@@ -683,7 +683,7 @@ void CProject::updateMakefileAm(QString makefile){
 	  }
 	  if(type =="normal_qt2" || type=="mdi_qt2" || type=="mdi_qextmdi" ||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2")
 	  {
-	    stream << "\nINCLUDES = $(QT_INCLUDES) $(X_INCLUDES)\n\n";
+	    stream << "\nINCLUDES = $(all_includes)\n\n";
 	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
 		}	
 	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
