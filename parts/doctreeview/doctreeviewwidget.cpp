@@ -552,7 +552,7 @@ void DocTreeDocbaseFolder::readDocbaseFile(FILE *f)
         else if (s.left(7) == "Index: "
                  && html && !title.isEmpty()) {
             QString filename = s.mid(7, s.length()-7);
-            DocTreeItem *item = new DocTreeItem(this, Doc, title);
+            DocTreeItem *item = new DocTreeItem(this, Doc, title, context());
             item->setFileName(filename);
             break;
         }
