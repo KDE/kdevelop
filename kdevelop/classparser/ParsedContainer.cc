@@ -439,18 +439,10 @@ void CParsedContainer::removeStruct( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedContainer::clear(bool bAutodel)
+void CParsedContainer::clear()
 {
   attributes.clear();
   methods.clear();
   methodsByNameAndArg.clear();
-
-  CParsedStruct *act;
-  if (bAutodel)
-   for( structIterator.toFirst();
-       (act=structIterator.current());
-       ++structIterator )
-     delete act;
-
   structs.clear();
 }

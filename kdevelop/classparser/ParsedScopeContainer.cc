@@ -25,6 +25,8 @@
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
  ********************************************************************/
+ // arrghh... global Variable
+ int ScopeLevel;
 
 /*-------------------- CParsedScopeContainer::CParsedScopeContainer()
  * CParsedScopeContainer()
@@ -39,7 +41,7 @@ CParsedScopeContainer::CParsedScopeContainer()
   : scopeIterator( scopes )
 {
   setItemType( PIT_SCOPE );
-  scopes.setAutoDelete( false );
+  scopes.setAutoDelete( true );
 }
 
 /*------------------- CParsedScopeContainer::~CParsedScopeContainer()
@@ -72,15 +74,10 @@ CParsedScopeContainer::~CParsedScopeContainer()
  *-----------------------------------------------------------------*/
 void CParsedScopeContainer::clear()
 {
-  CParsedClassContainer::clear(!path().isEmpty());
+  int templevel=ScopeLevel;
 
-  CParsedScopeContainer *act;
-  if (path().isEmpty())
-   for( scopeIterator.toFirst();
-       (act=scopeIterator.current());
-       ++scopeIterator )
-     delete act;
-
+  ScopeLevel=1;
+  CParsedClassContainer::clear(templevel==0);
   scopes.clear();
 }
 

@@ -72,7 +72,7 @@ CParsedClassContainer::~CParsedClassContainer()
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::clear(bool bAutodel)
 {
-  CParsedContainer::clear(!bAutodel);
+  CParsedContainer::clear();
 
   CParsedClass *act;
   if (bAutodel)
