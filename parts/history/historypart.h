@@ -2,6 +2,7 @@
 #define __HISTORYPART_H__
 
 
+#include <qguardedptr.h>
 #include <qptrlist.h>
 #include <qlistbox.h>
 
@@ -64,7 +65,7 @@ private:
 
   QPtrList<KURL> m_recentUrls;
 
-  QListBox *m_recentList;
+  QGuardedPtr<QListBox> m_recentList;
 
 };
 

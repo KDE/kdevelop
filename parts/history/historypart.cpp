@@ -55,6 +55,7 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
 
 HistoryPart::~HistoryPart()
 {
+  topLevel()->removeView(m_recentList);
   delete m_recentList;
 }
 
@@ -137,7 +138,7 @@ void HistoryPart::updateActions()
   m_backAction->setEnabled(m_history.current() != m_history.getFirst());
   m_forwardAction->setEnabled(m_history.current() != m_history.getLast());
 
-  kdDebug() << "HISTORY: history-length=" << m_history.count() << endl;
+  kdDebug(9013) << "history-length=" << m_history.count() << endl;
 }
 
 
@@ -277,7 +278,7 @@ void HistoryPart::forwardActivated()
 
 void HistoryPart::partAdded(KParts::Part *part)
 {
-  kdDebug() << "HISTORY: partAdded=" << part << endl;
+  kdDebug(9031) << "partAdded=" << part << endl;
 }
 
 
