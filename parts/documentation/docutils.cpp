@@ -25,6 +25,7 @@
 #include <kcombobox.h>
 #include <kpopupmenu.h>
 #include <klocale.h>
+#include <kstringhandler.h>
 
 #include <kdevpartcontroller.h>
 
@@ -73,7 +74,7 @@ void DocUtils::docItemPopup(DocumentationPart *part, const QString &title, const
     if (showSearch)
     {
         menu.insertSeparator();
-        menu.insertItem(QString("%1: %2").arg(i18n("Search")).arg(title), 4);
+        menu.insertItem(QString("%1: %2").arg(i18n("Search")).arg(KStringHandler::csqueeze(title,20)), 4);
     }
     
     switch (menu.exec(pos))
@@ -81,6 +82,6 @@ void DocUtils::docItemPopup(DocumentationPart *part, const QString &title, const
         case 1: part->partController()->showDocument(url); break;
         case 2: part->partController()->showDocument(url, true); break;
         case 3: part->emitBookmarkLocation(title, url); break;
-        case 4: break;
+        case 4: part->searchInDocumentation(title); break;
     }
 }

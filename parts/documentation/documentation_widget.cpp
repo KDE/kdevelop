@@ -77,4 +77,31 @@ KListBox *DocumentationWidget::index() const
     return m_index->indexBox();
 }
 
+void DocumentationWidget::searchInDocumentation()
+{
+    m_tab->setCurrentItem(m_search);
+    m_search->askSearchTerm();
+}
+
+void DocumentationWidget::searchInDocumentation(const QString &term)
+{
+    m_tab->setCurrentItem(m_search);
+    m_search->setSearchTerm(term);
+    m_search->search();
+}
+
+void DocumentationWidget::lookInDocumentationIndex()
+{
+    m_tab->setCurrentItem(m_index);
+    m_index->askSearchTerm();
+}
+
+void DocumentationWidget::lookInDocumentationIndex(const QString &term)
+{
+    m_tab->setCurrentItem(m_index);
+    m_index->setSearchTerm(term);
+    //adymo: let's allow the user to press enter here ;)
+//    m_index->searchInIndex();
+}
+
 #include "documentation_widget.moc"

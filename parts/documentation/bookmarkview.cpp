@@ -22,13 +22,17 @@
 #include <qlayout.h>
 #include <qheader.h>
 #include <qlineedit.h>
+#include <qpoint.h>
 
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kpushbutton.h>
 #include <kurlrequester.h>
+#include <kpopupmenu.h>
 #include <kparts/part.h>
+#include <khtml_part.h>
+#include <dom/html_document.h>
 
 #include <kdevpartcontroller.h>
 #include <kdevdocumentationplugin.h>
@@ -67,9 +71,13 @@ QString DocBookmarkOwner::currentURL() const
 QString DocBookmarkOwner::currentTitle() const
 {
     KParts::ReadOnlyPart *activePart = dynamic_cast<KParts::ReadOnlyPart*>(m_part->partController()->activePart());
-    KURL baseurl;
     if (activePart)
+    {
+        KHTMLPart *htmlPart = dynamic_cast<KHTMLPart*>(activePart);
+        if (htmlPart)
+            return htmlPart->htmlDocument().title().string();
         return activePart->url().prettyURL();
+    }
     else
         return QString::null;
 }
@@ -126,7 +134,7 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
 
     connect(m_view, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
         this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));
-    connect(m_addButton, SIGNAL(clicked()), this, SLOT(addBookmark()));
+    connect(m_addButton, SIGNAL(pressed()), this, SLOT(addBookmark()));
     connect(m_editButton, SIGNAL(clicked()), this, SLOT(editBookmark()));
     connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeBookmark()));
     
@@ -201,13 +209,41 @@ void BookmarkView::editBookmark()
 
 void BookmarkView::addBookmark()
 {
-    EditBookmarkDlg dlg(this);
-    dlg.setCaption(i18n("Add Bookmark"));
-    dlg.nameEdit->setText(m_bmOwner->currentTitle());
-    dlg.locationEdit->setURL(m_bmOwner->currentURL());
-    dlg.nameEdit->setFocus();
-    if (dlg.exec())
-        addBookmark(dlg.nameEdit->text(), KURL(dlg.locationEdit->url()));
+    QString title = m_bmOwner->currentTitle();
+    QString url = m_bmOwner->currentURL();
+    
+    KPopupMenu menu;
+    bool useMenu = false;
+    if (!title.isEmpty() && !url.isEmpty())
+    {
+        menu.insertItem(i18n("Current Document"), 1);
+        menu.insertItem(i18n("Custom..."), 2);
+        useMenu = true;
+    }
+    int mode = 2;
+    if (useMenu)
+    {
+        m_addButton->setDown(true);
+        mode = menu.exec(mapToGlobal(QPoint(m_addButton->x(), m_addButton->y()+m_addButton->height())));
+        m_addButton->setDown(false);
+    }
+
+    switch (mode)
+    {
+        case 1:
+            addBookmark(title, url);
+            break;
+        case 2:
+            EditBookmarkDlg dlg(this);
+            dlg.setCaption(i18n("Add Bookmark"));
+/*            dlg.nameEdit->setText(title);
+            dlg.locationEdit->setURL(url);*/
+            dlg.nameEdit->setFocus();
+            if (dlg.exec())
+                addBookmark(dlg.nameEdit->text(), KURL(dlg.locationEdit->url()));
+            m_addButton->setDown(false);
+            break;
+    }
 }
 
 void BookmarkView::addBookmark(const QString &title, const KURL &url)

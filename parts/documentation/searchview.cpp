@@ -299,4 +299,14 @@ void SearchView::itemMouseButtonPressed(int button, QListViewItem *item, const Q
     DocUtils::docItemPopup(m_part, docItem, pos, true, false, 1);
 }
 
+void SearchView::setSearchTerm(const QString &term)
+{
+    m_edit->setText(term);
+}
+
+void SearchView::askSearchTerm()
+{
+    m_edit->setFocus();
+}
+
 #include "searchview.moc"

@@ -30,6 +30,8 @@ class KDialogBase;
 class ConfigWidgetProxy;
 class DocumentationPlugin;
 class KURL;
+class Context;
+class QPopupMenu;
 
 /*
  Please read the README.dox file for more info about this part
@@ -46,6 +48,20 @@ public:
     void emitBookmarkLocation(const QString &title, const KURL &url);
     bool configure();
 
+public slots:
+    void lookInDocumentationIndex();
+    void lookInDocumentationIndex(const QString &term);
+    void contextLookInDocumentationIndex();
+    void searchInDocumentation();
+    void searchInDocumentation(const QString &term);
+    void contextSearchInDocumentation();
+    void manPage();
+    void manPage(const QString &term);
+    void contextManPage();
+    void infoPage();
+    void infoPage(const QString &term);
+    void contextInfoPage();
+    
 signals:
     void indexSelected(KListBox *indexBox);
     void bookmarkLocation(const QString &title, const KURL &url);
@@ -57,12 +73,15 @@ protected:
     
 protected slots:
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
+    void contextMenu(QPopupMenu *popup, const Context *context);
     
 private:
     QGuardedPtr<DocumentationWidget> m_widget;
     ConfigWidgetProxy *m_configProxy;
     
     QValueList<DocumentationPlugin*> m_plugins;
+    
+    QString m_contextStr;
     
 friend class DocGlobalConfigWidget;
 friend class SearchView;

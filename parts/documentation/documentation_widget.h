@@ -44,6 +44,12 @@ public:
     ContentsView *contents() const { return m_contents; }
     KListBox *index() const;
 
+public slots:
+    void lookInDocumentationIndex();
+    void lookInDocumentationIndex(const QString &term);
+    void searchInDocumentation();
+    void searchInDocumentation(const QString &term);
+    
 protected slots:
     void tabChanged(int t);
 

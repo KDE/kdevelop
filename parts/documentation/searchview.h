@@ -37,10 +37,14 @@ public:
     SearchView(DocumentationPart *part, QWidget *parent = 0, const char *name = 0);
     ~SearchView();
     
+public slots:
+    void search();
+    void setSearchTerm(const QString &term);
+    void askSearchTerm();
+    
 protected slots:
     void updateConfig();
     void updateIndex();
-    void search();
 
     void htsearchStdout(KProcess *, char *buffer, int len);
     void htsearchExited(KProcess *);

@@ -37,8 +37,12 @@ public:
     virtual bool eventFilter(QObject *watched, QEvent *e);
     KListBox *indexBox() const { return m_index; }
 
-protected slots:
+public slots:
     void searchInIndex();
+    void setSearchTerm(const QString &term);
+    void askSearchTerm();
+    
+protected slots:
     void searchInIndex(QListBoxItem *item);
     void showIndex(const QString &term);
 

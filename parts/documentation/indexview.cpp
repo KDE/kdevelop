@@ -77,7 +77,6 @@ void IndexView::searchInIndex(QListBoxItem *item)
     IndexItem *indexItem = dynamic_cast<IndexItem*>(item);
     if (!indexItem)
         return;
-    //FIXME: adymo: get rid of "context"
     //@todo: adymo: show dialog to select url from a list
     m_widget->part()->partController()->showDocument(indexItem->urls().first());
 }
@@ -159,6 +158,17 @@ void IndexView::itemMouseButtonPressed(int button, QListBoxItem *item, const QPo
         return;
     
     DocUtils::docItemPopup(m_widget->part(), docItem, pos, false, true);
+}
+
+void IndexView::setSearchTerm(const QString &term)
+{
+    m_edit->setFocus();
+    m_edit->setText(term);
+}
+
+void IndexView::askSearchTerm( )
+{
+    m_edit->setFocus();
 }
 
 #include "indexview.moc"
