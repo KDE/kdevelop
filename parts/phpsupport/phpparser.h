@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann,Sandy Meier                      *
- *   bernd@kdevelop.org,smeier@kdevelop.org                                *
+ *   Copyright (C) 2001 by Sandy Meier                                     *
+ *   smeier@kdevelop.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,7 +17,7 @@
 class KDevCore;
 class ClassStore;
 /**
-  *@author Sandy Meier, Bernd Gehrmann
+  *@author Sandy Meier
   */
 
 class PHPParser {
