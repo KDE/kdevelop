@@ -6,7 +6,7 @@
     begin                : Fri May 23 1999
 
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
 
  ***************************************************************************/
 
@@ -64,10 +64,10 @@ protected slots:
 signals: // Signals
 
   /** This signal is emitted when a user wants to view a declaration. */
-  void signalViewDeclaration( const char *, const char *, THType );
+  void signalViewDeclaration( const char *, const char *, THType, THType );
 
   /** This signal is emitted when a user wants to view a definition. */
-  void signalViewDefinition( const char *, const char *, THType );
+  void signalViewDefinition( const char *, const char *, THType, THType );
 
 };
 
