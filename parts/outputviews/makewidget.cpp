@@ -265,13 +265,13 @@ void MakeWidget::slotProcessExited(KProcess *)
 void MakeWidget::insertStdoutLine(const QString &line)
 {
     // KRegExp has ERE syntax
-    KRegExp enterDirRx("^make\\[0-9+\\]: ([^`]) `([^\n]*)'$");
-    KRegExp leaveDirRx("^make\\[0-9+\\]: ([^`]) `([^\n]*)'$");
+    KRegExp enterDirRx("[^\n]*: Entering directory `([^\n]*)'$");
+    KRegExp leaveDirRx("[^\n]*: Leaving directory `([^\n]*)'$");
 
     if (enterDirRx.match(line)) {
         QString *dir = new QString(enterDirRx.group(1));
         dirstack.push(dir);
-        kdDebug(9004) << "Entering dir: %s" << (*dir).ascii() << endl;
+        kdDebug(9004) << "Entering dir: " << (*dir).ascii() << endl;
     }
     else if (leaveDirRx.match(line)) {
         kdDebug(9004) << "Leaving dir: " << leaveDirRx.group(1) << endl;
