@@ -792,8 +792,7 @@ void CKDevelop::slotProjectGenerate()
 
   if(QFileInfo(file).exists())
   {
-    if (KMessageBox::questionYesNo(this, i18n("In the path you've given\n"
-                                                "already contains a KDevelop Project file!\n"
+    if (KMessageBox::questionYesNo(this, i18n("A KDevelop Project file already exists in the path you have given!\n"
                                                 "Overwrite?"),
                                           i18n("File Exists!")) != KMessageBox::Yes)
     {

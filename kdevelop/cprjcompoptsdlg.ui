@@ -843,7 +843,7 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>&amp;Prevent using shared libraries (-static)</string>
+                                    <string>&amp;Prevent use of shared libraries (-static)</string>
                                 </property>
                                 <property>
                                     <name>whatsThis</name>
