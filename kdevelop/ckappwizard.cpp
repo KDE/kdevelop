@@ -1038,6 +1038,11 @@ void CKAppWizard::okPermited() {
   errOutput->clear();
   output->clear();
   QDir kdevelop;
+  kdevelop.setPath(QDir::homeDirPath() + "/.kde/share/apps");
+  if (!kdevelop.exists()) {
+    kdevelop.mkdir (QDir::homeDirPath() + "/.kde/share/apps");
+  }
+  kdevelop.setPath(QDir::homeDirPath());
   kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
   cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
   cppedit->toggleModified(true);
