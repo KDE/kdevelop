@@ -367,6 +367,8 @@ void KTabZoomWidget::saveSettings(KConfig *config)
     config->writeEntry("Strut", d->m_popup->width());
   else
     config->writeEntry("Strut", d->m_popup->height());
+
+	config->writeEntry("TabIndex", indexOf(current()));
 }
 
 
@@ -387,7 +389,7 @@ void KTabZoomWidget::loadSettings(KConfig *config)
   {
     KTZWidgetInfo *i=d->m_info.first();
     if (i) {
-      d->m_tabBar->setActiveIndex(i->m_barIndex);
+      d->m_tabBar->setActiveIndex(config->readNumEntry("TabIndex", 0));
     } else {
       // np parts there to show so we just hide ourselves
       setDockMode( false );

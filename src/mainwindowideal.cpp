@@ -153,7 +153,7 @@ void MainWindowIDEAl::init() {
     KAction *a = actionCollection()->action("help_report_bug");
     disconnect(a, SIGNAL(activated()), 0, 0);
     connect(a, SIGNAL(activated()), m_pMainWindowShare, SLOT(slotReportBug()));
-
+	connect( Core::getInstance(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
     m_pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
 
     if( !m_pWindowMenu ){
@@ -187,12 +187,13 @@ MainWindowIDEAl::~MainWindowIDEAl() {
 
 bool MainWindowIDEAl::queryClose()
 {
+    saveSettings(); //moved from queryClose so tab settings can be saved while
+                    //the components still exist.
     return Core::getInstance()->queryClose();
 }
 
 bool MainWindowIDEAl::queryExit()
 {
-  saveSettings();
   return true;
 }
 
@@ -775,6 +776,10 @@ void MainWindowIDEAl::restoreOutputViewTab()
     m_bottomBar->raiseWidget(previous_output_view);
   }
   previous_output_view = NULL;
+}
+
+void MainWindowIDEAl::projectOpened() {
+  loadSettings();
 }
 
 #include "mainwindowideal.moc"

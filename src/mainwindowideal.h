@@ -91,6 +91,9 @@ public slots:
   /** Restore the previously saved view tab to the output (bottom) view */
   void restoreOutputViewTab();
 
+  /** Just after the project gets opened */
+  void projectOpened();
+
 private slots:
   void slotBufferSelected();      // One entry of the Windows menu has been selected
   void slotStatusChange(KParts::Part*);
