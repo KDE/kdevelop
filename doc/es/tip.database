@@ -3,10 +3,10 @@
 ...Si desea especificar opciones de la línea de comandos a su programa de make, puede indicarlos en el diálogo de configuración.
 ...Si utiliza funciones de otras bibliotecas además de aquellas con las que la aplicación está enlazada, puede especificarlo en el diálogo de opciones del proyecto.
 ...Si desea cambiar el número de versión de su aplicación, puede cambiarlo en el diálogo de opciones del proyecto, automáticamente actualizandose el mismo.
-Si desea crear un nuevo proyecto, elija "Proyecto"->"Asistente de Aplicaciones..." de la barra de menús.
-Si no tiene la documentación de las bibliotecas KDE, puede crearla eligiendo "Actualizar" de la patilla Documentación en el diálogo de configuración de KDevelop.
-Si ha cambiado las clases de la aplicación, debería actualizar la documentación de su API eligiendo "Make API-Doc" del menú Construir.
-Puede ahorrar tiempo si selecciona "Compilar Fichero" del menú Construir o de la barra de herramientas para solo compilar el fichero que está siendo editado.
+Si desea crear un nuevo proyecto, elija "Proyecto"->"Nuevo..." de la barra de menús.
+Si no tiene la documentación de las bibliotecas KDE, puede crearla eligiendo "Actualizar" en la patilla "Documentación" del diálogo de configuración de KDevelop.
+Si ha cambiado las clases de la aplicación, debería actualizar la documentación de su API eligiendo "Crear docs. de la API" en el menú Proyecto.
+Puede ahorrar tiempo si selecciona "Compilar fichero" del menú Construir o de la barra de herramientas para solo compilar el fichero que está siendo editado.
 Si busca información sobre clases o miembros de las clases, seleccione "Buscar ayuda sobre..." del menú Ayuda.
 Si desea información sobre algo en la ventana de KDevelop, seleccione el botón "¿Qué es esto...?" en la barra de herramientas y pulse sobre el icono del que desea información.
 Truco: Puede buscar una palabra clave en la documentación marcando dicha palabra y seleccionando "buscar:" en el menú contextual.
@@ -27,3 +27,4 @@ Si compila su proyecto y obtiene un error, puede pulsar en el mensaje de error p
 ...debería actualizar la documentación de sus bibliotecas tras instalar nuevas bibliotecas?
 ...puede configurar el resaltado de sintaxis del editor ?
 ...puede hacer y deshacer sus acciones y elegir el número de pasos en el diálogo del editor?
+Si encuentra un fallo en la traducción, bien sean errores gramaticales, ortográficos, de coherencia..., por favor comuníquelo al encargado de la traducción al español: Salvador Gimeno Zanón <salgiza@eui.upv.es>.
