@@ -404,8 +404,6 @@ AC_DEFUN(KDEV_CHECK_QEDITOR,
     AC_LANG_CPLUSPLUS
 
     save_CXXFLAGS="$CXXFLAGS"
-    save_LDFLAGS="$LDFLAGS"
-    save_LIBS="$LIBS"
 
     CXXFLAGS="$CXXFLAGS $QT_INCLUDES $X_CFLAGS"
 
@@ -420,6 +418,8 @@ AC_DEFUN(KDEV_CHECK_QEDITOR,
       ac_cv_qt_setup=yes,
       ac_cv_qt_setup=no
     )
+    CXXFLAGS="$save_CXXFLAGS"
+    AC_LANG_RESTORE
    ])
 
   if test "$ac_cv_qt_setup" != "yes"; then
