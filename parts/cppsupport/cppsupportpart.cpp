@@ -248,9 +248,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 
 	m_backgroundParser->unlock();
     } else if( ev->type() == int(Event_FileParsed) ){
-	//FileParsedEvent* event = (FileParsedEvent*) ev;
-	//QString fileName( event->fileName().unicode(), event->fileName().length() );
-	//emit fileParsed( fileName );
+	FileParsedEvent* event = (FileParsedEvent*) ev;
+	QString fileName( event->fileName().unicode(), event->fileName().length() );
+	emit fileParsed( fileName );
 	// mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
 
 	m_eventConsumed.wakeAll();
@@ -915,7 +915,7 @@ void CppSupportPart::slotMakeMember()
 	    text += "\n\n";
 	    text += typeSpecToString( decl->typeSpec() ) + " ";
 
-	    text += declStr + "\n{\n}\n\n";
+	    text += declStr + "\n{\n}";
 	}
 
 	m_backgroundParser->unlock();

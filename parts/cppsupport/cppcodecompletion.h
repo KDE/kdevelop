@@ -37,6 +37,7 @@ class ParsedClass;
 class ParsedClassContainer;
 class ParsedScopeContainer;
 class CodeInformationRepository;
+class CppCodeCompletionData;
 
 class CppCodeCompletion : public QObject
 {
@@ -77,7 +78,9 @@ private:
     void setupCodeInformationRepository();
     QString typeName( const QString& s );
     FunctionDefinitionAST* functionDefinition( AST* node );
-    
+
+    void computeRecoveryPoints();
+
     SimpleContext* computeContext( FunctionDefinitionAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, StatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, StatementListAST* ast, int line, int col );
@@ -107,6 +110,7 @@ private:
     private: unsigned int m_ccColumn;
 
     CodeInformationRepository* m_repository;
+    CppCodeCompletionData* d;
 };
 
 #endif
