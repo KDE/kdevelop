@@ -434,7 +434,7 @@ void MakeWidget::slotProcessExited(KProcess *)
 
 void MakeWidget::slotEnteredDirectory( EnteringDirectoryItem* item )
 {
-	kdDebug(9004) << "Entering dir: " << item->directory << endl;
+//	kdDebug(9004) << "Entering dir: " << item->directory << endl;
 	QString* dir = new QString( item->directory );
 	dirstack.push( dir );
 	insertItem( item );
@@ -443,7 +443,7 @@ void MakeWidget::slotEnteredDirectory( EnteringDirectoryItem* item )
 void MakeWidget::slotExitedDirectory( ExitingDirectoryItem* item )
 {
 	QString eDir = item->directory;
-	kdDebug(9004) << "Leaving dir: " << eDir << endl;
+//	kdDebug(9004) << "Leaving dir: " << eDir << endl;
 	QString *dir = dirstack.pop();
 	if (!dir)
 	{

@@ -142,7 +142,6 @@ public:
 	virtual bool visible( EOutputLevel ) { return true; }
 	virtual QString text( EOutputLevel level );
 
-private:
 	QString m_action;
 	QString m_file;
 	QString m_tool;

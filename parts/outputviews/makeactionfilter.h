@@ -18,12 +18,15 @@
 #include "outputfilter.h"
 
 class MakeItem;
+class ActionItem;
 
 class MakeActionFilter : public QObject, public OutputFilter
 {
 Q_OBJECT
 
 public:
+	static void test();
+
 	MakeActionFilter( OutputFilter& );
 
 	struct ActionFormat
@@ -35,12 +38,15 @@ public:
 		QRegExp expression;
 		int fileGroup;
 	};
-	static const QValueList<ActionFormat>& actionFormats();
+	static QValueList<ActionFormat>& actionFormats();
 
 	void processLine( const QString& line );
 
 signals:
 	void item( MakeItem* );
+
+private:
+	static ActionItem* matchLine( const QString& line );
 };
 
 #endif
