@@ -202,7 +202,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     QString id = d->declaratorId()->unqualifiedName()->text().stripWhiteSpace();
 
     QString scopeStr = scopeOfDeclarator( d );
-    ParsedClassContainer* cl = findContainer( m_store, scopeStr );
+    ParsedClassContainer* cl = findContainer( scopeStr );
     if( !cl )
        cl = m_currentContainer;
 
@@ -415,7 +415,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	id = t->declaratorId()->unqualifiedName()->text();
 
     QString scopeStr = scopeOfDeclarator( d );
-    ParsedClassContainer* cl = findContainer( m_store, scopeStr );
+    ParsedClassContainer* cl = findContainer( scopeStr );
     if( cl == 0 )
         cl = m_currentContainer;
 
@@ -692,9 +692,10 @@ void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ParsedClass * kla
     }
 }
 
-ParsedClassContainer* StoreWalker::findContainer( ClassStore* store, const QString& name )
+ParsedClassContainer* StoreWalker::findContainer( const QString& name, ParsedScopeContainer* container, bool includeImports )
 {
-    ParsedScopeContainer* container = store->globalScope();
+    if( !container )
+        container = m_store->globalScope();
 
     QStringList path = QStringList::split( ".", name );
     QStringList::Iterator it = path.begin();
@@ -717,6 +718,17 @@ ParsedClassContainer* StoreWalker::findContainer( ClassStore* store, const QStri
     ParsedClass* klass = container->getClassByName( className );
     if( !klass )
         klass = container->getStructByName( className );
+
+    if( !klass && includeImports ){
+        QStringList imports = m_imports.back();
+        QStringList::Iterator impIt = imports.begin();
+        while( impIt != imports.end() ){
+            ParsedClassContainer* kl = findContainer( (*impIt) + "." + name, container, false );
+            if( kl )
+                return kl;
+            ++impIt;
+        }
+    }
 
     return klass;
 }

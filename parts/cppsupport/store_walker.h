@@ -63,7 +63,7 @@ private:
     ParsedScopeContainer* findOrInsertScopeContainer( ParsedScopeContainer* scope, const QString& name );
     ParsedAttribute* findOrInsertAttribute( ParsedClassContainer* scope, const QString& name );
 
-    ParsedClassContainer* findContainer( ClassStore* store, const QString& name );
+    ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container=0, bool includeImports=false );
     ParsedScopeContainer* currentScope();
 
     QString scopeOfDeclarator( DeclaratorAST* d );
