@@ -36,7 +36,7 @@ void PydocProtocol::get(const KURL& url)
     cmd += key;
     
     FILE *fd = popen(cmd.data(), "r");
-    char buffer[4090];
+    char buffer[4096];
     QByteArray array;
     
     while (!feof(fd)) {

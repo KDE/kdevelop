@@ -10,6 +10,8 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       cppsupportpart.cpp \
 			       classparser.cpp \
 			       tokenizer.cpp \
+			       addclassmethodui.ui \
+			       cclonefunctiondlg.cpp \
 			       addclassmethoddlg.cpp \
 			       addclassattributedlg.cpp \
 			       cppcodecompletion.cpp \

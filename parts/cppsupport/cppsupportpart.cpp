@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>
+#include <kmessagebox.h>
 
 #include "keditor/editor.h"
 #include "kdevcore.h"
@@ -39,6 +40,7 @@
 #include "addclassattributedlg.h"
 #include "cppcodecompletion.h"
 
+#include "keditor/edit_iface.h"
 
 CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const char *name)
     : KDevLanguageSupport(api, parent, name)
@@ -311,7 +313,12 @@ void CppSupportPart::newClass()
 
 void CppSupportPart::addMethod(const QString &className)
 {
-    AddClassMethodDialog dlg(0, "methodDlg");
+   if (! m_pEditIface) {
+      KMessageBox::sorry(0, i18n("cann't get Interface: EditDocumentIface\nis the file open ?"), "OOPS" );
+      return;
+   }
+
+    AddClassMethodDialog dlg( m_pParser->getClassStore(), className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
     
@@ -364,23 +371,26 @@ void CppSupportPart::addMethod(const QString &className)
         atLine++;
 
     core()->gotoSourceFile(pc->declaredInFile(), atLine);
-    kdDebug(9007) << "####################" << "Adding at line " << atLine << " " 
-                  << headerCode << endl
-                  << "####################";
+    kdDebug() << "Adding to .h: " << atLine << " " << headerCode << endl;
+
+    m_pEditIface->insertLine(headerCode, atLine);
 
     QString cppCode = asCppCode(pm);
     
     core()->gotoSourceFile(pc->definedInFile(), atLine);
-    kdDebug(9007) << "####################" << "Adding at line " << atLine
-                  << " " << cppCode
-                  << "####################" << endl;
+    kdDebug() << "Adding to .cpp: " << atLine << " " << cppCode << endl;
     
+    m_pEditIface->insertLine(cppCode, atLine);
     delete pm;
 }
 
 
 void CppSupportPart::addAttribute(const QString &className)
 {
+   if (! m_pEditIface) {
+      KMessageBox::sorry(0, i18n("cann't get Interface: EditDocumentIface\nis the file open ?"), "OOPS" );
+      return;
+   }
     AddClassAttributeDialog dlg(0, "attrDlg");
     if( !dlg.exec() )
       return;
@@ -416,9 +426,8 @@ void CppSupportPart::addAttribute(const QString &className)
         atLine++;
 
     core()->gotoSourceFile(pc->declaredInFile(), atLine);
-    kdDebug(9007) << "####################" << "Adding at line " << atLine
-                  << " " << headerCode
-                  << "####################" << endl;
+    kdDebug() << "Adding at line " << atLine << " " << headerCode << endl;
+    m_pEditIface->insertLine(headerCode, atLine);
 
     delete pa;
 }
@@ -466,7 +475,7 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
 
     str += pm->type();
     str += " ";
-    str += pm->path();
+    str += path;
     
     if (pm->isConst())
         str += " const";

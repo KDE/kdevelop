@@ -77,6 +77,8 @@ public: // Public Methods
 
   /** Output this object as text on stdout */
   void out()     { store->out(); }
+  /** get a list of all classes */
+  ClassStore * getClassStore();
 
 //  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
 //    { store.getDependentFiles( fileList, dependentList); }

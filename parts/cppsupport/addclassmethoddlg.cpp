@@ -1,12 +1,10 @@
 /***************************************************************************
-               cclassaddmethoddlg.cpp  -  description
+                          addclassmethoddialog.cpp  -  description
                              -------------------
-
-    begin                : Fri Mar 19 1999
-
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@cenacle.se
-
+    copyright            : (C) 2001 by August Hörandl
+    email                : august.hoerandl@gmx.at
  ***************************** **********************************************/
 
 /***************************************************************************
@@ -18,279 +16,100 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qwhatsthis.h>
-#include <kapp.h>
-#include <klocale.h>
-#include <kmessagebox.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qlistbox.h>
+#include <qmultilineedit.h>
+#include <qregexp.h>
 
+#include <klineedit.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kdebug.h>
+
+#include "parsedmethod.h"
+#include "cclonefunctiondlg.h"
 #include "addclassmethoddlg.h"
 
+//#define TEST_DEBUG_ONLY  1
 
-AddClassMethodDialog::AddClassMethodDialog(QWidget *parent, const char *name)
-    : QDialog(parent, name, true),
-      topLayout( this, 5 ),
-      functionLayout( 9, 3, 10, "functionLayout" ),
-      accessLayout( 3, 5, 1, "accessLayout" ),
-      typeLayout( 3, 5, 1, "typeLayout" ),
-      modifierLayout( 3, 6, 1, "modifierLayout" ),
-      buttonLayout( 5, "buttonLayout" ),
-      modifierGrp( this, "modifierGrp" ),
-      typeGrp( this, "typeGrp" ),
-      functionGrp( this, "functionGrp" ),
-      accessGrp( this, "accessGrp" ),
-      typeLbl( this, "typeLbl" ),
-      typeEdit( this, "typeEdit" ),
-      declLbl( this, "declLbl" ),
-      declEdit( this, "declEdit" ),
-      docLbl( this, "docLbl" ),
-      docEdit( this, "docEdit" ),
-      publicRb( this, "publicRb" ),
-      protectedRb( this, "protectedRb" ),
-      privateRb( this, "privateRb" ),
-      methodRb( this, "methodRb" ),
-      signalRb( this, "signalRb" ),
-      slotRb( this, "slotRb" ),
-      virtualCb( this, "virtualCb" ),
-      pureCb( this, "pureCb" ),
-      staticCb( this, "staticCb" ),
-      constCb( this, "constCb" ),
-      okBtn( this, "okBtn" ),
-      cancelBtn( this, "cancelBtn" )
-{
-    setCaption( i18n("Add class member") );
+static const char EQU[] = " = ";
+static const int EQULEN = sizeof(EQU)-1;
+static const char COMM[] = " // ";
+static const int COMMLEN = sizeof(COMM)-1;
     
-    setWidgetValues();
-    setCallbacks();
+AddClassMethodDialog::AddClassMethodDialog(ClassStore *_store, const QString &className, QWidget *parent, const char *name)
+  :  AddClassMethodUI(parent, name, true), store(_store), currentClass(className), editactive(false)
+{
+    connect( rbMethod, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+    connect( rbSlot, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+    connect( rbSignal, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+    connect( cbVirtual, SIGNAL ( clicked() ), SLOT( slotVirtualClicked() ) );
+
+    connect( pbNew, SIGNAL( clicked() ), SLOT( slotNewPara() ) );
+    connect( pbDelete, SIGNAL( clicked() ), SLOT( slotDelPara() ) );
+    connect( pbMoveUp, SIGNAL( clicked() ), SLOT( slotUpPara() ) );
+    connect( pbMoveDown, SIGNAL( clicked() ), SLOT( slotDownPara() ) );
+
+    connect( paraName, SIGNAL( textChanged(const QString&) ), SLOT( slotUpdateParameter(const QString&) ));
+    connect( paraType, SIGNAL( textChanged(const QString&) ), SLOT( slotUpdateParameter(const QString&) ));
+    connect( paraDefault, SIGNAL( textChanged(const QString&) ), SLOT( slotUpdateParameter(const QString&) ));
+    connect( paraDocu, SIGNAL( textChanged(const QString&) ), SLOT( slotUpdateParameter(const QString&) ));
+    connect( lbPara, SIGNAL( selectionChanged(QListBoxItem*) ), SLOT( slotParaHighLight(QListBoxItem*) ));
+
+    connect( pbClone, SIGNAL( clicked() ), SLOT( slotClone() ) );
+
+    connect( pbOk, SIGNAL( clicked() ), SLOT( accept() ) );
+    connect( pbCancel, SIGNAL( clicked() ), SLOT( reject() ) );
+#ifdef TEST_DEBUG_ONLY
+    // test only
+   pbHelp->setEnabled(true);
+   connect( pbHelp, SIGNAL( clicked() ), SLOT( slotDebug() ) );
+#endif
 }
 
-
-void AddClassMethodDialog::setWidgetValues()
-{
-    // Top layout
-    topLayout.addLayout( &functionLayout );
-    topLayout.addLayout( &accessLayout );
-    topLayout.addLayout( &typeLayout );
-    topLayout.addLayout( &modifierLayout );
-    topLayout.addLayout( &buttonLayout );
-    
-    // Function grp
-    functionGrp.setFrameStyle( 49 );
-    functionGrp.setTitle( i18n("Function") );
-    
-    // Accessgrp
-    accessGrp.setFrameStyle( 49 );
-    accessGrp.setTitle( i18n("Access") );
-    
-    QString text;
-    text = i18n("You can choose here whether you want the member function\n"
-                "be declared as public, protected or private.");
-    QWhatsThis::add(&accessGrp, text);
-    
-    typeGrp.setFrameStyle( 49 );
-    typeGrp.setTitle( i18n( "Type" ) );
-    
-    text = i18n("Choose the type of member object you want to create.\n"
-                "The type can be signal, slot or method.");
-    QWhatsThis::add(&typeGrp, text);
-    
-    // Modifier grp
-    modifierGrp.setFrameStyle( 49 );
-    modifierGrp.setTitle( i18n("Modifiers") );
-    modifierGrp.setAlignment( 1 );
-    
-    text = i18n("You can set modifiers for the member function here.");
-    QWhatsThis::add(&modifierGrp, text);
-    
-    typeLbl.setText( i18n("Type:") );
-    
-    text = i18n("Enter the type of the member function here.");
-    QWhatsThis::add(&typeLbl, text);
-    QWhatsThis::add(&typeEdit, text);
-    
-    declLbl.setText( i18n("Declaration:") );
-    
-    text = i18n("Enter the declaration of the member function here.");
-    QWhatsThis::add(&declLbl, text);
-    QWhatsThis::add(&declEdit, text);
-    
-    docLbl.setText( i18n("Documentation:") );
-    
-    QFontMetrics fm(docEdit.fontMetrics());
-    docEdit.setMinimumWidth(fm.width("0")*30);
-    
-    text = i18n("You can enter a description of the member function here.");
-    QWhatsThis::add(&docLbl, text);
-    QWhatsThis::add(&docEdit, text);
-    
-    publicRb.setMinimumSize( 70, 20 );
-    publicRb.setFixedHeight( 20 );
-    publicRb.setText( "Public" );
-    publicRb.setChecked( true );
-    
-    protectedRb.setMinimumSize( 80, 20 );
-    protectedRb.setFixedHeight( 20 );
-    protectedRb.setText( "Protected" );
-    
-    privateRb.setMinimumSize( 60, 20 );
-    privateRb.setFixedHeight( 20 );
-    privateRb.setText( "Private" );
-    
-    methodRb.setMinimumSize( 60, 20 );
-    methodRb.setFixedHeight( 20 );
-    methodRb.setText( i18n( "Method" ) );
-    methodRb.setChecked( true );
-    
-    signalRb.setMinimumSize( 60, 20 );
-    signalRb.setFixedHeight( 20 );
-    signalRb.setText( "Signal" );
-    
-    slotRb.setMinimumSize( 60, 20 );
-    slotRb.setFixedHeight( 20 );
-    slotRb.setText( "Slot" );
-    
-    virtualCb.setMinimumSize( 60, 20 );
-    virtualCb.setFixedHeight( 20 );
-    virtualCb.setText( "Virtual" );
-    
-    pureCb.setMinimumSize( 60, 20 );
-    pureCb.setFixedHeight( 20 );
-    pureCb.setText( "Pure" );
-    pureCb.setEnabled( false );
-    
-    staticCb.setMinimumSize( 60, 20 );
-    staticCb.setFixedHeight( 20 );
-    staticCb.setText( "Static" );
-    
-    constCb.setMinimumSize( 60, 20 );
-    constCb.setFixedHeight( 20 );
-    constCb.setText( "Const" );
-    
-    okBtn.setText( i18n("OK") );
-    okBtn.setDefault( TRUE );
-    cancelBtn.setText( i18n("Cancel") );
-    
-    // Access group
-    accessGrp.insert( &publicRb );
-    accessGrp.insert( &protectedRb );
-    accessGrp.insert( &privateRb );
-    
-    // Type group
-    typeGrp.insert( &methodRb );
-    typeGrp.insert( &signalRb );
-    typeGrp.insert( &slotRb );
-    
-    // Modifier group
-    modifierGrp.insert( &virtualCb );
-    modifierGrp.insert( &pureCb );
-    modifierGrp.insert( &staticCb );
-    modifierGrp.insert( &constCb );
-    
-    // Function layout.
-    functionLayout.addMultiCellWidget( &functionGrp, 0, 8, 0, 2 );
-    functionLayout.addRowSpacing( 0, 10 );
-    functionLayout.addWidget( &typeLbl, 2, 1 );
-    functionLayout.addWidget( &typeEdit, 3, 1 );
-    functionLayout.addWidget( &declLbl, 4, 1 );
-    functionLayout.addWidget( &declEdit, 5, 1 );
-    functionLayout.addWidget( &docLbl, 6, 1 );
-    functionLayout.addWidget( &docEdit, 7, 1 );
-    functionLayout.addRowSpacing( 8, 10 );
-    
-    // Access layout
-    accessLayout.addMultiCellWidget( &accessGrp, 0, 2, 0, 4 );
-    accessLayout.addRowSpacing( 0, 20 );
-    accessLayout.addWidget( &publicRb, 1, 1 );
-    accessLayout.addWidget( &protectedRb, 1, 2 );
-    accessLayout.addWidget( &privateRb, 1, 3 );
-    accessLayout.addRowSpacing( 2, 10 );
-    
-    // Type layout
-    typeLayout.addMultiCellWidget( &typeGrp, 0, 2, 0, 4 );
-    typeLayout.addRowSpacing( 0, 20 );
-    typeLayout.addWidget( &methodRb, 1, 1 );
-    typeLayout.addWidget( &slotRb, 1, 2 );
-    typeLayout.addWidget( &signalRb, 1, 3 );
-    typeLayout.addRowSpacing( 2, 10 );
-    
-    // Modifier layout
-    modifierLayout.addMultiCellWidget( &modifierGrp, 0, 2, 0, 5 );
-    modifierLayout.addRowSpacing( 0, 20 );
-    modifierLayout.addColSpacing( 0, 10 );
-    modifierLayout.addWidget( &virtualCb, 1, 1 );
-    modifierLayout.addWidget( &pureCb, 1, 2 );
-    modifierLayout.addWidget( &staticCb, 1, 3 );
-    modifierLayout.addWidget( &constCb, 1, 4 );
-    modifierLayout.addColSpacing( 5, 10 );
-    modifierLayout.addRowSpacing( 2, 10 );
-    
-    // Button layout
-    buttonLayout.addWidget( &okBtn );
-    buttonLayout.addStretch();
-    buttonLayout.addWidget( &cancelBtn );
-    
-    // Set the default focus.
-    typeEdit.setFocus();
+AddClassMethodDialog::~AddClassMethodDialog(){
 }
-
-void AddClassMethodDialog::setCallbacks()
-{
-
-    connect( &methodRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
-    connect( &slotRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
-    connect( &signalRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
-    connect( &virtualCb, SIGNAL ( clicked() ), SLOT( slotVirtualClicked() ) );
-    
-    connect( &okBtn, SIGNAL( clicked() ), SLOT( accept() ) );
-    connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
-}
-
 
 ParsedMethod *AddClassMethodDialog::asSystemObj()
 {
-    int lpPos;
     QString decl;
     ParsedMethod *aMethod = new ParsedMethod();
     QString comment;
     
-    aMethod->setType( typeEdit.text() );
-    
-    decl = declEdit.text();
-    
-    lpPos = decl.find( '(' );
-    
-    // If no arguments we add ().
-    if( lpPos == -1 )
-        aMethod->setName( decl + "()" );
-    else // Else just set the whole thing as the name
-        aMethod->setName( decl );
+    // return type
+    aMethod->setType( edType->text() );
+    // name + parameters
+    aMethod->setName( getDecl() );
     
     // Set the type.
-    if( slotRb.isChecked() )
+    if( rbSlot->isChecked() )
         aMethod->setIsSlot( true );
-    else if( signalRb.isChecked() )
+    else if( rbSignal->isChecked() )
         aMethod->setIsSignal( true );
     
     // Set the export.
-    if( publicRb.isChecked() )
+    if( rbPublic->isChecked() )
         aMethod->setAccess( PIE_PUBLIC );
-    else if( protectedRb.isChecked() )
+    else if( rbProtected->isChecked() )
         aMethod->setAccess( PIE_PROTECTED );
-    else if( privateRb.isChecked() )
+    else if( rbPrivate->isChecked() )
         aMethod->setAccess( PIE_PRIVATE );
     
     // Set the modifiers if they are enabled.
-    if( pureCb.isEnabled() )
-        aMethod->setIsPure( pureCb.isChecked() );
-    if( staticCb.isEnabled() )
-        aMethod->setIsStatic( staticCb.isChecked() );
-    if( constCb.isEnabled() )
-        aMethod->setIsConst( constCb.isChecked() );
-    if( virtualCb.isEnabled())
-        aMethod->setIsVirtual( virtualCb.isChecked() );
+    if( cbPure->isEnabled() )
+        aMethod->setIsPure( true );
+    if( cbStatic->isEnabled() )
+        aMethod->setIsStatic( true );
+    if( cbConst->isEnabled() )
+        aMethod->setIsConst( true );
+    if( cbVirtual->isEnabled())
+        aMethod->setIsVirtual( true );
     
     // Set comment
-    comment = "/** " + docEdit.text() + " */";
-    aMethod->setComment( comment );
+    aMethod->setComment( getDocu() );
     
     return aMethod;
 }
@@ -298,14 +117,17 @@ ParsedMethod *AddClassMethodDialog::asSystemObj()
 
 void AddClassMethodDialog::slotToggleModifier()
 {
-    if (slotRb.isChecked() || signalRb.isChecked()) {
-        staticCb.setEnabled(false);
-        constCb.setEnabled(false);
-        virtualCb.setEnabled(false);
-        pureCb.setEnabled(false);
+    if (rbSlot->isChecked() || rbSignal->isChecked()) {
+        cbStatic->setEnabled(false);
+        cbConst->setEnabled(false);
+        cbVirtual->setEnabled( rbSlot->isChecked() );
+        cbPure->setEnabled(false);
+        edType->setText("void");
+        if ( rbSlot->isChecked() && edName->text().isEmpty())
+          edName->setText("slot");
     } else {
-        constCb.setEnabled(true);
-        virtualCb.setEnabled(true);
+        cbConst->setEnabled(true);
+        cbVirtual->setEnabled(true);
         slotVirtualClicked();
     }
 }
@@ -313,26 +135,218 @@ void AddClassMethodDialog::slotToggleModifier()
 
 void AddClassMethodDialog::slotVirtualClicked()
 {
-    pureCb.setEnabled( virtualCb.isChecked() );
-    staticCb.setEnabled( !virtualCb.isChecked() );
+    cbPure->setEnabled( cbVirtual->isChecked() );
+    cbStatic->setEnabled( !cbVirtual->isChecked() );
 }
-
 
 void AddClassMethodDialog::accept()
 {
-    if (typeEdit.text().isEmpty()) {
-        KMessageBox::sorry(this, i18n("No type"),
-                           i18n("You have to specify a function type.") );
+  /* //should there be a type - a constructor doesn't have one
+    if (edType->text().isEmpty()) {
+        KMessageBox::sorry(this, i18n("You have to specify a type."), i18n("No type") );
+        edType->setFocus();
+        return false;
+    }
+  */
+    if (edName->text().isEmpty()) {
+        KMessageBox::sorry(this, i18n("You have to specify a name."), i18n("No name") );
+        edName->setFocus();
         return;
     }
-    
-    if (declEdit.text().isEmpty()) {
-        KMessageBox::sorry(this, i18n("No name"),
-                           i18n("You have to specify a function name.") );
-        return;
-    }
-    
     QDialog::accept();
 }
+/** add new Paramter */
+void AddClassMethodDialog::slotNewPara()
+{
+  lbPara->insertItem(" ");
+  lbPara->setSelected(lbPara->count()-1, true);
+  paraType->setFocus();
+}
+    
+/** delete Paramter */
+void AddClassMethodDialog::slotDelPara(){
+  int curr = lbPara->currentItem();
+  editactive = true;
+  if (curr >= 0)
+    lbPara->removeItem(curr);
+  editactive = false;
+    }
+    
+/** update current parameter in listbox */
+void AddClassMethodDialog::slotUpdateParameter(const QString& s){
+   kdDebug() << "slot UpdatePara called "<< editactive << " " << s << endl;
+   if (! editactive) {
+      editactive = true;
+      QString p(paraType->text() + " " + paraName->text());
+      if (! paraDefault->text().isEmpty())
+		     p += EQU + paraDefault->text();
+      // p= p.simplifyWhiteSpace().stripWhiteSpace();
+     if (! paraDocu->text().isEmpty())
+ 	      p += COMM + paraDocu->text();
+     lbPara->changeItem(p, lbPara->currentItem());
+     editactive = false;
+   }
+}
 
-#include "addclassmethoddlg.moc"
+/** move Paramter up*/
+void AddClassMethodDialog::slotUpPara()
+{
+  int curr = lbPara->currentItem();
+  if (curr > 0) {
+      QString txt = lbPara->currentText();
+      lbPara->removeItem(curr);
+      --curr;
+      lbPara->insertItem(txt, curr);
+      lbPara->setCurrentItem(curr);
+  }
+}
+/** move Paramter down */
+void AddClassMethodDialog::slotDownPara()
+{
+  int curr = lbPara->currentItem();
+  if (curr >= 0 && curr < lbPara->count()-1) {
+      QString txt = lbPara->currentText();
+      lbPara->removeItem(curr);
+      curr++;
+      lbPara->insertItem(txt, curr);
+      lbPara->setCurrentItem(curr);
+  }
+}
+/** click onto Parameter */
+void AddClassMethodDialog::slotParaHighLight( QListBoxItem * ){
+   kdDebug() << "slot ParaHighlight called "<< editactive << endl;
+   if (! editactive) {
+      editactive = true;
+      QString txt = lbPara->currentText();
+      int docupos = txt.find(COMM);
+      if (docupos != -1) {
+         QString d = txt.mid(docupos+COMMLEN);
+         if (! d.isEmpty() )
+           paraDocu->setText(d);
+         txt.truncate(docupos);
+      } else
+          paraDocu->setText("");
+      int defpos = txt.find(EQU);
+      if (defpos != -1) {
+         QString d = txt.mid(defpos+EQULEN);
+         if (! d.isEmpty() )
+           paraDefault->setText(d);
+         txt.truncate(defpos);
+      } else
+          paraDefault->setText("");
+
+      int namepos = txt.findRev(" ");
+      if (namepos != -1) {
+        QString n(txt.mid(namepos+1).stripWhiteSpace());
+		    if (! n.isEmpty())
+           paraName->setText(n);
+        else
+           paraName->setText("");
+        txt.truncate(namepos);
+        paraType->setText(txt.stripWhiteSpace());
+      } else {
+         // TODO: ???
+         paraName->setText(txt);
+         paraType->setText("");
+      }
+      editactive = false;
+   }
+}
+
+/** Debug only - show Message boxes with values */
+void AddClassMethodDialog::slotDebug()
+{
+#ifdef TEST_DEBUG_ONLY
+   KMessageBox::sorry(this, getDecl(), "getDecl()" );
+   KMessageBox::sorry(this, getDocu(), "getDocu()" );
+#endif
+}
+
+/** return name + parameters */
+QString AddClassMethodDialog::getDecl(){
+
+  QString decl = edName->text() + "(";
+  QString sep;
+  for(QListBoxItem* i = lbPara->firstItem(); i != 0; i=i->next()) {
+     QString txt = i->text();
+     int docupos = txt.find(COMM);
+     if (docupos != -1)
+         txt.truncate(docupos);
+     decl += sep + txt;
+     sep = ", ";
+  }
+  decl += ")";
+  return decl;
+}
+/** return documentation string */
+QString AddClassMethodDialog::getDocu()
+{
+  QString docu = "/** " +edDocs->text();
+  for(QListBoxItem* i = lbPara->firstItem(); i != 0; i=i->next()) {
+     QString txt = i->text();
+     int docupos = txt.find(COMM);
+     if (docupos != -1) {
+        QString name(txt);
+        int defpos = name.find(EQU);
+        if (defpos != -1)
+          name.truncate(defpos);
+        int namepos = name.findRev(" ");
+        docu += "\n *  @param " + name.mid(namepos+1) + " " + txt.mid(docupos+COMMLEN);
+     }
+  }
+  docu += "\n */";
+  return docu;
+}
+/** clone a function */
+void AddClassMethodDialog::slotClone(){
+#ifdef TEST_DEBUG_ONLY
+   // test only - some values to test
+   {
+     QString type("int*"), decl("operator () (float x, int& a,double* b=3)"), str("/** a comment\n2.nd line */");
+     bool isPrivat(true), isProtected(false), isPublic(false), isvirtual(false), isSlot(false), isSignal(false);
+#else
+  // thats the real one
+  CCloneFunctionDlg cloneDlg(store, currentClass, this, "cloneDlg");
+  if (cloneDlg.exec()) {
+    QString type, decl, str;
+    bool isPrivat, isProtected, isPublic, isvirtual, isSignal, isSlot;
+
+    if (! cloneDlg.getMethod(type, decl, str, isPrivat, isProtected, isPublic, isvirtual, isSlot, isSignal ))
+    	return;
+#endif   	
+   // copy type and declaration
+   edType -> setText(type.simplifyWhiteSpace().stripWhiteSpace());
+
+   // search for paramters
+   int parastart = decl.findRev('(');
+   int paraend = decl.find(')', parastart);
+   QString name(decl);
+   name.truncate(parastart);
+   edName -> setText(name.simplifyWhiteSpace().stripWhiteSpace());
+   QString para(decl.mid(parastart+1, paraend-parastart-1));
+   para.replace( QRegExp("\\s*=\\s*"), EQU );
+   para = para.simplifyWhiteSpace().stripWhiteSpace();
+   lbPara->clear();
+   lbPara->insertStringList(QStringList::split(',', para));
+
+   // the comment needs some adjustment
+   // remove /** and */
+   str.replace( QRegExp("^/\\**\\s*"), "" );
+   str.replace( QRegExp("\\s*\\**/$"), "" );
+   // clean up line breaks
+   str.replace( QRegExp("\n\\s*\\**\\s*"), "\n" );
+	 edDocs -> setText(str);
+
+   // all the buttons
+   rbPrivate->setChecked( isPrivat );
+   rbProtected->setChecked( isProtected );
+   rbPublic->setChecked( isPublic );
+
+   rbMethod->setChecked( true );
+   rbSlot->setChecked( isSlot );
+   rbSignal->setChecked( isSignal );
+   // virtual
+   cbVirtual -> setChecked( isvirtual );
+   slotVirtualClicked();
+  }
+}

@@ -2459,3 +2459,7 @@ void CClassParser::wipeout()
 
   reset();
 }
+/** get a list of all classes */
+ClassStore * CClassParser::getClassStore(){
+  return  store;
+}
