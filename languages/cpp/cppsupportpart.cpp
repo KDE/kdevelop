@@ -512,7 +512,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
            else
                candidate = m_activeFileName;
 	       
-		size_t curLine = 0, curCol = 0;
+		unsigned int curLine = 0, curCol = 0;
 		if (m_activeViewCursor != 0)
 			m_activeViewCursor->cursorPosition(&curLine, &curCol);
 		
