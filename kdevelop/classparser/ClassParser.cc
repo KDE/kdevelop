@@ -643,7 +643,7 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   getNextLexem();
 
   // Set the arguments of the method, if there are any.
-  if( lexem != ')' )
+  if( lexem != ')' && lexem != ';')
     parseFunctionArgs( aMethod );
 
   // Set some attributes of the parsed method.
@@ -688,13 +688,20 @@ CParsedMethod *CClassParser::parseMethodDeclaration()
 
   // Add all lexems on the stack until we find the start of the
   // parameter list.
-  while( lexem != '(' )
+  while( lexem != '(' && lexem != ';' && lexem != 0 )
   {
     PUSH_LEXEM();
     getNextLexem();
   }
 
-  fillInParsedMethod( aMethod );
+  if( lexem == '(' )
+    fillInParsedMethod( aMethod );
+  else 
+  {
+    emptyStack();
+    delete aMethod;
+    aMethod = NULL;
+  }
 
   return aMethod;
 }
