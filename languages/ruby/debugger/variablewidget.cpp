@@ -85,7 +85,10 @@ void VariableWidget::clear()
 {
 	QListViewItemIterator it(varTree_);
 	while (it.current()) {
-        if (it.current()->rtti() != RTTI_WATCH_ROOT && it.current()->rtti() != RTTI_GLOBAL_ROOT) {
+        if (	it.current()->rtti() != RTTI_WATCH_ROOT 
+				&& it.current()->rtti() != RTTI_WATCH_VAR_ITEM
+				&& it.current()->rtti() != RTTI_GLOBAL_ROOT ) 
+		{
 			QListViewItem * item = it.current();
 			delete item;
 		}
@@ -548,10 +551,9 @@ QString VarItem::fullName() const
 	while (item->rtti() == RTTI_VAR_ITEM) {
 		QString itemName = item->text(VarNameCol);
 		
-		if (vPath.startsWith("[") || vPath.startsWith("{")) {
+		if (vPath.startsWith("[")) {
 			// If it's a Hash or an Array, then just insert the value. As
-			// in adding '[0]' to foo.bar to give foo.bar[0], or adding
-			// '{"m"}' to give foo.bar{"m"} 
+			// in adding '[0]' to foo.bar to give foo.bar[0]
  			vPath.prepend(itemName);
 		} else {
 			if (vPath.isEmpty()) {

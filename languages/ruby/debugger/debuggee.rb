@@ -554,7 +554,7 @@ class Context
 	  	obj.each_index { |i| stdout.printf "[%d]=%s\n", i.to_s, obj[i].inspect }
 	  elsif obj.kind_of? Hash
 	    stdout.printf "Hash (%d element(s))\n", obj.length
-	  	obj.each { |key, value| stdout.printf "{%s}=%s\n", key.inspect, value.inspect }
+	  	obj.each { |key, value| stdout.printf "[%s]=%s\n", key.inspect, value.inspect }
 	  else
 	    PP.pp(obj, stdout)
 	  end
