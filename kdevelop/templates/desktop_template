@@ -2,8 +2,8 @@
 [Desktop Entry]
 Type=Application
 Exec=|NAMELITTLE| -caption "%c" %i %m  
-Icon=|NAMELITTLE|.xpm
-MiniIcon=|NAMELITTLE|.xpm
+Icon=|NAMELITTLE|.png
+MiniIcon=|NAMELITTLE|.png
 DocPath=|NAMELITTLE|/index.html
 Comment=
 Comment[de]=

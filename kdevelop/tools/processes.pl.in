@@ -15,7 +15,7 @@ $homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
 
 my $local_icondir     = $homedirectory  . "/share/icons/";
 my $local_datadir     = $homedirectory  . "/share/apps/";
-my $kde_miniicondir   = $kde_icondir    . "/mini";
+my $kde_miniicondir   = $kde_icondir    . "/locolor/16x16/apps/";
 my $local_miniicondir = $local_icondir  . "/mini";
 
 printflush (STDOUT,"Starting with installation\n");
@@ -42,8 +42,8 @@ $name =  $processes{NAME};
 #$template_dir= $processes{TEMPLATESDIR} if ($processes{TEMPLATESDIR});
 if ($processes{KDEICONDIR})
 {
-  $kde_icondir= $processes{KDEICONDIR};
-  $kde_miniicondir = $kde_icondir . "/mini";
+  $kde_icondir= $processes{KDEICONDIR} ."/locolor/32x32/apps/";
+  $kde_miniicondir = $processes{KDEICONDIR} . "/locolor/16x16/apps/";
 }
 
 if ($processes{VSSUPPORT} eq "none"){
@@ -82,7 +82,7 @@ else{
   if ($processes{APPLICATION} =~ /kde2mini|kickerapp/) {
     changeMiniApp();
   }
-  elsif ($processes{APPLICATION} =~ /kdenormal|kde2normal|kde2mdi/)
+  elsif ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
   {
     changeNormalApp();
   }
@@ -343,10 +343,7 @@ sub condCopyUserDocFiles {
 
 sub condCopyKdelnkFile {
 
-  # desktop file is in the kickerapp tar ball, so don't do it here
-  return    if ($processes{APPLICATION} =~ /kickerapp/);
-
-  #if .kdelnk-file was chosen in kAppWizard
+  #if .desktop-file was chosen in kAppWizard
   if ($processes{KDELNK} eq "yes") {
 
     #copying, rename and replace in the kdelnk-file
@@ -354,15 +351,9 @@ sub condCopyKdelnkFile {
 
     if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/)
     {
-      copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
+      copy ("desktop_template", "$underDirectory/$nameLittle.desktop");
       chdir ($underDirectory);
       replaceValuesInFile(\%changings, "$nameLittle.desktop");
-    }
-    else
-    {
-      copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
-      chdir ($underDirectory);
-      replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
     }
   }
 }
@@ -374,46 +365,38 @@ sub condCopyProgIcons {
   if ($processes{PROGICON} eq "no") {}
 
   #if the default ProgIcon was chosen in kAppWizard
-  elsif ($processes{PROGICON} eq "(null)") {
-    chdir ($kde_icondir);
-    copy ("edit.xpm", "$underDirectory/$nameLittle.xpm");
+  elsif ($processes{PROGICON} eq "") {
+    chdir ($templatedir);
+    copy ("lo32-app-appicon.png", "$underDirectory/lo32-app-$nameLittle.png");
     chdir ($underDirectory);
-    chmod (0666, "$nameLittle.xpm");
+    chmod (0666, "lo32-app-$nameLittle.png");
   }
     
   #if a new ProgIcon was chosen in kAppWizard
   else {
-    $icon = $kde_icondir."/".$processes{PROGICON};
-    $copying = copy ($icon, "$underDirectory/$nameLittle.xpm");
-    if ($copying)  {
-        $icon = $local_icondir."/".$processes{PROGICON};
-        copy ($icon, "$underDirectory/$nameLittle.xpm");
-    }
+    $icon = "$kde_icondir/$processes{PROGICON}.png";
+    copy ($icon, "$underDirectory/lo32-app-$nameLittle.png");
     chdir ($underDirectory);
-    chmod (0666, "$nameLittle.xpm");
+    chmod (0666, "lo32-app-$nameLittle.png");
   }
     
   #if no MiniIcon was chosen in kAppWizard
   if ($processes{MINIICON} eq "no") {}
 
   #if the default MiniIcon was chosen in kAppWizard
-  elsif ($processes{MINIICON} eq "(null)") {
-    chdir ($kde_miniicondir);
-    copy ("application_settings.xpm", "$underDirectory/mini-$nameLittle.xpm");
+  elsif ($processes{MINIICON} eq "") {
+    chdir ($templatedir);
+    copy ("lo16-app-appicon.png", "$underDirectory/lo16-app-$nameLittle.png");
     chdir ($underDirectory);
-    chmod (0666, "mini-$nameLittle.xpm");
+    chmod (0666, "lo16-app-$nameLittle.png");
   }
     
   #if a new MiniIcon was chosen in kAppWizard
   else {
-    $icon = $kde_miniicondir."/".$processes{MINIICON};
-    $copying = copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
-    if ($copying)  {
-        $icon = $local_miniicondir."/".$processes{MINIICON};
-        copy ($icon, "$underDirectory/mini-$nameLittle.xpm");
-    }
+    $icon = "$kde_icondir/$processes{MINIICON}.png";
+    copy ($icon, "$underDirectory/lo16-app-$nameLittle.png");
     chdir ($underDirectory);
-    chmod (0666, "mini-$nameLittle.xpm");
+    chmod (0666, "lo16-app-$nameLittle.png");
   }
 }
 
@@ -604,15 +587,6 @@ sub changeMiniApp {
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
   }
 
-#    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
-#       "Makefile.am");        not needed anymore!!
-#                  the template should have
-#              SUBDIRS = |NAMELITTLE|.po
-#              but in this case it's made
-#              by the binary itself
-#    replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
-#       "configure.in");    now fixed entry in template of mini.tar.gz
-
   #Replacements and name changing in underDirectory
   chdir ($underDirectory);
 
@@ -622,8 +596,8 @@ sub changeMiniApp {
   {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
-  } 
- 
+  }
+
   replaceValuesInFile(\%changings, "Makefile.am");
   replaceValuesInFile(\%changings, "$nameLittle.cpp");
   replaceValuesInFile(\%changings, "$nameLittle.h");
@@ -635,7 +609,11 @@ sub changeMiniApp {
   condCopyGNUFiles();
   condCopyLsmFile();
   condCopyUserDocFiles();
-    
+  if ($processes{APPLICATION} =~ /kde2mini/){
+    condCopyKdelnkFile();
+  }
+  condCopyProgIcons();
+
   if ($processes{CPP} eq "yes") {
     processCppTemplate("main.cpp");
     processCppTemplate("$nameLittle.cpp");
@@ -645,8 +623,6 @@ sub changeMiniApp {
     processHeaderTemplate("$nameLittle.h");
   }
 
-  condCopyKdelnkFile();
-  condCopyProgIcons();
   condCreateApiDoc();
 }
 

@@ -2,10 +2,10 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.3
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.4
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<nolden@kde.org>">
 <inst>The KDevelop Team
-<date>Version 1.3 , October 16, 2000
+<date>Version 1.4 , Jan 18, 2001
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -41,9 +41,9 @@ part of the development process. KDevelop manages:
 <item> The creation of User-Handbooks written with <idx/SGML/ and the automatic generation of <idx/HTML/-<idx/output/ with the KDE look and feel,
 <item> Automatic <idx/HTML/-based <idx/API-documentation/ for your project's <idx/classes/ with cross-references to the used libraries,
 <item> Internationalization support for your application, allowing translators to easily add their target language to a project,
-<item> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in <idx/dialog editor/,
+<item> creation of user interfaces by interaction with TrollTech큦 Qt Designer,
 <item> managing your project via CVS by providing an easy-to-use frontend for the most needed functions,
-<item> Debugging your application by integrating <idx/KDbg/,
+<item> Debugging your application with a debugger of your choice, either the internal KDevelop debugge, ddd or kdbg,
 <item> Editing of project-specific <idx/pixmaps/ with <idx/KIconEdit/,
 <item> The inclusion of any other program you need for development by adding it to the "<idx/Tools/"-menu according to your individual needs.
 </itemize>
@@ -59,10 +59,9 @@ anywhere within the IDE.
 
 <sect>Changes
 <p>
-Version 1.3 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 1.0 final release, followed by the release of version 1.1 and 1.2. We believe that the current
-version is to be expected as the final release for the KDE 1.x series, giving developers the environment they want to use especially in
-regards to KDE 2.0 development.
+Version 1.4 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 1.0 final release, followed by the release of version 1.1 and 1.2., the version line based on the KDE 1.x and Qt 1.4x libraries
+finished with version 1.3 in late December of 2000. The current version is a port of version 1.3 to KDE 2.1 with enhanced features.
 
 Improvements were made in the following sections:
 
@@ -110,6 +109,16 @@ KDevelop큦 Dialogeditor into a *.ui file that can be edited with Qt큦 designer.
 <item>several bugfixes regarding bugs in the
 kwrite code and KDevelop itself </itemize>
 
+<bf>KDevelop 1.4:</bf>
+
+<itemize>
+<item>porting over to KDE 2.1. KDevelop is now a true KDE 2.x application and ships with KDE 2.1
+<item>removal of KDE 1.x templates and the internal dialogeditor. Graphical user interface design is now based on using Qt Designer only.
+<item>improved functionality in regards to the classbrowser such as providing the "grep" function over the class-tree and autocompletion in the browser toolbar
+that allows easy selection of classes, methods and member attributes as well as global functions, attributes and structs.
+<item>overall GUI enhancements like geometry-managed dialogs; usage of KDE 2큦 new dialog classes and dockwidgets.
+</itemize>
+
 Any comments about the IDE, its documentation or feature requests are welcome.
 
 <sect>About this Handbook
@@ -117,7 +126,8 @@ Any comments about the IDE, its documentation or feature requests are welcome.
 This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
 information about specific programming issues, we suggest reading the <htmlurl url="programming/index.html" name="KDevelop Programming
 Handbook"> included with KDevelop, which covers themes such as understanding generated <idx/application framework/s and how to create
-full-featured <idx/KDE/ applications using example projects.
+full-featured <idx/KDE/ applications using example projects. See also the included Tutorial Handbook as well as the KDE 2.0 Development book available
+at local bookstores in printed form or online at <htmlurl url="http://www.andamooka.org" name="http://www.andamooka.org">.
 
 The design of this handbook is therefore separated into the following parts:
 <itemize>
@@ -134,8 +144,8 @@ editing.
 <item>Chapter <ref id="Projects" name="Projects">, describes the creation and maintaining of software projects.
 <item>Chapter <ref id="Build Settings" name="Build Settings">, contains a reference on how to set <idx/Compiler/ and liker flags as well as project options.
 <item>Chapter <ref id="The Class Browser" name="The Class Browser">, tells you how to make use of KDevelop's powerful Class Browser.
-<item>Chapter <ref id="The Dialog Editor" name="The Dialog Editor">, features the integrated visual <idx/GUI/ constructor and how it
-generates C++ <idx/output/.
+<item>Chapter <ref id="Using Qt Designer in your Project" name="Using Qt Designer in your Project">, features how to use Qt Designer while working on your project
+and how KDevelop works together with Designer seamlessly.
 <item>Chapter<ref id="The Internal Debugger" name="The Internal Debugger">,gives an overview over debugging setup and use of the internal debugger
 <item>Chapter<ref id="CVS Integration" name="CVS Integration">, tells you how to use the revision control 
 system CVS and RCS with your KDevelop project.
@@ -176,10 +186,13 @@ user interfaces which also supports KDE widgets, the designer is about to replac
 dynamic layout management and directly connecting widgets. To support using the designer within KDevelop, the templates and KDevelop
 have been updated to make easy use of it while working on a KDE 2.0 or Qt 2.2.x project.
 
-The 1.3 release is to be expected as the last version that needs KDE 1.x libraries to run; the port to the KDE 2.0 is under way and is
-to be expected later in 2000 to early 2001 (estimated). As KDevelop 1.3 enables developers to directly work on KDE 2.0 projects, we
-will take our time to provide you a new KDevelop as soon as possible with even more features and please you to be patient meanwhile.
- 
+The 1.3 release marked another milestone. It was the last version that needed KDE 1.x libraries to run and was much anticipated through the offers it made towards
+development for the new KDE 2.0 platform when it was released on December 11th, 2000.
+
+Since then John Birch and I decided that we really would like to have a KDE 2.x version of our "baby", KDevelop. We took the time and made it- by the end of 2000,
+we roughly had the functionality to say we were almost ready. While KDE 2.1 was short to come out early 2001, we decided to ship KDevelop with the base KDE distribution
+as this version will make many new KDE developers happy to start working on a great API on a free system to develop software for.
+
 <sect>Printed Versions
 <p>
 A printed version of the complete KDevelop Documentation is available as the book titled <bf>Developing 
@@ -199,7 +212,7 @@ Letter size.
 <p>
 KDevelop can be found either on the <idx/KDE/ Applications page at <url url="http://www.kde.org/current.html"> or on the KDevelop
 homepage at <url url="http://www.kdevelop.org">. KDevelop is also available on Linux distributions, such
-as SuSE 6.1.
+as SuSE 6.x. and 7.x
 
 We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
 KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
@@ -250,8 +263,7 @@ as distribution packages and thereby can be installed easily.
 <item><idx/Qt designer and uic/ which come along with Qt 2.2.x.
 </itemize>
 
-KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
-200 MMX, 128MB RAM as well as on several other platforms.
+KDevelop was tested with SuSE Linux as well as on several other platforms.
 
 As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including <idx/enscript/ as packages or
 rpm's, so you should have no problem installing the required third-party software.

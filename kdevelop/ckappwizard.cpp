@@ -917,7 +917,7 @@ void CKAppWizard::initPages()
   setNextEnabled( page5, false );
   grid1 = new QGridLayout(page5,7,1,15,0);
 
-  // create a MultiLineEdit for the processes of kAppWizard
+  // create a MultiLineEdit for the processe of kAppWizard
   output = new QMultiLineEdit( page5, "output" );
   output->setFocusPolicy( QWidget::StrongFocus );
   output->setBackgroundMode( QWidget::PaletteBase );
@@ -1903,8 +1903,8 @@ void CKAppWizard::slotDefaultClicked() {
   //end modif by Benoit Cerrina
   nameline->setText(0);
   m_finishButton->setEnabled(false);
-  miniload->setPixmap(BarIcon("application_settings"));
-  iconload->setPixmap(BarIcon("edit"));
+  miniload->setPixmap(locate("appdata", "templates/lo16-app-appicon.png"));
+  iconload->setPixmap(locate("appdata", "templates/lo32-app-appicon.png"));
 
   QFile cppIODev(locate("appdata", "templates/cpp_template"));
   if (cppIODev.open(IO_ReadOnly))
@@ -2015,33 +2015,33 @@ void CKAppWizard::slotDirectoryEntry(const QString&)
 
 // connection of iconload
 void CKAppWizard::slotIconButtonClicked() {
-//  QStrList iconlist;
-  KIconDialog iload;
-//  iconlist.append (locate("icon", "kdevelop"));
-//  iconlist.append (locate("icon","/share/icons"));
-
-//  iload.setDir(&iconlist);
-//  iload.selectIcon(name1,"*");
-#warning FIXME where do the kdevelop icons reside???
-  name1= iload.selectIcon ();
-  if (!name1.isEmpty() )
-    iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1, KIcon::SizeLarge));
+////  QStrList iconlist;
+//  KIconDialog iload;
+////  iconlist.append (locate("icon", "kdevelop"));
+////  iconlist.append (locate("icon","/share/icons"));
+//
+////  iload.setDir(&iconlist);
+////  iload.selectIcon(name1,"*");
+//#warning FIXME where do the kdevelop icons reside???
+//  name1= iload.selectIcon ();
+//  if (!name1.isEmpty() )
+//    iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1, KIcon::SizeLarge));
 }
 
 // connection of miniload
 void CKAppWizard::slotMiniIconButtonClicked() {
-//  QStrList miniiconlist;
-  KIconDialog  mload;
-//  miniiconlist.append (locate("icon", "/mini"));
-//  miniiconlist.append (locate("","")+"/share/icons/mini");
-//  mload.setDir(&miniiconlist);
-//  mload.selectIcon(name2,"*");
+////  QStrList miniiconlist;
+//  KIconDialog  mload;
+////  miniiconlist.append (locate("icon", "/mini"));
+////  miniiconlist.append (locate("","")+"/share/icons/mini");
+////  mload.setDir(&miniiconlist);
+////  mload.selectIcon(name2,"*");
+////  if (!name2.isEmpty() )
+////    miniload->setPixmap(KGlobal::iconLoader()->loadMiniIcon(name2));
+//#warning FIXME where do the kdevelop icons reside???
+//  name2= mload.selectIcon ();
 //  if (!name2.isEmpty() )
-//    miniload->setPixmap(KGlobal::iconLoader()->loadMiniIcon(name2));
-#warning FIXME where do the kdevelop icons reside???
-  name2= mload.selectIcon ();
-  if (!name2.isEmpty() )
-    miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2, KIcon::Small));
+//    miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2, KIcon::Small));
 }
 
 // activate and deactivate the iconbutton
@@ -2548,39 +2548,39 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if (progicon->isChecked()) {
-    fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
+    fileInfo.rel_name = namelow + "/lo32-app-" + namelow + ".png";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!(qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
       if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
-        fileInfo.install_location = "$(kde_icondir)/medium/locolor/apps/" + namelow + ".xpm";
+        fileInfo.install_location = "$(kde_icondir)/locolor/32x32/apps/" + namelow + ".png";
       else
-        fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
+        fileInfo.install_location = "$(kde_icondir)/" + namelow + ".png";
     }
     else {
       fileInfo.install = false;
       fileInfo.install_location = "";
     }
-    project->addFileToProject (namelow + "/" + namelow + ".xpm",fileInfo);
+    project->addFileToProject (namelow + "/lo32-app-" + namelow + ".png",fileInfo);
   }
 
   if (miniicon->isChecked()) {
-    fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
+    fileInfo.rel_name = namelow + "/lo16-app-" + namelow + ".png";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     if (!( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
       if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
-        fileInfo.install_location = "$(kde_icondir)/small/locolor/apps/" + namelow + ".xpm";
+        fileInfo.install_location = "$(kde_icondir)/locolor/16x16/apps/" + namelow + ".png";
       else
-        fileInfo.install_location = "$(kde_minidir)/" + namelow + ".xpm";
+        fileInfo.install_location = "$(kde_minidir)/" + namelow + ".png";
     }
     else {
       fileInfo.install = false;
       fileInfo.install_location = "";
     }
-    project->addFileToProject (namelow + "/mini-" + namelow + ".xpm",fileInfo);
+    project->addFileToProject (namelow + "/lo16-app-" + namelow + ".png",fileInfo);
   }
 
   if ( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {

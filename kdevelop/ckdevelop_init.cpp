@@ -219,6 +219,7 @@ void CKDevelop::initView()
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
   // set the mode of the tab headers
+  config->setGroup("General Options");
   int mode=config->readNumEntry("tabviewmode", 3);
   switch (mode){
     case 1:
@@ -677,6 +678,19 @@ void CKDevelop::initMenuBar(){
   view_tab_menu->insertItem(i18n("Text only"), this, SLOT(slotViewTabText()), 0, ID_VIEW_TAB_TEXT);
   view_tab_menu->insertItem(i18n("Icons only"), this, SLOT(slotViewTabIcons()), 0, ID_VIEW_TAB_ICONS);
   view_tab_menu->insertItem(i18n("Text and Icons"), this, SLOT(slotViewTabTextIcons()),0, ID_VIEW_TAB_TEXT_ICONS);
+  config->setGroup("General Options");
+  int mode=config->readNumEntry("tabviewmode", 3);
+  switch (mode){
+    case 1:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT, true);
+      break;
+    case 2:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS, true);
+      break;
+    case 3:
+      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS, true);
+      break;
+  }
 
   view_menu = new QPopupMenu;
   view_menu->insertItem(SmallIconSet("goto"),i18n("Goto &Line..."), this,
@@ -1530,6 +1544,7 @@ void CKDevelop::initDebugger()
     disassemble->setFocusPolicy(QWidget::ClickFocus);
     var_viewer->setFocusPolicy(QWidget::NoFocus);
 
+    config->setGroup("General Options");
     int mode=config->readNumEntry("tabviewmode", 3);
     switch (mode){
       case 1:
