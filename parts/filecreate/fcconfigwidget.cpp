@@ -161,7 +161,7 @@ void FCConfigWidget::saveGlobalConfig()
     config.open(IO_WriteOnly | IO_Truncate);
     QTextStream stream(&config);
     stream << "<?xml version = '1.0'?>";
-    stream << globalDom.toString(2);
+    stream << globalDom.toString();
     config.close();
 }
 
