@@ -935,7 +935,6 @@ void CKDevelop::saveOptions(){
 
   // write setting whether to use the ctags search database
   config->writeEntry("use_ctags", bCTags);
-//!!!!!!!!!  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   // set the mode of the tab headers
   if(view_tab_menu->isItemChecked(ID_VIEW_TAB_TEXT))

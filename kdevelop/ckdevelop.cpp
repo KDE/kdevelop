@@ -251,16 +251,6 @@ void CKDevelop::slotFileSaveAll()
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotFileRevert()
-{
-  if (!m_docViewManager->currentEditView()) return;
-  if(KMessageBox::questionYesNo(this,
-                    i18n("Reload file and lose all changes?"),
-                    i18n("Are you sure?")) == KMessageBox::Yes) {
-    switchToFile(m_docViewManager->currentEditView()->fileName(),-1,-1,true,false);
-  }
-}
-
 void CKDevelop::slotFilePrint()
 {
   if (!m_docViewManager->currentEditView())
@@ -705,21 +695,44 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
         }
       }
       else {
-        if (pCur->isDockBackPossible()) {
+        bool bDockBackIsPossible = pCur->isDockBackPossible();
+        if (bDockBackIsPossible) {
 					QWidget* oldParentWdg = pCur->parentWidget();
           pCur->dockBack();
 					if (pCur->parentWidget() == oldParentWdg) {
-						// oops...somehow dockBack() failed :-(
-						//
-	          // now try a weak attempt to emulate a dockBack() if it aint possible
-  	        // (one should actually fix KDockWidget in a way that dockBack() is always possible)
-    	      if (type == ID_VIEW_TREEVIEW)
-      	      pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 25);
-        	  else
-          	  pCur->manualDock(m_pDockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
-	          if (pCur->isTopLevel())
-  	          pCur->show();
+					  bDockBackIsPossible = false;
 					}
+        }
+        if (!bDockBackIsPossible) {
+          // oops...somehow dockBack() failed :-(
+          //
+          // now try a weak attempt to emulate a dockBack() if it aint possible
+          // (one should actually fix KDockWidget in a way that dockBack() is always possible)
+          KDockWidget::DockPosition dockPos;
+          int percent;
+          if (type == ID_VIEW_TREEVIEW) {
+            dockPos = KDockWidget::DockLeft;
+            percent = 25;
+          }
+          else {
+            dockPos = KDockWidget::DockBottom;
+            percent = 70;
+          }
+          KDockWidget* pTargetDock = pCur->manualDock(m_pDockbaseAreaOfDocumentViews, dockPos, percent);
+          if ((pTargetDock == pCur) || (pTargetDock == 0L)) {
+            if (m_pDockbaseOfTabPage) {
+              if (m_pDockbaseOfTabPage->parentDockTabGroup()) {
+                KDockWidget* pDockW = dynamic_cast<KDockWidget*>(m_pDockbaseOfTabPage->parentDockTabGroup()->parentWidget());
+                pCur->manualDock(pDockW, dockPos, percent);
+              }
+              else {
+                pCur->manualDock(m_pDockbaseOfTabPage, dockPos, percent);
+              }
+            }
+          }
+          if (pCur->isTopLevel()) {
+            pCur->show();
+          }
         }
       }
     }
@@ -3718,8 +3731,6 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
-  case ID_FILE_REVERT:
-    slotFileRevert();
   case ID_FILE_PRINT:
     slotFilePrint();
     break;

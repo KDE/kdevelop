@@ -1,3 +1,13 @@
+2001-07-17  F@lk Brettschneider <falk@kdevelop.org>
+    * reverted Harald's patch because of the message and feature freeze (Ralf's wish is my comand ;)
+    * bugfix: step 3 to enable the restoring of the GUI also in TabPage MDI mode. Hopefully finished.
+      ==> that's why: writeDockConfig() re-enabled, KDevelop saves dock szenario to kdeveloprc file again.
+    Attention:
+      In case of a messed up dock state, please, remove section [dock_setting_default] from $HOME/.kde/share/config/kdeveloprc!
+
+2001-07-16  F@lk Brettschneider <falk@kdevelop.org>
+    * some bugfixes in QextMDI (synchronized with Dr. Baldeweg AG sources of original QextMDI)
+
 2001-07-11  Harald Fernengel  <harry@bnro.de>
     * added File->Revert Menu Entry to revert changes and reload file from disk
 

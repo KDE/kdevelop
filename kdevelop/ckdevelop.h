@@ -283,8 +283,6 @@ public:
   void slotFileSaveAll();
   /** save the current file under a different filename*/
   void slotFileSaveAs();
-  /** forget changes and reload file */
-  void slotFileRevert();
   /** opens the printing dialog */
   void slotFilePrint();
   /** quit kdevelop*/
