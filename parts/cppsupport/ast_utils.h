@@ -17,15 +17,12 @@
 class AST;
 class DeclaratorAST;
 class TypeSpecifierAST;
-class QListViewItem;
 class QStringList;
 
 namespace KTextEditor{ class EditInterface; }
 
 AST* findNodeAt( AST* unit, int line, int column );
-void buildView( AST* ast, KTextEditor::EditInterface*, QListViewItem* parent );
 void scopeOfNode( AST* ast, QStringList& );
-void printDeclarations( AST* ast );
 QString typeSpecToString( TypeSpecifierAST* typeSpec );
 QString declaratorToString( DeclaratorAST* declarator, const QString& scope = QString::null, bool skipPtrOp=false );
 

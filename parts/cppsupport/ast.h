@@ -305,6 +305,9 @@ public:
     typedef std::auto_ptr<TypeSpecifierAST> Node;
     enum { Type = NodeType_TypeSpecifier };
 
+public:
+    TypeSpecifierAST();
+
     virtual NameAST* name() { return m_name.get(); }
     virtual void setName( NameAST::Node& name );
 
@@ -313,9 +316,6 @@ public:
 
     GroupAST* cv2Qualify() { return m_cv2Qualify.get(); }
     void setCv2Qualify( GroupAST::Node& cv2Qualify );
-
-public:
-    TypeSpecifierAST();
 
 private:
     NameAST::Node m_name;
