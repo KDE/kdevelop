@@ -612,6 +612,9 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 
 	if (info.isFile())		//if the new project file is not valid, do nothing
 	{
+		project_menu->setEnabled(false);
+		kdlg_project_menu->setEnabled(false);
+
 		if(project)
 		{
 			old_project = prj->getProjectFile();
@@ -632,6 +635,8 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 		else
 			slotViewRefresh();
 		slotStatusMsg(i18n("Ready."));
+		project_menu->setEnabled(true);
+		kdlg_project_menu->setEnabled(true);
 	}	
 }
 

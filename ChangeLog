@@ -1,3 +1,6 @@
+2000-04-08 Ralf Nolden <rnolden@kdevelop.de>
+  * disabled project menu when opening project files
+
 2000-04-07 jbb <jbb@ihug.co.nz>
 	* Added Walter's patch to use libtool to relink project
       so that the correct shared libraries are used when debugging.

@@ -1302,28 +1302,7 @@ void CKDevelop::initProject(bool witharg){
       filename = config->readEntry("project_file","");
     }
   }
-
-  QFile file(filename);
-  if (file.exists()){
-    if(!(readProjectFile(filename))){
-      KMsgBox::message(0,filename,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
-    }
-    config->setGroup("Files");
-    filename = config->readEntry("header_file",i18n("Untitled.h"));
-    QFile _file(filename);
-    
-    if (QFile::exists(filename)){
-      switchToFile(filename);
-      
-    }
-
-    filename = config->readEntry("cpp_file", i18n("Untitled.cpp"));
-    if (QFile::exists(filename)){
-      switchToFile(filename);
-    }
-  }
-  refreshTrees();
-  
+  slotProjectOpenCmdl(filename);
 }
 
 
