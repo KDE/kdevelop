@@ -48,7 +48,8 @@ public:
 
     virtual void parseTypeDeclaratation( TypeSpecifierAST* typeSpec );
     virtual void parseDeclaration( TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
-
+    virtual void parseEnumerator( EnumeratorAST* );
+    
 private:
     QString m_fileName;
     QListView* m_listView;

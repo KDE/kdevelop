@@ -53,7 +53,7 @@ void RTClassBrowser::parseNamespace( NamespaceAST* ast )
     if( ast->namespaceName() )
         nsName = ast->namespaceName()->text();
     if( nsName.isEmpty() )
-        nsName = QString::fromLatin1( "<noname>" );
+        nsName = QString::fromLatin1( "<anon-namespace>" );
     
     m_currentScope.push_back( nsName );
     QListViewItem* old = m_currentItem;    
@@ -153,7 +153,7 @@ void RTClassBrowser::parseClassSpecifier( ClassSpecifierAST* ast )
     if( ast->name() )
         className = ast->name()->text();
     if( className.isEmpty() )
-        className = QString::fromLatin1( "<noname>" );
+        className = QString::fromLatin1( "<anon-class>" );
 
 
     int startLine, startColumn;
@@ -183,7 +183,7 @@ void RTClassBrowser::parseEnumSpecifier( EnumSpecifierAST* ast )
     if( ast->name() )
         enumName = ast->name()->text();
     if( enumName.isEmpty() )
-        enumName = QString::fromLatin1( "<noname>" );
+        enumName = QString::fromLatin1( "<anon-enum>" );
 
     int startLine, startColumn;
     int endLine, endColumn;
@@ -195,8 +195,14 @@ void RTClassBrowser::parseEnumSpecifier( EnumSpecifierAST* ast )
     		QString::number(startLine), QString::number(startColumn),
     		QString::number(endLine), QString::number(endColumn) );
 
+    QPtrList<EnumeratorAST> l = ast->enumeratorList();
+    QPtrListIterator<EnumeratorAST> it( l );
+    while( it.current() ){
+	parseEnumerator( it.current() );
+	++it;
+    }
     TreeParser::parseEnumSpecifier( ast );
-    m_currentItem->setOpen( true );
+    m_currentItem->setOpen( false );
     m_currentItem = old;
 }
 
@@ -223,6 +229,18 @@ void RTClassBrowser::parseDeclaration( TypeSpecifierAST* typeSpec, InitDeclarato
     decl->getEndPosition( &endLine, &endColumn );
 
     (void) new QListViewItem( m_currentItem, text,
+    		QString::number(startLine), QString::number(startColumn),
+    		QString::number(endLine), QString::number(endColumn) );
+}
+
+void RTClassBrowser::parseEnumerator( EnumeratorAST * ast )
+{
+    int startLine, startColumn;
+    int endLine, endColumn;
+    ast->getStartPosition( &startLine, &startColumn );
+    ast->getEndPosition( &endLine, &endColumn );
+
+    (void) new QListViewItem( m_currentItem, ast->id()->text(),
     		QString::number(startLine), QString::number(startColumn),
     		QString::number(endLine), QString::number(endColumn) );
 }
