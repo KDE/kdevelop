@@ -98,7 +98,7 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
                           const QStringList & /*args*/ )
     : KTextEditor::Document( parent, name ), m_editor( 0 )
 {
-    kdDebug() << "QEditorPart::QEditorPart()" << endl;
+    kdDebug(9032) << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
     setInstance( QEditorPartFactory::instance() );
 
@@ -412,26 +412,26 @@ QPtrList<KTextEditor::View> QEditorPart::views() const
 void QEditorPart::clearUndo()
 {
 #warning "TODO: void QEditorPart::clearUndo()"
-    kdDebug() << "QEditorPart::clearUndo() -- not implemented yet!!" << endl;
+    kdDebug(9032) << "QEditorPart::clearUndo() -- not implemented yet!!" << endl;
 }
 
 void QEditorPart::clearRedo()
 {
 #warning "TODO: void QEditorPart::clearRedo()"
-    kdDebug() << "QEditorPart::clearRedo() -- not implemented yet!!" << endl;
+    kdDebug(9032) << "QEditorPart::clearRedo() -- not implemented yet!!" << endl;
 }
 
 unsigned int QEditorPart::undoCount() const
 {
 #warning "TODO: unsigned int QEditorPart::undoCount() const"
-    kdDebug() << "QEditorPart::undoCount() -- not implemented yet!!" << endl;
+    kdDebug(9032) << "QEditorPart::undoCount() -- not implemented yet!!" << endl;
     return 0;
 }
 
 unsigned int QEditorPart::redoCount() const
 {
 #warning "TODO: unsigned int QEditorPart::redoCount() const"
-    kdDebug() << "QEditorPart::redoCount() -- not implemented yet!!" << endl;
+    kdDebug(9032) << "QEditorPart::redoCount() -- not implemented yet!!" << endl;
     return 0;
 }
 
@@ -623,7 +623,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
                               unsigned int *matchLen, bool casesensitive, bool backwards )
 {
 #warning "TODO: QEditorPart::searchText()"
-    kdDebug() << "TODO: QEditorPart::searchText()" << endl;
+    kdDebug(9032) << "TODO: QEditorPart::searchText()" << endl;
     return false;
 }
 

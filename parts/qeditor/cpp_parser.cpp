@@ -55,7 +55,7 @@ void CppParser::parseParag( QTextParag* p )
         startLevel = data->level();
     }
 
-    kdDebug() << "CppParser::parseParag() -- " << p->paragId() << endl;
+    kdDebug(9032) << "CppParser::parseParag() -- " << p->paragId() << endl;
 
     int level = startLevel;
 

@@ -266,7 +266,7 @@ void QEditor::zoomOut()
 
 void QEditor::updateStyles()
 {
-    kdDebug() << "QEditor::updateStyles()" << endl;
+    kdDebug(9032) << "QEditor::updateStyles()" << endl;
     int tabwidth = tabStop();
     QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
     if( colorizer ){
@@ -369,7 +369,7 @@ QString QEditor::textLine( uint line ) const
 
 void QEditor::setLanguage( const QString& l )
 {
-    kdDebug() << "QEditor::setLanguage(" << l << ")" << endl;
+    kdDebug(9032) << "QEditor::setLanguage(" << l << ")" << endl;
     m_language = l;
     if( m_language == "c++" ){
         setElectricKeys( "{}" );
