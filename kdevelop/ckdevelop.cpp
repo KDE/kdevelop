@@ -1695,6 +1695,9 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+
+  QString makefileDir=prj->getProjectDir() + prj->getSubDir();
+
   slotDebugStop();
   error_parser->reset();
   error_parser->toogleOn();
@@ -1704,7 +1707,18 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
+  QDir::setCurrent(makefileDir);
+  error_parser->setStartDir(makefileDir);
+  if (prj->getProjectType()=="normal_empty" &&
+       !QFileInfo(makefileDir+"Makefile").exists())
+  {
+     if (QFileInfo(prj->getProjectDir()+"Makefile").exists())
+     {
+       QDir::setCurrent(prj->getProjectDir());
+       error_parser->setStartDir(prj->getProjectDir());
+     }
+  }
+
   process.clearArguments();
   process << make_cmd;
   process << "clean";
@@ -1737,6 +1751,8 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
   QDir::setCurrent(prj->getProjectDir()); 
+  error_parser->setStartDir(prj->getProjectDir());
+
   QString makefile("Makefile.dist");
   if(!QFileInfo(QDir::current(), makefile).exists())
     makefile="Makefile.cvs";
@@ -1777,6 +1793,8 @@ void CKDevelop::slotBuildDistClean(){
   slotStatusMsg(i18n("Running make distclean..."));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir());
+  error_parser->setStartDir(prj->getProjectDir());
+
   process.clearArguments();
   process << make_cmd << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
