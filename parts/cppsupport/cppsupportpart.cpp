@@ -924,7 +924,10 @@ void CppSupportPart::slotMakeMember()
 	    QString declStr = declaratorToString( declarator, scopeStr ).simplifyWhiteSpace();
 
 	    text += "\n\n";
-	    text += typeSpecToString( decl->typeSpec() ) + " ";
+	    QString type = typeSpecToString( decl->typeSpec() );
+	    text += type;
+	    if( !type.isNull() )
+		text +=  + " ";
 
 	    text += declStr + "\n{\n}";
 	}

@@ -62,10 +62,10 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
 
     QMap<QString, Catalog*>::Iterator it = m_catalogs.begin();
     while( it != m_catalogs.end() ){
-        kdDebug(9020) << "try with the catalog " << it.key() << endl;
-
         Catalog* catalog = it.data();
         ++it;
+	
+	kdDebug(9020) << "try with the catalog " << catalog->dbName() << endl;
 
         tags = catalog->query( args );
         if( tags.size() )

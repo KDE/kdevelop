@@ -13,6 +13,7 @@
 #include "ast.h"
 
 #include <qstringlist.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -107,7 +108,7 @@ QString typeSpecToString( TypeSpecifierAST* typeSpec )  // ### TODO: remove
     if( !typeSpec )
         return QString::null;
 
-    return typeSpec->text();
+    return typeSpec->text().replace( QRegExp(" :: "), "::" );
 }
 
 QString declaratorToString( DeclaratorAST* declarator, const QString& scope, bool skipPtrOp )
@@ -149,7 +150,10 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
 	   QPtrListIterator<ParameterDeclarationAST> it( params );
 
            while( it.current() ){
-	       text += typeSpecToString( it.current()->typeSpec() ) + " ";
+	       QString type = typeSpecToString( it.current()->typeSpec() );
+	       text += type;
+	       if( !type.isEmpty() )
+		   text += " ";
                text += declaratorToString( it.current()->declarator() );
 
                ++it;
@@ -165,6 +169,6 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
            text += " const";
    }
 
-   return text.simplifyWhiteSpace();
+   return text.replace( QRegExp(" :: "), "::" ).simplifyWhiteSpace();
 }
 
