@@ -77,111 +77,110 @@ QString URLUtil::getExtension(const QString & path) {
 
 QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url )
 {
-    QString absBase = extractPathNameAbsolute( baseDirUrl ),
-        absRef = extractPathNameAbsolute( url );
-    int i = absRef.find( absBase, 0, true );
+  QString absBase = extractPathNameAbsolute( baseDirUrl ),
+    absRef = extractPathNameAbsolute( url );
+  int i = absRef.find( absBase, 0, true );
 
-    if (i == -1)
-        return QString();
+  if (i == -1)
+    return QString();
 
-    return absRef.replace( 0, absBase.length(), QString() );
+  return absRef.replace( 0, absBase.length(), QString() );
 }
 
 QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &url )
 {
-    KURL baseDirUrl;
-    baseDirUrl.setPath( basePath );
-    return extractPathNameRelative( baseDirUrl, url );
+  KURL baseDirUrl;
+  baseDirUrl.setPath( basePath );
+  return extractPathNameRelative( baseDirUrl, url );
 }
 
 QString URLUtil::extractPathNameAbsolute( const KURL &url )
 {
-    if (isDirectory( url ))
-        return url.path( +1 ); // with trailing "/" if none is present
-    else
-    {
-		// Ok, this is an over-tight pre-condition on "url" since I hope nobody will never
-		// stress this function with absurd cases ... but who knows?
-		QString path = url.path();
-		QFileInfo fi( path );  // Argh: QFileInfo is back ;))
-		return ( fi.exists()? path : QString() );
-	}
+  if (isDirectory( url ))
+    return url.path( +1 ); // with trailing "/" if none is present
+  else
+  {
+    // Ok, this is an over-tight pre-condition on "url" since I hope nobody will never
+    // stress this function with absurd cases ... but who knows?
+    // SIDENOTE: You will never believe it but the AutoMake Manager will first delete the
+    // files it is removing and then requesting to the cvspart to remove them: so this
+    // will always return QString() ;-((
+  /*
+    QString path = url.path();
+    QFileInfo fi( path );  // Argh: QFileInfo is back ;))
+    return ( fi.exists()? path : QString() );
+  */
+    return url.path();
+  }
 }
 
 bool URLUtil::isDirectory( const KURL &url )
 {
-    return QDir( url.path() ).exists();
+  return QDir( url.path() ).exists();
 }
 
 void URLUtil::dump( const KURL::List &urls )
 {
-    kdDebug(9000) << "dump( const QValueList<KURL> & ) here!" << endl;
-    kdDebug(9000) << " List has " << urls.count() << " elements." << endl;
-/*
-	QValueList<KURL>::const_iterator it = urls.begin();
-	for ( ; it != urls.end(); ++it );
-	{
-		const KURL &url = (*it);
-		kdDebug(9000) << " * Element = "  << url.path() << endl;
-	}
-*/
-   for (size_t i = 0; i<urls.count(); ++i)
-   {
-	    KURL url = urls[ i ];
-	    kdDebug(9000) << " * Element = "  << url.path() << endl;
-   }
+  kdDebug(9000) << "dump( const QValueList<KURL> & ) here!" << endl;
+  kdDebug(9000) << " List has " << urls.count() << " elements." << endl;
+
+  for (size_t i = 0; i<urls.count(); ++i)
+  {
+    KURL url = urls[ i ];
+    kdDebug(9000) << " * Element = "  << url.path() << endl;
+  }
 }
 
 QStringList URLUtil::toRelativePaths( const QString &baseDir, const KURL::List &urls)
 {
-    QStringList paths;
+  QStringList paths;
 
-    for (size_t i=0; i<urls.count(); ++i)
-	{
-	    paths << extractPathNameRelative( baseDir, urls[i] );
-	}
+  for (size_t i=0; i<urls.count(); ++i)
+  {
+    paths << extractPathNameRelative( baseDir, urls[i] );
+  }
 
-    return paths;
+  return paths;
 }
 
 QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fileUrl )
 {
-    if (dirUrl.isEmpty() || (dirUrl == "/"))
-        return fileUrl;
+  if (dirUrl.isEmpty() || (dirUrl == "/"))
+    return fileUrl;
 
-    QStringList dir = QStringList::split("/", dirUrl, false);
-    QStringList file = QStringList::split("/", fileUrl, false);
+  QStringList dir = QStringList::split("/", dirUrl, false);
+  QStringList file = QStringList::split("/", fileUrl, false);
 
-    QString resFileName = file.last();
-    file.remove(file.last());
+  QString resFileName = file.last();
+  file.remove(file.last());
 
-    uint i = 0;
-    while ( (i < dir.count()) && (i < (file.count())) && (dir[i] == file[i]) )
-        i++;
+  uint i = 0;
+  while ( (i < dir.count()) && (i < (file.count())) && (dir[i] == file[i]) )
+    i++;
 
-    QString result_up;
-    QString result_down;
-    QString currDir;
-    QString currFile;
-    do
+  QString result_up;
+  QString result_down;
+  QString currDir;
+  QString currFile;
+  do
+  {
+    i >= dir.count() ? currDir = "" : currDir = dir[i];
+    i >= file.count() ? currFile = "" : currFile = file[i];
+    qWarning("i = %d, currDir = %s, currFile = %s", i, currDir.latin1(), currFile.latin1());
+    if (currDir.isEmpty() && currFile.isEmpty())
+      break;
+    else if (currDir.isEmpty())
+      result_down += file[i] + "/";
+    else if (currFile.isEmpty())
+      result_up += "../";
+    else
     {
-        i >= dir.count() ? currDir = "" : currDir = dir[i];
-        i >= file.count() ? currFile = "" : currFile = file[i];
-        qWarning("i = %d, currDir = %s, currFile = %s", i, currDir.latin1(), currFile.latin1());
-        if (currDir.isEmpty() && currFile.isEmpty())
-            break;
-        else if (currDir.isEmpty())
-            result_down += file[i] + "/";
-        else if (currFile.isEmpty())
-            result_up += "../";
-        else
-        {
-            result_down += file[i] + "/";
-            result_up += "../";
-        }
-        i++;
+      result_down += file[i] + "/";
+      result_up += "../";
     }
-    while ( (!currDir.isEmpty()) || (!currFile.isEmpty()) );
+    i++;
+  }
+  while ( (!currDir.isEmpty()) || (!currFile.isEmpty()) );
 
-    return result_up + result_down + resFileName;
+  return result_up + result_down + resFileName;
 }
