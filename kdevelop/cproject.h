@@ -175,7 +175,7 @@ public: // Methods to store project options
   void setVersion(const char *version)        { writeGroupEntry( "General", "version",version ); }
 
   /** Store the name of version control system */
-  void setVCSystem(const char *vc)            { writeGroupEntry( "General", "version_control", vc ); }
+  void setVCSystem(const char *vcsystem);
 
     /** Store the classview tree. */
   void setClassViewTree( const char *tree )   { writeGroupEntry( "General", "classview_tree", tree ); }

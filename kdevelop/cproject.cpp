@@ -79,6 +79,15 @@ void CProject::writeProject(){
  *                                                                   *
  ********************************************************************/
 
+void CProject::setVCSystem(const char *vcsystem)
+{
+    writeGroupEntry( "General", "version_control", vcsystem );
+    if (vc)
+        delete vc;
+    vc = VersionControl::getVersionControl(vcsystem);
+}
+
+
 void CProject::setLFVOpenGroups(QStrList groups){
   config.setGroup( "General" );
   config.writeEntry( "lfv_open_groups", groups );

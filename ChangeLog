@@ -1,3 +1,6 @@
+1999-07-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Combobox for version control in project options
+
 1999-07-23 Jonas Nordin   <jonas.nordin@cenacle.se>
 	* fixed so that protected attributes/methods are shown with the
 	  correct icon. 

@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "cprjoptionsdlg.h"
+#include "vc/versioncontrol.h"
 #include <iostream.h>
 #include <qstrlist.h>
 #include "debug.h"
@@ -101,10 +102,24 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   modifymakefiles_checkbox = new QCheckBox( w, "" );
-  modifymakefiles_checkbox->setGeometry( 10, 220, 290, 20 );
+  modifymakefiles_checkbox->setGeometry( 10, 215, 290, 20 );
   modifymakefiles_checkbox->setText( i18n("Modify Makefiles") );
   modifymakefiles_checkbox->setChecked(prj->getModifyMakefiles());
-    
+
+  QLabel *vcsystem_label 
+    = new QLabel( i18n("Version Control:"), w, "vcsystem_label" );
+  vcsystem_label->setGeometry( 10, 240, 170, 30 );
+
+  vcsystem_combo = new QComboBox( false, w );
+  vcsystem_combo->setGeometry( 190, 240, 60, 30 );
+  QStrList l;
+  VersionControl::getSupportedSystems(&l);
+  vcsystem_combo->insertItem(i18n("None"));
+  vcsystem_combo->insertStrList(&l);
+  QString vcsystem = prj_info->getVCSystem();
+  for (int i = 0; i < vcsystem_combo->count(); ++i)
+      if (vcsystem_combo->text(i) == vcsystem)
+          vcsystem_combo->setCurrentItem(i);
 
   QLabel* info_label;
   info_label=new QLabel(w,"info_label");
@@ -1218,6 +1233,8 @@ void CPrjOptionsDlg::ok(){
   prj_info->setShortInfo(short_info);
   text="";
 
+  prj_info->setVCSystem(vcsystem_combo->currentText());
+  
   prj_info->setModifyMakefiles(modifymakefiles_checkbox->isChecked());
   
   //********gcc-options***************

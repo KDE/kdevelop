@@ -60,6 +60,7 @@ protected:
   QLineEdit* version_edit;
   QLineEdit* prjname_edit;
   QCheckBox* modifymakefiles_checkbox;
+  QComboBox* vcsystem_combo;
   QMultiLineEdit* info_edit;
   // TAB GCC-options
   QComboBox* target;
