@@ -75,7 +75,7 @@ if ($processes{APPLICATION} =~/customproj/){
 }
 else{
   unpackFiles ("template.tar");
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|kickerapp|kpart|kioslave|sharedlib/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|kpart|kioslave|sharedlib/) {
     unpackFiles ("admin.tar");
   }
 

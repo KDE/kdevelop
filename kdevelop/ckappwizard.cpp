@@ -1438,7 +1438,7 @@ void CKAppWizard::okPermited()
 
       if( ( kickeritem->isSelected()||kpartitem->isSelected()||kde2miniitem->isSelected()||
             kde2normalitem->isSelected()||kde2mdiitem->isSelected()||kioslaveitem->isSelected()||
-            qt2normalitem->isSelected()||qt2mdiitem->isSelected()))
+            qt2normalitem->isSelected()||qt2mdiitem->isSelected() || qextmdiitem->isSelected()))
       {
         if (QFileInfo(adminsrc).exists())
         {
