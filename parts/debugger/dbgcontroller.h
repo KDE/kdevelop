@@ -17,7 +17,7 @@
 #define _DBGCONTROLLER_H_
 
 #include <qobject.h>
-#include <lib/util/domutil.h>
+#include <domutil.h>
 
 class KProcess;
 class QString;
