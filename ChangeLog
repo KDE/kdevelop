@@ -1,0 +1,9 @@
+2001-04-06  Richard Dale <duke@tipitina.demon.co.uk
+
+	* Added Java and Objective-C class browsing, and Java KDE project template and
+	automake support (ie the _JAVA primary). Fixed bug in class browser where a 
+	method's arguments were not being displayed (was that a bug or a feature?). 
+	Clicking on a class's instance variables in the class browser now works and 
+	takes you to the source file.
+
+
