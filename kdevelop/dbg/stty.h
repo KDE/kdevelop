@@ -21,10 +21,9 @@
 #ifndef STTY_H
 #define STTY_H
 
-#include <kapp.h>
-#include <qobject.h>
+class QSocketNotifier;
 
-#include <qsocketnotifier.h>
+#include <qobject.h>
 #include <qstring.h>
 
 class STTY : public QObject
@@ -33,8 +32,7 @@ public:
   STTY();
   ~STTY();
 
-  QString getTTY(){ return tty; };
-  QString getMainTTY(){ return maintty; };
+  QString getMainTTY()    { return maintty; };
 
 private slots:
   void OutReceived(int);
@@ -44,14 +42,17 @@ signals:
   void ErrOutput( const char* );
 
 private:
+  int findTTY();
+
+private:
   int fout;
   int ferr;
-  int findTTY();
   QSocketNotifier* out;
   QSocketNotifier* err;
-  QString tty;
   QString maintty;
-  QString thisTTY;
+
+  char ptynam[50]; // "/dev/ptyxx" | "/dev/ptmx"
+  char ttynam[50]; // "/dev/ttyxx" | "/dev/pts/########..."
 };
 
 #endif

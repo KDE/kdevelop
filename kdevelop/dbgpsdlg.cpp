@@ -65,8 +65,8 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
   psProc_ = new KShellProcess("/bin/sh");
   *psProc_ << "ps";
   *psProc_ << "x";
-  *psProc_ << "-o";
-  *psProc_ << "pid,stat,args";
+//  *psProc_ << "-o";
+//  *psProc_ << "pid,stat,args";
 
   connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
   connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );

@@ -37,6 +37,7 @@ public:
 
 private:
   bool displayCurrent();
+  void getNextDisplay();
 
 public slots:
   void slotDisassemble(char* buf);
@@ -49,8 +50,9 @@ signals:
 
 private:
   bool    active_;
-  long    lowerBound_;
-  long    upperBound_;
+  long    lower_;
+  long    upper_;
+  long    address_;
   QString currentAddress_;
 };
 /***************************************************************************/

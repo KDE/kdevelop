@@ -74,7 +74,6 @@ class DbgToolbar : public QFrame
     void slotActivateAndUndock();
 
   private slots:
-    void slotDbgStop();
     void slotDbgKdevFocus();
     void slotDbgPrevFocus();
 
