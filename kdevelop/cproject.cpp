@@ -628,7 +628,7 @@ void CProject::updateMakefileAm(QString makefile){
 	    stream << getLDADD();
 	  }
 	  
-	  if(getProjectType() != "normal_cpp") {
+	  if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c") {
 	    stream << " $(LIBSOCKET)" << "\n";
 	  }
 	  else{
@@ -644,7 +644,7 @@ void CProject::updateMakefileAm(QString makefile){
 	    sources =  str + " " + sources ;
 	  }
 	  QDir dir(getDir(makefile));
-	  if (getProjectType() != "normal_cpp"){
+	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
 	  }
@@ -663,7 +663,8 @@ void CProject::updateMakefileAm(QString makefile){
 	}
  
 	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
-	if((getProjectType() != "normal_cpp") && (makefile == QString("Makefile.am"))){
+	if((getProjectType() != "normal_cpp")  && getProjectType() != "normal_c"&&
+                   (makefile == QString("Makefile.am"))){
 	  stream << "dist-hook:\n\t-perl automoc\n";
 	}
 	//************SUBDIRS***************

@@ -87,7 +87,7 @@ void slotDirDialogClicked();
   void slotNewHeaderButtonClicked();
   void slotNewCppButtonClicked();
   void slotOkClicked();
-  void slotDefaultClicked();
+  void slotDefaultClicked(int);
   //  void slotAppClicked();
   //  void slotMiniClicked();
   //  void slotQtClicked();
@@ -166,7 +166,7 @@ private:
   QListViewItem *ccppentry;
   //QListViewItem *gtkentry;
   QListViewItem *othersentry;
-  //QListViewItem *citem;
+  QListViewItem *citem;
   QListViewItem *cppitem;
   QListViewItem *customprojitem;
   //QListViewItem *gtknormalitem;

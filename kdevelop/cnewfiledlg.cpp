@@ -405,6 +405,8 @@ void CNewFileDlg::slotAddToProject(){
 
 void CNewFileDlg::slotEditTextChanged(const char* text){
   QString filetype = fileType();
+  QString extension = (prj && prj->getProjectType()=="normal_c") ? ".c" : ".cpp";
+
   if(autocompletion){
 
     if (filetype != "TEXTFILE" ) {
@@ -414,7 +416,7 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
 	edit->setText(text + QString(".h"));
       }
       if (filetype == "CPP" ) {
-	edit->setText(text + QString(".cpp"));
+	edit->setText(text + extension);
       }
       if (filetype == "KDELNK" ) {
 	edit->setText(text + QString(".kdelnk"));

@@ -111,7 +111,7 @@ bool CKDevelop::slotProjectClose(){
     // yes- save cpp widget
     edit_widget=cpp_widget;
     if(result== 1){			 	
-      if(edit_widget->getName() == "Untitled.cpp"){
+      if(edit_widget->getName() == "Untitled.cpp" || edit_widget->getName() == "Untitled.c"){
 	slotFileSaveAs();    
         slotFileClose();
       }
@@ -162,7 +162,8 @@ bool CKDevelop::slotProjectClose(){
 	// what to do
 	if(result==1){  // Yes- only save the actual file
 				// save file as if Untitled and close file
-	  if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
+	  if(isUntitled(actual_info->filename))
+            {
 //	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
 	    switchToFile(actual_info->filename);
 	    slotFileSaveAs();
@@ -304,7 +305,7 @@ void CKDevelop::slotProjectAddNewFile(){
 
 void CKDevelop::slotAddExistingFiles(){
   bool copy = false;
-  ProjectFileType type;
+  ProjectFileType type = DATA;
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   QString token;
   QStrList files;
@@ -345,8 +346,10 @@ void CKDevelop::slotAddExistingFiles(){
     type = CProject::getType( dest_name );
       
     if(QFile::exists(dest_name)){
-      int result=KMsgBox::yesNoCancel(this,i18n("Files exists!"),
-                                      i18n("\nThe file\n\n"+source_name+"\n\nalready exists.\nDo you want overwrite the old one?\n"));
+      int result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
+                                      QString(i18n("\nThe file\n\n"))+
+				      source_name+
+				      i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
       if(result==1)
         copy = true;
       if(result==2)
@@ -370,7 +373,8 @@ void CKDevelop::slotAddExistingFiles(){
     new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
   }
   progress.setProgress( files.count() );
-  switchToFile(dest_name);
+  // if (type != DATA)               // don't load data files (has to be tested if wanted)
+   switchToFile(dest_name);
   refreshTrees();
     
   if(new_subdir){
@@ -397,6 +401,9 @@ void CKDevelop::slotProjectRemoveFile(){
 
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+
+
   if(prjdlg.exec()){
     if (prjdlg.needConfigureInUpdate()){
       prj->updateConfigureIn();
@@ -407,9 +414,20 @@ void CKDevelop::slotProjectOptions(){
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
       shell_process.clearArguments();
-      shell_process << make_cmd << " -f Makefile.dist  && "  << "CXXFLAGS=\" " 
-		    << prj->getCXXFLAGS() << " " << prj->getAdditCXXFLAGS() << "\""
-		    << "LDFLAGS=\" " << prj->getLDFLAGS() << "\" " << "./configure";
+      shell_process << make_cmd << " -f Makefile.dist  && ";
+      shell_process << flaglabel;
+      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+      {
+       if (!prj->getCXXFLAGS().isEmpty())
+          shell_process << prj->getCXXFLAGS() << " ";
+       if (!prj->getAdditCXXFLAGS().isEmpty())
+          shell_process << prj->getAdditCXXFLAGS();
+      }
+      shell_process  << "\" " << "LDFLAGS=\" " ;
+      if (!prj->getLDFLAGS().isEmpty())
+         shell_process << prj->getLDFLAGS();
+      shell_process  << "\" "<< "./configure";
+
       shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
       return;
     }
@@ -421,8 +439,19 @@ void CKDevelop::slotProjectOptions(){
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
       shell_process.clearArguments();
-      shell_process << "CXXFLAGS=\" " << prj->getCXXFLAGS() << " " << prj->getAdditCXXFLAGS() << "\""
-		    << "LDFLAGS=\" " << prj->getLDFLAGS() << "\" " << "./configure";
+      shell_process << flaglabel;
+      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+      {
+       if (!prj->getCXXFLAGS().isEmpty())
+          shell_process << prj->getCXXFLAGS() << " ";
+       if (!prj->getAdditCXXFLAGS().isEmpty())
+          shell_process << prj->getAdditCXXFLAGS();
+      }
+      shell_process  << "\" " << "LDFLAGS=\" " ;
+      if (!prj->getLDFLAGS().isEmpty())
+         shell_process << prj->getLDFLAGS();
+      shell_process  << "\" "<< "./configure";
+
       shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
     }
   }
@@ -910,6 +939,8 @@ void CKDevelop::delFileFromProject(QString rel_filename){
 
 bool CKDevelop::readProjectFile(QString file){
   QString str;
+  QString extension;
+
   prj = new CProject(file);
   if(!(prj->readProject())){
     return false;
@@ -919,11 +950,28 @@ bool CKDevelop::readProjectFile(QString file){
   //   if(QFile::exists(str)){
   //     switchToFile(str);
   //   }
+
+  // if this is a c project then change Untitled.cpp to Untitled.c
+  if (prj->getProjectType()=="normal_c")
+  {
+    TEditInfo *actual_info=0l;
+    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename!="Untitled.cpp";
+         actual_info=edit_infos.next());
+    if (actual_info)
+    {
+      actual_info->filename = "Untitled.c";
+      menu_buffers->changeItem(actual_info->filename, actual_info->id);
+      if (cpp_widget->getName()=="Untitled.cpp")
+        cpp_widget->setName(actual_info->filename);
+    }
+   }
+
+  extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
   str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
   if(QFile::exists(str)){
     switchToFile(str);
   }
-  str = prj->getProjectDir() + prj->getSubDir() + "main.cpp";
+  str = prj->getProjectDir() + prj->getSubDir() + "main."+extension;
   if(QFile::exists(str)){
     switchToFile(str);
   }
@@ -973,15 +1021,18 @@ bool CKDevelop::readProjectFile(QString file){
   }
 
   enableCommand(ID_PROJECT_REMOVE_FILE);
-  enableCommand(ID_PROJECT_NEW_CLASS);
   enableCommand(ID_PROJECT_WORKSPACES);
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
-  enableCommand(ID_CV_WIZARD);
-  enableCommand(ID_CV_GRAPHICAL_VIEW);
-  enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
-  enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+  if (prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
+  {
+    enableCommand(ID_PROJECT_NEW_CLASS);
+    enableCommand(ID_CV_WIZARD);
+    enableCommand(ID_CV_GRAPHICAL_VIEW);
+    enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+    enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+  }
 
   addRecentProject(file);
   project=true;
@@ -1003,6 +1054,7 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   }
   current.openfiles.removeRef("Untitled.h");
   current.openfiles.removeRef("Untitled.cpp");
+  current.openfiles.removeRef("Untitled.c");
   current.header_file = header_widget->getName();
   current.cpp_file = cpp_widget->getName();
   current.browser_file =history_list.current();
@@ -1026,118 +1078,4 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

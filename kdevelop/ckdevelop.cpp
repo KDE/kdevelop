@@ -99,7 +99,7 @@ void CKDevelop::slotFileOpen( int id_ ){
 
 void CKDevelop::slotFileClose(){
   slotStatusMsg(i18n("Closing file..."));
-   QString filename=edit_widget->getName();
+  QString filename=edit_widget->getName();
   int message_result;
 
   if(edit_widget->isModified()){
@@ -116,14 +116,19 @@ void CKDevelop::slotFileClose(){
 
     if (message_result == 1){ // yes
 
-      if (filename=="Untitled.cpp" || filename=="Untitled.h")
+      if (isUntitled(filename))
       {
- 	slotFileSaveAs();
+ 	if (!fileSaveAs())
+		message_result=3;    // simulate here cancel because fileSaveAs failed....
       }
       else
+      {
         edit_widget->doSave();
-
+        if (edit_widget->isModified())
+            message_result=3;		   // simulate cancel because doSave went wrong!
+      }
     }
+
     if (message_result == 3){ // cancel
        slotStatusMsg(i18n("Ready."));
       return;
@@ -131,6 +136,10 @@ void CKDevelop::slotFileClose(){
   }
 
   removeFileFromEditlist(filename);
+  kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+  kdev_caption+= version +
+             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
+  setCaption(kdev_caption);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -142,9 +151,10 @@ void CKDevelop::slotFileCloseAll(){
 void CKDevelop::slotFileSave(){
 
   QString filename=edit_widget->getName();
-  slotStatusMsg(i18n("Saving file "+filename));
+  QString sShownFilename=QFileInfo(filename).fileName();
+  slotStatusMsg(i18n("Saving file ")+sShownFilename);
 
-  if((filename== "Untitled.cpp") || (filename == "Untitled.h")){
+  if(isUntitled(filename)){
     slotFileSaveAs();
   }
   else{
@@ -155,98 +165,25 @@ void CKDevelop::slotFileSave(){
     }
   }
   slotStatusMsg(i18n("Ready."));
-  slotStatusHelpMsg(i18n("File  "+filename+ "  saved."));
+  QString sHelpMsg=i18n("File ");
+  sHelpMsg+=sShownFilename;
+  if (edit_widget->isModified())
+    sHelpMsg+=i18n(" not saved.");
+  else
+    sHelpMsg+=i18n(" saved.");
+
+  slotStatusHelpMsg(sHelpMsg);
 }
 
 void CKDevelop::slotFileSaveAs(){
   slotStatusMsg(i18n("Save file as..."));
-  QString name, oldName;
-  TEditInfo* actual_info=0;
-  TEditInfo* old_info=0;
-  TEditInfo* search_info;
-  int message_result=-1; // this means no question of changing was needed
 
-  oldName=edit_widget->getName();
-  if (bAutosave)
-    saveTimer->stop();
-  do
-  {
-       if (oldName!="Untitled.h" && oldName!="Untitled.cpp")
-        name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
-       else
-        name = KFileDialog::getSaveFileName((const char *)
-           ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
-		0,this,oldName);
+  fileSaveAs();
 
-    if (name.isNull()){
-    // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
-      if (bAutosave)
-       saveTimer->start(saveTimeout);
-     slotStatusMsg(i18n("Ready."));
-     return;
-    }
-
-    // check if the extension is changed and the widget or program to view must change
-    if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
-      message_result = KMsgBox::yesNoCancel(this,i18n("Save as new type of document?"),
-                                                                  i18n("Do you really want to save the file\n"
-                                                                  "as another type of document?"),
-                                                                  KMsgBox::QUESTION);
-
-  } while (message_result == 2); // repeat it on 'no'
-
-
-  if (message_result==3){
-     //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
-      if (bAutosave)
-       saveTimer->start(saveTimeout);
-     slotStatusMsg(i18n("Ready."));
-     return;
-  }
-
-
-   // search if we can find the new desired filename in edit_infos ...
-   // means already loaded
-  for(search_info=edit_infos.first(); search_info!=0 && (actual_info == 0 || old_info == 0);
-      search_info=edit_infos.next()){
-     if (search_info->filename == name)
-       actual_info=search_info;
-     if (search_info->filename == oldName)
-       old_info=search_info;
-  }
-
-  // now that all cancel possibilities are handled simulate a changed file
-  // edit_widget->toggleModified(true);
-  edit_widget->doSave(name); // try the save
-
-  if (actual_info != 0l && actual_info==old_info)
-  {
-       // here we are ... saving the file with the same name
-       //   so only the modified-flags have to be changed
-       actual_info->modified = false;
-       edit_widget->toggleModified(false);
-  }
-  else
-  {
-    // now open this file as new file in edit_infos
-    //    if an widget still contains the file then update the contents in the widget from file
-    switchToFile(name, true);
-
-    if (oldName!=name)
-    {
-      // here we are... and any Untitled-file was saved with another name
-      //   and now we can remove the untitled file
-      if (oldName=="Untitled.h" || oldName=="Untitled.cpp")
-      {
-          removeFileFromEditlist(oldName);
-      }
-    }
-
-    slotViewRefresh();
-  }
-
-  if (bAutosave)
-     saveTimer->start(saveTimeout);
+  kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+  kdev_caption+= version +
+             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
+  setCaption(kdev_caption);
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -283,6 +220,10 @@ void CKDevelop::slotFileSaveAll(){
       switchToFile("Untitled.cpp");
       slotFileSaveAs();
     }
+    else if(cpp_widget->getName() == "Untitled.c"){
+      switchToFile("Untitled.c");
+      slotFileSaveAs();
+    }
     else{
       cpp_widget->doSave();
     }
@@ -298,7 +239,7 @@ void CKDevelop::slotFileSaveAll(){
     i++;
     statProg->setProgress(i);
     if(actual_info->modified){
-      if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
+      if(isUntitled(actual_info->filename)){
       	switchToFile(actual_info->filename);
       	slotFileSaveAs();
      // 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
@@ -782,6 +723,9 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -792,9 +736,20 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   QDir::setCurrent(prj->getProjectDir()); 
   shell_process.clearArguments();
   shell_process << make_cmd << "distclean && " << make_cmd 
-		<< " -f Makefile.dist && "  << "CXXFLAGS=\" " 
-		    << prj->getCXXFLAGS() << " " << prj->getAdditCXXFLAGS() << "\""
-		    << "LDFLAGS=\" " << prj->getLDFLAGS() << "\" " << "./configure && " << make_cmd;
+		<< " -f Makefile.dist && ";
+  shell_process << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+       if (!prj->getCXXFLAGS().isEmpty())
+          shell_process << prj->getCXXFLAGS() << " ";
+       if (!prj->getAdditCXXFLAGS().isEmpty())
+          shell_process << prj->getAdditCXXFLAGS();
+  }
+  shell_process  << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty())
+         shell_process << prj->getLDFLAGS();
+  shell_process  << "\" "<< "./configure && " << make_cmd;
+
   beep = true;
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
@@ -846,6 +801,8 @@ void CKDevelop::slotBuildAutoconf(){
 
 void CKDevelop::slotBuildConfigure(){
   slotStatusMsg(i18n("Running ./configure..."));
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+
   showOutputView(true);
   setToolMenuProcess(false);
   error_parser->toogleOff();
@@ -854,9 +811,18 @@ void CKDevelop::slotBuildConfigure(){
   slotFileSaveAll();
   QDir::setCurrent(prj->getProjectDir()); 
   shell_process.clearArguments();
-  shell_process  << "CXXFLAGS=\" " 
-		 << prj->getCXXFLAGS() << " " << prj->getAdditCXXFLAGS() << "\""
-		 << "LDFLAGS=\" " << prj->getLDFLAGS() << "\" " << "./configure";
+  shell_process << flaglabel;
+  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
+  {
+       if (!prj->getCXXFLAGS().isEmpty())
+          shell_process << prj->getCXXFLAGS() << " ";
+       if (!prj->getAdditCXXFLAGS().isEmpty())
+          shell_process << prj->getAdditCXXFLAGS();
+  }
+  shell_process  << "\" " << "LDFLAGS=\" " ;
+  if (!prj->getLDFLAGS().isEmpty())
+         shell_process << prj->getLDFLAGS();
+  shell_process  << "\" "<< "./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 }
@@ -1710,7 +1676,9 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
     browser_widget->findTextBegin();
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
-  setCaption(actualTitle+" - KDevelop " + version);
+
+  if (s_tab_view->getCurrentTab()==BROWSER)
+    setCaption(actualTitle+" - KDevelop " + version);
 
   if (pos!=-1)
    url_wo_ref = actualURL.left(pos);
@@ -2067,7 +2035,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       }
 
       // Warning: not every user has the current directory in his path !
-      if(prj->getProjectType() == "normal_cpp"){
+      if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
 	o_tab_view->setCurrentTab(STDINSTDOUT);
 	QString term = "xterm";
 	QString exec_str = term + " -e sh -c './" +  program + "'";
@@ -2165,11 +2133,10 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-		if(project)
-	    setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
-		else
-	    setCaption("KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
-
+    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+    kdev_caption+= version +
+             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
+    setCaption(kdev_caption);
   }
   if (item == CPP){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
@@ -2186,10 +2153,10 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-		if(project)
-	    setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
-		else
-	    setCaption("KDevelop " + version + " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]");
+    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+    kdev_caption+= version +
+             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
+    setCaption(kdev_caption);
   }
   if(item == BROWSER){
     if(bAutoswitch)
@@ -2575,7 +2542,6 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
-
 
 
 

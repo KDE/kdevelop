@@ -53,7 +53,10 @@ elsif ($processes{APPLICATION} eq "kdemini") {
   changeMiniApp();
 }
 elsif ($processes{APPLICATION} eq "cpp") {
-  changeTerminalApp();
+  changeTerminalCPPApp();
+}
+elsif ($processes{APPLICATION} eq "c") {
+  changeTerminalCApp();
 }
 elsif ($processes{APPLICATION} eq "qtnormal") {
   changeQtApp();
@@ -487,7 +490,7 @@ sub changeMiniApp {
 }
 
 
-sub changeTerminalApp {
+sub changeTerminalCPPApp {
 
     unpackFiles("cpp.tar");
     
@@ -525,6 +528,44 @@ sub changeTerminalApp {
     
 }
 
+
+sub changeTerminalCApp {
+
+    unpackFiles("c.tar");
+
+    #renamed the directory
+    printflush (STDOUT, "change files...\n");
+    chdir ($overDirectory);
+    rename ("skel", $nameLittle);
+
+    #create the templatedirectory
+    condCopyTemplateFiles();
+
+    #replaced skel with the projectname in different files
+    chdir ($overDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "configure.in");
+
+    chdir ($underDirectory);
+    replaceValuesInFile(\%changings, "Makefile.am");
+    replaceValuesInFile(\%changings, "main.c");
+
+    chdir ($underDirectory . "/docs/en");
+    replaceValuesInFile(\%changings, "Makefile.am");
+
+    condCopyGNUFiles();
+    condCopyLsmFile();
+    condCopyUserDocFiles();
+
+    if ($processes{CPP} eq "yes") {
+        processCppTemplate("main.c");
+    }
+
+    condCopyKdelnkFile();
+    condCopyProgIcons();
+    condCreateApiDoc();
+
+}
 
 sub changeQtApp {
 

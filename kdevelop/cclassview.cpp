@@ -102,7 +102,7 @@ void CClassView::initPopups()
   projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   projectPopup.insertSeparator();
   projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
-  projectPopup.insertItem(i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), ID_CV_GRAPHICAL_VIEW);
+  projectPopup.insertItem(i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
 
 
 
@@ -187,6 +187,7 @@ void CClassView::refresh( CProject *proj )
   char *str;
   int totalCount=0;
   int currentCount = 0;
+  bool popupClassItemsEnable;
 
   debug( "CClassView::refresh( proj )" );
 
@@ -223,6 +224,13 @@ void CClassView::refresh( CProject *proj )
   }
 
   refresh();
+
+  // disable certain popup items if it is a C Project
+  popupClassItemsEnable=proj->getProjectType()!="normal_c";
+  projectPopup.setItemEnabled(ID_PROJECT_NEW_CLASS, popupClassItemsEnable);
+  projectPopup.setItemEnabled(ID_CV_FOLDER_NEW, popupClassItemsEnable);
+  projectPopup.setItemEnabled(ID_CV_GRAPHICAL_VIEW, popupClassItemsEnable);
+
 }
 
 /*---------------------------------------------- CClassView::refresh()

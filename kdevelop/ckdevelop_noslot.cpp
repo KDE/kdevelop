@@ -74,7 +74,6 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
         cpp_widget->setText(actual_info->text);
         cpp_widget->toggleModified(actual_info->modified);
         cpp_widget->setName(actual_info->filename);
-        setCaption(actual_info->filename);
   //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
         return;
       }
@@ -83,14 +82,14 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
     // if not found a successor create an new file
     actual_info = new TEditInfo;
     actual_info->modified=false;
-    actual_info->id = menu_buffers->insertItem("Untitled.cpp",-2,0);
-    actual_info->filename = "Untitled.cpp";
+    QString sCFilename= (project && prj->getProjectType()=="normal_c") ? "Untitled.c" : "Untitled.cpp";
+    actual_info->id = menu_buffers->insertItem(sCFilename,-2,0);
+    actual_info->filename = sCFilename;
 
     edit_infos.append(actual_info);
 
     cpp_widget->clear();
     cpp_widget->setName(actual_info->filename);
-    setCaption(cpp_widget->getName());
   }
 
   // was this file in the header_widget?
@@ -103,7 +102,6 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
         header_widget->setText(actual_info->text);
         header_widget->toggleModified(actual_info->modified);
         header_widget->setName(actual_info->filename);
-        setCaption(actual_info->filename);
   //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
         return;
       }
@@ -119,9 +117,142 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
 
     header_widget->clear();
     header_widget->setName(actual_info->filename);
-    setCaption(header_widget->getName());
   }
 
+}
+/*---------------------------------------- CKDevelop::isUntitled()
+ * isUntitled()
+ *
+ *  static method
+ *  checks if the passed name
+ *  is defined by KDevelop (should be changed by the user)
+ *
+ * Parameters:
+ *  filename to check
+ * Returns:
+ *   true if filename isn´t still defined by user
+ *        (means some Untitled-name)
+ *-----------------------------------------------------------------*/
+bool CKDevelop::isUntitled(const char* name)
+{
+  QString s=(name) ? name : "";
+  return (s=="Untitled.h" || s=="Untitled.c" || s=="Untitled.cpp");
+}
+
+/*---------------------------------------- CKDevelop::fileSaveAs()
+ * fileSaveAs()
+ *
+ *  makes file "save As" handling
+ *  and returns true if it succeeded
+ *
+ * Parameters:
+ *  none
+ * Returns:
+ *   true if the file was saved
+ *-----------------------------------------------------------------*/
+bool CKDevelop::fileSaveAs(){
+
+  QString name, oldName;
+  TEditInfo* actual_info=0;
+  TEditInfo* old_info=0;
+  TEditInfo* search_info;
+  int message_result=1; // simulate ok state... this could change by one of the following messageboxes
+
+  oldName=edit_widget->getName();
+  if (bAutosave)
+    saveTimer->stop();
+
+  do
+  {
+       if (!isUntitled(oldName))
+        name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
+       else
+        name = KFileDialog::getSaveFileName((const char *)
+           ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
+		0,this,oldName);
+
+    if (name.isNull()){
+    // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
+      if (bAutosave)
+       saveTimer->start(saveTimeout);
+     return false;
+    }
+
+    // check if the extension is changed and the widget or program to view must change
+    if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
+      message_result = KMsgBox::yesNoCancel(this,i18n("Save as new type of document?"),
+                                                                  i18n("Do you really want to save the file\n"
+                                                                  "as another type of document?"),
+                                                                  KMsgBox::QUESTION);
+    if(message_result==1 && QFile::exists(name))
+    {
+      message_result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
+                    QString(i18n("\nThe file\n\n"))+name+
+		i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
+    }
+
+  } while (message_result == 2); // repeat it on 'no'
+
+
+  if (message_result==3){
+     //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
+      if (bAutosave)
+       saveTimer->start(saveTimeout);
+     return false;
+  }
+
+
+   // search if we can find the new desired filename in edit_infos ...
+   // means already loaded
+  for(search_info=edit_infos.first(); search_info!=0 && (actual_info == 0 || old_info == 0);
+      search_info=edit_infos.next()){
+     if (search_info->filename == name)
+       actual_info=search_info;
+     if (search_info->filename == oldName)
+       old_info=search_info;
+  }
+
+  // now that all cancel possibilities are handled simulate a changed file
+  // edit_widget->toggleModified(true);
+  edit_widget->doSave(name); // try the save
+
+  // if edit_widget is still modified, then saving failed
+  if (edit_widget->isModified()){
+      if (bAutosave)
+       saveTimer->start(saveTimeout);
+     return false;
+  }
+
+  if (actual_info != 0l && actual_info==old_info)
+  {
+       // here we are ... saving the file with the same name
+       //   so only the modified-flags have to be changed
+       actual_info->modified = false;
+       edit_widget->toggleModified(false);
+  }
+  else
+  {
+    // now open this file as new file in edit_infos
+    //    if an widget still contains the file then update the contents in the widget from file
+    switchToFile(name, true);
+
+    if (oldName!=name)
+    {
+      // here we are... and any Untitled-file was saved with another name
+      //   and now we can remove the untitled file
+      if (isUntitled(oldName))
+      {
+          removeFileFromEditlist(oldName);
+      }
+    }
+
+    slotViewRefresh();
+  }
+
+  if (bAutosave)
+     saveTimer->start(saveTimeout);
+
+  return true;
 }
 
 /*---------------------------------------- CKDevelop::realSearchText2regExp()
@@ -265,8 +396,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   TEditInfo* actual_info;
 
   // check if the file exists
-  if(!QFile::exists(filename) && filename != "Untitled.h" && filename != "Untitled.cpp"){
-    KMsgBox::message(this,i18n("Attention"),filename +"\n\nFile does not exist!");
+  if(!QFile::exists(filename) && !isUntitled(filename)){
+    KMsgBox::message(this,i18n("Attention"),filename +i18n("\n\nFile does not exist!"));
     return;
   }
 
@@ -390,14 +521,10 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
       //      output_widget->append ("File: was was already there");
-      if(project){
-  	setCaption(prj->getProjectName()+" - KDevelop " + version + 
-             " - ["+ QFileInfo(filename).fileName()+"]");
- 	}
- 	else{
-  	setCaption("KDevelop " + version + 
-             " - ["+ QFileInfo(filename).fileName()+"]");
-      }
+      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+      kdev_caption+= version +
+             " - ["+ QFileInfo(filename).fileName()+"]";
+      setCaption(kdev_caption);
       return;
     }
   }
@@ -421,12 +548,10 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   edit_widget->setFocus();
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
-  if(project){
-    setCaption(prj->getProjectName()+" - KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
-  }
-  else{
-    setCaption("KDevelop " + version + " - ["+ QFileInfo(filename).fileName()+"]");
-  }
+  kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+  kdev_caption+= version +
+             " - ["+ QFileInfo(filename).fileName()+"]";
+  setCaption(kdev_caption);
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){

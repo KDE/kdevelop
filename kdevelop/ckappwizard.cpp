@@ -36,7 +36,7 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   //cerr << ":" << m_author_name << ":";
   //cerr << ":" << m_author_email << ":";
   
-  slotDefaultClicked();    
+  slotDefaultClicked(0);
 }
 
 CKAppWizard::~CKAppWizard () {
@@ -60,7 +60,7 @@ void CKAppWizard::init(){
   defaultButton = new QButton();
   defaultButton = getDefaultButton();
   QToolTip::add(defaultButton,i18n("set all changes back"));
-  connect(this,SIGNAL(defaultclicked(int)),SLOT(slotDefaultClicked()));
+  connect(this,SIGNAL(defaultclicked(int)),SLOT(slotDefaultClicked(int)));
   setEnableArrowButtons(true);
 }
 
@@ -152,7 +152,7 @@ void CKAppWizard::initPages(){
   ccppentry->setOpen (TRUE);
   ccppentry->sortChildItems (0,FALSE);
   cppitem = new QListViewItem (ccppentry,i18n("C++"));
-  //citem = new QListViewItem (ccppentry,"C");
+  citem = new QListViewItem (ccppentry,i18n("C"));
 
   qtentry = new QListViewItem (applications, i18n("Qt"));
   qtentry->setExpandable (true);
@@ -732,7 +732,11 @@ void CKAppWizard::slotHeaderDialogClicked() {
 // connection of cppload
 void CKAppWizard::slotCppDialogClicked() {
   cppdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Cpptemplate",true,true);
-  cppdialog->setCaption(i18n("Select your template for Cpp-file headers"));
+  cppdialog->setCaption( (citem->isSelected()) ?
+                         i18n("Select your template for C-file headers")
+                         :
+                         i18n("Select your template for Cpp-file headers")
+			);
   if(cppdialog->exec()){
     cppedit->loadFile(cppdialog->selectedFile(),cppedit->OPEN_READWRITE);
   }
@@ -833,10 +837,10 @@ void CKAppWizard::okPermited() {
   else if (cppitem->isSelected()) {
     entries << "cpp\n";
   }
-  /*else if (citem->isSelected()) {
+  else if (citem->isSelected()) {
     entries << "c\n";
     }
-    else if (gtknormalitem->isSelected()) {
+  /*  else if (gtknormalitem->isSelected()) {
     entries << "gtknormal\n";
     }
     else if (gtkminiitem->isSelected()) {
@@ -929,7 +933,12 @@ void CKAppWizard::okPermited() {
     p << "cp " + copysrc + (QString) " " + copydes;
     p.start(KProcess::Block,KProcess::AllOutput);
   } 
-  
+  else if (citem->isSelected()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/c.tar.gz";
+    p << "cp " + copysrc + (QString) " " + copydes;
+    p.start(KProcess::Block,KProcess::AllOutput);
+  }
+
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -1030,8 +1039,9 @@ void CKAppWizard::slotAppEnd() {
   delete (qtnormalitem);
   //delete (qtminiitem);
   delete (qtentry);
-  //delete (citem);
   ccppentry->removeItem (cppitem);
+  ccppentry->removeItem (citem);
+  delete (citem);
   delete (cppitem);
   delete (ccppentry);
   //delete (gtknormalitem);
@@ -1132,9 +1142,15 @@ void CKAppWizard::slotApplicationClicked() {
     											"a menubar, toolbar and statusbar, including support for "
     											"a generic document-view model."));
   }
-  else if (cppitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if ((citem->isSelected() || cppitem->isSelected())
+            && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
+    if (citem->isSelected())
+    {
+      setPage(3, i18n("Headertemplate for .c-files"));
+      cppheader->setText( i18n("headertemplate for .c-files") );
+    }
     apidoc->setEnabled(false);
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -1153,18 +1169,14 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a C++ application. The program will run in a terminal "
-    											"and doesn't contain any support for a Graphical User Interface."));
+    apphelp->setText ( (citem->isSelected()) ?
+		      i18n("Create a C application. The program will run in a terminal "
+    			   "and doesn't contain any support for classes and Graphical User Interface.")
+                      :
+                      i18n("Create a C++ application. The program will run in a terminal "
+    			   "and doesn't contain any support for a Graphical User Interface."));
   }
-  /*  else if (citem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
-      if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
-      okButton->setEnabled(true);
-      }
-      apphelp->setText (i18n("With this framework you can\n"
-			   "generate a program with toolsbar\n"
-			   "and mainmenus"));
-      }
-      else if (corbaitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  /*    else if (corbaitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") & strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
       }
@@ -1257,8 +1269,14 @@ void CKAppWizard::slotApplicationClicked() {
 }
 
 // connection of this
-void CKAppWizard::slotDefaultClicked() {
+void CKAppWizard::slotDefaultClicked(int page) {
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
+
+    setPage(3, i18n("Headertemplate for .cpp-files"));
+    if (page==3)
+     gotoPage(3);
+    cppheader->setText( i18n("headertemplate for .cpp-files") );
+
   widget1b->setBackgroundPixmap(pm);
   applications->setSelected(kdenormalitem,true);
   apidoc->setChecked(true);
@@ -1392,6 +1410,9 @@ void CKAppWizard::slotProcessExited() {
   if (cppitem->isSelected()) {
     project->setProjectType("normal_cpp");
   } 
+  else if (citem->isSelected()) {
+    project->setProjectType("normal_c");
+  }
   else if (kdeminiitem->isSelected()) {
     project->setProjectType("mini_kde");  
   } 
@@ -1468,7 +1489,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
-  if (!(cppitem->isSelected() || qtnormalitem->isSelected())) {
+  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected())) {
     makeAmInfo.rel_name = "po/Makefile.am";
 //    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
     makeAmInfo.type = "po";
@@ -1541,15 +1562,16 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if (generatesource->isChecked()) {
-    fileInfo.rel_name = namelow + "/main.cpp";
+    QString extension= (citem->isSelected()) ? "c" : "cpp";
+    fileInfo.rel_name = namelow + "/main."+extension;
     fileInfo.type = CPP_SOURCE;
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
-    project->addFileToProject (namelow + "/main.cpp",fileInfo);
+    project->addFileToProject (namelow + "/main."+extension,fileInfo);
   }
   
-  if (!(cppitem->isSelected())) {
+  if (!citem->isSelected() && !cppitem->isSelected()) {
     if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
       fileInfo.type = CPP_SOURCE;
@@ -1672,7 +1694,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-1.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) {
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
@@ -1686,7 +1708,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-2.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) {
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
@@ -1699,7 +1721,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-3.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) {
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
@@ -1712,7 +1734,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-4.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) {
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
@@ -1725,7 +1747,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-5.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) { 
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
@@ -1738,7 +1760,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index-6.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) {
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
@@ -1751,7 +1773,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.rel_name = namelow + "/docs/en/index.html";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(cppitem->isSelected())) {
+    if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
       if (qtnormalitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
@@ -1791,13 +1813,13 @@ void CKAppWizard::slotProcessExited() {
     project->setFilters("GNU",group_filters);
   }
   
-  if (!(cppitem->isSelected() || qtnormalitem->isSelected())) {
+  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected())) {
     group_filters.clear();
     group_filters.append("*.po");
     project->addLFVGroup ("Translations","");
     project->setFilters("Translations",group_filters);
   } 
-  if (!cppitem->isSelected()) {
+  if (!cppitem->isSelected() && !citem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
     project->addLFVGroup ("Dialogs","");
@@ -1839,15 +1861,19 @@ void CKAppWizard::slotProcessExited() {
 
 // enable cancelbutton if everything is done
 void CKAppWizard::slotMakeEnd() {
+  QString extension= (citem->isSelected()) ? "c" : "cpp";
   if (!generatesource->isChecked()) {
     QFile file;
     q->clearArguments();
     directorytext = directoryline->text();
     nametext = nameline->text();
     nametext = nametext.lower();
-    file.remove (directorytext + "/" + nametext + "/main.cpp");
-    file.remove (directorytext + "/" + nametext + "/" + nametext + ".cpp");
-    file.remove (directorytext + "/" + nametext + "/" + nametext + ".h");
+    file.remove (directorytext + "/" + nametext + "/main."+extension);
+    if (!citem->isSelected() && !cppitem->isSelected())
+    {
+      file.remove (directorytext + "/" + nametext + "/" + nametext + ".cpp");
+      file.remove (directorytext + "/" + nametext + "/" + nametext + ".h");
+    }
     if (kdenormalitem->isSelected() || qtnormalitem->isSelected()) {
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.h");
