@@ -1,5 +1,6 @@
 1999-06-21 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed clicking behaviour in the CV.
+	* fixed problem parsing unclosed function declarations as in foo( int a
 
 1999-07-21 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commit patch by Stefan Mars <mars@lysator.liu.se> for (f)lex support in KDevelop. 
