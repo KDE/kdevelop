@@ -534,14 +534,14 @@ class KWrite : public QWidget {
     SConfig s;
     QDialog *replacePrompt;
 
-//right mouse button popup menu
-  public:
-    /** Install a Popup Menu. The Popup Menu will be activated on
-        a right mouse button press event.
-    */
-    void installRBPopup(QPopupMenu *);
-  protected:
-    QPopupMenu *popup;
+////right mouse button popup menu
+//  public:
+//    /** Install a Popup Menu. The Popup Menu will be activated on
+//        a right mouse button press event.
+//    */
+////    void installRBPopup(QPopupMenu *);
+//  protected:
+////    QPopupMenu *popup;
 
 //bookmarks
   public:
