@@ -1038,17 +1038,20 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
 CParsedMethod *CClassParser::parseMethodDeclaration()
 {
   CParsedMethod *aMethod = new CParsedMethod();
+  bool isOperator=false;
 
   // Add all lexems on the stack until we find the start of the
   // parameter list.
   while( lexem != '(' && lexem != ';' && lexem != 0 )
   {
+    if (lexem==CPOPERATOR)
+      isOperator=true;
     PUSH_LEXEM();
     getNextLexem();
   }
 
   if( lexem == '(' )
-    fillInParsedMethod( aMethod );
+    fillInParsedMethod( aMethod, isOperator);
   else 
   {
     emptyStack();
