@@ -1763,30 +1763,40 @@ void CKDevelop::slotTagSwitchTo()
   QString curFileExt = curFileInfo.extension(FALSE);
   QString switchToName = curFileInfo.baseName();
   
-  QStringList srcExtensions, headerExtensions;
+  QStringList srcExtensions, headerExtensions, *extensionList=0l;;
   QString newExtension;
 
   srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".c";
   headerExtensions << ".h" << ".hpp" << ".hxx";
 
   kdDebug() << "in CKDevelop::slotTagSwitchTo():" << endl;
-  kdDebug() << "current filename: " << curFileDir << "::" << curFileName << " (" << switchToName<< ")" << endl;
+  kdDebug() << "current filename: " << curFileDir << "/" << curFileName << " (" << switchToName<< ")" << endl;
   
   if (m_docViewManager->curDocIsHeaderFile()) 
+  {
+    extensionList=&srcExtensions;
+  }
+  
+  if (m_docViewManager->curDocIsCppFile())
+  {
+    extensionList=&headerExtensions;
+  }
+  
+  if (extensionList)
   {
     if (useCTags) 
     {
       int ntags=0;
-      for (QStringList::Iterator it=srcExtensions.begin(); 
-           newExtension.isEmpty() && it!=srcExtensions.end(); ++it)
+      for (QStringList::Iterator it=extensionList->begin(); 
+           newExtension.isEmpty() && it!=extensionList->end(); ++it)
       {
-         // should be fixed... it cannot find a tag, but they exist
-         ctags_dlg->searchTags(curFileDir+"/"+switchToName+(*it),&ntags);
-         if (ntags)
-         {
-            newExtension=*it;
-            bFoundInCTags=true;
-         }
+           // should be fixed... it cannot find a tag, but they exist
+           ctags_dlg->searchTags(switchToName+(*it),&ntags);
+           if (ntags)
+           {
+              newExtension=*it;
+              bFoundInCTags=true;
+           }
       }
     }
       
@@ -1796,8 +1806,8 @@ void CKDevelop::slotTagSwitchTo()
     }
     else
     {
-      for (QStringList::Iterator it=srcExtensions.begin(); 
-           newExtension.isEmpty() && it!=srcExtensions.end(); ++it)
+      for (QStringList::Iterator it=extensionList->begin(); 
+           newExtension.isEmpty() && it!=extensionList->end(); ++it)
       {
         if (QFile::exists(curFileDir+"/"+switchToName+(*it)))
         {
@@ -1806,27 +1816,8 @@ void CKDevelop::slotTagSwitchTo()
       }
       
       if (!newExtension.isEmpty()) 
-      {
         switchToName = switchToName + newExtension;
-      }
-    
-    }
-  }
-  else if (m_docViewManager->curDocIsCppFile()) 
-  {
-    for (QStringList::Iterator it=headerExtensions.begin(); 
-         newExtension.isEmpty() && it!=headerExtensions.end(); ++it)
-    {
-       if (QFile::exists(curFileDir+"/"+switchToName+(*it)))
-       {
-          newExtension=*it;
-       }
-    }
-      
-    if (!newExtension.isEmpty()) 
-    {
-      switchToName = switchToName + newExtension;
-    }
+    } 
   }
   
   if (!newExtension.isEmpty())
