@@ -256,7 +256,7 @@ bool CTagsPart::createTagsFile()
     kdDebug(9022) << "create tags file" << endl;
 
     QString cmd = "cd ";
-    cmd += KShellProcess(project()->projectDirectory());
+    cmd += KShellProcess::quote(project()->projectDirectory());
     cmd += " && ctags -n --c++-types=+px";
 
     QStringList l = project()->allFiles();
