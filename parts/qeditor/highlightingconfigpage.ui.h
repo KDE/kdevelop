@@ -11,6 +11,7 @@
 #include "qsourcecolorizer.h"
 #include <private/qrichtext_p.h>
 #include <kdebug.h>
+#include <kfontdialog.h>
 
 using namespace std;
 
@@ -83,4 +84,30 @@ void HighlightingConfigPage::slotSelectionChanged()
     checkItalic->setChecked( font.italic() );
     checkUnderline->setChecked( font.underline() );
     buttonColor->setColor( color );
+}
+
+
+void HighlightingConfigPage::slotAdjustAllElements()
+{
+  QFont changes;
+  int diffFlags = 0;
+  if (KFontDialog::getFontDiff(changes, diffFlags)) {
+      for(uint c=0;c<listElements->count();c++) {
+	  QString id = listElements->text(c);
+	  QFont font = m_map[ id ].first;
+	  QColor color = m_map[ id ].second;
+	  if (diffFlags && KFontChooser::FontDiffFamily)
+	      font.setFamily( changes.family() );
+	  if (diffFlags && KFontChooser::FontDiffStyle) {
+ 	      font.setWeight( changes.weight() );
+	      font.setItalic( changes.italic() );
+	      font.setStrikeOut( changes.strikeOut() );
+	      font.setUnderline( changes.underline() );
+	  }
+	  if (diffFlags && KFontChooser::FontDiffSize)
+	      font.setPointSize( changes.pointSize() );
+	  m_map[ id ] = qMakePair(font, color);
+      }
+      slotSelectionChanged();
+  }
 }
