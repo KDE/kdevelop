@@ -108,7 +108,7 @@ files - that's why some files are taken from the <code>"template-common"</code>-
 
 \section templates_2 II. Registration/Installation Of The Application Template
 
-The easies way to install your template is to provide an "install.sh" script.\n
+The easiest way to install your template is to provide an "install.sh" script.\n
 Example:
 \code
 #!/bin/sh
@@ -144,7 +144,7 @@ echo "done"
 
 \section templates_3 III. How To Add The Template To KDevelop CVS HEAD
 
-This section is for developers only. Most probably you don't have to read this!.\n
+This section is for kdevelop developers only. Most probably you don't have to read this!.\n
 Move the directory <code>"template-khello"</code> to <code>kdevelop/languages/cpp/app_templates/</code>
 and then add the following files in <code>kdevelop/languages/cpp/app_templates/template-khello/</code>
 (in this example the language is c++ if you use other language replace cpp with the language name):
