@@ -7,15 +7,9 @@
 
 
 #include <kxmlguiclient.h>
+#include <kservice.h>
 
 class KAction;
-
-
-#include "kdevpart.h"
-
-class KService;
-
-
 class ProjectInfo;
 
 class ProjectManager : public QObject, public KXMLGUIClient
@@ -56,10 +50,11 @@ private:
 
   void initializeProjectSupport();
 
-  void checkNewService(KService *service);
+  bool loadService( const KService::Ptr &service );
+  void checkNewService(const KService::Ptr &service);
 
   void integratePart(KXMLGUIClient *part);
-  void removePart(KDevPart *part);
+  void removePart(KXMLGUIClient *part);
 
   ProjectInfo *m_info;
 

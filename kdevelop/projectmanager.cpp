@@ -41,7 +41,7 @@ public:
   QDomDocument m_document;
   QString      m_projectPlugin, m_language;
   QStringList  m_ignoreParts, m_loadParts, m_keywords;
-  QPtrList<KDevPart> m_localParts;
+  QPtrList<KXMLGUIClient> m_localParts;
 
 };
 
@@ -188,13 +188,19 @@ void ProjectManager::loadLanguageSupport()
                            QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(m_info->m_language));
   if (!languageSupportOffers.isEmpty())
   {
-    KService *languageSupportService = *languageSupportOffers.begin();
-    KDevPart *part = PluginController::getInstance()->loadPlugin(languageSupportService, "KDevLanguageSupport", Core::getInstance());
-    if (!part)
-      return;
+      KService::Ptr languageSupportService = *languageSupportOffers.begin();
+      KDevLanguageSupport *langSupport = KParts::ComponentFactory
+          ::createInstanceFromService<KDevLanguageSupport>( languageSupportService,
+                                                            API::getInstance(),
+                                                            0,
+                                                            PluginController::argumentsFromService(  languageSupportService ) );
 
-    API::getInstance()->setLanguageSupport(static_cast<KDevLanguageSupport*>(part));
-    integratePart(part);
+        if ( !langSupport )
+            return;
+
+
+        API::getInstance()->setLanguageSupport( langSupport );
+        integratePart( langSupport );
   }
   else
     KMessageBox::sorry(CKDevelop::getInstance()->main(), i18n("No language plugin for %1 found.").arg(m_info->m_language));
@@ -212,21 +218,14 @@ void ProjectManager::loadLocalParts()
       continue;
 
     if (m_info->m_loadParts.contains((*it)->name()))
-    {
-      KDevPart *part = PluginController::getInstance()->loadPlugin(*it, "KDevPart", Core::getInstance());
-      if (!part)
-        return;
-
-      integratePart(part);
-      m_info->m_localParts.append(part);
-    }
+      loadService( *it );
     else
       checkNewService(*it);
   }
 }
 
 
-void ProjectManager::checkNewService(KService *service)
+void ProjectManager::checkNewService(const KService::Ptr &service)
 {
   QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
   QStringList langlist = var.asStringList();
@@ -251,13 +250,8 @@ void ProjectManager::checkNewService(KService *service)
     // the language and all keywords match or no keywords available
     if(keywordsMatch)
     {
-      m_info->m_loadParts << service->name();
-      KDevPart *part = PluginController::getInstance()->loadPlugin(service, "KDevPart", Core::getInstance());
-      if (!part)
-        return;
-
-      integratePart(part);
-      m_info->m_localParts.append(part);
+      if ( loadService( service ) )
+        m_info->m_loadParts << service->name();
     }
   }
   else
@@ -291,7 +285,7 @@ void ProjectManager::integratePart(KXMLGUIClient *part)
 }
 
 
-void ProjectManager::removePart(KDevPart *part)
+void ProjectManager::removePart(KXMLGUIClient *part)
 {
   CKDevelop::getInstance()->main()->guiFactory()->removeClient(part);
   delete part;
@@ -440,6 +434,18 @@ bool ProjectManager::projectLoaded() const
 {
   return m_info != 0;
 }
+
+bool ProjectManager::loadService( const KService::Ptr &service ) 
+{
+  KXMLGUIClient *part = PluginController::loadPlugin( service ); 
+  if ( !part ) return false;
+
+  integratePart( part );
+  m_info->m_localParts.append( part );
+
+  return true;
+}
+
 
 
 #include "projectmanager.moc"
