@@ -222,6 +222,8 @@ of symbol a certain information can be stored - symbol name, the
 location in source file, etc.
 
 @sa codemodel.h documentation for a list of typedefs and other convenience functions.
+
+@sa codemodel_utils.h documentation for an additional code model utility functions and classes reference.
 */
 class CodeModel
 {
