@@ -1,3 +1,6 @@
+#warning Consider switching to QStringList::split
+
+
 StringTokenizer::StringTokenizer()
 {
     buffer = 0;

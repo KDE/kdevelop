@@ -21,12 +21,33 @@
 #include <config.h>
 #endif
 
+#include <fstream.h>
+#include <qlistview.h>
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qheader.h>
+#include <qbuttongroup.h>
+#include <qcombobox.h>
+#include <qtooltip.h>
+#include <qstringlist.h>
+#include <keditcl.h>
+#include <kseparator.h>
+#include <kquickhelp.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kapp.h>
+#include <kiconloader.h>
+#include <kfiledialog.h>
+#include <kiconloaderdialog.h>
+#include <kprocess.h>
+#include "cproject.h"
 #include "ckappwizard.h"
 #include "debug.h"
 #include "ctoolclass.h"
-#include <qmessagebox.h>
-#include <kmsgbox.h>
-#include <klocale.h>
+
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
   q = new KShellProcess();
@@ -48,33 +69,28 @@ CKAppWizard::~CKAppWizard () {
   
 }
 
+// slot slotAppEnd -> reject()
+// slot slotOkClicked -> accept()
+
 void CKAppWizard::init(){
   
   setFixedSize(515,530);
-  setCancelButton();
-  cancelButton = getCancelButton();
-  QToolTip::add(cancelButton,i18n("exit the CKAppWizard"));
-  connect(this,SIGNAL(cancelclicked()),SLOT(slotAppEnd()));
-  setOkButton(i18n("Create"));
-  okButton = getOkButton();
-  QToolTip::add(okButton,i18n("creating the project"));
-  connect(this,SIGNAL(okclicked()),SLOT(slotOkClicked()));
+  QToolTip::add(cancelButton(), i18n("exit the CKAppWizard"));
+  QToolTip::add(finishButton(), i18n("creating the project"));
+#warning FIXME
+#if 0
   setDefaultButton();
   defaultButton = getDefaultButton();
   QToolTip::add(defaultButton,i18n("set all changes back"));
   connect(this,SIGNAL(defaultclicked(int)),SLOT(slotDefaultClicked(int)));
-  setEnableArrowButtons(true);
+#endif
 }
 
 void CKAppWizard::initPages(){
   
   // create the first page
-  page0 = new KWizardPage;
   widget0 = new QWidget(this);
-  page0->w = widget0;
-  page0->title = (i18n("Applications"));
-  page0->enabled = true;
-  addPage(page0);
+  addPage(widget0, i18n("Applications"));
   
   QPixmap iconpm;    
   QPixmap minipm;
@@ -183,12 +199,8 @@ void CKAppWizard::initPages(){
   /************************************************************/
   
   // create the second page
-  page1 = new KWizardPage;
   widget1 = new QWidget(this);
-  page1->w = widget1;
-  page1->title = (i18n("Generate settings"));
-  page1->enabled = true;
-  addPage(page1);  
+  addPage(widget1, i18n("Generate settings"));
   
   name = new QLabel( widget1, "name" );
   name->setGeometry( 30, 10, 100, 30 );
@@ -248,9 +260,7 @@ void CKAppWizard::initPages(){
   directoryload->setBackgroundMode( QWidget::PaletteBackground );
   directoryload->setFontPropagation( QWidget::NoChildren );
   directoryload->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  directoryload->setPixmap(pix);
+  directoryload->setPixmap(BarIcon("open"));
   directoryload->setAutoRepeat( FALSE );
   directoryload->setAutoResize( FALSE );
   
@@ -521,12 +531,8 @@ void CKAppWizard::initPages(){
   /************************************************************/
 
   // create the thirth page
-  page1a = new KWizardPage;
   widget1c = new QWidget(this);
-  page1a->w = widget1c;
-  page1a->title = (i18n("Version Control System Support"));
-  page1a->enabled = true;
-  addPage(page1a);
+  addPage(widget1c, i18n("Version Control System Support"));
 
 	qtarch_ButtonGroup_1 = new QButtonGroup( widget1c, "ButtonGroup_1" );
 	qtarch_ButtonGroup_1->setGeometry( 20, 50, 460, 360 );
@@ -747,12 +753,8 @@ void CKAppWizard::initPages(){
   /************************************************************/
   
   // create the forth page
-  page2 = new KWizardPage;
   widget2 = new QWidget(this);
-  page2->w = widget2;
-  page2->title = (i18n("Headertemplate for .h-files"));
-  page2->enabled = true;
-  addPage(page2);
+  addPage(widget2, i18n("Headertemplate for .h-files"));
   
   hheader = new QCheckBox( widget2, "hheader" );
   hheader->setGeometry( 20, 20, 230, 30 );
@@ -820,12 +822,8 @@ void CKAppWizard::initPages(){
   /************************************************************/
   
   // create the fifth page
-  page3 = new KWizardPage;
   widget3 = new QWidget(this);
-  page3->w = widget3;
-  page3->title = (i18n("Headertemplate for .cpp-files"));
-  page3->enabled = true;
-  addPage(page3);
+  addPage(widget3, i18n("Headertemplate for .cpp-files"));
   
   cppheader = new QCheckBox( widget3, "cppheader" );
   cppheader->setGeometry( 20, 20, 230, 30 );
@@ -892,12 +890,8 @@ void CKAppWizard::initPages(){
   /************************************************************/
   
   // create the sixth page
-  page4 = new KWizardPage;
   widget4 = new QWidget(this);
-  page4->w = widget4;
-  page4->title = (i18n("Processes"));
-  page4->enabled = true;
-  addPage(page4);
+  addPage(widget4, i18n("Processes"));
   
   // create a MultiLineEdit for the processes of kAppWizard
   output = new QMultiLineEdit( widget4, "output" );
@@ -929,15 +923,16 @@ void CKAppWizard::initPages(){
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
   // go to page 2 then to page 1
-  gotoPage(1);  
-  gotoPage(0);
+#warning FIXME
+  //  gotoPage(1);  
+  //  gotoPage(0);
 
 }
 
 // connection to directoryload
 void CKAppWizard::slotDirDialogClicked() {
   QString projname;
-  dirdialog = new KDirDialog(dir,this,"Directory");
+  KDirDialog *dirdialog = new KDirDialog(dir,this,"Directory");
   dirdialog->setCaption (i18n("Directory"));
   dirdialog->show();
   projname = nameline->text();
@@ -955,7 +950,7 @@ void CKAppWizard::slotDirDialogClicked() {
 
 // connection of hload
 void CKAppWizard::slotHeaderDialogClicked() {
-  headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true,true);
+  KFileDialog *headerdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Headertemplate",true,true);
   headerdialog->setCaption (i18n("Select your template for Header-file headers"));
   if(headerdialog->exec()){
     hedit->loadFile(headerdialog->selectedFile(),cppedit->OPEN_READWRITE);
@@ -965,7 +960,7 @@ void CKAppWizard::slotHeaderDialogClicked() {
 
 // connection of cppload
 void CKAppWizard::slotCppDialogClicked() {
-  cppdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Cpptemplate",true,true);
+  KFileDialog *cppdialog = new KFileDialog(QDir::homeDirPath(),"*",this,"Cpptemplate",true,true);
   cppdialog->setCaption( (citem->isSelected()) ?
                          i18n("Select your template for C-file headers")
                          :
@@ -988,14 +983,13 @@ void CKAppWizard::slotNewCppButtonClicked() {
 }
 
 // connection of this (defaultButton)
-void CKAppWizard::slotOkClicked() {
+void CKAppWizard::accept() {
 
   if (!(CToolClass::searchInstProgram("sgml2html") || CToolClass::searchInstProgram("ksgml2html"))) {
   	userdoc->setChecked(false);
-  	KMsgBox msg (0,i18n("sgml2html and ksgml2html do not exist!"),
-    i18n("If you want to generate the user-documentation, you need one of these programs.\n"
-    		 "If you do not have one, the user-documentation will not be generate."),16,i18n("Ok"));
-    msg.show();
+  	KMessageBox::sorry(0,i18n("sgml2html and ksgml2html do not exist!\n"
+                                  "If you want to generate the user-documentation, you need one of these programs.\n"
+    		 "If you do not have one, the user-documentation will not be generate."));
   }
 
 
@@ -1007,8 +1001,9 @@ void CKAppWizard::slotOkClicked() {
   QDir dir;
   QString direct = directoryline->text();
 
-  if (direct.right(1) == "/") { direct.resize(direct.length()); }
-  direct.resize (direct.length() - (direct.length() - direct.findRev('/') - 1));
+  if (direct.right(1) == "/")
+      direct.truncate(direct.length()-1); 
+  direct.truncate(direct.findRev('/'));
   dir.setPath(direct);
 
   KShellProcess p;
@@ -1021,9 +1016,9 @@ void CKAppWizard::slotOkClicked() {
 
   dir.setPath(directoryline->text());
   if (dir.exists()) {
-    QMessageBox::information ( this, directoryline->text() + (QString) i18n(" already exists!"), i18n("It isn't possible to generate a new project into an existing directory."), QMessageBox::Ok);
-      return;
-    
+    QString msg = i18n("%1 already exists!\nIt isn't possible to generate a new project into an existing directory.").arg(directoryline->text());
+    KMessageBox::sorry( this, msg);
+    return;
   }
   else {
     okPermited();
@@ -1031,13 +1026,14 @@ void CKAppWizard::slotOkClicked() {
 }
 
 void CKAppWizard::okPermited() {
-  cancelButton->setFixedWidth(75);
-  cancelButton->setEnabled(false);
-  defaultButton->setEnabled(false);
-  setCancelButton(i18n("Exit"));
+  cancelButton()->setEnabled(false);
+#warning FIXME
+  //  defaultButton->setEnabled(false);
+  cancelButton()->setText(i18n("Exit"));
   errOutput->clear();
   output->clear();
   QDir kdevelop;
+#warning FIXME: These explicit paths are not possible in KDE2
   kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
   cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
   cppedit->toggleModified(true);
@@ -1218,12 +1214,14 @@ void CKAppWizard::okPermited() {
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   *q << "perl" << path + "processes.pl";
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
-  okButton->setEnabled(false);
-  gotoPage(5);
+  finishButton()->setEnabled(false);
+#warning FIXME
+  //  gotoPage(5);
   int i;
   for (i=0;i<5;i++) {
-    setPageEnabled(i,false);
+      //    setPageEnabled(i,false);
   }
+  
   apidoc->setEnabled(false);
   lsmfile->setEnabled(false);
   cppheader->setEnabled(false);
@@ -1235,7 +1233,7 @@ void CKAppWizard::okPermited() {
   userdoc->setEnabled(false);
   directoryline->setEnabled(false);
   nameline->setEnabled(false);
-  okButton->setEnabled(false);
+  finishButton()->setEnabled(false);
   miniload->setEnabled(false);
   iconload->setEnabled(false);
   cppedit->setEnabled(false);
@@ -1271,13 +1269,12 @@ void CKAppWizard::okPermited() {
 }
 
 
-// connection of this (cancelButton)
-void CKAppWizard::slotAppEnd() {
+void CKAppWizard::reject() {
   nametext = nameline->text();
   m_author_name = authorline->text();
   m_author_email = emailline->text();
 
-  if ((!(okButton->isEnabled())) && (nametext.length() >= 1)) {
+  if ((!(finishButton()->isEnabled())) && (nametext.length() >= 1)) {
 
     delete (project);
   }
@@ -1353,25 +1350,24 @@ void CKAppWizard::slotAppEnd() {
   delete (vsSupport);
   delete (locationbutton);
   delete (qtarch_ButtonGroup_1);
-  reject();
 }
 
 // connection of this (okButton)
 void CKAppWizard::slotPerlOut(KProcess*,char* buffer,int buflen) {
-  QString str(buffer,buflen);
+  QCString str(buffer,buflen);
   output->append(str);
   output->setCursorPosition(output->numLines(),0);
 }
 
 // connection of this (okButton)
 void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
-  QString str(buffer,buflen);
+  QCString str(buffer,buflen);
   errOutput->append(str);
   errOutput->setCursorPosition(errOutput->numLines(),0);
 }
 
 void CKAppWizard::slotApplicationClicked() {
-  if (kdenormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  if (kdenormalitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);
@@ -1389,14 +1385,14 @@ void CKAppWizard::slotApplicationClicked() {
     userdoc->setChecked(true);
     generatesource->setChecked(true);
     generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
-      okButton->setEnabled(true);
+    if (strcmp(nameline->text(), "") && (cancelButton()->text() != i18n("Exit"))) {
+      finishButton()->setEnabled(true);
     }
     apphelp->setText (i18n("Create a KDE-application with session-management, "
     												"menubar, toolbar, statusbar and support for a "
     												"document-view codeframe model."));
   }
-  else if (kdeminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if (kdeminiitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);
@@ -1414,12 +1410,12 @@ void CKAppWizard::slotApplicationClicked() {
     userdoc->setChecked(true);
     generatesource->setChecked(true);
     generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
-      okButton->setEnabled(true);
+    if (strcmp(nameline->text(), "") && (cancelButton()->text() != i18n("Exit"))) {
+      finishButton()->setEnabled(true);
     }
     apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
   }
-  else if (qtnormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if (qtnormalitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
@@ -1437,20 +1433,21 @@ void CKAppWizard::slotApplicationClicked() {
     userdoc->setChecked(true);
     generatesource->setChecked(true);
     generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
-      okButton->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton()->text(), i18n("Exit"))) {
+      finishButton()->setEnabled(true);
     }
     apphelp->setText (i18n("Create a Qt-Application with a main window containing "
     											"a menubar, toolbar and statusbar, including support for "
     											"a generic document-view model."));
   }
   else if ((citem->isSelected() || cppitem->isSelected())
-            && strcmp (cancelButton->text(), i18n("Exit"))) {
+            && (cancelButton()->text() != i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     if (citem->isSelected())
     {
-      setPage(4, i18n("Headertemplate for .c-files"));
+#warning FIXME
+        //      setPage(4, i18n("Headertemplate for .c-files"));
       cppheader->setText( i18n("headertemplate for .c-files") );
     }
     apidoc->setEnabled(false);
@@ -1468,8 +1465,8 @@ void CKAppWizard::slotApplicationClicked() {
     userdoc->setChecked(true);
     generatesource->setChecked(true);
     generatesource->setEnabled(true);
-    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
-      okButton->setEnabled(true);
+    if (strcmp(nameline->text(), "") && (cancelButton()->text() != i18n("Exit"))) {
+      finishButton()->setEnabled(true);
     }
     apphelp->setText ( (citem->isSelected()) ?
 		      i18n("Create a C application. The program will run in a terminal "
@@ -1494,7 +1491,7 @@ void CKAppWizard::slotApplicationClicked() {
 			   "generate a program with toolsbar\n"
 			   "and mainmenus"));
       }*/
-  else if (customprojitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if (customprojitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/customApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
@@ -1513,8 +1510,8 @@ void CKAppWizard::slotApplicationClicked() {
     userdoc->setEnabled(false);
     generatesource->setChecked(false);
     generatesource->setEnabled(false);
-    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
-      okButton->setEnabled(true);
+    if (strcmp(nameline->text(), "") && (cancelButton()->text() != i18n("Exit"))) {
+      finishButton()->setEnabled(true);
     }
     apphelp->setText (i18n("Creates an empty project to work with existing development projects. "
     											"KDevelop will not take care of any Makefiles as those are supposed to "
@@ -1545,17 +1542,17 @@ void CKAppWizard::slotApplicationClicked() {
 			   "and mainmenus"));
       }*/
   else if (kdeentry->isSelected()) {
-    okButton->setEnabled(false);
+    finishButton()->setEnabled(false);
     apphelp->setText (i18n("Contains all KDE-compliant\n"
 			   "project types."));
   }
   else if (qtentry->isSelected()) {
-    okButton->setEnabled(false);
+    finishButton()->setEnabled(false);
     apphelp->setText (i18n("Contains all Qt-based\n"
 			   "project types."));
   }
   else if (ccppentry->isSelected()) {
-    okButton->setEnabled(false);
+    finishButton()->setEnabled(false);
     apphelp->setText (i18n("Contains all C/C++-terminal\n"
 			   "project types."));
   }
@@ -1566,7 +1563,7 @@ void CKAppWizard::slotApplicationClicked() {
 			   "and mainmenus"));
       }*/
   else if (othersentry->isSelected()) {
-    okButton->setEnabled(false);
+    finishButton()->setEnabled(false);
     apphelp->setText (i18n("Contains all individual project types."));
   }
 }
@@ -1575,9 +1572,12 @@ void CKAppWizard::slotApplicationClicked() {
 void CKAppWizard::slotDefaultClicked(int page) {
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
 
+#warning FIXME
+#if 0
     setPage(4, i18n("Headertemplate for .cpp-files"));
     if (page==4)
      gotoPage(4);
+#endif
     cppheader->setText( i18n("headertemplate for .cpp-files") );
 
   widget1b->setBackgroundPixmap(pm);
@@ -1597,7 +1597,7 @@ void CKAppWizard::slotDefaultClicked(int page) {
   directoryline->setText(QDir::homeDirPath()+ QString("/"));
   dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
-  okButton->setEnabled(false);
+  finishButton()->setEnabled(false);
   miniload->setPixmap(QPixmap(KApplication::kde_icondir() + "/mini/application_settings.xpm"));
   iconload->setPixmap(QPixmap(KApplication::kde_icondir() + "/edit.xpm"));
   cppedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/cpp_template",cppedit->OPEN_READWRITE);
@@ -1661,10 +1661,10 @@ void CKAppWizard::slotProjectnameEntry() {
 
   if (nametext == "" || kdeentry->isSelected() || qtentry->isSelected() ||
    	  ccppentry->isSelected() || othersentry->isSelected()) {
-   	okButton->setEnabled(false);
+   	finishButton()->setEnabled(false);
   }
   else {
-   	okButton->setEnabled(true);
+   	finishButton()->setEnabled(true);
   }
   nameline->setCursorPosition(position);
 }
@@ -1689,26 +1689,26 @@ void CKAppWizard::slotDirectoryEntry() {
 
 // connection of iconload
 void CKAppWizard::slotIconButtonClicked() {
-  QStrList iconlist;
+  QStringList iconlist;
   KIconLoaderDialog iload;
   iconlist.append (KApplication::kde_icondir());
   iconlist.append (KApplication::localkdedir()+"/share/icons");
-  iload.setDir(&iconlist);
+  iload.changeDirs(iconlist);
   iload.selectIcon(name1,"*");
   if (!name1.isNull() )   
-    iconload->setPixmap(kapp->getIconLoader()->loadIcon(name1));
+    iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1));
 }
 
 // connection of miniload
 void CKAppWizard::slotMiniIconButtonClicked() {
-  QStrList miniiconlist;
+  QStringList miniiconlist;
   KIconLoaderDialog  mload;
   miniiconlist.append (KApplication::kde_icondir()+"/mini");
   miniiconlist.append (KApplication::localkdedir()+"/share/icons/mini");
-  mload.setDir(&miniiconlist);
+  mload.changeDirs(miniiconlist);
   mload.selectIcon(name2,"*");
   if (!name2.isNull() )     
-    miniload->setPixmap(kapp->getIconLoader()->loadMiniIcon(name2));
+    miniload->setPixmap(KGlobal::iconLoader()->loadApplicationMiniIcon(name2));
 }
 
 // activate and deactivate the iconbutton
@@ -2303,7 +2303,7 @@ void CKAppWizard::slotMakeEnd() {
       file.remove (directorytext + "/" + nametext + "/" + nametext + "view.h");
     }
   }
-  cancelButton->setEnabled(true);
+  cancelButton()->setEnabled(true);
   gen_prj = true;
 }
 
@@ -2335,7 +2335,7 @@ bool CKAppWizard::generatedProject(){
 }
 
 void CKAppWizard::slotLocationButtonClicked() {
-  dirdialog = new KDirDialog(dir,this,"Directory");
+  KDirDialog *dirdialog = new KDirDialog(dir,this,"Directory");
   dirdialog->setCaption (i18n("Directory"));
   dirdialog->show();
   dir = dirdialog->dirPath() + "cvsroot";

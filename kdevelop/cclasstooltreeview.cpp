@@ -17,6 +17,7 @@
 #include "cclasstooltreeview.h"
 #include "cclasstreehandler.h"
 #include <assert.h>
+#include <klocale.h>
 
 /*********************************************************************
  *                                                                   *

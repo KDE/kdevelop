@@ -27,7 +27,7 @@
 #include <qkeycode.h>
 
 #include <kconfig.h>
-#include <kio_netaccess.h>
+#include <kio_job.h>
 
 #include "kwdialog.h"
 #include "kguicommand.h"
@@ -499,7 +499,7 @@ class KWrite : public QWidget {
     */
     fileResult saveAs();
   protected:
-    KIONetAccess *kfm;
+    KIOJob *kfm;
     QString kfmURL;
     QString kfmFile;
     fileAction kfmAction;

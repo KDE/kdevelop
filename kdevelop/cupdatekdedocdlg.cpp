@@ -16,15 +16,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
 
-#include <kapp.h>
+#include <qlineedit.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
+#include <qdir.h>
+#include <kmessagebox.h>
+#include <kprocess.h>
+#include <kconfig.h>
+#include <kquickhelp.h>
 #include <kfiledialog.h>
-#include <qmessagebox.h>
-#include <kmsgbox.h>
 #include <klocale.h>
-#include <qprogressdialog.h>
+#include <kiconloader.h>
 #include "cupdatekdedocdlg.h"
+
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
 
 
 CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config) : QDialog(parent,name,true) {
@@ -81,9 +91,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     source_button->setBackgroundMode( QWidget::PaletteBackground );
     source_button->setFontPropagation( QWidget::NoChildren );
     source_button->setPalettePropagation( QWidget::NoChildren );
-		QPixmap pix;
-  	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-    source_button->setPixmap(pix);
+    source_button->setPixmap(BarIcon("open"));
     source_button->setAutoRepeat( FALSE );
     source_button->setAutoResize( FALSE );
 
@@ -175,7 +183,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     doc_button->setBackgroundMode( QWidget::PaletteBackground );
     doc_button->setFontPropagation( QWidget::NoChildren );
     doc_button->setPalettePropagation( QWidget::NoChildren );
-    doc_button->setPixmap(pix);
+    doc_button->setPixmap(BarIcon("open"));
     doc_button->setAutoRepeat( FALSE );
     doc_button->setAutoResize( FALSE );
     doc_button->setEnabled(false);
@@ -257,10 +265,10 @@ void CUpdateKDEDocDlg::OK(){
   // check if path set corectly
   QString kde_testfile=kdelibs_path+"/kfile/kdir.cpp"; // test if the path really is the kdelibs path
   if(!QFileInfo(kde_testfile).exists()){
-    QMessageBox::warning(this,i18n("The selected path is not correct!"),i18n("The chosen path for the KDE-Libs does not\n"
-									 "lead to the KDE Libraries. Please choose the\n"
-									 "correct path.This is where you have unpacked\n"
-									 "e.g. a kdelibs snapshot a la /snapshot/kdelibs."));
+    KMessageBox::sorry(this, i18n("The chosen path for the KDE-Libs does not\n"
+                                  "lead to the KDE Libraries. Please choose the\n"
+                                  "correct path.This is where you have unpacked\n"
+                                  "e.g. a kdelibs snapshot a la /snapshot/kdelibs."));
     return;
   }
   
@@ -295,13 +303,13 @@ void CUpdateKDEDocDlg::OK(){
   QString cmd;
   if(! qt_test)
       {
-          int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set correctly.\n"
+          int qt_set=KMessageBox::yestionYesNo(this, i18n("The Qt-Documentation path is not set correctly.\n"
                                                                "If you want your KDE-library documentation to\n"
                                                                "be cross-referenced to the Qt-library, you have\n"
                                                                "to set the correct path to your Qt-library\n"
                                                                "documentation first.\n"
-                                                               "Do you want to set the Qt-Documentation path first ?"),KMsgBox::QUESTION);
-          if(qt_set==1)
+                                                               "Do you want to set the Qt-Documentation path first ?"));
+          if(qt_set==KMessageBox::Yes)
               return;
       }
   else
@@ -324,13 +332,13 @@ void CUpdateKDEDocDlg::OK(){
 #else
   
   if(!qt_test){ // don't cross-reference to qt
-    int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set correctly.\n"
+    int qt_set=KMessageBox::questionYesNo(this, i18n("The Qt-Documentation path is not set correctly.\n"
                                                     "If you want your KDE-library documentation to\n"
                                                     "be cross-referenced to the Qt-library, you have\n"
                                                     "to set the correct path to your Qt-library\n"
                                                     "documentation first.\n"
-                                                    "Do you want to set the Qt-Documentation path first ?"),KMsgBox::QUESTION);
-    if(qt_set==1)
+                                                    "Do you want to set the Qt-Documentation path first ?"));
+    if(qt_set==KMessageBox::Yes)
       return;  // exit the update dialog
     else{  // don't return to the setup to set the qt-path and index without qt
       *proc << "mkdir "+new_doc_path+"kdoc-reference;
@@ -433,9 +441,9 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
       source_edit->setText(dir);
     }
     else{
-      QMessageBox::warning(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-									   "KDE Libraries. Please choose the\n"
-									   "correct path."));
+      KMessageBox::sorry(this, i18n("The chosen path does not lead to the\n"
+                                    "KDE Libraries. Please choose the\n"
+                                    "correct path."));
     }
   }
 

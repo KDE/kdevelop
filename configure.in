@@ -3,14 +3,14 @@ dnl the argument is a source file out of your sources. But
 dnl acinclude.m4 makes the job for all programs ;-)
 AC_INIT(acinclude.m4)
 
-dnl without this order in this file, automake will be confused!
-dnl the argument 
-AM_CONFIG_HEADER(config.h)
-
 dnl inits some variables needed by automake's Makefiles.
 dnl add here the package name and it's version number. It will
 dnl be defined in config.h and in the Makefiles
 AM_INIT_AUTOMAKE(kdevelop,'1.0beta2')
+
+dnl without this order in this file, automake will be confused!
+dnl the argument 
+AM_CONFIG_HEADER(config.h)
 
 dnl sets the prefix to $KDEDIR or /usr/local/kde (if no $KDEDIR
 dnl set) for the case, that there is no --prefix
@@ -38,6 +38,8 @@ dnl adds --disable-nls to not install the .gmo files out of po. If you
 dnl don't have i18n support, you may want to remove this, but leaving it
 dnl here doesn't hurt
 AM_KDE_WITH_NLS
+
+AC_CHECK_BOOL
 
 KDE_USE_QT(2)
 

@@ -30,6 +30,9 @@
 #include "doctreeview.h"
 #include <stdio.h>
 
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
 
 /**
  * A list view item that is decorated with a doc icon.

@@ -120,12 +120,11 @@ void CRealFileView::addFilesFromDir( const QString& directory,
 
   // Add all files for this directory
   theDir.setFilter(QDir::Files);
-  fileList=*(theDir.entryList());
-  for( fileList.first();
-       fileList.current();
-       fileList.next() )
+  fileList=theDir.entryList();
+  QStringList::Iterator it;
+  for( it = fileList.begin(); it != fileList.end(); ++it)
   {
-    item = treeH->addItem( fileList.current(), THC_FILE, parent );
+    item = treeH->addItem( (*it), THC_FILE, parent );
     
     // If this is an installed file, we change the icon.
     if( isInstalledFile( getRelFilename( item ) ) )
@@ -147,29 +146,27 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   
   dir.setSorting(QDir::Name);
   dir.setFilter(QDir::Dirs);
-  dirList = *(dir.entryList());
+  dirList = dir.entryList();
   
   // Remove '.' and  '..'
-  dirList.first();
-  dirList.remove();
-  dirList.remove();
+  dirList.remove(dirList.first());
+  dirList.remove(dirList.first());
   
   // Recurse through all directories
-  while( dirList.current() ) 
+  QStringList::Iterator it;
+  for( it = dirList.begin(); it != dirList.end(); ++it)
   {
-    lastFolder = treeH->addItem( dirList.current(), THFOLDER, parent );
+    lastFolder = treeH->addItem( (*it), THFOLDER, parent );
     lastFolder->setOpen( true );
     
     // Recursive call to fetch subdirectories
-    currentPath = directory+"//"+dirList.current();
+    currentPath = directory+"//"+(*it);
     scanDir( currentPath, lastFolder );
     
     // Add the files in the recursed directory.
     //    addFilesFromDir( currentPath, lastFolder );
     
     treeH->setLastItem( lastFolder );
-    
-    dirList.next();
   } 
   
   // Add files in THIS directory as well.
@@ -296,8 +293,8 @@ void CRealFileView::slotSelectionChanged(QListViewItem* selection)
 void CRealFileView::slotAddFileToProject() {
 
   QString filename=getFullFilename(currentItem());
-  QString msg = i18n("Do you want to add the file\n%1\nto the project ?").arg(filename.data);
-  if (KMessageBox::yesNo(0, msg) == KMessageBox::No)
+  QString msg = i18n("Do you want to add the file\n%1\nto the project ?").arg(filename);
+  if (KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 
   currentItem()->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );

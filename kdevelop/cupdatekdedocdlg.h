@@ -21,16 +21,16 @@
 #ifndef CUPDATEKDEDOCDLG_H
 #define CUPDATEKDEDOCDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <kprocess.h>
-#include <kconfig.h>
-#include <kquickhelp.h>
+
+class QButtonGroup;
+class QLineEdit;
+class QLabel;
+class QPushButton;
+class QRadioButton;
+class KConfig;
+class KShellProcess;
+
 
 /** Generates the API-Documention from all KDE-Libs with kdoc
   *@author Sandy Meier

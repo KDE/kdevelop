@@ -30,6 +30,10 @@
 #include <iostream.h>
 #include <qmessagebox.h>
 
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
+
 CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email) : QTabDialog(parent,name,true) {
 
 

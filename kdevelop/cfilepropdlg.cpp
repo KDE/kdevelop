@@ -416,8 +416,8 @@ void CFilePropDlg::slotInstallCheckToogled(bool on){
     install_loc_edit->setEnabled(on);
     if(on){
 	if(QString(install_loc_edit->text()).isEmpty()){
-	    install_loc_edit->setText(
-				      (name_e_label->text()) != 0 ?name_e_label->text():"");
+	    install_loc_edit->setText( (name_e_label->text() != 0)?
+                                       name_e_label->text() : QString("") );
 	}
     }
 }

@@ -16,11 +16,26 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
+#include <qspinbox.h>
+#include <qlabel.h>
+#include <qmultilineedit.h>
+#include <qgroupbox.h>
+#include <qpushbutton.h>
+#include <qstrlist.h>
+#include <kquickhelp.h>
+#include <kapp.h>
+#include <kiconloader.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include "cproject.h"
 #include "cprjoptionsdlg.h"
 #include "vc/versioncontrol.h"
-#include <iostream.h>
-#include <qstrlist.h>
-#include <klocale.h>
 #include "debug.h"
 
 // OPTIONS DIALOG
@@ -1051,9 +1066,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_dir->setBackgroundMode( QWidget::PaletteBackground );
   m_set_modify_dir->setFontPropagation( QWidget::NoChildren );
   m_set_modify_dir->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  m_set_modify_dir->setPixmap(pix);
+  m_set_modify_dir->setPixmap(BarIcon("open"));
   m_set_modify_dir->setAutoRepeat( FALSE );
   m_set_modify_dir->setAutoResize( FALSE );
   
@@ -1552,7 +1565,7 @@ void CPrjOptionsDlg::ok(){
 void CPrjOptionsDlg::slotFileDialogClicked() {
   QString file,dir;
   dir = prj_info->getProjectDir();
-  file = filedialog->getOpenFileName(dir,"*",this,"File");
+  file = KFileDialog::getOpenFileName(dir,"*",this,"File");
   m_set_modify_line->setText(file);
 }
 

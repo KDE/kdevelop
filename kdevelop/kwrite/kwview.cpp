@@ -1580,7 +1580,8 @@ void KWrite::loadURL(const char *url, int flags) {
     emit statusMsg(i18n("Loading..."));
 
     QString name(u.path());
-    KURL::decodeURL(name);
+#warning FIXME
+    //    KURL::decodeURL(name);
     if (loadFile(name,flags)) {
       name = u.url();
       if (flags & lfInsert) {
@@ -1611,7 +1612,7 @@ void KWrite::loadURL(const char *url, int flags) {
     }
     emit statusMsg(i18n("Waiting for KFM..."));
 
-    kfm = new KFM;
+    kfm = new KIOJob;
     if (!kfm->isOK()) {
       QMessageBox::warning(this,
         i18n("Sorry"),
@@ -1645,7 +1646,8 @@ void KWrite::writeURL(const char *url, int flags) {
     emit statusMsg(i18n("Saving..."));
 
     QString name(u.path());
-    KURL::decodeURL(name);
+#warning FIXME
+    //    KURL::decodeURL(name);
     if (writeFile(name)) {
       if (!(flags & lfNoAutoHl)) kWriteDoc->setFileName(url);
       name = url;
@@ -1675,7 +1677,7 @@ void KWrite::writeURL(const char *url, int flags) {
     kfmFlags = flags;
     if (!writeFile(kfmFile)) return;
 
-    kfm = new KFM;
+    kfm = new KIOJob;
 
     if (!kfm->isOK()) {
       QMessageBox::warning(this,
@@ -1835,7 +1837,8 @@ KWrite::fileResult KWrite::saveAs() {
     if (u.isLocalFile()) {
       QFileInfo info;
       QString name(u.path());
-      KURL::decodeURL(name);
+#warning FIXME
+      //      KURL::decodeURL(name);
       info.setFile(name);
       if (info.exists()) {
         query = QMessageBox::warning(this,

@@ -139,7 +139,7 @@ void CProject::writeFileInfo(TFileInfo info){
   config.writeEntry("dist",info.dist);
   config.writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace("[\\$]","$$");
+  info.install_location.replace( QRegExp("[\\$]"), "$$");
   config.writeEntry("install_location",info.install_location);
 }
 
@@ -149,7 +149,7 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
   config.writeEntry("dist",info.dist);
   config.writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace("[\\$]","$$");
+  info.install_location.replace( QRegExp("[\\$]"), "$$");
   config.writeEntry("install_location",info.install_location);
 
   config.writeEntry("baseclass",info.baseclass);

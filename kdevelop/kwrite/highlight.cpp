@@ -30,6 +30,7 @@
 #include <kfontdialog.h>
 #include <kcharsets.h>
 #include <kglobal.h>
+#include <kstddirs.h>
 
 #include <X11/Xlib.h> //used in getXFontList()
 
@@ -1792,8 +1793,7 @@ int HlManager::wildcardFind(const char *fileName) {
 int HlManager::mimeFind(const char *contents, int len, const char *fname)
 {
   // Magic file detection init (from kfm/kbind.cpp)    
-  QString mimefile = kapp->kde_mimedir().copy();    
-  mimefile += "/magic";    
+  QString mimefile = locate("mime", "magic");
   KMimeMagic magic(mimefile);    
   magic.setFollowLinks(true);      
 /*
@@ -2003,7 +2003,7 @@ bool getKDEFontList(QStrList &fontList) {
   QString s;
 
   //TODO replace by QDir::homePath();
-  s = KApplication::localkdedir() + "/share/config/kdefonts";
+  s = locate("config", "kdefonts");
   QFile fontfile(s);
 //  if (!fontfile.exists()) return false;
   if(!fontfile.open(IO_ReadOnly)) return false;

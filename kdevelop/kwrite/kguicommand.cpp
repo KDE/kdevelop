@@ -39,9 +39,9 @@ The following things i have discovered:
 - on old Sun workstations with cursor keys the X11 modifier 3 is set.
 */
 
-/*const int SHIFT = Qt::SHIFT;
+const int SHIFT = Qt::SHIFT;
 const int ALT = Qt::ALT;
-const int CTRL = Qt::CTRL;*/
+const int CTRL = Qt::CTRL;
 const int META = 0x00010000;
 //const int MOD2 = 0x00020000;
 //const int MOD3 = 0x00040000;

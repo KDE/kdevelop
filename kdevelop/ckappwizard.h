@@ -20,44 +20,24 @@
 #ifndef CKAPPWIZARD_H
 #define CKAPPWIZARD_H
 
-#include <qdir.h>
-#include <kapp.h>
-#include <ktmainwindow.h>
-#include <kwizard.h>
-#include <kdatepik.h>
-#include <kbutton.h>
-#include <qfile.h>
-#include <qframe.h>
-#include <qheader.h>
-#include <qmessagebox.h>
-#include <qkeycode.h>
-#include <kiconloader.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qlistview.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qmultilinedit.h>
-#include <kseparator.h>
-#include <kfiledialog.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qpicture.h>
-#include <iostream.h>
-#include <kiconloaderdialog.h>
-#include <qstring.h>
-#include <keditcl.h>
-#include <qbutton.h>
 #include <qstrlist.h>
-#include <fstream.h>
-#include <kprocess.h>
-#include <qtooltip.h>
-#include <qrect.h>
-#include <qregexp.h>
-#include "cproject.h"
-#include <kquickhelp.h>
+#include <kwizard.h>
+
+class CProject;
+class QListView;
+class QListViewItem;
+class QLabel;
+class QPushButton;
+class QLineEdit;
+class QCheckBox;
+class QComboBox;
+class QMultiLineEdit;
+class QButtonGroup;
+class KSeparator;
+class KEdit;
+class KShellProcess;
+class KProcess;
+
 
 /** the KDE-Application-Wizard
   *@author Stefan Heidrich
@@ -79,14 +59,12 @@ public:
 public slots:
 
 void slotDirDialogClicked();
-  void slotAppEnd();
   void slotPerlOut(KProcess*,char*,int);
   void slotPerlErr(KProcess*,char*,int);
   void slotHeaderDialogClicked();
   void slotCppDialogClicked();
   void slotNewHeaderButtonClicked();
   void slotNewCppButtonClicked();
-  void slotOkClicked();
   void slotDefaultClicked(int);
   //  void slotAppClicked();
   //  void slotMiniClicked();
@@ -106,6 +84,10 @@ void slotDirDialogClicked();
   void slotLocationButtonClicked();
   void slotVSBoxChanged(int);
   void slotVendorEntry();
+
+protected slots:
+  virtual void accept();
+  virtual void reject();
 
 private:
 
@@ -145,18 +127,11 @@ private:
   QCheckBox* cppheader;
   QMultiLineEdit* output;
   QMultiLineEdit* errOutput;
-  KWizardPage *page0,*page1,*page1a,*page2,*page3,*page4;
   KSeparator *separator0,*separator1,*separator2;
-  KDirDialog* dirdialog;
-  KFileDialog *headerdialog,*cppdialog;
-  KIconLoaderDialog *iload,*mload;
   QPixmap pm,iconpm,minipm,*icontemp,*minitemp;
-  QPainter painter;
   KApplication* help;
   QString dir,nametext,directorytext,name1,name2,namelow,nameold;
   KEdit *cppedit,*hedit;
-  QButton *okButton,*cancelButton,*defaultButton, *prevButton;
-  KIconLoader* loader;
   KShellProcess *q;
   //  KSimpleConfig* settings;
   CProject *project;

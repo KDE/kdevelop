@@ -16,10 +16,14 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
+
 #ifndef __CPRJOPTIONSDLG_H_
 #define __CPRJOPTIONSDLG_H_
 
-#include "cproject.h"
+#include <qtabdialog.h>
+//#include "cproject.h"
+#if 0
 #include <kfiledialog.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
@@ -39,6 +43,17 @@
 #include <qcombobox.h>
 #include <kquickhelp.h>
 #include <qspinbox.h>
+#endif
+
+class CProject;
+class QLineEdit;
+class QCheckBox;
+class QComboBox;
+class QLineEdit;
+class QSpinBox;
+class QLabel;
+class QMultiLineEdit;
+
 
 /** the setup-dialog for a project 
   *@author Sandy Meier, Stefan Bartel
@@ -139,7 +154,7 @@ private:
   QString old_cxxflags;
   bool need_configure_in_update;
   bool need_makefile_generation;
-  KFileDialog *filedialog;
+    //  KFileDialog *filedialog;
 	KConfig *settings;
 	
 protected slots:

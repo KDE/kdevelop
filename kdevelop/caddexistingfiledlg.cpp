@@ -20,10 +20,11 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfiledialog.h>
-#include <kfiledialog.h>
 #include <qmessagebox.h>
+#include <kfiledialog.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include "caddexistingfiledlg.h"
 #include "cproject.h"
 
@@ -66,9 +67,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_button->setBackgroundMode( QWidget::PaletteBackground );
   source_button->setFontPropagation( QWidget::NoChildren );
   source_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  source_button->setPixmap(pix);
+  source_button->setPixmap(BarIcon("open"));
   source_button->setAutoRepeat( FALSE );
   source_button->setAutoResize( FALSE );
 
@@ -105,7 +104,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_button->setBackgroundMode( QWidget::PaletteBackground );
   destination_button->setFontPropagation( QWidget::NoChildren );
   destination_button->setPalettePropagation( QWidget::NoChildren );
-  destination_button->setPixmap(pix);
+  destination_button->setPixmap(BarIcon("open"));
   destination_button->setAutoRepeat( FALSE );
   destination_button->setAutoResize( FALSE );
   
@@ -169,29 +168,38 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   setMaximumSize( 32767, 32767 );
   
 }
+
+
 CAddExistingFileDlg::~CAddExistingFileDlg(){
 }
+
+
 void CAddExistingFileDlg::sourceButtonClicked(){
  
-  QStrList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,i18n("Source File(s)...")) );
-  files.setAutoDelete(true);
+  QStringList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,i18n("Source File(s)...")) );
 
   QString comp_str;
   if(!files.isEmpty()){
-    for(QString str=files.first();str != 0;str = files.next()){
-      comp_str = comp_str + str + ",";
+    QStringList::Iterator it;
+    for(it = files.begin(); it != files.end(); ++it){
+      comp_str += (*it);
+      comp_str += ",";
     }
   }
   source_edit->setText(comp_str);
   files.clear();
 
 }
+
+
 void CAddExistingFileDlg::destinationButtonClicked(){
  QString name=KDirDialog::getDirectory(destination_edit->text(),this,i18n("Destination Directory"));
  if(!name.isEmpty()){
     destination_edit->setText(name);
   }
 }
+
+
 void CAddExistingFileDlg::OK(){
   QFileInfo file_info(source_edit->text());
   QDir dir(destination_edit->text());
@@ -222,15 +230,3 @@ bool CAddExistingFileDlg::isTemplateChecked()
 {
  return template_checkbox->isChecked();
 }
-
-
-
-
-
-
-
-
-
-
-
-

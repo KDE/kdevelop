@@ -275,7 +275,7 @@ void CTreeHandler::readIcons()
 
   pixDir = KApplication::kde_datadir() + PIXPREFIX;
 
-  il = KApplication::getKApplication()->getIconLoader();
+  il = KGlobal::iconLoader();
 
   // Load the icons
   icons[ THFOLDER ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
