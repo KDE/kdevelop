@@ -67,6 +67,16 @@ public:
         m_kind = kind;
     }
 
+    unsigned long flags() const
+    {
+        return m_flags;
+    }
+
+    void setFlags( unsigned long flags )
+    {
+        m_flags = flags;
+    }
+        
     QString fileName() const
     {
         return m_fileName;
@@ -191,6 +201,7 @@ public:
 
 private:
     int m_kind;
+    unsigned long m_flags;
     QString m_name;
     QStringList m_scope;
     QString m_fileName;

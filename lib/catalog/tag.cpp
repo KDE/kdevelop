@@ -21,7 +21,7 @@
 #include <qdatastream.h>
 
 Tag::Tag()
-    : m_kind( 0 ),
+    : m_kind( 0 ), m_flags( 0 ),
       m_startLine( 0 ), m_startColumn( 0 ),
       m_endLine( 0 ), m_endColumn( 0 )
 {
@@ -29,6 +29,7 @@ Tag::Tag()
 
 Tag::Tag( const Tag& source )
     : m_kind( source.m_kind ),
+    m_flags( source.m_flags ),
     m_name( source.m_name ),
     m_scope( source.m_scope ),
     m_fileName( source.m_fileName ),
@@ -45,6 +46,7 @@ Tag::~Tag()
 Tag& Tag::operator = ( const Tag& source )
 {
     m_kind = source.m_kind;
+    m_flags = source.m_flags;
     m_name = source.m_name;
     m_scope = source.m_scope;
     m_fileName = source.m_fileName;
@@ -60,6 +62,7 @@ void Tag::load( QDataStream& stream )
 {
     stream 
 	>> m_kind
+	>> m_flags
 	>> m_name
 	>> m_scope
 	>> m_fileName
@@ -74,6 +77,7 @@ void Tag::store( QDataStream& stream ) const
 {
     stream 
 	<< m_kind
+	<< m_flags
 	<< m_name
 	<< m_scope
 	<< m_fileName
