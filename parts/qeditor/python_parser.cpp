@@ -87,17 +87,18 @@ void PythonParser::parseParag( QTextParag* p )
 
     // #### compute level
 
-    data->setMark( data->mark() | ~0x1 | ~0x2 );
+    data->setMark( data->mark() & ~0x100 );
+    data->setMark( data->mark() & ~0x200 );
 
     if( !p->prev() || p->prev()->endState() == 0 ){
         if( m_startClassRx.exactMatch(text) ){
             kdDebug(9032) << "Declared class " << m_startClassRx.cap(1)
                           << " at line " << p->paragId() << endl;
-            data->setMark( data->mark() & 0x1 );
+            data->setMark( data->mark() | 0x100 );
         } else if( m_startMethodRx.exactMatch(text) ){
             kdDebug(9032) << "Declared method " << m_startMethodRx.cap(1)
                           << " at line " << p->paragId() << endl;
-            data->setMark( data->mark() & 0x2 );
+            data->setMark( data->mark() | 0x200 );
         }
     }
 
