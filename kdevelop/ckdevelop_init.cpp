@@ -81,8 +81,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,appl_process("/bin/sh")
   ,shell_process("/bin/sh")
   ,search_process("/bin/sh")
-  ,m_print_process("/bin/sh")
-  ,m_preview_process("/bin/sh")
+//  ,m_print_process("/bin/sh")
+//  ,m_preview_process("/bin/sh")
   ,dbgController(0L)
   ,dbgToolbar(0L)
   ,var_viewer(0L)
@@ -831,9 +831,9 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Options-menu entries
   // submenu for setting printprograms
-  QPopupMenu* p3 = new QPopupMenu;
-  p3->insertItem(i18n("&Enscript..."), this,
-		  SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_PRINT_ENSCRIPT);
+//  QPopupMenu* p3 = new QPopupMenu;
+//  p3->insertItem(i18n("&Enscript..."), this,
+//		  SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_PRINT_ENSCRIPT);
 
   options_menu = new QPopupMenu;
   options_menu->insertItem(SmallIconSet("edit"),i18n("&Editor..."),this,
@@ -849,7 +849,7 @@ void CKDevelop::initMenuBar(){
   options_menu->insertItem(SmallIconSet("www"),i18n("Documentation &Browser..."),this,
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
 
-  options_menu->insertItem(SmallIconSet("fileprint"),i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
+//  options_menu->insertItem(SmallIconSet("fileprint"),i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
 	options_menu->insertItem(SmallIconSet("run"),i18n("Tools..."),this,SLOT(slotOptionsToolsConfigDlg()),0,ID_OPTIONS_TOOLS_CONFIG_DLG);
 //  options_menu->insertItem(i18n("&Spellchecker..."),this,SLOT(slotOptionsSpellchecker()),0,ID_OPTIONS_SPELLCHECKER);
   options_menu->insertSeparator();
@@ -968,7 +968,7 @@ void CKDevelop::initMenuBar(){
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
   connect(file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(p3,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+//  connect(p3,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));

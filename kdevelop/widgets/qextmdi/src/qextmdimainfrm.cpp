@@ -629,7 +629,10 @@ void QextMdiMainFrm::iconifyAllViews()
 void QextMdiMainFrm::closeActiveView()
 {
    if( m_pCurrentWindow != 0L)
+   {
       m_pCurrentWindow->close();
+      m_pCurrentWindow = 0L;
+   }
 }
 
 /**

@@ -55,8 +55,6 @@
 
 //#include <iostream.h>
 
-#warning FIXME This needs some rework to use KHTMLParts
-
 int  CDocBrowser::fSize = 12;
 QString CDocBrowser::standardFont;
 QString CDocBrowser::fixedFont;
@@ -127,12 +125,12 @@ void CDocBrowser::showURL(const QString& url, bool reload)
 
   QString ref;
   if (pos!=-1)
-		ref = complete_url.right(len - pos - 1);
+    ref = complete_url.right(len - pos - 1);
 
   m_refTitle = ref;
 
   if (pos!=-1)
-   	url_wo_ref = complete_url.left(pos);
+    url_wo_ref = complete_url.left(pos);
 
   if(complete_url.left(7) == "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1)
   {
@@ -149,31 +147,14 @@ void CDocBrowser::showURL(const QString& url, bool reload)
   if(complete_url.contains("file%3A/"))
     complete_url.replace( QRegExp("file%3A/"), "" );
 
-//  bool loaded = true;
-//  if( (url_wo_ref != old_url) || reload)
-//  {
-	  kapp->setOverrideCursor( Qt::waitCursor );
-		KURL kurl(complete_url);
-		openURL(kurl);
-		if (ref.isEmpty())
-    	view()->setContentsPos(0,0);
-  	kapp->restoreOverrideCursor();
-//  }
+  kapp->setOverrideCursor( Qt::waitCursor );
+  KURL kurl(complete_url);
+  openURL(kurl);
+  if (ref.isEmpty())
+    view()->setContentsPos(0,0);
+  kapp->restoreOverrideCursor();
 
-//  if (loaded)
-//  {
-//    if (pos != -1)
-//      gotoAnchor(ref);
-//    else
-//      if (url_wo_ref == old_url)
-//        view()->setContentsPos(0,0);
-//  }
-
-//  if (url_wo_ref == old_url)
-//    emit completed();  // simulate documentDone to put it in history...
-
-  old_url = url_wo_ref;
-
+  old_url = complete_url;
   emit completed();  // simulate documentDone to put it in history...
 }
 
@@ -213,7 +194,6 @@ void CDocBrowser::setDocBrowserOptions(){
   underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
   forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
-#warning FIXME KHTMLSettings
 //  setFixedFont( fixedFont);
 //  setStandardFont( standardFont );
   setURLCursor( KCursor::handCursor() );
@@ -230,7 +210,6 @@ void CDocBrowser::slotDocFontSize(int size){
   debug("CDocBrowser::slotDocFontSize !\n");
 
   fSize = size;
-#warning FIXME KHTMLSettings
 //  KHTMLView* htmlview=view();
 //  htmlview->setDefaultFontBase( size );
 //  htmlview->parse();
@@ -251,7 +230,6 @@ void CDocBrowser::slotDocStandardFont(const QString& n){
   debug("CDocBrowser::slotDocStandardFont !\n");
 
   standardFont = n;
-#warning FIXME KHTMLSettings
 //  KHTMLView* htmlview=view();
 //  htmlview->setStandardFont( n );
 //  htmlview->parse();
@@ -265,7 +243,6 @@ void CDocBrowser::slotDocFixedFont(const QString& n){
   debug("CDocBrowser::slotDocFixedFont !\n");
 
   fixedFont = n;
-#warning FIXME KHTMLSettings
 //  KHTMLView* htmlview=view();
 //  htmlview->setFixedFont( n );
 //  htmlview->parse();
@@ -280,7 +257,6 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 
   debug("CDocBrowser::slotDocColorsChanged !\n");
 
-#warning FIXME KHTMLSettings
 //  KHTMLView* htmlview=view();
 //  htmlview->setForceDefault( force );
 //  htmlview->setDefaultBGColor( bg );

@@ -74,6 +74,9 @@ class KProcess;
 class KWriteView;
 class KStartupLogo;
 class CKonsoleWidget;
+class QStringList;
+class QPrinter;
+class KPrinter;
 
 // Debugger classes
 class VarViewer;
@@ -500,10 +503,10 @@ public:
   void slotOptionsToolsConfigDlg();
   /** shows the spellchecker config dialog */
   void slotOptionsSpellchecker();
-  /** shows the configuration dialog for enscript-printing */
-  void slotOptionsConfigureEnscript();
-  /** shows the configuration dialog for a2ps printing */
-  void slotOptionsConfigureA2ps();
+//  /** shows the configuration dialog for enscript-printing */
+//  void slotOptionsConfigureEnscript();
+//  /** shows the configuration dialog for a2ps printing */
+//  void slotOptionsConfigureA2ps();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   /** sets the make command after it is changed in the Setup dialog */
@@ -806,11 +809,11 @@ protected: // Protected methods
 
 public: // Public methods
 
-  /** access to the print_process */
-  KShellProcess* print_process() const ;
-  /** access to the print preview process */
-  KShellProcess* preview_process() const ;
-
+//  /** access to the print_process */
+//  KShellProcess* print_process() const ;
+//  /** access to the print preview process */
+//  KShellProcess* preview_process() const ;
+//
   bool isFileInBuffer(QString abs_filename);
 
   /** a tool meth,used in the search engine*/
@@ -824,6 +827,7 @@ public: // Public methods
 	
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
+
 protected:
   /** reads all options and initializes values*/
   void readOptions();
@@ -844,6 +848,13 @@ protected:
   /** overridden from it's base class method, additionally moves the MDI system buttons (in maximized mode)
    */
   virtual void resizeEvent( QResizeEvent *pRSE);
+
+private:
+#ifdef USE_QTPRINT_SYSTEM
+  void printImpl(QStringList& list, QPrinter* printer);
+#else
+  void printImpl(QStringList& list, KPrinter* printer);
+#endif
 
 public:
   /** this attribute is true from construction until qApp->exec().
@@ -909,10 +920,10 @@ private:
   KShellProcess shell_process;
   /** search with glimpse */
   KShellProcess search_process;
-  /** print process */
-  KShellProcess m_print_process;
-  /** print preview process */
-  KShellProcess m_preview_process;
+//  /** print process */
+//  KShellProcess m_print_process;
+//  /** print preview process */
+//  KShellProcess m_preview_process;
 
   /** at the moment only one project at the same time */
   CProject* prj;

@@ -279,6 +279,7 @@ private: // Private methods
   void asTreeStr( QString &str );
 
   bool validClassDecl( const char *className, const char *declName, THType type );
+
 public slots: // Public slots
   /** Called from signal CClassPropertiesDlgImpl::sigAddSignal( CParsedClass*, CParsedMethod*)
 This method emits signal sigAddSignalMethod(...) for CKdevelop

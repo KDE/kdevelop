@@ -69,8 +69,8 @@ CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool 
   files = createFileString();
   doctab = html;
   // the processes are maintained by CKDevelop
-  print_process = (dynamic_cast<CKDevelop*>(parent))->print_process();
-  preview_process = (dynamic_cast<CKDevelop*>(parent))->preview_process();
+//  print_process = (dynamic_cast<CKDevelop*>(parent))->print_process();
+//  preview_process = (dynamic_cast<CKDevelop*>(parent))->preview_process();
 }
 
 CPrintDlg::~CPrintDlg(){

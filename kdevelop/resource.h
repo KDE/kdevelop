@@ -241,9 +241,9 @@
 #define ID_OPTIONS_DOCBROWSER			               16050
 #define ID_OPTIONS_TOOLS_CONFIG_DLG								16060	
 #define ID_OPTIONS_SPELLCHECKER										16065
-#define ID_OPTIONS_PRINT         16070
-#define ID_OPTIONS_PRINT_A2PS          16071
-#define ID_OPTIONS_PRINT_ENSCRIPT      16072
+//#define ID_OPTIONS_PRINT         16070
+//#define ID_OPTIONS_PRINT_A2PS          16071
+//#define ID_OPTIONS_PRINT_ENSCRIPT      16072
 
 #define ID_OPTIONS_KDEVELOP            16080
 

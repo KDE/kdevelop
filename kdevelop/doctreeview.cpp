@@ -204,7 +204,7 @@ QString DocTreeKDevelopBook::locatehtml(const QString& filename)
 void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
 {
   char buf[512];
-  ListViewDocItem* chapt;
+  ListViewDocItem* chapt=0;
   while (fgets(buf, sizeof buf, f))
   {
     // HTML files produced by sgml2html have toc's like the following:

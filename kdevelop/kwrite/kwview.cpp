@@ -40,6 +40,9 @@
 
 #include <X11/Xlib.h> //used to have XSetTransientForHint()
 
+int kw_bookmark_keys[] = {Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6,Qt::Key_7,Qt::Key_8,Qt::Key_9};
+
+
 struct BufferInfo {
   void *user;
   int w;

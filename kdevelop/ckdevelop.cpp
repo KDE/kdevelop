@@ -43,7 +43,7 @@
 #include "grepdialog.h"
 #include "structdef.h"
 
-#include "print/cprintdlg.h"
+//#include "print/cprintdlg.h"
 #include "vc/versioncontrol.h"
 #include "./dbg/vartree.h"
 #include "./dbg/gdbcontroller.h"
@@ -68,10 +68,14 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#ifdef USE_QTPRINT_SYSTEM
+#include <qprinter.h>
+#else
+#include <kprinter.h>
+#endif
 #include <krun.h>
 #include <kstddirs.h>
 #include <ktabctl.h>
-#include <qprogressbar.h>
 
 #include <qclipbrd.h>
 #include <qdir.h>
@@ -79,14 +83,15 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qfont.h>
+#include <qmessagebox.h>
+#include <qobjectlist.h>
+#include <qpaintdevicemetrics.h>
+#include <qprogressbar.h>
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qtoolbar.h>
-#include <qmessagebox.h>
 #include <qwhatsthis.h>
-#include <qobjectlist.h>
 
-//#include <iostream.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -296,15 +301,132 @@ void CKDevelop::slotFileSaveAll()
 
 void CKDevelop::slotFilePrint()
 {
-  if (!m_docViewManager->currentEditView()) return;
-  QString file;
+  if (!m_docViewManager->currentEditView())
+    return;
+    
+  slotStatusMsg(i18n("Printing..."));
   slotFileSave();
-  file = m_docViewManager->currentEditView()->getName();
-  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
-  printerdlg->resize(600,480);
-  printerdlg->exec();
-  delete (printerdlg);
+
+  // Here's where you need to replace this and add the file selection dialog
+  // also need to grab the printer setup stuff and put that on the dialog
+  // activated by a button
+  // then call printImpl(filesToPrint, printer);
+  // if you're using qt or printer->
+
+  QString file = m_docViewManager->currentEditView()->getName();
+  if (file.isEmpty())
+    return;
+
+#ifdef USE_QTPRINT_SYSTEM
+  QPrinter printer;
+#else
+  KPrinter printer;
+#endif
+
+  // QPrinter::setup() invokes a print dialog, configures the printer object,
+  // and returns TRUE if the user wants to print or FALSE if not.
+  if ( printer.setup(this) )
+  {
+    QStringList filesToPrint;
+    filesToPrint.append(file);
+    printImpl(filesToPrint, &printer);
+  }
+
+  slotStatusMsg(i18n("Ready"));
 }
+
+
+// Prints all the files in the given list to the print device supplied
+// At this point the printer device must be completely setup
+//
+// I based this on qt's example code but corrupted it beyound recognition.
+// QUOTE
+// In Qt, output to printer use the exact same code as output to screen,
+// pixmaps and picture metafiles. Therefore, we don't call a QPrinter function
+// to draw text, we call a QPainter function. QPainter works on all the output
+// devices and has a device independent API. Most of its code is device-independent,
+// too, which means that it's less likely that your application will have odd bugs.
+// (If the same code is used to print as to draw on the screen, it's less likely that
+// you'll have printing-only or screen-only bugs.)
+
+#ifdef USE_QTPRINT_SYSTEM
+void CKDevelop::printImpl(QStringList& list, QPrinter* printer)
+#else
+void CKDevelop::printImpl(QStringList& list, KPrinter* printer)
+#endif
+{
+  int pageNo = 1;
+  QSize margins = printer->margins();
+  int marginHeight = margins.height();
+
+  slotStatusMsg(i18n("Printing..."));             // in case printing takes any time.
+  QPainter p;
+  if( !p.begin( printer ) )
+    return;                                       // paint on printer
+
+// hmm Should we set the font to the kwrite font?
+//  p.setFont( e->font() );
+
+  int yPos        = 0;                            // y position for each line
+  QFontMetrics fm = p.fontMetrics();
+  QPaintDeviceMetrics metrics( printer );         // need width/height
+                                                  // of printer surface
+
+  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+  {
+    // Need to toss a page between files. We do it here because when the
+    // print ends then a new page should be tossed by the printer code _only_
+    // if the user has set the system to do that.
+    // ie prevents two pages being tossed at end of job
+    if (it != list.begin())
+    {
+      // Toss to a newpage between files
+      printer->newPage();
+      yPos = 0;
+    }
+
+    QString fileName = (*it);
+    QFile f( fileName );
+    if ( !f.open( IO_ReadOnly ) )
+      continue;
+
+    QTextStream t(&f);
+    while ( !t.eof() )
+    {
+      // read next line
+      QString s = t.readLine();
+      if ( marginHeight + yPos > metrics.height() - marginHeight )
+      {
+        // Before we print each line: Is there space for it on the current page, given the margins
+        // we want to use? IF not, we want to start a new page.
+        QString msg( "Printing (page " );
+        msg += QString::number( ++pageNo );
+        msg += ")...";
+        slotStatusMsg(msg);
+        printer->newPage();                         // no more room on this page
+        yPos = 0;                                   // back to top of page
+      }
+
+      // prints the text
+      p.drawText( marginHeight, marginHeight + yPos,
+                  metrics.width(), fm.lineSpacing(),
+                  ExpandTabs,
+                  s );
+
+      // Keep count of how much of the paper we've used.
+      yPos = yPos + fm.lineSpacing();
+    }
+
+    // Finished this file
+    f.close();
+  }
+
+  // At this point we've printed all of the text in all of the files
+  // so we send job to printer - note that if they selected an output file
+  // then this will do nothing - the ps file has been generated already.
+  p.end();
+}
+
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
@@ -1864,25 +1986,25 @@ void CKDevelop::slotOptionsSpellchecker(){
 
 }
 
-void CKDevelop::slotOptionsConfigureEnscript(){
-  if (!CToolClass::searchProgram("enscript")) {
-    return;
-  }
-  enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
-  enscriptconf->resize(610,510);
-  enscriptconf->exec();
-  delete (enscriptconf);
-}
-
-void CKDevelop::slotOptionsConfigureA2ps(){
-  if (!CToolClass::searchProgram("a2ps")) {
-    return;
-  }
-  a2psconf = new CConfigA2psDlg(this, "confdialog");
-  a2psconf->resize(600,430);
-  a2psconf->exec();
-  delete (a2psconf);
-}
+//void CKDevelop::slotOptionsConfigureEnscript(){
+//  if (!CToolClass::searchProgram("enscript")) {
+//    return;
+//  }
+//  enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+//  enscriptconf->resize(610,510);
+//  enscriptconf->exec();
+//  delete (enscriptconf);
+//}
+//
+//void CKDevelop::slotOptionsConfigureA2ps(){
+//  if (!CToolClass::searchProgram("a2ps")) {
+//    return;
+//  }
+//  a2psconf = new CConfigA2psDlg(this, "confdialog");
+//  a2psconf->resize(600,430);
+//  a2psconf->exec();
+//  delete (a2psconf);
+//}
 
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
@@ -3680,7 +3802,7 @@ void CKDevelop::slotToolbarClicked(int item){
 /** Reimplemented from base class QextMdiMainFrm.
  *  Dispatches this 'event' to m_docViewMan which will delete the closed view
  */
-void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool /*layoutTaskBar*/)
+void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 {
   // get the embedded view
   QObjectList* pL = (QObjectList*) pWnd->children();
@@ -3693,6 +3815,7 @@ void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool /*layoutTaskBar*/)
   }
 
   m_docViewManager->closeView( pView);
+  QextMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
 }
 
 QString CKDevelop::getProjectName()
@@ -3841,9 +3964,9 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING,           i18n("Sets the highlighting colors"))
     ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,                    i18n("Configures the Browser options"))
     ON_STATUS_MSG(ID_OPTIONS_TOOLS_CONFIG_DLG,              i18n("Configures the Tools-Menu entries"))
-    ON_STATUS_MSG(ID_OPTIONS_PRINT,                         i18n("Configures printing options"))
-    ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,                i18n("Configures the printer to use enscript"))
-    ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,                    i18n("Configures the printer to use a2ps"))
+//    ON_STATUS_MSG(ID_OPTIONS_PRINT,                         i18n("Configures printing options"))
+//    ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,                i18n("Configures the printer to use enscript"))
+//    ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,                    i18n("Configures the printer to use a2ps"))
     ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,                      i18n("Configures KDevelop"))
 
     ON_STATUS_MSG(ID_BOOKMARKS_SET,                         i18n("Sets a bookmark to the current window file"))

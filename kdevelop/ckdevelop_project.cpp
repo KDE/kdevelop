@@ -557,7 +557,7 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 		if (!slotProjectClose())
 			prjname = old_project; // just reset the prjname to the old one
 	}
-	bool ok = true;
+//  bool ok = true;
 	if (readProjectFile(prjname)) {
 	  QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
 	  projSessionFileName += "kdevses"; // suffix for a KDeveop session file

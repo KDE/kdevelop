@@ -1054,13 +1054,14 @@ void CKDevelop::resizeEvent( QResizeEvent *pRSE)
    QextMdiMainFrm::resizeEvent( pRSE);
    setSysButtonsAtMenuPosition();
 }
-/** access to the print_process */
-KShellProcess* CKDevelop::print_process() const
-{
-        return &m_print_process;
-}
-/** access to the print preview process */
-KShellProcess* CKDevelop::preview_process() const
-{
-        return &m_preview_process;
-}
+
+///** access to the print_process */
+//KShellProcess* CKDevelop::print_process() const
+//{
+//        return &m_print_process;
+//}
+///** access to the print preview process */
+//KShellProcess* CKDevelop::preview_process() const
+//{
+//        return &m_preview_process;
+//}

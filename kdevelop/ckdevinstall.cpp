@@ -573,7 +573,7 @@ void CKDevInstall::slotAuto() // proceed >>
   bool automake     = CToolClass::searchInstProgram("automake");
   bool perl         = CToolClass::searchInstProgram("perl");
   bool sgml2html    = CToolClass::searchInstProgram("sgml2html");
-  bool ksgml2html   = CToolClass::searchInstProgram("ksgml2html");
+//  bool ksgml2html   = CToolClass::searchInstProgram("ksgml2html");
   bool kdoc         = CToolClass::searchInstProgram("kdoc");
        glimpse      = CToolClass::searchInstProgram("glimpse");
        glimpseindex = CToolClass::searchInstProgram("glimpseindex");
