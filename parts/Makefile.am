@@ -2,5 +2,5 @@
 # interfaces in gideon/lib/interfaces which are in turn derived
 # from KPart. 
 
-SUBDIRS = autoproject cppsupport doctreeview classview appwizard \
+SUBDIRS = autoproject cppsupport javasupport doctreeview classview appwizard \
 	  outputviews grepview debugger konsole $(PYTHON_SUBDIR)

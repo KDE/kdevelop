@@ -85,11 +85,11 @@ public:
     
     // Name of target, e.g. foo
     QCString name;
-    // One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA
+    // One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA
     QCString primary;
-    // May be bin, pkglib, noinst, check, sbin, pkgdata, ...
+    // May be bin, pkglib, noinst, check, sbin, pkgdata, java...
     QCString prefix;
-    // Content of foo_SOURCES assignment
+    // Content of foo_SOURCES (or java_JAVA) assignment
     QList<FileItem> sources;
     // Content of foo_LDFLAGS assignment
     QCString ldflags;

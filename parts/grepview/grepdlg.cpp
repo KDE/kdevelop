@@ -34,6 +34,7 @@ const char *template_desc[] = {
     "->MEMBER(",
     "class::MEMBER(",
     "OBJECT->member(",
+    "[OBJECT method",
     0
 };
 
@@ -43,15 +44,17 @@ const char *template_str[] = {
     "\\->[\\t ]*\\<%s\\>[\\t ]*(",
     "[a-z0-9_$]\\+[\\t ]*::[\\t ]*\\<%s\\>[\\t ]*(",
     "\\<%s\\>[\\t ]*\\->[\\t ]*[a-z0-9_$]\\+[\\t ]*(",
+    "\\[[\\t ]*\\<%s\\>[\\t ]*[a-zA-Z0-9_$:]",
     0
 };
 
 const char *filepatterns[] = {
-    "*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c",
-    "*.cpp,*.cc,*.C,*.cxx,*.c",
+    "*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m",
+    "*.cpp,*.cc,*.C,*.cxx,*.c,*.m",
     "*.h,*.hxx,*.idl",
+    "*.java",
     "*",
-    0
+		0
 };
 
 

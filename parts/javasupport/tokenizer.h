@@ -4,7 +4,7 @@
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@syncom.se
-   
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,13 +12,13 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
-/* N.B 
+/* N.B
  * When adding new tokens, use the CP prefix to avoid nameclashes
- * with the compiler and other packages. 
+ * with the compiler and other packages.
  *
  * /Jonas
  */
@@ -26,38 +26,29 @@
 #ifndef _TOKENIZER_H_INCLUDED
 #define _TOKENIZER_H_INCLUDED
 
-#define CPCLASS        258
-#define CPPUBLIC       259
-#define CPPROTECTED    260
-#define CPPRIVATE      261
-#define ID             262
-#define CLCL           263
-#define CPCONST        264
-#define CPVOLATILE     265
-#define CPUNION        267
-#define STRING         268
-#define CPSTATIC       269
-#define CPVIRTUAL      270
-#define QTSIGNAL       271
-#define QTSLOT         272
-#define CPGLOBAL       273
-#define CPENUM         274
-#define CPTYPEDEF      275
-#define CPFRIEND       276
-#define CPSTRUCT       277
-#define CPOPERATOR     278
-#define CPTEMPLATE     279
-#define NUM            280
-#define CPTHROW        281
-#define CPNAMESPACE    282
-#define CPOBJCCLASS      283
-#define CPOBJCINTERFACE  284
-#define CPOBJCPROTOCOL   285
-#define CPOBJCIMPLEMENTATION 286
-#define CPOBJCEND        287
-#define CPOBJCPRIVATE    288
-#define CPOBJCPROTECTED  289
-#define CPOBJCPUBLIC     290
+#define ID				260
+#define NUM				261
+#define STRING			262
+
+#define JAVAPACKAGE		263
+#define JAVACLASS       264
+#define JAVAINTERFACE   265
+#define JAVAEXTENDS		266
+#define JAVAIMPLEMENTS	267
+#define JAVAIMPORTS     268
+#define JAVAPUBLIC     	269
+#define JAVAPROTECTED   270
+#define JAVAPRIVATE     271
+#define JAVASTATIC      272
+#define JAVANATIVE      273
+#define JAVAABSTRACT    274
+#define JAVAFINAL       275
+#define JAVASYNCHRONIZED	276
+#define JAVATRANSIENT  	277
+#define JAVAVOLATILE	278
+#define JAVASTRICTFP	279
+#define JAVATHROWS		280
+#define JAVATHROW		281
 
 typedef const char * YYSTYPE;
 

@@ -46,6 +46,8 @@ static QString nicePrimary(QCString primary)
         return i18n("Header");
     else if (primary == "DATA")
         return i18n("Data");
+    else if (primary == "JAVA")
+        return i18n("Java");
     else
         return QString::null;
 }
@@ -200,7 +202,7 @@ QStringList AutoProjectWidget::allSourceFiles()
         for (; tit.current(); ++tit) {
             QString primary = (*tit)->primary;
             if (primary == "PROGRAMS" || primary == "LIBRARIES"
-                || primary == "LTLIBRARIES") {
+                || primary == "LTLIBRARIES" || primary == "JAVA") {
                 QListIterator<FileItem> fit(tit.current()->sources);
                 for (; fit.current(); ++fit) {
                     QString fullname = path + "/" + (*fit)->name;
@@ -266,7 +268,7 @@ void AutoProjectWidget::slotItemExecuted(QListViewItem *item)
                 (*it2)->insertItem(*it3);
             QString primary = (*it2)->primary;
             if (primary == "PROGRAMS" || primary == "LIBRARIES"
-                || primary == "LTLIBRARIES")
+                || primary == "LTLIBRARIES" || primary == "JAVA")
                 (*it2)->setOpen(true);
         }
     } else if (pvitem->type() == ProjectItem::File) {
@@ -336,7 +338,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
 TargetItem *AutoProjectWidget::createTargetItem(const QCString &name,
                                                 const QCString &prefix, const QCString &primary)
 {
-    bool group = !(primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES");
+    bool group = !(primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES" || primary == "JAVA");
     QString text = group?
         i18n("%1 in %2").arg(nicePrimary(primary)).arg(prefix)
         : i18n("%1 (%2 in %3)").arg(name).arg(nicePrimary(primary)).arg(prefix);
@@ -391,20 +393,19 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
     // Not all combinations prefix/primary are possible, so this
     // could also be checked... not trivial because the list of
     // possible prefixes can be extended dynamically (see below)
-
     if (primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES") {
         QStringList l = QStringList::split(QRegExp("[ \\t\n]"), QString(rhs));
         QStringList::Iterator it1;
         for (it1 = l.begin(); it1 != l.end(); ++it1) {
             TargetItem *titem = createTargetItem((*it1).latin1(), prefix, primary);
             item->targets.append(titem);
-            
+
             QCString canonname = AutoProjectTool::canonicalize(*it1);
             titem->ldflags = cleanwhitespace(item->variables[canonname + "_LDFLAGS"]);
             titem->ldadd = cleanwhitespace(item->variables[canonname + "_LDADD"]);
             titem->libadd = cleanwhitespace(item->variables[canonname + "_LIBADD"]);
             titem->dependencies = cleanwhitespace(item->variables[canonname + "_DEPENDENCIES"]);
-            
+
             QCString sources = item->variables[canonname + "_SOURCES"];
             QStringList l2 = QStringList::split(QRegExp("[ \\t\\n]"), sources);
             QStringList::Iterator it2;
@@ -431,6 +432,17 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
         for (it3 = l.begin(); it3 != l.end(); ++it3) {
             FileItem *fitem = createFileItem(*it3);
             titem->sources.append(fitem);
+        }
+    } else if (primary == "JAVA") {
+        QStringList l = QStringList::split(QRegExp("[ \\t\n]"), QString(rhs));
+        QStringList::Iterator it1;
+        TargetItem *titem = createTargetItem(QCString(""), prefix, primary);
+        item->targets.append(titem);
+
+        for (it1 = l.begin(); it1 != l.end(); ++it1) {
+            FileItem *fitem = createFileItem(*it1);
+            titem->sources.append(fitem);
+
         }
     }
 }

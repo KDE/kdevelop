@@ -1,9 +1,11 @@
 /***************************************************************************
-                          tokenizer.l  -  description
+                          tokenizer.l  -  Derived from the C++ tokenizer
+                          					in the cppsupport KDevelop part
+                          					by Jonas Nordin
                              -------------------
-    begin                : Mon Mar 15 1999
-    copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@syncom.se
+    begin                : Wed Dec 12 2000
+    copyright            : (C) 2000 by Richard Dale
+    email                : Richard_Dale@tipitina.demon.co.uk
    
  ***************************************************************************/
 
@@ -15,7 +17,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-%Start COMMENT PREPARSER PPCOMMENT
+%Start COMMENT
 
 %{
   #include <stdlib.h>
@@ -66,49 +68,28 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %%
     /*==============> Strip whitespace <==============*/
-<INITIAL,PREPARSER>{WS}         {}
+<INITIAL>{WS}         {}
 
     /*==============> Special keyword <==============*/
-<INITIAL>"class"         {return CPCLASS;}
-<INITIAL>"public"        {return CPPUBLIC;}
-<INITIAL>"protected"     {return CPPROTECTED;}
-<INITIAL>"private"       {return CPPRIVATE;}
-<INITIAL>"const"         {return CPCONST;}
-<INITIAL>"volatile"      {return CPVOLATILE;}
-<INITIAL>"static"        {return CPSTATIC;}
-<INITIAL>"virtual"       {return CPVIRTUAL;}
-<INITIAL>"signals"       {return QTSIGNAL;}
-<INITIAL>"slots"         {return QTSLOT;}
-<INITIAL>"enum"          {return CPENUM;}
-<INITIAL>"typedef"       {return CPTYPEDEF;}
-<INITIAL>"friend"        {return CPFRIEND;}
-<INITIAL>"struct"        {return CPSTRUCT;}
-<INITIAL>"union"         {return CPUNION;}
-<INITIAL>"operator"      {return CPOPERATOR;}
-<INITIAL>"template"      {return CPTEMPLATE;}
-<INITIAL>"throw"         {return CPTHROW;}
-<INITIAL>"namespace"     {return CPNAMESPACE;}
-
-    /*==============> Ignored stuff <==============*/
-    /*========== added to avoid extern "C" trouble--rnolden 03232000====*/
-<INITIAL>"Q_EXPORT"       {}
-<INITIAL>"Q_EXPORTH"      {}
-<INITIAL>"Q_OBJECT"       {}
-<INITIAL>"__BEGIN_DECLS"  {}
-<INITIAL>"__END_DECLS"    {}
-<INITIAL>"inline"         {}
-<INITIAL>"afx_msg"        {}
-<INITIAL>"extern"         {}
-
-    /*==============> Objective-C keyword <==============*/
-<INITIAL>"@class"        {return CPOBJCCLASS;}
-<INITIAL>"@interface"    {return CPOBJCINTERFACE;}
-<INITIAL>"@protocol"     {return CPOBJCPROTOCOL;}
-<INITIAL>"@private"      {return CPOBJCPRIVATE;}
-<INITIAL>"@protected"    {return CPOBJCPROTECTED;}
-<INITIAL>"@public"       {return CPOBJCPUBLIC;}
-<INITIAL>"@implementation"  {return CPOBJCIMPLEMENTATION;}
-<INITIAL>"@end"          {return CPOBJCEND;}
+<INITIAL>"package"       {return JAVAPACKAGE;}
+<INITIAL>"class"         {return JAVACLASS;}
+<INITIAL>"interface"     {return JAVAINTERFACE;}
+<INITIAL>"extends"       {return JAVAEXTENDS;}
+<INITIAL>"implements"    {return JAVAIMPLEMENTS;}
+<INITIAL>"import"    	 {return JAVAIMPORTS;}
+<INITIAL>"public"        {return JAVAPUBLIC;}
+<INITIAL>"protected"     {return JAVAPROTECTED;}
+<INITIAL>"private"       {return JAVAPRIVATE;}
+<INITIAL>"static"        {return JAVASTATIC;}
+<INITIAL>"native"        {return JAVANATIVE;}
+<INITIAL>"abstract"      {return JAVAABSTRACT;}
+<INITIAL>"final"         {return JAVAFINAL;}
+<INITIAL>"synchronized"  {return JAVASYNCHRONIZED;}
+<INITIAL>"transient"     {return JAVATRANSIENT;}
+<INITIAL>"volatile"      {return JAVAVOLATILE;}
+<INITIAL>"strictfp"      {return JAVASTRICTFP;}
+<INITIAL>"throws"        {return JAVATHROWS;}
+<INITIAL>"throw"         {return JAVATHROW;}
 
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
@@ -116,7 +97,6 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
     /*==============> Normal operators <==============*/
 <INITIAL>":"          {return ':';}
-<INITIAL>"::"         {return CLCL;}
 <INITIAL>"~"          {return '~';}
 <INITIAL>"="          {return '=';}
 <INITIAL>"<"          {return '<';}
@@ -153,13 +133,6 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
     /*==============> Numbers <==============*/
 <INITIAL>{NUM}        {return NUM;}
 
-    /*==============> Skip preprocessor directives <==============*/
-<INITIAL>"#"[acdeimpsuw ]	{BEGIN (PREPARSER);}
-<PREPARSER>[^\\]"\n"	{ BEGIN (0);}
-<PREPARSER>"/*"		{beginComment((MyLexer *) this);
-                                  BEGIN (PPCOMMENT);}
-<PPCOMMENT>"*/"        { endComment((MyLexer *) this);
-                       BEGIN (PREPARSER); }
 
     /*==============> Strip // comments <==============*/
 <INITIAL>"//"(.)*[\n<<EOF>>] {}
@@ -171,29 +144,29 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <COMMENT>"*/"        { endComment((MyLexer *) this);
                        BEGIN (0); }
 
-<COMMENT,PPCOMMENT>[\n\r]  {inComment((MyLexer *) this);}
-<COMMENT,PPCOMMENT>.  {inComment((MyLexer *) this);}
+<COMMENT>[\n\r]  	{inComment((MyLexer *) this);}
+<COMMENT>.  		{inComment((MyLexer *) this);}
 
     /*==============> All other characters are ignored <==============*/
-<INITIAL,PREPARSER>[\n]  	{}
-<INITIAL,PREPARSER>.  		{}
+<INITIAL>[\n]  		{}
+<INITIAL>.  		{}
 
 %%
 
-bool beginComment(MyLexer *lex)
+static bool beginComment(MyLexer *lex)
 {
  comment_start = lex->lineno();
  comment="/*";
  return true;
 }
 
-void inComment(MyLexer *lex)
+static void inComment(MyLexer *lex)
 {
   char *text=lex->gettext();
   comment+=text;
 };
 
-bool endComment(MyLexer *lex)
+static bool endComment(MyLexer *lex)
 {
  comment_end = lex->lineno();
  comment+="*/";

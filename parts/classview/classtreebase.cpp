@@ -35,7 +35,7 @@ void ClassTreeItem::init(const QString &text)
         KConfig *config = KGlobal::config();
         config->setGroup("General");
         bool showScoped = config->readBoolEntry("FullIdentifierScopes", false);
-        setText(0, showScoped? scopedText() : m_item->name);
+        setText(0, showScoped? scopedText() : m_item->asString());
     } else
         setText(0, text);
 }
@@ -332,6 +332,16 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
         icon = "CVglobal_meth";
 
     setPixmap(0, UserIcon(icon));
+}
+
+QString ClassTreeMethodItem::scopedText() const
+{
+    QString str;
+
+    if (m_item)
+        str = m_item->asString();
+
+    return str;
 }
 
 

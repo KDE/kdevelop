@@ -71,7 +71,7 @@ public:
         {}
 
     KPopupMenu *createPopup();
-    QString scopedText() const;
+    virtual QString scopedText() const;
     void getDeclaration(QString *toFile, int *toLine);
     void getImplementation(QString *toFile, int *toLine);
 
@@ -166,6 +166,7 @@ public:
                          ParsedMethod *parsedMethod );
     ~ClassTreeMethodItem()
         {}
+    QString scopedText() const;
 };
 
 

@@ -1,6 +1,6 @@
 # Here resides the app wizard part.
 
-SUBDIRS = common kapp kpartapp kpartplugin
+SUBDIRS = common kapp kpartapp kpartplugin kappjava
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 

@@ -43,6 +43,7 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
     primary_combo->insertItem(i18n("Script"));
     primary_combo->insertItem(i18n("Header"));
     primary_combo->insertItem(i18n("Data file"));
+    primary_combo->insertItem(i18n("Java"));
     connect( primary_combo, SIGNAL(activated(int)), this, SLOT(primaryChanged()) );
 
     QLabel *prefix_label = new QLabel(i18n("Prefix:"), this);
@@ -96,6 +97,7 @@ void AddTargetDialog::accept()
     case 3: primary = "SCRIPTS";     break;
     case 4: primary = "HEADERS";     break;
     case 5: primary = "DATA";        break;
+    case 6: primary = "JAVA";        break;
     default: ;
     }
     
@@ -160,6 +162,9 @@ void AddTargetDialog::primaryChanged()
     case 5: // Data
         list.append("bin");
         list.append("sbin");
+        break;
+    case 6: // Java
+        list.append("java");
         break;
     }
 
