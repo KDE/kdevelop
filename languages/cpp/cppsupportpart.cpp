@@ -318,6 +318,12 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     m_functionHintTimer->stop();
     
+    if( m_activeView )
+    {
+	disconnect( m_activeView, SIGNAL(cursorPositionChanged(unsigned int, unsigned int)),
+		    this, SLOT(slotCursorPositionChanged(unsigned int, unsigned int )) );
+    }
+    
     m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
     m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
@@ -343,7 +349,13 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     if( !m_activeView )
 	return;
-    
+ 
+    if( m_activeViewCursor )
+    {
+	connect( m_activeView, SIGNAL(cursorPositionChanged()),
+		 this, SLOT(slotCursorPositionChanged()) );
+    }
+        
 #if 0
     KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
     if( !textHintIface )
@@ -1630,15 +1642,15 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( FunctionDefinitionDo
     return fun;
 }
 
-void CppSupportPart::slotCursorPositionChanged( unsigned int /*line*/, unsigned int /*column*/ )
+void CppSupportPart::slotCursorPositionChanged()
 {
-    kdDebug(9007) << "=======> cursor position changed" << endl;
     m_functionHintTimer->changeInterval( 1000 );
 }
 
 void CppSupportPart::slotFunctionHint( )
 {
     kdDebug(9007) << "=======> compute current function definition" << endl;
+    m_functionHintTimer->stop();
     if( FunctionDefinitionDom fun = currentFunctionDefinition() )
     {
 	QStringList scope = fun->scope();
@@ -1646,7 +1658,7 @@ void CppSupportPart::slotFunctionHint( )
 	if( !funName.isEmpty() )
 	    funName += "::";
 	
-	funName += fun->name();
+	funName += formatModelItem( fun, true );
 	
 	mainWindow()->statusBar()->message( funName, 2000 );
     }

@@ -127,7 +127,7 @@ private slots:
     void slotCompleteText();
     void slotMakeMember();
     void slotExtractInterface();
-    void slotCursorPositionChanged( unsigned int line, unsigned int column );
+    void slotCursorPositionChanged();
     void slotFunctionHint();
     void gotoLine( int line );
     void gotoDeclarationLine( int line );
