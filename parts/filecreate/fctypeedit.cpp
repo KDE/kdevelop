@@ -9,17 +9,26 @@
  ***************************************************************************/
 
 #include <qlineedit.h>
-
+#include <qpushbutton.h>
 #include "fctypeedit.h"
 
 
 FCTypeEdit::FCTypeEdit(QWidget *parent, char *name)
  : FCTypeEditBase(parent, name)
 {
+    connect( typeext_edit, SIGNAL( textChanged ( const QString & )),this, SLOT( slotTypeEditTextChanged()));
+    connect( typename_edit, SIGNAL( textChanged ( const QString & )),this, SLOT( slotTypeEditTextChanged( )));
+    slotTypeEditTextChanged( );
 }
 
 FCTypeEdit::~FCTypeEdit()
 {
+}
+
+void FCTypeEdit::slotTypeEditTextChanged( )
+{
+    ok_button->setEnabled( !typeext_edit->text().isEmpty() &&
+                           !typename_edit->text().isEmpty());
 }
 
 void FCTypeEdit::accept()
@@ -28,3 +37,4 @@ void FCTypeEdit::accept()
         !typename_edit->text().isEmpty() )
         FCTypeEditBase::accept();
 }
+#include "fctypeedit.moc"

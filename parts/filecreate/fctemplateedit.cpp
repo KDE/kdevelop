@@ -25,3 +25,4 @@ void FCTemplateEdit::accept()
     if ( !templatename_edit->text().isEmpty() )
         FCTemplateEditBase::accept();
 }
+#include "fctemplateedit.moc"

@@ -24,6 +24,7 @@ public:
 
 protected slots:
     virtual void accept();
+    void slotTypeEditTextChanged( );
 };
 
 #endif
