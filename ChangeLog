@@ -1,3 +1,7 @@
+2001-11-06  Roland Krause  <rokrau@klondike.dyndns.org>
+    * added patch from Markus Kuehni for ctags browsing of 
+      files that are dependent on the current project.
+
 2001-11-06  Walter Tasin <tasin@kdevelop.org>
     * bugfix: some dangerous uninstall rules
     * cleanup some warnings on kicker and kioslave template

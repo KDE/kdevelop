@@ -1052,6 +1052,14 @@ void CKDevelop::create_tags()
   }
   else {
       files = getProject()->getProjectDir();
+      // plus scan external dependencies' files
+      // NOTE these are taken from the *.P files in the .deps subdirectory created
+      // and updated by the make process
+      // (external dependencies let you browse non-project #include symbols)
+      // TODO ".deps" directories may not always be in first level subdirectories or may not at all exist
+      // TODO let user config this as an option
+      // TODO is this portable? (grep -e / max command line length)
+      files = files + " `grep -h -e \"^/.* :$\" */.deps/*.P | sort -u | cut -d \" \" -f 1`";
   }
   // set the name of the output file
   QString tagfile = getProject()->getProjectDir() + "/tags";
