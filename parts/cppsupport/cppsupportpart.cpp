@@ -303,6 +303,9 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (context->hasType("editor")) {
         const EditorContext *econtext = static_cast<const EditorContext*>(context);
         QString str = econtext->linestr();
+	if (str.isEmpty())
+	  return;
+
         //        int col = econtext->col();
         //        KRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
         KRegExp re(" *#include *[<\"](.*)[>\"] *");
