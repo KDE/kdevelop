@@ -2561,7 +2561,11 @@ bool Parser::parseCompoundStatement( StatementAST::Node& node )
 	}
     }
 
-    ADVANCE( '}', "}" );
+    if( lex->lookAhead(0) != '}' ){
+        reportError( i18n("} expected") );
+    } else {
+        lex->nextToken();
+    }
 
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
