@@ -71,7 +71,7 @@ bool loadKDlgLdrLibrary()
     }
 
   #define LOAD_LIB_FNC(fncname, fncptr) \
-       if (!fncptr) { (void*)fncptr = dlsym(KDlgLdr_Library, fncname); \
+       if (!fncptr) { fncptr = dlsym(KDlgLdr_Library, fncname); \
         if (!fncptr) { warning("Getting dialog loader library method failed. (%s)",dlerror()); return false; } }
 
   LOAD_LIB_FNC(FNC_KDLGLDR_INIT,              KDlgLdr_Init)
