@@ -1,14 +1,17 @@
+2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: switched off automatic focus - wtf, (removed enterEvent() from CEditWidget)
+
 2001-03-18  Christian Couder <christian@kdevelop.org>
     * Fix a bug (in switchToFile) in the change I previously commited.
-	* Fix some bookmark bugs.
-	
+    * Fix some bookmark bugs.
+
 2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
     * applied overridden bugfix again: DocViewMan::slotFileSaveAll doesn't crash any more
     * bugfix: possible crash in KWriteDoc::currentColumn(..)
 
 2001-03-18  Christian Couder <christian@kdevelop.org>
     * Moved all the edit_info stuff from the CKDevelop class to the
-	DocViewMan class.
+      DocViewMan class.
     * Code simplified in many places in ckdevelop files.
 
 2001-03-17  jbb <jbb@kdevelop.org>
@@ -24,7 +27,7 @@
 
 2001-03-16  Christian Couder <christian@kdevelop.org>
     * global bookmarks, there are still bugs and the implementation
-	will probably change.
+      will probably change.
 
 2001-03-16  F@lk Brettschneider <falk@kdevelop.org>
     * Closing and reopen edit files should work now without crash.
