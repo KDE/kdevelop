@@ -519,6 +519,12 @@ void VarItem::updateValue(char* buf)
     dataType_ = getParser()->determineType(buf);
     if (dataType_ == typeArray)
       buf++;
+
+    // Try fixing a format string here by overriding the dataType calculated
+    // from this data
+    QString varName=getName();
+    if (dataType_ == typePointer && varName[0] == '/')
+      dataType_ = typeValue;
   }
 
   getParser()->parseData(this, buf, true, false);
