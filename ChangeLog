@@ -1,10 +1,9 @@
-2000-02-27  Ralf Funken <rfunken@kdevelop.de>
-
-	* Included chapter 13 and appendix in german tutorial
-        * Translated chapters 4-10 of german tutorial
-
 2000-02-28 the KDevelop Team <kdevelop-team@barney.cs.uni-potsdam.de>
 	* KDevelop 1.1final released
+
+2000-02-27  Ralf Funken <rfunken@kdevelop.de>
+	* Included chapter 13 and appendix in german tutorial
+        * Translated chapters 4-10 of german tutorial
 
 2000-02-26 Ralf Nolden <rnolden@kdevelop.de>
 	* finished tutorial with complete sourcecode and added printing chapter to tutorial
