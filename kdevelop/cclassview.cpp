@@ -28,6 +28,7 @@
 #include "ccvaddfolderdlg.h"
 #include "./gfxview/GfxClassTreeWindow.h"
 #include "resource.h"
+#include "./classwizard/cclasswizarddlg.h"
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
@@ -122,6 +123,8 @@ void CClassView::initPopups()
   classPopup.setItemEnabled( id, false );
   id = classPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete class"), this, SLOT(slotClassDelete()), ID_CV_CLASS_DELETE);
   classPopup.setItemEnabled(id, false );
+  classPopup.insertSeparator();
+  classPopup.insertItem( i18n( "ClassWizard" ), this, SLOT( slotClassWizard()),0, ID_CV_CLASSWIZARD );
 
   // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
@@ -723,7 +726,8 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR )
+        type == THPRIVATE_ATTR || type == THPUBLIC_SIGNAL ||
+        type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL )
       slotViewDefinition();
     else
       slotViewDeclaration();
@@ -732,7 +736,8 @@ void CClassView::slotClassViewSelected()
   {
     if( type == THCLASS || type == THSTRUCT ||
         type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
-        type == THPRIVATE_ATTR )
+        type == THPRIVATE_ATTR  || type == THPUBLIC_SIGNAL ||
+        type == THPROTECTED_SIGNAL || type == THPRIVATE_SIGNAL)
       slotViewDeclaration();
     else
       slotViewDefinition();
@@ -868,27 +873,10 @@ void CClassView::slotViewDeclaration()
   viewDeclaration( className, otherName, idxType );
 }
 
-void CClassView::slotMoveToFolder()
+void CClassView::slotClassWizard()
 {
-//   CParsedClass *aClass;
-//   QList<CParsedClass> *list;
-//   CCVAdminFolderDlg dlg;
+  CClassWizardDlg dlg;
 
-//   list = store->getSortedClasslist();
-
-//   for( aClass = list->first();
-//        aClass != NULL;
-//        aClass = list->next() )
-//   {
-//     dlg.outsideLb.inSort( aClass->name );
-//   }
-
-//   if( dlg.exec() )
-//   {
-//     debug( "Moving items." );
-//   }
+  dlg.setStore( store );
+  dlg.exec();
 }
-
-
-
-

@@ -103,7 +103,7 @@ protected: // Protected signals and slots
     void slotClassTool();
     void slotViewDefinition();
     void slotViewDeclaration();
-    void slotMoveToFolder();
+    void slotClassWizard();
   signals:
     void selectedFileNew();
     void selectedClassNew();
