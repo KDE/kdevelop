@@ -45,6 +45,8 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     
     if ( args.count() == 1 && args[0] == "TMake" )
         m_tmakeProject = true;
+    else
+        m_tmakeProject = false;
 
     setXMLFile("kdevtrollproject.rc");
 
