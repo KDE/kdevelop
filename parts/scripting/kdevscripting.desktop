@@ -1,0 +1,21 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Name=KDevscripting
+GenericName=scripting Plugin
+Comment=scripting Description
+Icon=shellscript
+ServiceTypes=KDevelop/Plugin
+
+X-KDevelop-Plugin-Version=1
+X-KDevelop-Plugin-Homepage=http://www.sourcextreme.com/projects/kdevelop
+X-KDevelop-Plugin-BugsEmailAddress=geiseri@sourcextreme.com
+X-KDevelop-Plugin-Copyright=(C) by ian reinhart geiser
+
+X-KDevelop-Args=
+
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevscripting
+X-KDevelop-Version=3
+X-KDevelop-Properties=CodeEditing
