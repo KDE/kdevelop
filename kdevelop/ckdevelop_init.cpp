@@ -793,7 +793,7 @@ void CKDevelop::initMenuBar(){
   debug_menu->insertSeparator();
 
   debug_menu->insertItem(SmallIconSet("dbgbreak"),    i18n("Interrupt"),        ID_DEBUG_BREAK_INTO);
-  debug_menu->insertItem(SmallIconSet("stop_proc"),   i18n("Stop"),             ID_DEBUG_STOP);
+  debug_menu->insertItem(SmallIconSet("stop"),   i18n("Stop"),             ID_DEBUG_STOP);
 
   kdev_menubar->insertItem(i18n("Debu&g"), debug_menu);
   connect(debug_menu,SIGNAL(activated(int)), SLOT(slotDebugActivator(int)));
