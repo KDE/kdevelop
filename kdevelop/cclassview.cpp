@@ -29,7 +29,10 @@
 
 CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name){
   streamed_files = new QList<TStreamedFile>;
+  streamed_files->setAutoDelete(true);
   class_infos = new QList<TClassInfo>;
+  class_infos->setAutoDelete(true);
+
   icon_loader = KApplication::getKApplication()->getIconLoader();
   
 }
@@ -101,6 +104,7 @@ void CClassView::refresh(CProject* prj){
   KPath* saved_item_path;
 
   
+
   // let the show begin
   // save the current item;
   saved_item_path = itemPath(currentItem());
@@ -184,6 +188,8 @@ void CClassView::refresh(CProject* prj){
 
    // refresh the comboboxes in the toolbar
   
+
+ 
 }
 void CClassView::CVFindTheClasses(){
 
@@ -375,11 +381,17 @@ void CClassView::CVRemoveAllComments(QString* str){
     }
   }
   while ((begin = str->find("//")) != -1){
-    if (str->find("\n",begin) != -1)
+    if (str->find("\n",begin) != -1){
       end = str->find("\n",begin);
-    else
+    }
+    else{
       end = str->find("\0", begin);
-    for(i=begin-1;i<=end;i++){
+    }
+    i=0;
+    if(begin != 0){
+      i = begin-1;
+    }
+    for(;i<=end;i++){
       if ((*str)[i] != '\n'){
 	(*str)[i] = '_'; // remove the complete comment
       }
@@ -448,6 +460,8 @@ QString CClassView::CVGetVariable(QString str){
   end = str.findRev(regexp,str.size()-1); // find the last letter of the name
   regexp = "[ \t*]";
   begin = str.findRev(regexp,end); // find the first letter
-  
+  if((end-begin+1) <0){
+    return "error";
+  }
   return str.mid(begin+1,end-begin+1);
 }

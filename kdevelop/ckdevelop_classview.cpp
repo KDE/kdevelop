@@ -109,6 +109,7 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
   QString last_textpart;
   QRegExp regexp = "[ (\t]";
 
+
   pos = compl_name.find( regexp );
   if ( pos > 0 )
     compl_name.truncate( pos );
@@ -122,6 +123,7 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
 // 	stream = stream + in_stream.readLine() + "\n"; // read it
 //       }
       stream.resize(file.size()+1);
+      
       file.readBlock(stream,file.size());
       file.close(); 
       if (stream.find(compl_name) != -1){
@@ -148,11 +150,15 @@ void CKDevelop::CVGotoClassVarDecl(QString classname,QString var_name){
   do
   {
   pos = text.find(var_name,nextpos);
+  if(pos == -1){
+    break;// error
+  }
   debug("pos - 1: >" + text.mid(pos - 1, 1) + "<");
   debug("pos + length: >" + text.mid(pos + var_name.length(), 1) + "<");
   nextpos = pos + var_name.length();
   } while ( regexp.match( text.mid(pos - 1, 1) )
             || regexp.match( text.mid(pos + var_name.length(), 1) ) );
+  
   edit_widget->gotoPos(pos,text);
 
 }

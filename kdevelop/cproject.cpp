@@ -117,6 +117,15 @@ QStrList CProject::getShortInfo(){
   config->readListEntry("short_info",list);
   return list;
 }
+void CProject::setMakeOptions(QString options){
+  config->setGroup("General");
+  config->writeEntry("make_options",options);
+}
+QString CProject::getMakeOptions(){
+  config->setGroup("General");
+  return config->readEntry("make_options");
+}
+
 QStrList& CProject::getSources(){
   return cpp_files;
 } 

@@ -62,12 +62,13 @@ protected:
   QLabel* label_filename;
   QLabel* label_filetyp;
   QCheckBox* check_use_template;
-  QCheckBox* check_add_to_project;
+  QCheckBox* check_add_project;
+  QLabel* location_label;
   KTabCtl* tab;
   QListBox* list_cpp;
-  QListBox* list_gnu;
+ 
   QListBox* list_linux;
-  QListBox* list_kde;
+  QListBox* list_manuals;
   QLineEdit* edit;
   QPushButton* ok;
   QPushButton* cancel;

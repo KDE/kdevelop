@@ -578,7 +578,7 @@ int CKDevelop::searchToolGetNumber(QString str){
   return sub.toInt();
 }
 void CKDevelop::slotCreateSearchDatabase(){
-  if(!CToolClass::searchProgram("glimpse")){
+  if(!CToolClass::searchProgram("glimpseindex")){
     return;
   }
   CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config);
@@ -683,7 +683,12 @@ void CKDevelop::slotBuildMake(){
   output_widget->clear();
   QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
   process.clearArguments();
-  process << "make";
+  if(!prj.getMakeOptions().isEmpty()){
+    process << "make" << prj.getMakeOptions();
+  }
+  else{
+    process << "make";
+  }
   
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
@@ -863,7 +868,12 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if (next_job == "make"){ // rest from the rebuild all
       QDir::setCurrent(prj.getProjectDir() + prj.getSubDir()); 
       process.clearArguments();
-      process << "make";
+      if(!prj.getMakeOptions().isEmpty()){
+	process << "make" << prj.getMakeOptions();
+      }
+      else{
+	process << "make";
+      }
       setToolMenuProcess(false);
       process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
       next_job = "";

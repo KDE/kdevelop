@@ -16,6 +16,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #ifndef CPROJECT_H
 #define CPROJECT_H
 
@@ -26,7 +27,7 @@
 #include <qfileinfo.h>
 #include <ksimpleconfig.h>
 
-/**
+/** info struct for a Makefile.am (used in CProject)
   *@author Sandy Meier
   */
 struct TMakefileAmInfo {
@@ -35,7 +36,7 @@ struct TMakefileAmInfo {
   QString type;
   QStrList sub_dirs;
 };
-/**
+/** info struct for a file (used in CProject)
   *@author Sandy Meier
   */
 struct TFileInfo {
@@ -77,6 +78,11 @@ public:
   void setLDADD(QString libstring);
   void setAdditCXXFLAGS(QString flags);
 
+  /**options for make( f.e. "-k" for "make -k"*/
+
+  void setMakeOptions(QString options);
+  QString getMakeOptions();
+  
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
   void getLFVGroups(QStrList& groups);
@@ -124,6 +130,8 @@ public:
   void writeProject(); 
   /** true if the project was read*/
   bool valid; 
+
+
 protected:
 
   QString getDir(QString rel_name);

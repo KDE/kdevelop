@@ -40,7 +40,7 @@ public:
   QString genEngHandbook(QString abs_name,CProject* prj);
   QString genKDELnkFile(QString abs_name,CProject* prj);
   QString genLSMFile(QString abs_name,CProject* prj);
-  QString genGNUFile(QString abs_name,CProject* prj);
+  
   
 };
 #endif

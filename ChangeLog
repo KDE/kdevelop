@@ -1,9 +1,19 @@
 
 
+1999-01-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* kdevelop/cclassview.cpp: removed memory leaks,and commit many bugfixes
+	* little modification of the file-prop-dlg for more space in the treeview
+	* new new-file dlg,I think it is now a little bit better
+
+1999-01-22  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* kdevelop/ckappwizard.cpp: some bugfixes in the registration of files
+
 1999-01-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* kdevelop/ckdevelop.cpp: added messageboxes if a program cound't found
-	* kdevelop/cclassview.cpp : commit patches by Jost Schenck
+	* kdevelop/cclassview.cpp : commit patches by Jost Schenck,many bug fixes
 
 1999-01-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
