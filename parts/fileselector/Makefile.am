@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = libkdevfileselector.la
 libkdevfileselector_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevfileselector_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevfileselector_la_SOURCES = fileselector_part.cpp fileselector_widget.cpp kactionselector.cpp kactionselector.h
+libkdevfileselector_la_SOURCES = fileselector_part.cpp fileselector_widget.cpp kactionselector.cpp kbookmarkhandler.cpp
 
 METASOURCES = AUTO
 

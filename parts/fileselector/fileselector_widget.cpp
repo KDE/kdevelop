@@ -22,6 +22,7 @@
 //BEGIN Includes
 #include "fileselector_widget.h"
 #include "kactionselector.h"
+#include "kbookmarkhandler.h"
 
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
@@ -153,14 +154,12 @@ KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
     lo->addWidget(dir);
     lo->setStretchFactor(dir, 2);
 
-#if defined(BOOKMARK_HANDLER)
     // bookmarks action!
     KActionMenu *acmBookmarks = new KActionMenu( i18n("Bookmarks"), "bookmark",
                                 mActionCollection, "bookmarks" );
     acmBookmarks->setDelayed( false );
 
     bookmarkHandler = new KBookmarkHandler( this, acmBookmarks->popupMenu() );
-#endif
 
     QHBox* filterBox = new QHBox(this);
 
@@ -199,12 +198,9 @@ KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
     connect ( partController, SIGNAL(activePartChanged(KParts::Part*) ),
               this, SLOT(viewChanged() ) );
 
-#if defined(BOOKMARK_HANDLER)
-
     // Connect the bookmark handler
     connect( bookmarkHandler, SIGNAL( openURL( const QString& )),
              this, SLOT( setDir( const QString& ) ) );
-#endif
 
     waitingUrl = QString::null;
 
