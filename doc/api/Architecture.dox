@@ -224,6 +224,9 @@ These parts implement a KTextEditor interface.
   - parts/doxygen = Doxygen integration
     - (see DoxygenPart)
     .
+  - parts/filecreate = New file creation
+    - (see FileCreatePart)
+    .
   - parts/fileview = File groups
     - (see FileViewPart, FileGroupsPart)
     .
