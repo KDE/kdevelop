@@ -39,7 +39,7 @@ BPDialog::BPDialog(Breakpoint* BP, QWidget *parent, const char *name) :
   ignoreCount_(0)
 {
   ASSERT(BP);
-  
+
   QBoxLayout *topLayout = new QVBoxLayout(this, 10);
   QString title;
   if (BP->hasSourcePosition())
@@ -73,8 +73,8 @@ BPDialog::BPDialog(Breakpoint* BP, QWidget *parent, const char *name) :
   label2->setMinimumSize(label2->sizeHint());
   grid->addWidget(label2, 1, 0);
 
-  label2->setMaximumWidth(max(label1->sizeHint().width(),
-                              label2->sizeHint().width()));
+  label2->setMaximumWidth(QMAX(label1->sizeHint().width(),
+			       label2->sizeHint().width()));
 
   ignoreCount_ = new KIntNumInput(this);
   ignoreCount_->setValue(BP->ignoreCount());

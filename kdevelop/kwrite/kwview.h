@@ -165,9 +165,9 @@ protected:
 
 class KWriteView : public QWidget {
     Q_OBJECT
-    friend KWriteDoc;
-    friend KWrite;
-    friend KIconBorder;
+    friend class KWriteDoc;
+    friend class KWrite;
+    friend class KIconBorder;
   public:
     KWriteView(KWrite *, KWriteDoc *);
     ~KWriteView();
@@ -283,9 +283,9 @@ class KWBookmark {
 
 class KWrite : public QWidget {
     Q_OBJECT
-    friend KWriteView;
-    friend KWriteDoc;
-    friend KIconBorder;
+    friend class KWriteView;
+    friend class KWriteDoc;
+    friend class KIconBorder;
   public:
     /** The document can be used by more than one KWrite objects
     */

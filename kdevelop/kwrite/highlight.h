@@ -339,7 +339,7 @@ class HlManager;
 class KConfig;
 
 class Highlight {
-    friend HlManager;
+    friend class HlManager;
   public:
     Highlight(const QString& name);
     virtual ~Highlight();

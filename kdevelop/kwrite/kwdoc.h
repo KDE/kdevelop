@@ -145,10 +145,10 @@ class KWActionGroup {
 
 class KWriteDoc : public QObject {
     Q_OBJECT
-    friend KWriteView;
-    friend KWrite;
-    friend HlManager;
-    friend KIconBorder;
+    friend class KWriteView;
+    friend class KWrite;
+    friend class HlManager;
+    friend class KIconBorder;
     
   public:
     KWriteDoc(HlManager *, const char *path = 0L);
