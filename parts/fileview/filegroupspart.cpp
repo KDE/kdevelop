@@ -38,10 +38,11 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
 
     m_filegroups = new FileGroupsWidget(this);
     m_filegroups->setCaption(i18n("File Group View"));
+    m_filegroups->setIcon(SmallIcon("attach"));
     QWhatsThis::add(m_filegroups, i18n("File Group View\n\n"
                                        "The file group viewer shows all files of the project, "
                                        "in groups which can be configured by you."));
-    topLevel()->embedSelectView(m_filegroups, i18n("File Groups"));
+    topLevel()->embedSelectView(m_filegroups, i18n("File Groups"), i18n("all files of the project"));
   
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );

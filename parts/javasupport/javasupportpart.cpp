@@ -63,7 +63,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
-    topLevel()->embedOutputView( d->problemReporter, i18n("Problems") );
+    topLevel()->embedOutputView( d->problemReporter, i18n("Problems"), i18n("problem reporter") );
 
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
     

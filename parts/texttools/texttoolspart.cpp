@@ -56,7 +56,7 @@ void TextToolsPart::createWidget()
     m_widget->setCaption(i18n("Text Structure"));
     QWhatsThis::add(m_widget, i18n("Text Structure\n\n"
                                      "This browser shows the structure of your HTML text."));
-    topLevel()->embedSelectView(m_widget, i18n("Text Structure"));
+    topLevel()->embedSelectView(m_widget, i18n("Text Structure"), i18n("text structure"));
 }
 
 

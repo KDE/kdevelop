@@ -57,7 +57,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the subproject selected in the overview."));
     
-    topLevel()->embedSelectViewRight(m_widget, i18n("Automake Manager"));
+    topLevel()->embedSelectViewRight(m_widget, i18n("Automake Manager"), i18n("automake manager"));
 
     KAction *action;
 

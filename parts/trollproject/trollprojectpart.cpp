@@ -54,7 +54,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                                    ".pro file. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
 
-    topLevel()->embedSelectViewRight(m_widget, i18n("QMake Manager"));
+    topLevel()->embedSelectViewRight(m_widget, i18n("QMake Manager"), i18n("project manager"));
 
     KAction *action;
 

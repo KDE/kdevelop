@@ -24,10 +24,10 @@ public:
   ~TopLevelSDI();
     
   void embedPartView(QWidget *view, const QString &title);
-  void embedSelectView(QWidget *view, const QString &title);
-  void embedOutputView(QWidget *view, const QString &title);
+  void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
+  void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
   
-  void embedSelectViewRight ( QWidget* view, const QString& title );
+  void embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip);
 
   void removeView(QWidget *view);
   void setViewVisible(QWidget *pView, bool bEnabled);

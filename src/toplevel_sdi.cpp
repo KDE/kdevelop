@@ -229,17 +229,17 @@ void TopLevelSDI::embedPartView(QWidget *view, const QString &name)
 }
 
 
-void TopLevelSDI::embedSelectView(QWidget *view, const QString &name)
+void TopLevelSDI::embedSelectView(QWidget *view, const QString &name, const QString &/*toolTip*/)
 {
   m_leftBar->addTab(view, name);
 }
 
-void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title )
+void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title, const QString &/*toolTip*/)
 {
 	m_rightBar->addTab ( view, title );
 }
 
-void TopLevelSDI::embedOutputView(QWidget *view, const QString &name)
+void TopLevelSDI::embedOutputView(QWidget *view, const QString &name, const QString &/*toolTip*/)
 {
   m_bottomBar->addTab(view, name);
 }
@@ -249,7 +249,7 @@ void TopLevelSDI::removeView(QWidget *)
 {
 }
 
-void TopLevelSDI::setViewVisible(QWidget *pView, bool bEnabled)
+void TopLevelSDI::setViewVisible(QWidget */*pView*/, bool /*bEnabled*/)
 {
   // TODO: implement me
 }

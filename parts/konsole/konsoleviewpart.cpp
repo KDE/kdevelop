@@ -24,7 +24,7 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
 				   "window. It will try to follow you when "
 				   "you navigate in the source directories"));
   
-  topLevel()->embedOutputView(m_widget, i18n("Konsole"));
+  topLevel()->embedOutputView(m_widget, i18n("Konsole"), i18n("embedded console window"));
 }
 
 

@@ -58,7 +58,7 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
                                       "and implementations. The right button popup menu allows more specialized "
                                       "functionality."));
 
-    topLevel()->embedSelectView(m_classtree, i18n("Classes"));
+    topLevel()->embedSelectView(m_classtree, i18n("Classes"), i18n("class browser"));
 
     classes_action = new ClassListAction(this, i18n("Classes"), 0,
                                          this, SLOT(selectedClass()),
@@ -175,7 +175,8 @@ void ClassViewPart::updatedSourceInfo()
 void ClassViewPart::registerClassToolDialog(ClassToolDialog *dlg)
 {
     m_widgets.append(dlg);
-    topLevel()->embedSelectView(dlg, i18n("Classtools"));
+    dlg->setIcon(SmallIcon("CVclass"));
+    topLevel()->embedSelectView(dlg, i18n("Classtools"), i18n("classtools"));
     topLevel()->raiseView(dlg);
 }
 

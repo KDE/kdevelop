@@ -82,7 +82,7 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 			actionCollection(), "project_new_class" );
 
   m_phpErrorView = new PHPErrorView(this);
-  topLevel()->embedOutputView(m_phpErrorView, i18n("PHP"));
+  topLevel()->embedOutputView(m_phpErrorView, i18n("PHP"), i18n("PHP"));
   connect(m_phpErrorView,SIGNAL(fileSelected(const QString&,int)),
 	  this,SLOT(slotErrorMessageSelected(const QString&,int)));
 

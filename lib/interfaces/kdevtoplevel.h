@@ -10,10 +10,10 @@ class KDevTopLevel
 public:
 
   virtual void embedPartView(QWidget *view, const QString &title) = 0;
-  virtual void embedSelectView(QWidget *view, const QString &title) = 0;
-  virtual void embedOutputView(QWidget *view, const QString &title) = 0;
+  virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip) = 0;
+  virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip) = 0;
   
-  virtual void embedSelectViewRight ( QWidget* view, const QString& title ) = 0;
+  virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip) = 0;
 
   virtual void removeView(QWidget *view) = 0;
   virtual void setViewVisible(QWidget *pView, bool bEnabled) = 0;

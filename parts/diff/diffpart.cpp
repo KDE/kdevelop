@@ -36,7 +36,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget = new DiffWidget();
   QString nm( i18n( "Difference Viewer" ) );
   diffWidget->setCaption( nm );
-  topLevel()->embedOutputView( diffWidget, nm );
+  topLevel()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
 
   (void) new KAction( i18n("Difference Viewer..."), 0,
                         this, SLOT(slotExecDiff()),

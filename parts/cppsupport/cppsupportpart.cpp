@@ -94,7 +94,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
              this, SLOT(activePartChanged(KParts::Part*)));
 
     m_problemReporter = new ProblemReporter( this );
-    topLevel( )->embedOutputView( m_problemReporter, i18n("Problems") );
+    topLevel( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -297,9 +297,9 @@ CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
             m_pCHWidget = new CppSupportWidget( this );
 
         if( setOutputView )
-            topLevel( )->embedOutputView( m_pCHWidget, i18n( "Code Hinting" ) );
+            topLevel( )->embedOutputView( m_pCHWidget, i18n( "Code Hinting" ), i18n( "code hinting") );
         else
-            topLevel( )->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );
+            topLevel( )->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ), i18n( "code hinting") );
     }
 }
 

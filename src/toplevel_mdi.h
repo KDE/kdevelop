@@ -29,10 +29,10 @@ public:
   ~TopLevelMDI();
     
   void embedPartView(QWidget *view, const QString &title);    //!< Embeds a view as part view in the main working area at position (0,0)
-  void embedSelectView(QWidget *view, const QString &title);  //!< Embeds a view as select view in the left docking area
-  void embedOutputView(QWidget *view, const QString &title);  //!< Embeds a view as output view in the bottom docking area
+  void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as select view in the left docking area
+  void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as output view in the bottom docking area
   
-  void embedSelectViewRight ( QWidget* view, const QString& title );  //!< We do not have a right pane so this is just a wrapper to embedSelectView(
+  void embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip);  //!< We do not have a right pane so this is just a wrapper to embedSelectView(
 
   void removeView(QWidget *view);
   void setViewVisible(QWidget *pView, bool bEnabled);
@@ -98,7 +98,7 @@ protected:
   /** Reimplemented from QWidget just to get the info, that the window will now be shown */
   void resizeEvent(QResizeEvent *ev);
   /** Adds a tool view window to the output or tree views*/
-  void addToolViewWindow(EView eView,   QextMdiChildView *child, const QString &name);
+  void addToolViewWindow(EView eView, QextMdiChildView *child, const QString &name, const QString &toolTip);
 
 
 private slots:

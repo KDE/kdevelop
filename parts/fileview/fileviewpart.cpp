@@ -38,10 +38,11 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     
     m_filetree = new FileTreeWidget(this);
     m_filetree->setCaption(i18n("File Tree"));
+    m_filetree->setIcon(SmallIcon("folder"));
     QWhatsThis::add(m_filetree, i18n("File Tree\n\n"
                                      "The file viewer shows all files of the project "
                                      "in a tree layout."));
-    topLevel()->embedSelectView(m_filetree, i18n("File Tree"));
+    topLevel()->embedSelectView(m_filetree, i18n("File Tree"), i18n("view on the project directory"));
         
     // File tree
     connect( project(), SIGNAL(addedFileToProject(const QString&)),

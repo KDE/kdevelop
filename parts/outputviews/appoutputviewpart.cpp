@@ -38,7 +38,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
                                    "terminal-based application communication. Running terminal "
                                    "applications use this instead of a terminal window."));
 
-    topLevel()->embedOutputView(m_widget, i18n("Application"));
+    topLevel()->embedOutputView(m_widget, i18n("Application"), i18n("output of the executed user program"));
 
     connect( core(), SIGNAL(stopButtonClicked()),
              m_widget, SLOT(killJob()) );

@@ -45,7 +45,7 @@ default_remove("-f"),default_diff("-u3 -p"),default_log("") {
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
     m_widget = new CvsWidget(this);
-    topLevel()->embedOutputView(m_widget, i18n("CVS"));
+    topLevel()->embedOutputView(m_widget, i18n("CVS"), i18n("cvs output"));
     
 }
 

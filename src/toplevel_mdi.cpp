@@ -392,6 +392,9 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
   pMDICover->setTabCaption(shortName);
   pMDICover->setCaption(name);
 
+  const QPixmap& wndIcon = view->icon() ? *(view->icon()) : QPixmap();
+  pMDICover->setIcon(wndIcon);
+
   m_widgetMap.insert(view, pMDICover);
   m_childViewMap.insert(pMDICover, view);
 
@@ -423,7 +426,7 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
  *  If there is no tool window (first == null) then either TopLevelMDI will serve
  *  as dock base or the first part view, depending on the mdi mode.
  */
-void TopLevelMDI::addToolViewWindow(EView eView,   QextMdiChildView *child, const QString &name)
+void TopLevelMDI::addToolViewWindow(EView eView, QextMdiChildView *child, const QString& name, const QString &toolTip)
 {
   // Count how many windows are visible
   QWidget *first =0L;   // Pointer to a widget in that view area, may function as target to docking
@@ -440,7 +443,6 @@ void TopLevelMDI::addToolViewWindow(EView eView,   QextMdiChildView *child, cons
   }
   // Check, if the tool window is visible (it may have been closed using the close button)
 
-
   if (!first)  // If there is no selected view yet ...
   {
     if (mdiMode() == QextMdi::TabPageMode)
@@ -449,33 +451,45 @@ void TopLevelMDI::addToolViewWindow(EView eView,   QextMdiChildView *child, cons
     if (!first)
       first = this;
 
-    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockBottom, first, 70, name, name);
-    else                      addToolWindow(child, KDockWidget::DockLeft, first, 25, name, name);
+    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockBottom, first, 70, toolTip, name);
+    else {
+      QString tabName = name;
+      //TODO_implement_me: if (!tabHeaderShouldContainText) {
+        tabName = "";
+      //TODO_implement_me: }
+      addToolWindow(child, KDockWidget::DockLeft, first, 25, toolTip, tabName);
+    }      
   }
   else
   {
-    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
-    else                      addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
+    if(eView == OutputView)   addToolWindow(child, KDockWidget::DockCenter, first, 25, toolTip, name);
+    else {
+      QString tabName = name;
+      //TODO_implement_me: if (!tabHeaderShouldContainText) {
+        tabName = "";
+      //TODO_implement_me: }
+      addToolWindow(child, KDockWidget::DockCenter, first, 25, toolTip, tabName);
+    }
   }
 }
 
-void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
+void TopLevelMDI::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
 {
   QextMdiChildView *child = wrapper(view, name);
-  addToolViewWindow(TreeView, child, name);
+  addToolViewWindow(TreeView, child, name, toolTip);
   m_selectViews.append(child);
 }
 
-void TopLevelMDI::embedSelectViewRight ( QWidget* view, const QString& title )
+void TopLevelMDI::embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip)
 {
   //we do not have a right pane so we insert it in the default pos
-  embedSelectView( view, title );
+  embedSelectView( view, title, toolTip );
 }
 
-void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
+void TopLevelMDI::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
 {
   QextMdiChildView *child = wrapper(view, name);
-  addToolViewWindow(OutputView, child, name);
+  addToolViewWindow(OutputView, child, name, toolTip);
   m_outputViews.append(child);
 }
 
@@ -1065,7 +1079,7 @@ void TopLevelMDI::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionDat
     }
     else // It does not have a DockWidget
     {
-         addToolViewWindow(ActionData.eView, ActionData.pChildView, ActionData.pChildView->name());
+         addToolViewWindow(ActionData.eView, ActionData.pChildView, ActionData.pChildView->name(), ActionData.pChildView->name());
     }
   }
 }

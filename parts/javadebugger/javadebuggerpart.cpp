@@ -68,7 +68,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    topLevel()->embedSelectView(variableWidget, i18n("Watch"));
+    topLevel()->embedSelectView(variableWidget, i18n("Watch"), i18n("debugger variable-view"));
     topLevel()->setViewVisible(variableWidget, false);
     
     breakpointWidget = new BreakpointWidget();
@@ -80,7 +80,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "a popupmenu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
-    topLevel()->embedOutputView(breakpointWidget, i18n("&Breakpoints"));
+    topLevel()->embedOutputView(breakpointWidget, i18n("&Breakpoints"), i18n("debugger breakpoints"));
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -93,7 +93,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                            "program. By clicking on an item you "
                                            "can see the values in any of the "
                                            "previous calling functions."));
-    topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"));
+    topLevel()->embedOutputView(framestackWidget, i18n("&Frame Stack"), i18n("debugger function call stack"));
     topLevel()->setViewVisible(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
@@ -106,7 +106,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                             "instruction using the debuggers toolbar "
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
-    topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"));
+    topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble"));
     topLevel()->setViewVisible(disassembleWidget, false);
 
     VariableTree *variableTree = variableWidget->varTree();

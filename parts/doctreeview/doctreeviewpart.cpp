@@ -61,7 +61,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
                                    "documentation and the KDevelop manuals. It can "
                                    "be configured individually."));
     
-    topLevel()->embedSelectViewRight(m_widget, i18n("Documentation Browser"));
+    topLevel()->embedSelectViewRight(m_widget, i18n("Documentation"), i18n("documentation browser"));
 
     KAction *action;
 

@@ -1,3 +1,7 @@
+2002-11-07 F@lk Brettschneider <falk@kdevelop.org>
+    * extended interface class KDevTopLevel in a way that parts can specify view icons and tab-tooltips
+    * adapted all parts to use this feature, now KDevelop in one of the 3 MDI modes looks more like KDevelop-2
+
 2002-11-05 Yann Hodique <Yann.Hodique@lifl.fr>
     * new interface for global vcs actions
     * new page for appwizard : vcs system choice
