@@ -43,11 +43,12 @@ public:
     ~DoxygenPart();
 
 private slots:
-    /** Configuration dialog under "Project Options..." that alows
-      * to specify doxygen configuration options and store them to
-      * a configuration file. The file name is Doxyfile and it's stored
-      * in the project root.
-      */
+    /**
+     * Configuration dialog under "Project Options..." that alows
+     * to specify doxygen configuration options and store them to
+     * a configuration file. The file name is "Doxyfile" and it's stored
+     * in the project root.
+     */
     void projectConfigWidget(KDialogBase *dlg);
 
     /** run doxygen to generate API documentation */
@@ -55,42 +56,49 @@ private slots:
 
     /** clean the html API docs (delete the generated html files) */
     void slotDoxClean();
-	/**
-	*	gets called, when the Doxygen process for previewing is finished and shows its output then.
-	*/
-	void slotPreviewProcessExited();
-	/**
-	*	If the current part is KTextEditor::Document, run Doxygen over it. 
-	*	When the process exited slotPreviewProcessExited gets called.
-	*/
-	void slotRunPreview();
-	/**
-	 *	gets called when the currently active part changed. 
-	 *	When the new part is a KTextEditor::Document the filepath gets internally stored and gets processed if slotRunPreview() is called.
-	 *	@see KTextEditor::Document
-	*/
-	void slotActivePartChanged(KParts::Part*);
 
     /**
-     * inserts a documentation template above a functiondeclaration/-definition.
+     * Gets called, when the Doxygen process for previewing is finished
+     * and shows its output then.
+     */
+    void slotPreviewProcessExited();
+
+    /**
+      * If the current part is KTextEditor::Document, run Doxygen over it.
+      * When the process exited slotPreviewProcessExited gets called.
+      */
+    void slotRunPreview();
+
+    /**
+     * Gets called when the currently active part changed.
+     *  When the new part is a KTextEditor::Document the filepath gets
+     * internally stored and gets processed if slotRunPreview() is called.
+     * @see KTextEditor::Document
+     */
+    void slotActivePartChanged(KParts::Part*);
+
+    /**
+     * Inserts a documentation template above a function declaration/definition.
      */
     void slotDocumentFunction();
 
 
 private:
 
-    /** If a Doxygen configuration file doesn't exist, create one.
-      * And copy some of the project settings to it.
-      */
+    /**
+     * If a Doxygen configuration file doesn't exist, create one.
+     * And copy some of the project settings to it.
+     */
     void adjustDoxyfile();
 
     DoxygenDialog *m_dialog;
+
     //needed for doxygen preview
     KProcess m_process;
     QString m_file;
-	KTempDir m_tmpDir;
-    KAction* m_actionPreview;
-    
+    KTempDir m_tmpDir;
+    KAction* m_action;
+
     //needed for documentFunction
     KAction* m_actionDocumentFunction;
     KTextEditor::EditInterface* m_activeEditor;
