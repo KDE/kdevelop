@@ -1161,10 +1161,10 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
       // TODO: need to record what we do here
       if (curPos < indentPos) {
         int len = indentPos-curPos;
-        char *buf = new char[len];
+        char* buf = new char[len];
         memset(buf, ' ', len);
         textLine->insert(0, &buf[0], len);
-        delete [] buf;
+        delete[] buf;
       }
       else if (curPos > indentPos)
         textLine->del(indentPos, curPos-indentPos);
