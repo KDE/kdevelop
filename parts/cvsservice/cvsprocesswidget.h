@@ -13,6 +13,8 @@
 #define _CVSPROCESSWIDGET_H_
 
 #include <qtextedit.h>
+#include <qstringlist.h>
+
 #include <dcopobject.h>
 
 class CvsPart;
@@ -41,8 +43,8 @@ public:
 
     virtual void clear();
 
-    QString output() const { return m_output; }
-    QString errors() const { return m_errors; }
+    QString outputString() const { return m_output.join("\n"); }
+    QString errorsString() const { return m_errors.join("\n"); }
 
 k_dcop:
     // Connect this part with job's DCOP reference
@@ -54,9 +56,9 @@ signals:
     void jobFinished( bool normalExit, int exitStatus );
 
 private:
-    void showInfo( const QString &msg );
-    void showError( const QString &msg );
-    void showOutput( const QString &msg );
+    void showInfo( const QStringList &msg );
+    void showError( const QStringList &msg  );
+    void showOutput( const QStringList &msg  );
 
     CvsPart *m_part;
     CvsService_stub *m_service;
@@ -66,8 +68,15 @@ private:
         *m_errorStyle,
         *m_infoStyle;
 
-    QString m_output,
+    // A temporary buffer for storing characters as they arrive. CVS is not
+    // kind enough to present us whole strings :-(
+    QString m_outputBuffer,
+        m_errorBuffer;
+
+    QStringList m_output,
         m_errors;
+
+    QStringList processBuffer( QString &buffer );
 };
 
 #endif

@@ -185,10 +185,14 @@ void CvsProcessWidget::slotReceivedOutput( QString someOutput )
     g_dcopOutCounter++;
     kdDebug() << "MYDCOPDEBUG: dcopOutCounter == " << g_dcopOutCounter << endl;
 #endif
-
-    m_output += someOutput;
-    showOutput( someOutput );
-    scrollToBottom();
+    m_outputBuffer += someOutput;
+    QStringList strings = processBuffer( m_outputBuffer );
+    if (strings.count() > 0)
+    {
+        m_output += strings;
+        showOutput( strings );
+        scrollToBottom();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -201,31 +205,59 @@ void CvsProcessWidget::slotReceivedErrors( QString someErrors )
     kdDebug() << "MYDCOPDEBUG: dcopErrCounter == " << g_dcopErrCounter << endl;
 #endif
 
-    m_errors += someErrors;
-    showError( someErrors );
-    scrollToBottom();
+    m_errorBuffer += someErrors;
+    QStringList strings = processBuffer( m_errorBuffer );
+    if (strings.count() > 0)
+    {
+        m_errors += strings;
+        showError( strings );
+        scrollToBottom();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsProcessWidget::showInfo( const QString &msg )
+QStringList CvsProcessWidget::processBuffer( QString &buffer )
 {
-    append( "<infotag>" + msg + "</infotag>" );
+    QStringList strings;
+    int pos;
+    while ( (pos = buffer.find('\n')) != -1)
+    {
+        QString line = buffer.left( pos );
+        if (!line.isEmpty())
+        {
+            strings.append( line );
+        }
+        buffer = buffer.right( buffer.length() - pos - 1 );
+    }
+    return strings;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsProcessWidget::showError( const QString &msg )
+void CvsProcessWidget::showInfo( const QStringList &msg )
 {
-    append( "<errortag>" + msg + "</errortag>" );
+    for (QStringList::const_iterator it = msg.begin(); it != msg.end(); ++it)
+        append( "<infotag>" + (*it) + "</infotag>" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsProcessWidget::showOutput( const QString &msg )
+void CvsProcessWidget::showError( const QStringList &msg )
 {
-    append( "<goodtag>" + msg + "</goodtag>" );
+    for (QStringList::const_iterator it = msg.begin(); it != msg.end(); ++it)
+        append( "<errortag>" + (*it) + "</errortag>" );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsProcessWidget::showOutput( const QStringList &msg )
+{
+    for (QStringList::const_iterator it = msg.begin(); it != msg.end(); ++it)
+    {
+        // TODO: here we can interpret lines as [C], [M], ...
+        append( "<goodtag>" + (*it) + "</goodtag>" );
+    }
+}
 
 #include "cvsprocesswidget.moc"
