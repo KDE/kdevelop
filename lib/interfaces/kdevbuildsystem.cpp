@@ -162,8 +162,8 @@ KDevBuildSystem::~ KDevBuildSystem( )
 {
 }
 
-KDevBuildSystem::KDevBuildSystem( QObject * parent, const char * name )
-    :QObject(parent, name)
+KDevBuildSystem::KDevBuildSystem( QObject *parent, const char * name )
+    :QObject(parent, name), m_project(parent)
 {
 }
 
@@ -176,6 +176,15 @@ void KDevBuildSystem::configureBuildItem( KDialogBase * dlg, BuildBaseItem * it)
     addDefaultBuildWidget(dlg, vbox, it);
 }
 
+void KDevBuildSystem::initProject( KDevProject * project )
+{
+    m_project = project;
+}
+
+KDevProject * KDevBuildSystem::project( )
+{
+    return m_project;
+}
 
 // ------------------------------------------------------
 BuildItemConfigWidget::BuildItemConfigWidget( BuildBaseItem *it, QWidget * parent, const char * name )

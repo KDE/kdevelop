@@ -15,6 +15,8 @@
 #include <qwidget.h>
 #include <qdom.h>
 
+#include "kdevproject.h"
+
 class BuildFileItem;
 class BuildGroupItem;
 class BuildTargetItem;
@@ -156,6 +158,9 @@ public:
     KDevBuildSystem( QObject *parent=0, const char *name=0 );
     virtual ~KDevBuildSystem();
 
+    virtual void initProject(KDevProject *project);
+    virtual KDevProject *project();
+
     /**the name of the build system for using in project configuration files*/
     virtual QString buildSystemName() = 0;
     /**reimplement this to create your build system like makefiles ant's xml
@@ -188,6 +193,9 @@ public:
        widget (there is no need to reimplement this)*/
     //TODO: adymo: implement
     virtual void addDefaultBuildWidget(KDialogBase *dlg, QWidget *parent, BuildBaseItem*);
+
+private:
+    KDevProject *m_project;
 };
 
 

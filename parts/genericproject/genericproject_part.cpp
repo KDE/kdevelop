@@ -113,6 +113,7 @@ void GenericProjectPart::openProject( const QString & dirName, const QString & p
         KMessageBox::sorry(0, i18n("Could not create build system plugin for %1.").arg(bsName));
         return;
     }
+    m_buildSystem->initProject(this);
 
 /*    // Set the default directory radio to "executable"
     if (DomUtil::readEntry(dom, "/kdevpascalproject/run/directoryradio") == "" ) {
