@@ -44,7 +44,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-03-29</date>
+  <date>2004-03-30</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
@@ -117,7 +117,7 @@ Here you will find information on the following topics:
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="nutshell">In a Nutshell &mdash; Tips and Tricks</link> &mdash; a quick reference of the most used commands and actions.
+  <link linkend="nutshell">In a Nutshell &mdash; Tips and Tricks</link> &mdash; a quick reference to commonly used commands and actions. And a short guide to solve common problems when working with &kdevelop;.
   </para></listitem>
 
   <listitem><para>
@@ -211,7 +211,10 @@ This chapter is meant to provide short hints and tips together with (mandatory) 
 There should be an additional FAQ section near the end nevertheless which contains more general stuff not directly related to navigating the manual. -->
 
 <para>
-The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. If you want more information on a topic, just follow the link in the title starting that advice.
+The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. There are also short hints on how to solve some common problems when working with &kdevelop;.
+</para>
+<para>
+If you want more information on a topic, just follow the link in the title starting that advice.
 </para>
 <para>
 Information on these topics is availabe:
@@ -361,6 +364,22 @@ Information on these topics is availabe:
 
 <itemizedlist id="nutshellitem-compilemake">
   <title>Compile/Make Problems</title>
+  
+  <listitem>
+    <formalpara id="nutshell-builddirproblems">
+    <!-- ### Change the following link once a more comprehensive sourcedir != builddir description is available. -->
+    <title><link linkend="defaultbuild-warning">Project does not build again after switching to/from default target</link></title>
+    <para>
+    There is a problem with the &automake;/&autoconf; machinery. If <menuchoice> <guimenu>Project</guimenu> <guimenuitem>Build Configuration</guimenuitem></menuchoice> provides to select from three build directories: <guimenuitem>default</guimenuitem>, <guimenuitem>optimized</guimenuitem>, and <guimenuitem>debug</guimenuitem>, by all means stick to <emphasis>either</emphasis> the default <emphasis>or</emphasis> the debug/optimized targets.
+    </para>
+    </formalpara>
+    <itemizedlist>
+      <listitem><para>
+      Once you configured your project with default it will no longer build with debug or optimzed.
+      </para></listitem>
+      <listitem><para>Once you configured your project with debug or optimzed it will no longer build with default.</para></listitem>
+     </itemizedlist>
+  </listitem>
 
   <listitem>
     <formalpara id="nutshell-autoconf-problem">
