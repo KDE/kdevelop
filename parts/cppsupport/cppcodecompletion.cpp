@@ -56,6 +56,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
 CppCodeCompletion::~CppCodeCompletion( )
 {
     delete m_pParser;
+    delete m_pTmpFile;
 }
 
 void
@@ -214,28 +215,28 @@ CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int nCol
     if( strCurLine.right( 1 ) == "." ){
         QString strNodeText = getNodeText ( nNodePos, nLine );
 
+        // should always be 0 !
         if( m_pTmpFile )
             delete m_pTmpFile;
         m_pTmpFile = new KTempFile( );
 
-        // no delete ?
+        // no warning to user / log ?
         if( m_pTmpFile->status( ) != 0 )
             return;
 
         QString strFileName = createTmpFileForParser( nLine );
 
+        // new method that only searches for variables with name strNodeText
         if( m_pParser )
             m_pParser->parse ( strFileName, strNodeText );
-        // else ?
+        else
+            return;
 
-        // again - no delete ?
-//        m_pTmpFile->unlink( );
+        // for debugging: keep file - m_pTmpFile->unlink( );
         if( m_pTmpFile->status( ) != 0 )
             return;
 
-        // member completion
-        // the if( ) above is the right way because of comming changes in CppCCParser
-        // the m_ is a hack
+        // local var declaration not found - trying member completion
         if( !m_pParser->variableList.count( ) ){
             ParsedClass* pClass = m_pStore->getClassByName( m_currentClassName );
 
@@ -564,9 +565,10 @@ CppCodeCompletion::getEntryListForClass( QString strClass )
             entry.prefix = pMethod->type( ).left( 4 ) + "...";
         else
             entry.prefix = pMethod->type( );
+
         entry.text   = pMethod->name( ) + "(";
 
-        // creating postfix-text which is not displayed when a selection was made
+        // creating postfix-text (attributes) which is not displayed when a selection was made
         QString text;
         for( pArg = pMethod->arguments.first( ); pArg != 0; pArg = pMethod->arguments.next( ) ){
             if( pArg != pMethod->arguments.getFirst( ) )

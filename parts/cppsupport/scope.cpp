@@ -65,8 +65,10 @@ CScope::operator < ( const CScope& cs )
      */
 
     for( int i = 0; i < MAXSCOPES; i++ ){
+        if( ( cs.cScope[ i ] == cScope[ i ] ) && cScope[ i ] == 0 )
+            return true;
         if( !cs.cScope[ i ] )
-            return false;    
+            return false;
         if( !cScope[ i ] )
             return true;
         if( cScope[ i ] != cs.cScope[ i ] )
@@ -96,6 +98,24 @@ CScope::increase( const int iScope )
     }
     else {
         errln( "EE: CScope::increase iScope > MAXSCOPES" );
+    }
+}
+
+void
+CScope::decrease( const int iScope )
+{
+    if( iScope > 0 ){
+        if( cScope[ iScope ] - 1 ){
+            cScope[ iScope ]--;
+            cScope[ iScope + 1 ] = 0;
+            return;
+        }
+        else {
+            cScope[ iScope ] = 0;
+        }
+    }
+    else {
+        errln( "EE: CScope::decrease iScope < 0" );
     }
 }
 

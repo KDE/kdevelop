@@ -18,7 +18,7 @@ libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       addclassmethoddlg.cpp \
 			       addclassattributedlg.cpp \
 			       cppcodecompletion.cpp \
-			       cppcodecompletionparser.cpp \
+			       cppccparser.cpp \
 			       parsedvariable.cpp \
 			       scope.cpp\
 			       simpleparser.cpp

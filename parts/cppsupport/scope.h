@@ -18,28 +18,28 @@ class CScope {
 
 public:
     /**
-    * Default Constructor
-    */
+     * Default Constructor
+     */
     CScope( );
 
     /**
-    * Copy Constructor
-    */
+     * Copy Constructor
+     */
     CScope( const CScope& cs );
 
     /**
-    * Init Constructor
-    */
+     * Init Constructor
+     */
     CScope( const int iScope );
 
     /**
-    * Destructor
-    */
+     * Destructor
+     */
     ~CScope( );
 
     /**
-    * operator =
-    */
+     * operator =
+     */
     const CScope& operator = ( const CScope& cs );
 
     /**
@@ -48,14 +48,19 @@ public:
     bool operator < ( const CScope& cs );
 
     /**
-    * reset the scope value
-    */
+     * reset the scope value
+     */
     void reset( );
 
     /**
-    * to increase a scope
-    */
+     * to increase a scope
+     */
     void increase( const int iScope );
+    
+    /**
+     * to decrease a scope
+     */
+    void decrease( const int iScope );
 
     /**
      * to check the right scope for cc
@@ -64,13 +69,13 @@ public:
     bool isValidIn( const CScope& scope );
 
     /**
-    * debug output
-    */
+     * debug output
+     */
     void debugOutput( ) const;
 
 private:
     #define MAXSCOPES 50
-    char cScope[ MAXSCOPES ];
+    unsigned char cScope[ MAXSCOPES ];
 };
 
 #endif
