@@ -1060,7 +1060,7 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
 
 #ifdef DEBUG
 #include <iostream>
-#endif DEBUG
+#endif
 
 void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
 
