@@ -130,7 +130,7 @@ void TopLevelSDI::createActions()
   m_closeProjectAction->setEnabled(false);
   m_closeProjectAction->setStatusText(i18n("Closes the current project"));
 
-  m_projectOptionsAction = new KAction(i18n("Project &Options..."), 0,
+  m_projectOptionsAction = new KAction(i18n("Project &Options..."), "configure", 0,
                 this, SLOT(slotProjectOptions()),
                 actionCollection(), "project_options" );
   m_projectOptionsAction->setEnabled(false);
@@ -184,6 +184,13 @@ void TopLevelSDI::lowerView(QWidget *view)
 {
   m_leftBar->lowerWidget(view);
   m_bottomBar->lowerWidget(view);
+}
+
+
+void TopLevelSDI::lowerAllViews()
+{
+  m_leftBar->lowerAllWidgets();
+  m_bottomBar->lowerAllWidgets();
 }
 
 

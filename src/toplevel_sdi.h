@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 #ifndef _TOPLEVEL_SDI_H_
 #define _TOPLEVEL_SDI_H_
 
@@ -31,6 +39,7 @@ public:
 
   void raiseView(QWidget *view);
   void lowerView(QWidget *view);
+  void lowerAllViews();
 
   void loadSettings();
 

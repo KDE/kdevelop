@@ -30,6 +30,7 @@ public:
 
   void raiseView(QWidget *view);
   void lowerView(QWidget *view);
+  void lowerAllViews();
 
   void loadSettings();
 

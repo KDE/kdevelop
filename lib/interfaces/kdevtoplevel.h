@@ -17,6 +17,7 @@ public:
 
   virtual void raiseView(QWidget *view) = 0;
   virtual void lowerView(QWidget *view) = 0;
+  virtual void lowerAllViews() = 0;
 
   virtual void loadSettings() = 0;
 

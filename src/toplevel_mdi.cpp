@@ -254,6 +254,11 @@ void TopLevelMDI::lowerView(QWidget *)
   // ignored in MDI mode!
 }
 
+void TopLevelMDI::lowerAllViews()
+{
+    // ignored in MDI mode!
+}
+
 
 void TopLevelMDI::createGUI(KParts::Part *part)
 {
