@@ -149,6 +149,7 @@ public:
   void slotDocBack();
   void slotDocForward();
   void slotDocSText();
+  void slotDocSText(QString text);
   void slotDocQtLib();
   void slotDocKDECoreLib();
   void slotDocKDEGUILib();
@@ -185,6 +186,7 @@ public:
   void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
+  void slotDocumentDone( KHTMLView *_view );
   void slotProcessExited(KProcess* proc);
   void slotSearchProcessExited(KProcess*);
 
@@ -253,6 +255,7 @@ private:
 
   // for the browser
   QStrList history_list;
+  
 
   
   QList<TEditInfo> edit_infos;
@@ -277,12 +280,15 @@ private:
   bool project;
   bool bViewStatusbar;
 
+  bool  prev_was_search_result;
+
   COutputWidget* output_widget; // output for the compiler ...
 
 
   //some vars for the searchengine
   KShellProcess search_process;
   QString search_output;
+  QString doc_search_text;
   // for more then one job in proc;checked in slotProcessExited(KProcess* proc);
   // values are "run","make" "refresh";
   QString next_job;

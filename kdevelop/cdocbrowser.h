@@ -25,6 +25,7 @@
 #include <kiconloader.h>
 #include <kapp.h>
 #include "structdef.h"
+#include <qstring.h>
 
 /** 
   *the documentation browser, attention!: only a prototype
@@ -37,7 +38,9 @@ public:
   CDocBrowser(QWidget*parent=0,const char* name=0); 
   /** destructor */
   ~CDocBrowser();
-  /**show a html in a htmlview*/
-  void showURL(QString url);
+  /**show a html in a htmlview,if reload true it reload a file even it is in memory*/
+  void showURL(QString url,bool reload=false);
+protected:
+  QString old_url;
 };
 #endif

@@ -263,7 +263,7 @@ CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg(){
 
 void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
-  QString filename = conf->readEntry("doc_kde") +"/kdeui/KButton.html";
+  QString filename = conf->readEntry("doc_kde") +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
     KMsgBox::message(0,"No Database created!","The KDE-Documentation-Path isn't set correctly.");
     return;

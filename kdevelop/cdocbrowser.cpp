@@ -20,6 +20,7 @@
 #include <iostream.h>
 #include <kmsgbox.h>
 #include <kfm.h>
+#include <qregexp.h>
 
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
 }
@@ -27,37 +28,50 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
 CDocBrowser::~CDocBrowser(){
 }
 
-void CDocBrowser::showURL(QString url){
+void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
   QString ref = url;
+  QString url_wo_ref; // without ref
   int pos = ref.findRev('#');
   int len = ref.length();
   ref = ref.right(len - pos - 1);
-  //cerr << "REF:" << ref << "\n";
   
-  QString str="";
-  KFM::download(url,str);
-
-  //cerr << endl << "STR:" << str;
+  pos = url.findRev('#');
+  url_wo_ref = url.left(pos);
   
-  QFile file(str);
-  if(!file.open(IO_ReadOnly)) return;
-  QTextStream stream(&file);
-  QString str2="";
-  while(!stream.eof()){
-    str2 = str2 + stream.readLine() + "\n";
+  if( (url_wo_ref != old_url) || reload){
+    QString str="";
+    KFM::download(url,str);
+    
+    //cerr << endl << "STR:" << str;
+    
+    char buffer[256];
+    int val;
+    QFile file(str) ;
+    if(file.exists()){
+      file.open(IO_ReadOnly);
+      begin( url);
+      do
+	{
+	  buffer[0] = '\0';
+	  val = file.readLine( buffer, 256 );
+	  write(buffer);
+	}
+      while ( !file.atEnd() );
+      
+      end();
+      parse();
+           show();
+      KFM::removeTempFile(str);
+      file.close();
+    }
   }
-  begin(str);
-  write(str2);
-  end();
-  parse();
-  show();
-  KFM::removeTempFile(str);
-  file.close();
   
+
+
   if (pos != -1){
     gotoAnchor(ref);
   }
-    
+  old_url = url_wo_ref;
 }

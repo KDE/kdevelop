@@ -80,6 +80,11 @@ void CKDevelop::initConnections(){
   
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
+
+  //connect the editor lookup function with slotDocSText
+  connect(cpp_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
+  connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
+	  
   
 }
 void CKDevelop::init(){
@@ -181,12 +186,15 @@ void CKDevelop::init(){
   //  swallow_widget = new KSwallowWidget(s_tab_view);
 
   browser_widget = new CDocBrowser(s_tab_view,"browser");  
-
+  prev_was_search_result= false;
   //init
 
   connect(browser_widget,SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
 	  this,SLOT(slotURLSelected(KHTMLView*,const char*,int,const char*)));
+  connect(browser_widget,SIGNAL(documentDone(KHTMLView*)),
+	  this,SLOT(slotDocumentDone(KHTMLView*)));
   
+
   s_tab_view->addTab(header_widget,"Header/Resource Files");
   s_tab_view->addTab(cpp_widget,"C/C++ Files");
   //  s_tab_view->addTab(swallow_widget,"Tools");

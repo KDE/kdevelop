@@ -48,7 +48,15 @@ public:
   void gotoLine();
 protected:
 //  QString filename;
+  QPopupMenu* pop;
+  QString searchtext;
 void enterEvent ( QEvent * e); 
+  void mousePressEvent(QMouseEvent* event);
+ protected slots:
+ void slotLookUp();
+  signals:
+ void  lookUp(QString text);
+  
 };
 
 #endif

@@ -251,7 +251,9 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
+  
 }
+
 void CKDevelop::closeEvent(QCloseEvent* e){
   e->accept();
   cerr << "QUIT5";
@@ -573,40 +575,33 @@ void CKDevelop::slotCreateSearchDatabase(){
   return;
   
 }
-void CKDevelop::slotDocSText(){
-  slotStatusMsg(i18n("Searching selected text in documentation..."));
-  QString text = edit_widget->markedText();
-  if(text == ""){
-    text = edit_widget->currentWord();
+void CKDevelop::slotDocumentDone( KHTMLView *_view ){
+  if(prev_was_search_result){
+    browser_widget->findTextBegin();
+    browser_widget->findTextNext(QRegExp(doc_search_text));
   }
+  prev_was_search_result=false;
   
+}
+void CKDevelop::slotDocSText(QString text){
+  slotStatusMsg(i18n("Searching selected text in documentation..."));
+  doc_search_text = text.copy(); // save the text
+
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
   search_process << "glimpse  -H "+ QDir::homeDirPath() + "/.kdevelop -U -c -y '"+ text +"'";
   search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput); 
 
- //  config->setGroup("Doc_Location");
-//   QString filename =  config->readEntry("doc_qt") + classname.lower() + ".html";
-//   if (QFile::exists(filename)){
-//     slotURLSelected(browser_widget,filename,1,"test");
-//   }
-//   filename = config->readEntry("doc_kde_core") + classname + ".html";
-//   if (QFile::exists(filename)){
-//     slotURLSelected(browser_widget,filename,1,"test");
-//   }
-//   filename =  config->readEntry("doc_kde_gui") + classname + ".html";
-//   if (QFile::exists(filename)){
-//     slotURLSelected(browser_widget,filename,1,"test");
-//   }
-//   filename =  config->readEntry("doc_kde_kfile") + classname + ".html";
-//   if (QFile::exists(filename)){
-//     slotURLSelected(browser_widget,filename,1,"test");
-//   }
-//   filename =  config->readEntry("doc_kde_html") + classname + ".html";
-//   if (QFile::exists(filename)){
-//     slotURLSelected(browser_widget,filename,1,"test");
-//   }
   slotStatusMsg(IDS_DEFAULT); 
+}
+void CKDevelop::slotDocSText(){
+  
+  QString text = edit_widget->markedText();
+  if(text == ""){
+    text = edit_widget->currentWord();
+  }
+  slotDocSText(text);
+  
 }
 void CKDevelop::slotDocQtLib(){
   config->setGroup("Doc_Location");
@@ -749,13 +744,26 @@ void CKDevelop::slotBookmarksEdit(){
 
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   s_tab_view->setCurrentTab(BROWSER);
-  browser_widget->showURL(url);
-
+  QString url_str = url;
+  if(url_str.contains("kdevelop/search_result.html") != 0){
+    browser_widget->showURL(url,true); // with reload if equal
+  }
+  else{
+    browser_widget->showURL(url); // without reload if equal
+  }
   if (!history_list.isEmpty()){
     enableCommand(ID_DOC_BACK);
   }
+
+  QString str = history_list.current();
+  //if it's a url-request from the search result jump to the correct point
+  if (str.contains("kdevelop/search_result.html")){ 
+    prev_was_search_result=true; // after this time, jump to the searchkey
+  }
   // insert into the history-list
   history_list.append(url);
+ 
+  
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){ 

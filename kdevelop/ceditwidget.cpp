@@ -20,12 +20,22 @@
 #include <iostream.h>
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/highlight.h"
+#include <qpopupmenu.h>
+
 
 HlManager hlManager; //highlight manager
 
 CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   : KWrite(new KWriteDoc(&hlManager),parent,name) {
+  
   setFocusProxy (kWriteView); 
+  pop = new QPopupMenu();
+  pop->insertItem("",this,SLOT(slotLookUp()),0,0);
+  pop->insertSeparator();
+  pop->insertItem(i18n("Cut"),this,SLOT(cut()),0,1);
+  pop->insertItem(i18n("Copy"),this,SLOT(copy()),0,2);
+  pop->insertItem(i18n("Paste"),this,SLOT(paste()),0,3);
+  
 
 }
 
@@ -98,4 +108,20 @@ void CEditWidget::gotoLine(){
 
 void CEditWidget::enterEvent ( QEvent * e){
   setFocus();
+}
+void CEditWidget::mousePressEvent(QMouseEvent* event){
+  if(event->button() == RightButton){
+    
+    QString str = markedText();
+    if(str == ""){
+      str = word(event->x(),event->y());
+    }
+    searchtext = str;
+    pop->changeItem(i18n("look up: ") + str,0); // the lookup entry
+    pop->popup(this->mapToGlobal(event->pos()));
+  }
+}
+
+void CEditWidget::slotLookUp(){
+    emit lookUp(searchtext);
 }
