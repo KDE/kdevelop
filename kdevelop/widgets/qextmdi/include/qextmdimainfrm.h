@@ -149,6 +149,7 @@ protected:
    int                     m_oldMainFrmMinHeight;
    int                     m_oldMainFrmMaxHeight;
    static QextMdi::QextMdiFrameDecor   m_frameDecoration;
+   KDockWidget*            m_dockbaseAreaOfDocumentViews;
 
 // methods
 public:
@@ -425,7 +426,7 @@ protected:
    * Usually called from @ref QextMdiMainFrm::addWindow when adding a tool view window. It reparents the given widget
    * as toplevel and stay-on-top on the application's main widget.
    */
-   virtual void addToolWindow( QextMdiChildView* pWnd);
+   virtual void addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L, int percent = 50, const QString& tabToolTip = 0, const QString& tabCaption = 0);
 
 protected slots: // Protected slots
    /** 

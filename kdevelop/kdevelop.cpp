@@ -41,9 +41,8 @@
 
 KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
 :  QextMdiMainFrm( pParent, name, f)
-   ,m_dockbaseAreaOfDocumentViews(0L)
-   ,m_dockOnLeft(0L)
-   ,m_dockOnBottom(0L)
+   ,m_viewOnLeft(0L)
+   ,m_viewOnBottom(0L)
    ,m_pCore(0L)
 {
     m_MDICoverList.setAutoDelete( true);
@@ -473,89 +472,63 @@ void KDevelop::initHelp(){
 */
 }
 
-void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation)
+void KDevelop::embedWidget(QWidget *pWidget, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation)
 {
-  // document view area has to be created first
-  if ((role == KDevComponent::SelectView) || (role == KDevComponent::OutputView))
-  {
-    if (!m_dockbaseAreaOfDocumentViews)
-    {
-      kdDebug(9000) << "KDevelop::embedWidget failed. (No available KDockWidget to dock to)" << endl;
-      return;
+    if (role == KDevComponent::SelectView) {
+        addToolWindow( pWidget,                             // tool view
+                       KDockWidget::DockLeft,               // dock site
+                       m_viewOnLeft ? m_viewOnLeft : this,  // target widget
+                       35,                                  // split balance in %
+                       shortExplanation,                    // tab tooltip
+                       shortCaption);                       // tab caption
+
+        if (!m_viewOnLeft)
+            m_viewOnLeft = pWidget;
     }
-  }
-
-  KDockWidget *nextWidget = createDockWidget(QString(w->name()),
-                                             w->icon()? *w->icon() : QPixmap(),
-                                             0L,
-                                             w->caption(),
-                                             shortCaption);
-  nextWidget->setWidget(w);
-  nextWidget->setToolTipString(shortExplanation);
-
-  if (role == KDevComponent::SelectView)
-  {
-    if (m_dockOnLeft)
-      nextWidget->manualDock( m_dockOnLeft, KDockWidget::DockCenter, 35);
-    else
-      nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockLeft, 35);
-
-    nextWidget->show();
-    m_dockOnLeft = nextWidget; 
-  }
-  else
-  {
-    if (role == KDevComponent::OutputView)
-    {
-      if (m_dockOnBottom)
-        nextWidget->manualDock( m_dockOnBottom, KDockWidget::DockCenter, 70);
-      else
-        nextWidget->manualDock( m_dockbaseAreaOfDocumentViews, KDockWidget::DockBottom, 70);
-      nextWidget->show();
-      m_dockOnBottom = nextWidget; 
+    else if (role == KDevComponent::OutputView) {
+        addToolWindow( pWidget,                                 // tool view
+                       KDockWidget::DockBottom,                 // dock site
+                       m_viewOnBottom ? m_viewOnBottom : this,  // target widget
+                       70,                                      // split balance in %
+                       shortExplanation,                        // tab tooltip
+                       shortCaption);                           // tab caption
+        if (!m_viewOnBottom)
+            m_viewOnBottom = pWidget;
     }
-    else
-    {
-      if (role == KDevComponent::DocumentView)
-      {
-        if( getMainDockWidget()->caption() != QString("default"))
-        {
-          QextMdiChildView* pMDICover = new QextMdiChildView( w->caption());
-          m_MDICoverList.append( pMDICover);
-          QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
+    else if (role == KDevComponent::DocumentView) {
+        if( getMainDockWidget()->caption() != QString("default")) {
+            KDockWidget *nextWidget = createDockWidget(QString(pWidget->name()),
+                                                       pWidget->icon()? *pWidget->icon() : QPixmap(),
+                                                       0L,
+                                                       pWidget->caption(),
+                                                       shortCaption);
+            nextWidget->setWidget(pWidget);
+            nextWidget->setToolTipString(shortExplanation);
 
-          w->reparent( pMDICover, QPoint(0,0));
-          QApplication::sendPostedEvents();
-          pLayout->addWidget( w);
+            QextMdiChildView* pMDICover = new QextMdiChildView( pWidget->caption());
+            m_MDICoverList.append( pMDICover);
+            QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
 
-          pMDICover->setName( w->name());
-          addWindow( pMDICover, QextMdi::StandardAdd);
+            pWidget->reparent( pMDICover, QPoint(0,0));
+            QApplication::sendPostedEvents();
+            pLayout->addWidget( pWidget);
+
+            pMDICover->setName( pWidget->name());
+            addWindow( pMDICover, QextMdi::StandardAdd);
         }
-        m_dockOnLeft = nextWidget;
-      }
     }
-  }
 }
 
 void KDevelop::initQextMDI()
 {
-    // cover QextMdi's childarea by a dockwidget
-    m_dockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "");
-    m_dockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
-    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
-    m_dockbaseAreaOfDocumentViews->setWidget(m_pMdi);
-    // set this dock to main view
-    setView(m_dockbaseAreaOfDocumentViews);
-    setMainDockWidget(m_dockbaseAreaOfDocumentViews);
-
     setMenuForSDIModeSysButtons( menuBar());
 }
 
 /** additionally fit the system menu button position to the menu position */
 void KDevelop::resizeEvent( QResizeEvent *pRSE)
 {
-   KParts::DockMainWindow::resizeEvent( pRSE);
-   setSysButtonsAtMenuPosition();
+    KParts::DockMainWindow::resizeEvent( pRSE);
+    setSysButtonsAtMenuPosition();
 }
 
 void KDevelop::switchToToplevelMode()

@@ -90,15 +90,8 @@ private:
      */
     void saveCurrentDockAndMdiSzenario();
 
-    /**
-     * The initial dock cover for document views
-     */
-    KDockWidget*              m_dockbaseAreaOfDocumentViews;
-
-    // TODO: Workaround for bug in dock window stuff when using protected members
-    // DockL and DockB
-    KDockWidget*              m_dockOnLeft;
-    KDockWidget*              m_dockOnBottom;
+    QWidget*                  m_viewOnLeft;
+    QWidget*                  m_viewOnBottom;
 
     KDevelopCore*             m_pCore;
 

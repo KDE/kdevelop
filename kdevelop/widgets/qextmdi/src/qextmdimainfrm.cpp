@@ -33,6 +33,7 @@
 #include <kmenubar.h>
 #endif
 #include <qtoolbutton.h>
+#include <qlayout.h>
 
 #include "qextmdimainfrm.h"
 #include "qextmditaskbar.h"
@@ -90,6 +91,7 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_oldMainFrmHeight(0)
    ,m_oldMainFrmMinHeight(0)
    ,m_oldMainFrmMaxHeight(0)
+   ,m_dockbaseAreaOfDocumentViews(0L)
 {
    // Create the local list of windows
    m_pWinList = new QList<QextMdiChildView>;
@@ -97,9 +99,18 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    // This seems to be needed (re-check it after Qt2.0 comed out)
    setFocusPolicy(ClickFocus);
 
-   // And start creating self
+   // create the child widgets
    createMdiManager();
    createTaskBar();
+
+   // cover QextMdi's childarea by a dockwidget
+   m_dockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "");
+   m_dockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+   m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+   m_dockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+   // set this dock to main view
+   setView(m_dockbaseAreaOfDocumentViews);
+   setMainDockWidget(m_dockbaseAreaOfDocumentViews);
 
    // Apply options for the MDI manager
    applyOptions();
@@ -250,13 +261,59 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QPoint pos, int flags)
 }
 
 //============ addWindow ============//
-void QextMdiMainFrm::addToolWindow( QextMdiChildView* pWnd)
+void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos, QWidget* pTargetWnd, int percent, const QString& tabToolTip, const QString& tabCaption)
 {
+   QextMdiChildView* pToolView = 0L;
    QRect r = pWnd->geometry();
-   pWnd->reparent(this,WType_TopLevel | WStyle_StaysOnTop,r.topLeft(),pWnd->isVisible());
-   QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
-   m_pWinList->append(pWnd);
-   pWnd->m_bToolView = TRUE;
+
+   // if pWnd is not a QextMdiChildView already, cover it by such widget
+   if (pWnd->inherits("QextMdiChildView")) {
+      pToolView = (QextMdiChildView*) pWnd;
+   }
+   else {
+      pToolView = new QextMdiChildView( pWnd->caption());
+      QHBoxLayout* pLayout = new QHBoxLayout( pToolView, 0, -1, "internal_qextmdichildview_layout");
+      pWnd->reparent( pToolView, QPoint(0,0));
+      pToolView->setName( pWnd->name());
+      pToolView->setIcon( pWnd->icon() ? *(pWnd->icon()) : QPixmap());
+      pToolView->setCaption( pWnd->caption());
+      QApplication::sendPostedEvents();
+      pLayout->addWidget( pWnd);
+   }
+
+   // if docking is not desired, add the toolview as stay-on-top toplevel view
+   if (pos == KDockWidget::DockNone) {
+      pToolView->reparent(this,WType_TopLevel | WStyle_StaysOnTop,r.topLeft(),pToolView->isVisible());
+      QObject::connect( pToolView, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
+      m_pWinList->append(pToolView);
+      pToolView->m_bToolView = TRUE;
+      pToolView->setGeometry(r);
+      pToolView->show();
+   }
+   else {   // add (and dock) the toolview as DockWidget view
+      KDockWidget* pCover = createDockWidget( pToolView->name(),
+                                              pToolView->icon() ? *(pToolView->icon()) : QPixmap(),
+                                              0L,  // parent
+                                              pToolView->caption(),
+                                              tabCaption.isEmpty() ? pToolView->tabCaption() : tabCaption);
+      pCover->setWidget( pToolView);
+      pCover->setToolTipString( tabToolTip);
+      KDockWidget* pTargetDock = 0L;
+      if ((pTargetWnd == m_dockbaseAreaOfDocumentViews->getWidget()) && (pTargetWnd == this)) {
+         pTargetDock = m_dockbaseAreaOfDocumentViews;
+      }
+      else if(pTargetWnd != 0L) {
+         pTargetDock = dockManager->findWidgetParentDock( pTargetWnd);
+         if (!pTargetDock) {
+            if (pTargetWnd->parentWidget() && pTargetWnd->parentWidget()->inherits("QextMdiChildView")) {
+               pTargetDock = dockManager->findWidgetParentDock( pTargetWnd->parentWidget());
+            }
+         }
+      }
+      if (pTargetDock)
+         pCover->manualDock( pTargetDock, pos, percent);
+      pCover->show();
+   }
 }
 
 //============ attachWindow ============//
