@@ -66,44 +66,50 @@ and also number of detailed widgets like "font family" combo, etc. can be create
 \section Examples
 A simple example on how to create a property editor and use it with one property list:
 \code
+    using namespace PropertyLib;
+
     PropertyEditor *m_editor = new PropertyEditor(this);
     
     PropertyList *list = new PropertyList;
-    list->addProperty("My Group", new Property(Integer, "First Property",
+    list->addProperty("My Group", new Property(Property::Integer, "First Property",
         "This is my first property", -5));
-    list->addProperty("My Group", new Property(String, "Second Property",
+    list->addProperty("My Group", new Property(Property::String, "Second Property",
         "This is my second property", "Hello"));
-    list->addProperty(new Property(Color, "Third Property",
+    list->addProperty(new Property(Property::Color, "Third Property",
         "This is my third property", QColor("green")));
         
     m_editor->populateProperties(*list);
 \endcode
+\image html propeditor1.png "Simple property editor"
 
 More advanced example with property buffers and list intersection:
 \code
+    using namespace PropertyLib;
+    
     PropertyEditor *m_editor = new PropertyEditor(this);
     
     PropertyList *list = new PropertyList;
-    list->addProperty("My Group", new Property(Integer, "First Property",
+    list->addProperty("My Group", new Property(Property::Integer, "First Property",
         "This is my first property", -5));
-    list->addProperty("My Group", new Property(String, "Second Property",
+    list->addProperty("My Group", new Property(Property::String, "Second Property",
         "This is my second property", "Hello"));
-    list->addProperty(new Property(Color, "Third Property",
+    list->addProperty(new Property(Property::Color, "Third Property",
         "This is my third property", QColor("green")));
 
     PropertyList *list2 = new PropertyList;
-    list2->addProperty("My Group", new Property(Integer, "First Property",
+    list2->addProperty("My Group", new Property(Property::Integer, "First Property",
         "This is my first property", -7));
-    list2->addProperty("My Group", new Property(String, "Second Property",
+    list2->addProperty("My Group", new Property(Property::String, "Second Property",
         "This is my second property", "Hello"));
-    list2->addProperty(new Property(String, "Third Property",
+    list2->addProperty(new Property(Property::String, "Third Property",
         "This is my third property", "green"));
 
-    PropertyBuffer buf(list)
-    buf.intersect(*list2);
+    PropertyBuffer buf(list);
+    buf.intersect(list2);
     
-    m_editor->populateProperties(buf);
+    m_editor->populateProperties(&buf);
 \endcode
+\image html propeditor2.png "Result of property list intersection"
 In this example only properties named "First Property" and "Second Property" will be shown in editor.
 "Third Property" has different types in list and list2 and will not be included in intersection. 
 

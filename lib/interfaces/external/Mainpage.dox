@@ -1,7 +1,7 @@
 /**
-@mainpage The KInterfaceDesigner Library
+@mainpage The %KInterfaceDesigner Library
 
-This library contains all KInterfaceDesigner classes and interfaces which form the core of 
+This library contains all %KInterfaceDesigner classes and interfaces which form the core of 
 GUI Designer integration framework.
 
 <b>Link with</b>: -lkinterfacedesigner
@@ -24,6 +24,7 @@ KInterfaceDesigner::Designer interface):
     void removedFunction(DesignerType type, const QString &formName, Function function)
     void editedFunction(DesignerType type, const QString &formName, Function oldFunction, Function function)
     void editFunction(DesignerType type, const QString &formName, const QString &functionName)
+    void editSource(DesignerType type, const QString &formName);
 @endcode
 are connected to corresponding slots of KDevelop designer integration engine which can be implemented in KDevelop language support plugin.
  
@@ -34,23 +35,23 @@ virtual KDevDesignerIntegration *KDevLanguageSupport::designer(KInterfaceDesigne
 method and return designer integration object.
 
 Convenience designer integration support library is available for programming language support
-developers. With the convenience library writing Qt designer integration for the language is a
+developers. With the convenience library writing %Qt designer integration for the language is a
 trivial task.
 
 
 \section kdevdesigner KDevelop Designer technical overview
-KDevelop version >= 3.1 comes with a customized version (fork ;)) of Qt Designer. It is called KDevelop Designer (KDevDesigner, kdevdesigner from the command line). KDevDesigner has some important differences:
+KDevelop version >= 3.1 comes with a customized version (fork ;)) of %Qt Designer. It is called KDevelop Designer (KDevDesigner, kdevdesigner from the command line). KDevDesigner has some important differences:
 - KDevDesigner provides a read/write KPart which can be embedded into any application which wants to edit .ui files. KDevelop IDE embeds KDevDesigner this way.
-- KDevDesigner uses KDE icons and dialogs and thus provides better integration with a system.
+- KDevDesigner uses %KDE icons and dialogs and thus provides better integration with a system.
 .
 
-It is safe to preview forms with some KDE widgets from kdeui and kio libraries - KDevDesigner part is linked to those libraries so it will not crash under some circumstances.
+It is safe to preview forms with some %KDE widgets from kdeui and kio libraries - KDevDesigner part is linked to those libraries so it will not crash under some circumstances.
 
 KDevDesigner will not create .ui.h files - this feature is completely disabled. Integrated KDevDesigner will use subclassing approach, standalone does not allow to enter code.
 
 \section other Other information
 
-@note It is technically possible to integrate not only Qt Designer, but also, for example, Glade. Glade-3 can be compiled as a library and probably be embedded via XParts technology.
+@note It is technically possible to integrate not only %Qt Designer, but also, for example, Glade. Glade-3 can be compiled as a library and probably be embedded via XParts technology.
 
 */
 
