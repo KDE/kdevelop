@@ -393,7 +393,7 @@ void DistpartDialog::setprojectChangelogMultilineEditText(QString text) {
 }
 
 QString DistpartDialog::getSourceName() {
-    QString name = (getcustomProjectCheckBoxState()) ? getarchNameFormatLineEditText() : "%n-%v";
+    QString name = (getcustomProjectCheckBoxState()) ? getarchNameFormatLineEditText() : QString("%n-%v");
     name += (getcustomProjectCheckBoxState() && getbzipCheckBoxState()) ? ".tar.bz2" : ".tar.gz";
     return name.replace(QRegExp("%n"),getappNameFormatLineEditText())
 	.replace(QRegExp("%v"),getversionLineEditText())
