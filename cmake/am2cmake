@@ -66,6 +66,31 @@ class CMakeFile
       end   
    end
 
+   def findTarget(line)
+      type=SharedLib
+      if line =~ /^\s*lib(\S+)_la_\S+\s*=\s*\S+.*$/
+         targetName=$1
+         type=SharedLib
+      elsif line =~ /^\s*(\S+)_\S+\s*=\s*\S+.*$/
+         targetName=$1
+         type=Executable
+      end
+      
+      @targets.each do |buildTarget|
+         if (type==Executable)
+            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
+               return buildTarget
+            end
+         else
+            if (buildTarget.name==targetName)
+               return buildTarget
+            end
+         end
+      end
+      
+      return BuildTarget.new("Dummy", NoTarget)
+   end
+   
    def addTarget(line)
       type=NoTarget
       targets=""
@@ -95,107 +120,59 @@ class CMakeFile
    end
                
    def addSourcesToTarget(line)
-      type=SharedLib
-      if line =~ /^\s*lib(\S+)_la_SOURCES\s*=\s*(\S+.*)$/
-         targetName=$1
-         sources=$2
-      elsif line =~ /^\s*lib(\S+)_SOURCES\s*=\s*(\S+.*)$/
-         target=$1
-         sources=$2
-         type=Executable
+      buildTarget=findTarget(line)
+      if buildTarget.type==NoTarget
+         return
       end
-      
-      @targets.each do |buildTarget|
-         if (type==Executable)
-            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
-               buildTarget.addSourceFiles(sources)
-               return
-            end
-         else
-            if (buildTarget.name==targetName)
-               buildTarget.addSourceFiles(sources)
-               return
-            end
-         end
+         
+      if buildTarget.type==Executable
+         line =~ /^\s*\S+_SOURCES\s*=\s*(\S+.*)$/
+      else
+         line =~ /^\s*lib\S+_la_SOURCES\s*=\s*(\S+.*)$/
       end
+      buildTarget.addSourceFiles($1)
    end 
    
    def addLdflags(line)
-      type=SharedLib
-      if line =~ /^\s*lib(\S+)_la_LDFLAGS\s*=\s*(\S+.*)$/
-         targetName=$1
-         sources=$2
-      elsif line =~ /^\s*lib(\S+)_LDFLAGS\s*=\s*(\S+.*)$/
-         target=$1
-         sources=$2
-         type=Executable
+      buildTarget=findTarget(line)
+      if buildTarget.type==NoTarget
+         return
       end
-      
-      @targets.each do |buildTarget|
-         if (type==Executable)
-            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
-               buildTarget.ldflags=sources
-               return
-            end
-         else
-            if (buildTarget.name==targetName)
-               buildTarget.ldflags=sources
-               return
-            end
-         end
+         
+      if buildTarget.type==Executable
+         line =~ /^\s*\S+_LDFLAGS\s*=\s*(\S+.*)$/
+      else
+         line =~ /^\s*lib\S+_la_LDFLAGS\s*=\s*(\S+.*)$/
       end
+      buildTarget.ldflags=$1
    end 
    
    def addLdadd(line)
-      type=SharedLib
-      if line =~ /^\s*lib(\S+)_la_LDADD\s*=\s*(\S+.*)$/
-         targetName=$1
-         sources=$2
-      elsif line =~ /^\s*lib(\S+)_LDADD\s*=\s*(\S+.*)$/
-         target=$1
-         sources=$2
-         type=Executable
+      buildTarget=findTarget(line)
+      if buildTarget.type==NoTarget
+         return
       end
-      
-      @targets.each do |buildTarget|
-         if (type==Executable)
-            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
-               buildTarget.ldadd=sources
-               return
-            end
-         else
-            if (buildTarget.name==targetName)
-               buildTarget.ldadd=sources
-               return
-            end
-         end
+         
+      if buildTarget.type==Executable
+         line =~ /^\s*\S+_LDADD\s*=\s*(\S+.*)$/
+      else
+         line =~ /^\s*lib\S+_la_LDADD\s*=\s*(\S+.*)$/
       end
+      buildTarget.ldadd=$1
    end 
    
    def addLibadd(line)
-      type=SharedLib
-      if line =~ /^\s*lib(\S+)_la_LIBADD\s*=\s*(\S+.*)$/
-         targetName=$1
-         sources=$2
-      elsif line =~ /^\s*lib(\S+)_LIBADD\s*=\s*(\S+.*)$/
-         target=$1
-         sources=$2
-         type=Executable
+      buildTarget=findTarget(line)
+      if buildTarget.type==NoTarget
+         return
       end
-      
-      @targets.each do |buildTarget|
-         if (type==Executable)
-            if (buildTarget.type==Executable) && (buildTarget.name==targetName)
-               buildTarget.libadd=sources
-               return
-            end
-         else
-            if (buildTarget.name==targetName)
-               buildTarget.libadd=sources
-               return
-            end
-         end
+         
+      if buildTarget.type==Executable
+         line =~ /^\s*\S+_LIBADD\s*=\s*(\S+.*)$/
+      else
+         line =~ /^\s*lib\S+_la_LIBADD\s*=\s*(\S+.*)$/
       end
+      buildTarget.libadd=$1
    end 
    
    def evalLine(line)
