@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <qobjectlist.h>
 #include <qlabel.h>
 #include <qbttngrp.h>
 #include <qpushbt.h>

@@ -455,7 +455,7 @@ void CKDevelop::initMenuBar(){
   file_menu->insertSeparator();
   file_menu->insertItem(Icon("save.xpm"),i18n("&Save"), this, SLOT(slotFileSave()),0 ,ID_FILE_SAVE);
   file_menu->insertItem(i18n("Save &As..."), this, SLOT(slotFileSaveAs()),0 ,ID_FILE_SAVE_AS);
-  file_menu->insertItem(Icon("save_all.xpm"),i18n("Save All"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
+  file_menu->insertItem(Icon("save_all.xpm"),i18n("Save A&ll"), this, SLOT(slotFileSaveAll()),0,ID_FILE_SAVE_ALL);
   file_menu->insertSeparator();
   file_menu->insertItem(Icon("fileprint.xpm"),i18n("&Print..."), this, SLOT(slotFilePrint()),0 ,ID_FILE_PRINT);
   file_menu->insertSeparator();

@@ -1,3 +1,9 @@
+1999-08-27 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commited many small patches from various people
+ 
+1999-08-23 The KDevelop Team
+	* KDevelop 1.0Beta2 released
+
 1999-08-22 Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* commited patch from Charles Egan cega@oklahoma.net (implemented file->close all)
 	* fixed another bug in sourcecode generation (kdlgedit)

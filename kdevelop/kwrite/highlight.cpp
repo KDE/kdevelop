@@ -313,8 +313,11 @@ bool isCSymbol(char c) {
 
 const char *HlCSymbol::checkHgl(const char *str) {
   const char *s = str;
-  while ( isCSymbol(*s) ) s++;
-  if (s > str) return s;
+  while ( *s == ' ' || *s == '\t' ) s++;
+  if ( isCSymbol(*s) && ( *s != '\'' ) ){
+    s++;
+    return s;
+  }
   return 0L;
 }
 
