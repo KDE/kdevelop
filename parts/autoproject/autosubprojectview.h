@@ -79,6 +79,7 @@ class AutoSubprojectView : public KListView
 		KAction* addServiceAction;
 		KAction* buildSubprojectAction;
 		KAction* removeSubprojectAction;
+		KAction* cleanSubprojectAction;
         KAction* forceReeditSubprojectAction;
         KAction* installSubprojectAction;
         KAction* installSuSubprojectAction;
@@ -98,6 +99,7 @@ class AutoSubprojectView : public KListView
         void slotForceReeditSubproject();
         void slotInstallSubproject();
         void slotInstallSuSubproject();
+        void slotCleanSubproject();
 };
 
 #endif

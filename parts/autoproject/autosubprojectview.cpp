@@ -145,6 +145,8 @@ void AutoSubprojectView::initActions()
 	                                     this, SLOT( slotBuildSubproject() ), actions, "add build subproject" );
 	forceReeditSubprojectAction = new KAction( i18n( "Force Reedit" ), 0, 0,
 	                                     this, SLOT( slotForceReeditSubproject() ), actions, "force-reedit subproject" );
+	cleanSubprojectAction = new KAction( i18n( "Clean" ), 0, 0,
+	                                     this, SLOT( slotCleanSubproject() ), actions, "clean subproject" );
     if (!m_part->isKDE())
         forceReeditSubprojectAction->setEnabled(false);
 	installSubprojectAction = new KAction( i18n( "Install" ), 0, 0,
@@ -179,7 +181,10 @@ void AutoSubprojectView::slotContextMenu( KListView *, QListViewItem *item, cons
 	removeSubprojectAction->plug( &popup );
 	popup.insertSeparator();
 	buildSubprojectAction->plug( &popup );
+	popup.insertSeparator();
     forceReeditSubprojectAction->plug( &popup );
+	cleanSubprojectAction->plug( &popup );
+	popup.insertSeparator();
     installSubprojectAction->plug( &popup );
     installSuSubprojectAction->plug( &popup );
 
@@ -785,6 +790,18 @@ TargetItem * AutoSubprojectView::findNoinstHeaders( SubprojectItem *item )
 	}
 
     return noinst_HEADERS_item;
+}
+
+void AutoSubprojectView::slotCleanSubproject( )
+{
+	SubprojectItem* spitem = static_cast <SubprojectItem*>  ( selectedItem() );
+	if ( !spitem )	return;
+
+	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
+
+	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "clean" );
+
+	m_part->mainWindow() ->lowerView( m_widget );
 }
 
 #include "autosubprojectview.moc"

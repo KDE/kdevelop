@@ -301,7 +301,6 @@ void ChooseTargetDialog::accept ()
                 FileItem *fitem = m_widget->createFileItem( fileName, m_choosenSubproject );
                 noinst_HEADERS_item->sources.append( fitem );
                 noinst_HEADERS_item->insertItem( fitem );
-                noinst_HEADERS_item->setOpen(true);
 
                 QString varname = "noinst_HEADERS";
                 m_choosenSubproject->variables[ varname ] += ( " " + fileName );

@@ -575,7 +575,6 @@ void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* sp
         FileItem *fitem = createFileItem( fileName, spitem );
         noinst_HEADERS_item->sources.append( fitem );
         noinst_HEADERS_item->insertItem( fitem );
-        noinst_HEADERS_item->setOpen(true);
         varname = "noinst_HEADERS";
     }
     else
