@@ -121,7 +121,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(info_label,
   KQuickHelp::add(info_edit, i18n("Insert some useful information about\n"
 				  "your project here. This is only for the\n"
-				  "information in the project file-<b>not</n>"
+				  "information in the project file-<b>not\n"
 				  "\nfor README etc.")));  
 
 

@@ -1,11 +1,15 @@
+1999-07-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+        * Implemented cvs commit
+	* Restructured vc interface: moved message strings into backend
+
 1999-07-22 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* added many new c++ keywords to kwrite syntax highlighting, thanks to 
 	Huy Cuong Nguyen <huyc@iquebec.com>
 
-1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  * added german png logo, added italian translator to user manual
+1999-07-22 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+        * added german png logo, added italian translator to user manual
 
-1999-06-21 Jonas Nordin <jonas.nordin@cenacle.se>
+1999-07-21 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed clicking behaviour in the CV.
 	* fixed problem parsing unclosed function declarations as in foo( int a
 

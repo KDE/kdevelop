@@ -1,10 +1,12 @@
+#include <kapp.h>
 #include <qfileinfo.h>
 #include <stdio.h>
-#include <cvsdialog.h>
+#include "cvsdialog.h"
+#include "commitdialog.h"
 #include "cvs.h"
 
 
-void CVS::add(const char *filename, const char *text)
+void CVS::add(const char *filename)
 {
     QFileInfo fi(filename);
     QString dirpath(fi.dirPath());
@@ -15,13 +17,12 @@ void CVS::add(const char *filename, const char *text)
     command += " && cvs add ";
     command += filename;
     command += " 2>&1";
-    // >/dev/null";
 
-    ( new CvsDialog(command, text) )->show();
+    ( new CvsDialog(command, i18n("Adding file to repository")) )->show();
 }
 
 
-void CVS::remove(const char *filename, const char *text)
+void CVS::remove(const char *filename)
 {
     QFileInfo fi(filename);
     QString dirpath(fi.dirPath());
@@ -32,9 +33,31 @@ void CVS::remove(const char *filename, const char *text)
     command += " && cvs remove -f ";
     command += filename;
     command += " 2>&1";
-    // >/dev/null";
 
-    ( new CvsDialog(command, text) )->show();
+    ( new CvsDialog(command, i18n("Removing file from repository")) )->show();
+}
+
+void CVS::commit(const char *filename)
+{
+    QFileInfo fi(filename);
+    QString dirpath(fi.dirPath());
+    QString name(fi.fileName());
+
+    CommitDialog *d = new CommitDialog();
+    if (d->exec() == QDialog::Rejected)
+        return;
+        
+    QString command("cd ");
+    command += dirpath;
+    command += " && cvs commit -m \"";
+    command += d->logMessage();
+    command += "\" ";
+    command += filename;
+    command += " 2>&1";
+
+    delete d;
+
+    ( new CvsDialog(command, i18n("Commiting file")) )->show();
 }
 
 

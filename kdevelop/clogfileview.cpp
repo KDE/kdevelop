@@ -257,6 +257,9 @@ KPopupMenu *CLogFileView::getCurrentPopup()
               id = popup->insertItem( i18n("Remove from Repository"),
                                       this, SLOT(slotRemoveFromRepository()) );
               popup->setItemEnabled(id, reg);
+              id = popup->insertItem( i18n("Commit"),
+                                      this, SLOT(slotCommit()) );
+              popup->setItemEnabled(id, reg);
           }
       break;
     default:
@@ -470,16 +473,18 @@ void CLogFileView::slotShowPath()
 
 void CLogFileView::slotAddToRepository()
 {
-    project->getVersionControl()->add(getFullFilename(currentItem()),
-                                      i18n("Adding file to repository"));
+    project->getVersionControl()->add(getFullFilename(currentItem()));
 }
 
 
 void CLogFileView::slotRemoveFromRepository()
 {
-    project->getVersionControl()->remove(getFullFilename(currentItem()),
-                                         i18n("Removing file to repository"));
+    project->getVersionControl()->remove(getFullFilename(currentItem()));
 }
  
 
+void CLogFileView::slotCommit()
+{
+    project->getVersionControl()->commit(getFullFilename(currentItem()));
+}
 

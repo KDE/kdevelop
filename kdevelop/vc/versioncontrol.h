@@ -31,14 +31,16 @@ public:
     static VersionControl *getVersionControl(const char *name);
     /**
      * Adds a file to the repository.
-     * The message shown in the dialog box is text.
      */
-    virtual void add(const char *filename, const char *text) = 0;
+    virtual void add(const char *filename) = 0;
     /**
      * Removes a file from the repository.
-     * The message shown in the dialog box is text.
      */
-    virtual void remove(const char *filename, const char *text) = 0;
+    virtual void remove(const char *filename) = 0;
+    /**
+     * Commits a file to the repository.
+     */
+    virtual void commit(const char *filename) = 0;
     /**
      * Tells whether the given file is registered
      * in the version control system.

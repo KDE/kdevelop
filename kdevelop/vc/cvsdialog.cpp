@@ -32,7 +32,7 @@ CvsDialog::CvsDialog(const char *command, const char *text)
     resultbox->setReadOnly(true);
     QFontMetrics rb_fm(resultbox->fontMetrics());
     resultbox->setMinimumSize(rb_fm.width("0")*60,
-			      rb_fm.lineSpacing()*4);
+			      rb_fm.lineSpacing()*5);
     layout->addWidget(resultbox, 5);
     
     QFrame *frame = new QFrame(this);
@@ -77,6 +77,7 @@ void CvsDialog::processOutput()
 void CvsDialog::finish()
 {
     button->setText(i18n("OK"));
+    button->setDefault(true);
     
     buf += '\n';
     processOutput();
@@ -110,6 +111,7 @@ void CvsDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
 
 void CvsDialog::show()
 {
+    resultbox->append(cmd);
     childproc = new KShellProcess();
     *childproc << cmd;
 
