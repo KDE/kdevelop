@@ -62,8 +62,8 @@ void CLogFileView::initPopups()
 {
   file_pop.setTitle("File");
   file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  file_pop.insertItem(i18n("Remove File"),this,SLOT(slotFileRemove()));
-  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Delete File..."),this,SLOT(slotFileDelete()));
+  file_pop.insertItem(i18n("Remove File from Project..."),this,SLOT(slotFileRemove()));
+  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disk..."),this,SLOT(slotFileDelete()));
   file_pop.insertSeparator();
   file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
   
@@ -294,6 +294,9 @@ void CLogFileView::slotNewGroup(){
   } 
 }
 void CLogFileView::slotFileRemove(){
+  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to remove the file from project?\n\t\tIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
+    return;
+  }
   emit selectedFileRemove();
 }
 void CLogFileView::slotFileDelete(){

@@ -52,7 +52,7 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
 	ctoolsconfigdlg.cpp cbugreportdlg.cpp
-	
+
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -75,7 +75,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h \
 	ctoolsconfigdlg.h cbugreportdlg.h
-	
+
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm
 
 # if you "make distclean", this files get removed. If you want to remove
@@ -93,8 +93,10 @@ messages:
 # don't install a list of file. Just one file per install.
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
-	$(mkinstalldirs) $(APPSDIR)
-	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)
+	$(mkinstalldirs) $(APPSDIR)/kdevelop
+	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)/kdevelop
+	$(INSTALL_DATA) kdevelop-setup.kdelnk $(APPSDIR)/kdevelop
+	$(INSTALL_DATA) .directory $(APPSDIR)/kdevelop
 	$(mkinstalldirs) $(kde_icondir)
 	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
 	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	

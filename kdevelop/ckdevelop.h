@@ -463,7 +463,8 @@ public:
   void CVGotoDefinition(QListViewItem *item);
   void CVGotoDeclaration(QListViewItem *item);
 
-
+  
+  bool  isFileInBuffer(QString abs_filename);
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);

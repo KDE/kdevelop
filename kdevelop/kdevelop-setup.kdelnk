@@ -1,0 +1,13 @@
+# KDE Config File  
+[KDE Desktop Entry]
+BinaryPattern=kdevelop;
+Type=Application
+Exec=kdevelop --setup
+MimeType=
+Icon=application_settings.xpm
+MiniIcon=application_settings.xpm
+DocPath=kdevelop/index.html
+Comment=KDevelop Setup
+Terminal=0
+Name=Setup
+Name[de]=Setup

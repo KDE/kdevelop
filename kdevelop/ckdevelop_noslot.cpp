@@ -536,7 +536,15 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   KTMainWindow::closeEvent(e);
 }
 
-
+bool  CKDevelop::isFileInBuffer(QString abs_filename){
+  TEditInfo* info;
+  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
+    if (info->filename == abs_filename ){
+      return true;
+    }
+  }
+  return false;
+}
 
 
 

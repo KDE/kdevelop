@@ -112,6 +112,8 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
   kdlg_view_menu= new QPopupMenu;
+  kdlg_view_menu->insertItem(i18n("&Sourcecode Editor"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
+  kdlg_view_menu->insertSeparator();
   kdlg_view_menu->insertItem(i18n("&Widgets-View"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
@@ -250,7 +252,8 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   kdlg_help_menu->insertSeparator();
   kdlg_help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
-
+  kdlg_help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  kdlg_help_menu->insertItem(i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   kdlg_help_menu->insertSeparator();
   kdlg_help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   kdlg_help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);

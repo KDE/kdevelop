@@ -153,18 +153,18 @@ void CToolsConfigDlg::slotToolAdd()
 		KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
 		return;
   }
-	if(!CToolClass::searchInstProgram(exe_file) ){
-		KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
-																									"to execute the selected program as a tool."));
-		return;
-	}
+	// if(!CToolClass::searchInstProgram(exe_file) ){
+// 		KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
+// 																									"to execute the selected program as a tool."));
+// 		return;
+// 	}
 	if(menutext.isEmpty()){
 		KMsgBox::message(this,i18n("Menu text not set!"), i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
 		return;
 	}
 	
 	tools_listbox->insertItem(menutext);
-	tools_exe.append(exe_file);
+	tools_exe.append(executable);
 	tools_entry.append(menutext);
 	tools_argument.append(arguments_edit->text());
 		
@@ -173,6 +173,7 @@ void CToolsConfigDlg::slotToolAdd()
 void CToolsConfigDlg::slotToolDelete()
 {
 	int current=tools_listbox->currentItem();
+	if(current == -1) return;
 	tools_exe.remove(current);
 	tools_entry.remove(current);
 	tools_argument.remove(current);
@@ -182,11 +183,23 @@ void CToolsConfigDlg::slotToolDelete()
 
 void CToolsConfigDlg::slotToolMoveUp()
 {
+  int current = tools_listbox->currentItem();
+  if(current == 0  || current == -1) return ;
+  
+  swap(current-1,current);
+  tools_listbox->clear();
+  tools_listbox->insertStrList(&tools_entry);
+   tools_listbox->setCurrentItem(current-1);
 }
 
 void CToolsConfigDlg::slotToolMoveDown()
 {
-	
+  int current = tools_listbox->currentItem();
+  if (current == (int)tools_listbox->count()-1 || current == -1) return;
+  swap(current,current+1);
+  tools_listbox->clear();
+  tools_listbox->insertStrList(&tools_entry);	
+  tools_listbox->setCurrentItem(current+1);
 }
 
 
@@ -195,57 +208,78 @@ void CToolsConfigDlg::slotToolsExeSelect()
   QString exe_file_name;
   exe_file_name = KFileDialog::getOpenFileName();
   if (!exe_file_name.isEmpty()){
-	  QString exe_file=QFileInfo(exe_file_name).fileName();
-		if(!QFileInfo(exe_file_name).isExecutable()){
-			KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
-			return;
+    QString exe_file=QFileInfo(exe_file_name).fileName();
+    if(!QFileInfo(exe_file_name).isExecutable()){
+      KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
+      return;
     }
-		else if(!CToolClass::searchInstProgram(exe_file) ){
-			KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
-																									"to execute the selected program as a tool."));
-			return;
-		}
-		else{
-	    executable_edit->setText(exe_file_name);
+    else if(!CToolClass::searchInstProgram(exe_file) ){
+      KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
+						 "to execute the selected program as a tool."));
+      return;
+    }
+    else{
+      executable_edit->setText(exe_file_name);
     }
   }
 }
 
-void CToolsConfigDlg::slotShowToolProp(int index)
-{
-	executable_edit->setText(tools_exe.at(index));
-	menu_text_edit->setText(tools_entry.at(index));
-	arguments_edit->setText(tools_argument.at(index));
+void CToolsConfigDlg::slotShowToolProp(int index){
+  executable_edit->setText(tools_exe.at(index));
+  menu_text_edit->setText(tools_entry.at(index));
+  arguments_edit->setText(tools_argument.at(index));
 }
 
 void CToolsConfigDlg::readConfig(){
-	
+  
   config = kapp->getConfig();
   config->setGroup("ToolsMenuEntries");
-	config->readListEntry("Tools_exe",tools_exe);
-	config->readListEntry("Tools_entry",tools_entry);
-	config->readListEntry("Tools_argument",tools_argument);
-	tools_listbox->insertStrList(&tools_entry);
+  config->readListEntry("Tools_exe",tools_exe);
+  config->readListEntry("Tools_entry",tools_entry);
+  config->readListEntry("Tools_argument",tools_argument);
+  tools_listbox->insertStrList(&tools_entry);
 }
 
 void CToolsConfigDlg::writeConfig(){
   config->setGroup("ToolsMenuEntries");
-	config->writeEntry("Tools_exe",tools_exe);
-	config->writeEntry("Tools_entry",tools_entry);
-	config->writeEntry("Tools_argument",tools_argument);
-	
+  config->writeEntry("Tools_exe",tools_exe);
+  config->writeEntry("Tools_entry",tools_entry);
+  config->writeEntry("Tools_argument",tools_argument); 
 }
 void CToolsConfigDlg::slotOK()
 {
-	writeConfig();
-	close();
+  writeConfig();
+  close();
 }
 
 void CToolsConfigDlg::slotHelp()
 {
   kapp->invokeHTMLHelp("kdevelop/index-2.html", "ss2.3" );
 }
+void CToolsConfigDlg::swap(int item1,int item2){
+  
+  QString str1,str2;
+  str1 = tools_exe.at(item1);
+  str2 = tools_exe.at(item2);
+  tools_exe.remove(item1);
+  tools_exe.insert(item1,str2);
+  tools_exe.remove(item2);
+  tools_exe.insert(item2,str1);
+  
+  str1 = tools_entry.at(item1);
+  str2 = tools_entry.at(item2);
+  tools_entry.remove(item1);
+  tools_entry.insert(item1,str2);
+  tools_entry.remove(item2);
+  tools_entry.insert(item2,str1);
 
+  str1 = tools_argument.at(item1);
+  str2 = tools_argument.at(item2);
+  tools_argument.remove(item1);
+  tools_argument.insert(item1,str2);
+  tools_argument.remove(item2);
+  tools_argument.insert(item2,str1);
+}
 
 
 

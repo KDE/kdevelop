@@ -1390,7 +1390,7 @@ void CKAppWizard::slotProcessExited() {
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
-  project->setCXXFLAGS ("-O0 -g -Wall");
+  project->setCXXFLAGS ("-O0 -g3 -Wall");
   
   if (kdenormalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");

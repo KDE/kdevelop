@@ -515,7 +515,7 @@ void CKDevelop::initMenu(){
   bViewStatusbar = config->readBoolEntry("show_statusbar",true);
 
   view_menu = new QPopupMenu;
-  view_menu->insertItem(i18n("&Line..."), this,
+  view_menu->insertItem(i18n("Goto &Line..."), this,
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
 
   view_menu->insertSeparator();
@@ -523,6 +523,8 @@ void CKDevelop::initMenu(){
 			SLOT(slotViewNextError()),0,ID_VIEW_NEXT_ERROR);
   view_menu->insertItem(i18n("&Previous Error"),this,
 			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
+  view_menu->insertSeparator();
+  view_menu->insertItem(i18n("&Dialog Editor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -1141,8 +1143,8 @@ void CKDevelop::setToolmenuEntries(){
 		tools_menu->insertItem(tools_entry.at(items));
 		kdlg_tools_menu->insertItem(tools_entry.at(items));
 	}
-  tools_menu->insertItem(i18n("&Dialogeditor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
-  kdlg_tools_menu->insertItem(i18n("&KDevelop"),this,SLOT(switchToKDevelop()),0,ID_KDLG_TOOLS_KDEVELOP);
+  
+  
 	
 	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));

@@ -113,8 +113,8 @@ void CClassView::initPopups()
 
   // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()));
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ));
   methodPopup.insertSeparator();
   id = methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
   methodPopup.setItemEnabled( id, false );

@@ -785,9 +785,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   l_khtmlw=new QCheckBox(w4,"l_khtmlw");
   l_khtmlw->setGeometry(140,160,110,20);
   l_khtmlw->setText("khtmlw");
-  if (ldadd.contains("-lpng -ljpeg -ltiff -lkimgio")) {
+  if (ldadd.contains("-lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript")) {
     l_khtmlw->setChecked(true);
-    pos=ldadd.find(" -lpng -ljpeg -ltiff -lkimgio");
+    pos=ldadd.find(" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript");
     ldadd.remove(pos,29);
     //    cerr << "-htmlw OK" << endl;
   } else {
@@ -899,7 +899,8 @@ void CPrjOptionsDlg::ok(){
     short_info.append(text);
   }
   prj_info->setShortInfo(short_info);
-
+  text="";
+  
   //********gcc-options***************
   if (target->currentItem()) {
     text=" -b "+QString(target->currentText());
@@ -1036,7 +1037,7 @@ void CPrjOptionsDlg::ok(){
     text+=" -lkfm";
   }
   if (l_khtmlw->isChecked()) {
-    text+=" -lpng -ljpeg -ltiff -lkimgio";
+    text+=" -lkhtmlw -lkimgio -ljpeg -ltiff -lpng -lm -ljscript";
   }
   if (l_kdeui->isChecked()) {
     text+=" -lkdeui";

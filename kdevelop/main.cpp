@@ -31,6 +31,10 @@ int main(int argc, char* argv[]) {
   a.getConfig()->setGroup("General Options");
   bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
   bool bInstall=a.getConfig()->readBoolEntry("Install",true);
+  if (argc > 1 ){
+    if( QString(argv[1]) == "--setup") bInstall = true; // start the setupwizard
+  }
+  
   if(bStartLogo){
     start_logo= new KStartupLogo;
     start_logo->show();
@@ -61,13 +65,16 @@ int main(int argc, char* argv[]) {
     if(!a.getConfig()->readBoolEntry("show_kdevelop",true))
       kdevelop->setKDlgCaption();
     
-    if (argc > 1)
-      kdevelop->slotProjectOpenCmdl(argv[1]);
+    if (argc > 1){ 
+      if (QString(argv[1]) != "--setup-wizard")
+	kdevelop->slotProjectOpenCmdl(argv[1]);
+    }
+    
     a.getConfig()->setGroup("TipOfTheDay");
     bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
     if(showTip){
       tipdlg=new KTipofDay;
-      tipdlg->exec();
+	tipdlg->exec();
     }
   }
   if(bStartLogo){

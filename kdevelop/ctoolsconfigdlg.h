@@ -30,52 +30,53 @@
 
 
 /**a dialog to configure the tools-menu in the kdevelop menubar.
-	*Allows configuration of menuentry, command and arguments
-  *@author Ralf Nolden
-  */
+ *Allows configuration of menuentry, command and arguments
+ *@author Ralf Nolden
+ */
 
 class CToolsConfigDlg : public QDialog  {
-   Q_OBJECT
+  Q_OBJECT
 public: 
-	CToolsConfigDlg(QWidget *parent=0, const char *name=0);
-	~CToolsConfigDlg();
-
+  CToolsConfigDlg(QWidget *parent=0, const char *name=0);
+  ~CToolsConfigDlg();
+  
 protected slots:
 
-     void slotToolAdd();
-     void slotToolDelete();
-     void slotToolMoveUp();
-     void slotToolMoveDown();
-     void slotShowToolProp(int);
-     void slotToolsExeSelect();
-     void slotOK();
-     void slotHelp();
-
+void slotToolAdd();
+  void slotToolDelete();
+  void slotToolMoveUp();
+  void slotToolMoveDown();
+  void slotShowToolProp(int);
+  void slotToolsExeSelect();
+  void slotOK();
+  void slotHelp();
+  
 protected:
-		void readConfig();
-		void writeConfig();
+  void readConfig();
+  void writeConfig();
+  void swap(int item1,int item2);
 		
-    QListBox* tools_listbox;
-    QPushButton* add_button;
-    QPushButton* delete_button;
-    QPushButton* move_up_button;
-    QPushButton* move_down_button;
-    QPushButton* ok_button;
-    QPushButton* cancel_button;
-    QPushButton* help_button;
-    QLineEdit* executable_edit;
-    QLabel* executable_label;
-    QLineEdit* menu_text_edit;
-    QLabel* menu_text_label;
-    QLineEdit* arguments_edit;
-    QLabel* arguments_label;
-    QPushButton* executable_button;
-
+  QListBox* tools_listbox;
+  QPushButton* add_button;
+  QPushButton* delete_button;
+  QPushButton* move_up_button;
+  QPushButton* move_down_button;
+  QPushButton* ok_button;
+  QPushButton* cancel_button;
+  QPushButton* help_button;
+  QLineEdit* executable_edit;
+  QLabel* executable_label;
+  QLineEdit* menu_text_edit;
+  QLabel* menu_text_label;
+  QLineEdit* arguments_edit;
+  QLabel* arguments_label;
+  QPushButton* executable_button;
+  
 private:
-		KConfig* config;
-		QStrList tools_exe;
-		QStrList tools_entry;
-		QStrList tools_argument;
+  KConfig* config;
+  QStrList tools_exe;
+  QStrList tools_entry;
+  QStrList tools_argument;
 };
 
 #endif

@@ -260,6 +260,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	location_combo->insertItem( "logical file tree" );
 	location_combo->insertItem( "documentation tree" );
 	location_combo->insertItem( "editor" );
+	location_combo->insertItem( "dialog editor" );
 	location_combo->insertItem( "documentation browser" );
 	location_combo->insertItem( "app-wizard" );
 	location_combo->insertItem( "build process" );
@@ -421,7 +422,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	qtarch_compiler_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_compiler_label->setFontPropagation( QWidget::NoChildren );
 	qtarch_compiler_label->setPalettePropagation( QWidget::NoChildren );
-	qtarch_compiler_label->setText( "compiler" );
+	qtarch_compiler_label->setText( "Compiler" );
 	qtarch_compiler_label->setAlignment( 289 );
 	qtarch_compiler_label->setMargin( -1 );
 

@@ -60,15 +60,15 @@ CRealFileView::~CRealFileView(){
  *-----------------------------------------------------------------*/
 void CRealFileView::initPopups()
 {
-  installed_file_menu.setTitle(i18n("Installed"));
-  installed_file_menu.insertItem(i18n("Remove from Project..."),this,SLOT(slotRemoveFileFromProject()));
-  installed_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
+  installed_file_menu.setTitle(i18n("File (Registered)"));
+  installed_file_menu.insertItem(i18n("Remove File from Project..."),this,SLOT(slotRemoveFileFromProject()));
+  installed_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,SLOT(slotDeleteFilePhys()));
   installed_file_menu.insertSeparator();
   installed_file_menu.insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
 
-  other_file_menu.setTitle(i18n("Other"));
-  other_file_menu.insertItem(i18n("Add to Project..."),this,SLOT(slotAddFileToProject()));
-  other_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
+  other_file_menu.setTitle(i18n("File"));
+  other_file_menu.insertItem(i18n("Add File to Project..."),this,SLOT(slotAddFileToProject()));
+  other_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,SLOT(slotDeleteFilePhys()));
   //other_file_menu->insertSeparator();
   //other_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
 }
@@ -260,9 +260,7 @@ void CRealFileView::slotAddFileToProject() {
 void CRealFileView::slotRemoveFileFromProject() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Question"),
-                    i18n("Do you want to remove the file:\n"+filename+"\n from the project ?\nIt will remain on disk."),
-                    KMsgBox::QUESTION) == 2){
+  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to remove the file from project?\n\t\tIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
     return;
   }
   emit removeFileFromProject(filename);
@@ -271,9 +269,7 @@ void CRealFileView::slotRemoveFileFromProject() {
 void CRealFileView::slotDeleteFilePhys() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Question"),
-                    i18n("Do you want to remove the file:\n"+filename+"\n from your filesystem ?"),
-                    KMsgBox::QUESTION) == 2){
+  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
   }
 	filename = getFullFilename(currentItem());

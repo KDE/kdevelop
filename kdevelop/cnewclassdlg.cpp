@@ -2,7 +2,6 @@
                      cnewclassdlg.cpp - 
                              -------------------                                         
 
-    version              :                                   
     begin                : 4 Oct 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
