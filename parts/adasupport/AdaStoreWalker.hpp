@@ -62,37 +62,38 @@ public:
 	m_store->removeWithReferences (fileName);
     }
     ParsedScopeContainer * insertScopeContainer
-			  (ParsedScopeContainer* scope, const QString & name ) {
-	ParsedScopeContainer* ns = scope->getScopeByName( name );
-	if (ns)
-	    return ns;
-	QString nm = name;
-	int last_dot;
-	while ((last_dot = nm.findRev('.')) > 0) {
-	    QString basename = nm.left( last_dot );
-	    ns = scope->getScopeByName( basename );
-	    if ( ns ) {
-	        ParsedScopeContainer* inner = new ParsedScopeContainer( false );
-		inner->setName( nm.mid( last_dot+1 ) );
-		ns->addScope( inner );
-		//scope->addScope( ns );
-	        return inner;
-	    }
-	    nm = basename;
+			  (ParsedScopeContainer* scope, const QStringList & scopes ) {
+	QStringList::ConstIterator it = scopes.begin();
+	QString prefix( *it );
+	ParsedScopeContainer* ns = scope->getScopeByName( prefix );
+	if (ns == NULL) {
+	    ns = new ParsedScopeContainer( false );
+	    ns->setName( prefix );
+	    scope->addScope( ns );
+	    if (scope == m_store->globalScope())
+		m_store->addScope( ns );
 	}
-	ns = new ParsedScopeContainer( false );
-	ns->setName( name );
-	scope->addScope( ns );
-	if ( scope == m_store->globalScope() )
-	    m_store->addScope( ns );
+	while ( ++it != scopes.end() ) {
+	    QString nameSegment( *it );
+	    prefix += "." + nameSegment;
+	    ParsedScopeContainer* inner = scope->getScopeByName( prefix );
+	    if (inner == NULL ) {
+	        inner = new ParsedScopeContainer( false );
+		inner->setName( nameSegment );
+		ns->addScope( inner );
+	    }
+	    ns = inner;
+	}
 	return ns;
     }
     ParsedScopeContainer * defineScope( RefAdaAST namenode ) {
-       QString scopeName( qtext( namenode ) );
-       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
+       QStringList scopes( qnamelist( namenode ) );
+       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopes );
        psc->setDeclaredOnLine( namenode->getLine() );
        psc->setDeclaredInFile( m_fileName );
        // psc->setDeclarationEndsOnLine (endLine);
+       psc->setDefinedOnLine( namenode->getLine() );
+       psc->setDefinedInFile( m_fileName );
        return psc;
     }
 #line 34 "AdaStoreWalker.hpp"
