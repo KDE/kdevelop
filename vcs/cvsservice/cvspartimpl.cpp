@@ -101,6 +101,7 @@ CvsServicePartImpl::~CvsServicePartImpl()
     }
     delete m_scheduler;
     delete m_fileInfoProvider;
+    releaseCvsService();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -388,7 +389,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
     if (!prepareOperation( urlList, opCommit ))
         return;
 
-    CommitDialog dlg;
+    CommitDialog dlg( projectDirectory() + "/ChangeLog" );
     if (dlg.exec() == QDialog::Rejected)
         return;
 
@@ -411,7 +412,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
         // 2.1 Modify the Changelog
         ChangeLogEntry entry;
         entry.addLines( dlg.logMessage() );
-        entry.addToLog( projectDirectory() + "/ChangeLog" );
+        entry.addToLog( dlg.changeLogFileName() );
 
         kdDebug( 9999 ) << " *** ChangeLog entry : " <<
             entry.toString( changeLogPrependString ) << endl;

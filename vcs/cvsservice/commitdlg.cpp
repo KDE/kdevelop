@@ -14,6 +14,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qlineedit.h>
 #include <qtextedit.h>
 #include <qpushbutton.h>
 
@@ -24,14 +25,21 @@
 
 #include "commitdlg.h"
 
-//#include "ksyntaxhighlighter.h"
+///////////////////////////////////////////////////////////////////////////////
+// class CommitDialog
+///////////////////////////////////////////////////////////////////////////////
 
-CommitDialog::CommitDialog( QWidget *parent )
+
+CommitDialog::CommitDialog( const QString &changeLogfileNamePath,  QWidget *parent )
     : CommitDialogBase( parent, "commitdialog", true )
 {
     connect( buttonOk, SIGNAL(clicked()), SLOT(accept()) );
     connect( buttonCancel, SIGNAL(clicked()), SLOT(reject()) );
+
+    setChangeLogFileName( changeLogfileNamePath );
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 QStringList CommitDialog::logMessage() const
 {
@@ -43,10 +51,14 @@ QStringList CommitDialog::logMessage() const
     return textLines;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 bool CommitDialog::mustAddToChangeLog() const
 {
     return checkAddToChangelog->isChecked();
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void CommitDialog::accept()
 {
@@ -61,6 +73,20 @@ void CommitDialog::accept()
         }
     }
     QDialog::accept();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CommitDialog::setChangeLogFileName( const QString &fileName )
+{
+    changeLogNameEdit->setText( fileName );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CommitDialog::changeLogFileName() const
+{
+    return changeLogNameEdit->text();
 }
 
 #include "commitdlg.moc"

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CommitDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>531</width>
-            <height>346</height>
+            <height>383</height>
         </rect>
     </property>
     <property name="caption">
@@ -40,13 +40,37 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>checkAddToChangelog</cstring>
+                <cstring>layout2</cstring>
             </property>
-            <property name="text">
-                <string>Add to Changelog </string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>checkAddToChangelog</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add to Changelog </string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>changeLogNameEdit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Change log filename path (relative to project directory)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;b&gt;Changelog filename path&lt;/b&gt;&lt;br/&gt;Insert here the Changelog filename you wish to use so that the message is appended</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <widget class="Line">
             <property name="name">
@@ -125,6 +149,12 @@
         <signal>clicked()</signal>
         <receiver>CommitDialogBase</receiver>
         <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>checkAddToChangelog</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>changeLogNameEdit</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>

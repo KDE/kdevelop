@@ -25,13 +25,17 @@ class CommitDialog : public CommitDialogBase
 {
     Q_OBJECT
 public:
-    CommitDialog( QWidget *parent = 0 );
+    CommitDialog( const QString &changeLogfileNamePath, QWidget *parent = 0 );
 
     //! Returns the text of the log
     QStringList logMessage() const;
     //! Returns true if the user requests the log message to be added to the general
     //! Changelog file
     bool mustAddToChangeLog() const;
+
+    //! We need to set it when showing the dialog and then when saving the file
+    void setChangeLogFileName( const QString &fileName );
+    QString changeLogFileName() const;
 
 protected slots:
     //! Override: must check for message not being void.
