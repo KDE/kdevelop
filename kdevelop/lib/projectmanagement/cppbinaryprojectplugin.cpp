@@ -22,29 +22,29 @@ CPPBinaryProjectPlugin::CPPBinaryProjectPlugin(){
 CPPBinaryProjectPlugin::~CPPBinaryProjectPlugin(){
 }
 
-QStringList CPPBinaryProjectPlugin::getSources(QString binary_name=""){
+QStringList CPPBinaryProjectPlugin::getSources(QString binary_name){
 }
 
   /** Fetch the commandline execution arguments for the project binary
       if no binary_name was given, the first binary is returned
    */
-  QString CPPBinaryProjectPlugin::getExecuteArgs(QString args,QString binary_name=""){
+  QString CPPBinaryProjectPlugin::getExecuteArgs(QString args,QString binary_name){
   }
 
   /** Fetch the commandline execution arguments for debugging
       if no binary_name was given, the first binary is returned
   */
-  QString CPPBinaryProjectPlugin::getDebugArgs(QString args,QString binary_name=""){
+  QString CPPBinaryProjectPlugin::getDebugArgs(QString args,QString binary_name){
   }
 
   /** Store the commandline execution arguments for the project binary
       if no binary_name was given, the first binary is meant
   */
-  void CPPBinaryProjectPlugin::setExecuteArgs(QString args,QString binary_name=""){
+  void CPPBinaryProjectPlugin::setExecuteArgs(QString args,QString binary_name){
   }
 
   /** Store the commandline execution arguments for debugging
       if no binary_name was given, the first binary is meant
   */
-  void CPPBinaryProjectPlugin::setDebugArgs(QString args,QString binary_name=""){
+  void CPPBinaryProjectPlugin::setDebugArgs(QString args,QString binary_name){
   }

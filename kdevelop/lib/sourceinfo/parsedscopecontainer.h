@@ -59,7 +59,7 @@ public: // Public queries
    *
    * @param aName Name of the scope to check for.
    */
-  inline bool hasScope( const QString &aName );
+  bool hasScope( const QString &aName );
 
   /**
    * Fetch a scope by using its name.

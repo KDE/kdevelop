@@ -68,6 +68,10 @@ extern "C" {
 #define SVR4
 #endif
 
+#ifdef __osf__
+#define _XOPEN_SOURCE_EXTENDED
+#endif
+
 #include <qintdict.h>
 #include <qstring.h>
 #include <sys/wait.h>

@@ -1,4 +1,8 @@
-2000-08-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+2000-08-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Tom Leitner's patch to bring to sources in line
+	  with standard C++. Necessary for Tru64
+
+2000-08-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Added a class tool derived from the old one but subclassing 
 	  ClassTreeBase. Apart from the 'inherited' advantages, it
 	  now takes into account class parser updates while the dialog

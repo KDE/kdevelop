@@ -20,6 +20,7 @@
 %{
   #include <stdlib.h>
   #include <qstring.h>
+  #include <iostream.h>
   #include "tokenizer.h"
   #include "FlexLexer.h"
 

@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-class istream;
+#include <iostream.h>
 #include <unistd.h>
 
 /* Use prototypes in function declarations. */
@@ -236,7 +236,6 @@ typedef unsigned char YY_CHAR;
 #define YY_INTERACTIVE
 
 #include <FlexLexer.h>
-
 
 /* Done after the current pattern has been matched and before the
  * corresponding action - sets up yytext.
