@@ -748,7 +748,7 @@ void CKDevelop::slotProjectMessages(){
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
   shell_process.clearArguments();
   //shellprocess << make_cmd;
-  shell_process << make_cmd + " messages &&  cd ../po && make merge";
+  shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   beep = true;
 }
