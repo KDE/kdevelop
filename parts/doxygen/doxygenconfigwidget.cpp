@@ -62,7 +62,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                     case ConfigString::Dir:    sm = InputString::StringDir;  break;
                     }
                     InputString *inputString = new InputString
-                        ( message(option->name()),                        // name
+                        ( message(option->name()),               // name
                           pagebox,                               // widget
                           *((ConfigString *)option)->valueRef(), // variable 
                           sm                                     // type
@@ -77,7 +77,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 {
                     Q_ASSERT(pagebox!=0);
                     InputString *inputString = new InputString
-                        ( message(option->name()),                        // name
+                        ( message(option->name()),               // name
                           pagebox,                               // widget
                           *((ConfigEnum *)option)->valueRef(),   // variable 
                           InputString::StringFixed               // type
@@ -103,7 +103,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                         case ConfigList::FileAndDir: lm=InputStrList::ListFileDir; break;
                         }
                     InputStrList *inputStrList = new InputStrList
-                        ( message(option->name()),                         // name
+                        ( message(option->name()),                // name
                           pagebox,                                // widget
                           *((ConfigList *)option)->valueRef(),    // variable
                           lm                                      // type
@@ -133,7 +133,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 {
                     Q_ASSERT(pagebox!=0);
                     InputInt *inputInt = new InputInt
-                        ( message(option->name()),                         // name
+                        ( message(option->name()),                // name
                           pagebox,                                // widget
                           *((ConfigInt *)option)->valueRef(),     // variable
                           ((ConfigInt *)option)->minVal(),        // min value
@@ -145,7 +145,9 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                     addDependency(m_switches, option->dependsOn(), option->name());
                 }
                 break;
-            } 
+            case ConfigOption::O_Obsolete:
+                break;
+            }
     }
     
     QDictIterator<QObject> di(*m_switches);
