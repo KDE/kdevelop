@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "items.h"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
@@ -37,7 +38,6 @@
 #include "kdlgpropertybase.h"
 #define DONTINC_ALL
 #define INC_WIDGET
-#include "items.h"
 #include "kdlgloader.h"
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)

@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "items.h"
 #include "kdlgeditwidget.h"
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
@@ -25,7 +25,7 @@
 #include <qdatetime.h>
 #include <kruler.h>
 #include <stdio.h>
-#include "items.h"
+
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"

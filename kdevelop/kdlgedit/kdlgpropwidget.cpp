@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "items.h"
 #include "kdlgpropwidget.h"
 #include "kdlgproplvis.h"
 #include <kcolorbtn.h>

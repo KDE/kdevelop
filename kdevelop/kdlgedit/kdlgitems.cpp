@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "items.h"
 #include "kdlgitems.h"
 
 #include <ktreelist.h>
@@ -25,7 +25,7 @@
 #include <qheader.h>
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
-#include "items.h"
+
 #include "kdlgeditwidget.h"
 #include "kpopmenu.h"
 
