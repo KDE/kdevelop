@@ -1,1 +1,1 @@
-SUBDIRS = grepview doctreeview classview outputviews
+SUBDIRS = grepview doctreeview classview outputviews qextmdimainfrmview
