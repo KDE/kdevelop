@@ -51,8 +51,8 @@ const char *template_str[] = {
 };
 
 const char *filepatterns[] = {
-    "*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m",
-    "*.cpp,*.cc,*.C,*.cxx,*.c,*.m",
+    "*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m,*.mm,*.M",
+    "*.cpp,*.cc,*.C,*.cxx,*.c,*.m,*.mm,*.M",
     "*.h,*.hxx,*.idl",
     "*.java",
     "*",

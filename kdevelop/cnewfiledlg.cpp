@@ -71,7 +71,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 
   list_cpp = new QListBox( tab, "list_cpp" );
   list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
-  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C,*.m, ...)"));
+  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C,*.m,*.mm,*.M ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->insertItem(i18n("Qt Designer File (*.ui)"));
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
@@ -247,7 +247,7 @@ void CNewFileDlg::slotTabSelected(int item){
 void CNewFileDlg::slotOKClicked(){
   QString text = edit->text();
   if ( (fileType() == "CPP") &&
-       !(text.right(4) == ".cpp" || text.right(3) == ".cc" || text.right(2) == ".m"
+       !(text.right(4) == ".cpp" || text.right(3) == ".cc" || text.right(2) == ".m" || text.right(3) == ".mm" || text.right(2) == ".M"
 	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
     KMessageBox::error(this,i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec,.m or .ecpp!"));
     return;

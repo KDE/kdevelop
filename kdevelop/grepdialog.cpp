@@ -122,8 +122,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     files_combo = new QComboBox(true, this);
     files_label->setBuddy(files_combo->focusProxy());
     files_combo->setMinimumSize(files_combo->sizeHint());
-    files_combo->insertItem("*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m");
-    files_combo->insertItem("*.cpp,*.cc,*.C,*.cxx,*.c,*.m");
+    files_combo->insertItem("*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m,*.mm,*.M");
+    files_combo->insertItem("*.cpp,*.cc,*.C,*.cxx,*.c,*.m,*.mm,*.M");
     files_combo->insertItem("*.h,*.hxx,*.idl");
     files_combo->insertItem("*");
     input_layout->addWidget(files_combo, 2, 1);

@@ -2981,6 +2981,8 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.ll");
   group_filters.append("*.l");
   group_filters.append("*.m");
+  group_filters.append("*.mm");
+  group_filters.append("*.M");
   project->addLFVGroup (i18n("Sources"),"");
   project->setFilters(i18n("Sources"),group_filters);
 

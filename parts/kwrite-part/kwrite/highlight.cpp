@@ -1218,7 +1218,7 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 }
 
 ObjcHighlight::ObjcHighlight(const char * name) : CHighlight(name) {
-  iWildcards = "*.m;*.h";
+  iWildcards = "*.m;*.mm;*.M;*.h";
   iMimetypes = "text/x-objc-src;text/x-c-hdr";
 }
 

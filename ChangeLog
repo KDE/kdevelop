@@ -1,5 +1,8 @@
-2002-05-10  Bernd Gehrmann  <bernd@mail.berlios.de>
+2002-05-13  Richard Dale <duke@tipitina.demon.co.uk>
 
+	* Added .mm and .M source file extensions for Objective-C++
+
+2002-05-10  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Put grep into editor context menu
 	* Put 'Lookup in Index' and 'Goto manpage'
 	  into editor context menu
@@ -11,9 +14,7 @@
 	* Tools can be added by DnD from kicker menu
 	* Some preparations for loading files with a
 	  prescribed encoding
-
 2002-05-06  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Fixed history part crashing
 	* StatusBar cleanup
 	* Fixed ever-growing popup menu in editor
@@ -22,22 +23,16 @@
 	  command. Output can be sent to the app output
 	  art. %S, %D, %T and %W magic works like
 	  in old KDevelop (I hope :-)
-
 2002-05-03  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Structure view for HTML, Docbook and LaTeX
 	* Perl part can exec programs and code snippets now
 	* Moved duplicated code for executing programs in
 	  an external konsole into the app output part
-
 2002-05-01  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Limit size of class and method combo boxes
 	* Offer to rerun configure only if configuration
 	  has changed
-
 2002-04-30  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Implemented fileFilters() for cppsupport
 	* Methods and classes can now be added when no file is loaded
 	* Don't parse headers twice, now that they are included in 
@@ -50,40 +45,31 @@
 	  signals properly, improved context menus, started Remove File 
 	  implementation; made it possible to run qmake on any project
 	  file; polishing
-
 2002-04-29  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Display header files in automake manager
 	* Add Icon dialog
 	* Allow to build index.cache.bz2 by context menu
 	* Multiple build configurations
-
 2002-04-28  Sandy Meier  <smeier@kdevelop.org>
 	
 	* fixed some broken stuff (load project on startup,GBA support,php code completion)
 	* codeCompletion/realtimeparser is now configurable (GUI)
 	* readded gideonrc
-
 2002-04-28  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Renamed KDevProject::allSourceFiles() to allFiles(), as it isn't
 	  restricted to sources. It doesn't contain duplicates anymore.
 	* Handle AUTODIRS
 	* Handle foo_ICON
 	* Handle KDE_DOCS
-
 2002-04-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
 	
 	* Added a part providing a history, allowing you to go
 	  back and forward 
 	* Added splashscreen. Now we need an artist! :-)
-
 2002-04-28  Harald Fernengel <harry@kdevelop.org>
         * SourceNavPart now uses KToolBarPopupAction to display nifty
           Konqueror-like drop down menus for source code navigation
-
 2002-04-27  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Context menu actions in auto project act on context
 	  item, not active target
 	* Use selectionChanged() instead of executed() signal
@@ -95,19 +81,15 @@
 	  by QString and saved 35783 latin1 conversions ;-)
 	* Create popup menus with parent widget
 	* Made is possible to edit .desktop files
-
 2002-04-26 Harald Fernengel <harry@kdevelop.org>
         * Added first version of SourceNav Part which adds back/forward tool-buttons for code navigation.
         * Allow user to open more than one file in KFileDialog
-
 2002-04-25 Matthias Hölzer-Klüpfel <mhk@kde.org>
-
 	* started support for debugger handling via the new
 	  KTextEditor interfaces
 	* started with new documentation part handling
 	* added a workaround to open all text files with the
 	  same editor plugin
-
 2002-04-24 Victor Röder <victor_roeder@gmx.de>
 	* renamed Project view to Automake Manager
 	* reorganized Automake Manager
@@ -118,38 +100,27 @@
 		-> RemoveFileDlg
 		-> AddFileDlg
 		-> AddExistingDlg (does not work, yet)
-
 2002-04-24  F@lk Brettschneider  <falk@kdevelop.org>
         * bugfix for QFocusEvent::m_reason in QextMDI copy, it stabilizes the optimized focus mechanism
-
 2002-04-23  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Removed redundant loadparts property from project file
 	* Added isDirectory() to FileContext, so one can distinguish 
 	  between regular files and directories.
 	* Added "Insert quoted" button to regexp part
-
 2002-04-22  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Only program and library targets can be made active
 	* Sane resizeMode and allColumnsShowFocus settings for more list views
-
 2002-04-21  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Implemented setting active target in autoproject
 	  part and set a default one in most app templates
 	* Set resize mode of some list views to LastColumn
 	* In auto project, open active directory at startup
 	* Implemented addFile in auto project
-
 2002-04-20  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* If no compiler is set explicitly by the user,
 	  use the options widget of the default compiler
 	  (Property X-KDevelop-Default in the .desktop file)
-
 2002-04-19  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* In script projects, scan the source file list
 	  at loading time with configurable include
 	  and exclude pattern lists
@@ -157,13 +128,9 @@
 	* Implemented KDevLanguageSupport::fileFilters()
 	  for Python, Perl and PHP
 	* grep part shows the exit status of the sub process
-
 2002-04-19  Harald Fernengel <harry@kdevelop.org>
-
         * make outputwidget now locale aware
-
 2002-04-18  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* filter plugin
 	* Added methods addFile() and removeFile()
 	  to KDevProject interface, implemented
@@ -174,25 +141,17 @@
 	  dialog when file name extension is unknown
 	* ctags result list is now updated when
 	  any of the selected criteria is changed
-
 2002-04-17  Matthias Hölzer-Klüpfel <mhk@kde.org>
-
 	* introduced a facade to access the KTextEditor interfaces
 	* removed some code from PartController that is no longer
 	  needed
-
 2002-04-17  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Populate Build->Build Target menu in CustomProject
 	  with targets from Makefile, build.xml resp.
 	* Use kdDebug() more consequently
-
 2002-04-16  Matthias Hölzer-Klüpfel <mhk@kde.org>
-
 	* added a bit more context to the EditorContext
-
 2002-04-15  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Share code between project management parts by
 	  moving stuff to lib/project
 	* Separated file tree from custom and scripting
@@ -205,33 +164,25 @@
 	* Added the notion of an activeDirectory() in which
 	  new files are stored
 	* cerr -> kdDebug
-
 2002-04-15  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	
 	* moved window menu code from src to a plugin
 	
 2002-04-15  Simon Hausmann <hausmann@kde.org>
-
 	* Completed transition to KDevPlugin and KGenericFactory.
-
 2002-04-14  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Support for multiple file templates in app wizard
 	* More work on new class dialog
 	* Extended DomUtil to lists and pair lists
-
 2992-94-14  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* Added a new part that provides a "Open with" file menu entry
 	* Fixes for saving project settings on shutdown
 	* Properly enable menu entries when loading "last project"
-
 2002-04-13  Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* classstore config now in cppsupport
 	* code hinting really works now with KTextEditor
 	* update project pcs-file at projectClose( )
-
 2002-04-13  Bernd Gehrmann  <bernd@mail.berlios.de>
-
 	* Import dialog rewritten with designer, added author 
 	  and email fields
 	* When directory is selected in the import dialog, make
@@ -242,24 +193,17 @@
 	* More keywords in app wizard
 	* Load Java debugger only for JVM programs
 	  (keyword to be set by app wizard)
-
 2002-04-10  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* implemented setting the execution point
 	* move execution point handling from core to part controller
-
 2002-04-10  Simon Hausmann <hausmann@kde.org>
-
 	* ported the appwizard to KDP/KGF
-
 2002-04-09  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* ask user to save modified files before quitting
-
 2002-04-09 Roberto Raggi <raggi@cli.di.unipi.it>
 	* fixed crash in KDevDocTree
 	* removed qextmdi from kdevelop directory
-
 2002-04-09  Simon Hausmann <hausmann@kde.org>
-
 	* cleanups in the servicetype definitions. Added proper inheritance
 	and multiple defined propertyies
 	* some std:: namespace cleanups
@@ -281,14 +225,11 @@
 	* PluginController: don't bail out of loading of a kdevpart failed
 	* load kdevpart as well as kdevplugin components at the project
 	scope
-
 2002-04-08  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* emit loadedFile and savedFile again
 	* added DCOP interface for kdevpartcontroller
-
 2002-04-08  Roberto Raggi <raggi@cli.di.unipi.it>
 	* Fixed text insertion in Multi-language code template
-
 2002-04-07  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Fixed existing and potential memory leaks in class store
 	  with a more modern api. Big textual changes, no changes 
@@ -296,7 +237,6 @@
 	* New class dialog, to be finished
 	* Multi-language version of Roberto's code template stuff,
 	  not tested much
-
 2002-04-06 jbb <jbb@kdevelop.org> 
 	* Fixed some crashes, mainly to do with using .latin1() on
 	  a null string.
@@ -308,24 +248,20 @@
 	
 2002-04-06  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Python part can execute scripts and strings now
-
 2002-04-06  Harald Fernengel <harry@kdevelop.org>
         * ported editor-chooser to KTextEditor and re-enabled it
         * PartController now loads user's favourite editor
-
 2002-04-06  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* moved all part handling functions from KDevCore to
 	  KDevPartController
 	* enabled context sensitve popup menus in the text editor
 	* various fixes and workarounds for QextMdi modes
-
 2002-04-05  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* commited some patches by Bernd for fixing layout issues
 	* commited a patch by Bernd for reenabling the floating 
 	  debug toolbar
 	* reenabled context menu entries comming from parts
 	* added tiny part to select the UI mode
-
 2002-04-04  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* reenabled the RMB menu
 	* fixed the widget deletion when parts are closed
@@ -338,40 +274,31 @@
 	* made UI model configurable
 	* smaller refactorings in lib/interfaces
 	* moved toplevel view handling out of KDevCore to KDevTopLevel
-
 2002-03-29  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* migrated all parts to KTextEditor
 	* removed all traces of KEditor
 	* reenabled Tip-of-the-day
-
 2002-03-26  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* refactored the core source completely
 	* sneaked in a new UI concept
           (which Harald probably will replace with QextMDI soon)
-
 2002-02-24  Roberto Raggi <ragi@cli.di.unipi.it>
 	* improved code completion
 	* added quick hack for configuring the fonts for qeditor
-
 2002-16-02  Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* added codecompletion-classstore
 	* added removeWidget( )
 	* added config-dialogues for codecompletion/classstores
 	* improved codecompletion
 	* added cc-stuff from roberto raggi
-
 2002-10-02  Harald Fernengel <harry@kdevelop.org>
 	* Fixed KWrite Part and reenabled it again
 	* Added the Qt Editor Part (Qt Designer's Editor)
-
 2002-02-03  Christian Couder <christian@kdevelop.org>
 	* Bugfix : crash in classviewpart.cpp because languageSupport()
 	was null.
-
 2002-01-16  Richard Dale <duke@tipitina.demon.co.uk>
-
 	* Java plugin api regenerated
-
 2001-12-22  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * generate docs in all source dirs in Doxyfile
         and enable dot output
@@ -389,58 +316,47 @@
 2001-12-16  Roland Krause  <rokrau@yahoo.com>
         * Reenabled the kwrite-part,
           works now under KDE-3 with the KTextEditor interface.
-
 2001-12-15  Victor Röder <victor_roeder@gmx.de>
         * Added persistence functionality to the class store
                 - "cooperation" of Bernd, Daniel E. and me
                 - the class store is saved and loaded from a binary file
         * In core.cpp projectClosed() is emitted first and then
                 store->wipeout() is called
-
 2001-12-15  Sandy Meier  <smeier@kdevelop.org>
         * added some new options to the Appwizard (see README) and make it more intuitive: name completion,
         project loading after generation...
         * added "void openProject(const QString& projectFileName)" to the KDevCore Interface, used by AppWizard
         * fileselect part reacts now on signal KDevCore::projectOpen()
-
 2001-12-12  August Hörandl <august.hoerandl@gmx.at>
         * Add method dialog rewritten using designer
-
 2001-12-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * Added a preliminary Trie code to structure lib
-
 2001-11-29  Sandy Meier  <smeier@kdevelop.org>
         * added Gameboy Advance support including a "Hello World" template and
         an emulator frontend
-
 2001-11-21  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * Started lib/structure which will feature tree,
           trie and graph structures
         * Started a part called sourcebrowser which will facilitate
           multiple UI's to browse source code
-
 2001-10-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Made sourceinfo serializing more modular by adding
           stream operators to all relevant classes,
           including ParsedItem, and using them in the higher
           level ones
-
 2001-10-14 Victor Röder <victor_roeder@gmx.de>
         * new version of Daniel Engelschalt's CppCCParser
         * KDevArgHint adapts now the font size of the editor        
-
 2001-10-13 Victor Röder <victor_roeder@gmx.de>
         * added an additional signal textChanged with
                 + KEditor::Document*
                 + int line
                 + int col as params
         * added a switch to (de)activate cc (done with #ifs)
-
 2001-10-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Smart error message box when parts cannot be
           loaded
         * QFile::encode() library name
-
 2001-09-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added insertStdoutLine() and insertStderrLine() to 
           AppFrontend interface. This is e.g. needed by the
@@ -452,43 +368,35 @@
         * Changed ClassStore API to always use QStringLists instead
           of QStrList
         * Compiles with QT_NO_ASCII_CAST and QT_CLEAN_NAMESPACE now
-
 2001-09-26 Victor Röder <victor_roeder@gmx.de>
         * CppCCParser rewritten by Daniel Engelschalt
         * The affected code for CC is saved in a temporary file now
         * fixed some bugs in CppCodeCompletion
         * This is still very very alpha
-
 2001-08-22 Sandy Meier <smeier@kdevelop.org>
         * all 1500 php global functions are now available for code completion (incl. prototype) 
-
 2001-08-10 Victor Röder <victor_roeder@gmx.de>
         * reimplemented CppCodeCompletion::getEntryListForClass() and 
           getEntryListForClassOfNamespace()
           both work with the two recursive functions getParent...ListForClass()
           multiple inheritance works now
-
 2001-08-10   Harald Fernengel <harry@bnro.de>
         * Polished the Grep Dialog. It now remembers the last searches and 
           search directories, search button is now default-button
         * find now works on non-unix platforms, too
-
 2001-08-08   Sandy Meier  <smeier@kdevelop.org>
         * the  code completion and arghint works now in many cases (PHP)
         * added realtimeparser, so the classview is updated while you type :-) (PHP)
         * fix some problems in arghintWidget 
         * added textChanged() signal to the editor interface
         * phpsupport display the parsing progress in the statusbar (code from Matthias)
-
 2001-08-06 Victor Röder <victor_roeder@gmx.de>
         * Implemented several methods in CppCodeCompletionParser
                 getNode...();
         * Extended CppCodeCompletion
                 getEntryListFor...();
-
 2001-08-04 Victor Röder <victor_roeder@gmx.de>, Daniel Haberkorn <dhaberkorn@gmx.de>
         * Added CppCodeCompletionParser.cpp + .h (contains only interface definition)
-
 2001-08-02  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	* Exposed the status bar through the kdevcore interface
 	* Made cppsupport display the parsing progress in the statusbar
@@ -503,7 +411,6 @@
         * Put default binary name for compilers in their desktop files
           This default is used for the CC/CXX/F77 setting when the
           compiler has been changed by the user
-
 2001-07-30 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * interfaces/keditor: moc files are compiled separately, #include's
         removed from cpp files.
@@ -512,23 +419,19 @@
         
 2001-07-29 Victor Röder <victor_roeder@gmx.de>
         * KDevArgHint improved, i.e. positioning, ui
-
 2001-07-26 Victor Röder <victor_roeder@gmx.de>
         * KDevArgHint added to KWrite-part (widget that shows the function
           and its needed arguments)
           Try it and type in 'test(' at the beginning of an empty line in a C++ project!
         * showArgHint() added to CodeCompletionDocument
         * added some code to CppCodeCompletion (cppsupport), but only for testing
-
 2001-07-26 Sandy Meier   <smeier@kdevelop.org>
         * kwrite CodeCompletionbox is now useable, maybe someone who want make it more colorful?
         * php code completion supports (global methods,$this->xxx and $test = new xxx) now, 
                 more will follow
-
 2001-07-26 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * debian packaging for kdevelop-3.0 branch
         * kwrite: add path kwriteeditor_part for locating syntax.xml
-
 2001-07-22 Sandy Meier <smeier@kdevelop.org>
         * implemented initial codeCompletion interface for kwrite
         * added codeCompletion parsing to the PHP supportpart
@@ -539,34 +442,28 @@
           Thanks to Ludovic LANGE <ludovic.lange@free.fr> for a patch
         * Wait cursor while index dialog loads index files
         * Configurable full text search in toc'ed documentation
-
 2001-07-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added kdoc-generated Qt/KDE index to index dialog
         * Destroy compiled-in factories at exit. Otherwise
           their KConfig's don't get sync()ed
-
 2001-07-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Made doxygen config widget more KDE compliant, i.e.
           KDE icons, KFileDialog instead of QFileDialog,
           cleanup
-
 2001-07-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Elementary cvs support (add, remove, update, commit)
         * doxygen plugin
         * Added FileContext for context menus in the FileView.
           This should be used for the project management widgets
           later.
-
 2001-07-13  Richard Dale <duke@tipitina.demon.co.uk>
         * Fixed bug causing 'precondition violated' messages in the C++
           class parser
-
 2001-07-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Store relative instead of absolute file names in custom project
         * Use gotoFile() instead of gotoSourceFile() in custom and
           script project
         * Added Doxyfile for libkdevelop api
-
 2001-07-12  Sandy Meier   <smeier@kdevelop.org>
         * implemented extended plugin loading as discussed on Linuxtag 2001
           see HACKING how you can use it
@@ -576,34 +473,27 @@
           on either automake or tmake/qmake
         * Templates for C and C++ imports with custom Makefiles
         * Fix in import dialog to substitute APPNAMELC correctly
-
 2001-07-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Extended the KEditor::EditIface a bit
         * started to implement it in the editor parts
-
 2001-07-05  Richard Dale <duke@tipitina.demon.co.uk>
         * Fixed crash in class tool attribute display. Method and attribute
           icons now displayed correctly
         * Regenerated sources for Java plugin api
         * References in the class store are cleared, before a source file 
           is parsed
-
 2001-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Quick hack for a tmake/qmake project management
-
 2001-07-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Make file views work for arbitrary mime types
         * Switch header fix
-
 2001-07-03  Richard Dale <duke@tipitina.demon.co.uk>
         * Added package visibility to the class browser for Java - denoted by a 
           green rectangle against an instance variable or method.
-
 2001-07-03  Richard Dale <duke@tipitina.demon.co.uk>
         * Added accessor methods to the Class store/parser sources, so that
           instance variables should no longer need to be accessed directly.
           Java plugin api sources regenerated to use the new accessor method names
-
 2001-07-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Doc index dialog remembers checked indices and
           categories per project
@@ -611,7 +501,6 @@
         * Show 'Goto declaration' only for languages
           with declarations
         * Small toc and index DTD change
-
 2001-07-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added TOCs for STL and Gtk libraries
         * Removed General section in doc tree view,
@@ -620,36 +509,29 @@
         * Doc tree view configurable on a per-project basis,
           currently preconfigured by the app wizard and
           import dialog; no user interface
-
 2001-06-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * TOCs for KDE2 development book and libc
           plus Claudiu Costins <claudiuc@work.ro> scripts
-
 2001-06-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added GNUStep documentation toc plus a script
           for generating it from gsdoc files
         * Full Python toc plus a script for generating it
         * Full PHP toc made by Claudiu Costins script
-
 2001-06-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Implemented modification of build order of subprojects
         * Fixed update of prefixes list
         * Fixed update of include directory list
         * Switch header/implementation
-
 2001-06-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Perldoc support
         * Finished builddir support
-
 2001-06-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Implemented Add subproject
         * Fix for autoproject: allow ldflags to be
           added for programs, but disable libtool flags
         * Popup menu contexts for classes, not yet used
-
 2001-06-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * let the user choose which editor part to load
-
 2001-06-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Separated project options widget in 4 separate widgets 
           instead of one tab widget and embedded them 
@@ -663,26 +545,21 @@
         * Implemented Make messages
         * Menu structure cleanup
         * Implemented Make install
-
 2001-06-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Implemented Add translation
         * Implemented Execute program
         * lex fix
-
 2001-06-14  Sandy Meier <smeier@kdevelop.org>
         * phpsupport: configuration handling now in PHPConfigData
         * phpsupport: web and shell invocation works now 
-
 2001-06-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Implemented distclean
         * Support for autogen.sh in addition to Makefile.cvs
-
 2001-06-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Rewritten Add target dialog. Supports additional
           LDFLAGS now. Will add a context menu item 'Add KDE plugin'
           later which will set KDE_PLUGIN stuff as default
         * Added a special kde mode to autoproject part. 
-
 2001-06-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * New part regexptest for testing regular expressions
         * Fixed make frontend to recognize ftnchek messages
@@ -692,41 +569,33 @@
           directory of an erroneous file when only one
           directory is built
         * Rerun configure when project options have changed.
-
 2001-06-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Allow several commands for the make frontend to be queued
         * Project management automatically runs configures if no
           Makefile exists and Makefile.cvs if no configure script
           exists
-
 2001-06-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Don't show Fortran options for gcc
         * Enabled class view fixes from 06-05 :-)
         * More import project types
-
 2001-06-09 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	* Started to move the kwrite code from lib to the part.
 	* Added additional kwrite functions to the menues.
-
 2001-06-05 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	* Reenabled the signals when files are loaded and
           saved, so Bernd can test ;)
           (This was a hotfix, I will do the real one later)
-
 2001-06-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added Add application desktop file dialog
         * Fixed Add service dialog
         * Some fixes in class view that I can't test currently...
-
 2001-06-04 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Added DCOP bindings to the editor interfaces,
           so they are accessible for scripting.
-
 2001-06-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * New add service dialog in project management
           Not quite ready
         * Bug fixes in sub project and target options dialog
-
 2001-06-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * New sub project and target options dialogs.
           These are much more user-friend wrt convenience
@@ -735,23 +604,19 @@
           presented in documented check boxes
         * Put compiler options widget into the project
           options framework
-
 2001-06-01  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Reimplemented the modified-on-disk check with the new
           editor-interface.
         * Reimplemented the modified check before quitting.
         * Added "Save all" and "Revert all"
         * Added "Revert" to the editor interface.
-
 2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Made some dom writing code more robust by
           creating non-existent nodes in the tree
         * Rewrote the import dialog to allow the choice between
           a number of import templates
-
 2001-05-31 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * switched to the new editor interface concept
-
 2001-05-31 Sandy Meier <smeier@kdevelop.org>
         * added initial php webserver/shell preview and config dialog (phpsupport)
         * added errormessage parser/view (phpsupport) 
@@ -761,26 +626,20 @@
           project template for building a plugin. Java parts are
           not built if a --without-java flag is used for configuration,
           or if no suitable versions of javac, jar etc are found.
-
 2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added a zillion other languages to ctags tag mappings
         * Regular expression matching in ctags part
         * Tell user about dot in configure
-
 2001-05-30  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added a ctags part
-
 2001-05-30  Thomas Fromm <tf@tfromm.com>
         * Added basic Highlighting for PHP
-
 2001-05-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added a pydoc ioslave and a corresponding menu item to
           the python support part
         * Added a man page item to the help menu
-
 2001-05-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * New scripting layer based on DCOP
-
 2001-05-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added TOCs for perl, python and PHP to the
           documentation tree
@@ -796,54 +655,44 @@
         * Show progress dialog when parsing files
         * Implemented Remove file dialog in project management.
           Does not quite work yet :-(
-
 2001-05-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added FORTRAN 77 parser
         * Added plugins for g77 and the Portland Group's
           f77 compiler and High Performance Fortran 
           compiler driver
-
 2001-05-24 Sandy Meier   <smeier@kdevelop.org>
         * added option (load last project on startup)
         * saved mainview configuration on exit
-
 2001-05-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added templates for GNOME app and simple automake-
           based C and C++ programs
-
 2001-05-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Fixed file view and made it possible to add new
           groups and change the order of matched patterns
         * Added preliminary fortran support part with a
           ftnchek configuration dialog. Parser follows later...
-
 2001-05-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added a new part 'FileView' which shows all files of
           a project sorted in groups like 'Sources' and
           'User Interface'. The groups can be configured
           by the user. A default setting is provided by the
           application wizard.
-
 2001-05-20 Sandy Meier   <smeier@kdevelop.org>
         * added initial PHP support including a simple php parser
         * added "hello world" PHP template to AppWizard
-
 2001-05-20  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Added a new editor interface for debugging
           (breakpoints etc.)
         * Added cast methods to the editor interfaces, so
           you don't have to pass strings around any longer
-
 2001-05-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added kicker, kioslave and kcmodule templates
         * Each template can define an icon which is
           shown in the app wizard
         * The Big KInstance Cleanup
-
 2001-05-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Added a plugin to provide and configure a 
           Tools menu.
-
 2001-05-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Categorized all parts into Global or Project,
           so that they are either loaded at startup or
@@ -851,10 +700,8 @@
         * Added part selector which allows to configure
           the used parts both globally and on a per-
           project basis
-
 2001-05-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Back to KDialogBase for configuration dialogs
-
 2001-05-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added a project options dialog to which any
           plugin can add a tab.
@@ -862,25 +709,21 @@
         * Temporarily gone back to QTabDialog for these
           configuration dialogs instead of KDialogBase.
           Not sure if this is right...
-
 2001-05-13  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         
         * Added a status interface to the editor interfaces
         * Implemented display of editor status in the main
            statusbar
-
 2001-05-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Changed compiler frontend to use QTextView, instead of QListBox.
           Now copy&paste are possible, and the view scrolls to the end of the
           output (unless the user has clicked otherwise)
         * Also fixed the shortcuts
         * Fixed buffer menu for documentation parts
-
 2001-05-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Commited the new editor framework
           Note that it is not yet active, as it is not yet
           complete. But it is evolving...
-
 2001-05-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added Python Hello world template
         * Fixed memory leaks
@@ -888,7 +731,6 @@
         * Fixed script project to not show . and .. and to go to a source
           file when it is clicked
         * Implemented printing
-
 2001-05-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Implemented proper comparing of file identities:
           Instead of the file name, now devno/inode are compared.
@@ -902,7 +744,6 @@
         * Warning dialogs when modified files are closed or when
           saved/loaded files were modified outside.
         * Implemented searching html widget
-
 2001-05-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Use flex instead of $(LEX)
         * Made function prototypes in tokenizer.l static.
@@ -910,12 +751,10 @@
           'extern' and causes a conflict
         * Removed tokenizer.cpp from cvs, so it gets
           generated at build time
-
 2001-05-05  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         
         * prepared the Tip-of-the-Day plugin to make use of the
           KTipDialog class that will soon appear in kdelibs.
-
 2001-05-01  Richard Dale <duke@tipitina.demon.co.uk>
         * Removed hard coded java classpaths, and classnames. They are derived
           from the projectDirectory and mainProgram project attributes.
@@ -925,11 +764,9 @@
           from time to time) but could serve as a starting point for further
           development. The directory contains a README describing some of the 
           parsing in the jdbcontroller.'
-
 2001-04-29  Sandy Meier  <smeier@kdevelop.org>
         * some changes in appwizard gui (qtdesigner based),
         templates can have a category property now
-
 2001-04-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Implemented a generic project part for scripting languages. 
           It essentially consists of a widget that displays all files 
@@ -946,32 +783,26 @@
           In principle, we could now send them around via DCOP :-)
         * Implemented a python support part with parser
         * Implemented a perl support part with parser
-
 2001-04-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Made configure arguments configurable
           Patch by Berndt Josef Wulf <wulf@dingo.ping.net.au>
         * Don't link with libfl in cppsupport and javasupport
         * Each part now uses its own instance and the corresponding
           resource directory
-
 2001-04-18  Richard Dale <duke@tipitina.demon.co.uk>
         * GDB debugger part sources copied to 'parts/javadebugger', and all names 
           changed to JDB ones. Ready to add jdb functionality.
-
 2001-04-17  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Moved the splitter widget to lib/util, so it can be shared with parts
         * Moved the editor part to lib/kwrite, to allow parts to access it.
         * Added astyle part, a source code reformatter.
-
 2001-04-13  Richard Dale <duke@tipitina.demon.co.uk>
         * Applied patch from Oliver Strutynski to fix bug in the Java tokenizer
           with non US-ASCII identifiers in source files.
-
 2001-04-11  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * Added a plugin that let's you select the parts to load
           on startup
         * Added some code to core to only load the plugins selected.
-
 2001-04-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Added memory view widget
         * Fixed disassemble widget to act only when it is visible
@@ -979,20 +810,19 @@
         * Cleaning widget after the debugger has finished
         * Added status bar text and whats this
         * Clear execution point mark when debugger has finished
-
 2001-04-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
         * added a part to display a "Tip of the day"
         * moved over the tips from the previous HEAD branch,
           which probably need a review
-
 2001-04-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * Rewritten the icon border stuff from 1.x for use
           with multiple views per document
         * Ported the debugger frontend
-
 2001-04-06  Richard Dale <duke@tipitina.demon.co.uk>
         * Added Java and Objective-C class browsing, and Java KDE project template and
         automake support (ie the _JAVA primary). Fixed bug in class browser where a 
         method's arguments were not being displayed (was that a bug or a feature?). 
         Clicking on a class's instance variables in the class browser now works and 
+        takes you to the source file.
+les in the class browser now works and 
         takes you to the source file.

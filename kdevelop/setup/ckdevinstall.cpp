@@ -285,7 +285,7 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("Mimetypes","text/x-c-src");
     m_config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Wildcards","*.m;*.h");
+    m_config->writeEntry("Wildcards","*.m;*.M;*.mm;*.h");
     m_config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
@@ -357,7 +357,7 @@ void CKDevInstall::slotFinished()
     m_config->setGroup("C Highlight");
     m_config->writeEntry("Wildcards","*.c;*.C;*.ec;*.xpm;*.po");
     m_config->setGroup("Objective-C Highlight");
-    m_config->writeEntry("Wildcards","*.m;*.h");
+    m_config->writeEntry("Wildcards","*.m;*.mm;*.M;*.h");
     m_config->setGroup("C++ Highlight");
     m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff;*.inl;*.tlh");
 

@@ -1684,7 +1684,7 @@ void CKDevelop::slotTagSwitchTo()
   QString newExtension;
 
   srcExtensions << ".cpp" << ".cxx" << ".C" << ".cc" << ".ecpp" << ".c" << ".ec"
-                << ".inl" << ".m";
+                << ".inl" << ".m" << ".mm" << ".M";
   headerExtensions << ".h" << ".hpp" << ".hxx" << ".H" << ".hh" << ".tlh";
 
   kdDebug() << "in CKDevelop::slotTagSwitchTo():" << endl;

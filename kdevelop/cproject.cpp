@@ -424,7 +424,7 @@ ProjectFileType CProject::getType( const QString& aFile )
     // Check for a known extension.
     if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
         ext == ".ec" || ext == ".ecpp" || ext == ".C" ||
-        ext == ".cxx" || ext == ".ui" || ext == ".inl" || ext == ".m" )
+        ext == ".cxx" || ext == ".ui" || ext == ".inl" || ext == ".m" || ext == ".mm" || ext == ".M" )
       retVal = CPP_SOURCE;
     // .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
     else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" ||
