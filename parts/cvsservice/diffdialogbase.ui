@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>272</height>
+            <height>274</height>
         </rect>
     </property>
     <property name="caption">
@@ -75,7 +75,7 @@
                         <cstring>diffArbitraryRevRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>Two arbitrary revisions/tags</string>
+                        <string>Two arbitrary revisions/tags:</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">

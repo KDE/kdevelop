@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>613</width>
-            <height>564</height>
+            <height>566</height>
         </rect>
     </property>
     <property name="caption">
@@ -155,7 +155,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Return T&amp;ype:</string>
+                                <string>Return t&amp;ype:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>returnType</cstring>

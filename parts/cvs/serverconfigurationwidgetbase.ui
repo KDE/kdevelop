@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>526</width>
-            <height>194</height>
+            <width>771</width>
+            <height>239</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -196,7 +196,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Username:</string>
+                        <string>&amp;User name:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>userNameLineEdit</cstring>
@@ -252,6 +252,8 @@
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>connectionMethodComboBox</tabstop>
     <tabstop>userNameLineEdit</tabstop>

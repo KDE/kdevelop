@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>626</width>
-            <height>290</height>
+            <height>292</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Update/Revert to Another Release/Branch/Date</string>
+        <string>Update/Revert to Release/Branch/Date</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -68,7 +68,7 @@
                                 <cstring>revisionRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>An arbitrary revision/tag/branch</string>
+                                <string>An arbitrary revision/tag/branch:</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>
@@ -103,7 +103,7 @@
                                 <cstring>dateRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>An arbitrary date</string>
+                                <string>An arbitrary date:</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit">

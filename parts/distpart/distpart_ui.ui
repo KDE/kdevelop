@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>623</width>
-            <height>549</height>
+            <width>961</width>
+            <height>738</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -70,7 +70,7 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>&lt;H1&gt;Project Packaging and Publishing&lt;/H1&gt;</string>
+                        <string>&lt;H1&gt;Project Packaging &amp; Publishing&lt;/H1&gt;</string>
                     </property>
                 </widget>
                 <spacer>
@@ -283,6 +283,9 @@
                         </property>
                         <property name="text">
                             <string>File &amp;list:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>srcDistFileListBox</cstring>
                         </property>
                     </widget>
                 </grid>

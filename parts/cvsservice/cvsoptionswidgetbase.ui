@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>495</width>
-            <height>430</height>
+            <width>500</width>
+            <height>505</height>
         </rect>
     </property>
     <property name="caption">
@@ -62,7 +62,7 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>CVS Server location</string>
+                        <string>CVS server location:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -204,6 +204,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
