@@ -53,6 +53,7 @@ private slots:
 private:
   static void searchExtParts();
   static QStringList extParts;
+  static QStringList extPartsTranslated;
   bool _highlight;
 };
 
