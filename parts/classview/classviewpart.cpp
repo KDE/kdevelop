@@ -35,75 +35,10 @@
 
 #include "classviewwidget.h"
 #include "classviewpart.h"
+#include "viewcombos.h"
+#include "hierarchydlg.h"
 
 #include "klistviewaction.h"
-
-class NamespaceItem: public QListViewItem{
-public:
-    NamespaceItem(ClassViewPart *part, QListView *parent, QString name, NamespaceDom dom)
-        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
-    NamespaceItem(ClassViewPart *part, QListViewItem *parent, QString name, NamespaceDom dom)
-        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
-    NamespaceDom dom() const
-    {
-        return m_dom;
-    }
-    virtual void setup()
-    {
-        QListViewItem::setup();
-        setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, m_part->instance()) );
-    }
-private:
-    NamespaceDom m_dom;
-    ClassViewPart *m_part;
-};
-
-class ClassItem: public QListViewItem{
-public:
-    ClassItem(ClassViewPart *part, QListView *parent, QString name, ClassDom dom)
-        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
-    ClassItem(ClassViewPart *part, QListViewItem *parent, QString name, ClassDom dom)
-        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
-    ClassDom dom() const
-    {
-        return m_dom;
-    }
-    virtual void setup()
-    {
-        QListViewItem::setup();
-        setPixmap( 0, UserIcon("CVclass", KIcon::DefaultState, m_part->instance()) );
-    }
-private:
-    ClassDom m_dom;
-    ClassViewPart *m_part;
-};
-
-class FunctionItem: public QListViewItem{
-public:
-    FunctionItem(ClassViewPart *part, QListView *parent, QString name, FunctionDom dom)
-        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
-    FunctionItem(ClassViewPart *part, QListViewItem *parent, QString name, FunctionDom dom)
-        :QListViewItem(parent, name), m_dom(dom), m_part(part) {}
-    FunctionDom dom() const
-    {
-        return m_dom;
-    }
-    virtual void setup()
-    {
-        QListViewItem::setup();
-        QString iconName;
-        if( m_dom->access() == CodeModelItem::Private )
-            iconName = "CVprivate_meth";
-        else if( m_dom->access() == CodeModelItem::Protected )
-            iconName = "CVprotected_meth";
-        else
-            iconName = "CVpublic_meth";
-        setPixmap( 0, UserIcon(iconName, KIcon::DefaultState, m_part->instance()) );
-    }
-private:
-    FunctionDom m_dom;
-    ClassViewPart *m_part;
-};
 
 typedef KGenericFactory<ClassViewPart> ClassViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
@@ -193,72 +128,14 @@ void ClassViewPart::setupActions( )
         popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
     if (hasAddAttribute)
         popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
+
+    popup->insertSeparator();
+    popup->insertItem(i18n("Graphical Class Hierarchy"), this, SLOT(graphicalClassView()));
 }
 
 void ClassViewPart::refresh( )
 {
-    refreshNamespaces();
-}
-
-void ClassViewPart::refreshNamespaces( )
-{
-    m_namespaces->view()->clear();
-
-    NamespaceItem *global_item = new NamespaceItem( this, m_namespaces->view()->listView(), i18n("(Global Namespace)"), codeModel()->globalNamespace() );
-    global_item->setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, instance()) );
-    NamespaceList namespaces = codeModel()->globalNamespace()->namespaceList();
-    for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
-    {
-        NamespaceItem *item = new NamespaceItem(this, m_namespaces->view()->listView(), languageSupport()->formatModelItem(*it), *it);
-        item->setOpen(true);
-        processNamespace(item);
-    }
-    qWarning("ClassViewPart: setCurrentActiveItem(global_item)");
-    m_namespaces->view()->setCurrentActiveItem(global_item);
-}
-
-void ClassViewPart::refreshClasses( const NamespaceDom &dom )
-{
-    m_classes->view()->clear();
-
-    m_classes->view()->setCurrentText(i18n("(Classes)"));
-//    QListViewItem *global_item = new QListViewItem( m_classes->view()->listView(), i18n("Global") );
-    ClassList classes = dom->classList();
-    for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
-    {
-        ClassItem *item = new ClassItem(this, m_classes->view()->listView(), languageSupport()->formatModelItem(*it), *it);
-        item->setOpen(true);
-        processClass(item);
-    }
-//    m_classes->view()->setCurrentItem(global_item);
-}
-
-void ClassViewPart::refreshFunctions( const ClassDom & dom )
-{
-    m_functions->view()->clear();
-
-    m_functions->view()->setCurrentText(i18n("(Functions)"));
-    FunctionList functions = dom->functionList();
-    for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
-    {
-        FunctionItem *item = new FunctionItem(this, m_functions->view()->listView(), languageSupport()->formatModelItem(*it), *it);
-        item->setOpen(true);
-        processFunction(item);
-    }
-}
-
-void ClassViewPart::refreshFunctions( const NamespaceDom & dom )
-{
-    m_functions->view()->clear();
-
-    m_functions->view()->setCurrentText(i18n("(Functions)"));
-    FunctionList functions = dom->functionList();
-    for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
-    {
-        FunctionItem *item = new FunctionItem(this, m_functions->view()->listView(), languageSupport()->formatModelItem(*it), *it);
-        item->setOpen(true);
-        processFunction(item);
-    }
+    ViewCombosOp::refreshNamespaces(this, m_namespaces->view());
 }
 
 void ClassViewPart::selectNamespace( QListViewItem * item )
@@ -266,8 +143,8 @@ void ClassViewPart::selectNamespace( QListViewItem * item )
     NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
     if (!ni)
         return;
-    refreshClasses(ni->dom());
-    refreshFunctions(ni->dom());
+    ViewCombosOp::refreshClasses(this, m_classes->view(), ni->dom());
+    ViewCombosOp::refreshFunctions(this, m_functions->view(), ni->dom());
 }
 
 void ClassViewPart::selectClass( QListViewItem * item )
@@ -275,7 +152,7 @@ void ClassViewPart::selectClass( QListViewItem * item )
     ClassItem *ci = dynamic_cast<ClassItem*>(item);
     if (!ci)
         return;
-    refreshFunctions(ci->dom());
+    ViewCombosOp::refreshFunctions(this, m_functions->view(), ci->dom());
 }
 
 void ClassViewPart::selectFunction( QListViewItem * item )
@@ -292,40 +169,6 @@ void ClassViewPart::selectFunction( QListViewItem * item )
         fi->dom()->getStartPosition( &startLine, &startColumn );
         partController()->editDocument( KURL(fi->dom()->fileName()), startLine );
     }
-}
-
-void ClassViewPart::processNamespace( NamespaceItem * item )
-{
-    NamespaceList namespaces = item->dom()->namespaceList();
-    for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
-    {
-        NamespaceItem *newitem = new NamespaceItem(this, item, languageSupport()->formatModelItem(*it), *it);
-        newitem->setOpen(true);
-        processNamespace(newitem);
-    }
-}
-
-void ClassViewPart::processClass( ClassItem * item )
-{
-    ClassList classes = item->dom()->classList();
-    for (ClassList::const_iterator it = classes.begin(); it != classes.end(); ++it)
-    {
-        ClassItem *newitem = new ClassItem(this, item, languageSupport()->formatModelItem(*it), *it);
-        newitem->setOpen(true);
-        processClass(newitem);
-    }
-}
-
-void ClassViewPart::processFunction( FunctionItem * item )
-{
-    //TODO: allow nested functions (adymo: Pascal has nested procedures and functions)
-/*    FunctionList functions = item->dom()->functionList();
-    for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
-    {
-        FunctionItem *newitem = new FunctionItem(item, languageSupport()->formatModelItem(*it), *it);
-        newitem->setOpen(true);
-        processFunction(newitem);
-    }*/
 }
 
 void ClassViewPart::switchedViewPopup( )
@@ -414,6 +257,12 @@ void ClassViewPart::selectedAddAttribute( )
         return;
     if (languageSupport())
         languageSupport()->addAttribute(ci->dom()->name());
+}
+
+void ClassViewPart::graphicalClassView( )
+{
+    HierarchyDialog dia(this);
+    dia.exec();
 }
 
 #include "classviewpart.moc"

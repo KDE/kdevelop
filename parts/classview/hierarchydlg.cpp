@@ -11,81 +11,91 @@
 
 #include "hierarchydlg.h"
 
-#include <qcombobox.h>
+#include <kdialog.h>
+#include <klocale.h>
+
 #include <qlayout.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
-#include <kdialog.h>
-#include <klocale.h>
 
 #include "kdevlanguagesupport.h"
+#include "qcomboview.h"
+
 #include "classviewpart.h"
-#include "classstore.h"
-#include "classtoolwidget.h"
+//#include "classtoolwidget.h"
 #include "digraphview.h"
+#include "viewcombos.h"
 
 
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     : QDialog(0, "hierarchy dialog", WDestructiveClose)
 {
-    class_combo = new QComboBox(false, this);
+    class_combo = new QComboView(false, this);
+    class_combo->setMinimumWidth(150);
+    namespace_combo = new QComboView(false, this);
+    namespace_combo->setMinimumWidth(150);
 
     QPushButton *close_button = new QPushButton(i18n("&Close"), this);
 
     QSplitter *splitter = new QSplitter(Vertical, this);
     digraph = new DigraphView(splitter, "digraph view");
-    member_tree = new ClassToolWidget(part, splitter);
+//    member_tree = new ClassToolWidget(part, splitter);
 
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     QBoxLayout *combo_layout = new QHBoxLayout();
     layout->addLayout(combo_layout);
+    combo_layout->addWidget(namespace_combo);
     combo_layout->addWidget(class_combo);
     combo_layout->addStretch();
     combo_layout->addWidget(close_button);
     layout->addWidget(splitter);
 
-    connect( class_combo, SIGNAL(activated(const QString&)),
-             this, SLOT(slotClassComboChoice(const QString&)) );
+    connect( namespace_combo, SIGNAL(activated(QListViewItem*)),
+             this, SLOT(slotNamespaceComboChoice(QListViewItem*)) );
+    connect( class_combo, SIGNAL(activated(QListViewItem*)),
+             this, SLOT(slotClassComboChoice(QListViewItem*)) );
     connect( close_button, SIGNAL(clicked()),
              this, SLOT(reject()) );
     connect( digraph, SIGNAL(selected(const QString&)),
              this, SLOT(classSelected(const QString&)) );
 
     m_part = part;
-    m_part->registerHierarchyDialog(this);
+//    m_part->registerHierarchyDialog(this);
     refresh();
 }
 
 
 HierarchyDialog::~HierarchyDialog()
 {
-    m_part->unregisterHierarchyDialog(this);
+//    m_part->unregisterHierarchyDialog(this);
 }
 
 
 void HierarchyDialog::refresh()
 {
-    class_combo->clear();
     digraph->clear();
+    ViewCombosOp::refreshNamespaces(m_part, namespace_combo);
+    processNamespace("", m_part->codeModel()->globalNamespace());
 
     KDevLanguageSupport *ls = m_part->languageSupport();
-    
-    QValueList<ParsedClass*> list = m_part->classStore()->getSortedClassList();
-    QValueList<ParsedClass*>::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it) {
-        QString formattedName = ls->formatClassName((*it)->name());
-        class_combo->insertItem(formattedName);
-        QPtrListIterator<ParsedParent> it2((*it)->parents);
-        for (; it2.current(); ++it2) {
-            QString formattedParentName = ls->formatClassName(it2.current()->name());
-            digraph->addEdge(formattedParentName, formattedName);
+
+    for (QMap<QString, ClassDom>::const_iterator it = classes.begin(); it != classes.end(); ++it)
+    {
+        QString formattedName = ls->formatClassName(it.key());
+        QStringList baseClasses = it.data()->baseClassList();
+        for (QStringList::const_iterator bit = baseClasses.begin(); bit != baseClasses.end(); ++bit)
+        {
+            QMap<QString, QString>::const_iterator baseIt = uclasses.find(*bit);
+            if (baseIt != uclasses.end())
+            {
+                QString formattedParentName = ls->formatClassName(baseIt.data());
+                digraph->addEdge(formattedParentName, formattedName);
+            }
         }
     }
-
     digraph->process();
 }
-
 
 void HierarchyDialog::setLanguageSupport(KDevLanguageSupport *ls)
 {
@@ -96,11 +106,15 @@ void HierarchyDialog::setLanguageSupport(KDevLanguageSupport *ls)
 }
 
 
-void HierarchyDialog::slotClassComboChoice(const QString &text)
+void HierarchyDialog::slotClassComboChoice(QListViewItem * item)
 {
+    ClassItem *ci = dynamic_cast<ClassItem*>(item);
+    if (!ci)
+        return;
+
     KDevLanguageSupport *ls = m_part->languageSupport();
-    
-    QString className = ls->unformatClassName(text);
+
+    QString className = ls->formatClassName(uclasses[item->text(0)]);
     digraph->setSelected(className);
     digraph->ensureVisible(className);
     classSelected(className);
@@ -109,7 +123,7 @@ void HierarchyDialog::slotClassComboChoice(const QString &text)
 
 void HierarchyDialog::classSelected(const QString &className)
 {
-    ParsedClass *currentClass = m_part->classStore()->getClassByName(className);
+/*    ParsedClass *currentClass = m_part->classStore()->getClassByName(className);
     member_tree->clear();
     if (currentClass) {
         KDevLanguageSupport::Features features = m_part->languageSupport()->features();
@@ -117,6 +131,49 @@ void HierarchyDialog::classSelected(const QString &className)
             member_tree->insertAllClassMethods(currentClass, (PIAccess)-1);
         if (features & KDevLanguageSupport::Variables)
             member_tree->insertAllClassAttributes(currentClass, (PIAccess)-1);
+    }*/
+}
+
+void HierarchyDialog::slotNamespaceComboChoice( QListViewItem * item )
+{
+    NamespaceItem *ni = dynamic_cast<NamespaceItem*>(item);
+    if (!ni)
+        return;
+    ViewCombosOp::refreshClasses(m_part, class_combo, ni->dom());
+}
+
+void HierarchyDialog::processNamespace( QString prefix, NamespaceDom dom )
+{
+    qWarning("processNamespace: prefix %s", prefix.latin1());
+    QString prefixInc = prefix.isEmpty() ? "" : ".";
+//    QString nsprefix = dom->name().isEmpty() ? QString("") : prefixInc + dom->name();
+
+    NamespaceList namespaceList = dom->namespaceList();
+    for (NamespaceList::const_iterator it = namespaceList.begin(); it != namespaceList.end(); ++it)
+    {
+        qWarning("about to processNamespace: prefix %s", (prefixInc + (*it)->name()).latin1());
+        processNamespace(prefixInc + (*it)->name(), *it);
+    }
+
+    ClassList classList = dom->classList();
+    for (ClassList::const_iterator it = classList.begin(); it != classList.end(); ++it)
+    {
+        processClass(prefix, *it);
+    }
+}
+
+void HierarchyDialog::processClass( QString prefix, ClassDom dom )
+{
+    qWarning("processClass: prefix %s class %s", prefix.latin1(), dom->name().latin1());
+
+    QString prefixInc = prefix.isEmpty() ? "" : ".";
+    classes[prefix + prefixInc + dom->name()] = dom;
+    uclasses[dom->name()] = prefix + prefixInc + dom->name();
+
+    ClassList classList = dom->classList();
+    for (ClassList::const_iterator it = classList.begin(); it != classList.end(); ++it)
+    {
+        processClass(prefix + prefixInc + dom->name(), *it);
     }
 }
 

@@ -50,6 +50,7 @@ private slots:
     void slotProjectCloses();
     void refresh();
     void switchedViewPopup();
+    void graphicalClassView();
 
     void goToFunctionDeclaration();
     void goToFunctionDefinition();
@@ -61,13 +62,6 @@ private slots:
 
 private:
     void setupActions();
-    void refreshNamespaces();
-    void refreshClasses(const NamespaceDom &dom);
-    void refreshFunctions(const NamespaceDom &dom);
-    void refreshFunctions(const ClassDom &dom);
-    void processNamespace(NamespaceItem *item);
-    void processClass(ClassItem *item);
-    void processFunction(FunctionItem *item);
     bool langHasFeature(KDevLanguageSupport::Features feature);
 
     QGuardedPtr<ClassViewWidget> m_widget;

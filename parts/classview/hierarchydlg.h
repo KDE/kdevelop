@@ -14,12 +14,14 @@
 
 #include <qdialog.h>
 
+#include "codemodel.h"
+
 class ClassViewPart;
 class KDevLanguageSupport;
 class DigraphView;
 class ClassToolWidget;
-class QComboBox;
-
+class QComboView;
+class QListViewItem;
 
 class HierarchyDialog : public QDialog
 {
@@ -31,15 +33,24 @@ public:
 
 private slots:
     void setLanguageSupport(KDevLanguageSupport *ls);
-    void slotClassComboChoice(const QString &text);
+    void slotClassComboChoice(QListViewItem *item);
+    void slotNamespaceComboChoice(QListViewItem *item);
     void classSelected(const QString &className);
-    
+
 private:
     void refresh();
-    
-    QComboBox *class_combo;
+    void processNamespace(QString prefix, NamespaceDom dom);
+    void processClass(QString prefix, ClassDom dom);
+
+    QMap<QString, ClassDom> classes;
+    //QMap<class name, fully qualified class name>
+    //like MyClass - MyNamespace.MyClass
+    QMap<QString, QString> uclasses;
+
+    QComboView *namespace_combo;
+    QComboView *class_combo;
     DigraphView *digraph;
-    ClassToolWidget *member_tree;
+//    ClassToolWidget *member_tree;
     ClassViewPart *m_part;
 };
 
