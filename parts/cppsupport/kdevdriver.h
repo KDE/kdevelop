@@ -4,7 +4,7 @@
 
 #include "cppsupportpart.h"
 
-#include <kdevelop/kdevproject.h>
+#include <kdevproject.h>
 #include <kdeversion.h>
 
 #include <driver.h>
