@@ -128,11 +128,11 @@ void CDocTree::refresh(CProject* prj){
 void CDocTree::slotSingleSelected(int index){
   if(right_button){
     //cerr << itemAt(index)->getText();
-    if(QString(itemAt(index)->getText()) == "Others" ){
+    if(QString(itemAt(index)->getText()) == i18n("Others") ){
       others_pop->popup(this->mapToGlobal(mouse_pos));
      
     }
-    else if(QString(itemAt(index)->getParent()->getText()) == "Others"){
+    else if(QString(itemAt(index)->getParent()->getText()) == i18n("Others")){
       doc_pop->popup(this->mapToGlobal(mouse_pos));
     }
   }

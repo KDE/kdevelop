@@ -733,11 +733,19 @@ void CKDevelop::initToolbar(){
 }
 
 void CKDevelop::initStatusBar(){
+
+/*  statProg = new KProgress(0,100,0,KProgress::Horizontal,statusBar(),"Progressbar");
+  statProg->setBarColor("blue");
+  statProg->setBarStyle(KProgress::Solid);
+  statProg->setTextEnabled(false);
+  statProg->setBackgroundMode(PaletteBackground);
+*/
   statusBar()->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
   statusBar()->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
   statusBar()->changeItem(i18n(""), ID_STATUS_EMPTY);
   statusBar()->changeItem(i18n(""), ID_STATUS_LN_CLM);
   statusBar()->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
+//  statusBar()->insertWidget(statProg,150, ID_STATUS_PROGRESS);
   statusBar()->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
   statusBar()->setInsertOrder(KStatusBar::RightToLeft);
   statusBar()->setAlignment(ID_STATUS_INS_OVR, AlignCenter);

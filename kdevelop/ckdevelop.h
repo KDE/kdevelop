@@ -45,6 +45,7 @@ class CKDevelop;
 #include <kfiledialog.h>
 #include <kmsgbox.h>
 #include <kaccel.h>
+#include <kprogress.h>
 
 #include "caddexistingfiledlg.h"
 #include "cdocbrowser.h"
@@ -348,6 +349,8 @@ private:
   QTimer* saveTimer; // the timer
   bool bAutosave;    // enable=true
   int saveTimeout;   // timeout time
+
+//  KProgress* statProg;
   //some vars for the searchengine
   QString search_output;
   QString doc_search_text;

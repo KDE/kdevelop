@@ -95,6 +95,8 @@ void CKDevelop::slotFileSaveAll(){
   bool mod = false;
   // save current filename to switch back after saving
 	QString visibleFile = edit_widget->getName();
+	// ooops...autosave switches tabs...
+  int visibleTab=s_tab_view->getCurrentTab();
   // first the 2 current edits
   if(header_widget->isModified()){
     if(header_widget->getName() == "Untitled.h"){
@@ -141,6 +143,8 @@ void CKDevelop::slotFileSaveAll(){
   }
   // switch back to visible file
   switchToFile(visibleFile);
+  // switch back to visible tab
+  s_tab_view->setCurrentTab(visibleTab);
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotFileSaveAs(){
