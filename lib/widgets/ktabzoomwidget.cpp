@@ -96,6 +96,8 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title)
   connect(widget, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
 
   d->m_info.append(info);
+
+  emit tabsChanged();
 }
 
 
@@ -109,6 +111,7 @@ void KTabZoomWidget::widgetDeleted()
       d->m_tabBar->removeTab(i->m_barIndex);
       d->m_popup->removeTab(i->m_index);
       d->m_info.remove(i);
+      emit tabsChanged();
       return;
     }
 }
@@ -167,6 +170,17 @@ void KTabZoomWidget::selected(int index)
     }
 }
 
+void KTabZoomWidget::setFocus()
+{
+  if ( d->m_lastActiveWidget )
+    d->m_lastActiveWidget->setFocus();
+}
+
+bool KTabZoomWidget::hasFocus() const
+{
+  return d->m_lastActiveWidget && d->m_lastActiveWidget->hasFocus();
+}
+
 bool KTabZoomWidget::isDocked() const
 {
   return d->m_docked;
@@ -175,6 +189,11 @@ bool KTabZoomWidget::isDocked() const
 bool KTabZoomWidget::isRaised() const
 {
   return d->m_popup->isVisible();
+}
+
+bool KTabZoomWidget::isEmpty() const
+{
+  return d->m_info.isEmpty();
 }
 
 void KTabZoomWidget::unselected()

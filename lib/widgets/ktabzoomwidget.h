@@ -39,11 +39,17 @@ public:
  
   bool isRaised() const;
   bool isDocked() const;
+  bool hasFocus() const;
+  bool isEmpty() const; //indicates whether widget has tabs
+
+signals:
+  // emitted when a tab gets added / deleted
+  void tabsChanged();
 
 public slots:
 
   void setDockMode(bool docked);
-
+  void setFocus();
 
 private slots:
 
