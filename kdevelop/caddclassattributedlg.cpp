@@ -1,3 +1,4 @@
+
 /***************************************************************************
                cclassaddattributedlg.cpp  -  description
 
@@ -74,7 +75,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   modifierGrp.setFrameStyle( 49 );
   modifierGrp.setTitle( i18n("Modifiers") );
   QWhatsThis::add(&modifierGrp,i18n("You can set modifiers for the member variable here."));
-  
+
   // Access group
   accessGrp.setFrameStyle( 49 );
   accessGrp.setTitle( i18n("Access") );

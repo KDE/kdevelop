@@ -20,7 +20,7 @@
 
 #include "cclassview.h"
 #include "cdocbrowser.h"
-#include "ceditwidget.h"
+//#include "ceditwidget.h"
 #include "ckdevaccel.h"
 #include "clogfileview.h"
 #include "coutputwidget.h"
@@ -55,7 +55,7 @@
 
 #include <qprogressbar.h>
 
-#include "./kwrite/kwdoc.h"
+//#include "./kwrite/kwdoc.h"
 
 #undef Unsorted
 #include <qdir.h>

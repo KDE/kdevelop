@@ -20,7 +20,7 @@
 
 #include "cclassview.h"
 #include "cdocbrowser.h"
-#include "ceditwidget.h"
+//#include "ceditwidget.h"
 #include "clogfileview.h"
 #include "coutputwidget.h"
 #include "crealfileview.h"

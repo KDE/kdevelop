@@ -1,4 +1,4 @@
-s/***************************************************************************
+/***************************************************************************
   docviewman.h  -  MDI manager for
                    document classes of KDevelop (Kate::Documents, CDocBrowser)
                    and view classes of KDevelop (CEditWidget, KHTMLView)

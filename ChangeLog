@@ -1,3 +1,6 @@
+2001-12-18  Roland Krause  <rokrau@klondike.dyndns.org>
+    * fix some compilation bugs 
+
 2001-12-13  Roland Krause  <rokrau@klondike.dyndns.org>
     * remove kwrite files and directory from this branch 
 
