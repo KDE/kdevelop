@@ -427,7 +427,9 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     while ( it != projectFiles.end() )
     {
         QString file = m_part->project()->projectDirectory() + "/" + *it;
-        if ( name == QDir(file).canonicalPath() )
+        QFileInfo fileinfo(file);
+        QString canonicalFile = fileinfo.dir().canonicalPath() + "/" + fileinfo.fileName();
+        if ( name == canonicalFile )
         {
             kdDebug(9004) << "Found file in project - " << file << " == " << name << endl;
             return file;
