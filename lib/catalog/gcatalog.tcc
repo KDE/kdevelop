@@ -17,223 +17,27 @@
     Boston, MA 02111-1307, USA.
 */
 
-#include "catalog.h"
-
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdatastream.h>
 
-#include <krandomsequence.h>
-#include <kdebug.h>
-
-#include <cstring>
-#include <cstdlib>
-#include <db.h>
-
 #include <config.h>
 
-struct Catalog::Private
-{
-    QString dbName;
-
-    DB* dbp;
-    QMap<QCString, DB*> indexList;
-    KRandomSequence rnd;
-    
-    Private()
-	: dbp( 0 )
-    {
-    }
-    
-    bool hasIndex( const QCString& name ) const
-    {
-        return indexList.contains( name );
-    }
-
-    DB* index( const QCString& name )
-    {
-        return indexList[ name ];
-    }
-
-    QValueList<Tag> getAllItems( DB* dbp )
-    {
-	Q_ASSERT( dbp != 0 );
-
-	DBC* cursor;
-
-	int ret = dbp->cursor( dbp, 0, &cursor, 0 );
-	Q_ASSERT( cursor != 0 );
-
-	DBT key, data;
-	std::memset( &key, 0, sizeof(key) );
-	std::memset( &data, 0, sizeof(data) );
-
-	QValueList<Tag> tags;
-	QByteArray a2;
-	while( (ret = cursor->c_get(cursor, &key, &data, DB_NEXT)) == 0 ){
-
-	    a2.setRawData( (const char*) data.data, data.size );
-	    QDataStream s( a2, IO_ReadOnly );
-
-	    Tag tag;
-	    tag.load( s );
-
-	    a2.resetRawData( (const char*) data.data, data.size );
-
-	    tags << tag;
-	}
-
-	cursor->c_close( cursor );
-
-	return tags;
-    }
-
-
-    bool addItem( DB* dbp, const QCString& id, const Tag& tag )
-    {
-	Q_ASSERT( dbp != 0 );
-
-	DBT key, data;
-	int ret;
-
-	std::memset( &key, 0, sizeof(key) );
-	std::memset( &data, 0, sizeof(data) );
-
-	QByteArray a1;
-	{
-	    QDataStream stream( a1, IO_WriteOnly );
-	    stream << id;
-	    key.data = a1.data();
-	    key.size = a1.size();
-	}
-
-	QByteArray a2;
-	{
-	    QDataStream stream( a2, IO_WriteOnly );
-	    tag.store( stream );
-	    data.data = a2.data();
-	    data.size = a2.size();
-	}
-
-	ret = dbp->put( dbp, 0, &key, &data, 0 );
-
-	return ret == 0;
-    }
-
-    bool addItem( DB* dbp, const QVariant& id, const QCString& v )
-    {
-	Q_ASSERT( dbp != 0 );
-
-	DBT key, data;
-	int ret;
-
-	std::memset( &key, 0, sizeof(key) );
-	std::memset( &data, 0, sizeof(data) );
-
-	QByteArray a1;
-	{
-	    QDataStream stream( a1, IO_WriteOnly );
-	    stream << id;
-	    key.data = a1.data();
-	    key.size = a1.size();
-	}
-
-	QByteArray a2;
-	{
-	    QDataStream stream( a2, IO_WriteOnly );
-	    stream << v;
-	    data.data = a2.data();
-	    data.size = a2.size();
-	}
-
-	ret = dbp->put( dbp, 0, &key, &data, 0 );
-
-	return ret == 0;
-    }
-
-    bool removeItem( DB* dbp, const QCString& id )
-    {
-	Q_ASSERT( dbp != 0 );
-
-	DBT key, data;
-	std::memset( &key, 0, sizeof(key) );
-	std::memset( &data, 0, sizeof(data) );
-
-	QByteArray a1;
-	{
-	    QDataStream stream( a1, IO_WriteOnly );
-	    stream << id;
-	    key.data = a1.data();
-	    key.size = a1.size();
-	}
-
-	int ret = 0;	
-	ret = dbp->del( dbp, 0, &key, 0 );
-	Q_ASSERT( ret == 0 );
-		
-	return ret == 0;
-    }
-    
-    bool removeItem( DB* dbp, const QVariant& id, const QCString& v )
-    {
-        Q_ASSERT( dbp != 0 );
-
-        DBT key, data;
-        int ret;
-
-        std::memset( &key, 0, sizeof(key) );
-        std::memset( &data, 0, sizeof(data) );
-
-        QByteArray a1;
-        {
-            QDataStream stream( a1, IO_WriteOnly );
-            stream << id;
-            key.data = a1.data();
-            key.size = a1.size();
-        }
-
-        QByteArray a2;
-        {
-            QDataStream stream( a2, IO_WriteOnly );
-            stream << v;
-            data.data = a2.data();
-            data.size = a2.size();
-        }
-
-        DBC* dbc = 0;
- 
-	ret = dbp->cursor( dbp, 0, &dbc, 0 );
-	Q_ASSERT( ret == 0 );
-	if( ret != 0 )
-	    kdDebug() << "dbp->cursor: " << db_strerror(ret) << endl;
-     
-	ret = dbc->c_get( dbc, &key, &data, DB_GET_BOTH );
-	Q_ASSERT( ret == 0 );
-	if( ret != 0 )
-	    kdDebug() << "dbc->c_get: " << db_strerror(ret) << endl;
- 
-	ret = dbc->c_del( dbc, 0 );
-	Q_ASSERT( ret == 0 );
- 
-	dbc->c_close( dbc );
-
-        return ret == 0;
-    } 
-};
-
 /*!
-    \fn Catalog::Catalog
+    \fn GCatalog<Tp>::GCatalog
  */
-Catalog::Catalog()
-    : d( new Private )
+template <class Tp>
+inline GCatalog<Tp>::GCatalog()
+    : d( new _GCatalog_Private<Tp>() )
 {
 }
 
 /*!
-    \fn Catalog::~Catalog
+    \fn GCatalog<Tp>::~GCatalog
  */
-Catalog::~Catalog()
+template <class Tp>
+inline GCatalog<Tp>::~GCatalog()
 {
     close();
     delete( d );
@@ -241,9 +45,10 @@ Catalog::~Catalog()
 }
 
 /*!
-    \fn Catalog::indexList() const
+    \fn GCatalog<Tp>::indexList() const
  */
-QValueList<QCString> Catalog::indexList() const
+template <class Tp>
+inline QValueList<QCString> GCatalog<Tp>::indexList() const
 {
     QValueList<QCString> l;
     QMap<QCString, DB*>::Iterator it = d->indexList.begin();
@@ -256,17 +61,19 @@ QValueList<QCString> Catalog::indexList() const
 }
 
 /*!
-    \fn Catalog::hasIndex( const QString& name ) const
+    \fn GCatalog<Tp>::hasIndex( const QString& name ) const
  */
-bool Catalog::hasIndex( const QCString& name ) const
+template <class Tp>
+inline bool GCatalog<Tp>::hasIndex( const QCString& name ) const
 {
     return d->indexList.contains( name );
 }
 
 /*!
-    \fn Catalog::addIndex( const QString& name )
+    \fn GCatalog<Tp>::addIndex( const QString& name )
  */
-void Catalog::addIndex( const QCString& name )
+template <class Tp>
+inline void GCatalog<Tp>::addIndex( const QCString& name )
 {
     Q_ASSERT( d->dbp != 0 );
 
@@ -302,9 +109,10 @@ void Catalog::addIndex( const QCString& name )
 }
 
 /*!
-    \fn Catalog::removeIndex( const QString& name )
+    \fn GCatalog<Tp>::removeIndex( const QString& name )
  */
-void Catalog::removeIndex( const QCString& name )
+template <class Tp>
+inline void GCatalog<Tp>::removeIndex( const QCString& name )
 {
     QMap<QCString, DB*>::Iterator it = d->indexList.find( name );
     if( it != d->indexList.end() ){
@@ -315,9 +123,10 @@ void Catalog::removeIndex( const QCString& name )
 }
 
 /*!
-    \fn Catalog::close()
+    \fn GCatalog<Tp>::close()
  */
-void Catalog::close()
+template <class Tp>
+inline void GCatalog<Tp>::close()
 {
     d->dbName = QString::null;
 
@@ -337,9 +146,10 @@ void Catalog::close()
 }
 
 /*!
-    \fn Catalog::open( const QString& dbName )
+    \fn GCatalog<Tp>::open( const QString& dbName )
  */
-void Catalog::open( const QString& dbName )
+template <class Tp>
+inline void GCatalog<Tp>::open( const QString& dbName )
 {
     Q_ASSERT( d->dbp == 0 );
 
@@ -367,30 +177,31 @@ void Catalog::open( const QString& dbName )
 }
 
 /*!
-    \fn Catalog::dbName() const
+    \fn GCatalog<Tp>::dbName() const
  */
-QString Catalog::dbName() const
+template <class Tp>
+inline QString GCatalog<Tp>::dbName() const
 {
     return d->dbName;
 }
 
 /*!
-    \fn Catalog::isValid() const
+    \fn GCatalog<Tp>::isValid() const
  */
-bool Catalog::isValid() const
+template <class Tp>
+inline bool GCatalog<Tp>::isValid() const
 {
     return d->dbp != 0;
 }
 
 /*!
-    \fn Catalog::addItem( Tag& tag )
+    \fn GCatalog<Tp>::addItem( Tp& tag )
  */
-void Catalog::addItem( Tag& tag )
+template <class Tp>
+inline void GCatalog<Tp>::addItem( Tp& tag )
 {
-    // TODO: generate a unique ID
-    
     QCString id = generateId();
-    
+
     tag.setId( id );
     if( d->addItem(d->dbp, id, tag) ){
 	QMap<QCString, DB*>::Iterator it = d->indexList.begin();
@@ -403,12 +214,13 @@ void Catalog::addItem( Tag& tag )
 }
 
 /*!
-    \fn Catalog::removeItemById( const QCString& id )
+    \fn GCatalog<Tp>::removeItemById( const QCString& id )
  */
-bool Catalog::removeItemById( const QCString& id )
+template <class Tp>
+inline bool GCatalog<Tp>::removeItemById( const QCString& id )
 {
-    Tag tag = getItemById( id );
-    
+    Tp tag = getItemById( id );
+
     QMap<QCString, DB*>::Iterator it = d->indexList.begin();
     while( it != d->indexList.end() ){
 	if( tag.hasAttribute(it.key()) )
@@ -420,17 +232,19 @@ bool Catalog::removeItemById( const QCString& id )
 }
 
 /*!
-    \fn Catalog::removeItem( const Tag& tag )
+    \fn GCatalog<Tp>::removeItem( const Tp& tag )
  */
-bool Catalog::removeItem( const Tag& tag )
+template <class Tp>
+inline bool GCatalog<Tp>::removeItem( const Tp& tag )
 {
    return removeItemById( tag.id() );
 }
 
 /*!
-    \fn Catalog::getItemById( const QString& id )
+    \fn GCatalog<Tp>::getItemById( const QString& id )
  */
-Tag Catalog::getItemById( const QCString& id )
+template <class Tp>
+inline Tp GCatalog<Tp>::getItemById( const QCString& id )
 {
     Q_ASSERT( d->dbp != 0 );
 
@@ -449,7 +263,7 @@ Tag Catalog::getItemById( const QCString& id )
     int ret = d->dbp->get( d->dbp, 0, &key, &data, 0 );
     Q_ASSERT( ret == 0 );
 
-    Tag tag;
+    Tp tag;
 
     if( ret == 0 ){
 	QByteArray a;
@@ -463,17 +277,19 @@ Tag Catalog::getItemById( const QCString& id )
 }
 
 /*!
-    \fn Catalog::getAllItems()
+    \fn GCatalog<Tp>::getAllItems()
  */
-QValueList<Tag> Catalog::getAllItems()
+template <class Tp>
+inline QValueList<Tp> GCatalog<Tp>::getAllItems()
 {
     return d->getAllItems( d->dbp );
 }
 
 /*!
-    \fn Catalog::sync()
+    \fn GCatalog<Tp>::sync()
 */
-void Catalog::sync()
+template <class Tp>
+inline void GCatalog<Tp>::sync()
 {
     Q_ASSERT( d->dbp != 0 );
     d->dbp->sync( d->dbp, 0 );
@@ -486,11 +302,12 @@ void Catalog::sync()
 }
 
 /*!
-    \fn Catalog::query( const QValueList<QueryArgument>& args )
+    \fn GCatalog<Tp>::query( const QValueList<QueryArgument>& args )
 */
-QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
+template <class Tp>
+inline QValueList<Tp> GCatalog<Tp>::query( const QValueList<QueryArgument>& args )
 {
-    QValueList<Tag> tags;
+    QValueList<Tp> tags;
 
     DBT key, data;
 
@@ -547,7 +364,7 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
 	{
 	    a2.setRawData( (const char*) data.data, data.size );
 	    QDataStream s( a2, IO_ReadOnly );
-	    Tag tag;
+	    Tp tag;
 	    tag.load( s );
 	    a2.resetRawData( (const char*) data.data, data.size );
 	    tags << tag;
@@ -565,7 +382,8 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
     return tags;
 }
 
-void Catalog::removeItems( const QValueList< QueryArgument > & args )
+template <class Tp>
+inline void GCatalog<Tp>::removeItems( const QValueList< QueryArgument > & args )
 {
     DBT key, data;
 
@@ -646,23 +464,25 @@ void Catalog::removeItems( const QValueList< QueryArgument > & args )
     }
 }
 
-QCString Catalog::generateId()
+template <class Tp>
+inline QCString GCatalog<Tp>::generateId()
 {
     QCString asStr;
     int n = 0;
     for( ;; ){
 	++n;
-	
+
 	unsigned long l = d->rnd.getLong( 999999 );
 	asStr.setNum( l );
-	
+
 	if( !hasItem(asStr) ){
 	    return asStr;
 	}
-    } 
+    }
 }
 
-bool Catalog::hasItem( const QCString & id )
+template <class Tp>
+inline bool GCatalog<Tp>::hasItem( const QCString & id )
 {
     Q_ASSERT( d->dbp != 0 );
 

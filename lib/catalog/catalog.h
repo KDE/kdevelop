@@ -20,51 +20,13 @@
 #ifndef CATALOG_H
 #define CATALOG_H
 
+#include "gcatalog.h"
 #include "tag.h"
 
-#include <qvaluelist.h>
-#include <qpair.h>
-
-class Catalog
+class Catalog: public GCatalog<Tag>
 {
 public:
-    typedef QPair<QCString, QVariant> QueryArgument;
-
-public:
-    Catalog();
-    virtual ~Catalog();
-
-    bool isValid() const;
-    QString dbName() const;
-
-    virtual void open( const QString& dbName );
-    virtual void close();
-    virtual void sync();
-
-    QValueList<QCString> indexList() const;
-    bool hasIndex( const QCString& name ) const;
-    void addIndex( const QCString& name );
-    void removeIndex( const QCString& name );
-
-    void addItem( Tag& tag );
-    bool removeItem( const Tag& id );
-    bool removeItemById( const QCString& id );
-    void removeItems( const QValueList<QueryArgument>& args );
-
-    Tag getItemById( const QCString& id );
-    bool hasItem( const QCString& id );
-    QValueList<Tag> getAllItems();
-    QValueList<Tag> query( const QValueList<QueryArgument>& args );
-    
-    QCString generateId();
-
-private:
-    class Private;
-    Private* d;
-
-private:
-    Catalog( const Catalog& source );
-    void operator = ( const Catalog& source );
+    Catalog(): GCatalog<Tag>() {}
 };
 
 #endif
