@@ -144,7 +144,7 @@ int main( int argc, char* argv[] )
     driver.setResolveDependencesEnabled( true );
     KStandardDirs stddir;   
 
-    if( argc < 2 ){
+    if( argc < 3 ){
         std::cerr << "usage: r++ dbname directories..." << std::endl << std::endl;     
         return -1;
     }
