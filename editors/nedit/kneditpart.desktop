@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=NEdit support
+Comment[ar]=NEdit دعم
 Comment[ca]=Suport per a NEdit
 Comment[da]=NEdit støtte
 Comment[de]=Unterstützung für NEdit
@@ -30,6 +31,7 @@ Name[hi]=एन-एडिट
 Name[sv]=Nedit
 Name[ta]=Nதொகுப்பு
 GenericName=NEdit Support
+GenericName[ar]=NEdit مساعدة
 GenericName[ca]=Suport per a NEdit
 GenericName[da]=Støtte for NEdit
 GenericName[de]=Unterstützung für NEdit
