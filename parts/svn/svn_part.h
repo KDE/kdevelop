@@ -26,6 +26,7 @@
 #include <subversion-1/svn_client.h>
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
+#include "commitdlg.h"
 
 class SvnPart : public KDevPlugin
 {
@@ -49,6 +50,7 @@ class SvnPart : public KDevPlugin
 		//debug and info messages
 		void svnDebug(const char *dbg);
 		void svnMsg(const char *msg);
+		void svnLog(const char *msg);
 		//to receive logs from the lib
 		static svn_error_t *log_msg_receiver(void *baton, apr_hash_t *changed_paths, svn_revnum_t rev, 
 				const char *author, const char *date, const char *msg, apr_pool_t *pool);
@@ -72,6 +74,7 @@ class SvnPart : public KDevPlugin
 		void print_short_format (const char *path, svn_wc_status_t *status);
 		void print_long_format (const char *path, svn_boolean_t show_last_committed, 
 				svn_wc_status_t *status);
+		int num_lines(const char *msg);
 
 	private slots:
 		void contextMenu(QPopupMenu *popup, const Context *context);
@@ -95,7 +98,7 @@ class SvnPart : public KDevPlugin
 		QString auth_password;
 
 		apr_pool_t *pool;
-		apr_status_t apr_err;
+		CommitDialog *winlog;
 
 		struct log_msg_baton
 		{

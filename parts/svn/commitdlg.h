@@ -10,9 +10,10 @@ class CommitDialog : public QDialog
 {
 	public:
 		CommitDialog();
-		QString logMessage()
-		{ return edit->text(); }
+		QString logMessage() { return edit->text(); }
 		void setLog(QString msg) { edit->setText(msg); }
+		void append(QString msg) { edit->setText(edit->text()+"\n"+msg); }
+		void clear() { edit->setText(""); }
 
 	private:
 		QMultiLineEdit *edit;

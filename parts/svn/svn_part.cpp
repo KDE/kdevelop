@@ -43,6 +43,7 @@
 #include <subversion-1/svn_path.h>
 #include <subversion-1/svn_utf.h>
 #include <subversion-1/svn_sorts.h>
+#include <subversion-1/svn_time.h>
 #include <apr_hash.h>
 #include <apr_tables.h>
 #include "svnoptionswidget.h"
@@ -63,7 +64,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevsvn, svnFactory( "kdevsvn" ) );
 			this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 	connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 			this, SLOT(projectConfigWidget(KDialogBase*)) );
-	apr_err = apr_initialize ();
+	apr_status_t apr_err = apr_initialize ();
 	if (apr_err)
 	{//error , popup something ...
 	}
@@ -74,12 +75,14 @@ K_EXPORT_COMPONENT_FACTORY( libkdevsvn, svnFactory( "kdevsvn" ) );
 		svn_pool_destroy (pool);
 	}
 	readConf();
+	winlog = new CommitDialog();
 }
 
 SvnPart::~SvnPart()
 {
 	svn_pool_destroy (pool);
 	apr_terminate();
+	delete winlog;
 }
 
 void SvnPart::contextMenu(QPopupMenu *popup, const Context *context) {
@@ -524,11 +527,16 @@ void SvnPart::get_notifier(svn_wc_notify_func_t *notify_func_p, void **notify_ba
 }
 
 void SvnPart::svnDebug(const char *dbg) {
-	me->appFrontend()->insertStderrLine(dbg);
+	appFrontend()->insertStderrLine(dbg);
+}
+
+void SvnPart::svnLog(const char *msg) {
+	if (winlog)
+		winlog->append(msg);
 }
 
 void SvnPart::svnMsg(const char *msg) {
-	me->appFrontend()->insertStdoutLine(msg);
+	appFrontend()->insertStdoutLine(msg);
 }
 
 void SvnPart::Error(svn_error_t *err) {
@@ -562,25 +570,144 @@ void SvnPart::handleSvnError(svn_error_t *err, int depth, apr_status_t parent_ap
 }
 
 void SvnPart::slotLog() {
-#if 0
 	svn_client_auth_baton_t *auth_baton=createAuthBaton();
 	apr_array_header_t *targets = apr_array_make (pool, 5, sizeof (const char *));
 	struct log_message_receiver_baton lb;
+	svn_client_revision_t start;
+	svn_client_revision_t end;
+
+	start.kind=svn_client_revision_head;
+	end.kind=svn_client_revision_number;
+	end.value.number=1;
+
+	winlog->clear();
 
 	(*((const char **) apr_array_push ((apr_array_header_t*)targets))) = apr_pstrdup (pool, popupfile.utf8());
-	svn_error_t *err = svn_client_log (auth_baton,targets,
-                const svn_client_revision_t *start,
-                const svn_client_revision_t *end,
+	svn_error_t *err = svn_client_log (auth_baton,targets, &start, &end,
                 true,//option XXX discover_changed_paths
                 false, //option XXX strict_node_history
                 log_msg_receiver,
-                lb, pool);
-#endif
+                &lb, pool);
+	if (err)
+		Error(err);
+	else
+		winlog->show();
 }
 
 svn_error_t *SvnPart::log_msg_receiver(void *baton, apr_hash_t *changed_paths, svn_revnum_t rev, 
 		const char *author, const char *date, const char *msg, apr_pool_t *pool) {
+	struct log_message_receiver_baton *lb = (log_message_receiver_baton*)baton;
+	const char *author_native, *date_native, *msg_native;
+	svn_error_t *err;
 
+	/* Number of lines in the msg. */
+	int lines;
+
+	if (rev == 0)
+	{
+		me->svnMsg ("No commit for revision 0.");
+		return SVN_NO_ERROR;
+	}
+
+	/* ### See http://subversion.tigris.org/issues/show_bug.cgi?id=807
+	   for more on the fallback fuzzy conversions below. */
+
+	if (author == NULL)
+		author = "(no author)";
+
+	err = svn_utf_cstring_from_utf8 (&author_native, author, pool);
+	if (err && (APR_STATUS_IS_EINVAL (err->apr_err)))
+		author_native = svn_utf_cstring_from_utf8_fuzzy (author, pool);
+	else if (err)
+		return err;
+
+	if (date && date[0])
+	{
+		/* Convert date to a format for humans. */
+		apr_time_t time_temp;
+
+		SVN_ERR (svn_time_from_nts (&time_temp, date, pool));
+		date = svn_time_to_human_nts(time_temp, pool);
+	}
+	else
+		date = "(no date)";
+
+	err = svn_utf_cstring_from_utf8 (&date_native, date, pool);
+	if (err && (APR_STATUS_IS_EINVAL (err->apr_err)))   /* unlikely! */
+		date_native = svn_utf_cstring_from_utf8_fuzzy (date, pool);
+	else if (err)
+		return err;
+
+	if (msg == NULL)
+		msg = "";
+
+	err = svn_utf_cstring_from_utf8 (&msg_native, msg, pool);
+	if (err && (APR_STATUS_IS_EINVAL (err->apr_err)))
+		msg_native = svn_utf_cstring_from_utf8_fuzzy (msg, pool);
+	else if (err)
+		return err;
+
+#define SEP_STRING \
+	"------------------------------------------------------------------------"
+
+		if (lb->first_call)
+		{
+			me->svnLog (SEP_STRING);
+			lb->first_call = 0;
+		}
+
+	lines = me->num_lines (msg_native);
+	QString mg;
+	mg.sprintf ("rev %" SVN_REVNUM_T_FMT ":  %s | %s | %d line%s",
+			rev, author_native, date_native, lines, (lines > 1) ? "s" : "");
+	me->svnLog(mg);
+
+	if (changed_paths)
+	{
+		apr_array_header_t *sorted_paths;
+		int i;
+
+		/* Get an array of sorted hash keys. */
+		sorted_paths = apr_hash_sorted_keys (changed_paths, svn_sort_compare_items_as_paths, pool);
+
+		/* Note: This is the only place we need a pool, and therefore
+		   one might think we could just get it via
+		   apr_hash_pool_get().  However, that accessor will never be
+		   able to qualify its hash table parameter with `const',
+		   because it is a read/write accessor defined by
+		   APR_POOL_DECLARE_ACCESSOR().  Since I still hold out hopes of
+		   one day being able to constify `changed_paths' -- only some
+		   bizarre facts about apr_hash_first() currently prevent it --
+		   might as well just have the baton w/ pool ready right now, so
+		   it doesn't become an issue later. */
+
+		me->svnLog("Changed paths:");
+		for (i = 0; i < sorted_paths->nelts; i++)
+		{
+			svn_item_t *item = &(APR_ARRAY_IDX (sorted_paths, i, svn_item_t));
+			const char *path_native, *path = (const char*)item->key;
+			svn_log_changed_path_t *log_item 
+				= (svn_log_changed_path_t*)apr_hash_get (changed_paths, (const char*)item->key, item->klen);
+			const char *copy_data = "";
+
+			if (log_item->copyfrom_path && SVN_IS_VALID_REVNUM (log_item->copyfrom_rev))
+			{
+				SVN_ERR (svn_utf_cstring_from_utf8 (&path_native, log_item->copyfrom_path, pool));
+				copy_data 
+					= apr_psprintf (pool, " (from %s:%" SVN_REVNUM_T_FMT ")", path_native,
+							log_item->copyfrom_rev);
+			}
+			SVN_ERR (svn_utf_cstring_from_utf8 (&path_native, path, pool));
+			mg.sprintf ("   %c %s%s", log_item->action, path_native, copy_data);
+			me->svnLog(mg);
+		}
+	}
+	me->svnLog(" ");  /* A blank line always precedes the log message. */
+	mg.sprintf ("%s", msg_native);
+	me->svnLog(mg);
+	me->svnLog(SEP_STRING);
+
+	return SVN_NO_ERROR;
 }
 
 void SvnPart::slotDiff() {
@@ -929,5 +1056,29 @@ void SvnPart::notify (void *baton, const char *path, svn_wc_notify_action_t acti
 
 	svn_pool_destroy (subpool);
 }
+
+int SvnPart::num_lines(const char *msg) {
+	int count = 1;
+	const char *p;
+
+	for (p = msg; *p; p++)
+	{
+		if (*p == '\n')
+		{
+			count++;
+			if (*(p + 1) == '\r')
+				p++;
+		}
+		else if (*p == '\r')
+		{
+			count++;
+			if (*(p + 1) == '\n')
+				p++;
+		}
+	}
+
+	return count;
+}
+
 #include "svn_part.moc"
 /* vim: set ai ts=8 sw=8 : */
