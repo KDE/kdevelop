@@ -11,9 +11,6 @@ High priority tasks!
     desired: a menu option to "cd" to that directory
   * CTRL-C doesn't work
   
-* cvs commands don't work when the message contains those unfortunate characters
-  desired: whatever you type in message box it should work
-
 2. KDevelop 2 compatibility
 ---------------------------
 

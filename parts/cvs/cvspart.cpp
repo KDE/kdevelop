@@ -91,9 +91,9 @@ void CvsPart::slotCommit()
 
     QString command("cd ");
     command += dir;
-    command += " && cvs commit -m \'";
+    command += " && cvs commit -m ";
     command += message;
-    command += "\' ";
+    command += " ";
     command += name;
 
     makeFrontend()->queueCommand(dir, command);

@@ -11,6 +11,7 @@
 
 #include "ctagspart.h"
 
+#include <qapplication.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <klocale.h>
@@ -266,7 +267,12 @@ bool CTagsPart::createTagsFile()
 
     KShellProcess proc("/bin/sh");
     proc << cmd;
-    return proc.start(KProcess::Block);
+
+    QApplication::setOverrideCursor(Qt::waitCursor);
+    bool success = proc.start(KProcess::Block);
+    QApplication::restoreOverrideCursor();
+    
+    return success;
 }
 
 #include "ctagspart.moc"
