@@ -24,7 +24,7 @@
 #include <kparts/part.h>
 
 
-typedef QMap<QString, QString> NotesMap;
+typedef QMap<int, QString> NotesMap;
 
 class KIconView;
 class QIconViewItem;

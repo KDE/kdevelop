@@ -37,8 +37,7 @@ KDevPlugin::~KDevPlugin()
 
 QString KDevPlugin::pluginName() const
 {
-    // ### fix me
-    return d->name;
+    return d->pluginName;
 }
 
 QString KDevPlugin::icon() const
@@ -156,7 +155,7 @@ void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 void KDevPlugin::showPart()
 {
     if( part() )
-        partController()->showPart( part(), pluginName(), shortDescription() );
+        partController()->showPart( part(), d->pluginName, shortDescription() );
 }
 
 #include "kdevplugin.moc"

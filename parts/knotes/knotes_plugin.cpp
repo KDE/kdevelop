@@ -36,7 +36,7 @@ typedef KGenericFactory<KNotesPlugin> KNotesPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevnotes, KNotesPluginFactory( "kdevnotes" ) );
 
 KNotesPlugin::KNotesPlugin( QObject* parent, const char *name, const QStringList &)
-    : KDevPlugin(i18n("Notes"), "knotes", parent, name), m_part(0)
+    : KDevPlugin(i18n("Notes"), "knotes", parent, name ? name : "KDevNotes" ), m_part(0)
 {
     setInstance(KNotesPluginFactory::instance());
 
@@ -59,7 +59,6 @@ KParts::Part* KNotesPlugin::part()
 {
     if (!m_part){
 	m_part = new KNotesPart(this, "notes");
-	(void) dcopClient();
     }
 
     return m_part;

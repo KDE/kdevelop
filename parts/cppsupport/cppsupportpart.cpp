@@ -103,10 +103,10 @@ typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "CppSupportPart"), 
+    : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"), 
       m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
-{    
+{
     setInstance(CppSupportFactory::instance());
 
     setXMLFile("kdevcppsupport.rc");
@@ -190,7 +190,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                           .namedItem( "cppsupportpart" ).toElement( )
                           .namedItem( "codecompletion" ).toElement( );
     new KDevCppSupportIface( this );
-    (void) dcopClient();
+    //(void) dcopClient();
 }
 
 

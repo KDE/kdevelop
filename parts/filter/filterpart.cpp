@@ -47,7 +47,7 @@ FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
     m_filterDialog = 0;    
     
     new KDevFilterIface( this );
-    (void) dcopClient();
+    // (void) dcopClient();
 }
 
 
