@@ -1,7 +1,17 @@
+2001-02-24  jbb <jbb@kdevelop.org>
+    * Fixed: after a distclean if the qt dir wasn't entered then the
+      configure args ended up being "--with-qt-dir= ". This failed the
+      qt configure test.
+
 2001-02-23  jbb <jbb@kdevelop.org>
     * Fixed Multiple tools beng started after adding a tool
       grep support for Solaris - find params needed adjusting
       Update of QExtMDI template.
+
+2001-02-20ish
+    * kdevelop1.4 tagged for release as KDE_2_1_RELEASE. If you 
+      want bug fixes and other small enhancements then continue to
+      extract kdevelop using the branch of KDEVELOP_1_4.
 
 2000-12-30  jbb <jbb@kdevelop.org>
     * Ported 1.3 to kde2 - This is an interim version that

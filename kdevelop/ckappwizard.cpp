@@ -2331,17 +2331,24 @@ void CKAppWizard::slotProcessExited() {
     KConfig * config = KGlobal::config();
     config->setGroup("QT2");
     QString qtpath=config->readEntry("qt2dir");
-    if(qtpath.right(1) == "/")
-      qtpath=qtpath.remove(qtpath.length()-1,1);
-    if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() )
-      project->setConfigureArgs("--with-qt-dir="+qtpath);
-    else if( qextmdiitem->isSelected())
-      project->setConfigureArgs("--with-qt-dir="+qtpath+" --enable-kde=no");   
-    else{
-      QString kde2path=config->readEntry("kde2dir");
-      if(kde2path.right(1) == "/")
-        kde2path=kde2path.remove(kde2path.length()-1,1);
-      project->setConfigureArgs("--with-qt-dir="+qtpath+" --prefix="+kde2path);
+    if (qtpath.isEmpty())
+    {
+      project->setConfigureArgs("");
+    }
+    else
+    {
+      if(qtpath.right(1) == "/")
+        qtpath=qtpath.remove(qtpath.length()-1,1);
+      if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() )
+        project->setConfigureArgs("--with-qt-dir="+qtpath);
+      else if( qextmdiitem->isSelected())
+        project->setConfigureArgs("--with-qt-dir="+qtpath+" --enable-kde=no");
+      else{
+        QString kde2path=config->readEntry("kde2dir");
+        if(kde2path.right(1) == "/")
+          kde2path=kde2path.remove(kde2path.length()-1,1);
+        project->setConfigureArgs("--with-qt-dir="+qtpath+" --prefix="+kde2path);
+      }
     }
   }
   QStrList sub_dir_list;
