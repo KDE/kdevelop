@@ -1,3 +1,7 @@
+2002-04-19  Harald Fernengel <harry@kdevelop.org>
+
+        * make outputwidget now locale aware
+
 2002-04-18  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* filter plugin
@@ -93,7 +97,7 @@
 2002-04-09 Roberto Raggi <raggi@cli.di.unipi.it>
 	* fixed crash in KDevDocTree
 	* removed qextmdi from kdevelop directory
-	
+
 2002-04-09  Simon Hausmann <hausmann@kde.org>
 
 	* cleanups in the servicetype definitions. Added proper inheritance
@@ -124,7 +128,7 @@
 
 2002-04-08  Roberto Raggi <raggi@cli.di.unipi.it>
 	* Fixed text insertion in Multi-language code template
-	
+
 2002-04-07  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Fixed existing and potential memory leaks in class store
 	  with a more modern api. Big textual changes, no changes 
