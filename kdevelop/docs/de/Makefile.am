@@ -4,8 +4,8 @@
 EXTRA_DIST = tipdatabase 
 
 install-data-local:
-	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/
-	$(INSTALL_DATA) tipdatabase $(kde_htmldir)/de/kdevelop/tipdatabase
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) tipdatabase $(DESTDIR)$(kde_htmldir)/de/kdevelop/tipdatabase
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/de/kdevelop/tipdatabase
