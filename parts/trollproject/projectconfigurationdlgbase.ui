@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>199</width>
-            <height>123</height>
+            <width>336</width>
+            <height>306</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,7 +22,10 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Project configuration</string>
+        <string>Qmake Project Configuration</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string>Requires support for multi-threaded application or library.</string>
     </property>
     <grid>
         <property name="name">
@@ -34,61 +37,9 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>groupBuildMode</cstring>
-            </property>
-            <property name="title">
-                <string>Build mode</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Set project to be build in release mode</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioDebugMode</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Debug</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Set project to be build in debug mode</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>radioReleaseMode</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Release</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Set project to be build in release mode</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>buttonOk</cstring>
-            </property>
-            <property name="text">
-                <string>Ok</string>
-            </property>
-        </widget>
         <spacer row="1" column="0">
             <property name="name">
-                <cstring>Spacer1</cstring>
+                <cstring>Spacer1_2</cstring>
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
@@ -103,6 +54,232 @@
                 </size>
             </property>
         </spacer>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>buttonCancel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Ok</string>
+            </property>
+        </widget>
+        <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>TabBuild</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>B&amp;asics</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QButtonGroup" row="0" column="0">
+                        <property name="name">
+                            <cstring>groupTemplate</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Template</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioApplication</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Application</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Create an application</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioLibrary</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Library</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Create a library</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioSubdirs</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Subdirs</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>This project holds subdirs</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Build &amp;Mode</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>groupRequirements</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Requirements</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>checkQt</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Qt</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires the Qt header files/library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="0">
+                                <property name="name">
+                                    <cstring>checkOpenGL</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Open&amp;GL</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires the OpenGL (or Mesa) headers/libraries</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>checkX11</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;X11</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>checkThread</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Thread</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>groupBuildMode</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Build mode</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Set project to be build in release mode</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioDebugMode</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Debug</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be build in debug mode</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioReleaseMode</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Release</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be build in release mode</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>checkWarning</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Enable &amp;warnings</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Show compiler warnings</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -112,7 +289,28 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>accept()</slot>
     </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
 </connections>
+<tabstops>
+    <tabstop>TabBuild</tabstop>
+    <tabstop>radioApplication</tabstop>
+    <tabstop>radioLibrary</tabstop>
+    <tabstop>radioSubdirs</tabstop>
+    <tabstop>radioDebugMode</tabstop>
+    <tabstop>radioReleaseMode</tabstop>
+    <tabstop>checkWarning</tabstop>
+    <tabstop>checkQt</tabstop>
+    <tabstop>checkOpenGL</tabstop>
+    <tabstop>checkThread</tabstop>
+    <tabstop>checkX11</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
 <includes>
     <include location="local" impldecl="in declaration">configdefinitions.h</include>
 </includes>
