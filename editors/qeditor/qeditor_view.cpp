@@ -476,6 +476,11 @@ void QEditorView::doFind()
 
     if( m_findDialog->exec() ){
         m_options = m_findDialog->options();
+		if ( m_find )
+		{
+			m_find->abort();
+			delete m_find;
+		}
         m_find = new KoFind( m_findDialog->pattern(), m_findDialog->options() );
         connect( m_find, SIGNAL(highlight(const QString&,int,int,const QRect&)),
                  this, SLOT(highlight(const QString&,int,int,const QRect&)) );
@@ -491,6 +496,11 @@ void QEditorView::doReplace()
 
     if( m_replaceDialog->exec() ){
         m_options = m_replaceDialog->options();
+		if ( m_replace )
+		{
+			m_replace->abort();
+			delete m_replace;
+		}
         m_replace = new KoReplace( m_replaceDialog->pattern(), m_replaceDialog->replacement(),
                                    m_replaceDialog->options() );
         connect( m_replace, SIGNAL(highlight(const QString&,int,int,const QRect&)),
