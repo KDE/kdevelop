@@ -81,7 +81,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,appl_process("/bin/sh")
   ,shell_process("/bin/sh")
   ,search_process("/bin/sh")
-
+  ,m_print_process("/bin/sh")
+  ,m_preview_process("/bin/sh")
   ,dbgController(0L)
   ,dbgToolbar(0L)
   ,var_viewer(0L)
@@ -166,11 +167,9 @@ CKDevelop::~CKDevelop()
   {
     config->setGroup("General Options");
     config->writeEntry("ShutdownOK", true);
+    // i believe this is necessary to guarantee the config is written
+    config->sync();
   }
-
-  // from Constructur... delete everything which is not constructed
-  //   with a binding to the application
-//  delete error_parser;
 }
 
 void CKDevelop::initView()

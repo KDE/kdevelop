@@ -22,13 +22,13 @@
 #include "cproject.h"
 #include "ctreehandler.h"
 #include "resource.h"
-#include <kpp.h>
+#include "kpp/kpp.h"
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>
 #include <khelpmenu.h>
 #include <kcompletion.h>
-#include <widgets/qextmdi/include/qextmdimainfrm.h>
+#include "widgets/qextmdi/include/qextmdimainfrm.h"
 
 #include <kopenwith.h>
 #include <kprocess.h>
@@ -805,6 +805,12 @@ protected: // Protected methods
   void CVRefreshMethodCombo( CParsedClass *aClass );
 
 public: // Public methods
+
+  /** access to the print_process */
+  KShellProcess* print_process() const ;
+  /** access to the print preview process */
+  KShellProcess* preview_process() const ;
+
   bool isFileInBuffer(QString abs_filename);
 
   /** a tool meth,used in the search engine*/
@@ -903,11 +909,19 @@ private:
   KShellProcess shell_process;
   /** search with glimpse */
   KShellProcess search_process;
+  /** print process */
+  KShellProcess m_print_process;
+  /** print preview process */
+  KShellProcess m_preview_process;
+
   /** at the moment only one project at the same time */
   CProject* prj;
 
   CKDevAccel *accel;
+
+  /** global configuration file for KDevelop contains the project */
   KConfig* config;
+
   int act_outbuffer_len;
 
 //  QStringList recent_projects;

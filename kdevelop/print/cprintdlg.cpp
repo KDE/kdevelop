@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "../ckdevelop.h"
 #include "cprintdlg.h"
 
 #include "cfileprintdlg.h"
@@ -36,6 +36,7 @@
 #include <qwhatsthis.h>
 #include <qgrid.h>
 
+class CKDevelop;
 //#include <string.h>
 
 // Remove all null parameters (ie of the form "xyz= ")
@@ -67,6 +68,9 @@ CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool 
 	oldfiles = (QString) edittab;
   files = createFileString();
   doctab = html;
+  // the processes are maintained by CKDevelop
+  print_process = (dynamic_cast<CKDevelop*>(parent))->print_process();
+  preview_process = (dynamic_cast<CKDevelop*>(parent))->preview_process();
 }
 
 CPrintDlg::~CPrintDlg(){
@@ -1021,48 +1025,56 @@ void CPrintDlg::slotPreviewClicked() {
     }
     data1 = locate("appdata", "templates/preview1");
     data2 = locate("appdata", "templates/preview2");
-    process = new KShellProcess();
+
+    //process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
       text = (QString) " --output="+ dir;
       settings = KGlobal::config();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
       slotCreateParameters();
-      *process << removeNullParams("enscript " + string + " " + text + " " + files);
+      print_process->clearArguments();
+      *print_process << removeNullParams("enscript " + string + " " + text + " " + files);
     }
     else {
       //settings = KGlobal::config();
       //settings->setGroup("LastSettings");
       //  globalpara = settings->readEntry("A2psSettings");
       slotCreateParameters();
-      *process << removeNullParams("a2ps " + string + " -o " + dir + " " + files);
+      print_process->clearArguments();
+      *print_process << removeNullParams("a2ps " + string + " -o " + dir + " " + files);
     }
-    process->start(KProcess::Block,KProcess::AllOutput);
-    delete (process);
-    process2 = new KShellProcess();
+    print_process->start(KProcess::Block,KProcess::AllOutput);
+    //delete (process);
+    //process2 = new KShellProcess();
+    preview_process->clearArguments();
     if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
-      *process2 << "kdehelp";
-      *process2 << dir;
-      process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      *preview_process << "kdehelp";
+      *preview_process << dir;
+      preview_process->start(KProcess::NotifyOnExit,KProcess::AllOutput);
       return;
     }
     else {
+      /* NOTE: gv and ghostview will get removed soon, they are
+       * obsolete and can be replace by an embedded kghostview part
+       * (rokrau)
+       */
       if (lookProgram("gv")) {
-	*process2 << "gv";
-	*process2 << dir;
-	process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	*preview_process << "gv";
+	*preview_process << dir;
+	preview_process->start(KProcess::NotifyOnExit,KProcess::AllOutput);
 	return;
       }
       else if (lookProgram("ghostview")) {
-	*process2 << "ghostview";
-	*process2 << dir;
-	process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	*preview_process << "ghostview";
+	*preview_process << dir;
+	preview_process->start(KProcess::NotifyOnExit,KProcess::AllOutput);
 	return;
       }
       else if (lookProgram("kghostview")) {
-	*process2 << "kghostview";
-	*process2 << dir;
-	process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	*preview_process << "kghostview";
+	*preview_process << dir;
+	preview_process->start(KProcess::NotifyOnExit,KProcess::AllOutput);
 	return;
       }
     }
@@ -1130,6 +1142,9 @@ void CPrintDlg::slotPrintToFileDlgClicked() {
 //}
 
 void CPrintDlg::slotOkClicked() {
+
+    debug ("in CPrintDlg::slotOkClicked");
+
   settings = KGlobal::config();
   settings->setGroup("PrintDialog");
   settings->writeEntry("Program",programCombBox->currentItem());
@@ -1170,7 +1185,7 @@ void CPrintDlg::slotOkClicked() {
     QString dir="";
     QString data1,data2;
     QString text="";
-    process = new KShellProcess();
+    //process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
       if (printToFileButton->isChecked()) {
 	dir =  printToFileLine->text();
@@ -1179,10 +1194,20 @@ void CPrintDlg::slotOkClicked() {
 	settings->setGroup("LastSettings");
 	globalpara = settings->readEntry("EnscriptSettings");
 	slotCreateParameters();
-	process->clearArguments();
-	*process << removeNullParams("enscript " + string + text + " " + files);
-//	cerr << "enscript " + string + text + " " + files << endl;
-	process->start(KProcess::Block,KProcess::AllOutput);
+	print_process->clearArguments();
+//	*print_process << removeNullParams("enscript " + string + text + " " + files);
+	*print_process << "enscript" ;
+	*print_process << string ;
+	*print_process << text ;
+	*print_process << files ;
+
+        QString dbg_string1 = "print command: enscript " + string + text + files ;
+        debug(dbg_string1);
+	bool success = print_process->start(KProcess::Block,KProcess::AllOutput);
+        QString dbg_string2 = "printing ";
+        if (success) dbg_string2 += "was succesful";
+        else dbg_string2 += "has failed";
+        debug(dbg_string2);
       }
       else {
 	settings = KGlobal::config();
@@ -1190,9 +1215,9 @@ void CPrintDlg::slotOkClicked() {
 	globalpara = settings->readEntry("EnscriptSettings");
 	slotCreateParameters();
 	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-	  process->clearArguments();
-	  *process << removeNullParams("enscript " + string + " " + files);
-	  process->start(KProcess::Block,KProcess::AllOutput);
+	  print_process->clearArguments();
+	  *print_process << removeNullParams("enscript " + string + " " + files);
+	  print_process->start(KProcess::Block,KProcess::AllOutput);
 	}
       }
     }
@@ -1205,37 +1230,37 @@ void CPrintDlg::slotOkClicked() {
       slotCreateParameters();
       if (printToFileButton->isChecked()) {
 	dir =  printToFileLine->text();
-	process->clearArguments();
+	print_process->clearArguments();
 //	cerr << "a2ps " + string + " -o " + dir + " " + files << endl;
-	*process << removeNullParams("a2ps " + string + " -o " + dir + " " + files);
-	process->start(KProcess::Block,KProcess::AllOutput);
+	*print_process << removeNullParams("a2ps " + string + " -o " + dir + " " + files);
+	print_process->start(KProcess::Block,KProcess::AllOutput);
       }
       else {
 	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-	  process->clearArguments();
-	  *process << removeNullParams("a2ps " + string + " " + files);
-	  process->start(KProcess::Block,KProcess::AllOutput);
+	  print_process->clearArguments();
+	  *print_process << removeNullParams("a2ps " + string + " " + files);
+	  print_process->start(KProcess::Block,KProcess::AllOutput);
 	}
       }
     }
     else {
       if (printToFileButton->isChecked()) {
 	dir =  printToFileLine->text();
-	process->clearArguments();
-	*process << removeNullParams("lpr " + string + " " + files + " > " + dir);
+	print_process->clearArguments();
+	*print_process << removeNullParams("lpr " + string + " " + files + " > " + dir);
 //	cerr << "lpr " + string + " " + files + " > " + dir << endl;
-	process->start(KProcess::Block,KProcess::AllOutput);
+	print_process->start(KProcess::Block,KProcess::AllOutput);
       }
       else {
       	for (int i=0;i<((QString) copySpinBox->text()).toInt();i++) {
-	  process->clearArguments();
-	  *process << removeNullParams("lpr " + string + " " + files);
+	  print_process->clearArguments();
+	  *print_process << removeNullParams("lpr " + string + " " + files);
 //	  cerr << "lpr " + string + " " + files << endl;
-	  process->start(KProcess::Block,KProcess::AllOutput);
+	  print_process->start(KProcess::Block,KProcess::AllOutput);
 	}
       }	
     }
-    delete (process);
+    //delete (process);
     reject();
   }
 }
