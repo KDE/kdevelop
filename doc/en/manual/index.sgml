@@ -2776,8 +2776,8 @@ would take a long time to implement. Then, the "rest" of your work is implementi
 chapter deals with how to use the <idx/dialog editor/ to create your project <idx/widgets/ as well as what to do in case you see your <idx/widgets/ need
 corrections or additions during the further development process.
 
-You can switch to the <idx/dialog editor/ either by selecting "Dialog Editor" from the "<idx/Tools/"-menu or by the according toolbar icon.
-To switch back to the Project Editor, select "KDevelop" from the <idx/dialog editor/'s "<idx/Tools/"-menu or by the icon in the toolbar.
+You can switch to the <idx/dialog editor/ either by selecting "Dialog Editor" from the "<idx/View/"-menu or by the according toolbar icon.
+To switch back to the Project Editor, select "KDevelop" from the <idx/dialog editor/'s "<idx/View/"-menu or by the icon in the toolbar.
 
 What else does the <idx/dialog editor/'s interface offer you ?  Mainly, that its appearance is almost the same as the project editor in term
 of the main view separation as well as the menu- and toolbars. This allows you to make yourself accustomed with the <idx/dialog editor/ very
