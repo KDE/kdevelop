@@ -14,8 +14,9 @@
 
 static KDevGlobalVersionControl::GlobalVcsMap vcs_map;
 
-KDevGlobalVersionControl::KDevGlobalVersionControl(const QString& id, QObject *parent, const char *name)
-        : KDevPlugin(parent, name ? name : "KDevGlobalVersionControl"), m_id(id)
+KDevGlobalVersionControl::KDevGlobalVersionControl(const QString& pluginName, const QString& icon,
+	const QString& id, QObject *parent, const char *name)
+    : KDevPlugin(pluginName, icon, parent, name ? name : "KDevGlobalVersionControl"), m_id(id)
 {
     vcs_map.insert(m_id, this);
 }

@@ -14,11 +14,11 @@
 #include <kdebug.h>
 #include <kdialogbase.h>
 
-#include "kdevapi.h"
-#include "kdevplugin.h"
-#include "kdevmakefrontend.h"
-#include "kdevappfrontend.h"
-#include "kdevdifffrontend.h"
+#include <kdevapi.h>
+#include <kdevplugin.h>
+#include <kdevmakefrontend.h>
+#include <kdevappfrontend.h>
+#include <kdevdifffrontend.h>
 
 #include "core.h"
 #include "api.h"
@@ -139,13 +139,13 @@ void PluginController::loadGlobalPlugins()
       continue;
       
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
-
+    
     emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin ) {
-       m_globalParts.insert( name, plugin );
-       integratePart( plugin );
+	m_globalParts.insert( name, plugin );
+	integratePart( plugin );
     }
   }
 }

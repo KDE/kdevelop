@@ -28,7 +28,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) );
 
 GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( parent, name ? name : "GrepViewPart" )
+    : KDevPlugin( "GrepView", "grep", parent, name ? name : "GrepViewPart" )
 {
     setInstance(GrepViewFactory::instance());
     
@@ -65,6 +65,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                                "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
                                "can switch to a match directly.") );
+    core()->insertNewAction( action );
 }
 
 

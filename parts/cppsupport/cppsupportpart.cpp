@@ -28,6 +28,7 @@
 #include "subclassingdlg.h"
 #include "addmethoddialog.h"
 #include "addattributedialog.h"
+#include "KDevCppSupportIface.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -102,9 +103,10 @@ typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeSelection( 0 ), m_activeEditor( 0 ),
+    : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "CppSupportPart"), 
+      m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
-{
+{    
     setInstance(CppSupportFactory::instance());
 
     setXMLFile("kdevcppsupport.rc");
@@ -153,6 +155,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                                "If you are looking at an implementation file (.cpp etc.), "
                                "this brings you to the corresponding header file.") );
     action->setEnabled(false);
+    core()->insertNewAction( action );
+
 
     action = new KAction(i18n("Complete Text"), CTRL+Key_Space,
                          this, SLOT(slotCompleteText()),
@@ -160,16 +164,21 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setStatusText( i18n("Complete current expression") );
     action->setWhatsThis( i18n("Complete current expression") );
     action->setEnabled(false);
+    core()->insertNewAction( action );
+
 
     action = new KAction(i18n("Make Member"), "makermember", Key_F2,
                          this, SLOT(slotMakeMember()),
                          actionCollection(), "edit_make_member");
+    core()->insertNewAction( action );
+
 
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
                          actionCollection(), "project_newclass");
     action->setStatusText( i18n("Generate a new class") );
     action->setWhatsThis( i18n("Generate a new class") );
+    core()->insertNewAction( action );
 
     m_pCompletion  = 0;
 
@@ -187,6 +196,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     QDomElement element = projectDom( )->documentElement( )
                           .namedItem( "cppsupportpart" ).toElement( )
                           .namedItem( "codecompletion" ).toElement( );
+    new KDevCppSupportIface( this );
+    (void) dcopClient();
 }
 
 

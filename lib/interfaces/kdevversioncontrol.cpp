@@ -1,8 +1,8 @@
 #include "kdevversioncontrol.h"
 
 
-KDevVersionControl::KDevVersionControl(QObject *parent, const char *name)
-    : KDevPlugin(parent, name)
+KDevVersionControl::KDevVersionControl(const QString& pluginName, const QString& icon, QObject *parent, const char *name)
+    : KDevPlugin(pluginName, icon, parent, name)
 {
 }
 

@@ -15,7 +15,6 @@
 #include <qobject.h>
 #include <kxmlguiclient.h>
 
-class QDomElement;
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -23,14 +22,22 @@ class KDevLanguageSupport;
 class KDevEditorManager;
 class KDevMakeFrontend;
 class KDevAppFrontend;
-class ClassStore;
 class KDevApi;
 class KDevPartController;
 class KDevMainWindow;
 class KDevDebugger;
 class KDevDiffFrontend;
 class KDevCreateFile;
+class ClassStore;
 
+class DCOPClient;
+class KAboutData;
+class QDomElement;
+
+namespace KParts
+{
+    class Part;
+}
 
 // 2002-02-08 added ccClassStore( ) - daniel
 
@@ -46,11 +53,63 @@ public:
     /**
      * Constructs a component.
      */
-    KDevPlugin( QObject *parent, const char *name=0 );
+    KDevPlugin( const QString& pluginName, const QString& icon, QObject *parent, const char *name=0 );
+
     /**
      * Destructs a component.
      */
     ~KDevPlugin();
+
+    /**
+     * Offers access to KDevelop core.
+     **/
+    QString pluginName() const;
+
+    /**
+     * Returns the name of the icon
+     **/
+    QString icon() const;
+
+    /**
+     * Create the DCOP interface for the given @p serviceType, if this
+     * plugin provides it. Return false otherwise.
+     */
+    virtual bool createDCOPInterface( const QString& /*serviceType*/ ) { return 0L; }
+
+    /**
+     * Reimplement this method and return a @ref QStringList of all config
+     * modules your application part should offer via KDevelop. Note that the
+     * part and the module will have to take care for config syncing themselves.
+     * Usually @p DCOP used for that purpose.
+     *
+     * @note Make sure you offer the modules in the form:
+     * <code>"pathrelativetosettings/mysettings.desktop"</code>
+     *
+     **/
+    virtual QStringList configModules() const { return QStringList(); };
+
+    /**
+     * Reimplement this method if you want to add your credits to the KDevelop
+     * about dialog.
+     **/
+    virtual KAboutData* aboutData() { return 0L; };
+
+    /**
+     *  reimplement and retun the part here.You can use this method if
+     *  you need to access the current part.
+     **/
+    virtual KParts::Part* part() { return 0; }
+
+    /**
+     * Retrieve the current DCOP Client for the plugin.
+     *
+     * The clients name is taken from the name argument in the constructor.
+     * @note: The DCOPClient object will only be created when this method is
+     * called for the first time. Make sure that the part has been loaded
+     * before calling this method, if it's the one that contains the DCOP
+     * interface that other parts might use.
+     */
+    DCOPClient *dcopClient() const;
 
     /**
      * Returns the widget of the plugin. This must be overridden.
@@ -144,6 +203,13 @@ public:
      * See @ restorePartialProjectSession. This is the other way round, the same just for saving.
      */
     virtual void savePartialProjectSession(QDomElement* el);
+
+signals:
+    /**
+     * Emitted when the part will be shown. If you really want to avoid that
+     * the part is shown at all, you will have to reimplement showPart();
+     **/
+    void aboutToShowPart();
 
 private:
     KDevApi *m_api;

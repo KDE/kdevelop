@@ -12,10 +12,10 @@
 class KDevAppFrontend : public KDevPlugin
 {
     Q_OBJECT
-    
+
 public:
-    
-    KDevAppFrontend( QObject *parent=0, const char *name=0 );
+
+    KDevAppFrontend( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
     ~KDevAppFrontend();
 
     /**

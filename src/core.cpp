@@ -39,6 +39,10 @@ Core::~Core()
 {
 }
 
+void Core::insertNewAction( KAction* action )
+{
+    Q_UNUSED( action );
+}
 
 void Core::wantsToQuit()
 {

@@ -24,7 +24,7 @@ class KDevGlobalVersionControl : public KDevPlugin {
     Q_OBJECT
 
 public:
-    KDevGlobalVersionControl(const QString& id, QObject *parent, const char *name);
+    KDevGlobalVersionControl(const QString& pluginName, const QString& icon, const QString& id, QObject *parent, const char *name);
     ~KDevGlobalVersionControl();
     
     QString getVcsName();

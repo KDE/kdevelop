@@ -35,9 +35,11 @@
 typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
 
-CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & ) : KDevPlugin( parent, name ? name : "CvsPart" ),
-        default_cvs("-f"),default_commit(""),default_update("-dP"),default_add(""),
-default_remove("-f"),default_replace("-C -d -P"),default_diff("-u3 -p"),default_log(""),default_rsh("") {
+CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & ) 
+  : KDevPlugin( "CVS", "cvs", parent, name ? name : "CvsPart" ),
+    default_cvs("-f"),default_commit(""),default_update("-dP"),default_add(""),
+    default_remove("-f"),default_replace("-C -d -P"),default_diff("-u3 -p"),default_log(""),default_rsh("") 
+{
     setInstance(CvsFactory::instance());
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );

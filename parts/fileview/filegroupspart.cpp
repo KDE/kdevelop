@@ -32,7 +32,7 @@ typedef KGenericFactory<FileGroupsPart> FileGroupsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( "kdevfilegroups" ) );
 
 FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "FileGroupsPart")
+    : KDevPlugin("FileGroups", "filegroups", parent, name ? name : "FileGroupsPart")
 {
     setInstance(FileGroupsFactory::instance());
 

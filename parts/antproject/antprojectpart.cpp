@@ -41,7 +41,7 @@ AntOptions::AntOptions()
 
 
 AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringList &)
-  : KDevProject(parent, name ? name : "AntProjectPart")
+  : KDevProject("AntProject", "antproject", parent, name ? name : "AntProjectPart")
 {
   setInstance(AntProjectFactory::instance());
 
@@ -50,10 +50,12 @@ AntProjectPart::AntProjectPart(QObject *parent, const char *name, const QStringL
   m_buildProjectAction = new KAction(i18n("&Build Project"), "make_kdevelop", Key_F8,
 		                     this, SLOT(slotBuild()),
 				     actionCollection(), "build_build" );
+  core()->insertNewAction( m_buildProjectAction );
 
   KActionMenu *menu = new KActionMenu(i18n("Build &Target"),
                                       actionCollection(), "build_target" );
   m_targetMenu = menu->popupMenu();
+  core()->insertNewAction( menu );
 
   connect(m_targetMenu, SIGNAL(activated(int)), this, SLOT(slotTargetMenuActivated(int)));
   connect(core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)));

@@ -47,7 +47,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreat
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-    : KDevCreateFile(parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true)
+    : KDevCreateFile("FileCreate", "filecreate", parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
@@ -63,6 +63,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setText( i18n("Create a new file", "New...") );
   newAction->setWhatsThis( i18n("Use this to create a new file within your project.") );
   newAction->setToolTip( i18n("New file") );
+  core()->insertNewAction( newAction );
+
   m_filetypes.setAutoDelete(true);
 
   m_availableWidgets[0] = new FriendlyWidget(this);

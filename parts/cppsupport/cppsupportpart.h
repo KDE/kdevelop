@@ -59,14 +59,13 @@ public:
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
 
-
     QStringList fileExtensions( ) const;
 
     virtual void customEvent( QCustomEvent* ev );
 
     virtual QStringList subclassWidget(QString formName);
     virtual QStringList updateWidget(QString formName, QString fileName);
-
+    
 signals:
     void fileParsed( const QString& fileName );
 
@@ -107,13 +106,12 @@ private slots:
      */
     void initialParse( );
 
-
-private:
-
     /**
      * only parses the current project
      */
-    bool parseProject( );
+    bool parseProject( );    
+
+private:
 
     /**
      * checks if a file has to be parsed
@@ -156,6 +154,8 @@ private:
     QStringList m_projectFileList;
     QMap<QString, QDateTime> m_timestamp;
     bool m_valid;
+    
+    friend class KDevCppSupportIface;
 };
 
 #endif

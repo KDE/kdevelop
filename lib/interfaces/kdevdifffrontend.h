@@ -12,10 +12,10 @@
 class KDevDiffFrontend : public KDevPlugin
 {
     Q_OBJECT
-    
+
 public:
-    
-    KDevDiffFrontend( QObject *parent=0, const char *name=0 );
+
+    KDevDiffFrontend( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
     virtual ~KDevDiffFrontend();
 
     /**

@@ -27,7 +27,7 @@ public:
     FilterPart( QObject *parent, const char *name, const QStringList & );
     ~FilterPart();
 
-private slots:
+public slots:
     void slotShellInsert();
     void slotShellFilter();
     

@@ -25,7 +25,7 @@ typedef KGenericFactory<GlobalCvs> GlobalCvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevglobalcvs, GlobalCvsFactory( "kdevglobalcvs" ) );
 
 GlobalCvs::GlobalCvs(QObject *parent, const char *name, const QStringList &)
-        : KDevGlobalVersionControl("CVS",parent, name) {
+  : KDevGlobalVersionControl("GlobalCVS", "globalcvs", "CVS",parent, name) {
 
     setInstance(GlobalCvsFactory::instance());
     setXMLFile("kdevglobalcvs.rc");

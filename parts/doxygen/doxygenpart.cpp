@@ -36,7 +36,7 @@ typedef KGenericFactory<DoxygenPart> DoxygenFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( "kdevdoxygen" ) );
 
 DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "DoxygenPart")
+    : KDevPlugin("Doxgen", "doxygen", parent, name ? name : "DoxygenPart")
 {
     setInstance(DoxygenFactory::instance());
     setXMLFile("kdevdoxygen.rc");
@@ -46,6 +46,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     action = new KAction( i18n("Run Doxygen"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
+    core()->insertNewAction( action );
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );

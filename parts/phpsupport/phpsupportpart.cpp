@@ -58,7 +58,7 @@ using namespace std;
 K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( "kdevphpsupport" ) );
 
 PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport(parent, name ? name : "PHPSupportPart")
+    : KDevLanguageSupport("PHPSupport", "php", parent, name ? name : "PHPSupportPart")
 {
   m_htmlView=0;
   phpExeProc=0;
@@ -78,9 +78,13 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   action = new KAction( i18n("&Run"), "exec",Key_F9,
 			this, SLOT(slotRun()),
 			actionCollection(), "build_execute" );
+  core()->insertNewAction( action );
+
   action = new KAction( i18n("&New Class..."),0,
 			this, SLOT(slotNewClass()),
 			actionCollection(), "project_new_class" );
+  core()->insertNewAction( action );
+
 
   m_phpErrorView = new PHPErrorView(this);
   mainWindow()->embedOutputView(m_phpErrorView, i18n("PHP"), i18n("PHP"));

@@ -22,7 +22,7 @@ typedef KGenericFactory<TipOfDayPart> TipOfDayFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( "kdevtipofday" ) );
 
 TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name ? name : "TipOfDayPart")
+  : KDevPlugin("TopOfDay", "tipofday", parent, name ? name : "TipOfDayPart")
 {
   setInstance(TipOfDayFactory::instance());
 
@@ -36,6 +36,7 @@ TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList 
   action->setWhatsThis(i18n("Tip of the day\n\n"
                             "Will display another good tip \n"
                             "contributed by KDevelop users."));
+  core()->insertNewAction( action );
 
   connect(core(), SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
 }

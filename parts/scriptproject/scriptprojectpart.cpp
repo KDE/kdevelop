@@ -38,7 +38,7 @@ typedef KGenericFactory<ScriptProjectPart> ScriptProjectFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( "kdevscriptproject" ) );
 
 ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QStringList &)
-    : KDevProject(parent, name ? name : "ScriptProjectPart")
+    : KDevProject("ScriptProject", "scriptproject", parent, name ? name : "ScriptProjectPart")
 {
     setInstance(ScriptProjectFactory::instance());
 
@@ -50,7 +50,7 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
       action = new KAction( i18n("New File..."), 0,
                             this, SLOT(slotNewFile()),
                             actionCollection(), "file_newfile" );
-
+      core()->insertNewAction( action );
     }
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),

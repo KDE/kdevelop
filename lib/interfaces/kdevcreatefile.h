@@ -61,7 +61,7 @@ public:
 
 public:
 
-  KDevCreateFile(QObject * parent = 0, const char * name = 0);
+  KDevCreateFile(const QString& pluginName, const QString& icon, QObject * parent = 0, const char * name = 0);
   virtual ~KDevCreateFile();
 
   /**

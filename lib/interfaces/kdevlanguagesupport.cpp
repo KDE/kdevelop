@@ -1,8 +1,8 @@
 #include "kdevlanguagesupport.h"
 
 
-KDevLanguageSupport::KDevLanguageSupport(QObject *parent, const char *name)
-    : KDevPlugin(parent, name ? name : "KDevLanguageSupport")
+KDevLanguageSupport::KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
+    : KDevPlugin( pluginName, icon, parent, name ? name : "KDevLanguageSupport" )
 {
 }
 

@@ -29,7 +29,7 @@
 #include <kdevpartcontroller.h>
 
 AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "AppWizardPart")
+    : KDevPlugin("AppWizard", "appwizard", parent, name ? name : "AppWizardPart")
 {
     setInstance(AppWizardFactory::instance());
     setXMLFile("kdevappwizard.rc");
@@ -44,11 +44,13 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.") );
+    core()->insertNewAction( action );
 
     action = new KAction( i18n("&Import Existing Project..."),"wizard", 0,
                           this, SLOT(slotImportProject()),
                           actionCollection(), "project_import" );
     action->setStatusText( i18n("Creates a project file for a given directory.") );
+    core()->insertNewAction( action );
     
 }
 

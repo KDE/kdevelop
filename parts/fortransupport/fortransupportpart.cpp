@@ -46,7 +46,7 @@ typedef KGenericFactory<FortranSupportPart> FortranSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( "kdevfortransupport" ) );
 
 FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport(parent, name ? name : "FortranSupportPart")
+    : KDevLanguageSupport("FortranSupport", "fortran", parent, name ? name : "FortranSupportPart")
 {
     setInstance(FortranSupportFactory::instance());
     
@@ -64,6 +64,8 @@ FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const 
     action = new KAction( i18n("&Ftnchek"), 0,
                           this, SLOT(slotFtnchek()),
                           actionCollection(), "project_ftnchek" );
+    core()->insertNewAction( action );
+    
 
     parser = 0;
 }

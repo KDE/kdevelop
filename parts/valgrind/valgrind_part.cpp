@@ -22,7 +22,7 @@ typedef KGenericFactory<ValgrindPart> ValgrindFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( "kdevvalgrind" ) );
 
 ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin( parent, name ? name : "ValgrindPart" )
+  : KDevPlugin( "Valgrind", "valgrind", parent, name ? name : "ValgrindPart" )
 {
   setInstance( ValgrindFactory::instance() );
   setXMLFile( "kdevpart_valgrind.rc" );
@@ -41,8 +41,8 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   
   QWhatsThis::add( m_widget, i18n( "Valgrind memory leak check" ) );
 
-  (void) new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
-		      SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
+  core()->insertNewAction( new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
+					SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" ) );
   
   mainWindow()->embedOutputView( m_widget, "Valgrind", "Valgrind memory leak check" );
 }
@@ -65,7 +65,7 @@ void ValgrindPart::getActiveFiles()
       KURL url( projectDirectory + "/" + (*it) );
       url.cleanPath( true );
       activeFiles += url.path();
-      qDebug( "set project file: " + url.path() );
+      kdDebug() << "set project file: " << url.path().latin1() << endl;
     }
   }
 }
@@ -197,7 +197,6 @@ void ValgrindPart::processExited( KProcess* p )
 
 void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
 {
-//  qDebug( "RESTORE" );
   QDomElement execElem = el->namedItem( "executable" ).toElement();
   _lastExec = execElem.attribute( "path", "" );
   _lastParams = execElem.attribute( "params", "" );
@@ -209,7 +208,6 @@ void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
 
 void ValgrindPart::savePartialProjectSession( QDomElement* el )
 {
-//  qDebug( "SAVE" );
   QDomDocument domDoc = el->ownerDocument();
   if ( domDoc.isNull() ) 
     return;

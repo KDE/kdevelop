@@ -42,7 +42,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) );
 
 JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "JavaDebuggerPart"),
+    : KDevPlugin("JavaDebugger", "debugger", parent, name ? name : "JavaDebuggerPart"),
       controller(0)
 {
     setInstance(JavaDebuggerFactory::instance());
@@ -139,18 +139,21 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "before this, or you can interrupt the program "
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Sto&p"), "stop", 0,
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
     action->setEnabled(false);
     action->setStatusText( i18n("Kills the executable and exits the debugger") );
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
     action->setEnabled(false);
     action->setStatusText( i18n("Interrupts the application") );
+    core()->insertNewAction( action );
     
     action = new KAction(i18n("&Continue"), "dbgrun", 0,
                          this, SLOT(slotContinue()),
@@ -162,6 +165,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "debugger. This only takes effect when the application "
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
@@ -173,6 +177,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Step &Into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
@@ -183,13 +188,14 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
                                "the function has been entered.") );
-
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Step into I&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
     action->setEnabled(false);
     action->setStatusText( i18n("Steps into the next assembly instruction") );
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
@@ -202,12 +208,14 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "the line after the original call to that function. If "
                                "we are in the outermost frame (i.e. in main()), then "
                                "this operation has no effect.") );
+    core()->insertNewAction( action );
 
     action = new KAction(i18n("Viewers"), "dbgmemview", 0,
                          this, SLOT(slotMemoryView()),
                          actionCollection(), "debug_memview");
     action->setEnabled(false);
     action->setStatusText( i18n("Various views into the application") );
+    core()->insertNewAction( action );
     
     connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );

@@ -34,7 +34,7 @@ typedef KGenericFactory<PerforcePart> PerforceFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( "kdevperforce" ) );
 
 PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( parent, name ? name : "PerforcePart" )
+    : KDevPlugin( "Perforce", "perforce", parent, name ? name : "PerforcePart" )
 {
     setInstance(PerforceFactory::instance());
 

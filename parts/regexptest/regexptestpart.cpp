@@ -23,7 +23,7 @@ typedef KGenericFactory<RegexpTestPart> RegexpTestFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( "kdevregexptest" ) );
 
 RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "RegexpTestPart")
+    : KDevPlugin("RegExpTest", "regexptest", parent, name ? name : "RegexpTestPart")
 {
     setInstance(RegexpTestFactory::instance());
     setXMLFile("kdevregexptest.rc");
@@ -33,6 +33,7 @@ RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringL
     action = new KAction( i18n("Debug Regular Expression..."), 0,
                           this, SLOT(slotRegexpTest()),
                           actionCollection(), "tools_regexptest" );
+    core()->insertNewAction( action );
 
     m_dialog = 0;
 }

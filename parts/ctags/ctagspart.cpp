@@ -35,7 +35,7 @@ typedef KGenericFactory<CTagsPart> CTagsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( "kdevctags" ) );
 
 CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin(parent, name ? name : "CTagsPart")
+    : KDevPlugin("CTags", "ctags", parent, name ? name : "CTagsPart")
 {
     setInstance(CTagsFactory::instance());
     setXMLFile("kdevctags.rc");
@@ -45,6 +45,7 @@ CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
     action = new KAction( i18n("CTags..."), 0,
                           this, SLOT(slotSearchTags()),
                           actionCollection(), "tools_ctags" );
+    core()->insertNewAction( action );
 
     connect( core(), SIGNAL(projectClosed()),
              this, SLOT(projectClosed()) );

@@ -28,7 +28,7 @@ typedef KGenericFactory<HistoryPart> HistoryPartFactory;
 K_EXPORT_COMPONENT_FACTORY(libkdevhistory, HistoryPartFactory("kdevhistory"));
 
 HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name ? name : "HistoryPart"), m_restoring(false)
+  : KDevPlugin("History", "history", parent, name ? name : "HistoryPart"), m_restoring(false)
 {
   setInstance(HistoryPartFactory::instance());
 
@@ -66,10 +66,12 @@ void HistoryPart::setupActions()
   m_backAction = new KToolBarPopupAction(i18n("&Back"), "back", 0,
     			this, SLOT(backActivated()),
   			actionCollection(), "history_back");
+  core()->insertNewAction( m_backAction );
 
   m_forwardAction = new KToolBarPopupAction(i18n("&Forward"), "forward", 0,
 		 	this, SLOT(forwardActivated()),
 			actionCollection(), "history_forward");
+  core()->insertNewAction( m_forwardAction );
 
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
 	 this, SLOT(backAboutToShow()));

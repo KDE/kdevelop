@@ -16,7 +16,7 @@ typedef KGenericFactory<UIChooserPart> UIChooserFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( "kdevuichooser" ) );
 
 UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name ? name : "UIChooserPart")
+  : KDevPlugin( "UIChooser", "uichooser", parent, name ? name : "UIChooserPart")
 {
   setInstance(UIChooserFactory::instance());
 

@@ -42,7 +42,7 @@ typedef KGenericFactory<PythonSupportPart> PythonSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( "kdevpythonsupport" ) );
 
 PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport(parent, name ? name : "PythonSupportPart")
+    : KDevLanguageSupport("PythonSupport", "python", parent, name ? name : "PythonSupportPart")
 {
     setInstance(PythonSupportFactory::instance());
 
@@ -61,21 +61,27 @@ PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QS
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_exec" );
     action->setStatusText( i18n("Runs the Python program") );
+    core()->insertNewAction( action );
 
     action = new KAction( i18n("Execute String..."), "exec", 0,
                           this, SLOT(slotExecuteString()),
                           actionCollection(), "build_execstring" );
     action->setStatusText( i18n("Executes a string as Python code") );
+    core()->insertNewAction( action );
+
 
     action = new KAction( i18n("Start Python Interpreter"), "exec", 0,
                           this, SLOT(slotStartInterpreter()),
                           actionCollection(), "build_runinterpreter" );
     action->setStatusText( i18n("Starts the Python interpreter without a program") );
+    core()->insertNewAction( action );
+
 
     action = new KAction( i18n("Python Documentation..."), 0,
                           this, SLOT(slotPydoc()),
                           actionCollection(), "help_pydoc" );
     action->setStatusText( i18n("Show a Python documentation page") );
+    core()->insertNewAction( action );
 }
 
 

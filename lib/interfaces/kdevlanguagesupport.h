@@ -22,7 +22,7 @@ public:
         NewClass=512, AddMethod=1024, AddAttribute=2048          /* features of the language support part */
     };
 
-    KDevLanguageSupport( QObject *parent, const char *name );
+    KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name );
     ~KDevLanguageSupport();
 
     /**

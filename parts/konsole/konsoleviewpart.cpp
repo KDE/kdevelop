@@ -15,7 +15,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>( "kdevkonsoleview" ) );
 
 KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name ? name : "KonsoleViewPart")
+  : KDevPlugin("Konsole", "konsole", parent, name ? name : "KonsoleViewPart")
 {
   m_widget = new KonsoleViewWidget(this);
   

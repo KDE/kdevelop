@@ -33,7 +33,7 @@
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) );
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "ToolsPart")
+    : KDevPlugin( "Tools", "tools", parent, name ? name : "ToolsPart")
 {
   setInstance(ToolsFactory::instance());
 
@@ -92,6 +92,7 @@ void ToolsPart::updateMenu()
 
 	  KAction *action = new KAction(df.readName(), df.readIcon(), 0,
                                         this, SLOT(slotToolActivated()), (QObject*)0, name.latin1());
+	  core()->insertNewAction( action );
 	  actions.append(action);
 	}
 
@@ -193,6 +194,7 @@ void ToolsPart::updateToolsMenu()
         KAction *action = new KAction(*it, 0,
                                       this, SLOT(toolsMenuActivated()),
                                       (QObject*) 0, menutext.utf8());
+	core()->insertNewAction( action );
         if (isdesktopfile) {
             KDesktopFile df(config->readEntry("CommandLine"));
             action->setIcon(df.readIcon());

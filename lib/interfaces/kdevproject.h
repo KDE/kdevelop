@@ -10,7 +10,7 @@ class KDevProject : public KDevPlugin
 	Q_OBJECT
 
 public:
-	KDevProject( QObject *parent=0, const char *name=0 );
+	KDevProject( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
 	~KDevProject();
 
 	/**

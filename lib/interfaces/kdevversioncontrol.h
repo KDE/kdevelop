@@ -13,11 +13,11 @@
 class KDevVersionControl : public KDevPlugin
 {
     Q_OBJECT
-    
+
 public:
     enum State { canBeCommited = 1, canBeAdded = 2 };
-    
-    KDevVersionControl( QObject *parent, const char *name=0 );
+
+    KDevVersionControl( const QString& pluginName, const QString& icon, QObject *parent, const char *name=0 );
     ~KDevVersionControl();
 
     /**

@@ -57,7 +57,7 @@ typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & )
-    : KDevPlugin( parent, name ? name : "DebuggerPart" ),
+    : KDevPlugin( "CppDebugger", "debugger", parent, name ? name : "DebuggerPart" ),
       controller(0)
 {
     setInstance(DebuggerFactory::instance());
@@ -163,16 +163,20 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "before this, or you can interrupt the program "
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
+    core()->insertNewAction( action );
     
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
     action->setStatusText( i18n("Interrupts the application") );
-    
+    core()->insertNewAction( action );    
+
     action = new KAction(i18n("Run to &Cursor"), "dbgrunto", 0,
                          this, SLOT(slotRunToCursor()),
                          actionCollection(), "debug_runtocursor");
     action->setStatusText( i18n("Continues execution until the cursor position is reached") );
+    core()->insertNewAction( action );    
+
 
     action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
@@ -183,11 +187,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
+    core()->insertNewAction( action );    
+
 
     action = new KAction(i18n("Step over Ins&truction"), "dbgnextinst", 0,
                          this, SLOT(slotStepOverInstruction()),
                          actionCollection(), "debug_stepoverinst");
     action->setStatusText( i18n("Steps over the next assembly instruction") );
+    core()->insertNewAction( action );    
+
 
     action = new KAction(i18n("Step &Into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
@@ -197,12 +205,16 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
                                "the function has been entered.") );
+    core()->insertNewAction( action );    
+
 
 
     action = new KAction(i18n("Step into I&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
     action->setStatusText( i18n("Steps into the next assembly instruction") );
+    core()->insertNewAction( action );    
+
 
     action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
@@ -214,11 +226,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "the line after the original call to that function. If "
                                "program execution is in the outermost frame (i.e. in "
                                "main()) then this operation has no effect.") );
+    core()->insertNewAction( action );    
+
 
     action = new KAction(i18n("Viewers"), "dbgmemview", 0,
                          this, SLOT(slotMemoryView()),
                          actionCollection(), "debug_memview");
     action->setStatusText( i18n("Various views into the application") );
+    core()->insertNewAction( action );    
+
     
     action = new KAction(i18n("Examine Core File"), "core", 0,
                          this, SLOT(slotExamineCore()),
@@ -230,18 +246,26 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "segmentation fault. The core file contains an "
                                "image of the program memory at the time it crashed, "
                                "allowing you to do a post-mortem analysis.") );
+    core()->insertNewAction( action );    
+
 
     action = new KAction(i18n("Attach to Process"), "connect_creating", 0,
                          this, SLOT(slotAttachProcess()),
                          actionCollection(), "debug_attach");
     action->setStatusText( i18n("Attaches the debugger to a running process") );
+    core()->insertNewAction( action );    
+
     
     action = new KAction(i18n("Toggle Breakpoint"), 0, 0,
                          this, SLOT(toggleBreakpoint()),
                          actionCollection(), "debug_toggle_breakpoint");
+    core()->insertNewAction( action );    
+
 //    action = new KAction(i18n("Disable Breakpoint"), 0, 0,
 //                         this, SLOT(slotDisableBreakpoint()),
 //                         actionCollection(), "debug_disable_breakpoint");
+//    core()->insertNewAction( action );    
+
                          
     connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );

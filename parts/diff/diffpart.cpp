@@ -36,7 +36,7 @@ typedef KGenericFactory<DiffPart> DiffFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) );
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
-    : KDevDiffFrontend(parent, name ? name : "DiffPart"), proc(0)
+    : KDevDiffFrontend("Diff", "diff", parent, name ? name : "DiffPart"), proc(0)
 {
   setInstance(DiffFactory::instance());
   setXMLFile("kdevdiff.rc");
@@ -46,9 +46,9 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setCaption( nm );
   mainWindow()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
 
-  (void) new KAction( i18n("Difference Viewer..."), 0,
-                        this, SLOT(slotExecDiff()),
-                        actionCollection(), "tools_diff" );
+  core()->insertNewAction( new KAction( i18n("Difference Viewer..."), 0,
+					this, SLOT(slotExecDiff()),
+					actionCollection(), "tools_diff" ) );
 
   connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
            this, SLOT(contextMenu(QPopupMenu *, const Context *)) );

@@ -12,6 +12,7 @@
 
 class KDialogBase;
 class KDevPlugin;
+class KAction;
 
 class QStatusBar;
 class QPopupMenu;
@@ -81,7 +82,7 @@ public:
     { return m_url; }
     QString selection() const
     { return m_selection; }
-    
+
 private:
     QString m_url;
     QString m_selection;
@@ -136,16 +137,18 @@ private:
 class KDevCore : public QObject
 {
     Q_OBJECT
-    
+
 public:
     /**
      * An enumeration that specifies the behaviour of the
      * methods gotoSourceFile() and gotoDocumentationFile().
      */
     enum Embedding { Replace, SplitHorizontal, SplitVertical };
-    
+
     KDevCore( QObject *parent=0, const char *name=0 );
     ~KDevCore();
+
+    virtual void insertNewAction( KAction* action ) = 0;
 
     /**
      * This method should be called by a part that wants to show a
@@ -168,7 +171,7 @@ public:
      * all components get a stopButtonClicked().
      */
     virtual void running(KDevPlugin *which, bool runs) = 0;
-   
+
 
 signals:
 
@@ -185,7 +188,7 @@ signals:
      * The project is about to be closed.
      */
     void projectClosed();
-    
+
     /**
      * The user has clicked the stop button.
      */

@@ -33,7 +33,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevbuglist, BugListFactory( "kdevbuglist" ) );
 
 
 BugListComponent::BugListComponent (QObject *parent, const char *name, const QStringList &)
-:KDevPlugin (parent, name ? name : "BugListComponent")
+  : KDevPlugin ("BugList", "buglist", parent, name ? name : "BugListComponent")
 {
     setInstance(BugListFactory::instance());
     setXMLFile("kdevbuglist.rc");
@@ -83,6 +83,7 @@ void BugListComponent::setupGUI()
                          actionCollection(), "bug_tracking");
     m_pMenuAction->setStatusText (i18n("Provides bug tracking features for your project."));
     m_pMenuAction->setWhatsThis (i18n("Provides bug tracking features for your project."));
+    core()->insertNewItem( m_pMenuAction );
 
     // Bug tracking is only valid with a project.
     m_pMenuAction->setEnabled (FALSE);

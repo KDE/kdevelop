@@ -45,7 +45,7 @@ struct JavaSupportPartData{
 };
 
 JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStringList &)
-    : KDevLanguageSupport(parent, name ? name : "JavaSupportPart"), d( new JavaSupportPartData() )
+    : KDevLanguageSupport("JavaSupport", "java", parent, name ? name : "JavaSupportPart"), d( new JavaSupportPartData() )
 {
     setInstance(JavaSupportPartFactory::instance());
 

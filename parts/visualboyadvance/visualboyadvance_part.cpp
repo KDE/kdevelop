@@ -22,7 +22,7 @@ typedef KGenericFactory<VisualBoyAdvancePart> VisualBoyAdvanceFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevvisualboyadvance, VisualBoyAdvanceFactory( "kdevvisualboyadvance" ) );
   
 VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin(parent, name){
+  : KDevPlugin("VisualBoyAdvance", "vbadvance", parent, name){
   setInstance(VisualBoyAdvanceFactory::instance());
 
   setXMLFile("kdevpart_visualboyadvance.rc");
@@ -31,6 +31,7 @@ VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, co
   action = new KAction( i18n("Execute program"), "exec",  Key_F9,
 			this, SLOT(slotExecute()),
 			actionCollection(), "build_execute" );
+  core()->insertNewAction( action );
 
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 	   this, SLOT(projectConfigWidget(KDialogBase*)) );

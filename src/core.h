@@ -18,6 +18,8 @@ public:
 
   ~Core();
 
+  virtual void insertNewAction( KAction* action );
+
   virtual void running(KDevPlugin *which, bool runs);
   virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
   virtual void openProject(const QString& projectFileName);

@@ -33,7 +33,7 @@ typedef KGenericFactory<ScriptingPart> ScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( "kdevscripting" ) );
 
 ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin(parent, name ? name : "ScriptingPart")
+    : KDevPlugin("PythonScripting", "scripting", parent, name ? name : "ScriptingPart")
 {
     setInstance(ScriptingFactory::instance());
     
@@ -106,8 +106,8 @@ PyObject *ScriptingPart::addMenuItem(PyObject *args)
     
     actions.insert(ident, func);
     
-    (void) new KAction(submenustr, 0, this, SLOT(slotScriptAction()),
-                       actionCollection(), ident.latin1());
+    core()->insertAction( new KAction(submenustr, 0, this, SLOT(slotScriptAction()),
+				      actionCollection(), ident.latin1()) );
     
     QDomElement el = guiDocument.documentElement();
     el = el.namedItem("MenuBar").toElement();

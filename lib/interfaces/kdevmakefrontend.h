@@ -12,10 +12,10 @@
 class KDevMakeFrontend : public KDevPlugin
 {
     Q_OBJECT
-    
+
 public:
-    
-    KDevMakeFrontend( QObject *parent=0, const char *name=0 );
+
+    KDevMakeFrontend( const QString& pluginName, const QString& icon, QObject *parent=0, const char *name=0 );
     ~KDevMakeFrontend();
 
     virtual QWidget* widget() { return 0L; }

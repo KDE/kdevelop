@@ -1,22 +1,58 @@
-#include <qdom.h>
 
 #include "kdevplugin.h"
 #include "kdevpartcontroller.h"
-
-
 #include "kdevapi.h"
+
+#include <dcopclient.h>
+#include <qdom.h>
 
 #include <assert.h>
 
-KDevPlugin::KDevPlugin(QObject *parent, const char *name)
-    : QObject(parent, name)
+struct KDevPlugin::Private
 {
-   assert( parent->inherits( "KDevApi" ) );
-   m_api = static_cast<KDevApi *>( parent );
+    DCOPClient *dcopClient;
+    QCString name;
+    QString pluginName;
+    QString icon;
+};
+
+KDevPlugin::KDevPlugin( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
+    : QObject( parent, name ), d( new Private )
+{
+     assert( parent->inherits( "KDevApi" ) );
+     m_api = static_cast<KDevApi *>( parent );
+
+    d->name = name;
+    d->icon = icon;
+    d->pluginName = pluginName;
+    d->dcopClient = 0L;
 }
 
 KDevPlugin::~KDevPlugin()
 {
+   delete( d->dcopClient );
+   delete( d );
+}
+
+QString KDevPlugin::pluginName() const
+{
+    return d->name;
+}
+
+QString KDevPlugin::icon() const
+{
+    return d->icon;
+}
+
+DCOPClient* KDevPlugin::dcopClient() const
+{
+    if (!d->dcopClient)
+    {
+        d->dcopClient = new DCOPClient();
+        d->dcopClient->registerAs(d->name, false);
+    }
+
+    return d->dcopClient;
 }
 
 KDevMainWindow *KDevPlugin::mainWindow()
