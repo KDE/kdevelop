@@ -7,10 +7,13 @@
 *****************************************************************************/
 #include "qeditor.h"
 
+#include <limits.h>
+
 void GotoLineDialog::init()
 {
     m_editor = 0;
     spinLineNumber->setMinValue( 1 );
+    spinLineNumber->setMaxValue( INT_MAX );
 }
 
 void GotoLineDialog::destroy()
