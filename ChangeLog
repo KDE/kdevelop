@@ -1,3 +1,8 @@
+2000-03-30  Ralf Funken <rfunken@kdevelop.de>
+	* Commited de and en manuals
+        * Updated de.po
+        * Updated kdevelop.pot
+
 2000-03-30 Ralf Nolden <rnolden@kdevelop.de>
         * updated am_edit for KDE 2 templates and changed structure to hold the docbook file in <projectdir>/doc/en
         * updated Makefile.am´s for generating html output via kdb2html
