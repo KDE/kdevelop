@@ -34,6 +34,7 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kaction.h>
 
 
 #include "kdevcore.h"
@@ -120,6 +121,16 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 	kapp->config()->setGroup( group );
 	filterBox->setStretchFactor(filter, 2);
 	lo->addWidget(filterBox);
+
+    KActionCollection *coll = dir->actionCollection();
+    // some shortcuts of diroperator that clashes with Kate
+    coll->action( "delete" )->setShortcut( KShortcut( ALT + Key_Delete ) );
+    coll->action( "reload" )->setShortcut( KShortcut( ALT + Key_F5 ) );
+    coll->action( "back" )->setShortcut( KShortcut( ALT + SHIFT + Key_Left ) );
+    coll->action( "forward" )->setShortcut( KShortcut( ALT + SHIFT + Key_Right ) );
+    // some consistency - reset up for dir too
+    coll->action( "up" )->setShortcut( KShortcut( ALT + SHIFT + Key_Up ) );
+    coll->action( "home" )->setShortcut( KShortcut( CTRL + ALT + Key_Home ) );
 
 	// slots and signals
 
