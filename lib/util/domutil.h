@@ -82,14 +82,16 @@ public:
      */
     static QDomElement namedChildElement( QDomElement& el, const QString& name );
     /**
-     * Writes a string entry. For example,
-     * <code>
-     *   writeEntry(doc, "/general/special", "foo");
-     * </code>
-     * creates the DOM fragment
-     * <code>
-     *   <general><special>foo</special></general>
-     * </code>
+      Writes a string entry. For example,
+      \verbatim
+        <code>
+          writeEntry(doc, "/general/special", "foo");
+        </code>
+      \endverbatim creates the DOM fragment: \verbatim
+        <code>
+          <general><special>foo</special></general>
+        </code>
+      \endverbatim
      */
     static void writeEntry(QDomDocument &doc, const QString &path, const QString &value);
     /**
@@ -101,34 +103,38 @@ public:
      */
     static void writeBoolEntry(QDomDocument &doc, const QString &path, bool value);
     /**
-     * Writes a string list element. The list elements are separated by tag. For example,
-     * <code>
-     *   QStringList l; l << "one" << "two";
-     *   writeEntry(doc, "/general/special", "el", l);
-     * </code>
-     * creates the DOM fragment
-     * <code>
-     *   <general><special><el>one</el><el>two</el></special></general>
-     * </code>
+      Writes a string list element. The list elements are separated by tag. For example,
+      \verbatim
+        <code>
+          QStringList l; l << "one" << "two";
+          writeEntry(doc, "/general/special", "el", l);
+        </code>
+      \endverbatim creates the DOM fragment: \verbatim
+        <code>
+          <general><special><el>one</el><el>two</el></special></general>
+        </code>
+      \endverbatim
      */
     static void writeListEntry(QDomDocument &doc, const QString &path, const QString &tag,
                                const QStringList &value);
     /**
-     * Writes a list of string pairs. The list elements are stored in the attributes
-     * firstAttr and secondAttr of elements named tag. For example,
-     * <code>
-     *   DomUtil::StringPairList l;
-     *   l << DomUtil::StringPair("one", "1");
-     *   l << DomUtil::StringPair("two", "2");
-     *   writeEntry(doc, "/general/special", "el", "first", "second", l);
-     * </code>
-     * creates the DOM fragment
-     * <code>
-     *   <general><special>
-     *     <el first="one" second="1"/>
-     *     <el first="two" second="2"/>
-     *   </special></general>
-     * </code>
+      Writes a list of string pairs. The list elements are stored in the attributes
+      firstAttr and secondAttr of elements named tag. For example,
+      \verbatim
+        <code>
+          DomUtil::StringPairList l;
+          l << DomUtil::StringPair("one", "1");
+          l << DomUtil::StringPair("two", "2");
+          writeEntry(doc, "/general/special", "el", "first", "second", l);
+        </code>
+      \endverbatim creates the DOM fragment: \verbatim
+        <code>
+          <general><special>
+            <el first="one" second="1"/>
+            <el first="two" second="2"/>
+          </special></general>
+        </code>
+      \endverbatim
      */
     static void writePairListEntry(QDomDocument &doc, const QString &path, const QString &tag,
                                    const QString &firstAttr, const QString &secondAttr,
@@ -142,33 +148,35 @@ public:
      * path: pathpart[/pathpart/..]
      */
     static DomPath resolvPathStringExt(const QString pathstring);
-    
+
     /**
-     * Retrieve an element specified with extended path
-     * examples: 
-     * 1: "widget|class=QDialog/property|name=geometry"
-     *    or "widget|class=QDialog/property||1"
-     * 2: "widget/property|name=caption/string"
-     *    or "widget/property||2/string"
-     * 
-     *
-     * <widget class="QDialog">
-     *    <property name="name">
-     *        <cstring>KdevFormName</cstring>
-     *    </property>
-     *    <property name="geometry">       <-- 1. reaches this node
-     *        <rect>
-     *            <x>0</x>
-     *            <y>0</y>
-     *            <width>600</width>
-     *            <height>480</height>
-     *        </rect>
-     *    </property>
-     *    <property name="caption">
-     *        <string>KdevFormCaption</string>     <-- 2. reaches this node
-     *    </property>
-     * </widget>
-     */    
+      Retrieve an element specified with extended path
+      examples:
+
+       - 1: "widget|class=QDialog/property|name=geometry"
+         or "widget|class=QDialog/property||1"
+       - 2: "widget/property|name=caption/string"
+         or "widget/property||2/string"
+       .
+      \verbatim
+        <widget class="QDialog">
+          <property name="name">
+              <cstring>KdevFormName</cstring>
+          </property>
+          <property name="geometry">       <-- 1. reaches this node
+              <rect>
+                  <x>0</x>
+                  <y>0</y>
+                  <width>600</width>
+                  <height>480</height>
+              </rect>
+          </property>
+          <property name="caption">
+              <string>KdevFormCaption</string>     <-- 2. reaches this node
+          </property>
+        </widget>
+      \endverbatim
+     */
     static QDomElement elementByPathExt(QDomDocument &doc, const QString &pathstring);
 
     /**
