@@ -290,7 +290,7 @@ void CParsedMethod::asCppCode( QString &str )
     // Take the path and replace all . with ::
     aPath = path();
     aPath.replace( QRegExp( "\\." ), "::" );
-    str += type + " " + aPath + "::" + name;
+    str += type + " " + aPath;
     
     if( isConst )
       str += " const";
