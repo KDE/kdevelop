@@ -39,6 +39,8 @@ public:
         void setStyle(enum KMultiTabBar::KMultiTabBarStyle style);
         void showActiveTabTexts(bool show);
         QPtrList<KMultiTabBarTab>* tabs(){return &m_tabs;}
+        void layoutButtonsHoriz();
+        void layoutButtonsVertic();
 private:
         friend class KMultiTabBar;
         QHBox *box;
@@ -46,10 +48,11 @@ private:
         enum KMultiTabBar::KMultiTabBarPosition m_position;
         bool m_showActiveTabTexts;
         enum  KMultiTabBar::KMultiTabBarStyle m_style;
-
         int m_expandedTabSize;
+        KMultiTabBar::KMultiTabBarMode m_bm;
 protected:
         virtual void drawContents ( QPainter *, int, int, int, int);
+        void resizeEvent(QResizeEvent* e);
 
         /**
          * [contentsM|m]ousePressEvent are reimplemented from QScrollView

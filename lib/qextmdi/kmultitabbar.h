@@ -152,6 +152,8 @@ class KMultiTabBarButton: public QPushButton
 public:
 	KMultiTabBarButton(const QPixmap& pic,const QString&, QPopupMenu *popup,
 		int id,QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, KMultiTabBar::KMultiTabBarStyle style);
+	KMultiTabBarButton(const QString&, QPopupMenu *popup,
+		int id,QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, KMultiTabBar::KMultiTabBarStyle style);
 	virtual  ~KMultiTabBarButton();
 	int id() const;
 
@@ -225,6 +227,8 @@ protected:
 	void drawButtonClassic(QPainter *);
 protected slots:
 	virtual void slotClicked();
+	void setTabsPosition(KMultiTabBar::KMultiTabBarPosition);
+
 public slots:
 	virtual void setIcon(const QString&);
 	virtual void setIcon(const QPixmap&);
