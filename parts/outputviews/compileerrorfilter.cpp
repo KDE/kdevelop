@@ -46,9 +46,9 @@ const QValueList<CompileErrorFilter::ErrorFormat>& CompileErrorFilter::errorForm
 
 void CompileErrorFilter::processLine( const QString& line )
 {
-  bool hasmatch = false;
+	bool hasmatch = false;
 	QString file;
-	int lineNum;
+	int lineNum = 0;
 	QString text;
 	QValueList<ErrorFormat>::const_iterator it = errorFormats().begin();
 	for( ; it != errorFormats().end(); ++it )

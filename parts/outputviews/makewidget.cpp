@@ -302,7 +302,7 @@ void MakeWidget::nextError()
 
 	for ( int it = parag;
 #if QT_VERSION >= 0x030100
-	      it < m_items.count();
+	      it < (int)m_items.count();
 #else
 	      it < m_items.size();
 #endif
