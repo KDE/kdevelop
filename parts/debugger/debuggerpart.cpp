@@ -791,7 +791,9 @@ void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
       }
 
       // make it visible in the editor view
-      debugger()->setBreakpoint(fileName, lineNum, dbgId, bEnabled, false);
+      debugger()->setBreakpoint(fileName, lineNum,
+                                0, // hack: the real dbgId is -1 but we need to get it set. 0 does no harm
+                                bEnabled, true);
 
       QPtrList<Breakpoint> bpList = breakpointWidget->breakpoints();
       QPtrListIterator<Breakpoint> it(bpList);
