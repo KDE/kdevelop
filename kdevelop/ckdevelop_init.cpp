@@ -946,10 +946,10 @@ void CKDevelop::initToolBar(){
     toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine);
 
     toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP_INST, false,i18n("Execute one assembler instruction, stepping into fn if appropriate"));
     toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
-    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT_INST, false,i18n("Execute one assembler instruction, but run through functions"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnextinst.xpm"),ID_DEBUG_NEXT_INST, false,i18n("Execute one assembler instruction, but run through functions"));
+     toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstepinst.xpm"),ID_DEBUG_STEP_INST, false,i18n("Execute one assembler instruction, stepping into fn if appropriate"));
     toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
     toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_MEMVIEW, false,i18n("Memory, dissemble, registers, library viewer"));
     toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false, i18n("Interrupt the app execution"));
