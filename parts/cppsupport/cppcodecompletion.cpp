@@ -1558,7 +1558,7 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
     AST* node = findNodeAt( ast, line, column );
 
     if( node ){
-        kdDebug(9007) << "current node is = " << nodeTypeToString( node->nodeType() ) << endl;
+        kdDebug(9007) << "current node is = " << nodeTypeToString( (NodeType)(node->nodeType()) ) << endl;
     }
 
     if( node && node->nodeType() == NodeType_FunctionDefinition ){

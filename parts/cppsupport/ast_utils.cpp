@@ -70,7 +70,7 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
     }
 	
     if( nodeDescription.isEmpty() )
-	nodeDescription += i18n( " [%1]" ).arg( nodeTypeToString(ast->nodeType()) );
+	nodeDescription += i18n( " [%1]" ).arg( nodeTypeToString((NodeType)(ast->nodeType())) );
     
     QListViewItem* item = new QListViewItem( parent, nodeDescription,
 					     QString::number(startLine), QString::number(startColumn),
