@@ -1012,7 +1012,7 @@ void CPrjOptionsDlg::ok(){
     text+=" -lkfm";
   }
   if (l_khtmlw->isChecked()) {
-    text+=" $$(LIB_KHTMLW)";
+    text+=" $(LIB_KHTMLW)";
   }
   if (l_kdeui->isChecked()) {
     text+=" -lkdeui";

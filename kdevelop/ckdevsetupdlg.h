@@ -31,6 +31,10 @@
 #include <kmsgbox.h>
 #include <kfiledialog.h>
 #include <kquickhelp.h>
+#include <kaccel.h>
+#include <qdict.h>
+#include <kkeydialog.h>
+#include <kaccel.h>
 
 
 /** the setup dialog for kdevelop
@@ -40,10 +44,12 @@ class CKDevSetupDlg : public QTabDialog
 {
     Q_OBJECT
 public:
-    CKDevSetupDlg( QWidget *parent=0, const char *name=0 );
+    CKDevSetupDlg( QWidget *parent=0, const char *name=0,KAccel* accel=0 );
+  
 private:
-
+  QDict<KKeyEntry>* dict;
   KConfig* config;
+  KAccel* accel;
 
   QCheckBox* autoSaveCheck;
   QComboBox* autosaveTimeCombo;

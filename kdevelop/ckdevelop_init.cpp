@@ -546,9 +546,6 @@ void CKDevelop::initMenu(){
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("Documentation &Browser..."),this,
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
-  options_menu->insertSeparator();
-  options_menu->insertItem(i18n("Configure &Keys..."),this,
-			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
 
   options_menu->insertItem(i18n("Configure &Printer..."),p3,ID_OPTIONS_PRINT);
   options_menu->insertSeparator();

@@ -185,7 +185,6 @@ public:
   void slotOptionsEditorColors();
   void slotOptionsSyntaxHighlightingDefaults();
   void slotOptionsSyntaxHighlighting();
-  void slotOptionsKeys();
   void slotOptionsConfigureEnscript();
   void slotOptionsConfigureA2ps();
   /** show a configure-dialog for kdevelop*/

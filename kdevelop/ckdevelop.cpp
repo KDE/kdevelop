@@ -518,10 +518,10 @@ void CKDevelop::slotOptionsEditorColors(){
   slotStatusMsg(IDS_DEFAULT);
 
 }
-void CKDevelop::slotOptionsKeys(){
-  if( KKeyDialog::configureKeys( accel ) ) {
-  }
-}
+// void CKDevelop::slotOptionsKeys(){
+//   if( KKeyDialog::configureKeys( accel ) ) {
+//   }
+// }
 
 void CKDevelop::slotOptionsConfigureEnscript(){
   if (!CToolClass::searchProgram("enscript")) {
@@ -565,7 +565,7 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up Documentation paths..."));
 
-  CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup");
+  CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
   setup->show();
   slotStatusMsg(IDS_DEFAULT); 
 }

@@ -4,7 +4,7 @@
 
     version              :                                   
     begin                : Sat Oct 17 1998                                           
-    copyright            : (C) 1998 by Sandy Meier                         
+    copyright            : (C) 1998,1999 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -118,7 +118,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : Q
 	install_loc_label->setBackgroundMode( QWidget::PaletteBackground );
 	install_loc_label->setFontPropagation( QWidget::NoChildren );
 	install_loc_label->setPalettePropagation( QWidget::NoChildren );
-	install_loc_label->setText(i18n("Install-location:") );
+	install_loc_label->setText(i18n("Installdir + Filename:") );
 	install_loc_label->setAlignment( 289 );
 	install_loc_label->setMargin( -1 );
 
@@ -336,6 +336,12 @@ void CFilePropDlg::slotSingleSelected(int index){
 }
 void CFilePropDlg::slotInstallCheckToogled(bool on){
   install_loc_edit->setEnabled(on);
+  if(on){
+    if(QString(install_loc_edit->text()).isEmpty()){
+      install_loc_edit->setText(
+				(name_e_label->text()) != 0 ?name_e_label->text():"");
+    }
+  }
 }
 void CFilePropDlg::slotOk(){
   if(saved_info !=0 ){ //ok,there is a old one,it !=0

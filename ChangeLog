@@ -1,8 +1,13 @@
-
+1999-02-24  Sandy Meier <smeier@rz.uni-potsdam.de>
+	* moved the KeyConfigDlg to KDevelop Setup (KeyChooser)
+	* small bugfix in CProjectOptionsDlg( the $ bug again )
+	* some bugfixes in normal.tar.gz
+	* commit a small patch by Matthias Hipp <Matthias.Hipp@gmx.de>
+	
 1999-02-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added an icon-generation to the newfile dlg 
 	* commit a new version of kwrite into kdevelop's sourcetree
-
+	
 1999-02-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * changed Documentation Path dialog to KDevelop Setup
   * removed menuentries for autosave, make and added them to
@@ -33,7 +38,7 @@
 	* added the printconfigure entry in the options menu
 
 1999-02-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
-	* remove the sh-scripts "autoconfsuite","cleanrebuildall",
+	* removed the sh-scripts "autoconfsuite","cleanrebuildall",
 	"rebuildmakefiles" and
 	replaced it with a C++ solution
 	* fixed a bug in cpp.tar.gz (doubled SOURCE in Makefile.am)
