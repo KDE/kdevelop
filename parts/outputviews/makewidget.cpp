@@ -40,6 +40,9 @@
 #include <qpopupmenu.h>
 #include <private/qrichtext_p.h>
 
+#include <stdlib.h>
+#include <limits.h>
+
 static const char *const error_xpm[] =
     {
         "11 11 5 1",
