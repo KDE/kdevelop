@@ -63,7 +63,7 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
     gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
     gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
-    gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",0));
+    gsw->compilerOutputButtonGroup->setButton(config->readNumEntry("CompilerOutputLevel",1));
     config->setGroup("General Options");
     gsw->setApplicationFont(config->readFontEntry("Application Font"));
     gsw->changeMessageFontButton->setText(gsw->messageFont().family());

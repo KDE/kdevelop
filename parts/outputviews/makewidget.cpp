@@ -822,7 +822,7 @@ void MakeWidget::updateSettingsFromConfig()
 	pConfig->setGroup("MakeOutputView");
 	setFont(pConfig->readFontEntry("Messages Font"));
 	m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
-	m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eVeryShort);
+	m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eShort);
 	DirectoryItem::setShowDirectoryMessages( pConfig->readBoolEntry("ShowDirNavigMsg", false) );
 }
 
