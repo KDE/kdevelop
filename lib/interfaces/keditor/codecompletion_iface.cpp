@@ -19,4 +19,6 @@ KEditor::CodeCompletionDocumentIface *KEditor::CodeCompletionDocumentIface::inte
 /*void KEditor::CodeCompletionDocumentIface::showArgHint ( const QStringList& functionList, const QString& strWrapping, const QString& strDelimiter)
 {
 }*/
-//#include "codecompletion_iface.moc.cpp"
+
+
+#include "codecompletion_iface.moc"

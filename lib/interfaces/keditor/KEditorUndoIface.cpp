@@ -74,4 +74,5 @@ void KEditor::UndoDocumentDCOPIface::forwardRedoAvailable(KEditor::Document *doc
   emitDCOPSignal("redoAvailable(DCOPRef,bool)", data);
 }
         
-//#include "KEditorUndoIface.moc.cpp"
+
+#include "KEditorUndoIface.moc"

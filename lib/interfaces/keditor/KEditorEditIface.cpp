@@ -75,4 +75,4 @@ bool KEditor::EditDocumentDCOPIface::setLine(const QString &text, uint line)
 }
 
 
-//#include "KEditorEditIface.moc.cpp"
+#include "KEditorEditIface.moc"

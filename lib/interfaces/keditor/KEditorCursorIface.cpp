@@ -63,4 +63,5 @@ void KEditor::CursorDocumentDCOPIface::forwardCursorPositionChanged(KEditor::Doc
   
   emitDCOPSignal("cursorPositionChanged(DCOPRef,int,int)", data);
 }
-//#include "KEditorCursorIface.moc.cpp"
+
+#include "KEditorCursorIface.moc"
