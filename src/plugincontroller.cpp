@@ -11,11 +11,13 @@
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>
 #include <assert.h>
+#include <kdebug.h>
 
 #include "kdevapi.h"
 #include "kdevplugin.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
+#include "kdevdifffrontend.h"
 
 
 #include "core.h"
@@ -95,6 +97,16 @@ void PluginController::loadDefaultParts()
   if ( appFrontend ) {
     API::getInstance()->setAppFrontend( appFrontend );
     integratePart( appFrontend );
+  }
+
+  // Diff frontend
+  emit loadingPlugin(i18n("Loading plugin: Diff frontend"));
+  KDevDiffFrontend *diffFrontend = loadDefaultPart< KDevDiffFrontend >( "KDevelop/DiffFrontend" );
+  if ( diffFrontend ) {
+    API::getInstance()->setDiffFrontend( diffFrontend );
+    integratePart( diffFrontend );
+  } else {
+    kdDebug( 9000 ) << "could not load Diff frontend" << endl;
   }
 }
 
