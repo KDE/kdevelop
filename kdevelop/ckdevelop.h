@@ -235,8 +235,6 @@ public:
   ///////////////////////
   /** generates a new project with KAppWizard*/
   void slotProjectNewAppl();
-  /** generates a new project file */
-  void slotProjectNew();
   /** opens a projectfile and close the old one*/
   void slotProjectOpen();
   /** opens a project committed by comandline or kfm */

@@ -1,3 +1,7 @@
+1999-05-03  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* remove the new-app-dialog from kdevelop (sorry Ralf)
+	* finished the changes in kapplication-wizard
+
 1999-05-03  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* finished work on the KDevelop User Manual, now completely covering
 	KDevelop - NOTE: the manual will be reviewed by Michael Farr and

@@ -2090,7 +2090,6 @@ BEGIN_STATUS_MSG(CKDevelop)
 
 
   ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with KAppWizard"))
-  ON_STATUS_MSG(ID_PROJECT_NEW,                   			  i18n("Creates a new project"))
   ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
   ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			  i18n("Closes the current project"))
   ON_STATUS_MSG(ID_PROJECT_ADD_FILE,              			  i18n("Adds a file to the current project"))

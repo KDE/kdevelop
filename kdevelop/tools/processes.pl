@@ -46,6 +46,9 @@ elsif ($processes{APPLICATION} eq "cpp") {
 elsif ($processes{APPLICATION} eq "qtnormal") {
   changeQtApp();
 }
+elsif ($processes{APPLICATION} eq "customproj") {
+  changeCustomApp();
+}
 
 exit;
 
@@ -1867,5 +1870,117 @@ sub changeQtApp() {
     chdir ($underDirectory);
     mkdir ("api",0777);
     system ("kdoc -d ./api/ $name *.h");
+  }
+}
+
+sub changeCustomApp() {
+  #create the templatedirectory
+  mkdir ($nameLittle,0777);
+  chdir ($underDirectory);
+  mkdir ("templates",0777);
+
+  #copying the templates in the templatedirectoy
+  if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
+  else {
+    if ($processes{HEADER} eq "yes") {
+      $directory = $homedirectory . "/.kde/share/apps/kdevelop/header";
+      $targetdirectory = $underDirectory . "/templates";
+      copy ($directory, $targetdirectory);
+      chdir ($targetdirectory);
+      rename ("header","header_template");
+    }
+    
+    if ($processes{CPP} eq "yes") {
+      $directory = $homedirectory . "/.kde/share/apps/kdevelop/cpp";
+      $targetdirectory = $underDirectory . "/templates";
+      copy ($directory, $targetdirectory);
+      chdir ($targetdirectory);
+      rename ("cpp","cpp_template");
+    }
+  }
+
+  #if GNU-Files was chosen in kAppWizard
+  if ($processes{GNU} eq "yes") {
+  
+    #copying the GNU-Files and renamed these
+    chdir ($kdedirectory);
+    copy ("share/apps/kdevelop/templates/AUTHORS_template", $overDirectory);
+    copy ("share/apps/kdevelop/templates/COPYING_template", $overDirectory);
+    copy ("share/apps/kdevelop/templates/ChangeLog_template", $overDirectory);
+    copy ("share/apps/kdevelop/templates/INSTALL_template", $overDirectory);
+    copy ("share/apps/kdevelop/templates/README_template", $overDirectory);
+    copy ("share/apps/kdevelop/templates/TODO_template", $overDirectory);
+    chdir ($overDirectory);
+    rename ("AUTHORS_template", "AUTHORS");
+    rename ("COPYING_template", "COPYING");
+    rename ("ChangeLog_template", "ChangeLog");
+    rename ("INSTALL_template", "INSTALL");
+    rename ("README_template", "README");
+    rename ("TODO_template", "TODO");
+    
+    # replaced AUTHOR and EMAIL
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    $oldfile = "AUTHORS";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    $oldfile = "AUTHORS";
+    replaceOldFile($word,$replace,$oldfile);
+  }
+  #if LSM-Files was chosen in kAppWizard
+  if ($processes{LSM} eq "yes") {
+    
+    #copying, rename and replace in the lsm-template
+    chdir ($kdedirectory);
+    copy ("share/apps/kdevelop/templates/lsm_template", $overDirectory);
+    chdir ($overDirectory);
+    rename ("lsm_template", $nameLittle . ".lsm");
+    $oldfile = $nameLittle . ".lsm";
+    $word = "PROJECT_NAME";
+    $replace = $name;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "VERSION";
+    $replace = $processes{VERSION};
+    replaceOldFile($word,$replace,$oldfile); 
+  }
+
+  #if USER-Docs was chosen in kAppWizard
+  if ($processes{USER} eq "yes") {
+    chdir ($underDirectory);
+    mkdir ("docs",0777);
+    chdir ($underDirectory . "/docs");
+    mkdir ("en",0777);
+    #copying, rename and replace in the handbook-en-template
+    chdir ($kdedirectory);
+    $targetdirectory = $underDirectory . "/docs/en";
+    copy ("share/apps/kdevelop/templates/handbook_en_template", $targetdirectory);
+    chdir ($targetdirectory);
+    rename ("handbook_en_template", "index.sgml");
+    $oldfile = "index.sgml";
+    $word = "PROJECT_NAME";
+    $replace = $name;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "VERSION";
+    $replace = $processes{VERSION};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
   }
 }

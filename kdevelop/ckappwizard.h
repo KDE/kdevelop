@@ -164,7 +164,7 @@ private:
   QListViewItem *othersentry;
   //QListViewItem *citem;
   QListViewItem *cppitem;
-  QListViewItem *emptyprojitem;
+  QListViewItem *customprojitem;
   //QListViewItem *gtknormalitem;
   // QListViewItem *gtkminiitem;
   QListViewItem *qtnormalitem;

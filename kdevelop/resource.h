@@ -93,7 +93,6 @@
 // Project-menu entries 
 
 #define ID_PROJECT_KAPPWIZARD       13010
-#define ID_PROJECT_NEW              13020
 #define ID_PROJECT_OPEN			        13030
 #define ID_PROJECT_CLOSE            13040
 #define ID_PROJECT_NEW_CLASS        13050

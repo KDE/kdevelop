@@ -28,56 +28,12 @@
 #include "cfilepropdlg.h"
 #include "cnewfiledlg.h"
 #include "cnewclassdlg.h"
-#include "cnewprojectdlg.h"
 #include "caddnewtranslationdlg.h"
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
  *                                                                   *
  ********************************************************************/ 
-
-void CKDevelop::slotProjectNew(){
-  QString old_project="";
-  if(!CToolClass::searchProgram("perl")){
-    return;
-  }
-  if(!CToolClass::searchProgram("autoconf")){
-    return;
-  }
-  if(!CToolClass::searchProgram("automake")){
-    return;
-  }
-  if(project){
-    old_project = prj->getProjectFile();
-    if(!slotProjectClose()){
-      return;
-    }
-  }
-	// Currently a project open ?
-	slotStatusMsg(i18n("Creating new project..."));
-			
-//	CNewEmptyProject  *dlg = new CNewEmptyProject(this,"NewEmptyProject");
-	CNewProjectDlg *new_dlg = new CNewProjectDlg(this,"NewEmptyProject");
-/*	if(dlg->exec())
-	{
-		dlg->CreateNewEmptyProject();
-	}
-*/
-  new_dlg->exec();
-  QString file = new_dlg->getNewProjectFile();
-
-  if(new_dlg->generatedNewProject()){
-      readProjectFile(file);
-  }
-  else if (old_project != ""){ // if cancel load the old project again
-    readProjectFile(old_project);
-  }
-	
-//	delete(dlg);
-	
-	slotStatusMsg(IDS_DEFAULT);
-}
-
 
 bool CKDevelop::slotProjectClose(){
   // R.Nolden 03.02.99

@@ -133,7 +133,7 @@ void CKAppWizard::initPages(){
 	othersentry->setExpandable (true);
 	othersentry->setOpen (TRUE);
 	othersentry->sortChildItems (0,FALSE);
-	emptyprojitem = new QListViewItem (othersentry,"empty project");
+	customprojitem = new QListViewItem (othersentry,"custom project");
 
 	/*	gtkentry = new QListViewItem (applications, "GTK");
 		gtkentry->setExpandable (true);
@@ -806,8 +806,8 @@ void CKAppWizard::okPermited() {
     else if (gtkminiitem->isSelected()) {
     entries << "gtkmini\n";
     }*/
-  else if (emptyprojitem->isSelected()) {
-    entries << "emptyproj\n";
+  else if (customprojitem->isSelected()) {
+    entries << "customproj\n";
   }
   entries << "NAME\n";
   entries << nameline->text() << "\n";
@@ -996,8 +996,8 @@ void CKAppWizard::slotAppEnd() {
   //delete (gtknormalitem);
   //delete (gtkminiitem);
   //delete (gtkentry);
-  othersentry->removeItem (emptyprojitem);
-  delete (emptyprojitem);
+  othersentry->removeItem (customprojitem);
+  delete (customprojitem);
   delete (othersentry);
   delete (applications);
   reject();
@@ -1031,6 +1031,8 @@ void CKAppWizard::slotApplicationClicked() {
     miniicon->setChecked(true);
     miniload->setEnabled(true);
     iconload->setEnabled(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
@@ -1048,6 +1050,8 @@ void CKAppWizard::slotApplicationClicked() {
     miniicon->setChecked(true);
     miniload->setEnabled(true);
     iconload->setEnabled(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
@@ -1065,6 +1069,8 @@ void CKAppWizard::slotApplicationClicked() {
     miniicon->setChecked(true);
     miniload->setEnabled(true);
     iconload->setEnabled(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
@@ -1076,12 +1082,14 @@ void CKAppWizard::slotApplicationClicked() {
     apidoc->setChecked(false);
     datalink->setEnabled(false);
     datalink->setChecked(false);
-    progicon->setEnabled(true);
-    progicon->setChecked(true);
-    miniicon->setEnabled(true);
-    miniicon->setChecked(true);
-    miniload->setEnabled(true);
-    iconload->setEnabled(true);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(false);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
@@ -1101,10 +1109,25 @@ void CKAppWizard::slotApplicationClicked() {
       okButton->setEnabled(true);
       }
       }*/
-  else if (emptyprojitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if (customprojitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(false);
+    apidoc->setChecked(false);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(false);
+    generatesource->setChecked(false);
+    generatesource->setEnabled(false);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
+
   }
   /*  else if (gtknormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -1277,7 +1300,7 @@ void CKAppWizard::slotProcessExited() {
   else if (qtnormalitem->isSelected()) {
     project->setProjectType("normal_qt");
   } 
-  else if (emptyprojitem->isSelected()) {
+  else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
   }
   
@@ -1697,27 +1720,31 @@ void CKAppWizard::slotProcessExited() {
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
   
-    QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
-    q->clearArguments();
-    if (generatesource->isChecked()) {
-      *q << "perl" << path1 + "processesend.pl";
-    }
-    q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
-    if (!generatesource->isChecked()) {
-      q->clearArguments();
-      directorytext = directoryline->text();
-      nametext = nameline->text();
-      nametext = nametext.lower();
-      *q << "rm" << directorytext + "/" + nametext + "/*.cpp";
-      q->start(KProcess::Block,KProcess::AllOutput);      
-      q->clearArguments();
-      *q << "rm" << directorytext + "/" + nametext + "/*.h";
-      q->start(KProcess::Block,KProcess::AllOutput);      
-    }
+  QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
+  q->clearArguments();
+  *q << "perl" << path1 + "processesend.pl";
+  q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
+  
 }
 
 // enable cancelbutton if everything is done
 void CKAppWizard::slotMakeEnd() {
+  if (!generatesource->isChecked()) {
+    QFile file;
+    q->clearArguments();
+    directorytext = directoryline->text();
+    nametext = nameline->text();
+    nametext = nametext.lower();
+    file.remove (directorytext + "/" + nametext + "/main.cpp");
+    file.remove (directorytext + "/" + nametext + "/" + nametext + ".cpp");
+    file.remove (directorytext + "/" + nametext + "/" + nametext + ".h");
+    if (kdenormalitem->isSelected() || qtnormalitem->isSelected()) {
+      file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.cpp");
+      file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.h");
+      file.remove (directorytext + "/" + nametext + "/" + nametext + "view.cpp");
+      file.remove (directorytext + "/" + nametext + "/" + nametext + "view.h");
+    }
+  }
   cancelButton->setEnabled(true);
   gen_prj = true;
 }

@@ -24,17 +24,18 @@ $name =  $processes{NAME};
 $overDirectory = $processes{DIRECTORY};
 $underDirectory = $processes{DIRECTORY} . $nameLittle;
 
-
-#start make -f Makefile.dist
-printflush (STDOUT,"create configurationfiles...\n");
-chdir ($overDirectory);
-system ("make -f Makefile.dist");
-
-#start configure
-printflush (STDOUT,"make configure...\n");
-chdir ($overDirectory);
-system ("./configure");
-
+if ($processes{APPLICATION} eq "customproj") {}
+else {
+  #start make -f Makefile.dist
+  printflush (STDOUT,"create configurationfiles...\n");
+  chdir ($overDirectory);
+  system ("make -f Makefile.dist");
+  
+  #start configure
+  printflush (STDOUT,"make configure...\n");
+  chdir ($overDirectory);
+  system ("./configure");
+}
 #if User-Documentation was chosen in kAppWizard
 if ($processes{USER} eq "yes") {
   
@@ -44,9 +45,7 @@ if ($processes{USER} eq "yes") {
   system ("sgml2html index.sgml");
 }
 
-
 chdir ($underDirectory);
-
 printflush (STDOUT,"READY\n");
 
 exit;
