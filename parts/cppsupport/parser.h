@@ -56,8 +56,7 @@ public /*rules*/ :
     bool parseTypedef();
     bool parseAsmDefinition();
     bool parseTemplateDeclaration();
-    bool parseDeclaration2();
-	bool parseDeclaration();
+    bool parseDeclaration();
 
 
     bool parseNestedNameSpecifier();

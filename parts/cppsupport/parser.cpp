@@ -215,6 +215,7 @@ bool Parser::parseTranslationUnit()
     while( !lex->lookAhead(0).isNull() ){
         if( !parseDefinition() ){
             // error recovery
+            lex->nextToken();
             skipUntilDeclaration();
         }
     }
@@ -298,9 +299,8 @@ bool Parser::parseLinkageBody()
         if( !parseDefinition() ){
             // error recovery
             syntaxError();
-//             if( skipUntil(';') ){
-//                 lex->nextToken(); // skip ;
-//             }
+            lex->nextToken();
+            skipUntilDeclaration();
         }
     }
 
@@ -1631,6 +1631,7 @@ bool Parser::parseNestedNameSpecifier()
     bool ok = false;
 
     while( lex->lookAhead(0) == Token_identifier ){
+		index = lex->index();
 
          if( lex->lookAhead(1) == '<' ){
             lex->nextToken(); // skip template name
@@ -1650,8 +1651,10 @@ bool Parser::parseNestedNameSpecifier()
             if ( lex->lookAhead(0) == Token_scope ) {
                 lex->nextToken();
                 ok = true;
-            } else
-                break;
+            } else {
+				lex->setIndex( index );
+				break;
+			}
 
         } else if( lex->lookAhead(1) == Token_scope ){
             lex->nextToken(); // skip name

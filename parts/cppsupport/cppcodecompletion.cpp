@@ -228,8 +228,8 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
                  SLOT( slotCursorPositionChanged() ) );
 */
-	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)),
-		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
+//	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)),
+//		this, SLOT(slotTextChanged( int, int, const QString& ) ) );
 
 /*
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
@@ -1314,6 +1314,7 @@ CppCodeCompletion::typeOf( )
 void
 CppCodeCompletion::slotTextChangedRoberto( int nLine, int nCol, const QString &/*text*/)
 {
+    kdDebug(9007) << "CompletionEntry::slotTextChangedRoberto()" << endl;
     QString strCurLine = m_pEditIface->textLine( nLine );
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
