@@ -203,7 +203,7 @@ bool CTagsPart::ensureTagsLoaded()
         if (r != KMessageBox::Yes)
             return false;
         if (!createTagsFile()) {
-            KMessageBox::sorry(mainWindow()->main(), i18n("Could not create tags file"));
+            KMessageBox::sorry(mainWindow()->main(), i18n("Could not create tags file!\n\nPlease make sure 'ctags' can be found in your PATH."));
             return false;
         }
     }
@@ -293,21 +293,21 @@ bool CTagsPart::loadTagsFile()
 
 bool CTagsPart::createTagsFile()
 {
-    kdDebug(9022) << "create tags file" << endl;
+	kdDebug(9022) << "create tags file" << endl;
+	
+	KProcess proc;
+	proc.setWorkingDirectory( project()->projectDirectory() );
 
-    QString cmd = "cd ";
-    cmd += KShellProcess::quote(project()->projectDirectory());
-    cmd += " && ctags -n --c++-types=+px";
-
-    QStringList l = project()->allFiles();
-    QStringList::ConstIterator it;
-    for (it = l.begin(); it != l.end(); ++it) {
-        cmd += " ";
-        cmd += KShellProcess::quote(*it);
-    }
-
-    KShellProcess proc("/bin/sh");
-    proc << cmd;
+	proc << "ctags";
+	proc << "-n";
+	proc << "--c++-types=+px";
+	
+	QStringList l = project()->allFiles();
+	QStringList::ConstIterator it;
+	for (it = l.begin(); it != l.end(); ++it) 
+	{
+		proc << *it;
+	}
 
     QApplication::setOverrideCursor(Qt::waitCursor);
     bool success = proc.start(KProcess::Block);
