@@ -792,14 +792,16 @@ CppCodeCompletion::completeText( )
 		
 		type = evaluateExpression( expr, ctx );
 	    }
-	    
-	}	
+	}
     }
     m_pSupport->backgroundParser()->unlock();
+ 
+    if( !ctx )
+	return;
     
     if( !showArguments ){
 	QValueList<KTextEditor::CompletionEntry> entryList;
-		
+	
 	if( type.isEmpty() && expr.isEmpty() ){	    
 	    computeCompletionEntryList( entryList, ctx );
 	    computeCompletionEntryList( entryList, m_pSupport->classStore()->globalScope() );
@@ -814,9 +816,9 @@ CppCodeCompletion::completeText( )
 	if( entryList.size() ){
 	    unique( entryList );
 #if KDE_VERSION > 305
-      qHeapSort( entryList );
+	    qHeapSort( entryList );
 #else
-// @todo      
+	    // @todo      
 #endif      
 	    m_activeCompletion->showCompletionBox( entryList, word.length() );
 	}
@@ -837,7 +839,7 @@ CppCodeCompletion::completeText( )
 	
 	if( !this_type.isEmpty() && expr.isEmpty() )
 	    computeSignatureList( signatureList, word, this_type );
-	    
+	
 	if( !signatureList.isEmpty() ){
 	    unique( signatureList );
 	    qHeapSort( signatureList );
