@@ -1,9 +1,3 @@
-This outputview shows "diffs" between files.
-If "kompare" from KDESDK is installed, it'll use
-its widget to display the diff, otherwise
-in a QTextEdit with simple highlighting
-
-Just right-click on a CVS or Perforce file
-and select "diff to repository" to see it in action.
-
-Maintainer: Harald Fernengel <harry@kdevelop.org>
+Please read the on-line, automaticaly updated KDevelop API documentation at:
+http://www.kdevelop.org
+or read the README.dox file.

@@ -1,0 +1,10 @@
+/** \class GrepViewPart
+Integrates "find|grep" in KDevelop - allows fast searching of multiple files using patterns or regular expressions.
+
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
+
+\ummaintained This part is currently un-maintained.
+
+\feature grep works on editor context menu
+
+*/
