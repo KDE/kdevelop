@@ -28,6 +28,8 @@
 #include <cstdlib>
 #include <db.h>
 
+#include <config.h>
+
 struct Catalog::Private
 {
     QString dbName;
@@ -236,7 +238,7 @@ void Catalog::addIndex( const QCString& name )
 	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
 
         if ((ret = dbp->open(
-	    dbp, indexName, 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	    dbp BDB_OPEN_HACK, indexName, 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	    qWarning( "db_open: %s", db_strerror(ret) );
 	    dbp->close( dbp, 0 );
 	    return;
@@ -304,7 +306,7 @@ void Catalog::open( const QString& dbName )
     }
 
     if ((ret = d->dbp->open(
-	d->dbp, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
+	d->dbp  BDB_OPEN_HACK, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
 	qWarning( "db_open: %s", db_strerror(ret) );
 	close();
 	return;

@@ -402,12 +402,12 @@ fi
 ])
 
 dnl  **********
-dnl  Simple Check for Berkeley DB = 3
+dnl  Simple Check for Berkeley DB >= 3
 dnl  **********
 
 AC_DEFUN(KDEV_CHECK_BDB,
 [
-  AC_MSG_CHECKING(for Berkeley DB = 3)
+  AC_MSG_CHECKING(for Berkeley DB >= 3)
 
   AC_CACHE_VAL(ac_cv_bdb,
   [
@@ -429,18 +429,41 @@ AC_DEFUN(KDEV_CHECK_BDB,
          db->open( db, 0, NULL, DB_BTREE, DB_CREATE, 0644 );
       #endif
     ],
-      ac_cv_bdb=yes,
-      ac_cv_bdb=no
+      ac_cv_bdb=yes_3or40,
+
+      AC_TRY_LINK([
+        #include <db.h>
+      ],
+      [
+        #if DB_VERSION_MAJOR < 3
+           choke me
+        #else
+           DB *db;
+           db->open( db, 0, 0, NULL, DB_BTREE, DB_CREATE, 0644 );
+        #endif
+      ],
+        ac_cv_bdb=yes_ge_41,
+        ac_cv_bdb=no
+      )
+
     )
     CXXFLAGS="$save_CXXFLAGS"
     AC_LANG_RESTORE
    ])
 
-  if test "$ac_cv_bdb" != "yes"; then
+  if test "$ac_cv_bdb" = "no"; then
     AC_MSG_ERROR(no - please install Berkeley DB >= 3)
   else
-    AC_MSG_RESULT(yes)
+    if test "$ac_cv_bdb" = "yes_3or40" ; then
+      bdb_open_hack=""
+      AC_MSG_RESULT([yes - <=4.0])
+    else
+      bdb_open_hack=",0"
+      AC_MSG_RESULT([yes - >=4.1])
+    fi
   fi
+
+  AC_DEFINE_UNQUOTED(BDB_OPEN_HACK, $bdb_open_hack, [account for Berkeley DB API different from v4.1 onwards])
 ])
 
 
