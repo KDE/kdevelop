@@ -233,5 +233,3 @@ void DockMainWindow::createShellGUI( bool create )
 #ifndef NO_INCLUDE_MOCFILES // for Qt-only projects, because tmake doesn't take this name
 //#include "dockmainwindow_compat.moc.cpp"
 #endif
-
-#include "dockmainwindow_compat.moc"
