@@ -1,3 +1,7 @@
+1999-08-10  Jonas Nordin  <jonas.nordin@cenacle.se>
+	* added parsing of comments for all parsed items.
+	* fixed parsing of method and attribute declarations on multiple lines.
+
 1999-08-09  Jonas Nordin  <jonas.nordin@cenacle.se>
 	* fixed the layout of the ClassTool dialog.
 	* added possibility to addpure virtual methods to
