@@ -3108,14 +3108,17 @@ void KWriteDoc::doActionGroup(KWActionGroup *g, int flags) {
   tagEnd = 0;
   tagStart = 0xffffff;
 
-  a = g->action;
-  g->action = 0L;
-  while (a) {
-    doAction(a);
-    next = a->next;
-    g->insertAction(a);
-    a = next;
+  if (g) {
+    a = g->action;
+    g->action = 0L;
+    while (a) {
+      doAction(a);
+      next = a->next;
+      g->insertAction(a);
+      a = next;
+    }
   }
+  
   optimizeSelection();
   if (tagStart <= tagEnd) updateLines(tagStart,tagEnd,flags);
   setModified(true);
