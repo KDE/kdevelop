@@ -23,6 +23,7 @@
    <Action name="project_open" />
    <Action name="project_open_recent" />
    <Action name="project_close" />
+   <Action name="project_set_active"/>
    <Separator/>
    <Action name="project_add_existing_files" />
    <Merge/>

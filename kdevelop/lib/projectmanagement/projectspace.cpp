@@ -57,9 +57,6 @@ QString ProjectSpace::projectSpacePluginName(QString fileName){
   QDomElement psElement = doc.documentElement(); // get the Projectspace
   return psElement.attribute("pluginName");
 }
-void ProjectSpace::addProject(QString file){
-  
-}
 void ProjectSpace::addProject(Project* prj){
   cerr << endl << "enter ProjectSpace::addProject";
   m_projects->append (prj);
@@ -67,6 +64,18 @@ void ProjectSpace::addProject(Project* prj){
 }
 void ProjectSpace::setCurrentProject(Project* prj){
   m_current_project = prj;
+}
+
+void ProjectSpace::setCurrentProject(QString name){
+  Project* pProject;
+  for(pProject=m_projects->first();pProject !=0;pProject=m_projects->next()){
+      if(pProject->getName() == name){
+	m_current_project = pProject;
+      }
+  }  
+}
+Project* ProjectSpace::currentProject(){
+  return m_current_project;
 }
 
 void ProjectSpace::removeProject(QString name){
@@ -96,7 +105,7 @@ void ProjectSpace::modifyDefaultFiles(){
 
 /** returns the name of the projectspace*/
 QString ProjectSpace::getName(){
-  return "";
+  return m_name;
 }
 
 /** Fetch the name of the version control system */
@@ -125,6 +134,9 @@ void ProjectSpace::setAbsolutePath(QString path){
   m_path = path;
 }
 
+QString ProjectSpace::absolutePath(){
+  return m_path;
+}
 /** Store the name of version control system */
 void ProjectSpace::setVCSystem(QString vcsystem){
 }
@@ -192,7 +204,9 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
   m_name = psElement.attribute("name");
   //  m_path = psElement.attribut("path");
   m_version = psElement.attribute("version");
+  QString lastActive = psElement.attribute("lastActiveProject");
   readGlobalConfig(doc,psElement);
+  setCurrentProject(lastActive);
   file.close();
 
   // the "user" one
@@ -293,6 +307,7 @@ bool ProjectSpace::writeXMLConfig(){
   //  psElement.setAttribute("path",m_path);
   ps.setAttribute("pluginName", m_plugin_name); // the projectspacetype name
   ps.setAttribute("version", m_version);
+  ps.setAttribute("lastActiveProject",m_current_project->getName());
 
   writeGlobalConfig(doc,ps);
 
@@ -360,6 +375,14 @@ bool ProjectSpace::writeUserConfig(QDomDocument& doc,QDomElement& psElement){
 
 QString ProjectSpace::getProgrammingLanguage(){
   return m_language;
+}
+QStringList ProjectSpace::allProjectNames(){
+  QStringList list;
+  Project* pProject;
+  for(pProject=m_projects->first();pProject !=0;pProject=m_projects->next()){
+    list.append(pProject->getName());
+  }
+  return list;
 }
 
 void ProjectSpace::dump(){

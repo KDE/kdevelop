@@ -48,7 +48,7 @@
 class NewProjectDlg : public NewProjectDlgBase  {
 Q_OBJECT
 public: 
-	NewProjectDlg(QWidget *parent=0, const char *name=0,bool modal=true);
+	NewProjectDlg(ProjectSpace* projectSpace=0,QWidget *parent=0, const char *name=0,bool modal=true);
 	virtual	~NewProjectDlg();
 	void initDialog();
 
@@ -56,11 +56,14 @@ public:
 	void slotProjectSpaceSelected (QListViewItem *item );
 	void slotAppwizardSelected (QIconViewItem* item);
 	virtual void slotOk(); // from the KDialogBase
+	virtual void slotAddToCurrentProjectSpaceClicked();
+	virtual void slotNewProjectSpaceClicked();
 	void slotProjectSpaceDirClicked();
 	void slotProjectSpaceNameEdit(const QString& text);
 	void slotProjectSpaceLocationEdit(const QString & text);
 	void slotProjectNameEdit(const QString& text);
 	void slotProjectLocationEdit(const QString& text);
+	void slotProjectDirClicked();
 	
 	protected:
 	
@@ -71,6 +74,7 @@ public:
 	AppWizard* m_current_appwizard_plugin;
 	QString m_current_prjspace_name;
 	QPixmap* m_pixmap;
+	ProjectSpace* m_pProjectSpace;
 	
 	// others
 	bool m_project_name_modified;

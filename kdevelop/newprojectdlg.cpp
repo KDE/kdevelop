@@ -26,7 +26,7 @@
 #include <klibloader.h>
 #include <qfileinfo.h>
 #include <projectspace.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 #include <qdir.h>
 #include <qtoolbutton.h>
 #include <qtextview.h>
@@ -42,7 +42,7 @@
 
 
 
-NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
+NewProjectDlg::NewProjectDlg(ProjectSpace* projectSpace,QWidget *parent, const char *name,bool modal )
   : NewProjectDlgBase(parent,name,modal){
   
   m_current_appwizard_plugin=0; // no current
@@ -51,6 +51,7 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
   m_projectspace_location_modified=false;
   m_default_location = QDir::homeDirPath() + "/testprj";
   m_pixmap = new QPixmap();
+  m_pProjectSpace = projectSpace;
   
   //  QStringList::Iterator it;		
   KStandardDirs* std_dirs = KGlobal::dirs();
@@ -110,11 +111,14 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
 	  SLOT(slotProjectSpaceSelected(QListViewItem*)));
   connect(appwizard_iconview,SIGNAL(selectionChanged (QIconViewItem*)),
 	  SLOT(slotAppwizardSelected (QIconViewItem*) ) );
-  connect(m_prjspace_dir_button,SIGNAL(clicked()),SLOT(slotProjectSpaceDirClicked()));	 			
+
+  connect(m_prjspace_dir_button,SIGNAL(clicked()),SLOT(slotProjectSpaceDirClicked()));	 		  
   connect(m_prjspace_name_linedit, SIGNAL(textChanged(const QString &)),
           SLOT(slotProjectSpaceNameEdit(const QString &)));
   connect(m_prjspace_location_linedit, SIGNAL(textChanged(const QString &)),
           SLOT(slotProjectSpaceLocationEdit(const QString &)));
+
+  connect(m_project_dir_button,SIGNAL(clicked()),SLOT(slotProjectDirClicked()));
   connect(m_prjname_linedit, SIGNAL(textChanged(const QString &)),
           SLOT(slotProjectNameEdit(const QString &)));
   connect(m_prjlocation_linedit, SIGNAL(textChanged(const QString &)),
@@ -122,7 +126,6 @@ NewProjectDlg::NewProjectDlg(QWidget *parent, const char *name,bool modal )
   
   // init the first one
   //  prjspace_listbox->setSelected(0,true);
-  new_radio_button->setChecked(true);
   resize(637,489);
   
 }
@@ -138,6 +141,9 @@ void NewProjectDlg::slotProjectNameEdit(const QString &){
   if(m_prjname_linedit->hasFocus()){
     m_project_name_modified = true;
   }
+  if(!m_project_location_modified){
+    m_prjlocation_linedit->setText(m_default_location + "/" + m_prjname_linedit->text().lower());
+  } 
 }
 void NewProjectDlg::slotProjectLocationEdit(const QString &){
   if(m_prjlocation_linedit->hasFocus()){
@@ -196,6 +202,7 @@ void NewProjectDlg::slotAppwizardSelected (QIconViewItem* item){
   m_pixmap->load(appwizard_plg->getPreviewPicture());
   preview_widget->setPixmap(*m_pixmap);
   cerr << "Picture:" << appwizard_plg->getPreviewPicture() << endl;
+  ok_button->setEnabled(true);
 }
 
 void NewProjectDlg::slotProjectSpaceNameEdit(const QString &text){
@@ -214,54 +221,85 @@ void NewProjectDlg::slotProjectSpaceNameEdit(const QString &text){
 void NewProjectDlg::slotOk(){
   bool new_projectspace = true;
   ProjectSpace* selected_prjspace;
-  if(current_radio_button->isChecked()) new_projectspace = false;
-  
-  
-  QString constraint = QString("[Name] == '%1'").arg(m_current_prjspace_name);
-  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
-  KService *service = *offers.begin();
-  kdDebug(9000) << "Found ProjectSpace Component " << service->name() << endl;
-
-  KLibFactory *factory = KLibLoader::self()->factory(service->library());
-  QObject *obj = factory->create(this, service->name().latin1(),
-				 "ProjectSpace");
-        
-  if (!obj->inherits("ProjectSpace")) {
-    kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
-    return;
+  QString relProjectPath;
+  if(current_radio_button->isChecked()){
+    new_projectspace = false;
   }
-
-  selected_prjspace = (ProjectSpace*) obj;
+  if (new_projectspace) {
+    QString constraint = QString("[Name] == '%1'").arg(m_current_prjspace_name);
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
+    KService *service = *offers.begin();
+    kdDebug(9000) << "Found ProjectSpace Component " << service->name() << endl;
     
-  // name, path
-  selected_prjspace->setAbsolutePath(m_prjspace_location_linedit->text());
-  selected_prjspace->setName(m_prjspace_name_linedit->text());
-  
-  m_current_appwizard_plugin->init(new_projectspace,selected_prjspace,m_prjname_linedit->text());
-  Project* prj = m_current_appwizard_plugin->getProject();
-  kdDebug(9000) << "NewProjectDlg: set some project props" << endl;
+    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+    QObject *obj = factory->create(this, service->name().latin1(),
+				   "ProjectSpace");
     
-  prj->setName(m_prjname_linedit->text());
-  QString relProjectPath = CToolClass::getRelativePath(m_prjspace_location_linedit->text(),
-							m_prjlocation_linedit->text());
-  prj->setRelativePath(relProjectPath);
-  prj->setAbsolutePath(m_prjlocation_linedit->text());
-  kdDebug(9000) << "relative ProjectPath:" <<relProjectPath  << endl;
-  
+    if (!obj->inherits("ProjectSpace")) {
+      kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
+      return;
+    }
+    
+    selected_prjspace = (ProjectSpace*) obj;
+    
+    // name, path
+    selected_prjspace->setAbsolutePath(m_prjspace_location_linedit->text());
+    selected_prjspace->setName(m_prjspace_name_linedit->text());
+    m_current_appwizard_plugin->init(true,selected_prjspace,m_prjname_linedit->text(),
+				     m_prjlocation_linedit->text());
+  }
+  else { // use current ProjectSpace
+    m_current_appwizard_plugin->init(false,m_pProjectSpace,m_prjname_linedit->text(),
+				     m_prjlocation_linedit->text());
+  }
   m_current_appwizard_plugin->exec(); // exec the dialog
   kdDebug(9000) << "ApplicationWizard exited" << endl;
-  
   accept();
 }
 void NewProjectDlg::slotProjectSpaceDirClicked(){
-  QString dir = QFileDialog::getExistingDirectory ( m_prjspace_location_linedit->text(),this,"dirdlg",
+  QString dir = KFileDialog::getExistingDirectory ( m_prjspace_location_linedit->text(),this,
 						    "Projectspace Location" );
-  m_prjspace_location_linedit->setText(dir);
+  if(!dir.isEmpty()){
+    m_prjspace_location_linedit->setText(dir);
+    m_projectspace_location_modified = true;
+  }
+ 
+}
+void NewProjectDlg::slotProjectDirClicked(){
+  QString dir = KFileDialog::getExistingDirectory ( m_prjspace_location_linedit->text(),this,
+						    "Projectspace Location" );
+  if(!dir.isEmpty()){
+    m_prjlocation_linedit->setText(dir);
+    m_project_location_modified = true;
+  }
 }
 
 
 void NewProjectDlg::initDialog(){
   prjspace_listview->header()->hide();
+  if(m_pProjectSpace == 0){
+    slotNewProjectSpaceClicked();
+    current_radio_button->setEnabled(false);
+    new_radio_button->setChecked(true);
+  }
+  else{
+    slotAddToCurrentProjectSpaceClicked();
+    current_radio_button->setChecked(true);
+    m_prjspace_location_linedit->setText(m_pProjectSpace->absolutePath());
+    m_prjspace_name_linedit->setText(m_pProjectSpace->getName());
+  }
+  ok_button->setEnabled(false);
+
+}
+void NewProjectDlg::slotAddToCurrentProjectSpaceClicked(){
+  m_prjspace_name_linedit->setEnabled(false);
+  m_prjspace_dir_button->setEnabled(false);
+  m_prjspace_location_linedit->setEnabled(false);
+}
+void NewProjectDlg::slotNewProjectSpaceClicked(){
+  m_prjspace_name_linedit->setEnabled(true);
+  m_prjspace_dir_button->setEnabled(true);
+  m_prjspace_location_linedit->setEnabled(true);
 }
 
 

@@ -30,7 +30,7 @@
 
 
 AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(parent,obj_name,true){
-  // code from kbugreport by David Faure
+  // some code from kbugreport by David Faure
   KConfig emailConf( QString::fromLatin1("emaildefaults") );
   emailConf.setGroup( QString::fromLatin1("UserInfo") );
   QString fromaddr = emailConf.readEntry( QString::fromLatin1("EmailAddress") );
@@ -53,14 +53,24 @@ AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(pare
 AppWizard::~AppWizard(){
 }
 
-void AppWizard::init(bool new_projectspace,ProjectSpace* projectspace,QString projectname){
+void AppWizard::init(bool new_projectspace,ProjectSpace* projectspace,QString projectName,QString absProjectLocation){
   kdDebug(9000) << "enter AppWizard::init" << endl;
   m_new_projectspace = new_projectspace;
   m_projectspace = projectspace;
-  getProject();
+  m_projectName = projectName;
+  m_absProjectLocation = absProjectLocation;
+
+  // create the project
+  m_project = PluginLoader::getNewProject(m_projecttype_name);
+  m_project->setName(projectName);
+  m_project->setAbsolutePath(absProjectLocation);
+  QString relProjectPath = CToolClass::getRelativePath(projectspace->absolutePath(),
+						       absProjectLocation);
+  m_project->setRelativePath(relProjectPath);
  
   if(!m_new_projectspace){
-    removePage(page(1)); // remove the headerpage
+    removePage(page(0)); // remove the name,license page
+    removePage(page(0)); // remove the headerpage
   }
   
 }
@@ -90,12 +100,6 @@ QString  AppWizard::getProjectSpaceName(){
 }
 QString  AppWizard::getPreviewPicture(){
   return m_application_picture;
-}
-Project* AppWizard::getProject(){
-  if(m_project == 0){ // no project instance
-    m_project = PluginLoader::getNewProject(m_projecttype_name);
-  }
-  return m_project;
 }
 
 void AppWizard::generateDefaultFiles(){

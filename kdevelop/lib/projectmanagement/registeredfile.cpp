@@ -72,6 +72,7 @@ void RegisteredFile::readConfig(KConfig* config){
 }
 void RegisteredFile::writeConfig(QDomDocument& doc, QDomElement& fileElement){
    cerr << "\nenter RegisteredFile::writeConfig";
+   fileElement.setAttribute("file",m_file);
    if(m_dist) {
      fileElement.setAttribute("dist","true");
    }
@@ -84,7 +85,6 @@ void RegisteredFile::writeConfig(QDomDocument& doc, QDomElement& fileElement){
    else{
      fileElement.setAttribute("install","false");
    }
-  fileElement.setAttribute("file",m_file);
   fileElement.setAttribute("installFile",m_install_file);
 }
 void RegisteredFile::readConfig(QDomElement& fileElement){

@@ -51,14 +51,12 @@ public:
  
  AppWizard(QWidget* parent=0, const char* name=0);
  virtual ~AppWizard();
- virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,QString projectname="");
+ virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,
+		   QString projectName="",QString absProjectLocation="");
  // for which workspace is this plugin
  QString  getProjectSpaceName();
  // the picture for the newProjectDialog, the QString contains the absolute path
  QString getPreviewPicture();
- /* returns a pointer to the Project*/
- Project* getProject();
- 
  /** generates default files/app, properties from configwidgets set in AppWizard*/
  virtual void generateDefaultFiles();
 
@@ -77,6 +75,8 @@ public:
   bool m_new_projectspace;
   ProjectSpace* m_projectspace;
   Project* m_project;
+  QString m_projectName;
+  QString m_absProjectLocation;
   
   //plugin infos, static
   QString m_project_space_name;

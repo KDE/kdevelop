@@ -51,8 +51,8 @@ KDESDIAppWizardPlugin::KDESDIAppWizardPlugin(QObject* parent,const char* name){
 KDESDIAppWizardPlugin::~KDESDIAppWizardPlugin(){	
 }
 
-void KDESDIAppWizardPlugin::init(bool new_projectspace,ProjectSpace* projectspace,QString projectname){
-  AppWizard::init(new_projectspace,projectspace,projectname); // the default one, generate a new project
+void KDESDIAppWizardPlugin::init(bool new_projectspace,ProjectSpace* projectspace,QString projectname, QString absProjectLocation){
+  AppWizard::init(new_projectspace,projectspace,projectname,absProjectLocation); // the default one, generate a new project
   
   //add a new page (fileprops)
   m_sdi_fileprops_page = new FilePropsPage(this,"fileprops");

@@ -39,17 +39,19 @@ class ProjectSpace : public KDevComponent, public Plugin  {
 
   /** nesessary to bootstrap a ProjectSpace*/
   static QString projectSpacePluginName(QString fileName);
-  /** create a project object based on the projecfile */
-  void addProject(QString file);
 
   void addProject(Project* prj);
   void removeProject(QString name);
 
   void setCurrentProject(Project* prj);
+  void setCurrentProject(QString name);
+  Project* currentProject();
+  
   
   /** set the projectspace name*/
   void setName(QString name);
   void setAbsolutePath(QString path);
+  QString absolutePath();
   void setVersion(QString version);
   
   /** Store the name of version control system */
@@ -83,6 +85,7 @@ class ProjectSpace : public KDevComponent, public Plugin  {
   
   QString getCompany();
   QString getProgrammingLanguage();
+  QStringList allProjectNames();
   
   /***/
   virtual void generateDefaultFiles();

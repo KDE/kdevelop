@@ -50,6 +50,7 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f) :
   m_pCore = new KDevelopCore(this);
   createGUI(0);
   m_pCore->loadInitialComponents();
+  resize(800,600); // temp
 }
 
 

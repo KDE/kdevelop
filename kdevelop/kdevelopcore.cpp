@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2000 by The KDevelop Team                               *
- *   kdevelop-team@fara.cs.uni-potsdam.de                                  *
+ *   kdevelop-team@kdevelop.org                                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@ KDevelopCore::KDevelopCore(KDevelop *pGUI)
    ,m_pViewHandler(0L)
 {
     m_pClassStore = new ClassStore();
-
+    m_pProjectSpace = 0L;
     initActions();
 }
 
@@ -104,14 +104,16 @@ void KDevelopCore::initActions()
                           m_pKDevelopGUI->actionCollection(), "project_close");
     pAction->setEnabled(false);
     pAction->setStatusText( i18n("Closes the current project") );
-    
+
+    KActionMenu* pActionMenu = new KActionMenu(i18n("Set active Project"),m_pKDevelopGUI->actionCollection(),"project_set_active");
+    connect( pActionMenu->popupMenu(), SIGNAL( activated( int ) ),
+             this, SLOT( slotProjectSetActivate( int ) ) );
+
     pAction = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
                           m_pKDevelopGUI->actionCollection(), "project_add_existing_files");
     pAction->setEnabled(false);
     pAction->setStatusText( i18n("Adds existing file(s) to the project") );
     
-   
-
     pAction = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
                           m_pKDevelopGUI->actionCollection(), "project_options");
     pAction->setStatusText( i18n("Sets project and compiler options") );
@@ -328,6 +330,7 @@ bool KDevelopCore::loadProjectSpace(const QString &name){
   m_pProjectSpace = pComp;
   initComponent(pComp);
   m_pKDevelopGUI->guiFactory()->addClient( m_pProjectSpace);
+
   return true;
 }
 
@@ -341,6 +344,7 @@ void KDevelopCore::newFile()
 }
 
 void KDevelopCore::unloadProjectSpace(){
+  m_pProjectSpace->writeXMLConfig();
   m_components.remove(m_pProjectSpace);
   delete m_pProjectSpace;
   m_pProjectSpace = 0L;
@@ -386,15 +390,18 @@ void KDevelopCore::loadProject(const QString &fileName)
             (*it4)->languageSupportOpened(m_pLanguageSupport);
   }
   
-  
-  /*KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+   // set active Project
+  fillActiveProjectPopupMenu();
+  // some actions
+  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
   pAC->action("project_close")->setEnabled(true);
-  pAC->action("project_add_existing_files")->setEnabled(true);
-  pAC->action("project_add_translation")->setEnabled(true);
-  pAC->action("project_file_properties")->setEnabled(true);
-  pAC->action("project_options")->setEnabled(true);
-  
-  ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
+  /*
+    pAC->action("project_add_existing_files")->setEnabled(true);
+    pAC->action("project_add_translation")->setEnabled(true);
+    pAC->action("project_file_properties")->setEnabled(true);
+    pAC->action("project_options")->setEnabled(true);
+    
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
   */
   
 #if 1
@@ -408,6 +415,7 @@ void KDevelopCore::loadProject(const QString &fileName)
 
 void KDevelopCore::unloadProject()
 {
+  unloadProjectSpace(); // temp
     if (m_pLanguageSupport) {
         QListIterator<KDevComponent> it1(m_components);
         for (; it1.current(); ++it1)
@@ -436,10 +444,11 @@ void KDevelopCore::unloadProject()
 
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
     pAC->action("project_close")->setEnabled(false);
-    pAC->action("project_add_existing_files")->setEnabled(false);
+    /*pAC->action("project_add_existing_files")->setEnabled(false);
     pAC->action("project_add_translation")->setEnabled(false);
     pAC->action("project_file_properties")->setEnabled(false);
     pAC->action("project_options")->setEnabled(false);
+    */
 }
 
 
@@ -471,7 +480,8 @@ void KDevelopCore::slotFileNew()
 }
 
 void KDevelopCore::slotProjectNew(){
-  NewProjectDlg* dlg = new NewProjectDlg();
+  // if m_pProjectSpace == 0, create a new one
+  NewProjectDlg* dlg = new NewProjectDlg(m_pProjectSpace);
   dlg->show();
   delete dlg;
 }
@@ -535,6 +545,15 @@ void KDevelopCore::slotStop()
         (*it)->stopButtonClicked();
 }
 
+void KDevelopCore::slotProjectSetActivate( int id){
+  kdDebug(9000) << "KDevelopCore::slotProjectSetActivate";
+  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
+  QString name = pMenu->text(id);
+  m_pProjectSpace->setCurrentProject(name);
+  fillActiveProjectPopupMenu();
+}
+
 
 void KDevelopCore::slotOptionsKDevelopSetup()
 {
@@ -552,7 +571,20 @@ void KDevelopCore::slotOptionsKDevelopSetup()
 }
 
 
-
+void KDevelopCore::fillActiveProjectPopupMenu(){
+  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
+  QStringList projectList = m_pProjectSpace->allProjectNames();
+  QString currrentProjectName= m_pProjectSpace->currentProject()->getName();
+  pMenu->clear();
+  int id;
+  for ( QStringList::Iterator it = projectList.begin(); it != projectList.end(); ++it ) {  
+    id = pMenu->insertItem(*it);
+    if (currrentProjectName == *it){
+      pMenu->setItemChecked(id,true); // set the current Project
+    }
+  }
+}
 void KDevelopCore::executeMakeCommand(const QString &command)
 {
     if (!m_pMakeFrontend) {

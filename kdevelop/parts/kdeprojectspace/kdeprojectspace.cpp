@@ -47,8 +47,8 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 	m_language = "C++";
 
 
-	//	setXMLFile("kdevkdeprojectspaceui.rc");
-	setXMLFile("/home/kde2/kdevelop/kdevelop/parts/kdeprojectspace/kdevkdeprojectspace.rc"); //test
+	setXMLFile("kdevkdeprojectspaceui.rc");
+	//setXMLFile("/home/kde2/kdevelop/kdevelop/parts/kdeprojectspace/kdevkdeprojectspace.rc"); //test
 }
 KDEProjectSpace::~KDEProjectSpace(){
 }

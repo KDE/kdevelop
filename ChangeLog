@@ -1,3 +1,7 @@
+2000-09-29   Sandy Meier <smeier@kdevelop.org>
+	* it is now possible to add more then one Project to a Projectspace
+	* implemented "Set active Project"
+
 2000-09-24   Sandy Meier <smeier@kdevelop.org>
 	* ported most of the persitant layer (ProjectSpace/Project) from KConfig to XML
 	 all project and projectspace datas are now handled in two files (Global/User)

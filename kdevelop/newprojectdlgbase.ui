@@ -12,7 +12,7 @@
             <x>0</x>
             <y>0</y>
             <width>667</width>
-            <height>509</height>
+            <height>511</height>
         </rect>
     </property>
     <property stdset="1">
@@ -396,6 +396,20 @@ jdskl fjsdkl kldjfklsd jfkls kljslf</string>
         <receiver>MyDialog</receiver>
         <slot>slotOk()</slot>
     </connection>
+    <connection>
+        <sender>current_radio_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MyDialog</receiver>
+        <slot>slotAddToCurrentProjectSpaceClicked()</slot>
+    </connection>
+    <connection>
+        <sender>new_radio_button</sender>
+        <signal>clicked()</signal>
+        <receiver>MyDialog</receiver>
+        <slot>slotNewProjectSpaceClicked()</slot>
+    </connection>
+    <slot access="public">slotAddToCurrentProjectSpaceClicked()</slot>
+    <slot access="public">slotNewProjectSpaceClicked()</slot>
     <slot access="public">slotOk()</slot>
 </connections>
 </UI>

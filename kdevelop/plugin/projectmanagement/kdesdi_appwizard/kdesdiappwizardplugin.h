@@ -33,7 +33,8 @@ Q_OBJECT
 public: 
 	KDESDIAppWizardPlugin(QObject* parent=0,const char* name=0);
 	~KDESDIAppWizardPlugin();
-	virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,QString projectname="");
+	virtual void init(bool new_projectspace=true,ProjectSpace* projectspace=0,
+			  QString projectname="",QString absProjectLocation="");
 	
   /** generates default files/app, properties from configwidgets set in AppWizard*/
   virtual void generateDefaultFiles();
