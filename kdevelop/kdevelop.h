@@ -176,6 +176,8 @@ private:
   KDockWidget* m_dockOnLeft;
   KDockWidget* m_dockOnBottom;
 
+  KDevelopCore* m_pCore;
+
 private slots:
  void slotOptionsEditToolbars();
 };
