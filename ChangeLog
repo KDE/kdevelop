@@ -1,3 +1,7 @@
+2000-04-09 Ralf Nolden <rnolden@kdevelop.de>
+        * disabled open project button and accelerators when loading project
+        * fixed doc-tree refresh when no project is loaded on startup
+
 2000-04-09  Ralf Funken <rfunken@kdevelop.de>
 	* Bug #2970 messages fixed, Bug closed.
 	* Updated kdevelop.pot

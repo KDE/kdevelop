@@ -104,7 +104,7 @@ CKDevelop::CKDevelop(bool witharg)
   initKDlg();    // create the KDialogEditor
 
   readOptions();
-  
+  slotViewRefresh();
   show();
   if(start_logo)  
     start_logo->raise();
@@ -1300,9 +1300,10 @@ void CKDevelop::initProject(bool witharg){
     {  	   	
       config->setGroup("Files");
       filename = config->readEntry("project_file","");
+      slotProjectOpenCmdl(filename);
     }
   }
-  slotProjectOpenCmdl(filename);
+
 }
 
 
