@@ -388,7 +388,7 @@ void CKDevSetupDlg::addDocTab()
   docOptionsGroup->setFrameStyle( 49 );
   docOptionsGroup->setTitle(i18n("Options"));
   docOptionsGroup->setAlignment( 1 );
-  grid2 = new QGridLayout(docOptionsGroup,3,2,15,7);
+  grid2 = new QGridLayout(docOptionsGroup,4,2,15,7);
   QLabel* update_label;
   update_label = new QLabel( docOptionsGroup, "update_label" );
   grid2->addWidget(update_label,0,0);
@@ -443,8 +443,33 @@ void CKDevSetupDlg::addDocTab()
   QWhatsThis::add(create_label, createMsg);
   QWhatsThis::add(create_button, createMsg);
 
+
+  useCTags = new QCheckBox( docOptionsGroup, "useCTags" );
+  grid2->addWidget(useCTags,2,0);
+  useCTags->setText(i18n("Enable CTags database"));
+  useCTags->setAutoRepeat( FALSE );
+  useCTags->setAutoResize( FALSE );
+  bool bUseCTags;
+  config->setGroup("General Options");
+  bUseCTags = config->readBoolEntry("use_ctags", false);
+  useCTags->setChecked( bUseCTags );
+  QWhatsThis::add(useCTags,
+    i18n("Enable CTags based browsing and searching.\n\n"
+         "If this is enabled, you can browse the source code of your"
+         "project much easier. You can jump to declarations"
+         "and definitions of functions, classes and methods"
+         "using the right mouse button.\n"));
+
+  QPushButton* load_ctags_button;
+  load_ctags_button = new QPushButton( docOptionsGroup, "load_ctags_button" );
+  grid2->addWidget(load_ctags_button,2,1);
+  connect( load_ctags_button, SIGNAL(clicked()),parent(), SLOT(slotProjectLoadTags()) );
+  load_ctags_button->setText(i18n("Load"));
+  load_ctags_button->setAutoRepeat( FALSE );
+  load_ctags_button->setAutoResize( FALSE );
+
   kdocCheck = new QCheckBox( docOptionsGroup, "kdocCheck" );
-  grid2->addWidget(kdocCheck,2,0);
+  grid2->addWidget(kdocCheck,3,0);
   kdocCheck->setText(i18n("Create also KDOC-reference of your project"));
   kdocCheck->setAutoRepeat( FALSE );
   kdocCheck->setAutoResize( FALSE );
@@ -863,6 +888,9 @@ void CKDevSetupDlg::slotOkClicked(){
 
   bool kdoc=kdocCheck->isChecked();
   config->writeEntry("CreateKDoc",kdoc);
+
+  bool bCTags=useCTags->isChecked();
+  config->writeEntry("use_ctags",bCTags);
 
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);

@@ -268,7 +268,6 @@ CTagsDataBase::~CTagsDataBase()
 /** load a tags file and create the search database */
 void CTagsDataBase::load(const QString& file)
 {
-  if (!QFileInfo(file).exists()) return;
   QFile tagsfile(file);
   if (tagsfile.open(IO_ReadOnly)) {
     kdDebug() << "tags file opened succefully, now reading...\n" ;
@@ -311,6 +310,7 @@ void CTagsDataBase::load(const QString& file)
   }
   else {
     // "Unable to open tags file: %1"
+    kdDebug() << "cant open tags file: " << file << "\n";
     return;
   }
   tagsfile.close();

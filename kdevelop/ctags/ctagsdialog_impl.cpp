@@ -97,7 +97,9 @@ void searchTagsDialogImpl::slotSearchTag()
     }
   }
 }
-
+/*
+ * internal method
+ */
 void searchTagsDialogImpl::setSearchResult(const CTagList& taglist)
 {
   tagType currentTagType = (tagType)tagtypeComboBox->currentItem();
@@ -133,7 +135,9 @@ void searchTagsDialogImpl::setSearchResult(const CTagList& taglist)
     append = false;
   }
 }
-
+/*
+ * internal method
+ */
 void searchTagsDialogImpl::gotoTag(const CTag* tag)
 {
   if (!tag) {
@@ -150,20 +154,37 @@ void searchTagsDialogImpl::gotoTag(const CTag* tag)
             <<  tag->file() << "," << line << ");\n";
   emit switchToFile(tag->file(),line);
 }
-/**
- * Open all files that correspond to tag
+/*
+ * public slot
  */
 void searchTagsDialogImpl::slotGotoFile(QString text)
 {
-  kdDebug() << "searchTagsDialogImpl::slotGotoFile searching for " << text << "\n";
+  slotGotoTagType(file,text);
+}
+/*
+ * public slot
+ */
+void searchTagsDialogImpl::slotGotoDefinition(QString text)
+{
+  slotGotoTagType(definition,text);
+}
+/*
+ * public slot
+ */
+void searchTagsDialogImpl::slotGotoDeclaration(QString text)
+{
+  slotGotoTagType(declaration,text);
+}
+/*
+ * public slot
+ */
+void searchTagsDialogImpl::slotGotoTagType(tagType type, QString text)
+{
+  kdDebug() << "searchTagsDialogImpl::gotoTagType searching for "
+            << text << "\n";
   slotClear();
-  setTagType(file);
+  setTagType(type);
   searchTagLineEdit->setText(text);
-  /*
-   * there is no need to set the search result if we
-   * only find one tag, so in the future slotSearchTag
-   * can be split up and we can avoid duplicate effort
-   */
   slotSearchTag();
   if (m_currentTagList.count()==1) {
     gotoTag(&m_currentTagList[0]);
@@ -172,19 +193,4 @@ void searchTagsDialogImpl::slotGotoFile(QString text)
     show();
     raise();
   }
-//  CTagsDataBase& tagsDB = prj->ctagsDataBase();
-//  if (tagsDB.is_initialized()) {
-//    kdDebug() << "found tags data base\n";
-//    if (const CTagList* taglist = tagsDB.ctaglist(text))
-//    {
-//      int ntags = taglist->count();
-//      kdDebug() << "found: " << ntags << " entries for: "
-//                << text << "\n";
-//      // should only be one but we can open all we find
-//      for (int it=0; it<ntags; ++it)
-//      {
-//        ctags_dlg->gotoTag(&(*taglist)[it]);
-//      }
-//    }
-//  }
 }

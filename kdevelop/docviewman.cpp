@@ -737,14 +737,13 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
   if(!pEW) return 0L;
   pEW->setCaption(pDoc->fileName());
 
-  // connect tag related functionality
+  // connect tag related functionality with searchTagsDialogImpl
   searchTagsDialogImpl* ctagsDlg = m_pParent->getCTagsDialog();
   connect( pEW, SIGNAL(tagSwitchTo()), m_pParent, SLOT(slotTagSwitchTo()));
-
   connect( pEW, SIGNAL(tagOpenFile(QString)), ctagsDlg, SLOT(slotGotoFile(QString)));
+  connect( pEW, SIGNAL(tagDefinition(QString)), ctagsDlg, SLOT(slotGotoDefinition(QString)));
+  connect( pEW, SIGNAL(tagDeclaration(QString)), ctagsDlg, SLOT(slotGotoDeclaration(QString)));
 
-  connect( pEW, SIGNAL(tagDefinition(QString)), m_pParent, SLOT(slotTagDefinition(QString)));
-  connect( pEW, SIGNAL(tagDeclaration(QString)), m_pParent, SLOT(slotTagDeclaration(QString)));
   //connect the editor lookup function with slotHelpSText
   connect( pEW, SIGNAL(manpage(QString)),m_pParent, SLOT(slotHelpManpage(QString)));
   connect( pEW, SIGNAL(lookUp(QString)),m_pParent, SLOT(slotHelpSearchText(QString)));
@@ -1322,11 +1321,11 @@ int DocViewMan::saveFileFromTheCurrentEditWidget()
   // check if it is modified outside KDevelop
   bool bModifiedOutside = false;
   QFileInfo file_info(filename);
-  if ((file_info.lastModified() != pCurEditDoc->getLastFileModifDate())) {
+  if ((file_info.lastModified() < pCurEditDoc->getLastFileModifDate())) {
     bModifiedOutside = true;
   }
 
-  int button;
+  int button=KMessageBox::Yes;
   if (bModifiedInside && bModifiedOutside) {
     button = KMessageBox::warningYesNoCancel(m_pParent
              ,i18n("This file %1 was modified inside but also outside this editor.\n"
@@ -1334,13 +1333,18 @@ int DocViewMan::saveFileFromTheCurrentEditWidget()
              .arg(filename), i18n("File modified")
              ,i18n("&Overwrite"), i18n("&Reject"));
   }
-  else if (bModifiedInside) {
-    button = KMessageBox::warningYesNoCancel(m_pParent
-             ,i18n("The file %1 was modified.\n"
-                  "Do you want to save your changes?")
-             .arg(filename), i18n("File modified")
-             ,i18n("&Yes"), i18n("&No"));
-  }
+// (rokrau 05/14/01 late...)
+// Sorry, but this is complete nonsense!!!
+// If I have already decided to save the file,
+// then why would I need to be asked again?
+//
+//  else if (bModifiedInside) {
+//    button = KMessageBox::warningYesNoCancel(m_pParent
+//             ,i18n("The file %1 was modified.\n"
+//                  "Do you want to save your changes?")
+//             .arg(filename), i18n("File modified")
+//             ,i18n("&Yes"), i18n("&No"));
+//  }
 
   switch (button) {
   case KMessageBox::No:

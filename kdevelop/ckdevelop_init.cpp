@@ -163,7 +163,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   show();
 
-
   setDebugMenuProcess(false);
   setToolmenuEntries();
 
@@ -351,7 +350,12 @@ void CKDevelop::initMenuBar(){
 
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(SmallIconSet("grep"),i18n("Search in &Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
-  edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Search &CTags Database..."), this, SLOT(slotTagSearch()),0,ID_EDIT_TAGS_SEARCH);
+  /* (rokrau 05/14/01)
+   * this was taken out of the edit menu upon Falks request
+   * he thinks it is too confusing to have two different search dialogs
+   * it remains accessible through a keyboard shortcut though
+   */
+  //edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Search &CTags Database..."), this, SLOT(slotTagSearch()),0,ID_EDIT_TAGS_SEARCH);
   edit_menu->insertItem(/*SmallIconSet("grep"),*/i18n("Switch to Header/Source..."), this, SLOT(slotTagSwitchTo()),0,ID_EDIT_TAGS_SWITCH);
 
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
@@ -475,8 +479,8 @@ void CKDevelop::initMenuBar(){
 
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   // create a tags file
- // Roland: icon tags is missing !  RN
-  project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
+  // Roland: icon tags is missing !  RN
+  // project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
   // load a tags file
   project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Load &tags file"), this, SLOT(slotProjectLoadTags()),0, ID_PROJECT_LOAD_TAGS);
 

@@ -40,6 +40,9 @@ public slots:
     void slotClear();
     void slotSearchTag();
     void slotGotoFile(QString text);
+    void slotGotoDefinition(QString text);
+    void slotGotoDeclaration(QString text);
+    void slotGotoTagType(tagType type, QString text);
 signals:
     void switchToFile(const QString& filename, int line);
 

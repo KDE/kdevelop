@@ -842,8 +842,10 @@ void CKDevelop::readOptions()
     if (config->readBoolEntry("show_mdi_view_taskbar",true))
     view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
 
-    /////////////////////////////////////////
-    // Outputwindow, TreeView, KDevelop
+  // read setting whether to use the ctags search database
+  bCTags = config->readBoolEntry("use_ctags", false);
+  /////////////////////////////////////////
+  // Outputwindow, TreeView, KDevelop
   /////////////////////    
 
     config->setGroup("dock_setting_default");
@@ -946,6 +948,9 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdi_view_taskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
+
+  // write setting whether to use the ctags search database
+  config->writeEntry("use_ctags", bCTags);
 //!!!!!!!!!  config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   // set the mode of the tab headers
@@ -1128,7 +1133,7 @@ void CKDevelop::create_tags()
   shell_process << tagfile ;
   shell_process << files ;
   // run it
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  shell_process.start(KProcess::Block/*NotifyOnExit*/,KProcess::AllOutput);
 }
 
 /** return the instance of the CTags search dialog */

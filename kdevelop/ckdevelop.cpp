@@ -2211,6 +2211,9 @@ void CKDevelop::slotOptionsKDevelop(){
     break;
   }
 
+  // read setting whether to use the ctags search database
+  bCTags = config->readBoolEntry("use_ctags", false);
+
   // other stuff that could have changed as well
   accel->readSettings();
   setKeyAccel();

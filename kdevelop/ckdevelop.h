@@ -754,17 +754,17 @@ public:
    */
   void slotTagSwitchTo();
   /**
-   * Raise the CTags search dialog
+   * Show and raise the CTags search dialog
    */
   void slotTagSearch();
   /**
    * Find and open files that contain definition corresponding to tag
    */
-  void slotTagDefinition(QString tag);
+  //void slotTagDefinition(QString tag);
   /**
    * Find and open files that contain declaration corresponding to tag
    */
-  void slotTagDeclaration(QString tag);
+  //void slotTagDeclaration(QString tag);
 
 protected: // Protected methods
 
@@ -1073,8 +1073,13 @@ private:
   /** memory effect on open file dialog box*/
   QString _LastOpenDir;
 
+  /** true if we have and use Exuberant CTags for enhanced browsing capabilities */
+  bool bCTags;
+  /** true if we are using Glimpse */
   bool useGlimpse;
+  /** true if we are using HtDig */
   bool useHtDig;
+
   bool lastShutdownOK;
   KStatusBar* m_statusBar;
   KStartupLogo* start_logo;

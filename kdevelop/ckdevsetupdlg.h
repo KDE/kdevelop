@@ -93,7 +93,8 @@ private:
   QCheckBox* logoCheck;
   QCheckBox* tipDayCheck;
   QCheckBox* lastProjectCheck;
-  QCheckBox *kdocCheck;
+  QCheckBox* kdocCheck;
+  QCheckBox* useCTags;
 
   QLineEdit* kde_edit;
   QLineEdit* qt_edit;
@@ -102,7 +103,6 @@ private:
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
 	QLineEdit* ppath_edit;
 // ---
-
   // Dbg external options
   QButtonGroup* dbgExternalGroup;
   QCheckBox* dbgExternalCheck;

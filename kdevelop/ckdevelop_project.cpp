@@ -507,20 +507,19 @@ void CKDevelop::slotShowFileProperties(const QString& rel_name){
 
 void CKDevelop::slotProjectOpen()
 {
-    QString old_project = "";
+  QString old_project = "";
 
-    slotStatusMsg(i18n("Opening project..."));
-    QString str;
+  slotStatusMsg(i18n("Opening project..."));
+  QString str;
 // --- changed by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
   config->setGroup("General Options");
   QString defDir=config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
   str = KFileDialog::getOpenFileName( defDir, "*.kdevprj");
-    slotProjectOpenCmdl(str);
+  slotProjectOpenCmdl(str);
 }
 
 void CKDevelop::slotProjectOpenRecent(int id)
 {
-
   QString proj = getProjectAsString(id);
 
   if (QFile::exists(proj)) {
@@ -538,51 +537,50 @@ void CKDevelop::slotProjectOpenRecent(int id)
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname)
 {
-    prjname.replace(QRegExp("file:"),"");
-    QFileInfo info(prjname);
+  prjname.replace(QRegExp("file:"),"");
+  QFileInfo info(prjname);
 
-    //if the new project file is not valid, do nothing
-    if (!info.isFile())
-        return;
+  //if the new project file is not valid, do nothing
+  if (!info.isFile())
+    return;
 
-    // Make sure we have the right permissions to read and write to the prj file
-    if (!(info.isWritable() && info.isReadable()))
-    {
-        KMessageBox::error(0,
-            i18n("Unable to read the project file because you\n"
-            "do not have read/write permissions for this project"),
-            prjname);
-        return;
-    }
+  // Make sure we have the right permissions to read and write to the prj file
+  if (!(info.isWritable() && info.isReadable()))
+  {
+    KMessageBox::error(0,
+      i18n("Unable to read the project file because you\n"
+      "do not have read/write permissions for this project"),
+      prjname);
+    return;
+  }
 
-    project_menu->setEnabled(false);
-    disableCommand(ID_PROJECT_OPEN);
-    accel->setEnabled(false);
+  project_menu->setEnabled(false);
+  disableCommand(ID_PROJECT_OPEN);
+  accel->setEnabled(false);
 
-    QString old_project;
-    if (project)
-    {
-      if (prj)
-          old_project = prj->getProjectFile();
-        //the user may have pressed cancel in which case we want to reload
-        // the old project
-        if (!slotProjectClose())
-            prjname = old_project; // just reset the prjname to the old one
-    }
-//  bool ok = true;
-    if (readProjectFile(prjname)) {
-      QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
-      projSessionFileName += "kdevses"; // suffix for a KDeveop session file
-      if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
+  QString old_project;
+  if (project)
+  {
+    if (prj)
+      old_project = prj->getProjectFile();
+    //the user may have pressed cancel in which case we want to reload
+    // the old project
+    if (!slotProjectClose())
+      prjname = old_project; // just reset the prjname to the old one
+  }
+  if (readProjectFile(prjname)) {
+    QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
+    projSessionFileName += "kdevses"; // suffix for a KDeveop session file
+    if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
       debug("error during restoring of the KDevelop session !\n");
-      }
+    }
     slotViewRefresh();
-  }        
-    else {
-        KMessageBox::error(0,
-        i18n("This does not appear to be a valid or\n"
-            "supported kdevelop project file"),
-            prjname);
+  }
+  else {
+    KMessageBox::error(0,
+    i18n("This does not appear to be a valid or\n"
+      "supported kdevelop project file"),
+      prjname);
     // If there is an old project then try to restore it. (I wonder why - jbb)
     if (!old_project.isEmpty())
     {
@@ -591,11 +589,14 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
         slotViewRefresh();
     }
   }
-
-    project_menu->setEnabled(true);
-    enableCommand(ID_PROJECT_OPEN);
-    accel->setEnabled(true);
-    slotStatusMsg(i18n("Ready."));
+  // load CTags database
+  if (bCTags) {
+    slotProjectLoadTags();
+  }
+  project_menu->setEnabled(true);
+  enableCommand(ID_PROJECT_OPEN);
+  accel->setEnabled(true);
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotProjectNewAppl(){
@@ -1162,28 +1163,41 @@ void CKDevelop::slotConfigMakeDistRPM()
 void CKDevelop::slotProjectLoadTags()
 {
   kdDebug() << "in slotProjectLoadTags()\n";
-  QTime dt;
-  dt.start();
   slotStatusMsg(i18n("Loading tags file..."));
-  QString filename = "tags";
+  QString filename = getProject()->getProjectDir() + "/tags";
   if (!QFileInfo(filename).exists()) {
     // warn user that the tag file does not exist
-    // "There is no tags file in the project directory %1"
-    // "Would you like to create a tags file for your project now?"
-    // and ask to create it
-    // if not warn and return
-    // "The tags based features "Goto Definition" and "Goto Declaration"
-    // "will not be available"
-    // if create and creation unsuccesful return
-    return;
+    if (KMessageBox::questionYesNo(this,
+      i18n("There is no tags file in the project directory\n"
+           "Would you like to create a tags file for your project now?\n")) == KMessageBox::Yes)
+    {
+      slotProjectMakeTags();
+    }
+    else
+    {
+      KMessageBox::sorry(this,
+        i18n("Some ctags based features like\n"
+        "\"Goto Definition\" and \"Goto Declaration\"\n"
+        "will not be available\n"));
+      bCTags = false;
+      return;
+    }
   }
   prj->ctagsDataBase().load(filename);
-  kdDebug() << "loading tags file completed, time: " << dt.elapsed()/1000.0 << " [s]\n";
+  bCTags = true;
+  kdDebug() << "loading tags file completed\n";
 }
 
 void CKDevelop::slotProjectMakeTags()
 {
   slotStatusMsg(i18n("Creating tags file..."));
+  if(!CToolClass::searchInstProgram("ctags")) // no dialog
+  {
+    KMessageBox::sorry(0,
+      i18n("KDevelop needs \"Exuberant Ctags\" \n for tags based search functionality."),
+      i18n("You can find it at: http://ctags.sourceforge.net"));
+    return;
+  }
   create_tags();
 }
 
@@ -1572,48 +1586,6 @@ void SaveAllDialog::cancel()
 
 /***************************************************************************/
 /**
- * Open the file that corresponds to tag
- */
-/* ...
-void CKDevelop::slotTagGotoFile(const CTag* tag)
-{
-  if (!tag) {
-    kdDebug() << "CKDevelop::slotTagGotoFile, "
-              << "Error: null tag\n" ;
-    return;
-  }
-  kdDebug() << "CKDevelop::slotTagGotoFile, "
-            << "open file " << tag->file()
-            << "at line "   << tag->line()  << "\n";
-  if (tag->isFile()&&(tag->line()<=1))
-    switchToFile(tag->file());
-  else
-    switchToFile(tag->file(),tag->line());
-}
-... */
-///**
-// * Open all files that correspond to tag
-// */
-//void CKDevelop::slotTagOpenFile(QString text)
-//{
-//  kdDebug() << "CKDevelop::slotTagOpenFile looking for " << text << "\n";
-//  CTagsDataBase& tagsDB = prj->ctagsDataBase();
-//  if (tagsDB.is_initialized()) {
-//    kdDebug() << "found tags data base\n";
-//    if (const CTagList* taglist = tagsDB.ctaglist(text))
-//    {
-//      int ntags = taglist->count();
-//      kdDebug() << "found: " << ntags << " entries for: "
-//                << text << "\n";
-//      // should only be one but we can open all we find
-//      for (int it=0; it<ntags; ++it)
-//      {
-//        ctags_dlg->gotoTag(&(*taglist)[it]);
-//      }
-//    }
-//  }
-//}
-/**
  * Switch between corresponding source and header files. Assumes that
  * the files exist and that they have the same basename.
  */
@@ -1646,76 +1618,4 @@ void CKDevelop::slotTagSearch()
   ctags_dlg->show();
   ctags_dlg->raise();
   slotStatusMsg(i18n("Ready."));
-}
-/**
- * Find and open files that contain definition corresponding to tag
- */
-void CKDevelop::slotTagDefinition(QString text)
-{
-  kdDebug() << "CKDevelop::slotTagDefinition looking for " << text << "\n";
-  CTagsDataBase& tagsDB = prj->ctagsDataBase();
-  if (tagsDB.is_initialized()) {
-    kdDebug() << "found tags data base\n";
-    if (const CTagList* taglist = tagsDB.ctaglist(text))
-    {
-      int nDefTags = taglist->nDefinitionTags();
-      //CTagList defTagList = taglist->getDefinitionTags();
-      kdDebug() << "found: " << nDefTags << " definition entries for: "
-                << text << "\n";
-      /* if we find only one instance of the tag we can directly
-       * goto the line in the file */
-      if (nDefTags == 1) {
-        int nTags = taglist->count();
-        for (int i=0;i<nTags;++i){
-          if ((*taglist)[i].isDefinition())
-            ctags_dlg->gotoTag(&(*taglist)[i]);
-        }
-      }
-      /* in the case of multiple instances we show a dialog
-       * and let the user pick where he wants to go */
-      else {
-        ctags_dlg->slotClear();
-        ctags_dlg->setTagType(searchTagsDialogImpl::definition);
-        ctags_dlg->setSearchResult(*taglist);
-        ctags_dlg->show();
-        ctags_dlg->raise();
-      }
-    }
-  }
-}
-/**
- * Find and open files that contain declaration corresponding to tag
- */
-void CKDevelop::slotTagDeclaration(QString text)
-{
-  kdDebug() << "CKDevelop::slotTagDeclaration looking for " << text << "\n";
-  CTagsDataBase& tagsDB = prj->ctagsDataBase();
-  if (tagsDB.is_initialized()) {
-    kdDebug() << "found tags data base\n";
-    if (const CTagList* taglist = tagsDB.ctaglist(text))
-    {
-      int nDecTags = taglist->nDeclarationTags();
-      //CTagList decTagList = taglist->getDeclarationTags();
-      kdDebug() << "found: " << nDecTags << " declaration entries for: "
-                << text << "\n";
-      /* if we find only one instance of the tag we can directly
-       * goto the line in the file */
-      if (nDecTags == 1) {
-        int nTags = taglist->count();
-        for (int i=0;i<nTags;++i){
-          if ((*taglist)[i].isDeclaration())
-            ctags_dlg->gotoTag(&(*taglist)[i]);
-        }
-      }
-      /* in the case of multiple instances we show a dialog
-       * and let the user pick where he wants to go */
-      else {
-        ctags_dlg->slotClear();
-        ctags_dlg->setTagType(searchTagsDialogImpl::declaration);
-        ctags_dlg->setSearchResult(*taglist);
-        ctags_dlg->show();
-        ctags_dlg->raise();
-      }
-    }
-  }
 }
