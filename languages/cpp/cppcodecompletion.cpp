@@ -462,9 +462,36 @@ void CppCodeCompletion::slotTextChanged()
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN };
 
-int CppCodeCompletion::expressionAt( const QString& text, int index )
+int CppCodeCompletion::expressionAt( const QString& contents, int index )
 {
 	kdDebug( 9007 ) << k_funcinfo << endl;
+
+	/* C++ style comments present issues with finding the expr so I'm
+		matching for them and replacing them with empty C style comments
+		of the same length for purposes of finding the expr. */
+
+	QString text = contents;
+	QRegExp rx( "(//([^\n]*)(\n|$)|/\\*.*\\*/|\"([^\\\\]|\\\\.)*\")" );
+	rx.setMinimal( TRUE );
+
+	int pos = 0;
+	while ( (pos = rx.search( text, pos )) != -1 ) 
+	{
+		if ( rx.cap( 1 ).startsWith( "//" ) ) 
+		{
+			QString before = rx.cap( 1 );
+			QString after;
+			after.fill(' ', before.length() - 5 );
+			after.prepend( "/*" );
+			after.append( "*/" );
+			text.replace( pos, before.length() - 1, after );
+			pos += after.length();
+		}
+		else
+		{
+			pos += rx.matchedLength();
+		}
+	}
 
 	int last = T_UNKNOWN;
 	int start = index;
@@ -839,8 +866,8 @@ void CppCodeCompletion::completeText( )
 
 			QString textToReparse = getText( recoveryPoint->startLine, recoveryPoint->startColumn,
 			                                 line, showArguments ? column - 1 : column );
-			//kdDebug(9007) << "-------------> please reparse only text" << endl << textToReparse << endl
-			//              << "--------------------------------------------" << endl;
+// 			kdDebug(9007) << "-------------> please reparse only text" << endl << textToReparse << endl
+// 			             << "--------------------------------------------" << endl;
 
 			Driver d;
 			Lexer lexer( &d );

@@ -151,7 +151,7 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
 
 QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
 {
-	kdDebug( 9007 ) << "CodeInformationRepository::getBaseClasseList()" << endl;
+	kdDebug( 9007 ) << "CodeInformationRepository::getBaseClassList()" << endl;
 
 	if ( className.isEmpty() )
 		return QValueList<Tag>();
