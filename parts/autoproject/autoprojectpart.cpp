@@ -426,6 +426,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     dircmd += dir;
     dircmd += " && ";
 
+    m_buildCommand = preCommand + dircmd + cmdline;
     makeFrontend()->queueCommand(dir, preCommand + dircmd + cmdline);
 }
 
@@ -657,6 +658,11 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     kdDebug(9020) << "AutoProjectPart::slotProcessFinished()" << endl;
 
     Q_UNUSED( command );
+    
+    if( m_buildCommand != command )
+	return;
+    
+    m_buildCommand = QString::null;
 
     m_timestamp.clear();
     QStringList fileList = allFiles();

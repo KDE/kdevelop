@@ -104,6 +104,7 @@ private:
     QString configureCommand();
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
+    QString m_buildCommand;
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
