@@ -29,8 +29,16 @@
 #include <qlistbox.h>
 
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 /***************************************************************************/
+
+// Display a list of processes for the user to select one
+// only display processes that they can do something with so if the user
+// is root then display all processes
+// For use with the internal debugger, but this dialog doesn't know anything
+// about why it's doing it.
 
 Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
   KDialog(parent, name, true),      // modal
@@ -65,14 +73,20 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
   psProc_ = new KShellProcess("/bin/sh");
   *psProc_ << "ps";
   *psProc_ << "x";
-//  *psProc_ << "-o";
-//  *psProc_ << "pid,stat,args";
+  pidCmd_ = "ps x";
+
+  if (getuid() == 0)
+  {
+    *psProc_ << "-A";
+	  pidCmd_ += " -A";
+  }
 
   connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
   connect( psProc_, SIGNAL(receivedStdout(KProcess *, char *, int)),  SLOT(slotReceivedOutput(KProcess *, char *, int)) );
   psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
 
-  resize( ((kapp->fixedFont).pointSize())*30, height());
+  // Default display to 40 chars wide, default height is okay
+  resize( ((kapp->fixedFont).pointSize())*40, height());
   topLayout->activate();
 }
 
@@ -121,7 +135,7 @@ void Dbg_PS_Dialog::slotProcessExited()
     QString item = pidLines_.mid(start, pos-start);
     if (!item.isEmpty())
     {
-      if (item.find("ps x") == -1)
+      if (item.find(pidCmd_) == -1)
         pids_->insertItem(item);
     }
 

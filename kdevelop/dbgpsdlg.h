@@ -44,6 +44,7 @@ class Dbg_PS_Dialog : public KDialog
     QListBox* pids_;
     QLabel*   heading_;
     QString   pidLines_;
+    QString   pidCmd_;
 };
 
 #endif
