@@ -188,7 +188,7 @@ else
           dnl this substitution might not work - well, we test for jni.h below
           kde_cv_java_includedir=`echo $kde_cv_java_bindir | sed -e 's,bin/$,include/,'`
           dnl Look for libjvm.so
-          kde_cv_java_libjvmdir=`find $kde_cv_java_bindir/.. -name libjvm.so | sed 's,libjvm.so,,'`
+          kde_cv_java_libjvmdir=`find $kde_cv_java_bindir/.. -name libjvm.so | sed 's,libjvm.so,,'|head -n 1`
           dnl Look for libhpi.so and avoid green threads
           kde_cv_java_libhpidir=`find $kde_cv_java_bindir/.. -name libhpi.so | grep -v green | sed 's,libhpi.so,,'`
       else
