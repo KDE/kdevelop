@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>593</width>
+            <width>571</width>
             <height>507</height>
         </rect>
     </property>
@@ -23,18 +23,18 @@
         <class>QLayoutWidget</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>Layout11</cstring>
+            <cstring>Layout29</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>590</width>
-                <height>505</height>
+                <x>1</x>
+                <y>475</y>
+                <width>565</width>
+                <height>30</height>
             </rect>
         </property>
-        <grid>
+        <hbox>
             <property stdset="1">
                 <name>margin</name>
                 <number>0</number>
@@ -43,18 +43,7 @@
                 <name>spacing</name>
                 <number>6</number>
             </property>
-            <widget row="2"  column="1"  rowspan="1"  colspan="2" >
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>PushButton1_2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Cancel</string>
-                </property>
-            </widget>
-            <widget row="2"  column="0" >
+            <widget>
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
@@ -65,10 +54,21 @@
                     <string>Okay</string>
                 </property>
             </widget>
-            <spacer row="0"  column="2"  rowspan="1"  colspan="2" >
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>PushButton1_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Cancel</string>
+                </property>
+            </widget>
+            <spacer>
                 <property>
                     <name>name</name>
-                    <cstring>Spacer2</cstring>
+                    <cstring>Spacer1</cstring>
                 </property>
                 <property stdset="1">
                     <name>orientation</name>
@@ -86,7 +86,44 @@
                     </size>
                 </property>
             </spacer>
-            <widget row="0"  column="0"  rowspan="1"  colspan="2" >
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>PushButton1_3</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Help</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Layout30</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>1</x>
+                <y>0</y>
+                <width>565</width>
+                <height>82</height>
+            </rect>
+        </property>
+        <hbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
                 <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
@@ -111,7 +148,28 @@
                     <string>&lt;H1&gt;Project Packageing and Publishing&lt;/H1&gt;</string>
                 </property>
             </widget>
-            <widget row="0"  column="4" >
+            <spacer>
+                <property>
+                    <name>name</name>
+                    <cstring>Spacer2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>orientation</name>
+                    <enum>Horizontal</enum>
+                </property>
+                <property stdset="1">
+                    <name>sizeType</name>
+                    <enum>Expanding</enum>
+                </property>
+                <property>
+                    <name>sizeHint</name>
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget>
                 <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
@@ -147,58 +205,289 @@
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget row="2"  column="4" >
-                <class>QPushButton</class>
+        </hbox>
+    </widget>
+    <widget>
+        <class>QTabWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>OptionsWidget</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>-1</x>
+                <y>87</y>
+                <width>595</width>
+                <height>383</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>tabPosition</name>
+            <enum>Top</enum>
+        </property>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>Source Distrabution</string>
+            </attribute>
+            <widget>
+                <class>QLayoutWidget</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PushButton1_3</cstring>
+                    <cstring>Layout36</cstring>
                 </property>
                 <property stdset="1">
-                    <name>text</name>
-                    <string>Help</string>
+                    <name>geometry</name>
+                    <rect>
+                        <x>5</x>
+                        <y>50</y>
+                        <width>560</width>
+                        <height>300</height>
+                    </rect>
                 </property>
-            </widget>
-            <widget row="1"  column="0"  rowspan="1"  colspan="5" >
-                <class>QTabWidget</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>OptionsWidget</cstring>
-                </property>
-                <widget>
-                    <class>QWidget</class>
+                <grid>
                     <property stdset="1">
-                        <name>name</name>
-                        <cstring>tab</cstring>
+                        <name>margin</name>
+                        <number>0</number>
                     </property>
-                    <attribute>
-                        <name>title</name>
-                        <string>Source Distrabution</string>
-                    </attribute>
-                </widget>
-                <widget>
-                    <class>QWidget</class>
                     <property stdset="1">
-                        <name>name</name>
-                        <cstring>tab</cstring>
+                        <name>spacing</name>
+                        <number>6</number>
                     </property>
-                    <attribute>
-                        <name>title</name>
-                        <string>RPM Distrabution</string>
-                    </attribute>
-                    <widget>
+                    <widget row="0"  column="1" >
+                        <class>QLabel</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>TextLabel5_5</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>File List:</string>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="1" >
+                        <class>QListBox</class>
+                        <item>
+                            <property>
+                                <name>text</name>
+                                <string>New Item</string>
+                            </property>
+                        </item>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ListBox7</cstring>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="0"  rowspan="2"  colspan="1" >
                         <class>QLayoutWidget</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>Layout10</cstring>
+                            <cstring>Layout35</cstring>
                         </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>0</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QGroupBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>GroupBox13</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>title</name>
+                                    <string>Source Options:</string>
+                                </property>
+                                <widget>
+                                    <class>QCheckBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>CheckBox51</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>geometry</name>
+                                        <rect>
+                                            <x>20</x>
+                                            <y>30</y>
+                                            <width>176</width>
+                                            <height>26</height>
+                                        </rect>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Use bzip2 instead of gzip</string>
+                                    </property>
+                                </widget>
+                                <widget>
+                                    <class>QLayoutWidget</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>Layout34</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>geometry</name>
+                                        <rect>
+                                            <x>15</x>
+                                            <y>75</y>
+                                            <width>185</width>
+                                            <height>97</height>
+                                        </rect>
+                                    </property>
+                                    <vbox>
+                                        <property stdset="1">
+                                            <name>margin</name>
+                                            <number>0</number>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>spacing</name>
+                                            <number>6</number>
+                                        </property>
+                                        <widget>
+                                            <class>QLabel</class>
+                                            <property stdset="1">
+                                                <name>name</name>
+                                                <cstring>TextLabel6_2</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>text</name>
+                                                <string>&lt;b&gt;Archive Name Format: &lt;/b&gt;&lt;br&gt;
+%n - File Name &lt;BR&gt;
+%v - File Version &lt;BR&gt;
+%d - Date of Archive</string>
+                                            </property>
+                                        </widget>
+                                        <widget>
+                                            <class>QLineEdit</class>
+                                            <property stdset="1">
+                                                <name>name</name>
+                                                <cstring>LineEdit61</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>text</name>
+                                                <string>%n-%v</string>
+                                            </property>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                            </widget>
+                            <spacer>
+                                <property>
+                                    <name>name</name>
+                                    <cstring>Spacer37</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>orientation</name>
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property stdset="1">
+                                    <name>sizeType</name>
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property>
+                                    <name>sizeHint</name>
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget>
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>PushButton67</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Create Source Archive</string>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QPushButton</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>PushButton67_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Reset</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget>
+                <class>QCheckBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>CheckBox53</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>15</y>
+                        <width>186</width>
+                        <height>26</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Use Custom Options</string>
+                </property>
+            </widget>
+        </widget>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>Package Information</string>
+            </attribute>
+            <widget>
+                <class>QLayoutWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Layout5</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>5</x>
+                        <y>5</y>
+                        <width>560</width>
+                        <height>345</height>
+                    </rect>
+                </property>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>0</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget row="0"  column="0"  rowspan="5"  colspan="1" >
+                        <class>QLayoutWidget</class>
                         <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>6</x>
-                                <y>6</y>
-                                <width>555</width>
-                                <height>325</height>
-                            </rect>
+                            <name>name</name>
+                            <cstring>Layout9</cstring>
                         </property>
                         <grid>
                             <property stdset="1">
@@ -209,92 +498,809 @@
                                 <name>spacing</name>
                                 <number>6</number>
                             </property>
-                            <widget row="0"  column="1" >
-                                <class>QButtonGroup</class>
+                            <widget row="8"  column="0" >
+                                <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>ButtonGroup1</cstring>
+                                    <cstring>TextLabel5_2_2</cstring>
                                 </property>
                                 <property stdset="1">
-                                    <name>title</name>
-                                    <string>Advanced RPM Options</string>
+                                    <name>text</name>
+                                    <string>Packager:</string>
+                                </property>
+                            </widget>
+                            <widget row="10"  column="0"  rowspan="1"  colspan="2" >
+                                <class>QMultiLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>MultiLineEdit1</cstring>
+                                </property>
+                            </widget>
+                            <widget row="4"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel4</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>License:</string>
+                                </property>
+                            </widget>
+                            <widget row="7"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel5_4</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Author:</string>
+                                </property>
+                            </widget>
+                            <widget row="3"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel5_3</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Vendor:</string>
+                                </property>
+                            </widget>
+                            <widget row="6"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel5_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Group:</string>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit1</cstring>
+                                </property>
+                            </widget>
+                            <widget row="2"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel2_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Release Number:</string>
+                                </property>
+                            </widget>
+                            <widget row="5"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit5</cstring>
+                                </property>
+                            </widget>
+                            <widget row="7"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit5_4</cstring>
+                                </property>
+                            </widget>
+                            <widget row="0"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Application Name:</string>
+                                </property>
+                            </widget>
+                            <widget row="5"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel5</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Summary:</string>
+                                </property>
+                            </widget>
+                            <widget row="9"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel6</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Description:</string>
+                                </property>
+                            </widget>
+                            <widget row="6"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit5_2</cstring>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="0" >
+                                <class>QLabel</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>TextLabel3</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>text</name>
+                                    <string>Version:</string>
+                                </property>
+                            </widget>
+                            <widget row="2"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit3</cstring>
+                                </property>
+                            </widget>
+                            <widget row="1"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit2</cstring>
+                                </property>
+                            </widget>
+                            <widget row="3"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit5_3</cstring>
+                                </property>
+                            </widget>
+                            <widget row="4"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit4</cstring>
+                                </property>
+                            </widget>
+                            <widget row="8"  column="1" >
+                                <class>QLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>LineEdit5_2_2</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget row="2"  column="1" >
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>PushButton4_2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Build Source and Binary Package</string>
+                        </property>
+                    </widget>
+                    <widget row="3"  column="1" >
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>PushButton6</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Generate RPM SPEC File</string>
+                        </property>
+                    </widget>
+                    <widget row="4"  column="1" >
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>PushButton7</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Import RPM SPEC File</string>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="1" >
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>PushButton4</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Build Source Package</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="1" >
+                        <class>QButtonGroup</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ButtonGroup1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>Advanced Package Options</string>
+                        </property>
+                        <widget>
+                            <class>QCheckBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>CheckBox1</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>geometry</name>
+                                <rect>
+                                    <x>11</x>
+                                    <y>21</y>
+                                    <width>221</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Create Development Package</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QCheckBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>CheckBox2</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>geometry</name>
+                                <rect>
+                                    <x>10</x>
+                                    <y>45</y>
+                                    <width>221</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Create Documentation Package</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QLayoutWidget</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>Layout2</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>geometry</name>
+                                <rect>
+                                    <x>10</x>
+                                    <y>95</y>
+                                    <width>220</width>
+                                    <height>97</height>
+                                </rect>
+                            </property>
+                            <grid>
+                                <property stdset="1">
+                                    <name>margin</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>spacing</name>
+                                    <number>6</number>
+                                </property>
+                                <widget row="1"  column="0" >
+                                    <class>QComboBox</class>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>i386</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>i586</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>i686</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>AMD K6</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>AMD K7</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>PPC</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>PPC G3</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>PPC Altevec</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>Dec Alpha (AXP)</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property>
+                                            <name>text</name>
+                                            <string>Spark</string>
+                                        </property>
+                                    </item>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>ComboBox1</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>currentItem</name>
+                                        <number>0</number>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>autoResize</name>
+                                        <bool>true</bool>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>sizeLimit</name>
+                                        <number>10</number>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>autoCompletion</name>
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                                <widget row="0"  column="0" >
+                                    <class>QLabel</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>TextLabel1_2</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Archatechture Target&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                        <widget>
+                            <class>QCheckBox</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>CheckBox2_2</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>geometry</name>
+                                <rect>
+                                    <x>10</x>
+                                    <y>70</y>
+                                    <width>221</width>
+                                    <height>21</height>
+                                </rect>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Include Application Icon</string>
+                            </property>
+                        </widget>
+                    </widget>
+                </grid>
+            </widget>
+        </widget>
+        <widget>
+            <class>QWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tab</cstring>
+            </property>
+            <attribute>
+                <name>title</name>
+                <string>Project Publishing</string>
+            </attribute>
+            <widget>
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>GroupBox1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>1</x>
+                        <y>10</y>
+                        <width>565</width>
+                        <height>101</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>Local Options</string>
+                </property>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout18</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>5</x>
+                            <y>20</y>
+                            <width>550</width>
+                            <height>66</height>
+                        </rect>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLayoutWidget</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>Layout15</cstring>
+                            </property>
+                            <grid>
+                                <property stdset="1">
+                                    <name>margin</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>spacing</name>
+                                    <number>6</number>
+                                </property>
+                                <widget row="0"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QCheckBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>CheckBox7</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Generate HTML Information Page</string>
+                                    </property>
+                                </widget>
+                                <widget row="1"  column="1" >
+                                    <class>QCheckBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>CheckBox8</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>User information generated by RPM</string>
+                                    </property>
+                                </widget>
+                                <spacer row="1"  column="0" >
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Spacer7</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>orientation</name>
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>sizeType</name>
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property>
+                                        <name>sizeHint</name>
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </grid>
+                        </widget>
+                        <spacer>
+                            <property>
+                                <name>name</name>
+                                <cstring>Spacer8</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>sizeType</name>
+                                <enum>Expanding</enum>
+                            </property>
+                            <property>
+                                <name>sizeHint</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget>
+                            <class>QLayoutWidget</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>Layout17</cstring>
+                            </property>
+                            <vbox>
+                                <property stdset="1">
+                                    <name>margin</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>spacing</name>
+                                    <number>6</number>
                                 </property>
                                 <widget>
-                                    <class>QCheckBox</class>
+                                    <class>QPushButton</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox1</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>geometry</name>
-                                        <rect>
-                                            <x>11</x>
-                                            <y>21</y>
-                                            <width>221</width>
-                                            <height>21</height>
-                                        </rect>
+                                        <cstring>PushButton10</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Create Development Package</string>
+                                        <string>Generate</string>
                                     </property>
                                 </widget>
                                 <widget>
-                                    <class>QCheckBox</class>
+                                    <class>QPushButton</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox2</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>geometry</name>
-                                        <rect>
-                                            <x>10</x>
-                                            <y>45</y>
-                                            <width>221</width>
-                                            <height>21</height>
-                                        </rect>
+                                        <cstring>PushButton11</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Create Documentation Package</string>
+                                        <string>Reset</string>
                                     </property>
                                 </widget>
-                                <widget>
-                                    <class>QCheckBox</class>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+            </widget>
+            <widget>
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>GroupBox2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>1</x>
+                        <y>117</y>
+                        <width>565</width>
+                        <height>235</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>Remote Options</string>
+                </property>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout28</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>2</x>
+                            <y>17</y>
+                            <width>555</width>
+                            <height>211</height>
+                        </rect>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLayoutWidget</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>Layout27</cstring>
+                            </property>
+                            <grid>
+                                <property stdset="1">
+                                    <name>margin</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>spacing</name>
+                                    <number>6</number>
+                                </property>
+                                <widget row="5"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QLabel</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox2_2</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>geometry</name>
-                                        <rect>
-                                            <x>10</x>
-                                            <y>70</y>
-                                            <width>221</width>
-                                            <height>21</height>
-                                        </rect>
+                                        <cstring>TextLabel2_3</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Include Application Icon</string>
+                                        <string>Progress:</string>
                                     </property>
                                 </widget>
-                                <widget>
+                                <widget row="1"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QCheckBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>CheckBox5</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Upload to apps.kde.com</string>
+                                    </property>
+                                </widget>
+                                <widget row="0"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QCheckBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>CheckBox4</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Upload Files to ftp.kde.org</string>
+                                    </property>
+                                </widget>
+                                <spacer row="4"  column="0"  rowspan="1"  colspan="2" >
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Spacer6</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>orientation</name>
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>sizeType</name>
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property>
+                                        <name>sizeHint</name>
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget row="2"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QCheckBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>CheckBox6</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Upload to custom FTP Site</string>
+                                    </property>
+                                </widget>
+                                <widget row="7"  column="0" >
+                                    <class>QPushButton</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>PushButton8</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Submit</string>
+                                    </property>
+                                </widget>
+                                <widget row="7"  column="1" >
+                                    <class>QPushButton</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>PushButton9</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>Reset</string>
+                                    </property>
+                                </widget>
+                                <widget row="3"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QLineEdit</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>LineEdit10</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>ftp://username:password@ftp.server.com/path/</string>
+                                    </property>
+                                </widget>
+                                <widget row="6"  column="0"  rowspan="1"  colspan="2" >
+                                    <class>QProgressBar</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>ProgressBar1</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>frameShape</name>
+                                        <enum>Box</enum>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>frameShadow</name>
+                                        <enum>Sunken</enum>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>progress</name>
+                                        <number>0</number>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>centerIndicator</name>
+                                        <bool>true</bool>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>indicatorFollowsStyle</name>
+                                        <bool>false</bool>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                        <widget>
+                            <class>QLayoutWidget</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>Layout26</cstring>
+                            </property>
+                            <grid>
+                                <property stdset="1">
+                                    <name>margin</name>
+                                    <number>0</number>
+                                </property>
+                                <property stdset="1">
+                                    <name>spacing</name>
+                                    <number>6</number>
+                                </property>
+                                <widget row="0"  column="2" >
                                     <class>QLayoutWidget</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>Layout2</cstring>
+                                        <cstring>Layout21</cstring>
                                     </property>
-                                    <property stdset="1">
-                                        <name>geometry</name>
-                                        <rect>
-                                            <x>10</x>
-                                            <y>180</y>
-                                            <width>220</width>
-                                            <height>97</height>
-                                        </rect>
-                                    </property>
-                                    <grid>
+                                    <hbox>
                                         <property stdset="1">
                                             <name>margin</name>
                                             <number>0</number>
@@ -303,337 +1309,89 @@
                                             <name>spacing</name>
                                             <number>6</number>
                                         </property>
-                                        <widget row="1"  column="0" >
-                                            <class>QComboBox</class>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>i386</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>i586</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>i686</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>AMD K6</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>AMD K7</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>PPC</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>PPC G3</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>PPC Altevec</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>Dec Alpha (AXP)</string>
-                                                </property>
-                                            </item>
-                                            <item>
-                                                <property>
-                                                    <name>text</name>
-                                                    <string>Spark</string>
-                                                </property>
-                                            </item>
+                                        <widget>
+                                            <class>QToolButton</class>
                                             <property stdset="1">
                                                 <name>name</name>
-                                                <cstring>ComboBox1</cstring>
-                                            </property>
-                                            <property stdset="1">
-                                                <name>currentItem</name>
-                                                <number>0</number>
-                                            </property>
-                                            <property stdset="1">
-                                                <name>autoResize</name>
-                                                <bool>true</bool>
-                                            </property>
-                                            <property stdset="1">
-                                                <name>sizeLimit</name>
-                                                <number>10</number>
-                                            </property>
-                                            <property stdset="1">
-                                                <name>autoCompletion</name>
-                                                <bool>true</bool>
-                                            </property>
-                                        </widget>
-                                        <widget row="0"  column="0" >
-                                            <class>QLabel</class>
-                                            <property stdset="1">
-                                                <name>name</name>
-                                                <cstring>TextLabel1_2</cstring>
+                                                <cstring>ToolButton1</cstring>
                                             </property>
                                             <property stdset="1">
                                                 <name>text</name>
-                                                <string>Archatechture Target&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
+                                                <string>+</string>
                                             </property>
                                         </widget>
-                                    </grid>
+                                        <widget>
+                                            <class>QToolButton</class>
+                                            <property stdset="1">
+                                                <name>name</name>
+                                                <cstring>ToolButton2</cstring>
+                                            </property>
+                                            <property stdset="1">
+                                                <name>text</name>
+                                                <string>-</string>
+                                            </property>
+                                        </widget>
+                                    </hbox>
                                 </widget>
-                            </widget>
-                            <widget row="0"  column="0" >
-                                <class>QLayoutWidget</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>Layout9</cstring>
-                                </property>
-                                <grid>
-                                    <property stdset="1">
-                                        <name>margin</name>
-                                        <number>0</number>
+                                <spacer row="0"  column="1" >
+                                    <property>
+                                        <name>name</name>
+                                        <cstring>Spacer24</cstring>
                                     </property>
                                     <property stdset="1">
-                                        <name>spacing</name>
-                                        <number>6</number>
+                                        <name>orientation</name>
+                                        <enum>Horizontal</enum>
                                     </property>
-                                    <widget row="8"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel5_2_2</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Packager:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="10"  column="0"  rowspan="1"  colspan="2" >
-                                        <class>QMultiLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>MultiLineEdit1</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="4"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel4</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>License:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="7"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel5_4</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Author:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="3"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel5_3</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Vendor:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="6"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel5_2</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Group:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="0"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit1</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="2"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel2_2</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Release Number:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="5"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit5</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="7"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit5_4</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="0"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel2</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Application Name:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="5"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel5</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Summary:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="9"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel6</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Description:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="6"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit5_2</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="1"  column="0" >
-                                        <class>QLabel</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>TextLabel3</cstring>
-                                        </property>
-                                        <property stdset="1">
-                                            <name>text</name>
-                                            <string>Version:</string>
-                                        </property>
-                                    </widget>
-                                    <widget row="2"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit3</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="1"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit2</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="3"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit5_3</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="4"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit4</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget row="8"  column="1" >
-                                        <class>QLineEdit</class>
-                                        <property stdset="1">
-                                            <name>name</name>
-                                            <cstring>LineEdit5_2_2</cstring>
-                                        </property>
-                                    </widget>
-                                </grid>
-                            </widget>
-                        </grid>
-                    </widget>
-                </widget>
-                <widget>
-                    <class>QWidget</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>tab</cstring>
-                    </property>
-                    <attribute>
-                        <name>title</name>
-                        <string>Project Publishing</string>
-                    </attribute>
+                                    <property stdset="1">
+                                        <name>sizeType</name>
+                                        <enum>Minimum</enum>
+                                    </property>
+                                    <property>
+                                        <name>sizeHint</name>
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget row="0"  column="0" >
+                                    <class>QLabel</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>TextLabel1_3</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>text</name>
+                                        <string>File Submission List:</string>
+                                    </property>
+                                </widget>
+                                <widget row="1"  column="0"  rowspan="1"  colspan="3" >
+                                    <class>QListBox</class>
+                                    <property stdset="1">
+                                        <name>name</name>
+                                        <cstring>ListBox1</cstring>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>sizePolicy</name>
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>7</vsizetype>
+                                        </sizepolicy>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>minimumSize</name>
+                                        <size>
+                                            <width>250</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </hbox>
                 </widget>
             </widget>
-            <spacer row="2"  column="3" >
-                <property>
-                    <name>name</name>
-                    <cstring>Spacer1</cstring>
-                </property>
-                <property stdset="1">
-                    <name>orientation</name>
-                    <enum>Horizontal</enum>
-                </property>
-                <property stdset="1">
-                    <name>sizeType</name>
-                    <enum>Expanding</enum>
-                </property>
-                <property>
-                    <name>sizeHint</name>
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-        </grid>
+        </widget>
     </widget>
 </widget>
 <images>
