@@ -17,10 +17,7 @@ import org.kde.koala.*;
 public class %{APPNAME} extends KMainWindow
 {
     private %{APPNAME}View m_view;
-
     private QPrinter   m_printer;
-    private KToggleAction m_toolbarAction;
-    private KToggleAction m_statusbarAction;
 
 %{APPNAME}()
 {
