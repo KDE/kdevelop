@@ -351,6 +351,10 @@ QString CDocBrowser::currentTitle(){
 void  CDocBrowser::urlSelected ( const QString &url, int button, int state, const QString &_target)
 {
   KHTMLPart::urlSelected (url, button, state,_target);
+
+  KURL cURL = completeURL( url );
+  openURL( cURL ) ;
+  show();
 }
 
 //
