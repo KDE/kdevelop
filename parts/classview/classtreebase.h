@@ -164,7 +164,7 @@ public:
 
     virtual QString text( int ) const;
     virtual void setOpen(bool o);
-    
+
 private:
     void init();
 };
@@ -174,14 +174,14 @@ class ClassTreeClassItem : public ClassTreeItem
 {
 public:
     ClassTreeClassItem( ClassTreeBase *parent, ClassTreeItem *lastSibling,
-                        ParsedClass *parsedClass )
-        : ClassTreeItem(parent, lastSibling, parsedClass)
+                        ParsedClass *parsedClass, bool isStruct=false )
+        : ClassTreeItem(parent, lastSibling, parsedClass), m_isStruct( isStruct )
         {
           init();
         }
     ClassTreeClassItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
-                        ParsedClass *parsedClass )
-        : ClassTreeItem(parent, lastSibling, parsedClass)
+                        ParsedClass *parsedClass, bool isStruct=false )
+        : ClassTreeItem(parent, lastSibling, parsedClass), m_isStruct( isStruct )
         {
           init();
         }
@@ -193,10 +193,11 @@ public:
 
 private:
     void init();
+
+private:
+    bool m_isStruct;
 };
 
-
-typedef ClassTreeClassItem ClassTreeStructItem;
 
 class ClassTreeMethodItem : public ClassTreeItem
 {

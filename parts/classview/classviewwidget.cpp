@@ -286,7 +286,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         QValueList<ParsedClass*> structList = store->getSortedStructList();
         QValueList<ParsedClass*>::ConstIterator it;
         for (it = structList.begin(); it != structList.end(); ++it)
-            ilastItem = new ClassTreeStructItem(lastItem, ilastItem, *it);
+            ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it, true);
         if (fromScratch)
             lastItem->setOpen(true);
     }
