@@ -52,15 +52,14 @@ CKDevelop::CKDevelop(){
 
   initWhatsThis();
 	
-	readOptions();
+  readOptions();
 	
   initProject();
-	setToolmenuEntries();
+  setToolmenuEntries();
 	
   error_parser = new CErrorMessageParser;
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
-
 
 void CKDevelop::initView(){
   act_outbuffer_len=0;
@@ -204,6 +203,16 @@ void CKDevelop::initView(){
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
   
 }
+
+/*--------------------------------------- CKDevelop::initKeyAccel()
+ * initKeyAccel()
+ *   Create key accelerators.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::initKeyAccel(){
   accel = new KAccel( this );
   //file menu
@@ -313,6 +322,16 @@ void CKDevelop::initKeyAccel(){
 
   accel->readSettings();
 }
+
+/*--------------------------------------- CKDevelop::initMenuBar()
+ * initMenuBar()
+ *   Create the menubar with its' entries.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::initMenuBar(){
   //  KDEVELOP MENUBAR //
   // NOTE: ALL disableCommand(ID_XX) are placed in initKDlgMenuBar() at the end !!!
@@ -355,7 +374,7 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
 
-	edit_menu->insertSeparator();
+  edit_menu->insertSeparator();
   edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
   edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   
@@ -406,10 +425,10 @@ void CKDevelop::initMenuBar(){
   project_menu = new QPopupMenu;
   project_menu->insertItem(i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
   project_menu->insertItem(Icon("openprj.xpm"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
-	recent_projects_menu = new QPopupMenu();
-  connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
-	project_menu->insertItem(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
 
+  recent_projects_menu = new QPopupMenu();
+  connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
+  project_menu->insertItem(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
 
   project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
 
@@ -475,7 +494,7 @@ void CKDevelop::initMenuBar(){
   build_menu->insertSeparator();
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
-	build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
+  build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
   build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -524,30 +543,30 @@ void CKDevelop::initMenuBar(){
   
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
-    menu_buffers = new QPopupMenu;
+  menu_buffers = new QPopupMenu;
   kdev_menubar->insertItem(i18n("&Window"), menu_buffers);
   kdev_menubar->insertSeparator();
   
   ///////////////////////////////////////////////////////////////////
   // Bookmarks-menu entries
-	bookmarks_menu=new QPopupMenu;
-	bookmarks_menu->insertItem(i18n("&Set Bookmark..."),this,SLOT(slotBookmarksSet()),0,ID_BOOKMARKS_SET);
-	bookmarks_menu->insertItem(i18n("&Add Bookmark..."),this,SLOT(slotBookmarksAdd()),0,ID_BOOKMARKS_ADD);
-	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
-	bookmarks_menu->insertSeparator();
+  bookmarks_menu=new QPopupMenu;
+  bookmarks_menu->insertItem(i18n("&Set Bookmark..."),this,SLOT(slotBookmarksSet()),0,ID_BOOKMARKS_SET);
+  bookmarks_menu->insertItem(i18n("&Add Bookmark..."),this,SLOT(slotBookmarksAdd()),0,ID_BOOKMARKS_ADD);
+  bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
+  bookmarks_menu->insertSeparator();
 
   QPopupMenu* header_bookmarks = new QPopupMenu();
   header_widget->installBMPopup(header_bookmarks);
   QPopupMenu* cpp_bookmarks = new QPopupMenu();
   cpp_widget->installBMPopup(cpp_bookmarks);
 	
-	doc_bookmarks = new QPopupMenu();
-
-	bookmarks_menu->insertItem(i18n("&Header Window"),header_bookmarks,31000);
-	bookmarks_menu->insertItem(i18n("C/C++ &Window"),cpp_bookmarks,31010);
-	bookmarks_menu->insertItem(i18n("&Browser Window"), doc_bookmarks,31020);
+  doc_bookmarks = new QPopupMenu();
+  
+  bookmarks_menu->insertItem(i18n("&Header Window"),header_bookmarks,31000);
+  bookmarks_menu->insertItem(i18n("C/C++ &Window"),cpp_bookmarks,31010);
+  bookmarks_menu->insertItem(i18n("&Browser Window"), doc_bookmarks,31020);
 	
-	kdev_menubar->insertItem(i18n("Book&marks"),bookmarks_menu);
+  kdev_menubar->insertItem(i18n("Book&marks"),bookmarks_menu);
 
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
@@ -569,22 +588,39 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&Core-Library"),this,
-				 SLOT(slotHelpKDECoreLib()),0,ID_HELP_KDE_CORE_LIBRARY);
+                        SLOT(slotHelpKDECoreLib()),0,ID_HELP_KDE_CORE_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&GUI-Library"),this,
-				 SLOT(slotHelpKDEGUILib()),0,ID_HELP_KDE_GUI_LIBRARY);
+                        SLOT(slotHelpKDEGUILib()),0,ID_HELP_KDE_GUI_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&KFile-Library"),this,
-				 SLOT(slotHelpKDEKFileLib()),0,ID_HELP_KDE_KFILE_LIBRARY);
+                        SLOT(slotHelpKDEKFileLib()),0,ID_HELP_KDE_KFILE_LIBRARY);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("KDE-&HTML-Library"),this,
-				 SLOT(slotHelpKDEHTMLLib()),0,ID_HELP_KDE_HTML_LIBRARY);
+                        SLOT(slotHelpKDEHTMLLib()),0,ID_HELP_KDE_HTML_LIBRARY);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,
-				      SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
+                        SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
 
   help_menu->insertItem(i18n("Project &User-Manual"),this,
-				      SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
+                        SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
   kdev_menubar->insertItem(i18n("&Help"), help_menu);
+
+  ////////////////////////////////////////////////
+  // Popupmenu for the classbrowser wizard button
+  ////////////////////////////////////////////////
+
+  classbrowser_popup = new QPopupMenu();
+  classbrowser_popup->insertItem( i18n("View declaration"), this,
+                                  SLOT(slotClassbrowserViewDeclaration()) );
+  classbrowser_popup->insertItem( i18n("View definition"), this,
+                                  SLOT(slotClassbrowserViewDefinition()) );
+  classbrowser_popup->insertSeparator();
+  classbrowser_popup->insertItem( i18n("New class..."), this,
+                                  SLOT(slotProjectNewClass()) );
+  classbrowser_popup->insertItem( i18n("Add member function..."), this,
+                                  SLOT(slotClassbrowserNewMethod()) );
+  classbrowser_popup->insertItem( i18n("Add member variable..."), this,
+                                  SLOT(slotClassbrowserNewAttribute()) );
 
 
 ///////////////////////////////////////////////////////////////////
@@ -598,22 +634,29 @@ void CKDevelop::initMenuBar(){
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-	connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-
-
 }
 
+/*------------------------------------------ CKDevelop::initToolBar()
+ * initToolBar()
+ *   Initialize all toolbars.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::initToolBar(){
-
+   
 //  toolBar()->insertButton(Icon("filenew.xpm"),ID_FILE_NEW, false,i18n("New"));
 
   toolBar()->insertButton(Icon("openprj.xpm"),ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("open.xpm"),ID_FILE_OPEN, true,i18n("Open File"));
-	file_open_popup= new QPopupMenu();
-	connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
-	toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
+  file_open_popup= new QPopupMenu();
+  connect(file_open_popup, SIGNAL(activated(int)), SLOT(slotFileOpen(int)));
+  toolBar()->setDelayedPopup(ID_FILE_OPEN, file_open_popup);
 
   toolBar()->insertButton(Icon("save.xpm"),ID_FILE_SAVE,true,i18n("Save File"));
 //  toolBar()->insertButton(Icon("save_all.xpm"),ID_FILE_SAVE_ALL,true,i18n("Save All"));
@@ -624,8 +667,8 @@ void CKDevelop::initToolBar(){
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,20,separatorLine);
 	
-	toolBar()->insertButton(Icon("undo.xpm"),ID_EDIT_UNDO,false,i18n("Undo"));
-	toolBar()->insertButton(Icon("redo.xpm"),ID_EDIT_REDO,false,i18n("Redo"));
+  toolBar()->insertButton(Icon("undo.xpm"),ID_EDIT_UNDO,false,i18n("Undo"));
+  toolBar()->insertButton(Icon("redo.xpm"),ID_EDIT_REDO,false,i18n("Redo"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("cut.xpm"),ID_EDIT_CUT,true,i18n("Cut"));
   toolBar()->insertButton(Icon("copy.xpm"),ID_EDIT_COPY, true,i18n("Copy"));
@@ -639,7 +682,7 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar()->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
-	toolBar()->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
+  toolBar()->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
   toolBar()->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
@@ -651,8 +694,8 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("newwidget.xpm"),ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
   toolBar()->insertButton(Icon("tree_win.xpm"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
   toolBar()->insertButton(Icon("output_win.xpm"),ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
-	toolBar()->setToggle(ID_VIEW_TREEVIEW);
-	toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
+  toolBar()->setToggle(ID_VIEW_TREEVIEW);
+  toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
   QFrame *separatorLine3= new QFrame(toolBar());
   separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
@@ -667,26 +710,50 @@ void CKDevelop::initToolBar(){
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
 	
+  /////////////////////
   // the second toolbar
-  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),TOOLBAR_CLASS_CHOICE,true,SIGNAL(activated(int))
-			  ,this,SLOT(slotClassChoiceCombo(int)),true,i18n("Classes"),160 );
+  /////////////////////
+
+  // Class combo
+  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),
+                                           TOOLBAR_CLASS_CHOICE,true,
+                                           SIGNAL(activated(int))
+                                           ,this,
+                                           SLOT(slotClassChoiceCombo(int)),
+                                           true,i18n("Classes"),160 );
+
   KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::NoFocus);
-  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),TOOLBAR_METHOD_CHOICE,true,SIGNAL(activated(int))
-			  ,this,SLOT(slotMethodChoiceCombo(int)),true,i18n("Methods"),240 );
+
+  // Method combo
+  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),
+                                           TOOLBAR_METHOD_CHOICE,true,
+                                           SIGNAL(activated(int))
+                                           ,this,SLOT(slotMethodChoiceCombo(int)),
+                                           true,i18n("Methods"),240 );
+
   KCombo* choice_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
+
+  // Classbrowserwizard click button
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("classwiz.xpm"),
+                                            ID_CLASSBROWSER_WIZARD, true,
+                                            i18n("Jump to declaration"));
+  toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CLASSBROWSER_WIZARD,
+                                               classbrowser_popup);
+  
+
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("back.xpm"),ID_HELP_BACK, false,i18n("Back"));
   history_prev = new QPopupMenu();
-	connect(history_prev, SIGNAL(activated(int)), SLOT(slotHelpHistoryBack(int)));
-	toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_BACK, history_prev);
+  connect(history_prev, SIGNAL(activated(int)), SLOT(slotHelpHistoryBack(int)));
+  toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_BACK, history_prev);
 	
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_HELP_FORWARD, false,i18n("Forward"));
-	history_next = new QPopupMenu();
-	connect(history_next, SIGNAL(activated(int)), SLOT(slotHelpHistoryForward(int)));
-	toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_FORWARD, history_next);
+  history_next = new QPopupMenu();
+  connect(history_next, SIGNAL(activated(int)), SLOT(slotHelpHistoryForward(int)));
+  toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_FORWARD, history_next);
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("stop.xpm"),ID_HELP_BROWSER_STOP, false,i18n("Stop"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("reload_page.xpm"),ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
 	toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("start_page.xpm"), ID_HELP_CONTENTS, true, i18n("User Manual"));
@@ -703,6 +770,15 @@ void CKDevelop::initToolBar(){
 
 }
 
+/*------------------------------------------ CKDevelop::initStatusBar()
+ * initStatusBar()
+ *   Initialize the statusbar.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::initStatusBar(){
   kdev_statusbar= new KStatusBar(this,"KDevelop_statusbar");
 /*
@@ -713,7 +789,7 @@ void CKDevelop::initStatusBar(){
   statProg->setBackgroundMode(PaletteBackground);
   statProg->setLineWidth( 1 );                // hehe, this *is* tricky...
 */
-	statProg = new QProgressBar(kdev_statusbar,"Progressbar");
+  statProg = new QProgressBar(kdev_statusbar,"Progressbar");
   kdev_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
   kdev_statusbar->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
   kdev_statusbar->changeItem("", ID_STATUS_EMPTY);
@@ -733,7 +809,15 @@ void CKDevelop::initStatusBar(){
   enableStatusBar();
 }
 
-// all the init-stuff
+/*--------------------------------------- CKDevelop::initConnections()
+ * initConnections()
+ *   Create the signal<->slot mappings.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CKDevelop::initConnections(){
 
   connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
@@ -747,8 +831,8 @@ void CKDevelop::initConnections(){
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
   connect(class_tree, SIGNAL(selectedViewDeclaration(const char *, const char *,THType)), SLOT(slotCVViewDeclaration(const char *, const char *,THType)));
   connect(class_tree, SIGNAL(selectedViewDefinition(const char *, const char *,THType)), SLOT(slotCVViewDefinition(const char *, const char *,THType)));
-  connect(class_tree, SIGNAL(signalAddMethod( CParsedMethod *)), SLOT(slotCVAddMethod( CParsedMethod * )));
-  connect(class_tree, SIGNAL(signalAddAttribute( CParsedAttribute *)), SLOT(slotCVAddAttribute( CParsedAttribute * )));
+  connect(class_tree, SIGNAL(signalAddMethod(const char *)), SLOT(slotCVAddMethod(const char * )));
+  connect(class_tree, SIGNAL(signalAddAttribute(const char *)), SLOT(slotCVAddAttribute(const char * )));
 
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
@@ -769,16 +853,16 @@ void CKDevelop::initConnections(){
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-	connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-	connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-	connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-	connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   // connect Docbrowser rb menu
   connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
@@ -788,30 +872,30 @@ void CKDevelop::initConnections(){
   								this, SLOT(slotDocumentDone(KHTMLView*)));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
-	connect(browser_widget, SIGNAL(signalBookmarkAdd()),this,SLOT(slotBookmarksAdd()));
+  connect(browser_widget, SIGNAL(signalBookmarkAdd()),this,SLOT(slotBookmarksAdd()));
 
   connect(browser_widget, SIGNAL(onURL(KHTMLView *, const char *)),this,SLOT(slotURLonURL(KHTMLView *, const char *)));
   connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
-	connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
-	connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
-	connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
-	connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-	connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
+  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
+  connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
+  connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+  connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
 
   connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
-	connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
+  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
 
   connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
 
 
   // connections for the proc -processes
   connect(&search_process, SIGNAL(receivedStdout(KProcess*,char*,int)),
-  									this, SLOT(slotSearchReceivedStdout(KProcess*,char*,int)) );
+          this, SLOT(slotSearchReceivedStdout(KProcess*,char*,int)) );
 
   connect(&search_process, SIGNAL(receivedStderr(KProcess*,char*,int)),
-  	  							this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+          this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
 
   connect(&search_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
@@ -851,48 +935,48 @@ void CKDevelop::initConnections(){
 void CKDevelop::initProject(){
 
   config->setGroup("General Options");
-	bool bLastProject;
-	if(!kapp->isRestored())
-	  bLastProject= config->readBoolEntry("LastProject",true);
-	else
+  bool bLastProject;
+  if(!kapp->isRestored())
+    bLastProject= config->readBoolEntry("LastProject",true);
+  else
     bLastProject=false;
 
   QString filename;
-	if(kapp->argc() > 1)
-		bLastProject = false;
-	if(bLastProject){
-	  config->setGroup("Files");
-  	filename = config->readEntry("project_file","");
-	}
-	else
-		filename="";
+  if(kapp->argc() > 1)
+    bLastProject = false;
+  if(bLastProject){
+    config->setGroup("Files");
+    filename = config->readEntry("project_file","");
+  }
+  else
+    filename="";
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
       KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
-		else{
-   		setCursor(KCursor::waitCursor());
-   	  QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
-		  connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
-  		connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
-			progressDlg->setCaption(i18n("Starting..."));
-   		progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
-   	  progressDlg->setProgress(0);
-   	  progressDlg->show();
-   	  setCursor(KCursor::arrowCursor());
+    else{
+      setCursor(KCursor::waitCursor());
+      QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
+      connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
+      connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
+      progressDlg->setCaption(i18n("Starting..."));
+      progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
+      progressDlg->setProgress(0);
+      progressDlg->show();
+      setCursor(KCursor::arrowCursor());
       refreshTrees();
-			delete progressDlg;
-			
-		}
+      delete progressDlg;
+      
+    }
     config->setGroup("Files");
     filename = config->readEntry("header_file",i18n("Untitled.h"));
     QFile _file(filename);
-
+    
     if (QFile::exists(filename)){
       switchToFile(filename);
-
+      
     }
 
     filename = config->readEntry("cpp_file", i18n("Untitled.cpp"));
@@ -903,7 +987,7 @@ void CKDevelop::initProject(){
   else{
     refreshTrees(); // this refresh only the documentation tab,tree
   }
-
+  
 }
 
 
@@ -1042,113 +1126,3 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

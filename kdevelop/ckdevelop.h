@@ -289,6 +289,7 @@ public:
   void slotProjectAPI();
   void slotProjectManual();
   void slotProjectMakeDistSourceTgz();
+
   ////////////////////////
   // BUILD-Menu entries
   ///////////////////////
@@ -414,6 +415,18 @@ public:
   void slotKDlgViewPropView();
   void slotKDlgViewToolbar();
   void slotKDlgViewStatusbar();
+
+  //////////////////////////////////
+  // Classbrowser wizardbutton slots
+  //////////////////////////////////
+  /** View the declaration of a class/method. */
+  void slotClassbrowserViewDeclaration();
+  /** View the definition of a class/method. */
+  void slotClassbrowserViewDefinition();
+  /** Add a new method to a class. */
+  void slotClassbrowserNewMethod();
+  /** Add a new attribute to a class. */
+  void slotClassbrowserNewAttribute();
   
   ////////////////////////
   // All slots which are used if the user clicks or selects something in the view
@@ -487,9 +500,9 @@ public:
   
   //////////////// -- the methods for signals generated from the CV
   /** Added method in the classview. */
-  void slotCVAddMethod( CParsedMethod *aMethod );
+  void slotCVAddMethod( const char *aClassName );
   /** Added attribute in the classview. */
-  void slotCVAddAttribute( CParsedAttribute *aAttr );
+  void slotCVAddAttribute( const char *aClassName );
   /** The user wants to view the declaration of a method. */
   void slotCVViewDeclaration( const char *className, 
                               const char *declName, 
@@ -563,6 +576,9 @@ private:
   QPopupMenu* history_prev;
   QPopupMenu* history_next;
   QPopupMenu* file_open_popup;
+  /** Popup menu for the classbrowser wizard button. */
+  QPopupMenu* classbrowser_popup;
+
   QStrList file_open_list;	
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
   QPopupMenu* kdlg_file_menu;
@@ -711,7 +727,7 @@ private:
   CAddExistingFileDlg* add_dlg;
   GrepDialog* grep_dlg;
 
-  enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
+  enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE,TOOLBAR_WIZARD_CHOICE};
 
   int lasttab;
   QString lastfile;

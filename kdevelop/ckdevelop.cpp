@@ -1461,6 +1461,54 @@ void CKDevelop::slotKDlgViewStatusbar(){
 
 }
 
+/////////////////////////////////////////////////////////////////////
+// Slots for the classbrowser wizard button
+/////////////////////////////////////////////////////////////////////
+
+void CKDevelop::slotClassbrowserViewDeclaration()
+{
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_METHOD_CHOICE);
+  QString classname = classCombo->currentText();
+  QString methodname = methodCombo->currentText();
+
+  if( methodname.isEmpty() )
+    CVGotoDefinition( classname, "", THCLASS );
+  else
+    CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
+}
+
+void CKDevelop::slotClassbrowserViewDefinition()
+{
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_METHOD_CHOICE);
+  QString classname = classCombo->currentText();
+  QString methodname = methodCombo->currentText();
+
+  if( methodname.isEmpty() )
+    CVGotoDefinition( classname, "", THCLASS );
+  else
+    CVGotoDeclaration( classname, methodname, THPUBLIC_METHOD );
+}
+
+void CKDevelop::slotClassbrowserNewMethod()
+{
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
+  QString classname = classCombo->currentText();
+
+  if( !classname.isEmpty() )
+    slotCVAddMethod( classname );
+}
+
+void CKDevelop::slotClassbrowserNewAttribute()
+{
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
+  QString classname = classCombo->currentText();
+
+  if( !classname.isEmpty() )
+    slotCVAddAttribute( classname );
+}
+
 
 /////////////////////////////////////////////////////////////////////
 // Other slots and functions needed
@@ -2278,6 +2326,9 @@ void CKDevelop::slotToolbarClicked(int item){
     break;
   case ID_KDLG_BUILD_GENERATE:
     kdlgedit->slotBuildGenerate();
+    break;
+  case ID_CLASSBROWSER_WIZARD:
+    slotClassbrowserViewDeclaration();
     break;
   }
 }
