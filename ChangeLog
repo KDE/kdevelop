@@ -1,3 +1,7 @@
+2001-11-13  F@lk Brettschneider <falk@kdevelop.org>
+    * dangerous memory leak in QextMdiChildView fixed
+    * no #if 0 in highlighting.cpp
+
 2001-11-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: methods with namespace prefix in return type are displayed in class parser now
     * bugfix: accept *.inl and *.thl as header and source files (important for template-based projects and classparser)
