@@ -1,3 +1,6 @@
+2002-08-05 Matthias Hölzer-Klüpfel <mhk@kde.org>
+	* Removed kdevelop source, to prepare for an alpha release
+
 2002-08-04 Christian Couder <christian@kdevelop.org>
 	* Fix a few appwizard bugs. 
 

@@ -357,29 +357,3 @@ fi
 AC_SUBST(JAVA_SUBDIRS)
 ])
 
-dnl
-dnl Check if gideon / kdevelop should be compiled
-dnl
-AC_DEFUN(KDEV_DISABLE_GIDEON_KDEVELOP,
-[
-AC_MSG_CHECKING(if gideon should be compiled)
-AC_ARG_ENABLE(gideon,
-[  --disable-gideon	disable the compilation of gideon],
-[if test "$enableval" = no; then
-	GIDEON_SUBDIR=""
-else
-	GIDEON_SUBDIR="src"
-fi
-],GIDEON_SUBDIR="src")
-AC_SUBST(GIDEON_SUBDIR)
-AC_MSG_CHECKING(if kdevelop should be compiled)
-AC_ARG_ENABLE(kdevelop,
-[  --disable-kdevelop     disable the compilation of kdevelop],
-[if test "$enableval" = no; then
-        KDEV_SUBDIR=""
-else
-        KDEV_SUBDIR="kdevelop"
-fi
-],KDEV_SUBDIR="kdevelop")
-AC_SUBST(KDEV_SUBDIR)
-])

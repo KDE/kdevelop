@@ -1,6 +1,6 @@
 #kdevelop: GIDEON_SUBDIR = src
 
-SUBDIRS = lib parts plugins $(GIDEON_SUBDIR) $(KDEV_SUBDIR) doc pics
+SUBDIRS = lib parts plugins src pics
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING admin configure.in.bot
 
