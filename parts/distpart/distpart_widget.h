@@ -5,6 +5,13 @@
 #include <qwidget.h>
 #include <qstring.h>
 #include "distpart_ui.h"
+#include <qlistbox.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qmultilineedit.h>
+#include <qcombobox.h>
+#include <qprogressbar.h>
 
 class KDevProject;
 class distpartPart;
@@ -58,7 +65,7 @@ public slots:
 // Connect Slots to the following widgets and add
 // accessors and mutators
 //    QCheckBox* customProjectCheckBox;
-    void slotcustomProjectCheckBoxChanged();
+    void slotcustomProjectCheckBoxChanged(int state);
 //  QCheckBox* uploadCustomCheckBox;
     void slotuploadCustomCheckBoxChanged();
 public:
@@ -71,28 +78,28 @@ public:
 
 //   QCheckBox* bzipCheckBox;
     bool getbzipCheckBoxState();
-    void setbzipCheckBoxState(boot state);
+    void setbzipCheckBoxState(bool state);
 //    QCheckBox* appIconCheckBox;
     bool getappIconCheckBoxState();
-    void setappIconCheckBoxState(boot state);
+    void setappIconCheckBoxState(bool state);
 //    QCheckBox* genHTMLCheckBox;
     bool getgenHTMLCheckBoxState();
-    void setgenHTMLCheckBoxState(boot state);
+    void setgenHTMLCheckBoxState(bool state);
 //    QCheckBox* useRPMInfoCheckBox;
     bool getuseRPMInfoCheckBoxState();
-    void setuseRPMInfoCheckBoxState(boot state);
+    void setuseRPMInfoCheckBoxState(bool state);
 //    QCheckBox* uploadAppsKDEcomCheckBox;
     bool getuploadAppsKDEcomCheckBoxState();
-    void setuploadAppsKDEcomCheckBoxState(boot state);
+    void setuploadAppsKDEcomCheckBoxState(bool state);
 //    QCheckBox* uploadftpkdeorgCheckBox;
     bool getuploadftpkdeorgCheckBoxState();
-    void setuploadftpkdeorgCheckBoxState(boot state);
+    void setuploadftpkdeorgCheckBoxState(bool state);
 //    QCheckBox* devPackageCheckBox;
     bool getdevPackageCheckBoxState();
-    void setdevPackageCheckBoxState(boot state);
+    void setdevPackageCheckBoxState(bool state);
 //    QCheckBox* docsPackageCheckBox;
     bool getdocsPackageCheckBoxState();
-    void setdocsPackageCheckBoxState(boot state);
+    void setdocsPackageCheckBoxState(bool state);
 //    QProgressBar* uploadProgressBar;
     int getuploadProgressBarProgress();
     void setuploadProgressBarProgress(int progress);

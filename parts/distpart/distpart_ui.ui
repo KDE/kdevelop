@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>567</width>
+            <width>602</width>
             <height>507</height>
         </rect>
     </property>
@@ -110,7 +110,7 @@
             <rect>
                 <x>1</x>
                 <y>0</y>
-                <width>565</width>
+                <width>595</width>
                 <height>82</height>
             </rect>
         </property>
@@ -237,6 +237,26 @@
                 <string>Source Distrabution</string>
             </attribute>
             <widget>
+                <class>QCheckBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>customProjectCheckBox</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>15</y>
+                        <width>186</width>
+                        <height>26</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Use Custom Options</string>
+                </property>
+            </widget>
+            <widget>
                 <class>QLayoutWidget</class>
                 <property stdset="1">
                     <name>name</name>
@@ -247,7 +267,7 @@
                     <rect>
                         <x>5</x>
                         <y>50</y>
-                        <width>560</width>
+                        <width>580</width>
                         <height>300</height>
                     </rect>
                 </property>
@@ -428,26 +448,6 @@
                     </widget>
                 </grid>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>customProjectCheckBox</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>15</y>
-                        <width>186</width>
-                        <height>26</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Use Custom Options</string>
-                </property>
-            </widget>
         </widget>
         <widget>
             <class>QWidget</class>
@@ -470,7 +470,7 @@
                     <rect>
                         <x>5</x>
                         <y>5</y>
-                        <width>560</width>
+                        <width>580</width>
                         <height>345</height>
                     </rect>
                 </property>
@@ -939,7 +939,7 @@
                     <rect>
                         <x>1</x>
                         <y>10</y>
-                        <width>565</width>
+                        <width>585</width>
                         <height>101</height>
                     </rect>
                 </property>
@@ -958,7 +958,7 @@
                         <rect>
                             <x>5</x>
                             <y>20</y>
-                            <width>550</width>
+                            <width>575</width>
                             <height>66</height>
                         </rect>
                     </property>
@@ -1105,7 +1105,7 @@
                     <rect>
                         <x>1</x>
                         <y>117</y>
-                        <width>565</width>
+                        <width>585</width>
                         <height>235</height>
                     </rect>
                 </property>
@@ -1124,7 +1124,7 @@
                         <rect>
                             <x>2</x>
                             <y>17</y>
-                            <width>555</width>
+                            <width>575</width>
                             <height>211</height>
                         </rect>
                     </property>

@@ -5,15 +5,15 @@
 
 
 #include <kdevcore.h>
-
-
 #include "distpart_part.h"
 #include "distpart_widget.h"
-
+#include <qlayout.h>
 
 distpartWidget::distpartWidget(distpartPart *part)
 	: distpart_ui(0, "distpart widget")
 {
+    connect(customProjectCheckBox, SIGNAL(stateChanged ( int ) ),
+           this, SLOT(slotcustomProjectCheckBoxChanged(int)));
 }
 
 
@@ -40,100 +40,274 @@ void distpartWidget::slotimportPushButtonPressed() { }
 //    QPushButton* srcPackagePushButton;
 void distpartWidget::slotsrcPackagePushButtonPressed() { }
 //    QPushButton* genHTMLPushButton;
-void distpartWidget::slotgenHTMLPushButtonPressed() { }
+void distpartWidget::slotgenHTMLPushButtonPressed()
+{
+
+}
 //    QPushButton* resetHTMLPushButton;
-void distpartWidget::slotresetHTMLPushButtonPressed() { }
+void distpartWidget::slotresetHTMLPushButtonPressed()
+{
+
+}
 //    QToolButton* uploadAddFileToolButton;
-void distpartWidget::slotuploadAddFileToolButtonPressed() { }
+void distpartWidget::slotuploadAddFileToolButtonPressed()
+{
+
+}
 //    QToolButton* uploadRemoveToolButton;
-void distpartWidget::slotuploadRemoveToolButtonPressed() { }
+void distpartWidget::slotuploadRemoveToolButtonPressed()
+{
+
+}
 //    QPushButton* uploadSubmitPushButton;
-void distpartWidget::slotuploadSubmitPushButtonPressed() { }
+void distpartWidget::slotuploadSubmitPushButtonPressed()
+{
+
+}
 //    QPushButton* uploadResetPushButton;
-void distpartWidget::slotuploadResetPushButtonPressed() { }
+void distpartWidget::slotuploadResetPushButtonPressed()
+{
+
+}
 
 // Connect Slots to the following widgets and add
 // accessors and mutators
 //    QCheckBox* customProjectCheckBox;
-void distpartWidget::slotcustomProjectCheckBoxChanged() { }
+void distpartWidget::slotcustomProjectCheckBoxChanged(int state)
+{
+  Layout36->setEnabled(state);
+}
+bool distpartWidget::getcustomProjectCheckBoxState()
+{
+    return customProjectCheckBox->isChecked();
+}
+void distpartWidget::setcustomProjectCheckBoxState(bool state)
+{
+    customProjectCheckBox->setChecked(state);
+}
 //  QCheckBox* uploadCustomCheckBox;
-void distpartWidget::slotuploadCustomCheckBoxChanged() { }
-
-bool distpartWidget::getcustomProjectCheckBoxState() { }
-void distpartWidget::setcustomProjectCheckBoxState(bool state) { }
-bool distpartWidget::getuploadCustomCheckBoxState() { }
-void distpartWidget::setuploadCustomCheckBoxState(bool state) { }
+void distpartWidget::slotuploadCustomCheckBoxChanged()
+{
+    useRPMInfoCheckBox->setEnabled(uploadCustomCheckBox->isChecked());
+}
+bool distpartWidget::getuploadCustomCheckBoxState()
+{
+    return uploadCustomCheckBox->isChecked();
+}
+void distpartWidget::setuploadCustomCheckBoxState(bool state)
+{
+    uploadCustomCheckBox->setChecked(state);
+}
 
 // Add accessors and mutators for the following
 
 //   QCheckBox* bzipCheckBox;
-bool distpartWidget::getbzipCheckBoxState() { }
-void distpartWidget::setbzipCheckBoxState(boot state) { }
+bool distpartWidget::getbzipCheckBoxState()
+{
+    return bzipCheckBox->isChecked();
+}
+void distpartWidget::setbzipCheckBoxState(bool state)
+{
+    bzipCheckBox->setChecked(state);
+}
 //    QCheckBox* appIconCheckBox;
-bool distpartWidget::getappIconCheckBoxState() { }
-void distpartWidget::setappIconCheckBoxState(boot state) { }
+bool distpartWidget::getappIconCheckBoxState()
+{
+    return appIconCheckBox->isChecked();
+}
+void distpartWidget::setappIconCheckBoxState(bool state)
+{
+    appIconCheckBox->setChecked(state);
+}
 //    QCheckBox* genHTMLCheckBox;
-bool distpartWidget::getgenHTMLCheckBoxState() { }
-void distpartWidget::setgenHTMLCheckBoxState(boot state) { }
+bool distpartWidget::getgenHTMLCheckBoxState()
+{
+    return genHTMLCheckBox->isChecked();
+}
+void distpartWidget::setgenHTMLCheckBoxState(bool state)
+{
+    genHTMLCheckBox->setChecked(state);
+}
 //    QCheckBox* useRPMInfoCheckBox;
-bool distpartWidget::getuseRPMInfoCheckBoxState() { }
-void distpartWidget::setuseRPMInfoCheckBoxState(boot state) { }
+bool distpartWidget::getuseRPMInfoCheckBoxState()
+{
+    return useRPMInfoCheckBox->isChecked();
+}
+void distpartWidget::setuseRPMInfoCheckBoxState(bool state)
+{
+     useRPMInfoCheckBox->setChecked(state);
+}
 //    QCheckBox* uploadAppsKDEcomCheckBox;
-bool distpartWidget::getuploadAppsKDEcomCheckBoxState() { }
-void distpartWidget::setuploadAppsKDEcomCheckBoxState(boot state) { }
+bool distpartWidget::getuploadAppsKDEcomCheckBoxState()
+{
+     return uploadAppsKDEcomCheckBox->isChecked();
+}
+void distpartWidget::setuploadAppsKDEcomCheckBoxState(bool state)
+{
+     uploadAppsKDEcomCheckBox->setChecked(state);
+}
 //    QCheckBox* uploadftpkdeorgCheckBox;
-bool distpartWidget::getuploadftpkdeorgCheckBoxState() { }
-void distpartWidget::setuploadftpkdeorgCheckBoxState(boot state) { }
+bool distpartWidget::getuploadftpkdeorgCheckBoxState()
+{
+    return uploadftpkdeorgCheckBox->isChecked();
+}
+void distpartWidget::setuploadftpkdeorgCheckBoxState(bool state)
+{
+    uploadftpkdeorgCheckBox->setChecked(state);
+}
 //    QCheckBox* devPackageCheckBox;
-bool distpartWidget::getdevPackageCheckBoxState() { }
-void distpartWidget::setdevPackageCheckBoxState(boot state) { }
+bool distpartWidget::getdevPackageCheckBoxState()
+{
+    return devPackageCheckBox->isChecked();
+}
+void distpartWidget::setdevPackageCheckBoxState(bool state)
+{
+    devPackageCheckBox->setChecked(state);
+}
 //    QCheckBox* docsPackageCheckBox;
-bool distpartWidget::getdocsPackageCheckBoxState() { }
-void distpartWidget::setdocsPackageCheckBoxState(boot state) { }
+bool distpartWidget::getdocsPackageCheckBoxState()
+{
+    return docsPackageCheckBox->isChecked();
+}
+void distpartWidget::setdocsPackageCheckBoxState(bool state)
+{
+    docsPackageCheckBox->setChecked(state);
+}
 //    QProgressBar* uploadProgressBar;
-int distpartWidget::getuploadProgressBarProgress() { }
-void distpartWidget::setuploadProgressBarProgress(int progress) { }
+int distpartWidget::getuploadProgressBarProgress()
+{
+    return uploadProgressBar->progress();
+}
+void distpartWidget::setuploadProgressBarProgress(int progress)
+{
+    uploadProgressBar->setProgress( progress );
+}
 //    QLineEdit* archNameFormatLineEdit;
-QString distpartWidget::getarchNameFormatLineEditText() { }
-void distpartWidget::setarchNameFormatLineEditText(QString text) { }
+QString distpartWidget::getarchNameFormatLineEditText()
+{
+    return archNameFormatLineEdit->text();
+}
+void distpartWidget::setarchNameFormatLineEditText(QString text)
+{
+    archNameFormatLineEdit->setText(text);
+}
 //    QLineEdit* appNameLineEdit;
-QString distpartWidget::getappNameFormatLineEditText() { }
-void distpartWidget::setappNameFormatLineEditText(QString text) { }
+QString distpartWidget::getappNameFormatLineEditText()
+{
+    return appNameLineEdit->text();
+}
+void distpartWidget::setappNameFormatLineEditText(QString text)
+{
+    appNameLineEdit->setText(text);
+}
 //    QLineEdit* summaryLineEdit;
-QString distpartWidget::getsummaryLineEditText() { }
-void distpartWidget::setsummaryLineEditText(QString text) { }
+QString distpartWidget::getsummaryLineEditText()
+{
+   return summaryLineEdit->text();
+}
+void distpartWidget::setsummaryLineEditText(QString text)
+{
+   summaryLineEdit->setText(text);
+}
 //    QLineEdit* authorLineEdit;
-QString distpartWidget::getauthorLineEditText() { }
-void distpartWidget::setauthorLineEditText(QString text) { }
+QString distpartWidget::getauthorLineEditText()
+{
+   return authorLineEdit->text();
+}
+void distpartWidget::setauthorLineEditText(QString text)
+{
+   authorLineEdit->setText(text);
+}
 //    QLineEdit* groupLineEdit;
-QString distpartWidget::getgroupLineEditText() { }
-void distpartWidget::setgroupLineEditText(QString text) { }
+QString distpartWidget::getgroupLineEditText()
+{
+    return groupLineEdit->text();
+}
+void distpartWidget::setgroupLineEditText(QString text)
+{
+    groupLineEdit->setText(text);
+}
 //    QLineEdit* releaseLineEdit;
-QString distpartWidget::getreleaseLineEditText() { }
-void distpartWidget::setreleaseLineEditText(QString text) { }
+QString distpartWidget::getreleaseLineEditText()
+{
+   return releaseLineEdit->text();
+}
+void distpartWidget::setreleaseLineEditText(QString text)
+{
+   releaseLineEdit->setText(text);
+}
 //    QLineEdit* VersionLineEdit;
-QString distpartWidget::getversionLineEditText() { }
-void distpartWidget::setversionLineEditText(QString text) { }
+QString distpartWidget::getversionLineEditText()
+{
+   return VersionLineEdit->text();
+}
+void distpartWidget::setversionLineEditText(QString text)
+{
+     VersionLineEdit->setText( text );
+}
 //    QLineEdit* VendorLineEdit;
-QString distpartWidget::getvendorLineEditText() { }
-void distpartWidget::setvendorLineEditText(QString text) { }
+QString distpartWidget::getvendorLineEditText()
+{
+    return VendorLineEdit->text();
+}
+void distpartWidget::setvendorLineEditText(QString text)
+{
+    VendorLineEdit->setText(text);
+}
 //    QLineEdit* LicenseLineEdit;
-QString distpartWidget::getlicenseLineEditText() { }
-void distpartWidget::setlicenseLineEditText(QString text) { }
+QString distpartWidget::getlicenseLineEditText()
+{
+   return LicenseLineEdit->text();
+}
+void distpartWidget::setlicenseLineEditText(QString text)
+{
+    LicenseLineEdit->setText(text);
+}
 //    QLineEdit* uploadURLLineEdit;
-QString distpartWidget::getuploadURLLineEditText() { }
-void distpartWidget::setuploadURLLineEditText(QString text) { }
+QString distpartWidget::getuploadURLLineEditText()
+{
+    return uploadURLLineEdit->text();
+}
+void distpartWidget::setuploadURLLineEditText(QString text)
+{
+     uploadURLLineEdit->setText(text);
+}
 //    QLineEdit* PackagerLineEdit;
-QString distpartWidget::getpackagerLineEditText() { }
-void distpartWidget::setpackagerLineEditText(QString text) { }
+QString distpartWidget::getpackagerLineEditText()
+{
+   return PackagerLineEdit->text();
+}
+void distpartWidget::setpackagerLineEditText(QString text)
+{
+   PackagerLineEdit->setText(text);
+}
 //    QComboBox* archComboBox;
-QString distpartWidget::getarchComboBoxText() { }
-int distpartWidget::getarchComboBoxItem() { }
-void distpartWidget::setarchComboBoxItem(int item) { }
+QString distpartWidget::getarchComboBoxText()
+{
+   return archComboBox->currentText();
+}
+int distpartWidget::getarchComboBoxItem()
+{
+   return archComboBox->currentItem();
+}
+void distpartWidget::setarchComboBoxItem(int item)
+{
+   archComboBox->setCurrentItem( item );
+}
 //    QListBox* uploadFileListBox;
-QString distpartWidget::getuploadFileListBoxText() { }
-int distpartWidget::getuploadFileListBoxItem() { }
-void distpartWidget::setuploadFileListBoxItem(int item) { }
+QString distpartWidget::getuploadFileListBoxText()
+{
+    return uploadFileListBox->currentText();
+}
+
+int distpartWidget::getuploadFileListBoxItem()
+{
+    return uploadFileListBox->currentItem();
+}
+void distpartWidget::setuploadFileListBoxItem(int item)
+{
+    uploadFileListBox->setCurrentItem( item);
+}
 //    QListBox* srcDistFileListBox;
 QString distpartWidget::getsrcDistFileListBoxText()
 {
@@ -145,7 +319,7 @@ int distpartWidget::getsrcDistFileListBoxItem()
 }
 void distpartWidget::setsrcDistFileListBoxItem(int item)
 {
-    srcDistFileListBoxItem->setCurrentItem( item );
+    srcDistFileListBox->setCurrentItem( item );
 }
 //    QMultiLineEdit* projectDescriptionMultilineEdit;
 QString distpartWidget::getprojectDescriptionMultilineEditText()
