@@ -1,3 +1,6 @@
+2004-01-28 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Ported autotools part, FileTree, FileGroups and File cerate to demand loaded config page
+
 2004-01-24 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Updated Bookmarks Plugin. Various improvements and fixes.
 
