@@ -430,6 +430,48 @@ ClassTreeBase::~ClassTreeBase()
 {}
 
 
+ClassTreeBase::TreeState ClassTreeBase::treeState() const
+{
+    TreeState state;
+
+    ClassTreeBase *that = const_cast<ClassTreeBase*>(this);
+    QListViewItemIterator it(that);
+    for (; it.current(); ++it)
+        if (it.current()->isOpen()) {
+            QStringList path;
+            QListViewItem *item = it.current();
+            while (item) {
+                path.prepend(item->text(0));
+                item = item->parent();
+            }
+            state.append(path);
+        }
+
+    return state;
+}
+
+
+void ClassTreeBase::setTreeState(TreeState state)
+{
+    TreeStateIterator tsit;
+    for (tsit = state.begin(); tsit != state.end(); ++tsit) {
+        QListViewItemIterator it(this);
+        for (; it.current(); ++it) {
+            QStringList path;
+            QListViewItem *item = it.current();
+            while (item) {
+                path.prepend(item->text(0));
+                item = item->parent();
+            }
+            if (*tsit == path) {
+                it.current()->setOpen(true);
+                break;
+            }
+        }
+    }
+}
+
+
 void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
 {
     // We assume here that ALL (!) items in the list view

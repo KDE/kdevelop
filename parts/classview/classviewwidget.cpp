@@ -109,7 +109,10 @@ void ClassViewWidget::buildTree(bool fromScratch)
 
 void ClassViewWidget::buildTreeByCategory(bool fromScratch)
 {
-    // TODO: Some smart open/closed state restoring if !fromScratch
+    //    TreeState oldTreeState;
+    //    if (!fromScratch)
+    //        oldTreeState = treeState();
+    
     clear();
     
     ParsedScopeContainer *scope = &m_part->classStore()->globalContainer;
@@ -192,12 +195,18 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         if (fromScratch)
             lastItem->setOpen(true);
     }
+
+    //    if (!fromScratch)
+    //        setTreeState(oldTreeState);
 }
 
 
 void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
 {
-    // TODO: Some smart open/closed state restoring if !fromScratch
+    //    TreeState oldTreeState;
+    //    if (!fromScratch)
+    //        oldTreeState = treeState();
+
     clear();
 
     ClassTreeItem *lastItem = 0;
@@ -211,6 +220,9 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
             lastItem->setOpen(true);
     }
     delete scopeList;
+
+    //    if (!fromScratch)
+    //        setTreeState(oldTreeState);
 }
 
 

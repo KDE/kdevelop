@@ -1,7 +1,13 @@
+2001-06-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added Add application desktop file dialog
+	* Fixed Add service dialog
+	* Some fixes in class view that I can't test currently...
+
 2001-06-04 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
     
-    * Added DCOP bindings to the editor interfaces,
-      so they are accessible for scripting.
+	* Added DCOP bindings to the editor interfaces,
+	so they are accessible for scripting.
 
 2001-06-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
@@ -21,11 +27,11 @@
 
 2001-06-01  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
-    * Reimplemented the modified-on-disk check with the new
-      editor-interface.
-    * Reimplemented the modified check before quitting.
-    * Added "Save all" and "Revert all"
-    * Added "Revert" to the editor interface.
+	* Reimplemented the modified-on-disk check with the new
+	  editor-interface.
+	* Reimplemented the modified check before quitting.
+	* Added "Save all" and "Revert all"
+	* Added "Revert" to the editor interface.
 
 2001-05-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

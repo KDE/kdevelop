@@ -36,6 +36,11 @@ public:
     ~ClassTreeBase();
 
 protected:
+    typedef QValueList<QStringList> TreeState;
+    typedef QValueList<QStringList>::Iterator TreeStateIterator;
+    TreeState treeState() const;
+    void setTreeState(TreeState state);
+    
     ClassTreeItem *contextItem;
     virtual KPopupMenu *createPopup() = 0;
     

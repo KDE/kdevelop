@@ -155,14 +155,15 @@ void SubprojectOptionsDialog::storeConfig()
     QCString includes = includeslist.join(" ").latin1();
     subProject->variables["INCLUDES"] = includes;
     replaceMap.insert("INCLUDES", includes);
-    
+
+    // FIXME: adjust prefixes variable 
     for (QListViewItem *item = prefix_listview->firstChild();
          item; item = item->nextSibling())
-        replaceMap.insert(item->text(0).latin1(), item->text(1).latin1());
+        replaceMap.insert(QCString(item->text(0).latin1()) + "dir", item->text(1).latin1());
 
     // FIXME: take removed items into account
     
-    AutoProjectTool::modifyMakefileam(m_widget->subprojectDirectory() + "/Makefile.am", replaceMap);
+    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 }
 
 

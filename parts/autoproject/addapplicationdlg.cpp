@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qheader.h>
@@ -17,21 +18,20 @@
 #include <qtextstream.h>
 #include <kdebug.h>
 #include <kicondialog.h>
-#include <klineeditdlg.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kservicetype.h>
+#include <kmimetype.h>
 
 #include "misc.h"
 #include "autoprojectwidget.h"
 #include "autoprojectfactory.h"
-#include "addservicedlg.h"
+#include "addapplicationdlg.h"
 
 
 
-AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
-                                   QWidget *parent, const char *name)
-    : AddServiceDialogBase(parent, name, true)
+AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
+                                           QWidget *parent, const char *name)
+    : AddApplicationDialogBase(parent, name, true)
 {
     filename_edit->setText(".desktop");
     filename_edit->home(false);
@@ -42,52 +42,26 @@ AddServiceDialog::AddServiceDialog(AutoProjectWidget *widget, SubprojectItem *sp
     m_widget = widget;
     subProject = spitem;
 
-    // Fill the combo box with library names in the directory
+    // Fill the combo box with program names in the directory
     QListIterator<TargetItem> tit(spitem->targets);
     for (; tit.current(); ++tit) {
-        if ((*tit)->primary == "LTLIBRARIES")
-            library_combo->insertItem(QString((*tit)->name));
+        if ((*tit)->primary == "PROGRAMS")
+            executable_combo->insertItem(QString((*tit)->name));
     }
     
-    // Fill the list of available service types
-    KServiceType::List l = KServiceType::allServiceTypes();
-    KServiceType::List::Iterator it;
+    // Fill the list of available mime types
+    KMimeType::List l = KMimeType::allMimeTypes();
+    KMimeType::List::Iterator it;
     for (it = l.begin(); it != l.end(); ++it)
-        if (!(*it)->isType(KST_KMimeType))
-            new QListViewItem(availtypes_listview, (*it)->name());
+        new QListViewItem(availtypes_listview, (*it)->name());
 }
 
 
-AddServiceDialog::~AddServiceDialog()
+AddApplicationDialog::~AddApplicationDialog()
 {}
 
 
-void AddServiceDialog::updateProperties()
-{
-    QStringList props;
-    
-    QListViewItem *item = static_cast<QCheckListItem*>(chosentypes_listview->firstChild());
-    while (item) {
-        KServiceType::Ptr type = KServiceType::serviceType(item->text(0));
-        if (type) {
-            QStringList stprops = type->propertyDefNames();
-            QStringList::ConstIterator stit;
-            for (stit = stprops.begin(); stit != stprops.end(); ++stit)
-                if (props.find(*stit) == props.end() && (*stit) != "Name" && (*stit) != "Comment"
-                    && (*stit) != "Icon")
-                    props.append(*stit);
-        }
-        item = item->nextSibling();
-    }
-
-    properties_listview->clear();
-    QStringList::ConstIterator it;
-    for (it = props.begin(); it != props.end(); ++it)
-        new QListViewItem(properties_listview, *it);
-}
-
-
-void AddServiceDialog::iconClicked()
+void AddApplicationDialog::iconClicked()
 {
     KIconLoader *loader = AutoProjectFactory::instance()->iconLoader();
     KIconDialog dlg(loader, this);
@@ -99,7 +73,7 @@ void AddServiceDialog::iconClicked()
 }
 
 
-void AddServiceDialog::addTypeClicked()
+void AddApplicationDialog::addTypeClicked()
 {
     QListViewItem *selitem = availtypes_listview->selectedItem();
     if (!selitem)
@@ -112,42 +86,22 @@ void AddServiceDialog::addTypeClicked()
         olditem = olditem->nextSibling();
     }
     new QListViewItem(chosentypes_listview, selitem->text(0));
-
-    updateProperties();
 }
 
 
-void AddServiceDialog::removeTypeClicked()
+void AddApplicationDialog::removeTypeClicked()
 {
     delete chosentypes_listview->currentItem();
-
-    updateProperties();
 }
 
 
-void AddServiceDialog::propertyExecuted(QListViewItem *item)
+void AddApplicationDialog::accept()
 {
-    if (!item)
-        return;
-
-    QString prop = item->text(0);
-    QString value = item->text(1);
-    bool ok;
-    value = KLineEditDlg::getText(i18n("Property %1:").arg(prop), value, &ok, this);
-    if (!ok)
-        return;
-
-    item->setText(1, value);
-}
-
-
-void AddServiceDialog::accept()
-{
-    // Create list of service types
-    QStringList serviceTypes;
+    // Create list of mime types
+    QStringList mimeTypes;
     QListViewItem *item = chosentypes_listview->firstChild();
     while (item) {
-        serviceTypes.append(item->text(0));
+        mimeTypes.append(item->text(0));
         item = item->nextSibling();
     }
 
@@ -159,9 +113,16 @@ void AddServiceDialog::accept()
         return;
     }
         
+    QString executable = executable_combo->currentText();
+    if (executable.isEmpty()) {
+        KMessageBox::sorry(this, i18n("You have to enter the file name of an executable program."));
+        executable_combo->setFocus();
+        return;
+    }
+
     QString name = name_edit->text();
     if (name.isEmpty()) {
-        KMessageBox::sorry(this, i18n("You have to enter a service name."));
+        KMessageBox::sorry(this, i18n("You have to enter an application name."));
         name_edit->setFocus();
         return;
     }
@@ -179,28 +140,36 @@ void AddServiceDialog::accept()
     
     QTextStream stream(&f);
     stream << "[Desktop Entry]" << endl;
-    stream << "Type=Service" << endl;
+    stream << "Type=Application" << endl;
     stream << "Name=" << name << endl;
+    stream << "Exec=" << (executable + " -caption \"%c\" %i %m %u") << endl;
     stream << "Comment=" << comment_edit->text() << endl;
     if (!iconName.isNull())
         stream << "Icon=" << iconName << endl;
-    stream << "ServiceTypes=" << serviceTypes.join(",") << endl;
-    item = properties_listview->firstChild();
-    while (item) {
-        stream << item->text(0) << "=" << item->text(1) << endl;
-        item = item->nextSibling();
-    }
+    stream << "MimeTypes=" << mimeTypes.join(";") << endl;
+    stream << "Terminal=" << (terminal_box->isChecked()? "true" : "false") << endl;
     f.close();
 
-    // Find a prefix that points to the services directory.
-    // If there is none, use kde_services
+    // Find a prefix that points to the applnk directory.
+    // If there is none, use appslnksection
+    QCString section = section_combo->currentText().latin1();
+    QCString appsdir = "$(kde_appsdir)/" + section;
     QMap<QCString,QCString>::ConstIterator it;
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
-        if (it.data() == "$(kde_servicesdir)")
+        if (it.data() == appsdir)
             break;
-    QCString prefix = (it == subProject->prefixes.end())? QCString("kde_services") : it.key();
+    
+    QMap<QCString, QCString> replaceMap;
+    QCString prefix;
+    if (it == subProject->prefixes.end()) {
+        prefix = "applnk" + section;
+        replaceMap.insert(prefix + "dir", appsdir);
+        subProject->prefixes.insert(prefix, appsdir);
+    } else {
+        prefix = it.key();
+    }
     QCString varname = prefix + "_DATA";
-
+    
     // Look if a list view item for this prefix exists already.
     // Create a new one otherwise
     TargetItem *titem = 0;
@@ -218,13 +187,12 @@ void AddServiceDialog::accept()
     // Add this file to the target
     FileItem *fitem = m_widget->createFileItem(fileName);
     titem->sources.append(fitem);
-    
+        
     subProject->variables[varname] += (QCString(" ") + fileName.latin1());
-    QMap<QCString, QCString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
     
     QDialog::accept();
 }
 
-#include "addservicedlg.moc"
+#include "addapplicationdlg.moc"

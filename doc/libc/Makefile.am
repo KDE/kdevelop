@@ -13,13 +13,13 @@ libc.index: $(srcdir)/libc.index.in
 
 EXTRA_DIST = libc.index.in
 
-#install-data-local:
-#	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
-#	for file in *.html ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
-#
-#dist-hook:
-#	mkdir -p $(distdir) ; \
-#	for file in $(srcdir)/*.html ; do cp -p $$file $(distdir) ; done
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
+	for file in *.html ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
+
+dist-hook:
+	mkdir -p $(distdir) ; \
+	for file in $(srcdir)/*.html ; do cp -p $$file $(distdir) ; done
 
 html:
 	texi2html -split_node libc.texinfo
