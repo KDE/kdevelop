@@ -337,10 +337,10 @@ void CKDevSetupDlg::addDocTab()
 
   config->setGroup("Doc_Location");
 
-  QWhatsThis::add(docPage, i18n("Enter the path to your QT and KDE-Libs\n"
+  QWhatsThis::add(docPage, i18n("Enter the path to your Qt and KDE-Libs\n"
                                 "Documentation for the Documentation Browser.\n"
-                                "QT usually comes with complete Documentation\n"
-                                "whereas for KDE you can create the Documentation\n"
+                                "Qt usually comes with complete documentation,\n"
+                                "whereas for KDE you can create the documentation\n"
                                 "easily by pressing the Update button below."));
 
   QButtonGroup* docGroup;
@@ -370,11 +370,11 @@ void CKDevSetupDlg::addDocTab()
   grid2->addWidget(qt_label,0,0);
   qt_label->setText( i18n("Qt-Library-Doc:") );
 
-  QString qtdocMsg = i18n("Enter the path to your QT-Documentation\n"
-                                 "here. To access the path easier please\n"
-                                 "press the pushbutton on the right to change\n"
+  QString qtdocMsg = i18n("Enter the path to your Qt documentation\n"
+                                 "here. To access the path more easily,\n"
+                                 "press the button on the right to change\n"
                                  "directories.\n\n"
-                                 "Usually the QT-Documentation is\n"
+                                 "The Qt documentation is usually\n"
                                  "located in <i><blue>$QTDIR/html</i>");
 
   QWhatsThis::add(qt_edit, qtdocMsg);

@@ -112,7 +112,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   qtarch_ButtonGroup_3->setTitle( i18n("Index Options") );
 
   qt_checkbox = new QCheckBox( qtarch_ButtonGroup_3, "CheckBox_3" );
-  qt_checkbox->setText( i18n("Index the QT documentation") );
+  qt_checkbox->setText( i18n("Index the Qt documentation") );
   qt_checkbox->setChecked( TRUE );
 
   kde_checkbox = new QCheckBox( qtarch_ButtonGroup_3, "CheckBox_1" );
