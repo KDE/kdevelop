@@ -9,11 +9,8 @@
 class FileCreateListItem : public QListViewItem {
 
 public:
-  FileCreateListItem(QListView * listview, const FileCreateFileType * filetype) :
-    QListViewItem(listview, filetype->name(), filetype->ext() ), m_filetype(filetype) { }
-  FileCreateListItem(FileCreateListItem * listitem, const FileCreateFileType * filetype) :
-    QListViewItem(listitem, filetype->name(), filetype->ext() ), m_filetype(filetype) { }
-  
+  FileCreateListItem(QListView * listview, const FileCreateFileType * filetype);
+  FileCreateListItem(FileCreateListItem * listitem, const FileCreateFileType * filetype);
   virtual ~FileCreateListItem() { }
 
   const FileCreateFileType * filetype() const { return m_filetype; }

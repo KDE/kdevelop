@@ -67,6 +67,7 @@ void FileCreatePart::slotProjectOpened() {
         filetype->setName( element.attribute("name") );
         filetype->setExt( element.attribute("ext") );
         filetype->setCreateMethod( element.attribute("create") );
+        filetype->setIcon( element.attribute("icon") );
         m_filetypes.append(filetype);
 
         std::cout << "node: " << filetype->name().latin1() << std::endl;
@@ -80,6 +81,7 @@ void FileCreatePart::slotProjectOpened() {
               subtype->setExt( filetype->ext() );
               subtype->setCreateMethod( filetype->createMethod() );
               subtype->setSubtypeRef( subelement.attribute("ref") );
+              subtype->setIcon( subelement.attribute("icon") );
               subtype->setName( subelement.attribute("name") );
               filetype->addSubtype(subtype);
             }
@@ -156,7 +158,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   }
 
   
-  QString relToProj = URLUtil::relativePath(baseURL, selectedURL, true /* include prefix slash */);
+  QString relToProj = URLUtil::relativePath(baseURL, selectedURL, URLUtil::SLASH_PREFIX );
   if (!relToProj.endsWith("." + ext)) relToProj+="." + ext;
   
   QString filename = URLUtil::filename(relToProj);

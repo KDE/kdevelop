@@ -7,12 +7,14 @@
 
 #include <klistview.h>
 
+#include "filecreate_typechooser.h"
+
 class KDevProject;
 class FileCreatePart;
 
 class FileCreateFileType;
 
-class FileCreateWidget : public KListView
+class FileCreateWidget : public KListView, public FileCreateTypeChooser
 {
   Q_OBJECT
     
@@ -28,9 +30,6 @@ public slots:
 signals:
   void filetypeSelected(const FileCreateFileType * filetype);
 
-private:
-  FileCreatePart * m_part;
-  
 };
 
 

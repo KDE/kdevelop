@@ -19,6 +19,8 @@ public:
   QString createMethod() const { return m_createMethod; }
   void setSubtypeRef(const QString & subtypeRef) { m_subtypeRef = subtypeRef; }
   QString subtypeRef() const { return m_subtypeRef; }
+  void setIcon(const QString & iconName) { m_iconName = iconName; }
+  QString icon() const { return m_iconName; }
 
   void addSubtype(const FileCreateFileType * subtype) { m_subtypes.append(subtype); }
   QPtrList<FileCreateFileType> subtypes() const { return m_subtypes; }
@@ -28,6 +30,7 @@ private:
   QString m_ext;
   QString m_createMethod;
   QString m_subtypeRef;
+  QString m_iconName;
   
   QPtrList<FileCreateFileType> m_subtypes;
 

@@ -17,7 +17,7 @@
 #include <iostream>
 
 FileCreateWidget::FileCreateWidget(FileCreatePart *part)
-  : KListView(0, "filecreate widget"), m_part(part)
+  : KListView(0, "filecreate widget"), FileCreateTypeChooser(part)
 {
   
   addColumn("File Type");
