@@ -19,20 +19,6 @@ namespace KTextEditor { class ViewCursorInterface; };
 namespace KParts { class Part; };
 
 
-/**
- * A special status bar adjusted to our needs. Its main
- * uses:
- * @li Use message() to show a message in the status bar.
- *     It will be shown until message() is called again,
- *     or for 1.5 seconds if a widget is inserted.
- * @li Create a widget with this object as a parent.
- *     The widget will then be embedded. Embedded widgets
- *     have priority compared to messages. That means,
- *     as long as a widget is embedded, messages will
- *     be shown only for a short time.
- *
- * Embedded widgets are responsible for deleting themselves.
- */
 class StatusBar : public KStatusBar
 {
     Q_OBJECT
@@ -42,33 +28,19 @@ public:
     ~StatusBar();
 
 public slots:
-    void message(const QString &str);
-
-
     void setEditorStatusVisible(bool visible);
     void setStatus(const QString &str);
-	void setCursorPosition(int line, int col);
-	void setModified(bool isModified);
-
-
-protected:
-    virtual void paintEvent(QPaintEvent *e);
-    virtual bool event(QEvent *e);
+    void setCursorPosition(int line, int col);
+    void setModified(bool isModified);
 
 private slots:
-    void timeout();
     void cursorPositionChanged();
     void activePartChanged(KParts::Part *part);
 
-
 private:
-    QString msg;
-    QWidget *widget;
-    QTimer *timer;
-
-	QLabel *_modified;
-	QLabel *_cursorPosition;
-	QLabel *_status;
+    QLabel *_modified;
+    QLabel *_cursorPosition;
+    QLabel *_status;
 
     KTextEditor::ViewCursorInterface *m_cursorIface;
     KParts::Part *m_activePart;
