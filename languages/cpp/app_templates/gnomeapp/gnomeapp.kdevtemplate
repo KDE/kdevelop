@@ -100,3 +100,7 @@ Type=install
 Source=%{src}/main.c
 Dest=%{dest}/src/main.c
 
+[MSG]
+Type=message
+Comment=A GNOME application framework was created in %{dest}
+

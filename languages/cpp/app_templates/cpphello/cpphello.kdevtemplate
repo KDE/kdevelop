@@ -52,3 +52,7 @@ Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/src/%{APPNAMELC}.cpp
 
+[MSG]
+Type=message
+Comment=A Simple Hello World program was created in %{dest}
+

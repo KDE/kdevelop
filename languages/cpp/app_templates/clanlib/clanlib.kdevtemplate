@@ -46,3 +46,6 @@ Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/src/main.cpp
 
+[MSG]
+Type=message
+Comment=A simple clanlib application was created in %{dest}

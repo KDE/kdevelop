@@ -117,3 +117,6 @@ Type=install
 Source=%{src}/applet.desktop
 Dest=%{dest}/src/%{APPNAMELC}.desktop
 
+[MSG]
+Type=message
+Comment=A Kicker Applet was created in %{dest}

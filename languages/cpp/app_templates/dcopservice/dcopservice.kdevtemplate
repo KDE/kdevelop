@@ -117,3 +117,6 @@ Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/src/main.cpp
 
+[MSG]
+Type=message
+Comment=A KDE DCOP Service was created in %{dest}

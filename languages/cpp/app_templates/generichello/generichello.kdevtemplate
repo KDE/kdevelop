@@ -1,3 +1,13 @@
+# KDE Config File
+[General]
+Name=C++ program (shell script build system)
+Name[fr]=Un simple programme de test « Hello world »
+Icon=cpphello.png
+Category=C++/Generic
+Comment=Generates a simple Hello world program in C++
+Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C++.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
 Archive=generichello.tar.gz
 
 [GNU]

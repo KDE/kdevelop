@@ -52,3 +52,6 @@ Type=install
 Source=%{src}/main.cpp
 Dest=%{dest}/src/%{APPNAMELC}.cpp
 
+[MSG]
+Type=message
+Comment=A simple hello world program using ncurses was created in %{dest}

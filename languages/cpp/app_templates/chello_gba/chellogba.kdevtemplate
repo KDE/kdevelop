@@ -83,3 +83,6 @@ Type=install
 Source=%{src}/template-chellogba/master.pal.c
 Dest=%{dest}/src/master.pal.c
 
+[MSG]
+Type=message
+Comment=A Hello World programm was created in %{dest}
