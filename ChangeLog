@@ -1,3 +1,10 @@
+2004-10-13 Alexander Neundorf <neundorf@kde.org>
+    *buildtools/custommakefiles/:
+    -add two submenus "Object Files" and "Other Files" to the "Build Targets" menu
+    -add new tag <filelistdirectory> so that the filelist file can be 
+     located outside the source directory. This is currently only written
+     by the cmake kdevelop3 project file generator
+
 2004-08-27 Amilcar Lucas <amilcar@kdevelop.org>
     * Updated support for Doxygen 1.3.8
 
