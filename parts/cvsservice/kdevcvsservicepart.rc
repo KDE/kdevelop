@@ -1,0 +1,33 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevCvsServicePart" version="1">
+<MenuBar>
+    <Menu name="project" >
+        <Menu name="checkout_repositories">
+            <Text>&amp;Check out from ...</Text>
+            <Action name="cvsservice_checkout" />
+        </Menu>
+    </Menu>
+    <Menu name="tools">
+        <Menu name="version_control">
+            <Text>&amp;Version Control</Text>
+            <Merge />
+            <Menu name="version_control_tools_cvsservice">
+                <Text>CVS &amp;Service</Text>
+                <Action name="cvsservice_commit" />
+                <Action name="cvsservice_diff" />
+                <Action name="cvsservice_log" />
+                <Action name="cvsservice_add" />
+                <Action name="cvsservice_remove" />
+                <Separator />
+                <Action name="cvsservice_update" />
+                <Action name="cvsservice_revert" />
+                <Separator />
+                <Action name="cvsservice_ignore" />
+                <Action name="cvsservice_donot_ignore" />
+            </Menu>
+        </Menu>
+    </Menu>
+</MenuBar>
+
+</kpartgui>
+

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=CVS Integration using CvsService
+Name=CvsService
+ServiceTypes=KDevelop/VersionControl
+X-KDE-Library=libkdevcvsservice
+X-KDevelop-Scope=Global

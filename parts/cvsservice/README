@@ -1,0 +1,41 @@
+===============================================================================
+This file contains a summary of any concern about the CvsPart plugin for Gideon
+===============================================================================
+
+(Feel free to add your comments here, but first fill this section so we can
+know who said what and elaborate :-)
+[M] == Mario Scalas [marios]
+
+[M] This is an experimental attempt to integrate Cervisia HEAD's cvsservice into
+    gideon (read FAQ). This part _does_ require cvsservice being installed on
+    your system: I'm not an auto* wizard so you have to manually pass to the
+    configure script the options:
+    --with-extra-libs=$HOME/kde/lib --with-extra-includes=$HOME/kde/include
+    (where $HOME/kde is where I install my own kde stuff so I don't mess with
+    working kde installation)
+
+    WARNING: Keep in mind that there are incoming changes in cvsservice architecture
+    which could make this part quite subject to heavy modifications.
+
+Current features:
+* because this is a (buggy) direct conversion, as in parts/cvs.
+
+To Do list
+
+(Ok, this is based on cvsservice so we have already the features: we need only to
+integrate them ;-)
+
+1. When committing files must be committed differently by their type: binary
+   files must be committed with "-kb" command line option. A list of file
+   extension is what fits better: when committing two file lists will be
+   separately committed, the one with binary files, the others with text files.
+   This will make easier switching to cvsservice when time arises :-)
+2. Adding the import feature for checking out modules from repositories: fetch
+   a modules list and ask the user which one he wants to commit
+
+F.A.Q.
+
+Q: Does cvspart support login with :pserver: or :ext: ?
+A: You _must_ be logged in before using cvs operations because there is no
+   support for login (this will change if requests come).
+
