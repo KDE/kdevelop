@@ -47,12 +47,14 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 page = new QScrollView(this, option->name());
                 page->viewport()->setBackgroundMode(PaletteBackground);
                 pagebox = new QVBox(0);
+                ASSERT(pagebox!=0);
                 page->addChild(pagebox);
                 addTab(page, message(option->name()));
                 QWhatsThis::add(page, option->docs().simplifyWhiteSpace() );
                 break;
             case ConfigOption::O_String:
                 {
+                    ASSERT(pagebox!=0);
                     InputString::StringMode sm = InputString::StringFree;
                     switch (((ConfigString *)option)->widgetType()) {
                     case ConfigString::String: sm = InputString::StringFree; break;
@@ -73,6 +75,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 break;
             case ConfigOption::O_Enum:
                 {
+                    ASSERT(pagebox!=0);
                     InputString *inputString = new InputString
                         ( message(option->name()),                        // name
                           pagebox,                               // widget
@@ -90,6 +93,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 break;
             case ConfigOption::O_List:
                 {
+                    ASSERT(pagebox!=0);
                     InputStrList::ListMode lm = InputStrList::ListString;
                     switch(((ConfigList *)option)->widgetType())
                         {
@@ -112,8 +116,10 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 break;
             case ConfigOption::O_Bool:
                 {
+                    ASSERT(pagebox!=0);
                     InputBool *inputBool = new InputBool
-                        ( message(option->name()),                // name
+                        ( option->name(),                         // key
+                          message(option->name()),                // name
                           pagebox,                                // widget
                           *((ConfigBool *)option)->valueRef()     // variable
                           );
@@ -125,6 +131,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 break;
             case ConfigOption::O_Int:
                 {
+                    ASSERT(pagebox!=0);
                     InputInt *inputInt = new InputInt
                         ( message(option->name()),                         // name
                           pagebox,                                // widget
@@ -176,7 +183,9 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
         return;
     
     IInput *parent = m_inputWidgets->find(dep);
+    ASSERT(parent!=0);
     IInput *child = m_inputWidgets->find(name);
+    ASSERT(child!=0);
     if (!switches->find(dep))
         switches->insert(dep, parent->qobject());
     QPtrList<IInput> *list = m_dependencies->find(dep);
@@ -191,6 +200,7 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
 void DoxygenConfigWidget::toggle(const QString &name, bool state)
 {
     QPtrList<IInput> *inputs = m_dependencies->find(name);
+    ASSERT(inputs!=0);
     IInput *input = inputs->first();
     while (input) {
         input->setEnabled(state);
@@ -245,7 +255,7 @@ void DoxygenConfigWidget::saveFile()
     if (!f.open(IO_WriteOnly)) {
         KMessageBox::information(0, i18n("Cannot write Doxyfile."));
     } else {
-        Config::instance()->writeTemplate(&f, true, true);
+        Config::instance()->writeTemplate(&f, true, false);
 
         f.close();
     }

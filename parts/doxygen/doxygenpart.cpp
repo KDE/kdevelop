@@ -26,6 +26,7 @@
 #include "kdevmakefrontend.h"
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
+#include <../../lib/util/domutil.h>
 
 
 #include "config.h"
@@ -67,13 +68,19 @@ void DoxygenPart::projectConfigWidget(KDialogBase *dlg)
 }
 
 
+/** If a Doxygen configuration file doesn't exist, create one.
+  * And copy some of the project settings to it.
+  */
 void DoxygenPart::adjustDoxyfile()
 {
   QString fileName = project()->projectDirectory() + "/Doxyfile";
   if (QFile::exists(fileName))
     return;
 
+  // Initialize configuration
   Config::instance()->init();
+  
+  // Do some checks and improve the configuration a bit
   Config::instance()->check();
 
   QFile f(fileName);
@@ -87,7 +94,6 @@ void DoxygenPart::adjustDoxyfile()
     f.close();
   }
 
-  // insert input files
   // set "General/PROJECT_NAME"
   ConfigString *name = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NAME"));
   if (name)
@@ -95,15 +101,16 @@ void DoxygenPart::adjustDoxyfile()
     name->setDefaultValue(project()->projectName());
     name->init();
   }
+
   // set "General/PROJECT_NUMBER"
   ConfigString *version = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NUMBER"));
-  if (version) 
+  if (version)
   {
-    version->setDefaultValue("Someone should replace this with a pointer to the version");
+    version->setDefaultValue(DomUtil::readEntry(*projectDom(), "/general/version"));
     version->init();
   }
 
-  //insert input files into "Input/INPUT"  
+  // insert input files into "Input/INPUT"
   ConfigList *input_files = dynamic_cast<ConfigList*>(Config::instance()->get("INPUT"));
   if (input_files)
   {
@@ -111,23 +118,23 @@ void DoxygenPart::adjustDoxyfile()
     input_files->addValue(QFile::encodeName(project()->projectDirectory()));
   }
 
-  // insert file patters into "Input/FILE_PATTERNS"
+  // insert file patterns into "Input/FILE_PATTERNS"
   ConfigList *patterns = dynamic_cast<ConfigList*>(Config::instance()->get("FILE_PATTERNS"));
   if (patterns)
   {
-    //patterns->init();
+    // Remove Doxygen's default patterns
+//    patterns->init();
+    
+    // Add this ones:
     patterns->addValue("*.C");
+    patterns->addValue("*.H");
     patterns->addValue("*.tlh");
     patterns->addValue("*.diff");
     patterns->addValue("*.patch");
     patterns->addValue("*.moc");
     patterns->addValue("*.xpm");
-    patterns->addValue("*.hxx");
-    patterns->addValue("*.h++");
-    patterns->addValue("*.H");
   }
 
-  // recurse
   // set "Input/RECURSIVE" to recurse into subdirectories
   ConfigBool *recursive = dynamic_cast<ConfigBool*>(Config::instance()->get("RECURSIVE"));
   if (recursive)
@@ -179,8 +186,8 @@ void DoxygenPart::slotDoxygen()
       if (searchDatabase)
       {
         // get input files
-	htmlDirectory = Config_getString("OUTPUT_DIRECTORY");
-	if ( htmlDirectory.length() > 0 )
+        htmlDirectory = Config_getString("OUTPUT_DIRECTORY");
+        if ( htmlDirectory.length() > 0 )
           htmlDirectory += "/";
         htmlDirectory += Config_getString("HTML_OUTPUT");
       }
@@ -192,8 +199,10 @@ void DoxygenPart::slotDoxygen()
     cmdline += " && doxygen Doxyfile";
     if (searchDatabase)
     {
+      // create search database in the same directory where the html docs are
+      if ( htmlDirectory.length() > 0 )
+        cmdline += " && cd " + KShellProcess::quote( htmlDirectory );
       cmdline += " && doxytag -s search.idx ";
-      cmdline += KShellProcess::quote( htmlDirectory );
     }
 
     kdDebug(9026) << "Doxygen command line: " << cmdline << endl;

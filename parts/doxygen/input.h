@@ -38,10 +38,10 @@ class InputBool : public QWidget, public IInput
     Q_OBJECT
 
 public:
-    InputBool(const QString &text, QWidget *parent, bool &flag);
+    InputBool(const QCString &key, const QString &text, QWidget *parent, bool &flag);
     ~InputBool();
     
-    virtual void init();
+    void init();
     virtual void setEnabled(bool b);
     virtual QObject *qobject() { return this; }
     virtual bool getState() const { return state; }
@@ -55,6 +55,7 @@ private slots:
 
 private:
     bool &state;
+    QCString key;
     QCheckBox *cb;
 };
 
@@ -68,7 +69,7 @@ public:
              int &val, int minVal, int maxVal);
     ~InputInt();
     
-    virtual void init();
+    void init();
     virtual void setEnabled(bool);
     QObject *qobject() { return this; }
 
