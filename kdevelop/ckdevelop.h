@@ -127,7 +127,7 @@ public:
    */
   static bool isUntitled(const char *szFilename);
   /** The complete file save as handling
-   *  returns true if it succeeded
+   *  @return true if it succeeded
    */
   bool fileSaveAs();
 
@@ -150,14 +150,15 @@ public:
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
 
-  /** Add a file with a specified type to the project. Returns
-   *  true if a new subdir was added.
+  /** Add a file with a specified type to the project. 
+   *  
    *  @param complete_filename   The absolute filename.
    *  @param type                Type of file.
    *  @param refresh             If to refresh the trees.
+   *  @return true if a new subdir was added.
    */
   bool addFileToProject(QString complete_filename,ProjectFileType type,bool refreshTrees=true);
-	void addRecentProject(const char* file);
+  void addRecentProject(const char* file);
   void switchToWorkspace(int id);
 
   /** Switch the view to a certain file.
@@ -179,13 +180,14 @@ public:
 
   KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
   KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
-  KDlgWidgets* kdlg_get_widgets_view() { return kdlg_widgets_view; }
-  KDlgDialogs* kdlg_get_dialogs_view() { return kdlg_dialogs_view; }
-  KDlgItems*   kdlg_get_items_view() { return kdlg_items_view; }
-  KStatusBar*  kdlg_get_statusbar() { return kdlg_statusbar; }
-  CTabCtl* kdlg_get_tabctl() { return  kdlg_tabctl;}
+  KDlgWidgets* kdlg_get_widgets_view()   { return kdlg_widgets_view; }
+  KDlgDialogs* kdlg_get_dialogs_view()   { return kdlg_dialogs_view; }
+  KDlgItems*   kdlg_get_items_view()     { return kdlg_items_view; }
+  KStatusBar*  kdlg_get_statusbar()      { return kdlg_statusbar; }
+  CTabCtl* kdlg_get_tabctl()             { return  kdlg_tabctl;}
+
   /** Get the current project. */
-  CProject* getProject() {return prj;}
+  CProject* getProject()                 {return prj;}
 
 
  public slots:
@@ -238,11 +240,11 @@ public:
   /** repeat last search */
   void slotEditRepeatSearch();
   /** acts on grep to search the selected word by keyboard shortcut */
-	void slotEditSearchText();
+  void slotEditSearchText();
   /** search in files, use grep and find*/
   void slotEditSearchInFiles();
   /** called by popups in the edit and brwoser widgets to grep a string */
-	void slotEditSearchInFiles(QString);
+  void slotEditSearchInFiles(QString);
   /** runs ispell check on the actual editwidget */
   void slotEditSpellcheck();
   /** opens the search and replace dialog */
@@ -287,10 +289,10 @@ public:
   void slotProjectNewAppl();
   /** opens a projectfile and close the old one*/
   void slotProjectOpen();
-	/** opens a project file from the recent project menu in the project menu by getting the project entry and
-		* calling slotProjectOpenCmdl()
-		*/
-	void slotProjectOpenRecent(int id_);
+  /** opens a project file from the recent project menu in the project menu by getting the project entry and
+   * calling slotProjectOpenCmdl()
+   */
+  void slotProjectOpenRecent(int id_);
   /** opens a project committed by comandline or kfm */
   void slotProjectOpenCmdl(const char*);
   /** close the current project,return false if  canceled*/
@@ -450,8 +452,8 @@ public:
   //////////////////////////////////
   // Classbrowser wizardbutton slots
   //////////////////////////////////
-	/** View the class header */
-	void slotClassbrowserViewClass();
+  /** View the class header */
+  void slotClassbrowserViewClass();
   /** View the graphical classtree. */
   void slotClassbrowserViewTree();
   /** View the declaration of a class/method. */
@@ -534,9 +536,22 @@ public:
   void slotSearchProcessExited(KProcess*);
   
   //////////////// -- the methods for signals generated from the CV
-  /** Added method in the classview. */
+  /** Add a method to a class. Brings up a dialog and lets the
+   * user fill it out.
+   * @param aClassName      The class to add the method to.
+   */
   void slotCVAddMethod( const char *aClassName );
-  /** Added attribute in the classview. */
+
+  /** Add a method to a class.
+   * user fill it out.
+   * @param aClassName      The class to add the method to.
+   * @param aMethod         The method to add to the class.
+   */
+  void slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod );
+
+  /** Add an attribute to a class.
+   * @param aClassName      The class to add the attribute to.
+   */
   void slotCVAddAttribute( const char *aClassName );
   
   /** Delete an method.
@@ -544,16 +559,32 @@ public:
    * @param aMethodName Name of the method(with arguments) to delete.
    */
   void slotCVDeleteMethod( const char *aClassName,const char *aMethodName );
-  /** The user wants to view the declaration of a method. */
+
+  /** The user wants to view the declaration of a method. 
+   * @param className Name of the class holding the declaration. NULL for globals.
+   * @param declName Name of the declaration item.
+   * @param type Type of declaration item
+   */
   void slotCVViewDeclaration( const char *className, 
                               const char *declName, 
                               THType type  );
-  /** The user wants to view the definition of a method/attr... */
+  /** The user wants to view the definition of a method/attr...
+   * @param className Name of the class holding the definition. NULL for globals.
+   * @param declName Name of the definition item.
+   * @param type Type of definition item.
+   */
   void slotCVViewDefinition( const char *className, 
                              const char *declName, 
                              THType type  );
 
+  /** The user selected a class in the classcombo.
+   * @param aName Name of the class.
+   */
   void CVClassSelected( const char *aName );
+
+  /** The user selected a method in the methodcombo.
+   * @param aName Name of the method.
+   */
   void CVMethodSelected( const char *aName );
 
   // return the position of the classdeclaration begin
@@ -619,7 +650,10 @@ private:
   QPopupMenu* file_open_popup;
   /** Popup menu for the classbrowser wizard button. */
   QPopupMenu* classbrowser_popup;
-	bool cv_decl_or_impl;
+
+  /** Tells if the next click on the classwizard toolbar button should show
+   * the declaration or the definition of the selected item. */
+  bool cv_decl_or_impl;
 
   QStrList file_open_list;	
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
@@ -714,14 +748,14 @@ private:
  
   /** The classview. */
   CClassView* class_tree;
-  /** The logical filetree. */
+  /** The logical fileview. */
   CLogFileView* log_file_tree;
-  /** The real filetree. */
+  /** The real fileview. */
   CRealFileView* real_file_tree;
   /** The documentation tree. */
   DocTreeView* doc_tree;
   
-  /** Output for the compiler ... */
+  /** Output from the compiler ... */
   COutputWidget* messages_widget;
   /** stdin and stdout output. */
   COutputWidget* stdin_stdout_widget;
