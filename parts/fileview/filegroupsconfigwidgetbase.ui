@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>599</width>
-            <height>494</height>
+            <height>496</height>
         </rect>
     </property>
     <property name="caption">
@@ -76,23 +76,6 @@
                 </widget>
             </vbox>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer5</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>Layout3</cstring>
@@ -197,23 +180,6 @@
                 </spacer>
             </vbox>
         </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer7</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
     </hbox>
 </widget>
 <connections>
