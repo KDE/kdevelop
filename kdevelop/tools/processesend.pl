@@ -27,25 +27,19 @@ $underDirectory = $overDirectory . $nameLittle;
 
 if ($processes{APPLICATION} eq "customproj") {}
 else {
+  my $confargs = $processes{CONFIGARG} || "";
   #start make -f Makefile.dist
   printflush (STDOUT,"create configuration files...\n");
+  printflush (STDOUT,">make -f Makefile.dist\n");
   chdir ($overDirectory);
   system ("make -f Makefile.dist");
   
   #start configure
   printflush (STDOUT,"make configure...\n");
+  printflush (STDOUT,">LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
   chdir ($overDirectory);
-       if ($processes{APPLICATION} eq "qt2normal" || $processes{APPLICATION} eq "qt2mdi" ||
-        $processes{APPLICATION} eq "qextmdi" ||
-       	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
-       	$processes{APPLICATION} eq "kde2mdi")
-       {
-         system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
+  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure " . $confargs);
 	
-       }
-       else{
- 	system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
-       }
 }
 #if User-Documentation was chosen in kAppWizard
 if ($processes{USER} eq "yes") {
@@ -63,10 +57,12 @@ if ($processes{USER} eq "yes") {
   {
     if (-e "index.nif")
     {
+      printflush (STDOUT,">ksgml2html index.sgml en\n");
       system ("ksgml2html index.sgml en");
     }
     else
     {
+      printflush (STDOUT,">sgml2html index.sgml\n");
       system ("sgml2html index.sgml");
     }
   }
