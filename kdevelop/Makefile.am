@@ -33,8 +33,12 @@ rcdir = $(kde_datadir)/kdevelop
 rc_DATA = kdevelopui.rc
 
 KDE_ICON = AUTO
+
 data_DATA = kdevelop.desktop
 datadir = $(kde_appsdir)/Development
+
+mime_DATA = x-kdevelop-project.desktop
+mimedir = $(kde_mimedir)/application
 
 messages: rc.cpp
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
