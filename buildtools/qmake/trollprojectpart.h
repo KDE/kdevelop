@@ -65,6 +65,8 @@ private slots:
 //    void slotClean();
 //    void slotExecute();
     void slotCommandFinished( const QString& command );
+    void slotBuildAndExecuteProject();
+    void slotBuildAndExecuteTarget();
 
 private:
 //    void startMakeCommand(const QString &dir, const QString &target);

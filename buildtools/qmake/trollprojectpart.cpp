@@ -111,7 +111,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
     action = new KAction( i18n("Execute Main Program"), "exec", SHIFT+Key_F9,
-                          m_widget, SLOT(slotExecuteProject()),
+                          this, SLOT(slotBuildAndExecuteProject()),
                           actionCollection(), "build_execute_project" );
     action->setToolTip(i18n("Execute main program"));
     action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the main program specified in project settings, <b>Run Options</b> tab."));
@@ -148,7 +148,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
     action = new KAction( i18n("Execute Subproject"), "exec", 0,
-                          m_widget, SLOT(slotExecuteTarget()),
+                          this, SLOT(slotBuildAndExecuteTarget()),
                           actionCollection(), "build_execute_target" );
     action->setToolTip(i18n("Execute subproject"));
     action->setWhatsThis(i18n("<b>Execute subproject</b><p>Executes the target program for the currently selected subproject. "
@@ -273,6 +273,26 @@ QString TrollProjectPart::projectName() const
 DomUtil::PairList TrollProjectPart::runEnvironmentVars() const
 {
     return DomUtil::readPairListEntry(*projectDom(), "/kdevtrollproject/run/envvars", "envvar", "name", "value");
+}
+
+void TrollProjectPart::slotBuildAndExecuteProject()
+{
+    partController()->saveAllFiles();
+    if (isDirty()) {
+        m_executeAfterBuild = true;
+        m_widget->slotBuildProject();
+    } else
+        m_widget->slotExecuteProject();
+}
+
+void TrollProjectPart::slotBuildAndExecuteTarget()
+{
+    partController()->saveAllFiles();
+    if (isDirty()) {
+        m_executeAfterBuild = true;
+        m_widget->slotBuildTarget();
+    } else
+        m_widget->slotExecuteTarget();
 }
 
 
@@ -496,10 +516,10 @@ void TrollProjectPart::slotCommandFinished( const QString& command )
 {
     Q_UNUSED( command );
 
-    if( m_buildCommand != command )
-        return;
-
-    m_buildCommand = QString::null;
+//     if( m_buildCommand != command )
+//         return;
+// 
+//     m_buildCommand = QString::null;
 
     m_timestamp.clear();
     QStringList fileList = allFiles();
