@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 12/21/2002
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rï¿½er
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -36,7 +36,7 @@ class KImportIconView;
 class AddExistingDirectoriesDialog : public AddExistingDlgBase
 {
 	Q_OBJECT
-	
+
 public:
   AddExistingDirectoriesDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
   ~AddExistingDirectoriesDialog();
@@ -50,6 +50,8 @@ private:
 
 	TargetItem* m_titem;
 	SubprojectItem* m_spitem;
+
+    KFileItemList m_importList;
 
 protected:
 	void init();

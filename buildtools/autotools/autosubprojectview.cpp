@@ -26,6 +26,7 @@
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
+#include <ksqueezedtextlabel.h>
 
 /** KDevelop */
 #include <kdevmainwindow.h>
@@ -252,6 +253,10 @@ void AutoSubprojectView::slotAddExistingSubproject()
 	AddExistingDirectoriesDialog dlg ( m_part, m_widget, spitem, this, "add existing subprojects" );
 
 	dlg.setCaption ( i18n ( "Add Existing Subproject to '%1'" ).arg ( spitem->subdir ) );
+    dlg.targetLabel->setText("");
+    dlg.directoryLabel->setText(spitem->path);
+    dlg.destStaticLabel->setText("");
+    dlg.destLabel->setText("");
 
 	if ( dlg.exec() )
 		emit selectionChanged ( spitem );
