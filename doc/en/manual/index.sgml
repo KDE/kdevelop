@@ -2,10 +2,10 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.1
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name ="<Ralf.Nolden@post.rwth-aachen.de>">
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 2.3, Jan. 15, 2000
+<date>Version 2.2 , July 29,1999
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -42,7 +42,7 @@ part of the development process. KDevelop manages:
 <item> Internationalization support for your application, allowing translators to easily add their target language to a project,
 <item> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in <idx/dialog editor/,
 <item> managing your project via CVS by providing an easy-to-use frontend for the most needed functions,
-<item> Debugging your application, optionally by KDevelop's internal debugger or by using <idx/KDbg/,
+<item> Debugging your application by integrating <idx/KDbg/,
 <item> Editing of project-specific <idx/pixmaps/ with <idx/KIconEdit/,
 <item> The inclusion of any other program you need for development by adding it to the "<idx/Tools/"-menu according to your individual needs.
 </itemize>
@@ -58,13 +58,21 @@ anywhere within the IDE.
 
 <sect>Changes
 <p>
-Version 1.1 of KDevelop extends the already well-known and successful 1.0 version by various new features that were requested.
-Improvements were achieved by adding an integrated debugger that allows KDevelop users for the first time to test and debug their
-projects now within the IDE, which makes it another time even much easier to make at the same time use of the projectmanagement and
-codewatch; but at the same time leaving it open to stay with KDbg optionally. Further improvements are made in the classparser now
-capable of namespace handling, the editor's bookmark behavoir, updated filehandling and various fixes for BSD OS's, comment/uncomment
-of codeblocks and much more. The provided documentation also was updated and adapted to the additions since the 1.0 release, along with
-the recent development tendencies taking place at KDE 2.
+Version 1.0 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 0.1 release followed by the 0.2, 0.3 and 0.4 releases; each of them were tested and bugs
+fixed. We believe that the current version is to be expected as the final release for the KDE 1.x series, giving developers the
+environment they want to use.
+
+Improvements were made in the following sections:
+
+<itemize>
+<item>fast classparser and -browser with graphical class-tree view and dialog-based adding of members and classes,
+<item>CVS support for most needed functions such as adding, removing, updating and committing files and directories,
+<item>updated and extended documentation, now covering five handbooks shipping with KDevelop,
+<item>bugfixed classparser, dialogeditor and errorfinder.
+</itemize>
+
+Any comments about the IDE, its documentation or feature requests are welcome.
 
 <sect>About this Handbook
 <p>
@@ -90,10 +98,8 @@ editing.
 <item>Chapter <ref id="The Class Browser" name="The Class Browser">, tells you how to make use of KDevelop's powerful Class Browser.
 <item>Chapter <ref id="The Dialog Editor" name="The Dialog Editor">, features the integrated visual <idx/GUI/ constructor and how it
 generates C++ <idx/output/.
-<item>Chapter<ref id="Debugging Applications" name="Debugging Applications">,gives an overview over debugging setup and use of
-the internal debugger
-<item>Chapter <ref id="General Configuration" name="General Configuration"> shows how you can set overall preferences for using
-KDevelop.
+<item>Chapter<ref id="The Internal Debugger" name="The Internal Debugger">,gives an overview over debugging setup and use of the internal debugger
+<item>Chapter <ref id="General Configuration" name="General Configuration"> shows how you can set overall preferences for using KDevelop.
 <item>Chapter <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of KDevelop
 under different flavors of Unix systems and problem solutions in general.
 </itemize>
@@ -108,13 +114,12 @@ of time searching for functions and features as it will enable you to make use o
 <p>
 KDevelop can be found either on the <idx/KDE/ Applications page at <url url="http://www.kde.org/current.html"> or on the KDevelop
 homepage at <url url="http://www.kdevelop.org">. KDevelop is also available on Linux distributions, such
-as SuSE 6.3.
+as SuSE 6.1.
 
 We're also offering snapshots of the KDevelop CVS repository on our homepage for those who want to stay up to date with
 KDevelop. Usually, the snapshots are not intended to be used for production but as a test for new features and to give an insight
 into development progress of the KDevelop team. Also we offer various third party software needed by KDevelop directly such as
-<idx/KDoc/ and <idx/KDbg/. All needed applications for KDE development are also packed in the KDK (KDE Development Kit) package
-available on the KDevelop homepage.
+<idx/KDoc/ and <idx/KDbg/.
 
 If you're experiencing problems with compiling or using KDevelop, please read the <ref id="Questions and Answers" name="Questions and
 Answers"> section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
@@ -151,7 +156,6 @@ as distribution packages and thereby can be installed easily.
 <item><idx/a2ps/ or <idx/enscript/ for <idx/printing/ support
 <item>ghostview or kghostview for <idx/printing/ preview
 <item><idx/glimpse/ 4.0 for the <idx/search index/, available at <url url="http://glimpse.cs.arizona.edu">
-<item>Ht://Dig for commercial use of KDevelop due to license issues in connection with glimpse.
 <item>sgmltools 1.0, available at <url url="http://www.sgmltools.org">
 <item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it), which includes <idx/KDoc/, <idx/KSgml2Html/, <idx/KTranslator/
 (available at <url url="http://developer.kde.org">)
@@ -160,8 +164,7 @@ as distribution packages and thereby can be installed easily.
 </itemize>
 
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
-200 MMX, 128MB RAM. User reports show successful compiling and use under OpenBSD, NetBSD, HP-UX and various other Unices such as
-UnixWare 7, mostly providing KDevelop with their distributions.
+200 MMX, 128MB RAM.
 
 As far as known to the authors, SuSE Linux and FreeBSD contain all necessary packages, including <idx/a2ps/ and <idx/enscript/ as packages or
 rpm's, so you should have no problem installing the required third-party software.
@@ -170,16 +173,13 @@ rpm's, so you should have no problem installing the required third-party softwar
 
 For creating the <idx/KDE/ library documentation, you need the kdelibs package in source available on your
 system as provided by the KDE project or included with the source packages of your distribution and <bf><idx/KDoc/</bf> (included in the
-<idx/KDE-SDK/). Optionally we're offering a packaged version of the KDE library documentation on our homepage as well for those users
-that have trouble generating the documentation from the KDE libs sources.
+<idx/KDE-SDK/).
 
 Also we're offering a C/C++ <idx/Reference/ on our homepage at <url url="http://www.kdevelop.org">
 that is integrated into the <idx/documentation browser/ after it's installation. Download the package and copy the source file as
 <tt/root/ into your <idx/KDE/ directory and untar it with <tt/tar zxvf c_c++_reference.tar.gz/, then the reference is available in the
 documentation tree; otherwise selecting the reference book in the browser shows an error page with the KDevelop homepage URL offering a
 download and describes the installation process. <sect>Compilation and Installation
-
-<sect>Compilation
 <p>
 In order to compile and install KDevelop on your system, type the following in the base directory of the KDevelop distribution:
 
@@ -192,79 +192,8 @@ In order to compile and install KDevelop on your system, type the following in t
 	&percnt make install
 </verb></tscreen>
 
-Options:
-<p>
-The configure script allows appending a set of commandline options which can be obtained when calling configure with -help:
 
-<tscreen><verb>
-rnolden@Nolden:~/kde_11/kdevelop > ./configure -help
-Usage: configure [options] [host]
-Options: [defaults in brackets after descriptions]
-Configuration:
-  --cache-file=FILE       cache test results in FILE
-  --help                  print this message
-  --no-create             do not create output files
-  --quiet, --silent       do not print `checking...' messages
-  --version               print the version of autoconf that created configure
-Directory and file names:
-  --prefix=PREFIX         install architecture-independent files in PREFIX
-                          [/opt/kde]
-  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-                          [same as prefix]
-  --bindir=DIR            user executables in DIR [EPREFIX/bin]
-  --sbindir=DIR           system admin executables in DIR [EPREFIX/sbin]
-  --libexecdir=DIR        program executables in DIR [EPREFIX/libexec]
-  --datadir=DIR           read-only architecture-independent data in DIR
-                          [PREFIX/share]
-  --sysconfdir=DIR        read-only single-machine data in DIR [PREFIX/etc]
-  --sharedstatedir=DIR    modifiable architecture-independent data in DIR
-                          [PREFIX/com]
-  --localstatedir=DIR     modifiable single-machine data in DIR [PREFIX/var]
-  --libdir=DIR            object code libraries in DIR [EPREFIX/lib]
-  --includedir=DIR        C header files in DIR [PREFIX/include]
-  --oldincludedir=DIR     C header files for non-gcc in DIR [/usr/include]
-  --infodir=DIR           info documentation in DIR [PREFIX/info]
-  --mandir=DIR            man documentation in DIR [PREFIX/man]
-  --srcdir=DIR            find the sources in DIR [configure dir or ..]
-  --program-prefix=PREFIX prepend PREFIX to installed program names
-  --program-suffix=SUFFIX append SUFFIX to installed program names
-  --program-transform-name=PROGRAM
-                          run sed PROGRAM on installed program names
-Host type:
-  --build=BUILD           configure for building on BUILD [BUILD=HOST]
-  --host=HOST             configure for HOST [guessed]
-  --target=TARGET         configure for TARGET [TARGET=HOST]
-Features and packages:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --x-includes=DIR        X include files are in DIR
-  --x-libraries=DIR       X library files are in DIR
---enable and --with options recognized:
-  --enable-debug          creates debugging code [default=no]
-  --enable-strict         compiles with strict compiler options (may not work!)
-  --enable-shared[=PKGS]  build shared libraries [default=yes]
-  --enable-static[=PKGS]  build static libraries [default=yes]
-  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
-  --disable-libtool-lock  force libtool not to do file locking
-  --disable-nls           do not use Native Language Support
-  --with-extra-includes=DIR
-                          adds non standard include paths
-  --with-extra-libs=DIR   adds non standard library paths
-  --with-qt-dir=DIR       where the root of Qt is installed
-  --with-qt-includes=DIR  where the Qt includes are.
-  --with-qt-libraries=DIR where the Qt library is installed.
-  --disable-path-check    don't try to find out, where to install
-  --disable-rpath         do not use the rpath feature of ld
-  --with-qtdoc-dir=DIR     where the Qt documentation is installed
-  --with-kdelibsdoc-dir=DIR   where the kdelibs documentation is installed
-  --with-kdocindex-dir=DIR    where the kdoc index files are
-  --enable-docbase        enable Debian docbase support
-  --enable-kdoc2        enable kdoc2 support
-</verb></tscreen>
-You can append any of these options before calling make to build KDevelop. Ususally none of these are required for a normal install.
-
+<p>Since KDevelop uses <tt><idx/autoconf/</tt> you should have not trouble compiling it.
 
 In order to compile the KDevelop CVS snapshot, type the following :
 <tscreen><verb>
@@ -276,9 +205,6 @@ In order to compile the KDevelop CVS snapshot, type the following :
 	
 	&percnt make install
 </verb></tscreen>
-
-Mind that KDevelop is present in the KDE CVS in two versions, one in the HEAD branch currently under heavy development for KDE 2 and
-the current KDE 1.x version available with the -r KDEVELOP_1_0 tag.
 
 If your system's <idx/make-command/ is <tt/gmake/, type <tt/gmake/ instead of <tt/make/.
 
@@ -337,10 +263,9 @@ allow correct <idx/printing/. If neither program is installed, you can do this a
 
 <item> Checking for <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/.  We encourage you to install those programs as they are good
 helpers for creating complete <idx/KDE/-applications. Note that <idx/KDbg/ is used directly for <idx/debugging/ your current project within
-KDevelop but not required as KDevelop comes along with an integrated debugger frontend; <idx/KIconEdit/ is used to display and edit
-<idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/ are then configured to
-be available in the "<idx/Tools/" menu of the KDevelop menu bar if they are found. Other tools can be added to the <idx/Tools/-menu by
-selecting "<idx/Tools/..." in the Options menu later.
+KDevelop; <idx/KIconEdit/ is used to display and edit <idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/
+are then configured to be available in the "<idx/Tools/" menu of the KDevelop menu bar if they are found. Other tools can be added to the
+<idx/Tools/-menu by selecting "<idx/Tools/..." in the Options menu later.
 
 <item> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
 needed program is recommended.
@@ -536,24 +461,25 @@ all when using KDevelop.
 
 <sect>Debugging<label id="Debugging">
 <p>
-The following section covers a term that is widely used by developers: Debugging.  It means, that, although your <idx/compiler/
-produces the final application, your binary may not run or crash during execution due to a so-called "bug" in the code. A program
+The following section covers a term that is widely used by developers: Debugging.  It means, that, although your <idx/Compiler/ produces
+the final application, your application may not run or crash during execution due to a so-called "bug" in the code. A program
 error described by the name of this insect comes from the history of computing; one of the first <idx/errors/ that caused a machine to
 crash was not obviously a malfunction- bugs were inside the computer which were responsible for it. Therefore, an error not
-detectable on the first look is called a "bug", so "<idx/debugging/" means to throw out bugs where they shouldn't be.
-	Now, you don't have to hunt them for real; assuming that today's computers are designed to keep them out by some kind of outer
-protection. They have to be found inside the code, mostly ending the execution of a program with the message "Segmentation fault". GNU
+detectable on the first look is called a "bug", so "<idx/debugging/" means to throw out bugs where they shouldn't be. Now, you don't
+have to hunt them for real; assuming that today's computers are designed to keep them out by some kind of outer protection.
+They have to be found inside the code, mostly ending the execution of a program with the message "Segmentation fault". GNU
 provides another tool called <tt/gdb/, the GNU debugger. This terminal program allows to watch the internal values of an
 application and the execution step by step with setting "breakpoints" in the code. Gdb stops the execution every time the program
-comes to a breakpoint while executing. But like most other tools, the gdb is handled by another program providing a graphical frontend
+comes to a breakpoint while executing. But like most other tools, the debugger is handled by another program providing a frontend
 to it, allowing to easily watch values and the setting of breakpoints in the code.
 
-For this purpose, your project's application is by default created with a <idx/compiler/ option for <idx/debugging/, thereby storing
-additional data in the executable to allow the localization of values and lines in the code. As said, gdb is best handled by a
-graphical frontend which is also provided by KDevelop. Optionally, you can as well use any other debugger you like such as <idx/KDbg/
-or <idx/DDD/; see <ref id="Debugging Applications" name="Debugging Applications"> for more information on how to choose and use the
-debugger. In any way, to debug your program you just have to select "Debug" in the Build-menu or press the according toolbar button
-displayed by a wheel having glasses over it, signaling that you want to watch the execution.
+For this purpose, your project's application is by default created with a <idx/Compiler/ option for <idx/debugging/, thereby storing
+additional data in the executable to allow the localization of values and lines in the code. As a third-party frontend to gdb,
+KDevelop makes use of <idx/KDbg/, the KDebugger. To debug your program, you just have to select "Debug" in the Build-menu or press the
+according toolbar button displayed by a wheel having glasses over it, signaling that you want to watch the execution.
+
+KDevelop then opens the <idx/Tools/-window and starts your application with <idx/KDbg/. The <idx/KDbg/ interface appears inside the <idx/Tools/-window and
+allows the usage just like you started it from outside.
 
 In general, the above steps are clearly showing the need of certain steps that a developer has to do when starting to write his
 own application, and cover issues that are common to all projects. Also, we explained what part KDevelop does for a developer and
@@ -849,7 +775,7 @@ You're starting the build-process by:
 
 To execute your application, choose
 <itemize>
-<item>the symbol "Execute" or "Debug" (starting the debugger with your program) from the toolbar
+<item>the symbol "Execute" or "Debug" (starting <idx/KDbg/ with your program) from the toolbar
 <item>by the according menu entries in the Build-menu.
 <item>or by "Execute with Arguments" to start your application with additional arguments
 </itemize>
@@ -873,10 +799,10 @@ Therefore, you can enable the <idx/Compiler/ to add information within the binar
 then is another program that lets you do this by starting the application and letting you set breakpoints in the code where the
 execution stops, so you can control critical <idx/implementation/s and by this detect at least the line that caused the error. Finding
 the real cause is another task; it depends on the programmer to locate this. The <bf/gdb/ is a debugger that is provided with the
-GNU <idx/Compiler/ and programs like <em/ddd/ or <em/<idx/KDbg// are frontends that allow an easier use. KDevelop lets
+GNU <idx/Compiler/ and programs like <em/ddd/ or <em/<idx/KDbg// are frontends that allow an easier use. KDevelop therefore uses <idx/KDbg/ and lets
 you invoke the <idx/debugging/ process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
-information about <idx/debugging/ applications, see <ref id="Projects" name="Projects">, <ref id="Debugging Applications"
-name="Debugging Applications"> and <htmlurl url="programming/index-12.html" name="The KDevelop Programming Handbook">.
+information about <idx/debugging/ applications, see <ref id="Projects" name="Projects"> and <htmlurl url="programming/index-12.html"
+name="The KDevelop Programming Handbook">.
 
 <sect>Additional Information
 <p>
@@ -951,12 +877,9 @@ The Documentation Tree (<idx/DOC/) displays all available <idx/HTML/-based docum
 open the first page in the Browser window. Also, a popup-menu provides personal configuration for additional <idx/HTML/-based
 documentation packages.
 
-<sect1>The Variables Tree (<idx/VAR/) displays the variables of your application with the current values while the debugging steps are
-in progress; therefore only active when the debugger is running.
-
 <sect>Output window
 <p>
-The Output window is separated as well into several windows: a messages window, a stdin/stdout
+The Output window is separated as well into a messages window, a stdin/stdout
 window and a stderr window for the following necessities:
 <itemize>
 <item> messages window:	displays all <idx/output/ of the <idx/Compiler/. Clicking on error messages will change the edit widget to set the
@@ -967,14 +890,6 @@ Terminal applications are now started in an external console window.
 produces. This is useful for testing purposes. The Output window is programmed to show up each time an external process is called,
 such as make or a terminal application.
 </itemize>
-
-These are followed by the debugger windows: Breakpoint, Frame Stack and Disassemble:
-<itemize>
-<item>Breakpoint window: displays the current breakpoints set
-<item>Frame Stack: shows the memory contents
-<item>Disassemble: lists the application binary code in assembler
-</itemize>
-
 
 <sect><idx/Menubar/ Commands
 <p>
@@ -1012,8 +927,6 @@ browser.<p>
 <item><bf/Paste		Ctrl+V/ inserts the clipboard contents at the current cursor position.<p>
 <item><bf/Indent		Ctrl+I/ Indent moves a selection to the right<p>
 <item><bf/UnIndent	Ctrl+U/ UnIndent moves a selection to the left<p>
-<item><bf/Comment   Ctrl+M/ Comment out selected code<p>
-<item><bf/Uncomment  Ctrl+Alt+M/ Uncomment selected code<p>
 <item><bf/Insert File...Ctrl+Insert/ Lets you select a file and inserts its contents at the current cursor position<p>
 <item><bf/Search...		Ctrl+F/Opens the Search dialog that looks for an expression in the current file. For a search across several
 files, "Search in files..." should be used.<p>
@@ -1131,7 +1044,7 @@ Configure again.<p>
 The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
 "<idx/Tools/"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
-see <ref id="Configuring the &dquot;<idx/Tools/&dquot; Menu" name="Configuring the &dquot;<idx/Tools/&dquot; Menu">.
+see <ref id="Configuring the "<idx/Tools/" Menu" name="Configuring the "<idx/Tools/" Menu">.
 
 <sect1>Changing KDevelop's settings
 <p><nidx/"Options"-menu/
@@ -1145,8 +1058,10 @@ with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 <item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
 languages, including <idx/HTML/.<p>
 <item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal <idx/Helpbrowser/<p>
-<item><bf/Configure Printer.../ Configures your printer.<p>
+<item><bf/Configure Printer.../ Contains the entries for the printer <idx/configuration dialog/s according to the used <idx/printing/ program, <idx/a2ps/
+or <idx/enscript/.<p>
 <itemize>
+<item><bf/<idx/a2ps// Configures the printer for use with <idx/a2ps/. See Printing for more information.<p>
 <item><bf/<idx/enscript// Configures the printer for use with <idx/enscript/. See Printing for more information.<p>
 </itemize>
 <item><bf/<idx/Tools/.../ Opens the Configure <idx/Tools/ dialog. Here, you can configure the "<idx/Tools/" menu by adding or removing programs that will
@@ -1166,10 +1081,12 @@ on.
 The Bookmarks menu is intended for adding and removing <idx/bookmarks/ you want to set in the current editing file. As KDevelop uses two
 editing windows, each one configures it's <idx/bookmarks/ separately.
 <itemize>
-<item><bf/Toggle Bookmark  Ctrl+Alt+T/ sets or removes a bookmark.<p>
-<item><bf/Next Bookmark   F5/ jumps to the next bookmark.<p>
-<item><bf/Previous Bookmark  Ctrl+F5/ jumps to the previous bookmark.<p>
-<item><bf/Clear Bookmarks / Clears the bookmark-entries for the top editing window or the browser, e.g. if
+<item><bf/Set Bookmark/ Opens a context-menu with up to nine configurable <idx/bookmarks/. This allows setting a bookmark to a certain entry
+in the <idx/bookmarks/ menu by logical reasons.<p>
+<item><bf/Add Bookmark  Ctrl+Alt+A/ Adds the line of the current cursor position to the <idx/bookmarks/ menu as a bookmark. Mind that this
+could overwrite a bookmark set with the Set Bookmark-option. If the browser is opened, a bookmark will be added to the
+Browser-Window <idx/bookmarks/ menu.<p>
+<item><bf/Clear Bookmarks Ctrl+Alt+C/ Clears the bookmark-entries for the top editing window or the browser, e.g. if
 the Header-Window is visible and you call Clear Bookmarks, the entries for the Header-Window are deleted.<p>
 <item><bf/Header-Window/ Contains the bookmark-list for the Header-Window. Selecting a bookmark will set the cursor to the selected
 <idx/bookmarks/' line. Mind that <idx/bookmarks/ are only assigned to the file they are set to, so if you change to another file, the
@@ -1256,7 +1173,7 @@ application. The buttons execute the following commands from left to right:
 button.
 <item>Make - invokes make on the project
 <item>Rebuild All - rebuilds the project
-<item>Debug - starts the selected debugger with your application
+<item>Debug - opens <idx/KDbg/ with the application binary for <idx/debugging/ in the <idx/Tools/- window
 <item>Execute - runs the application target binary
 <item>Stop - cancels the current process
 <item>(separator)
@@ -1356,15 +1273,6 @@ delete selected text                             Select text, then Backspace or 
 </code>
 <p>
 
-<sect2>Comment/Uncomment Text
-<p>
-<code>
-comment out selected text                        CTRL+M
-uncomment selected text                          CTRL+ALT+M
-
-</code>
-<p>
-
 <sect2>Searching Text within the <idx/Editor/
 <p>
 <code>
@@ -1404,9 +1312,8 @@ next page                                        ALT+ Right Arrow
 <sect2>Managing Bookmarks
 <p>
 <code>
-toggle bookmark                                  CTRL+ALT+T
-next bookmark                                    F5
-previos bookmark                                 SHIFT+F5
+add bookmark                                     CTRL+ALT+A
+clear bookmark list                              CTRL+ALT+C
 </code>
 <p>	
 
@@ -1721,10 +1628,13 @@ The following gives you a general guideline how to locate certain positions with
 
 <enum>
 <item>Set the cursor to the line you want to access via a bookmark
-<item>Select "Toggle Bookmark" from the "Bookmarks"-menu.
+<item>Select "Set Bookmark" from the "Bookmarks"-menu.
+<item>A popup-menu opens that allows you to select the bookmark number you want to set for the new bookmark.
+<item>Select the bookmark number.
 </enum>
 
-The <idx/documentation browser/ also offers setting a bookmark to the current page by a context menu
+Another way to set <idx/bookmarks/ would be to select "Add Bookmark" from the "Bookmarks"-menu. This sets a bookmark to the current line
+and appends it to the <idx/bookmarks/-list. The <idx/documentation browser/ also offers setting a bookmark to the current page by a context menu
 entry "Add Bookmark".
 
 <bf>&raquo How to delete <idx/bookmarks/</bf>
@@ -1732,14 +1642,12 @@ entry "Add Bookmark".
 The <idx/bookmarks/ are set for each editing window separately- mind that your <idx/bookmarks/ aren't connected to a certain file you set the
 bookmark for. To delete all bookmarks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the <idx/bookmarks/ for the
 window actually on top, either the Header window, the C++ window or the browser window.
-Single bookmarks can be deleted by going to the bookmark and selecting "Toggle Bookmark" from the "Bookmarks"-menu.
 
 <bf>&raquo How to go to a bookmarked line</bf>
 
 <enum>
 <item>Select the "Bookmarks"-menu and open the popup menu containing the <idx/bookmarks/ for the window containing the bookmark you want
-to view; either the C++-Window or the Header-Window entry. The last or next bookmark can be found with the according menuentries in the
-bookmarks-menu.
+to view; either the C++-Window or the Header-Window entry.
 <item>Select the bookmarked line.
 </enum>
 
@@ -1787,8 +1695,6 @@ tabulator                                        TAB
 delete letter left of cursor position            Backspace
 delete letter right of cursor position           Delete
 delete selected text                             Select text, then Backspace
-commenting out selected Text                     CTRL+M
-uncommenting selected Text                       CTRL+ALT+M
 </code>
 <p>
 
@@ -3079,15 +2985,15 @@ Now that your project contains a new widget, your work as a programmer is to imp
 add other methods you may need. <footnote>See <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook, The
 Dialogeditor"> for more information about widget properties and sourcecode generation.</footnote>
 
-<chapt>Debugging Applications<label id="Debugging Applications">
+<chapt>The Internal Debugger<label id="The Internal Debugger">
 <sect>Setup
 <p>
 
 The default setup for KDevelop is to use the internal debugger. You can
- change this under Options select the &dquot;KDevelop setup&dquot; menu item,
+ change this under Options select the "KDevelop setup" menu item,
  and then the Debugger tab.
 
-Click on &dquot;Use external debugger&dquot; if you wish to use a different
+Click on "Use external debugger" if you wish to use a different
  debugger and enter the name of the debugger to use. See your debuggers documentation
  on how to run it.
 
@@ -3101,7 +3007,7 @@ If you choose the internal debugger, three tabs are added to your tree and outpu
 <itemize>
 <item>VAR tab : A tree view of the local variables at the current place in
 the  program you have stopped at. You can also see local variables in the
-function  that called this funtions. The VAR tab also contains a watch window.
+function  that called this functions. The VAR tab also contains a watch window.
 This allows  you to see the value of global variables, or perhaps you may want
 to see only  one local variable rather than the variable in a large list of
 local variables.</itemize>
@@ -3109,7 +3015,7 @@ local variables.</itemize>
 <sect2>On the output view window
 <p>
 <itemize>
-<item>breakpoint : A list of breakpoints set and there currrent state.
+<item>breakpoint : A list of breakpoints set and their current state.
 <item>framestack : The calling stack.
 <item>disassemble : A machine instruction view of the code showing the current instruction to be executed.
 </itemize>
@@ -3129,7 +3035,7 @@ Breakpoints can be set against source lines in a file (referred to as breakpoint
 <sect2>Set/Unset breakpoints
 <p>
 
-Simple one click set/unset. Click on the &dquot;icon&dquot; border to the
+Simple one click set/unset. Click on the "icon" border to the
  left of the text in the editor at the line you want the breakpoint. Click again
  on this line to unset the breakpoint.
 
@@ -3148,7 +3054,7 @@ This contains the following fields :
 <enum>
 <item>Conditional: Enter the condition that must be met before gdb will interrupt
  the program execution.
-<item>Ignore count: How many times you want to the code to past through this
+<item>Ignore count: How many times you want the code to past through this
  breakpoint before gdb interrupts the program execution.
 <item>Enable: When enabled gdb will break at this breakpoint. When disabled gdb
  will not break here.
@@ -3171,27 +3077,27 @@ WARNING: This is known to be problematic, so use caution when setting
  watchpoints on local variables.
 
 The watchpoint can also be set by a right mouse click on a previously entered
- watch variable, and selecting &dquot;toggle watchpoint&dquot;
+ watch variable, and selecting "toggle watchpoint"
 
 <sect2>Set/Unset Watch variables
 <p>
 
-At the bottom of the VAR view there is the &dquot;Watch&dquot; field where
+At the bottom of the VAR view there is the "Watch" field where
  you can enter the variable name you wish to see display in the watch list.
- Enter the variable name and type &dquot;enter&dquot; or click on the &dquot;Add&dquot;
+ Enter the variable name and type "enter" or click on the "Add"
  button alongside the field. Right Mouse clicking on the watch variable in the
  treeview will bring up a menu so that you can remove the variable from the
  list.
 
-You can also enter a watch variable by right mouse clicking on a variabel
- name in the editor window. This displays a popup menu with &dquot;watch: variable
- name&dquot; on it.
+You can also enter a watch variable by right mouse clicking on a variable
+ name in the editor window. This displays a popup menu with "watch: variable
+ name" on it.
 <sect2>Changing variable values
 <p>
 
-This is done via the watch variable. If you have a variable &dquot;test&dquot;
- then to set &dquot;test&dquot; to 5 type &dquot;test=5&dquot; in the watch
- field and add it to the list. Note that &dquot;test&dquot; will be set to &dquot;5&dquot;
+This is done via the watch variable. If you have a variable "test"
+ then to set "test" to 5 type "test=5" in the watch
+ field and add it to the list. Note that "test" will be set to "5"
  EVERY time the program stops at a breakpoint, so once you have set the variable,
  usually you should remove the item from the watch view.
 
@@ -3199,8 +3105,8 @@ This is done via the watch variable. If you have a variable &dquot;test&dquot;
 <p>
 
 The debugger toolbar is either on top of all windows displayed, or docked
- in the panel. When docked you can run you code by clicking on the docked icon.
- The function this performs is the &dquot;step over&dquot; function. Right clicking
+ in the panel. When docked you can run your code by clicking on the docked icon.
+ The function this performs is the "step over" function. Right clicking
  on the docked item allows you to restore the toolbar and optionally place focus
  on kdevelop.
 
@@ -3212,7 +3118,7 @@ The functions available are:
  until the above condition is met.
 <item>Step over i(nstruction) : Execute one machine instruction as above.
 <item>Step in : Execute exactly one source line of code. This
- means you will &dquot;step into&dquot; the current function, if necessary
+ means you will "step into" the current function, if necessary
 <item>Step in i(nstruction) : Execute one machine instruction as above.
 <item>Step out : Run to the end of the current stack frame (function)
 <item>View : Allows a variety of views into the data.
@@ -3226,17 +3132,52 @@ Currently implemented views are:
 <item>Interrupt : Stop the application executing.
 <item>Set focus on kdevelop : Set the focus on kdevelop
 <item>Set focus on app : This sets the focus on the window that had focus
- when you pressed the &dquot;set focus on kdevelop&dquot; button. This is a
+ when you pressed the "set focus on kdevelop" button. This is a
  compromise, it should set the focus on the application being debugged but this
  is difficult to do. If anyone has a better solution than the current functionality
  then please let us know.
 </itemize>
 
 When gdb interrupts the program, probably because a breakpoint has been
- triggered, we highlight the &dquot;Set focus on kdevelop&dquot;. We do not
+ triggered, we highlight the "Set focus on kdevelop". We do not
  automatically switch focus to kdevelop so that you can view the application
- window at this point. Click on the &dquot;set focus&dquot; button to switch
+ window at this point. Click on the "set focus" button to switch
  to kdevelop or press a button on the toolbar to perform your selected function.
+
+<sect> Shared libraries and breakpoints
+<p>
+
+ Shared libraries and breakpoints have a problem that has a reasonable solution.
+ The problem is that gdb will not accept breakpoints in source that is in a
+ shared library which has not yet been opened but will be opened via a
+ dlopen.
+
+ The solution is to get gdb to tell us when a shared library has been opened. 
+ We do so by setting "stop-on 1".
+ This means that when the user sets a breakpoint, we flag this breakpoint as
+ pending, try to set the breakpoint and if gdb says it succeeded then flag it
+ as active. If gdb is not successful then we leave the breakpoint as pending.
+ The next instruction will always be "continue" .
+
+ This is known as "lazy breakpoints"
+
+ You have to be careful, though. If you inadvertantly set a breakpoint in a file
+ that is really outside the program, that is it's neither part of the program nor of any
+ shared library inside the project, then this breakpoint will always be pending. There's
+ nothing you can do about that, because it might be in a shared library.
+
+ Now here's the problem with this. If the user "step"s over code that  contains a library
+ dlopen, then it isn't predictable what will happen. The dlopen will be catched by gdb, thus
+ the code will stop. Now there are two possibilities, either there are pending breakpoints,
+ then they will be marked as active and "continue" will lead to there. Or there aren't any pending
+ breakpoints in this frame stack. Then the program will "continue" until it waits for input or
+ it may lead us straight to the end, none of which is what we expected. In this situation, I do not do a
+ continue but leave it stopped with the status line reflecting the stopped state.
+ The frame stack is in the routine that caused the stop.
+
+ There isn't any way around this, but I could alleviate the problem somewhat
+ by only doing a "set stop-on 1" when we have pending breakpoints.
+
 
 <chapt>CVS Integration
 <p>
@@ -3293,7 +3234,7 @@ use the cvs features.
 This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
 found by the according entry in the Options-menu.
 
-<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the &dquot;<idx/Tools/&dquot; Menu">
+<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the "<idx/Tools/" Menu">
 <p><nidx/configuring the Tools-menu/<nidx/"Options"-menu/
 
 As KDevelop supports the use of third-party programs within it's user interface, you are able to <idx/configure/ any program that suits
@@ -3416,11 +3357,6 @@ in the path field and pushing "Remove". Furthermore, the user is offered three d
 medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger search-database
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
-
-<sect>Debugger
-<p>
-The fourth page in the KDevelop Setup dialog offers to choose between the internal debugger or an external like kdbg or ddd. Further,
-you can set various options for the internal debugger.
 
 
 <chapt>Questions and Answers<label id="Questions and Answers">
@@ -3592,10 +3528,6 @@ Jörgen Olsson       <htmlurl url="mailto:jorgen@cenacle.net" name="<jorgen@cenac
 Stefan Bartel 			<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
 <quote/Main development of: Real-File-Viewer/
 
-Walter Tasin				<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
-
-John Birch 					<htmlurl url="mailto:jbb@ihug.co.nz" name="<jbb@ihug.co.nz>">
-
 
 
 <bf>Translation coordination:</bf>
@@ -3610,15 +3542,13 @@ Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>
 
 Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
 
-Peeter Russak 			<htmlurl url="mailto:pezz@tkwcy.ee" name="<pezz@tkwcy.ee>">	            -Estonian
-
 Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
 
 Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
 
 Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
 
-Ralf Funken 				<htmlurl url="mailto:funken.ruk@netcologne.de" name="<funken.ruk@netcologne.de>">  -German (debugger work)
+Ralf Funken    <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger work )
 
 Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
 
@@ -3638,77 +3568,58 @@ Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patri
 
 Kaðan Kongar        <htmlurl url="mailto:kongar@doruk.net.tr" name="<kongar@doruk.net.tr>"> - Turkish
 
-Sunchange Lee 			<htmlurl url="mailto:leesongchen@263.net" name="<leesongchen@263.net>">         -Simpl.Chinese (GB2312)
-
 <bf>Startlogo:</bf>
 
 Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">
-<quote/KDevelop 1.0/
-Ralph Kocher			<htmlurl url="mailto:RKocher@t-online.de" name="<RKocher@t-online.de>">
-<quote/KDevelop 1.1/
 
 
 <bf>Additions, patches and bugfixes:</bf>
 
-Dag Andersen 							<htmlurl url="mailto:dandersen@c2i.net" name="<dandersen@c2i.net>">
+Walter Tasin						<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
 
-David Barth    						<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
+Jost Schenk    					<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
 
-Richard Dale 							<htmlurl url="mailto:Richard_Dale@tipitina.demon.co.uk" name = "<Richard_Dale@tipitina.demon.co.uk>">
+David Barth    					<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
 
-Charles Egan 							<htmlurl url="mailto:cega@oklahoma.net" name="<cega@oklahoma.net>">
+Matthias Hipp						<htmlurl url="mailto:Matthias.Hipp@gmx.de" name = "<Matthias.Hipp@gmx.de>">
 
-Pau Estalella Fernandez 	<htmlurl url="mailto:pef@upcnet.upc.es" name = "<pef@upcnet.upc.es>">
+Martin Piskernig    		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
 
-p_george 									<htmlurl url="mailto:p_george@club-internet.fr" name="<p_george@club-internet.fr>">
+Matthias Hoelzer-Kluepfel    	<htmlurl url="mailto:mh@caldera.de" name = "<mh@caldera.de>">
 
-Matthias Hipp							<htmlurl url="mailto:Matthias.Hipp@gmx.de" name = "<Matthias.Hipp@gmx.de>">
+Steen Rabol    					<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">
 
-Matthias Hoelzer-Kluepfel <htmlurl url="mailto:mh@caldera.de" name = "<mh@caldera.de>">
+Matt Koss 							<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
 
-Nich Hudson 							<htmlurl url="mailto:nick@nthcliff.demon.co.uk" name = "<nick@nthcliff.demon.co.uk>">
+Jochen Wilhelmy 				<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
 
-Matt Koss 								<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
+Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
 
-Nikolay Liber           	<htmlurl url="mailto:nikolay_liber@mail.ru" name="<nikolay_liber@mail.ru>">
+Stefan Mars             <htmlurl url="mailto:mars@lysator.liu.se" name="<mars@lysator.liu.se>">
 
-Lubos Lunak 							<htmlurl url="mailto:l.lunak@sh.cvut.cz" name="<l.lunak@sh.cvut.cz>">
+Nikolay Liber           <htmlurl url="mailto:nikolay_liber@mail.ru" name="<nikolay_liber@mail.ru>">
 
-Stefan Mars             	<htmlurl url="mailto:mars@lysator.liu.se" name="<mars@lysator.liu.se>">
+Gordon Tyler            <htmlurl url="maito:gtyler@iafrica.com" name="<gtyler@iafrica.com>">
 
-Alexis Mikhailov 					<htmlurl url="mailto:alexis@abc.cap.ru" name = "<alexis@abc.cap.ru>">
+Huy Cuong Nguyen        <htmlurl url="maito:huyc@iquebec.com" name="<huyc@iquebec.com>">
 
-Ulltveit-Moe 							<htmlurl url="mailto:Nils.Ulltveit-Moe@hia.no" name = "<Nils.Ulltveit-Moe@hia.no>">
+John R. Zedlewski       <htmlurl url="mailto:zedlwski@princeton.edu" name="<zedlwski@princeton.edu>">
 
-Andrew Morton 						<htmlurl url="mailto:morton@nortelnetworks.com" name="<morton@nortelnetworks.com>">
+Stephan Uhlmann <htmlurl url="mailto:suhlmann@gmx.de" name="<suhlmann@gmx.de>"> 
 
-Huy Cuong Nguyen        	<htmlurl url="maito:huyc@iquebec.com" name="<huyc@iquebec.com>">
+Charles Egan <htmlurl url="mailto:cega@oklahoma.net" name="<cega@oklahoma.net>"> 
 
-Ralf Palsa 								<htmlurl url="mailto:rpalsa@eso.org" name="<rpalsa@eso.org>">
+Andrew Morton <htmlurl url="mailto:morton@nortelnetworks.com" name="<morton@nortelnetworks.com>"> 
 
-Martin Piskernig    			<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
+p_george <htmlurl url="mailto:p_george@club-internet.fr" name="<p_george@club-internet.fr>">
 
-Steen Rabol    						<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">
+Lubos Lunak <htmlurl url="mailto:l.lunak@sh.cvut.cz" name="<l.lunak@sh.cvut.cz>"> 
 
-Jost Schenk    						<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
+Armin L. Schneider <htmlurl url="mailto:armin@uumail.de.uu.net" name="<armin@uumail.de.uu.net>"> 
 
-Armin L. Schneider 				<htmlurl url="mailto:armin@uumail.de.uu.net" name = "<armin@uumail.de.uu.net>">
+Martin Spirk <htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 
 
-Holger Schurig 						<htmlurl url="mailto:holger@holger.om.org" name = "<holger@holger.om.org>">
-
-Martin Spirk 							<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>">
-
-Gordon Tyler            	<htmlurl url="maito:gtyler@iafrica.com" name="<gtyler@iafrica.com>">
-
-Stephan Uhlmann 					<htmlurl url="mailto:suhlmann@gmx.de" name="<suhlmann@gmx.de>">
-
-Torsten Uhlmann 					<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
-
-Jochen Wilhelmy 					<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
-
-John R. Zedlewski       	<htmlurl url="mailto:zedlwski@princeton.edu" name="<zedlwski@princeton.edu>">
-
-
+Ralf Palsa <htmlurl url="mailto:rpalsa@eso.org" name="<rpalsa@eso.org>"> 
 
 
 <bf>KDevelop contains sourcecode from the following applications:</bf>
@@ -3726,7 +3637,7 @@ name="<hoelzer@physik.uni-wuerzburg.de>">
 <chapt>Thanks
 <p>
 We like to express special thanks to all of our family members and friends who supported us in several ways to let us construct
-and improve KDevelop as well as all users and participants who shared their experience and knowledge to improve KDevelop.
+and improve KDevelop.
 
 Further, we thank  Jochen Wilhelmy  for offering his program kwrite and his help on integrating it into KDevelop.
 
