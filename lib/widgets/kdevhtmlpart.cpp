@@ -143,7 +143,20 @@ void KDevHTMLPart::popup( const QString & url, const QPoint & p )
 
   if (r == idNewWindow)
   {
-    KURL kurl (KDevHTMLPart::url().upURL().url(true)+url);
+    KURL kurl;
+    if (!KURL(url).path().startsWith("/"))
+    {
+        kdDebug() << "processing relative url: " << url << endl;
+        if (url.startsWith("#"))
+        {
+            kurl = KURL(KDevHTMLPart::url());
+            kurl.setRef(url.mid(1));
+        }
+        else
+            kurl = KURL(KDevHTMLPart::url().upURL().url(true)+url);
+    }
+    else
+        kurl = KURL(url);
 //    kurl.addPath(url);
     if (kurl.isValid())
         slotOpenInNewWindow(kurl);
