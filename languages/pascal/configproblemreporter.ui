@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ConfigureProblemReporter</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>390</width>
-            <height>304</height>
+            <height>306</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,13 +19,15 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>bgParserCheckbox</cstring>
             </property>
             <property name="text">
-                <string>Enable background parsing</string>
+                <string>&amp;Enable background parsing</string>
+            </property>
+            <property name="accel">
+                <string>Alt+E</string>
             </property>
         </widget>
         <widget class="QSlider">
@@ -45,7 +47,7 @@
                 <enum>Horizontal</enum>
             </property>
             <property name="tickmarks">
-                <enum>Right</enum>
+                <enum>NoMarks</enum>
             </property>
             <property name="tickInterval">
                 <number>250</number>
@@ -79,15 +81,14 @@
     </connection>
 </connections>
 <includes>
-    <include location="local" impldecl="in implementation">configproblemreporter.ui.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <slots>
     <slot>init()</slot>
     <slot>destroy()</slot>
     <slot>accept()</slot>
     <slot>bgParserCheckbox_toggled( bool b )</slot>
 </slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

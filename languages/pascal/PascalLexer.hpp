@@ -1,7 +1,7 @@
 #ifndef INC_PascalLexer_hpp_
 #define INC_PascalLexer_hpp_
 
-#line 20 "pascal.g"
+#line 28 "pascal.g"
 
         #include "problemreporter.h"
         #include "PascalAST.hpp"
@@ -25,7 +25,7 @@
 #include <antlr/CharScanner.hpp>
 class PascalLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public PascalTokenTypes
 {
-#line 675 "pascal.g"
+#line 1026 "pascal.g"
 
 private:
         ProblemReporter* m_problemReporter;
@@ -94,6 +94,10 @@ public:
 	public: void mDOT(bool _createToken);
 	public: void mLCURLY(bool _createToken);
 	public: void mRCURLY(bool _createToken);
+	public: void mPLUSEQ(bool _createToken);
+	public: void mMINUSEQ(bool _createToken);
+	public: void mSTAREQ(bool _createToken);
+	public: void mSLASHQE(bool _createToken);
 	public: void mWS(bool _createToken);
 	public: void mCOMMENT_1(bool _createToken);
 	public: void mCOMMENT_2(bool _createToken);

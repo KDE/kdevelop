@@ -14,7 +14,15 @@
 // construction, and some tree walkers.
 //
 //
-// Adapted to KDevelop by Alexander Dymo <cloudtemple@mksat.net>
+// Turbo Pascal, Free Pascal and Delphi pascal extensions
+// by Alexander Dymo <cloudtemple@mksat.net>
+//
+//
+// Adapted from,
+// Free Pascal: Reference Guide 1.9 April 2002
+//
+//
+// KDevelop 3.0 support by Alexander Dymo <cloudtemple@mksat.net>
 //
 
 header "pre_include_hpp" {
@@ -112,227 +120,119 @@ public:
         }
 }
 
+compilationUnit
+    : program
+    | library
+    | unit
+    ;
 
 program
-    : programHeading (INTERFACE!)?
+    : programHeading
+      (usesClause)?
       block
       DOT!
     ;
 
-programHeading
-    : PROGRAM^ identifier LPAREN! identifierList RPAREN! SEMI!
-    | UNIT^ identifier SEMI!
-	;
+library
+    : LIBRARY^ identifier SEMI!
+      (usesClause)?
+      block
+      exportsClause
+      DOT!
+    ;
 
-identifier
-    : IDENT
+exportsClause
+    : EXPORTS^
+      exportsList
+    ;
+
+exportsList
+    : exportsEntry ( COMMA! exportsEntry )*
+    ;
+
+exportsEntry
+    : identifier ("index" integerConstant)? ("name" stringConstant)?
+    ;
+
+usesClause
+    : USES^ identifierList SEMI!
+    ;
+
+unit
+    : UNIT^ identifier SEMI!
+      interfacePart
+      implementationPart
+      ( (initializationPart (finalizationPart)?) | realizationPart )?
+      END!
+    ;
+
+interfacePart
+    : INTERFACE^
+      (usesClause)?
+    ( constantDeclarationPart
+    | typeDeclarationPart
+    | procedureHeadersPart
+    )*
+    ;
+
+implementationPart
+    : IMPLEMENTATION^
+      (usesClause)?
+      declarationPart
+    ;
+
+realizationPart
+    : BEGIN^ statement ( SEMI! statement )*
+    ;
+
+programHeading
+    : PROGRAM^ identifier (LPAREN! identifierList RPAREN!)? SEMI!
+    ;
+
+initializationPart
+    : INITIALIZATION^
+      statement ( SEMI! statement )*
+    ;
+
+finalizationPart
+    : FINALIZATION^
+      statement ( SEMI! statement )*
     ;
 
 block
-    : ( labelDeclarationPart
-      | constantDefinitionPart
-      | typeDefinitionPart
-      | variableDeclarationPart
-      | procedureAndFunctionDeclarationPart
-      | usesUnitsPart
-      | IMPLEMENTATION
-      )*
-      compoundStatement
+    : declarationPart statementPart
     ;
 
-usesUnitsPart
-    : USES^ identifierList SEMI!
+declarationPart
+    : (labelDeclarationPart
+    | constantDeclarationPart
+    | resourcestringDeclarationPart
+    | typeDeclarationPart
+    | variableDeclarationPart
+    | procedureAndFunctionDeclarationPart
+      )*
     ;
 
 labelDeclarationPart
     : LABEL^ label ( COMMA! label )* SEMI!
     ;
 
-label
-    : unsignedInteger
+constantDeclarationPart
+    : CONST^ ( constantDeclaration | typedConstantDeclaration )+
     ;
 
-constantDefinitionPart
-    : CONST^ constantDefinition ( SEMI! constantDefinition )* SEMI!
+resourcestringDeclarationPart
+    : RESOURCESTRING^ ( stringConstantDeclaration )*
     ;
 
-constantDefinition
-    : identifier EQUAL^ constant
+stringConstantDeclaration
+    : identifier EQUAL! string
     ;
 
-constantChr
-    : CHR^ LPAREN! unsignedInteger RPAREN!
+typeDeclarationPart
+    : TYPE^ ( typeDeclaration )+
     ;
 
-constant
-    : unsignedNumber
-    |! s:sign n:unsignedNumber { #constant=#(s,n); }
-    | identifier
-    |! s2:sign id:identifier { #constant=#(s2,id); }
-    | string
-    | constantChr
-    ;
-
-unsignedNumber
-    : unsignedInteger
-    | unsignedReal
-    ;
-
-unsignedInteger
-    : NUM_INT
-    ;
-
-unsignedReal
-    : NUM_REAL
-    ;
-
-sign
-    : PLUS | MINUS
-    ;
-
-string
-    : STRING_LITERAL
-    ;
-
-typeDefinitionPart
-    : TYPE^ typeDefinition ( SEMI! typeDefinition )* SEMI!
-    ;
-
-//PSPSPS
-typeDefinition
-    : identifier e:EQUAL^ {#e->setType(TYPEDECL);}
-      ( type
-      | functionType 
-//      | FUNCTION^ (formalParameterList)? COLON! resultType
-      | procedureType
-//      | PROCEDURE^ (formalParameterList)?
-      )
-    ;
-
-functionType
-    : FUNCTION^ (formalParameterList)? COLON! resultType
-    ;
-
-procedureType
-    : PROCEDURE^ (formalParameterList)?
-    ;
-
-type
-    : simpleType
-    | structuredType
-    | pointerType
-    ;
-
-simpleType
-    : scalarType
-    | subrangeType
-    | typeIdentifier
-    | stringtype
-    ;
-
-scalarType
-    : LPAREN^ identifierList RPAREN! {#scalarType->setType(SCALARTYPE);}
-    ;
-
-subrangeType
-    : constant DOTDOT^ constant
-    ;
-
-typeIdentifier
-    : identifier
-    | CHAR
-    | BOOLEAN
-    | INTEGER
-    | REAL
-    | STRING // as in return type: FUNCTION ... (...): string;
-    ;
-
-structuredType
-    : PACKED^ unpackedStructuredType
- 	| unpackedStructuredType
-    ;
-
-unpackedStructuredType
-    : arrayType
-    | recordType
-    | setType
-    | fileType
-    ;
-
-stringtype
-    : STRING^ LBRACK! (identifier|unsignedNumber) RBRACK!
-    ;
-
-arrayType
-    : ARRAY^ LBRACK! typeList RBRACK! OF! componentType
-    | ARRAY^ LBRACK2! typeList RBRACK2! OF! componentType
-	;
-
-typeList
-	: indexType ( COMMA! indexType )*
-	  {#typeList = #(#[TYPELIST],#typeList);}
-	;
-
-indexType
-    : simpleType
-    ;
-
-componentType
-    : type
-    ;
-
-recordType
-    : RECORD^ fieldList END!
-    ;
-
-fieldList
-    : (	fixedPart ( SEMI! variantPart | SEMI! )?
-      | variantPart
-      )
-      {#fieldList=#([FIELDLIST],#fieldList);}
-    ;
-
-fixedPart
-    : recordSection ( SEMI! recordSection )*
-    ;
-
-recordSection
-    : identifierList COLON! type
-      {#recordSection = #([FIELD],#recordSection);}
-    ;
-
-variantPart
-    : CASE^ tag OF! variant ( SEMI! variant | SEMI! )*
-    ;
-
-tag!
-    : id:identifier COLON t:typeIdentifier {#tag=#([VARIANT_TAG],id,t);}
-    | t2:typeIdentifier                    {#tag=#([VARIANT_TAG_NO_ID],t2);}
-    ;
-
-variant
-    : constList c:COLON^ {#c->setType(VARIANT_CASE);}
-	  LPAREN! fieldList RPAREN!
-    ;
-
-setType
-    : SET^ OF! baseType
-    ;
-
-baseType
-    : simpleType
-    ;
-
-fileType
-    : FILE^ OF! type
-    | FILE
-    ;
-
-pointerType
-    : POINTER^ typeIdentifier
-    ;
-
-/** Yields a list of VARDECL-rooted subtrees with VAR at the overall root */
 variableDeclarationPart
     : VAR^ variableDeclaration ( SEMI! variableDeclaration )* SEMI!
     ;
@@ -342,219 +242,457 @@ variableDeclaration
     ;
 
 procedureAndFunctionDeclarationPart
-    : procedureOrFunctionDeclaration SEMI!
+    : procedureAndFunctionDeclaration
     ;
 
-procedureOrFunctionDeclaration
+procedureAndFunctionDeclaration
     : procedureDeclaration
     | functionDeclaration
+    | constructorDeclaration
+    | destructorDeclaration
+    ;
+
+statementPart
+    : compoundStatement
     ;
 
 procedureDeclaration
-    : PROCEDURE^ identifier (formalParameterList)? SEMI!
-      block
+    : procedureHeader SEMI! subroutineBlock SEMI!
     ;
 
-formalParameterList
-    : LPAREN^ formalParameterSection ( SEMI! formalParameterSection )* RPAREN!
-   {#formalParameterList->setType(ARGDECLS);}
+procedureHeadersPart
+    : ( procedureHeader | functionHeader ) SEMI! ( callModifiers SEMI! )
     ;
 
-formalParameterSection
-    : parameterGroup
-    | VAR^ parameterGroup
-    | FUNCTION^ parameterGroup
-    | PROCEDURE^ parameterGroup
+procedureHeader
+    : PROCEDURE^ ( identifier | qualifiedMethodIdentifier )
+      formalParameterList SEMI! (modifiers SEMI!)*
     ;
 
-parameterGroup!
-    : ids:identifierList COLON! t:typeIdentifier
-	  {#parameterGroup = #([ARGDECL],ids,t);}
+qualifiedMethodIdentifier
+    : identifier COLON! COLON! identifier
     ;
 
-identifierList
-    : identifier ( COMMA! identifier )*
-	  {#identifierList = #(#[IDLIST],#identifierList);}
-    ;
-
-constList
-    : constant ( COMMA! constant )*
-	  {#constList = #([CONSTLIST],#constList);}
+subroutineBlock
+    : block
+    | externalDirective
+//    | asmBlock
+    | FORWARD!
     ;
 
 functionDeclaration
-    : FUNCTION^ identifier (formalParameterList)? COLON! resultType SEMI!
-      block
+    : functionHeader SEMI! subroutineBlock SEMI!
     ;
 
-resultType
-    : typeIdentifier
+functionHeader
+    : FUNCTION^ ( identifier | qualifiedMethodIdentifier )
+      formalParameterList COLON! type SEMI! (modifiers SEMI!)*
     ;
 
-statement
-    : label COLON^ unlabelledStatement
-    | unlabelledStatement
+formalParameterList
+    : LPAREN! parameterDeclaration ( SEMI! parameterDeclaration ) RPAREN!
     ;
 
-unlabelledStatement
-    : simpleStatement
-    | structuredStatement
+parameterDeclaration
+    : valueParameter
+    | variableParameter
+    | constantParameter
     ;
 
-simpleStatement
-    : assignmentStatement
-    | procedureStatement
-    | gotoStatement
-    | emptyStatement
+valueParameter
+    : (identifierList COLON! ARRAY! OF!)=> identifierList COLON! ARRAY! OF! type
+    | identifierList COLON! type
     ;
 
-assignmentStatement
-    : variable ASSIGN^ expression
+variableParameter
+    : VAR identifierList ( untypedParameterPart )?
     ;
 
-/** A variable is an id with a suffix and can look like:
- *  id
- *  id[expr,...]
- *  id.id
- *  id.id[expr,...]
- *  id^
- *  id^.id
- *  id^.id[expr,...]
- *  ...
- *
- *  LL has a really hard time with this construct as it's naturally
- *  left-recursive.  We have to turn into a simple loop rather than
- *  recursive loop, hence, the suffixes.  I keep in the same rule
- *  for easy tree construction.
- */
-variable
-    : ( AT^ identifier // AT is root of identifier; then other op becomes root
-      | identifier
-      )
-      (	LBRACK^ expression ( COMMA! expression)* RBRACK!
-      | LBRACK2^ expression ( COMMA! expression)* RBRACK2!
-      | DOT^ identifier
-      | POINTER^
-      )*
+untypedParameterPart
+    : (COLON! ARRAY! OF! type)=> COLON! ARRAY! OF! type
+    | COLON! type
     ;
 
-expression
-    : simpleExpression
-	  ( (EQUAL^ | NOT_EQUAL^ | LTH^ | LE^ | GE^ | GT^ | IN^) simpleExpression )*
+constantParameter
+    : CONST identifierList ( untypedParameterPart )?
     ;
 
-simpleExpression
-    : term ( (PLUS^ | MINUS^ | OR^) term )*
+externalDirective
+    : EXTERNAL^ ( stringConstant ( ("name" stringConstant) | ("index" integerConstant) )? )?
     ;
 
-term
-	: signedFactor ( (STAR^ | SLASH^ | DIV^ | MOD^ | AND^) signedFactor )*
+/*asmBlock
+    : ASSEMBLER^ SEMI! declarationPart asmStatement
+    ;
+*/
+modifiers
+    : PUBLIC! | (ALIAS! stringConstant) | INTERRUPT! | callModifiers
     ;
 
-signedFactor
-    : (PLUS^|MINUS^)? factor
+callModifiers
+    : REGISTER! | PASCAL! | CDECL! | STDCALL! | POPSTACK! | SAVEREGISTERS! | INLINE! | SAFECALL! | NEAR! | FAR!
     ;
 
-factor
-    : variable
-    | LPAREN! expression RPAREN!
-    | functionDesignator
-    | unsignedConstant
-    | set
-    | NOT^ factor
+constantDeclaration
+//    : ( identifier EQUAL! expression SEMI! ) ( identifier EQUAL! expression SEMI! )*
+    :  identifier EQUAL! expression SEMI!
     ;
 
-unsignedConstant
-    : unsignedNumber
-    | constantChr         //pspsps added
-    | string
-    | NIL
+typedConstantDeclaration
+//    : ( identifier COLON! type EQUAL! typedConstant SEMI! )+
+    : identifier COLON! type EQUAL! typedConstant SEMI!
     ;
 
-functionDesignator!
-    : id:identifier LPAREN! args:parameterList RPAREN!
-      {#functionDesignator = #([FUNC_CALL],id,args);}
+//FIXME: is there a better way to handle this instead of simply forcing the rules
+typedConstant
+    : (constant)=> constant
+//    | addressConstant
+    | (LPAREN! identifier COLON!)=> recordConstant
+    | (arrayConstant)=> arrayConstant
+    | proceduralConstant
     ;
 
-parameterList
-    : actualParameter ( COMMA! actualParameter )*
-	  {#parameterList = #([ARGLIST],#parameterList);}
+arrayConstant
+    : LPAREN! ( constant | arrayConstant ) ( COMMA! ( constant | arrayConstant ) )* RPAREN!
     ;
 
-set
-    : LBRACK^ elementList RBRACK!   {#set->setType(SET);}
-    | LBRACK2^ elementList RBRACK2! {#set->setType(SET);}
+recordConstant
+    : LPAREN! ( identifier COLON! constant ) ( SEMI! ( identifier COLON! constant ) )* RPAREN!
     ;
 
-elementList
-    : element ( COMMA! element )*
-    |
+addressConstant
+    : NUM_INT
     ;
 
-element
-    : expression ( DOTDOT^ expression )?
-    ;
-
-procedureStatement!
-    : id:identifier ( LPAREN! args:parameterList RPAREN! )?
-      {#procedureStatement = #([PROC_CALL],id,args);}
-    ;
-
-actualParameter
+proceduralConstant
     : expression
     ;
 
+typeDeclaration
+    : identifier EQUAL! type SEMI!
+    ;
+
+type
+//    : simpleType | subrangeType | enumeratedType | stringType | structuredType | pointerType | proceduralType | typeIdentifier
+    : simpleType | subrangeTypeOrTypeIdentifier | enumeratedType | stringType | structuredType | pointerType | proceduralType
+    ;
+
+simpleType
+    : ordinalType | realType
+    ;
+
+ordinalType
+    : INTEGER! | SHORTINT! | SMALLINT! | LONGINT! | INT64! | BYTE! | WORD! | CARDINAL! | QWORD!
+    | BOOLEAN! | BYTEBOOL! | LONGBOOL! | CHAR!
+    ;
+
+subrangeTypeOrTypeIdentifier
+    : constant (DOTDOT! constant)?
+    ;
+
+typeIdentifier
+    : identifier
+    ;
+
+subrangeType
+    : constant DOTDOT! constant
+    ;
+
+enumeratedType
+    : (LPAREN! identifier ASSIGN!)=> LPAREN! assignedEnumList RPAREN!
+    | LPAREN! identifierList RPAREN!
+    ;
+
+assignedEnumList
+    : (identifier ASSIGN! expression) ( COMMA! (identifier ASSIGN! expression) )*
+    ;
+
+realType
+    : REAL! | SINGLE! | DOUBLE! | EXTENDED! | COMP!
+    ;
+
+stringType
+    : STRING^ ( LBRACK! unsignedInteger RBRACK! )?
+    ;
+
+structuredType
+    : (PACKED!)? ( arrayType | recordType | objectType | classType | setType | fileType )
+    ;
+
+arrayType
+    : ARRAY^ LBRACK! ordinalType ( COMMA! ordinalType )* RBRACK! OF! type
+    ;
+
+recordType
+    : RECORD^ (fieldList)* END!
+    ;
+
+fieldList
+    : fixedField | variantPart
+    ;
+
+fixedField
+    : identifierList COLON! type SEMI!
+    ;
+
+variantPart
+    : CASE^ (identifier COLON!)? identifier OF! variant ( SEMI! variant )*
+    ;
+
+variant
+    : (constant COMMA!)+ COLON! LPAREN! (fieldList)* RPAREN!
+    ;
+
+setType
+    : SET^ OF! ordinalType
+    ;
+
+fileType
+    : FILE^ OF! type
+    ;
+
+pointerType
+    : POINTER^ typeIdentifier
+    ;
+
+proceduralType
+    : (proceduralTypePart1 SEMI!)=> proceduralTypePart1 SEMI! callModifiers
+    | proceduralTypePart1
+    ;
+
+proceduralTypePart1
+    : ( functionHeader | procedureHeader ) (OF! OBJECT!)?
+    ;
+
+objectType
+    : OBJECT^ (heritage)? (componentList | objectVisibilitySpecifier ) END!
+    ;
+
+heritage
+    : LPAREN! identifier RPAREN!
+    ;
+
+componentList
+    : ( (fieldDefinition)+ )? ( (methodDefinition)+ )?
+    ;
+
+fieldDefinition
+    : identifierList COLON! type SEMI!
+    ;
+
+methodDefinition
+    : ( functionHeader | procedureHeader | constructorHeader | destructorHeader ) SEMI! methodDirectives
+    ;
+
+methodDirectives
+    : ( VIRTUAL! SEMI! (ABSTRACT! SEMI!)? )? (callModifiers SEMI!)?
+    ;
+
+objectVisibilitySpecifier
+    : PRIVATE! | PROTECTED! | PUBLIC!
+    ;
+
+constructorDeclaration
+    : constructorHeader SEMI! subroutineBlock
+    ;
+
+destructorDeclaration
+    : destructorHeader SEMI! subroutineBlock
+    ;
+
+constructorHeader
+    : CONSTRUCTOR^ ( identifier | qualifiedMethodIdentifier ) formalParameterList
+    ;
+
+destructorHeader
+    : DESTRUCTOR^ ( identifier | qualifiedMethodIdentifier ) formalParameterList
+    ;
+
+classType
+    : CLASS^ (heritage)? (classComponentList | classVisibilitySpecifier ) END!
+    ;
+
+classComponentList
+    : ( (fieldDefinition)+ )? ( ( (classMethodDefinition | propertyDefinition) )+ )?
+    ;
+
+classMethodDefinition
+    : ( ( (CLASS!)? (functionHeader | procedureHeader) ) | constructorHeader | destructorHeader ) SEMI! classMethodDirectives
+    ;
+
+classMethodDirectives
+    : ( directiveVariants SEMI! )? (callModifiers SEMI!)?
+    ;
+
+directiveVariants
+    : ( VIRTUAL! (ABSTRACT! SEMI!)? )
+    | OVERRIDE!
+    | (MESSAGE! (integerConstant | stringConstant))
+    ;
+
+classVisibilitySpecifier
+    : PRIVATE! | PROTECTED! | PUBLIC! | PUBLISHED!
+    ;
+
+propertyDefinition
+    : PROPERTY^ identifier (propertyInterface)? propertySpecifiers
+    ;
+
+propertyInterface
+    : (propertyParameterList)? COLON! typeIdentifier ("index" integerConstant)?
+    ;
+
+propertyParameterList
+    : LBRACK! parameterDeclaration (SEMI! parameterDeclaration)* RBRACK!
+    ;
+
+propertySpecifiers
+    : (readSpecifier)? (writeSpecifier)? (defaultSpecifier)?
+    ;
+
+readSpecifier
+    : "read" fieldOrMethod
+    ;
+
+writeSpecifier
+    : "write" fieldOrMethod
+    ;
+
+defaultSpecifier
+    : ( DEFAULT (constant)? )
+    | "nodefault"
+    ;
+
+fieldOrMethod
+    : identifier
+    ;
+
+expression
+    : simpleExpression ( expressionSign simpleExpression )?
+    ;
+
+expressionSign
+//    : STAR! | LE! | GE! | LTH! | GT! | NOT_EQUAL! | IN! | IS!
+    : LE! | GE! | LTH! | GT! | NOT_EQUAL! | IN! | IS!
+    ;
+
+simpleExpression
+    : term ( ( PLUS! | MINUS! | OR! | XOR! ) term )*
+    ;
+
+term
+    : factor ( (STAR! | SLASH! | DIV! | MOD! | AND! | SHL! | SHR!) factor )*
+    ;
+
+//TODO: destinguish between identifiers, typecasts and function calls -> semantic predicate
+factor
+    : ( LPAREN! expression LPAREN! )
+    | identifierOrValueTypecastOrFunctionCall
+//    | identifier
+//    | functionCall
+    | unsignedConstant
+    | ( NOT! factor )
+    | ( (PLUS! | MINUS!) factor )
+    | setConstructor
+//    | valueTypecast
+    | addressFactor
+    ;
+
+//FIXME: is this correct?
+identifierOrValueTypecastOrFunctionCall
+    : (identifier LPAREN! expression COMMA!)=> identifier LPAREN! expressions RPAREN!
+    | (identifier LPAREN! expression RPAREN!)=> identifier LPAREN! expression RPAREN!
+    | identifier
+    ;
+
+//( functionIdentifier | methodDesignator | qualifiedMethodDesignator | variableReference )
+functionCall
+    : identifier (actualParameterList)?
+    ;
+
+actualParameterList
+    : LPAREN! ( expressions )? RPAREN!
+    ;
+
+expressions
+    : expression ( COMMA! expression )*
+    ;
+
+setConstructor
+    : LBRACK! ( setGroup ( COMMA! setGroup )* )? RBRACK!
+    ;
+
+setGroup
+    : expression ( DOT! DOT! expression )?
+    ;
+
+valueTypecast
+    : typeIdentifier LPAREN! expression RPAREN!
+    ;
+
+//( variableReference | procedureIdentifier | functionIdentifier | qualifiedMethodIdentifier )
+addressFactor
+    : AT! identifier
+    ;
+
+statement
+//    : (label COLON!)? (simpleStatement | structuredStatement | asmStatement)
+    : (label COLON!)? (simpleStatement | structuredStatement)
+    ;
+
+simpleStatement
+    : assignmentStatement | procedureStatement | gotoStatement | raiseStatement
+    ;
+
+assignmentStatement
+    : identifier assignmentOperator expression
+    ;
+
+assignmentOperator
+    : ASSIGN! | PLUSEQ | MINUSEQ | STAREQ | SLASHQE
+    ;
+
+procedureStatement
+    : identifier (actualParameterList)?
+    ;
+
 gotoStatement
-    : GOTO^ label
-    ;
-
-emptyStatement
-    :
-    ;
-
-empty
-    : /* empty */
+    : GOTO! label
     ;
 
 structuredStatement
-    : compoundStatement
-    | conditionalStatement
-    | repetetiveStatement
-    | withStatement
-    ;
-
-compoundStatement
-    : BEGIN!
-		statements
-      END!
-    ;
-
-statements
-    : statement ( SEMI! statement )* {#statements = #([BLOCK],#statements);}
+    : compoundStatement | repetitiveStatement | conditionalStatement | exceptionStatement | withStatement
     ;
 
 conditionalStatement
-    : ifStatement
-    | caseStatement
+    : ifStatement | caseStatement
+    ;
+
+repetitiveStatement
+    : forStatement | repeatStatement | whileStatement
+    ;
+
+compoundStatement
+    : BEGIN! statement ( SEMI! statement )* END!
     ;
 
 ifStatement
     : IF^ expression THEN! statement
       (
-		// CONFLICT: the old "dangling-else" problem...
-		//           ANTLR generates proper code matching
-		//			 as soon as possible.  Hush warning.
-		options {
-			generateAmbigWarnings=false;
-		}
-		: ELSE! statement
-	  )?
+        // CONFLICT: the old "dangling-else" problem...
+        //           ANTLR generates proper code matching
+        //           as soon as possible.  Hush warning.
+        options {
+            generateAmbigWarnings=false;
+        }
+        : ELSE! statement
+      )?
     ;
 
-caseStatement //pspsps ???
+caseStatement
     : CASE^ expression OF!
         caseListElement ( SEMI! caseListElement )*
-      ( SEMI! ELSE! statements )?
+      ( SEMI! ELSE! statement ( SEMI! statement )* )?
       END!
     ;
 
@@ -562,10 +700,9 @@ caseListElement
     : constList COLON^ statement
     ;
 
-repetetiveStatement
-    : whileStatement
-    | repeatStatement
-    | forStatement
+constList
+    : constant ( COMMA! constant )*
+      {#constList = #([CONSTLIST],#constList);}
     ;
 
 whileStatement
@@ -573,7 +710,7 @@ whileStatement
     ;
 
 repeatStatement
-    : REPEAT^ statements UNTIL! expression
+    : REPEAT^ statement ( SEMI! statement )* UNTIL! expression
     ;
 
 forStatement
@@ -600,6 +737,151 @@ recordVariableList
     : variable ( COMMA! variable )*
     ;
 
+/** A variable is an id with a suffix and can look like:
+ *  id
+ *  id[expr,...]
+ *  id.id
+ *  id.id[expr,...]
+ *  id^
+ *  id^.id
+ *  id^.id[expr,...]
+ *  ...
+ *
+ *  LL has a really hard time with this construct as it's naturally
+ *  left-recursive.  We have to turn into a simple loop rather than
+ *  recursive loop, hence, the suffixes.  I keep in the same rule
+ *  for easy tree construction.
+ */
+variable
+    : ( AT^ identifier // AT is root of identifier; then other op becomes root
+      | identifier
+      )
+      ( LBRACK^ expression ( COMMA! expression)* RBRACK!
+      | LBRACK2^ expression ( COMMA! expression)* RBRACK2!
+      | DOT^ identifier
+      | POINTER^
+      )*
+    ;
+
+/*asmStatement
+    : ASM^ assemblerCode END! (registerList)?
+    ;
+
+registerList
+    : LBRACK! stringConstant ( COMMA! stringConstant )*
+    ;
+
+assemblerCode
+    : (.)*
+    ;
+*/
+operatorDefinition
+    : OPERATOR^ ( assignmentOperatorDefinition | arithmeticOperatorDefinition | comparisonOperatorDefinition )
+      identifier COLON! type SEMI! subroutineBlock
+    ;
+
+assignmentOperatorDefinition
+    : ASSIGN! LPAREN! valueParameter RPAREN!
+    ;
+
+arithmeticOperatorDefinition
+    : ( PLUS! | MINUS! | STAR! | SLASH! | (STAR! STAR!) ) LPAREN! formalParameterList RPAREN!
+    ;
+
+comparisonOperatorDefinition
+    : ( EQUAL! | LE! | GE! | GT! | LTH! ) LPAREN! formalParameterList RPAREN!
+    ;
+
+raiseStatement
+    : RAISE^ ( functionCall (AT! addressConstant)? )?
+    ;
+
+exceptionStatement
+    : tryStatement
+    ;
+
+tryStatement
+    : TRY^ statement ( SEMI! statement )* exceptOrFinallyPart END!
+    ;
+
+exceptOrFinallyPart
+    : EXCEPT! (exceptionHandlers)?
+    | FINALLY! (statements)?
+    ;
+
+statements
+    : statement ( SEMI! statement )*
+    ;
+
+exceptionHandlers
+    : statements | exceptionHandler ( SEMI! exceptionHandler )* ( ELSE! statements )?
+    ;
+
+exceptionHandler
+    : ON! (identifier COLON!)? identifier DO! statement
+    ;
+
+identifierList
+    : identifier ( COMMA! identifier )*
+      {#identifierList = #(#[IDLIST],#identifierList);}
+    ;
+
+label
+    : unsignedInteger
+    ;
+
+unsignedInteger
+    : NUM_INT
+    ;
+
+integerConstant
+    : unsignedInteger
+    |! s:sign n:unsignedInteger { #integerConstant=#(s,n); }
+    ;
+
+stringConstant
+    : string | constantChr
+    ;
+
+sign
+    : PLUS | MINUS
+    ;
+
+string
+    : STRING_LITERAL
+    ;
+
+constantChr
+    : CHR^ LPAREN! unsignedInteger RPAREN!
+    ;
+
+constant
+    : unsignedNumber
+    |! s:sign n:unsignedNumber { #constant=#(s,n); }
+    | identifier
+    |! s2:sign id:identifier { #constant=#(s2,id); }
+    | string
+    | constantChr
+    ;
+
+unsignedConstant
+    : unsignedNumber | constantChr | string | NIL!
+    ;
+
+unsignedNumber
+    : unsignedInteger
+    | unsignedReal
+    ;
+
+unsignedReal
+    : NUM_REAL
+    ;
+
+identifier
+    : IDENT
+    ;
+
+
 //----------------------------------------------------------------------------
 // The Pascal scanner
 //----------------------------------------------------------------------------
@@ -616,46 +898,112 @@ options {
 }
 
 tokens {
+  ABSOLUTE         = "absolute"        ;
+  ABSTRACT         = "abstract"        ;
+  ALIAS            = "alias"           ;
   AND              = "and"             ;
   ARRAY            = "array"           ;
+  AS               = "as"              ;
+  ASM              = "asm"             ;
+  ASSEMBLER        = "assembler"       ;
   BEGIN            = "begin"           ;
+  BREAK            = "break"           ;
   BOOLEAN          = "boolean"         ;
+  BYTE             = "byte"            ;
+  CARDINAL         = "cardinal"        ;
   CASE             = "case"            ;
+  CDECL            = "cdecl"           ;
   CHAR             = "char"            ;
   CHR              = "chr"             ;
+  CLASS            = "class"           ;
+  COMP             = "comp"            ;
   CONST            = "const"           ;
+  CONSTRUCTOR      = "constructor"     ;
+  CONTINUE         = "continue"        ;
+  DEFAULT          = "default"         ;
+  DESTRUCTOR       = "destructor"      ;
+  DISPOSE          = "dispose"         ;
   DIV              = "div"             ;
   DO               = "do"              ;
+  DOUBLE           = "double"          ;
   DOWNTO           = "downto"          ;
   ELSE             = "else"            ;
   END              = "end"             ;
+  EXCEPT           = "except"          ;
+  EXPORT           = "export"          ;
+  EXPORTS          = "exports"         ;
+  EXTENDED         = "extended"        ;
+  EXTERNAL         = "external"        ;
+  EXIT             = "exit"            ;
+  FALSE            = "false"           ;
   FILE             = "file"            ;
+  FINALLY          = "finally"         ;
+  FAR              = "far"             ;
   FOR              = "for"             ;
+  FORWARD          = "forward"         ;
   FUNCTION         = "function"        ;
   GOTO             = "goto"            ;
   IF               = "if"              ;
   IN               = "in"              ;
+//  INDEX            = "index"           ;
+  IS               = "is"              ;
+  INHERITED        = "inherited"       ;
+  INLINE           = "inline"          ;
+  INT64            = "int64"           ;
   INTEGER          = "integer"         ;
   LABEL            = "label"           ;
+  LIBRARY          = "library"         ;
+  LONGINT          = "longint"         ;
   MOD              = "mod"             ;
+//  NAME             = "name"            ;
+  NEAR             = "near"            ;
+  NEW              = "new"             ;
   NIL              = "nil"             ;
   NOT              = "not"             ;
+  OBJECT           = "object"          ;
   OF               = "of"              ;
+  ON               = "on"              ;
+  OPERATOR         = "operator"        ;
   OR               = "or"              ;
+  OVERRIDE         = "override"        ;
   PACKED           = "packed"          ;
+  PASCAL           = "pascal"          ;
+  POPSTACK         = "popstack"        ;
+  PRIVATE          = "private"         ;
   PROCEDURE        = "procedure"       ;
+  PROTECTED        = "protected"       ;
   PROGRAM          = "program"         ;
+  PROPERTY         = "property"        ;
+  PUBLIC           = "public"          ;
+  PUBLISHED        = "published"       ;
+  QWORD            = "qword"           ;
+  RAISE            = "raise"           ;
   REAL             = "real"            ;
   RECORD           = "record"          ;
+  REGISTER         = "register"        ;
   REPEAT           = "repeat"          ;
+  SAFECALL         = "safecall"        ;
+  SAVEREGISTERS    = "saveregisters"   ;
+  SELF             = "self"            ;
   SET              = "set"             ;
+  SHORTINT         = "shortint"        ;
+  SHR              = "shr"             ;
+  SHL              = "shl"             ;
+  SINGLE           = "single"          ;
+  SMALLINT         = "smallint"        ;
+  STDCALL          = "stdcall"         ;
   THEN             = "then"            ;
   TO               = "to"              ;
+  TRUE             = "true"            ;
+  TRY              = "try"             ;
   TYPE             = "type"            ;
   UNTIL            = "until"           ;
   VAR              = "var"             ;
+  VIRTUAL          = "virtual"         ;
   WHILE            = "while"           ;
   WITH             = "with"            ;
+  WORD             = "word"            ;
+  XOR              = "xor"             ;
   METHOD                               ;
   ADDSUBOR                             ;
   ASSIGNEQUAL                          ;
@@ -669,6 +1017,9 @@ tokens {
   USES             = "uses"            ;
   STRING           = "string"          ;
   IMPLEMENTATION   = "implementation"  ;
+  FINALIZATION     = "finalization"    ;
+  INITIALIZATION   = "initialization"  ;
+  RESOURCESTRING   = "resourcestring"  ;
 //pspsps ???
 }
 
@@ -732,6 +1083,10 @@ AT              : '@'   ;
 DOT             : '.' ('.' {$setType(DOTDOT);})?  ;
 LCURLY          : "{" ;
 RCURLY          : "}" ;
+PLUSEQ          : "+=" ;
+MINUSEQ         : "-=" ;
+STAREQ          : "*=" ;
+SLASHQE         : "/=" ;
 
 
 // Whitespace -- ignored

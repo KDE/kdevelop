@@ -1,7 +1,7 @@
 #ifndef INC_PascalParser_hpp_
 #define INC_PascalParser_hpp_
 
-#line 20 "pascal.g"
+#line 28 "pascal.g"
 
         #include "problemreporter.h"
         #include "PascalAST.hpp"
@@ -25,7 +25,7 @@
 
 class PascalParser : public ANTLR_USE_NAMESPACE(antlr)LLkParser, public PascalTokenTypes
 {
-#line 81 "pascal.g"
+#line 89 "pascal.g"
 
 private:
         unsigned int m_numberOfErrors;
@@ -83,98 +83,163 @@ public:
 	{
 		return PascalParser::tokenNames;
 	}
+	public: void compilationUnit();
 	public: void program();
+	public: void library();
+	public: void unit();
 	public: void programHeading();
+	public: void usesClause();
 	public: void block();
 	public: void identifier();
+	public: void exportsClause();
+	public: void exportsList();
+	public: void exportsEntry();
+	public: void integerConstant();
+	public: void stringConstant();
 	public: void identifierList();
+	public: void interfacePart();
+	public: void implementationPart();
+	public: void initializationPart();
+	public: void finalizationPart();
+	public: void realizationPart();
+	public: void constantDeclarationPart();
+	public: void typeDeclarationPart();
+	public: void procedureHeadersPart();
+	public: void declarationPart();
+	public: void statement();
+	public: void statementPart();
 	public: void labelDeclarationPart();
-	public: void constantDefinitionPart();
-	public: void typeDefinitionPart();
+	public: void resourcestringDeclarationPart();
 	public: void variableDeclarationPart();
 	public: void procedureAndFunctionDeclarationPart();
-	public: void usesUnitsPart();
-	public: void compoundStatement();
 	public: void label();
-	public: void unsignedInteger();
-	public: void constantDefinition();
-	public: void constant();
-	public: void constantChr();
-	public: void unsignedNumber();
-	public: void sign();
+	public: void constantDeclaration();
+	public: void typedConstantDeclaration();
+	public: void stringConstantDeclaration();
 	public: void string();
-	public: void unsignedReal();
-	public: void typeDefinition();
-	public: void type();
-	public: void functionType();
-	public: void procedureType();
-	public: void formalParameterList();
-	public: void resultType();
-	public: void simpleType();
-	public: void structuredType();
-	public: void pointerType();
-	public: void scalarType();
-	public: void subrangeType();
-	public: void typeIdentifier();
-	public: void stringtype();
-	public: void unpackedStructuredType();
-	public: void arrayType();
-	public: void recordType();
-	public: void setType();
-	public: void fileType();
-	public: void typeList();
-	public: void componentType();
-	public: void indexType();
-	public: void fieldList();
-	public: void fixedPart();
-	public: void variantPart();
-	public: void recordSection();
-	public: void tag();
-	public: void variant();
-	public: void constList();
-	public: void baseType();
+	public: void typeDeclaration();
 	public: void variableDeclaration();
-	public: void procedureOrFunctionDeclaration();
+	public: void type();
+	public: void procedureAndFunctionDeclaration();
 	public: void procedureDeclaration();
 	public: void functionDeclaration();
-	public: void formalParameterSection();
-	public: void parameterGroup();
-	public: void statement();
-	public: void unlabelledStatement();
+	public: void constructorDeclaration();
+	public: void destructorDeclaration();
+	public: void compoundStatement();
+	public: void procedureHeader();
+	public: void subroutineBlock();
+	public: void functionHeader();
+	public: void callModifiers();
+	public: void qualifiedMethodIdentifier();
+	public: void formalParameterList();
+	public: void modifiers();
+	public: void externalDirective();
+	public: void parameterDeclaration();
+	public: void valueParameter();
+	public: void variableParameter();
+	public: void constantParameter();
+	public: void untypedParameterPart();
+	public: void expression();
+	public: void typedConstant();
+	public: void constant();
+	public: void recordConstant();
+	public: void arrayConstant();
+	public: void proceduralConstant();
+	public: void addressConstant();
+	public: void simpleType();
+	public: void subrangeTypeOrTypeIdentifier();
+	public: void enumeratedType();
+	public: void stringType();
+	public: void structuredType();
+	public: void pointerType();
+	public: void proceduralType();
+	public: void ordinalType();
+	public: void realType();
+	public: void typeIdentifier();
+	public: void subrangeType();
+	public: void assignedEnumList();
+	public: void unsignedInteger();
+	public: void arrayType();
+	public: void recordType();
+	public: void objectType();
+	public: void classType();
+	public: void setType();
+	public: void fileType();
+	public: void fieldList();
+	public: void fixedField();
+	public: void variantPart();
+	public: void variant();
+	public: void proceduralTypePart1();
+	public: void heritage();
+	public: void componentList();
+	public: void objectVisibilitySpecifier();
+	public: void fieldDefinition();
+	public: void methodDefinition();
+	public: void constructorHeader();
+	public: void destructorHeader();
+	public: void methodDirectives();
+	public: void classComponentList();
+	public: void classVisibilitySpecifier();
+	public: void classMethodDefinition();
+	public: void propertyDefinition();
+	public: void classMethodDirectives();
+	public: void directiveVariants();
+	public: void propertyInterface();
+	public: void propertySpecifiers();
+	public: void propertyParameterList();
+	public: void readSpecifier();
+	public: void writeSpecifier();
+	public: void defaultSpecifier();
+	public: void fieldOrMethod();
+	public: void simpleExpression();
+	public: void expressionSign();
+	public: void term();
+	public: void factor();
+	public: void identifierOrValueTypecastOrFunctionCall();
+	public: void unsignedConstant();
+	public: void setConstructor();
+	public: void addressFactor();
+	public: void expressions();
+	public: void functionCall();
+	public: void actualParameterList();
+	public: void setGroup();
+	public: void valueTypecast();
 	public: void simpleStatement();
 	public: void structuredStatement();
 	public: void assignmentStatement();
 	public: void procedureStatement();
 	public: void gotoStatement();
-	public: void emptyStatement();
-	public: void variable();
-	public: void expression();
-	public: void simpleExpression();
-	public: void term();
-	public: void signedFactor();
-	public: void factor();
-	public: void functionDesignator();
-	public: void unsignedConstant();
-	public: void set();
-	public: void parameterList();
-	public: void actualParameter();
-	public: void elementList();
-	public: void element();
-	public: void empty();
+	public: void raiseStatement();
+	public: void assignmentOperator();
+	public: void repetitiveStatement();
 	public: void conditionalStatement();
-	public: void repetetiveStatement();
+	public: void exceptionStatement();
 	public: void withStatement();
-	public: void statements();
 	public: void ifStatement();
 	public: void caseStatement();
-	public: void caseListElement();
-	public: void whileStatement();
-	public: void repeatStatement();
 	public: void forStatement();
+	public: void repeatStatement();
+	public: void whileStatement();
+	public: void caseListElement();
+	public: void constList();
 	public: void forList();
 	public: void initialValue();
 	public: void finalValue();
 	public: void recordVariableList();
+	public: void variable();
+	public: void operatorDefinition();
+	public: void assignmentOperatorDefinition();
+	public: void arithmeticOperatorDefinition();
+	public: void comparisonOperatorDefinition();
+	public: void tryStatement();
+	public: void exceptOrFinallyPart();
+	public: void exceptionHandlers();
+	public: void statements();
+	public: void exceptionHandler();
+	public: void sign();
+	public: void constantChr();
+	public: void unsignedNumber();
+	public: void unsignedReal();
 public:
 	RefPascalAST getAST();
 	
@@ -183,10 +248,10 @@ protected:
 private:
 	static const char* tokenNames[];
 #ifndef NO_STATIC_CONSTS
-	static const int NUM_TOKENS = 109;
+	static const int NUM_TOKENS = 189;
 #else
 	enum {
-		NUM_TOKENS = 109
+		NUM_TOKENS = 189
 	};
 #endif
 	
@@ -278,6 +343,62 @@ private:
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_42;
 	static const unsigned long _tokenSet_43_data_[];
 	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_43;
+	static const unsigned long _tokenSet_44_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_44;
+	static const unsigned long _tokenSet_45_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_45;
+	static const unsigned long _tokenSet_46_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_46;
+	static const unsigned long _tokenSet_47_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_47;
+	static const unsigned long _tokenSet_48_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_48;
+	static const unsigned long _tokenSet_49_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_49;
+	static const unsigned long _tokenSet_50_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_50;
+	static const unsigned long _tokenSet_51_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_51;
+	static const unsigned long _tokenSet_52_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_52;
+	static const unsigned long _tokenSet_53_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_53;
+	static const unsigned long _tokenSet_54_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_54;
+	static const unsigned long _tokenSet_55_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_55;
+	static const unsigned long _tokenSet_56_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_56;
+	static const unsigned long _tokenSet_57_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_57;
+	static const unsigned long _tokenSet_58_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_58;
+	static const unsigned long _tokenSet_59_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_59;
+	static const unsigned long _tokenSet_60_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_60;
+	static const unsigned long _tokenSet_61_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_61;
+	static const unsigned long _tokenSet_62_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_62;
+	static const unsigned long _tokenSet_63_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_63;
+	static const unsigned long _tokenSet_64_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_64;
+	static const unsigned long _tokenSet_65_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_65;
+	static const unsigned long _tokenSet_66_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_66;
+	static const unsigned long _tokenSet_67_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_67;
+	static const unsigned long _tokenSet_68_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_68;
+	static const unsigned long _tokenSet_69_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_69;
+	static const unsigned long _tokenSet_70_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_70;
+	static const unsigned long _tokenSet_71_data_[];
+	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_71;
 };
 
 #endif /*INC_PascalParser_hpp_*/

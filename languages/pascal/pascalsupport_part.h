@@ -29,6 +29,9 @@ public:
     virtual Features features();
     virtual KMimeType::List mimeTypes();
 
+    virtual QString formatTag( const Tag& tag );
+    virtual QString formatModelItem( const CodeModelItem *item, bool shortDescription=false );
+    
 private slots:
     void projectOpened();
     void projectClosed();

@@ -30,51 +30,123 @@ PascalLexer::PascalLexer(const ANTLR_USE_NAMESPACE(antlr)LexerSharedInputState& 
 
 void PascalLexer::initLiterals()
 {
-	literals["type"] = 42;
-	literals["case"] = 61;
-	literals["while"] = 87;
-	literals["repeat"] = 89;
-	literals["end"] = 60;
-	literals["integer"] = 49;
-	literals["then"] = 85;
-	literals["program"] = 24;
-	literals["implementation"] = 30;
-	literals["until"] = 90;
-	literals["to"] = 92;
-	literals["and"] = 79;
-	literals["const"] = 34;
-	literals["not"] = 80;
-	literals["var"] = 65;
-	literals["real"] = 50;
-	literals["mod"] = 78;
-	literals["packed"] = 52;
-	literals["do"] = 88;
-	literals["function"] = 43;
-	literals["with"] = 94;
-	literals["set"] = 62;
-	literals["interface"] = 22;
-	literals["of"] = 56;
-	literals["array"] = 55;
-	literals["file"] = 63;
-	literals["or"] = 74;
-	literals["if"] = 84;
-	literals["record"] = 59;
-	literals["chr"] = 36;
-	literals["goto"] = 82;
-	literals["for"] = 91;
-	literals["unit"] = 28;
-	literals["boolean"] = 48;
-	literals["label"] = 32;
-	literals["char"] = 47;
-	literals["string"] = 51;
-	literals["downto"] = 93;
-	literals["begin"] = 83;
-	literals["else"] = 86;
-	literals["uses"] = 31;
-	literals["in"] = 73;
-	literals["procedure"] = 45;
-	literals["nil"] = 81;
-	literals["div"] = 77;
+	literals["until"] = 143;
+	literals["xor"] = 122;
+	literals["abstract"] = 98;
+	literals["shortint"] = 68;
+	literals["with"] = 147;
+	literals["packed"] = 90;
+	literals["inherited"] = 171;
+	literals["break"] = 165;
+	literals["smallint"] = 69;
+	literals["safecall"] = 63;
+	literals["constructor"] = 101;
+	literals["continue"] = 166;
+	literals["uses"] = 29;
+	literals["for"] = 144;
+	literals["else"] = 139;
+	literals["is"] = 118;
+	literals["of"] = 51;
+	literals["and"] = 127;
+	literals["integer"] = 67;
+	literals["byte"] = 72;
+	literals["nil"] = 158;
+	literals["begin"] = 34;
+	literals["interface"] = 32;
+	literals["as"] = 162;
+	literals["div"] = 125;
+	literals["write"] = 109;
+	literals["qword"] = 75;
+	literals["procedure"] = 47;
+	literals["shl"] = 128;
+	literals["var"] = 45;
+	literals["private"] = 99;
+	literals["function"] = 49;
+	literals["unit"] = 30;
+	literals["downto"] = 146;
+	literals["name"] = 28;
+	literals["resourcestring"] = 42;
+	literals["register"] = 56;
+	literals["popstack"] = 60;
+	literals["label"] = 40;
+	literals["try"] = 152;
+	literals["raise"] = 151;
+	literals["not"] = 130;
+	literals["record"] = 91;
+	literals["forward"] = 48;
+	literals["in"] = 117;
+	literals["except"] = 153;
+	literals["file"] = 94;
+	literals["operator"] = 150;
+	literals["pascal"] = 57;
+	literals["finalization"] = 39;
+	literals["cdecl"] = 58;
+	literals["extended"] = 85;
+	literals["external"] = 52;
+	literals["destructor"] = 102;
+	literals["real"] = 82;
+	literals["virtual"] = 97;
+	literals["chr"] = 157;
+	literals["near"] = 64;
+	literals["object"] = 96;
+	literals["public"] = 53;
+	literals["repeat"] = 142;
+	literals["library"] = 23;
+	literals["false"] = 170;
+	literals["longint"] = 70;
+	literals["saveregisters"] = 61;
+	literals["to"] = 145;
+	literals["asm"] = 163;
+	literals["case"] = 92;
+	literals["export"] = 168;
+	literals["true"] = 174;
+	literals["do"] = 141;
+	literals["stdcall"] = 59;
+	literals["program"] = 35;
+	literals["absolute"] = 161;
+	literals["override"] = 104;
+	literals["then"] = 138;
+	literals["set"] = 93;
+	literals["protected"] = 100;
+	literals["or"] = 121;
+	literals["word"] = 73;
+	literals["finally"] = 154;
+	literals["char"] = 79;
+	literals["if"] = 137;
+	literals["far"] = 65;
+	literals["const"] = 41;
+	literals["index"] = 27;
+	literals["assembler"] = 164;
+	literals["cardinal"] = 74;
+	literals["string"] = 87;
+	literals["dispose"] = 167;
+	literals["read"] = 108;
+	literals["default"] = 110;
+	literals["new"] = 172;
+	literals["array"] = 50;
+	literals["self"] = 173;
+	literals["end"] = 31;
+	literals["single"] = 83;
+	literals["property"] = 107;
+	literals["mod"] = 126;
+	literals["goto"] = 136;
+	literals["on"] = 155;
+	literals["comp"] = 86;
+	literals["initialization"] = 38;
+	literals["class"] = 103;
+	literals["int64"] = 71;
+	literals["published"] = 106;
+	literals["nodefault"] = 111;
+	literals["inline"] = 62;
+	literals["while"] = 140;
+	literals["boolean"] = 76;
+	literals["type"] = 44;
+	literals["double"] = 84;
+	literals["implementation"] = 33;
+	literals["exports"] = 25;
+	literals["alias"] = 54;
+	literals["exit"] = 169;
+	literals["shr"] = 129;
 }
 
 ANTLR_USE_NAMESPACE(antlr)RefToken PascalLexer::nextToken()
@@ -86,30 +158,6 @@ ANTLR_USE_NAMESPACE(antlr)RefToken PascalLexer::nextToken()
 		resetText();
 		try {   // for lexical and char stream error handling
 			switch ( LA(1)) {
-			case static_cast<unsigned char>('+'):
-			{
-				mPLUS(true);
-				theRetToken=_returnToken;
-				break;
-			}
-			case static_cast<unsigned char>('-'):
-			{
-				mMINUS(true);
-				theRetToken=_returnToken;
-				break;
-			}
-			case static_cast<unsigned char>('*'):
-			{
-				mSTAR(true);
-				theRetToken=_returnToken;
-				break;
-			}
-			case static_cast<unsigned char>('/'):
-			{
-				mSLASH(true);
-				theRetToken=_returnToken;
-				break;
-			}
 			case static_cast<unsigned char>(','):
 			{
 				mCOMMA(true);
@@ -251,12 +299,44 @@ ANTLR_USE_NAMESPACE(antlr)RefToken PascalLexer::nextToken()
 					mRBRACK2(true);
 					theRetToken=_returnToken;
 				}
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (LA(2) == static_cast<unsigned char>('='))) {
+					mPLUSEQ(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (LA(2) == static_cast<unsigned char>('='))) {
+					mMINUSEQ(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('*')) && (LA(2) == static_cast<unsigned char>('='))) {
+					mSTAREQ(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (LA(2) == static_cast<unsigned char>('='))) {
+					mSLASHQE(true);
+					theRetToken=_returnToken;
+				}
 				else if ((LA(1) == static_cast<unsigned char>('(')) && (LA(2) == static_cast<unsigned char>('*'))) {
 					mCOMMENT_1(true);
 					theRetToken=_returnToken;
 				}
 				else if ((LA(1) == static_cast<unsigned char>('{')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377')))) {
 					mCOMMENT_2(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('+')) && (true)) {
+					mPLUS(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('-')) && (true)) {
+					mMINUS(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('*')) && (true)) {
+					mSTAR(true);
+					theRetToken=_returnToken;
+				}
+				else if ((LA(1) == static_cast<unsigned char>('/')) && (true)) {
+					mSLASH(true);
 					theRetToken=_returnToken;
 				}
 				else if ((LA(1) == static_cast<unsigned char>(':')) && (true)) {
@@ -629,9 +709,9 @@ void PascalLexer::mDOT(bool _createToken) {
 	{
 	if ((LA(1) == static_cast<unsigned char>('.'))) {
 		match(static_cast<unsigned char>('.'));
-#line 732 "pascal.g"
+#line 1083 "pascal.g"
 		_ttype = DOTDOT;
-#line 635 "PascalLexer.cpp"
+#line 715 "PascalLexer.cpp"
 	}
 	else {
 	}
@@ -665,6 +745,62 @@ void PascalLexer::mRCURLY(bool _createToken) {
 	int _saveIndex;
 	
 	match("}");
+	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
+	   _token = makeToken(_ttype);
+	   _token->setText(text.substr(_begin, text.length()-_begin));
+	}
+	_returnToken = _token;
+	_saveIndex=0;
+}
+
+void PascalLexer::mPLUSEQ(bool _createToken) {
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	_ttype = PLUSEQ;
+	int _saveIndex;
+	
+	match("+=");
+	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
+	   _token = makeToken(_ttype);
+	   _token->setText(text.substr(_begin, text.length()-_begin));
+	}
+	_returnToken = _token;
+	_saveIndex=0;
+}
+
+void PascalLexer::mMINUSEQ(bool _createToken) {
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	_ttype = MINUSEQ;
+	int _saveIndex;
+	
+	match("-=");
+	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
+	   _token = makeToken(_ttype);
+	   _token->setText(text.substr(_begin, text.length()-_begin));
+	}
+	_returnToken = _token;
+	_saveIndex=0;
+}
+
+void PascalLexer::mSTAREQ(bool _createToken) {
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	_ttype = STAREQ;
+	int _saveIndex;
+	
+	match("*=");
+	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
+	   _token = makeToken(_ttype);
+	   _token->setText(text.substr(_begin, text.length()-_begin));
+	}
+	_returnToken = _token;
+	_saveIndex=0;
+}
+
+void PascalLexer::mSLASHQE(bool _createToken) {
+	int _ttype; ANTLR_USE_NAMESPACE(antlr)RefToken _token; int _begin=text.length();
+	_ttype = SLASHQE;
+	int _saveIndex;
+	
+	match("/=");
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -713,9 +849,9 @@ void PascalLexer::mWS(bool _createToken) {
 		}
 		
 		}
-#line 746 "pascal.g"
+#line 1101 "pascal.g"
 		newline();
-#line 719 "PascalLexer.cpp"
+#line 855 "PascalLexer.cpp"
 		break;
 	}
 	default:
@@ -724,9 +860,9 @@ void PascalLexer::mWS(bool _createToken) {
 	}
 	}
 	}
-#line 748 "pascal.g"
+#line 1103 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
-#line 730 "PascalLexer.cpp"
+#line 866 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -746,24 +882,24 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && ((LA(4) >= static_cast<unsigned char>('\0') && LA(4) <= static_cast<unsigned char>('\377')))) {
 			match(static_cast<unsigned char>('\r'));
 			match(static_cast<unsigned char>('\n'));
-#line 756 "pascal.g"
+#line 1111 "pascal.g"
 			newline();
-#line 752 "PascalLexer.cpp"
+#line 888 "PascalLexer.cpp"
 		}
 		else if (((LA(1) == static_cast<unsigned char>('*')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))))&&( LA(2) != ')' )) {
 			match(static_cast<unsigned char>('*'));
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
 			match(static_cast<unsigned char>('\r'));
-#line 757 "pascal.g"
+#line 1112 "pascal.g"
 			newline();
-#line 761 "PascalLexer.cpp"
+#line 897 "PascalLexer.cpp"
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
 			match(static_cast<unsigned char>('\n'));
-#line 758 "pascal.g"
+#line 1113 "pascal.g"
 			newline();
-#line 767 "PascalLexer.cpp"
+#line 903 "PascalLexer.cpp"
 		}
 		else if ((_tokenSet_0.member(LA(1)))) {
 			{
@@ -771,16 +907,16 @@ void PascalLexer::mCOMMENT_1(bool _createToken) {
 			}
 		}
 		else {
-			goto _loop188;
+			goto _loop394;
 		}
 		
 	}
-	_loop188:;
+	_loop394:;
 	} // ( ... )*
 	match("*)");
-#line 762 "pascal.g"
+#line 1117 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
-#line 784 "PascalLexer.cpp"
+#line 920 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -800,21 +936,21 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 		if ((LA(1) == static_cast<unsigned char>('\r')) && (LA(2) == static_cast<unsigned char>('\n')) && ((LA(3) >= static_cast<unsigned char>('\0') && LA(3) <= static_cast<unsigned char>('\377'))) && (true)) {
 			match(static_cast<unsigned char>('\r'));
 			match(static_cast<unsigned char>('\n'));
-#line 768 "pascal.g"
+#line 1123 "pascal.g"
 			newline();
-#line 806 "PascalLexer.cpp"
+#line 942 "PascalLexer.cpp"
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\r')) && ((LA(2) >= static_cast<unsigned char>('\0') && LA(2) <= static_cast<unsigned char>('\377'))) && (true) && (true)) {
 			match(static_cast<unsigned char>('\r'));
-#line 769 "pascal.g"
+#line 1124 "pascal.g"
 			newline();
-#line 812 "PascalLexer.cpp"
+#line 948 "PascalLexer.cpp"
 		}
 		else if ((LA(1) == static_cast<unsigned char>('\n'))) {
 			match(static_cast<unsigned char>('\n'));
-#line 770 "pascal.g"
+#line 1125 "pascal.g"
 			newline();
-#line 818 "PascalLexer.cpp"
+#line 954 "PascalLexer.cpp"
 		}
 		else if ((_tokenSet_1.member(LA(1)))) {
 			{
@@ -822,16 +958,16 @@ void PascalLexer::mCOMMENT_2(bool _createToken) {
 			}
 		}
 		else {
-			goto _loop192;
+			goto _loop398;
 		}
 		
 	}
-	_loop192:;
+	_loop398:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('}'));
-#line 774 "pascal.g"
+#line 1129 "pascal.g"
 	_ttype = ANTLR_USE_NAMESPACE(antlr)Token::SKIP;
-#line 835 "PascalLexer.cpp"
+#line 971 "PascalLexer.cpp"
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
 	   _token->setText(text.substr(_begin, text.length()-_begin));
@@ -902,11 +1038,11 @@ void PascalLexer::mIDENT(bool _createToken) {
 		}
 		default:
 		{
-			goto _loop196;
+			goto _loop402;
 		}
 		}
 	}
-	_loop196:;
+	_loop402:;
 	} // ( ... )*
 	_ttype = testLiteralsTable(_ttype);
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -934,11 +1070,11 @@ void PascalLexer::mSTRING_LITERAL(bool _createToken) {
 			}
 		}
 		else {
-			goto _loop200;
+			goto _loop406;
 		}
 		
 	}
-	_loop200:;
+	_loop406:;
 	} // ( ... )*
 	match(static_cast<unsigned char>('\''));
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
@@ -961,46 +1097,46 @@ void PascalLexer::mNUM_INT(bool _createToken) {
 	int _saveIndex;
 	
 	{ // ( ... )+
-	int _cnt203=0;
+	int _cnt409=0;
 	for (;;) {
 		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
-			if ( _cnt203>=1 ) { goto _loop203; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
+			if ( _cnt409>=1 ) { goto _loop409; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
 		}
 		
-		_cnt203++;
+		_cnt409++;
 	}
-	_loop203:;
+	_loop409:;
 	}  // ( ... )+
 	{
 	if ((LA(1) == static_cast<unsigned char>('e'))) {
 		mEXPONENT(false);
-#line 803 "pascal.g"
+#line 1158 "pascal.g"
 		_ttype = NUM_REAL;
-#line 983 "PascalLexer.cpp"
+#line 1119 "PascalLexer.cpp"
 	}
 	else {
 		{
 		if (((LA(1) == static_cast<unsigned char>('.')))&&((LA(2)!='.')&&(LA(2)!=')'))) {
 			match(static_cast<unsigned char>('.'));
-#line 800 "pascal.g"
+#line 1155 "pascal.g"
 			_ttype = NUM_REAL;
-#line 991 "PascalLexer.cpp"
+#line 1127 "PascalLexer.cpp"
 			{ // ( ... )+
-			int _cnt207=0;
+			int _cnt413=0;
 			for (;;) {
 				if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 					matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 				}
 				else {
-					if ( _cnt207>=1 ) { goto _loop207; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
+					if ( _cnt413>=1 ) { goto _loop413; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
 				}
 				
-				_cnt207++;
+				_cnt413++;
 			}
-			_loop207:;
+			_loop413:;
 			}  // ( ... )+
 			{
 			if ((LA(1) == static_cast<unsigned char>('e'))) {
@@ -1066,18 +1202,18 @@ void PascalLexer::mEXPONENT(bool _createToken) {
 	}
 	}
 	{ // ( ... )+
-	int _cnt213=0;
+	int _cnt419=0;
 	for (;;) {
 		if (((LA(1) >= static_cast<unsigned char>('0') && LA(1) <= static_cast<unsigned char>('9')))) {
 			matchRange(static_cast<unsigned char>('0'),static_cast<unsigned char>('9'));
 		}
 		else {
-			if ( _cnt213>=1 ) { goto _loop213; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
+			if ( _cnt419>=1 ) { goto _loop419; } else {throw ANTLR_USE_NAMESPACE(antlr)NoViableAltForCharException(LA(1), getFilename(), getLine(), getColumn());}
 		}
 		
-		_cnt213++;
+		_cnt419++;
 	}
-	_loop213:;
+	_loop419:;
 	}  // ( ... )+
 	if ( _createToken && _token==ANTLR_USE_NAMESPACE(antlr)nullToken && _ttype!=ANTLR_USE_NAMESPACE(antlr)Token::SKIP ) {
 	   _token = makeToken(_ttype);
@@ -1091,43 +1227,73 @@ void PascalLexer::mEXPONENT(bool _createToken) {
 const unsigned long PascalLexer::_tokenSet_0_data_[] = { 4294958079UL, 4294966271UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
 // SCALARTYPE VARIANT_TAG VARIANT_TAG_NO_ID CONSTLIST FIELDLIST ARGDECLS 
-// VARDECL ARGDECL ARGLIST TYPEDECL FIELD "interface" DOT "program" LPAREN 
-// RPAREN SEMI "unit" IDENT "implementation" "uses" "label" COMMA "const" 
-// EQUAL "chr" NUM_INT NUM_REAL PLUS MINUS STRING_LITERAL "function" COLON 
-// "procedure" DOTDOT "char" "boolean" "integer" "real" "string" "packed" 
-// LBRACK RBRACK "array" "of" LBRACK2 RBRACK2 "record" "end" "case" "set" 
-// "file" POINTER "var" ASSIGN AT NOT_EQUAL LTH LE GE GT "in" "or" STAR 
-// SLASH "div" "mod" "and" "not" "nil" "goto" "begin" "if" "then" "else" 
-// "while" "do" "repeat" "until" "for" "to" "downto" "with" METHOD ADDSUBOR 
+// VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" SEMI "exports" 
+// COMMA "index" "name" "uses" "unit" "end" "interface" "implementation" 
+// "begin" "program" LPAREN RPAREN "initialization" "finalization" "label" 
+// "const" EQUAL "type" "var" COLON "procedure" "forward" "function" "array" 
+// "of" "external" "public" "alias" INTERRUPT "register" "pascal" "cdecl" 
+// "stdcall" "popstack" "saveregisters" "inline" "safecall" "near" "far" 
+// NUM_INT "integer" "shortint" "smallint" "longint" "int64" "byte" "word" 
+// "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL "char" DOTDOT ASSIGN 
+// "real" "single" "double" "extended" "comp" "string" LBRACK RBRACK "packed" 
+// "record" "case" "set" "file" POINTER "object" "virtual" "abstract" "private" 
+// "protected" "constructor" "destructor" "class" "override" MESSAGE "published" 
+// "property" "read" "write" "default" "nodefault" LE GE LTH GT NOT_EQUAL 
+// "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" "mod" "and" "shl" "shr" 
+// "not" AT PLUSEQ MINUSEQ STAREQ SLASHQE "goto" "if" "then" "else" "while" 
+// "do" "repeat" "until" "for" "to" "downto" "with" LBRACK2 RBRACK2 "operator" 
+// "raise" "try" "except" "finally" "on" STRING_LITERAL "chr" "nil" NUM_REAL 
+// IDENT "absolute" "as" "asm" "assembler" "break" "continue" "dispose" 
+// "export" "exit" "false" "inherited" "new" "self" "true" METHOD ADDSUBOR 
 // ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR LF LCURLY RCURLY WS COMMENT_1 
 // COMMENT_2 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_0(_tokenSet_0_data_,16);
 const unsigned long PascalLexer::_tokenSet_1_data_[] = { 4294958079UL, 4294967295UL, 4294967295UL, 3758096383UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
 // SCALARTYPE VARIANT_TAG VARIANT_TAG_NO_ID CONSTLIST FIELDLIST ARGDECLS 
-// VARDECL ARGDECL ARGLIST TYPEDECL FIELD "interface" DOT "program" LPAREN 
-// RPAREN SEMI "unit" IDENT "implementation" "uses" "label" COMMA "const" 
-// EQUAL "chr" NUM_INT NUM_REAL PLUS MINUS STRING_LITERAL "type" "function" 
-// COLON "procedure" DOTDOT "char" "boolean" "integer" "real" "string" 
-// "packed" LBRACK RBRACK "array" "of" LBRACK2 RBRACK2 "record" "end" "case" 
-// "set" "file" POINTER "var" ASSIGN AT NOT_EQUAL LTH LE GE GT "in" "or" 
-// STAR SLASH "div" "mod" "and" "not" "nil" "goto" "begin" "if" "then" 
-// "else" "while" "do" "repeat" "until" "for" "to" "downto" "with" METHOD 
-// ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR LF LCURLY RCURLY 
-// WS COMMENT_1 COMMENT_2 EXPONENT 
+// VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" SEMI "exports" 
+// COMMA "index" "name" "uses" "unit" "end" "interface" "implementation" 
+// "begin" "program" LPAREN RPAREN "initialization" "finalization" "label" 
+// "const" "resourcestring" EQUAL "type" "var" COLON "procedure" "forward" 
+// "function" "array" "of" "external" "public" "alias" INTERRUPT "register" 
+// "pascal" "cdecl" "stdcall" "popstack" "saveregisters" "inline" "safecall" 
+// "near" "far" NUM_INT "integer" "shortint" "smallint" "longint" "int64" 
+// "byte" "word" "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL "char" 
+// DOTDOT ASSIGN "real" "single" "double" "extended" "comp" "string" LBRACK 
+// RBRACK "packed" "record" "case" "set" "file" POINTER "object" "virtual" 
+// "abstract" "private" "protected" "constructor" "destructor" "class" 
+// "override" MESSAGE "published" "property" "read" "write" "default" "nodefault" 
+// LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR SLASH "mod" 
+// "and" "shl" "shr" "not" AT PLUSEQ MINUSEQ STAREQ SLASHQE "goto" "if" 
+// "then" "else" "while" "do" "repeat" "until" "for" "to" "downto" "with" 
+// LBRACK2 RBRACK2 "operator" "raise" "try" "except" "finally" "on" STRING_LITERAL 
+// "chr" "nil" NUM_REAL IDENT "absolute" "as" "asm" "assembler" "break" 
+// "continue" "dispose" "export" "exit" "false" "inherited" "new" "self" 
+// "true" METHOD ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR 
+// LF LCURLY RCURLY WS COMMENT_1 COMMENT_2 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_1(_tokenSet_1_data_,16);
 const unsigned long PascalLexer::_tokenSet_2_data_[] = { 4294967295UL, 4294967167UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 4294967295UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL, 0UL };
 // null EOF null NULL_TREE_LOOKAHEAD BLOCK IDLIST ELIST FUNC_CALL PROC_CALL 
 // SCALARTYPE TYPELIST VARIANT_TAG VARIANT_TAG_NO_ID VARIANT_CASE CONSTLIST 
-// FIELDLIST ARGDECLS VARDECL ARGDECL ARGLIST TYPEDECL FIELD "interface" 
-// DOT "program" LPAREN RPAREN SEMI "unit" IDENT "implementation" "uses" 
-// "label" COMMA "const" EQUAL "chr" NUM_INT NUM_REAL MINUS STRING_LITERAL 
-// "type" "function" COLON "procedure" DOTDOT "char" "boolean" "integer" 
-// "real" "string" "packed" LBRACK RBRACK "array" "of" LBRACK2 RBRACK2 
-// "record" "end" "case" "set" "file" POINTER "var" ASSIGN AT NOT_EQUAL 
-// LTH LE GE GT "in" "or" STAR SLASH "div" "mod" "and" "not" "nil" "goto" 
-// "begin" "if" "then" "else" "while" "do" "repeat" "until" "for" "to" 
-// "downto" "with" METHOD ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT 
-// MYASTVAR LF LCURLY RCURLY WS COMMENT_1 COMMENT_2 EXPONENT 
+// FIELDLIST ARGDECLS VARDECL ARGDECL ARGLIST TYPEDECL FIELD DOT "library" 
+// SEMI "exports" COMMA "index" "name" "uses" "unit" "end" "interface" 
+// "implementation" "begin" "program" LPAREN RPAREN "initialization" "label" 
+// "const" "resourcestring" EQUAL "type" "var" COLON "procedure" "forward" 
+// "function" "array" "of" "external" "public" "alias" INTERRUPT "register" 
+// "pascal" "cdecl" "stdcall" "popstack" "saveregisters" "inline" "safecall" 
+// "near" "far" NUM_INT "integer" "shortint" "smallint" "longint" "int64" 
+// "byte" "word" "cardinal" "qword" "boolean" BYTEBOOL LONGBOOL "char" 
+// DOTDOT ASSIGN "real" "single" "double" "extended" "comp" "string" LBRACK 
+// RBRACK "packed" "record" "case" "set" "file" POINTER "object" "virtual" 
+// "abstract" "private" "protected" "constructor" "destructor" "class" 
+// "override" MESSAGE "published" "property" "read" "write" "default" "nodefault" 
+// LE GE LTH GT NOT_EQUAL "in" "is" PLUS MINUS "or" "xor" STAR SLASH "div" 
+// "mod" "and" "shl" "shr" "not" AT PLUSEQ MINUSEQ STAREQ SLASHQE "goto" 
+// "if" "then" "else" "while" "do" "repeat" "until" "for" "to" "downto" 
+// "with" LBRACK2 RBRACK2 "operator" "raise" "try" "except" "finally" "on" 
+// STRING_LITERAL "chr" "nil" NUM_REAL IDENT "absolute" "as" "asm" "assembler" 
+// "break" "continue" "dispose" "export" "exit" "false" "inherited" "new" 
+// "self" "true" METHOD ADDSUBOR ASSIGNEQUAL SIGN FUNC NODE_NOT_EMIT MYASTVAR 
+// LF LCURLY RCURLY WS COMMENT_1 COMMENT_2 EXPONENT 
 const ANTLR_USE_NAMESPACE(antlr)BitSet PascalLexer::_tokenSet_2(_tokenSet_2_data_,16);
 

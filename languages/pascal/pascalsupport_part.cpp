@@ -11,6 +11,7 @@
 
 #include <qdir.h>
 #include <qtimer.h>
+#include <qwhatsthis.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -21,6 +22,7 @@
 
 #include <antlr/ASTFactory.hpp>
 
+#include "catalog.h"
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
@@ -66,6 +68,8 @@ PascalSupportPart::PascalSupportPart(QObject *parent, const char *name, const QS
              SLOT( projectConfigWidget( KDialogBase* ) ) );
 
     mainWindow()->embedOutputView( d->problemReporter, i18n("Problems"), i18n("problem reporter") );
+    QWhatsThis::add(d->problemReporter, i18n("<b>Problem reporter</b><p>This window shows various \"problems\" in your project. "
+        "It displays errors reported by a language parser."));
 }
 
 PascalSupportPart::~PascalSupportPart()
@@ -123,20 +127,30 @@ void PascalSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void PascalSupportPart::savedFile(const QString &fileName)
 {
-    Q_UNUSED( fileName );
-    return;
+    maybeParse(fileName);
+    emit updatedSourceInfo();
 }
 
 void PascalSupportPart::addedFilesToProject(const QStringList &fileList)
 {
-    Q_UNUSED( fileList );
-    return;
+    for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end() ;++it)
+    {
+        QString fn = project()->projectDirectory() + "/" + *it;
+        maybeParse( fn );
+        kapp->processEvents( 500 );
+        emit addedSourceInfo(fn);
+    }
 }
 
 void PascalSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
-    Q_UNUSED( fileList );
-    return;
+    for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end() ;++it)
+    {
+        QString fn = project()->projectDirectory() + "/" + *it;
+
+        emit aboutToRemoveSourceInfo(fn);
+        codeModel()->removeFile( codeModel()->fileByName(fn) );
+    }
 }
 
 void PascalSupportPart::slotProjectCompiled()
@@ -232,6 +246,77 @@ KMimeType::List PascalSupportPart::mimeTypes( )
     if( mime )
 	list << mime;
     return list;
+}
+
+QString PascalSupportPart::formatTag( const Tag & inputTag )
+{
+    Tag tag = inputTag;
+
+    switch( tag.kind() )
+    {
+        case Tag::Kind_Namespace:
+            return QString::fromLatin1("unit ") + tag.name();
+
+        case Tag::Kind_Class:
+            return QString::fromLatin1("class ") + tag.name();
+
+        case Tag::Kind_Function:
+        case Tag::Kind_FunctionDeclaration:
+        {
+            return tag.name() + "()";
+        }
+        break;
+
+        case Tag::Kind_Variable:
+        case Tag::Kind_VariableDeclaration:
+        {
+            return QString::fromLatin1("var ") + tag.name();
+        }
+        break;
+    }
+    return tag.name();
+}
+
+QString PascalSupportPart::formatModelItem( const CodeModelItem * item, bool shortDescription )
+{
+    if (item->isFunction() || item->isFunctionDefinition() )
+    {
+        const FunctionModel *model = static_cast<const FunctionModel*>(item);
+        QString function;
+        QString args;
+        ArgumentList argumentList = model->argumentList();
+        for (ArgumentList::const_iterator it = argumentList.begin(); it != argumentList.end(); ++it)
+        {
+            args.isEmpty() ? args += "" : args += ", " ;
+            args += formatModelItem((*it).data());
+        }
+
+        function += model->name() + "(" + args + ")";
+
+        if( !shortDescription )
+            function += (model->isVirtual() ? QString("virtual; ") : QString("") ) + model->resultType() + " ";
+
+        return function;
+    }
+    else if (item->isVariable())
+    {
+        const VariableModel *model = static_cast<const VariableModel*>(item);
+        if( shortDescription )
+            return model->name();
+        return model->name() + ": " + model->type();
+    }
+    else if (item->isArgument())
+    {
+        const ArgumentModel *model = static_cast<const ArgumentModel*>(item);
+        QString arg;
+        arg += model->name();
+        arg += ": " + model->type();
+        if( !shortDescription )
+            arg += model->defaultValue().isEmpty() ? QString("") : QString(" = ") + model->defaultValue();
+        return arg.stripWhiteSpace();
+    }
+    else
+        return KDevLanguageSupport::formatModelItem( item, shortDescription );
 }
 
 #include "pascalsupport_part.moc"
