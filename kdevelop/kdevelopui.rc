@@ -275,7 +275,6 @@
     <Action name="edit_deselect_all" />
     <Action name="edit_invert_selection" />
     <Action name="view_goto" />
-    <Action name="settings_editor" />
   </enable>
 </State>
 <State name="project_load">
@@ -349,6 +348,7 @@
     <Action name="debug_viewers" />
     <Action name="debug_interrupt" />
     <Action name="debug_stop" />
+    <Action name="toolbar_debug" />
   </enable>
   <disable>
     <Action name="debug_start" />

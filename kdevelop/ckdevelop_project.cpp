@@ -582,12 +582,12 @@ void CKDevelop::slotProjectOpen()
 void CKDevelop::slotProjectOpenRecent(const KURL& url)
 {
         kdDebug() << "in CKDevelop::slotProjectOpenRecent(), selected :"
-                  << url.filename() << "\n";
+                  << url.path() << "\n";
 
 //  QString proj = getProjectAsString(id);
 // FIXME until we use KURLs to open projects we need to stick with this
 // quirky code... (rokrau 02/17/02)
-  QString proj = url.filename();
+  QString proj = url.path();
 
   if (QFile::exists(proj)) {
     CProject* pProj = projectOpenCmdl_Part1(proj);
