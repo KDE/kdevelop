@@ -271,6 +271,11 @@ QWidget* CvsServicePart::newProjectWidget( QWidget *parent )
 
 void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
 {
+  // If the current project doesn't support CVS, we don't
+  // want to confuse the user with a CVS popup menu.
+  if(!project() || !isValidDirectory(project()->projectDirectory()))
+    return;
+
     kdDebug(9006) << "contextMenu()" << endl;
     if (context->hasType( Context::FileContext ) ||
         context->hasType( Context::EditorContext ))
