@@ -92,8 +92,8 @@ void QextMdiChildView::maximize(bool bAnimate)
 {
 	if(mdiParent()){
 		if(!isMaximized()){
-		   emit mdiParentNowMaximized();
 			mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
+		   emit mdiParentNowMaximized();
 		}
 	} else showMaximized();
 }
