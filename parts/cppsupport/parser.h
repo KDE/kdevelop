@@ -99,7 +99,7 @@ public /*rules*/ :
     bool parseOperatorFunctionId( AST::Node& node );
     bool parseTemplateArgumentList( TemplateArgumentListAST::Node& node );
     bool parseOperator( AST::Node& node );
-    bool parseCvQualify( AST::Node& node );
+    bool parseCvQualify( GroupAST::Node& node );
     bool parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parsePtrOperator( AST::Node& node );
     bool parseTemplateArgument( AST::Node& node );

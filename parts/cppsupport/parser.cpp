@@ -600,17 +600,17 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
 	return true;
     } else {
 	// parse cast operator
-	AST::Node cv;
-        parseCvQualify(cv);       
-	
+	GroupAST::Node cv;
+        parseCvQualify(cv);
+
 	TypeSpecifierAST::Node spec;
 	if( !parseSimpleTypeSpecifier(spec) ){
 	    parseError();
 	}
 	
-	AST::Node cv2;
+	GroupAST::Node cv2;
 	parseCvQualify(cv2);
-	
+
 	AST::Node ptrOp;
 	while( parsePtrOperator(ptrOp) )
   	    ;	    
@@ -805,27 +805,32 @@ bool Parser::parseOperator( AST::Node& /*node*/ )
     return false;
 }
 
-bool Parser::parseCvQualify( AST::Node& node )
+bool Parser::parseCvQualify( GroupAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCvQualify()" << endl;
-    
+
     int start = lex->index();
-        
+
+    GroupAST::Node ast = CreateNode<GroupAST>();
+
     int n = 0;
     while( !lex->lookAhead(0).isNull() ){
 	int tk = lex->lookAhead( 0 );
 	if( tk == Token_const || tk == Token_volatile ){
 	    ++n;
+	    int startWord = lex->index();
 	    lex->nextToken();
+            AST::Node word = CreateNode<AST>();
+            UPDATE_POS( word, startWord, lex->index() );
 	} else
 	    break;
     }
-    
-    AST::Node asn = CreateNode<AST>();
-    node = asn;
-    UPDATE_POS( node, start, lex->index() );
-    
-    return n != 0;
+
+    if( n == 0 )
+        return false;
+
+    node = ast;
+    return true;
 }
 
 bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
@@ -872,10 +877,12 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
     return true;
 }
 
-bool Parser::parsePtrOperator( AST::Node& /*node*/ )
+bool Parser::parsePtrOperator( AST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePtrOperator()" << endl;
-    
+
+    int start = lex->index();
+
     if( lex->lookAhead(0) == '&' ){
 	lex->nextToken();
     } else if( lex->lookAhead(0) == '*' ){
@@ -888,10 +895,14 @@ bool Parser::parsePtrOperator( AST::Node& /*node*/ )
 	    return false;
 	}
     }
-    
-    AST::Node cv;
+
+    GroupAST::Node cv;
     parseCvQualify( cv );
-    
+
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
     return true;
 }
 
@@ -924,11 +935,11 @@ bool Parser::parseTypeSpecifier( TypeSpecifierAST::Node& spec )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTypeSpecifier()" << endl;
 
-    AST::Node cv;    
+    GroupAST::Node cv;
     parseCvQualify( cv );
-    
+
     if( parseElaboratedTypeSpecifier(spec) || parseSimpleTypeSpecifier(spec) ){
-        AST::Node cv2;
+        GroupAST::Node cv2;
 	parseCvQualify( cv2 );
 	return true;
     }
@@ -1023,7 +1034,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 
 	lex->nextToken();  // skip ')'
 
-	AST::Node cv;
+	GroupAST::Node cv;
 	parseCvQualify( cv );  // or parse optional Token_const !?
 
 	AST::Node except;
@@ -1116,7 +1127,7 @@ bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 	} else
 	    lex->nextToken();
 
-	AST::Node cv;
+	GroupAST::Node cv;
 	parseCvQualify( cv );
 
 	AST::Node except;
@@ -1151,7 +1162,7 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
     GroupAST::Node storageSpec;
     parseStorageClassSpecifier( storageSpec );
 
-    AST::Node cv;
+    GroupAST::Node cv;
     parseCvQualify( cv );
 
     if( lex->lookAhead(0) != Token_enum ){
@@ -1577,7 +1588,7 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
     GroupAST::Node storageSpec;
     parseStorageClassSpecifier( storageSpec );
 
-    AST::Node cv;
+    GroupAST::Node cv;
     parseCvQualify( cv );
 
     AST::Node classKey;
@@ -2754,7 +2765,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     GroupAST::Node storageSpec;
     parseStorageClassSpecifier( storageSpec );
 
-    AST::Node cv;
+    GroupAST::Node cv;
     parseCvQualify( cv );
 
     int index = lex->index();
@@ -2780,7 +2791,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    lex->nextToken();
 
 		    InitDeclaratorListAST::Node declarators = CreateNode<InitDeclaratorListAST>();
-		    
+
 		    // update declarators position
 		    int startLine, startColumn, endLine, endColumn;
 		    if( declarator.get() ){
@@ -2790,7 +2801,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		        declarators->setEndPosition( endLine, endColumn );
 		    }
 		    declarators->addInitDeclarator( declarator );
-		    
+
 		    SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
 		    ast->setNestedName( nestedName );
 		    ast->setInitDeclaratorList( declarators );

@@ -802,21 +802,29 @@ public:
 public:
     SimpleDeclarationAST();
     virtual ~SimpleDeclarationAST();
-    
+
+    GroupAST* functionSpecifier() { return m_functionSpecifier.get(); }
+    void setFunctionSpecifier( GroupAST::Node& functionSpecifier );
+
+    GroupAST* storageSpecifier() { return m_storageSpecifier.get(); }
+    void setStorageSpecifier( GroupAST::Node& storageSpecifier );
+
     NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
     void setNestedName( NestedNameSpecifierAST::Node& nestedName );
-    
+
     TypeSpecifierAST* typeSpec();
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
 
     InitDeclaratorListAST* initDeclaratorList();
     void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
-    
+
 private:
+    GroupAST::Node m_functionSpecifier;
+    GroupAST::Node m_storageSpecifier;
     NestedNameSpecifierAST::Node m_nestedName;
     TypeSpecifierAST::Node m_typeSpec;
     InitDeclaratorListAST::Node m_initDeclaratorList;
-        
+
 private:
     SimpleDeclarationAST( const SimpleDeclarationAST& source );
     void operator = ( const SimpleDeclarationAST& source );

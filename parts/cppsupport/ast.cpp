@@ -743,6 +743,18 @@ SimpleDeclarationAST::~SimpleDeclarationAST()
 {
 }
 
+void SimpleDeclarationAST::setFunctionSpecifier( GroupAST::Node& functionSpecifier )
+{
+    m_functionSpecifier = functionSpecifier;
+    if( m_functionSpecifier.get() ) m_functionSpecifier->setParent( this );
+}
+
+void SimpleDeclarationAST::setStorageSpecifier( GroupAST::Node& storageSpecifier )
+{
+    m_storageSpecifier = storageSpecifier;
+    if( m_storageSpecifier.get() ) m_storageSpecifier->setParent( this );
+}
+
 void SimpleDeclarationAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
 {
     m_nestedName = nestedName;
