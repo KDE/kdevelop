@@ -387,3 +387,49 @@ AC_SUBST(SVNINC)
 AC_SUBST(SVNLIBS)
 AC_SUBST(SVN_SUBDIR)
 ])
+
+dnl  **********
+dnl  Very ugly hack to see whether QT_VERSION > 3.0.4. Remove it when
+dnl  KDevelop needs Qt > 3.0.4 anyways
+dnl  stolen from licq's qt-plugin, thank you guys ;)
+dnl  **********
+
+AC_DEFUN(KDEV_CHECK_QEDITOR,
+[
+  AC_MSG_CHECKING(for Qt >= 3.0.5)
+
+  AC_CACHE_VAL(ac_cv_qt_setup,
+  [
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+
+    save_CXXFLAGS="$CXXFLAGS"
+    save_LDFLAGS="$LDFLAGS"
+    save_LIBS="$LIBS"
+
+    CXXFLAGS="$CXXFLAGS $QT_INCLUDES $X_CFLAGS"
+    LDFLAGS="$X_LIBS $QT_LDFLAGS $LDFLAGS"
+    LIBS="$LIB_QT $X_PRE_LIBS -lX11 -lXext $LIBS"
+
+    AC_TRY_LINK([
+      #include <qglobal.h>
+    ],
+    [
+      #if QT_VERSION < 305
+         choke me
+      #endif
+    ],
+      ac_cv_qt_setup=yes,
+      ac_cv_qt_setup=no
+    )
+   ])
+
+  if test "$ac_cv_qt_setup" != "yes"; then
+    AC_MSG_RESULT(no)
+  else
+    AC_MSG_RESULT(yes)
+    QEDITOR_SUBDIR=editor
+  fi
+AC_SUBST(QEDITOR_SUBDIR)
+])
+
