@@ -13,7 +13,7 @@
   <primary>&appwizard;</primary></indexterm>
 
 <para>
-In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and any additional tools needed to get the application up and running.
+In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any necessary management facilities such as the make system, access to all components and any additional tools needed to get the application up and running.
 </para>
 <para>
 Organizing all development work in projects allows you to easily switch between the global tasks at hand. This is quite handy if you &eg; work on several applications at the same time as is often the case. Tell &kdevelop; to open the project you want to work at and you may proceed in the environment just where you left.
@@ -27,7 +27,7 @@ Organizing all development work in projects allows you to easily switch between 
   <secondary>new</secondary></indexterm>
 
 <para>
-Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, &etc;
+Whenever you want to initiate a new programming project several formal setup procedures need to be completed. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, &etc;
 </para>
 <para>
 &kdevelop; provides an easy way to initiate a new programming project&mdash;the <emphasis>&appwizard;</emphasis>. You will find the &appwizard; at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
@@ -166,12 +166,6 @@ The left hand side of the upper part in this dialog is where you do the selectio
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
-    PHP
-    <indexterm>
-      <primary>PHP</primary>
-      <secondary>new project</secondary></indexterm>
-  </para></listitem>
-  <listitem><para>
     Pascal
     <indexterm>
       <primary>Pascal</primary>
@@ -181,6 +175,12 @@ The left hand side of the upper part in this dialog is where you do the selectio
     Perl
     <indexterm>
       <primary>Perl</primary>
+      <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    PHP
+    <indexterm>
+      <primary>PHP</primary>
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
@@ -305,7 +305,7 @@ Thus you must select the name of your new application with care.  If you end up 
 <formalpara>
 <title>The Starting Path</title>
 <para>
-There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (you might &eg; set up for another version of an already existing application). As an alternative you may select another path to the application directory.
+There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (&eg; you might set up a new project for another version of an already existing application). As an alternative you may select another path to the application directory.
 </para>
 </formalpara>
 <para>
@@ -332,13 +332,13 @@ The fields following this are not so critical. Just supply your name (&ie; the n
 <note>
 <orderedlist>
   <listitem><para>
-  The &appwizard; fills these fields with some default values, taken from the Email presets in the KDE control center. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
+  The &appwizard; fills these fields with some default values, taken from the Email presets in the <application>KDE control center</application>. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
   </para></listitem>
   <listitem><para>
   The &appwizard; will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
   </para></listitem>
   <listitem><para>
-  Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
+  Of all fields, the <guilabel>Email</guilabel> is the only <emphasis>optional</emphasis> field, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
   </para></listitem>
 </orderedlist>
 </note>
@@ -358,11 +358,11 @@ If you selected <quote>Custom</quote> from the <guilabel>License</guilabel> tab 
 </para>
 
 <note><para>
-Both version and license information will as well be integrated into the starting templates in a suiting format the application type you selected does provide.
+Both version and license information will be integrated into the starting templates in a format suiting the application type you selected.
 </para></note>
 
 <para>
-Once you have correctly entered all this information stuff, press the <guibutton>Next &gt;</guibutton> button to proceed as shown in the following chapters.
+Once you have correctly entered all the information, press the <guibutton>Next &gt;</guibutton> button to proceed as shown in the following chapters.
 </para>
 </sect3> <!-- new-projects-start-general -->
 
@@ -398,7 +398,7 @@ This discussion concentrates on the needs for project creation only. For more in
 <formalpara>
 <title>No Version Control System Wanted</title>
 <para>
-Initially there is <quote>None</quote> selected in the <guilabel>Version control system</guilabel> tab, and the page will be empty otherwise. If you don't want to use a version control system, just click the <guibutton>Next ></guibutton> button and go on.
+Initially there is <quote>None</quote> selected in the <guilabel>Version control system</guilabel> tab, and the page will be empty otherwise. If you don't want to use a version control system, just click the <guibutton>Next &gt;</guibutton> button and go on.
 </para>
 </formalpara>
 
@@ -513,7 +513,7 @@ for the <quote>password protected server</quote> non-encrypted type, and
 for an rsh or ssh encrypted server type. For example
 </para>
 <para>
-<userinput><filename class="directory">:ext:mylogin@cvs.cervisia.sourceforge.net:/cvsroot/cervisia</filename></userinput>
+<userinput><filename class="directory">:ext:mylogin@cvs.sourceforge.net:/cvsroot/cervisia</filename></userinput>
 </para>
 <para>
 accesses the &cvs; root of the widely used <application>Cervisia</application> &cvs; management tool on the SourceForge server.
@@ -571,7 +571,7 @@ The &appwizard; has put a default <quote>start</quote> tag in here which is a wo
 
 <note>
 <para>
-When any information of all these is wrong &kdevelop; usually will not know about until project construction time. It is the &CVS; system which will figure out those errors when it tries to build the repository. Hence you must keep an eye to the <guilabel>Messages</guilabel> window of &kdevelop; when the project is created in the final setup step. If anything was in error with &CVS; you will in most cases see an error message like this:
+If any information about version control is wrong &kdevelop; usually will not know until project construction time. It is the &CVS; system which will figure out those errors when it tries to build the repository. Hence you must keep an eye to the <guilabel>Messages</guilabel> window of &kdevelop; when the project is created in the final setup step. If anything was in error with &CVS; you will in most cases see an error message like this:
 </para>
 
 <screen><computeroutput><literal>
@@ -590,7 +590,7 @@ If this happens you will have to either manually set up &cvs; (&kdevelop; should
 </note>
 
 <para>
-After you have entered all &CVS; related information, click the <guibutton>Next &gt;</guibutton> to go on.
+After you have entered all &CVS; related information, click <guibutton>Next &gt;</guibutton> to proceed.
 </para>
 
 <note><para>
@@ -638,7 +638,7 @@ If the page is used, &appwizard; will fill in some common header comment which f
 Other templates will provide similar information in a format according to the definitions of the programming language you want to use.
 </para>
 <para>
-As you might have noticed, the applications manager did readily fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
+As you might have noticed, the applications manager did fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
 </para>
 
 <sect3 id="new-projects-start-templates-edit">
@@ -708,7 +708,7 @@ for the GPL license, or
 if you decided to put your application under the BSD license.
 </para>
 <para>
-Thee are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
+There are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
 </para>
 
 <note><para>
@@ -750,7 +750,7 @@ In many cases when your new project has been set up this way, &kdevelop; will au
 Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
 </para>
 <para>
-Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
+Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can determine whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
 </para>
 
 <warning id="defaultbuild-warning"> <!-- ### remove this when "default" works again -->
@@ -795,12 +795,12 @@ Then it is adviceable that you <emphasis>compile the initial project</emphasis> 
   <tertiary>build</tertiary></indexterm>
 
 <para>
-It is always advisable to look at the messages output and try to understand what had happened. At least in principle you should know what was be done when the &appwizard; initiated your new project. We cannot go into the details but will have an overview of those messages to get an idea of what was going on behind the scenes.
+It is always advisable to look at the messages output and try to understand what has happened. At least in principle you should know what has been done when the &appwizard; initiated your new project. We cannot go into the details but will have an overview of those messages to get an idea of what was going on behind the scenes.
 </para>
 
 <tip>
 <para>
-If your project was set up for local &CVS; you will have got two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we caught both series in separate runs&mdash;set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
+If your project was set up for local &CVS; you will have received two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we caught both series in separate runs&mdash;set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
 </para>
 <para>
 You may want to follow this same procedure if anything weird happened and you just could not catch the messages of the first setup step.
@@ -873,7 +873,7 @@ In our case this <filename>script</filename> is located in the <filename class="
 This &perl; <filename>script</filename> is called with a series of parameters, all marked by <quote><computeroutput>--</computeroutput></quote> prefixes, wherein the &appwizard; put information from the other selections you made in the <guilabel>Create New Project</guilabel> dialog.
 </para>
 <para>
-The exact series of initialization steps depends on which &perl; <filename>script</filename> was called. If you want to check, just look into the <filename>script</filename> file the <computeroutput>perl</computeroutput> command on the first <guilabel>Messages</guilabel> window line did call.
+The exact series of initialization steps depends on which &perl; <filename>script</filename> was called. If you want to check, just look into the <filename>script</filename> file the <computeroutput>perl</computeroutput> command on the first <guilabel>Messages</guilabel> window line called.
 </para>
 <note><para>
 The setup scripts make use of a set of &perl; subroutines collected in the <filename>kdevelop.pm</filename> file which you may find in the <filename class="directory">share/apps/kdevwizard/template-common/</filename> subdirectory of your &kde; installation.
@@ -967,7 +967,7 @@ After this step you will find the following files in your application base direc
     <filename>README</filename>, initially empty&mdash;put any information here the user should know before installing your application.
   </para></listitem>
   <listitem><para>
-    <filename>TODO</filename>, initially empty&mdash;put information here about what has to be done to further develop your application. You can use this as a notebook for your own purposes, but it is all the well really helpful once you have put your application in public domain.
+    <filename>TODO</filename>, initially empty&mdash;put information here about what has to be done to further develop your application. You can use this as a notebook for your own purposes, but it is also really helpful once you have put your application in public domain.
   </para></listitem>
 </itemizedlist>
 </para>
@@ -1021,7 +1021,7 @@ You may want to have a look at the resulting project file which in our case was 
 
 <formalpara id="applicationwizard-behind-app-framework">
 <title>The Application Framework</title>
-<para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically dependends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be found in other projects, too.
+<para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically depends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be found in other projects, too.
 </para>
 </formalpara>
 <para>
@@ -1042,7 +1042,7 @@ In our case the following directory structure has been created in the <filename 
 </itemizedlist>
 </para>
 <para>
-All these directories will not kept empty but filled with a series of <filename>Makefile</filename> and other files &kdevelop; uses to process the sources of the application. Also some initial icon files for the new application will have been put into the <filename>src</filename> subdirectory, if applicable. In our case you will find two of them: <filename>src/hi16-app-myapp.png</filename> and <filename>src/hi32-app-myapp.png</filename> which both hold standard &kde; application icons.
+All these directories will not be kept empty but filled with a series of <filename>Makefile</filename> and other files &kdevelop; uses to process the sources of the application. Also some initial icon files for the new application will have been put into the <filename>src</filename> subdirectory, if applicable. In our case you will find two of them: <filename>src/hi16-app-myapp.png</filename> and <filename>src/hi32-app-myapp.png</filename> which both hold standard &kde; application icons.
 </para>
 
 <formalpara id="applicationwizard-behind-app-sources">
