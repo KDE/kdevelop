@@ -124,7 +124,7 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
 //       }
       stream.resize(file.size()+1);
       
-      file.readBlock(stream,file.size());
+      file.readBlock(stream.data(),file.size());
       file.close(); 
       if (stream.find(compl_name) != -1){
 	switchToFile(prj.getProjectDir() + prj.getSubDir() + filename);

@@ -61,7 +61,7 @@ void CClassView::CVReadAllFiles(){
 //  	}
 	// the above one was really slow
 	stream_info->stream.resize(file.size()+1);
-	file.readBlock((char*)stream_info->stream,file.size());
+	file.readBlock(stream_info->stream.data(),file.size());
 	file.close();
 	CVRemoveAllComments(&stream_info->stream);
 	streamed_files->append(stream_info); // add it to the classfiles
