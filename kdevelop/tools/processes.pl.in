@@ -74,11 +74,11 @@ if ($processes{APPLICATION} eq "customproj"){
 }
 else{
   unpackFiles ("template.tar");	
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|kicker/) {
     unpackFiles ("admin.tar");	
   }
 
-  if ($processes{APPLICATION} =~ /kde2mini/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kicker/) {
     changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kdenormal|kde2normal|kde2mdi/)
@@ -556,7 +556,7 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if($processes{APPLICATION} eq "kde2mini")
+  if($processes{APPLICATION} eq "kde2mini|kicker")
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");

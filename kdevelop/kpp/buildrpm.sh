@@ -6,23 +6,37 @@
 NAME=$1
 VERSION=$2
 SOURCE=$3
-DIR=~/.kde/build-$NAME
-BASE=$PWD
+BASE=$4
+error ()
+{
+	echo #### RPM BUILD ERROR ####
+	exit 0
+}
+
+good ()
+{
+	echo #### RPMS HAVE BEEN BUILT ####
+	exit 1
+}
+
+DIR=$BASE/build-$NAME
+
 
         rm -rf $DIR
         echo Starting Build Process
-        mkdir -p $DIR/RPMROOT/BUILD/   || exit 0
-        mkdir -p $DIR/RPMROOT/RPMS/    || exit 0
-        mkdir -p $DIR/RPMROOT/SOURCES/ || exit 0
-        mkdir -p $DIR/RPMROOT/SPECS/   || exit 0
-        mkdir -p $DIR/RPMROOT/SRPMS/   || exit 0
-        mkdir -p $DIR/RPMROOT/tmp/     || exit 0
-        mkdir -p $DIR/$NAME-$VERSION   || exit 0
+        mkdir -p $DIR/RPMROOT/BUILD/   || error
+        mkdir -p $DIR/RPMROOT/RPMS/    || error
+        mkdir -p $DIR/RPMROOT/SOURCES/ || error
+        mkdir -p $DIR/RPMROOT/SPECS/   || error
+        mkdir -p $DIR/RPMROOT/SRPMS/   || error
+        mkdir -p $DIR/RPMROOT/tmp/     || error
+        mkdir -p $DIR/$NAME-$VERSION   || error
 
-        cp -a $SOURCE/$NAME-$VERSION.tar.gz $DIR/RPMROOT/SOURCES                || exit 0
-        cp -a $SOURCE/$NAME.spec $DIR/RPMROOT/SPECS                             || exit 0
-        convert $SOURCE/$NAME/lo32-app-$NAME.png $DIR/RPMROOT/SOURCES/$NAME.xpm       || exit 0
-
+        cp -a $SOURCE $DIR/RPMROOT/SOURCES                || error
+        cp -a $BASE/$NAME.spec $DIR/RPMROOT/SPECS         || error
+        if [ $BASE/$NAME/lo32-app-$NAME.png]; then
+                convert $BASE/$NAME/lo32-app-$NAME.png $DIR/RPMROOT/SOURCES/$NAME.xpm       || error
+        fi
 cat > $DIR/rpmmacros <<EOF
 %_topdir $DIR/RPMROOT/
 %_tmppath $DIR/RPMROOT/tmp/
@@ -32,9 +46,9 @@ cat > $DIR/rpmrc <<EOF
 macrofiles: /usr/lib/rpm/macros:/usr/lib/rpm/%{_target}/macros:/etc/rpm/macros:/etc/rpm/%{_target}/macros:~/.rpmmacros:$DIR/rpmmacros
 EOF
 
-        rpm -ba $DIR/RPMROOT/SPECS/$NAME.spec --rcfile $DIR/rpmrc               || exit 0
-        mkdir -p $BASE/upload                                                   || exit 0
-        cp -a $DIR/RPMROOT/SOURCES/* $DIR/RPMROOT/SRPMS/* $DIR/RPMROOT/RPMS/*/* $BASE || exit 0
-        rm -rf $DIR                                                             || exit 0
+        rpm -ba $DIR/RPMROOT/SPECS/$NAME.spec --rcfile $DIR/rpmrc               || error
+        mkdir -p $BASE/upload                                                   || error
+        cp -a $DIR/RPMROOT/SOURCES/* $DIR/RPMROOT/SRPMS/* $DIR/RPMROOT/RPMS/*/* $BASE || error
+        rm -rf $DIR                                                             || error
         echo FINISHED
-        exit 1
+        good

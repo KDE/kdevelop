@@ -238,15 +238,19 @@ bool Kpp::startBuild(){
                         cerr << "spec file is there" << endl;
                         // The build env looks good so we will start
                         rpmBuild = new KShellProcess();
-                        QString buildProc = "sh ";
+                        QString buildProc = "sh $KDEDIR/share/apps/kdevelop/tools/buildrpm.sh ";
                         // the build script take a few args
                         // 1) base directory  - qaRPMBaseDir
                         // 2) project name    - qlineEdit_1->text()
                         // 3) the applications version  qlineEdit_->text()
                         // 4) the path to the source file qsRPMBaseDir + name + version + tar.gz
                         // 5) the path to the spec file  currentSpecPath
-
-                        *rpmBuild << "env";
+                        buildProc += QLineEdit_1->text().lower() + " ";
+                        buildProc += QLineEdit_2->text().lower() + " ";
+                        buildProc += tgzFile + " ";
+                        buildProc += qsRPMBaseDir;
+                        cerr << "Running " << buildProc << endl;
+                        *rpmBuild << buildProc;
                         rpmBuild->start(KShellProcess::NotifyOnExit,KShellProcess::All);
                         connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdOut(KProcess*, char *, int)));
                         connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdErr(KProcess*, char *, int)));
