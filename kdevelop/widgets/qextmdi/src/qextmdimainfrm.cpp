@@ -285,11 +285,12 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    else {
       if( (flags & QextMdi::Detach) || (m_mdiMode == QextMdi::ToplevelMode)) {
          detachWindow( pWnd, !(flags & QextMdi::Hide));
+         emit childViewIsDetachedNow(pWnd); // fake it because detach won't call it in this case of addWindow-to-MDI
       } else {
          attachWindow( pWnd, !(flags & QextMdi::Hide));
       }
 
-      if ((m_bMaximizedChildFrmMode && !(m_bSDIApplication && (flags & QextMdi::Detach)))
+      if ((m_bMaximizedChildFrmMode && !(m_bSDIApplication && (flags & QextMdi::Detach)) && (m_mdiMode != QextMdi::ToplevelMode))
        || (flags & QextMdi::Maximize) ) {
          if (!pWnd->isMaximized())
             pWnd->maximize();
@@ -946,12 +947,14 @@ void QextMdiMainFrm::switchToToplevelMode()
        pDockW->show();
    }
 
+//   m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
    m_mdiMode = QextMdi::ToplevelMode;
    //qDebug("ToplevelMode on");
 }
 
 void QextMdiMainFrm::finishToplevelMode()
 {
+   m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
 }
 
 /**
@@ -976,6 +979,9 @@ void QextMdiMainFrm::switchToChildframeMode()
       }
 
       finishTabPageMode();
+   }
+   else if (m_mdiMode == QextMdi::ToplevelMode) {
+      finishToplevelMode();
    }
 
    if (m_pDockbaseAreaOfDocumentViews == 0L) {
@@ -1068,6 +1074,9 @@ void QextMdiMainFrm::switchToTabPageMode()
    // make sure that all MDI views are detached
    if (m_mdiMode == QextMdi::ChildframeMode) {
       finishChildframeMode();
+   }
+   else if (m_mdiMode == QextMdi::ToplevelMode) {
+      finishToplevelMode();
    }
 
    // resize to childframe mode size of the mainwindow if we were in toplevel mode
