@@ -21,9 +21,6 @@
 #include <qlistbox.h>
 #include <qstrlist.h>
 
-/**
- * @author John Birch
- */
 namespace JAVADebugger
 {
 

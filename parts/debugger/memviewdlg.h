@@ -21,10 +21,6 @@
 class KLineEdit;
 class QMultiLineEdit;
 
-/**
- * @author John Birch
- */
-
 namespace GDBDebugger
 {
 

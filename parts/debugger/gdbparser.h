@@ -18,10 +18,6 @@
 
 #include "variablewidget.h"
 
-/**
- * @author John Birch
- */
-
 namespace GDBDebugger
 {
 

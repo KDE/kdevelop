@@ -166,7 +166,7 @@ void JDBParser::setItem(TrimmableItem *parent, const QString &varName,
     } else {
         // Don't update a "this" item because it'll alwasy stay red because the local
         // this looks different than the param this.
-        // TODO - this is not good code. We should check to see if the address is the
+        // @todo - this is not good code. We should check to see if the address is the
         // same between params and locals before ignoring the param.
         //    if (params && varName == "this")
         //      return;

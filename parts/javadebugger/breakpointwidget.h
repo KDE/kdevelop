@@ -31,8 +31,8 @@ class QMouseEvent;
 /***************************************************************************/
 /***************************************************************************/
 
-//TODO derive a JDB specific manager to handle the JDB specific
-// data in the parsers!!
+/// @todo derive a JDB specific manager to handle the JDB specific
+/// data in the parsers!!
 
 class BreakpointWidget : public KListBox
 {

@@ -497,8 +497,8 @@ void GDBController::parseLine(char* buf)
         // breakpoint is trying to access memory no longer used. The breakpoint
         // must first be deleted, however, we want to retain the breakpoint for
         // when the library gets loaded again.
-        // TODO  programHasExited_ isn't always set correctly,
-        // but it (almost) doesn't matter.
+        /// @todo  programHasExited_ isn't always set correctly,
+        /// but it (almost) doesn't matter.
         if ( strncmp(buf, "Cannot insert breakpoint", 24)==0)
         {
             if (programHasExited_)
@@ -680,7 +680,7 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
-    // TODO - Only do this at start up
+    /// @todo - Only do this at start up
     if (//strncmp(buf, "No executable file specified.", 29) ==0   ||
         strstr(buf, "not in executable format:")                ||
         strstr(buf, "No such file or directory.")               ||  // does this fall out?
@@ -1837,8 +1837,8 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
     // breakpoint is trying to access memory no longer used. The breakpoint
     // must first be deleted, however, we want to retain the breakpoint for
     // when the library gets loaded again.
-    // TODO  programHasExited_ isn't always set correctly,
-    // but it (almost) doesn't matter.
+    /// @todo  programHasExited_ isn't always set correctly,
+    /// but it (almost) doesn't matter.
     //  if (programHasExited_ && (found = strstr(bufData.data(), "Cannot insert breakpoint")))
     //  {
     //    setStateOff(s_appBusy);

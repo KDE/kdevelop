@@ -707,7 +707,7 @@ void VarItem::checkForRequests()
     // On the other hand, if it's empty, there is no reason to go on...
     if ( cache_.isEmpty() ) return;
 
-    // TODO - hardcoded for now - these should get read from config
+    /// @todo - hardcoded for now - these should get read from config
 
     // Signature for a QT1.44 QString
     if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
@@ -724,7 +724,7 @@ void VarItem::checkForRequests()
     }
 
     // Signature for a QT2.x QT3.x QString
-    // TODO - This handling is not that good - but it works sufficiently well
+    /// @todo - This handling is not that good - but it works sufficiently well
     // at the moment to leave it here, and it won't cause bad things to happen.
     if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
         waitingForData();

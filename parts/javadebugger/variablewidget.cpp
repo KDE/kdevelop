@@ -42,7 +42,7 @@
 namespace JAVADebugger
 {
 
-//TODO - change to a base class parser and setup a factory
+/// @todo - change to a base class parser and setup a factory
 static JDBParser *parser = 0;
 
 static JDBParser *getParser()
@@ -561,7 +561,7 @@ QCString VarItem::getCache()
 
 void VarItem::checkForRequests()
 {
-    // TODO - hardcoded for now - these should get read from config
+    /// @todo - hardcoded for now - these should get read from config
 
     // Signature for a QT1.44 QString
     if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0) {
@@ -578,8 +578,8 @@ void VarItem::checkForRequests()
     }
 
     // Signature for a QT2.0.x QT2.1 QString
-    // TODO - This handling is not that good - but it works sufficiently well
-    // at the moment to leave it here, and it won't cause bad things to happen.
+    /// @todo - This handling is not that good - but it works sufficiently well
+    /// at the moment to leave it here, and it won't cause bad things to happen.
     if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
