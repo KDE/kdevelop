@@ -1,3 +1,8 @@
+1999-10-18 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* bugfixing segfault in classview if comments or
+	  precompiler messages exeeds 2048 bytes (or 16k flex limit)
+	  now the parseable length should be limited only by the memory
+ 
 1999-10-13 Stefan Bartel <bartel@rz.uni-potsdam.de>
 	* commited patches for bug 2118 and 2113
 
