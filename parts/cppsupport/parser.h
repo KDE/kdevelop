@@ -108,7 +108,6 @@ public /*rules*/ :
     bool skipAssignmentExpression( AST::Node& node );
     bool skipExpressionStatement( StatementAST::Node& node );
 
-#if 0
     bool parseExpression( AST::Node& node );
     bool parsePrimaryExpression( AST::Node& node );
     bool parsePostfixExpression( AST::Node& node );
@@ -135,7 +134,6 @@ public /*rules*/ :
     bool parseConstantExpression( AST::Node& node );
     bool parseCommaExpression( AST::Node& node );
     bool parseThrowExpression( AST::Node& node );
-#endif
 
     // statement
     bool parseCondition( AST::Node& node );
