@@ -1407,11 +1407,11 @@ void CKDevelop::slotHelpTutorial(){
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/tutorial.html";
+  file = strpath + klocale->language() + '/' + "kdevelop/programming.html";
 
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/tutorial.html";
+    file = strpath + "default/" + "kdevelop/programming.html";
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 	
@@ -2575,6 +2575,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 
