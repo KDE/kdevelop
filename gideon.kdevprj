@@ -203,7 +203,7 @@ email=kdevelop-devel@kdevelop.org
 kdevprj_version=1.3
 lfv_open_groups=
 make_options=\s-j1
-makefiles=./Makefile.am,admin/Makefile.am,src/Makefile.am,plugins/Makefile.am,plugins/pgioptions/Makefile.am,plugins/gccoptions/Makefile.am,pics/Makefile.am,pics/toolbar/Makefile.am,pics/mini/Makefile.am,parts/Makefile.am,parts/fileselector/Makefile.am,parts/trollproject/Makefile.am,parts/tools/Makefile.am,parts/tipofday/Makefile.am,parts/simple-editor/Makefile.am,parts/scriptproject/Makefile.am,parts/scripting/Makefile.am,parts/regexptest/Makefile.am,parts/pythonsupport/Makefile.am,parts/phpsupport/Makefile.am,parts/phpsupport/data/Makefile.am,parts/perlsupport/Makefile.am,parts/partselector/Makefile.am,parts/outputviews/Makefile.am,parts/nedit/Makefile.am,parts/manager/Makefile.am,parts/kwrite-part/Makefile.am,parts/kwrite-part/kwrite/Makefile.am,parts/konsole/Makefile.am,parts/javasupport/Makefile.am,parts/javasupport/org/Makefile.am,parts/javasupport/org/kde/Makefile.am,parts/javasupport/org/kde/koala/Makefile.am,parts/javasupport/kdejava/Makefile.am,parts/javadebugger/Makefile.am,parts/grepview/Makefile.am,parts/fortransupport/Makefile.am,parts/fileview/Makefile.am,parts/editor-chooser/Makefile.am,parts/doxygen/Makefile.am,parts/doctreeview/Makefile.am,parts/distpart/Makefile.am,parts/debugger/Makefile.am,parts/cvs/Makefile.am,parts/customproject/Makefile.am,parts/ctags/Makefile.am,parts/cppsupport/Makefile.am,parts/classview/Makefile.am,parts/autoproject/Makefile.am,parts/astyle/Makefile.am,parts/appwizard/Makefile.am,parts/appwizard/pythonhello/Makefile.am,parts/appwizard/phphello/Makefile.am,parts/appwizard/kscreensaver/Makefile.am,parts/appwizard/kpartplugin/Makefile.am,parts/appwizard/kpartapp/Makefile.am,parts/appwizard/kofficepart/Makefile.am,parts/appwizard/kioslave/Makefile.am,parts/appwizard/kicker/Makefile.am,parts/appwizard/kdevpartjava/Makefile.am,parts/appwizard/kdevpart/Makefile.am,parts/appwizard/kcmodule/Makefile.am,parts/appwizard/kappjava/Makefile.am,parts/appwizard/kapp/Makefile.am,parts/appwizard/imports/Makefile.am,parts/appwizard/gnomeapp/Makefile.am,parts/appwizard/cpphello/Makefile.am,parts/appwizard/common/Makefile.am,parts/appwizard/chello/Makefile.am,lib/Makefile.am,lib/util/Makefile.am,lib/sourceinfo/Makefile.am,lib/qt3stuff/Makefile.am,lib/interfaces/Makefile.am,lib/interfaces/keditor/Makefile.am,doc/Makefile.am,doc/tools/Makefile.am,doc/stl/Makefile.am,doc/libc/Makefile.am,doc/kde2book/Makefile.am,doc/kde2book/graphics/Makefile.am,doc/3rdparty/Makefile.am,debian/Makefile.am,lib/structure/Makefile.am
+makefiles=./Makefile.am,admin/Makefile.am,src/Makefile.am,plugins/Makefile.am,plugins/pgioptions/Makefile.am,plugins/gccoptions/Makefile.am,pics/Makefile.am,pics/toolbar/Makefile.am,pics/mini/Makefile.am,parts/Makefile.am,parts/fileselector/Makefile.am,parts/trollproject/Makefile.am,parts/tools/Makefile.am,parts/tipofday/Makefile.am,parts/simple-editor/Makefile.am,parts/scriptproject/Makefile.am,parts/scripting/Makefile.am,parts/regexptest/Makefile.am,parts/pythonsupport/Makefile.am,parts/phpsupport/Makefile.am,parts/phpsupport/data/Makefile.am,parts/perlsupport/Makefile.am,parts/partselector/Makefile.am,parts/outputviews/Makefile.am,parts/nedit/Makefile.am,parts/manager/Makefile.am,parts/kwrite-part/Makefile.am,parts/kwrite-part/kwrite/Makefile.am,parts/konsole/Makefile.am,parts/javasupport/Makefile.am,parts/javasupport/org/Makefile.am,parts/javasupport/org/kde/Makefile.am,parts/javasupport/org/kde/koala/Makefile.am,parts/javasupport/kdejava/Makefile.am,parts/javadebugger/Makefile.am,parts/grepview/Makefile.am,parts/fortransupport/Makefile.am,parts/fileview/Makefile.am,parts/editor-chooser/Makefile.am,parts/doxygen/Makefile.am,parts/doctreeview/Makefile.am,parts/distpart/Makefile.am,parts/debugger/Makefile.am,parts/cvs/Makefile.am,parts/customproject/Makefile.am,parts/ctags/Makefile.am,parts/cppsupport/Makefile.am,parts/classview/Makefile.am,parts/autoproject/Makefile.am,parts/astyle/Makefile.am,parts/appwizard/Makefile.am,parts/appwizard/pythonhello/Makefile.am,parts/appwizard/phphello/Makefile.am,parts/appwizard/kscreensaver/Makefile.am,parts/appwizard/kpartplugin/Makefile.am,parts/appwizard/kpartapp/Makefile.am,parts/appwizard/kofficepart/Makefile.am,parts/appwizard/kioslave/Makefile.am,parts/appwizard/kicker/Makefile.am,parts/appwizard/kdevpartjava/Makefile.am,parts/appwizard/kdevpart/Makefile.am,parts/appwizard/kcmodule/Makefile.am,parts/appwizard/kappjava/Makefile.am,parts/appwizard/kapp/Makefile.am,parts/appwizard/imports/Makefile.am,parts/appwizard/gnomeapp/Makefile.am,parts/appwizard/cpphello/Makefile.am,parts/appwizard/common/Makefile.am,parts/appwizard/chello/Makefile.am,lib/Makefile.am,lib/util/Makefile.am,lib/sourceinfo/Makefile.am,lib/qt3stuff/Makefile.am,lib/interfaces/Makefile.am,lib/interfaces/keditor/Makefile.am,doc/Makefile.am,doc/tools/Makefile.am,doc/stl/Makefile.am,doc/libc/Makefile.am,doc/kde2book/Makefile.am,doc/kde2book/graphics/Makefile.am,doc/3rdparty/Makefile.am,debian/Makefile.am,lib/structure/Makefile.am,src/ lib/ parts/ plugins/ pics/Makefile.am,src/ lib/ parts/ plugins/Makefile.am,src/ lib/ parts/Makefile.am,src/ lib/Makefile.am
 modifyMakefiles=false
 project_name=gideon
 project_type=kde2_normal
@@ -225,7 +225,7 @@ User Interface=*.ui,*.kdevdlg,*.rc,
 groups=Headers,Sources,GNU,Translations,User Interface,Desktop,KIDL,Others
 
 [Makefile.am]
-sub_dirs=lib
+sub_dirs=lib,src
 
 [admin/ChangeLog]
 dist=true
@@ -6466,9 +6466,9 @@ install_location=
 type=SOURCE
 
 [lib/sourceinfo/Makefile.am]
-files=lib/sourceinfo/ClassStoreIface.cpp,lib/sourceinfo/ClassStoreIface.h,lib/sourceinfo/classparser.dia,lib/sourceinfo/classstore.cpp,lib/sourceinfo/classstore.h,lib/sourceinfo/classtreenode.cpp,lib/sourceinfo/classtreenode.h,lib/sourceinfo/main.cpp,lib/sourceinfo/parsedargument.cpp,lib/sourceinfo/parsedargument.h,lib/sourceinfo/parsedattribute.cpp,lib/sourceinfo/parsedattribute.h,lib/sourceinfo/parsedclass.cpp,lib/sourceinfo/parsedclass.h,lib/sourceinfo/parsedclasscontainer.cpp,lib/sourceinfo/parsedclasscontainer.h,lib/sourceinfo/parsedcontainer.cpp,lib/sourceinfo/parsedcontainer.h,lib/sourceinfo/parseditem.cpp,lib/sourceinfo/parseditem.h,lib/sourceinfo/parsedmethod.cpp,lib/sourceinfo/parsedmethod.h,lib/sourceinfo/parsedparent.cpp,lib/sourceinfo/parsedparent.h,lib/sourceinfo/parsedscopecontainer.cpp,lib/sourceinfo/parsedscopecontainer.h,lib/sourceinfo/parsedstruct.cpp,lib/sourceinfo/parsedstruct.h,lib/sourceinfo/persistantclassstore.cpp,lib/sourceinfo/persistantclassstore.h,lib/sourceinfo/programmingbycontract.h,lib/sourceinfo/ClassStoreIface.kidl,lib/sourceinfo/ClassStoreIface_skel.cpp,
+files=lib/sourceinfo/ClassStoreIface.cpp,lib/sourceinfo/ClassStoreIface.h,lib/sourceinfo/classparser.dia,lib/sourceinfo/classstore.cpp,lib/sourceinfo/classstore.h,lib/sourceinfo/classtreenode.cpp,lib/sourceinfo/classtreenode.h,lib/sourceinfo/main.cpp,lib/sourceinfo/parsedargument.cpp,lib/sourceinfo/parsedargument.h,lib/sourceinfo/parsedattribute.cpp,lib/sourceinfo/parsedattribute.h,lib/sourceinfo/parsedclass.cpp,lib/sourceinfo/parsedclass.h,lib/sourceinfo/parsedclasscontainer.cpp,lib/sourceinfo/parsedclasscontainer.h,lib/sourceinfo/parsedcontainer.cpp,lib/sourceinfo/parsedcontainer.h,lib/sourceinfo/parseditem.cpp,lib/sourceinfo/parseditem.h,lib/sourceinfo/parsedmethod.cpp,lib/sourceinfo/parsedmethod.h,lib/sourceinfo/parsedparent.cpp,lib/sourceinfo/parsedparent.h,lib/sourceinfo/parsedscopecontainer.cpp,lib/sourceinfo/parsedscopecontainer.h,lib/sourceinfo/parsedstruct.cpp,lib/sourceinfo/parsedstruct.h,lib/sourceinfo/persistantclassstore.cpp,lib/sourceinfo/persistantclassstore.h,lib/sourceinfo/programmingbycontract.h,lib/sourceinfo/ClassStoreIface.kidl,lib/sourceinfo/ClassStoreIface_skel.cpp,lib/sourceinfo/parsedscript.cpp,lib/sourceinfo/parsedscript.h,lib/sourceinfo/parsedscriptcontainer.cpp
 sub_dirs=
-type=normal
+type=static_library
 
 [lib/sourceinfo/classparser.dia]
 dist=true
@@ -6613,6 +6613,24 @@ dist=true
 install=false
 install_location=
 type=HEADER
+
+[lib/sourceinfo/parsedscript.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[lib/sourceinfo/parsedscript.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[lib/sourceinfo/parsedscriptcontainer.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
 
 [lib/sourceinfo/parsedstruct.cpp]
 dist=true
@@ -12575,9 +12593,40 @@ install=false
 install_location=
 type=HEADER
 
+[src/ lib/ parts/ plugins/ pics/Makefile.am]
+files=src/ lib/ parts/ plugins/ pics/parsedscriptcontainer.cpp,src/ lib/ parts/ plugins/ pics/parsedscriptcontainer.h
+sharedlib_LDFLAGS=-version-info 0:0:0
+sharedlib_rootname=\spics
+sub_dirs=
+type=shared_library
+
+[src/ lib/ parts/ plugins/ pics/parsedscriptcontainer.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[src/ lib/ parts/ plugins/ pics/parsedscriptcontainer.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[src/ lib/ parts/ plugins/Makefile.am]
+sub_dirs=\spics
+type=normal
+
+[src/ lib/ parts/Makefile.am]
+sub_dirs=\splugins
+type=normal
+
+[src/ lib/Makefile.am]
+sub_dirs=\sparts
+type=normal
+
 [src/Makefile.am]
 files=src/core.cpp,src/core.h,src/documentationpart.cpp,src/documentationpart.h,src/filenameedit.cpp,src/filenameedit.h,src/gideonui.rc,src/main.cpp,src/partloader.cpp,src/partloader.h,src/partselectwidget.cpp,src/partselectwidget.h,src/settingswidget.ui,src/statusbar.cpp,src/statusbar.h,src/toplevel.cpp,src/toplevel.h,
-sub_dirs=
+sub_dirs=\slib
 type=normal
 
 [src/core.cpp]
