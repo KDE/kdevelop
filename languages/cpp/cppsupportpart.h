@@ -232,7 +232,7 @@ private:
 		QGuardedPtr<QProgressBar> progressBar;
 		QStringList::Iterator it;
 		QStringList files;
-		QMap< QString, QPair<uint, Q_LONG> > pcs;
+		QMap< QString, QPair<uint, uint> > pcs;
 		QDataStream stream;
 		QFile file;
 		
