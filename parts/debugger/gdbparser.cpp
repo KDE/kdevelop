@@ -145,7 +145,7 @@ QCString GDBParser::getValue(char **buf, bool requested)
     // QT2.x string handling
     // A very bad hack alert!
     if (requested)
-        return value.replace( QRegExp("\\\\000"), "" );
+        return value.replace( QRegExp("\\\\0{1,3}"), "" );
 
     return value;
 }
