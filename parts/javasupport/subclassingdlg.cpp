@@ -77,14 +77,14 @@ SlotItem::SlotItem(QListView *parent,const QString &methodName,
     setOn(true);
     setEnabled(false);
   }
-  m_allreadyInSubclass = false;
+  m_alreadyInSubclass = false;
 }
 
 void SlotItem::setAllreadyInSubclass()
 {
   setOn(true);
   setEnabled(false);
-  m_allreadyInSubclass = true;
+  m_alreadyInSubclass = true;
 }
 
 
@@ -187,7 +187,7 @@ m_newFileNames(dummy), m_javaSupport( javaSupport )
   m_btnOk->setEnabled(true);
 }
 
-bool SubclassingDlg::allreadyInSubclass(const QString &method)
+bool SubclassingDlg::alreadyInSubclass(const QString &method)
 {
   for (uint i=0;i<m_parsedMethods.count();i++)
     if (method.find(m_parsedMethods[i])==0)
@@ -223,14 +223,14 @@ void SubclassingDlg::readUiFile()
   {
       newSlot = new SLOT_ACCEPT;
       newSlot->setOn(false);
-      if (allreadyInSubclass("accept()"))
+      if (alreadyInSubclass("accept()"))
           newSlot->setAllreadyInSubclass();
       m_slotView->insertItem(newSlot);
       m_slots << newSlot;
 
       newSlot = new SLOT_REJECT;
       newSlot->setOn(false);
-      if (allreadyInSubclass("reject()"))
+      if (alreadyInSubclass("reject()"))
           newSlot->setAllreadyInSubclass();
       m_slotView->insertItem(newSlot);
       m_slots << newSlot;
@@ -240,17 +240,17 @@ void SubclassingDlg::readUiFile()
   {
     newSlot = new SLOT_NEXT;
     m_slotView->insertItem(newSlot);
-    if (allreadyInSubclass("next()"))
+    if (alreadyInSubclass("next()"))
       newSlot->setAllreadyInSubclass();
     m_slots << newSlot;
     newSlot = new SLOT_BACK;
     m_slotView->insertItem(newSlot);
-    if (allreadyInSubclass("back()"))
+    if (alreadyInSubclass("back()"))
       newSlot->setAllreadyInSubclass();
     m_slots << newSlot;
     newSlot = new SLOT_HELP;
     newSlot->setOn(false);
-    if (allreadyInSubclass("help()"))
+    if (alreadyInSubclass("help()"))
       newSlot->setAllreadyInSubclass();
     m_slotView->insertItem(newSlot);
     m_slots << newSlot;
@@ -267,7 +267,7 @@ void SubclassingDlg::readUiFile()
                            slotelem.attributeNode("access").value(),
                            slotelem.attributeNode("returnType").value(),false);
     m_slotView->insertItem(newSlot);
-    if (allreadyInSubclass(slotelem.text()))
+    if (alreadyInSubclass(slotelem.text()))
       newSlot->setAllreadyInSubclass();
     m_slots << newSlot;
   }
@@ -283,7 +283,7 @@ void SubclassingDlg::readUiFile()
                            funcelem.attributeNode("access").value(),
                            funcelem.attributeNode("returnType").value(),true);
     m_slotView->insertItem(newFunc);
-    if (allreadyInSubclass(funcelem.text()))
+    if (alreadyInSubclass(funcelem.text()))
       newFunc->setAllreadyInSubclass();
     m_slots << newFunc;
   }
@@ -402,7 +402,7 @@ void SubclassingDlg::accept()
   {
     SlotItem *slitem = m_slots[i];
     if (!slitem->isOn() ||
-        slitem->m_allreadyInSubclass)
+        slitem->m_alreadyInSubclass)
       continue;
     QString declBuild;
     if (slitem->m_access=="public")
@@ -480,7 +480,7 @@ void SubclassingDlg::accept()
   {
     SlotItem *slitem = m_slots[i];
     if (!slitem->isOn() ||
-         slitem->m_allreadyInSubclass)
+         slitem->m_alreadyInSubclass)
       continue;
     QString impl = slitem->m_callBaseClass ? implementation_callbase : implementation;
     replace(impl,"$RETURNTYPE$",slitem->m_returnType);

@@ -34,7 +34,7 @@ class SlotItem : public QCheckListItem
   QString         m_specifier;
   bool            m_isFunc;
   bool            m_callBaseClass;
-  bool            m_allreadyInSubclass;
+  bool            m_alreadyInSubclass;
 };
 
 
@@ -56,7 +56,7 @@ private:
   void                  replace(QString &string, const QString& search, const QString& replace);
   bool                  saveBuffer(QString &buffer, const QString& filename);
   bool                  loadBuffer(QString &buffer, const QString& filename);
-  bool                  allreadyInSubclass(const QString &method);
+  bool                  alreadyInSubclass(const QString &method);
   bool                  m_creatingNewSubclass;
 
 public slots:

@@ -2,7 +2,7 @@ Distpart.
 =========
 
 - User interface and global architecture designed initially by Ian Reinart Geiser <geiseri@yahoo.com>
-- additionnal code by Yann Hodique <Yann.Hodique@lifl.fr>
+- additional code by Yann Hodique <Yann.Hodique@lifl.fr>
 
 This part aims to provide some help to the developpers for packaging
 and publishing their projects by ftp protocol.
