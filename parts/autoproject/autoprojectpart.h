@@ -52,7 +52,7 @@ public:
     virtual void removeFile(const QString &fileName);
     virtual void removeFiles ( const QStringList& fileList );
     virtual QString buildDirectory();
-	
+
 	/**
 	 * Implementation of the KDevPlugin interface.
 	 */
@@ -96,8 +96,9 @@ private slots:
     void slotBuildConfigChanged(const QString &config);
     void slotBuildConfigAboutToShow();
     void slotCommandFinished( const QString& command );
+    void slotCommandFailed( const QString& command );
     //void slotImportExisting();
-    
+
 private:
     QGuardedPtr<AutoProjectWidget> m_widget;
     QString m_projectName;
@@ -111,6 +112,7 @@ private:
     bool m_executeAfterBuild;
     QString m_buildCommand;
     bool m_needMakefileCvs;
+    bool m_lastCompilationFailed;
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;

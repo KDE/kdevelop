@@ -52,6 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautopro
 
 AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
     : KDevProject("AutoProject", "autoproject", parent, name ? name : "AutoProjectPart")
+    , m_lastCompilationFailed(false)
 {
     setInstance(AutoProjectFactory::instance());
 
@@ -150,6 +151,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
              this, SLOT(slotCommandFinished(const QString&)) );
+    connect( makeFrontend(), SIGNAL(commandFailed(const QString&)),
+             this, SLOT(slotCommandFailed(const QString&)) );
 
     setWantautotools();
 }
@@ -528,6 +531,8 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
 
 void AutoProjectPart::slotBuild()
 {
+    m_lastCompilationFailed = false;
+
     if( m_needMakefileCvs ){
 	slotMakefilecvs();
 	slotConfigure();
@@ -749,7 +754,7 @@ void AutoProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
 
-    if( !m_executeAfterBuild && DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && isDirty() ){
+    if( DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
         slotBuild();
         return;
@@ -841,9 +846,7 @@ void AutoProjectPart::savePartialProjectSession ( QDomElement* el )
 
 void AutoProjectPart::slotCommandFinished( const QString& command )
 {
-    kdDebug(9020) << "AutoProjectPart::slotProcessFinished()" << endl;
-
-    Q_UNUSED( command );
+    kdDebug(9020) << k_funcinfo << endl;
 
     if( m_buildCommand != command )
 	return;
@@ -868,8 +871,17 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     }
 }
 
+void AutoProjectPart::slotCommandFailed( const QString& /*command*/ )
+{
+    kdDebug(9020) << k_funcinfo << endl;
+
+    m_lastCompilationFailed = true;
+}
+
 bool AutoProjectPart::isDirty()
 {
+    if (m_lastCompilationFailed) return true;
+
     QStringList fileList = allFiles();
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){
