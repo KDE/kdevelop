@@ -133,12 +133,17 @@ void ProfileEditor::refreshAvailableList()
 {
     //filling a list of available plugins
     allList->clear();
+    allCore = new KListViewItem(allList, i18n("Core"));
+    allCore->setOpen(true);
     allGlobal = new KListViewItem(allList, i18n("Global"));
     allGlobal->setOpen(true);
     allProject = new KListViewItem(allList, i18n("Project"));
     allProject->setOpen(true);
     
-    KTrader::OfferList olist = engine.allOffers(ProfileEngine::Global);
+    KTrader::OfferList olist = engine.allOffers(ProfileEngine::Core);
+    for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
+        new KListViewItem(allCore, (*it)->name(), (*it)->genericName());
+    olist = engine.allOffers(ProfileEngine::Global);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
         new KListViewItem(allGlobal, (*it)->name(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Project);
@@ -192,11 +197,19 @@ void ProfileEditor::fillPluginsList(Profile *profile)
 {
     pluginsView->clear();
     
+    KListViewItem *core = new KListViewItem(pluginsView, i18n("Core Plugins"));
+    core->setOpen(true);
     KListViewItem *global = new KListViewItem(pluginsView, i18n("Global Plugins"));
     global->setOpen(true);
     KListViewItem *project = new KListViewItem(pluginsView, i18n("Project Plugins"));
     project->setOpen(true);
-    
+
+    KTrader::OfferList coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
+    for (KTrader::OfferList::const_iterator it = coreOffers.constBegin();
+            it != coreOffers.constEnd(); ++it)
+        new KListViewItem(core, (*it)->name(), (*it)->genericName(),
+            (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
+        
     KTrader::OfferList globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
     for (KTrader::OfferList::const_iterator it = globalOffers.constBegin();
             it != globalOffers.constEnd(); ++it)

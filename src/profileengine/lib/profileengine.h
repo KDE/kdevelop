@@ -40,7 +40,7 @@ public:
     ProfileEngine();
     ~ProfileEngine();
 
-    enum OfferType { Global, Project };
+    enum OfferType { Global, Project, Core };
     
     KTrader::OfferList offers(const QString &profileName, OfferType offerType);
     KTrader::OfferList allOffers(OfferType offerType);

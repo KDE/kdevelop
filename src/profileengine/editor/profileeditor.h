@@ -59,6 +59,7 @@ protected:
 private:
     ProfileEngine engine;
 
+    KListViewItem *allCore;
     KListViewItem *allGlobal;
     KListViewItem *allProject;    
 };

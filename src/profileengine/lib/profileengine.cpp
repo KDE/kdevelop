@@ -91,6 +91,9 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
         case Project:
             constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Project'");
             break;
+        case Core:
+            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Core'");
+            break;
     }
     QString constraint_add = "";
     Profile::EntryList properties = profile->list(Profile::Properties);
@@ -158,6 +161,9 @@ KTrader::OfferList ProfileEngine::allOffers(OfferType offerType)
             break;
         case Project:
             constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Project'");
+            break;
+        case Core:
+            constraint += QString::fromLatin1(" and [X-KDevelop-Scope] == 'Core'");
             break;
     }
     return KTrader::self()->query(QString::fromLatin1("KDevelop/Plugin"), constraint);
