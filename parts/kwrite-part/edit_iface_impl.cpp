@@ -1,13 +1,19 @@
+#include <kdebug.h>
+
+
+#include "kwrite/kwview.h"
+
+
 #include "edit_iface_impl.h"
 
 
-EditIfaceImpl::EditIfaceImpl(QMultiLineEdit *edit, KEditor::Editor *parent)
-    : EditIface(parent), m_edit(edit)
-{}
+EditIfaceImpl::EditIfaceImpl(KWrite *edit, KEditor::Document *parent, KEditor::Editor *editor)
+  : EditDocumentIface(parent, editor), m_edit(edit)
+{
+}
 
 
-
-QString EditIfaceImpl::getText()
+QString EditIfaceImpl::text() const
 {
   return m_edit->text();
 }
@@ -15,6 +21,7 @@ QString EditIfaceImpl::getText()
 
 void EditIfaceImpl::setText(const QString &text)
 {
+  // TODO: find a way to set the text so that it is undoable!
   m_edit->setText(text);
 }
 
