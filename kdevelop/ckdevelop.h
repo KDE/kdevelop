@@ -151,6 +151,8 @@ public:
   void slotEditRepeatSearch();
 	/** opens the search and replace dialog */
   void slotEditReplace();
+  void slotEditIndent();
+  void slotEditUnindent();
   /** selects the whole editing widget text */
   void slotEditSelectAll();
   /** inverts the selection */
@@ -481,6 +483,7 @@ private:
 };
 
 #endif
+
 
 
 

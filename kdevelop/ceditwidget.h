@@ -46,7 +46,8 @@ public:
   void searchAgain();
   void replace();
   void gotoLine();
-
+  void indent();
+  void unIndent();
 protected:
 //  QString filename;
   QPopupMenu* pop;
@@ -61,6 +62,8 @@ protected:
 };
 
 #endif
+
+
 
 
 

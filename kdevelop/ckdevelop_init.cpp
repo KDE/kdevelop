@@ -307,6 +307,11 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Replace"), "Replace",IDK_EDIT_REPLACE );
   accel->connectItem( "Replace", this, SLOT(slotEditReplace() ) );
 
+  accel->insertItem( i18n("Indent"), "Indent",IDK_EDIT_INDENT );
+  accel->connectItem( "Indent", this, SLOT(slotEditIndent() ) );
+
+  accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
+  accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ) );
 
 
   //view menu
@@ -414,18 +419,18 @@ void CKDevelop::initMenu(){
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
   edit_menu->insertItem(pix,i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
+  edit_menu->insertSeparator();
+	edit_menu->insertItem(i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
+	edit_menu->insertItem(i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
-  edit_menu->insertSeparator();
+
+	edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-
-  edit_menu->insertItem(i18n("&Repeat Search"), this,
-			SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
-
+  edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
   
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
-
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
@@ -578,11 +583,12 @@ void CKDevelop::initMenu(){
   disableCommand(ID_BUILD_DEBUG);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
+  disableCommand(ID_BUILD_STOP);
   disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
   disableCommand(ID_BUILD_DISTCLEAN);
   disableCommand(ID_BUILD_AUTOCONF);
   disableCommand(ID_BUILD_CONFIGURE);
-  disableCommand(ID_BUILD_STOP);
+  disableCommand(ID_BUILD_MESSAGES);  	
   disableCommand(ID_BUILD_MAKE_PROJECT_API);
   disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   disableCommand(ID_BUILD_COMPILE_FILE);
@@ -939,6 +945,9 @@ void CKDevelop::setKeyAccel(){
   accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
+
 
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
   accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
@@ -953,3 +962,9 @@ void CKDevelop::setKeyAccel(){
   accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
 
 }
+
+
+
+
+
+

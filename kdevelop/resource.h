@@ -57,6 +57,9 @@
 #define ID_EDIT_REPEAT_SEARCH       11080
 #define ID_EDIT_REPLACE             11090
 
+#define ID_EDIT_INDENT             	11091
+#define ID_EDIT_UNINDENT            11092
+
 #define ID_EDIT_SELECT_ALL          11100
 #define ID_EDIT_DESELECT_ALL        11110
 #define ID_EDIT_INVERT_SELECTION    11120
@@ -215,41 +218,45 @@
 
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
-#define IDK_FILE_NEW	       CTRL+Key_N
-#define IDK_FILE_OPEN	       CTRL+Key_O
-#define IDK_FILE_SAVE	       CTRL+Key_S
-#define IDK_FILE_PRINT         CTRL+Key_P
-#define IDK_FILE_CLOSE	       CTRL+Key_W
-#define IDK_FILE_QUIT	       CTRL+Key_Q
+#define IDK_FILE_NEW	       					CTRL+Key_N
+#define IDK_FILE_OPEN	       					CTRL+Key_O
+#define IDK_FILE_SAVE	       					CTRL+Key_S
+#define IDK_FILE_PRINT         				CTRL+Key_P
+#define IDK_FILE_CLOSE	       				CTRL+Key_W
+#define IDK_FILE_QUIT	       					CTRL+Key_Q
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
-#define IDK_EDIT_UNDO	       CTRL+Key_Z
-#define IDK_EDIT_REDO	       CTRL+Key_Y
+#define IDK_EDIT_UNDO	       					CTRL+Key_Z
+#define IDK_EDIT_REDO	       					CTRL+Key_Y
 
-#define IDK_EDIT_CUT	       CTRL+Key_X
-#define IDK_EDIT_COPY	       CTRL+Key_C
-#define IDK_EDIT_PASTE	       CTRL+Key_V
+#define IDK_EDIT_CUT	       					CTRL+Key_X
+#define IDK_EDIT_COPY	       					CTRL+Key_C
+#define IDK_EDIT_PASTE								CTRL+Key_V
 
-#define IDK_EDIT_SEARCH	       CTRL+Key_F
-#define IDK_EDIT_REPEAT_SEARCH Key_F3
-#define IDK_EDIT_REPLACE       CTRL+Key_R
+#define IDK_EDIT_SEARCH								CTRL+Key_F
+#define IDK_EDIT_REPEAT_SEARCH				Key_F3
+#define IDK_EDIT_REPLACE							CTRL+Key_R
+
+#define IDK_EDIT_INDENT								CTRL+Key_I
+#define IDK_EDIT_UNINDENT							CTRL+Key_U
+
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
-#define IDK_VIEW_GOTO_LINE	    CTRL+Key_L
-#define IDK_VIEW_TREEVIEW	    CTRL+Key_T
-#define IDK_VIEW_OUTPUTVIEW	    CTRL+Key_G
-#define IDK_VIEW_STATUSBAR          CTRL+Key_B			
+#define IDK_VIEW_GOTO_LINE	    			CTRL+Key_L
+#define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
+#define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_G
+#define IDK_VIEW_STATUSBAR          	CTRL+Key_B			
 
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 
 
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries 
-#define IDK_BUILD_COMPILE_FILE	        CTRL+Key_F10
-#define IDK_BUILD_MAKE			Key_F9
-#define IDK_BUILD_MAKE_WITH		ALT+Key_F9
-#define IDK_BUILD_RUN			CTRL+Key_F9
+#define IDK_BUILD_COMPILE_FILE	      CTRL+Key_F10
+#define IDK_BUILD_MAKE								Key_F9
+#define IDK_BUILD_MAKE_WITH						ALT+Key_F9
+#define IDK_BUILD_RUN									CTRL+Key_F9
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
@@ -261,13 +268,13 @@
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
 #define IDK_HELP_SEARCH_TEXT					Key_F2				
-#define IDK_HELP_CONTENTS						Key_F1
+#define IDK_HELP_CONTENTS							Key_F1
 
-#define IDK_SHOW_HEADER        CTRL+Key_1
-#define IDK_SHOW_C	       CTRL+Key_2
-#define IDK_SHOW_HELP	       CTRL+Key_3
-#define IDK_SHOW_TOOLS	       CTRL+Key_4
-#define IDK_TOGGLE_LAST        CTRL+Key_Tab
+#define IDK_SHOW_HEADER        				CTRL+Key_1
+#define IDK_SHOW_C	       						CTRL+Key_2
+#define IDK_SHOW_HELP	       					CTRL+Key_3
+#define IDK_SHOW_TOOLS	       				CTRL+Key_4
+#define IDK_TOGGLE_LAST        				CTRL+Key_Tab
 
 
 ///////////////////////////////////////////////////////////////////
@@ -314,6 +321,7 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
 
 
 

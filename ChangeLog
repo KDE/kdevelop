@@ -1,4 +1,8 @@
 1999-03-15  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added indent/unindent to the editwidgets
+	* en/disalbed cut/copy/paste for rb-menu of the editwidgets
+	
+1999-03-15  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed reread of changed key accelerators after closing setup dialg
 	
 1999-03-15  Sandy Meier  <smeier@rz.uni-potsdam.de>

@@ -21,6 +21,7 @@
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/highlight.h"
 #include <qpopupmenu.h>
+#include <qclipboard.h>
 
 HlManager hlManager; //highlight manager
 
@@ -35,6 +36,9 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   pop->insertItem(i18n("Cut"),this,SLOT(cut()),0,1);
   pop->insertItem(i18n("Copy"),this,SLOT(copy()),0,2);
   pop->insertItem(i18n("Paste"),this,SLOT(paste()),0,3);
+	pop->setItemEnabled(1,false);
+	pop->setItemEnabled(2,false);
+	pop->setItemEnabled(3,false);
   pop->insertSeparator();
   pop->insertItem("",this,SLOT(slotLookUp()),0,0);
   bookmarks.setAutoDelete(true);
@@ -108,6 +112,12 @@ void CEditWidget::replace(){
 void CEditWidget::gotoLine(){
   KWrite::gotoLine();
 }
+void CEditWidget::indent(){
+	KWrite::indent();
+}
+void CEditWidget::unIndent(){
+  KWrite::unIndent();
+}
 
 void CEditWidget::enterEvent ( QEvent * e){
   setFocus();
@@ -138,6 +148,21 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     }
 
     QString str = markedText();
+		if(!str.isEmpty()){
+			pop->setItemEnabled(1,true);
+			pop->setItemEnabled(2,true);
+		}
+		else{
+			pop->setItemEnabled(1,false);
+			pop->setItemEnabled(2,false);
+		}		
+		QClipboard *cb = kapp->clipboard();
+		QString text=cb->text();
+		if(text.isEmpty())
+			pop->setItemEnabled(3,false);
+		else
+			pop->setItemEnabled(3,true);
+
     if(str == ""){
       str = word(event->x(),event->y());
     }
@@ -153,6 +178,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
 
 
 

@@ -177,6 +177,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_DISTCLEAN);
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_BUILD_CONFIGURE);
+    enableCommand(ID_BUILD_MESSAGES);
     disableCommand(ID_BUILD_STOP);
     enableCommand(ID_BUILD_MAKE_PROJECT_API);
     enableCommand(ID_BUILD_MAKE_USER_MANUAL);
@@ -196,6 +197,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_DISTCLEAN);
     disableCommand(ID_BUILD_AUTOCONF);
     disableCommand(ID_BUILD_CONFIGURE);
+    disableCommand(ID_BUILD_MESSAGES);
     enableCommand(ID_BUILD_STOP);
     disableCommand(ID_BUILD_MAKE_PROJECT_API);
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);

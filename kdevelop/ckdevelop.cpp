@@ -348,6 +348,12 @@ void CKDevelop::slotEditReplace(){
   edit_widget->replace();
   slotStatusMsg(IDS_DEFAULT); 
 }
+void CKDevelop::slotEditIndent(){
+	edit_widget->indent();
+}
+void CKDevelop::slotEditUnindent(){
+	edit_widget->unIndent();
+}
 void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(i18n("Selecting all..."));
   edit_widget->selectAll();
@@ -1964,6 +1970,9 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
 
 
 
