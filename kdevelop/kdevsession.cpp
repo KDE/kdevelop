@@ -208,9 +208,19 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
     }
   }
 
+  QextMdiChildView* pLastView = 0L;
   QextMdiIterator<QextMdiChildView*>* winListIter = ((QextMdiMainFrm*)m_pDocViewMan->parent())->createIterator();
   for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
-    winListIter->currentItem()->show();
+    pLastView = winListIter->currentItem();
+  }
+  // show the last (the one above all)
+  if (pLastView) {
+    pLastView->show();
+    QApplication::sendPostedEvents();
+    // show the rest
+    for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
+      winListIter->currentItem()->show();
+    }
   }
 
   return true;
