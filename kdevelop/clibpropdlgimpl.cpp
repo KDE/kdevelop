@@ -30,11 +30,10 @@ CLibPropDlgImpl::CLibPropDlgImpl(TMakefileAmInfo* info, QWidget *parent, const c
 
   enableShared->setChecked(sharedLib);
   enableStatic->setChecked(!sharedLib);
+
   libNameEdit->setText(m_info->sharedlibRootName);
   LDFlagsEdit->setText(m_info->sharedlibLDFLAGS);
-
-  libNameEdit->setEnabled(sharedLib);
-  LDFlagsEdit->setEnabled(sharedLib);
+  GroupBox1->setEnabled(sharedLib);
 
   connect(rbGroup_LibType, SIGNAL(clicked(int)), this, SLOT(slotLibChanged(int)));
 }
