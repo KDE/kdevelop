@@ -24,6 +24,11 @@
 //#include "cproject.h"
 class CProject;
 
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+  bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
+    QString& in_absname, QString& in_filename);
+
 /**
   * tool class for generating new files with templates
   *@author Sandy Meier

@@ -23,15 +23,76 @@
 #include "cproject.h"
 #include <kprocess.h>
 
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+#include <qdir.h>
+
+bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
+  QString& in_absname, QString& in_filename)
+{
+  if(in_filename == "")
+    out_onlyname = QFileInfo(in_absname).fileName(); //cat from whole path	
+  else
+    out_onlyname = QFileInfo(in_filename).fileName(); //cat from extra value ??
+
+  //if in_absname includes directory path
+  QString dirname = QFileInfo(in_absname).dirPath(true);
+  if(dirname.contains(prj->getProjectDir()) == 0 )
+  {
+    printf("don't try create a new subdir outside projectdirectory\n");	
+    return false;
+  }
+  else //just mkdir
+  {
+    QDir dir;
+    dir = (const char*)dirname;
+    printf("handleCreateSubDirectory() need create a directory '%s'\n", (const char*)dirname);			
+    if(dir.exists() == false)
+    {
+      QString dir_to_make;
+      dir_to_make = prj->getProjectDir() + prj->getSubDir(); //always exist, i hope ,-)
+      int new_element;
+      while	(dir_to_make != dirname)
+      {
+        new_element = dirname.find(dir.separator(), dir_to_make.length(), false);
+
+        if(new_element == -1)
+          dir_to_make = dirname; //last loop
+        else
+          dir_to_make = dirname.left(new_element+1);
+
+        if(dir.exists((const char*)dir_to_make, true) == false)
+        {
+          if(dir.mkdir((const char*)dir_to_make, true))
+          {
+            printf("handleCreateSubDirectory() has created directory '%s'\n", (const char*)dir_to_make);
+          }
+          else
+          {
+            printf("handleCreateSubDirectory() can't create directory '%s'\n", (const char*)dir_to_make);
+            return false;
+          }
+        }
+        else
+          printf("handleCreateSubDirectory() directory '%s' already exists\n", (const char*)dir_to_make);
+      }//next subdir	
+    }
+  }
+  return true;	
+}
+
 CGenerateNewFile::CGenerateNewFile(){
 }
 CGenerateNewFile::~CGenerateNewFile(){
 }
 QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj, QString file_name){
   QString name;
-  if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
-   else { name  = QFileInfo(file_name).fileName(); }
-   // local cpp_template
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+/*  if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
+   else { name  = QFileInfo(file_name).fileName(); }*/
+  handleCreateSubDirectory(prj, name, abs_name, file_name);
+  // local cpp_template
   QString cpp_header = prj->getProjectDir() + prj->getSubDir() +"/templates/cpp_template";
   if(!QFile::exists(cpp_header)){
     cpp_header = KApplication::kde_datadir() + "/kdevelop/templates/cpp_template";
@@ -78,9 +139,11 @@ QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj, QString fi
 }
 QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj, QString file_name){
   QString name;
-  if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
-   else { name  = QFileInfo(file_name).fileName(); }
-
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+/*  if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
+   else { name  = QFileInfo(file_name).fileName(); }*/
+  handleCreateSubDirectory(prj, name, abs_name, file_name);
   // local header_template
   QString template_header = prj->getProjectDir() + prj->getSubDir() +"/templates/header_template";
   if(!QFile::exists(template_header)){

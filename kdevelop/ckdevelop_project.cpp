@@ -456,8 +456,9 @@ void CKDevelop::slotProjectNewClass(){
     QString header_file=dlg->getHeaderFile();
     switchToFile(source_file);
     switchToFile(header_file);
-
-    QFileInfo header_info(header_file);
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+/*  QFileInfo header_info(header_file);
     QFileInfo source_info(source_file);
     TFileInfo file_info;
     file_info.rel_name = prj->getSubDir() + source_info.fileName();
@@ -465,15 +466,21 @@ void CKDevelop::slotProjectNewClass(){
     file_info.dist = true;
     file_info.install = false;
     prj->addFileToProject(prj->getSubDir() + source_info.fileName(),file_info);
-    
+
     file_info.rel_name = prj->getSubDir() + header_info.fileName();
     file_info.type = CPP_HEADER;
     file_info.dist = true;
     file_info.install = false;
-    prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);
-   
+    prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);*/
+    bool new_subdir1, new_subdir2;
+    new_subdir1 = addFileToProject(source_file, CPP_SOURCE, false);
+    new_subdir2 = addFileToProject(header_file, CPP_HEADER, false);
+
+    if(new_subdir1 || new_subdir2)
+      newSubDir();
+
     prj->updateMakefilesAm();
-    
+
     slotViewRefresh();
   }
 }

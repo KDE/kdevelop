@@ -1,3 +1,7 @@
+1999-11-17  Sandy Meier  <smeier@rz.uni-potsdam.de>	
+	* commited patch by Alex Kern, Alexander.Kern@saarsoft.de
+	  new class dialog can now generate classes in subdirs
+
 1999-11-17 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commented out all assert in classparser and added some "error correction code"
 	 this much improve the stability!!

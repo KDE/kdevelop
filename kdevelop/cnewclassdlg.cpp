@@ -251,6 +251,14 @@ void CNewClassDlg::ok(){
  
   QString headername = prj_info->getProjectDir() + prj_info->getSubDir() + header_edit->text();
   QString implname = prj_info->getProjectDir() + prj_info->getSubDir() + impl_edit->text();
+  QString headerfile = header_edit->text();
+  QString classname = classname_edit->text();
+  QString basename = baseclass_edit->text();
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+  int slash = headername.findRev('/', -1, false);
+  if(slash != -1)
+    headerfile = headername.right(headername.length()-slash-1);
 
   if (QFileInfo(headername).exists() || QFileInfo(implname).exists()) {
       KMsgBox::message(this, i18n("Error..."),i18n("Sorry, but KDevelop is not able to add classes "
@@ -258,19 +266,17 @@ void CNewClassDlg::ok(){
                        KMsgBox::EXCLAMATION);
       return;
   }
-  QString headerfile = header_edit->text();
-  QString classname = classname_edit->text();
-  QString basename = baseclass_edit->text();
+ 
   if(basename.isEmpty() && qwidget_check->isChecked()){
     basename = "QWidget";
   }
   QString doc = doc_edit->text();
-  
+
 
   CGenerateNewFile generator;
   // generate the sourcecode
 
-  
+
   if(template_check->isChecked()){
     headername = generator.genHeaderFile(headername,prj_info);
     implname = generator.genCPPFile(implname,prj_info);
@@ -283,19 +289,56 @@ void CNewClassDlg::ok(){
     file.open(IO_ReadWrite);
     file.close();
   }
-  // modify the header
+
+
+// added by Alex Kern, Alexander.Kern@saarsoft.de
+//
+//  create implementationfile first, use headerfile like "header.h" before
+//  change them to "HEADER_H"
+
+  // modify the implementation
   QStrList list;
-  QFile file(headername);
+  QFile file(implname);
   QTextStream stream(&file);
   QString str;
-  
-  if(file.open(IO_ReadOnly)){ // 
+
+  if(file.open(IO_ReadOnly)){ //
     while(!stream.eof()){
       list.append(stream.readLine());
     }
   }
   file.close();
-  
+
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str != 0;str = list.next()){
+      stream << str << "\n";
+    }
+    stream << "\n#include \"" + QString(headerfile) + "\"\n\n" ;
+    stream << classname + "::" + classname +"(" ;
+    if (qwidget_check->isChecked()){
+      stream << "QWidget *parent, const char *name ) : ";
+      stream << basename + "(parent,name) {\n";
+    }
+    else{
+      stream << "){\n";
+    }
+    stream << "}\n";
+    stream << classname + "::~" + classname +"(){\n";
+    stream << "}\n";
+  }
+  file.close();
+
+  // modify the header
+  list.clear();
+  file.setName(headername);
+
+  if(file.open(IO_ReadOnly)){ //
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str != 0;str = list.next()){
       stream << str << "\n";
@@ -338,37 +381,6 @@ void CNewClassDlg::ok(){
     stream << ");\n";
     stream << "\t~" + classname +"();\n";
     stream << "};\n\n#endif\n";
-
-      
-  }
-  file.close();
-
-  // modify the implementation
-  list.clear();
-  file.setName(implname);
-  if(file.open(IO_ReadOnly)){ // 
-    while(!stream.eof()){
-      list.append(stream.readLine());
-    }
-  }
-  file.close();
-  
-  if(file.open(IO_WriteOnly)){
-    for(str = list.first();str != 0;str = list.next()){
-      stream << str << "\n";
-    }
-    stream << "\n#include \"" + QString(header_edit->text()) + "\"\n\n" ;
-    stream << classname + "::" + classname +"(" ;
-    if (qwidget_check->isChecked()){
-      stream << "QWidget *parent, const char *name ) : ";
-      stream << basename + "(parent,name) {\n";
-    }
-    else{
-      stream << "){\n";
-    }
-    stream << "}\n";
-    stream << classname + "::~" + classname +"(){\n";
-    stream << "}\n";
   }
   file.close();
 
