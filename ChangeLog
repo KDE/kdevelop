@@ -1,3 +1,11 @@
+2003-01-10  Julian Rockey <linux@jrockey.com>
+	* parts/autoproject:
+	  - be a bit smarter when adding files to directories that have only one target
+	  - be a bit nicer to files in the project root directory
+	* parts/filecreate
+	  - add some global file templates to be stored in $datadir/kdevfilecreate/file-templates
+	* lib/util/filetemplate
+	  - look in global directory for templates if not found in project directory
 2003-01-09  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* revived lib/structure:
 	  - has a working Trie class now (tested with g++-3.2)
