@@ -8,7 +8,7 @@ kde_module_LTLIBRARIES = libkdevfilecreate.la
 libkdevfilecreate_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevfilecreate_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevfilecreate_la_SOURCES = filecreate_part.cpp filecreate_listitem.cpp filecreate_widget.cpp filecreate_widget2.cpp filecreate_filetype.cpp filecreate_filedialog.cpp fcconfigwidgetbase.ui fcconfigwidgetbase.ui.h fcconfigwidget.h fcconfigwidget.cpp fctypeeditbase.ui fctypeeditbase.ui.h fctypeedit.h fctypeedit.cpp fctemplateeditbase.ui fctemplateeditbase.ui.h fctemplateedit.h fctemplateedit.cpp filecreate_newfile.cpp
+libkdevfilecreate_la_SOURCES = filecreate_part.cpp filecreate_listitem.cpp filecreate_widget3.cpp filecreate_widget2.cpp filecreate_filetype.cpp filecreate_filedialog.cpp fcconfigwidgetbase.ui fcconfigwidgetbase.ui.h fcconfigwidget.h fcconfigwidget.cpp fctypeeditbase.ui fctypeeditbase.ui.h fctypeedit.h fctypeedit.cpp fctemplateeditbase.ui fctemplateeditbase.ui.h fctemplateedit.h fctemplateedit.cpp filecreate_newfile.cpp
 
 METASOURCES = AUTO
 

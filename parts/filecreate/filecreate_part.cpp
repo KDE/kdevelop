@@ -35,6 +35,7 @@
 
 #include "filecreate_widget.h"
 #include "filecreate_widget2.h"
+#include "filecreate_widget3.h"
 #include "filecreate_part.h"
 #include "filecreate_filetype.h"
 #include "filecreate_filedialog.h"
@@ -65,8 +66,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setToolTip( i18n("New file") );
   m_filetypes.setAutoDelete(true);
 
-  m_availableWidgets[0] = new TreeWidget(this);
-  m_availableWidgets[1] = new FriendlyWidget(this);
+  m_availableWidgets[0] = new FriendlyWidget(this);
+  m_availableWidgets[1] = new ListWidget(this);
   m_numWidgets = 2;
 
   // TODO: provide a way of choosing your preferred widget without
