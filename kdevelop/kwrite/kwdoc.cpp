@@ -1163,11 +1163,14 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
         int len = indentPos-curPos;
         char* buf = new char[len];
         memset(buf, ' ', len);
-        textLine->insert(0, &buf[0], len);
+        PointStruc linebeg(0, c.cursor.y);
+        recordInsert(linebeg, &buf[0], len);
         delete[] buf;
       }
-      else if (curPos > indentPos)
-        textLine->del(indentPos, curPos-indentPos);
+      else if (curPos > indentPos) {
+        PointStruc beg(indentPos, c.cursor.y);
+        recordDelete(beg, curPos-indentPos);
+      }
     }
 
     if (setCursor) {
@@ -3169,6 +3172,18 @@ void KWriteDoc::recordReplace(PointStruc &cursor,
   a->textLen = textLen;
   doReplace(a);
   undoList.getLast()->insertAction(a);
+}
+
+#include <cassert>
+
+void KWriteDoc::recordInsert(PointStruc &cursor, const char *text, int textLen) {
+  assert(text!=0 && textLen>0);
+  recordReplace(cursor, 0, text, textLen);
+}
+
+void KWriteDoc::recordDelete(PointStruc &cursor, int len) {
+  assert(len>0);
+  recordReplace(cursor, len, 0, 0);
 }
 
 void KWriteDoc::recordEnd(KWriteView *view, VConfig &c) {

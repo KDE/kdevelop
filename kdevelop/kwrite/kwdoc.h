@@ -294,6 +294,8 @@ class KWriteDoc : public QObject {
     void recordStart(PointStruc &, bool keepModal = false);
     void recordAction(KWAction::Action, PointStruc &);
     void recordReplace(PointStruc &, int len, const char *text = 0L, int textLen = 0);
+    void recordInsert(PointStruc &, const char *text = 0L, int textLen = 0);
+    void recordDelete(PointStruc &, int len);
     void recordEnd(KWriteView *, VConfig &);
     void recordEnd(KWriteView *, PointStruc &, int flags);
     void doActionGroup(KWActionGroup *, int flags);

@@ -1,6 +1,7 @@
 2001-12-10  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
     * fix: new TabIndent editor option for turning on/off
       indentation with Tab key
+    * fix: get undo to work with TabIndent
 
 2001-12-08  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
     * add new editor configuration: Indent Length

@@ -78,6 +78,8 @@ const int eolDos            = 2;
 void resizeBuffer(void *user, int w, int h);
 
 struct PointStruc {
+  PointStruc() {}
+  PointStruc(int _x, int _y) : x(_x), y(_y) {}
   int x;
   int y;
 };
