@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2002 by Bernd Gehrmann and Harald Fernengel             *
+ *   bernd@kdevelop.org, harry@kdevelop.org                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,6 +11,9 @@
 
 #include "misc.h"
 
+#include <qstring.h>
+#include <kemailsettings.h>
+
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -20,27 +23,34 @@
 
 void AppWizardUtil::guessAuthorAndEmail(QString *author, QString *email)
 {
-    char hostname[512];
+  KEMailSettings emailConfig;
+  emailConfig.setProfile( emailConfig.defaultProfileName() );
+  QString fromAddr = emailConfig.getSetting( KEMailSettings::EmailAddress );
+  QString name = emailConfig.getSetting( KEMailSettings::RealName );
 
-    QString cfgName(KGlobal::dirs()->findResource("config","emaildefaults"));
-    if(cfgName.isEmpty()) {
-        struct passwd *pw = ::getpwuid(getuid());
-        // pw==0 => the system must be really fucked up
-        if (!pw)
-            return;
+  if ( !fromAddr.isEmpty() && !name.isEmpty() ) {
+    *author = name;
+    *email = fromAddr;
+    return;
+  }
 
-        // I guess we don't have to support users with longer host names ;-)
-        (void) ::gethostname(hostname, sizeof hostname);
+  struct passwd *pw = ::getpwuid(getuid());
+  // pw==0 => the system must be really fucked up
+  if (!pw)
+      return;
 
-        *author = QString::fromLocal8Bit(pw->pw_gecos);
-        *email = QString(pw->pw_name) + "@" + hostname;
-    }
-    else {
-	KConfig cfg(cfgName, true);
-	cfg.setGroup("Defaults");
-	QString profile = cfg.readEntry("Profile", "Default");    
-        cfg.setGroup("PROFILE_" + profile);
-	*author = cfg.readEntry("FullName", "Author");
-        *email = cfg.readEntry("EmailAddress", "me@me.com");	
-    }
+  char hostname[512];
+
+  // I guess we don't have to support users with longer host names ;-)
+  (void) ::gethostname(hostname, sizeof hostname);
+
+  if ( name.isEmpty() )
+    *author = QString::fromLocal8Bit( pw->pw_gecos );
+  else
+    *author = name;
+  if ( fromAddr.isEmpty() )
+    *email = QString(pw->pw_name) + "@" + hostname;
+  else
+    *email = fromAddr;
 }
+
