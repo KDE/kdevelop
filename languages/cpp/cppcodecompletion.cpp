@@ -1427,14 +1427,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementAST* stmt,
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementListAST* ast, int line, int col )
 {
-	int startLine, startColumn;
-	int endLine, endColumn;
-	ast->getStartPosition( &startLine, &startColumn );
-	ast->getEndPosition( &endLine, &endColumn );
-
-	if ( line > endLine || ( line == endLine && endColumn < col ) )
-		return ;
-
+	if ( !inContextScope( ast, line, col, false, true ) )
+		return;
+	
 	QPtrList<StatementAST> l( ast->statementList() );
 	QPtrListIterator<StatementAST> it( l );
 	while ( it.current() )
@@ -1448,6 +1443,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementListAST* a
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, IfStatementAST* ast, int line, int col )
 {
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 	computeContext( ctx, ast->elseStatement(), line, col );
@@ -1455,6 +1453,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, IfStatementAST* ast
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, ForStatementAST* ast, int line, int col )
 {
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
 	computeContext( ctx, ast->initStatement(), line, col );
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
@@ -1462,18 +1463,27 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ForStatementAST* as
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, DoStatementAST* ast, int line, int col )
 {
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
 	//computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, WhileStatementAST* ast, int line, int col )
 {
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col )
 {
+	if ( !inContextScope( ast, line, col ) )
+		return;
+	
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
@@ -1483,14 +1493,9 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 	if ( !ast->declaration() || ast->declaration() ->nodeType() != NodeType_SimpleDeclaration )
 		return ;
 
-	int startLine, startColumn;
-	int endLine, endColumn;
-	ast->getStartPosition( &startLine, &startColumn );
-	ast->getEndPosition( &endLine, &endColumn );
-
-	if ( line < startLine || ( line == startLine && col <= startColumn ) )
-		return ;
-
+	if ( !inContextScope( ast, line, col, true, false ) )
+		return;
+	
 	SimpleDeclarationAST* simpleDecl = static_cast<SimpleDeclarationAST*>( ast->declaration() );
 	TypeSpecifierAST* typeSpec = simpleDecl->typeSpec();
 	QStringList type = typeName( typeSpec->text() );
@@ -1522,19 +1527,44 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 	if ( !ast->typeSpec() || !ast->declarator() || !ast->declarator() ->declaratorId() )
 		return ;
 
-	int startLine, startColumn;
-	int endLine, endColumn;
-	ast->getStartPosition( &startLine, &startColumn );
-	ast->getEndPosition( &endLine, &endColumn );
-
-	if ( line < startLine || ( line == startLine && col <= startColumn ) )
-		return ;
-
+	if ( !inContextScope( ast, line, col, true, false ) )
+		return;
+	
 	QStringList type = typeName( ast->typeSpec() ->text() );
 	SimpleVariable var;
 	var.type = type;
 	var.name = toSimpleName( ast->declarator() ->declaratorId() );
 	ctx->add( var );
+}
+
+bool CppCodeCompletion::inContextScope( AST* ast, int line, int col, bool checkStart, bool checkEnd )
+{
+	int startLine, startColumn;
+	int endLine, endColumn;
+	ast->getStartPosition( &startLine, &startColumn );
+	ast->getEndPosition( &endLine, &endColumn );
+	
+// 	kdDebug(9007) << k_funcinfo << endl;
+// 	kdDebug(9007) << "current char line: " << line << " col: " << col << endl;
+// 	
+// 	kdDebug(9007) << nodeTypeToString( ast->nodeType() )
+// 		<< " start line: " << startLine
+// 		<< " col: " << startColumn << endl;
+// 	kdDebug(9007) << nodeTypeToString( ast->nodeType() )
+// 		<< " end line: " << endLine
+// 		<< " col: " << endColumn << endl;
+	
+	bool start = line > startLine || ( line == startLine && col >= startColumn );
+	bool end = line < endLine || ( line == endLine && col <= endColumn );
+	
+	if ( checkStart && checkEnd  )
+		return start && end;
+	else if ( checkStart )
+		return start;
+	else if ( checkEnd )
+		return end;
+	
+	return false;
 }
 
 FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
