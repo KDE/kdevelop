@@ -93,7 +93,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   
   QLabel* autosaveTimeLabel;
   autosaveTimeLabel = new QLabel( w1, "autosaveTimeLabel" );
-  autosaveTimeLabel->setGeometry( 20, 140, 210, 25 );
+  autosaveTimeLabel->setGeometry( 20, 140, 250, 25 );
   autosaveTimeLabel->setText(i18n("Select Autosave time-interval:"));
   autosaveTimeLabel->setAlignment( 289 );
   autosaveTimeLabel->setMargin( -1 );

@@ -40,6 +40,7 @@
 #include "ctabctl.h"
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
+#include "kstartuplogo.h"
 
 #include "./dbg/dbgcontroller.h"
 #include "./dbg/vartree.h"
@@ -75,6 +76,14 @@ CKDevelop::CKDevelop(bool witharg)
 
   config = kapp->getConfig();
   kdev_caption=kapp->getCaption();
+  
+  config->setGroup("General Options");
+  KStartupLogo* start_logo=0L;
+  if(config->readBoolEntry("Logo",true)){
+    start_logo= new KStartupLogo;
+    start_logo->show();
+  }
+
 
   // ********* DEBUGGER stuff splattered everywhere (jbb) :-)
   // We need to know what debugger we are using to set the
@@ -95,6 +104,11 @@ CKDevelop::CKDevelop(bool witharg)
   initKDlg();    // create the KDialogEditor
 
   readOptions();
+  
+  show();
+  if(start_logo)  
+    start_logo->raise();
+  
   initProject(witharg);
 	
   initDebugger();
@@ -106,6 +120,12 @@ CKDevelop::CKDevelop(bool witharg)
 
   initWhatsThis();
   slotStatusMsg(i18n("Welcome to KDevelop!"));
+  
+  if(start_logo)
+    delete start_logo;
+  config->setGroup("TipOfTheDay");
+  if(config->readBoolEntry("show_tod",true))
+    slotHelpTipOfDay();
 }
 
 CKDevelop::~CKDevelop(){
@@ -1285,30 +1305,6 @@ void CKDevelop::initProject(bool witharg){
   if (file.exists()){
     if(!(readProjectFile(filename))){
       KMsgBox::message(0,filename,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
-      refreshTrees();
-    }
-    else{
-      setCursor(KCursor::waitCursor());
-      QProgressDialog *progressDlg= new QProgressDialog(NULL, "progressDlg", true );
-      connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),progressDlg,SLOT(setTotalSteps(int)));
-      connect(class_tree,SIGNAL(setStatusbarProgress(int)),progressDlg,SLOT(setProgress(int)));
-      progressDlg->setCaption(i18n("Starting..."));
-      progressDlg->setLabelText( i18n("Initializing last project...\nPlease wait...\n") );
-      QPushButton* btn = new QPushButton(0,"");
-      
-      
-      
-      btn->setText("ddd");
-      
-      progressDlg->setCancelButton(btn);
-      //      progressDlg->setCancelButtonText(i18n("Cancel"));
-      progressDlg->setProgress(0);
-      progressDlg->show();
-      btn->hide();
-      setCursor(KCursor::arrowCursor());
-      refreshTrees();
-      delete progressDlg;
-      
     }
     config->setGroup("Files");
     filename = config->readEntry("header_file",i18n("Untitled.h"));
@@ -1324,9 +1320,7 @@ void CKDevelop::initProject(bool witharg){
       switchToFile(filename);
     }
   }
-  else{
-    refreshTrees(); // this refresh only the documentation tab,tree
-  }
+  refreshTrees();
   
 }
 

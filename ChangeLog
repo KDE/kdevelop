@@ -1,5 +1,9 @@
 2000-03-13 Ralf Nolden <rnolden@kdevelop.de>
         * updated handbook for various changes
+        * updated kappwizard´s CVS page (directorybutton, labels)
+        * fixed autosave label size in kdevelop setup dialog
+        * kdevelop now starts showing itself when loading the project with the spash screen in front
+        * added QT 2.1 macros to syntax highlighting
 
 2000-03-15  Ralf Funken <rfunken@kdevelop.de>
 	* Updated Authors section in de and en manuals

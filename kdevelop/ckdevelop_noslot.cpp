@@ -506,6 +506,7 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
 void CKDevelop::refreshTrees(QStrList * iFileList){
 //	time_t lStart = time(NULL);
 //	clock_t lStartClock = clock();
+  kapp->processEvents();
   doc_tree->refresh(prj);
   if (!project){
     return; // no project
@@ -523,6 +524,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 	{
 //		time_t lStart = time(NULL);
 //		clock_t lStartClock = clock();
+    kapp->processEvents();
 		class_tree->refresh(prj);
 //		cout << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
 // 	 	cout << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
@@ -533,15 +535,20 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   statProg->hide();
 
   // Update the classcombo.
+  kapp->processEvents();
   CVRefreshClassCombo();
 
   // Update LFV.
+  kapp->processEvents();
   log_file_tree->storeState(prj);
+  kapp->processEvents();
   log_file_tree->refresh(prj);
 
   // Update RFV.
+  kapp->processEvents();
   real_file_tree->refresh(prj);
 
+  kapp->processEvents();
   kdlg_dialogs_view->refresh(prj);
 
   kdev_statusbar->repaint();
@@ -581,6 +588,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 {
   if( project )
     {
+      kapp->processEvents();
       // If this is a sourcefile we parse it and update the classview.
       if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
 			{
@@ -589,12 +597,15 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 			}
       
       // Update LFV.
+      kapp->processEvents();
       log_file_tree->storeState(prj);
       log_file_tree->refresh(prj);
       
       // Update RFV.
+      kapp->processEvents();
       real_file_tree->refresh(prj);
       // update dialogs tree
+      kapp->processEvents();
       kdlg_dialogs_view->refresh(prj);
       
     }

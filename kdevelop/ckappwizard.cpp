@@ -83,6 +83,8 @@ void CKAppWizard::initPages(){
   QPixmap minipm;
   QPixmap pm;
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/kAppWizard.bmp");
+	QPixmap pix; // directory pixmap
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   
   // create a widget and paint a picture on it
   widget1a = new QWidget( widget0, "widget1a" );
@@ -255,8 +257,6 @@ void CKAppWizard::initPages(){
   directoryload->setBackgroundMode( QWidget::PaletteBackground );
   directoryload->setFontPropagation( QWidget::NoChildren );
   directoryload->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   directoryload->setPixmap(pix);
   directoryload->setAutoRepeat( FALSE );
   directoryload->setAutoResize( FALSE );
@@ -554,7 +554,7 @@ void CKAppWizard::initPages(){
   vsSupport->setBackgroundMode( QWidget::PaletteBackground );
   vsSupport->setFontPropagation( QWidget::NoChildren );
   vsSupport->setPalettePropagation( QWidget::NoChildren );
-  vsSupport->setText(i18n( "vcs support" ));
+  vsSupport->setText(i18n( "VCS Support" ));
   vsSupport->setAlignment( 289 );
   vsSupport->setMargin( -1 );	
   
@@ -579,7 +579,7 @@ void CKAppWizard::initPages(){
   vsInstall->setBackgroundMode( QWidget::PaletteBackground );
   vsInstall->setFontPropagation( QWidget::NoChildren );
   vsInstall->setPalettePropagation( QWidget::NoChildren );
-  vsInstall->setText(i18n( "vcs location") );
+  vsInstall->setText(i18n( "VCS Location") );
   vsInstall->setAlignment( 289 );
   vsInstall->setMargin( -1 );
   
@@ -604,7 +604,7 @@ void CKAppWizard::initPages(){
   locationbutton->setBackgroundMode( QWidget::PaletteBackground );
   locationbutton->setFontPropagation( QWidget::NoChildren );
   locationbutton->setPalettePropagation( QWidget::NoChildren );
-  locationbutton->setText( "..." );
+  locationbutton->setPixmap(pix);
   locationbutton->setAutoRepeat( FALSE );
   locationbutton->setAutoResize( FALSE );	
   
@@ -616,7 +616,7 @@ void CKAppWizard::initPages(){
   projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
   projectVSLocation->setFontPropagation( QWidget::NoChildren );
   projectVSLocation->setPalettePropagation( QWidget::NoChildren );
-  projectVSLocation->setText(i18n( "repository in vcs") );
+  projectVSLocation->setText(i18n( "Repository in VCS") );
   projectVSLocation->setAlignment( 289 );
   projectVSLocation->setMargin( -1 );	
 	
@@ -641,7 +641,7 @@ void CKAppWizard::initPages(){
   vendorTag->setBackgroundMode( QWidget::PaletteBackground );
   vendorTag->setFontPropagation( QWidget::NoChildren );
   vendorTag->setPalettePropagation( QWidget::NoChildren );
-  vendorTag->setText(i18n( "vendor tag") );
+  vendorTag->setText(i18n( "Vendor Tag") );
   vendorTag->setAlignment( 289 );
   vendorTag->setMargin( -1 );
   
@@ -666,7 +666,7 @@ void CKAppWizard::initPages(){
   logMessage->setBackgroundMode( QWidget::PaletteBackground );
   logMessage->setFontPropagation( QWidget::NoChildren );
   logMessage->setPalettePropagation( QWidget::NoChildren );
-  logMessage->setText(i18n( "log message") );
+  logMessage->setText(i18n( "Log Message") );
   logMessage->setAlignment( 289 );
   logMessage->setMargin( -1 );
   
@@ -691,7 +691,7 @@ void CKAppWizard::initPages(){
   releaseTag->setBackgroundMode( QWidget::PaletteBackground );
   releaseTag->setFontPropagation( QWidget::NoChildren );
   releaseTag->setPalettePropagation( QWidget::NoChildren );
-  releaseTag->setText(i18n( "release tag") );
+  releaseTag->setText(i18n( "Release Tag") );
   releaseTag->setAlignment( 289 );
   releaseTag->setMargin( -1 );
   
