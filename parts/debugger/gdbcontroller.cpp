@@ -154,8 +154,8 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
 {
     config_displayStaticMembers_  = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/staticmembers", false);
     config_asmDemangle_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/display/demanglenames", true);
-    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/breakonloadinglibs", false);
-    config_forceBPSet_            = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/allowforcedbpset", false);
+    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/breakonloadinglibs", true);
+    config_forceBPSet_            = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/allowforcedbpset", true);
     config_dbgTerminal_           = DomUtil::readBoolEntry(projectDom, "/kdevdebugger/general/separatetty", false);
     config_gdbPath_               = DomUtil::readEntry(projectDom, "/kdevdebugger/general/gdbpath");
     config_programArgs_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/programargs");
@@ -189,13 +189,13 @@ GDBController::~GDBController()
 void GDBController::reConfig()
 {
     bool old_displayStatic        = config_displayStaticMembers_;
-    config_displayStaticMembers_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers");
+    config_displayStaticMembers_  = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/staticmembers",false);
     
     bool old_asmDemangle  = config_asmDemangle_;
-    config_asmDemangle_   = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames");
+    config_asmDemangle_   = DomUtil::readBoolEntry(dom, "/kdevdebugger/display/demanglenames",true);
     
     bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs");
+    config_breakOnLoadingLibrary_ = DomUtil::readBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs",true);
     
     if (( old_displayStatic           != config_displayStaticMembers_   ||
           old_asmDemangle             != config_asmDemangle_            ||
