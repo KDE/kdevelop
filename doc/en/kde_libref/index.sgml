@@ -1788,6 +1788,8 @@ The exact execution of the <tt/Icon()/ macro is therefore:
 <tscreen><verb>
 KApplication::getKApplication()->getIconLoader()->loadIcon("new.xpm")
 </verb></tscreen>
+<footnote>In KDE2, you have to use BarIcon() to load menu/toolbar icons
+</footnote>
 
 which implicitely uses the <tt/kapp/ macro to get the application object. You see that using this macro saves lots of code but offers a
 very nice way to load an icon for a toolbar button.
@@ -1944,6 +1946,8 @@ context-menu entry "Quick-Help" and is therefore easy to use and gives enough in
 too much and a <tt/QToolTip/ would be too less. The reason I include <tt/KQuickHelp/ into the provided dialogs is that the
 class-documentation itself contains example usage, but doesn't cover all formatting possibilities, therefore these are listed in detail
 here.
+
+<footnote>In KDE2, KQuickHelp is no longer available and is replaced by QWhatsThis, which has almost the same API</footnote>
 
 <sect1>Usage
 <p>
@@ -2317,6 +2321,8 @@ and public methods as well that can be called similar to provide a user interfac
 the behavoir of the displaying <tt/KHTMLWidget/, you have to create a pointer to a <tt/KHTMLWidget/ and retrieve the instance of your
 <tt/KHTMLView/'s widget by calling <tt/getKHTMLWidget()/. Then you can set options like color settings and font sizes for your view
 area.
+<comment>In KDE2 you will have an extended KHTMLWidget that directly inherits QScrollView, so scrolling is provided by default.
+KHTMLView is removed instead. Also, the new HTML widget provides support for Java Script.</comment>
 
 
 <chapt>Process Handling
