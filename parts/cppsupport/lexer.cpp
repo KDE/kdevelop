@@ -590,8 +590,9 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
     } else if( directive == "pragma" ){
     } else if( directive == "if" ){
 	ptr = readWhiteSpaces( ptr, false );
-
-	if( isValid(ptr) && *ptr == '0' )
+	if( m_directiveStack.size() && m_directiveStack.top() == PreProc_skip )
+	    m_directiveStack.push( PreProc_skip );
+	else if( isValid(ptr) && *ptr == '0' )
 	    m_directiveStack.push( PreProc_skip );
 	else
 	    m_directiveStack.push( PreProc_in_group );
@@ -603,7 +604,10 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
 	}
 
-	m_directiveStack.push( PreProc_in_group );
+	if( m_directiveStack.size() && m_directiveStack.top() == PreProc_skip )
+	    m_directiveStack.push( PreProc_skip );
+	else 
+	    m_directiveStack.push( PreProc_in_group );
     } else if( directive == "ifndef" ){
 	ptr = readWhiteSpaces( ptr, false );
 	if( isValid(ptr) ) {
@@ -620,14 +624,11 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	    ptr = readIdentifier( ptr );
 	    QString macroName( startMacroName, int(ptr-startMacroName) );
 	}
-
-	// ignore elif
-	(void) m_directiveStack.pop();
-	m_directiveStack.push( PreProc_skip );
+	m_directiveStack.pop();
+	m_directiveStack.push( PreProc_skip ); // skip all elif
     } else if( directive == "else" ){
-	// ignore else
-	int st = m_directiveStack.top();
 	(void) m_directiveStack.pop();
+	int st = m_directiveStack.top();
 	m_directiveStack.push( st == PreProc_skip ? PreProc_in_group : PreProc_skip );
     } else if( directive == "endif" ){
 	(void) m_directiveStack.pop();
