@@ -5,19 +5,19 @@
 
 #include <qguardedptr.h>
 #include <kdialogbase.h>
-#include <kdevpart.h>
+#include <kdevplugin.h>
 #include <kfileitem.h>
 
 
 class FileSelectorWidget;
 
-class FileSelectorPart : public KDevPart
+class FileSelectorPart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
 
-  FileSelectorPart(KDevApi *api, QObject *parent=0, const char *name=0);
+  FileSelectorPart(QObject *parent, const char *name, const QStringList &);
   ~FileSelectorPart();
 
 public slots:

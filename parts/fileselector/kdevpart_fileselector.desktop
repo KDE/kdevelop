@@ -5,6 +5,6 @@ Exec=blubb
 Comment=File Selector
 Name=KDevFileSelector
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevfileselector
 X-KDevelop-Scope=Global

@@ -10,6 +10,7 @@
 #include <ktextbrowser.h>
 #include <kconfig.h>
 #include <kfileitem.h>
+#include <kgenericfactory.h>
 
 #include <kdevapi.h>
 #include <kdevcore.h>
@@ -19,13 +20,14 @@
 
 #include <ktip.h>
 
-#include "fileselector_factory.h"
 #include "fileselectorwidget.h"
 #include "fileselector_part.h"
 
+typedef KGenericFactory<FileSelectorPart> FileSelectorFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( "kdevfileselector" ) );
 
-FileSelectorPart::FileSelectorPart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
 	setInstance(FileSelectorFactory::instance());
 
