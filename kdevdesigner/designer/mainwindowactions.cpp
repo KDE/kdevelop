@@ -621,10 +621,10 @@ void MainWindow::setupFileActions()
     fileMenu = new QPopupMenu( this, "File" );
     menubar->insertItem( tr( "&File" ), fileMenu );
 
-    QAction *a = 0;
+    DesignerAction *a = 0;
 
     if ( !singleProject ) {
-	a = new DesignerAction( this, 0 );
+	DesignerAction *a = new DesignerAction( this, 0 );
 	a->setText( tr( "New" ) );
 	a->setToolTip( tr( "New Dialog or File" ) );
 	a->setMenuText( tr( "&New..." ) );
@@ -638,7 +638,7 @@ void MainWindow::setupFileActions()
 	actionNewFile = a;
     } else {
 	actionGroupNew = new QActionGroup( this, 0, FALSE );
-	 a = actionGroupNew;
+	QActionGroup* a = actionGroupNew;
 	( (QActionGroup*)a )->setUsesDropDown( TRUE );
 	a->setText( tr( "New" ) );
 	a->setMenuText( tr( "&New..." ) );
@@ -654,7 +654,7 @@ void MainWindow::setupFileActions()
 	newForm->setStatusTip( tr( "Creates a new dialog." ) );
 	connect( newForm, SIGNAL( activated() ), this, SLOT( fileNewDialog() ) );
 
-	QAction *newFile = new DesignerAction( a, 0 );
+	DesignerAction *newFile = new DesignerAction( a, 0 );
 	newFile->setText( tr( "New File" ) );
 	newFile->setMenuText( tr( "&File..." ) );
 	newFile->setIconSet( createIconSet("designer_filenew.png") );
@@ -793,7 +793,7 @@ void MainWindow::setupProjectActions()
     ag->setUsesDropDown( TRUE );
     connect( ag, SIGNAL( selected( QAction * ) ), this, SLOT( projectSelected( QAction * ) ) );
     connect( ag, SIGNAL( selected( QAction * ) ), this, SIGNAL( projectChanged() ) );
-    QAction *a = new DesignerAction( tr( "<No Project>" ), tr( "<No Project>" ), 0, ag, 0, TRUE );
+    DesignerAction *a = new DesignerAction( tr( "<No Project>" ), tr( "<No Project>" ), 0, ag, 0, TRUE );
     eProject = new Project( "", tr( "<No Project>" ), projectSettingsPluginManager, TRUE );
     projects.insert( a, eProject );
     a->setOn( TRUE );
@@ -848,7 +848,7 @@ void MainWindow::setupProjectActions()
 
 void MainWindow::setupPreviewActions()
 {
-    QAction* a = 0;
+    DesignerAction* a = 0;
     QPopupMenu *menu = new QPopupMenu( this, "Preview" );
     layoutMenu = menu;
     menubar->insertItem( tr( "&Preview" ), menu, toolsMenuId + 2 );

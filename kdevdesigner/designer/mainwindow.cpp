@@ -79,6 +79,7 @@
 #include "finddialog.h"
 #include "replacedialog.h"
 #include "gotolinedialog.h"
+#include "designeraction.h"
 
 #include <kiconloader.h>
 

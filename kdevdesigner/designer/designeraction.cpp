@@ -35,4 +35,14 @@ void DesignerAction::setEnabled( bool e )
     emit actionEnabled(e);
 }
 
+#if QT_VERSION < 0x030300
+void DesignerAction::activate()
+{
+    if ( isToggleAction() ) {
+        return;
+    }
+    emit activated();
+}
+#endif
+
 #include "designeraction.moc"

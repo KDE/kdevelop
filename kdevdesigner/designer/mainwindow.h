@@ -66,6 +66,7 @@ class GotoLineDialog;
 class SourceFile;
 class FormFile;
 class QAssistantClient;
+class DesignerAction;
 
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
 #include <qtoolbar.h>
@@ -393,29 +394,30 @@ private:
     QString fileFilter;
 
     QMap<QAction*, Project*> projects;
-    QAction *actionEditUndo, *actionEditRedo, *actionEditCut, *actionEditCopy,
+    DesignerAction *actionEditUndo, *actionEditRedo, *actionEditCut, *actionEditCopy,
     *actionEditPaste, *actionEditDelete,
     *actionEditAdjustSize,
     *actionEditHLayout, *actionEditVLayout, *actionEditGridLayout,
     *actionEditSplitHorizontal, *actionEditSplitVertical,
     *actionEditSelectAll, *actionEditBreakLayout, *actionEditFunctions, *actionEditConnections,
-    *actionEditLower, *actionEditRaise, *actionInsertSpacer;
+    *actionEditLower, *actionEditRaise;
+    QAction *actionInsertSpacer;
     QActionGroup *actionGroupTools, *actionGroupProjects;
     QAction* actionPointerTool, *actionConnectTool, *actionOrderTool, *actionBuddyTool;
     QAction* actionCurrentTool;
-    QAction *actionHelpContents, *actionHelpAbout, *actionHelpAboutQt, *actionHelpWhatsThis;
-    QAction *actionHelpManual;
+    DesignerAction *actionHelpContents, *actionHelpAbout, *actionHelpAboutQt, *actionHelpWhatsThis;
+    DesignerAction *actionHelpManual;
 #if defined(QT_NON_COMMERCIAL)
-    QAction *actionHelpRegister;
+    DesignerAction *actionHelpRegister;
 #endif
-    QAction *actionToolsCustomWidget, *actionEditPreferences;
-    QAction *actionWindowTile, *actionWindowCascade, *actionWindowClose, *actionWindowCloseAll;
-    QAction *actionWindowNext, *actionWindowPrevious;
-    QAction *actionEditFormSettings, *actionEditAccels;
-    QAction *actionEditSource, *actionNewFile, *actionFileSave, *actionFileExit;
-    QAction *actionFileClose, *actionFileSaveAs, *actionFileSaveAll;
-    QAction *actionSearchFind, *actionSearchIncremetal, *actionSearchReplace, *actionSearchGotoLine;
-    QAction *actionProjectAddFile, *actionEditPixmapCollection, *actionEditDatabaseConnections,
+    DesignerAction *actionToolsCustomWidget, *actionEditPreferences;
+    DesignerAction *actionWindowTile, *actionWindowCascade, *actionWindowClose, *actionWindowCloseAll;
+    DesignerAction *actionWindowNext, *actionWindowPrevious;
+    DesignerAction *actionEditFormSettings, *actionEditAccels;
+    DesignerAction *actionEditSource, *actionNewFile, *actionFileSave, *actionFileExit;
+    DesignerAction *actionFileClose, *actionFileSaveAs, *actionFileSaveAll;
+    DesignerAction *actionSearchFind, *actionSearchIncremetal, *actionSearchReplace, *actionSearchGotoLine;
+    DesignerAction *actionProjectAddFile, *actionEditPixmapCollection, *actionEditDatabaseConnections,
         *actionEditProjectSettings, *actionPreview;
     QActionGroup *actionGroupNew;
 

@@ -42,6 +42,9 @@ public:
     
     virtual void setEnabled(bool e);
     virtual void setDisabled(bool d);
+#if QT_VERSION < 0x030300
+    virtual void activate();
+#endif
 
 signals:
     void actionEnabled(bool e);
