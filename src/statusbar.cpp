@@ -71,7 +71,7 @@ void StatusBar::activePartChanged(KParts::Part *part)
 
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
-	if (_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()) )
+	if ((_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget())))
 	{
 		connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
 			this, SLOT( setStatus( const QString & ) ) );
@@ -85,7 +85,7 @@ void StatusBar::activePartChanged(KParts::Part *part)
 	else
 # endif
 #endif
-	if ( _cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()) )
+	if ((_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget())))
     {
 		connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
 
