@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="BugList" version="1">
+<MenuBar>
+ <Menu name="project">
+  <Action name="bug_tracking"/>
+ </Menu>
+</MenuBar>
+</kpartgui>
+
+
