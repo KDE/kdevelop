@@ -17,6 +17,7 @@
 
 #include <kdebug.h>
 #include <qfileinfo.h>
+#include <qregexp.h>
 
 DoxyDoc* TagCreator::m_documentation = new DoxyDoc("");
 
@@ -256,7 +257,7 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
     parseFunctionArguments( tag, d );
 
 	QString arguments = tag.attribute("a").toStringList().join(",");
-    tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace(".",":"), id, typeOfDeclaration(typeSpec, d), arguments));
+    tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace(QRegExp("."),":"), id, typeOfDeclaration(typeSpec, d), arguments));
 
     tagBuilder.setAccess( TagUtils::stringToAccess(m_currentAccess) );
 

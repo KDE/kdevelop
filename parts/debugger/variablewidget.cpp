@@ -19,6 +19,7 @@
 #include <kdebug.h>
 #include <kpopupmenu.h>
 #include <klineedit.h>
+#include <kdeversion.h>
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -186,7 +187,11 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             QString text = "{ \"" + item->text( 0 ) + "\", " + // name
                 "\"" + item->text( 2 ) + "\", " + // type
                 "\"" + item->text( 1 ) + "\" }";  // value
-			qb->setText( text, QClipboard::Clipboard );
+			qb->setText( text
+#if KDE_VERSION > 305				     
+				     , QClipboard::Clipboard 
+#endif				     
+				     );
 		}
         else if (res == idToggleWatch) {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
