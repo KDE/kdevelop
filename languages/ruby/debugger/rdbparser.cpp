@@ -85,7 +85,7 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
         buf = (char*)unknown;
 	}
 		
-	QRegExp var_re("\\s*([\\w@$-]+) => ([^\n]+)\n");
+	QRegExp var_re("\\s*([^\n\\s]+) => ([^\n]+)\n");
 	QRegExp ref_re("(#<\\w+:0x[\\da-f]+)\\s*(.*)>");
 	
 	// Look for 'dataitem => value' pairs. For example:
@@ -120,7 +120,7 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		@temp={"z"=>"zed", "p"=>"pee"}>
 	//
 	QRegExp ppref_re("(#<\\w+:0x[\\da-f]+[^\n]*)\n");
-	QRegExp ppvalue_re("\\s*([\\w@$-]+)=([^\n]+)[,>]\n");
+	QRegExp ppvalue_re("\\s*([^\n\\s]+)=([^\n]+)[,>]\n");
 	
 	pos = ppref_re.search(buf);
 	if (pos != -1) {
@@ -174,7 +174,7 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		"farewell"=>"goodbye"
 	//
 	QRegExp hash_re("(Hash \\(\\d+ element\\(s\\)\\))\n");
-	QRegExp pphash_re("\\s*([^=]+)=([^\n]+)\n");
+	QRegExp pphash_re("\\s*([^=\\s]+)=([^\n]+)\n");
 	
 	pos = hash_re.search(buf);
 	if (pos != -1) {
