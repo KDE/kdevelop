@@ -1478,7 +1478,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
     var.type = type;
     var.name = toSimpleName( ast->declarator()->declaratorId() );
     ctx->add( var );
-    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;    
+    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 }
 
 FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
@@ -1513,15 +1513,8 @@ QString CppCodeCompletion::getText( int startLine, int startColumn, int endLine,
     return contents.join( "\n" );
 }
 
-void CppCodeCompletion::computeRecoveryPoints( )
-{
-    kdDebug(9007) << "CppCodeCompletion::computeRecoveryPoints" << endl;
 
-    d->recoveryPoints.clear();
-    TranslationUnitAST* unit = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
-    if( !unit )
-        return;
-    
+// namespace?
     class ComputeRecoveryPoints: public TreeParser
     {
     public:
@@ -1587,6 +1580,16 @@ void CppCodeCompletion::computeRecoveryPoints( )
         QPtrList<RecoveryPoint>& recoveryPoints;
         QStringList m_currentScope;
     };
+
+
+void CppCodeCompletion::computeRecoveryPoints( )
+{
+    kdDebug(9007) << "CppCodeCompletion::computeRecoveryPoints" << endl;
+
+    d->recoveryPoints.clear();
+    TranslationUnitAST* unit = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
+    if( !unit )
+        return;
 
     ComputeRecoveryPoints walker( d->recoveryPoints );
     walker.parseTranslationUnit( unit );
