@@ -77,15 +77,15 @@ private:
     QStringList typeOf( const QString& name, NamespaceDom scope );
     QStringList typeOf( const QString& name, const FunctionList& methods );
     
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, QValueList<Tag>& tags );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ClassDom klass );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, NamespaceDom scope );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const FunctionList& methods );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst );
-    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const QStringList& type, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, QValueList<Tag>& tags, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, ClassDom klass, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, NamespaceDom scope, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const FunctionList& methods, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const VariableList& attributes, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const ClassList& lst, bool isInstance );
+    void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, const NamespaceList& lst, bool isInstance );
     
     void computeSignatureList( QStringList& signatureList, const QString& name, const QStringList& type );
     void computeSignatureList( QStringList& signatureList, const QString& name, ClassDom klass );

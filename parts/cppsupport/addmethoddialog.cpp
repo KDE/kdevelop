@@ -190,10 +190,6 @@ void AddMethodDialog::accept()
     QString fileName = m_klass->fileName();
     //kdDebug(9007) << "-------------> fileName = " << fileName << endl;
 
-    // sync
-    while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
-	m_cppSupport->backgroundParser()->isEmpty().wait();
-
     m_cppSupport->backgroundParser()->lock();
 
     int line = 0, column = 0;

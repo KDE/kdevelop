@@ -23,6 +23,7 @@
 
 class CppSupportPart;
 class TranslationUnitAST;
+class SynchronizedFileList;
 
 class Unit
 {
@@ -67,18 +68,16 @@ public:
 
 protected:
     Unit* findUnit( const QString& fileName );
-    Unit* parseFile( const QString& fileName );
-    bool contains( const QString& fileName ) const;
+    Unit* parseFile( const QString& fileName, bool readFromDisk );
 
 private:
     class KDevDriver* m_driver;
-    QValueList< QPair<QString, bool> > m_fileList;
     QString m_currentFile;
     QWaitCondition m_canParse;
     QWaitCondition m_isEmpty;
     QWaitCondition* m_consumed;
     QMutex m_mutex;
-
+    SynchronizedFileList* m_fileList;
     CppSupportPart* m_cppSupport;
     bool m_close;
     QMap<QString, Unit*> m_unitDict;

@@ -72,6 +72,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/selectioninterface.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/clipboardinterface.h>
 
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
@@ -146,7 +147,7 @@ public:
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
     : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"),
-      m_activeSelection( 0 ), m_activeEditor( 0 ),
+      m_activeDocument( 0 ), m_activeView( 0 ), m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
     setInstance(CppSupportFactory::instance());
@@ -234,9 +235,6 @@ CppSupportPart::~CppSupportPart()
     m_driver = 0;
 
     if( m_backgroundParser ){
-	//    while( m_backgroundParser->filesInQueue() > 0 )
-	//       m_backgroundParser->isEmpty().wait();
-	//m_backgroundParser->reparse();
 	m_backgroundParser->close();
 	m_backgroundParser->wait();
 	delete m_backgroundParser;
@@ -328,15 +326,16 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     bool enabled = false;
 
-    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
+    m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
+    m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
     m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
-    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( part->widget() ) : 0;
+    m_activeViewCursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>( m_activeView ) : 0;
 
     m_activeFileName = QString::null;
 
-    if (doc) {
-	m_activeFileName = QDir( doc->url().path() ).canonicalPath();
+    if (m_activeDocument) {
+	m_activeFileName = QDir( m_activeDocument->url().path() ).canonicalPath();
         QFileInfo fi( m_activeFileName );
         QString ext = fi.extension();
         if (fileExtensions().contains(ext))
@@ -350,11 +349,11 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     if( !part )
 	return;
 
-    KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( part->widget() );
-    if( !view )
+    if( !m_activeView )
 	return;
 
-    KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( view );
+#if 0
+    KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
     if( !textHintIface )
 	return;
 
@@ -362,6 +361,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 	     this, SLOT(slotNeedTextHint(int,int,QString&)) );
 
     textHintIface->enableTextHints( 1000 );
+#endif
 }
 
 
@@ -426,30 +426,42 @@ QString CppSupportPart::findHeader(const QStringList &list, const QString &heade
 
 void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    if (!context->hasType( Context::EditorContext ))
-        return;
+    m_activeClass = 0;
+    m_activeFunction = 0;
+    m_activeVariable = 0;
 
-    popup->insertSeparator();
-    popup->insertItem( i18n( "Switch Header/Implementation"),
-        this, SLOT( slotSwitchHeader() ) );
+    if( context->hasType(Context::EditorContext) ){
+	popup->insertSeparator();
+	popup->insertItem( i18n( "Switch Header/Implementation"),
+			   this, SLOT( slotSwitchHeader() ) );
 
-    const EditorContext *econtext = static_cast<const EditorContext*>(context);
-    QString str = econtext->currentLine();
-    if (str.isEmpty())
-        return;
+	const EditorContext *econtext = static_cast<const EditorContext*>(context);
+	QString str = econtext->currentLine();
+	if (str.isEmpty())
+	    return;
 
-    QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
-    if (!re.exactMatch(str))
-        return;
+	QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
+	if (!re.exactMatch(str))
+	    return;
 
-    QString popupstr = re.cap(1);
-    QStringList projectFileList = project()->allFiles();
-    m_contextFileName = findHeader(projectFileList, popupstr);
-    if (m_contextFileName.isEmpty())
-        return;
+	QString popupstr = re.cap(1);
+	QStringList projectFileList = project()->allFiles();
+	m_contextFileName = findHeader(projectFileList, popupstr);
+	if (m_contextFileName.isEmpty())
+	    return;
 
-    popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
-                       this, SLOT(slotGotoIncludeFile()) );
+	popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
+			   this, SLOT(slotGotoIncludeFile()) );
+    } else if( context->hasType(Context::CodeModelItemContext) ){
+	const CodeModelItemContext* mcontext = static_cast<const CodeModelItemContext*>( context );
+
+	if( mcontext->item()->isClass() ){
+	    m_activeClass = (ClassModel*) mcontext->item();
+	    popup->insertItem( i18n("Extract Interface..."), this, SLOT(slotExtractInterface()) );
+	} else if( mcontext->item()->isFunction() ){
+	    m_activeFunction = (FunctionModel*) mcontext->item();
+	}
+    }
 }
 
 
@@ -841,10 +853,6 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
     if( 1 || !m_activeEditor )
 	return;
 
-    // sync
-    //while( m_backgroundParser->filesInQueue() > 0 )
-    //     m_backgroundParser->isEmpty().wait();
-
     m_backgroundParser->lock();
     TranslationUnitAST* ast = m_backgroundParser->translationUnit( m_activeFileName );
     AST* node = 0;
@@ -872,10 +880,6 @@ void CppSupportPart::slotMakeMember()
 {
     if( !m_activeViewCursor || !m_valid )
         return;
-
-    // sync
-    while( m_backgroundParser->filesInQueue() > 0 )
-         m_backgroundParser->isEmpty().wait();
 
     QString text;
 
@@ -940,11 +944,6 @@ void CppSupportPart::slotMakeMember()
 	if( !text.isEmpty() && !implFile.isEmpty() ){
 	    partController()->editDocument( implFile );
 	    kapp->processEvents( 500 );
-
-            // sync
-            while( m_backgroundParser->filesInQueue() > 0 )
-                m_backgroundParser->isEmpty().wait();
-
 	}
 
 	m_backgroundParser->lock();
@@ -1271,6 +1270,79 @@ void CppSupportPart::saveProjectSourceInfo( )
 	stream << offset;
 	stream.device()->at( end );
     }
+}
+
+QString CppSupportPart::extractInterface( const ClassDom& klass )
+{
+    QString txt;
+    QTextStream stream( &txt, IO_WriteOnly );
+
+    QString name = klass->name() + "Interface";
+    QString ind;
+    ind.fill( QChar(' '), 4 );
+
+    stream
+	<< "class " << name << "\n"
+	<< "{" << "\n"
+	<< "public:" << "\n"
+	<< ind << name << "() {}" << "\n"
+	<< ind << "virtual ~" << name << "() {}" << "\n"
+	<< "\n";
+
+    const FunctionList functionList = klass->functionList();
+    for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it ){
+	const FunctionDom& fun = *it;
+
+	if( !fun->isVirtual() || fun->name().startsWith("~") )
+	    continue;
+
+	stream << ind << formatModelItem( fun );
+	if( !fun->isAbstract() )
+	    stream << " = 0";
+
+	stream << ";\n";
+    }
+
+    stream
+	<< "\n"
+	<< "private:" << "\n"
+	<< ind << name << "( const " << name << "& source );" << "\n"
+	<< ind << "void operator = ( const " << name << "& source );" << "\n"
+	<< "};" << "\n\n";
+
+    return txt;
+}
+
+void CppSupportPart::slotExtractInterface( )
+{
+    if( !m_activeClass )
+	return;
+
+    QFileInfo fileInfo( m_activeClass->fileName() );
+    QString ifaceFileName = fileInfo.dirPath( true ) + "/" + m_activeClass->name().lower() + "_interface.h";
+    if( QFile::exists(ifaceFileName) ){
+	KMessageBox::error( mainWindow()->main(), i18n("File %1 already exists").arg(ifaceFileName),
+			    i18n("C++ Support") );
+    } else {
+	QString text = extractInterface( m_activeClass );
+
+	QFile f( ifaceFileName );
+	if( f.open(IO_WriteOnly) ){
+	    QTextStream stream( &f );
+	    stream
+		<< "#ifndef __" << m_activeClass->name().upper() << "_INTERFACE_H" << "\n"
+		<< "#define __" << m_activeClass->name().upper() << "_INTERFACE_H" << "\n"
+		<< "\n"
+		<< extractInterface( m_activeClass )
+		<< "\n"
+		<< "#endif // __" << m_activeClass->name().upper() << "_INTERFACE_H" << "\n";
+	    f.close();
+
+	    project()->addFile( ifaceFileName );
+	}
+    }
+
+    m_activeClass = 0;
 }
 
 #include "cppsupportpart.moc"

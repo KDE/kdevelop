@@ -592,7 +592,8 @@ CppCodeCompletion::completeText( )
     QString strCurLine = m_activeEditor->textLine( nLine );
 
     bool showArguments = false;
-
+    bool isInstance = true;
+    
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
@@ -613,7 +614,7 @@ CppCodeCompletion::completeText( )
 
         showArguments = TRUE;
     }
-
+    
     QStringList type, this_type;
     QString expr, word;
 
@@ -797,18 +798,22 @@ CppCodeCompletion::completeText( )
     if( !ctx )
 	return;
 
+    if( ch2 == "::" || expr.isEmpty() ){
+	isInstance = false;
+    }
+    
     if( !showArguments ){
 	QValueList<KTextEditor::CompletionEntry> entryList;
 
 	if( type.isEmpty() && expr.isEmpty() ){
-	    computeCompletionEntryList( entryList, ctx );
-	    computeCompletionEntryList( entryList, m_pSupport->codeModel()->globalNamespace() );
+	    computeCompletionEntryList( entryList, ctx, isInstance );
+	    computeCompletionEntryList( entryList, m_pSupport->codeModel()->globalNamespace(), isInstance );
 
 	    if( this_type.size() )
-		computeCompletionEntryList( entryList, this_type );
+		computeCompletionEntryList( entryList, this_type, isInstance );
 
 	} else if( !type.isEmpty() ){
-	    computeCompletionEntryList( entryList, type );
+	    computeCompletionEntryList( entryList, type, isInstance );
 	}
 
 	if( entryList.size() ){
@@ -1339,13 +1344,13 @@ QStringList CppCodeCompletion::typeOf( const QString & name, const FunctionList 
     return QStringList();
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type, bool isInstance )
 {
     CppCodeCompletionConfig* cfg = m_pSupport->codeCompletionConfig();
     QString key = findClass( type.join( "::" ) );
     ClassDom klass = findContainer( key );
     if( klass ){
-	computeCompletionEntryList( entryList, klass );
+	computeCompletionEntryList( entryList, klass, isInstance );
     } else {
 	QValueList<Catalog::QueryArgument> args;
 	QValueList<Tag> tags;
@@ -1354,22 +1359,22 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
 	    << Catalog::QueryArgument( "scope", type );
 	tags = m_repository->query( args );
-	computeCompletionEntryList( entryList, tags );
+	computeCompletionEntryList( entryList, tags, isInstance );
 
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
 	    << Catalog::QueryArgument( "scope", type );
 	tags = m_repository->query( args );
-	computeCompletionEntryList( entryList, tags );
+	computeCompletionEntryList( entryList, tags, isInstance );
 
-	if( cfg->includeEnums() ){
-		args.clear();
-		args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
+	if( !isInstance && cfg->includeEnums() ){
+	    args.clear();
+	    args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
 		<< Catalog::QueryArgument( "scope", type );
-		tags = m_repository->query( args );
-		computeCompletionEntryList( entryList, tags );
+	    tags = m_repository->query( args );
+	    computeCompletionEntryList( entryList, tags, isInstance );
 	}
-
+	
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
 	    << Catalog::QueryArgument( "name", type.join("::") );
@@ -1380,12 +1385,12 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	    CppBaseClass<Tag> info( *it );
 	    ++it;
 
-	    computeCompletionEntryList( entryList, typeName(info.baseClass()) );
+	    computeCompletionEntryList( entryList, typeName(info.baseClass()), isInstance );
 	}
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, QValueList< Tag > & tags )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, QValueList< Tag > & tags, bool /*isInstance*/ )
 {
     QValueList<Tag>::Iterator it = tags.begin();
     while( it != tags.end() ){
@@ -1397,36 +1402,36 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ClassDom klass )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, ClassDom klass, bool isInstance )
 {
-    computeCompletionEntryList( entryList, klass->functionList() );
-    computeCompletionEntryList( entryList, klass->variableList() );
+    computeCompletionEntryList( entryList, klass->functionList(), isInstance );
+    computeCompletionEntryList( entryList, klass->variableList(), isInstance );
 
     QStringList parents = klass->baseClassList();
     for( QStringList::Iterator it=parents.begin(); it!=parents.end(); ++it ){
 	QStringList type = typeName( *it );
 
 	if( !type.isEmpty() )
-	    computeCompletionEntryList( entryList, type );
+	    computeCompletionEntryList( entryList, type, isInstance );
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, NamespaceDom scope )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, NamespaceDom scope, bool isInstance )
 {
     CppCodeCompletionConfig* cfg = m_pSupport->codeCompletionConfig();
 
     if( cfg->includeGlobalFunctions() ){
-	computeCompletionEntryList( entryList, scope->functionList() );
-	computeCompletionEntryList( entryList, scope->variableList() );
+	computeCompletionEntryList( entryList, scope->functionList(), isInstance );
+	computeCompletionEntryList( entryList, scope->variableList(), isInstance );
     }
 
-    if( cfg->includeTypes() ){
-	computeCompletionEntryList( entryList, scope->classList() );
-	computeCompletionEntryList( entryList, scope->namespaceList() );
+    if( !isInstance && cfg->includeTypes() ){
+	computeCompletionEntryList( entryList, scope->classList(), isInstance );
+	computeCompletionEntryList( entryList, scope->namespaceList(), isInstance );
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const ClassList & lst )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const ClassList & lst, bool isInstance )
 {
     CppCodeCompletionConfig* cfg = m_pSupport->codeCompletionConfig();
 
@@ -1441,12 +1446,12 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	entryList << entry;
 
 	if( cfg->includeTypes() ){
-	    computeCompletionEntryList( entryList, klass->classList() );
+	    computeCompletionEntryList( entryList, klass->classList(), isInstance );
 	}
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const NamespaceList & lst )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const NamespaceList & lst, bool /*isInstance*/ )
 {
     NamespaceList::ConstIterator it = lst.begin();
     while( it != lst.end() ){
@@ -1460,13 +1465,16 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const FunctionList & methods )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const FunctionList & methods, bool isInstance )
 {
     FunctionList::ConstIterator it = methods.begin();
     while( it != methods.end() ){
 	FunctionDom meth = *it;
 	++it;
 
+	if( isInstance && meth->isStatic() )
+	    continue;
+	
 	KTextEditor::CompletionEntry entry;
 	//entry.prefix = meth->type();
 
@@ -1500,12 +1508,15 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const VariableList & attributes )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const VariableList & attributes, bool isInstance )
 {
     VariableList::ConstIterator it = attributes.begin();
     while( it != attributes.end() ){
 	VariableDom attr = *it;
 	++it;
+	
+	if( isInstance && attr->isStatic() )
+	    continue;
 
 	KTextEditor::CompletionEntry entry;
 	entry.text = attr->name();
@@ -1513,7 +1524,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
     }
 }
 
-void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, SimpleContext * ctx )
+void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, SimpleContext * ctx, bool /*isInstance*/ )
 {
     while( ctx ){
 	QValueList<SimpleVariable> vars = ctx->vars();
@@ -1593,8 +1604,9 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	    ArgumentDom arg = *argIt;
 	    ++argIt;
 
-	    signature += arg->type();
-
+	    signature += arg->type() + " " + arg->name();
+	    signature = signature.stripWhiteSpace();
+	    
 	    if( argIt != args.end() )
 		signature += ", ";
 	}
@@ -1618,12 +1630,27 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	CppFunction<Tag> info( tag );
 	if( info.name() != name )
 	    continue;
+	
+        QString signature;
+        signature += tag.name() + "(";
+        QStringList arguments = info.arguments();
+        QStringList argumentNames = info.argumentNames();
 
-	QString signature;
-	signature += info.type() + " ";
-	signature += info.name() + "(" + info.arguments().join(", ") + ")";
+        for( uint i=0; i<arguments.size(); ++i ){
+            signature += arguments[ i ];
+            QString argName = argumentNames[ i ];
+            if( !argName.isEmpty() )
+                signature += QString::fromLatin1( " " ) + argName;
+
+            if( i != (arguments.size()-1) ){
+                signature += ", ";
+            }
+        }
+        signature += ")";
+	
 	if( info.isConst() )
 	    signature += " const";
+	
 	signatureList << signature.stripWhiteSpace();
     }
 }

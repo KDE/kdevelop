@@ -32,8 +32,6 @@ public:
     static KTextEditor::CompletionEntry toEntry( Tag& tag );
     QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute=false );
     
-    QStringList getSignatureList( const QStringList& scope, const QString& functionName, bool isInstance );
-
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
     QValueList<Tag> getTagsInScope( const QStringList& scope, bool isInstance );
     QValueList<Tag> getTagsInScope( const QString& name, const QStringList& scope );

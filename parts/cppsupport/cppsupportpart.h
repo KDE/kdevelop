@@ -39,7 +39,14 @@ class KListView;
 class Driver;
 
 namespace KParts { class Part; }
-namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; class Document; };
+namespace KTextEditor
+{
+    class Document;
+    class View;
+    class EditInterface;
+    class SelectionInterface;
+    class ViewCursorInterface;
+};
 
 class CppSupportPart : public KDevLanguageSupport
 {
@@ -74,6 +81,8 @@ public:
     virtual QString formatModelItem( const CodeModelItem *item, bool shortDescription=false );
     virtual void addClass();
 
+    QString extractInterface( const ClassDom& klass );
+
 signals:
     void fileParsed( const QString& fileName );
 
@@ -106,6 +115,7 @@ private slots:
     void slotGotoIncludeFile();
     void slotCompleteText();
     void slotMakeMember();
+    void slotExtractInterface();
 
     void slotNeedTextHint( int, int, QString& );
 
@@ -145,6 +155,8 @@ private:
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
 
+    KTextEditor::Document* m_activeDocument;
+    KTextEditor::View* m_activeView;
     KTextEditor::SelectionInterface* m_activeSelection;
     KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::ViewCursorInterface* m_activeViewCursor;
@@ -159,6 +171,10 @@ private:
     QPtrList<Catalog> m_catalogList;
     Driver* m_driver;
     QString m_projectDirectory;
+
+    ClassDom m_activeClass;
+    FunctionDom m_activeFunction;
+    VariableDom m_activeVariable;
 
     friend class KDevCppSupportIface;
     friend class CppDriver;

@@ -159,48 +159,6 @@ QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& clas
     return query( args );
 }
 
-QStringList CodeInformationRepository::getSignatureList( const QStringList & scope, const QString & functionName, bool /*isInstance*/ )
-{
-    kdDebug(9007) << "CodeInformationRepository::getSignatureList()" << endl;
-
-    QValueList<Catalog::QueryArgument> args;
-    args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-    	<< Catalog::QueryArgument( "scope", scope )
-    	<< Catalog::QueryArgument( "name", functionName );
-
-    QValueList<Tag> tags = query( args );
-
-    QStringList list;
-    QValueList<Tag>::Iterator it = tags.begin();
-    while( it != tags.end() ){
-        Tag tag = *it;
-        ++it;
-
-	CppFunction<Tag> tagInfo( tag );
-
-        QString signature;
-        signature += tag.name() + "(";
-	QStringList arguments = tagInfo.arguments();
-	QStringList argumentNames = tagInfo.argumentNames();
-
-	for( uint i=0; i<arguments.size(); ++i ){
-	    signature += arguments[ i ];
-	    QString argName = argumentNames[ i ];
-	    if( !argName.isEmpty() )
-		signature += QString::fromLatin1( " " ) + argName;
-
-	    if( i != (arguments.size()-1) ){
-		signature += ", ";
-	    }
-	}
-        signature += ")";
-
-        list << signature;
-    }
-
-    return list;
-}
-
 QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStringList & scope )
 {
     kdDebug(9007) << "CodeInformationRepository::getClassOrNamespaceList()" << endl;
