@@ -318,6 +318,7 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   disableCommand(ID_BUILD_COMPILE_FILE);
   disableCommand(ID_BUILD_SET_ARGS);
+  disableCommand(ID_BUILD_MAKE_DISTRIBUTION);
 
   disableCommand(ID_HELP_BACK);
   disableCommand(ID_HELP_FORWARD);

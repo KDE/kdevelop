@@ -601,7 +601,7 @@ void CKDevelop::initMenu(){
 // Build-menu entries
 
   build_menu = new QPopupMenu;
-  build_menu->insertItem(Icon("compfile.xpm"),i18n("Compile File"),
+  build_menu->insertItem(Icon("compfile.xpm"),i18n("Compile &File"),
 			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
 
   build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this,
@@ -624,17 +624,23 @@ void CKDevelop::initMenu(){
 	build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
   build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
-  build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
+  build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
   build_menu->insertSeparator();
-	build_menu->insertItem(i18n("Execution &arguments..."),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
+	build_menu->insertItem(i18n("Execution ar&guments..."),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
 	build_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
-  build_menu->insertItem(i18n("Make &API-Doc"), this,
+  build_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
   build_menu->insertItem(i18n("Make &User-Manual"), this, 
 			 SLOT(slotBuildManual()),0,ID_BUILD_MAKE_USER_MANUAL);
+
+  // submenu for making dists
+  p2 = new QPopupMenu;
+  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotBuildMakeDistSourceTgz()),0,ID_BUILD_MAKE_DISTRIBUTION_SOURCE_TGZ);
   
+  build_menu->insertItem(i18n("Make D&istribution"),p2,ID_BUILD_MAKE_DISTRIBUTION);
+
   kdev_menubar->insertItem(i18n("&Build"), build_menu);
 
 

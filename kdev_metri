@@ -1,2 +1,2 @@
 #you can get cxxmetric from the kdesdk -Sandy
-cxxmetric `find . -o -name \*.h -o -name \*.cpp -o -name \*.cc`
+cxxmetric `find . -name \*.h -o -name \*.cpp -o -name \*.cc`

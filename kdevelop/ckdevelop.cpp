@@ -863,6 +863,28 @@ void CKDevelop::slotBuildManual(){
   }
 }
 
+void CKDevelop::slotBuildMakeDistSourceTgz(){
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view->setSeparatorPos(output_view_pos);
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    QRect rMainGeom= view->geometry();
+    view->resize(rMainGeom.width()-1,rMainGeom.height());
+    view->resize(rMainGeom.width()+1,rMainGeom.height());
+  }
+
+  showOutputView(true);
+  error_parser->toogleOff();
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Running make dist..."));
+  messages_widget->clear();
+  QDir::setCurrent(prj->getProjectDir());
+  shell_process.clearArguments();
+  shell_process << make_cmd << " dist";
+  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  beep = true;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // TOOLS-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////

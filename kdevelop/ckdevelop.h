@@ -284,6 +284,7 @@ public:
   void slotBuildMessages();
   void slotBuildAPI();
   void slotBuildManual();
+  void slotBuildMakeDistSourceTgz();
   
   ////////////////////////
   // TOOLS-Menu entries

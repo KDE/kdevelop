@@ -136,6 +136,9 @@
 #define ID_BUILD_MAKE_PROJECT_API   14130
 #define ID_BUILD_MAKE_USER_MANUAL   14140
 
+#define ID_BUILD_MAKE_DISTRIBUTION  14200
+#define ID_BUILD_MAKE_DISTRIBUTION_SOURCE_TGZ  14210
+
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
