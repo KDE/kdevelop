@@ -44,6 +44,7 @@
 #include "addservicedlg.h"
 #include "addapplicationdlg.h"
 #include "addfiledlg.h"
+#include "addicondlg.h"
 #include "importexistingdlg.h"
 #include "removefiledlg.h"
 #include "autoprojectpart.h"
@@ -280,6 +281,8 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
                                    this, SLOT(slotAddNewFile()), actions, "add new file");
     addExistingFileAction = new KAction(i18n("Add existing file(s)..."), "fileimport", 0,
                                         this, SLOT(slotAddExistingFile()), actions, "add existing file");
+    addIconAction = new KAction(i18n("Add icon..."), "window_new", 0,
+                                this, SLOT(slotAddIcon()), actions, "add icon");
     buildTargetAction = new KAction(i18n("Build target..."), "launch", 0,
                                     this, SLOT(slotBuildTarget()), actions, "build target");
     setActiveTargetAction = new KAction(i18n("Make target active..."), "", 0,
@@ -697,6 +700,18 @@ void AutoProjectWidget::slotAddExistingFile()
 }
 
 
+void AutoProjectWidget::slotAddIcon()
+{
+    TargetItem *titem = selectedTarget();
+    if (!titem)
+        return;
+
+    AddIconDialog dlg(m_part, this, m_shownSubproject, titem,
+                      this, "add icon");
+    dlg.exec();
+}
+
+
 void AutoProjectWidget::slotBuildTarget()
 {
     TargetItem *titem = selectedTarget();
@@ -708,6 +723,8 @@ void AutoProjectWidget::slotBuildTarget()
         name + ".a";
     else if (titem->primary == "LTLIBRARIES")
         name + ".la";
+    else if (titem->primary == "KDEDOCS")
+        name = "index.cache.bz2";
 
     QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
     m_part->startMakeCommand(buildDirectory() + relpath, titem->name);
@@ -790,6 +807,12 @@ void AutoProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item,
             addExistingFileAction->plug(&popup);
             popup.insertSeparator();
             buildTargetAction->plug(&popup);
+        } else if (titem->primary == "KDEDOCS") {
+            buildTargetAction->plug(&popup);
+            addNewFileAction->plug(&popup);
+            addExistingFileAction->plug(&popup);
+        } else if (titem->primary == "KDEICON") {
+            addIconAction->plug(&popup);
         } else {
             addNewFileAction->plug(&popup);
             addExistingFileAction->plug(&popup);
@@ -838,10 +861,19 @@ TargetItem *AutoProjectWidget::createTargetItem(const QString &name,
 {
     bool group = !(primary == "PROGRAMS" || primary == "LIBRARIES"
                    || primary == "LTLIBRARIES" || primary == "JAVA");
-    QString text = group?
-        i18n("%1 in %2").arg(nicePrimary(primary)).arg(prefix)
-        : i18n("%1 (%2 in %3)").arg(name).arg(nicePrimary(primary)).arg(prefix);
-    
+    bool docgroup = (primary == "KDEDOCS");
+    bool icongroup = (primary == "KDEICON");
+
+    QString text;
+    if (docgroup)
+        text = i18n("Documentation data");
+    else if (icongroup)
+        text = i18n("Icon data in %1").arg(prefix);
+    else if (group)
+        text = i18n("%1 in %2").arg(nicePrimary(primary)).arg(prefix);
+    else
+        text = i18n("%1 (%2 in %3)").arg(name).arg(nicePrimary(primary)).arg(prefix);
+     
     // Workaround because of QListView not being able to create
     // items without actually inserting them
     TargetItem *titem = new TargetItem(overview, group, text);
@@ -925,6 +957,13 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item,
             for (it2 = l2.begin(); it2 != l2.end(); ++it2) {
                 FileItem *fitem = createFileItem(*it2);
                 titem->sources.append(fitem);
+                if (!kdeMode() || !(*it2).endsWith(".cpp"))
+                    continue;
+                QString header = (*it2).left((*it2).length()-4) + ".h";
+                if (sources.contains(header))
+                    continue;
+                fitem = createFileItem(header);
+                titem->sources.append(fitem);
             }
         }
     } else if (primary == "SCRIPTS" || primary == "HEADERS" || primary == "DATA") {
@@ -967,7 +1006,7 @@ void AutoProjectWidget::parseKDEDOCS(SubprojectItem *item,
     // (actually, no parsing is involved here)
 
     QString prefix = "kde_docs";
-    QString primary = "DATA";
+    QString primary = "KDEDOCS";
     
     TargetItem *titem = createTargetItem("", prefix, primary);
     item->targets.append(titem);
@@ -997,7 +1036,7 @@ void AutoProjectWidget::parseKDEICON(SubprojectItem *item,
     if (prefix == "KDE")
         prefix = "kde_icon";
     
-    QString primary = "DATA";
+    QString primary = "KDEICON";
     
     TargetItem *titem = createTargetItem("", prefix, primary);
     item->targets.append(titem);

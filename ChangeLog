@@ -1,3 +1,9 @@
+2002-04-29  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Display header files in automake manager
+	* Add Icon dialog
+	* Allow to build index.cache.bz2 by context menu
+
 2002-04-28  Sandy Meier  <smeier@kdevelop.org>
 	
 	* fixed some broken stuff (load project on startup,GBA support,php code completion)

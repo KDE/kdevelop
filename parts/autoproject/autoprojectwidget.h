@@ -98,15 +98,17 @@ private:
 class TargetItem : public ProjectItem
 {
 public:
-    enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
+    //    enum TargetKind { Program, Library, DataGroup, IconGroup, DocGroup };
     
     TargetItem(QListView *lv, bool group, const QString &text);
 
     // Target kind - not used currently
-    TargetKind kind;
+    //    TargetKind kind;
     // Name of target, e.g. foo
     QString name;
     // One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA
+    // In addition to these automake primaries, we use KDEICON and KDEDOCS
+    // for am_edit magic
     QString primary;
     // May be bin, pkglib, noinst, check, sbin, pkgdata, java...
     QString prefix;
@@ -206,9 +208,15 @@ public:
      * no file is selected.
      */
     FileItem *selectedFile();
-    
+
+    /**
+     * Creates a TargetItem instance without a parent item.
+     */
     TargetItem *createTargetItem(const QString &name,
                                  const QString &prefix, const QString &primary);
+    /**
+     * Creates a FileItem instance without a parent item.
+     */
     FileItem *createFileItem(const QString &name);
 
     void emitAddedFile(const QString &name);
@@ -231,6 +239,7 @@ private slots:
     void slotTargetOptions ();
     void slotAddNewFile();
     void slotAddExistingFile();
+    void slotAddIcon();
     void slotBuildTarget();
     void slotRemoveFile();
     void slotSetActiveTarget();
@@ -248,7 +257,11 @@ private:
                       const QString &lhs, const QString &rhs);
     void parse(SubprojectItem *item);
 
-    QToolButton* subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton, *addTargetButton, *addServiceButton, *addApplicationButton, *buildSubprojectButton, *targetOptionsButton, *addNewFileButton, *addExistingFileButton, *buildTargetButton, *removeFileButton;
+    QToolButton *subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton;
+    QToolButton *addTargetButton, *addServiceButton, *addApplicationButton;
+    QToolButton *buildSubprojectButton, *targetOptionsButton;
+    QToolButton *addNewFileButton, *addExistingFileButton;
+    QToolButton *buildTargetButton, *removeFileButton;
 
     KAction* addApplicationAction;
     KAction* subProjectOptionsAction;
@@ -260,6 +273,7 @@ private:
     KAction* targetOptionsAction;
     KAction* addNewFileAction;
     KAction* addExistingFileAction;
+    KAction* addIconAction;
     KAction* buildTargetAction;
     KAction* setActiveTargetAction;
     KAction* removeFileAction;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999 by Sandy Meier                                     *
+ *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,28 +9,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _ADDTRANSLATIONDLG_H_
-#define _ADDTRANSLATIONDLG_H_
+#ifndef _ADDICONDLG_H_
+#define _ADDICONDLG_H_
 
-#include <qdialog.h>
+#include "addicondlgbase.h"
 
-class QComboBox;
 class AutoProjectPart;
+class AutoProjectWidget;
+class SubprojectItem;
+class TargetItem;
 
 
-class AddTranslationDialog : public QDialog
+class AddIconDialog : public AddIconDialogBase
 {
     Q_OBJECT
     
 public:
-    AddTranslationDialog( AutoProjectPart *part, QWidget *parent=0, const char *name=0 );
-    ~AddTranslationDialog();
+    AddIconDialog( AutoProjectPart *part, AutoProjectWidget *widget,
+                   SubprojectItem *spitem, TargetItem *titem,
+                   QWidget *parent=0, const char *name=0 );
+    ~AddIconDialog();
+
 
 private:
+    virtual void somethingChanged();
     virtual void accept();
 
-    QComboBox *lang_combo;
     AutoProjectPart *m_part;
+    AutoProjectWidget *m_widget;
+    SubprojectItem *m_subProject;
+    TargetItem *m_target;
 };
 
 #endif

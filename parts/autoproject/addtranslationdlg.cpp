@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addtranslationdlg.h"
+
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -25,7 +27,6 @@
 
 #include "misc.h"
 #include "autoprojectpart.h"
-#include "addtranslationdlg.h"
 
 
 AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *parent, const char *name)

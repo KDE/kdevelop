@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addtargetdlg.h"
+
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
@@ -18,7 +20,6 @@
 
 #include "misc.h"
 #include "autoprojectwidget.h"
-#include "addtargetdlg.h"
 
 
 AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item,
@@ -36,7 +37,6 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
     primary_combo->insertItem(i18n("Header"));
     primary_combo->insertItem(i18n("Data file"));
     primary_combo->insertItem(i18n("Java"));
-    connect( primary_combo, SIGNAL(activated(int)), this, SLOT(primaryChanged()) );
 
     primaryChanged(); // updates prefix combo
 

@@ -63,6 +63,7 @@ private:
     friend class AutoProjectWidget;
     friend class CompilerOptionsWidget;
     friend class AddTranslationDialog;
+    friend class AddIconDialog;
 };
 
 typedef KGenericFactory<AutoProjectPart> AutoProjectFactory;

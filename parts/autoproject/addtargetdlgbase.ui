@@ -2,7 +2,7 @@
 <class>AddTargetDialogBase</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>Add_Target</cstring>
+        <cstring>add_target_dialog</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -254,19 +254,19 @@
     <connection>
         <sender>okbutton</sender>
         <signal>clicked()</signal>
-        <receiver>Add_Target</receiver>
+        <receiver>add_target_dialog</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>cancelbutton</sender>
         <signal>clicked()</signal>
-        <receiver>Add_Target</receiver>
+        <receiver>add_target_dialog</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
         <sender>primary_combo</sender>
         <signal>activated(int)</signal>
-        <receiver>Add_Target</receiver>
+        <receiver>add_target_dialog</receiver>
         <slot>primaryChanged()</slot>
     </connection>
 </connections>
@@ -283,7 +283,7 @@
     <tabstop>cancelbutton</tabstop>
 </tabstops>
 <slots>
-    <slot>primaryChanged()</slot>
+    <slot access="protected">primaryChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

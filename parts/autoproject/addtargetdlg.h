@@ -14,6 +14,9 @@
 
 #include "addtargetdlgbase.h"
 
+class AutoProjectWidget;
+class SubprojectItem;
+
 
 class AddTargetDialog : public AddTargetDialogBase
 {

@@ -30,6 +30,7 @@
 #include "runoptionswidget.h"
 #include "configureoptionswidget.h"
 #include "addtranslationdlg.h"
+#include "addicondlg.h"
 #include "autoprojectwidget.h"
 #include "config.h"
 
@@ -61,7 +62,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("Add Translation..."), 0,
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
-	
+
 /*	action = new KAction ( i18n("&Import existing files and directories..."), "", 0,
 							this, SLOT ( slotImportExisting() ),
 							actionCollection(), "project_importexisting" );
