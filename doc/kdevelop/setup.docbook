@@ -155,7 +155,7 @@ By default, &kdevelop; uses a common parent directory for all new projects. Ente
 </para>
 </formalpara>
 <note><para>
-You may of course change the directory path of a new project at the time you set it up in the <link linkend="appwizard">&appwizard;</link>.
+You may of course change the directory path of a new project at the time you set it up in the <link linkend="applicationwizard">&appwizard;</link>.
 </para></note>
 
 <formalpara id="setup-main-messages-font">

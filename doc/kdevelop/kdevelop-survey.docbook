@@ -25,7 +25,7 @@
   several <link  linkend="uimodes-survey">user interface modes</link> from which you can select the look and feel of the workspace,
   </para></listitem>
   <listitem><para>
-  an <link linkend="appwizard">&appwizard;</link> which aids you in setting up a new project,
+  an <link linkend="applicationwizard">&appwizard;</link> which aids you in setting up a new project,
   </para></listitem>
   <listitem><para>
   several <link linkend="makesystems">project management systems</link> which aid in building and managing your project,
