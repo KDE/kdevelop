@@ -32,7 +32,7 @@ ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent ), _latestfile(
     setSorting( -1 );
     addColumn( "" );
     header()->hide();
-    setFullWidth();
+    setFullWidth(true);
 
     QPalette pal = palette();
     QColorGroup cg = pal.active();
