@@ -58,7 +58,7 @@
   <kdevfileview>
     <groups>
       <group pattern="*.f" name="Preprocessed Fortran" />
-      <group pattern="*.F ; *.f77 ; *.ftn" name="Fortran77 source files" />
+      <group pattern="*.F;*.f77;*.ftn" name="Fortran77 source files" />
     </groups>
   </kdevfileview>
 </kdevelop>
