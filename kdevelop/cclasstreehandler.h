@@ -18,7 +18,7 @@
 #ifndef _CCLASSTREEHANDLER_H_INCLUDED
 #define _CCLASSTREEHANDLER_H_INCLUDED
 
-#include "./sourceinfo/classstore.h"
+#include "classstore.h"
 #include "ctreehandler.h"
 
 typedef enum

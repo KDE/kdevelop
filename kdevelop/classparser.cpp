@@ -24,7 +24,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include "classparser.h"
-#include "sourceinfo/programmingbycontract.h"
+#include "programmingbycontract.h"
 
 /** Line where a comment starts. */
 extern int comment_start;

@@ -30,7 +30,7 @@
 #include <qlistbox.h>
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include "../sourceinfo/classstore.h"
+#include "classstore.h"
 
 /** The virtual method view for the classwizard dialog. */
 class CCWVirtualMethodView : public QWidget

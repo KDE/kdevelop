@@ -20,7 +20,7 @@
 #include "ckdevelop.h"
 #include "kdevregexp.h"
 #include "docviewman.h"
-#include "sourceinfo/classstore.h"
+#include "classstore.h"
 
 #include <kate/document.h>
 #include <kate/view.h>

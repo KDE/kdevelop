@@ -23,7 +23,7 @@
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
 //#include <ceditwidget.h>
-#include "sourceinfo/programmingbycontract.h"
+#include "programmingbycontract.h"
 #include "docviewman.h"
 
 #include <kate/document.h>

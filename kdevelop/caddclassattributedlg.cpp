@@ -22,7 +22,7 @@
 
 
 #include "caddclassattributedlg.h"
-#include "./sourceinfo/classstore.h"
+#include "classstore.h"
 
 #include <kmessagebox.h>
 #include <kapp.h>

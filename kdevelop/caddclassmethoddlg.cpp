@@ -22,7 +22,7 @@
 
 #include "caddclassmethoddlg.h"
 #include "cclonefunctiondlg.h"
-#include "./sourceinfo/classstore.h"
+#include "classstore.h"
 
 #include <kmessagebox.h>
 #include <qwhatsthis.h>

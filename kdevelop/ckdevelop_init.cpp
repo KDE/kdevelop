@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "ckdevelop.h"
+#include "kdevcoreimpl.h"
 
 #include "cclassview.h"
 #include "cdocbrowser.h"
@@ -36,7 +37,7 @@
 #include "./dbg/brkptmanager.h"
 #include "./dbg/disassemble.h"
 
-#include "./sourceinfo/classstore.h"
+#include "classstore.h"
 
 #include "docviewman.h"
 #include "kdevsession.h"
@@ -184,6 +185,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   setToolmenuEntries();
 
   slotStatusMsg(i18n("Welcome to KDevelop!"));
+
+  m_pDevCore = new KDevCoreImpl( this );
 }
 
 CKDevelop::~CKDevelop()

@@ -12,3 +12,4 @@ EXTRA_DIST = cclasswizarddlg.cpp cclasswizarddlg.h ccwvirtualmethodview.cpp ccwv
 
 ####### kdevelop will overwrite this part!!! (end)############
 KDE_OPTIONS = nofinal
+INCLUDES += -I$(top_srcdir)/lib/sourceinfo $(all_includes)

@@ -28,7 +28,7 @@
 #include <qwidget.h>
 
 
-#include "./sourceinfo/classstore.h"
+#include "classstore.h"
 #include "cclasstreehandler.h"
 #include "cclasstooltreeview.h"
 

@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = doc kdevelop po 
+SUBDIRS = doc lib parts kdevelop po 
 
 EXTRA_DIST = AUTHORS BUGS COPYING ChangeLog FAQ INSTALL Menushortcuts.html README README.htdig TODO acconfig.h config.guess config.h.bot configure.in.in kdevelop.lsm kdevelop.m4 acinclude.m4 configure.files subdirs aclocal.m4 configure.in stamp-h.in config.h.in kdevelop.kdevprj.save admin configure.in.mid 
 

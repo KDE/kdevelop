@@ -45,7 +45,7 @@
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
 #include "./ctags/ctagsdialog_impl.h"
-#include "./sourceinfo/classstore.h"
+#include "classstore.h"
 #include "ckdevaccel.h"
 #include "kdevcodecompletion.h"
 #include "kdevcodetemplate.h"

@@ -18,7 +18,7 @@
 
 
 #include "cclasstooldlg.h"
-#include "sourceinfo/programmingbycontract.h"
+#include "programmingbycontract.h"
 
 #include <kdebug.h>
 #include <kglobal.h>

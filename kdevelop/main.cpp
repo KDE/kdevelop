@@ -24,7 +24,7 @@
 #include "setup/ckdevinstall.h"
 #include "kstartuplogo.h"
 
-#include <dcopclient.h>
+//#include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kapp.h>
 #include <kconfig.h>
@@ -141,8 +141,8 @@ int main(int argc, char* argv[])
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
   KApplication a;
-  a.dcopClient()->attach();
-  a.dcopClient()->registerAs("kdevelop");
+  //a.dcopClient()->attach();
+  //a.dcopClient()->registerAs("kdevelop");
 
   config = KGlobal::config();
   config->setGroup("General Options");

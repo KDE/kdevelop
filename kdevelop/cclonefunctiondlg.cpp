@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "cclonefunctiondlg.h"
-#include "./sourceinfo/parsedclass.h"
+#include "parsedclass.h"
 #include "cclassview.h"
 #include <klocale.h>
 #include <kmessagebox.h>

@@ -20,3 +20,5 @@ EXTRA_DIST = GfxClassBox.cpp GfxClassBox.h GfxClassTree.cpp GfxClassTree.h GfxCl
 ####### kdevelop will overwrite this part!!! (end)############
 
 KDE_OPTIONS = nofinal
+INCLUDES += -I$(top_srcdir)/lib/sourceinfo $(all_includes)
+

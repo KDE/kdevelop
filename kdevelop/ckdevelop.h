@@ -68,6 +68,7 @@ class ParsedContainer;
 class ParsedClass;
 class ParsedAttribute;
 class KStatusBar;
+class KDevCoreImpl;
 // does not exist anymore (rokrau 6/28/01)
 //class CEditWidget;
 class COutputWidget;
@@ -1137,6 +1138,7 @@ private:
   bool m_bToggleToolViewsIsPending;
 
   ClassStore* m_pStore;
+  KDevCoreImpl* m_pDevCore;
 
 private slots:
   void slotdoneWithKpp();

@@ -1,3 +1,6 @@
+2002-03-26  Roberto Raggi  <raggi@cli.di.unipi.it>
+    * added gideon sdk and implemented part loader
+
 2002-03-25  Roland Krause  <roland@cougar>
     * added parts/classwizzard and parts/cppsupport from gideon
 
@@ -6,7 +9,8 @@
 	
 2002-03-24  Roberto Raggi  <raggi@cli.di.unipi.it>
     * added code template
-2002-03-21  Robertp Raggi  <raggi@cli.di.unipi.it>
+	
+2002-03-21  Roberto Raggi  <raggi@cli.di.unipi.it>
     * added code completion/expand word
 	
 2002-03-21  Roland Krause  <rokrau@yahoo.com>
