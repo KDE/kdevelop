@@ -59,6 +59,7 @@ private slots:
 
 private:
     QWidget *createCompilerTab();
+    QWidget *createConfigureTab();
     QWidget *createMakeTab();
     QWidget *createMiscTab();
     KDevCompilerOptions *createCompilerOptions(const QString &lang);
@@ -79,7 +80,9 @@ private:
     QCheckBox *abort_box;
     QCheckBox *dontact_box;
     QSpinBox *jobs_box;
+    QLineEdit *makebin_edit;
 
+    QLineEdit *configargs_edit;
     QLineEdit *mainbin_edit;
     QLineEdit *progargs_edit;
     

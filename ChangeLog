@@ -1,3 +1,9 @@
+2001-04-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Made configure arguments configurable
+	  Patch by Berndt Josef Wulf <wulf@dingo.ping.net.au>
+	* Don't link with libfl in cppsupport
+
 2001-04-18  Richard Dale <duke@tipitina.demon.co.uk
 
 	* GDB debugger part sources copied to 'parts/javadebugger', and all names 
@@ -19,6 +25,15 @@
 	* Added a plugin that let's you select the parts to load
 	  on startup
 	* Added some code to core to only load the plugins selected.
+
+2001-04-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added memory view widget
+	* Fixed disassemble widget to act only when it is visible
+	* Added examine core file and attach to process
+	* Cleaning widget after the debugger has finished
+	* Added status bar text and whats this
+	* Clear execution point mark when debugger has finished
 
 2001-04-10  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 

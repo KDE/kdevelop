@@ -42,6 +42,7 @@ ProjectOptionsDialog::ProjectOptionsDialog(AutoProjectPart *part, QWidget *paren
 
     addTab(createCompilerTab(), i18n("Compiler"));
     //    addTab(createLinkerTab(), i18n("Linker"));
+    addTab(createConfigureTab(), i18n("Configure"));
     addTab(createMakeTab(), i18n("Make"));
     addTab(createMiscTab(), i18n("Misc"));
 
@@ -180,19 +181,38 @@ QWidget *ProjectOptionsDialog::createMakeTab()
     QLabel *jobs_label = new QLabel(i18n("Number of simulaneous jobs:"), w);
     jobs_box = new QSpinBox(1, 10, 1, w);
 
+    QLabel *makebin_label = new QLabel(i18n("Name of make executable:"), w);
+    makebin_edit = new QLineEdit(w);
+
     dontact_box = new QCheckBox(i18n("Display only commands without executing them"), w);
 
-    QGridLayout *grid = new QGridLayout(w, 4, 2,
+    QGridLayout *grid = new QGridLayout(w, 5, 2,
                                         2*KDialog::marginHint(), KDialog::spacingHint());
-    grid->setRowStretch(3, 4);
+    grid->setRowStretch(4, 4);
     grid->addMultiCellWidget(abort_box, 0, 0, 0, 1);
-    grid->addWidget(jobs_label, 2, 0);
-    grid->addWidget(jobs_box, 2, 1);
+    grid->addWidget(makebin_label,2,0);
+    grid->addWidget(makebin_edit,2,1);
+    grid->addWidget(jobs_label, 3, 0);
+    grid->addWidget(jobs_box, 3, 1);
     grid->addMultiCellWidget(dontact_box, 1, 1, 0, 1);
-    
+
     return w;
 }
 
+QWidget *ProjectOptionsDialog::createConfigureTab()
+{
+    QWidget *w = new QWidget(this, "configure tab");
+
+    QLabel *configargs_label = new QLabel(i18n("Configure arguments:"), w);
+    configargs_edit = new QLineEdit(w);
+
+    QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
+    layout->addWidget(configargs_label);
+    layout->addWidget(configargs_edit);
+    layout->addStretch();
+
+    return w;
+}
 
 QWidget *ProjectOptionsDialog::createMiscTab()
 {
@@ -200,7 +220,7 @@ QWidget *ProjectOptionsDialog::createMiscTab()
 
     QLabel *mainbin_label = new QLabel(i18n("Main program (relative to project directory):"), w);
     mainbin_edit = new QLineEdit(w);
- 
+
     QLabel *progargs_label = new QLabel(i18n("Program arguments:"), w);
     progargs_edit = new QLineEdit(w);
 
@@ -307,9 +327,12 @@ void ProjectOptionsDialog::init()
     cxxflags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxflags"));
     f77flags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77flags"));
 
+    configargs_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/configure/configargs"));
+
     abort_box->setChecked(DomUtil::readBoolEntry(doc, "/kdevautoproject/make/abortonerror"));
     jobs_box->setValue(DomUtil::readIntEntry(doc, "/kdevautoproject/make/numberofjobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(doc, "/kdevautoproject/make/dontact"));
+    makebin_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/make/makebin"));
 
     mainbin_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/general/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/general/programargs"));
@@ -332,9 +355,12 @@ void ProjectOptionsDialog::accept()
     DomUtil::writeEntry(doc, "/kdevautoproject/compiler/cxxflags", cxxflags_edit->text());
     DomUtil::writeEntry(doc, "/kdevautoproject/compiler/f77flags", f77flags_edit->text());
 
+    DomUtil::writeEntry(doc, "/kdevautoproject/configure/configargs", configargs_edit->text());
+
     DomUtil::writeBoolEntry(doc, "/kdevautoproject/make/abortonerror", abort_box->isChecked());
     DomUtil::writeIntEntry(doc, "/kdevautoproject/make/numberofjobs", jobs_box->value());
     DomUtil::writeBoolEntry(doc, "/kdevautoproject/make/dontact", dontact_box->isChecked());
+    DomUtil::writeEntry(doc, "/kdevautoproject/make/makebin", makebin_edit->text());
 
     DomUtil::writeEntry(doc, "/kdevautoproject/general/mainprogram", mainbin_edit->text());
     DomUtil::writeEntry(doc, "/kdevautoproject/general/programargs", progargs_edit->text());

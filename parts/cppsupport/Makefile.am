@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_i
 
 lib_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lfl
+libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
 			       cppsupportpart.cpp \

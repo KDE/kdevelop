@@ -112,10 +112,12 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     }
 
     core()->saveAllFiles();
-    
+
     QDomDocument &doc = *document();
-    
-    QString cmdline = "make";
+
+    QString cmdline = DomUtil::readEntry(doc, "/kdevautoproject/make/makebin");
+    if (cmdline.isEmpty())
+        cmdline = "make";
     if (!DomUtil::readBoolEntry(doc, "/kdevautoproject/make/abortonerror"))
         cmdline += " -k";
     int jobs = DomUtil::readIntEntry(doc, "/kdevautoproject/make/numberofjobs");
@@ -174,8 +176,14 @@ void AutoProjectPart::slotConfigure()
     QString fflags = DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77flags");
     if (!fflags.isEmpty())
         cmdline.prepend(QString("FFLAGS=%1 ").arg(fflags));
-    
-    makeFrontend()->startMakeCommand(projectDirectory(), "./configure");
+
+    QString configargs = DomUtil::readEntry(doc, "/kdevautoproject/configure/configargs");
+    if (!configargs.isEmpty()) {
+	cmdline += " ";
+        cmdline += configargs;
+    }
+
+    makeFrontend()->startMakeCommand(projectDirectory(), cmdline);
 }
 
 
