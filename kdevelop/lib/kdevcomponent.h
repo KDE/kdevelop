@@ -42,7 +42,7 @@ class KDevComponent : public KParts::Part
     Q_OBJECT
     
 public:
-    enum Role { SelectView, OutputView, DocumentView };
+    enum Role { SelectView, OutputView, AreaOfDocumentViews, DocumentView };
     
     KDevComponent( QObject *parent=0, const char *name=0 );
     ~KDevComponent();
