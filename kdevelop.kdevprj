@@ -9,7 +9,7 @@ author=Ralf Nolden
 configure_args=
 email=Ralf.Nolden@post.rwth-aachen.de
 kdevprj_version=1.0beta2
-lfv_open_groups=
+lfv_open_groups=Sources
 make_options=-j
 makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/docs/en/Makefile.am,po/Makefile.am,kdevelop/classparser/Makefile.am,kdevelop/classwizard/Makefile.am,kdevelop/gfxview/Makefile.am,kdevelop/kdlgedit/Makefile.am,kdevelop/kwrite/Makefile.am,kdevelop/plugins/prjstat/Makefile.am,kdevelop/plugins/Makefile.am,kdevelop/print/Makefile.am,kdevelop/vc/Makefile.am,kdevelop/widgets/checklistbox/Makefile.am,kdevelop/widgets/Makefile.am
 modifyMakefiles=false
@@ -44,7 +44,7 @@ install=false
 install_location=
 type=DATA
 [kdevelop/Makefile.am]
-files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cbugreportdlg.cpp,kdevelop/cbugreportdlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclasstooltreeview.cpp,kdevelop/cclasstooltreeview.h,kdevelop/cclasstreehandler.cpp,kdevelop/cclasstreehandler.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/ccreatedocdatabasedlg.cpp,kdevelop/ccreatedocdatabasedlg.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/ceditwidget.cpp,kdevelop/ceditwidget.h,kdevelop/cerrormessageparser.cpp,kdevelop/cerrormessageparser.h,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/cimport.cpp,kdevelop/cimport.h,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/ckdevelop.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop_init.cpp,kdevelop/ckdevelop_kdlginit.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevinstall.cpp,kdevelop/ckdevinstall.h,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cmakemanualdlg.cpp,kdevelop/cmakemanualdlg.h,kdevelop/cmakemanualdlgdata.cpp,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctabctl.cpp,kdevelop/ctabctl.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/cupdatekdedocdlg.cpp,kdevelop/cupdatekdedocdlg.h,kdevelop/doctreeview.cpp,kdevelop/doctreeview.h,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/klangcombo.cpp,kdevelop/klangcombo.h,kdevelop/klistview.cpp,kdevelop/klistview.h,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/kswallow.cpp,kdevelop/kswallow.h,kdevelop/ktipofday.cpp,kdevelop/ktipofday.h,kdevelop/main.cpp,kdevelop/misc.cpp,kdevelop/misc.h,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/ckdevelop_whatsthis.cpp
+files=kdevelop/caddclassattributedlg.cpp,kdevelop/caddclassattributedlg.h,kdevelop/caddclassmethoddlg.cpp,kdevelop/caddclassmethoddlg.h,kdevelop/caddexistingfiledlg.cpp,kdevelop/caddexistingfiledlg.h,kdevelop/caddnewtranslationdlg.cpp,kdevelop/caddnewtranslationdlg.h,kdevelop/cbugreportdlg.cpp,kdevelop/cbugreportdlg.h,kdevelop/cclasstooldlg.cpp,kdevelop/cclasstooldlg.h,kdevelop/cclasstooltreeview.cpp,kdevelop/cclasstooltreeview.h,kdevelop/cclasstreehandler.cpp,kdevelop/cclasstreehandler.h,kdevelop/cclassview.cpp,kdevelop/cclassview.h,kdevelop/ccreatedocdatabasedlg.cpp,kdevelop/ccreatedocdatabasedlg.h,kdevelop/ccvaddfolderdlg.cpp,kdevelop/ccvaddfolderdlg.h,kdevelop/cdocbrowser.cpp,kdevelop/cdocbrowser.h,kdevelop/cdoctreepropdlg.cpp,kdevelop/cdoctreepropdlg.h,kdevelop/ceditwidget.cpp,kdevelop/ceditwidget.h,kdevelop/cerrormessageparser.cpp,kdevelop/cerrormessageparser.h,kdevelop/cexecuteargdlg.cpp,kdevelop/cexecuteargdlg.h,kdevelop/cfilepropdlg.cpp,kdevelop/cfilepropdlg.h,kdevelop/cfinddoctextdlg.cpp,kdevelop/cfinddoctextdlg.h,kdevelop/cgeneratenewfile.cpp,kdevelop/cgeneratenewfile.h,kdevelop/cgrouppropertiesdlg.cpp,kdevelop/cgrouppropertiesdlg.h,kdevelop/cimport.cpp,kdevelop/cimport.h,kdevelop/ckappwizard.cpp,kdevelop/ckappwizard.h,kdevelop/ckdevelop.cpp,kdevelop/ckdevelop.h,kdevelop/ckdevelop_classview.cpp,kdevelop/ckdevelop_init.cpp,kdevelop/ckdevelop_kdlginit.cpp,kdevelop/ckdevelop_noslot.cpp,kdevelop/ckdevelop_project.cpp,kdevelop/ckdevinstall.cpp,kdevelop/ckdevinstall.h,kdevelop/ckdevsetupdlg.cpp,kdevelop/ckdevsetupdlg.h,kdevelop/clogfileview.cpp,kdevelop/clogfileview.h,kdevelop/cmakemanualdlg.cpp,kdevelop/cmakemanualdlg.h,kdevelop/cmakemanualdlgdata.cpp,kdevelop/cnewclassdlg.cpp,kdevelop/cnewclassdlg.h,kdevelop/cnewfiledlg.cpp,kdevelop/cnewfiledlg.h,kdevelop/coutputwidget.cpp,kdevelop/coutputwidget.h,kdevelop/cprjoptionsdlg.cpp,kdevelop/cprjoptionsdlg.h,kdevelop/cproject.cpp,kdevelop/cproject.h,kdevelop/crealfileview.cpp,kdevelop/crealfileview.h,kdevelop/ctabctl.cpp,kdevelop/ctabctl.h,kdevelop/ctoolclass.cpp,kdevelop/ctoolclass.h,kdevelop/ctoolsconfigdlg.cpp,kdevelop/ctoolsconfigdlg.h,kdevelop/ctreehandler.cpp,kdevelop/ctreehandler.h,kdevelop/ctreeview.cpp,kdevelop/ctreeview.h,kdevelop/cupdatekdedocdlg.cpp,kdevelop/cupdatekdedocdlg.h,kdevelop/doctreeview.cpp,kdevelop/doctreeview.h,kdevelop/grepdialog.cpp,kdevelop/grepdialog.h,kdevelop/klangcombo.cpp,kdevelop/klangcombo.h,kdevelop/klistview.cpp,kdevelop/klistview.h,kdevelop/kstartuplogo.cpp,kdevelop/kstartuplogo.h,kdevelop/kswallow.cpp,kdevelop/kswallow.h,kdevelop/ktipofday.cpp,kdevelop/ktipofday.h,kdevelop/main.cpp,kdevelop/misc.cpp,kdevelop/misc.h,kdevelop/resource.h,kdevelop/structdef.h,kdevelop/ckdevelop_whatsthis.cpp,kdevelop/ckdevaccel.cpp,kdevelop/ckdevaccel.h
 sub_dirs=classparser,classwizard,gfxview,kdlgedit,kwrite,plugins,print,vc,widgets
 type=prog_main
 [kdevelop/caddclassattributedlg.cpp]
@@ -263,6 +263,16 @@ install=false
 install_location=
 type=SOURCE
 [kdevelop/ckappwizard.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+[kdevelop/ckdevaccel.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+[kdevelop/ckdevaccel.h]
 dist=true
 install=false
 install_location=
