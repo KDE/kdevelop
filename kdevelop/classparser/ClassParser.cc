@@ -125,7 +125,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
               anAttr = new CParsedAttribute();
               fillInParsedVariable( anAttr );
               if( !anAttr->name.isEmpty() )
-                aStruct->addMember( anAttr );
+                aStruct->addAttribute( anAttr );
               else
                 delete anAttr;
               break;
@@ -138,7 +138,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
                    anAttr != NULL;
                    anAttr = list.next() )
               {
-                aStruct->addMember( anAttr );
+                aStruct->addAttribute( anAttr );
               }
               break;
             default: // Ignore all other cases for now
@@ -187,8 +187,10 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedStruct *CClassParser::parseStruct()
+void CClassParser::parseStruct( CParsedContainer *aContainer )
 {
+  assert( aContainer != NULL );
+
   CParsedStruct *aStruct = new CParsedStruct();
 
   // Set some info about the struct.
@@ -225,7 +227,11 @@ CParsedStruct *CClassParser::parseStruct()
       break;
   }
   
-  return aStruct;
+  if( aStruct != NULL && !aStruct->name.isEmpty() )
+  {
+    debug( "Adding struct to container" );
+    aContainer->addStruct( aStruct );
+  }
 }
 
 /*---------------------------------------- CClassParser::parseEnum()
@@ -317,6 +323,39 @@ void CClassParser::skipBlock()
   }
 }
 
+/*-------------------------------- CClassParser::parseClassTemplate()
+ * parseClassTemplate()
+ *   Skip a template declaration.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseTemplate()
+{
+  bool exit = false;
+  int depth = 0;
+
+  while( !exit )
+  {
+    getNextLexem();
+    switch( lexem )
+    {
+      case '<':
+        depth++;
+        break;
+      case '>':
+        depth--;
+        break;
+      default:
+        break;
+    }
+  
+    exit = ( depth == 0 || lexem == 0 );
+  }
+}
+
 /*********************************************************************
  *                                                                   *
  *                         VARIABLE METHODS                          *
@@ -334,7 +373,8 @@ void CClassParser::skipBlock()
  *-----------------------------------------------------------------*/
 bool CClassParser::isEndOfVarDecl()
 {
-  return lexem == ';' || lexem == ',' || lexem == ')' || lexem == '}';
+  return ( lexem == ';' || lexem == ',' || lexem == ')' || 
+           lexem == '}' || lexem == 0 );
 }
 
 /*------------------------------ CClassParser::fillInParsedVariable()
@@ -367,9 +407,16 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
       delete aLexem;
     }
   }
+  
+  // Check if this variable has a bit definition. If so remove it.
+  if( lexemStack.top()->type == NUM )
+  {
+    while( !lexemStack.isEmpty() && lexemStack.top()->type != ID )
+      delete lexemStack.pop();
+  }
 
   // Initial checks if this variable declaration just has a type.
-  if( lexemStack.top()->type == ID && lexemStack.count() > 1 )
+  if( !lexemStack.isEmpty() && lexemStack.top()->type == ID && lexemStack.count() > 1 )
   {
     aLexem = lexemStack.pop();
     anAttr->setName( aLexem->text );
@@ -402,7 +449,8 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
   fillInParsedType( type );
 
   // Set values in the variable.
-  anAttr->setType( type + anAttr->type );
+  if( !type.isEmpty() )
+    anAttr->setType( type + anAttr->type );
 
   // Skip default values
   if( lexem == '=' )
@@ -536,7 +584,8 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
       if( !anAttr->name.isEmpty() )
         anArg->setName( anAttr->name );
 
-      anArg->setType( anAttr->type );
+      if( !anAttr->type.isEmpty() )
+        anArg->setType( anAttr->type );
       
       // Add the argument to the method.
       method->addArgument( anArg );
@@ -590,7 +639,8 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   
   // Set the type of the method.
   fillInParsedType( type );
-  aMethod->setType( type );
+  if( !type.isEmpty() )
+    aMethod->setType( type );
 
   // Jump to first argument or ')'
   getNextLexem();
@@ -732,7 +782,7 @@ void CClassParser::parseMethodImpl(bool isOperator)
     pm = aClass->getMethod( aMethod );
     if( pm != NULL )
     {
-      aClass->setImplFilename( currentFile );
+      aClass->setDeclaredInFile( currentFile );
       pm->setIsInHFile( false );
       pm->setDeclaredInFile( currentFile );
       pm->setDeclaredOnLine( declLine );
@@ -887,8 +937,8 @@ CParsedClass *CClassParser::parseClassHeader()
   aClass = new CParsedClass();
   aClass->setName( getText() );
   aClass->setDefinedOnLine( getLineno() );
-  aClass->setHFilename( currentFile );
-  aClass->setImplFilename( currentFile );
+  aClass->setDefinedInFile( currentFile );
+  aClass->setDeclaredInFile( currentFile );
   
   getNextLexem();
 
@@ -931,9 +981,10 @@ void CClassParser::parseClassMethodVariable( CParsedClass *aClass )
       else
         delete anAttr;
       break;
+    case CP_IS_METHOD_IMPL:
+      debug( "Found METHOD_IMPL in class." );
     case CP_IS_OPERATOR:
     case CP_IS_METHOD:
-    case CP_IS_METHOD_IMPL:
       aMethod = new CParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
       if( !aMethod->name.isEmpty() )
@@ -969,7 +1020,6 @@ void CClassParser::parseClassMethodVariable( CParsedClass *aClass )
 void CClassParser::parseClassDeclarations( CParsedClass *aClass )
 {
   CParsedClass *childClass;
-  CParsedStruct *aStruct;
   CParsedMethod *aMethod;
   bool exit = false;
 
@@ -1002,6 +1052,9 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
       case CPUNION:
         parseUnion();
         break;
+      case CPTEMPLATE:
+        parseTemplate();
+        break;
       case CPCLASS:
         childClass = parseClass();
         if( childClass != NULL )
@@ -1027,9 +1080,7 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
         isStatic = true;
         break;
       case CPSTRUCT:
-        aStruct = parseStruct();
-        if( aStruct )
-          aClass->addStruct( aStruct );
+        parseStruct( &store.globalContainer );
         break;
       case CONST:
       case ID:
@@ -1108,6 +1159,14 @@ void CClassParser::parseGlobalMethodVariable()
   declType = checkClassDecl();
   switch( declType )
   {
+    case CP_IS_ATTRIBUTE:
+      anAttr = new CParsedAttribute();
+      fillInParsedVariable( anAttr );
+      if( !anAttr->name.isEmpty() )
+        store.globalContainer.addAttribute( anAttr );
+      else
+        delete anAttr;
+      break;
     case CP_IS_ATTR_IMPL:
       // Empty the stack
       emptyStack();
@@ -1116,20 +1175,12 @@ void CClassParser::parseGlobalMethodVariable()
     case CP_IS_METHOD_IMPL:
       parseMethodImpl( declType == CP_IS_OPERATOR_IMPL );
       break;
-    case CP_IS_ATTRIBUTE:
-      anAttr = new CParsedAttribute();
-      fillInParsedVariable( anAttr );
-      if( !anAttr->name.isEmpty() )
-        store.addGlobalVar(  anAttr );
-      else
-        delete anAttr;
-      break;
     case CP_IS_OPERATOR:
     case CP_IS_METHOD:
       aMethod = new CParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
       if( !aMethod->name.isEmpty() )
-        store.addGlobalFunction( aMethod );
+        store.globalContainer.addMethod( aMethod );
       else
         delete aMethod;
       break;
@@ -1146,7 +1197,7 @@ void CClassParser::parseGlobalMethodVariable()
            anAttr = list.next() )
       {
         if( !anAttr->name.isEmpty() )
-          store.addGlobalVar( anAttr );
+          store.globalContainer.addAttribute( anAttr );
       }
       break;
   }
@@ -1165,7 +1216,6 @@ void CClassParser::parseGlobalMethodVariable()
 void CClassParser::parseToplevel()
 {
   CParsedClass *aClass;
-  CParsedStruct *aStruct;
 
   // Ok... Here we go.
   lexem = -1;
@@ -1181,9 +1231,7 @@ void CClassParser::parseToplevel()
         switch( lexem )
         {
           case CPSTRUCT:
-            aStruct = parseStruct();
-            if( aStruct != NULL && !aStruct->name.isEmpty() )
-              store.addGlobalStruct( aStruct );
+            parseStruct( &store.globalContainer );
             break;
           case CPENUM:
             parseEnum();
@@ -1194,7 +1242,7 @@ void CClassParser::parseToplevel()
         }
 
         // Skip the typedef name.
-        while( lexem != ';' )
+        while( lexem != ';' && lexem != 0)
           getNextLexem();
 
         emptyStack();
@@ -1204,6 +1252,9 @@ void CClassParser::parseToplevel()
         break;
       case CPUNION:
         parseUnion();
+        break;
+      case CPTEMPLATE:
+        parseTemplate();
         break;
       case CPCLASS:
         aClass = parseClass();
@@ -1221,10 +1272,7 @@ void CClassParser::parseToplevel()
       case STATIC:
         break;
       case CPSTRUCT:
-        aStruct = parseStruct();
-        if( aStruct && !aStruct->name.isEmpty() )
-          store.addGlobalStruct( aStruct );
-
+        parseStruct( &store.globalContainer );
         break;
       case CONST:
       case ID:
@@ -1250,6 +1298,20 @@ void CClassParser::reset()
   lexem = -1;
   declaredScope = PIE_GLOBAL;
   isStatic=false;
+}
+
+/*------------------------------ CClassParser::removeWithReferences()
+ * removeWithReferences()
+ *   Remove all items in the store with references to the file.
+ *
+ * Parameters:
+ *   file          The file.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::removeWithReferences( const char *aFile )
+{
 }
 
 /*----------------------------------------- CClassParser::parseFile()
@@ -1294,6 +1356,9 @@ bool CClassParser::parse( const char *file )
 
   ifstream f( file );
   currentFile = file;
+
+  // Remove all items with references to this file.
+  removeWithReferences( file );
 
   // Parse the file.
   parseFile( f );

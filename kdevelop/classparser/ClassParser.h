@@ -130,7 +130,7 @@ private: // Private methods
   void parseStructDeclarations( CParsedStruct *aStruct);
 
   /** Parse a structure. */
-  CParsedStruct * parseStruct();
+  void parseStruct( CParsedContainer *aContainer );
 
   /** Parse an enumeration. */
   void parseEnum();
@@ -140,6 +140,9 @@ private: // Private methods
 
   /** Skip all lexems between '{' and '}'. */
   void skipBlock();
+
+  /** Skip a template declaration. */
+  void parseTemplate();
 
   /** Create a type using the arguments on the stack. */
   void fillInParsedType(QString &type);
@@ -198,11 +201,15 @@ private: // Private methods
   /** Parse toplevel statements */
   void parseToplevel();
 
+  /** Remove all items in the store with references to the file. */
+  void removeWithReferences( const char *aFile );
+
   /** Parse a file */
   void parseFile( ifstream &file );
 
   /** Reset the internal variables */
   void reset();
+
 
 };
 
