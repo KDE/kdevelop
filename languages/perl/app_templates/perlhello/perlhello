@@ -7,3 +7,4 @@ Category=Perl
 Comment=This generates a simplistic 'Hello world' program in Perl (http://www.perl.org)
 Comment[fr]=Génère un simple script de test du type « Hello world » dans le language PERL (http://www.perl.org).
 FileTemplates=perl,ShellStyle
+ShowFilesAfterGeneration=APPNAMELC.pl

@@ -7,3 +7,4 @@ Category=Java/KDE
 Comment=Generates a simple Java KDE application with one toplevel window, menus and  toolbars.
 Comment[fr]=Génère une simple application KDE dans le language JAVA avec une fenêtre principale, des menus, et des barres d'outils.
 FileTemplates=java,CStyle
+ShowFilesAfterGeneration=src/APPNAMEView.java

@@ -7,3 +7,4 @@ Category=C
 Comment=Generates a template for a Linux kernel module.
 Comment[fr]=Génère un modèle de module pour le noyau Linux.
 FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=APPNAMELC-driver.c

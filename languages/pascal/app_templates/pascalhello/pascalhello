@@ -7,3 +7,4 @@ Category=Pascal
 Comment=Generates a simple Hello world program in Pascal
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language PASCAL.
 FileTemplates=pp-program,PStyle,pp-unit,PStyle
+ShowFilesAfterGeneration=src/APPNAMELC.pp

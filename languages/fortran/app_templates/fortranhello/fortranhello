@@ -7,3 +7,4 @@ Category=Fortran
 Comment=Generates a simple Hello world program in Fortran
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language FORTRAN.
 FileTemplates=f,None
+ShowFilesAfterGeneration=src/APPNAMELC.f

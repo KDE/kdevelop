@@ -8,3 +8,4 @@ Comment=Generates a template for palm application
 Comment[fr]=Génère un modèle d'application pour l'environnement PALM.
 #tShowFileAfterGeneration=README.devel
 FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=APPNAME.c

@@ -5,4 +5,4 @@ Icon=preview.png
 Category=C++/KDE
 Comment=Generates a KFile plugin for konqueror to display meta information.
 FileTemplates=h,CStyle,cpp,CStyle
-ShowFileAfterGeneration=README.devel
+ShowFilesAfterGeneration=README.devel,src/kfile_APPNAMELC.cpp

@@ -7,3 +7,4 @@ Category=Python
 Comment=This generates a simplistic Hello world program in Python using Tkinter
 Comment[fr]=Génère un simple script de test du type « Hello world » dans le language PYTHON en utilisant « tkinter ».
 FileTemplates=py,ShellStyle
+ShowFilesAfterGeneration=APPNAMELC.py

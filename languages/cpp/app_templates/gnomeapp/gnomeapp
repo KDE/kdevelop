@@ -7,3 +7,4 @@ Category=C/GNOME
 Comment=Generates a simple GNOME application with one toplevel window, menus and toolbars.
 Comment[fr]=Génère une application GNOME avec une fenêtre principale, des menus, et des barres d'outils.
 FileTemplates=h,CStyle,c,CStyle
+ShowFilesAfterGeneration=src/main.c

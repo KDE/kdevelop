@@ -7,3 +7,4 @@ Icon=preview.png
 Comment=Generates a simple KDE application with one widget.
 Comment[fr]=Génère une simple application KDE en utilisant qu'un seul « widget ».
 FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp

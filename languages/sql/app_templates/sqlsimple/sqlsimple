@@ -4,3 +4,4 @@ Name=Simple SQL Project
 Category=Database
 Comment=Generates a simple SQL project.
 FileTemplates=xul,ShellStyle
+ShowFilesAfterGeneration=APPNAMELC.sql

@@ -8,3 +8,4 @@ Category[fr]=C++/QMake
 Comment=Generates a simple Hello world program in C++ using QMake based project manager
 Comment[fr]=Génère un simple programme de test du type « Hello world » en utilisant QMake.
 FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp

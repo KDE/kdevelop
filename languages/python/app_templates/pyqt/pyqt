@@ -7,4 +7,4 @@ Category=Python
 Comment=This generates an application framework using Python and Qt
 Comment[fr]=Génère un squelette d'application Qt dans le language PYTHON.
 FileTemplates=py,ShellStyle
-
+ShowFilesAfterGeneration=APPNAMELC.py

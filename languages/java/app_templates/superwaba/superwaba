@@ -7,3 +7,4 @@ Category=Java
 Comment=A simple template for building SuperWaba Java based apps on WinCE and PalmOS.  More information can be found at http://www.superwaba.org
 Comment[fr]=Génère un simple modéle d'application JAVA en utilisant SuperWaba pour les environnements WinCE et PalmOS. Plus d'informations peuvent être trouvé à l'URL suivante : http://www.superwaba.org.
 FileTemplates=java
+ShowFilesAfterGeneration=APPNAME.java

@@ -7,3 +7,4 @@ Comment=Generates a simple wxWindows Hello application.
 Comment[fr]=Génère un simple programme de test du type « Hello world » en utilisant la bibliothéque wxWindows.
 FileTemplates=h,CStyle,cpp,CStyle
 Icon=wxhello.png
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
