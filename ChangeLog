@@ -1,3 +1,10 @@
+1999-09-22 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* bug-fix: generation of new documentation
+	  (now kapp.h is checked for validity of KDE library
+	  sources) - Thanks to Troy Engel for the hint
+	* some more checks and messages in updating
+	  the documentation
+
 1999-09-19 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* now you can have spaces in the directory
 	* directories with + (like c++) works now (i hope)
