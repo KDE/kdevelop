@@ -41,6 +41,6 @@ messages:
 	find $$dirs -maxdepth 1 -name "*.cc" -print >> files ;\
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.rc"` > rc.cpp	;\
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.ui"` >> rc.cpp    ;\
-	$(XGETTEXT) rc.cpp `cat files` -o $(podir)/gideon.pot
+	$(XGETTEXT) rc.cpp `cat files` -o $(podir)/kdevelop.pot
 	rm -f rc.cpp dirs files
 
