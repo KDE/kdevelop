@@ -3,10 +3,12 @@
 
 
 #include <qptrlist.h>
+#include <qlistbox.h>
 
 
 #include <kparts/part.h>
 #include <kaction.h>
+#include <kurl.h>
 
 
 #include "kdevplugin.h"
@@ -41,6 +43,8 @@ private slots:
 
   void updateActions();
 
+  void recentFileSelected(const QString &url);
+
 
 private:
 
@@ -52,9 +56,15 @@ private:
   void addHistoryEntry(HistoryEntry *entry);
   QPtrList<HistoryEntry> m_history;
 
+  void addRecentEntry(KParts::Part *part);
+
   KToolBarPopupAction *m_backAction, *m_forwardAction;
 
   bool m_restoring;
+
+  QPtrList<KURL> m_recentUrls;
+
+  QListBox *m_recentList;
 
 };
 

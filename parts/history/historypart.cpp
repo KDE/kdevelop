@@ -38,15 +38,24 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
   connect(partController(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(partRemoved(KParts::Part*)));
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 
+  m_recentList = new QListBox;
+  m_recentList->setCaption(i18n("Recent files"));
+  topLevel()->embedSelectView(m_recentList, i18n("Recent"));
+  connect(m_recentList, SIGNAL(selected(const QString &)),
+	  this, SLOT(recentFileSelected(const QString &)));
+
   setupActions();
 
   m_history.setAutoDelete(true);
+  m_recentUrls.setAutoDelete(true);
+
   updateActions();
 }
 
 
 HistoryPart::~HistoryPart()
 {
+  delete m_recentList;
 }
 
 
@@ -146,6 +155,66 @@ void HistoryPart::addHistoryEntry(HistoryEntry *entry)
 }
 
 
+void HistoryPart::addRecentEntry(KParts::Part *part)
+{
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
+  if (!part)
+    return;
+
+  const KURL &url = ro_part->url();
+
+  QPtrListIterator<KURL> it(m_recentUrls);
+  for ( ; it.current(); ++it)
+    if (*it.current() == url)
+    {
+      m_recentUrls.remove(it.current());
+      break;
+    }
+
+  m_recentUrls.prepend(new KURL(url));
+
+  m_recentList->clear();
+  it.toFirst();
+  for ( ; it.current(); ++it)
+    m_recentList->insertItem(it.current()->url()); 
+}
+
+
+void HistoryPart::recentFileSelected(const QString &url)
+{
+  KURL theURL(url);
+ 
+  topLevel()->lowerView(m_recentList);
+
+  KParts::Part *part = 0;
+
+  QPtrListIterator<KParts::Part> it(*partController()->parts());
+  for ( ; it.current(); ++it)
+  {
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+    if (ro_part && ro_part->url() == theURL)
+    {
+      part = it.current();
+      break;
+    }
+  }
+  
+  if (part)
+  {
+    partController()->setActivePart(part);
+    if (part->widget())
+    {
+      topLevel()->raiseView(part->widget());
+      part->widget()->setFocus();
+    }
+
+    return;
+  }
+
+  partController()->editDocument(KURL(url));
+}
+
+
 void HistoryPart::saveState(KParts::Part *part)
 {
   if (!part)
@@ -220,6 +289,8 @@ void HistoryPart::activePartChanged(KParts::Part *part)
   HistoryEntry *entry = new HistoryEntry(part);
 
   addHistoryEntry(entry);
+
+  addRecentEntry(part);
 }
 
 
