@@ -1,0 +1,306 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>SettingsDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>SettingsDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>522</width>
+            <height>415</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Settings</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>tabWidget</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>Widget9</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Appearance</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>Layout4</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Tab width:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel1</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Default font:</string>
+                                </property>
+                            </widget>
+                            <widget class="KIntNumInput" row="1" column="1">
+                                <property name="name">
+                                    <cstring>spinTabWidth</cstring>
+                                </property>
+                                <property name="value">
+                                    <number>8</number>
+                                </property>
+                                <property name="minValue">
+                                    <number>1</number>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="2" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>Spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                            </spacer>
+                            <widget class="KFontCombo" row="0" column="1" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>comboDefaultFont</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget" row="0" column="3">
+                                <property name="name">
+                                    <cstring>Layout3</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="spacing">
+                                        <number>6</number>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>TextLabel3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Size:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KComboBox">
+                                        <property name="name">
+                                            <cstring>KComboBox1</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>checkReplaceTab</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Replace tab with spaces</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>checkShowMarker</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show marker border</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>checkShowLineNumber</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show line number border</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>checkShowCodeFolding</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Show code folding border</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>checkHighlightCurrentLine</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Highlight current line</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Highlighting</string>
+                </attribute>
+            </widget>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonHelp</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Help</string>
+                    </property>
+                    <property name="accel">
+                        <number>4144</number>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="accel">
+                        <number>0</number>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <number>0</number>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>SettingsDialog</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>SettingsDialog</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">settingsdialog.ui.h</include>
+</includes>
+<forwards>
+    <forward>class QEditorPart;</forward>
+</forwards>
+<variables>
+    <variable>QEditorPart* m_editor;</variable>
+</variables>
+<slots>
+    <slot>init()</slot>
+    <slot>destroy()</slot>
+    <slot>setEditor( QEditorPart * editor )</slot>
+    <slot>accept()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -43,13 +43,21 @@
 #ifndef qeditor_h
 #define qeditor_h
 
-#include <qtextedit.h>
+
+#if defined(HAVE_KTEXTEDIT)
+#  include <ktextedit.h>
+#else
+#  include <qtextedit.h>
+#  define KTextEdit QTextEdit
+#endif
+
 #include <qstringlist.h>
 
 class ParenMatcher;
 class QPopupMenu;
 
-class QEditor: public QTextEdit{
+class QEditor: public KTextEdit
+{
     Q_OBJECT
 public:
     QEditor( QWidget* parent=0, const char* name=0 );
@@ -58,36 +66,36 @@ public:
     QTextCursor* textCursor() const;
     QTextDocument* document() const;
     void setDocument( QTextDocument*);
-    
+
     void drawCursor( bool visible );
     void updateStyles();
     void repaintChanged();
-	
+
     virtual void zoomIn();
     virtual void zoomOut();
-    
+
     virtual int tabStop() const;
     virtual void setTabStop( int );
-    
+
     virtual bool tabIndentEnabled() const { return m_tabIndent; }
     virtual void setTabIndentEnabled( bool b ) { m_tabIndent = b; }
-	
+
     virtual bool backspaceIndentEnabled() const { return m_backspaceIndent; }
     virtual void setBackspaceIndentEnabled( bool b ) { m_backspaceIndent = b; }
-	
+
     virtual bool replace( const QString &find, const QString &replace,
 			  bool cs, bool wo, bool forward, bool startAtCursor,
 			  bool replaceAll );
     virtual QString textLine( uint ) const;
-	
+
     virtual void setLanguage( const QString& );
     virtual QString language() const;
-	
+
     virtual void setText( const QString& );
-	
+
     virtual int level( int ) const;
     virtual void setLevel( int, int );
-	
+
 public slots:
     void refresh();
     void doGotoLine( int line );

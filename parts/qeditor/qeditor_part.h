@@ -93,6 +93,7 @@ public slots:
     void writeConfig();
     void readConfig( KConfig* );
     void writeConfig( KConfig* );
+    void configDialog();
 
 private:
     void setupActions();

@@ -41,15 +41,22 @@
 **********************************************************************/
 
 #include "qeditor.h"
+
 #include "qsourcecolorizer.h"
-#include "simple_indent.h"
-#include "parenmatcher.h"
-#include "cindent.h"
 #include "cpp_colorizer.h"
 #include "java_colorizer.h"
 #include "python_colorizer.h"
 #include "xml_colorizer.h"
 #include "qmake_colorizer.h"
+
+#if defined(HAVE_PERL_MODE)
+#  include "perl_colorizer.h"
+#endif
+
+#include "simple_indent.h"
+#include "cindent.h"
+
+#include "parenmatcher.h"
 #include "paragdata.h"
 
 #include <private/qrichtext_p.h>
@@ -103,7 +110,7 @@ static int backspace_indentForLine( QTextParag* parag, int tabwidth )
 }
 
 QEditor::QEditor( QWidget* parent, const char* name )
-	: QTextEdit( parent, name )
+    : KTextEdit( parent, name )
 {
     setWordWrap( NoWrap );
     setHScrollBarMode( QScrollView::AlwaysOn );
@@ -177,10 +184,10 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	if( backspaceIndentEnabled() ){
 	    backspaceIndent( e );
 	} else {
-	    QTextEdit::keyPressEvent( e );
+	    KTextEdit::keyPressEvent( e );
 	}
     } else {
-	QTextEdit::keyPressEvent( e );
+	KTextEdit::keyPressEvent( e );
     }
 }
 
@@ -209,17 +216,17 @@ void QEditor::doGotoLine( int line )
 
 QTextCursor* QEditor::textCursor() const
 {
-    return QTextEdit::textCursor();
+    return KTextEdit::textCursor();
 }
 
 QTextDocument* QEditor::document() const
 {
-    return QTextEdit::document();
+    return KTextEdit::document();
 }
 
 void QEditor::drawCursor( bool visible )
 {
-    QTextEdit::drawCursor( visible );
+    KTextEdit::drawCursor( visible );
 }
 
 void QEditor::configChanged()
@@ -231,13 +238,13 @@ void QEditor::configChanged()
 
 void QEditor::zoomIn()
 {
-    QTextEdit::zoomIn();
+    KTextEdit::zoomIn();
     updateStyles();
 }
 
 void QEditor::zoomOut()
 {
-    QTextEdit::zoomOut();
+    KTextEdit::zoomOut();
     updateStyles();
 }
 
@@ -250,7 +257,7 @@ void QEditor::updateStyles()
 	document()->setTabStops( colorizer->format(0)->width('x') * tabwidth );
 	setFont( colorizer->format( 0 )->font() );
     }
-    QTextEdit::updateStyles();
+    KTextEdit::updateStyles();
 }
 
 void QEditor::backspaceIndent( QKeyEvent* e )
@@ -278,8 +285,8 @@ void QEditor::backspaceIndent( QKeyEvent* e )
 	    drawCursor( TRUE );
 	    e->accept();
 	} else {
-	    // doKeyboardAction( QTextEdit::ActionBackspace );
-	    QTextEdit::keyPressEvent( e );
+	    // doKeyboardAction( KTextEdit::ActionBackspace );
+	    KTextEdit::keyPressEvent( e );
 	}
     }
 
@@ -325,7 +332,7 @@ bool QEditor::replace( const QString &text, const QString &replace,
 
 void QEditor::setDocument( QTextDocument* doc )
 {
-    QTextEdit::setDocument( doc );
+    KTextEdit::setDocument( doc );
 }
 
 void QEditor::refresh()
@@ -344,7 +351,7 @@ void QEditor::refresh()
 
 void QEditor::repaintChanged()
 {
-    QTextEdit::repaintChanged();
+    KTextEdit::repaintChanged();
 }
 
 QString QEditor::textLine( uint line ) const
@@ -367,6 +374,11 @@ void QEditor::setLanguage( const QString& l )
     } else if( m_language == "java" ){
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent() );
+#if defined(HAVE_PERL_MODE)
+    } else if( m_language == "perl" ){
+	document()->setPreProcessor( new PerlColorizer(this) );
+	document()->setIndent( new CIndent() );
+#endif
     } else if( m_language == "python" ){
 	document()->setPreProcessor( new PythonColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
@@ -392,11 +404,11 @@ QString QEditor::language() const
 
 void QEditor::setText( const QString& text )
 {
-    setTextFormat( QTextEdit::PlainText );
+    setTextFormat( KTextEdit::PlainText );
     QString s = text;
     // tabify( s );
-    QTextEdit::setText( s );
-    setTextFormat( QTextEdit::AutoText );
+    KTextEdit::setText( s );
+    setTextFormat( KTextEdit::AutoText );
 }
 
 void QEditor::slotCursorPositionChanged( int line, int )

@@ -23,6 +23,7 @@
 #include "qeditor_view.h"
 #include "qeditor.h"
 #include "paragdata.h"
+#include "settingsdialog.h"
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -148,7 +149,10 @@ void QEditorPart::setupActions()
     KStdAction::gotoLine( m_editor, SLOT(gotoLine()), actionCollection() );
     KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
     KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
-
+    
+    new KAction( i18n("&Configure Editor..."), 0, 
+		 this, SLOT(configDialog()), actionCollection(),
+		 "settings_configure_editor" );
 }
 
 void QEditorPart::setReadWrite(bool rw)
@@ -513,6 +517,14 @@ void QEditorPart::setupHighlighting()
     mode->extensions = QStringList() << "*.java";
     m_modes.append( mode );
 
+#if defined(HAVE_PERL_MODE)
+    mode = new HLMode;
+    mode->name = "perl";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.pl";
+    m_modes.append( mode );
+#endif
+
     mode = new HLMode;
     mode->name = "python";
     mode->section = "Programming";
@@ -710,3 +722,11 @@ void QEditorPart::clearMarks ()
         p = p->next();
     }
 }
+
+void QEditorPart::configDialog()
+{
+    SettingsDialog dlg;
+    dlg.setEditor( this );
+    dlg.exec();
+}
+

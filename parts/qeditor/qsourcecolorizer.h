@@ -28,6 +28,29 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qregexp.h>
+#include <qpair.h>
+
+
+#define DECLARE_FORMAT_ITEM(type, id, f, c)\
+{\
+    QFont font = f; \
+    QColor color = c; \
+    font = config->readFontEntry( QString("Font ") + id, &font ); \
+    color = config->readColorEntry( QString("Color ") + id, &color ); \
+    m_formats.insert( type, qMakePair(QString(id), new QTextFormat(font, color)) ); \
+}
+
+#define UPDATE_FORMAT_ITEM(type, f, c)\
+    m_formats[ type ].second->setFont( f ); \
+    m_formats[ type ].second->setColor( c );
+
+#define STORE_FORMAT_ITEM(type)\
+{\
+    QString id = m_formats[ type ].first; \
+    QTextFormat* fmt = m_formats[ type ].second; \
+    config->writeEntry( QString("Font ") + id, fmt->font() ); \
+    config->writeEntry( QString("Color ") + id, fmt->color() ); \
+}
 
 class QEditor;
 
@@ -217,15 +240,14 @@ public:
 	Normal=0,
 	PreProcessor,
 	Keyword,
+        Operator,
 	Comment,
 	Constant,
 	String,
-	//Definition,
-	//Hilite,
-	
+
 	Custom = 1000
-    };    
-    
+    };
+
 public:
     QSourceColorizer( QEditor* );
     virtual ~QSourceColorizer();
@@ -234,18 +256,21 @@ public:
 
     void insertHLItem( int, HLItemCollection* );
 
-    void setSyntaxTable( const QString&, const QString& );
+    void setSymbols( const QString&, const QString& );
     QChar matchFor( const QChar& ) const;
-    QString left() const { return m_left; }
-    QString right() const { return m_right; }
+    QString leftSymbols() const { return m_left; }
+    QString rightSymbols() const { return m_right; }
 
-    virtual QTextFormat* format( int id ) { return m_formats[ id ]; }
+    virtual QTextFormat* format( int key ) { return m_formats[ key ].second; }
+    virtual QTextFormat* formatFromId( const QString& id );
+
+    virtual void updateStyles( QMap<QString, QPair<QFont, QColor> >& values );
     virtual void process( QTextDocument*, QTextParag*, int, bool=FALSE );
     virtual int computeLevel( QTextParag*, int );
 
 protected:
     QEditor* m_editor;
-    QIntDict<QTextFormat> m_formats;
+    QMap<int, QPair<QString, QTextFormat*> > m_formats;
     QList<HLItemCollection> m_items;
     QString m_left;
     QString m_right;

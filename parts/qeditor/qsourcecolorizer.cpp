@@ -32,30 +32,13 @@
 #include <kdebug.h>
 #include <kconfig.h>
 
-#define DECLARE_FORMAT_ITEM(type, id, f, c)\
-{\
-    QFont font = f; \
-    QColor color = c; \
-    font = config->readFontEntry( QString("Font ") + id, &font ); \
-    color = config->readColorEntry( QString("Color ") + id, &color ); \
-    m_formats.insert( ##type, new QTextFormat(font, color) ); \
-}
-
-#define STORE_FORMAT_ITEM(type, id)\
-{\
-    QTextFormat* fmt = m_formats[ type ]; \
-    config->writeEntry( QString("Font ") + id, fmt->font() ); \
-    config->writeEntry( QString("Color ") + id, fmt->color() ); \
-}
-
 
 QSourceColorizer::QSourceColorizer( QEditor* editor )
     : QTextPreProcessor(), m_editor( editor )
 {
-    m_formats.setAutoDelete( TRUE );
     m_items.setAutoDelete( TRUE );
 
-    QFont defaultFont( "courier", 10 );
+    QFont defaultFont = kapp->font();
     KConfig* config = QEditorPartFactory::instance()->config();
 
     m_formats.clear();
@@ -63,32 +46,46 @@ QSourceColorizer::QSourceColorizer( QEditor* editor )
     DECLARE_FORMAT_ITEM( Normal, "Normal", defaultFont, Qt::black );
     DECLARE_FORMAT_ITEM( PreProcessor, "PreProcessor", defaultFont, Qt::darkGreen );
     DECLARE_FORMAT_ITEM( Keyword, "Keyword", defaultFont, QColor( 0xff, 0x77, 0x00 ) );
+    DECLARE_FORMAT_ITEM( Operator, "Operator", defaultFont, Qt::black );
     DECLARE_FORMAT_ITEM( Comment, "Comment", defaultFont, QColor( 0xdd, 0x00, 0x00 ) );
     DECLARE_FORMAT_ITEM( Constant, "Constant", defaultFont, Qt::darkBlue );
     DECLARE_FORMAT_ITEM( String, "String", defaultFont, QColor( 0x00, 0xaa, 0x00 ) );
 
-    setSyntaxTable( "{[(", "}])" );
+    setSymbols( "{[(", "}])" );
 }
 
 QSourceColorizer::~QSourceColorizer()
 {
     KConfig* config = QEditorPartFactory::instance()->config();
 
-    STORE_FORMAT_ITEM( Normal, "Normal" );
-    STORE_FORMAT_ITEM( PreProcessor, "PreProcessor" );
-    STORE_FORMAT_ITEM( Keyword, "Keyword" );
-    STORE_FORMAT_ITEM( Comment, "Comment" );
-    STORE_FORMAT_ITEM( Constant, "Constant" );
-    STORE_FORMAT_ITEM( String, "String" );
+    while( !m_formats.empty() ){
+        QMap<int, QPair<QString, QTextFormat*> >::Iterator it = m_formats.begin();
+        STORE_FORMAT_ITEM( it.key() );
+        delete( (*it).second );
+        m_formats.erase( it );
+    }
 
     config->sync();
+}
+
+
+void QSourceColorizer::updateStyles( QMap<QString, QPair<QFont, QColor> >& values )
+{
+    QMap<QString, QPair<QFont, QColor> >::Iterator it = values.begin();
+    while( it != values.end() ){
+        QTextFormat* fmt = formatFromId( it.key() );
+        if( fmt ){
+            fmt->setFont( (*it).first );
+            fmt->setColor( (*it).second );
+        }
+        ++it;
+    }
 }
 
 
 void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
                                 bool invalidate )
 {
-//    qDebug( "QSourceColorizer::process()" );
     int state = 0;
     int pos = 0;
     int startLevel = 0;
@@ -160,7 +157,7 @@ void QSourceColorizer::insertHLItem( int id, HLItemCollection* item )
     m_items.insert( id, item );
 }
 
-void QSourceColorizer::setSyntaxTable( const QString& l, const QString& r )
+void QSourceColorizer::setSymbols( const QString& l, const QString& r )
 {
     m_left = l;
     m_right = r;
@@ -183,4 +180,16 @@ QChar QSourceColorizer::matchFor( const QChar& ch ) const
 int QSourceColorizer::computeLevel( QTextParag*, int startLevel )
 {
     return startLevel;
+}
+
+QTextFormat* QSourceColorizer::formatFromId( const QString& id )
+{
+    QMap<int, QPair<QString, QTextFormat*> >::Iterator it = m_formats.begin();
+    while( it != m_formats.end() ){
+        if( (*it).first == id ){
+            return (*it).second;
+        }
+        ++it;
+    }
+    return 0;
 }
