@@ -97,7 +97,7 @@
       <td bgcolor="green">CodeModel</td>
       <td bgcolor="green">CodeModel</td>
       <td bgcolor="green">CodeModel</td>
-      <td bgcolor="red">N</td>
+      <td bgcolor="green">N</td>
       <td bgcolor="green">Y</td>
     </tr>
     <tr>
@@ -256,7 +256,7 @@
       <td bgcolor="red">N</td>
       <td bgcolor="red">N</td>
       <td bgcolor="red">N</td>
-      <td bgcolor="red">N</td>
+      <td bgcolor="green">N</td>
       <td bgcolor="red">N</td>
     </tr>
     <tr>
