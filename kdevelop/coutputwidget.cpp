@@ -17,7 +17,9 @@
  ***************************************************************************/
 #include "coutputwidget.h"
 
-COutputWidget::COutputWidget(KApplication* a,QWidget* parent) : KEdit(a,parent){
+COutputWidget::COutputWidget(KApplication* a,QWidget* parent, char* name) :
+  KEdit(a,parent,name)
+{
 }
 void COutputWidget::insertAtEnd(QString s)
 {

@@ -29,7 +29,7 @@
   Q_OBJECT
 public:
   /**contructor*/
-  COutputWidget(KApplication* a,QWidget* parent);
+  COutputWidget(KApplication* a,QWidget* parent,char* name=0);
   /**destructor*/
   ~COutputWidget(){};
 
