@@ -336,7 +336,7 @@ DocTreeDoxygenBook::DocTreeDoxygenBook(DocTreeItem *parent, const QString &name,
     : DocTreeItem(parent, Book, name, context),
       dirname(dirName)
 {
-    QString fileName = dirName + "/index.html";
+    QString fileName = dirName + "index.html";
     setFileName(fileName);
     setExpandable(true);
 }
