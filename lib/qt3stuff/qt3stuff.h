@@ -1,3 +1,4 @@
+#if QT_VERSION < 300
 #ifndef QT3STUFF_H
 #define QT3STUFF_H
 
@@ -85,3 +86,4 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 
 #endif // QNAMESPACE_H
 
+#endif // QT_VERSION
