@@ -1,0 +1,29 @@
+# KDE Config File
+[General]
+Name=Hello world program
+Icon=cmakesimple.png
+Category=C++/CMake project
+Comment=Generates a simple Hello world program in C++ using CMake based project manager
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp
+Archive=cmakesimple.tar.gz
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/CMakeLists.txt
+Dest=%{dest}/CMakeLists.txt
+
+[FILE2]
+Type=install
+Source=%{src}/main.cpp
+Dest=%{dest}/main.cpp
+
+[CMAKE]
+Type=finishcmd
+Command=cmake ./ -GKDevelop3
+Directory=%{dest}
+
+[MSG]
+Type=message
+Comment=A CMake based hello world program was created in %{dest}
