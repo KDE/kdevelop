@@ -15,7 +15,6 @@
 #include "klistview.h"
 
 
-class DocTreeGeneralFolder;
 class DocTreeKDELibsFolder;
 class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
@@ -46,7 +45,6 @@ private slots:
 	
 private: 
     QListViewItem *contextItem;
-    DocTreeGeneralFolder *folder_general;
     DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;

@@ -8,33 +8,38 @@
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 
+use Getopt::Long;
 
-$depth=1;
+my $prefix = '';
+my $depth = 1;
+GetOptions( 'prefix=s' => \$prefix,
+            'depth=i' => \$depth ) || die "Wrong options\n";
+
+$initialdepth = $depth;
 $b3=$b2=$b1="";
 $in_processing=0;
 while (<>) {
     chop;
-    
+
     if (/Table of Contents<\/B/) {
         $in_processing=1;
-#        print "PROCESSING\n";
         next;
     }
-#    last if (/><HR/ && $in_processing);
     last if (/List of Tables/);
     next if (!$in_processing);
-    
+
     if (/HREF=\"(.+)\"/) {
-        $url=$1;
-#        print "URL $url\n";
+        $url = $1;
     }
-    if (/>(.+)<\//) {
+    if (/>(.+)<\/A/) {
         $name=$1;
         $name =~ s/\"/&quote;/g;
         $name =~ s/&#8212;/-/g;
+        $name =~ s/^\s*-?\s*//g;
+        $name =~ s/\.$//g;
 #        print "NAME $name\n";
     }
-    
+
     if ($b3 =~ /><DL/i) {
 	$depth++;
         $b3=$b2;
@@ -44,22 +49,14 @@ while (<>) {
     }
     if ($b3 =~ /><\/DL/i) {
 	$depth--;
-	print "  "x($depth-1) . "</tocsect${depth}>\n" if ($depth != 0);
+	print "  "x($depth-1) . "</tocsect${depth}>\n" if ($depth != $initialdepth-1);
         $b3=$b2;
         $b2=$b1;
 	$b1=$_;
 	next;
     }
 
-    if ($b3 =~ /><\/DT/i && $name ne "" && $url ne "") {
-#        print "****b7=$b7\n";
-#        print "****b6=$b6\n";
-#        print "****b5=$b5\n";
-#        print "****b4=$b4\n";
-#        print "****b3=$b3\n";
-#        print "****b2=$b2\n";
-#        print "****b1=$b1\n";
-#        print "****_=$_\n";
+    if ($b3 =~ />.*<\/DT/i && $name ne "" && $url ne "") {
 	if ($b1 =~ /><DL/i) {
 	    print "  "x($depth-1) . "<tocsect${depth} name=\"$name\" url=\"$url\">\n";
         } else {

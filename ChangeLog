@@ -1,3 +1,9 @@
+2001-07-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added TOCs for STL and Gtk libraries
+	* Removed General section in doc tree view,
+	  as all its contents are covered elsewhere
+
 2001-06-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* TOCs for KDE2 development book and libc

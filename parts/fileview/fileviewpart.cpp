@@ -67,7 +67,7 @@ void FileViewPart::projectChanged()
 void FileViewPart::refresh()
 {
     // This method may be called from m_filetree's slot,
-    // so make sure not to modify the list view during
+    // so we make sure not to modify the list view during
     // the execution of the slot
     QTimer::singleShot(0, m_filetree, SLOT(refresh()));
 }

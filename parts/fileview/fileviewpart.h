@@ -35,7 +35,7 @@ private slots:
     void projectConfigWidget(KDialogBase *dlg);
 
 private:
-    FileViewWidget *m_filetree;
+    QGuardedPtr<FileViewWidget> m_filetree;
 };
 
 #endif

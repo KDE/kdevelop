@@ -116,7 +116,7 @@ AC_DEFUN(KDEV_CHECK_PYTHONDOCDIR,
 [
 AC_MSG_CHECKING(for Python documentation directory)
 AC_ARG_WITH(pythondocdir,
-  [  --with-pythondocdir=pythondocdir  where the Python documentation is installed ],
+  [  --with-pythondocdir=pythondocdir    where the Python documentation is installed ],
   kdev_pythondocdir=$withval,
   kdev_pythondocdir=/usr/local/python2.0/html
 )
@@ -139,7 +139,7 @@ AC_DEFUN(KDEV_CHECK_PHPDOCDIR,
 [
 AC_MSG_CHECKING(for PHP documentation directory)
 AC_ARG_WITH(phpdocdir,
-  [  --with-phpdocdir=phpdocdir        where the PHP documentation is installed ],
+  [  --with-phpdocdir=phpdocdir          where the PHP documentation is installed ],
   kdev_phpdocdir=$withval,
   kdev_phpdocdir=/usr/local/php/doc/manual
 )
@@ -153,6 +153,126 @@ AC_CACHE_VAL(kdev_cv_phpdocdir,
 AC_MSG_RESULT($kdev_cv_phpdocdir)
 PHPDOCDIR=$kdev_cv_phpdocdir
 AC_SUBST(PHPDOCDIR)
+])
+
+
+dnl
+dnl Check for Gtk documentation dirs
+AC_DEFUN(KDEV_CHECK_GTKDOCDIR,
+[
+AC_ARG_WITH(glibdocdir,
+  [  --with-glibdocdir=glibdocdir        where the glib documentation is installed ],
+  kdev_glibdocdir=$withval,
+  kdev_glibdocdir=""
+)
+AC_ARG_WITH(gdkdocdir,
+  [  --with-gdkdocdir=gdkdocdir          where the gdk documentation is installed ],
+  kdev_gdkdocdir=$withval,
+  kdev_gdkdocdir=""
+)
+AC_ARG_WITH(gdkpbdocdir,
+  [  --with-gdkpbdocdir=gdkpbdocdir      where the gdk-pixbuf documentation is installed ],
+  kdev_gdkpbdocdir=$withval,
+  kdev_gdkpbdocdir=""
+)
+AC_ARG_WITH(gtkdocdir,
+  [  --with-gtkdocdir=gtkdocdir          where the gtk documentation is installed ],
+  kdev_gtkdocdir=$withval,
+  kdev_gtkdocdir=""
+)
+AC_ARG_WITH(gnomedocdir,
+  [  --with-gnomedocdir=gnomedocdir      where the gnome documentation is installed ],
+  kdev_gnomedocdir=$withval,
+  kdev_gnomedocdir=""
+)
+AC_ARG_WITH(gnomeuidocdir,
+  [  --with-gnomeuidocdir=gnomeuidocdir  where the gnomeui documentation is installed ],
+  kdev_gnomeuidocdir=$withval,
+  kdev_gnomeuidocdir=""
+)
+
+AC_MSG_CHECKING(for GLib documentation directory)
+AC_CACHE_VAL(kdev_cv_glibdocdir,
+[
+  glibdocdirs="/usr/share/doc/packages/glib $kdev_glibdocdir"
+  AC_FIND_FILE(glib-arrays.html, $glibdocdirs, kdev_cv_glibdocdir)
+])
+AC_MSG_RESULT($kdev_cv_glibdocdir)
+AC_MSG_CHECKING(for Gdk documentation directory)
+AC_CACHE_VAL(kdev_cv_gdkdocdir,
+[
+  gdkdocdirs="/usr/share/doc/packages/gdk $kdev_gdkdocdir"
+  AC_FIND_FILE(gdk-events.html, $gdkdocdirs, kdev_cv_gdkdocdir)
+])
+AC_MSG_RESULT($kdev_cv_gdkdocdir)
+AC_MSG_CHECKING(for Gdk-Pixbuf documentation directory)
+AC_CACHE_VAL(kdev_cv_gdkpbdocdir,
+[
+  gdkpbdocdirs="/usr/share/doc/packages/gdk-pixbuf/html $kdev_gdkpbdocdir"
+  AC_FIND_FILE(gdk-pixbuf-rendering.html, $gdkpbdocdirs, kdev_cv_gdkpbdocdir)
+])
+AC_MSG_RESULT($kdev_cv_gdkpbdocdir)
+AC_MSG_CHECKING(for Gtk documentation directory)
+AC_CACHE_VAL(kdev_cv_gtkdocdir,
+[
+  gtkdocdirs="/usr/share/doc/packages/gtk $kdev_gtkdocdir"
+  AC_FIND_FILE(gtkcombo.html, $gtkdocdirs, kdev_cv_gtkdocdir)
+])
+AC_MSG_RESULT($kdev_cv_gtkdocdir)
+AC_MSG_CHECKING(for libgnome documentation directory)
+AC_CACHE_VAL(kdev_cv_gnomedocdir,
+[
+  gnomedocdirs="/usr/share/doc/packages/gnome-libs-devel/devel-docs/gnome/html $kdev_gnomedocdir"
+  AC_FIND_FILE(libgnome.html, $gnomedocdirs, kdev_cv_gnomedocdir)
+])
+AC_MSG_RESULT($kdev_cv_gnomedocdir)
+AC_MSG_CHECKING(for libgnomeui documentation directory)
+AC_CACHE_VAL(kdev_cv_gnomeuidocdir,
+[
+  gnomeuidocdirs="/usr/share/doc/packages/gnome-libs-devel/devel-docs/gnomeui/html $kdev_gnomeuidocdir"
+  AC_FIND_FILE(libgnomeui.html, $gnomeuidocdirs, kdev_cv_gnomeuidocdir)
+])
+AC_MSG_RESULT($kdev_cv_gnomeuidocdir)
+
+dnl We need all directories or none
+
+if test "$kdev_cv_glibdocdir" = NO; then
+  kdev_cv_glib_docdir=""
+fi
+if test "$kdev_cv_gdkdocdir" = NO; then
+  kdev_cv_glib_docdir=""
+  kdev_cv_gdk_docdir=""
+fi
+if test "$kdev_cv_gdkpbdocdir" = NO; then
+  kdev_cv_glib_docdir=""
+  kdev_cv_gdkpb_docdir=""
+fi
+if test "$kdev_cv_gtkdocdir" = NO; then
+  kdev_cv_glib_docdir=""
+  kdev_cv_gtk_docdir=""
+fi
+if test "$kdev_cv_gnomedocdir" = NO; then
+  kdev_cv_glib_docdir=""
+  kdev_cv_gnome_docdir=""
+fi
+if test "$kdev_cv_gnomeuidocdir" = NO; then
+  kdev_cv_glib_docdir=""
+  kdev_cv_gnomeui_docdir=""
+fi
+
+GLIBDOCDIR=$kdev_cv_glibdocdir
+AC_SUBST(GLIBDOCDIR)
+GDKDOCDIR=$kdev_cv_gdkdocdir
+AC_SUBST(GDKDOCDIR)
+GDKPBDOCDIR=$kdev_cv_gdkpbdocdir
+AC_SUBST(GDKPBDOCDIR)
+GTKDOCDIR=$kdev_cv_gtkdocdir
+AC_SUBST(GTKDOCDIR)
+GNOMEDOCDIR=$kdev_cv_gnomedocdir
+AC_SUBST(GNOMEDOCDIR)
+GNOMEUIDOCDIR=$kdev_cv_gnomeuidocdir
+AC_SUBST(GNOMEUIDOCDIR)
+AM_CONDITIONAL(GTKDOCS, test x$kdev_cv_glibdocdir != x)
 ])
 
 

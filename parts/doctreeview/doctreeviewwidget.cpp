@@ -95,41 +95,6 @@ void DocTreeItem::clear()
 
 
 /*************************************/
-/* Folder "Books"                    */
-/*************************************/
-
-
-/**
- * Currently the list of books is hardcoded. In the future,
- * the list should be collected (in analogy to the docindices
- * directory) from an installed list of tocs (which in
- * turn may be generated from texinfo or docbook sources
- * at build time.
- */
-class DocTreeGeneralFolder : public DocTreeItem
-{
-public:
-    DocTreeGeneralFolder(DocTreeViewWidget *parent)
-        : DocTreeItem(parent, Folder, i18n("Books"))
-        { setExpandable(true); }
-    void refresh();
-};
-
-
-void DocTreeGeneralFolder::refresh()
-{
-    DocTreeItem::clear();
-
-    DocTreeItem *stlbook = new DocTreeItem(this, Book, i18n("STL"));
-    stlbook->setFileName(locate("html", "en/gideon/stl/index.html"));
-    DocTreeItem *kde2book = new DocTreeItem(this, Book, i18n("KDE 2 Development"));
-    kde2book->setFileName(locate("html", "en/gideon/kde2book/index.html"));
-    DocTreeItem *libcbook = new DocTreeItem(this, Book, i18n("Libc"));
-    libcbook->setFileName(locate("html", "en/gideon/libc/libc_toc.html"));
-}
-
-
-/*************************************/
 /* Folder "Qt/KDE libraries"         */
 /*************************************/
 
@@ -316,21 +281,18 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
     
     QDomElement docEl = doc.documentElement();
     QDomElement titleEl = docEl.namedItem("title").toElement();
-    QDomElement baseEl = docEl.namedItem("base").toElement();
     setText(0, titleEl.firstChild().toText().data());
-    QString base = baseEl.attribute("href");
-    if (!base.isEmpty())
-        base += "/";
 
+    QString base;
     QListViewItem *lastChildItem = 0;
     QDomElement childEl = docEl.firstChild().toElement();
     while (!childEl.isNull()) {
         if (childEl.tagName() == "tocsect1") {
             QString name = childEl.attribute("name");
-            QString url = base + childEl.attribute("url");
+            QString url = childEl.attribute("url");
             DocTreeItem *item = new DocTreeItem(this, Book, name);
-
-                item->setFileName(url);
+            if (!url.isEmpty())
+                item->setFileName(base + url);
             
             if (lastChildItem)
                 item->moveItem(lastChildItem);
@@ -343,9 +305,10 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
             while (!grandchildEl.isNull()) {
                 if (grandchildEl.tagName() == "tocsect2") {
                     QString name2 = grandchildEl.attribute("name");
-                    QString url2 = base + grandchildEl.attribute("url");
+                    QString url2 = grandchildEl.attribute("url");
                     DocTreeItem *item2 = new DocTreeItem(item, Doc, name2);
-                    item2->setFileName(url2);
+                    if (!url2.isEmpty())
+                        item2->setFileName(base + url2);
                     if (lastGrandchildItem)
                         item2->moveItem(lastGrandchildItem);
                     lastGrandchildItem = item2;
@@ -355,9 +318,10 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
 		    while (!grand2childEl.isNull()) {
 			if (grand2childEl.tagName() == "tocsect3") {
 			    QString name3 = grand2childEl.attribute("name");
-			    QString url3 = base + grand2childEl.attribute("url");
+			    QString url3 = grand2childEl.attribute("url");
 			    DocTreeItem *item3 = new DocTreeItem(item2, Doc, name3);
-			    item3->setFileName(url3);
+                            if (!url3.isEmpty())
+                                item3->setFileName(base + url3);
 			    if (last2GrandchildItem)
 				item3->moveItem(last2GrandchildItem);
 			    last2GrandchildItem = item3;
@@ -367,6 +331,10 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
                 }
                 grandchildEl = grandchildEl.nextSibling().toElement();
             }
+        } else if (childEl.tagName() == "base") {
+            base = childEl.attribute("href");
+            if (!base.isEmpty())
+                base += "/";
         }
 
         childEl = childEl.nextSibling().toElement();
@@ -580,8 +548,6 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 
     folder_kdelibs   = new DocTreeKDELibsFolder(this);
     folder_kdelibs->refresh();
-    folder_general   = new DocTreeGeneralFolder(this);
-    folder_general->refresh();
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -651,7 +617,6 @@ void DocTreeViewWidget::configurationChanged()
 
 void DocTreeViewWidget::refresh()
 {
-    folder_general->refresh();
     folder_kdelibs->refresh();
     folder_bookmarks->refresh();
 }

@@ -1,11 +1,18 @@
+if GTKDOCS
+GTKTOC = gtk.toc
+else
+GTKTOC =
+endif
+
 tocdir = ${kde_datadir}/kdevdoctreeview/tocs
-toc_DATA = python.toc perl.toc php.toc gnustep.toc
+toc_DATA = python.toc perl.toc php.toc gnustep.toc $(GTKTOC)
 
 indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = python.index
 
-EXTRA_DIST = python.toc.in perl.toc.in php.toc.in gnustep.toc.in python.index.in
-DISTCLEANFILES = python.toc perl.toc php.toc gnustep.toc python.index
+EXTRA_DIST = python.toc.in perl.toc.in php.toc.in gnustep.toc.in glib.toc.in \
+	     gdk.toc.in gdk-pixbuf.toc.in gtk.toc.in gnome.toc.in gnomeui.toc.in python.index.in
+DISTCLEANFILES = python.toc perl.toc php.toc gnustep.toc gtk.toc python.index
 
 perl.toc: $(srcdir)/perl.toc.in
 	echo "<!DOCTYPE gideontoc>" > perl.toc ; \
@@ -42,6 +49,31 @@ gnustep.toc: $(srcdir)/gnustep.toc.in
 	echo "</gideontoc>" >> gnustep.toc ; \
 	echo "" >> gnustep.toc
 
+gtk.toc: $(srcdir)/glib.toc.in $(srcdir)/gdk.toc.in $(srcdir)/gdk-pixbuf.toc.in $(srcdir)/gtk.toc.in $(srcdir)/gnome.toc.in $(srcdir)/gnomeui.toc.in 
+	echo "<!DOCTYPE gideontoc>" > gtk.toc ; \
+	echo "<gideontoc>" >> gtk.toc ; \
+	echo "<title>Gtk</title>" >> gtk.toc ; \
+	echo "<base href=\"$(GLIBDOCDIR)\"/>" >> gtk.toc ; \
+	echo "<tocsect1 name=\"GLib\" url=\"index.html\">" >> gtk.toc ; \
+        cat $(srcdir)/glib.toc.in >> gtk.toc ; \
+	echo "</tocsect1>" >> gtk.toc ; \
+	echo "<base href=\"$(GDKDOCDIR)\"/>" >> gtk.toc ; \
+	cat $(srcdir)/gdk.toc.in >> gtk.toc ; \
+	echo "<base href=\"$(GDKPBDOCDIR)\"/>" >> gtk.toc ; \
+	echo "<tocsect1 name=\"Gdk-Pixbuf\" url=\"index.html\">" >> gtk.toc ; \
+	cat $(srcdir)/gdk-pixbuf.toc.in >> gtk.toc ; \
+	echo "</tocsect1>" >> gtk.toc ; \
+	echo "<base href=\"$(GTKDOCDIR)\"/>" >> gtk.toc ; \
+	echo "<tocsect1 name=\"Gtk\" url=\"index.html\">" >> gtk.toc ; \
+	cat $(srcdir)/gtk.toc.in >> gtk.toc ; \
+	echo "</tocsect1>" >> gtk.toc ; \
+	echo "<base href=\"$(GNOMEDOCDIR)\"/>" >> gtk.toc ; \
+	cat $(srcdir)/gnome.toc.in >> gtk.toc ; \
+	echo "<base href=\"$(GNOMEUIDOCDIR)\"/>" >> gtk.toc ; \
+	cat $(srcdir)/gnomeui.toc.in >> gtk.toc ; \
+	echo "</gideontoc>" >> gtk.toc ; \
+	echo "" >> gtk.toc
+
 python.index: $(srcdir)/python.index.in
 	echo "<!DOCTYPE gideonindex>" > python.index ; \
 	echo "<gideonindex>" >> python.index
@@ -50,10 +82,6 @@ python.index: $(srcdir)/python.index.in
 	cat $(srcdir)/python.index.in >> python.index ; \
 	echo "</gideonindex>" >> python.index ; \
 	echo "" >> python.index
-
-php-toc:
-	perl ../tools/toc-docbook \
-	  /usr/share/doc/packages/phpdoc/manual/manual.html > php.toc.in
 
 python-toc:
 	perl ../tools/toc-python \
@@ -82,6 +110,10 @@ python-toc:
 	  --main=lib/lib \
 	  /usr/share/doc/packages/python/html/lib/lib.html >> python.toc.in
 
+php-toc:
+	perl ../tools/toc-docbook \
+	  /usr/share/doc/packages/phpdoc/manual/manual.html > php.toc.in
+
 gnustep-toc:
 	perl ../tools/toc-gsdoc \
 	  --prefix=Documentation/Base/Reference \
@@ -93,6 +125,23 @@ gnustep-toc:
 	  --title=Gui \
 	  --main=gui \
 	  Gui.gsdoc >> gnustep.toc.in
+
+gtk-toc:
+	perl ../tools/toc-docbook \
+	  --depth=2 \
+	  /usr/share/doc/packages/glib/index.html > glib.toc.in ; \
+	perl ../tools/toc-docbook \
+	  /usr/share/doc/packages/gdk/index.html > gdk.toc.in ; \
+	perl ../tools/toc-docbook \
+	  --depth=2 \
+	  /usr/share/doc/packages/gdk-pixbuf/html/index.html > gdk-pixbuf.toc.in ; \
+	perl ../tools/toc-docbook \
+	  --depth=2 \
+	  /usr/share/doc/packages/gtk/index.html > gtk.toc.in ; \
+	perl ../tools/toc-docbook \
+	  /usr/share/doc/packages/gnome-libs-devel/devel-docs/gnome/html/book1.html > gnome.toc.in ; \
+	perl ../tools/toc-docbook \
+	  /usr/share/doc/packages/gnome-libs-devel/devel-docs/gnomeui/html/book1.html > gnomeui.toc.in
 
 python-index:
 	perl ../tools/index-python \

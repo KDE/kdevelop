@@ -1,6 +1,19 @@
 htmldir = $(kde_htmldir)/en/kdevdoctreeview/stl
+
+tocdir = ${kde_datadir}/kdevdoctreeview/tocs
+toc_DATA = stl.toc
+
 indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = stl.index
+
+stl.toc: $(srcdir)/stl.toc.in
+	echo "<!DOCTYPE gideontoc>" > stl.toc ; \
+	echo "<gideontoc>" >> stl.toc ; \
+	echo "<title>STL</title>" >> stl.toc ; \
+	echo "<base href=\"$(htmldir)\"/>" >> stl.toc ; \
+	cat $(srcdir)/stl.toc.in >> stl.toc
+	echo "</gideontoc>" >> stl.toc ; \
+	echo "" >> stl.toc
 
 stl.index: $(srcdir)/stl.index.in
 	echo "<!DOCTYPE gideonindex>" > stl.index ; \
@@ -11,8 +24,8 @@ stl.index: $(srcdir)/stl.index.in
 	echo "</gideonindex>" >> stl.index
 
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
-	$(INSTALL_DATA) $(srcdir)/*.gif $(DESTDIR)$(htmldir)
+	$(mkinstalldirs) $(DESTDIR)$(htmldir) ;
+#	$(INSTALL_DATA) $(srcdir)/*.gif $(DESTDIR)$(htmldir)
 # 	$(INSTALL_DATA) $(srcdir)/*.html $(DESTDIR)$(htmldir) ;
 
 dist-hook:

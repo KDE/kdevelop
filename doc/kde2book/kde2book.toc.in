@@ -84,7 +84,7 @@
     <tocsect3 name="Dialog Layout the Simple Way" url="ch08lev1sec3.html"/>
     <tocsect3 name="Dialog Modality-Modal or Modeless Dialogs" url="ch08lev1sec4.html"/>
     <tocsect3 name="KDE User-Interface Library (kdeui)" url="ch08lev1sec5.html"/>
-    <tocsect3 name="KDialogBase" url="ch08lev1sec6.html"/>
+    <tocsect3 name="KDE User-Interface Library (kdeui)" url="ch08lev1sec6.html"/>
     <tocsect3 name="A Larger Example: The Option Dialog in KEdit" url="ch08lev1sec7.html"/>
     <tocsect3 name="User Interface Design Rules for Dialogs" url="ch08lev1sec8.html"/>
     <tocsect3 name="Summary" url="ch08lev1sec9.html"/>
@@ -141,7 +141,7 @@
     <tocsect3 name="A First Glance at Writing Modules" url="ch14lev1sec3.html"/>
     <tocsect3 name="MCOP" url="ch14lev1sec4.html"/>
     <tocsect3 name="Standard Interfaces" url="ch14lev1sec5.html"/>
-    <tocsect3 name="StereoEffect" url="ch14lev1sec6.html"/>
+    <tocsect3 name="Standard Interfaces" url="ch14lev1sec6.html"/>
     <tocsect3 name="KDE Multimedia Besides MCOP" url="ch14lev1sec7.html"/>
     <tocsect3 name="The Future of MCOP" url="ch14lev1sec8.html"/>
     <tocsect3 name="Summary" url="ch14lev1sec9.html"/>
@@ -179,7 +179,7 @@
     <tocsect3 name="Summary" url="ch18lev1sec8.html"/>
   </tocsect2>
   <tocsect2 name="Licensing Issues" url="ch19.html">
-    <tocsect3 name="&quote;Issues?&quote;" url="ch19lev1sec2.html"/>
+    <tocsect3 name="Licensing Issues" url="ch19lev1sec2.html"/>
     <tocsect3 name="License Usage by KDE" url="ch19lev1sec3.html"/>
     <tocsect3 name="The License Usage by Qt" url="ch19lev1sec4.html"/>
     <tocsect3 name="The KDE/Qt License History" url="ch19lev1sec5.html"/>
