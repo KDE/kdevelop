@@ -50,14 +50,29 @@ public:
 
     inline ProjectModel *projectModel() const
     { return part()->projectModel(); }
+    
+    inline ProjectOverview *overview() const
+    { return m_overview; }
+    
+    inline ProjectDetails *details() const
+    { return m_details; }
+
+    ProjectFolderDom activeFolder();
+    ProjectTargetDom activeTarget();
+    ProjectFileDom activeFile();
 
 public slots:
     void reload();
     void buildAll();
     void build();
+    
+    void createFile();
+    void createFolder();
+    void createTarget();
 
 protected slots:
     void updateDetails(QListViewItem *item);
+    void updateActions();
 
 private:
     KDevProjectManagerPart *m_part;
@@ -67,6 +82,10 @@ private:
     KAction *m_actionReload;
     KAction *m_actionBuild;
     KAction *m_actionBuildAll;
+    
+    KAction *m_addFile;
+    KAction *m_addTarget;
+    KAction *m_addFolder;
 };
 
 class ProjectViewItem: public QListViewItem
@@ -126,6 +145,8 @@ public:
     { return m_listView; }
         
     KToolBar *toolBar() const;
+    
+    virtual ProjectViewItem *selectedItem() const;
     
     virtual ProjectViewItem *createProjectItem(ProjectItemDom dom, ProjectViewItem *parent);
     virtual ProjectViewItem *findProjectItem(const QString &path) const;

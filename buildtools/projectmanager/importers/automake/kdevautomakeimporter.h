@@ -21,9 +21,9 @@
 #define KDEVAUTOMAKEIMPORTER_H
 
 #include "automakeprojectmodel.h"
-#include <kdevprojecteditor.h>
+#include <kdevprojectimporter.h>
 
-class KDevAutomakeImporter: public KDevProjectEditor
+class KDevAutomakeImporter: public KDevProjectImporter
 {
     Q_OBJECT
 public:
@@ -44,14 +44,6 @@ public:
     virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
   
-//
-// KDevProjectEditor interface
-//  
-    virtual ProjectFolderDom addFolder(ProjectFolderDom folder, const QString &name);
-    virtual ProjectTargetDom addTarget(ProjectFolderDom folder, const QString &name);
-    virtual ProjectFileDom addFile(ProjectFolderDom folder, const QString &name);
-    virtual ProjectFileDom addFile(ProjectTargetDom target, const QString &name);
-    
 private:    
     static void setup(AutomakeTargetDom dom, const QString &name, const QString &prefix, const QString &primary);
     static QString nicePrimary(const QString &primary);

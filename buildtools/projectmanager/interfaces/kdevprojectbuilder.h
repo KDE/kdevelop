@@ -27,6 +27,10 @@ class KDevProject;
 
 /**
 @author Roberto Raggi
+
+@short KDevProjectBuilder Base class for the Project Builders
+
+Describes a <b>Project Builder</b> to the KDevelop's Project Manager. 
 */
 class KDevProjectBuilder: public QObject
 {

@@ -18,16 +18,20 @@
 */
 #include "kdevprojectmanager_part.h"
 #include "kdevprojectmanager_widget.h"
+#include "importprojectjob.h"
 
 #include <kdevprojectimporter.h>
+#include <kdevprojecteditor.h>
 #include <kdevprojectbuilder.h>
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
+#include <kdevcreatefile.h>
 
 #include <klocale.h>
 #include <kaction.h>
+#include <kinputdialog.h>
 #include <kdialogbase.h>
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
@@ -36,6 +40,7 @@
 #include <kurl.h>
 
 #include <qlayout.h>
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qframe.h>
 #include <qheader.h>
@@ -118,12 +123,27 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
     m_actionBuild = new KAction(i18n("Build"), SmallIcon("launch"), SHIFT + Key_F8, this, SLOT(build()),
         part->actionCollection(), "project_build");
 
+    m_addFile = new KAction(i18n("Add File"), SmallIcon("file"), 0, this, SLOT(createFile()),
+        part->actionCollection(), "project_add_file");
+        
+    m_addTarget = new KAction(i18n("Add Target"), SmallIcon("target"), 0, this, SLOT(createTarget()),
+        part->actionCollection(), "project_add_target");
+        
+    m_addFolder = new KAction(i18n("Add Folder"), SmallIcon("folder"), 0, this, SLOT(createFolder()),
+        part->actionCollection(), "project_add_folder");
+
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     m_overview = new ProjectOverview(this, splitter);
     m_details = new ProjectDetails(this, splitter);
     
     connect(m_overview->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
         this, SLOT(updateDetails(QListViewItem*)));        
+        
+    connect(m_overview->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
+        this, SLOT(updateActions()));        
+    connect(m_details->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
+        this, SLOT(updateActions()));        
+
 }
 
 KDevProjectManagerWidget::~KDevProjectManagerWidget()
@@ -146,6 +166,83 @@ void KDevProjectManagerWidget::updateDetails(QListViewItem *item)
     m_details->setCurrentItem(item ? static_cast<ProjectViewItem*>(item)->dom() : 0);
 }
 
+void KDevProjectManagerWidget::updateActions()
+{    
+    m_addFile->setEnabled(activeTarget() != 0);
+    m_addTarget->setEnabled(activeFolder() != 0);
+    m_addFolder->setEnabled(activeFolder() != 0);
+}
+
+ProjectFolderDom KDevProjectManagerWidget::activeFolder()
+{
+    if (ProjectViewItem *item = overview()->selectedItem())
+        return item->dom()->toFolder();
+    
+    return ProjectFolderDom();
+}
+
+ProjectTargetDom KDevProjectManagerWidget::activeTarget()
+{
+    if (ProjectViewItem *item = details()->selectedItem()) {
+        while (item && !item->dom()->toTarget())
+            item = static_cast<ProjectViewItem*>(item->parent());
+     
+        if (item)       
+            return item->dom()->toTarget();
+    }
+    
+    return ProjectTargetDom();
+}
+
+ProjectFileDom KDevProjectManagerWidget::activeFile()
+{
+    if (ProjectViewItem *item = details()->selectedItem())
+        return item->dom()->toFile();
+    
+    return ProjectFileDom();
+}
+
+void KDevProjectManagerWidget::createFile()
+{
+    if (KDevCreateFile *createFileSupport = m_part->createFileSupport()) {
+        KDevCreateFile::CreatedFile crFile = createFileSupport->createNewFile(QString::null, activeFolder()->name());
+        QString path = activeFolder()->name() + "/" + crFile.filename;
+        ProjectItemDom item = part()->defaultImporter()->editor()->import(projectModel(), path);
+        if (item && item->toFile()) {
+            activeTarget()->addFile(item->toFile());
+            overview()->refresh();
+        }
+    }
+}
+
+void KDevProjectManagerWidget::createFolder()
+{
+    KDevProjectEditor *editor = part()->defaultImporter()->editor();
+    
+    QString name = KInputDialog::getText(i18n("Add Folder"), i18n("Add Folder"));
+    if (!name.isEmpty()) {
+        QFileInfo fileInfo(activeFolder()->name() + "/" + name);
+        
+        if (QDir::current().mkdir(fileInfo.absFilePath())) {
+            ProjectItemDom item = editor->import(projectModel(), fileInfo.absFilePath());
+            
+            if (item && item->toFolder()) {                
+                activeFolder()->addFolder(item->toFolder());
+                ImportProjectJob *job = ImportProjectJob::importProjectJob(item->toFolder(), editor);
+                job->start();
+
+                overview()->refresh();
+                ProjectViewItem *projectItem = overview()->findProjectItem(item->name());
+                kdDebug(9000) << "==================> projectItem:" << projectItem << " name:" << item->name() << endl;
+                overview()->listView()->setSelected(projectItem, true);
+            }        
+        }
+    }
+}
+
+void KDevProjectManagerWidget::createTarget()
+{
+}
 
 // ---------------------------------------------------------------------------------
 class ProjectRoot: public ProjectViewItem
@@ -193,6 +290,11 @@ ProjectView::~ProjectView()
 {
     delete fake_root;
     fake_root = 0;
+}
+
+ProjectViewItem *ProjectView::selectedItem() const
+{
+    return static_cast<ProjectViewItem*>(listView()->selectedItem());
 }
 
 KToolBar *ProjectView::toolBar() const
@@ -348,7 +450,14 @@ void ProjectViewItem::setOpen(bool opened)
 ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *parentWidget)
     : ProjectView(manager, parentWidget)
 {
+    KDevProjectImporter *importer = part()->defaultImporter();
+        
     if (KToolBar *tb = toolBar()) {
+        if (importer && importer->editor()) {                
+            if (importer->editor()->hasFeature(KDevProjectEditor::Folders))
+                part()->actionCollection()->action("project_add_folder")->plug(tb);
+        }
+        
         part()->actionCollection()->action("project_buildall")->plug(tb);
         tb->insertSeparator();
         part()->actionCollection()->action("project_reload")->plug(tb);
@@ -424,6 +533,9 @@ void ProjectOverview::refresh()
     if (listView()->selectedItem())
         currentText = listView()->selectedItem()->text(0);
         
+    int x = listView()->contentsX();
+    int y = listView()->contentsY();
+    
     ProjectView::refresh();
 
     ProjectItemList item_list = projectModel()->itemList();
@@ -436,13 +548,28 @@ void ProjectOverview::refresh()
     } else {
         listView()->setSelected(listView()->firstChild(), true);
     }
+    
+    listView()->setContentsPos(x, y);
+    
+    if (listView()->selectedItem())
+        listView()->ensureItemVisible(listView()->selectedItem());
 }
 
 // ---------------------------------------------------------------------------------
 ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parentWidget)
     : ProjectView(parent, parentWidget)
 {
+    KDevProjectImporter *importer = part()->defaultImporter();
+    
     if (KToolBar *tb = toolBar()) {
+        if (importer && importer->editor()) {                
+            if (importer->editor()->hasFeature(KDevProjectEditor::Targets))
+                part()->actionCollection()->action("project_add_target")->plug(tb);
+                
+            if (importer->editor()->hasFeature(KDevProjectEditor::Files))
+                part()->actionCollection()->action("project_add_file")->plug(tb);
+        }
+
         part()->actionCollection()->action("project_build")->plug(tb);
 
 #if 0 // ### 
@@ -481,6 +608,9 @@ void ProjectDetails::setCurrentItem(ProjectItemDom dom)
         currentText = sel->text(0);
     }
 
+    int x = listView()->contentsX();
+    int y = listView()->contentsY();
+    
     ProjectView::refresh();
     
     if (dom && dom->toFolder()) {
@@ -502,6 +632,11 @@ void ProjectDetails::setCurrentItem(ProjectItemDom dom)
     } else {
         listView()->setSelected(listView()->firstChild(), true);
     }
+
+    listView()->setContentsPos(x, y);
+    
+    if (listView()->selectedItem())
+        listView()->ensureItemVisible(listView()->selectedItem());
 }
 
 void ProjectView::open(ProjectItemDom dom)
@@ -568,6 +703,13 @@ void ProjectOverview::contextMenu(KListView *listView, QListViewItem *item, cons
             KPopupMenu menu(this);
             menu.insertTitle(i18n("Folder: %1").arg(folder->shortDescription()));
             
+            ProjectModelItemContext context(folder.data());
+            part()->core()->fillContextMenu(&menu, &context);
+
+            // FIXME: compat
+            FileContext fileContext(folder->name(), true);
+            part()->core()->fillContextMenu(&menu, &fileContext);
+
             menu.insertItem(i18n("Edit"), 1000);
             
             if (part()->defaultBuilder()) {
@@ -604,8 +746,12 @@ void ProjectDetails::contextMenu(KListView *listView, QListViewItem *item, const
         KPopupMenu menu(this);
         menu.insertTitle(i18n("File: %1").arg(file->shortDescription()));
                     
-        FileContext context(file->name(), false);
+        ProjectModelItemContext context(file.data());
         part()->core()->fillContextMenu(&menu, &context);
+        
+        // FIXME: compat
+        FileContext fileContext(file->name(), false);
+        part()->core()->fillContextMenu(&menu, &fileContext);
         
         if (part()->defaultBuilder()) {
             menu.insertSeparator();

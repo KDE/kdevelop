@@ -35,7 +35,7 @@
 K_EXPORT_COMPONENT_FACTORY(libkdevautomakeimporter, KGenericFactory<KDevAutomakeImporter>("kdevautomakeimporter"))
 
 KDevAutomakeImporter::KDevAutomakeImporter(QObject *parent, const char *name, const QStringList &)
-    : KDevProjectEditor(parent, name)
+    : KDevProjectImporter(parent, name)
 {
     m_project = ::qt_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
@@ -43,63 +43,6 @@ KDevAutomakeImporter::KDevAutomakeImporter(QObject *parent, const char *name, co
 
 KDevAutomakeImporter::~KDevAutomakeImporter()
 {
-}
-
-ProjectFolderDom KDevAutomakeImporter::addFolder(ProjectFolderDom folder, const QString &name)
-{
-    if (AutomakeFolderDom am_folder = AutomakeFolderModel::from(folder)) {
-        AutomakeFolderDom new_folder = am_folder->projectModel()->create<AutomakeFolderModel>();
-        new_folder->setName(name);
-        am_folder->addFolder(new_folder->toFolder());
-        am_folder->setDirty(true);
-        
-        am_folder->addSubdir(new_folder->name());
-        return new_folder->toFolder();
-    }
-    
-    return ProjectFolderDom();
-}
-
-ProjectTargetDom KDevAutomakeImporter::addTarget(ProjectFolderDom folder, const QString &name)
-{
-    if (AutomakeFolderDom am_folder = AutomakeFolderModel::from(folder)) {
-        AutomakeTargetDom new_target = am_folder->projectModel()->create<AutomakeTargetModel>();
-        new_target->setName(name);
-        am_folder->addTarget(new_target->toTarget());
-        am_folder->setDirty(true);
-        
-        // ### add the target
-        
-        return new_target->toTarget();
-    }
-    
-    return ProjectTargetDom();
-}
-
-ProjectFileDom KDevAutomakeImporter::addFile(ProjectFolderDom folder, const QString &name)
-{
-    if (AutomakeFolderDom am_folder = AutomakeFolderModel::from(folder)) {
-        AutomakeFileDom new_file = am_folder->projectModel()->create<AutomakeFileModel>();
-        new_file->setName(name);
-        am_folder->addFile(new_file->toFile());
-        return new_file->toFile();
-    }
-    
-    return ProjectFileDom();
-}
-
-ProjectFileDom KDevAutomakeImporter::addFile(ProjectTargetDom target, const QString &name)
-{
-    if (AutomakeTargetDom am_target = AutomakeTargetModel::from(target)) {
-        AutomakeFileDom new_file = am_target->projectModel()->create<AutomakeFileModel>();
-        new_file->setName(name);
-        am_target->addFile(new_file->toFile());
-        
-        // ### add the file to the target 
-        return new_file->toFile();
-    }
-    
-    return ProjectFileDom();
 }
 
 QString KDevAutomakeImporter::canonicalize(const QString &str)
@@ -330,9 +273,21 @@ QStringList KDevAutomakeImporter::findMakefiles(ProjectFolderDom dom)
 
 ProjectItemDom KDevAutomakeImporter::import(ProjectModel *model, const QString &fileName)
 {
-    AutomakeFolderDom root = model->create<AutomakeFolderModel>();
-    root->setName(fileName);
-    return root->toItem();
+    QFileInfo fileInfo(fileName);
+    
+    ProjectItemDom item;
+    
+    if (fileInfo.isDir()) {
+        AutomakeFolderDom folder = model->create<AutomakeFolderModel>();
+        folder->setName(fileName);
+        item = folder->toItem();
+    } else if (fileInfo.isFile()) {
+        AutomakeFileDom file = model->create<AutomakeFileModel>();
+        file->setName(fileName);
+        item = file->toItem();
+    }
+    
+    return item;
 }
 
 // ---------- Automake parser

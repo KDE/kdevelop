@@ -107,14 +107,23 @@ ProjectItemDom ProjectModel::itemByName(const QString &name) const
 
 void ProjectModel::addItem(ProjectItemDom dom)
 {
-    m_items.insert(dom->name(), dom);
+    if (!dom->toTarget())
+        m_items.insert(dom->name(), dom);
     
     if (ProjectFolderDom folder = dom->toFolder()) {
         ProjectFolderList folder_list = folder->folderList();
         for (ProjectFolderList::Iterator it=folder_list.begin(); it!=folder_list.end(); ++it)
             addItem((*it)->toItem());
             
+        ProjectTargetList target_list = folder->targetList();
+        for (ProjectTargetList::Iterator it=target_list.begin(); it!=target_list.end(); ++it)
+            addItem((*it)->toItem());        
+            
         ProjectFileList file_list = folder->fileList();
+        for (ProjectFileList::Iterator it=file_list.begin(); it!=file_list.end(); ++it)
+            addItem((*it)->toItem());
+    } else if (ProjectTargetDom target = dom->toTarget()) {
+        ProjectFileList file_list = target->fileList();
         for (ProjectFileList::Iterator it=file_list.begin(); it!=file_list.end(); ++it)
             addItem((*it)->toItem());
     }
@@ -122,14 +131,23 @@ void ProjectModel::addItem(ProjectItemDom dom)
 
 void ProjectModel::removeItem(ProjectItemDom dom)
 {
-    m_items.remove(dom->name());
+    if (!dom->toTarget())
+        m_items.remove(dom->name());
     
     if (ProjectFolderDom folder = dom->toFolder()) {
         ProjectFolderList folder_list = folder->folderList();
         for (ProjectFolderList::Iterator it=folder_list.begin(); it!=folder_list.end(); ++it)
             removeItem((*it)->toItem());
             
+        ProjectTargetList target_list = folder->targetList();
+        for (ProjectTargetList::Iterator it=target_list.begin(); it!=target_list.end(); ++it)
+            removeItem((*it)->toItem());
+            
         ProjectFileList file_list = folder->fileList();
+        for (ProjectFileList::Iterator it=file_list.begin(); it!=file_list.end(); ++it)
+            removeItem((*it)->toItem());
+    } else if (ProjectTargetDom target = dom->toTarget()) {
+        ProjectFileList file_list = target->fileList();
         for (ProjectFileList::Iterator it=file_list.begin(); it!=file_list.end(); ++it)
             removeItem((*it)->toItem());
     }

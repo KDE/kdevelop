@@ -28,16 +28,37 @@ class KDevProjectEditor: public KDevProjectImporter
 {
     Q_OBJECT
 public:
+    enum Features
+    {
+        Folders = 0x01,
+        Targets = 0x02,
+        Files   = 0x04,
+        
+        None = 0x00,
+        All = Folders | Targets | Files
+    };
+    
+public:
     KDevProjectEditor(QObject *parent = 0, const char *name = 0);
     virtual ~KDevProjectEditor();
-
+    
     virtual KDevProjectEditor *editor() const
     { return const_cast<KDevProjectEditor*>(this); }
+        
+    bool hasFeature(Features f) const
+    { return (features() & f) == f; }
     
-    virtual ProjectFolderDom addFolder(ProjectFolderDom folder, const QString &name) = 0;
-    virtual ProjectTargetDom addTarget(ProjectFolderDom folder, const QString &name) = 0;
-    virtual ProjectFileDom addFile(ProjectFolderDom target, const QString &name) = 0;
-    virtual ProjectFileDom addFile(ProjectTargetDom target, const QString &name) = 0;
+    virtual Features features() const = 0;
+    
+    virtual bool addFolder(ProjectFolderDom folder, ProjectFolderDom parent) = 0;
+    virtual bool addTarget(ProjectTargetDom target, ProjectFolderDom parent) = 0;
+    virtual bool addFile(ProjectFileDom file, ProjectFolderDom parent) = 0;
+    virtual bool addFile(ProjectFileDom file, ProjectTargetDom parent) = 0;
+    
+    virtual bool removeFolder(ProjectFolderDom folder, ProjectFolderDom parent) = 0;
+    virtual bool removeTarget(ProjectTargetDom target, ProjectFolderDom parent) = 0;
+    virtual bool removeFile(ProjectFileDom file, ProjectFolderDom parent) = 0;
+    virtual bool removeFile(ProjectFileDom file, ProjectTargetDom parent) = 0;
 };
 
 #endif

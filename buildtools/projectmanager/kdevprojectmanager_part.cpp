@@ -25,6 +25,7 @@
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
+#include <urlutil.h>
 
 #include <kaction.h>
 #include <kiconloader.h>
@@ -51,13 +52,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     m_dirty = false;
     
     setInstance(KDevProjectManagerFactory::instance());
-    
-    m_widget = new KDevProjectManagerWidget(this);
-
-    QWhatsThis::add(m_widget, i18n("Project Manager"));
-
-    mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
-    
+        
     { // load the importers
         KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
         
@@ -92,7 +87,16 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
         }    
     }
     
+    m_widget = new KDevProjectManagerWidget(this);
+
+    QWhatsThis::add(m_widget, i18n("Project Manager"));
+
+    mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
+
     setXMLFile("kdevprojectmanager.rc");    
+    
+    m_updateProjectTimer = new QTimer(this);
+    connect(m_updateProjectTimer, SIGNAL(timeout()), this, SLOT(updateProjectTimeout()));
 }
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
@@ -101,6 +105,26 @@ KDevProjectManagerPart::~KDevProjectManagerPart()
         mainWindow()->removeView(m_widget);
         delete m_widget;
     }
+}
+
+ProjectFolderDom KDevProjectManagerPart::activeFolder()
+{
+    return m_widget->activeFolder();
+}
+
+ProjectTargetDom KDevProjectManagerPart::activeTarget()
+{
+    return m_widget->activeTarget();
+}
+
+ProjectFileDom KDevProjectManagerPart::activeFile()
+{
+    return m_widget->activeFile();
+}
+
+void KDevProjectManagerPart::updateProjectTimeout()
+{
+    import();
 }
 
 void KDevProjectManagerPart::openProject(const QString &dirName, const QString &projectName)
@@ -178,7 +202,10 @@ QString KDevProjectManagerPart::runArguments() const
 
 QString KDevProjectManagerPart::activeDirectory() const
 {
-    return m_projectDirectory;
+    if (ProjectFolderDom folder = m_widget->activeFolder())
+        return URLUtil::relativePath(projectDirectory(), folder->name());
+    
+    return QString::null;
 }
 
 QString KDevProjectManagerPart::buildDirectory() const
@@ -242,16 +269,9 @@ KDevProjectBuilder *KDevProjectManagerPart::defaultBuilder() const
 void KDevProjectManagerPart::addFiles(const QStringList &fileList)
 {
     kdDebug(9000) << "KDevProjectManagerPart::addFiles:" << fileList << endl;
-    if (!defaultImporter())
-        return;
-
-    // ### block the signals.. i really don't want to add the method ::addFiles() to the KDevProjectEditor    
-    if (KDevProjectEditor *editor = defaultImporter()->editor()) {
-        for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it) {
-            // ### i'm not 100% sure to use the workspace as default folder
-            editor->addFile(m_workspace->toFolder(), *it);
-        }
-    }
+    
+    //m_updateProjectTimer->stop();
+    //m_updateProjectTimer->start(0, true);
 }
 
 void KDevProjectManagerPart::addFile(const QString &fileName)
@@ -265,13 +285,8 @@ void KDevProjectManagerPart::removeFiles(const QStringList &fileList)
 {
     kdDebug(9000) << "KDevProjectManagerPart::removeFiles" << fileList << endl;
     
-    // ### block the signals.. i really don't want to add the method ::addFiles() to the KDevProjectEditor    
-    if (KDevProjectEditor *editor = defaultImporter()->editor()) {
-        for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it) {
-            // ### implement me
-            Q_UNUSED(editor);
-        }
-    }
+    //m_updateProjectTimer->stop();
+    //m_updateProjectTimer->start(0, true);
 }
 
 void KDevProjectManagerPart::removeFile(const QString &fileName)

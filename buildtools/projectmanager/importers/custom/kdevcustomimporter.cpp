@@ -36,7 +36,7 @@ const QString &KDevCustomImporter::customImporter =
 K_EXPORT_COMPONENT_FACTORY(libkdevcustomimporter, KGenericFactory<KDevCustomImporter>("kdevcustomimporter"))
 
 KDevCustomImporter::KDevCustomImporter(QObject *parent, const char *name, const QStringList &)
-    : KDevProjectImporter(parent, name)
+    : KDevProjectEditor(parent, name)
 {
     m_project = ::qt_cast<KDevProject*>(parent);
     Q_ASSERT(m_project);
@@ -60,11 +60,11 @@ KDevProject *KDevCustomImporter::project() const
     return m_project;
 }
 
-bool KDevCustomImporter::isValid(const QFileInfo *fileInfo) const
+bool KDevCustomImporter::isValid(const QFileInfo &fileInfo) const
 {
-    QString fileName = fileInfo->fileName();
+    QString fileName = fileInfo.fileName();
     
-    bool ok = fileInfo->isDir();
+    bool ok = fileInfo.isDir();
     for (QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it) {
         QRegExp rx(*it, true, true);
         if (rx.exactMatch(fileName)) {
@@ -87,10 +87,10 @@ bool KDevCustomImporter::isValid(const QFileInfo *fileInfo) const
 
 ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
 {
-    QDir dir(item->name());
-    
     static const QString &dot = KGlobal::staticQString(".");
     static const QString &dotdot = KGlobal::staticQString("..");
+
+    QDir dir(item->name());
     
     ProjectTargetDom target = item->projectModel()->create<ProjectTargetModel>();
     target->setName("files");
@@ -102,10 +102,9 @@ ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
         while (const QFileInfo *fileInfo = it.current()) {
             ++it;
             
-            if (!isValid(fileInfo))
-                continue;
-            
-            if (fileInfo->isDir() && fileInfo->fileName() != dot && fileInfo->fileName() != dotdot) {
+            if (!isValid(*fileInfo)) {
+                //kdDebug(9000) << "skip:" << fileInfo->absFilePath() << endl;
+            } else if (fileInfo->isDir() && fileInfo->fileName() != dot && fileInfo->fileName() != dotdot) {
                 ProjectFolderDom folder = item->projectModel()->create<ProjectFolderModel>();
                 folder->setName(fileInfo->absFilePath());
                 item->addFolder(folder);
@@ -123,9 +122,18 @@ ProjectFolderList KDevCustomImporter::parse(ProjectFolderDom item)
 
 ProjectItemDom KDevCustomImporter::import(ProjectModel *model, const QString &fileName)
 {
-    ProjectFolderDom folder = model->create<ProjectFolderModel>();
-    folder->setName(fileName);
-    return folder->toItem();
+    QFileInfo fileInfo(fileName);
+    if (fileInfo.isDir()) {
+        ProjectFolderDom folder = model->create<ProjectFolderModel>();
+        folder->setName(fileName);
+        return folder->toItem();
+    } else if (fileInfo.isFile()) {
+        ProjectFileDom file = model->create<ProjectFileModel>();
+        file->setName(fileName);
+        return file->toItem();
+    }
+    
+    return ProjectItemDom();
 }
 
 QString KDevCustomImporter::findMakefile(ProjectFolderDom dom) const
@@ -138,6 +146,46 @@ QStringList KDevCustomImporter::findMakefiles(ProjectFolderDom dom) const
 {
     Q_UNUSED(dom);
     return QStringList();
+}
+
+bool KDevCustomImporter::addFolder(ProjectFolderDom folder, ProjectFolderDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::addTarget(ProjectTargetDom target, ProjectFolderDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::addFile(ProjectFileDom file, ProjectFolderDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::addFile(ProjectFileDom file, ProjectTargetDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::removeFolder(ProjectFolderDom folder, ProjectFolderDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::removeTarget(ProjectTargetDom target, ProjectFolderDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::removeFile(ProjectFileDom file, ProjectFolderDom parent)
+{
+    return false;
+}
+
+bool KDevCustomImporter::removeFile(ProjectFileDom file, ProjectTargetDom parent)
+{
+    return false;
 }
 
 #include "kdevcustomimporter.moc"

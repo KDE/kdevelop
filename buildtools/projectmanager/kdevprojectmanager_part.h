@@ -28,6 +28,7 @@ class KDevProjectManagerWidget;
 class KDevProjectImporter;
 class KDevProjectBuilder;
 class ProjectModel;
+class QTimer;
 
 /*
  Please read the README.dox file for more info about this part
@@ -52,6 +53,10 @@ public:
     
     inline bool isDirty() const
     { return m_dirty; }
+
+    ProjectFolderDom activeFolder();
+    ProjectTargetDom activeTarget();
+    ProjectFileDom activeFile();
 
     KDevProjectImporter *defaultImporter() const;
     KDevProjectBuilder *defaultBuilder() const;
@@ -88,6 +93,7 @@ private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);
     void fileDeleted(const QString &fileName);
+    void updateProjectTimeout();
     
 protected:
     bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
@@ -106,6 +112,8 @@ private:
     QString m_projectName;
     
     bool m_dirty;
+    
+    QTimer *m_updateProjectTimer;
 };
 
 #endif

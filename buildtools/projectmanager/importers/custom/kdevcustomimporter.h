@@ -24,7 +24,7 @@
 
 class QFileInfo;
 
-class KDevCustomImporter: public KDevProjectImporter
+class KDevCustomImporter: public KDevProjectEditor
 {
     Q_OBJECT
 public:
@@ -33,7 +33,23 @@ public:
     virtual ~KDevCustomImporter();
     
 //
-// KDevProjectImporter inerface
+// KDevProjectEditor interface
+//
+    virtual Features features() const 
+    { return Features(Folders | Files); }
+    
+    virtual bool addFolder(ProjectFolderDom folder, ProjectFolderDom parent);
+    virtual bool addTarget(ProjectTargetDom target, ProjectFolderDom parent);
+    virtual bool addFile(ProjectFileDom file, ProjectFolderDom parent);
+    virtual bool addFile(ProjectFileDom file, ProjectTargetDom parent);
+    
+    virtual bool removeFolder(ProjectFolderDom folder, ProjectFolderDom parent);
+    virtual bool removeTarget(ProjectTargetDom target, ProjectFolderDom parent);
+    virtual bool removeFile(ProjectFileDom file, ProjectFolderDom parent);
+    virtual bool removeFile(ProjectFileDom file, ProjectTargetDom parent);
+
+//
+// KDevProjectImporter interface
 //
     virtual KDevProject *project() const;
     
@@ -43,7 +59,7 @@ public:
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
 
 private:
-    bool isValid(const QFileInfo *fileName) const;
+    bool isValid(const QFileInfo &fileName) const;
     
 private:
     KDevProject *m_project;

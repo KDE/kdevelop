@@ -26,9 +26,15 @@
 
 class KDevProjectEditor;
 class KDevProject;
+class KDialogBase;
 
 /**
 @author Roberto Raggi
+
+@short Base class for the KDevProjectManager importers
+
+KDevProjectImporter is the class you want to implement for integrating
+a project manager in KDevelop.
 */
 class KDevProjectImporter: public QObject
 {
@@ -37,16 +43,40 @@ public:
     KDevProjectImporter(QObject *parent = 0, const char *name = 0);
     virtual ~KDevProjectImporter();
     
+    /** @return The current project. */
     virtual KDevProject *project() const = 0;
    
+    /** @return The instance of the editor interface. */
     virtual KDevProjectEditor *editor() const
     { return 0; }
     
-    virtual ProjectFolderList parse(ProjectFolderDom folder) = 0;
+    /** This method initialize the model item @arg dom
+        @return The list of the sub folders
+     */
+    virtual ProjectFolderList parse(ProjectFolderDom dom) = 0;
     
+    /** This method creates the root item from the file @arg fileName
+        @return The created item
+     */
     virtual ProjectItemDom import(ProjectModel *model, const QString &fileName) = 0;
+    
+    /** @return The makefile associated to the item model @dom.
+        @note The makefile list must contains absolute file names 
+      
+        For instance, for the <b>Automake</b> project you can return
+        
+        @code
+        dom->name() + "/Makefile.am";
+        @endcode
+      */
     virtual QString findMakefile(ProjectFolderDom dom) const = 0;
+    
+    /** @return The list of the makefiles from the item model @dom.
+        @note The makefile list must contains absolute file names */
     virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
+    
+signals:
+    void projectItemConfigWidget(ProjectItemDom dom, KDialogBase *dialog);
 };
 
 #endif
