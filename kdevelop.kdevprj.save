@@ -131,7 +131,7 @@ install=false
 install_location=
 type=DATA
 [doc/Makefile.am]
-sub_dirs=de,en,es,fr,hu,nl,pl,pt,ru,sv,zh_CN.GB2312,
+sub_dirs=de,en,es,fr,hu,nl,pl,pt,sv,zh_CN.GB2312,
 type=normal
 [doc/de/Makefile.am]
 files=doc/de/tip.database,
