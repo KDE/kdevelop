@@ -31,11 +31,6 @@ Type=install
 Source=%{kdevelop}/template-common/kde-Makefile.cvs
 Dest=%{dest}/Makefile.cvs
 
-[FILE4]
-Type=install
-Source=%{src}/template-kapp/subdirs
-Dest=%{dest}/subdirs
-
 [FILE5]
 Type=install
 Source=%{src}/kdevlang-configure.in.in
