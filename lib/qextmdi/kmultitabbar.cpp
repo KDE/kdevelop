@@ -713,13 +713,13 @@ KMultiTabBar::KMultiTabBar(KMultiTabBarMode bm, QWidget *parent,const char *name
 	if (bm==Vertical)
 	{
 		m_l=new QVBoxLayout(this);
-		setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding, true);
+		setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding, true));
 //		setFixedWidth(24);
 	}
 	else
 	{
 		m_l=new QHBoxLayout(this);
-		setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, true);
+		setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, true));
 //		setFixedHeight(24);
 	}
 	m_l->setMargin(0);
