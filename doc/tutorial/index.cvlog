@@ -1,0 +1,104 @@
+=== LinuxDoc conversion errors ===================
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+   3 `BOOK'                  0 `book'
+! Normally this should not be a problem, but check anyway ...
+   7 `HTMLURL'               0 `<affiliation><address><email><ulink>'
+   8 `'                      0 `'
+! Check the authorname (<collab><collabname> instead of <author><name>?)
+   8 `INST'                  0 `corpauthor'
+! Use affiliation, only corpauthor, or leave this out
+  11 `REF'                   0 `<link>'
+  17 `TOC'                   0 `'
+  43 `HTMLURL'               0 `<ulink>'
+  43 `HTMLURL'               0 `<ulink>'
+  58 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+  65 `HTMLURL'               0 `<ulink>'
+  80 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+  96 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 108 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 108 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 108 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 112 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 112 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 112 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 118 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 128 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 133 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 135 `TSCREEN'               0 `<screen>'
+ 138 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 163 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 164 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 164 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 180 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 180 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 180 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 180 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 180 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 185 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 185 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 185 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 194 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 194 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 194 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 194 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 194 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 201 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 222 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 222 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 222 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 225 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 234 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 234 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 234 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 241 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 256 `'                      0 `'
+! check if reference ID Copyright was meant for a section (if not, change manually)
+ 258 `TSCREEN'               0 `<screen>'
+ 275 `VERB'                  0 `'
+! Because it is in TSCREEN
+=== NIF conversion errors ========================
+Unknown META NAME value: keywords
+=== Finalising errors ===========================

@@ -1,0 +1,1414 @@
+=== LinuxDoc conversion errors ===================
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+   2 `BOOK'                  0 `book'
+! Normally this should not be a problem, but check anyway ...
+   6 `'                      0 `'
+! Check the authorname (<collab><collabname> instead of <author><name>?)
+   8 `REF'                   0 `<link>'
+  11 `TOC'                   0 `'
+  41 `mini-HOWTO'            0 `miniHOWTO'
+! Reference changed: check if still unique
+  41 `'                      0 `'
+! check if reference ID miniHOWTO was meant for a section (if not, change manually)
+  49 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+  49 `HTMLURL'               0 `<ulink>'
+  61 `HTMLURL'               0 `<ulink>'
+  71 `HTMLURL'               0 `<ulink>'
+  80 `HTMLURL'               0 `<ulink>'
+  99 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 127 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+ 132 `LIST'                  0 `<itemizedlist>'
+! Would <simplelist> be better? (uses <member>!)
+ 133 `HTMLURL'               0 `<ulink>'
+ 135 `HTMLURL'               0 `<ulink>'
+ 137 `HTMLURL'               0 `<ulink>'
+ 138 `HTMLURL'               0 `<ulink>'
+ 139 `HTMLURL'               0 `<ulink>'
+ 141 `HTMLURL'               0 `<ulink>'
+ 142 `HTMLURL'               0 `<ulink>'
+ 143 `HTMLURL'               0 `<ulink>'
+ 144 `HTMLURL'               0 `<ulink>'
+ 145 `HTMLURL'               0 `<ulink>'
+ 150 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 150 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 150 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 154 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 154 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 173 `TSCREEN'               0 `<screen>'
+ 177 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 177 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 177 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 225 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 227 `HTMLURL'               0 `<ulink>'
+ 233 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 237 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 237 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 240 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 240 `TSCREEN'               0 `<screen>'
+ 244 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 246 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 250 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 250 `TSCREEN'               0 `<screen>'
+ 254 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 259 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 259 `TSCREEN'               0 `<screen>'
+ 262 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 266 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 266 `TSCREEN'               0 `<screen>'
+ 273 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 275 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 291 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 291 `TSCREEN'               0 `<screen>'
+ 294 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 296 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 300 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 300 `TSCREEN'               0 `<screen>'
+ 303 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 310 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 310 `TSCREEN'               0 `<screen>'
+ 316 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 319 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 319 `TSCREEN'               0 `<screen>'
+ 325 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 327 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 327 `TSCREEN'               0 `<screen>'
+ 335 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 339 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 339 `TSCREEN'               0 `<screen>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 345 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 375 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 379 `TSCREEN'               0 `<screen>'
+ 393 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 395 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 402 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 402 `TSCREEN'               0 `<screen>'
+ 419 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 426 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 426 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 427 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 427 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 427 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 429 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 436 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 445 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 445 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 445 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 445 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 445 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 445 `HTMLURL'               0 `<ulink>'
+ 457 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 457 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 463 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 463 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 463 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 463 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 470 `HTMLURL'               0 `<ulink>'
+ 473 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 473 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 479 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 482 `TSCREEN'               0 `<screen>'
+ 485 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 485 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 492 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 495 `TSCREEN'               0 `<screen>'
+ 520 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 522 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 522 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 522 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 522 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 528 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 528 `TSCREEN'               0 `<screen>'
+ 531 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 533 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 556 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 556 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 556 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 562 `TSCREEN'               0 `<screen>'
+ 570 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 575 `&nbsp;'                0 ` '
+! if you really want an non-breaking space, you should encode it as in entity
+ 575 `TSCREEN'               0 `<screen>'
+ 583 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 583 `TSCREEN'               0 `<screen>'
+ 587 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 587 `TSCREEN'               0 `<screen>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 591 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 591 `TSCREEN'               0 `<screen>'
+ 596 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 598 `TSCREEN'               0 `<screen>'
+ 603 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 603 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 608 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 612 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 612 `TSCREEN'               0 `<screen>'
+ 615 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 621 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 621 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 621 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 621 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 629 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 640 `TSCREEN'               0 `<screen>'
+ 644 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 651 `TSCREEN'               0 `<screen>'
+ 682 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 690 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 692 `TSCREEN'               0 `<screen>'
+ 710 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 725 `HTMLURL'               0 `<ulink>'
+ 729 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 734 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 751 `HTMLURL'               0 `<ulink>'
+ 753 `HTMLURL'               0 `<ulink>'
+ 755 `HTMLURL'               0 `<ulink>'
+ 755 `HTMLURL'               0 `<ulink>'
+ 773 `HTMLURL'               0 `<ulink>'
+ 789 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 789 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 789 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 789 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 789 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 789 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 798 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 798 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 805 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 810 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 810 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 810 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 810 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 816 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 816 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 819 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+ 831 `HTMLURL'               0 `<ulink>'
+ 846 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 846 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 846 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 846 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 854 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 854 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 854 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 854 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 854 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 854 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 854 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 854 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 871 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 871 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 886 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 889 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+ 897 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+ 906 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+ 924 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 936 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 936 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 936 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 936 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 939 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+ 951 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 951 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 951 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 951 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 951 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 962 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 962 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 978 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 978 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 988 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 988 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 997 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 997 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 997 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 999 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 999 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1001 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1004 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1004 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1004 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1004 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1012 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+1049 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1049 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1049 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1049 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1049 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1065 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1065 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1065 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1065 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1065 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1065 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1078 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1078 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1097 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1097 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1097 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1097 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1097 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1109 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1109 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1109 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1124 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1124 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1124 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1135 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1145 `'                      0 `'
+! check if reference ID KOMOP was meant for a section (if not, change manually)
+1147 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1147 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1223 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1270 `TSCREEN'               0 `<screen>'
+1281 `CODE'                  0 `'
+! Because it is in TSCREEN
+1285 `TSCREEN'               0 `<screen>'
+1311 `CODE'                  0 `'
+! Because it is in TSCREEN
+1342 `TSCREEN'               0 `<screen>'
+1351 `CODE'                  0 `'
+! Because it is in TSCREEN
+1353 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1353 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1383 `TSCREEN'               0 `<screen>'
+1388 `CODE'                  0 `'
+! Because it is in TSCREEN
+1430 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1574 `HTMLURL'               0 `<ulink>'
+1647 `HTMLURL'               0 `<ulink>'
+1647 `HTMLURL'               0 `<ulink>'
+1654 `'                      0 `'
+! check if reference ID KOMHOWTO was meant for a section (if not, change manually)
+1657 `HTMLURL'               0 `<ulink>'
+1688 `HTMLURL'               0 `<ulink>'
+1688 `HTMLURL'               0 `<ulink>'
+1695 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1698 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1698 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1709 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1718 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1718 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1718 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1718 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1723 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1723 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1723 `NIDX'                  0 `<indexterm><primary>'
+1742 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+1756 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+1763 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+1765 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1765 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1780 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+1796 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1796 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1797 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1797 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1798 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1798 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1801 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1801 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1801 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1801 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1801 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1801 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1801 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1801 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1809 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1809 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1821 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1821 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1821 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1827 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1835 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1835 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1835 `VERB'                  0 `<literal remap="verb">'
+! Check and correct manually
+1846 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1846 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1852 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1852 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1852 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1852 `VERB'                  0 `<literal remap="verb">'
+! Check and correct manually
+1852 `VERB'                  0 `<literal remap="verb">'
+! Check and correct manually
+1861 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1861 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1863 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1863 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1863 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1865 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1865 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1865 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1867 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1867 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1867 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1869 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1869 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1869 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1871 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1871 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1871 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+1878 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1878 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1878 `NIDX'                  0 `<indexterm><primary>'
+1947 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+1949 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1949 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1949 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1949 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1949 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1954 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1955 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1956 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1957 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1958 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1959 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1960 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1971 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1971 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1982 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1982 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1995 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2006 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2006 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2020 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2023 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2040 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2040 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2040 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2052 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2054 `NIDX'                  0 `<indexterm><primary>'
+2064 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2066 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2066 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2066 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2071 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2084 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2084 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2094 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2101 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2112 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2120 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2131 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2132 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2140 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2143 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2143 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2143 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2143 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2143 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2143 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2143 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2143 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2143 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2143 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2143 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2189 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2189 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2189 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2189 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2189 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2189 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2198 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2198 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2198 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2198 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2198 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2198 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2205 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2208 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2208 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2211 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2214 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2214 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2220 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2220 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2244 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2244 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2244 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2244 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2244 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2244 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2244 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2244 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2244 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2255 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2255 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2255 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2255 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2255 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2255 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2255 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2268 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2268 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2294 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2296 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2296 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2307 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2308 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2312 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2313 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2316 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2316 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2321 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2325 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2325 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2331 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2331 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2331 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2331 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2331 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2363 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2373 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2373 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2373 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2373 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2373 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2373 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2373 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2373 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2373 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2384 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2387 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2387 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2387 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2387 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2387 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2387 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2399 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2401 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2401 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2401 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2406 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2406 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2406 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2406 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2412 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2419 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2429 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2429 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2434 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2434 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2434 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2434 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2434 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2441 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2441 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2458 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2463 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2463 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2466 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2466 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2473 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2473 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2476 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2476 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2482 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2504 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2504 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2504 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2504 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2507 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2516 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2516 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2516 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2525 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2525 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2525 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2528 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2528 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2534 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2534 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2534 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2534 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2534 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2534 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2534 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2545 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2545 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2560 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2572 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2574 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2574 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2574 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2583 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2595 `'                      0 `'
+! check if reference ID KDEDAEMON was meant for a section (if not, change manually)
+2597 `HTMLURL'               0 `<ulink>'
+2601 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2601 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2601 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2610 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2614 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2616 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2618 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2625 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2629 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2632 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2632 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2642 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2642 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2644 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2647 `VERB'                  0 `<literal remap="verb">'
+! Check and correct manually
+2647 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2647 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2647 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2647 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2657 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2657 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2657 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2657 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2657 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2666 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2666 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2666 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2666 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2669 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2669 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2669 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2671 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2671 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2671 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2671 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2671 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2677 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2677 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2677 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2677 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2683 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2683 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2685 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2685 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2687 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2687 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2687 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2692 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2692 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2692 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2692 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2692 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2692 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2699 `VERB'                  0 `<literal remap="verb">'
+! Check and correct manually
+2699 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2699 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2699 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2705 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2705 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2705 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2710 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2710 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2710 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2710 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2713 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2716 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2716 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2716 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2716 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2716 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2716 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2716 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2716 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2716 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2731 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2731 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2731 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2731 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2731 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2731 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2731 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2731 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2740 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2740 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2740 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2740 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2740 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2740 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2740 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2740 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2740 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2757 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2757 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2757 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2760 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2760 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2772 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2772 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2772 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2772 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2781 `NCDX'                  0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2810 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2813 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2813 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2813 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2820 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2820 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2820 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2823 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2823 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2823 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2823 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2823 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2823 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2823 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2823 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2823 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2831 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2831 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2831 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2838 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2838 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2845 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2845 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2845 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2849 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2852 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2852 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2852 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2852 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2852 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2862 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2867 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2891 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2897 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2910 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2910 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2918 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2921 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2929 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2935 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2938 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2938 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2938 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2938 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2938 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2938 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2944 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2947 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2947 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2952 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2952 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2952 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2957 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2957 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2957 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2965 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2978 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2978 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2978 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2986 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2986 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2986 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2996 `VERB'                  0 `<programlisting>'
+! Because it contains a newline character
+2998 `'                      0 `'
+! check if reference ID Copyright was meant for a section (if not, change manually)
+3008 `REF'                   0 `<link>'
+3008 `HTMLURL'               0 `<ulink>'
+3012 `REF'                   0 `<link>'
+3012 `HTMLURL'               0 `<ulink>'
+3012 `HTMLURL'               0 `<ulink>'
+3016 `REF'                   0 `<link>'
+3016 `REF'                   0 `<link>'
+3016 `HTMLURL'               0 `<ulink>'
+3019 `APPENDIX'              0 `appendix'
+! Make of all the *following* chapters appendices (<chapter> -> <appendix>) and remove the generated <appendix> tags.
+=== NIF conversion errors ========================
+Unknown META NAME value: keywords
+=== Finalising errors ===========================

@@ -1,0 +1,2357 @@
+=== LinuxDoc conversion errors ===================
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+   2 `BOOK'                  0 `book'
+! Normally this should not be a problem, but check anyway ...
+   6 `HTMLURL'               0 `<affiliation><address><email><ulink>'
+   7 `'                      0 `'
+! Check the authorname (<collab><collabname> instead of <author><name>?)
+   7 `INST'                  0 `corpauthor'
+! Use affiliation, only corpauthor, or leave this out
+  10 `REF'                   0 `<link>'
+  13 `TOC'                   0 `'
+  24 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  24 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  30 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+  30 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  35 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  35 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  35 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  35 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  37 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  38 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  40 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  40 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  40 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  41 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  41 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  41 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  43 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  45 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  46 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  46 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  47 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  51 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  55 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  55 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  79 `HTMLURL'               0 `<ulink>'
+  81 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  81 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  86 `REF'                   0 `<link>'
+  86 `REF'                   0 `<link>'
+  89 `REF'                   0 `<link>'
+  91 `REF'                   0 `<link>'
+  91 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  92 `REF'                   0 `<link>'
+  92 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  94 `REF'                   0 `<link>'
+  96 `REF'                   0 `<link>'
+  97 `REF'                   0 `<link>'
+  97 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  98 `REF'                   0 `<link>'
+  99 `REF'                   0 `<link>'
+  99 `IDX'                   0 `<indexterm remap="idx"><primary>'
+  99 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 101 `REF'                   0 `<link>'
+ 102 `REF'                   0 `<link>'
+ 110 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 110 `'                      0 `'
+! check if reference ID Installation was meant for a section (if not, change manually)
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 114 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 114 `URL'                   0 `<ulink>'
+ 114 `URL'                   0 `<ulink>'
+ 118 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 118 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 123 `REF'                   0 `<link>'
+ 124 `HTMLURL'               0 `<ulink>'
+ 126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 135 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 140 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 142 `URL'                   0 `<ulink>'
+ 143 `URL'                   0 `<ulink>'
+ 144 `URL'                   0 `<ulink>'
+ 145 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 145 `URL'                   0 `<ulink>'
+ 146 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 146 `URL'                   0 `<ulink>'
+ 148 `URL'                   0 `<ulink>'
+ 149 `URL'                   0 `<ulink>'
+ 150 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 150 `URL'                   0 `<ulink>'
+ 153 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 155 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 155 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 155 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 156 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 157 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 157 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 157 `URL'                   0 `<ulink>'
+ 158 `URL'                   0 `<ulink>'
+ 159 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 159 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 159 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 159 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 159 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 159 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 159 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 159 `URL'                   0 `<ulink>'
+ 161 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 161 `URL'                   0 `<ulink>'
+ 162 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 162 `URL'                   0 `<ulink>'
+ 168 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 168 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 171 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 173 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 173 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 173 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 173 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 177 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 177 `URL'                   0 `<ulink>'
+ 177 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 177 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 177 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 177 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 185 `TSCREEN'               0 `<screen>'
+ 192 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 195 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 195 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 197 `TSCREEN'               0 `<screen>'
+ 206 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 208 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 208 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 208 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 208 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 212 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 212 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 212 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 212 `TSCREEN'               0 `<screen>'
+ 219 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 223 `TSCREEN'               0 `<screen>'
+ 225 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 227 `REF'                   0 `<link>'
+ 231 `TSCREEN'               0 `<screen>'
+ 233 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 237 `The Installation       0 `TheInstallationProgram'
+! Reference changed: check if still unique
+ 237 `'                      0 `'
+! check if reference ID TheInstallationProgram was meant for a section (if not, change manually)
+ 246 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 248 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 251 `REF'                   0 `<link>'
+ 256 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 256 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 256 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 256 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 256 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 259 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 259 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 259 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 259 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 259 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 263 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 272 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 272 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 278 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 278 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 278 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 278 `URL'                   0 `<ulink>'
+ 282 `URL'                   0 `<ulink>'
+ 283 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 283 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 283 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 283 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 283 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 283 `URL'                   0 `<ulink>'
+ 297 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 297 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 297 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 297 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 297 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 297 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 297 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 303 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 303 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 303 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 308 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 310 `REF'                   0 `<link>'
+ 315 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 315 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 320 `'                      0 `'
+! check if reference ID Programs was meant for a section (if not, change manually)
+ 325 `The Compiler'          0 `TheCompiler'
+! Reference changed: check if still unique
+ 325 `'                      0 `'
+! check if reference ID TheCompiler was meant for a section (if not, change manually)
+ 327 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 334 `TSCREEN'               0 `<screen>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 342 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 342 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 342 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 342 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 342 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 348 `TSCREEN'               0 `<screen>'
+ 350 `VERB'                  0 `'
+! Because it is in TSCREEN
+ 350 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 353 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 353 `'                      0 `'
+! check if reference ID Make was meant for a section (if not, change manually)
+ 355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 355 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 355 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 355 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 355 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 365 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 367 `REF'                   0 `<link>'
+ 378 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 388 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 392 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 392 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 395 `'                      0 `'
+! check if reference ID Configure was meant for a section (if not, change manually)
+ 397 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 397 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 397 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 397 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 397 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 397 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 397 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 406 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 406 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 406 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 410 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 410 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 410 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 410 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 410 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 410 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 410 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 414 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 414 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 414 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 414 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 414 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 414 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 414 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 422 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 422 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 422 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 427 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 432 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 434 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 435 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 438 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 438 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 438 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 438 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 438 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 438 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 456 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 456 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 461 `'                      0 `'
+! check if reference ID Debugging was meant for a section (if not, change manually)
+ 463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 463 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 475 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 475 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 475 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 480 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 480 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 480 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 480 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 483 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 489 `Development with       0 `DevelopmentwithKDevelop'
+! Reference changed: check if still unique
+ 489 `'                      0 `'
+! check if reference ID DevelopmentwithKDevelop was meant for a section (if not, change manually)
+ 491 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 491 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 491 `HTMLURL'               0 `<ulink>'
+ 491 `REF'                   0 `<link>'
+ 491 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 501 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 501 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 501 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 501 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 506 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 506 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 516 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 516 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 516 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 516 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 527 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 527 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 531 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 533 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 543 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 543 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 553 `REF'                   0 `<xref>'
+ 561 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 563 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 563 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 563 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 567 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 569 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 569 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 569 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 569 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 574 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 580 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 582 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 583 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 583 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 587 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 591 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 606 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 606 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 606 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 606 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 613 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 613 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 617 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 617 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 617 `REF'                   0 `<link>'
+ 622 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 622 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 629 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 629 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 646 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 649 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 649 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 649 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 649 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 662 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 662 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 662 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 662 `REF'                   0 `<link>'
+ 662 `HTMLURL'               0 `<ulink>'
+ 695 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 707 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 707 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+ 707 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 711 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 715 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 715 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 715 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 715 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 719 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 719 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 740 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 746 `REF'                   0 `<link>'
+ 766 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 777 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 780 `REF'                   0 `<link>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `REF'                   0 `<link>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 785 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 796 `REF'                   0 `<link>'
+ 796 `HTMLURL'               0 `<ulink>'
+ 812 `HTMLURL'               0 `<ulink>'
+ 812 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 812 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 814 `REF'                   0 `<link>'
+ 814 `REF'                   0 `<link>'
+ 814 `REF'                   0 `<link>'
+ 814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 818 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 818 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 818 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 822 `URL'                   0 `<ulink>'
+ 822 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 823 `URL'                   0 `<ulink>'
+ 824 `URL'                   0 `<ulink>'
+ 825 `URL'                   0 `<ulink>'
+ 829 `'                      0 `'
+! check if reference ID Overview was meant for a section (if not, change manually)
+ 831 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 837 `REF'                   0 `<link>'
+ 842 `REF'                   0 `<link>'
+ 843 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 843 `REF'                   0 `<link>'
+ 849 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 851 `REF'                   0 `<link>'
+ 861 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 861 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 861 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 861 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 861 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 875 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 886 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 893 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 898 `NIDX'                  0 `<indexterm><primary>'
+ 902 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 902 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 904 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 905 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 906 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 908 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 909 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 910 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 910 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 910 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 910 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 912 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 917 `NIDX'                  0 `<indexterm><primary>'
+ 917 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 921 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 922 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 923 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 924 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 926 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 927 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 928 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 929 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 930 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 932 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 935 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 938 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 938 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+ 938 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 938 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 941 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 942 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 944 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 950 `NIDX'                  0 `<indexterm><primary>'
+ 950 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 954 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 956 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 956 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 956 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 958 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 959 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 959 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 960 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 960 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 960 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 960 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 962 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 963 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 963 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 964 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 964 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 965 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 970 `NIDX'                  0 `<indexterm><primary>'
+ 974 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 974 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 976 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 978 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 980 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 980 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 982 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 982 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 984 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 984 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 984 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 984 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 988 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 988 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 991 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 991 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 993 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 996 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 996 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 996 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 996 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 996 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 996 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+ 998 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+ 998 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 998 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 998 `IDX'                   0 `<indexterm remap="idx"><primary>'
+ 998 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1000 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1002 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1002 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1002 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1002 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1006 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1006 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1013 `NIDX'                  0 `<indexterm><primary>'
+1013 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1018 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1018 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1018 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1020 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1020 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1021 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1022 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1023 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1024 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1025 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1028 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1028 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1028 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1028 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1030 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1030 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1033 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1033 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1033 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1033 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1033 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1033 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1033 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1036 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1036 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1041 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `NIDX'                  0 `<indexterm><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1042 `REF'                   0 `<link>'
+1049 `NIDX'                  0 `<indexterm><primary>'
+1049 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1049 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1049 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1049 `REF'                   0 `<link>'
+1054 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1055 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1055 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1056 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1056 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1057 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1057 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1059 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1059 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1060 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1060 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1060 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1060 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1060 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1063 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1063 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1063 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1064 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1064 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1064 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1066 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1066 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1066 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1066 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1066 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1068 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1068 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1068 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1068 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1074 `NIDX'                  0 `<indexterm><primary>'
+1079 `NIDX'                  0 `<indexterm><primary>'
+1079 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1079 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1083 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1083 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1083 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1085 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1085 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1085 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1088 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1090 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1090 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1090 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1090 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1093 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1095 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1095 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1098 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1099 `NIDX'                  0 `<indexterm><primary>'
+1099 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1099 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1104 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1104 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1105 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1105 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1106 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1106 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1106 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1110 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1110 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1113 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1113 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1113 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1115 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1115 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1115 `HTMLURL'               0 `<ulink>'
+1118 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1118 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1121 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1121 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1123 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1123 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1123 `REF'                   0 `<link>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1126 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1129 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1129 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1131 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1131 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1131 `NIDX'                  0 `<indexterm><primary>'
+1133 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1133 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1133 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1133 `NIDX'                  0 `<indexterm><primary>'
+1135 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1135 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1137 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1137 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1137 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1138 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1138 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1138 `NIDX'                  0 `<indexterm><primary>'
+1138 `NIDX'                  0 `<indexterm><primary>'
+1140 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1140 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1140 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1140 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1140 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1143 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1147 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1149 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1153 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1155 `NIDX'                  0 `<indexterm><primary>'
+1171 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1175 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1175 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1175 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1179 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1181 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1183 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1186 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1188 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1188 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1188 `NIDX'                  0 `<indexterm><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1188 `NIDX'                  0 `<indexterm><primary>'
+1193 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1194 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1196 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1197 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1202 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1208 `REF'                   0 `<link>'
+1214 `NIDX'                  0 `<indexterm><primary>'
+1214 `NIDX'                  0 `<indexterm><primary>'
+1229 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1247 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1262 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1272 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1275 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1289 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1300 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1308 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1316 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1319 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1338 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1343 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1354 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1356 `The Help System'       0 `TheHelpSystem'
+! Reference changed: check if still unique
+1356 `'                      0 `'
+! check if reference ID TheHelpSystem was meant for a section (if not, change manually)
+1358 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1358 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1358 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1365 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1376 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1382 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1387 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1389 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1411 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1415 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1415 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1419 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1421 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1421 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1427 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1427 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1443 `Using the              0 `UsingtheDocumentationBrowser'
+! Reference changed: check if still unique
+1443 `'                      0 `'
+! check if reference ID UsingtheDocumentationBrowser was meant for a section (if not, change manually)
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1445 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1445 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1452 `REF'                   0 `<link>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1454 `REF'                   0 `<link>'
+1454 `REF'                   0 `<link>'
+1467 `HTMLURL'               0 `<ulink>'
+1470 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1470 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1470 `URL'                   0 `<ulink>'
+1477 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1477 `URL'                   0 `<ulink>'
+1478 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `REF'                   0 `<link>'
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1484 `REF'                   0 `<link>'
+1494 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1498 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1500 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1500 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1500 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1500 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1509 `Using the              0 `UsingtheSearchindex'
+! Reference changed: check if still unique
+1509 `'                      0 `'
+! check if reference ID UsingtheSearchindex was meant for a section (if not, change manually)
+1511 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1511 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1511 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1511 `REF'                   0 `<link>'
+1518 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1525 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1529 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1529 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1529 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1529 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1529 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1529 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1534 `Working with the       0 `WorkingwiththeEditor'
+! Reference changed: check if still unique
+1534 `'                      0 `'
+! check if reference ID WorkingwiththeEditor was meant for a section (if not, change manually)
+1536 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1538 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1539 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1540 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1541 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1541 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1542 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1542 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1542 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1548 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1548 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1555 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1555 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1555 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1559 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1566 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1566 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1566 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1566 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1566 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1575 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1586 `REF'                   0 `<link>'
+1586 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1591 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1591 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1599 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1599 `REF'                   0 `<xref>'
+1602 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1602 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1602 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1607 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1610 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1618 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1626 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1635 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1635 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1635 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1639 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1639 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1641 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1641 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1641 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1645 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1648 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1657 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1657 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1657 `REF'                   0 `<link>'
+1697 `CODE'                  0 `<programlisting>'
+! Because it contains a newline character
+1702 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1709 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1749 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1752 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1753 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1754 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1755 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1756 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1761 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1765 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1765 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1775 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1787 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+1787 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1802 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1802 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1807 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1808 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1809 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1810 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1811 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1816 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1817 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1818 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1819 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1820 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1821 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1822 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1832 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1832 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1832 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1832 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1840 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1840 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1840 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1849 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1851 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1853 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1857 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1860 `REF'                   0 `<link>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1872 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1882 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1882 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1882 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1882 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1882 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1887 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1892 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1893 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1894 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1895 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1896 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1896 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1897 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1897 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1898 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1898 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1899 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1900 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1903 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1906 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1907 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1908 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1908 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1910 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1910 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1911 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1917 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1918 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1920 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1921 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1923 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1926 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1931 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1932 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1934 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1935 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1937 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1939 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1940 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1942 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1944 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1945 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1947 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1949 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1950 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1951 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1958 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1960 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1961 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1962 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+1964 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1966 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1967 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1968 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1970 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1972 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1973 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1974 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1975 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1977 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1979 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1980 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1981 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1982 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1989 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1991 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1991 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1992 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1992 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1993 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1993 `IDX'                   0 `<indexterm remap="idx"><primary>'
+1994 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1995 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1997 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+1999 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2000 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2001 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2003 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2003 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2005 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2006 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2006 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2006 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2008 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2010 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2011 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2013 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2013 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2014 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2016 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2018 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2018 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2019 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2027 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2028 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2029 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2030 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2031 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2032 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2040 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2040 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2040 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2040 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2040 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2041 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2041 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2042 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2042 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2043 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2043 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2044 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2045 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2046 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2047 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2047 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2048 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2048 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2050 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2051 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2051 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2052 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2054 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2054 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2055 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2055 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2056 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2056 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2063 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2066 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2068 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2069 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2070 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2071 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2072 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2073 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2075 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2077 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2079 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2080 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2082 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2084 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2085 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2088 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2090 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2090 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2091 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2091 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2092 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2092 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2098 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2098 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2098 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2102 `'                      0 `'
+! check if reference ID Projects was meant for a section (if not, change manually)
+2110 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2115 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2115 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2119 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2119 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2119 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2119 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2119 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2125 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2128 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2128 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2132 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2132 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2157 `HTMLURL'               0 `<ulink>'
+2157 `REF'                   0 `<link>'
+2165 `HTMLURL'               0 `<ulink>'
+2172 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2179 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2179 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2183 `REF'                   0 `<link>'
+2203 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2206 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2206 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2206 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2206 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2206 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2206 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2216 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2227 `REF'                   0 `<link>'
+2236 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2241 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2241 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2251 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2251 `REF'                   0 `<link>'
+2256 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2256 `REF'                   0 `<link>'
+2261 `REF'                   0 `<link>'
+2264 `REF'                   0 `<link>'
+2267 `Adding Files and       0 `AddingFilesandClasses'
+! Reference changed: check if still unique
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2267 `'                      0 `'
+! check if reference ID AddingFilesandClasses was meant for a section (if not, change manually)
+2269 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2269 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2269 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2269 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2277 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2277 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2281 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2281 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2281 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2281 `REF'                   0 `<link>'
+2288 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2292 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2292 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2292 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2297 `Setting Project        0 `SettingProjectFileOptions'
+! Reference changed: check if still unique
+2297 `'                      0 `'
+! check if reference ID SettingProjectFileOptions was meant for a section (if not, change manually)
+2299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2307 `Adding                 0 `AddingTranslations'
+! Reference changed: check if still unique
+2307 `'                      0 `'
+! check if reference ID AddingTranslations was meant for a section (if not, change manually)
+2309 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2309 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2309 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2309 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2318 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2318 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2327 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2327 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2327 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2327 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2327 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2327 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2335 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2335 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2339 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2339 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2339 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2339 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2339 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2339 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2344 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2344 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2344 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2348 `URL'                   0 `<ulink>'
+2348 `REF'                   0 `<link>'
+2348 `HTMLURL'               0 `<ulink>'
+2353 `Extending the          0 `ExtendingtheProjectDocumentation'
+! Reference changed: check if still unique
+2353 `'                      0 `'
+! check if reference ID ExtendingtheProjectDocumentation was meant for a section (if not, change manually)
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2355 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2367 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2367 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2367 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2367 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2367 `HTMLURL'               0 `<ulink>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2382 `Project Hacking'       0 `ProjectHacking'
+! Reference changed: check if still unique
+2382 `'                      0 `'
+! check if reference ID ProjectHacking was meant for a section (if not, change manually)
+2384 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2384 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2384 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2384 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2392 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2394 `REF'                   0 `<link>'
+2394 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2403 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2403 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2410 `Build Settings'        0 `BuildSettings'
+! Reference changed: check if still unique
+2410 `'                      0 `'
+! check if reference ID BuildSettings was meant for a section (if not, change manually)
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2412 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2423 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2424 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2425 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2425 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2431 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2436 `Compiler Options'      0 `CompilerOptions'
+! Reference changed: check if still unique
+2436 `'                      0 `'
+! check if reference ID CompilerOptions was meant for a section (if not, change manually)
+2438 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2438 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2444 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2444 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2444 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2448 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2459 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2459 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2463 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2467 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2470 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2470 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2470 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2470 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2474 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2478 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2478 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2478 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2478 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2478 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2478 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2478 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2478 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2484 `Compiler Warnings'     0 `CompilerWarnings'
+! Reference changed: check if still unique
+2484 `'                      0 `'
+! check if reference ID CompilerWarnings was meant for a section (if not, change manually)
+2486 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2486 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2486 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2500 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2500 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2502 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2510 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2510 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2519 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2519 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2519 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2534 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2537 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2537 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2537 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2541 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2544 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2550 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2557 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2557 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2557 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2557 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2561 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2563 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2563 `Linker Options'        0 `LinkerOptions'
+! Reference changed: check if still unique
+2563 `'                      0 `'
+! check if reference ID LinkerOptions was meant for a section (if not, change manually)
+2564 `NIDX'                  0 `<indexterm><primary>'
+2564 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2564 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2564 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2564 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2564 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2564 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2570 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2571 `NIDX'                  0 `<indexterm><primary>'
+2573 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2580 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2580 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2580 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2580 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2580 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2586 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2586 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2590 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2592 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2594 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2594 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2594 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2596 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2596 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2598 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2598 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2600 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2602 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2602 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2604 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2606 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2608 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2608 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2610 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2616 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2622 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2622 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2623 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2625 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2625 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2628 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2629 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2629 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2630 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2630 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2632 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2633 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2634 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2636 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2638 `The Class Browser'     0 `TheClassBrowser'
+! Reference changed: check if still unique
+2638 `'                      0 `'
+! check if reference ID TheClassBrowser was meant for a section (if not, change manually)
+2641 `NIDX'                  0 `<indexterm><primary>'
+2641 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2641 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2646 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2646 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2653 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2655 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2656 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2656 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2663 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2663 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2663 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2669 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2669 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2669 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2673 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2673 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2686 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2686 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2695 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2695 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2696 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2696 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2697 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2697 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2697 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2698 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2698 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2699 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2699 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2702 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2702 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2702 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2707 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2707 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2708 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2708 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2708 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2717 `NIDX'                  0 `<indexterm><primary>'
+2717 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2717 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2717 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2717 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2723 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2729 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2729 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2729 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2729 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2732 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2734 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2736 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2737 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2746 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2750 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2757 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2762 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2762 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2764 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2769 `The Dialog Editor'     0 `TheDialogEditor'
+! Reference changed: check if still unique
+2769 `'                      0 `'
+! check if reference ID TheDialogEditor was meant for a section (if not, change manually)
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2771 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2779 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2779 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2779 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2779 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2782 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2782 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2782 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2788 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2788 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2795 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2797 `REF'                   0 `<link>'
+2799 `REF'                   0 `<link>'
+2801 `REF'                   0 `<link>'
+2805 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2805 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2805 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2807 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2810 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2812 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2812 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2814 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2814 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2817 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2817 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2817 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2820 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2822 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2824 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2826 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2833 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2833 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2833 `HTMLURL'               0 `<ulink>'
+2838 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2847 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2847 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2847 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2847 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2848 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2848 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2848 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2848 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2848 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2848 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2848 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2848 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2848 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2848 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2850 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2852 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2852 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2853 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2853 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2853 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2853 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+2857 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+2859 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2865 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2869 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2881 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2881 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2884 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2884 `HTMLURL'               0 `<ulink>'
+2890 `Adding Widgets'        0 `AddingWidgets'
+! Reference changed: check if still unique
+2890 `'                      0 `'
+! check if reference ID AddingWidgets was meant for a section (if not, change manually)
+2892 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2892 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2892 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2904 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2923 `NIDX'                  0 `<indexterm><primary>'
+2923 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2923 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2923 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2923 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2935 `NIDX'                  0 `<indexterm><primary>'
+2943 `NIDX'                  0 `<indexterm><primary>'
+2943 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2948 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2951 `The Widget Editor'     0 `TheWidgetEditor'
+! Reference changed: check if still unique
+2951 `'                      0 `'
+! check if reference ID TheWidgetEditor was meant for a section (if not, change manually)
+2957 `Setting Properties'    0 `SettingProperties'
+! Reference changed: check if still unique
+2957 `'                      0 `'
+! check if reference ID SettingProperties was meant for a section (if not, change manually)
+2958 `NIDX'                  0 `<indexterm><primary>'
+2967 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+2967 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2967 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2967 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+2976 `NIDX'                  0 `<indexterm><primary>'
+2978 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2978 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2978 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2978 `IDX'                   0 `<indexterm remap="idx"><primary>'
+2983 `HTMLURL'               0 `<ulink>'
+3011 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+3011 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+3017 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3018 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3019 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3024 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3025 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3026 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3027 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3034 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+3037 `General                0 `GeneralConfiguration'
+! Reference changed: check if still unique
+3037 `'                      0 `'
+! check if reference ID GeneralConfiguration was meant for a section (if not, change manually)
+3043 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3043 `Configuring the        0 `ConfiguringthequotltidxToolsquotMenu'
+! Reference changed: check if still unique
+3043 `'                      0 `'
+! check if reference ID ConfiguringthequotltidxToolsquotMenu was meant for a section (if not, change manually)
+3044 `NIDX'                  0 `<indexterm><primary>'
+3044 `NIDX'                  0 `<indexterm><primary>'
+3046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3046 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3056 `NIDX'                  0 `<indexterm><primary>'
+3062 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3062 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3063 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3063 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3063 `NIDX'                  0 `<indexterm><primary>'
+3065 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3074 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3079 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3079 `KDevelop Setup'        0 `KDevelopSetup'
+! Reference changed: check if still unique
+3079 `'                      0 `'
+! check if reference ID KDevelopSetup was meant for a section (if not, change manually)
+3081 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3081 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3081 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3086 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3086 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3091 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3091 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3093 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+3098 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3101 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3101 `Changing Keyboard      0 `ChangingKeyboardShortcuts'
+! Reference changed: check if still unique
+3101 `'                      0 `'
+! check if reference ID ChangingKeyboardShortcuts was meant for a section (if not, change manually)
+3107 `'                      0 `'
+! check if reference ID Documentation was meant for a section (if not, change manually)
+3109 `NIDX'                  0 `<indexterm><primary>'
+3111 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3111 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3111 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3115 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3115 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3115 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3124 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3126 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3148 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3148 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3148 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3148 `TT'                    0 `<literal remap="tt">'
+! Check and correct manually
+3148 `CDX'                   0 `<indexterm
+! Check if element literal is appropriate (e.g. command, envar, etc. could be better).
+3156 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3156 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3156 `REF'                   0 `<link>'
+3168 `Questions and          0 `QuestionsandAnswers'
+! Reference changed: check if still unique
+3168 `'                      0 `'
+! check if reference ID QuestionsandAnswers was meant for a section (if not, change manually)
+3173 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3173 `Bug Reporting'         0 `BugReporting'
+! Reference changed: check if still unique
+3173 `'                      0 `'
+! check if reference ID BugReporting was meant for a section (if not, change manually)
+3175 `URL'                   0 `<ulink>'
+3175 `HTMLURL'               0 `<ulink>'
+3182 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3188 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3190 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3190 `HTMLURL'               0 `<ulink>'
+3196 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3196 `URL'                   0 `<ulink>'
+3196 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3203 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3205 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3221 `IDX'                   0 `<indexterm remap="idx"><primary>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+3226 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3226 `TSCREEN'               0 `<screen>'
+3232 `VERB'                  0 `'
+! Because it is in TSCREEN
+3232 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3237 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3237 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3239 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3242 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3244 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3244 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3246 `TSCREEN'               0 `<screen>'
+3253 `VERB'                  0 `'
+! Because it is in TSCREEN
+3253 `TSCREEN'               0 `<screen>'
+3257 `VERB'                  0 `'
+! Because it is in TSCREEN
+3260 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3260 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3260 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3260 `TSCREEN'               0 `<screen>'
+3286 `VERB'                  0 `'
+! Because it is in TSCREEN
+3286 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3286 `URL'                   0 `<ulink>'
+3292 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3294 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3297 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3299 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3299 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3302 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3302 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3304 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3310 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3312 `HTMLURL'               0 `<ulink>'
+3312 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3316 `HTMLURL'               0 `<ulink>'
+3316 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+3316 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3316 `IDX'                   0 `<indexterm remap="idx"><primary>'
+3319 `HTMLURL'               0 `<ulink>'
+3319 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3322 `HTMLURL'               0 `<ulink>'
+3322 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3325 `HTMLURL'               0 `<ulink>'
+3325 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3328 `HTMLURL'               0 `<ulink>'
+3328 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3331 `HTMLURL'               0 `<ulink>'
+3331 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3334 `HTMLURL'               0 `<ulink>'
+3334 `QUOTE'                 0 `quote'
+! QUOTE seems only to be used to get some indentation.  DELETE <quote> if this is so!
+3339 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3341 `HTMLURL'               0 `<ulink>'
+3345 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3347 `HTMLURL'               0 `<ulink>'
+3349 `HTMLURL'               0 `<ulink>'
+3351 `HTMLURL'               0 `<ulink>'
+3353 `HTMLURL'               0 `<ulink>'
+3355 `HTMLURL'               0 `<ulink>'
+3357 `HTMLURL'               0 `<ulink>'
+3359 `HTMLURL'               0 `<ulink>'
+3361 `HTMLURL'               0 `<ulink>'
+3363 `HTMLURL'               0 `<ulink>'
+3365 `HTMLURL'               0 `<ulink>'
+3367 `HTMLURL'               0 `<ulink>'
+3369 `HTMLURL'               0 `<ulink>'
+3371 `HTMLURL'               0 `<ulink>'
+3373 `HTMLURL'               0 `<ulink>'
+3375 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3377 `HTMLURL'               0 `<ulink>'
+3380 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3382 `HTMLURL'               0 `<ulink>'
+3384 `HTMLURL'               0 `<ulink>'
+3386 `HTMLURL'               0 `<ulink>'
+3388 `HTMLURL'               0 `<ulink>'
+3390 `HTMLURL'               0 `<ulink>'
+3392 `HTMLURL'               0 `<ulink>'
+3394 `HTMLURL'               0 `<ulink>'
+3396 `HTMLURL'               0 `<ulink>'
+3398 `HTMLURL'               0 `<ulink>'
+3400 `HTMLURL'               0 `<ulink>'
+3402 `HTMLURL'               0 `<ulink>'
+3404 `HTMLURL'               0 `<ulink>'
+3406 `HTMLURL'               0 `<ulink>'
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+3408 `HTMLURL'               0 `<ulink>'
+3410 `HTMLURL'               0 `<ulink>'
+3413 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3415 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3415 `HTMLURL'               0 `<ulink>'
+3417 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3417 `HTMLURL'               0 `<ulink>'
+3419 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3419 `HTMLURL'               0 `<ulink>'
+3422 `BF'                    0 `<emphasis remap="bf">'
+! Check and correct manually
+3422 `HTMLURL'               0 `<ulink>'
+3440 `'                      0 `'
+! check if reference ID Copyright was meant for a section (if not, change manually)
+3442 `TSCREEN'               0 `<screen>'
+3459 `VERB'                  0 `'
+! Because it is in TSCREEN
+=== NIF conversion errors ========================
+Unknown META NAME value: keywords
+=== Finalising errors ===========================
+In see <link linkend="ConfiguringthequotltidxToolsquotMenu">Configuring the \|[quot  ]\|&lt;idx/Tools/\|[quot  ]\| Menu</link>.</para>
+: entities (from LinuxDoc attributes) replaced to see <link linkend="ConfiguringthequotltidxToolsquotMenu">Configuring the &quot;&lt;idx/Tools/&quot; Menu</link>.</para>

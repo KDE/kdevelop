@@ -1,0 +1,3366 @@
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN">
+<book lang="en">
+<bookinfo>
+<title>The KDE 2 Developer's Guide</title>
+<subtitle>The KDE 2 information guide to development, I/O slaves and KOM/OpenParts</subtitle>
+<authorgroup>
+<author>
+<surname>Ralf Nolden, Kurt Granroth, Simon Hausmann, David Sweet, Torben Weis and  Bern Wuebben</surname>
+</author>
+</authorgroup>
+<date>Version 0.1 ,July 8, 1999</date>
+<releaseinfo><!-- information about this particular version --></releaseinfo>
+<abstract>
+<para>This Handbook is a collection of various documentation about KDE 2 development. Each chapter remains the copyright of the original
+author mentioned at the beginnig of the chapters and in section <link linkend="Copyright">Copyright</link>.</para>
+<para></para><!-- Merge this with the previous paragraph; it comes from <META NAME="description" CONTENT="..."> --></abstract>
+</bookinfo>
+
+<chapter id="Preface">
+<title>Preface</title>
+
+<para>This handbook has been assembled to provide KDE developers the information they will need when porting their applications to KDE 2,
+currently under development. KDE 2 is based on the Qt 2.x and KDE 1.1.x libraries, whereby the KDE libraries are ported to work with
+the current Qt library. Further, the KDE libraries will introduce a component technology based on the MICO CORBA implementation which
+is developed and tested with the KOffice suite.</para>
+
+<para>As KDE application developers not involved in implementing for the KDE core team will probably want to port their applications, they
+will not only have to watch out for the changes in Qt, but also for KDE's improvements and additions. As KDE 1.x applications will not
+only be binary incompatible but also sourcecode incompatible, we want to provide enough information that can be used by developers that
+are using the currently stable KDE 1.x implementation for applications that are suitable for production use, so transitioning will be
+made less complicated and further implementations in current projects can be reviewed for possible problems that will arise when
+porting.</para>
+
+<para>Also the usual KDE developer does not have too much information about CORBA, not to speak of KOM. Therefore, this handbook tries to
+give an insight where to get information and how the current implementation works in general. This will enable you to find out where
+your applications can probably take advantage of distributed component technology where needed.</para>
+
+<para>I want to thank all authors that were willing to contribute their current documentation to this handbook and hope this collection will
+be of good use to those who want to stay on the bleeding edge of KDE development.</para>
+
+<para>Ralf Nolden</para>
+</chapter>
+
+<chapter id="miniHOWTO">
+<title>The KDE Developer's mini-HOWTO</title>
+
+<para>David Sweet &lt;dsweet@chaos.umd.edu&gt;</para>
+
+<para>August 14, 1999</para>
+
+<para><emphasis>To help develop KDE or a KDE application you need to know
+how to
+(i) find KDE information and code, (ii) use CVS, and (iii)
+compile. This document aims to help to you do these things without
+losing too much hair.
+This HOWTO is geared toward new developers, occasional
+developers, and anyone considering contributing the the most excellent
+free software project that is KDE.  It addresses questions that I and
+others have been asking on the <emphasis remap="bf">kde-devel</emphasis> mailing list recently
+along with some more general information.
+You can find a current version of this document at the
+<ulink url="http://www-chaos.umd.edu/~dsweet/KDE/DeveloperHOWTO">KDE Developer's HOWTO homepage</ulink>.
+To contribute, comment, or correct, please email me at
+<ulink url="mailto:dsweet@chaos.umd.edu">dsweet@chaos.umd.edu</ulink></emphasis></para>
+
+<sect1 id="InformationandSourceCode">
+<title>Information and Source Code</title>
+<sect2 id="GeneralInformation">
+<title>General Information</title>
+
+<para>The K Desktop Environment is an open source Unix desktop created by
+volunteers from around the world.  There are many ways to contribute
+to the project.  You can write new code, improve old code, write
+documentation, translate to other languages, create artwork, sounds, &
+music, report bugs, and suggest new features.  If you would like to
+develop code, read on.  If you would like to contribute in another
+way, please visit the KDE web site (<ulink url="http://www.kde.org">\|urlnam\|</ulink> name="http://www.kde.org"&gt;) for more information.</para>
+
+<para>KDE uses the Qt toolkit which is developed by Troll Tech (<ulink url="http://www.troll.no">http://www.troll.no</ulink>). The main
+components of the desktop are a file manager (kfm), window manager
+(kwm), and panel (kpanel).  There are many more utilities and
+applications which are included in the base distribution and available
+elsewhere.</para>
+
+<para>The primary programming language used for development is C++, although
+bindings are available for Python (pyKDE).  The KDE code consists of libraries
+containing classes for, for example: (libkdecore) an application base
+(KApplication), accessing configuration files (KConfig), launching
+external processs (KProcess); (libkdeui) widgets (KEdit, KFontDialog,
+KToolBar, etc.); and other utility classes like KFileDialog (a file
+dialog) and KSpell (a spellchecker).  Various desktop, configuration,
+and system administration utilities are also included in the
+distribution.  These are some of the things KDE developers work on.  A
+more recent creation is KOffice, a productivity suite which includes a
+word processor, spreadsheet, and presentation tool.</para>
+
+<para>The currently released version of KDE is 1.1.1.  KDE 1.1.2 (that's
+right, 1.1.2 is the name, not 1.2, according to release schedule
+announcments made to <emphasis remap="bf">kde-devel</emphasis> by Matthias Hoelzer-Kluepfel) will
+introduce theme support (which allows users to dramatically change the
+appearance of their desktops), an integrated development environment,
+KDevelop, and other development tools for KDE developers, and include
+bugfixes.  The KDE 1.1.2 release schedule current reads:
+<itemizedlist>
+<listitem>
+<para>Source .tgz's:  August 30</para>
+</listitem>
+<listitem>
+<para>Binary .rpm's:  September 6</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>KDE 2.0, which is, perhaps, the main focus of development right now, will
+include rewrites or major updates of kfm, khtmlw (an HTML widget),
+kpanel, kmail, and maybe kwm, unicode support, and much more.</para>
+
+<para>KDE 2.0 requires mico, a free CORBA implementation.  CORBA is used to
+make the new kfm (dubbed Konquerer) easily extensible and to create a
+document-centric user interface for KOffice.  The user can, for
+example, embed a chart created and edited with KSpread into a document
+which has text created and edited by KWord.  Here's a bit from Simon
+Hausmann about KOM/OpenParts
+<programlisting> OpenParts is based on KOM. It provides an easy way to graphically
+  embed other application's "widgets" , provides a clever way to manage
+  shared GUI elements, together with a CORBA/KOM interface/implementation of
+  these, and it implements the basic support for the document view model,
+  extensively used by KOffice.</programlisting>
+
+See kdenonbeta/corbadoc/komop.html in CVS for more.</para>
+</sect2>
+<sect2 id="URLs">
+<title>URLs</title>
+
+<para><itemizedlist><listitem>
+<para>The main KDE web site is at:  <ulink url="http://www.kde.org">http://www.kde.org</ulink>.</para>
+</listitem>
+<listitem>
+<para>The developer's library is at:   <ulink url="http://developer.kde.org">http://developer.kde.org</ulink>.</para>
+</listitem>
+<listitem>
+<para> Bug reports can be found at (and sent to):  <ulink url="http://bugs.kde.org">http://bugs.kde.org</ulink>.</para>
+</listitem>
+<listitem>
+<para> Troll Tech (makers of the Qt toolkit) main site:   <ulink url="http://www.troll.no">http://www.troll.no</ulink>.</para>
+</listitem>
+<listitem>
+<para> KDE Source Code and binaries:   <ulink url="ftp://ftp.kde.org">ftp://ftp.kde.org</ulink>  (or mirrors)</para>
+</listitem>
+<listitem>
+<para> Qt Source Code and binaries:  <ulink url="ftp://ftp.troll.no">ftp://ftp.troll.no</ulink></para>
+</listitem>
+<listitem>
+<para> CORBA Info: <ulink url="http://www.omg.org/">http://www.omg.org/</ulink></para>
+</listitem>
+<listitem>
+<para> A good CORBA paper (IMHO): <ulink url="http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz">http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz</ulink></para>
+</listitem>
+<listitem>
+<para> MICO:  <ulink url="http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/">http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/</ulink> (Read the documentation,  it's good!  And get version 2.2.7!)</para>
+</listitem>
+<listitem>
+<para> OpenParts/KOM and other KDE 2.0 information: <ulink url="http://developer.kde.org/documentation/library/kde-2.0.html">http://developer.kde.org/documentation/library/kde-2.0.html</ulink></para>
+</listitem>
+</itemizedlist></para>
+</sect2>
+<sect2 id="Mailinglists">
+<title>Mailing lists</title>
+
+<para>The list <emphasis remap="bf">kde-devel</emphasis> is for KDE developers in general.  The <emphasis remap="bf">kde-koffice</emphasis>
+mailing list is for developers interested in koffice, and <emphasis remap="bf">kfm-devel</emphasis> is
+for kfm (the file manager) developers.</para>
+
+<para>Send a message to either <emphasis remap="bf">kde-devel-request</emphasis> or
+<emphasis remap="bf">koffice-request</emphasis> with the message "subscribe myid@myserver" (where
+myid@myserver stands for your email address).  Go to the KDE mail page
+a click on "Mailing Lists" for more information about other KDE
+mailing lists and the mailing list archive.</para>
+
+<para>Toll Tech provides a list for users of the Qt 2.0 snapshots
+(discussed below).  You may subscribe to this by sending an email to
+snapshot-users-request@troll.no with the <emphasis>message</emphasis> "subscribe".</para>
+
+<para>As a KDE developer you may want or need a kde email address, like
+joedeveloper@kde.org.  To obtain one, send an email with a polite request to Martin Konold at konold@kde.org.</para>
+
+<para>To gain access to the KDE CVS respository (discussed below), you firsly need
+to have a good reason for wanting access.  For example, you may be maintaining
+a CVS module.  If you think you have a good reason, send a polite email request
+to Stephan Kulow &lt;coolo@kde.org&gt;.</para>
+
+<para>You'll also need to send him an encrypted password to get the account
+set up.  To create your encrpyted password, type:
+<screen>	perl -e print\ crypt\('passwd','sa'\)\.\"\\n\"
+</screen>
+
+where <literal remap="tt">passwd</literal> is your choice of password and <literal remap="tt">sa</literal> is two random
+characters from the set (a-zA-Z0-9./). The output is your encrypted
+password.</para>
+</sect2>
+</sect1>
+
+<sect1 id="KDECVS">
+<title>KDE CVS</title>
+<sect2 id="CVSIntroduction">
+<title>Introduction</title>
+
+<para>The KDE CVS (Concurrent Versions System) is the source code repository
+for the KDE project.  You can access it via (i) WWW: http://www., (ii)
+cvs utility, (iii) cvsup utility, or (iv) snapshots.  You will need
+CVS access only for (ii); (i), (iii), and (iv) are read-only methods and
+available to the public.</para>
+
+<para>The web page for method (i) explains its usage.  I haven't an
+explanation for method (iii), cvsup, yet.  Please see http://www.kde.org/cvsup.html
+&lcub; -- Perhaps someone who
+uses it will contribute a short explanation of usage and information
+on obtaining it. -- &rcub;
+The snapshots, (iv), are .tar.bz2 files which
+contain a section of KDE code (called "modules"; ex, kdelibs,
+kdeutils) as it looked on some specified day (specified in the
+filename: ex, kdelibs990517.tar.bz2).  The snapshots are posted daily
+inftp://ftp.kde.org/pub/kde/unstable/CVS/snapshots. &lcub; (ii) is
+described below. &rcub;</para>
+
+<para>The repository (or, just "CVS") stores all of the changes
+made to the source code by all of the contributors so that changes may
+be undone.  Each time a user makes a change (s)he includes a comment
+so that the devlopment of code can be more easily followed.  These
+comments are sent to the kde-cvs mailing list.  The CVS splits into
+&lowbar;branches&lowbar; which may contain different versions of the KDE project.
+For example, the two branches being developed now are KDE&lowbar;1&lowbar;1&lowbar;BRANCH
+and HEAD.  They both are derived from the same code (i.e., if you
+"undid" enough of the changes made to either branch you'd reveal
+identical source code) but used for different purposes.  Here are some
+branches and descriptions for your reference:
+<itemizedlist>
+<listitem>
+<para> KDE&lowbar;1&lowbar;1&lowbar;1&lowbar;RELEASE - code that was considered stable, released,
+and distributed as KDE 1.1.1</para>
+</listitem>
+<listitem>
+<para> KDE&lowbar;1&lowbar;1&lowbar;BRANCH - derived from
+KDE&lowbar;1&lowbar;1&lowbar;1&lowbar;RELEASE; being developed for KDE 1.1.2; will include
+KThemeMgr, KDevelop, and bugfixes; based on Qt 1.42.</para>
+</listitem>
+<listitem>
+<para> HEAD - code which will become KDE 2.0.  It is based on Qt 2.0, requires mico, has a new kwm, kpanel, etc.  LOTS of changes.</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+<sect2 id="Usingcvs">
+<title>Using <literal remap="tt">cvs</literal></title>
+
+<para>The cvs utility is probably on your system.  If not, you should visit
+<ulink url="http://www.cyclic.com/cyclic-pages/howget.html">http://www.cyclic.com/cyclic-pages/howget.html</ulink> To learn to use
+it I would recommend reading the man page!  But, I've included
+explanations of some common functions below.</para>
+
+<para>Let's assume for this section that your username is <literal remap="tt">joedeveloper</literal>.
+As written below you should enter all of these commands from some base
+directory.  (KDE/CVS is not a bad choice!)</para>
+
+<para>Set the environment variable <literal remap="tt">CVSROOT</literal> to
+<literal remap="tt">:pserver:joedeveloper@cvs.kde.org:/home/kde.</literal></para>
+
+<para><emphasis remap="bf">Listing CVS modules</emphasis>
+You can't do this directly unfortunately.  You can, however, view the contents of the file /home/kde/modules with
+<screen>        cvs -z6 co -c
+</screen>
+</para>
+
+<para>The <literal remap="tt">-z6</literal> option tells the server to compress the code at "level 6"
+before sending it to you.  This may speed things up for you.  (In this
+case, since the module listing is small, it may not matter.)</para>
+
+<para><emphasis remap="bf">Checking out a module</emphasis>, e.g. kdelibs from HEAD
+<screen>	cvs -z6 checkout -r HEAD kdelibs
+	cvs -z6 checkout kdelibs
+</screen>
+</para>
+
+<para>The -r options tells cvs which branch you want to checkout from.  The
+default is the HEAD branch.</para>
+
+<para><emphasis remap="bf">Checking out a module</emphasis>, ex. kdelibs, from KDE&lowbar;1&lowbar;1&lowbar;BRANCH
+<screen>	cvs -z6 checkout -r KDE_1_1_BRANCH kdelibs
+</screen>
+</para>
+
+<para><emphasis>Note</emphasis>: you could use co as an abbreviation for checkout.</para>
+
+<para><emphasis remap="bf">Checking out an application from within a module</emphasis> (ex kjots, which
+is in the kdeutils module) from the HEAD branch
+<screen>(1)	cvs -z6 co -l kdeutils
+(2)	cvs -z6 co -l admin
+(3)	cvs -z6 co -l kdeutils/kjots
+(4)	cd kdeutils; ln -s ../admin
+</screen>
+</para>
+
+<para>The <literal remap="tt">-l</literal> in line (1) tells cvs not to recurse the subdirectories of
+kdeutils.  This means will get the configure script and its
+companions (discussed below), but none of the application source code.</para>
+
+<para>Line (2) gets the admin directory which contains support files for
+autoconf and friends.  (This directory is retrieved automatically when
+checking out an entire module.)</para>
+
+<para>Line (3) gets the kjots source.</para>
+
+<para>Line (4) makes a link to the admin directory.  (This is better than
+copying or moving the directory here.  If you leave admin where cvs
+put if then you can easily update the admin directory with cvs.  You
+could also make links to admin from any other modules you check out
+this way and thus have only one, up-to-date copy of admin.)</para>
+
+<para><emphasis remap="bf">Updating source code you've previously checked out</emphasis> (ex. kdeutils/kjots)
+<screen>	cvs -z6 update kdeutils/kjots
+</screen>
+</para>
+
+<para>The source code for kjots on your hard drive will be updated to match
+the code in the CVS.  You don't need to specify the branch here.  The
+correct branch is stored in <literal remap="tt">kdeutils/kjots/CVS/Tag</literal>.</para>
+
+<para><emphasis remap="bf">Commiting changes</emphasis> (putting them into CVS) (ex. kdeutils/kjots)
+<screen>	cvs -z6 commit kdeutils/jots
+</screen>
+</para>
+
+<para>You'll be prompted to edit a comment.  Enter a short one which
+desribes the changes you're making with this commmit.  (You can use
+your editor of choice by setting the EDITOR or CVSEDITOR environment
+variable.)</para>
+
+<para><emphasis remap="bf">Adding a file</emphasis> (ex. kdeutils/kmyapp/greatnewcode.cpp)
+<screen>	(create the file first!)
+	cd kdeutils/kmyapp
+	cvs add greatnewcode.cpp
+	cvs commit
+</screen>
+</para>
+
+<para><emphasis remap="bf">Deleting a file</emphasis> (ex. kdeutils/kmyapp/badoldcode.cpp)
+<screen>	cd kdeutils/kmyapp
+	rm badoldcode.cpp
+	cvs remove badoldcode.cpp
+	cvs commit
+</screen>
+</para>
+
+<para><emphasis remap="bf">Adding a directory</emphasis> (a module, like a new app) (ex. kdeutils/kmyapp, with the source file kmysource.cpp)
+<screen>	cd kdeutils
+	mkdir kmyapp
+	(create the kmyapp/kmysource.cpp file)
+	cvs add kmyapp
+	cvs add kmyapp/kmysource.cpp
+	cvs commit    (actually puts the directory and file in the CVS)
+</screen>
+</para>
+
+<para><emphasis>Note</emphasis>: You need to have files in a directory to commit it.</para>
+
+<para><emphasis remap="bf">Removing a directory</emphasis> (a module, like a new app) (ex. kdeutils/kmyapp)
+<screen>	cd kdeutils/kmyapp
+	(delete all files, as described above in "Deleting a file")
+	cd ..
+	cvs -P update  (will remove the local kmyapp automatically)
+</screen>
+</para>
+</sect2>
+</sect1>
+
+<sect1 id="CompilingandSafeDevelopmentPracticeswithconf">
+<title>Compiling and Safe Development Practices (with configure)</title>
+
+<para>Before you start downloading and compiling the latest sources you
+should be aware that there's a good chance they won't work!  They are
+in a state of constant development so they could very well have bugs.</para>
+
+<para>Knowing this, you should find a way to compile and run new KDE stuff
+without interfering with your existing stable KDE setup.  Here's one
+way, using the HEAD branch as an example.  We, again, assume your
+login is joedeveloper.  We also assume that your home directory is in
+/home/joedeveloper.  (This would be the case for Red Hat systems.)</para>
+<sect2 id="Organizing">
+<title>Organizing</title>
+
+<para>Make a directory called KDE in the home directory of your *user*
+account.  You should not be doing any of this as root!  Make another
+called KDE/CVS-HEAD.  cd into that directory and get the KDE sources
+from the HEAD branch that you want.  The (minumum) modules needed to
+use an application are: kdesupport, kdelibs.  You should compile and
+install them in that order (see below for compiling).  Others you
+might want are: kdebase, kdeutils, kdegraphics, etc. Now, make a
+directory called KDE/kde-HEAD.  This is where you'll store the
+compiled code from the HEAD branch -- as well as Qt 2.0!</para>
+</sect2>
+<sect2 id="CompilingQt20">
+<title>Compiling Qt 2.0</title>
+
+<para>Let's get Qt 2.0.  (Get the official releascan also be found at e version.  It's
+available now).  Put the sources in KDE/kde-HEAD. To compile the
+code, <literal remap="tt">cd</literal> to KDE/kde-HEAD and</para>
+
+<para><screen>	gzip -d qt-2.00.tar.gz
+	tar -xvf qt-2.00.tar
+	ln -s qt-2.00 qt
+	cd qt
+	setenv QTDIR $PWD     (if you use csh/tcsh)
+	    OR
+        export QTDIR=`pwd`    (if you use bash)
+	cd configs
+	mv linux-g++-shared linux-g++-shared.orig
+	sed s/-fno-rtti// linux-g++-shared.orig &gt; linux-g++-shared
+(Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.)
+	make linux-g++-shared
+	make
+</screen>
+</para>
+
+<para>You should compare the files configs/linux-g++-shared and
+configs/linux-g++-shared.orig if you don't know what the sed is doing.
+Then look up the -fno-rtti option of <literal remap="tt">egcs</literal> if you'd like to learn more.</para>
+</sect2>
+<sect2 id="CompilingKDEHEAD">
+<title>Compiling KDE (HEAD)</title>
+
+<para>Now, for the KDE code.  <literal remap="tt">cd</literal> to KDE/CVS-HEAD/kdesupport.  Type
+<screen>	make -f Makefile.cvs
+	./configure --prefix=/home/joedeveloper/KDE/kde-HEAD
+    --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
+    --with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib
+	make
+If all goes well, then
+	make install
+If not, try to fix things, then type
+	make install
+Repeat this process for the other modules.  You should alter the
+./configure line to read
+	./configure --prefix=/home/joedeveloper/KDE/kde-HEAD
+  --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
+  --with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib --enable-new-stuff
+  --enable-tutorials when you compile the code in the kdelibs module.
+</screen>
+</para>
+</sect2>
+<sect2 id="Compilingtips">
+<title>Compiling tips</title>
+
+<para><itemizedlist>
+<listitem>
+<para>  We turned off the "-fno-rtti" option when compiling Qt 2.0 because it
+prevents KDE from linking.</para>
+</listitem>
+<listitem>
+<para> I usually put that long configure command into a file called <literal remap="tt">conf</literal> and leave it in my CVS-HEAD directory.  Then I can do a <literal remap="tt">../conf</literal> from any module and get a good configure.</para>
+</listitem>
+<listitem>
+<para> It seems that you need to compile and install qimageio (part of Qt)
+separately if you want to get koffice to compile.  Just <literal remap="tt">cd</literal> to <literal remap="tt">/$QTDIR/extensions/imageio/src</literal> and type <literal remap="tt">make install</literal></para>
+</listitem>
+<listitem>
+<para> When you compile mico, be sure to configure it with <literal remap="tt">./configure --disable-mini-stl</literal> (and any other options you want).  And be sure you have version 2.2.7!</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+</sect1>
+
+<sect1 id="Documentation">
+<title>Documentation</title>
+
+<para>It's important to document your application so that end-users can make
+the most of it.  You should be clear and concise.  Describe any
+non-standard installation, usage and UI features.  There's no need to
+talk about how to use the <emphasis>File</emphasis> menu, for example, unless you've put
+some special entry on it.  Include contact and bug-reporting
+information as well as a hyperlink to the application's home page.
+The best way to do this is by writing SGML and processing it with
+<literal remap="tt">ksgml2html</literal>.</para>
+
+<para>You should also document your widgets and other classes.  You can
+include comments in your header ( <literal remap="tt">.h</literal>) files which describe
+each <literal remap="tt">public</literal> or <literal remap="tt">protected</literal> method.  It you do this as you
+write the methods it will make the documentation proceSss seem easier.
+(It may also help you be certain about what function(s) that method is to
+perform.)  The script <literal remap="tt">kdoc</literal> will turn your header files into
+beautiful class documentation.  You can see examples of <literal remap="tt">kdoc</literal>
+output if you look at <ulink url="http://www.ph.unimelb.edu.au/~ssk/kde/srcdoc/kdecore/index-long.html">http://www.ph.unimelb.edu.au/~ssk/kde/srcdoc/kdecore/index-long.html</ulink>.
+This is the annotated list of the core KDE classes.</para>
+
+<para>You can find <literal remap="tt">ksgml2html</literal> and <literal remap="tt">kdoc</literal> in the KDE SDK which
+is available in the kdesdk module of CVS.  (Methods for getting
+things from CVS are described above.)</para>
+<sect2 id="SGMLDocumentation">
+<title>SGML Documentation</title>
+
+<para>The great thing about writing your documents in SGML (<emphasis remap="bf">S</emphasis>tandard
+<emphasis remap="bf">G</emphasis>eneralized <emphasis remap="bf">M</emphasis>arkup <emphasis remap="bf">L</emphasis>anguage) is that you can turn them
+into nice text, HTML, LaTeX or Postscript files.</para>
+
+<para>You'll need SGML Tools which are available from</para>
+
+<para><itemizedlist>
+<listitem>
+<para> SGML-Tools:  <ulink url="http://www.sgmltools.org/">http://www.sgmltools.org/</ulink></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>There's a good chance it's already on your system or, at least, on
+your Linux distribution's CD-ROM.  You should read the documentation
+and look at the <literal remap="tt">example.sgml</literal> file. (On my system, RH6.0, they are in
+<literal remap="tt">/usr/doc/sgml-tools</literal>).  It's fairly straightforward to learn.
+If you know HTML, then it's cake.</para>
+
+<para>If you create an application, put the documenation in a subdirectory
+of your source code directory called <literal remap="tt">doc</literal>.</para>
+
+<para>To process the .sgml file, ex. mydocs.sgml, into KDE-style HTML type
+<screen>     ksgml2html mydocs.sgml en
+</screen>
+
+where <literal remap="tt">en</literal> stands for English.  You should use the code for your
+language.</para>
+</sect2>
+<sect2 id="KDOCTheKDEClassDocumentationToolforC">
+<title>KDOC:  The KDE Class Documentation Tool for C++</title>
+
+<para>It's called <literal remap="tt">kdoc</literal> and is in the kdedoc subdirectory of the CVS
+module kdesdk.</para>
+
+<para>If you mark up your header files like this:
+<screen>  /**
+   * Short description of this class
+   *
+   * This is a longer description of my class.  It does the following
+   * @li Some bulleted thing
+   * @li Some other bulleted thing
+   *  You should use it when ...  It's not appropriate for ...
+   *
+   * @author My Name &lt;myemail@wherever.edu&gt;
+   * @version 0.0.1
+   **/
+
+class KMyClass
+{
+        .
+  /**
+   * Describe method.  It takes &lt;i&gt;argument&lt;/i&gt; to mean ...
+   *
+   * @return A pointer to another class
+   * @see KOtherClass
+   **/
+   KOtherClass *method (int argument);
+}
+</screen>
+</para>
+
+<para>The text in the comments beginning with <literal remap="tt">/**</literal> (two asterisks,
+mind you!) will be taken by <literal remap="tt">kdoc</literal> as class documentation and
+formatted appropriately.  You can use some HTML tags (like the
+&lt;i&gt; above).  The <literal remap="tt">@author</literal> and other tags are meaningful
+to <literal remap="tt">kdoc</literal> and used for formatting.</para>
+
+<para>To run <literal remap="tt">kdoc</literal>, use the following command
+<screen> kdoc -dhtml -L$KDEDIR/share/kdoc -a Title header1.h header2.h ...
+</screen>
+</para>
+
+<para>This instructs <literal remap="tt">kdoc</literal> to generate HTML output (the default) in the
+<literal remap="tt">html</literal> directory (by the <literal remap="tt">-d</literal> option) from the specified header
+files.  It uses <literal remap="tt">Title</literal> as the title for the documentation. ( <literal remap="tt">-a</literal>
+says to do work on all header files, even if they don't "ask for it".  I
+haven't told you how to "ask for it."  The <literal remap="tt">-L</literal> tells kdoc where
+its libraries are.)  Type <literal remap="tt">kdoc -h</literal> for more information.</para>
+</sect2>
+</sect1>
+
+<sect1 id="PackagingandSubmittingCodetoKDE">
+<title>Packaging and Submitting Code to KDE</title>
+<sect2 id="Packaging">
+<title>Packaging</title>
+
+<para>'Packing' means putting your (in this case source) code into some
+format that is
+<itemizedlist>
+<listitem>
+<para> easy for others to configure and install, and</para>
+</listitem>
+<listitem>
+<para> easy to transfer,</para>
+</listitem>
+<listitem>
+<para> can be indexed so that it is easy to find.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>These three concepts are expanded upon in the next three subsections.</para>
+<sect3 id="GNUConfigure">
+<title>GNU Configure</title>
+
+<para>The standard KDE application (or other code) source code package
+includes the GNU <literal remap="tt">configure</literal> script which determines some
+information about the user's system and provides it to your
+source code as <literal remap="tt">&num;define</literal> statements in a header file called
+<literal remap="tt">config.h</literal>.</para>
+
+<para>To get started with this, get the kdesdk from CVS using a
+method described above.  Then prepare kexample, an example
+package, for your application
+<screen>   cd kdesdk
+   cd kexample
+   make -f Makefile.cvs
+   cd ..; cp -r kexample ~/KDE/kmyapp-0.0.1
+</screen>
+
+(That last directory is just an example.  Replace kmyapp with your
+application's (or widget's) name, and replace 0.0.1 with its version
+number.)</para>
+
+<para>Now, we'll put your source code into the example package.  Let's
+say your source code was in the directory  /KDE/KMyApp:
+<screen>   cd ~/KDE/kmyapp-0.0.1
+   mkdir kmyapp
+   cp ~/KDE/KMyApp/*.cpp kmyapp
+   cp ~/KDE/KMyApp/*.h kmyapp
+   (There may be other files to copy, but leave your old Makefile behind!)
+</screen>
+
+Now, edit kmyapp-0.0.1/Makefile.am and change the line
+<screen>   SUBDIRS = kexample
+</screen>
+
+to
+<screen>   SUBDIRS = kmyapp
+</screen>
+
+<emphasis>Note</emphasis>:  kmyapp here refers to the subdirectory by that name.  You
+could include more subdirectories to be compiled.  For example:
+<screen>   SUBDIRS = kmyapp kmysupportclass
+</screen>
+</para>
+
+<para>Also edit the last line of configure.in to read
+<screen>AC_OUTPUT(Makefile \
+          kmyapp/Makefile \
+          po/Makefile)
+</screen>
+
+The <literal remap="tt">po</literal> directory contains translations of strings that you
+used in your code (this is about i18n(), which is not covered in this
+HOWTO).  We'll get to that it a minute.</para>
+
+<para>Now we want to set up the Makefile for the kmyapp subdirectory.  Edit
+<literal remap="tt">kmyapp/Makefile.am</literal> according to the instructions given in the
+comments.  They should be clear enough.</para>
+
+<para>Now <literal remap="tt">cd &tilde;/KDE/kmyapp</literal> and type
+<screen>   ./configure
+</screen>
+
+This should create:
+<itemizedlist>
+<listitem>
+<para> Makefile</para>
+</listitem>
+<listitem>
+<para> kmyapp/Makfile</para>
+</listitem>
+<listitem>
+<para> config.h</para>
+</listitem>
+</itemizedlist>
+
+You can now include config.h in your source code with <literal remap="tt">&num;include "../config.h"</literal> and have your code compile differently on different systems based
+on the <literal remap="tt">&num;define</literal>s.  Eh?  Well, different systems have slightly
+differnent ideas about implementing standards and such, and your
+code my need take this into account to be portable, i.e. to work on
+various Unices.  Take a look inside <literal remap="tt">config.h</literal> for descriptions
+of the <literal remap="tt">&num;define</literal>s.</para>
+
+<para><emphasis remap="bf">Shared Libraries!</emphasis>  If you are packaging a widget or other class
+you should be compiling a shared library.  Luckily, this is easy to do
+within the kexample packge.  You only need to change the Makefile.am
+that resides in your code's sudirectory.  Unluckily, now example
+for a shared-library Makefile.am is included.  So, I've included one
+in the next section.
+<emphasis>Note</emphasis>:  If you distribute a widget, you should also
+disrtribute a small program which tests the widget.  Put that
+program in the same package in another subdirectory and have it
+compile along with the widget.</para>
+
+<para>Next, make a compressed archive.  You can do it this way
+<screen>   cd ~/KDE
+   tar -cvf kmyapp-0.1.1.tgz kmyapp-0.1.1
+</screen>
+
+or however you like.  Just be sure that the archive expands to
+<emphasis>one</emphasis> directory containing all of the files.  This is neater and
+easier for the user to deal with.</para>
+</sect3>
+<sect3 id="ExampleMakfileamforaSharedLibrary">
+<title>Example Makfile.am for a Shared Library</title>
+
+<para><screen># Example Makefile.am for a shared library.  It makes a library
+#  called "example" as libexample.so.2.1.2
+# This Makefile.am was taken from the kdelibs distribution and modified
+#  to serve as an example.
+#
+# David Sweet
+#
+
+INCLUDES=  $(all_includes)
+
+lib_LTLIBRARIES  = libexample.la
+
+# Note:  If you specify a:b:c as the version in the next line,
+#  the library that is made has version (a-c).c.b.  In this
+#  example, the version is 2.1.2.
+libexample_la_LDFLAGS = -version-info 3:2:1 $(all_libraries)
+
+include_HEADERS = header1.h header2.h\
+                  header3.h
+
+# Which headers shouldn't be installed when a   make install  is done?
+noinst_HEADERS = version.h
+
+libexample_la_SOURCES = code1.cpp code2.cpp
+                        code3.cpp
+
+#  USE_AUTOMOC is great.  This takes care of all of your  moc'ing
+#   dependencies.
+#  (You still need to include, for example, header1.moc in code1.cpp.)
+libexample_la_METASOURCES = USE_AUTOMOC
+</screen>
+</para>
+</sect3>
+<sect3 id="LSMfile">
+<title>LSM file</title>
+
+<para>Next, you need and LSM file.  You can keep a copy in kmyapp-0.1.1
+for distribution.</para>
+
+<para>Here's a sample <literal remap="tt">.lsm</literal>:</para>
+
+<para><screen>
+Begin3
+Title:          KLab
+Version:        0.1.0
+Entered-date:   3/1/99
+Description:    GUI and more for RLab
+Keywords:       kde rlab math plot plotting
+Author:         David Sweet &lt;dsweet@chaos.umd.edu&gt;
+Maintained-by:  David Sweet &lt;'dsweet@chaos.umd.edu&gt;
+Home-page:      http://www.glue.umd.edu/~dsweet/KDE/KLab
+Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/scientific
+Alternate-site: http://www.glue.umd.edu/~dsweet/KDE/KLab/
+Original-site:  ftp://upload.kde.org/pub/kde/Incoming
+Platform:       unix
+Copying-policy: GPL
+End
+
+</screen>
+</para>
+
+<para>You can copy and paste this text into a file called "kmyapp.lsm" and
+make the appropriate changes.</para>
+</sect3>
+</sect2>
+<sect2 id="Submitting">
+<title>Submitting</title>
+
+<para>If you are hacking at CVS, you should follow the commit procedure
+outlined above.  If you want to submit changes to code
+that you are not maintaining, you should first check with the
+maintainer of the application.  You can usually find his/her email address
+in the directory containing the source.  Also check the program's "About" box
+if it has one.  If no maintainer is specifically listed, you should
+contact the author.</para>
+
+<para>If you are developing outside of CVS, you can submit your code
+(widgets, applications, etc.) via FTP to
+<ulink url="ftp://upload.kde.org/pub/kde/Incoming">ftp://upload.kde.org/pub/kde/Incoming</ulink></para>
+
+<para>When you do this be sure to include an <literal remap="tt">.lsm</literal> (Linux Software Map) file.
+This way your code can be automatically placed in the appropriate spot
+on ftp.kde.org and its mirrors and an announcement can be
+automatically sent to the kde-announce mailing list.</para>
+
+<para><emphasis>Note</emphasis>: The <literal remap="tt">.lsm</literal> file should be uploaded separately from the
+source code (as a plain ASCII file).  The source code should be
+packaged as a .tar.gz (or .tgz) or .tar.bz2.  This archive should
+expand to a single directory with all of your stuff in it.</para>
+</sect2>
+</sect1>
+
+<sect1 id="Acknowledgements">
+<title>Acknowledgements</title>
+
+<para>I'd like to thank the following people for their suggestions (in no
+particular order): Roberto Alsina, Waldo Bastian, Harri Porten, Samuel
+Wuethrich, Richard Moore, Daniel Naber, Ralf Nolden, Martin Konold,
+and Pietro Iglio, Stephan Kulow, Junji Takagi.</para>
+</sect1>
+
+<sect1 id="Aboutthisdocument">
+<title>About this document</title>
+<sect2 id="Finding">
+<title>Finding</title>
+
+<para>The current version of this document is available at <ulink url="http://www.chaos.umd.edu/~dsweet/KDE/MiniHOWTO">http://www.chaos.umd.edu/~dsweet/KDE/MiniHOWTO</ulink>.</para>
+
+<para>A Japanese language version is available at <ulink url="http://www.asahi-net.or.jp/~hc3j-tkg/kde-jp/DevelMiniHOWTO-jp.txt">http://www.asahi-net.or.jp/~hc3j-tkg/kde-jp/DevelMiniHOWTO-jp.txt</ulink> thanks to Junji Takagi.</para>
+
+<para>This document is included in the KDE Developer's Web Site (<ulink url="http://developer.kde.org">http://developer.kde.org</ulink>) and is part of the
+KDevelop (<ulink url="http://www.kdevelop.org">http://www.kdevelop.org</ulink>) programming manual.</para>
+</sect2>
+<sect2 id="Changes">
+<title>Changes</title>
+<sect3 id="ChangesfromversionJuly11999toversionAugust14">
+<title>Changes from version &lt;July 1, 1999&gt; to version &lt;August 14, 1999&gt; (only minor ones):</title>
+
+<para><itemizedlist>
+<listitem>
+<para> Added "About this document" section</para>
+</listitem>
+<listitem>
+<para> Added more acknowledgements</para>
+</listitem>
+<listitem>
+<para> Multiple formatting changes (thanks Ralf!)</para>
+</listitem>
+<listitem>
+<para> Fixed instructions for getting CVS access</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+</chapter>
+
+<chapter id="UsingKDEIOSlaves">
+<title>Using KDE I/O Slaves</title>
+
+<para>Kurt Granroth <ulink url="mailto:granroth@kde.org">&lt;granroth@kde.org&gt;</ulink></para>
+
+<para>v0.1, 15, June 1999</para>
+
+<para><emphasis>This HOWTO describes how the KDE I/O slaves (ioslaves) work.  It is
+intended for both ioslave implementers as well as users.  In this
+document, I will attempt to describe both how ioslaves work as well
+as how to use them.</emphasis></para>
+
+<sect1 id="KDEIOSlavesIntroduction">
+<title>Introduction</title>
+<sect2 id="WhatAreIOSlaves">
+<title>What Are I/O Slaves?</title>
+
+<para>The K Desktop Environment (KDE) I/O slaves (ioslaves) are a series of
+small programs that have intimate knowledge on working with a very
+specific protocol.  For instance, the HTTP ioslave (<literal remap="tt"><indexterm remap="cdx"><primary><literal>kio&lowbar;http</literal></primary></indexterm>kio&lowbar;http</literal>)
+knows all about sending and receiving data to and from a <indexterm remap="idx"><primary>web server</primary></indexterm>web server.  It
+knows all about <indexterm remap="idx"><primary>SSL</primary></indexterm>SSL, encoding, and what all of the different header fields
+mean.  It knows this so that KDE developers won't have to -- if they want
+a web page, they merely have to use <literal remap="tt"><indexterm remap="cdx"><primary><literal>kio&lowbar;http</literal></primary></indexterm>kio&lowbar;http</literal> for it and it will
+take care of everything for them.</para>
+
+<para>The ioslaves are based on the KIO library (<literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal>).  This library
+implements a method of asynchronous communication between
+applications as well as provides a "protocol registry" of sorts.
+This has many advantages.  Two of the major ones are:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>The client does not need to know anything about the ioslave that
+it is calling.  It merely specifies the protocol and <literal remap="tt">cdx/libkio/</literal> will
+automatically determine the proper ioslave to use.
+	</para>
+</listitem>
+<listitem>
+<para>All communication is done asynchronously.  All <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> calls will
+return immediately.  Whenever events occur, <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> will send
+signals altering the client to that fact.  This means that the
+client does not have to engage in any "busy waiting."</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Here is a fully working snippet of code to download a web page:<indexterm remap="ncdx"><primary><literal>KIOJob</literal></primary></indexterm><indexterm remap="ncdx"><primary><literal>sigData()</literal></primary></indexterm></para>
+
+<para><programlisting> KIOJob *job = new KIOJob;
+ connect(job, SIGNAL(sigData(int, const char*, int)),
+         this, SIGNAL(slotData(int, const char*, int)));
+ job-&gt;get("http://www.kde.org/news_dyn.html");
+ </programlisting>
+</para>
+
+<para>That's it!  When the ioslave is done getting the KDE news page, it
+will call your application's slotData() function with the page.</para>
+</sect2>
+<sect2 id="KIOSlaveCopyright">
+<title>Copyright</title>
+
+<para>Copyright (c) 1999 Kurt Granroth, All rights reserved.  This is free
+documentware; you can redistribute it and/or modify it under the
+terms of version 2 or later of the
+<ulink url="http://www.gnu.org/copyleft/gpl.html">GNU General Public  License</ulink></para>
+</sect2>
+</sect1>
+
+<sect1 id="SettingUpIOSlaves">
+<title>Setting Up IOSlaves
+ </title>
+
+<para>Using the KDE ioslaves is very easy once the framework is in place.
+This section will describe getting the "back-end" stuff setup.</para>
+<sect2 id="TheKIOLibrary">
+<title>The KIO Library
+ </title>
+
+<para>The first part that needs to be installed is the KDE IO library
+(<literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal>).  This library is part of the KDE 2.x <literal remap="tt"><indexterm remap="cdx"><primary><literal>kdelibs</literal></primary></indexterm>kdelibs</literal>
+package.  It
+will be installed by default on all KDE 2.x systems when 2.x is
+finally released.  In the meantime, you will need to get it through
+either CVSUP or the snapshots.  See www.kde.org (or a later appendix
+when I get around to it later) for details on that.</para>
+
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> depends on the KDE UI library (<literal remap="tt"><indexterm remap="cdx"><primary><literal>libkdeui</literal></primary></indexterm>libkdeui</literal>), the KDE
+Core library (<literal remap="tt"><indexterm remap="cdx"><primary><literal>libkdecore</literal></primary></indexterm>libkdecore</literal>), and Qt (<literal remap="tt"><indexterm remap="cdx"><primary><literal>libqt</literal></primary></indexterm>libqt</literal>).  These are
+the "standard" KDE libraries so there shouldn't be any problems, there.</para>
+</sect2>
+<sect2 id="TheIOSlaves">
+<title>The IOSlaves
+ </title>
+
+<para>There are ioslaves for <literal remap="tt"><indexterm remap="cdx"><primary><literal>http</literal></primary></indexterm>http</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>file</literal></primary></indexterm>file</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>gzip</literal></primary></indexterm>gzip</literal>,
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>tar</literal></primary></indexterm>tar</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>file</literal></primary></indexterm>file</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>smb</literal></primary></indexterm>smb</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>pop3</literal></primary></indexterm>pop3</literal>, and
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>imap4</literal></primary></indexterm>imap4</literal> as of the time of this writing.  They are all found in the
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>kdebase</literal></primary></indexterm>kdebase</literal> package under <literal remap="tt"><indexterm remap="cdx"><primary><literal>kioslaves</literal></primary></indexterm>kioslaves</literal>.  Again, these are
+available only from the KDE development CVS so you'll need to use CVSUP or
+the snapshots to retrieve them.</para>
+</sect2>
+</sect1>
+
+<sect1 id="UsingioslavesinyourApplication">
+<title>Using ioslaves in your Application
+ </title>
+
+<para>Now that you have the backend stuff all setup, you can start setting
+up your application to use them.  This requires adding the <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal>
+library to your linking and including the proper header files.</para>
+<sect2 id="ModifyingyourMakefile">
+<title>Modifying your Makefile
+ </title>
+
+<para>If you are using the standard KDE automake/autoconf system for your
+application, then you are in luck!  Adding another library is
+trivial:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>Edit <indexterm remap="idx"><primary>Makefile.am</primary></indexterm>Makefile.am</para>
+</listitem>
+<listitem>
+<para>Change the line &lt;yourapp&gt;<indexterm remap="cdx"><primary><literal>&lowbar;LDADD</literal></primary></indexterm>&lowbar;LDADD to look something like:
+
+<programlisting>     myapp_LDADD = $(LIB_KIO)
+   </programlisting>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>That's it!  If you are not using the KDE setup, then just make sure
+that you are including the following in your link stage:</para>
+
+<para><programlisting>    -lkio -lkdeui -lkdecore -lqt
+ </programlisting>
+</para>
+</sect2>
+<sect2 id="AddingtheProperHeaders">
+<title>Adding the Proper Headers
+ </title>
+
+<para>This is also simple:</para>
+
+<para><programlisting>   #include &lt;kio_job.h&gt;
+ </programlisting>
+</para>
+
+<para>Will take care of everything.</para>
+</sect2>
+</sect1>
+
+<sect1 id="UsingIOSlavesviaKIOJob">
+<title>Using IOSlaves via KIOJob
+ </title>
+
+<para>Now that your application is all prepped for using ioslaves, you can
+actually start using them!</para>
+
+<para>The only class you need to deal with at a client level is the KIOJob
+class.  You will use it to "call" the ioslaves and it will send you
+signals when it received events from them.</para>
+
+<para>The basic procedure is something like this:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>Create a <indexterm remap="idx"><primary>KIOJob</primary></indexterm>KIOJob instance</para>
+</listitem>
+<listitem>
+<para>Connect all of the signals (events) that you are interested in to
+some local slots (callbacks).</para>
+</listitem>
+<listitem>
+<para>Send the actual request</para>
+</listitem>
+<listitem>
+<para>Process the resulting response in your slots.</para>
+</listitem>
+</itemizedlist>
+</para>
+<sect2 id="TypicalExample">
+<title>Typical Example
+ </title>
+
+<para>An example looks like so:<indexterm remap="ncdx"><primary><literal>sigData()</literal></primary></indexterm><indexterm remap="ncdx"><primary><literal>sigError()</literal></primary></indexterm><indexterm remap="ncdx"><primary><literal>sigDataEnd()</literal></primary></indexterm><indexterm remap="ncdx"><primary><literal>sigFinished()</literal></primary></indexterm></para>
+
+<para><programlisting> KIOJob *job = new KIOJob;
+ connect(job, SIGNAL(sigData(int, const char*, int)),
+         this, SLOT(slotData(int, const char*, int)));
+ connect(job, SIGNAL(sigError(int, int, const char*)),
+         this, SLOT(slotError(int, int, const char*)));
+ connect(job, SIGNAL(sigDataEnd(int)),
+         this, SLOT(slotDataEnd(int)));
+ connect(job, SIGNAL(sigFinished(int)),
+         this, SLOT(slotFinished(int)));
+ job-&gt;get("http://www.pobox.com/~kurt_granroth/index.html");
+ </programlisting>
+</para>
+
+<para>This will get the web page at the above URL.  When the ioslave is done
+receiving the page, it will send it to you with your <literal remap="tt"><indexterm remap="cdx"><primary><literal>slotData()</literal></primary></indexterm>slotData()</literal>
+function.  If there was an error, then you receive it in
+<literal remap="tt">slotError()</literal>.  If the page was large, then it will be sent in
+chunks.  You know that you are done receiving data when
+<literal remap="tt">slotDataEnd()</literal> is called.  The <literal remap="tt">slotFinished()</literal> function is
+called when the ioslave is completely done.</para>
+</sect2>
+</sect1>
+
+<sect1 id="KIOJobCalls">
+<title>KIOJob Calls
+ </title>
+
+<para>There are numerous operations that you can do with KIOJob.  Some of them
+are: <literal remap="tt"><indexterm remap="cdx"><primary><literal>put</literal></primary></indexterm>put</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>get</literal></primary></indexterm>get</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>mkdir</literal></primary></indexterm>mkdir</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>copy</literal></primary></indexterm>copy</literal>,
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>move</literal></primary></indexterm>move</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>del</literal></primary></indexterm>del</literal>, <literal remap="tt"><indexterm remap="cdx"><primary><literal>unmount</literal></primary></indexterm>unmount</literal>, and <literal remap="tt"><indexterm remap="cdx"><primary><literal>mount</literal></primary></indexterm>mount</literal>.  I will
+refer only to <literal remap="tt"><indexterm remap="cdx"><primary><literal>put()</literal></primary></indexterm>put()</literal> and <literal remap="tt"><indexterm remap="cdx"><primary><literal>get()</literal></primary></indexterm>get()</literal> in this HOWTO.  The others
+follow similar patterns.</para>
+<sect2 id="getconstcharurl">
+<title>get(const char* url)
+ </title>
+
+<para>This is probably the most common operation.  It tells the ioslave to
+"get" the resource described in the URL.  This may be a web page, a
+POP3 message, or a local file -- it all depends on your URL.</para>
+
+<para>This operation is not very interactive.  You tell the ioslave what
+you want and it gets it for you.  Period.</para>
+
+<para>Specifically, it will send back your data with the <literal remap="tt"><indexterm remap="cdx"><primary><literal>sigData(int id,
+char char* data, int length)</literal></primary></indexterm>sigData(int id,
+char char* data, int length)</literal> signal.</para>
+
+<para>Parameters:</para>
+
+<para>const char *url - The URL of the resource that you wish to get</para>
+</sect2>
+<sect2 id="putconstcharurlintmodebooloverwriteboolresum">
+<title>put(const char* url, int mode, bool overwrite, bool resume, int size)
+ </title>
+
+<para>This operation will start the process of "putting" or sending data to
+the location specified in the URL.  This is used, for instance, to
+send files to a remote FTP server or do do a PUT or POST request with
+HTTP.  It is not quite a straight-forward as a <literal remap="tt"><indexterm remap="cdx"><primary><literal>get()</literal></primary></indexterm>get()</literal> operation.</para>
+
+<para>The basic procedure looks like:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>Connect <literal remap="tt"><indexterm remap="cdx"><primary><literal>sigReady(int)</literal></primary></indexterm>sigReady(int)</literal> to a local slot (e.g., <literal remap="tt">slotReady(int)</literal>)</para>
+</listitem>
+<listitem>
+<para>Send a <literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::put(..)</literal></primary></indexterm>KIOJob::put(..)</literal> request</para>
+</listitem>
+<listitem>
+<para>When <literal remap="tt">slotReady(..)</literal> is called, you know that the ioslave is ready
+to relay your data to its final destination.</para>
+</listitem>
+<listitem>
+<para>Send all of your data using the <literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::data(const char*, int)</literal></primary></indexterm>KIOJob::data(const char*, int)</literal>
+operation.  When you are done, notify the ioslave of this by
+sending a <literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::dataEnd()</literal></primary></indexterm>KIOJob::dataEnd()</literal></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Some sample code looks like so:</para>
+
+<para><programlisting> KIOJob *job;
+ char *data = "My message";
+ Client::Client()
+ {
+ 	job = new KIOJob;
+	connect(job, SIGNAL(sigReady(int)), this, SLOT(slotReady(int)));
+	connect(job, SIGNAL(sigData(int, const char*, int)),
+	        this, SLOT(slotData(int, const char*, int)));
+	connect(job, SIGNAL(sigDataEnd(int)),
+	        this, SLOT(slotDataEnd(int)));
+	job-&gt;put("http://server.com/cgi-bin/post.cgi", -1, true, false, strlen(data));
+ }
+
+ void Client::sigReady(int id)
+ {
+    job-&gt;data(data, strlen(data));
+	job-&gt;dataEnd();
+ }
+ </programlisting>
+</para>
+
+<para>Parameters:</para>
+
+<para>const char* url - The end location for your data
+int mode        - Special permissions for your data.  This should be set
+to -1 if there are no special permissions
+bool overwrite  - Instructs the ioslave to overwrite anything that
+may already be there.
+bool resume     - Instructs the ioslave to resume a previously aborted
+transaction.
+int size        - This is the size of the data that you will be sending</para>
+
+<para>Beyond that, everything else is identical to the 'get' method.</para>
+</sect2>
+<sect2 id="datavoiddataintsize">
+<title>data(void *data, int size)
+ </title>
+
+<para>This is used to send data to an ioslave.  It is used in conjunction with
+the <literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::put(..)</literal></primary></indexterm>KIOJob::put(..)</literal> operation.  It is almost always called from
+your object's <literal remap="tt">slotReady()</literal> slot as you must wait for the
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>sigReady(int)</literal></primary></indexterm>sigReady(int)</literal> signal before sending any data.  If your data is
+greater than 2048 bytes, then you must break it up into many chunks and
+send each chunk individually.</para>
+
+<para>Parameters:</para>
+
+<para>void *data - Your data that needs to go to the ioslave.  This should be no
+more than 2048 bytes.
+int size   - The size of this data</para>
+</sect2>
+<sect2 id="dataEnd">
+<title>dataEnd()
+ </title>
+
+<para>This is used along with <literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::data(..)</literal></primary></indexterm>KIOJob::data(..)</literal> and
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::put(..)</literal></primary></indexterm>KIOJob::put(..)</literal>.  It signals the ioslave that you are done
+sending it data.  If you do not send this signal, then the ioslave will
+essentially hang.  You do not need to use this if you are using
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>KIOJob::get(..)</literal></primary></indexterm>KIOJob::get(..)</literal>.</para>
+
+<para>Parameters:</para>
+
+<para>None</para>
+</sect2>
+</sect1>
+
+<sect1 id="KIOJobSignals">
+<title>KIOJob Signals
+ </title>
+
+<para>All communication from the ioslaves come through KIOJob in the form of
+signals.  There are quite a few of them (see <literal remap="tt"><indexterm remap="cdx"><primary><literal>kio&lowbar;job.h</literal></primary></indexterm>kio&lowbar;job.h</literal> for a complete
+listing), but I'll only discuss the "essential" ones.</para>
+<sect2 id="sigErrorintidinterridconstchartext">
+<title>sigError(int id, int errid, const char* text)
+ </title>
+
+<para>This signal is emitted whenever an error occurs.  You should always connect a
+slot to this signal unless you really don't care if there is an error or not.</para>
+
+<para>Parameters:</para>
+
+<para>int id           - The job id
+int errid        - The error code.  This corresponds to the list of errors
+defined in kio&lowbar;interface.h
+const char* text - A textual description of the error</para>
+</sect2>
+<sect2 id="sigReadyintid">
+<title>sigReady(int id)
+ </title>
+
+<para><indexterm remap="ncdx"><primary><literal>sigReady()</literal></primary></indexterm>
+This signal occurs when the ioslave is ready to accept data.  If you are
+using only <literal remap="tt"><indexterm remap="cdx"><primary><literal>get(..)</literal></primary></indexterm>get(..)</literal> methods, then you should not have to connect to this
+signal.  If you are using a <literal remap="tt"><indexterm remap="cdx"><primary><literal>put(..)</literal></primary></indexterm>put(..)</literal> method, then you must connect to this
+signal and begin sending data from there.</para>
+
+<para>Parameters:</para>
+
+<para>int id - The job id</para>
+</sect2>
+<sect2 id="sigDataintidconstchardataintsize">
+<title>sigData(int id, const char *data, int size)
+ </title>
+
+<para><indexterm remap="ncdx"><primary><literal>sigData()</literal></primary></indexterm>
+This signal happens whenever the ioslave is sending you data.  This is
+typically the data that it just downloaded.  It will never be more than 2048
+bytes, so plan on having it called several times.  You are responsible for
+collecting all of the data.  You will know that the ioslave is done sending
+you data when you get the <literal remap="tt"><indexterm remap="cdx"><primary><literal>sigDataEnd(int)</literal></primary></indexterm>sigDataEnd(int)</literal> signal.</para>
+
+<para>Parameters:</para>
+
+<para>int id           - The job id
+const char *data - The data that the ioslave just downloaded
+int size         - The size of this data chunk</para>
+</sect2>
+<sect2 id="sigDataEndintid">
+<title>sigDataEnd(int id)
+ </title>
+
+<para><indexterm remap="ncdx"><primary><literal>sigDataEnd()</literal></primary></indexterm>
+This signal is sent to signify that the ioslave is done sending you data.
+You should use this signal as an assurance that you can use the data as
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>sigData(..)</literal></primary></indexterm>sigData(..)</literal> will never again be called.</para>
+
+<para>Parameters:</para>
+
+<para>int id - The job id</para>
+</sect2>
+<sect2 id="sigFinishedintid">
+<title>sigFinished(int id)
+ </title>
+
+<para><indexterm remap="ncdx"><primary><literal>sigFinished()</literal></primary></indexterm>
+This signal indicates the the ioslave is completely done.</para>
+
+<para>Parameters:</para>
+
+<para>int id - The job id</para>
+</sect2>
+</sect1>
+</chapter>
+
+<chapter id="KOMOP">
+<title>KDE KOM/Open Parts</title>
+
+<para>Torben Weis <literal remap="tt">weis@kde.org</literal>, Bernd Wuebben <literal remap="tt">wuebben@kde.org</literal></para>
+
+<para>v 1.0 August 1998</para>
+
+<para><emphasis>A free Object Model for Unix</emphasis></para>
+
+<sect1 id="ObjectModelIntroduction">
+<title>Introduction</title>
+
+<para>Although it is nice to have applications like StarOffice and
+ApplixWare available for Unix/Linux, it is a sad fact that they do not
+interact with other applications. In fact user is expected to use the
+supplied e-mail-client only, the StarOffice spreadsheet cannot be
+embedded into an Applix document, and users cannot use the WWW
+browser of their choice.</para>
+
+<para>Even a rather simple component-based approach like COM (Component
+Object Model) can do lots of magic. Take a glimpse into Bill Gates'
+world to convince yourself. The spread sheet of one software house can
+be used in a word processor of another and many applications support
+scripting interfaces. A veritable industry of OCX/ActiveX component
+writers has cropped up. Using easy to learn languages such as Visual
+Basic, users with a minimal programming background can glue separate
+components together with ease in order to create new applications
+exhibiting previously unavailable functionality. As Aristotle put it:
+The whole is more than the sum of its parts.</para>
+
+<para>Even the most faithful of all Unix supporters had to recognize that
+the Unix community had technologically fallen far behind the windows as
+well as Macintosh worlds with regard to GUI and desktop technologies.
+Fortunately, distributed objects make sense beyond a the realm of
+desktop and GUI applications. The development of distributed databases
+may serve as an example and component technology in general fits
+nicely into the strategy of major software companies which in turn
+helped to push CORBA development on the UNIX platform. Consequently,
+there is a standardized, network transparent, platform- and
+language-independent solution to the IPC-problem available, that is
+based on an object-oriented approach and that offers exception
+handling as well as support for management of complex data structures.</para>
+
+<para>While initially only available commercially, free implementations of
+the CORBA 2.0 standard object request broker (ORB) became available as
+well.  A particularly well done free implementation of the CORBA
+standard, that will soon cover the full CORBA-2.1 standard, was
+developed at the university of Frankfurt, Germany.  This GNU GPL'd ORB
+named MICO, can compete with commercial implementations with respect to
+completeness and stability.</para>
+</sect1>
+
+<sect1 id="CORBAbasedKDEObjectModel">
+<title>CORBA-based KDE Object Model</title>
+
+<para>However, CORBA alone is not enough, as the standard only describes how
+distributed objects communicate; the COSS (CORBA Standard Services)
+define interfaces for a whole range of so called services, such as
+trading services, security services, transactions sercies and license
+management services and others. As is apparent, desktop development or
+even GUI application development did not play an important role when
+designing CORBA. The nearly indispensable event service does not
+support event filtering, furthermore it lacks a mechanism for so
+called 'callbacks'. Thus, in order for X11 and CORBA to work well
+together, CORBA´s well done industry standard object model had to be
+enhanced in order to be suitable as the underlying distributed object
+broker on which to build the all important compound document
+framework.  Of course all this had to be undertaking within the limits
+of the accepted CORBA industry standards.</para>
+
+<para>The KDE Object Model (KOM) addresses these issues and makes life
+easier for a programmer by automatically giving each object a base set
+of functionalities. This includes first and foremost event
+handling. Each KOM object is capable of receiving events. An event
+consists of an arbitrary data structure (<literal remap="tt">CORBA::Any</literal>) as well
+as a string, describing the type of the event, for example
+Desktop/Font/ChangeFont or Desktop/Color. By reading this string, an
+object can decide whether it is interested in that event, and will
+know how the unknown data structure is to be interpreted semantically.</para>
+</sect1>
+
+<sect1 id="Flexibilitywitheventsandfilters">
+<title>Flexibility with events and filters</title>
+
+<para>An important aspect when processing events is filtering. It allows the
+developer to enhance the functionality of a program without having to
+change the sources.  There are three types of filters: those which
+merely recognize events, those which are allowed to change or discard
+events, and finally those which finally process them.  This model can
+be illustrated with a simple WWW browser example: If a program wants
+the browser to open a new URL, it has to send it an event. To enhance
+the browser with a history function and the user only has to plug in a
+filter of the first category into the browser. This filter can record
+all URLs, thereby managing a history function. A tool for blocking
+certain pages (in order to protect minors for example) belongs to
+category two: If the URL is rated unsuitable for minors, the filter
+discards the event or replaces the URL in it with a different one. If
+the Browser does not support mailto, we need a third category filter:
+upon arrival of a URLOpen event with mailto:joe@doe in it, the event
+is discarded from the browser's point of view, but the filter offers
+an alternative implementation.</para>
+
+<para>The filter principle is of great importance, as in CORBA only
+interfaces are inherited, not implementations.  It would not be
+possible to derive from the browser object and to just overload the
+function that opens a new URL. The event model does not just solve
+this problem, it enables developers to install several enhancements at
+the same time. A second filter, filtering FTP URLs for example, can be
+easily installed in addition. It is important that an user can plug-in
+an arbitrary number of such filters at run-time. A filter is installed
+this way:</para>
+
+<para><screen>
+      KOM::EventTypeSeq types;
+
+      types.length (1);
+
+      types [0] = CORBA::string_dup ("OpenURL");
+
+      browser-&gt;installEventFilter ( this, "eventFilter", types);
+
+
+</screen>
+</para>
+
+<para>Now, all you have to do is wait for events:</para>
+
+<para><screen>
+boolean MailFilter::eventFilter (in Object obj, in EventType type, in any value)
+{
+
+    if ( type == "OpenURL" )
+    {
+
+        char *p;
+
+        if (( value &gt;&gt;=p ) && strcmp (type, "mailto:", 7) == 0)
+        {
+
+            // open mail app
+
+            CORBA::string_free (p);
+
+            return true;
+
+        }
+    }
+
+     return false;
+}
+
+
+</screen>
+</para>
+
+<para>When a user enters a URL in the example above, the browser sends an
+event to itself. This concept can also serve for a macro recorder,
+because events can be filtered, saved and re-send later. As event
+handling works the same way for all KOM objects, there is now - at
+last - the possibility of creating a supra-component macro recording.</para>
+
+<para>To avoid performance loss, filters can be installed in a way that they
+only receive events whose type matches a certain
+expression. Desktop/Font/* would filter all events that have to do
+with the font settings of the whole desktop.</para>
+</sect1>
+
+<sect1 id="Callbackswithsignalandslots">
+<title>Callbacks with signal and slots</title>
+
+<para>In an event-driven environment, programmers have to deal with so
+called callbacks. A callback is a mechanism by which a button for
+example activates a procedure that is supposed to be called once the
+button is pressed. C offers pointers to functions for that, under C++
+we can use elegant signals and slots. A wonderful implementation of
+this idea is offered by the QT toolkit. KOM offers this technique for
+distributed objects as well, it uses CORBA´s DII (Dynamic Invocation
+Interface) for that purpose. An object can be target and sender of
+signals at the same time. To receive a signal, an object must have a
+slot with a matching list of parameters. Such a slot is not different
+from a usual CORBA method without return value. The lines</para>
+
+<para><screen>
+      MySender_var s = new MySender;
+
+      MyReceiver_var r = new MyReceiver;
+
+      r.connect ( "selected", s, "myslot" );
+
+
+</screen>
+</para>
+
+<para>connect two objects with each other. As soon as <literal remap="tt">s</literal> emits the
+selected signal, the function myslot of object <literal remap="tt">r</literal> is
+called. If one of the objects is destroyed, the connection between the
+two is released automatically. It is possible to connect one signal to
+different slots and one slot to different signals. Theoretically, it
+would also be possible to work with events here. Signals and slots
+however work a lot faster and are easier to handle for the programmer,
+because he/she does not have to deal with event
+processing. Furthermore they are type-safe. On the other hand, you
+have to work without the advantages of filtering.</para>
+
+<para>As already mentioned, interface inheritance does not solve all
+problems. The browser example shows that installing multiple
+enhancements at run-time works only because filters are loaded which
+can plug into the browser. The principle behind this mechanism is
+called dynamic aggregation. You take a core object (the browser) and
+enhance it by other objects (plug-ins). The interface of the browser
+is expanded with the sum of the plug-ins' interfaces. KOM support
+run-time installation and uninstallation of those plug-ins. Neither is
+required to run within the same process or even the same computer.</para>
+
+<para>An object that communicates with the browser does not notice which
+interface was implemented by the core object and which by the
+plug-ins. If a client wants to know whether a component supports a
+special interface, a simple</para>
+
+<para><screen>
+CORBA::Object_var obj = browser-&gt;getInterface ('IDL:/foo/bar:1.0');
+
+
+</screen>
+</para>
+
+<para>is enough to get a reference to that interface. It is even possible to
+load the plug-in with the required interface at run-time. This saves a
+lot of memory, because the plug-ins allocate resources only then when
+they are really needed.</para>
+</sect1>
+
+<sect1 id="OpenPartsKOMmeetsGUI">
+<title>OpenParts: KOM meets GUI</title>
+
+<para>Until now, the word GUI has not been mentioned a single time. Indeed,
+KOM is solely based on CORBA. There are in effect quite a number of
+applications which do not have or do not need a GUI. It would not make
+sense to burden those applications with GUI code; we better leave that
+to the supporters of the Redmond doctrine. OpenParts form a layer on
+top of CORBA, KOM, and X11. Embedding GUI components in own programs
+has become widely known since introduction of MS Internet Explorer
+4.0. In the windows world, a lot of controls have been created, a
+whole industry has formed around the creation of controls and nearly
+everything, from a simple push-button to a complete WWW browser, can
+be realized as a control.</para>
+
+<para>The idea behind controls is actualized in KDE's OpenParts. This is
+done using window objects that export a well-defined interface. The
+CORBA Implementation Repository registers the implementation of those
+components.</para>
+
+<para>When an application needs a specific control, it relays a request to
+the repository. In the OpenParts framework, separate server processes
+handle these requests. Thus, a high level of toolkit, compiler,
+language and multi threading-support independence is achieved. The
+repository returns a reference to a factory. CORBA does not support
+the creation of new objects with a special construct. Because of that,
+factories have been introduced, which serve the purpose of creating a
+new object and returning a reference to it.</para>
+
+<para>The actual embedding is done via X11 swallowing. The element that is
+to be embedded (a X11 window) is assigned a new parent using the X11
+Xlib call <literal remap="tt">XReparentWindow</literal>. In order to keep developers away
+from messing around with pure X11, there exist so called control
+frames. This class depends on the used toolkit and (viewed from
+outside) looks like a normal window implemented using a specific GUI
+toolkit. The control frame is made the new father of the control. Is
+it moved or resized, the control is moved or resized as well.</para>
+</sect1>
+
+<sect1 id="DynamicElementsrealizedeasily">
+<title>Dynamic Elements realized easily</title>
+
+<para>Some elements of a window are subject to restrictions. There can only
+be one menu bar as well as one status bar. Great confusion would ensue
+if controls were allowed to take control of these restricted
+elements. One way to avoid this confusion is offered by an enhancement
+of controls: Parts. A part can be in three different modes: inactive,
+marked, or active. In a top-level window only one can be active. This
+part gains control over the restricted elements. The top-level window
+is called PartShell; it owns menu bar, tool bars, status bar etc. Each
+part can register its menus and toolbars with the Shell. The Shell,
+however, only displays the restricted elements of the active Part.</para>
+
+<para>Using Parts, one can build the basic structure of an integrated office
+suite. Text processing, spread sheet, drawing application and all the
+rest is put into such structures. As Parts can contain Parts, a
+spread-sheet Part can be embedded into a text-Part with no
+problems. Instead of ControlFrames, the developer can use the mightier
+PartFrames as well. A single click on a part creates a window frame,
+the user can move and resize the frame now; another click makes it
+active. The window frame is changed automatically to show the user,
+that the part has been made active. The Shell changes menu bar and
+tool bar to the needs of the Part that has become active.</para>
+
+<para>What is missing is a common file menu: it is the Shell's privilege to
+provide a menu and a toolbar of its own for that purpose. Via these
+widgets, the user can access the document as a whole, for example to
+save or print it.</para>
+</sect1>
+
+<sect1 id="TheDocumentViewArchitecture">
+<title>The Document View Architecture</title>
+
+<para>OpenParts support the Document View Model, known from Smalltalk and
+popularized in Microsoft's MFC. A view displays the document on the
+screen and is derived from the Parts class. The document contains data
+as well as the associated algorithms. The advantage of this solution is
+that users can have several views of the document. It is, for example,
+possible to display two paragraphs of a longer article in two windows
+or to display an image in a separate window when manipulating it. When
+zooming in on this picture, the rest of the document does not have to
+be enlarged as well.</para>
+
+<para>For reasons of performance, document and view run within the same
+process. In order to achieve a clean design, the developer has to
+strictly follow the principle of separating data and belonging
+manipulating algorithms on one side and viewing algorithms on the
+other side. Every user action first affects the view. This view must
+then signal the Document to change the data basis accordingly. After
+that, the Document must inform all views to update their windows
+in order to correctly reflect the new data state.</para>
+
+<para>An important aspect is using a Document without a View. This allows to
+make use of an office suite's functionality in a batch job, for
+example. The Document should export methods for manipulating data. A
+CORBA-aware scripting language could make use of those methods. At
+this time, CORBA-binding for Perl, Tcl, and CORBA-Script exist, a
+Python binding is being worked on.</para>
+
+<para>Object models, and operating systems are alike in that they are of
+mere academic value as long as there are no applications making use of
+their qualities. KOffice is, at the moment, the largest and most
+widely known application using OpenParts technology. As the KDE
+project makes wider use of CORBA, and KOM and OpenParts respectively,
+there is reason to hope that Unix will soon have a free implementation
+of a object model that transfers the advantages of contemporary
+compound document framework technology to the user.</para>
+</sect1>
+
+<sect1 id="UsingOpenPartsKOffice">
+<title>Using OpenParts: KOffice</title>
+
+<para>Based on OpenParts technology, the KOffice project aims at offering a
+free and easily extendible office suite for KDE.</para>
+
+<para>The 'mother' of all KOffice components (called Parts) is the spread
+sheet KSpread. Although officially still declared 'alpha', it is
+already working very well.. Its mathematical functions can be easily
+enhanced by means of an embedded Python language interpreter.</para>
+
+<para>KPresenter is a presentation application written by Reginald
+Stadlbauer, which convincingly demonstrated its usability at the Linux
+Congress in Cologne where a talk about KDE was given using
+KPresenter. In the future, Linus Torvalds will no longer have use
+Windows applications when giving presentations.</para>
+
+<para>KChart is an application to create diagrams. It supports different
+modes (bars, lines, etc.) and can be embedded into other KOffice
+application without problems. When data is changed in, for example,
+KSpread, the chart automatically changes itself accordingly.</para>
+
+<para>There is a component for displaying graphics, and work is being done
+adapting a formula editor and a vector-oriented painting application
+(KIllustrator). For the future, adaptation of KLyx is planned to embed
+Parts in LaTeX documents. Other KDE applications like KOrganizer,
+KAddressbook and KMail will be enhanced with CORBA interfaces to
+provide seamless integration in the KOffice suite.</para>
+
+<para>If possible, components save their data in XML format. To save an
+aggregate document in a file, the MIME multi-part format is used. XML
+and MIME multi-part share the advantage that import and exports filters
+can easily be written in scripting languages like Python and
+Perl. Ever since a WinWord filter attracted attention on
+c.o.l.a. (comp.os.linux.announce), developers began writing import
+filters for the most important MS applications.</para>
+
+<para>KOffice runs quite stably for a alpha release. To compile it, a fast
+CPU and a reasonable amount of RAM ( 64 MByte) should be available;
+for using KOffice, 32 MByte and a Pentium 133 MHz will
+suffice. KOffice is reported to work on DEC Alpha and Sun Sparcs as
+well. The sources for KOffice, KOM and OpenParts are available on
+<ulink url="http://www.kde.org">http://www.kde.org</ulink></para>
+</sect1>
+
+<sect1 id="CodeReusewithCORBA">
+<title>Code Re-use with CORBA</title>
+
+<para>A developer, sitting in front of his editor and trying to build new
+software components out of old ones, might sadly remember the good old
+Lego pieces from his/her childhood. Those always fit together nicely,
+and from a great number of primitive elements, great buildings could be
+constructed. From the software developer's point of view, software
+pieces do not fit at all, and each new building requires a lot of work
+to make it usable. Many developers therefore choose to rewrite the
+sources rather than to re-use code.</para>
+
+<para>Under Unix, the usual method concerning code re-use is putting code
+into libraries and linking the application against them. However,
+sometimes it happens that those libraries use different GUI toolkits,
+or that some support multi-threading and some do not. Additionally,
+all libraries should have been compiled with the same compiler,
+otherwise you will be subject to problems at the linking stage.</para>
+
+<para>One solution is to split an application into several processes. One
+process might, for example, offer database functionality with
+multi-threading, another one might offer the X11-GUI
+single-threaded. Now, the problem of Interprocess Communication (IPC)
+remains to be solved. CORBA (Common Object Request Broker
+Architecture) offers a modern and object-oriented solution, but the
+developer is tied to the CORBA object model, what is somewhat limited
+in contrast to the C++, Python or Smalltalk object model. First of all
+one can derive only from interfaces, not from implementations. If
+there is a text editor as a CORBA object, it usually is impossible to
+derive from this editor and overload just a few of its functions. The
+derivation of implementations works only if the sources of the editor
+are available, or if it is available as a library. But that was what
+we wanted to avoid.</para>
+
+<para>As the main article describes, the KDE Object Model (KOM) offers a
+solution for this problem; it is based on events and event
+filters. Instead of calling a function directly, it is possible to
+send an event. By filtering events, function overloading can be
+simulated.</para>
+
+<para>There are other obstacles when re-using code: According to Murphy's
+laws, the desperately needed module is always written in a different
+programming language than expected. Mixing different languages in one
+application is always a problem for programmers. Even semi-automatic
+wrapper generators like SWIG expect a certain amount of refining from
+the programmer. Further, a look at the KDE bindings in Python, Perl
+and Tcl shows that this wrapper code can easily grow huge. As
+OpenParts is CORBA-based, objects can be implemented in any of the
+languages for which CORBA bindings are available for. For interpreter
+languages, in most cases no special wrapper code is necessary, for
+compiler languages like C/C++, wrapper code generation is done
+automatically.</para>
+</sect1>
+
+<sect1 id="Credits">
+<title>Credits</title>
+
+<para>Most of this document was written by Torben Weis
+<ulink url="email:weis@kde.org">weis@kde.org</ulink>.
+Additions, corrections as well as the editorial work was done by
+Bernd Johannes Wuebben <ulink url="email:wuebben@kde.org">wuebben@kde.org</ulink>.</para>
+</sect1>
+</chapter>
+
+<chapter id="KOMHOWTO">
+<title>Using KOM / OpenParts HOWTO</title>
+
+<para>Simon Hausmann <ulink url="mailto:hausmann@kde.org">&lt;hausmann@kde.org&gt;</ulink></para>
+
+<para>v1.0 18, June 1999</para>
+
+<para><emphasis>This documentation is meant to help programmers who are already familiar
+with the standard Qt/KDE application framework and who are interested in using
+the KDE component technology, the KDE Object Model (KOM) and OpenParts, for
+their application.  It covers both "why" you should use KOM/OP
+and "how" to do so.</emphasis></para>
+
+<sect1 id="KOMIntroduction">
+<title>Introduction</title>
+
+<para>This documentation is meant to help programmers who are already familiar with
+the standard Qt/KDE application framework and who are interested in using the
+KDE component technology, the KDE Object Model (KOM) and OpenParts, for their
+application. The goals of using components in case of standard KDE
+applications might be:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>make several modules of the application re-usable components, being
+available for other applications, not matter in what language they are
+written or on what platform/machine they're running.</para>
+</listitem>
+<listitem>
+<para>make use of OpenPart's embedding facility and its way to manage shared
+GUI elements to provide seamless graphical integration of components in
+applications.</para>
+</listitem>
+<listitem>
+<para>use CORBA and KOM as an easy way of inter-process communication</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>I recommend reading the
+<ulink url="http://developer.kde.org/openparts/html/openparts.html">article by Torben Weis about KOM/Openparts</ulink>
+<ulink url="mailto:weis@kde.org">Torben Weis</ulink> is the
+author/creator/master/god of KOM/OpenParts.</para>
+</sect1>
+
+<sect1 id="TheKDEObjectModelKOM">
+<title>The KDE Object Model (KOM)</title>
+<sect2 id="FirstwaysofcommunicationtheKOMBaseinterfaceK">
+<title>First ways of communication - the <indexterm remap="idx"><primary>KOM::Base interface</primary></indexterm>KOM::Base interface</title>
+
+<para>The Base interface and its implementation in <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkom</literal></primary></indexterm>libkom</literal> provide the basic
+functionality for a standardized communication between CORBA objects using
+KOM. This includes</para>
+
+<para><itemizedlist>
+<listitem>
+<para>signals and slots, similar to the mechanism used in the Qt toolkit</para>
+</listitem>
+<listitem>
+<para>event handling, including filtering</para>
+</listitem>
+<listitem>
+<para>relatives management</para>
+</listitem>
+<listitem>
+<para>reference counting</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+<sect2 id="SignalsandSlotsSignalsandSlots">
+<title><indexterm remap="idx"><primary>Signals and Slots</primary></indexterm>Signals and Slots</title>
+
+<para>KOM supports signals and slots just like in the Qt toolkit, with a few
+differences in usage and implementation. The first and biggest difference is
+that signals and slots are no more typesafe again, meaning there's no moc
+compiler generating meta data for KOM signals/slots to enable type checking at
+run-time, when connecting.</para>
+
+<para>Another difference is the way you declare signal and slot functions. Signals
+have to be declared with the <literal remap="tt"><indexterm remap="cdx"><primary><literal>SIGNAL&lowbar;IMPL</literal></primary></indexterm>SIGNAL&lowbar;IMPL</literal> macro from <literal remap="tt"><indexterm remap="cdx"><primary><literal>komBase.h</literal></primary></indexterm>komBase.h</literal>,
+without  specifying any signal arguments. Slot methods have to be defined in
+your CORBA  interface description.</para>
+
+<para>For KOM signals the equivalent to the "emit" keyword from Qt is the
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>SIGNAL&lowbar;CALL</literal></primary></indexterm>SIGNAL&lowbar;CALLx</literal> macro, were "x" is one of 0, 1, 2, depending on the
+number of arguments.
+<indexterm><primary>KOM::Base</primary></indexterm>
+Example:</para>
+
+<para>In your CORBA interface description:
+<programlisting>  #include &lt;kom.idl&gt;
+
+  interface FooSender : KOM::Base
+  {
+    signal void mySignal( in long foobaz );
+  };
+
+  interface FooReceiver : KOM::Base
+  {
+    slot void mySlot( in long gosh );
+  };</programlisting>
+</para>
+
+<para>In the implementation of FooSender:
+<programlisting>  FooSender_Impl::FooSender_Impl( ... )
+  {
+    ...
+    SIGNAL_IMPL( "mySignal" );
+    ...
+  }
+
+  FooSender_Impl::mySignal( CORBA::Long foobaz )
+  {
+    SIGNAL_CALL1( "mySignal", foobaz );
+  }</programlisting>
+</para>
+
+<para>In the implementation of FooReceiver:
+<programlisting>  FooReceiver_Impl::mySlot( CORBA::Long gosh )
+  {
+    ...
+  }</programlisting>
+</para>
+
+<para>First some words about the sender: It is not required to define the signal
+in the interface description and to provide an implementation which simply
+emits the signal. However in many cases this is recommended, because this makes
+it easier for other developers to use your interface because they aren't required
+to seek in the implementation sources just to find out about the signals this
+object emits. Another way is to simply document the existence of the signal
+in the interface description, without defining a method. From the technical
+point only the <literal remap="tt"><indexterm remap="cdx"><primary><literal>SIGNAL&lowbar;CALL</literal></primary></indexterm>SIGNAL&lowbar;CALLx</literal> macro counts when emitting the signal.</para>
+
+<para>What's left is connecting and disconnecting. In the above described example it
+could like this:
+<programlisting>  ...
+  SenderObject-&gt;connect( "mySignal", ReceiverObject, "mySlot" );
+  ...
+  SenderObject-&gt;disconnect( "mySignal", ReceiverObject", "mySlot");</programlisting>
+</para>
+
+<para>Well, this is quite self-explaining I think. Just make sure to always disconnect
+from your object upon destruction.</para>
+</sect2>
+<sect2 id="Events">
+<title>Events</title>
+
+<para>An event consists of two elements, the event name, being a string, and an
+event argument, being a CORBA::Any value and therefore freely choosable by the
+developer.</para>
+
+<para>Events, sent to a specified object, can be imagined as being put through a
+pipe until they reach the destination object. This "pipe" is filled with
+installed  event filters. There are three kinds of filters.
+<itemizedlist>
+<listitem>
+<para>reading filters ( <literal remap="tt"><indexterm remap="cdx"><primary><literal>FM&lowbar;READ</literal></primary></indexterm>FM&lowbar;READ</literal> )</para>
+</listitem>
+<listitem>
+<para>writing filters ( <literal remap="tt"><indexterm remap="cdx"><primary><literal>FM&lowbar;WRITE</literal></primary></indexterm>FM&lowbar;WRITE</literal> )</para>
+</listitem>
+<listitem>
+<para>implementing filters ( <literal remap="tt"><indexterm remap="cdx"><primary><literal>FM&lowbar;IMPLEMENT</literal></primary></indexterm>FM&lowbar;IMPLEMENT</literal> )</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>In the current implementation in KOM these filter modes only specify the order
+how the event is processed. When an event is emitted it gets first filtered by
+all event filters with the filter mode <literal remap="tt"><indexterm remap="cdx"><primary><literal>FM&lowbar;WRITE</literal></primary></indexterm>FM&lowbar;WRITE</literal>, then followed by
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>FM&lowbar;IMPLEMENT</literal></primary></indexterm>FM&lowbar;IMPLEMENT</literal> and finally by <literal remap="tt"><indexterm remap="cdx"><primary><literal>FM&lowbar;READ</literal></primary></indexterm>FM&lowbar;READ</literal>. Event filters have two
+possibilities what they can do with the actual event: They can just
+<emphasis remap="bf">read</emphasis> it or they can <emphasis remap="bf">discard</emphasis>  it, which means the event is
+discarded and will never receive its destination  object.</para>
+
+<para>The actual event name has a special meaning in regard to event filters.  When
+installing an event filter to an object you have to specify, beside a
+reference to the filter object and the name of the filter mapping function, a
+sequence of so called event type patterns. An event type pattern can be the
+name of a  single event as well as a special pattern (see <literal remap="tt"><indexterm remap="cdx"><primary><literal>kom.idl</literal></primary></indexterm>kom.idl</literal> for more
+information about event type patterns) .</para>
+
+<para>When an event is meant to be processed by a filter, the specified filter
+function gets called, with the event name and the event value as arguments.
+This filter function has to return (through a boolean value) whether the event
+should be discarded or not.</para>
+
+<para>When all filtering is done and none of the installed filters discarded the
+event, it is finally received by the destination object, by calling the
+object's <literal remap="tt"><indexterm remap="cdx"><primary><literal>event()</literal></primary></indexterm>event()</literal> method, defined in the <indexterm remap="idx"><primary>KOM::Base</primary></indexterm>KOM::Base interface. The default
+implementation does actually nothing, so you may want to re-implement this
+virtual function.</para>
+
+<para>The very low-level usage of events is to call the receive/receiveASync methods
+of an object for sending an event and to re-implement <indexterm remap="cdx"><primary><literal>KOMBase::event</literal></primary></indexterm>KOMBase::event for
+mapping an event. But KOM provides some nice macros which simplify the
+processing of events.</para>
+<sect3 id="SendingEvents">
+<title>Sending Events</title>
+
+<para>For sending komBase.h defines some useful <literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT</literal></primary></indexterm>EMIT&lowbar;EVENT</literal> macros, all
+using the same syntax:
+<literal remap="verb">EMIT_EVENT_x( destination_object, event_name, event_argument)</literal></para>
+
+<para>"destination&lowbar;object" is a reference to the object which is meant to
+receive/process the event. The event will be filtered through all event
+filters which are installed in this destination object. "event&lowbar;name" is
+self-explaining ;-) . The event argument depends on the specific macro, which
+are in particular:</para>
+
+<para><itemizedlist>
+<listitem>
+<para><literal remap="tt">EMIT&lowbar;EVENT</literal>, the general macro for sending. The event argument is
+required to have a <literal remap="tt">&lt;&lt;=</literal> operator for CORBA::Any defined. You
+will want to use this macro whenever the event argument is a structure
+for example. (and don't forget to compile your idl file with the "--any"
+option, so that the idl compiler generates the necessary operator
+methods)</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;BOOLEAN</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;BOOLEAN</literal>, useful for boolean event arguments. The
+only difference to the <literal remap="tt">EMIT&lowbar;EVENT</literal> macro is that it uses
+CORBA::Any::from&lowbar;boolean for you to convert the boolean value. So it
+doesn't really matter whether you use:
+
+<literal remap="verb">    EMIT_EVENT( receiver, name, CORBA::Any::from_boolean( value ) );</literal>
+or
+<literal remap="verb">    EMIT_EVENT_BOOLEAN( receiver, name, value );</literal>
+</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;OCTET</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;OCTET</literal>, similar to EMIT&lowbar;EVENT&lowbar;BOOLEAN, useable for
+<indexterm remap="cdx"><primary><literal>CORBA::Octet</literal></primary></indexterm>CORBA::Octet values.</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;CHAR</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;CHAR</literal>, similar to EMIT&lowbar;EVENT&lowbar;BOOLEAN, useable for char
+(<indexterm remap="cdx"><primary><literal>CORBA::Char</literal></primary></indexterm>CORBA::Char) values.</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;WCHAR</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;WCHAR</literal>, similar to EMIT&lowbar;EVENT&lowbar;BOOLEAN, useable for
+<indexterm remap="cdx"><primary><literal>CORBA::WChar</literal></primary></indexterm>CORBA::WChar values.</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;STRING</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;STRING</literal>, similar to EMIT&lowbar;EVENT&lowbar;BOOLEAN, useable for
+char * (<indexterm remap="cdx"><primary><literal>CORBA::Char*</literal></primary></indexterm>CORBA::Char*) values.</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;WSTRING</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;WSTRING</literal>, similar to EMIT&lowbar;EVENT&lowbar;BOOLEAN, useable for
+<indexterm remap="cdx"><primary><literal>CORBA::WChar*</literal></primary></indexterm>CORBA::WChar* values.</para>
+</listitem>
+<listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>EMIT&lowbar;EVENT&lowbar;OBJECT</literal></primary></indexterm>EMIT&lowbar;EVENT&lowbar;OBJECT</literal>, similar to EMIT&lowbar;EVENT&lowbar;BOOLEAN, useable for
+CORBA objects (<indexterm remap="cdx"><primary><literal>CORBA::Object</literal></primary></indexterm>CORBA::Object).</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+<sect3 id="ReceivingEvents">
+<title>Receiving Events</title>
+
+<para>The process of receiving events is a little bit more difficult, compared
+to sending, since we have to process all kinds of events an object can receive
+in one handler method, <indexterm remap="idx"><primary>KOM::Base</primary></indexterm>KOM::Base::event (<indexterm remap="idx"><primary>IDL</primary></indexterm>IDL) / KOMBase::event (C++) . Just
+like with sending events you can again do everything on low CORBA level, but
+why should we go the hard way? KOM again provides very nice and easy-to-use
+macros for this (defined in komBase.h) :-) . Usually all this looks like the
+following example:<indexterm><primary>KOM::Base</primary></indexterm>
+<programlisting>#include &lt;kom.idl&gt;
+
+module MyModule
+{
+  // we say: the event argument is a string
+  const string eventFirstFoo = "MyFooEventNameOrWhateverYouNameIt";
+
+  struct MyStruct
+  {
+    boolean kde_rules;
+  };
+
+  const string eventSecondFoo = "Blaafooo";
+  typedef MyStruct EventSecondFoo;
+
+  interface SomethingElse
+  {
+    //..
+  };
+
+  const string eventThirdFoo = "KOMIsCool";
+  typedef SomethingElse EventThirdFoo;
+
+  interface Foo : KOM::Base
+  {
+    //...
+  };
+
+};
+
+bool FooImpl::event( const char *event, const CORBA::Any &amp;value )
+{
+  EVENT_MAPPER( event, value );
+
+  MAPPING_STRING( MyModule::eventFirstFoo, mappingFirstFoo );
+
+  MAPPING( MyModule::eventSecondFoo, MyModule::EventSecondFoo, mappingSecondFoo );
+
+  MAPPING( MyModule::eventThirdFoo, MyModule::EventThirdFoo_ptr, mappingThirdFoo );
+
+  END_EVENT_MAPPER; //the macro executes "return false;" for us, to indicate that
+                    //we did not handle the event if we reach this point
+}
+
+bool FooImpl::mappingFirstFoo( const char *myArgument )
+{
+  ...
+  //don't forget to return with a boolean value, indicating whether you sucessfully
+  //processed the event or not.
+}
+
+bool FooImpl::mappingSecondFoo( MyModule::MyString anotherArg )
+{
+  //...
+}
+
+bool FooImpl::mappingThirdFoo( MyModule::SomethingElse_ptr whaaboo )
+{
+  //...
+}
+</programlisting>
+</para>
+
+<para>As you can see an event handler usually begins with the <literal remap="tt">EVENT&lowbar;MAPPER</literal>
+macro and ends with <literal remap="tt">END&lowbar;EVENT&lowbar;MAPPER</literal> . Similar to the
+<literal remap="tt">EMIT&lowbar;EVENT&lowbar;x</literal> macros, the <literal remap="tt">MAPPING</literal> macros consist of a general
+<literal remap="tt">MAPPING</literal> macro and the following friends:
+<itemizedlist>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;BOOLEAN</literal></para>
+</listitem>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;OCTET</literal></para>
+</listitem>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;CHAR</literal></para>
+</listitem>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;WCHAR</literal></para>
+</listitem>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;STRING</literal></para>
+</listitem>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;WSTRING</literal></para>
+</listitem>
+<listitem>
+<para><literal remap="tt">MAPPING&lowbar;OBJECT</literal></para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>In order to structurize the process of event handling a little bit, every
+event  gets its own event handling function. These functions are called by the
+mapping  macros (last argument) . The above used naming scheme is not a
+requirement,  however it is used in most applications using KOM.</para>
+</sect3>
+</sect2>
+<sect2 id="Adopting">
+<title>Adopting</title>
+
+<para>You should use adopting whenever you want to hold a reference to an object and
+want to be informed when the object dies in order to free all your references
+to this object. But this should only be used when you're not the parent
+object, meaning you didn't reference the object directly via the KOM reference
+counter.  When using adopting you should re-implement the <literal remap="tt">leaveNotify</literal>
+(and perhaps <literal remap="tt">adoptNotify</literal>) methods of your  object (and don't forget
+to call the original KOMBase method!) .</para>
+</sect2>
+<sect2 id="KOMreferencing">
+<title>KOM referencing</title>
+
+<para>KOM reference counting should be used to "express" that you possess the
+object. This gives you direct control over the lifecycle of the object by
+letting the reference counter act directly on the server object, in contrary
+to CORBA reference counting, where the reference counter only acts on the stub
+object, in case of remote objects (this is different for local objects, where
+stub = server object) . When the KOM reference counter drops down to zero the
+object gets destroyed. This destruction is done by calling <literal remap="tt">cleanUp()</literal>,
+which closes all connections to other objects and leaves all relatives.  After
+this call is finished the object truly gets released. You might want to
+re-implement the <literal remap="tt">cleanUp()</literal> method. In this case make sure that you
+don't forget two things:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>only execute if the boolean variable <literal remap="tt">m&lowbar;bIsClean</literal> is false,
+otherwise simply return</para>
+</listitem>
+<listitem>
+<para>make sure you call the previous implementation!</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>As a short summary to this KOM reference stuff just keep in mind, that
+there are three ways to hold a reference to an object:
+<itemizedlist>
+<listitem>
+<para>you're connected to the object via signals/slots or via event filters</para>
+</listitem>
+<listitem>
+<para>you're the parent object, meaning you hold a reference through the KOM
+reference counter</para>
+</listitem>
+<listitem>
+<para>otherwise you should use adopting to get informed whenever the object wants
+to die, in order to free all references to the object which are not of
+one of the above kinds. The idea behind all this is that all
+connections/references between objects are symmetric, meaning
+<emphasis remap="bf">both</emphasis> sides know about the connection and <emphasis remap="bf">both</emphasis> sides
+clean up all connections between each other whenever one of the two
+objects wants to die. In case of signal/slot connections this is done
+automatically by KOM. In case of KOM reference counters you have the
+direct control over the lifecylcle for the object. Adopting, as third
+way, can be used to keep other connections symmetric, connections which
+are neither signal/slot connections nor direct references via the KOM
+reference counter.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Hint: Using the <literal remap="tt">KOMVar</literal> template makes handling KOM references much
+easier, they can be used similar to the CORBA &lowbar;var types.</para>
+</sect2>
+<sect2 id="THEcomponenttheKOMComponentKOMComponentinter">
+<title>THE component - the <indexterm remap="idx"><primary>KOM::Component</primary></indexterm>KOM::Component interface</title>
+
+<para>The Component interface, being derived from the Base interface, additionally
+provides a kind of small interface repository for only this component,
+combined with the possibility to provide new interfaces by dynamic aggregation
+and a standard way to add plugin components. This gives CORBA objects the
+possibility to enhance their functionality at run-time.</para>
+
+<para>There are five kinds of interfaces:
+<itemizedlist>
+<listitem>
+<para>Builtin Interfaces (derived Interfaces)</para>
+</listitem>
+<listitem>
+<para>Builtin Aggregate Interfaces</para>
+</listitem>
+<listitem>
+<para>Dynamic Aggregate Interfaces</para>
+</listitem>
+<listitem>
+<para>Builtin Plugin Interfaces</para>
+</listitem>
+<listitem>
+<para>Dynamic Plugin Interfaces</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Builtin interfaces are all interfaces the object directly implements. This
+means they are part of the actual object implementation and can be specified
+via the <literal remap="tt"><indexterm remap="cdx"><primary><literal>ADD&lowbar;INTERFACE</literal></primary></indexterm>ADD&lowbar;INTERFACE</literal> macro (in <indexterm remap="cdx"><primary><literal>komComponent.h</literal></primary></indexterm>komComponent.h) . So for example if
+your interface description looks like this:
+<programlisting>module Foo
+{
+  interface MyInterface : AnotherInterface
+  {
+    ...
+  };
+};</programlisting>
+</para>
+
+<para>You should add the following line into the constructor of an implementation of
+this interface:
+<indexterm><primary>IDL</primary></indexterm>
+<programlisting>ConstructorNameOfMyInterface::ConstructorNameOfMyInterface( ... )
+{
+  ...
+  ADD_INTERFACE( "IDL:Foo/MyInterface:1.0" );
+  ...
+}</programlisting>
+</para>
+
+<para>This way you tell your component that it supports the interface
+"Foo/Interface" and therefore makes it available through the three functions
+<literal remap="tt">getInterface()</literal>, <literal remap="tt">interfaces()</literal> and
+<literal remap="tt">supportsInterface()</literal> .</para>
+</sect2>
+<sect2 id="ExtendyourcomponentbyaggregationKOMAggregate">
+<title>Extend your component by aggregation - <indexterm remap="idx"><primary>KOM::Aggregate</primary></indexterm>KOM::Aggregate</title>
+
+<para>Aggregates solve a problem with distributed objects, the problem of
+derivation.  Since the implementation of an interface is completely
+encapsulated there has to be another way to extend the functionality of an
+already existing  object.  By using aggregate components you can add new
+interfaces to an object,  at run-time. This means you extend the functionality
+but you do not change the behaviour of the object itself.</para>
+<sect3 id="BuiltinAggregates">
+<title>Builtin Aggregates</title>
+
+<para>Builtin aggregate interfaces are the interfaces of aggregate implementations
+which run in the same process as our component. See in komComponent.h the four
+functions of the <literal remap="tt"><indexterm remap="cdx"><primary><literal>KOMComponent</literal></primary></indexterm>KOMComponent</literal> class for adding builtin aggregates,  it's easy.</para>
+</sect3>
+<sect3 id="DynamicAggregates">
+<title>Dynamic Aggregates</title>
+
+<para>Dynamic aggregates are similar to builtin aggregates, with two differences:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>They can (are) be installed from "outside" of the component,
+using  AggregateFactories (see <indexterm remap="idx"><primary>kom.idl</primary></indexterm>kom.idl) . This way they do neither have
+to run  within the same process nor on the same computer.</para>
+</listitem>
+<listitem>
+<para>They can depend on other available interfaces. KOM does the job of resolving
+these dependencies for you.</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="PluginstheKOMPluginKOMPlugininterface">
+<title>Plugins - the <indexterm remap="idx"><primary>KOM::Plugin</primary></indexterm>KOM::Plugin interface</title>
+
+<para>Plugins are the kind of counterpart to aggregates. They do not extend the
+functionality of an object by providing new interfaces, but instead usually
+change the behaviour of it, by
+<orderedlist><listitem>
+<para>doing things like installing event filters to the object, etc.</para>
+</listitem>
+<listitem>
+<para>providing special plugin interfaces</para>
+</listitem>
+</orderedlist>
+</para>
+</sect2>
+<sect2 id="CollectyourcomponentstheKOMContainerKOMConta">
+<title>Collect your components - the <indexterm remap="idx"><primary>KOM::Container</primary></indexterm>KOM::Container interface</title>
+
+<para>Containers do something simple but extremly useful: They act as repository for
+Container members. A container member structure consists of two elements:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>the member name, a freely chooseable and unique string identifier</para>
+</listitem>
+<listitem>
+<para>the member object, a <indexterm remap="idx"><primary>KOM::Base</primary></indexterm>KOM::Base type You can add, remove, replace, list
+and lookup container members or just clear  the whole container. In
+addition the container emits signals whenever a  member has been added
+or removed.</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+<sect2 id="Factories">
+<title>Factories</title>
+
+<para>KOM contains two abstract factory interfaces:
+<orderedlist><listitem>
+<para><indexterm remap="idx"><primary>KOM::AggregateFactory</primary></indexterm>KOM::AggregateFactory</para>
+</listitem>
+<listitem>
+<para><indexterm remap="idx"><primary>KOM::PluginFactory</primary></indexterm>KOM::PluginFactory</para>
+</listitem>
+</orderedlist>
+</para>
+
+<para>They both serve the job of creating objects and are needed for the creation of
+dynamic plugin and aggregate components. Whenever you want to install a such a
+dynamically created object to a component you have to provide an
+implementation of a factory interface.</para>
+</sect2>
+<sect2 id="KOMApplicationKOMApplication">
+<title><indexterm remap="idx"><primary>KOMApplication</primary></indexterm>KOMApplication</title>
+
+<para><indexterm remap="idx"><primary>KOMApplication</primary></indexterm>KOMApplication is the drop-in replacement for <indexterm remap="idx"><primary>KApplication</primary></indexterm>KApplication, required when
+using CORBA in your KDE Application. It, internally, combines CORBA event
+handling with Qt event handling and initializes the <indexterm remap="idx"><primary>ORB</primary></indexterm>ORB and the <indexterm remap="idx"><primary>BOA</primary></indexterm>BOA on
+startup.  komApplication.h defines two smart macros to get a reference to the
+ORB/BOA: <literal remap="tt">komapp&lowbar;orb</literal> and <literal remap="tt">komapp&lowbar;boa</literal> . Usually you will want
+to use your own application class, derived from KOMApplication, and
+re-implement <literal remap="tt">start()</literal> and/or <literal remap="tt">restore()</literal> , which will be called
+&gt;from <literal remap="tt"><indexterm remap="cdx"><primary><literal>KOMApplication::exec()</literal></primary></indexterm>KOMApplication::exec()</literal>, depending on the BOA's state about
+restoring objects. For further information about KOMApplication's API see
+<indexterm remap="cdx"><primary><literal>komApplication.h</literal></primary></indexterm>komApplication.h .</para>
+</sect2>
+</sect1>
+
+<sect1 id="OpenParts">
+<title>OpenParts</title>
+<sect2 id="OpenPartsIntroduction">
+<title>Introduction</title>
+
+<para>The goals of the OpenParts technology, based upon KOM, are:
+<itemizedlist>
+<listitem>
+<para>provide an easy way to graphically embed other application's "widgets"</para>
+</listitem>
+<listitem>
+<para>provide an clever way to manage shared GUI elements and provide a CORBA/KOM
+interface/implementation of these</para>
+</listitem>
+<listitem>
+<para>implement the basic support for the document view model</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>To simplify the act of understanding OpenParts I will give a short example
+situation:</para>
+
+<para>Imagine you have an a word processor and a formula editor, both being separate
+applications. If you now want to insert a formula into your word processor
+document by using your formula editor application this arises several
+problems: You can of course embed the formula editor's main widget window via
+swallowing by using XReparentWindow and friends, or easier by using QXEmbed.
+But then how do you want to edit your formula without having access to the
+formula editor's menubar / toolbar? In any way it would look ugly if these are
+part of the formula window. Wouldn't it be nice if the menus / toolbars of
+your word processor application would get replaced by the formula editor ones,
+except for some general menu /toolbar items? And when you go back to your text
+document the old menus / toolbars come back again.</para>
+
+<para>Well, this is a perfect job for OpenParts :-) .</para>
+
+<para>OpenParts solves the above described problem by introducing a new sytem of
+visual components and a new way of creating shared GUI elements, such as menus
+or toolbars, dynamically on demand.</para>
+
+<para>In the implementation of OpenParts every element consists usually of two
+classes, the interface implementation, where the class name ends with "If",
+and the Qt/KDE object. So for example the OpenParts StatusBar element is
+represented by two classes: <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPStatusBar</literal></primary></indexterm>OPStatusBar</literal>, being derived from
+<indexterm remap="cdx"><primary><literal>KStatusBar</literal></primary></indexterm>KStatusBar,  handles the Qt/KDE specific extensions, and
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>OPStatusBarIf</literal></primary></indexterm>OPStatusBarIf</literal> which is  responsible for providing an implementation
+of the actual <indexterm remap="cdx"><primary><literal>OpenPartsUI::StatusBar</literal></primary></indexterm>OpenPartsUI::StatusBar  interface by "translating" the interface
+functionality into Qt/KDE function  calls.</para>
+
+<para>Since every Qt/KDE object in OpenParts is most often bound to such an
+interface, like described above, there is usually an interface() function
+which returns a reference to the OpenParts interface of the element. In case
+of the above example <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPStatusBar::interface()</literal></primary></indexterm>OPStatusBar::interface()</literal> returns a reference to
+an <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPStatusBarIf</literal></primary></indexterm>OPStatusBarIf</literal> object which is directly bound to this
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>OPStatusBar</literal></primary></indexterm>OPStatusBar</literal> object.</para>
+</sect2>
+<sect2 id="OPApplicationOPApplication">
+<title><indexterm remap="idx"><primary>OPApplication</primary></indexterm>OPApplication</title>
+
+<para>Similar to <indexterm remap="cdx"><primary><literal>KOMApplication</literal></primary></indexterm>KOMApplication, the class <indexterm remap="cdx"><primary><literal>OPApplication</literal></primary></indexterm>OPApplication (derived from
+KOMApplication) is required when using OpenParts.</para>
+</sect2>
+<sect2 id="QWidgetQWidgetasComponenttheOpenPartsPartint">
+<title><indexterm remap="cdx"><primary><literal>QWidget</literal></primary></indexterm>QWidget as Component? - the OpenParts::Part interface</title>
+
+<para>In OpenParts every window which has its own GUI and which is meant to be
+displayed in a MainWindow is called a Part (just like the formula editor view
+or the word processor document view in the above described example) , and
+implements the <indexterm remap="cdx"><primary><literal>OpenParts::Part</literal></primary></indexterm>OpenParts::Part interface by deriving from the class
+<literal remap="tt">OPPartIf</literal>.</para>
+
+<para>If you want to make a widget class a full-featured Part component then you
+have to handle some things different than you might be used to, in regard to
+the standard Qt/KDE widget framework. In fact now a widget is no more a simple
+window in which you display some data, no, a Part is much more than this. In
+particular a Part has, beside it's window (widget, which may of course contain
+sub-windows or even other Parts (see <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPFrame</literal></primary></indexterm>OPFrame</literal> documentation) ) a
+full-featured GUI, consisting of a menubar with menus, toolbar(s) and a
+statusbar.</para>
+
+<para>The special thing with the GUI is the way it is created, handled/used and
+"destroyed" . All this has to be highly dynamic because now the user decides
+about which Part he wants to have active. OpenParts provides the basic
+framework for this:
+<itemizedlist>
+<listitem>
+<para>it tells you when you have to create your GUI and provides you the necessary
+references to the GUI related objects of OpenParts.</para>
+</listitem>
+<listitem>
+<para>it also tells you when the GUI is destructed.</para>
+</listitem>
+<listitem>
+<para>in addition you are notified when your Part gets the focus and gives you
+the choice whether to accept or reject the focus.</para>
+</listitem>
+<listitem>
+<para>you are also notified when your Part gets registered to a MainWindow, in
+order to register your component at several GUI servant objects, just
+like the menubar manager for example.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>The very first step you have to make is to tell the OpenParts Part Interface
+(<literal remap="tt"><indexterm remap="cdx"><primary><literal>OPPartIf</literal></primary></indexterm>OPPartIf</literal>) , the class you have to inherit from, what the actual
+widget is, because <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPartIf</literal></primary></indexterm>OPartIf</literal> does not inherit from QWidget. This gives
+you the  flexibility to separate your Part component from your actualy widget,
+but you  don't have to do this. You can simply multiply inherit from
+<literal remap="tt">OPPartIf</literal> and <literal remap="tt"><indexterm remap="cdx"><primary><literal>QWidget</literal></primary></indexterm>QWidget</literal> or the appropriate widget class. In any way you
+specify your Part  widget by calling <literal remap="tt">setWidget( your&lowbar;widget&lowbar;here )</literal> .
+In most cases, when  the Part component is the widget at the same time, you
+simply call <literal remap="tt">setWidget( this )</literal> :-) . Make sure this call is done in
+the constructor of your class!</para>
+
+<para>The next important point is that you will want to re-implement the virtual
+<literal remap="tt">init()</literal> function of <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPPartIf</literal></primary></indexterm>OPPartIf</literal> . This is highly recommended
+since this function is called after your Part got registered by a MainWindow.
+The idea  behind this function is that at the time the constructor of a Part
+gets executed, the Part itself is definitely not registered to a MainWindow,
+yet. But in fact you need to know when your Part gets registered, in order to
+register your Part at the GUI servant objects, which are only available via
+the MainWindow's interface. A reference to the MainWindow is available through
+the <literal remap="tt"><indexterm remap="cdx"><primary><literal>m&lowbar;vMainWindow</literal></primary></indexterm>m&lowbar;vMainWindow</literal> variable, which will be automatically initialized
+when the MainWindow  registration is done, so don't use this variable before
+your <literal remap="tt">init()</literal> function gets called (<literal remap="tt">m&lowbar;vMainWindow</literal> will be nil
+anyway) .</para>
+
+<para>Now over to the details of the <literal remap="tt"><indexterm remap="cdx"><primary><literal>init()</literal></primary></indexterm>init()</literal> function. Here you should place
+all initialisation stuff which depends on being registered to a MainWindow.
+In addition you can do the above mentioned registration at the GUI managing
+objects. Usually this looks like the following example:
+<programlisting>void MyPart::init()
+{
+  //register at the menubar manager if you want to use/display a menubar
+  OpenParts::MenuBarManager_var menuBarManager = m_vMainWindow-&gt;menuBarManager();
+  if ( !CORBA::is_nil( menuBarManager ) ) //check whether the shell window allows us to have a menubar
+    menuBarManager-&gt;registerClient( id(), this ); //see chapter about the
+              //*barManager objects
+              //for further explanations
+
+  //...the same with the toolbar
+  OpenParts::ToolBarManager_var toolBarManager = m_vMainWindow-&gt;toolBarManager();
+  if ( !CORBA::is_nil( toolBarManager ) )
+    toolBarManager-&gt;registerClient( id(), this );
+
+  //better define a class wide variable, of course
+  OpenPartsUI::StatusBar_var m_vMyStatusBar;
+
+  OpenParts::StatusBarManager_var statusBarManager = m_vMainWindow-&gt;statusBarManager();
+  if ( !CORBA::is_nil( statusBarManager ) )
+    m_vMyStatusBar = statusBarManager-&gt;registerClient( id() );
+}</programlisting>
+</para>
+
+<para>Note that the registration calls for these three GUI element types are only
+necessary if you really want to use them. For example if your Part does not
+want to display any toolbar you should leave out the corresponding call.  In
+addition you might come up with the situation that for example the
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>toolBarManager()</literal></primary></indexterm>toolBarManager()</literal> call returns a nil reference, which indicates that
+the MainWindow does not allow its Parts to have a toolbar. Obviously the same
+applies for the menubar and the statusbar.</para>
+
+<para>OpenParts makes use of KOM events to tell a Part about the
+construction/destruction of it's GUI. These are in particular:
+<itemizedlist>
+<listitem>
+<para><literal remap="tt">OpenPartsUI::eventCreateMenuBar</literal> ("OpenPartsUI/CreateMenuBar")</para>
+</listitem>
+</itemizedlist>
+
+The attached argument is a <literal remap="tt">OpenPartsUI::MenuBar</literal></para>
+
+<para><itemizedlist>
+<listitem>
+<para><literal remap="tt">OpenPartsUI::eventCreateToolBar</literal> ("OpenPartsUI/CreateToolBar")</para>
+</listitem>
+</itemizedlist>
+
+The attached argument is a <literal remap="tt">OpenPartsUI::ToolBarFactory</literal></para>
+
+<para>Depending on whether a Part wants to display a menubar and/or toolbar, the
+managing objects emit these two events to it. In regard to your implementation
+this means that you have to re-implement the <literal remap="tt"><indexterm remap="cdx"><primary><literal>event()</literal></primary></indexterm>event()</literal> function
+(remember: A Part is a full-featured KOM Component) .</para>
+
+<para>The attached event arguments indicate whether the toolbar(s) or the menubar
+are to be created or cleared. Check these arguments against
+<literal remap="tt">CORBA::is&lowbar;nil()</literal> and you know :-) .</para>
+
+<para>The OpenParts StatusBar is handled different compared to the
+MenuBar/ToolBar(s) . In fact it is easier: When registering at the OpenParts
+StatusBarManager you receive your <literal remap="tt"><indexterm remap="cdx"><primary><literal>OpenParts::StatusBar</literal></primary></indexterm>OpenParts::StatusBar</literal> as return
+value. You can then use the StatusBar everywhere in your Part, independend
+from whether it is visible (active) or not.</para>
+
+<para>In the <literal remap="tt"><indexterm remap="cdx"><primary><literal>init()</literal></primary></indexterm>init()</literal> function a lot of registration stuff is done, and
+corresponding to this in the <literal remap="tt"><indexterm remap="cdx"><primary><literal>cleanUp()</literal></primary></indexterm>cleanUp()</literal> function (see chapter about
+<indexterm remap="idx"><primary>KOM::Base</primary></indexterm>KOM::Base) you have to unregister from the GUI servant objects and free all
+appropriate references, following KOM's model of symmetric references and
+connections. Usually the code looks like this:
+<programlisting>void MyPart::cleanUp()
+{
+  if ( m_bIsClean )
+    return;
+
+  //unregister our menubar
+  OpenParts::MenuBarManager_var menuBarManager = m_vMainWindow-&gt;menuBarManager();
+  if ( !CORBA::is_nil( menuBarManager ) )
+    menuBarManager-&gt;unregisterClient( id() );
+
+  //...the same with the toolbar
+  OpenParts::ToolBarManager_var toolBarManager = m_vMainWindow-&gt;toolBarManager();
+  if ( !CORBA::is_nil( toolBarManager ) )
+    toolBarManager-&gt;unregisterClient( id() );
+
+  OpenParts::StatusBarManager_var statusBarManager = m_vMainWindow-&gt;statusBarManager();
+  if ( !CORBA::is_nil( statusBarManager ) )
+    statusBarManager-&gt;unregisterClient( id() );
+
+  //free other references here
+  //...
+
+  //this is IMPORTANT!!!
+  //Always call the cleanUp() method of the base class when you're done!
+  OPPartIf::cleanUp();
+}</programlisting>
+</para>
+</sect2>
+<sect2 id="PartChildren">
+<title>Part Children</title>
+
+<para>A Part Child is a usual Part with three extra features:
+<orderedlist><listitem>
+<para>A Part Child has a Parent Part assigned.</para>
+</listitem>
+<listitem>
+<para>It does not have a GUI and it therefore does not receive any GUI creation
+events.</para>
+</listitem>
+<listitem>
+<para>The Parent Child receives events whenever there are any child related focus
+changes. Since the Part Child functionality is integrated in the
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>OpenParts::Part</literal></primary></indexterm>OpenParts::Part</literal> interface and it's implementation,
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>OPPartIf</literal></primary></indexterm>OPPartIf</literal>, you don't have to deal  with additional classes when
+using Child Parts. Simply leave out the mapping of the OpenParts GUI
+events in the Child Part and instead map the Child Part events described
+below and assign the Parent Part via <literal remap="tt"><indexterm remap="cdx"><primary><literal>setParent()</literal></primary></indexterm>setParent()</literal>. See the
+interface description of <literal remap="tt"><indexterm remap="cdx"><primary><literal>OpenParts::Part</literal></primary></indexterm>OpenParts::Part</literal> , in <indexterm remap="cdx"><primary><literal>openparts.idl</literal></primary></indexterm>openparts.idl,
+for further information about the events and the API in general.</para>
+</listitem>
+</orderedlist>
+</para>
+</sect2>
+<sect2 id="HowtoembedaParttheOPFrameOPFrameclass">
+<title>How to embed a Part - the <indexterm remap="cdx"><primary><literal>OPFrame</literal></primary></indexterm>OPFrame class</title>
+
+<para>Now that you know how to create full-featured Part components it is still
+unexplained how Parts are really displayed/shown. Since Parts are no simple
+QWidgets but CORBA objects we need a helping hand here, which is the
+<literal remap="tt">OPFrame</literal> class. In fact <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPFrame</literal></primary></indexterm>OPFrame</literal> is a <indexterm remap="cdx"><primary><literal>QWidget</literal></primary></indexterm>QWidget, but in
+conjuction with Qt's <indexterm remap="cdx"><primary><literal>QXEmbed</literal></primary></indexterm>QXEmbed it embeds the Part's widget window. The usage of
+<literal remap="tt">OPFrame</literal> is really easy, usually the code looks like this:</para>
+
+<para><programlisting>... somewhere in an application's widget ...
+myFrame = new OPFrame( the_parent_widget );
+myFrame-&gt;attach( a_reference_to_the_part_we_want_to_embed );
+myFrame-&gt;show();</programlisting>
+</para>
+
+<para>In addition to the above example you can <literal remap="tt"><indexterm remap="cdx"><primary><literal>detach()</literal></primary></indexterm>detach()</literal> your Part, which
+you should usually do on exit. Just have a look at <indexterm remap="cdx"><primary><literal>opFrame.h</literal></primary></indexterm>opFrame.h, it is
+documented.</para>
+
+<para>One last important thing you have to know about <literal remap="tt"><indexterm remap="cdx"><primary><literal>OPFrame</literal></primary></indexterm>OPFrame</literal> is that this
+class internally uses KOM referencing (using a <literal remap="tt">KOMVar</literal> variable) to
+hold the Part.  This means that there are two possible situations when using
+<literal remap="tt">OPFrame</literal> :</para>
+
+<para><itemizedlist>
+<listitem>
+<para>If the embedding Widget/Object uses KOM referencing as well to keep a
+reference to the Part then there are two objects influencing the Part's
+lifecycle. On the one hand there's the <literal remap="tt">OPFrame</literal> which
+increases/decreases the Part's KOM reference counter when it gets
+attached/detached, and on the other hand there's the embedding
+Widget/Object. So make sure that you know when you free your KOM
+reference to the Part in regard to detaching the Part!</para>
+</listitem>
+<listitem>
+<para>If the embedding Widget/Object does not use KOM referencing then you have
+to know that when detaching the Part it automatically gets destroyed,
+since usually the <literal remap="tt">OPFrame</literal> is the only object holding a KOM
+reference  to the Part and the KOM reference counter therefore drops
+down to zero and issues the complete destruction of the object.</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+<sect2 id="ThecenterofOpenPartstheOpenPartsMainWindowin">
+<title>The center of OpenParts - the OpenParts::MainWindow interface</title>
+
+<para>Another important component is the so called <indexterm remap="cdx"><primary><literal>OpenParts::MainWindow</literal></primary></indexterm>OpenParts::MainWindow, being
+derived from a <indexterm remap="cdx"><primary><literal>KTMainWindow</literal></primary></indexterm>KTMainWindow in the implementation (and therefore the top-level
+window of your application) and being the shell around visible sub-windows and
+shared GUI elements.</para>
+
+<para>The MainWindow's functionality is extended by some builtin aggregates, the
+managing objects for the menu-/tool-/statusbar. These objects are either
+available directly via the <literal remap="tt">*barManager()</literal> methods of the MainWindow's
+interface or indirectly by being aggregates and therefore available via the
+components interface repository (<literal remap="tt"><indexterm remap="cdx"><primary><literal>getInterface()</literal></primary></indexterm>getInterface()</literal>,
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>supportsInterface()</literal></primary></indexterm>supportsInterface()</literal>, ...) .</para>
+
+<para>A Part can only be displayed in a MainWindow and the MainWindow has to know
+about this. So before you can display a Part you have to register it to the
+MainWindow. This is done by calling the Part Interface's
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>setMainWindow()</literal></primary></indexterm>setMainWindow()</literal> method (see previous chapter for further information
+about the process of registration) and this will give the Part a unique ID
+(which is for example used when addressing the part's GUI via the *bar manager
+objects) .</para>
+
+<para>The MainWindow, as shell, has full control over all shared GUI elements.  This
+means that it is responsible for
+<itemizedlist>
+<listitem>
+<para>creating the appropriate *bar managing objects</para>
+</listitem>
+<listitem>
+<para>providing a skeleton/standard GUI which is meant to be always present,
+no matter what Part is active</para>
+</listitem>
+<listitem>
+<para>telling the GUI managing objects to activate/deactivate a Part's GUI</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>The creation of the *bar managers can be easily done by simply performing a
+dummy call to <literal remap="tt">*barManager()</literal> which usually returns a pointer to the
+appropriate manager and also creates a new one if it does not exist yet. It is
+recommended to perform these calls in the constructor of your MainWindow.</para>
+
+<para>The creation/handling of the skeleton GUI is explained later in the chapters
+about <indexterm remap="cdx"><primary><literal>OPMenu</literal></primary></indexterm>OPMenu(Bar)/<indexterm remap="cdx"><primary><literal>OPToolBar</literal></primary></indexterm>OPToolBar .</para>
+
+<para>Your MainWindow emits a Qt signal (<literal remap="tt"><indexterm remap="cdx"><primary><literal>activePartChanged</literal></primary></indexterm>activePartChanged</literal>) which informs
+you about a focus change of the active part, meaning whenever the user clicks
+on a non-active Part and it accepts the focus. Beside the pure informative
+sense  of this signal it is recommended to connect to this signal and perform
+the  following two steps in the slot implementation:</para>
+
+<para><orderedlist><listitem>
+<para>deactivate the previous active Part's GUI by calling the *bar managers
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>clear()</literal></primary></indexterm>clear()</literal> function, which will do the job and, beside some
+internal stuff, emit the GUI events (see previous chapter) to the Part.</para>
+</listitem>
+<listitem>
+<para>activate the new active Part's GUI by calling the *bar managers
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>create()</literal></primary></indexterm>create()</literal> function, which will, similar to the activation, emit
+events to the Part. This is not really required but it is highly
+recommended. The following code is usually used for this:
+
+<programlisting>      void NameOfYourMainWindow::slotActivePartChanged( unsigned long old_id,
+                                                        unsigned long new_id )
+      {
+        // clear the menu/tool/statusbar(s)
+        menuBarManager()-&gt;clear();
+        toolBarManager()-&gt;clear();
+        statusBarManager()-&gt;clear();
+        // create the new Part's GUI
+        menuBarManager()-&gt;create( new_id );
+        toolBarManager()-&gt;create( new_id );
+        statusBarManager()-&gt;create( new_id );
+      }
+      </programlisting>
+</para>
+</listitem>
+</orderedlist>
+</para>
+
+<para>Now that the MainWindow handles all the shared "stuff" there is one thing
+which was not mentioned in this documentation, yet: What about the
+MainWindow's caption? The OpenParts MainWindow interface allows parts to have
+their own window captions, but how does OpenParts handle this?</para>
+
+<para>Well, there are two ways:
+<orderedlist><listitem>
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>OPMainWindow</literal></primary></indexterm>OPMainWindow</literal> provides you a so called <literal remap="tt"><indexterm remap="cdx"><primary><literal>AutoCaption</literal></primary></indexterm>AutoCaption</literal> mode
+which automatically changes the MainWindow's caption whenever the active
+part changes. This is enabled by default.</para>
+</listitem>
+<listitem>
+<para>But sometimes the shell wants to have full control over the window's
+caption, and this is accomplished by disabling the <literal remap="tt">AutoCaption</literal>
+mode, which  leads to the situation that the window's caption is not
+changed by OpenParts  in any way but instead gives you control over it.</para>
+</listitem>
+</orderedlist>
+</para>
+</sect2>
+<sect2 id="AccesssharedGUIelementsthroughCORBAOpenParts">
+<title>Access shared GUI elements through CORBA - OpenPartsUI and its interfaces</title>
+
+<para>Well, now that we know when we have to construct/destruct a Part's GUI,
+via the <indexterm remap="cdx"><primary><literal>OpenPartsUI</literal></primary></indexterm>OpenPartsUI events, we have to learn how to really create it, because
+we don't have the common <indexterm remap="cdx"><primary><literal>KMenuBar</literal></primary></indexterm>KMenuBar, <indexterm remap="cdx"><primary><literal>KToolBar</literal></primary></indexterm>KToolBar, etc. classes anymore available.
+The replacement for them are CORBA Objects, described in openparts&lowbar;ui.idl which
+is, together with the corresponding implementations, a part of the partsui
+module. The interfaces are 98&percnt;; similar to the KDE/Qt classes, so they're
+quite easy to use. Instead of bloating up this documentation with example code
+I rather suggest reading the tutorials in kdelibs/corba/tutorials .</para>
+</sect2>
+<sect2 id="PixmapsPixmapsandStringsStringsinOpenPartsOP">
+<title><indexterm remap="idx"><primary>Pixmaps</primary></indexterm>Pixmaps and <indexterm remap="idx"><primary>Strings</primary></indexterm>Strings in OpenParts - <indexterm remap="cdx"><primary><literal>OPUIUtils</literal></primary></indexterm>OPUIUtils</title>
+
+<para>Toolbars and menus are usually beautified with pixmaps, using QPixmap classes.
+As we now use a CORBA interface to access our GUI elements, <indexterm remap="cdx"><primary><literal>QPixmap</literal></primary></indexterm>QPixmap has become
+<indexterm remap="cdx"><primary><literal>OpenPartsUI::Pixmap</literal></primary></indexterm>OpenPartsUI::Pixmap for OpenParts applications. OpenPartsUI::Pixmap is just
+a "stringified" QPixmap, and opUIUtils.(h,cc) contains some easy
+to use conversion routines.</para>
+
+<para>In addition OPUIUtils contains string conversion routines between CORBA::WChar*
+and <indexterm remap="cdx"><primary><literal>QString</literal></primary></indexterm>QString. This is necessary since Qt version &gt;=2.0 supports <indexterm remap="cdx"><primary><literal>Unicode</literal></primary></indexterm>Unicode,
+via QString, all over the place, and obviously GUI elements like menus or
+toolbars have been converted to support this. OpenParts has been converted,
+too, by using "wstring" (<indexterm remap="cdx"><primary><literal>CORBA::WChar *</literal></primary></indexterm>CORBA::WChar *) in the interfaces and by
+using and providing conversion routines. These routines are static member
+functions of the OPUIUtils  class, just like with the pixmap conversion. To
+simplify the usage, two macros have been defined: <literal remap="tt"><indexterm remap="cdx"><primary><literal>Q2C</literal></primary></indexterm>Q2C</literal> and
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>C2Q</literal></primary></indexterm>C2Q</literal> . The first one converts a QString into a CORBA::WChar * string
+and the second one vice-versa.</para>
+
+<para>When converting from QString to CORBA::WChar * the conversion routine
+allocates memory. To avoid <indexterm remap="idx"><primary>memory leaks</primary></indexterm>memory leaks it is highly recommended to use
+CORBA::WString&lowbar;var variables. Exactly the same applies for QPixmap -&gt;
+OpenPartsUI::Pixmap conversions: Use <indexterm remap="cdx"><primary><literal>OpenPartsUI::Pixmap&lowbar;var</literal></primary></indexterm>OpenPartsUI::Pixmap&lowbar;var , and you don't
+have to worry about leaks :-) .</para>
+
+<para>Here's some example code, to show how to do it right:
+<programlisting>    ...
+    OpenPartsUI::Pixmap_var pm = OPUIUtils::convertPixmap( QPixmap_variable_here );
+    someToolBar-&gt;insertButton( pm, ... );
+    ...
+    //use the same pm variable again
+    pm = OPUIUtils::convertPixmap( another_qpixmap );
+    ...</programlisting>
+</para>
+
+<para>Similar things have to be done with QString's:</para>
+
+<para><programlisting>    ...
+    CORBA::WString_var text = Q2C( QString_here );
+    someMenuBar-&gt;insertItem7( text, ... );
+    ...
+    // or you can write:
+    someMenuBar-&gt;insertItem7( ( text = Q2C( QString_here ) ) , ...);
+    ...</programlisting>
+</para>
+
+<para>One note left: When you return a "wide string" (CORBA::WChar *) as
+a function result by using <literal remap="tt">Q2C</literal>, make sure not to use
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>CORBA::wstring&lowbar;dup()</literal></primary></indexterm>CORBA::wstring&lowbar;dup()</literal>.</para>
+
+<para>Example:
+<programlisting>  return CORBA::string_dup( Q2C( QString_here ) ); //!!!! WRONG!!!!!
+  ...
+  return Q2C( QString_here ); // RIGHT! because Q2C already allocates the string</programlisting>
+</para>
+
+<para>That's it! Have fun using KOM/OpenParts :-)</para>
+
+<para>TODO:
+<itemizedlist>
+<listitem>
+<para>KOMShutdownManager</para>
+</listitem>
+<listitem>
+<para>AutoLoader template classes</para>
+</listitem>
+<listitem>
+<para>OPApplication Interface + Factories</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect2>
+</sect1>
+</chapter>
+
+<chapter id="KDEDAEMON">
+<title>The KDE Daemon</title>
+
+<para>Simon Hausmann <ulink url="mailto:hausmann@kde.org">&lt;hausmann@kde.org&gt;</ulink></para>
+
+<para>v1.0 26, June 1999
+<emphasis>This documentation describes the KDE Daemon, the services it provides and
+how to use it. So if you're dealing with <indexterm remap="idx"><primary>CORBA server</primary></indexterm>CORBA servers in the KDE or if you're
+interested in a smart way of accessing <indexterm remap="idx"><primary>KService</primary></indexterm>KService data in your application then
+you might want to read this and use <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded</emphasis></para>
+
+<sect1 id="DaemonIntroduction">
+<title>Introduction</title>
+
+<para>The KDE Daemon, herein simply named <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded, is a central daemon in the KDE Desktop
+Environment. It provides three services:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>The KDE Trader (<indexterm remap="cdx"><primary><literal>KTrader</literal></primary></indexterm>KTrader) , which provides an easy-to-use but still extremly
+powerful interface to the KDE Registry.</para>
+</listitem>
+<listitem>
+<para>The KDE Activator (<indexterm remap="cdx"><primary><literal>KActivator</literal></primary></indexterm>KActivator) , which makes accessing CORBA based services
+in KDE the easiest thing of the world ;-) .</para>
+</listitem>
+<listitem>
+<para>The KDE Naming Service (<indexterm remap="cdx"><primary><literal>KNaming</literal></primary></indexterm>KNaming) , which provides a simple but useful
+naming service for CORBA Objects.</para>
+</listitem>
+</itemizedlist>
+</para>
+</sect1>
+
+<sect1 id="UsingTheKDEDaemonInYourApplication">
+<title>Using The KDE Daemon In Your Application</title>
+
+<para>Before we can use any of <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded's services, we have to know something about it's
+"position" in the KDE and the way it itself and the services can be accessed.</para>
+
+<para>As <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded uses CORBA to communicate with it's clients, your application (as client),
+has to
+<itemizedlist>
+<listitem>
+<para>link to the <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded library, <indexterm remap="cdx"><primary><literal>libkded</literal></primary></indexterm>libkded.</para>
+</listitem>
+<listitem>
+<para>link to libmico</para>
+</listitem>
+<listitem>
+<para>initialize the <indexterm remap="idx"><primary>MICO</primary></indexterm>MICO <indexterm remap="idx"><primary>ORB</primary></indexterm>ORB</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>The first two points are fixed for all clients, the third one depends on the
+specific client. In general you have to choices:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>If your application already uses <indexterm remap="idx"><primary>KOM</primary></indexterm>KOM, then you're fine with using
+<indexterm remap="cdx"><primary><literal>KOMApplication</literal></primary></indexterm>KOMApplication (as you need it anyway) .</para>
+</listitem>
+<listitem>
+<para>If you don't want to use <indexterm remap="idx"><primary>KOM</primary></indexterm>KOM, then you can initialize the ORBA "manually":
+<literal remap="verb">CORBA::ORB_ptr orb = CORBA::ORB_init( argc, argv, "mico-local-orb" );</literal>
+Please note that when using this construct or similar ones, your application is
+<emphasis remap="bf">not</emphasis> able to act as <indexterm remap="idx"><primary>CORBA server</primary></indexterm>CORBA server if you are using KDE/Qt classes at the
+same time. This is due to the fact that the <indexterm remap="idx"><primary>ORB</primary></indexterm>ORB needs it's own event loop, beside
+the main Qt event loop. Currently only <indexterm remap="cdx"><primary><literal>KOMApplication</literal></primary></indexterm>KOMApplication, as part of the KDE Object
+Model, implements the needed functionality to combine both event loops and thus
+making KDE apps able to serve CORBA Objects.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Although <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded uses CORBA extensively, the API is kept simple and free from
+complicated CORBA stuff. In fact when talking about <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded and it's API not the
+<indexterm remap="cdx"><primary><literal>kded server</literal></primary></indexterm>kded server is meant but the KDE Daemon library. This library contains the
+interface to the server (for the clients) as well as the whole server functionality.
+The reason for this is based on the idea that an application using <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded should
+not be forced to rely on an existing <indexterm remap="cdx"><primary><literal>kded server</literal></primary></indexterm>kded server binary nor a running server at
+all. The following three situations may exist when a client app gets started:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>No <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded is running and there's no <indexterm remap="cdx"><primary><literal>kded server</literal></primary></indexterm>kded server binary in the path. In this
+situation <indexterm remap="cdx"><primary><literal>libkded</literal></primary></indexterm>libkded will automatically start a local instance of <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded in
+the application's process.</para>
+</listitem>
+<listitem>
+<para>No <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded is running but there's a <indexterm remap="cdx"><primary><literal>kded server</literal></primary></indexterm>kded server binary available. Here <indexterm remap="cdx"><primary><literal>libkded</literal></primary></indexterm>libkded
+will start the kded executable and connect to it.</para>
+</listitem>
+<listitem>
+<para><indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded is already running :-) . The fact that a <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded is running is indicated
+by a special property on the X Root Window. <indexterm remap="cdx"><primary><literal>kded</literal></primary></indexterm>kded publishes it's <indexterm remap="idx"><primary>IOR</primary></indexterm>IOR
+(Interoperable Object Reference) in this property. This also ensures that
+a <indexterm remap="idx"><primary>kded</primary></indexterm>kded instance is specific to a X display and therefore to your KDE session.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>To sum it up: <indexterm remap="idx"><primary>libkded</primary></indexterm>libkded will always make sure that the services of <indexterm remap="idx"><primary>kded</primary></indexterm>kded are available
+for your client application, no matter in what alien environment the app is
+running :-) . And, although you don't have to care about this, you can optionally
+control this behaviour of <indexterm remap="idx"><primary>libkded</primary></indexterm>libkded by adding one of the following three <indexterm remap="idx"><primary>commandline arguments</primary></indexterm>commandline arguments
+to your app:
+<itemizedlist>
+<listitem>
+<para>"-kdedlocal" , which will make <indexterm remap="idx"><primary>libkded</primary></indexterm>libkded <emphasis remap="bf">always</emphasis> start a process-local
+instance of kded and it's services.</para>
+</listitem>
+<listitem>
+<para>"-kdedremote" , which will make <indexterm remap="idx"><primary>libkded</primary></indexterm>libkded try to look for a running <indexterm remap="idx"><primary>kded</primary></indexterm>kded
+instance before starting a local one.</para>
+</listitem>
+<listitem>
+<para>"-kdedior ior&lowbar;here" , which will make <indexterm remap="idx"><primary>libkded</primary></indexterm>libkded connect to the <indexterm remap="idx"><primary>kded server</primary></indexterm>kded server
+specified by the given <indexterm remap="idx"><primary>IOR</primary></indexterm>IOR.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Your actual interface to <indexterm remap="idx"><primary>kded</primary></indexterm>kded and it's services is the <literal remap="tt"><indexterm remap="cdx"><primary><literal>KdedInstance</literal></primary></indexterm>KdedInstance</literal> class,
+defined in kded&lowbar;instance.h . So if you want to use <indexterm remap="idx"><primary>kded</primary></indexterm>kded (I guess that's why you're
+reading this shit ;) ) then make sure to create <emphasis remap="bf">one</emphasis> single instance
+of it, preferably by adding the following line somewhere in the beginning of
+your <literal remap="tt">main()</literal> :
+<literal remap="verb">KdedInstance( argc, argv, _a_reference_to_the_orb_here_ );</literal>
+If you're using <indexterm remap="idx"><primary>KOMApplication</primary></indexterm>KOMApplication as application object (make sure to create the
+instance before this line) , then you're fine by specifying <literal remap="tt">komapp&lowbar;orb</literal> as
+reference to the <indexterm remap="idx"><primary>ORB</primary></indexterm>ORB.</para>
+
+<para>As there is always only one single instance of this class, you can simply access
+it by the static <literal remap="tt"><indexterm remap="cdx"><primary><literal>self()</literal></primary></indexterm>self()</literal> method of the class from anywhere you want. No
+need to pass <indexterm remap="cdx"><primary><literal>KdedInstance</literal></primary></indexterm>KdedInstance arguments all around in your program ;-) .</para>
+
+<para>For further information about <literal remap="tt"><indexterm remap="cdx"><primary><literal>KdedInstance</literal></primary></indexterm>KdedInstance</literal> you might want to read
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>kded&lowbar;instance.h</literal></primary></indexterm>kded&lowbar;instance.h</literal> , it's pretty good documented.</para>
+</sect1>
+
+<sect1 id="KTraderKTrader">
+<title><indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader</title>
+
+<para>As already mentioned in the introduction, <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader gives you access to the registry.
+"Now what the hell is the registry?" you might ask. As this is just a documentation
+about <indexterm remap="idx"><primary>kded</primary></indexterm>kded/<indexterm remap="idx"><primary>libkded</primary></indexterm>libkded, I can only respond: "Please consult the documentation of/in
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> for more information" :-&rcub; . Just one thing about it here: <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader loads
+the whole and bloaty registry for you. Thanks to the magic of <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> the loaded
+registry will always be in sync with the "real" registry, the <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop files in
+the following standard directories (both types, the system wide and the user ones) :
+<itemizedlist>
+<listitem>
+<para>applnk</para>
+</listitem>
+<listitem>
+<para>mimelnk</para>
+</listitem>
+<listitem>
+<para>services</para>
+</listitem>
+<listitem>
+<para>servicetypes</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>Now over to <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader and it's API. Similar to <literal remap="tt"><indexterm remap="cdx"><primary><literal>KdedInstance</literal></primary></indexterm>KdedInstance</literal> there can
+be only one single instance. The difference is that you don't have to care
+about allocating it, just simply get a reference to the <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader by calling
+the <literal remap="tt">ktrader()</literal> method of <literal remap="tt"><indexterm remap="cdx"><primary><literal>KdedInstance</literal></primary></indexterm>KdedInstance</literal> . And: don't
+even think about deleting the returned reference! Just simply use it and be
+happy with it :-) . (hey, <indexterm remap="idx"><primary>kded</primary></indexterm>kded is designed to be easy to use, no need for difficult
+stuff...)</para>
+
+<para>The <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader API is even so simple that it contains only two methods ;-) . But
+before I describe these methods you have to know something about the kind of
+data <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader returns. In simple words: You will always get a list of <indexterm remap="idx"><primary>KService</primary></indexterm>KService
+objects. More detailed: The returned list is a <literal remap="tt"><indexterm remap="cdx"><primary><literal>QValueList</literal></primary></indexterm>QValueList</literal> and the
+entries are <literal remap="tt"><indexterm remap="cdx"><primary><literal>KSharedPtr</literal></primary></indexterm>KSharedPtr</literal>'s (FIXME: will soon be renamed to QSharedPtr,
+as it will become part of Qt.... AFAIK) to <literal remap="tt"><indexterm remap="idx"><primary>KService</primary></indexterm>KService</literal> objects. Please
+read the corresponding Qt documentation about these two classes. The big advantage
+of using these two template classes is that everything becomes easy for you
+and that the memory consumption is kept at a minimum . You don't have to care
+about pointers, freeing them and cleaning up the list, as long as you use
+<literal remap="tt"><indexterm remap="cdx"><primary><literal>KTrader::ServicePtr</literal></primary></indexterm>KTrader::ServicePtr</literal> variables to hold the <indexterm remap="idx"><primary>KService</primary></indexterm>KService objects and as
+long as you use <literal remap="tt"><indexterm remap="cdx"><primary><literal>KTrader::OfferList</literal></primary></indexterm>KTrader::OfferList</literal> to pass the list around in your
+program. So: Remember to always use these two types when dealing with <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader!</para>
+
+<para>Now over to the two methods.</para>
+
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>KTrader::listServices()</literal></primary></indexterm>KTrader::listServices()</literal> returns your a list of <emphasis remap="bf">all</emphasis> available
+services in the whole KDE. (no need for further explanations I think...)</para>
+
+<para><literal remap="tt"><indexterm remap="cdx"><primary><literal>KTrader::query()</literal></primary></indexterm>KTrader::query()</literal> is the key method of this beast. It performs a lookup
+in the registry database, given your information about what you want to have.
+The first argument is the name of the servicetype which all returned services
+must implement. If you're unsure about the word "servicetype" , then you can
+replace it with "mimetype" , for most, but not all, cases.</para>
+
+<para>The second argument is an additional constraint expression, which has to be
+fulfilled by a service.</para>
+
+<para>The third argument is a preference expression after which the returned services
+will be sorted. The value of the expression has to be numeric.</para>
+
+<para>The syntax of these two expressions is equal with the language of the standard
+CORBA Trader (this is due to the fact that the parsing code is from the <indexterm remap="idx"><primary>COS</primary></indexterm>COS
+Trader of <indexterm remap="idx"><primary>MICO</primary></indexterm>MICO) . The language is not very difficult and I don't want to bloat
+this documentation with further explanations about it. Please consult your
+CORBA literature for more information. Just one thing you have to know:
+Comparisons are always done with the properties of the <indexterm remap="idx"><primary>KService</primary></indexterm>KService object,
+which are the standard entries (Name, ServiceType, RepoIds, ...) plus
+the ones specified in the servicetype declaration and read by <indexterm remap="idx"><primary>KService</primary></indexterm>KService.</para>
+
+<para>Well, after so much theoretical explanations it's time for some practical example
+code:
+<indexterm remap="ncdx"><primary><literal>KTrader::OfferList</literal></primary></indexterm>
+<programlisting>  ...
+  //get a reference to the KTrader
+  KTrader *trader = KdedInstance::self()-&gt;ktrader();
+
+  ...
+  //will return a list of all services which implement the servicetype
+  //named "text/plain"
+  KTrader::OfferList offers = trader-&gt;query( "text/plain" );
+
+
+  ...
+  //will return a list of all services which implement the servicetype
+  //named "image/gif" and which have the AllowAsDefault property set true
+  KTrader::OfferList offers = trader-&gt;query( "image/gif", "AllowAsDefault == TRUE" );
+
+  ...
+  //will return KSpread ;-)
+  KTrader::OfferList offers = trader-&gt;query( "KOfficeDocument", "(Exec == 'kspread') and (Path != '/opt/gnome/bin')" );
+
+  ...
+  //will return a list of all services which implement the servicetype
+  //named "BlahFoo" and which will be sorted (from lowest to highest) by
+  //the value of the property "Price" , declared in the servicetype
+  //declaration of BlahFoo.
+  KTrader::OfferList offers = trader-&gt;query( "BlahFoo", QString::null, "min Price" );</programlisting>
+</para>
+
+<para>Please note that <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader, since it queries <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> for services, will
+always return services sorted by the user's preferences for the specific
+servicetype. These preferences can be specified in the file "profilerc" .</para>
+<sect2 id="KTraderServiceProvider">
+<title>KTraderServiceProvider</title>
+
+<para>This section requires to be familiar with <literal remap="tt"><indexterm remap="cdx"><primary><literal>libkio</literal></primary></indexterm>libkio</literal> and it is meant for everybody who
+wants to use <indexterm remap="idx"><primary>KRun</primary></indexterm>KRun in his application.</para>
+
+<para><indexterm remap="idx"><primary>KRun</primary></indexterm>KRun requires a fully loaded registry in order to resolve mimetype &lt;-&gt; application
+bindings. A fully loaded registry means that you need a <literal remap="tt"><indexterm remap="cdx"><primary><literal>KServiceTypeFactory</literal></primary></indexterm>KServiceTypeFactory</literal> and
+a KServiceFactory, which both load the appropriate <literal remap="tt"><indexterm remap="cdx"><primary><literal>KServiceType</literal></primary></indexterm>KServiceType</literal><literal remap="tt"><indexterm remap="cdx"><primary><literal>KService</literal></primary></indexterm>KService</literal> objects.
+Now the KServiceType information doesn't need that much memory, but the <indexterm remap="idx"><primary>KService</primary></indexterm>KService
+object really eat loooots of it. And isn't it kind of stupid to load this information
+if this is already done by <indexterm remap="idx"><primary>kded</primary></indexterm>kded? Yes, it is ;-) .</para>
+
+<para>What we would need is to make <indexterm remap="idx"><primary>KRun</primary></indexterm>KRun query <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader for <indexterm remap="idx"><primary>KService</primary></indexterm>KService data, instead of
+directly using <indexterm remap="idx"><primary>KServiceTypeProfile</primary></indexterm>KServiceTypeProfile. Fortunately <indexterm remap="idx"><primary>KRun</primary></indexterm>KRun is flexible enough for this,
+we just need a re-implementation of the <indexterm remap="idx"><primary>KServiceProvider</primary></indexterm>KServiceProvider, defined in <literal remap="tt"><indexterm remap="cdx"><primary><literal>krun.h</literal></primary></indexterm>krun.h</literal>
+and used by <indexterm remap="idx"><primary>KRun</primary></indexterm>KRun. Guess what, but <indexterm remap="idx"><primary>KTrader</primary></indexterm>KTrader provides you this re-implementation :-) .
+Just have a look at the end of <literal remap="tt"><indexterm remap="cdx"><primary><literal>ktrader.h</literal></primary></indexterm>ktrader.h</literal>.</para>
+
+<para>To sum it up: The following line makes <indexterm remap="idx"><primary>KRun</primary></indexterm>KRun query <indexterm remap="idx"><primary>kded</primary></indexterm>kded, in your application:
+<programlisting>  ...
+  //place this somewhere BEFORE the first usage of KRun, preferable somewhere
+  //in main()
+  KTraderServiceProvider serviceProvider;
+  ...</programlisting>
+
+That's all, except that you <emphasis remap="bf">must</emphasis> have a <indexterm remap="cdx"><primary><literal>KdedInstance</literal></primary></indexterm>KdedInstance in order to be
+able to use it.</para>
+</sect2>
+</sect1>
+
+<sect1 id="KActivatorKActivator">
+<title><indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator</title>
+
+<para>One often mentioned problem, when talking about applications which provide
+their services via CORBA, is how to start and access these services. Solutions
+like making apps write the <indexterm remap="idx"><primary>IOR</primary></indexterm>IOR of an object somewhere into a file in the
+filesystem or similar approaches are just hacks ;-) . Better use <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator,
+since it can automatically, on demand, start servers for you or use already
+running ones. This is accomplished with the help of the mediators for <indexterm remap="idx"><primary>BOA/POA</primary></indexterm>BOA/POA
+and the <indexterm remap="idx"><primary>IMR</primary></indexterm>IMR (Implementation Repository), both provided by <indexterm remap="idx"><primary>MICO</primary></indexterm>MICO. Fortunately
+you don't have to deal with IMR entries and the mediators.</para>
+
+<para>Before you can use <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator to start a server for you, you have to register
+the server's service. There are two possible ways, the last one is highly
+recommended though:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>Register and unregister it manually, by using the two corresponding
+methods of the <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator.</para>
+</listitem>
+<listitem>
+<para>Go the smart way and provide the necessary information in a <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop file.
+Fortunately <indexterm remap="idx"><primary>KService</primary></indexterm>KService supports the necessary properties, like repository
+ids, activation mode and others.</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para>For the second point it's important that the <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop file is available for
+<indexterm remap="idx"><primary>KRegistry</primary></indexterm>KRegistry, by placing it in a directory which gets scanned by the registry.
+If your application has already a <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop file in the applnk tree for example,
+then you're fine with adding the necessary fields in there. Otherwise the
+directory named "services" (either system-wide or user-local) is the best place
+for it. If you provide the CORBA service information this way, then <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator
+will automatically detect it and register it automatically at the IMR. This
+means that it is immediately available for <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator and thus to your client app.
+And since <indexterm remap="idx"><primary>KRegistry</primary></indexterm>KRegistry is such a cool thing :-) , you can do all this even at
+run-time, when <indexterm remap="idx"><primary>kded</primary></indexterm>kded is running. Just place the <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop file in one of the
+right directories for it and <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator will update the IMR on-the-fly. The
+same applies obviously for just deleted or modified <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop files, which will
+make <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator adjust the IMR. Now you might get the idea why this is the
+preferred way :-)) .</para>
+
+<para>Now that you know how to register CORBA services you will want to know how
+to "access" it. <literal remap="tt">activateService()</literal> is your friend here. Simply pass
+it the name of the service, the repository id of the server object and the
+object's tag and it will return you a functional object reference. That's all :-)</para>
+
+<para>Depending on the service's activation mode, <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator will either return a reference
+to an already running server or it will start a new instance.</para>
+
+<para>One note about the returned object reference: This is a virtual reference,
+which means that that server object is started when the first call is invoked
+on this reference, thus making your server get started "lazy", only on-demand.
+But that's just additional information, you don't have to deal and know about
+it at all. Just be happy with your functional object reference :-) .</para>
+
+<para>Want some examples? Here we go:</para>
+
+<para>This is how a <indexterm remap="idx"><primary>.desktop</primary></indexterm>.desktop file could look like, assuming that the commandline
+"--server" starts the app in <indexterm remap="idx"><primary>CORBA server</primary></indexterm>CORBA server mode:
+<programlisting>Name=MyApp
+Exec=fooblah
+CORBAExec=fooblah --server
+X-KDE-RepoIds=IDL:Foo/Blah:1.0#MyFoo
+X-KDE-ActivationMode=shared</programlisting>
+</para>
+
+<para>If <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator "gets" this file, it will register the service and then you're
+able to do something like this:
+<programlisting>  ...
+  KActivator *activator = KdedInstance::self()-&gt;kactivator();
+  ...
+  CORBA::Object_var obj = activator-&gt;activateServer( "MyApp", "IDL:Foo/Blah:1.0", "MyFoo );
+  ...</programlisting>
+</para>
+
+<para>The above example will either start a new fooblah instance or connect to a running
+one.</para>
+
+<para>For further information please have a look at the examples in kdelibs/corba/tutorials/kded .
+The example application there registers the server manually via <literal remap="tt">registerService</literal> .</para>
+
+<para>Please note: The server <emphasis remap="bf">has</emphasis> to be started by <indexterm remap="idx"><primary>kded</primary></indexterm>kded in order to make <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator
+return a reference to a running one. Executing "fooblah" from somewhere else
+will <emphasis remap="bf">not</emphasis> make <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator use it. This is a problem for persistent
+servers like <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop for example. But there's a solution available, just read
+the next chapter about the KDE Naming Service :-) .</para>
+</sect1>
+
+<sect1 id="KNamingKNaming">
+<title><indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming</title>
+
+<para>The KDE Naming Service, <indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming, is also a very simple service, but it's pretty
+useful and in some cases a very nice solution to make a CORBA client connect to
+a persistent <indexterm remap="idx"><primary>CORBA server</primary></indexterm>CORBA server.</para>
+
+<para>With <indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming you can bind a freely chooseable name to a CORBA object. And since
+<indexterm remap="idx"><primary>kded</primary></indexterm>kded is system (session) wide available, your object becomes available for any
+client which is able to connect to <indexterm remap="idx"><primary>kded</primary></indexterm>kded.</para>
+
+<para>There's not much to explain here :-&rcub; , so I suggest having a look at the <indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming
+API, in <literal remap="tt"><indexterm remap="cdx"><primary><literal>knaming.h</literal></primary></indexterm>knaming.h</literal>.</para>
+
+<para>Example code can be, again, found in kdelibs/corba/tutorials/kded . Here's just
+a short real example situation:</para>
+
+<para>Just think of <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop, that nice app providing your background desktop icons.
+It provides some functionality via CORBA, just have a look at kdesktop.idl to
+see what I'm talking about. Now the problem for <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop is: How can it provide
+this service to other apps in the system? Writing an <indexterm remap="idx"><primary>IOR</primary></indexterm>IOR into some file is no
+clean solution IMHO, and using <indexterm remap="idx"><primary>KActivator</primary></indexterm>KActivator doesn't work because <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop does not
+get started by <indexterm remap="idx"><primary>kded</primary></indexterm>kded but by the startkde script on KDE startup. So we find a better
+way and make <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop register it's object at <indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming. This is done by the following
+lines:
+<programlisting>  ...
+  KNaming *knaming = KdedInstance::self()-&gt;knaming();
+  naming-&gt;bind( "KDesktop", kdesktop_object_here );
+  ...</programlisting>
+
+Well, I told you a lie ;) : <indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming does not really bind to "<indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop" but
+instead to "IDL:KDesktopIf:1.0" , but since there's no naming convention
+for the naming I have choosen a more readable name, IMHO of course :-) (don't
+mind me David :] ) . I personally prefer human readable names ;) , in contrary
+to repository ids with tags.</para>
+
+<para>Back to <indexterm remap="idx"><primary>KNaming</primary></indexterm>KNaming and <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop: Now any client application, kfmclient for example,
+can "connect" to <indexterm remap="idx"><primary>KDesktop</primary></indexterm>KDesktop. Just like this:
+<programlisting>  ..
+  KNaming *knaming = KdedInstance::self()-&gt;knaming();
+  ...
+  CORBA::Object_var obj = knaming-&gt;resolve( "KDesktop" );
+  KDesktopIf_var kdesky = KDesktopIf::_narrow( obj );
+  kdesky-&gt;selectAll(); //let's confuse the user by selecting all icons ;-)
+  ...</programlisting>
+</para>
+</sect1>
+</chapter>
+
+<chapter id="Copyright">
+<title>Copyright</title>
+
+<para>Each chapter of this handbook contains the documentation of the according authors, therefore the copyright remains on the side of
+those. This handbook has been assembled by agreement with each author about the usage of his documentation. Reprint is therefore only
+allowed on agreement with the KDevelop Team and the authors of each chapter.</para>
+
+<para>KDevelop is Copyright 1999 The KDevelop Team. This handbook itself is part of the KDevelop Intergrated Development environment</para>
+
+<para><link linkend="miniHOWTO">The KDE Developer's mini-HOWTO</link> is copyright of David Sweet.<ulink url="mailto:dsweet@chaos.umd.edu">&lt;dsweet@chaos.umd.edu&gt;</ulink></para>
+
+<para><link linkend="KOMOP">KDE KOM / OpenParts</link> is copyright of Torben Weis <ulink url="mailto:weis@kde.org">&lt;weis@kde.org&gt;</ulink> and
+Bernd Wuebben <ulink url="mailto:wuebben@kde.org">&lt;wuebben@kde.org&gt;</ulink></para>
+
+<para><link linkend="KOMHOWTO">Using KDE KOM / OpenParts HOWTO</link> and <link linkend="KDEDAEMON">The KDE Daemon</link> are copyright of Simon
+Hausmann <ulink url="mailto:hausmann@kde.org">&lt;hausmann@kde.org&gt;</ulink></para>
+</chapter>
+<chapter id="Glossary">
+<title>Glossary</title>
+
+<para><variablelist>
+<varlistentry>
+<term>CORBA</term>
+<listitem>
+<para>Common Object Request Broker Architecture, standard introduced by the OMG for distributed components that can be used
+independently of platform, implementation and operating system. CORBA itself is only the standard which requires a corresponding
+implementation that fulfills the requirements of the standard. KDE uses the MICO implementation, which provides a C++ interface to
+CORBA services.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>BOA</term>
+<listitem>
+<para>Basic Object Adapter. Interface defined by the OMG, which offers fundamental operations for managing remote objects.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>COS</term>
+<listitem>
+<para>Common Object Services. Collection of standard services to simplify developing standard applications. Naming, Event and
+Lifecycle-services are a part of the COS collection.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>DII</term>
+<listitem>
+<para>Dynamic Invocation Interface, interface to execute dynamic invocations in opposition to static invocations (clent side)</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Dynamic Invocation</term>
+<listitem>
+<para>Creation and execution of a request, whose signature is probably first known at runtime in opposition to
+static invocation.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>DSI</term>
+<listitem>
+<para>Dynamic Skeleton Interface. Server side in opposition to a DII.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>GIOP</term>
+<listitem>
+<para>General-Inter-ORB-Protocol</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>IIOP</term>
+<listitem>
+<para>Internet-Inter-ORB-Protocol</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>IMR</term>
+<listitem>
+<para>Implementation Repository</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>IOR</term>
+<listitem>
+<para>Interoperable Object Reference. The reference is specificated in the two parts GIOP and IIOP.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>IDL</term>
+<listitem>
+<para>Interface Definition Language. C++-Syntax similar programming language to describe object interfaces. The implementation
+translates IDL's to their target programming language.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Interface</term>
+<listitem>
+<para>in CORBA, all exported methods and attributes of an object are called an interface, whereby these are defined in IDL.
+Elements which are not specified in the interface are not accessible by clients.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>IOP</term>
+<listitem>
+<para>Interoperability Profile</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>MICO</term>
+<listitem>
+<para>free implementation of the CORBA standard. KDE's KOM/OpenParts technology is based on the MICO implementation.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>OMA</term>
+<listitem>
+<para>Object Management Architecture</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>OMG</term>
+<listitem>
+<para>Object Management Group</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>ORB</term>
+<listitem>
+<para>Object Request Broker, abstract name for the communication service between clients and remote objects.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>POA</term>
+<listitem>
+<para>Portable Object Adapter. The POA extends the features the BOA provides; introduced in the CORBA 2.2 standard.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+</chapter>
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+End:
+-->

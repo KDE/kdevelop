@@ -1,0 +1,15 @@
+=== LinuxDoc conversion errors ===================
+-> Check if any important attributes have been left behind.
+    INPUT                     OUTPUT
+Line Tag                  Line Tag
+   3 `SLIDES'                0 `book'
+! This may not be a problem, but check anyway ...
+   4 `SLIDE'                 0 `chapter'
+! This may not be a problem, but check anyway
+  18 `HTMLURL'               0 `<ulink>'
+  26 `HTMLURL'               0 `<ulink>'
+  36 `HTMLURL'               0 `<ulink>'
+  48 `HTMLURL'               0 `<ulink>'
+  58 `HTMLURL'               0 `<ulink>'
+=== NIF conversion errors ========================
+=== Finalising errors ===========================
