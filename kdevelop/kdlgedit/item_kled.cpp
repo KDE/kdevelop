@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+/*
 #define DONTINC_ALL
 #define INC_KLED
 #include "items.h"
@@ -85,3 +85,4 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
 }
+*/

@@ -165,7 +165,7 @@ void KDlgWidgets::clicked_KColorButton()
 
 void KDlgWidgets::clicked_KLed()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
+//  pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
 }
 
 void KDlgWidgets::clicked_KLedLamp()
@@ -263,7 +263,7 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_KColorButton.xpm",     "KColorButton",  clicked_KColorButton   ,i18n("This is a button displaying the selected color."));
   macroAddButton("kdlg_KKeyButton.xpm",       "KKeyButton",    clicked_KKeyButton     ,i18n("A push button that looks like a keyboard key."));
   macroAddButton("kdlg_KRestrictedLine.xpm",  "KRestrictedLine",clicked_KRestrictedLine,i18n("Restricted Editline: Only selected Characters are valid input."));
-  macroAddButton("kdlg_KLed.xpm",             "KLed",          clicked_KLed           ,i18n("A round led widget."));
+//  macroAddButton("kdlg_KLed.xpm",             "KLed",          clicked_KLed           ,i18n("A round led widget."));
   macroAddButton("kdlg_KProgress.xpm",        "KProgress",     clicked_KProgress      ,i18n("A Progress indicator widget."));
   macroAddButton("kdlg_KTreeList.xpm",        "KTreeList",     clicked_KTreeList      ,i18n("A collapsible treelist widget"));
   macroAddButton("kdlg_KLedLamp.xpm",         "KLedLamp",      clicked_KLedLamp       ,i18n("A CDE-style LED lamp widget."));

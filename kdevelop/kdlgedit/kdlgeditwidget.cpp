@@ -799,7 +799,6 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("KDateTable", KDlgItem_KDateTable )
     macro_CreateIfRightOne("KColorButton", KDlgItem_KColorButton )
 
-    macro_CreateIfRightOne("KLed", KDlgItem_KLed )
     macro_CreateIfRightOne("KLedLamp", KDlgItem_KLedLamp )
     macro_CreateIfRightOne("KProgress", KDlgItem_KProgress )
     macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )

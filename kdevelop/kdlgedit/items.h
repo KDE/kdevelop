@@ -48,7 +48,7 @@
   #define INC_KDATEPICKER
   #define INC_KDATETABLE
 
-  #define INC_KLED
+//  #define INC_KLED
   #define INC_KLEDLAMP
   #define INC_KPROGRESS
   #define INC_KKEYBUTTON
@@ -455,7 +455,7 @@ class KDlgItem_KDateTable : public KDlgItem_Base
 };
 #endif
 
-#ifdef INC_KLED
+/*#ifdef INC_KLED
 #include <kled.h>
 class KDlgItem_KLed: public KDlgItem_Base
 {
@@ -467,7 +467,7 @@ class KDlgItem_KLed: public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
-#endif
+#endif*/
 
 #ifdef INC_KLEDLAMP
 #include <kledlamp.h>
