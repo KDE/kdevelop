@@ -18,6 +18,7 @@
 #include "cclasstooldlg.h"
 #include "cclonefunctiondlg.h"
 #include "./classparser/ClassParser.h"
+#include "cclassview.h"
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -42,6 +43,7 @@
 #include <kmessagebox.h>
 #include "cclonefunctiondlg.h"
 #include <kiconloader.h>
+#include <klineedit.h>
 
 /* record of the classnames in which their header filename
  * are not built through their name. 
@@ -136,6 +138,8 @@ CClassPropertiesDlgImpl::~CClassPropertiesDlgImpl()
 
 void CClassPropertiesDlgImpl::applyAddAttribute()
 {
+    typeCompletion->addItem(leVarType_2->text());
+
     CParsedAttribute *aAttr = new CParsedAttribute();
     QString comment;
 
@@ -241,6 +245,8 @@ void CClassPropertiesDlgImpl::applyAddMethod()
     QCheckBox* chVirtual=0, * chPure=0, * chStatic=0, *chConst=0;
     QMultiLineEdit* meDoc;
     int pg = tabWidget -> currentPageIndex();
+
+    typeCompletion->addItem(leMethType_2->text());
     kdDebug() << "applyAddMethod: in page #" << pg << endl;
     switch ( pg )
     {
@@ -893,6 +899,27 @@ void CClassPropertiesDlgImpl::init()
     Member = "";
     workClassAttrList = 0;
     bgVarProperty -> setEnabled(true);
+
+   // auto completion on types
+   // the (static) pointer keeps completion across different incarnations
+   if (typeCompletion == 0)
+     typeCompletion = new KCompletion();
+   leVarType_2->setCompletionObject(typeCompletion);
+   leMethType_2->setCompletionObject(typeCompletion);
+   // add some standard values
+   typeCompletion->addItem("int");
+   typeCompletion->addItem("unsigned int");
+   typeCompletion->addItem("double");
+   typeCompletion->addItem("float");
+   typeCompletion->addItem("char");
+   typeCompletion->addItem("unsigned char");
+   // add list of all classes
+   QList<CParsedClass>* all = class_tree->store->getSortedClassList();
+   for (CParsedClass* i=all->first(); i != 0; i=all->next() )
+     typeCompletion->addItem(i->name);
+
+   connect(leVarType_2,SIGNAL(returnPressed(const QString&)),typeCompletion,SLOT(addItem(const QString&)));
+   connect(leMethType_2,SIGNAL(returnPressed(const QString&)),typeCompletion,SLOT(addItem(const QString&)));
 }
 /**  */
 void CClassPropertiesDlgImpl::setClass ( CParsedClass* aClass )
@@ -1440,3 +1467,6 @@ QList <CParsedAttribute>* CClassPropertiesDlgImpl::getAllParentAttr(CParsedClass
 
     return attrList;
 }
+
+/** static member to hold completion */
+KCompletion* CClassPropertiesDlgImpl::typeCompletion = 0;
