@@ -28,6 +28,7 @@ dist-hook:
 	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
 
 messages:
+	@mv parts/cppsupport/tokenizer-cc.cpp{,.away}
 	find . -type d | grep -v CVS | sed -e 's,$$,/,' > dirs
 	mfs=`find . -name Makefile.am | xargs egrep -l '^messages:'` ;\
 	for dir in $$mfs; do \
@@ -42,5 +43,6 @@ messages:
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.rc"` > rc.cpp	;\
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.ui"` >> rc.cpp    ;\
 	$(XGETTEXT) rc.cpp `cat files` -o $(podir)/kdevelop.pot
-	rm -f rc.cpp dirs files
+	@rm -f rc.cpp dirs files
+	@mv parts/cppsupport/tokenizer-cc.cpp{.away,}
 
