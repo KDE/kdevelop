@@ -1,3 +1,9 @@
+2003-04-18 Alexander Dymo <cloudtemple@mksat.net>
+    * Implemented Pascal language support including
+      pascalsupport part, pascalproject part, filecreate templates,
+      application wizard template, syntax highlighting and indentation in qeditor,
+      compiler plugins for Free Pascal compiler and (very basic) for Borland Delphi Compiler.
+
 2003-04-18 Roberto Raggi <roberto@kdevelop.org>
     * started to implement the recovery support, this is the first
       step to implement the incremental parser
