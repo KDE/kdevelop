@@ -32,9 +32,7 @@
 #include <qtooltip.h>
 #include <qlabel.h>
 
-#if QT_VERSION >= 200
 #include <qnamespace.h>
-#endif
 
 /*
 	@quickhelp: QextMdiTaskBar
@@ -68,18 +66,10 @@ QextMdiTaskBarButton::~QextMdiTaskBarButton()
 void QextMdiTaskBarButton::mousePressEvent( QMouseEvent* e)
 {
    switch(e->button()) {
-#if QT_VERSION >= 200
    case QMouseEvent::LeftButton:
-#else
-   case LeftButton:
-#endif
       emit leftMouseButtonClicked( m_pWindow);
       break;
-#if QT_VERSION >= 200
    case QMouseEvent::RightButton:
-#else
-   case RightButton:
-#endif
       emit rightMouseButtonClicked( m_pWindow);
       break;
    default:
@@ -160,7 +150,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
 	
    QObject::connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) );	
    QObject::connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
-   QObject::connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonLeftClicked(QextMdiChildView*)) );
+   QObject::connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(activateView(QextMdiChildView*)) );
    QObject::connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
 	
 	m_pButtonList->append(b);
