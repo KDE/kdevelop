@@ -93,6 +93,8 @@ private:
     MakeActionFilter              m_actionFilter;
     OtherFilter                   m_otherFilter;
 
+    void setPendingItem(MakeItem* new_item);
+    void displayPendingItem();
 	bool appendToLastLine( const QString& text );
 	void setCompilerOutputLevel(EOutputLevel level);
 
@@ -102,6 +104,7 @@ private:
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
     QPtrStack<QString> dirstack;
+    MakeItem* m_pendingItem;
     QValueVector<MakeItem*> m_items;
     QIntDict<MakeItem> m_paragraphToItem;
     long m_paragraphs;

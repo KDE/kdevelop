@@ -152,8 +152,9 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	, m_errorFilter( m_continuationFilter )
 	, m_continuationFilter( m_actionFilter )
 	, m_actionFilter( m_otherFilter )
+  , m_pendingItem(0)
 	, m_paragraphs(0)
-    , m_lastErrorSelected(-1)
+  , m_lastErrorSelected(-1)
 	, m_part(part)
 	, m_vertScrolling(false)
 	, m_horizScrolling(false)
@@ -520,6 +521,7 @@ void MakeWidget::slotProcessExited(KProcess *)
 
 	MakeItem* item = new ExitStatusItem( childproc->normalExit(), childproc->exitStatus() );
 	insertItem( item );
+  displayPendingItem();
 
 	m_part->mainWindow()->statusBar()->message( QString("%1: %2").arg(currentCommand).arg(item->m_text), 3000);
 	m_part->core()->running(m_part, false);
@@ -567,47 +569,65 @@ void MakeWidget::slotExitedDirectory( ExitingDirectoryItem* item )
 	delete dir;
 }
 
+void MakeWidget::displayPendingItem()
+{
+  if (!m_pendingItem) return;
+  // this handles the case of ImmDisplay|Append
+  // We call displayPendingItem once in insertItem
+  // and the appends are handled directly in
+  // appendToLastLine
+  if (!m_items.empty() 
+      && m_items.last() == m_pendingItem) return;
+
+  m_items.push_back(m_pendingItem);
+
+  if ( m_bCompiling && !m_pendingItem->visible( m_compilerOutputLevel ) )
+    return;
+
+  SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
+  m_paragraphToItem.insert( m_paragraphs++, m_pendingItem );
+  append( m_pendingItem->formattedText( m_compilerOutputLevel, brightBg() ) );
+}
+
 bool MakeWidget::appendToLastLine( const QString& text )
 {
-#if QT_VERSION >= 0x030100
-	if ( m_items.count() == 0 )
-#else
-	if ( m_items.size() == 0 )
-#endif
+	if ( !m_pendingItem ) return false;
+	if ( !m_pendingItem->append( text ) )
+  {
+    displayPendingItem();
+    m_pendingItem = 0;
 		return false;
-#if QT_VERSION >= 0x030100
-	MakeItem* item = m_items[m_items.count() - 1];
-#else
-	MakeItem* item = m_items[m_items.size() - 1];
-#endif
-	if ( !item->append( text ) )
-		return false;
+  }
 
-	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
-
-	removeParagraph( paragraphs() - 1 );
-	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
-
-
+  int mode = m_pendingItem -> displayMode();
+  if ((mode & MakeItem::Append) && (mode & MakeItem::ImmDisplay))
+  {
+    removeParagraph(paragraphs() - 1);
+    SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
+    append( m_pendingItem->formattedText( m_compilerOutputLevel, brightBg() ) );
+  }
 
 	return true;
 }
 
-void MakeWidget::insertItem( MakeItem* item )
+void MakeWidget::insertItem( MakeItem* new_item )
 {
-	ErrorItem* e = dynamic_cast<ErrorItem*>(item);
+	ErrorItem* e = dynamic_cast<ErrorItem*>(new_item);
 	if (e)
 		createCursor(e, 0L);
 
-	m_items.push_back( item );
+  displayPendingItem();
+  m_pendingItem = new_item;
 
-	if ( m_bCompiling && !item->visible( m_compilerOutputLevel ) )
-		return;
+  if (!new_item) return;
 
-	SelectionPreserver preserveSelection( *this, !m_vertScrolling && !m_horizScrolling );
-
-	m_paragraphToItem.insert( m_paragraphs++, item );
-	append( item->formattedText( m_compilerOutputLevel, brightBg() ) );
+  int mode = new_item -> displayMode();
+  if (mode & MakeItem::ImmDisplay)
+  {
+    displayPendingItem();
+    if (!(mode & MakeItem::Append))
+      m_pendingItem = 0;
+  }
 }
 
 void MakeWidget::slotDocumentOpened( const QString & filename )

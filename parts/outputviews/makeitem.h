@@ -30,6 +30,13 @@ public:
 	MakeItem( const QString& text );
 	virtual ~MakeItem();
 
+  enum DisplayModes
+  {
+    DelayedDisplay = 0, // item can be displayed later
+    ImmDisplay = 1,     // item has to be displayed ASAP
+    Append = 2          // item's text can be appended (append has been overloaded)
+  };
+  virtual int displayMode() const { return ImmDisplay; }
 	virtual bool append( const QString& ) { return false; }
 	virtual Type type() { return Diagnostic; }
 	virtual bool visible( EOutputLevel level ) { return level > eVeryShort; }
@@ -124,6 +131,7 @@ public:
 	virtual ~ErrorItem();
 
 	virtual bool append( const QString& text );
+  virtual int displayMode() const { return DelayedDisplay | Append; }
 	Type type() { return m_isWarning ? Warning : Error; }
 	virtual bool visible( EOutputLevel ) { return true; }
 
