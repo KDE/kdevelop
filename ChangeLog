@@ -1,3 +1,7 @@
+2001-06-29  rokrau@yahoo.com
+    * Fixed a seg fault in treehandler when clicking on class icon. 
+    * Fixed kdevprj.save to reflect the correct location of ctoolclass.*.
+
 2001-06-29  jbb <jbb@kdevelop.org>
     * bugfix: tools menu was built incorrectly - the label and exe were
     * inadvertantly swapped.
