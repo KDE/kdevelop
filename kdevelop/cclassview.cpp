@@ -3,7 +3,7 @@
                              -------------------
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
     based on             : cclassview.cpp by Sandy Meier
    
  ***************************************************************************/
@@ -746,8 +746,6 @@ void CClassView::asTreeStr(QString &str)
   str="";
 
   buildTreeStr( classesItem, str );
-
-  return str;
 }
 
 /*-------------------------------- CClassView::buildInitalClassTree()
@@ -829,11 +827,11 @@ void CClassView::buildInitalClassTree()
   ((CClassTreeHandler *)treeH)->addClasses( &rootList, classesItem );
 
   // Save the tree.
-  asTreeStr( Str );
+  asTreeStr( str );
   project->setClassViewTree( str );
 }
 
-/*-------------------------------- CClassView::createCTDlg()
+/*----------------------------------------- CClassView::createCTDlg()
  * createCTDlg()
  *   Create a new ClassTool dialog and setup its' attributes.
  *

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -245,7 +245,7 @@ private: // Private methods
    * 
    * @param str String to return the tree in.
    */
-  void asTreeStr( QString str );
+  void asTreeStr( QString &str );
 
   bool validClassDecl( const char *className, const char *declName, THType type );
 };
