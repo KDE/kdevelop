@@ -49,7 +49,7 @@ void SvnIntegratorDlg::accept()
 	if ( servURL.isEmpty() ) return;
 	if ( ! servURL.protocol().startsWith( "svn" ) )
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 
 	if ( importProject->isChecked() ) {
 		QByteArray parms;

@@ -50,7 +50,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		m_cachedDirEntries = new VCSFileInfoMap;
 //	return m_cachedDirEntries;
 
-	kdDebug() << "##################################################################################### svn provider : status " << dirPath << endl;
+	kdDebug(9036) << "##################################################################################### svn provider : status " << dirPath << endl;
 
 	if ( dirPath != m_previousDirPath ) {
 		m_previousDirPath = dirPath;
@@ -60,7 +60,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		int cmd = 9;
 		QString rPath = projectDirectory( );
 		rPath += QDir::separator() + dirPath;
-		kdDebug() << "DIR : " << rPath << " " << KURL( QFileInfo( rPath ).absFilePath() ) << endl;
+		kdDebug(9036) << "DIR : " << rPath << " " << KURL( QFileInfo( rPath ).absFilePath() ) << endl;
 		s << cmd << QFileInfo( rPath ).absFilePath();
 		KIO::SimpleJob *job2 = KIO::special(servURL, parms, false);
 		job2->setWindow( m_part->mainWindow()->main() );
@@ -84,7 +84,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 
 		QRegExp rx( "([0-9]*)(.*)" );
 		for ( it = begin; it != end; ) {
-			kdDebug() << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+			kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
 			if ( rx.search( *it ) == -1 ) return m_cachedDirEntries; // something is wrong ! :)
 			curIdx = lastIdx = rx.cap( 1 ).toInt(); 
 			while ( curIdx == lastIdx ) {
@@ -112,7 +112,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 }
 
 bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerData ) {
-	kdDebug() << "##################################################################################### svn provider : request status" << endl;
+	kdDebug(9036) << "##################################################################################### svn provider : request status" << endl;
     m_savedCallerData = callerData;
     // Flush old cache
     if (m_cachedDirEntries)
@@ -127,7 +127,7 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 	int cmd = 9;
 	QString rPath = projectDirectory( );
 	rPath += QDir::separator() + dirPath;
-	kdDebug() << "DIR : " << rPath << " " << QFileInfo( rPath ).absFilePath() << endl;
+	kdDebug(9036) << "DIR : " << rPath << " " << QFileInfo( rPath ).absFilePath() << endl;
 	s << cmd << KURL( QFileInfo( rPath ).absFilePath() );
 	KURL servURL = "svn+http://fakeserver_this_is_normal_behavior/";
 	job = KIO::special(servURL, parms, false);
@@ -153,7 +153,7 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 
 	QRegExp rx( "([0-9]*)(.*)" );
 	for ( it = begin; it != end; ) {
-		kdDebug() << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+		kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
 		if ( rx.search( *it ) == -1 ) return; // something is wrong ! :)
 		curIdx = lastIdx = rx.cap( 1 ).toInt(); 
 		while ( curIdx == lastIdx ) {
@@ -181,7 +181,7 @@ void SVNFileInfoProvider::slotResult( KIO::Job *j ) {
 }
 
 void SVNFileInfoProvider::slotStatus( const QString& path,int text_status, int prop_status,int repos_text_status, int repos_prop_status, long int rev) {
-	kdDebug() << "##################################################################################### svn provider : slotstatus" 
+	kdDebug(9036) << "##################################################################################### svn provider : slotstatus" 
 		<< " path " << path << " text_status " << text_status << " prop_status " << prop_status << " repos_text_status " << repos_text_status
 		<< " repos_prop_status " << repos_prop_status << " rev " << rev
 		<< endl;
@@ -229,7 +229,7 @@ void SVNFileInfoProvider::slotStatus( const QString& path,int text_status, int p
 	}
 	
 	VCSFileInfo info(QFileInfo( path ).fileName(),wRev,rRev,state);
-	kdDebug() << "Inserting " << info.toString() << endl;
+	kdDebug(9036) << "Inserting " << info.toString() << endl;
 	m_cachedDirEntries->insert( QFileInfo( path ).fileName(), info);
 }
 

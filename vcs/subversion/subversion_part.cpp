@@ -177,20 +177,20 @@ void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
 if(!project() || !isValidDirectory(project()->projectDirectory()))
   return;
 
-	kdDebug() << "contextMenu()" << endl;
+	kdDebug(9036) << "contextMenu()" << endl;
 	if (context->hasType( Context::FileContext ) ||
 			context->hasType( Context::EditorContext ))
 	{
 
 		if (context->hasType( Context::FileContext ))
 		{
-			kdDebug() << "Requested for a FileContext" << endl;
+			kdDebug(9036) << "Requested for a FileContext" << endl;
 			const FileContext *fcontext = static_cast<const FileContext*>( context );
 			m_urls = fcontext->urls();
 		}
 		else
 		{
-			kdDebug() << "Requested for an EditorContext" << endl;
+			kdDebug(9036) << "Requested for an EditorContext" << endl;
 			const EditorContext *editorContext = static_cast<const EditorContext*>( context );
 			m_urls << editorContext->url();
 		}
@@ -247,7 +247,7 @@ bool subversionPart::urlFocusedDocument( KURL &url ) {
 }
 
 void subversionPart::slotActionUpdate() {
-	kdDebug() << "subversion: slotActionUpdate()" << endl;
+	kdDebug(9036) << "subversion: slotActionUpdate()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->update( doc );
@@ -259,7 +259,7 @@ void subversionPart::slotUpdate() {
 }
 
 void subversionPart::slotActionResolve() {
-	kdDebug() << "subversion: slotActionResolve()" << endl;
+	kdDebug(9036) << "subversion: slotActionResolve()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->resolve( doc );
@@ -271,7 +271,7 @@ void subversionPart::slotResolve() {
 }
 
 void subversionPart::slotActionCommit() {
-	kdDebug() << "subversion: slotActionCommit()" << endl;
+	kdDebug(9036) << "subversion: slotActionCommit()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->commit( doc );
@@ -279,7 +279,7 @@ void subversionPart::slotActionCommit() {
 }
 
 void subversionPart::slotActionAdd() {
-	kdDebug() << "subversion: slotActionAdd()" << endl;
+	kdDebug(9036) << "subversion: slotActionAdd()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->add( doc );
@@ -287,7 +287,7 @@ void subversionPart::slotActionAdd() {
 }
 
 void subversionPart::slotActionDel() {
-	kdDebug() << "subversion: slotActionDel()" << endl;
+	kdDebug(9036) << "subversion: slotActionDel()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->del( doc );
@@ -295,7 +295,7 @@ void subversionPart::slotActionDel() {
 }
 
 void subversionPart::slotActionRevert() {
-	kdDebug() << "subversion: slotActionRevert()" << endl;
+	kdDebug(9036) << "subversion: slotActionRevert()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->revert( doc );
@@ -319,7 +319,7 @@ void subversionPart::slotRevert() {
 }
 
 void subversionPart::slotProjectOpened() {
-	kdDebug() << "subversion :projectOpened" << endl;
+	kdDebug(9036) << "subversion :projectOpened" << endl;
 /*	if ( g_projectWasJustCreated ) {
 		//saveOptions();
 		g_projectWasJustCreated = false;
@@ -331,7 +331,7 @@ void subversionPart::slotProjectOpened() {
 }
 
 void subversionPart::slotProjectClosed() {
-	kdDebug() << "subversion :projectClosed" << endl;
+	kdDebug(9036) << "subversion :projectClosed" << endl;
 	//saveOptions();
 	/// \FIXME slots
 	//disconnect( project(), SIGNAL(addedFilesToProject(const QStringList&)), this, SLOT(slotAddFilesToProject(const QStringList &)) );
@@ -339,7 +339,7 @@ void subversionPart::slotProjectClosed() {
 }
 
 void subversionPart::savePartialProjectSession(QDomElement* dom) {
-	kdDebug() << "subversion : savePartialProjectSession" << endl;
+	kdDebug(9036) << "subversion : savePartialProjectSession" << endl;
 	QDomDocument doc = dom->ownerDocument();
 	QDomElement svn = doc.createElement( "subversion" );
 	svn.setAttribute("recursecheckout", m_checkout_recurse);
@@ -363,7 +363,7 @@ void subversionPart::savePartialProjectSession(QDomElement* dom) {
 }
 
 void subversionPart::restorePartialProjectSession(const QDomElement* dom) {
-	kdDebug() << "subversion : restorePartialProjectSession" << endl;
+	kdDebug(9036) << "subversion : restorePartialProjectSession" << endl;
 	QDomElement svn = dom->namedItem("subversion").toElement();
 
 	m_checkout_recurse = svn.attribute( "recursecheckout", "1" ).toInt();
@@ -390,8 +390,8 @@ bool subversionPart::isValidDirectory( const QString &dirPath) const {
     QDir svndir( dirPath + svn );
     QString entriesFileName = dirPath + svn + "entries";
 
-	kdDebug() << "dirpath " << dirPath+"/.svn/" << svndir.exists() << endl;
-	kdDebug() << "entries " << entriesFileName << QFile::exists( entriesFileName ) << endl;
+	kdDebug(9036) << "dirpath " << dirPath+"/.svn/" << svndir.exists() << endl;
+	kdDebug(9036) << "entries " << entriesFileName << QFile::exists( entriesFileName ) << endl;
     return svndir.exists() &&
         QFile::exists( entriesFileName );
 }

@@ -58,7 +58,7 @@ KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
 
 //not used anymore
 void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {
-	kdDebug() << "Subversion Notification : " 
+	kdDebug(9036) << "Subversion Notification : " 
 		<< "path : " << path
 		<< "action: " << action
 		<< "kind : " << kind
@@ -84,9 +84,9 @@ void subversionCore::resolve( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "resolving: " << (*it).prettyURL() << endl;
+		kdDebug(9036) << "resolving: " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 11;
@@ -104,9 +104,9 @@ void subversionCore::update( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "updating : " << (*it).prettyURL() << endl;
+		kdDebug(9036) << "updating : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 2;
@@ -124,9 +124,9 @@ void subversionCore::commit( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "commiting : " << (*it).prettyURL() << endl;
+		kdDebug(9036) << "commiting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 3;
@@ -143,9 +143,9 @@ void subversionCore::add( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "adding : " << (*it).prettyURL() << endl;
+		kdDebug(9036) << "adding : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 6;
@@ -162,9 +162,9 @@ void subversionCore::del( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "deleting : " << (*it).prettyURL() << endl;
+		kdDebug(9036) << "deleting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 7;
@@ -181,9 +181,9 @@ void subversionCore::revert( const KURL::List& list ) {
 	if ( ! servURL.protocol().startsWith( "svn" ) ) {
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 	}
-	kdDebug() << "servURL : " << servURL.prettyURL() << endl;
+	kdDebug(9036) << "servURL : " << servURL.prettyURL() << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
-		kdDebug() << "reverting : " << (*it).prettyURL() << endl;
+		kdDebug(9036) << "reverting : " << (*it).prettyURL() << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 8;
@@ -230,7 +230,7 @@ void subversionCore::slotResult( KIO::Job * job ) {
 		QValueList<QString>::Iterator begin = keys.begin(), end = keys.end(), it;
 
 		for ( it = begin; it != end; ++it ) {
-			kdDebug() << "METADATA : " << *it << ":" << ma[ *it ] << endl;
+			kdDebug(9036) << "METADATA : " << *it << ":" << ma[ *it ] << endl;
 			if ( ( *it ).endsWith( "string" ) ) {
 				m_part->mainWindow()->raiseView(m_widget);
 				m_widget->append( ma[ *it ] );
