@@ -62,7 +62,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
 
     connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
     	this, SLOT(slotActivePartChanged(KParts::Part*)) );
-	
+
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
     KAction *action;
@@ -77,7 +77,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
                           actionCollection(), "edit_expandabbrev" );
 
     load();
-    
+
     m_inCompletion = false;
     docIface = 0;
     editIface = 0;
@@ -190,7 +190,7 @@ void AbbrevPart::slotExpandText()
 {
     if( !editIface || !completionIface || !viewCursorIface )
         return;
-	
+
     QString word = currentWord();
     if (word.isEmpty())
         return;
@@ -230,7 +230,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
-    
+
     QAsciiDictIterator<CodeTemplate> it( m_templates );
     while( it.current() ) {
 	KTextEditor::CompletionEntry e;
@@ -239,7 +239,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
 	entries << e;
 	++it;
     }
-    
+
     return entries;
 }
 
@@ -301,11 +301,10 @@ void AbbrevPart::slotExpandAbbrev()
 
 void AbbrevPart::insertChars( const QString &chars )
 {
-    bool bMoveCursor = false;
-    unsigned int line=0, col=0;
-    unsigned int currentLine=0, currentCol=0;
+    unsigned line=0, col=0;
+    viewCursorIface->cursorPositionReal( &line, &col );
 
-    viewCursorIface->cursorPositionReal( &currentLine, &currentCol );
+    unsigned int currentLine=line, currentCol=col;
 
     QString spaces;
     QString s = editIface->textLine( currentLine );
@@ -315,39 +314,44 @@ void AbbrevPart::insertChars( const QString &chars )
         ++i;
     }
 
-    QStringList l = QStringList::split( "\n", chars, true );
-    for( int i=0; i<(int)l.count(); ++i ){
-        QString s = l[ i ];
-        int idx = s.find( '|' );
+    bool foundPipe = false;
+    QString str;
+    QTextStream stream( &str, IO_WriteOnly );
+    QStringList lines = QStringList::split( "\n", chars );
+    QStringList::Iterator it = lines.begin();
+    line = currentLine;
+    while( it != lines.end() ){
+        QString lineText = *it;
+	if( it != lines.begin() ){
+            stream << spaces;
+	    if( !foundPipe )
+		currentCol += spaces.length();
+	}
+
+        int idx = lineText.find( "|" );
         if( idx != -1 ){
-            QString tmp = s.left( idx );
-            editIface->insertText( currentLine, currentCol, tmp );
-            currentCol += tmp.length();
-
-            line = currentLine;
-            col = currentCol;
-            bMoveCursor = true;
-
-            tmp = s.mid( idx + 1 );
-            editIface->insertText( currentLine, currentCol, tmp );
-            currentCol += tmp.length();
+            stream << lineText.left( idx ) << lineText.mid( idx+1 );
+	    if( !foundPipe ){
+		foundPipe = true;
+		currentCol += lineText.left( idx ).length();
+	    }
         } else {
-            editIface->insertText( currentLine, currentCol, s );
-            currentCol += s.length();
+            stream << lineText;
         }
 
-        if( i != (int)l.count()-1 ){
-            editIface->insertLine( ++currentLine, spaces );
-            currentCol = spaces.length();
-            //pView->keyReturn();
-        }
-    }
+        ++it;
 
-    if( bMoveCursor ){
-        viewCursorIface->setCursorPositionReal( line, col );
+	if( it != lines.end() ){
+            stream << "\n";
+	    if( !foundPipe ){
+		++currentLine;
+		currentCol = 0;
+	    }
+	}
     }
+    editIface->insertText( line, col, str );
+    viewCursorIface->setCursorPositionReal( currentLine, currentCol );
 }
-
 
 void AbbrevPart::addTemplate( const QString& templ,
                               const QString& descr,
@@ -384,12 +388,12 @@ QAsciiDictIterator<CodeTemplate> AbbrevPart::templates() const
 void AbbrevPart::slotActivePartChanged( KParts::Part* part )
 {
     KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
-    
+
     if( doc == docIface )
         return;
-	
+
     docIface = doc;
-	
+
     if( !docIface ){
         docIface = 0;
         editIface = 0;
