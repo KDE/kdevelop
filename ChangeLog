@@ -1,9 +1,17 @@
+2001-05-10  F@lk Brettschneider <falk@kdevelop.org>
+    * made application accelerators work also for the Toplevel MDI mode
+      which is needed for usuability.
+    * bugfix: crash on Ctrl+f when no view was open
+
+2001-05-09  F@lk Brettschneider <falk@kdevelop.org>
+    * some bugfixes in QextMDI for the view focus change in Toplevel MDI mode
+
 2001-05-09  Ralf Nolden <nolden@kde.org>
     * fixed up the kcmodule errors, works now. TODO would be the binary 
 	(standalone) and the desktop file but I think the users will find out 
 	about that themselves.
 
- 2001-05-08  rokrau@yahoo.com
+2001-05-08  rokrau@yahoo.com
     * added F12 for switch to header/source
     * added Edit menu entries for CTags related functionality
 

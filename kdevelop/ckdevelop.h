@@ -137,7 +137,6 @@ public:
   /** initializer functions called by the constructor */
   void initView();
   void initConnections();
-  void initKeyAccel();
   void initMenuBar();
   void initToolBar();
   void initStatusBar();

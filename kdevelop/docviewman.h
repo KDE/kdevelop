@@ -35,6 +35,7 @@ class CEditWidget;
 class CKDevelop;
 class KHTMLView;
 class CDocBrowser;
+class CKDevAccel;
 
 //=============================================================================
 // class DocViewMan
@@ -203,6 +204,11 @@ public:
   /** get all view pointer for a document */
   // const QList<QWidget> viewsOfDoc(int docId) const;
 
+  /**
+   * This method can be called from various places.
+   * CKDevelop calls it in its constructor, DocViewMan calls it from addQExtMDIFrame(..).
+   * Anyway, it sets the application accelerators for any _toplevel_ window of KDevelop. */
+  void initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget);
 
 public slots:
   /** Is called whenever the MDI view gets focus. 
@@ -213,8 +219,10 @@ public slots:
   /** shows the desired bookmark 
    * (eventually, switches to file and activates it) */
   void gotoBookmark(int n);
+  /** Helper method for initKeyAccel(CKDevAccel* accel, QWidget* pTopLevelWidget), acts as slot entry with
+   *  the right interface for signals from the QextMDI mainframe class. */
+  void initKeyAccel( QWidget* pTopLevelWidget);
 
-  
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
   void sig_viewGotFocus(QWidget* pView);

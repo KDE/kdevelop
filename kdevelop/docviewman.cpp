@@ -39,7 +39,7 @@
 #include "docviewman.h"
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
-#include <kmessagebox.h>
+#include "ckdevaccel.h"
 
 //==============================================================================
 // class implementation
@@ -307,10 +307,16 @@ void DocViewMan::doSearch()
 {
   debug("DocViewMan::doSearch !\n");
 
-  if (curDocIsBrowser())
-    currentBrowserDoc()->doSearchDialog();
-  else
-    currentEditView()->search();
+  if (curDocIsBrowser()) {
+    if (currentBrowserDoc()) {
+      currentBrowserDoc()->doSearchDialog();
+    }
+  }
+  else {
+    if (currentEditView()) {
+      currentEditView()->search();
+    }
+  }
 }
 
 /** */
@@ -704,6 +710,9 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow)
   // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
   pMDICover->setFirstFocusableChildWidget(0L);
   pMDICover->setLastFocusableChildWidget(0L);
+
+  // set the accelerators for Toplevel MDI mode (each toplevel window needs its own accels
+  connect( m_pParent, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(initKeyAccel(QWidget*)) );
 }
 
 //-----------------------------------------------------------------------------
@@ -1396,5 +1405,305 @@ QString DocViewMan::docName(QObject* pDoc) const
   return QString("");
 }
 
+/**
+* Helper method for the method below (slot entry point for QextMdi signals)
+*/
+void DocViewMan::initKeyAccel( QWidget* pTopLevelWidget)
+{
+  initKeyAccel(0L, pTopLevelWidget);
+}
+
+/**
+* This method can be called from various places.
+* CKDevelop calls it in its constructor, DocViewMan calls it from addQExtMDIFrame(..).
+* Anyway, it sets the application accelerators for any _toplevel_ window of KDevelop.
+*/
+void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
+{
+  if (accel == 0L) {
+    accel = new CKDevAccel( pTopLevelWidget );
+  }
+
+  //file menu
+  accel->connectItem( KStdAccel::New, m_pParent, SLOT(slotFileNew()), true, ID_FILE_NEW );
+  accel->connectItem( KStdAccel::Open , m_pParent, SLOT(slotFileOpen()), true, ID_FILE_OPEN );
+  accel->connectItem( KStdAccel::Close , m_pParent, SLOT(slotFileClose()), true, ID_FILE_CLOSE );
+
+  accel->connectItem( KStdAccel::Save , m_pParent, SLOT(slotFileSave()), true, ID_FILE_SAVE );
+
+  accel->insertItem(i18n("Save As"), "SaveAs", (unsigned int) 0);
+  accel->connectItem( "SaveAs", m_pParent, SLOT(slotFileSaveAs()), true, ID_FILE_SAVE_AS);
+
+  accel->insertItem(i18n("Save All"), "SaveAll", (unsigned int) 0);
+  accel->connectItem( "SaveAll", m_pParent, SLOT(slotFileSaveAll()), true, ID_FILE_SAVE_ALL);
+
+  accel->connectItem( KStdAccel::Print , m_pParent, SLOT(slotFilePrint()), true, ID_FILE_PRINT );
+  accel->connectItem( KStdAccel::Quit, m_pParent, SLOT(slotFileQuit()), true, ID_FILE_QUIT );
+
+  //edit menu
+  accel->connectItem( KStdAccel::Undo , m_pParent, SLOT(slotEditUndo()), true, ID_EDIT_UNDO );
+
+  accel->insertItem( i18n("Redo"), "Redo",IDK_EDIT_REDO );
+  accel->connectItem( "Redo" , m_pParent, SLOT(slotEditRedo()), true, ID_EDIT_REDO  );
+
+  accel->connectItem( KStdAccel::Cut , m_pParent, SLOT(slotEditCut()), true, ID_EDIT_CUT );
+  accel->connectItem( KStdAccel::Copy , m_pParent, SLOT(slotEditCopy()), true, ID_EDIT_COPY );
+  accel->connectItem( KStdAccel::Paste , m_pParent, SLOT(slotEditPaste()), true, ID_EDIT_PASTE );
+
+  accel->insertItem( i18n("Indent"), "Indent",IDK_EDIT_INDENT );
+  accel->connectItem( "Indent", m_pParent, SLOT(slotEditIndent() ), true, ID_EDIT_INDENT );
+
+  accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
+  accel->connectItem( "Unindent", m_pParent, SLOT(slotEditUnindent() ), true, ID_EDIT_UNINDENT );
+
+  accel->insertItem( i18n("Comment"), "Comment",IDK_EDIT_COMMENT );
+  accel->connectItem( "Comment", m_pParent, SLOT(slotEditComment() ), true, ID_EDIT_COMMENT );
+
+  accel->insertItem( i18n("Uncomment"), "Uncomment",IDK_EDIT_UNCOMMENT );
+  accel->connectItem( "Uncomment", m_pParent, SLOT(slotEditUncomment() ), true, ID_EDIT_UNCOMMENT );
+
+  accel->insertItem( i18n("Insert File"), "InsertFile", (unsigned int) 0);
+  accel->connectItem( "InsertFile", m_pParent, SLOT(slotEditInsertFile()), true, ID_EDIT_INSERT_FILE );
+
+  accel->connectItem( KStdAccel::Find, m_pParent, SLOT(slotEditSearch() ), true, ID_EDIT_SEARCH );
+
+  accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
+  accel->connectItem( "RepeatSearch", m_pParent, SLOT(slotEditRepeatSearch(int) ), true, ID_EDIT_REPEAT_SEARCH );
+
+  accel->insertItem( i18n("Repeat Search Back"), "RepeatSearchBack",IDK_EDIT_REPEAT_SEARCH_BACK );
+  accel->connectItem( "RepeatSearchBack", m_pParent, SLOT(slotEditRepeatSearchBack() ), true, ID_EDIT_REPEAT_SEARCH_BACK );
+  accel->connectItem( KStdAccel::Replace, m_pParent, SLOT(slotEditReplace() ), true, ID_EDIT_REPLACE );
+
+  accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_GREP_IN_FILES );
+  accel->connectItem( "Grep", m_pParent, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
+
+  accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_SEARCH_GREP_IN_FILES );
+  accel->connectItem( i18n("GrepSearch"), m_pParent, SLOT(slotEditSearchText() ) );
+
+  accel->insertItem( i18n("Search CTags Database"), "CTagsSearch", IDK_EDIT_TAGS_SEARCH );
+  accel->connectItem( "CTagsSearch", m_pParent, SLOT(slotTagSearch() ), true, ID_EDIT_TAGS_SEARCH );
+
+  accel->insertItem( i18n("Switch To Header/Source"), "CTagsSwitch", IDK_EDIT_TAGS_SWITCH );
+  accel->connectItem( "CTagsSwitch", m_pParent, SLOT(slotTagSwitchTo() ), true, ID_EDIT_TAGS_SWITCH );
+
+  accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
+  accel->connectItem("SelectAll", m_pParent, SLOT(slotEditSelectAll() ), true, ID_EDIT_SELECT_ALL );
+
+  accel->insertItem(i18n("Deselect All"), "DeselectAll", (unsigned int) 0);
+  accel->connectItem("DeselectAll", m_pParent, SLOT(slotEditDeselectAll()), true, ID_EDIT_DESELECT_ALL);
+
+  accel->insertItem(i18n("Invert Selection"), "Invert Selection", (unsigned int) 0);
+  accel->connectItem("Invert Selection", m_pParent, SLOT(slotEditInvertSelection()), true, ID_EDIT_INVERT_SELECTION);
+
+  //view menu
+  accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
+  accel->connectItem( "GotoLine", m_pParent, SLOT( slotViewGotoLine()), true, ID_VIEW_GOTO_LINE );
+
+  accel->insertItem( i18n("Next Error"), "NextError",IDK_VIEW_NEXT_ERROR);
+  accel->connectItem( "NextError", m_pParent, SLOT( slotViewNextError()), true, ID_VIEW_NEXT_ERROR );
+
+  accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
+  accel->connectItem( "PreviousError", m_pParent, SLOT( slotViewPreviousError()), true, ID_VIEW_PREVIOUS_ERROR  );
+
+  accel->insertItem( i18n("Dialog Editor"), "Dialog Editor", (unsigned int) 0);
+  accel->connectItem("Dialog Editor", m_pParent, SLOT(startDesigner()), true, ID_TOOLS_DESIGNER );
+
+  accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
+  accel->connectItem( "Tree-View", m_pParent, SLOT(slotViewTTreeView()), true, ID_VIEW_TREEVIEW );
+
+  accel->insertItem( i18n("Toogle Output-View"), "Output-View",IDK_VIEW_OUTPUTVIEW);
+  accel->connectItem( "Output-View", m_pParent, SLOT(slotViewTOutputView()), true, ID_VIEW_OUTPUTVIEW );
+
+  accel->insertItem( i18n("Toolbar"), "Toolbar", (unsigned int) 0);
+  accel->connectItem( "Toolbar", m_pParent, SLOT(slotViewTStdToolbar()), true, ID_VIEW_TOOLBAR );
+
+  accel->insertItem( i18n("Browser-Toolbar"), "Browser-Toolbar", (unsigned int) 0);
+  accel->connectItem( "Browser-Toolbar", m_pParent, SLOT(slotViewTBrowserToolbar()), true, ID_VIEW_BROWSER_TOOLBAR );
+	
+  accel->insertItem( i18n("Statusbar"), "Statusbar", (unsigned int) 0);
+  accel->connectItem( "Statusbar", m_pParent, SLOT(slotViewTStatusbar()), true, ID_VIEW_STATUSBAR );
+
+  accel->insertItem( i18n("MDI-View-Taskbar"), "MDI-View-Taskbar", (unsigned int) 0);
+  accel->connectItem( "MDI-View-Taskbar", m_pParent, SLOT(slotViewMdiViewTaskbar()), true, ID_VIEW_MDIVIEWTASKBAR );
+
+
+  accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
+
+  accel->insertItem( i18n("Refresh"), "Refresh", (unsigned int) 0);
+  accel->connectItem( "Refresh", m_pParent, SLOT(slotViewRefresh()), true, ID_VIEW_REFRESH);
+
+  accel->insertItem( i18n("Goto Declaration"), "CVGotoDeclaration", (unsigned int) 0);
+  accel->connectItem( "CVGotoDeclaration", m_pParent,SLOT(slotClassbrowserViewDeclaration()),true, ID_CV_VIEW_DECLARATION); // project menu
+
+  accel->insertItem( i18n("Goto Definition"), "CVGotoDefinition", (unsigned int) 0);
+  accel->connectItem( "CVGotoDefinition", m_pParent, SLOT(slotClassbrowserViewDefinition()), true,ID_CV_VIEW_DEFINITION );
+
+  accel->insertItem( i18n("Class Declaration"), "CVGotoClass", (unsigned int) 0);
+  accel->connectItem( "CVGotoClass", m_pParent,SLOT(slotClassbrowserViewClass()),true, ID_CV_VIEW_CLASS_DECLARATION);
+
+  accel->insertItem( i18n("Graphical Classview"), "CVViewTree", (unsigned int) 0);
+  accel->connectItem( "CVViewTree", m_pParent, SLOT(slotClassbrowserViewTree()), true, ID_CV_GRAPHICAL_VIEW );
+
+
+  // projectmenu
+  accel->insertItem( i18n("New Project"), "NewProject",(unsigned int) 0);
+  accel->connectItem( "NewProject", m_pParent, SLOT(slotProjectNewAppl()), true, ID_PROJECT_KAPPWIZARD );
+
+  accel->insertItem( i18n("Open Project"), "OpenProject", (unsigned int) 0);
+  accel->connectItem( "OpenProject", m_pParent, SLOT(slotProjectOpen()), true, ID_PROJECT_OPEN );
+
+  accel->insertItem( i18n("Close Project"), "CloseProject", (unsigned int) 0);
+  accel->connectItem("CloseProject", m_pParent, SLOT(slotProjectClose()), true, ID_PROJECT_CLOSE );
+
+  accel->insertItem(i18n("New Class"), "NewClass", (unsigned int) 0);
+  accel->connectItem("NewClass", m_pParent, SLOT(slotProjectNewClass()), true, ID_PROJECT_NEW_CLASS );
+
+  accel->insertItem(i18n("Add existing File(s)"), "AddExistingFiles", (unsigned int) 0);
+  accel->connectItem("AddExistingFiles",m_pParent, SLOT(slotProjectAddExistingFiles()), true, ID_PROJECT_ADD_FILE_EXIST );
+
+  accel->insertItem(i18n("Add new Translation File"),"Add new Translation File", (unsigned int) 0);
+  accel->connectItem("Add new Translation File", m_pParent, SLOT(slotProjectAddNewTranslationFile()), true, ID_PROJECT_ADD_NEW_TRANSLATION_FILE );
+
+  accel->insertItem(i18n("File Properties"), "FileProperties", IDK_PROJECT_FILE_PROPERTIES);
+  accel->connectItem("FileProperties", m_pParent, SLOT(slotProjectFileProperties() ), true, ID_PROJECT_FILE_PROPERTIES );
+
+  accel->insertItem(i18n("Make messages and merge"), "MakeMessages", (unsigned int) 0);
+  accel->connectItem("MakeMessages", m_pParent, SLOT(slotProjectMessages()), true, ID_PROJECT_MESSAGES  );
+
+  accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", (unsigned int) 0);
+  accel->connectItem("ProjectAPI", m_pParent, SLOT(slotProjectAPI()), true, ID_PROJECT_MAKE_PROJECT_API );
+
+  accel->insertItem(i18n("Make User-Manual..."), "ProjectManual", (unsigned int) 0);
+  accel->connectItem("ProjectManual", m_pParent, SLOT(slotProjectManual()), true, ID_PROJECT_MAKE_USER_MANUAL);
+
+  accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", (unsigned int) 0);
+  accel->connectItem("Source-tgz", m_pParent, SLOT(slotProjectMakeDistSourceTgz()), true, ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ );
+ 	
+  accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
+  accel->connectItem("ProjectOptions", m_pParent, SLOT(slotProjectOptions() ), true, ID_PROJECT_OPTIONS );
+
+  accel->insertItem(i18n("Make tags file"), "MakeTagsfile", ID_PROJECT_MAKE_TAGS);
+  accel->connectItem("MakeTagsfile", m_pParent, SLOT(slotProjectMakeTags() ), true, ID_PROJECT_MAKE_TAGS );
+
+  accel->insertItem(i18n("Load tags file"), "LoadTagsfile", ID_PROJECT_LOAD_TAGS);
+  accel->connectItem("LoadTagsfile", m_pParent, SLOT(slotProjectLoadTags() ), true, ID_PROJECT_LOAD_TAGS );
+
+  //build menu
+  accel->insertItem( i18n("Compile File"), "CompileFile", IDK_BUILD_COMPILE_FILE );
+  accel->connectItem( "CompileFile", m_pParent, SLOT( slotBuildCompileFile()), true, ID_BUILD_COMPILE_FILE );
+
+  accel->insertItem( i18n("Make"), "Make", IDK_BUILD_MAKE );
+  accel->connectItem( "Make", m_pParent, SLOT(slotBuildMake() ), true, ID_BUILD_MAKE );
+
+  accel->insertItem( i18n("Rebuild All"), "RebuildAll", (unsigned int) 0);
+  accel->connectItem( "RebuildAll", m_pParent, SLOT(slotBuildRebuildAll()), true, ID_BUILD_REBUILD_ALL );
+
+  accel->insertItem( i18n("Clean/Rebuild all"), "CleanRebuildAll", (unsigned int) 0);
+  accel->connectItem( "CleanRebuildAll", m_pParent, SLOT(slotBuildCleanRebuildAll()), true, ID_BUILD_CLEAN_REBUILD_ALL );
+
+  accel->insertItem( i18n("Stop process"), "Stop_proc", IDK_BUILD_STOP);
+  accel->connectItem( "Stop_proc", m_pParent, SLOT(slotBuildStop() ), true, ID_BUILD_STOP );
+
+  accel->insertItem( i18n("Execute"), "Run", IDK_BUILD_RUN);
+  accel->connectItem( "Run", m_pParent, SLOT(slotBuildRun() ), true, ID_BUILD_RUN );
+
+  accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
+  accel->connectItem( "Run_with_args", m_pParent, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
+
+  accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
+  accel->connectItem("BuildDistClean",m_pParent, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
+
+  accel->insertItem( i18n("Make Clean"), "BuildMakeClean", (unsigned int) 0);
+  accel->connectItem("BuildMakeClean",m_pParent, SLOT(slotBuildMakeClean()), true, ID_BUILD_MAKECLEAN );
+
+  accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", (unsigned int) 0);
+  accel->connectItem("BuildAutoconf", m_pParent,SLOT(slotBuildAutoconf()), true, ID_BUILD_AUTOCONF );
+
+  accel->insertItem( i18n("Configure..."), "BuildConfigure", (unsigned int) 0);
+  accel->connectItem( "BuildConfigure", m_pParent, SLOT(slotBuildConfigure()), true, ID_BUILD_CONFIGURE );
+
+  // Bookmarks-menu
+  accel->insertItem( i18n("Toggle Bookmark"), "Toggle_Bookmarks", IDK_BOOKMARKS_TOGGLE);
+  accel->connectItem( "Toggle_Bookmarks", m_pParent, SLOT(slotBookmarksToggle() ), true, ID_BOOKMARKS_TOGGLE );
+
+  accel->insertItem( i18n("Next Bookmark"), "Next_Bookmarks", IDK_BOOKMARKS_NEXT);
+  accel->connectItem( "Next_Bookmarks", m_pParent, SLOT(slotBookmarksNext() ), true, ID_BOOKMARKS_NEXT );
+
+  accel->insertItem( i18n("Previous Bookmark"), "Previous_Bookmarks", IDK_BOOKMARKS_PREVIOUS);
+  accel->connectItem( "Previous_Bookmarks", m_pParent, SLOT(slotBookmarksPrevious() ), true, ID_BOOKMARKS_PREVIOUS );
+
+  accel->insertItem( i18n("Clear Bookmarks"), "Clear_Bookmarks", IDK_BOOKMARKS_CLEAR);
+  accel->connectItem( "Clear_Bookmarks", m_pParent, SLOT(slotBookmarksClear() ), true, ID_BOOKMARKS_CLEAR );
+
+  //Help menu
+  accel->connectItem( KStdAccel::Help , m_pParent, SLOT(slotHelpContents()), true, ID_HELP_CONTENTS );
+
+  accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
+  accel->connectItem( "SearchMarkedText", m_pParent, SLOT(slotHelpSearchText() ), true, ID_HELP_SEARCH_TEXT );
+
+  accel->insertItem( i18n("Search for Help on"), "HelpSearch", (unsigned int) 0);
+  accel->connectItem( "HelpSearch", m_pParent, SLOT(slotHelpSearch()), true, ID_HELP_SEARCH );
+
+  accel->insertItem( i18n("View Project API-Doc"), "HelpProjectAPI", (unsigned int) 0);
+  accel->connectItem("HelpProjectAPI", m_pParent, SLOT(slotHelpAPI()), true, ID_HELP_PROJECT_API);
+
+  accel->insertItem( i18n("View Project User-Manual"), "HelpProjectManual", (unsigned int) 0);
+  accel->connectItem( "HelpProjectManual", m_pParent, SLOT(slotHelpManual()), true, ID_HELP_USER_MANUAL);   // Tab-Switch
+
+  // Debugger startups
+  accel->insertItem( i18n("Debug start"), "DebugStart", (unsigned int) 0);
+  accel->connectItem( "DebugStart", m_pParent, SLOT(slotBuildDebugStart()), true, ID_DEBUG_START);
+
+  accel->insertItem( i18n("Debug start other"), "DebugStartOther", (unsigned int) 0);
+  accel->connectItem( "DebugStartOther", m_pParent, SLOT(slotDebugNamedFile()), true, ID_DEBUG_START_OTHER);
+
+  accel->insertItem( i18n("Debug start with args"), "DebugRunWithArgs", (unsigned int) 0);
+  accel->connectItem( "DebugRunWithArgs", m_pParent, SLOT(slotDebugRunWithArgs()), true, ID_DEBUG_SET_ARGS);
+
+  accel->insertItem( i18n("Debug examine core"), "DebugExamineCore", (unsigned int) 0);
+  accel->connectItem( "DebugExamineCore", m_pParent, SLOT(slotDebugExamineCore()), true, ID_DEBUG_CORE);
+
+  accel->insertItem( i18n("Debug other executable"), "DebugOtherExec", (unsigned int) 0);
+  accel->connectItem( "DebugOtherExec", m_pParent, SLOT(slotDebugNamedFile()), true, ID_DEBUG_NAMED_FILE);
+
+  accel->insertItem( i18n("Debug attach"), "DebugAttach", (unsigned int) 0);
+  accel->connectItem( "DebugAttach", m_pParent, SLOT(slotDebugAttach()), true, ID_DEBUG_ATTACH);
+
+  // Debugger actions
+  accel->insertItem( i18n("Debug run"), "DebugRun", (unsigned int) 0);
+  accel->connectItem( "DebugRun", m_pParent, SLOT(slotDebugRun()), true, ID_DEBUG_RUN );
+
+  accel->insertItem( i18n("Debug run to cursor"), "DebugRunCursor", (unsigned int) 0);
+  accel->connectItem( "DebugRunCursor", m_pParent, SLOT(slotDebugRunToCursor()), true, ID_DEBUG_RUN_CURSOR );
+
+  accel->insertItem( i18n("Debug stop"), "DebugStop", (unsigned int) 0);
+  accel->connectItem( "DebugStop", m_pParent, SLOT(slotDebugStop()), true, ID_DEBUG_STOP);
+
+  accel->insertItem( i18n("Debug step into"), "DebugStepInto", (unsigned int) 0);
+  accel->connectItem( "DebugStepInto", m_pParent, SLOT(slotDebugStepInto()), true, ID_DEBUG_STEP);
+
+  accel->insertItem( i18n("Debug step into instr"), "DebugStepIntoInstr", (unsigned int) 0);
+  accel->connectItem( "DebugStepIntoInstr", m_pParent, SLOT(slotDebugStepIntoIns()), true, ID_DEBUG_STEP_INST);
+
+  accel->insertItem( i18n("Debug step over"), "DebugStepOver", (unsigned int) 0);
+  accel->connectItem( "DebugStepOver", m_pParent, SLOT(slotDebugStepOver()), true, ID_DEBUG_NEXT);
+
+  accel->insertItem( i18n("Debug step over instr"), "DebugStepOverInstr", (unsigned int) 0);
+  accel->connectItem( "DebugStepOverInstr", m_pParent, SLOT(slotDebugStepOverIns()), true, ID_DEBUG_NEXT_INST);
+
+  accel->insertItem( i18n("Debug step out"), "DebugStepOut", (unsigned int) 0);
+  accel->connectItem( "DebugStepOut", m_pParent, SLOT(slotDebugStepOutOff()), true, ID_DEBUG_FINISH);
+
+  accel->insertItem( i18n("Debug viewers"), "DebugViewer", (unsigned int) 0);
+  accel->connectItem( "DebugViewer", m_pParent, SLOT(slotDebugMemoryView()), true, ID_DEBUG_MEMVIEW);
+
+  accel->insertItem( i18n("Debug interrupt"), "DebugInterrupt", (unsigned int) 0);
+  accel->connectItem( "DebugInterrupt", m_pParent, SLOT(slotDebugInterrupt()), true, ID_DEBUG_BREAK_INTO);
+
+  accel->insertItem( i18n("Debug toggle breakpoint"), "DebugToggleBreakpoint", (unsigned int) 0);
+  accel->connectItem( "DebugToggleBreakpoint", m_pParent, SLOT(slotDebugToggleBreakpoint()), true, ID_DEBUG_TOGGLE_BP);
+
+  accel->readSettings(0, false);
+}
 
 #include "docviewman.moc"
