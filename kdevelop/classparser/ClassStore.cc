@@ -31,6 +31,7 @@
 #include "ClassStore.h"
 #include <iostream.h>
 #include <assert.h>
+#include <qregexp.h>
 
 /*********************************************************************
  *                                                                   *
@@ -314,6 +315,8 @@ QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
 {
+  assert( aName != NULL );
+
   bool exit;
   CParsedClass *aClass;
   CParsedAttribute *aAttr;
@@ -356,9 +359,43 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
 {
+  assert( aName != NULL );
+  assert( hasClass( aName ) );
+
+  CParsedClass *aClass;
+  CParsedClass *toAdd;
+  QString str;
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
 
   retVal->setAutoDelete( false );
+
+  aClass = getClassByName( aName );
+  for( aClass->attributeIterator.toFirst();
+       aClass->attributeIterator.current();
+       ++aClass->attributeIterator )
+  {
+    str = aClass->attributeIterator.current()->type;
+
+    // Remove all unwanted stuff.
+    str = str.replace( "[\*&]", "" );
+    str = str.replace( "const", "" );
+    str = str.replace( "void", "" );
+    str = str.replace( "bool", "" );
+    str = str.replace( "uint", "" );
+    str = str.replace( "int", "" );
+    str = str.replace( "char", "" );
+    str = str.stripWhiteSpace();
+
+    // If this isn't the class and the string contains data, we check for it.
+    if( str != aName && !str.isEmpty() )
+    {
+      debug( "Checking if '%s' is a class", str.data() );
+      toAdd = getClassByName( str );
+      if( toAdd )
+        retVal->append( toAdd );
+    }
+  }
+
   return retVal;
 }
 
