@@ -130,8 +130,8 @@ void %{APPNAME}Part::contextMenu(QPopupMenu *popup, const Context *context)
         
         // or create menu items on the fly
         // int id = -1;
-        // id = popup->insertItem(i18n("Do Something Here")),
-        //     this, SLOT(doSomething()));
+        // id = popup->insertItem(i18n("Do Something Here"),
+        //     this, SLOT(doSomething()) );
         // popup->setWhatsThis(id, i18n("<b>Do something here</b><p>Describe here what does this action do."
     }
     else if (context->hasType(Context::FileContext)) 
