@@ -18,7 +18,7 @@ du prochain KDE 2 est aussi inclus.
 <descrip>
 <tag/<subtitle/<htmlurl url="../index.html" name="Le Manuel d'Utilisation de KDevelop">//
 <p>
-Le Guide de Référence de KDevelop, l'Environnement de Développement Intégré pour Systèmes Unix, Version 1.0.
+Le Guide de Référence de KDevelop, l'Environnement de Développement Intégré pour Systèmes Unix, Version 1.2.
 <p>
 <em>Le Manuel d'Utilisation de KDevelop contient une description complète des fonctionnalités fournies par l'EDI. En plus, il
 vous donne des informations sur les projets en général et la façon dont ils sont définis en utilisant les outils standards
@@ -27,7 +27,7 @@ de développement du GNU.
 
 <tag/<subtitle/<htmlurl url="../programming/index.html" name="Le Manuel de Programmation de KDevelop">//
 <p>
-Le Guide de Conception d'Application C++ pour l'Environnement de Bureau KDE avec l'EDI KDevelop, Version 1.0.
+Le Guide de Conception d'Application C++ pour l'Environnement de Bureau KDE avec l'EDI KDevelop, Version 1.2.
 <p>
 <em>
 Le Manuel de Programmation aborde tous les sujets relatifs à l'utilisation de l'EDI. Il contient une description des types

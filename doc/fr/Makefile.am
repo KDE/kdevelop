@@ -1,4 +1,4 @@
-SUBDIRS = tutorial welcome
+SUBDIRS = tutorial welcome programming
 
 EXTRA_DIST = tip.database
 
