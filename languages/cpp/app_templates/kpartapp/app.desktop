@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=%{APPNAME}Part
 Name[et]=%{APPNAME} komponent
-Name[hi]=%{APPNAME}पार्ट
+Name[pt_BR]=Parte %{APPNAME}
 Name[sv]=%{APPNAME}-del
 Name[ta]=%{APPNAME}பாகம்
 Name[xx]=xx%{APPNAME}Partxx
