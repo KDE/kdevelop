@@ -44,6 +44,7 @@ private slots:
     void kdocadd_button_clicked();
     void kdocedit_button_clicked();
     void kdocremove_button_clicked();
+    void pushEdit_clicked();
 
 private:
     void readConfig();

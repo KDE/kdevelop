@@ -1276,13 +1276,13 @@ void DocTreeViewWidget::refresh()
 
 void DocTreeViewWidget::projectChanged(KDevProject *project)
 {
+    folder_project->setProject(project);
+    folder_project->refresh();
     if(!project) {
         kdDebug(9002) << "No Project...." << endl;
         return;
     }
 
-    folder_project->setProject(project);
-    folder_project->refresh();
 
     // Remove all...
     docView->takeItem(folder_bookmarks);
@@ -1318,21 +1318,24 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     docView->insertItem(folder_docbase);
 #endif
     QListIterator<DocTreeTocFolder> it2(folder_toc);
-    it2.toLast();
-    for (; it2.current(); --it2) {
+//    it2.toLast();
+//    for (; it2.current(); --it2) {
+    for (; it2.current(); ++it2) {
         if (!ignoretocs.contains(it2.current()->tocName()))
             docView->insertItem(it2.current());
     }
 
 //    docView->insertItem(folder_doxygen);
     QListIterator<DocTreeKDELibsFolder> itk2(folder_kdoc);
-    itk2.toLast();
-    for (; itk2.current(); --itk2)
+//    itk2.toLast();
+//    for (; itk2.current(); --itk2)
+    for (; itk2.current(); ++itk2)
         docView->insertItem(itk2.current());
     
     QListIterator<DocTreeDoxygenFolder> itx2(folder_doxygen);
-    itx2.toLast();
-    for (; itx2.current(); --itx2)
+//    itx2.toLast();
+//    for (; itx2.current(); --itx2)
+    for (; itx2.current(); ++itx2)
         docView->insertItem(itx2.current());
     
 /*    if(folder_kdelibs && kdelibskdoc )
@@ -1340,8 +1343,9 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
             docView->insertItem(folder_kdelibs);
 */
     QListIterator<DocTreeQtFolder> itq2(folder_qt);
-    itq2.toLast();
-    for (; itq2.current(); --itq2)
+//    itq2.toLast();
+//    for (; itq2.current(); --itq2)
+    for (; itq2.current(); ++itq2)
         docView->insertItem(itq2.current());
 //    if(folder_qt) docView->insertItem(folder_qt);
 

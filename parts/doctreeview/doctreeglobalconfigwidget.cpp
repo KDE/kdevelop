@@ -416,4 +416,22 @@ void DocTreeGlobalConfigWidget::kdocremove_button_clicked( )
         delete kdoc_view->currentItem();
 }
 
+void DocTreeGlobalConfigWidget::pushEdit_clicked()
+{
+    if (bListView->currentItem())
+    {
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/html", false,
+            kdoc_view->currentItem()->text(0), kdoc_view->currentItem()->text(1));
+        if (dialog->exec())
+        {
+            QString url = dialog->url();
+            if (url[url.length()-1] == QChar('/')) url.remove(url.length()-1, 1);
+            kdoc_view->currentItem()->setText(0, dialog->title());
+            kdoc_view->currentItem()->setText(1, url);
+        }
+        delete dialog;
+    }
+}
+
+
 #include "doctreeglobalconfigwidget.moc"

@@ -497,7 +497,24 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="KListView" row="0" column="0" rowspan="3" colspan="1">
+                    <spacer row="3" column="1">
+                        <property name="name">
+                            <cstring>spacer10</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>31</width>
+                                <height>300</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
                         <property name="name">
                             <cstring>bListView</cstring>
                         </property>
@@ -515,29 +532,20 @@
                     </widget>
                     <widget class="QPushButton" row="1" column="1">
                         <property name="name">
+                            <cstring>pushEdit</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Edit</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="2" column="1">
+                        <property name="name">
                             <cstring>pushRemove</cstring>
                         </property>
                         <property name="text">
                             <string>Remove</string>
                         </property>
                     </widget>
-                    <spacer row="2" column="1">
-                        <property name="name">
-                            <cstring>spacer10</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>31</width>
-                                <height>91</height>
-                            </size>
-                        </property>
-                    </spacer>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -547,66 +555,117 @@
                 <attribute name="title">
                     <string>External Documentation</string>
                 </attribute>
-                <grid>
+                <widget class="KListView">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>extListView</cstring>
                     </property>
-                    <widget class="QPushButton" row="0" column="1">
-                        <property name="name">
-                            <cstring>extEditButton</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Edit</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="1" column="1">
-                        <property name="name">
-                            <cstring>extEnableButton</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>true</bool>
-                        </property>
-                        <property name="text">
-                            <string>Enable</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="2" column="1">
-                        <property name="name">
-                            <cstring>extDisableButton</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>true</bool>
-                        </property>
-                        <property name="text">
-                            <string>Disable</string>
-                        </property>
-                    </widget>
-                    <spacer row="3" column="1">
-                        <property name="name">
-                            <cstring>spacer8</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>31</width>
-                                <height>101</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
-                        <property name="name">
-                            <cstring>extListView</cstring>
-                        </property>
-                        <property name="focusPolicy">
-                            <enum>WheelFocus</enum>
-                        </property>
-                    </widget>
-                </grid>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>11</y>
+                            <width>475</width>
+                            <height>407</height>
+                        </rect>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>extEditButton</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>490</x>
+                            <y>40</y>
+                            <width>80</width>
+                            <height>23</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Edit</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>extEnableButton</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>490</x>
+                            <y>70</y>
+                            <width>80</width>
+                            <height>23</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Enable</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>extDisableButton</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>490</x>
+                            <y>100</y>
+                            <width>80</width>
+                            <height>23</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Disable</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>extAddButton</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>490</x>
+                            <y>10</y>
+                            <width>80</width>
+                            <height>23</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer8</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>31</width>
+                            <height>290</height>
+                        </size>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>516</x>
+                            <y>128</y>
+                            <width>31</width>
+                            <height>290</height>
+                        </rect>
+                    </property>
+                </spacer>
             </widget>
         </widget>
     </grid>
@@ -742,16 +801,25 @@
         <receiver>doctreeview_global_config_widget</receiver>
         <slot>kdocedit_button_clicked()</slot>
     </connection>
+    <connection>
+        <sender>pushEdit</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>pushEdit_clicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>qtdocs_view</tabstop>
     <tabstop>qtdocsadd_button</tabstop>
+    <tabstop>qtdocsedit_button</tabstop>
     <tabstop>qtdocsremove_button</tabstop>
     <tabstop>doxygen_view</tabstop>
     <tabstop>doxygenadd_button</tabstop>
+    <tabstop>doxygenedit_button</tabstop>
     <tabstop>doxygenremove_button</tabstop>
     <tabstop>kdoc_view</tabstop>
     <tabstop>kdocadd_button</tabstop>
+    <tabstop>kdocedit_button</tabstop>
     <tabstop>kdocremove_button</tabstop>
     <tabstop>TabWidget2</tabstop>
     <tabstop>indexKDevelopBox</tabstop>
@@ -787,6 +855,7 @@
     <slot>qtdocsedit_button_clicked()</slot>
     <slot>doxygenedit_button_clicked()</slot>
     <slot>kdocedit_button_clicked()</slot>
+    <slot>pushEdit_clicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
