@@ -26,6 +26,7 @@ class FlagListToolTip;
 class FlagCheckBoxController;
 class FlagRadioButtonController;
 class FlagPathEditController;
+class FlagListEditController;
 class KLineEdit;
 class QPushButton;
 class KURLRequester;
@@ -98,7 +99,7 @@ class FlagPathEdit: public QWidget
 {
     Q_OBJECT
 public:
-    /**If the pathDelimiter is empty then path can consist only from one path*/
+    /**If the pathDelimiter is not empty then path edit can contain a list of paths*/
     FlagPathEdit(QWidget *parent, QString pathDelimiter, FlagPathEditController *controller,
                  const QString &flagstr, const QString &description, KFile::Mode mode = KFile::Directory);
 
@@ -122,6 +123,35 @@ private:
     friend class FlagPathEditController;
 };
 
+class FlagListEdit: public QWidget
+{
+    Q_OBJECT
+public:
+    /**If the listDelimiter is not empty then list edit can contain a list of entries*/
+    FlagListEdit(QWidget *parent, QString listDelimiter, FlagListEditController *controller,
+                 const QString &flagstr, const QString &description);
+
+    ~FlagListEdit() {}
+
+    void setText(const QString text);
+    void appendText(const QString text);
+    bool isEmpty();
+    QString text();
+    QStringList flags();
+
+private slots:
+    void showListDetails();
+
+private:
+    KLineEdit *edit;
+    QPushButton *details;
+
+    QString delimiter;
+    QString flag;
+    QString m_description;
+    friend class FlagListEditController;
+};
+
 class FlagPathEditController
 {
 public:
@@ -137,10 +167,25 @@ private:
     friend class FlagPathEdit;
 };
 
+class FlagListEditController
+{
+public:
+    FlagListEditController();
+    ~FlagListEditController();
+
+    void readFlags(QStringList *list);
+    void writeFlags(QStringList *list);
+
+private:
+    void addListEdit(FlagListEdit *item);
+    QPtrList<FlagListEdit> plist;
+    friend class FlagListEdit;
+};
+
 class FlagCheckBoxController
 {
 public:
-    /**multiKeys is a list of options like -vxyz (-vx -vy -vz)
+    /**"multi key" is a list of options like -vxyz (-vx -vy -vz)
        multiKeys must contain a list of option names like {-v}
        in the above example.
     */

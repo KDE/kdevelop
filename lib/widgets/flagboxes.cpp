@@ -292,17 +292,17 @@ void FlagPathEdit::showPathDetails( )
 
     KURLRequester *req = new KURLRequester( dia );
     req->setMode(KFile::Directory);
-    KEditListBox::CustomEditor* pCustomEditor;
+    KEditListBox::CustomEditor pCustomEditor;
 #if KDE_VERSION > 305
-    pCustomEditor = &req->customEditor();
+    pCustomEditor = req->customEditor();
 #else
     QObjectList* pOL = req->queryList("KLineEdit"); // dirty hack :)
     KLineEdit* pEdit = dynamic_cast<KLineEdit*>(pOL->first());
     assert(pEdit);
     KEditListBox::CustomEditor editor(req, pEdit);
-    pCustomEditor = &editor;
+    pCustomEditor = editor;
 #endif
-    KEditListBox *elb = new KEditListBox( "", *pCustomEditor, dia );
+    KEditListBox *elb = new KEditListBox( "", pCustomEditor, dia );
     dia->setMainWidget(elb);
 
     elb->insertStringList(QStringList::split(delimiter, text()));
@@ -410,6 +410,117 @@ void FlagRadioButtonController::writeFlags(QStringList *list)
         if (fitem->isChecked())
             (*list) << fitem->flag;
     }
+}
+
+ FlagListEditController::FlagListEditController( )
+{
+}
+
+ FlagListEditController::~ FlagListEditController( )
+{
+}
+
+void FlagListEditController::readFlags( QStringList * list )
+{
+    QPtrListIterator<FlagListEdit> it(plist);
+    for (; it.current(); ++it) {
+        FlagListEdit *peitem = it.current();
+
+        for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+        {
+            if ((*sli).startsWith(peitem->flag))
+            {
+                peitem->appendText((*sli).replace(QRegExp(peitem->flag),""));
+                sli = list->remove(sli);
+            }
+        }
+    }
+}
+
+void FlagListEditController::writeFlags( QStringList * list )
+{
+    QPtrListIterator<FlagListEdit> it(plist);
+    for (; it.current(); ++it) {
+        FlagListEdit *pitem = it.current();
+        if (!pitem->isEmpty())
+            (*list) += pitem->flags();
+    }
+}
+
+void FlagListEditController::addListEdit( FlagListEdit * item )
+{
+    plist.append(item);
+}
+
+FlagListEdit::FlagListEdit( QWidget * parent, QString listDelimiter, FlagListEditController * controller, const QString & flagstr, const QString & description )
+    : QWidget(parent), delimiter(listDelimiter), flag(flagstr), m_description(description)
+{
+    QBoxLayout *topLayout = new QVBoxLayout(this, 0, 1);
+    topLayout->addWidget(new QLabel(description, this));
+    QBoxLayout *layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
+
+    edit = new KLineEdit(this);
+    layout->addWidget(edit);
+    details = new QPushButton("...", this);
+    details->setMaximumWidth(30);
+    connect(details, SIGNAL(clicked()), this, SLOT(showListDetails()));
+    layout->addWidget(details);
+
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    QToolTip::add(this, flagstr);
+    controller->addListEdit(this);
+}
+
+void FlagListEdit::setText( const QString text )
+{
+    edit->setText(text);
+}
+
+bool FlagListEdit::isEmpty( )
+{
+    return edit->text().isEmpty();
+}
+
+QString FlagListEdit::text( )
+{
+    return edit->text();
+}
+
+void FlagListEdit::showListDetails( )
+{
+    KDialogBase *dia = new KDialogBase(0, "flag_list_edit_dia", true, m_description,
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+
+    QBoxLayout *diaLayout = new QVBoxLayout(dia, KDialog::marginHint(), KDialog::spacingHint());
+    diaLayout->setAutoAdd(true);
+
+    KEditListBox *elb = new KEditListBox( "", dia );
+    dia->setMainWidget(elb);
+
+    elb->insertStringList(QStringList::split(delimiter, text()));
+
+    if (dia->exec() == QDialog::Accepted)
+    {
+        setText(elb->items().join(delimiter));
+    }
+
+    delete dia;
+}
+
+void FlagListEdit::appendText( const QString text )
+{
+    edit->setText(edit->text() + (edit->text().isEmpty()?QString(""):delimiter) + text);
+}
+
+QStringList FlagListEdit::flags( )
+{
+    QStringList fl = QStringList::split(delimiter, text());
+    for (QStringList::iterator it = fl.begin(); it != fl.end(); ++it)
+    {
+        (*it).prepend(flag);
+    }
+    return fl;
 }
 
 #include "flagboxes.moc"
