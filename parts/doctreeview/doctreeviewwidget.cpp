@@ -874,7 +874,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
             QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
             if (!qtdocdir.isEmpty())
             {
-                folder_qt = new DocTreeQtFolder(docView, qtdocdir+"qt.xml", "ctx_qt");
+                folder_qt = new DocTreeQtFolder(docView, qtdocdir+"/qt.xml", "ctx_qt");
                 if (folder_qt)
                 {
                     folder_qt->setFileName(qtdocdir + "/index.html");
