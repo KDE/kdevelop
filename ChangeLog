@@ -1,3 +1,8 @@
+2001-06-04 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+    
+    * Added DCOP bindings to the editor interfaces,
+      so they are accessible for scripting.
+
 2001-06-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* New add service dialog in project management
