@@ -1988,7 +1988,7 @@ void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 	}
 
 
-extern "C" int isatty YY_PROTO(( int ));
+#include<unistd.h>
 void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, istream* file )
 
 	{

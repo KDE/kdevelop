@@ -17,7 +17,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Add application .desktop file</string>
+        <string>Add Application .desktop File</string>
     </property>
     <property stdset="1">
         <name>sizeGripEnabled</name>

@@ -50,7 +50,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
   heading_(new QLabel(" ", this)),
   pidLines_(QString())
 {
-  setCaption(i18n("Attach to process"));
+  setCaption(i18n("Attach to Process"));
 
   QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 

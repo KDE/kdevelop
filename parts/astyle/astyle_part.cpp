@@ -31,8 +31,8 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   setInstance(AStyleFactory::instance());
 	 
   setXMLFile("kdevpart_astyle.rc");
-	   
-  _action = new KAction(i18n("&Reformat source"), 0,
+
+  _action = new KAction(i18n("&Reformat Source"), 0,
 			  this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
   _action->setEnabled(false);
 

@@ -53,7 +53,7 @@ CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name 
     okBtn( this, "okBtn" ),
     cancelBtn( this, "cancelBtn" )
 {
-  setCaption( i18n("Add member variable") );
+  setCaption( i18n("Add Member Variable") );
 
   setWidgetValues();
   setCallbacks();

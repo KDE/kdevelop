@@ -36,7 +36,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>automatic &amp;code completion  (experimental)</string>
+                <string>Automatic &amp;code completion  (experimental)</string>
             </property>
         </widget>
         <widget row="1"  column="0" >
@@ -47,7 +47,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>&amp;argument's hint  (experimental)</string>
+                <string>&amp;Argument's hint  (experimental)</string>
             </property>
         </widget>
         <spacer row="2"  column="1" >

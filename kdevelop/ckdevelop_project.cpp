@@ -173,7 +173,7 @@ void CKDevelop::slotAddExistingFiles(){
   int i=files.count();
 
   QProgressDialog progress( i18n("Copying files..."),0, i, this,"",true );
-  progress.setCaption(i18n("please wait..."));
+  progress.setCaption(i18n("Please Wait..."));
   progress.show();
 
   i=0;
@@ -1567,7 +1567,7 @@ void CKDevelop::newSubDir(){
 SaveAllDialog::SaveAllDialog(const QString& filename, CProject* prj) :
   KDialog(0, 0, true)
 {
-  setCaption(i18n("Save changed project files ?"));
+  setCaption(i18n("Save Changed Project Files ?"));
 
   QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 

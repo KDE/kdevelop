@@ -97,19 +97,19 @@ void TopLevelMDI::createActions()
 
   KAction *action;
 
-  action = new KAction(i18n("&Open project..."), "project_open", 0,
+  action = new KAction(i18n("&Open Project..."), "project_open", 0,
                        this, SLOT(slotOpenProject()),
                        actionCollection(), "project_open");
   action->setStatusText( i18n("Opens a project"));
 
   m_openRecentProjectAction =
-    new KRecentFilesAction(i18n("Open &recent project..."), 0,
+    new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
                           this, SLOT(slotOpenRecentProject(const KURL &)),
                           actionCollection(), "project_open_recent");
   m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
 
   m_closeProjectAction =
-    new KAction(i18n("C&lose project"), "fileclose",0,
+    new KAction(i18n("C&lose Project"), "fileclose",0,
                 this, SLOT(slotCloseProject()),
                 actionCollection(), "project_close");
   m_closeProjectAction->setEnabled(false);
@@ -119,7 +119,7 @@ void TopLevelMDI::createActions()
                 this, SLOT(slotProjectOptions()),
                 actionCollection(), "project_options" );
   m_projectOptionsAction->setEnabled(false);
-  
+
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText(i18n("Lets you customize KDevelop") );
@@ -146,7 +146,7 @@ QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
   shortName = shortName.right(length - (shortName.findRev('/') +1));
   pMDICover->setTabCaption(shortName);
   pMDICover->setCaption(name);
- 
+
   m_widgetMap.insert(view, pMDICover);
 
   return pMDICover;

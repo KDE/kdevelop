@@ -37,7 +37,7 @@ BreakpointManager::BreakpointManager(QWidget* parent, const char* name, WFlags f
   QListBox(parent, name, f),
   activeFlag_(0)
 {
-//  setCaption("Breakpoint manager");
+//  setCaption("Breakpoint Manager");
   connect(this, SIGNAL(rightButtonClicked(QListBoxItem *, const QPoint & )),
                 SLOT(slotRightButtonClicked(QListBoxItem *, const QPoint & )));
   connect (this, SIGNAL(clicked(QListBoxItem *)), SLOT(slotClicked(QListBoxItem *)));

@@ -49,7 +49,7 @@
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
   prj = p_prj;
-  setCaption(i18n("Add existing files to project"));
+  setCaption(i18n("Add Existing Files to Project"));
 
   QGridLayout *grid1 = new QGridLayout(this,2,4,15,7);
   source_label = new QLabel( this, "source_label" );

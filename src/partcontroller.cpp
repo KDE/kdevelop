@@ -102,27 +102,27 @@ void PartController::setupActions()
   (void) KStdAction::open(this, SLOT(slotOpenFile()), 
     ac, "file_open");
 
-  m_saveAllFilesAction = new KAction(i18n("Save &all"), 0,
+  m_saveAllFilesAction = new KAction(i18n("Save &All"), 0,
     this, SLOT(slotSaveAllFiles()),
     ac, "file_save_all");
   m_saveAllFilesAction->setEnabled(false);
 
-  m_revertAllFilesAction = new KAction(i18n("&Revert all"), 0,
+  m_revertAllFilesAction = new KAction(i18n("&Revert All"), 0,
     this, SLOT(slotRevertAllFiles()),
     ac, "file_revert_all");
   m_revertAllFilesAction->setEnabled(false);
 
-  m_closeWindowAction = new KAction(i18n("&Close window"), Key_F4,
+  m_closeWindowAction = new KAction(i18n("&Close Window"), Key_F4,
     this, SLOT(slotCloseWindow()),
     ac, "file_closewindow");
   m_closeWindowAction->setEnabled(false);
 
-  m_closeAllWindowsAction = new KAction(i18n("Close all &windows"), 0,
+  m_closeAllWindowsAction = new KAction(i18n("Close All &Windows"), 0,
     this, SLOT(slotCloseAllWindows()),
     ac, "file_closeall");
   m_closeAllWindowsAction->setEnabled(false);
 
-  m_closeOtherWindowsAction = new KAction(i18n("Close all &other windows"), 0,
+  m_closeOtherWindowsAction = new KAction(i18n("Close All &Other Windows"), 0,
     this, SLOT(slotCloseOtherWindows()),
     ac, "file_closeother");
   m_closeOtherWindowsAction->setEnabled(false);
@@ -334,7 +334,7 @@ void PartController::closePart(KParts::Part *part)
     {
       int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(),
 	          i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
-	          i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
+	          i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
       if (res == KMessageBox::Cancel)
         return;
       if (res == KMessageBox::Ok)
@@ -497,7 +497,7 @@ bool PartController::closeDocuments(const QStringList &documents)
     {
       int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(),
         i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
-	i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
+	i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
       if (res == KMessageBox::Cancel)
         return false;
       if (res == KMessageBox::Ok)
@@ -598,8 +598,8 @@ bool PartController::readyToClose()
     if (rw_part->isModified())
     {
       int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(), 
-		  i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()), 
-		  i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
+		  i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
+		  i18n("Save File?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
 
       if (res == KMessageBox::Cancel)
         return false;

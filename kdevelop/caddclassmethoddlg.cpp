@@ -62,7 +62,7 @@ CAddClassMethodDlg::CAddClassMethodDlg(CClassView* class_tree, QWidget *parent, 
   btnFill( this, "btnFill" ),
   classtree(class_tree)
 {
-  setCaption( i18n("Add class member") );
+  setCaption( i18n("Add Class Member") );
 
   setWidgetValues();
   setCallbacks();

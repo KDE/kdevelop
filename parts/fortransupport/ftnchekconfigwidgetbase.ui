@@ -17,7 +17,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Ftncheck options</string>
+        <string>Ftncheck Options</string>
     </property>
     <property>
         <name>layoutMargin</name>

@@ -31,7 +31,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Search in tags database</string>
+        <string>Search in Tags Database</string>
     </property>
     <property>
         <name>layoutMargin</name>

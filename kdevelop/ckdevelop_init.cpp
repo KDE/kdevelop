@@ -287,7 +287,7 @@ void CKDevelop::initView()
   konsole_widget = new CKonsoleWidget(0L,"konsole");
   konsole_widget->setFocusPolicy(QWidget::ClickFocus);
 
-  messages_widget->setCaption(i18n("messages"));
+  messages_widget->setCaption(i18n("Messages"));
   addToolWindow(messages_widget, KDockWidget::DockBottom, m_pMdi, 70, i18n("output of KDevelop"), i18n("messages"));
   stdin_stdout_widget->setCaption(i18n("stdout"));
   addToolWindow(stdin_stdout_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("messages of started program"), i18n("stdout"));

@@ -72,7 +72,7 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>project requires Qt/KDE version:</string>
+                        <string>Project requires Qt/KDE version:</string>
                     </property>
                 </widget>
                 <widget>
@@ -92,7 +92,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>use &amp;exception handling</string>
+                <string>Use &amp;exception handling</string>
             </property>
             <property>
                 <name>toolTip</name>
@@ -107,7 +107,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>do some &amp;misc configure tests</string>
+                <string>Do some &amp;misc configure tests</string>
             </property>
         </widget>
         <widget row="5"  column="0" >
@@ -118,7 +118,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>add bison/&amp;yacc tests</string>
+                <string>Add bison/&amp;yacc tests</string>
             </property>
         </widget>
         <widget row="4"  column="0" >
@@ -129,7 +129,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>add (f)&amp;lex tests</string>
+                <string>Add (f)&amp;lex tests</string>
             </property>
         </widget>
         <widget row="2"  column="0" >
@@ -140,7 +140,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>don't use predefined -O &amp;flag</string>
+                <string>Don't use predefined -O &amp;flag</string>
             </property>
         </widget>
         <spacer row="1"  column="1"  rowspan="5"  colspan="2" >

@@ -29,7 +29,7 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
                                          SubprojectItem *item, QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add subproject"));
+    setCaption(("Add Subproject"));
     
     QLabel *name_label = new QLabel(i18n("&Name:"), this);
     name_edit = new QLineEdit(this);

@@ -21,7 +21,7 @@
 AddEnvvarDialog::AddEnvvarDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add environment variable"));
+    setCaption(("Add Environment Variable"));
     
     QLabel *varname_label = new QLabel(i18n("&Name:"), this);
     varname_edit = new QLineEdit(this);

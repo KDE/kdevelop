@@ -34,7 +34,7 @@ CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) :
   QDialog(parent,name, true)
 {
     resize(250,120);
-    setCaption(i18n("Search for Help on..."));
+    setCaption(i18n("Search for Help On..."));
     setIcon(SmallIcon("filefind"));
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 
@@ -102,7 +102,7 @@ CManpageTextDlg::CManpageTextDlg(QWidget *parent, const char *name ) :
   QDialog(parent,name, true)
 {
     resize(250,120);
-    setCaption(i18n("Show Manpage on..."));
+    setCaption(i18n("Show Manpage On..."));
     setIcon(SmallIcon("filefind"));
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 

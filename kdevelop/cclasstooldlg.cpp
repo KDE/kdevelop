@@ -543,25 +543,25 @@ void CClassToolDlg::changeCaption()
   switch( currentOperation )
   {
     case CTPARENT:
-      caption.arg(i18n("Parents of class %1")).arg(name);
+      caption.arg(i18n("Parents of Class %1")).arg(name);
       break;
     case CTCHILD:
-      caption.arg(i18n("Children of class %1")).arg(name);
+      caption.arg(i18n("Children of Class %1")).arg(name);
       break;
     case CTCLIENT:
-      caption.arg(i18n("Clients of class %1")).arg(name);
+      caption.arg(i18n("Clients of Class %1")).arg(name);
       break;
     case CTSUPP:
-      caption = i18n("Suppliers of class %1").arg(name);
+      caption = i18n("Suppliers of Class %1").arg(name);
       break;
     case CTATTR:
-      caption = i18n("%1 attributes of class %2").arg(exportCombo.currentText()).arg(name);
+      caption = i18n("%1 Attributes of Class %2").arg(exportCombo.currentText()).arg(name);
       break;
     case CTMETH:
-      caption = i18n("%1 methods of class %2").arg(exportCombo.currentText()).arg(name);
+      caption = i18n("%1 Methods of Class %2").arg(exportCombo.currentText()).arg(name);
       break;
     case CTVIRT:
-      caption = i18n("%1 virtual methods of class %2").arg(exportCombo.currentText()).arg(name);
+      caption = i18n("%1 Virtual Methods of Class %2").arg(exportCombo.currentText()).arg(name);
       break;
     default:
       caption = i18n("Class Tool Dialog of class %1").arg(name);

@@ -45,10 +45,10 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     topLevel()->embedOutputView(m_widget, i18n("Messages"));
 
     KAction *action;
-    action = new KAction( i18n("&Next error"), Key_F8, m_widget, SLOT(nextError()),
+    action = new KAction( i18n("&Next Error"), Key_F8, m_widget, SLOT(nextError()),
                           actionCollection(), "view_next_error");
     action->setStatusText( i18n("Switches to the file and line the next error was reported") );
-    action = new KAction( i18n("&Previous error"), Key_F7, m_widget, SLOT(prevError()),
+    action = new KAction( i18n("&Previous Error"), Key_F7, m_widget, SLOT(prevError()),
                           actionCollection(), "view_previous_error");
     action->setStatusText( i18n("Switches to the file and line the previous error was reported") );
 

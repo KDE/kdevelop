@@ -569,7 +569,7 @@ void CClassView::viewGraphicalTree()
   QList<ClassTreeNode> *forest = store->asForest();
   CGfxClassTreeWindow *cb = new CGfxClassTreeWindow(NULL);
   connect(cb, SIGNAL(gotoClassDefinition(ParsedClass *)), SLOT(slotViewClassDefinition(ParsedClass *)));
-  cb->setCaption(i18n("Graphical classview"));
+  cb->setCaption(i18n("Graphical Classview"));
   cb->InitializeTree(forest);
   cb->show();
 }

@@ -17,7 +17,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Compiler options</string>
+        <string>Compiler Options</string>
     </property>
     <grid>
         <property stdset="1">

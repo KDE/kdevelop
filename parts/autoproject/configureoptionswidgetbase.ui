@@ -17,7 +17,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Configure options</string>
+        <string>Configure Options</string>
     </property>
     <grid>
         <property stdset="1">

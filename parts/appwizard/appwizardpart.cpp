@@ -34,8 +34,8 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
     setXMLFile("kdevappwizard.rc");
 
     KAction *action;
-    
-    action = new KAction( i18n("&New project..."), "window_new", 0,
+
+    action = new KAction( i18n("&New Project..."), "window_new", 0,
                           this, SLOT(slotNewProject()),
                           actionCollection(), "project_new" );
     action->setStatusText( i18n("Generates a new project from a template") );

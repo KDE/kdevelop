@@ -21,7 +21,7 @@
 AddFileGroupDialog::AddFileGroupDialog(QWidget *parent, const char *name)
     : QDialog(parent, name, true)
 {
-    setCaption(("Add file group"));
+    setCaption(("Add File Group"));
     
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
     title_edit = new QLineEdit(this);

@@ -60,7 +60,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
 
     KAction *action;
 
-    action = new KAction( i18n("Lookup in &index..."), 0,
+    action = new KAction( i18n("Lookup in &Index..."), 0,
                           this, SLOT(slotDocumentationIndex()),
                           actionCollection(), "help_lookupindex" );
     action->setStatusText( i18n("Allows you to lookup a term in the documentation index") );
@@ -69,7 +69,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
                                "can enter a term to lookup in the various indices "
                                "of the installed documentation.") );
 
-    action = new KAction( i18n("Full text &search..."), 0,
+    action = new KAction( i18n("Full Text &Search..."), 0,
                           this, SLOT(slotSearchDocumentation()),
                           actionCollection(), "help_fulltextsearch" );
     action->setStatusText( i18n("Performs a full text search in the documentation") );
@@ -80,14 +80,14 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
                                "create a full text index, which can be done in the "
                                "configuration dialog of the documentation tree.") );
 
-    action = new KAction( i18n("Man page..."), 0,
+    action = new KAction( i18n("Man Page..."), 0,
                           this, SLOT(slotManpage()),
                           actionCollection(), "help_manpage" );
     action->setStatusText( i18n("Show a manpage") );
     
 #if 0
     // No longer necessary since the dock widgets are gone :-)
-    action = new KAction( i18n("&Documentation tree"), 0,
+    action = new KAction( i18n("&Documentation Tree"), 0,
                           this, SLOT(slotRaiseWidget()),
                           actionCollection(), "window_doctreeview" );
     action->setStatusText( i18n("Brings the documentation tree to the foreground.") );

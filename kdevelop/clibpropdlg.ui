@@ -17,7 +17,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Library properties</string>
+        <string>Library Properties</string>
     </property>
     <property stdset="1">
         <name>sizeGripEnabled</name>
@@ -89,7 +89,7 @@
             </property>
             <property stdset="1">
                 <name>title</name>
-                <string>Set library type</string>
+                <string>Set Library Type</string>
             </property>
             <hbox>
                 <property stdset="1">
@@ -140,7 +140,7 @@
             </property>
             <property stdset="1">
                 <name>title</name>
-                <string>Shared library properties</string>
+                <string>Shared Library Properties</string>
             </property>
             <grid>
                 <property stdset="1">

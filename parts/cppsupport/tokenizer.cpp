@@ -743,7 +743,7 @@ goto find_rule; \
   #include "FlexLexer.h"
 
   /** This class is a stupid trick to make it possible 
-   * to access the gettext method. */
+   * to access the getText method. */
   class MyLexer : public yyFlexLexer
   {
     public:

@@ -32,7 +32,7 @@
 CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true )
 {
-  setCaption(i18n("Add folder") );
+  setCaption(i18n("Add Folder") );
 
   setWidgetValues();
   setCallbacks();

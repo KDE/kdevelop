@@ -112,19 +112,19 @@ void TopLevelSDI::createActions()
 
   KAction *action;
 
-  action = new KAction(i18n("&Open project..."), "project_open", 0,
+  action = new KAction(i18n("&Open Project..."), "project_open", 0,
                        this, SLOT(slotOpenProject()),
                        actionCollection(), "project_open");
   action->setStatusText( i18n("Opens a project"));
 
   m_openRecentProjectAction =
-    new KRecentFilesAction(i18n("Open &recent project..."), 0,
+    new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
                           this, SLOT(slotOpenRecentProject(const KURL &)),
                           actionCollection(), "project_open_recent");
   m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
 
   m_closeProjectAction =
-    new KAction(i18n("C&lose project"), "fileclose",0,
+    new KAction(i18n("C&lose Project"), "fileclose",0,
                 this, SLOT(slotCloseProject()),
                 actionCollection(), "project_close");
   m_closeProjectAction->setEnabled(false);
@@ -230,7 +230,7 @@ void TopLevelSDI::saveSettings()
 
 void TopLevelSDI::slotOpenProject()
 {
-  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", this, i18n("Open project"));
+  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", this, i18n("Open Project"));
   if (fileName.isNull())
     return;
 

@@ -27,8 +27,8 @@ RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringL
     setXMLFile("kdevregexptest.rc");
 
     KAction *action;
-    
-    action = new KAction( i18n("Debug regular expression..."), 0,
+
+    action = new KAction( i18n("Debug Regular Expression..."), 0,
                           this, SLOT(slotRegexpTest()),
                           actionCollection(), "tools_regexptest" );
 

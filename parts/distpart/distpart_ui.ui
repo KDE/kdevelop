@@ -39,7 +39,7 @@
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Prepare for release</string>
+        <string>Prepare for Release</string>
     </property>
     <vbox>
         <property stdset="1">

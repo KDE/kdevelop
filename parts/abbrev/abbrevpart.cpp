@@ -55,7 +55,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
     KAction *action;
-    action = new KAction( i18n("Expand abbreviation..."), SHIFT + Key_Space,
+    action = new KAction( i18n("Expand Abbreviation..."), SHIFT + Key_Space,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
 
