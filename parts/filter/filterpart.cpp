@@ -34,18 +34,20 @@ FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
     setXMLFile("kdevfilter.rc");
 
     KAction *action;
-    
+
     action = new KAction( i18n("Execute Command..."), 0,
                           this, SLOT(slotShellInsert()),
                           actionCollection(), "tools_insertshell" );
+    action->setToolTip(i18n("Executes a shell command and outputs it's result into the current document"));
 
     action = new KAction( i18n("Filter Selection Through Command..."), 0,
                           this, SLOT(slotShellFilter()),
                           actionCollection(), "tools_filtershell" );
+    action->setToolTip(i18n("Filters selection trough a shell command and outputs it's result into the current document"));
 
     m_insertDialog = 0;
-    m_filterDialog = 0;    
-    
+    m_filterDialog = 0;
+
     new KDevFilterIface( this );
     // (void) dcopClient();
 }
@@ -85,8 +87,10 @@ void FilterPart::slotShellInsert()
     }
 
     if (!m_insertDialog)
+    {
         m_insertDialog = new ShellInsertDialog();
-
+        m_insertDialog->setCaption(i18n("Execute Command"));
+    }
     if (m_insertDialog->exec()) {
         uint line, col;
         cursoriface->cursorPositionReal(&line, &col);
@@ -129,12 +133,15 @@ void FilterPart::slotShellFilter()
     }
 
     if (!m_filterDialog)
+    {
         m_filterDialog = new ShellFilterDialog();
+        m_filterDialog->setCaption(i18n("Filter Selection Through Command"));
+    }
 
     kdDebug(9029) << "Old text: " << selectioniface->selection()<< endl;
-    
+
     m_filterDialog->setText(selectioniface->selection());
-    
+
     if (m_filterDialog->exec()) {
         uint line, col;
         // OUCH: KTextEditor doesn't allow to find out
