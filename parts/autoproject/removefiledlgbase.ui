@@ -242,7 +242,13 @@
                     <property name="sizeType">
                         <enum>Expanding</enum>
                     </property>
-                </spacer>
+                    <property name="sizeHint">
+			<size>
+			    <width>30</width>
+			    <height>20</height>
+			</size>
+		    </property>
+		</spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>removeButton</cstring>
