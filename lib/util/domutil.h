@@ -17,7 +17,7 @@
 #include <qpair.h>
 #include <qstringlist.h>
 #include <qvaluelist.h>
-
+#include <qmap.h>
 
 struct DomAttribute
 {
@@ -68,6 +68,10 @@ public:
      */
     static PairList readPairListEntry(const QDomDocument &doc, const QString &path, const QString &tag,
                                       const QString &firstAttr, const QString &secondAttr);
+    /**
+     * Reads a string to string map. See writeMapEntry()
+     */
+    static QMap<QString, QString> readMapEntry(const QDomDocument &doc, const QString &path);
     /**
      * Retrieves an element by path, return null if any item along
      * the path does not exist.
@@ -140,6 +144,11 @@ public:
     static void writePairListEntry(QDomDocument &doc, const QString &path, const QString &tag,
                                    const QString &firstAttr, const QString &secondAttr,
                                    const PairList &value);
+    /**
+     * Writes a string to string map. This map is stored in a way, that it can be read with
+     * readMapEntry() and readEntry()
+     */
+    static void writeMapEntry(QDomDocument &doc, const QString& path, const QMap<QString,QString> &map);
 
     /**
      * Resolves an extended path

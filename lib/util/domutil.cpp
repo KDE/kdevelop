@@ -117,6 +117,19 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
     return list;
 }
 
+QMap<QString, QString> DomUtil::readMapEntry(const QDomDocument &doc, const QString& path)
+{
+    QMap<QString, QString> map;
+
+    QDomElement el = elementByPath(doc, path);
+    QDomElement subEl = el.firstChild().toElement();
+    while (!subEl.isNull()) {
+        map[subEl.tagName()] = subEl.firstChild().toText().data();
+	subEl = subEl.nextSibling().toElement();
+    }
+
+    return map;
+}
 
 QDomElement DomUtil::namedChildElement( QDomElement& el, const QString& name )
 {
@@ -151,7 +164,18 @@ void DomUtil::writeEntry(QDomDocument &doc, const QString &path, const QString &
     QDomElement el = createElementByPath(doc, path);
     el.appendChild(doc.createTextNode(value));
 }
-    
+
+void DomUtil::writeMapEntry(QDomDocument &doc, const QString &path, const QMap<QString, QString> &map)
+{
+    QString basePath( path + "/" );
+    QMap<QString,QString>::ConstIterator it;
+    for (it = map.begin(); it != map.end(); ++it)
+    {
+        kdDebug( 9010 ) << "writing " << basePath << ";" << it.key() << ";" << it.data() << endl;
+	if( ! it.key().isEmpty() )
+            writeEntry(doc, basePath + it.key(), it.data() );
+    }
+}
 
 void DomUtil::writeIntEntry(QDomDocument &doc, const QString &path, int value)
 {
