@@ -359,8 +359,21 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
   QListViewItem *root;
   CParsedAttribute *anAttr;
   QList<CParsedAttribute> *list;
+  QList<CParsedStruct> *structList;
+  CParsedStruct *childStruct;
 
   root = addItem( aStruct->name, THSTRUCT, parent );
+
+  structList = aStruct->getSortedStructList();
+
+  for( childStruct = structList->first();
+       childStruct != NULL;
+       childStruct = structList->next() )
+  {
+    addStruct( childStruct, root );
+  }
+
+  delete structList;
 
   list = aStruct->getSortedAttributeList();
 

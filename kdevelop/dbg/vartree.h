@@ -126,7 +126,7 @@ public:
   bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
   QString getValue() const                { return QString(text(ValueCol)); }
 
-  virtual void updateValue(const QString& value);
+  virtual void updateValue(char* /* buf */);
   virtual DataType getDataType() const;
 
   virtual void setCache(const QString& value);

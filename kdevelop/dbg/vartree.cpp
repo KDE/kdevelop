@@ -421,7 +421,7 @@ QString TrimmableItem::getCache()
 
 // **************************************************************************
 
-void TrimmableItem::updateValue(const QString&)
+void TrimmableItem::updateValue(char* /* buf */)
 {
 }
 
@@ -506,9 +506,22 @@ void VarItem::setText ( int column, const char * data )
 
 // **************************************************************************
 
-void VarItem::updateValue(char* data)
+void VarItem::updateValue(char* buf)
 {
-  getParser()->parseData(this, data, true, false);
+  if (*buf == '$')
+  {
+    if (char* end = strchr(buf, '='))
+        buf = end+2;
+  }
+
+  if (dataType_ == typeUnknown)
+  {
+    dataType_ = getParser()->determineType(buf);
+    if (dataType_ == typeArray)
+      buf++;
+  }
+
+  getParser()->parseData(this, buf, true, false);
   setActive();
 }
 
