@@ -210,7 +210,7 @@ void DocViewMan::closeDoc(int docId)
       if (countViews() == 0) {
         emit sig_lastViewClosed();
       }
-
+      // now finally, delete the document
       KWriteDoc* pDoc = (KWriteDoc*) pCurDocViewNode->pDoc;
   //?      //   disconnect document signals
   //?       disconnect(pDoc, SIGNAL(sig_updated(QObject*, int)),
@@ -220,15 +220,24 @@ void DocViewMan::closeDoc(int docId)
     break;
   case DocViewMan::HTML:
     {
-      CDocBrowser* pDoc = (CDocBrowser*) pCurDocViewNode->pDoc;
-      KHTMLView* pView = pDoc->view();
-      // remove the view from MDI and delete the view
-      QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
-      m_pParent->removeWindowFromMdi( pMDICover);
+      QListIterator<QWidget>  itViews(pCurDocViewNode->existingViews);
+      for (; itViews.current() != 0; ++itViews) {
+        // remove the view from MDI
+        QWidget* pView = itViews.current();
+        QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+        pMDICover->hide();
+        pView->reparent(0L, 0, QPoint(0,0));
+        QApplication::sendPostedEvents();
+        m_pParent->removeWindowFromMdi( pMDICover);
+        delete pMDICover;
+      }
       pCurDocViewNode->existingViews.clear();
+      // emit an according signal if we closed the last view
       if (countViews() == 0) {
         emit sig_lastViewClosed();
       }
+      // now finally, delete the document (which inclusively deletes the view)
+      CDocBrowser* pDoc = (CDocBrowser*) pCurDocViewNode->pDoc;
       delete pDoc;
     }
     break;
@@ -238,7 +247,7 @@ void DocViewMan::closeDoc(int docId)
   int removedDocType = pCurDocViewNode->docType;
   m_docsAndViews.remove(pCurDocViewNode);
 
-  //   emit an according signal if we closed the last doc
+  // check if there's still a m_pCurBrowserDoc, m_pCurBrowserView, m_pCurEditDoc, m_pCurEditView
   bool bBrowserDocFound = false;
   bool bEditDocFound = false;
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
@@ -248,8 +257,6 @@ void DocViewMan::closeDoc(int docId)
     else if ((docType == DocViewMan::Source) || (docType == DocViewMan::Header))
       bEditDocFound = true;
   }
-
-  // check if there's still a m_pCurBrowserDoc, m_pCurBrowserView, m_pCurEditDoc, m_pCurEditView
   switch (removedDocType) {
   case DocViewMan::Header:
   case DocViewMan::Source:
@@ -266,6 +273,7 @@ void DocViewMan::closeDoc(int docId)
     break;
   }
 
+  //   emit an according signal if we closed the last doc
   if (m_docsAndViews.count() == 0) {
     m_currentDocType = DocViewMan::Undefined;
     emit sig_lastDocClosed();
@@ -458,11 +466,18 @@ void DocViewMan::closeView(QWidget* pView)
   // store the current items since lists may change while deleting view and doc
   DocViewNode*   pDocViews = m_docsAndViews.current();
   QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+  pMDICover->hide();
 
   // disconnect the focus signals
   disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)), this, SLOT(slot_gotFocus(QextMdiChildView*)));
   // remove view list entry
   pViewList->remove(pView);
+  int docType = pDocViews->docType;
+  if (docType == DocViewMan::HTML) {
+    // get a KHTMLView out of the parent to avoid a delete, it will be deleted later in the CDocBrowser destructor
+    pView->reparent(0L,0,QPoint(0,0));
+    QApplication::sendPostedEvents();
+  }
   // remove the view from MDI and delete the view
   m_pParent->removeWindowFromMdi( pMDICover);
   delete pMDICover;
@@ -473,13 +488,17 @@ void DocViewMan::closeView(QWidget* pView)
   }
   // check whether there are remaining views
   if (pDocViews->existingViews.count() == 0) {
-    // no -> delete document
-    delete pDocViews->pDoc;
-    //   remove list entry
-    m_docsAndViews.remove(pDocViews);
-    //   did we close the last doc?
-    if (docCount() == 0) {
-      emit sig_lastDocClosed();
+    switch (docType) {
+    case DocViewMan::Header:
+    case DocViewMan::Source:
+      {
+        KWriteDoc* pDoc = (KWriteDoc*) pDocViews->pDoc;
+        m_pParent->removeFileFromEditlist( pDoc->fileName()); // this removes from edit_infos and calls closeDoc right after
+      }
+      break;
+    case DocViewMan::HTML:
+      closeDoc( pDocViews->docId);
+      break;
     }
   }
 }
