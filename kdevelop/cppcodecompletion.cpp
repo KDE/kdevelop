@@ -682,7 +682,7 @@ QValueList<CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString st
         }
     }
 
-    kdDebug() << "getParentAttributeListForClass() -- END" << endl;
+    kdDebug() << "getEntryListForClass() -- END" << endl;
     return entryList;
 }
 
@@ -1002,24 +1002,28 @@ void CppCodeCompletion::completeText()
     kdDebug() << "prefix = |" << word << "|" << endl;
     kdDebug() << "expr = |" << expr << "|" << endl;
 
-    if( showArguments ){
-        QString type = evaluateExpression( expr, ctx, m_pStore );
-        QStringList functionList = getMethodListForClass( type, word );
-        showArgHint( functionList, "()", "," );
+    if( expr == "." || expr == "->" ){
+        kdDebug() << "---------> no expression ;-)" << endl;
     } else {
-        QValueList<CompletionEntry> entries;
-        QString type;
-
-        SimpleVariable v = ctx->findVariable( word );
-        if( expr.isEmpty() && !v.type.isEmpty() ){
-            type = v.type;
+        if( showArguments ){
+            QString type = evaluateExpression( expr, ctx, m_pStore );
+            QStringList functionList = getMethodListForClass( type, word );
+            showArgHint( functionList, "()", "," );
         } else {
-            type = evaluateExpression( expr, ctx, m_pStore );
-        }
+            QValueList<CompletionEntry> entries;
+            QString type;
 
-        entries = unique( getEntryListForClass( type ) );
-        if( entries.count() ){
-            showCompletionBox( entries, word.length() );
+            SimpleVariable v = ctx->findVariable( word );
+            if( expr.isEmpty() && !v.type.isEmpty() ){
+                type = v.type;
+            } else {
+                type = evaluateExpression( expr, ctx, m_pStore );
+            }
+
+            entries = unique( getEntryListForClass( type ) );
+            if( entries.count() ){
+                showCompletionBox( entries, word.length() );
+            }
         }
     }
 

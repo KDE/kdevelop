@@ -375,6 +375,15 @@ void CKDevelop::initMenuBar(){
 												m_docViewManager, SLOT(slotEditInvertSelection()),
 												0,ID_EDIT_INVERT_SELECTION);
 
+  edit_menu->insertSeparator();
+  edit_menu->insertItem(i18n("Expand Text"),
+												m_docViewManager, SLOT(slotEditExpandText()),
+												0,ID_EDIT_EXPAND_TEXT);
+  edit_menu->insertItem(i18n("Complete Text"),
+												m_docViewManager, SLOT(slotEditCompleteText()),
+												0,ID_EDIT_COMPLETE_TEXT);
+
+
   menuBar()->insertItem(i18n("&Edit"), edit_menu);
 
   ///////////////////////////////////////////////////////////////////

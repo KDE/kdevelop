@@ -91,6 +91,7 @@ SimpleContext* SimpleParser::localVariables( QString contents ){
         .replace( rx, "" )
         .replace( strconst, "" )
         .replace( chrconst, "" )
+        .replace( QRegExp("[ \t]*struct[ \t]*"), "" )
         .replace( QRegExp("[ \t]*static[ \t]*"), "" )
         .replace( QRegExp("[ \t]*unsigned[ \t]*"), "" )
         .replace( QRegExp("[ \t]*signed[ \t]*"), "" )

@@ -3718,6 +3718,8 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     enableCommand(ID_EDIT_SELECT_ALL);
     enableCommand(ID_EDIT_DESELECT_ALL);
     enableCommand(ID_EDIT_INVERT_SELECTION);
+    enableCommand(ID_EDIT_EXPAND_TEXT);
+    enableCommand(ID_EDIT_COMPLETE_TEXT);
   }
 
   if (m_docViewManager->curDocIsHeaderFile()){
@@ -3808,6 +3810,8 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     disableCommand(ID_EDIT_SELECT_ALL);
     disableCommand(ID_EDIT_DESELECT_ALL);
     disableCommand(ID_EDIT_INVERT_SELECTION);
+    disableCommand(ID_EDIT_EXPAND_TEXT);
+    disableCommand(ID_EDIT_COMPLETE_TEXT);
   }
 
   if (m_docViewManager->curDocIsBrowser())
