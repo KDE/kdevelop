@@ -213,6 +213,20 @@ private:
 
 class QSourceColorizer: public QTextPreProcessor{
 public:
+    enum Type {
+	Normal=0,
+	PreProcessor,
+	Keyword,
+	Comment,
+	Constant,
+	String,
+	//Definition,
+	//Hilite,
+	
+	Custom = 1000
+    };    
+    
+public:
     QSourceColorizer( QEditor* );
     virtual ~QSourceColorizer();
 

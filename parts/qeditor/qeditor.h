@@ -92,6 +92,8 @@ public slots:
     void refresh();
     void doGotoLine( int line );
     void configChanged();
+    void expandBlock( QTextParag* );
+    void collapseBlock( QTextParag* );
 
 private slots:
     void doMatch( QTextCursor* );

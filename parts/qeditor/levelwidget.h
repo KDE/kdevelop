@@ -50,24 +50,26 @@ class QTextParag;
 
 class LevelWidget: public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	LevelWidget( QEditor*, QWidget* =0, const char* =0 );
-	virtual ~LevelWidget();
+    LevelWidget( QEditor*, QWidget* =0, const char* =0 );
+    virtual ~LevelWidget();
+    
+signals:
+    void expandBlock( QTextParag* );
+    void collapseBlock( QTextParag* );
 
 public slots:
-	void doRepaint() { repaint( FALSE ); }
+    void doRepaint() { repaint( FALSE ); }
 
 protected:
-	virtual void resizeEvent( QResizeEvent* );
-	virtual void paintEvent( QPaintEvent* );
+    virtual void resizeEvent( QResizeEvent* );
+    virtual void paintEvent( QPaintEvent* );
     virtual void mousePressEvent( QMouseEvent* );
-    virtual void expandBlock( QTextParag* );
-    virtual void collapseBlock( QTextParag* );
 
 private:
-	QEditor* m_editor;
-	QPixmap buffer;
+    QEditor* m_editor;
+    QPixmap buffer;
 };
 
 #endif // __levelwidget_h

@@ -105,13 +105,13 @@ LevelWidget::LevelWidget( QEditor* editor, QWidget* parent, const char* name )
         minusPixmap = new QPixmap( minus_xpm );
     }
 
-	setFixedWidth( 16 );
-
-	connect( m_editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ),
-			 this, SLOT( doRepaint() ) );
-	connect( m_editor, SIGNAL( textChanged() ),
-			 this, SLOT( doRepaint() ) );
-        doRepaint();
+    setFixedWidth( 16 );
+	
+    connect( m_editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ),
+	     this, SLOT( doRepaint() ) );
+    connect( m_editor, SIGNAL( textChanged() ),
+	     this, SLOT( doRepaint() ) );
+    doRepaint();
 }
 
 LevelWidget::~LevelWidget()
@@ -120,150 +120,87 @@ LevelWidget::~LevelWidget()
 
 void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 {
-	buffer.fill( backgroundColor() );
-
-	QTextParag *p = m_editor->document()->firstParag();
-	QPainter painter( &buffer );
-	int yOffset = m_editor->contentsY();
-	while ( p ) {
-		if ( !p->isVisible() ) {
-			p = p->next();
-			continue;
-		}
-		if ( p->rect().y() + p->rect().height() - yOffset < 0 ) {
-			p = p->next();
-			continue;
-		}
-		if ( p->rect().y() - yOffset > height() )
-			break;
-
-                ParagData* data = (ParagData*) p->extraData();
-                if( data ){
-
-                    int prevLevel = 0;
-                    if( p->prev() ){
-                        prevLevel = ((ParagData*) p->prev()->extraData())->level();
-                    }
-
-                    if( data->isBlockStart() ){
-                        if( data->isOpen() ){
-                            painter.drawPixmap( 0, p->rect().y() +
-                                                ( p->rect().height() - minusPixmap->height() ) / 2 -
-                                                yOffset, *minusPixmap );
-                        } else {
-                            painter.drawPixmap( 0, p->rect().y() +
-                                                ( p->rect().height() - plusPixmap->height() ) / 2 -
-                                                yOffset, *plusPixmap );
-                        }
-                    } else if( data->level() < prevLevel ){
-                        painter.drawLine( plusPixmap->width() / 2, p->rect().y() - yOffset,
-                                          plusPixmap->width() / 2, p->rect().y() + p->rect().height() - yOffset );
-
-                        painter.drawLine( plusPixmap->width() / 2 + 2,
-                                          p->rect().y() + p->rect().height() - yOffset,
-                                          plusPixmap->width() / 2 - 2,
-                                          p->rect().y() + p->rect().height() - yOffset );
-                    } else if( data->level() != 0 ){
-                        painter.drawLine( plusPixmap->width() / 2, p->rect().y() - yOffset,
-                                          plusPixmap->width() / 2, p->rect().y() + p->rect().height() - yOffset );
-                    }
-                }
-		p = p->next();
+    buffer.fill( backgroundColor() );
+    
+    QTextParag *p = m_editor->document()->firstParag();
+    QPainter painter( &buffer );
+    int yOffset = m_editor->contentsY();
+    while ( p ) {
+	if ( !p->isVisible() ) {
+	    p = p->next();
+	    continue;
 	}
-
-	painter.end();
-	bitBlt( this, 0, 0, &buffer );
+	if ( p->rect().y() + p->rect().height() - yOffset < 0 ) {
+	    p = p->next();
+	    continue;
+	}
+	if ( p->rect().y() - yOffset > height() )
+	    break;
+	
+	ParagData* data = (ParagData*) p->extraData();
+	if( data ){
+	    
+	    int prevLevel = 0;
+	    if( p->prev() ){
+		prevLevel = ((ParagData*) p->prev()->extraData())->level();
+	    }
+	    
+	    if( data->isBlockStart() ){
+		if( data->isOpen() ){
+		    painter.drawPixmap( 0, p->rect().y() +
+					( p->rect().height() - minusPixmap->height() ) / 2 -
+					yOffset, *minusPixmap );
+		} else {
+		    painter.drawPixmap( 0, p->rect().y() +
+					( p->rect().height() - plusPixmap->height() ) / 2 -
+					yOffset, *plusPixmap );
+		}
+	    } else if( data->level() < prevLevel ){
+		painter.drawLine( plusPixmap->width() / 2, p->rect().y() - yOffset,
+				  plusPixmap->width() / 2, p->rect().y() + p->rect().height() - yOffset );
+		
+		painter.drawLine( plusPixmap->width() / 2 + 2,
+				  p->rect().y() + p->rect().height() - yOffset,
+				  plusPixmap->width() / 2 - 2,
+				  p->rect().y() + p->rect().height() - yOffset );
+	    } else if( data->level() != 0 ){
+		painter.drawLine( plusPixmap->width() / 2, p->rect().y() - yOffset,
+				  plusPixmap->width() / 2, p->rect().y() + p->rect().height() - yOffset );
+	    }
+	}
+	p = p->next();
+    }
+    
+    painter.end();
+    bitBlt( this, 0, 0, &buffer );
 }
 
 void LevelWidget::resizeEvent( QResizeEvent *e )
 {
-	buffer.resize( e->size() );
-	QWidget::resizeEvent( e );
+    buffer.resize( e->size() );
+    QWidget::resizeEvent( e );
 }
 
 void LevelWidget::mousePressEvent( QMouseEvent* e )
 {
-
     QTextParag *p = m_editor->document()->firstParag();
     int yOffset = m_editor->contentsY();
     while ( p ) {
-        if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
-            QTextParagData *d = p->extraData();
-            if ( !d )
-                return;
-            ParagData *data = (ParagData*)d;
-
-            if( data->isOpen() ){
-                collapseBlock( p );
-            } else {
-                expandBlock( p );
-            }
-            break;
-        }
-        p = p->next();
+	if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
+	    QTextParagData *d = p->extraData();
+	    if ( !d )
+		return;
+	    ParagData *data = (ParagData*)d;
+	    
+	    if( data->isOpen() ){
+		emit collapseBlock( p );
+	    } else {
+		emit expandBlock( p );
+	    }
+	    break;
+	}
+	p = p->next();
     }
-
+    
     doRepaint();
-}
-
-void LevelWidget::expandBlock( QTextParag* p )
-{
-    kdDebug() << "LevelWidget::expandBlock()" << endl;
-
-    int level = m_editor->level( p->paragId() ) - 1;
-    ParagData* data = (ParagData*) p->extraData();
-    if( !data ){
-        return;
-    }
-
-    data->setOpen( true );
-
-    p = p->next();
-    while( p ){
-        ParagData* data = (ParagData*) p->extraData();
-        if( data ){
-            p->show();
-            data->setOpen( true );
-
-            if( data->level() == level ){
-                break;
-            }
-            p = p->next();
-        }
-    }
-
-    m_editor->document()->invalidate();
-    m_editor->viewport()->repaint( true );
-    m_editor->ensureCursorVisible();
-}
-
-void LevelWidget::collapseBlock( QTextParag* p )
-{
-    kdDebug() << "LevelWidget::collapseBlock()" << endl;
-    int level = m_editor->level( p->paragId() ) - 1;
-
-    ParagData* data = (ParagData*) p->extraData();
-    if( !data ){
-        return;
-    }
-
-    data->setOpen( false );
-
-    p = p->next();
-    while( p ){
-        ParagData* data = (ParagData*) p->extraData();
-        if( data ){
-            p->hide();
-
-            if( data->level() == level ){
-                break;
-            }
-            p = p->next();
-        }
-    }
-
-    m_editor->document()->invalidate();
-    m_editor->viewport()->repaint( true );
-    m_editor->setCursorPosition( p->paragId(), 0 );
-    m_editor->ensureCursorVisible();
 }

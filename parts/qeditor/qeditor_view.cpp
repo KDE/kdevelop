@@ -45,45 +45,111 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 	  m_document( document ),
 	  m_popupMenu( 0 )
 {
-	m_findDialog = new KoFindDialog();
-	m_findDialog->setOptions( KoFindDialog::FromCursor );
-
-	m_replaceDialog = new KoReplaceDialog();
-	m_replaceDialog->setOptions( KoReplaceDialog::FromCursor );
-
-	QHBoxLayout* lay = new QHBoxLayout( this );
-
-	m_editor = new QEditor( this );
-	m_lineNumberWidget = new LineNumberWidget( m_editor, this );
-	m_markerWidget = new MarkerWidget( m_editor, this );
-        m_levelWidget = new LevelWidget( m_editor, this );
-
-	// lay->addWidget( m_markerWidget );
-	lay->addWidget( m_lineNumberWidget );
-        lay->addWidget( m_levelWidget );
-	lay->addWidget( m_editor );
-
-	setFocusProxy( m_editor );
-	connect( m_editor, SIGNAL(cursorPositionChanged(int, int)),
-			 this, SIGNAL(cursorPositionChanged()) );
-
-	m_pCodeCompletion = new CodeCompletion_Impl( this );
-	connect(m_pCodeCompletion,SIGNAL(completionAborted()),
-			this,SIGNAL(completionAborted()));
-	connect(m_pCodeCompletion,SIGNAL(completionDone()),
-			this,SIGNAL(completionDone()));
-	connect(m_pCodeCompletion,SIGNAL(argHintHidden()),
-			this,SIGNAL(argHintHidden()));
-	connect(m_pCodeCompletion,SIGNAL(completionDone(KTextEditor::CompletionEntry)),
-			this,SIGNAL(completionDone(KTextEditor::CompletionEntry)));
-	connect(m_pCodeCompletion,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)),
-			this,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)) );
+    m_markerWidgetVisible = false;
+    m_lineNumberWidgetVisible = false;
+    m_levelWidgetVisible = true;
+	    
+    m_findDialog = new KoFindDialog();
+    m_findDialog->setOptions( KoFindDialog::FromCursor );
+    
+    m_replaceDialog = new KoReplaceDialog();
+    m_replaceDialog->setOptions( KoReplaceDialog::FromCursor );
+    
+    QHBoxLayout* lay = new QHBoxLayout( this );
+    
+    m_editor = new QEditor( this );
+    m_lineNumberWidget = new LineNumberWidget( m_editor, this );
+    m_markerWidget = new MarkerWidget( m_editor, this );
+    m_levelWidget = new LevelWidget( m_editor, this );
+    connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
+	     m_editor, SLOT(expandBlock(QTextParag*)) );
+    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
+	     m_editor, SLOT(collapseBlock(QTextParag*)) );
+    
+    lay->addWidget( m_markerWidget );
+    lay->addWidget( m_lineNumberWidget );
+    lay->addWidget( m_levelWidget );
+    lay->addWidget( m_editor );
+    
+    if( !isMarkerWidgetVisible() ){
+	m_markerWidget->hide();
+    }
+    
+    if( !isLineNumberWidgetVisible() ){
+	m_lineNumberWidget->hide();
+    }
+    
+    if( !isLevelWidgetVisible() ){	
+	m_levelWidget->hide();
+    }
+    
+    setFocusProxy( m_editor );
+    connect( m_editor, SIGNAL(cursorPositionChanged(int, int)),
+	     this, SIGNAL(cursorPositionChanged()) );
+    
+    m_pCodeCompletion = new CodeCompletion_Impl( this );
+    connect(m_pCodeCompletion,SIGNAL(completionAborted()),
+	    this,SIGNAL(completionAborted()));
+    connect(m_pCodeCompletion,SIGNAL(completionDone()),
+	    this,SIGNAL(completionDone()));
+    connect(m_pCodeCompletion,SIGNAL(argHintHidden()),
+	    this,SIGNAL(argHintHidden()));
+    connect(m_pCodeCompletion,SIGNAL(completionDone(KTextEditor::CompletionEntry)),
+	    this,SIGNAL(completionDone(KTextEditor::CompletionEntry)));
+    connect(m_pCodeCompletion,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)),
+	    this,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)) );
 }
 
 QEditorView::~QEditorView()
 {
-	delete( m_pCodeCompletion );
-	m_pCodeCompletion = 0;
+    delete( m_pCodeCompletion );
+    m_pCodeCompletion = 0;
+}
+
+
+bool QEditorView::isMarkerWidgetVisible() const
+{
+    return m_markerWidgetVisible;
+}
+
+void QEditorView::setMarkerWidgetVisible( bool b )
+{
+    m_markerWidgetVisible = b;
+    if( m_markerWidgetVisible ){
+	m_markerWidget->show();
+    } else {
+	m_markerWidget->hide();
+    }
+}
+
+bool QEditorView::isLineNumberWidgetVisible() const
+{
+    return m_lineNumberWidgetVisible;
+}
+
+void QEditorView::setLineNumberWidgetVisible( bool b )
+{
+    m_lineNumberWidgetVisible = b;
+    if( m_lineNumberWidgetVisible ){
+	m_lineNumberWidget->show();
+    } else {
+	m_lineNumberWidget->hide();
+    }
+}
+
+bool QEditorView::isLevelWidgetVisible() const
+{
+    return m_levelWidgetVisible;
+}
+
+void QEditorView::setLevelWidgetVisible( bool b )
+{
+    m_levelWidgetVisible = b;
+    if( m_levelWidgetVisible ){
+	m_levelWidget->show();
+    } else {
+	m_levelWidget->hide();
+    }
 }
 
 KTextEditor::Document* QEditorView::document() const

@@ -430,3 +430,62 @@ void QEditor::setLevel( int line, int lev )
         return data->setLevel( lev );
     }
 }
+
+void QEditor::expandBlock( QTextParag* p )
+{
+    int lev = level( p->paragId() ) - 1;
+    ParagData* data = (ParagData*) p->extraData();
+    if( !data ){
+        return;
+    }
+
+    data->setOpen( true );
+
+    p = p->next();
+    while( p ){
+        ParagData* data = (ParagData*) p->extraData();
+        if( data ){
+            p->show();
+            data->setOpen( true );
+
+            if( data->level() == lev ){
+                break;
+            }
+            p = p->next();
+        }
+    }
+
+    document()->invalidate();
+    viewport()->repaint( true );
+    ensureCursorVisible();
+}
+
+void QEditor::collapseBlock( QTextParag* p )
+{
+    int lev = level( p->paragId() ) - 1;
+
+    ParagData* data = (ParagData*) p->extraData();
+    if( !data ){
+        return;
+    }
+
+    data->setOpen( false );
+
+    p = p->next();
+    while( p ){
+        ParagData* data = (ParagData*) p->extraData();
+        if( data ){
+            p->hide();
+
+            if( data->level() == lev ){
+                break;
+            }
+            p = p->next();
+        }
+    }
+
+    document()->invalidate();
+    viewport()->repaint( true );
+    setCursorPosition( p->paragId(), 0 );
+    ensureCursorVisible();
+}

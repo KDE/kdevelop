@@ -30,11 +30,6 @@ class XMLColorizer: public QSourceColorizer{
 public:
     XMLColorizer( QEditor* );
     virtual ~XMLColorizer();
-
-    virtual void refresh();
-
-private:
-    QFont font;
 };
 
 #endif

@@ -30,11 +30,6 @@ class QMakeColorizer: public QSourceColorizer{
 public:
     QMakeColorizer( QEditor* );
     virtual ~QMakeColorizer();
-
-    virtual void refresh();
-
-private:
-    QFont font;
 };
 
 #endif

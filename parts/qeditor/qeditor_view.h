@@ -39,39 +39,52 @@ class LevelWidget;
 class KoFindDialog;
 class KoReplaceDialog;
 
-class QEditorView: public KTextEditor::View,
-				   public KTextEditor::ClipboardInterface,
-				   public KTextEditor::ViewCursorInterface,
-				   public KTextEditor::PopupMenuInterface,
-				   public KTextEditor::CodeCompletionInterface
+class QEditorView: 
+	public KTextEditor::View,
+	public KTextEditor::ClipboardInterface,
+	public KTextEditor::ViewCursorInterface,
+	public KTextEditor::PopupMenuInterface,
+	public KTextEditor::CodeCompletionInterface
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	QEditorView( QEditorPart*, QWidget*, const char* =0 );
-	virtual ~QEditorView();
-
-	virtual KTextEditor::Document* document() const;
-	virtual QEditor* editor() const { return m_editor; }
-
-	virtual QString currentTextLine() const;
-	virtual void insertText( const QString& );
-
-	virtual QString language() const;
+    QEditorView( QEditorPart*, QWidget*, const char* =0 );
+    virtual ~QEditorView();
+	    
+    KTextEditor::Document* document() const;
+    QEditor* editor() const { return m_editor; }
+    
+    QString currentTextLine() const;
+    void insertText( const QString& );
+    
+    QString language() const;
+    
+    bool isMarkerWidgetVisible() const;
+    void setMarkerWidgetVisible( bool );
+    
+    bool isLineNumberWidgetVisible() const;
+    void setLineNumberWidgetVisible( bool );
+    
+    bool isLevelWidgetVisible() const;
+    void setLevelWidgetVisible( bool );    
 
 public slots:
-	virtual void gotoLine();
-	virtual void setLanguage( const QString& );
-	virtual void doFind();
-	virtual void doReplace();
+    void gotoLine();
+    void setLanguage( const QString& );
+    void doFind();
+    void doReplace();
 
 protected:
-	virtual void contextMenuEvent( QContextMenuEvent* );
+    virtual void contextMenuEvent( QContextMenuEvent* );
 
 private:
-	QPopupMenu* m_popupMenu;
-	KoFindDialog* m_findDialog;
-	KoReplaceDialog* m_replaceDialog;
-
+    QPopupMenu* m_popupMenu;
+    KoFindDialog* m_findDialog;
+    KoReplaceDialog* m_replaceDialog;
+    bool m_markerWidgetVisible;
+    bool m_levelWidgetVisible;
+    bool m_lineNumberWidgetVisible;
+	
 
 // ViewCursorInterface ----------------------------------------------------------------------
 public:

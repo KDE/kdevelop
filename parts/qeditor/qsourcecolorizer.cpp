@@ -22,22 +22,66 @@
 
 
 #include "qsourcecolorizer.h"
+#include "qeditor_part.h"
 #include "paragdata.h"
 #include "qeditor.h"
 
-#include <qapplication.h>
 #include <qregexp.h>
+
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kconfig.h>
+
+#define DECLARE_FORMAT_ITEM(type, id, f, c)\
+{\
+    QFont font = f; \
+    QColor color = c; \
+    font = config->readFontEntry( QString("Font ") + id, &font ); \
+    color = config->readColorEntry( QString("Color ") + id, &color ); \
+    m_formats.insert( ##type, new QTextFormat(font, color) ); \
+}
+
+#define STORE_FORMAT_ITEM(type, id)\
+{\
+    QTextFormat* fmt = m_formats[ type ]; \
+    config->writeEntry( QString("Font ") + id, fmt->font() ); \
+    config->writeEntry( QString("Color ") + id, fmt->color() ); \
+}
+
 
 QSourceColorizer::QSourceColorizer( QEditor* editor )
     : QTextPreProcessor(), m_editor( editor )
 {
     m_formats.setAutoDelete( TRUE );
     m_items.setAutoDelete( TRUE );
+
+    QFont defaultFont( "courier", 10 );
+    KConfig* config = QEditorPartFactory::instance()->config();
+
+    m_formats.clear();
+
+    DECLARE_FORMAT_ITEM( Normal, "Normal", defaultFont, Qt::black );
+    DECLARE_FORMAT_ITEM( PreProcessor, "PreProcessor", defaultFont, Qt::darkGreen );
+    DECLARE_FORMAT_ITEM( Keyword, "Keyword", defaultFont, QColor( 0xff, 0x77, 0x00 ) );
+    DECLARE_FORMAT_ITEM( Comment, "Comment", defaultFont, QColor( 0xdd, 0x00, 0x00 ) );
+    DECLARE_FORMAT_ITEM( Constant, "Constant", defaultFont, Qt::darkBlue );
+    DECLARE_FORMAT_ITEM( String, "String", defaultFont, QColor( 0x00, 0xaa, 0x00 ) );
+
     setSyntaxTable( "{[(", "}])" );
 }
 
 QSourceColorizer::~QSourceColorizer()
 {
+    KConfig* config = QEditorPartFactory::instance()->config();
+
+    STORE_FORMAT_ITEM( Normal, "Normal" );
+    STORE_FORMAT_ITEM( PreProcessor, "PreProcessor" );
+    STORE_FORMAT_ITEM( Keyword, "Keyword" );
+    STORE_FORMAT_ITEM( Comment, "Comment" );
+    STORE_FORMAT_ITEM( Constant, "Constant" );
+    STORE_FORMAT_ITEM( String, "String" );
+
+    config->sync();
 }
 
 

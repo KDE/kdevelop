@@ -23,20 +23,9 @@
 
 #include "qmake_colorizer.h"
 
-#include <qfont.h>
 #include <qapplication.h>
-#include <qsettings.h>
 #include <private/qrichtext_p.h>
 
-enum {
-    Normal,
-    Keyword,
-    Comment,
-    Constant,
-    String,
-    Definition,
-    Hilite
-};
 
 static const char *keywords[] = {
   // QMake keywords
@@ -46,8 +35,6 @@ static const char *keywords[] = {
 QMakeColorizer::QMakeColorizer( QEditor* editor )
     : QSourceColorizer( editor )
 {
-    refresh();
-
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
     context0->appendChild( new RegExpHLItem( "#.*", Comment, 0 ) );
@@ -58,29 +45,4 @@ QMakeColorizer::QMakeColorizer( QEditor* editor )
 
 QMakeColorizer::~QMakeColorizer()
 {
-    QString keybase = "/Klint/0.1/CodeEditor/";
-    QSettings config;
-
-    config.writeEntry( keybase + "Family", font.family() );
-    config.writeEntry( keybase + "Size", font.pointSize() );
-}
-
-void QMakeColorizer::refresh()
-{
-    m_formats.clear();
-
-    QString keybase = "/Klint/0.1/CodeEditor/";
-    QSettings config;
-
-    font = QFont( "courier", 10 );
-    font.setFamily( config.readEntry( keybase + "Family", font.family() ) );
-    font.setPointSize( config.readNumEntry( keybase + "Size", font.pointSize() ) );
-
-    m_formats.insert( Normal, new QTextFormat( font, Qt::black ) );
-    m_formats.insert( Keyword, new QTextFormat( font, QColor( 0xff, 0x77, 0x00 ) ) );
-    m_formats.insert( Comment, new QTextFormat( font, QColor( 0xdd, 0x00, 0x00 ) ) );
-    m_formats.insert( Constant, new QTextFormat( font, Qt::darkBlue ) );
-    m_formats.insert( String, new QTextFormat( font, QColor( 0x00, 0xaa, 0x00 ) ) );
-    m_formats.insert( Definition, new QTextFormat( font, QColor( 0x00, 0x00, 0xff ) ) );
-    m_formats.insert( Hilite, new QTextFormat( font, QColor( 0x00, 0x00, 0x68 ) ) );
 }
