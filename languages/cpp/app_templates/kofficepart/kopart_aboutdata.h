@@ -15,8 +15,8 @@ static const char version[]     = "%{VERSION}";
 KAboutData * new%{APPNAME}AboutData()
 {
     KAboutData * aboutData=new KAboutData( "%{APPNAMELC}", I18N_NOOP("%{APPNAME}"),
-                                           version, description, KAboutData::License_$LICENSE$,
-                                           "(c) 2001, %{AUTHOR}");
+                                           version, description, KAboutData::License_%{LICENSE},
+                                           "(c) %{YEAR}, %{AUTHOR}");
     aboutData->addAuthor("%{AUTHOR}",0, "%{EMAIL}");
     return aboutData;
 }

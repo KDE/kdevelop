@@ -145,7 +145,7 @@ Dest=%{dest}/src/x-%{APPNAMELC}.desktop
 [FILE22]
 Type=install
 Source=%{src}/main.cpp
-Dest=%{dest}/src/x-%{APPNAMELC}.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
 
 [MSG]
 Type=message
