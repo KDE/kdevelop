@@ -15,12 +15,12 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qtextstream.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 #include "kdevproject.h"
 #include "domutil.h"
 
 
-QString FileTemplate::read(KDevPart *part, const QString &relName)
+QString FileTemplate::read(KDevPlugin *part, const QString &relName)
 {
     KDevProject *project = part->project();
     QDomDocument &dom = *part->projectDom();

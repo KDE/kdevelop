@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/CompilerOptions
-X-KDE-Derived=KDevelop/Part
+X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Compiler Options Dialog Interface
 
 [PropertyDef::X-KDevelop-Language]

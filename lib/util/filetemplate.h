@@ -14,13 +14,13 @@
 
 #include <qstring.h>
 
-class KDevPart;
+class KDevPlugin;
 
 
 class FileTemplate
 {
 public:
-    static QString read(KDevPart *part, const QString &relName);
+    static QString read(KDevPlugin *part, const QString &relName);
 };
 
 #endif

@@ -7,10 +7,10 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
-class KDevLanguageSupport : public KDevPart
+class KDevLanguageSupport : public KDevPlugin
 {
     Q_OBJECT
     
@@ -22,7 +22,7 @@ public:
         NewClass=512, AddMethod=1024, AddAttribute=2048          /* features of the language support part */
     };
     
-    KDevLanguageSupport( KDevApi *api, QObject *parent=0, const char *name=0 );
+    KDevLanguageSupport( QObject *parent, const char *name );
     ~KDevLanguageSupport();
 
     /**
