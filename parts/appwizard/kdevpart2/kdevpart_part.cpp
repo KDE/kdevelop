@@ -6,9 +6,7 @@
 #include <kgenericfactory.h>
 
 
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
-
+#include <kdevelop/kdevcore.h>
 
 #include "$APPNAMELC$_widget.h"
 #include "$APPNAMELC$_part.h"

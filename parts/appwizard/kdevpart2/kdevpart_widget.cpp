@@ -4,7 +4,7 @@
 #include <kdebug.h>
 
 
-#include <kdevcore.h>
+#include <kdevelop/kdevcore.h>
 
 
 #include "$APPNAMELC$_part.h"
