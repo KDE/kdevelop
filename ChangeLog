@@ -1,3 +1,6 @@
+2001-05-11  F@lk Brettschneider <falk@kdevelop.org>
+    * new feature: now cursor positions in views are saved/restored to/from .kdevses-Session
+
 2001-05-11  jbb <jbb@kdevelop.org>
     * Replace the CMakeOuputWidget with one derived from 
       qmultilineedit. Hmmm - haven't we been here before? Wel

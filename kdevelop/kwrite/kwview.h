@@ -1,6 +1,8 @@
 #ifndef _KWVIEV_H_
 #define _KWVIEV_H_
 
+#include <qpoint.h>
+
 #include <qscrbar.h>
 #include <qiodev.h>
 #include <kpopupmenu.h>
@@ -179,6 +181,7 @@ class KWriteView : public QWidget {
     int getXPos() { return xPos;}
     int getYPos() { return yPos;}
     int getRange(int midline);
+    QPoint cursorPosition() { return QPoint(cursor.x, cursor.y); };
 
 protected slots:
     void changeXPos(int);

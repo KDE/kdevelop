@@ -78,7 +78,7 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
       docEl.setAttribute( "NumberOfViews", viewList.count());
       // loop over all views of this document
       int nView;
-      KWriteView* pView;
+      KWriteView* pView = 0L;
       QString viewIdStr;
       for (viewList.first(), nView = 0; viewList.current() != 0; viewList.next(), nView++) {
         pView = viewList.current();
@@ -92,6 +92,12 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
           // save geometry of current view
           saveViewGeometry( pView->parentWidget(), viewEl);
         }
+      }
+      // save cursor position of current view
+      if (pView) {
+        QPoint cursorPos(pView->cursorPosition());
+        docEl.setAttribute("CursorPosCol", cursorPos.x());
+        docEl.setAttribute("CursorPosLine", cursorPos.y());
       }
     }
     QList<CDocBrowser> kDocBrowserList = m_pDocViewMan->getDocBrowserList();
@@ -232,14 +238,16 @@ void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
   // loop over all views of this document
-  int   nView;
+  int nView;
   QDomElement viewEl;
   QWidget* pFocusedView = 0L;
   const bool HIDE = false;
+  QString viewType;
+  QWidget* pView = 0L;
   for (viewEl = docEl.firstChild().toElement(), nView = 0; nView < nNrOfViews; nView++, viewEl = viewEl.nextSibling().toElement()) {
+    // get type
+    viewType = viewEl.attribute( "Type", "Unknown");
     // create the view
-    QWidget* pView = 0L;
-    QString viewType = viewEl.attribute( "Type", "Unknown");
     if (viewType == QString("KWriteView"))
       pView = m_pDocViewMan->createEditView( (KWriteDoc*) pDoc, HIDE);
     else if (viewType == QString("KHTMLView"))
@@ -252,6 +260,17 @@ void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
       }
       // read geometry of current view
       loadViewGeometry( pView, viewEl);
+    }
+  }
+  if (pView && (viewType == QString("KWriteView"))) {
+    // read the cursor position of current view
+    int line = docEl.attribute( "CursorPosLine", "-1").toInt();
+    int col  = docEl.attribute( "CursorPosCol", "0").toInt();
+    if (pDoc && (line != -1)) {
+      KWrite* pKWrite = ((KWriteDoc*)pDoc)->getKWrite();
+      if (pKWrite) {
+         pKWrite->setCursorPosition(line, col);
+      }
     }
   }
 
