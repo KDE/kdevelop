@@ -44,7 +44,7 @@ AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringLis
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.") );
 
-    action = new KAction( i18n("&Import Existing Directory..."),"wizard", 0,
+    action = new KAction( i18n("&Import Existing Project..."),"wizard", 0,
                           this, SLOT(slotImportProject()),
                           actionCollection(), "project_import" );
     action->setStatusText( i18n("Creates a project file for a given directory.") );

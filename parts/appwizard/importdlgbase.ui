@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ImportDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>455</width>
-            <height>229</height>
+            <height>231</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Import Directory</string>
+        <string>Import Existing Project</string>
     </property>
     <grid>
         <property name="name">
@@ -37,7 +37,7 @@
             </property>
         </widget>
         <spacer row="3" column="1">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer1</cstring>
             </property>
             <property name="orientation">
@@ -115,7 +115,7 @@
             </property>
         </widget>
         <spacer row="6" column="1">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
             <property name="orientation">
@@ -146,7 +146,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer3</cstring>
                     </property>
                     <property name="orientation">
