@@ -6,6 +6,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialogbase.h>
+#include <kparts/part.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
