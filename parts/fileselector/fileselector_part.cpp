@@ -65,7 +65,6 @@ void FileSelectorPart::fileSelected( const KFileItem * file )
     KURL u(file->url());
 
     partController()->editDocument( u );
-    mainWindow()->lowerView(m_filetree);
 }
 
 void FileSelectorPart::slotProjectOpened()

@@ -564,9 +564,11 @@ private:
 
 KURL KDevFileSelector::activeDocumentUrl( )
 {
-    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( partController->activePart() );
-    if( doc )
-	return doc->url();
+	KParts::ReadOnlyPart * part = dynamic_cast<KParts::ReadOnlyPart*>( partController->activePart() );
+	if ( part )
+	{
+		return part->url();
+	}
 
     return KURL();
 }
