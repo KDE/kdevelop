@@ -65,7 +65,7 @@ public:
     QStringList allBuildConfigs();
     QString currentBuildConfig();
     QString topsourceDirectory();
-    void startMakeCommand(const QString &dir, const QString &target);
+    void startMakeCommand(const QString &dir, const QString &target, bool withKdesu = false);
     void buildTarget(QString relpath, TargetItem* titem);
 
     void needMakefileCvs();
@@ -88,6 +88,7 @@ private slots:
     void slotClean();
     void slotDistClean();
     void slotInstall();
+    void slotInstallWithKdesu();
     void slotMakefilecvs();
     void slotMakeMessages();
     void slotConfigure();

@@ -12,6 +12,7 @@
     <Action name="build_configure" />
     <Action name="build_makefilecvs" />
     <Action name="build_install" />
+    <Action name="build_install_kdesu" />
     <Separator/>
     <Action name="build_clean" />
     <Action name="build_distclean" />

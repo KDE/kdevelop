@@ -110,6 +110,10 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotInstall()),
                           actionCollection(), "build_install" );
 
+    action = new KAction( i18n("Install with kdesu"), 0,
+                          this, SLOT(slotInstallWithKdesu()),
+                          actionCollection(), "build_install_kdesu" );
+
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
@@ -447,11 +451,14 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
 }
 
 
-void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
+void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target, bool withKdesu)
 {
     partController()->saveAllFiles();
 
     m_buildCommand = constructMakeCommandLine(dir, target);
+    
+    if (withKdesu)
+	m_buildCommand = "kdesu -t -c '" + m_buildCommand + "'";
 
     if (!m_buildCommand.isNull())
       makeFrontend()->queueCommand(dir, m_buildCommand);
@@ -711,6 +718,12 @@ void AutoProjectPart::slotMakefilecvs()
 void AutoProjectPart::slotInstall()
 {
     startMakeCommand(buildDirectory(), QString::fromLatin1("install"));
+}
+
+
+void AutoProjectPart::slotInstallWithKdesu()
+{
+    startMakeCommand(buildDirectory(), QString::fromLatin1("install"), true);
 }
 
 
