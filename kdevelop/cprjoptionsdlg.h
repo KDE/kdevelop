@@ -112,6 +112,7 @@ protected:
   QCheckBox* l_kfile;
   QCheckBox* l_kspell;
   QCheckBox* l_kab;
+  QCheckBox* l_math;
   QLineEdit* addit_ldadd;
   // TAB Make options
   QLineEdit* m_set_modify_line;

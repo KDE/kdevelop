@@ -861,6 +861,19 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   }
   KQuickHelp::add(l_kab, i18n("KDE addressbook"));
  
+  l_math=new QCheckBox(w4,"l_math");
+  l_math->setGeometry(370,140,110,20);
+  l_math->setText("math");
+  if (ldadd.contains("-lm")) {
+    l_math->setChecked(true);
+    pos=ldadd.find(" -lm");
+    ldadd.remove(pos,9);
+    //    cerr << "-lm OK" << endl;
+  } else {
+    l_math->setChecked(false);
+  }
+  KQuickHelp::add(l_math, i18n("Math library"));
+
   QLabel* addit_ldadd_label;
   addit_ldadd_label=new QLabel(w4,"addit_ldadd_label");
   addit_ldadd_label->setGeometry(20,230,110,30);
@@ -1401,6 +1414,9 @@ void CPrjOptionsDlg::ok(){
   
   text= addit_ldadd->text();
 
+  if (l_math->isChecked()) {
+    text+=" -lm";
+  }
   if (l_kab->isChecked()) {
     text+=" -lkab";
   }
