@@ -14,8 +14,8 @@
  
 <P ALIGN="RIGHT">
 
-Next<A HREF="index-14.html">Previous</A>
-<A HREF="index.html#toc15">Table of Contents</A>
+Next <A HREF="index-14.html">Previous</A>
+ <A HREF="index.html#toc15">Table of Contents</A>
 </P>
 <H3><A NAME="s15">15. KScribble-1.0 Example Sourcecode</A></H3>
 
@@ -34,6 +34,7 @@ and Qt 2.1, so you have to change them manually to match your installation path 
 <H3><A NAME="ss15.2">15.2 main.cpp</A>
 </H3>
 
+<P>
 <P>
 <HR>
 <PRE>
@@ -60,48 +61,48 @@ and Qt 2.1, so you have to change them manually to match your installation path 
 #include "kscribble.h"
 
 static const char *description =
-        I18N_NOOP("KDE 2 example application");
+   I18N_NOOP("KDE 2 example application");
 
 static KCmdLineOptions options[] =
 {
-  { "+[File]", I18N_NOOP("image file to open"), 0 },
-  { 0, 0, 0 }
+   {  "+[File]", I18N_NOOP("image file to open"), 0  },
+   {  0, 0, 0  }
 };
 
 
 int main(int argc, char *argv[])
 {
-        KAboutData aboutData( "kscribble", I18N_NOOP("KScribble"),
-                VERSION, description, KAboutData::License_GPL,
-                "(c) 2000, Ralf Nolden");
-        aboutData.addAuthor("Ralf Nolden",0, "rnolden@kdevelop.de");
-        KCmdLineArgs::init( argc, argv, &amp;aboutData );
-        KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+   KAboutData aboutData( "kscribble", I18N_NOOP("KScribble"),
+      VERSION, description, KAboutData::License_GPL,
+      "(c) 2000, Ralf Nolden");
+   aboutData.addAuthor("Ralf Nolden",0, "rnolden@kdevelop.de");
+   KCmdLineArgs::init( argc, argv, &amp;aboutData );
+   KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-  KApplication app;
-  KImageIO::registerFormats();
+   KApplication app;
+   KImageIO::registerFormats();
 
-  if (app.isRestored())
-  {
-    RESTORE(KScribbleApp);
-  }
-  else
-  {
-    KScribbleApp *kscribble = new KScribbleApp();
-    kscribble->show();
-    
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-                
-    if (args->count())
-      for(int i=0;i&lt;args->count();i++)
-        kscribble->openDocumentFile(args->arg(i));
-    else
-      kscribble->openDocumentFile();
-                
-    args->clear();
-  }
-    
-  return app.exec();
+   if (app.isRestored())
+   {
+      RESTORE(KScribbleApp);
+   }
+   else
+   {
+      KScribbleApp *kscribble = new KScribbleApp();
+      kscribble->show();
+
+      KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+      if (args->count())
+        for(int i=0;i&lt;args->count();i++)
+          kscribble->openDocumentFile(args->arg(i));
+      else
+        kscribble->openDocumentFile();
+
+      args->clear();
+   }
+
+   return app.exec();
 }
 </PRE>
 <HR>
@@ -174,7 +175,7 @@ class KScribbleApp : public KTMainWindow
 
   public:
     /** construtor of KScribbleApp, calls all init functions to create the application.
-     * @see initMenuBar initToolBar
+     *  @see initMenuBar initToolBar
      */
     KScribbleApp();
     ~KScribbleApp();
@@ -190,50 +191,50 @@ class KScribbleApp : public KTMainWindow
 
   protected:
     /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
-     * default implementation (only returns true), this overridden function retrieves all modified documents
-     * from the open document list and asks the user to select which files to save before exiting the application.
-     * @see KTMainWindow#queryClose
-     * @see KTMainWindow#closeEvent
+     *  default implementation (only returns true), this overridden function retrieves all modified documents
+     *  from the open document list and asks the user to select which files to save before exiting the application.
+     *  @see KTMainWindow#queryClose
+     *  @see KTMainWindow#closeEvent
      */
     virtual bool queryClose();
     /** queryExit is called by KTMainWindow when the last window of the application is going to be closed
-     * during the closeEvent().
-     * Against the default implementation that just returns true, this calls saveOptions() to save the
-     * settings of the last window's properties.
-     * @see KTMainWindow#queryExit
-     * @see KTMainWindow#closeEvent
+     *  during the closeEvent().
+     *  Against the default implementation that just returns true, this calls saveOptions() to save the
+     *  settings of the last window's properties.
+     *  @see KTMainWindow#queryExit
+     *  @see KTMainWindow#closeEvent
      */
     virtual bool queryExit();
     /** saves the window properties for each open window during session end to the session config file,
-     * including saving the currently opened file by a temporary filename provided by KApplication.
-     * @see KTMainWindow#saveProperties
+     *  including saving the currently opened file by a temporary filename provided by KApplication.
+     *  @see KTMainWindow#saveProperties
      */
     virtual void saveProperties(KConfig *_cfg);
     /** reads the session config file and restores the application's state including the last
-     * opened files and documents by reading the temporary files saved by saveProperties()
-     * @see KTMainWindow#readProperties
+     *  opened files and documents by reading the temporary files saved by saveProperties()
+     *  @see KTMainWindow#readProperties
      */
     virtual void readProperties(KConfig *_cfg);
     /** event filter to catch close events for MDI child windows and is installed in createClient() on every
-      *child window. Closing a window calls the eventFilter first which removes the view from the connected
+      * child window. Closing a window calls the eventFilter first which removes the view from the connected
       * documents' view list. If the last view is going to be closed, the eventFilter() tests if the document
       * is modified; if yes, it asks the user to save the document. If the document title contains "Untitled",
       * slotFileSaveAs() gets called to get a save name and path.
       */
     virtual bool eventFilter(QObject* object, QEvent* event);
     /** creates a new child window. The document that will be connected to it
-     * has to be created before and the instances filled, with e.g. openDocument().
-     * Then call createClient() to get a new MDI child window.
-     * @see KScribbleDoc#addView
-     * @see KScribbleDoc#openDocument
-     * @param doc pointer to the document instance that the view will
-     * be connected to.
+     *  has to be created before and the instances filled, with e.g. openDocument().
+     *  Then call createClient() to get a new MDI child window.
+     *  @see KScribbleDoc#addView
+     *  @see KScribbleDoc#openDocument
+     *  @param doc pointer to the document instance that the view will
+     *  be connected to.
      */
     void createClient(KScribbleDoc* doc);
     /** accepts drag events for images */
     virtual void dragEnterEvent( QDragEnterEvent* );
     /** accepts drops and opens a new document
-      * for each drop */
+     *  for each drop */
     virtual void dropEvent( QDropEvent* );
 
   private slots:
@@ -242,7 +243,7 @@ class KScribbleApp : public KTMainWindow
     /** switch argument for slot selection by menu or toolbar ID */
     void commandCallback(int id_);
     /** switch argument for Statusbar help entries on slot selection. Add your ID's help
-      * here for toolbars and menubar entries. */
+     *  here for toolbars and menubar entries. */
     void statusCallback(int id_);
     /** add a opened file to the recent file list and update recent file menu*/
     void addRecentFile(const QString &amp;file);
@@ -287,8 +288,8 @@ class KScribbleApp : public KTMainWindow
      */
     void slotViewStatusBar();
     /** creates a new view for the document in the active child window and adds the new view to the
-      * list of views the document maintains.
-      */
+     * list of views the document maintains.
+     */
     void slotWindowNewWindow();
     /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
      * @param text the text that is displayed in the statusbar
@@ -300,7 +301,7 @@ class KScribbleApp : public KTMainWindow
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusHelpMsg(const QString &amp;text);
-        /** gets called when the window menu is activated; recreates the window menu with all opened window titles. */
+    /** gets called when the window menu is activated; recreates the window menu with all opened window titles. */
     void windowMenuAboutToShow();
     /** activates the MDI child widget when it gets selected from the window menu. */
     void windowMenuActivated( int id );
@@ -308,7 +309,7 @@ class KScribbleApp : public KTMainWindow
   private:
     /** save general Options like all bar positions and status as well as the geometry and
      * the recent file list to the configuration file
-     */         
+     */   
     void saveOptions();
     /** read general Options again and initialize all variables like the recent file list
      */
@@ -328,8 +329,8 @@ class KScribbleApp : public KTMainWindow
     void initStatusBar();
 
     /** Creates the main view of the KTMainWindow instance and initializes the MDI view area including any needed
-      * connections.
-      */
+     *  connections.
+     */
     void initView();
 
     /** contains the recently used filenames */
@@ -346,23 +347,23 @@ class KScribbleApp : public KTMainWindow
     /** the edit menu */
     QPopupMenu* pEditMenu;
     /** the pen menu */
-    QPopupMenu* pPenMenu;               
+    QPopupMenu* pPenMenu;    
     /** the view menu */
     QPopupMenu* pViewMenu;
     /** the window menu */
     QPopupMenu *pWindowMenu;
     /** pWorkspace is the MDI frame widget that handles MDI child widgets. Inititalized in
-      * initView()
-      */
+     * initView()
+     */
     QWorkspace *pWorkspace;
     /** the printer instance */
     QPrinter *printer;
     /** a counter that gets increased each time the user creates a new document with "File"->"New" */
     int untitledCount;
     /** a list of all open documents. If the last window of a document gets closed, the installed eventFilter
-      * removes this document from the list. The document list is checked for modified documents when the user
-      * is about to close the application. */
-    QList&lt;KScribbleDoc> *pDocList;   
+     * removes this document from the list. The document list is checked for modified documents when the user
+     * is about to close the application. */
+    QList&lt;KScribbleDoc> *pDocList;  
 
 };
 
@@ -425,7 +426,7 @@ KScribbleApp::KScribbleApp()
 {
   config=kapp->config();
   printer = new QPrinter;
-        untitledCount=0;
+  untitledCount=0;
   pDocList = new QList&lt;KScribbleDoc>();
   pDocList->setAutoDelete(true);
   setAcceptDrops(true);
@@ -437,7 +438,7 @@ KScribbleApp::KScribbleApp()
   initStatusBar();
   initKeyAccel();
   initView();
-        
+  
   readOptions();
 
   ///////////////////////////////////////////////////////////////////
@@ -453,7 +454,7 @@ KScribbleApp::~KScribbleApp()
 void KScribbleApp::initKeyAccel()
 {
   keyAccel = new KAccel(this);
-        
+  
   // fileMenu accelerators
   keyAccel->connectItem(KStdAccel::New, this, SLOT(slotFileNew()));
   keyAccel->connectItem(KStdAccel::Open, this, SLOT(slotFileOpen()));
@@ -467,7 +468,7 @@ void KScribbleApp::initKeyAccel()
   keyAccel->connectItem(KStdAccel::Paste, this, SLOT(slotEditPaste()));
 
   keyAccel->connectItem(KStdAccel::Help, this, SLOT(appHelpActivated()));
-                        
+      
   keyAccel->changeMenuAccel(pFileMenu, ID_FILE_NEW, KStdAccel::New);
   keyAccel->changeMenuAccel(pFileMenu, ID_FILE_OPEN, KStdAccel::Open);
   keyAccel->changeMenuAccel(pFileMenu, ID_FILE_SAVE, KStdAccel::Save);
@@ -479,7 +480,7 @@ void KScribbleApp::initKeyAccel()
   keyAccel->changeMenuAccel(pEditMenu, ID_EDIT_COPY, KStdAccel::Copy);
   keyAccel->changeMenuAccel(pEditMenu, ID_EDIT_PASTE, KStdAccel::Paste);
 
-  keyAccel->readSettings();     
+  keyAccel->readSettings();  
 }
 
 void KScribbleApp::initMenuBar()
@@ -504,7 +505,7 @@ void KScribbleApp::initMenuBar()
   pFileMenu->insertItem(BarIcon("fileprint"), i18n("&amp;Print..."), ID_FILE_PRINT);
   pFileMenu->insertSeparator();
   pFileMenu->insertItem(i18n("E&amp;xit"), ID_FILE_QUIT);
-        
+  
   ///////////////////////////////////////////////////////////////////
   // menuBar entry edit-Menu
   pEditMenu = new QPopupMenu(this);
@@ -589,7 +590,7 @@ void KScribbleApp::initToolBar()
   toolBar()->insertButton(BarIcon("penwidth"), ID_PEN_BRUSH, true, i18n("Width") );
   toolBar()->insertSeparator();
   toolBar()->insertButton(BarIcon("help"), ID_HELP_CONTENTS, SIGNAL(clicked()),
-                                this, SLOT(appHelpActivated()), true,i18n("Help"));
+          this, SLOT(appHelpActivated()), true,i18n("Help"));
 
   QToolButton *btnwhat = QWhatsThis::whatsThisButton(toolBar());
   QToolTip::add(btnwhat, i18n("What's this...?"));
@@ -672,49 +673,49 @@ void KScribbleApp::addRecentFile(const QString &amp;file)
 void KScribbleApp::createClient(KScribbleDoc* doc)
 {
   KScribbleView* w = new KScribbleView(doc, pWorkspace,0,WDestructiveClose);
-        w->installEventFilter(this);
+  w->installEventFilter(this);
   doc->addView(w);
-        w->setIcon(kapp->miniIcon());
+  w->setIcon(kapp->miniIcon());
   if ( pWorkspace->windowList().isEmpty() ) // show the very first window in maximized mode
-          w->showMaximized();
+    w->showMaximized();
   else
-        w->show();
+    w->show();
 }
 
 void KScribbleApp::openDocumentFile(const char* file)
 {
   slotStatusMsg(i18n("Opening file..."));
   KScribbleDoc* doc;
-        // check, if document already open. If yes, set the focus to the first view
+  // check, if document already open. If yes, set the focus to the first view
   for(doc=pDocList->first(); doc > 0; doc=pDocList->next())
   {
     if(doc->pathName()==file)
     {
-      KScribbleView* view=doc->firstView();     
-      view->setFocus();
-      return;
-    }
+       KScribbleView* view=doc->firstView();  
+       view->setFocus();
+       return;
+     }
   }
   doc = new KScribbleDoc();
   pDocList->append(doc);
   doc->newDocument();
-        // Creates an untitled window if file is 0      
-        if(!file)
-        {
-                untitledCount+=1;
-                QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
-                doc->setPathName(fileName);
-                doc->setTitle(fileName);
-        }
-        // Open the file
-        else
+  // Creates an untitled window if file is 0  
+  if(!file)
+  {
+    untitledCount+=1;
+    QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+    doc->setPathName(fileName);
+    doc->setTitle(fileName);
+  }
+  // Open the file
+  else
   {
     QString format=QImageIO::imageFormat(file);
-          if(!doc->openDocument(file,format))
-                KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
-                addRecentFile(file);
-        }
-        // create the window
+    if(!doc->openDocument(file,format))
+      KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
+    addRecentFile(file);
+  }
+  // create the window
   createClient(doc);
 
   slotStatusMsg(i18n("Ready."));
@@ -722,7 +723,7 @@ void KScribbleApp::openDocumentFile(const char* file)
 
 
 void KScribbleApp::saveOptions()
-{       
+{  
   config->setGroup("General Options");
   config->writeEntry("Geometry", size());
   config->writeEntry("Show Toolbar", toolBar()->isVisible());
@@ -734,7 +735,7 @@ void KScribbleApp::saveOptions()
 
 void KScribbleApp::readOptions()
 {
-        
+  
   config->setGroup("General Options");
 
   // bar status settings
@@ -744,7 +745,7 @@ void KScribbleApp::readOptions()
   {
      enableToolBar(KToolBar::Hide);
   }
-        
+  
   bool bViewStatusbar = config->readBoolEntry("Show Statusbar", true);
   menuBar()->setItemChecked(ID_VIEW_STATUSBAR, bViewStatusbar);
   if(!bViewStatusbar)
@@ -783,7 +784,7 @@ void KScribbleApp::saveProperties(KConfig *_cfg)
 
 void KScribbleApp::readProperties(KConfig* _cfg)
 {
-}               
+}    
 
 bool KScribbleApp::queryClose()
 {
@@ -791,33 +792,33 @@ bool KScribbleApp::queryClose()
   QStringList saveFiles;
   KScribbleDoc* doc;
   if(pDocList->isEmpty())
-        return true;
+    return true;
 
   for(doc=pDocList->first(); doc!=0;doc=pDocList->next()){
-        if(doc->isModified())
+    if(doc->isModified())
       saveFiles.append(doc->title());
   }
   if(saveFiles.isEmpty())
-        return true;
-                        
+    return true;
+        
   switch (KMessageBox::questionYesNoList(this,
-      i18n("One or more documents have been modified.\nSave changes before exiting?"),saveFiles))               
+      i18n("One or more documents have been modified.\nSave changes before exiting?"),saveFiles))     
   {
-        case KMessageBox::Yes:
-                for(doc=pDocList->first(); doc!=0;doc=pDocList->next()){
-                  if(doc->title().contains(i18n("Untitled")))
-                          slotFileSaveAs();
+    case KMessageBox::Yes:
+      for(doc=pDocList->first(); doc!=0;doc=pDocList->next()){
+        if(doc->title().contains(i18n("Untitled")))
+          slotFileSaveAs();
         else
         {
           if(!doc->saveDocument(doc->pathName())){
-                  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+            KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
             return false;
           }
         }
        }
       return true;
-        case KMessageBox::No:
-        default:
+    case KMessageBox::No:
+    default:
       return true;
   }
 }
@@ -829,29 +830,29 @@ bool KScribbleApp::queryExit()
 }
 
 bool KScribbleApp::eventFilter(QObject* object, QEvent* event){
-        if(event->type() == QEvent::Close)
-        {
-                QCloseEvent* e=(QCloseEvent*)event;
-                KScribbleView* pView=(KScribbleView*)object;
-                KScribbleDoc* pDoc=pView->getDocument();
-                if(pDoc->canCloseFrame(pView))
-                {
-                        pDoc->removeView(pView);
-                        if(!pDoc->firstView())
-                                pDocList->remove(pDoc);
-                        
-                        e->accept();
-                //////////////  
-                if(pWorkspace->windowList().count()==1)
-                        setPlainCaption(kapp->caption());
-                else
-                        setCaption(pWorkspace->activeWindow()->caption());                      
-                //////////////
-                }
-                else
-                        e->ignore();
-        }
-        return QWidget::eventFilter( object, event );    // standard event processing
+  if(event->type() == QEvent::Close)
+  {
+    QCloseEvent* e=(QCloseEvent*)event;
+    KScribbleView* pView=(KScribbleView*)object;
+    KScribbleDoc* pDoc=pView->getDocument();
+    if(pDoc->canCloseFrame(pView))
+    {
+       pDoc->removeView(pView);
+       if(!pDoc->firstView())
+         pDocList->remove(pDoc);
+       
+      e->accept();
+      //////////////  
+      if(pWorkspace->windowList().count()==1)
+        setPlainCaption(kapp->caption());
+      else
+        setCaption(pWorkspace->activeWindow()->caption());      
+      //////////////
+    }
+    else
+      e->ignore();
+  }
+  return QWidget::eventFilter( object, event );    // standard event processing
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -863,7 +864,7 @@ void KScribbleApp::slotFileNew()
 {
   slotStatusMsg(i18n("Creating new document..."));
 
-        openDocumentFile();
+  openDocumentFile();
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -871,12 +872,12 @@ void KScribbleApp::slotFileNew()
 void KScribbleApp::slotFileOpen()
 {
   slotStatusMsg(i18n("Opening file..."));
-        
+  
   QString fileToOpen=KFileDialog::getOpenFileName(QDir::currentDirPath(),
             KImageIO::pattern(KImageIO::Reading), this, i18n("Open File..."));
   if(!fileToOpen.isEmpty())
   {
-                openDocumentFile(fileToOpen);           
+    openDocumentFile(fileToOpen);    
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -885,26 +886,26 @@ void KScribbleApp::slotFileOpen()
 void KScribbleApp::slotFileOpenRecent(int id_)
 {
   slotStatusMsg(i18n("Opening file..."));
-        
+    
   openDocumentFile(pRecentFileMenu->text(id_));
-        
+  
   slotStatusMsg(i18n("Ready."));
 }
 
 void KScribbleApp::slotFileSave()
 {
   slotStatusMsg(i18n("Saving file..."));
-        KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
-        if( m )
-        {
-          KScribbleDoc* doc =   m->getDocument();
-          if(doc->title().contains(i18n("Untitled")))
-           slotFileSaveAs();
-          else
-          if(!doc->saveDocument(doc->pathName()))
-                  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+  KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
+  if( m )
+  {
+    KScribbleDoc* doc =  m->getDocument();
+    if(doc->title().contains(i18n("Untitled")))
+     slotFileSaveAs();
+    else
+      if(!doc->saveDocument(doc->pathName()))
+        KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
   }
-        
+  
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -920,18 +921,18 @@ void KScribbleApp::slotFileSaveAs()
     KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
     if( m )
     {
-      KScribbleDoc* doc =       m->getDocument();
-          QString format=QFileInfo(newName).extension();
-          format=format.upper();
-                  if(!doc->saveDocument(newName,format))
-          {
-                  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
-                                return;
-                        }
+      KScribbleDoc* doc =  m->getDocument();
+      QString format=QFileInfo(newName).extension();
+      format=format.upper();
+      if(!doc->saveDocument(newName,format))
+      {
+        KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+        return;
+      }
       doc->changedViewList();
       setWndTitle(m);
     }
-                
+    
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -940,25 +941,25 @@ void KScribbleApp::slotFileSaveAs()
 void KScribbleApp::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
-        
-        KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
-        if( m )
-        {
-                KScribbleDoc* doc=m->getDocument();
+  
+  KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
+  if( m )
+  {
+    KScribbleDoc* doc=m->getDocument();
     doc->closeDocument();
   }
 
-        
+  
   slotStatusMsg(i18n("Ready."));
 }
 
 void KScribbleApp::slotFilePrint()
 {
   slotStatusMsg(i18n("Printing..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m )
-                m->print( printer );
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m )
+    m->print( printer );
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -978,19 +979,19 @@ void KScribbleApp::slotFileQuit()
       // presses Cancel on the saveModified() dialog,
       // the window and the application stay open.
       if(!w->close())
-                        break;
+      break;
     }
-  }     
+  }  
   slotStatusMsg(i18n("Ready."));
 }
 
 void KScribbleApp::slotEditUndo()
 {
   slotStatusMsg(i18n("Reverting last action..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m )
-//              m->undo();
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m )
+//    m->undo();
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -998,10 +999,10 @@ void KScribbleApp::slotEditUndo()
 void KScribbleApp::slotEditCut()
 {
   slotStatusMsg(i18n("Cutting selection..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m )
-                m->cutSelection();      
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m )
+    m->cutSelection();  
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -1009,34 +1010,34 @@ void KScribbleApp::slotEditCut()
 void KScribbleApp::slotEditCopy()
 {
   slotStatusMsg(i18n("Copying selection to clipboard..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m )
-                m->copySelection();
-                
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m )
+    m->copySelection();
+    
   slotStatusMsg(i18n("Ready."));
 }
 
 void KScribbleApp::slotEditPaste()
 {
   slotStatusMsg(i18n("Inserting clipboard contents..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m )
-                m->pasteSelection();
-                
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m )
+    m->pasteSelection();
+    
   slotStatusMsg(i18n("Ready."));
 }
 
 void KScribbleApp::slotEditClearAll()
 {
   slotStatusMsg(i18n("Clearing the document contents..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m ){
-                KScribbleDoc* pDoc = m->getDocument();
-                pDoc->editClearAll();
-        }
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m ){
+    KScribbleDoc* pDoc = m->getDocument();
+    pDoc->editClearAll();
+  }
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1047,22 +1048,22 @@ void KScribbleApp::slotPenBrush()
   // get one window with document for a current pen width
   QWidgetList windows = pWorkspace->windowList();
   KScribbleView* m = (KScribbleView*)windows.at(0);
-        KScribbleDoc* pDoc = m->getDocument();
+  KScribbleDoc* pDoc = m->getDocument();
   int curr_width=pDoc->penWidth();
 
   // create the dialog, get the new width and set the pen width for all documents
   KPenBrushDlg* dlg= new KPenBrushDlg(curr_width,this);
   if(dlg->exec()){
     int width=dlg->width();
-        for ( int i = 0; i &lt; int(windows.count()); ++i )
-        {
-        m = (KScribbleView*)windows.at(i);
-        if ( m )
-        {
-                pDoc = m->getDocument();
+    for ( int i = 0; i &lt; int(windows.count()); ++i )
+    {
+      m = (KScribbleView*)windows.at(i);
+      if ( m )
+      {
+        pDoc = m->getDocument();
         pDoc->setPenWidth(width);
-        }
-        }
+      }
+    }
   }
   slotStatusMsg(i18n("Ready."));
 }
@@ -1075,19 +1076,19 @@ void KScribbleApp::slotPenColor()
   int result = KColorDialog::getColor( myColor, this );
   if ( result == KColorDialog::Accepted )
   {
-        QWidgetList windows = pWorkspace->windowList();
-        KScribbleDoc* pDoc;
-        KScribbleView* m;
-        for ( int i = 0; i &lt; int(windows.count()); ++i )
-        {
-        m = (KScribbleView*)windows.at(i);
-        if ( m )
-        {
-                pDoc = m->getDocument();
-          pDoc->setPenColor(myColor);
-        }
-        }
-        }
+    QWidgetList windows = pWorkspace->windowList();
+    KScribbleDoc* pDoc;
+    KScribbleView* m;
+    for ( int i = 0; i &lt; int(windows.count()); ++i )
+    {
+      m = (KScribbleView*)windows.at(i);
+      if ( m )
+      {
+        pDoc = m->getDocument();
+        pDoc->setPenColor(myColor);
+      }
+    }
+  }
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1106,7 +1107,7 @@ void KScribbleApp::slotViewToolBar()
   {
     menuBar()->setItemChecked(ID_VIEW_TOOLBAR, true);
     enableToolBar(KToolBar::Show);
-  }             
+  }    
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -1133,12 +1134,12 @@ void KScribbleApp::slotViewStatusBar()
 void KScribbleApp::slotWindowNewWindow()
 {
   slotStatusMsg(i18n("Opening a new application window..."));
-        
-        KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
-        if ( m ){
-                KScribbleDoc* doc = m->getDocument();
-        createClient(doc);
-        }
+  
+  KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
+  if ( m ){
+     KScribbleDoc* doc = m->getDocument();
+    createClient(doc);
+  }
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -1161,36 +1162,36 @@ void KScribbleApp::slotStatusHelpMsg(const QString &amp;text)
 
 void KScribbleApp::windowMenuAboutToShow()
 {
-        pWindowMenu->clear();
-        
-        pWindowMenu->insertItem(i18n("&amp;New Window"), ID_WINDOW_NEW_WINDOW);
+  pWindowMenu->clear();
+  
+  pWindowMenu->insertItem(i18n("&amp;New Window"), ID_WINDOW_NEW_WINDOW);
   pWindowMenu->insertItem(i18n("&amp;Cascade"),
                           pWorkspace, SLOT(cascade() ),0 , ID_WINDOW_CASCADE );
   pWindowMenu->insertItem(i18n("&amp;Tile"),
                           pWorkspace, SLOT(tile() ),0 , ID_WINDOW_TILE );
-        
-        if ( pWorkspace->windowList().isEmpty() ) {
-                disableCommand(ID_WINDOW_NEW_WINDOW);
-                disableCommand(ID_WINDOW_CASCADE);
-                disableCommand(ID_WINDOW_TILE);
-        }
-        
-        pWindowMenu->insertSeparator();
-        
-        QWidgetList windows = pWorkspace->windowList();
-        for ( int i = 0; i &lt; int(windows.count()); ++i ) {
-                int id = pWindowMenu->insertItem(QString("&amp;%1 ").arg(i+1)+windows.at(i)->caption(),
-                                                 this, SLOT( windowMenuActivated( int ) ) );
-                pWindowMenu->setItemParameter( id, i );
-          pWindowMenu->setItemChecked( id, pWorkspace->activeWindow() == windows.at(i) );
-        }
+  
+  if ( pWorkspace->windowList().isEmpty() ) {
+    disableCommand(ID_WINDOW_NEW_WINDOW);
+    disableCommand(ID_WINDOW_CASCADE);
+    disableCommand(ID_WINDOW_TILE);
+  }
+  
+  pWindowMenu->insertSeparator();
+  
+  QWidgetList windows = pWorkspace->windowList();
+  for ( int i = 0; i &lt; int(windows.count()); ++i ) {
+    int id = pWindowMenu->insertItem(QString("&amp;%1 ").arg(i+1)+windows.at(i)->caption(),
+                                     this, SLOT( windowMenuActivated( int ) ) );
+    pWindowMenu->setItemParameter( id, i );
+    pWindowMenu->setItemChecked( id, pWorkspace->activeWindow() == windows.at(i) );
+  }
 }
 
 void KScribbleApp::windowMenuActivated( int id )
 {
   QWidget* w = pWorkspace->windowList().at( id );
   if ( w )
-                w->setFocus();
+    w->setFocus();
 }
 
 
@@ -1199,7 +1200,7 @@ void KScribbleApp::commandCallback(int id_)
   switch (id_)
   {
     case ID_FILE_NEW:
-         slotFileNew();
+       slotFileNew();
          break;
 
     case ID_FILE_OPEN:
@@ -1260,7 +1261,7 @@ void KScribbleApp::commandCallback(int id_)
 
     case ID_WINDOW_NEW_WINDOW:
          slotWindowNewWindow();
-         break;
+       break;
 
     default:
          break;
@@ -1363,10 +1364,10 @@ void KScribbleApp::dropEvent( QDropEvent* e){
   if ( QImageDrag::decode(e, img) )
   {
     KScribbleDoc* doc = new KScribbleDoc();
-                untitledCount+=1;
-                QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
-                doc->setPathName(fileName);
-                doc->setTitle(fileName);
+    untitledCount+=1;
+    QString fileName=QString(i18n("Untitled%1")).arg(untitledCount);
+    doc->setPathName(fileName);
+    doc->setTitle(fileName);
     doc->newDocument();
     pDocList->append(doc);
     KPixmap tmp;
@@ -1432,7 +1433,7 @@ void KScribbleApp::dragEnterEvent( QDragEnterEvent* e){
 // forward declaration of the KScribble classes
 class KScribbleView;
 
-/**     KScribbleDoc provides a document object for a document-view model.
+/**  KScribbleDoc provides a document object for a document-view model.
   *
   * The KScribbleDoc class provides a document object that can be used in conjunction with the classes
   * KScribbleApp and KScribbleView to create a document-view model for MDI (Multiple Document Interface)
@@ -1441,7 +1442,7 @@ class KScribbleView;
   * the document structure with the according methods for manipulating the document
   * data by KScribbleView objects. Also, KScribbleDoc contains the methods for serialization of the document data
   * from and to files.
-  * @author Source Framework Automatically Generated by KDevelop, (c) The KDevelop Team.        
+  * @author Source Framework Automatically Generated by KDevelop, (c) The KDevelop Team.   
   * @version KDevelop version 1.1 code generation
   */
 class KScribbleDoc : public QObject
@@ -1460,22 +1461,22 @@ class KScribbleDoc : public QObject
     void addView(KScribbleView *view);
     /** removes a view from the list of currently connected views */
     void removeView(KScribbleView *view);
-                /** gets called if a view is removed or added */
-                void changedViewList();
+    /** gets called if a view is removed or added */
+    void changedViewList();
     /** returns the first view instance */
-                KScribbleView* firstView(){ return pViewList->first(); };
-                /** returns true, if the requested view is the last view of the document */
+    KScribbleView* firstView(){ return pViewList->first(); };
+    /** returns true, if the requested view is the last view of the document */
     bool isLastView();
     /** This method gets called when the user is about to close a frame window. It checks, if more than one view
-        * is connected to the document (then the frame can be closed), if pFrame is the last view and the document is
-        * modified, the user gets asked if he wants to save the document.
-        */
-                bool canCloseFrame(KScribbleView* pFrame);
+     * is connected to the document (then the frame can be closed), if pFrame is the last view and the document is
+     * modified, the user gets asked if he wants to save the document.
+     */
+    bool canCloseFrame(KScribbleView* pFrame);
     /** sets the modified flag for the document after a modifying action on the view connected to the document.*/
     void setModified(bool _m=true){ modified=_m; };
     /** returns if the document is modified or not. Use this to determine if your document needs
-      * saving by the user on closing.
-      */
+     * saving by the user on closing.
+     */
     bool isModified(){ return modified; };
     /** deletes the document's contents */
     void deleteContents();
@@ -1485,7 +1486,7 @@ class KScribbleDoc : public QObject
     void closeDocument();
     /** loads the document by filename and format and emits the updateViews() signal */
     bool openDocument(const QString &amp;filename, const char *format=0);
-    /** saves the document under filename and format.*/ 
+    /** saves the document under filename and format.*/  
     bool saveDocument(const QString &amp;filename, const char *format=0);
     /** sets the path to the file connected with the document */
     void setPathName(const QString &amp;name);
@@ -1497,15 +1498,15 @@ class KScribbleDoc : public QObject
     /** returns the title of the document */
     const QString&amp; title() const;
     /** get the current Pen */
-    const QPen currentPen(){ return pen;};      
-                /** returns the pen width */
-                const int penWidth() { return pen.width(); }
+    const QPen currentPen(){ return pen;};  
+    /** returns the pen width */
+    const int penWidth() { return pen.width(); }
     /** returns the pen color */
     const QColor penColor(){ return pen.color(); }
     /** sets the pen width */
     void setPenWidth( int w ){ pen.setWidth( w ); }
-                /** sets the pen color */
-        void setPenColor( const QColor &amp;c ){ pen.setColor( c ); }
+    /** sets the pen color */
+    void setPenColor( const QColor &amp;c ){ pen.setColor( c ); }
     /** sets the pen style by a second toolbar */
     void setPenStyle( PenStyle s){ pen.setStyle(s);}
     /** clears the document contents */
@@ -1513,7 +1514,7 @@ class KScribbleDoc : public QObject
 
     /** get the document size */
     const QSize docSize(){ return size;};
-  /** sets the pixmap contents. Used by KScribbleApp
+    /** sets the pixmap contents. Used by KScribbleApp
     to create a new document by drop events */
     void setPixmap(KPixmap pix) { buffer=pix;};
     void resizeDocument(QSize m_size) { size=m_size; };
@@ -1523,20 +1524,20 @@ class KScribbleDoc : public QObject
      * As this view normally repaints itself, it is excluded from the paintEvent.
      */
     void updateAllViews(KScribbleView *sender);
-        
-        protected:
-        
-                QPen pen;
-                QPointArray polyline;
-                KPixmap buffer;
-        
+  
+  protected:
+  
+    QPen pen;
+    QPointArray polyline;
+    KPixmap buffer;
+   
   private:
     /** the modified flag of the current document */
     bool modified;
     QString m_title;
     QString m_filename;
     /** the list of the views currently connected to the document */
-    QList&lt;KScribbleView> *pViewList; 
+    QList&lt;KScribbleView> *pViewList;  
     QSize size;
 };
 
@@ -1597,30 +1598,30 @@ KScribbleDoc::~KScribbleDoc()
 void KScribbleDoc::addView(KScribbleView *view)
 {
   pViewList->append(view);
-        changedViewList();
+  changedViewList();
 }
 
 void KScribbleDoc::removeView(KScribbleView *view)
 {
-          pViewList->remove(view);
-          if(!pViewList->isEmpty())
-                        changedViewList();
-                else
-                        deleteContents();
+    pViewList->remove(view);
+    if(!pViewList->isEmpty())
+      changedViewList();
+    else
+      deleteContents();
 }
 
-void KScribbleDoc::changedViewList(){   
-        
-        KScribbleView *w;
-        if((int)pViewList->count() == 1){
-        w=pViewList->first();
-        w->setCaption(m_title);
-        }
-        else{   
-                int i;
+void KScribbleDoc::changedViewList(){  
+  
+  KScribbleView *w;
+  if((int)pViewList->count() == 1){
+    w=pViewList->first();
+    w->setCaption(m_title);
+  }
+  else{  
+    int i;
     for( i=1,w=pViewList->first(); w!=0; i++, w=pViewList->next())
-                w->setCaption(QString(m_title+":%1").arg(i));   
-        }
+      w->setCaption(QString(m_title+":%1").arg(i));  
+  }
 }
 
 bool KScribbleDoc::isLastView() {
@@ -1633,7 +1634,7 @@ void KScribbleDoc::updateAllViews(KScribbleView *sender)
   KScribbleView *w;
   for(w=pViewList->first(); w!=0; w=pViewList->next())
   {
-                  w->update(sender);
+      w->update(sender);
   }
 
 }
@@ -1641,7 +1642,7 @@ void KScribbleDoc::updateAllViews(KScribbleView *sender)
 void KScribbleDoc::setPathName(const QString &amp;name)
 {
   m_filename=name;
-        m_title=QFileInfo(name).fileName();
+  m_title=QFileInfo(name).fileName();
 }
 
 const QString&amp; KScribbleDoc::pathName() const
@@ -1667,14 +1668,14 @@ void KScribbleDoc::closeDocument()
   {
     for(w=pViewList->first(); w!=0; w=pViewList->next())
     {
-                if(!w->close())
-                                break;
+        if(!w->close())
+         break;
     }
-        }
+  }
   if(isLastView())
   {
-        w=pViewList->first();
-        w->close();
+    w=pViewList->first();
+    w->close();
   }
 }
 
@@ -1695,40 +1696,40 @@ bool KScribbleDoc::newDocument()
 bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
 {
 
-        QFile f( filename );
-//      if ( !f.open( IO_ReadOnly ) )
-//              return false;
+  QFile f( filename );
+//  if ( !f.open( IO_ReadOnly ) )
+//    return false;
   /////////////////////////////////////////////////
   // TODO: Add your document opening code here
-        if(!buffer.load( filename, format ))
-                return false;
-        size=buffer.size();
+  if(!buffer.load( filename, format ))
+    return false;
+  size=buffer.size();
   /////////////////////////////////////////////////
-//      f.close();
-        
+//  f.close();
+  
   modified=false;
   m_filename=filename;
-        m_title=QFileInfo(f).fileName();
+  m_title=QFileInfo(f).fileName();
   return true;
 }
 
 bool KScribbleDoc::saveDocument(const QString &amp;filename, const char *format /*=0*/)
 {
-        QFile f( filename );
-//      if ( !f.open( IO_WriteOnly ) )
-//              return false;
+  QFile f( filename );
+//  if ( !f.open( IO_WriteOnly ) )
+//    return false;
 
   /////////////////////////////////////////////////
   // TODO: Add your document saving code here
-        if(!buffer.save( filename, format ))
-                return false;
+  if(!buffer.save( filename, format ))
+    return false;
   /////////////////////////////////////////////////
 
 //  f.close();
 
   modified=false;
   m_filename=filename;
-        m_title=QFileInfo(f).fileName();
+  m_title=QFileInfo(f).fileName();
   return true;
 }
 
@@ -1745,7 +1746,7 @@ bool KScribbleDoc::canCloseFrame(KScribbleView* pFrame)
 {
   if(!isLastView())
     return true;
-                
+      
   bool ret=false;
   if(isModified())
   {
@@ -1763,7 +1764,7 @@ bool KScribbleDoc::canCloseFrame(KScribbleView* pFrame)
       }
       else
        saveName=pathName();
-                                        
+          
       if(!saveDocument(saveName))
       {
         switch(KMessageBox::warningYesNo(pFrame,i18n("Could not save the current document !\n"
@@ -1773,7 +1774,7 @@ bool KScribbleDoc::canCloseFrame(KScribbleView* pFrame)
             ret=true;
           case KMessageBox::No:
             ret=false;
-        }                                       
+        }                
       }
       else
         ret=true;
@@ -1783,13 +1784,13 @@ bool KScribbleDoc::canCloseFrame(KScribbleView* pFrame)
       break;
     case KMessageBox::Cancel:
     default:
-      ret=false;                                
+      ret=false;         
       break;
     }
   }
   else
     ret=true;
-                
+    
   return ret;
 }
 
@@ -1852,7 +1853,7 @@ class KScribbleDoc;
  * is received by the KScribbleView, the overwritten event handler has to do nothing as the eventFilter
  * has set accept() or ignore() already. If QWidget::closeEvent() is called again, the default event
  * handler will accept the close event and the window gets destroyed even if the installed eventFilter
- * has set the event to be ignored.     
+ * has set the event to be ignored.  
  * @author Source Framework Automatically Generated by KDevelop, (c) The KDevelop Team.
  * @version KDevelop version 1.1 code generation
  */
@@ -1864,8 +1865,8 @@ class KScribbleView : public QScrollView
 
   public:
     /** Constructor for the view
-        * @param pDoc  your document instance that the view represents. Create a document
-        * before calling the constructor or connect an already existing document to a new MDI child widget.*/
+      * @param pDoc  your document instance that the view represents. Create a document
+      * before calling the constructor or connect an already existing document to a new MDI child widget.*/
     KScribbleView(KScribbleDoc* pDoc, QWidget* parent, const char *name, int wflags);
     /** Destructor for the main view */
     ~KScribbleView();
@@ -1881,9 +1882,9 @@ class KScribbleView : public QScrollView
     void copySelection();
     /** pastes the clipboard contents to a selection that can be inserted into the picture */
     void pasteSelection();
-                
-  protected:
         
+  protected:
+  
     /** overwritten QWidget::closeEvent() to catch closing views. Does nothing, as the closeEvents for
     * KScribbleView's are processed by KScribbleApp::eventFilter(), so this overwitten closeEvent is necessary
     * and has to be empty. Don't overwrite this method !
@@ -1903,7 +1904,7 @@ class KScribbleView : public QScrollView
 //    virtual void viewportResizeEvent( QResizeEvent* );
     /** changed from paintEvent() overwriting QScrollView method */
     virtual void viewportPaintEvent( QPaintEvent* );
-        
+      
     virtual void viewportDragEnterEvent ( QDragEnterEvent * );
 
     virtual void viewportDragMoveEvent ( QDragMoveEvent * );
@@ -1911,10 +1912,10 @@ class KScribbleView : public QScrollView
     virtual void viewportDragLeaveEvent ( QDragLeaveEvent * );
 
     virtual void viewportDropEvent ( QDropEvent * );
-        
+  
     /** the document instance */
     KScribbleDoc *doc;
-                
+      
   private:
     KPixmap tmp;
     QRect select;
@@ -2002,7 +2003,7 @@ void KScribbleView::print(QPrinter *pPrinter)
   {
     QPainter p;
     p.begin(pPrinter);
-                
+          
     ///////////////////////////////
     // TODO: add your printing code here
     p.drawPixmap(0,0,doc->buffer);
@@ -2054,7 +2055,7 @@ void KScribbleView::closeEvent(QCloseEvent* e){
 // This will accept the closing by QCloseEvent::accept() by default.
 // The installed eventFilter() in KScribbleApp takes care for closing the widget
 // or ignoring the close event
-                
+    
 }
 
 void KScribbleView::keyPressEvent( QKeyEvent *e )
@@ -2062,29 +2063,29 @@ void KScribbleView::keyPressEvent( QKeyEvent *e )
   switch (e->key())
   {
     case Key_Right:
-            scrollBy( 10, 0 );
-            break;
+      scrollBy( 10, 0 );
+      break;
     case Key_Left:
-            scrollBy( -10,0);
-            break;
+      scrollBy( -10,0);
+      break;
     case Key_Up:
-            scrollBy( 0, -10 );
-            break;
+      scrollBy( 0, -10 );
+      break;
     case Key_Down:
-            scrollBy( 0, 10 );
-            break;
+      scrollBy( 0, 10 );
+      break;
     case Key_Home:
-            setContentsPos(0,0);
-            break;
+      setContentsPos(0,0);
+      break;
     case Key_End:
-            setContentsPos(0,viewport()->height()-viewport()->height());
-            break;
+      setContentsPos(0,viewport()->height()-viewport()->height());
+      break;
     case Key_PageUp:
-            scrollBy( 0, -viewport()->height() );
-            break;
+      scrollBy( 0, -viewport()->height() );
+      break;
     case Key_PageDown:
-            scrollBy( 0, viewport()->height() );
-            break;
+      scrollBy( 0, viewport()->height() );
+      break;
   }
 
 }
@@ -2134,13 +2135,13 @@ void KScribbleView::viewportMousePressEvent( QMouseEvent *e )
       action = IDLE;
       viewport()->setCursor( Qt::crossCursor );
     }
-        QPoint mv_pt (viewport()->height(), viewport()->width());
+    QPoint mv_pt (viewport()->height(), viewport()->width());
     if(QRect(0,0,mv_pt.x(),mv_pt.y()).contains(e->pos()))
       select.moveCenter(e->pos());
-        else
-        {
-          select.moveBottomRight(mv_pt);
-        }
+    else
+    {
+      select.moveBottomRight(mv_pt);
+    }
     viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
   }
 }
@@ -2172,15 +2173,15 @@ void KScribbleView::viewportMouseDoubleClickEvent(QMouseEvent* e)
   {
     action = IDLE;
     select.moveCenter(e->pos());
-        viewport()->setCursor( Qt::crossCursor );
+    viewport()->setCursor( Qt::crossCursor );
     QPixmap cb_pix;
     cb_pix.resize(cb->pixmap().size());
     cb_pix=cb->pixmap();
-          bitBlt( &amp;doc->buffer, contentsX()+select.x(), contentsY()+select.y(),
-                  &amp;cb_pix, 0,0 , select.width(),select.height() );
+    bitBlt( &amp;doc->buffer, contentsX()+select.x(), contentsY()+select.y(),
+            &amp;cb_pix, 0,0 , select.width(),select.height() );
     viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
-          doc->setModified();
-          doc->updateAllViews(this);
+    doc->setModified();
+    doc->updateAllViews(this);
   }
 
 }
@@ -2188,7 +2189,7 @@ void KScribbleView::viewportMouseDoubleClickEvent(QMouseEvent* e)
 void KScribbleView::viewportMouseMoveEvent( QMouseEvent *e )
 {
   if ( action == DRAW )
-  {             
+  {    
     QPainter painter;
     painter.begin( &amp;doc->buffer );
     painter.setPen( doc->currentPen() );
@@ -2223,7 +2224,7 @@ void KScribbleView::viewportMouseMoveEvent( QMouseEvent *e )
   }
   if( action == PASTE )
   {
-        QPoint mv_pt (viewport()->height(), viewport()->width());
+    QPoint mv_pt (viewport()->height(), viewport()->width());
     if(QRect(0,0,mv_pt.x(),mv_pt.y()).contains(e->pos()))
       select.moveCenter(e->pos());
     else
@@ -2369,7 +2370,7 @@ public:
   ~KPenBrushDlg();
 
   int width() { return width_spbox->value(); };
-        
+  
 protected slots:
   void slotDefault();
 
@@ -2421,13 +2422,13 @@ private:
 KPenBrushDlg::KPenBrushDlg(int curr, QWidget *parent, const char *name)
   : QDialog(parent,name,true,WStyle_ContextHelp)
 {
-        initDialog();
+  initDialog();
   QWhatsThis::add(width_spbox,i18n("Select brush width"));
 
-        width_spbox->setValue(curr);
-        connect(default_btn, SIGNAL(clicked()), this, SLOT(slotDefault()));
-        connect(ok_btn, SIGNAL(clicked()), this, SLOT(accept()));
-        connect(cancel_btn, SIGNAL(clicked()), this, SLOT(reject()));
+  width_spbox->setValue(curr);
+  connect(default_btn, SIGNAL(clicked()), this, SLOT(slotDefault()));
+  connect(ok_btn, SIGNAL(clicked()), this, SLOT(accept()));
+  connect(cancel_btn, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 KPenBrushDlg::~KPenBrushDlg(){
@@ -2596,12 +2597,10 @@ void  KPenBrushDlg::initDialog(){
 </PRE>
 <HR>
 <P>
-<P>
-<P>
 <P ALIGN="RIGHT">
 
-Next<A HREF="index-14.html">Previous</A>
-<A HREF="index.html#toc15">Table of Contents</A>
+Next <A HREF="index-14.html">Previous</A>
+ <A HREF="index.html#toc15">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>

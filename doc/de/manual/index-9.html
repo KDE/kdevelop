@@ -258,8 +258,8 @@ verwendet um weitere Aufrufe von make zu täuschen.
 <DT><B>Arbeitsverzeichnis ausgeben</B><DD><P>Gibt vor und nach den Prozessen das Arbeitsverzeichnis aus. Dies kann nützlich sein, um Fehler 
 in kompliziert verschachtelten, rekursiven 'Make'-Kommandos zu finden.
 <P>
-<DT><B>Jobanzahl</B><DD><P>Gibt die Anzahl der Jobs (Kommandos) an, die gleichzeitig abgearbeitet werden. Wenn Sie ein einzelnes 
-CPU-System haben, ist es nicht empfehlenswert, mehr als 2 zu wählen.
+<DT><B>Jobanzahl</B><DD><P>Gibt die Anzahl der Jobs (Kommandos) an, die gleichzeitig abgearbeitet werden. Wenn Sie ein System mit nur einer 
+CPU haben, ist es nicht empfehlenswert, mehr als 2 zu wählen.
 <P>
 <DT><B>Geändert setzen</B><DD><P>Täusche vor, daß die Zieldatei gerade verändert wurde. Dies ist fast das gleiche wie 'touch' auf die Datei 
 auszuführen, allerdings wird die Änderungszeit nur für 'Make' geändert. Wenn Sie den Ordnerknopf auf der linken Seite drücken, 
@@ -267,6 +267,16 @@ können Sie eine Datei geändert setzen. Diese wird beim nächsten Aufruf von 'make
 <P>
 <DT><B>Zusätzliche Optionen</B><DD><P>Wählen Sie hier andere zusätzliche Optionen für Ihr Make-Programm. Sie können weitere Informationen 
 zu Make Optionen auf den manpages finden.
+<P>
+<DT><B>Neu Erstellen bei Ausführen</B><DD><P>Setzt die Aktionen die bei der Auswahl von "Ausführen" durchgeführt werden. Sie können 
+aus drei Optionen auswählen:
+<UL>
+<LI>Immer neu erstellen: Immer neu erstellen, ohne auf geänderte Dateien zu prüfen.</LI>
+<LI>Warnung bei Änderung: Warne, wenn Quelldateien verändert wurden und frage, ob neu erstellt werden soll.</LI>
+<LI>nur bei Änderung: Prüfe, ob Quelldateien geändert wurden und erstelle neu, wenn ja..</LI>
+</UL>
+
+Die Standardeinstellung ist, immer neu zu erstellen.
 </DL>
 <P>
 <P ALIGN="RIGHT">

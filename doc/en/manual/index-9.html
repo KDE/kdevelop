@@ -15,8 +15,8 @@
 <P ALIGN="RIGHT">
 
 <A HREF="index-10.html">Next</A>
-<A HREF="index-8.html">Previous</A>
-<A HREF="index.html#toc9">Table of Contents</A>
+ <A HREF="index-8.html">Previous</A>
+ <A HREF="index.html#toc9">Table of Contents</A>
 </P>
 <H3><A NAME="Build Settings"></A> <A NAME="s9">9. Build Settings</A></H3>
 
@@ -225,36 +225,57 @@ symbol tables.
 <B>additional libraries:</B> Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
 libraries with the -l option; for the example -lkom.
 <P>
-<H4>Make</H4>
+<H3><A NAME="Make Options"></A> <A NAME="ss9.5">9.5 Make Options</A>
+</H3>
 
 <P>As GNU make supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
 en/disabled. The available settings are:
 <P>
 <DL>
-<DT><B></B><DD><P>
 <DT><B>Print debug information</B><DD><P>prints out all information about the project files and what make determines for rebuilding them.
+<P>
 <DT><B>Continue after errors</B><DD><P>tries to continue with the compilation after an error occurred (e.g. a file couldn't be compiled due to an
 error)
+<P>
 <DT><B>Print the data base</B><DD><P>prints out the make-database for the current process which contains the changes from the last
 build-run. 
+<P>
 <DT><B>Environment variables</B><DD><P>give the current environment variables a higher priority than the currently used variables in
 the Makefiles.
+<P>
 <DT><B>No built-in rules</B><DD><P>doesn't use built-in rules for make.
+<P>
 <DT><B>Touch files</B><DD><P>don't run the Compiler on changed files; instead only touches them. This sets them as already processed by make.
+<P>
 <DT><B>Ignore all errors</B><DD><P>Ignores all errors that occur
+<P>
 <DT><B>Silent operation</B><DD><P>doesn't print out any information about the build-process
+<P>
 <DT><B>Print working directory</B><DD><P>prints the current directory during the make-process.
+<P>
 <DT><B>job number</B><DD><P>sets the amount of parallel processes for make. For a single-CPU system we recommend setting this to one or two.
+<P>
 <DT><B>set modified</B><DD><P>sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
 means that the file will be processed by make and compiled if it is a source file.
-<DT><B>additional options</B><DD><P>set additional options to make; those can be found in your local man page for "GNU Make". 
+<P>
+<DT><B>additional options</B><DD><P>set additional options to make; those can be found in your local man page for "GNU Make".
+<P>
+<DT><B>Rebuild behaviour on run</B><DD><P>Sets the actions taken when you choose run. There are three options you can choose from:
+<UL>
+<LI>always rebuild: Always rebuild without checking for modified files.</LI>
+<LI>Warning on modification: Warn if source files have been modified and ask if the project should be rebuilt.</LI>
+<LI>Only on modification: Check if sources have changed and rebuild if so.</LI>
+</UL>
+
+The default is to rebuild always.
+<P>
 </DL>
 <P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-10.html">Next</A>
-<A HREF="index-8.html">Previous</A>
-<A HREF="index.html#toc9">Table of Contents</A>
+ <A HREF="index-8.html">Previous</A>
+ <A HREF="index.html#toc9">Table of Contents</A>
 </P>
 <CENTER>
 <HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>

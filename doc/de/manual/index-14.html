@@ -79,7 +79,7 @@ während sich das Ausgabefenster schließt.
 <P>Sie können wählen, ob das Start-Logo von KDevelop während des Ladens angezeigt werden soll. Weiterhin können Sie das Öffnen 
 des letzten Projektes unterdrücken, sowie einstellen, ob Sie den Tip des Tage angezeigt bekommen.
 <P>
-<H3><A NAME="Ändern der Tastatur Kürzel"></A> <A NAME="ss14.4">14.4 Ändern der Tastatur Kürzel</A>
+<H3><A NAME="Ändern der Tastaturkürzel"></A> <A NAME="ss14.4">14.4 Ändern der Tastaturkürzel</A>
 </H3>
 
 <P>Der Dialog "Tasten" läßt Sie die Tastenzuordnung in KDevelop einstellen. Beachten Sie, daß globale Tastenkürzel wie Datei öffnen oder 
@@ -146,6 +146,42 @@ winzig, klein und mittel. Je höher die Indexgröße gewählt wird, um so größer wer
 die Suche in einer größeren Suchdatenbank beschleunigt und die Trefferquote ist höher, so daß wir eine mittlere Größe empfehlen. Zur 
 Verwendung der Suchfunktion, sehen Sie unter 
 <A HREF="index-6.html#Benutzung des Dokumentationsbrowsers">Benutzung des Dokumentationsbrowsers</A> nach.
+<P>
+<H3><A NAME="Debugger"></A> <A NAME="ss14.6">14.6 Debugger </A>
+</H3>
+
+<P>Standardmäßig verwendet KDevelop den internen Debugger. Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben 
+Sie den Namen des externen Debuggers ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
+<P>Bei Auswahl des internen Debuggers erhalten Sie eine Anzahl zusätzlicher Optionen aus denen Sie auswählen können:
+<P>
+<UL>
+<LI>Zeige static members: Die Anzeige von statischen Elementen verlangsamt gdb bei der Datenenerzeugung in kde und qt. Die 
+"Signatur" der Daten auf die sich QString und friend-Funktionen verlassen, könnte verändert werden. Wenn Sie jedoch diese Werte 
+debuggen müssen, markieren Sie die Option</LI>
+<LI>Zeige Teil-Namen an: Bei der Anzeige von disassembliertem Code können Sie sich Teil-Namen der Methoden anzeigen lassen. 
+Vollständige Namen sind jedoch einfacher zu lesen.</LI>
+<LI>BPs beim Laden von Bibliotheken setzen: Hiermit wird versucht "schwebende" Breakpoints beim Laden von Bibliotheken zu
+setzen. Wenn GDB eine Bibliothek die mittels "dlopen" geladen werden soll noch nicht kennt, weigert er sich Unterbrechungen in 
+diesem Code anzunehmen. Es ist jedoch möglich beim Laden der Bibliothek anzuhalten und dann zu versuchen die "schwebenden" 
+Breakpunkte zu setzen. Im Kapitel 
+<A HREF="index-12.html#Dynamische Bibliotheken und Unterbrechungen">Dynamische Bibliotheken und Unterbrechungen</A>
+finden Sie Details und Probleme dieser Vorgehensweise. Wenn Sie keine Bibliotheken mit "dlopen" öffnen, lassen Sie diese Option 
+ausgeschaltet.</LI>
+<LI>Schwebende Werkzeugleiste: Dies erlaubt Ihnen zusätzlich die Steuerung des Debuggers mit Hilfe der schwebenden 
+Werkzeugleiste. Die Werkzeugleiste ist bestens zum Debuggen von GUI Anwendungen geeignet. Details finden Sie unter 
+<A HREF="index-12.html#Die schwebende Werkzeugleiste">Die schwebende Werkzeugleiste</A>.</LI>
+</UL>
+<P>
+<H3><A NAME="Setzen der Pfade"></A> <A NAME="ss14.7">14.7 Setzen der Pfade</A>
+</H3>
+
+<P>Auf dem Tabulator "Pfad" können Sie die Pfade zu Ihren Qt 2.x und KDE 2 Installationen eingeben, sowie das Verzeichnis, in dem 
+neue Projekte erstellt werden sollen. Um mehr über die Installation von Qt 2.x / KDE 2 und die Konfiguration von KDevelop für Qt 
+2.x / KDE 2 zu erfahren, lesen Sie bitte das 
+<A HREF="../tutorial/index.html">KDE Anwendungs Tutorial</A>. 
+<P>Standardmäßig erstellt KDevelop neue Projekte im Homeverzeichnis des Benutzers. Wenn Sie dieses Verhalten ändern möchten, können 
+Sie das gewünschte Verzeichnis unter Standard Projektpfad eintragen.
+<P>
 <P>
 <P ALIGN="RIGHT">
 
