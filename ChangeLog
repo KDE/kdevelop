@@ -1,3 +1,8 @@
+1999-07-18 Walter Tasin  <tasin@e-technik.fh-muenchen.de> 
+	* fixed problem with saving and closing project
+        * inserting messagebox on exit KDevelop,
+          if something is changed in the widgets
+
 1999-07-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Minimal cvs support in RFV, LFV
 	* Show names of files to de deleted in dialog boxes
