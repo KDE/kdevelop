@@ -161,7 +161,7 @@ void CDocBrowser::setDocBrowserOptions(){
   htmlview->setURLCursor( KCursor::handCursor() );
   htmlview->setUnderlineLinks(underlineLinks);
   htmlview->setForceDefault( forceDefaults );
-
+  htmlview->setDefaultBGColor( bgColor );
 }
 
 void CDocBrowser::slotDocFontSize(int size){

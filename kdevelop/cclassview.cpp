@@ -80,9 +80,12 @@ void CClassView::CVReadAllFiles(){
   streamed_files->clear();
   //read the headers
   if (!prj_info->getHeaders().isEmpty()){
-    for(filename = prj_info->getHeaders().first();filename != 0;filename = prj_info->getHeaders().next()){
+    QStrList headers = prj_info->getHeaders();
+    for(filename = headers.first();filename != 0;filename = headers.next()){
       stream_info = new TStreamedFile;
+
       file.setName(prj_info->getProjectDir() + prj_info->getSubDir() + filename);
+
       stream_info->filename = filename;
       if (file.exists()){
 	file.open(IO_ReadOnly);

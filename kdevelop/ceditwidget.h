@@ -57,7 +57,7 @@ protected:
  void slotLookUp();
   signals:
  void  lookUp(QString text);
-  
+ void  bufferMenu(const QPoint&);
 };
 
 #endif

@@ -114,6 +114,12 @@ void CEditWidget::enterEvent ( QEvent * e){
 }
 void CEditWidget::mousePressEvent(QMouseEvent* event){
   if(event->button() == RightButton){
+    
+    if(event->state() & ControlButton) {
+      emit bufferMenu(this->mapToGlobal(event->pos()));
+      return;
+    }
+
     int state;
     state = undoState();
     //undo
