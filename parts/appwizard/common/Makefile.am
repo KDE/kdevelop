@@ -1,3 +1,5 @@
+CLEANFILES = *.tar.gz
+
 admin.tar.gz:
 	$(TAR) -cf admin.tar -C $(srcdir) admin
 	gzip admin.tar

@@ -1611,7 +1611,7 @@ sub handle_POFILES($$)
   appendLines ($tmp);
 
   if (!$lang) {
-    appendLines("merge:\n\t\$(MAKE) -f \$(top_srcdir)/admin/Makefile.common package-merge POFILES=\"\${POFILES}\" PACKAGE=\${PACKAGE}\n\n");
+    appendLines("merge:\n\t\$(MAKE) -C \$(top_srcdir)/po -f \$(top_srcdir)/admin/Makefile.common package-merge POFILES=\"\${POFILES}\" PACKAGE=\${PACKAGE}\n\n");
   }
  
 }
