@@ -97,10 +97,10 @@ void CCConfigWidget::initCodeCompletionTab( )
     checkAutomaticCodeCompletion->setChecked( c->automaticCodeCompletion() );
     checkAutomaticArgumentsHint->setChecked( c->automaticArgumentsHint() );
 
-    QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion options") );
+    QListViewItem* codeCompletionOptions = new QListViewItem( advancedOptions, i18n("Code Completion Options") );
     codeCompletionOptions->setExpandable( true );
 
-    //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint options") );
+    //QListViewItem* argumentsHintOptions = new QListViewItem( advancedOptions, i18n("Arguments Hint Options") );
 
     m_includeGlobalFunctions = new QCheckListItem( codeCompletionOptions, i18n("Include Global Functions"), QCheckListItem::CheckBox );
     m_includeGlobalFunctions->setOn( c->includeGlobalFunctions() );

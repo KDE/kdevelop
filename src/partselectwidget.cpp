@@ -74,8 +74,8 @@ void PartSelectWidget::init()
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     QString text = (_scope==Global)?
-        i18n("Plugins to load at startup:") :
-        i18n("Plugins to load for this project:");
+        i18n("Plugins to Load at Startup") :
+        i18n("Plugins to Load for This Project");
 
     QGroupBox * groupBox1 = new QGroupBox( text, this );
     groupBox1->setColumnLayout(0, Qt::Vertical );

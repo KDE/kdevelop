@@ -446,7 +446,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
            if( codeModel()->hasFile(candidate1) ){
                QPopupMenu* m = new QPopupMenu( popup );
-               id = popup->insertItem( i18n("Go to definition"), m );
+               id = popup->insertItem( i18n("Go to Definition"), m );
                popup->setWhatsThis(id, i18n("<b>Go to definition</b><p>Provides a menu to select available function definitions "
                     "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
 
@@ -479,7 +479,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
            if (!candidate.isEmpty() && codeModel()->hasFile(candidate) )
            {
                 QPopupMenu* m2 = new QPopupMenu( popup );
-                id = popup->insertItem( i18n("Go to declaration"), m2 );
+                id = popup->insertItem( i18n("Go to Declaration"), m2 );
                 popup->setWhatsThis(id, i18n("<b>Go to declaration</b><p>Provides a menu to select available function declarations "
                     "in the current file and in the corresponding header (if the current file is an implementation) or source (if the current file is a header) file."));
 

@@ -33,13 +33,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 CVSLogDialog::CVSLogDialog( CvsService_stub *cvsService, QWidget *parent, const char *name, int )
-    : KDialogBase( Tabbed, i18n("CVS Log & diff dialog"), Close, Close,
+    : KDialogBase( Tabbed, i18n("CVS Log & Diff Dialog"), Close, Close,
     parent, name? name : "logformdialog", false /*modal*/, true /*separator*/ ),
     m_cvsLogPage( 0 ), m_cvsService( cvsService )
 {
     setWFlags( getWFlags() | WDestructiveClose );
 
-    QVBox *vbox = addVBoxPage( i18n("Log from CVS") );
+    QVBox *vbox = addVBoxPage( i18n("Log From CVS") );
     m_cvsLogPage = new CVSLogPage( m_cvsService, vbox );
 
     connect( m_cvsLogPage, SIGNAL(diffRequested(const QString&, const QString&, const QString&)),
@@ -62,7 +62,7 @@ void CVSLogDialog::startLog( const QString &workDir, const QString &pathName )
 
 //    displayActionFeedback( true );
 /*
-    QVBox *vbox = addVBoxPage( i18n("Log from CVS: ") + pathName );
+    QVBox *vbox = addVBoxPage( i18n("Log From CVS: ") + pathName );
     m_cvsLogPage = new CVSLogPage( m_cvsService, vbox );
     this->resize( m_cvsLogPage->size() );
 

@@ -152,72 +152,72 @@ void CvsServicePart::setupActions()
     // This actions are used in the menubar: for context menu we build the
     // context at runtime. See CvsServicePart::contextMenu().
 
-    actionCommit = new KAction( i18n("&Commit to repository"), 0, this,
+    actionCommit = new KAction( i18n("&Commit to Repository"), 0, this,
         SLOT(slotActionCommit()), actionCollection(), "cvsservice_commit" );
     actionCommit->setToolTip( i18n("Commit file(s)") );
     actionCommit->setWhatsThis( i18n("Commit file(s)<p>Commit file to repository if modified") );
 
-    actionDiff = new KAction( i18n("&Difference between revisions"), 0, this, SLOT(slotActionDiff()),
+    actionDiff = new KAction( i18n("&Difference Between Revisions"), 0, this, SLOT(slotActionDiff()),
         actionCollection(), "cvsservice_diff" );
     actionDiff->setToolTip( i18n("Build difference") );
     actionDiff->setWhatsThis( i18n("Build difference<p>Build difference between releases") );
 
-    actionLog = new KAction( i18n("Generate &log"), 0, this, SLOT(slotActionLog()),
+    actionLog = new KAction( i18n("Generate &Log"), 0, this, SLOT(slotActionLog()),
         actionCollection(), "cvsservice_log" );
     actionLog->setToolTip( i18n("Build log") );
     actionLog->setWhatsThis( i18n("Build log<p>Produce log for this file") );
 
-    actionAdd = new KAction( i18n("&Add to repository"), 0, this, SLOT(slotActionAdd()),
+    actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvsservice_add" );
     actionAdd->setToolTip( i18n("Add file to repository") );
     actionAdd->setWhatsThis( i18n("Add file <p>Add file to repository") );
 
-    actionAddBinary = new KAction( i18n("Add to repository as &binary"), 0, this,
+    actionAddBinary = new KAction( i18n("Add to Repository as &Binary"), 0, this,
         SLOT(slotActionAddBinary()), actionCollection(), "cvsservice_add_bin" );
     actionAddBinary->setToolTip( i18n("Add file to repository") );
     actionAddBinary->setWhatsThis( i18n("Add file as binary<p>Add file to repository as binary (-kb option)") );
 
-    actionRemove = new KAction( i18n("&Remove from repository"), 0, this,
+    actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
         SLOT(slotActionRemove()), actionCollection(), "cvsservice_remove" );
     actionRemove->setToolTip( i18n("Remove from repository") );
     actionRemove->setWhatsThis( i18n("Remove from repository<p>Remove file(s) from repository") );
 
-    actionUpdate = new KAction( i18n("&Update/revert to another release"), 0, this,
+    actionUpdate = new KAction( i18n("&Update/Revert to Another Release"), 0, this,
         SLOT(slotActionUpdate()), actionCollection(), "cvsservice_update" );
     actionUpdate->setToolTip( i18n("Update/revert") );
     actionUpdate->setWhatsThis( i18n("Update/revert<p>Update/revert file(s) to another release") );
 
-    actionRemoveSticky = new KAction( i18n("R&emove sticky flag"), 0,
+    actionRemoveSticky = new KAction( i18n("R&emove Sticky Flag"), 0,
         this, SLOT(slotActionRemoveSticky()), actionCollection(), "cvsservice_removesticky" );
     actionRemoveSticky->setToolTip( i18n("Remove sticky flag") );
     actionRemoveSticky->setWhatsThis( i18n("Remove sticky flag<p>Remove sticky flag from file(s)") );
 
-    actionTag = new KAction( i18n("Make &tag/branch"), 0,
+    actionTag = new KAction( i18n("Make &Tag/Branch"), 0,
         this, SLOT(slotActionTag()), actionCollection(), "cvsservice_tag" );
     actionTag->setToolTip( i18n("Make tag/branch") );
     actionTag->setWhatsThis( i18n("Make tag/branch<p>Tags/branches selected file(s)") );
 
-    actionUnTag = new KAction( i18n("&Delete tag/branch"), 0,
+    actionUnTag = new KAction( i18n("&Delete Tag/Branch"), 0,
         this, SLOT(slotActionUnTag()), actionCollection(), "cvsservice_untag" );
     actionUnTag->setToolTip( i18n("Delete tag/branch") );
     actionUnTag->setWhatsThis( i18n("Delete tag/branch<p>Delete tag/branches from selected file(s)") );
 
-    actionAddToIgnoreList = new KAction( i18n("&Ignore in CVS operations"), 0,
+    actionAddToIgnoreList = new KAction( i18n("&Ignore in CVS Operations"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(), "cvsservice_ignore" );
     actionAddToIgnoreList->setToolTip( i18n("Ignore in CVS operations") );
     actionAddToIgnoreList->setWhatsThis( i18n("Ignore in CVS operations<p>Ignore file(s) by adding it to .cvsignore file") );
 
-    actionRemoveFromIgnoreList = new KAction( i18n("Do &not ignore in CVS operations"), 0,
+    actionRemoveFromIgnoreList = new KAction( i18n("Do &Not Ignore in CVS Operations"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "cvsservice_donot_ignore" );
     actionRemoveFromIgnoreList->setToolTip( i18n("Do not ignore in CVS operations") );
     actionRemoveFromIgnoreList->setWhatsThis( i18n("Do not ignore in CVS operations<p>Do not ignore file(s) by removing\nit from .cvsignore file") );
 
-    actionLogin = new KAction( i18n("&Log to server"), 0, this,
+    actionLogin = new KAction( i18n("&Log to Server"), 0, this,
         SLOT(slotActionLogin()), actionCollection(), "cvsservice_login" );
     actionLogin->setToolTip( i18n("Login to server") );
     actionLogin->setWhatsThis( i18n("Login to server<p>Log-in to remote CVS server") );
 
-    actionLogout = new KAction( i18n("L&ogout from server"), 0, this,
+    actionLogout = new KAction( i18n("L&ogout From Server"), 0, this,
         SLOT(slotActionLogout()), actionCollection(), "cvsservice_logout" );
     actionLogout->setToolTip( i18n("Logout from server") );
     actionLogout->setWhatsThis( i18n("Logout from server<p>Log-out from remote CVS server") );

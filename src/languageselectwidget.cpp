@@ -62,7 +62,7 @@ void LanguageSelectWidget::init()
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    QGroupBox * groupBox1 = new QGroupBox( i18n("Additional language support"), this );
+    QGroupBox * groupBox1 = new QGroupBox( i18n("Additional Language Support"), this );
     groupBox1->setColumnLayout(0, Qt::Vertical );
     groupBox1->layout()->setSpacing( 6 );
     groupBox1->layout()->setMargin( 11 );

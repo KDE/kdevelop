@@ -1924,8 +1924,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         {
 	  idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert Existing Files..."));
 	  idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
-	  idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update translation files"));
-	  idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release binary translations"));
+	  idLUpdate = popup.insertItem(SmallIconSet("konsole"),i18n("Update Translation Files"));
+	  idLRelease = popup.insertItem(SmallIconSet("konsole"),i18n("Release Binary Translations"));
         }
         else // File group containing files
         {

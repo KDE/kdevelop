@@ -105,7 +105,7 @@ void ResultsToolTip::maybeTip( const QPoint& p )
 
 PartExplorerForm::PartExplorerForm( QWidget *parent )
     : KDialogBase( parent, "parteplorerform", false,
-        i18n("Part Explorer -- A Services Lister"), User1 | Close, User1, true )
+        i18n("Part Explorer - A Services Lister"), User1 | Close, User1, true )
 {
     m_base = new PartExplorerFormBase( this, "partexplorerformbase", 0 );
     m_resultsList = new ResultsList( m_base );
