@@ -1,0 +1,4 @@
+# This group is now obsolete
+Id=kde2.2
+File=kdeveloprc
+RemoveGroup=dock_setting_default
