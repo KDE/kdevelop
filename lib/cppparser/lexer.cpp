@@ -47,11 +47,8 @@ inline void qthread_yield()
 
 #endif
 
-#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? QString::null : m_source.mid((start), (len)) )
-#define ADD_TOKEN(tk) \
-{ \
-    m_tokens.insert( m_size++, new Token(tk) ); \
-}
+#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), m_source )
+#define ADD_TOKEN(tk) m_tokens.insert( m_size++, new Token(tk) );
 
 using namespace std;
 
@@ -374,7 +371,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                 if( tok == Token_eof )
                      break;
 
-                QString tokText = toString( tok );
+                QString tokText = tok.text();
                 QString str = (tok == Token_identifier && d->hasBind(tokText)) ? d->apply( tokText ) : tokText;
                 if( str == ide ){
                     //Problem p( i18n("unsafe use of macro '%1'").arg(ide), m_currentLine, m_currentColumn );
@@ -688,7 +685,7 @@ void Lexer::processDefine( Macro& m )
 	    nextToken( tk, true );
 
 	    if( tk.type() != -1 ){
-                QString s = toString( tk );
+                QString s = tk.text();
 		body += s;
 	    }
 	}
@@ -842,11 +839,11 @@ int Lexer::macroPrimary()
 	    nextToken( tk, false );
 	    switch( tk.type() ){
 	    case Token_identifier:
-		if( toString(tk) == "defined" ){
+		if( tk.text() == "defined" ){
 		    return macroPrimary();
 		}
 		/// @todo implement
-		return m_driver->hasMacro( toString(tk) );
+		return m_driver->hasMacro( tk.text() );
 	    case Token_number_literal:
 	    case Token_char_literal:
 		return toInt( tk );
