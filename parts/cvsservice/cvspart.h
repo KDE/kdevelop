@@ -25,18 +25,16 @@ class KDialogBase;
 class KURL;
 class KURL::List;
 class KAction;
+
 class CvsProcessWidget;
 class CvsForm;
-class CvsLoginData;
+class CheckoutDialog;
 
 class CvsService_stub;
 class Repository_stub;
 
 // Available Cvs operations
 enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff };
-
-// Supported repositories
-enum CvsRepositoryType { repoExt, repoPserver, repoLocal };
 
 /**
 * Implementation for the CvsPart command line tool wrapper: it let to do all common
@@ -51,7 +49,7 @@ public:
     // Standard constructor.
     CvsPart( QObject *parent, const char *name, const QStringList & );
     // Destructor.
-    ~CvsPart();
+    virtual ~CvsPart();
 
     /**
     * Returns the configuration widget (for properly configuring the project to
@@ -62,6 +60,12 @@ public:
     * Setup a directory tree for use with CVS.
     */
     virtual void createNewProject( const QString& dir );
+    /**
+    * Fetch a module from remote repository, so it can be used for importing
+    * @param parent
+    * @return the full path to the fetched module, or an empty string
+    */
+    virtual void fetchFromRepository( QWidget *parent );
 
 private slots:
     // Add menu items binded to cvs operations' slots to @p popup, using
@@ -115,9 +119,10 @@ private slots:
 
     void slotJobFinished( bool normalExit, int exitStatus );
     void slotDiffFinished( bool normalExit, int exitStatus );
+    void slotCheckoutFinished( bool normalExit, int exitStatus );
 
 private:
-    void login( const CvsLoginData &data );
+    void login();
     void logout();
 
     // Implementation of CvsOperations
@@ -158,6 +163,8 @@ private:
     // by the ApplicationWizard in example)
     QGuardedPtr<CvsForm> m_cvsConfigurationForm;
 
+    QGuardedPtr<CheckoutDialog> m_checkoutDialog;
+
     // Actions
     KAction *actionCommit,
         *actionDiff,
@@ -168,7 +175,9 @@ private:
         *actionUpdate,
         *actionRevert,
         *actionAddToIgnoreList,
-        *actionRemoveFromIgnoreList;
+        *actionRemoveFromIgnoreList,
+        *actionLogin,
+        *actionLogout;
 
     CvsService_stub *m_cvsService;
     Repository_stub *m_repository;

@@ -16,19 +16,19 @@ know who said what and elaborate :-)
 
     WARNING: Keep in mind that there are incoming changes in cvsservice architecture
     which could make this part quite subject to heavy modifications.
+    WARNING2: If it doesn't compile try to update your cvsservice.
 
 Current features:
 * because this is a (buggy) direct conversion, as in parts/cvs.
 * it is possbile to 'add as binary' files to repository
+* checkout from remote repository ability added to the appwizard/importdlg
 
 To Do list
 
 (Ok, this is based on cvsservice so we have already the features: we need only to
 integrate them ;-)
 
-1. Adding the import feature for checking out modules from repositories: fetch
-   a modules list and ask the user which one he wants to commit
-2. login and logount from :ext: repositories
+1. There is need of testing for the SSH repositories!
 
 F.A.Q.
 

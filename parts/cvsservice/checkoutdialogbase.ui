@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>459</width>
-            <height>420</height>
+            <width>510</width>
+            <height>494</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -96,32 +96,26 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>serverConfigurationLayout</cstring>
+                <cstring>layout6</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QPushButton" row="2" column="2">
+                <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>fetchModulesButton</cstring>
+                        <cstring>textLabel2</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
-                            <hsizetype>1</hsizetype>
+                            <hsizetype>3</hsizetype>
                             <vsizetype>0</vsizetype>
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Fetch</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Fetch modules list from server</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Click to fetch modules list from server you specified</string>
+                        <string>Server path (i.e. :pserver:marios@cvs.kde.org:/home/kde)</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="0">
@@ -137,27 +131,6 @@
                     </item>
                     <property name="name">
                         <cstring>cvsRshComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>serverPathLineEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Server path (i.e. :pserver:mariosł@cvs.kde.org:/home/kde)</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -188,16 +161,164 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>240</width>
+                            <width>300</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
+                <widget class="QPushButton" row="2" column="2">
+                    <property name="name">
+                        <cstring>fetchModulesButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Fetch modules list</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Fetch modules list from server</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Click to fetch modules list from server you specified</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>serverPathLineEdit</cstring>
+                    </property>
+                </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="Line">
             <property name="name">
-                <cstring>groupBox2</cstring>
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer row="1" column="1">
+                    <property name="name">
+                        <cstring>spacer4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>156</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Module</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Tag</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="2">
+                    <property name="name">
+                        <cstring>tagEdit</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="0">
+                    <property name="name">
+                        <cstring>moduleEdit</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>pruneDirsCheck</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Prune directories</string>
+            </property>
+        </widget>
+        <widget class="KListView">
+            <column>
+                <property name="text">
+                    <string>Module</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Comment</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>modulesListView</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -207,121 +328,6 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <property name="title">
-                <string>Modules on server</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="KListView" row="0" column="0" rowspan="2" colspan="1">
-                    <column>
-                        <property name="text">
-                            <string>Module</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>Comment</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>modulesListView</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>101</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLayoutWidget" row="0" column="1">
-                    <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_3</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Tag</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>tagEdit</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>pruneDirsCheck</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>Prune directories</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-            </grid>
         </widget>
     </vbox>
 </widget>

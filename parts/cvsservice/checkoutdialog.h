@@ -18,6 +18,7 @@
 class CvsService_stub;
 class CvsJob_stub;
 class CheckoutDialogBase;
+class QListViewItem;
 
 /**
 * This dialog widget will collect all useful informazion about the module the
@@ -72,6 +73,7 @@ k_dcop:
     void receivedOutput( QString someOutput );
 
 private slots:
+    void slotModuleSelected( QListViewItem *item );
     void slotFetchModulesList();
     void slotSelectWorkDirList();
 

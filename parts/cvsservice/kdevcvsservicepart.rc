@@ -1,12 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevCvsServicePart" version="1">
 <MenuBar>
-    <Menu name="project" >
-        <Menu name="checkout_repositories">
-            <Text>&amp;Check out from ...</Text>
-            <Action name="cvsservice_checkout" />
-        </Menu>
-    </Menu>
     <Menu name="tools">
         <Menu name="version_control">
             <Text>&amp;Version Control</Text>
@@ -25,6 +19,9 @@
                 <Separator />
                 <Action name="cvsservice_ignore" />
                 <Action name="cvsservice_donot_ignore" />
+                <Separator />
+                <Action name="cvsservice_login" />
+                <Action name="cvsservice_logout" />
             </Menu>
         </Menu>
     </Menu>

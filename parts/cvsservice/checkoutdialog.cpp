@@ -72,9 +72,12 @@ CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
     m_base = new CheckoutDialogBase( this, "checkoutdialogbase" );
     setMainWidget( m_base );
 
-    connect( m_base->fetchModulesButton, SIGNAL(clicked()), this, SLOT(slotFetchModulesList()) );
-    connect( m_base->chooseWorkDirButton, SIGNAL(clicked()), this, SLOT(slotSelectWorkDirList()) );
-
+    connect( m_base->fetchModulesButton, SIGNAL(clicked()),
+        this, SLOT(slotFetchModulesList()) );
+    connect( m_base->chooseWorkDirButton, SIGNAL(clicked()),
+        this, SLOT(slotSelectWorkDirList()) );
+    connect( m_base->modulesListView, SIGNAL(executed(QListViewItem*)),
+        this, SLOT(slotModuleSelected(QListViewItem*)) );
     // DEBUG-LAZINESS here ;-)
     setServerPath( ":pserver:marios@cvs.kde.org:/home/kde" );
     setWorkDir( "/home/mario/src/test/prova_checkout" );
@@ -140,6 +143,7 @@ QString CheckoutDialog::tag() const
 
 QString CheckoutDialog::module() const
 {
+/*
     ModuleListViewItem *item = static_cast<ModuleListViewItem*>(
         m_base->modulesListView->selectedItem()
     );
@@ -147,6 +151,8 @@ QString CheckoutDialog::module() const
         return QString::null;
 
     return item->name();
+*/
+    return m_base->moduleEdit->text();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,7 +198,8 @@ void CheckoutDialog::receivedOutput( QString someOutput )
     kdDebug( 9000 ) << " Received output: " << someOutput << endl;
 
     // Fill the modules KListView if the list obtained is not empty
-    QStringList modules = m_job->output();
+    // QStringList modules = m_job->output();
+    QStringList modules = QStringList::split( "\n", someOutput );
     if (modules.count() <= 0)
         return;
 
@@ -218,3 +225,17 @@ void CheckoutDialog::slotSelectWorkDirList()
         return;
     setWorkDir( workDir );
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CheckoutDialog::slotModuleSelected( QListViewItem *item )
+{
+    ModuleListViewItem *aModuleItem = static_cast<ModuleListViewItem*>(
+        m_base->modulesListView->selectedItem()
+    );
+    if (!aModuleItem)
+        return QString::null;
+
+    m_base->moduleEdit->setText( aModuleItem->name() );
+}
+

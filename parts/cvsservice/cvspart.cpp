@@ -57,16 +57,6 @@
 #include <cvsservice_stub.h>
 #include <cvsjob_stub.h>
 
-QStringList quoted( const QStringList &args )
-{
-    QStringList qNames;
-    for (size_t i=0; i<args.count(); ++i)
-    {
-        qNames << KShellProcess::quote( args[i] );
-    }
-    return qNames;
-}
-
 QStringList prependToStringList( const QString &s, const QStringList &paths )
 {
     QStringList l = paths;
@@ -107,7 +97,7 @@ CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
     actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
     actionRevert( 0 ), actionAddToIgnoreList( 0 ),
-    actionRemoveFromIgnoreList( 0 )
+    actionRemoveFromIgnoreList( 0 ), actionLogin( 0), actionLogout( 0 )
 {
     setInstance( CvsFactory::instance() );
 
@@ -200,6 +190,12 @@ void CvsPart::setupActions()
         i18n("Do &not Ignore this file when doing cvs operation"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(),
         "cvsservice_donot_ignore" );
+
+    actionLogin = new KAction( i18n("&Login into server"), 0, this,
+        SLOT(slotActionLogin()), actionCollection(), "cvsservice_login" );
+
+    actionLogout = new KAction( i18n("&Logout from server"), 0, this,
+        SLOT(slotActionLogout()), actionCollection(), "cvsservice_logout" );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -314,6 +310,44 @@ void CvsPart::slotCheckOut()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+void CvsPart::fetchFromRepository( QWidget *parent )
+{
+    m_checkoutDialog = new CheckoutDialog( m_cvsService, parent, "checkoutdialog" );
+    QString modulePath;
+
+    int result = m_checkoutDialog->exec();
+    if ( result == QDialog::Accepted )
+    {
+        DCOPRef job = m_cvsService->checkout(
+            m_checkoutDialog->workDir(), m_checkoutDialog->serverPath(), m_checkoutDialog->module(),
+            m_checkoutDialog->tag(), m_checkoutDialog->pruneDirs()
+        );
+        if (!m_cvsService->ok())
+        {
+            KMessageBox::sorry( mainWindow()->main(), i18n( "Unable to checkout" ) );
+            return;
+        }
+
+        m_widget->startJob();
+        connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotCheckoutFinished(bool,int)) );
+    }
+    else
+    {
+        delete m_checkoutDialog;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsPart::slotCheckoutFinished( bool, int )
+{
+    QString modulePath = m_checkoutDialog->workDir() + QDir::separator() + m_checkoutDialog->module();
+    delete m_checkoutDialog;
+    emit finishedFetching( modulePath );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void CvsPart::createNewProject( const QString& dirName )
 {
     kdDebug( 9000 ) << "====> CvsPart::createNewProject( const QString& )" << endl;
@@ -407,13 +441,14 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
 void CvsPart::slotActionLogin()
 {
-
+    login();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::slotActionLogout()
 {
+    logout();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -665,14 +700,20 @@ void CvsPart::slotStopButtonClicked( KDevPlugin* which )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::login( const CvsLoginData &data )
+void CvsPart::login()
 {
+    DCOPRef job = m_cvsService->login();
+
+    m_widget->startJob( job.app(), job.obj() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CvsPart::logout()
 {
+    DCOPRef job = m_cvsService->logout();
+
+    m_widget->startJob( job.app(), job.obj() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
