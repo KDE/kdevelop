@@ -1304,7 +1304,7 @@ void CKDevelop::initDebugger()
     t_tab_view->addTab(var_viewer,i18n("VAR"));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    dbg_widget = new COutputWidget(kapp, o_tab_view);
+    dbg_widget = new COutputWidget(kapp, o_tab_view, "debugger");
     o_tab_view->addTab(dbg_widget,i18n("debugger"));
 #endif
 
@@ -1367,10 +1367,10 @@ void CKDevelop::initDebugger()
   	toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine1);
   }
 
-  setDebugMenuProcess(false);
-
   config = kapp->getConfig();
   config->setGroup("Debug");
+  bool oldDbg = dbgInternal;
+
   dbgInternal = !config->readBoolEntry("Use external debugger");
   dbgExternalCmd = config->readEntry("External debugger program","kdbg");
 
@@ -1381,7 +1381,13 @@ void CKDevelop::initDebugger()
   frameStack->setEnabled(dbgInternal);
   brkptManager->setEnabled(dbgInternal);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-//  o_tab_view->setTabEnabled(i18n("DebugMonitor"), dbgInternal);  // Cannot be disabled !!
+  o_tab_view->setTabEnabled(i18n("debugger"), dbgInternal);
   dbg_widget->setEnabled(dbgInternal);
 #endif
+
+  if (oldDbg != dbgInternal)
+    slotDebugStop();
+  else
+    if (dbgInternal && dbgController)
+      dbgController->reConfig();
 }
