@@ -131,7 +131,7 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     // Resize dialog
     resize( 480, 512 );
 
-    connect( m_base->typeCombo->lineEdit(), SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+//    connect( m_base->typeCombo->lineEdit(), SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 //    connect( m_base->constraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 
     connect( actionButton(User1), SIGNAL(clicked()), this, SLOT(slotSearchRequested()) );
