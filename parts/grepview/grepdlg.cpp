@@ -64,6 +64,7 @@ const char *filepatterns[] = {
     "*.cpp,*.cc,*.C,*.c++,*.cxx,*.inl,*.c,*.m,*.mm,*.M",
     "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl",
     "*.java",
+    "*.rb",
     "*",
     0
 };
