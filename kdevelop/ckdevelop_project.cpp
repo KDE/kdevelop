@@ -22,44 +22,59 @@
 #include "cnewclassdlg.h"
 #include "cfilepropdlg.h"
 #include "caddexistingfiledlg.h"
+#include <htmltoken.h>
 
 void CKDevelop::slotProjectAddNewFile(){
   newFile(true);
   
 }
 
-void CKDevelop::slotProjectAddExistingFile(){
+void CKDevelop::slotProjectAddExistingFiles(){
   QString type;
   CAddExistingFileDlg dlg(this,"test",&prj);
   
   dlg.destination_edit->setText(prj.getProjectDir()+ prj.getSubDir());
   if(dlg.exec()){
-    QFileInfo file_info(dlg.source_edit->text());
-    QString source_name = file_info.fileName();
-    QString dest_name = dlg.destination_edit->text() + source_name;
+    QString token;
+    QStrList files;
+    QString str_files = dlg.source_edit->text(); 
+    StringTokenizer str_token;
     
-    type = "DATA";
-    if (dest_name.right(2) == ".h"){
+    str_token.tokenize(str_files,",");
+    while(str_token.hasMoreTokens()){
+      token = str_token.nextToken();
+      files.append(token);
+    }
+    QString dest = dlg.destination_edit->text();
+    QString source_name;
+    QString dest_name ;
+    QString file;
+    QFileInfo file_info;
+    for(file = files.first(); file !=0;file = files.next()){
+      file_info.setFile(file);
+      source_name = file_info.fileName();
+      dest_name = dest + source_name;
+      
+      type = "DATA";
+      if (dest_name.right(2) == ".h"){
       type = "HEADER";
+      }
+      if (getTabLocation(dest_name) == CPP){
+	type = "SOURCE";
+      }
+         
+      // if not copy the file to the correct location 
+      process.clearArguments();
+      process << "cp"; // copy is your friend :-)
+      process << file;
+      process << dest;
+      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
+      
+      addFileToProject(dest_name,type,false); // no refresh
     }
-    if (getTabLocation(dest_name) == CPP){
-      type = "SOURCE";
-    }
-    
-    
-    
-    // if not copy the file to the correct location 
-    process.clearArguments();
-    process << "cp"; // copy iq your friend :-)
-    process << dlg.source_edit->text();
-    process << dlg.destination_edit->text();
-    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
-    
-    addFileToProject(dest_name,type);
     switchToFile(dest_name);
+    refreshTrees();
   }
-  
-  
 }
 
 void CKDevelop::slotProjectRemoveFile(){
@@ -102,7 +117,7 @@ void CKDevelop::newFile(bool add_to_project){
   }
   
 }
-void CKDevelop::addFileToProject(QString complete_filename,QString type){
+void CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
   QString rel_name = complete_filename;
   rel_name.replace(QRegExp(prj.getProjectDir()),"");
   prj.addFileToProject(rel_name);
@@ -114,7 +129,9 @@ void CKDevelop::addFileToProject(QString complete_filename,QString type){
   info.install_location = "";
   prj.writeFileInfo(info);
   prj.writeProject();
-  refreshTrees();
+  if(refresh){
+    refreshTrees();
+  }
 }
 void CKDevelop::delFileFromProject(QString rel_filename){
 

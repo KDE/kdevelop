@@ -69,10 +69,11 @@ struct TClassInfo {
   *@author Sandy Meier
   */
 struct TEditInfo {
-  int id; // the ID in the buffer-menu
+  /**  the id in the menu-buffer*/
+  int id; 
   QString filename;
   QString text; // 
-    bool modified; // modified ?
+  bool modified; // modified ?
 };
 
 #endif

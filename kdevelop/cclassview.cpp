@@ -53,16 +53,19 @@ void CClassView::CVReadAllFiles(){
       if (file.exists()){
 	file.open(IO_ReadOnly);
 	//      cerr << "LESE DATEI" << endl;
-	while(!in_stream.eof()){
-	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
-	}
+// 	while(!in_stream.eof()){
+// 	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
+// 	}
+	// the above one was really slow
+	stream_info->stream.resize(file.size()+1);
+	file.readBlock((char*)stream_info->stream,file.size());
 	file.close();
 	CVRemoveAllComments(&stream_info->stream);
 	streamed_files->append(stream_info); // add it to the classfiles
       }
     }
   }
-  //read the sources
+  // //read the sources
   if (!prj_info->getSources().isEmpty()){
     for(filename = prj_info->getSources().first();filename != 0;filename = prj_info->getSources().next()){
       stream_info = new TStreamedFile;
@@ -71,9 +74,11 @@ void CClassView::CVReadAllFiles(){
       if (file.exists()){
 	file.open(IO_ReadOnly);
 	//cerr << "LESE CPPDATEI" << endl;
-	while(!in_stream.eof()){
-	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
-	}
+	 // while(!in_stream.eof()){
+// 	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
+// 	}
+	stream_info->stream.resize(file.size()+1);
+	file.readBlock(stream_info->stream,file.size());
 	file.close();
 	CVRemoveAllComments(&stream_info->stream);
 	streamed_files->append(stream_info); // add it to the classfiles
@@ -181,6 +186,8 @@ void CClassView::refresh(CProject* prj){
   
 }
 void CClassView::CVFindTheClasses(){
+
+
   class_infos->clear();
   //cerr << endl <<"BEGINNE MIT DER ANALYSE";
   TClassInfo* class_info;
@@ -208,18 +215,25 @@ void CClassView::CVFindTheClasses(){
       act_pos = stream.find(regexp,act_pos); // find the class token
       regexp = " [a-zA-Z]";
       act_pos = stream.find(regexp,act_pos) +1; // find the begin of the classname
-      regexp = "[{ ]";
-      pos1 = stream.find(regexp,act_pos); // find the end of the classname
-      class_info->classname = stream.mid(act_pos,(pos1-act_pos)); // get the classname
-      act_pos = stream.find('{',act_pos);
-      class_info->begin = act_pos;
-      class_info->end = CVFindClassDecEnd(stream,act_pos);
+      regexp = "[{;]";
+      pos1 = stream.find(regexp, act_pos);    // test for forward declarations
+      if ( stream.mid(pos1, 1) == "{" )
+      {
+        regexp = "[;{ \t]";
+        pos1 = stream.find(regexp,act_pos); // find the end of the classname
+        class_info->classname = stream.mid(act_pos,(pos1-act_pos)); // get the classname
+        act_pos = stream.find('{',act_pos);
+        class_info->begin = act_pos;
+        class_info->end = CVFindClassDecEnd(stream,act_pos);
       
 
-      //cerr << endl <<"KLASSENAME:" << class_info->classname << ":" << endl;
-      //cerr << "Begin:" << class_info->begin << ":" << endl;
-      //cerr << "Ende:" << class_info->end << ":" << endl;
-      class_infos->append(class_info);
+        //cerr << endl <<"KLASSENAME:" << class_info->classname << ":" << endl;
+        //cerr << "Begin:" << class_info->begin << ":" << endl;
+        //cerr << "Ende:" << class_info->end << ":" << endl;
+        class_infos->append(class_info);
+      }
+      else
+        act_pos = pos1;
       num_classes--; 
     }
 
@@ -235,21 +249,29 @@ void CClassView::CVFindTheClasses(){
       act_pos = stream.find(regexp,act_pos); // find the struct token
       regexp = " [a-zA-Z]";
       act_pos = stream.find(regexp,act_pos) +1; // find the begin of the structname
-      regexp = "[{ ]";
-      pos1 = stream.find(regexp,act_pos); // find the end of the structname
-      class_info->classname = stream.mid(act_pos,pos1-act_pos); // get the structname
-      act_pos = stream.find('{',act_pos);
-      class_info->begin = act_pos;
-      class_info->end = CVFindClassDecEnd(stream,act_pos);
+      regexp = "[{;]";
+      pos1 = stream.find(regexp, act_pos);     // test for forward declarations
+      if ( stream.mid(pos1, 1) == "{" )
+      {
+        regexp = "[{ ]";
+        pos1 = stream.find(regexp,act_pos); // find the end of the structname
+        class_info->classname = stream.mid(act_pos,pos1-act_pos); // get the structname
+        act_pos = stream.find('{',act_pos);
+        class_info->begin = act_pos;
+        class_info->end = CVFindClassDecEnd(stream,act_pos);
       
-      //cerr << endl <<"STRUCTNAMENAME:" << class_info->classname << ":" << endl;
-      //cerr << "Begin:" << class_info->begin << ":" << endl;
-      //cerr << "Ende:" << class_info->end << ":" << endl;
-      class_infos->append(class_info);
+        //cerr << endl <<"STRUCTNAMENAME:" << class_info->classname << ":" << endl;
+        //cerr << "Begin:" << class_info->begin << ":" << endl;
+        //cerr << "Ende:" << class_info->end << ":" << endl;
+        class_infos->append(class_info);
+      }
+      else
+        act_pos = pos1;
       num_classes--; 
     }
     
   }
+ 
 }
 
 int CClassView::CVFindClassDecEnd(QString stream,int startpos){
@@ -339,6 +361,9 @@ void CClassView::CVRemoveAllComments(QString* str){
   int i=0;
   while ((begin = str->find("/*")) != -1){
     end = str->find("*/",begin+2);
+    if(end == -1){
+      end = str->length();
+    }
     for(i=begin;i<=end;i++){
       if ((*str)[i] != '\n'){
 	(*str)[i] = '_'; // remove the complete comment

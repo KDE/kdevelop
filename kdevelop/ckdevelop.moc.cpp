@@ -1,7 +1,7 @@
 /****************************************************************************
 ** CKDevelop meta object code from reading C++ file 'ckdevelop.h'
 **
-** Created: Wed Jan 13 22:38:57 1999
+** Created: Tue Jan 19 16:25:57 1999
 **      by: The Qt Meta Object Compiler ($Revision$)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -206,7 +206,7 @@ void CKDevelop::staticMetaObject()
     m1_t54 v1_54 = &CKDevelop::slotBuildAPI;
     m1_t55 v1_55 = &CKDevelop::slotBuildManual;
     m1_t56 v1_56 = &CKDevelop::slotProjectAddNewFile;
-    m1_t57 v1_57 = &CKDevelop::slotProjectAddExistingFile;
+    m1_t57 v1_57 = &CKDevelop::slotProjectAddExistingFiles;
     m1_t58 v1_58 = &CKDevelop::slotProjectRemoveFile;
     m1_t59 v1_59 = &CKDevelop::slotProjectNewClass;
     m1_t60 v1_60 = &CKDevelop::slotProjectFileProperties;
@@ -305,7 +305,7 @@ void CKDevelop::staticMetaObject()
     slot_tbl[54].name = "slotBuildAPI()";
     slot_tbl[55].name = "slotBuildManual()";
     slot_tbl[56].name = "slotProjectAddNewFile()";
-    slot_tbl[57].name = "slotProjectAddExistingFile()";
+    slot_tbl[57].name = "slotProjectAddExistingFiles()";
     slot_tbl[58].name = "slotProjectRemoveFile()";
     slot_tbl[59].name = "slotProjectNewClass()";
     slot_tbl[60].name = "slotProjectFileProperties()";

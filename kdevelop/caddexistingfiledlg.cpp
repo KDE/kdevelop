@@ -23,10 +23,13 @@
 #include <kmsgbox.h>
 #include <kapp.h>
 #include <qfileinfo.h>
+#include <iostream.h>
+#include <qfiledialog.h>
+
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
   prj = p_prj;
-  setCaption("Add existing file to project...");
+  setCaption("Add existing files to project...");
   source_edit = new QLineEdit( this, "source_edit" );
   source_edit->setGeometry( 120, 30, 220, 30 );
   source_edit->setMinimumSize( 0, 0 );
@@ -49,7 +52,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_label->setBackgroundMode( QWidget::PaletteBackground );
   source_label->setFontPropagation( QWidget::NoChildren );
   source_label->setPalettePropagation( QWidget::NoChildren );
-  source_label->setText( "Sourcefile:" );
+  source_label->setText( "Sourcefile(s):" );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
   
@@ -144,11 +147,19 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 CAddExistingFileDlg::~CAddExistingFileDlg(){
 }
 void CAddExistingFileDlg::sourceButtonClicked(){
-  QString name=KFileDialog::getOpenFileName(source_edit->text(),0,this,"Source File");
-  if(!name.isEmpty()){
-    source_edit->setText(name);
+ 
+  QStrList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,"Source File(s)...") );
+  files.setAutoDelete(true);
+
+  QString comp_str;
+  if(!files.isEmpty()){
+    for(QString str=files.first();str != 0;str = files.next()){
+      comp_str = comp_str + str + ",";
+    }
   }
-  
+  source_edit->setText(comp_str);
+  files.clear();
+
 }
 void CAddExistingFileDlg::destinationButtonClicked(){
  QString name=KDirDialog::getDirectory(destination_edit->text(),this,"Destination Directory");
@@ -159,13 +170,14 @@ void CAddExistingFileDlg::destinationButtonClicked(){
 void CAddExistingFileDlg::OK(){
   QFileInfo file_info(source_edit->text());
   QDir dir(destination_edit->text());
-  QString source_name = file_info.fileName();
-  QString dest_name = destination_edit->text() + source_name;
-  if (!file_info.exists()){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must choose an existing sourcefile!")
-		     ,KMsgBox::EXCLAMATION);
-    return;
-  }
+  //   QString source_name = file_info.fileName();
+  QString dest_name = destination_edit->text();// + source_name
+
+  // if (!file_info.exists()){
+//     KMsgBox::message(this,i18n("Error..."),i18n("You must choose an existing sourcefile!")
+// 		     ,KMsgBox::EXCLAMATION);
+//     return;
+//   }
   if(dest_name.contains(prj->getProjectDir()) == 0 ){
     KMsgBox::message(this,i18n("Error..."),
 		     i18n("You must choose a destination,that is in your project-dir!")

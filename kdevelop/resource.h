@@ -104,12 +104,13 @@
 ///////////////////////////////////////////////////////////////////
 // project-menu entries 
 
+#define ID_PROJECT_NEW_CLASS        14005
 #define ID_PROJECT_ADD_FILE         14010
 #define ID_PROJECT_ADD_FILE_NEW     14020
 #define ID_PROJECT_ADD_FILE_EXIST   14030
 #define ID_PROJECT_REMOVE_FILE      14040
 
-#define ID_PROJECT_NEW_CLASS        14050
+
 
 #define ID_PROJECT_FILE_PROPERTIES  14055
 #define ID_PROJECT_OPTIONS          14060

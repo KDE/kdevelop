@@ -111,9 +111,11 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
     for(filename = prj.getSources().first();filename != 0;filename = prj.getSources().next()){
       file.setName(prj.getProjectDir() + prj.getSubDir() + filename);
       file.open(IO_ReadOnly);
-      while(!in_stream.eof()){
-	stream = stream + in_stream.readLine() + "\n"; // read it
-      }
+      // while(!in_stream.eof()){
+// 	stream = stream + in_stream.readLine() + "\n"; // read it
+//       }
+      stream.resize(file.size()+1);
+      file.readBlock(stream,file.size());
       file.close(); 
       if (stream.find(compl_name) != -1){
 	switchToFile(prj.getProjectDir() + prj.getSubDir() + filename);

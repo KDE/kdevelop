@@ -1,9 +1,25 @@
+1999-01-19  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* implemented "added file(s) to a project"
+	* speedup the classviewer (10x faster !!!)
+
+1999-01-18  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* added a base application for C++ project without KDE/Qt (templates/cpp.tar.gz)
+	* TODO update KAppWizard to create this application
+
+1999-01-14  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* again some speedups in the doc-browser,it's now usable :-)
+	* implemented auto-jump after a search with glimpse
+
 1999-01-13  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* context-menu in the editor (look up ,copy,cut,paste)
 	* some speedups in the doc-browser
 
-1999-01-10 Sandy Meier <smeier@rz.uni-potsda.de>
+1999-01-10 Sandy Meier <smeier@rz.uni-potsdam.de>
+	
 	* added a createdocdatabase dialog
 
 1999-01-09  Sandy Meier <smeier@rz.uni-potsdam.de>
@@ -16,7 +32,7 @@
 1999-01-04  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* begin of the KWrite integration
- 	* commit some sourcecode (ceditwidget.cpp) from Jochen Wilhelmy for this
+ 	* commit some sourcecode (ceditwidget.cpp) by Jochen Wilhelmy for this
 	integration
 
 1998-12-16  Sandy Meier  <smeier@rz.uni-potsdam.de>

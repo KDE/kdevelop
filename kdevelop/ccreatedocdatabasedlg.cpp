@@ -279,7 +279,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
  
   QString kde_doc_dir = conf->readEntry("doc_kde");
   QString qt_doc_dir = conf->readEntry("doc_qt");
-
+  
   QString dirs;
   if(kde_checkbox->isChecked()){
     dirs = dirs + kde_doc_dir;
@@ -312,8 +312,10 @@ void CCreateDocDatabaseDlg::slotAddButtonClicked(){
   QString str = dir_edit->text();
 
   if(str != "" ){
-    dir_listbox->insertItem(dir_edit->text(),0);
+    dir_listbox->insertItem(str,0);
+    dir_edit->clear();
   }
+  
 }
 void CCreateDocDatabaseDlg::slotRemoveButtonClicked(){
   dir_listbox->removeItem(dir_listbox->currentItem());

@@ -16,6 +16,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #ifndef __CNEWCLASSDLG_H_
 #define __CNEWCLASSDLG_H_
 #include <qlineedit.h>
@@ -34,7 +35,7 @@
 #include "cproject.h"
 #include "cgeneratenewfile.h"
 
-/** 
+/** generates new class-skeletons (a header and a implementation file)
   *@author Sandy Meier
   */
 class CNewClassDlg : public QDialog

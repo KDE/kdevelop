@@ -150,6 +150,9 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   connect(cancel,SIGNAL(clicked()),SLOT(reject()));
   connect(loc_button,SIGNAL(clicked()),SLOT(slotLocButtonClicked()));
   connect(check_add_to_project,SIGNAL(clicked()),SLOT(slotAddToProject()));
+
+  //always default, add to Project
+  check_add_to_project->setChecked(true);
 }
 
 void CNewFileDlg::slotTabSelected(int item){

@@ -79,7 +79,7 @@ public:
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
   /**@param type HEADER,SOURCE,SCRIPT,DATA*/
-  void addFileToProject(QString complete_filename,QString type);
+  void addFileToProject(QString complete_filename,QString type,bool refreshTrees=true);
   void delFileFromProject(QString rel_filename);
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
@@ -170,7 +170,7 @@ public:
   void slotBuildManual();
 
   void slotProjectAddNewFile();
-  void slotProjectAddExistingFile();
+  void slotProjectAddExistingFiles();
   void slotProjectRemoveFile();
   void slotProjectNewClass();
   void slotProjectFileProperties();

@@ -391,16 +391,17 @@ void CKDevelop::initMenu(){
   // first the submenu for adding projectfiles
   QPopupMenu* p2 = new QPopupMenu;
   p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
-  p2->insertItem(i18n("&Existing File..."), this, 
-		 SLOT(slotProjectAddExistingFile()),0,ID_PROJECT_ADD_FILE_EXIST);
+  p2->insertItem(i18n("&Existing File(s)..."), this, 
+		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
 
   project_menu = new QPopupMenu;
-  project_menu->insertItem("&Add File to Project",p2,ID_PROJECT_ADD_FILE); 
+  project_menu->insertItem(i18n("&New Class..."), this, 
+			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
+  project_menu->insertItem("&Add File(s) to Project",p2,ID_PROJECT_ADD_FILE); 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this, 
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
   //project_menu->insertSeparator();
-  project_menu->insertItem(i18n("&New Class..."), this, 
-			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
+  
   project_menu->insertSeparator();		   
   project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
