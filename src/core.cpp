@@ -13,6 +13,7 @@
 #include <qdir.h>
 #include <qinputdialog.h>
 #include <qmessagebox.h>
+#include <qtabdialog.h>
 #include <qtextstream.h>
 #include <dcopclient.h>
 #include <kapp.h>
@@ -163,6 +164,11 @@ void Core::initActions()
                           this, SLOT(slotProjectImport()),
                           actionCollection(), "project_import" );
     action->setStatusText( i18n("Creates a project file for a given directory.") );
+
+    action = new KAction( i18n("Project &Options..."), 0,
+                          this, SLOT(slotProjectOptions()),
+                          actionCollection(), "project_options" );
+    action->setEnabled(false);
 
     action = new KAction( i18n("&Customize Gideon"), 0,
                           this, SLOT(slotSettingsCustomize()),
@@ -442,6 +448,7 @@ void Core::closeProject()
     projectFile = QString::null;
     win->setCaption(QString::fromLatin1(""));
     actionCollection()->action("project_close")->setEnabled(false);
+    actionCollection()->action("project_options")->setEnabled(false);
 }
 
 
@@ -500,6 +507,7 @@ void Core::openProject()
     
     win->setCaption(projectDir);
     actionCollection()->action("project_close")->setEnabled(true);
+    actionCollection()->action("project_options")->setEnabled(true);
 }
 
 
@@ -1122,11 +1130,30 @@ void Core::slotDocumentationBufferSelected(const KURL &url)
 }
 
 
+void Core::slotProjectOptions()
+{
+#if 0
+    KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
+                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
+                    "project options dialog");
+#endif
+    QTabDialog dlg(win, "project options dialog", true);
+    dlg.setCaption("Project Options");
+
+    emit projectConfigWidget(&dlg);
+    dlg.exec();
+}
+
+
 void Core::slotSettingsCustomize()
 {
+#if 0
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize Gideon"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, win,
                     "customization dialog");
+#endif
+    QTabDialog dlg(win, "customization dialog", true);
+    dlg.setCaption("Customize KDevelop");
 
     emit configWidget(&dlg);
     dlg.exec();

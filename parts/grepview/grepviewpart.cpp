@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qtabdialog.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
@@ -31,8 +32,8 @@ GrepViewPart::GrepViewPart(KDevApi *api, QObject *parent, const char *name)
     
     setXMLFile("kdevgrepview.rc");
 
-    connect( core(), SIGNAL(configWidget(KDialogBase*)),
-             this, SLOT(configWidget(KDialogBase*)) );
+    connect( core(), SIGNAL(configWidget(QTabDialog*)),
+             this, SLOT(configWidget(QTabDialog*)) );
     connect( core(), SIGNAL(stopButtonClicked()),
              this, SLOT(stopButtonClicked()) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
@@ -85,10 +86,12 @@ void GrepViewPart::slotRaiseWidget()
 }
 
 
-void GrepViewPart::configWidget(KDialogBase *dlg)
+void GrepViewPart::configWidget(QTabDialog *dlg)
 {
+#if 0
     QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
     (void) new GrepConfigWidget(vbox, "grep config widget");
+#endif
 }
 
 

@@ -22,6 +22,7 @@
 #include "gdbcommand.h"
 #include "stty.h"
 #include "variablewidget.h"
+#include "domutil.h"
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -128,7 +129,7 @@
 // **************************************************************************
 
 
-GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack)
+GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack, QDomDocument &projectDom)
     : DbgController(),
       frameStack_(frameStack),
       varTree_(varTree),
@@ -141,23 +142,24 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
       tty_(0),
       programHasExited_(false),
       badCore_(QString()),
+      dom(projectDom),
       config_breakOnLoadingLibrary_(true),
       config_forceBPSet_(true),
       config_displayStaticMembers_(false),
       config_asmDemangle_(true),
       config_dbgTerminal_(false),
-      config_gdbPath_()
+      config_gdbPath_(),
+      config_dbgShell_(),
+      config_programArgs_()
 {
-    KConfig *config = KGlobal::config();
-    config->setGroup("Debug");
-    ASSERT(!config->readBoolEntry("Use external debugger", false));
-    
-    config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
-    config_asmDemangle_           = !config->readBoolEntry("Display mangled names", true);
-    config_breakOnLoadingLibrary_ = config->readBoolEntry("Break on loading libs", true);
-    config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
-    config_gdbPath_               = config->readEntry("GDB path", "");
-    config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
+    config_displayStaticMembers_  = DomUtil::readEntry(projectDom, "/kdevdebugger/display/staticmembers");
+    config_asmDemangle_           = !DomUtil::readEntry(projectDom, "/kdevdebugger/display/manglednames");
+    config_breakOnLoadingLibrary_ = DomUtil::readEntry(projectDom, "/kdevdebugger/general/breakonloadinglibs");
+    config_forceBPSet_            = DomUtil::readEntry(projectDom, "/kdevdebugger/general/allowforcedbpset");
+    config_dbgTerminal_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/separatetty");
+    config_gdbPath_               = DomUtil::readEntry(projectDom, "/kdevdebugger/general/gdbpath");
+    config_dbgShell_              = DomUtil::readEntry(projectDom, "/kdevdebugger/general/dbgshell");
+    config_programArgs_           = DomUtil::readEntry(projectDom, "/kdevdebugger/general/programargs");
     
 #if defined (GDB_MONITOR)
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
@@ -231,18 +233,14 @@ GDBController::~GDBController()
 
 void GDBController::reConfig()
 {
-    KConfig *config = KGlobal::config();
-    config->setGroup("Debug");
-    ASSERT(!config->readBoolEntry("Use external debugger", false));
-    
     bool old_displayStatic        = config_displayStaticMembers_;
-    config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
+    config_displayStaticMembers_  = DomUtil::readEntry(dom, "/kdevdebugger/display/staticmembers");
     
     bool old_asmDemangle  = config_asmDemangle_;
-    config_asmDemangle_   = !config->readBoolEntry("Display mangled names", true);
+    config_asmDemangle_   = !DomUtil::readEntry(dom, "/kdevdebugger/display/manglednames");
     
     bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-    config_breakOnLoadingLibrary_   = config->readBoolEntry("Break on loading libs", true);
+    config_breakOnLoadingLibrary_ = DomUtil::readEntry(dom, "/kdevdebugger/general/breakonloadinglibs");
     
     if (( old_displayStatic           != config_displayStaticMembers_   ||
           old_asmDemangle             != config_asmDemangle_            ||
@@ -1098,7 +1096,7 @@ void GDBController::modifyBreakpoint(Breakpoint *BP)
 
 // **************************************************************************
 
-void GDBController::slotStart(const QString &application, const QString &args, const QString &sDbgShell)
+void GDBController::slotStart(const QString &application)
 {
     badCore_ = QString();
     
@@ -1138,11 +1136,11 @@ void GDBController::slotStart(const QString &application, const QString &args, c
     connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
     
-    if (!sDbgShell.isEmpty())
-        *dbgProcess_<<"/bin/sh"<<"-c"<<sDbgShell+" "+config_gdbPath_+
-            "gdb "+application+" -fullname -nx -quiet";
+    if (!config_dbgShell_.isEmpty())
+        *dbgProcess_ << "/bin/sh" << "-c"
+                     << config_dbgShell_ + " " +config_gdbPath_ + "gdb " + application + " -fullname -nx -quiet";
     else
-        *dbgProcess_<<config_gdbPath_+QString("gdb")<<application<<"-fullname"<<"-nx"<<"-quiet";
+        *dbgProcess_ << config_gdbPath_ + "gdb" << application << "-fullname" << "-nx" << "-quiet";
     
     dbgProcess_->start( KProcess::NotifyOnExit,
                         KProcess::Communication(KProcess::All));
@@ -1164,8 +1162,8 @@ void GDBController::slotStart(const QString &application, const QString &args, c
     
     queueCmd(new GDBCommand(QCString("tty ")+tty.latin1(), NOTRUNCMD, NOTINFOCMD));
     
-    if (!args.isEmpty())
-        queueCmd(new GDBCommand(QCString("set args ") + args.latin1(), NOTRUNCMD, NOTINFOCMD));
+    if (!config_programArgs_.isEmpty())
+        queueCmd(new GDBCommand(QCString("set args ") + config_programArgs_.latin1(), NOTRUNCMD, NOTINFOCMD));
     
     // This makes gdb pump a variable out on one line.
     queueCmd(new GDBCommand("set width 0", NOTRUNCMD, NOTINFOCMD));

@@ -1,5 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 1999-2001 by John Birch                                 *
+ *   jbb@kdevelop.org                                                      *
+ *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,34 +11,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GREPVIEWPART_H_
-#define _GREPVIEWPART_H_
+#ifndef _DEBUGGERCONFIGWIDGET_H_
+#define _DEBUGGERCONFIGWIDGET_H_
 
-#include <qguardedptr.h>
-#include "kdevpart.h"
-
-class QTabDialog;
-class GrepViewWidget;
+#include "debuggerconfigwidgetbase.h"
 
 
-class GrepViewPart : public KDevPart
-{
+class DebuggerConfigWidget : public DebuggerConfigWidgetBase
+{ 
     Q_OBJECT
 
 public:
-    GrepViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
-    ~GrepViewPart();
+    DebuggerConfigWidget( QDomDocument &projectDom, QWidget *parent=0, const char *name=0 );
+    ~DebuggerConfigWidget();
 
-private slots:
-    void slotRaiseWidget();
-    void configWidget(QTabDialog *dlg);
-    void stopButtonClicked();
-    void projectOpened();
-    void projectClosed();
+public slots:
+    void accept();
 
 private:
-    QGuardedPtr<GrepViewWidget> m_widget;
-    friend class GrepViewWidget;
+    QDomDocument &dom;
 };
 
 #endif

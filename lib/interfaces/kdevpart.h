@@ -26,10 +26,6 @@ class KDevEditorManager;
 class KDevMakeFrontend;
 class KDevAppFrontend;
 class ClassStore;
-class KDialogBase;
-class KAboutData;
-class KDevNode;
-class KDevFileNode;
 class KDevApi;
 
 

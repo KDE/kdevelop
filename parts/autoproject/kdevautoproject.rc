@@ -5,7 +5,7 @@
     <Action name="project_build" />
     <Action name="project_clean" />
     <Action name="project_configure" />
-    <Action name="project_options" />
+    <Action name="project_options2" />
   </Menu>
 </MenuBar>
 </kpartgui>

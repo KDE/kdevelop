@@ -55,10 +55,11 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name
     action = new KAction( i18n("Run configure"), 0,
                           this, SLOT(slotConfigure()),
                           actionCollection(), "project_configure" );
-    
-    action = new KAction( i18n("Project &Options..."), 0,
+
+    // Temporarily, will be substituted by signal connection Core::projectConfigWidget()
+    action = new KAction( i18n("Compiler &Options..."), 0,
                           this, SLOT(slotProjectOptions()),
-                          actionCollection(), "project_options" );
+                          actionCollection(), "project_options2" );
 }
 
 

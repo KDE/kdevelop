@@ -21,7 +21,9 @@ libkdevdebugger_la_SOURCES = debuggerfactory.cpp \
 			     disassemblewidget.cpp \
 			     memviewdlg.cpp \
 			     breakpointdlg.cpp \
-			     dbgpsdlg.cpp
+			     dbgpsdlg.cpp \
+			     debuggerconfigwidget.cpp \
+			     debuggerconfigwidgetbase.ui
 
 METASOURCES = AUTO
 

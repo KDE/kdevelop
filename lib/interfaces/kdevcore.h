@@ -8,6 +8,7 @@
 #include <qstringlist.h>
 #include "kdevpart.h"
 
+class QTabDialog;
 
 #ifdef NEW_EDITOR
 namespace KEditor {
@@ -217,9 +218,14 @@ signals:
     void contextMenu(QPopupMenu *popup, const Context *context);
     /**
      * Expects that a configuration page for use in the
-     * KDevelop settings dialog is created by the component
+     * KDevelop settings dialog is created by the component.
      */
-    void configWidget(KDialogBase *dlg);
+    void configWidget(QTabDialog *dlg);
+    /**
+     * Expects that a configuration page for use in the
+     * Project settings dialog is created by the component.
+     */
+    void projectConfigWidget(QTabDialog *dlg);
 };
 
 #endif

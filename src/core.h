@@ -84,6 +84,7 @@ private slots:
     void slotBufferSelected();
     void slotTextEditorBufferSelected(TextEditorDocument *doc);
     void slotDocumentationBufferSelected(const KURL &url);
+    void slotProjectOptions();
     void slotSettingsCustomize();
     void slotStop();
 

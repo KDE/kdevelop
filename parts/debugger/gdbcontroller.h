@@ -19,6 +19,7 @@
 #define _GDBCONTROLLER_H_
 
 #include "dbgcontroller.h"
+#include <qdom.h>
 #include <qobject.h>
 #include <qlist.h>
 
@@ -41,7 +42,7 @@ class GDBController : public DbgController
     Q_OBJECT
     
 public:
-    GDBController(VariableTree *varTree, FramestackWidget *frameStack);
+    GDBController(VariableTree *varTree, FramestackWidget *frameStack, QDomDocument &projectDom);
     ~GDBController();
     void reConfig();
     
@@ -78,7 +79,7 @@ private:
     bool stateIsOn(int state)       { return state_  &state; }
     
 public slots:
-    void slotStart(const QString &application, const QString &args, const QString &sDbgShell=QString());
+    void slotStart(const QString &application);
     void slotCoreFile(const QString &coreFile);
     void slotAttachTo(int pid);
     
@@ -148,12 +149,15 @@ private:
     QString           badCore_;
     
     // Configuration values
+    QDomDocument &dom;
     bool    config_breakOnLoadingLibrary_;
     bool    config_forceBPSet_;
     bool    config_displayStaticMembers_;
     bool    config_asmDemangle_;
     bool    config_dbgTerminal_;
     QString config_gdbPath_;
+    QString config_dbgShell_;
+    QString config_programArgs_;
 };
 
 #endif

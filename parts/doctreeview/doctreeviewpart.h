@@ -16,6 +16,7 @@
 #include "kdevpart.h"
 
 
+class QTabDialog;
 class DocTreeViewWidget;
 class DocIndexDialog;
 class Context;
@@ -30,7 +31,7 @@ public:
     ~DocTreeViewPart();
 
 private slots:
-    void configWidget(KDialogBase *dlg);
+    void configWidget(QTabDialog *dlg);
     void projectOpened();
     void projectClosed();
     void contextMenu(QPopupMenu *popup, const Context *context);
