@@ -541,7 +541,7 @@ void FCConfigWidget::newsubtype_button_clicked()
         FCTypeEdit *te = new FCTypeEdit(this);
         if (te->exec() == QDialog::Accepted )
         {
-            QListViewItem *it = new QListViewItem(fc_view->currentItem(),
+            /*QListViewItem *it =*/(void) new QListViewItem(fc_view->currentItem(),
                 te->typeext_edit->text(),
                 te->typename_edit->text(),
                 te->icon_url->icon(),
@@ -653,7 +653,7 @@ void FCConfigWidget::newtemplate_button_clicked()
     FCTemplateEdit *te = new FCTemplateEdit;
     if (te->exec() == QDialog::Accepted)
     {
-        QListViewItem *it = new QListViewItem(fctemplates_view, te->templatename_edit->text(),
+        /*QListViewItem *it =*/(void) new QListViewItem(fctemplates_view, te->templatename_edit->text(),
             te->template_url->url().isEmpty() ? QString("create") : te->template_url->url());
     }
 }

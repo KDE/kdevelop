@@ -27,7 +27,7 @@ QString Locate::relativeName(const QString file)
   return QString::null;
 }
 
-QString Locate::source(const QString file)
+QString Locate::source(const QString /*file*/)
 {
   return QString::null;
 }

@@ -45,7 +45,7 @@ void PColorCombo::setValue(const QVariant value, bool emitChange)
         emit propertyChanged(pname(), value);
 }
 
-void PColorCombo::updateProperty(int val)
+void PColorCombo::updateProperty(int /*val*/)
 {
     emit propertyChanged(pname(), value());
 }

@@ -801,6 +801,7 @@ bool MakeWidget::scanErrorBackward( int parag )
 		searchItem( it );
 		return true;
 	}
+	return false;
 }
 
 #include "makewidget.moc"

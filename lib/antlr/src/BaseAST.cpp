@@ -215,11 +215,11 @@ ANTLR_USE_NAMESPACE(std)vector<RefAST> BaseAST::findAllPartial(RefAST target)
 	return roots;
 }
 
-void BaseAST::setText(const ANTLR_USE_NAMESPACE(std)string& txt)
+void BaseAST::setText(const ANTLR_USE_NAMESPACE(std)string& /*txt*/)
 {
 }
 
-void BaseAST::setType(int type)
+void BaseAST::setType(int /*type*/)
 {
 }
 

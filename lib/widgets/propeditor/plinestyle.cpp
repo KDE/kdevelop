@@ -154,7 +154,7 @@ void PLineStyle::setValue(const QVariant value, bool emitChange)
     };
 }
 
-void PLineStyle::updateProperty(int val)
+void PLineStyle::updateProperty(int /*val*/)
 {
     emit propertyChanged(pname(), value());
 }

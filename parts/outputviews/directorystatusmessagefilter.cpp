@@ -146,6 +146,7 @@ bool DirectoryStatusMessageFilter::matchLeaveDir( const QString& line, QString& 
     static const QString fr_l( (const QChar*)fr_leave, sizeof(fr_leave) / 2 );
     static const QString ja_l( (const QChar*)ja_leave, sizeof(ja_leave) / 2 );
     static const QString ko_l( (const QChar*)ko_leave, sizeof(ko_leave) / 2 );
+    static const QString ko_b( (const QChar*)ko_behind, sizeof(ko_behind) / 2 );
     static const QString pt_br_l( (const QChar*)pt_br_leave, sizeof(pt_br_leave) / 2 );
     static const QString ru_l( (const QChar*)ru_leave, sizeof(ru_leave) / 2 );
 	static const QString en_l("Leaving directory");
@@ -163,11 +164,10 @@ bool DirectoryStatusMessageFilter::matchLeaveDir( const QString& line, QString& 
 
 	// avoid QRegExp if possible. This regex performs VERY badly with large inputs,
 	// and the input required is very short if these strings match.
-	//@todo: fix ko translation. I have no idea what the code did originally.
 	if(line.find(en_l) > -1 ||
 	   line.find(fr_l) > -1 ||
 	   line.find(ja_l) > -1 ||
-	   line.find(ko_l) > -1 ||
+	   (line.find(ko_l) > -1 && line.find(ko_b) > -1) ||
 	   line.find(pt_br_l) > -1 ||
 	   line.find(ru_l) > -1 ||
 	   line.find(de_l1) > -1 ||

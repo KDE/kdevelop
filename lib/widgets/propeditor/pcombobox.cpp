@@ -71,7 +71,7 @@ void PComboBox::setValue(const QVariant value, bool emitChange)
     }
 }
 
-void PComboBox::updateProperty(int val)
+void PComboBox::updateProperty(int /*val*/)
 {
     emit propertyChanged(pname(), value());
 }

@@ -686,7 +686,7 @@ int childCount(QListView *lv)
    Calculates the listbox height needed to contain all items, or as
    many as the list box is supposed to contain.
 */
-static int listHeight( QListView *l, int sl )
+static int listHeight( QListView *l, int /*sl*/ )
 {
 /*    if ( l->childCount() > 0 )
         return QMIN( l->childCount(), (uint)sl) * l->firstChild()->height();

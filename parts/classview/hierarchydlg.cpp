@@ -121,7 +121,7 @@ void HierarchyDialog::slotClassComboChoice(QListViewItem * item)
 }
 
 
-void HierarchyDialog::classSelected(const QString &className)
+void HierarchyDialog::classSelected(const QString &/*className*/)
 {
 /*    ParsedClass *currentClass = m_part->classStore()->getClassByName(className);
     member_tree->clear();

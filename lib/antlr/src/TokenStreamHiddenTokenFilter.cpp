@@ -99,7 +99,7 @@ void TokenStreamHiddenTokenFilter::hide(const BitSet& mask)
 	hideMask = mask;
 }
 
-RefToken TokenStreamHiddenTokenFilter::LA(int i)
+RefToken TokenStreamHiddenTokenFilter::LA(int /*i*/)
 {
 	return nextMonitoredToken;
 }

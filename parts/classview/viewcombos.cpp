@@ -322,7 +322,7 @@ void ViewCombosOp::removeClassItems( ClassViewPart * part, QListView * view, con
     }
 }
 
-void ViewCombosOp::removeFunctionItems( ClassViewPart * part, QListView * view, const ClassDom & dom )
+void ViewCombosOp::removeFunctionItems( ClassViewPart * part, QListView * /*view*/, const ClassDom & dom )
 {
     FunctionList fl = dom->functionList();
     for (FunctionList::const_iterator it = fl.begin(); it != fl.end(); ++it)

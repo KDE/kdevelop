@@ -48,7 +48,7 @@ namespace FileCreate {
     KFileDialog::initGUI();
   }
 
-  void FileDialog::slotActionFilterChanged(const QString & filter) {
+  void FileDialog::slotActionFilterChanged(const QString & /*filter*/) {
   }
 
   void FileDialog::slotActionTextChanged(const QString & text) {

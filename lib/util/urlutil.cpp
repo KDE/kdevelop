@@ -294,7 +294,7 @@ QString URLUtil::envExpand ( const QString& str )
       if (ret)
       {
         QString expandedStr ( QFile::decodeName( ret ) );
-        if (pos < len)
+        if (pos < (int)len)
           expandedStr += str.mid(pos);
         return expandedStr;
       }

@@ -620,7 +620,7 @@ string ASBeautifier::beautify(const string &originalLine)
     if (!isInComment)
     {
         leadingWhiteSpaces = 0;
-        while (leadingWhiteSpaces<originalLine.length() && originalLine[leadingWhiteSpaces] <= 0x20)
+        while (leadingWhiteSpaces<(int)originalLine.length() && originalLine[leadingWhiteSpaces] <= 0x20)
             leadingWhiteSpaces++;
 
         line = trim(originalLine);
@@ -629,7 +629,7 @@ string ASBeautifier::beautify(const string &originalLine)
     {
         int trimSize;
         for (trimSize=0;
-                trimSize < originalLine.length() && trimSize<leadingWhiteSpaces && originalLine[trimSize] <= 0x20 ;
+                trimSize < (int)originalLine.length() && trimSize<leadingWhiteSpaces && originalLine[trimSize] <= 0x20 ;
                 trimSize++)
             ;
         line = originalLine.substr(trimSize);
@@ -716,7 +716,7 @@ string ASBeautifier::beautify(const string &originalLine)
                 {
                     stackLength = waitingBeautifierStackLengthStack->back();
                     waitingBeautifierStackLengthStack->pop_back();
-                    while (waitingBeautifierStack->size() > stackLength)
+                    while ((int)waitingBeautifierStack->size() > stackLength)
                     {
                         beautifier = waitingBeautifierStack->back();
                         waitingBeautifierStack->pop_back();
@@ -728,7 +728,7 @@ string ASBeautifier::beautify(const string &originalLine)
                 {
                     stackLength = activeBeautifierStackLengthStack->back();
                     activeBeautifierStackLengthStack->pop_back();
-                    while (activeBeautifierStack->size() > stackLength)
+                    while ((int)activeBeautifierStack->size() > stackLength)
                     {
                         beautifier = activeBeautifierStack->back();
                         activeBeautifierStack->pop_back();
@@ -847,7 +847,7 @@ string ASBeautifier::beautify(const string &originalLine)
 
     // parse characters in the current line.
 
-    for (i=0; i<line.length(); i++)
+    for (i=0; i<(int)line.length(); i++)
     {
         tempCh = line[i];
 
@@ -1034,7 +1034,7 @@ string ASBeautifier::beautify(const string &originalLine)
                 {
                     int previousIndentStackSize = inStatementIndentStackSizeStack->back();
                     inStatementIndentStackSizeStack->pop_back();
-                    while (previousIndentStackSize < inStatementIndentStack->size())
+                    while (previousIndentStackSize < (int)inStatementIndentStack->size())
                         inStatementIndentStack->pop_back();
 
                     if (!parenIndentStack->empty())
@@ -1072,7 +1072,7 @@ string ASBeautifier::beautify(const string &originalLine)
             isInClassHeader = false;
             if (!isBlockOpener && currentHeader != NULL)
             {
-                for (int n=0; n < nonParenHeaders.size(); n++)
+                for (int n=0; n < (int)nonParenHeaders.size(); n++)
                     if (currentHeader == nonParenHeaders[n])
                     {
                         isBlockOpener = true;
@@ -1323,7 +1323,7 @@ string ASBeautifier::beautify(const string &originalLine)
         // special handling of 'case' statements
         if (ch == ':')
         {
-            if (line.length() > i+1 && line[i+1] == ':') // look for ::
+            if ((int)line.length() > i+1 && line[i+1] == ':') // look for ::
             {
                 ++i;
                 outBuffer.append(1, ':');
@@ -1379,7 +1379,7 @@ string ASBeautifier::beautify(const string &originalLine)
         }
 
         if ((ch == ';'  || (parenDepth>0 && ch == ','))  && !inStatementIndentStackSizeStack->empty())
-            while (inStatementIndentStackSizeStack->back() + (parenDepth>0 ? 1 : 0)  < inStatementIndentStack->size())
+            while (inStatementIndentStackSizeStack->back() + (parenDepth>0 ? 1 : 0)  < (int)inStatementIndentStack->size())
                 inStatementIndentStack->pop_back();
 
 
@@ -1401,7 +1401,7 @@ string ASBeautifier::beautify(const string &originalLine)
 
                             int previousIndentStackSize = inStatementIndentStackSizeStack->back();
                             inStatementIndentStackSizeStack->pop_back();
-                            while (previousIndentStackSize < inStatementIndentStack->size())
+                            while (previousIndentStackSize < (int)inStatementIndentStack->size())
                                 inStatementIndentStack->pop_back();
                             parenDepth--;
                             if (i == 0)

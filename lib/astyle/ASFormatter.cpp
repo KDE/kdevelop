@@ -316,7 +316,7 @@ string ASFormatter::nextLine() {
             appendCurrentChar();
 
             // explicitely break a line when a line comment's end is found.
-            if (/*bracketFormatMode == ATTACH_MODE &&*/ charNum+1 == currentLine.length()) {
+            if (/*bracketFormatMode == ATTACH_MODE &&*/ charNum+1 == (int)currentLine.length()) {
                 isInLineBreak = true;
                 isInLineComment = false;
                 isImmediatelyPostLineComment = true;
@@ -486,7 +486,7 @@ string ASFormatter::nextLine() {
             int templateDepth = 0;
             const string *oper;
             for ( int i=charNum;
-                    i< currentLine.length();
+                    i< (int)currentLine.length();
                     i += (oper ? oper->length() : 1) ) {
                 oper = ASBeautifier::findHeader(currentLine, i, operators);
 

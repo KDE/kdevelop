@@ -47,7 +47,7 @@ BookmarkSettings::~BookmarkSettings()
 
 void BookmarkSettings::slotAccept()
 {
-	unsigned int codeline;
+	unsigned int codeline = 0;
 	codeline = radioButton1->isChecked() ? 0 : codeline;
 	codeline = radioButton2->isChecked() ? 1 : codeline;
 	codeline = radioButton3->isChecked() ? 2 : codeline;

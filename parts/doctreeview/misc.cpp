@@ -236,7 +236,7 @@ QString DocTreeViewTool::devhelpLocation(const QString& fileName)
 }
 
 
-void DocTreeViewTool::scanDevHelpDirs( const QString path )
+void DocTreeViewTool::scanDevHelpDirs( const QString /*path*/ )
 {
 //    scanDevHelpOldWay(path);
     scanDevHelpNewWay();

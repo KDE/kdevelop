@@ -52,13 +52,13 @@ int Token::getType() const
 	return type;
 }
 
-void Token::setColumn(int c)
+void Token::setColumn(int /*c*/)
 {}
 
-void Token::setLine(int l)
+void Token::setLine(int /*l*/)
 {}
 
-void Token::setText(const ANTLR_USE_NAMESPACE(std)string& t)
+void Token::setText(const ANTLR_USE_NAMESPACE(std)string& /*t*/)
 {}
 
 void Token::setType(int t)

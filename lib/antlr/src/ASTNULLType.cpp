@@ -22,41 +22,41 @@ RefAST ASTNULLType::clone( void ) const
 	return RefAST(this);
 }
 
-void ASTNULLType::addChild(RefAST c)
+void ASTNULLType::addChild(RefAST /*c*/)
 {
 }
 
-bool ASTNULLType::equals(RefAST t) const
-{
-	return false;
-}
-
-bool ASTNULLType::equalsList(RefAST t) const
+bool ASTNULLType::equals(RefAST /*t*/) const
 {
 	return false;
 }
 
-bool ASTNULLType::equalsListPartial(RefAST t) const
+bool ASTNULLType::equalsList(RefAST /*t*/) const
 {
 	return false;
 }
 
-bool ASTNULLType::equalsTree(RefAST t) const
+bool ASTNULLType::equalsListPartial(RefAST /*t*/) const
 {
 	return false;
 }
 
-bool ASTNULLType::equalsTreePartial(RefAST t) const
+bool ASTNULLType::equalsTree(RefAST /*t*/) const
 {
 	return false;
 }
 
-vector<RefAST> ASTNULLType::findAll(RefAST tree)
+bool ASTNULLType::equalsTreePartial(RefAST /*t*/) const
+{
+	return false;
+}
+
+vector<RefAST> ASTNULLType::findAll(RefAST /*tree*/)
 {
 	return vector<RefAST>();
 }
 
-vector<RefAST> ASTNULLType::findAllPartial(RefAST subtree)
+vector<RefAST> ASTNULLType::findAllPartial(RefAST /*subtree*/)
 {
 	return vector<RefAST>();
 }
@@ -81,15 +81,15 @@ int ASTNULLType::getType() const
 	return Token::NULL_TREE_LOOKAHEAD;
 }
 
-void ASTNULLType::initialize(int t, const ANTLR_USE_NAMESPACE(std)string& txt)
+void ASTNULLType::initialize(int /*t*/, const ANTLR_USE_NAMESPACE(std)string& /*txt*/)
 {
 }
 
-void ASTNULLType::initialize(RefAST t)
+void ASTNULLType::initialize(RefAST /*t*/)
 {
 }
 
-void ASTNULLType::initialize(RefToken t)
+void ASTNULLType::initialize(RefToken /*t*/)
 {
 }
 
@@ -99,19 +99,19 @@ void ASTNULLType::initialize( istream& )
 }
 #endif
 
-void ASTNULLType::setFirstChild(RefAST c)
+void ASTNULLType::setFirstChild(RefAST /*c*/)
 {
 }
 
-void ASTNULLType::setNextSibling(RefAST n)
+void ASTNULLType::setNextSibling(RefAST /*n*/)
 {
 }
 
-void ASTNULLType::setText(const ANTLR_USE_NAMESPACE(std)string& text)
+void ASTNULLType::setText(const ANTLR_USE_NAMESPACE(std)string& /*text*/)
 {
 }
 
-void ASTNULLType::setType(int ttype)
+void ASTNULLType::setType(int /*ttype*/)
 {
 }
 
@@ -131,12 +131,12 @@ string ASTNULLType::toStringTree() const
 }
 
 #ifdef ANTLR_SUPPORT_XML
-bool ASTNULLType::attributesToStream( ostream &out ) const
+bool ASTNULLType::attributesToStream( ostream & /*out*/ ) const
 {
 	return false;
 }
 
-void ASTNULLType::toStream( ostream &out ) const
+void ASTNULLType::toStream( ostream & /*out*/ ) const
 {
 	out << "<ASTNULL/>" << endl;
 }
