@@ -315,7 +315,7 @@ bool ProgressDialog::createConfig()
     // locate the image dir
     QString images = locate("data", "kdevdoctreeview/pics/star.png");
     if (images.isEmpty())
-        //return false;
+        return false;
     images = images.left(images.length()-8);
 
     QFile f(indexdir + "/htdig.conf");

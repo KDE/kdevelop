@@ -1,0 +1,76 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>DocTreeProjectConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DocTreeProjectConfigWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>481</width>
+            <height>275</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>projectdocdirLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Location of project user documentation:</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="3" column="0">
+            <property name="name">
+                <cstring>apidocdirEdit</cstring>
+            </property>
+        </widget>
+        <spacer row="4" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>125</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>userdocdirLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Location of project API documentation:</string>
+            </property>
+        </widget>
+        <widget class="KURLRequester" row="1" column="0">
+            <property name="name">
+                <cstring>userdocdirEdit</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

@@ -25,7 +25,8 @@ class DocTreeItem;
 class DocTreeDoxygenFolder;
 class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
-//class DocTreeDocbaseFolder;
+class DocTreeDocbaseFolder;
+class DocTreeQtFolder;
 class DocTreeTocFolder;
 class DocTreeViewPart;
 class KDevProject;
@@ -73,10 +74,10 @@ private:
     QPtrList<QListViewItem> searchResultList;
 
     QListViewItem *contextItem;
-    //DocTreeItem *folder_kdevelop;
+    DocTreeQtFolder *folder_qt;
     DocTreeDoxygenFolder *folder_doxygen;
     DocTreeBookmarksFolder *folder_bookmarks;
-    //DocTreeDocbaseFolder *folder_docbase;
+    DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
     QList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;

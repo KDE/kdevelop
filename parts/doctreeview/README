@@ -7,3 +7,7 @@ With the index you can search for keywords in the kdelibs/qt api.
 Initially created by: Bernd Gehrmann <bernd@kdevelop.org>
 Maintainer: Sebastian Kratzert <skratzert@gmx.de>
 
+TODO:
+-make project docs nicer
+-change htdigindex, so that can be canceled
+-STL docs and kde2dev book have problems

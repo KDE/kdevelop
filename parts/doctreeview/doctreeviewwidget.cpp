@@ -41,8 +41,9 @@
 #include <ksimpleconfig.h>
 
 #include "kdevcore.h"
-#include "kdevproject.h"
+#include "domutil.h"
 #include "kdevtoplevel.h"
+#include "kdevproject.h"
 #include "kdevpartcontroller.h"
 
 #include "../../config.h"
@@ -208,7 +209,7 @@ class DocTreeDoxygenFolder : public DocTreeItem
 {
 public:
     DocTreeDoxygenFolder(KListView *parent, const QString &context)
-        : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries (Doxygen)"), context)
+        : DocTreeItem(parent, Folder, i18n("KDE Libraries (Doxygen)"), context)
         { setExpandable(true); }
     void refresh();
 };
@@ -232,7 +233,6 @@ void DocTreeDoxygenFolder::refresh()
         if (dirName == "." || dirName == ".." || dirName == "common")
             continue;
         if (DocTreeDoxygenBook::isInstallationOK(d.absFilePath(*it))) {
-//            new DocTreeDoxygenBook(this, *it, docdir + dirName + "/html/", context());
             new DocTreeDoxygenBook(this, *it, d.absFilePath(*it) + "/html/", context());
             //kdDebug(9002) << "foo: " << d.absFilePath(*it) + "/html/" + *it << endl;
         }
@@ -353,7 +353,7 @@ DocTreeTocFolder::~DocTreeTocFolder()
 
 #ifdef WITH_DOCBASE
 
-/*
+
 class DocTreeDocbaseFolder : public DocTreeItem
 {
 public:
@@ -420,7 +420,7 @@ void DocTreeDocbaseFolder::setOpen(bool o)
     }
     DocTreeItem::setOpen(o);
 }
-*/
+
 
 #endif
 
@@ -469,61 +469,141 @@ public:
     void setProject(KDevProject *project)
         { m_project = project; }
     void refresh();
-    
+
 private:
     KDevProject *m_project;
+    QString m_userdocDir, m_apidocDir;
 };
 
 
 DocTreeProjectFolder::DocTreeProjectFolder(KListView *parent, const QString &context)
-    : DocTreeItem(parent, Folder, i18n("Current Project"), context)
-{}
+    : DocTreeItem(parent, Folder, i18n("Current Project"), context), m_project(0)
+{
+}
 
 
 void DocTreeProjectFolder::refresh()
 {
+    //TODO: use doxygen tags
+    if( !m_project )
+        return;
+        
+    m_userdocDir = DomUtil::readEntry(
+        *m_project->projectDom() , "/kdevdoctreeview/projectdoc/userdocDir");
+    m_apidocDir = DomUtil::readEntry(
+        *m_project->projectDom() , "/kdevdoctreeview/projectdoc/apidocDir");
+    
+    
     DocTreeItem::clear();
 
-    if (m_project) {
         // API documentation
-        QDir apidir(m_project->projectDirectory() + "/srcdoc");
+        QDir apidir( m_apidocDir );
         if (apidir.exists()) {
-            QStringList entries = apidir.entryList("*", QDir::Dirs);
-            for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it) {
-                QString filename = apidir.filePath(*it) + "/index.html";
-                if (!QFileInfo(filename).exists())
-                    continue;
-                DocTreeItem *item = new DocTreeItem(this, Book, i18n("API of %1").arg(*it), context());
+            QStringList entries = apidir.entryList("*.html", QDir::Files);
+            QString filename = apidir.absPath() + "/index.html";
+            if (!QFileInfo(filename).exists())
+                return;
+            DocTreeItem *item = new DocTreeItem(
+                this, Book, i18n("API of %1").arg(m_project->projectName() ), context());
                 item->setFileName(filename);
+            for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it) {
+                filename = *it;
+                DocTreeItem *ditem = new DocTreeItem(item, 
+                    Doc, QFileInfo(filename).baseName() , context());
+                ditem->setFileName(apidir.absPath() +"/"+ filename);
             }
         }
         // User documentation
-        QDir userdir(m_project->projectDirectory() + "/doc");
+        QDir userdir( m_userdocDir );
         if (userdir.exists()) {
-           QString filename = userdir.absPath() + "/HTML/index.html";
-           if (!QFileInfo(filename).exists())
-                filename = userdir.absPath() + "/html/index.html";
-           
-           DocTreeItem *item = new DocTreeItem(this, Book, 
-                i18n("Userdoc for %1").arg(m_project->name()), context());
-           item->setFileName(filename);
-
-//TODO: iterate through userdir/html
-/*          QStringList entries = userdir.entryList("*", QDir::Dirs);
+            QStringList entries = userdir.entryList("*.html", QDir::Files);
+            QString filename = userdir.absPath() + "/index.html";
+            if (!QFileInfo(filename).exists())
+                return;
+            DocTreeItem *item = new DocTreeItem(
+                this, Book, i18n("Usedoc for %1").arg(m_project->projectName() ), context());
+                item->setFileName(filename);
             for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it) {
-                if (!QFileInfo(filename).exists())
-                    QString filename = userdir.filePath(*it) + "/html/index.html";
-                    if (!QFileInfo(filename).exists())
-                        continue;
+                filename = *it;
+                DocTreeItem *ditem = new DocTreeItem(item, 
+                    Doc, QFileInfo(filename).baseName() , context());
+                ditem->setFileName(userdir.absPath() +"/"+ filename);
             }
-*/
         }
-    }
-    
+
     if (!firstChild())
         setExpandable(false);
+
 }
 
+
+/**************************************/
+/* Qt Folder                          */
+/**************************************/
+
+class DocTreeQtFolder : public DocTreeItem
+{
+public:
+    DocTreeQtFolder(KListView *parent, const QString &_fileName, const QString &context);
+    void refresh();
+private:    
+    QString filename;
+};
+
+
+DocTreeQtFolder::DocTreeQtFolder(KListView *parent, const QString &_fileName,
+    const QString &context)
+    : DocTreeItem(parent, Folder, i18n("Qt"), context)
+{
+    filename = _fileName;
+}
+
+void DocTreeQtFolder::refresh() 
+{
+    QFileInfo fi(filename);
+
+    QFile f(filename);
+    if (!f.open(IO_ReadOnly)) {
+        kdDebug(9002) << "Could not read qt.xml" << endl;
+        return;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f) || doc.doctype().name() != "DCF") {
+        kdDebug(9002) << "Not a valid DCF file: " << filename << endl;
+        return;
+    }
+    
+    f.close();
+    
+    QDomElement docEl = doc.documentElement();
+    QDomElement titleEl = docEl.namedItem("DCF").toElement();
+    kdDebug() << titleEl.attribute("title") << endl;
+
+    QString base;
+    //QListViewItem *lastChildItem = 0;
+    QDomElement childEl = docEl.firstChild().toElement();
+    while (!childEl.isNull()) {
+        if (childEl.tagName() == "section") {
+            QString ref = childEl.attribute("ref");
+            QString title = childEl.attribute("title");
+            
+            int i = title.find("Class Reference");
+            if( i > 0 ) 
+            {
+                title = title.left(i);
+                DocTreeItem* item = new DocTreeItem(this, Doc, title, context());
+                item->setFileName(fi.dirPath( true ) +"/"+ ref);
+                //kdDebug(9002) <<"ref: "<< ref <<"  title: " << title << endl;
+            }
+            childEl = childEl.nextSibling().toElement();            
+        }
+        else
+        {
+            docEl = docEl.nextSibling().toElement();            
+        }
+    }
+    sortChildItems(0, true);
+}
 
 /**************************************/
 /* The DocTreeViewWidget itself       */
@@ -567,9 +647,6 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	showButton->setToggleButton ( true );
 	showButton->setMinimumHeight ( 23 );
 
-//	QLabel* label = new QLabel ( i18n ( " Look For" ), searchToolbar, "introduction text" );
-//	label->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );
-
 	completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
 	
 	startButton = new QToolButton ( searchToolbar, "start searching" );
@@ -602,9 +679,12 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 
     folder_bookmarks = new DocTreeBookmarksFolder(docView, "ctx_bookmarks");
     folder_bookmarks->refresh();
+    
     folder_project   = new DocTreeProjectFolder(docView, "ctx_current");
+    folder_project->refresh();
+
 #ifdef WITH_DOCBASE
- //   folder_docbase   = new DocTreeDocbaseFolder(docView, "ctx_docbase");
+    folder_docbase   = new DocTreeDocbaseFolder(docView, "ctx_docbase");
 #endif
 
     // doctocs
@@ -616,44 +696,32 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 
     folder_doxygen   = new DocTreeDoxygenFolder(docView, "ctx_doxygen");
     folder_doxygen->refresh();
-
-//  folder_kdelibs   = new DocTreeKDELibsFolder(docView, "ctx_kdelibs");
-//    folder_kdelibs->refresh();
-
+    
     // eventually, Qt docu extra
     QListViewItem* pChild = folder_doxygen->firstChild();
     while (pChild && pChild->text(0) != "qt") {
         pChild = pChild->nextSibling();
     }
-    if (!pChild) {
-        
-    // qt docu not found in doxygen subtree
-    KConfig *config = DocTreeViewFactory::instance()->config();
-    if (config) 
-    {
-        config->setGroup("General");
-        QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
-        if (!qtdocdir.isEmpty()) 
+    
+    if (!pChild) {        
+        // qt docu not found in doxygen subtree
+        KConfig *config = DocTreeViewFactory::instance()->config();
+        if (config) 
         {
-            DocTreeItem* folder_qt = new DocTreeItem(docView, DocTreeItem::Folder, i18n("Qt"), "qt");
-            if (folder_qt) 
+            config->setGroup("General");
+            QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
+            if (!qtdocdir.isEmpty()) 
             {
-                folder_qt->setFileName(qtdocdir + "/index.html");
+                folder_qt = new DocTreeQtFolder(docView, qtdocdir+"qt.xml", "ctx_qt");
+                if (folder_qt) 
+                {
+                    folder_qt->setFileName(qtdocdir + "/index.html");
+                    folder_qt->refresh();
+                }
             }
         }
     }
-    }
-    
-    // Preliminary
-    //folder_kdevelop = new DocTreeItem(docView, DocTreeItem::Folder, i18n("KDevelop"), "ctx_kdevelop");
-    /*( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE2 Development Book", "ctx_kdevelop") )
-        ->setFileName("help:/kde2book/index.html");
-    ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDE Architecture Overview", "ctx_kdevelop") )
-        ->setFileName("help:/kdearch/index.html");
-    ( new DocTreeItem(folder_kdevelop, DocTreeItem::Doc, "KDevelop Manual", "ctx_kdevelop") )
-        ->setFileName("help:/kdevelop/index.html");
-    */
-
+       
 	docConfigAction = new KAction(i18n("Customize..."), "configure", 0,
 		this, SLOT(slotConfigure()), actions, "documentation options");
 
@@ -783,8 +851,8 @@ void DocTreeViewWidget::slotSelectionChanged ( QListViewItem* item )
 	if( !item->parent() )
 	{// current is a toplevel item, so we initialize all childs
 		QListViewItem * myChild = item->firstChild();
-		while( myChild ) 
-		{
+		while( myChild && myChild->parent()) 
+		{// only initialize current folder, not the below ones
 			myChild->setOpen( true );
 			myChild->setOpen( false );
             
@@ -807,6 +875,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
     if (ident.isEmpty())
         return;
     
+    kdDebug(9002) << "Showing: " << ident << endl;
     m_part->partController()->showDocument(KURL(ident), dtitem->context());
     m_part->topLevel()->lowerView(this);
 }
@@ -844,25 +913,14 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
 
 
 void DocTreeViewWidget::slotConfigure()
-{
-//    DocTreeConfigWidget::Page page;
-//    if (contextItem == folder_kdelibs || contextItem->parent() == folder_kdelibs)
-//        page = DocTreeConfigWidget::Libraries;
-  //  else
-//        page = DocTreeConfigWidget::Bookmarks;
-                                                                                            
+{                                                                                         
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize documentation tree"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                     "customization dialog");
-    //QVBox *vbox = dlg.addVBoxPage(i18n("Documentation tree I"));
-    QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation tree"));
-    //DocTreeConfigWidget *w = new DocTreeConfigWidget(this, vbox, "doctreeview config widget1");
+    QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation Tree Global"));
     DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget(this, vbox1, "doctreeview config widget2");
-//    w->showPage(page);
-    //connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
     dlg.exec();
-    //delete w;
     delete w1;
 
 }
@@ -882,6 +940,7 @@ void DocTreeViewWidget::refresh()
 //    folder_kdelibs->refresh();
     folder_doxygen->refresh();
     folder_bookmarks->refresh();
+    folder_project->refresh();
 }
 
 
@@ -894,14 +953,14 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     docView->takeItem(folder_bookmarks);
     docView->takeItem(folder_project);
 #ifdef WITH_DOCBASE
-    //docView->takeItem(folder_docbase);
+    docView->takeItem(folder_docbase);
 #endif
     QListIterator<DocTreeTocFolder> it1(folder_toc);
     for (; it1.current(); ++it1)
         docView->takeItem(it1.current());
     
     docView->takeItem(folder_doxygen);
-//    docView->takeItem(folder_kdelibs);
+    docView->takeItem(folder_qt);
 //    docView->takeItem(folder_kdevelop);
 
     // .. and insert all again except for ignored items
@@ -923,7 +982,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     docView->insertItem(folder_bookmarks);
     docView->insertItem(folder_project);
 #ifdef WITH_DOCBASE
-//    docView->insertItem(folder_docbase);
+    docView->insertItem(folder_docbase);
 #endif
     QListIterator<DocTreeTocFolder> it2(folder_toc);
     for (; it2.current(); ++it2) {
@@ -933,9 +992,9 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     
     docView->insertItem(folder_doxygen);
 //    if (!ignoretocs.contains("kde"))
-  //      docView->insertItem(folder_kdelibs);
+//        docView->insertItem(folder_kdelibs);
 
-    //docView->insertItem(folder_kdevelop);
+    docView->insertItem(folder_qt);
 
     docView->triggerUpdate();
 }

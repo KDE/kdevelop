@@ -18,7 +18,7 @@
 
 class KDialogBase;
 class DocTreeViewWidget;
-class DocIndexDialog;
+//class DocIndexDialog;
 class Context;
 class QPopupMenu;
 
@@ -32,25 +32,25 @@ public:
     ~DocTreeViewPart();
 
 private slots:
+    void projectConfigWidget(KDialogBase *dlg);
     void configWidget(KDialogBase *dlg);
     void projectOpened();
     void projectClosed();
     void contextMenu(QPopupMenu *popup, const Context *context);
-    void slotDocumentationIndex();
+//  void slotDocumentationIndex();
     void slotSearchDocumentation();
     void slotManpage();
     void slotRaiseWidget();
     void slotContextGotoManpage();
-    void slotContextLookupIndex();
+//  void slotContextLookupIndex();
     void slotContextFulltextSearch();
     
 private:
     QGuardedPtr<DocTreeViewWidget> m_widget;
-    QGuardedPtr<DocIndexDialog> m_indexDialog;
+//    QGuardedPtr<DocIndexDialog> m_indexDialog;
     QString m_popupstr;
 
     friend class DocTreeViewWidget;
-    friend class DocTreeConfigWidget;
 };
 
 #endif

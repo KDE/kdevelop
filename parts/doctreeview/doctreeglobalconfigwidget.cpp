@@ -22,6 +22,7 @@
 #include "doctreeviewpart.h"
 #include "doctreeviewwidget.h"
 #include "doctreeviewfactory.h"
+#include "kdevproject.h"
 #include "adddocitemdlg.h"
 #include "misc.h"
 #include <qfileinfo.h>
@@ -34,7 +35,6 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewWidget *widget,
     : DocTreeGlobalConfigWidgetBase(parent, name)
 {
     m_widget = widget;
-    
     readConfig();
 }
 
@@ -49,9 +49,9 @@ void DocTreeGlobalConfigWidget::readConfig()
 
 
     config->setGroup("General");
-    qtdocdirEdit->setURL(config->readEntry("qtdocdir", QT_DOCDIR));
+    qtdocdirEdit->setURL(config->readPathEntry("qtdocdir", QT_DOCDIR));
     qtdocdirEdit->fileDialog()->setMode( KFile::Directory );
-    kdelibsdoxydirEdit->setURL(config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
+    kdelibsdoxydirEdit->setURL(config->readPathEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
     kdelibsdoxydirEdit->fileDialog()->setMode( KFile::Directory );
     
     config->setGroup("Index");
@@ -86,9 +86,9 @@ void DocTreeGlobalConfigWidget::storeConfig()
     KConfig *config = DocTreeViewFactory::instance()->config();
 
     config->setGroup("General");
-    config->writeEntry("qtdocdir", qtdocdirEdit->url());
-    config->writeEntry("kdelibsdocdir", kdelibsdoxydirEdit->url());
-
+    config->writePathEntry("qtdocdir", qtdocdirEdit->url());
+    config->writePathEntry("kdelibsdocdir", kdelibsdoxydirEdit->url());
+ 
     config->setGroup("Index");
     config->writeEntry("IndexKDevelop", indexKDevelopBox->isChecked());
     config->writeEntry("IndexQt", indexQtBox->isChecked());

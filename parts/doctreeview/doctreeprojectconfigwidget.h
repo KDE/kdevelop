@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2002 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2002 by Sebastian Kratzert                              *
+ *   skratzert@gmx.de                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,34 +9,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _DOCTREEGLOBALCONFIGWIDGET_H_
-#define _DOCTREEGLOBALCONFIGWIDGET_H_
+#ifndef _DOCTREEPROJECTCONFIGWIDGET_H_
+#define _DOCTREEPROJECTCONFIGWIDGET_H_
 
-#include "doctreeglobalconfigwidgetbase.h"
+#include "doctreeprojectconfigwidgetbase.h"
 
 class DocTreeViewWidget;
+class KDevProject;
 
-class DocTreeGlobalConfigWidget : public DocTreeGlobalConfigWidgetBase
+class DocTreeProjectConfigWidget : public DocTreeProjectConfigWidgetBase
 {
     Q_OBJECT
 
 public:
-    DocTreeGlobalConfigWidget( DocTreeViewWidget *widget, QWidget *parent, const char *name=0 );
-    ~DocTreeGlobalConfigWidget();
+    DocTreeProjectConfigWidget( DocTreeViewWidget *widget, QWidget *parent, KDevProject *project, const char *name=0 );
+    //~DocTreeProjectConfigWidget();
 
 public slots:
     void accept();
-
-private slots:
-    void updateIndexClicked();
-    void removeBookmarkClicked();
-    void addBookmarkClicked();
+   // void setProject(KDevProject* project);
 
 private:
     void readConfig();
     void storeConfig();
     
     DocTreeViewWidget *m_widget;
+    KDevProject *m_project;
 };
 
 #endif

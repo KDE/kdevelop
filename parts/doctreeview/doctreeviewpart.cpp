@@ -25,6 +25,7 @@
 #include <kaction.h>
 
 #include "kdevcore.h"
+#include "kdevproject.h"
 #include "kdevtoplevel.h"
 #include <kdevpartcontroller.h>
 
@@ -32,8 +33,8 @@
 #include "docindexdlg.h"
 #include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
-//#include "doctreeconfigwidget.h"
 #include "doctreeglobalconfigwidget.h"
+#include "doctreeprojectconfigwidget.h"
 
 
 DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStringList & )
@@ -47,6 +48,8 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              this, SLOT(configWidget(KDialogBase*)) );
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     
@@ -106,8 +109,8 @@ DocTreeViewPart::~DocTreeViewPart()
 void DocTreeViewPart::projectOpened()
 {
     m_widget->projectChanged(project());
-    if (m_indexDialog)
-        m_indexDialog->projectChanged();
+//    if (m_indexDialog)
+//        m_indexDialog->projectChanged();
 }
 
 
@@ -122,13 +125,22 @@ void DocTreeViewPart::configWidget(KDialogBase *dlg)
     QVBox *vbox;
 
     vbox = dlg->addVBoxPage(i18n("Documentation Tree"));
-    DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget(m_widget, vbox, "doc tree global config widget");
-
-    //vbox = dlg->addVBoxPage(i18n("Documentation Tree (II)"));
-    //DocTreeConfigWidget *w2 = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
+    DocTreeGlobalConfigWidget *w1 = 
+        new DocTreeGlobalConfigWidget(m_widget, vbox, "doc tree config widget");
 
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
-    //connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
+}
+
+
+void DocTreeViewPart::projectConfigWidget(KDialogBase *dlg) {
+    QVBox *vbox;
+
+    vbox = dlg->addVBoxPage(i18n("Project Documentation"));
+    DocTreeProjectConfigWidget *w1 = 
+        new DocTreeProjectConfigWidget(m_widget, vbox, project(), "doc tree project config");
+
+    connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
+    //kdDebug(9002) << "**** ProjectConfigWidget ****" << endl;
 }
 
 
@@ -144,8 +156,8 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             popup->insertSeparator();
             popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
-            popup->insertItem( i18n("Lookup in index: %1").arg(ident),
-                               this, SLOT(slotContextLookupIndex()) );
+//            popup->insertItem( i18n("Lookup in index: %1").arg(ident),
+//                               this, SLOT(slotContextLookupIndex()) );
             popup->insertItem( i18n("Goto manpage: %1").arg(ident),
                                this, SLOT(slotContextGotoManpage()) );
         }
@@ -157,15 +169,15 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             m_popupstr = selection;
             QString squeezed = KStringHandler::csqueeze(selection, 20);
             popup->insertSeparator();
-            popup->insertItem( i18n("Lookup in index: %1").arg(squeezed),
-                               this, SLOT(slotContextLookupIndex()) );
+//            popup->insertItem( i18n("Lookup in index: %1").arg(squeezed),
+//                               this, SLOT(slotContextLookupIndex()) );
             popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
         }
     }
 } 
 
-
+/*
 void DocTreeViewPart::slotDocumentationIndex()
 {
     if (!m_indexDialog)
@@ -173,7 +185,7 @@ void DocTreeViewPart::slotDocumentationIndex()
 
     m_indexDialog->show();
 }
-
+*/
 
 void DocTreeViewPart::slotSearchDocumentation()
 {
@@ -209,7 +221,7 @@ void DocTreeViewPart::slotContextGotoManpage()
 }
 
 
-void DocTreeViewPart::slotContextLookupIndex()
+/*void DocTreeViewPart::slotContextLookupIndex()
 {
     if (!m_indexDialog)
         m_indexDialog = new DocIndexDialog(this, m_widget, "doc index dialog");
@@ -217,13 +229,10 @@ void DocTreeViewPart::slotContextLookupIndex()
     m_indexDialog->lookup(m_popupstr);
     m_indexDialog->show();
 }
-
+*/
 
 void DocTreeViewPart::slotContextFulltextSearch()
 {
-    // We use the dialog for the interaction with htdig,
-    // but do not actually show the dialog. Looks like
-    // a hack, eh?
     DocSearchDialog dlg(m_widget, "doc search dialog");
     dlg.setSearchTerm(m_popupstr);
     if (dlg.performSearch()) {
