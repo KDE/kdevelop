@@ -31,6 +31,7 @@ EditorChooserWidget::EditorChooserWidget(QWidget *parent, const char *name)
 	}
 
 	load();
+	slotEditPartChanged(QString());
 }
 
 
@@ -49,7 +50,7 @@ void EditorChooserWidget::load()
     for (it = m_offers.begin(); it != m_offers.end(); ++it)
     {
         EditorPart->insertItem((*it)->name());
-        if ( (*it)->name() == editor )
+        if ( (*it)->desktopEntryName() == editor )
             index = current;
         ++current;
     }
@@ -83,7 +84,7 @@ void EditorChooserWidget::save()
     for (it = m_offers.begin(); it != m_offers.end(); ++it)
         if ( EditorPart->currentText() == (*it)->name() )
         {
-            config->writePathEntry("EmbeddedKTextEditor", (*it)->name());
+            config->writePathEntry("EmbeddedKTextEditor", (*it)->desktopEntryName());
         }
 
 	if ( reload->isChecked() )
@@ -119,6 +120,7 @@ void EditorChooserWidget::slotEditPartChanged( const QString & )
 			return;
 		}
 	}
+	external_changes_group->setEnabled( false );
 }
 
 
