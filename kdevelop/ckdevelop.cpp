@@ -985,6 +985,17 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        appl_process << exec_str;
        cerr << endl << "EXEC:" << exec_str;
     }
+    else if (prj->getProjectType().find("kde2", 0, false) != -1) {
+	//a KDE2 application
+	const QString oldGroup = config->group();
+	config->setGroup("QT2");
+	QString kde2dir =  QString("KDEDIR=") + config->readEntry("kde2dir") + " ";
+	config->setGroup(oldGroup);
+
+	appl_process << kde2dir << "./" + program;
+	cerr << endl << "EXEC:" << kde2dir << "./" + program;
+	o_tab_view->setCurrentTab(STDERR);
+    }
     else
     {
       appl_process << "./" + program;
