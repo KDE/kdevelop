@@ -105,7 +105,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   }
 
   d->m_dockButton = new QToolButton(f);
-  d->m_dockButton->setPixmap(QPixmap(sticky));
+  d->m_dockButton->setPixmap(QPixmap((const char **)sticky));
   d->m_dockButton->setFixedSize(12,12);
   d->m_dockButton->setToggleButton(true);
 
