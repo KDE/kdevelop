@@ -109,7 +109,7 @@ private:
     PropertyList m_detailedList;
 
     //machines cache for property types, machines will be deleted
-    QMap<int, Machine* > m_registeredForType;
+    QMap<QString, Machine* > m_registeredForType;
 
     PropertyItem *m_currentEditItem;
     PropertyWidget *m_currentEditWidget;

@@ -47,6 +47,14 @@ MultiProperty *PropertyList::operator[](const QString &name)
         return new MultiProperty(this);
 }
 
+MultiProperty *PropertyList::property( const QString &name )
+{
+	if (m_list.contains(name))
+		return m_list[name];
+	else 
+		return new MultiProperty(this);
+}
+
 void PropertyList::addProperty(Property *property)
 {
     if (property == 0)

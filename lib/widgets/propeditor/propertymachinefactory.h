@@ -89,7 +89,7 @@ private:
     virtual ~PropertyMachineFactory();
 
     //registered machines for property types
-    QMap<int, createMachine > m_registeredForType;
+    QMap<QString, createMachine > m_registeredForType;
 };
 
 }

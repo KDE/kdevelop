@@ -263,7 +263,7 @@ void PropertyEditor::addChildProperties(PropertyItem *parent)
 {
     MultiProperty *prop = parent->property();
     //force machine creation to get detailed properties appended to current multiproperty
-    if ( !m_registeredForType.contains(prop->type())
+    if ( !m_registeredForType.contains(prop->name())
         && (PropertyMachineFactory::getInstance()->hasDetailedEditors(prop->type())) )
     {
         //FIXME: find better solution
@@ -442,20 +442,20 @@ Machine *PropertyEditor::machine(MultiProperty *property)
     int type = property->type();
     QString name = property->name();
     QMap<QString, QVariant> values = property->valueList();
-    if (m_registeredForType[type] == 0)
+    if (m_registeredForType[name] == 0)
     {
-        m_registeredForType[type] = PropertyMachineFactory::getInstance()->machineForProperty(property);
-        connect(m_registeredForType[type]->propertyEditor, SIGNAL(propertyChanged(MultiProperty*, const QVariant&)),
-            this, SLOT(propertyChanged(MultiProperty*, const QVariant&)));
-        m_registeredForType[type]->propertyEditor->reparent(m_currentEditArea, 0, m_currentEditArea->childrenRect().topLeft());
-        m_registeredForType[type]->propertyEditor->hide();
+        m_registeredForType[name] = PropertyMachineFactory::getInstance()->machineForProperty(property);
+        connect(m_registeredForType[name]->propertyEditor, SIGNAL(propertyChanged(MultiProperty*, const QVariant&)),
+		this, SLOT(propertyChanged(MultiProperty*, const QVariant&)));
+        m_registeredForType[name]->propertyEditor->reparent(m_currentEditArea, 0, m_currentEditArea->childrenRect().topLeft());
+        m_registeredForType[name]->propertyEditor->hide();
     }
-    return m_registeredForType[type];
+    return m_registeredForType[name];
 }
 
 void PropertyEditor::clearMachineCache()
 {
-    for (QMap<int, Machine* >::iterator it = m_registeredForType.begin(); it != m_registeredForType.end(); ++it)
+    for (QMap<QString, Machine* >::iterator it = m_registeredForType.begin(); it != m_registeredForType.end(); ++it)
     {
         delete it.data();
     }
@@ -464,7 +464,7 @@ void PropertyEditor::clearMachineCache()
 
 void PropertyEditor::undo()
 {
-    if ((m_currentEditItem == 0) || (m_currentEditWidget == 0) 
+    if ((m_currentEditItem == 0) || (m_currentEditWidget == 0)
         || (!m_currentEditWidget->isVisible()))
         return;
     

@@ -94,6 +94,10 @@ public:
     /endcode
     @return @ref MultiProperty with given name.*/
     virtual MultiProperty *operator[](const QString &name);
+    /**Accesses a property by it's name. All property modifications are allowed
+    trough this method. For example, to set a value of a property
+    */
+    MultiProperty *property( const QString &name );
 
     /**Adds the property to the list to the "common" group.*/
     virtual void addProperty(Property *property);

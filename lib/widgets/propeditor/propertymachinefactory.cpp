@@ -75,9 +75,9 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
     int type = property->type();
     QString propertyName = property->name();
     QMap<QString, QVariant> valueList = property->valueList();
-    
-    if (m_registeredForType.contains(type))
-        return (*m_registeredForType[type])();
+
+    if (m_registeredForType.contains(propertyName))
+        return (*m_registeredForType[propertyName])();
 
     switch (type)
     {
