@@ -35,8 +35,8 @@
 #include "domutil.h"
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
+#include "urlutil.h"
 
-#include "urlfileutilities.h"
 #include "cvsentry.h"
 #include "changelog.h"
 #include "cvspart.h"
@@ -47,8 +47,6 @@
 #include "cvsform.h"
 #include "execcommand.h"
 #include "cvsoptionswidget.h"
-
-using namespace UrlFileUtilities;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Constants
@@ -422,7 +420,7 @@ void CvsPart::log( const QString& fileName )
     f->show();
     // Form will do all the work
     QString projectDir = project()->projectDirectory();
-    QString relPath = UrlFileUtilities::extractPathNameRelative( projectDir, fileName );
+    QString relPath = URLUtil::extractPathNameRelative( projectDir, fileName );
 
     f->start( projectDir, relPath );
 }

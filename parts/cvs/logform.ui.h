@@ -14,8 +14,6 @@
 #include <kurl.h>
 #include <kdebug.h>
 
-#include "urlfileutilities.h"
-
 using namespace std;
 
 void LogForm::init()

@@ -1,48 +1,53 @@
-/***************************************************************************
- *   Copyright (C) 2003 by Mario Scalas                                    *
- *   mario.scalas@libero.it                                                *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/****************************************************************************
+** Form interface generated from reading ui file './logform.ui'
+**
+** Created: Wed Jun 18 16:14:26 2003
+**      by: The User Interface Compiler ($Id$)
+**
+** WARNING! All changes made in this file will be lost!
+****************************************************************************/
 
 #ifndef LOGFORM_H
 #define LOGFORM_H
 
-class QStringList;
+#include <qvariant.h>
+#include <qwidget.h>
+
+class QVBoxLayout;
+class QHBoxLayout;
+class QGridLayout;
+class QTextBrowser;
 class QProcess;
 
-#include <logformbase.h>
-
-/**
-Implementation for the form displaying 'cvs log' output.
-
-@author KDevelop Authors
-*/
-class LogForm : public LogFormBase
+class LogForm : public QWidget
 {
-	Q_OBJECT
-public:
-	LogForm( QWidget *parent=0, const char *name=0, int flags=0 );
-	~LogForm();
+    Q_OBJECT
 
-	void start( const QString &workDir, const QStringList &pathsList );
+public:
+    LogForm( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ~LogForm();
+
+    QTextBrowser* contents;
 
 public slots:
-	void slotProcessExited();
-	void slotReadStdout();
-	void slotReadStderr();
-	void slotLinkClicked( const QString & link );
+    virtual void init();
+    virtual void destroy();
+    virtual void start( const QString & workDir, const QString & fn );
+    virtual void slotProcessExited();
+    virtual void slotReadStdout();
+    virtual void slotReadStderr();
+    virtual void setText( const QString & text );
+    virtual void linkClicked( const QString & link );
 
-private:
-	void setText( const QString& text );
+protected:
+    QString pathName;
+    QProcess* process;
 
-private:
-	QProcess *process;
-	QString pathName;
+    QVBoxLayout* LogFormLayout;
+
+protected slots:
+    virtual void languageChange();
+
 };
 
-#endif
+#endif // LOGFORM_H
