@@ -113,6 +113,7 @@ int main( int argc, char* argv[] )
 	    continue;
 	} else if( a == "-n" || a == "--nodep" ){
 	    driver.setResolveDependencesEnabled( false );
+            continue;
 	}
 
 	QFile f( argv[i] );
