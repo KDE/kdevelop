@@ -210,7 +210,7 @@ void CKDevelop::initKDlgMenuBar(){
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
   kdlg_debug_menu = new QPopupMenu;

@@ -385,13 +385,21 @@ public:
   /** Enter a pid and get the debugger to attach to it */
   void slotDebugAttach();
   /** Set the internal debugger arguments */
-  void slotDebugSetArgs();
+  void slotDebugRunWithArgs();
   /** Setect a core file and examine the contents with the debugger */
   void slotDebugExamineCore();
   /** Allow the user to select an arbitary executable to debug */
   void slotDebugNamedFile();
   /** Intial debugger setup */
   void setupInternalDebugger();
+
+  void slotDebugRunToCursor();
+  void slotDebugStepInto();
+  void slotDebugStepIntoIns();
+  void slotDebugStepOver();
+  void slotDebugStepOverIns();
+  void slotDebugBreakInto();
+  void slotDebugStepOutOff();
 
   ////////////////////////
   // TOOLS-Menu entries

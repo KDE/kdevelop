@@ -850,6 +850,59 @@ void CKDevelop::slotDebugActivator(int id)
   }
 }
 
+void CKDevelop::slotDebugRunToCursor()
+{
+  if (!dbgController)
+    return;
+
+  edit_widget->slotRunToCursor();
+}
+
+void CKDevelop::slotDebugStepInto()
+{
+  if (!dbgController)
+    return;
+
+  dbgController->slotStepInto();
+}
+
+void CKDevelop::slotDebugStepIntoIns()
+{
+  if (!dbgController)
+    return;
+  dbgController->slotStepIntoIns();
+}
+
+void CKDevelop::slotDebugStepOver()
+{
+  if (!dbgController)
+    return;
+  dbgController->slotStepOver();
+}
+
+void CKDevelop::slotDebugStepOverIns()
+{
+  if (!dbgController)
+    return;
+
+  dbgController->slotStepOverIns();
+}
+
+void CKDevelop::slotDebugBreakInto()
+{
+  if (!dbgController)
+    return;
+  dbgController->slotBreakInto();
+}
+
+void CKDevelop::slotDebugStepOutOff()
+{
+  if (!dbgController)
+    return;
+
+  dbgController->slotStepOutOff();
+}
+
 void CKDevelop::slotDebugRun()
 {
   if (!dbgController)
@@ -1021,7 +1074,7 @@ void CKDevelop::slotDebugAttach()
 }
 
 
-void CKDevelop::slotDebugSetArgs()
+void CKDevelop::slotDebugRunWithArgs()
 {
   QString args=prj->getDebugArgs();
   if (args.isEmpty())

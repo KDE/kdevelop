@@ -467,6 +467,56 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
   accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast()) );
 
+  // Debugger startups
+  accel->insertItem( i18n("Debug start"), "DebugStart", (unsigned int) 0);
+  accel->connectItem( "DebugStart", this, SLOT(slotBuildDebug()), true, ID_DEBUG_START);
+
+  accel->insertItem( i18n("Debug start other"), "DebugStartOther", (unsigned int) 0);
+  accel->connectItem( "DebugStartOther", this, SLOT(slotDebugNamedFile()), true, ID_DEBUG_START_OTHER);
+
+  accel->insertItem( i18n("Debug start with args"), "DebugRunWithArgs", (unsigned int) 0);
+  accel->connectItem( "DebugRunWithArgs", this, SLOT(slotDebugRunWithArgs()), true, ID_DEBUG_SET_ARGS);
+
+  accel->insertItem( i18n("Debug examine core"), "DebugExamineCore", (unsigned int) 0);
+  accel->connectItem( "DebugExamineCore", this, SLOT(slotDebugExamineCore()), true, ID_DEBUG_CORE);
+
+  accel->insertItem( i18n("Debug other executable"), "DebugOtherExec", (unsigned int) 0);
+  accel->connectItem( "DebugOtherExec", this, SLOT(slotDebugNamedFile()), true, ID_DEBUG_NAMED_FILE);
+
+  accel->insertItem( i18n("Debug attach"), "DebugAttach", (unsigned int) 0);
+  accel->connectItem( "DebugAttach", this, SLOT(slotDebugAttach()), true, ID_DEBUG_ATTACH);
+
+  // Debugger actions
+  accel->insertItem( i18n("Debug run"), "DebugRun", (unsigned int) 0);
+  accel->connectItem( "DebugRun", this, SLOT(slotDebugRun()), true, ID_DEBUG_RUN );
+
+  accel->insertItem( i18n("Debug run to cursor"), "DebugRunCursor", (unsigned int) 0);
+  accel->connectItem( "DebugRunCursor", this, SLOT(slotDebugRun()), true, ID_DEBUG_RUN_CURSOR );
+
+  accel->insertItem( i18n("Debug stop"), "DebugStop", (unsigned int) 0);
+  accel->connectItem( "DebugStop", this, SLOT(slotDebugStop()), true, ID_DEBUG_STOP);
+
+  accel->insertItem( i18n("Debug step into"), "DebugStepInto", (unsigned int) 0);
+  accel->connectItem( "DebugStepInto", this, SLOT(slotDebugStepInto()), true, ID_DEBUG_STEP);
+
+  accel->insertItem( i18n("Debug step into instr"), "DebugStepIntoInstr", (unsigned int) 0);
+  accel->connectItem( "DebugStepIntoInstr", this, SLOT(slotDebugStepIntoInstr()), true, ID_DEBUG_STEP_INST);
+
+  accel->insertItem( i18n("Debug step over"), "DebugStepOver", (unsigned int) 0);
+  accel->connectItem( "DebugStepOver", this, SLOT(slotDebugStepOver()), true, ID_DEBUG_NEXT);
+
+  accel->insertItem( i18n("Debug step over instr"), "DebugStepOverInstr", (unsigned int) 0);
+  accel->connectItem( "DebugStepOverInstr", this, SLOT(slotDebugStepOverInstr()), true, ID_DEBUG_NEXT_INST);
+
+  accel->insertItem( i18n("Debug step out"), "DebugStepOut", (unsigned int) 0);
+  accel->connectItem( "DebugStepOut", this, SLOT(slotDebugStepOut()), true, ID_DEBUG_FINISH);
+
+  accel->insertItem( i18n("Debug viewers"), "DebugViewer", (unsigned int) 0);
+  accel->connectItem( "DebugViewer", this, SLOT(slotDebugMemview()), true, ID_DEBUG_MEMVIEW);
+
+  accel->insertItem( i18n("Debug interrupt"), "DebugInterrupt", (unsigned int) 0);
+  accel->connectItem( "DebugInterrupt", this, SLOT(slotDebugInterrupt()), true, ID_DEBUG_BREAK_INTO);
+
   accel->readSettings(0, false);
 }
 
@@ -663,7 +713,7 @@ void CKDevelop::initMenuBar(){
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
   debug_menu = new QPopupMenu;
@@ -881,7 +931,7 @@ void CKDevelop::initToolBar(){
   debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
   debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+  debugToolPopup->insertItem(Icon("debugger.xpm"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
   connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
@@ -909,12 +959,12 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
 
   QPopupMenu* stepOverMenu = new QPopupMenu();
-  stepOverMenu->insertItem(Icon("dbgnextinst.xpm"),i18n("Step over instr."),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_NEXT_INST);
+  stepOverMenu->insertItem(Icon("dbgnextinst.xpm"),i18n("Step over instr."),this,SLOT(slotDebugStepOverIns()),0,ID_DEBUG_NEXT_INST);
   connect(stepOverMenu, SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_NEXT, stepOverMenu);
 
   QPopupMenu* stepIntoMenu = new QPopupMenu();
-  stepIntoMenu->insertItem(Icon("dbgstepinst.xpm"),i18n("Step into instr."),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_STEP_INST);
+  stepIntoMenu->insertItem(Icon("dbgstepinst.xpm"),i18n("Step into instr."),this,SLOT(slotDebugStepIntoIns()),0,ID_DEBUG_STEP_INST);
   connect(stepIntoMenu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   toolBar()->setDelayedPopup(ID_DEBUG_STEP, stepIntoMenu);
 
