@@ -25,6 +25,7 @@
 #define ID             262
 #define CLCL           263
 #define CPCONST        264
+#define CPVOLATILE     265
 #define CPUNION        267
 #define STRING         268
 #define CPSTATIC       269
@@ -40,6 +41,7 @@
 #define CPTEMPLATE     279
 #define NUM            280
 #define CPTHROW        281
+#define CPNAMESPACE      282
 
 typedef const char * YYSTYPE;
 
