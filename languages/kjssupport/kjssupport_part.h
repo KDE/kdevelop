@@ -24,8 +24,9 @@
 #include <kdevelop/kdevplugin.h>
 #include <kdevelop/codemodel.h>
 #include <kdevelop/kdevlanguagesupport.h>
-#include <qstringlist.h>
 #include <kdialogbase.h>
+#include <qstringlist.h>
+#include <qdict.h>
 
 namespace KJSEmbed
 {
@@ -35,6 +36,10 @@ class KJSConsoleWidget;
 
 class KAction;
 class KJSProblems;
+class JSCodeCompletion;
+
+class typeProperty;
+
 
 class kjsSupportPart : public KDevLanguageSupport
 {
@@ -66,6 +71,8 @@ class kjsSupportPart : public KDevLanguageSupport
 		KAction *m_build;
 		KJSEmbed::KJSEmbedPart *m_js;
 		KJSProblems *m_problemReporter;
+		QDict<typeProperty> m_typeMap;
+		JSCodeCompletion *m_cc;
 };
 
 

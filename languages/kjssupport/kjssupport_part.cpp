@@ -43,9 +43,19 @@
 
 #include "kjssupport_part.h"
 #include "kjsproblems.h"
+#include "jscodecompletion.h"
 
 typedef KGenericFactory<kjsSupportPart> kjsSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevkjssupport, kjsSupportFactory( "kdevkjssupport" ) );
+
+
+class typeProperty
+{
+	public:
+		QString type;
+		QString name;
+		int depth;
+};
 
 kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringList& )
 : KDevLanguageSupport("KDevkjsSupport", "JavaScript", parent, name ? name : "kjsSupportPart" )
@@ -75,12 +85,13 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
         m_problemReporter = new KJSProblems( this, 0, "problems" );
 	m_problemReporter->setIcon( SmallIcon("info") );
 	mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("Problem reporter"));
-
+	m_cc = new JSCodeCompletion();
     }
 
 
 kjsSupportPart::~kjsSupportPart()
 {
+	delete m_cc;
 	delete m_build;
 	delete m_js;
 }
@@ -205,6 +216,7 @@ void kjsSupportPart::parse()
 void kjsSupportPart::slotActivePartChanged(KParts::Part *part)
 {
 	kdDebug() << "Changeing active part..." << endl;
+	m_cc->setActiveEditorPart(part);
 }
 
 /*!
@@ -242,6 +254,7 @@ void kjsSupportPart::parse(const QString &fileName)
 		QRegExp classVarRx("this\\.([_a-zA-Z\\d]+)");
 		QRegExp classMethRx("this\\.([_a-zA-Z\\d]+)[\\s]*=[\\s]*function(\\([^){}\\n\\r]*\\))");
 		QRegExp methRx("function[\\s]+([_a-zA-Z\\d]+[\\s]*\\([^){}\\n\\r]*\\))");
+		QRegExp allocRx("([_\\d\\w]+)[\\s]*=[\\s]*new[\\s]*([_\\d\\w]+)");
 		
                 while (!stream.atEnd())
                 {
@@ -278,6 +291,21 @@ void kjsSupportPart::parse(const QString &fileName)
 				}
                                 addAttribute(classVarRx.cap(1), currentClass, lineNo);
                         }
+			
+			if( allocRx.search(line) != -1 )
+			{
+				QString varName = allocRx.cap(1);
+				QString varType = allocRx.cap(2);
+				
+				typeProperty *type = new typeProperty();
+				type->depth = depth;
+				type->name = varName;
+				type->type = varType;
+				
+				m_typeMap.insert(varName, type);
+				kdDebug() << "Adding " << varName << " of type " << varType << " at scope " << depth << endl;
+				
+			}
 			
 			if( line.contains("{") )
 				++depth;

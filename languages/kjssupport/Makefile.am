@@ -3,7 +3,7 @@ INCLUDES = $(all_includes)
 kde_module_LTLIBRARIES = libkdevkjssupport.la
 libkdevkjssupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevkjssupport_la_LIBADD = -lkjsembed -lkdevelop
-libkdevkjssupport_la_SOURCES = kjssupport_part.cpp kjsproblems.cpp
+libkdevkjssupport_la_SOURCES = kjssupport_part.cpp kjsproblems.cpp jscodecompletion.cpp
 
 METASOURCES = AUTO
 
