@@ -1,13 +1,8 @@
 [Desktop Entry]
 Type=Service
 Name=KDevPCSCustomImporter
-Name[da]=KDevelop brugerdefineret importør
-Name[de]=PCS-Import (KDevelop)
-Name[hi]=के-डेव-कस्टम-इम्पोर्टर
-Name[pl]=KDevWłasnyImport
-Name[sv]=KDevelop egen import
-Name[ta]=கெடெவ் கஸ்டம் இறக்குமதியாளர்
-Name[xx]=xxKDevCustomImporterxx
+Name[da]=KDevelop brugerdefineret PCS-importør
+Name[sv]=KDevelop egen import av PCS
 Comment=KDevelop Custom Directory PCS Importer
 Comment[ca]=Importador PCS de directori personalitzat per a KDevelop
 Comment[da]=KDevelop brugerdefineret mappe-PCS-importør
@@ -18,6 +13,7 @@ Comment[fr]=Importation PCS de dossier personnalisé pour KDevelop
 Comment[hi]=के-डेवलप मनपसंद डिरेक्ट्री पीसीएस आयातक
 Comment[hu]=KDevelop egyéni könyvtár PCS-importáló
 Comment[it]=Directory per l'importatore personalizzato PCS di KDevelop
+Comment[ja]=KDevelop カスタムディレクトリ PCS インポータ
 Comment[nb]=KDevelop Custom Directory PCS-importverktøy
 Comment[nl]=KDevelop PCS Importer voor eigen mappen
 Comment[pl]=Własny program do importowania PCS dla KDevelopa
