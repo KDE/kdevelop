@@ -336,6 +336,15 @@ void CustomProjectPart::populateProject()
             QPtrListIterator<QFileInfo> it(*dirEntries);
             for (; it.current(); ++it) {
                 QString fileName = it.current()->fileName();
+                QString path = it.current()->absFilePath();
+                if (fileName == "." || fileName == ".."){
+                    continue;
+                }
+                if (it.current()->isDir()) {
+                      kdDebug(9025) << "Pushing: " << path << endl;
+                      s.push(path);
+                      continue;
+                }
                 if ((!fileName.endsWith("~"))
                     && ((fileName.endsWith(".java"))
                         || (fileName.endsWith(".h"))
@@ -351,16 +360,9 @@ void CustomProjectPart::populateProject()
                         || (fileName.endsWith(".cxx"))
                         || (fileName.startsWith("Makefile"))))  //Makefile, Makefile.am, Makefile.in
                 {
-                   QString path = it.current()->absFilePath();
-                   if (it.current()->isDir()) {
-                      kdDebug(9025) << "Pushing: " << path << endl;
-                      s.push(path);
-                   }
-                   else {
-                      kdDebug(9025) << "Adding: " << path << endl;
-                      m_sourceFiles.append(path.mid(prefixlen));
-                   }
-                }
+                    kdDebug(9025) << "Adding: " << path << endl;
+                    m_sourceFiles.append(path.mid(prefixlen));
+                 }
             }
         }
     } while (!s.isEmpty());
