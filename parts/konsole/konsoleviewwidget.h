@@ -13,11 +13,7 @@ class KParts::ReadOnlyPart;
 class QVBoxLayout;
 
 
-#ifdef NEW_EDITOR
 #include "keditor/editor.h"
-#else
-namespace KEditor { class Document; }
-#endif
 
 
 class KonsoleViewWidget : public QWidget
@@ -38,7 +34,6 @@ public slots:
 private slots:
 
   void documentActivated(KEditor::Document *doc);
-  void wentToSourceFile(const QString &fileName);
   void partDestroyed();
 
  

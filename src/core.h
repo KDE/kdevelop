@@ -22,14 +22,7 @@ class KDevApi;
 class KDevFactory;
 class DocumentationPart;
 
-#ifdef NEW_EDITOR
 #include "keditor/editor.h"
-class TextEditorDocument;
-#else
-class TextEditorDocument;
-class EditorPart;
-namespace KEditor { class Document; };
-#endif
 
 
 class Core : public KDevCore
@@ -56,29 +49,20 @@ protected:
     virtual void running(KDevPart *which, bool runs);
     virtual void message(const QString &str);
     virtual KParts::PartManager *partManager() const { return manager; };
-#ifndef NEW_EDITOR
-    virtual TextEditorView *activeEditorView();
-#endif
 
-#ifdef NEW_EDITOR
     KEditor::Editor *editor();
-#endif
         
 private slots:
     void activePartChanged(KParts::Part *part);
     void docPartDestroyed();
     void docContextMenu(QPopupMenu *popup, const QString &url, const QString &selection);
-    void editorPartDestroyed();
     void editorContextMenu(QPopupMenu *popup, const QString &linestr, int col);
     void wantsToQuit();
     void openFileInteractionFinished(const QString &fileName);
-    void saveFileInteractionFinished(const QString &fileName);
 
     void message(KEditor::Document *doc, const QString &str);
         
     void slotOpenFile();
-    void slotSaveFile();
-    void slotSaveFileAs();
     void slotCloseWindow();
     void slotSplitVertically();
     void slotSplitHorizontally();
@@ -88,7 +72,6 @@ private slots:
     void slotProjectClose();
     void slotProjectImport();
     void slotBufferSelected();
-    void slotTextEditorBufferSelected(TextEditorDocument *doc);
     void slotDocumentationBufferSelected(const KURL &url);
     void slotProjectOptions();
     void slotSettingsCustomize();
@@ -109,11 +92,7 @@ private:
     void removeGlobalParts();
     
     DocumentationPart *createDocumentationPart();
-#ifdef NEW_EDITOR
     KEditor::Document *createDocument(const KURL &url);
-#else
-    EditorPart *createEditorPart();
-#endif
     void updateBufferMenu();
     void splitWindow(Orientation orient);
  
@@ -134,13 +113,9 @@ private:
     QList<KDevPart> runningParts;
     
     QList<DocumentationPart> docParts;
-#ifdef NEW_EDITOR
+    
     KEditor::Editor *_editor;
-#else
-    QList<EditorPart> editorParts;
-    QList<TextEditorDocument> editedDocs;
-    QList<KAction> bufferActions;
-#endif
+
     KURL::List viewedURLs;
     QString projectFile;
 };

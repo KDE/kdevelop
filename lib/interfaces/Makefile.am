@@ -1,6 +1,6 @@
 SUBDIRS = keditor 
 
-INCLUDES = $(all_includes) -I$(top_srcdir)/lib/kwrite
+INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la
 

@@ -9,13 +9,10 @@
 #include "kdevpart.h"
 
 class KDialogBase;
-class TextEditorView;
 
-#ifdef NEW_EDITOR
 namespace KEditor {
-class Editor;
+  class Editor;
 }
-#endif
 
 
 class Context
@@ -157,17 +154,10 @@ public:
     virtual KParts::PartManager *partManager() const = 0;	
 
 
-#ifdef NEW_EDITOR
     /**
      * The interface to the editor used
      */
     virtual KEditor::Editor *editor() = 0;
-#else
-    /**
-     * The active editor view, or 0 if no editor is currently focused.
-     */
-    virtual TextEditorView *activeEditorView() = 0;
-#endif
 	
 signals:
 
@@ -192,11 +182,6 @@ signals:
      * Emitted when a file has been loaded.
      */
     void loadedFile(const QString &fileName);
-    /**
-     * A new file has been displayed in the editor.
-     * Necessary??
-     */
-    void wentToSourceFile(const QString &fileName);
     /**
      * The user has toggled a breakpoint.
      */

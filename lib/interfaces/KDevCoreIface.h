@@ -23,7 +23,6 @@ k_dcop:
      */
     void gotoDocumentationFile(const QString &url, int embed);
     void gotoSourceFile(const QString &fileName, int lineNum, int embed);
-    DCOPRef activeEditorView();
 
 private slots:
     void forwardProjectOpened();

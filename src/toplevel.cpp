@@ -172,11 +172,7 @@ void TopLevel::embedDocumentWidget(QWidget *w, QWidget *old)
     if (old) {
         kdDebug(9000) << "replacing widget" << endl;
         splitter->replaceChild(old, w);
-#ifdef NEW_EDITOR
-// TODO: WHAT WAS THIS?!?        delete old;
-#else
-        delete old;
-#endif
+    // TODO: WHAT WAS THIS?!?        delete old;
     } else {
         kdDebug(9000) << "adding widget" << endl;
         splitter->addChild(w);

@@ -12,11 +12,7 @@ class KDialogBase;
 #include <kdevpart.h>
 
 
-#ifdef NEW_EDITOR
 #include "keditor/editor.h"
-#else
-namespace KEditor { class Document; }
-#endif
 
 
 class AStylePart : public KDevPart
@@ -31,7 +27,6 @@ public:
 
 private slots:
 
-  void activePartChanged(KParts::Part *newPart);
   void documentActivated(KEditor::Document *doc);
 		  
   void beautifySource();
