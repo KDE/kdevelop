@@ -4,46 +4,40 @@
 
 #include "kdevlanguagesupport.h"
 
-
-class JavaClassParser;
-
+class JavaSupportPartData;
 
 class JavaSupportPart : public KDevLanguageSupport
 {
-  Q_OBJECT
-
+    Q_OBJECT
 public:
-   
-  JavaSupportPart(QObject *parent, const char *name, const QStringList &);
-  ~JavaSupportPart();
- 
- 
+    JavaSupportPart(QObject *parent, const char *name, const QStringList &);
+    ~JavaSupportPart();
+
+    void parseContents( const QString& contents, const QString& fileName );
+
 protected:
+    Features features();
+    QStringList fileFilters();
+    QStringList fileExtensions();
 
-  Features features();
-  QStringList fileFilters();
-
-  void addClass();
-
+    void addClass();
 
 private slots:
+    void projectOpened();
+    void projectClosed();
 
-  void projectOpened();
-  void projectClosed();
+    void addedFileToProject(const QString &fileName);
+    void removedFileFromProject(const QString &fileName);
 
-  void addedFileToProject(const QString &fileName);
-  void removedFileFromProject(const QString &fileName);
-  
-  void initialParse();
-
+    void initialParse();
+    void savedFile( const QString& );
 
 private:
+    void maybeParse(const QString &fileName);
+    void parse(const QString &fileName);
 
-  void maybeParse(const QString &fileName);
-  void parse(const QString &fileName);
- 
-  JavaClassParser *m_parser;
-
+private:
+    JavaSupportPartData* d;
 };
 
 

@@ -15,4 +15,5 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces sourceinfo util project widgets qextmdi
+SUBDIRS = interfaces sourceinfo util project widgets qextmdi antlr
+

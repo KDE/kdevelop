@@ -1,169 +1,274 @@
+
 #include <qfileinfo.h>
 #include <qtimer.h>
-
+#include <qlistview.h>
 
 #include <kgenericfactory.h>
 #include <kapp.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <kapplication.h>
+#include <kstatusbar.h>
 
+#include <fstream>
+#include <strstream>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevtoplevel.h"
+#include "kdevproject.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
-
-
-#include "javaclassparser.h"
 #include "addclass.h"
-
-
 #include "javasupportpart.h"
+#include "problemreporter.h"
+
+#include "JavaLexer.hpp"
+#include "JavaRecognizer.hpp"
+#include "JavaStoreWalker.hpp"
 
 
 typedef KGenericFactory<JavaSupportPart> JavaSupportPartFactory;
 
 K_EXPORT_COMPONENT_FACTORY(libkdevjavasupport, JavaSupportPartFactory("kdevjavasupport"));
 
+
+struct JavaSupportPartData{
+    ProblemReporter* problemReporter;
+
+    JavaSupportPartData()
+        : problemReporter( 0 )
+        {}
+};
+
 JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStringList &)
-  : KDevLanguageSupport(parent, name), m_parser(0)
+    : KDevLanguageSupport(parent, name), d( new JavaSupportPartData() )
 {
-  setInstance(JavaSupportPartFactory::instance());
+    setInstance(JavaSupportPartFactory::instance());
 
-  setXMLFile("javasupportpart.rc");
+    d->problemReporter = new ProblemReporter( this );
 
-  connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
-  connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
+    setXMLFile("javasupportpart.rc");
+
+    connect(core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()));
+    connect(core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()));
+
+    connect( partController(), SIGNAL(savedFile(const QString&)),
+             this, SLOT(savedFile(const QString&)) );
+
+    topLevel()->embedOutputView( d->problemReporter, i18n("Problems") );
 }
 
 
 JavaSupportPart::~JavaSupportPart()
 {
+    topLevel()->removeView( d->problemReporter );
+    delete( d->problemReporter );
+
+    delete( d );
+    d = 0;
 }
 
 
 KDevLanguageSupport::Features JavaSupportPart::features()
 {
-  return KDevLanguageSupport::Features(Classes | NewClass);
+    return KDevLanguageSupport::Features(Classes | NewClass);
 }
 
 
 QStringList JavaSupportPart::fileFilters()
 {
-  QStringList r;
-  r << "*.java";
-  return r;
+    QStringList r;
+    r << "*.java";
+    return r;
 }
 
 
 void JavaSupportPart::projectOpened()
 {
-  connect(project(), SIGNAL(addedFileToProject(const QString &)), this, SLOT(addedFileToProject(const QString &)));
-  connect(project(), SIGNAL(removedFileFromProject(const QString &)), this, SLOT(removedFileFromProject(const QString &)));
-	
-  m_parser = new JavaClassParser(classStore());
+    connect(project(), SIGNAL(addedFileToProject(const QString &)),
+            this, SLOT(addedFileToProject(const QString &)));
+    connect(project(), SIGNAL(removedFileFromProject(const QString &)),
+            this, SLOT(removedFileFromProject(const QString &)));
 
-  QTimer::singleShot(0, this, SLOT(initialParse()));
+    QTimer::singleShot(0, this, SLOT(initialParse()));
 }
 
 
 void JavaSupportPart::projectClosed()
 {
-  delete m_parser;
-  m_parser = 0;
 }
 
 
 void JavaSupportPart::initialParse()
 {
-  kdDebug() << "initialParse()" << endl;
+    kdDebug() << "initialParse()" << endl;
 
-  if (project()) 
-  {
-    kapp->setOverrideCursor(waitCursor);
-   
-    // TODO: Progress indicator!
+    if (project())
+    {
+        kapp->setOverrideCursor(waitCursor);
 
-    QStringList files = project()->allFiles();
-    for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) 
-      maybeParse(*it);
-  
-    emit updatedSourceInfo();
-    
-    kapp->restoreOverrideCursor();
-  } 
+        // TODO: Progress indicator!
+
+        QStringList files = project()->allFiles();
+        for (QStringList::Iterator it = files.begin(); it != files.end() ;++it){
+            maybeParse(*it);
+            kapp->processEvents( 500 );
+        }
+
+        emit updatedSourceInfo();
+
+        kapp->restoreOverrideCursor();
+        topLevel()->statusBar()->message( i18n("Found %1 problems").arg(d->problemReporter->childCount()) );
+    }
 }
 
+QStringList JavaSupportPart::fileExtensions()
+{
+    return QStringList() << "java";
+}
 
 void JavaSupportPart::maybeParse(const QString &fileName)
 {
-  kdDebug() << "Maybe parse: " << fileName << endl;
+    kdDebug() << "Maybe parse: " << fileName << endl;
 
-  QFileInfo fi(fileName);
-  if (fi.extension() == "java")
-  {
-    classStore()->removeWithReferences(fileName);
-    parse(fileName);
-  }
+    if( !fileExtensions().contains( QFileInfo( fileName ).extension() ) )
+        return;
+
+    topLevel()->statusBar()->message( i18n("Parsing file: %1").arg(fileName) );
+    classStore()->removeWithReferences( fileName );
+    parse( fileName );
 }
 
 
 void JavaSupportPart::addedFileToProject(const QString &fileName)
 {
-  kdDebug() << "ADDED: " << project()->projectDirectory() + "/" + fileName << endl;
-  
-  maybeParse(project()->projectDirectory() + "/" + fileName);
-
-  emit updatedSourceInfo();
+    QString path = project()->projectDirectory() + "/" + fileName;
+    maybeParse( path );
+    emit updatedSourceInfo();
 }
 
 
 void JavaSupportPart::removedFileFromProject(const QString &fileName)
 {
-  kdDebug() << "REMOVED: " << project()->projectDirectory() + "/" + fileName << endl;
-	
-  if (m_parser)
-    m_parser->removeWithReferences(project()->projectDirectory() + "/" + fileName);
-
-  emit updatedSourceInfo();
-
-  m_parser->removeWithReferences("/home/mhk/platform/Services/TimeStamp/src/org/kde/koala/TestClass.java");
-  classStore()->out();
+    QString path = project()->projectDirectory() + "/" + fileName;
+    classStore()->removeWithReferences(path);
+    emit updatedSourceInfo();
 }
 
 
 void JavaSupportPart::parse(const QString &fileName)
 {
-  kdDebug() << "PARSE: " << fileName << endl;
+    kdDebug() << "JavaSupportPart::parse() -- " << fileName << endl;
 
-  if (m_parser)
-    m_parser->parse(fileName);
+
+    std::ifstream stream( fileName );
+    QCString _fn = fileName.utf8();
+    std::string fn( _fn.data() );
+
+    JavaLexer lexer( stream );
+    lexer.setFilename( fn );
+    lexer.setProblemReporter( d->problemReporter );
+
+    JavaRecognizer parser( lexer );
+    parser.setFilename( fn );
+    parser.setProblemReporter( d->problemReporter );
+
+    try{
+        lexer.resetErrors();
+        parser.resetErrors();
+
+        parser.compilationUnit();
+        int errors = lexer.numberOfErrors() + parser.numberOfErrors();
+        antlr::RefAST ast = parser.getAST();
+
+        if( errors == 0 && ast != antlr::nullAST ){
+            JavaStoreWalker walker;
+            walker.setFilename( fn );
+            walker.setClassStore( classStore() );
+            walker.compilationUnit( ast );
+        }
+
+    } catch( antlr::ANTLRException& ex ){
+        kdDebug() << "*exception*: " << ex.toString().c_str() << std::endl;
+        d->problemReporter->reportError( ex.what(),
+                                         fileName,
+                                         lexer.getLine(),
+                                         lexer.getColumn() );
+    }
 }
+
+void JavaSupportPart::parseContents( const QString& contents, const QString& fileName )
+{
+    kdDebug() << "JavaSupportPart::parseContents() -- " << fileName << endl;
+
+
+    QCString _fn = fileName.utf8();
+    std::string fn( _fn.data() );
+
+    QCString text = contents.utf8();
+    std::istrstream stream( text );
+
+    JavaLexer lexer( stream );
+    lexer.setFilename( fn );
+    lexer.setProblemReporter( d->problemReporter );
+
+    JavaRecognizer parser( lexer );
+    parser.setFilename( fn );
+    parser.setProblemReporter( d->problemReporter );
+
+    try{
+        lexer.resetErrors();
+        parser.resetErrors();
+
+        parser.compilationUnit();
+        int errors = lexer.numberOfErrors() + parser.numberOfErrors();
+
+    } catch( antlr::ANTLRException& ex ){
+        kdDebug() << "*exception*: " << ex.toString().c_str() << std::endl;
+        d->problemReporter->reportError( ex.what(),
+                                         fileName,
+                                         lexer.getLine(),
+                                         lexer.getColumn() );
+    }
+}
+
 
 
 void JavaSupportPart::addClass()
 {
-  static AddClassInfo info;
-  kdDebug() << "New JAVA class" << endl;
+    static AddClassInfo info;
+    kdDebug() << "New JAVA class" << endl;
 
-  AddClass ac;
+    AddClass ac;
 
-  info.className = "org.kde.koala.TestClass";
-  info.projectDir = project()->projectDirectory();
-  info.sourceDir = "src";
+    info.className = "org.kde.koala.TestClass";
+    info.projectDir = project()->projectDirectory();
+    info.sourceDir = "src";
 
-  ac.setInfo(info);
-  
-  QStringList baseClasses = classStore()->getSortedClassNameList();
-  baseClasses.prepend("java.lang.Object");
-  ac.setBaseClasses(baseClasses);
-  
-  if (ac.showDialog())
-  {
-    info = ac.info();
+    ac.setInfo(info);
 
-    if (ac.generate())
-      project()->addFile(info.javaFileName());
-  }
+    QStringList baseClasses = classStore()->getSortedClassNameList();
+    baseClasses.prepend("java.lang.Object");
+    ac.setBaseClasses(baseClasses);
+
+    if (ac.showDialog())
+    {
+        info = ac.info();
+
+        if (ac.generate())
+            project()->addFile(info.javaFileName());
+    }
 }
 
+void JavaSupportPart::savedFile( const QString& fileName )
+{
+    kdDebug() << "JavaSupportPart::savedFile()" << endl;
+
+    if (project()->allFiles().contains(fileName)) {
+        maybeParse( fileName );
+        emit updatedSourceInfo();
+    }
+}
 
 #include "javasupportpart.moc"
