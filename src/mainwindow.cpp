@@ -266,8 +266,16 @@ void MainWindow::init()
 
 
   if (!isFakingSDIApplication()) {
-    menuBar()->removeItem( menuBar()->idAt(menuBar()->count()-4));
-    menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, menuBar()->count()-1);
+    unsigned int count = menuBar()->count();
+    unsigned int idx;
+    for (idx = 0; idx < count; idx++) {
+      int id = menuBar()->idAt(idx);
+      if (menuBar()->text(id) == i18n("&Window")) {
+        menuBar()->removeItem(id);
+        break;
+      }
+    }
+    menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
   }
 
   if ( PluginController::pluginServices().isEmpty() ) {
