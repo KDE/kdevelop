@@ -66,36 +66,32 @@ static const char *keywords[] = {
 PythonColorizer::PythonColorizer( QEditor* editor )
     : QSourceColorizer( editor )
 {
-    // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
     context0->appendChild( new RegExpHLItem( "#.*", Comment, 0 ) );
-    context0->appendChild( new StringHLItem( "'''", String, 4 ) );
-    context0->appendChild( new StringHLItem( "\"\"\"", String, 5 ) );
-    context0->appendChild( new StringHLItem( "\"", String, 2 ) );
-    context0->appendChild( new StringHLItem( "'", String, 3 ) );
+    context0->appendChild( new RegExpHLItem( "\\s+", Normal, 0 ) );
+    context0->appendChild( new StringHLItem( "'''", String, 3 ) );
+    context0->appendChild( new StringHLItem( "\"\"\"", String, 4 ) );
+    context0->appendChild( new StringHLItem( "\"", String, 1 ) );
+    context0->appendChild( new StringHLItem( "'", String, 2 ) );
     context0->appendChild( new KeywordsHLItem( keywords, Keyword, 0 ) );
     context0->appendChild( new RegExpHLItem( "\\d+", Constant, 0 ) );
-    context0->appendChild( new RegExpHLItem( "\\w+", Normal, 0 ) );
+    context0->appendChild( new RegExpHLItem( "[_\\w]+", Normal, 0 ) );
 
-    // comment context
-    HLItemCollection* context1 = new HLItemCollection( Comment );
-    context1->appendChild( new StringHLItem( "*/", Comment, 0 ) );
+    HLItemCollection* context1 = new HLItemCollection( String );
+    context1->appendChild( new StringHLItem( "\\\\", String, 1 ) );
+    context1->appendChild( new StringHLItem( "\\\"", String, 1 ) );
+    context1->appendChild( new StringHLItem( "\"", String, 0 ) );
 
     HLItemCollection* context2 = new HLItemCollection( String );
+    context2->appendChild( new StringHLItem( "\\'", String, 2 ) );
     context2->appendChild( new StringHLItem( "\\\\", String, 2 ) );
-    context2->appendChild( new StringHLItem( "\\\"", String, 2 ) );
-    context2->appendChild( new StringHLItem( "\"", String, 0 ) );
+    context2->appendChild( new StringHLItem( "'", String, 0 ) );
 
     HLItemCollection* context3 = new HLItemCollection( String );
-    context3->appendChild( new StringHLItem( "\\'", String, 3 ) );
-    context3->appendChild( new StringHLItem( "\\\\", String, 3 ) );
-    context3->appendChild( new StringHLItem( "'", String, 0 ) );
+    context3->appendChild( new StringHLItem( "'''", String, 0 ) );
 
     HLItemCollection* context4 = new HLItemCollection( String );
-    context4->appendChild( new StringHLItem( "'''", String, 0 ) );
-
-    HLItemCollection* context5 = new HLItemCollection( String );
-    context5->appendChild( new StringHLItem( "\"\"\"", String, 0 ) );
+    context4->appendChild( new StringHLItem( "\"\"\"", String, 0 ) );
 
 
     m_items.append( context0 );
@@ -103,7 +99,6 @@ PythonColorizer::PythonColorizer( QEditor* editor )
     m_items.append( context2 );
     m_items.append( context3 );
     m_items.append( context4 );
-    m_items.append( context5 );
 }
 
 PythonColorizer::~PythonColorizer()

@@ -1,10 +1,6 @@
 /***************************************************************************
                           qeditorcodecompletion_arghint.cpp  -  description
                              -------------------
-	begin		: Sun May 19 19:32:02 CEST 2002
-	copyright	: (C) 2002 by Roberto Raggi
-	email		: raggi@cli.di.unipi.it
-
 	begin		: Sun Nov 18 20:00 CET 2001
 	copyright	: (C) 2001 by Joseph Wenninger
 	email		: jowenn@kde.org
@@ -237,8 +233,7 @@ void KDevArgHint::cursorPositionChanged (QEditorView *view, int nLine, int nCol 
 		return;
 	}
 
-        QEditorPart* doc = dynamic_cast<QEditorPart*>( view->document() );
-	if ( doc->hasSelection() )
+	if ( view->doc()->hasSelection() )
 	{
 		slotDone(0);
 		return;
@@ -246,7 +241,9 @@ void KDevArgHint::cursorPositionChanged (QEditorView *view, int nLine, int nCol 
 
 
 
- 	QString strCurLine = doc->textLine( nLine );
+ 	QString strCurLine="";
+	if (view->doc()->textLine(nLine))
+            strCurLine = view->doc()->textLine ( nLine );
 	strCurLine.replace(QRegExp("\t"),"        "); // hack which asume that TAB is 8 char big #fixme
 	//strCurLine = strCurLine.left ( nCol );
 	QString strLineToCursor = strCurLine.left ( nCol );

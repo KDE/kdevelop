@@ -32,7 +32,7 @@ class QPopupMenu;
 
 class QEditor;
 class QEditorPart;
-class CodeCompletion_Impl;
+class QEditorCodeCompletion;
 class LineNumberWidget;
 class MarkerWidget;
 class LevelWidget;
@@ -55,6 +55,7 @@ public:
     virtual ~QEditorView();
 
     KTextEditor::Document* document() const;
+    QEditorPart* doc() const { return m_document; }
     QEditor* editor() const { return m_editor; }
 
     QString currentTextLine() const;
@@ -248,7 +249,7 @@ signals:
 private:
     QEditorPart* m_document;
     QEditor* m_editor;
-    CodeCompletion_Impl* m_pCodeCompletion;
+    QEditorCodeCompletion* m_pCodeCompletion;
     LineNumberWidget* m_lineNumberWidget;
     MarkerWidget* m_markerWidget;
     LevelWidget* m_levelWidget;

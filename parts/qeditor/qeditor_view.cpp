@@ -30,7 +30,7 @@
 #include "qeditor_part.h"
 #include "qeditor.h"
 #include "paragdata.h"
-#include "qeditorcodecompletion_iface_impl.h"
+#include "qeditorcodecompletion.h"
 #include "linenumberwidget.h"
 #include "markerwidget.h"
 #include "levelwidget.h"
@@ -85,7 +85,7 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     connect( m_editor, SIGNAL(cursorPositionChanged(int, int)),
 	     this, SIGNAL(cursorPositionChanged()) );
 
-    m_pCodeCompletion = new CodeCompletion_Impl( this );
+    m_pCodeCompletion = new QEditorCodeCompletion( this );
     connect(m_pCodeCompletion,SIGNAL(completionAborted()),
 	    this,SIGNAL(completionAborted()));
     connect(m_pCodeCompletion,SIGNAL(completionDone()),
