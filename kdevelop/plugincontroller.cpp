@@ -10,10 +10,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmainwindow.h>
+#include <kparts/componentfactory.h>
 
-
+#include "kdevpart.h"
 #include "kdevapi.h"
 #include "kdevfactory.h"
+#include "kdevplugin.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 
@@ -25,6 +27,28 @@
 
 #include "plugincontroller.h"
 
+// a separate method in this anonymous namespace to avoid having it all
+// inline in plugincontroller.h
+namespace
+{
+  template <class ComponentType>
+  ComponentType *loadDefaultPart( const QString &serviceType )
+  {
+    KTrader::OfferList offers = KTrader::self()->query( serviceType, QString::null );
+    KTrader::OfferList::ConstIterator serviceIt = offers.begin();
+    for ( ; serviceIt != offers.end(); ++serviceIt ) {
+      KService::Ptr service = *serviceIt;
+
+      ComponentType *part = KParts::ComponentFactory
+        ::createInstanceFromService< ComponentType >( service, API::getInstance(), 0,
+                                                      PluginController::argumentsFromService( service ) );
+      
+      if ( part )
+        return part;
+    }
+    return 0;
+  }
+};
 
 PluginController *PluginController::s_instance = 0;
 
@@ -53,40 +77,26 @@ PluginController::~PluginController()
 
 void PluginController::loadDefaultParts()
 {
-  KService *service;
-  KDevPart *part;
-
   // Make frontend
-  KTrader::OfferList makeFrontendOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/MakeFrontend"), QString::null);
-  if (makeFrontendOffers.isEmpty())
-    return;
-  service = *makeFrontendOffers.begin();
-  part = loadPlugin(service, "KDevMakeFrontend", Core::getInstance());
-  if (part)
-  {
-    API::getInstance()->setMakeFrontend(static_cast<KDevMakeFrontend*>(part));
-    integratePart(part);
+  KDevMakeFrontend *makeFrontend = loadDefaultPart< KDevMakeFrontend >( "KDevelop/MakeFrontend" );
+  if ( makeFrontend ) {
+    API::getInstance()->setMakeFrontend( makeFrontend );
+    integratePart( makeFrontend );
   }
 
   // App frontend
-  KTrader::OfferList appFrontendOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/AppFrontend"), QString::null);
-  if (appFrontendOffers.isEmpty())
-    return;
-  service = *appFrontendOffers.begin();
-  part = loadPlugin(service, "KDevAppFrontend", Core::getInstance());
-  if (part)
-  {
-    API::getInstance()->setAppFrontend(static_cast<KDevAppFrontend*>(part));
-    integratePart(part);
+  KDevAppFrontend *appFrontend = loadDefaultPart< KDevAppFrontend >( "KDevelop/AppFrontend" );
+  if ( appFrontend ) {
+    API::getInstance()->setAppFrontend( appFrontend );
+    integratePart( appFrontend );
   }
 }
 
 
 void PluginController::loadGlobalPlugins()
 {
-  KDevPart *part;
 
-  KTrader::OfferList globalOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/Part"), QString::fromLatin1("[X-KDevelop-Scope] == 'Global'"));
+  KTrader::OfferList globalOffers = pluginServices( "Global" );
   KConfig *config = KGlobal::config();
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
@@ -94,21 +104,28 @@ void PluginController::loadGlobalPlugins()
     if (!config->readBoolEntry((*it)->name(), true))
        continue;
 
-    part = loadPlugin(*it, "KDevPart", Core::getInstance());
-    if (!part)
-      return;
+    if ( ( *it )->hasServiceType( "KDevelop/Part" ) ) {
+      KDevPart *part = loadPlugin(*it, "KDevPart", Core::getInstance());
+      if (!part)
+        continue;
 
-    integratePart(part);
+      integratePart(part);
+    } else {
+        QStringList args = argumentsFromService( *it );
+
+        KDevPlugin *plugin = KParts::ComponentFactory
+	    ::createInstanceFromService<KDevPlugin>( *it, API::getInstance(), 0,
+                                                     args );
+        if ( plugin )
+            integratePart( plugin );
+    }
   }
 }
 
 
-KDevPart *PluginController::loadPlugin(KService *service, const char *className, QObject *parent)
+KDevPart *PluginController::loadPlugin(const KService::Ptr &service, const char *className, QObject *parent)
 {
-  QStringList args;
-  QVariant prop = service->property("X-KDevelop-Args");
-  if (prop.isValid())
-    args = QStringList::split(" ", prop.toString());
+  QStringList args = argumentsFromService( service );;
 
   kdDebug(9000) << "Loading service " << service->name() << endl;
   KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
@@ -138,8 +155,33 @@ KDevPart *PluginController::loadPlugin(KService *service, const char *className,
   return part;
 }
 
+KService::List PluginController::pluginServices( const QString &scope )
+{
+    QString constraint;
 
-void PluginController::integratePart(KDevPart *part)
+    if ( !scope.isEmpty() )
+	constraint = QString::fromLatin1( "[X-KDevelop-Scope] == '%1'" ).arg( scope );
+    return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ), 
+	                           constraint );
+}
+
+void PluginController::integratePart(KXMLGUIClient *part)
 {
   CKDevelop::getInstance()->main()->guiFactory()->addClient(part);
+}
+
+KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
+{
+    return KParts::ComponentFactory
+        ::createInstanceFromService<KDevPlugin>( service, API::getInstance(), 0,
+                                                 argumentsFromService( service ) );
+}
+
+QStringList PluginController::argumentsFromService( const KService::Ptr &service )
+{
+    QStringList args;
+    QVariant prop = service->property( "X-KDevelop-Args" );
+    if ( prop.isValid() )
+        args = QStringList::split( " ", prop.toString() );
+    return args;
 }
