@@ -53,9 +53,8 @@ public:
     QWaitCondition& isEmpty() { return m_isEmpty; }
 
     bool filesInQueue();
-    bool contains( const QString& fileName );
 
-    void addFile( const QString& fileName );
+    void addFile( const QString& fileName, bool readFromDisk=false );
     void removeFile( const QString& fileName );
     void removeAllFiles();
 
@@ -69,10 +68,11 @@ public:
 protected:
     Unit* findUnit( const QString& fileName );
     Unit* parseFile( const QString& fileName );
+    bool contains( const QString& fileName ) const;
 
 private:
     class KDevDriver* m_driver;
-    QStringList m_fileList;
+    QValueList< QPair<QString, bool> > m_fileList;
     QString m_currentFile;
     QWaitCondition m_canParse;
     QWaitCondition m_isEmpty;

@@ -45,42 +45,49 @@
 class KDevSourceProvider: public SourceProvider
 {
 public:
-    KDevSourceProvider( CppSupportPart* cppSupport ): m_cppSupport( cppSupport ) {}
+    KDevSourceProvider( CppSupportPart* cppSupport )
+        : m_cppSupport( cppSupport ),
+          m_readFromDisk( false ) {}
+
+    void setReadFromDisk( bool b ) { m_readFromDisk = b; }
+    bool readFromDisk() const { return m_readFromDisk; }
 
     virtual QString contents( const QString& fileName )
     {
-        //kdDebug(9007) << "-------> kapp is locked = " << kapp->locked() << endl;
-        bool needToLock = kapp->locked() == false;
-
-        if( needToLock )
-	    kapp->lock();
-
-        //kdDebug(9007) << "-------> kapp locked" << endl;
-
-	QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
-	QPtrListIterator<KParts::Part> it( parts );
-	while( it.current() ){
-	    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
-	    ++it;
-
-	    KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
-	    if( !doc || !editIface || doc->url().path() != fileName )
-		continue;
-
-	    QString contents = QString( editIface->text().ascii() ); // deep copy
-
-            if( needToLock )
-                kapp->unlock();
-
-            //kdDebug(9007) << "-------> kapp unlocked" << endl;
-
-	    return contents;
+	if( !m_readFromDisk ){
+	    //kdDebug(9007) << "-------> kapp is locked = " << kapp->locked() << endl;
+	    bool needToLock = kapp->locked() == false;
+	    
+	    if( needToLock )
+		kapp->lock();
+	    
+	    //kdDebug(9007) << "-------> kapp locked" << endl;
+	    
+	    QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
+	    QPtrListIterator<KParts::Part> it( parts );
+	    while( it.current() ){
+		KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
+		++it;
+		
+		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
+		if( !doc || !editIface || doc->url().path() != fileName )
+		    continue;
+		
+		QString contents = QString( editIface->text().ascii() ); // deep copy
+		
+		if( needToLock )
+		    kapp->unlock();
+		
+		//kdDebug(9007) << "-------> kapp unlocked" << endl;
+		
+		return contents;
+	    }
+	    
+	    if( needToLock )
+		kapp->unlock();
+	    //kdDebug(9007) << "-------> kapp unlocked" << endl;
 	}
-
-        if( needToLock )
-	    kapp->unlock();
-        //kdDebug(9007) << "-------> kapp unlocked" << endl;
-
+	
 	QFile f( fileName );
 	QTextStream stream( &f );
 	if( f.open(IO_ReadOnly) ){
@@ -88,10 +95,10 @@ public:
 	    f.close();
 	    return contents;
 	}
-
+	
 	return QString::null;
     }
-
+    
     virtual bool isModified( const QString& fileName )
     {
 	Q_UNUSED( fileName );
@@ -100,7 +107,7 @@ public:
 
 private:
     CppSupportPart*  m_cppSupport;
-
+    bool m_readFromDisk;
 private:
     KDevSourceProvider( const KDevSourceProvider& source );
     void operator = ( const KDevSourceProvider& source );
@@ -121,13 +128,24 @@ BackgroundParser::~BackgroundParser()
     m_driver = 0;
 }
 
-void BackgroundParser::addFile( const QString& fileName )
+bool BackgroundParser::contains( const QString& fileName ) const
+{
+    QValueList< QPair<QString, bool> >::ConstIterator it = m_fileList.begin();
+    while( it != m_fileList.end() ){
+	if( (*it).first == fileName )
+	    return true;
+	++it;
+    }
+    return false;
+}
+
+void BackgroundParser::addFile( const QString& fileName, bool readFromDisk )
 {
     QMutexLocker locker( &m_mutex );
     QString fn = deepCopy( fileName );
     bool added = false;
-    if( m_fileList.find(fn) == m_fileList.end() ){
-        m_fileList.push_back( fn );
+    if( !contains(fileName) ){
+        m_fileList.push_back( qMakePair(fn, readFromDisk) );
 	added = true;
     }
 
@@ -145,6 +163,7 @@ void BackgroundParser::removeAllFiles()
         Unit* unit = it.data();
 	++it;
 	delete( unit );
+	unit = 0;
     }
     m_unitDict.clear();
     m_driver->reset();
@@ -236,13 +255,17 @@ void BackgroundParser::run()
             break;
         }
 
-        QString fileName = deepCopy( m_fileList.front() );
+	QPair<QString, bool> entry = m_fileList.front();
+        QString fileName = deepCopy( entry.first  );
+	bool readFromDisk = entry.second;
 	m_currentFile = fileName;
 	m_fileList.pop_front();
 
         m_mutex.unlock();
 
+	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( readFromDisk );
 	Unit* unit = parseFile( fileName );
+	static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( false );
         {
             QMutexLocker locker( &m_mutex );
 
@@ -268,10 +291,3 @@ void BackgroundParser::run()
 
     QThread::exit();
 }
-
-bool BackgroundParser::contains( const QString & fileName )
-{
-    QMutexLocker locker( &m_mutex );
-    return m_fileList.contains( fileName );
-}
-
