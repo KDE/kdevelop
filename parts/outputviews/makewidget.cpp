@@ -686,7 +686,7 @@ void MakeWidget::insertLine2(const QString &line, Type type)
     
     QString color = getOutputColor( type );
     QString eLine = QStyleSheet::escape( line );
-    append(QString("<code>%1<font color=\"%1\">%2</font></code><br>").arg(icon).arg(color).arg(eLine));
+    append(QString("<code>%1<font color=\"%2\">%3</font></code><br>").arg(icon).arg(color).arg(eLine));
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
     
     if (move) {
