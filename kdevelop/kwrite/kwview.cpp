@@ -583,24 +583,18 @@ void KWriteView::changeYPos(int p) {
   int dy;
 
   dy = yPos - p;
-  if ( QABS(dy) >= kWriteDoc->fontHeight )
-  {
-    dy= (dy/kWriteDoc->fontHeight)*kWriteDoc->fontHeight;
-    yPos -= dy;
-    if ( yPos < kWriteDoc->fontHeight )
-      yPos = 0;
-    startLine = yPos / kWriteDoc->fontHeight;
-    endLine = (yPos + height() -1) / kWriteDoc->fontHeight;
-    if (QABS(dy) < height())
-    {
-      leftBorder->scroll(0,dy);
-      scroll(0,dy);
-    }
-    else
-    {
-      repaint();
-    }
-  }
+  yPos = p;
+  startLine = yPos / kWriteDoc->fontHeight;
+  endLine = (yPos + height() -1) / kWriteDoc->fontHeight;
+  if (QABS(dy) < height())
+	{
+		leftBorder->scroll(0,dy);
+    scroll(0,dy);
+	}
+  else
+	{
+    QWidget::update();
+	}
 }
 
 void KWriteView::getVConfig(VConfig &c) {
@@ -761,7 +755,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
   int xMax, yMax;
   int cYPos;
   int cXPosMin, cXPosMax, cYPosMin, cYPosMax;
-//  int dx, dy;
+  int dx, dy;
 
   if (exposeCursor || flags & ufDocGeometry) {
     emit kWrite->newCurPos();
@@ -875,40 +869,38 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     yScroll->show();
   } else yScroll->hide();
 
-//  startLine = yPos / fontHeight;
-//  endLine = (yPos + h -1) / fontHeight;
+  startLine = yPos / fontHeight;
+  endLine = (yPos + h -1) / fontHeight;
 
   if (w != width() || h != height()) {
     resize(w,h);
+  } else {
+    dx = oldXPos - xPos;
+    dy = oldYPos - yPos;
+
+    b = updateState == 3;
+    if (flags & ufUpdateOnScroll) {
+      b |= dx || dy;
+    } else {
+      b |= QABS(dx)*3 > w*2 || QABS(dy)*3 > h*2;
+    }
+
+    if (b) {
+      repaint(0, 0, width(), height(), false);
+
+    } else {
+      if(dy) leftBorder->scroll(0,dy);
+
+      if (updateState > 0) paintTextLines(oldXPos,oldYPos);
+
+      if (dx || dy) {
+        scroll(dx,dy);
+      } else if (cursorOn) paintCursor();
+    }
   }
-//else {
-//    dx = oldXPos - xPos;
-//    dy = oldYPos - yPos;
-//
-//    b = updateState == 3;
-//    if (flags & ufUpdateOnScroll) {
-//      b |= dx || dy;
-//    } else {
-//      b |= QABS(dx)*3 > w*2 || QABS(dy)*3 > h*2;
-//    }
-//
-//    if (b) {
-//      repaint(0, 0, width(), height(), false);
-//
-//    } else {
-//      if(dy) leftBorder->scroll(0,dy);
-//
-//      if (updateState > 0) paintTextLines(oldXPos,oldYPos);
-//
-//      if (dx || dy) {
-//        scroll(dx,dy);
-//      } else if (cursorOn) paintCursor();
-//    }
-//  }
-//
-//  exposeCursor = false;
-//  updateState = 0;
-  QWidget::update();
+
+  exposeCursor = false;
+  updateState = 0;
 #ifdef QT_I18N
   int x, y;
   h = kWriteDoc->fontHeight;
@@ -1370,7 +1362,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   y = line*h - yPos;
   yEnd = updateR.y() + updateR.height();
 
-  int textLineCount = kWriteDoc->getTextLineCount()-1;
+ int textLineCount = kWriteDoc->getTextLineCount()-1;
   while (y < yEnd)
   {
     if (textLineCount>line)

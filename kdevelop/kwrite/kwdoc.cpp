@@ -113,7 +113,7 @@ void TextLine::del(int pos, int n) {
   }
 }
 
-int TextLine::length() const {
+int TextLine::length() {
   return len;
 }
 
@@ -188,21 +188,21 @@ void TextLine::setAttr(int attribute) {
   attr = (attr & taSelectMask) | attribute;
 }
 
-int TextLine::getAttr(int pos) const {
+int TextLine::getAttr(int pos) {
   if (pos < len) return attribs[pos] & taAttrMask;
   return attr & taAttrMask;
 }
 
-int TextLine::getAttr() const {
+int TextLine::getAttr() {
   return attr & taAttrMask;
 }
 
-int TextLine::getRawAttr(int pos) const {
+int TextLine::getRawAttr(int pos) {
   if (pos < len) return attribs[pos];
   return (attr & taSelectMask) ? attr : attr | 256;
 }
 
-int TextLine::getRawAttr() const{
+int TextLine::getRawAttr() {
   return attr;
 }
 
@@ -1271,27 +1271,23 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags)
 }
 
 
-void KWriteDoc::updateMaxLength( const TextLine *textLine) {
+void KWriteDoc::updateMaxLength(TextLine *textLine) {
   int len;
 
-  if ( textLine )
-    len = textWidth(textLine,textLine->length());
-  else
-    len = -1;
+  len = textWidth(textLine,textLine->length());
 
   if (len > maxLength) {
-    longestLine = const_cast<TextLine*>(textLine);
+    longestLine = textLine;
     maxLength = len;
     newDocGeometry = true;
   } else {
     if (!longestLine || (textLine == longestLine && len <= maxLength*3/4)) {
       maxLength = -1;
-      TextLine *line;
-      for (line = contents.first(); line != 0L; line = contents.next()) {
-        len = textWidth(line,line->length());
+      for (textLine = contents.first(); textLine != 0L; textLine = contents.next()) {
+        len = textWidth(textLine,textLine->length());
         if (len > maxLength) {
           maxLength = len;
-          longestLine = line;
+          longestLine = textLine;
         }
       }
       newDocGeometry = true;
@@ -1321,7 +1317,7 @@ void KWriteDoc::updateViews(KWriteView *exclude) {
 }
 
 
-int KWriteDoc::textWidth( const TextLine *textLine, const int cursorX) {
+int KWriteDoc::textWidth(TextLine *textLine, int cursorX) {
   int x;
   int z;
   char ch;
@@ -2549,8 +2545,6 @@ void KWriteDoc::setFileName(const QString& s)
 	// Read bookmarks, breakpoints, ...
 	readFileConfig();
   updateViews();
-  longestLine = NULL;
-  updateMaxLength(longestLine);
 }
 
 void KWriteDoc::clearFileName() {
