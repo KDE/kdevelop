@@ -18,11 +18,6 @@
 
 class Catalog;
 class Tag;
-/**
- * parse a comment for doxygen tags and create a formatted richtext string out of it
- * @todo put function into another place, 'cause it is used from the StoreWalker, too
- */
-QString parseDoxygen(const QString& comment);
 
 namespace TagUtils
 {
@@ -55,8 +50,8 @@ public:
     virtual void parseEnumSpecifier( EnumSpecifierAST* );
     virtual void parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* );
 
-    virtual void parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl, const QString&  = QString::null );
-    virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl, const QString&  comment = QString::null );
+    virtual void parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
+    virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionArguments( Tag& tag, DeclaratorAST* declarator );
     virtual void parseBaseClause( const QString& className, BaseClauseAST* baseClause );
 

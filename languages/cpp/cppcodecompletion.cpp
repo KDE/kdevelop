@@ -1615,8 +1615,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	//entry.prefix = meth->type();
 
 	entry.text = meth->name() + "(";
-    if (!meth->documentation().isNull())
-        entry.comment = parseDoxygen(meth->documentation());
+
 	QString text;
 
 	ArgumentList args = meth->argumentList();

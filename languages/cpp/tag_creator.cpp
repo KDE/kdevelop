@@ -18,127 +18,8 @@
 #include <kdebug.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
-#include <qiodevice.h>
+
 DoxyDoc* TagCreator::m_documentation = new DoxyDoc( QStringList() );
-/**
- * parse a comment for doxygen tags and create a formatted richtext string out of it
- */
-QString parseDoxygen(const QString& comment){
-	
-	if (comment.isNull())
-		return comment;
-	QString str;
-	if (comment.startsWith("/**") || comment.startsWith("/*!")){
-		str = comment.right(comment.length() - 3);
-	} else {
-		str = comment;
-		//@todo dunno
-	}
-	
-	QTextStream stream(str, IO_ReadOnly);
-	stream.device()->at(0);
-	
-	QString retval;
-	QString see;
-	QString author;
-	QString version;
-	QString parameters = "<b>Parameterlist:</b><p>";//below length is tested to 24
-	QString returnvalue = "<b>Returns:</b>\t";//16
-	QString brief;
-	QString description;
-	QString* cur = &description;
-	QString curline;
-	while(!stream.atEnd()){
-		stream.skipWhiteSpace();
-		QChar c;
-		stream >> c;
-		
-		if (c != '*'){//skip * if there are some in front otherwise go noe char back
-			stream >> curline;
-			curline.prepend(c);
-		}else  {
-			stream.skipWhiteSpace();
-            unsigned int off = stream.device()->at();
-			stream >> curline;
-            if (curline.contains('\n')) {//text was just * in this line
-                stream.device()->at(off);
-                stream.readLine();
-                *cur += '\n';
-                continue;
-            }
-		}
-
-		if (curline == "@param" || curline == "\\param"){//@todo check all other tags, too like @throws ... test for stream.atEnd
-			if (cur == &parameters)
-				*cur += "</li>";
-			else 
-				cur = &parameters;
-			QString varname;
-			stream >> varname;
-			if (stream.atEnd()){
-				*cur += "<li><i>"+varname+"</i></li>";
-				break;
-			}
-			curline = stream.readLine();
-			*cur += "<li><i>"+varname+"</i>\t" + curline;
-		} else if (curline == "@short" || curline == "\\brief"){
-			if (cur == &parameters)
-				*cur += "</li>";
-			cur = &brief;
-			*cur += stream.readLine();
-		} else if (curline == "@return" || curline == "\\return"){
-			if (cur == &parameters)
-				*cur += "</li>";
-			cur = &returnvalue;
-			*cur += stream.readLine();;
-		} else if (curline == "@see" || curline == "\\sa"){
-			//cur += curline;
-			if (cur == &parameters)
-				*cur += "</li>";
-			cur = &see;
-			stream.readLine();
-		} else if (curline == "@author"){
-			if (cur == &parameters)
-				*cur += "</li>";
-			cur = &author;
-			*cur += stream.readLine();
-			cur = &description;
-		} else if (curline == "@version"){
-			if (cur == &parameters)
-				*cur += "</li>";
-			cur = &version;
-			*cur += stream.readLine();
-			cur = &description;
-		} else {//normal
-			*cur += curline;
-            *cur += stream.readLine();
-		}
-	}
-	if (cur == &parameters)
-		*cur += "</li>";
-	if (brief.length() != 0)
-		retval += brief;
-	
-	if (description.length() != 0){
-		if (retval.length() != 0)
-			retval += "<p>";
-		retval += description;
-	}
-	
-	if (parameters.length() != 24){
-		if (retval.length() != 0)
-			retval += "<p>";
-		retval += parameters;
-	}
-	
-	if (returnvalue.length() != 16){
-		if (retval.length() != 0)
-			retval += "<p>";
-		retval += returnvalue;
-	}
-	return retval;
-}
-
 
 TagCreator::TagCreator( const QString& fileName, Catalog* c )
     : m_catalog( c ), m_fileName( fileName ), m_anon( 0 )
@@ -318,7 +199,7 @@ void TagCreator::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 
 	QPtrListIterator<InitDeclaratorAST> it( l );
 	while( it.current() ){
-	    parseMyDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current(), ast->comment() );
+	    parseMyDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current() );
 	    ++it;
 	}
     }
@@ -388,8 +269,8 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     parseFunctionArguments( tag, d );
 
-    if (! ast->comment().isNull() )
-	tag.setAttribute("description", parseDoxygen(ast->comment()));
+    QString arguments = tag.attribute("a").toStringList().join(",");
+    tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace(QRegExp("."),":"), id, typeOfDeclaration(typeSpec, d), arguments));
 
     tagBuilder.setAccess( TagUtils::stringToAccess(m_currentAccess) );
 
@@ -450,8 +331,7 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
 
     Tag tag;
     tag.setKind( Tag::Kind_Class );
-    if (!ast->comment().isNull())
-	tag.setAttribute("description", parseDoxygen( ast->comment()));
+
     tag.setFileName( m_fileName );
     tag.setName( className );
     tag.setScope( m_currentScope );
@@ -526,7 +406,7 @@ void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
     TreeParser::parseEnumSpecifier( ast );
 }
 
-void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl, const QString& comment )
+void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl )
 {
     DeclaratorAST* d = decl->declarator();
 
@@ -534,7 +414,7 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
 	return;
 
     if( !d->subDeclarator() && d->parameterDeclarationClause() )
-	return parseFunctionDeclaration( funSpec, storageSpec, typeSpec, decl, comment );
+	return parseFunctionDeclaration( funSpec, storageSpec, typeSpec, decl );
 
     DeclaratorAST* t = d;
     while( t && t->subDeclarator() )
@@ -602,7 +482,7 @@ void TagCreator::parseAccessDeclaration( AccessDeclarationAST * access )
 }
 
 void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec,
-					     TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl, const QString& comment )
+					     TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl )
 {
     bool isFriend = false;
     bool isVirtual = false;
@@ -668,8 +548,10 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
     tagBuilder.setSlot( m_inSlots );
 
     parseFunctionArguments( tag, d );
-    if(!comment.isNull())
-	tag.setAttribute("description", parseDoxygen(comment));
+
+	QString arguments = tag.attribute("a").toStringList().join(",");
+    QString scopeStr = m_currentScope.join("::");
+    tag.setAttribute("description", m_documentation->functionDescription(scopeStr, id, type, arguments));
 
     m_catalog->addItem( tag );
 }
