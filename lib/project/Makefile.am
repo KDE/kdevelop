@@ -2,7 +2,7 @@
 # project management for the sole purpose that they
 # can be shared between parts.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets/propeditor $(all_includes)
 
 noinst_LTLIBRARIES = libkdevproject.la
 

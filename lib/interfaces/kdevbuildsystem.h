@@ -59,7 +59,7 @@ public:
     const BuildBaseItem* parent() const { return m_parent; }
 
     const QMap<QString, PropPtr>& attributes() const { return m_attributes; }
-    QMap<QString, PropPtr> *pAttributes() const { return &m_attributes; } 
+    QMap<QString, PropPtr> *pAttributes() { return &m_attributes; }
 
     bool hasAttribute( const QString& name ) const { return m_attributes.contains( name ); }
     QVariant attribute( const QString& name ) const { return m_attributes[ name ]->value(); }
