@@ -127,8 +127,8 @@ void Debugger::partAdded( KParts::Part* part )
   iface->setDescription((MarkInterface::MarkTypes)Breakpoint, i18n("Breakpoint"));
   iface->setMarksUserChangable( Bookmark | Breakpoint );
   
-  connect( part, SIGNAL(markChanged(KTextEditor::Mark, MarkInterfaceExtension::MarkChangeAction)),
-           this, SLOT(markChanged(KTextEditor::Mark, MarkInterfaceExtension::MarkChangeAction)) );
+  connect( part, SIGNAL(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
+           this, SLOT(markChanged(KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
 #endif
 }
 

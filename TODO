@@ -59,7 +59,8 @@ all: write a lot more plugins ;)
 
 Unsorted:
 
-* Script project options 
+* Update configure.in when sub projects are added and the
+  project doesn't use am_edit
 
 * Implement removing sub projects.
 
@@ -70,19 +71,10 @@ Unsorted:
 * Distinguish vanilla c++ support from c++ + Qt extensions
   and show signals/slots in the class view only with Qt.
 
-* Fix the whole mess with header files which are parsed
-  whenever the source file is parsed. This is implemented
-  this way because header files don't appear in _SOURCES
-  in KDE projects :-(
-
 * Perhaps use konsole part for the application frontend
-
-* Implement reverse I-search
 
 * Check if a man page exists before offering the context menu
   item 'Goto manpage'
 
 * Show intro page on startup
-
-* Optional: Arrange classes by sub project
 
