@@ -394,7 +394,7 @@ void CParsedClass::out()
   if( !comment.isEmpty() )
     cout << comment << endl;
 
-  cout << "Class " << name << " @ line " << declaredOnLine;
+  cout << "Class " << path() << " @ line " << declaredOnLine;
   cout << " - " << declarationEndsOnLine << endl;
   cout << "  Defined in files:" << endl;
   cout << "    " << declaredInFile << endl;
