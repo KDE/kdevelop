@@ -42,7 +42,7 @@
 
 <tip category="KDevelop|General">
 <html>
-<p>If you changed your applications' classes, you should update your API documentation by selecting "Make API-Doc" from the Build menu.
+<p>If you changed your applications' classes, you should update your API documentation by selecting "Run Doxygen" from the Build menu.
 </html>
 </tip>
 

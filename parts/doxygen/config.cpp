@@ -614,14 +614,26 @@ void ConfigOption::writeStringValue(QTextStream &t,QCString &s)
 {
   const char *p=s.data();
   char c;
-  bool hasBlanks=FALSE;
+  bool needsEscaping=FALSE;
   if (p)
   {
-    while ((c=*p++)!=0 && !hasBlanks) hasBlanks = (c==' ' || c=='\n' || c=='\t');
-    if (hasBlanks) 
-      t << "\"" << s << "\"";
+    while ((c=*p++)!=0 && !needsEscaping) 
+      needsEscaping = (c==' ' || c=='\n' || c=='\t' || c=='"');
+    if (needsEscaping)
+    { 
+      t << "\"";
+      p=s.data();
+      while (*p)
+      {
+	if (*p=='"') t << "\\"; // escape quotes
+	t << *p++;
+      }
+      t << "\"";
+    }
     else
+    {
       t << s;
+    }
   }
 }
 
@@ -631,13 +643,10 @@ void ConfigOption::writeStringList(QTextStream &t,QStrList &l)
   bool first=TRUE;
   while (p)
   {
-    char c;
-    const char *s=p;
-    bool hasBlanks=FALSE;
-    while ((c=*p++)!=0 && !hasBlanks) hasBlanks = (c==' ' || c=='\n' || c=='\t');
+    QCString s=p;
     if (!first) t << "                         ";
     first=FALSE;
-    if (hasBlanks) t << "\"" << s << "\""; else t << s;
+    writeStringValue(t,s);
     p = l.next();
     if (p) t << " \\" << endl;
   }
@@ -1077,7 +1086,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 416 "config.l"
+#line 425 "config.l"
 
 
 
@@ -1164,17 +1173,17 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 418 "config.l"
+#line 427 "config.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 419 "config.l"
+#line 428 "config.l"
 { BEGIN(SkipComment); }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 420 "config.l"
+#line 429 "config.l"
 { QCString cmd=yytext;
                                            cmd=cmd.left(cmd.length()-1).stripWhiteSpace(); 
 					   ConfigOption *option = config->get(cmd);
@@ -1224,7 +1233,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 466 "config.l"
+#line 475 "config.l"
 { QCString cmd=yytext;
                                           cmd=cmd.left(cmd.length()-2).stripWhiteSpace(); 
 					  ConfigOption *option = config->get(cmd);
@@ -1261,18 +1270,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 499 "config.l"
+#line 508 "config.l"
 { BEGIN(GetStrList); l=&includePathList; l->clear(); elemStr=""; }
 	YY_BREAK
 /* include a config file */
 case 6:
 YY_RULE_SETUP
-#line 501 "config.l"
+#line 510 "config.l"
 { BEGIN(Include);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 502 "config.l"
+#line 511 "config.l"
 { 
   					  readIncludeFile(yytext); 
   					  BEGIN(Start);
@@ -1288,7 +1297,7 @@ case YY_STATE_EOF(GetStrList):
 case YY_STATE_EOF(GetQuotedString):
 case YY_STATE_EOF(GetEnvVar):
 case YY_STATE_EOF(Include):
-#line 506 "config.l"
+#line 515 "config.l"
 {
                                           //printf("End of include file\n");
 					  //printf("Include stack depth=%d\n",g_includeStack.count());
@@ -1313,17 +1322,17 @@ case YY_STATE_EOF(Include):
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 528 "config.l"
+#line 537 "config.l"
 { config_err("Warning: ignoring unknown tag `%s' at line %d, file %s\n",yytext,yyLineNr,yyFileName.data()); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 529 "config.l"
+#line 538 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 530 "config.l"
+#line 539 "config.l"
 { 
   					  yyLineNr++; 
 					  if (!elemStr.isEmpty())
@@ -1336,7 +1345,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 539 "config.l"
+#line 548 "config.l"
 {
   				          if (!elemStr.isEmpty())
 					  {
@@ -1348,12 +1357,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 547 "config.l"
+#line 556 "config.l"
 { (*s)+=yytext; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 548 "config.l"
+#line 557 "config.l"
 { lastState=YY_START;
   					  BEGIN(GetQuotedString); 
                                           tmpString.resize(0); 
@@ -1361,7 +1370,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 552 "config.l"
+#line 561 "config.l"
 { 
   					  //printf("Quoted String = `%s'\n",tmpString.data());
   					  if (lastState==GetString)
@@ -1378,19 +1387,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 565 "config.l"
+#line 574 "config.l"
 {
   					  tmpString+='"';
   					}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 568 "config.l"
+#line 577 "config.l"
 { tmpString+=*yytext; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 569 "config.l"
+#line 578 "config.l"
 { 
   					  QCString bs=yytext; 
   					  bs=bs.upper();
@@ -1409,39 +1418,39 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 584 "config.l"
+#line 593 "config.l"
 {
   					  elemStr+=yytext;
   					}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 587 "config.l"
+#line 596 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 588 "config.l"
+#line 597 "config.l"
 { yyLineNr++; BEGIN(Start); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 589 "config.l"
+#line 598 "config.l"
 { yyLineNr++; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 590 "config.l"
+#line 599 "config.l"
 
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 591 "config.l"
+#line 600 "config.l"
 { yyLineNr++ ; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 593 "config.l"
+#line 602 "config.l"
 ECHO;
 	YY_BREAK
 
@@ -2327,7 +2336,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 593 "config.l"
+#line 602 "config.l"
 
 
 /*@ ----------------------------------------------------------------------------
@@ -2947,6 +2956,13 @@ void Config::check()
     PUTENV(buf);
   }
   
+  if (Config_getBool("OPTIMIZE_OUTPUT_JAVA") && Config_getBool("INLINE_INFO"))
+  {
+    // don't show inline info for Java output, since Java has no inline 
+    // concept.
+    Config_getBool("INLINE_INFO")=FALSE;
+  }
+  
 }
 
 void Config::init()
@@ -3090,6 +3106,21 @@ void Config::create()
 #ifdef LANG_UA
   ce->addValue("Ukrainian");
 #endif
+  cb = addBool(
+                    "USE_WINDOWS_ENCODING",
+                    "This tag can be used to specify the encoding used in the generated output. \n"
+                    "The encoding is not always determined by the language that is chosen, \n"
+                    "but also whether or not the output is meant for Windows or non-Windows users. \n"
+                    "In case there is a difference, setting the USE_WINDOWS_ENCODING tag to YES \n"
+                    "forces the Windows enconding, (this is the default for the Windows binary), \n"
+                    "whereas setting the tag to NO uses a Unix-style encoding (the default for the \n"
+                    "all platforms other than Windows).\n",
+#if defined(_WIN32) || defined(__CYGWIN__)
+		    TRUE
+#else
+		    FALSE
+#endif
+		 );
   cb = addBool(
                     "EXTRACT_ALL",
                     "If the EXTRACT_ALL tag is set to YES doxygen will assume all entities in \n"
@@ -3704,7 +3735,7 @@ void Config::create()
                     "If the GENERATE_TREEVIEW tag is set to YES, a side panel will be\n"
                     "generated containing a tree-like index structure (just like the one that \n"
                     "is generated for HTML Help). For this to work a browser that supports \n"
-                    "JavaScript, DHTML, CSS and frames is required (for instance Mozilla, \n"
+                    "JavaScript, DHTML, CSS and frames is required (for instance Mozilla 1.0+, \n"
                     "Netscape 6.0+, Internet explorer 5.0+, or Konqueror). Windows users are \n"
                     "probably better off using the HTML help feature. \n",
                     FALSE
@@ -3813,6 +3844,14 @@ void Config::create()
                     "command to the generated LaTeX files. This will instruct LaTeX to keep \n"
                     "running if errors occur, instead of asking the user for help. \n"
                     "This option is also used when generating formulas in HTML. \n",
+                    FALSE
+                 );
+  cb->addDependency("GENERATE_LATEX");
+  cb = addBool(
+                    "LATEX_HIDE_INDICES",
+                    "If LATEX_HIDE_INDICES is set to YES then doxygen will not \n"
+                    "include the index chapters (such as File Index, Compound Index, etc.) \n"
+                    "in the output. \n",
                     FALSE
                  );
   cb->addDependency("GENERATE_LATEX");

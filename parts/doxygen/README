@@ -1,15 +1,22 @@
 To update to a newer doxygen version:
 -------------------------------------
 
-1. Copy over the files config.* from the src/ directory in the doxygen sources.
+1. Copy over the config.h and config.cpp files from the addon/doxywizard/
+   directory in the doxygen sources. You'll probably have to issue:
+       $ ./configure --with-doxywizard && make
+   to get the config.h and config.cpp files on this directory.
+   You should also copy config.l if you'd like to do some debugging.
 
 2. Copy over the file lang_cfg.h from the src/ directory in the doxygen sources.
 
-3. Add the new i18n strings to messages.cpp
+3. Replace _ALL_ references to the deprecated QList class with the new QPtrList
+   class in config.h
 
-4. Update version.cpp
+4. Add the new i18n strings to messages.cpp
 
-5. Add anything else you needed to do, to get it to compile, to this file.
+5. Update version.cpp
+
+6. Add anything else you needed to do, to get it to compile, to this file.
 
 
 Everything else we can customize for our look & feel.

@@ -28,6 +28,7 @@ QString message(const QCString &key)
     addMessage("PROJECT_NUMBER", i18n("Project version"));
     addMessage("OUTPUT_DIRECTORY", i18n("Output path"));
     addMessage("OUTPUT_LANGUAGE", i18n("Output language"));
+    addMessage("USE_WINDOWS_ENCODING", i18n("Use MS Windows(tm) font encoding"));
     addMessage("EXTRACT_ALL", i18n("Extract undocumented entities"));
     addMessage("EXTRACT_PRIVATE", i18n("Extract private entities"));
     addMessage("EXTRACT_STATIC", i18n("Extract static entitites"));
@@ -126,6 +127,7 @@ QString message(const QCString &key)
     addMessage("PDF_HYPERLINKS", i18n("Generate PDF hyperlinks"));
     addMessage("USE_PDFLATEX", i18n("Use pdflatex"));
     addMessage("LATEX_BATCHMODE", i18n("Use batch mode"));
+    addMessage("LATEX_HIDE_INDICES", i18n("Do not include index chapters"));
     addMessage("RTF", i18n("RTF"));
     addMessage("GENERATE_RTF", i18n("Generate RTF"));
     addMessage("RTF_OUTPUT", i18n("RTF output directory"));
