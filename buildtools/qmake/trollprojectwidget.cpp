@@ -1456,7 +1456,16 @@ QString TrollProjectWidget::getHeader()
 
 void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QString &filename)
 {
-  FileItem *fitem = createFileItem(filename);
+  QPtrListIterator<FileItem> it( titem->files );
+  while ( it.current() != 0 )
+  {
+     if(it.current()->name == filename) //File already exists in this subproject
+       return; 
+     ++it;
+  }  
+  
+  FileItem *fitem = createFileItem(filename);    
+    
   fitem->uiFileLink = getUiFileLink(titem->owner->relpath+"/",filename);
   if (titem->groupType != GroupItem::InstallObject)
     titem->files.append(fitem);
@@ -1510,6 +1519,13 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
     if ((*it)->groupType == gtype)
     {
       gitem = *it;
+       QPtrListIterator<FileItem> it( gitem->files );
+       while ( it.current() != 0 )
+       {
+        if(it.current()->name == filename) //File already exists in this subproject
+          return; 
+        ++it;
+       }  
       break;
     }
   }
