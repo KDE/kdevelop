@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "phperrorview.h"
+#include <qstringlist.h>
 #include <kregexp.h>
 #include <iostream.h>
 
