@@ -9,13 +9,17 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <kiconloader.h>
+		 
 #include "filelist_item.h"
 
 
-FileListItem::FileListItem( QListView * parent, KURL const & url )
+FileListItem::FileListItem( QListView * parent, KURL const & url, DocumentState state )
 	: QListViewItem( parent, QString(" ") + url.fileName() ), 
-	_url( url ), _state( Clean )
-{}
+	_url( url )
+{
+	setState( state );
+}
 	
 KURL FileListItem::url()
 {
@@ -30,6 +34,22 @@ DocumentState FileListItem::state( )
 void FileListItem::setState( DocumentState state )
 {
 	_state = state;
+	
+	switch( state )
+	{
+		case Clean:
+			setPixmap( 0, 0L );
+			break;
+		case Modified:
+			setPixmap( 0, SmallIcon("filesave") );
+			break;
+		case Dirty:
+			setPixmap( 0, SmallIcon("revert") );
+			break;
+		case DirtyAndModified:
+			setPixmap( 0, SmallIcon("stop") );
+			break;					
+	}
 }
 
 

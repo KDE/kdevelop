@@ -22,7 +22,7 @@
 class FileListItem : public QListViewItem
 {
 public:
-	FileListItem( QListView * parent, KURL const & url );
+	FileListItem( QListView * parent, KURL const & url, DocumentState = Clean );
 	
 	KURL url();
 	DocumentState state();

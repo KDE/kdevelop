@@ -39,18 +39,21 @@ protected:
   	void maybeTip( QPoint const & );
 
 private slots:
-	void partAdded(KParts::Part*);
-	void partRemoved();
+//	void partAdded(KParts::Part*);
+//	void partRemoved();
 	void activePartChanged(KParts::Part*);
 	void itemClicked( QListViewItem * );
 	void popupMenu( QListViewItem * , const QPoint & , int );
 	void closeSelectedFiles();
+	void saveSelectedFiles();
+	void reloadSelectedFiles();
 	void documentChangedState( const KURL &, DocumentState );
-	void partURLChanged( KParts::ReadOnlyPart *);
+	void refreshFileList();
 
 private:
 	KURL::List getSelectedURLs();
 	FileListItem * itemForURL( KURL const & url );
+
 	FileListPart * _part;
 
 };

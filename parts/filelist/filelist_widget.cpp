@@ -16,7 +16,7 @@
 #include <klibloader.h>
 #include <kurl.h>
 #include <kdebug.h>
-#include <kiconloader.h>
+//#include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 
@@ -38,8 +38,10 @@ FileListWidget::FileListWidget(FileListPart *part)
 	
 	setSelectionMode( QListView::Extended );
 
-	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
-	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
+//	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(partAdded(KParts::Part*)) );
+//	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(partRemoved()) );
+	connect( _part->partController(), SIGNAL( partAdded(KParts::Part*) ), this, SLOT(refreshFileList()) );
+	connect( _part->partController(), SIGNAL( partRemoved(KParts::Part*) ), this, SLOT(refreshFileList()) );
 	connect( _part->partController(), SIGNAL( activePartChanged(KParts::Part*) ), this, SLOT( activePartChanged(KParts::Part* )) );
 
 	connect( this, SIGNAL( executed( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
@@ -51,18 +53,9 @@ FileListWidget::FileListWidget(FileListPart *part)
 	connect( _part->partController(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
 	
-	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )),
-		this, SLOT(partURLChanged(KParts::ReadOnlyPart * )) );
+	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), this, SLOT(refreshFileList()) );
 	
-	KURL::List list( _part->openFiles() );	
-	QValueListIterator<KURL> it = list.begin();
-	while ( it != list.end() )
-	{
-		new FileListItem( this, *it );
-		++it;
-	}
-
-	activePartChanged( _part->partController()->activePart() );
+	refreshFileList();
 }
 
 
@@ -118,6 +111,25 @@ FileListItem * FileListWidget::itemForURL( KURL const & url )
 	return 0L;
 }
 
+void FileListWidget::refreshFileList( )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	KListView::clear();
+	
+	KURL::List list( _part->openFiles() );	
+	QValueListIterator<KURL> it = list.begin();
+	while ( it != list.end() )
+	{
+		FileListItem * item = new FileListItem( this, *it );
+		item->setState( _part->partController()->documentState( *it ) );
+		++it;
+	}
+
+	activePartChanged( _part->partController()->activePart() );
+}
+
+/*
 void FileListWidget::partAdded( KParts::Part * part )
 {
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
@@ -144,6 +156,7 @@ void FileListWidget::partRemoved()
 
 	activePartChanged( _part->partController()->activePart() );
 }
+*/
 
 void FileListWidget::itemClicked( QListViewItem * item )
 {
@@ -179,25 +192,7 @@ void FileListWidget::documentChangedState( const KURL & url, DocumentState state
 	FileListItem * item = itemForURL( url );
 	if ( item )
 	{
-		switch( state )
-		{
-			case Clean:
-				item->setPixmap( 0, 0 );
-				item->setState( Clean );
-				break;
-			case Modified:
-				item->setPixmap( 0, SmallIcon("filesave") );
-				item->setState( Modified );
-				break;
-			case Dirty:
-				item->setPixmap( 0, SmallIcon("revert") );
-				item->setState( Dirty );
-				break;
-			case DirtyAndModified:
-				item->setPixmap( 0, SmallIcon("stop") );
-				item->setState( DirtyAndModified );
-				break;					
-		}
+		item->setState( state );
 	}
 }
 
@@ -208,6 +203,8 @@ void FileListWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 		KPopupMenu popup;
 		popup.insertTitle( i18n("FileList") );
 		popup.insertItem( i18n("Close Selected"), this, SLOT(closeSelectedFiles()) );        
+		popup.insertItem( i18n("Save Selected"), this, SLOT(saveSelectedFiles()) );
+		popup.insertItem( i18n("Reload Selected"), this, SLOT(reloadSelectedFiles()) );
 		
 		FileContext context( getSelectedURLs() );
         _part->core()->fillContextMenu( &popup, &context );
@@ -245,12 +242,42 @@ void FileListWidget::closeSelectedFiles( )
 	}
 }
 
-void FileListWidget::partURLChanged( KParts::ReadOnlyPart * part )
+// this is a bad idea - should be done by partController
+void FileListWidget::saveSelectedFiles( )
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	partAdded( part );
-	partRemoved();
+	KURL::List list = getSelectedURLs();
+	KURL::List::iterator it = list.begin();
+	while ( it != list.end() )
+	{
+		kdDebug() << "Saving " << (*it).prettyURL() << endl;
+		KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( _part->partController()->findOpenDocument( *it ) );
+		if ( rw_part )
+		{
+			rw_part->save();
+		}
+		++it;
+	}
+}
+
+// this is a bad idea - should be done by partController
+void FileListWidget::reloadSelectedFiles( )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	KURL::List list = getSelectedURLs();
+	KURL::List::iterator it = list.begin();
+	while ( it != list.end() )
+	{
+		kdDebug() << "Reloading " << (*it).prettyURL() << endl;
+		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( _part->partController()->findOpenDocument( *it ) );
+		if ( ro_part )
+		{
+			ro_part->openURL( *it );
+		}
+		++it;
+	}
 }
 			
 #include "filelist_widget.moc"
