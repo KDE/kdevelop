@@ -1,3 +1,8 @@
+2003-04-14 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Replace part refinements and bugfixes
+      Tooltips, regexp validation feedback, colorization & gui redraw.
+      shortcut changed to alt-ctrl-R
+
 2003-04-14 Harald Fernengel <harry@kdevelop.org>
     * Diff part is now able to use any kpart that can display 'text/x-diff'
     * Diff part can display raw output on the fly (if the kpart is too silly to parse the diff)
