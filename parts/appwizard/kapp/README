@@ -1,0 +1,48 @@
+-----------------------------------------------
+Kde application framework template quickstart
+Author: Thomas Nagy
+Date: 2003-06-20
+-----------------------------------------------
+
+This README file explains you how to use this application template.
+
+
+* To distribute your program, try "make dist".
+This will make a compact tarball archive of your release with the
+necessary scripts inside.
+
+* To clean everything try make distclean
+
+* To build the configure script try make -f Makefile.cvs
+
+* For the translations :
+1. Download a patched gettext which can be found at:
+ http://public.kde.planetmirror.com/pub/kde/devel/gettext-kde/
+2. Install that gettext in ~/bin/
+3. cd ~/yourproject, export PATH=~/bin:$PATH, export
+KDEDIR=/where_your_KDE3_is
+4. make -f admin/Makefile.common package-messages
+5. make package-messages
+6. Translate the po files (not the pot!!) with kbabel or xemacs
+
+
+* Build the menus of your application easily
+kde applications now use an xml file (*ui.rc file) to build the menus.
+This allow a great customization of the application. However, when
+programming the menu is shown only after a "make install"
+
+For more details, consult :
+http://devel-home.kde.org/~larrosa/tutorial/p9.html
+http://developer.kde.org/documentation/tutorials/xmlui/preface.html
+
+
+* Modifying the auto-tools scripts
+for automake scripts there is an excellent tutorial there :
+http://developer.kde.org/documentation/other/makefile_am_howto.html
+
+* Simplify your life : install the project in your home directory for
+testing purposes.
+./configure --prefix=/home/user/dummyfolder/
+In the end when you finished the development you can
+rm -rf /home/user/dummyfolder/
+without fear.
