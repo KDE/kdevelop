@@ -4,9 +4,9 @@
 
 INCLUDES = $(all_includes)
 
-if include_qextmdi
+#if include_qextmdi
 QEXTMDI_SUBDIR=qextmdi
-endif
+#endif
 
 if include_compat
 COMPAT_SUBDIR=compat

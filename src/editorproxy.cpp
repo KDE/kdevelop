@@ -118,6 +118,9 @@ void EditorProxy::installPopup( KParts::Part * part )
 				popup->insertSeparator( 0 );
 				action->plug( popup, 0 );
 			}
+			action = TopLevel::getInstance()->main()->actionCollection()->action( "file_closeother" );
+			if ( action && !action->isPlugged( popup ) )
+				action->plug( popup, 1 );
 			
 			iface->installPopup( popup );
 					

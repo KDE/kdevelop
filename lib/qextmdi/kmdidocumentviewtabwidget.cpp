@@ -8,9 +8,10 @@
 //----------------------------------------------------------------------------
 
 #include <ktabbar.h>
+#include <kpopupmenu.h>
 #include "kmdidocumentviewtabwidget.h"
 
-KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char* name):KTabWidget(parent,name) {
+KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char* name):KTabWidget(parent,name), m_tabBarMenu(0) {
 	m_visibility = KMdi::ShowWhenMoreThanOneTab;
 	tabBar()->hide();
 	setHoverCloseButton(true);
@@ -18,6 +19,7 @@ KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char
 }
 
 KMdiDocumentViewTabWidget::~KMdiDocumentViewTabWidget() {
+    delete m_tabBarMenu;
 }
 
 void KMdiDocumentViewTabWidget::closeTab(QWidget* w) {
@@ -45,18 +47,21 @@ void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, const QString & lab
 	KTabWidget::insertTab(child,label,index);
     showPage(child);
 	maybeShow();
+	tabBar()->repaint();
 }
 
 void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, const QIconSet & iconset, const QString & label, int index ) {
 	KTabWidget::insertTab(child,iconset,label,index);
     showPage(child);
 	maybeShow();
+	tabBar()->repaint();
 }
 
 void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, QTab * tab, int index) {
 	KTabWidget::insertTab(child,tab,index);
     showPage(child);
 	maybeShow();
+	tabBar()->repaint();
 }
 
 void KMdiDocumentViewTabWidget::removePage ( QWidget * w ) {
@@ -79,12 +84,26 @@ void KMdiDocumentViewTabWidget::maybeShow()
 	if ( m_visibility == KMdi::AlwaysShowTabs )
 	{
 		tabBar()->show();
+                if (cornerWidget())
+                {
+                    if (count() == 0)
+                        cornerWidget()->hide();
+                    else
+                        cornerWidget()->show();
+                }
 	}
 	
 	if ( m_visibility == KMdi::ShowWhenMoreThanOneTab )
 	{
 		if (count()<2) tabBar()->hide();
 		if (count()>1) tabBar()->show();
+                if (cornerWidget())
+                {
+                    if (count() < 2)
+                        cornerWidget()->hide();
+                    else
+                        cornerWidget()->show();
+                }
 	}
 
 	if ( m_visibility == KMdi::NeverShowTabs )

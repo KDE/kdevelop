@@ -9,17 +9,20 @@
             <x>0</x>
             <y>0</y>
             <width>386</width>
-            <height>403</height>
+            <height>505</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QButtonGroup">
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0">
             <property name="name">
                 <cstring>UIModeGroup</cstring>
             </property>
@@ -97,7 +100,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
                 <cstring>layout1</cstring>
             </property>
@@ -193,7 +196,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
             </hbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QButtonGroup" row="2" column="0">
             <property name="name">
                 <cstring>IDEAlButtonGroup</cstring>
             </property>
@@ -236,9 +239,63 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QLabel">
+        <widget class="QGroupBox" row="3" column="0">
+            <property name="name">
+                <cstring>TabbedBrowsingGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Tabbed Browsing</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>OpenNewTabAfterCurrent</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Open &amp;new tab after current tab</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>ShowTabIcons</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show icons on document tabs</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>ShowCloseTabsButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show close button in tab bar</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
             <property name="name">
                 <cstring>textLabel1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="text">
                 <string>Note: Changes will take effect after KDevelop is restarted</string>
@@ -247,7 +304,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 <set>WordBreak|AlignCenter</set>
             </property>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <connections>
     <connection>

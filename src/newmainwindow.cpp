@@ -21,6 +21,7 @@
 #include <qvaluelist.h>
 #include <qobjectlist.h>
 #include <qtabbar.h>
+#include <qtoolbutton.h>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -175,10 +176,10 @@ void NewMainWindow::init() {
 	
 	connect( PartController::getInstance(), SIGNAL(documentChangedState(const KURL &, DocumentState)), 
 		this, SLOT(documentChangedState(const KURL&, DocumentState )) );
-	
+
+
 	Core::getInstance()->loadLicenses();
-	
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,90)
+
 	if ( tabWidget() )
 	{
 		KConfig *config = kapp->config();
@@ -192,8 +193,20 @@ void NewMainWindow::init() {
 		
 		bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
 		tabWidget()->setHoverCloseButtonDelayed( CloseOnHoverDelay );
-	}
-#endif
+		
+		openNewTabAfterCurrent = config->readBoolEntry( "OpenNewTabAfterCurrent", false );
+		showTabIcons = config->readBoolEntry( "ShowTabIcons", true );
+  
+                if (config->readBoolEntry( "ShowCloseTabsButton", true ))
+                {
+                    QToolButton *but = new QToolButton(tabWidget());
+                    but->setIconSet(SmallIcon("tab_remove"));
+                    but->adjustSize();
+                    but->hide();
+                    connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
+                    tabWidget()->setCornerWidget(but, TopRight);
+                }
+        }
 }
 
 NewMainWindow::~NewMainWindow() {
@@ -333,13 +346,21 @@ void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QStr
 
     KMdiChildView * child = createWrapper(view, name, shortName);
     
-    const QPixmap* wndIcon = view->icon();
-    if (!wndIcon || (wndIcon && (wndIcon->size().height() > 16))) {
-        child->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
+    if (showTabIcons)
+    {
+        const QPixmap* wndIcon = view->icon();
+        if (!wndIcon || (wndIcon && (wndIcon->size().height() > 16)))
+            child->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
     }
+    else
+        child->setIcon(QPixmap());
 
     unsigned int mdiFlags = KMdi::StandardAdd | KMdi::UseKMdiSizeHint;
-    addWindow(child, mdiFlags);
+    int tabIndex = -1;
+    if (openNewTabAfterCurrent)
+        if (tabWidget()->count() > 0)
+            tabIndex = tabWidget()->currentPageIndex() + 1;
+    addWindow(child, mdiFlags, tabIndex);
 }
 
 
@@ -598,22 +619,34 @@ void NewMainWindow::documentChangedState( const KURL & url, DocumentState state 
 	QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( PartController::getInstance()->partForURL( url ) );
 	if ( widget )
 	{
+		//calculate the icon size if showTabIcons is false
+		//this is necessary to avoid tab resizing by setIcon() call
+		int isize = 16;
+		if (tabWidget() && !showTabIcons)
+		{
+			isize = tabWidget()->fontMetrics().height() - 1;
+//			kdDebug() << "size: " << isize << endl;
+			isize = isize > 16 ? 16 : isize;
+		}
 		switch( state )
 		{
 			// we should probably restore the original icon instead of just using "kdevelop",
 			// but I have never seen any other icon in use so this should do for now
 			case Clean:
-				widget->setIcon( SmallIcon("kdevelop"));
+				if (showTabIcons)
+					widget->setIcon( SmallIcon("kdevelop", isize));
+				else    
+					widget->setIcon(QPixmap());
 				break;
 			case Modified:
-				widget->setIcon( SmallIcon("filesave"));
+				widget->setIcon( SmallIcon("filesave", isize));
 				break;
 			case Dirty:
-				widget->setIcon( SmallIcon("revert"));
+				widget->setIcon( SmallIcon("revert", isize));
 				break;
 			case DirtyAndModified:
-				widget->setIcon( SmallIcon("stop"));
-				break;					
+				widget->setIcon( SmallIcon("stop", isize));
+				break;
 		}
 	}
 }

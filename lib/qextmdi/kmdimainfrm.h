@@ -424,7 +424,7 @@ public:
 
    void setSwitching( const bool switching ) { m_bSwitching = switching; }
    bool switching(void) const { return m_bSwitching; }
-
+   
 public slots:
    /** addWindow demands a KMdiChildView. This method wraps every QWidget in such an object and
        this way you can every widget put under MDI control.
@@ -439,8 +439,9 @@ public slots:
     * <LI>maximized, minimized or restored (normalized)</LI>
     * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI?
     * </UL>
+    * @param index defines an index of tab, after which the new tab will be inserted. This param have not any sence in ChildFrame mode. If index == -1 then the tab will be appended.
     */
-   virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
+   virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd, int index = -1);
    /**
    * See the method above for more details. Additionally, it moves to point pos.
    */

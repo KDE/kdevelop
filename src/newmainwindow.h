@@ -113,6 +113,9 @@ private:
 
   QValueList< QPair< int, KURL > > m_windowList;
   MainWindowShare*   m_pMainWindowShare;
+  
+  bool openNewTabAfterCurrent;
+  bool showTabIcons;
 };
 
 

@@ -391,7 +391,7 @@ KMdiChildView* KMdiMainFrm::createWrapper(QWidget *view, const QString& name, co
 
 //================ addWindow ===============//
 
-void KMdiMainFrm::addWindow( KMdiChildView* pWnd, int flags)
+void KMdiMainFrm::addWindow( KMdiChildView* pWnd, int flags, int index)
 {
   if( windowExists( pWnd,AnyView)) {
     // is already added to the MDI system
@@ -415,7 +415,10 @@ void KMdiMainFrm::addWindow( KMdiChildView* pWnd, int flags)
   QObject::connect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
   connect(pWnd,SIGNAL(activated(KMdiChildView*)),this,SIGNAL(viewActivated(KMdiChildView*)));
   connect(pWnd,SIGNAL(deactivated(KMdiChildView*)),this,SIGNAL(viewDeactivated(KMdiChildView*)));
-  m_pDocumentViews->append(pWnd);
+  if (index == -1)
+    m_pDocumentViews->append(pWnd);
+  else
+    m_pDocumentViews->insert(index, pWnd);
   if (m_pTaskBar) {
     KMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
     QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
@@ -425,7 +428,8 @@ void KMdiMainFrm::addWindow( KMdiChildView* pWnd, int flags)
   if (m_mdiMode == KMdi::TabPageMode || m_mdiMode == KMdi::IDEAlMode) {
     //      const QPixmap& wndIcon = pWnd->icon() ? *(pWnd->icon()) : QPixmap();
 
-    m_documentTabWidget->addTab(pWnd, pWnd->icon() ? *(pWnd->icon()) : QPixmap(),pWnd->tabCaption());
+    m_documentTabWidget->insertTab(pWnd, pWnd->icon() ? *(pWnd->icon()) : QPixmap(),pWnd->tabCaption(), index);
+    
     /*
        connect(pWnd,SIGNAL(iconOrCaptionUdpated(QWidget*,QPixmap,const QString&)),
        m_documentTabWidget,SLOT(updateView(QWidget*,QPixmap,const QString&)));
@@ -786,6 +790,7 @@ void KMdiMainFrm::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
     if (!m_documentTabWidget) return; //oops
     if (m_pDocumentViews->count()==0) m_pClose->hide();
     pWnd->reparent(0L, QPoint(0,0));
+    kdDebug() << "-------- 1" << endl;
     if (m_pDocumentViews->count() == 1) {
       m_pDocumentViews->last()->activate(); // all other views are activated by tab switch
     }
@@ -838,8 +843,14 @@ void KMdiMainFrm::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
         pView->activate();
       }
     } else if (m_pDocumentViews->count() > 0) {
-      m_pDocumentViews->last()->activate();
-      m_pDocumentViews->last()->setFocus();
+      if (m_pDocumentViews->current()) {
+        m_pDocumentViews->current()->activate();
+        m_pDocumentViews->current()->setFocus();
+      }
+      else {
+        m_pDocumentViews->last()->activate();
+        m_pDocumentViews->last()->setFocus();
+      }
     }
   }
 
@@ -1524,6 +1535,7 @@ void KMdiMainFrm::setupTabbedDocumentViewSpace() {
   m_documentTabWidget=new KMdiDocumentViewTabWidget(m_pDockbaseAreaOfDocumentViews);
   connect(m_documentTabWidget,SIGNAL(currentChanged(QWidget*)),this,SLOT(slotDocCurrentChanged(QWidget*)));
   m_pDockbaseAreaOfDocumentViews->setWidget(m_documentTabWidget);
+  qWarning("=============================");
   m_documentTabWidget->show();
   QPtrListIterator<KMdiChildView> it4( *m_pDocumentViews);
   for( ; it4.current(); ++it4) {
