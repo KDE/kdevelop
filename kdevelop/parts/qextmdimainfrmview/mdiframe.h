@@ -18,7 +18,7 @@
 #ifndef _MDIFRAME_H_
 #define _MDIFRAME_H_
 
-#include "qextmdimainfrm.h"
+#include "kextmdimainfrm.h"
 
 class MdiFrame : public QextMdiMainFrm
 {
