@@ -1,3 +1,3 @@
 INCLUDES = 
 METASOURCES = AUTO
-SUBDIRS =  qtimporter
+SUBDIRS =  qtimporter kdelibsimporter

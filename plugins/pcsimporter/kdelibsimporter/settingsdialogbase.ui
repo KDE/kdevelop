@@ -1,0 +1,66 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>SettingsDialogBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SettingsDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>394</width>
+            <height>342</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KListBox">
+            <property name="name">
+                <cstring>kdeListBox</cstring>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>41</width>
+                    <height>61</height>
+                </size>
+            </property>
+        </spacer>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>kdeListBox</sender>
+        <signal>selectionChanged(QListBoxItem*)</signal>
+        <receiver>SettingsDialogBase</receiver>
+        <slot>slotSelectionChanged(QListBoxItem*)</slot>
+    </connection>
+</connections>
+<signals>
+    <signal>enabled(int)</signal>
+</signals>
+<slots>
+    <slot>slotSelectionChanged(QListBoxItem*)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistbox.h</includehint>
+</includehints>
+</UI>

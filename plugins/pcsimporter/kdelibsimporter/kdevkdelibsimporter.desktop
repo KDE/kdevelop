@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=KDevKDELibsImporter
+Comment=KDevelop KDELibs PCS Importer
+ServiceTypes=KDevelop/PCSImporter
+X-KDE-Library=libkdevkdelibsimporter
+X-KDevelop-PCSImporter=
