@@ -81,7 +81,7 @@ static void removeDir( const QString& dirName )
 	if( fileInfo->fileName() == "." || fileInfo->fileName() == ".." )
 	    continue;
 	
-	if( fileInfo->isDir() )
+	if( fileInfo->isDir() && !fileInfo->isSymLink() )
 	    removeDir( fileInfo->absFilePath() );
 	
 	kdDebug(9020) << "remove " << fileInfo->absFilePath() << endl;
