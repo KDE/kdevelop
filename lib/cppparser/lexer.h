@@ -228,7 +228,7 @@ public:
     const Token& lookAhead( int n ) const;
 
     static QString toString( const Token& token );
-    static int toInt( const QString &s );
+    static int toInt( const Token& token );
 
     int tokenPosition( const Token& token ) const;
     void getTokenPosition( const Token& token, int* line, int* col );
@@ -632,10 +632,12 @@ inline void Lexer::readMultiLineComment()
 
 inline void Lexer::readCharLiteral()
 {
-    if( currentChar() != '\'' )
+    if( currentChar() == '\'' )
+        nextChar(); // skip '
+    else if( currentChar() == 'L' && peekChar() == '\'' )
+	nextChar( 2 ); // slip L'
+    else
         return;
-
-    nextChar(); // skip '
 
     while( !currentChar().isNull() ){
         int len = m_endPtr - currentPosition();

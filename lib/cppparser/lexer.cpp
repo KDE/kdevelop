@@ -161,17 +161,39 @@ void Lexer::reset()
 }
 
 // ### should all be done with a "long" type IMO
-int Lexer::toInt( const QString &s )
+int Lexer::toInt( const Token& token )
 {
-    // hex literal ?
-    if ( s[0] == '0' && (s[1] == 'x' || s[1] == 'X') )
-	return s.mid( 2 ).toInt( 0, 16 );
-    QString n;
-    int i = 0;
-    while ( i < int(s.length()) && s[i].isDigit() )
-	n += s[i++];
-    // ### respect more prefixes and suffixes ?
-    return n.toInt();
+    QString s = token.text();
+    if( token.type() == Token_number_literal ){
+        // hex literal ?
+	if( s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))
+	    return s.mid( 2 ).toInt( 0, 16 );
+        QString n;
+        int i = 0;
+        while( i < int(s.length()) && s[i].isDigit() )
+            n += s[i++];
+        // ### respect more prefixes and suffixes ?
+        return n.toInt();
+    } else if( token.type() == Token_char_literal ){
+	int i = s[0] == 'L' ? 2 : 1; // wide char ?
+	if( s[i] == '\\' ){
+	    // escaped char
+	    int c = s[i+1].unicode();
+	    switch( c ) {
+	    case '0':
+		return 0;
+	    case 'n':
+		return '\n';
+	    // ### more
+	    default:
+		return c;
+	    }
+	} else {
+	    return s[i].unicode();
+	}
+    } else {
+	return 0;
+    }
 }
 
 void Lexer::getTokenPosition( const Token& token, int* line, int* col )
@@ -238,7 +260,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	}
-    } else if( ch == '\'' ){
+    } else if( ch == '\'' || (ch == 'L' && ch1 == '\'') ){
 	int start = currentPosition();
 	readCharLiteral();
 	tk = CREATE_TOKEN( Token_char_literal, start, currentPosition() - start );
@@ -825,10 +847,9 @@ int Lexer::macroPrimary()
 		/// @todo implement
 		return m_driver->hasMacro( toString(tk) );
 	    case Token_number_literal:
-		return toInt( toString(tk) );
 	    case Token_char_literal:
-		return 1;
-		default:
+		return toInt( tk );
+            default:
 		break;
 	    } // end switch
 
