@@ -2588,7 +2588,7 @@ bool Parser::parseForStatement( StatementAST::Node& node )
     ADVANCE( ')', ")" );
 
     StatementAST::Node body;
-    parseStatement(body)
+    parseStatement(body);
 
     ForStatementAST::Node ast = CreateNode<ForStatementAST>();
     ast->setInitStatement( init );
