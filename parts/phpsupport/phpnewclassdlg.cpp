@@ -45,3 +45,4 @@ void PHPNewClassDlg::fileNameTextChanged(const QString&){
     m_filenameModified = true;
   }
 }
+#include "phpnewclassdlg.moc"
