@@ -293,8 +293,10 @@ void ProjectManager::loadLanguageSupport()
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
                            QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(m_info->m_language));
-  if (languageSupportOffers.isEmpty())
+  if (languageSupportOffers.isEmpty()) {
     KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("No language plugin for %1 found.").arg(m_info->m_language));
+    return;
+  }
   
   KService::Ptr languageSupportService = *languageSupportOffers.begin();
   KDevLanguageSupport *langSupport = KParts::ComponentFactory
