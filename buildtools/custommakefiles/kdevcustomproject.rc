@@ -11,10 +11,10 @@
     <Action name="build_execute" />
   </Menu>
 </MenuBar>
-<ToolBar name="buildToolBar">
+<ToolBar name="buildToolBar" noMerge="1">
     <Action name="build_build" group="build_operations" />
     <Action name="build_compilefile" group="build_operations" />
-    <Separator/>
+    <Separator group="build_operations"/>
     <Action name="build_execute" group="build_operations" />
 </ToolBar>
 </kpartgui>

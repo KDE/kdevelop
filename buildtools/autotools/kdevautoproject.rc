@@ -21,7 +21,7 @@
     <Action name="build_execute" />
   </Menu>
 </MenuBar>
-<ToolBar name="buildToolBar">
+<ToolBar name="buildToolBar" noMerge="1">
     <Action name="build_build" group="build_operations" />
     <Action name="build_buildactivetarget" group="build_operations" />
     <Action name="build_execute" group="build_operations" />

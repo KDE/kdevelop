@@ -15,15 +15,15 @@
     <Action name="build_compilefile" />
   </Menu>
 </MenuBar>
-<ToolBar name="buildToolBar">
+<ToolBar name="buildToolBar" noMerge="1">
     <Action name="build_build_project" group="build_operations" />
     <Action name="build_rebuild_project" group="build_operations" />
     <Action name="build_execute_project" group="build_operations" />
-    <Separator/>
+    <Separator  group="build_operations"/>
     <Action name="build_build_target" group="build_operations" />
     <Action name="build_rebuild_target" group="build_operations" />
     <Action name="build_execute_target" group="build_operations" />
-    <Separator/>
+    <Separator  group="build_operations"/>
     <Action name="build_compilefile" group="build_operations" />
 </ToolBar>
 </kpartgui>

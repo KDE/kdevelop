@@ -7,8 +7,8 @@
     <Action name="build_execute" />
   </Menu>
 </MenuBar>
-<ToolBar name="buildToolBar">
-    <Action name="build_build" />
-    <Action name="build_execute" />
+<ToolBar name="buildToolBar" noMerge="1">
+    <Action name="build_build"  group="build_operations" />
+    <Action name="build_execute"  group="build_operations" />
 </ToolBar>
 </kpartplugin>

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="17" name="kdevelop" >
+<kpartgui version="18" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -62,6 +62,7 @@
     <DefineGroup name="project_import"/>
     <Separator/>
     <Merge/>
+    <DefineGroup name="designer_project"/>
     <Action name="project_options"/>
     <Separator/>
     <Action name="project_close"/>

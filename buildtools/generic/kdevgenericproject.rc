@@ -10,9 +10,9 @@
     <Action name="execute" />
   </Menu>
 </MenuBar>
-<ToolBar name="buildToolBar">
+<ToolBar name="buildToolBar" noMerge="1">
     <Action name="build" group="build_operations" />
-    <Separator/>
+    <Separator group="build_operations"/>
     <Action name="execute" group="build_operations" />
 </ToolBar>
 </kpartgui>
