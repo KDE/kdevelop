@@ -373,6 +373,7 @@ private:
     QEditorView* m_currentView;
     QPtrList<KTextEditor::View> m_views;
     QPtrList<KTextEditor::Cursor> m_cursors;
+    QPtrList<KTextEditor::Mark> m_marks;
 };
 
 #endif // QEDITORPART_H

@@ -112,6 +112,7 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 
     m_views.setAutoDelete( FALSE );
     m_cursors.setAutoDelete( TRUE );
+    m_marks.setAutoDelete( TRUE );
 
     (void) createView( parentWidget, widgetName );
     
@@ -702,8 +703,8 @@ void QEditorPart::removeMark (uint line, uint markType)
 
 QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 {
-    QPtrList<KTextEditor::Mark> marks;
-    marks.setAutoDelete( TRUE );
+    m_marks.clear();
+    
     QTextDocument* textDoc = m_currentView->editor()->document();
     QTextParagraph* p = textDoc->firstParagraph();
     while( p ){
@@ -712,11 +713,11 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
             KTextEditor::Mark* mark = new KTextEditor::Mark;
             mark->type = data->mark();
             mark->line = p->paragId();
-            marks.append( mark );
+            m_marks.append( mark );
         }
         p = p->next();
     }
-    return marks;
+    return m_marks;
 }
 
 void QEditorPart::clearMarks ()
