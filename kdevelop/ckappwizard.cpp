@@ -545,8 +545,8 @@ void CKAppWizard::initPages(){
               "Wizard.");
   QWhatsThis::add(miniload, text);  
   
-  connect(nameline,SIGNAL(textChanged(const char*)),SLOT(slotProjectnameEntry()));
-	connect(directoryline,SIGNAL(textChanged(const char*)),SLOT(slotDirectoryEntry()));
+  connect(nameline,SIGNAL(textChanged(const QString &)),SLOT(slotProjectnameEntry()));
+	connect(directoryline,SIGNAL(textChanged(const QString &)),SLOT(slotDirectoryEntry()));
   connect(directoryload,SIGNAL(clicked()),SLOT(slotDirDialogClicked()));
   connect(miniload,SIGNAL(clicked()),SLOT(slotMiniIconButtonClicked()));
   connect(progicon,SIGNAL(clicked()),SLOT(slotProgIconClicked()));   
@@ -736,7 +736,7 @@ void CKAppWizard::initPages(){
   					
 	connect(locationbutton,SIGNAL(clicked()),SLOT(slotLocationButtonClicked()));
 	connect(vsBox,SIGNAL(activated(int)),SLOT(slotVSBoxChanged(int)));
-	connect(vendorline,SIGNAL(textChanged(const char*)),SLOT(slotVendorEntry()));
+	connect(vendorline,SIGNAL(textChanged(const QString &)),SLOT(slotVendorEntry()));
 	
 	projectlocationline->setEnabled(false);
 

@@ -383,10 +383,10 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	data_modified = false;
 	
 	// connections
-	connect(classname_edit,SIGNAL(textChanged(const char*)),SLOT(slotClassEditChanged(const char*)));
-	connect(header_edit,SIGNAL(textChanged(const char*)),SLOT(slotHeaderEditChanged(const char*)));
-	connect(cpp_edit,SIGNAL(textChanged(const char*)),SLOT(slotSourceEditChanged(const char*)));
-	connect(data_edit,SIGNAL(textChanged(const char*)),SLOT(slotDataEditChanged(const char*)));
+	connect(classname_edit,SIGNAL(textChanged(const QString&)),SLOT(slotClassEditChanged(const QString &)));
+	connect(header_edit,SIGNAL(textChanged(const QString &)),SLOT(slotHeaderEditChanged(const QString &)));
+	connect(cpp_edit,SIGNAL(textChanged(const QString &)),SLOT(slotSourceEditChanged(const QString &)));
+	connect(data_edit,SIGNAL(textChanged(const QString &)),SLOT(slotDataEditChanged(const QString &)));
 	
 	connect(ok_button,SIGNAL(clicked()),SLOT(slotOKClicked()));
 	connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
@@ -471,7 +471,7 @@ void KDlgNewDialogDlg::setCustomPropsEnabled(bool show){
     custom_prob_gbox->setEnabled(false);
   }
 }
-void  KDlgNewDialogDlg::slotClassEditChanged(const char* text){
+void  KDlgNewDialogDlg::slotClassEditChanged(const QString &text){
   QString str = text;
   if(!header_modified){
     header_edit->setText(str.lower() + ".h");
@@ -486,21 +486,21 @@ void  KDlgNewDialogDlg::slotClassEditChanged(const char* text){
 }
 
 
-void KDlgNewDialogDlg::slotHeaderEditChanged(const char*){
+void KDlgNewDialogDlg::slotHeaderEditChanged(const QString &){
   if(header_edit->hasFocus()){
     header_modified = true;
   }
 }
 
 
-void KDlgNewDialogDlg::slotSourceEditChanged(const char*){
+void KDlgNewDialogDlg::slotSourceEditChanged(const QString &){
   if(cpp_edit->hasFocus()){
     source_modified = true;
   }
 }
 
 
-void KDlgNewDialogDlg::slotDataEditChanged(const char*){
+void KDlgNewDialogDlg::slotDataEditChanged(const QString &){
   if(data_edit->hasFocus()){
     data_modified = true;
   }

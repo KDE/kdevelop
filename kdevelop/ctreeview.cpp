@@ -129,8 +129,9 @@ QListViewItem *CTreeView::findByName( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CTreeView::mousePressEvent(QMouseEvent * event)
+void CTreeView::contentsMousePressEvent(QMouseEvent * event)
 {
+#warning FIXME: Something's still wrong here...
   // Save the mousebutton.
   mouseBtn = event->button();
 
@@ -143,7 +144,7 @@ void CTreeView::mousePressEvent(QMouseEvent * event)
 		item = itemAt(mousePos);
 		setSelected(item,true);
   }
-  QListView::mousePressEvent( event );
+  QListView::contentsMousePressEvent( event );
 
   // reset the saved mousebutton.
   mouseBtn = NoButton;

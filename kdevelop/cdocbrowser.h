@@ -123,8 +123,8 @@ public:
 public slots:
 	void	slotApplyPressed();
 	void	slotFontSize( int );
-	void	slotStandardFont( const char *n );
-	void	slotFixedFont( const char *n );
+	void	slotStandardFont( const QString &n );
+	void	slotFixedFont( const QString &n );
 
 signals:
 	void	fontSize( int );

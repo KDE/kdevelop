@@ -274,10 +274,8 @@ void CTreeHandler::readIcons()
   for( int i=0; i<THEND_POS; i++ )
     icons[ i ] = NULL;
 
-
   il = KGlobal::iconLoader();
 
-  // Load the icons
   icons[ THFOLDER ] = new QPixmap( il->loadIcon( "folder.xpm" ) );
   icons[ THFOLDER_OPEN ] = new QPixmap( il->loadIcon( "folder_open.xpm" ) );
   icons[ THCLASS ] = new QPixmap(locate("appdata", "pics/mini/CVclass"));

@@ -1,3 +1,9 @@
+1999-09-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed const char* -> const QString& in
+	  several signals
+	* QListView::mousePressEvent -> contentsMousePressEvent
+        * Removed some .xpm extensions
+
 1999-09-11 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* fixed options->editor
 	* added KWrite's undo history to edit-menu

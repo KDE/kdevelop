@@ -81,10 +81,10 @@ protected slots:
 void slotOKClicked();
   void slotLocButtonClicked();
   void slotRadioButtonClicked(); 
-  void  slotClassEditChanged(const char* text);
-  void  slotHeaderEditChanged(const char* text);
-  void  slotSourceEditChanged(const char* text);
-  void  slotDataEditChanged(const char* text);
+  void  slotClassEditChanged(const QString &text);
+  void  slotHeaderEditChanged(const QString &text);
+  void  slotSourceEditChanged(const QString &text);
+  void  slotDataEditChanged(const QString &text);
   
 };
 

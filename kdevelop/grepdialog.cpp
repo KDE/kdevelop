@@ -225,8 +225,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 	     SLOT(templateActivated(int)) );
     connect( dir_button, SIGNAL(clicked()),
 	     SLOT(dirButtonClicked()) );
-    connect( resultbox, SIGNAL(selected(const char *)),
-	     SLOT(itemSelected(const char *)) );
+    connect( resultbox, SIGNAL(selected(const QString &)),
+	     SLOT(itemSelected(const QString &)) );
     connect( search_button, SIGNAL(clicked()),
 	     SLOT(slotSearch()) );
     connect( cancel_button, SIGNAL(clicked()),
@@ -258,11 +258,11 @@ void GrepDialog::templateActivated(int index)
 
 
 #include <iostream.h>
-void GrepDialog::itemSelected(const char *item)
+void GrepDialog::itemSelected(const QString &item)
 {
   int pos;
   QString filename, linenumber;
-  
+
   QString str = item;
   if ( (pos = str.find(':')) != -1)
     {
@@ -289,10 +289,7 @@ void GrepDialog::processOutput()
       buf = buf.right(buf.length()-pos-1);
     }
   
-  QString str;
-  str.setNum(resultbox->count());
-  str += i18n(" matches");
-  matches_label->setText(str);
+  matches_label->setText(i18n("%1 matches").arg(resultbox->count()));
 }
 
 
@@ -303,6 +300,7 @@ void GrepDialog::slotSearch()
 
     QString files;
 #warning FIXME: QStringList does not have method split or?
+#warning It has, but only in 2.1 ;(
    /* QStringList filelist = QStringList::split(",", files_combo->currentText());
     if (!filelist.isEmpty())
         {
@@ -388,7 +386,7 @@ void GrepDialog::childExited()
 
 void GrepDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
 {
-    buf += QCString(buffer, buflen+1);
+    buf += QString::fromLatin1(buffer, buflen+1);
     processOutput();
 }
 

@@ -59,7 +59,7 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   pop->insertSeparator();
   pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
   pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-  pop->insertItem(BarIcon("past"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+  pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
   pop->setItemEnabled(ID_EDIT_CUT,false);
   pop->setItemEnabled(ID_EDIT_COPY,false);
   pop->setItemEnabled(ID_EDIT_PASTE,false);

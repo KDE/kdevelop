@@ -149,8 +149,8 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   dirList = dir.entryList();
   
   // Remove '.' and  '..'
-  dirList.remove(dirList.first());
-  dirList.remove(dirList.first());
+  dirList.remove(dirList.begin());
+  dirList.remove(dirList.begin());
   
   // Recurse through all directories
   QStringList::Iterator it;

@@ -120,7 +120,7 @@ private: // Private attributes
 private: // Private methods
 
   /** Initalize the icon array and read the icons from disk. */
-  void readIcons();
+  static void readIcons();
 };
 
 #endif

@@ -64,7 +64,7 @@ protected: // Protected attributes
 protected: // Protected methods
 
   /** Event to be executed on a mousepress. */
-  void mousePressEvent(QMouseEvent* event);
+  virtual void contentsMousePressEvent(QMouseEvent* event);
 
   /** Initialize popupmenus. */
     //  virtual void initPopups() = 0;

@@ -703,14 +703,14 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(BarIcon("filemail"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("KDE-&Core-Library"),this,
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("KDE-&Core-Library"),this,
                         SLOT(slotHelpKDECoreLib()),0,ID_HELP_KDE_CORE_LIBRARY);
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("KDE-&GUI-Library"),this,
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("KDE-&GUI-Library"),this,
                         SLOT(slotHelpKDEGUILib()),0,ID_HELP_KDE_GUI_LIBRARY);
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("KDE-&KFile-Library"),this,
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("KDE-&KFile-Library"),this,
                         SLOT(slotHelpKDEKFileLib()),0,ID_HELP_KDE_KFILE_LIBRARY);
-  help_menu->insertItem(BarIcon("mini-book1.xpm"),i18n("KDE-&HTML-Library"),this,
+  help_menu->insertItem(BarIcon("mini-book1"),i18n("KDE-&HTML-Library"),this,
                         SLOT(slotHelpKDEHTMLLib()),0,ID_HELP_KDE_HTML_LIBRARY);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,

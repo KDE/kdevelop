@@ -27,7 +27,7 @@
 #include "../ckdevelop.h"
 
 
-KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool modal, WFlags f )
+KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name/*, bool modal, WFlags f*/ )
   : QDialog(parent,name,true)
 {
   int w = 350;

@@ -2031,6 +2031,7 @@ void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
 	}
 }
 
+#warning Whats the argument _view good for?
 void CKDevelop::slotDocumentDone( KHTMLView *_view ){
   QString actualURL=browser_widget->currentURL();
   QString actualTitle=browser_widget->currentTitle();
@@ -2227,7 +2228,7 @@ void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
 }
 
 
-void CKDevelop::slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen){
+void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
   QString str;
 	str.fromLatin1(buffer,buflen+1);
   search_output = search_output + str;

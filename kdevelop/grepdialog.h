@@ -49,7 +49,7 @@ private slots:
     void templateActivated(int index);
     void childExited();
     void receivedOutput(KProcess *proc, char *buffer, int buflen);
-    void itemSelected(const char *item);
+    void itemSelected(const QString &item);
     void slotSearch();
     void slotCancel();
     void slotClear();
@@ -65,7 +65,7 @@ private:
     QPushButton *search_button, *cancel_button;
     QLabel *status_label, *matches_label;
     KProcess *childproc;
-    QCString buf;
+    QString buf;
 };
 
 

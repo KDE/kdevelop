@@ -19,6 +19,7 @@ int CALLER_ITEMCLASS_NAME::MyWidget::recPosY(int py)
     int ynew = py+y();
     if ((!parent()) || (parent()!=parentObject->getEditWidget()))
 	return py;
+#warning and now???
 }
 
 
