@@ -409,6 +409,7 @@ bool MakeWidget::matchEnterDir( const QString& line, QString& dir )
 
         if ( msg == "Entering directory" ||   // English - default
                 msg == "Wechsel in das Verzeichnis Verzeichnis" ||    // German - yes, this is badly translated
+		msg == "Wechsel in das Verzeichnis" || // German without typo
                 msg == "Cambiando a directorio" || // Spanish
                 msg == fr_e || // French
                 msg == ja_e || // Japanese
@@ -471,6 +472,7 @@ bool MakeWidget::matchLeaveDir( const QString& line, QString& dir )
 
         if ( msg == "Leaving directory" || // en
                 msg == "Verlassen des Verzeichnisses Verzeichnis" || // de
+		msg == "Verlassen des Verzeichnisses" ||
                 msg == "Saliendo directorio" || // es
                 msg == fr_l || // fr
                 msg == ja_l || //ja
