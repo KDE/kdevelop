@@ -150,18 +150,19 @@ void BookmarksPart::marksChanged()
 	while ( it != _dirtyParts.end() )
 	{
 		KParts::ReadOnlyPart * ro_part = *it;
-		KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface*>( ro_part );
-	
-		if ( ro_part && mi && partIsSane( ro_part ) )
+		if ( partIsSane( ro_part ) )
 		{
-			if ( EditorData * data = storeBookmarksForURL( ro_part ) )
-			{
-				updateContextStringForURL( ro_part );
-				_widget->updateURL( data );
-			}
-			else
-			{
-				_widget->removeURL( ro_part->url() );
+			if ( dynamic_cast<KTextEditor::MarkInterface*>( ro_part ) )
+			{	
+				if ( EditorData * data = storeBookmarksForURL( ro_part ) )
+				{
+					updateContextStringForURL( ro_part );
+					_widget->updateURL( data );
+				}
+				else
+				{
+					_widget->removeURL( ro_part->url() );
+				}
 			}
 		}
 		++it;
@@ -504,19 +505,9 @@ KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
 
 bool BookmarksPart::partIsSane( KParts::ReadOnlyPart * ro_part )
 {
-	//kdDebug(0) << "BookmarksPart::partIsSane()" << endl;
-	
-	bool isSane = true;
-	
-	isSane = isSane && partController()->parts()->contains( ro_part);
-	isSane = isSane && !ro_part->url().path().isEmpty();
-	
-	if ( ! isSane )
-	{
-		//kdDebug(0) << " ** Non-sane part encountered! ** " << endl;
-	}
-	
-	return isSane;
+	return ( ro_part != 0 ) && 
+			partController()->parts()->contains( ro_part) &&
+			!ro_part->url().path().isEmpty();
 }
 
 #include "bookmarks_part.moc"

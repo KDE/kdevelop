@@ -156,6 +156,8 @@ void KDevApi::registerVersionControl( KDevVersionControl *vcs )
 
 void KDevApi::unregisterVersionControl( KDevVersionControl *vcs )
 {
+    if( vcs == d->m_versionControl )
+    	setVersionControl( 0 );
     d->m_registeredVcs.remove( vcs->uid() );
 }
 
