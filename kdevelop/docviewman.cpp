@@ -1580,9 +1580,8 @@ void DocViewMan::doBookmarksToggle()
 
     // Recreate thepopup menu
     for (uint i = 0 ; i < m_docBookmarksList.count(); i++){
-      QString bmTitle = QString ("&%1 %2").arg(i + 1)
-        .arg(m_docBookmarksTitleList.at(i));
-      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"), bmTitle);
+      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"), 
+                                      getBrowserMenuItem(i));
     }
   }
   else
@@ -1655,6 +1654,21 @@ void DocViewMan::doBookmarksPrevious()
 }
 
 //-----------------------------------------------------------------------------
+// Get browser bookmark popup menu item
+//-----------------------------------------------------------------------------
+QString DocViewMan::getBrowserMenuItem(int index)
+{
+  QString bmTitle;
+  if (index < 9) {
+    bmTitle = QString ("&%1 %2").arg(index + 1)
+      .arg(m_docBookmarksTitleList.at(index));
+  } else {
+    bmTitle = m_docBookmarksTitleList.at(index);
+  }
+  return bmTitle;
+} 
+
+//-----------------------------------------------------------------------------
 // Reads bookmarks from the config
 //-----------------------------------------------------------------------------
 void DocViewMan::readBookmarkConfig(KConfig* theConfig)
@@ -1663,9 +1677,8 @@ void DocViewMan::readBookmarkConfig(KConfig* theConfig)
   theConfig->readListEntry("doc_bookmarks_title",m_docBookmarksTitleList);
   for ( uint i =0 ; i < m_docBookmarksTitleList.count(); i++)
     {
-      QString bmTitle = QString ("&%1 %2").arg(i + 1)
-        .arg(m_docBookmarksTitleList.at(i));
-      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"),bmTitle);
+      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"),
+                                      getBrowserMenuItem(i));
     }
 }
 

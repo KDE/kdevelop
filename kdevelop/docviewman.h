@@ -131,6 +131,9 @@ public:
   /** */
 	void writeBookmarkConfig(KConfig* theConfig);
 
+  /** */
+    QString getBrowserMenuItem(int index);
+
   ///////////////////////////
   // Doc stuff
   ///////////////////////////
