@@ -218,8 +218,11 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	method->setType( cl->name() + "*" );
     else if( cl && isDestructor )
 	method->setType( "void" );
-    else
-	method->setType( typeOfDeclaration(typeSpec, d) );
+    else {
+	QString text = typeOfDeclaration( typeSpec, d );
+	if( !text.isEmpty() )
+	    method->setType( text );
+    }
 
     ParsedMethod* m = c->getMethod( method );
     bool isStored = m != 0;
@@ -525,7 +528,6 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     method->setIsStatic( isStatic );
     method->setIsVirtual( isVirtual );
     method->setIsPure( isPure );
-    method->setType( typeOfDeclaration(typeSpec, d) );
     parseFunctionArguments( d, method );
     
     if( m_currentClass ){	
@@ -541,6 +543,10 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 	    method->setType( "void" );
 	else
 	    method->setType( typeOfDeclaration(typeSpec, d) );
+    } else {
+	QString text = typeOfDeclaration( typeSpec, d );
+	if( !text.isEmpty() )
+	    method->setType( text );
     }
     method->setIsConst( d->constant() != 0 );
 
