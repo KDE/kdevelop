@@ -134,6 +134,7 @@ namespace Structure {
 // 	cout << "nobody has it!" << endl;
 	return 0;
       }
+	return 0;
     }
 
     bool remove(const String& string) {
@@ -183,7 +184,7 @@ namespace Structure {
       if (!empty_comp)
 	count ++;
       if (!children.empty()) {
-	for (typename Subtries::iterator i=children.begin();
+	for (typename Subtries::const_iterator i=children.begin();
 	     i!=children.end(); i++) {
 	  count += (*i)->num_components();
 	}
@@ -201,10 +202,10 @@ namespace Structure {
       }
     }
 
-    ostream& print(ostream& out) const {
+    ostream& print(ostream& out)  const {
 //       out << " [ " << " sym: " << symbol << " comp: " << component
 // 	  << " empty?: " << empty_comp;
-      for (typename Subtries::iterator i=children.begin();
+      for (typename Subtries::const_iterator i=children.begin();
 	   i!=children.end(); i++) {
 	(*i)->print(out);
       }

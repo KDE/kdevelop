@@ -10,7 +10,7 @@ TESTS=test-kdict
 noinst_PROGRAMS = test-kdict
 ##test-string-trie
 
-test_kdict_SOURCES = test-kdict.cpp
+test_kdict_SOURCES = test-kdict.cpp kdict.h Trie.h Trie.hxx
 test_kdict_LDADD = $(LIB_QT) $(LIB_KDECORE)
 test_kdict_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 ##test_trie_SOURCES=test-trie.cpp
