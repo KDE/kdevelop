@@ -1,7 +1,7 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
 <title>Document Object Model (DOM) Level 2 HTML Specification</title>
-<base href="http://www.w3.org/TR/DOM-Level-2-HTML" url="index.html" />
+<base href="http://www.w3.org/TR/DOM-Level-2-HTML" />
  <tocsect1 name="1. Document Object Model HTML" url="html.html">
  <tocsect2 name="1.1. Introduction" url="html.html#ID-1176245063">
  </tocsect2>
@@ -57,7 +57,7 @@
  </tocsect2>
  </tocsect1>
  <tocsect1 name="Index" url="def-index.html">
- </tocsect1>
+ </tocsect1>         
  <tocsect1 name="Expanded Table of Contents" url="expanded-toc.html">
  </tocsect1>
  <tocsect1 name="Copyright Notice" url="copyright-notice.html">
