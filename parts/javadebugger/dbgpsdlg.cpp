@@ -102,9 +102,9 @@ Dbg_PS_Dialog::~Dbg_PS_Dialog()
 
 int Dbg_PS_Dialog::pidSelected()
 {
-    QString pidText = QString(pids_->text(pids_->currentItem()));
-    if (pidText)
-        return atoi(pidText);
+    QString pidText = pids_->text(pids_->currentItem());
+    if (!pidText.isEmpty())
+        return atoi(pidText.latin1());
     
     return 0;
 }

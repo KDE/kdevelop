@@ -1,6 +1,4 @@
 /***************************************************************************
-                          stty.cpp  -  description
-                             -------------------
     begin                : Mon Sep 13 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com

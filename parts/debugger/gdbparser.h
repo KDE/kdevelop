@@ -1,6 +1,4 @@
 /***************************************************************************
-                          gdbparser.h  -  description                              
-                             -------------------                                         
     begin                : Tue Aug 17 1999                                           
     copyright            : (C) 1999 by John Birch                         
     email                : jb.nz@writeme.com                                     

@@ -1,6 +1,4 @@
 /***************************************************************************
-                          vartree.h  -  description                              
-                             -------------------                                         
     begin                : Sun Aug 8 1999                                           
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
@@ -114,13 +112,13 @@ public:
     virtual ~TrimmableItem();
     
     virtual void trim();
-    virtual QString getName() const         { return QString(text(VarNameCol)); }
+    virtual QString getName() const         { return text(VarNameCol); }
     virtual TrimmableItem *findMatch(const QString& match, DataType type) const;
     QListViewItem *lastChild() const;
     int  rootActiveFlag() const;
     void setActive()                        { activeFlag_ = rootActiveFlag(); }
     bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
-    QString getValue() const                { return QString(text(ValueCol)); }
+    QString getValue() const                { return text(ValueCol); }
     bool isTrimmable() const;
     void waitingForData ()                  { waitingForData_ = true; }
     

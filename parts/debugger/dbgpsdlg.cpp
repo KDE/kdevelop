@@ -1,6 +1,4 @@
 /***************************************************************************
-                      dbgpsdlg.cpp  -  pid selector using ps
-                             -------------------
     begin                : Mon Sep 20 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
@@ -102,9 +100,9 @@ Dbg_PS_Dialog::~Dbg_PS_Dialog()
 
 int Dbg_PS_Dialog::pidSelected()
 {
-    QString pidText = QString(pids_->text(pids_->currentItem()));
-    if (pidText)
-        return atoi(pidText);
+    QString pidText = pids_->text(pids_->currentItem());
+    if (!pidText.isEmpty())
+        return atoi(pidText.latin1());
     
     return 0;
 }

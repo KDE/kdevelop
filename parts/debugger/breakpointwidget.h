@@ -1,6 +1,4 @@
 /***************************************************************************
-                          brkptmanager.h  -  description                              
-                             -------------------                                         
     begin                : Sun Aug 8 1999                                           
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com

@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qcombobox.h>
+#include <qfile.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
@@ -206,7 +207,13 @@ KDevCompilerOptions *CompilerOptionsWidget::createCompilerOptions(const QString 
         return 0;
     }
     
-    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+    KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
+    if (!factory) {
+        QString errorMessage = KLibLoader::self()->lastErrorMessage();
+        KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
+                                   "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
+        exit(1);
+    }
 
     QStringList args;
     QVariant prop = service->property("X-KDevelop-Args");

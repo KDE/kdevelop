@@ -1,6 +1,4 @@
 /***************************************************************************
-                          disassemble.cpp  -  description                              
-                             -------------------                                         
     begin                : Tues Jan 3 2000                                           
     copyright            : (C) 2000 by John Birch
     email                : jb.nz@writeme.com

@@ -53,8 +53,10 @@ private slots:
 
     void slotRefreshBPState(Breakpoint *BP);
     void slotStatus(const QString &msg, int state);
-    void slotShowStep(const QString &, int);
-    void slotGotoSource(const QString &, int);
+    void slotShowStep(const QString &fileName, int lineNum);
+    void slotGotoSource(const QString &fileName, int lineNum);
+    void slotApplReceivedStdout(const char *buf);
+    void slotApplReceivedStderr(const char *buf);
 
 private:
     void startDebugger();

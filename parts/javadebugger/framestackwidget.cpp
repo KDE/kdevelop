@@ -78,7 +78,7 @@ void FramestackWidget::clearList() {
     currentList_->setAutoDelete(true);      // delete items when they are removed
 }
 
-void FramestackWidget::addItem(QString s) {
+void FramestackWidget::addItem(QCString s) {
         currentList_->append(s);            // This copies the string (deepcopies = true above)
 }
 

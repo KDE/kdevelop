@@ -130,7 +130,7 @@ void AddFileDialog::accept()
     
     QCString canontargetname = AutoProjectTool::canonicalize(target->name);
     QCString varname = canontargetname + "_SOURCES";
-    subProject->variables[varname] += (QString(" ") + name.latin1());
+    subProject->variables[varname] += (QCString(" ") + name.latin1());
     
     QMap<QCString,QCString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);

@@ -1,3 +1,10 @@
+2001-10-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Made sourceinfo serializing more modular by adding
+	  stream operators to all relevant classes,
+	  including ParsedItem, and using them in the higher
+	  level ones
+
 2001-10-14 Victor Röder <victor_roeder@gmx.de>
 
 	* new version of Daniel Engelschalt's CppCCParser

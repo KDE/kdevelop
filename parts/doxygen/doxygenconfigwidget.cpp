@@ -229,7 +229,7 @@ void DoxygenConfigWidget::loadFile()
         f.readBlock(contents.data(),fsize);
         contents[fsize]='\0';
         
-        Config::instance()->parse(contents, m_fileName);
+        Config::instance()->parse(contents, m_fileName.latin1());
         Config::instance()->convertStrToVal();
 
         f.close();

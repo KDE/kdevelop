@@ -1,6 +1,4 @@
 // **************************************************************************
-//                          vartree.cpp  -  description
-//                             -------------------
 //    begin                : Sun Aug 8 1999
 //    copyright            : (C) 1999 by John Birch
 //    email                : jb.nz@writeme.com
@@ -452,8 +450,7 @@ QString VarItem::varPath() const
 
 QString VarItem::fullName() const
 {
-    QString itemName(getName());
-    ASSERT (itemName);
+    QString itemName = getName();
     QString vPath = varPath();
     if (itemName[0] == '<')
         return vPath;
@@ -576,14 +573,15 @@ void VarItem::checkForRequests()
                                                          fullName().latin1()+QCString(".dPath.shd.data"));
     }
     
-    // Signature for a QT2.0.x QT2.1 QString
+    // Signature for a QT2.x QT3.x QString
     // TODO - This handling is not that good - but it works sufficiently well
     // at the moment to leave it here, and it won't cause bad things to happen.
     if (strncmp(cache_, "d = 0x", 6) == 0) {     // Eeeek - too small
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
-                                                    QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-                                                                      fullName().latin1()));
+                                                         // QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                         QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+                                                                            fullName().latin1()));
     }
     
     // Signature for a QT2.0.x QT2.1 QCString
@@ -597,7 +595,8 @@ void VarItem::checkForRequests()
     if (strncmp(cache_, "dPath = {d = 0x", 15) == 0) {
         waitingForData();
         ((VariableTree*)listView())->expandUserItem(this,
-                                                    QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                    // QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+                                                    QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
                                                                        fullName().latin1()));
   }
 }

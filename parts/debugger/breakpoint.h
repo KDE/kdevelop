@@ -1,6 +1,4 @@
 /***************************************************************************
-                          breakpoint.h  -  description                              
-                             -------------------                                         
     begin                : Tue Aug 10 1999                                           
     copyright            : (C) 1999 by John Birch                         
     email                : jb.nz@writeme.com                                     

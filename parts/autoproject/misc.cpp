@@ -15,6 +15,8 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <klibloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kregexp.h>
 #include <kservice.h>
 
@@ -30,7 +32,13 @@ static KDevCompilerOptions *createCompilerOptions(const QString &name, QObject *
         return 0;
     }
     
-    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+    KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
+    if (!factory) {
+        QString errorMessage = KLibLoader::self()->lastErrorMessage();
+        KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
+                                   "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
+        exit(1);
+    }
 
     QStringList args;
     QVariant prop = service->property("X-KDevelop-Args");
@@ -92,7 +100,7 @@ void AutoProjectTool::parseMakefileam(const QString &filename, QMap<QCString,QCS
         }
         line += s;
         
-        if (re.match(line)) {
+        if (re.match(line.latin1())) {
             QCString lhs = re.group(1);
             QCString rhs = re.group(2);
             variables->insert(lhs, rhs);
@@ -122,7 +130,7 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
     while (!ins.atEnd()) {
         QString line;
         QString s = ins.readLine();
-        if (re.match(s)) {
+        if (re.match(s.latin1())) {
             QCString lhs = re.group(1);
             QCString rhs = re.group(2);
             QMap<QCString,QCString>::Iterator it;

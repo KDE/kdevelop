@@ -22,6 +22,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevappfrontend.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
 #include "framestackwidget.h"
@@ -308,14 +309,10 @@ void DebuggerPart::setupController()
     connect( controller,       SIGNAL(showStepInSource(const QString&, int, const QString&)),
              this,             SLOT(slotShowStep(const QString&, int)));
 
-    // Hmm, the application's output can be separated from the debugger's?
-    // Didn't know that...
-#if 0
     connect( controller,       SIGNAL(ttyStdout(const char*)),
              this,             SLOT(slotApplReceivedStdout(const char*)));
     connect( controller,       SIGNAL(ttyStderr(const char*)),
              this,             SLOT(slotApplReceivedStderr(const char*)));
-#endif
 }
 
 
@@ -562,6 +559,18 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
     core()->gotoSourceFile(fileName, lineNum);
+}
+
+
+void DebuggerPart::slotApplReceivedStdout(const char *buf)
+{
+    appFrontend()->insertStdoutLine(QString::fromLatin1(buf));
+}
+
+
+void DebuggerPart::slotApplReceivedStderr(const char *buf)
+{
+    appFrontend()->insertStderrLine(QString::fromLatin1(buf));
 }
 
 #include "debuggerpart.moc"

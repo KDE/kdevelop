@@ -1,6 +1,4 @@
 /***************************************************************************
-                          breakpointdialog.cpp  -  description
-                             -------------------
     begin                : Mon Sep 20 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
