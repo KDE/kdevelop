@@ -2603,7 +2603,7 @@ void TrollProjectWidget::slotBuildFile()
     QString fileName = part->url().path();
     QFileInfo fi(fileName);
     QString sourceDir = fi.dirPath();
-    QString baseName = fi.baseName();
+    QString baseName = fi.baseName(true);
     kdDebug(9020) << "Compiling " << fileName
                   << "in dir " << sourceDir
                   << " with baseName " << baseName << endl;
