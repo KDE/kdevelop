@@ -19,7 +19,7 @@ AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
 dnl the first KDE macro to check for the Compilers needed. The
 dnl default autoconf macro had not the best support for C++ compilers.
 AC_CHECK_COMPILERS
-AC_CHECK_BOOL
+KDE_PROG_LIBTOOL
 
 dnl Check for a lexer.
 AM_PROG_LEX
@@ -32,14 +32,12 @@ dnl AM_DISABLE_LIBRARIES
 dnl But contrary to above we _will_ enable shared libs
 AM_ENABLE_SHARED
 
-dnl let libtool configure. Checks for the way to handle your compiler
-dnl to do some magic 
-KDE_PROG_LIBTOOL
-
 dnl adds --disable-nls to not install the .gmo files out of po. If you
 dnl don't have i18n support, you may want to remove this, but leaving it
 dnl here doesn't hurt
 AM_KDE_WITH_NLS
+
+AC_CHECK_BOOL
 
 dnl This uses qt1. Make sure it's valid
 KDE_USE_QT(1)
