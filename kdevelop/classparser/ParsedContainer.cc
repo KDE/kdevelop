@@ -79,7 +79,8 @@ void CParsedContainer::addStruct( CParsedStruct *aStruct )
   REQUIRE( "Valid structname", !aStruct->name.isEmpty() );
   REQUIRE( "Unique struct", !hasStruct( useFullPath ? aStruct->path() : aStruct->name ) );
   
-  aStruct->setDeclaredInScope( path() );
+  if( !path().isEmpty() )
+    aStruct->setDeclaredInScope( path() );
 
   structs.insert( ( useFullPath ? aStruct->path() : aStruct->name ), aStruct );  
 }
@@ -100,7 +101,9 @@ void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
   REQUIRE( "Valid attributename", !anAttribute->name.isEmpty() );
   REQUIRE( "Unique attribute", !hasAttribute( useFullPath ? anAttribute->path() : anAttribute->name ) );
 
-  anAttribute->setDeclaredInScope( path() );
+  if( !path().isEmpty() )
+    anAttribute->setDeclaredInScope( path() );
+
   attributes.insert( ( useFullPath ? anAttribute->path() : anAttribute->name ), 
                      anAttribute );
 }
@@ -122,7 +125,9 @@ void CParsedContainer::addMethod( CParsedMethod *aMethod )
   
   QString str;
   
-  aMethod->setDeclaredInScope( path() );
+  if( !path().isEmpty() )
+    aMethod->setDeclaredInScope( path() );
+
   methods.append( aMethod );
   
   aMethod->asString( str );
