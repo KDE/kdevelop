@@ -116,12 +116,12 @@ bool DirectoryItem::m_showDirectoryMessages = true;
 
 QString EnteringDirectoryItem::text( EOutputLevel )
 {
-	return i18n("Entering directory <b>%3</b>").arg( directory );
+	return i18n("Entering directory %3").arg( directory );
 }
 
 QString ExitingDirectoryItem::text( EOutputLevel )
 {
-	return i18n("Leaving directory <b>%3</b>").arg( directory );
+	return i18n("Leaving directory %3").arg( directory );
 }
 
 QString ActionItem::text( EOutputLevel outputLevel )
