@@ -216,8 +216,6 @@ void CEditWidget::spellcheck(){
 }
 
 void CEditWidget::spellcheck2(KSpell *){
-    if (kspell->isOk())
-      {
 
 //	setReadOnly (TRUE);
 
@@ -238,12 +236,6 @@ void CEditWidget::spellcheck2(KSpell *){
 */
 	kspell->check (text().data());
 	
-      }
-/*    else
-      {
-	KMsgBox::message(this,"KEdit: Error","Error starting KSpell.\n"\
-			 "Please make sure you have ISpell properly configured and in your PATH.", KMsgBox::STOP);
-      }*/
 }
 
 /*------------------------------------- CEditWidget::deleteInterval()

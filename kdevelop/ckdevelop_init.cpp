@@ -544,7 +544,7 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
-  project_menu->insertItem(loader->loadApplicationIcon("mini/locale.png"),i18n("Add new &Translation File..."), this,
+  project_menu->insertItem(loader->loadIcon("locale", KIconLoader::Small),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,

@@ -454,7 +454,7 @@ void CNewFileDlg::setAddToProject(){
   check_add_project->setChecked(true);
 }
 void CNewFileDlg::slotLocButtonClicked(){
-  QString str=  KDirDialog::getDirectory(prj_loc_edit->text(),this,"test");
+  QString str=  KFileDialog::getExistingDirectory(prj_loc_edit->text(),this,"test");
   if(!str.isEmpty()){
     prj_loc_edit->setText(str);
   }
