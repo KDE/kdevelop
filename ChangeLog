@@ -1,3 +1,21 @@
+2003-10-17 Dominik Haumann <dhdev@gmx.de>
+    * new Application templates in cpp: kateplugin2, noatunvisual,
+    noatunui, kbearimportfilter, kbearplugin, kfileplugin
+    * fixed 53943, 64028
+    * parts/appwizard: Now you can add "ShowFilesAfterGeneration=file1,file2"
+    to the app_tamplate's information-file (example: khello/khello) so that
+    file1 and file2 are shown after project generation - usually a README.devel
+    and/or source code files the user has to modify.
+    ShowFilesAfterGeneration= takes a comma separated list of files regarding to
+    the project root directory wheras
+      - APPNAMEUC will be replaced with the projectname.upper()
+      - APPNAMELC will be replaced with the projectname.lower()
+      - APPNAME   will be replaced with the projectname.
+    Function 'openMainFile()'is now deprecated and therefore removed.
+    * updated documentation for this stuff.
+    * new in New-Project-Dialog: Getting the Project location with "..." asks
+    if it should set tht directory to the DefaultProjectsDir.
+
 2003-10-13 Amilcar Lucas <a.lucas@tu-bs.de>
     * Moved the language specific documentation to the languages/xxx/doc directories
 
@@ -50,7 +68,7 @@
       to use it for editing properties in build item configuration dialog.
 
 2003-09-09 Dominik Haumann <dhdev@gmx.de>
-	* parts/appwizard/appwizarddlg[base.ui,.cpp]: fixed bugs 45719, 63930, 63929
+    * parts/appwizard/appwizarddlg[base.ui,.cpp]: fixed bugs 45719, 63930, 63929
 
 2003-09-08 Roberto Raggi <roberto@kdevelop.org>
     * Added the GUI for create the code completion databases for
