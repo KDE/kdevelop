@@ -4,14 +4,18 @@ Comment=KDevelop
 
 [ProcessSuccess]
 Name=Process successful
+Name[hu]=Sikeres folyamat
 Name[sv]=Processen lyckades
 Comment=Process finished successfully
+Comment[hu]=A folyamat sikeresen befejeződött
 Comment[sv]=Processen avslutades med lyckat resultat
 default_presentation=0
 
 [ProcessError]
 Name=Process error
+Name[hu]=Hibás folyamat
 Name[sv]=Processfel
 Comment=Process finished with errors
+Comment[hu]=A folyamat hibajelzéssel fejeződött be
 Comment[sv]=Processen avslutades med fel
 default_presentation=0
