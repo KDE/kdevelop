@@ -647,6 +647,8 @@ void CKDevelop::initMenuBar(){
   kdev_menubar->insertItem(i18n("&Window"), mdi_main_frame->m_pMdi->m_pWindowMenu);
   kdev_menubar->insertSeparator();
 
+  mdi_main_frame->setMenuForSDIModeSysButtons(kdev_menubar);
+
   ///////////////////////////////////////////////////////////////////
   // PlugIns menu
   plugin_menu= new QPopupMenu;
