@@ -33,6 +33,7 @@
 #include "classgeneratorconfig.h"
 #include "catalog.h"
 #include "cpp_tags.h"
+#include "kdevdriver.h"
 
 #include <qheader.h>
 #include <qmessagebox.h>
@@ -105,6 +106,24 @@ void showMemUsage()
 #endif
 
 enum { PCS_VERSION = 1 };
+
+class CppDriver: public KDevDriver
+{
+public:
+    CppDriver( CppSupportPart* cppSupport )
+	: KDevDriver( cppSupport )
+    {
+    }
+    
+    void fileParsed( const QString& fileName )
+    {
+	kdDebug(9007) << "-----> file " << fileName << " parsed!" << endl;
+	TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
+	cppSupport()->classStore()->removeWithReferences( fileName );
+	StoreWalker walker( fileName, cppSupport()->classStore() );
+	walker.parseTranslationUnit( ast.get() );
+    }
+};
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
     : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"),
@@ -234,12 +253,15 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
+    kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
+    
     if( ev->type() == int(Event_FileParsed) ){
+	FileParsedEvent* event = (FileParsedEvent*) ev;
+	QString fileName = event->fileName();
+	
+	kdDebug(9007) << "----------> file " << fileName << " parsed" << endl; 
 
         if( m_problemReporter ){
-	    FileParsedEvent* event = (FileParsedEvent*) ev;
-	    QString fileName = event->fileName();
-
 	    m_problemReporter->removeAllErrors( fileName );
 
 	    QValueList<Problem> problems = event->problems();
@@ -249,18 +271,22 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	        m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	    }
 
+	    m_backgroundParser->lock();
+	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
+		classStore()->removeWithReferences( fileName );
+		StoreWalker walker( fileName, classStore() );
+		walker.parseTranslationUnit( ast );
+		
 #ifdef ENABLE_FILE_STRUCTURE
-	    if( fileName == m_activeFileName ){
-	        TranslationUnitAST* ast = m_backgroundParser->translationUnit( fileName );
-	        if( ast ){
-	            RTClassBrowser b( fileName, m_structureView );
+		if( fileName == m_activeFileName ){
+		    RTClassBrowser b( fileName, m_structureView );
 		    b.parseTranslationUnit( ast );
-	        }
-	    }
+		}
 #endif
-        }
-
-	m_eventConsumed.wakeAll();
+		
+	    }
+	    m_backgroundParser->unlock();	    
+	}	
     }
 }
 
@@ -585,14 +611,12 @@ void CppSupportPart::slotSwitchHeader()
     }
 }
 
-
 void CppSupportPart::slotGotoIncludeFile()
 {
     if (!m_contextFileName.isEmpty())
         partController()->editDocument(m_contextFileName, 0);
 
 }
-
 
 KDevLanguageSupport::Features CppSupportPart::features()
 {
@@ -610,14 +634,12 @@ QString CppSupportPart::formatClassName(const QString &name)
     return res;
 }
 
-
 QString CppSupportPart::unformatClassName(const QString &name)
 {
     QString res = name;
     res.replace(QRegExp("::"), ".");
     return res;
 }
-
 
 QStringList CppSupportPart::fileExtensions() const
 {
@@ -627,13 +649,11 @@ QStringList CppSupportPart::fileExtensions() const
         return QStringList::split(",", "c,h");
 }
 
-
 void CppSupportPart::slotNewClass()
 {
     CppNewClassDialog dlg(this);
     dlg.exec();
 }
-
 
 void CppSupportPart::addMethod(const QString &className)
 {
@@ -646,7 +666,6 @@ void CppSupportPart::addMethod(const QString &className)
     AddMethodDialog dlg( this, pc, mainWindow()->main() );
     dlg.exec();
 }
-
 
 void CppSupportPart::addAttribute(const QString &className)
 {
@@ -709,6 +728,8 @@ CppSupportPart::parseProject( )
     int n = 0;
     QDir d( project()->projectDirectory() );
 
+    CppDriver driver( this );
+    
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
 	QFileInfo fileInfo( d, *it );
@@ -717,7 +738,7 @@ CppSupportPart::parseProject( )
             QString absFilePath = fileInfo.absFilePath();
             //kdDebug(9007) << "parse file" << absFilePath << endl;
 
-            maybeParse( absFilePath );
+            driver.parseFile( absFilePath );
 
 	    if( (n%5) == 0 )
 	        kapp->processEvents();
@@ -765,24 +786,7 @@ CppSupportPart::maybeParse( const QString& fileName )
 
     m_timestamp[ fileName ] = t;
 
-    //partController()->blockSignals( true );
-
     m_backgroundParser->addFile( fileName );
-    while( m_backgroundParser->filesInQueue() > 0 )
-       m_backgroundParser->isEmpty().wait();
-
-    m_backgroundParser->lock();
-    TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( fileName );
-    if( translationUnit ){
-	StoreWalker walker( fileName, classStore() );
-	walker.parseTranslationUnit( translationUnit );
-    }
-    m_backgroundParser->unlock();
-
-    if( !findDocument(fileName) )
-        m_backgroundParser->removeFile( fileName );
-
-    //partController()->blockSignals( false );
 }
 
 void CppSupportPart::implementVirtualMethods( const QString& className )
