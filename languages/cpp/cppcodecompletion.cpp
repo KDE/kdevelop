@@ -859,7 +859,7 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 	return QStringList();
 }
 
-void CppCodeCompletion::completeText( )
+void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 {
 	kdDebug( 9007 ) << "CppCodeCompletion::completeText()" << endl;
 
@@ -1229,7 +1229,32 @@ void CppCodeCompletion::completeText( )
 			computeCompletionEntryList( entryList, type, isInstance );
 		}
 
-		if ( entryList.size() )
+		QStringList trueMatches;
+
+		if ( invokedOnDemand )
+		{
+			// find matching words
+			QValueList<KTextEditor::CompletionEntry>::Iterator it;
+			for ( it = entryList.begin(); it != entryList.end(); ++it )
+			{
+				if ( (*it).text.startsWith( word :) )
+				{
+					trueMatches << (*it).text;
+
+					// if more than one entry matches, abort immediately
+					if ( trueMatches.size() > 1 )
+						break;
+				}
+			}
+		}
+
+		if ( invokedOnDemand && trueMatches.size() == 1 )
+		{
+			// there is only one entry -> complete immediately
+			m_activeEditor->insertText( m_ccLine, m_ccColumn,
+				trueMatches[0].right( trueMatches[0].length() - word.length() ) );
+		}
+		else if ( entryList.size() )
 		{
 			entryList = unique( entryList );
 			qHeapSort( entryList );

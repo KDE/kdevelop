@@ -73,7 +73,13 @@ public:
 	static QStringList typeName( const QString& name );
 
 public slots:
-	void completeText();
+	/**
+	 * @param invokedOnDemand if true and there is exactly one matching entry
+	 *        complete the match immediately without showing the completion box.
+	 *        This is only true, when the users invokes the completion himself
+	 *        (eg presses the completion shortcut CTRL+space)
+	 */
+	void completeText( bool invokedOnDemand = false );
 
 private slots:
 	void slotPartAdded( KParts::Part *part );

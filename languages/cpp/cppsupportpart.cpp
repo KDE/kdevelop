@@ -1013,7 +1013,7 @@ void CppSupportPart::slotCompleteText()
 {
 	if ( !m_pCompletion )
 		return ;
-	m_pCompletion->completeText();
+	m_pCompletion->completeText( true );
 }
 
 /**
