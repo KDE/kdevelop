@@ -33,7 +33,8 @@
 #include <qcursor.h>
 #include <qobjectlist.h>
 #include <qframe.h>
-
+#include <qpopupmenu.h>
+#include <qtoolbutton.h>
 #include <qnamespace.h>
 
 #include "kmdidefines.h"
@@ -316,7 +317,7 @@ void KMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
    if(maxHeight>maximumHeight())maxHeight=maximumHeight();
 
    QPoint mousePos( xPos, yPos);
-   
+
    // manipulate width
    switch (resizeCorner){
    case KMDI_RESIZE_TOPLEFT:     // no break
@@ -456,7 +457,7 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          m_pClient->m_stateChanged = TRUE;
          m_state=state;
          // client min / max size / layout behaviour don't change
-         // set frame max size indirectly by setting the clients max size to 
+         // set frame max size indirectly by setting the clients max size to
          // it's current value (calls setMaxSize() of frame)
          m_pClient->setMaximumSize(m_pClient->maximumSize().width(), m_pClient->maximumSize().height());
          m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
@@ -499,7 +500,7 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
             QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
             QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
             int nFrameWidth = KMDI_CHILDFRM_DOUBLE_BORDER;
-            int nFrameHeight = KMDI_CHILDFRM_DOUBLE_BORDER + KMDI_CHILDFRM_SEPARATOR + 
+            int nFrameHeight = KMDI_CHILDFRM_DOUBLE_BORDER + KMDI_CHILDFRM_SEPARATOR +
                                m_pCaption->heightHint();
             setGeometry(-m_pClient->x(), -m_pClient->y(),
                         m_pManager->width() + nFrameWidth,
@@ -628,7 +629,7 @@ void KMdiChildFrm::setIcon(const QPixmap& pxm)
 
 //============ icon =================//
 
-QPixmap* KMdiChildFrm::icon()
+QPixmap* KMdiChildFrm::icon() const
 {
    return m_pIconButtonPixmap;
 }
@@ -712,9 +713,9 @@ void KMdiChildFrm::setClient(KMdiChildView *w, bool bAutomaticResize)
 void KMdiChildFrm::unsetClient( QPoint positionOffset)
 {
    if(!m_pClient)return;
-   
+
    QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
-   
+
    //reparent to desktop widget , no flags , point , show it
    QDict<FocusPolicy>* pFocPolDict;
    pFocPolDict = unlinkChildren();
@@ -765,11 +766,11 @@ void KMdiChildFrm::unsetClient( QPoint positionOffset)
    }
    delete list;                        // delete the list, not the objects
    delete pFocPolDict;
-   
+
    // reset first and last focusable widget
    m_pClient->setFirstFocusableChildWidget( firstFocusableChildWidget);
    m_pClient->setLastFocusableChildWidget( lastFocusableChildWidget);
-   
+
    // reset the focus policy of the view
    m_pClient->setFocusPolicy(QWidget::ClickFocus);
 
@@ -960,7 +961,7 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          }
       }
       break;
-   case QEvent::MouseButtonPress: 
+   case QEvent::MouseButtonPress:
       {
          if ( (QWidget*)obj != m_pClient ) {
             bool bIsSecondClick = FALSE;
@@ -987,7 +988,7 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                if (m_timeMeasure.elapsed() > QApplication::doubleClickInterval()) {
                   showSystemMenu();
                   m_timeMeasure.start();
-               } 
+               }
                else {
                   closePressed();   // double click on icon button closes the view
                }
@@ -996,7 +997,7 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          }
       }
       break;
-   case QEvent::Resize: 
+   case QEvent::Resize:
       {
          if ( ( (QWidget*)obj == m_pClient ) && (m_state == Normal) ) {
             QResizeEvent* re = (QResizeEvent*)e;
@@ -1008,9 +1009,9 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          }
       }
       break;
-   case QEvent::ChildRemoved: 
+   case QEvent::ChildRemoved:
       {
-         // if we lost a child we uninstall ourself as event filter for the lost 
+         // if we lost a child we uninstall ourself as event filter for the lost
          // child and its children
          QObject* pLostChild = ((QChildEvent*)e)->child();
          if ((pLostChild != 0L) /*&& (pLostChild->inherits("QWidget"))*/ ) {
@@ -1027,10 +1028,10 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          }
       }
       break;
-   case QEvent::ChildInserted: 
+   case QEvent::ChildInserted:
       {
-         // if we got a new child we install ourself as event filter for the new 
-         // child and its children (as we did when we got our client). 
+         // if we got a new child we install ourself as event filter for the new
+         // child and its children (as we did when we got our client).
          // XXX see linkChildren() and focus policy stuff
          QObject* pNewChild = ((QChildEvent*)e)->child();
          if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) ) {
@@ -1078,7 +1079,7 @@ void KMdiChildFrm::setMinimumSize ( int minw, int minh )
 
 //============= systemMenu ===============//
 
-QPopupMenu* KMdiChildFrm::systemMenu()
+QPopupMenu* KMdiChildFrm::systemMenu() const
 {
    if( m_pSystemMenu == 0)
       return 0;

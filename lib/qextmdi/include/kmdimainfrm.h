@@ -37,8 +37,6 @@
 #include <kpopupmenu.h>
 #include <kparts/dockmainwindow.h>
 #else
-#include <qmenubar.h>
-#include <qpopupmenu.h>
 #include "dummykpartsdockmainwindow.h"
 #endif
 
@@ -57,6 +55,9 @@
 #include "kmdinulliterator.h"
 
 class QTimer;
+class QPopupMenu;
+class QMenuBar;
+class QToolButton;
 
 /**
  * @short Internal class
@@ -248,7 +249,7 @@ protected:
    bool                    m_bClearingOfWindowMenuBlocked;
 
    QTimer*                 m_pDragEndTimer;
-   
+
    bool                    m_bSwitching;
 
 // methods
@@ -345,7 +346,7 @@ public:
    * Additionally, this menu provides some placing actions for these views.
    * Usually, you insert this popup menu in your main menubar as "Window" menu.
    */
-   QPopupMenu* windowMenu() { return m_pWindowMenu; };
+   QPopupMenu* windowMenu() const { return m_pWindowMenu; };
    /**
    * Sets a background colour for the MDI view area widget.
    */
@@ -398,7 +399,7 @@ public:
    /**
    * @returns if we are fake an SDI application (@ref fakeSDIApplication())
    */
-   bool isFakingSDIApplication() { return m_bSDIApplication; };
+   bool isFakingSDIApplication() const { return m_bSDIApplication; };
    /**
    *
    */
@@ -410,7 +411,7 @@ public:
 
    void setSwitching( const bool switching ) { m_bSwitching = switching; }
    bool switching(void) const { return m_bSwitching; }
-   
+
 public slots:
    /** addWindow demands a KMdiChildView. This method wraps every QWidget in such an object and
        this way you can every widget put under MDI control.
@@ -426,11 +427,11 @@ public slots:
     * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.
     */
    virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
-   /** 
+   /**
    * See the method above for more details. Additionally, it moves to point pos.
    */
    virtual void addWindow( KMdiChildView* pView, QPoint pos, int flags = KMdi::StandardAdd);
-   /** 
+   /**
    * See the method above for more details. Additionally, it sets the geometry.
    */
    virtual void addWindow( KMdiChildView* pView, QRect rectNormal, int flags = KMdi::StandardAdd);
@@ -464,25 +465,25 @@ public slots:
     * The view window still remains under the main frame's MDI control.
     */
    virtual void detachWindow(KMdiChildView *pWnd,bool bShow=TRUE);
-   /** 
+   /**
    * Someone wants that the MDI view to be closed. This method sends a KMdiViewCloseEvent to itself
    * to break the function call stack. See also @ref event() .
    */
    virtual void childWindowCloseRequest(KMdiChildView *pWnd);
-   /** 
-   * Close all views 
+   /**
+   * Close all views
    */
    virtual void closeAllViews();
-   /** 
-   * Iconfiy all views 
+   /**
+   * Iconfiy all views
    */
    virtual void iconifyAllViews();
-   /** 
-   * Closes the view of the active (topchild) window 
+   /**
+   * Closes the view of the active (topchild) window
    */
    virtual void closeActiveView();
-   /** 
-   * Undocks all view windows (unix-like) 
+   /**
+   * Undocks all view windows (unix-like)
    */
    virtual void switchToToplevelMode();
    virtual void finishToplevelMode();
@@ -501,44 +502,44 @@ public slots:
    */
    bool isViewTaskBarOn();
    /**
-   * Shows the view taskbar. This should be connected with your "View" menu. 
+   * Shows the view taskbar. This should be connected with your "View" menu.
    */
    virtual void showViewTaskBar();
-   /** 
-   * Hides the view taskbar. This should be connected with your "View" menu. 
+   /**
+   * Hides the view taskbar. This should be connected with your "View" menu.
    */
    virtual void hideViewTaskBar();
-   /** 
-   * Update of the window menu contents. 
+   /**
+   * Update of the window menu contents.
    */
    virtual void fillWindowMenu();
 
-   /** 
-   * Cascades the windows without resizing them. 
+   /**
+   * Cascades the windows without resizing them.
    */
    virtual void cascadeWindows() { m_pMdi->cascadeWindows(); }
-   /** 
-   * Cascades the windows resizing them to the maximum available size. 
+   /**
+   * Cascades the windows resizing them to the maximum available size.
    */
    virtual void cascadeMaximized() { m_pMdi->cascadeMaximized(); };
-   /** 
+   /**
    * Maximizes only in vertical direction.
    */
    virtual void expandVertical() { m_pMdi->expandVertical(); };
-   /** 
+   /**
    * Maximizes only in horizontal direction.
    */
    virtual void expandHorizontal() { m_pMdi->expandHorizontal(); };
-   /** 
-   * Tile Pragma 
+   /**
+   * Tile Pragma
    */
    virtual void tilePragma() { m_pMdi->tilePragma(); };
-   /** 
-   * Tile Anodine 
+   /**
+   * Tile Anodine
    */
    virtual void tileAnodine() { m_pMdi->tileAnodine(); };
-   /** 
-   * Tile Vertically 
+   /**
+   * Tile Vertically
    */
    virtual void tileVertically() { m_pMdi->tileVertically(); };
    /**
@@ -590,32 +591,32 @@ protected:
    void blockClearingOfWindowMenu( bool bBlocked) { m_bClearingOfWindowMenuBlocked = bBlocked; };
 
 protected slots: // Protected slots
-   /** 
+   /**
    * Sets the focus to this MDI view, raises it, activates its taskbar button and updates
    * the system buttons in the main menubar when in maximized (Maximize mode).
    */
    virtual void activateView(KMdiChildView *pWnd);
-   /** 
+   /**
    * Activates the MDI view (see @ref activateView() ) and popups the taskBar popup menu (see @ref taskBarPopup() ).
    */
    virtual void taskbarButtonRightClicked(KMdiChildView *pWnd);
    /**
-   * Turns the system buttons for maximize mode (SDI mode) off, and disconnects them 
+   * Turns the system buttons for maximize mode (SDI mode) off, and disconnects them
    */
    void switchOffMaximizeModeForMenu(KMdiChildFrm* oldChild);
    /**
-   * Reconnects the system buttons form maximize mode (SDI mode) with the new child frame 
+   * Reconnects the system buttons form maximize mode (SDI mode) with the new child frame
    */
    void updateSysButtonConnections( KMdiChildFrm* oldChild, KMdiChildFrm* newChild);
-   /** 
+   /**
    * Usually called when the user clicks an MDI view item in the "Window" menu.
    */
    void windowMenuItemActivated(int id);
-   /** 
+   /**
    * Usually called when the user clicks an MDI view item in the sub-popup menu "Docking" of the "Window" menu.
    */
    void dockMenuItemActivated(int id);
-   /** 
+   /**
    * Popups the "Window" menu. See also @ref windowPopup() .
    */
    void popupWindowMenu(QPoint p);
@@ -628,12 +629,12 @@ protected slots: // Protected slots
    */
    void closeViewButtonPressed();
 signals:
-   /** 
-   * Signals the last attached @ref KMdiChildView has been closed 
+   /**
+   * Signals the last attached @ref KMdiChildView has been closed
    */
    void lastChildFrmClosed();
-   /** 
-   * Signals the last KMdiChildView (that is under MDI control) has been closed 
+   /**
+   * Signals the last KMdiChildView (that is under MDI control) has been closed
    */
    void lastChildViewClosed();
    /**

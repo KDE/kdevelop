@@ -383,7 +383,7 @@ void KMdiChildArea::expandHorizontal()
 
 //============= getVisibleChildCount =============//
 
-int KMdiChildArea::getVisibleChildCount()
+int KMdiChildArea::getVisibleChildCount() const
 {
    int cnt=0;
    for(KMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
@@ -441,20 +441,20 @@ void KMdiChildArea::tileAllInternal(int maxWnds)
             lpC->restorePressed();
          if ((curWin%numToHandle)==0)
             lpC->setGeometry(curX,curY,xQuantum * lastwindw[numToHandle-1],yQuantum);
-         else 
+         else
             lpC->setGeometry(curX,curY,xQuantum,yQuantum);
          //example : 12 windows : 3 cols 3 rows
          if (curCol<colstable[numToHandle-1]) { //curCol<3
             curX+=xQuantum; //add a column in the same row
             curCol++;       //increase current column
-         } 
+         }
          else {
             curX = 0;         //new row
             curCol = 1;       //column 1
             if (curRow < rowstable[numToHandle-1]) { //curRow<3
                curY += yQuantum; //add a row
                curRow++;       //
-            } 
+            }
             else {
                curY = 0;         //restart from beginning
                curRow = 1;       //
@@ -524,7 +524,7 @@ void KMdiChildArea::tileVertically()
    KMdiChildFrm *lpTop=topChild();
    int numVisible=getVisibleChildCount(); // count visible windows
    if(numVisible<1)return;
-   
+
    int w = width() / numVisible;
    int lastWidth = 0;
    if( numVisible > 1)
@@ -534,7 +534,7 @@ void KMdiChildArea::tileVertically()
    int h = height();
    int posX = 0;
    int countVisible = 0;
-   
+
    for(KMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
       if(lpC->m_state != KMdiChildFrm::Minimized){
          if(lpC->m_state==KMdiChildFrm::Maximized)lpC->restorePressed();

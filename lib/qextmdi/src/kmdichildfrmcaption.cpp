@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qcursor.h>
+#include <qtoolbutton.h>
 
 #include "kmdidefines.h"
 #include "kmdichildfrmcaption.h"
@@ -141,7 +142,7 @@ void KMdiChildFrmCaption::setActive(bool bActive)
 {
    if( m_bActive == bActive)
       return;
-   
+
    //    Ensure the icon's pixmap has the correct bg color
    m_pParent->m_pWinIcon->setBackgroundColor(bActive
    ? m_pParent->m_pManager->m_captionActiveBackColor
@@ -210,7 +211,7 @@ void KMdiChildFrmCaption::paintEvent(QPaintEvent *)
    int captionWidthForText = width() - 4*m_pParent->m_pClose->width() - m_pParent->icon()->width() - 5;
    QString text = abbreviateText( m_szCaption, captionWidthForText);
    p.drawText( r, AlignVCenter|AlignLeft|SingleLine, text);
-   
+
 }
 
 //=============== abbreviateText ===============//

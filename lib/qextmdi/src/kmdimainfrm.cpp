@@ -31,6 +31,9 @@
 #include <qcursor.h>
 #include <qclipboard.h>
 #include <qobjectlist.h>
+#include <qpopupmenu.h>
+#include <qmenubar.h>
+
 #ifndef NO_KDE
 #include <kmenubar.h>
 #include <kapplication.h>
@@ -38,6 +41,7 @@
 #include <kdeversion.h>
 #include <qtabwidget.h>
 #endif
+
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qtimer.h>
@@ -191,7 +195,7 @@ KMdiMainFrm::~KMdiMainFrm()
    delete m_pCloseButtonPixmap;
 
    //deletes added for Release-Version-Pop-Up-WinMenu-And-Go-Out-Problem
-   delete m_pDockMenu; 
+   delete m_pDockMenu;
    delete m_pMdiModeMenu;
    delete m_pPlacingMenu;
    delete m_pTaskBarPopup;
@@ -222,7 +226,7 @@ void KMdiMainFrm::createMdiManager()
    QObject::connect( m_pMdi, SIGNAL(sysButtonConnectionsMustChange(KMdiChildFrm*,KMdiChildFrm*)), this, SLOT(updateSysButtonConnections(KMdiChildFrm*,KMdiChildFrm*)) );
    QObject::connect( m_pMdi, SIGNAL(popupWindowMenu(QPoint)), this, SLOT(popupWindowMenu(QPoint)) );
    QObject::connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SIGNAL(lastChildFrmClosed()) );
-#ifndef NO_KDE   
+#ifndef NO_KDE
 #if !(KDE_VERSION > 305)
    m_pMdi->installEventFilter( this );
 #endif
@@ -271,7 +275,7 @@ KMdiChildView* KMdiMainFrm::createWrapper(QWidget *view, const QString& name, co
   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
   view->reparent(pMDICover, QPoint(0,0));
   pLayout->addWidget(view);
-  pMDICover->setName(name);
+//  pMDICover->setName(name);
   pMDICover->setTabCaption(shortName);
   pMDICover->setCaption(name);
 
@@ -509,7 +513,7 @@ void KMdiMainFrm::attachWindow(KMdiChildView *pWnd, bool bShow, bool bAutomaticR
                        m_pMdi->width()  + KMDI_CHILDFRM_DOUBLE_BORDER,
                        m_pMdi->height() + lpC->captionHeight() + KMDI_CHILDFRM_SEPARATOR + KMDI_CHILDFRM_DOUBLE_BORDER);
       lpC->setRestoreGeometry(r);
-   }      
+   }
 
    if (bShow) {
       lpC->show();
@@ -845,13 +849,13 @@ bool KMdiMainFrm::event( QEvent* e)
          closeWindow( pWnd);
       return TRUE;
    }
-   // A hack little hack: If MDI child views are moved implicietly by moving 
+   // A hack little hack: If MDI child views are moved implicietly by moving
    // the main widget the should know this too. Unfortunately there seems to
    // be no way to catch the move start / move stop situations for the main
-   // widget in a clean way. (There is no MouseButtonPress/Release or 
-   // something like that.) Therefore we do the following: When we get the 
+   // widget in a clean way. (There is no MouseButtonPress/Release or
+   // something like that.) Therefore we do the following: When we get the
    // "first" move event we start a timer and interprete it as "drag begin".
-   // If we get the next move event and the timer is running we restart the 
+   // If we get the next move event and the timer is running we restart the
    // timer and don't do anything else. If the timer elapses (this meens we
    // haven't had any move event for a while) we interprete this as "drag
    // end". If the moving didn't stop actually, we will later get another
@@ -865,7 +869,7 @@ bool KMdiMainFrm::event( QEvent* e)
          m_pDragEndTimer->stop();
       }
       else {
-         // this is the first move -> send the drag begin to all concerned views 
+         // this is the first move -> send the drag begin to all concerned views
          KMdiChildView* pView;
          for (m_pWinList->first(); (pView = m_pWinList->current()) != 0L; m_pWinList->next()) {
             KMdiChildFrmDragBeginEvent    dragBeginEvent(0L);
@@ -898,7 +902,7 @@ bool KMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
    }
    else if (e->type() == QEvent::KeyRelease) {
       if (switching()) {
-#ifndef NO_KDE        
+#ifndef NO_KDE
         KAction *a = actionCollection()->action( "view_last_window" ) ;
         if (a) {
               const KShortcut cut( a->shortcut() );
@@ -906,7 +910,7 @@ bool KMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
               const KKey& key = seq.key(0);
               int modFlags = key.modFlags();
               int state = ((QKeyEvent *)e)->state();
-              KKey key2( (QKeyEvent *)e ); 
+              KKey key2( (QKeyEvent *)e );
 
               /** these are quite some assumptions:
               *   The key combination uses exactly one modifier key
@@ -1220,7 +1224,7 @@ void KMdiMainFrm::finishChildframeMode()
          if( pView->isMaximized())
             pView->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
          detachWindow( pView, FALSE);
-	 
+
       }
    }
 }
@@ -1323,7 +1327,7 @@ void KMdiMainFrm::finishTabPageMode()
    if (m_mdiMode == KMdi::TabPageMode) {
       m_pClose->hide();
       QObject::disconnect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
-      
+
       QPtrListIterator<KMdiChildView> it( *m_pWinList);
       for( ; it.current(); ++it) {
          KMdiChildView* pView = it.current();
@@ -1423,7 +1427,7 @@ void KMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
    m_pMinimize->hide();
    m_pRestore->hide();
    m_pClose->hide();
-   
+
    m_pUndock->setPixmap( *m_pUndockButtonPixmap);
    m_pMinimize->setPixmap( *m_pMinButtonPixmap);
    m_pRestore->setPixmap( *m_pRestoreButtonPixmap);
@@ -1620,7 +1624,7 @@ void KMdiMainFrm::switchOffMaximizeModeForMenu(KMdiChildFrm* oldChild)
    // if there is no menubar given, those system buttons aren't possible
    if( m_pMainMenuBar == 0L)
       return;
-      
+
    m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(0));
 
    if( oldChild) {
@@ -1642,7 +1646,7 @@ void KMdiMainFrm::updateSysButtonConnections( KMdiChildFrm* oldChild, KMdiChildF
    // if there is no menubar given, those system buttons aren't possible
    if( m_pMainMenuBar == 0L)
       return;
-      
+
    if (newChild) {
       if (frameDecorOfAttachedViews() == KMdi::KDELaptopLook) {
          m_pMainMenuBar->insertItem( QPixmap(kde2laptop_closebutton_menu), newChild, SLOT(closePressed()), 0, -1, 0);

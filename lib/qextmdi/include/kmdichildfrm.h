@@ -30,9 +30,7 @@
 
 #include <qptrlist.h>
 #include <qpixmap.h>
-#include <qpopupmenu.h>
 #include <qpushbutton.h>
-#include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qdatetime.h>
 #include <qlayout.h>
@@ -43,6 +41,8 @@
 
 class KMdiChildArea;
 class KMdiChildView;
+class QPopupMenu;
+class QToolButton;
 
 //==============================================================================
 /**
@@ -145,7 +145,7 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
    friend class KMdiChildFrmCaption;
    Q_OBJECT
 
-// attributes  
+// attributes
 public:
    enum MdiWindowState { Normal,Maximized,Minimized };
                            //positions same in h and cpp for fast order check
@@ -172,12 +172,12 @@ protected:
    QPixmap*                m_pRestoreButtonPixmap;
    QPixmap*                m_pCloseButtonPixmap;
    QPixmap*                m_pUndockButtonPixmap;
-   /** 
-   * Every child frame window has an temporary ID in the Window menu of the child area. 
+   /**
+   * Every child frame window has an temporary ID in the Window menu of the child area.
    */
    int                     m_windowMenuID;
-   /** 
-   * Imitates a system menu for child frame windows 
+   /**
+   * Imitates a system menu for child frame windows
    */
    QPopupMenu*             m_pSystemMenu;
    QSize                   m_oldClientMinSize;
@@ -214,7 +214,7 @@ public:
    /**
    * Returns the child frame icon.
    */
-   QPixmap* icon();
+   QPixmap* icon() const;
    /**
    * Enables or disables the close button
    */
@@ -236,7 +236,7 @@ public:
    * Returns the current state of the window
    * Cool to have it inline...
    */
-   inline MdiWindowState state(){ return m_state; };
+   inline MdiWindowState state() const { return m_state; };
    /**
    * Returns the inner client area of the parent of this (which is KMdiChildArea).
    */
@@ -257,11 +257,11 @@ public:
    /**
    * Returns the system menu.
    */
-   QPopupMenu* systemMenu();
+   QPopupMenu* systemMenu() const;
    /**
-   * Returns the caption bar height 
+   * Returns the caption bar height
    */
-   inline int captionHeight() { return m_pCaption->height(); };
+   inline int captionHeight() const { return m_pCaption->height(); };
    /**
    * sets new raise behaviour and pixmaps of the buttons depending on the current decoration style
    */
@@ -280,10 +280,10 @@ public:
    */
    void raiseAndActivate();
 
-   /** 
+   /**
    * Sets the minimum size of the widget to w by h pixels.
    * It extends it's base clase method in a way that the minimum size of
-   * the child area will be set additionally if the view is maximized. 
+   * the child area will be set additionally if the view is maximized.
    */
    virtual void setMinimumSize ( int minw, int minh );
 
@@ -296,44 +296,44 @@ public slots:
 protected:
    /** Reimplemented from its base class.
    * Resizes the captionbar, relayouts the position of the system buttons,
-   * and calls resize for its embedded client @ref KMdiChildView with the proper size 
+   * and calls resize for its embedded client @ref KMdiChildView with the proper size
    */
    virtual void resizeEvent(QResizeEvent *);
    /** Reimplemented from its base class.
    * Detects if the mouse is on the edge of window and what resize cursor must be set.
-   * Calls KMdiChildFrm::resizeWindow if it is in m_bResizing. 
+   * Calls KMdiChildFrm::resizeWindow if it is in m_bResizing.
    */
    virtual void mouseMoveEvent(QMouseEvent *e);
    /** Reimplemented from its base class.
    * Colours the caption, raises the childfrm widget and
-   * turns to resize mode if it is on the edge (resize-sensitive area) 
+   * turns to resize mode if it is on the edge (resize-sensitive area)
    */
    virtual void mousePressEvent(QMouseEvent *e);
    /** Reimplemented from its base class.
-   * Sets a normal cursor and leaves the resize mode. 
+   * Sets a normal cursor and leaves the resize mode.
    */
    virtual void mouseReleaseEvent(QMouseEvent *);
    /** Reimplemented from its base class.
    * give its child view the chance to notify a childframe move... that's why it sends
-   * a @ref KMdiChildMovedEvent to the embedded @ref KMdiChildView . 
+   * a @ref KMdiChildMovedEvent to the embedded @ref KMdiChildView .
    */
    virtual void moveEvent(QMoveEvent* me);
-   /** 
-   * Reimplemented from its base class. If not in resize mode, it sets the mouse cursor to normal appearance. 
+   /**
+   * Reimplemented from its base class. If not in resize mode, it sets the mouse cursor to normal appearance.
    */
    virtual void leaveEvent(QEvent *);
    /** Reimplemented from its base class.
    * Additionally it catches<UL>
    * <LI>the client's mousebutton press events and raises and activates the childframe then</LI>
-   * <LI>the client's resize event and resizes its childframe widget (this) as well</LI></UL> 
+   * <LI>the client's resize event and resizes its childframe widget (this) as well</LI></UL>
    */
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
    /** Calculates the new geometry from the new mouse position given as parameters
-   * and calls KMdiChildFrm::setGeometry 
+   * and calls KMdiChildFrm::setGeometry
    */
    void resizeWindow(int resizeCorner, int x, int y);
-   /** 
-   * Override the cursor appearance depending on the widget corner given as parameter 
+   /**
+   * Override the cursor appearance depending on the widget corner given as parameter
    */
    void setResizeCursor(int resizeCorner);
    /**
@@ -341,7 +341,7 @@ protected:
    */
    void unsetResizeCursor();
    /** That means to show a mini window showing the childframe's caption bar, only.
-   * It cannot be resized. 
+   * It cannot be resized.
    */
    virtual void switchToMinimizeLayout();
    /**
@@ -350,19 +350,19 @@ protected:
    void doResize();
 
 protected slots:
-   /** 
-   * Handles a click on the Maximize button 
+   /**
+   * Handles a click on the Maximize button
    */
    void maximizePressed();
-   /** 
-   * Handles a click on the Restore (Normalize) button 
+   /**
+   * Handles a click on the Restore (Normalize) button
    */
    void restorePressed();
-   /** 
-   * Handles a click on the Minimize button. 
+   /**
+   * Handles a click on the Minimize button.
    */
    void minimizePressed();
-   /** 
+   /**
    * Handles a click on the Close button.
    */
    void closePressed();
