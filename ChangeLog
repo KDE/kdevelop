@@ -1,3 +1,8 @@
+2001-05-16  F@lk Brettschneider <falk@kdevelop.org>
+    * evil hack in KDevSession to get rid of the event timing problem
+      when adding a flood of new views to MDI
+    * bugfix: set correct position of system popupmenu of MDI child view
+
 2001-05-16  Christian Couder <christian@kdevelop.org>
     * Move the browser bookmark stuff from ckdevelop to docviewman.
     * Rename some browser bookmark methods.
