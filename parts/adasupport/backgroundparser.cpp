@@ -9,8 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <strstream>
-
 #include "backgroundparser.h"
 #include "problemreporter.h"
 #include "AdaLexer.hpp"
@@ -19,6 +17,13 @@
 #include <kdebug.h>
 #include <qfile.h>
 
+#include <config.h>
+
+#ifdef HAVE_SSTREAM
+#include <sstream>
+#else
+#include <strstream.h>
+#endif
 
 BackgroundParser::BackgroundParser( ProblemReporter* reporter,
                                     const QString& source,
@@ -38,8 +43,11 @@ void BackgroundParser::run()
     QCString _fn = QFile::encodeName(m_fileName);
     std::string fn( _fn.data() );
 
-    QCString text = m_source.utf8();
-    std::istrstream stream( text );
+#ifdef HAVE_SSTREAM
+    std::istringstream stream( m_source.utf8().data() );
+#else
+    istrstream stream( m_source.utf8().data() );
+#endif
 
     AdaLexer lexer( stream );
     lexer.setFilename( fn );
@@ -61,11 +69,10 @@ void BackgroundParser::run()
         parser.resetErrors();
 
         parser.compilation_unit();
-        int errors = lexer.numberOfErrors() + parser.numberOfErrors();
 
     } catch( antlr::ANTLRException& ex ){
         kdDebug() << "*exception*: " << ex.toString().c_str() << endl;
-        m_reporter->reportError( ex.getMessage(),
+        m_reporter->reportError( QString::fromLatin1( ex.getMessage().c_str() ),
 				 m_fileName,
 				 lexer.getLine(),
 				 lexer.getColumn() );
