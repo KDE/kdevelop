@@ -19,7 +19,6 @@
 
 #include "cclassview.h"
 #include <assert.h>
-#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <klocale.h>
 #include <qheader.h>
@@ -458,7 +457,7 @@ void CClassView::tip( const QPoint &p, QRect &r, QString &str )
   i = itemAt( p );
   r = itemRect( i );
 
-  if( treeH->itemType( i ) != THFOLDER && i != NULL && r.isValid() )
+  if( i != NULL && treeH->itemType( i ) != THFOLDER && r.isValid() )
     str = i->text( 0 );
   else
     str = "";
@@ -925,7 +924,7 @@ void CClassView::slotClassDelete()
                       i18n("Are you sure you want to delete this class?"),
                       KMsgBox::QUESTION ) == 1 )
   {
-    QMessageBox::information( this, "Not implemented",
+    KMsgBox::message( this, "Not implemented",
                       "This function isn't implemented yet." );
   }
                       
@@ -1083,7 +1082,5 @@ void CClassView::slotClassWizard()
   dlg.setStore( store );
   dlg.exec();
 }
-
-
 
 
