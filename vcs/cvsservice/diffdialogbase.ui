@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DiffDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>221</height>
+            <height>246</height>
         </rect>
     </property>
     <property name="caption">
@@ -35,20 +35,6 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>diffLocalBaseRadio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Local copy and BASE</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+L</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
                         <cstring>diffLocalHeadRadio</cstring>
                     </property>
                     <property name="text">
@@ -56,6 +42,20 @@
                     </property>
                     <property name="accel">
                         <string>Alt+H</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>diffLocalBaseRadio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Local copy and BASE</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+L</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
