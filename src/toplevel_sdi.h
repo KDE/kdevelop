@@ -64,6 +64,7 @@ public slots:
   void raiseLeftTabbar();
   void raiseRightTabbar();
   void raiseBottomTabbar();
+  void raiseEditor();
 
 private slots:
 
@@ -96,11 +97,11 @@ private:
 
   void saveSettings();
 
-  void moveRelativeTab(unsigned int);
+  void moveRelativeTab(int);
   void raiseTabbar( KTabZoomWidget *tabBar );
 
   KAction *m_stopProcesses;
-  KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar;
+  KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
 
   QTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;

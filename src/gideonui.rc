@@ -43,6 +43,7 @@
     <Action name="raise_left_tabbar"/>
     <Action name="raise_right_tabbar"/>
     <Action name="raise_bottom_tabbar"/>
+    <Action name="raise_editor"/>
     <Separator/>
     <Merge/>
   </Menu>

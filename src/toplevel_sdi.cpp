@@ -45,87 +45,87 @@
 
 
 TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
-  : KParts::MainWindow(parent, name),
-  m_pWindowMenu(0L),
-  m_closing(false)
-{
-   KAction * action;
+        : KParts::MainWindow(parent, name),
+        m_pWindowMenu(0L),
+m_closing(false) {
+    KAction * action;
 
-   action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, 
-                         this, SLOT(gotoNextWindow()),
-                         actionCollection(), "view_next_window");
-   action->setStatusText( i18n("Switches to the next window") );
+    action = new KAction( i18n("&Next Window"), ALT+Key_PageDown,
+                          this, SLOT(gotoNextWindow()),
+                          actionCollection(), "view_next_window");
+    action->setStatusText( i18n("Switches to the next window") );
 
-   action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp,
-                         this, SLOT(gotoPreviousWindow()),
-                         actionCollection(), "view_previous_window");
-   action->setStatusText( i18n("Switches to the previous window") );
+    action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp,
+                          this, SLOT(gotoPreviousWindow()),
+                          actionCollection(), "view_previous_window");
+    action->setStatusText( i18n("Switches to the previous window") );
 
-   m_raiseLeftBar = new KAction( i18n("Switch &Left Tabbar"), ALT+Key_L,
-			 this, SLOT(raiseLeftTabbar()),
-			 actionCollection(), "raise_left_tabbar");
+    m_raiseLeftBar = new KAction( i18n("Switch &Left Tabbar"), ALT+Key_L,
+                                  this, SLOT(raiseLeftTabbar()),
+                                  actionCollection(), "raise_left_tabbar");
 
-   m_raiseRightBar = new KAction( i18n("Switch &Right Tabbar"), ALT+Key_R,
-                         this, SLOT(raiseRightTabbar()),
-                         actionCollection(), "raise_right_tabbar");
+    m_raiseRightBar = new KAction( i18n("Switch &Right Tabbar"), ALT+Key_R,
+                                   this, SLOT(raiseRightTabbar()),
+                                   actionCollection(), "raise_right_tabbar");
 
-   m_raiseBottomBar = new KAction( i18n("Switch &Bottom Tabbar"), ALT+Key_U,
-                         this, SLOT(raiseBottomTabbar()),
-                         actionCollection(), "raise_bottom_tabbar");
+    m_raiseBottomBar = new KAction( i18n("Switch &Bottom Tabbar"), ALT+Key_U,
+                                    this, SLOT(raiseBottomTabbar()),
+                                    actionCollection(), "raise_bottom_tabbar");
 
-   m_raiseLeftBar->setEnabled( false );
-   m_raiseRightBar->setEnabled( false );
-   m_raiseBottomBar->setEnabled( false );
+    m_raiseEditor = new KAction( i18n("Raise &Editor"), ALT+Key_C,
+                                 this, SLOT(raiseEditor()),
+                                 actionCollection(), "raise_editor");
 
-   // Add window menu to the menu bar
-   m_pWindowMenu = new QPopupMenu( main(), "window_menu");
-   m_pWindowMenu->setCheckable( TRUE);
-   menuBar()->insertItem(tr("&Window"),m_pWindowMenu);
+    m_raiseLeftBar->setEnabled( false );
+    m_raiseRightBar->setEnabled( false );
+    m_raiseBottomBar->setEnabled( false );
 
-   QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
+    // Add window menu to the menu bar
+    m_pWindowMenu = new QPopupMenu( main(), "window_menu");
+    m_pWindowMenu->setCheckable( TRUE);
+    menuBar()->insertItem(tr("&Window"),m_pWindowMenu);
+
+    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), main(), SLOT(slotFillWindowMenu()) );
 }
 
 
-void TopLevelSDI::init()
-{
+void TopLevelSDI::init() {
 #if (KDE_VERSION > 305)
-  setStandardToolBarMenuEnabled( true );
+    setStandardToolBarMenuEnabled( true );
 #endif
-  setXMLFile("gideonui.rc");
 
-  createFramework();
-  createActions();
-  createStatusBar();
+    setXMLFile("gideonui.rc");
 
-  createGUI(0);
-  slotFillWindowMenu();  // Just in case there is no file open. The menu would then be empty.
+    createFramework();
+    createActions();
+    createStatusBar();
 
-  if ( PluginController::pluginServices().isEmpty() ) {
-    KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
-	"that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
-	"path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
-	"Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
-	i18n("Couldn't find plugins") );
-  }
+    createGUI(0);
+    slotFillWindowMenu();  // Just in case there is no file open. The menu would then be empty.
+
+    if ( PluginController::pluginServices().isEmpty() ) {
+        KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
+                                       "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
+                                       "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
+                                       "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
+                            i18n("Couldn't find plugins") );
+    }
 }
 
 
-TopLevelSDI::~TopLevelSDI()
-{
-  TopLevel::invalidateInstance( this );
-  delete m_pWindowMenu;
+TopLevelSDI::~TopLevelSDI() {
+    TopLevel::invalidateInstance( this );
+    delete m_pWindowMenu;
 }
 
 
-bool TopLevelSDI::queryClose()
-{
-  if (m_closing)
-    return true;
+bool TopLevelSDI::queryClose() {
+    if (m_closing)
+        return true;
 
-  emit wantsToQuit();
-  return false;
+    emit wantsToQuit();
+    return false;
 }
-
 
 void TopLevelSDI::prepareToCloseViews()
 {
@@ -141,452 +141,432 @@ void TopLevelSDI::realClose()
 }
 
 
-KMainWindow *TopLevelSDI::main()
-{
-  return this;
+KMainWindow *TopLevelSDI::main() {
+    return this;
 }
 
 
-void TopLevelSDI::createStatusBar()
-{
-  (void) new StatusBar(this);
+void TopLevelSDI::createStatusBar() {
+    (void) new StatusBar(this);
 }
 
 
-void TopLevelSDI::createFramework()
-{
-  m_leftBar = new KTabZoomWidget(this, KTabZoomPosition::Left);
-  setCentralWidget(m_leftBar);
+void TopLevelSDI::createFramework() {
+    m_leftBar = new KTabZoomWidget(this, KTabZoomPosition::Left);
+    setCentralWidget(m_leftBar);
 
-  m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
-  m_leftBar->addContent(m_bottomBar);
+    m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
+    m_leftBar->addContent(m_bottomBar);
 
-  m_rightBar = new KTabZoomWidget ( m_bottomBar, KTabZoomPosition::Right );
-  m_bottomBar->addContent ( m_rightBar );
+    m_rightBar = new KTabZoomWidget ( m_bottomBar, KTabZoomPosition::Right );
+    m_bottomBar->addContent ( m_rightBar );
 
-  m_tabWidget = new QTabWidget(m_rightBar);
-  m_tabWidget->setMargin(2);
+    m_tabWidget = new QTabWidget(m_rightBar);
+    m_tabWidget->setMargin(2);
 
-  PartController::createInstance(m_tabWidget);
+    PartController::createInstance(m_tabWidget);
 
-  m_bottomBar->addContent(m_tabWidget);
-  m_rightBar->addContent ( m_tabWidget );
+    m_bottomBar->addContent(m_tabWidget);
+    m_rightBar->addContent ( m_tabWidget );
 
-  connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)), 
-	  PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
+    connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)),
+            PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
 
-  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-	  this, SLOT(createGUI(KParts::Part*)));
+    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+            this, SLOT(createGUI(KParts::Part*)));
 
-  connect( m_leftBar, SIGNAL(tabsChanged()), this, SLOT(slotLeftTabsChanged()) );
-  connect( m_rightBar, SIGNAL(tabsChanged()), this, SLOT(slotRightTabsChanged()) );
-  connect( m_bottomBar, SIGNAL(tabsChanged()), this, SLOT(slotBottomTabsChanged()) );
+    connect( m_leftBar, SIGNAL(tabsChanged()), this, SLOT(slotLeftTabsChanged()) );
+    connect( m_rightBar, SIGNAL(tabsChanged()), this, SLOT(slotRightTabsChanged()) );
+    connect( m_bottomBar, SIGNAL(tabsChanged()), this, SLOT(slotBottomTabsChanged()) );
 
-  connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
-  connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-  connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-  connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+    connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+    connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
 }
 
 
 
-void TopLevelSDI::createActions()
-{
-  ProjectManager::getInstance()->createActions( actionCollection() );
-  
-  KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
-    
-  KAction* action;
-  
-  m_stopProcesses = new KAction( i18n( "&Stop" ), "stop", 
-                Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
-                actionCollection(), "stop_processes" );
-  m_stopProcesses->setStatusText(i18n("Stop all running processes"));
-  m_stopProcesses->setEnabled( false );
-  
-  connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
-           this, SLOT(slotActiveProcessCountChanged(uint)) );
- 
-  action = KStdAction::showMenubar(
-     this, SLOT(slotShowMenuBar()),
-     actionCollection(), "settings_show_menubar" );
-  action->setStatusText(i18n("Lets you switch the menubar on/off"));
-   
-  action = KStdAction::keyBindings(
-      this, SLOT(slotKeyBindings()),
-      actionCollection(), "settings_configure_shortcuts" );
-  action->setStatusText(i18n("Lets you configure shortcut keys"));
+void TopLevelSDI::createActions() {
+    ProjectManager::getInstance()->createActions( actionCollection() );
 
-  action = KStdAction::configureToolbars(
-      this, SLOT(slotConfigureToolbars()),
-      actionCollection(), "settings_configure_toolbars" );
-  action->setStatusText(i18n("Lets you configure toolbars"));
+    KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
+
+    KAction* action;
+
+    m_stopProcesses = new KAction( i18n( "&Stop" ), "stop",
+                                   Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
+                                   actionCollection(), "stop_processes" );
+    m_stopProcesses->setStatusText(i18n("Stop all running processes"));
+    m_stopProcesses->setEnabled( false );
+
+    connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
+             this, SLOT(slotActiveProcessCountChanged(uint)) );
+
+    action = KStdAction::showMenubar(
+                 this, SLOT(slotShowMenuBar()),
+                 actionCollection(), "settings_show_menubar" );
+    action->setStatusText(i18n("Lets you switch the menubar on/off"));
+
+    action = KStdAction::keyBindings(
+                 this, SLOT(slotKeyBindings()),
+                 actionCollection(), "settings_configure_shortcuts" );
+    action->setStatusText(i18n("Lets you configure shortcut keys"));
+
+    action = KStdAction::configureToolbars(
+                 this, SLOT(slotConfigureToolbars()),
+                 actionCollection(), "settings_configure_toolbars" );
+    action->setStatusText(i18n("Lets you configure toolbars"));
 
 #if (KDE_VERSION > 305)
-  action = KStdAction::configureNotifications(
-      this, SLOT(slotConfigureNotifications()),
-      actionCollection(), "settings_configure_notifications" );
-  action->setStatusText(i18n("Lets you configure system notifications"));
-#endif  
-  
-  action = KStdAction::preferences(this, SLOT(slotSettings()),
-                actionCollection(), "settings_configure" );
-  action->setStatusText( i18n("Lets you customize KDevelop") );
+
+    action = KStdAction::configureNotifications(
+                 this, SLOT(slotConfigureNotifications()),
+                 actionCollection(), "settings_configure_notifications" );
+    action->setStatusText(i18n("Lets you configure system notifications"));
+#endif
+
+    action = KStdAction::preferences(this, SLOT(slotSettings()),
+                                     actionCollection(), "settings_configure" );
+    action->setStatusText( i18n("Lets you customize KDevelop") );
 }
 
-void TopLevelSDI::slotActiveProcessCountChanged( uint active )
-{
-  m_stopProcesses->setEnabled( active > 0 );
+void TopLevelSDI::slotActiveProcessCountChanged( uint active ) {
+    m_stopProcesses->setEnabled( active > 0 );
 }
 
-void TopLevelSDI::slotQuit()
-{
-  (void) queryClose();
-}
-
-
-void TopLevelSDI::embedPartView(QWidget *view, const QString &name, const QString& toolTip)
-{
-  m_tabWidget->addTab(view, name);
-  m_tabWidget->setTabToolTip(view, toolTip);
-  m_tabWidget->showPage(view);
+void TopLevelSDI::slotQuit() {
+    (void) queryClose();
 }
 
 
-void TopLevelSDI::embedSelectView(QWidget *view, const QString &name, const QString &toolTip)
-{
-  m_leftBar->addTab(view, name, toolTip);
-}
-
-void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip)
-{
-  m_rightBar->addTab (view, title, toolTip);
-}
-
-void TopLevelSDI::embedOutputView(QWidget *view, const QString &name, const QString &toolTip)
-{
-  m_bottomBar->addTab(view, name, toolTip);
-}
-
-
-void TopLevelSDI::removeView(QWidget *)
-{
-}
-
-void TopLevelSDI::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/)
-{
-  // TODO: implement me
-}
-
-void TopLevelSDI::raiseView(QWidget *view)
-{
-  m_leftBar->raiseWidget(view);
-  m_bottomBar->raiseWidget(view);
-  m_tabWidget->showPage(view);
-}
-
-
-void TopLevelSDI::lowerView(QWidget *view)
-{
-  m_leftBar->lowerWidget(view);
-  m_bottomBar->lowerWidget(view);
-}
-
-
-void TopLevelSDI::lowerAllViews()
-{
-  m_leftBar->lowerAllWidgets();
-  m_bottomBar->lowerAllWidgets();
-}
-
-void TopLevelSDI::moveRelativeTab(unsigned int n)
-{
-  if(m_tabWidget->count()) {
-    int index = m_tabWidget->currentPageIndex();
-		
-    QWidget * view = (m_tabWidget->page((index+n)%m_tabWidget->count()));
+void TopLevelSDI::embedPartView(QWidget *view, const QString &name, const QString& toolTip) {
+    m_tabWidget->addTab(view, name);
+    m_tabWidget->setTabToolTip(view, toolTip);
     m_tabWidget->showPage(view);
-  }
-}
-
-void TopLevelSDI::gotoNextWindow()
-{
-  moveRelativeTab(1);
-}
-
-void TopLevelSDI::gotoPreviousWindow()
-{
-  moveRelativeTab(m_tabWidget->count()-1);
-}
-
-void TopLevelSDI::createGUI(KParts::Part *part)
-{
-  if ( !part )
-    setCaption( QString::null );
-  KParts::MainWindow::createGUI(part);
 }
 
 
-void TopLevelSDI::loadSettings()
-{
-  KConfig *config = kapp->config();
-  
-  ProjectManager::getInstance()->loadSettings();
-  applyMainWindowSettings(config, "Mainwindow");
+void TopLevelSDI::embedSelectView(QWidget *view, const QString &name, const QString &toolTip) {
+    m_leftBar->addTab(view, name, toolTip);
+}
 
-  config->setGroup("LeftBar");
-  m_leftBar->loadSettings(config);
+void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip) {
+    m_rightBar->addTab (view, title, toolTip);
+}
 
-  config->setGroup("BottomBar");
-  m_bottomBar->loadSettings(config);
+void TopLevelSDI::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) {
+    m_bottomBar->addTab(view, name, toolTip);
 }
 
 
-void TopLevelSDI::saveSettings()
-{
-  KConfig *config = kapp->config();
+void TopLevelSDI::removeView(QWidget *) {}
 
-  ProjectManager::getInstance()->saveSettings();
-  saveMainWindowSettings(config, "Mainwindow");
+void TopLevelSDI::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
+    // TODO: implement me
+}
 
-  config->setGroup("LeftBar");
-  m_leftBar->saveSettings(config);
-
-  config->setGroup("BottomBar");
-  m_bottomBar->saveSettings(config);
+void TopLevelSDI::raiseView(QWidget *view) {
+    m_leftBar->raiseWidget(view);
+    m_bottomBar->raiseWidget(view);
+    m_tabWidget->showPage(view);
 }
 
 
-void TopLevelSDI::slotKeyBindings()
-{
-  KKeyDialog dlg( false, this );
-  QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
-  for( QPtrListIterator<KXMLGUIClient> it( clients );
-       it.current(); ++it ) {
-    dlg.insert( (*it)->actionCollection() );
-  }
-  dlg.configure();
+void TopLevelSDI::lowerView(QWidget *view) {
+    m_leftBar->lowerWidget(view);
+    m_bottomBar->lowerWidget(view);
 }
 
-void TopLevelSDI::slotConfigureToolbars()
-{
-  saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
-  KEditToolbar dlg( factory() );
-  connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
-  dlg.exec();
+
+void TopLevelSDI::lowerAllViews() {
+    m_leftBar->lowerAllWidgets();
+    m_bottomBar->lowerAllWidgets();
+}
+
+void TopLevelSDI::moveRelativeTab(int n) {
+
+    KTabZoomWidget * bar = 0;
+    if (m_leftBar->hasFocus()) bar = m_leftBar;
+    if (m_rightBar->hasFocus()) bar = m_rightBar;
+    if (m_bottomBar->hasFocus()) bar = m_bottomBar;
+    
+    if (bar) {
+    if(bar->count()) {
+            int index = bar->indexOf(bar->current());
+
+            QWidget * view = (bar->at((bar->count()+index+n)%bar->count()));
+            bar->raiseWidget(view);
+        }
+        return;
+    }
+    
+    //Default : editor
+    if(m_tabWidget->count()) {
+            int index = m_tabWidget->currentPageIndex();
+
+            QWidget * view = (m_tabWidget->page((m_tabWidget->count()+index+n)%m_tabWidget->count()));
+            m_tabWidget->showPage(view);
+        }
+}
+
+void TopLevelSDI::gotoNextWindow() {
+    moveRelativeTab(1);
+}
+
+void TopLevelSDI::gotoPreviousWindow() {
+    moveRelativeTab(-1);
+}
+
+void TopLevelSDI::createGUI(KParts::Part *part) {
+    if ( !part )
+        setCaption( QString::null );
+    KParts::MainWindow::createGUI(part);
+}
+
+
+void TopLevelSDI::loadSettings() {
+    KConfig *config = kapp->config();
+
+    ProjectManager::getInstance()->loadSettings();
+    applyMainWindowSettings(config, "Mainwindow");
+
+    config->setGroup("LeftBar");
+    m_leftBar->loadSettings(config);
+
+    config->setGroup("BottomBar");
+    m_bottomBar->loadSettings(config);
+}
+
+
+void TopLevelSDI::saveSettings() {
+    KConfig *config = kapp->config();
+
+    ProjectManager::getInstance()->saveSettings();
+    saveMainWindowSettings(config, "Mainwindow");
+
+    config->setGroup("LeftBar");
+    m_leftBar->saveSettings(config);
+
+    config->setGroup("BottomBar");
+    m_bottomBar->saveSettings(config);
+}
+
+
+void TopLevelSDI::slotKeyBindings() {
+    KKeyDialog dlg( false, this );
+    QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
+    for( QPtrListIterator<KXMLGUIClient> it( clients );
+            it.current(); ++it ) {
+        dlg.insert( (*it)->actionCollection() );
+    }
+    dlg.configure();
+}
+
+void TopLevelSDI::slotConfigureToolbars() {
+    saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
+    KEditToolbar dlg( factory() );
+    connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
+    dlg.exec();
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
-void TopLevelSDI::slotNewToolbarConfig()
-{
-  // replug actionlists here...
+void TopLevelSDI::slotNewToolbarConfig() {
+    // replug actionlists here...
 
-  applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
+    applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
 }
 
-void TopLevelSDI::slotShowMenuBar()
-{
-  if (menuBar()->isVisible()) {
-    menuBar()->hide();
-  } else {
-    menuBar()->show();
-  }
-  saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
+void TopLevelSDI::slotShowMenuBar() {
+    if (menuBar()->isVisible()) {
+        menuBar()->hide();
+    } else {
+        menuBar()->show();
+    }
+    saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
 }
 
-void TopLevelSDI::slotConfigureNotifications()
-{
+void TopLevelSDI::slotConfigureNotifications() {
 #if (KDE_VERSION > 305)
-  KNotifyDialog::configure(this, "Notification Configuration Dialog");
+    KNotifyDialog::configure(this, "Notification Configuration Dialog");
 #endif
 }
 
-void TopLevelSDI::slotSettings()
-{
-  KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
-                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
-                  "customization dialog");
+void TopLevelSDI::slotSettings() {
+    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
+                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
+                    "customization dialog");
 
-  QVBox *vbox = dlg.addVBoxPage(i18n("General"));
-  SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
-  
-  KConfig* config = kapp->config();
-  config->setGroup("General Options");
-  gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
+    QVBox *vbox = dlg.addVBoxPage(i18n("General"));
+    SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
 
-  Core::getInstance()->doEmitConfigWidget(&dlg);
-  dlg.exec();
+    KConfig* config = kapp->config();
+    config->setGroup("General Options");
+    gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
 
-  config->setGroup("General Options");
-  config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
+    Core::getInstance()->doEmitConfigWidget(&dlg);
+    dlg.exec();
+
+    config->setGroup("General Options");
+    config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
 }
 
 
 //=============== slotFillWindowMenu ===============//
-void TopLevelSDI::slotFillWindowMenu()
-{
-  // construct the menu and its submenus
-  bool bNoViewOpened = true;    // Assume no view is open yet
-  m_pWindowMenu->clear();       // Erase whole window menu
+void TopLevelSDI::slotFillWindowMenu() {
+    // construct the menu and its submenus
+    bool bNoViewOpened = true;    // Assume no view is open yet
+    m_pWindowMenu->clear();       // Erase whole window menu
 
-  // Construct fixed enties of the window menu
-  int closeId         = m_pWindowMenu->insertItem(tr("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
-  int closeAllId      = m_pWindowMenu->insertItem(tr("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
-  int closeAllOtherId = m_pWindowMenu->insertItem(tr("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
-  m_pWindowMenu->insertSeparator();
+    // Construct fixed enties of the window menu
+    int closeId         = m_pWindowMenu->insertItem(tr("&Close"), PartController::getInstance(), SLOT(slotCloseWindow()));
+    int closeAllId      = m_pWindowMenu->insertItem(tr("Close &All"), PartController::getInstance(), SLOT(slotCloseAllWindows()));
+    int closeAllOtherId = m_pWindowMenu->insertItem(tr("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
+    m_pWindowMenu->insertSeparator();
 
-  // Loop over all parts and add them to the window menu
-  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
-  for ( ; it.current(); ++it)
-  {
-    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-    if (!ro_part)
-      continue;
-    // We fond a KPart to add
-    QString name = ro_part->url().url();
-    KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
-    action->setChecked(ro_part == PartController::getInstance()->activePart());
-    connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
-    action->plug(m_pWindowMenu);
-    bNoViewOpened = false;   // Now we know that at least one view exists.
-   }
+    // Loop over all parts and add them to the window menu
+    QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+    for ( ; it.current(); ++it) {
+        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+        if (!ro_part)
+            continue;
+        // We fond a KPart to add
+        QString name = ro_part->url().url();
+        KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
+        action->setChecked(ro_part == PartController::getInstance()->activePart());
+        connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
+        action->plug(m_pWindowMenu);
+        bNoViewOpened = false;   // Now we know that at least one view exists.
+    }
 
-   if (bNoViewOpened) { // If there is no view open all fixed window menu entries will be disabled
-      m_pWindowMenu->setItemEnabled(closeId, FALSE);
-      m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
-      m_pWindowMenu->setItemEnabled(closeAllOtherId, FALSE);
-   }
+    if (bNoViewOpened) { // If there is no view open all fixed window menu entries will be disabled
+        m_pWindowMenu->setItemEnabled(closeId, FALSE);
+        m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
+        m_pWindowMenu->setItemEnabled(closeAllOtherId, FALSE);
+    }
 }
 
 //=============== slotBufferSelected ===============//
-void TopLevelSDI::slotBufferSelected()
-{
+void TopLevelSDI::slotBufferSelected() {
 
-  // Get the URL of the sender
-  QString SenderName = sender()->name();
-  KURL SenderUrl(SenderName);
+    // Get the URL of the sender
+    QString SenderName = sender()->name();
+    KURL SenderUrl(SenderName);
 
-  // Loop over all KParts
-  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
-  for ( ; it.current(); ++it)
-  {
-    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-    if (ro_part) {
-      KURL PartUrl=ro_part->url();
-      QString PartName=PartUrl.path();
-      if (SenderUrl == PartUrl)  { // Found part to activate
-        PartController::getInstance()->setActivePart(ro_part);
-        if (ro_part->widget()) {
-          raiseView(ro_part->widget());
-          ro_part->widget()->setFocus();
+    // Loop over all KParts
+    QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+    for ( ; it.current(); ++it) {
+        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+        if (ro_part) {
+            KURL PartUrl=ro_part->url();
+            QString PartName=PartUrl.path();
+            if (SenderUrl == PartUrl)  { // Found part to activate
+                PartController::getInstance()->setActivePart(ro_part);
+                if (ro_part->widget()) {
+                    raiseView(ro_part->widget());
+                    ro_part->widget()->setFocus();
+                }
+                break;
+            }
         }
-        break;
-      }
     }
-  }
-  slotFillWindowMenu();  // To check the correct entry
+    slotFillWindowMenu();  // To check the correct entry
 }
 
-void TopLevelSDI::slotPartAdded(KParts::Part* part)
-{
-  if ( !part || !part->inherits("KTextEditor::Document") )
-    return;
+void TopLevelSDI::slotPartAdded(KParts::Part* part) {
+    if ( !part || !part->inherits("KTextEditor::Document") )
+        return;
 
-  connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 }
 
-void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar )
-{
-  if ( !tabBar )
-    return;
+void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar ) {
+    if ( !tabBar )
+        return;
 
-  if ( tabBar->isRaised() ) {
-    if ( tabBar->isDocked() ) {
-      if ( tabBar->hasFocus() ) {
-        if ( m_tabWidget->currentPage() )
-          m_tabWidget->currentPage()->setFocus();
-      } else {
-          tabBar->setFocus();
-      }
+    if ( tabBar->isRaised() ) {
+        if ( tabBar->isDocked() ) {
+            if ( tabBar->hasFocus() ) {
+                if ( m_tabWidget->currentPage() )
+                    m_tabWidget->currentPage()->setFocus();
+            } else {
+                tabBar->setFocus();
+            }
+        } else {
+            tabBar->lowerAllWidgets();
+            if ( m_tabWidget->currentPage() )
+                m_tabWidget->currentPage()->setFocus();
+        }
     } else {
-      tabBar->lowerAllWidgets();
-      if ( m_tabWidget->currentPage() )
-	m_tabWidget->currentPage()->setFocus();
+        tabBar->raiseWidget( 0 );
     }
-  } else {
-    tabBar->raiseWidget( 0 );
-  }
 }
 
-void TopLevelSDI::raiseLeftTabbar()
-{
-  raiseTabbar( m_leftBar );
+void TopLevelSDI::raiseLeftTabbar() {
+    raiseTabbar( m_leftBar );
 }
 
-void TopLevelSDI::raiseRightTabbar()
-{
-  raiseTabbar( m_rightBar );
+void TopLevelSDI::raiseRightTabbar() {
+    raiseTabbar( m_rightBar );
 }
 
-void TopLevelSDI::raiseBottomTabbar()
-{
-  raiseTabbar( m_bottomBar );
+void TopLevelSDI::raiseBottomTabbar() {
+    raiseTabbar( m_bottomBar );
 }
 
-void TopLevelSDI::slotTextChanged()
-{
-  QWidget* w = m_tabWidget->currentPage();
-  if ( !w )
-    return;
-
-  QString t = m_tabWidget->tabLabel( w );
-  if ( t.right( 1 ) != "*" )
-    t += "*";
-
-  m_tabWidget->setTabLabel( w, t ); 
+void TopLevelSDI::raiseEditor() {
+    m_tabWidget->currentPage()->setFocus();
 }
 
-void TopLevelSDI::slotUpdateModifiedFlags()
-{
-  QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
-  for ( ; it.current(); ++it) {
-    KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
-    if ( rw_part && rw_part->widget() ) {
-      int idx = m_tabWidget->indexOf( rw_part->widget() );
-      if ( idx < 0 )
-        continue;
-      QString t = m_tabWidget->tabLabel( rw_part->widget() );
-      bool titleMod = (t.right( 1 ) == "*");
-      if ( rw_part->isModified() && !titleMod ) {
-	m_tabWidget->setTabLabel( rw_part->widget(), t + "*" );
-      } else if ( !rw_part->isModified() && titleMod ) {
-        t.truncate( t.length() - 1 );
-        m_tabWidget->setTabLabel( rw_part->widget(), t );
-      }
+void TopLevelSDI::slotTextChanged() {
+    QWidget* w = m_tabWidget->currentPage();
+    if ( !w )
+        return;
+
+    QString t = m_tabWidget->tabLabel( w );
+    if ( t.right( 1 ) != "*" )
+        t += "*";
+
+    m_tabWidget->setTabLabel( w, t );
+}
+
+void TopLevelSDI::slotUpdateModifiedFlags() {
+    QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
+    for ( ; it.current(); ++it) {
+        KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
+        if ( rw_part && rw_part->widget() ) {
+            int idx = m_tabWidget->indexOf( rw_part->widget() );
+            if ( idx < 0 )
+                continue;
+            QString t = m_tabWidget->tabLabel( rw_part->widget() );
+            bool titleMod = (t.right( 1 ) == "*");
+            if ( rw_part->isModified() && !titleMod ) {
+                m_tabWidget->setTabLabel( rw_part->widget(), t + "*" );
+            } else if ( !rw_part->isModified() && titleMod ) {
+                t.truncate( t.length() - 1 );
+                m_tabWidget->setTabLabel( rw_part->widget(), t );
+            }
+        }
     }
-  }
 }
 
-void TopLevelSDI::slotBottomTabsChanged()
-{
-  if ( !m_bottomBar )
-    return;
-  m_raiseBottomBar->setEnabled( !m_bottomBar->isEmpty() );
+void TopLevelSDI::slotBottomTabsChanged() {
+    if ( !m_bottomBar )
+        return;
+    m_raiseBottomBar->setEnabled( !m_bottomBar->isEmpty() );
 }
 
-void TopLevelSDI::slotRightTabsChanged()
-{
-  if ( !m_rightBar )
-    return;
-  m_raiseRightBar->setEnabled( !m_rightBar->isEmpty() );
+void TopLevelSDI::slotRightTabsChanged() {
+    if ( !m_rightBar )
+        return;
+    m_raiseRightBar->setEnabled( !m_rightBar->isEmpty() );
 }
 
-void TopLevelSDI::slotLeftTabsChanged()
-{
-  if ( !m_leftBar )
-    return;
-  m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
+void TopLevelSDI::slotLeftTabsChanged() {
+    if ( !m_leftBar )
+        return;
+    m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
 }
 
 #include "toplevel_sdi.moc"
