@@ -1154,6 +1154,20 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         return;
     }
 
+    // Get the run environment variables pairs into the environstr string
+    // in the form of; "ENV_VARIABLE1=ENV_VALUE1 ENV_VARIABLE2=ENV_VALUE2 ..."
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(dom, "/kdevautoproject/run/envvars", "envvar", "name", "value");
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+        environstr += (*it).second;
+        environstr += " ";
+    }
+    //TODO: use environst to set envoronment variables of the executable file.
+    
     //    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+"] path:["+config_gdbPath_+"]\n");
     dbgProcess_ = new KProcess;
 
