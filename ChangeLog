@@ -1,3 +1,6 @@
+2003-09-09 Dominik Haumann <dhdev@gmx.de>
+	* parts/appwizard/appwizarddlg[base.ui,.cpp]: fixed bugs 45719, 63930, 63929
+
 2003-09-08 Roberto Raggi <roberto@kdevelop.org>
     * Added the GUI for create the code completion databases for
       external libraries like Qt and KDE
