@@ -1167,7 +1167,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         QMap<QString, QString>::Iterator it;
         for (it = xmap.begin(); it != xmap.end(); ++it)
         {
-            DocTreeDoxygenFolder *dxf = new DocTreeDoxygenFolder(it.data(), it.key(), docView, "ctx_doxygen");
+            DocTreeDoxygenFolder *dxf = new DocTreeDoxygenFolder(config->readPathEntry(it.key()), it.key(), docView, "ctx_doxygen");
             dxf->refresh();
             folder_doxygen.append(dxf);
         }
