@@ -181,6 +181,7 @@ public:
     virtual ~FrameRoot();
     
     void setLocals(char *locals);
+    void addLocal(QString name, QString type, QString value);
     void setParams(const QCString& params);
     
     void setOpen(bool open);

@@ -71,22 +71,24 @@ void FramestackWidget::slotSelectFrame(int frame)
 
 /***************************************************************************/
 
-void FramestackWidget::parseJDBBacktraceList(char *str)
-{
-    // #0  Test::Test (this=0x8073b20, parent=0x0, name=0x0) at test.cpp:224
-    // #1  0x804bba9 in main (argc=1, argv=0xbffff9c4) at main.cpp:24
-
+void FramestackWidget::clearList() {
     clear();
     delete currentList_;
     currentList_ = new QStrList(true);      // make deep copies of the data
     currentList_->setAutoDelete(true);      // delete items when they are removed
+}
 
-    while (char *end = strchr(str, '\n')) {
-        *end = 0;                             // make it a string
-        currentList_->append(str);            // This copies the string (deepcopies = true above)
-        str = end+1;                          // next string
-    }
+void FramestackWidget::addItem(QString s) {
+        currentList_->append(s);            // This copies the string (deepcopies = true above)
+}
 
+void FramestackWidget::parseJDBBacktraceList(char *str)
+{
+}
+
+void FramestackWidget::updateDone()
+{
+    
     insertStrList(currentList_);
     currentFrame_ = 0;
 }

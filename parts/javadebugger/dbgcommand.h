@@ -40,7 +40,7 @@ public:
     bool expectReply() const                  { return waitForReply_; }
     bool typeMatch(char cmdType) const        { return (prompt_ == cmdType); }
     
-protected:
+//protected:
     QCString cmdBuffer_;
     QCString command_;
     bool    isRunCmd_;

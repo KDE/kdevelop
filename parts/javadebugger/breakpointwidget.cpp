@@ -319,7 +319,7 @@ void BreakpointWidget::slotUnableToSetBPNow(int BPid)
 
 void BreakpointWidget::slotParseJDBBrkptList(char *str)
 {
-    // An example of a GDB breakpoint table
+    // An example of a JDB breakpoint table
     // Num Type           Disp Enb Address    What
     // 1   breakpoint     del  y   0x0804a7fb in main at main.cpp:22
     // 2   hw watchpoint  keep y   thisIsAGlobal_int

@@ -42,7 +42,7 @@
 //  No data means disassemble the method we're curently in.(from the
 //  start of the method)
 //
-// click ok buton to send the request to gdb
+// click ok buton to send the request to jdb
 // the output is returned (some time later) in the raw data slot
 // and displayed as is, so it's rather crude, but it works!
 // **************************************************************************
@@ -103,7 +103,7 @@ MemoryViewDialog::~MemoryViewDialog()
 
 void MemoryViewDialog::slotRawJDBMemoryView(char *buf)
 {
-    // just display the resultant output from GDB in the edit box
+    // just display the resultant output from JDB in the edit box
     output_->clear();
     output_->insertLine(buf);
     output_->setCursorPosition(0,0);
@@ -111,7 +111,7 @@ void MemoryViewDialog::slotRawJDBMemoryView(char *buf)
 
 // **************************************************************************
 
-// get gdb to supply the disassembled data.
+// get jdb to supply the disassembled data.
 void MemoryViewDialog::slotDisassemble()
 {
     QString start(start_->text());

@@ -647,6 +647,12 @@ FrameRoot::~FrameRoot()
 
 // **************************************************************************
 
+void FrameRoot::addLocal(QString name, QString type, QString value)
+{
+    setText( VarNameCol, name);
+}
+
+
 void FrameRoot::setLocals(char *locals)
 {
     ASSERT(isActive());

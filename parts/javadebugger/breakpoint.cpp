@@ -146,7 +146,7 @@ void Breakpoint::configureDisplay()
 QString Breakpoint::dbgRemoveCommand() const
 {
     if (dbgId_>0)
-        return QString("delete %1").arg(dbgId_); // gdb command - not translatable
+        return QString("delete %1").arg(dbgId_); // jdb command - not translatable
     
     return QString();
 }
@@ -264,7 +264,7 @@ QString FilePosBreakpoint::dbgSetCommand() const
     }
     
     if (isTemporary())
-        cmdStr = "t"+cmdStr;  // gdb command
+        cmdStr = "t"+cmdStr;  // jdb command
     
     return cmdStr;
 }
@@ -318,7 +318,7 @@ Watchpoint::~Watchpoint()
 
 QString Watchpoint::dbgSetCommand() const
 {
-    return QString("watch ")+varName_;    // gdb command - not translatable
+    return QString("watch ")+varName_;    // jdb command - not translatable
 }
 
 /***************************************************************************/
@@ -397,7 +397,7 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 /***************************************************************************/
 /***************************************************************************/
 //
-// These are implemented in gdb but can cause a lot of breakpoints
+// These are implemented in jdb but can cause a lot of breakpoints
 // to be set. This needs more thought before being implemented
 
 //RegExpBreakpoint::RegExpBreakpoint(bool temporary, bool enabled) :
@@ -437,7 +437,7 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 /***************************************************************************/
 /***************************************************************************/
 
-// Most catch options arn't implemented in gdb so ignore this for now.
+// Most catch options arn't implemented in jdb so ignore this for now.
 
 //CatchBreakpoint::CatchBreakpoint(bool temporary, bool enabled) :
 //  Breakpoint(temporary, enabled)

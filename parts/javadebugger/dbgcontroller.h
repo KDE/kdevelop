@@ -47,8 +47,20 @@ enum DBGStateFlags
   s_attached          = 512,
   s_core              = 1024,
   s_waitTimer         = 2048,
-  s_shuttingDown      = 4096
+  s_shuttingDown      = 4096,
+  s_appStarting       = 8192,
+  s_parsingOutput     = 8192*2,
+  s_parsingLocals     = 8192*4
 };
+
+// only one command should be active at a time
+enum DBGCommandFlags
+{
+  c_Stackframe        = 1,
+  c_Locals            = 2,
+  c_BreakpointList    = 3
+};
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
@@ -69,15 +81,24 @@ protected:
 public slots:
     virtual void slotStart(const QString &application, const QString &args,
                            const QString &sDbgShell=QString())              = 0;
+    virtual void slotCoreFile(const QString &coreFile)                      = 0;
+    virtual void slotAttachTo(int pid)                                      = 0;
     
     virtual void slotRun()                                                  = 0;
+    virtual void slotRunUntil(const QString &fileName, int lineNum)         = 0;
     virtual void slotStepInto()                                             = 0;
     virtual void slotStepOver()                                             = 0;
     virtual void slotStepIntoIns()                                          = 0;
+    virtual void slotStepOverIns()                                          = 0;
     virtual void slotStepOutOff()                                           = 0;
     
     virtual void slotBreakInto()                                            = 0;
     virtual void slotBPState(Breakpoint *BP)                                = 0;
+    
+    virtual void slotDisassemble(const QString &start, const QString &end)  = 0;
+    virtual void slotMemoryDump(const QString &start, const QString &amount)= 0;
+    virtual void slotRegisters()                                            = 0;
+    virtual void slotLibraries()                                            = 0;
     
     virtual void slotExpandItem(VarItem *parent)                            = 0;
     virtual void slotExpandUserItem(VarItem *parent,

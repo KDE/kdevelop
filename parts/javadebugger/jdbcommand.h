@@ -1,5 +1,5 @@
 /***************************************************************************
-                          gdbcommand.h  -  description                              
+                          jdbcommand.h  -  description                              
                              -------------------                                         
     begin                : Sun Aug 8 1999                                           
     copyright            : (C) 1999 by John Birch
@@ -50,7 +50,8 @@ enum JDBCmd
   REGISTERS       = 'r',
 
   PROGRAM_STOP    = 'S',
-  SHARED_CONT     = 's',
+
+  STEP            = 's',
 
   BACKTRACE       = 'T',
 
@@ -77,7 +78,7 @@ public:
     JDBCommand(const QCString& command, bool isRunCmd=false, bool isInfoCmd=true,
                char prompt=WAIT);
     virtual ~JDBCommand();
-
+    
 private:
     static QCString idlePrompt_;
 };
@@ -91,7 +92,7 @@ public:
     JDBItemCommand(VarItem *item, const QCString &command,
                    bool isRunCmd=false, char prompt=DATAREQUEST);
     virtual ~JDBItemCommand();
-
+    
     VarItem *getItem()      { return item_; }
 
 private:

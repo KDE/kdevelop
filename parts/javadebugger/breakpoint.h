@@ -106,10 +106,10 @@ private:
     bool s_changedCondition_    :1;
     bool s_changedIgnoreCount_  :1;
     bool s_changedEnable_       :1;
-    bool s_hardwareBP_          :1;     // assigned by gdb
+    bool s_hardwareBP_          :1;     // assigned by jdb
     
-    int dbgId_;                         // assigned by gdb
-    int hits_;                          // assigned by gdb
+    int dbgId_;                         // assigned by jdb
+    int hits_;                          // assigned by jdb
     
     int key_;                           // internal unique key
     int active_;                        // counter incremented on receipt of all BP's

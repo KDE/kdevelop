@@ -1,11 +1,10 @@
-// *************************************************************************
+// **************************************************************************
 //                          jdbcontroller.cpp  -  description
 //                             -------------------
-//    begin                : Sun Aug 8 1999
-//    copyright            : (C) 1999 by John Birch
-//    email                : jb.nz@writeme.com
-// **************************************************************************
-//
+//    begin                : Mon Apr 16 2001
+//    copyright            : (C) 2001 by Oliver Strutynski
+//    email                : olistrut@gmx.net
+//    This code is heavily based on John Birch's original JDB Controller.               
 // **************************************************************************
 // *                                                                        *
 // *   This program is free software; you can redistribute it and/or modify *
@@ -15,122 +14,79 @@
 // *                                                                        *
 // **************************************************************************
 
+
 #include "jdbcontroller.h"
 
 #include "breakpoint.h"
 #include "framestackwidget.h"
+#include "variablewidget.h"
 #include "jdbcommand.h"
 #include "stty.h"
-#include "variablewidget.h"
 
 #include <kapp.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <kmessagebox.h>
+
 #include <kglobal.h>
 #include <klocale.h>
-#include <kmessagebox.h>
+
 #include <kprocess.h>
 
-#include <qregexp.h>
+#include <kregexp.h>
 #include <qstring.h>
 #include <qtimer.h>
-#include <qfileinfo.h>
+#include <qurl.h>
 
 #include <iostream>
 #include <ctype.h>
 #include <stdlib.h>
 
+#define BREAKPOINT_HIT 1
+#define MARK_FOUND 2
+#define JDB_MONITOR 1
+
+
+
 #if defined(DBG_MONITOR)
   #define JDB_MONITOR
-  #define DBG_DISPLAY(X)          {emit rawData((QString("\n")+QString(X)));}
+  #define DBG_DISPLAY(X)          {cout << QString(X) << "\n";}
 #else
-  #define DBG_DISPLAY(X)          {;}
+  #define DBG_DISPLAY(X)          {cout << QString(X) << "\n";}
 #endif
 
 #if defined(JDB_MONITOR)
-  #define JDB_DISPLAY(X)          {emit rawData(X);}
+  #define JDB_DISPLAY(X)          {cout << QString(X) << "\n";}
 #else
-  #define JDB_DISPLAY(X)          {;}
+  #define JDB_DISPLAY(X)          {cout << QString(X) << "\n";}
 #endif
 
-// **************************************************************************
-//
-// Does all the communication between jdb and the kdevelop's debugger code.
-// Significatant classes being used here are
-//
-// JDBParser  - parses the "variable" data using the vartree and varitems
-// VarTree    - where the variable data will end up
-// FrameStack - tracks the program frames and allows the user to switch between
-//              and therefore view the calling funtions and their data
-// Breakpoint - Where and what to do with breakpoints.
-// STTY       - the tty that the _application_ will run on.
-//
-// Significant variables
-// state_     - be very careful setting this. The controller is totally
-//              dependent on this reflecting the correct state. For instance,
-//              if the app is busy but we don't think so, then we lose control
-//              of the app. The only way to get out of these situations is to
-//              delete (stop) the controller.
-// currentFrame_
-//            - Holds the frame number where and locals/variable information will
-//              go to
-//
-// Certain commands need to be "wrapped", so that the output jdb produces is
-// of the form "\032data_id jdb output \032data_id"
-// Then a very simple parse can extract this jdb output and hand it off
-// to its' respective parser.
-// To do this we set the prompt to be \032data_id before the command and then
-// reset to \032i to indicate the "idle".
-//
-// Note that the following does not work because in certain situations
-// jdb can get an error in performing the command and therefore will not
-// output the final echo. Hence the data will be thrown away.
-// (certain "info locals" will generate this error.
-//
-//  queueCmd(new JDBCommand(QString().sprintf("define printlocal\n"
-//                                              "echo \32%c\ninfo locals\necho \32%c\n"
-//                                              "end",
-//                                              LOCALS, LOCALS)));
-// (although replacing echo with "set prompt" appropriately could work Hmmmm.)
-//
-// Shared libraries and breakpoints
-// ================================
-// Shared libraries and breakpoints have a problem that has a reasonable solution.
-// The problem is that jdb will not accept breakpoints in source that is in a
-// shared library that has _not_ _yet_ been opened but will be opened via a
-// dlopen.
-//
-// The solution is to get jdb to tell us when a shared library has been opened.
-// This means that when the user sets a breakpoint, we flag this breakpoint as
-// pending, try to set the breakpoint and if jdb says it succeeded then flag it
-// as active. If jdb is not successful then we leave the breakpoint as pending.
-//
-// This is known as "lazy breakpoints"
-//
-// If the user has selected a file that is really outside the program and tried to
-// set a breakpoint then this breakpoint will always be pending. I can't do
-// anything about that, because it _might_ be in a shared library. If not they
-// are either fools or just misguided...
-//
-// Now that the breakpoint is pending, we need jdb to tell us when a shared
-// library has been loaded. We use "set stop-on 1". This breaks on _any_
-// library event, and we just try to set the pending breakpoints. Once we're
-// done, we then "cont"
-//
-// Now here's the problem with all this. If the user "step"s over code that
-// contains a library dlopen then it'll just keep running, because we receive a
-// break and hence end up doing a continue. In this situation, I do _not_
-// do a continue but leave it stopped with the status line reflecting the
-// stopped state. The frame stack is in the dl routine that caused the stop.
-//
-// There isn't any way around this, but I could allievate the problem somewhat
-// by only doing a "set stop-on 1" when we have pending breakpoints.
-//
-// **************************************************************************
 
-
+/**
+ *
+ * Does all the communication between jdb and the kdevelop's debugger code.
+ * Significatant classes being used here are
+ *
+ * VarTree    - where the variable data will end up
+ * FrameStack - tracks the program frames and allows the user to switch between
+ *              and therefore view the calling funtions and their data
+ * Breakpoint - Where and what to do with breakpoints.
+ * STTY       - the tty that the _application_ will run on.
+ *
+ * Significant variables
+ * state_     - be very careful setting this. The controller is totally
+ *              dependent on this reflecting the correct state. For instance,
+ *              if the app is busy but we don't think so, then we lose control
+ *              of the app. The only way to get out of these situations is to
+ *              delete (stop) the controller.
+ * currentFrame_
+ *            - Holds the frame number where and locals/variable information will
+ *              go to
+ *
+ *
+*/
 JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack)
     : DbgController(),
+      
       frameStack_(frameStack),
       varTree_(varTree),
       currentFrame_(0),
@@ -149,21 +105,23 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
     KConfig *config = KGlobal::config();
     config->setGroup("Debug");
     ASSERT(!config->readBoolEntry("Use external debugger", false));
-
+    
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
     config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
     config_jdbPath_               = config->readEntry("JDB path", "");
     config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
-
+    
 #if defined (JDB_MONITOR)
+    cout << "Conenct\n";
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
               SLOT(slotDbgStatus(const QString&, int)));
 #endif
+
 #if defined (DBG_MONITOR)
     connect(  this,   SIGNAL(showStepInSource(const QString&, int, const QString&)),
               SLOT(slotStepInSource(const QString&,int)));
 #endif
-
+    
     cmdList_.setAutoDelete(true);
 }
 
@@ -250,21 +208,23 @@ void JDBController::reConfig()
 // the queue.
 void JDBController::queueCmd(DbgCommand *cmd, bool executeNext)
 {
+    // Output command info for debugging purposes
+    // DBG_DISPLAY("Queue: " + cmd->command_);
+
     // We remove any info command or _run_ command if we are about to
     // add a run command.
     if (cmd->isARunCmd())
         removeInfoRequests();
-
+    
     if (executeNext)
         cmdList_.insert(0, cmd);
     else
         cmdList_.append (cmd);
-
+    
     executeCmd();
 }
 
 // **************************************************************************
-
 // If the appliction can accept a command and we've got one waiting
 // then send it.
 // Commands can be just request for data (or change jdbs state in someway)
@@ -272,40 +232,49 @@ void JDBController::queueCmd(DbgCommand *cmd, bool executeNext)
 // state will get updated.
 void JDBController::executeCmd()
 {
-    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_appBusy))
+    
+    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_appBusy)) {
         return;
+   }
+    
 
     if (!currentCmd_) {
-        if (cmdList_.isEmpty())
-            return;
-
-        currentCmd_ = cmdList_.take(0);
-    }
-
-    if (!currentCmd_->moreToSend()) {
-        if (currentCmd_->expectReply())
-            return;
-
-        delete currentCmd_;
         if (cmdList_.isEmpty()) {
-            currentCmd_ = 0;
+            DBG_DISPLAY("Commandlist empty...\n");
             return;
         }
 
         currentCmd_ = cmdList_.take(0);
-    }
+    } else {
 
+      if (!currentCmd_->moreToSend()) {
+          if (currentCmd_->expectReply()) {
+              return;
+          }
+        
+          delete currentCmd_;
+          if (cmdList_.isEmpty()) {
+              currentCmd_ = 0;
+            
+              return;
+          }
+        
+          currentCmd_ = cmdList_.take(0);
+      }
+    }
+    
     ASSERT(currentCmd_ && currentCmd_->moreToSend());
 
+    // Output command info for debugging purposes
     dbgProcess_->writeStdin(currentCmd_->cmdToSend().data(), currentCmd_->cmdLength());
     setStateOn(s_waitForWrite);
-
+    
     if (currentCmd_->isARunCmd()) {
         setStateOn(s_appBusy);
         setStateOff(s_appNotStarted|s_programExited|s_silent);
     }
-
-    JDB_DISPLAY(currentCmd_->cmdToSend());
+    
+    JDB_DISPLAY("Written command: " + currentCmd_->cmdToSend());
     if (!stateIsOn(s_silent))
         emit dbgStatus ("", state_);
 }
@@ -318,7 +287,7 @@ void JDBController::destroyCmds()
         delete currentCmd_;
         currentCmd_ = 0;
     }
-
+    
     while (!cmdList_.isEmpty())
         delete cmdList_.take(0);
 }
@@ -343,47 +312,46 @@ void JDBController::removeInfoRequests()
 // commands as well.
 void JDBController::pauseApp()
 {
-    int i = cmdList_.count();
-    while (i) {
-        i--;
-        DbgCommand *cmd = cmdList_.at(i);
-        if ((stateIsOn(s_silent) && cmd->isAnInfoCmd()) || cmd->isARunCmd())
-            delete cmdList_.take(i);
-    }
-
-    if (dbgProcess_ && stateIsOn(s_appBusy))
-        dbgProcess_->kill(SIGINT);
 }
 
 // **********************************************************************
 
 // Whenever the program pauses we need to refresh the data visible to
-// the user. The reason we've stooped may be passed in  to be emitted.
+// the user. The reason we've stooped may be passed in to be emitted.
 void JDBController::actOnProgramPause(const QString &msg)
 {
     // We're only stopping if we were running, of course.
     if (stateIsOn(s_appBusy)) {
-        DBG_DISPLAY("Acting on program paused");
-        setStateOff(s_appBusy);
-        if (stateIsOn(s_silent))
-            return;
+       DBG_DISPLAY("Acting on program paused: " + msg);
+       setStateOff(s_appBusy);                        
+       // We're always at frame zero when the program stops
+       // and we must reset the active flag
+       currentFrame_ = 0;
+       varTree_->setActiveFlag(); //               ????????????????????????????????????
+       // These two need to be actioned immediately. The order _is_ important
+       emit dbgStatus("", state_);
+       
+       stackLineCount = 0;
 
-        emit dbgStatus (msg, state_);
+       frameStack_->clearList();
 
-        // We're always at frame zero when the program stops
-        // and we must reset the active flag
-        currentFrame_ = 0;
-        varTree_->setActiveFlag();
+       setStateOn(s_parsingOutput);
+       queueCmd(new JDBCommand("where", NOTRUNCMD, NOTINFOCMD, BACKTRACE), TRUE);
+       
+       executeCmd();
 
-        // These two need to be actioned immediately. The order _is_ important
-        queueCmd(new JDBCommand("where", NOTRUNCMD, INFOCMD, BACKTRACE), true);
-        if (stateIsOn(s_viewLocals))
-            queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS));
-
-        varTree_->findWatch()->requestWatchVars();
-        varTree_->findWatch()->setActive();
-        emit acceptPendingBPs();
-    }
+       varLineCount = 0;
+       // delete localData
+       localData.clear();
+       nameQueue.clear(); // should actually be empty already
+       
+       
+       setStateOn(s_parsingOutput);
+       parsedThis = FALSE;
+       queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS), FALSE);
+       executeCmd();
+                                                                                                                        
+    } else { cout << "Not running\n";}
 }
 
 // **************************************************************************
@@ -392,353 +360,538 @@ void JDBController::actOnProgramPause(const QString &msg)
 // an invalid program specified or ...
 // jdb is still running though, but only the run command (may) make sense
 // all other commands are disabled.
-void JDBController::programNoApp(const QString &msg, bool msgBox)
+void JDBController::programNoApp(const QString &, bool)
 {
-    state_ = (s_appNotStarted|s_programExited|(state_&s_viewLocals));
-    destroyCmds();
-    emit dbgStatus (msg, state_);
-
-    // We're always at frame zero when the program stops
-    // and we must reset the active flag
-    currentFrame_ = 0;
-    varTree_->setActiveFlag();
-
-    // Now wipe the tree out
-    varTree_->viewport()->setUpdatesEnabled(false);
-    varTree_->trim();
-    varTree_->viewport()->setUpdatesEnabled(true);
-    varTree_->repaint();
-
-    frameStack_->clear();
-
-    if (msgBox)
-        KMessageBox::error(0, i18n("jdb message:\n")+msg);
 }
 
 // **************************************************************************
 
 enum lineStarts
     {
-        START_Brea  = 1634038338,
-        START_Prog  = 1735357008,
-        START_warn  = 1852989815,
-        START_Cann  = 1852727619,
-        START_Stop  = 1886352467,
-        START__no_  = 544173608,
-        START_curr  = 1920103779,
-        START_Curr  = 1920103747,
-        START_Watc  = 1668571479,
-        START_Sing  = 1735289171,
-        START_No_s  = 1931505486,
-        START_Core  = 1701998403,
-        START_Temp  = 1886217556,
-        START__New  = 2003127899,
-        START__Swi  = 1769427803
+        START_Brea  = 0x61657242,
+        START_Step  = 0x70657453
     };
+
 
 // Any data that isn't "wrapped", arrives here. Rather than do multiple
 // string searches until we find (or don't find!) the data,
 // we break the data up, depending on the first 4 four bytes, treated as an
 // int. Hence those big numbers you see above.
-void JDBController::parseLine(char *buf)
+char* JDBController::parseLine(char *buf)
 {
-    //  int t=*(int*)(char*)"[New";
-    //  kdDebug() << "t = " << t << endl;
-
-    ASSERT(*buf != (char)BLOCK_START);
-
-    // Don't process blank lines
-    if (!*buf)
-        return;
-
+    
+    // TODO: ignore empty lines
+    
+    
     // Doing this copy should remove any alignment problems that
     // some systems have (eg Solaris).
     int sw;
     memcpy (&sw, buf, sizeof(int));
-
+    
     switch (sw) {
-    case START_Prog:
-        {
-            if ((strncmp(buf, "Program exited", 14) == 0) ||
-                (strncmp(buf, "Program terminated", 18) == 0)) {
-                DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
-                programNoApp(QString(buf), false);
-                programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
-                break;
-            }
-
-            if (strncmp(buf, "Program received signal", 23) == 0) {
-                // SIGINT is a "break into running program".
-                // We do this when the user set/mod/clears a breakpoint but the
-                // application is running.
-                // And the user does this to stop the program for their own
-                // nefarious purposes.
-                if (strstr(buf+23, "SIGINT") && stateIsOn(s_silent))
-                    break;
-
-                if (strstr(buf+23, "SIGSEGV"))
-                    {
-                        // Oh, shame, shame. The app has died a horrible death
-                        // Lets remove the pending commands and get the current
-                        // state organised for the user to figure out what went
-                        // wrong.
-                        // Note we're not quite dead yet...
-                        DBG_DISPLAY("Parsed (SIGSEGV) <" + QString(buf) + ">");
-                        destroyCmds();
-                        actOnProgramPause(QString(buf));
-                        programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
-                        break;
+    case START_Brea: {
+            cout << "Checking for breakpoint\n";
+            if ((strncmp(buf, "Breakpoint hit: thread", 22) == 0)) {
+                KRegExp ex( "Breakpoint hit: thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*), bci\\=[0-9]*.*\\n[^\\[]*\\[[0-9]*\\] ");
+                if (ex.match( QString(buf))) {
+                    DBG_DISPLAY(QString("Breakpoint hit in line ") + ex.group(3))
+                    if (stateIsOn(s_appStarting)) {
+                        setStateOff(s_appStarting);
                     }
-            }
+                    curMethod = ex.group(2),
+                    curLine = ex.group(3);
 
-            // All "Program" strings cause a refresh of the program state
-            DBG_DISPLAY("Unparsed (START_Prog)<" + QString(buf) + ">");
-            actOnProgramPause(QString(buf));
-            break;
-        }
 
-    case START_Cann:
-        {
-            // If you end the app and then restart when you have breakpoints set
-            // in a dynamically loaded library, jdb will halt because the set
-            // breakpoint is trying to access memory no longer used. The breakpoint
-            // must first be deleted, however, we want to retain the breakpoint for
-            // when the library gets loaded again.
-            // TODO  programHasExited_ isn't always set correctly,
-            // but it (almost) doesn't matter.
-            if ( strncmp(buf, "Cannot insert breakpoint", 24)==0) {
-                if (programHasExited_) {
-                    setStateOn(s_silent);
-                    actOnProgramPause(QString());
-                    int BPNo = atoi(buf+25);
-                    if (BPNo) {
-                        emit unableToSetBPNow(BPNo);
-                        queueCmd(new JDBCommand(QCString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
-                        queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-                        queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
+                    if (currentCmd_ && currentCmd_->isARunCmd()) {
+                        delete currentCmd_;
+                        currentCmd_ = 0;
+                        cout << "Deleting step command\n";
                     }
-                    DBG_DISPLAY("Parsed (START_cann)<" + QString(buf) + ">");
-                    break;
+
+
+                    emit showStepInSource(QCString("/home/olistrut/testprj/jdb/src/JavaDebugController.java"),
+                                          atoi(ex.group(3)), "");
+                    actOnProgramPause(QString("Reached Breakpoint in line ")+ex.group(3));
+
+                    return buf + ex.groupEnd(0);
                 }
-
-                DBG_DISPLAY("Ignore (START_cann)<" + QString(buf) + ">");
-                //        actOnProgramPause(QString());
-                break;
+            
             }
-
-            DBG_DISPLAY("Unparsed (START_cann)<" + QString(buf) + ">");
-            actOnProgramPause(QString(buf));
-            break;
-        }
-
-    case START__New:
-        {
-            if ( strncmp(buf, "[New Thread", 11)==0) {
-                DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString(buf) + ">");
-                break;
-            }
-        }
-
-    case START__Swi:
-        {
-            if ( strncmp(buf, "[Switching to Thread", 20)==0) {
-                DBG_DISPLAY("Parsed (START_[Swi)<ignored><" + QString(buf) + ">");
-                break;
-            }
-        }
-
-    case START_Curr:
-        {
-            if ( strncmp(buf, "Current language:", 17)==0) {
-                DBG_DISPLAY("Parsed (START_Curr)<ignored><" + QString(buf) + ">");
-                break;
-            }
-        }
-
-
-    case START_Brea:
-        {
-            // Starts with "Brea" so assume "Breakpoint" and just get a full
-            // breakpoint list. Note that the state is unchanged.
-            // Much later: I forget why I did it like this :-o
-            queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
-
-            DBG_DISPLAY("Parsed (BP) <" + QString(buf) + ">");
-            break;
-        }
-
-    case START_No_s:      // "No symbols loaded"
-    case START_Sing:      // Single stepping
-        {
-            // We don't change state, because this falls out when a run command starts
-            // rather than when a run command stops.
-            // We do let the user know what is happening though.
-            emit dbgStatus (QString(buf), state_);
-            break;
-        }
-
-    case START_warn:
-        {
-            actOnProgramPause(QString());
-            break;
-        }
-
-
-    default:
-        {
-            // The first "step into" into a source file that is missing
-            // prints on stderr with a message that there's no source. Subsequent
-            // "step into"s just print line number at filename. Both start with a
-            // numeric char.
-            // Also a 0x message arrives everytime the program stops
-            // In the case where there is no source available and you were
-            // then this message should appear. Otherwise a program location
-            // message will arrive immediately after this and overwrite it.
-            if (isdigit(*buf)) {
-                DBG_DISPLAY("Parsed (digit)<" + QString(buf) + ">");
-                parseProgramLocation(buf);
-                //        actOnProgramPause(QString(buf));
-                break;
-            }
-
-            // TODO - Only do this at start up
-            if ( //strncmp(buf, "No executable file specified.", 29) ==0   ||
-                strstr(buf, "not in executable format:")                ||
-                strstr(buf, "No such file or directory.")               ||  // does this fall out?
-                strstr(buf, i18n("No such file or directory.").latin1())||  // from system via jdb
-                strstr(buf, "is not a core dump:")                      ||
-                strncmp(buf, "ptrace: No such process.", 24)==0         ||
-                strncmp(buf, "ptrace: Operation not permitted.", 32)==0) {
-                programNoApp(QString(buf), true);
-                DBG_DISPLAY("Bad file <" + QString(buf) + ">");
-                break;
-            }
-
-            // Any other line that falls out when we are busy is a stop. We
-            // might blank a previous message or display this message
-            if (stateIsOn(s_appBusy)) {
-                if ((strncmp(buf, "No ", 3)==0) && strstr(buf, "not meaningful")) {
-                    DBG_DISPLAY("Parsed (not meaningful)<" + QString(buf) + ">");
-                    actOnProgramPause(QString(buf));
-                    break;
-                }
-
-                DBG_DISPLAY("Unparsed (default - busy)<" + QString(buf) + ">");
-                actOnProgramPause(QString(" "));
-                break;
-            }
-
-            // All other lines are ignored
-            DBG_DISPLAY("Unparsed (default - not busy)<" + QString(buf) + ">");
-            break;
-        }
     }
+    case START_Step: {
+            if ((strncmp(buf, "Step completed:", 15) == 0)) {
+                cout << "STEP: " << buf << "\n";
+                KRegExp ex( " thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*)");
+                if (ex.match( QString(buf))) {
+                    cout << "MATCH\n";  
+                    curMethod = ex.group(2),
+                    curLine = ex.group(3);
+                    
+
+                    if (currentCmd_ && currentCmd_->typeMatch(STEP)) {
+                        delete currentCmd_;
+                        currentCmd_ = 0;
+                        DBG_DISPLAY("Deleting step command");
+                    }
+
+                    QString curClass = QString(ex.group(2)).left(QString(ex.group(2)).findRev("."));
+                    QString curFile = getFile(curClass);
+                    cout << "Filename: " << curFile <<"\n";
+                    emit showStepInSource(curFile, atoi(ex.group(3)), "");
+                                                                    
+                    actOnProgramPause(QString("step completed, stopped in ") + ex.group(2));
+                    
+                    return buf + QString(buf).length();
+                }
+                
+            }
+    
+    }
+    }
+    return 0;
 }
+
+// **********************************************************************
+
+char* JDBController::parseInfo(char *buf)
+{
+
+    // Every string we are looking for has to match at the 
+    // beginning of buf!
+    if (currentCmd_ && currentCmd_->typeMatch(BACKTRACE)) {
+        return parseBacktrace(buf);
+    } else if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
+        setStateOn(s_parsingLocals);
+        return parseLocalVars(buf);
+    } else if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
+        setStateOn(s_parsingLocals);
+        if (char* tmp = parseDump(buf)) { return tmp; }
+    }
+    
+    return 0;
+}
+
+
+// **********************************************************************
+
+char* JDBController::parseBacktrace(char* buf) {
+    KRegExp* exp = 0;
+    // Check for a new line of stacktrace output first
+    exp = new KRegExp( "^ \\[[0-9]+\\][^\\)]+\\)");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Found some stacktrace output"));
+        frameStack_->addItem(exp->group(0));
+        stackLineCount++;
+        buf += exp->groupEnd(0);
+        delete exp;
+        return buf;
+    }
+
+    // If that fails we check if the standard prompt is displayed
+    if (stackLineCount > 0) {
+    cout << ">" << *buf<<"\n";
+    exp->compile("^[^ ]+\\[[0-9]+\\]");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Found end of stacktrace (prompt)"));
+
+        if (currentCmd_ && currentCmd_->typeMatch(BACKTRACE)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+        
+        setStateOff(s_parsingOutput);
+        
+        frameStack_->updateDone();
+        buf += exp->groupEnd(0);
+        delete exp;        
+        return buf;
+        
+    }
+    }
+    
+    // we know there will be a stack trace, so we just need to wait for
+    // more data flowing in
+    delete exp;
+    return 0;
+}        
+
+// **********************************************************************
+
+
+char* JDBController::parseLocalVars(char* buf) {
+    KRegExp* exp = 0;
+    exp = new KRegExp( "^Local variable information not available. Compile with -g to generate variable information\n");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("No var info available"));
+        if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+        varUpdateDone();
+        buf += exp->groupEnd(0);
+        delete exp;
+        return buf;
+    }
+    
+    exp->compile( "^No local variables");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("No locals"));
+        
+        // wait for prompt
+        buf += exp->groupEnd(0);
+        delete exp;
+        return buf;
+    }
+    
+    // Seems as if Java outputs some very strange spaces sometimes
+    // or \s is partly broken in KRegExp
+    exp->compile( "^  ([^ ]+) \\= ([^\\(\n]+)\\s*\\(id\\=[0-9]*\\)");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Var info:"));
+        varLineCount++;
+        cout << "Name: " << exp->group(1) << "\n";
+        cout << "Type: " << exp->group(2) << "\n"; // Remove possible trailing whitespace
+        
+        // Queue current var for processing.
+        // cout << "APPENDING: " << exp->group(1) << "\n";
+        nameQueue.append(exp->group(1));
+
+        buf += exp->groupEnd(0);
+        delete exp;
+        return buf;
+
+    }
+
+    exp->compile("^  ([^ ]+) \\= ([^\n]+)");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Local Var info:"));
+
+        varLineCount++;
+        cout << "Name: " << exp->group(1) << "\n";
+        cout << "Type: " << exp->group(2) << "\n"; // Remove possible trailing whitespace
+        
+        // primitive type, add directly
+        analyzeDump(exp->group(0));
+
+        buf += exp->groupEnd(0);
+        delete exp;
+        return buf;
+
+    }
+
+
+    exp->compile("^([^ ]+)\\[[0-9]+\\] ");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Found end of var dump (prompt)"));
+        cout << ">" << exp->group(0) << "<\n";
+        if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+
+        if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+
+        buf += exp->groupEnd(0);
+        delete exp;
+        return buf;
+        
+        
+    }
+    delete exp;
+    
+    return 0;
+}
+
+// **********************************************************************
+
+
+char* JDBController::parseDump(char* buf) {
+    // Looking for dump output
+    KRegExp *exp;
+    
+    // compound object
+    exp = new KRegExp( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Found dump info"));
+        
+        analyzeDump(exp->group(0));
+
+        if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+        
+        buf +=  exp->groupEnd(0);
+        delete exp;
+        return buf;
+    }
+
+    // Array element
+    exp->compile("^ ([^\\[]+\\[[0-9]+\\]) \\= ([^\n]+)");
+    if (exp->match( QString(buf))) {
+        DBG_DISPLAY(QString("Found dump info"));
+        cout << "Array element: " << exp->group(1) << " - " << exp->group(2) << "\n";
+        analyzeDump(exp->group(0));
+
+        if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+
+        
+        buf +=  exp->groupEnd(0);
+        delete exp;
+        return buf;
+    }
+
+    exp->compile("^No 'this'.  In native or static method\n");
+    if (exp->match( QString(buf))) {
+        
+        if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
+            delete currentCmd_;
+            currentCmd_ = 0;
+        }
+
+        buf +=  exp->groupEnd(0);
+        delete exp;
+        return buf;
+    }
+
+    delete exp;
+    return 0;
+}
+
+
+
 
 // **************************************************************************
 
-// The program location falls out of jdb, preceeded by \032\032. We treat
-// it as a wrapped command (even though it doesn't have a trailing \032\032.
-// The data gets parsed here and emitted in its component parts.
-void JDBController::parseProgramLocation(char *buf)
+/*
+ * There aren't too many possibilities here:
+ *  a) Object is of primitive type: data should match something like name: value(id=xxx)
+ *  b) Object is an array element of primitive type: name[index] = value
+ *  b) Object is of compound type: name: instance of package.classname(id=xxx) { properties }
+ *     where properties can be variables of primitive type (a) or are in the form
+ *     name: instance of type name or are arrays of either primitive or non primitive types
+ *  c) Object is an array of primitive type objects: name: instance of type[dimension] (id=xxx)
+ *  d) Object is an array of compound objects:
+*/
+void JDBController::analyzeDump(QString data)
 {
-    if (stateIsOn(s_silent)) {
-        // It's a silent stop. This means that the queue will have a "cont"
-        // in it somewhere. The only action needed is to reset the state so that
-        // queue'd items can be sent to jdb
-        DBG_DISPLAY("Program location (but silent) <" + QString(buf) + ">");
-        setStateOff(s_appBusy);
-        return;
+
+  cout << "Parsing dump: " << data << "\n";
+
+  // case a
+  // if we have a primitive type we add it to the list of locals directly
+  KRegExp *exp = new KRegExp( "^  ([^ \\[]+) \\= ([^\n]+)"); // dup if it's really a var of primitive type
+  if (exp->match(data)) {
+      QString name = exp->group(1);
+      QString value = exp->group(2);
+      JDBVarItem *item = new JDBVarItem();
+      item->value = value;
+      item->name = name;
+      if (!localData[name]) {
+          cout << "inserting local var\n";
+          localData.insert(name, item);
+      } else { /* The object is already being referred to as a property */ }
+      delete exp;
+      return; 
+
+  }
+
+  exp->compile( " ([^ \\[]+)\\[([0-9]+)\\] \\= ([^\n]+)");
+  if (exp->match( QString(data))) {
+      cout << "Array element: " << exp->group(1) << "[" << exp->group(2)<< "] = " << exp->group(3) <<"\n";
+
+      QString name = exp->group(1);
+
+      JDBVarItem *item;
+      JDBVarItem *subItem = new JDBVarItem();
+      subItem->name = QString(exp->group(1)) + "[" + QString(exp->group(2)) + "]";
+      subItem->value = exp->group(3);
+      item = localData[name];
+      ASSERT((name != 0));
+
+      //cout << "->Appending to: " << name << "\n";
+      //cout << "Which is at: " << (int)item << "\n";
+
+      // item.insertSibling(subItem);
+      item->siblings.append(subItem);
+
+      delete exp;
+      return;
+  }
+
+
+  
+  exp->compile( "^([^ ]+) \\= instance of ([^[]+)\\[([0-9])+] \\(id\\=[0-9]+\\) {");
+  if (exp->match(data)) {
+      cout << "Array...\n";
+      cout << "Name: " << exp->group(1) << "\n";
+      cout << "Type: " << exp->group(2) << "\n";
+      cout << "Dimension: " << exp->group(3) << "\n";
+
+      cout << "Adding array to var tree... \n";
+      JDBVarItem *item = new JDBVarItem();
+      item->name = exp->group(1);
+      QString name = exp->group(1);
+      if (atoi(exp->group(3)) == 0) {
+          item->value="null";
+      }
+      if (!localData[name]) {
+          cout << "inserting local var " << name << " at " << (int)item << "\n";
+          localData.insert(name, item);
+      } else { /* The object is already being referred to as a property */ }
+
+      for (int i=0; i<atoi(exp->group(3)); i++) {
+          cout <<  QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]") << "\n";
+          nameQueue.append(QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]"));
+      }
+      
+      delete exp;
+      return;
+  }  
+  
+  // case b
+  // otherwise we need to extract all properties and add the name of the current var
+  // and link it with its properties 
+  exp->compile( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
+  if (exp->match(data)) {
+      cout << "COMPOUND DATA\n";
+      // create a new jdbvaritem for the name of the object and for each property it
+      // contains. the object's jdbvaritem has siblings then
+      QString name = exp->group(1);
+      JDBVarItem *item;
+      if (!localData[name]) {
+          /* oops, we should already have added that object TODO: insert assertion */
+          item = new JDBVarItem();
+          cout << "NAME: " << name << " - " << (int)item <<"\n";
+          item->name = name;
+          localData.insert(name, item);
+      } else {
+          /* The object is already being referred to as a property */
+          item = localData[name];
+      }
+          
+
+      
+      unsigned int i = data.find("{")+1;
+      exp = new KRegExp("^([^ \\:]+): ([^\n]+)");
+      QString tmp;
+      while (i<data.length()) {
+         // I guess this is really slow. Using a char* would be better here
+         if (exp->match(data.mid(i))) {
+             if (strncmp(exp->group(2), "instance of", 11) != 0) {
+                 // property of primitive type
+                 cout << "Primitive type...\n";
+                 QString fullName = name + QString(".") + QString(exp->group(1));
+
+                 // create new item
+                 JDBVarItem *subItem = new JDBVarItem();
+                 subItem->value = exp->group(2);
+                 subItem->name = fullName;
+                 if (!localData[fullName]) {
+                     localData.insert(fullName, subItem);
+                 } else { /* Oops */ }  // TODO: insert assertion
+                 
+                 // item.insertSibling(subItem);
+                 item->siblings.append(subItem);
+                 
+                 //DBG_DISPLAY(QString("Appending Name: ") + name + QString(".") + exp->group(1));
+                 //DBG_DISPLAY(QString("Value: ") + exp->group(2));
+             } else if (QString(exp->group(2)).contains("[")) {
+                 // Array property
+                 // not parsed yet. just insert some dummy data
+                 
+                 QString fullName = name + QString(".") + QString(exp->group(1));
+
+                 JDBVarItem *subItem = new JDBVarItem();
+                 subItem->name = fullName;
+                 if (!localData[fullName]) {
+                     localData.insert(fullName, subItem);
+                 } else { /* Oops */ }  // TODO: insert assertion
+
+                 //cout << "->Appending Name: " << name << "." << exp->group(1) << "\n";
+                 //cout << "Value: " << exp->group(2) << " as " << (int)subItem << "\n";
+                 
+                 // get array dimension andn queue elements for parsing
+                 KRegExp *exp2 = new KRegExp("\\[([0-9]+)\\]");
+                 if (exp2->match(exp->group(2))) {
+                     int dimension = atoi(exp2->group(1));
+                     cout << "Array dimension: " << dimension << "\n";
+                     for (int i=0; i<dimension; i++) {
+                         nameQueue.append(fullName + "[" + QString::number((i)) + "]");
+                     }
+
+                     // item.insertSibling(subItem);
+                     item->siblings.append(subItem);
+                 }
+                 
+             } else {
+                 // property of non-primitive type, we will request additional 
+                 // information later
+                 cout << "complex...\n";
+                 QString fullName = name + QString(".") + QString(exp->group(1));
+                 nameQueue.append(fullName);
+
+                 JDBVarItem *subItem = new JDBVarItem();
+                 subItem->name = fullName;
+                 if (!localData[fullName]) {
+                     localData.insert(fullName, subItem);
+                 } else { /* Oops */ }  // TODO: insert assertion
+
+                 cout << "appending: " << fullName << " as " << (int)subItem << "\n";
+                 
+                 // item.insertSibling(subItem);
+                 item->siblings.append(subItem);
+
+
+             }
+             i += exp->groupEnd(0);
+         } else {
+             i++;
+         }
+      } 
+      
+  }
+  
+  delete exp; exp = 0;
+}
+
+
+// If there are elements left in the queue we remove the first one and issue
+// a dump command
+void JDBController::parseLocals()
+{
+    if (!stateIsOn(s_parsingLocals)) { return; }
+    if (currentCmd_) { return; }
+    DBG_DISPLAY("Trying to continue with locals");
+    if (!nameQueue.isEmpty()) {
+        DBG_DISPLAY("Issueing newdump command");
+        QString varName = nameQueue.first();
+        nameQueue.remove(nameQueue.begin());
+        // cout << nameQueue.count() << "\n";
+        queueCmd(new JDBCommand(QCString("dump " + varName), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
+    } else if (!parsedThis) {
+        parsedThis = TRUE;
+        queueCmd(new JDBCommand(QCString("dump this"), NOTRUNCMD, INFOCMD, DATAREQUEST), FALSE);
+       
+    } else {
+       parsedThis = FALSE;
+       setStateOff(s_parsingLocals);
+       
+       varUpdateDone();
     }
-
-    //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
-    // This is soooo easy in perl...
-    QRegExp regExp1(":[0-9]+:[0-9]+:[a-z]+:0x[abcdef0-9]+$");
-    QRegExp regExp2(":0x[abcdef0-9]+$");
-    int linePos;
-    int addressPos;
-    if (((linePos     = regExp1.match(buf, 0)) >= 0) &&
-        ((addressPos  = regExp2.match(buf, 0)) >= 0)) {
-        actOnProgramPause(QString(" "));
-        emit showStepInSource(QCString(buf, linePos+1),
-                              atoi(buf+linePos+1),
-                              QString(buf+addressPos+1));
-        return;
-    }
-
-    if (stateIsOn(s_appBusy))
-        actOnProgramPause(i18n("No source: %1").arg(QString(buf)));
-    else
-        emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
-
-    QRegExp regExp3("^0x[abcdef0-9]+ ");
-    int start;
-    if ((start = regExp3.match(buf, 0)) >= 0)
-        emit showStepInSource(QString(), -1,
-                              QCString(buf, (strchr(buf, ' ')-buf)+1));
-    else
-        emit showStepInSource("", -1, "");
-
 }
 
 // **************************************************************************
 
 // parsing the backtrace list will cause the vartree to be refreshed
-void JDBController::parseBacktraceList(char *buf)
+void JDBController::parseBacktraceList(char *)
 {
-    frameStack_->parseJDBBacktraceList(buf);
-
-    varTree_->viewport()->setUpdatesEnabled(false);
-
-    FrameRoot *frame;
-    // The locals are always attached to the currentFrame
-    // so make sure we have one of those.
-    if (!(frame = varTree_->findFrame(currentFrame_)))
-        frame = new FrameRoot(varTree_, currentFrame_);
-
-    ASSERT(frame);
-
-    frame->setFrameName(frameStack_->getFrameName(currentFrame_));
-
-    // Add the frame params to the variable list
-    frame->setParams(frameStack_->getFrameParams(currentFrame_));
-
-    if (currentFrame_ == 0)
-        varTree_->trimExcessFrames();
-
-    varTree_->viewport()->setUpdatesEnabled(true);
-    varTree_->repaint();
-}
-
-// **************************************************************************
-
-// When a breakpoint has been set, jdb responds with some data about the
-// new breakpoint. We just inform the breakpoint system about this.
-void JDBController::parseBreakpointSet(char *buf)
-{
-    if (JDBSetBreakpointCommand *BPCmd = dynamic_cast<JDBSetBreakpointCommand*>(currentCmd_)) {
-        // ... except in this case :-) A -1 key tells us that this is
-        // a special internal breakpoint, and we shouldn't do anything with it.
-        // Currently there are _no_ internal breakpoints.
-        if (BPCmd->getKey() != -1)
-            emit rawJDBBreakpointSet(buf, BPCmd->getKey());
-    }
-}
-
-// **************************************************************************
-
-// Extra data needed by an item was requested. Here's the result.
-void JDBController::parseRequestedData(char *buf)
-{
-    if (JDBItemCommand *jdbItemCommand = dynamic_cast<JDBItemCommand*> (currentCmd_)) {
-        // Fish out the item from the command and let it deal with the data
-        VarItem *item = jdbItemCommand->getItem();
-        varTree_->viewport()->setUpdatesEnabled(false);
-        item->updateValue(buf);
-        item->trim();
-        varTree_->viewport()->setUpdatesEnabled(true);
-        //    varTree_->repaint();
-    }
 }
 
 // **************************************************************************
@@ -758,240 +911,119 @@ void JDBController::parseRequestedData(char *buf)
 
 // Select a different frame to view. We need to get and (maybe) display
 // where we are in the program source.
-void JDBController::parseFrameSelected(char *buf)
+void JDBController::parseFrameSelected(char *)
 {
-    char lookup[3] = {BLOCK_START, SRC_POSITION, 0};
-    if (char *start = strstr(buf, lookup)) {
-        //    if (char *end = strchr(start, '\n'))  // 21/11/2000 this has already been removed
-        //    {
-        //      *end = 0;      // clobber the new line
-        parseProgramLocation(start+2);
-        return;
-        //    }
-    }
-
-    if (!stateIsOn(s_silent))
-        {
-            //    if (char *end = strchr(buf, '\n'))    // 21/11/2000 this has already been removed
-            //      *end = 0;      // clobber the new line
-            emit showStepInSource("", -1, "");
-            emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
-        }
 }
 
 // **************************************************************************
 
-// This is called when a completely new set of local data arrives. This data
-// is always attached to (and completely updates) the current frame
-// _All_ inactive items in the tree are trimmed here.
-void JDBController::parseLocals(char *buf)
-{
-    varTree_->viewport()->setUpdatesEnabled(false);
 
-    FrameRoot *frame;
-    // The locals are always attached to the currentFrame
-    // so make sure we have one of those.
-    if (!(frame = varTree_->findFrame(currentFrame_)))
-        frame = new FrameRoot(varTree_, currentFrame_);
-
-    ASSERT(frame);
-
-    frame->setFrameName(frameStack_->getFrameName(currentFrame_));
-
-    // Frame data consists of the parameters of the calling function
-    // and the local data.
-    frame->setLocals(buf);
-
-    // This is tricky - trim the whole tree when we're on the top most
-    // frame so that they always see onlu "frame 0" on a program stop.
-    // User selects frame 1, will show both frame 0 and frame 1.
-    // Reselecting a frame 0 regenerates the data and therefore trims
-    // the whole tree _but_ all the items in every frame will be active
-    // so nothing will be deleted.
-    if (currentFrame_ == 0)
-        varTree_->trim();
-    else
-        frame->trim();
-
-    varTree_->viewport()->setUpdatesEnabled(true);
-    varTree_->repaint();
-}
-
-// **************************************************************************
-
-// We are given a block of data that starts with \032. We now try to find a
-// matching end block and if we can we shoot the data of to the appropriate
-// parser for that type of data.
-char *JDBController::parseCmdBlock(char *buf)
-{
-    ASSERT(*buf == (char)BLOCK_START);
-
-    char *end = 0;
-    switch (*(buf+1)) {
-    case IDLE:
-        // remove the idle tag because they often don't come in pairs
-        return buf+1;
-
-    case SRC_POSITION:
-        // file and line number info that jdb just drops out starts with a
-        // \32 but ends with a \n. Could treat this as a line rather than
-        // a block. Ah well!
-        if((end = strchr(buf, '\n')))
-            *end = 0;      // Make a null terminated c-string
-        break;
-
-    default:
-        {
-            // match the start block with the end block if we can.
-            char lookup[3] = {BLOCK_START, *(buf+1), 0};
-            if ((end = strstr(buf+2, lookup))) {
-                if (*(end-1) == '\n')
-                    *(end-1) = 0;   // fix this by clobbering the new line
-                *end = 0;         // Make a null terminated c-string
-                end++;            // The real end!
-            }
-            break;
-        }
-    }
-
-    if (end) {
-        char cmdType = *(buf+1);
-        buf +=2;
-        switch (cmdType) {
-        case FRAME:           parseFrameSelected        (buf);      break;
-        case SET_BREAKPT:     parseBreakpointSet        (buf);      break;
-        case SRC_POSITION:    parseProgramLocation      (buf);      break;
-        case LOCALS:          parseLocals               (buf);      break;
-        case DATAREQUEST:     parseRequestedData        (buf);      break;
-        case BPLIST:          emit rawJDBBreakpointList (buf);      break;
-        case BACKTRACE:       parseBacktraceList        (buf);      break;
-        case DISASSEMBLE:     emit rawJDBDisassemble    (buf);      break;
-        case DETACH:          setStateOff(s_attached);              break;
-            //      case FILE_START:      parseFileStart            (buf);      break;
-        default:                                                    break;
-        }
-
-        // Once we've dealt with the data, we can remove the current command if
-        // it is a match for this data.
-        if (currentCmd_ && currentCmd_->typeMatch(cmdType)) {
-            delete currentCmd_;
-            currentCmd_ = 0;
-        }
-    }
-
-    return end;
-}
-
-// **************************************************************************
-
-// Deals with data that just falls out of jdb. Basically waits for a line
-// terminator to arrive and then gives it to the line parser.
-char *JDBController::parseOther(char *buf)
-{
-    // Could be the start of a block that isn't terminated yet
-    ASSERT (*buf != (char)BLOCK_START);
-
-    char *end = buf;
-    while (*end) {
-        if (*end=='(') {   // quick test before a big test
-            // This falls out of jdb without a \n terminator. Sometimes
-            // a "Stopped due" message will fall out imediately behind this
-            // creating a "line". Soemtimes it doesn'y. So we need to check
-            // for and remove them first then continue as if it wasn't there.
-            // And there can be more that one in a row!!!!!
-            // Isn't this bloody awful...
-            if (strncmp(end, "(no debugging symbols found)...", 31) == 0) {
-                emit dbgStatus (QCString(end, 32), state_);
-                return end+30;    // The last char parsed
-            }
-        }
-
-        if (*end=='\n') {
-            // Join continuation lines together by removing the '\n'
-            if ((end-buf > 2) && (*(end-1) == ' ' && *(end-2) == ',') || (*(end-1) == ':'))
-                *end = ' ';
-            else {
-                *end = 0;        // make a null terminated c-string
-                parseLine(buf);
-                return end;
-            }
-        }
-
-        // Remove stuff like "junk\32i".
-        // This only removes "junk" and leaves "\32i"
-        if (*end == (char)BLOCK_START)
-            return end-1;
-
-        end++;
-    }
-
-    return 0;
-}
-
-// **************************************************************************
 
 char *JDBController::parse(char *buf)
 {
-    char *unparsed = buf;
+
+    if (stateIsOn(s_dbgNotStarted)) {
+        cout << "dbgnotstarted\n";
+        // Check for first prompt
+        cout << QString(buf).left(20) << "\n";
+        if (QString(buf).left(20) == "Initializing jdb...\n") { return buf+20; }
+        if (QString(buf) == "> ") { 
+            setStateOff(s_dbgNotStarted); 
+            emit debuggerStarted();
+            return buf + 2;
+        }
+        curLine = "";
+        return buf++;
+    }
+
+    
+    if (stateIsOn(s_appStarting)) {
+        cout << "appstarting\n";
+        char* unparsed = buf;
+        char* orig = buf;
+        while (*buf) {
+            if ( (buf = parseLine(buf)) ) {
+                return buf;
+            } else {
+                buf = ++unparsed;
+            }
+        }
+        return orig;
+    }
+
+
+    // If the app is currently running eat all output
+    // until we recognize something
+    if (stateIsOn(s_appBusy)) {
+        cout << "\nApp busy:\n";
+        char* unparsed = buf;
+        char* orig = buf;
+        while (*buf) {
+            if ( (buf = parseLine(unparsed)) ) {
+                return buf; // application is stopped now
+                            // additional output will be ignored for 
+                            // now. we parse it later on
+            } else {
+                buf = ++unparsed;
+            }
+        }
+        return orig;
+
+    } else {
+        // assuming app is paused
+        cout << "\nApp is paused:\n";
+        char* unparsed = buf;
+        char* orig = buf;
+        while (*buf) {
+            if ( (buf = parseInfo(buf)) ) {
+                unparsed = orig = buf;
+            } else {
+                buf = ++unparsed;
+            }
+        }
+        // Check if there are more vars to parse, otherwise update vartree widget
+        parseLocals();
+        
+        return orig;
+
+    }
+
+    /*
     while (*unparsed) {
         char *parsed;
         if (*unparsed == (char)BLOCK_START)
             parsed = parseCmdBlock(unparsed);
         else
             parsed = parseOther(unparsed);
-
+        
         if (!parsed)
             break;
-
+        
         // Move one beyond the end of the parsed data
         unparsed = parsed+1;
     }
-
-    return (unparsed==buf) ? 0 : unparsed;
+    */
+//    return (unparsed==buf) ? 0 : unparsed;
 }
 
 // **************************************************************************
 
-void JDBController::setBreakpoint(const QCString &BPSetCmd, int key)
+void JDBController::setBreakpoint(const QCString &/*BPSetCmd*/, int key)
 {
-    queueCmd(new JDBSetBreakpointCommand(BPSetCmd, key));
+//    queueCmd(new JDBSetBreakpointCommand("", key));
 }
 
 // **************************************************************************
 
-void JDBController::clearBreakpoint(const QCString &BPClearCmd)
+void JDBController::clearBreakpoint(const QCString &/*BPClearCmd*/)
 {
-    queueCmd(new JDBCommand(BPClearCmd, NOTRUNCMD, NOTINFOCMD));
-    // Note: this is NOT an info command, because jdb doesn't explictly tell
-    // us that the breakpoint has been deleted, so if we don't have it the
-    // BP list doesn't get updated.
-    queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
+//    queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
 }
 
 // **************************************************************************
 
-void JDBController::modifyBreakpoint(Breakpoint *BP)
+void JDBController::modifyBreakpoint(Breakpoint *)
 {
-    ASSERT(BP->isActionModify());
-    if (BP->dbgId()) {
-        if (BP->changedCondition())
-            queueCmd(new JDBCommand(QCString().sprintf("condition %d %s", BP->dbgId(), BP->conditional().latin1()),
-                                    NOTRUNCMD, NOTINFOCMD));
-
-        if (BP->changedIgnoreCount())
-            queueCmd(new JDBCommand(QCString().sprintf("ignore %d %d", BP->dbgId(), BP->ignoreCount()),
-                                    NOTRUNCMD, NOTINFOCMD));
-
-        if (BP->changedEnable())
-            queueCmd(new JDBCommand(QCString().sprintf("%s %d",
-                                                       BP->isEnabled() ? "enable" : "disable", BP->dbgId()), NOTRUNCMD, NOTINFOCMD));
-
-        BP->setDbgProcessing(true);
-        // Note: this is NOT an info command, because jdb doesn't explictly tell
-        // us that the breakpoint has been deleted, so if we don't have it the
-        // BP list doesn't get updated.
-        queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
-    }
 }
 
 // **************************************************************************
@@ -999,133 +1031,180 @@ void JDBController::modifyBreakpoint(Breakpoint *BP)
 //                                *****
 // For most of these slots data can only be sent to jdb when it
 // isn't busy and it is running.
-
 // **************************************************************************
 
+/**
+ * Start a JDB debugging session
+*/
 void JDBController::slotStart(const QString &application, const QString &args, const QString &sDbgShell)
 {
+    QString classPath = "/usr/lib/java2/jre/lib/rt.jar:/usr/lib/java2/classes";
+    QString sourcePath = "";
+    QString srcPath = "/home/olistrut/testprj/jdb/src";
+
+    badCore_ = QString();
+    
     ASSERT (!dbgProcess_ && !tty_);
+    
+    // Remove .class suffix and leading path information from appname
+    // (should not be there anyway)
+
+    QUrl appUrl(application);
+    
+    QString app = appUrl.fileName();
+
+    if (app.findRev(".class", -1, FALSE) == app.length()-6) {
+        app = app.left(app.length()-6);
+    }
+
+    mainclass_ = app;
 
     tty_ = new STTY(config_dbgTerminal_, "konsole");
     if (!config_dbgTerminal_) {
         connect( tty_, SIGNAL(OutOutput(const char*)), SIGNAL(ttyStdout(const char*)) );
         connect( tty_, SIGNAL(ErrOutput(const char*)), SIGNAL(ttyStderr(const char*)) );
     }
-
+    
     QString tty(tty_->getSlave());
+
     if (tty.isEmpty()) {
         KMessageBox::error(0, i18n("jdb cannot use the tty* or pty* devices\n"
                                    "Check the settings on /dev/tty* and /dev/pty*\n\n"
                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices\n"
                                    "and/or add the user to the tty group using\n"
                                    "\"usermod -G tty username\""));
-
+        
         delete tty_;
         tty_ = 0;
         return;
     }
 
-    QFileInfo app(application);
-
     JDB_DISPLAY("\nStarting JDB - app:["+application+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
     dbgProcess_ = new KProcess;
-
+    
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
              this,        SLOT(slotDbgStdout(KProcess *, char *, int)) );
-
+    
     connect( dbgProcess_, SIGNAL(receivedStderr(KProcess *, char *, int)),
              this,        SLOT(slotDbgStderr(KProcess *, char *, int)) );
-
+    
     connect( dbgProcess_, SIGNAL(wroteStdin(KProcess *)),
              this,        SLOT(slotDbgWroteStdin(KProcess *)) );
-
+    
     connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
+    
+    QString path = " -classpath " + srcPath + ":" + classPath;
+/*    if (!args.isEmpty())
+        app += " " + args;*/
 
-    if (!sDbgShell.isEmpty())
-        *dbgProcess_<<"/bin/sh"<<"-c"<<sDbgShell+" "+config_jdbPath_+
-            "jdb "+app.baseName()+"";
-    else
-        *dbgProcess_<<config_jdbPath_+QString("jdb")<<app.baseName()<<"";
+/*    if (!sDbgShell.isEmpty())
+        *dbgProcess_ << "/bin/sh -c" + sDbgShell + " " + config_jdbPath_ + "jdb " + app2;
+    else*/
 
+
+    // For now app has to be in the java classpath
+    *dbgProcess_ << QString("jdb");
+    *dbgProcess_ << QString("-classpath");
+    *dbgProcess_ << srcPath + ":" + classPath;
+    *dbgProcess_ << app;
+    *dbgProcess_ << args;
+    
     dbgProcess_->start( KProcess::NotifyOnExit,
                         KProcess::Communication(KProcess::All));
 
-    setStateOff(s_dbgNotStarted);
+    // JDB takes some time to start up
+    setStateOn(s_dbgNotStarted);
     emit dbgStatus ("", state_);
 
     // Initialise jdb. At this stage jdb is sitting wondering what to do,
     // and to whom. Organise a few things, then set up the tty for the application,
     // and the application itself
-
-    // Load the file into jdb
-    /*if (sDbgShell.isEmpty())
-      {
-      QString fileCmd = "file " + application;
-      queueCmd(new JDBCommand(fileCmd, NOTRUNCMD, NOTINFOCMD));
-      }
-    */
-    // Organise any breakpoints.
-    emit acceptPendingBPs();
-
-    // Now jdb has been started and the application has been loaded,
-    // BUT the app hasn't been started yet! A run command is about to be issued
-    // by whoever is controlling us. Or we might be asked to load a core, or
-    // attach to a running process.
+    
 }
-
-
 
 // **************************************************************************
 
-void JDBController::slotRun()
+void JDBController::slotCoreFile(const QString&)
 {
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand(stateIsOn(s_appNotStarted) ? "run" : "cont", RUNCMD, NOTINFOCMD, 0));
 }
 
+
+void JDBController::slotAttachTo(int)
+{
+}
+
+// **************************************************************************
+
+void JDBController::slotDebuggerStarted() {
+    cout << "slotRun()\n";
+    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
+        return;
+    bool first_flag = FALSE;
+
+    cout << "slotRun()\n";
+    if (stateIsOn(s_appNotStarted)) {
+        first_flag = TRUE;
+        queueCmd(new JDBCommand(QCString("stop in " + mainclass_ + ".main(java.lang.String[])") , NOTRUNCMD, NOTINFOCMD, 0));
+    }
+
+    queueCmd(new JDBCommand(stateIsOn(s_appNotStarted) ? "run" : "cont", RUNCMD, NOTINFOCMD, 0));
+
+    // Signal we are waiting for the first breakpoint to be reached
+    setStateOn(s_appStarting);
+}
+
+void JDBController::slotRun()
+{
+    if (stateIsOn(s_dbgNotStarted)) {
+        // Connect to debuggerStarted slot to wait for jdb to finish
+        // initialization
+        connect(this, SIGNAL(debuggerStarted()), SLOT(slotDebuggerStarted()));
+    } else {
+//        emit debuggerStarted();
+    }
+
+}
+
+// **************************************************************************
+
+void JDBController::slotRunUntil(const QString &, int)
+{
+}
 
 // **************************************************************************
 
 void JDBController::slotStepInto()
 {
-    if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("step", RUNCMD, NOTINFOCMD, 0));
+    cout << "slotStepInstruction\n";
+    if (stateIsOn(s_dbgNotStarted) || stateIsOn(s_appBusy) || stateIsOn(s_parsingOutput)) { return; }
+    queueCmd(new JDBCommand("stepi", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
 
 void JDBController::slotStepIntoIns()
 {
-    if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("stepi", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
 
-void JDBController::slotStepOver()
-{
-    if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("next", RUNCMD, NOTINFOCMD, 0));
+void JDBController::slotStepOver() {
+    cout << "slotStepOver\n";
+    if (stateIsOn(s_appStarting) || stateIsOn(s_dbgNotStarted) || stateIsOn(s_appBusy) || stateIsOn(s_parsingOutput)) { return; }
+    queueCmd(new JDBCommand("step", RUNCMD, NOTINFOCMD, 0));
 }
 
+// **************************************************************************
+
+void JDBController::slotStepOverIns()
+{
+}
 
 // **************************************************************************
 
 void JDBController::slotStepOutOff()
 {
-    if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("step up", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1133,150 +1212,57 @@ void JDBController::slotStepOutOff()
 // Only interrupt a running program.
 void JDBController::slotBreakInto()
 {
-    pauseApp();
 }
 
 // **************************************************************************
 
 // See what, if anything needs doing to this breakpoint.
-void JDBController::slotBPState(Breakpoint *BP)
+void JDBController::slotBPState(Breakpoint *)
 {
-    // Are we in a position to do anything to this breakpoint?
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown) || !BP->isPending() || BP->isActionDie())
-        return;
-
-    // We need this flag so that we can continue execution. I did use
-    // the s_silent state flag but it can be set prior to this method being
-    // called, hence is invalid.
-    bool restart = false;
-    if (stateIsOn(s_appBusy)) {
-        if (!config_forceBPSet_)
-            return;
-
-        // When forcing breakpoints to be set/unset, interrupt a running app
-        // and change the state.
-        setStateOn(s_silent);
-        pauseApp();
-        restart = true;
-    }
-
-    if (BP->isActionAdd()) {
-        setBreakpoint(BP->dbgSetCommand().latin1(), BP->key());
-        BP->setDbgProcessing(true);
-    } else {
-        if (BP->isActionClear()) {
-            clearBreakpoint(BP->dbgRemoveCommand().latin1());
-            BP->setDbgProcessing(true);
-        } else if (BP->isActionModify()) {
-            modifyBreakpoint(BP); // Note: DbgProcessing gets set in modify fn
-        }
-    }
-
-    if (restart)
-        queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
 
 void JDBController::slotClearAllBreakpoints()
 {
-    // Are we in a position to do anything to this breakpoint?
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    bool restart = false;
-    if (stateIsOn(s_appBusy)) {
-        if (!config_forceBPSet_)
-            return;
-
-        // When forcing breakpoints to be set/unset, interrupt a running app
-        // and change the state.
-        setStateOn(s_silent);
-        pauseApp();
-        restart = true;
-    }
-
-    queueCmd(new JDBCommand("delete", NOTRUNCMD, NOTINFOCMD));
-    // Note: this is NOT an info command, because jdb doesn't explictly tell
-    // us that the breakpoint has been deleted, so if we don't have it the
-    // BP list doesn't get updated.
-    queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
-
-    if (restart)
-        queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
 }
-
 
 // **************************************************************************
 
-void JDBController::slotDisassemble(const QString &start, const QString &end)
+void JDBController::slotDisassemble(const QString &, const QString &)
 {
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
 }
-
 
 // **************************************************************************
 
-void JDBController::slotSelectFrame(int frameNo)
+void JDBController::slotMemoryDump(const QString &, const QString &)
 {
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
+}
 
-    // Get jdb to switch the frame stack on a frame change.
-    // This is an info command because _any_ run command will set the system back
-    // to frame 0 regardless, so being removed with a run command is the best
-    // thing that could happen here.
-    // _Always_ switch frames (even if we're the same frame so that a program
-    // position will be generated by jdb
-    //  if (frameNo != currentFrame_)
-    queueCmd(new JDBCommand(QCString().sprintf("frame %d", frameNo), NOTRUNCMD, INFOCMD, FRAME));
+// **************************************************************************
 
-    // Hold on to  this frame number so that we know where to put the
-    // local variables if any are generated.
-    currentFrame_ = frameNo;
+void JDBController::slotRegisters()
+{
+}
 
-    // Find or add the frame details. hold onto whether it existed because we're
-    // about to create one if it didn't.
-    FrameRoot *frame = varTree_->findFrame(frameNo);
-    bool haveFrame = (bool)frame;
-    if (!haveFrame)
-        frame = new FrameRoot(varTree_, currentFrame_);
+// **************************************************************************
 
-    ASSERT(frame);
+void JDBController::slotLibraries()
+{
+}
 
-    // Make vartree display a pretty frame description
-    frame->setFrameName(frameStack_->getFrameName(currentFrame_));
+// **************************************************************************
 
-    if (stateIsOn(s_viewLocals)) {
-        // Have we already got these details?
-        if (frame->needLocals()) {
-            // Add the frame params to the variable list
-            frame->setParams(frameStack_->getFrameParams(currentFrame_));
-            // and ask for the locals
-            queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS));
-        }
-    }
+void JDBController::slotSelectFrame(int)
+{
 }
 
 // **************************************************************************
 
 // This is called when the user desires to see the details of an item, by
 // clicking open an varItem on the varTree.
-void JDBController::slotExpandItem(VarItem *item)
+void JDBController::slotExpandItem(VarItem *)
 {
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    switch (item->getDataType()) {
-    case typePointer:
-        queueCmd(new JDBPointerCommand(item));
-        break;
-
-    default:
-        queueCmd(new JDBItemCommand(item, QCString("print ") + item->fullName().latin1()));
-        break;
-    }
 }
 
 // **************************************************************************
@@ -1284,32 +1270,17 @@ void JDBController::slotExpandItem(VarItem *item)
 // This is called when an item needs special processing to show a value.
 // Example = QStrings. We want to display the QString string against the var name
 // so the user doesn't have to open the qstring to find it. Here's where that happens
-void JDBController::slotExpandUserItem(VarItem *item, const QCString &userRequest)
+void JDBController::slotExpandUserItem(VarItem *, const QCString& )
 {
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    ASSERT(item);
-
-    // Bad user data!!
-    if (userRequest.isEmpty())
-        return;
-
-    queueCmd(new JDBItemCommand(item, QCString("print ")+userRequest.data(), false, DATAREQUEST));
 }
 
 // **************************************************************************
 
 // The user will only get locals if one of the branches to the local tree
 // is open. This speeds up stepping through code a great deal.
-void JDBController::slotSetLocalViewState(bool onOff)
+// TODO:
+void JDBController::slotSetLocalViewState(bool)
 {
-    if (onOff)
-        setStateOn(s_viewLocals);
-    else
-        setStateOff(s_viewLocals);
-
-    DBG_DISPLAY(onOff ? "<Locals ON>": "<Locals OFF>");
 }
 
 // **************************************************************************
@@ -1317,12 +1288,7 @@ void JDBController::slotSetLocalViewState(bool onOff)
 // Data from jdb gets processed here.
 void JDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
-#ifdef JDB_MONITOR
-    QCString msg(buf, buflen+1);
-    msg.replace(QRegExp("\032."),"\n(jdb) ");
-    JDB_DISPLAY(msg);
-#endif
-
+    
     // Allocate some buffer space, if adding to this buffer will exceed it
     if (jdbOutputLen_+buflen+1 > jdbSizeofBuf_) {
         jdbSizeofBuf_ = jdbOutputLen_+buflen+1;
@@ -1332,61 +1298,35 @@ void JDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         delete[] jdbOutput_;                        // ??? and free ???
         jdbOutput_ = newBuf;
     }
-
+    
     // Copy the data out of the KProcess buffer before it gets overwritten
     // and fake a string so we can use the string fns on this buffer
     memcpy(jdbOutput_+jdbOutputLen_, buf, buflen);
     jdbOutputLen_ += buflen;
     *(jdbOutput_+jdbOutputLen_) = 0;
-
+    
     if (char *nowAt = parse(jdbOutput_)) {
         ASSERT(nowAt <= jdbOutput_+jdbOutputLen_+1);
         jdbOutputLen_ = strlen(nowAt);
-        // Some bytes that wern't parsed need to be move to the head of the buffer
+        // Some bytes that weren't parsed need to be moved to the head of the buffer
         if (jdbOutputLen_)
             memmove(jdbOutput_, nowAt, jdbOutputLen_);     // Overlapping data
+        
     }
-
     // check the queue for any commands to send
     executeCmd();
+    cout << "stdout\n";
 }
 
 // **************************************************************************
 
-void JDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
+void JDBController::slotDbgStderr(KProcess */*proc*/, char *buf, int/* buflen*/)
 {
-    // At the moment, just drop a message out and redirect
-    DBG_DISPLAY(QString("\nSTDERR: ")+QString(buf, buflen+1));
-    slotDbgStdout(proc, buf, buflen);
-
-    //  QString bufData(buf, buflen+1);
-    //  char *found;
-    //  if ((found = strstr(buf, "No symbol table is loaded")))
-    //    emit dbgStatus (QString("No symbol table is loaded"), state_);
-
-    // If you end the app and then restart when you have breakpoints set
-    // in a dynamically loaded library, jdb will halt because the set
-    // breakpoint is trying to access memory no longer used. The breakpoint
-    // must first be deleted, however, we want to retain the breakpoint for
-    // when the library gets loaded again.
-    // TODO  programHasExited_ isn't always set correctly,
-    // but it (almost) doesn't matter.
-    //  if (programHasExited_ && (found = strstr(bufData.data(), "Cannot insert breakpoint")))
-    //  {
-    //    setStateOff(s_appBusy);
-    //    int BPNo = atoi(found+25);
-    //    if (BPNo)
-
-    //    {
-    //      queueCmd(new JDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
-    //      queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-    //      queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
-    //      emit unableToSetBPNow(BPNo);
-    //    }
-    //    return;
-    //  }
-    //
-    //  parse(bufData.data());
+    // At the moment, just drop a message out
+    // dont and redirect
+    cout << "STDERR\n";
+    DBG_DISPLAY(QString("\nSTDERR: ")+QString(buf));
+//    slotDbgStdout(proc, buf, buflen);
 }
 
 // **************************************************************************
@@ -1394,9 +1334,8 @@ void JDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 void JDBController::slotDbgWroteStdin(KProcess *)
 {
     setStateOff(s_waitForWrite);
-    //  if (!stateIsOn(s_silent))
-    //    emit dbgStatus ("", state_);
     executeCmd();
+    cout << "dbgwrotestdin\n";
 }
 
 // **************************************************************************
@@ -1406,11 +1345,72 @@ void JDBController::slotDbgProcessExited(KProcess*)
     destroyCmds();
     state_ = s_appNotStarted|s_programExited|(state_&s_viewLocals);
     emit dbgStatus (i18n("Process exited"), state_);
-
+    
     JDB_DISPLAY(QString("\n(jdb) Process exited"));
 }
 
 // **************************************************************************
+
+
+/**
+ * This function returns the absolute position of the source file
+ * for the class specified by the parameter className.
+ * TODO: Make this function work by using the java sourcepath or
+ * the KDevelop class store.
+*/
+QString JDBController::getFile(QString className)
+{
+    if (className == "Class2") {
+        return "/home/olistrut/testprj/jdb/src/Class2.java";
+    } else {
+        return "/home/olistrut/testprj/jdb/src/JavaDebugController.java";
+    }
+}
+
+// **********************************************************************
+
+void JDBController::varUpdateDone()
+{
+    cout << "VarUpdateDone\n";
+
+    QString locals = "";
+    QDictIterator<JDBVarItem> it(localData); // iterator for dict
+    if (!it.toFirst()) { return; }
+    // make sure we dont visit nodes more than once
+    while (it.current()) {
+       
+       if (!it.currentKey().contains(".")) {
+           locals += it.current()->toString() + QString(",");
+       }
+       ++it;
+    }
+    
+    locals[locals.length()-1] = ' '; // remove trailing comma
+    char* _l = new char[locals.length()];
+    strcpy(_l, locals.latin1());
+    cout << "\nLocals: "<< _l << "\n";
+
+
+    varTree_->trim();
+
+    FrameRoot *frame;
+    // The locals are always attached to the currentFrame
+    // so make sure we have one of those.
+    if (!(frame = varTree_->findFrame(currentFrame_)))
+        frame = new FrameRoot(varTree_, currentFrame_);
+    
+    ASSERT(frame);
+    frame->setFrameName(frameStack_->getFrameName(currentFrame_));
+
+    frame->setLocals(_l);
+
+    varTree_->viewport()->setUpdatesEnabled(true);
+    varTree_->repaint();
+    localData.clear();
+    setStateOff(s_parsingOutput);
+
+}
+
 
 // The time limit has expired so set the state off.
 void JDBController::slotAbortTimedEvent()
@@ -1421,9 +1421,6 @@ void JDBController::slotAbortTimedEvent()
 
 // **************************************************************************
 
-// These are here for debug display. I wanted them to be removed if DBG_MONITOR
-// wasn't defined but qt's moc has problems with that.
-#if defined(DBG_MONITOR)
 void JDBController::slotStepInSource(const QString &fileName, int lineNum)
 {
     DBG_DISPLAY((QString("(Show step in source) ")+fileName+QString(":")
@@ -1451,22 +1448,39 @@ void JDBController::slotDbgStatus(const QString &status, int state)
         s += QString("<silent>");
     if (state & s_viewLocals)
         s += QString("<viewing locals>");
-
+    
     DBG_DISPLAY((s+status).data());
 }
-#else
 
-void JDBController::slotStepInSource(const QString&, int)
-{}
 
-// **************************************************************************
+JDBVarItem::JDBVarItem() {
+    value = "";
+    name = "";
+}
 
-void JDBController::slotDbgStatus(const QString&, int)
-{}
+QString JDBVarItem::toString() {
+    if (value != "") {
+        cout << value <<" - ";
+        return name + QString(" = ") + value;
+    } else {
+        // iterate over siblings and build return string
+        QString tmp = "";
+        JDBVarItem *item;
 
-#endif
+        for (item = this->siblings.first(); item != 0; item = this->siblings.next()) {
+            tmp += item->toString() + ",";
+            delete item;
+        }
+        
+        tmp = name + QString(" = {") +tmp;
+        tmp[tmp.length()-1] = '}'; // remove trailing comma
+        return tmp;
+    }
+}
 
-// **************************************************************************
-// **************************************************************************
+
+
+
+
 // **************************************************************************
 #include "jdbcontroller.moc"

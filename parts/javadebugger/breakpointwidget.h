@@ -27,7 +27,7 @@ class QMouseEvent;
 /***************************************************************************/
 /***************************************************************************/
 
-//TODO derive a GDB specific manager to handle the GDB specific
+//TODO derive a JDB specific manager to handle the JDB specific
 // data in the parsers!!
 
 class BreakpointWidget : public KListBox

@@ -33,6 +33,9 @@ public:
     virtual ~FramestackWidget();
 
     void parseJDBBacktraceList(char *str);
+    void addItem(QString s);
+    void updateDone();
+    void clearList();
     QCString getFrameParams(int frame);
     QString getFrameName(int frame);
     
