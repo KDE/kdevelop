@@ -469,7 +469,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   if (!dir.isNull())
     dialog.setDirectory(dir);
   else
-    dialog.setDirectory( project()->projectDirectory() );
+    dialog.setDirectory( project()->projectDirectory() + "/" + project()->activeDirectory() );
   if (!name.isNull()) dialog.setName(name);
   if (filetype) dialog.setCurrent(filetype);
 
