@@ -81,7 +81,11 @@ namespace QextMdi
       /**
       * add the view as tool view. That means it is stay-on-top and toplevel
       */
-      ToolWindow  = 16
+      ToolWindow  = 16,
+      /**
+      * uses the restore geometry of the latest current top childframe
+      */
+      UseQextMDISizeHint = 32
    };
 
    enum FrameDecor {
