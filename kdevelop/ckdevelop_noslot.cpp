@@ -586,10 +586,19 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   QString type =  KMimeType::findByURL(url, 0, true)->name();
   if (!(type.startsWith("text/")
     || type.startsWith("application/x-perl") || type.startsWith("application/x-python")
-    || type.startsWith("application/x-shellscript") || type.startsWith("application/x-desktop") ) )  // open with krun
+    || type.startsWith("application/x-shellscript") || type.startsWith("application/x-desktop")
+    || type.startsWith("application/x-kdevelop-project") ) )  // open with krun
   {
-    new KRun( url );
-    return;
+    bool bStartWithKRun = true;
+    if (type.startsWith("image/x-xpm")) {
+      if (KMessageBox::questionYesNo(this, i18n("Do you want to load it as ASCII file?"), i18n("Load decision")) == KMessageBox::Yes) {
+        bStartWithKRun = false;
+      }
+    }
+    if (bStartWithKRun) {
+      new KRun( url );
+      return;
+    }
   }
 
   // Enable or disable command
