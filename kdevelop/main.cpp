@@ -17,7 +17,6 @@
  ***************************************************************************/
 
 #include "ckdevelop.h"
-#include "kstartuplogo.h"
 #include "ckdevinstall.h"
 #include <kwmmapp.h>
 
@@ -25,37 +24,19 @@
 
 int main(int argc, char* argv[]) {
   
-  KStartupLogo* start_logo=0L;
   KWMModuleApplication a(argc,argv,"kdevelop");
 	a.connectToKWM();
   a.getConfig()->setGroup("General Options");
-  bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
   bool bInstall=a.getConfig()->readBoolEntry("Install",true);
   if (argc > 1 ){
     if( QString(argv[1]) == "--setup") bInstall = true; // start the setupwizard
   }
-  
-  if(bStartLogo){
-    start_logo= new KStartupLogo;
-    start_logo->show();
-  }
-
   if (a.isRestored()){
     RESTORE(CKDevelop);
-    if (bStartLogo) {
-	start_logo->close();
-	delete start_logo;
-	bStartLogo = false;
-      }
   }
   else{
     if(bInstall){
       CKDevInstall* install=new CKDevInstall(0,"install");
-      if (bStartLogo) {
-	start_logo->close();
-	delete start_logo;
-	bStartLogo = false;
-      }
       install->show();
       delete install;
     }
@@ -63,7 +44,6 @@ int main(int argc, char* argv[]) {
     if(bInstall){
       kdevelop->refreshTrees();  // this is because of the new documentation
     }
-    kdevelop->show();
     
     a.getConfig()->setGroup("General Options");
     kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
@@ -75,17 +55,7 @@ int main(int argc, char* argv[]) {
     if (argc > 1){ 
       if (QString(argv[1]) != "--setup")
 	  kdevelop->slotProjectOpenCmdl(argv[1]);
-    }
-    if(bStartLogo){
-      start_logo->close();
-      delete start_logo;
-    }
-  
-    a.getConfig()->setGroup("TipOfTheDay");
-    bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
-    if(showTip){
-    	kdevelop->slotHelpTipOfDay();
-    }
+    }  
   }
   
   int rc = a.exec();

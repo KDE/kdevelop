@@ -38,10 +38,14 @@ const char *cppKeywords[] = {
   //  ISO/IEC 14882:1998 . Sec. 2.11.2
   "and", "and_eq", "bitand", "bitor", "compl", "not", "not_eq", "or", "or_eq", "xor",
   "xor_eq",
+  
+  "bad_cast", "bad_typeid","except","finally","type_info", "xalloc",
   // ADDED FOR TESTING
-  "Q_EXPORT","Q_OBJECT","K_DCOP","SLOT","SIGNAL","slots","signals",0L};
+  "Q_EXPORT","Q_OBJECT","K_DCOP","SLOT","SIGNAL", "slots","signals",
+  // QT 2.1 macros
+  "Q_PROPERTY", "Q_ENUMS","Q_SETS","Q_OVERRIDE","Q_CLASSINFO",0L}; 
 
-const char *cppTypes[] = {
+ const char *cppTypes[] = {
   "bool", "wchar_t", "mutable", 0L};
 
 const char *idlKeywords[] = {
