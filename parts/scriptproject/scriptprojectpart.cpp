@@ -92,8 +92,14 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
 
     QString includepatterns
         = DomUtil::readEntry(dom, "/kdevscriptproject/general/includepatterns");
-    QStringList includepatternList = includepatterns.isNull()?
-        languageSupport()->fileFilters() : QStringList::split(",", includepatterns);
+    QStringList includepatternList;
+    if ( includepatterns.isNull() ) {
+        if ( languageSupport() )
+            includepatternList = languageSupport()->fileFilters();
+    } else {
+        includepatternList = QStringList::split(",", includepatterns);
+    }
+
     QString excludepatterns
         = DomUtil::readEntry(dom, "/kdevscriptproject/general/excludepatterns");
     if (excludepatterns.isNull())
