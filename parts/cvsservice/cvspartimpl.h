@@ -26,6 +26,7 @@ class KDevMainWindow;
 class KDevCore;
 class KDevDiffFrontend;
 class QDir;
+class JobScheduler;
 
 
 /**
@@ -64,73 +65,73 @@ public:
     * Do login into repository. The component will show a dialog requesting the
     * needed data to the user.
     */
-    virtual void login() = 0;
+    virtual void login();
     /**
     * Do logout. Of course one must be logged into repository first ;-)
     */
-    virtual void logout() = 0;
+    virtual void logout();
     /**
     * Do checkout of module from some remote directory. Requested data will be
     * collected here.
     */
-    virtual void checkout() = 0;
+    virtual void checkout();
     /**
     * Commit the specified files (as KURL) to repository.
     * @param urlList
     */
-    virtual void commit( const KURL::List& urlList ) = 0;
+    virtual void commit( const KURL::List& urlList );
     /**
     * Update the specified files (as KURL): files will be
     * updated if not locally modified.
     * @param urlList
     */
-    virtual void update( const KURL::List& urlList ) = 0;
+    virtual void update( const KURL::List& urlList );
     /**
     * Add the specified files (as KURL) to repository.
     * @param urlList
     */
-    virtual void add( const KURL::List& urlList, bool binary = false ) = 0;
+    virtual void add( const KURL::List& urlList, bool binary = false );
     /**
     * Remove the specified files (as KURL) from repository.
     * @param urlList
     */
-    virtual void remove( const KURL::List& urlList ) = 0;
+    virtual void remove( const KURL::List& urlList );
     /**
     * Produce a log of changes about the specified files.
     * @param urlList
     */
-    virtual void log( const KURL::List& urlList ) = 0;
+    virtual void log( const KURL::List& urlList );
     /**
     * Produce a diff of the the specified files (as KURL). The diff could
     * be displayed in the diff frontend or in an ad-hoc container.
     * @param urlList
     */
-    virtual void diff( const KURL::List& urlList ) = 0;
+    virtual void diff( const KURL::List& urlList );
     /**
     * Tag the specified files (as KURL) with a release or branch tag.
     * @param urlList
     */
-    virtual void tag( const KURL::List& urlList ) = 0;
+    virtual void tag( const KURL::List& urlList );
     /**
     * Remove tag from the specified files (as KURL) in repository.
     * @param urlList
     */
-    virtual void unTag( const KURL::List& urlList ) = 0;
+    virtual void unTag( const KURL::List& urlList );
     /**
     * Remove tag from the specified files (as KURL) in repository.
     * @param urlList
     */
-    virtual void removeStickyFlag( const KURL::List& urlList ) = 0;
+    virtual void removeStickyFlag( const KURL::List& urlList );
     /**
     * Add the specified files (as KURL) to the .cvsignore file.
     * @param urlList
     */
-    virtual void addToIgnoreList( const KURL::List& urlList ) = 0;
+    virtual void addToIgnoreList( const KURL::List& urlList );
     /**
     * Commit the specified files (as KURL) to repository.
     * @param urlList
     */
-    virtual void removeFromIgnoreList( const KURL::List& urlList ) = 0;
+    virtual void removeFromIgnoreList( const KURL::List& urlList );
     /**
     * Creates a new project with cvs support, that is will import the
     * generated sources in the repository.
@@ -146,7 +147,7 @@ public:
     virtual void createNewProject( const QString &dirName,
         const QString &cvsRsh, const QString &location,
         const QString &message, const QString &module, const QString &vendor,
-        const QString &release, bool mustInitRoot ) = 0;
+        const QString &release, bool mustInitRoot );
 
     /**
     * Check if the directory is valid as CVS directory (has the /CVS/ dir inside)
@@ -169,8 +170,13 @@ signals:
     //        (will be empty if the operation failed)
     void checkoutFinished( QString checkedDir );
 
-// Methods
-protected:
+private slots:
+    void slotJobFinished( bool normalExit, int exitStatus );
+    void slotDiffFinished( bool normalExit, int exitStatus );
+    void slotCheckoutFinished( bool normalExit, int exitStatus );
+    void slotProjectOpened();
+
+private:
     /**
     * Call this every time a slot for cvs operations starts!! (It will setup the
     * state (file/dir URL, ...).
@@ -222,19 +228,31 @@ protected:
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
     static void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 
-    KDevMainWindow *mainWindow() const;
-    KDevCore *core() const;
-    QString projectDirectory() const;
-    KDevDiffFrontend *diffFrontend() const;
-
-// Data members
-protected:
-    //! File name for the changelog file
+    //! Changelog filename (currently "CHANGELOG" )
     static const QString changeLogFileName;
     //! Four spaces for every log line (except the first which includes the
     //! developers name)
     static const QString changeLogPrependString;
 
+    // Internal short-cuts
+    KDevMainWindow *mainWindow() const;
+    KDevCore *core() const;
+    QString projectDirectory() const;
+    KDevDiffFrontend *diffFrontend() const;
+
+    /** Locate and setup DCOP CvsService */
+    bool requestCvsService();
+    /** De-initialize and release CvsService */
+    void releaseCvsService();
+
+    CvsService_stub *m_cvsService;
+    Repository_stub *m_repository;
+
+    // Used for storing module path between start and ending of check-out
+    QString modulePath;
+
+    JobScheduler *m_scheduler;
+    // Reference to owner part
     CvsServicePart *m_part;
 
     //! Reference to widget integrated in the "bottom tabbar" (IDEAL)

@@ -45,10 +45,8 @@ CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char
     // @fixme: a better way?
     m_textBrowser->setMinimumWidth(fontMetrics().maxWidth()*40);
     m_textBrowser->setMinimumHeight(fontMetrics().maxWidth()*43);
-//    resize();
 
-    connect( m_textBrowser, SIGNAL(linkClicked( const QString& )),
-        this, SLOT(slotLinkClicked( const QString& )) );
+    connect( m_textBrowser, SIGNAL(linkClicked( const QString& )), this, SLOT(slotLinkClicked( const QString& )) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

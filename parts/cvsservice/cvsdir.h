@@ -26,7 +26,10 @@ Helper classes for handling CVS dirs
 class CVSDir : public QDir
 {
 public:
+    CVSDir();
     CVSDir( const QDir &dir );
+    explicit CVSDir( const CVSDir & );
+    CVSDir &operator=( const CVSDir & );
     virtual ~CVSDir();
 
     /**
@@ -86,9 +89,6 @@ private:
     QString m_cvsDir;
 
     mutable QMap<QString,CVSEntry> m_cachedEntries;
-
-    explicit CVSDir( const CVSDir & ); // verboten!
-    CVSDir &operator=( const CVSDir & );
 };
 
 #endif

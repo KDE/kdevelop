@@ -67,22 +67,8 @@ void CVSDiffPage::startDiff( const QString &fileName, const QString &v1, const Q
     CvsOptions *options = CvsOptions::instance();
     DCOPRef job = m_cvsService->diff( fileName, v1, v2, options->diffOptions(), options->contextLines() );
     m_cvsDiffJob = new CvsJob_stub( job.app(), job.obj() );
-    if (job.isNull())
-    {
-        kdDebug() << "Null job???" << endl;
-        return;
-    }
 
-    QString cmd;
-    DCOPReply reply = job.call( "cvsCommand()" );
-    if (!reply.isValid())
-    {
-        kdDebug() << "Reply not valid" << endl;
-        return;
-    }
-    reply.get<QString>( cmd );
-
-    kdDebug() << "Running command : " << cmd << endl;
+    kdDebug() << "Running command : " << m_cvsDiffJob->cvsCommand() << endl;
     connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotDiffJobExited(bool, int)", true );
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
     bool success = m_cvsDiffJob->execute();
