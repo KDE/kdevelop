@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
+            <width>354</width>
             <height>230</height>
         </rect>
     </property>
@@ -19,7 +19,7 @@
         <name>caption</name>
         <string>Form1</string>
     </property>
-    <grid>
+    <vbox>
         <property stdset="1">
             <name>margin</name>
             <number>11</number>
@@ -28,7 +28,7 @@
             <name>spacing</name>
             <number>6</number>
         </property>
-        <widget row="0"  column="0" >
+        <widget>
             <class>QCheckBox</class>
             <property stdset="1">
                 <name>name</name>
@@ -39,7 +39,7 @@
                 <string>automatic &amp;code completion  (experimental)</string>
             </property>
         </widget>
-        <widget row="1"  column="0" >
+        <widget>
             <class>QCheckBox</class>
             <property stdset="1">
                 <name>name</name>
@@ -50,7 +50,58 @@
                 <string>&amp;argument's hint  (experimental)</string>
             </property>
         </widget>
-        <spacer row="2"  column="1" >
+        <widget>
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Delay</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QSlider</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>delaySlider</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>maxValue</name>
+                        <number>1000</number>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>tickmarks</name>
+                        <enum>Right</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>tickInterval</name>
+                        <number>200</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <spacer>
             <property>
                 <name>name</name>
                 <cstring>Spacer1</cstring>
@@ -71,6 +122,6 @@
                 </size>
             </property>
         </spacer>
-    </grid>
+    </vbox>
 </widget>
 </UI>

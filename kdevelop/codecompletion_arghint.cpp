@@ -120,7 +120,7 @@ KDevArgHint::KDevArgHint ( QWidget *parent, CEditWidget* edit )
 	connect ( m_pPrev, SIGNAL ( clicked() ), this, SLOT ( gotoPrev() ) );
 	connect ( m_pNext, SIGNAL ( clicked() ), this, SLOT ( gotoNext() ) );
 
-	m_nNumFunc = m_nCurFunc = m_nCurLine = 0;
+	m_nNumFunc = m_nCurFunc = m_nCurLine = m_nCurCol = 0;
 
 	m_nCurArg = 1;
 

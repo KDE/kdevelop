@@ -1,3 +1,9 @@
+2002-03-21  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of Roberto Raggi
+      now there's delay of code completion by default. 
+      You can change that in the Codecompletion settings.
+      --> This fixes the usuability of KDevelop on slow machines (less than 800MHz)
+
 2002-03-20  Roberto Raggi <ragi@cli.di.unipi.i>
     * bugfix: Bug#39541: crash when entering pointer (code completion)
 	

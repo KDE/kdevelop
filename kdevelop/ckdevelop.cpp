@@ -4768,3 +4768,16 @@ bool CKDevelop::getAutomaticArgsHint()
     config->setGroup("CodeCompletion");
     return config->readBoolEntry("automatic_argshint", true);
 }
+
+void CKDevelop::setCodeCompletionTimeout( int timeout )
+{
+    config->setGroup("CodeCompletion");
+    config->writeEntry("timeout", timeout);
+    config->sync();
+}
+
+int CKDevelop::getCodeCompletionTimeout()
+{
+    config->setGroup("CodeCompletion");
+    return config->readEntry("timeout", "500").toInt();
+}

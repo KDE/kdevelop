@@ -33,6 +33,7 @@ class CParsedClass;
 class CParsedContainer;
 class CParsedMethod;
 class CParsedAttribute;
+class QTimer;
 
 class CompletionEntry {
 public:
@@ -109,6 +110,7 @@ private:
     int m_lineCursor;
     int m_colCursor;
     int m_offset;
+    QTimer* m_pTimer;
 
 public slots:
     void slotCursorPosChanged();

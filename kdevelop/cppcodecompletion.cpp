@@ -30,6 +30,7 @@
 #include <qapplication.h>
 #include <qregexp.h>
 #include <qmap.h>
+#include <qtimer.h>
 
 #include <kdebug.h>
 #include <kregexp.h>
@@ -176,6 +177,9 @@ CppCodeCompletion::CppCodeCompletion( CEditWidget *edit, CClassStore* pStore, CK
     connect(m_pArgHint,SIGNAL(argHintHided()),SIGNAL(argHintHided()));
 
     connect(m_edit, SIGNAL ( newCurPos() ), this, SLOT ( slotCursorPosChanged () ) );
+
+    m_pTimer = new QTimer( this );
+    connect( m_pTimer, SIGNAL(timeout()), this, SLOT(completeText()) );
 }
 
 void CppCodeCompletion::showCompletionBox(QValueList<CompletionEntry> complList,int offset){
@@ -211,6 +215,7 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
         int line = ed->cursorPosition().y();
         int col = ed->cursorPosition().x();
         if( e->type() == QEvent::KeyPress ){
+            m_pTimer->stop();
             // kdDebug() << "Project = " << prj << endl;
             QKeyEvent* ke = (QKeyEvent*) e;
             if( ke->key() == Key_Tab && !m_edit->currentWord().isEmpty() ){
@@ -226,7 +231,8 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
                 int attr = l->getAttr( col );
                 if( attr == 13 ){
                     kdDebug() << "---------------------------> complete (enabled by robe :-)" << endl;
-                    completeText();
+                    m_pTimer->start( m_pDevelop->getCodeCompletionTimeout(), true );
+                    // completeText();
                 }
                 return TRUE;
             } else if( m_pDevelop->getAutomaticArgsHint() &&
@@ -242,7 +248,8 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
                     while( index>=0 && s[index].isSpace() )
                         --index;
                     if( s[index].isLetterOrNumber() || s[index] == '_' ){
-                        completeText();
+                        m_pTimer->start( m_pDevelop->getCodeCompletionTimeout(), true );
+                        // completeText();
                     }
                 }
                 return TRUE;

@@ -261,6 +261,9 @@ public:
   bool getAutomaticCompletion();
   bool getAutomaticArgsHint();
 
+  void setCodeCompletionTimeout( int );
+  int getCodeCompletionTimeout();
+
  public slots:
 
   void enableCommand(int id_);

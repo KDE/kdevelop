@@ -18,6 +18,7 @@
 #include "ccompletionopts.h"
 #include "ckdevelop.h"
 #include <qcheckbox.h>
+#include <qslider.h>
 
 CCompletionOpts::CCompletionOpts(CKDevelop* pDev,
                                  QWidget *parent, const char *name )
@@ -25,6 +26,7 @@ CCompletionOpts::CCompletionOpts(CKDevelop* pDev,
 {
     checkBoxCompleteText->setChecked( m_pDevelop->getAutomaticCompletion() );
     checkBoxArgHint->setChecked( m_pDevelop->getAutomaticArgsHint() );
+    delaySlider->setValue( m_pDevelop->getCodeCompletionTimeout() );
 }
 
 CCompletionOpts::~CCompletionOpts()
@@ -35,4 +37,5 @@ void CCompletionOpts::slotSettingsChanged()
 {
     m_pDevelop->setAutomaticCompletion( checkBoxCompleteText->isChecked() );
     m_pDevelop->setAutomaticArgsHint( checkBoxArgHint->isChecked() );
+    m_pDevelop->setCodeCompletionTimeout( delaySlider->value() );
 }
