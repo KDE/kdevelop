@@ -19,6 +19,7 @@
 #include <kaction.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
+#include <kprocess.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -86,7 +87,7 @@ void GrepViewPart::stopButtonClicked(KDevPlugin* which)
     if ( which != 0 && which != this )
         return;
     kdDebug(9001) << "GrepViewPart::stopButtonClicked()" << endl;
-    m_widget->killJob();
+    m_widget->killJob( SIGHUP );
 }
 
 

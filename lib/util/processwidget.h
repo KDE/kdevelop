@@ -13,8 +13,8 @@
 #define _PROCESSWIDGET_H_
 
 #include <klistbox.h>
+#include <kprocess.h>
 
-class KProcess;
 class ProcessLineMaker;
 
 class ProcessListBoxItem : public QListBoxText
@@ -57,7 +57,7 @@ public slots:
     /**
      * Kills the child processss.
      */
-    void killJob();
+    void killJob( int signo = SIGTERM );
     /**
      * Inserts one line from stdin into the listbox. This can
      * be overridden by subclasses to implement

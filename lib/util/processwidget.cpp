@@ -92,9 +92,9 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
 }
 
 
-void ProcessWidget::killJob()
+void ProcessWidget::killJob( int signo )
 {
-    childproc->kill();
+    childproc->kill( signo );
 }
 
 
