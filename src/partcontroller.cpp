@@ -1126,16 +1126,20 @@ void PartController::slotFileDirty( const KURL & url )
 {
 	kdDebug(9000) << k_funcinfo << endl;
 	
-	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partForURL( url ) );
-	if ( !ro_part || !ro_part->widget() ) return;
+	KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+	if ( !rw_part || !rw_part->widget() ) return;
 	
-	if ( isDirty( ro_part ) ) 
+	if ( isDirty( rw_part ) ) 
 	{
-		ro_part->widget()->setIcon( SmallIcon("revert") );
+		rw_part->widget()->setIcon( SmallIcon("revert") );
 	} 
-	else 
+	else if ( !rw_part->isModified() )
 	{
-		ro_part->widget()->setIcon( SmallIcon("kdevelop") );
+		rw_part->widget()->setIcon( SmallIcon("kdevelop") );
+	}
+	else
+	{
+		rw_part->widget()->setIcon( SmallIcon("filesave") );
 	}
 }
 
