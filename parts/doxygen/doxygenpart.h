@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2004 by Jonas Jacobi                                    *
+ *   jonas.jacobi@web.de                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,10 +16,19 @@
 
 #include <qguardedptr.h>
 #include <kdialogbase.h>
+#include <kprocess.h>
+#include <ktempdir.h>
+#include <qstring.h>
+
 #include "kdevplugin.h"
 
 class DoxygenDialog;
-
+class QPopupMenu;
+class Context;
+class KAction;
+namespace KParts{
+    class Part;
+}
 
 class DoxygenPart : public KDevPlugin
 {
@@ -40,6 +51,23 @@ private slots:
 
     /** clean the html API docs (delete the generated html files) */
     void slotDoxClean();
+	/**
+	*	gets called, when the Doxygen process for previewing is finished and shows its output then.
+	*/
+	void slotPreviewProcessExited();
+	/**
+	*	If the current part is KTextEditor::Document, run Doxygen over it. 
+	*	When the process exited slotPreviewProcessExited gets called.
+	*/
+	void slotRunPreview();
+	/**
+	*	gets called when the currently active part changed. 
+		When the new part is a KTextEditor::Document the filepath gets internally stored and gets processed if slotRunPreview() is called.
+		@see KTextEditor::Document
+	*/
+	void slotActivePartChanged(KParts::Part*);
+	
+
 
 private:
 
@@ -49,6 +77,11 @@ private:
     void adjustDoxyfile();
 
     DoxygenDialog *m_dialog;
+    //needed for doxygen preview
+    KProcess m_process;
+    QString m_file;
+	KTempDir m_tmpDir;
+    KAction* m_action;
 };
 
 #endif

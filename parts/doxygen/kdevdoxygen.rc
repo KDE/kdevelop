@@ -1,9 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDoxygen" version="2">
+<kpartgui name="KDevDoxygen" version="3">
 <MenuBar>
   <Menu name="build" >
     <Action name="build_doxygen"/>
     <Action name="clean_doxygen"/>
+  </Menu>
+  <Menu name="tools" >
+    <Action name="show_preview_doxygen_output"/>
   </Menu>
 </MenuBar>
 </kpartgui>

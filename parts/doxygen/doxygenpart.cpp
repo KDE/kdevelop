@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2004 by Jonas Jacobi                                    *   
+ *    jonas.jacobi@web.de                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,20 +16,23 @@
 #include <qvbox.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qpopupmenu.h>
+#include <qfileinfo.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
+#include <kparts/part.h>
+#include <ktexteditor/document.h>
+#include <partcontroller.h>
 
 #include "kdevproject.h"
 #include "kdevmakefrontend.h"
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
 #include "domutil.h"
-
 
 #include "config.h"
 
@@ -43,7 +48,6 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     setXMLFile("kdevdoxygen.rc");
 
     KAction *action;
-
     action = new KAction( i18n("Build API Documentation"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
@@ -59,6 +63,27 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+                  
+    m_tmpDir.setAutoDelete(true);
+    connect(&m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotPreviewProcessExited()));
+    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )));
+    m_action = new KAction(i18n("Preview Doxygen Output"), 0, CTRL+ALT+Key_P, this, SLOT(slotRunPreview()), actionCollection(), "show_preview_doxygen_output");
+    m_action->setToolTip( i18n("Show a preview of the doxygen output of this file") );
+    m_action->setWhatsThis( i18n("<b>Preview Doxygen output</b><p>Runs Doxygen over the current file and shows the created index.html.") );
+
+    //read Doxygen configuration, if none exists yet, create it with some defaults    
+    adjustDoxyfile();
+    QString fileName = project()->projectDirectory() + "/Doxyfile";
+
+    QFile file(fileName);
+    if (file.open(IO_ReadOnly)) {
+        QTextStream is(&file);
+
+        Config::instance()->parse(QFile::encodeName(fileName));
+        Config::instance()->convertStrToVal();
+
+        file.close();
+    }
 }
 
 
@@ -291,6 +316,142 @@ void DoxygenPart::slotDoxClean()
        kdDebug(9026) << "No Doxygen generated API documentation exists. There's nothing to clean!" << endl;
 
 }
+
+void DoxygenPart::slotPreviewProcessExited( )
+{
+	partController()->showDocument(KURL(m_tmpDir.name()+"html/index.html"), "doxyprev");
+}
+
+void DoxygenPart::slotRunPreview( )
+{
+    if (m_file.isNull())
+        return;
+	
+    if (m_process.isRunning()) {
+        if ( KMessageBox::warningYesNo(0, i18n("Previous Doxygen process is still running.\nDo you want to cancel that process?"))  == KMessageBox::Yes )
+            m_process.kill();
+	else 
+            return;
+    }
+	
+    m_process.clearArguments();
+    
+    m_tmpDir.unlink();
+    m_tmpDir = KTempDir();
+    m_tmpDir.setAutoDelete(true);
+    
+    Config* config = Config::instance();
+    
+    ConfigString* poDir = dynamic_cast<ConfigString*>(config->get("OUTPUT_DIRECTORY"));
+    ConfigList* pInput = dynamic_cast<ConfigList*>(config->get("INPUT"));
+    ConfigString* pHeader = dynamic_cast<ConfigString*>(config->get("HTML_HEADER"));
+    ConfigString* pFooter = dynamic_cast<ConfigString*>(config->get("HTML_FOOTER"));
+    ConfigString* pStyle = dynamic_cast<ConfigString*>(config->get("HTML_STYLESHEET"));
+    
+    //store config values to restore them later | override config values to get only the current file processed
+    QCString dirVal;
+    if (poDir != 0) {
+        dirVal = *poDir->valueRef();
+        *poDir->valueRef() = m_tmpDir.name().ascii();
+    }
+   
+   QStrList inputVal;
+    if (pInput != 0) {
+        inputVal = *pInput->valueRef();
+         QStrList xl;
+         xl.append(m_file.ascii());
+        *pInput->valueRef() = xl;
+    } else {
+        config->addList("INPUT", "# The INPUT tag can be used to specify the files and/or directories that contain\n"
+                                                     "# documented source files. You may enter file names like \"myfile.cpp\" or\n"
+                                                     "# directories like \"/usr/src/myproject\". Separate the files or directories\n"
+                                                     "# with spaces.");
+        pInput = dynamic_cast<ConfigList*>(config->get("INPUT")); //pinput now has to be != 0 
+        QStrList xl;
+         xl.append(m_file.ascii());
+        *pInput->valueRef() = xl;
+    }
+    
+    QCString header;
+    QCString footer;
+    QCString stylesheet;
+    //if header/footer/stylesheets are set, make sure they get found in the doxygen run
+    QString projectDir = project()->projectDirectory();
+    if (pHeader != 0 && !pHeader->valueRef()->isEmpty()){
+        header = *pHeader->valueRef();
+        QFileInfo info (header);
+        if (info.isRelative())
+            *pHeader->valueRef() = QString(projectDir + "/" + QString(header)).ascii();
+        else 
+            header = 0;
+    }
+    
+    if (pFooter != 0 && !pFooter->valueRef()->isEmpty()){
+        footer = *pFooter->valueRef();
+        QFileInfo info (footer);
+        if (info.isRelative())
+            *pFooter->valueRef() = QString(projectDir + "/" + QString(footer)).ascii();
+        else 
+            footer = 0;
+    }
+    
+    if (pStyle != 0 && !pStyle->valueRef()->isEmpty()){
+        stylesheet = *pStyle->valueRef();
+        QFileInfo info (stylesheet);
+        if (info.isRelative())
+            *pStyle->valueRef() = QString(projectDir +"/" + QString(stylesheet)).ascii();
+        else 
+            stylesheet = 0;
+    }
+
+    QFile file(m_tmpDir.name() +"PreviewDoxyfile"); //file gets deleted automatically 'cause of tempdir
+    if (!file.open(IO_WriteOnly)){
+        //restore config values
+        if (pInput != 0)
+            *pInput->valueRef() = inputVal;
+    
+        if (poDir != 0)
+            *poDir->valueRef() = dirVal;
+        
+        KMessageBox::error(0, "Can't create temporary file '" + file.name() + "'!");
+        return;
+    }
+    
+    config->writeTemplate(&file, false, false);
+    
+    if (inputVal.count() == 0) //pInput is always != 0
+        *pInput->valueRef() = QStrList();
+    else
+        *pInput->valueRef() = inputVal;
+    
+    if (poDir != 0)
+        *poDir->valueRef() = dirVal;
+    
+    if (pHeader != 0 && !header.isNull())
+        *pHeader->valueRef() = header;
+    
+    if (pFooter != 0 && !footer.isNull())
+        *pFooter->valueRef() = footer;
+    
+    if (pStyle != 0 && !stylesheet.isNull())
+        *pStyle->valueRef() = stylesheet;
+        
+	m_process << "doxygen" << file.name().ascii();
+	m_process.start(KProcess::NotifyOnExit, KProcess::NoCommunication);
+    
+}
+
+void DoxygenPart::slotActivePartChanged( KParts::Part * part )
+{
+	// -> idea from cppsupportpart.cpp
+	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part);
+	if (doc != 0) 
+		m_file = doc->url().path();
+	else
+		m_file = QString::null;
+	// <-
+}
+
 
 
 #include "doxygenpart.moc"
