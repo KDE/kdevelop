@@ -12,5 +12,3 @@ $NEWCLASS$::~$NEWCLASS$()
 }
 
 /*$SPECIALIZATION$*/
-
-#include "$NEWFILENAMELC$.moc"
