@@ -339,7 +339,7 @@ void AppWizardDialog::licenseChanged()
 			}
 			
 			QString text;
-			text = lic->assemble( commentStyle, author_edit->text(), email_edit->text(), 0 );
+			text = lic->assemble( commentStyle, author_edit->text(), email_edit->text() , 0 );
 			edit->setText(text);
 		}
 	}
@@ -441,7 +441,7 @@ void AppWizardDialog::accept()
 			for( ; it != files.end(); ++it )
 			{
 				installFile file;
-				file.source = QString( "%{src}/template-common/%1" ).arg( *it );
+				file.source = QString( "%{kdevelop}/template-common/%1" ).arg( *it );
 				file.dest = QString("%{dest}/%1").arg( *it );
 				file.process = true;
 				m_pCurrentAppInfo->fileList.append( file );
