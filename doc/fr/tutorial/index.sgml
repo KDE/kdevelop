@@ -1,207 +1,220 @@
-
 <!doctype linuxdoc system>
 <book>
 <titlepag>
-<title>KDE Application Tutorials
-<subtitle>The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment
+<title>Tutoriels Applications KDE
+<subtitle>Le Manuel Tutoriels Applications KDE pour l'Environnement de Développement Intégré KDevelop
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
-<inst>The KDevelop Team
-<date>Version 0.1 , Mon Jun 21 1999
-<abstract>
-The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment, a tutorial collection on how to create KDE
-applications by examples and describes how to build the tutorial examples included with the Qt library. This handbook itself is part
-of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
-id="Copyright" name="Copyright"> for more information.
+<translater>François-Xavier Duranceau <htmlurl url="mailto:duranceau@kde.org" name = "<duranceau@kde.org>">
+<inst>L'Équipe KDevelop
+<date>Version 0.1 , Lun 21 Juin 1999
+<abstract> 
+Le Manuel Tutoriels Applications KDE pour l'Environnement de Développement Intégré est un ensemble de tutoriels sur comment créer
+des applications KDE par l'exemple et décrit comment construire les exemples du tutoriel inclus avec la bibliothèque Qt.
+Ce manuel fait partie de l'Environnement de Développement Intégré KDevelop et est donc distribué sous la Licence GPL du GNU ; 
+consultez le <ref id="Copyright" name="Copyright"> pour plus d'informations.
 </abstract>
 
 <toc>
 
 <chapt>Introduction
 <p>
-As KDE is currently becoming a standard for Unix System's desktops, more and more developers want to take advantage of the well-written
-API that the KDE project includes to create new applications that offer a GUI as well as an easy use of the classes provided with
-Qt/KDE. The KDevelop project therefore intends to provide an IDE which enables developers to create and extend their applications
-rapidly with the main focus on KDE. As beginners always have difficulties to get started, this handbook tries to explain certain
-aspects of application creation for KDE by describing how to create running applications with the sample code included with the Qt
-library by using the KDevelop IDE as well as creating KDE applications by examples.
+Puisque KDE est actuellement en train de devenir un standard pour les bureaux des Systèmes Unix, de plus en plus de développeurs
+veulent tirer parti de l'excellente API incluse dans le projet KDE pour créer de nouvelles applications ayant une interface 
+graphique (GUI), et utiliser facilement les classes fournies par Qt/KDE. Le projet KDevelop essaie donc de fournir un EDI qui
+permet aux développeurs de créer et d'étendre rapidement leurs applications basées sur KDE. Comme les néophytes ont toujours du
+mal à commencer, ce manuel essaie d'expliquer certains aspects de la création d'applications pour KDE. Il décrit comment créer
+des applications KDE par l'exemple et des applications fonctionnelles avec l'échantillon de code inclus dans la bibliothèque 
+Qt et l'EDI KDevelop.
 
-Therefore, the next chapter will explain you how to create a project with KDevelop that is already a complete application; then we'll
-walk on to the Qt online documentation containing the sources for examples on how to use the Qt library.
+Le chapitre suivant expliquera donc comment créer, avec KDevelop, un projet qui est déjà une application complète. Ensuite, nous
+parcourerons la documentation en ligne de Qt qui contient les sources des exemples d'utilisation de la bibliothèque Qt.
 
-This will give you a first understanding how the underlying Qt library functions and how to use the classes provided with it; Qt is the
-point where to get started as KDE is on top of the Qt library classes and KDE applications make a wide use of them.
+Cela vous donnera un premier aperçu des fonctions de la bibliothèque Qt et comment utiliser les classes fournies avec ; Qt est
+le point de départ car KDE est bâti au-dessus des classes de la bibliothèque Qt et les applications KDE en font une
+utilisation intensive.
 
-Further, we'll cover on how to create a mini-KDE application with KDevelop's application wizard. From the minimum framework provided,
-we will create a running example KDE application that makes use of the KDE libraries and will explain the different parts of a KDE
-application in detail.
+Ensuite, nous traiterons la création d'une mini-application KDE avec l'assistant d'application de KDevelop. A partir de l'architecture
+minimale fournie, nous créerons une application KDE exemple qui utilise les bibliothèques KDE et nous expliquerons en détail 
+les différentes parties de l'application.
 
-The KDevelop Team wishes you success in learing about KDE and Qt with this handbook and hope it will enable you to become another
-programmer contributing to the KDE project.
+L'Équipe KDevelop vous souhaite un bon apprentissage de KDE et Qt avec ce manuel et espère qu'il vous permettra de devenir un
+programmeur supplémentaire contribuant au projet KDE.
 
-<sect>What you should know already
+
+<sect>Ce que vous devriez déjà savoir
 <p>
-This handbook requires a base knowledge about the C++ programming language as a minimum to understand the code examples and their
-functionality. Further, it is assumed that you have read <htmlurl url="../index.html" name="The User Manual to KDevelop"> as well as
-<htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook"> and know how the KDevelop IDE works in general and
-what generated projects are.
+Ce manuel nécessite une connaissance de base du langage de programmation C++ pour comprendre les exemples de code et leurs
+fonctionnalités. De plus, nous supposons que vous avez lu <htmlurl url="../index.html" name="Le Manuel d'Utilisation de KDevelop">
+ainsi que <htmlurl url="../programming/index.html" name="Le Manuel de Programmation de KDevelop"> et que vous savez comment fonctionne
+globalement l'EDI KDevelop et ce que sont les projets générés.
 
-<chapt>Getting Started
+<chapt>Pour Commencer
 <p>
-Getting Started- that means, you should have set up KDevelop to work correctly first. Ensure you have access to the Qt online reference
-documentation by the "Help" menu or the according book in the documentation tree. When looking a the first page of the Ot
-documentation, you will see that it contains a link to a section "Tutorials" and "Examples". Under "Tutorials", you will find a 14-step
-introduction into using the Qt library to build applications. On the other hand, "Examples" will lead you to a list of example
-programs that Qt includes and takes for example usage reference in certain classes. Now, if you are an absolute beginner, you should be
-comfortable with the idea behind Qt- providing a library that offers:
-
+Pour commencer signifie que vous devez avoir installé et configuré KDevelop pour qu'il fonctionne correctement. Assurez-vous que vous avez
+accès à la documentation de référence de Qt en ligne par le menu "Aide" ou le manuel correspondant dans l'arborescence de documentation.
+Lorsque vous regarderez la première page de la documenation de Qt, vous verrez qu'elle contient un lien vers les sections "Tutorials" et
+"Examples". Sous "Tutorials", vous trouverez une introduction en 14 étapes à l'utilisation de la bibliothèque Qt pour construire des 
+applications. Par ailleurs, "Examples" vous conduira à une liste de programmes exemples inclus dans Qt et pris comme référence d'exemple 
+d'utilisation de certaines classes. Maintenant, si vous débutez complètement, vous devriez vous sentir à l'aise
+avec la philosophie de Qt, à savoir fournir une bibliothèque qui offre :
 <itemize>
-<item>a base application class (<tt/QApplication/)
-<item>a widget library for graphical user interfaces
-<item>a set of additional helper classes for graphics, file and data handling
-<item>the signal-slot mechanism for object communication
-<item>event controlling by event loops and virtual methods
+<item>une classe d'application de base (<tt/QApplication/)
+<item>une bibliothèque de widgets pour les interfaces graphiques utilisateur
+<item>un ensemble de classes supplémentaires facilitant la gestion des fichiers, du graphisme et des données
+<item>un mécanisme signal-slot pour la communication entre objets
+<item>la gestion des événements pas des boucles d'événements et des méthodes virtuelles
 </itemize>
 
-If that doesn't tell you anything right now, you should read about the Qt library in <htmlurl url="../programming/index-2.html#ss2.1"
-name="The KDevelop Programming Handbook"> where the basics for a Qt application are described in detail. There, you will also find and
-introduction about the difference between a Qt and a KDE application, which is not much at the first level of the Qt tutorial step.
+Si cela ne vous dit rien, vous devriez découvrir la bibliothèque Qt dans <htmlurl url="../programming/index-2.html#ss2.1"
+name="Le Manuel de Programmation de KDevelop"> où les bases d'une application Qt sont décrites en détail. Vous y trouverez
+aussi une introduction sur la différence entre une application Qt et une application KDE, ce qui n'est pas vraiment la première
+étape dans le tutoriel Qt.
 
-Now, to learn about Qt first would be a good start for programming KDE applications as well, so we will create a project that will
-produce the tutorial applications after editing.
+Commencer par apprendre Qt devrait aussi être un bon début pour la programmation d'applications KDE. Nous allons donc créer un
+projet qui aboutira aux applications du tutoriel après édition.
 
-To do this, start with opening KDevelop and select "Project"-"New" from the menubar. The application wizard opens and you have to
-select which type of project you want to build. For Qt applications, you would choose the Qt application, but we will use the mini-KDE
-project to build our examples. The reason is simple: the Qt tutorials don't contain much code, and  by choosing the Qt application in
-the application wizard, we would have to do a lot of changing on the provided code to create the "true" examples.
+Pour cela, commencez par lancer KDevelop et sélectionner "Projet" - "Nouveau" dans la barre de menus. L'assistant d'application
+s'ouvre et vouz devez sélectionner le type du projet qui vous voulez construire. Pour les applications Qt, vous choisiriez 
+Application Qt mais nous allons utiliser le type de projet mini-application KDE pour construire nos exemples. La raison est simple : les
+tutoriels de Qt ne contiennent pas beaucoup de code et en choisissant Application Qt dans l'assistant d'application, vous
+auriez à effectuer beaucoup de modifications sur le code fourni pour créer les "vrais" exemples.
 
-But as the mini-KDE application only consists of an empty main window but also checks for the Qt library and header files, it will fit
-for our purposes and doesn't require much changes.
+Et comme la mini-application KDE n'est constituée que d'une fenêtre principale et vérifie la bibliothèque Qt et les fichiers d'en-tête,
+cela conviendra parfaitement à nos besoins et ne nécessitera pas trop de modifications.
 
-When entering the next wizard page, we have to enter the project-specific information. There, we can leave out any KDE-specific
-additions such as a mini-icon and a main icon, documentation etc. We just fill in the information that will be useful for building a
-suitable base for the tutorials. As the structure of the tutorial steps builds the next step on the previously created code, we can
-start with <tt/MyWidget/ as the project name. This will already build us the base class that is needed in chapter 4, so we don't have
-to care for that later. As we want to start with the first tutorial step, we will use '1' as the project number, which we can increase
-later when moving to the next step.
+Lorsque vous passez à la page suivante de l'assistant, vous devez saisir les informations spécifiques au projet. Vous pouvez laisser
+telles quelles les informations supplémentaires spécifiques à KDE comme la mini-icône, l'icône principale, la documentation, etc. Nous
+remplissons uniquement les informations qui seront utiles à la création d'une base adéquate pour les tutoriels. Comme la structure des
+étapes du tutoriel construit l'étape suivante en partant du code de l'étape précédente, nous pouvons commencer avec <tt/MyWidget/>
+comme nom du projet. Cela nous construira déjà la classe de base requise au chapitre 4 donc nous n'aurons plus à nous en préoccuper .
+Comme nous voulons débuter avec la première étape du tutoriel, nous utiliserons '1' comme numéro de projet et nous l'augmenterons
+plus tard en passant à l'étape suivante.
 
-Then, fill in the other required information such as your name, email address and project directory. That would be all we need and we
-can flip to the next page. Insert your header for the project's header file here or use the given example. The same is done with the
-4th page, where the same has to be set for the source files. Finally, the last page is entered, where you have to press "Create" to
-build the project. If the button is not available, start at the first page again and make sure you didn't miss to insert any required
-information.
+Ensuite, remplissez les autres informations requises telles que votre nom, votre adresse électronique et le répertoire du projet.
+C'est tout ce dont nous avons besoin et nous pouvons sauter à la page suivante. Insérez ici votre en-tête pour les fichiers d'en-tête
+du projet ou utilisez l'exemple donné. De même pour la quatrième page où vous devez définir l'en-tête des fichiers sources. Enfin, vous
+entrez dans la dernière page où vous devez cliquer sur le bouton "Créer" pour construire le projet. Si le bouton est grisé, recommencez
+depuis la première page et assurez-vous que vous n'avez pas oublié d'insérer une information nécessaire.
 
-If everything went OK, the project has been build and the messages window in the application wizard will have "READY" at it's last
-line.  Select "Exit" to finish the wizard.
+Si tout s'est bien passé, le projet a été créé et la fenêtre des messages de l'assistant d'application doit contenir "PRET" sur
+la dernière ligne. Sélectionnez "Quitter" pour fermer l'assistant.
 
-When looking at the treeview on the left, you will see that the project alreay includes a class "MyWidget"- this is because we chose
-this to be the application name. Further, when opening "Functions" in the classviewer's "Globals" folder, you will see that the
-application already contains a <tt/main()/ function where the execution will start.
+Si vous regardez l'arborescence sur la gauche, vous verrez que le projet contient déjà une classe "MyWidget" - parce que nous avons
+choisi ceci comme nom de l'application. En ouvrant "Fonctions" dans le dossier "Globals" du visualiseur de classes, vous verrez que
+l'application contient déjà une fonction <tt/main()/> où l'exécution commencera.
 
-Now the application is already set up. You could do an "Execute" or "Make", but as we want to create the tutorial applications, we can
-go ahead and change the code first to create our tutorial examples- which we'll do in the next step.
+L'application est déjà définie. Vous pourriez faire un "Exécuter" ou "Construire" mais comme nous voulons créer les applications
+du tutoriel, nous pouvons nous lancer et modifier d'abord le code pour créer nos applications exemples - ce que nous ferons à
+la prochaine étape.
 
-
-<chapt>Building the Qt Tutorials
+<chapt>Construction des Tutoriels Qt
 <p>
-<sect>Step One: Hello World!
+<sect>Étape 1 : Hello World!
 <p>
-As the previous chapter explains, we created a project called <tt/MyWidget/- now, when looking at the first tutorial page of the Qt
-documentation, you will see that the first application only uses a <tt/main()/ function. Therefore, we only have to change the given
-<tt/main()/ function of our generated project to get the first tutorial step running.
+Comme l'explique le chapitre précédent, nous avons créé un projet appelé <tt/MyWidget/> - si nous regardons à la première page
+du tutoriel de la documentation de Qt, nous voyons que la première application utilise uniquement la fonction  <tt/main()/>.
+Il nous suffit donc de modifier la fonction <tt/main()/> de notre projet généré pour franchir la première étape du tutoriel.
 
-To access the <tt/main()/ function, select it from the classviewer's "Globals" folder, which contains a subfolder for "Functions" where
-all non-class functions are listed. This will open the file <tt/main.cpp/ in the "C/C++ Files" window and the editing cursor is already
-set in front of the first line of <tt/main()/.
+Pour accéder à la fonction <tt/main()/>, sélectionnez-la dans le dossier "Globals" du visualiseur de classes qui contient un
+sous-dossier "Fonctions" où sont listées les fonctions qui n'appartiennent pas à une classe. Cela ouvre le fichier
+<tt/main.cpp/> dans la fenêtre des "Fichiers C/C++" et le curseur d'édition est directement positionné au début
+de la première ligne de <tt/main()/.
 
-<sect1>What to change first
+<sect1>Quoi modifier en premier
 <p>
-We could start changing the given code towards the desired one which is listed in the tutorial- but it can be even easier. Select the
-contents of the <tt/main()/ function with the mouse or by holding the Shift-key pressed while selecting the lines with the down-arrow
-key. Then select "Cut" from the "Edit" menu or press the DEL-key to remove the selected code. This will clear the main function and we
-can start from scratch to build our first tutorial.
+Nous pourrions commencer par modifier le code donné pour obtenir ce qui est listé dans le tutoriel mais il y a encore plus simple.
+Sélectionnez le contenu de la fonction <tt/main()/> avec la souris ou en maintenant la touche Shift enfoncée pendant la sélection des
+lignes avec la touche flèche vers le bas. Sélectionnez ensuite "Couper" dans le menu "Edition" ou appuyez sur la touche Suppr. pour
+supprimer le code sélectionné. Cela effacera la fonction main et nous pourrons commencer à zéro la construction de notre tutoriel.
 
-<sect1>Entering the tutorial code
+<sect1>Saisie du code source
 <p>
-Now, to insert the code from the tutorial, you could first read it carefully and try to remember which line contained which code. Then,
-after reading the tutorial's line-by-line description, you could use it as an example to write the tutorial by yourself.
+Pour insérer le code du tutoriel, vous pourriez le lire attentivement et essayer de vous souvenir de chaque ligne de code qu'il contient.
+Ensuite, après avoir lu ligne par ligne la description du tutoriel, vous pourriez l'utiliser comme exemple pour écrire le tutoriel 
+vous-même.
 
-Those who want to go the easy way: select the contents of the listed <tt/main()/ function in the documentation browser and press the
-"Copy"-icon from the toolbar. Optionally, you could use the context-menu or the according entry in the "Edit" menu. This will copy the
-selection into the clipboard and, after switching back to the sourcecode window, can be inserted with "Paste" (either from the context
-menu, the toolbar icon or the according entry in the "Edit" menu).
+Pour ceux qui veulent se simplifier la vie : sélectionnez dans le navigateur le contenu de la fonction <tt/main()/> listée et cliquez
+sur l'icône "Copier" dans la barre d'outils. Autrement, vous pouvez utiliser le menu contextuel ou l'entrée appropriée dans le menu "Edit".
+Cela copiera la sélection dans le presse-papiers et, après être revenu dans la fenêtre du code source, vous pourrez l'insérer avec "Coller"
+(en utilisant le menu contextuel, l'icône de la barre d'outils ou l'entrée adéquate du menu "Edition").
 
-Finally, add the according header files outside the <tt/main()/ function:
+Enfin, ajoutez hors de la fonction <tt/main()/> les fichiers d'en-tête suivants :
 
 <tscreen><verb>
 #include <qapplication.h>
 #include <qpushbutton.h>
 </verb></tscreen>
 
-That's it ! The source code is done for your first tutorial application.
+C'est tout ! Le code source de votre première application de tutoriel est terminé.
 
-<sect1>Building Hello World!
+<sect1>Construction de Hello World!
 <p>
-To build the first tutorial, select "Make" from the "Build" menu or press the according toolbar icon. Optionally, you could choose
-"Execute" as well, which results in running the application after the build was successful.
+Pour construire le premier tutoriel, sélectionnez "Construire" dans le menu "Build" ou cliquez sur l'icône correspondante
+dans la barre d'outils. Vous pourriez aussi bien choisir "Exécuter" qui provoque l'exécution après une construction correcte.
 
-If the build stops due to an error, be assured the fault was on the programmer's side, not on the tutorial ! This would be sad to
-search for an error just when you decided to program for KDE and/or Qt, but you can use this to train yourself to use KDevelop. Now, to
-find an error, you have two options: either select the according error message in the output window, which will bring you to the
-according line the error occured, or press the F4 key; optionally you could use the "Next Error" entry in the "View" menu.
+Si la construction s'arrête à cause d'une erreur, vous pouvez être sûr que la faute vient du programmeur et non du tutoriel !
+Ca serait dommage de chercher une erreur alors que vous avez décidé de programmer pour KDE et/ou Qt mais vous pouvez
+utiliser cette occasion pour vous entraîner à utililiser KDevelop. Pour chercher une erreur, vous avez deux possibilités : soit
+en sélectionnant le message d'erreur correspondant dans la fênetre des messages, ce qui vous placera sur la ligne où l'erreur
+s'est produite, soit en appuyant sur la touche F4. Vous pourriez aussi utiliser l'entrée "Erreur suivante" du menu "Affichage".
 
-<sect1>Exercises
+<sect1>Exercices
 <p>
-You may ask "Exercises ? This one was so simple, I don't need to excercise !", but be assured, things will get more complicated. This
-one was the easiest example, but the more complex they will get the more thinking is asked on your side to understand and follow the
-tutorial steps. Also the excercises will enable you to learn how to acutally use KDevelop and it's features.
+Vous pourriez vous dire "Exercices" ? C'était si simple que je n'ai pas besoin de m'exercer !" mais rassurez-vous, les choses vont
+devenir plus compliquées. Ceci était l'exemple le plus simple qui soit mais plus ce sera compliqué et plus cela demandera de réflexions
+de votre part pour assimiler et suivre les étapes du tutoriel.
 
-To teach yourself more with the first tutorial, you should try to do the following changes to the given code and see how this will
-influence the application behavoir:
+Les exercices vous permettront aussi d'apprendre comment utiliser KDevelop et ses fonctionnalités.
+
+Pour apprendre par vous-même plus de choses avec le premier tutoriel, vous pouvez essayer d'effectuer les modifications suivantes
+dans le code et voir l'influence sur le comportement de l'application :
 
 <enum>
-<item>change the pushbutton to a QLabel.
-<item>use <tt/setText()/ instead of directly setting the text in the pushbutton's constructor
-<item>use <tt/QPushButton::resize ( const QSize & s )/ instead of setting the size by width and height directly. Create a <tt/QSize/
-instance first that contains the size
-<item>play with the sizes to see which is width and heigth
+<item>changez le bouton (pushbutton) en QLabel
+<item>utilisez <tt/setText()/> au lieu de définir directement le texte dans le constructeur du bouton (pushbutton)
+<item>utilisez <tt/QPushButton::resize ( const QSize & s )/> au lieu de définir directement la taille par sa largeur et sa hauteur. Créez
+d'abord une instance de <tt/QSize/> qui contiendra la taille
+<item>jouez avec les tailles pour voir laquelle est la largeur et laquelle est la hauteur
 </enum>
 
-<sect>Step 2 and 3: Extensions
+<sect>Étapes 2 et 3 : Extensions
 <p>
-The tutorial steps 2 and 3 are extending the facilities of the first tutorial. There, you will learn about signals and slots as well as
-parent-child relationships between widgets.
+Les étapes 2 et 3 du tutoriel étendent les fonctionnalités du premier tutorial. Vous y découvrirez le mécanisme signal/slot ainsi
+que les relations parent-enfant entre les widgets.
 
-Now, why is it important to learn about that ? Well, the signals and slots are building the technology which make the difference when
-comparing the Qt library to other widget library.  Whenever you will hit an implementation problem where you want to communicate
-between objects, this will make your work incredible short and nothing serious will happen if something went wrong, even misconnections
-don't lead to a segmentation fault. This is the strength of the Qt library and a lot of KDE/Qt developer's won't want to miss it
-anymore because of it's flexibility. Understanding the signal/slot mechanism therefore is essential to create any KDE/Qt application.
+À propos, pourquoi est-il important d'apprendre cela ? Eh bien, le mécanisme signal/slot est à la base de la technologie qui fait
+la différence entre la bibliothèque Qt et les autres bibliothèques de widgets. Lorsque vous rencontrerez un problème d'implantation
+où vous voulez communiquer entre objets, cela réduira considérablement vos efforts et rien de grave n'arrivera si quelque chose se
+passe mal, même les mauvaises connexions ne conduisent pas à des fautes de segmentation (NdT : segmentation fault). C'est la force
+de la bibliothèque Qt et beaucoup de développeurs KDE/Qt ne peuvent plus se passer de sa flexibilité. Comprendre le mécanisme
+signal/slot est donc essentiel pour créer des applications KDE/Qt.
 
-Another thing to watch out for is the fact that the button terminates the <tt/QApplication/ instance by calling <tt/quit()/. You will
-meet <tt/quit()/ again when working with <tt/QApplication/'s KDE-pendant, <tt/KApplication/
+Une autre chose à remarquer est le fait que le bouton termine l'instance de <tt/QApplication/> en appelant <tt/quit()/>. Vous
+rencontrerez <tt/quit()/> à nouveau en travaillant avec <tt/KApplication/>, l'équivalent de <tt/QApplication/> pour KDE.
 
-<sect>Writing your own Widgets
+<sect>Écrire vos propres widgets
 <p>
-Now, after having successfully modified and extended the <tt/main()/ function, you will hit the point to create a new widget- a unique
-widget that only can be constructed with the class you're about to write in step 4.  Actually, the class has been created by the
-application wizard for you, so there is not much to add- just that you have to insert the code that lesson 4 places in the
-<tt/main.cpp/ file into the <tt/MyWidget/ classes' header and implementation file. Fortunately, you only have to add the implementation
-to the constructor code.
+Après avoir réussi à modifier et à étendre la fonction <tt/main()/>, vous allez vouloir créer un nouveau widget - un widget particulier
+qui peut seulement être construit avec la classe que vous allez écrire à l'étape 4. En fait, la classe a été créée pour vous par
+l'assistant d'application donc il n'y a pas grand chose à ajouter - vous devez juste insérer le code que la leçon 4 place dans les
+fichiers d'en-tête et d'implantation de la classe <tt/MyWidget/> du fichier <tt/main.cpp/>. Par chance, il suffit d'ajouter
+l'implantation au code du constructeur.
 
-To access the constructor, select it from the classviewer. This will automatically bring you to the implementation where you have to
-add the code.
+Pour accéder au constructeur, sélectionnez-le dans le visualiseur de classes. Vous serez automatiquement placé dans l'implantation
+où vous pourrez ajouter le code.
 
-Here, you only have to watch out for the include of <tt/qfont.h/- <tt/QFont/ is only used in the constructor code of <tt/MyWidget/.
-Therefore, add <tt/#include &lt;qfont.h&gt;/ to the top of the <tt/mywidget.cpp/ file.
+Ici, vous devez uniquement faire attention à l'inclusion de <tt/qfont.h/> - <tt/QFont/> est uniquement utilisé dans le code
+du constructeur de <tt/MyWidget/>. Ajoutez donc <tt/#include> &lt;qfont.h&gt;/ en haut du fichier <tt/mywidget.cpp/>.
 
-To run the new application, just hit "Execute". This will result in compling the changes after an autosaving.
+Pour exécuter la nouvelle application, cliquez juste sur "Exécuter". Après un enregistrement automatique, toutes les modifications 
+seront compilées.
 
-<sect>Extending the Widget Class
+<sect>Étendre la classe Widget
 <p>
-Now, in lesson 5 the target is to extend the widget class. Therefore, you will learn about virtual functions as well. Here, the
-<tt/resizeEvent()/ is reimplemented. What is important to learn here (besides extending a class) is that Qt works with user events by
-virtual functions that take an event as a parameter. Therefore, you should make yourself comfortable with the following classes of the
-Qt library:
+Dans la leçon 5, le but va maintenant être d'étendre la classe widget. Vous allez donc apprendre aussi les fonctions virtuelles.
+Ici, l'événement <tt/resizeEvent()/> est réimplanté. Ce qu'il est important d'apprendre ici (au-delà de l'extension de classe),
+c'est que Qt utilise des fonctions virtuelles ayant un événement en paramètre pour gérer les événements utilisateurs. Vous 
+devriez donc vous familiariser avec les classes suivantes de la bibliothèque Qt :
 
 <itemize>
 <item>QEvent
@@ -216,42 +229,45 @@ Qt library:
 <item>QTimerEvent
 </itemize>
 
-Whenever writing custom widgets, especially view areas of applications, you will have to overwrite the default implementation of the
-widget's event-methods by your own for certain events that have to be processed. Those would be e.g.
+Lorsque vous voulez écrire des widgets personnalisés, spécialement les zones d'affichage des applications, vous devez surcharger
+l'implantation par défaut des méthodes-événements du widget par les vôtres pour certains événements à traiter. Par exemple, cela peut être
 
-<tt/virtual void mousePressEvent ( QMouseEvent * )/ for processing a mouse event to pop up a context menu. In the implementation, you
-have to insert a formal parameter into the function header, most developers either use <tt/event/ or just <tt/e/ as the parameter name.
+<tt/virtual> void mousePressEvent ( QMouseEvent * )/ afin de traiter un événement de la souris pour afficher un menu contextuel. Dans
+l'implantation, vous devrez insérer un paramètre formel dans l'en-tête de la fonction, la plupart des développeurs utilise
+<tt/event/> ou juste <tt/e/> comme nom du paramètre.
 
-Then, you can process the event's parameters. For a <tt/QMouseEvent/, you have to ask if the right, middle or left mouse button was the
-one that caused the event.
+Ensuite, vous pouvez traiter les paramètres de l'événement. Pour un <tt/QMouseEvent/>, vous devez demander si c'est le bouton gauche,
+droit ou du milieu de la souris qui a provoqué cet événement.
 
-<sect>Adding a new Class
+<sect>Ajouter une nouvelle Classe
 <p>
-With lesson 6, you will have to add a class to the tutorial application. Now, normally you would think "I just will create a header
-file and an implementation file- then I'm done"- but KDevelop will make it easier for you. When adding a class, you should always use
-the Classgenerator. This will do all the work for you so you just will have to add the specific code.
+Avec la leçon 6, vous allez devoir ajouter une classe à l'application du tutoriel. Logiquement, vous devriez penser "Je vais juste
+créer un fichier d'en-tête et un fichier d'implantation, et c'est tout" mais KDevelop va vous rendre cela encore plus simple. Pour
+ajouter une classe, vous devriez toujours utiliser le Générateur de classes. Il fera tout le boulot pour vous et vous aurez uniquement
+à rajouter le code spécifique.
 
-To add a class with the Classgenerator, choose "Project"-"New Class", which will open a dialog to enter all needed values for the class
-you want to add. The first thing we have to insert is the classname. The tutorial name this <tt/LCDRange/, so this has to be inserted
-first. Then proceed to the baseclass. The baseclass is the one that the new class inherits. Looking at the tutorial (Qt 1.42), this is
-<tt/QWidget/.  Now, as most GUI classes to add would inherit QWidget, the Classgenerator makes it even easier. Leave the baseclass
-empty and instead check "QWidget child class" in the "Additional Options" section. This will automatically add the required
-<tt/Q_OBJECT/ macro to the headerfile to add slots and signals later (which is required in chapter 7).
+Pour ajouter une classe avec le Générateur de classes, choisissez "Projet" - "Nouvelle Classe" qui ouvrira une boîte de dialogue afin de
+saisir toutes les valeurs nécessaires à la classe que vous voulez ajouter. La première chose à insérer est le nom de la classe. Le 
+tutoriel la nomme <tt/LCDRange/> donc ceci doit être inséré en premier. Ensuite, passons à la classe de base. La classe de base est celle
+dont hérite la nouvelle classe. D'après le tutoriel (Qt 1.42), il s'agit de <tt/QWidget/>. Maintenant, comme la plupart des
+classes du GUI (Interface Graphique Utilisateur) à ajouter dérivent de QWidget, le Générateur de classes rend cela encore plus
+simple. Laissez vide la classe de base et cochez plutôt "Classe fille de QWidget" dans la section "Options supplémentaires". Cela
+ajoutera automatiquement dans le fichier d'en-tête la macro <tt/Q_OBJECT/> qui est nécessaire pour ajouter des signal/slot (requis
+pour le chapitre 7).
 
-As the filenames are automatically inserted, you don't have to care for that. The only thing that we would suggest adding is the
-documentation. It is always a good style to add a desciptive documentation to the class, especially as the classname <tt/LCDRange/
-doesn't inform you specifically about the purpose of the widget.
+Comme les noms de fichiers sont automatiquement insérés, vous n'avez pas à vous en préoccuper. La seule chose que nous vous
+suggérons d'ajouter est la documentation. Il est toujours plus élégant d'ajouter une documentation descriptive à la classe, 
+spécialement lorsque le nom de classe <tt/LCDRange/> n'est pas très clair sur le but du widget.
 
-<sect>Step 7-14
+<sect>Étapes 7-14
 <p>
-For the rest of the tutorial steps, you are prepared and know everything you have to know- adding the classes required and doing the
-changes.
+Pour les dernières étapes du tutoriel, vous êtes prêt et vous savez tout ce que vous avez à savoir - ajouter les classes nécessaires
+et effectuer les modifications.
 
-After each change you should do a new build and check your code for errors. Run the application and follow it's execution;
-additionally, you should play with KDevelop's options for "Build"- execute the application with a commandline argument such as
---geometry and debug it with KDbg in the Tools-window. Then you should be able to proceed with the Qt examples that will be discussed
-in the next chapter.
-
+Après chaque modification, vous devriez reconstruire et vérifier que votre code ne contient pas d'erreur. Exécutez l'application
+et suivez son exécution ; vous pouvez aussi jouer avec les options de "Construction" de KDevelop, exécuter l'application avec une
+ligne de commande telle que --geometry et la déboguer avec KDbg dans la fenêtre des Outils. Ensuite, vous devriez être capable
+de traiter les exemples de Qt qui seront présentés dans le chapitre suivant.
 
 <chapt>Copyright <label id="Copyright">
 <p>
