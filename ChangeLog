@@ -3,6 +3,7 @@
 	  instead of $()
 	* Use /bin/sh for CKDevelop::shell_process. The
 	  trick with shell=="/bin/bash" was not portable.
+	* Fixed documentation bugs #1906 and #1913
 
 1999-09-06 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* new standard kdelib-doc path defined
