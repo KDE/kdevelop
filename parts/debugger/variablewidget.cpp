@@ -126,6 +126,7 @@ void VariableWidget::slotAddWatchVariable(const QString &ident)
 
 VariableTree::VariableTree(VariableWidget *parent, const char *name)
     : KListView(parent, name),
+      QToolTip( viewport() ),
       activeFlag_(0),
       currentThread_(-1)
 {
@@ -190,7 +191,7 @@ void VariableTree::slotAddWatchVariable(const QString &watchVar)
 {
     kdDebug(9012) << "Add watch variable: " << watchVar << endl;
     VarItem *varItem = new VarItem(findWatch(), watchVar, typeUnknown);
-    emit expandItem(varItem);
+	emit expandItem(varItem);
 }
 
 // **************************************************************************
@@ -332,6 +333,21 @@ QListViewItem *VariableTree::lastChild() const
             child = nextChild;
 
     return child;
+}
+
+// **************************************************************************
+
+void VariableTree::maybeTip(const QPoint &p)
+{
+	kdDebug(0) << "ToolTip::maybeTip()" << endl;
+
+	VarItem * item = dynamic_cast<VarItem*>( itemAt( p ) );
+	QRect r = itemRect( item );
+
+	if ( item && r.isValid() )
+	{
+		tip( r, item->tipText() );
+	}
 }
 
 // **************************************************************************
@@ -742,6 +758,20 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
         QListViewItem::paintCell( p, hl_cg, column, width, align );
     } else
         QListViewItem::paintCell( p, cg, column, width, align );
+}
+
+// **************************************************************************
+
+QString VarItem::tipText() const
+{
+    const unsigned int maxTooltipSize = 70;
+    // FIXME: Column #1 is "Value": perhaps some kind of const somewhere is better ...
+    QString tip = text( 1 );
+
+    if (tip.length() < maxTooltipSize )
+	    return tip;
+    else
+	    return tip.mid( 0, maxTooltipSize - 1 ) + " [...]";
 }
 
 // **************************************************************************

@@ -19,6 +19,7 @@
 #include <klistview.h>
 #include <kcombobox.h>
 #include <qwidget.h>
+#include <qtooltip.h>
 
 class KLineEdit;
 
@@ -66,7 +67,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class VariableTree : public KListView
+class VariableTree : public KListView, public QToolTip
 {
     Q_OBJECT
 
@@ -89,6 +90,9 @@ public:
     void trim();
     void trimExcessFrames();
     void setLocalViewState(bool localsOn, int frameNo, int threadNo);
+
+	// (from QToolTip) Display a tooltip when the cursor is over an item
+	virtual void maybeTip(const QPoint &);
 
 signals:
     void toggleWatchpoint(const QString &varName);
@@ -190,6 +194,9 @@ public:
 
     // jw - overriden from TrimmableItem to handle renaming
     void handleDoubleClicked(const QPoint &pos, int c);
+
+    // Returns the text to be displayed as tooltip (the value)
+    QString tipText() const;
 
 private:
     void checkForRequests();
