@@ -88,8 +88,7 @@ public /*rules*/ :
     bool parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parseDeclaratorId( NameAST::Node& node );
     bool parseExceptionSpecification( AST::Node& node );
-    bool parseEnumeratorList( AST::Node& node );
-    bool parseEnumerator( AST::Node& node );
+    bool parseEnumerator( EnumeratorAST::Node& node );
     bool parseTypeParameter( AST::Node& node );
     bool parseParameterDeclaration( AST::Node& node );
     bool parseTypeId( AST::Node& node );

@@ -442,10 +442,29 @@ ClassSpecifierAST::~ClassSpecifierAST()
 // ------------------------------------------------------------------------
 EnumSpecifierAST::EnumSpecifierAST()
 {
+    m_enumerators.setAutoDelete( true );
 }
 
 EnumSpecifierAST::~EnumSpecifierAST()
 {
+}
+
+AST* EnumSpecifierAST::name()
+{
+    return m_name.get();
+}
+
+void EnumSpecifierAST::setName( AST::Node& name )
+{
+    m_name = name;
+}
+
+void EnumSpecifierAST::addEnumerator( EnumeratorAST::Node& enumerator )
+{
+    if( !enumerator.get() )
+        return;
+	
+    m_enumerators.append( enumerator.release() );
 }
 
 
@@ -485,5 +504,35 @@ StatementAST::StatementAST()
 
 StatementAST::~StatementAST()
 {
+}
+
+// ------------------------------------------------------------------------
+
+EnumeratorAST::EnumeratorAST()
+{
+}
+
+EnumeratorAST::~EnumeratorAST()
+{
+}
+
+AST* EnumeratorAST::id()
+{
+    return m_id.get();
+}
+
+void EnumeratorAST::setId( AST::Node& id )
+{
+    m_id = id;
+}
+
+AST* EnumeratorAST::expr()
+{
+    return m_expr.get();
+}
+
+void EnumeratorAST::setExpr( AST::Node& expr )
+{
+    m_expr = expr;
 }
 

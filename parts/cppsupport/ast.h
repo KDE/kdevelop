@@ -194,6 +194,30 @@ private:
     void operator = ( const ClassSpecifierAST& source );
 };
 
+class EnumeratorAST: public AST
+{
+public:
+    typedef std::auto_ptr<EnumeratorAST> Node;
+    
+public:
+    EnumeratorAST();
+    virtual ~EnumeratorAST();
+    
+    AST* id();
+    void setId( AST::Node& id );
+    
+    AST* expr();
+    void setExpr( AST::Node& expr );
+    
+private:
+    AST::Node m_id;
+    AST::Node m_expr;
+        
+private:
+    EnumeratorAST( const EnumeratorAST& source );
+    void operator = ( const EnumeratorAST& source );
+};
+
 class EnumSpecifierAST: public TypeSpecifierAST
 {
 public:
@@ -203,6 +227,16 @@ public:
     EnumSpecifierAST();
     virtual ~EnumSpecifierAST();
     
+    AST* name();
+    void setName( AST::Node& name );
+    
+    void addEnumerator( EnumeratorAST::Node& enumerator );
+    QPtrList<EnumeratorAST> enumerators() { return m_enumerators; }
+
+private:
+    AST::Node m_name;
+    QPtrList<EnumeratorAST> m_enumerators;
+        
 private:
     EnumSpecifierAST( const EnumSpecifierAST& source );
     void operator = ( const EnumSpecifierAST& source );

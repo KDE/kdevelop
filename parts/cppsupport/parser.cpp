@@ -979,11 +979,11 @@ bool Parser::parseDeclarator( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& /*node*/ )
+bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumSpecifier()" << endl;
     
-    int index = lex->index();
+    int start = lex->index();
     
     AST::Node storageSpec;
     while( parseStorageClassSpecifier(storageSpec) )
@@ -1004,18 +1004,36 @@ bool Parser::parseEnumSpecifier( TypeSpecifierAST::Node& /*node*/ )
     }
     
     if( lex->lookAhead(0) != '{' ){
-	lex->setIndex( index );
+	lex->setIndex( start );
 	return false;
     }
     lex->nextToken();
-        
-    AST::Node enumerators;
-    parseEnumeratorList( enumerators );
+    
+    EnumSpecifierAST::Node ast = CreateNode<EnumSpecifierAST>();
+            
+    EnumeratorAST::Node enumerator;
+    if( parseEnumerator(enumerator) ){
+        ast->addEnumerator( enumerator );
+    
+        while( lex->lookAhead(0) == ',' ){
+	    lex->nextToken();
+	
+	    if( !parseEnumerator(enumerator) ){
+	        //reportError( i18n("Enumerator expected") );
+	        break;
+	    }
+	
+	    ast->addEnumerator( enumerator );
+        }
+    }
     
     if( lex->lookAhead(0) != '}' )
 	reportError( i18n("} missing") );
     else
 	lex->nextToken();
+    
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     
     return true;
 }
@@ -1564,43 +1582,39 @@ bool Parser::parseExceptionSpecification( AST::Node& node )
     return true;
 }
 
-bool Parser::parseEnumeratorList( AST::Node& /*node*/ )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumeratorList()" << endl;
-    
-    AST::Node enumerator;
-    if( !parseEnumerator(enumerator) ){
-	return false;
-    }
-    
-    while( lex->lookAhead(0) == ',' ){
-	lex->nextToken();
-	
-	if( !parseEnumerator(enumerator) ){
-	    //reportError( i18n("Enumerator expected") );
-	    break;
-	}
-    }
-    
-    return true;
-}
-
-bool Parser::parseEnumerator( AST::Node& /*node*/ )
+bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumerator()" << endl;
+    
+    int start = lex->index();
     
     if( lex->lookAhead(0) != Token_identifier ){
 	return false;
     }
     lex->nextToken();
     
+    node = CreateNode<EnumeratorAST>();
+    
+    AST::Node id = CreateNode<AST>();
+    UPDATE_POS( id, start, lex->index() );
+ 
+    node->setId( id );
+            
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
+
+	AST::Node expr = CreateNode<AST>();	
+	int startExpr = lex->index();
 	
 	if( !skipExpression() ){
 	    reportError( i18n("Constant expression expected") );
 	}
+	UPDATE_POS( expr, startExpr, lex->index() );
+	
+	node->setExpr( expr );
     }
+    
+    UPDATE_POS( node, start, lex->index() );
     
     return true;
 }
