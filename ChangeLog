@@ -1,6 +1,10 @@
+2002-12-01 F@lk Brettschneider <falk@kdevelop.org>
+    * ported KDevSession (.kdevses) over from KDevelop-2, now called ProjectSession.
+      Not finished but already does what removed ProjectWorkspace did. More to come...
+
 2002-11-28  Victor Röder  <victor_roeder@gmx.de>
-	* Added "Remove target" to Automake Manager
-	* Minor fixes
+    * Added "Remove target" to Automake Manager
+    * Minor fixes
 
 2002-11-28 F@lk Brettschneider <falk@kdevelop.org>
     * QEditor defaults to KDevelop-2 syntax highlighting colours
