@@ -706,7 +706,7 @@ void MainWindow::loadMDISettings()
   // restore a possible maximized Childframe mode
   bool maxChildFrmMode = config->readBoolEntry("maximized childframes", true);
   setEnableMaximizedChildFrmMode(maxChildFrmMode);
-  
+
   readDockConfig(0L, "dockSession_version1");
 }
 
@@ -1164,63 +1164,63 @@ void MainWindow::switchToToplevelMode()
   if (m_mdiMode == KMdi::ToplevelMode) return;
   m_bUiModeSwitchPending = true;
   
-  saveMDISettings();
   m_toggleViewbar->setEnabled(true);
   if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
   }
   KMdiMainFrm::switchToToplevelMode();
-  
+
   m_bUiModeSwitchPending = false;
   updateActionState();
+  saveMDISettings();
 }
 
 void MainWindow::switchToChildframeMode()
 {
   if (m_mdiMode == KMdi::ChildframeMode) return;
   m_bUiModeSwitchPending = true;
-  
-  saveMDISettings();
+
   m_toggleViewbar->setEnabled(true);
   if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
   }
   KMdiMainFrm::switchToChildframeMode();
-  
+
   m_bUiModeSwitchPending = false;
   updateActionState();
+  saveMDISettings();
 }
 
 void MainWindow::switchToTabPageMode()
 {
   if (m_mdiMode == KMdi::TabPageMode) return;
   m_bUiModeSwitchPending = true;
-  
-  saveMDISettings();
+
   if (isViewTaskBarOn()) {
       slotToggleViewbar();
   }
   m_toggleViewbar->setEnabled(false);
   KMdiMainFrm::switchToTabPageMode();
-  
+
   m_bUiModeSwitchPending = false;
   updateActionState();
+  saveMDISettings();
 }
 
 void MainWindow::switchToIDEAlMode()
 {
   if (m_mdiMode == KMdi::IDEAlMode) return;
   m_bUiModeSwitchPending = true;
-  
-  saveMDISettings();
+
   if (isViewTaskBarOn()) {
       slotToggleViewbar();
   }
   m_toggleViewbar->setEnabled(false);
   KMdiMainFrm::switchToIDEAlMode();
-  
+
   m_bUiModeSwitchPending = false;
   updateActionState();
+  saveMDISettings();
 }
 
 void MainWindow::slotReactToProjectOpened()
