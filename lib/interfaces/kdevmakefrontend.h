@@ -18,6 +18,8 @@ public:
     KDevMakeFrontend( QObject *parent=0, const char *name=0 );
     ~KDevMakeFrontend();
 
+    virtual QWidget* widget() { return 0L; }
+    
     /**
      * The component shall start to execute a make-like command.
      * Commands are always asynchronous. You can submit several jobs

@@ -253,6 +253,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
 
 void TrollProjectPart::slotBuild()
 {
+    mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(m_widget->projectDirectory(), QString::fromLatin1(""));
 }
 

@@ -76,4 +76,9 @@ bool MakeViewPart::isRunning()
     return m_widget->isRunning();
 }
 
+QWidget* MakeViewPart::widget()
+{
+    return m_widget.operator->();
+}
+
 #include "makeviewpart.moc"

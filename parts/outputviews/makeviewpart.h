@@ -27,7 +27,7 @@ class MakeViewPart : public KDevMakeFrontend
 public:
     MakeViewPart( QObject *parent, const char *name, const QStringList & );
     ~MakeViewPart();
-
+    virtual QWidget* widget();
 protected:
     virtual void queueCommand(const QString &dir, const QString &command);
     virtual bool isRunning();

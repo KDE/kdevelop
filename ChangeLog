@@ -1,3 +1,8 @@
+2003-02-09 F@lk Brettschneider <falk@kdevelop.org>
+	* bugfix: classview now alphabetically sorted again
+	* KDevPlugin interface extended with 'KDevMakeFrontend* makeFrontend()' which made it
+	  possible to raise the messages view on 'Build'
+
 2003-02-05 F@lk Brettschneider <falk@kdevelop.org>
 	* now it compiles and runs on KDE-3.0.x again
 

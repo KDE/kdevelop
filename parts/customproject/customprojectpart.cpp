@@ -370,6 +370,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 
 void CustomProjectPart::slotBuild()
 {
+    mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 

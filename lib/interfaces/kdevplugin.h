@@ -53,6 +53,11 @@ public:
     ~KDevPlugin();
 
     /**
+     * Returns the widget of the plugin. This must be overridden.
+     */
+    virtual QWidget* widget() { return 0L; }
+
+    /**
      * Gives a reference to the toplevel widget.
      */
     KDevMainWindow *mainWindow();

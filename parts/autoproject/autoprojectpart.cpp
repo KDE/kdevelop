@@ -426,6 +426,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
 void AutoProjectPart::slotBuild()
 {
+    mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 
