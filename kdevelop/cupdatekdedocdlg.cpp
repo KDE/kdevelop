@@ -331,7 +331,7 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
     }
     else{  // cross-reference to qt
       *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
-				 		"kdoc-reference " + qtPath + ";
+				 		"kdoc-reference " +"-z"+ qtPath + ";
 						cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
 					 	+ new_doc_path +"kdoc-reference -nkdecore *.h -lqt;
 						cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
@@ -398,7 +398,7 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
     }
     else{  // cross-reference to qt
       *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
-				 		  "kdoc-reference " + qtPath + ";
+				 		  "kdoc-reference " +"-z "+ qtPath + ";
 					  	cd kdecore;kdoc -d "+ new_doc_path + "/kdecore -ufile:" + new_doc_path + "kdecore/ -L"
 				  	 	+ new_doc_path +"kdoc-reference -nkdecore *.h -lqt;
 			  			cd ../kdeui;kdoc -d " + new_doc_path + "/kdeui -ufile:" + new_doc_path + "kdeui/ -L"
