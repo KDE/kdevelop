@@ -37,7 +37,7 @@
 FileListWidget::FileListWidget(FileListPart *part)
  : KListView(0, "filelist widget"), QToolTip( viewport() ), _part( part )
 {
-	addColumn( QString::null );
+	addColumn( "" );
 	header()->hide();
 	setRootIsDecorated( false );
 	setResizeMode( QListView::LastColumn );
@@ -124,7 +124,7 @@ void FileListWidget::refreshFileList( )
 
 	KListView::clear();
 
-	KURL::List list( _part->openFiles() );
+	KURL::List list = _part->partController()->openURLs();
 	QValueListIterator<KURL> it = list.begin();
 	while ( it != list.end() )
 	{
@@ -170,7 +170,7 @@ void FileListWidget::itemClicked( QListViewItem * item )
 	if ( !item ) return;
 
 	FileListItem * listItem = static_cast<FileListItem*>( item );
-	_part->partController()->activatePart( _part->partController()->partForURL( listItem->url() ) );
+	_part->partController()->editDocument( listItem->url() );
 }
 
 void FileListWidget::activePartChanged( KParts::Part * part )

@@ -18,17 +18,7 @@
 
 
 class FileListWidget;
-class KURL::List;
-/*
-// @fixme - this should be in kdevpartcontroller
-enum DocumentState
-{
-	Clean,
-	Modified,
-	Dirty,
-	DirtyAndModified
-};
-*/
+
 class FileListPart : public KDevPlugin
 {
   Q_OBJECT
@@ -37,7 +27,6 @@ public:
    
 	FileListPart(QObject *parent, const char *name, const QStringList &);
 	~FileListPart();
-	KURL::List openFiles();
 
 private:
 	QGuardedPtr<FileListWidget> m_widget;

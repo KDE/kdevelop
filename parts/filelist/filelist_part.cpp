@@ -57,25 +57,6 @@ FileListPart::~FileListPart()
     delete m_widget;
 }
 
-// @todo remove. use partcontroller's method instead
-KURL::List FileListPart::openFiles()
-{
-    KURL::List openfiles;
-    if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
-    {
-        QPtrListIterator<KParts::Part> it( *partlist );
-        while ( KParts::Part* part = it.current() )
-        {
-            if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
-            {
-                openfiles.append( ro_part->url() );
-            }
-            ++it;
-        }
-    }
-    return openfiles;
-}
-
 #include "filelist_part.moc"
 
 // kate: space-indent off; indent-width 4; tab-width 4; show-tabs off;
