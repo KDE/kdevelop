@@ -45,6 +45,7 @@
 #include "keditor/cursor_iface.h"
 #include "keditor/status_iface.h"
 #include "keditor/cursor_iface.h"
+#include "keditor/debug_iface.h"
 #else
 #include "editorpart.h"
 #endif
@@ -230,7 +231,7 @@ void Core::initGlobalParts()
                                  QString::fromLatin1("[X-KDevelop-Scope] == 'Global'"));
     KConfig *config = KGlobal::config();
     for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it) {
-	config->setGroup("Plugins");
+    config->setGroup("Plugins");
         if (!config->readBoolEntry((*it)->name(), true)) {
             kdDebug(9000) << "Not loading " << (*it)->name() << endl;
             continue;
@@ -277,10 +278,10 @@ void Core::activePartChanged(KParts::Part *part)
     win->createGUI(part);
     activePart = part;
 
-	slotUpdateStatusBar();
+    slotUpdateStatusBar();
 
-	// TODO: enable/disable actions depending on the current part!
-    	
+    // TODO: enable/disable actions depending on the current part!
+        
 #ifndef NEW_EDITOR
     if (activePart && activePart->inherits("EditorPart")) {
         EditorPart *part = static_cast<EditorPart*>(activePart);
@@ -390,30 +391,30 @@ void Core::editorContextMenu(QPopupMenu *popup, const QString &linestr, int col)
 void Core::updateBufferMenu()
 {
 #ifdef NEW_EDITOR
-	
-	QList<KAction> bufferActions;
-	
-	win->unplugActionList("buffer_list");
-	
-	QListIterator<KParts::Part> it(*partManager()->parts());
-	for ( ; it.current(); ++it)
-	{
-	  kdDebug(9000) << "listing part: " << it.current()->className() << endl;
-	  if (it.current()->inherits("KParts::ReadOnlyPart"))
-	  {
-		KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(it.current());
-		QString name = ro_part->url().url();
-		if (name.isEmpty())
-		    continue;
-		kdDebug(9000) << "Plugging " << name << endl;
-		KAction *action = new KAction(name, 0, 0, name.latin1());
-		connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
-		bufferActions.append(action);
-	  }
-	}
-	
-	win->plugActionList("buffer_list", bufferActions);
-	
+    
+    QList<KAction> bufferActions;
+    
+    win->unplugActionList("buffer_list");
+    
+    QListIterator<KParts::Part> it(*partManager()->parts());
+    for ( ; it.current(); ++it)
+    {
+      kdDebug(9000) << "listing part: " << it.current()->className() << endl;
+      if (it.current()->inherits("KParts::ReadOnlyPart"))
+      {
+        KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(it.current());
+        QString name = ro_part->url().url();
+        if (name.isEmpty())
+            continue;
+        kdDebug(9000) << "Plugging " << name << endl;
+        KAction *action = new KAction(name, 0, 0, name.latin1());
+        connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
+        bufferActions.append(action);
+      }
+    }
+    
+    win->plugActionList("buffer_list", bufferActions);
+    
 #else
     win->unplugActionList("buffer_list");
     bufferActions.clear();
@@ -623,9 +624,9 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
     part->gotoURL(url);
     win->raiseWidget(part->widget());
 
-	//TODO: fix the documentation part so that it behaves like a normal
-	//part.
-	//updateBufferMenu();
+    //TODO: fix the documentation part so that it behaves like a normal
+    //part.
+    //updateBufferMenu();
 }
 
 
@@ -636,17 +637,24 @@ KEditor::Document *Core::createDocument(const KURL &url)
   if (!doc)
       return 0;
 
-  KEditor::StatusDocumentIface *status = static_cast<KEditor::StatusDocumentIface *>(doc->queryInterface("KEditor::StatusDocumentIface"));
+  KEditor::StatusDocumentIface *status = KEditor::StatusDocumentIface::interface(doc);
   if (status)
   {
-	connect(status, SIGNAL(message(const QString &)), win->statusBar(), SLOT(message(const QString &))),
-	connect(status, SIGNAL(statusChanged()), this, SLOT(slotUpdateStatusBar()));
+    connect(status, SIGNAL(message(KEditor::Document*,const QString &)), win->statusBar(), SLOT(message(KEditor::Document*,const QString &))),
+    connect(status, SIGNAL(statusChanged(KEditor::Document*)), this, SLOT(slotUpdateStatusBar()));
   }
  
-  KEditor::CursorDocumentIface *cursor = static_cast<KEditor::CursorDocumentIface *>(doc->queryInterface("KEditor::CursorDocumentIface"));
+  KEditor::CursorDocumentIface *cursor = KEditor::CursorDocumentIface::interface(doc);
  if (cursor)
-   connect(cursor, SIGNAL(cursorPositionChanged(int,int)), this, SLOT(slotUpdateStatusBar()));
+   connect(cursor, SIGNAL(cursorPositionChanged(KEditor::Document*,int,int)), this, SLOT(slotUpdateStatusBar()));
 
+  KEditor::DebugDocumentIface *debug = KEditor::DebugDocumentIface::interface(doc);
+  if (debug)
+  {
+    connect(debug, SIGNAL(breakPointToggled(KEditor::Document*,int)), this, SLOT(slotBreakPointToggled(KEditor::Document*,int)));
+    connect(debug, SIGNAL(breakPointEnabledToggled(KEditor::Document*,int)), this, SLOT(slotBreakPointEnabled(KEditor::Document*,int)));
+  }
+  
   partManager()->addPart(doc);
 
   return doc;
@@ -656,42 +664,45 @@ KEditor::Document *Core::createDocument(const KURL &url)
 
 void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 {
+    if (url.isEmpty())
+      return;
+
     kdDebug(9000) << "Goto source file: " << url.path() << " line: " << lineNum << endl;
 
 #ifdef NEW_EDITOR
 
-	KParts::Part *activePart = partManager()->activePart();
+    KParts::Part *activePart = partManager()->activePart();
 
     // activate the requested file
     KEditor::Document *doc = editor()->document(url);
     if (!doc)
-	{
+    {
         doc = createDocument(url);
-		updateBufferMenu();
-	}
+        updateBufferMenu();
+    }
     if (!doc)
         return;
 
-	if (activePart != doc)
-	  partManager()->setActivePart(doc, doc->widget());
+    if (activePart != doc)
+      partManager()->setActivePart(doc, doc->widget());
 
     // goto the requested line
-    KEditor::CursorDocumentIface *iface = static_cast<KEditor::CursorDocumentIface*>(doc->queryInterface("KEditor::CursorDocumentIface"));
+    KEditor::CursorDocumentIface *iface = KEditor::CursorDocumentIface::interface(doc);
     if (iface)
         iface->setCursorPosition(lineNum, 0);
 
     if (!doc->widget())
       return;
 
-	if (doc != activePart)
-	{
+    if (doc != activePart)
+    {
       if (embed == SplitHorizontal || embed == SplitVertical)
         win->splitDocumentWidget(doc->widget(), activePart ? activePart->widget() : 0, (embed==SplitHorizontal) ? Horizontal : Vertical);
       else
         win->embedDocumentWidget(doc->widget(), activePart ? activePart->widget() : 0);
     }
 
-  if (doc->widget())	
+  if (doc->widget())    
     win->raiseWidget(doc->widget());
   
 #else
@@ -743,9 +754,20 @@ void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
     KURL url(fileName);
 #ifdef NEW_EDITOR
 
-	gotoSourceFile(url, lineNum);
+    // TODO: This needs fixing: Disable all others, 
+    // load the file if not there yet.
+    
+    gotoSourceFile(url, lineNum);
 
-    // TODO: This should use the Breakpoint/Debug iface once it exists!
+    KEditor::Document *doc = editor()->document(url);
+    if (!doc)
+      return;
+
+    KEditor::DebugDocumentIface *debug = KEditor::DebugDocumentIface::interface(doc);
+    if (!debug)
+      return;
+
+    debug->markExecutionPoint(lineNum);
 #else
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it)
@@ -771,14 +793,14 @@ void Core::saveAllFiles()
 #ifdef NEW_EDITOR
 
     QListIterator<KParts::Part> it(*partManager()->parts());
-	for ( ; it.current(); ++it)
-	    if (it.current()->inherits("KParts::ReadWritePart"))
-		{
-			KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
-			rw_part->save();
-		}
-		
-#else	
+    for ( ; it.current(); ++it)
+        if (it.current()->inherits("KParts::ReadWritePart"))
+        {
+            KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
+            rw_part->save();
+        }
+        
+#else    
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         TextEditorDocument *doc = it.current();
@@ -820,8 +842,21 @@ void Core::setBreakpoint(const QString &fileName, int lineNum,
 {
     KURL url(fileName);
 
-#ifndef NEW_EDITOR
+#ifdef NEW_EDITOR
 
+    KEditor::Document *doc = editor()->document(url);
+    if (!doc)
+      return;
+
+    KEditor::DebugDocumentIface *debug = KEditor::DebugDocumentIface::interface(doc);
+    if (!debug)
+      return;
+
+    if (id >= 0)
+      debug->setBreakPoint(lineNum, enabled, pending);
+    else
+      debug->unsetBreakPoint(lineNum);
+#else
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         if ((*it)->isEditing(url)) {
@@ -841,6 +876,14 @@ void Core::running(KDevPart *part, bool runs)
         runningParts.remove(part);
 
     actionCollection()->action("stop_processes")->setEnabled(!runningParts.isEmpty());
+}
+
+
+void Core::message(KEditor::Document *, const QString &str)
+{
+#ifdef NEW_EDITOR
+    win->statusBar()->message(str);
+#endif 
 }
 
 
@@ -1141,34 +1184,34 @@ void Core::slotBufferSelected()
 {
 #ifdef NEW_EDITOR
 
-	// Note: this code is intented to work with more than
- 	// just editor parts, e.g. with documentation parts. There
-	// are two problems right now: a) the documentation part's
-	// implementation is broken, and b) we need a better mechanism
-	// than the URL to identify the parts.
-	
+    // Note: this code is intented to work with more than
+    // just editor parts, e.g. with documentation parts. There
+    // are two problems right now: a) the documentation part's
+    // implementation is broken, and b) we need a better mechanism
+    // than the URL to identify the parts.
+    
     QListIterator<KParts::Part> it(*partManager()->parts());
-	for ( ; it.current(); ++it)
-	{
-	  if (!it.current()->inherits("KParts::ReadOnlyPart"))
-		  continue;
+    for ( ; it.current(); ++it)
+    {
+      if (!it.current()->inherits("KParts::ReadOnlyPart"))
+          continue;
 
-	  KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(it.current());
-	  if (ro_part->url() == KURL(sender()->name()))
-		{
-		  KParts::Part *activePart = partManager()->activePart();
+      KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(it.current());
+      if (ro_part->url() == KURL(sender()->name()))
+        {
+          KParts::Part *activePart = partManager()->activePart();
 
           partManager()->setActivePart(it.current(), it.current()->widget());
  
-		  if (!it.current()->widget())
-		      return;
+          if (!it.current()->widget())
+              return;
 
-          if (activePart != ro_part)		  
-	        win->embedDocumentWidget(it.current()->widget(), activePart ? activePart->widget() : 0);
-	
-	      win->raiseWidget(it.current()->widget());	
-		}
-	  }
+          if (activePart != ro_part)          
+            win->embedDocumentWidget(it.current()->widget(), activePart ? activePart->widget() : 0);
+    
+          win->raiseWidget(it.current()->widget());    
+        }
+      }
 #endif
 }
 
@@ -1227,28 +1270,47 @@ void Core::slotUpdateStatusBar()
 #ifdef NEW_EDITOR
   if (!activePart || !activePart->inherits("KEditor::Document"))
   {
-	win->statusBar()->setEditorStatusVisible(false);
-	return;
+    win->statusBar()->setEditorStatusVisible(false);
+    return;
   }
 
   KEditor::Document *doc = static_cast<KEditor::Document*>(activePart);
 
-  KEditor::StatusDocumentIface *status = static_cast<KEditor::StatusDocumentIface *>(doc->queryInterface("KEditor::StatusDocumentIface"));   
+  KEditor::StatusDocumentIface *status = KEditor::StatusDocumentIface::interface(doc);
   if (status)
   {
     win->statusBar()->setStatus(status->status());
-    win->statusBar()->setModified(status->modified());	
+    win->statusBar()->setModified(status->modified());    
   }
   
-  KEditor::CursorDocumentIface *cursor = static_cast<KEditor::CursorDocumentIface *>(doc->queryInterface("KEditor::CursorDocumentIface"));
+  KEditor::CursorDocumentIface *cursor = KEditor::CursorDocumentIface::interface(doc);
   if (cursor)
   {
-	 int line, col;
-	 cursor->getCursorPosition(line, col);
-	 win->statusBar()->setCursorPosition(line, col);
+     int line, col;
+     cursor->getCursorPosition(line, col);
+     win->statusBar()->setCursorPosition(line, col);
   }
 
   win->statusBar()->setEditorStatusVisible(true);  
+#endif
+}
+
+
+void Core::slotBreakPointToggled(KEditor::Document *doc, int line)
+{
+#ifdef NEW_EDITOR
+  QString fname = doc->url().path();
+  emit toggledBreakpoint(fname, line);
+#endif
+}
+
+
+void Core::slotBreakPointEnabled(KEditor::Document *doc, int line)
+{
+#ifdef NEW_EDITOR
+  QString fname = doc->url().path();
+  kdDebug() << "TOGGLED BREAKPOINT: " << fname << ": " << line << endl;
+  emit toggledBreakpoint(fname, line);
 #endif
 }
 

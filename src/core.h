@@ -28,6 +28,7 @@ class TextEditorDocument;
 #else
 class TextEditorDocument;
 class EditorPart;
+namespace KEditor { class Document; };
 #endif
 
 
@@ -59,7 +60,7 @@ protected:
 #ifdef NEW_EDITOR
     KEditor::Editor *editor();
 #endif
-	    
+        
 private slots:
     void activePartChanged(KParts::Part *part);
     void docPartDestroyed();
@@ -70,6 +71,8 @@ private slots:
     void openFileInteractionFinished(const QString &fileName);
     void saveFileInteractionFinished(const QString &fileName);
 
+    void message(KEditor::Document *doc, const QString &str);
+        
     void slotOpenFile();
     void slotSaveFile();
     void slotSaveFileAs();
@@ -87,8 +90,10 @@ private slots:
     void slotProjectOptions();
     void slotSettingsCustomize();
     void slotStop();
+    void slotBreakPointToggled(KEditor::Document* doc, int line);
+    void slotBreakPointEnabled(KEditor::Document* doc, int line);
 
-	void slotUpdateStatusBar();
+    void slotUpdateStatusBar();
 
 
 private:
@@ -133,7 +138,7 @@ private:
     QList<TextEditorDocument> editedDocs;
     QList<KAction> bufferActions;
 #endif
-	KURL::List viewedURLs;
+    KURL::List viewedURLs;
     QString projectFile;
 };
 

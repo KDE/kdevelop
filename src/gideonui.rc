@@ -45,7 +45,6 @@
   <Menu name="buffers">
     <text>&amp;Buffers</text>
     <ActionList name="buffer_list"/>
-    <Merge/>
   </Menu>
   <Menu name="settings">
     <text>&amp;Settings</text>
