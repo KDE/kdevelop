@@ -10,7 +10,7 @@
 <title>Configuring &kdevelop;</title>
 
 <para>
-&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you selected.
+&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you did select.
 </para>
 
 <screenshot>
@@ -25,7 +25,7 @@
 </screenshot>
 
 <para>
-We will discuss these configurations in a different order, split up into the main topics of <link linkend="setup-general">General Configuration</link>, <link linkend="setup-docu">Configuring the Documentation Tree</link>, and <link linkend="setup-advanced">Advanced Configuration</link> which makes for a more intuitive reading.
+We will discuss these configurations in a different order, split up into the main topics of <link linkend="setup-general">General Configuration</link>, <link linkend="setup-docu">Configuring the Documentation</link>, and <link linkend="setup-advanced">Advanced Configuration</link> which makes for a more intuitive reading.
 </para>
 <para>
 If you want directly look up a certain configuration item use one of the following links.
@@ -34,14 +34,15 @@ If you want directly look up a certain configuration item use one of the followi
   <member><link linkend="setup-main">General</link></member>
   <member><link linkend="setup-plugins">Plugins</link></member>
   <member><link linkend="setup-format">Source Formatter</link></member>
+  <member><link linkend="setup-new-file-wizard">New File Wizard</link></member>
   <member><link linkend="setup-ui">User Interface</link></member>
   <member><link linkend="setup-editor">Editor</link></member>
   <member><link linkend="setup-abbrev">Abbreviations</link></member>
   <member><link linkend="setup-menu-standard">Tools Menu</link></member>
   <member><link linkend="setup-menu-external">External Tools</link></member>
+  <member><link linkend="setup-docu">Documentation</link></member>
   <member><link linkend="setup-snippets">Code Snippets</link></member>
   <member><link linkend="setup-fileselector">File Selector</link></member>
-  <member><link linkend="setup-docu">Documentation Tree</link></member>
 </simplelist>
 
 <sect1 id="setup-general">
@@ -262,7 +263,7 @@ As already said in the <link linkend="uimodes-survey">Available User Interface M
 </itemizedlist>
 
 <para>
-To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Configure KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the followig settings dialog to the right.
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand tree. This will display the followig settings dialog to the right.
 </para>
 
 <screenshot>
@@ -323,7 +324,7 @@ In the IDEAl and tabbed pages modes there will be named tabs on top of the docum
 <formalpara id="setup-ui-hover">
 <title>Setting Up to Close a Document by a Click On Its Tab</title>
 <para>
-When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> configuration section for this.
+When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
 </para>
 </formalpara>
 <variablelist>
@@ -369,7 +370,7 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
 <varlistentry>
   <term><guilabel>Text</guilabel></term>
   <listitem><para>
-  This is the default toolview tab display mode. Each tab displays the name of its associated toolview.
+  This is the default toolview tab display mode. Each tab displays the name of its associated toolwiew.
   </para></listitem>
 </varlistentry>
 <varlistentry>
@@ -460,11 +461,11 @@ These editor interfaces are fully integrated in the &kdevelop; IDE concept. Part
 </para>
 
 <note><para>
-Changing the editor will not affect already open files. There are two possibilities to proceed. Either close all open text windows and reopen them one by one or simply close the whole project and reopen it again. The windows will then automatically open under the new text editor interface.
+Changing the editor will not effect already open files. There are two possibilities to proceed. Either close all open text windows and reopen them one by one. Or simply close the whole project and reopen it again. The windows will then automatically open under the new text editor interface.
 </para></note>
 
 <important id="setup-editor-kparts"><para>
-&kdevelop; lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
+KDevelop lets you use editor interfaces which have registered with &kde; and that provide a KatePart interface. If you miss one one of the selections shown above check your &kde; installation if the corresponding KPart was correctly installed.
 </para></important>
 </sect2> <!-- setup-editor -->
 
@@ -484,7 +485,7 @@ To set up a specific format style, select <menuchoice> <guimenu>Settings</guimen
 </para>
 
 <tip><para>
-Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitly use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
+Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitely use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
 </para></tip>
 
 <note><para>
@@ -492,7 +493,7 @@ The exact outcome of these style formatting definitions depends on the <link lin
 </para></note>
 
 <warning><para>
-There may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with a non-&kde;-standard editor.
+There may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with an none KDE standard editor.
 </para></warning>
 
 <sect3 id="setup-format-general">
@@ -527,7 +528,7 @@ Currently only the predefined source formatting styles will be demonstrated by a
 <title>Indentation Style Setup</title>
 
 <para>
-Proper indentation is the main means to enhance readability of a source text. If you selected the <guilabel>Indentation</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog you will be presented with a series of indentation formatting choices grouped into three boxes as following.
+Proper indentation is the main means to enhance readability of a source text. I you selected the <guilabel>Indentation</guilabel> tab of the <guilabel>Source Formatter</guilabel> dialog you will be presented with a series of indentation formatting choices grouped into three boxes as following.
 </para>
 
 <screenshot>
@@ -934,7 +935,7 @@ There is a toolbar on top of the <guilabel>File Selector</guilabel> which can be
 <formalpara id="setup-fileselector-autosync">
 <title>Defining When the Contents Should Change</title>
 <para>
-Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitly want to refresh its contents.
+Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitely want to refresh its contents.
 </para>
 </formalpara>
 
@@ -1001,7 +1002,7 @@ By default the <guilabel>File Selector</guilabel> is set up so that it shows the
 </formalpara>
 
 <note><para>
-If &kdevelop; was automatically restarted by the &kde; session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent &kde; session will always be restored.
+If &kdevelop; was automatically restarted by the KDE session manager the changes in these settings will have no effect. In this case location and filter settings of the most recent KDE session will always be restored.
 </para></note>
 
 <variablelist>
@@ -1028,6 +1029,15 @@ If &kdevelop; was automatically restarted by the &kde; session manager the chang
 
 </sect2> <!-- setup-fileselector -->
 
+<sect2 id="setup-new-file-wizard">
+<title>Configuring the New File Wizard</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- setup-new-file-wizard -->
+
 </sect1> <!-- setup-general -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -1042,220 +1052,229 @@ If &kdevelop; was automatically restarted by the &kde; session manager the chang
 <screenshot>
   <mediaobject>
     <imageobject>
-      <imagedata fileref="doctree.png" format="PNG"/>
+      <imagedata fileref="documents-contents.png" format="PNG"/>
     </imageobject>
     <caption><para>
-    The &kdevelop; documentation tree (IDEAl mode)
+    The &kdevelop; documentation window (IDEAl mode)
     </para></caption>
   </mediaobject>
 </screenshot>
-
-<para>
-You may set up the contents of this documentation tree if you select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Documentation Tree</guilabel> in the left hand tree.
-</para>
 
 <note><para>
 &kdevelop; must have loaded the <guilabel>Documentation</guilabel> plugin in order to view the documentation tree. See the <link linkend="setup-plugins">Plugin Tools</link> section for more info.
 </para></note>
 
-<formalpara>
-<title>Alternative Method to Call Up the Configuration Page</title>
 <para>
-There is a shortcut way to call up this configuration. Open the documentation tree (&eg; by clicking on the <guilabel>Documentation</guilabel> tab in IDEAl mode), then right-click into the list. From the popup dialog select <guilabel>Properties</guilabel> which in turn will display a <guilabel>Customize Documentation Tree</guilabel> window.
+You may set up contents and behaviour of the various parts of this documentation window if you select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Documentation</guilabel> in the left hand window.
 </para>
-</formalpara>
 
 <para>
-The thus displayed <link linkend="configure-doctree-general">configuration page</link> shows a series of tabbed configuration dialog pages, namely:
+The thus displayed <link linkend="configure-docu-general">configuration page</link> shows three tabbed configuration dialog pages, namely:
 </para>
 
 <simplelist>
-  <member><link linkend="setup-docu-general">General</link></member>
+  <member><link linkend="setup-docu-general">Documentation Collections</link></member>
   <member><link linkend="setup-docu-textsearch">Full Text Search</link></member>
-  <member><link linkend="setup-docu-bookmark">Bookmarks</link></member>
-  <member><link linkend="setup-docu-TOC">KDevelopTOC Documentation</link></member>
-  <member><link linkend="setup-docu-DevHelp">DevHelp Documentation</link></member>
+  <member><link linkend="setup-docu-other">Other</link></member>
 </simplelist>
-<para>
-Additionally you have the option to select what the documentation tree should display as
-</para>
-<simplelist>
-  <member><link linkend="setup-docu-project">Project Documentation</link></member>
-</simplelist>
-<para>
-on a per project basis.
-</para>
-
-<para>
-For a more intuitive reading we will discuss these configuration dialogs in slightly different order. Use one of the links above if you want to directly look at the help for one of the tabbed configure dialog sections.
-</para>
 
 <tip><para>
 You should at least configure the <link linkend="setup-docu-textsearch">Full Text Search</link> section. It is mandatory to immediately access the &Qt; and &kde; Libraries API help from within a source text.
 </para></tip>
 
-<sect2 id="setup-docu-buttons">
-<title>Changing Documentation Entries</title>
+<sect2 id="setup-docu-general">
+<title>Setting Up Documentation Collections</title>
 
 <para>
-Most of these tabbed configuration dialogs provide a set of <link linkend="setup-docu-button-add">Add</link>, <link linkend="setup-docu-button-edit">Edit</link>, and <link linkend="setup-docu-button-remove">Remove</link> buttons to the right of some list field. Use these to change the listed entries or add your own.
+The documentation configuration settings have been divided into a series of documentation collections, each providing access to documentation files of some unique format and content type. These setups control which documentation items will be listed on the <guilabel>Contents</guilabel> page of the &kdevelop; <guilabel>Documentation</guilabel> facility, and how the user may access documentation details by indexed and full text searches.
 </para>
 <para>
-If you click one of the <guibutton>Add</guibutton> or <guibutton>Edit</guibutton> buttons you will be shown an <guilabel>Add Documentation Entry</guilabel> dialog like this (deliberately filled in by an example):
+The <guilabel>Documentation</guilabel> tab provides a series of configuration pages which are ordered vertically like a stack of index cards. One page at a time will open after a click on its index card title:
 </para>
+<simplelist>
+  <member><link linkend="setup-docu-general-qt">Qt Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-chm">CHM Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-dox">Doxygen Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-toc">KDevelop TOC Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-devhelp">Devhelp Documentation Collection</link></member>
+  <member><link linkend="setup-docu-general-custom">Custom Documentation Collection</link></member>
+</simplelist>
 
-<screenshot id="configure-add-dialog">
+<para id="configure-docu-general">
+<screenshot>
   <mediaobject>
     <imageobject>
-      <imagedata fileref="configure-adddialog.png" format="PNG"/>
+      <imagedata fileref="configure-docu-general.png" format="PNG"/>
     </imageobject>
     <caption><para>
-    Adding or changing a documentation entry
+    Setting up documentation collections
     </para></caption>
   </mediaobject>
 </screenshot>
+</para>
 
-<formalpara>
-<title>Local and Remote Documentation</title>
+<sect3 id="setup-docu-general-common">
+<title>Common Documentation Setup Structure</title>
+
 <para>
-The &kdevelop; documentation tree may access <emphasis>local</emphasis> (system internal) documentation files as well as <emphasis>remote</emphasis> (external, mostly accessible via the web) ones. You only need to enter the proper &URL; addresses in the <guilabel>Location</guilabel> field. (In fact, most predefined entries in the documentation tree at initial &kdevelop; start-up consist of links to external documention.)
+All configurations pages on the <guilabel>Documentation</guilabel> tab use a common layout. You will find the currently available documentation items of this type listed on the open page to the left and a set of buttons to the right.
+</para>
+
+<formalpara id="setup-docu-buttons">
+<title>Buttons to Maintain Documentation List Contents</title>
+
+<para>
+There are three buttons available to maintain the contents of the documentation setup pages:
 </para>
 </formalpara>
-<para>
-You may at any time change from remote to local documentation (if you &eg; downloaded the files into your system) and vice versa. Just alter the &URL; accordingly as shown below.
-</para>
-
-<note><para>
-Don't forget to provide working net access before you select one of the external documentation entries in the &kdevelop; documentation tree.
-</para></note>
 
 <variablelist>
-  <title>Documentation List Change Buttons</title>
-  <varlistentry id="setup-docu-button-add">
+  <varlistentry>
     <term><guibutton>Add</guibutton></term>
     <listitem>
-    <para>
-    When you click this button you will be presented with an empty <guilabel>Add Documentation Entry</guilabel> dialog.
-    </para>
-    <para>
-    Enter a suitable <guilabel>Title</guilabel> text and the &URL; address where the documentation will be found in the <guilabel>Location</guilabel> field.
-    </para>
-    <para>
-    If you don't know the exact address (or rather want not type) click the folder-labeled button to the right of the <guilabel>Location</guilabel> field. The usual file selection dialog will then pop up where you can navigate to the file you want to be added.
-    </para>
+      <para>Opens a <guilabel>Documentation Catalog Properties</guilabel> dialog as shown below where you can select the source location of the documentation item to be added and name it.</para>
     </listitem>
   </varlistentry>
-  <varlistentry id="setup-docu-button-edit">
+  <varlistentry>
     <term><guibutton>Edit</guibutton></term>
     <listitem>
-    <para>
-    First select the entry you want to change in the list field, then click the <guibutton>Edit</guibutton> button. The <guilabel>Add Documentation Entry</guilabel> dialog will then pop up with its fields preset with informations from the selected list item (see the <link linkend="configure-add-dialog">example</link> above where the fields are filled in for the &kde; Libraries documentation).
-    </para>
-    <para>
-    Enter a more suitable <guilabel>Title</guilabel> text and/or change the &URL; address in the <guilabel>Location</guilabel> field to the location where this documentation will be found in your system.
-    </para>
-    <para>
-    If you don't know the exact address (or rather want not type) click the folder-labeled button to the right of the <guilabel>Location</guilabel> field. The usual file selection dialog will then pop up where you can navigate to the file you want to be added.
-    </para>
+      <para>Opens a <guilabel>Documentation Catalog Properties</guilabel> dialog as shown below where you can change the source location of the documentation item previously selected in the list and rename it.</para>
     </listitem>
   </varlistentry>
-  <varlistentry id="setup-docu-button-remove">
+  <varlistentry>
     <term><guibutton>Remove</guibutton></term>
     <listitem>
-      <para>
-      First select the entry you want to remove in the list field, then click the <guibutton>Remove</guibutton> button. This will delete the selected documentation from the stored entries.
-      </para>
-
-      <warning>
-        <para>
-        <emphasis>Think twice before you remove a documentation form the list!</emphasis>
-        </para>
-        <para>
-        There is usually no easy way to undo this operation. In most cases you will have to add the documentation manually again. So, if you are unsure, try to backup the configuration files (if known) or at least note &URL; and title of the selected documentation before you click <guibutton>Remove</guibutton>.
-        </para>
-      </warning>
+      <para>Removes the selected documentation entry from the list.</para>
+      <warning><para>
+      The entry will be removed without prior confirmation! Think twice before you use this button.
+      </para></warning>
     </listitem>
   </varlistentry>
 </variablelist>
 
-<formalpara>
-<title>Predefined File Selections</title>
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-docu-edit.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Add or change a documentation item
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<note><para>
+The <guilabel>Title</guilabel> field may not be available, depending on the documentation type to be maintained.
+</para></note>
+
+<formalpara id="setup-docu-columns">
+<title>Documentation List Structure</title>
+
 <para>
-In some cases when you called the file selection dialog from <guilabel>Add Documentation Entry</guilabel> you may find the display of available files limited by a preset <guilabel>Filter</guilabel> field (located at the dialog bottom). This may &eg; read <quote>*.xml *.dcf</quote> in the case of changing the &Qt; documentation files. If you are unsure about the files you need, best stick to such predefined selections.
+Every documentation setup page shows the listed documentation items in a table with four columns:
 </para>
 </formalpara>
 
-</sect2> <!-- setup-docu-buttons -->
+<variablelist>
+  <varlistentry>
+    <term><guilabel>TOC</guilabel></term>
+    <listitem><para>
+    If this check box is marked, this documentation item will show up on the <guilabel>Contents</guilabel> page of the &kdevelop; <guilabel>Documentation</guilabel> facility.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Index</guilabel></term>
+    <listitem>
+      <para>
+      If this check box is marked, an internal index will be built of this documentation item. This provides fast access to the documentation by the use of the <guilabel>Index</guilabel> and (optionally) <guilabel>Finder</guilabel> pages of the &kdevelop; <guilabel>Documentation</guilabel> facility.
+      </para>
+      <note><para>
+      The internal index will be built/restructured the first time the user selects the <guilabel>Index</guilabel> page. As this will delay the first access noticeably, you should use this indexing facility with care.
+      </para></note>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Search</guilabel></term>
+    <listitem>
+      <para>
+      If this check box is marked, the contents of this documentation item will be included in the full text search path of the <guilabel>Search</guilabel> page of the &kdevelop; <guilabel>Documentation</guilabel> facility.
+      </para>
+      <note>
+        <para>
+        &kdevelop; utilizes the htdig application collection to perform full text searches. This search is done over an internal index, the htdig machinery has to build before it can be used.
+        </para>
+        <para>
+        Any change of the <guilabel>Search</guilabel> check box marks will thus effect the search runs only after you rebuilt the index on the  <guilabel>Search</guilabel> page of the &kdevelop; <guilabel>Documentation</guilabel> facility.
+        </para>
+      </note>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><guilabel>Title</guilabel></term>
+    <listitem><para>
+    This is the name of the Documentation item as it will be shown on the <guilabel>Contents</guilabel> page of the &kdevelop; <guilabel>Documentation</guilabel> facility.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
 
-<sect2 id="setup-docu-general">
-<title>Basic &Qt; and &kde; Documentation</title>
-
-<para>
-The <guilabel>General</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page contains information to access the basic documentation sets needed for &kde; programming. Accordingly there are three dialog groups:
-</para>
-<simplelist>
-  <member><link linkend="setup-docu-general-qt">Qt documentation collections</link></member>
-  <member><link linkend="setup-docu-general-dox">Documentation generated by Doxygen</link></member>
-  <member><link linkend="setup-docu-general-kdoc">Documentation generated by KDoc</link></member>
-</simplelist>
-
-<para id="configure-doctree-general"><screenshot>
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="configure-doctree-general.png" format="PNG"/>
-    </imageobject>
-    <caption><para>
-    Setting up &kde; basic documentation sets
-    </para></caption>
-  </mediaobject>
-</screenshot></para>
+</sect3> <!-- setup-docu-general-common -->
 
 <sect3 id="setup-docu-general-qt">
 <title>Qt Documentation Collections</title>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-docu-general.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Setting up the &Qt; documentation collection
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
 <para>
-Normally &kdevelop; will fill this in on its first start-up. It looks for standard documentation files in the &Qt; installation directory. The table to the left lists the files &kdevelop; found by their standard title and &URL; address.
+Normally &kdevelop; will fill this in on its first start-up. It looks for standard <filename>*.xml</filename>, or <filename>*.dcf</filename> documentation files in the &Qt; installation directory. The table to the left lists the files &kdevelop; found by their standard titles.
 </para>
 
 <para>
-If you have a non-standard installation, either there will be no information listed at all or the addresses will possibly point to improper locations (&eg; to another &Qt; installation available in your system). You may adjust the entries using the <link linkend="setup-docu-buttons">buttons</link> to the right of the list field.
+If you have a non-standard installation, either there will be no information listed at all or the entries will possibly refer to improper locations (&eg; to another &Qt; installation available in your system). You may adjust the entries using the <link linkend="setup-docu-buttons">buttons</link> to the right of the list field.
 </para>
 
-<note>
-  <para>
-  Pressing the <guibutton>Add</guibutton> or <guibutton>Edit</guibutton> to change a &Qt; list entry will pop up a slightly different dialog:
-  </para>
-  <screenshot>
-    <mediaobject>
-      <imageobject>
-        <imagedata fileref="configure-adddialog-qt.png" format="PNG"/>
-      </imageobject>
-      <caption><para>
-      Adding or changing a &Qt; documentation entry
-      </para></caption>
-    </mediaobject>
-  </screenshot>
-  <para>
-  Normally &kdevelop; will use the titles already provided by the installed &Qt; documentation. Hence the <guilabel>Title</guilabel> field will be grayed and inaccessible when this <guilabel>Add Documentation Entry</guilabel> dialog starts up. If you want to use your own title text in the documentation tree of &kdevelop; you must first check the <guilabel>Custom title</guilabel> field. This will provide access to the <guilabel>Title</guilabel> field contents where you then may fill in any text you like.
-  </para>
-</note>
+<note><para>
+&kdevelop; will use the titles already provided by the installed &Qt; documentation. Hence the <guilabel>Title</guilabel> field in the <guilabel>Documentation Catalog Properties</guilabel> dialog is inaccessible.
+</para></note>
+
+<para>
+By default, not all &Qt; documentation will be shown on the <guilabel>Contents</guilabel> page of the &kdevelop; <guilabel>Documentation</guilabel> facility. Use the <guilabel>TOC</guilabel> check box in the <link linkend="setup-docu-columns">setup table</link> to select the documentation to be shown.
+</para>
+
+<para>
+If you want to have some specific &Qt; documentation included in the search indexes or full text search use the <guilabel>Index</guilabel> and <guilabel>Search</guilabel>check boxes in the <link linkend="setup-docu-columns">setup table</link>.
+</para>
+
 </sect3> <!-- setup-docu-general-qt -->
 
-<sect3 id="setup-docu-general-kde">
-<title>&kde; API Documentations</title>
+<sect3 id="setup-docu-general-chm">
+<title>Setting Up the CHM Documentation Collection</title>
 
 <para>
-The other two lists on the <guilabel>General</guilabel> documentation tree configuration page concern API documentations provided by the &kde; system.
+(... to be written ...)
 </para>
+
+</sect3> <!-- setup-docu-general-chm -->
+
+<sect3 id="setup-docu-general-dox">
+<title>Documentation Generated by Doxygen</title>
+
 <para>
 In short, such an API documents the interface to certain library functions. There are two common ways to produce an API documentation from the sources, namely the older one using the &kde; <ulink url="http://sirtaj.net/projects/kdoc/">KDoc</ulink> application and the far more versatile using the externally provided <ulink url="http://www.doxygen.org">&doxygen;</ulink> tool.
 </para>
 
-<formalpara id="setup-docu-general-dox">
-<title>Documentation Generated by Doxygen</title>
 <para>
 &kdevelop; will have filled in a link to the current &kde; Libraries API, provided it found one at installation time. There are two basic ways for &kdevelop; to find out:
 </para>
-</formalpara>
+
 <itemizedlist>
   <listitem><para>
   Either you provided the <command>configure</command> command with the <option>--with-kdelibsdoxy-dir</option> option when you compiled &kdevelop; (see the <link linkend="make-api">How to Obtain a KDevelop API Documentation</link> chapter).
@@ -1269,43 +1288,36 @@ In short, such an API documents the interface to certain library functions. Ther
 If &kdevelop; did not find a valid &doxygen; generated &kde; Libraries API at its first start-up the <guilabel>Documentation Generated by Doxygen</guilabel> list will be empty.
 </para>
 
-<para>
+<!--<para>
 You may change the entries in the <guilabel>Documentation Generated by Doxygen</guilabel> list using the <link linkend="setup-docu-buttons">buttons</link> to the right.
-</para>
+</para>-->
 
-<note><para>
+<note>
+<para>
 After you first started up &kdevelop; after a new installation you should in any case check whether the &kde; Libraries API had been correctly set up in the documentation tree. It is advisable to have this API documentation at hand because it is basic to all &kde; programming.
-</para></note>
+</para>
+</note>
 
 <tip>
   <para>
   The &kde; system provides more API documentation than the &kde; Libraries API only. You will need additional interfaces information if you want to &eg; include the &kate; part into you programs. For this &kate; part API for example you should compile and install the &kde; Base Libraries API from the <ulink url="http://developer.kde.org/source/index.html">sources</ulink> (using the <command>make apidox</command> and <command>make install</command> commands on the <filename class="directory">kdebase</filename> sources) and then add an entry to the <guilabel>Documentation Generated by Doxygen</guilabel> list like this:
   </para>
-  <screenshot>
-    <mediaobject>
+  <screenshot><mediaobject>
       <imageobject>
         <imagedata fileref="configure-adddialog-baselibs.png" format="PNG"/>
       </imageobject>
       <caption><para>
       Adding a &kde; Base API to the list
       </para></caption>
-    </mediaobject>
-  </screenshot>
+    </mediaobject></screenshot>
   <para>
   (Of course you should replace the <filename class="directory">/opt/kde-cvs/</filename> directory in the <guilabel>Location</guilabel> field example with the path to your &kde; installation.)
   </para>
 </tip>
 
-<formalpara id="setup-docu-general-kdoc">
-<title>Documentation Generated by KDoc</title>
-<para>
-There is not much <ulink url="http://sirtaj.net/projects/kdoc/">KDoc</ulink> based API documentation around these days. Hence this list will be empty after the first &kdevelop; start-up. If you want to add some <application>KDoc</application> based API documentation use the <link linkend="setup-docu-buttons">buttons</link> to the right of this list.
-</para>
-</formalpara>
-</sect3> <!-- setup-docu-general-kde -->
-</sect2> <!-- setup-docu-general -->
+</sect3> <!-- setup-docu-general-dox -->
 
-<sect2 id="setup-docu-TOC">
+<sect3 id="setup-docu-general-toc">
 <title>Handling Structured Documentation (KDevelopTOC Files)</title>
 
 <para>
@@ -1335,7 +1347,7 @@ The rationale behind this is not only to locally navigate remote documentation w
 There is already an overwhelming lot of such <guilabel>KDevelopTOC Documentation</guilabel> available. To keep things maintainable you can limit the display to the documentation you really need on a per-project basis. See the <link  linkend="setup-docu-project">Displaying Selected Documentation in a Project</link> section how to accomplish this.
 </para></note>
 
-<sect3 id="setup-docu-TOC-files">
+<sect4 id="setup-docu-general-toc-files">
 <title>&kdevelop; TOC Files</title>
 
 <para>
@@ -1411,7 +1423,7 @@ When &kdevelop; was installed usually a series of predefined <filename>.toc</fil
       This &URL; points to the location where all files of this documentation are located. It will be prepended before each section &URL; in the following content structure list. So, if you &eg; downloaded a documentation from a remote server, all you need to display the files from this new location is to change its <computeroutput>&lt;base&gt;</computeroutput> &URL;.
       </para>
       <para>
-      You need not change the <filename>.toc</filename> file, however. Better use the <guibutton>Edit</guibutton> button on the <guilabel>KDevelopTOC Documentation</guilabel> tab of the documentation customization page as <link linkend="setup-docu-TOC-edit">shown below</link>.
+      You need not change the <filename>.toc</filename> file, however. Better use the <guibutton>Edit</guibutton> button on the <guilabel>KDevelopTOC Documentation</guilabel> tab of the documentation customization page as <link linkend="setup-docu-general-toc-edit">shown below</link>.
       </para>
     </listitem>
   </varlistentry>
@@ -1459,9 +1471,9 @@ When &kdevelop; was installed usually a series of predefined <filename>.toc</fil
   </varlistentry>
 </variablelist>
 
-</sect3> <!-- setup-docu-TOC-files  -->
+</sect4> <!-- setup-docu-general-toc-files  -->
 
-<sect3 id="setup-docu-TOC-list">
+<sect4 id="setup-docu-general-toc-list">
 <title>Altering the &kdevelop; TOC Documentation</title>
 
 <para>
@@ -1471,16 +1483,16 @@ There are two ways to alter the &kdevelop; TOC Documentation. You may change the
 <formalpara>
 <title>Adding &kdevelop; TOC Files</title>
 <para>
-Adding an entry to the <guilabel>KDevelopTOC Documentation</guilabel> tab is fairly straightforward. At first you need a <filename>.toc</filename> file to some structured documentation following the <link linkend="toc-file-structure">structure</link> shown above. This is easily constructed using any standard text editor. Then add this file using the <link linkend="setup-docu-button-add"><guibutton>Add</guibutton> button</link> on the configuration page.
+Adding an entry to the <guilabel>KDevelopTOC Documentation</guilabel> tab is fairly straightforward. At first you need a <filename>.toc</filename> file to some structured documentation following the <link linkend="toc-file-structure">structure</link> shown above. This is easily constructed using any standard text editor. <!--Then add this file using the <link linkend="setup-docu-button-add"><guibutton>Add</guibutton> button</link> on the configuration page.-->
 </para>
 </formalpara>
 
-<formalpara>
+<!--<formalpara>
 <title>Removing a &kdevelop; TOC Entry</title>
 <para>
 To remove an entry from the <guilabel>KDevelopTOC Documentation</guilabel> tab first select it in the list, then click on the <link linkend="setup-docu-button-remove"><guibutton>Remove</guibutton> button</link> on the configuration page.
 </para>
-</formalpara>
+</formalpara>-->
 
 <warning>
 <para>
@@ -1495,7 +1507,7 @@ To remove an entry from the <guilabel>KDevelopTOC Documentation</guilabel> tab f
 If the <filename>.toc</filename> file cannot be removed (&ie; if you have no write access), the entry will remain in the <guilabel>KDevelopTOC Documentation</guilabel> list.
 </para>
 
-<formalpara id="setup-docu-TOC-edit">
+<formalpara id="setup-docu-general-toc-edit">
 <title>Changing the Base Address of a &kdevelop; TOC Entry</title>
 <para>
 If the documentation in an already listed <filename>.toc</filename> file should be read from another location, tell &kdevelop; to alter the documentation base address. Select the file in the <guilabel>KDevelopTOC Documentation</guilabel> list, then click on the <guibutton>Edit</guibutton> button.
@@ -1544,15 +1556,15 @@ The remaining <guilabel>Library source path</guilabel> dialog field is of no imp
 If you want to get the original documentation base address back, use the <guibutton>Default</guibutton> button in this <guilabel>Library Documentation</guilabel> dialog. &kdevelop; will replace its internal documentation base pointer by the contents of the <computeroutput>&lt;base&gt;</computeroutput> field in the corresponding <filename>.toc</filename> file.
 </para>
 
-</sect3> <!-- setup-docu-TOC-list -->
+</sect4> <!-- setup-docu-general-toc-list -->
 
-</sect2> <!-- setup-docu-TOC -->
+</sect3> <!-- setup-docu-general-toc -->
 
-<sect2 id="setup-docu-DevHelp">
+<sect3 id="setup-docu-general-devhelp">
 <title>DevHelp Documentation</title>
 
 <para>
-DevHelp documentation is another means of structured documentation access. It uses structured table of content files denoted by a <filename>.devhelp</filename> extension similar to <link linkend="setup-docu-TOC-files">&kdevelop; TOC files</link> to access documentation for the GNOME 2 desktop.
+DevHelp documentation is another means of structured documentation access. It uses structured table of content files denoted by a <filename>.devhelp</filename> extension similar to <link linkend="setup-docu-general-toc-files">&kdevelop; TOC files</link> to access documentation for the GNOME 2 desktop.
 </para>
 <para>
 Usually you will need the GNOME <application>gtk-doc</application> application for access, but &kdevelop; has the ability to access documentation structured by DevHelp files built in. You can control which DevHelp files should be accessible on the <guilabel>DevHelp Documentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page.
@@ -1590,12 +1602,12 @@ When &kdevelop; is installed it will attempt to find all <filename>.devhelp</fil
 </para>
 </formalpara>
 
-<formalpara>
+<!--<formalpara>
 <title>Adding a DevHelp File</title>
 <para>
 To add <filename>.devhelp</filename> files to the list use the <link linkend="setup-docu-button-add">Add</link> button on the right of the <guilabel>DevHelp Documentation</guilabel> configuration page. &kdevelop; will copy the <filename>.devhelp</filename> file you provided to the default DevHelp directory.
 </para>
-</formalpara>
+</formalpara>-->
 <note><para>
 Usually &kdevelop; will not readily be able to access a thus newly added DevHelp documention. You will have to edit this entry to provide a base access address to this documentation.
 </para></note>
@@ -1619,12 +1631,12 @@ To enable the documentation access, enter the base address of the directory wher
 The remaining <guilabel>Library source path</guilabel> dialog field is of no importance. Just ignore it.
 </para>
 
-<formalpara>
+<!--<formalpara>
 <title>Removing a DevHelp Entry</title>
 <para>
 To remove an entry from the <guilabel>DevHelp Documentation</guilabel> tab first select it in the list, then click on the <link linkend="setup-docu-button-remove"><guibutton>Remove</guibutton> button</link> on the configuration page.
 </para>
-</formalpara>
+</formalpara>-->
 
 <warning>
 <para>
@@ -1635,7 +1647,18 @@ To remove an entry from the <guilabel>DevHelp Documentation</guilabel> tab first
 </para>
 </warning>
 
-</sect2> <!-- setup-docu-DevHelp -->
+</sect3> <!-- setup-docu-general-devhelp -->
+
+<sect3 id="setup-docu-general-custom">
+<title>Setting Up Custom Documentation Collections</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect3> <!--- setup-docu-general-custom -->
+
+</sect2> <!-- setup-docu-general -->
 
 <sect2 id="setup-docu-project">
 <title>Displaying Selected Documentation in a Project</title>
@@ -1678,37 +1701,6 @@ In the <guilabel>Displayed documents in the documentation browser</guilabel> lis
 
 </sect2> <!-- setup-docu-project -->
 
-<sect2 id="setup-docu-bookmark">
-<title>Bookmarked Documentation</title>
-
-<para>
-(... to be written ...)
-</para>
-
-<screenshot>
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="configure-doctree-bookmark.png" format="PNG"/>
-    </imageobject>
-    <caption><para>
-  Explicitelyly adding documentation to the bookmarks
-    </para></caption>
-  </mediaobject>
-</screenshot>
-
-<screenshot>
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="doctree-add-bookmark.png" format="PNG"/>
-    </imageobject>
-    <caption><para>
-    Adding existing documentation to the bookmarks
-    </para></caption>
-  </mediaobject>
-</screenshot>
-
-</sect2> <!-- setup-docu-bookmark -->
-
 <sect2 id="setup-docu-textsearch">
 <title>Setting Up Text Search Indexes</title>
 
@@ -1728,6 +1720,15 @@ In the <guilabel>Displayed documents in the documentation browser</guilabel> lis
 </screenshot>
 
 </sect2> <!-- setup-docu-textsearch -->
+
+<sect2 id="setup-docu-other">
+<title>Other Documentation Configuration Settings</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- setup-docu-other -->
 
 </sect1> <!-- setup-docu -->
 
