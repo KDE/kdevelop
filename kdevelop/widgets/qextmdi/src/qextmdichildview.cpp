@@ -530,6 +530,10 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          QObjectListIt it( *list );          // iterate over all new child widgets
          QObject * obj;
          while ( (obj=it.current()) != 0 ) { // for each found object...
+            if (!obj->inherits("QWidget")) {
+              ++it;
+              continue;
+            }
             QWidget* widg = (QWidget*)obj;
             ++it;
             widg->installEventFilter(this);
@@ -560,6 +564,10 @@ void QextMdiChildView::insertChild(QObject *pChild)
    QObjectListIt it( *list );          // iterate over all child widgets
    QObject * obj;
    while ( (obj=it.current()) != 0 ) { // for each found object...
+      if (!obj->inherits("QWidget")) {
+         ++it;
+         continue;
+      }
       QWidget* widg = (QWidget*)obj;
       ++it;
       if (!(widg->inherits("QPopupMenu"))) {
@@ -601,6 +609,10 @@ void QextMdiChildView::installEventFilterForAllChildren()
    QObjectListIt it( *list );          // iterate over all child widgets
    QObject * obj;
    while ( (obj=it.current()) != 0 ) { // for each found object...
+      if (!obj->inherits("QWidget")) {
+         ++it;
+         continue;
+      }
       QWidget* widg = (QWidget*)obj;
       ++it;
       if (!(widg->inherits("QPopupMenu"))) {
