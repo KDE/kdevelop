@@ -69,6 +69,7 @@
   <Merge/>
   <Menu name="tools">
     <text>&amp;Tools</text>
+    <DefineGroup name="tools_operations"/>
     <Merge/>
   </Menu>
   <Menu name="settings" noMerge="1">
