@@ -1,3 +1,6 @@
+2001-07-26  rokrau@yahoo.com
+    * bugfix: F12 without having Project loaded, 2nd attempt
+
 2001-07-26  John Firebaugh <jfirebaugh@kde.org>
     * Bug fix for the creation of ctags database.
       Developer's Note: The following is not a good thing to do:
@@ -32,7 +35,7 @@
     * fix: Wheelmouse works now fine after reaching top or bottom of document
 
 2001-07-23  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-	* improved debian packaging (see debian changelog)
+    * improved debian packaging (see debian changelog)
     * fix: bool bug in setup that prevented finding KDE docs in KDELIBS_DOCDIR
 
 2001-07-23  rokrau@yahoo.com
@@ -413,8 +416,8 @@
 
 2001-05-09  Ralf Nolden <nolden@kde.org>
     * fixed up the kcmodule errors, works now. TODO would be the binary 
-	(standalone) and the desktop file but I think the users will find out 
-	about that themselves.
+    (standalone) and the desktop file but I think the users will find out 
+    about that themselves.
 
 2001-05-08  rokrau@yahoo.com
     * added F12 for switch to header/source
