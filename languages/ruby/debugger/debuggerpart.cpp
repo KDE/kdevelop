@@ -449,9 +449,20 @@ bool RubyDebuggerPart::startDebugger()
     if (project()) {
         build_dir     = project()->buildDirectory();
         run_directory = project()->runDirectory();
-        program       = project()->mainProgram();
-        run_arguments = project()->runArguments();
     }
+	
+	int runMainProgram = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/runmainprogram");
+	
+	if (runMainProgram == 0) {
+    	program = project()->projectDirectory() + "/" + DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/mainprogram");
+	} else {
+		KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+		if (ro_part != 0) {
+			program = ro_part->url().path();
+		}
+	}
+	
+    run_arguments = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/programargs");
 
     QString shell = DomUtil::readEntry(*projectDom(), "/kdevrbdebugger/general/dbgshell");
     if( !shell.isEmpty() )
@@ -504,9 +515,30 @@ bool RubyDebuggerPart::startDebugger()
     }
     
 	ruby_interpreter = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/interpreter");
+    
+	int coding = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/charactercoding");
+	QString character_coding("-K");
+	
+	switch (coding) {
+	case 0:
+		character_coding.append("A");
+		break;
+	case 1:
+		character_coding.append("E");
+		break;
+	case 2:
+		character_coding.append("S");
+		break;
+	case 3:
+		character_coding.append("U");
+		break;
+	}
+	
+//	ruby_interpreter.append(QString(" -K") + code);
+	
 	debuggee_path = ::locate("data", "kdevrbdebugger/debuggee.rb", instance());
 	
-    controller->slotStart(ruby_interpreter, run_directory, debuggee_path, program, run_arguments);
+    controller->slotStart(ruby_interpreter, character_coding, run_directory, debuggee_path, program, run_arguments);
     return true;
 }
 
@@ -736,8 +768,8 @@ void RubyDebuggerPart::savePartialProjectSession(QDomElement* el)
 
 KDevAppFrontend * RDBDebugger::RubyDebuggerPart::appFrontend( )
 {
-	return extension<KDevAppFrontend>("KDevelop/AppFrontend");
-//    return static_cast<KDevAppFrontend*>(extension("KDevelop/AppFrontend"));
+//	return extension<KDevAppFrontend>("KDevelop/AppFrontend");
+    return static_cast<KDevAppFrontend*>(extension("KDevelop/AppFrontend"));
 }
 
 KDevDebugger * RDBDebugger::RubyDebuggerPart::debugger()

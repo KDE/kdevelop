@@ -1,3 +1,12 @@
+2004-11-23  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Added some ruby project options which are used for both debugging and an
+   ordinary run.
+     - Main program (this is in addition to the automake project main program)
+     - Program arguments
+     - Run main program or run selected window options
+ * The '-K' character coding project option is now passed to the debugger too
+
 2004-11-22 Alexander Dymo <adymo@kdevelop.org>
  * Implemented simple VCS integrators for Clearcase, Perforce and Subversion.
  * Reenabled subversion support plugin.

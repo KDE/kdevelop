@@ -162,17 +162,14 @@ void VariableTree::clear()
 	QListViewItemIterator it(this);
 	while (it.current() != 0) {
 		QListViewItem * item = it.current();
-		
-        if (	item->rtti() != RTTI_WATCH_ROOT 
-				&& item->rtti() != RTTI_WATCH_VAR_ITEM
-				&& item->rtti() != RTTI_GLOBAL_ROOT ) 
-		{
-			
+        if (item->rtti() != RTTI_WATCH_ROOT && item->rtti() != RTTI_WATCH_VAR_ITEM) {
 			delete item;
 		}
+		
 		++it;
     }
 	
+	globalRoot_ = 0;
 	return;
 }
 

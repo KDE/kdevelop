@@ -98,7 +98,9 @@ private:
 public slots:
     void configure();
 
-    void slotStart(const QString& shell, const QString& run_directory, const QString& debuggee_path, const QString &application, const QString& run_arguments);
+    void slotStart(	const QString& shell, const QString& characterCoding, 
+					const QString& run_directory, const QString& debuggee_path, 
+					const QString &application, const QString& run_arguments );
     //void slotStart(const QString& shell, const QString &application);
 
     void slotStopDebugger();
@@ -171,6 +173,7 @@ private:
 	
 	// Details for starting the ruby debugger process
 	QString          rubyInterpreter_;
+	QString          characterCoding_;
 	QString          runDirectory_;
 	QString          debuggeePath_;
 	QString          application_;

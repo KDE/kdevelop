@@ -701,7 +701,7 @@ void RDBController::modifyBreakpoint( const Breakpoint& BP )
 
 // **************************************************************************
 
-void RDBController::slotStart(const QString& ruby_interpreter, const QString& run_directory, const QString& debuggee_path, const QString &application, const QString& run_arguments)
+void RDBController::slotStart(const QString& ruby_interpreter, const QString& character_coding, const QString& run_directory, const QString& debuggee_path, const QString &application, const QString& run_arguments)
 {
     Q_ASSERT (!dbgProcess_ && !tty_);
 	
@@ -741,12 +741,14 @@ void RDBController::slotStart(const QString& ruby_interpreter, const QString& ru
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
 
 	rubyInterpreter_ = ruby_interpreter;
+	characterCoding_ = character_coding;
 	runDirectory_ = run_directory;
 	debuggeePath_ = debuggee_path;
 	application_ = application;
 	runArguments_ = run_arguments;
 
 	*dbgProcess_ << ruby_interpreter;
+	*dbgProcess_ << character_coding;
 	*dbgProcess_ << "-C" << QString(QFile::encodeName( run_directory ));
 	*dbgProcess_ << "-r" << debuggee_path;
 	*dbgProcess_ << application;
@@ -755,7 +757,7 @@ void RDBController::slotStart(const QString& ruby_interpreter, const QString& ru
 		*dbgProcess_ << run_arguments;
 	}
 
-    emit rdbStdout(QString( ruby_interpreter 
+    emit rdbStdout(QString( ruby_interpreter + character_coding
 							+ " -C " + QString(QFile::encodeName( run_directory ))
 							+ " -r " + debuggee_path + " " 
 							+ application + " " + run_arguments ).latin1() );
@@ -854,7 +856,7 @@ void RDBController::slotRun()
         return;
 		
 	if (stateIsOn(s_programExited)) {
-		slotStart(rubyInterpreter_, runDirectory_, debuggeePath_, application_, runArguments_);
+		slotStart(rubyInterpreter_, characterCoding_, runDirectory_, debuggeePath_, application_, runArguments_);
 		return;
 	}
 

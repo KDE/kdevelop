@@ -14,7 +14,6 @@
 #include <kapplication.h>
 #include <qregexp.h>
 
-
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "kdevlanguagesupport.h"
@@ -446,13 +445,14 @@ void RubySupportPart::parse(const QString &fileName)
 
 
 void RubySupportPart::slotRun () {
-	QFileInfo program(project()->mainProgram());
-    QString cmd = QString("%1 -K%2 -C%3 -I%4 %5")
+	QFileInfo program(mainProgram());
+    QString cmd = QString("%1 -K%2 -C%3 -I%4 %5 %6")
 	                      .arg(interpreter())
 						  .arg(characterCoding())
 						  .arg(program.dirPath())
 						  .arg(program.dirPath())
-						  .arg(program.fileName() );
+						  .arg(program.fileName())
+						  .arg(programArgs());
     startApplication(cmd);
 }
 
@@ -460,6 +460,27 @@ QString RubySupportPart::interpreter() {
     QString prog = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/interpreter");
     if (prog.isEmpty()) prog = "ruby";
     return prog;
+}
+
+QString RubySupportPart::mainProgram() {
+	QString prog;
+	int runMainProgram = DomUtil::readIntEntry(*projectDom(), "/kdevrubysupport/run/runmainprogram");
+	
+	if (runMainProgram == 0) {
+    	prog = project()->projectDirectory() + "/" + DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/mainprogram");
+	} else {
+		KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+		if (ro_part != 0) {
+			prog = ro_part->url().path();
+		}
+	}
+	
+    return prog;
+}
+
+QString RubySupportPart::programArgs() {
+    QString args = DomUtil::readEntry(*projectDom(), "/kdevrubysupport/run/programargs");
+    return args;
 }
 
 QString RubySupportPart::characterCoding() {
@@ -486,7 +507,7 @@ QString RubySupportPart::characterCoding() {
 
 void RubySupportPart::startApplication(const QString &program) {
 	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevrubysupport/run/terminal");
-    if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+    if (KDevAppFrontend *appFrontend = (KDevAppFrontend*)(extension("KDevelop/AppFrontend")))
         appFrontend->startAppCommand(QString::QString(), program, inTerminal);
 }
 

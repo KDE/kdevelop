@@ -83,13 +83,15 @@ public slots:
 
     /**
      * Start the debugger
-     * \param rubyInterpreter shell
+     * \param ruby_interpreter shell
+	 * \param character_coding -K option
      * \param run_directory Directory from where the program should be run
      * \param debuggee_path Absolute path to debuggee.rb debugger script
      * \param application Absolute path to application
      * \param run_arguments Command line arguments to be passed to the application
      */
     virtual void slotStart(const QString& ruby_interpreter,
+	                       const QString& character_coding,
                            const QString& run_directory,
 						   const QString& debuggee_path,
                            const QString& application,
