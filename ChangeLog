@@ -1,3 +1,12 @@
+2000-02-26 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* updating "create API documentation" for usage with
+	  kdoc 2, also in processes.pl
+	* making creation of project kdoc-file selectable
+	  now there is an option in "KDevelop Setup..."
+	  (only for kdoc 2 usage)
+	  kdoc 1 always needs write permission in
+	  kdoc-reference directory :-(
+
 2000-02-25 Ralf Funken <funken.ruk@netcologne.de>
 	* Updated de.po and kdevelop.pot
 	* Changed en and de manual (chapter debugging)

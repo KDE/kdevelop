@@ -366,14 +366,41 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 						     "e.g. after a kdelibs-update or installing a new\n"
 						     "Qt-library version.")));
   
+#ifdef WITH_KDOC2
+  kdocCheck = new QCheckBox( w, "kdocCheck" );
+  kdocCheck->setGeometry( 20, 270, 350, 30 );
+  kdocCheck->setText(i18n("Create also KDOC-reference of your project"));
+  kdocCheck->setAutoRepeat( FALSE );
+  kdocCheck->setAutoResize( FALSE );
+  bool bCreateKDoc;
+
+  config->setGroup("General Options");
+  bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+
+  kdocCheck->setChecked( bCreateKDoc );
+
+  KQuickHelp::add(kdocCheck, i18n("Create KDOC-reference of your project\n\n"
+                    "If this is enabled, on creating the API-Documentation KDoc creates also\n"
+                    "a cross reference file of your project into the seleceted kdoc-reference\n"
+                    "directory."));
+#endif
+
+
   QButtonGroup* docOptionsGroup;
   docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
+#ifdef WITH_KDOC2
+  docOptionsGroup->setGeometry( 10, 160, 400, 150 );
+#else
   docOptionsGroup->setGeometry( 10, 160, 400, 110 );
+#endif
   docOptionsGroup->setFrameStyle( 49 );
   docOptionsGroup->setTitle(i18n("Options"));
   docOptionsGroup->setAlignment( 1 );
   docOptionsGroup->insert( update_button );
   docOptionsGroup->insert( create_button );
+#ifdef WITH_KDOC2
+  docOptionsGroup->insert( kdocCheck );
+#endif
   docOptionsGroup->lower();
   
   QButtonGroup* docGroup;
@@ -692,6 +719,11 @@ void CKDevSetupDlg::slotOkClicked(){
 
   bool logo=logoCheck->isChecked();
   config->writeEntry("Logo",logo);
+
+#ifdef WITH_KDOC2
+  bool kdoc=kdocCheck->isChecked();
+  config->writeEntry("CreateKDoc",kdoc);
+#endif
 
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);

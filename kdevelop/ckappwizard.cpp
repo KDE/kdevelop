@@ -1039,6 +1039,42 @@ void CKAppWizard::slotOkClicked() {
 
 void CKAppWizard::generateEntries(const QString &filename) {
   QString entriesfilename(filename.isEmpty() ? QString("entries") : filename);
+  KConfig *config=kapp->getConfig();
+
+  config->setGroup("Doc_Location");
+  QString idx_path, link;
+  idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+          + "/kdoc-reference";
+#ifdef WITH_KDOC2
+  if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
+       QFileInfo(idx_path + "/qt.kdoc.gz").exists() )
+#else
+  if ( QFileInfo(idx_path + "/qt.kdoc").exists() )
+#endif
+      link += " -lqt";
+  // This could me made a lot smarter...
+#ifdef WITH_KDOC2
+  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() ||
+       QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
+#else
+  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() )
+#endif
+      link += " -lkdecore -lkdeui -lkfile -lkfmlib -ljscript -lkab -lkspell";
+#ifdef WITH_KDOC2
+  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() ||
+       QFileInfo(idx_path + "/khtmlw.kdoc.gz").exists() )
+#else
+  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() )
+#endif
+      link += " -lkhtmlw";
+#ifdef WITH_KDOC2
+  if ( QFileInfo(idx_path + "/khtml.kdoc").exists() ||
+      QFileInfo(idx_path + "/khtml.kdoc.gz").exists() )
+#else
+  if ( QFileInfo(idx_path + "/khtml.kdoc").exists())
+#endif
+      link += " -lkhtml";
+
 
   ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/"+entriesfilename);
 
@@ -1139,6 +1175,22 @@ void CKAppWizard::generateEntries(const QString &filename) {
   if (apidoc->isChecked())
     entries << "yes\n";
   else entries << "no\n";
+  entries << "KDOC_CALL\n";
+#ifdef WITH_KDOC2
+  bool bCreateKDoc;
+
+  config->setGroup("General Options");
+  bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+  if (bCreateKDoc)
+   entries << QString("kdoc -p -d")+direct+"/"+QString(nameline->text()).lower()+"/api -L"+
+	idx_path+link+" -n "+nameline->text()+" *.h\n";
+  else
+   entries << QString("kdoc -p -d")+direct+"/"+QString(nameline->text()).lower()+"/api -L"+
+	idx_path+link+" *.h\n";
+#else
+   entries << QString("kdoc -p -d ")+direct+"/"+QString(nameline->text()).lower()+"/api -L"+
+	idx_path+link+" "+nameline->text()+" *.h\n";
+#endif
   entries << "USER\n";
   if (userdoc->isChecked())
     entries << "yes\n";

@@ -766,24 +766,38 @@ void CKDevelop::slotProjectAPI(){
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
 
-#ifdef WITH_KDOC2
   config->setGroup("Doc_Location");
-  QString idx_path;
+  QString idx_path, link;
   idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
           + "/kdoc-reference";
-  QString link;
+#ifdef WITH_KDOC2
   if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
        QFileInfo(idx_path + "/qt.kdoc.gz").exists() )
-      link = "-lqt ";
+#else
+  if ( QFileInfo(idx_path + "/qt.kdoc").exists() )
+#endif
+      link += " -lqt";
   // This could me made a lot smarter...
+#ifdef WITH_KDOC2
   if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() ||
        QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
-      link += "-lkdecore -lkdeui -lkfile -lkfmlib -ljscript -lkab -lkspell";
+#else
+  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() )
+#endif
+      link += " -lkdecore -lkdeui -lkfile -lkfmlib -ljscript -lkab -lkspell";
+#ifdef WITH_KDOC2
   if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() ||
        QFileInfo(idx_path + "/khtmlw.kdoc.gz").exists() )
+#else
+  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() )
+#endif
       link += " -lkhtmlw";
+#ifdef WITH_KDOC2
   if ( QFileInfo(idx_path + "/khtml.kdoc").exists() ||
       QFileInfo(idx_path + "/khtml.kdoc.gz").exists() )
+#else
+  if ( QFileInfo(idx_path + "/khtml.kdoc").exists())
+#endif
       link += " -lkhtml";
 
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
@@ -803,87 +817,37 @@ void CKDevelop::slotProjectAPI(){
   shell_process.clearArguments();
   shell_process << "kdoc";
   shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-  if (!sources.isEmpty())
-      shell_process << sources;
   if (!link.isEmpty())
       {
           shell_process << ("-L" + idx_path);
           shell_process << link;
       }
 
+/* using the project name in the kdoc call will cause an warning
+   if you have no write permission to the kdoc-reference directory,
+   because kdoc tries to create a cross-reference file "<project_name>.kdoc(.gz)"
+
+   so I implemented a config entry to select this...
+
+   on kdoc 1 there is no possibility to disable this...
+
+   2000/02/26 - W. Tasin
+*/
+#ifdef WITH_KDOC2
+  bool bCreateKDoc;
+
+  config->setGroup("General Options");
+  bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+  if (bCreateKDoc)
+   shell_process << QString("-n ")+prj->getProjectName();
 #else
- 
-  config->setGroup("Doc_Location");
-  QString idx_path;
-  idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
-          + "/kdoc-reference";
-  QString qt_ref_file=idx_path+"/qt.kdoc";
-  QString kde_ref_file=idx_path+"/kdecore.kdoc";
-  QString khtmlw_ref_file=idx_path+"/khtmlw.kdoc";
-
-	QStrList headerlist(prj->getHeaders());
-	uint i;
-
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-  QString dir=QDir::currentDirPath();
-  uint dirlength=dir.length()+1;
-
-  shell_process.clearArguments();
-
-  if( !QFileInfo(kde_ref_file).exists()){
-    shell_process << "kdoc";
-    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-//    shell_process << "*.h";
-    shell_process << prj->getProjectName();
-		for (i=0; i < headerlist.count(); i++){
-			QString file=headerlist.at(i);
-			QString header=file.remove(0,dirlength);
-			shell_process << header;
-			shell_process << " ";
-		}
-  }
-  else if(!QFileInfo(qt_ref_file).exists()){
-    shell_process << "kdoc";
-    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api/";
-    shell_process << "-L" + idx_path;
-    shell_process << prj->getProjectName();
-		for (i=0; i < headerlist.count(); i++){
-			QString file=headerlist.at(i);
-			QString header=file.remove(0,dirlength);
-			shell_process << header;
-			shell_process << " ";
-		}
-		if(!QFileInfo(khtmlw_ref_file).exists()){
-    	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
-		}
-		else{
-    	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-		}
-  }
-  else{
-    shell_process << "kdoc";
-    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api/";
-    shell_process << "-L" + idx_path;
-    shell_process << prj->getProjectName();
-		for (i=0; i < headerlist.count(); i++){
-			QString file=headerlist.at(i);
-			QString header=file.remove(0,dirlength);
-			shell_process << header;
-			shell_process << " ";
-		}
-		if(!QFileInfo(khtmlw_ref_file).exists()){
-    	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
-		}
-		else{
-    	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-		}
-
-  }
-  
+  shell_process << prj->getProjectName();
 #endif
-  
+
+  if (!sources.isEmpty())
+      shell_process << sources;
+
+
   shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 

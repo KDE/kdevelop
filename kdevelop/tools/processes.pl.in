@@ -415,8 +415,14 @@ sub condCreateApiDoc {
 	#create the API-documentation
 	chdir ($underDirectory);
 	mkdir ("api", 0777);
-	system ("kdoc -d ./api/ $name *.h");
-
+      if ($processes{KDOC_CALL})
+      {
+	system ("$processes{KDOC_CALL}");
+      }
+      else
+      {
+	system ("kdoc -d $underDirectory/api/ $name *.h");
+      }
     }
 
 }

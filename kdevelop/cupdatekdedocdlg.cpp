@@ -355,7 +355,7 @@ void CUpdateKDEDocDlg::OK(){
     qt_test=true;
   }
 
-#if WITH_KDOC2
+#ifdef WITH_KDOC2
   QString cmd;
   if(! qt_test)
       {
