@@ -1,3 +1,14 @@
+2001-05-01  Richard Dale <duke@tipitina.demon.co.uk
+
+        * Removed hard coded java classpaths, and classnames. They are derived
+	  from the projectDirectory and mainProgram project attributes.
+	* Checked in jdb front end code from Oliver Strutynski. He comments:
+	  'I finished work on a first version of JDB Support. It is not at 
+          all feature complete (setting breakpoints does not work yet, hangs 
+          from time to time) but could serve as a starting point for further
+          development. The directory contains a README describing some of the 
+          parsing in the jdbcontroller.'
+
 2001-04-29  Sandy Meier  <smeier@kdevelop.org>
 	* some changes in appwizard gui (qtdesigner based),
 	templates can have a category property now
