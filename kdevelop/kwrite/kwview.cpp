@@ -21,6 +21,7 @@
 #include <qdir.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
+#include <kprinter.h>
 #include <qpaintdevicemetrics.h>
 #include <qclipbrd.h>
 
@@ -2511,23 +2512,28 @@ void KWrite::print() {
   int fontHeight;
   int lines, pages;
   int line, c, p, l, y;
-  QPrinter prt;
+  KPrinter prt;
+
+  prt.setFullPage(false);
 
   if (prt.setup()) {
-    QPaintDeviceMetrics pdm(&prt);
     QPainter paint;
-
-    paint.begin(&prt);
-    fontHeight = kWriteDoc->fontHeight;
+    QPaintDeviceMetrics pdm(&prt);
+    fontHeight = kWriteDoc->printFontHeight;
     lines = pdm.height()/fontHeight;
     pages = (kWriteDoc->lastLine() +1)/lines;
+
+    paint.begin(&prt);
     for (c = 1; c <= prt.numCopies(); c++) {
       line = 0;
-      for (p = 0; p <= pages; p++) {
+      
+      for (p =  0 ; p <= pages; p++) {
         y = 0;
-        if (prt.pageOrder() == QPrinter::LastPageFirst) line = (pages - p)*lines;
+        if (prt.pageOrder() == KPrinter::LastPageFirst) 
+          line = (pages - p)*lines;
+        
         for (l = 0; l < lines; l++) {
-          kWriteDoc->printTextLine(paint, line, pdm.width(), y);
+          kWriteDoc->paintTextLine(paint, line, y, 0, pdm.width(), flags() & cfShowTabs, true);
           line++;
           y += fontHeight;
         }

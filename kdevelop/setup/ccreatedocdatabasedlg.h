@@ -44,7 +44,7 @@ public:
 	      bool foundGlimpse=false, bool foundHtDig=false, bool bShowIndexingButton = true);
         void setQtDocDir(const QString& qtDocDir);
 	~CCreateDocDatabaseDlg();
-	
+
 public slots:
   void slotOkClicked();
 
@@ -59,6 +59,8 @@ protected slots:
   void slotAddButtonClicked();
   void slotRemoveButtonClicked();
   void slotDirButtonClicked();
+  void slotProcessOK();
+
   void slotShowToolProcessOutputDlg();
   void slotReceivedStdout(KProcess*,char*,int);
   void slotReceivedStderr(KProcess*,char*,int);

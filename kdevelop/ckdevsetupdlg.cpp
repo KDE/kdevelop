@@ -22,11 +22,14 @@
 #include "resource.h"
 #include "ccompletionopts.h"
 
+#include "setup/ccreatedocdatabasedlg.h"
+
 #include <kmessagebox.h>
 #include <kkeydialog.h>
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
+#include <kbuttonbox.h>
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -454,7 +457,7 @@ void CKDevSetupDlg::addDocTab()
   QPushButton* create_button;
   create_button = new QPushButton( docOptionsGroup, "create_button" );
   grid2->addWidget(create_button,1,1);
-  connect( create_button, SIGNAL(clicked()),parent(), SLOT(slotOptionsCreateSearchDatabase()) );
+  connect( create_button, SIGNAL(clicked()),this, SLOT(slotCreateSearchDatabase()) );
   create_button->setText(i18n("Create..."));
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
@@ -1106,5 +1109,56 @@ void CKDevSetupDlg::addCodeCompletionTab()
     grid->addWidget(completionOptsDlg,0,0);
 
 }
+
+void CKDevSetupDlg::slotCreateSearchDatabase(){
+   KShellProcess shell_process;
+
+   bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
+   bool foundHtDig = CToolClass::searchInstProgram("htdig");
+   if(!foundGlimpse && !foundHtDig){
+     KMessageBox::error( 0,
+                         i18n("KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!"),
+                         i18n("Program Not Found!"));
+     return;
+   }
+
+   config->setGroup("Doc_Location");
+   QString qtDocu = config->readEntry("doc_qt",QT_DOCDIR);
+   QString kdeDocu = config->readEntry("doc_kde",KDELIBS_DOCDIR);
+
+   QDialog parentDlg(this, "create_doc_database_parentdlg", true);
+   parentDlg.setCaption(i18n("Create Search Database..."));
+   CCreateDocDatabaseDlg embeddedDlg(&parentDlg,"create_doc_database_dlg",&shell_process,kdeDocu,qtDocu,foundGlimpse, foundHtDig, false);
+
+   connect(&embeddedDlg, SIGNAL(indexingFinished(const QString&)), SLOT(slotSetSearchDatabase(const QString&) ) );
+   //
+
+   KButtonBox bb( &parentDlg);
+   bb.addStretch();
+   QPushButton* ok_button  = bb.addButton( i18n("Start indexing") );
+   QPushButton* cancel_button  = bb.addButton( i18n("Back") );
+   ok_button->setDefault(true);
+   connect(cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()));
+   connect(ok_button, SIGNAL(clicked()), &embeddedDlg, SLOT(slotOkClicked()));
+
+     QVBoxLayout* vbl = new QVBoxLayout(&parentDlg, 15, 6);
+     vbl->addWidget(&embeddedDlg);
+     vbl->addWidget(&bb);
+
+   if (parentDlg.exec()){
+     //    slotStatusMsg(i18n("Creating Search Database..."));
+   }
+
+   return;
+
+}
+
+void CKDevSetupDlg::slotSetSearchDatabase(const QString& s)
+{
+  config->setGroup("Doc_Location");
+  config->writeEntry("searchengine",s);
+  config->sync();
+ }
+
 
 #include "ckdevsetupdlg.moc"

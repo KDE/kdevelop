@@ -115,8 +115,9 @@ class Attribute {
     QColor col;
     QColor selCol;
     void setFont(const QFont &);
-    QFont font;
-    QFontMetrics fm;
+    void setPrintFont(const QFont &);
+    QFont font, printFont;
+    QFontMetrics fm, printFM;
 };
 
 class KWAction {
@@ -271,8 +272,8 @@ class KWriteDoc : public QObject {
     void delMarkedText(KWriteView *, VConfig &);
 
     QColor &cursorCol(int x, int y);
-    void paintTextLine(QPainter &, int line, int xStart, int xEnd, bool showTabs);
-    void printTextLine(QPainter &, int line, int xEnd, int y);
+    void paintTextLine(QPainter &, int line, int y, int xStart, int xEnd, bool showTabs, bool printing);
+    void paintTextLine(QPainter &, int line, int xStart, int xEnd, bool showTabs, bool printing=false);
 
     bool isLastView(int numViews);
 
@@ -327,9 +328,9 @@ class KWriteDoc : public QObject {
     int eolMode;
 
     int tabChars;
-    int tabWidth;
-    int fontHeight;
-    int fontAscent;
+    int tabWidth, printTabWidth;
+    int fontHeight, printFontHeight;
+    int fontAscent, printFontAscent;
     int indentLength;
 
     QList<KWriteView> views;

@@ -307,6 +307,7 @@ class ItemFont {
 //    void setData(const ItemFont &);
     QString family;
     int size;
+    int printSize;
     QString charset;
 };
 
@@ -531,7 +532,7 @@ class HlManager : public QObject {
     Highlight *getHl(int n);
     int defaultHl();
     int nameFind(const QString& name);
-    
+
     int findHl(Highlight *h) { return hlList.find(h); }
     int findByFile(const QString& fileName);
     int findByMimetype(const QString& filename);
@@ -581,12 +582,14 @@ class FontChanger : public QWidget {
   protected slots:
     void familyChanged(const QString&);
     void sizeChanged(int);
+    void printSizeChanged(int);
     void charsetChanged(const QString&);
   protected:
     void displayCharsets();
     ItemFont *font;
     QComboBox *familyCombo;
     QComboBox *sizeCombo;
+    QComboBox *printSizeCombo;
     QComboBox *charsetCombo;
 };
 

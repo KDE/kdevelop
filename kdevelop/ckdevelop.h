@@ -528,7 +528,7 @@ public:
   /** shows the Update dialog and sends output to the messages widget */
   void slotOptionsUpdateKDEDocumentation();
   /** shows the create search database dialog called by the setup button */
-  void  slotOptionsCreateSearchDatabase();
+  //void  slotOptionsCreateSearchDatabase();
 
   ////////////////////////
   // BOOKMARKS-Menu entries

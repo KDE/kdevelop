@@ -220,7 +220,7 @@ void CCreateDocDatabaseDlg::slotOkClicked()
     dirs = dirs + " ";
     dirs = dirs + dir_listbox->text(i);
   }
-  
+
   QString size_str;
   if (small_radio_button->isChecked()){
     size_str = " -o ";
@@ -228,13 +228,14 @@ void CCreateDocDatabaseDlg::slotOkClicked()
   else if (medium_radio_button->isChecked()){
     size_str = " -b ";
   }
-  
+
   m_proc->clearArguments();
   if (useGlimpse->isChecked())
   {
     *m_proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " +
                     size_str +" -F -X -H "+ locateLocal("appdata","");
     m_proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    slotShowToolProcessOutputDlg();
   }
   else if (useHtDig->isChecked())
   {
@@ -297,7 +298,8 @@ void CCreateDocDatabaseDlg::createShellProcessOutputWidget()
 
   m_pShellProcessOutput->resize(500, 400);
 
-  QObject::connect(m_pShellProcessOutputOKButton, SIGNAL(clicked()), m_pShellProcessOutput, SLOT(accept()));
+  //QObject::connect(m_pShellProcessOutputOKButton, SIGNAL(clicked()), m_pShellProcessOutput, SLOT(accept()));
+  QObject::connect(m_pShellProcessOutputOKButton, SIGNAL(clicked()), this, SLOT(slotProcessOK() ));
   QObject::connect(m_proc,SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(slotReceivedStdout(KProcess*,char*,int)) );
   QObject::connect(m_proc,SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
   QObject::connect(m_proc,SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*) )) ;
@@ -337,7 +339,11 @@ void CCreateDocDatabaseDlg::slotProcessExited(KProcess*)
 	if (start_button)
 	  start_button->setEnabled(true);
   QApplication::restoreOverrideCursor();
+}
 
+void CCreateDocDatabaseDlg::slotProcessOK()
+{
+  m_pShellProcessOutput->close();
   if (useGlimpse->isChecked())
     emit indexingFinished("glimpse");
   else

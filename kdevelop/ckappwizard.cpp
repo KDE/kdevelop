@@ -67,7 +67,7 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   nameold = "";
 
   setCaption(i18n("Application Wizard"));
-  setFixedSize(515,530);
+  setMinimumSize(515,530);
 
   m_cancelButton = cancelButton();
   QToolTip::add(m_cancelButton,i18n("exit the CKAppWizard"));
@@ -111,20 +111,21 @@ void CKAppWizard::initPages()
 
   // create a widget and paint a picture on it
   widget1a = new QWidget( page0, "widget1a" );
-  widget1a->setGeometry( 0, 0, 500, 160 );
-  widget1a->setMinimumSize( 0, 0 );
-  widget1a->setMaximumSize( 32767, 32767 );
+  widget1a->setFixedSize(pm.width(), pm.height());
   widget1a->setFocusPolicy( QWidget::NoFocus );
   widget1a->setBackgroundMode( QWidget::PaletteBackground );
-
   widget1a->setBackgroundPixmap (pm);
+  QVBoxLayout* vbl1 = new QVBoxLayout(page0, 8, 4);
+  QHBoxLayout* hbl1 = new QHBoxLayout(vbl1, 10);
+  hbl1->addWidget(widget1a);
+  hbl1->addStretch();
 
   applications = new QListView( page0, "applications" );
-  applications->setGeometry( 20, 170, 170, 250 );
-  applications->setMinimumSize( 0, 0 );
-  applications->setMaximumSize( 32767, 32767 );
+  applications->setMinimumSize( 200, 250 );
   applications->setFocusPolicy( QWidget::TabFocus );
   applications->setBackgroundMode( QWidget::PaletteBackground );
+  QHBoxLayout* hbl2 = new QHBoxLayout(vbl1, 10);
+  hbl2->addWidget(applications);
 
   applications->setResizePolicy( QScrollView::Manual );
   applications->setVScrollBarMode( QScrollView::Auto );
@@ -142,21 +143,21 @@ void CKAppWizard::initPages()
 
   // create another widget for a picture
   widget1b = new QWidget( page0, "widget1b" );
-  widget1b->setGeometry( 255, 180, 190, 140 );
-  widget1b->setMinimumSize( 0, 0 );
-  widget1b->setMaximumSize( 32767, 32767 );
+  widget1b->setFixedSize(190, 140);
   widget1b->setFocusPolicy( QWidget::NoFocus );
   widget1b->setBackgroundMode( QWidget::PaletteBackground );
+  QVBoxLayout* vbl2 = new QVBoxLayout(hbl2, 10);
+  QHBoxLayout* hbl3 = new QHBoxLayout(vbl2, 10);
+  hbl3->addWidget(widget1b);
+  hbl3->addStretch();
 
   apphelp = new QLabel( page0, "apphelp" );
-  apphelp->setGeometry( 230, 330, 240, 90 );
-  apphelp->setMinimumSize( 0, 0 );
-  apphelp->setMaximumSize( 32767, 32767 );
   apphelp->setFocusPolicy( QWidget::NoFocus );
   apphelp->setBackgroundMode( QWidget::PaletteBackground );
   apphelp->setText( i18n("Label:") );
-  apphelp->setAlignment( 1313 );
+  apphelp->setAlignment( Qt::WordBreak);//1313 );
   apphelp->setMargin( -1 );
+  vbl2->addWidget(apphelp);
 
   othersentry = new QListViewItem (applications, i18n("Others"));
   othersentry->setExpandable (true);
@@ -208,9 +209,6 @@ void CKAppWizard::initPages()
   kde2miniitem = new QListViewItem (kdeentry,i18n("KDE Mini"));
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
-
-  separator0 = new KSeparator (page0);
-  separator0->setGeometry(0,160,515,5);
 
   connect (applications,SIGNAL(selectionChanged ()),SLOT(slotApplicationClicked()));
 
@@ -444,6 +442,8 @@ void CKAppWizard::initPages()
   separator2 = new KSeparator (page1);
   separator2->setGeometry(0,255,515,5);
 
+  page1->setMinimumSize(515, 430);
+  
   QString nameMsg = i18n("Insert your project name here. This is\n"
                "also the name of the directory where your Project\n"
                "will be created.");

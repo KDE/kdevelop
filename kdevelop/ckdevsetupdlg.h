@@ -71,6 +71,9 @@ private:
   void slotSetDebug();
   void slotQt2Clicked();
   void slotKDE2Clicked();
+  void slotSetSearchDatabase(const QString&);
+  /** shows the create search database dialog called by the setup button */
+  void slotCreateSearchDatabase();
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
 	void slotPPathClicked();
 // ---

@@ -1,8 +1,12 @@
+2002-06-07  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of Anders Lynge Esbensen <esban@egmont-kol.dk>: Fixes on docu indexing. Reviewed by Harry.
+    * applied printer patch of Walter Tasin: Much improved printing. Reviewed by myself.
+    * applied my fixes for page 0 of AppWizard: Ability of resizing, layout and word wrapping fixes. Too trivial for reviewing.
 2002-06-06  August Hörandl  <august.hoerandl@gmx.at>
-	* fix typo: kbasedoc.h in kdemdi.tar.gz
+    * fix typo: kbasedoc.h in kdemdi.tar.gz
 2002-06-04  Roland Krause  <roland@ca.wai.com>
     * Applied a fix to the coutputwidget. This is mine and Harry's but not
-      Kuba's solution. The coutputwidget will still use RichText so we can 
+      Kuba's solution. The coutputwidget will still use RichText so we can
       have bullets. "Isch geb mir die Kugel..."
 2002-06-04  Roland Krause  <roland@ca.wai.com>
     * Applied Kuba's patches for indentation, editor settings and
@@ -15,34 +19,33 @@
       future additions without problems on lower resolution screens
     * compilation fixes for GCC 3.1
 2002-05-30  Harald Fernengel <harry@kdevelop.org>
-        * gcc 3.1 compile fix in tokenizer.l
+    * gcc 3.1 compile fix in tokenizer.l
 2002-05-28  F@lk Brettschneider <falk@kdevelop.org>
-        * stepped to version 2.1.2 (preparing for KDE-3.0.2)
+    * stepped to version 2.1.2 (preparing for KDE-3.0.2)
 2002-05-19  F@lk Brettschneider <falk@kdevelop.org>
-	* applied patch of Marcus Gruendler which workarounds changed (maybe buggy) Qt behaviour on text output in output tool-view
-	  (reviewed by Harald Fernengel)
+    * applied patch of Marcus Gruendler which workarounds changed (maybe buggy) Qt behaviour on text output in output tool-view
+     (reviewed by Harald Fernengel)
 2002-04-27  August Hörandl  <august.hoerandl@gmx.at>
-	* kdevelop/cclassview.cpp: fixed wrong path for new file
-	  reviewed by Roland Krause
+    * kdevelop/cclassview.cpp: fixed wrong path for new file
+      reviewed by Roland Krause
 2002-04-26  Roland Krause  <roland@ca.wai.com>
-	* fixed a crash when attempting to look at parent classes in the 
-         class viewer. reviewed by HarryF
+    * fixed a crash when attempting to look at parent classes in the
+      class viewer. reviewed by HarryF
 2002-04-25  F@lk Brettschneider <falk@kdevelop.org>
-        * applied framestack patch, reviewed by Harald
-	
+    * applied framestack patch, reviewed by Harald
 2002-04-24  F@lk Brettschneider <falk@kdevelop.org>
-        * fixed an evil crash after QextMDI gets confused in the view-focus control.
-	  (reason for that bug was changed event behaviour in the latest Qt versions.
-	   Sometimes optimizing the code makes it very sensitive, too)
+    * fixed an evil crash after QextMDI gets confused in the view-focus control.
+      (reason for that bug was changed event behaviour in the latest Qt versions.
+      Sometimes optimizing the code makes it very sensitive, too)
 2002-04-10  Harald Fernengel <harry@kdevelop.org>
-        * Jumping to error messages now also works on localized versions of "make"
-          Error messages that contain Utf8 characters only work under KDE3,
-          the non-Utf8 strings under KDE2 as well as KDE3.
-          Workaround for KDE2: "export LANG=C"
+    * Jumping to error messages now also works on localized versions of "make"
+      Error messages that contain Utf8 characters only work under KDE3,
+      the non-Utf8 strings under KDE2 as well as KDE3.
+      Workaround for KDE2: "export LANG=C"
 2002-04-03  Richard Dale <duke@tipitina.demon.co.uk>
-	* Removed Objective-C support (moving the changes to KDEVELOP_2_BRANCH).
+    * Removed Objective-C support (moving the changes to KDEVELOP_2_BRANCH).
 2002-04-02  Richard Dale <duke@tipitina.demon.co.uk>
-	* Added Objective-C support.
+    * Added Objective-C support.
 2002-03-26  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: corrupted .kdevses file shouldn't confuse KDevelop any more
 2002-03-15  Harald Fernengel <harry@kdevelop.org>
@@ -80,7 +83,6 @@
     * bugfix: Accelerator-Keys in DocView
     * bugfix: KTheme now treated as a KDE 2 project
     * bugfixes in creation of API-documentation
-    
 2002-03-03  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: 0x0 pointer access in SimpleParser
       (Ctrl+Space on class name in class declaration, happened only sometimes)
@@ -139,15 +141,13 @@
       if builddir==srcdir and inside the created Makefiles contains the srcdir as
       absolute path, rules for .ui files and .moc files won't apply.
       This occurs if "configure" will be a called with FQPN.
-      
 2002-02-22  Walter Tasin <tasin@kdevelop.org>
     * implementing a little usability feature:
       after project creation KDevelop loads automatically main.cpp or
       main.c (if present).
       This feature is now switchable (Options/KDevelop Setup).
-      
 2002-02-21  Roberto Raggi <raggi@cli.di.unipi.it>
-    * cppcodecompletion.cpp: no delay in comments any more! 
+    * cppcodecompletion.cpp: no delay in comments any more!
 2002-02-21  F@lk Brettschneider <falk@kdevelop.org>
     * updated kdevelop.kdevprj.save to current project structure
     * regenerated all Makefile.am's from kdevelop.kdevprj.save
@@ -155,12 +155,11 @@
     Attention: Do not hack in the paragraphs of Makefile.am's marked with "kdevelop will overwrite this part"!
     * some accel warnings removed
 2002-02-20  Walter Tasin <tasin@kdevelop.org>
-    * implementing additional project options 
+    * implementing additional project options
       [which are set inside configure.in(.in)]
       exceptions enabling, noopt-flag activation, misc tests for
       c/c++ terminal apps, enabling (f)lex and yacc/bison tests for configure,
       kde/qt version selection
-      
 2002-02-17  August Hörandl  <august.hoerandl@gmx.at>
     * cppcodecompletion.cpp: better regular expression for QT2/KDE2-codecompletion 
 2002-02-15  F@lk Brettschneider <falk@kdevelop.org>
@@ -183,15 +182,12 @@
 2002-02-11  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Daniel Koebbing <daniel.koebbing@westfleisch.de>
       for making basic code completion available on KDE 2 as well
-      
 2002-02-10  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Roberto Raggi <raggi@cli.di.unipi.it>
       for codecompletion and text expansion
-    
 2002-02-09  jbb <jbb@kdevelop.org>
     * bugfix: When using gdb 5.1+ QString's wern't dispalyed correctly
     * Removed hardwired (3) from manpages so user can select appropriate page.
-    
 2002-02-02  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: taskbar flickering on session loading
     * bugfix: .kdevses in TabPage mode saves views as 'attached', not as 'detached' any more
@@ -203,7 +199,6 @@
 2002-01-26  Walter Tasin <tasin@kdevelop.org>
     * applied patch from Klas Kalass <klas.kalass@gmx.de>
       makes addcxxflags working
-    
 2002-01-26  F@lk Brettschneider <falk@kdevelop.org>
    * bugfix (Qt3 only): QextMDI mode switch TabPage-->Childframe and TabPage-->Toplevel fixed, bug happened in KBear, too
    * stepped to version 2.1beta2 (only 2 days left until KDE tagging)
@@ -225,7 +220,7 @@
 2002-01-18  Walter Tasin <tasin@kdevelop.org>
     * bugfix: configure didn't recognize the argument given by the dialogbox the first
       time (only after reloading the project)
-    * bugfix: On project creation neither the configure argument --prefix 
+    * bugfix: On project creation neither the configure argument --prefix
       nor --enable-kde=no (for qextmdi projects) were not passed, unless 
       --with-qt-dir was set.
     * kdevelop compiled for KDE 3RC1/Beta2 creates kde/qt projects for QT 3 and KDE 3RC1/Beta2

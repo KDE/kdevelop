@@ -270,7 +270,8 @@ void CKDevelop::slotFilePrint()
   if (file.isEmpty())
     return;
 
-  KPrinter printer;
+  m_docViewManager->currentEditView()->print();
+/*  KPrinter printer;
 
   // QPrinter::setup() invokes a print dialog, configures the printer object,
   // and returns TRUE if the user wants to print or FALSE if not.
@@ -280,11 +281,18 @@ void CKDevelop::slotFilePrint()
     filesToPrint.append(file);
     printImpl(filesToPrint, &printer);
   }
+*/
 
   slotStatusMsg(i18n("Ready"));
 }
 
-
+// BACK to the roots
+//   printing will be almost done like kwrite and kate does!
+//   This is because the font isn't set correct in this way of printing.
+//   Even on default QPrinter::fullPage is FALSE, so no margin subtraction should be necessarry
+//   (greetings Walter 15.05.2002)
+//
+//
 // Prints all the files in the given list to the print device supplied
 // At this point the printer device must be completely setup
 //
@@ -2447,42 +2455,6 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
     }
   }
 }
-void CKDevelop::slotOptionsCreateSearchDatabase(){
-  bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
-  bool foundHtDig = CToolClass::searchInstProgram("htdig");
-  if(!foundGlimpse && !foundHtDig){
-    KMessageBox::error( 0,
-                        i18n("KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!"),
-                        i18n("Program not found!"));
-    return;
-  }
-
-  QString qtDocu = config->readEntry("doc_qt",QT_DOCDIR);
-  QString kdeDocu = config->readEntry("doc_kde",KDELIBS_DOCDIR);
-
-	QDialog parentDlg(this, "create_doc_database_parentdlg", true);
-  parentDlg.setCaption(i18n("Create Search Database..."));
-  CCreateDocDatabaseDlg embeddedDlg(&parentDlg,"create_doc_database_dlg",&shell_process,kdeDocu,qtDocu,foundGlimpse, foundHtDig, false);
-
-  KButtonBox bb( &parentDlg);
-  bb.addStretch();
-  QPushButton* ok_button  = bb.addButton( i18n("OK") );
-  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );
-  ok_button->setDefault(true);
-  connect(cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()));
-  connect(ok_button, SIGNAL(clicked()), &embeddedDlg, SLOT(slotOkClicked()));
-
-	QVBoxLayout* vbl = new QVBoxLayout(&parentDlg, 15, 6);
-	vbl->addWidget(&embeddedDlg);
-	vbl->addWidget(&bb);
-
-  if (parentDlg.exec()){
-    slotStatusMsg(i18n("Creating Search Database..."));
-  }
-
-  return;
-
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // BOOKMARK-Menu slots
@@ -2670,6 +2642,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   QString engine=config->readEntry("searchengine","htdig");
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
+  /*
   if(engine=="glimpse" && useGlimpse && !QFile::exists(locateLocal("appdata", ".glimpse_index")))
   {
     if (!useHtDig) {
@@ -2683,6 +2656,7 @@ void CKDevelop::slotHelpSearchText(QString text){
     }
     useGlimpse = false;
   }
+  */
   enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
@@ -2693,6 +2667,7 @@ void CKDevelop::slotHelpSearchText(QString text){
     search_process << "-U" << "-c" << "-y" << "'" + text +"'";
 
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    return;
   }
   if (useHtDig && engine=="htdig" )
   {
@@ -2702,7 +2677,12 @@ void CKDevelop::slotHelpSearchText(QString text){
                         encodeURL(text) +"\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " +
                         locateLocal("appdata", "search_result.html");
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+    return;
   }
+  
+  KMessageBox::error(this,
+  	i18n("KDevelop couldn't find the search database.\n Go to the options dialog to create one"),
+        i18n("Error"),0);
 }
 
 void CKDevelop::slotHelpSearchText()

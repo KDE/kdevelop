@@ -937,7 +937,7 @@ const char *HlLatexTag::checkHgl(const char *s) {
   return 0L;
 }
 
-// ---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 HlLatexChar::HlLatexChar(int attribute, int context)
   : HlItem(attribute, context) {
@@ -1097,10 +1097,11 @@ void Highlight::getItemDataList(ItemDataList &list, KConfig *config) {
 
   for (p = list.first(); p != 0L; p = list.next()) {
     s = config->readEntry(p->name);
+    p->size=p->printSize=10;
     if (!s.isEmpty()) {
-      sscanf(s,"%d,%X,%X,%d,%d,%d,%95[^,],%d,%47[^,]",
+      sscanf(s,"%d,%X,%X,%d,%d,%d,%95[^,],%d,%47[^,],%d",
         &p->defStyle,&col,&selCol,&p->bold,&p->italic,
-        &p->defFont,family,&p->size,charset);
+        &p->defFont,family,&p->size,charset, &p->printSize);
       p->col.setRgb(col);
       p->selCol.setRgb(selCol);
       p->family = family;
@@ -1114,9 +1115,9 @@ void Highlight::setItemDataList(ItemDataList &list, KConfig *config) {
   char s[200];
 
   for (p = list.first(); p != 0L; p = list.next()) {
-    sprintf(s,"%d,%X,%X,%d,%d,%d,%1.95s,%d,%1.47s",
+    sprintf(s,"%d,%X,%X,%d,%d,%d,%1.95s,%d,%1.47s,%d",
       p->defStyle,p->col.rgb(),p->selCol.rgb(),p->bold,p->italic,
-      p->defFont,p->family.data(),p->size,p->charset.data());
+      p->defFont,p->family.data(),p->size,p->charset.data(),p->printSize);
     config->writeEntry(p->name,s);
   }
 }
@@ -2172,7 +2173,7 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
   ItemDataList itemDataList;
   ItemData *itemData;
   int z;
-  QFont font;
+  QFont font, printFont;
   KCharsets * charsets = KGlobal::charsets();
 
   defaultStyleList.setAutoDelete(true);
@@ -2194,19 +2195,28 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
       font.setBold(itemData->bold);
       font.setItalic(itemData->italic);
     }
+
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
+      printFont=font;
+      printFont.setPointSize(defaultFont.printSize);
+
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
+      printFont=font;
+      printFont.setPointSize(itemData->printSize);
     }
+
     a[z].setFont(font);
+    a[z].setPrintFont(printFont);
   }
   for (; z < n; z++) {
     a[z].col = black;
     a[z].selCol = black;
     a[z].setFont(font);
+    a[z].setPrintFont(printFont);
   }
 }
 
@@ -2258,6 +2268,7 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
   QFont defaultFont = KGlobalSettings::fixedFont();
   font.family = config->readEntry("Family", defaultFont.family());
   font.size = config->readNumEntry("Size", defaultFont.pointSize());
+  font.printSize = config->readNumEntry("PrintSize", defaultFont.pointSize());
 #if QT_VERSION < 300
   // ### doesn't compile with Qt3
   font.charset = config->readEntry("Charset", QFont::encodingName(QFont::ISO_8859_1));//  "ISO-8859-1");
@@ -2283,6 +2294,7 @@ void HlManager::setDefaults(ItemStyleList &list, ItemFont &font) {
   config->setGroup("Default Font");
   config->writeEntry("Family",font.family);
   config->writeEntry("Size",font.size);
+  config->writeEntry("PrintSize",font.printSize);
   config->writeEntry("Charset",font.charset);
 
   emit changed();
@@ -2409,27 +2421,75 @@ FontChanger::FontChanger(QWidget *parent) :
   box->addWidget(charsetCombo);
 
   connect(charsetCombo,SIGNAL(activated(const QString&)),SLOT(charsetChanged(const QString&)));
+
+  label = new QLabel(i18n("Size (printing):"),this);
+  box->addWidget(label);
+  printSizeCombo = new QComboBox(true,this);
+  box->addWidget(printSizeCombo);
+
+  connect(printSizeCombo,SIGNAL(activated(int)),SLOT(printSizeChanged(int)));
+  for( int i=0; fontSizes[i] != 0; i++ ){
+    printSizeCombo->insertItem(QString().setNum(fontSizes[i]),i);
+  }
+
 }
 
 void FontChanger::setRef(ItemFont *f) {
-  int z;
+  int z, defaultZ=0;
+  bool found=false;
+  QFont defaultFont = KGlobalSettings::fixedFont();
 
   font = f;
   for (z = 0; z < (int) familyCombo->count(); z++) {
     if (font->family == familyCombo->text(z)) {
       familyCombo->setCurrentItem(z);
-      goto found;
+      found=true;
+      break;
     }
-  }
-  font->family = familyCombo->text(0);
-found:
 
+    if (defaultFont.family() == familyCombo->text(z))
+       defaultZ=z;
+  }
+
+  if (!found)
+  {
+    familyCombo->setCurrentItem(defaultZ);
+    font->family = familyCombo->text(defaultZ);
+  }
+
+  found=false; defaultZ=0;
   for (z = 0; fontSizes[z] > 0; z++) {
     if (font->size == fontSizes[z]) {
       sizeCombo->setCurrentItem(z);
+      found=true;
+      break;
+    }
+
+    if (defaultFont.pointSize() == fontSizes[z])
+      defaultZ=z;
+  }
+
+  if (!found)
+  {
+    font->size = fontSizes[defaultZ];
+    sizeCombo->setCurrentItem(defaultZ);
+  }
+
+  found=false;
+  for (z = 0; fontSizes[z] > 0; z++) {
+    if (font->printSize == fontSizes[z]) {
+      printSizeCombo->setCurrentItem(z);
+      found=true;
       break;
     }
   }
+
+  if (!found)
+  {
+    font->printSize = fontSizes[defaultZ];
+    printSizeCombo->setCurrentItem(defaultZ);
+  }
+
   displayCharsets();
 }
 
@@ -2441,7 +2501,12 @@ void FontChanger::familyChanged(const QString& family) {
 
 void FontChanger::sizeChanged(int n) {
 
-  font->size = fontSizes[n];;
+  font->size = fontSizes[n];
+}
+
+void FontChanger::printSizeChanged(int n) {
+
+  font->printSize = fontSizes[n];
 }
 
 void FontChanger::charsetChanged(const QString& charset) {
@@ -2511,7 +2576,7 @@ DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
 
   itemStyleList = styleList;
   changed(0);
-  
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   button  = bb->addButton( i18n("&OK") );
@@ -2600,6 +2665,7 @@ HighlightDialog::HighlightDialog(HlManager *hlManager,
   fontChanger = new FontChanger(groupbox);
 
 
+
   hlDataList = highlightDataList;
   hlChanged(hlNumber);
   KButtonBox *bb = new KButtonBox( this );
@@ -2642,14 +2708,20 @@ void HighlightDialog::itemChanged(int z) {
 
   styleDefault->setChecked(itemData->defStyle);
   styleChanger->setRef(itemData);
+  styleChanger->setEnabled(!itemData->defStyle);
 
   fontDefault->setChecked(itemData->defFont);
   fontChanger->setRef(itemData);
+  fontChanger->setEnabled(!itemData->defFont);
+
 }
 
 void HighlightDialog::changed() {
+
   itemData->defStyle = styleDefault->isChecked();
+  styleChanger->setEnabled(!itemData->defStyle);
   itemData->defFont = fontDefault->isChecked();
+  fontChanger->setEnabled(!itemData->defFont);
 }
 
 void HighlightDialog::writeback() {
