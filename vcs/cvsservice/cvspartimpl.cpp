@@ -914,13 +914,13 @@ void CvsServicePartImpl::slotDiffFinished( bool normalExit, int exitStatus )
 
 void CvsServicePartImpl::slotCheckoutFinished( bool exitStatus, int )
 {
-    kdDebug() << "CvsServicePartImpl::slotCheckoutFinished(): job ended with status == "
+    kdDebug(9006) << "CvsServicePartImpl::slotCheckoutFinished(): job ended with status == "
         << exitStatus << endl;
     // Return a null string if the operation was not succesfull
     if (!exitStatus)
         modulePath = QString::null;
 
-    kdDebug() << "   I'll emit modulePath == " << modulePath << endl;
+    kdDebug(9006) << "   I'll emit modulePath == " << modulePath << endl;
 
     emit checkoutFinished( modulePath );
 }
@@ -930,7 +930,7 @@ void CvsServicePartImpl::slotCheckoutFinished( bool exitStatus, int )
 void CvsServicePartImpl::slotJobFinished( bool /*exitStatus*/, int exitCode )
 {
     // Return a null string if the operation was not succesfull
-    kdDebug() << "CvsServicePartImpl::slotJobFinished(): job ended with code == "
+    kdDebug(9006) << "CvsServicePartImpl::slotJobFinished(): job ended with code == "
         << exitCode << endl;
 /*
     // Operation has been successfull
@@ -946,7 +946,7 @@ void CvsServicePartImpl::slotJobFinished( bool /*exitStatus*/, int exitCode )
 
 void CvsServicePartImpl::slotProjectOpened()
 {
-    kdDebug() << "CvsServicePartImpl::slotProjectOpened(): setting work directory to "
+    kdDebug(9006) << "CvsServicePartImpl::slotProjectOpened(): setting work directory to "
         << projectDirectory() << endl;
 
     if ( m_repository )
