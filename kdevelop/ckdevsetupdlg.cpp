@@ -35,6 +35,9 @@
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qgrid.h>
+#include <qvbox.h>
+#include <qvbuttongroup.h>
+#include <qradiobutton.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -59,6 +62,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name ) 
   addDocTab();
   addDebuggerTab();
   addQT2Tab();
+  addUserInterfaceTab();
 
 //  connect( this, SIGNAL(defaultButtonPressed()), SLOT(slotDefault()) );
   connect( this, SIGNAL(okClicked()), SLOT(slotOkClicked()) );
@@ -677,6 +681,59 @@ void CKDevSetupDlg::addQT2Tab()
   QWhatsThis::add(ppath, ppathMsg);
 }
 
+//
+//************************** QT-2 directory select *************************
+//
+void CKDevSetupDlg::addUserInterfaceTab()
+{
+  QFrame* UserInterfacePage = addPage(i18n("user interface"),i18n("User interface"),
+  KGlobal::instance()->iconLoader()->loadIcon( "window_list", KIcon::NoGroup, KIcon::SizeMedium ));
+
+  config->setGroup("General Options");
+  int mdiMode = config->readNumEntry("MDI mode", QextMdi::ChildframeMode);
+
+  QGridLayout* grid = new QGridLayout(UserInterfacePage,3,1,15,7);
+  QLabel* label = new QLabel(i18n("What kind of user interface do you want?"),UserInterfacePage);
+  grid->addWidget(label,0,0);
+
+  QVButtonGroup* bg = new QVButtonGroup(UserInterfacePage);
+  grid->addWidget(bg,1,0);
+  QRadioButton* childframe = new QRadioButton( i18n("Childframe Mode"), bg );
+  QRadioButton* toplevel = new QRadioButton( i18n("Toplevel Mode"), bg );
+  QRadioButton* tabpage = new QRadioButton( i18n("Tab Page Mode"), bg );
+  childframe->setChecked(false);
+  toplevel->setChecked(false);
+  tabpage->setChecked(false);
+
+  switch (mdiMode) {
+  case QextMdi::ToplevelMode:
+    toplevel->setChecked(true);
+    break;
+  case QextMdi::ChildframeMode:
+    childframe->setChecked(true);
+    break;
+  case QextMdi::TabPageMode:
+    tabpage->setChecked(true);
+    break;
+  default:
+    break;
+  }
+
+  bg->setFrameStyle(QFrame::Raised|QFrame::Box);
+  bg->setMargin(8);
+  bg->setFixedHeight(bg->sizeHint().height());
+  connect(bg, SIGNAL(clicked(int)), SLOT(slotUserInterfaceChosen(int)));
+
+  grid->setRowStretch(2,1);
+
+  QString cfTxt = i18n("All tool views are initially docked to the mainframe.\nEditor and browser views will live within a view area of the mainframe.");
+  QWhatsThis::add(childframe, cfTxt);
+  QString tlTxt = i18n("All editor, browser and tool views will be toplevel windows (directly on desktop).");
+  QWhatsThis::add(toplevel, tlTxt);
+  QString tpTxt = i18n("All tool views are initially docked to the mainframe.\nEditor and browser views will be stacked in a tab window.");
+  QWhatsThis::add(tabpage, tpTxt);
+}
+
 void CKDevSetupDlg::slotDefault(){
 
   // General tab
@@ -928,4 +985,24 @@ void CKDevSetupDlg::slotPPathClicked(){
   }
 }
 // ---
+
+void CKDevSetupDlg::slotUserInterfaceChosen(int chosenUIMode)
+{
+  config->setGroup("General Options");
+
+  switch (chosenUIMode) {
+  case 0:
+    config->writeEntry("MDI mode", QextMdi::ChildframeMode);
+    break;
+  case 1:
+    config->writeEntry("MDI mode", QextMdi::ToplevelMode);
+    break;
+  case 2:
+    config->writeEntry("MDI mode", QextMdi::TabPageMode);
+    break;
+  default:
+    break;
+  }
+}
+
 #include "ckdevsetupdlg.moc"

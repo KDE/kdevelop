@@ -904,7 +904,7 @@ void CKDevelop::readOptions()
   }
 
    // restore MDI mode
-   config->setGroup("MDI");
+   config->setGroup("General Options");
    int mdiModeNum = config->readNumEntry( "MDI mode", (int)QextMdi::ChildframeMode);
    QextMdi::MdiMode mdiMode;
    mdiMode = (QextMdi::MdiMode)mdiModeNum;

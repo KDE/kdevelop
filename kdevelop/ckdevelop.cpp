@@ -2025,6 +2025,24 @@ void CKDevelop::slotOptionsKDevelop(){
   // This might have changed
   initDebugger();
 
+  // the MDI mode might have changed, too
+  config->setGroup("General Options");
+  int mdiMode = config->readNumEntry("MDI mode", QextMdi::ChildframeMode);
+  switch (mdiMode) {
+  case QextMdi::ToplevelMode:
+    switchToToplevelMode();
+    break;
+  case QextMdi::ChildframeMode:
+    switchToChildframeMode();
+    break;
+  case QextMdi::TabPageMode:
+    switchToTabPageMode();
+    break;
+  default:
+    break;
+  }
+
+  // other stuff that could have changed as well
   accel->readSettings();
   setKeyAccel();
   slotStatusMsg(i18n("Ready."));
@@ -3829,6 +3847,7 @@ void CKDevelop::fillWindowMenu()
 {
   QextMdiMainFrm::fillWindowMenu();
   windowMenu()->insertItem(i18n("New &Window"), this, SLOT(slotCreateNewViewWindow()), 0, -1, 0);
+  windowMenu()->removeItemAt(5);
 }
 
 /**

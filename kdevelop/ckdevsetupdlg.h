@@ -53,6 +53,7 @@ private:
   void addDocTab();
   void addDebuggerTab();
   void addQT2Tab();
+  void addUserInterfaceTab();
 
  private slots:
   void slotOkClicked();
@@ -66,6 +67,7 @@ private:
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
 	void slotPPathClicked();
 // ---
+  void slotUserInterfaceChosen(int chosenUIMode);
 
 private:
   bool wantsTreeRefresh;
