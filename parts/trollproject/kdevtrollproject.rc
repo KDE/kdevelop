@@ -3,17 +3,26 @@
 <MenuBar>
   <Menu name="build" >
     <Action name="build_compilefile" />
-    <Separator/>
     <Action name="build_build_project" />
     <Action name="build_rebuild_project" />
+    <Action name="build_execute_project" />
     <Action name="build_clean_project" />
     <Separator/>
-    <Action name="build_execute_project" />
+    <Action name="build_build_target" />
+    <Action name="build_rebuild_target" />
+    <Action name="build_execute_target" />
+    <Action name="build_clean_target" />
   </Menu>
 </MenuBar>
 <ToolBar name="buildToolBar">
+    <Action name="build_compilefile" />
+    <Action name="build_build_target" />
+    <Action name="build_rebuild_target" />
+    <Action name="build_execute_target" />
+    <Separator/>
     <Action name="build_build_project" />
+    <Action name="build_rebuild_project" />
     <Action name="build_execute_project" />
+    <Action name="build_clean_project" />
 </ToolBar>
 </kpartgui>
-
