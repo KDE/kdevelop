@@ -48,4 +48,14 @@ void KDevLanguageSupport::addAttribute(const QString &/*className*/)
 {
 }
 
+QStringList KDevLanguageSupport::subclassWidget(QString formName)
+{
+    return QStringList();
+}
+
+QStringList KDevLanguageSupport::updateWidget(QString formName, QString fileName)
+{
+    return QStringList();
+}
+
 #include "kdevlanguagesupport.moc"

@@ -13,7 +13,7 @@
 class KDevLanguageSupport : public KDevPlugin
 {
     Q_OBJECT
-    
+
 public:
 
     enum Features {
@@ -21,7 +21,7 @@ public:
         Namespaces=16, Signals=32, Slots=64, Declarations=128,   /* features of the language itself       */
         NewClass=512, AddMethod=1024, AddAttribute=2048          /* features of the language support part */
     };
-    
+
     KDevLanguageSupport( QObject *parent, const char *name );
     ~KDevLanguageSupport();
 
@@ -31,7 +31,7 @@ public:
      * and which not.
      */
     virtual Features features();
-    /** 
+    /**
      * Returns a typical filter list for the support language
      * should be configurable in the languagesupport dialog
      * example "*.cpp,*.h,*.c";
@@ -71,6 +71,19 @@ public:
      * method to the sources.
      */
     virtual void addAttribute(const QString &className);
+    /**
+     * Opens an "Subclass Widget" dialog for given Qt .ui file (formName)
+     * and propmts to implement it's slots.
+     * Returns a list of newly created files.
+    */
+    virtual QStringList subclassWidget(QString formName);
+    /**
+     * Opens and "Update Widget" dialog for given Qt .ui file (formName)
+     * and prompts to add missing slot implementations
+     * in the subclass located in fileName.
+     * Returns a list of newly created files.
+    */
+    virtual QStringList updateWidget(QString formName, QString fileName);
 
 
 signals:
