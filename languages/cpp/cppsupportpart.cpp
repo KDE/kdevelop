@@ -1027,7 +1027,7 @@ void CppSupportPart::slotParseFiles()
 					} 
 					else 
 					{
-						kdDebug(9007) << "newly parsing..." << endl;
+						kdDebug(9007) << "newly parsing: " << absFilePath << endl;
 						m_driver->parseFile( absFilePath );
 					}
 			
