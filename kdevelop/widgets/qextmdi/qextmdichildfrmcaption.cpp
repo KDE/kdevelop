@@ -113,9 +113,16 @@ void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 
 void QextMdiChildFrmCaption::setActive(bool bActive)
 {
-	if(m_bActive==bActive)return;
-	m_bActive=bActive;
-	repaint(FALSE);
+   if( m_bActive == bActive)
+      return;
+	
+	//    Ensure the icon's pixmap has the correct bg color
+   m_pParent->m_pIcon->setBackgroundColor(bActive
+   ? m_pParent->m_pManager->m_captionActiveBackColor
+   : m_pParent->m_pManager->m_captionInactiveBackColor);
+	
+   m_bActive = bActive;
+   repaint( FALSE);
 }
 
 //=============== setCaption ===============//
