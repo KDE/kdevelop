@@ -2047,10 +2047,7 @@ void CKAppWizard::slotDefaultClicked() {
 void CKAppWizard::slotProjectnameEntry(const QString&_projectname)
 {
   if(_projectname.isEmpty())
-        {
         setNextEnabled( page1, false );
-        return;
-        }
   else
         setNextEnabled( page1, true );
   int position = nameline->cursorPosition();

@@ -42,6 +42,7 @@
 #include <kapp.h>
 #include <kcursor.h>
 #include <kcombobox.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <khtmlview.h>
 #include <kmenubar.h>
@@ -164,7 +165,7 @@ void CKDevelop::initView()
   act_outbuffer_len=0;
   prj = 0;
 
-  QFont font("Fixed",10);
+//  QFont font("Fixed",10);
 
   ////////////////////////
   // Main splitter
@@ -215,7 +216,8 @@ void CKDevelop::initView()
   header_widget = new CEditWidget(s_tab_view,"header");
   header_widget->setFocusPolicy(QWidget::StrongFocus);
 
-  header_widget->setFont(font);
+//  header_widget->setFont(font);
+  header_widget->setFont(KGlobalSettings::fixedFont());
   header_widget->setName(i18n("Untitled.h"));
   config->setGroup("KWrite Options");
   header_widget->readConfig(config);
@@ -225,7 +227,8 @@ void CKDevelop::initView()
   edit_widget=header_widget;
   cpp_widget = new CEditWidget(s_tab_view,"cpp");
   cpp_widget->setFocusPolicy(QWidget::StrongFocus);
-  cpp_widget->setFont(font);
+//  cpp_widget->setFont(font);
+  cpp_widget->setFont(KGlobalSettings::fixedFont());
   cpp_widget->setName(i18n("Untitled.cpp"));
   config->setGroup("KWrite Options");
   cpp_widget->readConfig(config);
@@ -1291,7 +1294,7 @@ void CKDevelop::initConnections(){
 
 void CKDevelop::completeStartup(bool witharg)
 {
-//  initProject(witharg);
+  initProject(witharg);
 
   if (start_logo)
     delete start_logo;
@@ -1316,20 +1319,13 @@ void CKDevelop::initProject(bool witharg)
   {
     if (!lastShutdownOK)
     {
-      bLastProject = (QMessageBox::warning(this,
-                                    i18n("KDevelop failed to shutdown correctly previously"),
- 	                                  i18n( "KDevelop failed to shutdown correctly previously"
-  	                                      "\nWould you like to start with the last loaded project?"),
-                                    i18n("Yes"), i18n("No"), 0,1) == 0);
-
-
-//  	  if ( KMessageBox::No == KMessageBox::questionYesNo(0,
-//  	                            i18n( "KDevelop failed to shutdown correctly previously"
-//  	                                  "\nWould you like to start with the last loaded project?"),
-//            	                  i18n("KDevelop failed to shutdown correctly previously")))
-//      {
-//  	    bLastProject = false;
-//  	  }
+      if ( KMessageBox::No == KMessageBox::questionYesNo(this,
+  	                            i18n( "KDevelop failed to shutdown correctly previously"
+  	                                  "\nWould you like to start with the last loaded project?"),
+            	                  i18n("KDevelop failed to shutdown correctly previously")))
+      {
+  	    bLastProject = false;
+  	  }
     }
 
     if (bLastProject)

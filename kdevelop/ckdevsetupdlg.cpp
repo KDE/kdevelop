@@ -266,67 +266,78 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   grid1 = new QGridLayout(w2,2,1,15,7);
 
   w21 = new KKeyChooser ( &keyMap, w2, true);
-  //w21->setGeometry(15,10,395,320);
   grid1->addWidget( w21,0,0);
 
   // ****************** the Documentation Tab ********************
   w = new QWidget( this, "documentaion" );
+  grid1 = new QGridLayout(w,2,1,15,7);
+
   config->setGroup("Doc_Location");
-  
+
   QWhatsThis::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
 				"Documentation for the Documentation Browser.\n"
 				"QT usually comes with complete Documentation\n"
 				"whereas for KDE you can create the Documentation\n"
 				"easily by pressing the Update button below."));
-	
-  qt_edit = new QLineEdit( w, "qt_edit" );
-  qt_edit->setGeometry( 170, 40, 190, 30 );
+
+  QButtonGroup* docGroup;
+
+  docGroup = new QButtonGroup( w, "docGroup" );
+  grid1->addWidget(docGroup,0,0);
+  docGroup->setFrameStyle( 49 );
+  docGroup->setTitle(i18n("Directories"));
+  docGroup->setAlignment( 1 );
+  docGroup->lower();
+  grid2 = new QGridLayout(docGroup,2,3,15,7);
+
+  qt_edit = new QLineEdit( docGroup, "qt_edit" );
+  grid2->addWidget(qt_edit,0,1);
   qt_doc_path= config->readEntry("doc_qt", QT_DOCDIR);
   qt_edit->setText(qt_doc_path);
   qt_edit->setMaxLength( 32767 );
-  
+
   QPushButton* qt_button;
-  qt_button = new QPushButton( w, "qt_button" );
-  qt_button->setGeometry( 370, 40, 30, 30 );
+  qt_button = new QPushButton( docGroup, "qt_button" );
+  grid2->addWidget(qt_button,0,2);
   QPixmap pix = BarIcon("open");
   qt_button->setPixmap(pix);
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
-  
+
   QLabel* qt_label;
-  qt_label = new QLabel( w, "qt_label" );
-  qt_label->setGeometry( 20, 40, 140, 30 );
+  qt_label = new QLabel( docGroup, "qt_label" );
+  grid2->addWidget(qt_label,0,0);
   qt_label->setText( i18n("Qt-Library-Doc:") );
-  
+
   QString qtdocMsg = i18n("Enter the path to your QT-Documentation\n"
 				 "here. To access the path easier please\n"
 				 "press the pushbutton on the right to change\n"
 				 "directories.\n\n"
 				 "Usually the QT-Documentation is\n"
-				 "located in <i><blue>$QTDIR/html</i>");	
+				 "located in <i><blue>$QTDIR/html</i>");
 
   QWhatsThis::add(qt_edit, qtdocMsg);
   QWhatsThis::add(qt_button, qtdocMsg);
   QWhatsThis::add(qt_label, qtdocMsg);
 
-  kde_edit = new QLineEdit( w, "kde_edit");
-  kde_edit->setGeometry( 170, 90, 190, 30 );
+  kde_edit = new QLineEdit( docGroup, "kde_edit");
+  grid2->addWidget(kde_edit,1,1);
   kde_doc_path=config->readEntry("doc_kde", KDELIBS_DOCDIR);
   kde_edit->setText(kde_doc_path);
   kde_edit->setMaxLength( 32767 );
   kde_edit->setEchoMode( QLineEdit::Normal );
   kde_edit->setFrame( TRUE );
-  
+
   QPushButton* kde_button;
-  kde_button = new QPushButton( w, "kde_button" );
-  kde_button->setGeometry( 370, 90, 30, 30 );
+  kde_button = new QPushButton(  docGroup, "kde_button" );
+  grid2->addWidget(kde_button,1,2);
   kde_button->setPixmap(pix);
   connect(kde_button,SIGNAL(clicked()),SLOT(slotKDEClicked()));
-  
+
   QLabel* kde_label;
-  kde_label = new QLabel( w, "kde_label" );
-  kde_label->setGeometry( 20, 90, 140, 30 );
+  kde_label = new QLabel(  docGroup, "kde_label" );
+  grid2->addWidget(kde_label,1,0);
   kde_label->setText( i18n("KDE-Libraries-Doc:") );
-  
+
   QString kdedocMsg = i18n("Enter the path to your KDE-Documentation\n"
 				 "here. To access the path easier please\n"
 				 "press the pushbutton on the right to change\n"
@@ -338,21 +349,30 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(kde_button, kdedocMsg);
   QWhatsThis::add(kde_label, kdedocMsg);
 
+
+
+  QButtonGroup* docOptionsGroup;
+  docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
+  grid1->addWidget(docOptionsGroup,1,0);
+  docOptionsGroup->setFrameStyle( 49 );
+  docOptionsGroup->setTitle(i18n("Options"));
+  docOptionsGroup->setAlignment( 1 );
+  grid2 = new QGridLayout(docOptionsGroup,3,2,15,7);
   QLabel* update_label;
-  update_label = new QLabel( w, "update_label" );
-  update_label->setGeometry( 20, 190, 260, 30 );
+  update_label = new QLabel( docOptionsGroup, "update_label" );
+  grid2->addWidget(update_label,0,0);
   update_label->setText(i18n("Update KDE-Documentation :"));
   update_label->setAlignment( 289 );
   update_label->setMargin( -1 );
-  
+
   QPushButton* update_button;
-  update_button = new QPushButton( w, "update_button" );
-  update_button->setGeometry( 290, 190, 110, 30 );
+  update_button = new QPushButton( docOptionsGroup, "update_button" );
+  grid2->addWidget(update_button,0,1);
   connect( update_button, SIGNAL(clicked()), SLOT(slotKDEUpdateReq()) );
   update_button->setText(i18n("Update..."));
   update_button->setAutoRepeat( FALSE );
   update_button->setAutoResize( FALSE );
-  
+
   QString updateMsg = i18n("Update KDE-Documentation\n\n"
 				     "This lets you create or update the\n"
 				     "HTML-documentation of the KDE-libs.\n"
@@ -367,20 +387,20 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(update_button, updateMsg);
 
   QLabel* create_label;
-  create_label = new QLabel( w, "create_label" );
-  create_label->setGeometry( 20, 230, 260, 30 );
+  create_label = new QLabel( docOptionsGroup, "create_label" );
+  grid2->addWidget(create_label,1,0);
   create_label->setText(i18n("Create Search Database :") );
   create_label->setAlignment( 289 );
   create_label->setMargin( -1 );
 
-  QPushButton* create_button;	
-  create_button = new QPushButton( w, "create_button" );
-  create_button->setGeometry( 290, 230, 110, 30 );
+  QPushButton* create_button;
+  create_button = new QPushButton( docOptionsGroup, "create_button" );
+  grid2->addWidget(create_button,1,1);
   connect( create_button, SIGNAL(clicked()),parent, SLOT(slotOptionsCreateSearchDatabase()) );
   create_button->setText(i18n("Create..."));
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
-  
+
   QString createMsg = i18n("Create Search Database\n\n"
 						     "This will create a search database for glimpse\n"
 						     "which will be used to look up marked text in\n"
@@ -393,8 +413,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(create_button, createMsg);
 
 #ifdef WITH_KDOC2
-  kdocCheck = new QCheckBox( w, "kdocCheck" );
-  kdocCheck->setGeometry( 20, 270, 350, 30 );
+  kdocCheck = new QCheckBox( docOptionsGroup, "kdocCheck" );
+  grid2->addWidget(kdocCheck,2,0);
   kdocCheck->setText(i18n("Create also KDOC-reference of your project"));
   kdocCheck->setAutoRepeat( FALSE );
   kdocCheck->setAutoResize( FALSE );
@@ -411,34 +431,6 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "directory."));
 #endif
 
-
-  QButtonGroup* docOptionsGroup;
-  docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
-#ifdef WITH_KDOC2
-  docOptionsGroup->setGeometry( 10, 160, 400, 150 );
-#else
-  docOptionsGroup->setGeometry( 10, 160, 400, 110 );
-#endif
-  docOptionsGroup->setFrameStyle( 49 );
-  docOptionsGroup->setTitle(i18n("Options"));
-  docOptionsGroup->setAlignment( 1 );
-  docOptionsGroup->insert( update_button );
-  docOptionsGroup->insert( create_button );
-#ifdef WITH_KDOC2
-  docOptionsGroup->insert( kdocCheck );
-#endif
-  docOptionsGroup->lower();
-  
-  QButtonGroup* docGroup;
-  docGroup = new QButtonGroup( w, "docGroup" );
-  docGroup->setGeometry( 10, 10, 400, 140 );
-  docGroup->setFrameStyle( 49 );
-  docGroup->setTitle(i18n("Directories"));
-  docGroup->setAlignment( 1 );
-  docGroup->insert( qt_button );
-  docGroup->insert( kde_button );
-  docGroup->lower();
-  
   // ****************** the Debugger Tab ***************************
 
   config->setGroup("Debug");
@@ -567,29 +559,27 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 //************************** QT-2 directory select *************************//
   w4 = new QWidget( this, "pat" );
   config->setGroup("QT2");
+  grid1 = new QGridLayout(w4,2,1,15,7);
 
   QGroupBox* kde2_box= new QGroupBox(w4,"NoName");
-  kde2_box->setGeometry(10,10,400,190);
-  kde2_box->setMinimumSize(0,0);
+  grid1->addWidget(kde2_box,0,0);
   kde2_box->setTitle(i18n("Qt 2.x / KDE path"));
+  grid2 = new QGridLayout(kde2_box,4,2,15,7);
 
-  QLabel* qt2= new QLabel(w4,"NoName");
-  qt2->setGeometry(30,40,300,30);
-  qt2->setMinimumSize(0,0);
+  QLabel* qt2= new QLabel(kde2_box,"NoName");
   qt2->setText(i18n("Qt 2.x directory:"));
+  grid2->addWidget(qt2,0,0);
 
-  qt2_edit= new QLineEdit(w4,"NoName");
-  qt2_edit->setGeometry(30,70,300,30);
-  qt2_edit->setMinimumSize(0,0);
+  qt2_edit= new QLineEdit(kde2_box,"NoName");
   qt2_edit->setMaxLength( 32767 );
+  grid2->addWidget(qt2_edit,1,0);
 
   QString qt2_path= config->readEntry("qt2dir");
   qt2_edit->setText(qt2_path);
 
-  QPushButton* qt2_button= new QPushButton(w4,"NoName");
-  qt2_button->setGeometry(340,70,30,30);
-  qt2_button->setMinimumSize(0,0);
+  QPushButton* qt2_button= new QPushButton(kde2_box,"NoName");
   qt2_button->setPixmap(pix);
+  grid2->addWidget(qt2_button,1,1);
 
   QString qt2Msg = i18n("Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0");
   QWhatsThis::add(qt2_edit, qt2Msg);
@@ -597,22 +587,20 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(qt2, qt2Msg);
 
 
-  QLabel* kde2= new QLabel(w4,"NoName");
-  kde2->setGeometry(30,110,300,30);
-  kde2->setMinimumSize(0,0);
+  QLabel* kde2= new QLabel(kde2_box,"NoName");
   kde2->setText(i18n("KDE 2.x directory:"));
+  grid2->addWidget(kde2,2,0);
 
-  kde2_edit= new QLineEdit(w4,"NoName");
-  kde2_edit->setGeometry(30,150,300,30);
-  kde2_edit->setMinimumSize(0,0);
+  kde2_edit= new QLineEdit(kde2_box,"NoName");
+  grid2->addWidget(kde2_edit,3,0);
 
   QString kde2_path= config->readEntry("kde2dir");
   kde2_edit->setText(kde2_path);
 
-  QPushButton* kde2_button= new QPushButton(w4,"NoName");
-  kde2_button->setGeometry(340,150,30,30);
-  kde2_button->setMinimumSize(0,0);
-	kde2_button->setPixmap(pix);
+
+  QPushButton* kde2_button= new QPushButton(kde2_box,"NoName");
+  kde2_button->setPixmap(pix);
+ grid2->addWidget(kde2_button,3,1);
 
   QString kde2Msg = i18n("Set the root directory path leading to your KDE 2 includes/libraries, e.g. /opt/kde2");
   QWhatsThis::add(kde2_edit, kde2Msg);
@@ -623,28 +611,25 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   connect(kde2_button, SIGNAL(clicked()),SLOT(slotKDE2Clicked()));
 
   QGroupBox* ppath_box= new QGroupBox(w4,"NoName");
-  ppath_box->setGeometry(10,210,400,100);
-  ppath_box->setMinimumSize(0,0);
+  grid1->addWidget( ppath_box,1,0);
+  grid2 = new QGridLayout(ppath_box,2,2,15,7);
   ppath_box->setTitle(i18n("Default Project Path"));
 
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
   config->setGroup("General Options");
-  QLabel* ppath= new QLabel(w4,"NoName");
-  ppath->setGeometry(30,230,300,30);
-  ppath->setMinimumSize(0,0);
+  QLabel* ppath= new QLabel(ppath_box,"NoName");
   ppath->setText(i18n("Project Path:"));
+  grid2->addWidget(ppath,0,0);
 
-  ppath_edit= new QLineEdit(w4,"NoName");
-  ppath_edit->setGeometry(30,260,300,30);
-  ppath_edit->setMinimumSize(0,0);
+  ppath_edit= new QLineEdit(ppath_box,"NoName");
+  grid2->addWidget(ppath_edit,1,0);
 
   QString project_path= config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
   ppath_edit->setText(project_path);
 
-  QPushButton* ppath_button= new QPushButton(w4,"NoName");
-  ppath_button->setGeometry(340,260,30,30);
-  ppath_button->setMinimumSize(0,0);
-	ppath_button->setPixmap(pix);
+  QPushButton* ppath_button= new QPushButton(ppath_box,"NoName");
+ppath_button->setPixmap(pix);
+ grid2->addWidget(ppath_button,1,1);
   connect(ppath_button, SIGNAL(clicked()),SLOT(slotPPathClicked()));
 // ---
 

@@ -503,11 +503,9 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
   //+++++++++ TAB: Problem description+++++++++++++++++++++++++++++++++++++
   QWidget* w3=new QWidget(this,"Problem description");
   QWhatsThis::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
-
+   grid1 = new QGridLayout(w3,15,1,15,7);
 	description_mledit = new QMultiLineEdit( w3, "description_mledit" );
-	description_mledit->setGeometry( 20, 30, 420, 130 );
-	description_mledit->setMinimumSize( 0, 0 );
-	description_mledit->setMaximumSize( 32767, 32767 );
+                grid1->addMultiCellWidget(description_mledit,1,5,0,0);
 	description_mledit->setFocusPolicy( QWidget::StrongFocus );
 	description_mledit->setBackgroundMode( QWidget::PaletteBase );
 	description_mledit->setFontPropagation( QWidget::SameFont );
@@ -518,9 +516,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
 
 	QLabel* qtarch_description_label;
 	qtarch_description_label = new QLabel( w3, "description_label" );
-	qtarch_description_label->setGeometry( 20, 00, 360, 30 );
-	qtarch_description_label->setMinimumSize( 0, 0 );
-	qtarch_description_label->setMaximumSize( 32767, 32767 );
+                grid1->addWidget(qtarch_description_label,0,0);
 	qtarch_description_label->setFocusPolicy( QWidget::NoFocus );
 	qtarch_description_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_description_label->setFontPropagation( QWidget::NoChildren );
@@ -531,9 +527,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
 
 	QLabel* qtarch_repeat_label;
 	qtarch_repeat_label = new QLabel( w3, "repeat_label" );
-	qtarch_repeat_label->setGeometry( 20, 160, 360, 30 );
-	qtarch_repeat_label->setMinimumSize( 0, 0 );
-	qtarch_repeat_label->setMaximumSize( 32767, 32767 );
+                grid1->addWidget(qtarch_repeat_label,6,0);
 	qtarch_repeat_label->setFocusPolicy( QWidget::NoFocus );
 	qtarch_repeat_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_repeat_label->setFontPropagation( QWidget::NoChildren );
@@ -543,9 +537,8 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
 	qtarch_repeat_label->setMargin( -1 );
 
 	repeat_mledit = new QMultiLineEdit( w3, "repeat_mledit" );
-	repeat_mledit->setGeometry( 20, 190, 420, 70 );
-	repeat_mledit->setMinimumSize( 0, 0 );
-	repeat_mledit->setMaximumSize( 32767, 32767 );
+                grid1->addMultiCellWidget(repeat_mledit,7,10,0,0);
+
 	repeat_mledit->setFocusPolicy( QWidget::StrongFocus );
 	repeat_mledit->setBackgroundMode( QWidget::PaletteBase );
 	repeat_mledit->setFontPropagation( QWidget::SameFont );
@@ -556,9 +549,8 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
 
 	QLabel* qtarch_fix_label;
 	qtarch_fix_label = new QLabel( w3, "fix_label" );
-	qtarch_fix_label->setGeometry( 20, 260, 360, 30 );
-	qtarch_fix_label->setMinimumSize( 0, 0 );
-	qtarch_fix_label->setMaximumSize( 32767, 32767 );
+                grid1->addWidget(qtarch_fix_label,11,0);
+
 	qtarch_fix_label->setFocusPolicy( QWidget::NoFocus );
 	qtarch_fix_label->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_fix_label->setFontPropagation( QWidget::NoChildren );
@@ -568,9 +560,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
 	qtarch_fix_label->setMargin( -1 );
 
 	fix_mledit = new QMultiLineEdit( w3, "fix_mledit" );
-	fix_mledit->setGeometry( 20, 290, 420, 80 );
-	fix_mledit->setMinimumSize( 0, 0 );
-	fix_mledit->setMaximumSize( 32767, 32767 );
+                grid1->addMultiCellWidget(fix_mledit,12,14,0,0);
 	fix_mledit->setFocusPolicy( QWidget::StrongFocus );
 	fix_mledit->setBackgroundMode( QWidget::PaletteBase );
 	fix_mledit->setFontPropagation( QWidget::SameFont );
@@ -580,7 +570,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent,
 	fix_mledit->setOverwriteMode( FALSE );
 
 	addTab(w3,i18n("Problem description"));
-	
+
 	// **************set the button*********************
 	setOkButton(0);
   setDefaultButton(i18n("Send E-Mail"));

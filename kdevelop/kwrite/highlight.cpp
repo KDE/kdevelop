@@ -2286,7 +2286,7 @@ FontChanger::FontChanger(QWidget *parent, int x, int y) :
   label = new QLabel(sizeCombo,i18n("Size:"),parent);
   connect(sizeCombo,SIGNAL(activated(int)),SLOT(sizeChanged(int)));
   for( int i=0; fontSizes[i] != 0; i++ ){
-    sizeCombo->insertItem(QString().setNum(fontSizes[i]));
+    sizeCombo->insertItem(QString().setNum(fontSizes[i]),i);
   }
 
   r.moveBy(0,25);
@@ -2354,12 +2354,12 @@ void FontChanger::displayCharsets() {
   charsetCombo->clear();
   for(z = 0; z < (int) lst.count(); z++) {
     charset = *lst.at(z);
-    charsetCombo->insertItem(charset);
+    charsetCombo->insertItem(charset,z);
     if (/*(QString)*/ font->charset == charset)
       charsetCombo->setCurrentItem(z);
   }
   charset = "any";
-  charsetCombo->insertItem(charset);
+  charsetCombo->insertItem(charset,z);
   if (/*(QString)*/ font->charset == charset)
     charsetCombo->setCurrentItem(z);
 }
@@ -2391,7 +2391,7 @@ DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
   connect(styleCombo,SIGNAL(activated(int)),this,SLOT(changed(int)));
 
   for (z = 0; z < hlManager->defaultStyles(); z++) {
-    styleCombo->insertItem(i18n(hlManager->defaultStyleName(z)));
+    styleCombo->insertItem(i18n(hlManager->defaultStyleName(z)),z);
   }
 
   group = new QGroupBox(i18n("Default Font"),this);
@@ -2442,7 +2442,7 @@ HighlightDialog::HighlightDialog(HlManager *hlManager,
   r.moveBy(0,25);
   hlCombo->setGeometry(r);
   for (z = 0; z < hlManager->highlights(); z++) {
-    hlCombo->insertItem(hlManager->hlName(z));
+    hlCombo->insertItem(hlManager->hlName(z),z);
   }
   hlCombo->setCurrentItem(hlNumber);
 
