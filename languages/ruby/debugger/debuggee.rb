@@ -803,7 +803,7 @@ EOHELP
 	Tracer.trace_func(event, file, line, id, binding, klass) if trace?
     context(Thread.current).check_suspend
   
-	if file =~ /qtruby.rb|korundum.rb/
+	if file =~ %r{/qtruby.rb|/korundum.rb|/debuggee.rb}
     	case event
     	when 'line'
       		frame_set_pos(file, line)
@@ -850,15 +850,19 @@ EOHELP
 	  # LJ this test doesn't make sense and cause troubles when 
 	  # on a line with a recursive call and a breakpoint on it (e.g factorial)
 	  # or when in a while loop with one line only inside the loop
-	  #if [file, line] == @last
-	  #  @stop_next = 1
-	  #else
+	  #
+	  # RJD: reinstated the test with a check on whether '@frames.size'
+	  # has changed to catch the recursive factorial case LJ describes
+	  # above. The while loop problem still exists though
+	  if [file, line, @frames.size] == @last
+	    @stop_next = 1
+	  else
 		@no_step = nil
 		suspend_all
 		debug_command(file, line, id, binding)
-	    @last = [file, line]
-	  #end
-      end
+	    @last = [file, line, @frames.size]
+	  end
+    end
 
    when 'call'
        @frames.unshift [binding, file, line, id]
