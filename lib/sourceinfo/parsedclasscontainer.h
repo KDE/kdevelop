@@ -32,7 +32,7 @@ class ParsedClass;
 class ParsedClassContainer : public ParsedContainer
 {
 public:
-    ParsedClassContainer();
+    ParsedClassContainer( bool caseSensitive=true );
     ~ParsedClassContainer();
     
 protected:

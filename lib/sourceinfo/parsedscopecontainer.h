@@ -31,7 +31,7 @@
 class ParsedScopeContainer : public ParsedClassContainer
 {
 public:
-    ParsedScopeContainer();
+    ParsedScopeContainer( bool caseSensitive=true );
     ~ParsedScopeContainer();
 
 private:

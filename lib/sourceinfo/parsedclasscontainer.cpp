@@ -36,9 +36,9 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedClassContainer::ParsedClassContainer()
-    : ParsedContainer(),
-      classes(),
+ParsedClassContainer::ParsedClassContainer( bool caseSensitive )
+    : ParsedContainer( caseSensitive ),
+      classes( QD_ANYSIZE, caseSensitive ),
       classIterator( classes )
 {
     classes.setAutoDelete( false );

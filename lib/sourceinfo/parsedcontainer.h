@@ -27,6 +27,7 @@
 #include "parsedattribute.h"
 #include "parsedmethod.h"
 
+#define QD_ANYSIZE 17  // Used for the constructor of QDict
 class ParsedClass;
 
 /**
@@ -115,7 +116,7 @@ protected:
     };
 
 public:
-    ParsedContainer();
+    ParsedContainer( bool caseSensitive=true );
     ~ParsedContainer();
 
 protected:

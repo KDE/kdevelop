@@ -35,11 +35,12 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedContainer::ParsedContainer()
+ParsedContainer::ParsedContainer( bool caseSensitive )
     : ParsedItem(),
       methods(),
-      attributes(),
-      structs(),
+      attributes         ( QD_ANYSIZE, caseSensitive ),
+      methodsByNameAndArg( QD_ANYSIZE, caseSensitive ),
+      structs            ( QD_ANYSIZE, caseSensitive ),
       methodIterator( methods ),
       attributeIterator( attributes ),
       structIterator( structs )

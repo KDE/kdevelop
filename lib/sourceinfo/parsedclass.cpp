@@ -35,12 +35,14 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedClass::ParsedClass()
-    : ParsedClassContainer(),
+ParsedClass::ParsedClass( bool caseSensitive )
+    : ParsedClassContainer( caseSensitive ),
       slotList(),
       signalList(),
       slotIterator( slotList ),
-      signalIterator( signalList )
+      signalIterator( signalList ),
+      slotsByNameAndArg  ( QD_ANYSIZE, caseSensitive ),
+      signalsByNameAndArg( QD_ANYSIZE, caseSensitive )
 {
     setItemType( PIT_CLASS );
 

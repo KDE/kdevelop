@@ -36,9 +36,9 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-ParsedScopeContainer::ParsedScopeContainer()
-    : ParsedClassContainer(),
-      scopes(),
+ParsedScopeContainer::ParsedScopeContainer( bool caseSensitive )
+    : ParsedClassContainer( caseSensitive ),
+      scopes( QD_ANYSIZE, caseSensitive ),
       scopeIterator( scopes )
 {
     setItemType( PIT_SCOPE );
