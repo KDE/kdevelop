@@ -608,7 +608,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
     }
 
     cmdline += " ";
-    cmdline += target;
+    cmdline += KProcess::quote(target);
 
     QString dircmd = "cd ";
     dircmd += KProcess::quote(dir);
