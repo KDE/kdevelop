@@ -435,7 +435,6 @@ void Core::updateBufferMenu()
 
 void Core::closeProject()
 {
-    api->classStore->wipeout();
     if  (api->project) {
         emit projectClosed();
         api->project->closeProject();
@@ -465,6 +464,8 @@ void Core::closeProject()
         removePart(api->project);
         api->project = 0;
     }
+
+	api->classStore->wipeout();
 
     projectFile = QString::null;
     win->setCaption(QString::fromLatin1(""));
@@ -1316,4 +1317,4 @@ void Core::recentProjectSelected(const KURL &url)
 }
 
 
-#include "core.moc"
+//#include "core.moc"
