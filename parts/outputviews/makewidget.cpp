@@ -522,12 +522,12 @@ void MakeWidget::slotProcessExited(KProcess *)
 	{
 		if (childproc->exitStatus())
 		{
-			KNotifyClient::event( "ProcessError", i18n("The process has finished with errors"));
+			KNotifyClient::event( topLevelWidget()->winId(), "ProcessError", i18n("The process has finished with errors"));
 			emit m_part->commandFailed(currentCommand);
 		}
 		else
 		{
-			KNotifyClient::event( "ProcessSuccess", i18n("The process has finished successfully"));
+			KNotifyClient::event( topLevelWidget()->winId(), "ProcessSuccess", i18n("The process has finished successfully"));
 			emit m_part->commandFinished(currentCommand);
 		}
 	}
