@@ -40,7 +40,7 @@ public:
   CConfigA2psDlg(QWidget* parent=0,const char* name=0);
   ~CConfigA2psDlg();
   void init();
-  bool lookProgram(QString name) { CToolClass::searchProgram(name, false); }
+  bool lookProgram(QString name) { return CToolClass::searchProgram(name, false); }
   void loadSettings();
 
 public slots:

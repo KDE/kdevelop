@@ -403,7 +403,7 @@ public: // Public queries
   bool isQt2Project();
   bool isCustomProject();
   /** check if a subdir is in the project (registered). */
-  bool isDirInProject(QString rel_name);
+//  bool isDirInProject(QString rel_name);
 
   
 

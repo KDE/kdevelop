@@ -395,31 +395,31 @@ void CProject::getAllFiles(QStrList& list){
   }  
 }
 
-bool CProject::isDirInProject(QString rel_name){
-
-//  KDEBUG(KDEBUG_INFO,CPROJECT,"isDirInProject() Don't use this function,it's not implemented!");
-  return true;
-  int pos = rel_name.findRev('/');
-  QString dir_name;
-   
-  
-  if(pos == -1){ // not found
-    dir_name = rel_name.copy();
-    rel_name = "Makefile.am";
-  }
-  else{
-    dir_name = rel_name.right(rel_name.length()-pos-1);
-    rel_name.truncate(pos+1);
-    rel_name.append("Makefile.am");
-  }
-  
-  TMakefileAmInfo info = getMakefileAmInfo(rel_name);
-  QString str;
-  
-  for(str=info.sub_dirs.first();str!=0;str=info.sub_dirs.next()){
-    kdDebug() << endl << str;
-  }
-}
+//bool CProject::isDirInProject(QString rel_name){
+//
+////  KDEBUG(KDEBUG_INFO,CPROJECT,"isDirInProject() Don't use this function,it's not implemented!");
+//  return true;
+//  int pos = rel_name.findRev('/');
+//  QString dir_name;
+//
+//
+//  if(pos == -1){ // not found
+//    dir_name = rel_name.copy();
+//    rel_name = "Makefile.am";
+//  }
+//  else{
+//    dir_name = rel_name.right(rel_name.length()-pos-1);
+//    rel_name.truncate(pos+1);
+//    rel_name.append("Makefile.am");
+//  }
+//
+//  TMakefileAmInfo info = getMakefileAmInfo(rel_name);
+//  QString str;
+//
+//  for(str=info.sub_dirs.first();str!=0;str=info.sub_dirs.next()){
+//    kdDebug() << endl << str;
+//  }
+//}
 
 bool CProject::addDialogFileToProject(QString /*rel_name*/,TDialogFileInfo info){
   config.setGroup(info.rel_name);

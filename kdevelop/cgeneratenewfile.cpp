@@ -397,7 +397,8 @@ QString CGenerateNewFile::genIcon(QString abs_name){
   file.close();  
   return file.name();
 }
-QString CGenerateNewFile::genNifFile(QString abs_name){
+
+void CGenerateNewFile::genNifFile(QString abs_name){
   KShellProcess process;
   QString nif_template = locate("appdata", "templates/nif_template");
 

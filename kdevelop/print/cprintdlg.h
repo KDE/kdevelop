@@ -41,7 +41,7 @@ public:
   CPrintDlg(QWidget* parent=0,const char* file="",const char* name=0, bool html = false);
   ~CPrintDlg();
   void init();
-  bool lookProgram(QString name) { CToolClass::searchProgram(name, false); }
+  bool lookProgram(QString name) { return CToolClass::searchProgram(name, false); }
   QString createFileString();
   void loadSettings();
   QString files,globalpara,prj_str;
