@@ -1,5 +1,5 @@
 /** \file Mainpage.dox
-    \brief The main page of the doxygen generated API Documentation
+    \brief The main page of the doxygen generated %API Documentation
 */
 
 /**
@@ -38,7 +38,7 @@ Additionally you may also want to find out \ref howToDocument.
 
 \section PlannedTasks Planned tasks
 
-First we need to do the \ref HighPriTasks then fix the \ref bug and finally fix the dispersed \ref todo
+First we need to do the \ref HighPriTasks then fix the <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>, then fix the bugs in the \ref bug and finally fix the dispersed \ref todo
 all over the code.
 
 
