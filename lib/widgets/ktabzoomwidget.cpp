@@ -206,10 +206,17 @@ void KTabZoomWidget::addContent(QWidget *content)
 void KTabZoomWidget::selected(int index)
 {
   if( !d->m_tabBar->isTabRaised(index) ){
-     kdDebug() << "=========================> unselected!!!!!!" << endl;
      unselected();
+     kdDebug() << "=========================> unselected!!!!!!" << endl;
      return;
   }
+
+    QPtrListIterator<KMultiTabBarTab> it( *d->m_tabBar->tabs() );
+    while( it.current() ){
+        if( it.current()->id() != index )
+            it.current()->setState( false );
+        ++it;
+    }
 
   calculateGeometry();
 
