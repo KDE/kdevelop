@@ -237,7 +237,7 @@ void ProfileEditor::addProfile()
 
 void ProfileEditor::removeProfile()
 {
-    if (KMessageBox::questionYesNo(this, i18n("Remove selected profile and all it's subprofiles?"),
+    if (KMessageBox::questionYesNo(this, i18n("Remove selected profile and all its subprofiles?"),
         i18n("Remove Profile")) == KMessageBox::Yes)
     {
         Profile *profile = currentProfile();
@@ -250,7 +250,7 @@ void ProfileEditor::removeProfile()
             delete item;
         }
         else
-            KMessageBox::error(this, i18n("Can not remove this profile because it is not a local (user created) profile."), i18n("Remove Profile"));
+            KMessageBox::error(this, i18n("Cannot remove this profile because it is not a local (user-created) profile."), i18n("Remove Profile"));
     }
 }
 
