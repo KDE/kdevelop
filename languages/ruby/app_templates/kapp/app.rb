@@ -14,11 +14,7 @@ class %{APPNAMESC} < KDE::MainWindow
           'fileSave()',
           'fileSaveAs()',
           'filePrint()',
-          'optionsShowStatusbar()',
-          'optionsConfigureKeys()',
-          'optionsConfigureToolbars()',
           'optionsPreferences()',
-          'newToolbarConfig()',
           'changeStatusbar(const QString&)',
           'changeCaption(const QString&)'
 
@@ -38,10 +34,11 @@ class %{APPNAMESC} < KDE::MainWindow
         # and a status bar
         statusBar().show()
     
-        # apply the saved mainwindow settings, if any, and ask the mainwindow
-        # to automatically save settings if changed: window size, toolbar
-        # position, icon size, etc.
-        setAutoSaveSettings()
+        # Apply the create the main window and ask the mainwindow to
+        # automatically save settings if changed: window size, toolbar
+        # position, icon size, etc.  Also to add actions for the statusbar
+        # toolbar, and keybindings if necessary.
+        setupGUI();
     
         # allow the view to change the statusbar and caption
         connect(@view, SIGNAL('signalChangeStatusbar(const QString&)'),
@@ -84,11 +81,6 @@ class %{APPNAMESC} < KDE::MainWindow
         KDE::StdAction.print(self, SLOT('filePrint()'), actionCollection())
         KDE::StdAction.quit($kapp, SLOT('quit()'), actionCollection())
     
-		setStandardToolBarMenuEnabled(true)
-        @statusbarAction = KDE::StdAction.showStatusbar(self, SLOT('optionsShowStatusbar()'), actionCollection())
-    
-        KDE::StdAction.keyBindings(self, SLOT('optionsConfigureKeys()'), actionCollection())
-        KDE::StdAction.configureToolbars(self, SLOT('optionsConfigureToolbars()'), actionCollection())
         KDE::StdAction.preferences(self, SLOT('optionsPreferences()'), actionCollection())
     
         # this doesn't do anything useful.  it's just here to illustrate
@@ -96,7 +88,6 @@ class %{APPNAMESC} < KDE::MainWindow
         custom = KDE::Action.new(i18n("Cus&tom Menuitem"), KDE::Shortcut.new(),
                                     self, SLOT('optionsPreferences()'),
                                     actionCollection(), "custom_action")
-        createGUI(Dir.getwd + '/%{APPNAMELC}ui.rc')
     end
     
     def saveProperties(config)
@@ -203,34 +194,7 @@ class %{APPNAMESC} < KDE::MainWindow
             p.end()
         end
     end
-    
-    def optionsShowStatusbar()
-        # This is all very cut and paste code for showing/hiding the
-        # statusbar
-        if @statusbarAction.isChecked()
-            statusBar().show()
-        else
-            statusBar().hide()
-        end
-    end
-    
-    def optionsConfigureKeys()
-        KDE::KeyDialog.configure(actionCollection())
-    end
-    
-    def optionsConfigureToolbars()
-        # use the standard toolbar editor
-        saveMainWindowSettings(KDE::Global.config(), autoSaveGroup())
-    end
-    
-    def newToolbarConfig()
-        # This slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
-        # recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
-        createGUI(Dir.getwd + '/%{APPNAMELC}ui.rc')
-    
-        applyMainWindowSettings(KDE::Global.config(), autoSaveGroup())
-    end
-    
+        
     def optionsPreferences()
         # popup some sort of preference dialog, here
         dlg = %{APPNAMESC}Preferences.new
