@@ -13,12 +13,14 @@ configkdevelop= --prefix=/usr \
  --libdir=$(kde_libdir) --includedir=$(kde_includedir) --mandir=$(mandir) \
  --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
  --enable-gideon-qt2 --enable-docbase \
- --enable-javasupport \
  --with-phpdocdir=/usr/share/doc/php4 \
  --with-glibdocdir=/usr/share/doc/glib-reference/html \
  --with-gdkdocdir=/usr/share/doc/gtk-reference/gdk/html \
  --with-gtkdocdir=/usr/share/doc/gtk-reference/gtk/html \
  --with-gnomedocdir=/usr/share/doc/gnome-dev-doc/html
+
+# we don't enable java support because we don't have that in debian
+# --enable-javasupport --with-java=/usr/lib/j2sdk1.3 \
 
 debdir=$(shell pwd)/debian
 instdir=$(debdir)/tmp
