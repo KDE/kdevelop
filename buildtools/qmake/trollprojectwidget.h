@@ -81,6 +81,7 @@ struct ProjectConfiguration
   QString         m_target_install_path;
 
   QMap<QString,QString> m_variables;
+  QStringList    m_removed_variables;
   QStringList    m_projectInclude;
 
 };

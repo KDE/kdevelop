@@ -100,6 +100,8 @@ virtual void editCustomValueClicked();
 virtual void upCustomValueClicked();
 virtual void downCustomValueClicked();
 
+virtual void newCustomVariableActive();
+
 
 void updateIncludeControl();
 void updateLibaddControl();

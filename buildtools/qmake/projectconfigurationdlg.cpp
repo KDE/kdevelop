@@ -105,7 +105,8 @@ ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QLis
 //=================================================
 {
 // Remove when we can depend on KDE 3.4
-  buttonOk->setGuiItem(KStdGuiItem::ok());
+/*
+    buttonOk->setGuiItem(KStdGuiItem::ok());
   buttonCancel->setGuiItem(KStdGuiItem::cancel());
   Browse->setGuiItem(browse());
   insideIncMoveUpBtn->setGuiItem(up());
@@ -141,7 +142,8 @@ ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QLis
   varEdit_button->setGuiItem(edit());
   varMoveUp_button->setGuiItem(up());
   varMoveDown_button->setGuiItem(down());
-// End remove in kde 3.4
+  */
+      // End remove in kde 3.4
 
   myProjectItem=_item;
   prjList=_prjList;
@@ -415,9 +417,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   // custom vars
   QListViewItem *item = customVariables->firstChild();
   for( ; item; item = item->nextSibling() )
-  {
 	myProjectItem->configuration.m_variables[item->text(0)] = item->text(1);
-  }
 
   QDialog::accept();
 
@@ -1310,21 +1310,63 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
 
  void ProjectConfigurationDlg::addCustomValueClicked()
 {
-
+  QListViewItem *item = new QListViewItem(customVariables, i18n("Name"),i18n("Value"));
+  customVariables->setSelected(item,true);
+  newCustomVariableActive();
+  customVariableName->setEnabled(true);
 }
  void ProjectConfigurationDlg::removeCustomValueClicked()
 {
-
+  QListViewItem *item = customVariables->currentItem();
+  if( item )
+  {
+    myProjectItem->configuration.m_variables.remove(item->text(0));
+    myProjectItem->configuration.m_removed_variables.append(item->text(0));
+    delete item;
+  }
 }
  void ProjectConfigurationDlg::editCustomValueClicked()
 {
-
+  QListViewItem *item = customVariables->currentItem();
+  if(item)
+  {
+     item->setText(0,customVariableName->text());
+     item->setText(1,customVariableData->text());
+     
+     if(myProjectItem->configuration.m_removed_variables.contains(customVariableName->text()) != 0)
+	myProjectItem->configuration.m_removed_variables.remove(customVariableName->text());
+  }
 }
  void ProjectConfigurationDlg::upCustomValueClicked()
 {
-
+  // custom vars
+  QListViewItem *item = customVariables->firstChild();
+  if (customVariables->currentItem() == item) {
+    KNotifyClient::beep();
+    return;
+  }
+  while (item->nextSibling() != customVariables->currentItem())
+    item = item->nextSibling();
+  item->moveItem(customVariables->currentItem());
 }
+
  void ProjectConfigurationDlg::downCustomValueClicked()
 {
+  if (customVariables->currentItem() == 0 || customVariables->currentItem()->nextSibling() == 0) {
+    KNotifyClient::beep();
+    return;
+  }
+  customVariables->currentItem()->moveItem(customVariables->currentItem()->nextSibling());
+}
 
+void ProjectConfigurationDlg::newCustomVariableActive( )
+{
+  QListViewItem *item = customVariables->currentItem();
+  if(item)
+  {
+	customVariableName->setText(item->text(0));
+	customVariableData->setText(item->text(1));
+	customVariableName->setFocus();
+	customVariableName->setEnabled(false);
+  }
 }

@@ -1389,6 +1389,11 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
 
   updateInstallObjects(item,Buffer);
 
+  // Remove vars no longer kept
+  QStringList::Iterator remVars = item->configuration.m_removed_variables.begin();
+  for( ; remVars != item->configuration.m_removed_variables.end(); ++remVars)
+    Buffer->removeValues( *remVars );
+  
   // save custom vars first
   QMap<QString,QString>::Iterator custVars = item->configuration.m_variables.begin();
   for( ; custVars != item->configuration.m_variables.end(); ++custVars )
@@ -3077,7 +3082,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
     {
         item->m_FileBuffer.getValues(*it,lst,minusListDummy);
     if( lst.count() != 0 )
-    item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
+        item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
     }
 
 }
