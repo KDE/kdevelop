@@ -178,7 +178,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
 	i18n("Checking this will delete the current documentation\n"
 		"and lets you choose a path in the input field below\n"
 		"where the new generated documentation will be"
-		"installed.\n"));  
+		"installed."));  
 
   leave_new_radio_button = new QRadioButton( this, "leave_new_radio_button" );
   leave_new_radio_button->setGeometry( 40, 190, 450, 30 );

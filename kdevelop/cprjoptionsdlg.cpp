@@ -191,13 +191,13 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   					"here. Turning off optimization\n"	
 				     	"equals -O0. The higher the level\n"
 					"the more time you need to compile\n"
-				 	"but increases program speed.\n"))));
+				 	"but increases program speed."))));
 
   QGroupBox* debug_group;
   debug_group=new QGroupBox(w2,"debug_group");
   debug_group->setGeometry(260,10,240,140);
   debug_group->setTitle(i18n("Debugging"));
-  KQuickHelp::add(debug_group, i18n("Set your debugging options here.\n"));
+  KQuickHelp::add(debug_group, i18n("Set your debugging options here."));
 
   debug=new QCheckBox(w2,"debug");
   debug->setGeometry(270,30,220,20);
@@ -208,7 +208,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
     debug->setChecked(false);
   }
   KQuickHelp::add(debug, i18n("Checking this turns on the -g flag\n"
-			"to GCC to generate debugging information\n"));
+			"to GCC to generate debugging information."));
 
   debug_level=new KNumericSpinBox(w2,"debug_level");
   debug_level->setGeometry(290,60,40,20);
@@ -273,7 +273,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   QWidget *w3= new QWidget(this,"Compiler Warnings");
   KQuickHelp::add(w3, i18n("Set the Compiler warnings here by checking\n"
-			"the -W options you want to use.\n"));
+			"the -W options you want to use."));
  
   w_all=new QCheckBox(w3,"w_all");
   w_all->setGeometry(10,10,230,20);
@@ -286,7 +286,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w_all, i18n("Compile with -Wall. This option\n"
 			"includes several different warning\n"
 			"parameters which are recommended to\n"
-			"turn on.\n"));
+			"turn on."));
 
   w_=new QCheckBox(w3,"w_");
   w_->setGeometry(10,30,230,20);
@@ -299,7 +299,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w_, i18n("Compile with -W. This option\n"
 			"sets options not included in -Wall\n"
 			"which are very specific. Please read\n"
-			"GCC-Info for more information.\n"));
+			"GCC-Info for more information."));
 
   w_traditional=new QCheckBox(w3,"w_traditional");
   w_traditional->setGeometry(10,50,230,20);
@@ -609,7 +609,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 		"declared in the base class. With this option, the\n"
 		"compiler warns when you define a function with the same\n"
 		"as a virtual function, but with a type signature that\n"
-		"does not match any declarations from the base class.\n"));
+		"does not match any declarations from the base class."));
 
 
   w_synth=new QCheckBox(w3,"w_synth");
@@ -742,7 +742,7 @@ ldadd = " " + ldadd + " ";
   } else {
     l_qt->setChecked(false);
   }
-  KQuickHelp::add(l_qt, i18n("Qt\n"));
+  KQuickHelp::add(l_qt, i18n("Qt"));
 
   l_kdecore=new QCheckBox(w4,"l_kdecore");
   l_kdecore->setGeometry(20,200,110,20);

@@ -176,7 +176,7 @@ void CKAppWizard::initPages(){
   KQuickHelp::add(authorname,
   KQuickHelp::add(authorline,
 	i18n("Enter your name here for the about dialog.\n"
-		"You may also consider using the Team-name.\n")));
+		"You may also consider using the Team-name.")));
   KQuickHelp::add(email,
   KQuickHelp::add(emailline,
   	i18n("Enter your email adress here, so users\n"
@@ -224,7 +224,7 @@ void CKAppWizard::initPages(){
 //  QToolTip::add(progicon,i18n("activate, if you want an icon for your program"));
   KQuickHelp::add(progicon, i18n("Check this to create a sample icon for\n"
 				"your program. We suggest to do so and just\n"
-				"change it's view by using KIconEdit.\n"));
+				"change it's view by using KIconEdit."));
 
   miniicon = new QCheckBox (i18n("Mini-Icon"), widget2);
   miniicon->setGeometry(20,250,140,30);
@@ -232,7 +232,7 @@ void CKAppWizard::initPages(){
 //  QToolTip::add(miniicon,i18n("activate, if you want a mini-icon for your program"));
   KQuickHelp::add(miniicon, i18n("Check this to create a sample mini-icon\n"
 				"for your program. We suggest to do so and just\n"
-				"change it's view by using KIconEdit.\n"));
+				"change it's view by using KIconEdit."));
  
   datalink = new QCheckBox (i18n(".kdelnk-File"), widget2);
   datalink->setGeometry(240,190,140,30);
@@ -274,7 +274,7 @@ void CKAppWizard::initPages(){
   connect(hheader,SIGNAL(clicked()),SLOT(slotHeaderHeaderClicked()));   
 //  QToolTip::add(hheader,i18n("activate, if you want a headertemplate for your headerfiles"));
   KQuickHelp::add(hheader, i18n("Check this if you want a standard\n"
-				"headertemplate for your headerfiles\n"));
+				"headertemplate for your headerfiles"));
 
   hload = new QPushButton (i18n("Load..."),widget3);
   hload->setGeometry(210,10,60,30);
@@ -305,7 +305,7 @@ void CKAppWizard::initPages(){
   connect(cppheader,SIGNAL(clicked()),SLOT(slotCppHeaderClicked()));   
 //  QToolTip::add(cppheader,i18n("activate, if you want a cpptemplate for your cppfiles"));
   KQuickHelp::add(cppheader, i18n("Check this if you want a standard\n"
-				"cpp-Template for your cpp-files.\n"));
+				"cpp-Template for your cpp-files."));
 
   cppload = new QPushButton (i18n("Load..."),widget4);
   cppload->setGeometry(210,10,60,30);
