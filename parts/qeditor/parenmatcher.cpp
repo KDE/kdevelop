@@ -38,14 +38,14 @@ bool ParenMatcher::match( QTextCursor *cursor )
 	return FALSE;
     bool ret = FALSE;
 
-    QChar c( cursor->parag()->at( cursor->index() )->c );
+    QChar c( cursor->paragraph()->at( cursor->index() )->c );
     bool ok1 = FALSE;
     bool ok2 = FALSE;
     if ( c == '{' || c == '(' || c == '[' ) {
 	ok1 = checkOpenParen( cursor );
 	ret = ok1 || ret;
     } else if ( cursor->index() > 0 ) {
-	c = cursor->parag()->at( cursor->index() - 1 )->c;
+	c = cursor->paragraph()->at( cursor->index() - 1 )->c;
 	if ( c == '}' || c == ')' || c == ']' ) {
 	    ok2 = checkClosedParen( cursor );
 	    ret = ok2 || ret;
@@ -56,17 +56,17 @@ bool ParenMatcher::match( QTextCursor *cursor )
 
 bool ParenMatcher::checkOpenParen( QTextCursor *cursor )
 {
-    if ( !cursor->parag()->extraData() )
+    if ( !cursor->paragraph()->extraData() )
 	return FALSE;
-    QValueList<Symbol> parenList = ( (ParagData*)cursor->parag()->extraData() )->symbolList();
+    QValueList<Symbol> parenList = ( (ParagData*)cursor->paragraph()->extraData() )->symbolList();
 
     Symbol openParen, closedParen;
-    QTextParag *closedParenParag = cursor->parag();
+    QTextParagraph *closedParenParag = cursor->paragraph();
 
     int i = 0;
     int ignore = 0;
     bool foundOpen = FALSE;
-    QChar c = cursor->parag()->at( cursor->index() )->c;
+    QChar c = cursor->paragraph()->at( cursor->index() )->c;
     for (;;) {
 	if ( !foundOpen ) {
 	    if ( i >= (int)parenList.count() )
@@ -112,13 +112,13 @@ bool ParenMatcher::checkOpenParen( QTextCursor *cursor )
 		 c == '(' && closedParen.ch() != ')' ||
 		 c == '[' && closedParen.ch() != ']' )
 		id = Mismatch;
-	    cursor->document()->setSelectionStart( id, cursor );
+	    cursor->document()->setSelectionStart( id, *cursor );
 	    int tidx = cursor->index();
-	    QTextParag *tstring = cursor->parag();
-	    cursor->setParag( closedParenParag );
+	    QTextParagraph *tstring = cursor->paragraph();
+	    cursor->setParagraph( closedParenParag );
 	    cursor->setIndex( closedParen.pos() + 1 );
-	    cursor->document()->setSelectionEnd( id, cursor );
-	    cursor->setParag( tstring );
+	    cursor->document()->setSelectionEnd( id, *cursor );
+	    cursor->setParagraph( tstring );
 	    cursor->setIndex( tidx );
 	    return TRUE;
 	}
@@ -130,17 +130,17 @@ bool ParenMatcher::checkOpenParen( QTextCursor *cursor )
 
 bool ParenMatcher::checkClosedParen( QTextCursor *cursor )
 {
-    if ( !cursor->parag()->extraData() )
+    if ( !cursor->paragraph()->extraData() )
 	return FALSE;
-    QValueList<Symbol> parenList = ( (ParagData*)cursor->parag()->extraData() )->symbolList();
+    QValueList<Symbol> parenList = ( (ParagData*)cursor->paragraph()->extraData() )->symbolList();
 
     Symbol openParen, closedParen;
-    QTextParag *openParenParag = cursor->parag();
+    QTextParagraph *openParenParag = cursor->paragraph();
 
     int i = parenList.count() - 1;
     int ignore = 0;
     bool foundClosed = FALSE;
-    QChar c = cursor->parag()->at( cursor->index() - 1 )->c;
+    QChar c = cursor->paragraph()->at( cursor->index() - 1 )->c;
     for (;;) {
 	if ( !foundClosed ) {
 	    if ( i < 0 )
@@ -186,13 +186,13 @@ bool ParenMatcher::checkClosedParen( QTextCursor *cursor )
 		 c == ')' && openParen.ch() != '(' ||
 		 c == ']' && openParen.ch() != '[' )
 		id = Mismatch;
-	    cursor->document()->setSelectionStart( id, cursor );
+	    cursor->document()->setSelectionStart( id, *cursor );
 	    int tidx = cursor->index();
-	    QTextParag *tstring = cursor->parag();
-	    cursor->setParag( openParenParag );
+	    QTextParagraph *tstring = cursor->paragraph();
+	    cursor->setParagraph( openParenParag );
 	    cursor->setIndex( openParen.pos() );
-	    cursor->document()->setSelectionEnd( id, cursor );
-	    cursor->setParag( tstring );
+	    cursor->document()->setSelectionEnd( id, *cursor );
+	    cursor->setParagraph( tstring );
 	    cursor->setIndex( tidx );
 	    return TRUE;
 	}

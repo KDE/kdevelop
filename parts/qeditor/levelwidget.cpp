@@ -116,7 +116,7 @@ void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 {
     buffer.fill( backgroundColor() );
 
-    QTextParag *p = m_editor->document()->firstParag();
+    QTextParagraph *p = m_editor->document()->firstParagraph();
     QPainter painter( &buffer );
     int yOffset = m_editor->contentsY();
     while ( p ) {
@@ -182,7 +182,7 @@ void LevelWidget::resizeEvent( QResizeEvent *e )
 
 void LevelWidget::mousePressEvent( QMouseEvent* e )
 {
-    QTextParag *p = m_editor->document()->firstParag();
+    QTextParagraph *p = m_editor->document()->firstParagraph();
     int yOffset = m_editor->contentsY();
     while ( p ) {
 	if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {

@@ -98,7 +98,7 @@ void QSourceColorizer::updateStyles( QMap<QString, QPair<QFont, QColor> >& value
 }
 
 
-void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
+void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
                                 bool invalidate )
 {
     int state = 0;
@@ -121,7 +121,7 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
     }
 
     HLItemCollection* ctx = m_items.at( state );
-    while( pos < parag->length() - 1 ){
+    while( pos < parag->length() ){
         int attr = 0;
         int next = state;
         int npos = ctx->checkHL( doc, parag, pos, &attr, &next );

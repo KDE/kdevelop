@@ -66,7 +66,7 @@ public:
     virtual int attr() const { return m_state; }
     virtual int context() const { return m_context; }
 
-    virtual int checkHL( QTextDocument*, QTextParag*, int pos, int*, int* ) =0;
+    virtual int checkHL( QTextDocument*, QTextParagraph*, int pos, int*, int* ) =0;
 
 private:
     int m_state;
@@ -83,8 +83,8 @@ public:
         return ch.isLetter() || ch == '_';
     }
 
-    int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
-        while( pos < p->length()-1 ){
+    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
+        while( pos < p->length() ){
             QChar ch = p->string()->at(pos).c;
             if( ch.isLetterOrNumber() || ch == '_' )
                 ++pos;
@@ -100,8 +100,8 @@ public:
     NumberHLItem( int state, int context )
         : HLItem( state, context ) {}
 
-    int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
-        while( pos < p->length()-1 ){
+    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
+        while( pos < p->length() ){
             if( p->string()->at(pos).c.isNumber() )
                 ++pos;
             else
@@ -116,10 +116,10 @@ public:
     CommentHLItem( const QChar ch, int state, int context )
         : HLItem( state, context ), m_char1( ch ) {}
 
-    int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
+    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
         QChar ch = p->string()->at( pos ).c;
         if( ch == m_char1 )
-            return p->length() - 1;
+            return p->length();
         return pos;
     }
 
@@ -142,10 +142,10 @@ public:
         return ch.isLetter() || ch == '_';
     }
 
-    int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
+    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
         int save_pos = pos;
         QString word;
-        while( pos < p->length() - 1 ){
+        while( pos < p->length() ){
             QChar ch = p->string()->at(pos).c;
             if( ch.isLetterOrNumber() || ch == '_' ){
                 word += ch;
@@ -169,7 +169,7 @@ public:
         : HLItem( state, context ), m_text(text) {}
 
     QString text() const { return m_text; }
-    int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
+    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
         QString s = p->string()->toString();
         s.truncate( s.length() - 1 );
         if( s.mid( pos, m_text.length() ) == m_text )
@@ -186,7 +186,7 @@ public:
     RegExpHLItem( QString pattern, int state, int context )
         : HLItem( state, context ), m_rx( pattern ) {}
 
-    int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
+    int checkHL( QTextDocument*, QTextParagraph* p, int pos, int*, int* ){
         QString s = p->string()->toString();
         s.truncate( s.length() - 1 );
         int idx = m_rx.search(s, pos);
@@ -208,7 +208,7 @@ public:
     void appendChild( HLItem* item ) { m_items.append( item ); }
 
 
-    int checkHL( QTextDocument* doc, QTextParag* p, int pos,
+    int checkHL( QTextDocument* doc, QTextParagraph* p, int pos,
                  int* state, int* next){
         QListIterator<HLItem> it( m_items );
         QTextString* s = p->string();
@@ -268,7 +268,7 @@ public:
 
     QStringList styleList() const;
     virtual void updateStyles( QMap<QString, QPair<QFont, QColor> >& values );
-    virtual void process( QTextDocument*, QTextParag*, int, bool=FALSE );
+    virtual void process( QTextDocument*, QTextParagraph*, int, bool=FALSE );
 
 protected:
     QEditor* m_editor;

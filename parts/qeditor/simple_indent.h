@@ -53,13 +53,13 @@ public:
     SimpleIndent( QEditor* );
     virtual ~SimpleIndent();
 
-    void indent( QTextDocument*, QTextParag*, int* =0, int* =0 );
+    void indent( QTextDocument*, QTextParagraph*, int* =0, int* =0 );
 
 private:
     QEditor* m_editor;
 };
 
 void tabify( QString& text, int tabwidth );
-void indentLine( QTextParag *p, int tabwidth, int &oldIndent, int &newIndent );
+void indentLine( QTextParagraph *p, int tabwidth, int &oldIndent, int &newIndent );
 
 #endif

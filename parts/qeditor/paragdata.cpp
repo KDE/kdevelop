@@ -40,7 +40,7 @@ ParagData::~ParagData()
 
 }
 
-void ParagData::join( QTextParagData* )
+void ParagData::join( QTextParagraphData* )
 {
     // not implemented yet!!
 }

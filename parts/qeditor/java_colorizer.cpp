@@ -108,7 +108,7 @@ JavaColorizer::JavaColorizer( QEditor* editor )
     context2->appendChild( new StringHLItem( "\"", String, 0 ) );
 
     HLItemCollection* context3 = new HLItemCollection( String );
-    context1->appendChild( new StringHLItem( "\\\\", String, 3 ) );
+    context3->appendChild( new StringHLItem( "\\\\", String, 3 ) );
     context3->appendChild( new StringHLItem( "\\'", String, 3 ) );
     context3->appendChild( new StringHLItem( "'", String, 0 ) );
 

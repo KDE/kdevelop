@@ -102,7 +102,7 @@ private:
 	    QTextFormatter *formatter;
 	    formatter = new QTextFormatterBreakWords;
 	    formatter->setWrapEnabled( FALSE );
-	    parag = new QTextParag( 0 );
+	    parag = new QTextParagraph( 0 );
 	    parag->pseudoDocument()->pFormatter = formatter;
 	    parag->insert( 0, " " + m_entry.type + ( m_entry.type.isEmpty() ? " " : "\t" ) + m_entry.prefix + " "+
 			   QListBoxItem::text() + m_entry.postfix );
@@ -141,7 +141,7 @@ private:
     }
 
 public:
-    QTextParag *parag;
+    QTextParagraph *parag;
     bool lastState;
     KTextEditor::CompletionEntry m_entry;
 };
@@ -313,11 +313,11 @@ void QEditorCodeCompletion::updateBox( bool newCoordinate )
     if( newCoordinate ) {
         QEditor* curEditor = m_view->editor();
         QTextCursor* cursor = curEditor->textCursor();
-        QTextStringChar *chr = cursor->parag()->at( cursor->index() );
-        int x = cursor->parag()->rect().x() + chr->x;
+        QTextStringChar *chr = cursor->paragraph()->at( cursor->index() );
+        int x = cursor->paragraph()->rect().x() + chr->x;
         int y, dummy;
-        int h = cursor->parag()->lineHeightOfChar( cursor->index(), &dummy, &y );
-        y += cursor->parag()->rect().y();
+        int h = cursor->paragraph()->lineHeightOfChar( cursor->index(), &dummy, &y );
+        y += cursor->paragraph()->rect().y();
 
         m_completionPopup->resize( m_completionListBox->sizeHint() +
                                    QSize( m_completionListBox->verticalScrollBar()->width() + 4,

@@ -92,12 +92,12 @@ static int backspace_indentation( const QString &s, int tabwidth )
 }
 
 
-static int backspace_indentForLine( QTextParag* parag, int tabwidth )
+static int backspace_indentForLine( QTextParagraph* parag, int tabwidth )
 {
     int line_ind = backspace_indentation( parag->string()->toString(), tabwidth );
     line_ind = line_ind > 0 ? line_ind-1 : 0;
     int ind = 0;
-    QTextParag* p = parag->prev();
+    QTextParagraph* p = parag->prev();
     while( p ){
 	QString raw_text = p->string()->toString();
 	QString line = raw_text.stripWhiteSpace();
@@ -230,16 +230,16 @@ void QEditor::doMatch( QTextCursor* c )
 void QEditor::doGotoLine( int line )
 {
     setCursorPosition( line, 0 );
-    QTextParag *p = document()->paragAt( line );
+    QTextParagraph *p = document()->paragAt( line );
     if ( !p )
 	return;
     QTextCursor c( document() );
-    c.setParag( p );
+    c.setParagraph( p );
     c.setIndex( 0 );
     document()->removeSelection( 1000 );
-    document()->setSelectionStart( 1000, &c );
+    document()->setSelectionStart( 1000, c );
     c.gotoLineEnd();
-    document()->setSelectionEnd( 1000, &c );
+    document()->setSelectionEnd( 1000, c );
     viewport()->repaint( FALSE );
 }
 
@@ -294,7 +294,7 @@ void QEditor::updateStyles()
 void QEditor::backspaceIndent( QKeyEvent* e )
 {
     QTextCursor* c = textCursor();
-    QTextParag* p = c->parag();
+    QTextParagraph* p = c->paragraph();
     QString raw_text = p->string()->toString();
     QString line = raw_text.stripWhiteSpace();
 
@@ -341,9 +341,9 @@ bool QEditor::replace( const QString &text, const QString &replace,
 
     if ( !replaceAll || !ok ) {
 	if ( ok )
-	    setSelection( textCursor()->parag()->paragId(),
+	    setSelection( textCursor()->paragraph()->paragId(),
 			  textCursor()->index() - replace.length(),
-			  textCursor()->parag()->paragId(),
+			  textCursor()->paragraph()->paragId(),
 			  textCursor()->index() );
 	return ok;
     }
@@ -394,6 +394,7 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent(this) );
+        setBackgroundParser( new CppParser(this) );
     } else if( m_language == "csharp" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );
@@ -449,7 +450,7 @@ void QEditor::slotCursorPositionChanged( int /*line*/, int )
 	    clearParagraphBackground( m_currentLine );
 	}
 	m_currentLine = line;
-	setParagraphBackgroundColor( m_currentLine,
+	setParagraphraphBackgroundColor( m_currentLine,
 				     palette().active().mid() );
     }
 #endif
@@ -494,7 +495,7 @@ void QEditor::setBackgroundParser( BackgroundParser* parser )
 
 void QEditor::refresh()
 {
-    QTextParag* p = document()->firstParag();
+    QTextParagraph* p = document()->firstParagraph();
     while( p ){
 	if( p->endState() == -1 ){
 	    break;

@@ -46,7 +46,7 @@
 #include <qpixmap.h>
 
 class QEditor;
-class QTextParag;
+class QTextParagraph;
 
 class LevelWidget: public QWidget
 {
@@ -56,8 +56,8 @@ public:
     virtual ~LevelWidget();
     
 signals:
-    void expandBlock( QTextParag* );
-    void collapseBlock( QTextParag* );
+    void expandBlock( QTextParagraph* );
+    void collapseBlock( QTextParagraph* );
 
 public slots:
     void doRepaint() { repaint( FALSE ); }

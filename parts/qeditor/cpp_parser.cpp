@@ -38,7 +38,7 @@ CppParser::~CppParser()
 
 }
 
-void CppParser::parseParag( QTextParag* p )
+void CppParser::parseParag( QTextParagraph* p )
 {
     // m_editor->ensureFormatted( p )
 
@@ -88,12 +88,12 @@ void CppParser::parseParag( QTextParag* p )
     setParsed( p, true );
 }
 
-QTextParag* CppParser::findGoodStartParag( QTextParag* p )
+QTextParagraph* CppParser::findGoodStartParag( QTextParagraph* p )
 {
     return p;
 }
 
-QTextParag* CppParser::findGoodEndParag( QTextParag* p )
+QTextParagraph* CppParser::findGoodEndParag( QTextParagraph* p )
 {
     return p;
 }

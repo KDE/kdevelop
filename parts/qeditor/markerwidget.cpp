@@ -206,7 +206,7 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
 {
     buffer.fill( backgroundColor() );
 
-    QTextParag *p = m_editor->document()->firstParag();
+    QTextParagraph *p = m_editor->document()->firstParagraph();
     QPainter painter( &buffer );
     int yOffset = m_editor->contentsY();
     while ( p ) {
@@ -268,7 +268,7 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
     int toggleBreakPoint = 0;
     int toggleBookmark = 0;
 
-    QTextParag *p = m_editor->document()->firstParag();
+    QTextParagraph *p = m_editor->document()->firstParagraph();
     int yOffset = m_editor->contentsY();
     while ( p ) {
         if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {

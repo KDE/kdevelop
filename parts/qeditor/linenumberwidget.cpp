@@ -66,7 +66,7 @@ void LineNumberWidget::paintEvent( QPaintEvent* /*e*/ )
 {
 	buffer.fill( backgroundColor() );
 
-	QTextParag *p = m_editor->document()->firstParag();
+	QTextParagraph *p = m_editor->document()->firstParagraph();
 	QPainter painter( &buffer );
 	int yOffset = m_editor->contentsY();
 	while ( p ) {

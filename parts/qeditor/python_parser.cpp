@@ -59,7 +59,7 @@ PythonParser::~PythonParser()
 
 }
 
-void PythonParser::parseParag( QTextParag* p )
+void PythonParser::parseParag( QTextParagraph* p )
 {
     // editor()->ensureFormatted( p )
 
@@ -119,12 +119,12 @@ void PythonParser::parseParag( QTextParag* p )
 
 }
 
-QTextParag* PythonParser::findGoodStartParag( QTextParag* p )
+QTextParagraph* PythonParser::findGoodStartParag( QTextParagraph* p )
 {
     return p;
 }
 
-QTextParag* PythonParser::findGoodEndParag( QTextParag* p )
+QTextParagraph* PythonParser::findGoodEndParag( QTextParagraph* p )
 {
     return p;
 }

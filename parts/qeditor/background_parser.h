@@ -25,7 +25,7 @@
 #include <qobject.h>
 
 class QEditor;
-class QTextParag;
+class QTextParagraph;
 class QTimer;
 
 class BackgroundParser: public QObject
@@ -51,15 +51,15 @@ private slots:
     void slotTextChanged();
 
 protected:
-    void setParsed( QTextParag*, bool );
-    bool isParsed( QTextParag* ) const;
+    void setParsed( QTextParagraph*, bool );
+    bool isParsed( QTextParagraph* ) const;
 
-    virtual void invalidate( QTextParag*, QTextParag* );
-    virtual void ensureParsed( QTextParag* );
+    virtual void invalidate( QTextParagraph*, QTextParagraph* );
+    virtual void ensureParsed( QTextParagraph* );
 
-    virtual void parseParag( QTextParag* );
-    virtual QTextParag* findGoodStartParag( QTextParag* p ) { return p; }
-    virtual QTextParag* findGoodEndParag( QTextParag* p ) { return p; }
+    virtual void parseParag( QTextParagraph* );
+    virtual QTextParagraph* findGoodStartParag( QTextParagraph* p ) { return p; }
+    virtual QTextParagraph* findGoodEndParag( QTextParagraph* p ) { return p; }
 
 private slots:
     void continueParsing();
@@ -67,7 +67,7 @@ private slots:
 private:
     QEditor* m_editor;
     QTimer* m_timer;
-    QTextParag* m_lastParsed;
+    QTextParagraph* m_lastParsed;
     int m_interval;
 };
 

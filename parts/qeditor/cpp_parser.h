@@ -30,9 +30,9 @@ public:
     virtual ~CppParser();
 
 protected:
-    virtual void parseParag( QTextParag* );
-    virtual QTextParag* findGoodStartParag( QTextParag* );
-    virtual QTextParag* findGoodEndParag( QTextParag* );
+    virtual void parseParag( QTextParagraph* );
+    virtual QTextParagraph* findGoodStartParag( QTextParagraph* );
+    virtual QTextParagraph* findGoodEndParag( QTextParagraph* );
 };
 
 #endif

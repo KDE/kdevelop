@@ -102,7 +102,7 @@ void tabify( QString &s, int tabwidth )
     }
 }
 
-void indentLine( QTextParag *p, int tabwidth, int &oldIndent, int &newIndent )
+void indentLine( QTextParagraph *p, int tabwidth, int &oldIndent, int &newIndent )
 {
     QString indentString;
     indentString.fill( ' ', newIndent );
@@ -133,10 +133,10 @@ SimpleIndent::~SimpleIndent()
 
 }
 
-static int indentForLine( QTextParag* parag, int tabwidth )
+static int indentForLine( QTextParagraph* parag, int tabwidth )
 {
     int ind = 0;
-    QTextParag* p = parag->prev();
+    QTextParagraph* p = parag->prev();
     while( p ){
         QString raw_text = p->string()->toString();
         QString line = raw_text.stripWhiteSpace();
@@ -149,7 +149,7 @@ static int indentForLine( QTextParag* parag, int tabwidth )
     return ind;
 }
 
-void SimpleIndent::indent( QTextDocument* doc, QTextParag* parag,
+void SimpleIndent::indent( QTextDocument* doc, QTextParagraph* parag,
                            int* oldIndent, int* newIndent )
 {
     int tabwidth = editor()->tabStop();

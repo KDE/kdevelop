@@ -72,10 +72,10 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
              m_markerWidget, SLOT(doRepaint()) );
 
     m_levelWidget = new LevelWidget( m_editor, this );
-    connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
-	     this, SLOT(expandBlock(QTextParag*)) );
-    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
-	     this, SLOT(collapseBlock(QTextParag*)) );
+    connect( m_levelWidget, SIGNAL(expandBlock(QTextParagraph*)),
+	     this, SLOT(expandBlock(QTextParagraph*)) );
+    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParagraph*)),
+	     this, SLOT(collapseBlock(QTextParagraph*)) );
 
     lay->addWidget( m_markerWidget );
     lay->addWidget( m_lineNumberWidget );
@@ -176,12 +176,12 @@ KTextEditor::Document* QEditorView::document() const
 QPoint QEditorView::cursorCoordinates()
 {
     QTextCursor *cursor = m_editor->textCursor();
-    QTextStringChar *chr = cursor->parag()->at( cursor->index() );
-    int h = cursor->parag()->lineHeightOfChar( cursor->index() );
-    int x = cursor->parag()->rect().x() + chr->x;
+    QTextStringChar *chr = cursor->paragraph()->at( cursor->index() );
+    int h = cursor->paragraph()->lineHeightOfChar( cursor->index() );
+    int x = cursor->paragraph()->rect().x() + chr->x;
     int y, dummy;
-    cursor->parag()->lineHeightOfChar( cursor->index(), &dummy, &y );
-    y += cursor->parag()->rect().y();
+    cursor->paragraph()->lineHeightOfChar( cursor->index(), &dummy, &y );
+    y += cursor->paragraph()->rect().y();
     return m_editor->contentsToViewport( QPoint( x, y+h ) );
 }
 
@@ -319,46 +319,46 @@ void QEditorView::gotoLine()
 void QEditorView::proceed()
 {
     // Start point
-    QTextParag * firstParag = m_editor->document()->firstParag();
+    QTextParagraph * firstParagraph = m_editor->document()->firstParagraph();
     int firstIndex = 0;
 
     // 'From Cursor' option
     QEditor* edit = m_editor;
     if ( edit && ( m_options & KoFindDialog::FromCursor ) )
     {
-        firstParag = edit->textCursor()->parag();
+        firstParagraph = edit->textCursor()->paragraph();
         firstIndex = edit->textCursor()->index();
     } // no else here !
 
     // 'Selected Text' option
     if ( edit && ( m_options & KoFindDialog::SelectedText ) )
     {
-        if ( !firstParag ) // not set by 'from cursor'
+        if ( !firstParagraph ) // not set by 'from cursor'
         {
             QTextCursor c1 = edit->document()->selectionStartCursor( QTextDocument::Standard );
-            firstParag = c1.parag();
+            firstParagraph = c1.paragraph();
             firstIndex = c1.index();
         }
         QTextCursor c2 = edit->document()->selectionEndCursor( QTextDocument::Standard );
         // Find in the selection
-        (void) find_real( firstParag, firstIndex, c2.parag(), c2.index() );
+        (void) find_real( firstParagraph, firstIndex, c2.paragraph(), c2.index() );
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
-        QTextParag * lastParag = edit->document()->lastParag();
-        (void) find_real( firstParag, firstIndex, lastParag, lastParag->length()-1 );
+        QTextParagraph * lastParagraph = edit->document()->lastParagraph();
+        (void) find_real( firstParagraph, firstIndex, lastParagraph, lastParagraph->length()-1 );
     }
 }
 
-bool QEditorView::find_real( QTextParag* firstParag, int firstIndex,
-                             QTextParag* lastParag, int lastIndex )
+bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
+                             QTextParagraph* lastParagraph, int lastIndex )
 {
-    m_currentParag = firstParag;
+    m_currentParag = firstParagraph;
     m_offset = 0;
 
-    if( firstParag == lastParag ){
+    if( firstParagraph == lastParagraph ){
         m_offset = firstIndex;
-        return process( firstParag->string()->toString().mid( firstIndex, lastIndex-firstIndex ) );
+        return process( firstParagraph->string()->toString().mid( firstIndex, lastIndex-firstIndex ) );
     } else {
         bool forw = ! (m_options & KoFindDialog::FindBackwards);
         bool ret = true;
@@ -369,14 +369,14 @@ bool QEditorView::find_real( QTextParag* firstParag, int firstIndex,
             ret = process( str.mid( firstIndex ) );
             if (!ret) return false;
         } else {
-            m_currentParag = lastParag;
-            ret = process( lastParag->string()->toString().left( lastIndex + 1 ) );
+            m_currentParag = lastParagraph;
+            ret = process( lastParagraph->string()->toString().left( lastIndex + 1 ) );
             if (!ret) return false;
         }
 
-        m_currentParag = forw ? firstParag->next() : lastParag->prev();
+        m_currentParag = forw ? firstParagraph->next() : lastParagraph->prev();
         m_offset = 0;
-        QTextParag* endParag = forw ? lastParag : firstParag;
+        QTextParagraph* endParag = forw ? lastParagraph : firstParagraph;
         while( m_currentParag && m_currentParag != endParag ){
             QString str = m_currentParag->string()->toString();
             str = str.left( str.length() - 1 );
@@ -388,7 +388,7 @@ bool QEditorView::find_real( QTextParag* firstParag, int firstIndex,
         Q_ASSERT( endParag == m_currentParag );
         if ( forw )
         {
-            QString s = lastParag->string()->toString().left( lastIndex + 1 );
+            QString s = lastParagraph->string()->toString().left( lastIndex + 1 );
             ret = process( s );
         } else {
             m_offset = firstIndex;
@@ -459,7 +459,7 @@ void QEditorView::replace( const QString&, int matchingIndex,
                         matchingIndex );
 }
 
-void QEditorView::expandBlock( QTextParag* p )
+void QEditorView::expandBlock( QTextParagraph* p )
 {
     ParagData* data = (ParagData*) p->extraData();
     if( !data ){
@@ -488,7 +488,7 @@ void QEditorView::expandBlock( QTextParag* p )
     doRepaint();
 }
 
-void QEditorView::collapseBlock( QTextParag* p )
+void QEditorView::collapseBlock( QTextParagraph* p )
 {
     ParagData* data = (ParagData*) p->extraData();
     if( !data ){

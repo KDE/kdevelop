@@ -40,7 +40,7 @@ class KoFindDialog;
 class KoReplaceDialog;
 class KoFind;
 class KoReplace;
-class QTextParag;
+class QTextParagraph;
 
 class QEditorView:
     public KTextEditor::View,
@@ -82,8 +82,8 @@ public slots:
     void doFind();
     void doReplace();
     void indent();
-    void expandBlock( QTextParag* );
-    void collapseBlock( QTextParag* );
+    void expandBlock( QTextParagraph* );
+    void collapseBlock( QTextParagraph* );
 
 protected slots:
     void highlight( const QString&, int, int, const QRect& );
@@ -91,13 +91,13 @@ protected slots:
 
 protected:
     void proceed();
-    bool find_real( QTextParag* firstParag, int firstIndex,
-                    QTextParag* lastParag, int lastIndex );
+    bool find_real( QTextParagraph* firstParag, int firstIndex,
+                    QTextParagraph* lastParag, int lastIndex );
     bool process( const QString& );
     void doRepaint();
 
 private:
-    QTextParag* m_currentParag;
+    QTextParagraph* m_currentParag;
     KoFindDialog* m_findDialog;
     KoReplaceDialog* m_replaceDialog;
     KoFind* m_find;

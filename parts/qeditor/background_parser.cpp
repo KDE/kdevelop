@@ -43,7 +43,7 @@ BackgroundParser::BackgroundParser( QEditor* parent, const char* name )
     connect( m_timer, SIGNAL(timeout()),
 	     this, SLOT(continueParsing()) );
 
-    m_lastParsed = m_editor->document()->firstParag();
+    m_lastParsed = m_editor->document()->firstParagraph();
     connect( m_editor, SIGNAL(textChanged()),
              this, SLOT(slotTextChanged()) );
     connect( this, SIGNAL(parsed()),
@@ -56,7 +56,7 @@ BackgroundParser::~BackgroundParser()
 {
 }
 
-void BackgroundParser::ensureParsed( QTextParag* p )
+void BackgroundParser::ensureParsed( QTextParagraph* p )
 {
     // kdDebug() << "BackgroundParser::ensureParsed" << endl;
 
@@ -85,9 +85,9 @@ void BackgroundParser::continueParsing()
     }
 }
 
-void BackgroundParser::invalidate( QTextParag* from, QTextParag* to )
+void BackgroundParser::invalidate( QTextParagraph* from, QTextParagraph* to )
 {
-    QTextParag* p = from;
+    QTextParagraph* p = from;
 
     while( p ){
         setParsed( p, false );
@@ -107,12 +107,12 @@ void BackgroundParser::sync()
         return;
 
     m_interval = 0;
-    ensureParsed( m_editor->document()->lastParag() );
+    ensureParsed( m_editor->document()->lastParagraph() );
 }
 
 void BackgroundParser::slotTextChanged()
 {
-    QTextParag* parag = m_editor->textCursor()->parag();
+    QTextParagraph* parag = m_editor->textCursor()->paragraph();
 
     invalidate( findGoodStartParag(parag),
                 findGoodEndParag(parag) );
@@ -125,26 +125,26 @@ void BackgroundParser::reparse()
     if( !m_editor )
         return;
 
-    invalidate( m_editor->document()->firstParag(),
-                m_editor->document()->lastParag() );
+    invalidate( m_editor->document()->firstParagraph(),
+                m_editor->document()->lastParagraph() );
 
     continueParsing();
 }
 
-void BackgroundParser::parseParag( QTextParag* p )
+void BackgroundParser::parseParag( QTextParagraph* p )
 {
     // TODO: m_editor->ensureFormatted( p )
     setParsed( p, true );
 }
 
-void BackgroundParser::setParsed( QTextParag* p, bool parsed )
+void BackgroundParser::setParsed( QTextParagraph* p, bool parsed )
 {
     ParagData* data = (ParagData*) p->extraData();
     if( data )
         data->setParsed( parsed );
 }
 
-bool BackgroundParser::isParsed( QTextParag* p ) const
+bool BackgroundParser::isParsed( QTextParagraph* p ) const
 {
     ParagData* data = (ParagData*) p->extraData();
     if( data )

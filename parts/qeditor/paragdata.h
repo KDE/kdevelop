@@ -69,7 +69,7 @@ private:
 };
 
 
-class ParagData: public QTextParagData{
+class ParagData: public QTextParagraphData{
 public:
     ParagData();
     virtual ~ParagData();
@@ -78,7 +78,7 @@ public:
     QValueList<Symbol> symbolList() const { return m_symbolList; }
 
     void add( int, const QChar&, int );
-    void join( QTextParagData* );
+    void join( QTextParagraphData* );
 
     int level() const;
     void setLevel( int );

@@ -66,28 +66,28 @@ public:
     }
 
     virtual void position ( unsigned int *line, unsigned int *col ) const{
-        *line = m_cursor->parag()->paragId();
+        *line = m_cursor->paragraph()->paragId();
         *col = m_cursor->index();
     }
 
     virtual bool setPosition ( unsigned int line, unsigned int col ){
-        m_cursor->setParag( m_cursor->document()->paragAt( line ) );
+        m_cursor->setParagraph( m_cursor->document()->paragAt( line ) );
         m_cursor->setIndex( col );
         return TRUE;
     }
 
     virtual bool insertText ( const QString& text ){
-        m_cursor->parag()->insert( m_cursor->index(), text );
+        m_cursor->paragraph()->insert( m_cursor->index(), text );
         return TRUE;
     }
 
     virtual bool removeText ( unsigned int numberOfCharacters ){
-        m_cursor->parag()->remove( m_cursor->index(), numberOfCharacters );
+        m_cursor->paragraph()->remove( m_cursor->index(), numberOfCharacters );
         return TRUE;
     }
 
     virtual QChar currentChar () const{
-        return m_cursor->parag()->at( m_cursor->index() )->c;
+        return m_cursor->paragraph()->at( m_cursor->index() )->c;
     }
 
 private:
@@ -112,9 +112,9 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     m_cursors.setAutoDelete( TRUE );
 
     m_currentView = new QEditorView( this, parentWidget, widgetName );
+    setWidget( m_currentView );
     m_views.append( m_currentView );
     insertChildClient( m_currentView );
-    setWidget( m_currentView );
 
     setupHighlighting();
 
@@ -551,7 +551,7 @@ void QEditorPart::setupHighlighting()
     mode->name = "c++";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.cpp" << "*.cxx" << "*.cc" << "*.C" << "*.c++" << "*.c" <<
-                       "*.h" << "*.hh" << "*.hxx" << "*.h++" << "*.H";
+                       "*.h" << "*.hpp" << "*.hh" << "*.hxx" << "*.h++" << "*.H";
     m_modes.append( mode );
 
     mode = new HLMode;
@@ -657,7 +657,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
 {
     QEditor* ed = m_currentView->editor();
-    QTextParag* p = ed->document()->paragAt( startLine );
+    QTextParagraph* p = ed->document()->paragAt( startLine );
     while( p ){
         QString str = p->string()->toString();
         int pos = -1;
@@ -686,7 +686,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 uint QEditorPart::mark (uint line)
 {
     QTextDocument* textDoc = m_currentView->editor()->document();
-    QTextParag* parag = textDoc->paragAt( line );
+    QTextParagraph* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
         if( data ){
@@ -699,7 +699,7 @@ uint QEditorPart::mark (uint line)
 void QEditorPart::setMark (uint line, uint markType)
 {
     QTextDocument* textDoc = m_currentView->editor()->document();
-    QTextParag* parag = textDoc->paragAt( line );
+    QTextParagraph* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
         if( data ){
@@ -717,7 +717,7 @@ void QEditorPart::clearMark (uint line)
 void QEditorPart::addMark (uint line, uint markType)
 {
     QTextDocument* textDoc = m_currentView->editor()->document();
-    QTextParag* parag = textDoc->paragAt( line );
+    QTextParagraph* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
         if( data ){
@@ -730,7 +730,7 @@ void QEditorPart::addMark (uint line, uint markType)
 void QEditorPart::removeMark (uint line, uint markType)
 {
     QTextDocument* textDoc = m_currentView->editor()->document();
-    QTextParag* parag = textDoc->paragAt( line );
+    QTextParagraph* parag = textDoc->paragAt( line );
     if( parag ){
         ParagData* data = (ParagData*) parag->extraData();
         if( data ){
@@ -745,7 +745,7 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
     QPtrList<KTextEditor::Mark> marks;
     marks.setAutoDelete( TRUE );
     QTextDocument* textDoc = m_currentView->editor()->document();
-    QTextParag* p = textDoc->firstParag();
+    QTextParagraph* p = textDoc->firstParagraph();
     while( p ){
         ParagData* data = (ParagData*) p->extraData();
         if( data && data->mark() ){
@@ -762,7 +762,7 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 void QEditorPart::clearMarks ()
 {
     QTextDocument* textDoc = m_currentView->editor()->document();
-    QTextParag* p = textDoc->firstParag();
+    QTextParagraph* p = textDoc->firstParagraph();
     while( p ){
         ParagData* data = (ParagData*) p->extraData();
         if( data ){

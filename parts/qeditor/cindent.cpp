@@ -112,7 +112,7 @@ static void tabify( QString &s )
     }
 }
 
-static void indentLine( QTextParag *p, int &oldIndent, int &newIndent )
+static void indentLine( QTextParagraph *p, int &oldIndent, int &newIndent )
 {
     QString indentString;
     indentString.fill( ' ', newIndent );
@@ -132,11 +132,11 @@ static void indentLine( QTextParag *p, int &oldIndent, int &newIndent )
 }
 
 
-void CIndent::indent( QTextDocument *doc, QTextParag *p, int *oldIndent, int *newIndent )
+void CIndent::indent( QTextDocument *doc, QTextParagraph *p, int *oldIndent, int *newIndent )
 {
     int oi = indentation( p->string()->toString() );
     QStringList code;
-    QTextParag *parag = doc->firstParag();
+    QTextParagraph *parag = doc->firstParagraph();
     while ( parag ) {
 	code << parag->string()->toString();
 	if ( parag == p )

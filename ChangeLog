@@ -1,3 +1,6 @@
+2002-07-23 Roberto Raggi <raggi@cli.di.unipi.it>
+	* updated qeditor to qt 3.0.5
+	
 2002-07-19 Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* changes concerning the classstore are taking effect without restarting
 	* parsing of project directory works again without having persistance :)
