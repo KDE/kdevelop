@@ -1,7 +1,7 @@
 # Here resides the PHP support part.
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
-SUBDIRS = data app_templates file_templates
+SUBDIRS = data app_templates file_templates doc
 
 
 kde_module_LTLIBRARIES = libkdevphpsupport.la

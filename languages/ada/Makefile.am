@@ -2,7 +2,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 INCLUDES = -I$(top_srcdir)/lib/antlr -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
-SUBDIRS = app_templates file_templates
+SUBDIRS = app_templates file_templates doc
 
 
 kde_module_LTLIBRARIES = libkdevadasupport.la

@@ -1,3 +1,6 @@
+2003-10-13 Amilcar Lucas <a.lucas@tu-bs.de>
+    * Moved the language specific documentation to the languages/xxx/doc directories
+
 2003-10-12 Mickael Marchand <marchand@kde.org>
     * New subversion part added to replace the old svn one
 

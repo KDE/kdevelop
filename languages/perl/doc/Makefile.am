@@ -1,7 +1,6 @@
 tocdir = ${kde_datadir}/kdevdoctreeview/tocs
-toc_DATA = kdev3api.toc
+toc_DATA = perl.toc
 
 indexdir = ${kde_datadir}/devdoctreeview/indices
-index_DATA = 
-
+index_DATA =
 
