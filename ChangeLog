@@ -1,3 +1,10 @@
+2001-06-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added GNUStep documentation toc plus a script
+	  for generating it from gsdoc files
+	* Full Python toc plus a script for generating it
+	* Full PHP toc made by Claudiu Costins script
+
 2001-06-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Implemented modification of build order of subprojects
