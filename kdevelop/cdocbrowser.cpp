@@ -134,13 +134,13 @@ void CDocBrowser::showURL(const QString& url, bool reload)
     complete_url.replace( QRegExp("file%3A/"), "" );
 
 //  bool loaded = true;
-  if( (url_wo_ref != old_url) || reload)
-  {
+//  if( (url_wo_ref != old_url) || reload)
+//  {
 	  kapp->setOverrideCursor( Qt::waitCursor );
 		KURL kurl(complete_url);
 		openURL(kurl);
   	kapp->restoreOverrideCursor();
-  }
+//  }
 
 //  if (loaded)
 //  {
