@@ -220,7 +220,7 @@ void DocTreeKDevelopFolder::refresh()
     (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
 				   "kde_libref.html");
     (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
-				   "c-c++-reference.html");
+				   "cref.html");
 }
 
 
