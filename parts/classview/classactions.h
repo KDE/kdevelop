@@ -17,14 +17,14 @@
 #include <kaction.h>
 
 class KDevPlugin;
+class QComboBox;
 
-
-class ClassListAction : public KSelectAction
+class ClassListAction : public KWidgetAction
 {
 public:
-    ClassListAction( KDevPlugin *part, const QString &text, int accel,
+    ClassListAction( KDevPlugin *part, const QString &text, const KShortcut& cut,
                      const QObject *receiver, const char *slot,
-                     QObject *parent, const char *name );
+                     KActionCollection *parent, const char *name );
     void setCurrentClassName(const QString &name);
     QString currentClassName();
     void refresh();
@@ -33,21 +33,23 @@ private:
     QString currentText(); // only here for preventing its public use
     void setCurrentItem(const QString &item);
     KDevPlugin *m_part;
+    QComboBox* m_combo;
 };
 
 
-class MethodListAction : public KSelectAction
+class MethodListAction : public KWidgetAction
 {
 public:
-    MethodListAction( KDevPlugin *part, const QString &text, int accel,
+    MethodListAction( KDevPlugin *part, const QString &text, const KShortcut& cut,
                       const QObject *receiver, const char *slot,
-                      QObject *parent, const char *name );
+                      KActionCollection *parent, const char *name );
     void refresh(const QString &className);
     QString currentMethodName();
     
 private:
     QString currentText(); // only here for preventing its public use
     KDevPlugin *m_part;
+    QComboBox* m_combo;
 };
 
 
@@ -56,9 +58,9 @@ class DelayedPopupAction : public KAction
     Q_OBJECT
 
 public:
-    DelayedPopupAction( const QString &text, const QString &pix, int accel,
+    DelayedPopupAction( const QString &text, const QString &pix, const KShortcut& cut,
                         QObject *receiver, const char *slot,
-                        QObject *parent, const char* name );
+                        KActionCollection *parent, const char* name );
     ~DelayedPopupAction();
     
     virtual int plug(QWidget *widget, int index=-1);

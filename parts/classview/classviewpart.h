@@ -86,8 +86,8 @@ private:
     void gotoDeclaration(const QString &className, const QString &memberName);
     void gotoImplementation(const QString &className, const QString &memberName);
 
-    ClassListAction *classes_action;
-    MethodListAction *methods_action;
+    ClassListAction* classes_action;
+    MethodListAction* methods_action;
     DelayedPopupAction *popup_action;
     bool m_decl_or_impl;
 };

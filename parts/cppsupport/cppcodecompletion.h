@@ -21,6 +21,7 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qtimer.h>
+#include <qguardedptr.h>
 
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/editinterface.h>
@@ -99,7 +100,7 @@ protected:
     QStringList getParentSignatureListForClass( ParsedClass* pClass, QString strMethod );
 
 private:
-    CppSupportPart* m_pSupport;
+    QGuardedPtr<CppSupportPart> m_pSupport;
     KDevCore* m_pCore;
     ClassStore* m_pStore;
     ClassStore* m_pCCStore;

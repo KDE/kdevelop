@@ -998,6 +998,7 @@ void CClassParser::fillInParsedMethod(ParsedMethod *aMethod, bool isOperator)
 
   // Set the operator name
   aMethod->setName( name );
+  aMethod->setIsDestructor( name.startsWith("~") );
   
   // Set the type of the method.
   fillInParsedType( type );
@@ -1295,6 +1296,7 @@ void CClassParser::fillInParsedObjcMethod(ParsedMethod *aMethod)
 	
 	// Set the method name
 	aMethod->setName(methodSignature);
+	aMethod->setIsDestructor( methodSignature.startsWith("~") );
 	
 	return;
 }
@@ -1624,7 +1626,8 @@ bool CClassParser::parseClassLexem( ParsedClass *aClass )
           aMethod->setDefinitionEndsOnLine( pm->definitionEndsOnLine() );
           aClass->removeMethod(pm);
 		}
-        	
+       
+		aMethod->setIsConstructor( aClass->name() == aMethod->name() );
         	aMethod->setIsVirtual( true );
 		aClass->addMethod(aMethod);
       }
@@ -1836,6 +1839,7 @@ ParsedClass *CClassParser::parseObjcImplementation()
 			pm = aClass->getMethod(aMethod);
 
 			if (pm == NULL) {
+			        aMethod->setIsConstructor( aClass->name() == aMethod->name() );
 				aClass->addMethod(aMethod);
 				pm = aMethod;
 				pm->setDeclaredInFile(currentFile);
@@ -2050,6 +2054,7 @@ ParsedClass *CClassParser::parseObjcClass()
 			pm = aClass->getMethod(aMethod);
 
 			if (pm == NULL) {
+			        aMethod->setIsConstructor( aClass->name() == aMethod->name() );
 				aClass->addMethod(aMethod);
 				pm = aMethod;
 				pm->setDefinedInFile(currentFile);

@@ -13,6 +13,7 @@
 
 #include "cppsupportpart.h"
 #include "problemreporter.h"
+#include "implementmethodsdialog.h"
 
 #include <qmessagebox.h>
 #include <qdir.h>
@@ -37,6 +38,7 @@
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
+#include <kmessagebox.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -722,6 +724,19 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
     str += pm->type();
     str += " ";
     str += pm->name();
+    
+    if( pm->arguments.count() > 0 ) {
+	str += "( ";
+        for ( ParsedArgument* arg = pm->arguments.first(); arg != NULL; arg = pm->arguments.next() ) {
+            if ( arg != pm->arguments.getFirst() )
+                str += ", ";
+
+            str += arg->toString();
+        }
+        str += " )";
+    } else {
+        str += "()";
+    }
 
     if (pm->isConst())
         str += " const";
@@ -753,6 +768,19 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
     }
     str += pm->name();
 
+    if( pm->arguments.count() > 0 ) {
+	str += "( ";
+        for ( ParsedArgument* arg = pm->arguments.first(); arg != NULL; arg = pm->arguments.next() ) {
+            if ( arg != pm->arguments.getFirst() )
+                str += ", ";
+
+            str += arg->toString();
+        }
+        str += " )";
+    } else {
+        str += "()";
+    }
+    
     if (pm->isConst())
         str += " const";
 
@@ -1055,5 +1083,21 @@ CppSupportPart::parseDirectory( const QString &startDir, bool withSubDir,
     label->setText( "" );
 }
 
+void CppSupportPart::implementVirtualMethods( const QString& className )
+{
+    ParsedClass *pc = classStore()->getClassByName(className);
+
+    if (!pc) {
+	QMessageBox::critical(0,"Error","Please select a class !");
+	return;
+    }    
+    
+    ImplementMethodsDialog dlg( 0, "implementMethodsDlg" );
+    dlg.setPart( this );
+    if( !dlg.implementMethods(pc) )
+      return;
+    
+    KMessageBox::sorry( 0, i18n("Not implemented yet ;)"), i18n("Sorry") );
+}
 
 #include "cppsupportpart.moc"

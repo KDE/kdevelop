@@ -21,6 +21,7 @@
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kcompletionbox.h>
 
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
@@ -64,10 +65,12 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
                                          actionCollection(), "class_combo");
     methods_action = new MethodListAction(this, i18n("Methods"), 0,
                                           this, SLOT(selectedMethod()),
-                                          actionCollection(), "method_combo");
+                                          actionCollection(), "method_combo");        
+    
     popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0,
                                            this, SLOT(switchedDeclImpl()),
-                                           actionCollection(), "class_wizard");
+                                           actionCollection(), "class_wizard");    
+    
     setupPopup();
     m_decl_or_impl = false;
     

@@ -191,7 +191,7 @@ void
 CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
 {
     // we use the QString type in entry for this
-    if( m_pSupport->getCHWidget( ) ) {
+    if( m_pSupport && m_pSupport->getCHWidget( ) ) {
         m_pSupport->getCHWidget( )->setCHText( m_CHCommentList[ entry.type.toInt( ) ] );
     }
     m_CHCommentList.clear( );
@@ -203,7 +203,7 @@ CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry entry )
 void
 CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 {
-    kdDebug( 9007 ) << "CppCodeCompletion::slotDocumentActivated" << endl;
+    kdDebug( 9007 ) << "CppCodeCompletion::slotActivePartChanged()" << endl;
 
     if( !part )
       return;
@@ -226,9 +226,9 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
         kdDebug( 9007 ) << "Editor doesn't support the CompletionIface" << endl;
         return;
     }
-
+    
     // here we have to investigate :)
-    if( m_pSupport->getEnableCC( ) == true ){
+    if( m_pSupport && m_pSupport->getEnableCC( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
 /*
 	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
@@ -244,12 +244,17 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	QObject::connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
                  SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
     }
+    
+    kdDebug(9007) << "CppCodeCompletion::slotActivePartChanged() -- end" << endl;
 }
 
 void
 CppCodeCompletion::slotCursorPositionChanged()
 {
     kdDebug(9007) << "Cursor position changed" << endl;
+    
+    if( !m_pSupport )
+	return;
 
     uint nLine, nCol;
     m_pCursorIface->cursorPosition(&nLine, &nCol);

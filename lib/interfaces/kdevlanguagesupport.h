@@ -62,6 +62,11 @@ public:
      */
     virtual void addMethod(const QString &className);
     /**
+     * Opens an "Implement Virtual Methods" dialog and adds the
+     * configured methods to the sources.
+     */
+    virtual void implementVirtualMethods(const QString &className);
+    /**
      * Opens an "Add attribute" dialog and adds the configured
      * method to the sources.
      */

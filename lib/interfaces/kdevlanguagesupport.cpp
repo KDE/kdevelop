@@ -40,6 +40,10 @@ void KDevLanguageSupport::addMethod(const QString &/*className*/)
 {
 }
 
+void KDevLanguageSupport::implementVirtualMethods(const QString& /*className*/ )
+{
+}
+
 void KDevLanguageSupport::addAttribute(const QString &/*className*/)
 {
 }

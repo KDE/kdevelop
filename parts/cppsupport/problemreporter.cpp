@@ -120,11 +120,10 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
     if( !part )
         return;
+    
+    if( m_editor )
+	reparse();
 		
-	if( m_editor ){
-		reparse();
-	}
-
     m_document = dynamic_cast<KTextEditor::Document*>( part );
     if( m_document ){
         m_filename = m_document->url().path();
@@ -265,7 +264,8 @@ void ProblemReporter::slotPartAdded( KParts::Part* part )
 }
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )
-{ 
+{
+    kdDebug(9007) << "ProblemReporter::slotPartRemoved()" << endl;
     if( part == m_document ){
         m_document = 0;
         m_editor = 0;
