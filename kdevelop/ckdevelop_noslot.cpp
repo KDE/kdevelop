@@ -570,8 +570,8 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 //		clock_t lStartClock = clock();
     kapp->processEvents(100);
 		class_tree->refresh(prj);
-//		cout << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
-// 	 	cout << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+//		kdDebug() << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
+// 	 	kdDebug() << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 
 	}
 
@@ -612,8 +612,8 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   }
   
   slotStatusMsg(i18n("Ready."));
-//  cout << "refreshTree took " << (time(NULL) - lStart) << "ms to complete" << endl;
-//  cout << "refrehTree took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+//  kdDebug() << "refreshTree took " << (time(NULL) - lStart) << "ms to complete" << endl;
+//  kdDebug() << "refrehTree took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 }
  
 /*------------------------------------------ CKDevelop::refreshTrees()
@@ -679,8 +679,8 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     QFileInfo fi(filename);
     QString dirpart = fi.dir(true).canonicalPath();
     QString filepart = fi.fileName();
-//    cout << "Path: " << dirpart << endl;
-//    cout << "File: " << filepart << endl;
+//    kdDebug() << "Path: " << dirpart << endl;
+//    kdDebug() << "File: " << filepart << endl;
     filename = dirpart + "/" + filepart;
   }
 

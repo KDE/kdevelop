@@ -16,10 +16,12 @@
  ***************************************************************************/
 
 #include "cdevproject.h"
+
+#include <kdebug.h>
+
 #include <qfile.h>
 #include <qregexp.h>
 #include <qstring.h>
-#include <iostream.h>
 #include <qtextstream.h>
 
 ckdevelProject::ckdevelProject(){
@@ -58,7 +60,7 @@ bool ckdevelProject::loadProject(QString qsFileName){
             else if (newLine.contains(regexConfig) == 1)
               qsConfig = newLine.mid(15, newLine.length());
             else
-              cout << "EXTRA: " << newLine << endl;
+              kdDebug() << "EXTRA: " << newLine << endl;
             bGoodFile = true;
        }
   else

@@ -1,25 +1,31 @@
-/*********************************************************
- * cclasspropertiesdlgimpl.h                                                                  *
- * Safe Implementation class from cclasspropertiesdlg.ui                            *
- *------------------------------------------------------------------------*
- * Author :                                                                                         *
- *            Serge Lussier                                                                      *
- * email: serge.lussier@videotron.ca                                                      *
- * Started on January 15, 2001                                                            *
- *-----------------------------------------------------------------------*
- * NOTE:                                                                                       *
- * Before re-implement the ui file (with '-impl' option) , make a safe copy of             *
- * this file then re-put                                                                                    *
- * added stuff from this file to the new file.                                                        *
- ***************************************************************/
+/****************************************************************************
+ * cclasspropertiesdlgimpl.h                                                *
+ * Safe Implementation class from cclassproperties.ui                       *
+ *--------------------------------------------------------------------------*
+ * Author :                                                                 *
+ *            Serge Lussier                                                 *
+ * email: serge.lussier@videotron.ca                                        *
+ * Started on January 15, 2001                                              *
+ *--------------------------------------------------------------------------*
+ * NOTE:                                                                    *
+ * Before re-implement the ui file (with -impl option), make a safe copy of *
+ * this file then re-put                                                    *
+ * added stuff in this file to the new file.                                *
+ ****************************************************************************/
 
 
 #ifndef CCLASSPROPERTIESDLGIMPL_H
 #define CCLASSPROPERTIESDLGIMPL_H
 #include "wzconnectdlg.h"
 //#include "./classparser/ClassStore.h"
-#include "./classparser/ClassParser.h"
+//#include "./classparser/ClassParser.h"
 
+class CClassParser;
+class CClassStore;
+class CParsedAttribute;
+class CParsedArgument;
+class CParsedClass;
+class CParsedMethod;
 
 /** For what action the dialog was called and current action : */
 enum CTPACTION {CTPVIEW=0, CTPADDATTR, CTPADDMETH, CTPADDSIGNAL, CTPADDSLOT, CTPCONNECTSIG };
@@ -74,6 +80,12 @@ public:
   void viewChildren();
   /**  */
   void setClassToolDlg( CClassToolDlg* ct);
+  /** No descriptions */
+  CParsedClass* getParsedParentClass( CParsedClass* aClass );
+  /** This function will try to fill up the combo with 
+avaible Signals/Slots methods from the class itself and, if possible, 
+from its parent classes. */
+  bool fillCombo(CParsedClass* aClass,  CTPACTION action, QComboBox* cb);
 public slots:
     void slotClone();
     void slotBtnApply();
@@ -109,7 +121,7 @@ protected slots:
   /**  */
   void getClassNameFromString( const  QString & aName, QString & newName);
   /**  */
-  void setSignalsMemberList( CParsedClass* );
+  void setSignalsMemberList( CParsedClass*, bool bClear = true );
     class CTabData {
         public:
             QString editFields[2];
@@ -119,6 +131,7 @@ protected slots:
             bool bModified;
             bool bApplied;
     };
+public: // Public methods
     CTabData tbdata[6];
     CTPACTION ctpAction;
     /** Table of pointer to tabWidgets to use for iteration. internal use.*/

@@ -17,9 +17,10 @@
  ***************************************************************************/
 
 #include "ClassStore.h"
-#include <iostream.h>
+//#include <iostream.h>
 #include <qregexp.h>
 #include "ProgrammingByContract.h"
+#include <kdebug.h>
 
 /*********************************************************************
  *                                                                   *
@@ -217,7 +218,7 @@ void CClassStore::addScope( CParsedScopeContainer *aScope )
 {
   REQUIRE( "Valid scope", aScope != NULL );
   REQUIRE( "Valid scope name", !aScope->name.isEmpty() );
-  REQUIRE( "Unique scope path", !hasScope( aScope->path() ) );
+  REQUIRE( "Unique scope path <"+aScope->path()+">", !hasScope( aScope->path() ) );
 
   globalContainer.addScope( aScope );
 }
@@ -235,7 +236,7 @@ void CClassStore::addClass( CParsedClass *aClass )
 {
   REQUIRE( "Valid class", aClass != NULL );
   REQUIRE( "Valid classname", !aClass->name.isEmpty() );
-  REQUIRE( "Unique classpath", !hasClass( aClass->path() ) );
+  REQUIRE( "Unique classpath <"+aClass->path()+">", !hasClass( aClass->path() ) );
 
   globalContainer.addClass( aClass );
 
@@ -722,7 +723,7 @@ void CClassStore::out()
   CParsedStruct *aStruct;
 
   // Output all namespaces
-  cout << "Global namespaces" << endl;
+  kdDebug() << "Global namespaces" << endl;
   globalScopes = globalContainer.getSortedScopeList();
   for( aScope = globalScopes->first();
        aScope != NULL;
@@ -731,7 +732,7 @@ void CClassStore::out()
 
 
   // Output all classes.
-  cout << "Global classes\n";
+  kdDebug() << "Global classes" << endl;
   classes = getSortedClassList();
   for( aClass = classes->first();
        aClass != NULL;
@@ -742,7 +743,7 @@ void CClassStore::out()
   delete classes;
 
   // Global methods
-  cout << "Global functions\n";
+  kdDebug() << "Global functions" << endl;
 
   globalMethods = globalContainer.getSortedMethodList();
   for( aMethod = globalMethods->first();
@@ -754,7 +755,7 @@ void CClassStore::out()
   delete globalMethods;
 
   // Global structures
-  cout << "Global variables\n";
+  kdDebug() << "Global variables" << endl;
   globalAttributes = globalContainer.getSortedAttributeList();
   for( aAttr = globalAttributes->first();
        aAttr != NULL;
@@ -765,7 +766,7 @@ void CClassStore::out()
   delete globalAttributes;  
 
   // Global structures
-  cout << "Global structs\n";
+  kdDebug() << "Global structs" << endl;
   globalStructs = getSortedStructList();
   for( aStruct = globalStructs->first();
        aStruct != NULL;

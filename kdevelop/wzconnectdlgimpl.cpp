@@ -1,36 +1,41 @@
-/***************************************************************
- * cclasspropertiesdlgimpl.h                                                                            *
- * Safe Implementation class from cclassproperties.ui                                          *
- *-------------------------------------------------------------------------------*
- * Author :                                                                                                  *
- *            Serge Lussier                                                                                 *
- * email: serge.lussier@videotron.ca                                                                 *
- * Started on January 15, 2001
- *-------------------------------------------------------------------------------*
- * NOTE:                                                                                                     *
- * Before re-implement the ui file (with -impl option), make a safe copy of this file then re-put             *
- * added stuff in this file to the new file.                                                           *
- ***************************************************************/
+/****************************************************************************
+ * cclasspropertiesdlgimpl.cpp                                              *
+ * Safe Implementation class from cclassproperties.ui                       *
+ *--------------------------------------------------------------------------*
+ * Author :                                                                 *
+ *            Serge Lussier                                                 *
+ * email: serge.lussier@videotron.ca                                        *
+ * Started on January 15, 2001                                              *
+ *--------------------------------------------------------------------------*
+ * NOTE:                                                                    *
+ * Before re-implement the ui file (with -impl option), make a safe copy of *
+ * this file then re-put                                                    *
+ * added stuff in this file to the new file.                                *
+ ****************************************************************************/
 
 #include "wzconnectdlgimpl.h"
-#include <qtabwidget.h>
-#include <iostream>
-#include <qlabel.h>
+
+#include "cclasstooldlg.h"
+#include "cclonefunctiondlg.h"
+#include "./classparser/ClassParser.h"
+
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+
 #include <qcombobox.h>
-#include <qgroupbox.h>
 #include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
-#include <kglobal.h>
-#include <klocale.h>
+#include <qlabel.h>
+#include <qmultilineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qmultilineedit.h>
-#include <qcheckbox.h>
-#include "cclasstooldlg.h"
-#include <kmessagebox.h>
-#include "cclonefunctiondlg.h"
-#include <kiconloader.h>
+#include <qtabwidget.h>
+
 /* 
  *  Constructs a CClassPropertiesDlgImpl which is a child of 'CClassPropertiesDlg', with the
  *  name 'name' and widget flags set to 'f'
@@ -92,7 +97,7 @@ void CClassPropertiesDlgImpl::resizeEvent( QResizeEvent* e)
     // For a reason I don't know yet, the CClassToolDlg::resizeEvent is not called,
     // even though it is a child widget ...
     //tpgClassView -> resize(tabWidget -> width(), tabWidget -> height());
-    //cerr << "new tabWidget Size: W:" << tabWidget -> width() << "H:" << tabWidget -> height() << endl;
+    //kdDebug() << "new tabWidget Size: W:" << tabWidget -> width() << "H:" << tabWidget -> height() << endl;
 }
 
 /*  
@@ -155,7 +160,7 @@ void CClassPropertiesDlgImpl::applyAddMethod()
     QCheckBox* chVirtual=0, * chPure=0, * chStatic=0, *chConst=0;
     QMultiLineEdit* meDoc;
     int pg = tabWidget -> currentPageIndex();
-    cerr << "applyAddMethod: in page #" << pg << endl;
+    kdDebug() << "applyAddMethod: in page #" << pg << endl;
     switch ( pg )
     {
         case CTPSIGNAL:
@@ -235,13 +240,13 @@ void CClassPropertiesDlgImpl::applyAddMethod()
   aMethod->setComment( comment );
   if (! currentClass )
   {
-    cerr << "ERROR currentClass != NULL!!!!!!!" << endl;
+    kdDebug() << "ERROR currentClass != NULL!!!!!!!" << endl;
     return;
   }
-  emit sigAddMethod( currentClass -> name.data(), aMethod);
+  emit sigAddMethod( currentClass -> path().data(), aMethod);
 
 
-  //cerr << "Definition of method ends on line: " <<aMethod -> definitionEndsOnLine << endl;
+  //kdDebug() << "Definition of method ends on line: " <<aMethod -> definitionEndsOnLine << endl;
   //delete aMethod;
   tbdata[pg].editFields[0] = eType ? eType -> text() : QString("");
   tbdata[pg].editFields[1] = eName -> text();
@@ -253,7 +258,7 @@ void CClassPropertiesDlgImpl::applyAddMethod()
     if ( pg == CTPMETHOD)
     {
         //QList <CParsedMethod> * m = currentClass -> getSortedMethodList();
-        //cerr << "class " << currentClass -> name.data() << " : updating methods list..." << endl;
+        //kdDebug() << "class " << currentClass -> name.data() << " : updating methods list..." << endl;
         currentClass -> addMethod( aMethod );
         cbImplMethodList_2 -> insertItem( aMethod -> name) ;
     }
@@ -261,13 +266,13 @@ void CClassPropertiesDlgImpl::applyAddMethod()
     if ( pg == CTPSLOT )
     {
         //QList <CParsedMethod> * m = currentClass -> getSortedSlotList();
-        cerr << "adding new slot to currentClass..." << endl;
+        kdDebug() << "adding new slot to currentClass..." << endl;
         currentClass -> addSlot( aMethod );
         cbSlotMemberList_2 -> insertItem( aMethod -> name );
     }
     if ( pg == CTPSIGNAL )
     {
-        cerr << "adding new method to currentClass ..." << endl;
+        kdDebug() << "adding new method to currentClass ..." << endl;
         currentClass -> addSignal ( aMethod );
     }
     // don't touch to signals list...
@@ -282,19 +287,19 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     QString strImplMethod = "";
     QString strAttrMember="";
     QString toAdd;
-    cerr  << "applying signal-clot connection ..." << endl;
+    kdDebug()  << "applying signal-clot connection ..." << endl;
     if ( !signalMethod || !slotMethod || !implMethod )
     {
-        cerr << "Error: caugth NULL POINTER! can't be! uh ?" << endl;
+        kdDebug() << "Error: caugth NULL POINTER! can't be! uh ?" << endl;
         return;
     }
 
     signalMethod -> asString ( strSigMethod );
-    cerr << "signalMethod: " << strSigMethod.data() << endl;
+    kdDebug() << "signalMethod: " << strSigMethod.data() << endl;
     slotMethod -> asString ( strSlotMethod );
-    cerr << "slotMethod: " << strSlotMethod.data() << endl;
+    kdDebug() << "slotMethod: " << strSlotMethod.data() << endl;
     implMethod -> asString ( strImplMethod );
-    cerr << "implMethod: " << strImplMethod.data() << endl;
+    kdDebug() << "implMethod: " << strImplMethod.data() << endl;
 
     if ( attrMember ) strAttrMember = attrMember -> name;
     else strAttrMember = "this";
@@ -303,7 +308,7 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     toAdd = toAdd + "SIGNAL( " + strSigMethod + " ), ";
     toAdd = toAdd + "SLOT( " + strSlotMethod + " ) );";
 
-    cerr << " toAdd = " << toAdd.data() << endl;
+    kdDebug() << " toAdd = " << toAdd.data() << endl;
 
     QString Message;
 
@@ -343,14 +348,14 @@ void CClassPropertiesDlgImpl::slotBtnApply()
     switch ( pg )
     {
         case CTPATTRIBUTE:
-            cerr << "Applying new Attribute..." << endl;
+            kdDebug() << "Applying new Attribute..." << endl;
             applyAddAttribute();
             accept();
             return;
         case CTPMETHOD:
         case CTPSIGNAL:
         case CTPSLOT:
-            cerr << "Applying new method..." << endl;
+            kdDebug() << "Applying new method..." << endl;
             applyAddMethod();
             accept();
             return;
@@ -365,22 +370,22 @@ void CClassPropertiesDlgImpl::slotBtnApply()
     }
 }
 
-/* 
+/*
  * public slot
  */
 void CClassPropertiesDlgImpl::slotBtnUndo()
 {
-    qWarning( "CClassPropertiesDlgImpl::slotBtnUndo() not yet implemented!" ); 
+    qWarning( "CClassPropertiesDlgImpl::slotBtnUndo() not yet implemented!" );
 }
 
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSlotModifierChanged(int )
 {
-    qWarning( "CClassPropertiesDlgImpl::slotSlotModifierChanged(int ) not yet implemented!" ); 
+    qWarning( "CClassPropertiesDlgImpl::slotSlotModifierChanged(int ) not yet implemented!" );
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotAddSlotState(int)
@@ -394,7 +399,7 @@ void CClassPropertiesDlgImpl::slotAddSlotState(int)
         if ( signalMethod )
         {
             QList <CParsedArgument>  argList = signalMethod -> arguments;
-            cerr << "build args from signal " << signalMethod -> name.data() << endl;
+            kdDebug() << "build args from signal " << signalMethod -> name.data() << endl;
             CParsedArgument * arg;
             if ( argList. count() > 0 )
             {
@@ -403,7 +408,7 @@ void CClassPropertiesDlgImpl::slotAddSlotState(int)
                     if ( strArgs != "" ) strArgs = strArgs + ", ";
                     strArgs = strArgs + arg -> type;
                 }
-                cerr << "args are " << strArgs.data() << endl;
+                kdDebug() << "args are " << strArgs.data() << endl;
             }
         }
         strDeclare = strDeclare + strArgs + ")";
@@ -417,7 +422,7 @@ void CClassPropertiesDlgImpl::slotAddSlotState(int)
         buttonApply -> setEnabled(false);
     }
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotImplMethodSelected(const QString& strMethod)
@@ -425,12 +430,12 @@ void CClassPropertiesDlgImpl::slotImplMethodSelected(const QString& strMethod)
     bool btrue;
     QList < CParsedMethod> * l =  currentClass -> getSortedMethodList();
     QString am;
-    cerr << "in slotImplMethodSelected:" << endl;
-    cerr << "getting instance of " << strMethod.data() << endl;
+    kdDebug() << "in slotImplMethodSelected:" << endl;
+    kdDebug() << "getting instance of " << strMethod.data() << endl;
     for ( implMethod = l -> first() ; implMethod; implMethod = l -> next())
     {
         implMethod -> asString ( am );
-        cerr << "mathing " << am.data() << endl;
+        kdDebug() << "mathing " << am.data() << endl;
         if ( am == strMethod ) break;
     }
     //implMethod = currentClass -> getMethodByNameAndArg( strMethod.data() );
@@ -439,25 +444,25 @@ void CClassPropertiesDlgImpl::slotImplMethodSelected(const QString& strMethod)
     buttonApply -> setEnabled(btrue);
     buttonUndo -> setEnabled(btrue);
 
-    if ( signalMethod == NULL ) cerr << " signal method is NULL! " << endl;
-    if ( slotMethod == NULL ) cerr << " slot method is NULL! " << endl;
-    if ( implMethod == NULL ) cerr << " impl. methodis NULL! " << endl;
+    if ( signalMethod == NULL ) kdDebug() << " signal method is NULL! " << endl;
+    if ( slotMethod == NULL ) kdDebug() << " slot method is NULL! " << endl;
+    if ( implMethod == NULL ) kdDebug() << " impl. methodis NULL! " << endl;
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotMethAccessChanged(int)
 {
-    qWarning( "CClassPropertiesDlgImpl::slotMethAccessChanged(int) not yet implemented!" ); 
+    qWarning( "CClassPropertiesDlgImpl::slotMethAccessChanged(int) not yet implemented!" );
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotMethModifierChanged(int)
 {
-    qWarning( "CClassPropertiesDlgImpl::slotMethModifierChanged(int) not yet implemented!" ); 
+    qWarning( "CClassPropertiesDlgImpl::slotMethModifierChanged(int) not yet implemented!" );
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotMethNameChanged( const QString & )
@@ -469,7 +474,7 @@ void CClassPropertiesDlgImpl::slotMethNameChanged( const QString & )
     buttonApply -> setEnabled(true);
     buttonUndo -> setEnabled(true);
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotMethTypeChanged( const QString & )
@@ -481,14 +486,14 @@ void CClassPropertiesDlgImpl::slotMethTypeChanged( const QString & )
     buttonApply -> setEnabled(true);
     buttonUndo -> setEnabled(true);
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSigAccessChanged(int)
 {
-    qWarning( "CClassPropertiesDlgImpl::slotSigAccessChanged(int) not yet implemented!" ); 
+    qWarning( "CClassPropertiesDlgImpl::slotSigAccessChanged(int) not yet implemented!" );
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSigAddSignalState(int)
@@ -510,11 +515,12 @@ void CClassPropertiesDlgImpl::slotSigAddSignalState(int)
 
 
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSigMemberSelected(const QString& aMember)
 {
+    /*
     QString aName;
     QString a;
     getClassNameFromString( aMember, aName );
@@ -527,7 +533,59 @@ void CClassPropertiesDlgImpl::slotSigMemberSelected(const QString& aMember)
         delete theParser;
         theParser = NULL;
     }
-    //cerr <<  "class to get signal list '" << aName.data() <<"'" << "curerntClass:'"<< currentClass -> name << "'" << (int) (aName == currentClass -> name) <<  endl;
+    //kdDebug() <<  "class to get signal list '" << aName.data() <<"'" << "curerntClass:'"<< currentClass -> name << "'" << (int) (aName == currentClass -> name) <<  endl;
+    leSigClassName -> setText ( aName );
+    if (aName == currentClass -> name)
+    {
+        classOfSig = currentClass;
+        aClass = getParsedParentClass( classOfSig );
+        bool bClear = true;
+        while ( aClass != NULL )
+        {	
+            if ( aClass ) setSignalsMemberList ( aClass, false );
+            aClass = getParsedParentClass( aClass );
+            bClear = false;
+        }
+        setSignalsMemberList( currentClass, false );
+        selectedSigAttrClass = currentClass;
+        return;
+    }
+
+    aClass = store -> getClassByName ( aName );
+    if ( aClass == NULL ){
+        aClass = unParsedClass( aName );
+        selectedSigAttrClass = aClass;
+        if( aClass == NULL)
+        {
+            kdDebug() << " CClassPropertiesDlgImpl::slotSigMemberSelected: failed to parse..." << endl;
+            return;
+        }
+    }
+    classOfSig = aClass;
+    aClass = getParsedParentClass( aClass );
+    bool bClear = false;
+    while ( aClass != NULL )
+    {	
+        if ( aClass ) setSignalsMemberList ( aClass, bClear );
+        aClass = getParsedParentClass( aClass );
+        bClear = false;
+    }
+    setSignalsMemberList ( classOfSig, false ); //
+*/
+
+    QString aName;
+    QString a;
+    getClassNameFromString( aMember, aName );
+    getMemberFromString( aMember, a);
+
+    CParsedClass * aClass;
+    cbSigSignalList_2 -> clear();
+    if ( theParser != NULL )
+    {// Clean up old parser....
+        delete theParser;
+        theParser = NULL;
+    }
+    //kdDebug() <<  "class to get signal list '" << aName.data() <<"'" << "curerntClass:'"<< currentClass -> name << "'" << (int) (aName == currentClass -> name) <<  endl;
     leSigClassName -> setText ( aName );
     if (aName == currentClass -> name)
     {
@@ -543,7 +601,7 @@ void CClassPropertiesDlgImpl::slotSigMemberSelected(const QString& aMember)
         selectedSigAttrClass = aClass;
         if( aClass == NULL)
         {
-            cerr << " CClassPropertiesDlgImpl::slotSigMemberSelected: failed to parse..." << endl;
+            kdDebug() << " CClassPropertiesDlgImpl::slotSigMemberSelected: failed to parse..." << endl;
             return;
         }
     }
@@ -551,8 +609,9 @@ void CClassPropertiesDlgImpl::slotSigMemberSelected(const QString& aMember)
 
     setSignalsMemberList ( aClass );
 //    qWarning( "CClassPropertiesDlgImpl::slotSigMemberSelected(const QString&) not completely implemented!" );
+
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSigNameChanged( const QString& )
@@ -564,7 +623,7 @@ void CClassPropertiesDlgImpl::slotSigNameChanged( const QString& )
     buttonApply -> setEnabled(true);
     buttonUndo -> setEnabled(true);
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSigSignalSelected(const QString& aName)
@@ -577,7 +636,7 @@ void CClassPropertiesDlgImpl::slotSigSignalSelected(const QString& aName)
     if ( meth == 0 ) return;
     methList = currentClass -> getSortedSlotList();
     setSlotTabSlotList ( methList, true);
-    cerr << "CClassPropertiesDlgImpl::slotSigSignalSelected() - signal '" << signalMethod -> name << "' selected.." << endl;
+    kdDebug() << "CClassPropertiesDlgImpl::slotSigSignalSelected() - signal '" << signalMethod -> name << "' selected.." << endl;
     delete methList;
     // Ok now that since we can give a arbitrary class name which could have signal member different from
     // our working class, we need to recheck if our member attribute does have the same signal member than
@@ -586,7 +645,7 @@ void CClassPropertiesDlgImpl::slotSigSignalSelected(const QString& aName)
 
     //qWarning( "CClassPropertiesDlgImpl::slotSigSignalSelected(const QString&) not yet implemented!" );
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSlotAccessChanged(int)
@@ -595,15 +654,15 @@ void CClassPropertiesDlgImpl::slotSlotAccessChanged(int)
 
     qWarning( "CClassPropertiesDlgImpl::slotSlotAccessChanged(int) not yet implemented!" );
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSlotMemberSelected(const QString&)
 {
     slotMethod = currentClass -> getSlotByNameAndArg ( cbSlotMemberList_2 -> currentText().data() );
-    cerr << "slot member " << (slotMethod ? slotMethod -> name.data() : "oops - NULL") << "selected..." << endl;
+    kdDebug() << "slot member " << (slotMethod ? slotMethod -> name.data() : "oops - NULL") << "selected..." << endl;
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotSlotNameChanged( const QString& )
@@ -615,7 +674,7 @@ void CClassPropertiesDlgImpl::slotSlotNameChanged( const QString& )
     buttonApply -> setEnabled(true);
     buttonUndo -> setEnabled(true);
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotVarNameChanged( const QString& )
@@ -627,7 +686,7 @@ void CClassPropertiesDlgImpl::slotVarNameChanged( const QString& )
     buttonApply -> setEnabled(true);
     buttonUndo -> setEnabled(true);
 }
-/* 
+/*
  * protected slot
  */
 void CClassPropertiesDlgImpl::slotVarTypeChanged( const QString& )
@@ -734,9 +793,13 @@ void CClassPropertiesDlgImpl::init()
             break;
         case CTPADDSIGNAL:
             tabWidget -> setCurrentPage( CTPSIGNAL );
+            chSigAdd_2 -> setChecked(true);
+            slotSigAddSignalState(0);
             break;
         case CTPADDSLOT:
             tabWidget -> setCurrentPage( CTPSLOT );
+            chSlotAdd -> setChecked(true);
+            slotAddSlotState(0);
             break;
         default:
             break;
@@ -778,13 +841,13 @@ void CClassPropertiesDlgImpl::setSigTabAttrList ( QList <CParsedAttribute>* Attr
     cbSigMemberList_2 -> insertItem ( strItem );
     if ( AttrList -> count() == 0 )
     {
-        cerr << "no attributes in class "<< currentClass -> name.data () << endl;
+        kdDebug() << "no attributes in class "<< currentClass -> name.data () << endl;
         return;
     }
     for ( Attr = AttrList -> first() ; Attr; Attr = AttrList -> next())
     {
         strType = Attr -> type;
-        //cerr << "type of " << Attr -> name .data() << " is " << strType.data() << endl;
+        //kdDebug() << "type of " << Attr -> name .data() << " is " << strType.data() << endl;
         apos = strType.find('*'); // remove pointer modifier if any
         if(apos != -1) strType.remove(apos,1);
         // remove all spaces from type name!
@@ -796,7 +859,7 @@ void CClassPropertiesDlgImpl::setSigTabAttrList ( QList <CParsedAttribute>* Attr
         pos = -1;
         if ( !store -> hasClass( strType.data() ) )
         {
-            //cerr << strType.data () << " not parsed ..." << endl;
+            //kdDebug() << strType.data () << " not parsed ..." << endl;
             // here I am screwed for the moment...
             if ( (pos = strType.find('Q')) == 0)
             {
@@ -833,17 +896,17 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<CParsedMethod> * list, 
     if(!list) return;
     if ( list -> isEmpty())
     {
-        cerr << "no slot members ...." << endl;
+        kdDebug() << "no slot members ...." << endl;
         //signalMethod = NULL;
         slotMethod = 0;
         return;
     }
     if ( signalMethod == NULL && bmatchsig )
     {
-        cerr << "can't match signal arguments : signal is null" << endl;
+        kdDebug() << "can't match signal arguments : signal is null" << endl;
         lbSlotClassOfSig -> setText ( i18n("no matching slots") );
         slotMethod  =0;
-        cerr << "slotMethod set to NULL " << endl;
+        kdDebug() << "slotMethod set to NULL " << endl;
 
         return;
     }
@@ -854,7 +917,7 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<CParsedMethod> * list, 
         {
             match = false;
             slotArgs = meth -> arguments;
-            //cerr << meth -> name.data()  << "numargs: " << slotArgs . count() << endl;
+            //kdDebug() << meth -> name.data()  << "numargs: " << slotArgs . count() << endl;
             if( sigArgs . count() ==0 && slotArgs . count() ==0 ) goto ARGMATH;
             if ( sigArgs . count() != slotArgs . count()) continue;
             for ( sigArgIt = sigArgs . first(),
@@ -863,7 +926,7 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<CParsedMethod> * list, 
                    sigArgIt = sigArgs . next(),
                    slotArgIt = slotArgs . next())
             {
-                //cerr << "mathing " << sigArgIt -> type << " with " << slotArgIt -> type << endl;
+                //kdDebug() << "mathing " << sigArgIt -> type << " with " << slotArgIt -> type << endl;
                 if ( sigArgIt -> type == slotArgIt -> type)
                 {
                     match = true;
@@ -878,16 +941,16 @@ void CClassPropertiesDlgImpl::setSlotTabSlotList ( QList<CParsedMethod> * list, 
     }
     if( !cbSlotMemberList_2 -> count() )
     {
-        cerr << "No matching slot members found..." << endl;
+        kdDebug() << "No matching slot members found..." << endl;
         lbSlotClassOfSig -> setText (i18n("no matching slots"));
         slotMethod = 0;
-        cerr << "slotMethod set to NULL " << endl;
+        kdDebug() << "slotMethod set to NULL " << endl;
         return;
     }
     else lbSlotClassOfSig -> setText ( classOfSig ? classOfSig -> name + "'s signals": QString(i18n("no signal selected")) );
-    cerr << "getting slot method instacne..." << endl;
+    kdDebug() << "getting slot method instacne..." << endl;
     slotMethod = currentClass -> getSlotByNameAndArg( cbSlotMemberList_2 -> currentText().data() );
-    cerr << "slotMethod set to '" << slotMethod -> name.data() << endl;
+    kdDebug() << "slotMethod set to '" << slotMethod -> name.data() << endl;
 }
 /**  */
 void CClassPropertiesDlgImpl::setImplTabMethList ( QList<CParsedMethod>* mlist, bool bclear)
@@ -898,11 +961,11 @@ void CClassPropertiesDlgImpl::setImplTabMethList ( QList<CParsedMethod>* mlist, 
     for ( meth = mlist -> first(); meth; meth = mlist -> next())
     {
         meth -> asString( strMeth );
-        //cerr << "method " << strMeth.data() << " ends on line#" << meth -> definitionEndsOnLine << endl;
+        //kdDebug() << "method " << strMeth.data() << " ends on line#" << meth -> definitionEndsOnLine << endl;
         cbImplMethodList_2 -> insertItem ( strMeth );
     }
     implMethod = currentClass -> getMethodByNameAndArg ( cbImplMethodList_2 -> currentText().data() );
-    cerr << "implMethod set to " << (implMethod ? implMethod -> name.data() : "NULL") << endl;
+    kdDebug() << "implMethod set to " << (implMethod ? implMethod -> name.data() : "NULL") << endl;
 }
 /** EditEnter:
       This method tries to get the header filename from the line edit text
@@ -926,7 +989,7 @@ void CClassPropertiesDlgImpl::slotSigClassNameEditEnter()
 */
     if (! fixClass )
     { // abort...
-        cerr << " no class or can't get header file of class " << aClassName.data() << endl;
+        kdDebug() << " no class or can't get header file of class " << aClassName.data() << endl;
         delete theParser;
         theParser = NULL;
         return;
@@ -935,8 +998,8 @@ void CClassPropertiesDlgImpl::slotSigClassNameEditEnter()
     guestClass = theParser -> store . getClassByName (  classOfSig -> name );
     if ( ! guestClass )
     {
-        cerr << " No class named '" << classOfSig -> name.data() << "' in parsed file!" << endl;
-        cerr << "trying to get parent class of  " << classOfSif -> name.data() << endl;
+        kdDebug() << " No class named '" << classOfSig -> name.data() << "' in parsed file!" << endl;
+        kdDebug() << "trying to get parent class of  " << classOfSif -> name.data() << endl;
         if ( fixClass -> hasParent ( aClassName ) )
         {
             parentClass
@@ -964,17 +1027,17 @@ void CClassPropertiesDlgImpl::getClassNameFromString( const QString & aName, QSt
     if ((pos = newName.find("[]")) != -1) newName.remove(pos, 2);
 }
 /**  */
-void CClassPropertiesDlgImpl::setSignalsMemberList( CParsedClass* aClass)
+void CClassPropertiesDlgImpl::setSignalsMemberList( CParsedClass* aClass, bool bClear)
 {
     QList<CParsedMethod> *siglist = aClass -> getSortedSignalList();
     QString item;
-    cbSigSignalList_2 -> clear();
+    if ( bClear ) cbSigSignalList_2 -> clear();
     if ( (siglist == (QList<CParsedMethod> *)0) || ( siglist -> isEmpty()) )
     {
-        cerr << "CClassPropertiesDlgImpl::setSignalsMemberList() : class " << aClass -> name.data() << " has no signal members." << endl;
+        kdDebug() << "CClassPropertiesDlgImpl::setSignalsMemberList() : class " << aClass -> name.data() << " has no signal members." << endl;
         // ToDo: KMessageBox::warning(...)...
         signalMethod = 0;
-        cerr << "signalMethod set to NULL" << endl;
+        kdDebug() << "signalMethod set to NULL" << endl;
         return;
     }
     CParsedMethod* sig;
@@ -984,7 +1047,7 @@ void CClassPropertiesDlgImpl::setSignalsMemberList( CParsedClass* aClass)
         cbSigSignalList_2 -> insertItem( item );
     }
     signalMethod = aClass -> getSignalByNameAndArg ( cbSigSignalList_2 -> currentText().data() );
-    cerr << " signalMethod set to '" << signalMethod -> name.data() << "'" << endl;
+    if ( signalMethod ) kdDebug() << " signalMethod set to '" << signalMethod -> name.data() << "'" << endl;
 }
 /** This function tries guess if aName is a QT or a KDE class then set filename
       of the include file according to the classname.
@@ -1004,11 +1067,11 @@ CParsedClass* CClassPropertiesDlgImpl::unParsedClass( const QString& aName)
     if ( aName.find("K") == 0 )
         filePath = kde2dir + "/include/" + aName.lower() + ".h";
 
-    cerr << "about to parse file " << filePath.data() << endl;
+    kdDebug() << "about to parse file " << filePath.data() << endl;
     parser -> parse( filePath.data() );
     if (! parser -> store.hasClass( aName ))
     {
-        cerr << "Parse failed for " << aName.data() << endl;
+        kdDebug() << "Parse failed for " << aName.data() << endl;
         delete parser;
         return NULL;
     }
@@ -1039,13 +1102,13 @@ void CClassPropertiesDlgImpl::getMemberFromString ( const QString& str, QString&
     spos = str.length() - str.find(" ");
     //if( spos == -1) spos = 0;
     newName = str.right(spos-1);
-    cerr << newName.data() << endl;
+    kdDebug() << newName.data() << endl;
     for ( aAttr = l -> first(); aAttr; aAttr = l  -> next())
     {
         if (aAttr -> name == newName)
         {
             attrMember = aAttr;
-            cerr << "Atttribute member match: " << attrMember -> name.data() << endl;
+            kdDebug() << "Atttribute member match: " << attrMember -> name.data() << endl;
             return;
         }
     }
@@ -1104,6 +1167,48 @@ CCloneFunctionDlg volDlg(class_tree, this, "volnameDlg");
   }
 }	
 
+/** No descriptions */
+CParsedClass* CClassPropertiesDlgImpl::getParsedParentClass( CParsedClass* aClass )
+{
+    kdDebug() << "in getParsedParentClass: " << endl;
+	if ( aClass == NULL )
+	{
+	    kdDebug() << " no class! " << endl;
+	    return NULL;
+	}
+	QList <CParsedParent> parents = aClass -> parents;
+	CParsedParent* pr;
+	// CParsedClass* theClass;
+	kdDebug() << "parents count:" << parents.count() << endl;
+	if (parents.count() == 0) return NULL;
+	
+	// for now, get only the first parent class...
+	pr = parents.first();
+	kdDebug() << "got a parent class: " << pr -> name.data() << endl;
+	if (store -> hasClass( pr -> name.data() ) )
+		return store ->getClassByName( pr ->name.data());
+	else
+		return unParsedClass( pr -> name );
+}
+
 
 //#include "wzconnectdlgimpl.moc"
 
+/** This function will try to fill up the combo with 
+avaible Signals/Slots methods from the class itself and, if possible, 
+from its parent classes. */
+bool CClassPropertiesDlgImpl::fillCombo(CParsedClass* /*aClass*/,  CTPACTION /*action*/, QComboBox* /*cb*/)
+{
+    /*
+    CParsedMethod* meth;
+    CParsedParent* parent;
+    QList <CParsedParent> prList;
+
+    cb -> clear();
+    if( action == CTPSLOT )
+    {
+        // Only get the c
+    */
+    return false;
+
+}

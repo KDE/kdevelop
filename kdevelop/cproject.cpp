@@ -417,7 +417,7 @@ bool CProject::isDirInProject(QString rel_name){
   QString str;
   
   for(str=info.sub_dirs.first();str!=0;str=info.sub_dirs.next()){
-    cerr << endl << str;
+    kdDebug() << endl << str;
   }
 }
 
@@ -430,7 +430,7 @@ bool CProject::addDialogFileToProject(QString /*rel_name*/,TDialogFileInfo info)
   config.writeEntry("cpp_file",info.header_file);
   config.writeEntry("data_file",info.data_file);
   config.writeEntry("classname",info.classname);
-  
+
   TFileInfo file_info;
   file_info.rel_name = info.rel_name;
   file_info.type = KDEV_DIALOG;
@@ -441,19 +441,19 @@ bool CProject::addDialogFileToProject(QString /*rel_name*/,TDialogFileInfo info)
 }
 
 bool CProject::addFileToProject(QString rel_name,TFileInfo info)
-{  
+{
 
   // normalize it a little bit
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
-    
+
   QStrList all_files;
   getAllFiles(all_files);
 
   if(all_files.contains(rel_name) > 0){ // file is already in Project?
     return false; // no new subdir;
   }
-  
+
   QStrList list_files;
   QString makefile_name;
   QStrList sub_dirs;
@@ -474,7 +474,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
   config.readListEntry("files",list_files);
   list_files.append(rel_name);
   config.writeEntry("files",list_files);
-  
+
   //++++++++++++++add Makefile.am and the toplevels makefile.ams to the project if needed (begin)
   QStrList makefile_list;
   QStrList check_makefile_list;
@@ -483,15 +483,15 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
   check_makefile_list.append(makefile_name);
   QString makefile_name_org = makefile_name.copy();
 
-  //   cerr << endl << "*check:*" << makefile_name;
-  
+  //   kdDebug() << endl << "*check:*" << makefile_name;
+
   while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
 
       slash2_pos = makefile_name.findRev('/',slash_pos-1);
       if(slash2_pos != -1 && makefile_name != "/"){
 	makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
 	check_makefile_list.append(makefile_name);
-	cerr << "append to check_makefile_list: " << makefile_name << endl;
+	kdDebug() << "append to check_makefile_list: " << makefile_name << endl;
       } 
       else{
 	makefile_name = "";

@@ -77,7 +77,7 @@ void CParsedContainer::addStruct( CParsedStruct *aStruct )
 {
   REQUIRE( "Valid struct", aStruct != NULL );
   REQUIRE( "Valid structname", !aStruct->name.isEmpty() );
-  REQUIRE( "Unique struct", !hasStruct( useFullPath ? aStruct->path() : aStruct->name ) );
+  REQUIRE( "Unique struct <"+aStruct->path()+">", !hasStruct( useFullPath ? aStruct->path() : aStruct->name ) );
   
   if( !path().isEmpty() )
     aStruct->setDeclaredInScope( path() );
@@ -99,7 +99,7 @@ void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
 {
   REQUIRE( "Valid attribute", anAttribute != NULL );
   REQUIRE( "Valid attributename", !anAttribute->name.isEmpty() );
-  REQUIRE( "Unique attribute", !hasAttribute( useFullPath ? anAttribute->path() : anAttribute->name ) );
+  REQUIRE( "Unique attribute <"+anAttribute->path()+">", !hasAttribute( useFullPath ? anAttribute->path() : anAttribute->name ) );
 
   if( !path().isEmpty() )
     anAttribute->setDeclaredInScope( path() );

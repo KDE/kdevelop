@@ -18,7 +18,7 @@
 
 #include "ceditwidget.h"
 
-#include <iostream.h>
+//#include <kdebug.h>
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/highlight.h"
 #include <qpopupmenu.h>
@@ -151,11 +151,11 @@ void CEditWidget::setFocus(){
  *-----------------------------------------------------------------*/
 void CEditWidget::gotoPos(int pos,QString text_str){
 
-  //  cerr << endl << "POS: " << pos;
+  //  kdDebug() << endl << "POS: " << pos;
   // calculate the line
   QString last_textpart = text_str.right(text_str.length()-pos); // the second part of the next,after the pos
   int line = text_str.contains("\n") - last_textpart.contains("\n");
-  //  cerr << endl << "LINE:" << line;
+  //  kdDebug() << endl << "LINE:" << line;
   setCursorPosition(line,0);
   setFocus();
 }

@@ -16,7 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <kdebug.h>
 #include "ParsedSignalSlot.h"
 #include "ProgrammingByContract.h"
 
@@ -110,5 +110,5 @@ void CParsedSignalSlot::setSlot( CParsedMethod *aSlot )
  *-----------------------------------------------------------------*/
 void CParsedSignalSlot::out()
 {
-  cout << "    " << signal << " -> " << slot->name << "()\n";
+  kdDebug() << "    " << signal << " -> " << slot->name << "()\n";
 }

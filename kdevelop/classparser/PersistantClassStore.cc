@@ -19,7 +19,7 @@
 #include "PersistantClassStore.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream.h>
+#include <kdebug.h>
 #include "ProgrammingByContract.h"
 
 #define CLASSPREFIX "[CLASS]"
@@ -228,7 +228,7 @@ CParsedClass *CPersistantClassStore::getClassByName( const char *aName )
   //  assert( isOpen );
   //  assert( aName != NULL && strlen( aName ) > 0 );
    if(aName == 0 ){
-     cerr << "ERROR!!! in parser CParsedClass *CPersistantClassStore::getClassByName( : \n";
+     kdDebug() << "ERROR!!! in parser CParsedClass *CPersistantClassStore::getClassByName( : \n";
     return 0;
   }
 

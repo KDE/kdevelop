@@ -20,6 +20,7 @@
 #include "cclasstooldlg.h"
 #include "classparser/ProgrammingByContract.h"
 
+#include <kdebug.h>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -86,7 +87,7 @@ void CClassToolDlg::resizeEvent( QResizeEvent* e)
 {
     QWidget::resizeEvent(e);
     //resize(parentWidget() -> width(), parentWidget() -> height());
-    cerr << "CClassToolDlg: new size: W:" << width() << " H:" << height() << endl;
+    kdDebug() << "CClassToolDlg: new size: W:" << width() << " H:" << height() << endl;
 }
 
 /*********************************************************************

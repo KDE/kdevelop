@@ -83,7 +83,7 @@ void CKDevAccel::connectItem(const QString& action,
 //		QString str;
 //		str.sprintf( "KAccel : Cannot connect action %s which is not in the object dictionary",
 //		                    action.latin1() );
-//		warning(str);
+//		kdWarning() << str << endl;
 //		return;
 //	}
 //	

@@ -59,6 +59,7 @@
 #include <kaboutdialog.h>
 #include <kcombobox.h>
 #include <kcursor.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <khtmlview.h>
 #include <kkeydialog.h>
@@ -82,7 +83,7 @@
 #include <qmessagebox.h>
 #include <qwhatsthis.h>
 
-#include <iostream.h>
+//#include <iostream.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -443,8 +444,8 @@ void CKDevelop::slotFileSaveAll()
       TEditInfo *next_info=edit_infos.next();
       statProg->setProgress(++i);
 
-//      cerr << "checking: " << actual_info->filename << "\n";
-//      cerr << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
+//      kdDebug() << "checking: " << actual_info->filename << "\n";
+//      kdDebug() << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
 
       if(!isUntitled(actual_info->filename) && actual_info->modified &&
         handledNames.contains(actual_info->filename)<1)
@@ -469,7 +470,7 @@ void CKDevelop::slotFileSaveAll()
           blind_widget.doSave();
           isModified=blind_widget.isModified();
 //
-//      cerr << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+//      kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
 //
 
           if (actual_info==cpp_info)
@@ -870,7 +871,7 @@ void CKDevelop::slotBuildCompileFile(){
   process.clearArguments();
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
-//  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
+//  kdDebug() << "ObjectFile= " << fileinfo.baseName()+".o";
   QFileInfo fileinfo(cpp_widget->getName());
   QString actualDir=fileinfo.dirPath();
   QDir::setCurrent(actualDir);
@@ -1042,7 +1043,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        appl_process << exec_str;
-       cerr << endl << "EXEC:" << exec_str;
+       kdDebug() << endl << "EXEC:" << exec_str;
     }
     else if (prj->isKDE2Project()) {
        const QString oldGroup = config->group();
@@ -1051,19 +1052,19 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        config->setGroup(oldGroup);
 
        appl_process << kde2dir << binProgram;
-       cerr << endl << "EXEC:" << kde2dir << binProgram;
+       kdDebug() << endl << "EXEC:" << kde2dir << binProgram;
        o_tab_view->setCurrentTab(STDERR);
     }
     else if(prj->isKDEProject() || prj->isQtProject() || prj->isQt2Project())
     {
       appl_process << binProgram;
-      cerr << endl << "EXEC:" << binProgram;
+      kdDebug() << endl << "EXEC:" << binProgram;
       o_tab_view->setCurrentTab(STDERR);
     }
     else
     {
       appl_process << binProgram;
-      cerr << endl << "EXEC:" << binProgram;
+      kdDebug() << endl << "EXEC:" << binProgram;
       o_tab_view->setCurrentTab(STDERR);
     }
 
@@ -2624,7 +2625,7 @@ void CKDevelop::slotHelpSearchText(QString text){
     KMessageBox::error(this,i18n("You must select a text for searching the documentation!"));
     return;
   }
-  //  cerr << ":" << text << ":" << endl;
+  //  kdDebug() << ":" << text << ":" << endl;
 
   doc_search_display_text = text.copy(); // save the text
   text=realSearchText2regExp(text);  // change the text for using with regexp
@@ -4047,7 +4048,7 @@ void CKDevelop::slotToolbarClicked(int item){
     slotHelpBrowserReload();
     break;
   case ID_HELP_BROWSER_STOP:
-#warning FIXME KHTML changes.
+//#warning FIXME KHTML changes.
 //    browser_widget->cancelAllRequests();
     shell_process.kill();
     disableCommand(ID_HELP_BROWSER_STOP);

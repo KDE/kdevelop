@@ -1895,7 +1895,7 @@ void CKAppWizard::slotDefaultClicked() {
   m_dir = lSettings->readEntry ( "ProjectDefaultDir", QDir::homeDirPath());
   if(m_dir.right(1) != "/")
     m_dir+="/";
-//  cout << m_dir << endl;
+//  kdDebug() << m_dir << endl;
   directoryline->setText(m_dir);
   //end modif by Benoit Cerrina
   nameline->setText(0);

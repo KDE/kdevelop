@@ -16,10 +16,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
-#include <stdio.h>
+//#include <iostream.h>
+//#include <stdio.h>
 #include "ParsedMethod.h"
-#include <qregexp.h> 
+#include <qregexp.h>
+#include <kdebug.h>
 
 /*********************************************************************
  *                                                                   *
@@ -138,60 +139,60 @@ const char *CParsedMethod::asString( QString &str )
 void CParsedMethod::out()
 {
   CParsedArgument *arg;
-  char buf[10];
+//  char buf[10];
 
   if( !comment.isEmpty() )
-    cout << "    " << comment << "\n";
+    kdDebug() << "    " << comment << "\n";
 
-  cout << "    ";
+  kdDebug() << "    ";
   switch( exportScope )
   {
     case PIE_PUBLIC:
-      cout << "public ";
+      kdDebug() << "public ";
       break;
     case PIE_PROTECTED:
-      cout << "protected ";
+      kdDebug() << "protected ";
       break;
     case PIE_PRIVATE:
-      cout << "private ";
+      kdDebug() << "private ";
       break;
     case PIE_GLOBAL:
-      cout << "";
+      kdDebug() << "";
       break;
   }
 
   if( isVirtual )
-    cout << "virtual ";
+    kdDebug() << "virtual ";
 
   if( isStatic )
-    cout << "static ";
+    kdDebug() << "static ";
 
   if( isSlot )
-    cout << "slot ";
+    kdDebug() << "slot ";
 
   if( isSignal )
-    cout << "signal ";
+    kdDebug() << "signal ";
 
-  cout << ( type.isEmpty() ? "" : type.data() )  << " " << name << "( "; 
+  kdDebug() << ( type.isEmpty() ? "" : type.data() )  << " " << name << "( ";
 
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
   {
     if( arg != arguments.getFirst() )
-      cout << ", ";
+      kdDebug() << ", ";
 
     arg->out();
   }
 
-  cout << ( isConst ? " ) const\n" : " )\n" );
-  sprintf( buf, "%d", declaredOnLine );
-  cout << "      declared @ line " << buf << " - ";
-  sprintf( buf, "%d", declarationEndsOnLine );
-  cout << buf << "\n";
-  cout << "      defined(in " << ( isInHFile ? ".h" : ".cc" ) << ")";
-  sprintf( buf, "%d", definedOnLine );
-  cout << "@ line " << buf << " - ";
-  sprintf( buf, "%d", definitionEndsOnLine );
-  cout << buf << "\n";
+  kdDebug() << ( isConst ? " ) const\n" : " )\n" );
+//  sprintf( buf, "%d", declaredOnLine );
+  kdDebug() << "      declared @ line " << declaredOnLine << " - ";
+//  sprintf( buf, "%d", declarationEndsOnLine );
+  kdDebug() << declarationEndsOnLine << "\n";
+  kdDebug() << "      defined(in " << ( isInHFile ? ".h" : ".cc" ) << ")";
+//  sprintf( buf, "%d", definedOnLine );
+  kdDebug() << "@ line " << definedOnLine << " - ";
+//  sprintf( buf, "%d", definitionEndsOnLine );
+  kdDebug() << definitionEndsOnLine << "\n";
 }
 
 /*********************************************************************

@@ -16,7 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <kdebug.h>
 #include <qstring.h>
 #include "ParsedArgument.h"
 #include "ProgrammingByContract.h"
@@ -181,7 +181,7 @@ void CParsedArgument::out()
 {
   QString argString;
   toString(argString);
-  cout << argString;
+  kdDebug() << argString;
 }
 
 /*----------------------------- CParsedArgument::asPersistantString()

@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <iostream.h>
+//#include <stdio.h>
+#include <kdebug.h>
 #include <qstring.h>
 #include "ParsedAttribute.h"
 #include "ProgrammingByContract.h"
@@ -239,33 +239,33 @@ void CParsedAttribute::out()
   QString attrString;
 
   if( !comment.isEmpty() )
-    cout << "    " << comment << "\n";
+    kdDebug() << "    " << comment << "\n";
 
-  cout << "    ";
+  kdDebug() << "    ";
 
   switch( exportScope )
   {
     case PIE_PUBLIC:
-      cout << "public ";
+      kdDebug() << "public ";
       break;
     case PIE_PROTECTED:
-      cout << "protected ";
+      kdDebug() << "protected ";
       break;
     case PIE_PRIVATE:
-      cout << "private ";
+      kdDebug() << "private ";
       break;
     case PIE_GLOBAL:
-      cout << "";
+      kdDebug() << "";
       break;
   }
 
-  // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
+  // kdDebug() << ( type.isEmpty() ? " " : type.data() ) << " " << name;
   asString(attrString);
-  cout << attrString;
+  kdDebug() << attrString;
   buf.sprintf("%d", declaredOnLine );
-  cout << " @ line " << buf << " - ";
+  kdDebug() << " @ line " << buf << " - ";
   buf.sprintf("%d", declarationEndsOnLine );
-  cout << buf << "\n";
+  kdDebug() << buf << "\n";
 }
 
 /*********************************************************************

@@ -28,6 +28,7 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 /*********************************************************************
  *                                                                   *
@@ -328,9 +329,9 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
     switchToFile( aClass->definedInFile );
 	 aMethod->asCppCode( toAdd );	
 	 //int pos = toAdd.find( aMethod -> name );
-    //cerr << aMethod -> name.data() << " 's pos=" << pos << endl;
+    //kdDebug() << aMethod -> name.data() << " 's pos=" << pos << endl;
 	 //if(pos > -1 ) toAdd.insert(pos, QString(QString(aClassName)+"::"));
-	 //cerr << "fixed cpp code : " << toAdd.data() << endl;	
+	 //kdDebug() << "fixed cpp code : " << toAdd.data() << endl;	
     // Add the code to the file.
 
     edit_widget->append( toAdd );
@@ -381,13 +382,13 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
        ++aClass->attributeIterator )
   {
     attr = aClass->attributeIterator.current();
-    if( attr->exportScope == aAttr->exportScope && 
+    if( attr->exportScope == aAttr->exportScope &&
         atLine < attr->declarationEndsOnLine )
       atLine = attr->declarationEndsOnLine + 1;
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClass->name, "", THCLASS, THCLASS );  
+  CVGotoDeclaration( aClass->name, "", THCLASS, THCLASS );
 
   // Get the code for the new attribute
   aAttr->asHeaderCode( toAdd );
@@ -509,7 +510,7 @@ void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString&
     int atLine = implMethod -> definitionEndsOnLine ;
     if ( atLine ==-1 )
     {
-        cerr << "Line# not stored in implement method! Aborting SigSlotMapImplement!" << endl;
+        kdDebug() << "Line# not stored in implement method! Aborting SigSlotMapImplement!" << endl;
         return;
     }
    QString str = "\t" + toAdd + "\n";

@@ -110,22 +110,22 @@ void CParsedParent::setExport( int aExport )
  *-----------------------------------------------------------------*/
 void CParsedParent::out()
 {
-  cout << "    " << name << "(";
+  kdDebug() << "    " << name << "(";
 
   switch(exportattr)
   {
     case CPPUBLIC:
-      cout << "public";
+      kdDebug() << "public";
       break;
     case CPPROTECTED:
-      cout << "protected";
+      kdDebug() << "protected";
       break;
     case CPPRIVATE:
-      cout << "private";
+      kdDebug() << "private";
       break;
   }
   
-  cout << ")\n";
+  kdDebug() << ")\n";
 }
 
 /*--------------------------------- CParsedClass::asPersistantString()

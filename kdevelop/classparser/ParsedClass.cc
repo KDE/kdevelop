@@ -16,8 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
-#include <stdio.h>
+//#include <iostream.h>
+//#include <stdio.h>
 #include <stdlib.h>
 #include "ProgrammingByContract.h"
 #include "ParsedClass.h"
@@ -509,41 +509,41 @@ void CParsedClass::out()
   char *str;
 
   if( !comment.isEmpty() )
-    cout << comment << endl;
+    kdDebug() << comment << endl;
 
-  cout << "Class " << path() << " @ line " << declaredOnLine;
-  cout << " - " << declarationEndsOnLine << endl;
-  cout << "  Defined in files:" << endl;
-  cout << "    " << declaredInFile << endl;
-  cout << "    " << definedInFile << endl;
-  cout << "  Parents:" << endl;
+  kdDebug() << "Class " << path() << " @ line " << declaredOnLine;
+  kdDebug() << " - " << declarationEndsOnLine << endl;
+  kdDebug() << "  Defined in files:" << endl;
+  kdDebug() << "    " << declaredInFile << endl;
+  kdDebug() << "    " << definedInFile << endl;
+  kdDebug() << "  Parents:" << endl;
   for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
     aParent->out();
-  cout << "  Friends:" << endl;
+  kdDebug() << "  Friends:" << endl;
   for( str = friends.first(); str != NULL; str = friends.next() )
-    cout << "   " << str << endl;
-  cout << "  Attributes:" << endl;
+    kdDebug() << "   " << str << endl;
+  kdDebug() << "  Attributes:" << endl;
   for( ait.toFirst(); ait.current(); ++ait )
     ait.current()->out();
-  cout << "  Methods:" << endl;
+  kdDebug() << "  Methods:" << endl;
   for( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
     aMethod->out();
-  cout << "  Signals:" << endl;
+  kdDebug() << "  Signals:" << endl;
   for( aMethod = signalList.first(); aMethod != NULL; aMethod = signalList.next() )
     aMethod->out();
-  cout << "  Slots:" << endl;
+  kdDebug() << "  Slots:" << endl;
   for( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
     aMethod->out();
-  cout << "  Signal to slot mappings:" << endl;
+  kdDebug() << "  Signal to slot mappings:" << endl;
   for( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     aSS->out();
-  cout << "  Classes:" << endl;
+  kdDebug() << "  Classes:" << endl;
   for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )
     classIterator.current()->out();
   
-  cout << endl;
+  kdDebug() << endl;
 }
 
 /*--------------------------------- CParsedClass::asPersistantString()

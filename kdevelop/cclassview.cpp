@@ -28,9 +28,9 @@
 #include "./classwizard/cclasswizarddlg.h"
 #include "wzconnectdlgimpl.h"
 
-
 #include "resource.h"
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -286,7 +286,7 @@ void CClassView::refresh( CProject *proj )
   int currentCount = 0;
   bool popupClassItemsEnable;
 
-  debug( "CClassView::refresh( proj )" );
+  kdDebug() << "CClassView::refresh( proj )" << endl;
 
   project = proj;
 
@@ -317,12 +317,12 @@ void CClassView::refresh( CProject *proj )
   // Parse headerfiles.
   for( str = header.first(); str != NULL; str = header.next() )
   {
-    debug( "  parsing:[%s]", str );
+    kdDebug() << "  parsing:[" << str << "]" << endl;
     cp->parse( str );
     emit setStatusbarProgress( ++currentCount );
   }
 	
-  cerr << "before ui file removal: " << src.count() << endl;
+  kdDebug() << "before ui file removal: " << src.count() << endl;
   QString cur;
   for (cur = src.first(); cur !=NULL; cur = src.next())
   {
@@ -331,11 +331,11 @@ void CClassView::refresh( CProject *proj )
         src.prev(); // set the previous item the current so the next item will be the next after the removed ui file
       }
   }
-  cerr <<"after ui file removal: " << src.count() << endl;
+  kdDebug() <<"after ui file removal: " << src.count() << endl;
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
-    debug( "  parsing:[%s]", str );
+    kdDebug() << "  parsing:[" << str << "]" << endl;
     cp->parse( str );
     emit setStatusbarProgress( ++currentCount );
   }
@@ -364,7 +364,7 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
 {
 //  cp->getDependentFiles( iHeaderList, iSourceList);
 
-  cerr << "before ui file removal: " << iSourceList.count() << endl;
+  kdDebug() << "before ui file removal: " << iSourceList.count() << endl;
   QString cur;
   for (cur = iSourceList.first(); cur; cur = iSourceList.next())
   {
@@ -373,7 +373,7 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
         iSourceList.prev(); // set the previous item the current so the next item will be the next after the removed ui file
       }
   }
-  cerr <<"after ui file removal: " << iSourceList.count() << endl;
+  kdDebug() <<"after ui file removal: " << iSourceList.count() << endl;
 
   // Initialize progressbar.
   int lTotalCount = 0;
@@ -395,14 +395,14 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
   // Now parse the each file and add the data back.
   for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
   {
-    debug( "  parsing:[%s]", lCurFile );
+    kdDebug() << "  parsing:[" << lCurFile << "]" << endl;
 	  cp->parse( lCurFile );
     emit setStatusbarProgress( ++lCurCount );
   }
 
   for (lCurFile = iSourceList.first(); lCurFile; lCurFile = iSourceList.next())
   {
-    debug( "  parsing:[%s]", lCurFile );
+    kdDebug() <<  "  parsing:[" << lCurFile << "]" << endl;
     cp->parse( lCurFile );
     emit setStatusbarProgress( ++lCurCount );
   }
@@ -431,7 +431,7 @@ void CClassView::refresh()
   QList<CParsedAttribute> *attributeList;
   QList<CParsedStruct> *structList;
 
-  debug( "CClassView::refresh()" );
+  kdDebug() << "CClassView::refresh()" << endl;
 
   // Try to fetch a stored classview tree.
   treeStr = project->getClassViewTree();
@@ -466,7 +466,7 @@ void CClassView::refresh()
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
   methodList = store->globalContainer.getSortedMethodList();
-  cout << "Got " << methodList->count() << " methods" << endl;
+  kdDebug() << "Got " << methodList->count() << " methods" << endl;
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
   delete methodList;
 
@@ -499,7 +499,7 @@ void CClassView::addFile( const char *aName )
   // Reset the tree.
   ((CClassTreeHandler *)treeH)->clear();
 
-  debug( "Adding file %s", aName );
+  kdDebug() << "Adding file " << aName << endl;
 
   // Parse the file.
   cp->parse( aName );
@@ -541,7 +541,7 @@ void CClassView::refreshClassByName( const char *aName )
  *   View graphical classtree.
  *
  * Parameters:
- *   
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
@@ -563,7 +563,7 @@ void CClassView::viewGraphicalTree()
  *   p          Point to check if we should get a tooltip for.
  *   r          Rectangle of the tooltip item.
  *   str        String that should contain the tooltip.
- *   
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
@@ -585,12 +585,12 @@ void CClassView::tip( const QPoint &p, QRect &r, QString &str )
  *   Views a definition of an item.
  *
  * Parameters:
- *   
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::slotViewDefinition( const char *parentPath, 
-                                     const char *itemName, 
+void CClassView::slotViewDefinition( const char *parentPath,
+                                     const char *itemName,
                                      THType parentType,
                                      THType itemType )
 {
@@ -603,12 +603,12 @@ void CClassView::slotViewDefinition( const char *parentPath,
  *   Views a declaration of an item.
  *
  * Parameters:
- *   
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::slotViewDeclaration( const char *parentPath, 
-                                      const char *itemName, 
+void CClassView::slotViewDeclaration( const char *parentPath,
+                                      const char *itemName,
                                       THType parentType,
                                       THType itemType )
 {
@@ -806,7 +806,7 @@ void CClassView::buildTree( const char *str )
   CParsedClass *aPC;
   char buf[50];
 
-  debug( "CClassView::buildtree( treeStr )" );
+  kdDebug() << "CClassView::buildtree( treeStr )"  << endl;
 	uint lStringSize = strlen(str);
   while( pos < lStringSize )
   {
@@ -849,13 +849,13 @@ void CClassView::buildTree( const char *str )
     }
     else if (str[pos] != '(')					//the current character is not an '\'' (we are out of the inner loop) nor a '('
     {
-    	cerr << "invalid tree string trying to recover" << endl;
-    	pos++;
+      kdDebug() << "invalid tree string trying to recover" << endl;
+      pos++;
     }
   }
   classesItem = root;
-//  cout << "buildTree(str) took " << (time(NULL) - lStart) << "ms to complete" << endl;
-//  cout << "buildTree(str) took " << (clock() - lStartClock) << "clocktick to complete" << endl;
+//  kdDebug() << "buildTree(str) took " << (time(NULL) - lStart) << "ms to complete" << endl;
+//  kdDebug() << "buildTree(str) took " << (clock() - lStartClock) << "clocktick to complete" << endl;
 
 }
 
@@ -954,7 +954,7 @@ void CClassView::buildInitalClassTree()
   QDictIterator< QList<CParsedClass> > dictI( dict );
   QList<CParsedClass> rootList;
 
-  debug( "buildInitalClassTree" );
+  kdDebug() << "buildInitalClassTree" << endl;
 
   dict.setAutoDelete( true );
 
@@ -1017,8 +1017,8 @@ void CClassView::buildInitalClassTree()
 //  project->setClassViewTree( str );
   //end modif
 
-//  cout << "buildInitialClassTree took " << (time(NULL) - start) << " ms to complete" << endl;
-//  cout << "buildInitialClassTree took " << (clock() - startClock) << " clock to complete" << endl;
+//  kdDebug() << "buildInitialClassTree took " << (time(NULL) - start) << " ms to complete" << endl;
+//  kdDebug() << "buildInitialClassTree took " << (clock() - startClock) << " clock to complete" << endl;
 }
 
 /*----------------------------------------- CClassView::createCTDlg()
@@ -1035,14 +1035,14 @@ CClassPropertiesDlgImpl *CClassView::createCTDlg(CParsedClass* aClass, int pgn)
 {
   CClassPropertiesDlgImpl *ctDlg = new CClassPropertiesDlgImpl( this, (CTPACTION) pgn, NULL );
 
-  cerr << "CClassView::createCTDlg() : creating CClassToolDlg as child of CClassPropertiesDlgImpl::*tpgClassView:"<< endl;
+  kdDebug() << "CClassView::createCTDlg() : creating CClassToolDlg as child of CClassPropertiesDlgImpl::*tpgClassView:"<< endl;
   CClassToolDlg* tool = new CClassToolDlg( ctDlg -> CVLayout );
   tool -> show ();
 
   connect( tool,
            SIGNAL( signalViewDeclaration(const char *,const char *,THType,THType ) ),
            SLOT(slotViewDeclaration(const char *,const char *,THType,THType ) ) );
-                   
+
   connect( tool,
            SIGNAL( signalViewDefinition(const char *, const char *, THType, THType ) ),
            SLOT(slotViewDefinition(const char *, const char *, THType, THType ) ) );
@@ -1079,8 +1079,8 @@ CClassPropertiesDlgImpl *CClassView::createCTDlg(CParsedClass* aClass, int pgn)
  * Returns:
  *   A newly allocated classtool dialog.
  *-----------------------------------------------------------------*/
-bool CClassView::validClassDecl( const char *className, 
-                                 const char *declName, 
+bool CClassView::validClassDecl( const char *className,
+                                 const char *declName,
                                  THType /*type*/ )
 {
   bool retVal = false;
@@ -1090,18 +1090,18 @@ bool CClassView::validClassDecl( const char *className,
 
   if( retVal && className != NULL )
   {
-    str.sprintf( "%s '%s' %s", 
+    str.sprintf( "%s '%s' %s",
                  i18n("The class:").latin1(),
-                 className == NULL ? "" : className, 
+                 className == NULL ? "" : className,
                  i18n("couldn't be found.").latin1());
-      
+
     retVal = store->hasClass( className );
 
     if( !retVal )
     {
-      str.sprintf( "%s '%s' %s", 
+      str.sprintf( "%s '%s' %s",
                    i18n("The struct:").latin1(),
-                   className == NULL ? "" : className, 
+                   className == NULL ? "" : className,
                    i18n("couldn't be found.").latin1());
       retVal = store->hasStruct( className );
     }
@@ -1199,7 +1199,7 @@ void CClassView::slotClassDelete()
                       i18n("This function isn't implemented yet."),
                       i18n("Not implemented") );
   }
-                      
+
 }
 
 void CClassView::slotClassViewSelected()
@@ -1212,7 +1212,7 @@ void CClassView::slotClassViewSelected()
   if( mouseBtn == LeftButton && type != THFOLDER )
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
-        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
+        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR ||
         type == THPRIVATE_ATTR || type == THSIGNAL || type == THSCOPE )
       slotViewDeclaration();
     else
@@ -1221,7 +1221,7 @@ void CClassView::slotClassViewSelected()
   else if( mouseBtn == MidButton && type != THFOLDER ) // Middle button clicks
   {
     if( type == THCLASS || type == THSTRUCT || type == THGLOBAL_VARIABLE ||
-        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
+        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR ||
         type == THPRIVATE_ATTR  || type == THSIGNAL || type == THSCOPE )
       slotViewDefinition();
     else
@@ -1229,7 +1229,7 @@ void CClassView::slotClassViewSelected()
   }
 
   // Set it back, so next time only if user clicks again we react.
-  mouseBtn = RightButton; 
+  mouseBtn = RightButton;
 }
 
 void CClassView::slotMethodNew()
@@ -1244,9 +1244,9 @@ void CClassView::slotMethodNew()
                                                  parentType, itemType );
   if (itemType==THCLASS)
   {
-      cerr << "parentPath = " << parentPath.data() << endl;
+      kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      cerr << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name.data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDMETH);
       dlg -> show();
   }
@@ -1262,7 +1262,7 @@ void CClassView::slotMethodDelete()
   THType itemType;
 
   // Fetch the current data for classname etc..
-  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName, 
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
                                                  parentType, itemType );
 
   emit signalMethodDelete( parentPath, itemName );
@@ -1280,9 +1280,9 @@ void CClassView::slotAttributeNew()
                                                  parentType, itemType );
   if (itemType==THCLASS)
   {
-      cerr << "parentPath = " << parentPath.data() << endl;
+      kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      cerr << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name.data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDATTR);
       dlg -> show();
   }
@@ -1315,9 +1315,9 @@ void CClassView::slotSignalNew()
                                                  parentType, itemType );
   if (itemType==THCLASS)
   {
-      cerr << "parentPath = " << parentPath.data() << endl;
+      kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      cerr << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name.data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDSIGNAL);
       dlg -> show();
   }
@@ -1348,9 +1348,9 @@ void CClassView::slotSlotNew()
                                                  parentType, itemType );
   if (itemType==THCLASS)
   {
-      cerr << "parentPath = " << parentPath.data() << endl;
+      kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      cerr << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name.data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDSLOT);
       dlg -> show();
   }

@@ -128,7 +128,7 @@ void CParsedScopeContainer::addScope( CParsedScopeContainer *aScope )
 {
   REQUIRE( "Valid scope", aScope != NULL );
   REQUIRE( "Valid scope name", !aScope->name.isEmpty() );
-  REQUIRE( "Unique scope", !hasScope( useFullPath ? aScope->path() : aScope->name ) );
+  REQUIRE( "Unique scope <"+aScope->path()+">", !hasScope( useFullPath ? aScope->path() : aScope->name ) );
 
   if( !path().isEmpty() )
     aScope->setDeclaredInScope( path() );
@@ -195,49 +195,49 @@ QStrList *CParsedScopeContainer::getSortedScopeNameList()
 void CParsedScopeContainer::out()
 {
   if( !comment.isEmpty() )
-    cout << comment << endl;
+    kdDebug() << comment << endl;
 
   if( !path().isEmpty() )
   {
-    cout << "Namespace " << name << " @ line " << declaredOnLine;
-    cout << " - " << declarationEndsOnLine << endl;
-    cout << "  Defined in files:" << endl;
-    cout << "    " << declaredInFile << endl;
-    cout << "    " << definedInFile << endl;
+    kdDebug() << "Namespace " << name << " @ line " << declaredOnLine;
+    kdDebug() << " - " << declarationEndsOnLine << endl;
+    kdDebug() << "  Defined in files:" << endl;
+    kdDebug() << "    " << declaredInFile << endl;
+    kdDebug() << "    " << definedInFile << endl;
   }
 
   if( path().isEmpty() )
-    cout << "Global ";
-  cout << "Namespaces:" << endl;
+    kdDebug() << "Global ";
+  kdDebug() << "Namespaces:" << endl;
     for( scopeIterator.toFirst(); 
        scopeIterator.current();
        ++scopeIterator )
     scopeIterator.current()->out();
 
   if( path().isEmpty() )
-    cout << "Global ";
-  cout << "Classes:" << endl;
-  for( classIterator.toFirst(); 
+    kdDebug() << "Global ";
+  kdDebug() << "Classes:" << endl;
+  for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )
     classIterator.current()->out();
   if( path().isEmpty() )
-    cout << "Global ";
-  cout << "Structures:" << endl;
-  for( structIterator.toFirst(); 
+    kdDebug() << "Global ";
+  kdDebug() << "Structures:" << endl;
+  for( structIterator.toFirst();
        structIterator.current();
        ++structIterator )
     structIterator.current()->out();
   if( path().isEmpty() )
-    cout << "Global ";
-  cout << "Functions:" << endl;
-  for( methodIterator.toFirst(); 
+    kdDebug() << "Global ";
+  kdDebug() << "Functions:" << endl;
+  for( methodIterator.toFirst();
        methodIterator.current();
        ++methodIterator )
     methodIterator.current()->out();
   if( path().isEmpty() )
-    cout << "Global ";
-  cout << "Variables:" << endl;
+    kdDebug() << "Global ";
+  kdDebug() << "Variables:" << endl;
   for( attributeIterator.toFirst(); 
        attributeIterator.current();
        ++attributeIterator )

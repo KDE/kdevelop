@@ -38,7 +38,7 @@
 #include "ctabctl.h"
 #include "debug.h"
 #include "./kpp/kpp.h"
-#include <iostream.h>
+#include <kdebug.h>
 #include <kcursor.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
@@ -1145,7 +1145,7 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
 }
 
 void CKDevelop::slotProjectMakeDistRPM(){
- cerr << "Lets build and RPM!!!" << endl;
+ kdDebug() << "Lets build an RPM!!!" << endl;
 
 
  rpmbuilder = new Kpp(0,"KPP",true);
@@ -1210,7 +1210,7 @@ void CKDevelop::slotAddSpec(QString path)
 		prj->getAllFiles(myList);
 		//if(myList.contains(namelow+".spec"))
 		{
-				cerr << "I need to add " << path << " to the project..." << endl;
+				kdDebug() << "I need to add " << path << " to the project..." << endl;
         TFileInfo fileInfo;
         fileInfo.rel_name = namelow + ".spec";
         fileInfo.type = DATA;
@@ -1221,11 +1221,11 @@ void CKDevelop::slotAddSpec(QString path)
 		}
 }
 void CKDevelop::slotGetRPMBuildSTDOUT(QString sstdout){
-        cerr << sstdout << endl;
+        kdDebug() << sstdout << endl;
 				messages_widget->insertAtEnd(sstdout);
 }
 void CKDevelop::slotGetRPMBuildSTDERR(QString sstderr){
-        cerr << sstderr << endl;
+        kdDebug() << sstderr << endl;
 				stderr_widget->insertAtEnd(sstderr);
 }
 void CKDevelop::slotdoneWithKpp(){
@@ -1262,7 +1262,7 @@ void CKDevelop::slotrpmBuildProcess(){
  *                                                                   *
  *                          PUBLIC METHODS                           *
  *                                                                   *
- ********************************************************************/ 
+ ********************************************************************/
 
 /*---------------------------------------------- CKDevelop::newFile()
  * newFile()
@@ -1287,7 +1287,7 @@ void CKDevelop::newFile(bool add_to_project, const char* dir/*=0*/){
     dlg.setAddToProject();
   }
   if(!dlg.exec()) return; // cancel
-  
+
   complete_filename = dlg.location() + dlg.fileName();
 
   // Get the filetype.
@@ -1305,7 +1305,7 @@ void CKDevelop::newFile(bool add_to_project, const char* dir/*=0*/){
   if(prj->getProjectType()=="normal_gnome" && !new_subdir){
     slotBuildAutoconf();
   }
-  
+
 }
 
 /*-------------------------------------- CKDevelop::addFileToProject()
@@ -1326,15 +1326,15 @@ bool CKDevelop::addFileToProject(QString complete_filename,
 {
   bool new_subdir = false;
   QString rel_name = complete_filename;
-  
+
   // normalize it a little bit
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
-		   
+		
   rel_name.remove(0,prj->getProjectDir().length());
   //  rel_name.replace(QRegExp(prj->getProjectDir()),"");
-  //  cerr << "getProDir():" << prj->getProjectDir() << endl;
-  //  cerr << "*rel_name2*:" << rel_name << endl;
+  //  kdDebug() << "getProDir():" << prj->getProjectDir() << endl;
+  //  kdDebug() << "*rel_name2*:" << rel_name << endl;
 
   TFileInfo info;
   info.rel_name = rel_name;

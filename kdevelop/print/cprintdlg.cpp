@@ -35,7 +35,7 @@
 #include <qwhatsthis.h>
 #include <qgrid.h>
 
-//#include <iostream.h>
+//#include <kdebug.h>
 //#include <string.h>
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) :
@@ -1181,7 +1181,7 @@ void CPrintDlg::slotOkClicked() {
       //settings = KGlobal::config();
       //settings->setGroup("LastSettings");
       //      globalpara = settings->readEntry("A2psSettings");
-//      cout << string << endl;
+//      kdDebug() << string << endl;
       string = "";
       slotCreateParameters();
       if (printToFileButton->isChecked()) {

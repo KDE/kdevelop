@@ -18,7 +18,7 @@
 #include "cfileprintdlg.h"
 #include <qlabel.h>
 #include <qbuttongroup.h>
-#include <iostream.h>
+#include <kdebug.h>
 #include <kapp.h>
 #include <kmessagebox.h>
 #include <qdatetime.h>
@@ -810,9 +810,9 @@ void CFilePrintDlg::slotOkClicked() {
     }
     settings->setGroup("LastSettings");
     settings->writeEntry("FileSettings",sources);
-    cout << "Start output" << endl;
-    cout << sources << endl;
-    cout << "End Output" << endl;
+    kdDebug() << "Start output" << endl;
+    kdDebug() << sources << endl;
+    kdDebug() << "End Output" << endl;
   }
   settings->sync();
   reject();

@@ -99,7 +99,7 @@ void CParsedClassContainer::addClass( CParsedClass *aClass )
 {
   REQUIRE( "Valid class", aClass != NULL );
   REQUIRE( "Valid classname", !aClass->name.isEmpty() );
-  REQUIRE( "Unique class", !hasClass( useFullPath ? aClass->path() : aClass->name ) );
+  REQUIRE( "Unique class <"+aClass->path()+">", !hasClass( useFullPath ? aClass->path() : aClass->name ) );
 
   if( !path().isEmpty() )
     aClass->setDeclaredInScope( path() );

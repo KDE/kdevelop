@@ -17,7 +17,8 @@
  ***************************************************************************/
 // 1999-07-27 added kapp->processEvents() to line 1381 - Ralf
 
-#include <iostream.h>
+//#include <iostream.h>
+#include <kdebug.h>
 #include <qstring.h>
 #include <qregexp.h> 
 #include <kapp.h>
@@ -310,8 +311,8 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
 
   getNextLexem();
 
-  // cerr << "parsing namespace" << endl;
-  // cerr << "lexem = " << lexem << ":" << static_cast<char>(lexem) << endl;
+  // kdDebug() << "parsing namespace" << endl;
+  // kdDebug() << "lexem = " << lexem << ":" << static_cast<char>(lexem) << endl;
 
   if( lexem == '{' ) 
   {
@@ -1148,8 +1149,7 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
       }
       else
       {
-        warning( "No method by the name %s found in class %s", 
-                 name.data(), className.data() );
+        kdWarning() << "No method by the name " << name << " found in class " << className << endl;
         aMethod.out();
       }
     }
@@ -1160,7 +1160,7 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
   	  if (scope->path())        // Don't produce bad class names
   	    path = scope->path() + "." + path;
   	
-      cout << "scope path is " << path << endl;
+      kdDebug() << "scope path is " << path << endl;
       aClass = store.getClassByName( path );
       if( aClass != NULL)
       {
@@ -1175,13 +1175,12 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
         }
         else
         {
-          warning( "No method by the name %s found in class %s",
-                 name.data(), path.data() );
+          kdWarning() << "No method by the name " << name << " found in class " << path << endl;
           aMethod.out();
         }
       }
       else
-        warning( "No class by the name %s found", path.data() );
+        kdWarning() << "No class by the name " << path << " found" << endl;
     }
   }
 }
@@ -1402,7 +1401,7 @@ CParsedClass *CClassParser::parseClassHeader()
   aLexem = lexemStack.pop();
 
   if(aLexem == 0) {
-    cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+    kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
     return 0;
   }
 
@@ -1420,7 +1419,7 @@ CParsedClass *CClassParser::parseClassHeader()
       // Fetch the name of the parent.
       aLexem = lexemStack.pop();
       if(aLexem == 0) {
-        cerr << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+        kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
         return 0;
       }
 
@@ -1834,7 +1833,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
 
         aClass->setDeclaredInScope( classPath );
 
-        cout << "Storing class with path: " << aClass->path() << endl;
+        kdDebug() << "Storing class with path: " << aClass->path() << endl;
         
         // Check if class is in the global store, add it if missing
         if( store.hasClass( aClass->path() ) ) {

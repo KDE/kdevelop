@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "ParsedStruct.h"
-#include <iostream.h>
+#include <kdebug.h>
 
 /*********************************************************************
  *                                                                   *
@@ -69,9 +69,9 @@ CParsedStruct::~CParsedStruct()
 void CParsedStruct::out()
 {
   if( !comment.isEmpty() )
-    cout << "   " << comment << "\n";
+    kdDebug() << "   " << comment << "\n";
 
-  cout << "   " << path() << "\n";
+  kdDebug() << "   " << path() << "\n";
   for( attributeIterator.toFirst();
        attributeIterator.current();
        ++attributeIterator )

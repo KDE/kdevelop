@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "ClassTreeNode.h"
-#include <iostream.h>
+#include <kdebug.h>
 #include "ProgrammingByContract.h"
 
 /*********************************************************************
@@ -115,9 +115,7 @@ void CClassTreeNode::out()
 {
   CClassTreeNode *aChild;
 
-  cout << "(";
-
-  cout << theClass ? theClass->name.data() : "??";
+  kdDebug() << "(" << (theClass ? theClass->name.data() : "??");
 
   for( aChild = children.first();
        aChild != NULL;
@@ -126,7 +124,7 @@ void CClassTreeNode::out()
     aChild->out();
   }
   
-  cout << ")";
+  kdDebug() << ")" << endl;
 }
 
 /*---------------------------------------------- CParsedClass::width()

@@ -267,7 +267,7 @@ void GrepDialog::itemSelected(const QString& item)
         {
             linenumber = str.left(pos);
             emit itemSelected(filename,linenumber.toInt()-1);
-            //	cout << "Selected file " << filename << ", line " << linenumber << endl;
+            //	kdDebug() << "Selected file " << filename << ", line " << linenumber << endl;
         }
     }
 }
