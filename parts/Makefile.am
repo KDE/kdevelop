@@ -7,6 +7,7 @@
 #kdevelop: SVN_SUBDIR = svn
 
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
+	  adaproject adasupport \
 	  cppsupport pythonsupport perlsupport phpsupport fortransupport \
 	  autoproject scriptproject trollproject customproject \
 	  cvs perforce clearcase antproject diff valgrind sqlsupport \

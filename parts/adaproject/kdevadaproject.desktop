@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Ada Project
+Name=KDevAdaProject
+ServiceTypes=KDevelop/Project
+X-KDE-Library=libkdevadaproject

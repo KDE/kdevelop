@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<kdevelop>
+ <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <version>$VERSION$</version>
+  <projectmanagement>KDevAdaProject</projectmanagement>
+  <primarylanguage>Ada</primarylanguage>
+  <keywords>
+   <keyword>Ada</keyword>
+   <keyword>Code</keyword>
+  </keywords>
+ </general>
+ <kdevadaproject>
+  <run>
+   <mainprogram>src/$APPNAMELC$</mainprogram>
+   <mainsource>src/$APPNAMELC$.adb</mainsource>
+   <terminal>true</terminal>
+  </run>
+ </kdevadaproject>
+ <kdevfilecreate>
+  <useglobaltypes>
+   <type ext="adb"/>
+   <type ext="ads"/>
+  </useglobaltypes>
+ </kdevfilecreate>
+</kdevelop>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Ada Language Support
+Name=KDevAdaSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevadasupport
+X-KDevelop-Language=Ada
