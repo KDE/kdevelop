@@ -2,7 +2,7 @@
             project.cpp - the projectmanagment specific part of CKDevelop
                              -------------------                                         
 
-    begin                : 28 Jul 1998                                        
+    begin                : 28 Jul 1998                                    
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
@@ -290,7 +290,38 @@ void CKDevelop::slotAddExistingFiles(){
    
     // Fetch the type of the file
     type = CProject::getType( dest_name );
-      
+
+
+    if(file == dest_name) {
+      copy = false;
+      process.clearArguments();
+      process << "cat"; // copy is your friend :-) ...cat, too
+
+      if (add_dlg->isTemplateChecked())
+      {
+       if (CProject::getType(file)==CPP_HEADER)
+        {
+         temp_template = genfile.genHeaderFile(locate("appdata","temp_template"), prj,fi.fileName());
+         process << temp_template;
+        }
+        else if (CProject::getType(file)==CPP_SOURCE)
+              {
+               temp_template = genfile.genCPPFile(locate("appdata","temp_template"), prj, fi.fileName());
+               process << temp_template;
+              }
+      }
+      process << file;
+      process << ">";
+
+      process << "temp.tmp";
+      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important 
+      process.clearArguments();
+      process << "mv";
+      process << "temp.tmp";
+      process << dest_name;
+      process.start(KProcess::Block,KProcess::AllOutput);
+    }
+    else      
     if(QFile::exists(dest_name)){
         int result=KMessageBox::warningYesNoCancel(this,
                                                    i18n("The file\n\n%1\n\n"
@@ -915,7 +946,8 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
 		   
-  rel_name.replace(QRegExp(prj->getProjectDir()),"");
+  rel_name.remove(0,prj->getProjectDir().length());
+  //  rel_name.replace(QRegExp(prj->getProjectDir()),"");
   
   TFileInfo info;
   if( type == KDEV_DIALOG){

@@ -1,3 +1,8 @@
+1999-09-19 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* now you can have spaces in the directory
+	* directories with + (like c++) works now (i hope)
+	* add existing files in the same directory works now
+
 1999-09-17 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* fixed i18n("") problem in kdlgedit, I got this bugreport by someone, 
 	but I lost his email :-( Sorry.
