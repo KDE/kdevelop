@@ -46,6 +46,7 @@ void Core::wantsToQuit()
 
 void Core::slotQuit()
 {
+  ProjectManager::getInstance()->closeProject();
   if (PartController::getInstance()->readyToClose())
     TopLevel::getInstance()->realClose();
 }
