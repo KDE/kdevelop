@@ -17,7 +17,7 @@
 #include <qhbox.h>
 #include <qwhatsthis.h>
 #include <qstringlist.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 #include <kbuttonbox.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -209,7 +209,7 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::dirButtonClicked()
 {
-    dir_combo->setEditText(QFileDialog::getExistingDirectory(dir_combo->currentText()));
+    dir_combo->setEditText(KFileDialog::getExistingDirectory(dir_combo->currentText()));
 }
 
 
