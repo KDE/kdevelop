@@ -46,6 +46,8 @@ private:
         enum KMultiTabBar::KMultiTabBarPosition m_position;
         bool m_showActiveTabTexts;
         enum  KMultiTabBar::KMultiTabBarStyle m_style;
+
+        int m_expandedTabSize;
 protected:
         virtual void drawContents ( QPainter *, int, int, int, int);
 
