@@ -441,6 +441,8 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    //Closes a child window. sends no close event : simply deletes it
    if (!(m_pWinList->removeRef(pWnd)))
       return;
+   if (m_pWinList->count() == 0)
+     m_pCurrentWindow = 0L;
 
    QObject::disconnect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool)), this, SLOT(attachWindow(QextMdiChildView*,bool)) );
    QObject::disconnect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
@@ -451,7 +453,6 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 
    if (m_pTaskBar) {
       QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
-      // changed signale (mmorin)
       if (but != 0L) {
          QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
       }
@@ -472,7 +473,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 {
    //Closes a child window. sends no close event : simply deletes it
    m_pWinList->removeRef(pWnd);
-   if( m_pWinList->count() == 0L)
+   if (m_pWinList->count() == 0)
       m_pCurrentWindow = 0L;
 
    if (m_pTaskBar) {
