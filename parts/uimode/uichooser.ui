@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>386</width>
-            <height>438</height>
+            <height>403</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,6 +25,9 @@
             </property>
             <property name="title">
                 <string>Major &amp;User-Interface Mode</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string></string>
             </property>
             <vbox>
                 <property name="name">
@@ -54,6 +57,9 @@
                     <property name="text">
                         <string>C&amp;hildframe window mode</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>All tool views are initially docked to the mainframe.
 Editor and browser views will live like toplevel windows within a view area of the mainframe.
@@ -80,6 +86,9 @@ A typical example of this user interface mode is KDEStudio, our friend C++-IDE i
                     <property name="text">
                         <string>To&amp;plevel window mode</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+P</string>
+                    </property>
                     <property name="whatsThis" stdset="0">
                         <string>All editor, browser and tool views will be toplevel windows (directly on desktop).
 The main widget contains the menu, toolbars and statusbar only.
@@ -102,6 +111,9 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                     </property>
                     <property name="title">
                         <string>Use Tabs</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Some prefer not to have a tabbar and switch between documents using other means. Kate is one example of this.</string>
                     </property>
                     <vbox>
                         <property name="name">
@@ -143,6 +155,9 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                     <property name="title">
                         <string>Use Close On Hover</string>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The document tab can optionally be used to close the document, by clicking on the tab icon.</string>
+                    </property>
                     <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
@@ -183,7 +198,10 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 <cstring>IDEAlButtonGroup</cstring>
             </property>
             <property name="title">
-                <string>IDEAl Mode Button Layout</string>
+                <string>Toolview Tab Layout</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Three different modes for the IDEAl toolview tabs. "Text and Icons" is the most informative, but takes a lot of space. Those with a smaller screen will typically want "Icons".</string>
             </property>
             <vbox>
                 <property name="name">
@@ -194,7 +212,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                         <cstring>IconsOnly</cstring>
                     </property>
                     <property name="text">
-                        <string>Icons only</string>
+                        <string>Icons</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -202,7 +220,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                         <cstring>TextOnly</cstring>
                     </property>
                     <property name="text">
-                        <string>Text only</string>
+                        <string>Text</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -210,18 +228,10 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>TextOnActive</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Text on active button</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
                         <cstring>TextAndIcons</cstring>
                     </property>
                     <property name="text">
-                        <string>Text and Icons on all</string>
+                        <string>Text and Icons</string>
                     </property>
                 </widget>
             </vbox>

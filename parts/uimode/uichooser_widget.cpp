@@ -71,12 +71,11 @@ void UIChooserWidget::load()
 		case 1:
 			TextOnly->setChecked( true );
 			break;
-		case 2:
-			TextOnActive->setChecked( true );
-			break;
 		case 3:
 			TextAndIcons->setChecked( true );
 			break;
+		default:
+			TextOnly->setChecked( true );
 	}
 	
 	int tabVisibility = config->readNumEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
@@ -159,17 +158,13 @@ void UIChooserWidget::save()
 	{
 		config->writeEntry( "MDIStyle", 0 );
 	}
-	else if ( TextOnly->isChecked() )
-	{
-		config->writeEntry( "MDIStyle", 1 );
-	}
-	else if ( TextOnActive->isChecked() )
-	{
-		config->writeEntry( "MDIStyle", 2 );
-	}
 	else if ( TextAndIcons->isChecked() )
 	{
 		config->writeEntry( "MDIStyle", 3 );
+	}
+	else // TextOnly
+	{
+		config->writeEntry( "MDIStyle", 1 );
 	}
   
   config->sync();
