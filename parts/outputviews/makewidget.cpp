@@ -310,9 +310,11 @@ void MakeWidget::slotProcessExited(KProcess *)
         if (childproc->exitStatus()) {
             s = i18n("*** Exited with status: %1 ***").arg(childproc->exitStatus());
             t = Error;
+            KNotifyClient::event( "ProcessError", i18n("The process has finished with errors"));
         } else {
             s = i18n("*** Success ***");
             t = Diagnostic;
+            KNotifyClient::event( "ProcessSuccess", i18n("The process has finished successfully"));
             emit m_part->commandFinished(currentCommand);
         }
     } else {
