@@ -22,7 +22,7 @@ AC_MSG_CHECKING([for Qt documentation])
 
 ac_qt_docdirs=""
 AC_ARG_WITH(qtdoc_dir, 
-[  --with-qtdoc-dir=DIR     where the Qt documentation is installed ],
+[  --with-qtdoc-dir=DIR    where the Qt documentation is installed ],
 ac_qt_docdirs=""
 qt_docdirs=""
 [
@@ -87,7 +87,8 @@ AC_MSG_CHECKING([for kdoc index])
 
 ac_kdoc_indexdirs=""
 AC_ARG_WITH(kdocindex_dir, 
-[  --with-kdocindex-dir=DIR    where the kdoc index files are ],
+[  --with-kdocindex-dir=DIR    where the kdoc index files are. Obsolete - don't use!
+                              Index files are searched under kdelibsdoc-dir/kdoc-reference ],
 ac_kdoc_indexdirs=""
 kdoc_indexdirs=""
 [
@@ -136,7 +137,7 @@ AC_DEFUN(KDEV_CHECK_KDOC2,
 [
 AC_MSG_CHECKING(for kdoc2)
 AC_ARG_ENABLE(kdoc2,
-[  --enable-kdoc2        enable kdoc2 support],
+[  --enable-kdoc2          enable kdoc2 support],
 [if test "$enableval" = yes; then
   enable_kdoc2=yes
 fi],
