@@ -70,6 +70,14 @@
 #include <kdebug.h>
 //END Includes
 
+#if defined(KDE_IS_VERSION)
+# if KDE_IS_VERSION(3,1,3)
+#  ifndef _KDE_3_1_3_
+#   define _KDE_3_1_3_
+#  endif
+# endif
+#endif
+
 // from kfiledialog.cpp - avoid qt warning in STDERR (~/.xsessionerrors)
 static void silenceQToolBar(QtMsgType, const char *)
 {}
@@ -244,7 +252,11 @@ void KDevFileSelector::readConfig(KConfig *config, const QString & name)
     setupToolbar( config );
 
     cmbPath->setMaxItems( config->readNumEntry( "pathcombo history len", 9 ) );
+#if defined(_KDE_3_1_3_)
+    cmbPath->setURLs( config->readPathListEntry("dir history") );
+#else
     cmbPath->setURLs( config->readListEntry("dir history") );
+#endif
     // if we restore history
     if ( config->readBoolEntry( "restore location", true ) || kapp->isRestored() )
     {
@@ -318,17 +330,11 @@ void KDevFileSelector::writeConfig(KConfig *config, const QString & name)
     {
         l.append( cmbPath->text( i ) );
     }
-    config->writeEntry("dir history", l );
-#if defined(KDE_IS_VERSION)
-# if KDE_IS_VERSION(3,1,3)
-#  ifndef _KDE_3_1_3_
-#   define _KDE_3_1_3_
-#  endif
-# endif
-#endif
 #if defined(_KDE_3_1_3_)
+    config->writePathEntry( "dir history", l );
     config->writePathEntry( "location", cmbPath->currentText() );
 #else
+    config->writeEntry( "dir history", l );
     config->writeEntry( "location", cmbPath->currentText() );
 #endif
 
