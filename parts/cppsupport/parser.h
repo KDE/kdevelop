@@ -12,25 +12,20 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "ast.h"
+
 #include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvaluestack.h>
 
 class ParserPrivateData;
-class ProblemReporter;
-class QDomElement;
-
-class ClassStore;
-class ParsedClass;
-class ParsedParent;
-class ParsedClassContainer;
-class ParsedScopeContainer;
 
 class Driver;
 class Lexer;
 class Token;
 class Error;
+class ProblemReporter;
 
 class Parser: public QObject{
 public:
@@ -52,68 +47,68 @@ public:
 
 public /*rules*/ :
 
-    bool parseTranslationUnit( ClassStore* store=0 );
+    bool parseTranslationUnit( AST::Ptr& node );
 
-    bool parseDefinition( QDomElement& );
-    bool parseBlockDeclaration();
-    bool parseLinkageSpecification();
-    bool parseLinkageBody();
-    bool parseNamespace();
-    bool parseNamespaceAliasDefinition();
-    bool parseUsing();
-    bool parseUsingDirective();
-    bool parseTypedef();
-    bool parseAsmDefinition();
-    bool parseTemplateDeclaration();
-    bool parseDeclaration();
-
-    bool parseNestedNameSpecifier();
-    bool parseUnqualifiedName( QDomElement& );
-    bool parseStringLiteral();
-    bool parseName( QDomElement& );
-    bool parseOperatorFunctionId( QDomElement& );
-    bool parseTemplateArgumentList();
-    bool parseOperator( QDomElement& );
-    bool parseCvQualify();
-    bool parseSimpleTypeSpecifier( QDomElement& );
-    bool parsePtrOperator();
-    bool parseTemplateArgument();
-    bool parseTypeSpecifier( QDomElement& );
-    bool parseTypeSpecifierOrClassSpec( QDomElement& );
-    bool parseDeclarator( QDomElement& );
-    bool parseTemplateParameterList();
-    bool parseTemplateParameter();
-    bool parseStorageClassSpecifier();
-    bool parseFunctionSpecifier();
-    bool parseInitDeclaratorList();
-    bool parseInitDeclarator( QDomElement& );
-    bool parseParameterDeclarationClause();
-    bool parseCtorInitializer();
-    bool parsePtrToMember();
-    bool parseEnumSpecifier( QDomElement& );
-    bool parseClassSpecifier( QDomElement& );
-    bool parseElaboratedTypeSpecifier( QDomElement& );
-    bool parseDeclaratorId( QDomElement& );
-    bool parseExceptionSpecification();
-    bool parseEnumeratorList();
-    bool parseEnumerator();
-    bool parseTypeParameter();
-    bool parseParameterDeclaration();
-    bool parseTypeId();
-    bool parseAbstractDeclarator();
-    bool parseParameterDeclarationList();
-    bool parseMemberSpecification();
-    bool parseAccessSpecifier( QString& );
-    bool parseTypeIdList();
-    bool parseMemInitializerList();
-    bool parseMemInitializer();
-    bool parseInitializer();
-    bool parseBaseClause( QDomElement& parents );
-    bool parseBaseSpecifierList( QDomElement& parents );
-    bool parseBaseSpecifier( QDomElement& parent );
-    bool parseInitializerClause();
-    bool parseMemInitializerId();
-    bool parseFunctionBody();
+    bool parseDefinition( AST::Ptr& node );
+    bool parseBlockDeclaration( AST::Ptr& node );
+    bool parseLinkageSpecification( AST::Ptr& node );
+    bool parseLinkageBody( AST::Ptr& node );
+    bool parseNamespace( AST::Ptr& node );
+    bool parseNamespaceAliasDefinition( AST::Ptr& node );
+    bool parseUsing( AST::Ptr& node );
+    bool parseUsingDirective( AST::Ptr& node );
+    bool parseTypedef( AST::Ptr& node );
+    bool parseAsmDefinition( AST::Ptr& node );
+    bool parseTemplateDeclaration( AST::Ptr& node );
+    bool parseDeclaration( AST::Ptr& node );
+    
+    bool parseNestedNameSpecifier( AST::Ptr& node );
+    bool parseUnqualifiedName( AST::Ptr& node );
+    bool parseStringLiteral( AST::Ptr& node );
+    bool parseName( AST::Ptr& node );
+    bool parseOperatorFunctionId( AST::Ptr& node );
+    bool parseTemplateArgumentList( AST::Ptr& node );
+    bool parseOperator( AST::Ptr& node );
+    bool parseCvQualify( AST::Ptr& node );
+    bool parseSimpleTypeSpecifier( AST::Ptr& node );
+    bool parsePtrOperator( AST::Ptr& node );
+    bool parseTemplateArgument( AST::Ptr& node );
+    bool parseTypeSpecifier( AST::Ptr& node );
+    bool parseTypeSpecifierOrClassSpec( AST::Ptr& node );
+    bool parseDeclarator( AST::Ptr& node );
+    bool parseTemplateParameterList( AST::Ptr& node );
+    bool parseTemplateParameter( AST::Ptr& node );
+    bool parseStorageClassSpecifier( AST::Ptr& node );
+    bool parseFunctionSpecifier( AST::Ptr& node );
+    bool parseInitDeclaratorList( AST::Ptr& node );
+    bool parseInitDeclarator( AST::Ptr& node );
+    bool parseParameterDeclarationClause( AST::Ptr& node );
+    bool parseCtorInitializer( AST::Ptr& node );
+    bool parsePtrToMember( AST::Ptr& node );
+    bool parseEnumSpecifier( AST::Ptr& node );
+    bool parseClassSpecifier( AST::Ptr& node );
+    bool parseElaboratedTypeSpecifier( AST::Ptr& node );
+    bool parseDeclaratorId( AST::Ptr& node );
+    bool parseExceptionSpecification( AST::Ptr& node );
+    bool parseEnumeratorList( AST::Ptr& node );
+    bool parseEnumerator( AST::Ptr& node );
+    bool parseTypeParameter( AST::Ptr& node );
+    bool parseParameterDeclaration( AST::Ptr& node );
+    bool parseTypeId( AST::Ptr& node );
+    bool parseAbstractDeclarator( AST::Ptr& node );
+    bool parseParameterDeclarationList( AST::Ptr& node );
+    bool parseMemberSpecification( AST::Ptr& node );
+    bool parseAccessSpecifier( AST::Ptr& node );
+    bool parseTypeIdList( AST::Ptr& node );
+    bool parseMemInitializerList( AST::Ptr& node );
+    bool parseMemInitializer( AST::Ptr& node );
+    bool parseInitializer( AST::Ptr& node );
+    bool parseBaseClause( AST::Ptr& node );
+    bool parseBaseSpecifierList( AST::Ptr& node );
+    bool parseBaseSpecifier( AST::Ptr& node );
+    bool parseInitializerClause( AST::Ptr& node );
+    bool parseMemInitializerId( AST::Ptr& node );
+    bool parseFunctionBody( AST::Ptr& node );
 
     // expression
     bool skipExpression();
@@ -121,48 +116,49 @@ public /*rules*/ :
     bool skipCommaExpression();
     bool skipAssignmentExpression();
     bool skipExpressionStatement();
-
-    bool parseExpression();
-    bool parsePrimaryExpression();
-    bool parsePostfixExpression();
-    bool parseUnaryExpression();
-    bool parseNewExpression();
-    bool parseNewTypeId();
-    bool parseNewDeclarator();
-    bool parseNewInitializer();
-    bool parseDeleteExpression();
-    bool parseCastExpression();
-    bool parsePmExpression();
-    bool parseMultiplicativeExpression();
-    bool parseAdditiveExpression();
-    bool parseShiftExpression();
-    bool parseRelationalExpression();
-    bool parseEqualityExpression();
-    bool parseAndExpression();
-    bool parseExclusiveOrExpression();
-    bool parseInclusiveOrExpression();
-    bool parseLogicalAndExpression();
-    bool parseLogicalOrExpression();
-    bool parseConditionalExpression();
-    bool parseAssignmentExpression();
-    bool parseConstantExpression();
-    bool parseCommaExpression();
-    bool parseThrowExpression();
-
+    
+#if 0
+    bool parseExpression( AST::Ptr& node );
+    bool parsePrimaryExpression( AST::Ptr& node );
+    bool parsePostfixExpression( AST::Ptr& node );
+    bool parseUnaryExpression( AST::Ptr& node );
+    bool parseNewExpression( AST::Ptr& node );
+    bool parseNewTypeId( AST::Ptr& node );
+    bool parseNewDeclarator( AST::Ptr& node );
+    bool parseNewInitializer( AST::Ptr& node );
+    bool parseDeleteExpression( AST::Ptr& node );
+    bool parseCastExpression( AST::Ptr& node );
+    bool parsePmExpression( AST::Ptr& node );
+    bool parseMultiplicativeExpression( AST::Ptr& node );
+    bool parseAdditiveExpression( AST::Ptr& node );
+    bool parseShiftExpression( AST::Ptr& node );
+    bool parseRelationalExpression( AST::Ptr& node );
+    bool parseEqualityExpression( AST::Ptr& node );
+    bool parseAndExpression( AST::Ptr& node );
+    bool parseExclusiveOrExpression( AST::Ptr& node );
+    bool parseInclusiveOrExpression( AST::Ptr& node );
+    bool parseLogicalAndExpression( AST::Ptr& node );
+    bool parseLogicalOrExpression( AST::Ptr& node );
+    bool parseConditionalExpression( AST::Ptr& node );
+    bool parseAssignmentExpression( AST::Ptr& node );
+    bool parseConstantExpression( AST::Ptr& node );
+    bool parseCommaExpression( AST::Ptr& node );
+    bool parseThrowExpression( AST::Ptr& node );
+#endif
 
     // statement
-    bool parseCondition();
-    bool parseStatement();
-    bool parseWhileStatement();
-    bool parseDoStatement();
-    bool parseForStatement();
-    bool parseCompoundStatement();
-    bool parseForInitStatement();
-    bool parseIfStatement();
-    bool parseSwitchStatement();
-    bool parseLabeledStatement();
-    bool parseDeclarationStatement();
-    bool parseTryBlockStatement();
+    bool parseCondition( AST::Ptr& node );
+    bool parseStatement( AST::Ptr& node );
+    bool parseWhileStatement( AST::Ptr& node );
+    bool parseDoStatement( AST::Ptr& node );
+    bool parseForStatement( AST::Ptr& node );
+    bool parseCompoundStatement( AST::Ptr& node );
+    bool parseForInitStatement( AST::Ptr& node );
+    bool parseIfStatement( AST::Ptr& node );
+    bool parseSwitchStatement( AST::Ptr& node );
+    bool parseLabeledStatement( AST::Ptr& node );
+    bool parseDeclarationStatement( AST::Ptr& node );
+    bool parseTryBlockStatement( AST::Ptr& node );
 
     bool skipUntil( int token );
     bool skipUntilDeclaration();
@@ -178,8 +174,6 @@ private:
     QString m_fileName;
     int m_errors;
     int m_maxErrors;
-    ClassStore* m_store;
-    QValueStack<ParsedScopeContainer*> m_scopeStack;
 };
 
 inline QString Parser::fileName() const

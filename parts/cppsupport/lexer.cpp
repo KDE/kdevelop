@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "lexer.h"
-#include "lexer.moc"
+
 #include <qregexp.h>
 #include <kdebug.h>
 

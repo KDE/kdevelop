@@ -14,7 +14,6 @@
 #include "parser.h"
 #include "driver.h"
 #include "problemreporter.h"
-#include <classstore.h>
 #include <kdebug.h>
 
 BackgroundParser::BackgroundParser( ProblemReporter* reporter,
@@ -85,8 +84,8 @@ void BackgroundParser::run()
     Parser parser( m_reporter, &driver,  &lexer );
     parser.setFileName( m_fileName );
 
-    ClassStore store;
-    parser.parseTranslationUnit( &store );
+    AST::Ptr translationUnit;
+    parser.parseTranslationUnit( translationUnit );
 
     kdDebug(9007) << "FINISHED!!" << endl;
 }
