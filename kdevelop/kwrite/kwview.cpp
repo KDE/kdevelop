@@ -5,6 +5,7 @@
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -581,12 +582,15 @@ void KWriteView::changeXPos(int p) {
 void KWriteView::changeYPos(int p) {
   int dy;
 
+  //kdDebug() << "changeYPos1: " << p << " isPainting " << bIsPainting << endl;
+
   if ( bIsPainting )
     return;
   dy = yPos - p;
   yPos = p;
   startLine = yPos / kWriteDoc->fontHeight;
   endLine = (yPos + height() -1) / kWriteDoc->fontHeight;
+  //kdDebug() << "changeYPos2: " << p << " dy " << dy << " height " << height() << endl;
   if (QABS(dy) < height())
   {
     leftBorder->scroll(0,dy);
@@ -676,6 +680,7 @@ void KWriteView::wheelEvent(QWheelEvent *e)
 {
     e->accept();
     yScroll->setValue(yScroll->value() - e->delta());
+//    kdDebug() << yScroll->value() << " - " << e->delta() << " = " << yScroll->value() - e->delta() << endl;
 }
 void KWriteView::updateCursor() {
   cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
@@ -989,8 +994,9 @@ void KWriteView::focusOutEvent(QFocusEvent *) {
 }
 
 void KWriteView::scroll( int dx, int dy ) {
-  bIsPainting= true;
+  bIsPainting = true;
   QWidget::scroll( dx, dy );
+  bIsPainting = false;
 }
 
 void KWriteView::keyPressEvent(QKeyEvent *e) {
@@ -1269,8 +1275,8 @@ void KWriteView::mouseMoveEvent(QMouseEvent *e) {
 
 void KWriteView::paintEvent(QPaintEvent *e) {
   int xStart, xEnd;
-  int h;
-  int line, y, yEnd;
+  int h, y, yEnd;
+  int line = 0;
   bIsPainting = true;		// toggle scrolling off
 //  bool isVisible;
 
