@@ -87,7 +87,7 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
   connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
-  configData = new PHPConfigData(document());
+  configData = new PHPConfigData(projectDom());
 }
 
 
@@ -114,7 +114,7 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
 }
 
 void PHPSupportPart::slotRun(){
-  configData = new PHPConfigData(document());
+  configData = new PHPConfigData(projectDom());
   if(validateConfig()){
     core()->raiseWidget(m_phpErrorView);
     PHPConfigData::InvocationMode mode = configData->getInvocationMode() ;

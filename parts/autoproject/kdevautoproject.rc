@@ -1,15 +1,19 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevAutoProject" version="1">
 <MenuBar>
-  <Menu name="build" >
+  <Menu name="project" >
     <Action name="project_addtranslation" />
+  </Menu>
+  <Menu name="build" >
     <Action name="build_build" />
+    <Action name="build_configure" />
+    <Action name="build_makefilecvs" />
+    <Action name="build_install" />
+    <Separator/>
     <Action name="build_clean" />
     <Action name="build_distclean" />
-    <Action name="build_makefilecvs" />
     <Action name="build_messages" />
     <Separator/>
-    <Action name="build_configure" />
     <Action name="build_execute" />
   </Menu>
 </MenuBar>

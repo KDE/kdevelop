@@ -23,7 +23,7 @@ RunOptionsWidget::RunOptionsWidget(AutoProjectPart *part, QWidget *parent, const
 {
     m_part = part;
 
-    QDomDocument dom = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
     mainprogram_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/run/programargs"));
@@ -54,7 +54,7 @@ RunOptionsWidget::~RunOptionsWidget()
 
 void RunOptionsWidget::accept()
 {
-    QDomDocument dom = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
     DomUtil::writeEntry(dom, "/kdevautoproject/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(dom, "/kdevautoproject/run/programargs", progargs_edit->text());

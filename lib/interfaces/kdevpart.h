@@ -82,15 +82,8 @@ public:
      * Gives a reference to the DOM tree that represents
      * the project file.
      */
-    QDomDocument *document();
+    QDomDocument *projectDom();
 
-#if 0
-    /**
-     * return a list of KDevFileActions which are implemented by this component for this KDevNode
-     */
-    virtual QValueList<KAction*> nodeActions(KDevNode *node);
-#endif
-  
 private:
     // These methods are not meaningful and are therefore forbidden
     void setWidget(QWidget *w);

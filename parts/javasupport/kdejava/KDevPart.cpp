@@ -107,8 +107,8 @@ Java_org_kde_koala_KDevPart_classStore(JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT jobject JNICALL
-Java_org_kde_koala_KDevPart_document(JNIEnv *env, jobject obj)
+Java_org_kde_koala_KDevPart_projectDom(JNIEnv *env, jobject obj)
 {
-	return (jobject) QtSupport::objectForQtKey(env, (void *)((KDevPartJBridge*) QtSupport::getQt(env, obj))->document(), "org.kde.qt.QDomDocument");
+	return (jobject) QtSupport::objectForQtKey(env, (void *)((KDevPartJBridge*) QtSupport::getQt(env, obj))->projectDom(), "org.kde.qt.QDomDocument");
 }
 

@@ -62,6 +62,18 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
     
+    action = new KAction( i18n("Run configure"), 0,
+                          this, SLOT(slotConfigure()),
+                          actionCollection(), "build_configure" );
+
+    action = new KAction( i18n("Run automake & friends"), 0,
+                          this, SLOT(slotMakefilecvs()),
+                          actionCollection(), "build_makefilecvs" );
+
+    action = new KAction( i18n("Install"), 0,
+                          this, SLOT(slotInstall()),
+                          actionCollection(), "build_install" );
+    
     action = new KAction( i18n("&Clean project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
@@ -70,19 +82,11 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                           this, SLOT(slotDistClean()),
                           actionCollection(), "build_distclean" );
 
-    action = new KAction( i18n("Run automake & friends"), 0,
-                          this, SLOT(slotMakefilecvs()),
-                          actionCollection(), "build_makefilecvs" );
-
     action = new KAction( i18n("Make messages & and merge"), 0,
                           this, SLOT(slotMakeMessages()),
                           actionCollection(), "build_messages" );
     if (!kde)
         action->setEnabled(false);
-
-    action = new KAction( i18n("Run configure"), 0,
-                          this, SLOT(slotConfigure()),
-                          actionCollection(), "build_configure" );
 
     action = new KAction( i18n("Execute program"), "exec", 0,
                           this, SLOT(slotExecute()),
@@ -131,9 +135,9 @@ void AutoProjectPart::closeProject()
 
 QString AutoProjectPart::mainProgram()
 {
-    QDomDocument &doc = *document();
+    QDomDocument &dom = *projectDom();
 
-    return DomUtil::readEntry(doc, "/kdevautoproject/run/mainprogram");
+    return DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
 }
 
 
@@ -171,19 +175,19 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
             slotConfigure();
         }
     }
-    QDomDocument &doc = *document();
+    QDomDocument &dom = *projectDom();
 
-    QString cmdline = DomUtil::readEntry(doc, "/kdevautoproject/make/makebin");
+    QString cmdline = DomUtil::readEntry(dom, "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
-    if (!DomUtil::readBoolEntry(doc, "/kdevautoproject/make/abortonerror"))
+    if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/make/abortonerror"))
         cmdline += " -k";
-    int jobs = DomUtil::readIntEntry(doc, "/kdevautoproject/make/numberofjobs");
+    int jobs = DomUtil::readIntEntry(dom, "/kdevautoproject/make/numberofjobs");
     if (jobs != 0) {
         cmdline += " -j";
         cmdline += QString::number(jobs);
     }
-    if (DomUtil::readBoolEntry(doc, "/kdevautoproject/make/dontact"))
+    if (DomUtil::readBoolEntry(dom, "/kdevautoproject/make/dontact"))
         cmdline += " -n";
 
     cmdline += " ";
@@ -203,21 +207,47 @@ void AutoProjectPart::slotBuild()
 }
 
 
-void AutoProjectPart::slotClean()
+void AutoProjectPart::slotConfigure()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1("clean"));
-}
+    QDomDocument &dom = *projectDom();
+    
+    QString cmdline = "./configure";
+    QString cc = DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompilerbinary");
+    if (!cc.isEmpty())
+        cmdline.prepend(QString("CC=%1 ").arg(cc));
+    QString cflags = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cflags");
+    if (!cflags.isEmpty())
+        cmdline.prepend(QString("CFLAGS=%1 ").arg(cflags));
+    QString cxx = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompilerbinary");
+    if (!cxx.isEmpty())
+        cmdline.prepend(QString("CXX=%1 ").arg(cxx));
+    QString cxxflags = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxflags");
+    if (!cxxflags.isEmpty())
+        cmdline.prepend(QString("CXXFLAGS=%1 ").arg(cxxflags));
+    QString f77 = DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compilerbinary");
+    if (!f77.isEmpty())
+        cmdline.prepend(QString("F77=%1 ").arg(f77));
+    QString fflags = DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77flags");
+    if (!fflags.isEmpty())
+        cmdline.prepend(QString("FFLAGS=%1 ").arg(fflags));
 
+    QString configargs = DomUtil::readEntry(dom, "/kdevautoproject/configure/configargs");
+    if (!configargs.isEmpty()) {
+	cmdline += " ";
+        cmdline += configargs;
+    }
 
-void AutoProjectPart::slotDistClean()
-{
-    startMakeCommand(projectDirectory(), QString::fromLatin1("distclean"));
+    QString dircmd = "cd ";
+    dircmd += projectDirectory();
+    dircmd += " && ";
+
+    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
 }
 
 
 void AutoProjectPart::slotMakefilecvs()
 {
-    QString cmdline = DomUtil::readEntry(*document(), "/kdevautoproject/make/makebin");
+    QString cmdline = DomUtil::readEntry(*projectDom(), "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
     cmdline += " -f Makefile.cvs";
@@ -241,47 +271,27 @@ void AutoProjectPart::slotMakefilecvs()
 }
 
 
-void AutoProjectPart::slotMakeMessages()
+void AutoProjectPart::slotInstall()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1("package-messages"));
+    startMakeCommand(projectDirectory(), QString::fromLatin1("install"));
 }
 
 
-void AutoProjectPart::slotConfigure()
+void AutoProjectPart::slotClean()
 {
-    QDomDocument &doc = *document();
-    
-    QString cmdline = "./configure";
-    QString cc = DomUtil::readEntry(doc, "/kdevautoproject/compiler/ccompilerbinary");
-    if (!cc.isEmpty())
-        cmdline.prepend(QString("CC=%1 ").arg(cc));
-    QString cflags = DomUtil::readEntry(doc, "/kdevautoproject/compiler/cflags");
-    if (!cflags.isEmpty())
-        cmdline.prepend(QString("CFLAGS=%1 ").arg(cflags));
-    QString cxx = DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxcompilerbinary");
-    if (!cxx.isEmpty())
-        cmdline.prepend(QString("CXX=%1 ").arg(cxx));
-    QString cxxflags = DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxflags");
-    if (!cxxflags.isEmpty())
-        cmdline.prepend(QString("CXXFLAGS=%1 ").arg(cxxflags));
-    QString f77 = DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77compilerbinary");
-    if (!f77.isEmpty())
-        cmdline.prepend(QString("F77=%1 ").arg(f77));
-    QString fflags = DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77flags");
-    if (!fflags.isEmpty())
-        cmdline.prepend(QString("FFLAGS=%1 ").arg(fflags));
+    startMakeCommand(projectDirectory(), QString::fromLatin1("clean"));
+}
 
-    QString configargs = DomUtil::readEntry(doc, "/kdevautoproject/configure/configargs");
-    if (!configargs.isEmpty()) {
-	cmdline += " ";
-        cmdline += configargs;
-    }
 
-    QString dircmd = "cd ";
-    dircmd += projectDirectory();
-    dircmd += " && ";
+void AutoProjectPart::slotDistClean()
+{
+    startMakeCommand(projectDirectory(), QString::fromLatin1("distclean"));
+}
 
-    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
+
+void AutoProjectPart::slotMakeMessages()
+{
+    startMakeCommand(projectDirectory(), QString::fromLatin1("package-messages"));
 }
 
 
@@ -289,7 +299,7 @@ void AutoProjectPart::slotExecute()
 {
     QString program = project()->projectDirectory() + "/" + project()->mainProgram();
     
-    if (DomUtil::readBoolEntry(*document(), "/kdevautoproject/run/terminal")) {
+    if (DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal")) {
         QString terminal = "konsole -e /bin/sh -c '";
         terminal += program;
         terminal += "; echo \"\n";
@@ -298,7 +308,7 @@ void AutoProjectPart::slotExecute()
         program = terminal;
     }
     
-    QDomElement docEl = document()->documentElement();
+    QDomElement docEl = projectDom()->documentElement();
     QDomElement autoprojectEl = docEl.namedItem("kdevautoproject").toElement();
     QDomElement envvarsEl = autoprojectEl.namedItem("envvars").toElement();
     

@@ -60,9 +60,9 @@ void ScriptProjectPart::closeProject()
 
 QString ScriptProjectPart::mainProgram()
 {
-    QDomDocument &doc = *document();
+    QDomDocument &dom = *projectDom();
 
-    return DomUtil::readEntry(doc, "/kdevscriptproject/run/mainprogram");
+    return DomUtil::readEntry(dom, "/kdevscriptproject/run/mainprogram");
 }
 
 

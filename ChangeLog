@@ -15,6 +15,7 @@
 	* Implemented Execute program
 	* Implemented Make messages
 	* Menu structure cleanup
+	* Implemented Make install
 
 2001-06-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

@@ -22,12 +22,12 @@ MakeOptionsWidget::MakeOptionsWidget(AutoProjectPart *part, QWidget *parent, con
 {
     m_part = part;
 
-    QDomDocument doc = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
-    abort_box->setChecked(DomUtil::readBoolEntry(doc, "/kdevautoproject/make/abortonerror"));
-    jobs_box->setValue(DomUtil::readIntEntry(doc, "/kdevautoproject/make/numberofjobs"));
-    dontact_box->setChecked(DomUtil::readBoolEntry(doc, "/kdevautoproject/make/dontact"));
-    makebin_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/make/makebin"));
+    abort_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevautoproject/make/abortonerror"));
+    jobs_box->setValue(DomUtil::readIntEntry(dom, "/kdevautoproject/make/numberofjobs"));
+    dontact_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevautoproject/make/dontact"));
+    makebin_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/make/makebin"));
 }
 
 
@@ -37,12 +37,12 @@ MakeOptionsWidget::~MakeOptionsWidget()
 
 void MakeOptionsWidget::accept()
 {
-    QDomDocument doc = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
-    DomUtil::writeBoolEntry(doc, "/kdevautoproject/make/abortonerror", abort_box->isChecked());
-    DomUtil::writeIntEntry(doc, "/kdevautoproject/make/numberofjobs", jobs_box->value());
-    DomUtil::writeBoolEntry(doc, "/kdevautoproject/make/dontact", dontact_box->isChecked());
-    DomUtil::writeEntry(doc, "/kdevautoproject/make/makebin", makebin_edit->text());
+    DomUtil::writeBoolEntry(dom, "/kdevautoproject/make/abortonerror", abort_box->isChecked());
+    DomUtil::writeIntEntry(dom, "/kdevautoproject/make/numberofjobs", jobs_box->value());
+    DomUtil::writeBoolEntry(dom, "/kdevautoproject/make/dontact", dontact_box->isChecked());
+    DomUtil::writeEntry(dom, "/kdevautoproject/make/makebin", makebin_edit->text());
 }
 
 #include "makeoptionswidget.moc"

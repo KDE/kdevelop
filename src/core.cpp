@@ -61,7 +61,7 @@ Core::Core()
     api = new KDevApi();
     api->core = this;
     api->classStore = new ClassStore();
-    api->document = 0;
+    api->projectDom = 0;
     api->project = 0;
 
     win = new TopLevel();
@@ -433,17 +433,17 @@ void Core::closeProject()
             api->languageSupport = 0;
         }
         
-        if (api->document) {
+        if (api->projectDom) {
             QFile fout(projectFile);
             if (fout.open(IO_WriteOnly)) {
                 QTextStream stream(&fout);
-                api->document->save(stream, 2);
+                api->projectDom->save(stream, 2);
             } else {
                 KMessageBox::sorry(win, i18n("Could not write the project file."));
             }
             fout.close();
-            delete api->document;
-            api->document = 0;
+            delete api->projectDom;
+            api->projectDom = 0;
         }
         removePart(api->project);
         api->project = 0;
@@ -471,10 +471,10 @@ void Core::openProject()
         fin.close();
         return;
     }
-    api->document = doc;
+    api->projectDom = doc;
     fin.close();
 
-    QDomElement docEl = api->document->documentElement();
+    QDomElement docEl = api->projectDom->documentElement();
     QDomElement generalEl = docEl.namedItem("general").toElement();
     QDomElement projectEl = generalEl.namedItem("projectmanagement").toElement();
     
@@ -1039,7 +1039,7 @@ void Core::slotProjectOptions()
                     "project options dialog");
     
     QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
-    PartSelectWidget *w = new PartSelectWidget(*api->document, vbox, "part selection widget");
+    PartSelectWidget *w = new PartSelectWidget(*api->projectDom, vbox, "part selection widget");
     connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     
     emit projectConfigWidget(&dlg);

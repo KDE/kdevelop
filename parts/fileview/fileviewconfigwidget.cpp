@@ -36,7 +36,7 @@ FileViewConfigWidget::~FileViewConfigWidget()
 
 void FileViewConfigWidget::readConfig()
 {
-    QDomDocument dom = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
     QDomElement docEl = dom.documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
@@ -58,7 +58,7 @@ void FileViewConfigWidget::readConfig()
 
 void FileViewConfigWidget::storeConfig()
 {
-    QDomDocument dom = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
     QDomElement docEl = dom.documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     if (fileviewEl.isNull()) {

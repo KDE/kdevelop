@@ -253,7 +253,7 @@ DebuggerPart::~DebuggerPart()
 void DebuggerPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Debugger"));
-    DebuggerConfigWidget *w = new DebuggerConfigWidget(*document(), vbox, "debugger config widget");
+    DebuggerConfigWidget *w = new DebuggerConfigWidget(*projectDom(), vbox, "debugger config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
@@ -262,7 +262,7 @@ void DebuggerPart::setupController()
 {
     VariableTree *variableTree = variableWidget->varTree();
 
-    controller = new GDBController(variableTree, framestackWidget, *document());
+    controller = new GDBController(variableTree, framestackWidget, *projectDom());
 
     // variableTree -> controller
     connect( variableTree,     SIGNAL(expandItem(VarItem*)),

@@ -104,5 +104,5 @@ public class KDevPart extends Part  {
  the project file.
      
 */
-	public native QDomDocument document();
+	public native QDomDocument projectDom();
 }

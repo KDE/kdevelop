@@ -61,7 +61,7 @@ CompilerOptionsWidget::CompilerOptionsWidget(AutoProjectPart *part, QWidget *par
 {
     m_part = part;
 
-    QDomDocument doc = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
     KTrader::OfferList coffers =
         KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C'");
@@ -75,13 +75,13 @@ CompilerOptionsWidget::CompilerOptionsWidget(AutoProjectPart *part, QWidget *par
     ServiceComboBox::insertStringList(f77service_combo, f77offers, &f77service_names);
     
     ServiceComboBox::setCurrentText(cservice_combo,
-                                    DomUtil::readEntry(doc, "/kdevautoproject/compiler/ccompiler"),
+                                    DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompiler"),
                                     &cservice_names);
     ServiceComboBox::setCurrentText(cxxservice_combo,
-                                    DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxcompiler"),
+                                    DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompiler"),
                                     &cxxservice_names);
     ServiceComboBox::setCurrentText(f77service_combo,
-                                    DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77compiler"),
+                                    DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compiler"),
                                     &f77service_names);
 
     if (coffers.isEmpty())
@@ -91,13 +91,13 @@ CompilerOptionsWidget::CompilerOptionsWidget(AutoProjectPart *part, QWidget *par
     if (f77offers.isEmpty())
         f77flags_button->setEnabled(false);
 
-    cbinary_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/ccompilerbinary"));
-    cxxbinary_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxcompilerbinary"));
-    f77binary_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77compilerbinary"));
+    cbinary_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompilerbinary"));
+    cxxbinary_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompilerbinary"));
+    f77binary_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compilerbinary"));
     
-    cflags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/cflags"));
-    cxxflags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/cxxflags"));
-    f77flags_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/compiler/f77flags"));
+    cflags_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cflags"));
+    cxxflags_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxflags"));
+    f77flags_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77flags"));
 }
 
 
@@ -107,22 +107,22 @@ CompilerOptionsWidget::~CompilerOptionsWidget()
 
 void CompilerOptionsWidget::accept()
 {
-    QDomDocument doc = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/ccompiler",
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/ccompiler",
                         ServiceComboBox::currentText(cservice_combo, &cservice_names));
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/cxxcompiler",
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cxxcompiler",
                         ServiceComboBox::currentText(cxxservice_combo, &cxxservice_names));
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/f77compiler",
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77compiler",
                         ServiceComboBox::currentText(f77service_combo, &f77service_names));
 
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/ccompilerbinary", cbinary_edit->text());
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/cxxcompilerbinary", cxxbinary_edit->text());
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/f77compilerbinary", f77binary_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/ccompilerbinary", cbinary_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cxxcompilerbinary", cxxbinary_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77compilerbinary", f77binary_edit->text());
 
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/cflags", cflags_edit->text());
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/cxxflags", cxxflags_edit->text());
-    DomUtil::writeEntry(doc, "/kdevautoproject/compiler/f77flags", f77flags_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cflags", cflags_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cxxflags", cxxflags_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77flags", f77flags_edit->text());
 
     if (KMessageBox::questionYesNo(this, i18n("Rerun configure now?")) == KMessageBox::Yes)
         m_part->slotConfigure();

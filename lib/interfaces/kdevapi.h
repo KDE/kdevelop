@@ -27,7 +27,7 @@ class KDevApi
 public:
     KDevApi()
         : classStore(0),
-          document(0),
+          projectDom(0),
           core(0),
           makeFrontend(0),
           appFrontend(0),
@@ -37,7 +37,7 @@ public:
         {}
 
     ClassStore *classStore;
-    QDomDocument *document;
+    QDomDocument *projectDom;
     KDevCore *core;
     KDevMakeFrontend *makeFrontend;
     KDevAppFrontend *appFrontend;

@@ -880,7 +880,7 @@ JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_core
  * Method:    document
  * Signature: ()Lorg/kde/qt/QDomDocument;
  */
-JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_document
+JNIEXPORT jobject JNICALL Java_org_kde_koala_KDevPart_projectDom
   (JNIEnv *, jobject);
 
 /*

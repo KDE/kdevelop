@@ -42,6 +42,7 @@ private slots:
     void slotBuild();
     void slotClean();
     void slotDistClean();
+    void slotInstall();
     void slotMakefilecvs();
     void slotMakeMessages();
     void slotConfigure();

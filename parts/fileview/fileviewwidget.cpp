@@ -157,7 +157,7 @@ void FileViewWidget::refresh()
     while (firstChild())
         delete firstChild();
 
-    QDomElement docEl = m_part->document()->documentElement();
+    QDomElement docEl = m_part->projectDom()->documentElement();
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
 

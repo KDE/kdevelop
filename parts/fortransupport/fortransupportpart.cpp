@@ -77,7 +77,7 @@ void FortranSupportPart::slotFtnchek()
 
     core()->saveAllFiles();
 
-    QDomDocument &dom = *document();
+    QDomDocument &dom = *projectDom();
     
     QString cmdline = "cd ";
     cmdline += project()->projectDirectory();
@@ -146,7 +146,7 @@ void FortranSupportPart::slotFtnchek()
 void FortranSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Ftnchek"));
-    FtnchekConfigWidget *w = new FtnchekConfigWidget(*document(), vbox, "ftnchek config widget");
+    FtnchekConfigWidget *w = new FtnchekConfigWidget(*projectDom(), vbox, "ftnchek config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 

@@ -21,10 +21,10 @@ ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *p
 {
     m_part = part;
 
-    QDomDocument doc = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
-    configargs_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/configure/configargs"));
-    builddir_edit->setText(DomUtil::readEntry(doc, "/kdevautoproject/configure/builddir"));
+    configargs_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/configure/configargs"));
+    builddir_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/configure/builddir"));
 }
 
 
@@ -34,8 +34,8 @@ ConfigureOptionsWidget::~ConfigureOptionsWidget()
 
 void ConfigureOptionsWidget::accept()
 {
-    QDomDocument doc = *m_part->document();
+    QDomDocument dom = *m_part->projectDom();
 
-    DomUtil::writeEntry(doc, "/kdevautoproject/configure/configargs", configargs_edit->text());
-    DomUtil::writeEntry(doc, "/kdevautoproject/configure/builddir", builddir_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/configure/configargs", configargs_edit->text());
+    DomUtil::writeEntry(dom, "/kdevautoproject/configure/builddir", builddir_edit->text());
 }

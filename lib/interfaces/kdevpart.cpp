@@ -26,9 +26,9 @@ ClassStore *KDevPart::classStore()
     return m_api->classStore;
 }
 
-QDomDocument *KDevPart::document()
+QDomDocument *KDevPart::projectDom()
 {
-    return m_api->document;
+    return m_api->projectDom;
 }
 
 KDevVersionControl *KDevPart::versionControl()
