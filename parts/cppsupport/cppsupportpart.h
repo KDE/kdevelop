@@ -23,6 +23,7 @@
 #include "cppsupportwidget.h"
 #include <qstring.h>
 #include <qwaitcondition.h>
+#include <qdatetime.h>
 
 class ParsedMethod;
 class ParsedAttribute;
@@ -192,6 +193,8 @@ private:
 
     QWaitCondition m_eventConsumed;
     bool m_projectClosed;
+    
+    QMap<QString, QDateTime> m_timestamp;
 };
 
 #endif

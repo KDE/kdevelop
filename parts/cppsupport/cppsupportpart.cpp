@@ -442,6 +442,7 @@ CppSupportPart::projectOpened( )
              this, SLOT( removedFilesFromProject( const QStringList & ) ) );
 
     // code completion working class
+    m_timestamp.clear();
     m_pCompletion = new CppCodeCompletion( this, classStore( ), ccClassStore( ) );
     m_projectClosed = false;
     QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
@@ -1161,6 +1162,15 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
 {
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
+    
+    QDateTime t = QFileInfo( fileName ).lastModified();
+	
+    QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
+    if( it != m_timestamp.end() && *it == t ){
+	return;
+    }
+    
+    m_timestamp[ fileName ] = t;
 
     m_backgroundParser->addFile( fileName );
     while( m_backgroundParser->filesInQueue() > 0 )
