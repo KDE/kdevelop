@@ -465,24 +465,24 @@ void CKDevelop::initMenu(){
 
   menuBar()->insertItem(i18n("&View"), view_menu);
   
-
+  
   // the bookmarks menu
   // p = new QPopupMenu;
-//   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
-//   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
-//   p->insertSeparator();
-//   menuBar()->insertItem(i18n("&Bookmarks"),p);
-
-
-///////////////////////////////////////////////////////////////////
-// Project-menu entries
-
+  //   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
+  //   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
+  //   p->insertSeparator();
+  //   menuBar()->insertItem(i18n("&Bookmarks"),p);
+  
+  
+  ///////////////////////////////////////////////////////////////////
+  // Project-menu entries
+  
   // submenu for adding projectfiles
   QPopupMenu* p2 = new QPopupMenu;
   p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
   p2->insertItem(i18n("&Existing File(s)..."), this,
 		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
-
+  
   // project-menu
   project_menu = new QPopupMenu;
   project_menu->insertItem(i18n("Application Wizard..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
@@ -502,15 +502,15 @@ void CKDevelop::initMenu(){
   project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
   project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
-  project_menu->insertSeparator();		
+  //  project_menu->insertSeparator();		
 
   
   workspaces_submenu = new QPopupMenu;
-  workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
-  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
-  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
-  project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
-  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
+  //workspaces_submenu->insertItem(i18n("Workspace 1"),ID_PROJECT_WORKSPACES_1);
+  //  workspaces_submenu->insertItem(i18n("Workspace 2"),ID_PROJECT_WORKSPACES_2);
+  //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
+  //  project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
+  //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
 
   menuBar()->insertItem(i18n("&Project"), project_menu);
 

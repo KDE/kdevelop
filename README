@@ -1,26 +1,37 @@
-
--please delete your $HOME/.kde/share/config/kdeveloprc before you test a new version of KDevelop
-
-+++++++++++++++++++++++++++
+KDevelop 0.3
 
 KDevelop will be an easy to use IDE (Intergrated Development Enviroment) for
-Unix/X11.At the moment there are only unstable alpha-versions.
+Unix/X11.At the moment there are only alpha-versions.
+
+KDevelop-Homepage:
+http://www.cs.uni-potsdam.de/~smeier/kdevelop/
 
 Requirements:
 In order to successfully compile und use KDevelop, you need following
 programs and libraries: 	
 
 	g++ 2.8/egcs 1.1 (or compatible) (it should work with gcc 2.7.2)
+	GNU make
 	perl 5.004
 	autoconf 2.12
 	automake 1.2
-	Qt 1.41
+	Qt 1.42
 	KDE 1.1
- 	KDE-SDK
-	Glimpse 4.1
+ 	KDE-SDK  (optional)
+	sgmltools  (optional)
+	Glimpse 4.1 (optional)
+	KIconEdit (optional)
+	KDbg  (optional)
+	a2ps  (optional)
+	enscript  (optional)
+	Gv,Ghostview,KGhotsview  (optional)
+
 
 Installation:
 see INSTALL in the same directory
 
-Have fun! The KDevelop-Team
+Have fun!
+							 The KDevelop-Team
+
+
 

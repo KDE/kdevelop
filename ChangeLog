@@ -1,3 +1,10 @@
+1999-03-03    Sandy Meier <smeier@rz.uni-potsdam.de>
+
+	* commented out the workspace-feature
+	* added a Qt base-application . TODO  update KAppWizard to create this application
+	* minor changes on startuplogo (no titlebar)
+	* updated README,lsm-file ...
+
 1999-03-02 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* add some buttons in the a2ps-,enscript- and printdialog
 	* implemented all previewbuttons in the dialogs
@@ -17,6 +24,9 @@
   * changed the make command select to a QLineEdit to set it directly
   * commented out the progressbar...doesn't show nicely in win95 style.
 
+1999-03-02  Sandy Meier <smeier@rz.uni-potsdam.de>
+ 	* commit some patches by Martin and an extended german translation 
+	
 1999-03-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed "compile file" disableing during shell process
   * added startup logo & new geometry, deleted entry LastActiveTab in kdeveloprc

@@ -27,6 +27,7 @@
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config ) : QDialog(parent,name,true) {
 
+  setCaption(i18n("Create Search Database..."));
   this->proc = proc;
   this->conf = config;
 
