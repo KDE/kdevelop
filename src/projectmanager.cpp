@@ -119,12 +119,6 @@ void ProjectManager::createActions( KActionCollection* ac )
   m_projectOptionsAction->setToolTip(i18n("Project options"));
   m_projectOptionsAction->setWhatsThis(i18n("<b>Project options</b><p>Lets you customize project options."));
   m_projectOptionsAction->setEnabled(false);
-
-  m_activeLanguage = new KSelectAction(i18n("&Active Language"), 0, ac, "project_active_language");
-  m_activeLanguage->setWhatsThis(i18n("<b>Active language</b><p>Sets the active programming language."));
-  m_activeLanguage->setEnabled(false);
-  connect(m_activeLanguage, SIGNAL(activated(const QString&)),
-          this, SLOT(switchLanguage(const QString&)));
 }
 
 void ProjectManager::slotOpenProject()
@@ -159,12 +153,8 @@ void ProjectManager::slotProjectOptions()
 
   QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), BarIcon( "kdf", KIcon::SizeMedium ) );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
-//  vbox = dlg.addVBoxPage(i18n("Languages"));
-//  LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-//  connect( &dlg, SIGNAL(okClicked()), lw, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
-//  connect( lw, SIGNAL(accepted()), this, SLOT(updateActiveLangMenu()) );
 
   KConfig *config = kapp->config();
   config->setGroup("Project Settings Dialog");
@@ -181,30 +171,6 @@ void ProjectManager::slotProjectOptions()
   config->setGroup("Project Settings Dialog");
   config->writeEntry( "Height", dlg.size().height() );
   config->writeEntry( "Width", dlg.size().width() );
-}
-
-void ProjectManager::updateActiveLangMenu()
-{
-  getGeneralInfo();
-  QStringList list( m_info->m_secondaryLanguages );
-  list.prepend( m_info->m_language ); //make sure primary lang comes first
-  m_activeLanguage->setItems( list );
-  m_activeLanguage->setEnabled( m_info->m_secondaryLanguages.count() > 0 );
-  m_activeLanguage->setCurrentItem(m_activeLanguage->items().findIndex(m_info->m_activeLanguage));
-}
-
-void ProjectManager::switchLanguage(const QString& lang)
-{
-  // make sure there is a project loaded
-  if ( !m_info ) return;
-
-//  PluginController::getInstance()->unloadAllLocalParts();
-  PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
-  unloadLanguageSupport();
-  m_info->m_loadParts.clear();
-  loadLanguageSupport(lang);
-  loadLocalParts();
-  Core::getInstance()->doEmitLanguageChanged();
 }
 
 void ProjectManager::loadSettings()
@@ -283,8 +249,6 @@ void ProjectManager::slotLoadProject( )
 
   getGeneralInfo();
 
-  updateActiveLangMenu();
-
   if( !loadLanguageSupport(m_info->m_language) ) {
     delete m_info; m_info = 0;
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
@@ -350,9 +314,8 @@ bool ProjectManager::closeProject( bool exiting )
 
   Core::getInstance()->doEmitProjectClosed();
 
-//  PluginController::getInstance()->unloadAllLocalParts();
   unloadVCSSupport();
-  PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
+  PluginController::getInstance()->unloadProjectPlugins();
   PluginController::getInstance()->changeProfile(m_oldProfileName);
   unloadLanguageSupport();
   unloadProjectPart();
@@ -368,7 +331,6 @@ bool ProjectManager::closeProject( bool exiting )
 
   m_closeProjectAction->setEnabled(false);
   m_projectOptionsAction->setEnabled(false);
-  m_activeLanguage->setEnabled(false);
 
   if ( !exiting )
   {
@@ -484,7 +446,6 @@ void ProjectManager::getGeneralInfo()
 
   getAttributeList(generalEl, "ignoreparts", "part", m_info->m_ignoreParts);
   getAttributeList(generalEl, "keywords", "keyword", m_info->m_keywords);
-  getAttributeList(generalEl, "secondaryLanguages", "language", m_info->m_secondaryLanguages);
 
   //FIXME: adymo: workaround for those project templates without "profile" element
 //  m_info->m_profileName = getAttribute(generalEl, "profile");
@@ -582,8 +543,6 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   API::getInstance()->setLanguageSupport( langSupport );
   PluginController::getInstance()->integratePart( langSupport );
   m_info->m_activeLanguage = lang;
-  m_activeLanguage->setCurrentItem(m_activeLanguage->items().findIndex(lang));
-
   kdDebug(9000) << "Language support for " << lang << " successfully loaded." << endl;
   return true;
 }
@@ -604,7 +563,7 @@ void ProjectManager::loadLocalParts()
 	getGeneralInfo();
 
 	PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
-	PluginController::getInstance()->loadLocalParts( m_info, m_info->m_loadParts, m_info->m_ignoreParts );
+	PluginController::getInstance()->loadProjectPlugins( m_info->m_ignoreParts );
 }
 
 KURL ProjectManager::projectFile() const

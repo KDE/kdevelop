@@ -26,7 +26,7 @@ public:
   QDomDocument m_document;
   QString      m_profileName;
   QString      m_projectPlugin, m_language, m_activeLanguage, m_vcsPlugin;
-  QStringList  m_ignoreParts, m_loadParts, m_keywords, m_secondaryLanguages;
+  QStringList  m_ignoreParts, m_keywords;
 
   QString sessionFile() const;
 };
@@ -71,9 +71,6 @@ private slots:
   void slotLoadProject();
 
   void loadLocalParts();
-
-  void updateActiveLangMenu();
-  void switchLanguage(const QString& lang);
   
 private:
   ProjectManager();
@@ -99,7 +96,6 @@ private:
 
   KAction *m_closeProjectAction, *m_projectOptionsAction;
   KRecentFilesAction *m_openRecentProjectAction;
-  KSelectAction *m_activeLanguage;
 
   static ProjectManager *s_instance;
 

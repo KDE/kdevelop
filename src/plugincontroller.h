@@ -29,17 +29,14 @@ public:
   ~PluginController();
 
   static PluginController *getInstance();
-//  static KService::List pluginServices( const QString &scope = QString::null );
   static QStringList argumentsFromService( const KService::Ptr &service );
 
   QString currentProfile() const { return m_profile; }
-//  QString currentProfilePath() const { return m_profilePath; }
   
   void loadInitialPlugins();
   
-  void loadLocalParts( ProjectInfo*, QStringList const & loadPlugins, QStringList const & ignorePlugins );	// @todo figure out a way to remove the ProjectInfo parameter
-//  void unloadAllLocalParts();
-//  void unloadLocalParts( QStringList const & );
+  void loadProjectPlugins( const QStringList & ignorePlugins );
+  void unloadProjectPlugins();
   
   //  KDevPlugin * getPlugin( const KService::Ptr &service );
   
@@ -72,24 +69,15 @@ private slots:
   void slotConfigWidget( KDialogBase* );
   void loadGlobalPlugins();
   void loadCorePlugins();
-  void loadGlobalPlugins(KTrader::OfferList globalOffers);
-  void loadCorePlugins(KTrader::OfferList coreOffers);
-//  void unloadGlobalPlugins();
+  void loadPlugins( KTrader::OfferList offers, const QStringList & ignorePlugins = QStringList() );
   void unloadPlugins();
   
 private:
-	//	static void createInstance();
 	static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
-  bool checkNewService( ProjectInfo *, const KService::Ptr &service );
 
   QDict<KDevPlugin> m_parts;
-//  QDict<KDevPlugin> m_globalParts;
-//  QDict<KDevPlugin> m_localParts;
   QString m_profile;
-/*  QString m_profilePath;
-  QString m_defaultProfile;
-  QString m_defaultProfilePath;*/
   
   static PluginController *s_instance;
   

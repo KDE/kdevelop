@@ -108,74 +108,38 @@ PluginController::~PluginController()
   unloadPlugins();
 }
 
-
-
-// a Core plugin is implicitly global, so it makes
-// sense to put them in the global plugin container
 void PluginController::loadCorePlugins()
 {
   KTrader::OfferList coreOffers = m_engine.offers(m_profile, ProfileEngine::Core);
-  loadCorePlugins(coreOffers);
+  loadPlugins( coreOffers );
 }
 
 void PluginController::loadGlobalPlugins()
 {
   KTrader::OfferList globalOffers = m_engine.offers(m_profile, ProfileEngine::Global);
-  loadGlobalPlugins(globalOffers);
+  loadPlugins( globalOffers );
 }
 
-void PluginController::loadGlobalPlugins(KTrader::OfferList globalOffers)
+void PluginController::loadProjectPlugins( const QStringList & ignorePlugins )
 {
-//  KConfig config( m_profilePath );
-  for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
-  {
-//    config.setGroup( "Plugins" );
-
-    QString name = (*it)->desktopEntryName();
-	
-/*    // Unload it if is marked as ignored and loaded
-    if (!config.readBoolEntry( name, true)) {
-      KDevPlugin* part = m_parts[name];
-      if( part ) {
-        removePart( part );
-        m_parts.remove( name );
-        part->deleteLater();
-      }
-      continue;
-    }*/
-    
-    // Check if it is already loaded
-    if( m_parts[ name ] != 0 )
-      continue;
-
-    assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
-
-    emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
-
-    KDevPlugin *plugin = loadPlugin( *it );
-    if ( plugin ) {
-        m_parts.insert( name, plugin );
-        integratePart( plugin );
-    }
-  }
+	KTrader::OfferList projectOffers = m_engine.offers(m_profile, ProfileEngine::Project);
+	loadPlugins( projectOffers, ignorePlugins );
 }
 
-void PluginController::loadCorePlugins(KTrader::OfferList coreOffers)
+void PluginController::loadPlugins( KTrader::OfferList offers, const QStringList & ignorePlugins )
 {
-  for (KTrader::OfferList::ConstIterator it = coreOffers.begin(); it != coreOffers.end(); ++it)
+  for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
   {
     QString name = (*it)->desktopEntryName();
 
     // Check if it is already loaded
-    if( m_parts[ name ] != 0 )
+    if( m_parts[ name ] != 0 || ignorePlugins.contains( name ) )
       continue;
-
-    assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
 
     emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
-    if ( plugin )
+    if ( plugin ) 
     {
         m_parts.insert( name, plugin );
         integratePart( plugin );
@@ -183,10 +147,8 @@ void PluginController::loadCorePlugins(KTrader::OfferList coreOffers)
   }
 }
 
-//void PluginController::unloadGlobalPlugins()
 void PluginController::unloadPlugins()
 {
-//  for( QDictIterator<KDevPlugin> it( m_globalParts ); !it.isEmpty(); )
   for( QDictIterator<KDevPlugin> it( m_parts ); !it.isEmpty(); )
   {
     KDevPlugin* part = it.current();
@@ -196,27 +158,17 @@ void PluginController::unloadPlugins()
   }
 }
 
-void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList const & loadPlugins, QStringList const & ignorePlugins  )
+void PluginController::unloadProjectPlugins( )
 {
-	KTrader::OfferList localOffers = m_engine.offers(m_profile, ProfileEngine::Project);
-	for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
+	KTrader::OfferList offers = m_engine.offers(m_profile, ProfileEngine::Project);
+	for (KTrader::OfferList::ConstIterator it = offers.begin(); it != offers.end(); ++it)
 	{
 		QString name = (*it)->desktopEntryName();
-		TopLevel::getInstance()->statusBar()->message( i18n("Loading: %1").arg( (*it)->genericName() ) );
-		
-		kdDebug(9000) << "-----------------------------> load part " << name << endl;
-		
-		// Check if it is already loaded or should be ignored
-		if( m_parts[ name ] != 0 || ignorePlugins.contains( name ) )
-			continue;
 	
-		if( loadPlugins.contains( name ) || checkNewService( projectInfo, *it ) )
+		if ( KDevPlugin * plugin = m_parts[ name ] )
 		{
-			KDevPlugin *part = loadPlugin( *it );
-			if ( !part ) continue;
-		
-			integratePart( part );
-			m_parts.insert( name, part );
+			removeAndForgetPart( name, plugin );
+			delete plugin;
 		}
 	}
 }
@@ -236,47 +188,6 @@ void PluginController::unloadPlugins( QStringList const & unloadParts )
 		++it;
 	}
 }
-
-bool PluginController::checkNewService( ProjectInfo * projectInfo, const KService::Ptr &service )
-{
-    //FIXME: adymo: do we need this checkNewService?
-/*  QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
-  QStringList langlist = var.asStringList();
-
-  // empty means it supports all languages
-  if( !langlist.isEmpty() && !langlist.contains(projectInfo->m_activeLanguage) ) {
-    projectInfo->m_ignoreParts << service->name();
-    return false;
-  }
-
-  // the language is ok, now check if the keywords match
-  QStringList serviceKeywords = service->keywords();
-  for ( QStringList::Iterator is = serviceKeywords.begin();
-        is != serviceKeywords.end(); ++is )
-  {
-    if ( !projectInfo->m_keywords.contains(*is) ) {
-      // no match
-      kdDebug(9000) << "ignoreParts because Keyword does not match: " << service->name() << endl;
-      projectInfo->m_ignoreParts << service->name();
-      return false;
-    }
-  }
-*/
-  projectInfo->m_loadParts << service->desktopEntryName();
-  return true;
-}
-
-/*KService::List PluginController::pluginServices( const QString &scope )
-{
-    QString constraint = QString::fromLatin1("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
-
-    if ( !scope.isEmpty() )
-	constraint += QString::fromLatin1( " and [X-KDevelop-Scope] == '%1'").arg( scope );
-    if (TopLevel::mode == TopLevel::AssistantMode)
-        constraint += QString::fromLatin1( " and [X-KDevelop-Mode] == 'AssistantMode'");
-    return KTrader::self()->query( QString::fromLatin1( "KDevelop/Plugin" ),
-	                           constraint );
-}*/
 
 KDevPlugin *PluginController::loadPlugin( const KService::Ptr &service )
 {
@@ -384,8 +295,8 @@ QString PluginController::changeProfile(const QString &newProfile)
     m_profile = newProfile;
         
     unloadPlugins(unload);
-    loadCorePlugins(coreLoad);
-    loadGlobalPlugins(globalLoad);
+    loadPlugins( coreLoad );
+    loadPlugins( globalLoad );
         
     return oldProfile;
 }
