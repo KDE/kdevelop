@@ -24,6 +24,7 @@
 
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
 #include <ktabctl.h>
@@ -95,8 +96,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	label_filename = new QLabel( this, "label_filename" );
 	label_filename->setFocusPolicy( QWidget::NoFocus );
 	label_filename->setBackgroundMode( QWidget::PaletteBackground );
-	label_filename->setFontPropagation( QWidget::NoChildren );
-	label_filename->setPalettePropagation( QWidget::NoChildren );
 	label_filename->setText( i18n("Filename:") );
 	label_filename->setMinimumSize( label_filename->sizeHint() );
 	vlayout->addWidget( label_filename, 0 );
@@ -104,8 +103,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	edit = new QLineEdit( this, "edit" );
 	edit->setFocusPolicy( QWidget::StrongFocus );
 	edit->setBackgroundMode( QWidget::PaletteBase );
-	edit->setFontPropagation( QWidget::NoChildren );
-	edit->setPalettePropagation( QWidget::NoChildren );
 	edit->setText( "" );
 	edit->setMaxLength( 32767 );
 	edit->setEchoMode( QLineEdit::Normal );
@@ -118,8 +115,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	check_use_template = new QCheckBox( this, "check_use_template" );
 	check_use_template->setFocusPolicy( QWidget::TabFocus );
 	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
-	check_use_template->setFontPropagation( QWidget::NoChildren );
-	check_use_template->setPalettePropagation( QWidget::NoChildren );
 	check_use_template->setText(i18n("use Template") );
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
@@ -132,8 +127,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	button_group = new QButtonGroup( this, "button_group" );
 	button_group->setFocusPolicy( QWidget::NoFocus );
 	button_group->setBackgroundMode( QWidget::PaletteBackground );
-	button_group->setFontPropagation( QWidget::NoChildren );
-	button_group->setPalettePropagation( QWidget::NoChildren );
 	button_group->setFrameStyle( 49 );
 	button_group->setTitle( i18n("Project Options" ));
 	button_group->setAlignment( 1 );
@@ -152,8 +145,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	check_add_project = new QCheckBox( button_group, "check_add_project" );
 	check_add_project->setFocusPolicy( QWidget::TabFocus );
 	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
-	check_add_project->setFontPropagation( QWidget::NoChildren );
-	check_add_project->setPalettePropagation( QWidget::NoChildren );
 	check_add_project->setText(i18n("add to Project") );
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
@@ -164,8 +155,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	location_label = new QLabel( button_group, "location_label" );
 	location_label->setFocusPolicy( QWidget::NoFocus );
 	location_label->setBackgroundMode( QWidget::PaletteBackground );
-	location_label->setFontPropagation( QWidget::NoChildren );
-	location_label->setPalettePropagation( QWidget::NoChildren );
 	location_label->setText(i18n("Location:") );
 	location_label->setMinimumSize( location_label->sizeHint() );
 	glayout->addWidget( location_label, 2, 0 );
@@ -173,8 +162,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	prj_loc_edit = new QLineEdit( button_group, "prj_loc_edit" );
 	prj_loc_edit->setFocusPolicy( QWidget::StrongFocus );
 	prj_loc_edit->setBackgroundMode( QWidget::PaletteBase );
-	prj_loc_edit->setFontPropagation( QWidget::NoChildren );
-	prj_loc_edit->setPalettePropagation( QWidget::NoChildren );
 	prj_loc_edit->setText( prj->getProjectDir()+ prj->getSubDir());
 	prj_loc_edit->setMaxLength( 32767 );
 	prj_loc_edit->setEchoMode( QLineEdit::Normal );
@@ -186,8 +173,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	loc_button = new QPushButton( button_group, "loc_button" );
 	loc_button->setFocusPolicy( QWidget::TabFocus );
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
-	loc_button->setFontPropagation( QWidget::NoChildren );
-	loc_button->setPalettePropagation( QWidget::NoChildren );
 	QPixmap pix = SmallIcon("fileopen");
 	loc_button->setPixmap(pix);
 	loc_button->setAutoRepeat( FALSE );
@@ -209,8 +194,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	ok = new QPushButton( this, "ok" );
 	ok->setFocusPolicy( QWidget::TabFocus );
 	ok->setBackgroundMode( QWidget::PaletteBackground );
-	ok->setFontPropagation( QWidget::NoChildren );
-	ok->setPalettePropagation( QWidget::NoChildren );
 	ok->setText(i18n("&OK"));
 	ok->setAutoRepeat( FALSE );
 	ok->setAutoResize( FALSE );
@@ -219,8 +202,6 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	cancel = new QPushButton( this, "cancel" );
 	cancel->setFocusPolicy( QWidget::TabFocus );
 	cancel->setBackgroundMode( QWidget::PaletteBackground );
-	cancel->setFontPropagation( QWidget::NoChildren );
-	cancel->setPalettePropagation( QWidget::NoChildren );
 	cancel->setText(i18n("&Cancel") );
 	cancel->setAutoRepeat( FALSE );
 	cancel->setAutoResize( FALSE );

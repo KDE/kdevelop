@@ -64,6 +64,28 @@ private: // Private classes
     void maybeTip( const QPoint & );
   };
 
+  /** list of classes of a certain subfolder */
+  class SubfolderClassList
+  {
+  public:
+    SubfolderClassList(const QString& sfname, QList<CParsedClass>* pCL) {
+      subfolderName = sfname;
+      pClassList = pCL;
+    }
+    ~SubfolderClassList() {
+      delete pClassList;
+    }
+    bool operator<(const SubfolderClassList& scl) {
+      return (subfolderName < scl.subfolderName);
+    }
+    bool operator==(const SubfolderClassList& scl) {
+      return (subfolderName == scl.subfolderName);
+    }
+    QString subfolderName;
+    QList<CParsedClass>* pClassList;
+    QListViewItem* pFolderItem;
+  };
+
 public: // Public constants
 
   /** Name of the class-root. */

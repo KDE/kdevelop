@@ -150,7 +150,11 @@ void CKDevAccel::disconnectItem(const QString& action,
   if (uMenuId!=0)
        m_Assoc.remove( uMenuId );
 
+#if QT_VERSION < 300
   KAccel::disconnectItem(action, receiver, member);
+#else
+  setActionSlot(action, 0, 0);
+#endif
 }
 
 //void CKDevAccel::reconnectItem(const QString& action,

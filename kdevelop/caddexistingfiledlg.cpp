@@ -53,8 +53,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_label = new QLabel( this, "source_label" );
   source_label->setFocusPolicy( QWidget::NoFocus );
   source_label->setBackgroundMode( QWidget::PaletteBackground );
-  source_label->setFontPropagation( QWidget::NoChildren );
-  source_label->setPalettePropagation( QWidget::NoChildren );
   source_label->setText(i18n("Sourcefile(s):") );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
@@ -63,8 +61,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_edit = new KURLRequester( this, "source_edit" );
   source_edit->setFocusPolicy( QWidget::StrongFocus );
   //source_edit->setBackgroundMode( QWidget::PaletteBase );
-  source_edit->setFontPropagation( QWidget::NoChildren );
-  source_edit->setPalettePropagation( QWidget::NoChildren );
   source_edit->lineEdit()->setText( "" );
   source_edit->fileDialog()->setMode(KFile::Files);
 
@@ -73,8 +69,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_label = new QLabel( this, "destination_label" );
   destination_label->setFocusPolicy( QWidget::NoFocus );
   destination_label->setBackgroundMode( QWidget::PaletteBackground );
-  destination_label->setFontPropagation( QWidget::NoChildren );
-  destination_label->setPalettePropagation( QWidget::NoChildren );
   destination_label->setText(i18n("Destinationdir:") );
   destination_label->setAlignment( 289 );
   destination_label->setMargin( -1 );
@@ -82,8 +76,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
 
   destination_edit = new KURLRequester( this, "destination_edit" );
   destination_edit->setFocusPolicy( QWidget::StrongFocus );
-  destination_edit->setFontPropagation( QWidget::NoChildren );
-  destination_edit->setPalettePropagation( QWidget::NoChildren );
   destination_edit->lineEdit()->setText( "" );
   destination_edit->fileDialog()->setMode(KFile::Directory);
   grid1->addWidget(destination_edit,1,1);
@@ -100,8 +92,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   template_checkbox = new QCheckBox( this, "addTemplate_checkbox");
   template_checkbox->setFocusPolicy( QWidget::TabFocus );
   template_checkbox->setBackgroundMode( QWidget::PaletteBackground );
-  template_checkbox->setFontPropagation( QWidget::NoChildren );
-  template_checkbox->setPalettePropagation( QWidget::NoChildren );
   template_checkbox->setText( i18n("insert header/cpp-templates to added files" ));
   template_checkbox->setAutoRepeat( FALSE );
   template_checkbox->setAutoResize( FALSE );
@@ -114,8 +104,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   ok_button  = bb->addButton( i18n("OK") );
   ok_button->setFocusPolicy( QWidget::TabFocus );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
-  ok_button->setFontPropagation( QWidget::NoChildren );
-  ok_button->setPalettePropagation( QWidget::NoChildren );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
   ok_button->setDefault( TRUE );
@@ -123,8 +111,6 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   cancel_button =  bb->addButton( i18n("Cancel") );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-  cancel_button->setFontPropagation( QWidget::NoChildren );
-  cancel_button->setPalettePropagation( QWidget::NoChildren );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   bb->layout();

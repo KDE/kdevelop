@@ -23,7 +23,7 @@
 
 
 KDevListView::KDevListView(QWidget *parent, const char *name)
-    : QListView(parent, name)
+    : KListView(parent, name)
 {}
 
 

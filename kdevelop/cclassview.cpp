@@ -39,6 +39,7 @@
 #include <qmessagebox.h>
 #include <qprogressdialog.h>
 #include <qstrlist.h>
+#include <qsortedlist.h>
 
 #include <time.h>
 #include <assert.h>
@@ -133,6 +134,8 @@ CClassView::CClassView(QWidget* parent, const char* name) :
   ((CClassTreeHandler *)treeH)->setStore( store );
 
   connect (this, SIGNAL(executed(QListViewItem *, const QPoint &, int )),
+           SLOT(slotClassViewSelected()));
+  connect (this, SIGNAL(returnPressed(QListViewItem *)),
            SLOT(slotClassViewSelected()));
   // the signal used to be reemitted from CTreeView, it doesnt make sense
   // any longer and it's therefore replaced (rokrau 6/18/01)
@@ -293,6 +296,10 @@ void CClassView::refresh( CProject *proj )
 
   project = proj;
 
+  // memorize which parts of the tree are open and also the selected item
+  QStringList pathList = treeH->pathListOfAllOpenedItems();
+  QString curSelectedPath = treeH->pathToSelectedItem();
+
   // Reset the classparser and the view.
   ((CClassTreeHandler *)treeH)->clear();
   cp->wipeout();
@@ -338,6 +345,8 @@ void CClassView::refresh( CProject *proj )
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
+		if (src.contains(".ui"))
+			continue;
     kdDebug() << "  parsing:[" << str << "]" << endl;
     cp->parse( str );
     emit setStatusbarProgress( ++currentCount );
@@ -351,6 +360,9 @@ void CClassView::refresh( CProject *proj )
   projectPopup.setItemEnabled(ID_CV_FOLDER_NEW, popupClassItemsEnable);
   projectPopup.setItemEnabled(ID_CV_GRAPHICAL_VIEW, popupClassItemsEnable);
 
+  // reopen the tree and select the item again
+  treeH->openItems(pathList);
+  treeH->activateItem(curSelectedPath);
 }
 
 
@@ -410,9 +422,17 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
     emit setStatusbarProgress( ++lCurCount );
   }
 
+  // memorize which parts of the tree are open and also the selected item
+  QStringList pathList = treeH->pathListOfAllOpenedItems();
+  QString curSelectedPath = treeH->pathToSelectedItem();
+
   //reset and refresh the tree
 	((CClassTreeHandler *)treeH)->clear();	
 	refresh();
+
+  // reopen the tree and select the item again
+  treeH->openItems(pathList);
+  treeH->activateItem(curSelectedPath);
 }
 
 /*---------------------------------------------- CClassView::refresh()
@@ -457,12 +477,14 @@ void CClassView::refresh()
   item = treeH->addItem( i18n( "Namespaces" ), THFOLDER, globalsItem );
   scopeList = store->globalContainer.getSortedScopeList();
   ((CClassTreeHandler *)treeH)->addScopes( scopeList, item );
+  item->sortChildItems(0,true);
   delete scopeList;
 
   // Add global Structures
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
   structList = store->getSortedStructList();
   ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
+  item->sortChildItems(0,true);
   delete structList;
 
   // Add global functions
@@ -471,6 +493,7 @@ void CClassView::refresh()
   methodList = store->globalContainer.getSortedMethodList();
   kdDebug() << "Got " << methodList->count() << " methods" << endl;
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
+  item->sortChildItems(0,true);
   delete methodList;
 
   // Add global variables
@@ -478,6 +501,7 @@ void CClassView::refresh()
   item = treeH->addItem( i18n( "Variables" ), THFOLDER, globalsItem );
   attributeList = store->globalContainer.getSortedAttributeList();
   ((CClassTreeHandler *)treeH)->addGlobalVariables( attributeList, item );
+  item->sortChildItems(0,true);
   delete attributeList;
 
   treeH->setLastItem( item );
@@ -499,6 +523,10 @@ void CClassView::refresh()
  *-----------------------------------------------------------------*/
 void CClassView::addFile( const char *aName )
 {
+  // memorize which parts of the tree are open and also the selected item
+  QStringList pathList = treeH->pathListOfAllOpenedItems();
+  QString curSelectedPath = treeH->pathToSelectedItem();
+
   // Reset the tree.
   ((CClassTreeHandler *)treeH)->clear();
 
@@ -509,6 +537,10 @@ void CClassView::addFile( const char *aName )
 
   // Build the new classtree.
   refresh();
+
+  // reopen the tree and select the item again
+  treeH->openItems(pathList);
+  treeH->activateItem(curSelectedPath);
 }
 
 /*---------------------------------- CClassView::refreshClassByName()
@@ -949,17 +981,15 @@ void CClassView::buildInitalClassTree()
 //	clock_t startClock = clock();
   QString str;
   CParsedClass *aPC;
-  QListViewItem *folder;
   QList<CParsedClass> *list;
-  QList<CParsedClass> *iterlist;
   QString projDir;
-  QDict< QList<CParsedClass> > dict;
-  QDictIterator< QList<CParsedClass> > dictI( dict );
+  QSortedList<CClassView::SubfolderClassList> listOfClassLists;
+  CClassView::SubfolderClassList* pCurClassList;
   QList<CParsedClass> rootList;
 
   kdDebug() << "buildInitalClassTree" << endl;
 
-  dict.setAutoDelete( true );
+  listOfClassLists.setAutoDelete(true);
 
   // Insert root item
   str = i18n( CLASSROOTNAME );
@@ -976,38 +1006,69 @@ void CClassView::buildInitalClassTree()
     // Try to determine if this is a subdirectory.
     str = aPC->definedInFile;
     str = str.remove( 0, projDir.length() );
-    str = str.remove( 0, str.find( '/', 1 ) );
-    str = str.remove( str.findRev( '/' ), 10000 );
-
+    int p = str.find( '/', 1 );
+    if (p == -1) {
+      // a source file directly in the project dir
+      str = "";
+    }
+    else {
+      QString subDir(project->getSubDir());
+      QString strPart = str.left(p+1);
+      if ((strPart == subDir) || (strPart == "src/") || (strPart == "include/")) {
+         // files in such subdirs have to appear directly under Classes
+         str = str.remove( 0, p);
+      }
+      str = str.remove( str.findRev( '/' ),10000 ); // just the subdir will remain
+    }
     if( str.isEmpty() )
       rootList.append( aPC );
-    else
-    {
+    else {
       // Remove heading /
-      str = str.remove( 0, 1 );
-      iterlist = dict.find( str );
-
-      if( iterlist == NULL )
-      {
-        iterlist = new QList<CParsedClass>();
-        dict.insert( str, iterlist );
+      if (!str.isEmpty() && (str[0] == '/')) {
+        str = str.remove( 0, 1 );
       }
 
-      iterlist->append( aPC );
+      // search if a class list called contents of str already exists
+      QList<CParsedClass>* iterlist = 0L;
+      bool bFound = false;
+      for (pCurClassList = listOfClassLists.first(); !bFound && pCurClassList != 0; pCurClassList = listOfClassLists.next()) {
+        if (pCurClassList->subfolderName == str) {
+          bFound = true;
+          iterlist = pCurClassList->pClassList;
+        }
+      }
+      if (!iterlist) {
+        // must create a new class list
+        iterlist = new QList<CParsedClass>(); // will be deleted in destructor of pSCL
+        pCurClassList = new CClassView::SubfolderClassList( str, iterlist);
+        listOfClassLists.append(pCurClassList);
+      }
+
+      iterlist->append(aPC);
     }
   }
 
   delete list;
 
+
   // Add all classes with a folder.
-  for( dictI.toFirst();
-       dictI.current();
-       ++dictI )
-  {
+  // (it's tricky: loop from end to start to ensure the folder items are above the class items)
+  listOfClassLists.sort();
+  for (pCurClassList = listOfClassLists.last(); pCurClassList != 0L; pCurClassList = listOfClassLists.prev()) {
     // Add folder.
-    folder = treeH->addItem( dictI.currentKey(), THFOLDER, classesItem );
-    ((CClassTreeHandler *)treeH)->addClasses( dictI.current(), folder );
-    treeH->setLastItem( folder );
+    pCurClassList->pFolderItem = treeH->addItem(pCurClassList->subfolderName, THFOLDER, classesItem);
+    ((CClassTreeHandler *)treeH)->addClasses(pCurClassList->pClassList, pCurClassList->pFolderItem);
+  }
+
+  // set to last item for the classes without folder
+  QListViewItem* c = classesItem->firstChild();
+  QListViewItem* oldC = c;
+  while (c) {
+    oldC = c;
+    c = c->nextSibling();
+  }
+  if (oldC) {
+    treeH->setLastItem(oldC);
   }
 
   // Add all classes without a folder.

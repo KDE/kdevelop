@@ -1301,10 +1301,6 @@ int CClassParser::checkClassDecl()
         PUSH_LEXEM();
         break;
       case CLCL:
-	// if in a class definition something like that is found:
-	// class x{ x::y( ); };
-	// the classparser thinks at x:: it's an implementation
-	// fact is that we don't know it exactly -> bug 2374
         isImpl = true;
         PUSH_LEXEM();
         break;
@@ -1347,8 +1343,14 @@ int CClassParser::checkClassDecl()
   {
     if( isOperator )
       retVal = ( isImpl ? CP_IS_OPERATOR_IMPL : CP_IS_OPERATOR );
-    else
-      retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+    else {
+      if (m_isParsingClassDeclaration) {
+         retVal = CP_IS_METHOD;//( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+      }
+      else {
+         retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+      }
+    }
   }
   else if( lexem == '{' )
   {
@@ -1357,10 +1359,11 @@ int CClassParser::checkClassDecl()
   }
   else if( lexem != 0 ) // Attribute
   {
+    // If isImpl is true, it is simply a leading namespace in the attribute type (Falk)
     if( isMultiDecl )
-      retVal = ( isImpl ? CP_IS_MULTI_ATTR_IMPL : CP_IS_MULTI_ATTRIBUTE );
+      retVal = CP_IS_MULTI_ATTRIBUTE; // ( isImpl ? CP_IS_MULTI_ATTR_IMPL : CP_IS_MULTI_ATTRIBUTE );
     else
-      retVal = ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE );
+      retVal = CP_IS_ATTRIBUTE; // ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE );
   }
 
   return retVal;
@@ -1460,7 +1463,7 @@ CParsedClass *CClassParser::parseClassHeader()
   aLexem = lexemStack.pop();
 
   if(aLexem == 0) {
-    kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+    kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()" << endl;
     return 0;
   }
 
@@ -1478,7 +1481,7 @@ CParsedClass *CClassParser::parseClassHeader()
       // Fetch the name of the parent.
       aLexem = lexemStack.pop();
       if(aLexem == 0) {
-        kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()\n";
+        kdDebug() << "ERROR in classparser: CParsedClass *CClassParser::parseClassHeader()" << endl;
         return 0;
       }
 
@@ -1938,6 +1941,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
           parseClassInheritance( aClass );
         }
 
+        m_isParsingClassDeclaration = true;
         parseClass( aClass );
       }
       break;
@@ -1947,6 +1951,7 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
     case CPSTRUCT:
     case CPCONST:
     case ID:
+      m_isParsingClassDeclaration = false;
       parseMethodAttributes( scope );
       break;
     default:

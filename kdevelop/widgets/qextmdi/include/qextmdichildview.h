@@ -39,11 +39,65 @@
 /**
   * @short Base class for all your special view windows.
   *
-  * Base class for all MDI view widgets.
+  * Base class for all MDI view widgets. QextMDI stores additional information in this class
+  * to handle the attach/detach mechanism and such things.
   *
-  * The derived windows 'lives' attached to a QextMdiChildFrm widget
+  * All such windows 'lives' attached to a QextMdiChildFrm widget
   * managed by QextMdiChildArea, or detached (managed by the window manager.)
   * So remember that the @ref QextMdiChildView::parent pointer may change, and may be 0L, too.
+  *
+  * There are 2 possibilities for you to put your widgets under MDI control:
+  *
+  * Either you inherit all the views from QextMdiChildView:
+  *   <PRE>
+  *   class MyMdiWidget : public QextMdiChildView
+  *   { .... };
+  *   ...
+  *   MyMdiWidget w;
+  *   mainframe->addWindow(w, flags);
+  *   </PRE>
+  *
+  * or you wrap them by a QextMdiChildView somehow like this:
+  *
+  * <PRE>
+  * void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& icon)
+  * {
+  *   // cover it by a QextMDI childview and add that MDI system
+  *   QextMdiChildView* pMDICover = new QextMdiChildView( pNewView->caption());
+  *   pMDICover->setIcon(icon);
+  *   m_MDICoverList.append( pMDICover);
+  *   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
+  *   pNewView->reparent( pMDICover, QPoint(0,0));
+  *   pLayout->addWidget( pNewView);
+  *   pMDICover->setName( pNewView->name());
+  *   // captions
+  *   QString shortName = pNewView->caption();
+  *   int length = shortName.length();
+  *   shortName = shortName.right(length - (shortName.findRev('/') +1));
+  *   pMDICover->setTabCaption( shortName);
+  *   pMDICover->setCaption(pNewView->caption());
+  *
+  *   // fake a viewActivated to update the currentEditView/currentBrowserView pointers _before_ adding to MDI control
+  *   slot_viewActivated( pMDICover);
+  *
+  *   // take it under MDI mainframe control (note: this triggers also a setFocus())
+  *   int flags;
+  *   if (bShow) {
+  *     flags = QextMdi::StandardAdd;
+  *   }
+  *   else {
+  *     flags = QextMdi::Hide;
+  *   }
+  *   // set the accelerators for Toplevel MDI mode (each toplevel window needs its own accels
+  *   connect( m_pParent, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(initKeyAccel(QWidget*)) );
+  *
+  *   m_pParent->addWindow( pMDICover, flags);
+  *   // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
+  *   pMDICover->setFirstFocusableChildWidget(0L);
+  *   pMDICover->setLastFocusableChildWidget(0L);
+  * }
+  * </PRE>
+  *
   */
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget

@@ -217,8 +217,10 @@ void CKDevelop::setMainCaption(int item)
       if (pCurBrowserDoc) {
         setCaption(pCurBrowserDoc->currentTitle());
         QextMdiChildView* pMDICover = (QextMdiChildView*) pCurBrowserView->parentWidget();
-        pMDICover->setCaption(pCurBrowserDoc->currentURL());
-        pMDICover->setTabCaption(pCurBrowserDoc->currentTitle());
+	if (pMDICover) {
+          pMDICover->setCaption(pCurBrowserDoc->currentURL());
+          pMDICover->setTabCaption(pCurBrowserDoc->currentTitle());
+	}
       }
     }
     break;
@@ -664,6 +666,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     if (m_docViewManager->curDocIsCppFile()){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
+	  enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_RUN_WITH_ARGS);
     enableCommand(ID_DEBUG_START);
@@ -706,6 +709,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //  if (!enable)
   {
     // set the popupmenus enable or disable
+	  disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // disable switching project configs during an operation
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
     disableCommand(ID_BUILD_RUN);
@@ -841,10 +845,14 @@ void CKDevelop::readOptions()
     view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
   if(config->readBoolEntry("show_browser_toolbar",true))
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
-    if (config->readBoolEntry("show_statusbar",true))
+  if (config->readBoolEntry("show_statusbar",true))
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-    if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isVisible()))
-    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
+  if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isSwitchedOn())) {
+    showViewTaskBar();
+  }
+  else {
+    hideViewTaskBar();
+  }
 
   // read setting whether to use the ctags search database
   bCTags = config->readBoolEntry("use_ctags", false);
@@ -1057,6 +1065,14 @@ void CKDevelop::create_tags()
   }
   else {
       files = getProject()->getProjectDir();
+      // plus scan external dependencies' files
+      // NOTE these are taken from the *.P files in the .deps subdirectory created
+      // and updated by the make process
+      // (external dependencies let you browse non-project #include symbols)
+      // TODO ".deps" directories may not always be in first level subdirectories or may not at all exist
+      // TODO let user config this as an option
+      // TODO is this portable? (grep -e / max command line length)
+      files = files + " `grep -h -e \"^/.* :$\" */.deps/*.P | sort -u | cut -d \" \" -f 1`";
   }
   // set the name of the output file
   QString tagfile = getProject()->getProjectDir() + "/tags";

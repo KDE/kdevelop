@@ -47,7 +47,8 @@ enum DBGStateFlags
   s_attached          = 512,
   s_core              = 1024,
   s_waitTimer         = 2048,
-  s_shuttingDown      = 4096
+  s_shuttingDown      = 4096,
+  s_viewThreads       = 8192
 };
 /***************************************************************************/
 /***************************************************************************/
@@ -72,7 +73,7 @@ public slots:
   virtual void slotCoreFile(const QString& coreFile)                      = 0;
   virtual void slotAttachTo(int pid)                                      = 0;
 
-  virtual void slotRun()                                                   = 0;
+  virtual void slotRun()                                                  = 0;
   virtual void slotRunUntil(const QString& filename, int lineNo)          = 0;
   virtual void slotStepInto()                                             = 0;
   virtual void slotStepOver()                                             = 0;
@@ -88,7 +89,7 @@ public slots:
   virtual void slotRegisters()                                            = 0;
   virtual void slotLibraries()                                            = 0;
 
-  virtual void slotSelectFrame(int frame)                                 = 0;
+  virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
 
   virtual void slotExpandItem(VarItem* parent)                            = 0;
   virtual void slotExpandUserItem(VarItem* parent,

@@ -94,7 +94,7 @@ QextMdiChildView::~QextMdiChildView()
 
 QRect QextMdiChildView::internalGeometry() const
 {
-   if(mdiParent()) {
+   if(mdiParent()) { // is attached
       // get the client area coordinates inside the MDI child frame
       QRect    posInFrame = geometry();
       // map these values to the parent of the MDI child frame
@@ -112,7 +112,7 @@ QRect QextMdiChildView::internalGeometry() const
 
 void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
 {
-   if(mdiParent()) {
+   if(mdiParent()) { // is attached
       // retrieve the frame size
       QRect    geo      = internalGeometry();
       QRect    frameGeo = externalGeometry();
@@ -159,21 +159,29 @@ QRect QextMdiChildView::externalGeometry() const
 
 void QextMdiChildView::setExternalGeometry(const QRect& newGeometry)
 {
-   // retrieve the frame size
-   QRect    geo      = internalGeometry();
-   QRect    frameGeo = externalGeometry();
-   int      nTotalFrameWidth = frameGeo.width() - geo.width();
-   int      nTotalFrameHeight = frameGeo.height() - geo.height();
+   if(mdiParent()) { // is attached
+       mdiParent()->setGeometry(newGeometry);
+   }
+   else {
+      // retrieve the frame size
+      QRect    geo      = internalGeometry();
+      QRect    frameGeo = externalGeometry();
+      int      nTotalFrameWidth = frameGeo.width() - geo.width();
+      int      nTotalFrameHeight = frameGeo.height() - geo.height();
+      int      nFrameSizeTop  = geo.y() - frameGeo.y();
+      int      nFrameSizeLeft = geo.x() - frameGeo.x();
 
-   // create the new geometry that is accepted by the QWidget::setGeometry() method
-   QRect    newGeoQt;
-   newGeoQt.setX(newGeometry.x());
-   newGeoQt.setY(newGeometry.y());
-   newGeoQt.setWidth(newGeometry.width()-nTotalFrameWidth);
-   newGeoQt.setHeight(newGeometry.height()-nTotalFrameHeight);
+      // create the new geometry that is accepted by the QWidget::setGeometry() method
+      // not attached => the window system makes the frame
+      QRect    newGeoQt;
+      newGeoQt.setX(newGeometry.x()+nFrameSizeLeft);
+      newGeoQt.setY(newGeometry.y()+nFrameSizeTop);
+      newGeoQt.setWidth(newGeometry.width()-nTotalFrameWidth);
+      newGeoQt.setHeight(newGeometry.height()-nTotalFrameHeight);
 
-   // set the geometry
-   mdiParent() ? mdiParent()->setGeometry(newGeoQt) : setGeometry(newGeoQt);
+      // set the geometry
+      setGeometry(newGeoQt);
+   }
 }
 
 //============== minimize ==============//
@@ -197,6 +205,7 @@ void QextMdiChildView::showMinimized()
    QWidget::showMinimized();
 }
 
+//slot:
 void QextMdiChildView::minimize() { minimize(TRUE); }
 
 //============= maximize ==============//
@@ -208,7 +217,8 @@ void QextMdiChildView::maximize(bool bAnimate)
          mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
          emit mdiParentNowMaximized(TRUE);
       }
-   } else {
+   }
+   else {
       showMaximized();
    }
 }
@@ -220,6 +230,7 @@ void QextMdiChildView::showMaximized()
    QWidget::showMaximized();
 }
 
+//slot:
 void QextMdiChildView::maximize() { maximize(TRUE); }
 
 //============== restoreGeometry ================//
@@ -296,7 +307,8 @@ void QextMdiChildView::restore()
       if(isMinimized()||isMaximized()) {
          mdiParent()->setState(QextMdiChildFrm::Normal);
       }
-   } else {
+   }
+   else {
       showNormal();
    }
 }
@@ -467,19 +479,14 @@ void QextMdiChildView::slot_childDestroyed()
          QWidget* widg = (QWidget*)obj;
          ++it;
          widg->removeEventFilter(this);
-         if((widg->focusPolicy() == QWidget::StrongFocus) || 
-            (widg->focusPolicy() == QWidget::TabFocus   ) ||
-            (widg->focusPolicy() == QWidget::WheelFocus ))
-         {
-            if(m_firstFocusableChildWidget == widg) {
-               m_firstFocusableChildWidget = 0L;   // reset first widget
-            }
-            if(m_lastFocusableChildWidget == widg) {
-               m_lastFocusableChildWidget = 0L;    // reset last widget
-            }
-            if(m_focusedChildWidget == widg) {
-               m_focusedChildWidget = 0L;          // reset focused widget
-            }
+         if(m_firstFocusableChildWidget == widg) {
+            m_firstFocusableChildWidget = 0L;   // reset first widget
+         }
+         if(m_lastFocusableChildWidget == widg) {
+            m_lastFocusableChildWidget = 0L;    // reset last widget
+         }
+         if(m_focusedChildWidget == widg) {
+            m_focusedChildWidget = 0L;          // reset focused widget
          }
       }
       delete list;                        // delete the list, not the objects
@@ -518,6 +525,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          if(list->find(obj) != -1) {
             m_focusedChildWidget = (QWidget*)obj;
          }
+         delete list;   // delete the list, not the objects
       }
       if (!isAttached()) {   // is toplevel, for attached views activation is done by frame event filter
          static bool m_bActivationIsPending = FALSE;

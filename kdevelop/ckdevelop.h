@@ -332,6 +332,10 @@ public:
   void slotViewTStatusbar();
   /** en-/disable the MDI-view taskbar */
   void slotViewMdiViewTaskbar();
+  /** overridden from its base class to set the menu item additionally */
+  void showViewTaskBar();
+  /** overridden from its base class to set the menu item additionally */
+  void hideViewTaskBar();
   /** refresh all trees and other widgets*/
   void slotViewRefresh();
 
@@ -398,6 +402,9 @@ public:
   ///////////////////////
   /** compile the actual sourcefile using preset options */
   bool RunMake(const CMakefile::Type type, const QString& target);
+	/** run configure. config is the configuration, ask=true opens the
+			configure arguments dialog to edit the configure options.*/
+	void RunConfigure(const QString& conf, bool ask);
 
   void slotBuildMake();
   void slotBuildMakeClean();
@@ -767,6 +774,21 @@ public:
    */
   //void slotTagDeclaration(QString tag);
 
+  // activate certain tool-views (slots for accels)
+  void slotActivateTView_Class();
+  void slotActivateTView_LFV();
+  void slotActivateTView_RFV();
+  void slotActivateTView_Doc();
+  void slotActivateTView_VAR();
+  void slotActivateOView_Messages();
+  void slotActivateOView_StdInStdOut();
+  void slotActivateOView_StdErr();
+  void slotActivateOView_Konsole();
+  void slotActivateOView_BrkptManager();
+  void slotActivateOView_FrameStack();
+  void slotActivateOView_Disassemble();
+  void slotActivateOView_Dbg();
+
 protected: // Protected methods
 
   /** The user selected a class in the classcombo.
@@ -929,6 +951,7 @@ private:
   /** QValueList containing the Tool Apps */
   ToolAppList toolList;
 
+  KCompletion* compile_comp;
   KCompletion* class_comp;
   KCompletion* method_comp;    
   /** If this to true, the user wants a beep after a

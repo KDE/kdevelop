@@ -2169,6 +2169,7 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
   ItemData *itemData;
   int z;
   QFont font;
+  KCharsets * charsets = KGlobal::charsets();
 
   defaultStyleList.setAutoDelete(true);
   getDefaults(defaultStyleList,defaultFont);
@@ -2192,9 +2193,15 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
+#if QT_VERSION < 300
+//      font.setCharSet(charsets->charsetForEncoding(defaultFont.charset));
+#endif
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
+#if QT_VERSION < 300
+//      font.setCharSet(charsets->charsetForEncoding(itemData->charset));
+#endif
     }
     a[z].setFont(font);
   }
@@ -2253,7 +2260,12 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
   QFont defaultFont = KGlobalSettings::fixedFont();
   font.family = config->readEntry("Family", defaultFont.family());
   font.size = config->readNumEntry("Size", defaultFont.pointSize());
+#if QT_VERSION < 300
+  // ### doesn't compile with Qt3
   font.charset = config->readEntry("Charset", QFont::encodingName(QFont::ISO_8859_1));//  "ISO-8859-1");
+#else
+  font.charset = config->readEntry("Charset", "ISO-8859-1");
+#endif
 }
 
 void HlManager::setDefaults(ItemStyleList &list, ItemFont &font) {
@@ -2445,7 +2457,11 @@ void FontChanger::displayCharsets() {
   KCharsets *charsets;
 
   charsets = KGlobal::charsets();
+#if QT_VERSION < 300
   QStringList lst = charsets->availableCharsetNames(font->family);
+#else
+  QStringList lst; // ### fails with Qt3...
+#endif
 //  QStrList lst = charsets->displayable(font->family);
   charsetCombo->clear();
   for(z = 0; z < (int) lst.count(); z++) {

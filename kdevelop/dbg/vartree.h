@@ -26,7 +26,7 @@ enum DataType { typeUnknown, typeValue, typePointer, typeReference,
                 typeStruct, typeArray, typeQString, typeWhitespace,
                 typeName };
 
-class FrameRoot;
+class VarFrameRoot;
 class WatchRoot;
 class VarItem;
 class VarTree;
@@ -45,6 +45,9 @@ public:
   VarViewer( QWidget *parent=0, const char *name=0 );
   VarTree* varTree()      { return varTree_; }
   void clear();
+
+public slots:
+  virtual void setEnabled(bool bEnabled);
 
 private slots:
   void slotAddWatchVariable();
@@ -72,8 +75,9 @@ public:
   void setActiveFlag()                  { activeFlag_++; }
 
   QListViewItem* findRoot(QListViewItem* item) const;
-  FrameRoot* findFrame(int frameNo) const;
+  VarFrameRoot* findFrame(int frameNo, int threadNo) const;
   WatchRoot* findWatch();
+  void setCurrentThread(int currentThread)     { currentThread_ = currentThread; }
 
   // Remove items that are not active
   void trim();
@@ -82,7 +86,7 @@ public:
   void emitExpandItem(VarItem* item)            { emit expandItem(item); }
   void emitExpandUserItem(VarItem* item, const QCString& request)
                                                 { emit expandUserItem(item, request);}
-  void emitSetLocalViewState(bool localsOn,int frameNo);
+  void emitSetLocalViewState(bool localsOn, int frameNo, int threadNo);
 
 public slots:
   void slotAddWatchVariable(const QString& watchVar);
@@ -98,10 +102,11 @@ signals:
   void expandItem(VarItem* item);
   void expandUserItem(VarItem* item, const QCString& userRequest);
   void setLocalViewState(bool localsOn);
-  void selectFrame(int frameNo);
+  void selectFrame(int frameNo, int threadNo);
 
 private:
   int activeFlag_;
+  int currentThread_;
 };
 
 /***************************************************************************/
@@ -179,25 +184,28 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class FrameRoot : public TrimmableItem
+class VarFrameRoot : public TrimmableItem
 {
 public:
-  FrameRoot(VarTree* parent, int frameNo);
-  virtual ~FrameRoot();
+  VarFrameRoot(VarTree* parent, int frameNo, int threadNo);
+  virtual ~VarFrameRoot();
 
   void setLocals(char* locals);
   void setParams(const QCString& params);
 
   void setOpen(bool open);
 
-  int  getFrameNo() const                     { return frameNo_; }
-  void setFrameName(const QString& frameName) { setText(VarNameCol, frameName); setText(ValueCol, ""); }
+//  int  getFrameNo() const                     { return frameNo_; }
+  void setFrameName(const QString& frameName)
+            { setText(VarNameCol, frameName); setText(ValueCol, ""); }
 
   bool needLocals() const                     { return needLocals_; }
+  bool matchDetails(int frameNo, int threadNo);
 
 private:
   bool    needLocals_;
   int     frameNo_;
+  int     threadNo_;
   QCString params_;
   QCString locals_;
 };

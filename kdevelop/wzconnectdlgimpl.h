@@ -17,6 +17,8 @@
 #ifndef CCLASSPROPERTIESDLGIMPL_H
 #define CCLASSPROPERTIESDLGIMPL_H
 #include "wzconnectdlg.h"
+#include <kcompletion.h>
+
 //#include "./classparser/ClassStore.h"
 //#include "./classparser/ClassParser.h"
 
@@ -94,6 +96,8 @@ public:
   /** This build a list of CParsedAttribute items from the current class and its parents classes */
   QList <CParsedAttribute>* getAllParentAttr(CParsedClass*, bool initList=true);
 
+  /** static member to hold completion */
+  static KCompletion* typeCompletion;
 public slots:
     void slotClone();
     void slotBtnApply();

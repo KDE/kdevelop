@@ -77,6 +77,9 @@ CRealFileView::CRealFileView(QWidget*parent,const char* name)
   connect(this,
           SIGNAL(executed(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem*)));
+  connect( this,
+          SIGNAL(returnPressed(QListViewItem *)),
+          SLOT(slotSelectionChanged(QListViewItem *)) );
 }
 
 CRealFileView::~CRealFileView(){
@@ -135,6 +138,10 @@ void CRealFileView::refresh(CProject* prj)
     return;
   }
 
+  // memorize which parts of the tree are open and also the selected item
+  QStringList pathList = treeH->pathListOfAllOpenedItems();
+  QString curSelectedPath = treeH->pathToSelectedItem();
+
   // Remove all entries.
   treeH->clear();
 
@@ -146,6 +153,10 @@ void CRealFileView::refresh(CProject* prj)
   pRootItem->setOpen(true);
 
   scanDir(projectdir, pRootItem);
+
+  // reopen the tree and select the item again
+  treeH->openItems(pathList);
+  treeH->activateItem(curSelectedPath);
 }
 
 void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* parent ) {
@@ -225,10 +236,23 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   QStringList::Iterator it = dirList.begin();
   it = dirList.remove(it);
   it = dirList.remove(it);
+  it = dirList.end();
 
+  // Add files in THIS directory as well.
+  addFilesFromDir( directory, parent );
+
+  if (it == dirList.begin()) {
+    return; // there aint subdirs
+  }
+
+  bool bLastLoopStep = false;
   // Recurse through all directories
-  while( it != dirList.end())
-  {
+  do {
+    it--;
+    if (it == dirList.begin()) {
+      bLastLoopStep = true;
+    }
+
     lastFolder = treeH->addItem( (*it).latin1(), THFOLDER, parent );
     lastFolder->setOpen( false );
     
@@ -240,12 +264,8 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
     //    addFilesFromDir( currentPath, lastFolder );
     
     treeH->setLastItem( lastFolder );
-    
-    it++;
-  } 
-  
-  // Add files in THIS directory as well.
-  addFilesFromDir( directory, parent );
+  }
+  while (!bLastLoopStep);
 }
 
 /*----------------------------------- CRealFileView::getCurrentPopup()

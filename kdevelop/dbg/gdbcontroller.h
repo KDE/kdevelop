@@ -52,6 +52,7 @@ protected:
 private:
   void parseProgramLocation (char* buf);
   void parseBacktraceList   (char* buf);
+  void parseThreadList      (char* buf);
   void parseBreakpointSet   (char* buf);
   void parseLocals          (char* buf);
   void parseRequestedData   (char* buf);
@@ -100,7 +101,7 @@ public slots:
   void slotRegisters();
   void slotLibraries();
 
-  void slotSelectFrame(int frame);
+  void slotSelectFrame(int frame, int thread, bool needFrames);
 
   void slotExpandItem(VarItem* parent);
   void slotExpandUserItem(VarItem* parent, const QCString& userRequest);
@@ -136,6 +137,7 @@ private:
   FrameStack*       frameStack_;
   VarTree*          varTree_;
   int               currentFrame_;
+  int               viewedThread_;
 
   int               state_;
   int               gdbSizeofBuf_;          // size of the output buffer

@@ -2265,7 +2265,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd, b
     ch = s[z];//textLine->getChar(z);
     if (ch == '\t') {
       if (z > zc) {
-        QString str=QString::fromLatin1(&s[zc], z - zc /*+1*/);
+        QString str=QString::fromLocal8Bit(&s[zc], z - zc /*+1*/);
         paint.drawText(x - xStart, y, str);
         x += a->fm.width(str); //a->width(s);//&s[zc], z - zc);
       }
@@ -2293,7 +2293,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd, b
       nextAttr = textLine->getRawAttr(z);
       if (nextAttr != attr) {
         if (z > zc) {
-          QString str=QString::fromLatin1(&s[zc], z - zc /*+1*/);
+          QString str=QString::fromLocal8Bit(&s[zc], z - zc /*+1*/);
           paint.drawText(x - xStart, y, str);
           x += a->fm.width(str);//a->width(s);//&s[zc], z - zc);
           zc = z;
@@ -2309,7 +2309,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd, b
     z++;
   }
   if (z > zc) {
-    QString str=QString::fromLatin1(&s[zc], z - zc /*+1*/);
+    QString str=QString::fromLocal8Bit(&s[zc], z - zc /*+1*/);
     paint.drawText(x - xStart, y, str);
   }
 //gettimeofday(&tv3, &tz);

@@ -3,7 +3,7 @@
                              -------------------                                         
 
     begin                : 5 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
+    copyright            : (C) 1998 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -35,7 +35,11 @@ void COutputWidget::insertAtEnd(const QString& s)
   int row = (numLines() < 1)? 0 : numLines()-1;
   // correct workaround for QMultilineEdit
   //  the string inside could be NULL, and so QMultilineEdit fails
+#if (QT_VERSION < 300)
   int col = qstrlen(textLine(row));
+#else
+  int col = 0;
+#endif
   if (s.left(1) == "\n" && row == 0 && col == 0)
     insertAt(" "+s, row, col);
   else
@@ -78,7 +82,9 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   m_errorGcc("([^: \t]+):([0-9]+)[:,].*")
 {
   it = m_errorMap.begin();
-//  setReadOnly(true);
+  setReadOnly(true);        // -JROC uncommented again
+  setWordWrap(WidgetWidth); // -JROC
+  setWrapPolicy(Anywhere); // -JROC
 }
 
 // ---------------------------------------------------------------------------
@@ -99,7 +105,11 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     // add to the end of the text - highlighting is done in the
     // paint routine.
     int row = (numLines() < 1)? 0 : numLines()-1;
+#if (QT_VERSION < 300)
     int col = qstrlen(textLine(row));
+#else
+    int col = 0;
+#endif
 
     bool displayAdditions=atEnd();
     insertAt(line, row, col);
@@ -351,6 +361,7 @@ static QPixmap *getCacheBuffer( QSize sz )
 
 int CMakeOutputWidget::mapToView( int xIndex, int line )
 {
+#if (QT_VERSION < 300)
     int lr_marg = hMargin();
     int align = alignment();
 
@@ -366,6 +377,9 @@ int CMakeOutputWidget::mapToView( int xIndex, int line )
       if ( align == Qt::AlignRight )
         w += wcell - wrow;
     return lr_marg + w;
+#else
+    return 0; // dummy, 'cause never used
+#endif
 }
 
 // --------------------------------------------------------------------------------
@@ -374,6 +388,7 @@ int CMakeOutputWidget::mapToView( int xIndex, int line )
 
 void CMakeOutputWidget::paintCell(QPainter* painter, int row, int /*col*/)
 {
+#if (QT_VERSION < 300)
   int lr_marg = hMargin();
   bool markIsOn = hasMarkedText();
   int align = alignment();
@@ -516,6 +531,7 @@ void CMakeOutputWidget::paintCell(QPainter* painter, int row, int /*col*/)
   p.end();
   painter->drawPixmap( updateR.left(), updateR.top(), *buffer,
      0, 0, updateR.width(), updateR.height() );
+#endif // QT_VERSION < 300
 }
 
 #include "coutputwidget.moc"

@@ -29,8 +29,10 @@ SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   search = new QComboBox(true, this);
   search->insertStrList(searchFor);
   search->setFocus();
-  //workaround for missing QComboBox::selectAll()
-  ((QLineEdit *) (search->children()->getFirst()))->selectAll();
+  QLineEdit* pLE = search->lineEdit();
+  if (pLE) {
+    pLE->selectAll();
+  }
 //  search->dumpObjectTree();
   search->setFixedHeight( search->sizeHint().height() );
   search->setMinimumWidth( search->sizeHint().width() );
@@ -134,7 +136,10 @@ void SearchDialog::setSearchText( const QString &searchstr )
 {
   search->insertItem( searchstr, 0 );
   search->setCurrentItem( 0 );
-  ((QLineEdit *) (search->children()->getFirst()))->selectAll();
+  QLineEdit* pLE = search->lineEdit();
+  if (pLE) {
+    pLE->selectAll();
+  }
 }
 
 const char *SearchDialog::getSearchFor() {

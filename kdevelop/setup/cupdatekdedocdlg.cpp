@@ -34,6 +34,7 @@
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kstddirs.h>

@@ -234,6 +234,17 @@ void QextMdiChildFrm::setResizeCursor(int resizeCorner)
    }
 }
 
+//============= unsetResizeCursor ===============//
+
+void QextMdiChildFrm::unsetResizeCursor()
+{
+   if ( !m_bResizing && (m_iResizeCorner != QEXTMDI_NORESIZE) ) {
+      m_iResizeCorner=QEXTMDI_NORESIZE;
+      m_iLastCursorCorner=QEXTMDI_NORESIZE;
+      if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
+   }
+}
+
 //============= mouseMoveEvent ===============//
 
 void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
@@ -272,11 +283,7 @@ void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 
 void QextMdiChildFrm::leaveEvent(QEvent *)
 {
-   if(!m_bResizing) {
-      m_iResizeCorner=QEXTMDI_NORESIZE;
-      m_iLastCursorCorner=QEXTMDI_NORESIZE;
-      if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
-   }
+   unsetResizeCursor();
 }
 
 void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
@@ -909,6 +916,21 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
 {
    switch (e->type()) {
+   case QEvent::Enter:
+      {
+         // check if the receiver is really a child of this frame
+         bool bIsChild = false;
+         QObject*    pObj = obj;
+         while ( (pObj != 0L) && !bIsChild) {
+            bIsChild = (pObj == this);
+            pObj = pObj->parent();
+         }
+         // unset the resize cursor if the cursor moved from the frame into a inner widget
+         if (bIsChild) {
+            unsetResizeCursor();
+         }
+      }
+      break;
    case QEvent::MouseButtonPress: 
       {
          if ( (QWidget*)obj != m_pClient ) {
@@ -1053,7 +1075,7 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
       if( state() != Maximized)
          m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
       if( state() != Minimized)
-         m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
+         m_pSystemMenu->insertItem(tr("&Minimize"),this, SLOT(minimizePressed()));
       if( state() != Maximized)
          m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
       if( state() == Normal)

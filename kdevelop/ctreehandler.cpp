@@ -19,6 +19,7 @@
 
 #include <kiconloader.h>
 #include <kstddirs.h>
+#include <kdebug.h>
 
 #include <qlist.h>
 #include <qlistview.h>
@@ -251,14 +252,114 @@ QListViewItem *CTreeHandler::addItem( const char *aName,
   assert( aName != NULL );
   assert( parent != NULL );
 
-  QListViewItem *item = new QListViewItem( parent, lastItem, aName, label2, label3, label4, label5 );
-  //item->setText( 0, aName );
-  item->setPixmap( 0, *(getIcon( iconType )) );
+  QListViewItem* item = 0L;
+  QListViewItem* originalParent = parent;
 
-  // Save this as the last entry.
-  setLastItem( item );
+  if (iconType == THFOLDER) {
+    QString str = aName;
+    int pos = str.find('/');
+    QListViewItem* oldC = 0L;
+    while (!str.isEmpty()) {
+      // each subfolder gets an own tree entry, create them step by step
+      QString subfolderName;
+      if (pos == -1) {
+        subfolderName = str;
+      }
+      else {
+        subfolderName = str.left(pos);
+      }
+      if (!subfolderName.isEmpty()) {
+        // check if such subfolder already exists
+        bool bExists = false;
+        oldC = 0L;
+        QListViewItem* c = parent->firstChild();
+        while (c && !bExists) {
+          oldC = c;
+          QString curText = c->text(0);
+          if (curText == subfolderName) {
+            bExists = true; // ok, found; now also go to the last sibling of children of this
+            parent = c;
+            item = c;
+          }
+          else {
+            c = c->nextSibling();
+          }
+        }
+        // if no such subfolder exists, create it
+        if (!bExists) {
+          item = new QListViewItem( parent, subfolderName);
+          item->setPixmap( 0, *(icons[THFOLDER]) );
+          parent = item;
+        }
+        else if (subfolderName == str) {
+          // we're in the last loop step, now go to the right sibling for setLastItem
+          c = item->firstChild();
+          while (c) {
+            oldC = c;
+            c = c->nextSibling();
+          }
+        }
+      }
+      if (pos == -1) {
+        break;
+      }
+      str = str.right(str.length() - pos-1);
+      pos = str.find('/');
+    }
+    // set the last item to the belowest sibling
+    if (oldC) {
+      setLastItem(oldC);
+    }
+    else if (item) {
+      setLastItem(item);
+    }
+  }
+  else {
+    item = new QListViewItem( parent, lastItem, aName, label2, label3, label4, label5 );
+    //item->setText( 0, aName );
+    item->setPixmap( 0, *(getIcon( iconType )) );
+    // Save this as the last entry.
+    setLastItem( item );
+  }
 
   return item;
+}
+
+//-----------------------------------------------------------------
+QStringList CTreeHandler::pathListOfAllOpenedItems()
+{
+  QStringList list;
+  if (!tree)
+    return list;
+
+  QListViewItem *pCurItem = tree->firstChild();
+  appendOpenedItemsOfSubtreeToPathList( &list, pCurItem);
+  list.sort();
+  return list;
+}
+
+//-----------------------------------------------------------------
+QString CTreeHandler::pathToSelectedItem()
+{
+  if (!tree) return "";
+  QListViewItem *item = tree->currentItem(); // the currently selected one
+  return pathToItem(item);
+}
+
+//-----------------------------------------------------------------
+void CTreeHandler::openItems(QStringList pathList)
+{
+  for (QStringList::Iterator it = pathList.begin(); it != pathList.end(); ++it ) {
+    QString curPath = *it;
+    kdDebug() << "reopen: " << curPath << endl;
+    goToItem( curPath, true, false);
+  }
+}
+
+//-----------------------------------------------------------------
+void CTreeHandler::activateItem(const char* path)
+{
+  goToItem( path, false, true);
 }
 
 /*********************************************************************
@@ -269,7 +370,7 @@ QListViewItem *CTreeHandler::addItem( const char *aName,
 
 /*------------------------------------ CClassTreeHandler::readIcons()
  * readIcons()
- *   Read the icons from disk and store them in the class.
+ *   Read the icons from dactivateItemisk and store them in the class.
  *
  * Parameters:
  *   -
@@ -312,4 +413,83 @@ void CTreeHandler::readIcons()
   iconsRead = true;
 }
 
+//-----------------------------------------------------------------
+void CTreeHandler::appendOpenedItemsOfSubtreeToPathList(QStringList *pList, QListViewItem *pCurItem)
+{
+  while (pCurItem) {
+    if (pCurItem->isOpen()) {
+      pList->append(pathToItem(pCurItem));
+      // recursive check of the children
+      QListViewItem* pFirstChild = pCurItem->firstChild();
+      appendOpenedItemsOfSubtreeToPathList( pList, pFirstChild);
+    }
+    pCurItem = pCurItem->nextSibling();
+  }
+}
 
+//-----------------------------------------------------------------
+QString CTreeHandler::pathToItem(QListViewItem* pItem)
+{
+  QString path;
+  if (pItem) {
+    path = pItem->text(0);
+    pItem = pItem->parent();
+  }
+  while (pItem) {
+    path = pItem->text(0) + "*" + path; // "*" is the separator
+    pItem = pItem->parent();
+  }
+  return path;
+}
+
+//-----------------------------------------------------------------
+void CTreeHandler::goToItem(const char* path, bool bAction_OpenTheItem, bool bAction_SelectTheItem)
+{
+  if (!tree) return;
+
+  QString p = path;
+  QString curItemText;
+  QListViewItem *pCurItem = tree->firstChild();
+  int pos = p.find("*");
+
+  // go along the path and expand the appropriate tree branches
+  while (pCurItem) {
+    if (pos != -1) {
+      curItemText = p.left(pos);
+    }
+    else {
+      curItemText = p;
+    }
+
+    // try to find the right item in the current level
+    bool bReachedEnd = false;
+    QListViewItem* pCandidate = pCurItem;
+    while (!bReachedEnd && (pCandidate->text(0) != curItemText)) {
+      pCandidate = pCandidate->nextSibling();
+      if (!pCandidate) {
+        bReachedEnd = true;
+      }
+    }
+    if (!bReachedEnd) {
+      // has found this part of the path,
+      // if possible and desired, expand the tree here.
+      if (pCandidate->firstChild()) {
+        if (bAction_OpenTheItem) {
+          pCandidate->setOpen(true);
+        }
+      }
+      // if desired and the path is completely processed, highlight the item
+      if (bAction_SelectTheItem && (p == curItemText)) {
+        tree->setSelected( pCandidate, true);
+      }
+      // prepare to enter the next subtree
+      pCurItem = pCandidate->firstChild();
+
+    }
+    else {
+      pCurItem = 0L;
+    }
+    p = p.right(p.length() - pos - 1);
+    pos = p.find("*");
+  }
+}

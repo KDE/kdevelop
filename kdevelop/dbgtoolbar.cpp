@@ -33,6 +33,7 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qcursor.h>
 
 // **************************************************************************
 // **************************************************************************
@@ -65,8 +66,7 @@
 class DbgMoveHandle : public QFrame
 {
 public:
-  DbgMoveHandle(DbgToolbar* parent=0, const char * name=0,
-                  WFlags f=0, bool allowLines=TRUE);
+  DbgMoveHandle(DbgToolbar* parent=0, const char * name=0, WFlags f=0);
   virtual ~DbgMoveHandle();
 
   virtual void mousePressEvent(QMouseEvent *e);
@@ -82,8 +82,8 @@ private:
 // **************************************************************************
 
 DbgMoveHandle::DbgMoveHandle(DbgToolbar* toolBar,
-                              const char * name, WFlags f, bool allowLines) :
-  QFrame(toolBar, name, f, allowLines),
+                              const char * name, WFlags f) :
+  QFrame(toolBar, name, f),
   toolBar_(toolBar),
   offset_(QPoint(0,0)),
   moving_(false)

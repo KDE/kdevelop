@@ -14,5 +14,8 @@ EXTRA_DIST = ClassParser.cc ClassParser.h ClassStore.cc ClassStore.h ClassTreeNo
 ####### kdevelop will overwrite this part!!! (end)############
 
 tokenizer.cc: tokenizer.l
-	$(LEX) -+ -otokenizer.cc $(srcdir)/tokenizer.l
+	$(LEX) -+ -otokenizer.cc $(srcdir)/tokenizer.l && cat tokenizer.cc | \
+	sed -e "s,class istream;,#include <iostream\.h>," > tokenizer.cc.tmp && \
+	mv tokenizer.cc.tmp tokenizer.cc
+
 KDE_OPTIONS = nofinal

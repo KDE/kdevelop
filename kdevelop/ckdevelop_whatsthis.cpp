@@ -177,6 +177,26 @@ void CKDevelop::initWhatsThis(){
         "the window is open, otherwise closed.");
   whats_this->add(toolBar()->getButton(ID_VIEW_TREEVIEW),treeview);
 
+  whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE),
+  			i18n("Compile configurations\n\n"
+				"Compile configurations allow different build processes "
+				"of the same project. A useful example would be "
+				"setting up a configuration for a release (final) version "
+				"and one for a debug version of a program, or different "
+				"configurations for cross-compiling a project.\n\n "
+				"The configuration (Default) can only be used stand-alone "
+				"as the default build process means the build directory "
+				"is equal to the source directory. Other configurations "
+				"need a seperate build directory.\n\n"
+				"To use customized compile configurations, switch to the "
+				"(Default) configuration first and run Project->DistClean "
+				"as the source directory must be in the distclean state to use "
+				"other directories as the build directory.\n\n"
+				"To customize KDevelop for using crosscompilers, set up your "
+				"crosscompiling environment in the KDevelop Setup dialog, section "
+				"Compiler. To add/customize configurations, open the Project Options "
+				"dialog, section Compiler-Settings."));
+				
   whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
         "Choosing a class will switch to the header "
         "file where the class is declared."));

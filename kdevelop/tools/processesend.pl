@@ -3,13 +3,15 @@ require ("flush.pl");
 use File::Copy;
 
 $homedirectory = $ENV{KDEHOME};
-$homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
+$homedirectory = "$ENV{HOME}/.kde2"    if (!$homedirectory);
 
 my $entriesfilename= shift || "entries";
+my $local_datadir     = shift || ($homedirectory  . "/share/apps/kdevelop");
+
 printflush (STDOUT,"Starting with configuration\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/share/apps/kdevelop/" . $entriesfilename)
+open (PROCESSLIST, $local_datadir . "/" . $entriesfilename)
   || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
 while ( defined ($name = <PROCESSLIST> )) {
   chomp ($name);
@@ -137,5 +139,5 @@ if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2m
 
 printflush (STDOUT,"READY\n");
 
-system("rm -f ". $homedirectory . "/share/apps/kdevelop/" . $entriesfilename);
+system("rm -f ". $local_datadir . "/" . $entriesfilename);
 exit;

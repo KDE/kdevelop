@@ -20,14 +20,15 @@
 
 #include <kapp.h>
 #include <kbuttonbox.h>
-#include <klineedit.h>
-#include <knuminput.h>
 #include <kdialog.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <knuminput.h>
 
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <klocale.h>
+#include <qpushbutton.h>
 
 #include <algorithm>
 

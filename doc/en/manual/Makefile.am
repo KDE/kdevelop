@@ -27,6 +27,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/index-16.html $(kde_htmldir)/en/kdevelop/index-16.html
 	$(INSTALL_DATA) $(srcdir)/index-17.html $(kde_htmldir)/en/kdevelop/index-17.html
 	$(INSTALL_DATA) $(srcdir)/index-18.html $(kde_htmldir)/en/kdevelop/index-18.html
+	$(INSTALL_DATA) $(srcdir)/index-19.html $(kde_htmldir)/en/kdevelop/index-19.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/logotp3.png
@@ -49,3 +50,4 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/index-16.html
 	-rm -f $(kde_htmldir)/en/kdevelop/index-17.html
 	-rm -f $(kde_htmldir)/en/kdevelop/index-18.html
+	-rm -f $(kde_htmldir)/en/kdevelop/index-19.html

@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libkdevelopdbg.la
 INCLUDES = $(all_includes)
 
 
-LDFLAGS = 
+LDFLAGS =    
 
 
 libkdevelopdbg_la_LDFLAGS = -version-info 2:0
@@ -19,5 +19,5 @@ EXTRA_DIST = breakpoint.cpp breakpoint.h breakpointdialog.cpp breakpointdialog.h
 
 ####### kdevelop will overwrite this part!!! (end)############
 
-KDE_CXXFLAGS=-DQT_CLEAN_NAMESPACE -DQT_NO_COMPAT -DQT_NO_ASCII_CAST
+KDE_CXXFLAGS=-DQT_CLEAN_NAMESPACE -DQT_NO_ASCII_CAST
 KDE_OPTIONS = nofinal

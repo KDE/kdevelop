@@ -1,15 +1,18 @@
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qmultilinedit.h>
-#include <qlistbox.h>
-#include <qmessagebox.h>
+#include "cvsdialog.h"
+
 #include <kapp.h>
-#include <kprocess.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
+#include <kprocess.h>
 #include <kseparator.h>
-#include "cvsdialog.h"
+
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qlistbox.h>
+#include <qmessagebox.h>
+#include <qmultilinedit.h>
+#include <qpushbutton.h>
 
 // TODO: Only show dialog if cvs client doesn't exit immediately.
 // For local repositories cvs is really fast!

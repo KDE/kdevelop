@@ -25,6 +25,7 @@
 //#include <kapp.h>
 
 #include <qmessagebox.h>
+#include <qregexp.h>
 
 static const QString templates("Templates");
 

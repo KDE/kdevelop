@@ -947,10 +947,15 @@ void KWriteView::placeCursor(int x, int y, int flags) {
 }
 
 void KWriteView::focusInEvent(QFocusEvent *e) {
+
+/* Removed by HarryF (harry@bnro.de) because the cursor could disappear when 
+   opening and closing Popup Menus. (10/15/01)
+
   // every widget get a focusInEvent when a popup menu is opened!?! -> maybe bug of QT
   if (e && ((e->reason())==QFocusEvent::Popup)) {
     return;
   }
+*/
   if (m_hasFocus)
     return;
   else
@@ -1978,9 +1983,9 @@ void KWrite::initSearch(SConfig &s, int flags) {
     const char *line = textLine->getText();
     int (*cmpfct)(const char *, const char *, unsigned int);
     if ( s.flags & sfCaseSensitive )
-      cmpfct= strncmp;
+      cmpfct= qstrncmp;
     else
-      cmpfct= strnicmp;
+      cmpfct= qstrnicmp;
     if ( s.flags & sfBackward )
     {
       if ( static_cast<int>(s.cursor.x)-static_cast<int>(strlen(searchFor)) >= 0 )
@@ -2032,6 +2037,10 @@ void KWrite::searchAgain(SConfig &s) {
  const char *searchFor = searchForList.getFirst();
 
   slen = strlen(searchFor);//.length();
+  if (slen == 0) {
+    search();
+    return;
+  }
   do {
     query = 1;
     if (kWriteDoc->doSearch(s,searchFor)) {

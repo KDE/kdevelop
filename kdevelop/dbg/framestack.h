@@ -18,35 +18,93 @@
 #ifndef FRAMESTACK_H
 #define FRAMESTACK_H
 
-#include <qlistbox.h>
-#include <qstrlist.h>
+#include <qlistview.h>
 
 /**
   *@author John Birch
   */
 
-class FrameStack : public QListBox
+class FrameStack;
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
+
+class ThreadStackItem : public QListViewItem
+{
+public:
+
+  ThreadStackItem(FrameStack* parent, const QString& threadDesc);
+  virtual ~ThreadStackItem();
+
+  void setOpen(bool open);
+  QListViewItem* lastChild() const;
+
+  int threadNo()    { return threadNo_; }
+
+private:
+  int threadNo_;
+};
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
+
+class FrameStackItem : public QListViewItem
+{
+public:
+
+  FrameStackItem(FrameStack* parent, const QString& frameDesc);
+  FrameStackItem(ThreadStackItem* parent, const QString& frameDesc);
+  virtual ~FrameStackItem();
+
+  void setOpen(bool open);
+  QListViewItem* lastChild() const;
+
+  int frameNo()         { return frameNo_; }
+  int threadNo()        { return threadNo_; }
+
+private:
+  int frameNo_;
+  int threadNo_;
+};
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
+
+class FrameStack : public QListView
 {
   Q_OBJECT
 
 public:
-
   FrameStack( QWidget * parent=0, const char * name=0, WFlags f=0 );
-	virtual ~FrameStack();
+  virtual ~FrameStack();
+  void parseGDBThreadList(char* str);
   void parseGDBBacktraceList(char* str);
-  QCString getFrameParams(int frame);
-  QString getFrameName(int frame);
-	
+
+  QListViewItem* lastChild() const;
+  void clear();
+
+  ThreadStackItem* findThread(int threadNo);
+  FrameStackItem* findFrame(int frameNo, int threadNo);
+
+  QCString getFrameParams(int frameNo, int threadNo);
+  QString getFrameName(int frameNo, int threadNo);
+
+  int viewedThread()         { return viewedThread_ ? viewedThread_->threadNo() : -1; }
+
 public slots:
-  void slotHighlighted(int index);
-  void slotSelectFrame(int frame);
+  void slotSelectFrame(int frameNo, int threadNo);
+  void slotSelectionChanged(QListViewItem *thisItem);
 
 signals:
-  void selectFrame(int selectFrame);
+  void selectFrame(int frameNo, int threadNo, bool needFrames);
 
 private:
-  int currentFrame_;
-  QStrList* currentList_;
+  ThreadStackItem*  viewedThread_;
+  ThreadStackItem*  stoppedAtThread_;
+  int               currentFrame_;
 };
 
 #endif

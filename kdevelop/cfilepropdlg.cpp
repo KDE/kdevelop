@@ -55,8 +55,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   distribution_group = new QButtonGroup( this, "distribution_group" );
   distribution_group->setFocusPolicy( QWidget::NoFocus );
   distribution_group->setBackgroundMode( QWidget::PaletteBackground );
-  distribution_group->setFontPropagation( QWidget::NoChildren );
-  distribution_group->setPalettePropagation( QWidget::NoChildren );
   distribution_group->setFrameStyle( 49 );
   distribution_group->setTitle(i18n("Distribution") );
   distribution_group->setAlignment( 1 );
@@ -69,8 +67,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   incdist_check = new QCheckBox( distribution_group, "incdist_check" );
   incdist_check->setFocusPolicy( QWidget::TabFocus );
   incdist_check->setBackgroundMode( QWidget::PaletteBackground );
-  incdist_check->setFontPropagation( QWidget::NoChildren );
-  incdist_check->setPalettePropagation( QWidget::NoChildren );
   incdist_check->setText(i18n("include in distribution") );
   incdist_check->setAutoRepeat( FALSE );
   incdist_check->setAutoResize( FALSE );
@@ -81,8 +77,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   type_group = new QButtonGroup( this, "type_group" );
   type_group->setFocusPolicy( QWidget::NoFocus );
   type_group->setBackgroundMode( QWidget::PaletteBackground );
-  type_group->setFontPropagation( QWidget::NoChildren );
-  type_group->setPalettePropagation( QWidget::NoChildren );
   type_group->setFrameStyle( 49 );
   type_group->setTitle(i18n("Filetype") );
   type_group->setAlignment( 1 );
@@ -93,8 +87,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   type_combo = new QComboBox( FALSE, type_group, "type_combo" );
   type_combo->setFocusPolicy( QWidget::StrongFocus );
   type_combo->setBackgroundMode( QWidget::PaletteBackground );
-  type_combo->setFontPropagation( QWidget::NoChildren );
-  type_combo->setPalettePropagation( QWidget::NoChildren );
   type_combo->setSizeLimit( 10 );
   type_combo->setAutoResize( FALSE );
   type_combo->insertItem( "HEADER" );
@@ -111,8 +103,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   installion_group = new QButtonGroup( this, "installion_group" );
   installion_group->setFocusPolicy( QWidget::NoFocus );
   installion_group->setBackgroundMode( QWidget::PaletteBackground );
-  installion_group->setFontPropagation( QWidget::NoChildren );
-  installion_group->setPalettePropagation( QWidget::NoChildren );
   installion_group->setFrameStyle( 49 );
   installion_group->setTitle(i18n("Installation") );
   installion_group->setAlignment( 1 );
@@ -123,8 +113,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   install_check = new QCheckBox( installion_group, "install_check" );
   install_check->setFocusPolicy( QWidget::TabFocus );
   install_check->setBackgroundMode( QWidget::PaletteBackground );
-  install_check->setFontPropagation( QWidget::NoChildren );
-  install_check->setPalettePropagation( QWidget::NoChildren );
   install_check->setText(i18n("install") );
   install_check->setAutoRepeat( FALSE );
   install_check->setAutoResize( FALSE );
@@ -133,8 +121,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   install_loc_label = new QLabel(installion_group, "install_loc_label" );
   install_loc_label->setFocusPolicy( QWidget::NoFocus );
   install_loc_label->setBackgroundMode( QWidget::PaletteBackground );
-  install_loc_label->setFontPropagation( QWidget::NoChildren );
-  install_loc_label->setPalettePropagation( QWidget::NoChildren );
   install_loc_label->setText(i18n("Installdir + Filename:") );
   install_loc_label->setAlignment( 289 );
   install_loc_label->setMargin( -1 );
@@ -143,8 +129,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   install_loc_edit = new QLineEdit( installion_group, "install_loc_edit" );
   install_loc_edit->setFocusPolicy( QWidget::StrongFocus );
   install_loc_edit->setBackgroundMode( QWidget::PaletteBase );
-  install_loc_edit->setFontPropagation( QWidget::NoChildren );
-  install_loc_edit->setPalettePropagation( QWidget::NoChildren );
   install_loc_edit->setText( "" );
   install_loc_edit->setMaxLength( 32767 );
   install_loc_edit->setEchoMode( QLineEdit::Normal );
@@ -156,8 +140,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   file_group = new QButtonGroup( this, "file_group" );
   file_group->setFocusPolicy( QWidget::NoFocus );
   file_group->setBackgroundMode( QWidget::PaletteBackground );
-  file_group->setFontPropagation( QWidget::NoChildren );
-  file_group->setPalettePropagation( QWidget::NoChildren );
   file_group->setFrameStyle( 49 );
   file_group->setTitle(i18n("File") );
   file_group->setAlignment( 1 );
@@ -166,8 +148,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   size_label = new QLabel( file_group, "size_label" );
   size_label->setFocusPolicy( QWidget::NoFocus );
   size_label->setBackgroundMode( QWidget::PaletteBackground );
-  size_label->setFontPropagation( QWidget::NoChildren );
-  size_label->setPalettePropagation( QWidget::NoChildren );
   size_label->setText(i18n("Size:") );
   size_label->setAlignment( 289 );
   size_label->setMargin( -1 );
@@ -176,8 +156,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   name_label = new QLabel( file_group, "name_label" );
   name_label->setFocusPolicy( QWidget::NoFocus );
   name_label->setBackgroundMode( QWidget::PaletteBackground );
-  name_label->setFontPropagation( QWidget::NoChildren );
-  name_label->setPalettePropagation( QWidget::NoChildren );
   name_label->setText(i18n("Name:") );
   name_label->setAlignment( 289 );
   name_label->setMargin( -1 );
@@ -187,8 +165,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   name_e_label = new QLabel( file_group, "name_e_label" );
   name_e_label->setFocusPolicy( QWidget::NoFocus );
   name_e_label->setBackgroundMode( QWidget::PaletteBackground );
-  name_e_label->setFontPropagation( QWidget::NoChildren );
-  name_e_label->setPalettePropagation( QWidget::NoChildren );
   name_e_label->setText(i18n("Untitled") );
   name_e_label->setAlignment( 289 );
   name_e_label->setMargin( -1 );
@@ -197,8 +173,6 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   size_e_label = new QLabel( file_group, "size_e_label" );
   size_e_label->setFocusPolicy( QWidget::NoFocus );
   size_e_label->setBackgroundMode( QWidget::PaletteBackground );
-  size_e_label->setFontPropagation( QWidget::NoChildren );
-  size_e_label->setPalettePropagation( QWidget::NoChildren );
   size_e_label->setText( "0" );
   size_e_label->setAlignment( 289 );
   size_e_label->setMargin( -1 );
@@ -223,15 +197,11 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj, cons
   ok_button = bb->addButton( i18n("OK") );
   ok_button->setDefault( TRUE );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
-  ok_button->setFontPropagation( QWidget::NoChildren );
-  ok_button->setPalettePropagation( QWidget::NoChildren );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
   cancel_button = bb->addButton( i18n( "Cancel" ) );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-  cancel_button->setFontPropagation( QWidget::NoChildren );
-  cancel_button->setPalettePropagation( QWidget::NoChildren );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   bb->layout();

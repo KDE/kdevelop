@@ -11,17 +11,15 @@ my $entriesfilename= shift || "entries";
 my %changings;
 
 my $homedirectory = $ENV{KDEHOME};
-$homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
+$homedirectory = "$ENV{HOME}/.kde2"    if (!$homedirectory);
 
-my $local_icondir     = $homedirectory  . "/share/icons/";
-my $local_datadir     = $homedirectory  . "/share/apps/";
+my $local_datadir     = shift || ($homedirectory  . "/share/apps/kdevelop");
 my $kde_miniicondir   = $kde_icondir    . "/locolor/16x16/apps/";
-my $local_miniicondir = $local_icondir  . "/mini";
 
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/share/apps/kdevelop/" . $entriesfilename)
+open (PROCESSLIST, $local_datadir . "/" . $entriesfilename)
   || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
 
 while (defined($name = <PROCESSLIST>)) {
@@ -51,12 +49,12 @@ if ($processes{VSSUPPORT} eq "none"){
   $underDirectory = $overDirectory . $nameLittle;
 }
 else{
-  $overDirectory = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/";
+  $overDirectory = $local_datadir . "/kdeveloptemp/";
   $underDirectory = $overDirectory . $nameLittle;
 }
-  
-  
-# change to work/project directory 
+
+
+# change to work/project directory
 #printflush (STDOUT, "changing directory...\n");
 chdir ($overDirectory) || die "Couldn't change to directory $overDirectory: $!";
 
@@ -71,13 +69,17 @@ setupDefaultChangings();
 chdir ($overDirectory);
 
 if ($processes{APPLICATION} =~/customproj/){
-  changeCustomApp();  
+  changeCustomApp();
 }
 else{
   unpackFiles ("template.tar");
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme|sharedlib/) {
+#  removed because almost all projects except custom and gnome should
+#  use admin-dir (W. Tasin 2001-11-02)
+#  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme|sharedlib/)
+   unless ($processes{APPLICATION} =~ /gnomenormal/)
+   {
     unpackFiles ("admin.tar");
-  }
+   }
 
   if ($processes{APPLICATION} =~/kde2mini|kickerapp|^kpart$|kioslave|kcmodule|ktheme/) {
 	changeMiniApp();
@@ -101,18 +103,6 @@ else{
 }
 
 if ($processes{VSSUPPORT} eq "cvs") {
-#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/");
-#  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
-#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/.cvsignore";
-#  system ("cp $copysrc $copydes");
-
-#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
-#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
-#  system ("cp $copysrc $copydes");
-
-#  chdir ($homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
-#  $copydes = $homedirectory . "/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
-#  system ("cp $copysrc $copydes");
 
   $copysrc = $templatedir . "/cvsignore_template";
   $copydes = $overDirectory . "/.cvsignore";
@@ -250,12 +240,12 @@ sub condCopyTemplateFiles {
   if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
   else {
     if ($processes{HEADER} eq "yes") {
-        copy ("$local_datadir/kdevelop/header",
+        copy ("$local_datadir/header",
         "$underDirectory/templates/header_template");
     }
   
     if ($processes{CPP} eq "yes") {
-        copy ("$local_datadir/kdevelop/cpp",
+        copy ("$local_datadir/cpp",
         "$underDirectory/templates/cpp_template");
     }
   }
@@ -416,7 +406,7 @@ sub processCppTemplate {
 
   my ( $file ) = @_;
 
-  copy ("$local_datadir/kdevelop/cpp", $underDirectory);
+  copy ("$local_datadir/cpp", $underDirectory);
   chdir ($underDirectory);
   replaceValuesInFile(\%changings, "cpp", $file);
 
@@ -446,7 +436,7 @@ sub processHeaderTemplate {
 
   my ( $file ) = @_;
 
-  copy ("$local_datadir/kdevelop/header", $underDirectory);
+  copy ("$local_datadir/header", $underDirectory);
   chdir ($underDirectory);
   replaceValuesInFile(\%changings, "header", $file);
 
@@ -474,7 +464,7 @@ sub processHeaderTemplate {
 sub changeNormalApp {
 
 #    unpackFiles("normal.tar");
-#    
+#
   #renamed the directory
   printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
 
@@ -564,14 +554,14 @@ sub changeNormalApp {
   condCopyKdelnkFile();
   condCopyProgIcons();
   condCreateApiDoc();
-    
+
 }
 
 
 sub changeMiniApp {
 
 #   unpackFiles("mini.tar");
-#    
+#
   #renamed the directory
   printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
@@ -602,7 +592,7 @@ sub changeMiniApp {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
   }
-  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule|ktheme/)
+  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule|ktheme|kickerapp/)
   {
     if ($processes{APPLICATION} =~ /kpart/)
         {
@@ -626,10 +616,10 @@ sub changeMiniApp {
     if ($processes{CPP} eq "yes") {
       processCppTemplate("$nameLittle.cpp");
     }
-    
+
     if ($processes{HEADER} eq "yes") {
        processHeaderTemplate("$nameLittle.h");
-    }  
+    }
   }
   else
   {
@@ -642,14 +632,14 @@ sub changeMiniApp {
       processCppTemplate("main.cpp");
       processCppTemplate("$nameLittle.cpp");
     }
-    
+
     if ($processes{HEADER} eq "yes") {
        processHeaderTemplate("$nameLittle.h");
     }
   }
 
   replaceValuesInFile(\%changings, "Makefile.am");
-  
+
   chdir ($underDirectory."/docs/en");
   replaceValuesInFile(\%changings, "Makefile.am");
 
@@ -668,19 +658,29 @@ sub changeMiniApp {
 sub changeTerminalCPPApp {
 
 #    unpackFiles("cpp.tar");
-#    
+#
     #renamed the directory
     printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
     chdir ($overDirectory);
     rename ("skel", $nameLittle);
-    
+
     #create the templatedirectory
     condCopyTemplateFiles();
-    
+
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+
+    # The "in.in" will generate the "in" file, so make sure we
+    # look for that first
+    if ( -f "configure.in.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in.in");
+    }
+    elsif ( -f "configure.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in");
+    }
 
     chdir ($underDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
@@ -692,15 +692,15 @@ sub changeTerminalCPPApp {
     condCopyGNUFiles();
     condCopyLsmFile();
     condCopyUserDocFiles();
-    
+
     if ($processes{CPP} eq "yes") {
         processCppTemplate("main.cpp");
     }
-    
+
     condCopyKdelnkFile();
     condCopyProgIcons();
     condCreateApiDoc();
-    
+
 }
 
 
@@ -719,7 +719,17 @@ sub changeTerminalCApp {
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
+
+    # The "in.in" will generate the "in" file, so make sure we
+    # look for that first
+    if ( -f "configure.in.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in.in");
+    }
+    elsif ( -f "configure.in")
+    {
+      replaceValuesInFile(\%changings, "configure.in");
+    }
 
     chdir ($underDirectory);
     replaceValuesInFile(\%changings, "Makefile.am");
@@ -745,7 +755,7 @@ sub changeTerminalCApp {
 sub changeQtApp {
 
 #    unpackFiles("qt.tar");
-#    
+#
   #renamed the directory
   printflush (STDOUT, "changing files [$processes{APPLICATION}]...\n");
   chdir ($overDirectory);
@@ -812,7 +822,7 @@ sub changeQtApp {
     processCppTemplate("${nameLittle}view.cpp");
     processCppTemplate("${nameLittle}doc.cpp");
   }
-    
+
   if ($processes{HEADER} eq "yes") {
     processHeaderTemplate("$nameLittle.h");
     processHeaderTemplate("${nameLittle}view.h");
@@ -824,7 +834,7 @@ sub changeQtApp {
   condCopyKdelnkFile();
   condCopyProgIcons();
   condCreateApiDoc();
-    
+
 }
 
 
@@ -837,7 +847,7 @@ sub changeCustomApp {
 
   condCopyGNUFiles();
   condCopyLsmFile();
-    
+
 }
 
 sub changeGnomeApp {

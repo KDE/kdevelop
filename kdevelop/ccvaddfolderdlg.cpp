@@ -57,16 +57,12 @@ void CCVAddFolderDlg::setWidgetValues()
   okBtn = bb->addButton( i18n("OK") );
   okBtn->setFocusPolicy( QWidget::TabFocus );
   okBtn->setBackgroundMode( QWidget::PaletteBackground );
-  okBtn->setFontPropagation( QWidget::NoChildren );
-  okBtn->setPalettePropagation( QWidget::NoChildren );
   okBtn->setAutoRepeat( FALSE );
   okBtn->setAutoResize( FALSE );
   okBtn->setDefault( true );
   cancelBtn = bb->addButton( i18n( "Close" ) );
   cancelBtn->setFocusPolicy( QWidget::TabFocus );
   cancelBtn->setBackgroundMode( QWidget::PaletteBackground );
-  cancelBtn->setFontPropagation( QWidget::NoChildren );
-  cancelBtn->setPalettePropagation( QWidget::NoChildren );
   cancelBtn->setAutoRepeat( FALSE );
   cancelBtn->setAutoResize( FALSE );
   bb->layout();

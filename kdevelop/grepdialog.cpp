@@ -28,6 +28,7 @@
 #include <qwhatsthis.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
 #include <kprocess.h>
 #include <kapp.h>
 #include <klocale.h>

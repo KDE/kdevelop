@@ -154,6 +154,14 @@ public:
    * Get the button belonging to the MDI view given as parameter. 
    */
    QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
+   /**
+   * Switch it on or off.
+   */
+   void switchOn(bool bOn);
+   /**
+   * @return whether switched on or off.
+   */
+   bool isSwitchedOn() { return m_bSwitchedOn; };
 protected:
    /** 
    * Reimplemented from its base class to call layoutTaskBar, additionally. 
@@ -193,6 +201,7 @@ protected:
    */
    QLabel*                       m_pStretchSpace;
    bool                          m_layoutIsPending;
+   bool                          m_bSwitchedOn;
 };
 
 #endif //_QEXTMDITASKBAR_H_

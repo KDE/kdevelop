@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <kfiledialog.h>
+#include <kiconloader.h>
 #include <kmessagebox.h>
 
 #include "ckdevinstallstate.h"

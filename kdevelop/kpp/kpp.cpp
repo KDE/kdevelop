@@ -32,16 +32,17 @@
 #include <kprocess.h>
 #include "kpp.h"
 #include <kmessagebox.h>
+#include <qpushbutton.h>
 
 Kpp::Kpp(QWidget*parent,const char* name, bool modal):projectview(parent,name,modal){
 
-  connect (QPushButton_1, SIGNAL(clicked()), SLOT(notYet()));
-  connect (QPushButton_2, SIGNAL(clicked()), SLOT(exitApp()));
-  connect (QPushButton_3, SIGNAL(clicked()), SLOT(saveFile()));
-  connect (QPushButton_4, SIGNAL(clicked()), SLOT(openFile()));
+  connect ((const QObject*)QPushButton_1, SIGNAL(clicked()), SLOT(notYet()));
+  connect ((const QObject*)QPushButton_2, SIGNAL(clicked()), SLOT(exitApp()));
+  connect ((const QObject*)QPushButton_3, SIGNAL(clicked()), SLOT(saveFile()));
+  connect ((const QObject*)QPushButton_4, SIGNAL(clicked()), SLOT(openFile()));
   //connect (QPushButton_5, SIGNAL(clicked()), SLOT(helpMe()));
-  connect (QPushButton_6, SIGNAL(clicked()), SLOT(changeSpec()));
-  connect (QPushButton_7, SIGNAL(clicked()), SLOT(rpmBuildSlot()));
+  connect ((const QObject*)QPushButton_6, SIGNAL(clicked()), SLOT(changeSpec()));
+  connect ((const QObject*)QPushButton_7, SIGNAL(clicked()), SLOT(rpmBuildSlot()));
   currentProject = new ckdevelProject();
   kcConfig = kapp->config();
   loadPrefs();
@@ -207,7 +208,7 @@ bool Kpp::saveClass(){
 /** Save all of the current application preferences */
 void Kpp::savePrefs(){
      kdDebug() << "Saving Prefs..." << endl;
-     kdDebug() << kcConfig->writeEntry( "specTemplate", qsSpecTemplate) << endl;
+     kcConfig->writeEntry( "specTemplate", qsSpecTemplate);
 //     kdDebug() << kcConfig->writeEntry( "url", QLineEdit_8->text()) << endl;
 //     kdDebug() << kcConfig->writeEntry( "vendor", QLineEdit_9->text()) << endl;
 //     kdDebug() << kcConfig->writeEntry( "license", QComboBox_1->currentItem()) << endl;

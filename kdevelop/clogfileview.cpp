@@ -54,6 +54,8 @@ CLogFileView::CLogFileView(bool s_path, QWidget*parent,const char* name)
   popup = 0;
   connect(this,SIGNAL(executed(QListViewItem*)),
           SLOT(slotSelectionChanged(QListViewItem *)));
+  connect( this,SIGNAL(returnPressed(QListViewItem *)),
+          SLOT(slotSelectionChanged(QListViewItem *)) );
   preselectitem = ""; // no preselect
   firstitemselect = false;
   allgroups_opened= false;
@@ -90,19 +92,19 @@ void CLogFileView::refresh(CProject* prj)
   QListViewItem *top_item;
   QListViewItem *current_item;
   QStrList files;
-  QStrList groups;
-  QStrList filters;
+  QStringList groups;
+  QStringList filters;
   QStrList temp_files;
 
- 
+
   // get all opengroups
-  QStrList opengroups;
+  QStringList opengroups;
   prj->getLFVOpenGroups(opengroups);
-  
+
   QRegExp filter_exp("",true,true);// set Wildcard
-  char *group_str;
-  char *filter_str;
-  char *temp_str;
+  QString group_str;
+  QString filter_str;
+  QString temp_str;
   QString filename;
   QString* p_filename;
   bool item_already_selected = false;
@@ -117,32 +119,31 @@ void CLogFileView::refresh(CProject* prj)
   }
 
   project = prj;
-  
+
   // Add the root item.
   top_item = treeH->addRoot( prj->getProjectName(), THPROJECT );
 
   prj->getLFVGroups(groups);
   prj->getAllFiles(files);
-  for(group_str = groups.first();
-      group_str != NULL;
-      group_str = groups.next())
-  { 
+
+  for (QStringList::Iterator itGroups = groups.begin(); itGroups != groups.end(); ++itGroups ) {
+    group_str = *itGroups;
+
     // Add the group item.
     lastGrp = treeH->addItem( group_str, THFOLDER, top_item );
 
     // Add files belonging to the group.
     prj->getFilters( group_str, filters );
-    for( filter_str = filters.first();
-         filter_str != 0;
-         filter_str=filters.next())
-    {
-      filter_exp = filter_str;
+    for (QStringList::Iterator itFilters = filters.begin(); itFilters != filters.end(); ++itFilters ) {
+      filter_str = *itFilters;
+
+      filter_exp.setPattern(filter_str);
 
       // Check every file
       for( filename = files.first();
            !filename.isEmpty();
            filename = files.next())
-      { 
+      {
         // If found
         if( filename.find( filter_exp ) != -1)
         {
@@ -179,12 +180,14 @@ void CLogFileView::refresh(CProject* prj)
       temp_files.clear();
     }
 
-    treeH->setLastItem( lastGrp );
-    if(opengroups.contains(lastGrp->text(0)) > 0){
-      setOpen( lastGrp, true );
-    }
-    if(allgroups_opened){
-      setOpen( lastGrp, true );
+    if (lastGrp) {
+      treeH->setLastItem(lastGrp);
+      if(opengroups.contains(lastGrp->text(0)) > 0){
+        setOpen(lastGrp, true);
+      }
+      if(allgroups_opened){
+        setOpen(lastGrp, true);
+      }
     }
   }
 
@@ -192,7 +195,7 @@ void CLogFileView::refresh(CProject* prj)
 
   preselectitem =""; // no preselect on the next refresh
   popupmenu_disable = false;
-  
+
   // Sort the damn list.
   setSorting (0, TRUE);
   sort ();
@@ -321,7 +324,7 @@ void CLogFileView::slotFileProp()
 
 
 void CLogFileView::slotGroupProp(){
-  QStrList filters;
+  QStringList filters;
   QString filter_str,str;
   QString name = currentItem()->text(0);
   CGroupPropertiesDlg dlg;
@@ -330,7 +333,8 @@ void CLogFileView::slotGroupProp(){
   dlg.name_edit->setEnabled(false);
   
   project->getFilters(name,filters);
-  for(str = filters.first();str !=0;str = filters.next()){
+  for ( QStringList::Iterator itFilters = filters.begin(); itFilters != filters.end(); ++itFilters ) {
+    str = *itFilters;
     filter_str = filter_str + str +",";
   }
   dlg.filters_edit->setText(filter_str);
@@ -348,7 +352,7 @@ void CLogFileView::slotGroupProp(){
 void CLogFileView::slotNewGroup(){
   CGroupPropertiesDlg dlg;
   QString current_group = currentItem()->text(0);
-  QStrList filters;
+  QStringList filters;
   dlg.setCaption(i18n("New Group ..."));
   if(dlg.exec()){// if clicked ok
     QString ace_group;
@@ -418,7 +422,7 @@ void CLogFileView::slotGroupRemove(){
 }
 
 
-void CLogFileView::split(QString str,QStrList& filters){
+void CLogFileView::split(QString str,QStringList& filters){
   int pos=0;
   int next=0;
   QString str2;
@@ -458,7 +462,7 @@ void CLogFileView::storeState(CProject* prj){
   assert( prj != NULL );
 
   if(childCount() == 0) return; // save no empty tree
-  QStrList opengroups;
+  QStringList opengroups;
   
   QListViewItem* ch_grp_item = firstChild();
   if(ch_grp_item != 0){

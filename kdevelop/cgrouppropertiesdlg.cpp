@@ -36,8 +36,6 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   name_edit = new QLineEdit( this, "name_edit" );
   name_edit->setFocusPolicy( QWidget::StrongFocus );
   name_edit->setBackgroundMode( QWidget::PaletteBase );
-  name_edit->setFontPropagation( QWidget::NoChildren );
-  name_edit->setPalettePropagation( QWidget::NoChildren );
   name_edit->setText( "" );
   name_edit->setMaxLength( 32767 );
   name_edit->setEchoMode( QLineEdit::Normal );
@@ -48,8 +46,6 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   filters_edit = new QLineEdit( this, "filters_edit" );
   filters_edit->setFocusPolicy( QWidget::StrongFocus );
   filters_edit->setBackgroundMode( QWidget::PaletteBase );
-  filters_edit->setFontPropagation( QWidget::NoChildren );
-  filters_edit->setPalettePropagation( QWidget::NoChildren );
   filters_edit->setText( "" );
   filters_edit->setMaxLength( 32767 );
   filters_edit->setEchoMode( QLineEdit::Normal );
@@ -60,8 +56,6 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   name_label = new QLabel( this, "name_label" );
   name_label->setFocusPolicy( QWidget::NoFocus );
   name_label->setBackgroundMode( QWidget::PaletteBackground );
-  name_label->setFontPropagation( QWidget::NoChildren );
-  name_label->setPalettePropagation( QWidget::NoChildren );
   name_label->setText(i18n("Groupname:") );
   name_label->setAlignment( 289 );
   name_label->setMargin( -1 );
@@ -71,8 +65,6 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   filter_label = new QLabel( this, "filer_label" );
   filter_label->setFocusPolicy( QWidget::NoFocus );
   filter_label->setBackgroundMode( QWidget::PaletteBackground );
-  filter_label->setFontPropagation( QWidget::NoChildren );
-  filter_label->setPalettePropagation( QWidget::NoChildren );
   filter_label->setText(i18n("Filters:") );
   filter_label->setAlignment( 289 );
   filter_label->setMargin( -1 );
@@ -84,16 +76,12 @@ CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : Q
   ok_button  = bb->addButton( i18n("OK") );
   ok_button->setFocusPolicy( QWidget::TabFocus );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
-  ok_button->setFontPropagation( QWidget::NoChildren );
-  ok_button->setPalettePropagation( QWidget::NoChildren );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
   ok_button->setDefault( TRUE );
   cancel_button = bb->addButton( i18n( "Close" ) );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-  cancel_button->setFontPropagation( QWidget::NoChildren );
-  cancel_button->setPalettePropagation( QWidget::NoChildren );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
   bb->layout();

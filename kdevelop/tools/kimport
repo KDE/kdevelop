@@ -175,9 +175,9 @@ sub processDir($)
 
         push @files, $file;
         addSource("$reldir$file"), next
-            if ($file =~ /\.cpp$|\.cc$|\.cxx$|\.F$|\.ftn$|\.f77$|\.C$|\.c$|\.ui$|\.CPP$|\.CC$|\.CXX\+\+$/);
+            if ($file =~ /\.cpp$|\.cc$|\.cxx$|\.inl$|\.F$|\.ftn$|\.f77$|\.C$|\.c$|\.ui$|\.CPP$|\.CC$|\.CXX\+\+$/);
         addHeader("$reldir$file"), next
-            if ($file =~ /\.h$|\.H$|\.hh$|\.hxx$|\.h$|\.hpp$|\.HPP$|\.HH$|\.HXX\+\+$/);
+            if ($file =~ /\.h$|\.tlh$|\.H$|\.hh$|\.hxx$|\.h$|\.hpp$|\.HPP$|\.HH$|\.HXX\+\+$/);
         addData("$reldir$file"), next;
     }
 

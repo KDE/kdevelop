@@ -125,12 +125,17 @@ void CToolClass::writeToolConfig(const ToolAppList& toolList)
   for (it = toolList.begin(); it != toolList.end(); ++it) {
     exeList.append( (*it).getExeName() );
     labelList.append( (*it).getLabel() );
-    argList.append( (*it).getArgs() );
+    // make sure the arguments string is not empty or writeEntry(QStrList)
+    // will not work as expected - add a space instead (whitespace will be ignored by the shell)
+    argList.append( (*it).getArgs().isEmpty() ? QString(" ") : (*it).getArgs());    
     outputList.append( (*it).isOutputCaptured() ? "1" : "0" );
     paneList.append( (*it).isInNewPane() ? "1" : "0" );
   }
 
   KConfig* config = KGlobal::config();
+
+  if (!config)
+    return;
 
   config->setGroup("ToolsMenuEntries");
   config->writeEntry( "Tools_exe",exeList );

@@ -49,6 +49,7 @@
 #include <khtmlview.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
+#include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kaboutdata.h>
 
@@ -265,7 +266,7 @@ void CKDevelop::initView()
   konsole_widget->setCaption(i18n("Konsole"));
   addToolWindow(konsole_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("embedded konsole window"), i18n("Konsole"));
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
   m_docViewManager->initKeyAccel(accel, this);
@@ -820,12 +821,28 @@ void CKDevelop::initToolBar(){
   /////////////////////
 
   // Class combo
+  toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Compile Configuration"),
+                                           ID_CV_TOOLBAR_COMPILE_CHOICE,true,
+                                           SIGNAL(activated(const QString&))
+                                           ,this,
+                                           SLOT(slotCompileCombo(const QString&)),
+                                           true,i18n("Compile Configuration"),110 );
+  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+  compile_combo->setFocusPolicy(QWidget::ClickFocus);
+  compile_combo->setAutoCompletion(true);
+  compile_combo->setInsertionPolicy(QComboBox::NoInsertion);
+  compile_combo->setEnabled(false);
+  compile_combo->useGlobalKeyBindings();
+  compile_combo->setCompletionMode ( KGlobalSettings::CompletionPopup );
+  compile_comp = compile_combo->completionObject();
+  compile_combo->setAutoDeleteCompletionObject( true );
+
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),
                                            ID_CV_TOOLBAR_CLASS_CHOICE,true,
                                            SIGNAL(activated(const QString&))
                                            ,this,
                                            SLOT(slotClassChoiceCombo(const QString&)),
-                                           true,i18n("Classes"),160 );
+                                           true,i18n("Classes"),130 );
 
   KComboBox* class_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::ClickFocus);
@@ -1308,8 +1325,8 @@ void CKDevelop::initDebugger()
               this,           SLOT(slotDebugBPState(Breakpoint*)));
 
     // connect adding watch variable from the rmb in the editors
-    connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int)),
-              frameStack,             SLOT(slotSelectFrame(int)));
+    connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int, int)),
+              frameStack,             SLOT(slotSelectFrame(int, int)));
   }
 
   // Enable or disable the tabs, if they exist...

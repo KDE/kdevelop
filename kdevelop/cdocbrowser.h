@@ -48,7 +48,13 @@ public:
   QPopupMenu* popup(){ return doc_pop; };	
 	
 protected:	
-  virtual void  urlSelected ( const QString &url, int button = 0, int state = 0, const QString &_target = QString::null );
+#if (QT_VERSION < 300)
+  virtual void urlSelected( const QString &url, int button = 0, int state = 0,
+                            const QString &_target = QString::null );
+#else
+  virtual void urlSelected( const QString &url, int button, int state,
+                            const QString &_target, KParts::URLArgs args = KParts::URLArgs());
+#endif
 
 public slots:
   void slotDocFontSize(int);

@@ -20,6 +20,7 @@
 
 #include <qdict.h>
 #include <qheader.h>
+#include <qcursor.h>
 
 #include <kpopupmenu.h>
 #include <kapp.h>
@@ -396,10 +397,10 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
 //  setAutoUpdate(false);
 
   // skip the first line which is the header
-  while (str && (str = strchr(str, '\n')))
+  while (str && (str = ::strchr(str, '\n')))
   {
     str++;
-    int id = atoi(str);
+    int id = ::atoi(str);
     if (id)
     {
       // Inner loop handles lines of extra data for this breakpoint
@@ -409,7 +410,7 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
       int hits = 0;
       int ignore = 0;
       QString condition;
-      while (str && (str = strchr(str, '\n')))
+      while (str && (str = ::strchr(str, '\n')))
       {
         str++;
 
@@ -422,15 +423,15 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
         }
 
         // We're only interested in these fields here.
-        if (strncmp(str, "\tbreakpoint already hit ", 24) == 0)
-          hits = atoi(str+24);
+        if (::strncmp(str, "\tbreakpoint already hit ", 24) == 0)
+          hits = ::atoi(str+24);
     
-        if (strncmp(str, "\tignore next ", 13) == 0)
-          ignore = atoi(str+13);
+        if (::strncmp(str, "\tignore next ", 13) == 0)
+          ignore = ::atoi(str+13);
 
-        if (strncmp(str, "\tstop only if ", 14) == 0)
+        if (::strncmp(str, "\tstop only if ", 14) == 0)
         {
-          char* EOL = strchr(str, '\n');
+          char* EOL = ::strchr(str, '\n');
           if (EOL)
             condition = QCString(str+14, EOL-(str+13));
         }
@@ -478,17 +479,17 @@ void BreakpointManager::slotParseGDBBreakpointSet(char* str, int BPKey)
 
   BP->setDbgProcessing(false);
 
-  if ((strncmp(str, "Breakpoint ", 11) == 0))
+  if ((::strncmp(str, "Breakpoint ", 11) == 0))
     startNo = str+11;
   else
   {
-    if ((strncmp(str, "Hardware watchpoint ", 20) == 0))
+    if ((::strncmp(str, "Hardware watchpoint ", 20) == 0))
     {
       hardware = true;
       startNo = str+20;
     }
     else
-      if ((strncmp(str, "Watchpoint ", 11) == 0))
+      if ((::strncmp(str, "Watchpoint ", 11) == 0))
         startNo = str+11;
   }
   

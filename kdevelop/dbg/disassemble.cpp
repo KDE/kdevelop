@@ -126,7 +126,7 @@ void Disassemble::slotActivate(bool activate)
 void Disassemble::slotShowStepInSource(const QString&, int,
                                         const QString& currentAddress)
 {
-  currentAddress_ = currentAddress;
+  currentAddress_ = currentAddress.stripWhiteSpace();
   const char* t = currentAddress_.latin1();
   address_ = strtol(t, 0, 0);
   if (!active_)
@@ -142,7 +142,7 @@ void Disassemble::getNextDisplay()
 {
   if (address_)
   {
-    ASSERT(currentAddress_);
+    ASSERT(!currentAddress_.isEmpty());
 
     // restrict this to a managable size - some functions are _big_
     QString endAddress;
@@ -158,6 +158,13 @@ void Disassemble::getNextDisplay()
 void Disassemble::showEvent(QShowEvent*)
 {
   slotActivate(true);
+}
+
+/***************************************************************************/
+
+void Disassemble::hideEvent(QHideEvent*)
+{
+  slotActivate(false);
 }
 
 /***************************************************************************/

@@ -6,6 +6,7 @@
 - Add/Modify signals-to-slot property
 All in one dialog.</comment>
 <author>Serge Lussier &lt;lusse@videotron.ca&gt; </author>
+<include location="global">klineedit.h</include>
 <widget>
     <class>QDialog</class>
     <property stdset="1">
@@ -278,7 +279,7 @@ All in one dialog.</comment>
                                 <number>6</number>
                             </property>
                             <widget>
-                                <class>QLineEdit</class>
+                                <class>KLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
                                     <cstring>leVarType_2</cstring>
@@ -574,7 +575,7 @@ All in one dialog.</comment>
                                 <number>6</number>
                             </property>
                             <widget>
-                                <class>QLineEdit</class>
+                                <class>KLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
                                     <cstring>leMethType_2</cstring>

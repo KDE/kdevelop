@@ -234,6 +234,7 @@
 #define	ID_CV_TOOLBAR_CLASS_CHOICE	14540
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541
 #define	ID_CV_TOOLBAR_WIZARD_CHOICE	14542
+#define	ID_CV_TOOLBAR_COMPILE_CHOICE	14543
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
@@ -420,6 +421,32 @@
 
 #define IDK_GOTO_PREVWIN                                        ALT+Key_Prior
 #define IDK_GOTO_NEXTWIN                                        ALT+Key_Next
+
+#define IDK_GOTO_EDITORVIEW1                                    ALT+Key_1
+#define IDK_GOTO_EDITORVIEW2                                    ALT+Key_2
+#define IDK_GOTO_EDITORVIEW3                                    ALT+Key_3
+#define IDK_GOTO_EDITORVIEW4                                    ALT+Key_4
+#define IDK_GOTO_EDITORVIEW5                                    ALT+Key_5
+#define IDK_GOTO_EDITORVIEW6                                    ALT+Key_6
+#define IDK_GOTO_EDITORVIEW7                                    ALT+Key_7
+#define IDK_GOTO_EDITORVIEW8                                    ALT+Key_8
+#define IDK_GOTO_EDITORVIEW9                                    ALT+Key_9
+#define IDK_GOTO_EDITORVIEW10                                   ALT+Key_0
+
+#define ID_ACTIVATETREEVIEW_CLASS                               CTRL+SHIFT+Key_C
+#define ID_ACTIVATETREEVIEW_LFV                                 CTRL+SHIFT+Key_L
+#define ID_ACTIVATETREEVIEW_RFV                                 CTRL+SHIFT+Key_R
+#define ID_ACTIVATETREEVIEW_DOC                                 CTRL+SHIFT+Key_D
+#define ID_ACTIVATETREEVIEW_VAR                                 CTRL+SHIFT+Key_V
+#define ID_ACTIVATEOUTPUTVIEW_MESSAGES                          CTRL+SHIFT+Key_M
+#define ID_ACTIVATEOUTPUTVIEW_STDINSTDOUT                       CTRL+SHIFT+Key_O
+#define ID_ACTIVATEOUTPUTVIEW_STDERR                            CTRL+SHIFT+Key_E
+#define ID_ACTIVATEOUTPUTVIEW_KONSOLE                           CTRL+SHIFT+Key_K
+#define ID_ACTIVATEOUTPUTVIEW_BRKPTMANAGER                      CTRL+SHIFT+Key_B
+#define ID_ACTIVATEOUTPUTVIEW_FRAMESTACK                        CTRL+SHIFT+Key_F
+#define ID_ACTIVATEOUTPUTVIEW_DISASSEMBLE                       CTRL+SHIFT+Key_A
+#define ID_ACTIVATEOUTPUTVIEW_DBG                               CTRL+SHIFT+Key_G
+
 ///////////////////////////////////////////////////////////////////
 // MACROS FOR THE CONNECT OF YOUR SIGNALS TO CORRESPONDENT SLOTS
 // IN YOUR MAIN IMPLEMENTATION OF MENUBAR AND TOOLBAR

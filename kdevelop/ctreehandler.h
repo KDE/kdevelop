@@ -18,6 +18,9 @@
 #ifndef _CTREEHANDLER_H_INCLUDED
 #define _CTREEHANDLER_H_INCLUDED
 
+#include <qstring.h>
+#include <qstringlist.h>
+
 class QListView;
 class QListViewItem;
 class QPixmap;
@@ -82,6 +85,26 @@ public: // Public methods
 													const char* =0, const char* =0,
 													const char* =0, const char* =0 );
 
+   /**
+    * scan the currently tree and collect the pathes of all items which are open in a string list
+    */
+   QStringList pathListOfAllOpenedItems();
+
+   /**
+    * return the path to the currently activated (clicked) item
+    */
+   QString pathToSelectedItem();
+
+   /**
+    * open all tree items which are in the path list
+    */
+   void openItems(QStringList pathList);
+
+   /**
+    * select and highlight that item described by the path
+    */
+   void activateItem(const char* path);
+
 public: // Public queries
 
   /** Return the selected pixmap. 
@@ -124,6 +147,17 @@ private: // Private methods
 
   /** Initalize the icon array and read the icons from disk. */
   void readIcons();
+
+  /** process the subtree starting at pCurItem and append all open items to pList.
+    * Note: It calls itself recursivly
+    */
+  void appendOpenedItemsOfSubtreeToPathList(QStringList *pList, QListViewItem *pCurItem);
+
+  /** returns the path for the given item */
+  QString pathToItem(QListViewItem* pItem);
+
+  /** go to the item described by path and do the actions which are switched on */
+  void goToItem(const char* path, bool bAction_OpenTheItem, bool bAction_SelectTheItem);
 };
 
 #endif

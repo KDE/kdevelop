@@ -164,7 +164,7 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("String","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,");
     m_config->writeEntry("String Char","0,FFDE1907,FFFF1E09,0,0,1,adobe-courier,12,");
     m_config->writeEntry("Symbol","1,FF000000,FFFFFFFF,0,0,1,adobe-courier,12,");
-    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff");
+    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff;*.inl;*.tlh");
   }
   else if (m_pInstallState->highlightStyle == 1) {
     m_config->setGroup("Perl Highlight");
@@ -187,7 +187,7 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("Mimetypes","text/x-c++-src;text/x-c++-hdr;text/x-c-hdr");
     m_config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,");
-    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff");
+    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff;*.inl;*.tlh");
     m_config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,");
     m_config->writeEntry("String","0,8000,8000,0,0,1,courier,12,");
     m_config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
@@ -339,7 +339,7 @@ void CKDevInstall::slotFinished()
     m_config->setGroup("C Highlight");
     m_config->writeEntry("Wildcards","*.c;*.C;*.ec;*.xpm;*.po");
     m_config->setGroup("C++ Highlight");
-    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff");
+    m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff;*.inl;*.tlh");
 
     m_config->setGroup("Normal Highlight");
     m_config->writeEntry("Mimetypes","");

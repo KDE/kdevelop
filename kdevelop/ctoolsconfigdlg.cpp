@@ -27,6 +27,7 @@
 
 #include <iostream.h>
 #include <kstddirs.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <qgrid.h>
 #include <qlayout.h>

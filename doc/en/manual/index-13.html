@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: CVS Integration</TITLE>
+<TITLE>The User Manual to KDevelop: The Internal Debugger</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,97 +18,192 @@
  <A HREF="index-12.html">Previous</A>
  <A HREF="index.html#toc13">Table of Contents</A>
 </P>
-<H3><A NAME="CVS Integration"></A> <A NAME="s13">13. CVS Integration</A></H3>
+<H3><A NAME="The Internal Debugger"></A> <A NAME="s13">13. The Internal Debugger</A></H3>
 
-<P>
-<P>KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent 
-version control) is to enable groups of developers to work on the same source-tree independently and to merge 
-changes into the repository. Usually, the repository is located at a server. The initial repository contains
-the base set of files that the project includes; directories and files are then added or removed to the CVS by 
-the developers. Locally, the developer works on his copy of the CVS tree. He writes his changes into his files 
-and tests, if his project still works, at least to a certain extend where incomplete sources don't prevent 
-other developers from still working on the CVS repository if they receive the changes. 
-<P>
-<H3><A NAME="ss13.1">13.1 Creating a Repository</A>
+<H3><A NAME="ss13.1">13.1 Setup</A>
 </H3>
 
-<P>When creating a new project with KDevelop, you can directly import the project as a CVS module. To enable 
-this, you have to have CVS installed (which should be already, if not, revise your system installation or
-contact your system administrator).
-<P>On the third page of the KAppWizard (VCS support), choose "CVS". Then the editing fields of this page get 
-active and you can specify the import parameters, see below for the given options. The KAppWizard will then 
-import the project source tree as a module into the CVS root directory and create your new project as a local 
-copy of the CVS source tree that you will be working on.
-<P><B>Attention:</B> to create an initial repository, you have to have write  access to the CVS root directory 
-! Also the CVS root directory has to be on the same machine where you´re running KDevelop ! If you want to 
-have the repository on a dedicated CVS server either contact this servers´ system administrator to create the 
-project with KDevelop on the server machine or do the following steps: 
+<P>
+<P>The default setup for KDevelop is to use the internal debugger. You can change this under Options select the "KDevelop setup" menu
+item, and then the Debugger tab.
+<P>Click on "Use external debugger" if you wish to use a different debugger and enter the name of the debugger to use. See your
+debuggers documentation on how to run it.
+<P>Selecting the internal debugger enables an additional set of options you can choose from:
 <P>
 <UL>
-<LI>create your project locally</LI>
-<LI>import the project source tree as a module on the CVS server</LI>
-<LI>delete local project source tree</LI>
-<LI>check out the project source tree from CVS </LI>
-<LI>enable CVS support in the project options dialog as described below after loading the project file of 
-your CVS copy you checked out.</LI>
+<LI>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change
+the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option.</LI>
+<LI>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names.
+However, non-mangled names are easier to read.</LI>
+<LI>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be
+loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set
+the pending breakpoints. See 
+<A HREF="#Shared libraries and breakpoints">Shared libraries and breakpoints</A> for more details
+and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.</LI>
+<LI>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons.
+The toolbar is most useful for debugging GUI applications. For details see 
+<A HREF="#The floating toolbar">The floating toolbar</A>.</LI>
+<LI>Enable separate terminal for application i/o: This allows you to enter terminal input when your application contains
+terminal input code (eg cin, fgets etc.). If you use terminal input in your app, then tick this option. Otherwise leave this off.
+<B>Tip:</B> This option is most useful, if you use it in combination with 
+<A HREF="#The floating toolbar">the floating toolbar</A>, because this way, the terminal window won't be hidden behind the KDevelop window when you control the debugger.</LI>
 </UL>
-   
-<P>For more details on CVS commands, please revise your system help on cvs, e.g. by doing a <CODE>man cvs</CODE>.
-<P>In the following we will discuss the options when creating a repository with the KAppWizard
-<P>
-<DL>
-<DT><B>VCS Location:</B><DD><P>This is the CVS root directory where the project source tree will be imported and where 
-commits, checkouts and updates take place.
-<DT><B>Repository in CVS</B><DD><P>This is the module name given for your project. As this is the same as your project
-directory you can´t change that.
-<DT><B>Vendor Tag</B><DD><P>this is a tag for the entire branch
-<DT><B>Log Message</B><DD><P>is the first log message entry of the new module. When adding or commiting to the 
-repository, you will be asked for a log message each time to document your changes to the repository source 
-tree.
-<DT><B>Release Tag</B><DD><P>this specifies the tag under which your project source tree can be found, meaning that you 
-can create several projects with the same module name in the CVS root which differ in the tag, so you can work
-on different branches of the same project. Example: KDE 2 is developed under the tag HEAD (default tag), KDE 
-1.1.2. can be found in the tag KDE_1_1_2_RELEASE.
-</DL>
- 
-<P>After creating your project with the KAppWizard, the CVS support option is already set for your project, so 
-you can commit and add changes in the way described below in the section "Using CVS Commands".
 <P>
 <P>
-<H3><A NAME="ss13.2">13.2 Enabling CVS Support</A>
+<H3><A NAME="ss13.2">13.2 Using the internal debugger</A>
 </H3>
 
-<P>As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
-KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
-the option for Version Control to "CVS".
 <P>
-<H3><A NAME="ss13.3">13.3 Using CVS Commands</A>
+<H4>Changes made in the tree and output view window</H4>
+
+<P>If you choose the internal debugger, four tabs are added to your tree and output view windows.
+<H4>On the tree view window</H4>
+
+<P>
+<UL>
+<LI>VAR tab : A tree view of the local variables at the current place in the  program you have stopped at. You can also see local
+variables in the function  that called this functions. The VAR tab also contains a watch window. This allows  you to see the value of
+global variables, or perhaps you may want to see only  one local variable rather than the variable in a large list of
+local variables.</LI>
+</UL>
+<P>
+<H4>On the output view window</H4>
+
+<P>
+<UL>
+<LI>breakpoint : A list of breakpoints set and their current state.</LI>
+<LI>framestack : The calling stack.</LI>
+<LI>disassemble : A machine instruction view of the code showing the current instruction to be executed.</LI>
+</UL>
+<P>
+<P>
+<H4>Changes made in the Debug menu and on the panel</H4>
+
+<P>
+<H4>On the panel</H4>
+
+<P>Two normal and two dropdown buttons to control the debugger functions will be accessible as soon as you start the debugger.
+<P>
+<H4>In the Debug menu</H4>
+
+<P>When you start debugging, ten items to control the debugger will be enabled.
+<P>Available functions: 
+<A NAME="Available functions"></A> 
+<UL>
+<LI>Run: Continue the program from the current point.</LI>
+<LI>Run to cursor: Execute the program up to the current cursor position</LI>
+<LI>Step over: Execute one line of code stopping on the next
+line of code in the same surce file. This will run any functions encountered
+until the above condition is met.</LI>
+<LI>Step over i(nstruction): Execute one machine instruction as above.</LI>
+<LI>Step in: Execute exactly one source line of code. This
+means you will "step into" the current function, if necessary</LI>
+<LI>Step in i(nstruction): Execute one machine instruction as above.</LI>
+<LI>Step out: Run to the end of the current stack frame (function)</LI>
+<LI>Viewers: Allows a variety of views into the data.
+Currently implemented views are:
+<OL>
+<LI> Memory address</LI>
+<LI> Disassemble code</LI>
+<LI> Current registers</LI>
+<LI> Current libraries</LI>
+</OL>
+</LI>
+<LI>Interrupt: Stop the application executing.</LI>
+<LI>Stop: Stop the application executing and exit the debugger.</LI>
+</UL>
+<P>
+<P>
+<H4>Details</H4>
+
+<P>
+<P>
+<H4>Breakpoints</H4>
+
+<P>Breakpoints can be set against source lines in a file (referred to as breakpoints) or on variables in the source (referred to as watchpoints). 
+Both types of breakpoints can be set at anytime, however watchpoints on local variables only have meaning  in the variables local 
+scope. Watchpoints have more meaning when you are dealing with global variables.
+<P>
+<H4>Set/Unset breakpoints</H4>
+
+<P>Simple one click set/unset. Click on the "icon" border to the left of the text in the editor at the line you want the breakpoint. Click again 
+on this line to unset the breakpoint.
+<P>
+<H4>Alternative beakpoint manipulating via menus</H4>
+
+<P>By right clicking on a breakpoint in the breakpoint list or on a breakpoint  in the editors icon border you will get a menu of breakpoint 
+options. This allows you to remove this breakpoint, clear all breakpoints, or edit the breakpoint.
+<P>
+<H4>Editing breakpoints</H4>
+
+<P>Use the above menu to display the edit breakpoint dialog. This contains the following fields :
+<OL>
+<LI>Conditional: Enter the condition that must be met before gdb will interrupt the program execution.</LI>
+<LI>Ignore count: How many times you want the code to past through this breakpoint before gdb interrupts the program execution.</LI>
+<LI>Enable: When enabled gdb will break at this breakpoint. When disabled gdb will not break here.</LI>
+</OL>
+<P>
+<H4>Clear all breakpoints</H4>
+
+<P>Removes all the breakpoints for this program.
+<P>
+<H4>Set/Unset watchpoints</H4>
+
+<P>In the VAR view click with the Right Mouse button on a variable. A popup menu will be displayed allowing you to set a watchpoint on 
+the local variable. This functionality is limited to the scope that the local variable is in. As the variable goes out of scope the program 
+breaks and the watchpoint is deleted.
+<P>WARNING: This is known to be problematic, so use caution when setting watchpoints on local variables.
+<P>The watchpoint can also be set by a right mouse click on a previously entered watch variable, and selecting "toggle watchpoint"
+<P>
+<H4>Set/Unset Watch variables</H4>
+
+<P>At the bottom of the VAR view there is the "Watch" field where you can enter the variable name you wish to see display in the watch 
+list. Enter the variable name and type "enter" or click on the "Add" button alongside the field. Right Mouse clicking on the watch 
+variable in the treeview will bring up a menu so that you can remove the variable from the list.
+<P>You can also enter a watch variable by right mouse clicking on a variable name in the editor window. This displays a popup menu 
+with "watch: variable name" on it.
+<P>
+<H4>Changing variable values</H4>
+
+<P>This is done via the watch variable. If you have a variable "test" then to set "test" to 5 type "test=5" in the watch field and add it to the 
+list. Note that "test" will be set to "5" EVERY time the program stops at a breakpoint, so once you have set the variable, usually you 
+should remove the item from the watch view.
+<P>
+<H3><A NAME="The floating toolbar"></A> <A NAME="ss13.3">13.3 The floating toolbar </A>
 </H3>
 
-<P>Then the following commands are available in the LFV and RFV by context menus:
-<P>Over a file not included in the repository:
+<P>The floating toolbar is a feature of the internal debugger, which greatly improves your comfort in debugging GUI applications. 
+The toolbar is either on top of all windows displayed, or docked into the panel. When docked you can run your code by clicking on the 
+docked icon. The function this performs is the "step over" function. Right clicking on the docked item allows you to restore the toolbar 
+and optionally place focus on kdevelop.
+<P>Besides the 
+<A HREF="#Available functions">functions available from the Debug Menu</A>, the floating toolbar offers two additional 
+functions:
 <UL>
-<LI><B>Add to Repository</B>: adds the file to the repository. The file is set up to be added and will be introduced to the repository
-on the next <CODE>commit</CODE> command that includes the directory where the added file is located locally.</LI>
+<LI>Set focus on kdevelop : Set the focus on kdevelop</LI>
+<LI>Set focus on app : This sets the focus on the window that had focus
+when you pressed the "set focus on kdevelop" button. This is a
+compromise, it should set the focus on the application being debugged but this
+is difficult to do. If anyone has a better solution than the current functionality
+then please let us know.</LI>
 </UL>
-<P>Over a file included in the repository:
-<UL>
-<LI><B>Update</B>: update the selected file with the CVS version</LI>
-<LI><B>Commit</B>: commit the selected file to the CVS repository</LI>
-<LI><B>Remove from Repository</B>: remove the file from the repository</LI>
-</UL>
-<P>Over a folder:
-<UL>
-<LI><B>Add</B>: adds the folder to the repository</LI>
-<LI><B>Remove</B>: removes the folder from the repository</LI>
-<LI><B>Update</B>: update the folder recursively to be in sync with the repository</LI>
-<LI><B>Commit</B>: commit any changes recursively to the repository</LI>
-</UL>
-<P>The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
-the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
-successful or not.
-<P>As the CVS commands of KDevelop only work with the <CODE>cvs</CODE> system command and its commandline options, you should have no trouble to
-use the cvs features.
+<P>When gdb interrupts the program, probably because a breakpoint has been triggered, we highlight the "Set focus on kdevelop". We do 
+not automatically switch focus to kdevelop so that you can view the application window at this point. Click on the "set focus" button to 
+switch to kdevelop or press a button on the toolbar to perform your selected function.
+<P>
+<H3><A NAME="Shared libraries and breakpoints"></A> <A NAME="ss13.4">13.4 Shared libraries and breakpoints </A>
+</H3>
+
+<P>Shared libraries and breakpoints have a problem that has a reasonable solution. The problem is that gdb will not accept breakpoints in 
+source that is in a shared library which has not yet been opened but will be opened via a dlopen.
+<P>The solution is to get gdb to tell us when a shared library has been opened. We do so by setting "stop-on 1". This means that when the 
+user sets a breakpoint, we flag this breakpoint as pending, try to set the breakpoint and if gdb says it succeeded then flag it as active. If 
+gdb is not successful then we leave the breakpoint as pending. The next instruction will always be "continue" .
+<P>This is known as "lazy breakpoints"
+<P>However, this can lead to a problem when you use the "step over" command and step over code that will load a library. This will trigger a 
+break on the library load, and, normally the debugger would do a "continue" (ie run to the next breakpoint or the end of the code). The user, 
+however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere 
+inside a dlopen command). This is disconcerting but cannot be helped.
 <P>
 <P ALIGN="RIGHT">
 

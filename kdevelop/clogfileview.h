@@ -22,20 +22,21 @@
 
 #include "ctreeview.h"
 #include <qptrdict.h>
+#include <qstrlist.h>
 
 class CProject;
 class CTreeHandler;
 class KPopupMenu;
 class QListViewItem;
 
-/** the logical-file-view,draw the contents of 
+/** the logical-file-view,draw the contents of
   * a cprojectinfo into a tree
   *@author Sandy Meier
   */
 
 class CLogFileView : public CTreeView {
-  Q_OBJECT 
-public: 
+  Q_OBJECT
+public:
 
   /** construtor */
   CLogFileView(bool s_path=false,QWidget*parent=0,const char* name=0);
@@ -68,7 +69,7 @@ protected: // Implementations of virtual methods.
   virtual KPopupMenu *getCurrentPopup();
 
 protected:
-  void split(QString str,QStrList& filters);
+  void split(QString str,QStringList& filters);
  protected slots:
     void slotSelectionChanged( QListViewItem *);
     void slotNewClass();

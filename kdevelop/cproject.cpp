@@ -18,6 +18,7 @@
 
 #include "ckdevelop.h"
 #include "cproject.h"
+#include "resource.h"
 
 #include "vc/versioncontrol.h"
 #include "ctoolclass.h"
@@ -30,6 +31,9 @@
 #include <kstddirs.h>
 #include <ksimpleconfig.h>
 #include <klocale.h>
+#include <kmainwindow.h>
+#include <ktoolbar.h>
+#include <kcombobox.h>
 
 #include <qdir.h>
 #include <qregexp.h>
@@ -127,7 +131,9 @@ bool CProject::createEmptyProject()
 }
 
 void CProject::writeProject(){
-  config->sync();
+  if (config) {
+    config->sync();
+  }
 }
 
 /*********************************************************************
@@ -155,7 +161,7 @@ void CProject::setVCSystem(const QString& vcsystem)
 }
 
 
-void CProject::setLFVOpenGroups(QStrList groups){
+void CProject::setLFVOpenGroups(QStringList groups){
   config->setGroup("General");
   config->writeEntry( "lfv_open_groups", groups );
 }
@@ -174,6 +180,18 @@ void CProject::setLDFLAGS(const QString& flags){
 void CProject::setLDADD(const QString& libstring){
   config->setDollarExpansion(false);
   writeGroupEntry( "Config for BinMakefileAm", "ldadd", libstring );
+  config->setDollarExpansion(true);
+}
+/** No descriptions */
+void CProject::setCFLAGS(const QString& flags){
+  config->setDollarExpansion(false);
+  writeGroupEntry( "Config for BinMakefileAm", "cflags",flags );
+  config->setDollarExpansion(true);
+}
+/** No descriptions */
+void CProject::setCPPFLAGS(const QString& flags){
+  config->setDollarExpansion(false);
+  writeGroupEntry( "Config for BinMakefileAm", "cppflags",flags );
   config->setDollarExpansion(true);
 }
 
@@ -195,7 +213,7 @@ void CProject::setAdditCXXFLAGS(const QString& flags){
   config->setDollarExpansion(true);
 }
 
-void CProject::setFilters(const QString& group,QStrList& filters){
+void CProject::setFilters(const QString& group,QStringList& filters){
   config->setGroup("LFV Groups");
   config->writeEntry(group,filters);
 }
@@ -216,7 +234,7 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
   config->writeEntry("dist",info.dist);
   config->writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace(QRegExp("[\\$]"),"$$");
+										  info.install_location.replace(QRegExp("[\\$]"),"$$");
   config->writeEntry("install_location",info.install_location);
 
   config->writeEntry("baseclass",info.baseclass);
@@ -244,15 +262,15 @@ void CProject::writeMakefileAmInfo(const TMakefileAmInfo* info)
  *                                                                   *
  ********************************************************************/
 
-void CProject::getLFVOpenGroups(QStrList& groups){
+void CProject::getLFVOpenGroups(QStringList& groups){
   config->setGroup("General");
-  config->readListEntry("lfv_open_groups",groups);
+  groups = config->readListEntry("lfv_open_groups");
 }
 
-void CProject::getLFVGroups(QStrList& groups){
+void CProject::getLFVGroups(QStringList& groups){
   groups.clear();
   config->setGroup("LFV Groups");
-  config->readListEntry("groups",groups);
+  groups = config->readListEntry("groups");
 }
 
 QStrList CProject::getShortInfo(){
@@ -281,6 +299,22 @@ bool CProject::getModifyMakefiles(){
     config->setGroup("General");
     return config->readBoolEntry("modifyMakefiles",true);
 }
+/** returns the preprocessor flags */
+QString CProject::getCPPFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
+  str = readGroupEntry( "Config for BinMakefileAm", "cppflags" );
+  config->setDollarExpansion(true);
+  return str;
+}
+/** returns the CFLAGS string */
+QString CProject::getCFLAGS(){
+  QString str;
+  config->setDollarExpansion(false);
+  str = readGroupEntry( "Config for BinMakefileAm", "cflags" );
+  config->setDollarExpansion(true);
+  return str;
+}
 
 QString CProject::getCXXFLAGS(){
   QString str;
@@ -298,10 +332,10 @@ QString CProject::getAdditCXXFLAGS(){
   return str;
 }
 
-void CProject::getFilters(const QString& group,QStrList& filters){
+void CProject::getFilters(const QString& group,QStringList& filters){
   filters.clear();
   config->setGroup("LFV Groups");
-  config->readListEntry(group,filters);
+  filters = config->readListEntry(group);
 }
 
 TFileInfo CProject::getFileInfo(const QString& rel_filename){
@@ -375,11 +409,11 @@ ProjectFileType CProject::getType( const QString& aFile )
     // Check for a known extension.
     if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
         ext == ".ec" || ext == ".ecpp" || ext == ".C" ||
-        ext == ".cxx" || ext == ".ui" )
+        ext == ".cxx" || ext == ".ui" || ext == ".inl" )
       retVal = CPP_SOURCE;
     // .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
     else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" ||
-             ext == ".H" || ext == ".hh" )
+             ext == ".H" || ext == ".hh" || ext == ".tlh" )
       retVal = CPP_HEADER;
     // Fortran support (rokrau 05/22/01)
     else if ( (ext==".F") || (ext==".f") ||
@@ -587,8 +621,11 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
           // allow user to adjust defaults if they want
           TMakefileAmInfo tmpInfo = makefileaminfo;
           CLibPropDlgImpl dlg(&tmpInfo);
-          if (dlg.exec())
-            makefileaminfo = tmpInfo;
+          if( !isCustomProject()) {
+            if (dlg.exec()) {
+              makefileaminfo = tmpInfo;
+            }
+          }
 
           // update project file THEN create makefile
           writeMakefileAmInfo(&makefileaminfo);
@@ -934,14 +971,14 @@ void CProject::updateMakefileAm(const QString& makefile)
           if( (type == "kio_slave") )
           {
             stream << "kio_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
-            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else if( (type == "kc_module") )
           {
             stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
             stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
-            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else
             stream << "lib" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
@@ -1260,24 +1297,30 @@ void CProject::setKDevelopWriteArea(const QString& makefile){
 
 void CProject::addLFVGroup(const QString& name, const QString& ace_group)
 {
-  QStrList groups;
+  QStringList groups;
   config->setGroup("LFV Groups");
-  config->readListEntry("groups",groups);
+  groups = config->readListEntry("groups");
   if(ace_group.isEmpty()){
-    groups.insert(0,name);
+    groups.insert(groups.begin(),name);
     config->writeEntry("groups",groups);
     return;
   }
-  int pos = groups.find(ace_group);
-  groups.insert(pos+1,name);
+  QStringList::Iterator pos = groups.find(ace_group);
+  pos++;
+  if (pos == groups.end()) {
+    groups.append(name);
+  }
+  else {
+    groups.insert(pos,name);
+  }
   config->writeEntry("groups",groups);
 }
 
 void CProject::removeLFVGroup(const QString& name)
 {
-  QStrList groups;
+  QStringList groups;
   config->setGroup("LFV Groups");
-  config->readListEntry("groups",groups);
+  groups = config->readListEntry("groups");
   groups.remove(name);
   config->deleteEntry(name,false);
   config->writeEntry("groups",groups);
@@ -1830,16 +1873,21 @@ QString CProject::findMakefile(const CMakefile::Type type, const QString& name)
 		 * If the user opens a distclean project he will also get this warning
 		 * which is sort of annoying, but I dont know of a way to prevent this.
 		 */
-		if (type==CMakefile::toplevel) {
-			QMessageBox::warning(0,i18n("Makefile not found"),
-			i18n("There is no makefile to build your application.\n"
-			     "Possibly you forgot to create the makefiles.\n"
-			     "In this case please run Build->Configure.\n"),
-			QMessageBox::Ok,
-			QMessageBox::NoButton,
-			QMessageBox::NoButton);
-		}
-		else if ((type==CMakefile::cvs) && !isCustomProject())
+		// I have to rethink this a bit where to get the info about either
+		// the session management or the mainwindow for the toolbar - anyway, I need to
+		// know whether we're using i18n("(Default)") or one of the configs... R.N.
+#warning fixme: toplevel makefile detection when using VPATH RalfN
+//	  if(type==CMakefile::toplevel){
+//			QMessageBox::warning(0,i18n("Makefile not found"),
+//			i18n("There is no makefile to build your application.\n"
+//			     "Possibly you forgot to create the makefiles.\n"
+//			     "In this case please run Build->Configure.\n"),
+//			QMessageBox::Ok,
+//			QMessageBox::NoButton,
+//			QMessageBox::NoButton);
+//		}
+//		else
+		if ((type==CMakefile::cvs) && !isCustomProject())
 		{
 			QMessageBox::warning(0,i18n("Makefile not found"),
 			i18n("There is no makefile to generate the configure script.\n"

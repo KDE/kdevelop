@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kprocess.h>
+#include <kiconloader.h>
 #include <kbuttonbox.h>
 //#include <kconfig.h>
 

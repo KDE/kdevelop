@@ -24,8 +24,6 @@ package-messages:
 	$(MAKE) -f admin/Makefile.common package-messages
 	$(MAKE) -C po merge
 
-EXTRA_DIST = admin 
-
 datadir = $(kde_datadir)/kdevelop
 data_DATA = eventsrc
 

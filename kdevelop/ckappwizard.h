@@ -1,11 +1,11 @@
 /***************************************************************************
                     ckappwizard.h - the kde-application-wizard
-                             -------------------                                         
+                             -------------------
 
-    version              :                                   
-    begin                : 9 Sept 1998                                        
-    copyright            : (C) 1998 by Stefan Heidrich                         
-    email                : sheidric@rz.uni-potsdam.de                                     
+    version              :
+    begin                : 9 Sept 1998
+    copyright            : (C) 1998 by Stefan Heidrich
+    email                : sheidric@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -30,6 +30,7 @@ class QListViewItem;
 class QMultiLineEdit;
 class QPushButton;
 class QPushButton;
+class QButton;
 
 class KEdit;
 class KIconDialog;

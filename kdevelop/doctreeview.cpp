@@ -931,7 +931,10 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
              SIGNAL(rightButtonPressed(QListViewItem*,const QPoint&,int)),
              SLOT(slotRightButtonPressed(QListViewItem*,const QPoint&,int)) );
     connect( this,
-             SIGNAL(selectionChanged(QListViewItem*)),
+             SIGNAL(executed(QListViewItem *)),
+             SLOT(slotSelectionChanged(QListViewItem *)) );
+    connect( this,
+             SIGNAL(returnPressed(QListViewItem *)),
              SLOT(slotSelectionChanged(QListViewItem *)) );
 }
 

@@ -54,7 +54,8 @@ enum GDBCmd
   PROGRAM_STOP    = 'S',
   SHARED_CONT     = 's',
 
-  BACKTRACE       = 'T',
+  THREAD          = 'T',
+  BACKTRACE       = 't',
 
   SETWATCH        = 'W',
   UNSETWATCH      = 'w',

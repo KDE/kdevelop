@@ -257,10 +257,11 @@ public slots:
   /** shows the desired document bookmark 
    * (eventually, switches to file and activates it) */
   void gotoDocBookmark(int n);
-
+  /** The last view has been closed, set the mainwidget caption to default */
+  void slotResetMainFrmCaption();
 
   // ***************************
-	// Edit slots
+  // Edit slots
   // ***************************
 
   /** swich construction for the toolbar icons, selecting the right slots */
@@ -291,6 +292,17 @@ public slots:
   /** remove all text selections */
   void slotEditDeselectAll();
 
+  // view activation by accel
+  void activateView1();
+  void activateView2();
+  void activateView3();
+  void activateView4();
+  void activateView5();
+  void activateView6();
+  void activateView7();
+  void activateView8();
+  void activateView9();
+  void activateView10();
 
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
@@ -305,8 +317,8 @@ signals:
       has been closed */
   void sig_lastDocClosed();
 
-	/** Is emitted when the status message should be changed */
-	void sig_newStatus(const QString& text);
+  /** Is emitted when the status message should be changed */
+  void sig_newStatus(const QString& text);
 
 // attributes
 private:

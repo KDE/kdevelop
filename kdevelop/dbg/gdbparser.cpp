@@ -107,7 +107,7 @@ void GDBParser::parseArray(TrimmableItem* parent, char* buf)
     int pos = value.find(" <repeats", 0);
     if (pos > -1)
     {
-      if (int i = atoi(value.data()+pos+10))
+      if (int i = ::atoi(value.data()+pos+10))
         idx += (i-1);
     }
 
@@ -251,10 +251,10 @@ DataType GDBParser::determineType(char* buf) const
   // (void (*)(void)) 0x804a944 <f(E *, char)>  - so is this - ugly!!!
   if (*buf == '{')
   {
-    if (strncmp(buf, "{{", 2) == 0)
+    if (::strncmp(buf, "{{", 2) == 0)
       return typeArray;
 
-    if (strncmp(buf, "{<No data fields>}", 18) == 0)
+    if (::strncmp(buf, "{<No data fields>}", 18) == 0)
       return typeValue;
 
     buf++;
@@ -279,7 +279,7 @@ DataType GDBParser::determineType(char* buf) const
         case '}':
           if (*(buf+1) == ',' || *(buf+1) == '\n' || !*(buf+1))
             return typeArray;                     // Hmm a single element array??
-          if (strncmp(buf+1, " 0x", 3) == 0)
+          if (::strncmp(buf+1, " 0x", 3) == 0)
             return typePointer;                   // What about references?
           return typeUnknown;                     // very odd?
         case '(':
@@ -299,7 +299,7 @@ DataType GDBParser::determineType(char* buf) const
   // some sort of address. We need to sort out if we have
   // a 0x888888 "this is a char*" type which we'll term a value
   // or whether we just have an address
-  if (strncmp(buf, "0x", 2) == 0)
+  if (::strncmp(buf, "0x", 2) == 0)
   {
     while (*buf)
     {
@@ -333,7 +333,7 @@ DataType GDBParser::determineType(char* buf) const
   }
 
   buf = skipTokenValue(buf);
-  if ((strncmp(buf, " = ", 3) == 0) || (*buf == '='))
+  if ((::strncmp(buf, " = ", 3) == 0) || (*buf == '='))
     return typeName;
 
   return typeValue;
@@ -348,10 +348,10 @@ char* GDBParser::skipString(char* buf) const
     buf = skipQuotes(buf, *buf);
     while (*buf)
     {
-      if ((strncmp(buf, ", \"", 3) == 0) ||(strncmp(buf, ", '", 3) == 0))
+      if ((::strncmp(buf, ", \"", 3) == 0) ||(::strncmp(buf, ", '", 3) == 0))
         buf = skipQuotes(buf+2, *(buf+2));
 
-      else if (strncmp(buf, " <", 2) == 0)         // take care of <repeats
+      else if (::strncmp(buf, " <", 2) == 0)         // take care of <repeats
         buf = skipDelim(buf+1, '<', '>');
       else
         break;

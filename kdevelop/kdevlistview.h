@@ -22,7 +22,7 @@
 #ifndef _KDEVLISTVIEW_H_
 #define _KDEVLISTVIEW_H_
 
-#include <qlistview.h>
+#include <klistview.h>
 
 
 /**
@@ -31,7 +31,7 @@
  * In addition to QListView's features, this class makes
  * the last inserted child available as lastChild().
  */
-class KDevListView : public QListView
+class KDevListView : public KListView
 {
     Q_OBJECT
 public:

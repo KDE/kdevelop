@@ -134,6 +134,7 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   frameStack_(frameStack),
   varTree_(varTree),
   currentFrame_(0),
+  viewedThread_(-1),
   state_(s_dbgNotStarted|s_appNotStarted|s_silent),
   gdbSizeofBuf_(2048),
   gdbOutputLen_(0),
@@ -210,7 +211,7 @@ GDBController::~GDBController()
 
     setStateOn(s_waitTimer|s_appBusy);
     const char* quit="quit\n";
-    dbgProcess_->writeStdin(quit, strlen(quit));
+    dbgProcess_->writeStdin(quit, ::strlen(quit));
     GDB_DISPLAY(quit)
     timer->start(3000, TRUE);
     DBG_DISPLAY("<quit wait>\n")
@@ -225,6 +226,8 @@ GDBController::~GDBController()
     if (stateIsOn(s_shuttingDown))
       dbgProcess_->kill(SIGKILL);
   }
+
+  frameStack_->clear();
 
   delete tty_; tty_ = 0;
   delete[] gdbOutput_;
@@ -296,11 +299,10 @@ void GDBController::reConfig()
 // If you tell me to, I'll put it at the head of the queue so it'll run ASAP
 // Not quite so obvious though is that if we are going to run again. then any
 // information requests become redundent and must be removed.
-// We also try and run whatever command happens to be at the head of
-// the queue.
+// Also the act of adding to the queue tries to run the first command.
 void GDBController::queueCmd(DbgCommand* cmd, bool executeNext)
 {
-  // We remove any info command or _run_ command if we are about to
+  // We remove any info commands or _run_ commands if we are about to
   // add a run command.
   if (cmd->isARunCmd())
     removeInfoRequests();
@@ -373,7 +375,7 @@ void GDBController::destroyCmds()
     delete currentCmd_;
     currentCmd_ = 0;
   }
-  
+
   while (!cmdList_.isEmpty())
     delete cmdList_.take(0);
 }
@@ -415,7 +417,7 @@ void GDBController::pauseApp()
 // **********************************************************************
 
 // Whenever the program pauses we need to refresh the data visible to
-// the user. The reason we've stooped may be passed in  to be emitted.
+// the user. The reason we've stoped may be passed in to be emitted.
 void GDBController::actOnProgramPause(const QString& msg)
 {
   // We're only stopping if we were running, of course.
@@ -430,11 +432,14 @@ void GDBController::actOnProgramPause(const QString& msg)
 
     // We're always at frame zero when the program stops
     // and we must reset the active flag
+    viewedThread_ = -1;
     currentFrame_ = 0;
     varTree_->setActiveFlag();
 
-    // These two need to be actioned immediately. The order _is_ important
-    queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
+    // These need to be actioned immediately. The order _is_ important
+    if (stateIsOn(s_viewThreads))
+      queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD), true);
+    queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
     if (stateIsOn(s_viewLocals))
       queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
 
@@ -458,6 +463,7 @@ void GDBController::programNoApp(const QString& msg, bool msgBox)
 
   // We're always at frame zero when the program stops
   // and we must reset the active flag
+  viewedThread_ = -1;
   currentFrame_ = 0;
   varTree_->setActiveFlag();
 
@@ -484,10 +490,10 @@ void GDBController::parseLine(char* buf)
   if (!*buf)
     return;
 
-  if (strncmp(buf, "Prog", 4) == 0)
+  if (::strncmp(buf, "Prog", 4) == 0)
   {
-    if ((strncmp(buf, "Program exited", 14) == 0) ||
-        (strncmp(buf, "Program terminated", 18) == 0))
+    if ((::strncmp(buf, "Program exited", 14) == 0) ||
+        (::strncmp(buf, "Program terminated", 18) == 0))
     {
       DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
       programNoApp(QString(buf), false);
@@ -495,38 +501,24 @@ void GDBController::parseLine(char* buf)
       return;
     }
 
-    if (strncmp(buf, "Program received signal", 23) == 0)
+    // FIXME - what about SIGKILL, SIGTERM and others?
+    if (::strncmp(buf, "Program received signal SIGSEGV", 31) == 0)
     {
-      // SIGINT is a "break into running program".
-      // We do this when the user set/mod/clears a breakpoint but the
-      // application is running.
-      // And the user does this to stop the program for their own
-      // nefarious purposes.
-      if (strstr(buf+23, "SIGINT") && stateIsOn(s_silent))
-        return;
-
-      if (strstr(buf+23, "SIGSEGV"))
-      {
-        // Oh, shame, shame. The app has died a horrible death
-        // Lets remove the pending commands and get the current
-        // state organised for the user to figure out what went
-        // wrong.
-        // Note we're not quite dead yet...
-        DBG_DISPLAY("Parsed (SIGSEGV) <" + QString(buf) + ">");
-        destroyCmds();
-        actOnProgramPause(QString(buf));
-        programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
-        return;
-      }
+      // The apps has died - remove the pending commands.
+      // Note we're not quite dead yet...
+      DBG_DISPLAY("Parsed (SIGSEGV) <" + QString(buf) + ">");
+      destroyCmds();
+      programHasExited_ = true;   // TODO - a nasty switch - this needs fixing
+      // Really tell the user what's happened
+      KMessageBox::error(0, i18n("gdb message:\n")+QString(buf));
     }
 
     // All "Program" strings cause a refresh of the program state
-    DBG_DISPLAY("Unparsed (START_Prog)<" + QString(buf) + ">");
     actOnProgramPause(QString(buf));
     return;
   }
 
-  if (strncmp(buf, "Cann", 4) == 0)
+  if (::strncmp(buf, "Cann", 4) == 0)
   {
     // If you end the app and then restart when you have breakpoints set
     // in a dynamically loaded library, gdb will halt because the set
@@ -535,13 +527,13 @@ void GDBController::parseLine(char* buf)
     // when the library gets loaded again.
     // TODO  programHasExited_ isn't always set correctly,
     // but it (almost) doesn't matter.
-    if ( strncmp(buf, "Cannot insert breakpoint", 24)==0)
+    if ( ::strncmp(buf, "Cannot insert breakpoint", 24)==0)
     {
       if (programHasExited_)
       {
         setStateOn(s_silent);
         actOnProgramPause(QString());
-        int BPNo = atoi(buf+25);
+        int BPNo = ::atoi(buf+25);
         if (BPNo)
         {
           emit unableToSetBPNow(BPNo);
@@ -563,19 +555,20 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if ( strncmp(buf, "[New Thread", 11)==0)
+  if ( ::strncmp(buf, "[New Thread", 11)==0)
   {
     DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString(buf) + ">");
+    setStateOn(s_viewThreads);
     return;
   }
 
-  if ( strncmp(buf, "[Switching to Thread", 20)==0)
+  if ( ::strncmp(buf, "[Switching to Thread", 20)==0)
   {
     DBG_DISPLAY("Parsed (START_[Swi)<ignored><" + QString(buf) + ">");
     return;
   }
 
-  if ( strncmp(buf, "Current language:", 17)==0)
+  if ( ::strncmp(buf, "Current language:", 17)==0)
   {
     DBG_DISPLAY("Parsed (START_Curr)<ignored><" + QString(buf) + ">");
     return;
@@ -583,12 +576,12 @@ void GDBController::parseLine(char* buf)
 
     // When the watchpoint variable goes out of scope the program stops
     // and tells you. (sometimes)
-  if (strncmp(buf, "Watc", 4) == 0)
+  if (::strncmp(buf, "Watc", 4) == 0)
   {
-    if ((strncmp(buf, "Watchpoint", 10)==0) &&
-        (strstr(buf, "deleted because the program has left the block")))
+    if ((::strncmp(buf, "Watchpoint", 10)==0) &&
+        (::strstr(buf, "deleted because the program has left the block")))
     {
-      int BPNo = atoi(buf+11);
+      int BPNo = ::atoi(buf+11);
       if (BPNo)
       {
         queueCmd(new GDBCommand(QCString().sprintf("delete %d",BPNo), NOTRUNCMD, NOTINFOCMD));
@@ -605,9 +598,9 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if (strncmp(buf, "Temp", 4) == 0)
+  if (::strncmp(buf, "Temp", 4) == 0)
   {
-    if (strncmp(buf, "Temporarily disabling shared library breakpoints:", 49) == 0)
+    if (::strncmp(buf, "Temporarily disabling shared library breakpoints:", 49) == 0)
     {
       DBG_DISPLAY("Parsed (START_Temp)<" + QString(buf) + ">");
       return;
@@ -618,9 +611,9 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if (strncmp(buf, "Stop", 4) == 0)
+  if (::strncmp(buf, "Stop", 4) == 0)
   {
-    if (strncmp(buf, "Stopped due to shared library event", 35) == 0)
+    if (::strncmp(buf, "Stopped due to shared library event", 35) == 0)
     {
       // When it's a library event, we try and set any pending
       // breakpoints, and that done, just continue onwards.
@@ -650,7 +643,7 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if (strncmp(buf, "Brea", 4) == 0)
+  if (::strncmp(buf, "Brea", 4) == 0)
   {
     // Starts with "Brea" so assume "Breakpoint" and just get a full
     // breakpoint list. Note that the state is unchanged.
@@ -661,8 +654,8 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if (strncmp(buf, "No s", 4) == 0 ||      // "No symbols loaded"
-      strncmp(buf, "Sing", 4) == 0)        // Single stepping
+  if (::strncmp(buf, "No s", 4) == 0 ||      // "No symbols loaded"
+      ::strncmp(buf, "Sing", 4) == 0)        // Single stepping
   {
     // We don't change state, because this falls out when a run command starts
     // rather than when a run command stops.
@@ -671,10 +664,10 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if (strncmp(buf, "warn", 4) == 0)
+  if (::strncmp(buf, "warn", 4) == 0)
   {
-    if (strncmp(buf, "warning: core file may not match", 32) == 0 ||
-        strncmp(buf, "warning: exec file is newer", 27) == 0)
+    if (::strncmp(buf, "warning: core file may not match", 32) == 0 ||
+        ::strncmp(buf, "warning: exec file is newer", 27) == 0)
     {
       badCore_ = QString(buf);
     }
@@ -682,11 +675,11 @@ void GDBController::parseLine(char* buf)
     return;
   }
 
-  if (strncmp(buf, "Core", 4) == 0)
+  if (::strncmp(buf, "Core", 4) == 0)
   {
     DBG_DISPLAY("Parsed (Core)<" + QString(buf) + ">");
     actOnProgramPause(buf);
-    if (!badCore_.isEmpty() && strncmp(buf, "Core was generated by", 21) == 0)
+    if (!badCore_.isEmpty() && ::strncmp(buf, "Core was generated by", 21) == 0)
       KMessageBox::error( 0,
                         i18n("gdb message:\n")+badCore_ + "\n" + QString(buf)+"\n\n"+
                               i18n("Any symbols gdb resolves are suspect"),
@@ -712,13 +705,13 @@ void GDBController::parseLine(char* buf)
   }
 
   // TODO - Only do this at start up
-  if (//strncmp(buf, "No executable file specified.", 29) ==0   ||
-      strstr(buf, "not in executable format:")                ||
-      strstr(buf, "No such file or directory.")               ||  // does this fall out?
-      strstr(buf, i18n("No such file or directory.").latin1())||  // from system via gdb
-      strstr(buf, "is not a core dump:")                      ||
-      strncmp(buf, "ptrace: No such process.", 24)==0         ||
-      strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
+  if (//::strncmp(buf, "No executable file specified.", 29) ==0   ||
+      ::strstr(buf, "not in executable format:")                ||
+      ::strstr(buf, "No such file or directory.")               ||  // does this fall out?
+      ::strstr(buf, i18n("No such file or directory.").latin1())||  // from system via gdb
+      ::strstr(buf, "is not a core dump:")                      ||
+      ::strncmp(buf, "ptrace: No such process.", 24)==0         ||
+      ::strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
   {
     programNoApp(QString(buf), true);
     DBG_DISPLAY("Bad file <" + QString(buf) + ">");
@@ -729,7 +722,7 @@ void GDBController::parseLine(char* buf)
   // might blank a previous message or display this message
   if (stateIsOn(s_appBusy))
   {
-    if ((strncmp(buf, "No ", 3)==0) && strstr(buf, "not meaningful"))
+    if ((::strncmp(buf, "No ", 3)==0) && ::strstr(buf, "not meaningful"))
     {
       DBG_DISPLAY("Parsed (not meaningful)<" + QString(buf) + ">");
       actOnProgramPause(QString(buf));
@@ -765,19 +758,33 @@ void GDBController::parseProgramLocation(char* buf)
 
   //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
   // This is soooo easy in perl...
-  QRegExp regExp1(":[0-9]+:[0-9]+:[a-z]+:0x[abcdef0-9]+$");
-  QRegExp regExp2(":0x[abcdef0-9]+$");
+#if QT_VERSION < 300
+  QRegExp regExp1(":[0-9]+:[0-9]+:[a-z]+:0x[a-f0-9]+");
+  QRegExp regExp2(":0x[abcdef0-9]+");
   int linePos;
   int addressPos = 0;
   if (((linePos     = regExp1.match(buf, 0)) >= 0) &&
       ((addressPos  = regExp2.match(buf, 0)) >= 0))
   {
     actOnProgramPause(QString(" "));
+    QString address(buf+addressPos+1);
+    address.stripWhiteSpace();
     emit showStepInSource(QCString(buf, linePos+1),
-                          atoi(buf+linePos+1),
-                          QString(buf+addressPos+1));
+                          ::atoi(buf+linePos+1),
+                          address);
     return;
   }
+#else
+  QRegExp regExp("(^.*):([0-9]+):[0-9]+:[a-z]+:(0x[a-f0-9]+)");
+  if (regExp.search(buf, 0) != -1)
+  {
+    actOnProgramPause(QString(" "));
+    emit showStepInSource(regExp.cap(1),
+                          (regExp.cap(2)).toInt(),
+                          regExp.cap(3));
+    return;
+  }
+#endif
 
   if (stateIsOn(s_appBusy))
     actOnProgramPause(i18n("No source: %1").arg(QString(buf)));
@@ -788,7 +795,7 @@ void GDBController::parseProgramLocation(char* buf)
   int start;
   if ((start = regExp3.match(buf, 0)) >= 0)
     emit showStepInSource(QString(), -1, QCString(buf,
-                              (strchr(buf, ' ')-buf)+1));
+                              (::strchr(buf, ' ')-buf)+1));
   else
     emit showStepInSource("", -1, "");
 
@@ -802,25 +809,39 @@ void GDBController::parseBacktraceList(char* buf)
   frameStack_->parseGDBBacktraceList(buf);
 
   varTree_->viewport()->setUpdatesEnabled(false);
+  varTree_->setCurrentThread(viewedThread_);
 
-  FrameRoot* frame;
   // The locals are always attached to the currentFrame
   // so make sure we have one of those.
-  if (!(frame = varTree_->findFrame(currentFrame_)))
-    frame = new FrameRoot(varTree_, currentFrame_);
+  VarFrameRoot* varFrame;
+  if (!(varFrame = varTree_->findFrame(currentFrame_, viewedThread_)))
+    varFrame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
 
-  ASSERT(frame);
+  ASSERT(varFrame);
 
-  frame->setFrameName(frameStack_->getFrameName(currentFrame_));
+  // Make a nice descriptive name for this item.
+  // This item gets all the variables attached to it.
+  QString frameName = frameStack_->getFrameName(currentFrame_, viewedThread_);
+  varFrame->setFrameName(frameName);
 
   // Add the frame params to the variable list
-  frame->setParams(frameStack_->getFrameParams(currentFrame_));
+  // we could get these from gdb using show args(?) but we extract from the
+  // existing bt list
+  varFrame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
 
-  if (currentFrame_ == 0)
+  if (currentFrame_ == 0 && viewedThread_ != -1)
     varTree_->trimExcessFrames();
 
   varTree_->viewport()->setUpdatesEnabled(true);
   varTree_->repaint();
+}
+
+// **************************************************************************
+
+void GDBController::parseThreadList(char* buf)
+{
+  frameStack_->parseGDBThreadList(buf);
+  viewedThread_ = frameStack_->viewedThread();
 }
 
 // **************************************************************************
@@ -861,8 +882,8 @@ void GDBController::parseRequestedData(char* buf)
 // If the user gives us a bad program, catch that here.
 //void GDBController::parseFileStart(char* buf)
 //{
-//  if (strstr(buf, "not in executable format:") ||
-//      strstr(buf, "No such file or directory."))
+//  if (::strstr(buf, "not in executable format:") ||
+//      ::strstr(buf, "No such file or directory."))
 //  {
 //    programNoApp(QString(buf), true);
 //    DBG_DISPLAY("Bad file start <" + QString(buf) + ">");
@@ -877,7 +898,7 @@ void GDBController::parseQTVersion(char* buf)
 {
   if (dynamic_cast<GDBGetQTVersionCommand*>(currentCmd_))
   {
-    bool qt2 = (strncmp(buf, "There is no member or method named ucs.", 39) == 0);
+    bool qt2 = (::strncmp(buf, "There is no member or method named ucs.", 39) == 0);
     GDBParser::getGDBParser()->setQT2Version(qt2);
   }
 }
@@ -889,9 +910,9 @@ void GDBController::parseQTVersion(char* buf)
 void GDBController::parseFrameSelected(char* buf)
 {
   char lookup[3] = {BLOCK_START, SRC_POSITION, 0};
-  if (char* start = strstr(buf, lookup))
+  if (char* start = ::strstr(buf, lookup))
   {
-//    if (char* end = strchr(start, '\n'))  // 21/11/2000 this has already been removed
+//    if (char* end = ::strchr(start, '\n'))  // 21/11/2000 this has already been removed
 //    {
 //      *end = 0;      // clobber the new line
       parseProgramLocation(start+2);
@@ -901,7 +922,7 @@ void GDBController::parseFrameSelected(char* buf)
 
   if (!stateIsOn(s_silent))
   {
-//    if (char* end = strchr(buf, '\n'))    // 21/11/2000 this has already been removed
+//    if (char* end = ::strchr(buf, '\n'))    // 21/11/2000 this has already been removed
 //      *end = 0;      // clobber the new line
     emit showStepInSource("", -1, "");
     emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
@@ -917,15 +938,15 @@ void GDBController::parseLocals(char* buf)
 {
   varTree_->viewport()->setUpdatesEnabled(false);
 
-  FrameRoot* frame;
+  VarFrameRoot* frame;
   // The locals are always attached to the currentFrame
   // so make sure we have one of those.
-  if (!(frame = varTree_->findFrame(currentFrame_)))
-    frame = new FrameRoot(varTree_, currentFrame_);
+  if (!(frame = varTree_->findFrame(currentFrame_, viewedThread_)))
+    frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
 
   ASSERT(frame);
 
-  frame->setFrameName(frameStack_->getFrameName(currentFrame_));
+  frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
 
   // Frame data consists of the parameters of the calling function
   // and the local data.
@@ -937,7 +958,7 @@ void GDBController::parseLocals(char* buf)
   // Reselecting a frame 0 regenerates the data and therefore trims
   // the whole tree _but_ all the items in every frame will be active
   // so nothing will be deleted.
-  if (currentFrame_ == 0)
+  if (currentFrame_ == 0 && viewedThread_ == -1)    // FIXME:
     varTree_->trim();
   else
     frame->trim();
@@ -966,7 +987,7 @@ char* GDBController::parseCmdBlock(char* buf)
       // file and line number info that gdb just drops out starts with a
       // \32 but ends with a \n. Could treat this as a line rather than
       // a block. Ah well!
-      if((end = strchr(buf, '\n')))
+      if((end = ::strchr(buf, '\n')))
         *end = 0;      // Make a null terminated c-string
       break;
 
@@ -974,10 +995,12 @@ char* GDBController::parseCmdBlock(char* buf)
     {
       // match the start block with the end block if we can.
       char lookup[3] = {BLOCK_START, *(buf+1), 0};
-      if ((end = strstr(buf+2, lookup)))
+      if ((end = ::strstr(buf+2, lookup)))
       {
-        if (*(end-1) == '\n')
-          *(end-1) = 0;   // fix this by clobbering the new line
+        // fix this by clobbering the new line
+        // Hmm What did this fix? - it breaks thread handling
+//FIXME        if (*(end-1) == '\n')
+//FIXME          *(end-1) = 0;
         *end = 0;         // Make a null terminated c-string
         end++;            // The real end!
       }
@@ -999,6 +1022,7 @@ char* GDBController::parseCmdBlock(char* buf)
       case DATAREQUEST:     parseRequestedData        (buf);        break;
       case BPLIST:          emit rawGDBBreakpointList (buf);        break;
       case BACKTRACE:       parseBacktraceList        (buf);        break;
+      case THREAD:          parseThreadList           (buf);        break;
       case DISASSEMBLE:     emit rawGDBDisassemble    (buf);        break;
       case MEMDUMP:         emit rawGDBMemoryDump     (buf);        break;
       case REGISTERS:       emit rawGDBRegisters      (buf);        break;
@@ -1039,7 +1063,7 @@ char* GDBController::parseOther(char* buf)
       // for and remove them first then continue as if it wasn't there.
       // And there can be more that one in a row!!!!!
       // Isn't this bloody awful...
-      if (strncmp(end, "(no debugging symbols found)...", 31) == 0)
+      if (::strncmp(end, "(no debugging symbols found)...", 31) == 0)
       {
         emit dbgStatus (QCString(end, 32), state_);
         return end+30;    // The last char parsed
@@ -1239,7 +1263,7 @@ void GDBController::slotStart(const QString& application, const QString& args, c
     queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
   // Find out what version of qt is being used.
-  queueCmd(new GDBGetQTVersionCommand());
+//  queueCmd(new GDBGetQTVersionCommand());
 
   // Load the file into gdb
   /*if (sDbgShell.isEmpty())
@@ -1263,6 +1287,9 @@ void GDBController::slotCoreFile(const QString& coreFile)
 {
   setStateOff(s_silent);
   queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD, NOTINFOCMD, 0));
+
+  if (stateIsOn(s_viewThreads))
+    queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
   queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
   if (stateIsOn(s_viewLocals))
     queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
@@ -1275,6 +1302,8 @@ void GDBController::slotAttachTo(int pid)
   setStateOff(s_appNotStarted|s_programExited|s_silent);
   setStateOn(s_attached);
   queueCmd(new GDBCommand(QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
+  if (stateIsOn(s_viewThreads))
+    queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
   queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
   if (stateIsOn(s_viewLocals))
     queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
@@ -1485,7 +1514,7 @@ void GDBController::slotLibraries()
 
 // **************************************************************************
 
-void GDBController::slotSelectFrame(int frameNo)
+void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
 {
   if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
     return;
@@ -1496,24 +1525,43 @@ void GDBController::slotSelectFrame(int frameNo)
   // thing that could happen here.
   // _Always_ switch frames (even if we're the same frame so that a program
   // position will be generated by gdb
-//  if (frameNo != currentFrame_)
-    queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo), NOTRUNCMD, INFOCMD, FRAME));
+  if (threadNo != -1)
+  {
+    // We don't switch threads if we on this thread. The -1 check is because the first time
+    // after a stop we're actually on this thread but the thread no had been reset to -1.
+    if (viewedThread_ != -1)
+    {
+      if (viewedThread_ != threadNo)
+        queueCmd(new GDBCommand(QCString().sprintf("thread %d", threadNo), NOTRUNCMD, INFOCMD, FRAME));
 
-  // Hold on to  this frame number so that we know where to put the
-  // local variables if any are generated.
+      if (needFrames)
+        queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
+
+      if (needFrames || (viewedThread_ != threadNo) || (currentFrame_ != frameNo))
+        queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo), NOTRUNCMD, INFOCMD, FRAME));
+    }
+  }
+  else
+  {
+    if (currentFrame_ != frameNo)
+      queueCmd(new GDBCommand(QCString().sprintf("frame %d", frameNo), NOTRUNCMD, INFOCMD, FRAME));
+  }
+
+  // Hold on to  this thread/frame so that we know where to put the local variables if generated.
+  viewedThread_ = threadNo;
   currentFrame_ = frameNo;
 
   // Find or add the frame details. hold onto whether it existed because we're
   // about to create one if it didn't.
-  FrameRoot* frame = varTree_->findFrame(frameNo);
+  VarFrameRoot* frame = varTree_->findFrame(frameNo, viewedThread_);
   bool haveFrame = (bool)frame;
   if (!haveFrame)
-    frame = new FrameRoot(varTree_, currentFrame_);
+    frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
 
   ASSERT(frame);
 
   // Make vartree display a pretty frame description
-  frame->setFrameName(frameStack_->getFrameName(currentFrame_));
+  frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
 
   if (stateIsOn(s_viewLocals))
   {
@@ -1521,7 +1569,7 @@ void GDBController::slotSelectFrame(int frameNo)
     if (frame->needLocals())
     {
       // Add the frame params to the variable list
-      frame->setParams(frameStack_->getFrameParams(currentFrame_));
+      frame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
       // and ask for the locals
       queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
     }
@@ -1613,7 +1661,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
   if (char* nowAt = parse(gdbOutput_))
   {
     ASSERT(nowAt <= gdbOutput_+gdbOutputLen_+1);
-    gdbOutputLen_ = strlen(nowAt);
+    gdbOutputLen_ = ::strlen(nowAt);
     // Some bytes that wern't parsed need to be move to the head of the buffer
     if (gdbOutputLen_)
       memmove(gdbOutput_, nowAt, gdbOutputLen_);     // Overlapping data
@@ -1633,7 +1681,7 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 
 //  QString bufData(buf, buflen+1);
 //  char* found;
-//  if ((found = strstr(buf, "No symbol table is loaded")))
+//  if ((found = ::strstr(buf, "No symbol table is loaded")))
 //    emit dbgStatus (QString("No symbol table is loaded"), state_);
 
   // If you end the app and then restart when you have breakpoints set
@@ -1643,7 +1691,7 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
   // when the library gets loaded again.
   // TODO  programHasExited_ isn't always set correctly,
   // but it (almost) doesn't matter.
-//  if (programHasExited_ && (found = strstr(bufData.data(), "Cannot insert breakpoint")))
+//  if (programHasExited_ && (found = ::strstr(bufData.data(), "Cannot insert breakpoint")))
 //  {
 //    setStateOff(s_appBusy);
 //    int BPNo = atoi(found+25);

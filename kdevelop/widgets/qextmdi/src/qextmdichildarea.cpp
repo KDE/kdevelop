@@ -43,7 +43,7 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
    m_captionFont = QFont();//F.B.QFont("clean",16);
    QFontMetrics fm(m_captionFont);
    m_captionFontLineSpacing = fm.lineSpacing();
-   m_captionActiveBackColor = QColor(0,0,128);
+   m_captionActiveBackColor = colorGroup().highlight();//QColor(0,0,128);
    m_captionActiveForeColor = QColor(255,255,255);
    m_captionInactiveBackColor = QColor(160,160,164);
    m_captionInactiveForeColor = QColor(255,255,255);

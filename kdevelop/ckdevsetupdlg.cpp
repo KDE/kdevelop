@@ -61,6 +61,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, i
   addGeneralTab();
   addKeysTab();
   addDocTab();
+  addCompilerTab();
   addDebuggerTab();
   addQT2Tab();
   addUserInterfaceTab();
@@ -286,12 +287,18 @@ void CKDevSetupDlg::addGeneralTab()
 void CKDevSetupDlg::addKeysTab()
 {
 
+#if QT_VERSION < 300
   keyMap = m_accel->keyDict();
+#endif
   keysPage = addPage(i18n("Keys"),i18n("Configuration of KDevelop Hot-Keys"),
   KGlobal::instance()->iconLoader()->loadIcon( "key_bindings", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(keysPage,2,1,15,7);
 
+#if QT_VERSION < 300
   keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
+#else
+  keyChooser = new KKeyChooser ( m_accel->actions(), keysPage, true);
+#endif
   grid->addWidget(keyChooser,0,0);
 }
 
@@ -485,6 +492,15 @@ void CKDevSetupDlg::addDocTab()
                     "a cross reference file of your project into the selected kdoc-reference\n"
                     "directory."));
 
+}
+
+/** adds the compiler page for setting up the compile environment */
+void CKDevSetupDlg::addCompilerTab(){
+  compilerPage = addPage(i18n("Compiler"),i18n("Compiler Settings"),
+  KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
+  compdlg = new CCompConf(compilerPage);
+  QGridLayout *grid = new QGridLayout(compilerPage);
+  grid->addWidget(compdlg,0,0);
 }
 
 void CKDevSetupDlg::addDebuggerTab()
@@ -929,7 +945,11 @@ void CKDevSetupDlg::slotOkClicked(){
     break;
   }
 
+#if QT_VERSION < 300
   m_accel->setKeyDict(keyMap);
+#else
+  keyChooser->commitChanges();
+#endif
   m_accel->writeSettings(config);
   config->sync();
   accept();

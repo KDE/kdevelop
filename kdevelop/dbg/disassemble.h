@@ -49,6 +49,7 @@ signals:
 
 protected:
   virtual void showEvent(QShowEvent*);
+  virtual void hideEvent(QHideEvent*);
 
 private:
   bool    active_;

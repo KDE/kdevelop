@@ -22,7 +22,7 @@
 
 <P>
 <P>The first step when creating an application based on the Document-View model should always be to think what kind of data the
-application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
+application has to manage. This decides how the view class will look like but especially how the document class will read and write data
 to and from files and offer methods to manipulate the data. As <EM>KScribble</EM> will be a simple drawing application that operates on
 graphical data, we will use the Qt class <CODE>QPixmap</CODE> for storing our paintings while it is edited. <CODE>QPixmap</CODE> also offers
 simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for

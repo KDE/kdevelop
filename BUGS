@@ -25,3 +25,10 @@ These are not considered as bugs but a lack of implementation and described for 
 - The widget editor does not generate geometry management implementations
 - TMake is not yet supported
 - If the generation of the KDE libs documentation fails, go to http://developer.kde.org or www.kdevelop.org and get the tar'ed documentation.
+
+Install dir problem.
+When creating a normal2 project (and others?) the default png files are
+installed in $$(kde_xxx). The $$ is incorrect - it should be $. This also
+appears to happen with old projects (pre kdevelop2.0) opened with kdevelop2.0.
+The install directory in this case can be $$$$(kde_xxx)
+The workaround is to remove these duplicate $'s in the properties dialog.

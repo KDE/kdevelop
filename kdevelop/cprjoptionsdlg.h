@@ -28,6 +28,8 @@ class QLabel;
 class QPushButton;
 class KConfig;
 class QMultiLineEdit;
+class CPrjCompOpts;
+class KDevSession;
 
 #include <kdialogbase.h>
 //#include <qtabdialog.h>
@@ -40,7 +42,7 @@ class CPrjOptionsDlg : public KDialogBase // QTabDialog
     Q_OBJECT
 public:
   /**constructor*/
-  CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name );
+  CPrjOptionsDlg(CProject* prj, KDevSession* session, const QString& curr, QWidget *parent, const char *name );
   bool needConfigureInUpdate();
   bool needMakefileUpdate(){return need_makefile_generation;}
 
@@ -53,6 +55,7 @@ private:
   void addBinPage();
 
 protected:
+	CPrjCompOpts* compdlg;
   /** local projectinfo object*/
   CProject* prj_info; 
   // TAB General
@@ -63,42 +66,6 @@ protected:
   QCheckBox* modifymakefiles_checkbox;
   QComboBox* vcsystem_combo;
   QMultiLineEdit* info_edit;
-  // TAB GCC-options
-  QComboBox* target;
-  QCheckBox* syntax_check;
-  QCheckBox* optimize;
-  QSpinBox*  optimize_level;
-  QCheckBox* debug;
-  QSpinBox*  debug_level;
-  QCheckBox* gprof_info;
-  QCheckBox* save_temps;
-  QLineEdit* addit_gcc_options;
-  // TAB GCC-Warnings
-  QCheckBox* w_all;
-  QCheckBox* w_;
-  QCheckBox* w_traditional;
-  QCheckBox* w_undef;
-  QCheckBox* w_shadow;
-  //  QSpinBox*  w_id_clash_len;
-  //  QSpinBox*  w_larger_than_len;
-  QCheckBox* w_pointer_arith;
-  QCheckBox* w_bad_function_cast;
-  QCheckBox* w_cast_qual;
-  QCheckBox* w_cast_align;
-  QCheckBox* w_write_strings;
-  QCheckBox* w_conversion;
-  QCheckBox* w_sign_compare;
-  QCheckBox* w_aggregate_return;
-  QCheckBox* w_strict_prototypes;
-  QCheckBox* w_missing_prototypes;
-  QCheckBox* w_missing_declarations;
-  QCheckBox* w_redundant_decls;
-  QCheckBox* w_nested_externs;
-  QCheckBox* w_inline;
-  QCheckBox* w_old_style_cast;
-  QCheckBox* w_overloaded_virtual;
-  QCheckBox* w_synth;
-  QCheckBox* w_error;
   // TAB Linker options
   QCheckBox* l_remove_symbols;
   QCheckBox* l_static;
@@ -138,6 +105,8 @@ protected:
   QLineEdit* m_makestartpoint_line;
   QPushButton* m_makestartpoint_dir;
 private:
+	KDevSession* sess;
+	QString currentcfg;
   QString old_version;
   QString old_ldflags;
   QString old_ldadd;
@@ -155,8 +124,6 @@ protected slots:
    /** is called, if the ok-button were clicked*/
   void ok();
   void slotFileDialogClicked();
-  void slotOptimize_level_changed(int v);
-  void slotDebug_level_changed(int v);
   void slotBinaryClicked();
   void slotLibtoolClicked();
   void slotFileDialogMakeStartPointClicked();

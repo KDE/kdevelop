@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlistbox.h>
+#include <qpushbutton.h>
 #include <qtoolbutton.h>
 
 #include <stdlib.h>

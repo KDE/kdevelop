@@ -91,6 +91,9 @@ public: // Public Methods
 
 private: // Private attributes
 
+  /** flag that helps checkClassDecl() to recognize the lexem */
+  bool m_isParsingClassDeclaration;
+
   /** Lexer used to fetch lexical patterns */
   yyFlexLexer *lexer;
 

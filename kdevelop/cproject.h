@@ -278,7 +278,7 @@ public: // Methods to store project options
   void setDirWhereMakeWillBeCalled(const QString& name)  { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
 
   /** Store all open groups in the LFV*/
-  void setLFVOpenGroups(QStrList groups);
+  void setLFVOpenGroups(QStringList groups);
 
   void setShortInfo(QStrList short_info);
 
@@ -287,10 +287,14 @@ public: // Methods to store project options
   void setLDADD(const QString& libstring);
 
   /** Store the C++ compiler flags. */
+  /** No descriptions */
+  void setCPPFLAGS(const QString& flags);
+  /** No descriptions */
+  void setCFLAGS(const QString& flags);
   void setCXXFLAGS(const QString& flags);
   void setAdditCXXFLAGS(const QString& flags);
 
-  void setFilters(const QString& group,QStrList& filters);
+  void setFilters(const QString& group,QStringList& filters);
 
   void setActiveTarget(const QString& target);
 
@@ -356,20 +360,24 @@ public: // Methods to fetch project options
   QString getLibtool();
 
   /** Fetch all groups in the logic file view. */
-  void getLFVGroups(QStrList& groups);
+  void getLFVGroups(QStringList& groups);
 
   /** Fetch all open groups in the LFV. */
-  void getLFVOpenGroups(QStrList& groups);
+  void getLFVOpenGroups(QStringList& groups);
 
   QStrList getShortInfo();
 
   /** Fetch the librarys. */
   QString getLDFLAGS();
   QString getLDADD();
+  /** returns the preprocessor flags */
+  QString getCPPFLAGS();
+  /** returns the CFLAGS string */
+  QString getCFLAGS();
   QString getCXXFLAGS();
   QString getAdditCXXFLAGS();
 
-  void getFilters(const QString& group,QStrList& filters);
+  void getFilters(const QString& group,QStringList& filters);
 
   TFileInfo getFileInfo(const QString& filename);
 
@@ -580,4 +588,5 @@ private: // Protected attributes
  * author: rokrau
  **/
 CProject* currentProject();
+
 #endif

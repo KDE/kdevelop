@@ -20,6 +20,7 @@
 
 #include <kfiledialog.h>
 #include <qwhatsthis.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kstddirs.h>
 
@@ -34,8 +35,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   name_edit->setMaximumSize( 32767, 32767 );
   name_edit->setFocusPolicy( QWidget::StrongFocus );
   name_edit->setBackgroundMode( QWidget::PaletteBase );
-  name_edit->setFontPropagation( QWidget::NoChildren );
-  name_edit->setPalettePropagation( QWidget::NoChildren );
   name_edit->setText( "" );
   name_edit->setMaxLength( 32767 );
   name_edit->setEchoMode( QLineEdit::Normal );
@@ -47,8 +46,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_edit->setMaximumSize( 32767, 32767 );
   file_edit->setFocusPolicy( QWidget::StrongFocus );
   file_edit->setBackgroundMode( QWidget::PaletteBase );
-  file_edit->setFontPropagation( QWidget::NoChildren );
-  file_edit->setPalettePropagation( QWidget::NoChildren );
   file_edit->setText( "" );
   file_edit->setMaxLength( 32767 );
   file_edit->setEchoMode( QLineEdit::Normal );
@@ -60,8 +57,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   name_label->setMaximumSize( 32767, 32767 );
   name_label->setFocusPolicy( QWidget::NoFocus );
   name_label->setBackgroundMode( QWidget::PaletteBackground );
-  name_label->setFontPropagation( QWidget::NoChildren );
-  name_label->setPalettePropagation( QWidget::NoChildren );
   name_label->setText(i18n("Name:") );
   name_label->setAlignment( 289 );
   name_label->setMargin( -1 );
@@ -74,8 +69,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_label->setMaximumSize( 32767, 32767 );
   file_label->setFocusPolicy( QWidget::NoFocus );
   file_label->setBackgroundMode( QWidget::PaletteBackground );
-  file_label->setFontPropagation( QWidget::NoChildren );
-  file_label->setPalettePropagation( QWidget::NoChildren );
   file_label->setText(i18n("File:") );
   file_label->setAlignment( 289 );
   file_label->setMargin( -1 );
@@ -88,8 +81,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   ok_button->setMaximumSize( 32767, 32767 );
   ok_button->setFocusPolicy( QWidget::TabFocus );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
-  ok_button->setFontPropagation( QWidget::NoChildren );
-  ok_button->setPalettePropagation( QWidget::NoChildren );
   ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
@@ -101,8 +92,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   cancel_button->setMaximumSize( 32767, 32767 );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-  cancel_button->setFontPropagation( QWidget::NoChildren );
-  cancel_button->setPalettePropagation( QWidget::NoChildren );
   cancel_button->setText( i18n("Cancel") );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
@@ -113,8 +102,6 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_button->setMaximumSize( 32767, 32767 );
   file_button->setFocusPolicy( QWidget::TabFocus );
   file_button->setBackgroundMode( QWidget::PaletteBackground );
-  file_button->setFontPropagation( QWidget::NoChildren );
-  file_button->setPalettePropagation( QWidget::NoChildren );
 	QPixmap pix = SmallIcon("fileopen");
   file_button->setPixmap(pix);
   file_button->setAutoRepeat( FALSE );
