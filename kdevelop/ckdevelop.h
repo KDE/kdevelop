@@ -41,7 +41,6 @@ class CKDevelop;
 #include <khtmlview.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-#include <kaccel.h>
 #include <kprogress.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -64,6 +63,7 @@ class CEditWidget;
 #include "component.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
+#include "ckdevaccel.h"
 //#include "crealfileview.h"
 //#include "clogfileview.h"
 #include "ctreehandler.h"
@@ -761,7 +761,7 @@ private:
   /** at the moment only one project at the same time */
   CProject* prj;
 
-  KAccel *accel;
+  CKDevAccel *accel;
   KConfig* config;
   int act_outbuffer_len;
 

@@ -1922,6 +1922,8 @@ void CKDevelop::enableCommand(int id_)
 {
   kdev_menubar->setItemEnabled(id_,true);
   kdlg_menubar->setItemEnabled(id_,true);
+  accel->setItemEnabled(id_,true);
+
 //  menuBar()->setItemEnabled(id_,true);
   toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
@@ -1932,6 +1934,8 @@ void CKDevelop::disableCommand(int id_)
 {
   kdev_menubar->setItemEnabled(id_,false);
   kdlg_menubar->setItemEnabled(id_,false);
+  accel->setItemEnabled(id_,false);
+
 //  menuBar()->setItemEnabled(id_,false);
   toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
