@@ -82,27 +82,20 @@ public:
     FileGroupsFileItem(QListViewItem *parent, const QString &fileName);
     QString fileName() const
     { return fullname; }
-    
+
 private:
-    static QString extractName(const QString &fileName);
     QString fullname;
 };
 
 
 FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fileName)
-    : QListViewItem(parent, extractName(fileName)), fullname(fileName)
+    : QListViewItem(parent), fullname(fileName)
 {
     setPixmap(0, SmallIcon("document"));
-    setText(1, fileName);
-}
-
-
-QString FileGroupsFileItem::extractName(const QString &fileName)
-{
     QFileInfo fi(fileName);
-    return fi.fileName();
+    setText(0, fi.fileName());
+    setText(1, fi.dirPath() + "/");
 }
-
 
 FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     : KListView(0, "file view widget")
@@ -135,6 +128,10 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
 {
     if (!item)
         return;
+
+    // toggle open state for parents
+    if (item->childCount() > 0)
+        setOpen(item, !isOpen(item));
 
     // Is it a group item?
     if (!item->parent())
