@@ -77,26 +77,18 @@ Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
 
 <itemize>
 <item>Kapitel <ref id="Installation" name="Installation">, behandelt Systemanforderungen, Installation und Einrichtung der KDevelop Entwicklungsumgebung.
-<item>Kapitel <ref id="Programme" name="Programme">, beschreibt Ihnen, wie Programme mit den Standard-GNU Entwickungswerkzeugen erzeugt
-und erstellt werden.
-<item>Kapitel <ref id="Entwicklung mit KDevelop" name="Entwicklung mit KDevelop">, nimmt Sie mit auf eine kurze Reise, die Ihnen die
-Funktionalität der Entwicklungsumgebung beschreibt.
+<item>Kapitel <ref id="Programme" name="Programme">, beschreibt Ihnen, wie Programme mit den Standard-GNU Entwickungswerkzeugen erzeugt und erstellt werden.
+<item>Kapitel <ref id="Entwicklung mit KDevelop" name="Entwicklung mit KDevelop">, nimmt Sie mit auf eine kurze Reise, die Ihnen die Funktionalität der Entwicklungsumgebung beschreibt.
 <item>Kapitel <ref id="Übersicht" name="Übersicht">, erklärt sowohl die Menüs und Dialoge als auch Schnelltasten.
-<item>Kapitel <ref id="Das Hilfe-System" name="Das Hilfe-System">, zeigt die Benuztung des integrierten Dokumentationsbrowsers und
-zusätzliche Hilfe-funktionen.
-<item>Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, erklärt die Features des Dateimanagements und
--bearbeitung.
+<item>Kapitel <ref id="Das Hilfe-System" name="Das Hilfe-System">, zeigt die Benuztung des integrierten Dokumentationsbrowsers und zusätzliche Hilfe-funktionen.
+<item>Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, erklärt die Features des Dateimanagements und -bearbeitung.
 <item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
-<item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und
-Linker Flags und der Projekteinstellungen.
-<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop
-Klassenbrowser benutzen.
-<item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen
-C++ Code erzeugt.
-<item>Kapitel <ref id="Allgemeine Konfiguration" name="Allgemeine Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur
-Benutzung von KDevelop vornehmen.
-<item>Kapitel <ref id="Fragen und Antworten" name="Fragen und Antworten">, behandelt Fragen, die bei der Benutzung von KDevelop unter
-verschiedenen Unix-Systemen vorkommen und generelle Problemlösungen.
+<item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und Linker Flags und der Projekteinstellungen.
+<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop Klassenbrowser benutzen.
+<item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen C++ Code erzeugt.
+<item>Kapitel <ref id="Debuggen einer Anwendung" name="Debuggen einer Anwendung">, Features und Erläuterungen zum internen Debugger
+<item>Kapitel <ref id="Allgemeine Konfiguration" name="Allgemeine Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur Benutzung von KDevelop vornehmen.
+<item>Kapitel <ref id="Fragen und Antworten" name="Fragen und Antworten">, behandelt Fragen, die bei der Benutzung von KDevelop unter verschiedenen Unix-Systemen vorkommen und generelle Problemlösungen.
 </itemize>
 
 Für Programmieranfänger und neue Benutzer dieses Produkts empfehlen wir, sich in dieses Handbuch einzulesen bevor Sie damit beginnen,
@@ -3087,6 +3079,202 @@ add other methods you may need.
 For more information about implementation of the widgets functions, see <htmlurl url="programming-6.html" name="The KDevelop
 Programming Handbook">.
 
+<chapt>Debuggen einer Anwendung<label id="Debuggen einer Anwendung">
+<sect>Einstellungen
+<p>
+
+Standardmäßig verwendet KDevelop den internen Debugger. Dies kann unter 
+"Einstellungen" geändert werden. Wählen Sie "KDevelop setup" 
+und dann "Debugger" .
+
+Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie 
+einen anderen Debugger verwenden wollen und geben Sie den Namen des externen Debuggers 
+ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
+
+<sect>Verwendung des internen Debuggers
+<p>
+<sect1>Änderungen in den Baum- und Ausgabeansichten
+<p>
+Bei Verwendung des internen Debuggers werden den Baum- und Ausgabeansichten drei Tabs 
+hinzugefügt.
+<sect2>In der Baumansicht
+<p>
+<itemize>
+<item>VAR Tab : Eine Baumansicht der lokalen Variablen des aktuellen Stackframes. 
+Es können auch Variablen der aufrufenden Funktion angezeigt werden. Außerdem 
+enthält dieses TAb ein Watch Fenster. Dies ermöglicht es globale Variablen anzuzeigen; 
+oder Sie wollen vielleicht nur eine lokale Variable anzeigen anstatt sie in einer 
+langen Liste lokaler Variablen zu suchen.
+</itemize>
+
+<sect2>In der Ausgabeansicht
+<p>
+<itemize>
+<item>Breakpoint : Eine Liste der aktuell gesetzten Unterbrechungen und ihr aktueller Status.
+<item>Framestack : Eine Liste der zur Zeit aufgerufenen Funktionen
+<item>Disassemble : Eine Ansicht des Assemblercodes der aktuell ausgeführten Anweisung
+</itemize>
+
+<sect1>Details
+<p>
+
+<sect2>Unterbrechungen
+<p>
+
+Unterbrechungen können auf Quellcodezeilen gesetzt werden (sog. Breakpoints), 
+oder auch auf Variablen (sog. Watchpoints) . Beide Arten von Unterbrechung können 
+jederzeit gesetzt werden, Watchpoints auf lokale Variablen sind jedoch nur im jeweiligen
+Gültigkeitsbereich von Bedeutung. Sinnvoller ist die Verwendung von Watchpoints für 
+globale Variablen.
+
+<sect2>Setzen/Löschen von Unterbrechungen
+<p>
+
+Klicken Sie im Editor in der gewünschten Zeile den schmalen "Icon"-Rand auf der linken 
+Seite des Quelltextes an, um eine Unterbrechung zu setzen. Nochmaliges Klicken entfernt 
+die Unterbrechung wieder.
+
+<sect2>Alternative Manipulation der Unterbrechungen via Menü
+<p>
+
+Wenn Sie den Breakpoint entweder im Editor oder in der Breakpointliste mit der rechten 
+Maustaste anklicken, öffnet sich ein Menü mit Optionen. Dort können Sie die Unterbrechung 
+entfernen oder editieren, oder alle Unterbrechungen löschen.
+
+<sect2>Editieren von Unterbrechungen
+<p>
+
+Benutzen Sie das eben beschriebene Menü um Unterbrechungen zu editieren.
+Es enthält die folgenden Einträge:
+<enum>
+<item>Bedingung: Geben Sie eine Bedingung an, die erfüllt sein muß, damit 
+gdb die Programmausführung unterbricht.
+<item>Ignoriere die nächsten: Wie oft der Code den Breakpoint passieren soll, bevor 
+gdb die Programmausführung unterbricht.
+<item>Aktivieren: Wenn das Kontrollfeld aktiviert ist, hält gdb an dieser Stelle an, 
+sonst wird der Breakpoint ignoriert.
+</enum>
+
+<sect2>Alle Breakpoints löschen
+<p>
+
+Entfernt alle Unterbrechungen für dieses Programm.
+
+<sect2>Setzen/Löschen von Watchpoints
+<p>
+
+Klicken Sie in der Variablenansicht mit der rechten Maustaste auf eine Variable. 
+Es öffnet sich ein Popup Menü in dem Sie einen Watchpoint auf diese lokale Variable 
+setzen können. Diese Funktionalität ist auf den Gültigkeitsbereich dieser Variablen 
+eingeschränkt. Sobald der Gültigkeitsbereich verlassen werden soll, wird das Programm 
+angehalten und der Watchpoint gelöscht.
+
+WARNUNG: Dies ist als problematisch bekannt. Seien Sie also vorsichtig, wenn Sie 
+Unterbrechungen auf lokale Variablen setzen.
+
+Eine Unterbrechung kann auch gesetzt werden, indem Sie mit der rechten Maustaste auf eine 
+vorher eingegebene Unterbrechung klicken und "Watchpoint umschalten" auswählen.
+
+<sect2>Setzen/Löschen von Watch Variablen
+<p>
+
+Am unteren Ende der Variablenansicht befindet sich das "Watch"-Feld 
+in dem man den Variablennamen eingeben kann, den man sich in der Watchliste 
+anzeigen lassen will. Geben Sie den Variablennamen gefolgt von &lt;RETURN&gt; ein oder 
+klicken Sie auf "Hinzufügen" . Ein Klick mit der rechten Maustaste auf den 
+Variablennamen in der Baumansicht öffnet ein Menü, in dem Sie die Variable wieder aus 
+der Liste entfernen können.
+
+Sie können eine Watchvariable auch eingeben, indem Sie mit der rechten Maustaste im 
+Editorfenster auf den Variablennamen klicken. Dies öffnet ein Popoup Menü mit einem 
+"Beobachten : Variablenname" Eintrag.
+
+<sect2>Ändern von Variablenwerten
+<p>
+
+Das ändern von Variablenwerten erfolgt mit Hilfe einer Watchvariablen. Wenn Sie eine 
+Variable "test" haben, können Sie die Variable auf 5 setzen, indem Sie 
+im Watch-Feld "test=5" eingeben und die Variable zur Liste hizufügen.
+Beachten Sie, daß "test" JEDESMAL auf 5 gesetzt wird, wenn das Programm an 
+dieser Stelle angehalten wird. Sie sollten eine Variable deshalb wieder aus der Liste entfernen nachdem sie 
+einmal gesetzt worden ist.
+
+<sect1>Die schwebende Werkzeugleiste
+<p>
+
+Die Werkzeugleiste des internen Debuggers "schwebt" entweder über allen 
+angezeigten Fenstern, oder sie ist in die Kontrolleiste gedockt. Wenn sie gedockt ist, können 
+Sie den Code durch anklicken des gedockten Icons ausführen. Die dabei ausgeführte Funktion 
+ist die "Step Over" Funktion. Mit Hilfe der rechten Maustaste können sie die Werkzeugleiste 
+wiederherstellen und optional KDevelop den Fokus geben.
+
+Die verfügbaren Funktionen sind:
+<itemize>
+<item>Ausführen : Fortsetzen des Programmes von der aktuellen Stelle aus.
+<item>Über Funktion  : Ausführen einer Codezeile. Alle in dieser Zeile enthaltenen Funktionen 
+werden ausgeführt.
+<item>Über Funktion A(ssembler) : Ausführen einer Assemblerinstruktion wie oben.
+<item>In Funktion : Ausführen einer Codezeile. Wenn erforderlich wird aber in die enthaltenen 
+Funktionen verzweigt und diese werden angezeigt.
+<item>In Funktion A(ssembler) : Ausführen einer Assemblerinstruktion wie oben.
+<item>Aus Funktion : Ausführen bis zum Ende des aktuellen Stackframes (Funktion).
+<item>Ansehen : Erlaubt verschieden Ansichten der Daten.
+Zur Zeit sind implementiert:
+<enum>
+<item> Speicher
+<item> Disassemblieren
+<item> Register
+<item> Bibliotheken
+</enum>
+<item>Anhalten : Ausführung der Anwendung unterbrechen.
+<item>Setze Fokus auf KDevelop : Setzt den Fokus auf KDevelop.
+<item>Setze Fokus auf Applikation : Setzt den Fokus auf das Fenster das ihn hatte
+als "Setze Fokus auf KDevelop" gedrückt wurde. Dies ist ein Kompromiß, der 
+Fokus sollte eigentlich auf die zu debuggende Anwendung gesetzt werden, aber dies ist 
+schwierig. Wenn jemand eine bessere Lösung hat, laßt es uns wissen.
+</itemize>
+
+Wenn gdb das Programm unterbricht, weil z.B. ein Breakpoint erreicht wurde, 
+wird "Setze Fokus auf KDevelop" mit einem Highlight versehen. 
+Wir geben nicht automatisch KDevelop den Fokus, damit Sie die Ausgabe Ihres 
+Programmes sehen können. Klicken Sie auf "Setze Fokus auf KDevelop" 
+oder einen anderen Knopf um die gewünschte Funktion auszuführen.
+
+<sect> Dynamische Bibliotheken und Unterbrechungen
+<p>
+
+Die Verwendung Breakpoints innerhalb von dynamischen Bibliotheken führt zu einem Problem, 
+für das es eine annehmbare Lösung gibt. 
+Das Problem ist, daß gdb keine Breakpoints akzeptiert, die innerhalb des Quellcodes einer dynamischen 
+Bibliothek liegen, solange diese noch nicht mittels dlopen geöffnet wurde. 
+
+Die Lösung besteht darin, gdb dazu zu bringen uns zu benachrichtigen, wenn eine 
+dynamische Bibliothek geöffnet wurde. Das heißt, wenn der Benutzer dort eine Unterbrechung 
+setzt, markieren wir dies als "in der Schwebe", und wenn gdb anhält, weil die 
+Bibliothek geöffnet wurde, versuchen wir die Breakpoints zu setzen. Ist dies erfolgreich, wird 
+die Unterbrechung als aktiv markiert, wenn nicht, bleibt der Breakpoint "schwebend". In jedem Falle 
+wird anschließend ein "continue" ausgeführt.
+
+Dies ist als "lazy breakpoints" bekannt.
+
+Dennoch müssen Sie vorsichtig sein. Wenn Sie versehentlich eine Unterbrechung in einer Datei 
+setzen, die absolut nichts mit Ihrem Programm zu tun hat, sie gehört also weder zu Ihrem Programm 
+noch zu irgendeiner dynamischen Bibliothek Ihres Projektes, wird dieser Breakpoint immer 
+"schwebend" bleiben. Dies kann nicht verhindert werden, da er zu einer dynamischen Bibliothek 
+gehören könnte. 
+
+Das Problem der "schwebenden" Unterbrechungen ist folgendes:
+Wenn Sie "Über Funktion" in einer Codezeile anwenden, die ein dlopen enthält oder zu einem 
+dlopen führt, kann man nicht vorhersagen was passieren wird. Das dlopen wird von gdb 
+abgefangen, wodurch die Ausführung unterbrochen wird. Nun gibt es zwei Möglichkeiten, entweder
+gibt es dort "schwebende" Breakpoints, dann werden Sie als aktiv markiert und das anschließende 
+"continue" führt zu diesem Punkt. Oder es gibt keine, dann führt "continue" bis zur nächsten 
+Eingabeaufforderung oder direkt zum Programmende. Nichts von dem ist das, was erwartet wurde. 
+Aus diesem Grund wird bei "Über Funktion" kein "continue" ausgeführt, sondern das Programm bleibt 
+angehalten und der "Gestoppt" Zustand wird in der Statuszeile angezeigt. Der Framestack befindet sich 
+in der Routine die den Stop verursacht hat.
+
+Es gibt keinen Ausweg aus dieser Situation, aber so konnte das Problem ein wenig abgemildert werden.
 
 <chapt>CVS Integration
 <p>
