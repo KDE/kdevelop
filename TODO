@@ -4,34 +4,70 @@ High priority tasks!
 1. Fixing major/annoying bugs
 -----------------------------
 
-* crashes when quit with 'close window' button
+* crashes
+  - crashes when quit with 'close window' button
 
 * konsole part:
-  * cd's when selecting a file, but doesn't when selecting a dir
+  - cd's when selecting a file, but doesn't when selecting a dir
     desired: a menu option to "cd" to that directory
-  * CTRL-C doesn't work
-  
+  - CTRL-C doesn't work
+
+* UI bugs
+  - GUI redraw blocked on Gideon startup for the time of project loading 
+  - debugger toolview are visible when the debugger isn't active
+  - new editor views are added always maximized, even in non-maximized
+    UI Childframe mode, view-taskbar missing
+  - docking state of all toolviews not restored after Gideon restart
+  - editor options dialog missing when all views are closed
+
+* debugger
+  - Trying to call the debugger for the Gideon project itself just
+     shows an error message (have to be smart about libtool)
+   
+* misc
+  - Printing files not supported
+  - Trying Java projects results in mysterious error messages
+
 2. KDevelop 2 compatibility
 ---------------------------
 
 These are things that must be accomplished before we can say that
 gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
-new file: a File menu to create a new file dammit!
+* general UI issues
+  - new file: a File menu to create a new file 
+  - no possibility of bringing back closed toolviews
+  - no possibility of switching toolviews on and off
+  - toplevel UI mode broken
+  - Window menu allows switching files only; standard functionality missing
+  - [Modified] missing in mainframe caption
 
-cppsupport:
- * new class dialog belongs in File menu
+* cppsupport:
+  - new class dialog belongs in File menu
 
-doctreeview:
- * forward/back buttons must implement history in doctreeview!
+* doctreeview:
+  - use kdoc to update Qt/KDE docs
+  - navigation toolbar
+
+* editing:
+  - setting breakpoints in qeditor texteditor (the only one that is
+    working here) impossible
+  - RMB on qeditor doesn't have the 'Switch to declaration/definition'
+    functionality
+
+* build/configuration:
+  - cross-compiling feature missing
+    
+* interoperability
+  - import/export 2.1-projects<-->Gideon-projects
 
 3. Missing UIs (other than 2)
 -----------------------------
 
 UIs that intuitively ought to be there
 
-automakemanager:
- * install, etc. targets besides "build" for subproject menus & toolbar
+* automakemanager:
+  - install, etc. targets besides "build" for subproject menus & toolbar
 
 New features
 ============
@@ -41,7 +77,6 @@ Short-Term:
 mhk: move function areas of kdevcore into separate classes
 mhk: improve documentation browsing
 mhk: find a nicer way to remove dynamic menu entries from context menus
-exa: improve new class dialog, configure file templates, add my cool templates ;)
 
 Mid-Term:
 
