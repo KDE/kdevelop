@@ -216,7 +216,7 @@ void GrepViewWidget::childFinished(bool normal, int status)
     if (status == 123 && numRows() > 1)
         status = 0;
 
-    insertItem(new ProcessListBoxItem(i18n("*** %1 match found. ***", "*** %1 matches found. ***", m_matchCount).arg(m_matchCount), ProcessListBoxItem::Diagnostic));
+    insertItem(new ProcessListBoxItem(i18n("*** %n match found. ***", "*** %n matches found. ***", m_matchCount), ProcessListBoxItem::Diagnostic));
 
     ProcessWidget::childFinished(normal, status);
     m_part->core()->running(m_part, false);
