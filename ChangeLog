@@ -1,3 +1,9 @@
+2003-09-10 Alexander Dymo <cloudtemple@mksat.net>
+    * Added the GUI to create custom code completion databases
+      based on user selected directories.
+    * Imported Kugar property editor library. Modified generic project manager
+      to use it for editing properties in build item configuration dialog.
+
 2003-09-09 Dominik Haumann <dhdev@gmx.de>
 	* parts/appwizard/appwizarddlg[base.ui,.cpp]: fixed bugs 45719, 63930, 63929
 
