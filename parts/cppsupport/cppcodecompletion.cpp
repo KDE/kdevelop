@@ -1171,7 +1171,7 @@ CppCodeCompletion::completeText( )
     }
 
     uint nLine, nCol;
-    m_pCursorIface->cursorPosition( &nLine, &nCol );
+    m_pCursorIface->cursorPositionReal( &nLine, &nCol );
     QString strCurLine = m_pEditIface->textLine( nLine );
 
     QString className;
@@ -1269,7 +1269,7 @@ CppCodeCompletion::typeOf( )
     }
 
     uint nLine, nCol;
-    m_pCursorIface->cursorPosition( &nLine, &nCol );
+    m_pCursorIface->cursorPositionReal( &nLine, &nCol );
 
     QString strCurLine = m_pEditIface->textLine( nLine );
     QValueList<KTextEditor::CompletionEntry> entries;

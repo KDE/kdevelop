@@ -31,6 +31,7 @@
 #include <kstatusbar.h>
 #include <kurl.h>
 #include <kapplication.h>
+
 #include <kconfig.h>
 #include <kdebug.h>
 
@@ -39,6 +40,29 @@
 #include <qvbox.h>
 #include <kdialogbase.h>
 
+
+class ProblemItem: public QListViewItem{
+public:
+	ProblemItem( QListView* parent, const QString& level, const QString& problem,
+				 const QString& file, const QString& line, const QString& column  )
+		: QListViewItem( parent, level, problem, file, line, column ) {}
+		
+	ProblemItem( QListViewItem* parent, const QString& level, const QString& problem,
+				 const QString& file, const QString& line, const QString& column  )
+		: QListViewItem( parent, level, problem, file, line, column ) {}
+		
+	int compare( QListViewItem* item, int column, bool ascending ) const {
+		if( column == 3 || column == 4 ){
+			int a = text( column ).toInt();
+			int b = item->text( column ).toInt();
+			if( a == b )
+				return 0;
+			return( a > b ? -1 : 1 );
+		}
+		return QListViewItem::compare( item, column, ascending );
+	}
+		
+};
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
     : QListView( parent, name ),
@@ -92,6 +116,8 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
     m_editor = dynamic_cast<KTextEditor::EditInterface*>( part );
     if( m_editor )
         connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+		
+	reparse();
 }
 
 void ProblemReporter::slotTextChanged()
@@ -144,7 +170,7 @@ void ProblemReporter::reportError( QString message,
                                    QString filename,
                                    int line, int column )
 {
-    new QListViewItem( this,
+    new ProblemItem( this,
                        "error",
                        message.replace( QRegExp("\n"), "" ),
                        filename,
@@ -156,7 +182,7 @@ void ProblemReporter::reportWarning( QString message,
                                      QString filename,
                                      int line, int column )
 {
-    new QListViewItem( this,
+    new ProblemItem( this,
                        "warning",
                        message.replace( QRegExp("\n"), "" ),
                        filename,
