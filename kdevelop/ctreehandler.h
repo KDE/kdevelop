@@ -112,7 +112,7 @@ private: // Private attributes
   QListViewItem *lastRootItem;
 
   /** Array containing all pixmaps used */
-  static QPixmap *icons;
+  static QPixmap **icons;
 
   /** Tells if the icons has been read or not. */
   static bool iconsRead;
