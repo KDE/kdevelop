@@ -2193,11 +2193,15 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
+#if QT_VERSION < 300
       font.setCharSet(charsets->charsetForEncoding(defaultFont.charset));
+#endif
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
+#if QT_VERSION < 300
       font.setCharSet(charsets->charsetForEncoding(itemData->charset));
+#endif
     }
     a[z].setFont(font);
   }
