@@ -2918,7 +2918,6 @@ AC_DEFUN(AC_CHECK_COMPILERS,
   fi
     
   if test "$GXX" = "yes"; then
-    KDE_CHECK_COMPILER_FLAG(fno-exceptions,[CXXFLAGS="$CXXFLAGS -fno-exceptions"])
     KDE_CHECK_COMPILER_FLAG(fno-check-new, [CXXFLAGS="$CXXFLAGS -fno-check-new"])
     KDE_CHECK_COMPILER_FLAG(fno-common, [CXXFLAGS="$CXXFLAGS -fno-common"])
     KDE_CHECK_COMPILER_FLAG(fexceptions, [USE_EXCEPTIONS="-fexceptions"], USE_EXCEPTIONS=	)
@@ -2926,7 +2925,6 @@ AC_DEFUN(AC_CHECK_COMPILERS,
   if test "$CXX" = "KCC"; then
     dnl unfortunately we currently cannot disable exception support in KCC
     dnl because doing so is binary incompatible and Qt by default links with exceptions :-(
-    dnl KDE_CHECK_COMPILER_FLAG(-no_exceptions,[CXXFLAGS="$CXXFLAGS --no_exceptions"])
     dnl KDE_CHECK_COMPILER_FLAG(-exceptions, [USE_EXCEPTIONS="--exceptions"], USE_EXCEPTIONS=	)
 
     AC_ARG_ENABLE(pch,[  --enable-pch            enables precompiled header support (currently only KCC) [default=no]],
@@ -4399,7 +4397,7 @@ AC_DEFUN(KDE_CHECK_INSURE,
   AC_MSG_CHECKING(if we will use Insure++ to debug)
   AC_MSG_RESULT($ac_use_insure)
   if test "$ac_use_insure" = "yes"; dnl
-       then CC="insure"; CXX="insure"; dnl CFLAGS="$CLAGS -fno-rtti -fno-exceptions "????
+       then CC="insure"; CXX="insure"; dnl CFLAGS="$CLAGS -fno-rtti "????
    fi
 ])
 
