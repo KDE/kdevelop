@@ -690,8 +690,8 @@ void CProject::updateMakefileAm(QString makefile){
 	  }
 	  QDir dir(getDir(makefile));
 //	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "qt2mdi"){
-		QString type=getProjectType();
-	  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
+          QString type=getProjectType();
+/*	  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
 	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2"))
 	  {
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
@@ -702,6 +702,21 @@ void CProject::updateMakefileAm(QString makefile){
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
 		}	
+*/
+          if (type!="normal_cpp" && type != "normal_c")
+	    stream << "\nINCLUDES = $(all_includes)\n\n";
+
+          if (QFileInfo(getProjectDir() + "am_edit").exists())
+          {
+	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
+	  }
+          else
+           if (QFileInfo(getProjectDir() + "automoc").exists())
+           {
+	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
+           }
+
+
 	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
 	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
 	}
@@ -717,17 +732,23 @@ void CProject::updateMakefileAm(QString makefile){
 	}
  
 	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
-	QString type=getProjectType();
-  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
-	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2")&& makefile == QString("Makefile.am"))
-	{
-	  stream << "dist-hook:\n\t-perl automoc\n";
-	}
-	if((type =="normal_qt2" || type=="mdi_qt2" || type=="mdi_qextmdi" ||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2") &&
-      makefile==QString("Makefile.am"))
-  {
-	  stream << "dist-hook:\n\t-perl am_edit\n";
-	}
+//	QString type=getProjectType();
+        if (makefile==QString("Makefile.am"))
+        {
+//	if((type =="normal_qt2" || type=="mdi_qt2" || type=="mdi_qextmdi" ||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2") &&
+//      )
+          if (QFileInfo(getProjectDir() + "am_edit").exists())
+          {
+           stream << "dist-hook:\n\t-perl am_edit\n";
+	  }
+          else
+//  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
+//	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2"))
+          if (QFileInfo(getProjectDir() + "automoc").exists())
+          {
+           stream << "dist-hook:\n\t-perl automoc\n";
+          }
+       }
 	//************SUBDIRS***************
 	if(!subdirs.isEmpty()){ // the SUBDIRS key
 	  stream << "\nSUBDIRS = ";
