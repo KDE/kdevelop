@@ -1,3 +1,9 @@
+2001-05-22  Harald Fernengel <harry@bnro.de>
+    * Added 2 slots activateNextWin() and activatePrevWin() to QextMdiMainFrm.
+    * Added 2 new keyboard accels: "Goto Next Window" and "Goto Previous Window"
+      to easily cycle through the open windows.
+      default-keys: Alt-PgUp and Alt-PgDown
+
 2001-05-19  Harald Fernengel <harry@bnro.de>
     * Added support for events. Define them in "eventsrc" and fire them via 
       KNotifyClient::event(). Currently we have two events: "BuildSuccess" and
