@@ -110,7 +110,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
     return;
   }
 
-  QString preferred, serviceType;
+  QString preferred, className;
 
   QString mimeType, encoding;
   if (m_presetEncoding.isNull())
@@ -131,20 +131,21 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
   KParts::Factory *factory = 0;
 
-  QString services[] = {"KTextEditor/Document", "KParts/ReadWritePart", "KParts/ReadOnlyPart"};
+  QString services[] = {"KTextEditor/Editor", "KParts/ReadWritePart", "KParts/ReadOnlyPart"};
+  QString classnames[] = {"KTextEditor::Editor", "KParts::ReadWritePart", "KParts::ReadOnlyPart"};
   for (uint i=0; i<3; ++i)
   {
     factory = findPartFactory(mimeType, services[i], preferred);
     if (factory)
     {
-      serviceType = services[i];
+      className = classnames[i];
       break;
     }
   }
 
   if (factory)
   {
-    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), serviceType));
+    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
     KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
     kdDebug() << "Encoding: " << encoding << ", extension: " << extension << endl;
     if (extension && !encoding.isNull())
@@ -333,6 +334,8 @@ bool PartController::closePart(KParts::Part *part)
   // Normally this would work, because the factory uses a QGuardedPtr to the part.
   // But the QGuardedPtr is connected to the _same_ destroyed() slot that got us to
   // that point (slots are called in an undefined order)!
+
+  // The following line can be removed with kdelibs HEAD! (2002-05-26)
   removePart( part );
 
   if (part->widget())
