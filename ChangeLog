@@ -1,3 +1,7 @@
+2002-02-03  Christian Couder <christian@kdevelop.org>
+	* Bugfix : crash in classviewpart.cpp because languageSupport()
+	was null.
+
 2002-01-16  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Java plugin api regenerated

@@ -58,7 +58,6 @@ ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
                                            actionCollection(), "class_wizard");
     setupPopup();
     m_decl_or_impl = false;
-
 }
 
 
@@ -71,24 +70,31 @@ ClassViewPart::~ClassViewPart()
     delete m_classtree;
 }
 
+bool ClassViewPart::langHasFeature(KDevLanguageSupport::Features feature)
+{
+    bool result = false;
+    if (languageSupport())
+        result = (feature & languageSupport()->features());
+    return result;
+}
 
 void ClassViewPart::setupPopup()
 {
     QPopupMenu *popup = popup_action->popupMenu();
 
-    KDevLanguageSupport::Features features = languageSupport()->features();
-    
     popup->clear();
-    if (features & KDevLanguageSupport::Declarations)
+
+    if (langHasFeature(KDevLanguageSupport::Declarations))
         popup->insertItem(i18n("Go to declaration"), this, SLOT(selectedGotoDeclaration()));
+
     popup->insertItem(i18n("Go to implementation"), this, SLOT(selectedGotoImplementation()));
     popup->insertItem(i18n("Go to class declaration"), this, SLOT(selectedGotoClassDeclaration()));
     popup->insertItem(i18n("View class hierarchy"), this, SLOT(selectedViewHierarchy()));
     popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
 
-    bool hasAddMethod = features & KDevLanguageSupport::AddMethod;
-    bool hasAddAttribute = features & KDevLanguageSupport::AddAttribute;
-    bool hasNewClass =  features & KDevLanguageSupport::NewClass;
+    bool hasAddMethod = langHasFeature(KDevLanguageSupport::AddMethod);
+    bool hasAddAttribute = langHasFeature(KDevLanguageSupport::AddAttribute);
+    bool hasNewClass = langHasFeature(KDevLanguageSupport::NewClass);
     if (hasAddMethod || hasAddAttribute || hasNewClass) 
         popup->insertSeparator();
     if (hasNewClass)

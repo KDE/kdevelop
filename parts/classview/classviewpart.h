@@ -16,6 +16,7 @@
 
 #include <qguardedptr.h>
 #include "kdevpart.h"
+#include "kdevlanguagesupport.h"
 
 
 class ClassTreeWidget;
@@ -75,6 +76,7 @@ private:
     friend class ClassTreeBase;
     friend class HierarchyDialog;
 
+    bool langHasFeature(KDevLanguageSupport::Features feature);
     void setupPopup();
     ParsedClass *getClass(const QString &className);
     void gotoDeclaration(const QString &className, const QString &memberName, ItemType type);
