@@ -109,7 +109,7 @@ void showMemUsage()
 {}
 #endif
 
-enum { KDEV_DB_VERSION = 4 };
+enum { KDEV_DB_VERSION = 5 };
 enum { KDEV_PCS_VERSION = 4 };
 
 class CppDriver: public KDevDriver
@@ -155,7 +155,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
     setInstance(CppSupportFactory::instance());
-    
+
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
 
@@ -360,12 +360,12 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 void CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
-    
+
     m_projectDirectory = URLUtil::canonicalPath( project()->projectDirectory() );
     m_projectFileList = project()->allFiles();
 
     setupCatalog();
-    
+
     m_problemReporter = new ProblemReporter( this );
     m_problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
@@ -406,7 +406,7 @@ void CppSupportPart::projectClosed( )
 	    enabledPCSs.push_back( QFileInfo(c->dbName()).baseName() );
     }
     DomUtil::writeListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs", enabledPCSs );
-    
+
     saveProjectSourceInfo();
 
     m_pCompletionConfig->store();
@@ -1442,10 +1442,10 @@ void CppSupportPart::recomputeCodeModel( const QString& fileName )
 	FileDom file = codeModel()->fileByName( fileName );
 	removeWithReferences( fileName );
     }
-    
+
     m_backgroundParser->lock();
     if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
-	
+
 	if( true /*!hasErrors*/ ){
 	    StoreWalker walker( fileName, codeModel() );
 	    walker.parseTranslationUnit( ast );
@@ -1497,7 +1497,7 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 {
     if( !QFile::exists(dbName) )
 	return;
-    
+
     QValueList<Catalog*> catalogs = codeRepository()->registeredCatalogs();
     Catalog* c = 0;
     for( QValueList<Catalog*>::Iterator it=catalogs.begin(); it!=catalogs.end(); ++it )
@@ -1507,12 +1507,12 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 	    break;
 	}
     }
-    
+
     if( c ){
 	codeRepository()->unregisterCatalog( c );
 	m_catalogList.remove( c );
     }
-    
+
     QFileInfo fileInfo( dbName );
     QDir dir( fileInfo.dir(true) );
     QStringList fileList = dir.entryList( fileInfo.baseName() + "*.idx" );
@@ -1522,7 +1522,7 @@ void CppSupportPart::removeCatalog( const QString & dbName )
 	kdDebug(9007) << "=========> remove db index: " << idxName << endl;
 	dir.remove( *it );
     }
-    
+
     dir.remove( fileInfo.fileName() );
 }
 
