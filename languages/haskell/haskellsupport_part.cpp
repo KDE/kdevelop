@@ -146,3 +146,4 @@ KMimeType::List HaskellSupportPart::mimeTypes()
 	return list;
 }
 
+#include "haskellsupport_part.moc"
