@@ -711,7 +711,7 @@ void CKAppWizard::initPages()
   // create the forth page
   page3 = new QWidget(this);
   page3->setEnabled(true);
-  addPage(page3, i18n("Headertemplate for .h-files"));
+  addPage(page3, i18n("Header template for .h-files"));
   grid1 = new QGridLayout(page3,2,3,15,7);
 
   setFinishEnabled ( page3, true );
@@ -719,7 +719,7 @@ void CKAppWizard::initPages()
   hheader = new QCheckBox( page3, "hheader" );
   hheader->setFocusPolicy( QWidget::TabFocus );
   hheader->setBackgroundMode( QWidget::PaletteBackground );
-  hheader->setText( i18n("headertemplate for .h-files") );
+  hheader->setText( i18n("header template for .h-files") );
   hheader->setAutoRepeat( FALSE );
   hheader->setAutoResize( FALSE );
   grid1->addWidget(hheader,0,0);
@@ -753,11 +753,11 @@ void CKAppWizard::initPages()
 
   QToolTip::add(hload,i18n("Press this button to select an\n"
          "existing header template file"));
-  QToolTip::add(hnew,i18n("Clears the pre-set headertemplate"));
-  QToolTip::add(hedit,i18n("Edit your headertemplate here"));
+  QToolTip::add(hnew,i18n("Clears the pre-set header template"));
+  QToolTip::add(hedit,i18n("Edit your header template here"));
 
   QWhatsThis::add(hheader, i18n("Use a standard\n"
-        "headertemplate for your headerfiles"));
+        "header template for your header files"));
 
 
   connect(hheader,SIGNAL(clicked()),SLOT(slotHeaderHeaderClicked()));
@@ -769,7 +769,7 @@ void CKAppWizard::initPages()
   // create the fifth page
   page4 = new QWidget(this);
   page4->setEnabled(true);
-  addPage(page4, i18n("Headertemplate for .cpp-files"));
+  addPage(page4, i18n("Header template for .cpp-files"));
   setFinishEnabled ( page4, true );
   grid1 = new QGridLayout(page4,2,3,15,7);
 
@@ -777,7 +777,7 @@ void CKAppWizard::initPages()
   cppheader = new QCheckBox( page4, "cppheader" );
   cppheader->setFocusPolicy( QWidget::TabFocus );
   cppheader->setBackgroundMode( QWidget::PaletteBackground );
-  cppheader->setText( i18n("headertemplate for .cpp-files") );
+  cppheader->setText( i18n("header template for .cpp-files") );
   cppheader->setAutoRepeat( FALSE );
   cppheader->setAutoResize( FALSE );
   grid1->addWidget(cppheader,0,0);
@@ -809,11 +809,11 @@ void CKAppWizard::initPages()
 
   QToolTip::add(cppload,i18n("Press this button to select an\n"
            "existing header template file"));
-  QToolTip::add(cppnew,i18n("Clears the pre-set headertemplate"));
-  QToolTip::add(cppedit,i18n("Edit your headertemplate here"));
+  QToolTip::add(cppnew,i18n("Clears the pre-set header template"));
+  QToolTip::add(cppedit,i18n("Edit your header template here"));
 
   QWhatsThis::add(cppheader, i18n("Use a standard\n"
-          "headertemplate for your implementation files"));
+          "header template for your implementation files"));
 
 
   connect(cppheader,SIGNAL(clicked()),SLOT(slotCppHeaderClicked()));
@@ -1582,11 +1582,11 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
 void CKAppWizard::slotApplicationClicked() {
   // reset some titles
   if (kdeobjcnormalitem->isSelected() || kdeobjcminiitem->isSelected() || qtobjcnormalitem->isSelected()) {
-    setTitle(page4, i18n("Headertemplate for .m-files"));
-    cppheader->setText( i18n("headertemplate for .m-files") );
+    setTitle(page4, i18n("Header template for .m-files"));
+    cppheader->setText( i18n("header template for .m-files") );
   } else {
-    setTitle(page4, i18n("Headertemplate for .cpp-files"));
-    cppheader->setText( i18n("headertemplate for .cpp-files") );
+    setTitle(page4, i18n("Header template for .cpp-files"));
+    cppheader->setText( i18n("header template for .cpp-files") );
   }
 
   apidoc->setEnabled(!citem->isSelected() && !customprojitem->isSelected());
@@ -1901,12 +1901,12 @@ void CKAppWizard::slotApplicationClicked() {
     widget1b->setBackgroundPixmap(pm);
     if (citem->isSelected())
     {
-      setTitle(page4, i18n("Headertemplate for .c-files"));
-      cppheader->setText( i18n("headertemplate for .c-files") );
+      setTitle(page4, i18n("Header template for .c-files"));
+      cppheader->setText( i18n("header template for .c-files") );
     } else if (objcitem->isSelected())
  	{
-       setTitle(page4, i18n("Headertemplate for .m-files"));
-       cppheader->setText( i18n("headertemplate for .m-files") );
+       setTitle(page4, i18n("Header template for .m-files"));
+       cppheader->setText( i18n("header template for .m-files") );
  	}
     apidoc->setChecked(false);
     datalink->setEnabled(false);
@@ -2019,9 +2019,9 @@ void CKAppWizard::slotDefaultClicked() {
 
   pm.load(locate("appdata", "pics/normalApp.png"));
 
-  setTitle(page4, i18n("Headertemplate for .cpp-files"));
+  setTitle(page4, i18n("Header template for .cpp-files"));
 
-  cppheader->setText( i18n("headertemplate for .cpp-files") );
+  cppheader->setText( i18n("header template for .cpp-files") );
 
   widget1b->setBackgroundPixmap(pm);
   applications->setSelected(kde2normalitem,true);
