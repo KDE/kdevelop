@@ -46,5 +46,12 @@ void DlgEdit::slotEditPaste(){
 }
 void DlgEdit::slotEditCut(){
 }
+
+void DlgEdit::slotEditSelectAll(){
+}
+void DlgEdit::slotEditDeselectAll(){
+}
 void DlgEdit::slotFileSave(){
+}
+void DlgEdit::slotBuildGenerate(){
 }

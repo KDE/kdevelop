@@ -80,6 +80,7 @@ CKDevelop::CKDevelop()
   config = kapp->config();
   kdev_caption=kapp->caption();
 
+  
   initView();
   initConnections();
   initKDlg();    // create the KDialogEditor
@@ -87,6 +88,7 @@ CKDevelop::CKDevelop()
   initWhatsThis();
 	
   readOptions();
+  readDockConfig();
 	
   initProject();
   setToolmenuEntries();
@@ -171,6 +173,7 @@ void CKDevelop::initView(){
 
   // the dialog editor manager
   dlgedit = new DlgEdit(widprop_split_view->getWidgetsView(),widprop_split_view->getPropertyView());
+  ComponentManager::self()->registerComponent(dlgedit);
   
   
 #warning FIXME should we swallow tools in KDevelop 2??
@@ -340,6 +343,7 @@ void CKDevelop::initKeyAccel(){
   
   
   //build menu
+  
   accel->insertItem( i18n("Compile File"), "CompileFile", IDK_BUILD_COMPILE_FILE );
   accel->connectItem( "CompileFile", this, SLOT( slotBuildCompileFile()), true, ID_BUILD_COMPILE_FILE);
   
@@ -464,11 +468,11 @@ void CKDevelop::initMenuBar(){
 
   edit_menu->insertSeparator();
   pixmap = loader->loadIcon("cut");
-  edit_menu->addCommand(ctEditCommands, cmCut, pixmap, ID_EDIT_CUT);
+  edit_menu->addCommand(ctEditCommands, cmCut, pixmap, this,SLOT(slotEditCut()),ID_EDIT_CUT);
   pixmap = loader->loadIcon("copy");
   edit_menu->addCommand(ctEditCommands, cmCopy, pixmap, this, SLOT(slotEditCopy()), ID_EDIT_COPY);
   pixmap = loader->loadIcon("paste");
-  edit_menu->addCommand(ctEditCommands, cmPaste, pixmap, ID_EDIT_PASTE);
+  edit_menu->addCommand(ctEditCommands, cmPaste, pixmap, this,SLOT(slotEditPaste()),ID_EDIT_PASTE);
 
 
   edit_menu->insertSeparator();
@@ -492,8 +496,8 @@ void CKDevelop::initMenuBar(){
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
-  edit_menu->addCommand(ctEditCommands, cmSelectAll, ID_EDIT_SELECT_ALL);
-  edit_menu->addCommand(ctEditCommands, cmDeselectAll, ID_EDIT_DESELECT_ALL);
+  edit_menu->addCommand(ctEditCommands, cmSelectAll,pixmap, this,SLOT(slotEditSelectAll()),ID_EDIT_SELECT_ALL);
+  edit_menu->addCommand(ctEditCommands, cmDeselectAll,pixmap,this,SLOT(slotEditDelectAll()), ID_EDIT_DESELECT_ALL);
   edit_menu->addCommand(ctEditCommands, cmInvertSelection, ID_EDIT_INVERT_SELECTION);
 
 
@@ -588,6 +592,8 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Build-menu entries
   build_menu = new QPopupMenu;
+  build_menu->insertItem(BarIcon("generate"),i18n("&Generate Sources..."),dlgedit,
+			       SLOT(slotBuildGenerate()),0,ID_KDLG_BUILD_GENERATE);  
   build_menu->insertItem(BarIcon("compfile"),i18n("Compile &File"),
 			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
   build_menu->insertItem(BarIcon("make"),i18n("&Make"),this,

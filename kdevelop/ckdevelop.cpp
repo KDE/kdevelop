@@ -343,35 +343,54 @@ void CKDevelop::slotEditUndoHistory(){
     
 }
 
-void CKDevelop::slotEditCut(){
-    // if editor_view->editor isn't shown don't proceed
-    if(editor_view == 0)
-	return;
+void CKDevelop::slotEditCut(){    
+    QextMdiChildView* item = mdi_main_frame->activeWindow();
+    if(item != 0){
+	if ( item->inherits("DialogView")){    
+	    dlgedit->slotEditCut();
+	}
+	if(item->inherits("EditorView")){
+	    EditorView* editorview = static_cast<EditorView*>(item);
+	    editorview->currentEditor()->cut();
+	}
+	slotStatusMsg(i18n("Ready."));
+    }
     
-
-    slotStatusMsg(i18n("Cutting..."));
-    editor_view->currentEditor()->cut();
-    slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditCopy(){
-    if(mdi_main_frame->activeWindow() == browser_view){
-	slotStatusMsg(i18n("Copying..."));
-	browser_widget->slotCopyText();
-	slotStatusMsg(i18n("Ready."));
+    QextMdiChildView* item = mdi_main_frame->activeWindow();
+    if(item != 0){
+	if ( item->inherits("DialogView")){    
+	    dlgedit->slotEditCopy();
+	}
+	if(item->inherits("EditorView")){
+	    EditorView* editorview = static_cast<EditorView*>(item);
+	    editorview->currentEditor()->copy();
+	}
+	
+	if(item->inherits("DocBrowserView")){
+	    browser_widget->slotCopyText();
+	    slotStatusMsg(i18n("Ready."));
+	}
     }
 }
 
 
 void CKDevelop::slotEditPaste(){
-  // if editor_view->editor isn't shown don't proceed
-    if(editor_view == 0)
-	return;
-    
-    slotStatusMsg(i18n("Pasting selection..."));
-    editor_view->currentEditor()->paste();
-    slotStatusMsg(i18n("Ready."));
+    QextMdiChildView* item = mdi_main_frame->activeWindow();
+    if(item != 0){
+	if ( item->inherits("DialogView")){    
+	    dlgedit->slotEditPaste();
+	}
+	if(item->inherits("EditorView")){
+	    EditorView* editorview = static_cast<EditorView*>(item);
+	    editorview->currentEditor()->paste();
+	}
+	slotStatusMsg(i18n("Ready."));
+    }
+ 
 }
 
 
@@ -462,17 +481,35 @@ void CKDevelop::slotEditSpellcheck(){
 
 
 void CKDevelop::slotEditSelectAll(){
-  // if editor_view->editor isn't shown don't proceed
-    if(editor_view == 0)
-	return;
-    slotStatusMsg(i18n("Selecting all..."));
-    editor_view->currentEditor()->selectAll();
-    slotStatusMsg(i18n("Ready."));
+
+    QextMdiChildView* item = mdi_main_frame->activeWindow();
+    if(item != 0){
+	if ( item->inherits("DialogView")){    
+	    dlgedit->slotEditSelectAll();
+	}
+	if(item->inherits("EditorView")){
+	    EditorView* editorview = static_cast<EditorView*>(item);
+	    editorview->currentEditor()->selectAll();
+	}
+	slotStatusMsg(i18n("Ready."));
+    }
+
+  
 }
 
 void CKDevelop::slotEditDeselectAll(){
-    if(editor_view != 0)
-	editor_view->currentEditor()->deselectAll();
+    QextMdiChildView* item = mdi_main_frame->activeWindow();
+    if(item != 0){
+	if ( item->inherits("DialogView")){    
+	    dlgedit->slotEditDeselectAll();
+	}
+	if(item->inherits("EditorView")){
+	    EditorView* editorview = static_cast<EditorView*>(item);
+	    editorview->currentEditor()->deselectAll();
+	}
+	slotStatusMsg(i18n("Ready."));
+    }
+   
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -2362,9 +2399,31 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
       DialogView* dialog_view = static_cast<DialogView*>(item);
       // TODO
       dlgedit->setCurrentDialogWidget(dialog_view->dialogWidget());
+      disableCommand(ID_FILE_SAVE_AS);
+      enableCommand(ID_FILE_CLOSE);
       
+      disableCommand(ID_FILE_PRINT);
+      enableCommand(ID_EDIT_PASTE);
+      
+      disableCommand(ID_EDIT_INSERT_FILE);
+      disableCommand(ID_EDIT_SEARCH);
+      disableCommand(ID_EDIT_REPEAT_SEARCH);
+      disableCommand(ID_EDIT_REPLACE);
+      disableCommand(ID_EDIT_SPELLCHECK);
+      disableCommand(ID_EDIT_INDENT);
+      disableCommand(ID_EDIT_UNINDENT);
+      enableCommand(ID_EDIT_SELECT_ALL);
+      enableCommand(ID_EDIT_DESELECT_ALL);
+      disableCommand(ID_EDIT_INVERT_SELECTION);
+      disableCommand(ID_BUILD_COMPILE_FILE);
+      
+      if(bAutoswitch){	
+	  t_tab_view->setCurrentTab(DLG);
+	  
+      }
       
     }
+    
     
     if(browser_view == item){ // browser selected TODO tools
 	cerr << "BROWSER";

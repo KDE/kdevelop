@@ -282,6 +282,7 @@
 #define LFV 1
 #define RFV 2
 #define DOC 3
+#define DLG 4
 
 ///////////////////////////////////////////////////////////////////
 // tab-ID's for the messages_widget

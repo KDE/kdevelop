@@ -976,6 +976,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
   config->writeEntry("Recent Projects", recent_projects);
   
+  writeDockConfig();
   config->sync();
 }
 

@@ -43,7 +43,10 @@ class DlgEdit : public QObject, public Component  {
     void slotEditCopy();
     void slotEditPaste();
     void slotEditCut();
+    void slotEditSelectAll();
+    void slotEditDeselectAll();
     void slotFileSave();
+    void slotBuildGenerate();
     
     
  private:
