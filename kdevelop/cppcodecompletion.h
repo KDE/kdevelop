@@ -63,11 +63,11 @@ protected:
     void getParentMethodListForClass( CParsedClass* pClass, QString strMethod, QStringList& methodList );
     QStringList getFunctionList( QString strMethod );
     QString evaluateExpression( const QString& expr,
-                                const QValueList<SimpleVariable>& roo,
+                                SimpleContext* ctx,
                                 CClassStore* sigma );
     int expressionAt( const QString& text, int index );
     QValueList<CompletionEntry> getEntryListForExpr( const QString& expr,
-                                                     const QValueList<SimpleVariable>& vars );
+                                                     SimpleContext* ctx );
     QValueList<CompletionEntry> getEntryListForClass ( QString strClass );
     QStringList splitExpression( const QString& text );
 

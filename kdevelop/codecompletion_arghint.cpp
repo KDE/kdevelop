@@ -213,6 +213,7 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
 
 	if ( m_nCurLine > 0 && m_nCurLine != nLine)
 	{
+            //kdDebug() << "-----------> case 1" << endl;
 		hide();
 		emit argHintHided();
 		return;
@@ -243,6 +244,9 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
 	//nBegin != -1 && strLineAfterCursor.findRev ( m_strArgWrapping[1] ) != -1 ) // the first wrap was found before the cursor and the second beyond
 	{
 		hide();
+                //kdDebug() << "m_strArgWrapping = " << m_strArgWrapping << endl;
+                //kdDebug() << "nBegin = " << nBegin << endl;
+                //kdDebug() << "-----------> case 2" << endl;
 		emit argHintHided();
 		//m_nCurLine = 0; // reset m_nCurLine so that ArgHint is finished
 	}
@@ -343,7 +347,7 @@ QString KDevArgHint::markCurArg()
 	while ( strFuncText.find ( ' ', 0 ) != -1 ) // replace ' ' with "&ndsp;" so that there's no wrap
 		strFuncText = strFuncText.replace ( ( strFuncText.find ( ' ', 0 ) ), 1, "&nbsp;" );
 
-	kdDebug ( 12001 ) << strFuncText <<endl;
+	kdDebug() << strFuncText <<endl;
 
 	return strFuncText;
 }

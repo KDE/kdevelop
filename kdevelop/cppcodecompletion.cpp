@@ -445,7 +445,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 }
 
 QString CppCodeCompletion::evaluateExpression( const QString& expr,
-                                               const QValueList<SimpleVariable>& roo,
+                                               SimpleContext* ctx,
                                                CClassStore* sigma )
 {
     QStringList exprs = splitExpression( expr );
@@ -454,7 +454,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     }
 
 
-    SimpleVariable v_this = SimpleParser::findVariable( roo, "this" );
+    SimpleVariable v_this = ctx->findVariable( "this" );
     QString type;
 
     CParsedClass* pThis = sigma->getClassByName( v_this.type );
@@ -476,7 +476,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
             e1 = e1.left( first_paren_index ).stripWhiteSpace();
             type = getTypeOfMethod( pThis, e1 );
         } else {
-            SimpleVariable v = SimpleParser::findVariable( roo, e1 );
+            SimpleVariable v = ctx->findVariable( e1 );
             if( v.type ){
                 type = v.type;
             } else {
@@ -564,9 +564,9 @@ QString CppCodeCompletion::getTypeOfAttribute( CParsedClass* pClass, const QStri
 
 QValueList<CompletionEntry>
 CppCodeCompletion::getEntryListForExpr( const QString& expr,
-                                        const QValueList<SimpleVariable>& vars )
+                                        SimpleContext* ctx )
 {
-    QString type = evaluateExpression( expr, vars, m_pStore );
+    QString type = evaluateExpression( expr, ctx, m_pStore );
     kdDebug() << "--------> type = " << type << endl;
     QValueList<CompletionEntry> entries = getEntryListForClass( type );
     return entries;
@@ -813,64 +813,6 @@ QStringList CppCodeCompletion::getFunctionList( QString strMethod )
 }
 
 
-#if 0
-
-QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
-{
-    kdDebug() << "CppCodeCompletion::getMethodBody()" << endl;
-
-    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
-
-    QRegExp qt_rx( "Q_[A-Z]+" );
-    QRegExp newline_rx( "\n" );
-    QRegExp const_rx( "[ \t]*const[ \t]*" );
-    QRegExp comment_rx( "//[^\n]*" );
-    QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
-
-
-    QString text;
-    for( int i=0; i<iLine; ++i ){
-        text += m_edit->textLine( i ).simplifyWhiteSpace() + "\n";
-    }
-    kdDebug() << ".... 1 " << endl;
-    text += m_edit->textLine( iLine ).left( iCol );
-
-    text = remove_comment( text );
-    text = remove( text, '[', ']' );
-    kdDebug() << ".... 2 " << endl;
-
-    text = text
-           .replace( qt_rx, "" )
-           .replace( const_rx, "" )
-           .replace( comment_rx, "" )
-           .replace( preproc_rx, "" )
-           .replace( newline_rx, " " );
-
-    kdDebug() << ".... 3 " << endl;
-
-    QValueList<KDevRegExpCap> methods = regMethod.findAll( text );
-    if( methods.count() == 0 ){
-        kdDebug() << "no method found!!!" << endl;
-        return QString::null;
-    }
-    kdDebug() << ".... 4 " << endl;
-
-    KDevRegExpCap m = methods.last();
-
-    kdDebug() << "------------------------> m.start = " << m.start() << endl;
-    text = text.mid( m.start() );
-    regMethod.search( m.text() );
-    text.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
-    if( classname ){
-        *classname = regMethod.cap( 1 );
-    }
-
-    kdDebug() << ".... 5 " << endl;
-
-    return text;
-}
-
-#else
 
 QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 {
@@ -936,8 +878,6 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
     return QString::null;
 }
 
-#endif
-
 void CppCodeCompletion::completeText()
 {
     int nLine = m_edit->view()->cursorPosition().y();
@@ -955,14 +895,16 @@ void CppCodeCompletion::completeText()
 
     contents = getMethodBody( nLine, nCol, &className );
     kdDebug() << "contents = " << contents << endl;
-
     kdDebug() << "classname = " << className << endl;
-    QValueList<SimpleVariable> variableList = SimpleParser::localVariables( contents );
+
+    SimpleContext* ctx = SimpleParser::localVariables( contents );
+    QValueList<SimpleVariable> variableList;
     SimpleVariable v;
     v.name = "this";
-    v.scope = 1;
     v.type = className;
     variableList.append( v );
+
+    ctx->add( v );
 
     QString word;
     int start_expr = expressionAt( contents, contents.length() - 1 );
@@ -986,17 +928,28 @@ void CppCodeCompletion::completeText()
     kdDebug() << "expr = |" << expr << "|" << endl;
 
     if( showArguments ){
-        QString type = evaluateExpression( expr, variableList, m_pStore );
+        QString type = evaluateExpression( expr, ctx, m_pStore );
         QStringList functionList = getMethodListForClass( type, word );
         showArgHint( functionList, "()", "," );
     } else {
         QValueList<CompletionEntry> entries;
-        entries = unique( getEntryListForExpr( expr, variableList ) );
+        QString type;
+
+        SimpleVariable v = ctx->findVariable( word );
+        if( expr.isEmpty() && !v.type.isEmpty() ){
+            type = v.type;
+        } else {
+            type = evaluateExpression( expr, ctx, m_pStore );
+        }
+
+        entries = unique( getEntryListForClass( type ) );
         if( entries.count() ){
             showCompletionBox( entries, word.length() );
         }
     }
 
+    delete( ctx );
+    ctx = 0;
 }
 
 bool CppCodeCompletion::checkEnd(const QString &str, const QString &suffix)

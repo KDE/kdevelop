@@ -24,33 +24,74 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
-#include <qstringlist.h>
 
 class SimpleVariable{
 public:
     SimpleVariable()
-        : scope( 0 ), name( QString::null ), type( QString::null ){}
+        : name( QString::null ), type( QString::null ){}
     SimpleVariable( const SimpleVariable& source )
-        : scope( source.scope ), name( source.name ), type( source.type ) {}
+        : name( source.name ), type( source.type ) {}
     ~SimpleVariable(){}
 
     SimpleVariable& operator = ( const SimpleVariable& source ){
-        scope = source.scope;
         name = source.name;
         type = source.type;
         return *this;
     }
 
-    int scope;
     QString name;
     QString type;
 };
 
+class SimpleContext{
+public:
+    SimpleContext( SimpleContext* prev=0 )
+        : m_prev( prev ) {}
+
+    virtual ~SimpleContext()
+        {}
+
+    SimpleContext* prev() const
+        { return m_prev; }
+
+    void attach( SimpleContext* ctx )
+        { m_prev = ctx; }
+
+    void detach()
+        { m_prev = 0; }
+
+    const QValueList<SimpleVariable>& vars() const
+        { return m_vars; }
+
+    void add( const SimpleVariable& v )
+        { m_vars.append( v ); }
+
+    void add( const QValueList<SimpleVariable>& vars )
+        { m_vars += vars; }
+
+    SimpleVariable findVariable( const QString& varname )
+        {
+            SimpleContext* ctx = this;
+            while( ctx ){
+                const QValueList<SimpleVariable>& vars = ctx->vars();
+                for( int i=vars.count() - 1; i>=0; --i ){
+                    SimpleVariable v = vars[ i ];
+                    if( v.name == varname )
+                        return v;
+                }
+                ctx = ctx->prev();
+            }
+            return SimpleVariable();
+        }
+
+private:
+    QValueList<SimpleVariable> m_vars;
+    SimpleContext* m_prev;
+};
+
 class SimpleParser{
 public:
-    static SimpleVariable findVariable( const QValueList<SimpleVariable>&, const QString& );
-    static QValueList<SimpleVariable> localVariables( QString contents );
-    static QValueList<SimpleVariable> parseFile( const QString& filename );
+    static SimpleContext* localVariables( QString contents );
 };
 
 #endif

@@ -1,3 +1,6 @@
+2002-02-26  Roberto Raggi <raggi@cli.di.unipi.it>
+    * added scope support
+
 2002-02-26  Walter Tasin <tasin@kdevelop.org>
     * bugfix: switching between source/header considers now other source
       extensions

@@ -21,13 +21,13 @@
 
 #include "simpleparser.h"
 #include "kdevregexp.h"
-#include "kdevregexp.h"
 
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
+
 #include <kregexp.h>
 #include <kdebug.h>
 
@@ -71,7 +71,8 @@ static QString remove_comment( QString text ){
     return s;
 }
 
-QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
+SimpleContext* SimpleParser::localVariables( QString contents ){
+
     QValueList<SimpleVariable> vars;
 
     QRegExp ws( "[ \t]+" );
@@ -95,11 +96,13 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
         .replace( QRegExp("\\}"), ";};" )
         ;
 
-    kdDebug() << "contents = " << contents << endl;
+    //kdDebug() << "contents = " << contents << endl;
 
     QStringList lines = QStringList::split( ";", contents );
 
     KDevRegExp decl_rx( "^[ \t]*([a-zA-Z0-9_<>:]+)[ \t]+([a-zA-Z0-9_]+)[^{]*$" );
+
+    SimpleContext* ctx = new SimpleContext();
 
     int lev = 0;
     QStringList::Iterator it = lines.begin();
@@ -114,8 +117,15 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
         if( line.find("{") != -1 ){
             ++lev;
+            ctx = new SimpleContext( ctx );
         } else if( line.find("}") != -1 ){
             --lev;
+            if( ctx ){
+                SimpleContext* sv_ctx = ctx;
+                ctx = ctx->prev();
+                sv_ctx->detach();
+                delete( sv_ctx );
+            }
         }
 
         if( line.startsWith("(") || line.isEmpty() ){
@@ -131,43 +141,19 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
                 QStringList vlist = QStringList::split( ",", rest);
                 for( QStringList::Iterator it=vlist.begin(); it!=vlist.end(); ++it ){
                     SimpleVariable var;
-                    var.scope = lev;
                     var.type = type;
                     var.name = *it;
-                    vars.append( var );
+                    ctx->add( var );
                 }
-//                qDebug( "lev = %d - type = %s - vars = %s",
+//                qDebug( "ctx = %p - lev = %d - type = %s - vars = %s",
+//                        ctx,
 //                        lev,
 //                        type.latin1(),
 //                        vlist.join(", ").latin1() );
             }
         }
     }
-    return vars;
+
+    return ctx;
 }
 
-QValueList<SimpleVariable> SimpleParser::parseFile( const QString& filename ){
-    QValueList<SimpleVariable> vars;
-    qDebug( "-----------------------------------------------------------" );
-    QFile f( filename );
-    if( f.open(IO_ReadOnly) ){
-        QTextStream in( &f );
-        QString contents = in.read();
-        vars = localVariables( contents );
-        f.close();
-    }
-    qDebug( "-----------------------------------------------------------" );
-    return vars;
-}
-
-
-SimpleVariable SimpleParser::findVariable( const QValueList<SimpleVariable>& vars,
-                                           const QString& varname )
-{
-    for( int i=vars.count() - 1; i>=0; --i ){
-        SimpleVariable v = vars[ i ];
-        if( v.name == varname ) // TODO: check variable's scope
-            return v;
-    }
-    return SimpleVariable();
-}
