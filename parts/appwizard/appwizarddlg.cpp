@@ -178,7 +178,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 //    QRegExp appname_regexp ("[a-zA-Z][a-zA-Z0-9_]*"); //Non-Unicode version
     /* appname will start with a letter, and will contain letters,
        digits or underscores. */
-    QRegExp appname_regexp ("\\w+"); //Unicode version.
+    QRegExp appname_regexp ("[a-zA-Z][a-zA-Z0-9_]*");
     // How about names like "__" or "123" for project name? Are they legal?
     QRegExpValidator *appname_edit_validator;
     appname_edit_validator = new QRegExpValidator (appname_regexp,
