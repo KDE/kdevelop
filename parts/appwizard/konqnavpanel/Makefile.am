@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 konqnavpaneldir = ${appwizarddatadir}/template-konqnavpanel
 templatedir = ${appwizarddatadir}/templates
 
-konqnavpanel_DATA = konqnavpanel.cpp konqnavpanel.h konqnavpanel.desktop konqnavpanel.kdevelop src-Makefile.am \
-	      konqnavpanel.png subdirs
+konqnavpanel_DATA = konqnavpanel.cpp konqnavpanel.h konqnavpanel.desktop konqnavpanel.kdevelop src-Makefile.am 	      konqnavpanel.png subdirs
 template_DATA = konqnavpanel
 
 DISTCLEANFILES = script.local

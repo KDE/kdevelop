@@ -4,11 +4,7 @@ kde_module_LTLIBRARIES = libkdevtools.la
 libkdevtools_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevtools_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevtools_la_SOURCES = tools_part.cpp toolsconfig.cpp \
-			  toolsconfigwidgetbase.ui \
-			  toolsconfigwidget.cpp \
-			  kapplicationtree.cpp \
-			  addtooldlg.ui addtooldlg.ui.h
+libkdevtools_la_SOURCES = tools_part.cpp toolsconfig.cpp toolsconfigwidgetbase.ui toolsconfigwidget.cpp kapplicationtree.cpp addtooldlg.ui
 
 METASOURCES = AUTO
 

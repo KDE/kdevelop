@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = libkdevhistory.la
 libkdevhistory_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevhistory_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevhistory_la_SOURCES = historypart.cpp 
+libkdevhistory_la_SOURCES = historypart.cpp
 
 METASOURCES = AUTO
 

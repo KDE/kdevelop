@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kcmoduledir = ${appwizarddatadir}/template-kcmodule
 templatedir = ${appwizarddatadir}/templates
 
-kcmodule_DATA = module.cpp module.h module.desktop module.kdevelop src-Makefile.am \
-                kcmodule.png subdirs
+kcmodule_DATA = module.cpp module.h module.desktop module.kdevelop src-Makefile.am                 kcmodule.png subdirs
 template_DATA = kcmodule
 
 DISTCLEANFILES = script.local

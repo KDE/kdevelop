@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 khellodir = ${appwizarddatadir}/template-khello
 templatedir = ${appwizarddatadir}/templates
 
-khello_DATA = src-Makefile.am app.cpp app.h main.cpp \
-              appui.rc app.kdevelop subdirs app.desktop
+khello_DATA = src-Makefile.am app.cpp app.h main.cpp               appui.rc app.kdevelop subdirs app.desktop
 template_DATA = khello
 
 DISTCLEANFILES = script.local

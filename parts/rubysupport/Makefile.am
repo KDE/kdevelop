@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = libkdevrubysupport.la
 libkdevrubysupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevrubysupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevrubysupport_la_SOURCES = rubysupport_part.cpp rubyconfigwidgetbase.ui rubyconfigwidget.cpp rubyconfigwidget.h
+libkdevrubysupport_la_SOURCES = rubysupport_part.cpp rubyconfigwidgetbase.ui rubyconfigwidget.cpp
 
 METASOURCES = AUTO
 

@@ -3,9 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kappjavadir = ${appwizarddatadir}/template-kappjava
 templatedir = ${appwizarddatadir}/templates
 
-kappjava_DATA = app.java pref.java appview.java \
-                app_client.java appui.rc src-Makefile.am \
-                kappjava.png app.kdevelop subdirs
+kappjava_DATA = app.java pref.java appview.java                 app_client.java appui.rc src-Makefile.am                 kappjava.png app.kdevelop subdirs
 template_DATA = kappjava
 
 DISTCLEANFILES = script.local

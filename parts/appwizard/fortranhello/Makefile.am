@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 fortranhellodir = ${appwizarddatadir}/template-fortranhello
 templatedir = ${appwizarddatadir}/templates
 
-fortranhello_DATA = main.f src-Makefile.am fortran-Makefile.am fortran-Makefile.cvs \
-		configure.in fortranhello.png app.kdevelop
+fortranhello_DATA = main.f src-Makefile.am fortran-Makefile.am fortran-Makefile.cvs 		configure.in fortranhello.png app.kdevelop
 template_DATA = fortranhello
 
 DISTCLEANFILES = script.local

@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 qmakesimpledir = ${appwizarddatadir}/template-qmakesimple
 templatedir = ${appwizarddatadir}/templates
 
-qmakesimple_DATA = main.cpp  \
-		 qmakesimple.png app.kdevelop app.pro src.pro
+qmakesimple_DATA = main.cpp  		 qmakesimple.png app.kdevelop app.pro src.pro
 template_DATA = qmakesimple
 
 DISTCLEANFILES = script.local

@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevperforce.la
 libkdevperforce_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevperforce_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevperforce_la_SOURCES = perforcepart.cpp \
-			     commitdlg.cpp
+libkdevperforce_la_SOURCES = perforcepart.cpp commitdlg.cpp
 
 METASOURCES = AUTO
 

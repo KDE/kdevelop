@@ -1,18 +1,13 @@
 # Here resides the Python support part.
 # Do not confuse this with the python part responsible for KDevelop scripting
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces \
-           -I$(top_srcdir)/lib/sourceinfo \
-           -I$(top_srcdir)/lib/util \
-           $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces            -I$(top_srcdir)/lib/sourceinfo            -I$(top_srcdir)/lib/util            $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevpythonsupport.la kio_pydoc.la
 
 libkdevpythonsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevpythonsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
-libkdevpythonsupport_la_SOURCES = pythonsupportpart.cpp \
-				  pythonconfigwidget.cpp \
-				  pythonconfigwidgetbase.ui
+libkdevpythonsupport_la_SOURCES = pythonsupportpart.cpp pythonconfigwidget.cpp pythonconfigwidgetbase.ui
 
 kio_pydoc_la_SOURCES = pydoc.cpp
 kio_pydoc_la_LIBADD = $(LIB_KIO)

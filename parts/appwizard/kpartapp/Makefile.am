@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kpartappdir = ${appwizarddatadir}/template-kpartapp
 templatedir = ${appwizarddatadir}/templates
 
-kpartapp_DATA = src-Makefile.am app.cpp app.h app_part.cpp app_part.h main.cpp \
-                app_part.rc app_shell.rc kpartapp.png app.kdevelop subdirs
+kpartapp_DATA = src-Makefile.am app.cpp app.h app_part.cpp app_part.h main.cpp                 app_part.rc app_shell.rc kpartapp.png app.kdevelop subdirs
 template_DATA = kpartapp
 
 DISTCLEANFILES = script.local

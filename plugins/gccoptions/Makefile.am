@@ -12,7 +12,7 @@ METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevgccoptions.desktop kdevgppoptions.desktop kdevg77options.desktop
-AM_CFLAGS = 
-AM_CXXFLAGS = 
-AM_FFLAGS = 
-SUBDIRS = 
+
+
+
+

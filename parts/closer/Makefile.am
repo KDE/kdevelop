@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevcloser.la
 libkdevcloser_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevcloser_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevcloser_la_SOURCES = closer_part.cpp closer_dialog.ui closer_dialogimpl.cpp closer_dialogimpl.h
+libkdevcloser_la_SOURCES = closer_part.cpp closer_dialog.ui closer_dialogimpl.cpp
 
 METASOURCES = AUTO
 

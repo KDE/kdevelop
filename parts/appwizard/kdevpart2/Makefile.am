@@ -3,9 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kdevpart2dir = ${appwizarddatadir}/template-kdevpart2
 templatedir = ${appwizarddatadir}/templates
 
-kdevpart2_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h \
-		kdevpart_widget.h kdevpart_widget.cpp \
-		kdevpart_part.rc kdevpart.desktop app.kdevelop kdevpart-configure.in.in
+kdevpart2_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h 		kdevpart_widget.h kdevpart_widget.cpp 		kdevpart_part.rc kdevpart.desktop app.kdevelop kdevpart-configure.in.in
 template_DATA = kdevpart2
 
 noinst_SCRIPTS = script.local

@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kioslavedir = ${appwizarddatadir}/template-kioslave
 templatedir = ${appwizarddatadir}/templates
 
-kioslave_DATA = slave.cpp slave.h slave.protocol slave.kdevelop src-Makefile.am \
-                kioslave.png subdirs
+kioslave_DATA = slave.cpp slave.h slave.protocol slave.kdevelop src-Makefile.am                 kioslave.png subdirs
 template_DATA = kioslave
 
 DISTCLEANFILES = script.local

@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 chellodir = ${appwizarddatadir}/template-chello
 templatedir = ${appwizarddatadir}/templates
 
-chello_DATA = main.c src-Makefile.am c-Makefile.am c-Makefile.cvs \
-	      configure.in chello.png app.kdevelop
+chello_DATA = main.c src-Makefile.am c-Makefile.am c-Makefile.cvs 	      configure.in chello.png app.kdevelop
 template_DATA = chello
 
 DISTCLEANFILES = script.local

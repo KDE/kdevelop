@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 cpphellodir = ${appwizarddatadir}/template-cpphello
 templatedir = ${appwizarddatadir}/templates
 
-cpphello_DATA = main.cpp src-Makefile.am cpp-Makefile.am cpp-Makefile.cvs \
-		configure.in cpphello.png app.kdevelop
+cpphello_DATA = main.cpp src-Makefile.am cpp-Makefile.am cpp-Makefile.cvs 		configure.in cpphello.png app.kdevelop
 template_DATA = cpphello
 
 DISTCLEANFILES = script.local

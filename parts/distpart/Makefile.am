@@ -4,8 +4,7 @@ kde_module_LTLIBRARIES = libkdevdistpart.la
 libkdevdistpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdistpart_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevdistpart_la_SOURCES = distpart_ui.ui distpart_part.cpp \
-	 distpart_widget.cpp packagebase.cpp lsmsupport.cpp specsupport.cpp
+libkdevdistpart_la_SOURCES = distpart_ui.ui distpart_part.cpp distpart_widget.cpp packagebase.cpp lsmsupport.cpp specsupport.cpp
 
 METASOURCES = AUTO
 KDEICON = AUTO

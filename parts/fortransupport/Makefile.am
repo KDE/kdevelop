@@ -6,10 +6,7 @@ kde_module_LTLIBRARIES = libkdevfortransupport.la
 libkdevfortransupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevfortransupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevfortransupport_la_SOURCES = fortransupportpart.cpp \
-				   fixedformparser.cpp \
-				   ftnchekconfigwidget.cpp \
-				   ftnchekconfigwidgetbase.ui
+libkdevfortransupport_la_SOURCES = fortransupportpart.cpp fixedformparser.cpp ftnchekconfigwidget.cpp ftnchekconfigwidgetbase.ui
 
 METASOURCES = AUTO
 

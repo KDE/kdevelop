@@ -6,13 +6,7 @@ kde_module_LTLIBRARIES = libkdevdoxygen.la
 libkdevdoxygen_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdoxygen_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevdoxygen_la_SOURCES = doxygenpart.cpp \
-			    doxygenconfigwidget.cpp \
-			    input.cpp \
-			    config.cpp \
-			    version.cpp \
-			    messages.cpp \
-			    config.h
+libkdevdoxygen_la_SOURCES = doxygenpart.cpp doxygenconfigwidget.cpp input.cpp config.cpp version.cpp messages.cpp
 
 METASOURCES = AUTO
 

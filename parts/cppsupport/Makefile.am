@@ -8,10 +8,10 @@ kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
 libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
 
-libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui cppnewclassdlgbase.ui cppnewclassdlg.cpp kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp implementmethodsdialog.ui implementmethodsdialog.ui.h cppsupport_events.h ast_utils.h ast_utils.cpp store_walker.h store_walker.cpp realtime_classbrowser.h realtime_classbrowser.cpp subclassingdlg.cpp subclassingdlgbase.ui addmethoddialogbase.ui addmethoddialog.cpp addattributedialogbase.ui addattributedialog.cpp addattributedialog.h KDevCppSupportIface.h KDevCppSupportIface.cpp KDevCppSupportIface.skel classgeneratorconfigbase.ui classgeneratorconfig.cpp classgeneratorconfig.h cppsupportfactory.cpp cppsupportfactory.h tag_creator.cpp codeinformationrepository.h codeinformationrepository.cpp cpp_tags.h doxydoc.cpp doxydoc.h cppcodecompletionconfig.h cppcodecompletionconfig.cpp
+libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp ccconfigwidgetbase.ui cppnewclassdlgbase.ui cppnewclassdlg.cpp kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp configproblemreporter.ui backgroundparser.cpp implementmethodsdialog.ui ast_utils.cpp store_walker.cpp realtime_classbrowser.cpp subclassingdlg.cpp subclassingdlgbase.ui addmethoddialogbase.ui addmethoddialog.cpp addattributedialogbase.ui addattributedialog.cpp KDevCppSupportIface.cpp KDevCppSupportIface.skel classgeneratorconfigbase.ui classgeneratorconfig.cpp cppsupportfactory.cpp tag_creator.cpp codeinformationrepository.cpp doxydoc.cpp cppcodecompletionconfig.cpp
 
-EXTRA_DIST =
-DISTCLEANFILES =
+
+
 
 METASOURCES = AUTO
 
@@ -23,11 +23,11 @@ rc_DATA = kdevcppsupport.rc
 
 templatedir = ${kde_datadir}/kdevabbrev/templates
 template_DATA = cpptemplates
-AM_CFLAGS =
+
 AM_CXXFLAGS = -DAST_DEBUG
-AM_FFLAGS =
-bin_PROGRAMS =  r++
+
+bin_PROGRAMS = r++
 r___LDFLAGS = $(all_libraries)
-r___SOURCES = main.cpp cppsupportfactory.h
+r___SOURCES = main.cpp
 r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la

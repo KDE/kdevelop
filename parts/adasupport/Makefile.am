@@ -2,24 +2,13 @@
 # Here resides the Ada support part.
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-INCLUDES = 	-I$(top_srcdir)/lib/antlr \
-		-I$(top_srcdir)/lib/interfaces \
-		-I$(top_srcdir)/lib/sourceinfo \
-		$(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/antlr 		-I$(top_srcdir)/lib/interfaces 		-I$(top_srcdir)/lib/sourceinfo 		$(all_includes)
 
 kde_module_LTLIBRARIES = libkdevadasupport.la
-libkdevadasupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN) 
-libkdevadasupport_la_LIBADD  = $(top_builddir)/lib/libkdevelop.la \
-				$(top_builddir)/lib/antlr/src/libantlr.la
+libkdevadasupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
+libkdevadasupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la 				$(top_builddir)/lib/antlr/src/libantlr.la
 
-libkdevadasupport_la_SOURCES = adasupportpart.cpp \
-				problemreporter.cpp \
-				backgroundparser.cpp \
-				addclassdlg.ui addclass.cpp \
-				configproblemreporter.ui \
-                                ada_utils.cpp adasupport.cpp \
-                                AdaLexer.cpp AdaParser.cpp AdaTreeParserSuper.cpp \
-                                AdaStoreWalker.cpp
+libkdevadasupport_la_SOURCES = adasupportpart.cpp problemreporter.cpp backgroundparser.cpp addclassdlg.ui addclass.cpp configproblemreporter.ui ada_utils.cpp adasupport.cpp AdaLexer.cpp AdaParser.cpp AdaTreeParserSuper.cpp AdaStoreWalker.cpp
 
 METASOURCES = AUTO
 

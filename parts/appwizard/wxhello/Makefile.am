@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 wxhellodir = ${appwizarddatadir}/template-wxhello
 templatedir = ${appwizarddatadir}/templates
 
-wxhello_DATA = src-Makefile.am app.cpp app.h \
-               app.kdevelop subdirs app.desktop
+wxhello_DATA = src-Makefile.am app.cpp app.h                app.kdevelop subdirs app.desktop
 template_DATA = wxhello
 
 DISTCLEANFILES = script.local

@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 kdedcopdir = ${appwizarddatadir}/template-kdedcop
 templatedir = ${appwizarddatadir}/templates
 
-kdedcop_DATA = app.cpp app.h app_iface.h app.kdevelop main.cpp mainclass.cpp mainclass.h \
-         kdedcop.png src-Makefile.am subdirs
+kdedcop_DATA = app.cpp app.h app_iface.h app.kdevelop main.cpp mainclass.cpp mainclass.h          kdedcop.png src-Makefile.am subdirs
 template_DATA = kdedcop
 
 DISTCLEANFILES = script.local

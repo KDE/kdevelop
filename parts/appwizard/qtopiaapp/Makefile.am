@@ -3,8 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 qtopiaappdir = ${appwizarddatadir}/template-qtopiaapp
 templatedir = ${appwizarddatadir}/templates
 
-qtopiaapp_DATA = Example.png  app.kdevelop  example.control  example.desktop  example.html    main.cpp \
-	Makefile.am  app.pro       example.cpp      example.h        examplebase.ui  qtopiaapp
+qtopiaapp_DATA = Example.png  app.kdevelop  example.control  example.desktop  example.html    main.cpp 	Makefile.am  app.pro       example.cpp      example.h        examplebase.ui  qtopiaapp
 
 template_DATA = qtopiaapp
 

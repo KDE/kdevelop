@@ -4,11 +4,11 @@ INCLUDES = -I$(top_srcdir)/lib/qextmdi/include -I$(top_srcdir)/lib/qextmdi/res -
 
 lib_LTLIBRARIES = libkdevelopqextmdi.la
 libkdevelopqextmdi_la_LDFLAGS = $(all_libraries) -version-info 3:0
-libkdevelopqextmdi_la_LIBADD  = $(LIB_KPARTS)
+libkdevelopqextmdi_la_LIBADD = $(LIB_KPARTS)
 
 libkdevelopqextmdi_la_SOURCES = kmdichildarea.cpp kmdichildfrm.cpp kmdichildfrmcaption.cpp kmdichildview.cpp kmdimainfrm.cpp kmditaskbar.cpp
 
 KDE_OPTIONS = nofinal
 METASOURCES = AUTO
 
-META_INCLUDES=$(srcdir)/../include
+META_INCLUDES = $(srcdir)/../include

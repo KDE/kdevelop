@@ -6,9 +6,7 @@ kde_module_LTLIBRARIES = libkdevpascalsupport.la
 libkdevpascalsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
 libkdevpascalsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/sourceinfo/libkdevsourceinfo.la $(top_builddir)/lib/antlr/src/libantlr.la
 
-libkdevpascalsupport_la_SOURCES = pascalsupport_part.cpp\
-	PascalLexer.cpp PascalParser.cpp PascalStoreWalker.cpp\
-	backgroundparser.cpp backgroundparser.h configproblemreporter.ui problemreporter.cpp
+libkdevpascalsupport_la_SOURCES = pascalsupport_part.cpp PascalLexer.cpp PascalParser.cpp PascalStoreWalker.cpp backgroundparser.cpp configproblemreporter.ui problemreporter.cpp
 
 METASOURCES = AUTO
 

@@ -5,7 +5,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
 kde_module_LTLIBRARIES = libkdevreplace.la
 libkdevreplace_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevreplace_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
-libkdevreplace_la_SOURCES = replace_part.cpp replace_widget.cpp replacedlg.ui replaceitem.h replaceitem.cpp replaceview.cpp replaceview.h replacedlgimpl.cpp replacedlgimpl.h
+libkdevreplace_la_SOURCES = replace_part.cpp replace_widget.cpp replacedlg.ui replaceitem.cpp replaceview.cpp replacedlgimpl.cpp
 
 METASOURCES = AUTO
 

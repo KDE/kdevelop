@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 prctooldir = ${appwizarddatadir}/template-prc-tool
 templatedir = ${appwizarddatadir}/templates
 
-prctool_DATA = prc-tool.png src-Makefile prc-tool.kdevelop callback.h palmhello.c palmhello.pbitm palmhello.rcp palmhelloRsc.h 
+prctool_DATA = prc-tool.png src-Makefile prc-tool.kdevelop callback.h palmhello.c palmhello.pbitm palmhello.rcp palmhelloRsc.h
 template_DATA = prc-tool
 
 DISTCLEANFILES = script.local
