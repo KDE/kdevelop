@@ -1,7 +1,10 @@
+2001-04-12  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: switching in View->Tab_Text works again but not completely right, use latest KDE sources from HEAD (12/04/2001)
+
 2001-04-10  rokrau@yahoo.com
 
     * some small changes that should make analysing print problems easier,
-      e.g. printing is handled by its own KShellProcess now. 
+      e.g. printing is handled by its own KShellProcess now.
 
 2001-04-10  F@lk Brettschneider <falk@kdevelop.org>
     * splitted tree tab view and output tab view into single tool views. Still unfinished, but ready to play with it.

@@ -628,43 +628,85 @@ void CKDevelop::slotViewTabIcons(){
     view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,true);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
-//!!!!!!!!!    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),"");
-//!!!!!!!!!    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),"");
-//!!!!!!!!!    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),"");
-//!!!!!!!!!    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),"");
-    if(var_viewer)
-;//!!!!!!!!!      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),"");
-
+    QWidget* w[5];
+    w[0] = class_tree;
+    w[1] = log_file_tree;
+    w[2] = real_file_tree;
+    w[3] = doc_tree;
+    w[4] = var_viewer;
+    QPixmap pm[5];
+    pm[0] = SmallIcon("CVclass");
+    pm[1] = SmallIcon("attach");
+    pm[2] = SmallIcon("folder");
+    pm[3] = SmallIcon("contents");
+    pm[4] = SmallIcon("brace");
+    int count = var_viewer ? 5 : 4;
+    int i;
+    for (i = 0; i < count; i++) {
+      KDockWidget* pDockWdg = dockManager->findWidgetParentDock(w[i]->parentWidget());
+      pDockWdg->setIcon(pm[i]);
+      pDockWdg->undock();
+      pDockWdg->setTabPageLabel("");
+      pDockWdg->dockBack();
+    }
 }
 void CKDevelop::slotViewTabText(){
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,true);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
-//!!!!!!!!!    t_tab_view->removePage(class_tree);
-//!!!!!!!!!    t_tab_view->removePage(log_file_tree);
-//!!!!!!!!!    t_tab_view->removePage(real_file_tree);
-//!!!!!!!!!    t_tab_view->removePage(doc_tree);
-    if(var_viewer)
-;//!!!!!!!!!      t_tab_view->removePage(var_viewer);
-//!!!!!!!!!    t_tab_view->addTab(class_tree,i18n("C&lasses"));
-//!!!!!!!!!    t_tab_view->addTab(log_file_tree,i18n("G&roups"));
-//!!!!!!!!!    t_tab_view->addTab(real_file_tree,i18n("File&s"));
-//!!!!!!!!!    t_tab_view->addTab(doc_tree,i18n("Boo&ks"));
-    if(var_viewer)
-;//!!!!!!!!!      t_tab_view->addTab(var_viewer,i18n("W&atch"));
-
+    QWidget* w[5];
+    w[0] = class_tree;
+    w[1] = log_file_tree;
+    w[2] = real_file_tree;
+    w[3] = doc_tree;
+    w[4] = var_viewer;
+    QString str[5];
+    str[0] = i18n("Classes");
+    str[1] = i18n("Groups");
+    str[2] = i18n("Files");
+    str[3] = i18n("Books");
+    str[4] = i18n("Watch");
+    int count = var_viewer ? 5 : 4;
+    int i;
+    for (i = 0; i < count; i++) {
+      KDockWidget* pDockWdg = dockManager->findWidgetParentDock(w[i]->parentWidget());
+      pDockWdg->undock();
+      pDockWdg->setIcon(QPixmap());
+      pDockWdg->setTabPageLabel(str[i]);
+      pDockWdg->dockBack();
+    }
 }
 void CKDevelop::slotViewTabTextIcons(){
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,true);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
     view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
-
-//!!!!!!!!!    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),i18n("C&lasses"));
-//!!!!!!!!!    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),i18n("G&roups"));
-//!!!!!!!!!    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),i18n("File&s"));
-//!!!!!!!!!    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),i18n("Boo&ks"));
-    if(var_viewer)
-;//!!!!!!!!!      t_tab_view->changeTab(var_viewer,SmallIcon("brace"),i18n("W&atch"));
+    QWidget* w[5];
+    w[0] = class_tree;
+    w[1] = log_file_tree;
+    w[2] = real_file_tree;
+    w[3] = doc_tree;
+    w[4] = var_viewer;
+    QString str[5];
+    str[0] = i18n("Classes");
+    str[1] = i18n("Groups");
+    str[2] = i18n("Files");
+    str[3] = i18n("Books");
+    str[4] = i18n("Watch");
+    QPixmap pm[5];
+    pm[0] = SmallIcon("CVclass");
+    pm[1] = SmallIcon("attach");
+    pm[2] = SmallIcon("folder");
+    pm[3] = SmallIcon("contents");
+    pm[4] = SmallIcon("brace");
+    int count = var_viewer ? 5 : 4;
+    int i;
+    for (i = 0; i < count; i++) {
+      KDockWidget* pDockWdg = dockManager->findWidgetParentDock(w[i]->parentWidget());
+      pDockWdg->setIcon(pm[i]);
+      pDockWdg->undock();
+      pDockWdg->setTabPageLabel(str[i]);
+      pDockWdg->dockBack();
+    }
 }
 
 

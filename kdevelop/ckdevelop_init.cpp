@@ -94,6 +94,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,m_docViewManager(0L)
   ,m_pKDevSession(0L)
 {
+  m_pTaskBar->hide();
 
   doctool = DT_KDOC;
 
@@ -221,19 +222,23 @@ void CKDevelop::initView()
   int mode=config->readNumEntry("tabviewmode", 3);
   switch (mode) {
     case 2:
-      class_tree_title = "  ";
-      log_file_tree_title = "  ";
-      real_file_tree_title = "  ";
-      doc_tree_title = "  ";
+      class_tree_title = "";
+      log_file_tree_title = "";
+      real_file_tree_title = "";
+      doc_tree_title = "";
     case 3:
       class_tree->setIcon(SmallIcon("CVclass"));
       log_file_tree->setIcon(SmallIcon("attach"));
       real_file_tree->setIcon(SmallIcon("folder"));
       doc_tree->setIcon(SmallIcon("contents"));
   }
+  class_tree->setCaption(class_tree_title);
   addToolWindow(class_tree, KDockWidget::DockLeft, m_pMdi, 35, i18n("class tree"), class_tree_title);
+  log_file_tree->setCaption(log_file_tree_title);
   addToolWindow(log_file_tree, KDockWidget::DockCenter, class_tree, 35, i18n("files of project"), log_file_tree_title);
+  real_file_tree->setCaption(real_file_tree_title);
   addToolWindow(real_file_tree, KDockWidget::DockCenter, class_tree, 35, i18n("view on project directory"), real_file_tree_title);
+  doc_tree->setCaption(doc_tree_title);
   addToolWindow(doc_tree, KDockWidget::DockCenter, class_tree, 35, i18n("documentation"), doc_tree_title);
 
   prev_was_search_result= false;
@@ -257,9 +262,13 @@ void CKDevelop::initView()
 
   konsole_widget = new CKonsoleWidget(0L);
 
+  messages_widget->setCaption(i18n("messages"));
   addToolWindow(messages_widget, KDockWidget::DockBottom, m_pMdi, 70, i18n("output of KDevelop"), i18n("messages"));
+  stdin_stdout_widget->setCaption(i18n("stdout"));
   addToolWindow(stdin_stdout_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("messages of started program"), i18n("stdout"));
+  stderr_widget->setCaption(i18n("stderr"));
   addToolWindow(stderr_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("error messages of started program"), i18n("stderr"));
+  konsole_widget->setCaption(i18n("Konsole"));
   addToolWindow(konsole_widget, KDockWidget::DockCenter, messages_widget, 70, i18n("embedded konsole window"), i18n("Konsole"));
 
 /////////////////////////////////////////////////////////////
@@ -1139,20 +1148,6 @@ void CKDevelop::initToolBar(){
 
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
-
-  // set the right default position for the MDI view taskbar
-  config->setGroup("CKDevelop Toolbar QextMdiTaskBar");
-  QString dockEdgeStr = config->readEntry("Position","Bottom");
-  QMainWindow::ToolBarDock taskBarEdge;
-  if (dockEdgeStr == "Bottom")
-    taskBarEdge = Bottom;
-  else if (dockEdgeStr == "Top")
-    taskBarEdge = Top;
-  else if (dockEdgeStr == "Left")
-    taskBarEdge = Left;
-  else if (dockEdgeStr == "Right")
-    taskBarEdge = Right;
-  moveToolBar( m_pTaskBar, taskBarEdge);
 }
 
 /*------------------------------------------ CKDevelop::initStatusBar()
@@ -1328,6 +1323,21 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
   config->setGroup("TipOfTheDay");
   if(config->readBoolEntry("show_tod",true) && !kapp->isRestored())
     slotHelpTipOfDay();
+
+  // set the right default position for the MDI view taskbar
+  config->setGroup("CKDevelop Toolbar QextMdiTaskBar");
+  QString dockEdgeStr = config->readEntry("Position","Bottom");
+  QMainWindow::ToolBarDock taskBarEdge;
+  if (dockEdgeStr == "Bottom")
+    taskBarEdge = Bottom;
+  else if (dockEdgeStr == "Top")
+    taskBarEdge = Top;
+  else if (dockEdgeStr == "Left")
+    taskBarEdge = Left;
+  else if (dockEdgeStr == "Right")
+    taskBarEdge = Right;
+  moveToolBar( m_pTaskBar, taskBarEdge);
+  m_pTaskBar->show();
 }
 
 void CKDevelop::initProject(bool ignoreLastProject)
@@ -1497,8 +1507,11 @@ void CKDevelop::initDebugger()
     brkptManager  = new BreakpointManager(0L, "BPManagerTab");
     frameStack    = new FrameStack(0L, "FStackTab");
     disassemble   = new Disassemble(0L, "DisassembleTab");
+    brkptManager->setCaption(i18n("breakpoint"));
     addToolWindow(brkptManager, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger breakpoints"), i18n("breakpoint"));
+    frameStack->setCaption(i18n("frame stack"));
     addToolWindow(frameStack, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger function call stack"), i18n("frame stack"));
+    disassemble->setCaption(i18n("disassemble"));
     addToolWindow(disassemble, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger disassemble view"), i18n("disassemble"));
 
     var_viewer    = new VarViewer(0L,"VARTab");
@@ -1513,15 +1526,17 @@ void CKDevelop::initDebugger()
     int mode=config->readNumEntry("tabviewmode", 3);
     switch (mode){
       case 2:
-        var_viewer_title = "  ";
+        var_viewer_title = "";
       case 3:
         var_viewer->setIcon(SmallIcon("brace"));
     }
+    var_viewer->setCaption(var_viewer_title);
     addToolWindow(var_viewer, KDockWidget::DockLeft, class_tree, 35, i18n("debugger variable watch view"), var_viewer_title);
 
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     dbg_widget = new COutputWidget(0L, "debuggerTab");
+    dbg_widget->setCaption(i18n("debugger"));
     addToolWindow(dbg_widget, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger control view"), i18n("debugger"));
     dbg_widget->setFocusPolicy(QWidget::ClickFocus);
     dbg_widget->setReadOnly(TRUE);
