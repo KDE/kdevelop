@@ -22,6 +22,7 @@ class KShellProcess;
 class KProcess;
 class PHPErrorView;
 class PHPConfigData;
+class PHPCodeCompletion;
 
 class PHPSupportPart : public KDevLanguageSupport
 {
@@ -64,6 +65,7 @@ private:
     KShellProcess* phpExeProc;
     QString m_phpExeOutput;
     PHPConfigData* configData;
+    PHPCodeCompletion* m_codeCompletion;
 };
 
 #endif

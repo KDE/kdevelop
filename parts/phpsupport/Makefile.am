@@ -1,16 +1,16 @@
-# Here resides the Perl support part.
+# Here resides the PHP support part.
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevphpsupport.la
 libkdevphpsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevphpsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(LIB_KHTML)
+libkdevphpsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(LIB_KHTML) $(top_builddir)/lib/interfaces/keditor/libkeditorinterface.la
 
 libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp \
 				phpsupportpart.cpp phpconfigwidgetbase.ui \
 				phpconfigwidget.cpp phpinfodlg.ui phphtmlview.cpp \
 				phperrorview.cpp phpconfigdata.cpp phpbookconfigwidget.ui \
-				phpbookconfig.cpp
+				phpbookconfig.cpp phpcodecompletion.cpp
 
 METASOURCES = AUTO
 

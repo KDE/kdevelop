@@ -35,6 +35,8 @@
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
 #include "phpbookconfig.h"
+#include "phpcodecompletion.h"
+
 
 #include "phphtmlview.h"
 #include "phperrorview.h"
@@ -88,6 +90,7 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
   configData = new PHPConfigData(projectDom());
+  m_codeCompletion = new  PHPCodeCompletion(core()->editor());
 }
 
 
