@@ -65,6 +65,10 @@ void AStylePart::beautifySource()
 	os << formatter.nextLine().c_str() << endl;
 
   iface->setText(output);
+  // workaround for kate clearing undo history on setText()
+  iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
+  iface->insertText( 0, 0, output);
+
 }
 
 
@@ -96,9 +100,9 @@ void AStylePart::activePartChanged(KParts::Part *part)
       if (extension == ".h"   || extension == ".c" || extension == ".java"
        || extension == ".cpp" || extension == ".hpp"
        || extension == ".C"   || extension == ".H"
-       || extension == ".cxx" || extension == ".hxx" 
-       || extension == ".inl" || extension == ".tlh" 
-       || extension == ".moc" || extension == ".xpm" 
+       || extension == ".cxx" || extension == ".hxx"
+       || extension == ".inl" || extension == ".tlh"
+       || extension == ".moc" || extension == ".xpm"
        || extension == ".diff"|| extension == ".patch"
        || extension == ".hh"  || extension == ".cc"
        || extension == ".c++" || extension == ".h++")
