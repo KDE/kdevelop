@@ -422,6 +422,8 @@ QString CKDevelop::prepareConfigureCommand()
   }
   else
   {
+     cppflags=prj->getCPPFLAGS().simplifyWhiteSpace();
+     cflags=prj->getCFLAGS().simplifyWhiteSpace();
      cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
      addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
      ldflags=prj->getLDFLAGS().simplifyWhiteSpace();

@@ -935,11 +935,20 @@ void CKDevelop::slotBuildCompileFile(){
  	QString conf=compile_combo->currentText();
   QString flags, makefile;
 
+  /* Setting the flags (CPPFLAGS, CFLAGS, CXXFLAGS, ADDCXXFLAGS) here don't do anything 
+      unless the flags are part of the right side of the (g)make call
+      on the left side they are only informative and of interest for the debug output
+      so consider this code as obsolete, but it does no harm.
+      The setting of the flags is only done by the configure-call!!!
+      W. Tasin 20.06.2002
+  */
   if (prj->getProjectType()!="normal_empty")
   {
    	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
     if(conf==i18n("(Default)")){
 		  QDir::setCurrent(actualDir);
+   		cppflags=prj->getCPPFLAGS().simplifyWhiteSpace();
+   		cflags=prj->getCFLAGS().simplifyWhiteSpace();
    		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
    		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
    		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
@@ -1894,11 +1903,20 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
  	QString conf=compile_combo->currentText();
   QString flags, makefile;
 
+ /* Setting the flags (CPPFLAGS, CFLAGS, CXXFLAGS, ADDCXXFLAGS) here don't do anything 
+      unless the flags are part of the right side of the (g)make call
+      on the left side they are only informative and of interest for the debug output
+      so consider this code as obsolete, but it does no harm.
+      The setting of the flags is only done by the configure-call!!!
+      W. Tasin 20.06.2002
+ */
   if (type!=CMakefile::cvs)
   {
    	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
     if(conf==i18n("(Default)")){
     	QDir::setCurrent(prj->getProjectDir());
+   		cppflags=prj->getCPPFLAGS().simplifyWhiteSpace();
+   		cflags=prj->getCFLAGS().simplifyWhiteSpace();
    		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
    		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
    		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
@@ -2119,6 +2137,8 @@ void CKDevelop::RunConfigure(const QString &conf, bool ask){
 	// get all other strings
   if(conf==i18n("(Default)"))
   {
+		cppflags=prj->getCPPFLAGS().simplifyWhiteSpace();
+		cflags=prj->getCFLAGS().simplifyWhiteSpace();
 		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
 		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
 		ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
