@@ -10,6 +10,10 @@
 
 #include "filecreate_newfile.h"
 
+#include <qvbox.h>
+#include <qgrid.h>
+
+#include <qhbox.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
@@ -24,22 +28,32 @@ namespace FileCreate {
     KDialogBase(KDialogBase::Plain, i18n("New file dialog (title)", "New File"), KDialogBase::Ok|KDialogBase::Cancel,
                 KDialogBase::Ok, parent, "New file", true)
   {
-    m_grid = new QGridLayout(plainPage(), 3, 3, 10, 10);
-    m_grid->addMultiCellWidget( new QLabel(i18n("New file creation"), plainPage() ), 0, 0, 0, 2 );
-    m_grid->addWidget( new QLabel(i18n("Directory"), plainPage() ), 1, 0 );
-    m_grid->addMultiCellWidget( m_urlreq = new KURLRequester(plainPage(), "url request"), 1, 1, 1, 2);
-    m_grid->addWidget( new QLabel(i18n("Filename"), plainPage() ) , 2, 0 );
-    m_grid->addMultiCellWidget( m_filename = new QLineEdit( plainPage() ), 2, 2, 1, 2);
-    m_grid->addMultiCellWidget( m_filetypes = new KComboBox( plainPage(), "combo" ), 3, 3, 0, 1 );
-    m_grid->addWidget( m_addToProject = new QCheckBox(i18n("Add to project (on checkbox)", "Add to project"), plainPage(), "addproject"), 3, 2);
-    m_grid->setColStretch( 0, 1 );
-    m_grid->setColStretch( 1, 1 );
-    m_grid->setColStretch( 2, 1 );
+      QVBoxLayout* lay = new QVBoxLayout( plainPage(), 5, 5 );
+      
+      lay->addWidget( new QLabel( i18n("<b>New file creation</b>"), plainPage() ) );
+      
+      QGrid* grid = new QGrid( 2, plainPage() );
+      grid->setSpacing( 5 );
+      new QLabel(i18n("Directory:"), grid );
+      m_urlreq = new KURLRequester( grid, "url request" );
+      new QLabel(i18n("File name:"), grid );
+      m_filename = new QLineEdit( grid );
+      lay->addWidget( grid );
+      
+      QHBox* hbox = new QHBox( plainPage() );
+      hbox->setMargin( 5 );
+      hbox->setSpacing( 5 );
+      m_filetypes = new KComboBox( hbox, "combo" );
+      m_addToProject = new QCheckBox( i18n("Add to project (on checkbox)", i18n("Add to project") ),
+				      hbox, "addproject" );
+      lay->addWidget( hbox );
+      
+      lay->addItem( new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Expanding) );
+      
+      m_filename->setFocus();
+      m_addToProject->setChecked( true );
 
-    m_filename->setFocus();
-    m_addToProject->setChecked(true);
-
-    m_urlreq->setMode((int) KFile::Directory);
+      m_urlreq->setMode((int) KFile::Directory);      
   }
 
   NewFileChooser::~NewFileChooser() {
