@@ -385,7 +385,7 @@ XulCodeCompletion::cursorPositionChanged()
 
 	KRegExp prevReg("\\<[\\d\\w]\\b$" );
 
-	if ( prevReg.match( prevText ) )
+	if ( prevReg.match( prevText.local8Bit() ) )
 	{
 		kdDebug()<<"### MATCHED!"<<endl;
 		// We are in completion mode
