@@ -16,22 +16,22 @@
    Boston, MA 02111-1307, USA.
 */
 
-// $Id$
 
 #include "kactionselector.h"
- 
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdialog.h> // for spacingHint()
 #include <kdebug.h>
- 
+#include <qapplication.h>
+
 #include <qlistbox.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qevent.h>
 #include <qwhatsthis.h>
- 
+
 class KActionSelectorPrivate {
   public:
   QListBox *availableListBox, *selectedListBox;
@@ -53,26 +53,26 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
   d->moveOnDoubleClick = true;
   d->keyboardEnabled = true;
   d->iconSize = SmallIcon;
-  d->addIcon = "forward";
-  d->removeIcon = "back";
+  d->addIcon = QApplication::reverseLayout() ? "back" : "forward";
+  d->removeIcon = QApplication::reverseLayout() ? "forward" : "back";
   d->upIcon = "up";
   d->downIcon = "down";
   d->availableInsertionPolicy = Sorted;
   d->selectedInsertionPolicy = BelowCurrent;
   d->showUpDownButtons = true;
-    
+
   //int isz = IconSize( KIcon::Small );
-  
+
   QHBoxLayout *lo = new QHBoxLayout( this );
   lo->setSpacing( KDialog::spacingHint() );
-  
+
   QVBoxLayout *loAv = new QVBoxLayout( lo );
   d->lAvailable = new QLabel( i18n("&Available:"), this );
   loAv->addWidget( d->lAvailable );
   d->availableListBox = new QListBox( this );
   loAv->addWidget( d->availableListBox );
   d->lAvailable->setBuddy( d->availableListBox );
-  
+
   QVBoxLayout *loHBtns = new QVBoxLayout( lo );
   loHBtns->addStretch( 1 );
   d->btnAdd = new QToolButton( this );
@@ -80,14 +80,14 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
   d->btnRemove = new QToolButton( this );
   loHBtns->addWidget( d->btnRemove );
   loHBtns->addStretch( 1 );
-   
+
   QVBoxLayout *loS = new QVBoxLayout( lo );
   d->lSelected = new QLabel( i18n("&Selected:"), this );
   loS->addWidget( d->lSelected );
   d->selectedListBox = new QListBox( this );
   loS->addWidget( d->selectedListBox );
   d->lSelected->setBuddy( d->selectedListBox );
-  
+
   QVBoxLayout *loVBtns = new QVBoxLayout( lo );
   loVBtns->addStretch( 1 );
   d->btnUp = new QToolButton( this );
@@ -97,20 +97,20 @@ KActionSelector::KActionSelector( QWidget *parent, const char *name )
   loVBtns->addStretch( 1 );
 
   loadIcons();
-    
+
   connect( d->btnAdd, SIGNAL(clicked()), this, SLOT(buttonAddClicked()) );
   connect( d->btnRemove, SIGNAL(clicked()), this, SLOT(buttonRemoveClicked()) );
   connect( d->btnUp, SIGNAL(clicked()), this, SLOT(buttonUpClicked()) );
   connect( d->btnDown, SIGNAL(clicked()), this, SLOT(buttonDownClicked()) );
-  connect( d->availableListBox, SIGNAL(doubleClicked(QListBoxItem*)), 
+  connect( d->availableListBox, SIGNAL(doubleClicked(QListBoxItem*)),
            this, SLOT(itemDoubleClicked(QListBoxItem*)) );
-  connect( d->selectedListBox, SIGNAL(doubleClicked(QListBoxItem*)), 
+  connect( d->selectedListBox, SIGNAL(doubleClicked(QListBoxItem*)),
            this, SLOT(itemDoubleClicked(QListBoxItem*)) );
-  connect( d->availableListBox, SIGNAL(currentChanged(QListBoxItem*)), 
+  connect( d->availableListBox, SIGNAL(currentChanged(QListBoxItem*)),
            this, SLOT(slotCurrentChanged(QListBoxItem *)) );
-  connect( d->selectedListBox, SIGNAL(currentChanged(QListBoxItem*)), 
+  connect( d->selectedListBox, SIGNAL(currentChanged(QListBoxItem*)),
            this, SLOT(slotCurrentChanged(QListBoxItem *)) );
-           
+
   d->availableListBox->installEventFilter( this );
   d->selectedListBox->installEventFilter( this );
 }
@@ -226,13 +226,13 @@ void KActionSelector::setButtonsEnabled()
   d->btnAdd->setEnabled( d->availableListBox->currentItem() > -1 );
   d->btnRemove->setEnabled( d->selectedListBox->currentItem() > -1 );
   d->btnUp->setEnabled( d->selectedListBox->currentItem() > 0 );
-  d->btnDown->setEnabled( d->selectedListBox->currentItem() > -1 && 
+  d->btnDown->setEnabled( d->selectedListBox->currentItem() > -1 &&
                           d->selectedListBox->currentItem() < (int)d->selectedListBox->count() - 1 );
 }
 
 //END Public Methods
 
-//BEGIN Properties 
+//BEGIN Properties
 
 bool KActionSelector::moveOnDoubleClick() const
 {
@@ -481,10 +481,10 @@ void KActionSelector::itemDoubleClicked( QListBoxItem *item )
 
 void KActionSelector::loadIcons()
 {
-  d->btnAdd->setIconSet( SmallIconSet( d->addIcon, d->iconSize ) ); 
-  d->btnRemove->setIconSet( SmallIconSet( d->removeIcon, d->iconSize ) ); 
-  d->btnUp->setIconSet( SmallIconSet( d->upIcon, d->iconSize ) ); 
-  d->btnDown->setIconSet( SmallIconSet( d->downIcon, d->iconSize ) ); 
+  d->btnAdd->setIconSet( SmallIconSet( d->addIcon, d->iconSize ) );
+  d->btnRemove->setIconSet( SmallIconSet( d->removeIcon, d->iconSize ) );
+  d->btnUp->setIconSet( SmallIconSet( d->upIcon, d->iconSize ) );
+  d->btnDown->setIconSet( SmallIconSet( d->downIcon, d->iconSize ) );
 }
 
 void KActionSelector::moveItem( QListBoxItem *item )
@@ -497,15 +497,15 @@ void KActionSelector::moveItem( QListBoxItem *item )
     lbTo = d->availableListBox;
   else  //?! somewhat unlikely...
     return;
-  
+
   InsertionPolicy p = ( lbTo == d->availableListBox ) ?
                         d->availableInsertionPolicy : d->selectedInsertionPolicy;
-            
+
   lbFrom->takeItem( item );
   lbTo->insertItem( item, insertionIndex( lbTo, p ) );
   lbTo->setFocus();
   lbTo->setCurrentItem( item );
-  
+
   if ( p == Sorted )
     lbTo->sort();
   if ( lbTo == d->selectedListBox )
