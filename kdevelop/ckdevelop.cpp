@@ -804,8 +804,6 @@ void CKDevelop::slotViewTStatusbar(){
   else{
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
   }
-
-  initStatusBar();
 }
 
 void CKDevelop::slotViewRefresh(){

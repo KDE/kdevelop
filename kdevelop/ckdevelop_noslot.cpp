@@ -953,12 +953,6 @@ void CKDevelop::switchToKDevelop(){
 	setKeyAccel();  // initialize Keys
   ///////// reset bar status ////////////
 
-  initStatusBar();
-//  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-//    kdev_statusbar->show();
-//  else
-//    kdev_statusbar->hide();
-
   if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
     toolBar()->show();
   else
@@ -1198,8 +1192,6 @@ void CKDevelop::readOptions()
 	if (statusbar)
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
 
-  initStatusBar();
-  	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop
 //	mainSplitter->setSeparatorPos(config->readNumEntry("viewSplitter_pos",80));
