@@ -226,7 +226,7 @@ void AdaSupportPart::parse (const QString &fileName)
         }
     } catch (antlr::ANTLRException& ex) {
         kdDebug () << "*exception*: " << ex.toString ().c_str () << endl;
-        d->problemReporter->reportError (ex.getMessage (),
+        d->problemReporter->reportError (QString::fromLatin1( ex.getMessage ().c_str() ),
                                          fileName,
                                          lexer.getLine (),
                                          lexer.getColumn ());
@@ -260,7 +260,7 @@ void AdaSupportPart::parseContents (const QString& contents, const QString& file
 
     } catch (antlr::ANTLRException& ex) {
         kdDebug () << "*exception*: " << ex.toString ().c_str () << endl;
-        d->problemReporter->reportError (ex.getMessage (),
+        d->problemReporter->reportError (QString::fromLatin1( ex.getMessage().c_str() ),
                                          fileName,
                                          lexer.getLine (),
                                          lexer.getColumn ());
