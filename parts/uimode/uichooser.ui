@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>UIChooser</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,9 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>441</width>
-            <height>437</height>
+            <width>540</width>
+            <height>529</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>UIChooser</string>
     </property>
     <vbox>
         <property name="name">
@@ -142,6 +145,9 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 <widget class="QButtonGroup">
                     <property name="name">
                         <cstring>HoverCloseGroup</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
                     </property>
                     <property name="title">
                         <string>Use Close on Hover</string>
@@ -418,6 +424,12 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
         <signal>toggled(bool)</signal>
         <receiver>TabbedBrowsingGroup</receiver>
         <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>ShowTabIcons</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>HoverCloseGroup</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <includes>
