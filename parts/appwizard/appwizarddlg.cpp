@@ -430,9 +430,11 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             AppWizardFileTemplate fileTemplate;
             fileTemplate.suffix = *it;
             ++it;
-            if (it != l.end())
+            if (it != l.end()) {
                 fileTemplate.style = *it;
-            ++it;
+                ++it;
+            } else
+                fileTemplate.style = "";
 
             QMultiLineEdit *edit = new QMultiLineEdit(this);
             edit->setFont(KGlobalSettings::fixedFont());
