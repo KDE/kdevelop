@@ -7,11 +7,11 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif 
+#endif
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kparts/mainwindow.h>
- 
+
 class KToggleAction;
 
 /**
@@ -57,10 +57,13 @@ protected:
 
 private slots:
     void fileNew();
+    void fileOpen();
     void optionsShowToolbar();
     void optionsShowStatusbar();
     void optionsConfigureKeys();
     void optionsConfigureToolbars();
+
+    void applyNewToolbarConfig();
 
 private:
     void setupAccel();

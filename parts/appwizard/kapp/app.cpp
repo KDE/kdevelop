@@ -6,9 +6,7 @@
 #include "pref.h"
 
 #include <qdragobject.h>
-#include <qlineedit.h>
-#include <qprinter.h>
-#include <qprintdialog.h>
+#include <kprinter.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 
@@ -48,6 +46,11 @@ $APPNAME$::$APPNAME$()
     // and a status bar
     statusBar()->show();
 
+    // apply the saved mainwindow settings, if any, and ask the mainwindow
+    // to automatically save settings if changed: window size, toolbar
+    // position, icon size, etc.
+    setAutoSaveSettings();
+
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
             this,   SLOT(changeStatusbar(const QString&)));
@@ -69,7 +72,7 @@ void $APPNAME$::load(const KURL& url)
 
     #if 0
     // download the contents
-    if (KIONetAccess::download(url, target))
+    if (KIO::NetAccess::download(url, target))
     {
         // set our caption
         setCaption(url);
@@ -78,7 +81,7 @@ void $APPNAME$::load(const KURL& url)
         loadFile(target);
 
         // and remove the temp file
-        KIONetAccess::removeTempFile(target);
+        KIO::NetAccess::removeTempFile(target);
     }
     #endif
 
@@ -115,9 +118,9 @@ void $APPNAME$::saveProperties(KConfig *config)
     // the 'config' object points to the session managed
     // config file.  anything you write here will be available
     // later when this app is restored
-    
+
     if (m_view->currentURL() != QString::null)
-        config->writeEntry("lastURL", m_view->currentURL()); 
+        config->writeEntry("lastURL", m_view->currentURL());
 }
 
 void $APPNAME$::readProperties(KConfig *config)
@@ -127,7 +130,7 @@ void $APPNAME$::readProperties(KConfig *config)
     // the app is being restored.  read in here whatever you wrote
     // in 'saveProperties'
 
-    QString url = config->readEntry("lastURL"); 
+    QString url = config->readEntry("lastURL");
 
     if (url != QString::null)
         m_view->openURL(KURL(url));
@@ -202,8 +205,8 @@ void $APPNAME$::filePrint()
     // this slot is called whenever the File->Print menu is selected,
     // the Print shortcut is pressed (usually CTRL+P) or the Print toolbar
     // button is clicked
-    if (!m_printer) m_printer = new QPrinter;
-    if (QPrintDialog::getPrinterSetup(m_printer))
+    if (!m_printer) m_printer = new KPrinter;
+    if (m_printer->setup(this))
     {
         // setup the printer.  with Qt, you always "print" to a
         // QPainter.. whether the output medium is a pixmap, a screen,
@@ -248,12 +251,18 @@ void $APPNAME$::optionsConfigureKeys()
 void $APPNAME$::optionsConfigureToolbars()
 {
     // use the standard toolbar editor
+    saveMainWindowSettings( KGlobal::config(), autoSaveGroup() );
     KEditToolbar dlg(actionCollection());
-    if (dlg.exec())
-    {
-        // recreate our GUI
-        createGUI();
-    } 
+    connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(newToolbarConfig()));
+    dlg.exec();
+}
+
+void $APPNAME$::newToolbarConfig()
+{
+    // this slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
+    // recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
+    createGUI();
+    applyMainWindowSettings( KGlobal::config(), autoSaveGroup() );
 }
 
 void $APPNAME$::optionsPreferences()

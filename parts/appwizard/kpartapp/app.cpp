@@ -44,7 +44,7 @@ $APPNAME$::$APPNAME$()
         {
             // tell the KParts::MainWindow that this is indeed the main widget
             setCentralWidget(m_part->widget());
-            
+
             // and integrate the part's GUI with the shell's
             createGUI(m_part);
         }
@@ -55,7 +55,15 @@ $APPNAME$::$APPNAME$()
         // itself can't do anything useful
         KMessageBox::error(this, "Could not find our Part!");
         kapp->quit();
+        // we return here, cause kapp->quit() only means "exit the
+        // next time we enter the event loop...
+        return;
     }
+
+    // apply the saved mainwindow settings, if any, and ask the mainwindow
+    // to automatically save settings if changed: window size, toolbar
+    // position, icon size, etc.
+    setAutoSaveSettings();
 }
 
 $APPNAME$::~$APPNAME$()
@@ -70,6 +78,8 @@ void $APPNAME$::load(const KURL& url)
 void $APPNAME$::setupActions()
 {
     KStdAction::openNew(this, SLOT(fileNew()), actionCollection());
+    KStdAction::open(this, SLOT(fileOpen()), actionCollection());
+
     KStdAction::quit(kapp, SLOT(quit()), actionCollection());
 
     m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
@@ -100,8 +110,14 @@ void $APPNAME$::fileNew()
     // the New shortcut is pressed (usually CTRL+N) or the New toolbar
     // button is clicked
 
-    // create a new window
-    (new $APPNAME$)->show();
+    // About this function, the style guide (
+    // http://developer.kde.org/documentation/standards/kde/style/basics/index.html )
+    // says that it should open a new window if the document is _not_
+    // in its initial state.  This is what we do here..
+    if ( ! m_part->url().isEmpty() || m_part->isModified() )
+    {
+        (new $APPNAME$)->show();
+    };
 }
 
 
@@ -132,13 +148,47 @@ void $APPNAME$::optionsConfigureKeys()
 
 void $APPNAME$::optionsConfigureToolbars()
 {
+    saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
+
     // use the standard toolbar editor
-    KEditToolbar dlg(actionCollection());
-    if (dlg.exec())
+    KEditToolbar dlg(factory());
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            this, SLOT(applyNewToolbarConfig()));
+    dlg.exec();
+}
+
+void $APPNAME$::applyNewToolbarConfig()
+{
+    applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
+}
+
+void $APPNAME$::fileOpen()
+{
+    // this slot is called whenever the File->Open menu is selected,
+    // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
+    // button is clicked
+    KURL url =
+        KFileDialog::getOpenURL( QString::null, QString::null, this );
+
+    if (url.isEmpty() == false)
     {
-        // recreate our GUI
-        createGUI(m_part);
-    } 
+        // About this function, the style guide (
+        // http://developer.kde.org/documentation/standards/kde/style/basics/index.html )
+        // says that it should open a new window if the document is _not_
+        // in its initial state.  This is what we do here..
+        if ( m_part->url().isEmpty() && ! m_part->isModified() )
+        {
+            // we open the file in this window...
+            load( url );
+        }
+        else
+        {
+            // we open the file in a new window...
+            $APPNAME$* newWin = new $APPNAME$;
+            newWin->load( url );
+            newWin->show();
+        }
+    }
 }
 
 #include "$APPNAMELC$.moc"

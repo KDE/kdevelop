@@ -7,14 +7,14 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif 
+#endif
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kmainwindow.h>
- 
+
 #include "$APPNAMELC$view.h"
 
-class QPrinter;
+class KPrinter;
 class KToggleAction;
 class KURL;
 
@@ -78,18 +78,19 @@ private slots:
     void optionsConfigureKeys();
     void optionsConfigureToolbars();
     void optionsPreferences();
+    void newToolbarConfig();
 
     void changeStatusbar(const QString& text);
     void changeCaption(const QString& text);
 
 private:
-	void setupAccel();
-	void setupActions();
+    void setupAccel();
+    void setupActions();
 
 private:
     $APPNAME$View *m_view;
 
-    QPrinter   *m_printer;
+    KPrinter   *m_printer;
     KToggleAction *m_toolbarAction;
     KToggleAction *m_statusbarAction;
 };
