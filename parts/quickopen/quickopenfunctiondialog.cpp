@@ -99,7 +99,7 @@ void QuickOpenFunctionDialog::gotoFile( QString name )
 		QString argStr, _argStr;
 		QString fileStr;
 		
-		QuickOpenFunctionChooseForm fdlg( this );
+		QuickOpenFunctionChooseForm fdlg( this, name.ascii() );
 
 		for( FunctionDefinitionList::Iterator it = funcList->begin() ; it!=funcList->end() ; ++it ){
 			fmodel = (*it).data();
