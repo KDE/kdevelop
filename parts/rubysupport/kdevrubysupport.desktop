@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Ruby Support
+Name=KDevRubySupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevrubysupport
+X-KDevelop-Language=Ruby

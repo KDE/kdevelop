@@ -1,0 +1,8 @@
+This is a Ruby support plugin for KDevelop 3.0 (Gideon)
+Currently it only provides some very basic support:
+- .rb template for New File
+- Ruby project template for Application Wizard
+- "Run" option in menu
+
+Hopefully some more advanced options will be added soon :)
+
