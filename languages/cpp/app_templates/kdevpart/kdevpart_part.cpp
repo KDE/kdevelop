@@ -40,7 +40,10 @@ $APPNAME$Part::$APPNAME$Part(QObject *parent, const char *name, const QStringLis
 $APPNAME$Part::~$APPNAME$Part()
 {
 // if you embed a widget, you need to tell the mainwindow when you remove it
-//  mainWindow()->removeView( m_widget );
+//  if ( m_widget )
+//  {
+//    mainWindow()->removeView( m_widget );
+//  }
   delete m_widget;
 }
 
