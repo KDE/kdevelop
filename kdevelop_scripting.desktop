@@ -1,4 +1,4 @@
-[KDE Desktop Entry]
+[Desktop Entry]
 Encoding=UTF-8
 Type=Application
 Exec=kdevelop --profile ScriptingLanguageIDE %u
