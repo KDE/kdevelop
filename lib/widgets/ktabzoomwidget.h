@@ -25,7 +25,7 @@ public:
   KTabZoomWidget(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
   ~KTabZoomWidget();
 
-  void addTab(QWidget *widget, const QString &tab);
+  void addTab(QWidget *widget, const QString &tab, const QString &toolTip = QString::null);
 
   void addContent(QWidget *widget);
 

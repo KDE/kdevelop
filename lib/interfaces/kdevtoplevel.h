@@ -9,7 +9,7 @@ class KDevTopLevel
 {
 public:
 
-  virtual void embedPartView(QWidget *view, const QString &title) = 0;
+  virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString::null) = 0;
   virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip) = 0;
   virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip) = 0;
   

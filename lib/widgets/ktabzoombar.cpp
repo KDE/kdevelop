@@ -3,6 +3,7 @@
 #include <qlayout.h>
 #include <qframe.h>
 #include <qsignalmapper.h>
+#include <qtooltip.h>
 
 
 #include <kdebug.h>
@@ -58,9 +59,10 @@ KTabZoomBar::~KTabZoomBar()
 }
 
 
-int KTabZoomBar::addTab(const QTab &tab)
+int KTabZoomBar::addTab(const QTab &tab, const QString& toolTip)
 {
   KTabZoomButton *btn = new KTabZoomButton(tab.text(), this, d->m_tabPosition);
+  QToolTip::add( btn, toolTip );
   d->m_layout->add(btn);
   btn->show();
 

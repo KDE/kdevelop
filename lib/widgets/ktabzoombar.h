@@ -18,7 +18,7 @@ public:
   KTabZoomBar(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
   ~KTabZoomBar();
 
-  int addTab(const QTab &tab);
+  int addTab(const QTab &tab, const QString& toolTip = QString::null);
   void removeTab(int index);
 
   void setActiveIndex(int index);
