@@ -11,7 +11,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 bin_PROGRAMS = gideon
 
 gideon_SOURCES = main.cpp core.cpp toplevel.cpp partloader.cpp documentationpart.cpp \
-		 editorpart.cpp importdlg.cpp splitter.cpp filenameedit.cpp \
+		 editorpart.cpp importdlg.cpp filenameedit.cpp \
 		 statusbar.cpp
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -21,6 +21,7 @@ gideon_LDADD = $(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
 	       $(top_builddir)/parts/outputviews/libkdevoutputviews.la \
 	       $(top_builddir)/parts/appwizard/libkdevappwizard.la \
 	       $(top_builddir)/lib/libkdevelop.la \
+	       $(top_builddir)/lib/util/libkdevutil.la \
 	       $(LIB_KHTML)
 
 rcdir = $(kde_datadir)/gideon
