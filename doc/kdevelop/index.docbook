@@ -314,24 +314,6 @@ When you have a large project consisting of possibly hundreds of source code fil
 <sect2 id="unixdev-buildsystems-make">
 <title>The make process</title>
 
-<!-- ### clutters the index
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>make</primary>
-  <secondary>Makefile</secondary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>make</primary>
-  <secondary>rule</secondary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>make</primary>
-  <secondary>target</secondary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>make</primary>
-  <secondary>dependencies</secondary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>make</primary>
-  <secondary>commands</secondary></indexterm>
--->
-
 <indexterm zone="unixdev-buildsystems-make">
   <primary>make</primary></indexterm>
 <indexterm zone="unixdev-buildsystems-make">
@@ -569,6 +551,9 @@ Now you can compile a new &kdevelop; version as shown in the <link linkend="comp
 <indexterm zone="requirements">
   <primary>&kdevelop;</primary>
   <secondary>requirements</secondary></indexterm>
+<indexterm zone="requirements">
+  <primary>GNU</primary>
+  <secondary>requirements</secondary></indexterm>
 
 <para>
 In order to successfully compile and use &kdevelop;, you need the following programs and libraries. They are available on most platforms as distribution packages and thereby can be installed easily.
@@ -625,7 +610,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
     <indexterm><primary>dot</primary></indexterm>
   </para></listitem>
   <listitem><para>
-    The &doxygen; documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
+    The &doxygen; documentation tool, from <ulink url="http://www.doxygen.org">http://www.doxygen.org</ulink> if you want to generate concise and powerful API documentation from your projects.
     <indexterm><primary>doxygen</primary></indexterm>
   </para></listitem>
   <listitem><para>
@@ -1771,43 +1756,6 @@ Once you have correctly entered all this information stuff, press the <guibutton
   <primary>CVS</primary>
   <secondary>new project</secondary></indexterm>
 <indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>root</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>root</primary>
-  <secondary>CVS</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>local</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>remote</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>local CVS</primary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>:local:</primary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>remote CVS</primary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>:pserver:</primary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>:ext:</primary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>:local:</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>:pserver:</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>:ext:</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>CVS</primary>
-  <secondary>repository</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
-  <primary>repository</primary>
-  <secondary>CVS</secondary></indexterm>
-<indexterm zone="newprojects-start-cvs">
   <primary>project</primary>
   <secondary>CVS</secondary></indexterm>
 <indexterm zone="newprojects-start-cvs">
@@ -1857,7 +1805,27 @@ Otherwise you must reselect the version control system you want to use from the 
 A version control system such as &CVS; (which means <quote>Concurrent Versions System</quote>) stores copies of selected project files in some sort of a database. If you use &CVS; you can amongst others upload (<quote>commit</quote>) those files or load them back into your project directory (<quote>checkout</quote>, or <quote>update</quote>). The special thing about this is that the files in the versioning database are stored in a structured way which allows you to always revert to an earlier development state if you need so. And &CVS; allows multiple designers to fairly easily collaborate on a big project (such as &kdevelop;) without disturbing each others work.
 </para>
 
-<formalpara>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>CVS</primary>
+  <secondary>root</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>root</primary>
+  <secondary>CVS</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>CVS</primary>
+  <secondary>local</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>CVS</primary>
+  <secondary>remote</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>local CVS</primary></indexterm>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>:local:</primary></indexterm>
+<indexterm zone="newprojects-start-cvs-root">
+  <primary>CVS</primary>
+  <secondary>:local:</secondary></indexterm>
+
+<formalpara id="newprojects-start-cvs-root">
 <title>CVS root</title>
 <para>
 &cvs; needs to <emphasis>manage</emphasis> the versioning database it keeps from your project files. To accomplish this it keeps some special database information in an own directory, called the <emphasis>&cvs; root</emphasis>. The first step on setting up &cvs; for your new project thus is to tell &kdevelop; where this root is located.
@@ -1891,7 +1859,23 @@ As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initi
 <userinput><filename class="directory">:pserver:mylogin@cvs.kde.org:/home/kde</filename></userinput> (where <filename>mylogin</filename> denotes the login name set up in your &kde; &cvs; account)
 </para>
 
-<formalpara>
+<indexterm zone="newprojects-start-cvs-remote">
+  <primary>remote CVS</primary></indexterm>
+<indexterm zone="newprojects-start-cvs-remote">
+  <primary>:pserver:</primary></indexterm>
+<indexterm zone="newprojects-start-cvs-remote">
+  <primary>:ext:</primary></indexterm>
+<indexterm zone="newprojects-start-cvs-remote">
+  <primary>CVS</primary>
+  <secondary>:local:</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-remote">
+  <primary>CVS</primary>
+  <secondary>:pserver:</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-remote">
+  <primary>CVS</primary>
+  <secondary>:ext:</secondary></indexterm>
+
+<formalpara id="newprojects-start-cvs-remote">
 <title>Remote &cvs; server types</title>
 <para>
 Basically there are two widely used remote &cvs; server types, the <emphasis>pserver</emphasis> which uses a password-secured non-encrypted protocol, and the <emphasis>ext</emphasis> server which uses an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted data transfer. They are distinguished by the <acronym>URL</acronym> prefix they use:
@@ -1923,7 +1907,14 @@ If you want to use an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted
 There is a caveat if you use an encrypted server for &cvs; from within &kdevelop;. See the <link linkend="cvs">Using CVS</link> chapter for details.
 </para></note>
 
-<formalpara>
+<indexterm zone="newprojects-start-cvs-repository">
+  <primary>CVS</primary>
+  <secondary>repository</secondary></indexterm>
+<indexterm zone="newprojects-start-cvs-repository">
+  <primary>repository</primary>
+  <secondary>CVS</secondary></indexterm>
+
+<formalpara id="newprojects-start-cvs-repository">
 <title>The &cvs; repository</title>
 <para>
 So far you have told &kdevelop; where the &cvs; root resides which manages the versioning database and how to access it. Now you need to tell &kdevelop; under which name you want &CVS; save your project files in that database. Such a place your project files will be held in &cvs; is called a <emphasis>repository</emphasis>.
@@ -2146,7 +2137,7 @@ Then it is adviceable that you <emphasis>compile the initial project</emphasis> 
   <secondary>new</secondary>
   <tertiary>build</tertiary></indexterm>
 <indexterm zone="appwizard-behind">
-  <primary>cvs</primary>
+  <primary>CVS</primary>
   <secondary>new project</secondary>
   <tertiary>build</tertiary></indexterm>
 
@@ -2242,6 +2233,13 @@ When the &perl; script is run, you get a series of messages of what is <emphasis
 </para>
 </formalpara>
 
+<indexterm zone="appwizard-behind-app-templates">
+  <primary>project</primary>
+  <secondary>templates</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-templates">
+  <primary>templates</primary>
+  <secondary>project</secondary></indexterm>
+
 <formalpara id="appwizard-behind-app-templates">
 <title>The file templates</title>
 <para>
@@ -2252,6 +2250,12 @@ In the next step the file templates you set up in the <guilabel>Create New Proje
 In our example two such template files were installed, namely <filename>templates/h</filename> for C++ header and <filename>templates/cpp</filename> for C++ source files.
 </para>
 
+<indexterm zone="appwizard-behind-app-license">
+  <primary>project</primary>
+  <secondary>license</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-license">
+  <primary>license</primary></indexterm>
+
 <formalpara id="appwizard-behind-app-license">
 <title>The license file</title>
 <para>
@@ -2261,6 +2265,12 @@ On the <guilabel>General</guilabel> page of the <guilabel>Create New Project</gu
 <para>
 The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <filename>script</filename> which license text file to copy. In our example the <filename>/home/devel/yournewapplication/COPYING</filename> file will have been installed in this step.
 </para>
+
+<indexterm zone="appwizard-behind-app-admin">
+  <primary>project</primary>
+  <secondary>administration</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-admin">
+  <primary>administration</primary></indexterm>
 
 <formalpara id="appwizard-behind-app-admin">
 <title>The administration directory</title>
@@ -2274,6 +2284,10 @@ The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <f
 <note><para>
 &kdevelop; always uses the same set of standard files for its administration purposes. Hence no parameter is needed in the &perl;  <filename>script</filename> call to set up the <filename class="directory">admin</filename> subdirectory.
 </para></note>
+
+<indexterm zone="appwizard-behind-app-gnu">
+  <primary>GNU</primary>
+  <secondary>coding standard</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-gnu">
 <title>The &gnu; coding standard files</title>
@@ -2305,12 +2319,26 @@ After this step you will find the following files in your application base direc
 </itemizedlist>
 </para>
 
+<indexterm zone="appwizard-behind-app-doc">
+  <primary>project</primary>
+  <secondary>documentation</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-doc">
+  <primary>documentation</primary>
+  <secondary>project</secondary></indexterm>
+
 <formalpara id="appwizard-behind-app-doc">
 <title>The initial application documentation</title>
 <para>
 Every project you set up will contain an initial <emphasis>DocBook</emphasis> template from where you can start to write your application documentation. The &perl; <filename>script</filename> will in this step have set up <filename class="directory">doc</filename> and <filename class="directory">doc/en</filename> subdirectories of the application base directory with an initial <filename>doc/en/index.docbook</filename> template and some &automake; <filename>Makefile.am</filename> files from which &kdevelop; can later build help system files.
 </para>
 </formalpara>
+
+<indexterm zone="appwizard-behind-app-project">
+  <primary>project</primary>
+  <secondary>project file</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-project">
+  <primary>&kdevelop;</primary>
+  <secondary>project file</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-project">
 <title>The project file</title>
@@ -2325,6 +2353,18 @@ In the first step of these the <emphasis>&kdevelop; project managagement file</e
 <note><para>
 You may want to have a look at the resulting project file which in our case was saved as <filename>/home/devel/yournewapplication/yournewapplication.kdevelop</filename>. It is written in XML format and easily to be displayed with <application>Kate</application> or any other text editor. But take care nothing to change as &kdevelop; relies on its contents.
 </para></note>
+
+<indexterm zone="appwizard-behind-app-framework">
+  <primary>project</primary>
+  <secondary>framework</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-framework">
+  <primary>project</primary>
+  <secondary>application framework</secondary></indexterm>
+<indexterm zone="appwizard-behind-app-framework">
+  <primary>framework</primary></indexterm>
+<indexterm zone="appwizard-behind-app-framework">
+  <primary>application</primary>
+  <secondary>framework</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-framework">
 <title>The application framework</title>
@@ -2361,11 +2401,145 @@ This framework finally will be used to put the <emphasis>initial source files</e
 
 </sect2> <!-- appwizard-behind-app -->
 
+<!--<indexterm zone="appwizard-behind-cvs">
+  <primary>CVS</primary>
+  <secondary>new project</secondary>
+  <tertiary>build</tertiary></indexterm>
+<indexterm zone="appwizard-behind-cvs">
+  <primary>project</primary>
+  <secondary>CVS</secondary></indexterm>//-->
+
 <sect2 id="appwizard-behind-cvs">
 <title>Setting up &CVS;</title>
 
+<indexterm zone="appwizard-behind-cvs">
+  <primary>CVS</primary>
+  <secondary>new project</secondary>
+  <tertiary>build</tertiary></indexterm>
+<indexterm zone="appwizard-behind-cvs">
+  <primary>project</primary>
+  <secondary>CVS</secondary></indexterm>
+
 <para>
+Now let us have a look at what the <guilabel>Messages</guilabel> window will contain when the &appwizard; continues to build our example project. If no error occured during the first pass, the <guilabel>Messages</guilabel> contents will revert to create the local &cvs; repository.
 </para>
+<para>
+As before we reformatted the output lines a bit for readability. And we removed some superfluous lines (where the <quote>. . .</quote> dots are).
+</para>
+
+<screen><computeroutput>
+* cd '/home/devel/yournewapplication' \
+  &amp;&amp; cvs -d '/home/devel/cvsroot' \
+         import -m 'new project' \
+                'YourNewApplication' \
+                'vendor' \
+                'start' \
+  &amp;&amp; sh /opt/kde3/share/apps/kdevcvs/buildcvs.sh . \
+                                                 'YourNewApplication' \
+                                                 '/home/devel/cvsroot'
+  . . .
+* N YourNewApplication/NEWS
+* N YourNewApplication/TODO
+* N YourNewApplication/README
+  . . .
+* N YourNewApplication/admin/configure.in.bot.end
+* N YourNewApplication/templates/h
+* N YourNewApplication/templates/cpp
+*
+* No conflicts created by this import
+*
+* *** Success ***
+</computeroutput></screen>
+
+<para>
+As you see from the first message line, the &appwizard; built another shell command line which conducts the &cvs; work to be done. At first the shell changes to the newly created application base directory to use it as default in the following steps.
+</para>
+
+<formalpara>
+<title>Building the &cvs; repository</title>
+<para>
+In the second command line part the &CVS; application will be called to <emphasis>import</emphasis> the initial project contents into the wanted repository. Again, the work in detail is commanded by a series of command line arguments to the &CVS; application call.
+</para>
+</formalpara>
+<itemizedlist>
+  <listitem><para>
+    <computeroutput>-d '/home/devel/cvsroot'</computeroutput> - the <computeroutput>-d</computeroutput> option tells &CVS; which root directory is to be used. In our case this is the <emphasis>local &cvs; root</emphasis> located in <filename class="directory">/home/devel/cvsroot</filename>.
+  </para></listitem>
+  <listitem><para>
+    <computeroutput>import</computeroutput> - tells the &CVS; application which operation to perform in this root. We want to <emphasis>import</emphasis> files into the &cvs; database. To accomplish this, the <computeroutput>import</computeroutput> command needs some arguments of its own:
+    <itemizedlist>
+      <listitem><para>
+        <computeroutput>-m 'new project'</computeroutput> - the <computeroutput>-m</computeroutput> option provides import some <emphasis>message text</emphasis> for this action. It will be stored in the database and can later be recalled to identify the data which was kept in this step. In our case <quote><computeroutput>new project</computeroutput></quote> denotes the storage of our first files in the database.
+      </para></listitem>
+      <listitem><para>
+        <computeroutput>'YourNewApplication'</computeroutput> - the second argument tells &CVS; which <emphasis>repository</emphasis> to use. If it does not exist, it will be created prior to the file import actions. In this case the <filename>YourNewApplication</filename> repository will be created.
+      </para></listitem>
+      <listitem><para>
+        <computeroutput>'vendor'</computeroutput> - this following argument is a <emphasis>tag</emphasis>, a symbolic name which marks a series of files in the directory. There are several different meanings such a tag can have (see <link linkend="cvs">Using CVS</link> for more information), this one in principle marks the whole bunch of files which subsequently will ever be stored in this repository. It is of no particular use to us, so <quote><computeroutput>vendor</computeroutput></quote> is as good a name as any other.
+      </para></listitem>
+      <listitem><para>
+        <computeroutput>'start'</computeroutput> - is another tag. It marks the <emphasis>release</emphasis>, in easy words a series of subsequently saved files which belong together. We used <quote><computeroutput>start</computeroutput></quote> here, a meaningful description of the use of this initial series.
+      </para></listitem>
+    </itemizedlist>
+  </para></listitem>
+</itemizedlist>
+
+<formalpara>
+<title>The imported files</title>
+<para>
+The &CVS; application will create the repository and then start to import all files from our <filename class="directory">/home/devel/yournewapplication</filename> directory. It subsequently reports any file which is loaded - this is the contents of the whole bunch of <quote><computeroutput>N</computeroutput></quote> lines following in the <guilabel>Messages</guilabel> window. The <computeroutput>N</computeroutput> denotes that this file was newly imported into the repository.
+</para>
+</formalpara>
+<para>
+Depending on the type of the new application there will be quite a lot of those <quote><computeroutput>N</computeroutput></quote> lines. We truncated the output showing only the first and last three lines as an example.
+</para>
+
+<formalpara>
+<title>The &CVS; success message</title>
+<para>
+&CVS; always reports when an operation was successfully performed. In our case the <quote><computeroutput>No conflicts created by this import</computeroutput></quote> message was printed, followed by the general <quote><computeroutput>*** Success ***</computeroutput></quote> line as no other operation had to be performed.
+</para>
+</formalpara>
+
+<note><para>
+There <emphasis>could</emphasis> have been some error messages about conflicting files if the repository already existed because &CVS; checks the file contents according to some formal criteria and will report any conflict it possibly finds.
+</para></note>
+
+<formalpara>
+<title>Building the &cvs; administration entries</title>
+<para>
+The &CVS; import operation is concluded at this point. The repository has been set up and all files we want to be kept were stored in the database. Yet there is more work to do, because the &CVS; application needs some administration information kept in every directory of the application. It uses this information later to communinicate with the cvs root and repository.
+</para>
+</formalpara>
+<para>
+If we were working with &CVS; alone we had to provide a means for &CVS; to store this information in our working directory. For instance we could <emphasis>check out</emphasis> the files again in an empty base directory in which case &CVS; automatically would write all administrative operation together with the checked out files.
+</para>
+<para>
+In &kdevelop; fortunately there is an easier way. It provides the <filename>buildcvs.sh</filename> shell script in the <filename class="directory">/opt/kde3/share/apps/kdevcvs/</filename> directory (again replace <filename class="directory">/opt/kde</filename> with your &kde; installation directory), which the &appwizard; called after the &CVS; application had successfully finished its work.
+</para>
+<para>
+The <filename>buildcvs.sh</filename> script mainly will put a <filename class="directory">CVS</filename> subdirectory into each directory of the application framework. Each of these  <filename class="directory">CVS</filename> subdirectories will hold three file entries as follows:
+</para>
+<itemizedlist>
+  <listitem><para>
+    <filename>Root</filename> holds the name of the server on which the &cvs; root is located. In our case this is the local <filename>/home/devel/cvsroot</filename> root. The rationale behind this is to always use the same repository for these files, because &CVS; does not store them as a whole but will record only the <emphasis>differences</emphasis> of the subsequent parts. This will save lots of disk space yet makes it mandatory that all subsequent information be kept together under all circumstances.
+  </para></listitem>
+  <listitem><para>
+    <filename>Repository</filename> serves the same purpose. &CVS; keeps the name of the repository to use herein, <filename>YourNewApplication</filename> in our case.
+  </para></listitem>
+  <listitem><para>
+    <filename>Entries</filename> holds the names and some other data about the files &CVS; will care of in this directory. This is because &CVS; does not necessarily keep every application file in the repository. You can tell it which files to store and which to ignore - this information is kept in the <filename>Entries</filename> file.
+  </para>
+  </listitem>
+</itemizedlist>
+
+<para>
+All these efforts are necessary because &CVS;'s work is <emphasis>directory-oriented</emphasis>. As &CVS; previously had stored all files in the <filename>YourNewApplication</filename> framework, the <filename>buildcvs.sh</filename> script simply scans every directory and puts the names of all application files it finds into the according <filename>CVS/Entries</filename> file.
+</para>
+<para>
+The script runs silently, just closing without any more line in the <guilabel>Messages</guilabel> window when the work was done.
+</para>
+
 </sect2> <!-- appwizard-behind-cvs -->
 
 </sect1> <!-- appwizard-behind -->
