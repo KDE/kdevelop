@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>DialogWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,18 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>318</width>
-            <height>270</height>
+            <width>322</width>
+            <height>306</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
@@ -64,120 +64,269 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QWidgetStack" row="1" column="0">
             <property name="name">
-                <cstring>groupBox2</cstring>
+                <cstring>stack</cstring>
             </property>
-            <property name="title">
-                <string>Valgrind</string>
-            </property>
-            <vbox>
+            <widget class="QWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>WStackPage</cstring>
                 </property>
-                <widget class="QCheckBox">
+                <attribute name="id">
+                    <number>0</number>
+                </attribute>
+                <grid>
                     <property name="name">
-                        <cstring>memleakBox</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="text">
-                        <string>Memory &amp;leak check</string>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout2</cstring>
-                    </property>
-                    <hbox>
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>groupBox2</cstring>
                         </property>
-                        <property name="margin">
-                            <number>0</number>
+                        <property name="title">
+                            <string>Valgrind</string>
                         </property>
-                        <spacer>
+                        <vbox>
                             <property name="name">
-                                <cstring>spacer1</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Fixed</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QCheckBox">
-                            <property name="name">
-                                <cstring>reachableBox</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Show still reachable blocks</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QCheckBox">
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>memleakBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Memory &amp;leak check</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+L</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout2</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer1</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Fixed</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>reachableBox</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Show still reachable blocks</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+S</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>childrenBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Trace children</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+T</string>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout3</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <widget class="QLabel" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>textLabel5</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Additional p&amp;arameters:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>valParamEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="1" column="1">
+                                        <property name="name">
+                                            <cstring>valParamEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KURLRequester" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>valExecutableEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>textLabel4</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>E&amp;xecutable:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>valExecutableEdit</cstring>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
+                </property>
+                <attribute name="id">
+                    <number>1</number>
+                </attribute>
+                <grid>
                     <property name="name">
-                        <cstring>childrenBox</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="text">
-                        <string>&amp;Trace children</string>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
-                    </property>
-                    <grid>
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>groupBox3</cstring>
                         </property>
-                        <property name="margin">
-                            <number>0</number>
+                        <property name="title">
+                            <string>Calltree</string>
                         </property>
-                        <widget class="QLabel" row="1" column="0">
+                        <grid>
                             <property name="name">
-                                <cstring>textLabel5</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Additional p&amp;arameters:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>valParamEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="KLineEdit" row="1" column="1">
+                            <widget class="QLayoutWidget" row="1" column="0">
+                                <property name="name">
+                                    <cstring>layout3_2</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <property name="margin">
+                                        <number>0</number>
+                                    </property>
+                                    <widget class="QLabel" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>textLabel5_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Additional p&amp;arameters:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>valParamEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="1" column="1">
+                                        <property name="name">
+                                            <cstring>ctParamEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KURLRequester" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>ctExecutableEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>textLabel4_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>E&amp;xecutable:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>valExecutableEdit</cstring>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>ctChildrenBox</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Trace children</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+T</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBox4</cstring>
+                        </property>
+                        <property name="title">
+                            <string>KCachegrind</string>
+                        </property>
+                        <grid>
                             <property name="name">
-                                <cstring>valParamEdit</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                        </widget>
-                        <widget class="KURLRequester" row="0" column="1">
-                            <property name="name">
-                                <cstring>valExecutableEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>textLabel4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>E&amp;xecutable:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>valExecutableEdit</cstring>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </vbox>
+                            <widget class="KURLRequester" row="0" column="1">
+                                <property name="name">
+                                    <cstring>kcExecutableEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>textLabel4_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Executable:</string>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>valExecutableEdit</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </grid>
+            </widget>
         </widget>
-    </vbox>
+    </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>memleakBox</sender>
@@ -194,10 +343,13 @@
     <tabstop>childrenBox</tabstop>
     <tabstop>valExecutableEdit</tabstop>
     <tabstop>valParamEdit</tabstop>
+    <tabstop>ctChildrenBox</tabstop>
+    <tabstop>ctExecutableEdit</tabstop>
+    <tabstop>ctParamEdit</tabstop>
+    <tabstop>kcExecutableEdit</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
-    <include location="local" impldecl="in implementation">dialog_widget.ui.h</include>
 </includes>
 <slots>
     <slot access="private" specifier="non virtual">checkBoxToggled()</slot>
@@ -211,6 +363,13 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

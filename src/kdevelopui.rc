@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="19" name="kdevelop" >
+<kpartgui version="20" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -73,6 +73,11 @@
     <Merge/>
     <Separator/>
     <Action name="stop_processes"/>
+  </Menu>
+  <Menu name="debug">
+    <text>&amp;Debug</text>
+    <DefineGroup name="debug"/>
+    <DefineGroup name="profile"/>
   </Menu>
   <Merge/>
   <Menu name="tools">

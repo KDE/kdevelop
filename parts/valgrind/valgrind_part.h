@@ -28,6 +28,7 @@ public:
 
 private slots:
   void slotExecValgrind();
+  void slotExecCalltree();
   void slotKillValgrind();
   void slotStopButtonClicked( KDevPlugin* which );
   void receivedStdout( KProcess*, char*, int );
@@ -42,13 +43,19 @@ private:
   void appendMessages( const QStringList& lines );
   void receivedString( const QString& str );
   void clear();
-  QString _lastExec, _lastParams, _lastValExec, _lastValParams;
+  QString _lastExec, _lastParams, _lastValExec, _lastValParams,
+      _lastCtExec, _lastCtParams, _lastKcExec;
   KProcess* proc;
   QString currentMessage;
   QString lastPiece;
   QStringList activeFiles;
   int currentPid;
   QGuardedPtr<ValgrindWidget> m_widget;
+  struct {
+      bool runKc;
+      QString kcPath;
+//      QString kcWorkDir;
+  } kcInfo;
 };
 
 

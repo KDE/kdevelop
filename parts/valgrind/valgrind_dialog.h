@@ -15,7 +15,9 @@ class ValgrindDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-  ValgrindDialog( QWidget* parent = 0 );
+  enum Type { Memcheck = 0, Calltree = 1 };
+    
+  ValgrindDialog( Type type, QWidget* parent = 0 );
   ~ValgrindDialog();
 
   // the app to check
@@ -33,9 +35,22 @@ public:
   // command line parameters for valgrind
   QString valParams() const;
   void setValParams( const QString& params );
-      
+  
+  // name and/or path to the calltree executable
+  QString ctExecutable() const;
+  void setCtExecutable( const QString& ce );
+  
+  // command line parameters for calltree
+  QString ctParams() const;
+  void setCtParams( const QString& params );
+
+  // name and/or path to the kcachegrind executable
+  QString kcExecutable() const;
+  void setKcExecutable( const QString& ke );
+        
 private:
   DialogWidget *w;
+  Type m_type;
   private slots:
       void valgrindTextChanged();
 

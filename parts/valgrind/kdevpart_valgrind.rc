@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="valgrind" library="libvalgrindplugin" version="2">
+<kpartplugin name="valgrind" library="libvalgrindplugin" version="3">
 <MenuBar>
- <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="tools_valgrind" group="tools_project_operations"/>
+ <Menu name="debug"><Text>&amp;Debug</Text>
+  <Action name="tools_valgrind" group="profile"/>
+  <Action name="tools_calltree" group="profile"/>
  </Menu>
 </MenuBar>
 </kpartplugin>

@@ -1,25 +1,26 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDebugger" version="9">
+<kpartgui name="KDevDebugger" version="10">
 <MenuBar>
  <Menu name="debug">
   <text>&amp;Debug</text>
-  <Action name="debug_run"/>
-  <Action name="debug_stop"/>
-  <Action name="debug_pause"/>
-  <Action name="debug_runtocursor"/>
-  <Separator/>
-  <Action name="debug_stepover"/>
-  <Action name="debug_stepoverinst"/>
-  <Action name="debug_stepinto"/>
-  <Action name="debug_stepintoinst"/>
-  <Action name="debug_stepout"/>
-  <Separator/>
-  <Action name="debug_toggle_breakpoint"/>
-  <Action name="debug_disable_breakpoint"/>
-  <Separator/>
-  <Action name="debug_memview"/>
-  <Action name="debug_core"/>
-  <Action name="debug_attach"/>
+  <Action name="debug_run" group="debug"/>
+  <Action name="debug_stop" group="debug"/>
+  <Action name="debug_pause" group="debug"/>
+  <Action name="debug_runtocursor" group="debug"/>
+  <Separator group="debug"/>
+  <Action name="debug_stepover" group="debug"/>
+  <Action name="debug_stepoverinst" group="debug"/>
+  <Action name="debug_stepinto" group="debug"/>
+  <Action name="debug_stepintoinst" group="debug"/>
+  <Action name="debug_stepout" group="debug"/>
+  <Separator group="debug"/>
+  <Action name="debug_toggle_breakpoint" group="debug"/>
+  <Action name="debug_disable_breakpoint" group="debug"/>
+  <Separator group="debug"/>
+  <Action name="debug_memview" group="debug"/>
+  <Action name="debug_core" group="debug"/>
+  <Action name="debug_attach" group="debug"/>
+  <Separator group="debug"/>
  </Menu>
 </MenuBar>
 <ToolBar name="debugToolBar">

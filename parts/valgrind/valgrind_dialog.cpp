@@ -1,6 +1,7 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qregexp.h>
+#include <qwidgetstack.h>
 
 #include <klocale.h>
 #include <kurlrequester.h>
@@ -14,15 +15,19 @@
 #include "valgrind_dialog.moc"
 
 
-ValgrindDialog::ValgrindDialog( QWidget* parent )
-  : KDialogBase( parent, "valgrind dialog", true, i18n("Valgrind Memory Check"), Ok|Cancel )
+ValgrindDialog::ValgrindDialog( Type type, QWidget* parent )
+  : KDialogBase( parent, "valgrind dialog", true, i18n("Valgrind Memory Check"), Ok|Cancel ),
+  m_type(type)
 {
   w = new DialogWidget( this );
   w->valExecutableEdit->setURL( "valgrind" );
   w->executableEdit->setFocus();
+  w->stack->raiseWidget(m_type);
   setMainWidget( w );
   connect( w->executableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
   connect( w->valExecutableEdit->lineEdit(), SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
+  connect( w->ctExecutableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
+  connect( w->kcExecutableEdit->lineEdit(), SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
   enableButtonOK( false );
 }
 
@@ -33,7 +38,10 @@ ValgrindDialog::~ValgrindDialog()
 
 void ValgrindDialog::valgrindTextChanged()
 {
-    enableButtonOK( !w->valExecutableEdit->lineEdit()->text().isEmpty() &&  !w->executableEdit->lineEdit()->text().isEmpty() );
+    if (m_type == Memcheck)
+        enableButtonOK( !w->valExecutableEdit->lineEdit()->text().isEmpty() &&  !w->executableEdit->lineEdit()->text().isEmpty() );
+    else if (m_type == Calltree)
+        enableButtonOK( !w->executableEdit->lineEdit()->text().isEmpty() &&  !w->ctExecutableEdit->lineEdit()->text().isEmpty() && !w->kcExecutableEdit->lineEdit()->text().isEmpty() );
 }
 
 QString ValgrindDialog::executableName() const
@@ -110,5 +118,68 @@ void ValgrindDialog::setValParams( const QString& params )
   myParams = myParams.replace( QRegExp( childrenParam ), "" );
   myParams = myParams.stripWhiteSpace();
   w->valParamEdit->setText( myParams );
+}
+
+QString ValgrindDialog::ctExecutable() const
+{
+  return w->ctExecutableEdit->url();
+}
+
+void ValgrindDialog::setCtExecutable( const QString& ce )
+{
+  QString vUrl = ce;
+  if ( vUrl.isEmpty() ) {
+    vUrl = KStandardDirs::findExe( "calltree" );
+  }
+  if ( vUrl.isEmpty() ) {
+    KMessageBox::sorry( this, i18n( "Could not find calltree in your $PATH. Please make "
+                                    "sure it is installed properly." ),
+                        i18n( "Calltree Not Found" ) );
+    w->ctExecutableEdit->setURL( "calltree" );
+  } else {
+    w->ctExecutableEdit->setURL( vUrl );
+  }
+}
+
+QString ValgrindDialog::ctParams() const
+{
+  QString params = w->ctParamEdit->text();
+  if ( w->ctChildrenBox->isChecked() )
+    params += " " + childrenParam;
+
+  return params;
+}
+
+void ValgrindDialog::setCtParams( const QString& params )
+{
+  QString myParams = params;
+  if ( myParams.contains( childrenParam ) )
+    w->ctChildrenBox->setChecked( true );
+  w->init();
+
+  myParams = myParams.replace( QRegExp( childrenParam ), "" );
+  myParams = myParams.stripWhiteSpace();
+  w->ctParamEdit->setText( myParams );
+}
+
+QString ValgrindDialog::kcExecutable( ) const
+{
+  return w->kcExecutableEdit->url();
+}
+
+void ValgrindDialog::setKcExecutable( const QString& ke )
+{
+  QString vUrl = ke;
+  if ( vUrl.isEmpty() ) {
+    vUrl = KStandardDirs::findExe( "kcachegrind" );
+  }
+  if ( vUrl.isEmpty() ) {
+    KMessageBox::sorry( this, i18n( "Could not find kcachegrind in your $PATH. Please make "
+                                    "sure it is installed properly." ),
+                        i18n( "KCachegrind Not Found" ) );
+    w->kcExecutableEdit->setURL( "kcachegrind" );
+  } else {
+    w->kcExecutableEdit->setURL( vUrl );
+  }
 }
 
