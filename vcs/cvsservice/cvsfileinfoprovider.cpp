@@ -185,7 +185,7 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
 
 VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsString )
 {
-    // @todo add more status as "Conflict" (but I dunno how CVS writes it so I'm going
+    // @todo add more status as "Conflict" and "Sticky" (but I dunno how CVS writes it so I'm going
     // to await until I have a conflict or somebody else fix it ;-)
     if (stateAsString == "Up-to-date")
         return VCSFileInfo::Uptodate;
@@ -193,9 +193,10 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
         return VCSFileInfo::Modified;
     if (stateAsString == "Locally Added")
         return VCSFileInfo::Added;
+    if (stateAsString == "Unresolved Conflict")
+        return VCSFileInfo::Conflict;
     else
         return VCSFileInfo::Unknown; // @fixme: exhaust all the previous cases first ;-)
 }
-
 
 #include "cvsfileinfoprovider.moc"
