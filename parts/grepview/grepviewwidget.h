@@ -13,39 +13,95 @@
 #define _GREPVIEWWIDGET_H_
 
 #include "processwidget.h"
+#include <qwidget.h>
 
 class GrepDialog;
 class GrepViewPart;
 class KDevProject;
-
-
-class GrepViewWidget : public ProcessWidget
+class KTabWidget;
+class QHBoxLayout;
+class QToolButton;
+class GrepViewProcessWidget : public ProcessWidget
 {
-    Q_OBJECT
-
+	Q_OBJECT
 public:
-    GrepViewWidget(GrepViewPart *part);
-    ~GrepViewWidget();
-
-    void projectChanged(KDevProject *project);
-
+	GrepViewProcessWidget(QWidget* parent) : ProcessWidget(parent) {};
+	~GrepViewProcessWidget(){};
+	void setMatchCount(int newCount) 
+	{
+		m_matchCount = newCount;
+	}
+	
+	void incrementMatchCount(uint amount = 1)
+	{
+		m_matchCount += amount;
+	}
+	
+	void setLastFileName(const QString& lastFileName)
+	{
+		_lastfilename = lastFileName;
+	}
+	
 public slots:
-    void showDialog();
-    void showDialogWithPattern(QString pattern);
+	virtual void insertStdoutLine(const QString &line);
 
-private slots:
-    void searchActivated();
-    void slotExecuted(QListBoxItem *item);
-    void popupMenu(QListBoxItem *, const QPoint &p);
+protected:
+	virtual void childFinished(bool normal, int status);
 
 private:
-    virtual void childFinished(bool normal, int status);
-    virtual void insertStdoutLine(const QString &line);
+	int m_matchCount;
+	QString _lastfilename;
+};
 
-    GrepDialog *grepdlg;
-    GrepViewPart *m_part;
-    int m_matchCount;
-    QString _lastfilename;
+class GrepViewWidget : public QWidget
+{
+	Q_OBJECT
+
+public:
+	GrepViewWidget(GrepViewPart *part);
+	~GrepViewWidget();
+
+	void projectChanged(KDevProject *project);
+	void killJob( int signo = SIGTERM );
+	bool isRunning() const;
+	
+public slots:
+	void showDialog();
+	void showDialogWithPattern(QString pattern);
+
+private slots:
+	void searchActivated();
+	/**
+	 * If item is a valid result of a search run, it opens the file at the position, where the stuff was found.
+	 * @param item item containing filename and linenumber of the file to open.
+	 */
+	void slotExecuted(QListBoxItem *item);
+	void popupMenu(QListBoxItem*, const QPoint& p);
+	/**
+	 * Creates a new tab containing the current output in the main tab and clears the main tab.
+	 */
+	void slotKeepOutput();
+	/**
+	 * Closes the currently active tab, if it is not the main output.
+	 */
+	void slotCloseCurrentOutput();
+	/**
+	 * Slot reacting on changes of the active tab, to activate/deactivate the close button,
+	 * as the main output tab must not be closed.
+	 */
+	void slotOutputTabChanged();
+	
+	void slotSearchProcessExited();
+
+private:
+
+	QHBoxLayout* m_layout;
+	KTabWidget* m_tabWidget;
+	GrepViewProcessWidget* m_curOutput;
+	GrepDialog *grepdlg;
+	GrepViewPart *m_part;
+	QToolButton* m_closeButton;
+	QString m_lastPattern;
 };
 
 #endif
