@@ -1240,7 +1240,8 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags)
     }
 
     endCtx = textLine->getContext();
-    ctxNum = highlight->doHighlight(ctxNum,textLine);
+//    ctxNum = highlight->doHighlight(ctxNum,textLine);
+    if(endLine-line<4)ctxNum = highlight->doHighlight(ctxNum,textLine);
     textLine->setContext(ctxNum);
     line++;
   } while (line <= lastLine && (line <= endLine || endCtx != ctxNum));

@@ -2991,6 +2991,7 @@ void CKDevelop::slotStatusMsg(const char *text)
   // change status message permanently
 //  statusBar()->clear();
 //    statProg->hide();
+    statProg->reset();
     statusBar()->changeItem(text, ID_STATUS_MSG );
 }
 

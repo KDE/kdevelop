@@ -1340,7 +1340,19 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   y = line*h - yPos;
   yEnd = updateR.y() + updateR.height();
 
-  while (y < yEnd) {
+  while (y < yEnd)
+  {
+		TextLine *textLine;
+		int ctxNum = 0;
+    if ((kWriteDoc->getTextLineCount()-1)>line)
+    {
+      textLine = kWriteDoc->textLine(line);
+      if (line > 0)
+        ctxNum = kWriteDoc->textLine(line - 1)->getContext();
+      ctxNum = kWriteDoc->highlight->doHighlight(ctxNum,textLine);
+      textLine->setContext(ctxNum);
+    }
+
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
 //    if (cursorOn && line == cursor.y) paintCursor(paint,cXPos - xStart,h);
     bitBlt(this,updateR.x(),y,drawBuffer,0,0,updateR.width(),h);
