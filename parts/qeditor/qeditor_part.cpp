@@ -519,6 +519,12 @@ void QEditorPart::setupHighlighting()
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.pp" << "*.p" << "*.pas" << "*.dpr";
     m_modes.append( mode );
+
+    mode = new HLMode;
+    mode->name = "sql";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.sql" << "*.SQL";
+    m_modes.append( mode );
 }
 
 unsigned int QEditorPart::hlMode()

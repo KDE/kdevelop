@@ -53,6 +53,7 @@
 #include "cs_colorizer.h"
 #include "ocaml_colorizer.h"
 #include "pascal_colorizer.h"
+#include "sql_colorizer.h"
 
 #if defined(HAVE_PERL_MODE)
 #  include "perl_colorizer.h"
@@ -507,6 +508,10 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new PascalColorizer(this) );
 	document()->setIndent( new PascalIndent(this) );
+    } else if( m_language == "sql" ){
+	setElectricKeys( QString::null );
+	document()->setPreProcessor( new SqlColorizer(this) );
+	document()->setIndent( new SimpleIndent(this) );
     } else {
         setElectricKeys( QString::null );
 	document()->setPreProcessor( 0 );
