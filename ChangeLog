@@ -1,7 +1,10 @@
-1999-06-21  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+1999-06-22  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* Jonas: I commented out cclasswizarddlg.cpp line 93 -see comment
 		(caused build error)
-		
+
+1999-06-22 Jonas Nordin <jonas.nordin@cenacle.se>
+	* added basic classwizard support.
+	
 1999-06-21 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commit patch by Walter Tasin (mainly in bugfixes and improvements in docbrowser)
 
