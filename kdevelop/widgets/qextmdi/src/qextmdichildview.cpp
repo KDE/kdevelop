@@ -30,11 +30,7 @@
 #include <qobjectlist.h>
 
 #include "qextmdichildview.h"
-#ifdef NO_KDE2
-#  include "qextmdimainfrm.h"
-#else
-#  include "kextmdimainfrm.h"
-#endif
+#include "qextmdimainfrm.h"
 #include "qextmdichildfrm.h"
 #include "qextmdidefines.h"
 

@@ -30,15 +30,11 @@
 #include <qclipboard.h>
 #include <qobjcoll.h>
 #ifndef NO_KDE2
- #include <kmenubar.h>
+#  include <kmenubar.h>
 #endif
 #include <qtoolbutton.h>
 
-#ifdef NO_KDE2
-#  include "qextmdimainfrm.h"
-#else
-#  include "kextmdimainfrm.h"
-#endif
+#include "qextmdimainfrm.h"
 #include "qextmditaskbar.h"
 #include "qextmdichildfrm.h"
 #include "qextmdichildarea.h"
@@ -58,13 +54,8 @@
 
 //============ constructor ============//
 
-#ifndef NO_KDE2
 QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
 : KMainWindow( parentWidget, name, flags)
-#else
-QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
-: QMainWindow( parentWidget, name, flags)
-#endif
    ,m_pMdi(0L)
    ,m_pTaskBar(0L)
    ,m_pWinList(0L)
@@ -174,7 +165,11 @@ void QextMdiMainFrm::resizeEvent(QResizeEvent *e)
       if( e->oldSize().height() != e->size().height()) {
          return;
       }
+#ifdef NO_KDE2
    QMainWindow::resizeEvent(e);
+#else
+   KMainWindow::resizeEvent(e);
+#endif
 }
 
 //================ setMinimumSize ===============//
@@ -183,7 +178,11 @@ void QextMdiMainFrm::setMinimumSize( int minw, int minh)
 {
    if( m_bTopLevelMode && !parentWidget())
       return;
+#ifdef NO_KDE2
    QMainWindow::setMinimumSize( minw, minh);
+#else
+   KMainWindow::setMinimumSize( minw, minh);
+#endif
 }
 
 //================ addWindow ===============//
@@ -518,7 +517,11 @@ bool QextMdiMainFrm::event( QEvent* e)
          closeWindow( pWnd);
       return TRUE;
    }
-   return QMainWindow::event( e);      
+#ifdef NO_KDE2
+   return QMainWindow::event( e);
+#else
+   return KMainWindow::event( e);
+#endif
 }
 
 /**
@@ -888,5 +891,5 @@ void QextMdiMainFrm::popupWindowMenu(QPoint p)
 }
 
 #ifdef INCLUDE_MOCFILES
-#  include "kextmdimainfrm.moc"
+#  include "qextmdimainfrm.moc"
 #endif

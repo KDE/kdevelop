@@ -9,7 +9,7 @@ libkdevqextmdi_la_LDFLAGS = $(all_libraries) -version-info 1:0
 
 libkdevqextmdi_la_SOURCES = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdichildfrmcaption.cpp qextmdichildview.cpp qextmdimainfrm.cpp qextmditaskbar.cpp
 
-noinst_HEADERS = ../include/qextmdichildarea.h ../include/qextmdichildfrm.h ../include/qextmdichildfrmcaption.h ../include/qextmdichildview.h ../include/kextmdimainfrm.h ../include/qextmditaskbar.h ../include/qextmdiiterator.h ../include/qextmdilistiterator.h ../include/qextmdinulliterator.h
+noinst_HEADERS = ../include/qextmdichildarea.h ../include/qextmdichildfrm.h ../include/qextmdichildfrmcaption.h ../include/qextmdichildview.h ../include/qextmdimainfrm.h ../include/qextmditaskbar.h ../include/qextmdiiterator.h ../include/qextmdilistiterator.h ../include/qextmdinulliterator.h
 
 METASOURCES = AUTO
 
@@ -30,9 +30,9 @@ $(srcdir)/qextmdichildview.cpp: qextmdichildview.moc
 qextmdichildview.moc: ../include/qextmdichildview.h
 	$(MOC) ../include/qextmdichildview.h -o qextmdichildview.moc
 
-$(srcdir)/qextmdimainfrm.cpp: kextmdimainfrm.moc
-kextmdimainfrm.moc: ../include/kextmdimainfrm.h
-	$(MOC) ../include/kextmdimainfrm.h -o kextmdimainfrm.moc
+$(srcdir)/qextmdimainfrm.cpp: qextmdimainfrm.moc
+qextmdimainfrm.moc: ../include/qextmdimainfrm.h
+	$(MOC) ../include/qextmdimainfrm.h -o qextmdimainfrm.moc
 
 $(srcdir)/qextmditaskbar.cpp: qextmditaskbar.moc
 qextmditaskbar.moc: ../include/qextmditaskbar.h

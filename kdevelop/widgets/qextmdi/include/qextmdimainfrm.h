@@ -96,6 +96,20 @@ public:
    QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
 };
 
+#ifdef NO_KDE2
+/**
+  * @short The base class of QextMdiMainFrm in case of QextMDI without KDE2 support
+  *
+  */
+class DLL_IMP_EXP_QEXTMDICLASS KMainWindow : public QMainWindow
+{
+   Q_OBJECT
+public:
+   KMainWindow( QWidget* parentWidget = 0L, const char* name = "", WFlags flags = WType_TopLevel) : QMainWindow( parentWidget, name, flags) {};
+   ~KMainWindow() {};
+};
+#endif
+
 /**
   * @short Base class for all your special main frames.
   *
@@ -104,7 +118,7 @@ public:
   * Provides functionality for docking/undocking view windows and manages the taskbar.<br>
   * Usually you just need to know about this class and the child view class.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KMainWindow
 {
    friend class QextMdiChildView;
    friend class QextMdiTaskBar;
@@ -122,10 +136,10 @@ protected:
    QPopupMenu              *m_pWindowMenu;
    QPopupMenu              *m_pDockMenu;
    QPopupMenu              *m_pPlacingMenu;
-#ifndef NO_KDE2
-   KMenuBar                *m_pMainMenuBar;
-#else
+#ifdef NO_KDE2
    QMenuBar                *m_pMainMenuBar;
+#else
+   KMenuBar                *m_pMainMenuBar;
 #endif
 
    QPixmap                 *m_pUndockButtonPixmap;

@@ -26,11 +26,7 @@
 //----------------------------------------------------------------------------
 
 #include "qextmditaskbar.h"
-#ifdef NO_KDE2
-#  include "qextmdimainfrm.h"
-#else
-#  include "kextmdimainfrm.h"
-#endif
+#include "qextmdimainfrm.h"
 #include "qextmdichildview.h"
 #include "qextmdidefines.h"
 
