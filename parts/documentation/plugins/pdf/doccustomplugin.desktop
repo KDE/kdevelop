@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DocPDFPlugin
+Exec=blubb
+Comment=Documentation plugin for PDF format
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdocpdfplugin
