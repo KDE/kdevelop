@@ -395,7 +395,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       if( ke->key() == Qt::Key_Tab) {
          //qDebug("ChildView %i::eventFilter - TAB from %s (%s)", this, obj->name(), obj->className());
          QWidget* w = (QWidget*) obj;
-         if( (w->focusPolicy() == QWidget::StrongFocus) || (w->focusPolicy() == QWidget::TabFocus)) {
+         if( (w->focusPolicy() == QWidget::StrongFocus) || (w->focusPolicy() == QWidget::TabFocus) || (w->focusPolicy() == QWidget::WheelFocus)) {
             //qDebug("  accept TAB as setFocus change");
             if( m_lastFocusableChildWidget != 0) {
                if( w == m_lastFocusableChildWidget) {
@@ -404,22 +404,6 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
                      m_firstFocusableChildWidget->setFocus();
                      //qDebug("  TAB: focus is set to first");
                   }
-                  return TRUE;
-                }
-            }
-         }
-         else {
-            if( w->focusPolicy() == QWidget::WheelFocus) {
-               //qDebug("  accept TAB as setFocus change");
-               if( m_lastFocusableChildWidget != 0) {
-                  if( w == m_lastFocusableChildWidget) {
-                     if( w != m_firstFocusableChildWidget) {
-                        //qDebug("  TAB: setFocus to first");
-                        m_firstFocusableChildWidget->setFocus();
-                        //qDebug("  TAB: focus is set to first");
-                     }
-                     return TRUE;
-                   }
                }
             }
          }
@@ -448,19 +432,11 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
             QWidget* widg = (QWidget*)obj;
             ++it;
             widg->installEventFilter(this);
-            if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
+            if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus) || (widg->focusPolicy() == QWidget::WheelFocus)) {
                if( m_firstFocusableChildWidget == 0)
                   m_firstFocusableChildWidget = widg;  // first widget
                m_lastFocusableChildWidget = widg; // last widget
                //qDebug("*** %s (%s)",widg->name(),widg->className());
-            }
-            else {
-               if( widg->focusPolicy() == QWidget::WheelFocus) {
-                  if( m_firstFocusableChildWidget == 0)
-                     m_firstFocusableChildWidget = widg;  // first widget
-                  m_lastFocusableChildWidget = widg; // last widget
-                  //qDebug("*** %s (%s)",widg->name(),widg->className());
-               }
             }
          }
          delete list;                        // delete the list, not the objects
@@ -482,19 +458,11 @@ void QextMdiChildView::installEventFilterForAllChildren()
       QWidget* widg = (QWidget*)obj;
       ++it;
       widg->installEventFilter(this);
-      if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
+      if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus) || (widg->focusPolicy() == QWidget::WheelFocus)) {
          if( m_firstFocusableChildWidget == 0)
             m_firstFocusableChildWidget = widg;  // first widget
          m_lastFocusableChildWidget = widg; // last widget
          //qDebug("*** %s (%s)",widg->name(),widg->className());
-      }
-      else {
-         if( widg->focusPolicy() == QWidget::WheelFocus) {
-            if( m_firstFocusableChildWidget == 0)
-               m_firstFocusableChildWidget = widg;  // first widget
-            m_lastFocusableChildWidget = widg; // last widget
-            //qDebug("*** %s (%s)",widg->name(),widg->className());
-         }
       }
    }
    //qDebug("### |%s|", m_lastFocusableChildWidget->name());
