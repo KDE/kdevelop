@@ -131,6 +131,7 @@ private slots:
 
   void slotDocumentDirty( Kate::Document * doc, bool isModified, unsigned char reason );
   void slotNewStatus();
+  void slotNewDesignerStatus(const QString &formName, int status);
 
 private:
   KURL findURLInProject(const KURL& url);

@@ -612,6 +612,11 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget*
       connect(designerPart, SIGNAL(editFunction(DesignerType, const QString&, const QString& )),
           API::getInstance()->languageSupport(),
           SLOT(openFunction(DesignerType, const QString&, const QString& )));
+      connect(designerPart, SIGNAL(editSource(DesignerType, const QString& )),
+          API::getInstance()->languageSupport(),
+          SLOT(openSource(DesignerType, const QString& )));
+      connect(designerPart, SIGNAL(newStatus(const QString &, int)), 
+          this, SLOT(slotNewDesignerStatus(const QString &, int)));
   }
 }
 
@@ -779,7 +784,8 @@ bool PartController::closePart(KParts::Part *part)
   // The following line can be removed with kdelibs HEAD! (2002-05-26)
   //
   // Now, this is needed for proper functioning, so leave...
-  removePart( part );
+//  removePart( part );
+  TopLevel::getInstance()->main()->guiFactory()->removeClient(part);
 
   if (QWidget* w = EditorProxy::getInstance()->topWidgetForPart(part))
     TopLevel::getInstance()->removeView(w);
@@ -1301,6 +1307,13 @@ bool PartController::reactToDirty( KURL const & url )
 	reloadFile( url );
 	
 	return true;
+}
+
+void PartController::slotNewDesignerStatus(const QString &formName, int status)
+{
+	kdDebug(9000) << k_funcinfo << endl;
+	kdDebug(9000) << " formName: " << formName << ", status: " << status << endl;
+	emit documentChangedState( KURL::fromPathOrURL(formName), DocumentState(status) );
 }
 
 void PartController::slotNewStatus( )
