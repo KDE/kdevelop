@@ -92,7 +92,7 @@ void CKDevelop::addRecentProject(const QString& file)
     QString menuFile = recent_projects_menu->text(id);
     if (menuFile == file)
     {
-      shuffleProjectToTop(id);
+//      shuffleProjectToTop(id);
       return;
     }
   }

@@ -179,7 +179,7 @@ void BreakpointManager::modifyBreakpoint(int index)
 
 void BreakpointManager::slotRightButtonClicked(QListBoxItem *item, const QPoint &)
 {
-  if (item >= 0)
+  if (item)
     breakpointPopup((Breakpoint*)item);
 }
 
