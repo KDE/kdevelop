@@ -1038,8 +1038,16 @@ void CKAppWizard::slotOkClicked() {
   }
 }
 
-void CKAppWizard::generateEntries() {
-  ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/entries");
+void CKAppWizard::generateEntries(const QString &filename) {
+  QString entriesfilename(filename.isEmpty() ? QString("entries") : filename);
+
+  ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/"+entriesfilename);
+
+  entries << "TEMPLATESDIR\n";
+  entries << KApplication::kde_datadir() << "/kdevelop/templates\n";
+  entries << "KDEICONDIR\n";
+  entries << KApplication::kde_icondir() << "\n";
+
   entries << "APPLICATION\n";
   if (kdeminiitem->isSelected()) {
     entries << "kdemini\n";
@@ -1191,6 +1199,7 @@ void CKAppWizard::okPermited() {
   errOutput->clear();
   output->clear();
   QDir kdevelop;
+
   kdevelop.setPath(QDir::homeDirPath() + "/.kde/share/apps");
   if (!kdevelop.exists()) {
     kdevelop.mkdir (QDir::homeDirPath() + "/.kde/share/apps");
@@ -1204,7 +1213,10 @@ void CKAppWizard::okPermited() {
   hedit->toggleModified(true);
   hedit->doSave();
 
-  generateEntries();
+  // making the entries-filename unique... so two Kdevelops on the same
+  //  account can let run the ApplicationWizard concurrent
+  entriesfname.sprintf("entries.%lX", (long) parent());
+  generateEntries(entriesfname);
 
   namelow = nameline->text();
   namelow = namelow.lower();
@@ -1291,6 +1303,10 @@ void CKAppWizard::okPermited() {
 	  this,SLOT(slotPerlErr(KProcess *, char *, int)));
   QString path = KApplication::kde_datadir()+"/kdevelop/tools/";
   *q << "perl" << path + "processes.pl";
+
+  if (!entriesfname.isEmpty())
+    *q << entriesfname;
+
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   okButton->setEnabled(false);
   gotoPage(5);
@@ -2042,6 +2058,14 @@ void CKAppWizard::slotProcessExited() {
 
   QString directory = directoryline->text();
   QString prj_str;
+
+  // PLEASE
+  /*
+    		DON´T make a 'return' inside this function...
+		It´s IMPORTANT to let run "processesend.pl" at the end
+		of this function...
+		because this removes "entries.XXXXXX", which is a temporary file
+  */
   if (vsBox->currentItem() != 0) {
     prj_str = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/" + namelow + ".kdevprj";
   }
@@ -2634,7 +2658,8 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
   q->clearArguments();
   *q << "perl" << path1 + "processesend.pl";
-
+  if (!entriesfname.isEmpty())
+    *q << entriesfname;
 
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   

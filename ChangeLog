@@ -1,3 +1,13 @@
+2000-01-31 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* processes.pl retrieves now the KDE-pathes
+	  by KDevelop ... good news for rpm-packagers
+	* Now the ApplicationWizard can run concurrent, which
+	  means two instances of KDevelop can start the
+	  ApplicationWizard at the same time. 
+
+2000-01-31 the KDevelop team
+	* KDevelop 1.1 beta 2 released
+
 2000-01-30 Ralf Funken <funken.ruk@netcologne.de>
 	* Translated chapter Questions and Answers (15)
 	* Corrected the links in this chapter in en and de manuals

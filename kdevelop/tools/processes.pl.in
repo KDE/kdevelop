@@ -4,6 +4,8 @@ use File::Copy;
 $templatedir = _;
 $kde_icondir = _;
 
+my $entriesfilename= shift || "entries";
+
 my %changings;
 
 my $homedirectory = $ENV{HOME};
@@ -15,8 +17,8 @@ my $local_miniicondir = $local_icondir ."/mini";
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") 
-  || die "can not open file \"entries\" in your local app-data-dir:\n  $!";
+open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/" . $entriesfilename)
+  || die "can not open file \"$entriesfilename\" in your local app-data-dir:\n  $!";
 while (defined($name = <PROCESSLIST>)) {
   chomp ($name);
   chomp ($process = <PROCESSLIST>);
@@ -30,6 +32,13 @@ $nameLittle =~ tr/A-Z/a-z/;
 $nameBig = $processes{NAME};
 $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
+
+$template_dir= $processes{TEMPLATESDIR} if ($processes{TEMPLATESDIR});
+if ($processes{KDEICONDIR})
+{
+  $kde_icondir= $processes{KDEICONDIR};
+  $kde_miniicondir = $kde_icondir . "/mini";
+}
 
 if ($processes{VSSUPPORT} eq "none") {
 	$overDirectory = $processes{DIRECTORY} . "/";
