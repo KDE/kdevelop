@@ -42,20 +42,11 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 {
   initActions();
   initHelp();
-  //  setXMLFile( "/home/falk/Projekte/kde2src/kdevelop/kdevelop/kdevelopui.rc" );//!!!
   //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
 
   createGUI( 0L );
-
-  // build up the inner tool views and information views
-  // MDI view mainframe widget
-  m_dockbaseMDIMainFrm = createDockWidget(i18n("MDI Mainframe"), BarIcon("filenew"));
-  m_dockbaseMDIMainFrm->setEnableDocking(KDockWidget::DockNone);
-  m_dockbaseMDIMainFrm->setDockSite(KDockWidget::DockCorner);
-  setView(m_dockbaseMDIMainFrm);
-  setMainDockWidget( m_dockbaseMDIMainFrm );
 
   (void) new KDevelopCore(this);
 }
@@ -744,28 +735,44 @@ void KDevelop::initHelp(){
 
 }
 
-void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption)
+void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation)
 {
     // This is a hack to get the ball rolling...
-    static KDockWidget *leftWidget = m_dockbaseMDIMainFrm;
+    static KDockWidget *leftWidget = 0L;
     static KDockWidget::DockPosition leftpos = KDockWidget::DockLeft;
-    static KDockWidget *bottomWidget = m_dockbaseMDIMainFrm;
+    static KDockWidget *bottomWidget = 0L;
     static KDockWidget::DockPosition bottompos = KDockWidget::DockBottom;
+    static KDockWidget *mfWidget = 0L;
 
     KDockWidget *nextWidget = createDockWidget(QString(w->name()),
                                                w->icon()? *w->icon() : QPixmap(),
-                                               0,
+                                               0L,
                                                w->caption(),
-                                               shortCaption);
+                                               "");//shortCaption);
     nextWidget->setWidget(w);
+    nextWidget->setToolTipString(shortExplanation);
     if (role == KDevComponent::SelectView) {
-        nextWidget->manualDock(leftWidget, leftpos, 35);
+        if(leftWidget)
+          nextWidget->manualDock(leftWidget, leftpos, 35);
         leftWidget = nextWidget;
         leftpos = KDockWidget::DockCenter;
-    } else {
-        nextWidget->manualDock(bottomWidget, bottompos, 70);
+        nextWidget->show();
+    } else if (role == KDevComponent::OutputView) {
+        if(bottomWidget)
+          nextWidget->manualDock(bottomWidget, bottompos, 70);
         bottomWidget = nextWidget;
         bottompos = KDockWidget::DockCenter;
+        nextWidget->show();
+    } else if(role == KDevComponent::DocumentView) {
+        // MDI view mainframe widget
+        // another ugly hack to get it run, will be fixed soon...
+        nextWidget->setEnableDocking(KDockWidget::DockNone);
+        nextWidget->setDockSite(KDockWidget::DockCorner);
+        setView(nextWidget);
+        setMainDockWidget( nextWidget );
+        mfWidget = nextWidget;
+        ((KDockWidget*)(bottomWidget->parentWidget()->parentWidget()->parentWidget()))->manualDock(mfWidget,KDockWidget::DockBottom,70);
+        ((KDockWidget*)(leftWidget->parentWidget()->parentWidget()->parentWidget()))->manualDock(mfWidget,KDockWidget::DockLeft,35);
     }
 }
 
@@ -799,81 +806,6 @@ void KDevelop::slotOptionsEditToolbars(){
   
   if (dlg.exec())
     createGUI(0);
-}
-
-
-/** creates and inits all tool (selection and output) views */
-void KDevelop::initCoveringDockViews(){
-  // output views
-  KIconLoader *il = KGlobal::iconLoader();
-
-  m_dockbaseMessagesView = createDockWidget(i18n("messages"), BarIcon(""), 0L, i18n("Messages"));
-  m_dockbaseGrepView     = createDockWidget(i18n("search"), QPixmap( il->loadIcon( "find.png", KIcon::Small )), 0L, i18n("Search"), "" );
-	m_dockbaseOutputView   = createDockWidget(i18n("output"), BarIcon(""), 0L, i18n("Output"));
-
-  // tree views
-  m_dockbaseClassTree = createDockWidget(i18n("CV"), QPixmap(locate("appdata", "pics/mini/CVclass.png")), 0L, i18n("Class view"), "" );
-  m_dockbaseClassTree->setToolTipString(i18n("class tree view"));
-
-  m_dockbaseLogFileTree = createDockWidget(i18n("LFV"), QPixmap( il->loadIcon( "kdevelop.png", KIcon::Small )), 0L, i18n("Logical file view"), "" );
-  m_dockbaseLogFileTree->setToolTipString(i18n("logical file tree view"));
-
-  m_dockbaseRealFileTree = createDockWidget(i18n("RFV"), QPixmap( il->loadIcon( "folder.png", KIcon::Small )), 0L, i18n("Real file view"), "" );
-  m_dockbaseRealFileTree->setToolTipString(i18n("real file tree view"));
-
-  m_dockbaseDocTree = createDockWidget(i18n("DOC"), BarIcon("mini-book1"), 0L, i18n("Documentation"), "");
-  m_dockbaseDocTree->setToolTipString(i18n("documentation tree view"));
-
-  m_dockbaseWidPropSplitView = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"), 0L, i18n("Dialog editor"), "");
-  m_dockbaseWidPropSplitView->setToolTipString(i18n("dialog editor view"));
-
-  //
-  // dock the widgets
-  //
-  // ...the output views
-  m_dockbaseMessagesView->manualDock(m_dockbaseMDIMainFrm, KDockWidget::DockBottom, 70/*size relation in %*/);
-  m_dockbaseGrepView->manualDock(m_dockbaseMessagesView, KDockWidget::DockCenter);
-  m_dockbaseOutputView->manualDock(m_dockbaseMessagesView, KDockWidget::DockCenter);
-	// ...the tree views
-  m_dockbaseClassTree->manualDock(m_dockbaseMDIMainFrm, KDockWidget::DockLeft, 35/*size relation in %*/);
-  m_dockbaseLogFileTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
-  m_dockbaseRealFileTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
-  m_dockbaseDocTree->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
-  m_dockbaseWidPropSplitView->manualDock(m_dockbaseClassTree, KDockWidget::DockCenter);
-}
-
-/** Embed the widgets of components in the dockwidget-based GUI.
-    Which dockwidget gets which widget depends on the object name.
-    This method should be called in the initialization part of every certain component */
-void KDevelop::embedToolViewInGUI(QWidget* w)
-{
-  if( w->name() == "messages") {
-    m_dockbaseMessagesView->setWidget(w);
-  }
-  else if( w->name() == "search") {
-    m_dockbaseGrepView->setWidget(w);
-  }
-  else if( w->name() == "output") {
-    m_dockbaseOutputView->setWidget(w);
-  }
-  else if( w->name() == "CV") {
-    m_dockbaseClassTree->setWidget(w);
-  }
-  else if( w->name() == "LFV") {
-    m_dockbaseLogFileTree->setWidget(w);
-  }
-  else if( w->name() == "RFV") {
-    m_dockbaseRealFileTree->setWidget(w);
-  }
-  else if( w->name() == "DOC") {
-    m_dockbaseDocTree->setWidget(w);
-  }
-  else if( w->name() == "DLG") {
-    m_dockbaseWidPropSplitView->setWidget(w);
-  }
-  else if( w->name() == "MDI Mainframe") {
-    m_dockbaseMDIMainFrm->setWidget(w);
-  }
 }
 
 #include "kdevelop.moc"
