@@ -382,7 +382,7 @@ void MakeWidget::keyPressEvent(QKeyEvent *e)
 // returns the current directory for parag
 QString MakeWidget::directory(int parag) const
 {
-	QValueVector<MakeItem*>::ConstIterator it = qFind( m_items.begin(), m_items.end(), m_paragraphToItem[parag] );
+	QValueVector<MakeItem*>::const_iterator it = qFind( m_items.begin(), m_items.end(), m_paragraphToItem[parag] );
 	if ( it == m_items.end() )
 		return QString::null;
 	// run backwards over directories and figure out where we are
