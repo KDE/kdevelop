@@ -1,9 +1,11 @@
 [Desktop Entry]
-
 Type=Service
 Exec=blubb
 Comment=TMake Project
+Comment[fr]=Un module externe pour la gestion de projet avec le programme « TMake ».
 Name=KDevTMakeProject
+GenericName=TMake Project
+GenericName[fr]=Projet avec TMake
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject
 X-KDevelop-Args=TMake

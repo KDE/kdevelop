@@ -2,8 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=valgrind
+Comment=Valgrind support
+Comment[fr]=Un module externe pour la gestion du programme « valgrind ».
 Name=KDevvalgrind
+GenericName=Valgrind support
+GenericName[fr]=Gestion de Valgrind
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global

@@ -2,8 +2,11 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=VisualBoyAdvance
+Comment=VisualBoyAdvance support
+Comment[fr]=Un module externe pour la gestion de la platte-forme « VisualBoyAdvance ».
 Name=KDevVisualBoyAdvance
+GenericName=VisualBoyAdvance support
+GenericName[fr]=Gestion de VisualBoyAdvance
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevvisualboyadvance

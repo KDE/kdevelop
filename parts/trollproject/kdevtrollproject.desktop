@@ -1,9 +1,11 @@
 [Desktop Entry]
-
 Type=Service
 Exec=blubb
 Comment=QMake Project
+Comment[fr]=Un module externe pour la gestion de projet avec le programme « QMake ».
 Name=KDevTrollProject
+GenericName=QMake Project
+GenericName[fr]=Projet avec QMake
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject
 X-KDevelop-Args=
