@@ -1,27 +1,29 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop 3</application>">
-  <!ENTITY grep "<command>grep</command>">
-  <!ENTITY egrep "<command>egrep</command>">
-  <!ENTITY ctags "<command>ctags</command>">
-  <!ENTITY automake "<command>automake</command>">
+  <!ENTITY apache "<application>Apache</application>">
+  <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
-  <!ENTITY libtool "<command>libtool</command>">
-  <!ENTITY doxygen "<application>doxygen</application>">
-  <!ENTITY doxywizard "<application>doxywizard</application>">
+  <!ENTITY automake "<command>automake</command>">
+  <!ENTITY ctags "<command>ctags</command>">
   <!ENTITY CVS "<application>CVS</application>">
   <!ENTITY cvs "<acronym>CVS</acronym>">
-  <!ENTITY ssh "<application>ssh</application>">
+  <!ENTITY doxygen "<application>doxygen</application>">
+  <!ENTITY doxywizard "<application>doxywizard</application>">
+  <!ENTITY egrep "<command>egrep</command>">
+  <!ENTITY gnu "<acronym>GNU</acronym>">
+  <!ENTITY grep "<command>grep</command>">
+  <!ENTITY libtool "<command>libtool</command>">
+  <!ENTITY kde "<acronym>KDE</acronym>">
+  <!ENTITY Mac "<application>Mac</application>">
+  <!ENTITY Microsoft "<application>Microsoft</application>">
   <!ENTITY python "<application>Python</application>">
   <!ENTITY perl "<application>Perl</application>">
   <!ENTITY php "<application>PHP</application>">
-  <!ENTITY apache "<application>Apache</application>">
-  <!ENTITY Microsoft "<application>Microsoft</application>">
-  <!ENTITY Windows "<application>Windows</application>">
-  <!ENTITY Mac "<application>Mac</application>">
-  <!ENTITY kde "<acronym>KDE</acronym>">
   <!ENTITY qt "<acronym>Qt</acronym>">
   <!ENTITY qte "<application>Qt/embedded</application>">
+  <!ENTITY ssh "<application>ssh</application>">
+  <!ENTITY Windows "<application>Windows</application>">
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -115,7 +117,7 @@ You will here find information on the following topics:
   <link linkend="initialsetup">Configuring &kdevelop;</link> - shows how you can taylor the <acronym>IDE</acronym> to suit your needs.
   </para></listitem>
   <listitem><para>
-  <link linkend="appwizard">Getting started: the application wizard</link> - describes the basics on how to set up a new project in &kdevelop; using the built-in application wizard.
+  <link linkend="appwizard">Getting started: the &appwizard;</link> - describes the basics on how to set up a new project in &kdevelop; using the built-in &appwizard;.
   </para></listitem>
   <listitem><para>
   <link linkend="editing">Editing tools</link> - all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
@@ -188,25 +190,25 @@ All these scripting languages have in common that they are widely portable betwe
 </para>
 
 <sect2 id="unixdev-SL-Perl">
-<title>Perl</title>
+<title>&perl;</title>
 <para>
 &perl; has become popular as a text processing and system administration language. In the beginning of the World Wide Web, CGI scripts written in &perl; were a widely used method to create dynamic web pages from databases. Today, this method has been replaced mostly by the <command>mod_perl</command> plugin for the &apache; web server. Among &perl;'s strengths are its built-in support for advanced regular expression matching and its rich archive of freely distributed modules, see: <ulink url="http://cpan.org">CPAN</ulink>.
 </para>
-</sect2>
+</sect2> <!-- unixdev-SL-Perl -->
 
 <sect2 id="unixdev-SL-Python">
 <title>Python</title>
 <para>
 &python; shines by the elegance of its class system and the ease and flexibility with which external libraries can be wrapped, in a way that they appear like standard &python; classes and functions. In contrast to &perl;, &python; has a clear and concise embedding API, which makes it the language of choice for making C and C++ programs scriptable.
 </para>
-</sect2>
+</sect2> <!-- unixdev-SL-Python -->
 
 <sect2 id="unixdev-SL-PHP">
 <title>PHP</title>
 <para>
 &php; was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content in the web.
 </para>
-</sect2>
+</sect2> <!-- unixdev-SL-PHP -->
 </sect1> <!-- unixdev-scripting-languages -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -298,7 +300,7 @@ There are some tutorials available:
   </para></listitem>
 </itemizedlist>
 </para>
-</sect2>
+</sect2> <!-- unixdev-buildsystems-make -->
 
 </sect1> <!-- unixdev-buildsystems -->
 
@@ -390,7 +392,7 @@ Now you may compile your &kdevelop; version as shown in the <link linkend="compi
 <note><para>
 Once you successfully checked out your &kdevelop; version, you may keep up with the changes using the update procedure shown in the next section. <emphasis>Please do not checkout every time you want to keep your &kdevelop; up to date!</emphasis>
 </para></note>
-</sect3>
+</sect3> <!-- howto-cvs-co -->
 
 <sect3 id="howto-cvs-up">
 <title>Keeping your &CVS; copy actual</title>
@@ -424,9 +426,9 @@ Keep an eye on the messages &CVS; produces during the update sequence. The exact
 <para>
 Now you can compile a new &kdevelop; version as shown in the <link linkend="compileandinstall-make-cvs">Special &CVS; compilation considerations</link> chapter.
 </para>
-</sect3>
+</sect3> <!-- howto-cvs-up -->
 
-</sect2>
+</sect2> <!-- howto-cvs -->
 
 </sect1> <!-- howto -->
 
@@ -441,8 +443,8 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 <itemizedlist>
 <title>Required:</title>
   <listitem><para><application>gcc/g++</application> 2.95.3 or greater (or compatible)</para></listitem>
-  <listitem><para><application>GNU make</application> (or compatible)</para></listitem>
-  <listitem><para><application>perl</application> 5.004</para></listitem>
+  <listitem><para><application>&gnu; make</application> (or compatible)</para></listitem>
+  <listitem><para>&perl; 5.004</para></listitem>
   <listitem><para><application>autoconf</application> 2.52 or greater</para></listitem>
   <listitem><para><application>automake</application> 1.6.1 or greater</para></listitem>
   <listitem><para><application>flex</application> 2.5.4</para></listitem>
@@ -459,10 +461,10 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This
   <!-- ### temporarily disabled until the graphial class browser works again
   allows you to navigate in a graphical view of your classes' dependencies. Likewise the <application>dot</application> //-->
-  tool is needed in conjunction with <application>doxygen</application> below if you want to have class relationships graphically displayed (which is highly recommended).
+  tool is needed in conjunction with &doxygen; below if you want to have class relationships graphically displayed (which is highly recommended).
   </para></listitem>
   <listitem><para>
-  The <application>doxygen</application> documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
+  The &doxygen; documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
   </para></listitem>
   <listitem><para>
   <application>valgrind</application> from <ulink url="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</ulink> helps you to find memory management problems in your applications.
@@ -528,7 +530,7 @@ export LD_LIBRARY_PATH=$QTDIR/lib:$KDEDIR/lib:$LD_LIBRARY_PATH
 export LIBRARY_PATH=$QTDIR/lib:$KDEDIR/lib:$LIBRARY_PATH
 export PATH=$QTDIR/bin:$KDEDIR/bin:$PATH
 </screen>
-</sect3>
+</sect3> <!-- compileandinstall-preliminaries-bash -->
 
 <sect3 id="compileandinstall-preliminaries-tcsh">
 <title>tcsh shell</title>
@@ -543,9 +545,9 @@ setenv LD_LIBRARY_PATH $QTDIR/lib:$KDEDIR/lib:$LD_LIBRARY_PATH
 setenv LIBRARY_PATH $QTDIR/lib:$KDEDIR/lib:$LIBRARY_PATH
 setenv PATH $QTDIR/bin:$KDEDIR/bin:$PATH
 </screen>
-</sect3>
+</sect3> <!-- compileandinstall-preliminaries-tcs -->
 
-</sect2>
+</sect2> <!-- compileandinstall-preliminaries -->
 
 <sect2 id="compileandinstall-make">
 <title>Compile &kdevelop;</title>
@@ -592,7 +594,7 @@ or if you just did a full checkout, you must do:
 <para>
 before you proceed with <emphasis>all</emphasis> of the following steps.
 </para>
-</sect3>
+</sect3> <!-- compileandinstall-make-cvs -->
 
 <sect3 id="compileandinstall-make-basic">
 <title>Basic <command>make</command> command sequence</title>
@@ -656,8 +658,8 @@ and entering the root password. Then install the application:
 That was all. If you installed &kdevelop; in the default &kde; directory you can now run the <acronym>IDE</acronym>. Otherwise some additional steps will be necessary as shown in the <link linkend="compileandinstall-options-dir">Non-default installation directory</link> section below.
 </para>
 
-</sect3>
-</sect2>
+</sect3> <!-- compileandinstall-make-basic -->
+</sect2> <!-- compileandinstall-make -->
 
 <sect2 id="compileandinstall-bsd">
 <title>How to compile on FreeBSD</title>
@@ -680,7 +682,7 @@ If you want compile and install &kdevelop; on a <acronym>FreeBSD</acronym> syste
 You need the <emphasis>berkeley db 4.1</emphasis> installed, if you have another version, you have to adjust the path.
 </para></note>
 
-<sect3>
+<sect3 id="check-berkeley-db">
 <title>Check the berkeley db version</title>
 <para>
 To find out which berkeley db version you have installed, run:
@@ -695,9 +697,9 @@ This should return someting like:
 db41-4.1.25_1       The Berkeley DB package, revision 4.1
 </screen>
 </para>
-</sect3>
+</sect3> <!-- check-berkeley-db -->
 
-<sect3>
+<sect3 id="more-changes">
 <title>More changes</title>
 <para>
 Change the line
@@ -737,9 +739,9 @@ in <filename>lib/catalog/Makefile.am</filename>.
 <para>
 Then you can continue with the normal <command>configure</command> and <command>make</command> steps as shown above.
 </para>
-</sect3>
+</sect3> <!--  more-changes -->
 
-</sect2>
+</sect2> <!-- compileandinstall-bsd -->
 
 <sect2 id="compileandinstall-options">
 <title>Some notes on <command>configure</command> options</title>
@@ -783,16 +785,20 @@ The <command>kbuildsycoca</command> command (<quote>build system control cache</
 <para>
 (You could as well put the lines in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file, but this is not advisable as <command>kbuildsycoca</command> will then be run any time you call up the shell.)
 </para>
-</sect3>
 
-<sect3>
+<note><para>
+The <command>kbuildsycoca</command> command does not run from within the root. You must call it from a non-root user. (But is <emphasis>not a very good idea</emphasis> after all to develop from within the root!)
+</para></note>
+</sect3> <!-- compileandinstall-options-dir -->
+
+<sect3 id="other-options">
 <title>Other options</title>
 <!-- *** other configuration options -->
 <para>
 <emphasis>(... to be written ...)</emphasis>
 </para>
-</sect3>
-</sect2>
+</sect3> <!-- other-options -->
+</sect2> <!-- compileandinstall-options -->
 
 </sect1> <!-- compileandinstall -->
 
@@ -810,7 +816,7 @@ The <command>kbuildsycoca</command> command (<quote>build system control cache</
   several <link  linkend="uimodes-overview">user interface modes</link> from which you can select the look and feel of the workspace,
   </para></listitem>
   <listitem><para>
-  an <link linkend="appwizard">application wizard</link> which aids you in setting up a new project,
+  an <link linkend="appwizard">&appwizard;</link> which aids you in setting up a new project,
   </para></listitem>
   <listitem><para>
   several <link linkend="makesystems">project management systems</link> which aid in building and managing your project,
@@ -923,7 +929,7 @@ Select the radio button of the user interface mode you want to switch to, then p
 </orderedlist>
 </note>
 
-</sect2>
+</sect2> <!-- uimodes-switch -->
 
 <sect2 id="maximize-workspace">
 <title>How to maximize the work space area</title>
@@ -934,7 +940,7 @@ To maximize space, there is a full-screen window mode available which expands th
 <formalpara>
 <title>Full screen mode</title>
 <para>
-To switch to or from full screen mode select <menuchoice> <guimenu>Tools</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>Shift</keycap> <keycap>F</keycap> </keycombo>. There is also a <guiicon>Full-Screen Mode</guiicon> icon in the <guilabel>Browse Toolbar</guilabel> available.
+To switch to or from full screen mode select <menuchoice> <guimenu>View</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>Shift</keycap> <keycap>F</keycap> </keycombo>. There is also a <guiicon>Full-Screen Mode</guiicon> icon in the <guilabel>Browse Toolbar</guilabel> available.
 </para>
 </formalpara>
 
@@ -945,7 +951,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 </para>
 </formalpara>
 
-</sect2>
+</sect2> <!-- maximize-workspace -->
 
 </sect1> <!-- uimodes-overview -->
 
@@ -957,7 +963,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 <para>
 (... to be written ...)
 </para>
-</sect1>
+</sect1> <!-- ui-elements -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -969,7 +975,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
 
 <itemizedlist>
   <listitem><para>
-  <link linkend="automake-project">Automake projects</link> use the GNU standard development tools.
+  <link linkend="automake-project">Automake projects</link> use the &gnu; standard development tools.
   </para></listitem>
   <listitem><para>
   <link linkend="qmake-project">QMake projects</link> use the trolltech QMake project manager.
@@ -987,7 +993,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
 <title>Automake project</title>
 
 <para>
-Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers to use the GNU standard development tools. They provide
+Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers to use the &gnu; standard development tools. They provide
 <itemizedlist>
   <listitem><para>
   a better way of <filename>Makefile</filename> generation and
@@ -997,7 +1003,7 @@ Projects created with &kdevelop;'s Automake Project Manager make it very easy fo
   </para></listitem>
 </itemizedlist>
 </para>
-</sect2>
+</sect2> <!-- automake-project -->
 
 <sect2 id="qmake-project">
 <title>QMake project</title>
@@ -1008,7 +1014,7 @@ For developers who enjoy the flexibility and feel of &qt;'s qmake system, &kdeve
 <para>
 For more information on the QMake project manager see the <citetitle>qmake User Guide</citetitle> which should be included in your distribution or have a look at the <ulink url="http://doc.trolltech.com/">TROLLTECH Documentation</ulink> home page where you may find the QMake documentation of your <citetitle>Qt C++ GUI Application Development Toolkit</citetitle> version.
 </para>
-</sect2>
+</sect2> <!-- qmake-project -->
 
 <sect2 id="ant-project">
 <title>ANT project</title>
@@ -1023,7 +1029,7 @@ Java developers may want to use the Apache ANT project manager for their project
 <para>
 For more information see <ulink url="http://ant.apache.org/">The Apache Ant Project</ulink> home page.
 </para>
-</sect2>
+</sect2> <!-- ant-project -->
 
 <sect2 id="custom-project">
 <title>Custom project</title>
@@ -1034,7 +1040,7 @@ If you prefer to maintain your own <filename>Makefiles</filename> for your proje
 <para>
 Yet, if you do not <emphasis>really need</emphasis> the extra flexibility and control of the custom project manager you should consider Autoproject or one of the other project managers, because they considerably ease the program building and distribution processes.
 </para>
-</sect2>
+</sect2> <!-- custom-project -->
 
 <sect2 id="makesystems-distribution">
 <title>How to distribute your application</title>
@@ -1062,7 +1068,7 @@ For projects where s<emphasis>everal developers</emphasis>, maybe working on dif
 Especially on multi language applications, <emphasis>translators</emphasis> won't actually work with the source code, except in cases that require correction for enabling translation support.
 </para>
 
-</sect2>
+</sect2> <!-- makesystems-distribution -->
 
 </sect1> <!-- makesystems -->
 
@@ -1095,7 +1101,7 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 <!-- ====================================================================== -->
 
 <chapter id="appwizard">
-<title>Getting started: the application wizard</title>
+<title>Getting started: the &appwizard;</title>
 
 <para>
 In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and any additional tools needed to get the application up and running.
@@ -1111,10 +1117,10 @@ Organizing all development work in projects allows you to easily switch between 
 Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
 </para>
 <para>
-&kdevelop; provides an easy way to initiate a new programming project - the <emphasis>application wizard</emphasis>. You will find the application wizard at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
+&kdevelop; provides an easy way to initiate a new programming project - the <emphasis>&appwizard;</emphasis>. You will find the &appwizard; at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
 </para>
 <para>
-Only a short series of steps is necessary to start a new programming project, using the application wizard:
+Only a short series of steps is necessary to start a new programming project, using the &appwizard;:
 </para>
 <orderedlist>
   <listitem><para>
@@ -1130,11 +1136,11 @@ Only a short series of steps is necessary to start a new programming project, us
   Set up some templates for <link linkend="newprojects-start-templates">initial header and source files</link> (if applicable).
   </para></listitem>
   <listitem><para>
-  Finally tell application wizard to set up all initial directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
+  Finally tell &appwizard; to <link linkend="newprojects-start-build">set up all initial stuff</link>, directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
   </para></listitem>
 </orderedlist>
 <para>
-Voil&agrave; - that's all. Application wizard will have provided you with a primary functional set of programming files, where you can readily start working.
+Voil&agrave; - that's all. &appwizard; will have provided you with a primary functional set of programming files, where you can readily start working.
 </para>
 <para>
 Let's look at all this in more detail now ...
@@ -1190,13 +1196,13 @@ We cannot go into detail here on which tasks each template provides, but it's ea
 <para>
 Select the template which best fits your application's goals as a starting point. Then enter the general properties information in the lower field as shown in the next chapter.
 </para>
-</sect3>
+</sect3> <!-- newprojects-start-type -->
 
 <sect3 id="newprojects-start-general">
 <title>Provide general information</title>
 
 <para>
-The lower part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page is a framed field labeled <guilabel>Properties</guilabel>. You must provide some general information about your project here so that the application wizard knows how to build the initial structure.
+The lower part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page is a framed field labeled <guilabel>Properties</guilabel>. You must provide some general information about your project here so that the &appwizard; knows how to build the initial structure.
 </para>
 <formalpara>
 <title>Application Name</title>
@@ -1205,7 +1211,7 @@ Your application needs a name of course. Enter this in the uppermost <guilabel>P
 </para>
 </formalpara>
 <para>
-When you do so, you will notice that the application wizard refuses to accept special characters of any kind. The only characters accepted are:
+When you do so, you will notice that the &appwizard; refuses to accept special characters of any kind. The only characters accepted are:
 <itemizedlist>
   <listitem><para>upper and lower case characters</para></listitem>
   <listitem><para>numbers</para></listitem>
@@ -1213,19 +1219,19 @@ When you do so, you will notice that the application wizard refuses to accept sp
 </itemizedlist>
 </para>
 <para>
-One prominent cause of this restriction is that the application manager will use this application name as the <emphasis>basis of some class names</emphasis> it will construct when it sets up an initial project. Thus the name of the application must stick to the rules of the programming language you use.
+One prominent cause of this restriction is that the &appwizard; will use this application name as the <emphasis>basis of some class names</emphasis> it will construct when it sets up an initial project. Thus the name of the application must stick to the rules of the programming language you use.
 </para>
 <formalpara>
 <title>The project directory</title>
 <para>
-The other prominent cause of this restriction you can see at the bottom line of the <guilabel>Properties</guilabel> area. It is labeled <guilabel>Final location</guilabel> and shows the directory where the application manager  will create the application.
+The other prominent cause of this restriction you can see at the bottom line of the <guilabel>Properties</guilabel> area. It is labeled <guilabel>Final location</guilabel> and shows the directory where the &appwizard;  will create the application.
 </para>
 </formalpara>
 <para>
-As you type the application name you will notice that the application wizard repeats your input at the end of the <guilabel>Final location</guilabel> line, using lower case only characters.
+As you type the application name you will notice that the &appwizard; repeats your input at the end of the <guilabel>Final location</guilabel> line, using lower case only characters.
 </para>
 <para>
-Thus you must select the name of your new application with care.  If you end up with an already used directory the application manager will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (greyed). Yet, it will <emphasis>warn</emphasis> you in this case by appending <quote>(dir/file already exist)</quote> to the <guilabel>Final location</guilabel> line.
+Thus you must select the name of your new application with care.  If you end up with an already used directory the &appwizard; will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (greyed). Yet, it will <emphasis>warn</emphasis> you in this case by appending <quote>(dir/file already exist)</quote> to the <guilabel>Final location</guilabel> line.
 </para>
 
 <formalpara>
@@ -1235,17 +1241,17 @@ There are two ways to select another path for your new application. One is to se
 </para>
 </formalpara>
 <para>
-This is done in the second row input field of the <guilabel>Properties</guilabel>, named <guilabel>Location</guilabel>. What you enter here is the <emphasis>starting path</emphasis> of the new application development directory. The application manager appends the application name to this path when it initializes the new project. The result is shown in the <guilabel>Final location</guilabel> line to give you better control on what is going on.
+This is done in the second row input field of the <guilabel>Properties</guilabel>, named <guilabel>Location</guilabel>. What you enter here is the <emphasis>starting path</emphasis> of the new application development directory. The &appwizard; appends the application name to this path when it initializes the new project. The result is shown in the <guilabel>Final location</guilabel> line to give you better control on what is going on.
 </para>
 <para>
-Application manager will copy an <emphasis>initial value</emphasis> to the <guilabel>Location</guilabel> field on start-up. This is taken from what you have chosen in the <guilabel>Default projects directory</guilabel> field during the <link linkend="initialsetup-general">general configuration steps</link>.
+&appwizard; will copy an <emphasis>initial value</emphasis> to the <guilabel>Location</guilabel> field on start-up. This is taken from what you have chosen in the <guilabel>Default projects directory</guilabel> field during the <link linkend="initialsetup-general">general configuration steps</link>.
 </para>
 <para>
 Alter the <guilabel>Location</guilabel> field contents so that the application development directory shown in the <guilabel>Final location</guilabel> line will be unique.
 </para>
 
 <note><para>
-Take care that the path you enter in the <guilabel>Location</guilabel> field already exists. Otherwise you will not be able to continue to the next step. The application manager will <emphasis>warn</emphasis> you about non-existing paths by appending <quote>(invalid)</quote> to the <guilabel>Final location</guilabel> line.
+Take care that the path you enter in the <guilabel>Location</guilabel> field already exists. Otherwise you will not be able to continue to the next step. The &appwizard; will <emphasis>warn</emphasis> you about non-existing paths by appending <quote>(invalid)</quote> to the <guilabel>Final location</guilabel> line.
 </para></note>
 
 <formalpara>
@@ -1258,10 +1264,10 @@ The fields following this are not so critical. Just supply your name (i.e. the n
 <note>
 <orderedlist>
   <listitem><para>
-  The application manager fills these fields with some default values, taken from the Email presets in the KDE control center. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
+  The &appwizard; fills these fields with some default values, taken from the Email presets in the KDE control center. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
   </para></listitem>
   <listitem><para>
-  The application manager will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
+  The &appwizard; will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
   </para></listitem>
   <listitem><para>
   Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
@@ -1277,7 +1283,7 @@ Finally enter a starting version number for your new application in the <guilabe
 </formalpara>
 
 <para>
-If you select an application type for which the application manager provides common source template texts (e.g. C/C++), you may view the licence notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="newprojects-start-templates">Supply header/source templates</link> chapter below).
+If you select an application type for which the &appwizard; provides common source template texts (e.g. C/C++), you may view the licence notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="newprojects-start-templates">Supply header/source templates</link> chapter below).
 </para>
 <para>
 If you selected <quote>Custom</quote> from the <guilabel>License</guilabel> tab you must provide a license text on your own.
@@ -1290,15 +1296,15 @@ Both version and license information will as well be integrated into the startin
 <para>
 Once you have correctly entered all this information stuff, press the <guibutton>Next &gt;</guibutton> button to proceed as shown in the following chapters.
 </para>
-</sect3>
+</sect3> <!-- newprojects-start-general -->
 
-</sect2>
+</sect2> <!-- newprojects-start -->
 
 <sect2 id="newprojects-start-cvs">
 <title>Supply version system information</title>
 
 <para>
-In a second step the application manager will lead you to the <guilabel>Version Control System</guilabel> page where you can decide which version control system you want to use.
+In a second step the &appwizard; will lead you to the <guilabel>Version Control System</guilabel> page where you can decide which version control system you want to use.
 </para>
 
 <note><para>
@@ -1315,7 +1321,7 @@ Initially there is <quote>None</quote> selected in the <guilabel>Version control
 <formalpara>
 <title>Using CVS</title>
 <para>
-Otherwise you must reselect the version control system you want to use from the <guilabel>Version control system</guilabel> tab. Currently only <quote>&cvs;</quote> is availabe. If you select this, the application manager will redisplay the page, now showing a series of fields you must fill in.
+Otherwise you must reselect the version control system you want to use from the <guilabel>Version control system</guilabel> tab. Currently only <quote>&cvs;</quote> is availabe. If you select this, the &appwizard; will redisplay the page, now showing a series of fields you must fill in.
 </para>
 </formalpara>
 
@@ -1411,20 +1417,20 @@ Just enter the repository name you want to use in the <guilabel>CVS repository</
 <formalpara>
 <title>The remaining fields</title>
 <para>
-There is not much work left to do. Application manager has already set up the remaining fields for you. In detail:
+There is not much work left to do. &appwizard; has already set up the remaining fields for you. In detail:
 </para>
 </formalpara>
 <para>
-The <guilabel>Vendor</guilabel> field is used for compatibility reasons only. You can stick to the <quote>vendor</quote> default the application manager puts in here.
+The <guilabel>Vendor</guilabel> field is used for compatibility reasons only. You can stick to the <quote>vendor</quote> default the &appwizard; puts in here.
 </para>
 <para>
-The <guilabel>Message</guilabel> field allows you to comment the initial &cvs; contents. Use any text you like or just stick to the <quote>new project</quote> default the application manager did put in.
+The <guilabel>Message</guilabel> field allows you to comment the initial &cvs; contents. Use any text you like or just stick to the <quote>new project</quote> default the &appwizard; did put in.
 </para>
 <para>
 The <guilabel>Release tag</guilabel> holds the name wich tags the initial state of your project. Such a <emphasis>tag</emphasis> names a certain point within the &CVS; repository by which you can later access this state of your development. (See more in  the <link linkend="cvs">Using CVS</link> chapter.)
 </para>
 <para>
-The application manager has put a default <quote>start</quote> tag in here which is a worthy proposal. Just stick to it.
+The &appwizard; has put a default <quote>start</quote> tag in here which is a worthy proposal. Just stick to it.
 </para>
 
 <note>
@@ -1448,14 +1454,14 @@ If this happens you will have to either manually set up &cvs; (&kdevelop; should
 </note>
 
 <para>
-Afer you have entered all &CVS; related information, press the <guibutton>Next &gt;</guibutton> to go on.
+Afer you have entered all &CVS; related information, click the <guibutton>Next &gt;</guibutton> to go on.
 </para>
 
 <note><para>
-If you want to correct an error on the previous <guilabel>Create New Project</guilabel> page, just press the <guibutton>&lt; Back</guibutton> button. The application manager will remember your settings on the current page, so you can easily proceed when you come back.
+If you want to correct an error on the previous <guilabel>Create New Project</guilabel> page, just press the <guibutton>&lt; Back</guibutton> button. The &appwizard; will remember your settings on the current page, so you can easily proceed when you come back.
 </para></note>
 
-</sect2>
+</sect2> <!-- newprojects-start-cv -->
 
 <sect2 id="newprojects-start-templates">
 <title>Supply header/source templates</title>
@@ -1464,7 +1470,10 @@ If you want to correct an error on the previous <guilabel>Create New Project</gu
 The next step brings you to a series of pages where you can set up common information you want to include in your source and header files, if the task at hand allows.
 </para>
 <para>
-Both header and source templates are provided for C and C++ applications, each on its own page. There may be source templates only for others. And in some cases you will find this page empty. Application wizard will fill in some common header comment which for a c++ application might look like:
+Both header and source templates are provided for C and C++ applications, each on its own page. For other languages there may be source templates only. And in some cases you will even find this template page empty.
+</para>
+<para>
+If the page is used, &appwizard; will fill in some common header comment which for a C++ based application might look like:
 </para>
 
 <screen><computeroutput><literal>
@@ -1483,31 +1492,326 @@ Both header and source templates are provided for C and C++ applications, each o
 Other templates will provide similar information in a format according to the definitions of the programming language you want to use.
 </para>
 <para>
-As you might have noticed, the applications manager did readily fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contnents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
-</para>
-<para>
-You can edit this template text according to your needs. Some hints on what you may inlude are given in the next chapter.
+As you might have noticed, the applications manager did readily fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
 </para>
 
 <sect3 id="newprojects-start-templates-edit">
 <title>How to edit the templates</title>
 
 <para>
+The templates you set up in the <guilabel>Create New Project</guilabel> dialog will later be processed whenever you command &kdevelop; to set up a new source and/or header file. The information you provided here will be included at top as a documentation header, before the code parts begin.
 </para>
-</sect3>
+<para>
+You are not restricted to plain text however. &kdevelop; knows of several variables which allow you to include actual information in the file. The &appwizard; did in fact use some such variables to insert the <guilabel>Author</guilabel>, <guilabel>Email</guilabel>, and <guilabel>License</guilabel> informations into the intial template text.
+</para>
 
-</sect2>
+<formalpara>
+<title>Include &doxygen; file information</title>
+<para>
+If, for example, you want the &doxygen;-built API documentation to display some further information about the file's contents in its filenames list, you may include the following lines in the source file template:
+</para>
+</formalpara><screen><computeroutput><literal>
+/**
+ * \file $MODULE$.cpp
+ * \brief (put some short descripion here).
+ **/
+</literal></computeroutput></screen>
+<para>
+Whenever you create a new source file, &kdevelop; will replace the <computeroutput>$MODULE$</computeroutput> variable by the name body of the newly created file. For example, if you created a new C++ class named <classname>ASimpleTest</classname> you will see the following lines in the <filename>asimpletest.cpp</filename> file:
+</para>
+<screen><computeroutput><literal>
+/**
+ * \file asimpletest.cpp
+ * \brief (put some short descripion here).
+ **/
+</literal></computeroutput></screen>
+<para>
+You will still have to provide the short description after the <quote>\brief</quote> keyword, but part of the job is automatically done for you.
+</para>
+<formalpara>
+<title>The license text file</title>
+<para>
+As another example you could include an explicit hint to the license text you want to use into the template. Use the <computeroutput>$LICENSEFILE$</computeroutput> variable for this and add for example this line:
+</para>
+</formalpara>
+<screen><computeroutput><literal>
+//   See $LICENSEFILE$ for the full license text.
+</literal></computeroutput></screen>
+<para>
+The &appwizard; will replace the <computeroutput>$LICENSEFILE$</computeroutput> with the name of the file where the full license text is to be found, namely:
+</para>
+<screen><computeroutput><literal>
+//   See COPYING for the full license text.
+</literal></computeroutput></screen>
+<para>
+for the <acronym>GPL</acronym> license, or
+</para>
+<screen><computeroutput><literal>
+//   See LICENSE.BSD for the full license text.
+</literal></computeroutput></screen>
+<para>
+if you decided to put your application under the <acronym>BSD</acronym> license.
+</para>
+<para>
+Thee are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
+</para>
+
+<note><para>
+The templates you define here will come in effect only after the &appwizard; has created the new project. You will find this information on top of the files you created yourself in the development process. When creating the initial files the &appwizard; will use some predefined standard templates. You will have to manually adapt those initial files to your needs.
+</para></note>
+
+</sect3> <!-- newprojects-start-templates-edit -->
+</sect2> <!-- newprojects-start-templates -->
 
 <sect2 id="newprojects-start-build">
 <title>Build the initial project files</title>
-<para></para>
-</sect2>
+
+<para>
+Almost everything is done now. On the last templates page the <guibutton>Next &gt;</guibutton> button will have changed to read <guibutton>Finish</guibutton> now.
+</para>
+<para>
+Think twice before you click on it. You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again.
+</para>
+<para>
+If ever you don't want the new project be built, abort the <guilabel>Create New Project</guilabel> dialog by the <guibutton>Cancel</guibutton> button. Oterwise click <guibutton>Finish</guibutton> and watch in the <guilabel>Messages</guilabel> window how the &appwizard; initiates the project.
+</para>
+<para>
+If you want to use a versioning system (&CVS;) there will be two runs actually. &appwizard; will first build the project directories and files and then call up the &CVS; program which restarts the <guilabel>Messages</guilabel> window with its own contents. If any error occurs in either of these runs, the process will stop showing you an according error message in the window.
+</para>
+
+<note><para>
+In IDEAl mode the <guilabel>Messages</guilabel> window might automatically have been closed after the run in case you did not fix it into position. Do not forget to reopen it again to view any success or error message.
+</para></note>
+
+<para>
+Do not forget to initially check what the &appwizard; has provided. For example you may want to change the inital heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
+</para>
+<para>
+Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
+</para>
+</sect2> <!-- newprojects-start-build -->
 
 </sect1> <!-- newprojects -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-<sect1 id="importing">
+<sect1 id="appwizard-behind">
+<title>Behind the scenes</title>
+
+<para>
+It is always advisable to look at the messages output and try to understand what had happened. At least in principle you should know what was be done when the &appwizard; initiated your new project. We cannot go into the depths but will have a survey of those messages to get an idea of what was going on behind the scenes.
+</para>
+
+<tip>
+<para>
+If your project was set up for local &CVS; you will have got two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we catched both series in separate runs - set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
+</para>
+<para>
+You may want to follow this same procedure if anything weird happened and you just could not catch the messages of the first setup step.
+</para>
+</tip>
+<para>
+We will have look at the <guilabel>Messages</guilabel> outputs of both steps:
+<itemizedlist>
+  <listitem><para>
+    <link linkend="appwizard-behind-app">Setting up the application</link> as well as
+  </para></listitem>
+  <listitem><para>
+    <link linkend="appwizard-behind-cvs">Setting up &CVS;</link>.
+  </para></listitem>
+</itemizedlist>
+</para>
+
+<sect2 id="appwizard-behind-app">
+<title>Setting up the application</title>
+
+<para>
+If you set up <quote>YourNewApplication</quote> as in our previous example the &appwizard; should have printed the following messages (we re-arranged the output a bit for readability):
+</para>
+<screen><computeroutput><literal>
+* perl /opt/kde3/share/apps/kdevappwizard/template-kapp/script \
+  --author='Your Name' \
+  --email='you@you.com' \
+  --version='0.1' \
+  --appname='YourNewApplication' \
+  --dest='/home/devel/yournewapplication' \
+  --source='/opt/kde3/share/apps/kdevappwizard' \
+  --license='GPL' \
+  --licensefile='COPYING' \
+  --filetemplates='h,/tmp/kde-devel/gideoncDE5Ja.tmp,\
+                   cpp,/tmp/kde-devel/gideonsRrLab.tmp'
+* Making destination directory
+* Installing file templates
+* Installing license file
+* Installing admin directory
+* Installing GNU coding standard files
+* Installing Docbook template
+* Installing project file
+* Installing application framework
+* Installing application sources
+* Finished
+* *** Success ***
+</literal></computeroutput></screen>
+<formalpara>
+<title>A &perl; script called</title>
+<para>
+As you see from the first line, the &appwizard; did construct a &perl; program call from the settings you made in the <guilabel>Create New Project</guilabel> dialog. The called <filename>script</filename> resides in a directory which was determined from the application type template you selected in the upper part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page.
+</para>
+</formalpara>
+<para>
+In our case this <filename>sript</filename> is located in the <filename class="directory">/opt/kde3/share/apps/kdevappwizard/template-kapp/</filename> directory. Just replace <filename class="directory">/opt/kde3/</filename> by the &kde; directory on your system.
+</para>
+<para>
+This &perl; <filename>script</filename> is called with a series of parameters, all marked by <quote><computeroutput>--</computeroutput></quote> prefixes, wherein the &appwizard; put information from the other selections you made in the <guilabel>Create New Project</guilabel> dialog.
+</para>
+<para>
+The exact series of initialization steps depends on which &perl; <filename>script</filename> was called. If you want to check, just look into the <filename>script</filename> file the <computeroutput>perl</computeroutput> command on the first <guilabel>Messages</guilabel> window line did call.
+</para>
+<note><para>
+The setup scripts make use of a set of &perl; subroutines collected in the <filename>gideon.pm</filename> file which you may find in the <filename class="directory">share/apps/kdevwizard/template-common/</filename> subdirectory of your &kde; installation.
+</para></note>
+
+<formalpara>
+<title>The application base directory</title>
+<para>
+When the &perl; script is run, you get a series of messages of what is <emphasis>about to be done</emphasis> in the next installation step. At first a <computeroutput>destination direcory</computeroutput> will be set up. This is the base directory of your application, just what you got displayed in the <guilabel>Final location</guilabel> line on the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page. The script uses the value of the <computeroutput>--dest</computeroutput> parameter in the &perl; command above.
+</para>
+</formalpara>
+
+<formalpara>
+<title>The file templates</title>
+<para>
+In the next step the file templates you set up in the <guilabel>Create New Project</guilabel> dialog will be copied to the <filename class="directory">templates</filename> subdirectory of this destination directory. As you can see from the <computeroutput>--filetemplates</computeroutput> parameter, the templates are submitted in pairs - the suffixes they are used for first, followed by the name of a temporary file in which the &appwizard; has copied the contents of the templates dialog pages. These suffixes will be taken as the filenames of where to store the template texts.
+</para>
+</formalpara>
+<para>
+In our example two such template files were installed, namely <filename>templates/h</filename> for C++ header and <filename>templates/cpp</filename> for C++ source files.
+</para>
+
+<formalpara>
+<title>The license file</title>
+<para>
+On the <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog you selected the license you want to put your application under. The &appwizard; initiated two actions from this. One was the license indication it put into the templates. The other action causes the according license file to be copied in your application base directory.
+</para>
+</formalpara>
+<para>
+The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <filename>script</filename> which license text file to copy. In our example the <filename>/home/devel/yournewapplication/COPYING</filename> file will have been installed in this step.
+</para>
+
+<formalpara>
+<title>The administration directory</title>
+<para>
+&kdevelop; needs a bunch of files to administrate the project. These are put in the <filename class="directory">admin</filename> subdirectory of your application base directory.
+</para>
+</formalpara>
+<para>
+&appwizard; creates the <filename class="directory">admin</filename> subdirectory in this step and extracts the standard set of files it needs from the <filename>share/apps/kdevappwizard/template-common/admin.tar.gz</filename> tarball in your &kde; directory.
+</para>
+<note><para>
+&kdevelop; always uses the same set of standard files for its administration purposes. Hence no parameter is needed in the &perl;  <filename>script</filename> call to set up the <filename class="directory">admin</filename> subdirectory.
+</para></note>
+
+<formalpara>
+<title>The &gnu; coding standard files</title>
+<para>
+There are several standard files to be distributed with every application which conforms to the &gnu; coding standard. The &perl; <filename>script</filename> extracts these files from the <filename>share/apps/kdevappwizard/template-common/gnu.tar.gz</filename> tarball of your &kde; installation directory and customizes them according to the information you provided in the <guilabel>Create New Page</guilabel> dialog.
+</para>
+</formalpara>
+<para>
+After this step you will find the following files in your application base directory:
+<itemizedlist>
+  <listitem><para>
+    <filename>AUTHORS</filename>, initially containing information from the <computeroutput>--author</computeroutput> and <computeroutput>--email</computeroutput> parameters.
+  </para></listitem>
+  <listitem><para>
+    <filename>COPYING</filename>, this is the general &gnu; license, which all &gnu; conforming applications must contain - even if you decided to put your application under another license.
+  </para></listitem>
+  <listitem><para>
+    <filename>ChangeLog</filename>, initially empty - you should protocol all major changes here.
+  </para></listitem>
+  <listitem><para>
+    <filename>INSTALL</filename> contains generic installation instructions - modify this if special precautions and/or procedures are needed to install your application.
+  </para></listitem>
+  <listitem><para>
+    <filename>README</filename>, initially empty - put any information here the user should know before installing your application.
+  </para></listitem>
+  <listitem><para>
+    <filename>TODO</filename>, initially empty - put information here about what has to be done to further develop your application. You can use this as a notebook for your own purposes, but it is all the well really helpful once you have put your application in public domain.
+  </para></listitem>
+</itemizedlist>
+</para>
+
+<formalpara>
+<title>The initial application documentation</title>
+<para>
+Every project you set up will contain an initial <emphasis>DocBook</emphasis> template from where you can start to write your application documentation. The &perl; <filename>script</filename> will in this step have set up <filename class="directory">doc</filename> and <filename class="directory">doc/en</filename> subdirectories of the application base directory with an initial <filename>doc/en/index.docbook</filename> template and some &automake; <filename>Makefile.am</filename> files from which &kdevelop; can later build help system files.
+</para>
+</formalpara>
+
+<formalpara>
+<title>The project file</title>
+<para>
+Up to here most of the more global stuff has been set up, things which more or less are to be found in any &kdevelop; project. With this step the more application-specific setup processes start. These may vary upon the type of application you selected. Have a look at the actual &perl; <filename>sript</filename> the &appwizard; called up for your new application if you want to lookup details. We will continue to follow the example steps listed above.
+</para>
+</formalpara>
+<para>
+In the first step of these the <emphasis>&kdevelop; project managagement file</emphasis> is copied out of the template directory, where the &perl; <filename>script</filename> resides. In our case the <filename>share/apps/kdevappwizard/template-kapp/app.kdevelop</filename> file was copied into the application base directory and then customized according to the selections made in the <guilabel>Create New Project</guilabel> dialog.
+</para>
+
+<note><para>
+You may want to have a look at the resulting project file, in our case the <filename>/home/devel/yournewapplication/yournewapplication.kdevelop</filename> file. It is written in XML format and easily to be displayed with <application>Kate</application> or any other text editor. But take care nothing to change as &kdevelop; relies on its contents.
+</para></note>
+
+<formalpara>
+<title>The application framework</title>
+<para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically dependends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be repeated in other projects.
+</para>
+</formalpara>
+<para>
+In our case the following directory structure has been created in the <filename class="directory">/home/devel/yournewapplication/</filename> application base directory:
+<itemizedlist>
+  <listitem><para>
+    The <filename>src</filename> subdirectory is meant to hold the source files of your application.
+  </para></listitem>
+  <listitem><para>
+    The <filename>debug</filename> subdirectory will hold the compiled output of the <emphasis><quote>debug</quote> build configuration</emphasis>. (See the <link linkend="advanced-buildconfig">Build configurations</link> chapter to learn more about that.) As the name says, you should use this directory for debug purposes.
+  </para></listitem>
+  <listitem><para>
+    The <filename>optimized</filename> subdirectory will hold the compiled output of the <emphasis><quote>optimized</quote> build configuration</emphasis>. You should test an optimized version of your application from within here.
+  </para></listitem>
+  <listitem><para>
+    The <filename>po</filename> subdirectory is meant for <emphasis>translation purposes</emphasis>. It will hold so-called <quote>Portable Object</quote> files and templates which will be processed by a translation program as e.g. <application>KBabel</application>.
+  </para></listitem>
+</itemizedlist>
+</para>
+<para>
+All these directories will not kept empty but filled with a series of <filename>Makefile</filename> and other files &kdevelop; uses to process the sources of the application. Also some initial icon files for the new application will have been put into the <filename>src</filename> directory, if applicable.
+</para>
+
+<formalpara>
+<title>Application sources installed</title>
+<para>
+This framework finally will be used to put the <emphasis>initial source files</emphasis> of your new project in the <filename class="directory">src</filename> directory. The actual files highly depend on the application type you selected in the <guilabel>Create New Project</guilabel> dialog. You will soon see yourself as this is the stuff you will actually have to work on.
+</para>
+</formalpara>
+
+</sect2> <!-- appwizard-behind-app -->
+
+<sect2 id="appwizard-behind-cvs">
+<title>Setting up &CVS;</title>
+
+<para>
+</para>
+</sect2> <!-- appwizard-behind-cvs -->
+
+</sect1> <!-- appwizard-behind -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="oldprojects">
+<title>Existing projects</title>
+
+<sect2 id="importing">
 <title>Importing existing projects</title>
 
 <para>
@@ -1522,18 +1826,18 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 </mediaobject>
 </figure>
 
-</sect1> <!-- importing -->
+</sect2> <!-- importing -->
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="convertingold">
+<sect2 id="convertingold">
 <title>Converting old KDevelop project files</title>
 
 <para>
 &kdevelop; allows you to open old KDevelop 2.x project files and convert them to &kdevelop; files. To do so go to <guimenuitem>Open Project...</guimenuitem> and select <guilabel>KDevelop 2 project files</guilabel> in the <guilabel>Filter:</guilabel>. Then select project file you want to open. The project gets converted to &kdevelop; and saved as a <guilabel>&kdevelop; project file</guilabel>.
 </para>
 
-</sect1> <!-- convertingold -->
+</sect2> <!-- convertingold -->
+
+</sect1> <!-- oldprojects -->
 
 </chapter> <!-- appwizard -->
 
@@ -1752,7 +2056,7 @@ Redo
 <keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>- Replace
 </para>
 
-</sect2>
+</sect2> <!-- searching -->
  
 
 <sect2 id="isearch">
@@ -1771,7 +2075,7 @@ type. You will find that often the desired term is already found after typing
 in 3 or 4 letters.
 </para>
 
-</sect2>
+</sect2> <!-- isearch -->
 
 
 <sect2 id="grep">
@@ -1894,7 +2198,7 @@ your editor, you may get some mismatches in the line number, or some found
 items will be invalid. You can avoid this by saving all files beforehand.
 </para>
 
-</sect2>
+</sect2> <!-- grep -->
 
 </sect1> <!-- searchinggrepping -->
 
@@ -1904,7 +2208,16 @@ items will be invalid. You can avoid this by saving all files beforehand.
 <title>Creating new files and classes</title>
 
 <para>
+(... to be written ...)
 </para>
+
+<sect2 id="newfiles-edittemplates">
+<title>Editing the templates</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect2> <!-- newfiles-edittemplates -->
 
 </sect1> <!-- newfiles -->
 
@@ -2097,7 +2410,7 @@ Documentation has multiple facets. There is
 	<emphasis>comments</emphasis> in header/source files
 	</para></listitem>
     <listitem><para>
-	<emphasis>internal API documentation</emphasis> of your project generated from the program file by special tools, e.g. <application>Doxygen</application>
+	<emphasis>internal API documentation</emphasis> of your project generated from the program file by special tools, e.g. &doxygen;
 	</para></listitem>
   </itemizedlist>
   </para></listitem>
@@ -2152,7 +2465,7 @@ the build systems commonly in use on UNIX systems. We now give a detailed
 introduction into the project management modules supported by &kdevelop;
 The most important one is the <command>autoproject</command> plugin which
 serves as a frontend to the collection of scripts sometimes referred to as
-GNU autotools (&automake;, &autoconf;, &libtool;). Almost all application
+&gnu; autotools (&automake;, &autoconf;, &libtool;). Almost all application
 templates use this project management.
 </para>
 
@@ -2164,6 +2477,16 @@ which can be used for projects for which you maintain your own
 using <command>qmake</command>.
 </para>
 
+<sect1 id="buildconfigurations">
+<title>Build configurations</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect1> <!-- buildconfigurations -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="autoproject">
 <title>Automake projects</title>
@@ -2226,7 +2549,7 @@ CXX = g++
 #define SIZEOF_INT 4
 </programlisting>
 
-</sect2>
+</sect2> <!-- autoconf -->
 
 
 <sect2 id="automake">
@@ -2235,7 +2558,7 @@ CXX = g++
 <para>
 </para>
 
-</sect2>
+</sect2> <!--automake  -->
 
 
 <sect2 id="automakemanager">
@@ -2248,7 +2571,7 @@ CXX = g++
 </mediaobject>
 </figure>
 
-</sect2>
+</sect2> <!-- automakemanager -->
 
 
 <sect2 id="automakelibrary">
@@ -2271,7 +2594,7 @@ CXX = g++
 </itemizedlist>
 </para>
 
-</sect2>
+</sect2> <!-- automakelibrary -->
 
 </sect1> <!-- autoproject -->
 
@@ -2315,7 +2638,7 @@ CXX = g++
 <title>Advanced autoproject usage</title>
 <indexterm zone="advancedautoproject"><primary>&automake;</primary></indexterm>
 
-<sect1 id="buildconfigurations">
+<sect1 id="advanced-buildconfig">
 <title>Multiple build configurations</title>
 <indexterm zone="buildconfigurations"><primary>build configurations</primary><secondary>multiple</secondary></indexterm>
 
@@ -2336,7 +2659,7 @@ CXX = g++
 <para>
 When you have suitable cross compilers available, you can cross compile your
 programs for processors and operating systems different from the system where
-&kdevelop; and the compiler is running. The GNU compiler collection GCC can
+&kdevelop; and the compiler is running. The &gnu; compiler collection GCC can
 be configured and compiled as a cross compiler if you compile it yourself.
 Consult the <ulink url="info://gcc/Cross-Compiler">GCC info pages</ulink> for
 more information. Some Linux distributions also provide binary packages.
@@ -2454,7 +2777,7 @@ the autoproject project management, you have to add
 <para>
 For C and C++, &kdevelop; contains an internal debugger that is directly
 integrated with the editor. Technically, it is implemented as a frontend 
-that uses the portable GNU debugger <application>gdb</application> through 
+that uses the portable &gnu; debugger <application>gdb</application> through
 a pipe. The debugger can be started in several ways:
 </para>
 
@@ -2580,7 +2903,7 @@ In C++, function names in the executable are <quote>mangled</quote>, i.e. the fu
 names include information about the argument types. This is necessary in 
 order to support overloading of functions. The mangling algorithm is not 
 standardized and differs even between different versions of the 
-GNU C++ compiler.
+&gnu; C++ compiler.
 </para>
 </formalpara>
 
@@ -2857,16 +3180,16 @@ command is then inserted into the editor.
 
 <listitem>
 <formalpara>
-<title>The doxygen plugin</title>
+<title>The &doxygen; plugin</title>
 <indexterm zone="plugintools"><primary>&doxygen;</primary></indexterm>
 <indexterm zone="plugintools"><primary>documentation tool</primary></indexterm>
 <indexterm zone="plugintools"><primary>API documentation</primary></indexterm>
 
 <para>
-This one helps you to use the &doxygen; API documentation tool 
+This one helps you to use the &doxygen; API documentation tool
 (<ulink url="http://www.doxygen.org"/>). You can select
 <menuchoice><guimenu>Project</guimenu>
-<guimenuitem>Run Doxygen</guimenuitem></menuchoice> to generate API 
+<guimenuitem>Run Doxygen</guimenuitem></menuchoice> to generate API
 documentation for your current project, based on the configuration given by 
 the file <filename>Doxyfile</filename> in your project directory.
 </para>
@@ -3079,7 +3402,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <row><entry>buglist</entry><entry></entry></row>
 <row><entry>classview</entry><entry>Classview Manager</entry></row>
 <row><entry>ctags</entry><entry></entry></row>
-<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
+<row><entry>debugger</entry><entry>&gnu; Debugger Manager</entry></row>
 <row><entry>diff</entry><entry></entry></row>
 <row><entry>distpart</entry><entry></entry></row>
 <row><entry>doxygen</entry><entry></entry></row>
@@ -3268,7 +3591,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <bibliography>
 
 <biblioentry>
-<title><ulink url="info://make/Top">GNU Make Manual</ulink></title>
+<title><ulink url="info://make/Top">&gnu; Make Manual</ulink></title>
 <authorgroup>
 <author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
 <author><firstname>Roland</firstname><surname>McGrath</surname></author>
@@ -3276,7 +3599,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://automake/Top">GNU Automake</ulink></title>
+<title><ulink url="info://automake/Top">&gnu; Automake</ulink></title>
 <authorgroup>
 <author><firstname>David</firstname><surname>MacKenzie</surname></author>
 <author><firstname>Tom</firstname><surname>Tromey</surname></author>
@@ -3284,7 +3607,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://autoconf/Top">GNU Autoconf</ulink></title>
+<title><ulink url="info://autoconf/Top">&gnu; Autoconf</ulink></title>
 <authorgroup>
 <author><firstname>David</firstname><surname>MacKenzie</surname></author>
 <author><firstname>Ben</firstname><surname>Elliston</surname></author>
@@ -3292,12 +3615,12 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://gcc/Top">Using the GNU Compiler Collection</ulink></title>
+<title><ulink url="info://gcc/Top">Using the &gnu; Compiler Collection</ulink></title>
 <author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://libtool/Top">GNU Libtool</ulink></title>
+<title><ulink url="info://libtool/Top">&gnu; Libtool</ulink></title>
 <authorgroup>
 <author><firstname>Gordon</firstname><surname>Matzigkeit</surname></author>
 <author><firstname>Alexandre</firstname><surname>Oliva</surname></author>
