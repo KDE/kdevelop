@@ -210,7 +210,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   KQuickHelp::add(optimize,
   KQuickHelp::add(optimize_level,
   KQuickHelp::add(optimize_level_label, i18n("Set the -O option for the GCC\n"
-  					"here. Turning off optimization\n"	
+  					"here. Turning off optimization\n"
 				     	"equals -O0. The higher the level\n"
 					"the more time you need to compile\n"
 				 	"but increases program speed."))));
@@ -1164,7 +1164,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   	m_print_debug_info->setChecked(TRUE);
   }
  	else m_print_debug_info->setChecked(FALSE);
- 	
+
  	if (settings->readBoolEntry("PrintDataBase")) {
  	  m_print_data_base->setChecked(TRUE);
   }
@@ -1184,7 +1184,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   	m_cont_after_error->setChecked(TRUE);
 	}
 	else m_cont_after_error->setChecked(FALSE);
-	
+
 	if (settings->readBoolEntry("TouchFiles")) {
 		m_touch_files->setChecked(TRUE);
   }
@@ -1194,22 +1194,62 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
 		m_print_work_dir->setChecked(TRUE);
 	}
 	else m_print_work_dir->setChecked(FALSE);
-	
+
 	if (settings->readBoolEntry("SilentOperation")) {
 		m_silent_operation->setChecked(TRUE);
 	}
 	else m_silent_operation->setChecked(FALSE);
-	
+
 	if (settings->readBoolEntry("IgnorErrors")) {
 		m_ignor_errors->setChecked(TRUE);
 	}
 	else m_ignor_errors->setChecked(FALSE);
-	
+
 	m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
 	m_optional_line->setText(settings->readEntry("OptionalLine"));
-	m_job_number->setValue(settings->readNumEntry ("JobNumber"));	
+	m_job_number->setValue(settings->readNumEntry ("JobNumber"));
 
 	m_rebuild_combo->setCurrentItem(settings->readNumEntry("RebuildType", 2));
+
+//************************** binary selection *************************//
+  QWidget* w6 = new QWidget( this, "bin" );
+
+  QGroupBox* binary_box= new QGroupBox(w6,"binary_box");
+  binary_box->setGeometry(10,10,400,150);
+  binary_box->setMinimumSize(0,0);
+  binary_box->setTitle(i18n("Name"));
+
+  QLabel* binary = new QLabel(w6,"binary_label");
+  binary->setGeometry(30,40,300,30);
+  binary->setMinimumSize(0,0);
+  binary->setText(i18n("Filename of binary that will be started on \"Execute\":"));
+
+  binary_edit= new QLineEdit(w6,"binary_edit");
+  binary_edit->setGeometry(30,70,300,30);
+  binary_edit->setMinimumSize(0,0);
+  binary_edit->setMaxLength( 32767 );
+
+  QString binaryFileName;
+  binaryFileName = prj->getBinPROGRAM();
+  if (!binaryFileName.isEmpty()){
+    binary_edit->setText(binaryFileName);
+  }
+
+  QPushButton* binary_button= new QPushButton(w6,"binary_button");
+  binary_button->setGeometry(340,70,30,30);
+  binary_button->setMinimumSize(0,0);
+  binary_button->setPixmap(pix);
+
+  KQuickHelp::add(binary_edit,
+  KQuickHelp::add(binary_button,
+  KQuickHelp::add(binary,i18n("Set the directory path leading to your binary that is expected to be started on Run.\n"
+                              "This is useful in projects for a dynamical library!\n"
+			      "Hint: Use a relative path starting from your source directory to be location independent."))));
+
+
+  connect(binary_button,SIGNAL(clicked()),SLOT(slotBinaryClicked()));
+  addTab(w6, i18n("Binary"));
+
 
   // **************set the button*********************
   setOkButton(i18n("OK"));
@@ -1263,11 +1303,11 @@ void CPrjOptionsDlg::ok(){
   }
   if (debug_level->value()>3) {
       debug_level->setValue(3);
-  } 
+  }
   if (debug_level->value()<1) {
       debug_level->setValue(1);
   }
-  
+
 
   //*********general******************
   text = prjname_edit->text();
@@ -1288,9 +1328,9 @@ void CPrjOptionsDlg::ok(){
 
   QString vcsystem = vcsystem_combo->currentText();
   prj_info->setVCSystem(vcsystem == i18n("None")? QString("None") : vcsystem);
-  
+
   prj_info->setModifyMakefiles(modifymakefiles_checkbox->isChecked());
-  
+
   //********gcc-options***************
   if (target->currentItem()) {
     text=" -b "+QString(target->currentText());
@@ -1411,7 +1451,7 @@ void CPrjOptionsDlg::ok(){
   if(old_ldflags != prj_info->getLDFLAGS().stripWhiteSpace()){
     need_makefile_generation = true;
   }
-  
+
   text= addit_ldadd->text();
 
   if (l_math->isChecked() && !l_khtmlw->isChecked()) {
@@ -1460,7 +1500,7 @@ void CPrjOptionsDlg::ok(){
     settings->writeEntry("PrintDebugInfo",TRUE);
   }
   else settings->writeEntry("PrintDebugInfo",FALSE);
-  
+
   if (m_print_data_base->isChecked()) {
     settings->writeEntry("PrintDataBase",TRUE);
   }
@@ -1480,7 +1520,7 @@ void CPrjOptionsDlg::ok(){
 		settings->writeEntry("ContAfterError",TRUE);
 	}
 	else settings->writeEntry("ContAfterError",FALSE);
-	
+
 	if (m_touch_files->isChecked()) {
 		settings->writeEntry("TouchFiles", TRUE);
   }
@@ -1490,17 +1530,17 @@ void CPrjOptionsDlg::ok(){
   	settings->writeEntry("PrintWorkDir", TRUE);
 	}
 	else settings->writeEntry("PrintWorkDir", FALSE);
-	
+
 	if (m_silent_operation->isChecked()) {
 		settings->writeEntry("SilentOperation", TRUE);
 	}
 	else settings->writeEntry("SilentOperation", FALSE);
-	
+
 	if (m_ignor_errors->isChecked()) {
 		settings->writeEntry("IgnorErrors", TRUE);
 	}
 	else settings->writeEntry("IgnorErrors", FALSE);
-	
+
 	settings->writeEntry("RebuildType", m_rebuild_combo->currentItem());
 	settings->writeEntry("SetModifyLine", m_set_modify_line->text());
 	settings->writeEntry("OptionalLine", m_optional_line->text());
@@ -1558,6 +1598,9 @@ void CPrjOptionsDlg::ok(){
 
   prj_info->setMakeOptions (text);
 
+  /******** binary options *********/
+  prj_info->setBinPROGRAM( binary_edit->text());
+
   // write it to the disk
   prj_info->writeProject();
   if (version_edit->text() != old_version){
@@ -1579,4 +1622,10 @@ bool CPrjOptionsDlg::needConfigureInUpdate(){
 }
 
 
-
+void CPrjOptionsDlg::slotBinaryClicked(){
+  QString dir;
+  dir = KFileDialog::getOpenFileName(prj_info->getBinPROGRAM());
+  if (!dir.isEmpty()){
+    binary_edit->setText(dir);
+  }
+}

@@ -1,3 +1,9 @@
+2000-10-27 Falk Brettschneider <falk@kdevelop.org>
+  * Another new Feature!:
+    Now you can set any program at any location as executable that will be started on "Execute" or "Debug".
+    It is useful for shared object projects or multi-processes projects to start the master binary.
+    (Use the project settings for that)
+
 2000-10-18 Falk Brettschneider <falk@kdevelop.org>
   * added Make Clean
 

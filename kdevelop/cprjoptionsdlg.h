@@ -145,6 +145,9 @@ private:
   bool need_makefile_generation;
   KFileDialog *filedialog;
 	KConfig *settings;
+  // Binary path
+  QLineEdit* binary_edit;
+
 	
 protected slots:
    /** is called, if the ok-button were clicked*/
@@ -152,6 +155,7 @@ protected slots:
   void slotFileDialogClicked();
   void slotOptimize_level_changed(int v);
   void slotDebug_level_changed(int v);
+  void slotBinaryClicked();
 };
 
 #endif
