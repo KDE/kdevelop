@@ -130,8 +130,9 @@ void MarkerWidget::resizeEvent( QResizeEvent *e )
 void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
 {
     QPopupMenu m( 0, "editor_breakpointsmenu" );
+    QPopupMenu sub( 0, "editor_breakpointsmenu_sub" );
 
-    int toggleBreakPoint = 0;
+    int toggleBreakpoint = 0;
     int toggleBookmark = 0;
     int lmbClickChangesBPs = 0;
     int lmbClickChangesBookmarks = 0;
@@ -141,26 +142,20 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
     while ( p ) {
         if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
             ParagData* data = (ParagData*) p->extraData();
-            if ( data->mark() & 0x02 )
-                toggleBreakPoint = m.insertItem( i18n( "Clear %1" ).arg(m_breakpointDescr) );
-            else
-                toggleBreakPoint = m.insertItem( i18n( "Set %1" ).arg(m_breakpointDescr) );
-            m.setItemEnabled(toggleBreakPoint, m_changeBreakpointsAllowed);
-            m.insertSeparator();
-
-            if ( data->mark() & 0x01 )
-                toggleBookmark = m.insertItem( i18n( "Clear %1" ).arg(m_bookmarkDescr) );
-            else
-                toggleBookmark = m.insertItem( i18n( "Set %1" ).arg(m_bookmarkDescr) );
+	    
+            toggleBookmark = m.insertItem( m_bookmarkDescr );
             m.setItemEnabled(toggleBookmark, m_changeBookmarksAllowed);
-            m.insertSeparator();
-
-            lmbClickChangesBPs = m.insertItem( i18n( "Left Mouse Button Click Sets: %1" ).arg(m_breakpointDescr) );
-            lmbClickChangesBookmarks = m.insertItem( i18n( "Left Mouse Button Click Sets: %1" ).arg(m_bookmarkDescr) );
+            m.setItemChecked(toggleBookmark, data->mark() & 0x01);
+	    
+            toggleBreakpoint = m.insertItem( m_breakpointDescr );
+            m.setItemEnabled(toggleBreakpoint, m_changeBreakpointsAllowed);
+            m.setItemChecked(toggleBreakpoint, data->mark() & 0x02);
+	    
+	    m.insertItem("Set default mark type", &sub);
+            lmbClickChangesBookmarks = sub.insertItem( m_bookmarkDescr );
+            lmbClickChangesBPs = sub.insertItem( m_breakpointDescr );
             m.setItemChecked(lmbClickChangesBPs, m_clickChangesBPs);
             m.setItemChecked(lmbClickChangesBookmarks, !m_clickChangesBPs);
-
-            //m.insertSeparator();
             break;
         }
         p = p->next();
@@ -185,7 +180,7 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
             data->setMark( data->mark() | 0x01 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
         }
-    } else if ( res == toggleBreakPoint && m_changeBreakpointsAllowed ) {
+    } else if ( res == toggleBreakpoint && m_changeBreakpointsAllowed ) {
         mark.type = 0x02;
         if ( data->mark() & 0x02 ) {
             data->setMark( data->mark() & ~0x02 );
