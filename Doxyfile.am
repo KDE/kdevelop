@@ -119,8 +119,6 @@ apidox-am-yes:
 			fi ;\
 			$(LN_S) $$common_dir $(top_builddir)/apidocs/common ;\
 		fi ;\
-		$(DOXYGEN) -s -u Doxyfile; \
-		cat Doxyfile; \
 		$(DOXYGEN) Doxyfile; \
 		rm -f Doxyfile; \
 	fi
