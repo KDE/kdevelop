@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/widgets $(all_incl
 
 kde_module_LTLIBRARIES = libkdevghcoptions.la
 libkdevghcoptions_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
-libkdevghcoptions_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la
+libkdevghcoptions_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML)
 
 libkdevghcoptions_la_SOURCES = ghcoptionsplugin.cpp
 # optiontabs.cpp
