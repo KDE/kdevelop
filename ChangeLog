@@ -1,3 +1,9 @@
+2000-05-06 Falk Brettschneider <gigafalk@yahoo.com>
+        * trying to have all views as dockwidgets, we will see if that is cool
+	  (dedicated to JB ;-)
+        * using the reimplemented "dockback" feature of the dockwidget class set
+	  (you will need to upgrade to kdelibs (06/May/2000))
+
 2000-04-28 Falk Brettschneider <gigafalk@yahoo.com>
         * several bugfixes in QextMDI for new event/class behaviours in Qt-2.1
           (shaking-motion effect, taskbar, system menu)

@@ -249,49 +249,49 @@ void CKDevelop::initView(){
 	// Note: this has to be done _before_ we disable some dock positions
   readDockConfig( config, "Dock Settings");
 	// recover broken pointers after the read of the configuration
-  dockbase_o_tab_view = dockManager->getDockWidgetFromName( nameOfOutputSuperDock);
-  dockbase_o_tab_view->setCaption(i18n("Output views"));
-  QObject::connect(dockbase_o_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTOutputView()));
-  dockbase_t_tab_view = dockManager->getDockWidgetFromName( nameOfTreeSuperDock);
-  dockbase_t_tab_view->setCaption(i18n("Tree views"));
-  QObject::connect(dockbase_t_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTTreeView()));
+//  dockbase_o_tab_view = dockManager->getDockWidgetFromName( nameOfOutputSuperDock);
+//  dockbase_o_tab_view->setCaption(i18n("Output views"));
+//  QObject::connect(dockbase_o_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTOutputView()));
+//  dockbase_t_tab_view = dockManager->getDockWidgetFromName( nameOfTreeSuperDock);
+//  dockbase_t_tab_view->setCaption(i18n("Tree views"));
+//  QObject::connect(dockbase_t_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTTreeView()));
 
 	// disable docking for all trees and output views
 	// (only debugger views are supposed to be able for undocking)
-	dockbase_messages_widget->setEnableDocking( KDockWidget::DockNone);
-	dockbase_messages_widget->setDockSite( KDockWidget::DockNone);	
-	dockbase_grepview->setEnableDocking( KDockWidget::DockNone);
-	dockbase_grepview->setDockSite( KDockWidget::DockNone);	
-	dockbase_outputview->setEnableDocking( KDockWidget::DockNone);
-	dockbase_outputview->setDockSite( KDockWidget::DockNone);
-	dockbase_brkptManager_view->setEnableDocking( KDockWidget::DockNone);
-	dockbase_brkptManager_view->setDockSite( KDockWidget::DockNone);
-	dockbase_frameStack_view->setEnableDocking( KDockWidget::DockNone);
-	dockbase_frameStack_view->setDockSite( KDockWidget::DockNone);
-	dockbase_disassemble_view->setEnableDocking( KDockWidget::DockNone);
-	dockbase_disassemble_view->setDockSite( KDockWidget::DockNone);
-#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-	dockbase_dbg_widget_view->setEnableDocking( KDockWidget::DockNone);
-	dockbase_dbg_widget_view->setDockSite( KDockWidget::DockNone);
-#endif
-	dockbase_class_tree->setEnableDocking( KDockWidget::DockNone);
-	dockbase_class_tree->setDockSite( KDockWidget::DockNone);	
-	dockbase_log_file_tree->setEnableDocking( KDockWidget::DockNone);
-	dockbase_log_file_tree->setDockSite( KDockWidget::DockNone);	
-	dockbase_real_file_tree->setEnableDocking( KDockWidget::DockNone);
-	dockbase_real_file_tree->setDockSite( KDockWidget::DockNone);
-	dockbase_var_viewer->setEnableDocking( KDockWidget::DockNone);
-	dockbase_var_viewer->setDockSite( KDockWidget::DockNone);
-	dockbase_doc_tree->setEnableDocking( KDockWidget::DockNone);
-	dockbase_doc_tree->setDockSite( KDockWidget::DockNone);	
-	dockbase_widprop_split_view->setEnableDocking( KDockWidget::DockNone);
-	dockbase_widprop_split_view->setDockSite( KDockWidget::DockNone);	
+//	dockbase_messages_widget->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_messages_widget->setDockSite( KDockWidget::DockNone);	
+//	dockbase_grepview->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_grepview->setDockSite( KDockWidget::DockNone);	
+//	dockbase_outputview->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_outputview->setDockSite( KDockWidget::DockNone);
+//	dockbase_brkptManager_view->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_brkptManager_view->setDockSite( KDockWidget::DockNone);
+//	dockbase_frameStack_view->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_frameStack_view->setDockSite( KDockWidget::DockNone);
+//	dockbase_disassemble_view->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_disassemble_view->setDockSite( KDockWidget::DockNone);
+//#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+//	dockbase_dbg_widget_view->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_dbg_widget_view->setDockSite( KDockWidget::DockNone);
+//#endif
+//	dockbase_class_tree->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_class_tree->setDockSite( KDockWidget::DockNone);	
+//	dockbase_log_file_tree->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_log_file_tree->setDockSite( KDockWidget::DockNone);	
+//	dockbase_real_file_tree->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_real_file_tree->setDockSite( KDockWidget::DockNone);
+//	dockbase_var_viewer->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_var_viewer->setDockSite( KDockWidget::DockNone);
+//	dockbase_doc_tree->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_doc_tree->setDockSite( KDockWidget::DockNone);	
+//	dockbase_widprop_split_view->setEnableDocking( KDockWidget::DockNone);
+//	dockbase_widprop_split_view->setDockSite( KDockWidget::DockNone);	
 
 	// enable docking of trees-widget and outputs-widget for some positions, only
-  dockbase_o_tab_view->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop);
-  dockbase_o_tab_view->setDockSite( KDockWidget::DockNone);
-  dockbase_t_tab_view->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop);
-  dockbase_t_tab_view->setDockSite( KDockWidget::DockNone);
+//  dockbase_o_tab_view->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop);
+//  dockbase_o_tab_view->setDockSite( KDockWidget::DockNone);
+//  dockbase_t_tab_view->setEnableDocking( KDockWidget::DockCorner | KDockWidget::DockDesktop);
+//  dockbase_t_tab_view->setDockSite( KDockWidget::DockNone);
 	dockbase_mdi_main_frame->setEnableDocking( KDockWidget::DockNone);
 	dockbase_mdi_main_frame->setDockSite( KDockWidget::DockCorner);	
 
@@ -751,6 +751,11 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
   kdev_menubar->insertItem(i18n("&Window"), mdi_main_frame->windowMenu());
+  kdev_menubar->insertSeparator();
+
+  ///////////////////////////////////////////////////////////////////
+  // Dock-menu entries
+  kdev_menubar->insertItem(i18n("&Docking"), dockHideShowMenu());
   kdev_menubar->insertSeparator();
 
   ///////////////////////////////////////////////////////////////////

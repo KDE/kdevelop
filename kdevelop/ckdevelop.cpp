@@ -2237,16 +2237,16 @@ void CKDevelop::slotDocTreeSelected(const QString &filename){
 }
 
 void CKDevelop::slotTCurrentTab(int idOfTabPage){
-	if( idOfTabPage == -1)	// is it the default value?
-		// yes, set DOC to current page/show it
-		dockbase_doc_tree->makeDockVisible();
-	else if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
-		// no, try to show the according tab page in the tree group
-		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();	// get tab control
-		pTabGroup->setVisiblePage(idOfTabPage);
-	}
-	else
-		qDebug("warning: (in CKDevelop::slotTCurrentTab) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
+//FALK	if( idOfTabPage == -1)	// is it the default value?
+//FALK		// yes, set DOC to current page/show it
+//FALK		dockbase_doc_tree->makeDockVisible();
+//FALK	else if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
+//FALK		// no, try to show the according tab page in the tree group
+//FALK		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();	// get tab control
+//FALK		pTabGroup->setVisiblePage(idOfTabPage);
+//FALK	}
+//FALK	else
+//FALK		qDebug("warning: (in CKDevelop::slotTCurrentTab) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
 }
 
 
@@ -2303,41 +2303,24 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 
 		slotMarkStatus();
 
-		if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
-			// get tab control
-			KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();
-			// get current tab page
-			QWidget* tmpWidget = pTabGroup->visiblePage();
-			if( !tmpWidget->inherits("KDockWidget"))
-				qDebug("critical: (in CKDevelop::slotMDIGetFocus) tab control page is not a KDockWidget!");
-			KDockWidget* currentTab = (KDockWidget*) pTabGroup->visiblePage();
-			if (type == CPP_HEADER){
-				if(bAutoswitch && (currentTab == dockbase_doc_tree)){	
-					if ( bDefaultCV)
-						pTabGroup->setVisiblePage(dockbase_class_tree);
-					else
-						pTabGroup->setVisiblePage(dockbase_log_file_tree);
-				}
-				disableCommand(ID_BUILD_COMPILE_FILE);
-			}
-			if (type == CPP_SOURCE){
-				if(bAutoswitch && (currentTab == dockbase_doc_tree)){	
-					if ( bDefaultCV)
-						pTabGroup->setVisiblePage(dockbase_class_tree);
-					else
-						pTabGroup->setVisiblePage(dockbase_log_file_tree);
-				}
-				cerr << "CPP_SOURCE\n";
-				if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
-					enableCommand(ID_BUILD_COMPILE_FILE);
-				}			
-			}
+		if (type == CPP_HEADER){
+			if ( bDefaultCV)
+				makeDockVisible(dockbase_class_tree);
 			else
-				qDebug("warning: (in CKDevelop::slotMDIGetFocus) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
+				makeDockVisible(dockbase_log_file_tree);
+			disableCommand(ID_BUILD_COMPILE_FILE);
+		}
+		if (type == CPP_SOURCE){
+			if ( bDefaultCV)
+				makeDockVisible(dockbase_class_tree);
+			else
+				makeDockVisible(dockbase_log_file_tree);
+			cerr << "CPP_SOURCE\n";
+			if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
+				enableCommand(ID_BUILD_COMPILE_FILE);
+			}			
 		}
 	}
-
-
 
 	// Dialog Views --------------------------------------------
 

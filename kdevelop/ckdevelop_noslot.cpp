@@ -465,7 +465,7 @@ void CKDevelop::switchToKDevelop(){
 
   //////// change the mainview ////////
   mdi_main_frame->show();
-  dockbase_t_tab_view->show();
+//FALK  dockbase_t_tab_view->show();
 
 //F.B.  top_panner->hide();
   //  top_panner->deactivate();
@@ -585,9 +585,9 @@ void CKDevelop::showTreeView(bool show){
 
  
      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-       dockbase_t_tab_view->show();
+;//FALK       dockbase_t_tab_view->show();
      else
-       dockbase_t_tab_view->hide();
+;//FALK       dockbase_t_tab_view->hide();
    
   if(bAutoswitch)
   {
@@ -699,9 +699,9 @@ void CKDevelop::readOptions(){
   int edit_view_pos=config->readNumEntry("EditViewHeight", size.height()-output_view_pos);
 
   // set initial heights of trees, mdi and output views
-  dockbase_t_tab_view->resize(dockbase_t_tab_view->width(),edit_view_pos);
+//FALK  dockbase_t_tab_view->resize(dockbase_t_tab_view->width(),edit_view_pos);
   mdi_main_frame->resize(mdi_main_frame->width(),edit_view_pos);
-  dockbase_o_tab_view->resize(dockbase_o_tab_view->width(),output_view_pos);
+//FALK  dockbase_o_tab_view->resize(dockbase_o_tab_view->width(),output_view_pos);
 
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
@@ -715,7 +715,7 @@ void CKDevelop::readOptions(){
   edit_view_pos=config->readNumEntry("EditViewWidth", size.width()-tree_view_pos);
 
   // set initial widths of trees and  mdi views
-  dockbase_t_tab_view->resize(tree_view_pos,dockbase_t_tab_view->height());
+//FALK  dockbase_t_tab_view->resize(tree_view_pos,dockbase_t_tab_view->height());
   mdi_main_frame->resize(edit_view_pos,mdi_main_frame->height());
 
   if(treeview){
@@ -723,7 +723,7 @@ void CKDevelop::readOptions(){
     toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
   }
   else
-    dockbase_t_tab_view->hide();
+;//FALK    dockbase_t_tab_view->hide();
 
 	
   
@@ -787,9 +787,9 @@ void CKDevelop::saveOptions(){
 
 
   config->writeEntry("EditViewHeight",mdi_main_frame->height());
-  config->writeEntry("OutputViewHeight",dockbase_o_tab_view->height());
+//FALK  config->writeEntry("OutputViewHeight",dockbase_o_tab_view->height());
 
-  config->writeEntry("ClassViewWidth",dockbase_t_tab_view->width());
+//FALK  config->writeEntry("ClassViewWidth",dockbase_t_tab_view->width());
   config->writeEntry("EditViewWidth",mdi_main_frame->width());
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
@@ -801,18 +801,18 @@ void CKDevelop::saveOptions(){
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
 
-	if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
-		// get tab control
-		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();
-		// get current tab page
-		QWidget* tmpWidget = pTabGroup->visiblePage();
-		if( !tmpWidget->inherits("KDockWidget"))
-			qDebug("critical: (in CKDevelop::slotMDIGetFocus) tab control page is not a KDockWidget!");
-		KDockWidget* currentTab = (KDockWidget*) pTabGroup->visiblePage();
-		config->writeEntry("LastActiveTree", pTabGroup->id(currentTab));	//was: value=t_tab_view->getCurrentTab()
-	}
-	else
-		qDebug("warning: (in CKDevelop::saveOptions) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
+//FALK	if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
+//FALK		// get tab control
+//FALK		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();
+//FALK		// get current tab page
+//FALK		QWidget* tmpWidget = pTabGroup->visiblePage();
+//FALK		if( !tmpWidget->inherits("KDockWidget"))
+//FALK			qDebug("critical: (in CKDevelop::slotMDIGetFocus) tab control page is not a KDockWidget!");
+//FALK		KDockWidget* currentTab = (KDockWidget*) pTabGroup->visiblePage();
+//FALK		config->writeEntry("LastActiveTree", pTabGroup->id(currentTab));	//was: value=t_tab_view->getCurrentTab()
+//FALK	}
+//FALK	else
+//FALK		qDebug("warning: (in CKDevelop::saveOptions) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
 
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
