@@ -37,7 +37,7 @@
 #include <kregexp.h>
 #include <kurl.h>
 #include <qmessagebox.h>
-
+#include <kprocess.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -549,7 +549,17 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 
     QString dirName = m_shownSubproject->path;
     FileItem *fitem = static_cast<FileItem*>(pvitem);
-    m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    
+    bool isUiFile = QFileInfo(fitem->name).extension() == "ui";
+    if( m_part->isTMakeProject() && isUiFile ){
+	// start designer in your PATH
+	KShellProcess proc;
+        proc << "designer" << (dirName + "/" + QString(fitem->name));
+        proc.start( KProcess::DontCare, KProcess::NoCommunication );
+
+    } else    
+	m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    
     m_part->mainWindow()->lowerView(this);
 }
 
