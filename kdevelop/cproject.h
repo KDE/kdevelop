@@ -366,6 +366,8 @@ public: // Public methods
 
   void updateConfigureIn();
   void updateMakefilesAm();
+  void changeLibraryType(const QString &makefile, const QString &type);
+  void createLibraryMakefileAm(const QString &makefile, const QString &type);
   //  void createBinMakefileAm();
   void updateMakefileAm(QString makefile);
   /** read the projectfile */
