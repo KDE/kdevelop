@@ -11,11 +11,15 @@
 
 #include "runoptionswidget.h"
 
+#include <klocale.h>
+
 #include <qlineedit.h>
 #include <qlistview.h>
+#include <qfiledialog.h>
 
 #include "domutil.h"
 #include "addenvvardlg.h"
+
 
 
 RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup,
@@ -74,6 +78,17 @@ void RunOptionsWidget::addVarClicked()
 void RunOptionsWidget::removeVarClicked()
 {
     delete listview->currentItem();
+}
+
+void RunOptionsWidget::browseMainProgram()
+{
+  mainprogram_edit->setText(QFileDialog::getOpenFileName(i18n("All (*)"),
+                                                         "~",
+                                                         0,
+                                                         i18n("Main program"),
+                                                         i18n("Select main program executable")));
+
+    
 }
 
 #include "runoptionswidget.moc"

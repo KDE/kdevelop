@@ -32,6 +32,7 @@ public slots:
 private:
     virtual void addVarClicked();
     virtual void removeVarClicked();
+    virtual void browseMainProgram();
     
     QDomDocument &m_dom;
     QString m_configGroup;

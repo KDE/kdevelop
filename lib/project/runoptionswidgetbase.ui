@@ -8,14 +8,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>439</width>
-            <height>318</height>
+            <width>467</width>
+            <height>385</height>
         </rect>
     </property>
     <property name="caption">
         <string>Run Options</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -25,160 +25,185 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>mainprogram_edit</cstring>
+                <cstring>GroupBox1</cstring>
             </property>
+            <property name="title">
+                <string>Run</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLineEdit" row="1" column="0">
+                    <property name="name">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>progargs_label_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Program arguments:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>mainprogram_label_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Main program (relative to project directory):</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>browseMain</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse...</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="3" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>progargs_edit</cstring>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-        <widget class="QLabel" row="3" column="0" rowspan="1" colspan="4">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>progargs_label_3</cstring>
+                <cstring>GroupBox2</cstring>
             </property>
-            <property name="text">
-                <string>Program arguments:</string>
+            <property name="title">
+                <string>Environment variables</string>
             </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QListView" row="1" column="0" rowspan="2" colspan="1">
+                    <column>
+                        <property name="text">
+                            <string>Name</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Value</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizeable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>listview</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="showSortIndicator">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizeMode">
+                        <enum>AllColumns</enum>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>Layout2</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>addvar_button</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Add...</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>removevar_button</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Remove</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <spacer row="2" column="1">
+                    <property name="name">
+                        <cstring>Spacer12</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>0</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
         </widget>
-        <spacer row="5" column="1">
-            <property name="name" stdset="0">
-                <cstring>Spacer8</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>mainprogram_label_3</cstring>
-            </property>
-            <property name="text">
-                <string>Main program (relative to project directory):</string>
-            </property>
-        </widget>
-        <spacer row="2" column="1">
-            <property name="name" stdset="0">
-                <cstring>Spacer54_3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <spacer row="10" column="2">
-            <property name="name" stdset="0">
-                <cstring>Spacer10</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>MinimumExpanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <spacer row="8" column="2">
-            <property name="name" stdset="0">
-                <cstring>Spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLabel" row="6" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>envvars_label</cstring>
-            </property>
-            <property name="text">
-                <string>Environment variables:</string>
-            </property>
-        </widget>
-        <spacer row="1" column="0">
-            <property name="name" stdset="0">
-                <cstring>Spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>16</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <spacer row="4" column="0">
-            <property name="name" stdset="0">
-                <cstring>Spacer3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>16</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <spacer row="7" column="0">
-            <property name="name" stdset="0">
-                <cstring>Spacer5</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>16</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>progargs_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="9" column="0" rowspan="1" colspan="3">
+        <widget class="QCheckBox">
             <property name="name">
                 <cstring>startinterminal_box</cstring>
             </property>
@@ -186,164 +211,7 @@
                 <string>Start in external terminal</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="7" column="4">
-            <property name="name">
-                <cstring>Layout8_3</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name" stdset="0">
-                        <cstring>Spacer6</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>addvar_button</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Add...</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>removevar_button</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Remove</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name" stdset="0">
-                        <cstring>Spacer7</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </vbox>
-        </widget>
-        <spacer row="4" column="3" rowspan="1" colspan="2">
-            <property name="name" stdset="0">
-                <cstring>Spacer4</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <spacer row="1" column="3" rowspan="1" colspan="2">
-            <property name="name" stdset="0">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Preferred</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QListView" row="7" column="1" rowspan="1" colspan="3">
-            <column>
-                <property name="text">
-                    <string>Name</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizeable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Value</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizeable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>listview</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="showSortIndicator">
-                <bool>true</bool>
-            </property>
-            <property name="resizeMode">
-                <enum>AllColumns</enum>
-            </property>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
 <connections>
     <connection>
@@ -358,6 +226,12 @@
         <receiver>run_options_widget</receiver>
         <slot>removeVarClicked()</slot>
     </connection>
+    <connection>
+        <sender>browseMain</sender>
+        <signal>clicked()</signal>
+        <receiver>run_options_widget</receiver>
+        <slot>browseMainProgram()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>mainprogram_edit</tabstop>
@@ -369,6 +243,7 @@
 </tabstops>
 <slots>
     <slot access="protected">addVarClicked()</slot>
+    <slot>browseMainProgram()</slot>
     <slot access="protected">removeVarClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
