@@ -21,6 +21,8 @@
 #include <iostream.h>
 #include <qstrlist.h>
 #include <qmessagebox.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 #include <klocale.h>
 #include "debug.h"
 #include "ctoolclass.h"
@@ -1292,7 +1294,11 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   binary_edit->setMaxLength( 32767 );
 
   QString binaryFileName;
-  binaryFileName = prj->getBinPROGRAM();
+  if (prj->pathToBinPROGRAM())
+    binaryFileName = prj->pathToBinPROGRAM() + "/" + prj->getBinPROGRAM();
+  else
+    binaryFileName = prj->getBinPROGRAM();
+
   if (!binaryFileName.isEmpty()){
     binary_edit->setText(binaryFileName);
   }
@@ -1707,17 +1713,15 @@ void CPrjOptionsDlg::ok(){
     }
   }
   // split the path into dir and program
-  QString binaryDir;
-  QString binaryProgram;
-  int sepPos = binaryPath.findRev('/', binaryPath.length()-1);
-  if (sepPos != -1) {
-    binaryDir = binaryPath.left( sepPos);
-    binaryProgram = binaryPath.right( binaryPath.length()-sepPos-1);
-  }
-  else
-    binaryProgram = binaryPath;  // we've got only the binary name
-  prj_info->setBinPROGRAM( binaryProgram);
-  prj_info->setPathToBinPROGRAM( binaryPath);
+  QFileInfo fileInfo( binaryPath );
+
+  //****** TODO remove - debug statements
+  QString binaryDir = fileInfo.dirPath();
+  QString binaryProgram = fileInfo.fileName();
+  // ******************
+
+  prj_info->setBinPROGRAM( fileInfo.fileName() );
+  prj_info->setPathToBinPROGRAM( fileInfo.dirPath() );
 
   // write it to the disk
   prj_info->writeProject();
