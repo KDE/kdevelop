@@ -5,4 +5,4 @@ Comment=C++ support
 Name=CppSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevcppsupport
-X-KDE-Language=C++
+X-KDevelop-Language=C++

@@ -29,10 +29,6 @@ protected:
     virtual void classStoreOpened(CClassStore *store);
     virtual void classStoreClosed();
 
-    virtual void addedFileToProject(const QString &name);
-    virtual void removedFileFromProject(const QString &name);
-    virtual void savedFile(const QString &name);
-
 private slots:
     void selectedClass();
     void selectedMethod();
@@ -40,6 +36,7 @@ private slots:
     void selectedGotoDeclaration();
     void selectedGotoImplementation();
     void selectedGotoClassDeclaration();
+    void selectedNewClass();
     void selectedAddMethod();
     void selectedAddAttribute();
     

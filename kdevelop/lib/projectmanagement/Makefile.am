@@ -1,7 +1,7 @@
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib
 
-lib_LTLIBRARIES = libkdevprojectmanagement.la
+noinst_LTLIBRARIES = libkdevprojectmanagement.la
 libkdevprojectmanagement_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0 
 libkdevprojectmanagement_la_LIBADD = $(LIB_KPARTS)
 

@@ -5,8 +5,10 @@
 #include <kstdaction.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 
 #include "ClassStore.h"
+#include "cproject.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevversioncontrol.h"
@@ -26,20 +28,6 @@ KDevelopCore::KDevelopCore(KDevelop *gui)
     m_classstore = new CClassStore();
 
     initActions();
-
-#if 0
-    // Hack to test the class viewer
-    CClassParser *classparser = new CClassParser;
-    kdDebug(9000) << "Parsing kdevelop.cpp" << endl;
-    classparser->parse("kdevelop.cpp");
-    kdDebug(9000) << "Parsing doctreewidget.cpp" << endl;
-    classparser->parse("parts/doctreeview/doctreewidget.cpp");
-
-    QListIterator<KDevComponent> it(m_components);
-    for (; it.current(); ++it) {
-        (*it)->classStoreOpened(&classparser->store);
-    }
-#endif
 }
 
 
@@ -81,6 +69,32 @@ void KDevelopCore::initActions()
                                "configure which printing program you wish "
                                "to use, and print your project files.") );
     
+    action = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
+                          m_kdevelopgui->actionCollection(), "project_open");
+    action->setStatusText( i18n("Opens an existing project") );
+    action->setWhatsThis(  i18n("Open project\n\n"
+                                "Shows the open project dialog "
+                                "to select a project to be opened") );
+
+    action = new KRecentFilesAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent(const KURL&) ),
+                                     m_kdevelopgui->actionCollection(), "project_open_recent");
+
+    action = new KAction( i18n("C&lose"), 0, this, SLOT( slotProjectClose() ),
+                          m_kdevelopgui->actionCollection(), "project_close");
+    action->setEnabled(false);
+    action->setStatusText( i18n("Closes the current project") );
+    
+    action = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
+                          m_kdevelopgui->actionCollection(), "project_add_existing_files");
+    action->setEnabled(false);
+    action->setStatusText( i18n("Adds existing file(s) to the project") );
+    
+    action = new KAction( i18n("Add new &Translation File..."), "locale", 0, this, SLOT( slotProjectAddNewTranslationFile() ),
+                          m_kdevelopgui->actionCollection(), "project_add_translation");
+    action->setEnabled(false);
+    action->setStatusText( i18n("Adds a new language for internationalization to the project") );
+
+
     action = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
                           m_kdevelopgui->actionCollection(), "options_kdevelop_setup");
     action->setStatusText( i18n("Configures KDevelop") );
@@ -131,7 +145,7 @@ void KDevelopCore::loadInitialComponents()
 
 void KDevelopCore::loadVersionControl(const QString &vcsystem)
 {
-    QString constraint = "[X-KDevelop-VersionControlSystem] == " + vcsystem;
+    QString constraint = QString("[X-KDevelop-VersionControlSystem] == '%1'").arg(vcsystem);
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", constraint);
     if (offers.isEmpty()) {
         KMessageBox::sorry(m_kdevelopgui,
@@ -172,7 +186,7 @@ void KDevelopCore::unloadVersionControl()
 
 void KDevelopCore::loadLanguageSupport(const QString &lang)
 {
-    QString constraint = "[X-KDevelop-Language] == " + lang;
+    QString constraint = QString("[X-KDevelop-Language] == '%1'").arg(lang);
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/LanguageSupport", constraint);
     if (offers.isEmpty()) {
         KMessageBox::sorry(m_kdevelopgui,
@@ -211,8 +225,9 @@ void KDevelopCore::unloadLanguageSupport()
 }
 
 
-void KDevelopCore::loadProject()
+void KDevelopCore::loadProject(const QString &fileName)
 {
+    m_project = new CProject("../kdevelop.kdevprj");
     // project must define a version control system
     // hack until implemented
     QString vcsystem = QString::fromLatin1("CVS");
@@ -239,6 +254,21 @@ void KDevelopCore::loadProject()
         for (; it4.current(); ++it4)
             (*it4)->languageSupportOpened(m_languagesupport);
     }
+
+    KActionCollection *ac = m_kdevelopgui->actionCollection();
+    ac->action("project_close")->setEnabled(true);
+    ac->action("project_add_existing_files")->setEnabled(true);
+    ac->action("project_add_translation")->setEnabled(true);
+    ac->action("project_file_properties")->setEnabled(true);
+
+    ((KRecentFilesAction*)ac->action("project_open_recent"))->addURL(KURL(fileName));
+    
+#if 1
+    // Hack to test the class viewer
+    QListIterator<KDevComponent> it5(m_components);
+    for (; it5.current(); ++it5)
+        (*it5)->savedFile("parts/doctreeview/doctreewidget.cpp");
+#endif
 }
 
 
@@ -266,6 +296,15 @@ void KDevelopCore::unloadProject()
     QListIterator<KDevComponent> it4(m_components);
     for (; it4.current(); ++it4)
         (*it4)->projectClosed();
+
+    delete m_project;
+    m_project = 0;
+    
+    KActionCollection *ac = m_kdevelopgui->actionCollection();
+    ac->action("project_close")->setEnabled(false);
+    ac->action("project_add_existing_files")->setEnabled(false);
+    ac->action("project_add_translation")->setEnabled(false);
+    ac->action("project_file_properties")->setEnabled(false);
 }
 
 
@@ -288,6 +327,46 @@ void KDevelopCore::slotFilePrint()
     QDialog *dlg = (QDialog *)obj;
     dlg->exec();
     delete dlg;
+}
+
+
+void KDevelopCore::slotProjectOpen()
+{
+    QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevprj",
+                                                    m_kdevelopgui, i18n("Open project"));
+
+    if (m_project)
+        unloadProject();
+
+    loadProject(fileName);
+}
+
+
+void KDevelopCore::slotProjectOpenRecent(const KURL &url)
+{
+    QString fileName = url.fileName();
+
+    if (m_project)
+        unloadProject();
+
+    loadProject(fileName);
+}
+
+
+void KDevelopCore::slotProjectClose()
+{
+    // Ask for confirmation?
+    unloadProject();
+}
+
+
+void KDevelopCore::slotProjectAddExistingFiles()
+{
+}
+
+
+void KDevelopCore::slotProjectAddNewTranslationFile()
+{
 }
 
 

@@ -1,6 +1,7 @@
 #include <kdebug.h>
 
 #include "cppsupport.h"
+#include "cproject.h"
 #include "ParsedClass.h"
 #include "ParsedAttribute.h"
 #include "ParsedMethod.h"
@@ -69,13 +70,23 @@ void CppSupport::removedFileFromProject(const QString &fileName)
 void CppSupport::savedFile(const QString &fileName)
 {
     kdDebug(9007) << "CppSupport::savedFile()" << endl;
-    m_parser->parse(fileName);
+
+    if (CProject::getType(fileName) == CPP_HEADER)
+        m_parser->parse(fileName);
+
+    // We also need a way to tell other components that the class store
+    // has changed...
 }
 
 
 bool CppSupport::hasFeature(Features feature)
 {
     return (feature==AddMethod) || (feature==AddAttribute);
+}
+
+
+void CppSupport::newClassRequested()
+{
 }
 
 

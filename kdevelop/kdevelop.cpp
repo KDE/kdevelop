@@ -131,6 +131,9 @@ void KDevelop::initActions(){
   connect( m_paViewBrowserToolbar, SIGNAL( activated() ), this, SLOT( slotViewBrowserToolbar() ) );
   connect( m_paViewMDITaskbar, SIGNAL( activated() ), this, SLOT( slotViewMDITaskbar() ) );
   ////////////////
+
+
+#if 0
   // Debug Viewers submenu
   m_paViewDebugVar = new KAction( i18n("&Variables"), 0, this, SLOT( slotViewDebugVar() ),
           actionCollection(), "view_debug_variables");
@@ -144,7 +147,7 @@ void KDevelop::initActions(){
           actionCollection(), "view_debug_debugger");
   ////////////////
   // Separator
-  m_paViewRefresh = new KAction( i18n("&Refresh"), "reload", 0, this, SLOT( slotViewRefresh() ), actionCollection(), "view_refresh");
+#endif
 
 
   /////////////////////////////////////
@@ -152,18 +155,6 @@ void KDevelop::initActions(){
   ////////////////////////////////////
   m_paProjectNew = new KAction( i18n("&New..."), 0, this, SLOT( slotProjectNew() ),
           actionCollection(), "project_new");
-  m_paProjectOpen = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
-          actionCollection(), "project_open");
-  m_paProjectOpenRecent = new KAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent() ),
-          actionCollection(), "project_open_recent");
-  m_paProjectClose = new KAction( i18n("C&lose"), 0, this, SLOT( slotProjectClose() ), actionCollection(), "project_close");
-  // Separator
-  m_paProjectNewClass = new KAction( i18n("New &Class..."), 0, this, SLOT( slotProjectNewClass() ),
-          actionCollection(), "project_new_class");
-  m_paProjectAddExistingFiles = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
-          actionCollection(), "project_add_existing_files");
-  m_paProjectAddNewTranslationFile = new KAction( i18n("Add new &Translation File..."), "locale", 0,
-          this, SLOT( slotProjectAddNewTranslationFile() ), actionCollection(), "project_add_translation");
   m_paProjectFileProperties = new KAction( i18n("&File Properties..."), "file_properties", 0,
           this, SLOT( slotProjectFileProperties() ), actionCollection(), "project_file_properties");
   // Separator
@@ -203,6 +194,7 @@ void KDevelop::initActions(){
   m_paBuildConfigure = new KAction( i18n("C&onfigure..."), 0, this, SLOT( slotBuildConfigure() ),
           actionCollection(), "build_configure");
 
+#if 0
   /////////////////////////////////////
   // Debug Menu
   ////////////////////////////////////
@@ -221,6 +213,8 @@ void KDevelop::initActions(){
           actionCollection(), "debug_debug_with_args");
   /////////////
   // Separator
+#endif
+
 //  ***********************
 //   METHODS NEEDED
 //  ***********************
@@ -305,11 +299,12 @@ void KDevelop::initActions(){
 
 }
 
-
+#if 0
 /** reimplemented from KParts::MainWindow
  */
 void KDevelop::slotSetStatusBarText( const QString &text){
 }
+#endif
 
 
 /** initializes the help messages (whats this and
@@ -473,47 +468,10 @@ void KDevelop::initHelp(){
   m_paViewStatusbar->setStatusText( i18n("Enables / disables the statusbar") );
 //  m_paViewStatusbar->setWhatsThis(  );
 //
-//  m_paViewDebugVar->setStatusText(  );
-//  m_paViewDebugVar->setWhatsThis(  );
-//
-//  m_paViewDebugBreakpoints->setStatusText(  );
-//  m_paViewDebugBreakpoints->setWhatsThis(  );
-//
-//  m_paViewDebugFrameStack->setStatusText(  );
-//  m_paViewDebugFrameStack->setWhatsThis(  );
-//
-//  m_paViewDebugDisassemble->setStatusText(  );
-//  m_paViewDebugDisassemble->setWhatsThis(  );
-//
-//  m_paViewDebugDebugger->setStatusText(  );
-//  m_paViewDebugDebugger->setWhatsThis(  );
-
-//  m_paViewRefresh->setStatusText(  );
-//  m_paViewRefresh->setWhatsThis(  );
 
   // Project Actions
   m_paProjectNew->setStatusText( i18n("Generates a new project with Application Wizard") );
 //  m_paProjectNew->setWhatsThis(  );
-
-  m_paProjectOpen->setStatusText( i18n("Opens an existing project") );
-  m_paProjectOpen->setWhatsThis(  i18n("Open project\n\n"
-		                      				"Shows the open project dialog "
-																	"to select a project to be opened") );
-
-//  m_paProjectOpenRecent->setStatusText(  );
-//,  m_paProjectOpenRecent->setWhatsThis(  );
-
-  m_paProjectClose->setStatusText( i18n("Closes the current project") );
-//  m_paProjectClose->setWhatsThis(  );
-
-  m_paProjectNewClass->setStatusText( i18n("Creates a new Class frame structure and files") );
-//  m_paProjectNewClass->setWhatsThis(  );
-
-  m_paProjectAddExistingFiles->setStatusText( i18n("Adds existing file(s) to the project") );
-//  m_paProjectAddExistingFiles->setWhatsThis(  );
-
-  m_paProjectAddNewTranslationFile->setStatusText( i18n("Adds a new language for internationalization to the project") );
-//  m_paProjectAddNewTranslationFile->setWhatsThis(  );
 
   m_paProjectFileProperties->setStatusText( i18n("Shows the file properties dialog") );
 //  m_paProjectFileProperties->setWhatsThis(  );
@@ -597,22 +555,6 @@ void KDevelop::initHelp(){
   m_paBuildConfigure->setStatusText( i18n("Invokes ./configure") );
 //  m_paBuildConfigure->setWhatsThis(  );
 
-
-  // Debug Actions
-//  m_paDebugStart->setStatusText(  );
-//  m_paDebugStart->setWhatsThis(  );
-//
-//  m_paDebugExamineCore->setStatusText(  );
-//  m_paDebugExamineCore->setWhatsThis(  );
-//
-//  m_paDebugNamedFile->setStatusText(  );
-//  m_paDebugNamedFile->setWhatsThis(  );
-//
-//  m_paDebugAttatch->setStatusText(  );
-//  m_paDebugAttatch->setWhatsThis(  );
-//
-//  m_paDebugExecuteWithArgs->setStatusText(  );
-//  m_paDebugExecuteWithArgs->setWhatsThis(  );
 
   // Options Actions
   m_paOptionsEditor->setStatusText( i18n("Sets the Editor's behavoir") );

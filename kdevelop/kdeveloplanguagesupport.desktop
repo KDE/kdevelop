@@ -3,5 +3,5 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/LanguageSupport
 Name=KDevelop Language Support Interface
 
-[PropertyDef::Language]
+[PropertyDef::X-KDevelop-Language]
 Type=QString

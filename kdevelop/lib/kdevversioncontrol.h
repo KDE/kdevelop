@@ -12,6 +12,8 @@
 
 class KDevVersionControl : public KDevComponent
 {
+    Q_OBJECT
+    
 public:
     enum State { canBeCommited = 1, canBeAdded = 2 };
     

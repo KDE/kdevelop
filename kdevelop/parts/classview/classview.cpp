@@ -43,7 +43,7 @@ void ClassView::setupGUI()
                             "functionality."));
 
     embedWidget(w, SelectView, i18n("CV"), i18n("class tree view"));
-    
+
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
     methods_action = new MethodListAction(i18n("Methods"), 0, this, SLOT(selectedMethod()),
@@ -66,8 +66,11 @@ void ClassView::setupPopup()
     if (m_langsupport) {
         bool hasAddMethod = m_langsupport->hasFeature(KDevLanguageSupport::AddMethod);
         bool hasAddAttribute = m_langsupport->hasFeature(KDevLanguageSupport::AddAttribute);
-        if (hasAddMethod || hasAddAttribute) 
+        bool hasNewClass =  m_langsupport->hasFeature(KDevLanguageSupport::NewClass);
+        if (hasAddMethod || hasAddAttribute || hasNewClass) 
             popup->insertSeparator();
+        if (hasNewClass)
+            popup->insertItem(i18n("New class..."), this, SLOT(selectedNewClass()));
         if (hasAddMethod)
             popup->insertItem(i18n("Add method..."), this, SLOT(selectedAddMethod()));
         if (hasAddAttribute)
@@ -125,31 +128,6 @@ void ClassView::classStoreClosed()
     classes_action->refresh();
     classes_action->refresh();
     m_store = 0;
-}
-
-
-void ClassView::addedFileToProject(const QString &name)
-{
-    kdDebug(9003) << "ClassView::addedFileToProject()" << endl;
-    // This could be much finer-grained...
-    //    classWidget()->refresh();
-}
-
-
-void ClassView::removedFileFromProject(const QString &name)
-{
-    kdDebug(9003) << "ClassView::removedFileFromProject()" << endl;
-    // This could be much finer-grained...
-    //    classWidget()->refresh();
-}
-
-
-void ClassView::savedFile(const QString &name)
-{
-    kdDebug(9003) << "ClassView::savedFile()" << endl;
-    if (CProject::getType(name) == CPP_HEADER)
-        ;
-        //        classWidget()->refresh();
 }
 
 
@@ -241,6 +219,16 @@ void ClassView::selectedGotoImplementation()
         gotoDeclaration(className, "", THCLASS);
     else
         gotoImplementation(className, methodName, THPUBLIC_METHOD);
+}
+
+
+/**
+ * The user selected "New class..." from the delayed class wizard popup.
+ */
+void ClassView::selectedNewClass()
+{
+    if (m_langsupport)
+        m_langsupport->newClassRequested();
 }
 
 

@@ -10,9 +10,11 @@
 
 class KDevLanguageSupport : public KDevComponent
 {
+    Q_OBJECT
+    
 public:
 
-    enum Features { AddMethod, AddAttribute };
+    enum Features { NewClass, AddMethod, AddAttribute };
     
     KDevLanguageSupport( QObject *parent=0, const char *name=0 );
     ~KDevLanguageSupport();
@@ -23,6 +25,11 @@ public:
      * menus.
      */
     virtual bool hasFeature(Features feature);
+    /**
+     * Opens a "New class" dialog and adds the configured
+     * class to the sources.
+     */
+    virtual void newClassRequested();
     /**
      * Opens an "Add method" dialog and adds the configured
      * method to the sources.

@@ -28,6 +28,7 @@ protected:
     virtual void savedFile(const QString &fileName);
 
     virtual bool hasFeature(Features feature);
+    virtual void newClassRequested();
     virtual void addMethodRequested(const QString &className);
     virtual void addAttributeRequested(const QString &className);
 

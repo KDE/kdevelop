@@ -1,3 +1,10 @@
+2000-07-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* More work on the project loading/unloading framework
+	* Building classstore and projecctmanagement as convenience library
+	* Fixed service types definitions
+	* Added Q_OBJECT to KDevLanguageSupport and KDevVersionControl
+        * Added 'New class' to classview, some cleanup
+
 2000-07-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Decentralized version control and language support handling
 	  into the respective components

@@ -42,7 +42,7 @@ public slots:
 
 protected slots: // Protected slots
   /** reimplemented from KParts::MainWindow */
-  void slotSetStatusBarText( const QString &text);
+//  void slotSetStatusBarText( const QString &text);
 private:
   /** sets up the KActions designed User Interface
 			for the toolbars and menubar */

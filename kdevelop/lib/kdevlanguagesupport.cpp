@@ -15,6 +15,10 @@ bool KDevLanguageSupport::hasFeature(Features feature)
     return false;
 }
 
+void KDevLanguageSupport::newClassRequested()
+{
+}
+
 void KDevLanguageSupport::addMethodRequested(const QString &className)
 {
 }

@@ -29,12 +29,17 @@ private:
     void unloadVersionControl();
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
-    void loadProject();
+    void loadProject(const QString &fileName);
     void unloadProject();
 
 private slots:
     // Handling of actions
     void slotFilePrint();
+    void slotProjectOpen();
+    void slotProjectOpenRecent(const KURL &url);
+    void slotProjectClose();
+    void slotProjectAddExistingFiles();
+    void slotProjectAddNewTranslationFile();
     void slotOptionsKDevelopSetup();
 
     // Handling of component requests

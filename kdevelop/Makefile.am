@@ -1,4 +1,4 @@
-SUBDIRS = widgets lib classparser plugin parts tools templates
+SUBDIRS = widgets classparser lib plugin parts tools templates
 
 INCLUDES = -I$(top_srcdir)/kdevelop/lib -I$(top_srcdir)/kdevelop/classparser $(all_includes)
 
@@ -18,8 +18,8 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-kdevelop_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
-		$(top_builddir)/kdevelop/classparser/libkdevclassparser.la $(LIB_KPARTS) $(LIB_KFILE)
+kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
+		 $(LIB_KPARTS) $(LIB_KFILE)
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h
