@@ -34,3 +34,6 @@
 
 /* Define if you need the GNU extensions to compile */
 #undef _GNU_SOURCE
+
+#undef QT_DOCDIR
+#undef KDELIBS_DOCDIR

@@ -24,6 +24,9 @@
 /* Define to 1 if NLS is requested.  */
 #undef ENABLE_NLS
 
+#undef QT_DOCDIR
+#undef KDELIBS_DOCDIR
+
 /* Name of package */
 #undef PACKAGE
 

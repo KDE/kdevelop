@@ -18,7 +18,7 @@ dist:
 	rm -f Makefile.dist
 
 all:
-	aclocal
+	aclocal -I .
 	autoheader
 	automake
 	perl automoc

@@ -54,6 +54,7 @@
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
 #include "cbugreportdlg.h"
+#include "../config.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1284,11 +1285,13 @@ void CKDevelop::slotHelpReference(){
 }
 void CKDevelop::slotHelpQtLib(){
   config->setGroup("Doc_Location");
-  slotURLSelected(browser_widget,"file:" + config->readEntry("doc_qt") + "index.html",1,"test");
+  QString doc_qt = config->readEntry("doc_qt", QT_DOCDIR);
+  slotURLSelected(browser_widget,"file:" + doc_qt + "/index.html",1,"test");
 }
 void CKDevelop::slotHelpKDECoreLib(){
   config->setGroup("Doc_Location");
-  slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdecore/index.html",1,"test");
+  QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+  slotURLSelected(browser_widget,"file:" + doc_kde + "kdecore/index.html",1,"test");
 }
 void CKDevelop::slotHelpKDEGUILib(){
   config->setGroup("Doc_Location");
