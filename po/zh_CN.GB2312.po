@@ -1,0 +1,7487 @@
+# Chinese translation for kdevelop.
+# 
+# Lee Song Chen<leesongchen@263.net>, 1999.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: kdevelop1.0beta1 19990812\n"
+"POT-Creation-Date: 1999-08-12 23:06+0200\n"
+"PO-Revision-Date: 1999-08-12 20:18+CST\n"
+"Last-Translator: Lee Song Chen <leesongchen@263.net>\n"
+"Language-Team: simplified chinese <gb2312>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=GB2312\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+msgid "Add member variable"
+msgstr "添加成员变量"
+
+msgid "Modifiers"
+msgstr "修饰符"
+
+msgid "You can set modifiers for the member variable here."
+msgstr "你可以在这儿为成员变量设置修饰符。"
+
+msgid "Variable"
+msgstr "变量"
+
+msgid "Access"
+msgstr "访问"
+
+msgid ""
+"You can choose here whether you want the member variable\n"
+"be declared as public, protected or private."
+msgstr ""
+"你可以在这儿选择成员变量是声明为\n"
+"公有的，保护的还是私有的。"
+
+msgid "Type:"
+msgstr "类型："
+
+msgid "Enter the type of the member variable here."
+msgstr "在这儿输入成员变量的类型。"
+
+msgid "Name:"
+msgstr "变量名："
+
+msgid "Enter the name of the member variable here."
+msgstr "在这儿输入成员变量名。"
+
+msgid "Documentation:"
+msgstr "文档："
+
+msgid "You can enter a description of the member variable here."
+msgstr "你可以在这儿输入一段对成员变量的描述。"
+
+msgid "No type"
+msgstr "没有类型"
+
+msgid "You have to specify a variable type."
+msgstr "你必须指定变量类型。"
+
+msgid "No name"
+msgstr "没有名字"
+
+msgid "You have to specify a variable name."
+msgstr "你必须指定变量名。"
+
+msgid "Add member function"
+msgstr "添加成员函数"
+
+msgid "You can set modifiers for the member function here."
+msgstr "你可以在这儿为成员函数设置修饰符。"
+
+msgid "Function"
+msgstr "函数"
+
+msgid ""
+"You can choose here whether you want the member function\n"
+"be declared as public, protected or private."
+msgstr ""
+"你可以在这儿选择成员函数是声明为\n"
+"公有的，保护的还是私有的。"
+
+msgid "Enter the type of the member function here."
+msgstr "在这儿输入成员函数类型。"
+
+msgid "Declaration:"
+msgstr "声明："
+
+msgid "Enter the declaration of the member function here."
+msgstr "在这儿输入成员函数声明。"
+
+msgid "You can enter a description of the member function here."
+msgstr "你可以在这儿输入一段对成员函数的描述。"
+
+msgid "You have to specify a function type."
+msgstr "你必须指定函数类型。"
+
+msgid "You have to specify a function name."
+msgstr "你必须指定函数名。"
+
+msgid "Add existing files to project"
+msgstr "向项目添加文件"
+
+msgid "Sourcefile(s):"
+msgstr "源文件："
+
+msgid "Destinationdir:"
+msgstr "目标目录："
+
+msgid ""
+"Select the source files to be added\n"
+"to the project here."
+msgstr ""
+"在这儿选择需要加入项目的源文件。"
+
+msgid ""
+"select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+"在这儿选择新的源文件\n"
+"将被复制到的目录。"
+
+msgid "Source File(s)..."
+msgstr "源文件..."
+
+msgid "Destination Directory"
+msgstr "目标目录"
+
+msgid "Error..."
+msgstr "错误..."
+
+msgid "You must choose a destination,that is in your project-dir!"
+msgstr "你必须在你的项目目录下选择一个目标！"
+
+msgid "You must choose a valid dir as a destination!"
+msgstr "你必须选择一个有效的目录作为目标！"
+
+msgid "Add new Translation File"
+msgstr "添加新的翻译文件"
+
+msgid "Language:"
+msgstr "语言："
+
+msgid "Your sourcecode is already translated to all supported languages."
+msgstr "你的源代码已经被译为所有支持的语言。"
+
+msgid "Bug Report"
+msgstr "Bug报告"
+
+msgid ""
+"Fill in all information,\n"
+"we need to help you."
+msgstr ""
+"输入所有的信息,\n"
+"我们它来帮助你."
+
+msgid "Severity"
+msgstr "严重性"
+
+msgid "Priority"
+msgstr "优先级"
+
+msgid "Your Name :"
+msgstr "你的名字："
+
+msgid "Your E-mail Address :"
+msgstr "你的E-mail地址："
+
+msgid "Subject :"
+msgstr "主题："
+
+msgid "Error Class :"
+msgstr "错误类："
+
+msgid "software bug"
+msgstr "软件bug"
+
+msgid "documentation bug"
+msgstr "文档bug"
+
+msgid "change-request"
+msgstr "变化要求"
+
+msgid "how do I ..."
+msgstr "我如何..."
+
+msgid "low"
+msgstr "低"
+
+msgid "medium"
+msgstr "中等"
+
+msgid "high"
+msgstr "高"
+
+msgid "normal"
+msgstr "一般"
+
+msgid "grave"
+msgstr "严重"
+
+msgid "critical"
+msgstr "关键"
+
+msgid "I don磘 know"
+msgstr "我不知道"
+
+msgid "class tree"
+msgstr "类树"
+
+msgid "logical file tree"
+msgstr "逻辑文件树"
+
+msgid "documentation tree"
+msgstr "文档树"
+
+msgid "editor"
+msgstr "编辑器"
+
+msgid "dialog editor"
+msgstr "对话框编辑器"
+
+msgid "documentation browser"
+msgstr "文档浏览器"
+
+msgid "app-wizard"
+msgstr "应用程序向导"
+
+msgid "build process"
+msgstr "建立过程"
+
+msgid "output window"
+msgstr "输出窗口"
+
+msgid "configuration"
+msgstr "配置"
+
+msgid "project management"
+msgstr "项目管理"
+
+msgid "installation process"
+msgstr "安装过程"
+
+msgid "Error Location :"
+msgstr "错误定位："
+
+msgid "General information"
+msgstr "一般信息"
+
+msgid "Environment"
+msgstr "环境"
+
+msgid "KDevelop version :"
+msgstr "KDevelop版本号："
+
+msgid "KDE version :"
+msgstr "KDE版本号："
+
+msgid "QT version :"
+msgstr "QT版本号："
+
+msgid "OS / distribution :"
+msgstr "操作系统/发布版:"
+
+msgid "Compiler"
+msgstr "编译器"
+
+msgid "System information"
+msgstr "系统信息"
+
+msgid ""
+"Insert as much information about your\n"
+"problem, so that we are able to help by\n"
+"your description."
+msgstr ""
+"尽可能多的输入与你的问题有关\n"
+"的信息,这样我们才能通过它来\n"
+"帮助你."
+
+msgid "Bug Description :"
+msgstr "Bug描述: "
+
+msgid "How to repeat the error :"
+msgstr "如何重复错误："
+
+msgid "Perhaps a bugfix or workaround ?"
+msgstr ""
+
+msgid "Problem description"
+msgstr "问题描述"
+
+msgid "Send E-Mail"
+msgstr "发E-Mail"
+
+msgid "Please fill in at least the subject and bug description!"
+msgstr "请至少填入主题与bug描述！"
+
+msgid ""
+"Bugreport was successfully submitted to the KDevelop Team.\n"
+"\t\tThank you!"
+msgstr ""
+"Bug报告已经成功发往KDevelop小组，谢谢你！"
+
+msgid "Class Tool"
+msgstr "类工具"
+
+msgid "Class:"
+msgstr "类："
+
+msgid "All"
+msgstr "所有的"
+
+msgid "Show parents"
+msgstr "显示父类"
+
+msgid "Show children"
+msgstr "显示子类"
+
+msgid "Show clients"
+msgstr "显示客户"
+
+msgid "Show suppliers"
+msgstr "显示提供者"
+
+msgid "Show attributes"
+msgstr "显示属性"
+
+msgid "Show methods"
+msgstr "显示方法"
+
+msgid "Show virtual methods"
+msgstr "显示虚方法"
+
+msgid "Parents"
+msgstr "父类"
+
+msgid "Children"
+msgstr "子类"
+
+msgid "Clients"
+msgstr "客户"
+
+msgid "Suppliers"
+msgstr "提供者"
+
+msgid " attributes"
+msgstr "属性"
+
+msgid " methods"
+msgstr "方法"
+
+msgid " virtual methods"
+msgstr "虚方法"
+
+msgid "Class Tool Dialog"
+msgstr "类工具对话框"
+
+msgid " of class "
+msgstr "--类"
+
+msgid "Class"
+msgstr "类"
+
+msgid "Go to definition"
+msgstr "跳到定义处"
+
+msgid "Method"
+msgstr "方法"
+
+msgid "Go to declaration"
+msgstr "跳到声明处"
+
+msgid "Attribute"
+msgstr "属性"
+
+msgid "Project"
+msgstr "项目"
+
+msgid "New file..."
+msgstr "新建文件..."
+
+msgid "New class..."
+msgstr "新建类..."
+
+msgid "Add Folder..."
+msgstr "添加文件夹..."
+
+msgid "Options..."
+msgstr "选项..."
+
+msgid "Graphical classview.."
+msgstr "图形化显示.."
+
+msgid "Add member function..."
+msgstr "添加成员函数..."
+
+msgid "Add member variable..."
+msgstr "添加成员变量..."
+
+msgid "Implement virtual function..."
+msgstr "实现虚方法..."
+
+msgid "Parent classes..."
+msgstr "父类..."
+
+msgid "Child classes..."
+msgstr "子类..."
+
+msgid "Classtool..."
+msgstr "类工具..."
+
+msgid "Add slot for signal"
+msgstr "为信号添加slot"
+
+msgid "Delete class"
+msgstr "删除类"
+
+msgid "ClassWizard"
+msgstr "类向导"
+
+msgid "Delete method"
+msgstr "删除方法"
+
+msgid "Delete attribute"
+msgstr "删除属性"
+
+msgid "Slot"
+msgstr ""
+
+msgid "Delete slot"
+msgstr "删除slot"
+
+msgid "Folder"
+msgstr "文件夹"
+
+msgid "Delete Folder..."
+msgstr "删除文件夹..."
+
+msgid "Structures"
+msgstr "结构"
+
+msgid "Functions"
+msgstr "函数"
+
+msgid "Variables"
+msgstr "变量"
+
+msgid "Graphical classview"
+msgstr "图形化显示"
+
+msgid "Not found"
+msgstr "未找到"
+
+msgid "This item could not be viewed. The item isn't parsed."
+msgstr "该项不可见.该项未被分解."
+
+msgid "Are you sure you want to delete this class?"
+msgstr "你确定要删除这个类吗？"
+
+msgid "Are you sure you want to delete this attribute?"
+msgstr "你确定要删除这个属性吗？"
+
+msgid "Delete folder"
+msgstr "删除文件夹"
+
+msgid "Are you sure you want to delete this folder?"
+msgstr "你确定要删除这个文件夹吗？"
+
+msgid "Create Search Database..."
+msgstr "生成搜索数据库..."
+
+msgid "Index Size"
+msgstr "索引大小"
+
+msgid "tiny size"
+msgstr "很小"
+
+msgid "small size"
+msgstr "小"
+
+msgid "medium size"
+msgstr "中等"
+
+msgid "Index Options"
+msgstr "索引选项"
+
+msgid "index the QT documentation"
+msgstr "将QT文档编入索引"
+
+msgid "index the KDE documentation"
+msgstr "将KDE文档编入索引"
+
+msgid "additional directories to index"
+msgstr "索引附加目录"
+
+msgid "add"
+msgstr "添加"
+
+msgid "remove"
+msgstr "删除"
+
+#, c-format
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+"建立种等大小的索引(占所有文件\n"
+"大小的20-30%),允许快速查找."
+
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+"建立较小的索引(一般占所有文件\n"
+"大小的7-9% -你的可能与此有出入),\n"
+"允许快速查找."
+
+#, c-format
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr "很小的索引 (占所有文件大小的2-3%)"
+
+msgid "No Database created!"
+msgstr "没有生成数据库!"
+
+msgid "The KDE-Documentation-Path isn't set correctly."
+msgstr "KDE文档路径设置不对。"
+
+msgid "The Qt-Documentation-Path isn't set correctly."
+msgstr "QT文档路径设置不对。"
+
+msgid "Select Directory..."
+msgstr "选择目录..."
+
+msgid "Add folder"
+msgstr "添加文件夹"
+
+msgid "Folder name:"
+msgstr "文件夹名："
+
+msgid "You have to specify a foldername."
+msgstr "你必须指定文件夹名。"
+
+msgid "Forward"
+msgstr "往前"
+
+msgid "Add Bookmark"
+msgstr "添加书签"
+
+msgid "View in new window"
+msgstr "在新窗口中打开"
+
+msgid "grep: "
+msgstr "正则表达式:"
+
+msgid "look up: "
+msgstr "查找："
+
+msgid "Not found!"
+msgstr "未找到!"
+
+msgid "\" not found!"
+msgstr "\" 未找到!"
+
+msgid "Small"
+msgstr "小"
+
+msgid "Medium"
+msgstr "中"
+
+msgid "Large"
+msgstr "大"
+
+msgid "Standard Font"
+msgstr "标准字体"
+
+msgid "Fixed Font"
+msgstr "等宽字体"
+
+msgid "Background Color:"
+msgstr "背景色"
+
+msgid "Normal Text Color:"
+msgstr "普通文本颜色："
+
+msgid "URL Link Color:"
+msgstr "URL颜色："
+
+msgid "Followed Link Color:"
+msgstr "去过的链接:"
+
+msgid "Underline links"
+msgstr "链接带下划线"
+
+msgid "Always use my colors"
+msgstr "总使用我的颜色"
+
+msgid "Documentation Browser Options"
+msgstr "文档浏览器选项"
+
+msgid "Colors"
+msgstr "颜色"
+
+msgid "Enter the name of the entry here."
+msgstr "在这儿输入条目名"
+
+msgid "File:"
+msgstr "文件："
+
+msgid "Enter the file of the entry here."
+msgstr "在这儿输入条目的文件"
+
+msgid "Here you can browse through the disc to select a file for the entry."
+msgstr "你可以浏览磁盘并为条目选择一个文件."
+
+msgid "Arguments: "
+msgstr "参数："
+
+msgid "Clear Arguments"
+msgstr "清除参数"
+
+msgid "File Properties"
+msgstr "文件属性"
+
+msgid "Distribution"
+msgstr "发布"
+
+msgid "Filetype"
+msgstr "文件类型"
+
+msgid "Installation"
+msgstr "安装"
+
+msgid "Size:"
+msgstr "大小："
+
+msgid "include in distribution"
+msgstr "包含在发布中"
+
+msgid "install"
+msgstr "安装"
+
+msgid "Installdir + Filename:"
+msgstr "安装目录+文件名："
+
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+"如果设置了此选项,该文件\n"
+"将包括在最终发布中."
+
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+"如果设置了该选项,文件将在运行\n"
+"make install时安装到平台中.如\n"
+"果选中,\n"
+"你需要设置安装路径和文\n"
+"件名,可能的值有:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"其它值可以在Makefile中找到."
+
+msgid "Search for Help on..."
+msgstr "查找帮助..."
+
+msgid "Search for:"
+msgstr "我要查找:"
+
+msgid "&Search"
+msgstr "查找(&S)"
+
+msgid "Groupname:"
+msgstr "组名："
+
+msgid "Filters:"
+msgstr "过虑:"
+
+msgid "Application Wizard"
+msgstr "应用程序向导"
+
+msgid "exit the CKAppWizard"
+msgstr "退出CKAppWizard"
+
+msgid "Create"
+msgstr "生成"
+
+msgid "creating the project"
+msgstr "生成项目"
+
+msgid "set all changes back"
+msgstr "取消所有更改"
+
+msgid "Applications"
+msgstr "应用程序"
+
+msgid "Label:"
+msgstr "标签："
+
+msgid "Others"
+msgstr "其它"
+
+msgid "custom project"
+msgstr "自定义项目"
+
+msgid "Terminal"
+msgstr "终端程序"
+
+msgid "C++"
+msgstr "C++程序"
+
+msgid "C"
+msgstr "C程序"
+
+msgid "Qt"
+msgstr "Qt程序"
+
+msgid "Normal"
+msgstr "普通"
+
+msgid "KDE"
+msgstr "KDE程序"
+
+msgid "Mini"
+msgstr "迷你型"
+
+msgid "Generate settings"
+msgstr "一般设置"
+
+msgid "Projectname:"
+msgstr "项目名："
+
+msgid "Projectdirectory:"
+msgstr "项目目录："
+
+msgid "Versionnumber:"
+msgstr "版本号："
+
+msgid "Author:"
+msgstr "作者："
+
+msgid "Email:"
+msgstr "E-mail地址："
+
+msgid "generate sources and headers"
+msgstr "生成源文件和头文件"
+
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "GNU标准文件(INSTALL,README,COPYING...)"
+
+msgid "User-Documentation"
+msgstr "用户文档"
+
+msgid "API-Documentation"
+msgstr "API文档"
+
+msgid "lsm-File - Linux Software Map"
+msgstr "lsm-File - Linux软件地图"
+
+msgid ".kdelnk-File"
+msgstr "kdelnk文件"
+
+msgid "Program-Icon"
+msgstr "程序图标"
+
+msgid "Mini-Icon"
+msgstr "迷你图标"
+
+msgid ""
+"Insert your project name here. This is\n"
+"also the name of the directory where your Project\n"
+"will be created."
+msgstr ""
+"在这儿插入你的项目名。\n"
+"这也是你的项目将被生成的目录名。"
+
+msgid "Enter the toplevel-directory of your project.\n"
+msgstr "输入项目的顶级目录。\n"
+
+msgid ""
+"Set the initial version number of your project here.\n"
+"The number will be used in the about-dialog as well as for\n"
+"determining the project's package numbering for distribution."
+msgstr ""
+"在这儿输入项目的初始版本号。该号码除将用在关于对话框中，\n"
+"还将决定项目发布时包的编号。"
+
+msgid ""
+"Insert your name or the development team name here. This will be used\n"
+"for adding your name as the author to all generated files of your project."
+msgstr ""
+"在这儿插入你或你们开发组的名字。它将被加入到项目中的所有文件中。"
+
+msgid ""
+"Enter your email adress here. This will be\n"
+"used for file header information."
+msgstr ""
+"在这儿输入你的电子邮件地址。文件头信息将要用到它。"
+
+msgid ""
+"Generate a HTML-based documentation set\n"
+"for your project classes including cross-references to\n"
+"the used libraries."
+msgstr ""
+"为你的项目类生成一套基于HTML的文档集，\n"
+"包括对使用库的交叉引用。"
+
+msgid ""
+"Generate a preset documentation handbook in HTML\n"
+"by an SGML file included with your package."
+msgstr ""
+"用你包中的SGML文件生成HTML格式的文档手册框架。"
+
+msgid ""
+"Create a lsm-file for your project. The Linux Software Map\n"
+"is a file generally used for projects for distribution purpose and contains\n"
+"a short description of the project including the requirements on the side "
+"of\n"
+"the end-user."
+msgstr ""
+"为你的项目生成lsm文件.该文件用来在\n"
+"发布时包含一段关于该项目的简短信息.\n"
+"包括另外的需要."
+
+msgid ""
+"Generate a set of GNU standard files for your project.\n"
+"These will give the end-user of the sourcepackage an overview about\n"
+"the licensing, readme's etc, as well as a ChangeLog file for you to\n"
+"protocol your changes."
+msgstr ""
+"为你的项目生成一套GNU标准文件。这些使最终用户对诸如许可证，自述文件等\n"
+"有一个概览。同时它们也作为你制定更改时的记录文件。"
+
+msgid ""
+"Add a program icon to your project that represents\n"
+"your application in the window manager."
+msgstr ""
+"为你的项目添加图标，它将在窗口管理器中代表你的应用程序。"
+
+msgid ""
+"Add a mini program icon to your project that is used\n"
+"for window-manager popup menus."
+msgstr ""
+"为你的项目添加迷你图标，它将用在窗口管理器的弹出式菜单中。"
+
+msgid ""
+"Add a KDE link file which is installed in\n"
+"the KDE panel of the end-user. By default, your application's\n"
+"link file will be installed in the Applications-menu. You can\n"
+"change this destination by editing the installation properties\n"
+"for the link file later."
+msgstr ""
+"添加KDE连接文件，它将安装在最终用户的KDE面板中。缺省情况下，\n"
+"该连接文件安装在应用程序菜单中。不过，你可以在以后编辑安装属性\n"
+"来改变目的。"
+
+
+msgid ""
+"Lets you select another icon for your program\n"
+"than the sample program icon provided by the Application\n"
+"Wizard."
+msgstr ""
+"让你选择另外的图标以代替应用程序向导为你提供的示例图标。"
+
+msgid ""
+"Lets you select another mini-icon for your program\n"
+"than the sample program icon provided by the Application\n"
+"Wizard."
+msgstr ""
+"让你选择另外的迷你图标以代替应用程序向导为你提供的示例图标。"
+
+msgid "Version Control System Support"
+msgstr "版本控制系统支持"
+
+msgid "vcs support"
+msgstr "vcs支持"
+
+msgid "vcs location"
+msgstr "vcs位置"
+
+msgid "repository in vcs"
+msgstr "cvs中的仓库"
+
+msgid "vendor tag"
+msgstr "vendor标签"
+
+msgid "log message"
+msgstr "日志信息"
+
+msgid "release tag"
+msgstr "release标签"
+
+msgid ""
+"Here you can enter the log message for the\n"
+"version control system."
+msgstr ""
+"你可以在这儿输入版本控制系统的日志信息。"
+
+msgid ""
+"Here you can choose the vendor tag, which your project\n"
+"has in the version control system."
+msgstr ""
+"你可以在这儿选择项目在版本控制系统中的vendor标签."
+
+msgid ""
+"Here you can choose a special pointer for the first\n"
+"entry in the version control system."
+msgstr ""
+"你可以在这儿选择一个特别的指针\n"
+"以代表版本系统中的第一条."
+
+msgid ""
+"Here you can choose the version control system,\n"
+"which you want to use."
+msgstr ""
+"你可以在这儿选择你要使用的版本控制系统。"
+
+msgid ""
+"Here you can choose where your vcsroot loction should be.\n"
+"At the moment we only support local vs. And be sure, you\n"
+"have read and write access in the location."
+msgstr ""
+"你可以在这儿选择vcs根位置.目前,我们只\n"
+"支持本地vs.当然,你必须在该位置拥有读\n"
+"写权."
+
+msgid ""
+"Here you can see the repository of your project in the\n"
+"version control system. The repository is dependend on\n"
+"the directory of your project. You can not change the\n"
+"repository direct."
+msgstr ""
+"在这儿,你可以看到项目的仓库在版本控\n"
+"制系统中的位置.仓库独立于项目所在目录."
+"你不能直接更改仓库."
+
+msgid "Headertemplate for .h-files"
+msgstr ".h文件的头模板"
+
+msgid "headertemplate for .h-files"
+msgstr ".h文件的头模板"
+
+msgid "Load..."
+msgstr "载入..."
+
+msgid "New"
+msgstr "新建"
+
+msgid ""
+"Press this button to select an\n"
+"existing header template file"
+msgstr ""
+"按这个安钮选择现存的头文件模板。"
+
+msgid "Clears the pre-set headertemplate"
+msgstr "清除预设的头模板"
+
+msgid "Edit your headertemplate here"
+msgstr "在这儿编辑你的头模板"
+
+msgid ""
+"Use a standard\n"
+"headertemplate for your headerfiles"
+msgstr ""
+"在你的头文件中使用标准的头模板"
+
+msgid "Headertemplate for .cpp-files"
+msgstr ".cpp文件的头模板"
+
+msgid "headertemplate for .cpp-files"
+msgstr ".cpp文件的头模板"
+
+msgid ""
+"Use a standard\n"
+"headertemplate for your implementation files"
+msgstr ""
+"在你的实现文件中使用标准的头模板"
+
+msgid "Processes"
+msgstr "处理过程"
+
+msgid "Displays the normal output of the project generator"
+msgstr "显示项目生成器的正常输出"
+
+msgid "Displays warnings and errormessages of the project generator"
+msgstr "显示项目生成器的警告和错误信息"
+
+msgid "Directory"
+msgstr "目录"
+
+msgid "Select your template for Header-file headers"
+msgstr "为Header文件头选择模板"
+
+msgid "Select your template for C-file headers"
+msgstr "为C文件头选择模板"
+
+msgid "Select your template for Cpp-file headers"
+msgstr "为Cpp文件头选择模板"
+
+msgid "sgml2html and ksgml2html do not exist!"
+msgstr "sgml2html和ksgml2html不存在！"
+
+msgid ""
+"If you want to generate the user-documentation, you need one of these "
+"programs.\n"
+"If you do not have one, the user-documentation will not be generate."
+msgstr ""
+"如果你需要生成用户文档，你就必须有其中之一，否则无法生成。"
+
+msgid "Ok"
+msgstr "确定"
+
+msgid " already exists!"
+msgstr "已经存在！"
+
+msgid ""
+"The selected project directory already exists. If you\n"
+" click 'OK', all files and subdirectories of the currently chosen\n"
+" project directory will be deleted before a new project is going\n"
+" to be generated."
+msgstr ""
+"你所选的项目目录已经存在。如果你按了“确定“，在生成新项目前，\n"
+"该目录下的所有文件和子目录都将被删除。"
+
+msgid "Exit"
+msgstr "退出"
+
+msgid ""
+"Create a KDE-application with session-management, menubar, toolbar, "
+"statusbar and support for a document-view codeframe model."
+msgstr ""
+"生成KDE应用程序。包括会话管理，\n"
+"菜单条，工具条，状态条。支持\n"
+"文档/视图模型。"
+
+msgid "Create a KDE-application with an empty main widget."
+msgstr "生成仅有一个主窗口的KDE应用程序。"
+
+msgid ""
+"Create a Qt-Application with a main window containing a menubar, toolbar and "
+"statusbar, including support for a generic document-view model."
+msgstr ""
+"生成Qt应用程序。主窗口包括菜单\n"
+"条，工具条，状态条。支持文档/\n"
+"视图模型。"
+
+msgid "Headertemplate for .c-files"
+msgstr ".c文件头模板"
+
+msgid "headertemplate for .c-files"
+msgstr ".c文件头模板"
+
+msgid ""
+"Create a C application. The program will run in a terminal and doesn't "
+"contain any support for classes and Graphical User Interface."
+msgstr ""
+"生成C应用程序。该程序在终端中运行，\n"
+"不需要任何类与图形界面的支持。"
+
+msgid ""
+"Create a C++ application. The program will run in a terminal and doesn't "
+"contain any support for a Graphical User Interface."
+msgstr ""
+"生成C++应用程序。该程序在终端中运行，\n"
+"不需要任何类与图形界面的支持。"
+
+msgid ""
+"Creates an empty project to work with existing development projects. "
+"KDevelop will not take care of any Makefiles as those are supposed to be "
+"included with your old project."
+msgstr ""
+"生成一个空的项目以辅助现存的开发项\n"
+"目.KDevelop不会管理任何Makefiles."
+
+msgid ""
+"Contains all KDE-compliant\n"
+"project types."
+msgstr ""
+"包括所有KDE兼容项目类型。"
+
+msgid ""
+"Contains all Qt-based\n"
+"project types."
+msgstr ""
+"包括所有基于Qt的项目类型。"
+
+msgid ""
+"Contains all C/C++-terminal\n"
+"project types."
+msgstr ""
+"包括所有C/C++终端项目类型。"
+
+msgid "Contains all individual project types."
+msgstr "包括所有独立项目类型。"
+
+msgid "Translations"
+msgstr "翻译"
+
+msgid "Dialogs"
+msgstr "对话框"
+
+msgid "Sources"
+msgstr "源文件"
+
+msgid "Header"
+msgstr "头文件"
+
+msgid "Creating new file..."
+msgstr "正在生成新文件..."
+
+msgid "Ready."
+msgstr "就绪。"
+
+msgid "Opening file..."
+msgstr "正在打开文件..."
+
+msgid "Closing file..."
+msgstr "正在关闭文件..."
+
+msgid "Save?"
+msgstr "是否保存？"
+
+msgid "The document was modified,save?"
+msgstr "文档已经改变，是否保存？"
+
+msgid "Closing all files..."
+msgstr "正在关闭所有文件..."
+
+msgid "Saving file "
+msgstr "正在保存文件 "
+
+msgid "File "
+msgstr "文件"
+
+msgid " not saved."
+msgstr "未保存。"
+
+msgid " saved."
+msgstr "已保存。"
+
+msgid "Save file as..."
+msgstr "将文件另存为..."
+
+msgid "Saving all changed files..."
+msgstr "正在保存所有更改过的文件..."
+
+msgid "Autosaving..."
+msgstr "正在自动保存..."
+
+msgid "Exiting..."
+msgstr "正在退出..."
+
+msgid "Cutting..."
+msgstr "正在剪切..."
+
+msgid "Copying..."
+msgstr "正在复制..."
+
+msgid "Pasting selection..."
+msgstr "正在选择粘贴..."
+
+msgid "Inserting file contents..."
+msgstr "正在插入文件内容..."
+        
+msgid "Searching..."
+msgstr "正在查找..."
+
+msgid "Repeating last search..."
+msgstr "正在查找下一个..."
+
+msgid "Searching in Files..."
+msgstr "正在文件中查找..."
+
+msgid "Replacing..."
+msgstr "正在替换..."
+
+msgid "Selecting all..."
+msgstr "正在全选..."
+
+msgid "Switching to selected line..."
+msgstr "正在切换到所选行..."
+
+msgid "Compiling "
+msgstr "正在编译 "
+
+msgid "Running "
+msgstr "正在运行 "
+
+msgid "Execute with Arguments"
+msgstr "带参数运行"
+
+msgid "Running  "
+msgstr "正在运行"
+
+msgid "Running make..."
+msgstr "正在运行连编..."
+
+msgid "Running make clean-command "
+msgstr "正在运行make clean命令"
+
+msgid "Running make clean and rebuilding all..."
+msgstr "正在运行make clean和全部重建"
+
+msgid "Running make distclean..."
+msgstr "正在运行make distclean..."
+
+msgid "Running autoconf/automake suite..."
+msgstr "正在运行autoconf/automake..."
+
+msgid "Configure with Arguments"
+msgstr "运行Configure时带参数"
+
+msgid "Running ./configure..."
+msgstr "正在运行 ./configure..."
+
+msgid "Killing current process..."
+msgstr "正在终止当前进程..."
+
+msgid "Setting up the Editor..."
+msgstr "正在设置编辑器..."
+
+msgid "Setting up the Editor's colors..."
+msgstr "正在设置编辑器颜色..."
+
+msgid "Setting up syntax highlighting default colors..."
+msgstr "正在设置语法高亮缺省颜色..."
+
+msgid "Setting up syntax highlighting colors..."
+msgstr "正在设置语法高亮颜色..."
+
+msgid "Configuring Documentation Browser..."
+msgstr "正在配置文档浏览器..."
+
+msgid "Configuring Tools-Menu entries..."
+msgstr "正在配置工具菜单项..."
+
+msgid "Setting up KDevelop..."
+msgstr "正在设置KDevelop..."
+
+msgid "Updating KDE-Libs documentation..."
+msgstr "正在更新KDE库文档..."
+
+msgid "Generating Documentation..."
+msgstr "正在生成文档..."
+
+msgid "Creating Search Database..."
+msgstr "正在生成查找数据库..."
+
+msgid "Opening bookmark..."
+msgstr "正在打开标签..."
+
+msgid "Switching to last page..."
+msgstr "正在切换到最后一页..."
+
+msgid "Switching to next page..."
+msgstr "正在切换到下一页..."
+
+msgid "Opening history page..."
+msgstr "正在打开历史页..."
+
+msgid "Reloading page..."
+msgstr "正在重新载入页..."
+
+msgid "You must select a text for searching the documentation!"
+msgstr "你必须选择需要在文档中查找的文本！"
+
+msgid "Searching selected text in documentation..."
+msgstr "正在文档中查找文本..."
+
+msgid ""
+"KDevelop couldn't find the search database.\n"
+" Do you want to generate it now?"
+msgstr ""
+"KDevelop没有发现查找数据库，现在生成吗？"
+
+msgid "Searching for Help on..."
+msgstr "正在查找帮助..."
+
+msgid "No Project API documentation !"
+msgstr "没有项目API文档！"
+
+msgid ""
+"The Project API documentation is not present.\n"
+"Would you like to generate it now ?"
+msgstr ""
+"项目API文档不存在，现在生成吗？"
+
+msgid "Switching to project API Documentation..."
+msgstr "正在切换到项目API文档..."
+
+msgid "No Project manual found !"
+msgstr "没有项目手册！"
+
+msgid ""
+"The Project manual documentation is not present.\n"
+"Would you like to generate the handbook  now ?"
+msgstr ""
+"项目手册文档不存在，现在生成吗？"
+
+msgid "Switching to project Manual..."
+msgstr "正在切换到项目手册..."
+
+msgid "About KDevelop..."
+msgstr "关于KDevelop..."
+
+msgid "\t   KDevelop Version "
+msgstr "\t   KDevelop 版本"
+
+#, c-format
+msgid "Line: %d Col: %d"
+msgstr "行: %d 列: %d"
+
+msgid "\" not found in documentation!"
+msgstr "\"在文档中没有发现！"
+
+msgid "Search for: "
+msgstr "查找："
+
+msgid "Title"
+msgstr "标题"
+
+msgid "Hits"
+msgstr "找到"
+
+msgid "*** failed ***\n"
+msgstr "*** 失败 ***\n"
+
+msgid "*** success ***\n"
+msgstr "*** 成功 ***\n"
+
+#, c-format
+msgid "*** exit-code: %i ***\n"
+msgstr "***  退出码：%i ***\n"
+
+msgid "Press Enter to continue!"
+msgstr "按回车继续！"
+
+msgid "*** process exited with error(s) ***\n"
+msgstr "*** 进程错误退出 ***\n"
+
+msgid "Qt-Library"
+msgstr "Qt库"
+
+msgid "File not found!"
+msgstr "文件未找到！"
+
+msgid "KDE-Core-Library"
+msgstr "KDE核心库"
+
+msgid "KDE-UI-Library"
+msgstr "KDE-UI库"
+
+msgid "KDE-KFile-Library"
+msgstr "KDE-KFile库"
+
+msgid "KDE-KHTMLW-Library"
+msgstr "KDE-KHTMLW库"
+
+msgid "KDE-KFM-Library"
+msgstr "KDE-KFM库"
+
+msgid "KDE-KDEutils-Library"
+msgstr "KDE-KDEutils库"
+
+msgid "KDE-KAB-Library"
+msgstr "KDE-KAB库"
+
+msgid "KDE-KSpell-Library"
+msgstr "KDE-KSpell库"
+
+msgid "Creates a new file"
+msgstr "生成新文件"
+
+msgid "Opens an existing file"
+msgstr "打开现存的文件"
+
+msgid "Closes the actual file"
+msgstr "关闭当前文件"
+
+msgid "Save the actual document"
+msgstr "保存实际文档"
+
+msgid "Save the document as..."
+msgstr "把文档另存为..."
+
+msgid "Save all changed files"
+msgstr "保存所有更改过的文件"
+
+msgid "Prints the current document"
+msgstr "打印当前文档"
+
+msgid "Exits the program"
+msgstr "退出程序"
+
+msgid "Reverts the last editing step"
+msgstr "恢复最近一次编辑"
+
+msgid "Re-execute the last undone step"
+msgstr "重复最近一次撤消"
+
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "剪切到剪贴板"
+
+msgid "Copys the selected section to the clipboard"
+msgstr "复制到剪贴板"
+
+msgid "Pastes the clipboard contents to actual position"
+msgstr "将剪贴板中的内容粘贴到实际位置"
+
+msgid "Inserts a file at the current position"
+msgstr "在当前位置插入文件"
+
+msgid "Searchs the file for an expression"
+msgstr "在文件中查找表达式"
+
+msgid "Repeats the last search"
+msgstr "查找下一个"
+
+msgid "Searchs and replace expression"
+msgstr "查找与替换表达式"
+
+msgid ""
+"Opens the search in files dialog to search for expressions over several files"
+msgstr ""
+"在多个文件中查找表达式."
+
+msgid "Moves the selection to the right"
+msgstr "把选择移到右边"
+
+msgid "Moves the selection to the left"
+msgstr "把选择移到左边"
+
+msgid "Selects the whole document contents"
+msgstr "选择整个文档内容"
+
+msgid "Deselects the whole document contents"
+msgstr "取消选择文档内容"
+
+msgid "Inverts the current selection"
+msgstr "反选当前选择"
+
+msgid "Goes to Line Number..."
+msgstr "转到行..."
+
+msgid "Switches to the file and line the next error was reported"
+msgstr "切换到下一个错误所在的文件和行"
+
+msgid "Switches to the file and line the previous error was reported"
+msgstr "切换到前一个错误所在的文件和行"
+
+msgid "Enables / disables the treeview"
+msgstr "允许/禁止树状视图"
+
+msgid "Enables / disables the outputview"
+msgstr "允许/禁止输出视图"
+
+msgid "Enables / disables the standard toolbar"
+msgstr "允许/禁止标准工具条"
+
+msgid "Enables / disables the browser toolbar"
+msgstr "允许/禁止浏览器工具条"
+
+msgid "Enables / disables the statusbar"
+msgstr "允许/禁止状态条"
+
+msgid "Refreshes current view"
+msgstr "更新当前视图"
+
+msgid "Opens the current document in the KFM browser"
+msgstr "在KFM浏览器中打开当前文档"
+
+msgid "Generates a new project with Application Wizard"
+msgstr "使用应用程序向导生成新项目"
+
+msgid "Opens an existing project"
+msgstr "打开现存的项目"
+
+msgid "Closes the current project"
+msgstr "关闭当前项目"
+
+msgid "Adds an existing file to the project"
+msgstr "添加现存文件到项目中"
+
+msgid "Adds a new language for internationalization to the project"
+msgstr "添加新语言到项目中"
+
+msgid "Removes file from the project"
+msgstr "从项目中删除文件"
+
+msgid "Creates a new Class frame structure and files"
+msgstr "生成新的类框架结构和文件"
+
+msgid "Shows the current file properties"
+msgstr "显示当前文件属性"
+
+msgid "Sets project and compiler options"
+msgstr "设置项目和编译器选项"
+
+msgid "Invokes make to create the message file by extracting all i18n() macros"
+msgstr "调用make抽取i18()宏以生成消息文件"
+
+msgid "Creates the Project's API with KDoc"
+msgstr "用KDoc生成项目的API"
+
+msgid "Creates the Project's User Manual with the sgml-file"
+msgstr "用sgml文件生成项目用户手册"
+
+msgid "Creates distribution packages from the current project"
+msgstr "从当前项目中生成发布包"
+
+msgid "Creates a tar.gz file from the current project sources"
+msgstr "从当前项目源中生成tar.gz文件"
+
+msgid "Compiles the current sourcefile"
+msgstr "编译当前源文件"
+
+msgid "Generates the sourcefiles for the dialog"
+msgstr "生成对话框的源文件"
+
+msgid "Invokes make-command"
+msgstr "调用连编命令"
+
+msgid "Rebuilds the program"
+msgstr "重建程序"
+
+msgid "Invokes make clean and rebuild all"
+msgstr "调用make clean并全部重建"
+
+msgid "Stops make immediately"
+msgstr "立即停止连编"
+
+msgid "Invokes make-command and runs the program"
+msgstr "调用连编命令并运行程序"
+
+msgid "Lets you set run-arguments to the binary and invokes the make-command"
+msgstr "让你为二进制代码设置运行时刻参数并调用连编命令"
+
+msgid "Invokes make and KDbg debugging the binary"
+msgstr "调用连编和KDbg调试二进制代码"
+
+msgid "Invokes make distclean and deletes all compiled files"
+msgstr "调用make distclean并删除所有编译过的文件"
+
+msgid "Invokes automake and co."
+msgstr "调用automake和co."
+
+msgid "Invokes ./configure"
+msgstr "调用 ./configure"
+
+msgid "Changes to the KDevelop dialogeditor"
+msgstr "切换到KDevelop对话框编辑器"
+
+msgid "Changes to KDevelop project editor"
+msgstr "切换到KDevelop项目编辑器"
+
+msgid "Sets the Editor's behavoir"
+msgstr "设置编辑器行为"
+
+msgid "Sets the Editor's colors"
+msgstr "设置编辑器颜色"
+
+msgid "Sets the highlighting default colors"
+msgstr "设置高亮缺省颜色"
+
+msgid "Sets the highlighting colors"
+msgstr "设置高亮颜色"
+
+msgid "Configures the Browser options"
+msgstr "配置浏览器选项"
+
+msgid "Configures the Tools-Menu entries"
+msgstr "配置工具-菜单项"
+
+msgid "Configures printing options"
+msgstr "配置打印选项"
+
+msgid "Configures the printer to use enscript"
+msgstr "将打印机配置成使用enscript"
+
+msgid "Configures the printer to use a2ps"
+msgstr "将打印机配置成使用a2ps"
+
+msgid "Configures KDevelop"
+msgstr "配置KDevelop"
+
+msgid "Sets a bookmark to the current window file"
+msgstr "为当前窗口文件设置书签"
+
+msgid "Adds a bookmark to the current window file"
+msgstr "在当前窗口文件中添加书签"
+
+msgid "Clears the bookmark list for the current window"
+msgstr "清除当前窗口的书签列"
+
+msgid "Switchs to last browser page"
+msgstr "切换到上一浏览页"
+
+msgid "Switchs to next browser page"
+msgstr "切换到下一浏览页"
+
+msgid "Reloads the current browser page"
+msgstr "重新载入当前浏览页"
+
+msgid "Cancels the document request"
+msgstr "取消文档请求"
+
+msgid "Searchs the selected text in the documentation"
+msgstr "在文档中查找所选择的文本"
+
+msgid "Lets you search individually for an expression"
+msgstr "让你各个查找表达式"
+
+msgid "Switchs to KDevelop's User Manual"
+msgstr "切换到KDevelop用户手册"
+
+msgid "Switchs to the KDevelop Programming Handbook"
+msgstr "切换到KDevelop编程手册"
+
+msgid "Opens the Tip of the Day dialog with hints for using KDevelop"
+msgstr "打开带有使用KDevelop提示的日集月累对话框"
+
+msgid "Switchs to the C/C++-Reference"
+msgstr "切换到C/C++参考"
+
+msgid "Switchs to the QT-Documentation"
+msgstr "切换到QT文档"
+
+msgid "Switchs to the KDE-Core-Documentation"
+msgstr "切换到KDE核心文档"
+
+msgid "Switchs to the KDE-GUI-Documentation"
+msgstr "切换到KDE-GUI文档"
+
+msgid "Switchs to the KDE-File-Documentation"
+msgstr "切换到KDE-FILE文档"
+
+msgid "Switchs to the KDE-Html-Documentation"
+msgstr "切换到KDE-Html文档"
+
+msgid "Switchs to the project's API-Documentation"
+msgstr "切换到项目的API文档"
+
+msgid "Switchs to the project's User-Manual"
+msgstr "切换到项目的用户手册"
+
+msgid "Enter the KDevelop Homepage"
+msgstr "到KDevelop主页"
+
+msgid "Sends a bug-report email to the KDevelop Team"
+msgstr "用电子邮件向KDevelop小组发bug报告."
+
+msgid "Some information about the dialog editor..."
+msgstr "关于对话框编辑器的一些信息..."
+
+msgid "Programmer's Hall of Fame..."
+msgstr "关于KDevelop..."
+
+msgid "Switchs to declaration/implementation"
+msgstr "切换到声明/实现处"
+
+msgid "Switchs to the method's declaration"
+msgstr "切换到方法的声明处"
+
+msgid "Switchs to the method's definition"
+msgstr "切换到方法的定义处"
+
+msgid "Opens the graphical inheritance tree"
+msgstr "打开继承关系树的图形化显示"
+
+msgid "Opens the classtool dialog"
+msgstr "打开类工具对话框"
+
+msgid "Displays the inherited classes of the current class"
+msgstr "显示当前类的超类"
+
+msgid "Displays the classes who inherit the current class"
+msgstr "显示当前类的派生类"
+
+msgid "Creates a new folder"
+msgstr "生成新文件夹"
+
+msgid "Deletes the current folder"
+msgstr "删除当前文件夹"
+
+msgid "Deletes the current class"
+msgstr "删除当前类"
+
+msgid "Goes to the class declaration"
+msgstr "跳到类声明处"
+
+msgid "Opens the New Method dialog"
+msgstr "打开新方法对话框"
+
+msgid "Deletes the current class method"
+msgstr "删除当前类方法"
+
+msgid "Creates a new attribute for the current class"
+msgstr "为当前类生成一条新属性"
+
+msgid "Deletes the current class attribute"
+msgstr "删除当前类属性"
+
+msgid "Creates a virtual method"
+msgstr "生成一个虚方法"
+
+msgid "Adds a signal/slot mechanism"
+msgstr "添加一个signal/slot机制"
+
+msgid "Closes the current dialog"
+msgstr "关闭当前对话框"
+
+msgid "Saves the current dialog"
+msgstr "保存当前对话框"
+
+msgid "Saves the current dialog under a new filename"
+msgstr "使用新文件名保存当前对话框."
+
+msgid "Enables/Disables the properties window"
+msgstr "允许/禁止属性窗口"
+
+msgid "Sets the grid size of the editing widget grid snap"
+msgstr "设置widget编辑器中对齐网格的大小"
+
+msgid "Lets you create a new logical file group"
+msgstr "让你生成一个新的逻辑文件组"
+
+msgid "Removes the selected logical file group"
+msgstr "删除所选择的逻辑文件组"
+
+msgid "Shows the group's properties"
+msgstr "显示组属性"
+
+msgid "Displays the absolute / relative path"
+msgstr "显示绝对/相对路径"
+
+msgid "Deletes the selected file"
+msgstr "删除所选择的文件"
+
+msgid "Ready"
+msgstr "就绪"
+
+msgid "Are you sure you want to delete this method?"
+msgstr "你确定要删除这个方法吗？"
+
+msgid "//Del by KDevelop: "
+msgstr ""
+
+msgid "Welcome to KDevelop!"
+msgstr "欢迎来到KDevelop!"
+
+msgid "messages"
+msgstr "消息"
+
+msgid "stdout"
+msgstr "标准输出"
+
+msgid "stderr"
+msgstr "标准错误输出"
+
+msgid "CV"
+msgstr ""
+
+msgid "LFV"
+msgstr ""
+
+msgid "RFV"
+msgstr ""
+
+msgid "DOC"
+msgstr "文档"
+
+msgid "Untitled.h"
+msgstr ""
+
+msgid "Untitled.cpp"
+msgstr ""
+
+msgid "Header/Reso&urce Files"
+msgstr "头/资源文件(&U)"
+
+msgid "&C/C++ Files"
+msgstr "C/C++文件(&C)"
+
+msgid "&Documentation-Browser"
+msgstr "文档浏览器(&D)"
+
+msgid "Tool&s"
+msgstr "工具(&S)"
+
+msgid "Save All"
+msgstr "全部保存"
+
+msgid "Indent"
+msgstr "缩进"
+
+msgid "Unindent"
+msgstr "不缩进"
+
+msgid "Insert File"
+msgstr "插入文件"
+
+msgid "Repeat Search"
+msgstr "查找下一个"
+
+msgid "Search in Files"
+msgstr "在文件中查找"
+
+msgid "Search selection in Files"
+msgstr "在文件中查找所选文本"
+
+msgid "Select All"
+msgstr "全选"
+
+msgid "Deselect All"
+msgstr "取消选择"
+
+msgid "Invert Selection"
+msgstr "反选"
+
+msgid "Goto Line"
+msgstr "跳到行"
+
+msgid "Next Error"
+msgstr "下一个错误"
+
+msgid "Previous Error"
+msgstr "上一个错误"
+
+msgid "Sourcecode Editor"
+msgstr "源代码编辑器"
+
+msgid "Dialog Editor"
+msgstr "对话框编辑器"
+
+msgid "Toogle Tree-View"
+msgstr ""
+
+msgid "Toogle Output-View"
+msgstr ""
+
+msgid "Toolbar"
+msgstr "工具条"
+
+msgid "Browser-Toolbar"
+msgstr "浏览器工具条"
+
+msgid "Statusbar"
+msgstr "状态条"
+
+msgid "Preview dialog"
+msgstr "预览对话框"
+
+msgid "Refresh"
+msgstr "更新"
+
+msgid "Graphical Classview"
+msgstr "图形化显示的类视图"
+
+msgid "New Project"
+msgstr "新建项目"
+
+msgid "Open Project"
+msgstr "打开项目"
+
+msgid "Close Project"
+msgstr "关闭项目"
+
+msgid "New Class"
+msgstr "新建类"
+
+msgid "Add existing File(s)"
+msgstr "添加现存文件"
+
+msgid "Make messages and merge"
+msgstr "生成与合并消息"
+
+msgid "Make API-Doc"
+msgstr "生成API文档"
+
+msgid "Make User-Manual..."
+msgstr "生成用户手册..."
+
+msgid "Make Source-tgz"
+msgstr "生成tgz格式的源"
+
+msgid "Project options"
+msgstr "项目选项"
+
+msgid "Compile File"
+msgstr "编译文件"
+
+msgid "Make"
+msgstr "连编"
+
+msgid "Rebuild All"
+msgstr "全部重建"
+
+msgid "Clean/Rebuild all"
+msgstr "清除/全部重建"
+
+msgid "Stop process"
+msgstr "停止处理"
+
+msgid "Execute"
+msgstr "执行"
+
+msgid "Execute with arguments"
+msgstr "带参数执行"
+
+msgid "Debug"
+msgstr "调试"
+
+msgid "DistClean"
+msgstr ""
+
+msgid "Autoconf and automake"
+msgstr "autoconf和automake"
+
+msgid "Configure..."
+msgstr "配置..."
+
+msgid "Clear Bookmarks"
+msgstr "清除书签"
+
+msgid "Search Marked Text"
+msgstr "查找标示的文本"
+
+msgid "Search for Help on"
+msgstr "查找帮助"
+
+msgid "Toggle Last"
+msgstr ""
+
+msgid "&New..."
+msgstr "新建(&N)"
+
+msgid "Save &As..."
+msgstr "另存为(&A)..."
+
+msgid "U&ndo"
+msgstr "撤消(&N)"
+
+msgid "R&edo"
+msgstr "重复(&R)"
+
+msgid "In&dent"
+msgstr "缩进(&D)"
+
+msgid "&Unindent"
+msgstr "不缩进(&U)"
+
+msgid "&Insert File..."
+msgstr "插入文件(&I)..."
+
+msgid "&Search..."
+msgstr "查找(&S)..."
+
+msgid "&Repeat Search"
+msgstr "查找下一个(&R)"
+
+msgid "&Replace..."
+msgstr "替换(&R)..."
+
+msgid "&Search in Files..."
+msgstr "在文件中查找(&S)..."
+
+msgid "Select &All"
+msgstr "全选(&A)"
+
+msgid "Goto &Line..."
+msgstr "跳到行(&L)..."
+
+msgid "&Next Error"
+msgstr "下一个错误(&N)"
+
+msgid "&Previous Error"
+msgstr "上一个错误(&P)"
+
+msgid "&Dialog Editor"
+msgstr "对话框编辑器(&D)"
+
+msgid "&Tree-View"
+msgstr "树状视图(&T)"
+
+msgid "&Output-View"
+msgstr "输出视图(&O)"
+
+msgid "&Toolbar"
+msgstr "工具条(&T)"
+
+msgid "&Browser-Toolbar"
+msgstr "浏览器工具条(&B)"
+
+msgid "Status&bar"
+msgstr "状态条(&B)"
+
+msgid "&Refresh"
+msgstr "更新(&R)"
+
+msgid "New..."
+msgstr "新建..."
+
+msgid "Open &recent project..."
+msgstr "打开最近的项目(&R)..."
+
+msgid "C&lose"
+msgstr "关闭(&L)"
+
+msgid "&New Class..."
+msgstr "新建类(&N)..."
+
+msgid "&Add existing File(s)..."
+msgstr "添加现存的文件(&A)..."
+
+msgid "Add new &Translation File..."
+msgstr "添加新的翻译文件(&T)..."
+
+msgid "&File Properties..."
+msgstr "文件属性(&F)..."
+
+msgid "Make &messages and merge"
+msgstr "生成与合并消息(&M)"
+
+msgid "Make AP&I-Doc"
+msgstr "生成API文档(&I)"
+
+msgid "Make &User-Manual..."
+msgstr "生成用户手册(&U)..."
+
+msgid "&Source-tgz"
+msgstr "tgz格式的源(&S)"
+
+msgid "Make D&istribution"
+msgstr "生成发布(&I)"
+
+msgid "&Options..."
+msgstr "选项(&O)..."
+
+msgid "&Project"
+msgstr "项目(&P)"
+
+msgid "Compile &File"
+msgstr "编译文件(&F)"
+
+msgid "&Make"
+msgstr "连编(&M)"
+
+msgid "&Rebuild all"
+msgstr "全部重建(&R)"
+
+msgid "&Clean/Rebuild all"
+msgstr "清除/全部重建(&C)"
+
+msgid "&Stop Build"
+msgstr "停止连编(&S)"
+
+msgid "&Execute"
+msgstr "执行(&E)"
+
+msgid "Execute &with Arguments..."
+msgstr "带参数执行(&W)..."
+
+msgid "&Debug..."
+msgstr "调试(&D)..."
+
+msgid "DistC&lean"
+msgstr ""
+
+msgid "&Autoconf and automake"
+msgstr "autoconf和automake(&A)"
+
+msgid "C&onfigure..."
+msgstr "配置(&O)..."
+
+msgid "&Build"
+msgstr "建立(&B)"
+
+msgid "&Tools"
+msgstr "工具(&T)"
+
+msgid "&A2ps..."
+msgstr ""
+
+msgid "&Enscript..."
+msgstr ""
+
+msgid "&Editor..."
+msgstr "编辑器(&E)..."
+
+msgid "Editor &Colors..."
+msgstr "编辑器颜色(&C)..."
+
+msgid "Editor &Defaults..."
+msgstr "编辑器缺省(&D)..."
+
+msgid "&Syntax Highlighting..."
+msgstr "语法高亮显示(&S)"
+
+msgid "Documentation &Browser..."
+msgstr "文档浏览器(&B)..."
+
+msgid "Configure &Printer..."
+msgstr "配置打印机(&P)..."
+
+msgid "Tools..."
+msgstr "工具..."
+
+msgid "&KDevelop Setup..."
+msgstr "配置KDevelop(&K)..."
+
+msgid "&Window"
+msgstr "窗口(&W)"
+
+msgid "&Set Bookmark..."
+msgstr "设置书签(&S)..."
+
+msgid "&Add Bookmark..."
+msgstr "添加书签(&A)..."
+
+msgid "&Clear Bookmarks"
+msgstr "清除书签(&C)..."
+
+msgid "&Header Window"
+msgstr "头文件窗口(&H)"
+
+msgid "C/C++ &Window"
+msgstr "C/C++窗口(&W)"
+
+msgid "&Browser Window"
+msgstr "浏览器窗口(&B)"
+
+msgid "Book&marks"
+msgstr "书签(&M)"
+
+msgid "&Back"
+msgstr "向后(&B)"
+
+msgid "&Forward"
+msgstr "向前(&F)"
+
+msgid "&Search Marked Text"
+msgstr "查找标示的文本"
+
+msgid "User Manual"
+msgstr "用户手册"
+
+msgid "Programming Handbook"
+msgstr "编程手册"
+
+msgid "Tip of the Day"
+msgstr "日集月累"
+
+msgid "KDevelop Homepage"
+msgstr "KDevelop主页"
+
+msgid "Bug Report..."
+msgstr "Bug报告..."
+
+msgid "C/C++-Reference"
+msgstr "C/C++参考"
+
+msgid "&Qt-Library"
+msgstr "Qt库(&Q)"
+
+msgid "KDE-&Core-Library"
+msgstr "KDE核心库(&C)"
+
+msgid "KDE-&GUI-Library"
+msgstr "KDE-GUI库(&G)"
+
+msgid "KDE-&KFile-Library"
+msgstr "KDE-KFile库(&K)"
+
+msgid "KDE-&HTML-Library"
+msgstr "KDE-HTML库(&H)"
+
+msgid "Project &API-Doc"
+msgstr "项目API文档(&A)"
+
+msgid "Project &User-Manual"
+msgstr "项目用户手册(&U)"
+
+msgid "Goto declaration"
+msgstr "跳到声明处"
+
+msgid "Goto definition"
+msgstr "跳到定义处"
+
+msgid "Goto class declaration"
+msgstr "跳到类声明处"
+
+msgid "Show graphical classview"
+msgstr "显示图形化的类视图"
+
+msgid "Open File"
+msgstr "打开文件"
+
+msgid "Save File"
+msgstr "保存文件"
+
+msgid "Compile file"
+msgstr "编译文件"
+
+msgid "Rebuild"
+msgstr "重建"
+
+msgid "Run"
+msgstr "运行"
+
+msgid "Switch to the dialogeditor"
+msgstr "切换到对话框编辑器"
+
+msgid "Tree-View"
+msgstr "树状视图"
+
+msgid "Output-View"
+msgstr "输出视图"
+
+msgid "What's this...?"
+msgstr "这是什么...？"
+
+msgid "Classes"
+msgstr "类"
+
+msgid "Methods"
+msgstr "方法"
+
+msgid "Declaration/Definition"
+msgstr "声明/定义"
+
+msgid "Search Text in Documenation"
+msgstr "在文档中查找文本"
+
+msgid "xxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxx"
+
+msgid "Line: 00000 Col: 000"
+msgstr "行：00000 列：000"
+
+msgid " INS "
+msgstr " INS "
+
+msgid "yyyyyyyyyyyyyy"
+msgstr "yyyyyyyyyyyyyy"
+
+msgid "Starting..."
+msgstr "正在启动..."
+
+msgid ""
+"Initializing last project...\n"
+"Please wait...\n"
+msgstr ""
+"正在初始化上一个项目，请等待...\n"
+
+msgid "Widgets"
+msgstr "Widgets"
+
+msgid "Items"
+msgstr "项"
+
+msgid "Widget Editor"
+msgstr "Widget编辑器"
+
+msgid "Widget Properties"
+msgstr "Widget属性"
+
+msgid "&Sourcecode Editor"
+msgstr "源代码编辑器(&S)"
+
+msgid "&Widgets-View"
+msgstr "Widgets视图(&W)"
+
+msgid "&Properties-View"
+msgstr "属性视图(&P)"
+
+msgid "&Preview dialog"
+msgstr "预览对话框(&P)"
+
+msgid "&Grid..."
+msgstr "对齐网格(&G)..."
+
+msgid "Make &messages"
+msgstr "生成消息(&M)"
+
+msgid "Make &API-Doc"
+msgstr "生成API文档(&A)"
+
+msgid "Make &User-Manual"
+msgstr "生成用户手册(&U)"
+
+msgid "&Generate Sources..."
+msgstr "生成源(&G)..."
+
+msgid "&Generate Complete Sources..."
+msgstr "生成完整的源(&G)..."
+
+msgid "&Execute  "
+msgstr "执行(&E)  "
+
+msgid "Execute &with Arguments"
+msgstr "带参数执行(&W)"
+
+msgid "&DistClean"
+msgstr "&DistClean"
+
+msgid "&Autoconf"
+msgstr "&Autoconf"
+
+msgid "Dialog editor notes..."
+msgstr "对话框编辑器的注意提示..."
+
+msgid "Save Dialog"
+msgstr "保存对话框"
+
+msgid "Generate Sources"
+msgstr "生成源"
+
+msgid "Switch to edit-mode"
+msgstr "切换到编辑模式"
+
+msgid "Tree View"
+msgstr "树状视图"
+
+msgid "Output View"
+msgstr "输出视图"
+
+msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+msgid "xxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxx"
+
+msgid "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+msgstr ""
+
+msgid "        "
+msgstr ""
+
+msgid "Untitled.c"
+msgstr ""
+
+msgid "Save as new type of document?"
+msgstr "另存为一种新的文档类型吗？"
+
+msgid ""
+"Do you really want to save the file\n"
+"as another type of document?"
+msgstr ""
+"你是否确定要将文件存为另一种类型？"
+
+msgid "File exists!"
+msgstr "文件已经存在！"
+
+msgid ""
+"\n"
+"The file\n"
+"\n"
+msgstr ""
+"\n"
+"该文件\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"already exists.\n"
+"Do you want overwrite the old one?\n"
+msgstr ""
+"\n"
+"\n"
+"已经存在。覆盖吗？\n"
+
+msgid "Scanning project files..."
+msgstr "扫描项目文件..."
+
+msgid "Attention"
+msgstr "注意"
+
+msgid ""
+"\n"
+"\n"
+"File does not exist!"
+msgstr ""
+"\n"
+"\n"
+"文件不存在！"
+
+msgid "Exit KDevelop"
+msgstr "退出KDevelop"
+
+msgid ""
+"There is unsaved data.\n"
+"Do you really want to quit?"
+msgstr "还有未保存的数据，你真的要退出吗？"
+
+msgid "Closing project..."
+msgstr "正在关闭项目..."
+
+msgid "Save changed project files ?"
+msgstr "是否保存更改过的项目文件？"
+
+msgid ""
+"The project\n"
+"\n"
+msgstr ""
+"项目\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"包含更该过的文件。是否保存修改后的文件\n"
+"\n"
+
+msgid "Save all"
+msgstr "全部保存"
+
+msgid "Copying files..."
+msgstr "正在复制文件..."
+
+msgid "please wait..."
+msgstr "请等待..."
+
+msgid ""
+"You have modified the projectversion.\n"
+"We will regenerate all Makefiles now."
+msgstr ""
+"你修改了项目版本号，我们现在会重新生成所有的Makefiles。"
+
+msgid "Running automake/autoconf and configure..."
+msgstr "正在运行automake/autoconf和configure..."
+
+msgid "Running configure..."
+msgstr "正在运行configure..."
+
+msgid "Opening project..."
+msgstr "正在打开项目..."
+
+msgid "Creating a new frame application..."
+msgstr "正在生成一个新的框架应用程序..."
+
+msgid "Creating pot-file in /po..."
+msgstr "正在po目录下生成pot文件..."
+
+msgid "Creating project API-Documentation..."
+msgstr "正在生成项目的API文档..."
+
+msgid "Creating project Manual..."
+msgstr "正在生成项目手册..."
+
+msgid "Running make dist..."
+msgstr "正在运行make dist..."
+
+msgid ""
+"You have added a new subdir to the project.\n"
+"We will regenerate all Makefiles now."
+msgstr ""
+"你已经为该项目添加了新的子目录，\n"
+"我们现在会重新生成所有的Makefiles。"
+
+msgid ""
+"Open project\n"
+"\n"
+"Shows the open project dialog to select a project to be opened"
+msgstr ""
+"打开项目\n"
+"\n"
+"显示打开项目对话框，选择一个需要打开\n"
+"的项目。"
+
+msgid ""
+"Open file\n"
+"\n"
+"Shows the Open file dialog to select a file to be opened. Holding the button "
+"pressed will show a popup menu containing all filenames of your project's "
+"sources and header files. Selecting a filename on the menu will then open "
+"the file according to the file-type."
+msgstr ""
+"打开文件\n"
+"\n"
+"当显示打开文件对话框时，选择一个需要\n"
+"打开的文件。保持按钮按住不放将会显示\n"
+"一个弹出式菜单，其中包括该项目所有的\n"
+"源文件和头文件名。在菜单中选择一个文\n"
+"件名后，该文件将按照其类型被打开。"
+
+msgid ""
+"Save file\n"
+"\n"
+"Saves the file opened in the actual editing view"
+msgstr ""
+"保存文件\n"
+"\n"
+"保存在实际的编辑视图中打开的文件。"
+
+msgid ""
+"Print\n"
+"\n"
+"Opens the printing dialog. There, you can configure which printing program "
+"you wish to use, either a2ps or ensrcipt, and print your project files."
+msgstr ""
+"打印\n"
+"\n"
+"打开打印对话框。在这儿，你可以配置使\n"
+"用那一个打印程序，a2ps或者ensript，\n"
+"然后打印你的项目文件。"
+
+msgid ""
+"Undo\n"
+"\n" 
+"Reverts the last editing step."
+msgstr ""
+"撤消\n"
+"\n"
+"恢复到上一步编辑。"
+
+msgid ""
+"Redo\n"
+"\n"
+"If an editing step was undone, redo lets you do this step again."
+msgstr ""
+"重复\n"
+"\n"
+"如果你选择了撤消，重复可以使你恢复到\n"
+"撤消前的状况。"
+
+msgid ""
+"Cut\n"
+"\n"
+"Cuts out the selected text and copies it to the system clipboard."
+msgstr ""
+"剪切\n"
+"\n"
+"删除所选文本并将其复制到系统剪贴板。"
+
+msgid ""
+"Cut\n"
+"\n"
+"Cuts out the selected widget and copies it to the system clipboard."
+msgstr ""
+"剪切\n"
+"\n"
+"删除所选Widget并将其复制到系统剪贴板。"
+
+msgid ""
+"Copy\n"
+"\n"
+"Copies the selected text into the system clipboard."
+msgstr ""
+"复制\n"
+"\n"
+"将所选文本复制到系统剪贴板。"
+
+msgid ""
+"Copy\n"
+"\n"
+"Copies the selected widget into the system clipboard."
+msgstr ""
+"复制\n"
+"\n"
+"将所选Widget复制到系统剪贴板。"
+
+msgid ""
+"Paste\n"
+"\n"
+"Inserts the contents of the system clipboard at the current cursor position. "
+msgstr ""
+"粘贴\n"
+"\n"
+"将系统剪贴板中的内容插入到当前位置。"
+
+msgid ""
+"Compile file\n"
+"\n"
+"Only compile the file opened in the C/C++ Files- window. The output is shown "
+"in the output window. If errors occur, clicking on the error line causes the "
+"file window to show you the line the error occured."
+msgstr ""
+"编译文件\n"
+"\n"
+"只有在C/C++文件窗口中打开的文件才会\n"
+"被编译。程序输出在输出窗口中显示。\n"
+"如果有错误发生，点击该错误将把你带\n"
+"到发生错误所在的行。"
+
+msgid ""
+"Generate files\n"
+"\n"
+"This will actually generate the source files for the current dialog opened. "
+"The sources will be added to the project if one is opened, otherwise you "
+"will be asked to select the output directory for the generated files."
+msgstr ""
+"生成文件\n"
+"\n"
+"这会为当前打开的对话框生成源文件。如\n"
+"果有一个项目已经打开，这些文件会加入\n"
+"其中，否则，你必须为生成的文件指定输\n"
+"出目录。"
+
+msgid ""
+"Make\n"
+"\n"
+"Invokes the make-command set in the options-menu for the current project "
+"after saving all files. This will compile all changed sources since the last "
+"compilation was invoked.\n"
+"The output window opens to show compiler messages. If errors occur, clicking "
+"on the error line will open the file where the error was found and sets the "
+"cursor to the error line."
+msgstr ""
+"连编\n"
+"\n"
+"\n"
+"在保存所有文件后，调用在＂选项＂菜单\n"
+"中为当前项目设置的make命令。它将编译\n"
+"自上次编译后所有更改过的源文件。输出\n"
+"窗口将显示编译信息。如果有错误发生，\n"
+"点击该错误会打开发生错误的文件，并将\n"
+"光标置于错误所在的行"
+
+msgid ""
+"Rebuild all\n"
+"\n"
+"After saving all files, rebuild all invokes the make-command set with the "
+"clean-option to remove all object files. Then, configure creates new "
+"Makefiles and the make-command will rebuild the project."
+msgstr ""
+"全部重建\n"
+"\n"
+"在保存所有文件后，调用带clean参数的\n"
+"make命令清除所有目标文件。然后，\n"
+"configure会生成新的Makefiles,make命\n"
+"令将使用这些文件重建项目。"
+
+msgid ""
+"Execute\n"
+"\n"
+"After saving all files,the make-command is called to build the project. Then "
+"the binary is executed out of the project directory.\n"
+"Be aware that this function is only valid for programs and that references "
+"to e.g. pixmaps or html help files that are supposed to be installed will "
+"cause some strange behavoir like testing the helpmenu will open an error "
+"message that the index.html file is not found."
+msgstr ""
+"执行\n"
+"\n"
+"在保存所有文件后，调用make命令建立项\n"
+"目。然后，该二进制文件会在项目路径外\n"
+"执行。注意，该功能仅对程序有效。\n"
+"另外，对应该预先安装的位图和html帮\n"
+"助文件的引用可能产生奇怪的行为，\n"
+"比如：测试帮助菜单可能会显示\n"
+"index.html未找到的错误信息。"
+
+msgid ""
+"Debug program\n"
+"\n"
+"Opens KDbg in the tools window with your actualprogram and allows you to "
+"execute it step by stepby setting breakpoints in the sourcecode.Note that "
+"you have to open your sourcecodes in KDbgto access it."
+msgstr ""
+"调试程序\n"
+"\n"
+"在工具窗口中同你的程序一起打开KDbg可\n"
+"以使你在源代码中设置断点并单步执行。\n"
+"注意，你必须在KDbg中同时打开程序源\n"
+"文件。"
+
+msgid ""
+"Stop\n"
+"\n"
+"If activated, the stop-command will interrupt the active process. This "
+"affects make-commands as well as documentation generation."
+msgstr ""
+"停止\n"
+"\n"
+"如果被激活，停止命令将中断活动进程。\n"
+"这既影响make命令也影响生成文档。"
+
+msgid ""
+"Dialogeditor\n"
+"\n"
+"This will switch to the internal dialog editor of the KDevelop IDE. There, "
+"you can also switch back to the editing mode by choosing the Sourcecode "
+"editor button or Sourcecode-editor from the View-menu."
+msgstr ""
+"对话框编辑器\n"
+"\n"
+"这会切换到KDevelop内置的对话框编辑器。\n"
+"在那儿，你可以选择源代码编辑器按钮或\n"
+"在视图菜单中选择源代码编辑器以回到编\n"
+"辑模式。"
+
+msgid ""
+"Sourcecode Editor\n"
+"\n"
+"This will switch to the sourcecode editor providing the usual IDE interface. "
+"You can switch back to the dialogeditor by choosing the Dialogeditor button "
+"in the KDevelop toolbar or by choosing Dialogeditor in the View-menu."
+msgstr ""
+"源代码编辑器\n"
+"\n"
+"这会切换到源代码编辑器以提供通常的\n"
+"IDE界面。你可以在工具条或视图菜单中\n"
+"选择对话框编辑器以继续编辑对话框。"
+
+msgid ""
+"Output-View\n"
+"\n"
+"Enables/ disables the output window. The state of the window is displayed by "
+"the toggle button: if the button is pressed, the window is open, otherwise "
+"closed."
+msgstr ""
+"输出视图\n"
+"\n"
+"允许/禁止输出窗口。窗口的状态由toggle\n"
+"按钮指示：如果该按钮是按下的，那么窗\n"
+"口就是打开的，反之则是关闭的。"
+
+msgid ""
+"Tree-View\n"
+"\n"
+"Enables/ disables the tree window. The state of the window is displayed by "
+"the toggle button: if the button is pressed, the window is open, otherwise "
+"closed."
+msgstr ""
+"树视图\n"
+"\n"
+"允许/禁止树窗口。窗口的状态由toggle\n"
+"按钮指示：如果该按钮是按下的，那么窗\n"
+"口就是打开的，反之则是关闭的。"
+
+msgid ""
+"Classes\n"
+"\n"
+"Choosing a class will switch to the header file where the class is "
+"declarated."
+msgstr ""
+"类\n"
+"\n"
+"选择一个类会切换到声明该类的头文件。"
+
+msgid ""
+"Methods\n"
+"\n"
+"Allows selecting a method of the current selected class. This will switch to "
+"the implementation of the chosen class."
+msgstr ""
+"方法\n"
+"\n"
+"允许选择当前类的方法。这将切换到该类\n"
+"的实现部分。"
+
+msgid ""
+"Documentation-Back\n"
+"\n"
+"This opens the previously visited page in the browser window. Holding the "
+"button pressed down will open a popup menu showing the browser history. "
+"Selecting an entry will open the according page in the browser window."
+msgstr ""
+"文档-向后\n"
+"\n"
+"这将在浏览窗口中打开先前访问过的页。\n"
+"按住按钮不放会打开一个弹出式菜单，\n"
+"其中是浏览的历史记录。选择其中一项\n"
+"将在浏览窗口中打开相应的页。"
+
+msgid ""
+"Documentation-Forward\n"
+"\n"
+"This opens the next page in the history list. Holding the button pressed "
+"will show you a popup menu to browse visited pages forward."
+msgstr ""
+"文档-向前\n"
+"\n"
+"这将打开历史记录中的下一页。按住按钮\n"
+"不放会打开一个弹出式菜单，其中是浏览\n"
+"的历史记录。"
+
+msgid ""
+"Search Marked Text\n"
+"\n"
+"Uses the searchdatabase to look for the selected text string and opens a "
+"summary page of found references for the selection in the browser window. "
+"There, you can select a documentation page of your choice and open it by "
+"following the link."
+msgstr ""
+"查找标示的文本\n"
+"\n"
+"使用查找数据库搜索在浏览器窗口内所选\n"
+"的文本字串，结果显示在摘要页中。 你\n"
+"可以打开链接并选择你需要的文档页。"
+
+msgid ""
+"Search for Help on...\n"
+"\n"
+"Opens the Search for Help on... dialog. There, you can search for a keyword "
+"in the documentation directly using the search database."
+msgstr ""
+"查找帮助...\n"
+"\n"
+"打开查找帮助对话框。你可以使用查找数\n"
+"据库直接在文档中搜索关键字。"
+
+msgid ""
+"Class Viewer\n"
+"\n"
+"The class viewer shows all classes, methods and variables of the current "
+"project files and allows switching to declarations and implementations. The "
+"right button popup-menu allows more specialized functionality."
+msgstr ""
+"类浏览器\n"
+"\n"
+"类浏览器显示当前项目文件所有的类，\n"
+"方法和变量，同时也允许切换到声明和\n"
+"实现处。鼠标右键的弹出式菜单允许更\n"
+"多特别的功能。"
+
+msgid ""
+"Logical File Viewer\n"
+"\n"
+"The logical file viewer separates your project files into logical groups to "
+"allow easier access e.g.to header and implementation files.The right button "
+"popup-menu allows more specialized functionality."
+msgstr ""
+"逻辑文件浏览器\n"
+"\n"
+"逻辑文件浏览器将你的项目文件分成逻\n"
+"辑组，使你更容易访问头文件和实现文件。\n"
+"右键的弹出式菜单允许更多特别的功能。"
+
+msgid ""
+"Real File Viewer\n"
+"\n"
+"The real file viewer shows the project directory in it's real structure and "
+"gives access to all files."
+msgstr ""
+"实际文件浏览器\n"
+"\n"
+"实际文件浏览器显示项目目录的实际\n"
+"结构。并允许访问所有文件。"
+
+msgid ""
+"Documentation Tree\n"
+"\n"
+"The documentation tree gives access to library documentation and the "
+"KDevelop manuals. Can be configured individually by right-button menu."
+msgstr ""
+"文档树\n"
+"\n"
+"文档树使你能够访问库文档和KDevelop\n"
+"手册。使用右键菜单可以单独进行配置。"
+
+msgid ""
+"Widgets\n"
+"\n"
+"Here, you can select a widget item to add to the dialog you're working on. "
+"More information about the widget items can be found by What's this help on "
+"the buttons or in the KDevelop documentation. "
+msgstr ""
+"Widget\n"
+"\n"
+"你可以在这儿选择一个widget加入到你的\n"
+"对话框中。 通过'这是什么'按钮或KDevelop\n"
+"文档可以获得有关widget项更多的信息。"
+
+msgid ""
+"Dialogs\n"
+"\n"
+"Selecting a dialog in the list will open the dialog definition file and "
+"dispay the dialog for editing."
+msgstr ""
+"对话框\n"
+"\n"
+"在列表中选择一个对话框会打开该对话框\n"
+"的定义文件并显示此对话框用于编辑。"
+
+msgid ""
+"Properties\n"
+"\n"
+"The properties window shows the properties for the currently selected widget "
+"item. You can switch to the different items by selecting them in the editing "
+"view or by using the drop-down menu at the top of the properties window "
+"containing a list with all used widget items."
+msgstr ""
+"属性\n"
+"\n"
+"属性窗口显示当前所选Widget项的属性。\n"
+"你有两种方法切换到其它项：在编辑视图\n"
+"中选择，或者使用窗口顶端的下拉菜单，\n"
+"其中包含一个所有用过的widget项的列表。"
+
+msgid ""
+"Widget Editing Window\n"
+"\n"
+"The Widget Editing Window is the working window of the widget editor "
+"displaying a resizable widget with a grid to place selected widget items on. "
+"A click on the items will acitvate them and give a resize-frame around with "
+"draggable points to resize the item. The properties for the selected item "
+"are shown in the properties window at the right. New widget items can be "
+"added by choosing them on the widgets-window on the left."
+msgstr ""
+"编辑窗口\n"
+"\n"
+"编辑窗口是widget编辑器的工作窗口。它会\n"
+"显示一可变大小的widget和用来对齐项的网\n"
+"格。点击某一项会激活它并显示边框，通过\n"
+"该边框你可以改变widget的位置和大小。所\n"
+"选项的属性显示在右边的属性窗口中。在左\n"
+"边的widget窗口中可以选择需要添加到对话\n"
+"框中的项。"
+
+msgid ""
+"Header/Resource Files\n"
+"\n"
+"This window shows header and all other project files except for source "
+"files. The statusbar shows the status of the insert/overwrite key as well as "
+"the cursor position by line and column."
+msgstr ""
+"头/资源文件\n"
+"\n"
+"这个窗口显示除源文件以外的所有文件。\n"
+"状态条显示插入/覆盖键的状态和光标所\n"
+"在的行号和列号。"
+
+msgid ""
+"C/C++ Files\n"
+"\n"
+"This window shows only source files. The statusbar shows the status of the "
+"insert/overwrite key as well as the cursor position by line and column."
+msgstr ""
+"C/C++文件\n"
+"\n"
+"这个窗口只显示源文件。状态条\n"
+"显示插入/覆盖键的状态和光标\n"
+"所在的行号和列号。"
+
+msgid ""
+"Documentation Browser\n"
+"\n"
+"The documentation browser window shows the online-documentation provided "
+"with kdevelop as well as library class documentation created. Use the "
+"documentation tree to switch between various parts of the documentation."
+msgstr ""
+"文档浏览器\n"
+"\n"
+"文档浏览器窗口显示在线KDevelop文档和\n"
+"生成的类库文档。使用文档树在不同部分\n"
+"间切换。"
+
+msgid ""
+"Messages\n"
+"\n"
+"The messages window shows the output of the compiler and used utilities like "
+"kdoc reference documentation. For compiler error messages, click on the "
+"error message. This will automatically open the source file and set the "
+"cursor to the line that caused the compiler error/warning. "
+msgstr ""
+"消息\n"
+"\n"
+"消息窗口显示编译器和工具的输出。对编\n"
+"译器的错误消息，可以点击该消息。这会\n"
+"自动打开源文件，并将光标置于引起编译\n"
+"错误或警告所在的行。"
+
+msgid ""
+"StdErr\n"
+"\n"
+"The Standard Error window displays messages of running applications using "
+"the cerr function to debug."
+msgstr ""
+"标准错误输出\n"
+"\n"
+"标准错误输出窗口显示正在运行的应用程\n"
+"序用cerr函数输出的消息以用于调试。"
+
+msgid ""
+"The program glimpse is not installed,\n"
+"therefore KDevelop can not index your\n"
+"documentation to provide a proper help\n"
+"functionality. We advise to install glimpse\n"
+"and create the searchdatabase later by choosing\n"
+"KDevelop Setup in the Options menu .\n"
+"\n"
+"As this is the last step of the Installation\n"
+"process, KDevelop will be started now.\n"
+"\n"
+"We hope you enjoy KDevelop and that it is a useful\n"
+"help to create new software.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"程序glimpse没有安装，因此，KDevelop无法在你的文档中\n"
+"编入索引以提供适当的帮助功能。我们建议安装glimpse并生\n"
+"成查找数据库（在＂选项＂菜单中选择＂设置KDevelop＂）\n"
+"\n"
+"由于这是安装过程的最后一步，现在将启动KDevelop\n"
+"\n"
+"我们希望你能够喜欢KDevelop，也希望它能对\n"
+"你生成新的应用程序有所帮助。\n"
+"\n"
+"KDevelop开发小组"
+
+msgid ""
+"Now KDevelop will perform the last step\n"
+"of the installation process with indexing\n"
+"your documentation. This will provide an extended\n"
+"help functionality and will give you the information\n"
+"you need."
+msgstr ""
+"现在,KDevelop将进行安装过程中的最后一步:\n"
+"为你的文档编索引。这会提供广泛的帮助并给\n"
+"你需要的信息。"
+
+msgid ""
+"                 Creating search database                                    "
+"                                                                     Please "
+"wait...                                                                      "
+"                                                                             "
+"      "
+msgstr ""
+"                      生成查找数据库                                         "
+"                                                                         请 "
+"等待...                                                                      "
+"                                                                             "
+"      "
+                                                         
+msgid "Installation successful !"
+msgstr "安装成功 ！"
+
+msgid ""
+"\n"
+"The installation process finished successfully.\n"
+"\n"
+"The KDevelop Team wishes that you will enjoy our\n"
+"program and we would be honoured for any feedback.\n"
+"\n"
+"The KDevelop Team"
+msgstr ""
+"\n"
+"安装过程已经成功完成。\n"
+"\n"
+"KDevelop开发小组希望你能够喜欢我们的程序，\n"
+"同时我们也衷心期待着你们的回馈。\n"
+"\n"     
+"KDevelop开发小组"
+
+
+msgid "KDevelop Installation"
+msgstr "KDevelop安装"
+
+msgid "Welcome to the KDevelop Setup !"
+msgstr "欢迎来到KDevelop安装程序！"
+
+msgid "Qt-Documentation Path:"
+msgstr "Qt文档路径："
+
+msgid ""
+"This installation program will check your system for helper programs needed "
+"by KDevelop. Also your documentation will be set up automatically.  Choose "
+"'Proceed` to invoke the automatic detection and the documentation generator. "
+"'Help' will give more information about the installation. Choosing 'Cancel' "
+"will stop the installation and KDevelop will be started without setting the "
+"initialvalues needed for proper functionality."
+msgstr ""
+"安装程序将在系统中检查KDevelop需要的帮助程序。\n"
+"同时,你的文档也会被自动设置。选择'开始处理'\n"
+"以进行自动探测和调用文档生成器.'帮助'将给出\n"
+"更多有关安装的信息.选择'取消'将停止安装过程\n"
+"KDevelop启动后,相应的功能会由于缺少处始值而\n"
+"而无发使用。"
+
+msgid "Proceed >>"
+msgstr "开始进行 >>"
+
+msgid "The selected path is not correct!"
+msgstr "选择的路径不对！"
+
+msgid ""
+"\n"
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Please choose the\n"
+"correct path."
+msgstr ""
+"\n"
+"选择的路径中没有Qt库文档，\n"
+"请选择正确的路径。"
+
+msgid ""
+"\n"
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Please choose 'Proceed'\n"
+"in any case. If you don't have a documentation,\n"
+"it will be generated automatically in one of the\n"
+"next steps"
+msgstr ""
+"\n"
+"选择的路径中没有Qt库文档，请一定选择'Proceed'\n"
+"如果你没有文档，在后继的某步中会自动生成。"
+
+msgid "        Automatic installation in progress... "
+msgstr "        自动安装在进行中... "
+
+msgid "Syntax-Highlighting"
+msgstr "语法高亮"
+
+msgid ""
+"\n"
+"Now you can choose the Syntax-Highlighting style\n"
+"KDevelop will use. The options are to set\n"
+"the highlighting to Emacs stlye or to the default\n"
+"settings of KWrite (k.a. 'Extended Editor')\n"
+"\n"
+"Which one do you want to use ?"
+msgstr ""
+"\n"
+"现在,你可以选择KDevelop中'语法高亮'的风格\n"
+"待选的有Emacs风格和KWrite风格。\n"
+"\n"
+"你要选择哪一个?"
+
+msgid "Emacs style"
+msgstr "Emacs风格"
+
+msgid "KWrite default"
+msgstr "KWrite确省风格"
+
+msgid "Checking needed programs..."
+msgstr "正在检查需要的程序..."
+
+msgid " was found."
+msgstr " 已经找到。"
+
+msgid " was not found."
+msgstr " 没有找到。"
+
+msgid "KPaint"
+msgstr "KPaint"
+
+msgid " -- search functionality will not be provided\n"
+msgstr " -- 查找功能将不被提供\n"
+
+msgid " -- generation of new frame applications will not be possible\n"
+msgstr " -- 无法生成框架应用程序\n"
+
+msgid "  -- printing available\n"
+msgstr "  -- 打印可用\n"
+
+msgid " -- printing can only use lpr\n"
+msgstr " -- 打印时只能使用lpr\n"
+
+msgid "Program test results"
+msgstr "程序测试结果"
+
+msgid ""
+"The following results have been determined for your system:\n"
+"\n"
+" "
+msgstr ""
+"以下的结果是根据你的系统做出的：\n"
+"\n"
+" "
+
+msgid "Qt Documentation found"
+msgstr "找到Qt文档"
+
+msgid ""
+"\n"
+"The Qt-Documentation has been found at:\n"
+"\n"
+msgstr ""
+"\n"
+"Qt文档已经找到，位于：\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"The correct path has been set.\n"
+" "
+msgstr ""
+"\n"
+"\n"
+"已经设置了正确的路径。\n"
+" "
+
+msgid ""
+"\n"
+"The Qt-library documentation could not\n"
+"be detected. Please insert the correct path\n"
+"to your Qt-documentation manually. Do you want\n"
+"to set it now ?\n"
+" "
+msgstr ""
+"\n"
+"无法探测到Qt库。请在Qt文档中手动插入正确的路径。\n"
+"你现在就设置吗？\n"
+" "
+
+msgid ""
+"    Please choose your Qt-Documentation path by pushing the selection button "
+"above."
+msgstr ""
+"    请按上面的按钮以选择你的Qt文档路径。 "
+
+msgid "KDE-Library Documentation found"
+msgstr "找到KDE库文档"
+
+msgid ""
+"\n"
+"The KDE-Library-Documentation has been found at:\n"
+"\n"
+msgstr ""
+"\n"
+"KDE库文档已经找到，位于：\n"
+"\n"
+
+msgid ""
+"\n"
+"The Program KDoc was not found on your system,\n"
+"a library documentation update can not be performed.\n"
+"KDoc is part of the kdesdk package that can be obtained\n"
+"from www.kde.org.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"没有在你的系统中找到KDoc程\n"
+"序，库文档更新将无法进行。\n"
+"KDoc是kdesdk包的一部分，你\n"
+"可以在www.kde.org中找到。\n"
+"\n"
+" "
+
+msgid ""
+"\n"
+"Now KDevelop will create a new KDE-library\n"
+"documentation. For that, you need the kdelibs\n"
+"package as the source package. If you don't have\n"
+"the kdelibs as sources, we advise to obtain them\n"
+"from www.kde.org. Mind that the sources should match\n"
+"your installed kdelibs version.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"现在，KDevelop将生成一个新的\n"
+"KDE库文档。为此，你需要\n"
+"kdelibs源文件包。如果你没有\n"
+"kdelibs源文件包，我们建议你\n"
+"从www.kde.org下载。不要忘\n"
+"了，包的版本号应该和你已安装\n"
+"的kdelibs相匹配。"
+"\n"
+" "
+
+msgid ""
+"                Creating KDE documentation                                   "
+"                                                                    Please "
+"wait...                                                                      "
+"                                                                             "
+"      "
+msgstr ""
+"                          生成KDE文档                                      "
+"                                                                        请 "
+"等待...                                                                      "
+"                                                                             "
+"      "
+
+msgid ""
+"\n"
+"\n"
+"This will exit the automatic installation process\n"
+"and start KDevelop with the default values !\n"
+"\n"
+"If you choose 'Continue', you will have to set all\n"
+"installation values manually in the KDevelop Setup\n"
+"dialog available in the options menu.\n"
+"\n"
+" "
+msgstr ""
+"\n"
+"\n"
+"这将退出自动安装过程并用缺省\n"
+"值启动KDevelop！\n"
+"\n"
+"如果你选择＂继续＂，你就得在选\n"
+"项菜单的设置KDevelop对话框中\n"
+"手动设置所有的安装值。"
+"\n"
+" "
+
+msgid "KDevelop Setup"
+msgstr "设置KDevelop"
+
+msgid "Make-Command"
+msgstr "连编命令"
+
+msgid "Select Make-Command:"
+msgstr "选择连编命令："
+
+msgid ""
+"Make-Command\n"
+"\n"
+"Select your system's make-command.\n"
+"Usually, this is make, FreeBSD users\n"
+"may use gmake. Mind that you can also\n"
+"add option parameters to your make-binary\n"
+"as well."
+msgstr ""
+"连编命令\n"
+"\n"
+"选择在你系统中的make命令。一\n"
+"般就是make，FreeBSD用户可能\n"
+"是gmake。注意，你可以为连编\n"
+"命令指定参数。"
+
+msgid "Autosave"
+msgstr "自动保存"
+
+msgid "enable Autosave"
+msgstr "允许自动保存"
+
+msgid "Select Autosave time-interval:"
+msgstr "选择自动保存时间间隔："
+
+msgid "3 min"
+msgstr "3分钟"
+
+msgid "5 min"
+msgstr "5分钟"
+
+msgid "15 min"
+msgstr "15分钟"
+
+msgid "30 min"
+msgstr "30分钟"
+
+msgid ""
+"Autosave\n"
+"\n"
+"If autosave is enabled, your currently\n"
+"changed files will be saved after the\n"
+"time-interval selected times out.\n"
+"\n"
+"Please select your timeout-value.\n"
+"Available are: 3 minutes, 5 minutes,\n"
+"15 minutes and 30 minutes."
+msgstr ""
+"自动保存\n"
+"\n"
+"如果允许自动保存，当到达指定\n"
+"的时间间隔后，你当前修改过的\n"
+"文件会被保存起来。"
+"\n"
+"请选择时间间隔，你可以选：\n"
+"3分钟，5分钟，15分钟或30分钟。"
+
+msgid "Autoswitch"
+msgstr "自动切换"
+
+msgid "enable Autoswitch"
+msgstr "允许自动切换"
+
+msgid "use Class View as default"
+msgstr "将类视图作为缺省"
+
+msgid ""
+"use Class View as default\n"
+"\n"
+"If this is enabled, KDevelop\n"
+"will automatically switch to\n"
+"the Class Viewer when switching.\n"
+"When disabled, KDevelop will\n"
+"use Logical File Viewer for\n"
+"autoswitching."
+msgstr ""
+"将类视图作为缺省\n"
+"\n"
+"如果允许，在切换时KDevelop会\n"
+"自动切换到类浏览器。\n"
+"如果禁止，KDevelop就切换到逻\n"
+"辑文件浏览器。"
+
+msgid ""
+"Autoswitch\n"
+"\n"
+"If autoswitch is enabled, KDevelop\n"
+"will open windows in the working\n"
+"view automatically according to\n"
+"most needed functionality.\n"
+"\n"
+"Disableing autoswitch means you\n"
+"will have to switch to windows\n"
+"yourself, including turning on and\n"
+"off the outputwindow."
+msgstr ""
+"自动切换\n"
+"\n"
+"如果允许自动切换，KDevelop将\n"
+"根据最需要的功能在当前工作视\n"
+"图中打开窗口。"
+"\n"
+"禁止自动切换意味着你必须自己\n"
+"在窗口间切换，包括打开和关闭\n"
+"输出窗口。"
+
+msgid "Startup"
+msgstr "启动"
+
+msgid ""
+"Startup\n"
+"\n"
+"The Startup group offers options for\n"
+"starting KDevelop"
+msgstr ""
+"启动\n"
+"\n"
+"启动组为启动KDevelop时提供参数"
+
+msgid "Startup Logo"
+msgstr "启动徽标"
+
+msgid ""
+"Startup Logo\n"
+"\n"
+"If Startup Logo is enabled, KDevelop will show the\n"
+"logo picture while it is starting."
+msgstr ""
+"启动徽标\n"
+"\n"
+"如果允许启动徽标，KDevelop将\n"
+"在启动时显示徽标图案。"
+
+msgid "Load last project"
+msgstr "加载最近的项目"
+
+msgid ""
+"Load last project\n"
+"\n"
+"If Load last project is enabled, KDevelop will load\n"
+"the last project used."
+msgstr ""
+"加载最近的项目\n"
+"\n"
+"如果允许加载最近的项目，\n"
+"KDevelop将在启动时加载\n"
+"最近的一个项目。"
+
+msgid ""
+"Tip of the Day\n"
+"\n"
+"If Tip of the Day is enabled, KDevelop will show the\n"
+"Tip of the Day every time it starts."
+msgstr ""
+"日集月累\n"
+"\n"
+"如果允许日集月累，KDevelop将\n"
+"在每次启动时显示一条小技巧。"
+
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by pressing the Update button below."
+msgstr ""
+"输入QT和KDE库文档的路径，文\n"
+"档浏览器要用到它。QT通常都带\n"
+"有完整的文档，而对KDE，你可\n"
+"以按下面的更新按钮轻易的生成\n"
+"文档。"
+
+msgid "Qt-Library-Doc:"
+msgstr "Qt库文档："
+
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"在这儿输入QT文档所在路径。为\n"
+"了更容易访问路径，请按右边的\n"
+"按钮改变目录。"
+"\n"
+"QT文档通常在 <i><blue>$QTDIR/html</i>"
+
+msgid "KDE-Libraries-Doc:"
+msgstr "KDE库文档："
+
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"you can create it by selecting the Update button\n"
+"below."
+msgstr ""
+"在这儿输入KDE文档所在路径。为\n"
+"了更容易访问路径，请按右边的\n"
+"按钮改变目录。"
+"\n"
+"如果你没有安装kdelibs文档，\n"
+"你可以按下面的更新按钮生成。"
+
+msgid "Update KDE-Documentation :"
+msgstr "更新KDE文档"
+
+msgid "Update..."
+msgstr "更新..."
+
+msgid ""
+"Update KDE-Documentation\n"
+"\n"
+"This lets you create or update the\n"
+"HTML-documentation of the KDE-libs.\n"
+"Mind that you have kdoc installed to\n"
+"use this function. Also, the kdelibs\n"
+"sources have to be available to create\n"
+"the documentation, as well as the \n"
+"Qt-Documentation path has to be set to\n"
+"cross-reference the KDE-Documentation\n"
+"with the Qt-classes."
+msgstr ""
+"更新KDE文档\n"
+"\n"
+"这使你能够生成或更新KDE库的\n"
+"HTML文档。注意，你需要安装\n"
+"kdoc才能使用这项功能。如果需\n"
+"要生成新文档则必需有kdelibs\n"
+"源文件另外，只有正确设置了QT\n"
+"文档的路径后才能使KDE文档和\n"
+"QT类进行交叉引用。"
+
+msgid "Create Search Database :"
+msgstr "生成查找数据库："
+
+msgid "Create..."
+msgstr "生成..."
+
+msgid ""
+"Create Search Database\n"
+"\n"
+"This will create a search database for glimpse\n"
+"which will be used to look up marked text in\n"
+"the documentation. We recommend updating the\n"
+"database each time you've changed the documentation\n"
+"e.g. after a kdelibs-update or installing a new\n"
+"Qt-library version."
+msgstr ""
+"生成查找数据库\n"
+"\n"
+"这将为glimpse生成查找数据库，\n"
+"在文档中查找标记的文本时要用\n"
+"到它。我们建议你在每次改变文\n"
+"档后都更新数据库，例如在更新\n"
+"kdelibs或安装了新版本的Qt库\n"
+"后。"
+
+msgid "Directories"
+msgstr "目录"
+
+msgid "General"
+msgstr "常规"
+
+msgid "Keys"
+msgstr "键"
+
+msgid "Documentation"
+msgstr "文档"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"Qt-library documentation. Please choose the\n"
+"correct path."
+msgstr ""
+"选择的路径没有Qt库文档。请选\n"
+"择正确的路径。"
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE-library documentation. Please choose the\n"
+"correct path or choose 'Update' to create a new\n"
+"documentation"
+msgstr ""
+"选择的路径没有KDE库文档。请\n"
+"选择正确的路径或“更新“以生\n"
+"成一个新文档。"
+
+msgid "Project/LFV"
+msgstr "项目/逻辑文件浏览器"
+
+msgid "New File..."
+msgstr "新建文件..."
+
+msgid "New Class..."
+msgstr "新建类..."
+
+msgid "New Group..."
+msgstr "新建组..."
+
+msgid "Show relative path"
+msgstr "显示相对路径"
+
+msgid "Group"
+msgstr "组"
+
+msgid "Remove Group"
+msgstr "删除组"
+
+msgid "Properties..."
+msgstr "属性..."
+
+msgid "Remove File from Project..."
+msgstr "从项目中删除文件..."
+
+msgid "Remove File from Disk..."
+msgstr "从磁盘上删除文件..."
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Commit"
+msgstr "提交"
+
+msgid "Add to Repository"
+msgstr "添加到仓库"
+
+msgid "Remove from Repository"
+msgstr "从仓库中删除"
+
+msgid "Group Properties..."
+msgstr "组属性..."
+
+msgid "New Group ..."
+msgstr "新建组..."
+
+#, c-format
+msgid ""
+"Do you really want to remove the file\n"
+"%s\n"
+"from project?\n"
+"\t\tIt will remain on disk."
+msgstr ""
+"你真的要从项目中删除该文件吗？\n"
+"%s\n"
+"\t\t它将保留在你的磁盘上。"
+
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+"你真的要删除所选的文件吗？\n"
+"    删除后无法恢复！"
+
+msgid "You must choose an existing file!"
+msgstr "你必需选择存在的文件！"
+
+msgid "Manual-File:"
+msgstr "手册文件："
+
+msgid "Button"
+msgstr "按钮"
+
+msgid "Class Generator"
+msgstr "类生成器"
+
+msgid "Classname"
+msgstr "类名"
+
+msgid ""
+"Insert your new classname here.\n"
+"Please try to keep some standards\n"
+"like using an upper `K` as the first\n"
+"letter for your new class, if it is\n"
+"a class for a KDE-project."
+msgstr ""
+"在这儿输入新类的名子。在命名时\n"
+"最好保持一定的标准。例如,新类\n"
+"如果是属于KDE项目，就使用大写\n"
+"字母“K“作为类名的第一个字母。"
+
+msgid "Baseclass"
+msgstr "基类"
+
+msgid ""
+"Insert the baseclass from which your new class\n"
+"will be derived from. If you have checked\n"
+"`generate a QWidget-Childclass`, the new class will\n"
+"be derived from QWidget. If no baseclass is named, the\n"
+"new class will not have a parent class."
+msgstr ""
+"指明你的新类要从那一个基类派生.\n"
+"如果你选了'生成QWidget的子类',\n"
+"新类就派生于QWidget。如果没\n"
+"有指定基类，则新类就没有父类。"
+
+msgid ""
+"Insert your header filename here.\n"
+"It is automatically inserted while\n"
+"you select the classname, but you can\n"
+"still edit it afterwards."
+msgstr ""
+"在这儿输入你的头文件名。在你\n"
+"选择类名时，它会自动被插入，\n"
+"但在以后你可以编辑它。"
+
+msgid "Impl."
+msgstr "实现"
+
+msgid ""
+"Insert your implementation filename here.\n"
+"It is automatically inserted while\n"
+"you select the classname, but you can\n"
+"still edit it afterwards."
+msgstr ""
+"在这儿输入你的实现文件名。在\n"
+"你选择类名时，它会自动被插入，\n"
+"但在以后你可以编辑它。"
+
+msgid ""
+"Insert a short description for your new class\n"
+"here for documenation purposes. This will be used\n"
+"for the API-documentation you can create or update\n"
+"after the class is created."
+msgstr ""
+"在这儿为你的新类插入一段简短\n"
+"的说明。你在产生该类后，生成\n"
+"或更新API文档时，需要用到这\n"
+"段说明。"
+
+msgid "Inheritence"
+msgstr "继承"
+
+msgid "Additional Options"
+msgstr "附加选项"
+
+msgid "use header/cpp-templates"
+msgstr "使用header/cpp模板"
+
+msgid "generate a QWidget-Childclass"
+msgstr "生成QWidget的子类"
+
+msgid ""
+"This offers additional options to your new class.\n"
+"If you check `use header/cpp-templates`, your name and\n"
+"email adress will be added into the new generated files\n"
+"If you check `generate a QWidget-Childclass`, the new class\n"
+"will use QWidget as the baseclass. This is also useful for\n"
+"using baseclasses derived from QWidget, e.g. QDialog."
+msgstr ""
+"这为你的新类提供了附加选项。如\n"
+"果你选了'使用header/cpp模板,\n"
+"你的名字和电子邮件地址会被加\n"
+"入到生成的文件中。如果你选了\n"
+"“生成QWidget子类“,新类会把\n"
+"QWidget作为基类。这对把\n"
+"QWidget的派生类(如QDialog)\n"
+"作为基类也有帮助。"
+
+msgid ""
+"Check here your inheritance from the chosen baseclass.\n"
+"You can derive from a baseclass as public,protected\n"
+"or private."
+msgstr ""
+"在这儿选择从基类派生的方式。\n"
+"你可以选择公有的，保护的或私\n"
+"有的。"
+
+msgid "You must enter a classname!"
+msgstr "你必需输入类名！"
+
+msgid "You must enter a name for the header-file!"
+msgstr "你必需为头文件指定名字！"
+
+msgid "You must enter a name for the implementation-file!"
+msgstr "你必需为实现文件指定名字！"
+
+msgid "lsm File - Linux Software Map"
+msgstr "lsm文件-Linux软件地图"
+
+msgid "kdelnk-File - for the KDE-Menu"
+msgstr "kdelnk文件-用于KDE菜单"
+
+msgid "Icon (*.xpm)"
+msgstr "图标 (*.xpm)"
+
+msgid "english (.sgml)"
+msgstr "sgml源文件(*.sgml)"
+
+msgid "C/C++ Header (*.h,*.hxx)"
+msgstr "C/C++头文件 (*.h,*.hxx)"
+
+msgid "C/C++ File (*.cpp,*.c,*.cc,*.C ...)"
+msgstr "C/C++文件 (*.cpp,*.c,*.cc,*.C ...)"
+
+msgid "Empty Textfile"
+msgstr "空文本文件"
+
+msgid "Qt/KDE Dialog (*.kdevdlg)"
+msgstr "Qt/KDE对话框 (*.kdevdlg)"
+
+msgid "Lexical File (*.l, *.ll, *.lxx, *.l++)"
+msgstr "lex词法分析文件(*.l,*.ll,*.lxx,*.l++)"
+
+msgid "Choose the type of the new file here."
+msgstr "在这儿选择新文件类型。"
+
+msgid "Manuals"
+msgstr "手册"
+
+msgid "Linux/KDE"
+msgstr "Linux/KDE"
+
+msgid "Filename:"
+msgstr "文件名："
+
+msgid "Enter a name for your new file here."
+msgstr "在这儿输入新文件名。"
+
+msgid "use Template"
+msgstr "使用模板"
+
+msgid "Check this if you want to use a template."
+msgstr "如果你要使用模板就选中它。"
+
+msgid "Project Options"
+msgstr "项目选项"
+
+msgid "add to Project"
+msgstr "添加到项目"
+
+msgid "Check this if you want to add the new file to your project."
+msgstr "如果你要将新文件添加到项目就选中它。"
+
+msgid "Location:"
+msgstr "位置："
+
+msgid "Enter the directory where the new file will be located."
+msgstr "输入新文件存储的目录。"
+
+msgid "Here you can choose a directory where the new file will be located."
+msgstr "在这儿你可以为新文件选择一个目录。"
+
+msgid "The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"
+msgstr "文件名必需以.cpp,.c,.cc,.C,.cxx,.ec或.ecpp结尾！"
+
+msgid "The filename must end with .h or .hxx!"
+msgstr "文件名必需以.h或.hxx结尾！"
+
+msgid "The filename must end with .lsm !"
+msgstr "文件名必需以.lsm结尾！"
+
+msgid "The filename must end with .kdelnk !"
+msgstr "文件名必需以.kdelnk结尾！"
+
+msgid "The filename must end with .sgml !"
+msgstr "文件名必需以.sgml结尾！"
+
+msgid "The filename must end with .kdevdlg !"
+msgstr "文件名必需以.kdevdlg结尾！"
+
+msgid "The filename must end with .xpm !"
+msgstr "文件名必需以.xpm结尾！"
+
+msgid "The filename must end with .l, .ll, .lxx or .l++ !"
+msgstr "文件名必需以.l,.ll,.lxx或.l++结尾！"
+
+msgid "You must enter a filename!"
+msgstr "你必需输入文件名！"
+
+msgid "You must choose a location,that is in your project-dir!"
+msgstr ""
+
+msgid "Files exists!"
+msgstr "文件已经存在！"
+
+msgid ""
+"You have added a file to the project that already exists.\n"
+"Do you want overwrite the old one?"
+msgstr ""
+"你要添加的文件在项目中已经\n"
+"存在。替换现有文件吗？"
+
+msgid "Information..."
+msgstr "信息..."
+
+msgid ""
+"Please make sure, that you have added\n"
+"\"AM_LEX_PROG\" to your configure.in!"
+msgstr ""
+"请确信在configure.in中已经\n"
+"加上了\"AM_LEX_PROG\"！"
+
+msgid "Set the general options of your project here."
+msgstr "在这儿设置项目的一般选项。"
+
+msgid "Set the project name here."
+msgstr "在这儿设置项目名。"
+
+msgid "Version:"
+msgstr "版本："
+
+msgid ""
+"Set your project version\n"
+"number here."
+msgstr ""
+"在这儿设置项目版本号。" 
+
+msgid "Insert your name or the name of your team here"
+msgstr "在这儿输入你或你们小组的名字"
+
+msgid "Insert your email-address here"
+msgstr "在这儿输入你的电子邮件地址"
+
+msgid "Modify Makefiles"
+msgstr "修改Makefiles"
+
+msgid "Version Control:"
+msgstr "版本控制："
+
+msgid "None"
+msgstr "无"
+
+msgid "Short Information:"
+msgstr "简短信息："
+
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not\n"
+"\n"
+"for README etc."
+msgstr ""
+"在这儿输入与项目有关的信息。\n"
+"该信息只用于表示项目本身，\n"
+"<b>而不会用在自述文件等中。"
+
+msgid "Set your Compiler options here"
+msgstr "在这儿设置编译器选项"
+
+msgid "Target"
+msgstr "目标"
+
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"在这儿指定机器类型和gcc的优\n"
+"化级别(0-3)。"
+
+msgid "Target Machine"
+msgstr "目标机器"
+
+msgid "your machine"
+msgstr "你的机器"
+
+msgid "i386v"
+msgstr "i386v"
+
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages. i386v is intended for\n"
+"cross-compilers to build a binary for an intel\n"
+"machine running Unix System V."
+msgstr ""
+"为你的程序指定目标机器的类型。一般只有\n"
+"在生成预编译的发布包时才需要选择非本\n"
+"地机器类型。i386v表示建立Intel/Unix V\n"
+"兼容的二进制程序。"
+
+msgid "only syntax check"
+msgstr "只进行语法检查"
+
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+"该选项将编译器设置为\n"
+"<i>-fsyntax-only</i> 。\n"
+"这可以使你只检查是否有\n"
+"语法错误而不必做其它事。"
+
+msgid "optimize"
+msgstr "优化"
+
+msgid "Optimization-level"
+msgstr "优化级别"
+
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+msgstr ""
+"在这儿为编译器设置-O选项。关\n"
+"闭优化相当于-O0。优化级别越\n"
+"高，编译时间越长，程序也越快。"
+
+msgid "Debugging"
+msgstr "调试"
+
+msgid "Set your debugging options here."
+msgstr "在这儿设置调试选项。"
+
+msgid "generate debugging information"
+msgstr "生成调试信息"
+
+msgid ""
+"Checking this turns on the -g flag\n"
+"to generate debugging information."
+msgstr ""
+"选中它将为编译器打开-g选项\n"
+"以生成调试信息。"
+
+msgid "Debug-level"
+msgstr "调试级别"
+
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+"在这儿设置调试级别。你可以选\n"
+"择级别1到3，分别代表选项\n"
+"-g1 到 -g3 。"
+
+msgid "generate extra information for gprof"
+msgstr "为gprof生成附加信息"
+
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+"为gprof生成附加的信息。gprof是一个\n"
+"分析程序,用来分析程序的性能等。"
+
+msgid "store temporary intermediate files"
+msgstr "保存临时的中间文件"
+
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+"在当前目录下保存通常的临时中\n"
+"间文件。即，如果编译\n"
+" <i>foo.c</i> 将会生成\n"
+"<i>foo.o，foo.i</i>和<i>foo.s"
+
+msgid "additional options:"
+msgstr "附加选项："
+
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+"在这儿输入调用gcc（通过设置\n"
+"CXXFLAGS环境变量）时的其它选项。"
+
+msgid "Compiler Options"
+msgstr "编译选项"
+
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+msgstr ""
+"选择你要使用的编译器警告。" 
+
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+msgstr ""
+"编译时带参数-Wall.它是许多推荐打开警告\n"
+"的组合。"
+
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+msgstr ""
+"编译时参数-W.它包括没有包含在-Wall\n"
+"中的特殊选项。请阅读gcc-Info以获取\n"
+"更进一步的信息。"
+
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+"如果某种构造在传统C和ANSI C中有所不同就显示警告。"
+
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+"如果有未定义的标识符用于#if指令中就显示警告。"
+
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+"如果一局部变量遮避了另一局部变量就显示警告。"
+
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+"如果有东西依赖于函数和void的大小(<i>size of</i>)\n"
+"就显示警告。GNU C把这些类型的大小置为1,以\n"
+"利于计算指向<i>void</i>的指针或函数指针。"
+
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+"当函数被强制转换成不匹配的类型时就显示警告。\n"
+"例如:把<i>int malloc()</i>转换成指针类型。"
+
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+"如果指针在强制转换时丢失了类型修饰符就显示\n"
+"警告。例如:把<i>const char *</i>转换成<i>char *</i>"
+
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+"如果在强制转换指针时,目标对齐增加就显示警告。\n"
+"例如:在只能在2或4字节边界访问整数的机器上,\n"
+"把<i>char *</i>转换成<i>int *</i>。"
+
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+"如果把字符串常量<i>const char[LENGTH]</i>的地址\n"
+"赋于一个非常量的字符串指针就显示警告.这些警\n"
+"告有利于你在编译时找到写常量字串的代码。当然\n"
+"你必须在声明和原型中小心使用<i>const</i>,否则\n"
+"你会得到一堆讨厌的东西,这就是我们没在<i>-Wall<i>\n"
+"中放这些警告的原因。"
+
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+"如果带符号数和无符号数相比较就显示警告。"
+
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+"如果定义或调用了返回结构或公用体的函数\n"
+"就显示警告。(在可以返回数组的语言中也将\n"
+"引起警告)"
+
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+"如果函数在定义或声明时没有指定参数类型\n"
+"就显示警告。(旧式的函数中,如果定义前的\n"
+"声明指定了参数类型,在定义时可以省略。)"
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+"如果全局函数在定义时没有预先声明函数原型\n"
+"就现实警告。即使定义本身提供了原型。这可以\n"
+"找到未在头文件中声明的全局函数。"
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+"如果全局函数在定义时没有预先声明就显示警告。\n"
+"即使该定义有原型。使用此选项可以找到未在头\n"
+"文件中声明的全局函数。"
+
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+"如果在同一域中某事物被声明了一次以上就显示\n"
+"警告。即使允许多次声明或对程序没有影响。"
+
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+"如果在函数内出现<i>extern</i>声明就显示警告。"
+
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+"如果无法将函数置为内嵌的就显示警告。\n"
+"这些函数在声明中使用了inline或指定了\n"
+"<i>-finline-functions</i>参数。"
+
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr ""
+"如果在程序中使用了旧式(C风格)转换就显示警告。"
+
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+msgstr ""
+"如果派生类定义的虚方法可能是一个错误的\n"
+"函数声明就显示警告(仅C++)。在派生类中,\n"
+"定义的虚方法必须与基类的声明一致。如果\n"
+"打开该选项,而编译器发现定义了与基类的\n"
+"声明不匹配的虚方法就发出警告。"
+
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+
+msgid "make all Warnings into errors"
+msgstr "把所有的警告转化成错误"
+
+msgid "Make all warnings into errors."
+msgstr "把所有的警告转化成错误"
+
+msgid "Compiler Warnings"
+msgstr "编译器警告"
+
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+"设置连接器选项并选择加入到\n"
+"项目中的库。"
+
+msgid "library flags"
+msgstr "库标志"
+
+msgid "Set your library flags here."
+msgstr "在这儿设置你的库标志"
+
+msgid "remove all symbol table and relocation information from the executable"
+msgstr "删除可执行文件中的符号表和重定位信息。"
+
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+"如果你要使用调试器,你就必须在目标文件\n"
+"中保留那些信息.让编译器生成调试信息后\n"
+"又用该选项予以删除是毫无必要的."
+
+msgid "prevent using shared libraries"
+msgstr "不使用共享库"
+
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+"在支持动态连接的系统中，该选\n"
+"项阻止与共享库连接。在其它系\n"
+"统中，该选项无效。"
+
+msgid "additional flags:"
+msgstr "附加标志："
+
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+"在这儿输入调用连接器（通过设置\n"
+"LDFLAGS环境变量）时的其它选项。"
+
+msgid "libraries"
+msgstr "库"
+
+msgid "Choose your libraries here."
+msgstr "在这儿选择你需要库。"
+
+msgid "X11 basics\n"
+msgstr "X11基本库\n"
+
+msgid "X11 extensions\n"
+msgstr "X11扩展库\n"
+
+msgid "KDE basics"
+msgstr "KDE基本库"
+
+msgid "KDE user interface"
+msgstr "KDE用户界面库"
+
+msgid ""
+"KDE HTML widget :\n"
+"this includes -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
+msgstr ""
+"KDE HTML widget：\n"
+"包括 -lkhtmlw, -lkimgio, -ljpeg,\n"
+"-ltiff, -lpng, -lm, -ljscript."
+
+msgid "KDE kfm functionality"
+msgstr "KDE文件管理库(kfm)"
+
+msgid "KDE file handling"
+msgstr "KDE文件处理库"
+
+msgid "KDE Spell checking"
+msgstr "KDE拼写检查库"
+
+msgid "KDE addressbook"
+msgstr "KDE地址簿库"
+
+msgid "additional libraries:"
+msgstr "附加库："
+
+msgid "Add additional libraries here."
+msgstr "在这儿添加附加库。"
+
+msgid "Linker Options"
+msgstr "连接器选项"
+
+msgid ""
+"This dialog is for setting\n"
+"your make options."
+msgstr ""
+"该对话框用于设置连编选项。"
+
+msgid "Print debug information"
+msgstr "打印调试信息"
+
+msgid "Continue after errors"
+msgstr "发生错误后继续"
+
+msgid "Print the data base"
+msgstr "打印数据基础"
+
+msgid "Environment variables"
+msgstr "环境变量"
+
+msgid "No built-in rules"
+msgstr "无内建规则"
+
+msgid "Touch files"
+msgstr "更新文件的修改日期"
+
+msgid "Ignore all errors"
+msgstr "忽略所有错误"
+
+msgid "Silent operation"
+msgstr "安静操作"
+
+msgid "Print working directory"
+msgstr "打印工作目录"
+
+msgid "job number"
+msgstr "任务数"
+
+msgid "set modified"
+msgstr "设为已更改"
+
+msgid "additional options"
+msgstr "附加选项"
+
+msgid "Make Options"
+msgstr "连编选项"
+
+msgid ""
+"Pressing the folder button lets you choose\n"
+"a file which will be set modified. This will\n"
+"recompile the file on the next build run."
+msgstr ""
+"按文件夹按钮，选择需要设为已更改的文件.\n"
+"该文件在下次选择'建立'时会被重新编译."
+
+msgid ""
+"Print  debugging  information  in  addition to normal\n"
+"processing. The debugging information tells you which\n"
+"files  are being considered for remaking, which file-\n"
+"times are being compared and with what results, which\n"
+"files  actually  need  to  be  remade, which implicit\n"
+"rules are considered and which  are  applied---every璡n"
+"thing  interesting about how make decides what to do."
+msgstr ""
+
+msgid ""
+"Set any other additional options for your\n"
+"make-program here."
+msgstr ""
+"在这儿为你的连编程序设置其它的附加选项。"
+
+msgid ""
+"Print  the data base (rules and variable values) that\n"
+"results from reading the makefiles; then  execute  as\n"
+"usual  or  as  otherwise specified.  This also prints\n"
+"the version information."
+msgstr ""
+"打印读入makefiles的数据基础(规则和变量值)\n"
+"后继续执行.这也会打印版本信息。"
+
+msgid ""
+"Eliminate  use  of the built-in implicit rules.  Also\n"
+"clear out the default list  of  suffixes  for  suffix\n"
+"rules."
+msgstr ""
+"取消内建的固有规则.同时也清除缺省的后缀名规则。"
+
+msgid ""
+"Give variables taken from the environment  precedence\n"
+"over variables from makefiles."
+msgstr ""
+
+msgid ""
+"Continue  as  much as possible after an error. While\n"
+"the target that failed, and those that depend on it,\n"
+"cannot  be  remade, the  other dependencies of these\n"
+"targets can be processed all the same."
+msgstr ""
+"在发生错误后尽可能地继续.虽然该目标及其依赖\n"
+"无法生成,但是其它的从属目标可以得到处理。"
+
+msgid ""
+"Touch  files  (mark  them  up  to date without really\n"
+"changing them) instead  of  running  their  commands.\n"
+"This  is used to pretend that the commands were done,\n"
+"in order to fool future invocations of make."
+msgstr ""
+"更改文件日期.这可以让一个不需要更新的目标\n"
+"在下次连编时重新编译。"
+
+msgid ""
+"Print  a  message  containing  the  working directory\n"
+"before and after other processing.  This may be  use璡n"
+"ful  for  tracking down errors from complicated nests\n"
+"of recursive make commands."
+msgstr ""
+"在处理过程之前和之后打印工作目录.这有助于在\n"
+"复杂的连编命令中追踪错误."
+
+msgid ""
+"Silent operation; do not print the commands as they\n"
+"are executed."
+msgstr ""
+"安静操作；不打印要执行的命令"
+
+msgid ""
+"Ignore all errors in commands executed to\n"
+"remake files."
+msgstr ""
+"忽略执行重新连编时的所有错误。"
+
+msgid ""
+"Specifies the number of jobs (commands) to run\n"
+"simultaneously. If you have a single CPU-System\n"
+"it is not recommended to choose more then 2."
+msgstr ""
+"指定同时运行的任务（命令）数.如果你用的是\n"
+"单CPU系统，该数目最好不要超过2。"
+
+msgid ""
+"Pretend that the target file has just been  modified.\n"
+"It  is  almost the same as running a touch command on\n"
+"the given file before running make, except  that  the\n"
+"modification  time is changed only in the imagination\n"
+"of make."
+msgstr ""
+"把目标文件设置成已更改.它其实相当于对该文件\n"
+"运行touch后在执行连编,只不过更改的日期无法\n"
+"预测。"
+
+msgid "File (Registered)"
+msgstr "文件(已注册)"
+
+msgid "Add File to Project..."
+msgstr "向项目添加文件..."
+
+#, c-format
+msgid ""
+"Do you want to add the file\n"
+"%s\n"
+"to the project ?"
+msgstr ""
+"你是否要将文件\n"
+"%s\n"
+"添加到项目中？"
+
+msgid "Question"
+msgstr "问题"
+
+#, c-format
+msgid ""
+"Do you really want to delete the file\n"
+"%s\n"
+"from the disk?\n"
+"There is no way to restore it!"
+msgstr ""
+"你真的要将文件\n"
+"%s\n"
+"从磁盘上删除吗？\n"
+"删除后无法恢复！"
+
+msgid "Tools-Menu Configuration"
+msgstr "工具菜单配置"
+
+msgid "&Add"
+msgstr "添加(&A)"
+
+msgid "Click here to add a tool specified below."
+msgstr "单击这儿添加一个下面指定的工具。"
+
+msgid "De&lete"
+msgstr "删除(&L)"
+
+msgid "Click here to delete an entry from the list."
+msgstr "单击这儿从列表中删除一条目。"
+
+msgid "Move &Up"
+msgstr "移动到上面(&U)"
+
+msgid "Click here to move up the selected entry."
+msgstr "单击这儿将选择的条目移到上面。"
+
+msgid "Move &Down"
+msgstr "移动到下面(&D)"
+
+msgid "Click here to move down the selected entry."
+msgstr "单击这儿将选择的条目移到下面。"
+
+msgid "Executable:"
+msgstr "可执行文件："
+
+msgid "Here you can browse through the disc to select an executable file."
+msgstr "你可以浏览磁盘并选择一个可执行文件。"
+
+msgid "Enter the name of the executable file here."
+msgstr "在这儿输入可执行文件名。"
+
+msgid "Menu Text:"
+msgstr "菜单文本："
+
+msgid "Enter a menu text for the executable here."
+msgstr "在这儿为可执行文件输入显示在菜单中的文本。"
+
+msgid "Arguments:"
+msgstr "参数："
+
+msgid "Enter arguments for the executable here."
+msgstr "在这儿输入可执行文件的参数。"
+
+msgid "Executable not set!"
+msgstr "未设置可执行文件！"
+
+msgid "You have to set an executable to add to the Tools-Menu first."
+msgstr "你必需首先指定要添加到工具菜单的可执行文件。"
+
+msgid ""
+"The selected file is not an executable. Please choose an executable filename."
+msgstr ""
+"选择的文件不可执行。请选择一个可执行的文件名."
+
+msgid ""
+"The selected executable is not in your Path. Please update your $PATH "
+"environment variableto execute the selected program as a tool."
+msgstr ""
+"所选的可执行文件不在你的路径\n"
+"中。请更新你的$PATH环境变量，\n"
+"所选程序才能作为工具执行。"
+
+msgid "Menu text not set!"
+msgstr "没有设置菜单文本！"
+
+msgid ""
+"You have to insert a menuentry text to add the selected program to the "
+"Tools-Menu."
+msgstr ""
+"你必需为添加到工具菜单中的程\n"
+"序输入菜单文本。"
+
+msgid "KDE Library Documentation Update..."
+msgstr "KDE库文档更新..."
+
+msgid "Choose installation mode:"
+msgstr "选择安装模式："
+
+msgid "new KDE Libs sources path:"
+msgstr "新的KDE库源路径："
+
+msgid "Delete old Documentation and install to recent Documentation path"
+msgstr "删除旧文档并安装至上一次的文档路径"
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+"选择该项将删除当前文档并将新\n"
+"生成的文档安装到同一目录下。"
+
+msgid "Delete old Documentation and install to new Documentation path"
+msgstr "删除旧文档并安装至新的文档路径"
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+msgstr ""
+"选择该项将删除当前文档并将新\n"
+"生成的文档安装到你选择的目录下。"
+
+msgid "Leave old Documention untouched and install to new Documention path"
+msgstr "保留旧文档并安装至新的文档路径"
+
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+"这不会删除旧的文档,你可以为新文档\n"
+"另选一个路径。注意:不要选择旧文档\n"
+"所在路径,这会把新旧文件混在一起。"
+
+msgid "new KDE Libs Documentation path:"
+msgstr "新的KDE库文档路径："
+
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+"输入当前KDE库的源代码路径。"
+
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+"输入新文档的安装路径。注意：\n"
+"在安装过程中，路径信息会自动\n"
+"更新，你不需要将它们改变成新\n"
+"文档的路径。"
+
+msgid ""
+"The chosen path for the KDE-Libs does not\n"
+"lead to the KDE Libraries. Please choose the\n"
+"correct path.This is where you have unpacked\n"
+"e.g. a kdelibs snapshot a la /snapshot/kdelibs."
+msgstr ""
+"所选路径中没有KDE库.请选择正确\n"
+"的路径."
+
+msgid ""
+"The Qt-Documentation path is not set correctly.\n"
+"If you want your KDE-library documentation to\n"
+"be cross-referenced to the Qt-library, you have\n"
+"to set the correct path to your Qt-library\n"
+"documentation first.\n"
+"Do you want to set the Qt-Documentation path first ?"
+msgstr ""
+"Qt文档路径设置不正确。如果你\n"
+"希望你的KDE库文档能和Qt文档\n"
+"交叉引用，你就必需首先为Qt库\n"
+"文档设置正确的路径。你要首先\n"
+"设置Qt文档路径吗？"
+
+msgid "New KDE Documentation Directory..."
+msgstr "新的KDE文档目录..."
+
+msgid "KDE Libs Directory..."
+msgstr "KDE库目录..."
+
+msgid ""
+"The chosen path does not lead to the\n"
+"KDE Libraries. Please choose the\n"
+"correct path."
+msgstr ""
+"所选的路径没有KDE库。\n"
+"请选择正确的路径。"
+
+msgid "KDevelop"
+msgstr "KDevelop"
+
+msgid "Welcome !"
+msgstr "欢迎 ！"
+
+msgid "Tutorials"
+msgstr "教程"
+
+msgid "KDE Library Reference"
+msgstr "KDE库参考"
+
+msgid "KDE 2 Developer Guide"
+msgstr "KDE 2开发者指南"
+
+msgid "C/C++ Reference"
+msgstr "C/C++ 参考"
+
+msgid "Qt/KDE Libraries"
+msgstr "Qt/KDE库"
+
+msgid "Qt Library"
+msgstr "Qt库"
+
+msgid "KDE Core Library"
+msgstr "KDE核心库"
+
+msgid "KDE UI Library"
+msgstr "KDE UI库"
+
+msgid "KDE KFile Library"
+msgstr "KDE KFile库"
+
+msgid "KDE HTMLW Library"
+msgstr "KDE HTMLW库"
+
+msgid "KDE KAB Library"
+msgstr "KDE KAB库"
+
+msgid "KDE KSpell Library"
+msgstr "KDE KSpell库"
+
+msgid "Documentation Base"
+msgstr "文档基本"
+
+msgid "Add Entry..."
+msgstr "添加条目..."
+
+msgid "Remove Entry"
+msgstr "删除条目"
+
+msgid "Current Project"
+msgstr "当前项目"
+
+msgid "API documentation"
+msgstr "API文档"
+
+msgid "User manual"
+msgstr "用户手册"
+
+msgid "Search in Files..."
+msgstr "在文件中查找..."
+
+msgid "&Pattern:"
+msgstr "样式(&P)："
+
+msgid "&Template:"
+msgstr "模板(&T)："
+
+msgid "&Files:"
+msgstr "文件(&F)："
+
+msgid "&Directory:"
+msgstr "目录(&D)："
+
+msgid "&Recursive"
+msgstr "包括子目录(&R)"
+
+msgid "9999 matches"
+msgstr "9999匹配"
+
+msgid "Done"
+msgstr "完成"
+
+msgid ""
+"Enter the regular expression you want to search for here.\n"
+"Possible meta characters are:\n"
+"<bold>.</bold> - Matches any character\n"
+"<bold>^</bold> - Matches the beginning of a line\n"
+"<bold>$</bold> - Matches the end of a line\n"
+"<bold>\\\\\\<</bold> - Matches the beginning of a word\n"
+"<bold>\\\\\\></bold> - Matches the end of a word\n"
+"\n"
+"The following repetition operators exist:\n"
+"<bold>?</bold> - The preceding item is matches at most once\n"
+"<bold>*</bold> - The preceding item is matched zero or more times\n"
+"<bold>+</bold> - The preceding item is matched once or more times\n"
+"<bold>{<i>n</i>}</bold> - The preceding item is matched exactly <i>n</i> "
+"times\n"
+"<bold>{<i>n</i>,}</bold> - The preceding item is matched <i>n</i> or more "
+"times\n"
+"<bold>{,<i>n</i>}</bold> - The preceding item is matched at most <i>n</i> "
+"times\n"
+"<bold>{<i>n</i>,<i>m</i>}</bold> - The preceding item is matched at least "
+"<i>n</i>,\n"
+"   but at most <i>m</i> times.\n"
+"\n"
+"Furthermore, backreferences to bracketed subexpressions are\n"
+"available via the notation \\\\<i>n</i>."
+msgstr ""
+"在这儿输入你要查找的正则表达式\n"
+"可能的元字符有：\n"
+"<bold>.</bold> - 匹配任何字符\n"
+"<bold>^</bold> - 匹配行首\n"
+"<bold>$</bold> - 匹配行尾\n"
+"<bold>\\\\\\<</bold> - 匹配字首\n"
+"<bold>\\\\\\></bold> - 匹配字尾\n"
+"\n"
+"以下是重复操作符：\n"
+"<bold>?</bold> - 前面的项至少匹配一次\n"
+"<bold>*</bold> - 前面的项匹配零或多次\n"
+"<bold>+</bold> - 前面的项匹配一或多次\n"
+"<bold>{<i>n</i>}</bold> - 前面的项精确匹配<i>n</i>次\n"
+"<bold>{<i>n</i>,}</bold> - 前面的项匹配<i>n</i>或多次\n"
+"<bold>{,<i>n</i>}</bold> - 前面的项至多匹配<i>n</i>次\n"
+"<bold>{<i>n</i>,<i>m</i>}</bold> - 前面的项至少匹配<i>n</i>次，\n"
+"     至多匹配<i>m</i>次．\n"
+"\n"
+"此外，可以使用记号"
+"\\\\<i>n</i>\n"
+"对用括号括起来的子表达式进行向\n"
+"后引用。"
+
+msgid ""
+"Enter the file name pattern of the files to search here.\n"
+"You may give several patterns separated by commas"
+msgstr ""
+"在这儿输入要查找的文件的文件\n"
+"名样式。你可以用逗号分隔多各\n"
+"样式。"
+
+#, c-format
+msgid ""
+"You can choose a template for the pattern from the combo box\n"
+"and edit it here. The string %s in the template is replaced\n"
+"by the pattern input field, resulting in the regular expression\n"
+"to search for."
+msgstr ""
+"你可以从组合框中为样式选择并编辑一个模板.\n"
+"模板中的字符串%s将被样式域中的输入所代替,\n"
+"从而生成要查找的正则表达式."
+
+msgid ""
+"The results of the grep run are listed here. Select a\n"
+"filename/line number combination and press Enter or doubleclick\n"
+"on the item to show the respective line in the editor."
+msgstr ""
+"这儿列出了查找结果.你可以在文件名/行的组\n"
+"合上按回车或双击,编辑器中会显示相应的行。"
+
+msgid " matches"
+msgstr "项匹配"
+
+msgid "Canceled"
+msgstr "被取消"
+
+msgid "No matches found"
+msgstr "未发现匹配项"
+
+msgid "Syntax error in pattern"
+msgstr "样式语法错误"
+
+msgid "Did you know...?"
+msgstr "你知道吗...？"
+
+msgid "show Tip of the day on next start"
+msgstr "在下次启动时显示日集月累"
+
+msgid "Next Tip"
+msgstr "下一条"
+
+msgid "Tipdatabase not found ! Please check your installation."
+msgstr "未找到小技巧数据库！请检查安装。"
+
+msgid "ClassWizard Tool"
+msgstr "类向导工具"
+
+msgid "Virtual functions"
+msgstr "虚方法"
+
+msgid "Available:"
+msgstr "可用的："
+
+msgid "Used:"
+msgstr "已用的："
+
+msgid "Added method"
+msgstr "已添加的方法"
+
+msgid "The virtual method implementation has been added."
+msgstr "虚方法的实现部分已加入。"
+
+msgid "Print subtree"
+msgstr "打印子树"
+
+msgid "Fold all"
+msgstr "全部折叠"
+
+msgid "Unfold all"
+msgstr "全部展开"
+
+msgid "Could not add item"
+msgstr "无法添加项"
+
+msgid ""
+"Sorry, the maximum item count per dialog has been arrived.\n"
+"\n"
+"You may change the \"MAX_WIDGETS_PER_DIALOG\" constant in the "
+"\"kdlgedit/kdlgeditwidget.h\" file and recompile the program."
+msgstr ""
+"抱歉，已到达每个对话框最多添加项的上限。\n"
+"\n"
+"你可以在kdlgedit/kdlgeditwidget.h\n"
+"中修改＂MAX_WIDGETS_PERDIALOG＂常量\n"
+"并重新编译。"
+
+msgid "New Dialog..."
+msgstr "新建对话框..."
+
+msgid "Delete Dialog..."
+msgstr "删除对话框..."
+
+msgid "KDevelop Dialog Editor: "
+msgstr "KDevelop对话框编辑器："
+
+msgid ""
+"You have modified the current dialog\n"
+"Do you want to save it?"
+msgstr ""
+"当前对话框已经更改，你是否保存？" 
+
+msgid "Dialog editor (WYSIWYG Preview)"
+msgstr "对话框编辑器（所见即所得预览）"
+
+msgid ""
+"Error loading kdlgloader library (libkdlgloader.so).\n"
+"\n"
+"Normally it is supposed to be installed together\n"
+"with kdevelop (if you are running a release version).\n"
+"If so and no library was installed please send a bug\n"
+"report though the Help|Bug Report menu. However,\n"
+"you can also get the library on the KDevelop website."
+msgstr ""
+"加载kdlgloader库(libkdlgloader.so)\n"
+"时发生错误.\n"
+"\n"
+"通常,它是和KDevelop安装在一起的(如\n"
+"果你使用的正式版)。你可以通过帮助菜\n"
+"单上的Bug报告通知我们。当然,你也可\n"
+"以从KDevelop的站点上下载该库。"
+
+msgid "Error saving temporary dialog file."
+msgstr "在保存临时文件时发生错误。"
+
+msgid ""
+"Do you really want to delete the selected dialog?\n"
+"        There is no way to restore it!"
+msgstr ""
+"你是否真的要删除所选对话框？\n"
+"     删除后无法恢复！"
+
+msgid "Add item"
+msgstr "添加项"
+
+msgid ""
+"Into which widget do you want to insert this item ?\n"
+"\n"
+"You either may add it to the main widget or to the selected\n"
+"widget respectively to the selected items' parent widget."
+msgstr ""
+"你要把该项加入到哪一个Widget?\n"
+"\n"
+"你可以把它加到主Widget中,也可\n"
+"以加到所选的Widget中。"
+
+msgid "&Main"
+msgstr "主(&M)"
+
+msgid "&Selected"
+msgstr "已选的(&S)"
+
+msgid ""
+"<b><u><brown>QuickHelp<black></u></b>\n"
+"\n"
+msgstr ""
+"<b><u><brown>快速帮助<black></u></b>\n"
+"\n"
+
+msgid ""
+"<b><i>Raise</i></b>\n"
+"\n"
+"Brings the item one step towards the topmost one in the hierarchy.\n"
+"\n"
+msgstr ""
+"<u>上升</u>\n"
+"\n"
+"使项上升一步。在项与项发生重叠时,你可以使用它。\n"
+"\n"
+
+msgid ""
+"<b><i>Lower</i></b>\n"
+"\n"
+"On the contrary to <i>raise</i> this function brings the item one step "
+"backwards in the hierarchy, to the bottommost item.\n"
+"\n"
+msgstr ""
+"<u>下降</u>\n"
+"\n"
+"使项下降一层。在项与项发生重叠时,你可以使用它。\n"
+"\n"
+
+msgid ""
+"<b><i>Raise to top</i></b>\n"
+"\n"
+"Sets the item to be the topmost one.\n"
+"\n"
+msgstr ""
+"<u>升到顶端</u>\n"
+"\n"
+"把项带到最顶端\n"
+"\n"
+
+msgid ""
+"<b><i>Raise to bottom</i></b>\n"
+"\n"
+"Makes the item to become the bottommost.\n"
+"\n"
+msgstr ""
+"<u>降到底端</u>\n"
+"\n"
+"把项带到最底端\n"
+"\n"
+
+msgid ""
+"<b><i>Copy</i></b>\n"
+"\n"
+"Selects the item to be copied. That means, if you choose paste later, this "
+"item will be inserted.\n"
+"\n"
+msgstr ""
+"<u>复制</u>\n"
+"\n"
+"选择要复制的项。也就是说，如果你在以后选择了粘贴,\n"
+"该项将被插入。\n "
+"\n"
+
+msgid ""
+"<b><i>Delete</i></b>\n"
+"\n"
+"Removes the selected item from the dialog.\n"
+"\n"
+msgstr ""
+"<u>删除</u>\n"
+"\n"
+"将所选项从对话框中删除。\n"
+"\n"
+
+msgid ""
+"<b><i>Cut</i></b>\n"
+"\n"
+"Copies the item and removes it from the dialog. But unlike toe delete "
+"function you will be able to insert a copy of the item using the "
+"<i>paste</i> function.\n"
+"\n"
+msgstr ""
+"<u>剪切</u>\n"
+"\n"
+"复制该项并从对话框中删除。它与删除的不同之处在于:\n"
+"你可以使用<i>复制</i>插入该项的一个拷贝.\n"
+"\n"
+
+msgid ""
+"<b>Note :</b> Since the selected item is the main widget only few of the "
+"normally available functions are enabled. Open another item's help to get "
+"information about the other functions.\n"
+"\n"
+msgstr ""
+"<b>注意:</b>由于所选的项是主Widget,因而只有很少的功能可用.\n"
+"打开另外一项的帮助以获得其它相关的信息.\n"
+"\n"
+
+msgid ""
+"<b><i>Paste</i></b>\n"
+"\n"
+"Inserts an item you have copied before using the <i>Copy</i>function at the "
+"current position of the mouse pointer.\n"
+"\n"
+msgstr ""
+"<u>粘贴</u>\n"
+"\n"
+"把你先前用<i>复制</i>拷贝的项插入到鼠标当前位置。\n"
+"\n"
+
+#, c-format
+msgid ""
+"Error reading dialog file (line %d) :\n"
+"   Could not insert item (%s). Seems like I don't know it :-("
+msgstr ""
+"在读入对话框文件时发生错误（第%d行）：\n"
+"   无法插入项（%s）。"
+
+msgid "&Ignore"
+msgstr "忽略(&I)"
+
+msgid ""
+"Error while reading the dialog file.\n"
+"\n"
+"Note : If you choose continue now the\n"
+"dialog may be loaded and saved incorrectly."
+msgstr ""
+"在读入对话框文件时发生错误。\n"
+"\n"
+"注意：如果你选择继续，对话框可\n"
+"能被错误的加载和保存。"
+
+msgid "Aborted reading dialog file"
+msgstr "中止读入对话框文件"
+
+msgid ""
+"Reading aborted !\n"
+"\n"
+"The dialog has not been loaded completely.\n"
+"Open another dialog or create a new one\n"
+"if you don't like the result."
+msgstr ""
+"读入被中止！"
+"\n"
+"对话框没有被完整的读入。如果你\n"
+"不喜欢这个结果，打开另一个或创\n"
+"建一个新的。"
+
+msgid "&Raise"
+msgstr "上升(&R)"
+
+msgid "&Lower"
+msgstr "下降(&L)"
+
+msgid "Raise to &top"
+msgstr "升到顶端(&T)"
+
+msgid "Lower to &bottom"
+msgstr "降到底端(&B)"
+
+msgid "Main Widget"
+msgstr "主Widget"
+
+msgid "Dialog Class"
+msgstr "对话框类"
+
+msgid "Custom"
+msgstr "定制"
+
+msgid "Custom Properties:"
+msgstr "定制属性："
+
+msgid "Custom Class:"
+msgstr "定制类："
+
+msgid "Custom Header:"
+msgstr "定制头："
+
+msgid "Files:"
+msgstr "文件："
+
+msgid "Classname:"
+msgstr "类名："
+
+msgid "Header File:"
+msgstr "头文件："
+
+msgid "C++ File:"
+msgstr "C++文件："
+
+msgid "Data File:"
+msgstr "数据文件："
+
+msgid "Directory:"
+msgstr "目录："
+
+msgid "Generate Dialog... (C++ Sourcecode)"
+msgstr "生成对话框...（C++源代码）"
+
+msgid "You must enter a name for the data-file!"
+msgstr "你必须输入数据文件名！"
+
+msgid ""
+"You must enter a name for the header-file\n"
+" for the custom class!"
+msgstr ""
+"你必须为定制的类输入头文件名！"
+
+msgid "You must enter a name for the custom class!"
+msgstr "你必须输入定制的类名！"
+
+msgid "Horizontal Grid Size :"
+msgstr "水平网格尺寸："
+
+msgid "Vertical Grid Size :"
+msgstr "垂直网格尺寸："
+
+msgid "No Grid"
+msgstr "没有网格"
+
+msgid "Pixels"
+msgstr "象素"
+
+msgid "Square Grid"
+msgstr "正方形网格"
+
+msgid ""
+"<brown><b>\"Set Grid\" dialog<black></b>\n"
+"\n"
+"Within this dialog you can set the desired\n"
+"grip size or disable the grid.\n"
+"\n"
+"KDlgEdit allows you to set the horizontal\n"
+"and vertical grid size independently. That\n"
+"means you can set different values for each\n"
+"direction."
+msgstr ""
+"<brown><b>＂设置网格＂对话框<black></b>\n"
+"\n"
+"在对话框中，你可以设置需要的网格尺寸\n"
+"或者禁用网格。\n"
+"\n"
+"KDlgEdit允许你分别设置水平和垂直网格\n"
+"尺寸。也就是说，你可以为各个方向指定\n"
+"不同的值。"
+
+msgid ""
+"<brown><b>(Horizontal) Grid Size<black></b>\n"
+"\n"
+"Use this field to set the horizontal grid\n"
+"size in pixels or, if <i><u>Square Grid</u></i>is\n"
+"selected, to set both the horizontal and\n"
+"vertical grid size.\n"
+"\n"
+"A size of zero or one pixel disables the grid."
+msgstr ""
+"<brown><b>水平网格尺寸<black></b>\n"
+"\n"
+"设置水平网格的象素值。如果选了\n"
+"<i><u>正方形网格</u></i>，\n"
+"就可以同时设置水平和垂直网格尺寸。\n"
+"\n"
+"0或1个象素将禁用网格。"
+
+msgid ""
+"<brown><b>Vertical Grid Size<black></b>\n"
+"\n"
+"Use this field to set the vertical grid\n"
+"size in pixels.\n"
+"\n"
+"A size of zero or one pixel disables the grid."
+msgstr ""
+"<brown><b>垂直网格尺寸<black></b>\n"
+"\n"
+"设置垂直网格的象素值。\n"
+"\n"
+"0或1个象素将禁用网格。"
+
+msgid ""
+"<brown><b>Square Grid<black></b>\n"
+"\n"
+"If enabled the horizontal and vertical\n"
+"size will be the same value.\n"
+msgstr ""
+"<brown><b>正方形网格<black></b>\n"
+"\n"
+"如果被允许，水平和垂直尺寸将\n"
+"被设为相同的值。\n"
+
+
+msgid ""
+"<brown><b>Ok<black></b>\n"
+"\n"
+"Closes the dialog and uses the changed values."
+msgstr ""
+"<brown><b>确定<black></b>\n"
+"\n"
+"关闭对话框并使用改变后的值。"
+
+msgid ""
+"<brown><b>Cancel<black></b>\n"
+"\n"
+"Closes the dialog <i>without</i>using the changed values."
+msgstr ""
+"<brown><b>取消<black></b>\n"
+"\n"
+"关闭对话框<i>不</i>使用改变后的值。"
+
+msgid "Grid Size :"
+msgstr "网格尺寸："
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group contains general properties like <i>Name</i>or <i>Text</i>."
+msgstr ""
+"<i>组</i>\n"
+"\n"
+"该组包括一般属性，如<i>Name</i>或<i>Text</i>。"
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group contains properties having to do with the placement of the item "
+"like <i>Width</i>or <i>Height</i>."
+msgstr ""
+"<i>组</i>\n"
+"\n"
+"该组包括与项的位置有关的属性\n"
+"如<i>Width</i>或<i>Height</i>。"
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group contains properties having to do with how the item will appear in "
+"the dialog.\n"
+"\n"
+"<i>Pixmap</i>is an example for such an appearance property."
+msgstr ""
+"<i>组</i>\n"
+"\n"
+"该组包括与项在对话框中的外观有关的属性。\n"
+"\n"
+"例如<i>Pixmap</i>。"
+
+msgid ""
+"<i>Group</i>\n"
+"\n"
+"This group is a special one. It contains properties which do not effect on "
+"the item in the dialog editor but in the running program.\n"
+"\n"
+"That means if you change them you will not see any difference in the editor "
+"but there can be a big difference in the running program.\n"
+"\n"
+"<i>Connections</i>might be a pretty good example."
+msgstr ""
+"<i>组</i>\n"
+"\n"
+"该组是特殊组。它包括的属性不会影响对\n"
+"话框编辑器中的项而只影响运行时的程序。\n"
+"\n"
+"也就是说，如果改变它们，你不会在编辑\n"
+"器中看到任何变化，但对运行时的程序可\n"
+"能是一个很大的变化。\n"
+"\n"
+"例如<i>Connections</i>。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Helps to identify an dialog item i.e. for runtime loaded dialogs. In "
+"addition, if the constructor of the destination class has a \"name\" "
+"argument it is set to this value."
+msgstr ""
+"<i>类: 任意</i>\n"
+"\n"
+"动态加载对话框时用来识别对话框项。\n"
+"另外,目标类的构造函数有'name'变\n"
+"量,它将被设为该值。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If this property is set to <i>true</i>the item will not be visible in the "
+"editor and in the program."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"如果该属性设为<i>true</i>，则该项在编\n"
+"辑器和程序中都不可见。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If disabled (=<i>false</i>) the widget will not handle user events (i.e. "
+"mouse or keyboard events)."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"如果禁止（=<i>false</i>），widget将\n"
+"不处理用户事件（即鼠标或键盘事件）。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Used for generating sources. Defines the variable later containing the "
+"items' pointer."
+msgstr ""
+"<i>类: 任意</i>\n"
+"\n"
+"用于生成源。定义包含该项指针的变量。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the <i>SIGNAL/SLOT</i>connections for this item. (Only has effects "
+"in programs, not in this editor)"
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"为项定义<i>SIGNAL/SLOT</i>连接。"
+"（仅影响程序，不影响编辑器）"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Is <i>true</i>this item will fill out the whole of his parent window. (Only "
+"has effects in programs, not in this editor)"
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"如果=<i>ture</i>，该项将充满父窗口。"
+"（仅影响程序，不影响编辑器）"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If enabled (=<i>true</i>) the widget will accept drops from the drag&drop "
+"mechanism. (Only has effects in programs, not in this editor)"
+msgstr ""
+"<i>类: 任意</i>\n"
+"\n"
+"如果允许(=<i>ture</i>),该widget将从\n"
+"拖/放机制中接收放。(仅影响程序,不影\n"
+"响编辑器。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If <i>true</i>and if it is the only widget whose 'HasFocus' property is "
+"enabled it will have the focus by default.\n"
+"\n"
+"<b><u>Note</u></b>: Only one widget can have focus at the same time. So do "
+"<i>not</i>enable this property for more than one dialog item !"
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"如果=<i>ture</i>，并且它是唯一设置了\n"
+"“获得焦点“的widget，那么它将按照\n"
+"缺省获得焦点。\n"
+"\n"
+"<b><u>注意</u></b>：同一时间只有一个\n"
+"widget可以获得焦点。所以<i>不要</i>为\n"
+"多于一个的对话框项允许该属性。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If you enter a widgets' variable name here it will be the focus proxy for "
+"this item (which means, if the widget you磛e entered gets the focus it "
+"transfers it to this widget)"
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"如果你在这儿输入了一个widget变量名，\n"
+"它将作为该项的焦点代理（也就是说，\n"
+"如果你输入的widget获得了焦点，它\n"
+"会把焦点传给该widget）"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The X coordinate of the widget relative to its parent widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"相对于父widget的X坐标。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The Y coordinate of the widget relative to its parent widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"相对于父widget的Y坐标。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The width of the widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"widget宽度。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The height of the widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"widget高度。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the minimum width of the widget. The widget than cannot become "
+"smaller than this value."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"定义widget的最小宽度。widget的\n"
+"实际宽度不会小于该值。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the minimum height of the widget. The widget than cannot become "
+"smaller than this value."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"定义widget的最小高度。widget的"
+"实际高度不会小于该值。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the maximum width of the widget. The widget than cannot become "
+"larger than this value."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"定义widget的最大宽度。widget的"
+"实际宽度不会大于该值。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Defines the maximum height of the widget. The widget than cannot become "
+"larger than this value."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"定义widget的最大高度。widget的\n"
+"实际高度不会大于该值。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"If <i>true</i>the widget size cannot be changed."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"如果=<i>true</i>，widget大小就不能改变。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Sets in how many pixel steps the item should be resized."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The background mode of the widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"widget的背景模式。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The background color of the widget. Overrides the BgMode property."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"widget的背景色。覆盖BgMode属性。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"The (background) palette color. This more recent method for BgColor also "
+"changes the frames etc."
+msgstr ""
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Specifies the file which should be used as background pixmap. Note that not "
+"all widgets run correctly with background images. (i.e. the QLineEdit)"
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"指定作为背景位图的文件。注意：\n"
+"不是所有的widget都能有背景位图。\n"
+"（如QLineEdit就不行）"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Specifies the file which should be used as mask bitmap. Note that this "
+"operation can be pretty slow."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"指定作为屏蔽位图的文件。\n"
+"注意，该操作可能相当慢。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Sets the font which should be used for drawing text in the widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"设置在widget显示文本的字体。"
+
+msgid ""
+"<i>Class : Any</i>\n"
+"\n"
+"Sets the cursor which should appear when moving the mouse pointer over the "
+"widget."
+msgstr ""
+"<i>类：任意</i>\n"
+"\n"
+"设置在widget中显示的鼠标形状。"
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"The text which will appear on the button."
+msgstr ""
+"<i>类：QPushButton</i>\n"
+"\n"
+"按钮上的文本。"
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button will be the default button. That means if the user "
+"presses return this button will receive the clicked() signal. Note that only "
+"one button can be the default button and that this value is only valid in "
+"dialogs."
+msgstr ""
+"<i>类：QPushButton</i>\n"
+"\n"
+"如果允许，该按钮将作为缺省按钮。\n"
+"即，如果用户按了回车，该按钮将\n"
+"收到clicked()信号。注意，只有一\n"
+"个按钮可以被设为缺省的，而且该\n"
+"值只对在对话框中的按钮有效。"
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button will be an auto default button. An auto-default "
+"button becomes the default push button automatically when it receives the "
+"keyboard input focus."
+msgstr ""
+"<i>类：QPushButton</i>\n"
+"\n"
+"如果允许，该按钮将作为自动缺省按钮。\n"
+"自动缺省按钮在收到键盘输入焦点后自\n"
+"动变成缺省按钮。"
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button keeps pressed until it is pressed again."
+msgstr ""
+"<i>类：QPushButton</i>\n"
+"\n"
+"如果允许，该按钮在下一次被按之前将\n"
+"保持被按下的状态。"
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, and isToggleButton is also enabled the button will be toggled "
+"down by default."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"Tells this button to draw a menu indication triangle if enabled, and to not "
+"draw one if disabled."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the button will resize itself whenever the contents change."
+msgstr ""
+"<i>类：QPushButton</i>\n"
+"\n"
+"如果允许，按钮随着内容的改变而改变尺寸。"
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"When enabled, the clicked() signal is emitted at regular intervals while the "
+"buttons is down. Note that this property does not have any effect if "
+"isToggleButton is enabled."
+msgstr ""
+
+msgid ""
+"<i>Class : QPushButton</i>\n"
+"\n"
+"The pixmap which will appear on the button. Leave it empty if you don't want "
+"a pixmap on the button."
+msgstr ""
+"<i>类：QPushButton</i>\n"
+"\n"
+"在按钮上显示的位图。如果你不想要位图就让它空着。"
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"This text is set to the lineedit after it is created."
+msgstr ""
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"Sets the singleline editor to draw itself inside a two-pixel frame if "
+"enabled, otherwise to draw itself without any frame."
+msgstr ""
+"<i>类：QLineEdit</i>\n"
+"\n"
+"如果允许，单行编辑器将显示两个\n"
+"象素厚的边框。如果禁止则没有。"
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"Sets the maximum length of the text in the editor."
+msgstr ""
+"<i>类：QLineEdit</i>\n"
+"\n"
+"设置编辑器中文本的最大长度。"
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"Set the cursor position for this line edit."
+msgstr ""
+"<i>类：QLineEdit</i>\n"
+"\n"
+"设置单行编辑器的光标位置。"
+
+msgid ""
+"<i>Class : QLineEdit</i>\n"
+"\n"
+"When enabled the text is initially selected."
+msgstr ""
+"<i>类：QLineEdit</i>\n"
+"\n"
+"如果允许，文本最开始是被选择的。"
+
+msgid ""
+"<i>Class : QGroupBox</i>\n"
+"\n"
+"Sets the groupbox title that is displayed in the box frame."
+msgstr ""
+"<i>类：QGroupBox</i>\n"
+"\n"
+"设置组框的标题文本。"
+
+msgid ""
+"<i>Class : QProgressBar</i>\n"
+"\n"
+"Sets the total steps of the progressbar. During the iteration of your action "
+"to display the progress, you have to call setProgress(int) to advance the "
+"progress step displayed to (int)"
+msgstr ""
+"<i>类：QProgressBar</i>\n"
+"\n"
+"设置进度条的总步数。在重复显示进度\n"
+"时，你必须调用setProgress(int)来增\n"
+"加需要显示的步。"
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets a fixed height for the widget so that the given number of textlines are "
+"displayed using the current font."
+msgstr ""
+"<i>类：QMultiLineEdit</i>\n"
+"\n"
+"为其设置一个固定的高度。这样，\n"
+"给定的文本行就用当前字体显示。"
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets the text of the widget."
+msgstr ""
+"<i>类：QMultiLineEdit</i>\n"
+"\n"
+"设置widget文本字串。"
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Used to avoid flicker during large changes; the view is not updated if "
+"disabled."
+msgstr ""
+"<i>类：QMultiLineEdit</i>\n"
+"\n"
+"用来避免变化较大时的闪烁现象；如果禁止，\n"
+"视图将不被更新。"
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets the widget text to read only; disables text input."
+msgstr ""
+"<i>类：QMultiLineEdit</i>\n"
+"\n"
+"将widget设置成只读；禁止文本输入。"
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Sets overwrite enabled or disabled."
+msgstr ""
+"<i>类：QMultiLineEdit</i>\n"
+"\n"
+"允许或禁止该写。"
+
+msgid ""
+"<i>Class : QMultiLineEdit</i>\n"
+"\n"
+"Marks the whole text selected."
+msgstr ""
+"<i>类：QMultiLineEdit</i>\n"
+"\n"
+"将全部文本标为被选择的。"
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the maximum slider value; used in constructor"
+msgstr ""
+"<i>类：QScrollBar</i>\n"
+"\n"
+"设置滑块的最大值；用于构造函数"
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the minimum slider value; used in constructor"
+msgstr ""
+"<i>类：QScrollBar</i>\n"
+"\n"
+"设置滑块的最小值；用于构造函数"
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the orientation of the scrollbar to horizontal or vertical"
+msgstr ""
+"<i>类：QScrollBar</i>\n"
+"\n"
+"设置滚动条的方向：水平或垂直"
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"Sets the initial value of the scrollbar in the constructor"
+msgstr ""
+"<i>类：QScrollBar</i>\n"
+"\n"
+"设置滚动条在构造函数中的初始化值"
+
+msgid ""
+"<i>Class : QScrollBar</i>\n"
+"\n"
+"If enabled, the scrollbar emits valueChanged() whenever the bar is dragged; "
+"otherwise only on mouse release."
+msgstr ""
+"<i>类：QScrollBar</i>\n"
+"\n"
+"如果允许，无论何时滑块被拖动，都发送valueChanged()；\n"
+"否则只有在放开鼠标后才发送"
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"sets the maximum slider value; used in constructor"
+msgstr ""
+"<i>类：QSlider</i>\n"
+"\n"
+"设置滑块的最大值；用于构造函数"
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"sets the minimum slider value; used in constructor"
+msgstr ""
+"<i>类：QSlider</i>\n"
+"\n"
+"设置滑块的最小值；用于构造函数"
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"sets the orientation of the slider to horizontal or vertical"
+msgstr ""
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"uses QRangeControl::setValue() to set the value"
+msgstr ""
+"<i>类：QSlider</i>\n"
+"\n"
+"使用QRangeControl::setValue()设置该值"
+
+msgid ""
+"<i>Class : QSlider</i>\n"
+"\n"
+"if enabled, the slider emits valueChanged() whenever the bar is dragged; "
+"otherwise only on mouse release."
+msgstr ""
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"If auto-scrolling is enabled, the list box will scroll its contents when the "
+"user drags the mouse outside (below or above) the list box."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"如果允许自动滚动，当用户将鼠标拖出列表\n"
+"框外（上或下）时，列表框会滚动其内容。"
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"If it is enabled, then the list box will get\n"
+"a bottom scroll bar if the maximum list box item\n"
+"width exceeds the list box width."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"如果允许，并且列表框中最长的项超过了\n"
+"列表框的宽度，底部将出现滚动条。"
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Enables an automatic (vertical) scroll bar."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"允许自动（垂直）滚动条。"
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Enables a bottom scroll bar."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"允许底部的滚动条。"
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"If drag-selection is enabled, the list box will highlight\n"
+"new items when the user drags the mouse inside the list box. "
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"如果允许拖动选择，当用户在框中拖动\n"
+"鼠标时，列表框将高亮显示新的项。"
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Enables smooth list box scrolling."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"允许列表框平滑滚动。"
+
+msgid ""
+"<i>Class : QListBox</i>\n"
+"\n"
+"Sets a fixed height for the widget so that the given number of textlines are "
+"displayed using the current font."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"为其设置一个固定的高度。这样，\n"
+"给定的文本行就用当前字体显示。"
+
+msgid ""
+"<i>Class : QListbox</i>\n"
+"\n"
+"Used to avoid flicker during large changes; the view is not updated if "
+"disabled."
+msgstr ""
+"<i>类：QListBox</i>\n"
+"\n"
+"用来避免变化较大时的闪烁现象；如果禁止，"
+"视图将不被更新。"
+
+msgid "Sorry, there is no help available for this property."
+msgstr "抱歉，该属性没有帮助。"
+
+msgid ""
+"\n"
+"\n"
+"<i><->See also: <link kdev>KDevelop Manual</link>, <link qt>Qt API</link>, "
+"<link kdeui>KDE User Interfaces</link>, <link KDEWEB>KDE "
+"Website</link><+></i>"
+msgstr ""
+"\n"
+"\n"
+"<i><->参阅: <link kdev>KDevelop手册</link>, <link qt>Qt API</link>, "
+"<link kdeui>KDE用户界面</link>, <link KDEWEB>KDE "
+"Web站点</link><+></i>"
+
+msgid "Property"
+msgstr "属性"
+
+msgid "Value"
+msgstr "值"
+
+msgid "(not defined)"
+msgstr "未定义"
+
+msgid "(not set)"
+msgstr "未设置"
+
+msgid "List of QStrings"
+msgstr ""
+
+msgid "row(s) entered."
+msgstr ""
+
+msgid "&Ok"
+msgstr "确定(&O)"
+
+msgid ""
+"PLEASE READ THIS FIRST !\n"
+"\n"
+"This dialog editor is intended for creating dialogs\n"
+"for your applications. It creates .kdevdlg files for\n"
+"saving theses dialogs (see KDevelop help).\n"
+"\n"
+"There are two possible methods for including dialogs\n"
+"in you applications :\n"
+"\n"
+"- Let KDevelop create the dialogs' sources.\n"
+"- Using the KDlgLoader for loading dialogs at run time.\n"
+"\n"
+"I recommend using the dialog loader since there\n"
+"are some problems regarding the source generation for\n"
+"now. However, using the loader would be a good idea\n"
+"for some other reasons as described i the help.\n"
+"\n"
+"This is a WYSINWYG (What you see is\n"
+"NEARLY what you get) editor. That means it\n"
+"displays most of the widgets properties possible but\n"
+"not all. User \"View|Preview dialog\" if you want a\n"
+"real preview (however this is like the loader class will\n"
+"show it).\n"
+"\n"
+"We surely were not able to implement ALL possible\n"
+"widget properties but it is hopefully enough for\n"
+"designing dialogs more comfortable.\n"
+"\n"
+"By the way, you can get help on every widget and\n"
+"property by a right click. This also works in the\n"
+"editor window.\n"
+"\n"
+"Pascal Krahmer <pascal@beast.de>"
+msgstr ""
+"请首先阅读以下内容！\n"
+"\n"
+"这个对话框编辑器是用来为你的应用程\n"
+"序创建对话框的。它创建.kdevdlg文件\n"
+"来保存这些对话框（见KDevelop帮助）。\n"
+"\n"
+"有两种方法在你的应用程序中\n"
+"包含对话框：\n"
+"\n"
+"- 让KDevelop创建对话框源。\n"
+"- 使用KDlgLoader在运行时加载对话框。\n"
+"\n"
+"我推荐使用对话框载入程序，因为目前\n"
+"使用源生成存在一些问题。当然，正如\n"
+"在帮助文件中描述的，使用载入程序的\n"
+"好处还有其它原因。\n"
+"\n"
+"这是一个WYSINWYG（所见几乎即所得）\n"
+"编辑器。也就是说，它显示大部分属性\n"
+"而并非全部。如果你需要真正的预览\n"
+"用“视图｜预览对话框“。\n"
+"\n"
+"我们当然不可能实现所有可能的widget\n"
+"属性，但是，希望它能使对话框的设计\n"
+"足够轻松。\n"
+"\n"
+"顺便提一句，你可以在每个widget和属\n"
+"性上按右键获得帮助。在编辑窗口中也\n"
+"是这样。\n"
+"\n"
+"Pascal Krahmer <pascal@beast.de>"
+
+msgid "&Okay"
+msgstr "确定(&O)"
+
+msgid "&Show again."
+msgstr "下次显示(&S)"
+
+msgid ""
+"<brown><b>\"Widgets\" tab<black></b>\n"
+"\n"
+"In this tab you will find all items\n"
+"you can add to the dialog. They are\n"
+"sorted in two groups :\n"
+"\n"
+"The <b><i>QT-Widgets</i></b>group is\n"
+"always visible and contains all native\n"
+"Qt widgets. Your program will not need\n"
+"the KDE libraries in order to run if you\n"
+"only use these items.\n"
+"\n"
+"The <b><i>KDE-Widgets</i></b>group is\n"
+"only visible if you have created a KDE\n"
+"application because it would not be\n"
+"logical to add KDE widgets needing KDE\n"
+"libraries to a Qt project."
+msgstr ""
+"<brown><b>＂Widgets＂标签<black></b>\n"
+"\n"
+"在这个标签中，你可以找到能够加入到\n"
+"对话框中的所有项。它们被分为两组：\n"
+"\n"
+"<b><i>QT-Widgets</i></b>组总可见并且包括所有\n"
+"本地的Qt widgets。如果你只使用这些\n"
+"项，你的程序不需要KDE库就能运行.\n"
+"\n"
+"<b><i>KDE-Widgets</i></b>组只有在你创建KDE应用\n"
+"程序时才可见。因为向一个QT项目添加\n"
+"需要KDE库的KDE widget是不符合逻辑的."
+
+msgid ""
+"This will insert a QWidget to the dialog.\n"
+"Such an item may have serveral children items\n"
+"or even more QWidgets as children. That means\n"
+"this item lets you create complex hierarchies\n"
+"for you dialog.\n"
+"\n"
+"Another think you will need this item type for\n"
+"are widgets like the tab view which need several\n"
+"widgets they can bring to the top."
+msgstr ""
+"这会在对话框中插入QWidget。它可能有其它\n"
+"的子项或更多的QWidget作为子项。它使你可\n"
+"以为对话框生成复杂的层次结构。"
+
+msgid ""
+"A QLabel can be used in order to display\n"
+"some text or pixmap information in the dialog."
+msgstr ""
+"QLable用于在对话框中显示文本或位图信息。"
+
+msgid ""
+"This is the normal button often used in\n"
+"dialogs (i.e. the \"Ok\"-Button)."
+msgstr ""
+"这是常在对话框中使用的普通按钮。\n"
+"（例如“确定“按钮）"
+
+msgid "Lets user can (de-)select some settings."
+msgstr "让用户可以（不）选择某些设置。"
+
+msgid "Lets the user choose between several options."
+msgstr "让用户在几个选项间选择。"
+
+msgid ""
+"A combo box lets the user set a value by selecting\n"
+"it from a drop-down menu or by inserting the value,\n"
+"if the box is write enabled"
+msgstr ""
+"组合框让用户可以在下拉菜单中选择一个\n"
+"值，或者（如果可写）直接输入该值。"
+
+msgid ""
+"Allows choosing numeric values by up-\n"
+"and down buttons or insertion if write enabled."
+msgstr ""
+"允许用上下按钮选择数值或（如果可写）\n"
+"直接输入。"
+
+msgid "Provides a single-column list of items that can be scrolled."
+msgstr "提供可滚动的单列列表。"
+
+msgid ""
+"Provides a groupbox frame with title to indicate that\n"
+"child widgets within the box belong together."
+msgstr ""
+"提供带标题的组框框架以表明该\n"
+"框中的子widget属于同类。"
+
+msgid ""
+"Inserts a text field giving the user the\n"
+"possibility to enter of change a text."
+msgstr ""
+"允许用户输入文本."
+
+msgid "Offers a multi-line editor."
+msgstr "提供多行编辑器。"
+
+msgid ""
+"Indicates the range of a value and sets the current value\n"
+"by a slider as well as up- and down buttons; often used\n"
+"for widgets whose contents is larger than the acutally visible\n"
+"view area. By using the scrollbar, the visible area\n"
+"can be changed to another part of the widgets' contents."
+msgstr ""
+"指定值的范围并使用滑块或上下按钮设置\n"
+"当前值；经常用于那些内容超出可视区的\n"
+"widget。通过使用滚动条，可视区就能显\n"
+"示内容中的其它部分。"
+
+msgid "Sets a value in a program-defined range by a slider."
+msgstr "用滑块把值设定在程序定义的范围内。"
+
+msgid ""
+"Displays the progress of an action that takes a longer time to be finished."
+msgstr ""
+"显示长任务的进度。"
+
+msgid ""
+"Displays a number in the style of LC-displays\n"
+"often used in clocks."
+msgstr ""
+"用时钟常用的液晶方式显示数字。"
+
+msgid "A list view lets your application display a multi-column list or tree."
+msgstr "列表视图让你的应用程序显示多列或树状列表。"
+
+msgid ""
+"'KSeparator' is a small class to provide a identically look of horizontal or "
+"vertical lines in all KDE applications."
+msgstr ""
+"“KSeparator“是一个小类，它为所有KDE\n"
+"应用程序提供水平或垂直直线的一致外观。"
+
+msgid "Just like QComboBox."
+msgstr "与QComboBox相似"
+
+msgid "This is a button displaying the selected color."
+msgstr "可以显示彩色的按钮。"
+
+msgid "A push button that looks like a keyboard key."
+msgstr "看起来象键盘键的按钮。"
+
+msgid "Restricted Editline: Only selected Characters are valid input."
+msgstr "受限编辑框：只有所选的字符才能被输入。"
+
+msgid "A Progress indicator widget."
+msgstr "进度指示器。"
+
+msgid "A collapsible treelist widget"
+msgstr "可折叠的树状列表。"
+
+msgid "A CDE-style LED lamp widget."
+msgstr "CDE风格的二级管。"
+
+msgid "Lets the user choose a date."
+msgstr "让用户选择时间。"
+
+msgid "Views a calendar in a tableview."
+msgstr "在表格视图中显示时间。"
+
+msgid "QT-Widgets"
+msgstr "QT-Widgets"
+
+msgid "KDE-Widgets"
+msgstr ""
+
+msgid "Normal:"
+msgstr "普通："
+
+msgid "Selected:"
+msgstr "已选择的："
+
+msgid "Bold"
+msgstr "粗体"
+
+msgid "Family:"
+msgstr "族:"
+
+msgid "Default Item Styles"
+msgstr "项的缺省风格"
+
+msgid "Item:"
+msgstr "项："
+
+msgid "Default Font"
+msgstr "缺省字体"
+
+msgid "Config Select"
+msgstr "配置选择"
+
+msgid "Highlight:"
+msgstr "高亮："
+
+msgid "Highlight Auto Select"
+msgstr "高亮自动选择"
+
+msgid "File Extensions:"
+msgstr "文件扩展名："
+
+msgid "Mime Types:"
+msgstr "Mime类型"
+
+msgid "Item Style"
+msgstr "项风格"
+
+msgid "Item Font"
+msgstr "项字体"
+
+msgid "&Text To Find:"
+msgstr "要查找(&T)："
+
+msgid "&Replace With:"
+msgstr "替换成(&R)："
+
+msgid "&Case Sensitive"
+msgstr "区分大小(&C)"
+
+msgid "&Whole Words Only"
+msgstr "全字匹配(&W)"
+
+msgid "&From Cursor"
+msgstr "从光标处开始(&F)"
+
+msgid "Find &Backwards"
+msgstr "向后查找(&B)"
+
+msgid "&Selected Text"
+msgstr "仅在被选文本中(&S)"
+
+msgid "&Prompt On Replace"
+msgstr "在替换时提示(&P)"
+
+msgid "Replace this occurence?"
+msgstr "替换吗？"
+
+msgid "&Yes"
+msgstr "是(&Y)"
+
+msgid "&No"
+msgstr "否(&N)"
+
+msgid "&All"
+msgstr "全部替换(&A)"
+
+msgid "&Goto Line:"
+msgstr "跳到行(&G)："
+
+msgid "Edit Options"
+msgstr "编辑选项"
+
+msgid "Auto &Indent"
+msgstr "自动缩进(&I)"
+
+msgid "&Backspace Indent"
+msgstr "回删时对齐(&B)"
+
+msgid "&Word Wrap"
+msgstr "自动换行(&W)"
+
+msgid "Replace &Tabs"
+msgstr "替代Tab(&T)"
+
+msgid "Remove Trailing &Spaces"
+msgstr ""
+
+msgid "Wrap &Cursor"
+msgstr ""
+
+msgid "&Auto Brackets"
+msgstr "自动括号(&A)"
+
+msgid "Select Options"
+msgstr "选择选项"
+
+msgid "&Persistent Selections"
+msgstr "持续选择(&P)"
+
+msgid "&Multiple Selections"
+msgstr "多行选择(&M)"
+
+msgid "&Vertical Selections"
+msgstr "垂直选择(&V)"
+
+msgid "&Delete On Input"
+msgstr "输入时删除(&D)"
+
+msgid "&Toggle Old"
+msgstr ""
+
+msgid "Wrap Words At:"
+msgstr "每行字符数:"
+
+msgid "Tab Width:"
+msgstr "Tab宽度："
+
+msgid "Undo steps:"
+msgstr "撤消步数："
+
+msgid "Background:"
+msgstr "背景："
+
+msgid "Text Background:"
+msgstr "文本背景："
+
+msgid "Found:"
+msgstr "找到："
+
+msgid "Selected + Found:"
+msgstr "选择的+找到的:"
+
+msgid "Vertical Selections On"
+msgstr "垂直选择打开"
+
+msgid "Vertical Selections Off"
+msgstr "垂直选择关闭"
+
+msgid "The specified File does not exist"
+msgstr "指定的文件不存在"
+
+msgid "You have specified a directory"
+msgstr "你指定了一个目录"
+
+msgid "You do not have read permission to this file"
+msgstr "你对该文件没有读权限"
+
+msgid "An Error occured while trying to open this Document"
+msgstr "在打开该文档时出错"
+
+msgid "You do not have write permission to this file"
+msgstr "你对该文件没有写权限"
+
+msgid "Loading..."
+msgstr "正在加载..."
+
+msgid "Inserted"
+msgstr "已插入"
+
+msgid "Read"
+msgstr "读"
+
+msgid ""
+"KWrite is already waiting\n"
+"for an internet job to finish\n"
+"Please wait until it has finished\n"
+"Alternatively stop the running one."
+msgstr ""
+
+msgid "Waiting for KFM..."
+msgstr "正在等待KFM..."
+
+msgid "Could not start or find KFM"
+msgstr "无法启动或未找到KFM"
+
+msgid "Saving..."
+msgstr "正在保存..."
+
+msgid "Wrote"
+msgstr "已写入"
+
+msgid ""
+"The current Document has been modified.\n"
+"Would you like to save it?"
+msgstr ""
+"当前文档已经改变。你想保存它吗？"
+
+msgid ""
+"Could not save the document.\n"
+"Open a new document anyways?"
+msgstr ""
+"无法保存该文档。还要打开新文档吗？"
+
+msgid "No changes need to be saved"
+msgstr "没有需要保存的变化"
+
+msgid ""
+"A Document with this Name already exists.\n"
+"Do you want to overwrite it?"
+msgstr ""
+"已经有一个同名文件存在，\n"
+"替换现有文件吗？"
+
+msgid "End of document reached"
+msgstr "已到文档最后"
+
+msgid "Continue from the beginning"
+msgstr "从开始处继续吗？"
+
+msgid "Find"
+msgstr "查找"
+
+msgid "Beginning of document reached"
+msgstr "已到文档开始处"
+
+msgid "Continue from the end"
+msgstr "从最后继续吗？"
+
+msgid "Search string not found!"
+msgstr "字串未找到！"
+
+msgid "replace(s) made"
+msgstr "处已替换"
+
+msgid "Line"
+msgstr "行"
+
+msgid "Numbering"
+msgstr "正在编号"
+
+msgid "Lines per page"
+msgstr "行每页"
+
+msgid "Printing"
+msgstr "正在打印"
+
+msgid "Textprinting"
+msgstr "文本打印"
+
+msgid "bold font"
+msgstr "粗字体"
+
+msgid "align files"
+msgstr "对齐文件"
+
+msgid "print non ascii character as ISO Latin 1"
+msgstr "把非ASCII码作为ISO Latin 1打印"
+
+msgid "interpret TAB, BS and FF"
+msgstr "解释TAB,BS和FF"
+
+msgid "Date & Time"
+msgstr "日期＆时间"
+
+msgid "Headertext"
+msgstr "页头文本"
+
+msgid "headertext"
+msgstr "页头文本"
+
+msgid "text"
+msgstr "文本"
+
+msgid "login"
+msgstr "登录"
+
+msgid "filename"
+msgstr "文件名"
+
+msgid "header"
+msgstr "页头"
+
+msgid "replace non-printing character by space"
+msgstr "用空格代替不可打印的字符"
+
+msgid "cut lines"
+msgstr "剪切行"
+
+msgid "set TAB size"
+msgstr "设置TAB大小"
+
+msgid "fontsize"
+msgstr "字体大小"
+
+msgid "numbering lines"
+msgstr "对行编号"
+
+msgid "borders"
+msgstr "边界"
+
+msgid "file single"
+msgstr ""
+
+msgid "file together"
+msgstr ""
+
+msgid "lines per page"
+msgstr "行每页"
+
+msgid "numbering pages"
+msgstr "打印页号"
+
+msgid "Preview"
+msgstr "预览"
+
+msgid "Defaults"
+msgstr "缺省"
+
+msgid "use fontsize"
+msgstr ""
+
+msgid "uses lines per page"
+msgstr ""
+
+msgid "Print using bold font."
+msgstr ""
+
+msgid ""
+"Print non ascii characters (with the high bit set)\n"
+"as ISO Latin 1 characters. These characters are\n"
+"printed as M- (for meta) followed by  the character\n"
+"of the low 7 bits."
+msgstr ""
+"把非ASCII码（设置了最高位）作为\n"
+"ISO Latin 1字符打印。这些字符\n"
+"以M-（作为元）开头，后跟该字符\n"
+"低7位所代表的字符。"
+
+msgid ""
+"Interpret   TAB,   BS  and  FF  characters TAB\n"
+"is replaced by enough spaces  to  reach next\n"
+"tab stop while BS and FF have their meanings."
+msgstr ""
+
+msgid ""
+"Print the current date and time at the bottom of the\n"
+"page. This option is affected by the no surrounding\n"
+"border and the no header options."
+msgstr ""
+"在页底打印当前的日期和时间。该选项受\n"
+"无边框和无头注选项的影响。"
+
+msgid ""
+"If button is checked, no filename is printed in the\n"
+"pages headers.Now you can use a text instead of the\n"
+"filename."
+msgstr ""
+"如果选中该按钮，页头不打印文件名。\n"
+"现在你可以用一串文本来代替文件名。"
+
+msgid ""
+"Use this text instead of the file name in the page\n"
+"headers for printing next (and only next) file."
+msgstr ""
+"打印下一个文件时（仅下一个），用\n"
+"这串文本替代文件名打印在页头的上"
+
+msgid ""
+"Print user login ID in the upper right corner of\n"
+"the page.  (available for Unix systems only)"
+msgstr ""
+"在该页右上角打印用户登录标识号。\n"
+"（仅对UNIX系统有效）"
+
+msgid "Print filename ,centered, at bottom of page."
+msgstr "在页底居中打印文件名。"
+
+msgid "If button is checked ,print page headers."
+msgstr "如果被选中就打印页头。"
+
+msgid ""
+"If button is checked ,non-printing characters are\n"
+"replaced by a space.Otherwise non-printing characters\n"
+"are replaced so that they are visible and easy to\n"
+"identify. Control characters are printed  like ^X\n"
+"for ctrl-x; the delete character is printed as ^?.\n"
+"Non ascii characters are printed as M- (for meta)\n"
+"followed by the character of the low 7 bits."
+msgstr ""
+"如果被选中，不可打印的字符将被空格\n"
+"代替。否则，不可打印字符会被替换成\n"
+"可见且易于识别的符号。控制字符象^X\n"
+"（代表ctrl-x）一样打印；删除字符打\n"
+"印成^?；非ASCII码以M-（作为元）开头，\n"
+"后跟该字符低7位所代表的字符。"
+
+msgid ""
+"If button checked ,lines too large will be truncate.\n"
+"Otherwise lines  too large will be fold and be printed\n"
+"inside the borders. Max line size depends on format\n"
+"and font size used and whether line numbering has been\n"
+"suppressed."
+msgstr ""
+"如果被选中，过长的行会被截短。否则，\n"
+"过长的行将被折叠并打印在边界内。行\n"
+"的长度取决于使用的格式，字体以及是\n"
+"否对行编号。"
+
+msgid ""
+"Compact mode for a sequence of  files.  This  option\n"
+"allows  the printing of two files in the same physical\n"
+"page: last page of the first file  in  the  left\n"
+"(or  up)  side  and first page of the second file in\n"
+"the right (or down) side. This option is valid  only\n"
+"for twinpage mode (two pages per physical page)."
+msgstr ""
+
+msgid ""
+"Set TAB size to value. This option is\n"
+"ignored if TAB is not interpreted."
+msgstr ""
+"设置TAB值。如果TAB未被解释，\n"
+"该选项被忽略。"
+
+msgid "Changes font size to this value."
+msgstr "把字体大小改变成该值。"
+
+msgid ""
+"Output lines are preceded by line numbers,\n"
+"numbered sequentially from 1."
+msgstr ""
+"在输出行前加上行号，编号顺序从1开始。"
+
+msgid "Print page surrounding borders."
+msgstr "打印页四周的边界。"
+
+msgid ""
+"Reset sheet numbering for each new file. Sheet\n"
+"numbering is used to number physical pages (sheets)\n"
+"as they are printed. Page numbering numbers the\n"
+"logical pages, of which there are usually two per\n"
+"physical page."
+msgstr ""
+
+msgid ""
+"Set  the  lines per page for printing. The font size\n"
+"is automatically scaled up to fill in the whole page.\n"
+"The  minimum number of lines per page is set at 40\n"
+"and maximum is at 160."
+msgstr ""
+
+msgid "Check this button if you wish to change the fontsize."
+msgstr "如果你希望改变字体大小就选中它。"
+
+msgid ""
+"Check this button if you wish to change the number of\n"
+"the lines per page."
+msgstr ""
+"如果你希望改变每页行数就选中它。"
+
+msgid "Program not found!"
+msgstr "程序未找到！"
+
+msgid ""
+"KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n"
+"\t\t    Please install one!"
+msgstr ""
+"KDevelop需要“gv“或“ghostview“\n"
+"或“kghostview“才能正常工作，请\n"
+"安装其中之一。"
+
+msgid "Underlay"
+msgstr ""
+
+msgid "Header settings"
+msgstr ""
+
+msgid "Fancy header"
+msgstr ""
+
+msgid "fancy header"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "left"
+msgstr "居左"
+
+msgid "center"
+msgstr "居中"
+
+msgid "right"
+msgstr "居右"
+
+msgid "position"
+msgstr "位置"
+
+msgid "Filename"
+msgstr "文件名"
+
+msgid "size of filename"
+msgstr "文件大小"
+
+msgid "short"
+msgstr "简短"
+
+msgid "full"
+msgstr "完整"
+
+msgid "Hostname"
+msgstr "主机名"
+
+msgid "hostname"
+msgstr "主机名"
+
+msgid "size of hostname"
+msgstr "主机名长度"
+
+msgid "If you wish to have a page header, then check it."
+msgstr "如果你希望有页头就选中它。"
+
+msgid "Here you can enter the headertext."
+msgstr "你可以在这儿输入页头文本。"
+
+msgid "If you wish to have a headertext, then check it."
+msgstr ""
+
+msgid "If you wish to print a userlogin, then check it."
+msgstr "如果你希望打印用户登录就选中它。"
+
+msgid "If you will a fancy header, then check it."
+msgstr ""
+
+msgid "If you wish to print the filenames, then check it."
+msgstr "如果你希望打印文件名就选中它。"
+
+msgid ""
+"Here you can choose, if the filename from the last '/'\n"
+"is print, or if the full filename is print."
+msgstr ""
+
+msgid "Here you can set the position in the header."
+msgstr "你可以在这儿选择页头所在位置。"
+
+msgid ""
+"Here you can choose, if the hostname up to the first\n"
+"'.' is print, or the full hostname is print."
+msgstr ""
+
+msgid "If you wish to print the hostname, then check it."
+msgstr "如果你希望打印主机名就选中它。"
+
+msgid "Current time"
+msgstr "当前时间"
+
+msgid "Modification time"
+msgstr "修改时间"
+
+msgid "Format"
+msgstr "格式"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Modification date"
+msgstr "修改日期"
+
+msgid "Current date"
+msgstr "当前日期"
+
+msgid "AM/PM"
+msgstr "上午/下午"
+
+msgid "current date"
+msgstr "当前日期"
+
+msgid "modification date"
+msgstr "更改日期"
+
+msgid "current time"
+msgstr "当前时间"
+
+msgid "modification time"
+msgstr "更改时间"
+
+msgid "If you wish to print the current time, then check it."
+msgstr "如果你希望打印当前时间就选择它。"
+
+msgid "If you wish to print the modification time, then check it."
+msgstr "如果你希望打印更改时间就选择它。"
+
+msgid "If you wish to print the modification date, then check it."
+msgstr "如果你希望打印更改日期就选择它。"
+
+msgid "If you wish to print the current date, then check it."
+msgstr "如果你希望打印当前日期就选择它。"
+
+msgid "Here you can set the format."
+msgstr "在这儿你可以设置格式"
+
+msgid ""
+"Here you can choose, if you time will be printed in\n"
+"am/pm format or in 24h format."
+msgstr ""
+"在这儿，你可以选择是使用上午/下午格式\n"
+"还是用24小时格式。"
+
+msgid "Font and TAB"
+msgstr "字体和TAB"
+
+msgid "Other options"
+msgstr "其它选项"
+
+msgid "Highlight bars"
+msgstr ""
+
+msgid "cycle of change"
+msgstr ""
+
+msgid "Wrapped line"
+msgstr ""
+
+msgid "Numbering & border"
+msgstr "编号＆边界"
+
+msgid "table of contents"
+msgstr "目录"
+
+msgid "marked wrapped lines"
+msgstr ""
+
+msgid "value for wrapped line"
+msgstr ""
+
+msgid "highlight bars"
+msgstr ""
+
+msgid "font for header"
+msgstr ""
+
+msgid "font for body"
+msgstr ""
+
+msgid "yes"
+msgstr "是"
+
+msgid "no"
+msgstr "否"
+
+msgid "If button is checked, borders around columns are printed."
+msgstr ""
+
+msgid "If button is checked, a summary is printed at the end."
+msgstr "如果被选中就在最后打印摘要。"
+
+msgid "If button is checked, wrapped lines are marked in the output."
+msgstr ""
+
+msgid "If button is checked, the sides are numbered."
+msgstr ""
+
+msgid "Precede each line with its line number."
+msgstr ""
+
+msgid "Print setting number lines per each page."
+msgstr ""
+
+msgid ""
+"Align separate input files to even align page count.\n"
+"This is handy for two-side and 2-up printings."
+msgstr ""
+
+msgid "Set the style of the wrap value."
+msgstr ""
+
+msgid "Specify  how high highlight bars are in lines."
+msgstr ""
+
+msgid "Set the position in the header."
+msgstr ""
+
+msgid "If button is checked, highlight bars are printed."
+msgstr ""
+
+msgid "Set tabulator size to specify number."
+msgstr ""
+
+msgid ""
+"If button is checked, lines that are too long will\n"
+"be cut. Otherwise enscript wraps long lines  so no\n"
+"information is lost."
+msgstr ""
+
+msgid ""
+"If button is checked, non printing characters are\n"
+"replace by space."
+msgstr ""
+
+msgid ""
+"If you clicked the button, a fontdialog is shown\n"
+"and you can select a font that is used for body text."
+msgstr ""
+
+msgid ""
+"If you clicked the button, a fontdialog is shown\n"
+"and you can select a font that is used for header text."
+msgstr ""
+
+msgid "Underlaytext"
+msgstr ""
+
+msgid "Underlaystyle"
+msgstr ""
+
+msgid "Underlayangle"
+msgstr ""
+
+msgid "Underlaygray"
+msgstr ""
+
+msgid "Underlayfont"
+msgstr ""
+
+msgid "Underlayposition"
+msgstr ""
+
+msgid "Y-Position"
+msgstr ""
+
+msgid "X-Position"
+msgstr ""
+
+msgid "underlay"
+msgstr ""
+
+msgid "underlaystyle"
+msgstr ""
+
+msgid "angle"
+msgstr ""
+
+msgid "font"
+msgstr ""
+
+msgid "underlaygray (x(1/10))"
+msgstr ""
+
+msgid "default"
+msgstr ""
+
+msgid "outline"
+msgstr ""
+
+msgid "filled"
+msgstr ""
+
+msgid "underlaytext"
+msgstr ""
+
+msgid "If you wish to print underlayed text, then check it."
+msgstr ""
+
+msgid "Here you can set the angle of the underlayed text."
+msgstr ""
+
+msgid "Here you can set the x-position of the underlayed text."
+msgstr ""
+
+msgid "Here you can set the y-position of the underlayed text."
+msgstr ""
+
+msgid ""
+"Here you can set the underlayed text gray.\n"
+"The lower the darker is the text."
+msgstr ""
+
+msgid ""
+"If you wish to print the underlayed text with the\n"
+"default angle, then check it."
+msgstr ""
+
+msgid "Here you can set the style of the underlayed text."
+msgstr ""
+
+msgid ""
+"If you wish to print the underlayed text with the\n"
+"default position, then check it."
+msgstr ""
+
+msgid "Here you can enter the text."
+msgstr ""
+
+msgid "Here you can set another font by clicking on it."
+msgstr ""
+
+msgid "File selection"
+msgstr ""
+
+msgid "current"
+msgstr ""
+
+msgid "all in project"
+msgstr ""
+
+msgid "self choosen files"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "all headers"
+msgstr ""
+
+msgid "all cpp files"
+msgstr ""
+
+msgid "changed files"
+msgstr ""
+
+msgid "Changed files"
+msgstr ""
+
+msgid "Between"
+msgstr ""
+
+msgid "date"
+msgstr ""
+
+msgid "time"
+msgstr ""
+
+msgid "o碿lock"
+msgstr ""
+
+msgid "And"
+msgstr ""
+
+msgid "Self choosen files"
+msgstr ""
+
+msgid "delete"
+msgstr ""
+
+msgid "clear"
+msgstr ""
+
+msgid ""
+"Here are the files which will be printed, if 'self\n"
+"choosen file' is checked."
+msgstr ""
+
+msgid "Cleans the 'self choosen file list'."
+msgstr ""
+
+msgid "Adds the selecte file to the choosen file to the list."
+msgstr ""
+
+msgid "Deletes the selected files in the filelist."
+msgstr ""
+
+msgid ""
+"Insert the filename and path to the file you\n"
+"want to add to the self-chosen file list.\n"
+"After insertion, press the 'add' button below\n"
+"the file list box."
+msgstr ""
+
+msgid ""
+"Selects all registered project files\n"
+"for printing, including the pixmap and\n"
+"html documentation files"
+msgstr ""
+
+msgid ""
+"Allows to set up a list of self-chosen files\n"
+"for printing. Select your files to print below\n"
+"and press the 'add' button on the file list."
+msgstr ""
+
+msgid ""
+"Lets you select files to print by their date of\n"
+"the last modification. Set the modification time\n"
+"range below by choosing the beginning and end date."
+msgstr ""
+
+msgid "Selects all registered header files for printing."
+msgstr ""
+
+msgid "Selects all registered source files for printing."
+msgstr ""
+
+msgid ""
+"Sets the end date of the interval. Press the button\n"
+"to pick a date by the calendar. After selection, the\n"
+"chosen end-date will be displayed on the button."
+msgstr ""
+
+msgid ""
+"Sets the beginning date of the interval. Press the button\n"
+"to pick a date by the calendar. After selection, the\n"
+"chosen begin-date will be displayed on the button."
+msgstr ""
+
+msgid "Sets the minute value of the beginning time."
+msgstr ""
+
+msgid "Sets the hour value of the beginning time."
+msgstr ""
+
+msgid "Sets the hour value of the end time."
+msgstr ""
+
+msgid "Sets the minute value of the end time."
+msgstr ""
+
+msgid ""
+"Pressing this button lets you select the file\n"
+"by a filedialog."
+msgstr ""
+
+msgid ""
+"Selects the current file of the visible\n"
+"editor window for printing."
+msgstr ""
+
+msgid "BeginDate"
+msgstr ""
+
+msgid "EndDate"
+msgstr ""
+
+msgid "No File to print !"
+msgstr ""
+
+msgid ""
+"You need to select at least one file for printing. This can be done by "
+"entering the filename on the left at the file entry field."
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "Printer"
+msgstr ""
+
+msgid "printername"
+msgstr ""
+
+msgid "Outputlocation"
+msgstr ""
+
+msgid "print to file"
+msgstr ""
+
+msgid "Paper format"
+msgstr ""
+
+msgid "portrait"
+msgstr ""
+
+msgid "landscape"
+msgstr ""
+
+msgid "Outputmedia"
+msgstr ""
+
+msgid "Outputformat"
+msgstr ""
+
+msgid "Default printsettings"
+msgstr ""
+
+msgid "settings"
+msgstr ""
+
+msgid "Files..."
+msgstr ""
+
+msgid "Outprinting"
+msgstr ""
+
+msgid "Page printing"
+msgstr ""
+
+msgid "one page per side"
+msgstr ""
+
+msgid "two pages per side"
+msgstr ""
+
+msgid "Pages"
+msgstr ""
+
+msgid "all"
+msgstr ""
+
+msgid "odd"
+msgstr ""
+
+msgid "even"
+msgstr ""
+
+msgid "Pretty-print"
+msgstr ""
+
+msgid "pretty-print"
+msgstr ""
+
+msgid "color"
+msgstr ""
+
+msgid "Pretty-print mode"
+msgstr ""
+
+msgid ""
+"If you click this button a configdialog will be shown.\n"
+"Which configdialog will be shown is depend on the\n"
+"choosen program."
+msgstr ""
+
+msgid "If you click this button a filedialog will be shown."
+msgstr ""
+
+msgid "If you click this button the fileprintdialog will be shown."
+msgstr ""
+
+msgid "In this file the printing is gone."
+msgstr ""
+
+msgid ""
+"In this line you can specify the printer, with which\n"
+"you will print. If default is written in the line, the\n"
+"default printer ($PRINTER) is choosen."
+msgstr ""
+
+msgid "Here you can change the paper direction."
+msgstr ""
+
+msgid "Here you can set the program, you whish to use."
+msgstr ""
+
+msgid "Here you can choose, if you print out in postscript or html."
+msgstr ""
+
+msgid ""
+"Here you can choose, if you print with your personal\n"
+"settings. Or with some other settings."
+msgstr ""
+
+msgid ""
+"Here you can set the sides, which you will print.\n"
+"You can also specify an interval like:\n"
+"5-    :print from side 5 to end\n"
+"5-10 :print from side 5 to side 10\n"
+"-5    :print from side 1 to side 10"
+msgstr ""
+
+msgid ""
+"Here you can choose, if you wish to print 1 page per\n"
+"physical side or 2 page."
+msgstr ""
+
+msgid "Here you can set the pretty-print-mode."
+msgstr ""
+
+msgid "Here you can change the paperformat."
+msgstr ""
+
+msgid "Here you can set, how many times you will print the files."
+msgstr ""
+
+msgid "If you wish to print in pretty-print-mode then check this button."
+msgstr ""
+
+msgid ""
+"If you wish to print in pretty-print-color-mode,\n"
+"then check this button."
+msgstr ""
+
+msgid "If you wish to print to file, then check this button."
+msgstr ""
+
+msgid "a2ps default"
+msgstr ""
+
+msgid "lineprinter"
+msgstr ""
+
+msgid "enscript default"
+msgstr ""
+
+msgid "CVS Commit"
+msgstr ""
+
+msgid "Log message:"
+msgstr "日志消息："
+
+msgid "Adding file to repository"
+msgstr "向仓库中添加文件"
+
+msgid "Removing file from repository"
+msgstr "从仓库中删除文件"
+
+msgid "Updating"
+msgstr "正在更新"
+
+msgid "Commiting file"
+msgstr "正在提交文件"
+
+msgid "CVS"
+msgstr ""
