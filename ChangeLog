@@ -1,4 +1,13 @@
 1999-09-22 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* updating the KDE documentation and changing the path
+	  by menu-setup-dialog will now change the edit field
+	* on ok of the menu-setup-dialog the pathes will be checked,
+	  so the documentation pathes will be checked, if
+	  the user enters the path by line editing.
+	* Doc-Tree refresh if any path in the menu-setup-dialog
+	  is changed.
+
+1999-09-22 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bug-fix: generation of new documentation
 	  (now kapp.h is checked for validity of KDE library
 	  sources) - Thanks to Troy Engel for the hint
