@@ -1,3 +1,8 @@
+2002-12-02 Caleb Tennis <caleb@aei-tech.com>
+    * Added configuration option to set environment variables before
+      running "Automake & Friends".  Patch provided by Hannes Mehnert
+      (hannes@gentoo.org). 
+
 2002-12-01 Sebastian Kratzert <skratzert@gmx.de>
     * New configuration for external documentation (toc docs)
     
