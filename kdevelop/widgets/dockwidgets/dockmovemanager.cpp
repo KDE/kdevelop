@@ -150,8 +150,6 @@ void DockMoveManager::stop ()
   QPoint p(xp, yp);
   if (widget->parent() != 0) p=widget->parentWidget()->mapFromGlobal(p);
 
-  widget->move(p);
-
   working = false;
 }
 

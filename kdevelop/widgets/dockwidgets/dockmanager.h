@@ -1,22 +1,17 @@
 /***************************************************************************
-                dockmanager.h  -  Def. DockWidget,DockManager
+                         DockWidget part of KDEStudio
                              -------------------
-    begin                : Now 21 21:08:00 1999
-    copyright            : (C) 2000 by Judin Max (novaprint@mtu-net.ru)
+    copyright            : (C) 1999 by Judin Max
     email                : novaprint@mtu-net.ru
-
-		improved/changed by	 : Falk Brettschneider	(Jan 30 17:52 MET 2000)
-													 email: gigafalk@yahoo.com
  ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/*  === MEMOS ===
+  DockTabCtl and DockSplitter always have parent DockWidget;
+
+
+
+*/
+
 
 #ifndef DOCKMANAGER_H
 #define DOCKMANAGER_H
@@ -29,14 +24,24 @@
 #include <qpushbutton.h>
 #include <qstrlist.h>
 
+#include "stabctl.h"
+
 class QObjectList;
-class STabCtl;
 class DockSplitter;
 class DockMoveManager;
 class KTMainWindow;
 class QPopupMenu;
+class KConfig;
 
 typedef QList<QWidget> WidgetList;
+
+class DockTabCtl : public STabCtl
+{ Q_OBJECT
+public:
+  DockTabCtl( QWidget *parent = 0, const char *name = 0 )
+  :STabCtl( parent, name ){};
+  ~DockTabCtl(){};
+};
 
 enum DockPosition
 {
@@ -45,7 +50,8 @@ enum DockPosition
   DockLeft   = 0x0002,
   DockRight  = 0x0004,
   DockBottom = 0x0008,
-  DockCenter = 0x0010
+  DockCenter = 0x0010,
+  DockDesktop= 0x0020
 };
 
 class SDockButton : public QPushButton
@@ -64,70 +70,68 @@ private:
 
 class DockWidget: public QWidget
 { Q_OBJECT
-
 friend class DockManager;
 friend class DockSplitter;
 friend class DockMainWindow;
 
 public:
-  DockWidget( DockManager* dockManager, const char* name, const QPixmap &pixmap );
+  DockWidget( DockManager* dockManager, const char* name, const QPixmap &pixmap, QWidget* parent = 0L );
   virtual ~DockWidget();
 
-  /* if target is null  - dock move to desktop at position pos; */
-  void manualDock( DockWidget* target, DockPosition dockPos, QPoint pos = QPoint(0,0), int spliPos = 50 );
+  /* if target is null  - dock move to desktop at position pos;
+     check - only for internal uses;
+     return result GroupDockWidget
+  */
+  DockWidget* manualDock( DockWidget* target, DockPosition dockPos, int spliPos = 50, QPoint pos = QPoint(0,0), bool check = false );
 
-  void setEnableDocking( int pos ){ eDocking = pos;}
+  void setEnableDocking( int pos );
   int enableDocking(){ return eDocking; }
-
-	void setDraggable( bool bDraggable) { m_bDraggable = bDraggable; }
-	bool draggable() { return m_bDraggable; }
 
   void setDockSite( int pos ){ sDocking = pos;}
   int dockSite(){ return sDocking; }
 
-	DockPosition currentDockPos() { return m_curDockPos; }
-
-  void setKTMainWindow( KTMainWindow* );
+  void setWidget( QWidget* );
 
   virtual bool event( QEvent * );
   virtual void show();
-  
+
+  void makeDockVisible();
+  bool mayBeHide();
+  bool mayBeShow();
+
+public slots:
+  void changeHideShowState();
+
 protected:
+  void updateCaptionButton();
   virtual void paintCaption();
 
 signals:
   //emit for dock when another DockWidget docking in this DockWidget
   void docking( DockWidget*, DockPosition );
-	void iMBeingClosed();
+  void setDockDefaultPos();
 
 public slots:
   void unDock();
 
 private slots:
-  void slotDockBackButtonClick();
-	void slotOldBrotherIsLost();
-
-public: // was also private (F.B.)
-  void recreateToDesktop( QPoint );
-  void recreateTo( QWidget* );
+  void slotCloseButtonClick();
 
 private:
-  void setDockTabName( STabCtl* );
+  void setDockTabName( DockTabCtl* );
+  void applyToWidget( QWidget* s, const QPoint& p  = QPoint(0,0) );
   QRect crect();
 
-  DockManager* manager;
   QWidget* widget;
-  SDockButton* dockbackButton;
-//F.B.  SDockButton* stayButton;
-//  DockManager* manager;
-  QWidget* Parent;
+  SDockButton* closeButton;
+  SDockButton* stayButton;
+  DockManager* manager;
   QPixmap* drawBuffer;
   QPixmap* pix;
 
-  int eDocking;	// where can this be docked
-  int sDocking; // where can other DockWidgets dock in this
+  int eDocking;
+  int sDocking;
   int dockCaptionHeight;
-  int buttonY;
 
   // GROUP data
   const char* firstName;
@@ -135,11 +139,6 @@ private:
   int splitterOrientation;
   bool isGroup;
   bool isTabGroup;
-
-  bool m_bDraggable;
-	DockWidget* m_oldBrotherDockWidget;
-  DockPosition m_curDockPos;
-  DockPosition m_oldDockPos;
 };
 
 struct menuDockData
@@ -161,25 +160,22 @@ friend class DockWidget;
 friend class DockMainWindow;
 
 public:
-	DockManager( DockMainWindow* mainWindow, const char* name );
+	DockManager( QWidget* mainWindow, const char* name = 0L );
 	virtual ~DockManager();
 
   void activate();
 
-  void writeConfig( const char* );
-  void readConfig( const char* );
+  void writeConfig( KConfig* c = 0L, QString group = QString::null );
+  void readConfig ( KConfig* c = 0L, QString group = QString::null );
 
-  bool eventFilter( QObject *, QEvent * );
+  virtual bool eventFilter( QObject *, QEvent * );
 
 	void startDrag( DockWidget* );
 	void dragMove( DockWidget*, QPoint pos );
 	void drop();
 
-  void makeDockVisible( DockWidget* );
   DockWidget* findWidgetParentDock( QWidget* );
-  void makeWidgetDockVisible( QWidget* w ){ makeDockVisible(findWidgetParentDock(w)); }
-
-  bool isDockVisible( DockWidget* );
+  void makeWidgetDockVisible( QWidget* w ){ findWidgetParentDock(w)->makeDockVisible(); }
 
   QPopupMenu* dockMenu(){ return menu; }
 
@@ -191,6 +187,7 @@ public:
 signals:
   void change();
   void replaceDock( DockWidget* oldDock, DockWidget* newDock );
+  void setDockDefaultPos( DockWidget* );
 
 private slots:
   void slotTabShowPopup( int, QPoint );
@@ -198,9 +195,9 @@ private slots:
   void slotHideTab();
   void slotMenuPopup();
   void slotMenuActivated( int );
-  void slotConfigMenuActivated( int );
 
 private:
+  QWidget* main;
   DockMoveManager* mg;
   DockWidget* currentDragWidget;
   DockWidget* currentMoveWidget; // widget where mouse moving
@@ -212,14 +209,12 @@ private:
   int storeH;
   bool draging;
   bool undockProcess;
+  bool dropCancel;
 
   /* right mouse button click on the tabbar data: */
   DockWidget* curTabDockWidget;
-  QFont* titleFont;
   QPopupMenu* menu;
-  QPopupMenu* configMenu;
   QList<menuDockData> *menuData;
-  QStrList* configMenuData;
 };
 
 #endif

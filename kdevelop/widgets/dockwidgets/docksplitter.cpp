@@ -13,6 +13,8 @@ DockSplitter::DockSplitter(QWidget *parent, const char *name, Orientation orient
 : KNewPanner( parent, name, orient, units, pos )
 {
   o = orient;
+  first = 0L;
+  last = 0L;
 }
 
 DockSplitter::~DockSplitter()
@@ -43,8 +45,12 @@ void DockSplitter::setSeparatorPos( int pos )
 
 void DockSplitter::updateName()
 {
+  if ( !first || !last ) return;
+
   parentWidget()->setName( QString( first->name() ) + "," + last->name() );
+  parentWidget()->setCaption( QString( first->caption() ) + "," + last->caption() );
   parentWidget()->repaint( false );
+
   ((DockWidget*)parentWidget())->firstName = first->name();
   ((DockWidget*)parentWidget())->lastName = last->name();
   if ( o == Vertical )

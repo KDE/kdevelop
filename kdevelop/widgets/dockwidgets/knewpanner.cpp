@@ -202,49 +202,46 @@ int KNewPanner::checkValue(int pos)
     return pos;
 }
 
-bool KNewPanner::eventFilter(QObject *, QEvent *e)
+bool KNewPanner::eventFilter(QObject *o, QEvent *e)
 {
-    QMouseEvent *mev;
-    bool handled= false;
+  QMouseEvent *mev;
+  bool handled= false;
 
-    switch (e->type()) {
+  switch (e->type()) {
     case QEvent::MouseMove:
-	mev= (QMouseEvent *)e;
-	child0->setUpdatesEnabled(false);
-	child1->setUpdatesEnabled(false);
-	if (orientation == Horizontal) {
-	    setAbsSeparatorPos(divider->mapToParent(mev->pos()).y(), false);
-	    divider->setGeometry(0, absSeparatorPos(), width(), 4);
-	    divider->repaint(0);
-	}
-	else {
-	    setAbsSeparatorPos(divider->mapToParent(mev->pos()).x(), false);
-	    divider->setGeometry(absSeparatorPos(), 0, 4, height());
-	    divider->repaint(0);
-	}
-	handled= true;
-	break;
+      mev= (QMouseEvent *)e;
+      child0->setUpdatesEnabled(false);
+      child1->setUpdatesEnabled(false);
+      if (orientation == Horizontal) {
+        setAbsSeparatorPos(divider->mapToParent(mev->pos()).y(), false);
+        divider->setGeometry(0, absSeparatorPos(), width(), 4);
+        divider->repaint(0);
+      }
+      else {
+        setAbsSeparatorPos(divider->mapToParent(mev->pos()).x(), false);
+        divider->setGeometry(absSeparatorPos(), 0, 4, height());
+        divider->repaint(0);
+      }
+      handled= true;
+      break;
     case QEvent::MouseButtonRelease:
-	mev= (QMouseEvent *)e;
+      child0->setUpdatesEnabled(true);
+      child1->setUpdatesEnabled(true);
 
-	child0->setUpdatesEnabled(true);
-	child1->setUpdatesEnabled(true);
-
-	if (orientation == Horizontal) {
-	    resizeEvent(0);
-	    divider->repaint(true);
-	}
-	else {
-	    resizeEvent(0);
-	    divider->repaint(true);
-	}
-	handled= true;
-	break;
-      default:
+      if (orientation == Horizontal) {
+        resizeEvent(0);
+        divider->repaint(true);
+      }
+      else {
+        resizeEvent(0);
+        divider->repaint(true);
+      }
+      handled= true;
+      break;
+    default:
         break;
-    }
-
-    return handled;
+  }
+  return (handled) ? true : QWidget::eventFilter( o, e );
 }
 
 

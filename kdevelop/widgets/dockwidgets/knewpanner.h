@@ -1,5 +1,3 @@
-// -*- c++ -*-
-
 #ifndef KNEWPANNER_H
 #define KNEWPANNER_H
 
@@ -21,10 +19,6 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 
 #include <qwidget.h>
 #include <qframe.h>
@@ -52,8 +46,7 @@
  * @author Richard Moore rich@kde.org
  */
 class KNewPanner : public QWidget
-{
-    Q_OBJECT
+{ Q_OBJECT
 
 public:
     /**
@@ -149,7 +142,7 @@ protected:
   /**
    * Filter the events from the divider
    */
-  bool eventFilter(QObject *, QEvent *);
+  virtual bool eventFilter(QObject *, QEvent *);
 
 private:
   // The managed children
