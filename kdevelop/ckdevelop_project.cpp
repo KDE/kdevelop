@@ -40,6 +40,7 @@
 #include "kpp.h"
 #include "docviewman.h"
 #include "kwdoc.h"
+#include "kdevsession.h"
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -75,7 +76,13 @@ bool CKDevelop::slotProjectClose()
   slotStatusMsg(i18n("Closing project..."));
   log_file_tree->storeState(prj);
 
-  bool cont = m_docViewManager->doProjectClose();  
+  // save the session
+  QString sessionFileName = prj->getProjectFile();
+  sessionFileName = sessionFileName.left( sessionFileName.length() - 7);
+  sessionFileName += "kdevses";
+  m_pKDevSession->saveToFile(sessionFileName);
+
+  bool cont = m_docViewManager->doProjectClose();
 
   if (cont)
     {
@@ -550,10 +557,16 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 		if (!slotProjectClose())
 			prjname = old_project; // just reset the prjname to the old one
 	}
-	if (readProjectFile(prjname))
-		slotViewRefresh();
-	else
-	{
+	bool ok = true;
+	if (readProjectFile(prjname)) {
+	  QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
+	  projSessionFileName += "kdevses"; // suffix for a KDeveop session file
+	  if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
+      debug("error during restoring of the KDevelop session !\n");
+  	}
+    slotViewRefresh();
+  }		
+	else {
 		KMessageBox::error(0,
 		i18n("This does not appear to be a valid or\n"
 		    "supported kdevelop project file"),
@@ -1366,7 +1379,6 @@ bool CKDevelop::readProjectFile(QString file)
   }
 
   QString str;
-  QString extension;
 
   // Ok - valid project file - we hope
   project=true;
@@ -1375,17 +1387,6 @@ bool CKDevelop::readProjectFile(QString file)
   // set the top level and autoconf makefiles
   lNewProject->setTopMakefile();
   lNewProject->setCvsMakefile();
-
-//FB: really switch to the 2 files below? That's very special...
-  extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
-  str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
-  if(QFile::exists(str)){
-    switchToFile(str);
-  }
-  str = prj->getProjectDir() + prj->getSubDir() + "main."+extension;
-  if(QFile::exists(str)){
-    switchToFile(str);
-  }
 
 // TODO: Add function to read last opened files from project to restore project workspace
 
@@ -1442,15 +1443,6 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   // save the current workspace
   current.id = workspace;
-
-  m_docViewManager->appendInfoFilenames(current.openfiles);
-
-  current.openfiles.removeRef(i18n("Untitled.h"));
-  current.openfiles.removeRef(i18n("Untitled.cpp"));
-  current.openfiles.removeRef(i18n("Untitled.c"));
-//FB  current.header_file = header_widget->getName();
-//FB  current.cpp_file = cpp_widget->getName();
-  current.browser_file = history_list.current();
   current.show_treeview = view_menu->isItemChecked(ID_VIEW_TREEVIEW);
   current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
 

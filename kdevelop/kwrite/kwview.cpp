@@ -238,12 +238,13 @@ void KIconBorder::paintLine(int line)
 
 void KIconBorder::paintEvent(QPaintEvent* e)
 {
-	int lineStart, lineEnd, h, yPos;
+	int lineStart = 0;
+	int lineEnd = 0;
 
 	QRect updateR = e->rect();
 
-	h = kWriteDoc->getFontHeight();
-	yPos = kWriteView->getYPos();
+	int h = kWriteDoc->getFontHeight();
+	int yPos = kWriteView->getYPos();
 	if (h) {
   	lineStart = (yPos + updateR.y()) / h;
 	  lineEnd = (yPos + updateR.y() + updateR.height()) / h;
@@ -347,7 +348,7 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
   QWidget::setCursor(ibeamCursor);
   setMouseTracking(true);   //dbg
   setBackgroundMode(NoBackground);
-  setFocusPolicy(StrongFocus);
+  setFocusPolicy(ClickFocus);
 #ifdef QT_I18N
   setInputMethodEnabled( TRUE );
   setInputMethodSpotLocation(0, kWriteDoc->fontAscent);

@@ -173,16 +173,6 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col,
 
         qDebug("createView for a new created doc");
         pCurEditWidget = createEditView(pDoc);
-        pCurEditWidget->setFocusPolicy(QWidget::StrongFocus);
-        pCurEditWidget->setFont(KGlobalSettings::fixedFont());
-      
-        // Read the config
-        KConfig* config = m_pParent->getConfig();
-        if(config) {
-          config->setGroup("KWrite Options");
-          pCurEditWidget->readConfig(config);
-          pCurEditWidget->doc()->readConfig(config);
-        }
       }
     } else {
       // a view for this doc exists, already;
@@ -434,13 +424,18 @@ KWriteDoc* DocViewMan::createKWriteDoc(const QString& strFileName)
   debug("creating KWriteDoc ");
 
   KWriteDoc* pDoc = new KWriteDoc(&m_highlightManager, strFileName);
+  if (!pDoc)
+    return 0L;
 
-  if (pDoc != 0L) {
-    QFileInfo file_info(strFileName);
+  QFileInfo file_info(strFileName);
     
+  // Add the new doc to the list
+  m_documentList.append(pDoc);
 
-    // Add the new doc to the list
-    m_documentList.append(pDoc);
+  KConfig* config = m_pParent->getConfig();
+  if(config) {
+    config->setGroup("KWrite Options");
+    pDoc->readConfig(config);
   }
 
   // Return the new document
@@ -754,7 +749,16 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
 
   // Cover it by a QextMDI childview and add that MDI system
   addQExtMDIFrame(pEW);
-  
+
+  // some additional settings
+  pEW->setFocusPolicy(QWidget::StrongFocus);
+  pEW->setFont(KGlobalSettings::fixedFont());
+  KConfig* config = m_pParent->getConfig();
+  if(config) {
+    config->setGroup("KWrite Options");
+    pEW->readConfig(config);
+  }
+
   return pEW;
 }
 
@@ -1162,19 +1166,6 @@ void DocViewMan::appendInfo(TEditInfo* info)
   edit_infos.append(info);
 }
 */
-
-void DocViewMan::appendInfoFilenames(QStrList &fileList)
-{
-  debug("DocViewMan::appendInfoFilenames !\n");
-
-  QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
-    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
-    if(pDoc) {
-      fileList.append(pDoc->fileName());
-    }
-  }
-}
 
 void DocViewMan::doFileSave(bool project)
 {

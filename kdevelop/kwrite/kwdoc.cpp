@@ -409,8 +409,31 @@ void KWActionGroup::insertAction(KWAction *a) {
 
 
 KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
-  : QObject(0L), hlManager(hlManager), fName(path) {
-
+  : QObject(0L)
+  ,hlManager(hlManager)
+  ,highlight(0L)
+  ,kWriteConfig(0L)
+  ,tabChars(8)
+  ,tabWidth(0)
+  ,fontHeight(0)
+  ,fontAscent(0)
+  ,newDocGeometry(false)
+  ,longestLine(0L)
+  ,maxLength(0)
+  ,selectStart(0)
+  ,selectEnd(0)
+  ,modified(false)
+  ,oldMarkState(false)
+  ,fName(path)
+  ,fileConfig(0L)
+  ,foundLine(0)
+  ,currentUndo(0)
+  ,undoState(0)
+  ,undoSteps(5000)
+  ,tagStart(0)
+  ,tagEnd(0)
+  ,pseudoModal(0L)
+{
   contents.setAutoDelete(true);
 
   fileConfig = new KConfig();//FB? NULL, "kdevelop_srcfiles.cfg");
@@ -420,21 +443,12 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   colors[2] = black;
   colors[3] = black;
   colors[4] = white;
-
-  highlight = 0L;
-  tabChars = 8;
-
-  newDocGeometry = false;
-  modified = false;
-  oldMarkState=false;
-
   undoList.setAutoDelete(true);
-  undoState = 0;
-  undoSteps = 50;
-
-  pseudoModal = 0L;
-
   clear();
+
+  connect(hlManager,SIGNAL(changed()),SLOT(hlChanged()));
+  setHighlight(0); //calls updateFontData()
+
   KWriteView *view;
   for (view = views.first(); view != 0L; view = views.next()) {
     emit view->kWrite->newCaption();
@@ -444,9 +458,6 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 #if defined(QT_I18N) && defined(HAVE_NKF_H)
   JPcode = Nkf::EUC;
 #endif
-
-//  setHighlight(0); //calls updateFontData()
-  connect(hlManager,SIGNAL(changed()),SLOT(hlChanged()));
 }
 
 KWriteDoc::~KWriteDoc() {
@@ -543,7 +554,7 @@ void KWriteDoc::readConfig(KConfig *config) {
   char s[16];
 
   setTabWidth(config->readNumEntry("TabWidth",8));
-  setUndoSteps(config->readNumEntry("UndoSteps",50));
+  setUndoSteps(config->readNumEntry("UndoSteps",5000));
   for (z = 0; z < 5; z++) {
     sprintf(s,"Color%d",z);
     colors[z] = config->readColorEntry(s,&colors[z]);
@@ -1193,7 +1204,7 @@ void KWriteDoc::setHighlight(int n)
 void KWriteDoc::makeAttribs() {
   hlManager->makeAttribs(highlight,attribs,nAttribs);
   updateFontData();
-  // updateLines();
+//  updateLines();
 }
 
 void KWriteDoc::updateFontData() {

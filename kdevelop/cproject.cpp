@@ -1349,10 +1349,6 @@ void  CProject::writeWorkspace(TWorkspace ws){
     default:
       config->setGroup("Workspace_1");
     }
-    config->writeEntry("openfiles",ws.openfiles);
-    config->writeEntry("header_file",ws.header_file);
-    config->writeEntry("cpp_file",ws.cpp_file);
-    config->writeEntry("browser_file",ws.browser_file);
     config->writeEntry("show_treeview",ws.show_treeview);
     config->writeEntry("show_outputview",ws.show_output_view);
     config->sync();
@@ -1385,10 +1381,6 @@ TWorkspace CProject::getWorkspace(int id){
     config->setGroup("Workspace_1");
   }
 
-  config->readListEntry("openfiles",ws.openfiles);
-  ws.header_file = config->readEntry("header_file");
-  ws.cpp_file = config->readEntry("cpp_file");
-  ws.browser_file = config->readEntry("browser_file");
   ws.show_treeview = config->readBoolEntry("show_treeview",true);
   ws.show_output_view =config->readBoolEntry("show_outputview",true);
   return ws;

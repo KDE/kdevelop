@@ -40,6 +40,7 @@
 #include "./dbg/disassemble.h"
 
 #include "docviewman.h"
+#include "kdevsession.h"
 
 #include <kaccel.h>
 #include <kapp.h>
@@ -89,6 +90,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,dbg_widget(0L)
   ,dbgInternal(false)
   ,m_docViewManager(0L)
+  ,m_pKDevSession(0L)
 {
 
   doctool = DT_KDOC;
@@ -111,6 +113,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   // ********* MDI stuff (falk) *******
   m_docViewManager = new DocViewMan( this); // controls the kwrite documents, their views and the covering MDI views
+  m_pKDevSession = new KDevSession( m_docViewManager, "testtest");
 
   // ********* DEBUGGER stuff splattered everywhere (jbb) :-)
   // We need to know what debugger we are using to set the
@@ -142,7 +145,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   initDebugger();
   initWhatsThis();
-
 
   show();
 

@@ -89,6 +89,7 @@ class Kpp;
 
 // MDI and related classes
 class DocViewMan;
+class KDevSession;
 
 // SaveAllDialog class
 class SaveAllDialog : public KDialog
@@ -1019,6 +1020,8 @@ private:
 
   /***************** MDI additions ********************/
   DocViewMan* m_docViewManager;
+
+  KDevSession* m_pKDevSession;
   /************* END MDI additions ********************/
 
 private slots:

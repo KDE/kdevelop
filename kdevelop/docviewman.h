@@ -176,8 +176,6 @@ public:
 
   // void appendInfo(TEditInfo* info);
 
-  void appendInfoFilenames(QStrList &fileList);
-
   bool saveFileFromTheCurrentEditWidget();
 
   void doFileSave(bool project);

@@ -56,6 +56,7 @@
 #include "ktipofday.h"
 #include "wzconnectdlgimpl.h"
 #include "docviewman.h"
+#include "kdevsession.h"
 
 #include <kaboutdialog.h>
 #include <kcombobox.h>
