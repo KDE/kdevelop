@@ -10,7 +10,7 @@
 
 
 #include "splashscreen.h"
-
+#include "splashscreen.moc"
 
 SplashScreen::SplashScreen()
   : QObject()

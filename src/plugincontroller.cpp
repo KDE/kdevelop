@@ -25,6 +25,7 @@
 
 
 #include "plugincontroller.h"
+#include "plugincontroller.moc"
 
 // a separate method in this anonymous namespace to avoid having it all
 // inline in plugincontroller.h
