@@ -77,7 +77,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     action->setStatusText( i18n("Performs a full text search in the documentation") );
     action->setWhatsThis( i18n("Search in documentation\n\n"
                                "Opens the Search in documentation dialog. There you "
-                               "can enter a search term which will be searched in "
+                               "can enter a search term which will be searched for in "
                                "the documentation. For this to work, you must first "
                                "create a full text index, which can be done in the "
                                "configuration dialog of the documentation tree.") );

@@ -91,9 +91,9 @@ const char *arguments_flags[] = {
     "arrayness",     I18N_NOOP("warn about inconsistent use of arguments that use arrays"),
     "type",          I18N_NOOP("warn about dummy arguments of a data type different from "
                                "the actual arguments"),
-    "function-type", I18N_NOOP("warn if the invocation assumes a different data type for the return type "
+    "function-type", I18N_NOOP("warn if the invocation assumes a different data type for the return type, "
                                "different from the actual return type"),
-    "number",        I18N_NOOP("warn about invoking a subprogram with a wrong number of arguments"),
+    "number",        I18N_NOOP("warn about invoking a subprogram with an incorrect number of arguments"),
     0,               0
 };
 
@@ -132,13 +132,13 @@ const char *f77_flags[] = {
     "accept-type",     I18N_NOOP("ACCEPT and TYPE I/O statements"),
     "array-bounds",    I18N_NOOP("expressions defining array bounds that contain array "
                                  "elements or function references"),
-    "assignment-stmt", I18N_NOOP("Assignment statements involing arrays"),
+    "assignment-stmt", I18N_NOOP("Assignment statements involving arrays"),
     0,                 0
 };
 
 
 const char *portability_flags[] = {
-    "backslash",        I18N_NOOP("Backslah characters in strings"),
+    "backslash",        I18N_NOOP("Backslash characters in strings"),
     "common-alignment", I18N_NOOP("COMMON block variables not in descending order of storage sizes"),
     "hollerith",        I18N_NOOP("Hollerith constants"),
     0,                  0

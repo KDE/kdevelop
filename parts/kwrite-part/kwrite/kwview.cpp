@@ -2191,7 +2191,7 @@ bool KWrite::loadFile(const QString &name, int flags) {
   QFileInfo info(name);
   if (!info.exists()) {
     if (flags & KWrite::lfNewFile) return true;
-    KMessageBox::sorry(this, i18n("The specified File does not exist"));
+    KMessageBox::sorry(this, i18n("The specified file does not exist"));
     return false;
   }
   if (info.isDir()) {
@@ -2530,7 +2530,7 @@ int KWrite::checkOverwrite( KURL u )
     info.setFile( name );
     if( info.exists() )
       query = KMessageBox::warningYesNoCancel( this,
-        i18n( "A Document with this Name already exists.\nDo you want to overwrite it?" ) );
+        i18n( "A document with this name already exists.\nDo you want to overwrite it?" ) );
   }
   return query;
 }
@@ -3002,7 +3002,7 @@ bool KWrite::askReplaceEnd() {
   kWriteDoc->updateViews();
   if (s.flags & KWrite::sfFinished) {
     // replace finished
-    str = i18n("%n replace made","%n replaces made",replaces);
+    str = i18n("%n replacement made","%n replacements made",replaces);
     KMessageBox::information(this, str, i18n("Replace"));
     return true;
   }
@@ -3010,10 +3010,10 @@ bool KWrite::askReplaceEnd() {
   // ask for continue
   if (!(s.flags & KWrite::sfBackward)) {
     // forward search
-    str = i18n("%n replace made.\n"
+    str = i18n("%n replacement made.\n"
                "End of document reached.\n"
                "Continue from the beginning?",
-	       "%n replaces made.\n"
+	       "%n replacements made.\n"
                "End of document reached.\n"
                "Continue from the beginning?",replaces);
     query = KMessageBox::questionYesNo(this, str, i18n("Replace"),

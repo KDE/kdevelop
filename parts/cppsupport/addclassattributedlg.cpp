@@ -82,7 +82,7 @@ void AddClassAttributeDialog::setWidgetValues()
     accessGrp.setTitle( i18n("Access") );
     
     text = i18n("You can choose here whether you want the member variable\n"
-                "be declared as public, protected or private.");
+                "to be declared as public, protected or private.");
     QWhatsThis::add(&accessGrp, text);
     
     typeLbl.setText( i18n("Type:") );

@@ -463,7 +463,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Indention</string>
+                    <string>&amp;Indentation</string>
                 </attribute>
                 <grid>
                     <property name="name">

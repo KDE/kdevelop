@@ -217,7 +217,7 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
     DomUtil::writeEntry(dom, prefix + "cxxflags", cxxflags_edit->text());
     DomUtil::writeEntry(dom, prefix + "f77flags", f77flags_edit->text());
 
-    if (KMessageBox::questionYesNo(this, i18n("Rerun configure for %1 now?").arg(config)) == KMessageBox::Yes)
+    if (KMessageBox::questionYesNo(this, i18n("Re-run configure for %1 now?").arg(config)) == KMessageBox::Yes)
         QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
 }
 

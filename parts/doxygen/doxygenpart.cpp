@@ -40,7 +40,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 
     KAction *action;
     
-    action = new KAction( i18n("Run doxygen"), 0,
+    action = new KAction( i18n("Run Doxygen"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
 

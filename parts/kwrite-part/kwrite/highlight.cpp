@@ -2116,7 +2116,7 @@ void LatexHighlight::createItemData(ItemDataList &list) {
   list.append(new ItemData(I18N_NOOP("Tag/Keyword"), dsKeyword));
  list.append(new ItemData(I18N_NOOP("Optional Argument"), dsKeyword));
  list.append(new ItemData(I18N_NOOP("Mandatory Argument"), dsKeyword));
- list.append(new ItemData(I18N_NOOP("Inline Maths"), dsDecVal));
+ list.append(new ItemData(I18N_NOOP("Inline Math"), dsDecVal));
   list.append(new ItemData(I18N_NOOP("Char"       ), dsChar));
   list.append(new ItemData(I18N_NOOP("Parameter"  ), dsDecVal));
   list.append(new ItemData(I18N_NOOP("Comment"    ), dsComment));

@@ -156,7 +156,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     action->setStatusText( i18n("Continues the application execution") );
     action->setWhatsThis( i18n("Continue application execution\n\n"
                                "Continues the execution of your application in the "
-                               "debugger. This only has affect when the application "
+                               "debugger. This only takes effect when the application "
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
 
@@ -198,7 +198,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                "function is completed. The debugger will then display "
                                "the line after the original call to that function. If "
                                "we are in the outermost frame (i.e. in main()), then "
-                               "this operation has no affect.") );
+                               "this operation has no effect.") );
 
     action = new KAction(i18n("Viewers"), "dbgmemview", 0,
                          this, SLOT(slotMemoryView()),

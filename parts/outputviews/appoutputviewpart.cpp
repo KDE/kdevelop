@@ -36,7 +36,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
     QWhatsThis::add(m_widget, i18n("Application output\n\n"
                                    "The stdout/stderr output window is a replacement for "
                                    "terminal-based application communication. Running terminal "
-                                   "applications are using this instead of a terminal window."));
+                                   "applications use this instead of a terminal window."));
 
     topLevel()->embedOutputView(m_widget, i18n("Application"));
 

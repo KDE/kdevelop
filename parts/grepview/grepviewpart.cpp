@@ -62,7 +62,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     action->setWhatsThis( i18n("Search in files\n\n"
                                "Opens the Search in files dialog. There you "
                                "can enter a regular expression which is then "
-                               "searched through all files in the directories "
+                               "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
                                "can switch to a match directly.") );
 }

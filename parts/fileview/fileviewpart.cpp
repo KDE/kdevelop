@@ -42,7 +42,7 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     m_filetree->setCaption(i18n("File Tree"));
     QWhatsThis::add(m_filetree, i18n("File Tree\n\n"
                                      "The file viewer shows all files of the project "
-                                     "in a tree."));
+                                     "in a tree layout."));
     topLevel()->embedSelectView(m_filetree, i18n("File Tree"));
 
     m_filegroups = new FileGroupsWidget(this);

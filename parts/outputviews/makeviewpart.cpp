@@ -48,10 +48,10 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     KAction *action;
     action = new KAction( i18n("&Next Error"), Key_F4, m_widget, SLOT(nextError()),
                           actionCollection(), "view_next_error");
-    action->setStatusText( i18n("Switches to the file and line the next error was reported") );
+    action->setStatusText( i18n("Switches to the file and line where the next error was reported from") );
     action = new KAction( i18n("&Previous Error"), SHIFT+Key_F4, m_widget, SLOT(prevError()),
                           actionCollection(), "view_previous_error");
-    action->setStatusText( i18n("Switches to the file and line the previous error was reported") );
+    action->setStatusText( i18n("Switches to the file and line where the previous error was reported from") );
 
 
     connect( core(), SIGNAL(stopButtonClicked()),

@@ -267,7 +267,7 @@ void AppWizardDialog::accept()
 {
     QFileInfo fi(dest_edit->text());
     if (fi.exists()) {
-        KMessageBox::sorry(this, i18n("The directory you have chosen as location for "
+        KMessageBox::sorry(this, i18n("The directory you have chosen as the location for "
                                       "the project already exists."));
         showPage(generalPage);
         dest_edit->setFocus();
@@ -285,7 +285,7 @@ void AppWizardDialog::accept()
 
     // if dir still does not exist
     if (!fi.dir().exists()) {
-      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist and can not be created."));
+      KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist and cannot be created."));
       showPage(generalPage);
       dest_edit->setFocus();
       return;
@@ -295,7 +295,7 @@ void AppWizardDialog::accept()
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber()) {
             KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers, "
-                                          "as it will be used as toplevel directory name."));
+                                          "as it will be used as the top level directory name."));
             showPage(generalPage);
             appname_edit->setFocus();
             return;

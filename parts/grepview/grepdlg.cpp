@@ -154,9 +154,9 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 			 "</ul>"
 			 "The following repetition operators exist:"
                          "<ul>"
-			 "<li><b>?</b> - The preceding item is matches at most once"
+			 "<li><b>?</b> - The preceding item is matched at most once"
 			 "<li><b>*</b> - The preceding item is matched zero or more times"
-			 "<li><b>+</b> - The preceding item is matched once or more times"
+			 "<li><b>+</b> - The preceding item is matched one or more times"
 			 "<li><b>{<i>n</i>}</b> - The preceding item is matched exactly <i>n</i> times"
 			 "<li><b>{<i>n</i>,}</b> - The preceding item is matched <i>n</i> or more times"
 			 "<li><b>{,<i>n</i>}</b> - The preceding item is matched at most <i>n</i> times"
@@ -170,9 +170,9 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 		    i18n("Enter the file name pattern of the files to search here. "
 			 "You may give several patterns separated by commas"));
     QWhatsThis::add(template_edit,
-		    i18n("You can choose a template for the pattern from the combo box"
-			 "and edit it here. The string %s in the template is replaced"
-			 "by the pattern input field, resulting in the regular expression"
+		    i18n("You can choose a template for the pattern from the combo box "
+			 "and edit it here. The string %s in the template is replaced "
+			 "by the pattern input field, resulting in the regular expression "
 			 "to search for."));
 
     connect( template_combo, SIGNAL(activated(int)),

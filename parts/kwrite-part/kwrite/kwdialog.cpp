@@ -406,7 +406,7 @@ EditConfigTab::EditConfigTab(QWidget *parent, KWrite *kWrite)
   QWhatsThis::add(opt[4], i18n("Checking this will cause sequences of similar actions to be undone at once."));
   QWhatsThis::add(opt[5], i18n("The editor will display a symbol to indicate the presence of a tab in the text."));
   QWhatsThis::add(opt[6], i18n("Not yet implemented."));
-  QWhatsThis::add(opt[7], i18n("If this is selected, the insertion cursor will be moved to the first/last line when pressing the page up/down buttons.<p>If not selected, it will remain it's relative posision in the visible text."));
+  QWhatsThis::add(opt[7], i18n("If this is selected, the insertion cursor will be moved to the first/last line when pressing the page up/down buttons.<p>If not selected, it will remain at its relative posision in the visible text."));
   QWhatsThis::add(e3, i18n("Sets the number of undo/redo steps to record. More steps uses more memory."));
   QWhatsThis::add(opt[8], i18n("When on, moving the insertion cursor using the <b>Left</b> and <b>Right</b> keys will go on to previous/next line at beginning/end of the line, similar to most editors.<p>When off, the insertion cursor cannot be moved left of the line start, but it can be moved off the line end, which can be very handy for programmers."));
 }
@@ -654,8 +654,8 @@ ColorConfig::ColorConfig( QWidget *parent, char *name )
   QWhatsThis::add(m_back, i18n("Sets the background color of the editing area"));
   QWhatsThis::add(m_textBack, i18n("Sets the background color of the text"));
   QWhatsThis::add(m_selected, i18n("Sets the background color of the selection. To set the text color for selected text, use the &quot;<b>Configure Highlightning</b>&quot; dialog."));
-  QWhatsThis::add(m_found, i18n("Sets the background color the text found by the <b>Find</b> functions"));
-  QWhatsThis::add(m_selFound, i18n("Sets the background color text found within a selection"));
+  QWhatsThis::add(m_found, i18n("Sets the background color of text found by the <b>Find</b> functions"));
+  QWhatsThis::add(m_selFound, i18n("Sets the background color of text found within a selection"));
 
 }
 

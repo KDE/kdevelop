@@ -29,7 +29,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
   m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"
                  	    "fnork fnork blub.... \n"
                             "bork bork bork....."));
-  //QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
+  //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
   m_dialog = 0;
 

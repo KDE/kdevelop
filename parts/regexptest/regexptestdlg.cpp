@@ -71,13 +71,13 @@ void RegexpTestDialog::somethingChanged()
         switch (res)
             {
             case REG_BADRPT:
-                regcompMessage = i18n("Repitition operators must not appear as first character");
+                regcompMessage = i18n("Repetition operators must not appear as first character");
                 break;
             case REG_BADBR:
                 regcompMessage = i18n("Invalid use of back reference operator");
                 break;
             case REG_EBRACE:
-                regcompMessage = i18n("Unmatched brace inverval operators");
+                regcompMessage = i18n("Unmatched brace interval operators");
                 break;
             case REG_EBRACK:
                 regcompMessage = i18n("Unmatched bracket list operators");
@@ -95,7 +95,7 @@ void RegexpTestDialog::somethingChanged()
                 regcompMessage = i18n("Unmatched parenthesis group operators");
                 break;
             case REG_ESUBREG:
-                regcompMessage = i18n("Invalid back reference to subexpresion");
+                regcompMessage = i18n("Invalid back reference to subexpression");
                 break;
             case REG_EESCAPE:
                 regcompMessage = i18n("Trailing backslash");
@@ -105,7 +105,7 @@ void RegexpTestDialog::somethingChanged()
                 break;
 #ifdef REG_ESIZE
             case REG_ESIZE:
-                regcompMessage = i18n("Huh? Regular expression too large");
+                regcompMessage = i18n("Regular expression too large");
                 break;
 #endif
             default:
