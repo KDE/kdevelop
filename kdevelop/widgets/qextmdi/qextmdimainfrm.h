@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
@@ -37,6 +37,10 @@
 #include "qextmdichildarea.h"
 #include "qextmdichildview.h"
 
+/**
+ * @short Internal class
+ * This special event is needed because the view has to inform the main frame that it`s being closed.
+ */
 class QextMdiViewCloseEvent : public QCustomEvent
 {
 public:
@@ -47,6 +51,12 @@ public:
 #endif
 };
 
+/**
+  * @short Base class for all your special main frames. It contains the child frame area and a child view taskbar.
+  * Defines some virtual functions for later common use.<br>
+  * Provides functionality for docking/undocking view windows and manages the taskbar.<br>
+  * Usually you just need to know about this class and the child view class.
+  */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 {
 	friend class QextMdiChildView;
@@ -54,68 +64,80 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 	
 	Q_OBJECT
 
-public:		// Consruction & Destruction
+// attributes
+public:
+	QextMdiTaskBar          *m_pTaskBar;
+	QextMdiChildArea        *m_pMdi;
+	QList<QextMdiChildView> *m_pWinList;
+	QextMdiChildView        *m_pCurrentWindow;
+   QPopupMenu              *m_pWindowPopup;
+   QPopupMenu              *m_pTaskBarPopup;
+
+// methods
+public:
 	QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
 	~QextMdiMainFrm();
-
-public:		// Fields //why don't try to make it private?
-	//Bars
-//F.B.	KviMenuBar    *m_pMenuBar;
-//F.B.	KviToolBar    *m_pToolBar;
-//F.B.	KviStatusBar  *m_pStatusBar;
-	QextMdiTaskBar    *m_pTaskBar;
-	//Mdi manager
-	QextMdiChildArea *m_pMdi;
-	QList<QextMdiChildView> *m_pWinList;
-	//Console window
-	QextMdiChildView* m_pCurrentWindow;
-
-   QPopupMenu* m_pWindowPopup;
-   QPopupMenu* m_pTaskBarPopup;
-   QextMdiChildView*  m_pCurrentActiveWindow;
-public:
-	// Window management
 	QextMdiChildView * activeWindow();
-	QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = false);
-	QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = true);
-	void applyOptions();
+	virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = false);
+	virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = true);
+	virtual void applyOptions();
 	QextMdiChildView * findWindow(const QString& caption);
 	bool windowExists(QextMdiChildView *pWnd);
-	void switchWindows(bool bRight);
-  virtual	bool event(QEvent* e);
+	virtual void switchWindows(bool bRight);
+   virtual bool event(QEvent* e);
 public slots:
-	void addWindow(QextMdiChildView *pWnd,bool bShow, bool bAttach = true);
-   void removeWindowFromMdi(QextMdiChildView *pWnd);
-	void closeWindow(QextMdiChildView *pWnd);
-	// toolbar slots
-	void slot_toggleStatusBar();
-	void slot_toggleTaskBar();
-	void slot_toggleToolBar();
+   /**
+    * One of the most important methods at all!
+    * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
+    * You can specify here whether the view should be attached or detached.
+    */
+	virtual void addWindow(QextMdiChildView *pWnd,bool bShow, bool bAttach = true);
+   /**
+    * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
+    * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
+    */
+   virtual void removeWindowFromMdi(QextMdiChildView *pWnd);
+   /**
+    * Removes a QextMdiChildView from the MDI system and from the main frame`s control.
+    * Note: The view will be deleted!
+    */
+	virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = true);
+   /**
+    * Switches the QextMdiTaskBar on and off.
+    */
+	virtual void slot_toggleTaskBar();
+   /**
+    * Makes a main frame controlled undocked QextMdiChildView docked.
+    * Doesn't work on QextMdiChildView which aren't added to the MDI system.
+    * Use addWindow() for that.
+    */
+	virtual void attachWindow(QextMdiChildView *pWnd,bool bShow,bool overrideGeometry,QRect *r);
+   /**
+    * Makes a docked QextMdiChildView undocked.
+    * The view window still remains under the main frame's MDI control.
+    */
+	virtual void detachWindow(QextMdiChildView *pWnd);
+	virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 protected:
-	//Connection management
-	void applyToolbarOptions();
-	bool checkHighlight(const QString& msg);
-	//Socket events
 	virtual void closeEvent(QCloseEvent *e);
 	virtual void focusInEvent(QFocusEvent *);
-	void childWindowGainFocus(QextMdiChildView *pWnd);
-	//F.B.void windowPopupRequested(QextMdiChildView *pWnd);
-	// Creation
-	void createMenuBar();
-	void createToolBar();
-	void createTaskBar();
-	void createStatusBar();
-	void createMdiManager();
-   void raiseTopLevelWidget(QWidget * ptr);  //added by F.B.
+	virtual void childWindowGainFocus(QextMdiChildView *pWnd);
+	virtual void createTaskBar();
+	virtual void createMdiManager();
+   virtual void raiseTopLevelWidget(QWidget * ptr);
+   /**
+    * Returns a popup menu that contains the MDI controlled view list.
+    * Additionally, this menu provides some placing actions for these views.
+    */
    QPopupMenu* windowMenu() { return m_pMdi->m_pWindowMenu; };
-public slots:	
-	void attachWindow(QextMdiChildView *pWnd,bool bShow,bool overrideGeometry,QRect *r);
-	void detachWindow(QextMdiChildView *pWnd);
-	void childWindowCloseRequest(QextMdiChildView *pWnd);
 protected slots:
-	void taskbarButtonLeftClicked(QextMdiChildView *pWnd);
-	void taskbarButtonRightClicked(QextMdiChildView *pWnd);
-	void pushNewTaskBarButton(QextMdiChildView* pWnd);
+	virtual void taskbarButtonLeftClicked(QextMdiChildView *pWnd);
+	virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
+   /**
+    * For internal use. Called when a taskbar button must be pushed.
+    * Usually, if its view raises.
+    */
+	virtual void pushNewTaskBarButton(QextMdiChildView* pWnd);
 };
 
 #endif //_QEXTMDIMAINFRM_H_

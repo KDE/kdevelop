@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
@@ -33,9 +33,9 @@
 #include "qextmdichildview.h"
 
 /**
-* Manager for QextMdiChildFrm widgets.
-*/
-
+  * @short Internal class.
+  * The widget where the child frames live in. Furthermore the manager for those frame widgets.
+  */
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildArea : public QFrame
 {
 	friend class QextMdiChildFrmCaption;
@@ -140,7 +140,7 @@ protected:	// Protected methods
 	void mousePressEvent(QMouseEvent *e);
 	void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
 	
-	void undockWindow(QWidget *lpC);   //added by F.B.
+	void undockWindow(QWidget *lpC);
 protected slots:
 	void menuActivated(int id);
 signals:
@@ -148,5 +148,3 @@ signals:
 };
 
 #endif   // _QEXTMDICHILDAREA_H_
-
-

@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
@@ -30,31 +30,45 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 #include <qrect.h>
-#include <qpushbutton.h>   //F.B.
-#include <qtoolbutton.h>   //F.B.
+#include <qapplication.h>
 
 #include "qextmdichildfrm.h"
 
 /**
- * @short Base class for all interface windows
- * Base class for all interface windows.<br>
- * Defines some virtual functions for later common use.<br>
- * The derived windows 'lives' attached to a QextMdiChildFrm widget<br>
- * managed by KviMdiManager , or detached (managed by the window manager.)<br>
- * So remember that the parent() pointer may change , and may be 0 too.<br>
- */
+  * @short Base class for all your special view windows.
+  * Base class for all interface windows.<br>
+  * Defines some virtual functions for later common use.<br>
+  * The derived windows 'lives' attached to a QextMdiChildFrm widget<br>
+  * managed by QextMdiChildArea, or detached (managed by the window manager.)<br>
+  * So remember that the parent() pointer may change , and may be 0 too.<br>
+  */
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
 {
 	Q_OBJECT
 
 public:		// Consruction & Destruction
-	QextMdiChildView(const QString& name, QWidget* parentWidget = 0);
+	QextMdiChildView( const QString& name, QWidget* parentWidget = 0);
 	~QextMdiChildView();
 protected:		// Fields
-	QString            m_szCaption;
+	QString     m_szCaption;
+	QWidget*    m_focusedChildWidget;
+	QWidget*    m_firstFocusableChildWidget;
+	QWidget*    m_lastFocusableChildWidget;
 
 public:     // Methods
+	/**
+	 * Memorize first focusable child widget <br>
+	 */
+   void setFirstFocusableChildWidget(QWidget*);
+	/**
+	 * Memorize last focusable child widget <br>
+	 */
+   void setLastFocusableChildWidget(QWidget*);
+	/**
+	 * Returns current focused child widget <br>
+	 */
+   QWidget* focusedChildWidget();
 	/**
 	 * Returns true if this window is attached to the Mdi manager<br>
 	 * (inline)
@@ -69,13 +83,7 @@ public:     // Methods
 	 * Sets the window caption string...<br>
 	 * Calls updateButton on the taskbar button if it has been set.<br>
 	 */
-	void setWindowCaption(const QString& szCaption);
-	/**
-	 * Highlights the related taskbar button.<br>
-	 * Should be called from all do*Output overridden calls.<br>
-	 * (inline)
-	 */
-//F.B.	void highlight();
+	virtual void setWindowCaption(const QString& szCaption);
 	/**
 	 * Returns the QextMdiChildFrm parent widget (or 0 if the window is not attached)
 	 */
@@ -97,7 +105,6 @@ public:     // Methods
 	//Methods to override ABSOLUTELY
 	/**
 	 * You SHOULD override this function in the derived class<br>
-	 * and return one of the g_pWindowIcon pointers managed by KviApp.
 	 */
 	virtual QPixmap * myIconPtr();
 	/**
@@ -105,56 +112,65 @@ public:     // Methods
 	 */
 //F.B.	virtual void applyOptions();
 	/**
-	 * Sets the related taskbar button progress
-	 */
-//F.B.	void setProgress(int progress);
-	/**
 	 * Minimizes this window when it is attached to the Mdi manager.<br>
 	 * Otherwise has no effect
 	 */
-	void minimize(bool bAnimate);   //Useful only when attached
+	virtual void minimize(bool bAnimate);   //Useful only when attached
 	/**
 	 * Maximizes this window when it is attached to the Mdi manager.<br>
 	 * Otherwise has no effect
 	 */
-	void maximize(bool bAnimate);   //Useful only when attached
+   virtual void maximize(bool bAnimate);   //Useful only when attached
+   /**
+     * Interpose in event loop of all current child widgets.
+     * Must be recalled after dynamic adding of new child widgets!
+     */
+   void installEventFilterForAllChildren();
+   /**
+     * Switches interposing in event loop of all current child widgets off.
+     */
+   void removeEventFilterForAllChildren();
 	
-/*F.B.	virtual void setProperties(QextMdiChildViewProperty * p); //do nothing here....
-	  virtual void saveProperties();F.B.*/
-	
-	public slots:
-	  /**
-	   * Attaches this window to the Mdi manager.<br>
-	   * It calls the KviFrame attachWindow function , so if you have a pointer<br>
-	   * to this KviFrame you'll be faster calling that function.<br>
-	   * Useful as slot.
-	   */
-	  void attach();
+//F.B.	virtual void setProperties(QextMdiChildViewProperty * p); //do nothing here....
+//F.B.	virtual void saveProperties();
+public slots:
+   /**
+    * Only for Qt1.44 downwards compatibility.
+    */
+/*#if QT_VERSION < 200
+   virtual void setFocus() { if(!hasFocus()) {QFocusEvent* fe = new QFocusEvent(Event_FocusIn); QApplication::postEvent(this, fe);} };
+#endif*/
 	/**
-	 * Detaches this window from the Mdi manager.<br>
-	 * It calls the KviFrame detachWindow function , so if you have a pointer<br>
-	 * to this KviFrame you'll be faster calling that function.<br>
+	 * Attaches this window to the Mdi manager.<br>
+	 * It calls the QextMdiMainFrm attachWindow function , so if you have a pointer<br>
+	 * to this QextMdiMainFrm you'll be faster calling that function.<br>
 	 * Useful as slot.
 	 */
-	void detach();
+	virtual void attach();
+	/**
+	 * Detaches this window from the Mdi manager.<br>
+	 * It calls the QextMdiMainFrm detachWindow function , so if you have a pointer<br>
+	 * to this QextMdiMainFrm you'll be faster calling that function.<br>
+	 * Useful as slot.
+	 */
+	virtual void detach();
 	
-	void minimize(); //Overload and slot
-	void maximize(); //Overload and slot
+	virtual void minimize(); //Overload and slot
+	virtual void maximize(); //Overload and slot
 	/**
 	 * Restores this window when it is attached to the Mdi manager.
 	 */
-	void restore();    //Useful only when attached
-	void youAreAttached(QextMdiChildFrm *lpC);
-	void youAreDetached();
+	virtual void restore();    //Useful only when attached
+	virtual void youAreAttached(QextMdiChildFrm *lpC);
+	virtual void youAreDetached();
  protected:	// Protected methods
 	/**
-	 * Ignores the event and calls KviFrame::childWindowCloseRequest
-	 * @see KviFrame::childWindowCloseRequest
+	 * Ignores the event and calls QextMdiMainFrm::childWindowCloseRequest
+	 * @see QextMdiMainFrm::childWindowCloseRequest
 	 */
 	virtual void closeEvent(QCloseEvent *e);
-//F.B.	virtual bool eventFilter(QObject *o,QEvent *e);
-//F.B.  virtual void resizeEvent(QResizeEvent *e);   //F.B.
-      	virtual void focusInEvent(QFocusEvent *); //F.B.
+   virtual bool eventFilter(QObject *obj, QEvent *e);
+   virtual void focusInEvent(QFocusEvent *);
 	
  signals:
 	void attachWindow( QextMdiChildView*,bool,bool,QRect*);

@@ -5,7 +5,7 @@
 //
 //    begin                : 07/1999       by Szymon Stefanek as part of kvirc
 //                                         (an IRC application)
-//    changes              : 09/1999       by Falk Brettschneider to create an
+//    changes              : 09/1999       by Falk Brettschneider to create a
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
@@ -24,23 +24,32 @@
 //
 //----------------------------------------------------------------------------
 
+#include <qdatetime.h>
+#include <qobjectlist.h>
+
+#if QT_VERSION < 200
+   #include <qkeycode.h>
+#endif
+
 #include "qextmdichildview.h"
 #include "qextmdimainfrm.h"
 #include "qextmdichildfrm.h"
-#include "qextmdidefines.h"   //F.B.
+#include "qextmdidefines.h"
 
-#include <qdatetime.h>
 //============ QextMdiChildView ============//
 
 QextMdiChildView::QextMdiChildView( const QString& name, QWidget* parentWidget)
-:QWidget(parentWidget)
+: QWidget(parentWidget),
+  m_focusedChildWidget(0),
+  m_firstFocusableChildWidget(0),
+  m_lastFocusableChildWidget(0)
 {
    if( name)
       m_szCaption = name;
    else
-      m_szCaption = QString("Unnamed");
+      m_szCaption = QString(tr("Unnamed"));
    //F.B.	setMinimumSize(QSize(QEXTMDI_CHILDVIEW_MIN_WIDTH,QEXTMDI_CHILDVIEW_MIN_HEIGHT));
-   setFocusPolicy(StrongFocus);
+   setFocusPolicy(ClickFocus);
 }
 
 //============ ~QextMdiChildView ============//
@@ -115,8 +124,8 @@ bool QextMdiChildView::isMinimized()
 bool QextMdiChildView::isMaximized()
 {
 	if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Maximized);
-	if( size() == maximumSize()) return true; //F.B.
-	else return false;//F.B.
+	if( size() == maximumSize()) return true;
+	else return false;
 }
 
 //============== restore ================//
@@ -173,41 +182,175 @@ QPixmap * QextMdiChildView::myIconPtr()
 {
 	return 0;
 }
-/*F.B.
-//================ applyOptions =================//
 
-void QextMdiChildView::applyOptions()
-{
-	//Nothing here
-}
-
+////================ applyOptions =================//
+//
+//void QextMdiChildView::applyOptions()
+//{
+//	//Nothing here
+//}
+//
 //=============== highlight =================//
-
-void QextMdiChildView::highlight()
-{
+//
+//void QextMdiChildView::highlight()
+//{
 //F.B.	if(m_pTaskBarButton)m_pTaskBarButton->highlight();
-}
-
+//}
+//
 //============ setProgress ==============//
-
-void QextMdiChildView::setProgress(int progress)
-{
+//
+//void QextMdiChildView::setProgress(int progress)
+//{
 //F.B.	if(m_pTaskBarButton)m_pTaskBarButton->setProgress(progress);
-}
-void QextMdiChildView::setProperties(QextMdiChildViewProperty *)
-{
-}
-
-void QextMdiChildView::saveProperties()
-{
-}
-F.B. */
+//}
+//void QextMdiChildView::setProperties(QextMdiChildViewProperty *)
+//{
+//}
+//
+//void QextMdiChildView::saveProperties()
+//{
+//}
 
 //============= focusInEvent ===============//
 
 void QextMdiChildView::focusInEvent(QFocusEvent *)
 {
+   //qDebug("ChildView::focusInEvent");
    emit focusInEventOccurs( this);
+
+   if( m_focusedChildWidget != 0) {
+      //qDebug("ChildView::focusInEvent 2");
+      m_focusedChildWidget->setFocus();
+   }
+   else
+      if( m_firstFocusableChildWidget != 0) {
+         //qDebug("ChildView::focusInEvent 3");
+         m_firstFocusableChildWidget->setFocus();
+         m_focusedChildWidget = m_firstFocusableChildWidget;
+      }
 }
 
+bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
+{
+#if QT_VERSION >= 200
+   if( e->type() == QEvent::KeyPress) {
+      QKeyEvent* ke = (QKeyEvent*) e;
+      if( ke->key() == Qt::Key_Tab) {
+#else
+   if( e->type() == Event_KeyPress) {
+      QKeyEvent* ke = (QKeyEvent*) e;
+      if( ke->key() == Key_Tab) {
+#endif
+         //qDebug("ChildView %i::eventFilter - TAB from %s (%s)", this, obj->name(), obj->className());
+         QWidget* w = (QWidget*) obj;
+         if( (w->focusPolicy() == QWidget::StrongFocus) || (w->focusPolicy() == QWidget::TabFocus)) {
+            //qDebug("  accept TAB as setFocus change");
+            if( m_lastFocusableChildWidget != 0) {
+               if( w == m_lastFocusableChildWidget) {
+                  if( w != m_firstFocusableChildWidget) {
+                     //qDebug("  TAB: setFocus to first");
+                     m_firstFocusableChildWidget->setFocus();
+                     //qDebug("  TAB: focus is set to first");
+                  }
+                  return true;
+                }
+            }
+         }
+#if QT_VERSION >= 200
+         else {
+            if( w->focusPolicy() == QWidget::WheelFocus) {
+               //qDebug("  accept TAB as setFocus change");
+               if( m_lastFocusableChildWidget != 0) {
+                  if( w == m_lastFocusableChildWidget) {
+                     if( w != m_firstFocusableChildWidget) {
+                        //qDebug("  TAB: setFocus to first");
+                        m_firstFocusableChildWidget->setFocus();
+                        //qDebug("  TAB: focus is set to first");
+                     }
+                     return true;
+                   }
+               }
+            }
+         }
+#endif   // QT_VERSION >= 200
+      }
+   }
+   return false;                           // standard event processing
+}
 
+/** Interpose in event loop of all current child widgets. Must be recalled after dynamic adding of new child widgets!
+  * and
+  * get first and last TAB-focusable widget of this child frame
+  */
+void QextMdiChildView::installEventFilterForAllChildren()
+{
+   QObjectList *list = queryList( "QWidget" );
+   QObjectListIt it( *list );          // iterate over all child widgets
+   QObject * obj;
+   while ( (obj=it.current()) != 0 ) { // for each found object...
+      QWidget* widg = (QWidget*)obj;
+      ++it;
+      widg->installEventFilter(this);
+      if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus)) {
+         if( m_firstFocusableChildWidget == 0)
+            m_firstFocusableChildWidget = widg;  // first widget
+         m_lastFocusableChildWidget = widg; // last widget
+         //qDebug("*** %s (%s)",widg->name(),widg->className());
+      }
+#if QT_VERSION >= 200
+      else {
+         if( widg->focusPolicy() == QWidget::WheelFocus) {
+            if( m_firstFocusableChildWidget == 0)
+               m_firstFocusableChildWidget = widg;  // first widget
+            m_lastFocusableChildWidget = widg; // last widget
+            //qDebug("*** %s (%s)",widg->name(),widg->className());
+         }
+      }
+#endif // QT_VERSION >= 200
+   }
+   //qDebug("### |%s|", m_lastFocusableChildWidget->name());
+   if( m_lastFocusableChildWidget != 0) {
+      if( QString(m_lastFocusableChildWidget->name()) == QString("qt_viewport")) {
+         // bad Qt hack :-( to avoid setting a listbox viewport as last focusable widget
+         it.toFirst();
+         // search widget
+         while( (obj=it.current()) != m_lastFocusableChildWidget) ++it;
+         --it;
+         --it;
+         --it;// three steps back
+         m_lastFocusableChildWidget = (QWidget*) it.current();
+         //qDebug("Qt hack");
+      }
+   }
+   //qDebug("### |%s|", m_lastFocusableChildWidget->name());
+   delete list;                        // delete the list, not the objects
+}
+
+/** Switches interposing in event loop of all current child widgets off. */
+void QextMdiChildView::removeEventFilterForAllChildren()
+{
+   QObjectList *list = queryList( "QWidget" );
+   QObjectListIt it( *list );          // iterate over all child widgets
+   QObject * obj;
+   while ( (obj=it.current()) != 0 ) { // for each found object...
+      QWidget* widg = (QWidget*)obj;
+      ++it;
+      widg->removeEventFilter(this);
+   }
+   delete list;                        // delete the list, not the objects
+}
+
+QWidget* QextMdiChildView::focusedChildWidget()
+{
+   return m_focusedChildWidget;
+}
+
+void QextMdiChildView::setFirstFocusableChildWidget(QWidget* firstFocusableChildWidget)
+{
+   m_firstFocusableChildWidget = firstFocusableChildWidget;
+}
+
+void QextMdiChildView::setLastFocusableChildWidget(QWidget* lastFocusableChildWidget)
+{
+   m_lastFocusableChildWidget = lastFocusableChildWidget;
+}

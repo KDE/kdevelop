@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //

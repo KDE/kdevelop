@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
@@ -27,12 +27,12 @@
 #ifndef _QEXTMDICHILDFRM_H_
 #define _QEXTMDICHILDFRM_H_
 
-//#include <qscrollview.h> //tentative
 #include <qframe.h>
 #include <qlist.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
+#include <qdict.h>
 
 #include "qextmdichildfrmcaption.h" //cross ref
 
@@ -40,8 +40,9 @@ class QextMdiChildArea;
 class QextMdiChildView;
 
 /**
-* A MDI child widget: Usually you don't need to derive from this class.
-*/
+  * @short Internal class.
+  * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
+  */
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm : public QFrame
 {
@@ -58,7 +59,7 @@ public:
 	* Delicato : destroys this QextMdiChildFrm
 	* If a child is still here managed (no recreation was made) it is destroyed too.
 	*/
-	~QextMdiChildFrm();
+	~QextMdiChildFrm();	
 public:
 	QextMdiChildView     *m_pClient;
 protected:
@@ -125,14 +126,15 @@ public:
 	*/
 	void updateRects(){ resizeEvent(0); };
 private:
-	void linkChildren();
-	void unlinkChildren();
+	void linkChildren( QDict<FocusPolicy>* pFocPolDict);
+	QDict<QWidget::FocusPolicy>* unlinkChildren();
 	int getResizeCorner(int ax,int ay);
 protected slots:
 	void maximizePressed();
 	void minimizePressed();
 	void closePressed();
 	void undockPressed();
+	void raiseAndActivate();
 protected:
 	virtual void resizeEvent(QResizeEvent *);
 	virtual void mouseMoveEvent(QMouseEvent *e);
@@ -140,26 +142,11 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent *);
    virtual void leaveEvent(QEvent *);
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
-	void resizeWindow(int resizeCorner/*F.B.*/,int x, int y /*F.B.*/);
-	void moveWindow(QPoint diff);
+  //   virtual bool focusNextPrevChild( bool next ) { return true; };
+	void resizeWindow(int resizeCorner, int x, int y);
+	void moveWindow(QPoint diff, QPoint relativeMousePos);
 	void setResizeCursor(int resizeCorner);
 };
 
 
 #endif //_QEXTMDICHILDFRM_H_
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

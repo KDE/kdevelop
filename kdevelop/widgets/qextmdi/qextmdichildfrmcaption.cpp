@@ -44,7 +44,7 @@
 //============== QextMdiChildFrmCaption =============//
 
 QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
-:QWidget(parent)
+:QWidget(parent, "qextmdi_childfrmcaption")
 {
 	m_szCaption    = tr("Unnamed");
 	m_bActive      = false;
@@ -53,7 +53,7 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
 	m_bCanMove     = false;
 	m_pParent      = parent;
 	setBackgroundMode(NoBackground);
-	setFocusPolicy(ClickFocus);
+	setFocusPolicy(NoFocus);
 }
 
 //============== ~QextMdiChildFrmCaption =============//
@@ -66,7 +66,8 @@ QextMdiChildFrmCaption::~QextMdiChildFrmCaption()
 
 void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
-    m_relativeMousePos = e->pos() - pos() ;//+ QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
+   grabMouse();
+   m_relativeMousePos = e->pos() - pos() + QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
 	//F.B. QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
 	m_bCanMove=true;
 }
@@ -77,15 +78,15 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *)
 {
 	m_bCanMove=false;
 	QApplication::restoreOverrideCursor();
+	releaseMouse();
 }
 
 //============== mouseMoveEvent =============//
-
 void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 {
 	if(m_bCanMove){
-		QPoint newPos = (e->pos() - m_relativeMousePos);
-		if(e->state() & LeftButton)m_pParent->moveWindow( newPos);
+		QPoint diff = (e->pos() - m_relativeMousePos);
+		if(e->state() & LeftButton)m_pParent->moveWindow( diff, m_relativeMousePos);
 	}
 }
 
@@ -134,6 +135,7 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
 	}
 	r.setLeft(r.left()+19); //Shift the after the icon
 	p.drawText(r,AlignVCenter|AlignLeft|SingleLine,m_szCaption);
+	
 }
 
 //============= mouseDoubleClickEvent ===========//

@@ -682,7 +682,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   
   mdi_main_frame->addWindow( new_editorview, true);
   if(maximize){
-      //  new_editorview->maximize(false);
+    new_editorview->maximize(true);
   }
   //  new_editorview->setFocus();
   

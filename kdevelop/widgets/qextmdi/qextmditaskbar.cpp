@@ -30,6 +30,7 @@
 #include "qextmdidefines.h"
 
 #include <qtooltip.h>
+#include <qlabel.h>
 
 #if QT_VERSION >= 200
 #include <qnamespace.h>
@@ -50,15 +51,14 @@
 // QextMdiTaskBarButton
 //
 //####################################################################
-
 QextMdiTaskBarButton::QextMdiTaskBarButton(QextMdiTaskBar *pTaskBar,QextMdiChildView *win_ptr)
-:QToolButton(pTaskBar)
+:QPushButton(pTaskBar),
+ m_actualText("")
 {
-   setToggleButton( true); //F.B.
-
-//	setFont(g_pOptions->m_fntApplication);
+   setToggleButton( true);
 	m_pWindow      = win_ptr;
 	QToolTip::add(this,win_ptr->caption());
+	setFocusPolicy(NoFocus);
 }
 
 QextMdiTaskBarButton::~QextMdiTaskBarButton()
@@ -88,9 +88,40 @@ void QextMdiTaskBarButton::mousePressEvent( QMouseEvent* e)
    emit clicked( m_pWindow);
 }
 
+/** slot version of setText */
 void QextMdiTaskBarButton::setNewText(const QString& s)
 {
-   setText(s);
+   setText( s);
+}
+
+void QextMdiTaskBarButton::setText(const QString& s)
+{
+   m_actualText = s;
+   QButton::setText( s);
+}
+
+void QextMdiTaskBarButton::fitText(const QString& s, int newWidth)
+{
+   QButton::setText( m_actualText);
+
+   int actualWidth = sizeHint().width();
+   int realLetterCount = s.length();
+   int newLetterCount = (newWidth * realLetterCount) / actualWidth;
+   if( newLetterCount < realLetterCount) {
+      if(newLetterCount > 3)
+         QButton::setText( s.left( newLetterCount/2) + "..." + s.right( newLetterCount/2));
+      else {
+         if(newLetterCount > 1) QButton::setText( s.left( newLetterCount) + "..");
+         else QButton::setText( s.left(1));
+      }
+   }
+   else
+      QButton::setText( s);
+}
+
+QString QextMdiTaskBarButton::actualText() const
+{
+   return m_actualText;
 }
 
 //####################################################################
@@ -100,14 +131,15 @@ void QextMdiTaskBarButton::setNewText(const QString& s)
 //####################################################################
 
 QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock)
-:QToolBar("TaskBar",parent,dock)
+ :QToolBar("TaskBar",parent,dock),
+  m_pCurrentFocusedWindow(0),
+  m_pStretchSpace(0)
 {
 	m_pFrm = parent;
 	m_pButtonList = new QList<QextMdiTaskBarButton>;
 	m_pButtonList->setAutoDelete(true);
-//	setFont(g_pOptions->m_fntApplication);
 	setFontPropagation(QWidget::SameFont);
-	m_pCurrentFocusedWindow = 0;
+   setMinimumWidth(1);
 }
 
 QextMdiTaskBar::~QextMdiTaskBar()
@@ -117,39 +149,42 @@ QextMdiTaskBar::~QextMdiTaskBar()
 
 QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
 {
-	QextMdiTaskBarButton *b=new QextMdiTaskBarButton( this /*0,                      // icon
-	                                    win_ptr->caption(),     // text
-	                                    "",                     // statusbar text
-	                                    this,                   // receiver
-	                                    SLOT(setActiveButton()),// slot
-	                                    this);                  // parent*/ ,win_ptr);
+   if( m_pStretchSpace) {
+      delete m_pStretchSpace;
+      m_pStretchSpace = 0;
+      setStretchableWidget( 0);
+   }
+
+	QextMdiTaskBarButton *b=new QextMdiTaskBarButton( this, win_ptr);
 	
    connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) );	
    connect( b, SIGNAL(clicked(QextMdiChildView*)), this, SLOT(setActiveButton(QextMdiChildView*)) );
-   connect( b,  SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonLeftClicked(QextMdiChildView*)) );
+   connect( b, SIGNAL(leftMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonLeftClicked(QextMdiChildView*)) );
    connect( b, SIGNAL(rightMouseButtonClicked(QextMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(QextMdiChildView*)) );
 	
 	m_pButtonList->append(b);
 	b->setToggleButton( true);
-	b->setText(win_ptr->caption());   //F.B.
-	b->show(); //????
+	b->setText(win_ptr->caption());
+	
+   m_pStretchSpace = new QLabel(this, "empty");
+   m_pStretchSpace->setText("");
+   setStretchableWidget( m_pStretchSpace);
+   m_pStretchSpace->show();
+
+	layoutTaskBar();
+	b->show();
 	return b;
 }
 
-void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr)
+void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar)
 {
 	QextMdiTaskBarButton *b=getButton(win_ptr);
 	if(b){
 		m_pButtonList->removeRef(b);
+      if( haveToLayoutTaskBar) layoutTaskBar();
 	}
 }
-/*F.B.
-void QextMdiTaskBar::windowAttached(QextMdiChildView *win_ptr,bool bAttached)
-{
-//F.B.	QToolButton *b=getButton(win_ptr);
-//F.B.	b->setAttachState(bAttached);
-}
-F.B.*/
+
 QextMdiTaskBarButton * QextMdiTaskBar::getButton(QextMdiChildView *win_ptr)
 {
 	for(QextMdiTaskBarButton *b=m_pButtonList->first();b;b=m_pButtonList->next()){
@@ -201,15 +236,53 @@ void QextMdiTaskBar::setActiveButton(QextMdiChildView *win_ptr)
    }
 }
 
-/*F.B.void QextMdiTaskBar::fontChange(const QFont &oldFont)
+void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 {
-	recalcButtonHeight();
+   if( !taskBarWidth)
+      // no width is given
+      taskBarWidth = width();
+
+   // calculate current width of all taskbar buttons
+   int allButtonsWidth = 0;
+   QextMdiTaskBarButton *b = 0;
+	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
+	   allButtonsWidth += b->width();
+	}
+	
+	// reset button text
+	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
+	   b->setText( b->actualText());
+	}
+
+   // calculate actual width of all taskbar buttons
+   int allButtonsWidthHint = 0;
+	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
+	   int shw = b->sizeHint().width();
+	   allButtonsWidthHint += shw;
+	}
+
+   // if there's enough space, use actual width
+   if( allButtonsWidthHint <= taskBarWidth - 10) {
+   	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
+	      b->setMinimumWidth( b->sizeHint().width());
+	      b->show();
+	   }
+   }
+   else {
+      // too many buttons for actual width
+   	//if( allButtonsWidth > taskBarWidth - 10) {
+         int buttonCount = m_pButtonList->count();
+         int newButtonWidth = (taskBarWidth - 10) / buttonCount;
+      	for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
+   	      b->fitText( b->actualText(), newButtonWidth);
+	         b->setMinimumWidth( newButtonWidth);
+	         b->show();
+   	   }
+   }
 }
-F.B.*/
 
-
-
-
-
-
-
+void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
+{
+   layoutTaskBar( rse->size().width());
+   QToolBar::resize( rse->size());
+}

@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
@@ -35,11 +35,11 @@
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm;
 
 /**
-* Internal class
-* @internal
-*/
+  * @short Internal class.
+  * It's the caption bar of a child frame widget.
+  */
 
-class QextMdiChildFrmCaption : public QWidget
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmCaption : public QWidget
 {
 	Q_OBJECT
 public:
@@ -66,7 +66,5 @@ protected:
 	virtual void mouseReleaseEvent(QMouseEvent *);
 	virtual void mouseMoveEvent(QMouseEvent *e);
 };
-
-
 
 #endif //_QEXTMDICAPTION_H_

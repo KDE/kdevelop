@@ -37,7 +37,7 @@
 //============ QextMdiChildArea ============//
 
 QextMdiChildArea::QextMdiChildArea(QWidget *parent)
-:QFrame(parent)
+:QFrame(parent, "qextmdi_childarea")
 {
 	setFrameStyle(QFrame::Panel|QFrame::Sunken);
 	m_captionFont = QFont();//F.B.QFont("clean",16);
@@ -94,17 +94,17 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
 			}
 		}
 		lpC->show();
-		lpC->raise();
-		lpC->setFocus();
 	}
 	fillWindowMenu();
 	focusTopChild();  //F.B.
+	//if(bShow) lpC->setFocus();
 }
 
 //============= focusInEvent ===============//
 
 void QextMdiChildArea::focusInEvent(QFocusEvent *)
 {
+   //qDebug("ChildArea::focusInEvent");
 	focusTopChild();
 }
 
@@ -148,6 +148,7 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
 {
 	if(m_pZ->last() != lpC){
+      //qDebug("setTopChild");
 		m_pZ->setAutoDelete(false);
 		m_pZ->removeRef(lpC);
 		//disable the labels of all the other children
@@ -516,48 +517,3 @@ void QextMdiChildArea::undockWindow(QWidget* pWidget)   // added by F.B.
 	destroyChild(lpC,false); //Do not focus the new top child , we loose focus...
 	pWnd->setFocus();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -9,9 +9,9 @@
 //                                         stand-alone Qt extension set of
 //                                         classes and a Qt-based library
 //
-//    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
+//    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
-//                                         Falk Brettschneider
+//                                         Szymon Stefanek (stefanek@tin.it)
 //    email                :  gigafalk@geocities.com (Falk Brettschneider)
 //----------------------------------------------------------------------------
 //
@@ -30,8 +30,8 @@
 #include <qtoolbar.h>
 #include <qlist.h>
 #include <qpixmap.h>
+#include <qlabel.h>
 #include <qpushbutton.h>
-#include <qtoolbutton.h>
 
 #include "qextmdidefines.h"
 
@@ -39,15 +39,21 @@ class QextMdiMainFrm;
 class QextMdiChildView;
 class QextMdiTaskBar;
 
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBarButton : public QToolButton
+/**
+  * @short Internal class.
+  * It's a special kind of QPushButton catching mouse clicks.
+  * And you have the ability to abbreviate the text that it fits in the button.
+  */
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBarButton : public QPushButton
 {
 	Q_OBJECT
-
+// methods
 public:
 	QextMdiTaskBarButton( QextMdiTaskBar *pTaskBar, QextMdiChildView *win_ptr);
 	~QextMdiTaskBarButton();
-	
-	QextMdiChildView *m_pWindow;
+   QString actualText() const;
+   void fitText(const QString&, int newWidth);
+   void setText(const QString&);
 signals:
    void clicked(QextMdiChildView*);
    void leftMouseButtonClicked(QextMdiChildView*);
@@ -56,27 +62,40 @@ public slots:
    void setNewText(const QString&);
 protected slots:
    void mousePressEvent( QMouseEvent*);
+
+// attributes
+public:
+	QextMdiChildView *m_pWindow;
+protected:
+   QString m_actualText;
 };
 
-class QextMdiTaskBar : public QToolBar
+/**
+ * @short Internal class.
+ * It's a special kind of QToolBar that acts as taskbar for child views.
+ * QextMdiTaskBarButtons can be added or removed dynamically.<br>
+ * The button sizes are adjusted dynamically, as well.
+ */
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiTaskBar : public QToolBar
 {
 	Q_OBJECT
 public:		// Construction & Destruction
 	QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock dock);
 	~QextMdiTaskBar();
 	QextMdiTaskBarButton * addWinButton(QextMdiChildView *win_ptr);
-	void removeWinButton(QextMdiChildView *win_ptr);
-//F.B.	void windowAttached(QextMdiChildView *win_ptr,bool bAttached);
+	void removeWinButton(QextMdiChildView *win_ptr, bool haveToLayoutTaskBar = true);
 	QextMdiTaskBarButton * getNextWindowButton(bool bRight,QextMdiChildView *win_ptr);
 	QextMdiTaskBarButton * getButton(QextMdiChildView *win_ptr);
-//F.B.	virtual void fontChange(const QFont &oldFont);
+protected:
+   void layoutTaskBar( int taskBarWidth = 0);
+   void resizeEvent( QResizeEvent*);
 public slots:
 	void setActiveButton(QextMdiChildView *win_ptr);
 private:
 	QList<QextMdiTaskBarButton>*  m_pButtonList;
 	QextMdiMainFrm*               m_pFrm;
    QextMdiChildView*             m_pCurrentFocusedWindow;
+   QLabel*                       m_pStretchSpace;
 };
 
 #endif //_QEXTMDITASKBAR_H_
-

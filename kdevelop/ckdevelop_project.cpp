@@ -460,15 +460,15 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
 void CKDevelop::slotProjectOpen(){
   slotStatusMsg(i18n("Opening project..."));
   QString filename = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
-  if (str.isEmpty())
+  if (filename.isEmpty())
       return;
   
   if (project && !slotProjectClose())
       return;
  
-  QFileInfo info(str);
+  QFileInfo info(filename);
   if (info.isFile()){
-    if(!(readProjectFile(str))){
+    if(!(readProjectFile(filename))){
 
     KMessageBox::sorry(0, i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                                "Please use only new generated projects!"));

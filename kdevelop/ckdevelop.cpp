@@ -1040,93 +1040,148 @@ void CKDevelop::slotToolsTool(int tool){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotOptionsEditor(){
-    slotStatusMsg(i18n("Setting up the Editor..."));
-    
+    // a unvisible editor for configuration
+    CEditWidget* editor_widget = new CEditWidget(this,"temp");
     QTabDialog *qtd = new QTabDialog(this, "tabdialog", TRUE);
+    EditorView* edit_view;
     
+    
+    slotStatusMsg(i18n("Setting up the Editor..."));
     qtd->setCaption(i18n("Options Editor"));
-    
+    editor_widget->hide();
+    config->setGroup("KWrite Options");
+    editor_widget->readConfig(config);
+    editor_widget->doc()->readConfig(config);
+
     // indent options
-#warning FIXME MDI stuff
-   //  IndentConfigTab *indentConfig = new IndentConfigTab(qtd, cpp_widget);
-//     qtd->addTab(indentConfig, i18n("Indent"));
+    IndentConfigTab *indentConfig = new IndentConfigTab(qtd, editor_widget);
+    qtd->addTab(indentConfig, i18n("Indent"));
     
-//     // select options
-//     SelectConfigTab *selectConfig = new SelectConfigTab(qtd, cpp_widget);
-//     qtd->addTab(selectConfig, i18n("Select"));
+    // select options
+    SelectConfigTab *selectConfig = new SelectConfigTab(qtd, editor_widget);
+    qtd->addTab(selectConfig, i18n("Select"));
     
-//     // edit options
-//     EditConfigTab *editConfig = new EditConfigTab(qtd, cpp_widget);
-//     qtd->addTab(editConfig, i18n("Edit"));
+    // edit options
+    EditConfigTab *editConfig = new EditConfigTab(qtd, editor_widget);
+    qtd->addTab(editConfig, i18n("Edit"));
     
     
-//     qtd->setOkButton(i18n("OK"));
-//     qtd->setCancelButton(i18n("Cancel"));
+    qtd->setOkButton(i18n("OK"));
+    qtd->setCancelButton(i18n("Cancel"));
     
 
-//     if (qtd->exec()) {
-// 	// indent options
-// 	indentConfig->getData(cpp_widget);
-// 	indentConfig->getData(header_widget);
-// 	// select options
-// 	selectConfig->getData(cpp_widget);
-// 	selectConfig->getData(header_widget);
-// 	// edit options
-// 	editConfig->getData(cpp_widget);
-// 	editConfig->getData(header_widget);
-	
-// 	config->setGroup("KWrite Options");
-// 	cpp_widget->writeConfig(config);
-// 	cpp_widget->doc()->writeConfig(config);
-	
-// 	slotStatusMsg(i18n("Ready."));
-//     }
-//     delete qtd;
+    if (qtd->exec()) {
+	// 	// indent options
+	// 	indentConfig->getData(cpp_widget);
+	// 	indentConfig->getData(header_widget);
+	// 	// select options
+	// 	selectConfig->getData(cpp_widget);
+	// 	selectConfig->getData(header_widget);
+	// 	// edit options
+	// 	editConfig->getData(cpp_widget);
+	// 	editConfig->getData(header_widget);
 
+	indentConfig->getData(editor_widget);
+	selectConfig->getData(editor_widget);
+	editConfig->getData(editor_widget);
+	config->setGroup("KWrite Options");
+	editor_widget->writeConfig(config);
+	editor_widget->doc()->writeConfig(config);
+	
+	// every current editor view get this new configuration
+	QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+	QListIterator<QextMdiChildView> it(editorviews);
+	for (; it.current(); ++it) {
+	    edit_view = static_cast<EditorView*>(it.current());
+	    indentConfig->getData(edit_view->editor);
+	    selectConfig->getData(edit_view->editor);
+	    editConfig->getData(edit_view->editor);
+	}
+	
+    }
+    delete qtd;
+    slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotOptionsEditorColors(){
-#warning FIXME MDI stuff
-  // slotStatusMsg(i18n("Setting up the Editor's colors..."));
-//   cpp_widget->colDlg();
-//   config->setGroup("KWrite Options");
-//   cpp_widget->writeConfig(config);
-//   cpp_widget->doc()->writeConfig(config);
-//   header_widget->copySettings(cpp_widget);
-//   config->setGroup("KWrite Options");
-//   header_widget->readConfig(config);
-//   header_widget->doc()->readConfig(config);
-//   slotStatusMsg(i18n("Ready."));
+    // a unvisible editor for configuration
+    CEditWidget* editor_widget = new CEditWidget(this,"temp");
+    EditorView* edit_view;
+
+    slotStatusMsg(i18n("Setting up the Editor's colors..."));  
+    editor_widget->hide();
+    config->setGroup("KWrite Options");
+    editor_widget->readConfig(config);
+    editor_widget->doc()->readConfig(config);
+    editor_widget->colDlg();
+    editor_widget->writeConfig(config);
+    editor_widget->doc()->writeConfig(config);
+
+
+    // every current editor view get this new configuration
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    for (; it.current(); ++it) {
+	edit_view = static_cast<EditorView*>(it.current());
+	edit_view->editor->readConfig(config);
+	edit_view->editor->doc()->readConfig(config);
+    }
+
+    slotStatusMsg(i18n("Ready."));
 
 }
 
 
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
-#warning FIXME MDI stuff
- //  slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
-//   cpp_widget->hlDef();
-//   config->setGroup("KWrite Options");
-//   cpp_widget->writeConfig(config);
-//   cpp_widget->doc()->writeConfig(config);
-//   header_widget->copySettings(cpp_widget);
-//   config->setGroup("KWrite Options");
-//   header_widget->readConfig(config);
-//   header_widget->doc()->readConfig(config);
-//   slotStatusMsg(i18n("Ready."));
+    EditorView* edit_view;
+    // a unvisible editor for configuration
+    CEditWidget* editor_widget = new CEditWidget(this,"temp");
+    
+    slotStatusMsg(i18n("Setting up syntax highlighting defaults..."));
+    editor_widget->hide();
+    config->setGroup("KWrite Options");
+    editor_widget->readConfig(config);
+    editor_widget->doc()->readConfig(config);
+    editor_widget->hlDef();
+    editor_widget->writeConfig(config);
+    editor_widget->doc()->writeConfig(config);
+
+
+    // every current editor view get this new configuration
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    for (; it.current(); ++it) {
+	edit_view = static_cast<EditorView*>(it.current());
+	edit_view->editor->readConfig(config);
+	edit_view->editor->doc()->readConfig(config);
+    }
+    slotStatusMsg(i18n("Ready."));
 }
 
 
- void CKDevelop::slotOptionsSyntaxHighlighting(){
-#warning FIXME MDI stuff
- //  slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
-//   cpp_widget->hlDlg();
-//   config->setGroup("KWrite Options");
-//   cpp_widget->writeConfig(config);
-//   cpp_widget->doc()->writeConfig(config);
-//   header_widget->copySettings(cpp_widget);
-//   config->setGroup("KWrite Options");
-//   header_widget->readConfig(config);
-//   header_widget->doc()->readConfig(config);
-//   slotStatusMsg(i18n("Ready."));
+void CKDevelop::slotOptionsSyntaxHighlighting(){
+    EditorView* edit_view;
+    // a unvisible editor for configuration
+    CEditWidget* editor_widget = new CEditWidget(this,"temp");
+    
+    slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
+    editor_widget->hide();
+    config->setGroup("KWrite Options");
+    editor_widget->readConfig(config);
+    editor_widget->doc()->readConfig(config);
+    editor_widget->hlDlg();
+    editor_widget->writeConfig(config);
+    editor_widget->doc()->writeConfig(config);
+    
+    // every current editor view get this new configuration
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    for (; it.current(); ++it) {
+	edit_view = static_cast<EditorView*>(it.current());
+	edit_view->editor->readConfig(config);
+	edit_view->editor->doc()->readConfig(config);
+     }
+    
+    slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -2395,6 +2450,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 	enableCommand(ID_EDIT_DESELECT_ALL);
 	enableCommand(ID_EDIT_INVERT_SELECTION);
 
+
 	slotNewUndo();
 	slotNewStatus();
 	slotNewLineColumn();
@@ -2462,6 +2518,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 	disableCommand(ID_EDIT_SELECT_ALL);
 	disableCommand(ID_EDIT_DESELECT_ALL);
 	disableCommand(ID_EDIT_INVERT_SELECTION);
+	
 	if(bAutoswitch){
 	    t_tab_view->setCurrentTab(DOC);
 	    browser_widget->setFocus();
