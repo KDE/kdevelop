@@ -6,6 +6,7 @@
 
 
 class GeneralTab;
+class CodeGenTab;
 class OptimizationTab;
 class Warnings1Tab;
 class Warnings2Tab;
@@ -25,6 +26,7 @@ protected:
 
 private:
     GeneralTab *general;
+    CodeGenTab *codegen;
     OptimizationTab *optimization;
     Warnings1Tab *warnings1;
     Warnings2Tab *warnings2;

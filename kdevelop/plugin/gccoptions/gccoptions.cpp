@@ -5,6 +5,7 @@
 #include <qvaluelist.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
+#include <qvbox.h>
 #include <kdialog.h>
 #include <klocale.h>
 
@@ -23,6 +24,20 @@ public:
 
 private:
     FlagCheckBoxController *controller;
+};
+
+
+class CodeGenTab : public QWidget
+{
+public:
+    CodeGenTab( bool cpp, QWidget *parent=0, const char *name=0 );
+    ~CodeGenTab();
+
+    void readFlags(QStringList *str);
+    void writeFlags(QStringList *str);
+
+private:
+    FlagListBox *genBox;
 };
 
 
@@ -108,6 +123,58 @@ void GeneralTab::writeFlags(QStringList *list)
 }
 
 
+CodeGenTab::CodeGenTab(bool cpp, QWidget *parent, const char *name)
+    : QWidget(parent, name)
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    layout->setAutoAdd(true);
+
+    genBox = new FlagListBox(this);
+
+    if (!cpp) {
+    new FlagListItem(genBox,
+                     "-fexceptions",        i18n("Enable exception handling."),
+                     "-fno-exception");
+    } else {
+    new FlagListItem(genBox,
+                     "-fno-exceptions",     i18n("Enable exception handling."),
+                     "-fexception");
+    }
+    // The following two are somehow mutually exclusive, but the default is
+    // platform-dependent, so if we would leave out one of them, we wouldn't
+    // know how to set the remaining one.
+    new FlagListItem(genBox,
+                     "-fpcc-struct-return", i18n("<qt>Return certain struct and union values in memory rather than in registers.</qt>"));
+    new FlagListItem(genBox,
+                     "-freg-struct-return", i18n("<qt>Return certain struct and union values in registers when possible.</qt>"));
+    new FlagListItem(genBox,
+                     "-short-enums",        i18n("<qt>For an enum, choose the smallest possible integer type.</qt>"));
+    new FlagListItem(genBox,
+                     "-short-double",       i18n("<qt>Make <i>double</i> the same as <i>float</i>.</qt>"));
+
+    layout->addSpacing(10);
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addStretch();
+}
+
+
+CodeGenTab::~CodeGenTab()
+{
+}
+
+
+void CodeGenTab::readFlags(QStringList *list)
+{
+    genBox->readFlags(list);
+}
+
+
+void CodeGenTab::writeFlags(QStringList *list)
+{
+    genBox->writeFlags(list);
+}
+
+
 OptimizationTab::OptimizationTab(bool cpp, QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
@@ -124,15 +191,33 @@ OptimizationTab::OptimizationTab(bool cpp, QWidget *parent, const char *name)
     optBox = new FlagListBox(this);
 
     new FlagListItem(optBox,
-                     "-ffloat-store",  i18n("<qt>Do not store floating point variables in registers.</qt>"));
+                     "-ffloat-store",       i18n("<qt>Do not store floating point variables in registers.</qt>"),
+                     "-fno-float-store");
     new FlagListItem(optBox,
-                     "-fno-defer-pop", i18n("<qt>Pop the arguments to each function call directly "
-                                            "after the function returns.</qt>"));
+                     "-fno-defer-pop",      i18n("<qt>Pop the arguments to each function call directly "
+                                                 "after the function returns.</qt>"),
+                     "-fdefer-pop");
+    new FlagListItem(optBox,
+                     "-fforce-mem",         i18n("<qt>Force memory operands to be copied into registers before"
+                                                 "doing arithmetic on them.</qt>"),
+                     "-fno-force-mem");
+    new FlagListItem(optBox,
+                     "-fforce-addr",        i18n("<qt>Force memory address constants to be copied into registers before"
+                                                 "doing arithmetic on them.</qt>"),
+                     "-fno-force-addr");
+    new FlagListItem(optBox,
+                     "-omit-frame-pointer", i18n("<qt>Don't keep the frame pointer in a register for functions that"
+                                                 "don't need one.</qt>"),
+                     "-fno-omit-frame-pointer");
+    new FlagListItem(optBox,
+                     "-no-inline",          i18n("<qt>Ignore the <i>inline</i> keyword.</qt>"),
+                     "-finline");
 
     if (cpp) {
     new FlagListItem(optBox,
                      "-fno-default-inline", i18n("<qt>Do not make members functions inline merely because they "
-                                                 "are defined inside the class scope.</qt>"));
+                                                 "are defined inside the class scope.</qt>"),
+                     "-fdefault-inline");
     }
 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
@@ -146,6 +231,8 @@ OptimizationTab::~OptimizationTab()
 
 void OptimizationTab::readFlags(QStringList *list)
 {
+    optBox->readFlags(list);
+    
     QStringList::Iterator sli;
     sli = list->find("-O0");
     if (sli != list->end()) {
@@ -167,6 +254,8 @@ void OptimizationTab::readFlags(QStringList *list)
 
 void OptimizationTab::writeFlags(QStringList *list)
 {
+    optBox->writeFlags(list);
+    
     if (O0->isChecked())
         (*list) << "-O0";
     else if (O1->isChecked())
@@ -344,22 +433,26 @@ void Warnings2Tab::writeFlags(QStringList *list)
 
 // Last but not least... :-)
 GccOptions::GccOptions(bool cpp, QWidget *parent, const char *name)
-    : KDevCompilerOptions(parent, name)
+    : KDevCompilerOptions(Tabbed,
+                          cpp? i18n("GNU C++ Compiler Options") : i18n("GNU C Compiler Options"),
+                          parent, name)
 {
-    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint());
-    layout->setAutoAdd(true);
-    
-    QTabWidget *tabw = new QTabWidget(this, "tabw");
+    QVBox *vbox;
 
-    general = new GeneralTab(cpp, tabw, "general tab");
-    optimization = new OptimizationTab(cpp, tabw, "optimization tab");
-    warnings1 = new Warnings1Tab(cpp, tabw, "warnings1 tab");
-    warnings2 = new Warnings2Tab(cpp, tabw, "warnings2 tab");
+    vbox = addVBoxPage(i18n("General"));
+    general = new GeneralTab(cpp, vbox, "general tab");
+
+    vbox = addVBoxPage(i18n("Code Generation"));
+    codegen = new CodeGenTab(cpp, vbox, "codegen tab");
+
+    vbox = addVBoxPage(i18n("Optimization"));
+    optimization = new OptimizationTab(cpp, vbox, "optimization tab");
+
+    vbox = addVBoxPage(i18n("Warnings I"));
+    warnings1 = new Warnings1Tab(cpp, vbox, "warnings1 tab");
         
-    tabw->addTab(general, i18n("General"));
-    tabw->addTab(optimization, i18n("Optimization"));
-    tabw->addTab(warnings1, i18n("Warnings I"));
-    tabw->addTab(warnings2, i18n("Warnings II"));
+    vbox = addVBoxPage(i18n("Warnings II"));
+    warnings2 = new Warnings2Tab(cpp, vbox, "warnings2 tab");
 }
 
 
@@ -377,6 +470,7 @@ void GccOptions::setFlags(const QString &flags)
     optimization->readFlags(&flaglist);
     warnings1->readFlags(&flaglist);
     warnings2->readFlags(&flaglist);
+    codegen->readFlags(&flaglist);
     general->readFlags(&flaglist);
 }
 
@@ -388,6 +482,7 @@ QString GccOptions::flags() const
     optimization->writeFlags(&flaglist);
     warnings1->writeFlags(&flaglist);
     warnings2->writeFlags(&flaglist);
+    codegen->writeFlags(&flaglist);
     general->writeFlags(&flaglist);
 
     QString flags;

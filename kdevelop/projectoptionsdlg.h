@@ -2,8 +2,59 @@
 #define _PROJECTOPTIONSDLG_H_
 
 #include <kdialogbase.h>
+#include <klineedit.h>
 
 class KDevCompilerOptions;
+class ServiceComboBox;
+
+
+class GeneralPage : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    GeneralPage( QWidget *parent=0, const char *name=0 );
+    ~GeneralPage();
+};
+
+
+class CompilerPage : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    CompilerPage( QWidget *parent=0, const char *name=0 );
+    ~CompilerPage();
+
+    QString cCompiler() const;
+    QString cxxCompiler() const;
+    QString f77Compiler() const;
+    QString cFlags() const;
+    QString cxxFlags() const;
+    QString f77Flags() const;
+    void setCFlags(const QString &str);
+    void setCxxFlags(const QString &str);
+    void setF77Flags(const QString &str);
+
+private slots:
+    void cflagsClicked();
+    void cxxflagsClicked();
+    void f77flagsClicked();
+
+private:
+    KDevCompilerOptions *createCompilerOptions(const QString &lang);
+
+    ServiceComboBox *cservice_combo;
+    ServiceComboBox *cxxservice_combo;
+    ServiceComboBox *f77service_combo;
+    QLineEdit *cbinary_edit;
+    QLineEdit *cxxbinary_edit;
+    QLineEdit *f77binary_edit;
+    QLineEdit *cflags_edit;
+    QLineEdit *cxxflags_edit;
+    QLineEdit *f77flags_edit;
+};
+
 
 class ProjectOptionsDialog : public KDialogBase
 {
@@ -17,9 +68,8 @@ protected:
     void accept();
     
 private:
-    KDevCompilerOptions *createCompilerOptions(const QString &lang, QWidget *box);
-    KDevCompilerOptions *coptdlg;
-    KDevCompilerOptions *cppoptdlg;
+    GeneralPage *generalpage;
+    CompilerPage *compilerpage;
 };
 
 #endif

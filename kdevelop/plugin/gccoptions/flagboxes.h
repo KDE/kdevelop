@@ -13,12 +13,15 @@ class FlagCheckBoxController;
 class FlagListItem : public QCheckListItem
 {
 public:
-    FlagListItem(FlagListBox *parent, 
-                 const QString &flagstr, const QString &description);
+    FlagListItem(FlagListBox *parent, const QString &flagstr,
+                 const QString &description);
+    FlagListItem(FlagListBox *parent, const QString &flagstr,
+                 const QString &description, const QString &offstr);
     ~FlagListItem()
         {}
 private:
     QString flag;
+    QString off;
     QString desc;
     friend class FlagListToolTip;
     friend class FlagListBox;

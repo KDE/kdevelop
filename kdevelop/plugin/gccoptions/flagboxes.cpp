@@ -30,9 +30,17 @@ void FlagListToolTip::maybeTip(const QPoint &pos)
 }
 
 
-FlagListItem::FlagListItem(FlagListBox *parent, 
-                           const QString &flagstr, const QString &description)
-    : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox), flag(flagstr), desc(description)
+FlagListItem::FlagListItem(FlagListBox *parent, const QString &flagstr,
+                           const QString &description)
+    : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
+      flag(flagstr), desc(description)
+{}
+
+
+FlagListItem::FlagListItem(FlagListBox *parent, const QString &flagstr,
+                           const QString &description, const QString &offstr)
+    : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
+      flag(flagstr), off(offstr), desc(description)
 {}
 
 
@@ -109,7 +117,8 @@ void FlagCheckBoxController::writeFlags(QStringList *list)
     QListIterator<FlagCheckBox> it(cblist);
     for (; it.current(); ++it) {
         FlagCheckBox *fitem = it.current();
-        (*list) << fitem->flag;
+        if (fitem->isChecked())
+            (*list) << fitem->flag;
     }
 }
     

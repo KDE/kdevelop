@@ -1,15 +1,16 @@
 #ifndef _KDEVCOMPILEROPTIONS_H_
 #define _KDEVCOMPILEROPTIONS_H_
 
-#include <qwidget.h>
+#include <kdialogbase.h>
 
 
-class KDevCompilerOptions : public QWidget
+class KDevCompilerOptions : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KDevCompilerOptions( QWidget *parent=0, const char *name=0 );
+    KDevCompilerOptions( int dialogFace, const QString &caption,
+                         QWidget *parent=0, const char *name=0 );
     ~KDevCompilerOptions();
 
     virtual void setFlags(const QString &flags);

@@ -1,10 +1,10 @@
 #include "kdevcompileroptions.h"
 
-KDevCompilerOptions::KDevCompilerOptions(QWidget *parent, const char *name)
-    : QWidget(parent, name)
+KDevCompilerOptions::KDevCompilerOptions( int dialogFace, const QString &caption,
+                                          QWidget *parent, const char *name )
+    : KDialogBase(dialogFace, caption, Ok|Cancel, Ok, parent, name, true)
 {
 }
-
 
 KDevCompilerOptions::~KDevCompilerOptions()
 {
