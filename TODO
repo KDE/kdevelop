@@ -27,10 +27,6 @@ High priority tasks!
 * misc:
   - Project name should be able to contain spaces
 
-* code completion:
-  - remove the annoying conflict from automatic word completion(abbrevpart)
-    and language specific code completion(like the one in cppsupport)
-
 * c++ debugger
   - Fix "core file" handling
   - Fix "attach to" handling
