@@ -5,19 +5,22 @@
 #include <kdevproject.h>
 #include <kdevappfrontend.h>
 #include <qvbox.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 
 #include <kdevcore.h>
 
-#include "visualboyadvance_factory.h"
 #include "visualboyadvance_part.h"
 #include "vbaconfigwidget.h"
 
 using namespace VisualBoyAdvance;
 
+typedef KGenericFactory<VisualBoyAdvancePart> VisualBoyAdvanceFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevvisualboyadvance, VisualBoyAdvanceFactory( "kdevvisualboyadvance" ) );
   
-VisualBoyAdvancePart::VisualBoyAdvancePart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name){
+VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name){
   setInstance(VisualBoyAdvanceFactory::instance());
 
   setXMLFile("kdevpart_visualboyadvance.rc");

@@ -7,17 +7,17 @@
 #define __KDEVPART_VISUALBOYADVANCE_H__
   
 #include <qguardedptr.h>
-#include <kdevpart.h>
+#include <kdevplugin.h>
 #include <kdialogbase.h>
 
 namespace VisualBoyAdvance {  
-  class VisualBoyAdvancePart : public KDevPart
+  class VisualBoyAdvancePart : public KDevPlugin
     {
       Q_OBJECT
 	
 	public:
       
-      VisualBoyAdvancePart(KDevApi *api, QObject *parent=0, const char *name=0);
+      VisualBoyAdvancePart(QObject *parent, const char *name, const QStringList &);
       ~VisualBoyAdvancePart();
       private slots:
 	void slotExecute();
