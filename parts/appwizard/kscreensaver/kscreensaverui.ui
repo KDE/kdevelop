@@ -1,0 +1,101 @@
+<!DOCTYPE UI><UI>
+<class>$APPNAME$UI</class>
+<comment>This is the main UI for setting up your screen saver.</comment>
+<author>Ian Reinhart Geiser</author>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>$APPNAMELC$cfg</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>257</width>
+            <height>58</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Screen Saver Config</string>
+    </property>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Layout2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>5</x>
+                <y>0</y>
+                <width>255</width>
+                <height>57</height>
+            </rect>
+        </property>
+        <grid>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget row="0"  column="0" >
+                <class>QCheckBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>CheckBox1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Set some setting...</string>
+                </property>
+            </widget>
+            <widget row="1"  column="0" >
+                <class>QLayoutWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Layout1</cstring>
+                </property>
+                <hbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>0</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>OkayPushButton</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Okay</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>CancelPushButton</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Cancel</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+        </grid>
+    </widget>
+</widget>
+</UI>

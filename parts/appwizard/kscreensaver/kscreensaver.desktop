@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=$APPNAME$
+Exec=$APPNAMELC$ %i %m -caption "%c"
+Icon=$APPNAMELC$
+Type=Application
+DocPath=$APPNAMELC$/$APPNAMELC$.html
+Comment=A KDE Screen Saver
+Terminal=0
