@@ -146,7 +146,7 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 
 //============= setTopChlid ============//
 
-void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
+void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool /* bSetFocus */)
 {
    if(m_pZ->last() != lpC){
       m_pZ->setAutoDelete(FALSE);
