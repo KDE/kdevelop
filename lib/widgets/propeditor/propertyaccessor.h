@@ -48,7 +48,7 @@ Changing the value of property b will lead to changing of
 A.b and B.b automatically.
 
 Accessors can't be created. Use cast @ref PropertyList::operator PropertyAccessor
-or @ref PropertyList::intersect method to get the instance of this class.
+or @ref PropertyList::intersect(const PropertyAccessor *list) method to get the instance of this class.
 */
 class PropertyAccessor: public PropertyOperator
 {
@@ -71,6 +71,8 @@ public:
     /**Sets the value of the property.*/
     virtual void setValue(const QString &propertyName, const QVariant &value);
     /**Sets the value of the property.
+     * @param propertyName the property name.
+     * @param value It's value.
      * @param emitChange specifies whether to emit propertyValueChanged signal.
      */
     virtual void setValue(const QString &propertyName, const QVariant &value, bool emitChange);
