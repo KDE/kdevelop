@@ -310,7 +310,8 @@ void ChooseTargetDialog::accept ()
 			proc.start(KProcess::DontCare);
 		}
 
-		m_part->partController()->editDocument ( KURL ( m_choosenSubproject->path + "/" + fileName ) );
+        // why open the files?! 
+//		m_part->partController()->editDocument ( KURL ( m_choosenSubproject->path + "/" + fileName ) );
 		
 		found = false;
 	}
