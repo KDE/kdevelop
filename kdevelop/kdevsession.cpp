@@ -215,9 +215,20 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
   }
 
   QextMdiChildView* pLastView = 0L;
+  QextMdiChildFrm*  pLastFrm = 0L;
   QextMdiIterator<QextMdiChildView*>* winListIter = ((QextMdiMainFrm*)m_pDocViewMan->parent())->createIterator();
   for(winListIter->first(); !winListIter->isDone(); winListIter->next()){
     pLastView = winListIter->currentItem();
+    if (bMaxMode && pLastView->isAttached()) {
+      pLastFrm = pLastView->mdiParent();
+    }
+  }
+  // evil hack (of Falk): resize the childframe again 'cause of event timing probs with resizing
+  if (bMaxMode) {
+    pLastFrm->setGeometry(-QEXTMDI_MDI_CHILDFRM_BORDER,
+                          -QEXTMDI_MDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
+                          pLastFrm->parentWidget()->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+                          pLastFrm->parentWidget()->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + pLastFrm->captionHeight());
   }
   // show the last (the one above all)
   if (pLastView) {
@@ -337,7 +348,6 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
   if ( (pMDICover->isAttached()) && (!bAttached) ) {
     pMDICover->detach();
   }
-//  QApplication::sendPostedEvents();
   if (nMinMaxMode == 0) {
     pMDICover->setInternalGeometry(QRect(nLeft, nTop, nWidth, nHeight));
   }
@@ -346,8 +356,7 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
       pMDICover->minimize();
     }
     if (nMinMaxMode == 2) {
-//      pMDICover->maximize();
-//      QApplication::sendPostedEvents();
+      // maximize: nothing to do, this is already under control of the mainframe
     }
     pMDICover->setRestoreGeometry(QRect(nLeft, nTop, nWidth, nHeight));
   }
