@@ -87,11 +87,11 @@ void CvsPart::slotCommit()
 
     QString message = d.logMessage();
     if (!message.isEmpty())
-     message = KShellProcess::quote(message);
+     message = " -m " + KShellProcess::quote(message);
 
     QString command("cd ");
     command += dir;
-    command += " && cvs commit -m ";
+    command += " && cvs commit ";
     command += message;
     command += " ";
     command += name;
