@@ -25,22 +25,12 @@ CKDevelop::CKDevelop(){
   QString filename;
   version = VERSION;
   project=false;// no project
+
   init();
   initConnections();
   initProject(); 
   
   // read the three last files
-  config->setGroup("Files");
-  filename = config->readEntry("browser_file");
-   if(!filename.isEmpty()){
-     slotURLSelected(browser_widget,filename,1,"test");
-   }
-   else{
-     slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() + 
-		     "/en/kdevelop/index.html",1,"test");
-   }
-   s_tab_view->setCurrentTab(BROWSER);
-   s_tab_view->repaint();
 
    config->setGroup("Files");
    filename = config->readEntry("header_file");
@@ -52,8 +42,18 @@ CKDevelop::CKDevelop(){
    if (QFile::exists(filename)){
      switchToFile(filename);
    }
-      
-   
+   config->setGroup("Files");
+   filename = config->readEntry("browser_file");
+   if(!filename.isEmpty()){
+     slotURLSelected(browser_widget,filename,1,"test");
+   }
+   else{
+   slotHelpContent();
+   }
+  config->setGroup("View Configuration");
+  int lastActiveTab=config->readNumEntry("LastActiveTab", BROWSER);
+  slotSTabSelected(lastActiveTab);
+
 }
 
 // all the init-stuff
@@ -95,15 +95,15 @@ void CKDevelop::init(){
   KApplication *app=KApplication::getKApplication();
   config = app->getConfig();
   config->setGroup("General Options");
-  int w = config->readNumEntry("width");
-  int h = config->readNumEntry("height");
+  int w = config->readNumEntry("width", 800);
+  int h = config->readNumEntry("height", 500);
   resize(w,h);
 
   // call bar functions to create bars
 
   // create the main view
   view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Absolute,
-  			config->readNumEntry("view_panner_pos"));  
+  			config->readNumEntry("view_panner_pos", 337));
   
   output_widget = new COutputWidget(kapp,view);
 //  output_widget->setFillColumnMode(80,true);
@@ -116,7 +116,8 @@ void CKDevelop::init(){
   
   //  s_tab_current = 0;
   top_panner = new KNewPanner(view,"top_panner",KNewPanner::Vertical,KNewPanner::Absolute,
-  			      config->readNumEntry("top_panner_pos"));
+  			      config->readNumEntry("top_panner_pos", 213));
+
   t_tab_view = new CTabCtl(top_panner);
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
@@ -194,7 +195,6 @@ void CKDevelop::init(){
   edit2->filename = cpp_widget->getName();
   
 
-  swallow_widget = new KSwallowWidget(s_tab_view);
 
   browser_widget = new CDocBrowser(s_tab_view,"browser");  
   prev_was_search_result= false;
@@ -205,15 +205,15 @@ void CKDevelop::init(){
 	  this,SLOT(slotURLSelected(KHTMLView*,const char*,int,const char*)));
   connect(browser_widget,SIGNAL(documentDone(KHTMLView*)),
 	  this,SLOT(slotDocumentDone(KHTMLView*)));
+  swallow_widget = new KSwallowWidget(s_tab_view);
   
 
   s_tab_view->addTab(header_widget,"Header/Resource Files");
   s_tab_view->addTab(cpp_widget,"C/C++ Files");
-  s_tab_view->addTab(swallow_widget,"Tools");
   s_tab_view->addTab(browser_widget,"Documentation-Browser");
- 
+  s_tab_view->addTab(swallow_widget,"Tools");
+
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  
   view->activate(top_panner,output_widget); 
   
 
@@ -231,7 +231,7 @@ void CKDevelop::init(){
   edit_infos.append(edit1);
   edit_infos.append(edit2);
 
-  
+
 }
 void CKDevelop::initMenu(){
   // build a menubar
@@ -402,11 +402,10 @@ void CKDevelop::initMenu(){
 
   //the tools menu
   tools_menu = new QPopupMenu;
+  tools_menu->insertItem(i18n("&KDbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
   tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
   tools_menu->insertItem(i18n("KTranslator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
-  tools_menu->insertItem(i18n("&Kdbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
   menuBar()->insertItem(i18n("&Tools"), tools_menu);
-  menuBar()->insertSeparator();
 
   
 
@@ -579,7 +578,7 @@ void CKDevelop::initStatusBar(){
 }
 void CKDevelop::initProject(){
   config->setGroup("Files");
-  QString filename = config->readEntry("project_file");
+  QString filename = config->readEntry("project_file","");
   QFile file(filename);
   // cerr << "INITPROJECT: " << filename << endl;
   if (file.exists()){
@@ -595,34 +594,3 @@ void CKDevelop::initProject(){
   }
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

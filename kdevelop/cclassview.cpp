@@ -582,29 +582,3 @@ QString CClassView::CVGetVariable(QString str){
   return str.mid(begin+1,end-begin+1);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -105,7 +105,7 @@ void CKDevelop::switchToFile(QString filename){
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
       
       //      output_widget->append ("File: was was already there");
-      setCaption("KDevelop V" + version + ": " + filename);
+      setCaption("KDevelop " + version + ":  "+prj.getProjectName()+":  " + filename);
       return;
     }
   }
@@ -130,7 +130,7 @@ void CKDevelop::switchToFile(QString filename){
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
 
-  setCaption("KDevelop V" + version + ": " + filename);
+  setCaption("KDevelop " + version + ":  "+prj.getProjectName()+":  "+ filename);
  
 }
 
@@ -160,3 +160,4 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   }
 }
+

@@ -20,12 +20,25 @@
 
 CTabCtl::CTabCtl(QWidget* parent,char* name) : KTabCtl(parent,name){
   setFocusPolicy(QWidget::NoFocus);
-  tabs->setFocusPolicy(QWidget::NoFocus);
+//tabs->setFocusPolicy(QWidget::NoFocus);
   setShape(QTabBar::RoundedAbove);
   
 }
 void CTabCtl::setCurrentTab(int id){
+
   tabs->setCurrentTab(id);
-  //  tabSelected(id);
+//  tabSelected(id);
 }
+
+int CTabCtl::getCurrentTab(){
+  int currentTab=tabs->currentTab();
+  return currentTab;
+}
+
+
+
+
+
+
+
 

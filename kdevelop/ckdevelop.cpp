@@ -291,6 +291,7 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
+  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   cerr << "QUIT3";
   //config->writeEntry("x",x());
   //config->writeEntry("y",y());
@@ -395,15 +396,15 @@ void CKDevelop::slotOptionsTStatusbar(){
 }
 void CKDevelop::slotOptionsTTreeView(){
 
-
-
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+    config->setGroup("View Configuration");
     config->writeEntry("tree_view_pos",top_panner->separatorPos());
     top_panner->setSeparatorPos(0);
   }
   else{
-    top_panner->setSeparatorPos(config->readNumEntry("tree_view_pos"));
+    config->setGroup("View Configuration");
+    top_panner->setSeparatorPos(config->readNumEntry("tree_view_pos",213));
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
   resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
@@ -413,11 +414,13 @@ void CKDevelop::slotOptionsTTreeView(){
 void CKDevelop::slotOptionsTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    config->setGroup("View Configuration");
     config->writeEntry("output_view_pos",view->separatorPos());
     view->setSeparatorPos(view->height());
   }
   else{
-    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos",337));
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
   resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
@@ -693,6 +696,14 @@ void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram("make")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
+  }
+
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
@@ -713,6 +724,14 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram("make")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
+  }
+
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
@@ -729,6 +748,14 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram("make")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
+  }
+
   setToolMenuProcess(false);
   slotFileSaveAll();
   output_widget->clear();
@@ -743,6 +770,13 @@ void CKDevelop::slotBuildCleanRebuildAll(){
 void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("autoconf")){
     return;
+  }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
   }
   setToolMenuProcess(false);
   slotFileSave();
@@ -762,6 +796,13 @@ void CKDevelop::slotBuildStop(){
 void CKDevelop::slotBuildAPI(){
   if(!CToolClass::searchProgram("kdoc")){
     return;
+  }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
   }
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -783,6 +824,14 @@ void CKDevelop::slotBuildManual(){
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
+  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    config->setGroup("View Configuration");
+    view->setSeparatorPos(config->readNumEntry("output_view_pos"));
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
+  }
+
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
@@ -802,6 +851,15 @@ void CKDevelop::slotBookmarksEdit(){
 }
 
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    config->setGroup("View Configuration");
+    config->writeEntry("output_view_pos",view->separatorPos());
+    view->setSeparatorPos(view->height());
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
+  }
+
   s_tab_view->setCurrentTab(BROWSER);
   QString url_str = url;
   if(url_str.contains("kdevelop/search_result.html") != 0){
@@ -919,7 +977,7 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-    setCaption("KDevelop V" + version + ": " + edit_widget->getName());
+    setCaption("KDevelop " + version + ": " + edit_widget->getName());
   }
   if (item == CPP){
     edit_widget = cpp_widget;
@@ -927,9 +985,10 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-    setCaption("KDevelop V" + version + ": " + edit_widget->getName());
+    setCaption("KDevelop " + version + ": " + edit_widget->getName());
   }
   if(item == BROWSER){
+
     browser_widget->setFocus();
   }
  
@@ -1042,9 +1101,10 @@ void CKDevelop::slotToolsKIconEdit(){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     config->writeEntry("output_view_pos",view->separatorPos());
     view->setSeparatorPos(view->height());
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
   }
-  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-  resize (width()+1,height());
+
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
@@ -1054,13 +1114,14 @@ void CKDevelop::slotToolsKIconEdit(){
 }
 
 void CKDevelop::slotToolsKDbg(){
+
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     config->writeEntry("output_view_pos",view->separatorPos());
     view->setSeparatorPos(view->height());
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
   }
-  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-  resize (width()+1,height());
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
@@ -1069,14 +1130,15 @@ void CKDevelop::slotToolsKDbg(){
   swallow_widget->init();
 }
 
+
 void CKDevelop::slotToolsKTranslator(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     config->writeEntry("output_view_pos",view->separatorPos());
     view->setSeparatorPos(view->height());
+    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    resize (width()+1,height());
   }
-  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-  resize (width()+1,height());
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
@@ -1085,6 +1147,7 @@ void CKDevelop::slotToolsKTranslator(){
   swallow_widget->init();
 
 }
+
 
 void CKDevelop::slotHelpContent(){
   slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() + 
@@ -1311,18 +1374,4 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -37,7 +37,10 @@ public:
 public:
   /** set the top tab*/
   void setCurrentTab(int id);
+  int getCurrentTab();
+
   
+ 
   
 };
 

@@ -55,6 +55,8 @@ class CKDevelop;
 #include "resource.h"
 
 
+
+
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
@@ -283,7 +285,9 @@ private:
   CLogFileView* log_file_tree; // the logical filetree
   CRealFileView* real_file_tree; // the real filetree
   CDocTree* doc_tree; // the documentation tre
- 
+
+
+
   QString version;
   bool project;
   bool bViewStatusbar;
@@ -305,8 +309,5 @@ private:
 };
 
 #endif
-
-
-
 
 

@@ -156,10 +156,12 @@
 
 // for the setCurrentTab(int);
 
-#define HEADER 0
-#define CPP 1
-#define TOOLS 2
-#define BROWSER 3
+
+#define HEADER  0
+#define CPP 	1
+#define TOOLS 	3
+#define BROWSER 2
+
 
 #define ID_BROWSER_TOOLBAR 1
 
@@ -217,10 +219,4 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
-
-
-
-
-
-
 
