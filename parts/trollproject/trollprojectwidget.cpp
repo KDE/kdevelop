@@ -94,7 +94,7 @@ void SubprojectItem::init()
   configuration.m_buildMode = QBM_RELEASE;
   configuration.m_requirements = QD_QT;
   groups.setAutoDelete(true);
-  if (scopeString=="")
+  if (scopeString.isEmpty())
   {
     isScope = false;
   }
@@ -647,7 +647,7 @@ void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
   if ( ok && !scopename.isEmpty() )
   {
     QString newScopeString;
-    if (spitem->scopeString != "")
+    if (!spitem->scopeString.isEmpty())
       newScopeString = spitem->scopeString + ":" + scopename;
     else
       newScopeString = scopename;
@@ -797,13 +797,13 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
 
   // Config strings
   Buffer->removeValues("DESTDIR");
-  if (item->configuration.m_destdir.simplifyWhiteSpace()!="")
+  if (!item->configuration.m_destdir.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("DESTDIR",QString(item->configuration.m_destdir),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("TARGET");
-  if (item->configuration.m_target.simplifyWhiteSpace()!="")
+  if (!item->configuration.m_target.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("INCLUDEPATH");
-  if (item->configuration.m_includepath.simplifyWhiteSpace()!="")
+  if (!item->configuration.m_includepath.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("INCLUDEPATH",QString(item->configuration.m_includepath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("DEFINES");
   if (item->configuration.m_defines.count())
@@ -1381,7 +1381,7 @@ QString TrollProjectWidget::getUiFileLink(const QString &relpath, const QString&
 
 void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, FileBuffer *buffer)
 {
-    if (scopeString!="")
+    if (!scopeString.isEmpty())
     {
       QStringList scopeNames = QStringList::split(':',scopeString);
       SubprojectItem *sitem;
@@ -1441,7 +1441,7 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     }
     QStringList childScopes = subBuffer->getChildScopeNames();
     for (unsigned int i=0; i<childScopes.count();i++)
-      parseScope(item,scopeString+(scopeString!="" ? ":" : "")+childScopes[i],buffer);
+      parseScope(item,scopeString+(!scopeString.isEmpty() ? ":" : "")+childScopes[i],buffer);
 }
 
 void TrollProjectWidget::parse(SubprojectItem *item)

@@ -105,7 +105,7 @@ void FileBuffer::splitScopeString(QString scopeString,QString &scopeName, QStrin
   scopeString = scopeString.simplifyWhiteSpace();
   scopeName="";
   scopeRest="";
-  if (scopeString!="")
+  if (!scopeString.isEmpty())
   {
     int kolonPos = scopeString.find(':');
     if (kolonPos==-1)
@@ -127,7 +127,7 @@ FileBuffer* FileBuffer::getSubBuffer(QString scopeString)
 {
   QString nextScopeName,scopeStringRest;
   splitScopeString(scopeString,nextScopeName,scopeStringRest);
-  if (nextScopeName=="")
+  if (nextScopeName.isEmpty())
     return this;
   int idx = findChildBuffer(nextScopeName);
   if (idx==-1)
@@ -240,7 +240,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     long lineNum=eqSign.m_row;
     curValues.clear();
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
-    while (line!="")
+    while (!line.isEmpty())
     {
       if (line[line.length()-1]=='\\')
       {
@@ -346,7 +346,7 @@ void FileBuffer::saveBuffer(const QString &filename,const QString &qmakeHeader)
   if (dataFile.open(IO_WriteOnly))
   {
     for (unsigned int i=0; i<writeBuffer.count(); i++)
-      if (writeBuffer[i].simplifyWhiteSpace()!="")
+      if (!writeBuffer[i].simplifyWhiteSpace().isEmpty())
         dataFile.writeBlock((writeBuffer[i]+"\n").ascii(),(writeBuffer[i]+"\n").length());
   }
 }
@@ -363,7 +363,7 @@ void FileBuffer::makeScope(const QString &scopeString)
   FileBuffer *subBuffer;
   QString nextScopeName,scopeStringRest;
   splitScopeString(scopeString,nextScopeName,scopeStringRest);
-  if (nextScopeName=="")
+  if (nextScopeName.isEmpty())
     return;
   // next scope in nested scopeString
   int idx = findChildBuffer(nextScopeName);

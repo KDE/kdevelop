@@ -136,7 +136,7 @@ void VBAConfigWidget::accept(){
 }
 void VBAConfigWidget::emuPathButtonClicked(){
   QString emu = KFileDialog::getOpenFileName(QDir::homeDirPath());
-  if(emu!=""){
+  if(!emu.isEmpty()){
     emuPathEdit->setText(emu);
   }
 }

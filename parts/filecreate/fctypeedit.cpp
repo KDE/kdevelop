@@ -24,9 +24,7 @@ FCTypeEdit::~FCTypeEdit()
 
 void FCTypeEdit::accept()
 {
-    if ( (typeext_edit->text() != "") &&
-        (typename_edit->text() != "") )
+    if ( !typeext_edit->text().isEmpty() &&
+        !typename_edit->text().isEmpty() )
         FCTypeEditBase::accept();
-    else
-        return;
 }
