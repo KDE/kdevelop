@@ -1581,16 +1581,16 @@ QString CProject::getLibtool()
 // The directory that the program will be run from.
 QString CProject::getRunFromDir()
 {
+  if (isCustomProject())
+    return getProjectDir();
+
   QString underDir=pathToBinPROGRAM();
   if (underDir.isEmpty())
-  {
-    underDir = getProjectDir();
-    if (!isCustomProject())
-      underDir += getSubDir();
-  }
+    underDir = getProjectDir() + getSubDir();
 
   if (underDir[0] != '/')
     underDir = getProjectDir() + underDir;
+
   return underDir;
 }
 

@@ -1007,7 +1007,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
 
   if (bContinue)
   {
-    slotStatusMsg(i18n("Running %1 (from %2)").arg(prj->getBinPROGRAM()).arg(runFromDir));
+    slotStatusMsg(i18n("Running %1 (from %2)").arg(binProgram).arg(runFromDir));
     // Warning: not every user has the current directory in his path !
     if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
@@ -1490,9 +1490,9 @@ void CKDevelop::slotStartDebugRunWithArgs()
     stderr_widget->clear();
 
     slotStatusMsg(i18n("Debugging %1 (with arg %2 %3)")
-                        .arg(prj->getBinPROGRAM())
+                        .arg(binProgram)
                         .arg(args)
-                        .arg(libtool.isEmpty()? "" : " with libtool"));
+                        .arg(libtool.isEmpty()? QString("") : i18n("Is the 3th arg in - Debugging %1 (with arg %2 %3)", "with libtool")));
 
     setupInternalDebugger();
     dbgController->slotStart(binProgram, args, libtool);
@@ -1520,10 +1520,9 @@ void CKDevelop::slotStartDebug()
     stderr_widget->clear();
 
     slotStatusMsg(i18n("Debugging %1 (from %2 %3) in internal debugger")
-                          .arg(prj->getBinPROGRAM())
+                          .arg(binProgram)
                           .arg(runFromDir)
-                          .arg(libtool.isEmpty()? "" : " with libtool")
-);
+                          .arg(libtool.isEmpty()? QString("") : i18n("Is the 3rg arg in - Debugging %1 (from %2 %3) in internal debugger", "with libtool")));
     setupInternalDebugger();
     dbgController->slotStart(binProgram, QString(), libtool);
     brkptManager->slotSetPendingBPs();
@@ -1536,7 +1535,7 @@ void CKDevelop::slotStartDebug()
   }
 
   slotStatusMsg(i18n("Debugging %1 (from %2) in %3")
-                    .arg(prj->getBinPROGRAM())
+                    .arg(binProgram)
                     .arg(runFromDir)
                     .arg(dbgExternalCmd));
 
