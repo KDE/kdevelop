@@ -20,7 +20,7 @@ SplashScreen::SplashScreen()
   : QObject()
 {
   m_splash = new QWidget( 0,
-    "splash", WStyle_NoBorder | WStyle_Customize | WStyle_Tool | WStyle_StaysOnTop );
+    "splash", WStyle_NoBorder | WStyle_Customize | WStyle_StaysOnTop | WX11BypassWM );
 
   QVBoxLayout *vbox = new QVBoxLayout(m_splash);
 
