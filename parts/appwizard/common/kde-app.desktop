@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=$APPNAME$
-Name[xx]=xx$APPNAME$xx
-Exec=$APPNAMELC$ %i %m -caption "%c"
-Icon=$APPNAMELC$
+Name=%{APPNAME}
+Name[xx]=xx%{APPNAME}xx
+Exec=%{APPNAMELC} %i %m -caption "%c"
+Icon=%{APPNAMELC}
 Type=Application
-DocPath=$APPNAMELC$/$APPNAMELC$.html
+DocPath=%{APPNAMELC}/%{APPNAMELC}.html
 Comment=A KDE KPart Application
 Comment[ca]=Una aplicació KPart per a KDE
 Comment[da]=Et KDE KPart program

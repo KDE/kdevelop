@@ -2,7 +2,7 @@ EXTRA_DIST = $APPNAMELC$.png
 
 install-data-local:
 	$(mkinstalldirs) $(datadir)
-	$(INSTALL_DATA) $(srcdir)/$APPNAMELC$.png $(datadir)/pixmaps
+	$(INSTALL_DATA) $(srcdir)/%{APPNAMELC}.png $(datadir)/pixmaps
 
 uninstall-local:
 	-rm -f $(datadir)/pixmaps
