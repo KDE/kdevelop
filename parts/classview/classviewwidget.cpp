@@ -247,7 +247,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
             else {
                 kdDebug(9003) << "found folder" << endl;
                 QListViewItem *iilastItem = (*fit)->firstChild();
-                while (iilastItem)
+                while (iilastItem && iilastItem->nextSibling())
                     iilastItem = iilastItem->nextSibling();
                 new ClassTreeClassItem(*fit, static_cast<ClassTreeItem*>(iilastItem), *it);
             }
