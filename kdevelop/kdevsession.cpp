@@ -260,5 +260,4 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
   }
 }
 
-#include "kdevsession.moc"
-
+//#include "kdevsession.moc"
