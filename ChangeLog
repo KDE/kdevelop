@@ -1,3 +1,8 @@
+2001-05-24  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: solved event timing problem with KDE's window manager on a flood of mixed show, hide and reparent events on app startup
+              --> now we hide the main widget until readDockConfig has finished
+              (you need to update your libkdeui.so (of kdelibs) to tonight's version, too!)
+
 2001-05-22  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: backswitch from Toplevel mode to Childframe mode works properly now
     * --> that's why: enabled readDockConfig() in CKDevelop constructor again
