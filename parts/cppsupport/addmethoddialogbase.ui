@@ -118,7 +118,7 @@
                         <cstring>addMethodButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Add Method</string>
+                        <string>&amp;Add Method</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -126,7 +126,7 @@
                         <cstring>deleteMethodButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Delete Method</string>
+                        <string>&amp;Delete Method</string>
                     </property>
                 </widget>
             </hbox>
