@@ -1,6 +1,14 @@
+2001-12-15  Victor Röder <victor_roeder@gmx.de>
+
+	* Added persistence functionality to the class store
+		- "cooperation" of Bernd, Daniel E. and me
+		- the class store is saved and loaded from a binary file
+	* In core.cpp projectClosed() is emitted first and then
+		store->wipeout() is called
+
 2001-12-15  Sandy Meier  <smeier@kdevelop.org>
 
-	* added some new options to the Appwizard (see README) and make it more intuitive: name completion, 
+	* added some new options to the Appwizard (see README) and make it more intuitive: name completion,
 	project loading after generation...
 	* added "void openProject(const QString& projectFileName)" to the KDevCore Interface, used by AppWizard
 	* fileselect part reacts now on signal KDevCore::projectOpen()
