@@ -392,10 +392,12 @@ ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *n
 
     (void) new ClassToolTip(this);
     
+    connect( this, SIGNAL(executed(QListViewItem*)),
+             this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int)),
              this, SLOT(slotItemPressed(int, QListViewItem*)) );
     connect( this, SIGNAL(returnPressed( QListViewItem*)), 
-             SLOT( slotReturnPressed(QListViewItem*)) );
+             SLOT( slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
              this, SLOT(slotContextMenuRequested(QListViewItem*, const QPoint&)) );
 
@@ -449,6 +451,25 @@ void ClassTreeBase::setTreeState(TreeState state)
 }
 
 
+void ClassTreeBase::slotItemExecuted( QListViewItem* item )
+{
+    if (!item)
+        return;
+
+    // We assume here that ALL (!) items in the list view
+    // are ClassTreeItem's
+    ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
+    if (ctitem->isOrganizer())
+        return;
+        
+    QString toFile;
+    int toLine = -1;
+    ctitem->getImplementation(&toFile, &toLine);
+    m_part->partController()->editDocument(toFile, toLine);
+    m_part->topLevel()->lowerView(this);
+}
+
+
 void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
 {
     if (!item)
@@ -460,27 +481,14 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
     if (ctitem->isOrganizer())
         return;
 
-    if (button == LeftButton) {
-        QString toFile;
-        int toLine = -1;
-        ctitem->getImplementation(&toFile, &toLine);
-	m_part->partController()->editDocument(toFile, toLine);
-	m_part->topLevel()->lowerView(this);
-    } else if (button == MidButton) {
+    if (button == MidButton) {
         QString toFile;
         int toLine = -1;
         ctitem->getDeclaration(&toFile, &toLine);
         m_part->partController()->editDocument(toFile, toLine);
-	m_part->topLevel()->lowerView(this);
+        m_part->topLevel()->lowerView(this);
     }
 }
-
-
-void ClassTreeBase::slotReturnPressed(QListViewItem *item)
-{
-    slotItemPressed(LeftButton, item);
-}
-
 
 void ClassTreeBase::slotContextMenuRequested(QListViewItem *item, const QPoint &p)
 {
