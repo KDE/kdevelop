@@ -27,7 +27,6 @@
 #include "coutputwidget.h"
 #include "crealfileview.h"
 #include "ctoolclass.h"
-#include "ctabctl.h"
 #include "doctreeview.h"
 #include "grepdialog.h"
 #include "./ctags/ctagsdialog_impl.h"

@@ -36,7 +36,6 @@
 #include "cprjoptionsdlg.h"
 #include "crealfileview.h"
 #include "ctoolclass.h"
-#include "ctabctl.h"
 #include "debug.h"
 #include "kpp.h"
 #include "docviewman.h"

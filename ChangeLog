@@ -1,3 +1,6 @@
+2001-06-10  F@lk Brettschneider <falk@kdevelop.org>
+   * splitted setup/ckdevinstall.h in several headers, more bugfixes for libkdevelopsetup.so
+   
 2001-06-09  F@lk Brettschneider <falk@kdevelop.org>
    * bugfix: restore geometry on project session loading
    * bugfix: crash if switching to TabPage mode with special case of having exactly 1 view

@@ -31,7 +31,6 @@
 #include "clogfileview.h"
 #include "coutputwidget.h"
 #include "crealfileview.h"
-#include "ctabctl.h"
 #include "ctoolclass.h"
 #include "ctoolsconfigdlg.h"
 #include "setup/cupdatekdedocdlg.h"

@@ -24,7 +24,6 @@
 #include "ceditwidget.h"
 #include "clogfileview.h"
 #include "crealfileview.h"
-#include "ctabctl.h"
 #include "ctoolclass.h"
 #include "debug.h"
 #include "doctreeview.h"
