@@ -1,3 +1,7 @@
+1999-10-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed wrong assert() in CEditWidget::deleteInternal()
+	  - from Richard Dale's Objective C patch
+
 1999-10-27 The KDevelop Team
 	* KDevelop 1.0Beta4 released
 
