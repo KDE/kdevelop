@@ -88,12 +88,19 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
     if (!kde)
         action->setEnabled(false);
 
-    action = new KAction( i18n("Execute program"), "exec", 0,
-                          this, SLOT(slotExecute()),
-                          actionCollection(), "build_execute" );
+    QDomDocument &dom = *projectDom();
+    if(DomUtil::readEntry(dom, "/kdevautoproject/run/default_implementation") != "no"){
+      //ok we handle the execute in this kpart
+      action = new KAction( i18n("Execute program"), "exec", 0,
+			    this, SLOT(slotExecute()),
+			    actionCollection(), "build_execute" );
+    }
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+
+    
+
 }
 
 
@@ -112,9 +119,13 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     vbox = dlg->addVBoxPage(i18n("Configure Options"));
     ConfigureOptionsWidget *w2 = new ConfigureOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
-    vbox = dlg->addVBoxPage(i18n("Run Options"));
-    RunOptionsWidget *w3 = new RunOptionsWidget(this, vbox);
-    connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+    QDomDocument &dom = *projectDom();
+    if(DomUtil::readEntry(dom, "/kdevautoproject/run/default_implementation") != "no"){
+      //ok we handle the execute in this kpart
+      vbox = dlg->addVBoxPage(i18n("Run Options"));
+      RunOptionsWidget *w3 = new RunOptionsWidget(this, vbox);
+      connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+    }
     vbox = dlg->addVBoxPage(i18n("Make Options"));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
