@@ -1,4 +1,12 @@
 <chapter id="unixdev">
+
+<chapterinfo>
+  <authorgroup>
+    <author><personname><firstname></firstname></personname></author>
+    <!-- ROLES_OF_TRANSLATORS -->
+  </authorgroup>
+</chapterinfo>
+
 <title>Development on UNIX</title>
 
 <indexterm zone="unixdev"><primary>development</primary></indexterm>
