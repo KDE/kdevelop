@@ -21,21 +21,25 @@
 #include <qstring.h>
 #include <assert.h>
 
-/** The type of item. */
+/** The type of a CParsedItem. */
 typedef enum
 { 
   PIT_UNKNOWN, PIT_CLASS, PIT_METHOD, 
   PIT_ATTRIBUTE, PIT_STRUCT 
 } PIType;
 
-/** Export of this item. */
+/** Export of a CParsedItem. */
 typedef enum
 { 
   PIE_GLOBAL, PIE_PUBLIC, 
   PIE_PROTECTED, PIE_PRIVATE 
 } PIExport;
 
-/** Abstract class for all items that are parsed in the classparser. */
+/** Abstract class for all items that are parsed in the classparser. 
+ * The smallest common items shared by all items are name, export
+ * and the files/lines they are declared/defined on.
+ * @author Jonas Nordin
+ */
 class CParsedItem
 {
 public: // Constructor and destructor. */
