@@ -11,11 +11,14 @@
 
 #include "envvartools.h"
 
+#include <qregexp.h>
+
 QString EnvVarTools::quote( const QString & arg )
 {
     QString res = arg;
-    res.replace(QString::fromLatin1("'"), QString::fromLatin1("'\\''"));
+    res.replace(QRegExp(QString::fromLatin1("'")), QString::fromLatin1("'\\''"));
     res.prepend("\"");
     res.append("\"");
     return res;
 }
+
