@@ -42,7 +42,7 @@ GDBParser::~GDBParser()
 void GDBParser::parseData(TrimmableItem* parent, char* buf,
                             bool requested, bool params)
 {
-  static char* unknown="?";
+  static const char* unknown = "?";
 
   ASSERT(parent);
   if (!buf)
@@ -55,7 +55,7 @@ void GDBParser::parseData(TrimmableItem* parent, char* buf,
   }
 
   if (requested && !*buf)
-    buf = unknown;
+    buf = (char*)unknown;
 
   while (*buf)
   {

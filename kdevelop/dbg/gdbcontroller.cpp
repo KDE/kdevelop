@@ -1666,6 +1666,7 @@ void GDBController::slotAbortTimedEvent()
 
 // These are here for debug display. I wanted them to be removed if DBG_MONITOR
 // wasn't defined but qt's moc has problems with that.
+#if defined(DBG_MONITOR)
 void GDBController::slotStepInSource(const QString& filename, int lineNo)
 {
   DBG_DISPLAY((QString("(Show step in source) ")+filename+QString(":")
@@ -1676,7 +1677,6 @@ void GDBController::slotStepInSource(const QString& filename, int lineNo)
 
 void GDBController::slotDbgStatus(const QString& status, int state)
 {
-#if defined(DBG_MONITOR)
   QString s("(status) ");
   if (!state)
     s += QString("<program paused>");
@@ -1696,8 +1696,18 @@ void GDBController::slotDbgStatus(const QString& status, int state)
     s += QString("<viewing locals>");
 
   DBG_DISPLAY((s+status).data());
-#endif
 }
+#else
+
+void GDBController::slotStepInSource(const QString&, int)
+{}
+
+// **************************************************************************
+
+void GDBController::slotDbgStatus(const QString&, int)
+{}
+
+#endif
 
 // **************************************************************************
 // **************************************************************************
