@@ -72,6 +72,8 @@ Core::Core()
 
     initComponents();
     win->show();
+
+    emit coreInitialized();
 }
 
 
