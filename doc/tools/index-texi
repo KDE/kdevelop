@@ -2,14 +2,7 @@
 
 use Getopt::Long;
 
-GetOptions( 'title=s' => \$title,
-            'base=s'  => \$base,
-            'map=s'   => \%mapping ) || die "Wrong options\n";
-
-print "<!DOCTYPE gideonindex>\n";
-print "<gideonindex>\n";
-print "<title>$title</title>\n";
-print "<base href=\"$base\"/>\n";
+GetOptions( 'map=s'   => \%mapping ) || die "Wrong options\n";
 
 for $file (@ARGV) {
 
@@ -46,7 +39,6 @@ for $file (@ARGV) {
 if ($lastindex) {
         print "</$lastindex>\n";
 }
-print "</gideonindex>\n";
 
 sub dehtml
 {

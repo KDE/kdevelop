@@ -1,1 +1,1 @@
-noinst_SCRIPTS = index-db
+EXTRA_DIST = index-texi index.xsl
