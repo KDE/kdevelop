@@ -91,9 +91,9 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
         if( e->type() == QEvent::KeyPress ){
             QKeyEvent* ke = (QKeyEvent*) e;
             if( ke->key() == Key_Tab && !m_edit->currentWord().isEmpty() ){
-                kdDebug() << "--------------------------> expand" << endl;
-                m_edit->expandText();
-                return TRUE;
+                kdDebug() << "--------------------------> expand (disabled by Falk!)" << endl;
+//DISABLED_BY_FALK                m_edit->expandText();
+//DISABLED_BY_FALK                return TRUE;
             }
         }
     }

@@ -1,5 +1,6 @@
 2002-02-12  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: coloured output also for the KDE 3 version
+    * bugfix: disabled text expansion with Tab key (broke Tab-character insertion)
 
 2002-02-11  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Daniel Koebbing <daniel.koebbing@westfleisch.de>
