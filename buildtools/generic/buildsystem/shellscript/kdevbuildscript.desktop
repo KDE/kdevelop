@@ -9,6 +9,7 @@ Name[pl]=KDevPowłokaSkryptBudowania
 Name[sv]=KDevelop byggskalskript
 Name[ta]=கெடெவ் பில்டு ஷெல் ஸ்கிரிப்ட்
 Comment=Shell script based build system
+Comment[ar]=نظام بناء قواعد المخطوطات المتفرعة
 Comment[ca]=Sistema de construcció basat en scripts de Shell
 Comment[da]=Skal-script baseret byggesystem
 Comment[de]=Shell-Skript-basiertes Erstellungssystem

@@ -5,6 +5,7 @@ Comment[hi]=के-डेवलप
 
 [ProcessSuccess]
 Name=Process successful
+Name[ar]=تمت العملية بنجاح
 Name[ca]=Procés correcte
 Name[da]=Processen lykkedes
 Name[de]=Prozess erfolgreich
@@ -29,6 +30,7 @@ Name[ta]=செயல்முறை வெற்றி
 Name[tg]=Амал бо мувафақият ба анҷом расид
 Name[zh_CN]=处理成功
 Comment=Process finished successfully
+Comment[ar]=تمت العملية بنجاح
 Comment[ca]=Procés finalitzat amb èxit
 Comment[da]=Processen afsluttede med succes
 Comment[de]=Prozess erfolgreich beendet
@@ -55,6 +57,7 @@ default_presentation=0
 
 [ProcessError]
 Name=Process error
+Name[ar]=خطأ في العملية
 Name[ca]=Procés fallit
 Name[da]=Procesfejl
 Name[de]=Prozessfehler
@@ -79,6 +82,7 @@ Name[ta]=செயல்முறை பிழை
 Name[tg]=Ҳангоми иҷро намудани амал хатогие дида мешавад
 Name[zh_CN]=处理失败
 Comment=Process finished with errors
+Comment[ar]=تمت العملية بأخطاء
 Comment[ca]=Procés finalitzat amb errors
 Comment[da]=Processen afsluttede med fejl
 Comment[de]=Prozess mit Fehlerstatus beendet

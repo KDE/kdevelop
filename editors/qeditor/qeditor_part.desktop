@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Qt Designer Based Text Editor
+Comment[ar]=مصمِّم Qt على حسب محرر النصر
 Comment[ca]=Editor de texts basat en Qt Designer
 Comment[da]=Qt Designer baseret teksteditor
 Comment[de]=Auf Qt-Designer basierender Texteditor
@@ -25,6 +26,7 @@ Comment[ta]=Qtயை சார்ந்த வடிவமைப்பு உர
 Comment[tg]=Муҳаррири матни аз Qt Designer 
 Comment[zh_CN]=基于文本编辑器的 Qt 设计师
 Name=Qt Designer Based Text Editor
+Name[ar]=مصمِّم Qt على حسب محرر النص
 Name[ca]=Editor de texts basat en Qt Designer
 Name[da]=Qt Designer baseret teksteditor
 Name[de]=Texteditor (Qt-Designer-basiert)
@@ -49,6 +51,7 @@ Name[ta]=Qtயை சார்ந்த வடிவமைப்பு உரை
 Name[tg]=Дизайнгари Qt муҳаррири матни база карда шуда
 Name[zh_CN]=基于文本编辑器的 Qt 设计师
 GenericName=QEditor Support
+GenericName[ar]=QEditor دعم
 GenericName[ca]=Suport per a QEditor
 GenericName[da]=QEditor støtte
 GenericName[de]=Unterstützung für QEditor
