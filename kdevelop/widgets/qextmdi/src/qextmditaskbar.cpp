@@ -176,6 +176,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
    m_pStretchSpace->show();
 
    b->show();
+   show();
    return b;
 }
 
@@ -186,6 +187,7 @@ void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr, bool haveToLayou
       m_pButtonList->removeRef(b);
       if( haveToLayoutTaskBar) layoutTaskBar();
    }
+   m_pStretchSpace->hide();
 }
 
 QextMdiTaskBarButton * QextMdiTaskBar::getButton(QextMdiChildView *win_ptr)
