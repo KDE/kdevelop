@@ -9,17 +9,17 @@
             <x>0</x>
             <y>0</y>
             <width>622</width>
-            <height>486</height>
+            <height>488</height>
         </rect>
     </property>
     <property name="caption">
         <string>BookmarkSettingsBase</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
@@ -35,7 +35,10 @@
                         <cstring>checkBox1</cstring>
                     </property>
                     <property name="text">
-                        <string>Show code tooltip</string>
+                        <string>Show code &amp;tooltip</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -57,7 +60,10 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Lines of context:</string>
+                                <string>&amp;Lines of context:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>spinBox1</cstring>
                             </property>
                         </widget>
                         <widget class="QSpinBox">
@@ -95,7 +101,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QButtonGroup">
+        <widget class="QButtonGroup" row="1" column="0">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
             </property>
@@ -111,7 +117,10 @@
                         <cstring>radioButton1</cstring>
                     </property>
                     <property name="text">
-                        <string>Never</string>
+                        <string>&amp;Never</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>The bookmark panel contains only line numbers</string>
@@ -122,7 +131,10 @@
                         <cstring>radioButton2</cstring>
                     </property>
                     <property name="text">
-                        <string>Only if comment</string>
+                        <string>Only &amp;if comment</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+I</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -136,7 +148,10 @@
                         <cstring>radioButton3</cstring>
                     </property>
                     <property name="text">
-                        <string>Always</string>
+                        <string>&amp;Always</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Always show the bookmarked line in addition to the line number</string>
@@ -144,7 +159,24 @@
                 </widget>
             </vbox>
         </widget>
-    </vbox>
+        <spacer row="2" column="0">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>240</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <connections>
     <connection>
