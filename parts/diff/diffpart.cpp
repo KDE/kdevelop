@@ -156,7 +156,7 @@ void DiffPart::processExited( KProcess* p )
     else
       showDiff( resultBuffer );
   } else {
-    showMessage( i18n("Diff command failed (%d):\n").arg( p->exitStatus() ) + resultErr );
+    showMessage( i18n("Diff command failed (%1):\n").arg( p->exitStatus() ) + resultErr );
   }
   resultBuffer = resultErr = QString::null;
   delete proc;
