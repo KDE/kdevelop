@@ -42,6 +42,7 @@ private:
     PIAccess m_currentAccess;
     bool m_addToStore; /* auxiliary variable: for the moment, this is `true'
                           only when we are in specs, not bodies.  */
+    bool m_isSubprogram;  // auxiliary to def_id()
 
 public:
     void setClassStore (ClassStore* store)     { m_store = store; }
@@ -58,6 +59,7 @@ public:
 	m_scopeStack.append (m_currentContainer);
         m_currentAccess = PIE_PUBLIC;
 	m_addToStore = false;
+	m_isSubprogram = false;
         m_store->removeWithReferences (m_fileName);
     }
 
@@ -177,25 +179,31 @@ library_item :
 	;
 
 
+subprog_def_id
+	: { m_isSubprogram = true; }
+	def_id
+	  { m_isSubprogram = false; }
+	;
+
 subprog_decl
-	: #(GENERIC_PROCEDURE_INSTANTIATION def_id[true] generic_inst)
-	| #(PROCEDURE_RENAMING_DECLARATION  def_id[true] formal_part_opt renames)
-	| #(PROCEDURE_DECLARATION           def_id[true] formal_part_opt)
-	| #(PROCEDURE_BODY_STUB             def_id[true] formal_part_opt)
-	| #(ABSTRACT_PROCEDURE_DECLARATION  def_id[true] formal_part_opt)
+	: #(GENERIC_PROCEDURE_INSTANTIATION subprog_def_id generic_inst)
+	| #(PROCEDURE_RENAMING_DECLARATION  subprog_def_id formal_part_opt renames)
+	| #(PROCEDURE_DECLARATION           subprog_def_id formal_part_opt)
+	| #(PROCEDURE_BODY_STUB             subprog_def_id formal_part_opt)
+	| #(ABSTRACT_PROCEDURE_DECLARATION  subprog_def_id formal_part_opt)
 	| #(GENERIC_FUNCTION_INSTANTIATION  def_designator generic_inst)
 	| #(FUNCTION_RENAMING_DECLARATION   def_designator function_tail renames)
 	| #(FUNCTION_DECLARATION            def_designator function_tail)
 	| #(FUNCTION_BODY_STUB              def_designator function_tail)
-	| #(ABSTRACT_FUNCTION_DECLARATION   def_id[true] function_tail)
+	| #(ABSTRACT_FUNCTION_DECLARATION   subprog_def_id function_tail)
 	;
 
 
-def_id [bool is_subprogram=false]
+def_id
 	: cn:compound_name
 	  {
 	    if (m_addToStore) {
-	      if (is_subprogram) {
+	      if (m_isSubprogram) {
 	        ParsedMethod *method = new ParsedMethod;
 	        method->setName (qtext (cn));
 	        method->setDeclaredInFile ( m_fileName );
@@ -445,11 +453,11 @@ generic_decl
 		)
 	| #(GENERIC_PROCEDURE_RENAMING generic_formal_part_opt def_id
 		formal_part_opt renames)
-	| #(GENERIC_PROCEDURE_DECLARATION generic_formal_part_opt def_id
+	| #(GENERIC_PROCEDURE_DECLARATION generic_formal_part_opt subprog_def_id
 		formal_part_opt)
 	| #(GENERIC_FUNCTION_RENAMING generic_formal_part_opt def_designator
 		function_tail renames)
-	| #(GENERIC_FUNCTION_DECLARATION generic_formal_part_opt def_id
+	| #(GENERIC_FUNCTION_DECLARATION generic_formal_part_opt subprog_def_id
 		function_tail)
 	;
 
@@ -520,7 +528,7 @@ declarative_item
 
 subprog_decl_or_body
 	: procedure_body
-	| #(PROCEDURE_DECLARATION def_id[true] formal_part_opt)
+	| #(PROCEDURE_DECLARATION subprog_def_id formal_part_opt)
 	| function_body
 	| #(FUNCTION_DECLARATION def_designator function_tail)
 	;

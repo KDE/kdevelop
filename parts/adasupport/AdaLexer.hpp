@@ -5,7 +5,7 @@
 
 #include <antlr/SemanticException.hpp>  // antlr wants this
 #include "AdaAST.hpp"
-#include "problemreporter.h"
+#include "preambles.h"
 
 #line 11 "AdaLexer.hpp"
 #include <antlr/config.hpp>
@@ -15,45 +15,11 @@
 #include <antlr/BitSet.hpp>
 #include "AdaTokenTypes.hpp"
 #include <antlr/CharScanner.hpp>
-class AdaLexer : public ANTLR_USE_NAMESPACE(antlr)CharScanner, public AdaTokenTypes
+class AdaLexer : public antlr::CharScanner, public AdaTokenTypes
 {
-#line 1883 "ada.g"
+#line 1848 "ada.g"
 
-private:
-  unsigned int m_numberOfErrors;
-  ProblemReporter* m_problemReporter;
-
-public:
-
-  void resetErrors ()                          { m_numberOfErrors = 0; }
-  unsigned int numberOfErrors () const         { return m_numberOfErrors; }
-  void setProblemReporter (ProblemReporter* r) { m_problemReporter = r; }
-
-  void reportError (const antlr::RecognitionException& ex) {
-    m_problemReporter->reportError
-           (ex.toString ().c_str (),
-            ex.getFilename ().c_str (),
-            ex.getLine (),
-            ex.getColumn ());
-    ++m_numberOfErrors;
-  }
-
-  void reportError (const std::string& errorMessage) {
-    m_problemReporter->reportError
-           (errorMessage.c_str (),
-            getFilename().c_str (),
-            getLine (),
-            getColumn ());
-    ++m_numberOfErrors;
-  }
-
-  void reportWarning (const std::string& warnMessage) {
-    m_problemReporter->reportWarning
-           (warnMessage.c_str (),
-            getFilename ().c_str (),
-            getLine (),
-            getColumn ());
-  }
+  ANTLR_LEXER_PREAMBLE
 #line 22 "AdaLexer.hpp"
 private:
 	void initLiterals();
@@ -63,10 +29,10 @@ public:
 		return false;
 	}
 public:
-	AdaLexer(ANTLR_USE_NAMESPACE(std)istream& in);
-	AdaLexer(ANTLR_USE_NAMESPACE(antlr)InputBuffer& ib);
-	AdaLexer(const ANTLR_USE_NAMESPACE(antlr)LexerSharedInputState& state);
-	ANTLR_USE_NAMESPACE(antlr)RefToken nextToken();
+	AdaLexer(std::istream& in);
+	AdaLexer(antlr::InputBuffer& ib);
+	AdaLexer(const antlr::LexerSharedInputState& state);
+	antlr::RefToken nextToken();
 	public: void mCOMMENT_INTRO(bool _createToken);
 	public: void mDOT_DOT(bool _createToken);
 	public: void mLT_LT(bool _createToken);
@@ -107,21 +73,21 @@ public:
 private:
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
+	static const antlr::BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
+	static const antlr::BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
+	static const antlr::BitSet _tokenSet_2;
 	static const unsigned long _tokenSet_3_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
+	static const antlr::BitSet _tokenSet_3;
 	static const unsigned long _tokenSet_4_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_4;
+	static const antlr::BitSet _tokenSet_4;
 	static const unsigned long _tokenSet_5_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_5;
+	static const antlr::BitSet _tokenSet_5;
 	static const unsigned long _tokenSet_6_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_6;
+	static const antlr::BitSet _tokenSet_6;
 	static const unsigned long _tokenSet_7_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_7;
+	static const antlr::BitSet _tokenSet_7;
 };
 
 #endif /*INC_AdaLexer_hpp_*/

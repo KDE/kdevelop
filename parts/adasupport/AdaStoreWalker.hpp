@@ -27,7 +27,7 @@
 #include "parsedargument.h"
 
 #line 30 "AdaStoreWalker.hpp"
-class AdaStoreWalker : public ANTLR_USE_NAMESPACE(antlr)TreeParser, public AdaStoreWalkerTokenTypes
+class AdaStoreWalker : public antlr::TreeParser, public AdaStoreWalkerTokenTypes
 {
 #line 29 "expandedada.store.g"
 
@@ -40,6 +40,7 @@ private:
     PIAccess m_currentAccess;
     bool m_addToStore; /* auxiliary variable: for the moment, this is `true'
                           only when we are in specs, not bodies.  */
+    bool m_isSubprogram;  // auxiliary to def_id()
 
 public:
     void setClassStore (ClassStore* store)     { m_store = store; }
@@ -56,6 +57,7 @@ public:
 	m_scopeStack.append (m_currentContainer);
         m_currentAccess = PIE_PUBLIC;
 	m_addToStore = false;
+	m_isSubprogram = false;
         m_store->removeWithReferences (m_fileName);
     }
 
@@ -102,7 +104,7 @@ public:
 #line 34 "AdaStoreWalker.hpp"
 public:
 	AdaStoreWalker();
-	void initializeASTFactory( ANTLR_USE_NAMESPACE(antlr)ASTFactory& factory );
+	void initializeASTFactory( antlr::ASTFactory& factory );
 	int getNumTokens() const
 	{
 		return AdaStoreWalker::NUM_TOKENS;
@@ -122,14 +124,13 @@ public:
 	public: void use_clause(RefAdaAST _t);
 	public: void subtype_mark(RefAdaAST _t);
 	public: void lib_subprog_decl_or_rename_or_inst_or_body(RefAdaAST _t);
-	public: void def_id(RefAdaAST _t,
-		bool is_subprogram=false
-	);
+	public: void def_id(RefAdaAST _t);
 	public: void pkg_body_part(RefAdaAST _t);
 	public: void generic_inst(RefAdaAST _t);
 	public: void pkg_spec_part(RefAdaAST _t);
 	public: void renames(RefAdaAST _t);
 	public: void generic_decl(RefAdaAST _t);
+	public: void subprog_def_id(RefAdaAST _t);
 	public: void subprog_decl(RefAdaAST _t);
 	public: void formal_part_opt(RefAdaAST _t);
 	public: void def_designator(RefAdaAST _t);
@@ -308,15 +309,15 @@ private:
 #endif
 	
 	static const unsigned long _tokenSet_0_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_0;
+	static const antlr::BitSet _tokenSet_0;
 	static const unsigned long _tokenSet_1_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_1;
+	static const antlr::BitSet _tokenSet_1;
 	static const unsigned long _tokenSet_2_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_2;
+	static const antlr::BitSet _tokenSet_2;
 	static const unsigned long _tokenSet_3_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_3;
+	static const antlr::BitSet _tokenSet_3;
 	static const unsigned long _tokenSet_4_data_[];
-	static const ANTLR_USE_NAMESPACE(antlr)BitSet _tokenSet_4;
+	static const antlr::BitSet _tokenSet_4;
 };
 
 #endif /*INC_AdaStoreWalker_hpp_*/

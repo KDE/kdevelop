@@ -28,7 +28,7 @@
 header "pre_include_hpp" {
 #include <antlr/SemanticException.hpp>  // antlr wants this
 #include "AdaAST.hpp"
-#include "problemreporter.h"
+#include "preambles.h"
 }
 
 options {
@@ -51,49 +51,15 @@ options {
 }
 
 {
-private:
-  unsigned int m_numberOfErrors;
-  ProblemReporter* m_problemReporter;
+  ANTLR_PARSER_PREAMBLE
 
 public:
-
   // Ada support stuff
   void push_def_id (const RefAdaAST& defid);
   const RefAdaAST& pop_def_id ();
   bool end_id_matches_def_id (const RefAdaAST& endid);
   bool definable_operator (const char *string);  // operator_symbol sans "/="
   bool is_operator_symbol (const char *string);
-
-  // ProblemReporter stuff (for kdevelop compatibility - may be removed)
-  void resetErrors ()                          { m_numberOfErrors = 0; }
-  unsigned int numberOfErrors () const         { return m_numberOfErrors; }
-  void setProblemReporter (ProblemReporter* r) { m_problemReporter = r; }
-
-  void reportError (const antlr::RecognitionException& ex) {
-    m_problemReporter->reportError
-           (ex.toString().c_str (),
-            ex.getFilename().c_str (),
-            ex.getLine (),
-            ex.getColumn ());
-    ++m_numberOfErrors;
-  }
-
-  void reportError (const std::string& errorMessage) {
-    m_problemReporter->reportError
-           (errorMessage.c_str(),
-            getFilename ().c_str(),
-            LT(1)->getLine (),
-            LT(1)->getColumn ());
-    ++m_numberOfErrors;
-  }
-
-  void reportMessage (const std::string& message) {
-    m_problemReporter->reportMessage
-           (message.c_str (),
-            getFilename ().c_str (),
-            LT(1)->getLine (),
-            LT(1)->getColumn ());
-  }
 }
 
 // Compilation Unit:  This is the start rule for this parser.
@@ -179,7 +145,7 @@ lib_pkg_spec_or_body
 		)
 	;
 
-subprog_decl [bool lib_level=false]
+subprog_decl [bool lib_level]
 	{ RefAdaAST t; }
 	: p:PROCEDURE^ def_id[lib_level]
 		( generic_subp_inst
@@ -201,7 +167,7 @@ subprog_decl [bool lib_level=false]
 		)
 	;
 
-def_id [bool lib_level=false]
+def_id [bool lib_level]
 	: { lib_level }? cn:compound_name { push_def_id(#cn); }
 	| { !lib_level }? n:IDENTIFIER { push_def_id(#n); }
 	;
@@ -360,7 +326,7 @@ separate_or_abstract! [RefAdaAST t]
 		}
 	;
 
-def_designator [bool lib_level=false]
+def_designator [bool lib_level]
 	{ RefAdaAST d; }
 	: { lib_level }? n:compound_name { push_def_id(#n); }
 	| { !lib_level }? d=designator { push_def_id(d); }
@@ -422,17 +388,17 @@ basic_declarative_items : ( basic_decl_item | pragma )+
 	;
 
 basic_decl_item
-	: pkg:PACKAGE^ def_id spec_decl_part[#pkg]
+	: pkg:PACKAGE^ def_id[false] spec_decl_part[#pkg]
 	| tsk:TASK^ task_type_or_single_decl[#tsk]
 	| pro:PROTECTED^ prot_type_or_single_decl[#pro] SEMI!
-	| subprog_decl
+	| subprog_decl[false]
 	| decl_common
 	;
 
 task_type_or_single_decl [RefAdaAST tsk]
-	: TYPE! def_id discrim_part_opt task_definition_opt
+	: TYPE! def_id[false] discrim_part_opt task_definition_opt
 		{ Set(tsk, TASK_TYPE_DECLARATION); }
-	| def_id task_definition_opt
+	| def_id[false] task_definition_opt
 		{ Set(tsk, SINGLE_TASK_DECLARATION); }
 	;
 
@@ -561,9 +527,9 @@ private_task_items_opt : ( PRIVATE! ( pragma )* entrydecls_repspecs_opt )?
 	;
 
 prot_type_or_single_decl [RefAdaAST pro]
-	: TYPE! def_id discrim_part_opt protected_definition
+	: TYPE! def_id[false] discrim_part_opt protected_definition
 		{ Set(pro, PROTECTED_TYPE_DECLARATION); }
-	| def_id protected_definition
+	| def_id[false] protected_definition
 		{ Set(pro, SINGLE_PROTECTED_DECLARATION); }
 	;
 
@@ -577,9 +543,9 @@ prot_op_decl_s : ( prot_op_decl )*
 	;
 
 prot_op_decl : entry_declaration
-	| p:PROCEDURE^ def_id formal_part_opt SEMI!
+	| p:PROCEDURE^ def_id[false] formal_part_opt SEMI!
 		{ pop_def_id(); Set(#p, PROCEDURE_DECLARATION); }
-	| f:FUNCTION^ def_designator function_tail SEMI!
+	| f:FUNCTION^ def_designator[false] function_tail SEMI!
 		{ pop_def_id(); Set(#f, FUNCTION_DECLARATION); }
 	| rep_spec
 	| pragma
@@ -622,7 +588,7 @@ decl_common
 		SEMI!
 	| s:SUBTYPE^ IDENTIFIER IS! subtype_ind SEMI!  // subtype_decl
 		{ Set(#s, SUBTYPE_DECLARATION); }
-	| generic_decl
+	| generic_decl[false]
 	| use_clause
 	| r:FOR^ ( (local_enum_name USE LPAREN) => local_enum_name USE!
 			enumeration_aggregate
@@ -670,7 +636,7 @@ type_def [RefAdaAST t]
 		)
 	| array_type_definition[t]
 	| access_type_definition[t]
-	| empty_discrim_opt derived_or_private_or_record[t]
+	| empty_discrim_opt derived_or_private_or_record[t, false]
 	;
 
 enum_id_s : enumeration_literal_specification
@@ -786,7 +752,7 @@ constant_all_opt : ( CONSTANT | ALL )?
 		#(#[MODIFIERS, "MODIFIERS"], #constant_all_opt); }
 	;
 
-derived_or_private_or_record [RefAdaAST t, bool has_discrim=false]
+derived_or_private_or_record [RefAdaAST t, bool has_discrim]
 	: ( ( ABSTRACT )? NEW subtype_ind WITH ) =>
 		abstract_opt NEW! subtype_ind WITH!
 			( PRIVATE!  { Set(t, PRIVATE_EXTENSION_DECLARATION); }
@@ -805,12 +771,12 @@ abstract_opt : ( ABSTRACT )?
 	{ #abstract_opt = #(#[MODIFIERS, "MODIFIERS"], #abstract_opt); }
 	;
 
-record_definition [bool has_discrim=false]
+record_definition [bool has_discrim]
 	: RECORD! component_list[has_discrim] END! RECORD!
 	| NuLL! RECORD!  // Thus the component_list is optional in the tree.
 	;
 
-component_list [bool has_discrim=false]
+component_list [bool has_discrim]
 	: NuLL! SEMI!  // Thus the component_list is optional in the tree.
 	| component_items ( variant_part { has_discrim }? )?
 	| empty_component_items variant_part { has_discrim }?
@@ -879,7 +845,7 @@ aliased_constant_opt : ( ALIASED )? ( CONSTANT )?
 	  #(#[MODIFIERS, "MODIFIERS"], #aliased_constant_opt); }
 	;
 
-generic_decl [bool lib_level=false]
+generic_decl [bool lib_level]
 	: g:GENERIC^ generic_formal_part_opt
 	( PACKAGE! def_id[lib_level]
 		( renames { Set(#g, GENERIC_PACKAGE_RENAMING); }
@@ -909,7 +875,7 @@ generic_formal_part_opt : ( use_clause | pragma | generic_formal_parameter )*
 	;
 
 generic_formal_parameter :
-	( t:TYPE^ def_id
+	( t:TYPE^ def_id[false]
 		( IS!
 			( LPAREN! BOX! RPAREN!
 				{ Set (#t, FORMAL_DISCRETE_TYPE_DECLARATION); }
@@ -931,11 +897,11 @@ generic_formal_parameter :
 		| discrim_part IS! discriminable_type_definition[#t]
 		)
 		{ pop_def_id(); }
-	| w:WITH^ ( PROCEDURE! def_id formal_part_opt subprogram_default_opt
+	| w:WITH^ ( PROCEDURE! def_id[false] formal_part_opt subprogram_default_opt
 			{ Set(#w, FORMAL_PROCEDURE_DECLARATION); }
-		| FUNCTION! def_designator function_tail subprogram_default_opt
+		| FUNCTION! def_designator[false] function_tail subprogram_default_opt
 			{ Set(#w, FORMAL_FUNCTION_DECLARATION); }
-		| PACKAGE! def_id IS! NEW! compound_name formal_package_actual_part_opt
+		| PACKAGE! def_id[false] IS! NEW! compound_name formal_package_actual_part_opt
 			{ Set(#w, FORMAL_PACKAGE_DECLARATION); }
 		)
 		{ pop_def_id(); }
@@ -961,7 +927,7 @@ formal_package_actual_part_opt
 	: ( LPAREN! ( BOX | defining_identifier_list ) RPAREN! )?
 	;
 
-subprog_decl_or_rename_or_inst_or_body [bool lib_level=false]
+subprog_decl_or_rename_or_inst_or_body [bool lib_level]
 	{ RefAdaAST t; }
 	: p:PROCEDURE^ def_id[lib_level]
 		( generic_subp_inst
@@ -1008,7 +974,7 @@ declarative_item :
 				{ Set(#pkg, PACKAGE_BODY); }
 			)
 			SEMI!
-		| def_id spec_decl_part[#pkg]
+		| def_id[false] spec_decl_part[#pkg]
 		)
 	| tsk:TASK^ ( body_is
 			( separate { Set(#tsk, TASK_BODY_STUB); }
@@ -1026,7 +992,7 @@ declarative_item :
 		| prot_type_or_single_decl[#pro]
 		)
 		SEMI!
-	| subprog_decl_or_rename_or_inst_or_body
+	| subprog_decl_or_rename_or_inst_or_body[false]
 	| decl_common
 	)
 	/* DECLARATIVE_ITEM is just a pass-thru node so we omit it.
@@ -1037,7 +1003,7 @@ declarative_item :
 	 */
 	;
 
-body_is : BODY! def_id IS!
+body_is : BODY! def_id[false] IS!
 	;
 
 separate : SEPARATE! { pop_def_id(); }
@@ -1062,12 +1028,12 @@ prot_op_bodies_opt : ( entry_body
 	;
 
 subprog_decl_or_body
-	: p:PROCEDURE^ def_id formal_part_opt
+	: p:PROCEDURE^ def_id[false] formal_part_opt
 		( IS! body_part { Set(#p, PROCEDURE_BODY); }
 		| { pop_def_id(); Set(#p, PROCEDURE_DECLARATION); }
 		)
 		SEMI!
-	| f:FUNCTION^ def_designator function_tail
+	| f:FUNCTION^ def_designator[false] function_tail
 		( IS! body_part { Set(#f, FUNCTION_BODY); }
 		| { pop_def_id(); Set(#f, FUNCTION_DECLARATION); }
 		)
@@ -1240,7 +1206,7 @@ call_or_assignment :  // procedure_call is in here.
 	SEMI!
 	;
 
-entry_body : e:ENTRY^ def_id entry_body_formal_part entry_barrier IS!
+entry_body : e:ENTRY^ def_id[false] entry_body_formal_part entry_barrier IS!
 		body_part SEMI!
 	{ Set (#e, ENTRY_BODY); }
 	;
@@ -1250,7 +1216,7 @@ entry_body_formal_part : entry_index_spec_opt formal_part_opt
 
 entry_index_spec_opt :
 	( (LPAREN FOR) =>
-		LPAREN! FOR! def_id IN! discrete_subtype_definition RPAREN!
+		LPAREN! FOR! def_id[false] IN! discrete_subtype_definition RPAREN!
 	| /* empty */
 	)
 	{ #entry_index_spec_opt =
@@ -1268,7 +1234,7 @@ entry_call_stmt : name SEMI!  // Semantic analysis required, for example
 		   "ENTRY_CALL_STATEMENT"], #entry_call_stmt); }
 	;
 
-accept_stmt : a:ACCEPT^ def_id entry_index_opt formal_part_opt
+accept_stmt : a:ACCEPT^ def_id[false] entry_index_opt formal_part_opt
 		( DO! handled_stmt_s end_id_opt! SEMI!
 		| SEMI! { pop_def_id(); }
 		)
@@ -1512,7 +1478,7 @@ subunit : sep:SEPARATE^ LPAREN! compound_name RPAREN!
 	;
 
 subprogram_body
-	: p:PROCEDURE^ def_id formal_part_opt IS! body_part SEMI!
+	: p:PROCEDURE^ def_id[false] formal_part_opt IS! body_part SEMI!
 		{ Set(#p, PROCEDURE_BODY); }
 	| f:FUNCTION^ function_tail IS! body_part SEMI!
 		{ Set(#f, FUNCTION_BODY); }
@@ -1538,7 +1504,7 @@ protected_body : p:PROTECTED^ body_is prot_op_bodies_opt end_id_opt! SEMI!
 // The Ada scanner
 //----------------------------------------------------------------------------
 {
-#include <string>
+#include "preambles.h"
 }
 class AdaLexer extends Lexer;
 
@@ -1879,43 +1845,8 @@ tokens {
   VARIANTS;
 }
 
-// ProblemReporter stuff (for kdevelop compatibility - may be removed)
 {
-private:
-  unsigned int m_numberOfErrors;
-  ProblemReporter* m_problemReporter;
-
-public:
-
-  void resetErrors ()                          { m_numberOfErrors = 0; }
-  unsigned int numberOfErrors () const         { return m_numberOfErrors; }
-  void setProblemReporter (ProblemReporter* r) { m_problemReporter = r; }
-
-  void reportError (const antlr::RecognitionException& ex) {
-    m_problemReporter->reportError
-           (ex.toString ().c_str (),
-            ex.getFilename ().c_str (),
-            ex.getLine (),
-            ex.getColumn ());
-    ++m_numberOfErrors;
-  }
-
-  void reportError (const std::string& errorMessage) {
-    m_problemReporter->reportError
-           (errorMessage.c_str (),
-            getFilename().c_str (),
-            getLine (),
-            getColumn ());
-    ++m_numberOfErrors;
-  }
-
-  void reportWarning (const std::string& warnMessage) {
-    m_problemReporter->reportWarning
-           (warnMessage.c_str (),
-            getFilename ().c_str (),
-            getLine (),
-            getColumn ());
-  }
+  ANTLR_LEXER_PREAMBLE
 }
 
 //----------------------------------------------------------------------------
