@@ -606,11 +606,11 @@ void CppSupportPart::addMethod(const QString &className)
         if (pm->isSignal())
             headerCode.prepend(QString("signals:\n"));
         else if (pm->access() == PIE_PUBLIC)
-            headerCode.prepend(QString("public:%1\n").arg(pm->isSlot()? " slots" :  ""));
+            headerCode.prepend(QString("public%1:\n").arg(pm->isSlot()? " slots" :  ""));
         else if (pm->access() == PIE_PROTECTED)
-            headerCode.prepend(QString("protected:\n").arg(pm->isSlot()? " slots" :  ""));
+            headerCode.prepend(QString("protected%1:\n").arg(pm->isSlot()? " slots" :  ""));
         else if (pm->access() == PIE_PRIVATE)
-            headerCode.prepend(QString("private:\n").arg(pm->isSlot()? " slots" :  ""));
+            headerCode.prepend(QString("private%1:\n").arg(pm->isSlot()? " slots" :  ""));
         else
             kdDebug(9007) << "selectedAddMethod: Unknown access "
                           << (int)pm->access() << endl;
