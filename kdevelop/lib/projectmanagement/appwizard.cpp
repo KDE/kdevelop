@@ -20,36 +20,39 @@
 #include <qfiledialog.h>
 #include <iostream.h>
 #include <kprocess.h>
+#include <kdebug.h>
 
 
-AppWizard::AppWizard(QWidget* parent, const char* obj_name) : QWizard(parent,obj_name){
-	// conntects
+AppWizard::AppWizard(QWidget* parent, const char* obj_name) : QWizard(parent,obj_name,true){
+  // conntects
+  m_project=0;
+  
 }
 AppWizard::~AppWizard(){
 }
 
 void AppWizard::init(bool new_projectspace,ProjectSpace* projectspace){
-	m_new_projectspace = new_projectspace;
-	m_projectspace = projectspace;
-	m_project = getProject();
-	
-	initDefaultPages(); // initPages
-	// add pages
-	addPage(m_general_page,"first");
-	if(m_new_projectspace){
-	  addPage(m_fileheader_page,"second");
-	}
-	resize(519,513);
+  kdDebug(9000) << "enter AppWizard::init" << endl;
+  m_new_projectspace = new_projectspace;
+  m_projectspace = projectspace;
+  getProject();
+  
+  initDefaultPages(); // initPages
+  // add pages
+  addPage(m_general_page,"first");
+  if(m_new_projectspace){
+    addPage(m_fileheader_page,"second");
+  }
+  resize(519,513);
 }
 
 void AppWizard::accept(){
-  cerr << "start generation";
+  kdDebug(9000) << "start generation" << endl;
   if(m_new_projectspace){ // only if a new one was selected
     m_projectspace->generateDefaultFiles();
-    
-    m_projectspace->addProject(m_project);
-    m_projectspace->writeConfig();
   }
+  m_projectspace->addProject(m_project);
+  m_projectspace->writeConfig();
   generateDefaultFiles();
   QWizard::accept();
 }
@@ -62,26 +65,26 @@ QString  AppWizard::getPreviewPicture(){
 }
 Project* AppWizard::getProject(){
   if(m_project == 0){ // no project instance
-    return PluginLoader::getNewProject(m_project_library);
+    m_project = PluginLoader::getNewProject(m_projecttype_name);
   }
   return m_project;
 }
 
 void AppWizard::generateDefaultFiles(){
-	KShellProcess proc("/bin/sh");
-	
-	// create the directories
-	proc << "mkdirhier";
-	proc << m_project->getAbsolutePath();
-	proc.start(KProcess::Block,KProcess::AllOutput);
-	
-	// untar/unzip the projectspace
-	proc.clearArguments();
-	QString args = "xzvf " + m_project_template + " -C " + m_project->getAbsolutePath();
-	cerr << "AppWizardPluginBase::generateDefaultFiles():" << args;
-	proc << "tar";
-	proc << args;
-	proc.start(KProcess::Block,KProcess::AllOutput);
+  KShellProcess proc("/bin/sh");
+  
+  // create the directories
+  proc << "mkdirhier";
+  proc << m_project->getAbsolutePath();
+  proc.start(KProcess::Block,KProcess::AllOutput);
+  
+  // untar/unzip the project
+  proc.clearArguments();
+  QString args = "xzvf " + m_project_template + " -C " + m_project->getAbsolutePath();
+  cerr << "AppWizard::generateDefaultFiles():" << args;
+  proc << "tar";
+  proc << args;
+  proc.start(KProcess::Block,KProcess::AllOutput);
 }
 void AppWizard::initDefaultPages(){
 	

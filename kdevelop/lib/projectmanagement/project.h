@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat May 13 2000
     copyright            : (C) 2000 by Sandy Meier
-    email                : smeier@kdevelop.de
+    email                : smeier@kdevelop.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -23,12 +23,13 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 #include "registeredfile.h"
+#include <ksimpleconfig.h>
 
 /**-base class for all project plugins, contains  special config widgets for
      PMC (Project Managment Console) , generate/modify Makefile.am's,
      - every project has 2 own project files
      NAME.kdevprj2 for global relevant options,
-     NAME_local.kdevprj2 for local user options
+     .NAME.kdevprj2 for local user options
      - abstract
   *@author Sandy Meier
   */
@@ -51,6 +52,7 @@ class Project : public QObjectPlugin  {
   QString getVersion();
   QString getName();
   QString getProjectFile();
+  QString getUserProjectFile();
 
   /** store the project version. */
   void setVersion(QString version);
@@ -63,10 +65,14 @@ class Project : public QObjectPlugin  {
   virtual void registerFile(RegisteredFile file);
   virtual void unRegisterFile(RegisteredFile file);
 
-  /** read the projectfile */
-  virtual bool readConfig();
-  /** write the projectfile to the disk or db*/
-  virtual bool writeConfig();
+
+  virtual bool readConfig(QString filename);
+  virtual bool readGeneralConfig(KSimpleConfig* config);
+  virtual bool readUserConfig(KSimpleConfig* config);
+  
+  virtual bool writeConfig();	
+  virtual bool writeGeneralConfig(KSimpleConfig* config);
+  virtual bool writeUserConfig(KSimpleConfig* config);
 
   /* */
   virtual void showAllFiles();
@@ -75,6 +81,8 @@ class Project : public QObjectPlugin  {
   QString m_name;
   QString m_version;
   QString m_abs_path;
+  QString m_user_project_file;
+  QString m_project_file;
 };
 
 #endif

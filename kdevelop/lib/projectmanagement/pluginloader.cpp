@@ -27,6 +27,7 @@
 #include <qfileinfo.h>
 #include <klibloader.h>
 #include <kdebug.h>
+#include <ktrader.h>
 
 
 
@@ -86,19 +87,24 @@ AppWizard* PluginLoader::getNewAppwizardPlugin(QString library_filename){
   return 0;
 }
 
-Project* PluginLoader::getNewProject(QString library_filename,QObject* parent){
+Project* PluginLoader::getNewProject(QString projecttype_name,QObject* parent){
   kdDebug(9000) << "enter PluginLoader::getNewProject";
-  KLibFactory *factory = KLibLoader::self()->factory(library_filename);
+  QString constraint = QString("[Name] == '%1'").arg(projecttype_name);
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/Project", constraint);
+  KService *service = *offers.begin();
+  kdDebug(9000) << "Found Project Component " << service->name() << endl;
+
+  KLibFactory *factory = KLibLoader::self()->factory(service->library());
   if (!factory){
-    kdDebug(9000) << "Factory not available " << library_filename  << endl;
+    kdDebug(9000) << "Factory not available " << service->library()  << endl;
   }
   
-  Project* prj  = (Project*)factory->create(parent);
+  Project* prj  = (Project*)factory->create(parent,service->name().latin1(),
+					    "Project");
   if(!prj){
-    kdDebug(9000) << "couldn't create the project "<< library_filename   << endl;
+    kdDebug(9000) << "couldn't create the project "<<  service->library()  << endl;
   }
-  kdDebug(9000) << "create new Project ";
-  kdDebug(9000) << prj->getPluginName()  << endl;
+  kdDebug(9000) << "create new Project " << prj->getPluginName() << endl;
   return prj;
 }
 

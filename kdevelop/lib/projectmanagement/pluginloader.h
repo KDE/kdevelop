@@ -40,7 +40,7 @@ public:
 	/** returns a new projectspace, based on the pluginname from the configfile*/
 	static ProjectSpace* getNewProjectSpaceFromConfigfile(QString filename);
 	static AppWizard* getNewAppwizardPlugin(QString library_filename);
-	static Project* getNewProject(QString library_filename,QObject* parent=0);
+	static Project* getNewProject(QString projecttype_name,QObject* parent=0);
 	static QString findLibrary(QString library_name);
 	static QList<ProjectSpace>* getAllProjectSpaces(QObject* parent);
 	static QList<AppWizard>* getAllAppWizards(QObject* parent);

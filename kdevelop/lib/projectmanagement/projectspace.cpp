@@ -20,8 +20,8 @@
 #include <kstddirs.h>
 #include <iostream.h>
 #include "plugin.h"
-#include <kstddirs.h>
 #include <ksimpleconfig.h>
+#include <kdebug.h>
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(parent,name){
   m_projects = new QList<Project>;
@@ -45,7 +45,7 @@ void ProjectSpace::generateDefaultFiles(){
   // untar/unzip the projectspace
   proc.clearArguments();
   QString args = "xzvf " + m_projectspace_template + " -C " + m_path;
-  cerr << "ProjectSpace::generateDefaultFiles():" << args;
+  kdDebug(9000)  << "ProjectSpace::generateDefaultFiles():" << endl << args << endl;
   proc << "tar";
   proc << args;
   proc.start(KProcess::Block,KProcess::AllOutput);
@@ -61,47 +61,46 @@ QString ProjectSpace::getName(){
 QString ProjectSpace::getVCSystem(){
 }
 
-  /** Fetch the authors name. stored in the *_user files*/
-  QString ProjectSpace::getAuthor(){
-  }
+/** Fetch the authors name. stored in the *_user files*/
+QString ProjectSpace::getAuthor(){
+}
 
-  /** Fetch the authors eMail-address,  stored in the *_user files */
-  QString ProjectSpace::getEmail(){
-  }
+/** Fetch the authors eMail-address,  stored in the *_user files */
+QString ProjectSpace::getEmail(){
+}
 
-   /** set the projectspace name*/
-  void ProjectSpace::setName(QString name){
-  	m_name = name;
-  }
-  void ProjectSpace::setAbsolutePath(QString path){
-  	m_path = path;
-  }
+/** set the projectspace name*/
+void ProjectSpace::setName(QString name){
+  m_name = name;
+}
+void ProjectSpace::setAbsolutePath(QString path){
+  m_path = path;
+}
 
-  /** Store the name of version control system */
-  void ProjectSpace::setVCSystem(QString vcsystem){
-  }
+/** Store the name of version control system */
+void ProjectSpace::setVCSystem(QString vcsystem){
+}
 
-  /** stored in the *_user files*/
-  void ProjectSpace::setAuthor(QString name){
-  }
+/** stored in the *_user files*/
+void ProjectSpace::setAuthor(QString name){
+}
 
-  /** set the email, stored in the *_user file */
-  void ProjectSpace::setEmail(QString email){
-  }
+/** set the email, stored in the *_user file */
+void ProjectSpace::setEmail(QString email){
+}
 
-  /** method to fill up a string template with actual projectspace info
-   */
-  QString& ProjectSpace::setInfosInString(QString& strtemplate, bool basics){
-  }
+/** method to fill up a string template with actual projectspace info
+ */
+QString& ProjectSpace::setInfosInString(QString& strtemplate, bool basics){
+}
 
-
-  /** writes a NAME.kdevpsp and NAME_user.kdevpsp
-      NAME.kdevpsp contains options for all users, like cvs system
-      NAME_user contains options from the local user:
-  */
-  bool ProjectSpace::readConfig(QString filename){
-  	return true;
-  }
+/** writes a NAME.kdevpsp and .NAME.kdevpsp
+    NAME.kdevpsp contains options for all users, like cvs system
+    .NAME.kdevpsp contains options from the local user:
+*/
+bool ProjectSpace::readConfig(QString filename){
+  return true;
+}
 
 bool ProjectSpace::readGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
@@ -115,35 +114,42 @@ bool ProjectSpace::readUserConfig(KSimpleConfig* config){
 
 
 bool ProjectSpace::writeConfig(){
+  kdDebug(9000) << "enter ProjectSpace::writeConfig" << endl;
   // the "global" one
   QString filename = m_path + "/" + m_name + ".kdevpsp";
-  cerr << "filename:" << filename << "\n";
+  kdDebug(9000)  << "filename:" << filename << endl;
   KSimpleConfig* config = new KSimpleConfig(filename);
   writeGeneralConfig(config); // maybe virtual overwritten
   config->sync();
   delete config;
+
+  // write all projectfiles
+  Project* prj;
+  for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
+    prj->writeConfig();
+  }
   
-  // the "local" on
+  // the "local/user" on
   filename = m_path + "/." + m_name + ".kdevpsp";
-  cerr << "filename:" << filename << "\n";
+  kdDebug(9000) << "filename:" << filename << endl;
   config = new KSimpleConfig(filename);
   writeUserConfig(config); // maybe virtual overwritten
   config->sync();
   delete config;
   
 }
+
 bool ProjectSpace::writeGeneralConfig(KSimpleConfig* config){
   config->setGroup("General");
   config->writeEntry("name",m_name);
   config->writeEntry("path",m_path);
-  config->writeEntry("plugin_libraryname", m_plugin_libraryname);
+  config->writeEntry("plugin_name", m_plugin_name); // the projectspacetype name
   QStringList projectfiles;
   Project* prj;
   for(prj=m_projects->first();prj !=0;prj=m_projects->next()){
     projectfiles.append(prj->getProjectFile());
   }
   config->writeEntry("projectfiles",projectfiles);
-  
   return true;
 }
 

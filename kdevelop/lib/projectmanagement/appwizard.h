@@ -97,7 +97,7 @@ public:
   //plugin infos, static
   QString m_project_space_name;
   QString m_application_picture;
-  QString m_project_library;
+  QString m_projecttype_name;
   
   QString m_project_template;
   QString m_path;

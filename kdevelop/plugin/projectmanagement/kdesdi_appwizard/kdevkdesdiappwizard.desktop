@@ -6,5 +6,5 @@ Name=KDE SDI
 ServiceTypes=KDevelop/AppWizard
 X-KDE-Library=libkdevkdesdiappwizard
 X-KDevelop-ProjectSpace-Name=KDE
-X-KDevelop-Project-Name=KDEBinary
+X-KDevelop-Project-Name=KDEBinaryProject
 Icon=java_src

@@ -21,3 +21,9 @@ RegisteredFile::RegisteredFile(){
 }
 RegisteredFile::~RegisteredFile(){
 }
+QString RegisteredFile::getFilename(){
+  return m_filename;
+}
+void RegisteredFile::setFilename(QString filename){
+  m_filename = filename;
+}

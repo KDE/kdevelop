@@ -2,7 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=KDE Binary Project (handles 1 binary)
-Name=KDEBinary
+Name=KDEBinaryProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevkdebinaryproject
 Icon=java_src

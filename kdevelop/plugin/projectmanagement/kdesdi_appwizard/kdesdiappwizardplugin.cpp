@@ -41,7 +41,7 @@ KDESDIAppWizardPlugin::KDESDIAppWizardPlugin(QObject* parent,const char* name){
 	m_project_template = std_dirs->findResource("data","kdevelop/project_templates/kdesdi.tar.gz");
 	
 	// project infos
-	m_project_library = "libkdebinary_project";
+	m_projecttype_name = "KDEBinaryProject";
 	
 	cerr << "\nKDESDIAppWizardPlugin:: I'm a plugin";	
 }

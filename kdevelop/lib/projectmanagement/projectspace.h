@@ -69,22 +69,22 @@ class ProjectSpace : public KDevComponent, public Plugin  {
 
   /** Fetch the authors eMail-address,  stored in the *_local files */
   QString getEmail();
-
-	/***/
-	virtual void generateDefaultFiles();
+  
+  /***/
+  virtual void generateDefaultFiles();
 	
-  /** writes a NAME.kdevpsp and NAME_local.kdevpsp
+  /** writes a NAME.kdevpsp and .NAME.kdevpsp
       NAME.kdevpsp contains options for all users, like cvs system
-      NAME_local contains options from the local user:
+      .NAME.kdevpsp contains options from the local user:
   */
 
   virtual bool readConfig(QString filename);
   virtual bool readGeneralConfig(KSimpleConfig* config);
-	virtual bool readUserConfig(KSimpleConfig* config);
-
-	virtual bool writeConfig();	
+  virtual bool readUserConfig(KSimpleConfig* config);
+  
+  virtual bool writeConfig();	
   virtual bool writeGeneralConfig(KSimpleConfig* config);
-	virtual bool writeUserConfig(KSimpleConfig* config);
+  virtual bool writeUserConfig(KSimpleConfig* config);
 
 	
 protected:

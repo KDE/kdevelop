@@ -28,10 +28,14 @@ class RegisteredFile {
 public: 
 	RegisteredFile();
 	~RegisteredFile();
-	QString filename;
-  bool dist;
-  bool install;
-  QString install_path;
+	QString getFilename();
+	void setFilename(QString filename);
+	
+ protected:
+	QString m_filename;
+	bool m_dist;
+	bool m_install;
+	QString m_install_path;
 };
 
 #endif

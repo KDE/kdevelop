@@ -235,9 +235,11 @@ void NewProjectDlg::slotOk(){
   selected_prjspace->setName(m_prjspace_name_linedit->text());
   
   m_current_appwizard_plugin->init(new_projectspace,selected_prjspace);
-  //  Project* prj = m_current_appwizard_plugin->getProject();
-  //  prj->setName(m_prjname_linedit->text());
-  //  prj->setAbsolutePath(m_prjlocation_linedit->text());
+  Project* prj = m_current_appwizard_plugin->getProject();
+  kdDebug(9000) << "NewProjectDlg: set some project props" << endl;
+    
+  prj->setName(m_prjname_linedit->text());
+  prj->setAbsolutePath(m_prjlocation_linedit->text());
   
   m_current_appwizard_plugin->exec(); // exec the dialog
   
