@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>571</width>
+            <width>567</width>
             <height>507</height>
         </rect>
     </property>
@@ -47,7 +47,7 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PushButton1</cstring>
+                    <cstring>okayPushButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>text</name>
@@ -58,7 +58,7 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PushButton1_2</cstring>
+                    <cstring>cancelPushButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>text</name>
@@ -90,7 +90,7 @@
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PushButton1_3</cstring>
+                    <cstring>help_PushButton</cstring>
                 </property>
                 <property stdset="1">
                     <name>text</name>
@@ -281,7 +281,7 @@
                         </item>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>ListBox7</cstring>
+                            <cstring>srcDistFileListBox</cstring>
                         </property>
                     </widget>
                     <widget row="0"  column="0"  rowspan="2"  colspan="1" >
@@ -313,7 +313,7 @@
                                     <class>QCheckBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox51</cstring>
+                                        <cstring>bzipCheckBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>geometry</name>
@@ -371,7 +371,7 @@
                                             <class>QLineEdit</class>
                                             <property stdset="1">
                                                 <name>name</name>
-                                                <cstring>LineEdit61</cstring>
+                                                <cstring>archNameFormatLineEdit</cstring>
                                             </property>
                                             <property stdset="1">
                                                 <name>text</name>
@@ -406,7 +406,7 @@
                                 <class>QPushButton</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>PushButton67</cstring>
+                                    <cstring>createSrcArchPushButton</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -417,7 +417,7 @@
                                 <class>QPushButton</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>PushButton67_2</cstring>
+                                    <cstring>resetSrcPushButton</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -432,7 +432,7 @@
                 <class>QCheckBox</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>CheckBox53</cstring>
+                    <cstring>customProjectCheckBox</cstring>
                 </property>
                 <property stdset="1">
                     <name>geometry</name>
@@ -513,7 +513,7 @@
                                 <class>QMultiLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>MultiLineEdit1</cstring>
+                                    <cstring>projectDescriptionMultilineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="4"  column="0" >
@@ -564,7 +564,7 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit1</cstring>
+                                    <cstring>appNameLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="2"  column="0" >
@@ -575,21 +575,21 @@
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>Release Number:</string>
+                                    <string>Release:</string>
                                 </property>
                             </widget>
                             <widget row="5"  column="1" >
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit5</cstring>
+                                    <cstring>summaryLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="7"  column="1" >
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit5_4</cstring>
+                                    <cstring>authorLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="0"  column="0" >
@@ -629,7 +629,7 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit5_2</cstring>
+                                    <cstring>groupLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="1"  column="0" >
@@ -647,35 +647,35 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit3</cstring>
+                                    <cstring>releaseLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="1"  column="1" >
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit2</cstring>
+                                    <cstring>VersionLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="3"  column="1" >
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit5_3</cstring>
+                                    <cstring>VendorLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="4"  column="1" >
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit4</cstring>
+                                    <cstring>LicenseLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="8"  column="1" >
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LineEdit5_2_2</cstring>
+                                    <cstring>PackagerLineEdit</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -684,7 +684,7 @@
                         <class>QPushButton</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>PushButton4_2</cstring>
+                            <cstring>buildAllPushButton</cstring>
                         </property>
                         <property stdset="1">
                             <name>text</name>
@@ -695,7 +695,7 @@
                         <class>QPushButton</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>PushButton6</cstring>
+                            <cstring>exportSPECPushButton</cstring>
                         </property>
                         <property stdset="1">
                             <name>text</name>
@@ -706,7 +706,7 @@
                         <class>QPushButton</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>PushButton7</cstring>
+                            <cstring>importSPECPushButton</cstring>
                         </property>
                         <property stdset="1">
                             <name>text</name>
@@ -717,7 +717,7 @@
                         <class>QPushButton</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>PushButton4</cstring>
+                            <cstring>srcPackagePushButton</cstring>
                         </property>
                         <property stdset="1">
                             <name>text</name>
@@ -738,7 +738,7 @@
                             <class>QCheckBox</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>CheckBox1</cstring>
+                                <cstring>devPackageCheckBox</cstring>
                             </property>
                             <property stdset="1">
                                 <name>geometry</name>
@@ -758,7 +758,7 @@
                             <class>QCheckBox</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>CheckBox2</cstring>
+                                <cstring>docsPackageCheckBox</cstring>
                             </property>
                             <property stdset="1">
                                 <name>geometry</name>
@@ -862,7 +862,7 @@
                                     </item>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>ComboBox1</cstring>
+                                        <cstring>archComboBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>currentItem</name>
@@ -898,7 +898,7 @@
                             <class>QCheckBox</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>CheckBox2_2</cstring>
+                                <cstring>appIconCheckBox</cstring>
                             </property>
                             <property stdset="1">
                                 <name>geometry</name>
@@ -990,7 +990,7 @@
                                     <class>QCheckBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox7</cstring>
+                                        <cstring>genHTMLCheckBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1001,7 +1001,7 @@
                                     <class>QCheckBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox8</cstring>
+                                        <cstring>useRPMInfoCheckBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1071,7 +1071,7 @@
                                     <class>QPushButton</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>PushButton10</cstring>
+                                        <cstring>genHTMLPushButton</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1082,7 +1082,7 @@
                                     <class>QPushButton</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>PushButton11</cstring>
+                                        <cstring>resetHTMLPushButton</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1167,7 +1167,7 @@
                                     <class>QCheckBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox5</cstring>
+                                        <cstring>uploadAppsKDEcomCheckBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1178,7 +1178,7 @@
                                     <class>QCheckBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox4</cstring>
+                                        <cstring>uploadftpkdeorgCheckBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1210,7 +1210,7 @@
                                     <class>QCheckBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>CheckBox6</cstring>
+                                        <cstring>uploadCustomCheckBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1221,7 +1221,7 @@
                                     <class>QPushButton</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>PushButton8</cstring>
+                                        <cstring>uploadSubmitPushButton</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1232,7 +1232,7 @@
                                     <class>QPushButton</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>PushButton9</cstring>
+                                        <cstring>uploadResetPushButton</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1243,7 +1243,7 @@
                                     <class>QLineEdit</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>LineEdit10</cstring>
+                                        <cstring>uploadURLLineEdit</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
@@ -1254,7 +1254,7 @@
                                     <class>QProgressBar</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>ProgressBar1</cstring>
+                                        <cstring>uploadProgressBar</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>frameShape</name>
@@ -1313,7 +1313,7 @@
                                             <class>QToolButton</class>
                                             <property stdset="1">
                                                 <name>name</name>
-                                                <cstring>ToolButton1</cstring>
+                                                <cstring>uploadAddFileToolButton</cstring>
                                             </property>
                                             <property stdset="1">
                                                 <name>text</name>
@@ -1324,7 +1324,7 @@
                                             <class>QToolButton</class>
                                             <property stdset="1">
                                                 <name>name</name>
-                                                <cstring>ToolButton2</cstring>
+                                                <cstring>uploadRemoveToolButton</cstring>
                                             </property>
                                             <property stdset="1">
                                                 <name>text</name>
@@ -1369,7 +1369,7 @@
                                     <class>QListBox</class>
                                     <property stdset="1">
                                         <name>name</name>
-                                        <cstring>ListBox1</cstring>
+                                        <cstring>uploadFileListBox</cstring>
                                     </property>
                                     <property stdset="1">
                                         <name>sizePolicy</name>
