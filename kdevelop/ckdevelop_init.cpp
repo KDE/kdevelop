@@ -1140,7 +1140,7 @@ if(bKDevelop){
     accel->setItemEnabled("Dialog Editor", true );
 
     accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
-    accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_OPEN);
+    accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
     accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
     accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO);
     accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO);
