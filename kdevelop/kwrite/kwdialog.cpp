@@ -159,7 +159,7 @@ void SearchDialog::okSlot() {
   if (text && *text) accept();//emit search();
 }
 
-ReplacePrompt::ReplacePrompt(QWidget *parent, const char *name)
+ReplacePrompt::ReplacePrompt(QWidget */*parent*/, const char *name)
   : QDialog(0L,name,false) {
 
   QVBoxLayout *mainLayout = new QVBoxLayout(this, 10);

@@ -219,9 +219,9 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
 QString DocTreeKDevelopBook::readIndexTitle(const char* book)
 {
   FILE *f;
+  QString title="";
   if ( (f = fopen(book, "r")) != 0)
   {
-    QString title;
     char buf[512];
     while (fgets(buf, sizeof buf, f))
     {
@@ -236,8 +236,8 @@ QString DocTreeKDevelopBook::readIndexTitle(const char* book)
       title = s.mid(pos1+7, pos2-(pos1+7));
     }    
     fclose(f);
-    return title;
   }
+  return title;
 }
 
 void DocTreeKDevelopBook::setOpen(bool o)
@@ -401,7 +401,7 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
     if ( (f = fopen(indexFile, "r")) != 0)
     {
       char buf[512];
-      int count=0;
+//      int count=0;
       QString baseurl;
       while (fgets(buf, sizeof buf, f))
       {
@@ -420,7 +420,7 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
                          + indexFile + ".gz 2>/dev/null", "r")) != 0)
     {
       char buf[512];
-      int count=0;
+//      int count=0;
       QString baseurl;
       while (fgets(buf, sizeof buf, f))
       {
@@ -443,6 +443,7 @@ QString DocTreeKDELibsBook::locatehtml(const char *libname)
         return kde_path + libname + "/index.html";
     }
 #endif
+  return "";  // only to kill warnings - IMHO there should be only 1 return at the end - W. Tasin
 }
 
 int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
