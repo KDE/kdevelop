@@ -897,11 +897,6 @@ void CppSupportPart::slotMakeMember()
 
 	if( decl && declarator && declarator->parameterDeclarationClause() ){
 
-	    text += "\n\n";
-	    text += typeSpecToString( decl->typeSpec() );
-	    if( text )
-	        text += " ";
-
 	    QStringList scope;
 	    scopeOfNode( decl, scope );
 
@@ -909,7 +904,12 @@ void CppSupportPart::slotMakeMember()
 	    if( scopeStr )
 	        scopeStr += "::";
 
-	    text += declaratorToString( declarator, scopeStr ).simplifyWhiteSpace() + "\n{\n}\n\n";
+	    QString declStr = declaratorToString( declarator, scopeStr ).simplifyWhiteSpace();
+
+	    text += "\n\n";
+	    text += typeSpecToString( decl->typeSpec() ) + " ";
+
+	    text += declStr + "\n{\n}\n\n";
 	}
 
 	m_backgroundParser->unlock();
@@ -935,13 +935,13 @@ void CppSupportPart::slotMakeMember()
 	    atLine = m_activeEditor->numLines() - 1;
 	    atColumn = 0;
 	}
-	m_backgroundParser->unlock();
 
 	if( m_activeEditor )
 	    m_activeEditor->insertText( atLine, atColumn, text );
 	if( m_activeViewCursor )
-	    m_activeViewCursor->setCursorPositionReal( atLine+2, 0 );
+	    m_activeViewCursor->setCursorPositionReal( atLine+3, 1 );
     }
+    m_backgroundParser->unlock();
 }
 
 QStringList CppSupportPart::subclassWidget(const QString& formName)
