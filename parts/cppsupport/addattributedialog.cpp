@@ -257,3 +257,4 @@ void AddAttributeDialog::currentChanged( QListViewItem* item )
     updateGUI();
 }
 
+#include "addattributedialog.moc"

@@ -378,3 +378,4 @@ void AddMethodDialog::browseImplementationFile()
     sourceFile->setCurrentText( fileName );
     updateGUI();
 }
+#include "addmethoddialog.moc"
