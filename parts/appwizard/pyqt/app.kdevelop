@@ -38,4 +38,13 @@
       <group pattern="*.ui" name="QT Designer files" />
     </groups>
   </kdevfileview>
+  <kdevfilecreate>
+    <filetypes>
+      <type ext="py" name="Python" create="template" />
+      <type ext="ui" name="QT Designer" create="template" >
+        <subtype ref="dialog" name="Dialog" />
+        <subtype ref="mainwin" name="Main window" />
+      </type>
+    </filetypes>
+  </kdevfilecreate>  
 </kdevelop>
