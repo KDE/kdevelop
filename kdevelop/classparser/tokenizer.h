@@ -1,9 +1,10 @@
 /***************************************************************************
-                          tokenizer.h  -  description
+                          tokenizer.l  -  description
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
+   
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,6 +15,13 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
+/* N.B 
+ * When adding new tokens, use the CP prefix to avoid nameclashes
+ * with the compiler and other packages. 
+ *
+ * /Jonas
+ */
 
 #ifndef _TOKENIZER_H_INCLUDED
 #define _TOKENIZER_H_INCLUDED
@@ -41,7 +49,7 @@
 #define CPTEMPLATE     279
 #define NUM            280
 #define CPTHROW        281
-#define CPNAMESPACE      282
+#define CPNAMESPACE    282
 
 typedef const char * YYSTYPE;
 

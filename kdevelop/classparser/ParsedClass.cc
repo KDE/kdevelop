@@ -1,37 +1,25 @@
-/********************************************************************
-* Name    : Implementation of a parsed class.                       *
-* ------------------------------------------------------------------*
-* File    : ParsedClass.h                                           *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Mon Mar 15 12:03:15 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedClass.cc  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #include <iostream.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
+#include "ProgrammingByContract.h"
 #include "ParsedClass.h"
 
 /*********************************************************************
@@ -60,6 +48,8 @@ CParsedClass::CParsedClass()
   slotList.setAutoDelete( true );
   signalMaps.setAutoDelete( true );
   classes.setAutoDelete( false );
+
+  isSubClass = false;
 }
 
 /*------------------------------------- CParsedClass::~CParsedClass()
@@ -81,6 +71,124 @@ CParsedClass::~CParsedClass()
  *                                                                   *
  ********************************************************************/
 
+/*---------------------- CParsedClass::removeWithReferences()
+ * removeWithReferences()
+ *   Remove references to all items in the parsed class that were
+ *   obtained from the given file
+ *
+ * Parameters:
+ *   aFile          The file.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::removeWithReferences( const char *aFile )
+{
+  REQUIRE( "Valid filename", aFile != NULL );
+  REQUIRE( "Valid filename length", strlen( aFile ) > 0 );
+
+  CParsedMethod *aMethod = NULL;
+
+  methodIterator.toFirst();
+  while( ( aMethod = methodIterator.current() ) != (CParsedMethod *) NULL )
+  {
+    if( aMethod->declaredInFile == aFile ) {
+    		if( aMethod->definedInFile.isNull() || aMethod->declaredInFile == aMethod->definedInFile ) {
+    			CParsedContainer::removeMethod(aMethod);
+    		} else {
+    			aMethod->clearDeclaration();
+    			++methodIterator;
+    		}
+    } else if( aMethod->definedInFile == aFile ) {
+    		if( aMethod->declaredInFile.isNull() ) {
+    			CParsedContainer::removeMethod(aMethod);
+    		} else {
+    			aMethod->clearDefinition();
+    			++methodIterator;
+    		}
+    } else {
+    		++methodIterator;
+    }
+  }
+
+  slotIterator.toFirst();
+  while( ( aMethod = slotIterator.current() ) != (CParsedMethod *) NULL )
+  {
+    if( aMethod->declaredInFile == aFile ) {
+    		if( aMethod->definedInFile.isNull() || aMethod->declaredInFile == aMethod->definedInFile ) {
+			slotList.removeRef( aMethod );
+    		} else {
+    			aMethod->clearDeclaration();
+    			++slotIterator;
+    		}
+    } else if( aMethod->definedInFile == aFile ) {
+    		if( aMethod->declaredInFile.isNull() ) {
+			slotList.removeRef(aMethod);
+    		} else {
+    			aMethod->clearDefinition();
+    			++slotIterator;
+    		}
+    } else {
+    		++slotIterator;
+    }
+  }
+
+  if( declaredInFile == aFile ) {
+  	clearDeclaration();
+  } else if( definedInFile == aFile ) {
+  	clearDefinition();
+  }
+}
+
+/*----------------------------------- CParsedClass::removeMethod()
+ * removeMethod()
+ *   Remove a method matching the specification.
+ *
+ * Parameters:
+ *   aMethod        Specification of the method.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::removeMethod( CParsedMethod *aMethod )
+{
+  REQUIRE( "Valid method", aMethod != NULL );
+  REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
+
+  QString str;
+  aMethod->asString( str );
+
+  if ( slotList.removeRef( aMethod ) ) {
+    slotsByNameAndArg.remove( str );
+  } else {
+  	CParsedContainer::removeMethod( aMethod );
+  }
+}
+
+/*----------------------------------------- CParsedClass::clearDeclaration()
+ * clearDeclaration()
+ *   Clear all attributes which are only in the class declaration,
+ *	 and not in the definition part. This excludes the 'methods'
+ *   and 'slotList' lists, as these can contain parsed methods with
+ *   definition data
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::clearDeclaration()
+{
+  attributes.clear();
+  structs.clear();
+  slotsByNameAndArg.clear();
+  signalList.clear();
+  signalsByNameAndArg.clear();
+  parents.clear();
+  friends.clear();
+  signalMaps.clear();
+
+  CParsedItem::clearDeclaration();
+}
+
 /*----------------------------------------- CParsedClass::addParent()
  * addParent()
  *   Add a parent.
@@ -93,7 +201,8 @@ CParsedClass::~CParsedClass()
  *-----------------------------------------------------------------*/
 void CParsedClass::addParent( CParsedParent *aParent )
 {
-  assert( aParent != NULL );
+  REQUIRE( "Valid parent", aParent != NULL );
+  REQUIRE( "Valid parent name", !aParent->name.isEmpty() );
 
   parents.append( aParent );
 }
@@ -110,9 +219,10 @@ void CParsedClass::addParent( CParsedParent *aParent )
  *-----------------------------------------------------------------*/
 void CParsedClass::addSignal( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
+  REQUIRE( "Valid signal", aMethod != NULL );
+  REQUIRE( "Valid signal name", !aMethod->name.isEmpty()  );
 
-  aMethod->setDeclaredInClass( name );
+  aMethod->setDeclaredInScope( path() );
   signalList.append( aMethod );
 
   QString str;
@@ -132,13 +242,13 @@ void CParsedClass::addSignal( CParsedMethod *aMethod )
  *-----------------------------------------------------------------*/
 void CParsedClass::addSlot( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
+  REQUIRE( "Valid slot", aMethod != NULL );
+  REQUIRE( "Valid slot name", !aMethod->name.isEmpty() );
 
   QString str;
 
-  aMethod->setDeclaredInClass( name );
+  aMethod->setDeclaredInScope( path() );
   slotList.append( aMethod );
-
   aMethod->asString( str );
   slotsByNameAndArg.insert( str, aMethod );
 }
@@ -155,7 +265,7 @@ void CParsedClass::addSlot( CParsedMethod *aMethod )
  *-----------------------------------------------------------------*/
 void CParsedClass::addSignalSlotMap( CParsedSignalSlot *aSS )
 {
-  assert( aSS != NULL );
+  REQUIRE( "Valid signal slot map",  aSS != NULL );
 
   signalMaps.append( aSS );
 }
@@ -209,6 +319,9 @@ CParsedMethod *CParsedClass::getMethod( CParsedMethod &aMethod )
  *-----------------------------------------------------------------*/
 CParsedMethod *CParsedClass::getSignalByNameAndArg( const char *aName )
 {
+  REQUIRE1( "Valid signal name", aName != NULL, NULL );
+  REQUIRE1( "Valid signal name length", strlen( aName ) > 0, NULL );
+
   return signalsByNameAndArg.find( aName );
 }
 
@@ -226,6 +339,9 @@ CParsedMethod *CParsedClass::getSignalByNameAndArg( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedMethod *CParsedClass::getSlotByNameAndArg( const char *aName )
 {
+  REQUIRE1( "Valid slot name", aName != NULL, NULL );
+  REQUIRE1( "Valid slot name length", strlen( aName ) > 0, NULL );
+
   return slotsByNameAndArg.find( aName );
 }
 
@@ -241,6 +357,9 @@ CParsedMethod *CParsedClass::getSlotByNameAndArg( const char *aName )
  *-----------------------------------------------------------------*/
 bool CParsedClass::hasParent( const char *aName )
 {
+  REQUIRE1( "Valid parent name", aName != NULL, false );
+  REQUIRE1( "Valid parent name length", strlen( aName ) > 0, false );
+
   CParsedParent *aParent;
 
   for( aParent = parents.first();
@@ -383,7 +502,6 @@ QList<CParsedMethod> *CParsedClass::getVirtualMethodList()
  *-----------------------------------------------------------------*/
 void CParsedClass::out()
 {
-  char buf[10];
   QDictIterator<CParsedAttribute> ait( attributes );
   CParsedParent *aParent;
   CParsedMethod *aMethod;
@@ -391,37 +509,35 @@ void CParsedClass::out()
   char *str;
 
   if( !comment.isEmpty() )
-    cout << comment << "\n";
+    cout << comment << endl;
 
-  sprintf( buf, "%d", declaredOnLine );
-  cout << "Class " << name << " @ line " << buf;
-  sprintf( buf, "%d", declarationEndsOnLine );
-  cout << " - " << buf << "\n";
-  cout << "  Defined in files:\n";
-  cout << "    " << declaredInFile << "\n";
-  cout << "    " << definedInFile << "\n";
-  cout << "  Parents:\n";
+  cout << "Class " << path() << " @ line " << declaredOnLine;
+  cout << " - " << declarationEndsOnLine << endl;
+  cout << "  Defined in files:" << endl;
+  cout << "    " << declaredInFile << endl;
+  cout << "    " << definedInFile << endl;
+  cout << "  Parents:" << endl;
   for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
     aParent->out();
-  cout << "  Friends:\n";
+  cout << "  Friends:" << endl;
   for( str = friends.first(); str != NULL; str = friends.next() )
-    cout << "   " << str << "\n";
-  cout << "  Attributes:\n";
+    cout << "   " << str << endl;
+  cout << "  Attributes:" << endl;
   for( ait.toFirst(); ait.current(); ++ait )
     ait.current()->out();
-  cout << "  Methods:\n";
+  cout << "  Methods:" << endl;
   for( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
     aMethod->out();
-  cout << "  Signals:\n";
+  cout << "  Signals:" << endl;
   for( aMethod = signalList.first(); aMethod != NULL; aMethod = signalList.next() )
     aMethod->out();
-  cout << "  Slots:\n";
+  cout << "  Slots:" << endl;
   for( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
     aMethod->out();
-  cout << "  Signal to slot mappings:\n";
+  cout << "  Signal to slot mappings:" << endl;
   for( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
     aSS->out();
-  cout << "  Classes:\n";
+  cout << "  Classes:" << endl;
   for( classIterator.toFirst();
        classIterator.current();
        ++classIterator )
@@ -521,6 +637,9 @@ const char *CParsedClass::asPersistantString( QString &dataStr )
  *-----------------------------------------------------------------*/
 int CParsedClass::fromPersistantString( const char *str, int startPos )
 {
+  REQUIRE1( "Valid string", str != NULL, -1 );
+  REQUIRE1( "Valid startpos", startPos > 0, -1 );
+
   CParsedParent *aParent;
   CParsedMethod *aMethod;
   CParsedAttribute *anAttribute;

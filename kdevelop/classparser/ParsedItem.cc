@@ -1,10 +1,9 @@
 /***************************************************************************
-                          ParsedParent.cc  -  description
+                          ParsedItem.cc  -  description
                              -------------------
-    begin                : Mon Mar 15 1999
+    begin                : Mon Nov 21 1999
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@syncom.se
-   
  ***************************************************************************/
 
 /***************************************************************************
@@ -16,9 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
-#include "ParsedParent.h"
+#include "ParsedItem.h"
 #include "ProgrammingByContract.h"
+#include <iostream.h>
 
 /*********************************************************************
  *                                                                   *
@@ -26,8 +25,8 @@
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------- CParsedParent::CParsedParent()
- * CParsedParent()
+/*----------------------------------------- CParsedItem::CParsedItem()
+ * CParsedItem()
  *   Constructor.
  *
  * Parameters:
@@ -35,12 +34,18 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedParent::CParsedParent()
-{
+CParsedItem::CParsedItem()
+{ 
+  itemType = PIT_UNKNOWN; 
+  exportScope = PIE_GLOBAL; 
+  declaredOnLine = -1; 
+  declarationEndsOnLine = -1;
+  definedOnLine = -1; 
+  definitionEndsOnLine = -1;
 }
 
-/*------------------------------- CParsedParent::~CParsedParent()
- * ~CParsedParent()
+/*--------------------------------------- CParsedItem::~CParsedItem()
+ * ~CParsedItem()
  *   Destructor.
  *
  * Parameters:
@@ -48,49 +53,8 @@ CParsedParent::CParsedParent()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedParent::~CParsedParent()
-{
-}
-
-/*********************************************************************
- *                                                                   *
- *                    METHODS TO SET ATTRIBUTE VALUES                *
- *                                                                   *
- ********************************************************************/
-
-/*------------------------------------------- CParsedClass::setName()
- * setName()
- *   Set the name of the parent.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedParent::setName( const char *aName )
-{
-  REQUIRE( "Valid name", aName != NULL );
-  REQUIRE( "Valid name length", strlen( aName ) > 0 );
-
-  name = aName;
-}
-
-/*----------------------------------------- CParsedClass::setExport()
- * setExport()
- *   Set the export status of the parent.
- *
- * Parameters:
- *   aExport          The new export status.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedParent::setExport( int aExport )
-{
-  REQUIRE( "Valid export", aExport == CPPUBLIC || aExport == CPPRIVATE || aExport == CPPROTECTED );
-
-  exportattr = aExport;
+CParsedItem::~CParsedItem()
+{ 
 }
 
 /*********************************************************************
@@ -99,60 +63,71 @@ void CParsedParent::setExport( int aExport )
  *                                                                   *
  ********************************************************************/
 
-/*---------------------------------------------- CParsedParent::out()
- * out()
- *   Output this object as text.
+/*------------------------------------------------ CParsedItem::copy()
+ * copy()
+ *   Make this object a copy of the supplied object. 
  *
  * Parameters:
- *   -
+ *   anItem     Item to copy.
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedParent::out()
+void CParsedItem::copy( CParsedItem *anItem )
 {
-  cout << "    " << name << "(";
-
-  switch(exportattr)
-  {
-    case CPPUBLIC:
-      cout << "public";
-      break;
-    case CPPROTECTED:
-      cout << "protected";
-      break;
-    case CPPRIVATE:
-      cout << "private";
-      break;
-  }
+  REQUIRE( "Valid item", anItem != NULL );
   
-  cout << ")\n";
+  setName( anItem->name );
+  setExport( anItem->exportScope );
+  setComment( anItem->comment );
 }
 
-/*--------------------------------- CParsedClass::asPersistantString()
- * asPersistantString()
- *   Return a string made for persistant storage.
+/*------------------------------------------------ CParsedItem::path()
+ * path()
+ *   The path is the scope + "." + the name of the item. Unless the
+ *   scope is empty, then the path is just the name.
  *
  * Parameters:
  *   -
  * Returns:
+ *   The path to this item.
+ *-----------------------------------------------------------------*/
+QString CParsedItem::path()
+{
+  if( declaredInScope.isEmpty() )
+    return name;
+  else
+    return declaredInScope + "." + name;
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                         PROTECTED METHODS                         *
+ *                                                                   *
+ ********************************************************************/
+
+/*----------------------------------------- CParsedItem::getSubString()
+ * getSubString()
+ *   Returns the next substring(ending with \n) starting at position 
+ *   start. 
+ *
+ * Parameters:
+ *   buf        This is where the result is stored.
+ *   toRead     String to interpret.
+ *   start      Position in toRead to start at.
+ * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedParent::asPersistantString( QString &dataStr )
+int CParsedItem::getSubString( char *buf, const char *toRead, int start )
 {
-  dataStr = "";
+  REQUIRE1( "Valid buffer", buf != NULL, -1 );
+  REQUIRE1( "Valid string", toRead != NULL, -1 );
 
-  switch(exportattr)
-  {
-    case CPPUBLIC:
-      dataStr += "public";
-      break;
-    case CPPROTECTED:
-      dataStr += "protected";
-      break;
-    case CPPRIVATE:
-      dataStr += "private";
-      break;
-  }
-  dataStr += "\n";
-  dataStr += name + "\n";
+  int endPos=0;
+  
+  buf[ 0 ] = '\0';
+  while( toRead[ start + endPos ] != '\n' )
+    endPos++;
+  strncpy( buf, &toRead[ start ], endPos );
+  
+  return start + endPos + 1;
 }

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,10 +28,76 @@
 
 class CParsedStruct;
 
+/**
+ * Function that takes a dictionary iterator and returns 
+ * a sorted list of their names.
+ *
+ * @param itr Iterator with elements to sort
+ *
+ * @return List of sorted element names.
+ */
+template<class T>
+QStrList *getSortedIteratorNameList( QDictIterator<T> &itr )
+{
+  QStrList *retVal = new QStrList();
+
+  // Iterate over all structures.
+  for( itr.toFirst();
+       itr.current();
+       ++itr )
+  {
+    CParsedItem *item = (CParsedItem *)itr.current();
+    retVal->inSort( item->name );
+  }
+
+  return retVal;
+}
+
+/**
+ * Function that takes a dictionary and returns it's element as
+ * a sorted list.
+ *
+ * @param dict       Dictionary to sort.
+ *
+ * @return List of sorted elements.
+ */
+template<class T>
+QList<T> *getSortedDictList( QDict<T> &dict, bool usePath )
+{
+  QList<T> *retVal = new QList<T>();
+  char *str;
+  QStrList srted;
+  //  QString m;
+  QDictIterator<T> itr( dict );
+
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( itr.toFirst();
+       itr.current();
+       ++itr )
+  {
+      //    itr.current()->asString( m );
+      //    srted.inSort( m );
+
+    srted.inSort( ( usePath ? itr.current()->path() : itr.current()->name ) );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( dict.find( str ) );
+  }
+
+  return retVal;
+}
+
 /** Represents a parsed object that can store other objects.
  *  The objects can be variables, functions or structures. 
  *  Since this is a special case of a parsed item, the container
  *  inherits CParsedItem.
+ *
  * @author Jonas Nordin
  */
 class CParsedContainer : public CParsedItem
@@ -54,6 +120,10 @@ protected: // Private attributes
 
   /** All structures declared in this class. */
   QDict<CParsedStruct> structs;
+
+  /** Tells if objects stored in the container should use the 
+   * full path as the key(default is no). */
+  bool useFullPath;
 
 public: // Public attributes
 
@@ -83,16 +153,14 @@ public: // Metods to set attribute values
    */
   void addMethod( CParsedMethod *aMethod );
 
+  /** 
+   * Tells if the container should store objects using their full path.
+   *
+   * @param state If to use full path or not.
+   */
+  inline void setUseFullpath( bool state ) { useFullPath = state; }
+
 public: // Public queries
-
-  /** Returns the number of global methods. */
-  int methodCount() { return methodIterator.count(); }
-    
-  /** Returns the number of global attributes. */
-  int attributeCount() { return attributeIterator.count(); }
-
-  /** Returns the number of global structures. */
-  int structCount() { return structIterator.count(); }
 
   /** Get a method by comparing with another method. 
    * @param aMethod Method to compare with.
@@ -193,7 +261,7 @@ public: // Implementation of virtual methods
    * @param str String to initialize from.
    * @param startPos Position(0-based) at which to start.
    */
-  virtual int fromPersistantString( const char * /*str*/, int startPos ) { return startPos; }
+  virtual int fromPersistantString( const char *, int startPos ) { return startPos; }
 
 };
 

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -51,15 +51,15 @@ public: // Public methods
   void asPersistantString( QString &dataStr );
 
   /** Initialize the object from a persistant string. */
-  int fromPersistantString( const char * /*str*/, int startPos ) { return startPos; }
+  int fromPersistantString( const char *, int startPos ) { return startPos; }
 
   /** Output the class as text on stdout */
   void out();
 
 public: // Public queries
-  bool isPublic()    { return ( exportattr == CPPUBLIC ); }
-  bool isProtected() { return ( exportattr == CPPROTECTED ); }
-  bool isPrivate()   { return ( exportattr == CPPRIVATE ); }
+  inline bool isPublic()    { return ( exportattr == CPPUBLIC ); }
+  inline bool isProtected() { return ( exportattr == CPPROTECTED ); }
+  inline bool isPrivate()   { return ( exportattr == CPPRIVATE ); }
 
 };
 

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,14 +27,13 @@
 #include "ParsedAttribute.h"
 #include "ParsedMethod.h"
 #include "ParsedSignalSlot.h"
-#include "ParsedClassItem.h"
 #include "ParsedClassContainer.h"
 
 /** This is the representation of a class that has been parsed by 
  * the classparser.
  * @author Jonas Nordin
  */
-class CParsedClass : public CParsedClassContainer, public CParsedClassItem
+class CParsedClass : public CParsedClassContainer
 {
 public: // Constructor & Destructor
 
@@ -71,10 +70,28 @@ public: // Public attributes
 
   /** List of signal<->slot mappings. */
   QList<CParsedSignalSlot> signalMaps;
+
+  /** Tells if this class is declared inside another class. */
+  bool isSubClass;
   
 public: // Metods to set attribute values
 
-  /** Add a parent. 
+  /** Remove all items in the store with references to the file.
+   * @param aFile The file to check references to.
+   */
+  void removeWithReferences( const char *aFile );
+
+  /** Remove a method matching the specification (from either 'methods'
+   * or 'slotList').
+   * @param aMethod Specification of the method.
+   */
+  void removeMethod( CParsedMethod *aMethod );
+
+  /** Clear all attribute values.
+   */
+  void clearDeclaration();
+
+  /** Add a parent.
    * @param aParent A parent of this class.
    */
   void addParent( CParsedParent *aParent );
@@ -96,6 +113,13 @@ public: // Metods to set attribute values
 
   /** Add a signal->slot mapping. */
   void addSignalSlotMap( CParsedSignalSlot *aSS );
+
+  /** 
+   * Set the state if this is a subclass. 
+   *
+   * @param aState The new state.
+   */
+  inline void setIsSubClass( bool aState ) { isSubClass = aState; }
 
 public: // Public queries
 
@@ -130,9 +154,6 @@ public: // Public queries
 
   /** Check if the class has any virtual methods. */
   bool hasVirtual();
-
-  /** Check if this class is declared in another class. */
-  bool isSubClass() { return !declaredInClass.isEmpty(); }
 
 public: // Implementation of virtual methods
 

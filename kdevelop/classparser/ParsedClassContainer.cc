@@ -1,9 +1,9 @@
 /***************************************************************************
-                 ParsedClassContainer.cpp  -  implementation
+                 ParsedClassContainer.cc  -  implementation
                              -------------------
     begin                : Tue Aug 27 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
    
  ***************************************************************************/
 
@@ -16,7 +16,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qregexp.h>
 #include "ParsedClassContainer.h"
+#include <iostream.h>
+#include "ProgrammingByContract.h"
+
 
 /*********************************************************************
  *                                                                   *
@@ -36,7 +40,7 @@
 CParsedClassContainer::CParsedClassContainer()
   : classIterator( classes )
 {
-  classes.setAutoDelete( true );
+  classes.setAutoDelete( false );
 }
 
 /*------------------- CParsedClassContainer::~CParsedClassContainer()
@@ -67,9 +71,16 @@ CParsedClassContainer::~CParsedClassContainer()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClassContainer::clear()
+void CParsedClassContainer::clear(bool bAutodel)
 {
   CParsedContainer::clear();
+
+  CParsedClass *act;
+  if (bAutodel)
+   for( classIterator.toFirst();
+       (act=classIterator.current());
+       ++classIterator )
+     delete act;
 
   classes.clear();
 }
@@ -86,32 +97,18 @@ void CParsedClassContainer::clear()
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::addClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
-  assert( !hasClass( aClass->name ) );
+  REQUIRE( "Valid class", aClass != NULL );
+  REQUIRE( "Valid classname", !aClass->name.isEmpty() );
+  REQUIRE( "Unique class", !hasClass( useFullPath ? aClass->path() : aClass->name ) );
 
-  classes.insert( aClass->name, aClass );
-}
+  if( !path().isEmpty() )
+    aClass->setDeclaredInScope( path() );
 
-/*------------------------------- CParsedClassContainer::addSubClass()
- * addSubClass()
- *   Store a subclass pointer using its' hierarchy as the key.
- *
- * Parameters:
- *   key           The hierarchy.
- *   aClass        The subclass to store.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedClassContainer::addSubClass( const char *key, 
-                                         CParsedClass *aClass )
-{
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
-  assert( key != NULL );
+  // If this is a class, and we're adding another class that class
+  // is a subclass.
+  aClass->setIsSubClass( itemType == PIT_CLASS );
 
-  classes.insert( key, aClass );
+  classes.insert( useFullPath ? aClass->path() : aClass->name, aClass );
 }
 
 /*------------------------------ CParsedClassContainer::removeClass()
@@ -126,9 +123,9 @@ void CParsedClassContainer::addSubClass( const char *key,
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::removeClass( const char *aName )
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
-  assert( hasClass( aName ) );
+  REQUIRE( "Valid classname", aName != NULL );
+  REQUIRE( "Valid classname", strlen( aName ) > 0 );
+  REQUIRE( "Class exists", hasClass( aName ) );
 
   classes.remove( aName );
 }
@@ -145,6 +142,9 @@ void CParsedClassContainer::removeClass( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::removeWithReferences( const char *aFile )
 {
+  REQUIRE( "Valid filename", aFile != NULL );
+  REQUIRE( "Valid filename length", strlen( aFile ) > 0 );
+
   CParsedContainer::removeWithReferences( aFile );
 }
 
@@ -166,6 +166,9 @@ void CParsedClassContainer::removeWithReferences( const char *aFile )
  *-----------------------------------------------------------------*/
 bool CParsedClassContainer::hasClass( const char *aName )
 {
+  REQUIRE1( "Valid classname", aName != NULL, false );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, false );
+
   return classes.find( aName ) != NULL;
 }
 
@@ -182,13 +185,10 @@ bool CParsedClassContainer::hasClass( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedClass *CParsedClassContainer::getClassByName( const char *aName )
 {
-  assert( aName != NULL );
+  REQUIRE1( "Valid classname", aName != NULL, NULL );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, NULL );
 
-  CParsedClass *aClass;
-
-  aClass = classes.find( aName );
-
-  return aClass;
+  return classes.find( aName );
 }
 
 /*------------------------ CParsedClassContainer::getSortedClassList()
@@ -202,30 +202,7 @@ CParsedClass *CParsedClassContainer::getClassByName( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CParsedClassContainer::getSortedClassList()
 {
-  QList<CParsedClass> *retVal = new QList<CParsedClass>();
-  QStrList srted;
-  char *str;
-
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-  {
-    // Only add non-subclasses.
-    if( !classIterator.current()->isSubClass() )
-      srted.inSort( classIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getClassByName( str ) );
-  }
-
-  return retVal;
+  return getSortedDictList<CParsedClass>( classes, useFullPath );
 }
 
 /*-------------------- CParsedClassContainer::getSortedClassNameList()
@@ -237,47 +214,40 @@ QList<CParsedClass> *CParsedClassContainer::getSortedClassList()
  * Returns:
  *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
+/*
+    obsolete    W. Tasin
 QStrList *CParsedClassContainer::getSortedClassNameList()
 {
-  QStrList * retVal = new QStrList();
-  
-  // Iterate over all classes in the store.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-  {
-    // Only add non-subclasses.
-    if( !classIterator.current()->isSubClass() )
-      retVal->inSort( classIterator.current()->name );
-  }
-
-  return retVal;
+  return getSortedIteratorNameList( classIterator );
 }
-
-/*----------------- CParsedClassContainer::getClassesReferencingFile()
- * getClassesReferencingFile()
- *   Get all classes referencing(==declared in) a certain file. 
+*/
+/*-------------------- CParsedClassContainer::getSortedClassNameList()
+ * getSortedClassNameList()
+ *   Get all classnames in sorted order.
  *
  * Parameters:
- *   aFile                 File to look for.
+ *   -
  * Returns:
- *   QList<CParsedClass> * The classes.
+ *   QStrList * The classnames.
  *-----------------------------------------------------------------*/
-QList<CParsedClass> *CParsedClassContainer::getClassesReferencingFile( const char *aFile )
+QStrList *CParsedClassContainer::getSortedClassNameList(bool bUseFullPath)
 {
-  QList<CParsedClass> *retVal = new QList<CParsedClass>;
+  QStrList *ret_val = new QStrList();
+  CParsedClass *act;
 
-  retVal->setAutoDelete( false );
-
-  // Iterate over all classes in the store.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  for (classIterator.toFirst();
+       (act=classIterator.current());
+        ++classIterator)
   {
-    if( classIterator.current()->isSubClass() &&
-        classIterator.current()->declaredInFile == aFile )
-      retVal->append( classIterator.current() );
-  }
+     if (bUseFullPath)
+       ret_val->append(classIterator.currentKey());
+     else
+     {
+       QString path=act->path();
+    //   path.replace(QRegExp("."),"::");
+       ret_val->append(path);
+     }
+  };
 
-  return retVal;
+  return ret_val;
 }

@@ -221,7 +221,7 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
   {
     // Create the string like <classname>::<methodname>
     aMethod->asString( str );
-    str = aMethod->declaredInClass + "::" + str;
+    str = aMethod->declaredInScope + "::" + str;
 
     // Add to the view.
     availLb.inSort( str );

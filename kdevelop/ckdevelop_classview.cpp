@@ -158,7 +158,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   if( dlg.exec() )
   {
     aMethod = dlg.asSystemObj();
-    aMethod->setDeclaredInClass( aClassName );
+    aMethod->setDeclaredInScope( aClassName );
 
     slotCVAddMethod( aClassName, aMethod );
 
@@ -324,7 +324,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
       return;
   
   CParsedAttribute *aAttr = dlg.asSystemObj();
-  aAttr->setDeclaredInClass( aClassName );
+  aAttr->setDeclaredInScope( aClassName );
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
@@ -768,7 +768,7 @@ CParsedClass *CKDevelop::CVGetClass( const char *className )
     aClass = class_tree->store->getClassByName( className );
 
     // If we found the class and it isn't a subclass we update the combo.
-    if( aClass != NULL && !aClass->isSubClass() )
+    if( aClass != NULL && !aClass->isSubClass )
       CVClassSelected( className );
   }
 

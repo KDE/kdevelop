@@ -1,37 +1,26 @@
-/********************************************************************
-* Name    : Implementation of a parsed attribute.                   *
-* ------------------------------------------------------------------*
-* File    : ParsedAttribute.cc                                      *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Mon Mar 15 12:03:15 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedAttribute.cc  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #include <stdio.h>
 #include <iostream.h>
-#include <assert.h>
+#include <qstring.h>
 #include "ParsedAttribute.h"
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -54,6 +43,7 @@ CParsedAttribute::CParsedAttribute()
   isConst = false;
   isStatic = false;
   isInHFile = true;
+  posName=-1; // place it at the end
 }
 
 /*----------------------------- CParsedAttribute::~CParsedAttribute()
@@ -87,10 +77,25 @@ CParsedAttribute::~CParsedAttribute()
  *-----------------------------------------------------------------*/
 void CParsedAttribute::setType( const char *aType )
 {
-  assert( aType != NULL );
+  REQUIRE( "Valid type", aType != NULL );
 
   type = aType;
   type = type.stripWhiteSpace();
+}
+
+/*------------------------------------ CParsedAttribute::setNamePos()
+ * setNamePos()
+ *   Set the name of the class.
+ *
+ * Parameters:
+ *   pos            The new name.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedAttribute::setNamePos( int pos )
+{
+  posName = pos;
 }
 
 /*---------------------------------- CParsedAttribute::setIsInHFile()
@@ -158,6 +163,7 @@ void CParsedAttribute::copy( CParsedAttribute *anAttribute )
 {
   CParsedItem::copy( anAttribute );
 
+  setNamePos( anAttribute->posName );
   setType( anAttribute->type );
   setIsStatic( anAttribute->isStatic );
   setIsConst( anAttribute->isConst );
@@ -175,6 +181,7 @@ void CParsedAttribute::copy( CParsedAttribute *anAttribute )
  *-----------------------------------------------------------------*/
 void CParsedAttribute::asHeaderCode( QString &str )
 {
+  QString attrString;
   str = "  " + comment + "\n  ";
 
   if( isConst )
@@ -183,7 +190,8 @@ void CParsedAttribute::asHeaderCode( QString &str )
   if( isStatic )
     str += "static ";
 
-  str += type + " " + name + ";\n";
+  asString(attrString);
+  str += attrString + ";\n";
 }
 
 /*-------------------------------------- CParsedAttribute::asString()
@@ -198,7 +206,20 @@ void CParsedAttribute::asHeaderCode( QString &str )
  *-----------------------------------------------------------------*/
 const char * CParsedAttribute::asString( QString &str )
 {
-  str.sprintf( "%s %s", type.data(), name.data() );
+  str=type;
+
+  if (posName>=0 && ((unsigned)posName)<type.length())
+    str=str.left(posName);
+  else
+    str+=" ";
+
+  if (!name.isEmpty())
+  {
+    str+=name;
+  }
+
+  if (posName>=0 && ((unsigned)posName)<type.length())
+    str+=type.mid(posName, type.length()-posName);
 
   return str;
 }
@@ -214,7 +235,8 @@ const char * CParsedAttribute::asString( QString &str )
  *-----------------------------------------------------------------*/
 void CParsedAttribute::out()
 {
-  char buf[10];
+  QString buf;
+  QString attrString;
 
   if( !comment.isEmpty() )
     cout << "    " << comment << "\n";
@@ -237,10 +259,12 @@ void CParsedAttribute::out()
       break;
   }
 
-  cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
-  sprintf( buf, "%d", declaredOnLine );
+  // cout << ( type.isEmpty() ? " " : type.data() ) << " " << name;
+  asString(attrString);
+  cout << attrString;
+  buf.sprintf("%d", declaredOnLine );
   cout << " @ line " << buf << " - ";
-  sprintf( buf, "%d", declarationEndsOnLine );
+  buf.sprintf("%d", declarationEndsOnLine );
   cout << buf << "\n";
 }
 
@@ -284,8 +308,10 @@ const char *CParsedAttribute::asPersistantString( QString &dataStr )
   dataStr += name + "\n";
   dataStr += type + "\n";
   dataStr += definedInFile + "\n";
-  dataStr += declaredInClass + "\n";
+  dataStr += declaredInScope + "\n";
   intStr.sprintf( "%d", definedOnLine );
+  dataStr += intStr + "\n";
+  intStr.sprintf( "%d", posName );
   dataStr += intStr + "\n";
   dataStr += ( isInHFile ? "true" : "false" );
   dataStr += "\n";

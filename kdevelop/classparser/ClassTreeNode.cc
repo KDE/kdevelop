@@ -1,36 +1,23 @@
-/********************************************************************
-* Name    : Implementation of a ClassTreeNode                       *
-* ------------------------------------------------------------------*
-* File    : ClassTreeNode.cc                                        *
-* Author  : Jonas Nordin (jonas.nordin@cenacle.se)                  *
-* Date    : Sun May 16 19:58:07 CEST 1999                           *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedItem.cc  -  description
+                             -------------------
+    begin                : Sun May 16 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #include "ClassTreeNode.h"
-#include <assert.h>
 #include <iostream.h>
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -47,10 +34,11 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassTreeNode::CClassTreeNode()
+CClassTreeNode::CClassTreeNode() :
+  theClass(0),
+  isInSystem(false)
 {
   children.setAutoDelete( false );
-  isInSystem = false;
 }
 
 /*---------------------------------- CClassTreeNode::~CClassTreeNode()
@@ -84,7 +72,8 @@ CClassTreeNode::~CClassTreeNode()
  *-----------------------------------------------------------------*/
 void CClassTreeNode::setClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
+  REQUIRE( "Valid parent class", aClass != NULL );
+  REQUIRE( "Valid parent class name", !aClass->name.isEmpty() );
 
   theClass = aClass;
 }
@@ -101,7 +90,8 @@ void CClassTreeNode::setClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassTreeNode::addChild( CClassTreeNode *aChild )
 {
-  assert( aChild != NULL );
+  REQUIRE( "Valid child", aChild != NULL );
+  REQUIRE( "Valid child name", !aChild->name.isEmpty() );
 
   children.append( aChild );
 }

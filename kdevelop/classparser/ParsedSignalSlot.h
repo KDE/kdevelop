@@ -1,48 +1,30 @@
-/********************************************************************
-* Name    : Definition of a signal<->slot map.                      *
-* ------------------------------------------------------------------*
-* File    : ParsedSignalSlot.h                                      *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Wed Mar 17 11:21:00 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Macros:                                                           *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Types:                                                            *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedSignalSlot.h  - A signal<->slot map.
+                             -------------------
+    begin                : Wed Mar 17 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 #ifndef _CPARSEDSIGNALSLOT_H_INCLUDED
 #define _CPARSEDSIGNALSLOT_H_INCLUDED
 
 #include <qstring.h>
 #include "ParsedMethod.h"
-/** */
+
+/** This class describes a signal to slot mapping
+ * 
+ * @author Jonas Nordin
+ */
 class CParsedSignalSlot
 {
 public: // Constructor & Destructor
@@ -61,7 +43,6 @@ public: // Public attributes
 public: // Public methods to set attribute values.
 
   /** Set the signalname. */
-  void setSignal( QString &aSignal );
   void setSignal( const char *aSignal );
 
   /** Set the slot method. */

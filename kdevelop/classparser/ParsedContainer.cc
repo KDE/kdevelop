@@ -1,6 +1,23 @@
+/***************************************************************************
+                          ParsedContainer.cc  -  description
+                             -------------------
+    begin                : Mon Nov 21 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+ ***************************************************************************/
 
-#include <assert.h>
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include "ParsedContainer.h"
+#include <iostream.h>
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -18,7 +35,8 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedContainer::CParsedContainer()
-  : methodIterator( methods ),
+  : useFullPath( false ),
+    methodIterator( methods ),
     attributeIterator( attributes ),
     structIterator( structs )
 {
@@ -57,11 +75,14 @@ CParsedContainer::~CParsedContainer()
  *-----------------------------------------------------------------*/
 void CParsedContainer::addStruct( CParsedStruct *aStruct ) 
 {
-  assert( aStruct != NULL );
-  assert( !aStruct->name.isEmpty() );
+  REQUIRE( "Valid struct", aStruct != NULL );
+  REQUIRE( "Valid structname", !aStruct->name.isEmpty() );
+  REQUIRE( "Unique struct", !hasStruct( useFullPath ? aStruct->path() : aStruct->name ) );
+  
+  if( !path().isEmpty() )
+    aStruct->setDeclaredInScope( path() );
 
-  aStruct->setDeclaredInClass( name );
-  structs.insert( aStruct->name, aStruct );  
+  structs.insert( ( useFullPath ? aStruct->path() : aStruct->name ), aStruct );  
 }
 
 /*-------------------------------------- CParsedContainer::addAttribute()
@@ -76,11 +97,14 @@ void CParsedContainer::addStruct( CParsedStruct *aStruct )
  *-----------------------------------------------------------------*/
 void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
 {
-  assert( anAttribute != NULL );
-  assert( !anAttribute->name.isEmpty() );
+  REQUIRE( "Valid attribute", anAttribute != NULL );
+  REQUIRE( "Valid attributename", !anAttribute->name.isEmpty() );
+  REQUIRE( "Unique attribute", !hasAttribute( useFullPath ? anAttribute->path() : anAttribute->name ) );
 
-  anAttribute->setDeclaredInClass( name );
-  attributes.insert( anAttribute->name, anAttribute );
+  if( !path().isEmpty() )
+    anAttribute->setDeclaredInScope( path() );
+
+  attributes.insert( anAttribute->name,  anAttribute );
 }
 
 /*------------------------------------------ CParsedContainer::addMethod()
@@ -95,15 +119,18 @@ void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
  *-----------------------------------------------------------------*/
 void CParsedContainer::addMethod( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
-  assert( !aMethod->name.isEmpty() );
-
+  REQUIRE( "Valid method", aMethod != NULL );
+  REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
+  
   QString str;
+  
+  if( !path().isEmpty() )
+    aMethod->setDeclaredInScope( path() );
 
-  aMethod->setDeclaredInClass( name );
   methods.append( aMethod );
-
+  
   aMethod->asString( str );
+
   methodsByNameAndArg.insert( str, aMethod );
 }
 
@@ -126,6 +153,8 @@ void CParsedContainer::addMethod( CParsedMethod *aMethod )
  *-----------------------------------------------------------------*/
 CParsedMethod *CParsedContainer::getMethod( CParsedMethod &aMethod )
 {
+  REQUIRE1( "Valid methodname", !aMethod.name.isEmpty(), NULL );
+
   CParsedMethod *retVal = NULL;
 
   for( retVal = methods.first(); 
@@ -149,6 +178,9 @@ CParsedMethod *CParsedContainer::getMethod( CParsedMethod &aMethod )
  *-----------------------------------------------------------------*/
 QList<CParsedMethod> *CParsedContainer::getMethodByName( const char *aName )
 {
+  REQUIRE1( "Valid methodname", aName != NULL, new QList<CParsedMethod>() );
+  REQUIRE1( "Valid methodname length", strlen( aName ) > 0, new QList<CParsedMethod>() );
+
   QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
   CParsedMethod *aMethod;
 
@@ -181,6 +213,9 @@ QList<CParsedMethod> *CParsedContainer::getMethodByName( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedMethod *CParsedContainer::getMethodByNameAndArg( const char *aName )
 {
+  REQUIRE1( "Valid methodname", aName != NULL, NULL );
+  REQUIRE1( "Valid methodname length", strlen( aName ) > 0,  NULL );
+
   return methodsByNameAndArg.find( aName );
 }
 
@@ -196,18 +231,19 @@ CParsedMethod *CParsedContainer::getMethodByNameAndArg( const char *aName )
 QList<CParsedMethod> *CParsedContainer::getSortedMethodList()
 {
   QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+  CParsedMethod *aMethod;
   char *str;
   QStrList srted;
   QString m;
-  
+
   retVal->setAutoDelete( false );
 
   // Ok... This sucks. But I'm lazy.
-  for( methodIterator.toFirst();
-       methodIterator.current();
-       ++methodIterator )
+  for( aMethod = methods.first();
+       aMethod != NULL;
+       aMethod = methods.next() )
   {
-    methodIterator.current()->asString( m );
+    aMethod->asString( m );
     srted.inSort( m );
   }
 
@@ -234,7 +270,8 @@ QList<CParsedMethod> *CParsedContainer::getSortedMethodList()
  *-----------------------------------------------------------------*/
 CParsedAttribute *CParsedContainer::getAttributeByName( const char *aName )
 {    
-  assert( aName != NULL );
+  REQUIRE1( "Valid attributename", aName != NULL, NULL );
+  REQUIRE1( "Valid attributename length", strlen( aName ) > 0, NULL );
 
   return attributes.find( aName );
 }
@@ -250,18 +287,7 @@ CParsedAttribute *CParsedContainer::getAttributeByName( const char *aName )
  *-----------------------------------------------------------------*/
 QStrList *CParsedContainer::getSortedAttributeAsStringList()
 {
-  QStrList *retVal = new QStrList();
-  QString str;
-
-  // Iterate over all attributes.
-  for( attributeIterator.toFirst();
-       attributeIterator.current();
-       ++attributeIterator )
-  {
-    retVal->inSort( attributeIterator.current()->asString( str ) );
-  }
-
-  return retVal;
+  return getSortedIteratorNameList<CParsedAttribute>( attributeIterator );
 }
 
 /*------------------------ CParsedContainer::getSortedAttributeList()
@@ -275,28 +301,7 @@ QStrList *CParsedContainer::getSortedAttributeAsStringList()
  *-----------------------------------------------------------------*/
 QList<CParsedAttribute> *CParsedContainer::getSortedAttributeList()
 {
-  QList<CParsedAttribute> *retVal = new QList<CParsedAttribute>();
-  char *str;
-  QStrList srted;
-  
-  retVal->setAutoDelete( false );
-
-  // Iterate over all attributes.
-  for( attributeIterator.toFirst();
-       attributeIterator.current();
-       ++attributeIterator )
-  {
-    srted.inSort( attributeIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getAttributeByName( str ) );
-  }
-
-  return retVal;
+  return getSortedDictList<CParsedAttribute>( attributes, false );
 }
 
 /*--------------------------- CParsedContainer::getStructByName()
@@ -312,7 +317,8 @@ QList<CParsedAttribute> *CParsedContainer::getSortedAttributeList()
  *-----------------------------------------------------------------*/
 CParsedStruct *CParsedContainer::getStructByName( const char *aName )
 {    
-  assert( aName != NULL );
+  REQUIRE1( "Valid structname", aName != NULL, NULL );
+  REQUIRE1( "Valid structname length", strlen( aName ), NULL );
 
   return structs.find( aName );
 }
@@ -328,17 +334,7 @@ CParsedStruct *CParsedContainer::getStructByName( const char *aName )
  *-----------------------------------------------------------------*/
 QStrList *CParsedContainer::getSortedStructNameList()
 {
-  QStrList *retVal = new QStrList();
-
-  // Iterate over all structures.
-  for( structIterator.toFirst();
-       structIterator.current();
-       ++structIterator )
-  {
-    retVal->inSort( structIterator.current()->name );
-  }
-
-  return retVal;
+  return getSortedIteratorNameList<CParsedStruct>( structIterator );
 }
 
 /*---------------------------- CParsedContainer::getSortedStructList()
@@ -352,28 +348,7 @@ QStrList *CParsedContainer::getSortedStructNameList()
  *-----------------------------------------------------------------*/
 QList<CParsedStruct> *CParsedContainer::getSortedStructList()
 {
-  QList<CParsedStruct> *retVal = new QList<CParsedStruct>();
-  char *str;
-  QStrList srted;
-  
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( structIterator.toFirst();
-       structIterator.current();
-       ++structIterator )
-  {
-    srted.inSort( structIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getStructByName( str ) );
-  }
-
-  return retVal;
+  return getSortedDictList<CParsedStruct>( structs, useFullPath );
 }
 
 /*--------------------------- CParsedContainer::removeWithReferences()
@@ -388,6 +363,9 @@ QList<CParsedStruct> *CParsedContainer::getSortedStructList()
  *-----------------------------------------------------------------*/
 void CParsedContainer::removeWithReferences( const char *aFile )
 {
+  REQUIRE( "Valid filename", aFile != NULL );
+  REQUIRE( "Valid filename length", strlen( aFile ) > 0 );
+
 }
 
 /*----------------------------------- CParsedContainer::removeMethod()
@@ -402,6 +380,9 @@ void CParsedContainer::removeWithReferences( const char *aFile )
  *-----------------------------------------------------------------*/
 void CParsedContainer::removeMethod( CParsedMethod *aMethod )
 {
+  REQUIRE( "Valid method", aMethod != NULL );
+  REQUIRE( "Valid methodname", !aMethod->name.isEmpty() );
+
   QString str;
   CParsedMethod *m;
 
@@ -423,10 +404,10 @@ void CParsedContainer::removeMethod( CParsedMethod *aMethod )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedContainer::removeAttribute( const char *aName )
+void CParsedContainer::removeAttribute( const char *aName ) 
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
+  REQUIRE( "Valid attribute name", aName != NULL );
+  REQUIRE( "Valid attribute name length", strlen( aName ) > 0 );
 
   attributes.remove( aName );
 }
@@ -443,9 +424,9 @@ void CParsedContainer::removeAttribute( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedContainer::removeStruct( const char *aName )
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
-
+  REQUIRE( "Valid struct name", aName != NULL );
+  REQUIRE( "Valid struct name length", strlen( aName ) > 0 );
+  
   structs.remove( aName );
 }
 

@@ -4,7 +4,7 @@
 
     begin                : 27 Aug 1999                                        
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -25,6 +25,7 @@ class CParsedClass;
 
 /** This class is a container that also can hold classes.
  * It has a range of functions to work with the classes it holds.
+ *
  * @author Jonas Nordin
  */
 class CParsedClassContainer : public CParsedContainer
@@ -47,9 +48,6 @@ public: // Public attributes
 
 public: // Public queries
 
-  /** Returns the number of parsed classes. */
-  int classCount() { return classIterator.count(); }
-
   /** Tells if a class exists in the store. 
    * @param aName Classname to check if it exists.
    */
@@ -67,16 +65,10 @@ public: // Public queries
    */
   QList<CParsedClass> *getSortedClassList();
 
-  /** Get all classes referencing(==declared in) a certain file. 
-   * @param aFile File to look for.
-   * @returns A list of classnames. 
-   */
-  QList<CParsedClass> *getClassesReferencingFile( const char *aFile );
-
   /** Get all classnames in sorted order.
    * @return A list of all classnames in sorted order.
    */
-  QStrList *getSortedClassNameList();
+  QStrList *getSortedClassNameList(bool useFullPath=false);
 
 public: // Public Methods
 
@@ -90,19 +82,13 @@ public: // Public Methods
    */
   void addClass( CParsedClass *aClass );
 
-  /** Store a subclass pointer using its' hierarchy as the key.
-   * @param key The hierarchy.
-   * @param aClass The childclass to store.
-   */
-  void addSubClass( const char *key, CParsedClass *aClass );
-
   /** Remove a class from the store. 
    * @param aName Name of the class to remove
    */
   void removeClass( const char *aName );
 
   /** Clear the internal state. */
-  void clear();
+  void clear(bool bAutodel=true);
 };
 
 #include "ParsedClass.h"

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,8 +18,6 @@
 #ifndef _CLASSPARSER_H_INCLUDED
 #define _CLASSPARSER_H_INCLUDED
 
-#include <list>
-
 #include <qstring.h>
 #include <qlist.h>
 #include <qstack.h>
@@ -32,6 +30,7 @@
  * constructions. The classparser has a store in which all elements that
  * have been parsed is stored. The external interface to this class is
  * very simple. Just call parse() and you're off.
+ *
  * @author Jonas Nordin
  * @short Handles parsing of C++ and C expressions.
  */
@@ -69,8 +68,11 @@ public: // Public attributes
 
 public: // Public Methods
 
-  /** Parse the two files and return the parsed classes found. 
+  /** 
+   * Parse the file and store the parsed classes found. 
+   *
    * @param file Name of the file to parse.
+   *
    * @return If the parsing was successful.
    */
   bool parse( const char *file = NULL );
@@ -80,6 +82,12 @@ public: // Public Methods
 
   /** Output this object as text on stdout */
   void out()     { store.out(); }
+
+//  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
+//    { store.getDependentFiles( fileList, dependentList); }
+
+  void removeWithReferences( const char*  aFile )
+      { store.removeWithReferences( aFile ); }
 
 private: // Private attributes
 
@@ -106,9 +114,6 @@ private: // Private attributes
 
   /** Start of a declaration that has been pushed on the stack. */
   int declStart;
-
-  /** Stores the namespace stack. */
-  list<QString> namespace_stack;
 
 private: // Private methods
 
@@ -155,7 +160,7 @@ private: // Private methods
   void parseUnion();
 
   /** Parse a namespace. */
-  void parseNamespace();
+  void parseNamespace( CParsedScopeContainer *scope );
 
   /** Skip a throw() statement. */
   void skipThrowStatement();
@@ -196,7 +201,8 @@ private: // Private methods
   CParsedMethod *parseMethodDeclaration();
 
   /** Parse a method implementation. */
-  void parseMethodImpl(bool isOperator);
+  void parseMethodImpl(bool isOperator,CParsedContainer *scope);
+//  void parseMethodImpl(bool isOperator);
 
   /** Push lexems on the stack until we find something we know and 
    *   return what we found. */
@@ -217,7 +223,7 @@ private: // Private methods
   /** Parse a class declaration. 
    * @return The parsed class or NULL if it was no class.
    */
-  CParsedClass *parseClass();
+  CParsedClass *parseClass(CParsedClass * aClass);
 
   /** Tells if the current lexem is generic and needs no special
    * handling depending on the current scope.
@@ -231,10 +237,10 @@ private: // Private methods
   /** Take care of generic lexem.
    * @param aContainer Container to store parsed items in.
    */
-  void parseGenericLexem(  CParsedContainer *aContainer );
+  void parseGenericLexem( CParsedContainer *aContainer );
 
   /** Take care of lexem in a top-level context. */
-  void parseTopLevelLexem();
+  void parseTopLevelLexem( CParsedScopeContainer *aContainer );
 
   /** Parse toplevel statements */
   void parseToplevel();

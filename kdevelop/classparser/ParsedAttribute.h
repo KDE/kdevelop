@@ -1,12 +1,31 @@
+/***************************************************************************
+                          ParsedAttribute.h  -  description
+                             -------------------
+    begin                : Fri Mar 19 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _CPARSEDATTRIBUTE_H_INCLUDED
 #define _CPARSEDATTRIBUTE_H_INCLUDED
 
 #include "ParsedItem.h"
-#include "ParsedClassItem.h"
 #include "tokenizer.h"
 
-/** Represents an attribute and all data for the attribute. */
-class CParsedAttribute : public CParsedItem, public CParsedClassItem
+/** Represents an attribute and all data for the attribute. 
+ * 
+ * @author Jonas Nordin
+ */
+class CParsedAttribute : public CParsedItem
 {
 public: // Constructor && Destructor
 
@@ -27,10 +46,16 @@ public: // Public attributes
   /** Is this a const attribute */
   bool isConst;
 
+  /** where I have to place the name between type */
+  int posName;
+
 public: // Public methods to set attribute values
 
   /** Set the type. */
   void setType( const char *aType );
+
+  /** Set the pos of the name between type */
+  void setNamePos( int pos );
 
   /** Set if it is defined in the .h file. */
   void setIsInHFile( bool aState = true );
@@ -60,7 +85,7 @@ public: // Implementation of virtual methods
   virtual const char *asPersistantString( QString &str );
 
   /** Initialize the object from a persistant string. */
-  virtual int fromPersistantString( const char * /*str*/, int /*startPos*/ ) {return 0;}
+  virtual int fromPersistantString( const char *, int) {return 0;}
 
 public: // Public queries
 

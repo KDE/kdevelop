@@ -12,7 +12,7 @@ int main( int argc, char *argv[] )
     cout << "Parsing: [" << argv[ i ] << "]\n";
     cp.parse( argv[ i ] );
     if( start == 2 )
-      cp.store.storeAll( "foo" );
+      cp.store.storeAll();
   }
 
   cp.out();

@@ -1,9 +1,10 @@
 /***************************************************************************
-                       ParsedClassItem.h  -  description
+                          ProgrammingByContract.h  -  description
                              -------------------
-    begin                : Mon Mar 15 1999
+    begin                : Sat Nov 27 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
+   
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,35 +15,30 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+#ifndef _PROGRAMMINGBYCONTRACT_H_INCLUDED_
+#define _PROGRAMMINGBYCONTRACT_H_INCLUDED_
 
-#ifndef _PARSEDCLASSITEM_H_INCLUDED
-#define _PARSEDCLASSITEM_H_INCLUDED
+//#ifdef ASSERTIONS
+#define REQUIRE( TAG, REQ ) \
+if( !(REQ) ) \
+{ \
+  cerr << "Precondition violation [" << __FILE__ << ":" << __LINE__ << "]" << endl; \
+  cerr << "  " << TAG << ": " << #REQ << endl; \
+  return; \
+}
 
-#include <assert.h>
+#define REQUIRE1( TAG, REQ, RETVAL ) \
+if( !(REQ) ) \
+{ \
+  cerr << "Precondition violation [" << __FILE__ << ":" << __LINE__ << "]" << endl; \
+  cerr << "  " << TAG << ": " << #REQ << endl; \
+  return RETVAL; \
+}
+/*#else
+#define REQUIRE( TAG, REQ )
+#define REQUIRE1( TAG, REQ, RETVAL )
+#endif
 
-/** This is the abstract definition for all items that can be included
- * as a part of an class. 
- * @author Jonas Nordin
- */
-class CParsedClassItem
-{
-public: // Constructor and destructor
-
-  CParsedClassItem() {};
-  virtual ~CParsedClassItem() {};
-
-public: // Public attributes
-
-  /** Declared in class. NULL for global declarations. */
-  QString declaredInClass;
-
-public: // Public methods to set attribute values
-
-  /** Set the class this attribute belongs to. 
-   * @param aName Name of the class this item belongs to.
-   */
-  void setDeclaredInClass( const char *aName ) { declaredInClass = aName; }
-
-};
+*/
 
 #endif

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Tue Mar 30 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -22,13 +22,12 @@
 #include <qstring.h>
 #include "ParsedAttribute.h"
 #include "ParsedItem.h"
-#include "ParsedClassItem.h"
 #include "ParsedContainer.h"
 
 /** The parsed representation of a structure.
  * @author Jonas Nordin
  */
-class CParsedStruct : public CParsedContainer, public CParsedClassItem
+class CParsedStruct : public CParsedContainer
 {
 public: // Constructor & Destructor
 
@@ -41,13 +40,13 @@ public: // Implementation of virtual methods
    * @param str String to store the result in.
    * @return Pointer to str.
    */
-  virtual const char *asPersistantString( QString & /*str*/ ) { return NULL;}
+  virtual const char *asPersistantString( QString & ) { return NULL;}
 
   /** Initialize the object from a persistant string. 
    * @param str String to initialize from.
    * @param startPos Position(0-based) at which to start.
    */
-  virtual int fromPersistantString( const char * /*str*/, int /*startPos*/ ) {return 0;}
+  virtual int fromPersistantString( const char *, int) {return 0;}
 
   /** Output this object to stdout. */
   virtual void out();

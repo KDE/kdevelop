@@ -3,7 +3,7 @@
                              -------------------
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,12 +18,13 @@
 #ifndef _CLASSTORE_H_INCLUDED
 #define _CLASSTORE_H_INCLUDED
 
-#include "ParsedClassContainer.h"
+#include "ParsedScopeContainer.h"
 #include "PersistantClassStore.h"
 #include "ClassTreeNode.h"
 
 /** This class has the ability to store and fetch parsed items. 
- * @author Jonas Nordin(jonas.nordin@cenacle.se)
+ *
+ * @author Jonas Nordin
  */
 class CClassStore
 {
@@ -39,22 +40,18 @@ private: // Private attributes
 
 public: // Public attributes
 
-  /** Container that holds all global classes, functions, variables and structures. */
-  CParsedClassContainer globalContainer;
+  /** Container that holds all global scopes, classes, functions, 
+   * variables and structures. */
+  CParsedScopeContainer globalContainer;
 
 public: // Public queries
 
-  /** Returns the number of parsed classes. */
-  int classCount() { return globalContainer.classCount(); }
-
-  /** Returns the number of global methods. */
-  int methodCount() { return globalContainer.methodCount(); }
-    
-  /** Returns the number of global attributes. */
-  int attributeCount() { return globalContainer.attributeCount(); }
-
-  /** Returns the number of global structures. */
-  int structCount() { return globalContainer.structCount(); }
+  /**
+   * Checks if a scope exists in the store.
+   *
+   * @param aName Scope to check for.
+   */
+  bool hasScope( const char *aName );
 
   /** Tells if a class exists in the store. 
    * @param aName Classname to check if it exists.
@@ -65,6 +62,16 @@ public: // Public queries
    * @param aName Classname to check if it exists.
    */
   bool hasStruct( const char *aName ) { return globalContainer.hasStruct( aName ); }
+
+  /**
+   * Fetches a scope from the store using its' name.
+   * 
+   * @param aName Name of the scope to fetch.
+   *
+   * @return A pointer to the scope(not to be deleted) or
+   * NULL if the scope wasn't found. 
+   */
+  CParsedScopeContainer *getScopeByName( const char *aName );
 
   /** Fetches a class from the store by using its' name. 
    * @return A pointer to the class(not to be deleted) or
@@ -92,12 +99,6 @@ public: // Public queries
    */
   QList<CParsedClass> *getClassSuppliers( const char *aName );
 
-  /** Get all classes referencing(==declared in) a certain file. 
-   * @param aFile File to look for.
-   * @returns A list of classnames. 
-   */
-  QList<CParsedClass> *getClassesReferencingFile( const char *aFile );
-
   /** Get all classes in sorted order. 
    * @return A list of all classes in alpabetical order. 
    */
@@ -118,10 +119,24 @@ public: // Public queries
                                   QList<CParsedMethod> *implList,
                                   QList<CParsedMethod> *availList );
 
+  /**
+   * Get all global structures not declared in a scope.
+   * 
+   * @return A sorted list of global structures.
+   */
+  QList<CParsedStruct> *getSortedStructList();
+
 public: // Public Methods
 
   /** Remove all parsed classes. */
   void wipeout();
+
+  /** 
+   * Add a scope to the store.
+   *
+   * @param aScope Scope to add.
+   */
+  void addScope( CParsedScopeContainer *aScope );
 
   /** Add a classdefintion. 
    * @param aClass Class to add.
@@ -141,6 +156,15 @@ public: // Public Methods
    * @param aFile The file to check references to.
    */
   void removeWithReferences( const char *aFile );
+
+  /**
+   *  Given a list of files in the project look for any files that
+   *  depends on this
+   *  @param fileList       - The file that may have dependents
+   *  @param dependentList  - A list of files that depends on the given file
+   *  @returns              - The dependent files added in param dependentList
+   */
+//  void getDependentFiles( QStrList& fileList, QStrList& dependentList);
 
   /** Remove a class from the store. 
    * @param aName Name of the class to remove

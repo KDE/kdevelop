@@ -3,7 +3,7 @@
                              -------------------
     begin                : Fri Mar 19 1999
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
    
  ***************************************************************************/
 
@@ -18,15 +18,15 @@
 
 #include "ClassStore.h"
 #include <iostream.h>
-#include <assert.h>
 #include <qregexp.h>
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
  ********************************************************************/
-
+extern int ScopeLevel;
 /*---------------------------------------- CClassStore::CClassStore()
  * CClassStore()
  *   Constructor.
@@ -44,6 +44,9 @@ CClassStore::CClassStore()
 
   // Open the store if it exists, else create it.
   globalStore.open();
+
+  // Always use full path for the global container.
+  globalContainer.setUseFullpath( true );
 }
 
 /*---------------------------------------- CClassStore::~CClassStore()
@@ -76,6 +79,7 @@ CClassStore::~CClassStore()
  *-----------------------------------------------------------------*/
 void CClassStore::wipeout()
 {
+  ScopeLevel=0;
   globalContainer.clear();
 }
 
@@ -92,24 +96,83 @@ void CClassStore::wipeout()
  *-----------------------------------------------------------------*/
 void CClassStore::removeWithReferences( const char *aFile )
 {
-  CParsedClass *aClass;
-
   // Remove all classes with reference to this file.
-  for( globalContainer.classIterator.toFirst();
-       globalContainer.classIterator.current();
-       ++globalContainer.classIterator )
+  // Need to take care here as we are using an iterator on a
+  // container that we can be deleting classes from.
+  CParsedClass *aClass = globalContainer.classIterator.toFirst();
+  while (aClass)
   {
-    aClass = globalContainer.classIterator.current();
+    if( aClass->declaredInFile == aFile )
+    {
+      if ( aClass->definedInFile.isEmpty() ||
+            aClass->definedInFile == aClass->declaredInFile )
+        removeClass( aClass->path() );
+      else
+        aClass->removeWithReferences(aFile);
+    }
+    else
+    {
+      if ( aClass->definedInFile == aFile )
+      {
+        if ( aClass->declaredInFile.isEmpty() )
+          removeClass( aClass->path() );
+        else
+          aClass->removeWithReferences(aFile);
+      }
+    }
 
-    // Remove the class if any of the files are the supplied one.
-    if( aClass->declaredInFile == aFile ||
-        aClass->definedInFile == aFile )
-      removeClass( aClass->name );
+    // Move to the next class if we arn't already there due
+    // to the class being removed.
+    if (aClass == globalContainer.classIterator.current())
+      ++globalContainer.classIterator;
+
+    aClass = globalContainer.classIterator.current();
   }
   
   // Remove all global functions, variables and structures.
   globalContainer.removeWithReferences( aFile );
 }
+
+/*-------------------------------- CClassStore::getDependentFiles()
+ * getDependentFiles()
+ *    Find all files that depends on the given file
+ *
+ * Parameters:
+ *   fileList       - The files to check
+ *   dependentList  - The dependent files are added to this list
+ *
+ * Returns:
+ *    The added files in the dependentList parameter.
+ *
+ *-----------------------------------------------------------------*/
+//void CClassStore::getDependentFiles(  QStrList& fileList,
+//                                      QStrList& dependentList)
+//{
+//  for (QString thisFile = fileList.first();
+//          thisFile;
+//          thisFile = fileList.next())
+//  {
+//    // Find all classes with reference to this file.
+//    for( globalContainer.classIterator.toFirst();
+//         globalContainer.classIterator.current();
+//         ++globalContainer.classIterator )
+//    {
+//      CParsedClass *aClass = globalContainer.classIterator.current();
+//
+//      if( aClass->declaredInFile  == thisFile &&
+//          aClass->definedInFile   != thisFile)
+//      {
+//        if (dependentList.find(aClass->definedInFile) == -1)
+//          dependentList.append(aClass->definedInFile);
+//      }
+//
+//      // now scan methods for files
+//      // ie a class in a.h is split into aa.cpp and ab.cpp
+//      //
+//      // TBD perhaps - as the above catches most situations
+//    }
+//  }
+//}
 
 /*------------------------------------------- CClassStore::storeAll()
  * storeAll()
@@ -141,21 +204,38 @@ void CClassStore::storeAll()
   }
 }
 
+/*------------------------------------------- CClassStore::addScope()
+ * addScope()
+ *   Add a scope to the store.
+ *
+ * Parameters:
+ *   aScope        The scope to add.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::addScope( CParsedScopeContainer *aScope )
+{
+  REQUIRE( "Valid scope", aScope != NULL );
+  REQUIRE( "Valid scope name", !aScope->name.isEmpty() );
+  REQUIRE( "Unique scope path", !hasScope( aScope->path() ) );
+
+  globalContainer.addScope( aScope );
+}
+
 /*------------------------------------------- CClassStore::addClass()
  * addClass()
  *   Add a class to the store.
  *
  * Parameters:
  *   aClass        The class to add.
- *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CClassStore::addClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
-  assert( !hasClass( aClass->name ) );
+  REQUIRE( "Valid class", aClass != NULL );
+  REQUIRE( "Valid classname", !aClass->name.isEmpty() );
+  REQUIRE( "Unique classpath", !hasClass( aClass->path() ) );
 
   globalContainer.addClass( aClass );
 
@@ -175,79 +255,14 @@ void CClassStore::addClass( CParsedClass *aClass )
  *-----------------------------------------------------------------*/
 void CClassStore::removeClass( const char *aName )
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
-  assert( hasClass( aName ) );
+  REQUIRE( "Valid classname", aName != NULL );
+  REQUIRE( "Valid classname length", strlen( aName ) > 0 );
+  REQUIRE( "Class exists", hasClass( aName ) );
 
   globalContainer.removeClass( aName );
 
   if( globalStore.isOpen )
     globalStore.removeClass( aName );
-}
-
-/*------------------------------------------------- CClassStore::out()
- * out()
- *   Output this object to stdout.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassStore::out()
-{
-  QList<CParsedMethod> *globalMethods;
-  QList<CParsedAttribute> *globalAttributes;
-  QList<CParsedStruct> *globalStructs;
-  QList<CParsedClass> *classes;
-  CParsedClass *aClass;
-  CParsedMethod *aMethod;
-  CParsedAttribute *aAttr;
-  CParsedStruct *aStruct;
-
-  // Output all classes.
-  classes = globalContainer.getSortedClassList();
-  for( aClass = classes->first();
-       aClass != NULL;
-       aClass = classes->next() )
-  {
-    aClass->out();
-  }
-  delete classes;
-
-  // Global methods
-  cout << "Global functions\n";
-
-  globalMethods = globalContainer.getSortedMethodList();
-  for( aMethod = globalMethods->first();
-       aMethod != NULL;
-       aMethod = globalMethods->next() )
-  {
-    aMethod->out();
-  }
-  delete globalMethods;
-
-  // Global structures
-  cout << "Global variables\n";
-  globalAttributes = globalContainer.getSortedAttributeList();
-  for( aAttr = globalAttributes->first();
-       aAttr != NULL;
-       aAttr = globalAttributes->next() )
-  {
-    aAttr->out();
-  }
-  delete globalAttributes;  
-
-  // Global structures
-  cout << "Global structs\n";
-  globalStructs = globalContainer.getSortedStructList();
-  for( aStruct = globalStructs->first();
-       aStruct != NULL;
-       aStruct = globalStructs->next() )
-  {
-    aStruct->out();
-  }
-  delete globalStructs;  
 }
 
 /*********************************************************************
@@ -333,18 +348,55 @@ QList<CClassTreeNode> *CClassStore::asForest()
   return retVal;
 }
 
+/*-------------------------------------------- CClassStore::hasScope()
+ * hasScope()
+ *   Tells if a scope exist in the store.
+ *
+ * Parameters:
+ *   aName          Name of the scope to check for.
+ * Returns:
+ *   bool           Result of the lookup.
+ *-----------------------------------------------------------------*/
+bool CClassStore::hasScope( const char *aName )
+{
+  REQUIRE1( "Valid scope name", aName != NULL, false );
+  REQUIRE1( "Valid scope name length", strlen( aName ) > 0, false );
+
+  return globalContainer.hasScope( aName );
+}
+
+/*-------------------------------------- CClassStore::getScopeByName()
+ * getScopeByName()
+ *   Get a scope from the store by using its' name.
+ *
+ * Parameters:
+ *   aName          Name of the scope to fetch.
+ * Returns:
+ *   Pointer to the scope or NULL if not found.
+ *-----------------------------------------------------------------*/
+CParsedScopeContainer *CClassStore::getScopeByName( const char *aName )
+{
+  REQUIRE1( "Valid scope name", aName != NULL, NULL );
+  REQUIRE1( "Valid scope name length", strlen( aName ) > 0, NULL );
+
+  return globalContainer.getScopeByName( aName );
+}
+
+
 /*-------------------------------------------- CClassStore::hasClass()
  * hasClass()
  *   Tells if a class exist in the store.
  *
  * Parameters:
  *   aName          Name of the class to check.
- *
  * Returns:
  *   bool           Result of the lookup.
  *-----------------------------------------------------------------*/
 bool CClassStore::hasClass( const char *aName )
 {
+  REQUIRE1( "Valid classname", aName != NULL, false );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, false );
+
   return globalContainer.hasClass( aName ) || 
     ( globalStore.isOpen && globalStore.hasClass( aName ) );
   //return classes.find( aName ) != NULL;
@@ -363,8 +415,9 @@ bool CClassStore::hasClass( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedClass *CClassStore::getClassByName( const char *aName )
 {
-  assert( aName != NULL );
-
+  REQUIRE1( "Valid classname", aName != NULL, NULL );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, NULL );
+  
   CParsedClass *aClass;
 
   if( globalStore.isOpen && globalStore.hasClass( aName ) )
@@ -387,6 +440,9 @@ CParsedClass *CClassStore::getClassByName( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
 {
+  REQUIRE1( "Valid classname", aName != NULL, new QList<CParsedClass>() );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<CParsedClass>() );
+
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
   CParsedClass *aClass;
 
@@ -415,7 +471,8 @@ QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
 {
-  assert( aName != NULL );
+  REQUIRE1( "Valid classname", aName != NULL, new QList<CParsedClass>() );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<CParsedClass>() );
 
   bool exit;
   CParsedClass *aClass;
@@ -459,8 +516,9 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
 {
-  assert( aName != NULL );
-  assert( hasClass( aName ) );
+  REQUIRE1( "Valid classname", aName != NULL, new QList<CParsedClass>() );
+  REQUIRE1( "Valid classname length", strlen( aName ) > 0, new QList<CParsedClass>() );
+  REQUIRE1( "Class exists", hasClass( aName ), new QList<CParsedClass>() );
 
   CParsedClass *aClass;
   CParsedClass *toAdd;
@@ -477,13 +535,13 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
     str = aClass->attributeIterator.current()->type;
 
     // Remove all unwanted stuff.
-    str = str.replace( QRegExp("[\\*&]"), "" );
-    str = str.replace( QRegExp("const"), "" );
-    str = str.replace( QRegExp("void"), "" );
-    str = str.replace( QRegExp("bool"), "" );
-    str = str.replace( QRegExp("uint"), "" );
-    str = str.replace( QRegExp("int"), "" );
-    str = str.replace( QRegExp("char"), "" );
+    str = str.replace(  QRegExp("[\\*&]"), "" );
+    str = str.replace(  QRegExp("const"), "" );
+    str = str.replace(  QRegExp("void"), "" );
+    str = str.replace(  QRegExp("bool"), "" );
+    str = str.replace(  QRegExp("uint"), "" );
+    str = str.replace(  QRegExp("int"), "" );
+    str = str.replace(  QRegExp("char"), "" );
     str = str.stripWhiteSpace();
 
     // If this isn't the class and the string contains data, we check for it.
@@ -499,20 +557,6 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
   return retVal;
 }
 
-/*-------------------------- CClassStore::getClassesReferencingFile()
- * getClassesReferencingFile()
- *   Get all classes referencing(==declared in) a certain file. 
- *
- * Parameters:
- *   aFile                 File to look for.
- * Returns:
- *   QList<CParsedClass> * The classes.
- *-----------------------------------------------------------------*/
-QList<CParsedClass> *CClassStore::getClassesReferencingFile( const char *aFile )
-{
-  return globalContainer.getClassesReferencingFile( aFile );
-}
-
 /*------------------------------------ CClassStore::getSortedClassList()
  * getSortedClassList()
  *   Get all classes in sorted order.
@@ -524,7 +568,23 @@ QList<CParsedClass> *CClassStore::getClassesReferencingFile( const char *aFile )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getSortedClassList()
 {
-  return globalContainer.getSortedClassList();
+  QList<CParsedClass> *list = globalContainer.getSortedClassList();
+  CParsedClass *aClass;
+
+  // Remove all non-global classes.
+  aClass = list->first();
+  while (aClass != NULL)
+  {
+    if( !aClass->declaredInScope.isEmpty() )
+    {
+      list->remove();
+      aClass = list->current();
+    }
+    else
+      aClass = list->next();
+  }
+
+  return list;
 }
 
 /*---------------------------- CClassStore::getSortedClassNameList()
@@ -538,7 +598,7 @@ QList<CParsedClass> *CClassStore::getSortedClassList()
  *-----------------------------------------------------------------*/
 QStrList *CClassStore::getSortedClassNameList()
 {
-  return globalContainer.getSortedClassNameList();
+  return globalContainer.getSortedClassNameList(true);
 }
 
 /*-------------------------- CClassStore::getVirtualMethodsForClass()
@@ -559,10 +619,14 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
                                              QList<CParsedMethod> *implList,
                                              QList<CParsedMethod> *availList )
 {
-  QList<CParsedMethod> alist, ilist;
+  REQUIRE( "Valid classname", aName != NULL );
+  REQUIRE( "Valid classname length", strlen( aName ) > 0 );
+  REQUIRE( "Class exists", hasClass( aName ) );
+
   CParsedClass *aClass;
   CParsedParent *aParent;
   CParsedClass *parentClass;
+  QList<CParsedMethod> *list;
   CParsedMethod *aMethod;
   QDict<char> added;
   QString str;
@@ -586,11 +650,11 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
       parentClass = getClassByName( aParent->name );
       if( parentClass != NULL )
       {
-        getVirtualMethodsForClass(aParent->name, &ilist, &alist);
+        list = parentClass->getVirtualMethodList();
 
-        for( aMethod = alist.first();
+        for( aMethod = list->first();
              aMethod != NULL;
-             aMethod = alist.next() )
+             aMethod = list->next() )
         {
           // Check if we already have the method.
           if( aClass->getMethod( *aMethod ) != NULL )
@@ -601,21 +665,113 @@ void CClassStore::getVirtualMethodsForClass( const char *aName,
           else if( !aMethod->isConstructor && !aMethod->isDestructor )
             availList->append( aMethod );
         }
+        
+        delete list;
       }
-    }
 
-    // Add all virtual methods defined in THIS class.
-    for( aClass->methodIterator.toFirst();
-         aClass->methodIterator.current();
-         ++aClass->methodIterator )
-    {
-      aMethod = aClass->methodIterator.current();
-      if( aMethod->isVirtual && !aMethod->isPrivate() &&
-          !aMethod->isConstructor && !aMethod->isDestructor &&
-          added.find( aMethod->asString( str ) ) == NULL )
-      {
-        availList->append( aMethod );
-      }
     }
   }
+}
+
+/*---------------------------- CClassStore::getSortedClassNameList()
+ * getSortedClassNameList()
+ *   Get all global structures not declared in a scope.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   A sorted list of global structures.
+ *-----------------------------------------------------------------*/
+QList<CParsedStruct> *CClassStore::getSortedStructList() 
+{ 
+  QList<CParsedStruct> *retVal = new QList<CParsedStruct>();
+
+  // Iterate over all structs in the scope.
+  for( globalContainer.structIterator.toFirst();
+       globalContainer.structIterator.current();
+       ++globalContainer.structIterator )
+  {
+    // Only append global structs.
+    if( globalContainer.structIterator.current()->declaredInScope.isEmpty() )
+      retVal->append( globalContainer.structIterator.current() );
+  }
+
+  return retVal; 
+}
+
+/*------------------------------------------------- CClassStore::out()
+ * out()
+ *   Output this object to stdout.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::out()
+{
+  QList<CParsedScopeContainer> *globalScopes;
+  QList<CParsedMethod> *globalMethods;
+  QList<CParsedAttribute> *globalAttributes;
+  QList<CParsedStruct> *globalStructs;
+  QList<CParsedClass> *classes;
+  CParsedScopeContainer *aScope;
+  CParsedClass *aClass;
+  CParsedMethod *aMethod;
+  CParsedAttribute *aAttr;
+  CParsedStruct *aStruct;
+
+  // Output all namespaces
+  cout << "Global namespaces" << endl;
+  globalScopes = globalContainer.getSortedScopeList();
+  for( aScope = globalScopes->first();
+       aScope != NULL;
+       aScope = globalScopes->next() )
+    aScope->out();
+
+
+  // Output all classes.
+  cout << "Global classes\n";
+  classes = getSortedClassList();
+  for( aClass = classes->first();
+       aClass != NULL;
+       aClass = classes->next() )
+  {
+    aClass->out();
+  }
+  delete classes;
+
+  // Global methods
+  cout << "Global functions\n";
+
+  globalMethods = globalContainer.getSortedMethodList();
+  for( aMethod = globalMethods->first();
+       aMethod != NULL;
+       aMethod = globalMethods->next() )
+  {
+    aMethod->out();
+  }
+  delete globalMethods;
+
+  // Global structures
+  cout << "Global variables\n";
+  globalAttributes = globalContainer.getSortedAttributeList();
+  for( aAttr = globalAttributes->first();
+       aAttr != NULL;
+       aAttr = globalAttributes->next() )
+  {
+    aAttr->out();
+  }
+  delete globalAttributes;  
+
+  // Global structures
+  cout << "Global structs\n";
+  globalStructs = getSortedStructList();
+  for( aStruct = globalStructs->first();
+       aStruct != NULL;
+       aStruct = globalStructs->next() )
+  {
+    aStruct->out();
+  }
+  delete globalStructs;
 }

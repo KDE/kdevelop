@@ -1,36 +1,24 @@
-/********************************************************************
-* Name    : Implementation of a signal<->slot map.                  *
-* ------------------------------------------------------------------*
-* File    : ParsedSignalSlot.cc                                     *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Wed Mar 17 11:30:00 CET 1999                            *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedSignalSlot.cc  - A signal<->slot map.
+                             -------------------
+    begin                : Wed Mar 17 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@syncom.se
+   
+ ***************************************************************************/
 
-#include <assert.h>
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #include <iostream.h>
 #include "ParsedSignalSlot.h"
+#include "ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -80,26 +68,10 @@ CParsedSignalSlot::~CParsedSignalSlot()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedSignalSlot::setSignal( QString &aSignal )
-{
-  assert( aSignal != NULL && !aSignal.isEmpty() );
-
-  signal = aSignal;
-}
-
-/*------------------------------------ CParsedSignalSlot::setSignal()
- * setSignal()
- *   Set the signalname.
- *
- * Parameters:
- *   aSignal          The new signal.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
 void CParsedSignalSlot::setSignal( const char *aSignal )
 {
-  assert( aSignal != NULL && strlen( aSignal ) > 0 );
+  REQUIRE( "Valid signal", aSignal != NULL );
+  REQUIRE( "Valid signal length", strlen( aSignal ) > 0 );
 
   signal = aSignal;
 }
@@ -116,7 +88,7 @@ void CParsedSignalSlot::setSignal( const char *aSignal )
  *-----------------------------------------------------------------*/
 void CParsedSignalSlot::setSlot( CParsedMethod *aSlot )
 {
-  assert( aSlot != NULL );
+  REQUIRE( "Valid slot", aSlot != NULL );
 
   slot = aSlot;
 }
