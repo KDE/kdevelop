@@ -265,6 +265,185 @@ bool Parser::skip( int l, int r )
     return false;
 }
 
+bool Parser::skipConstantExpression( AST::Node& node )
+{
+    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipConstantExpression()" << endl;
+
+    int start = lex->index();
+
+    while( !lex->lookAhead(0).isNull() ){
+	int tk = lex->lookAhead( 0 );
+
+	if( tk == '(' ){
+	    if( !skip('(', ')') ){
+		return false;
+	    }
+	    lex->nextToken();
+	} else if( tk == '[' ){
+	    if( !skip('[', ']') ){
+		return false;
+	    }
+	    lex->nextToken();
+	} else if( tk == '<' ){
+	    if( !skip('<', '>') ){
+		return false;
+	    }
+	    lex->nextToken();
+#ifdef ROB
+	} else if( tk == Token_identifier ){
+	    lex->nextToken();
+	    if( lex->lookAhead( 0 ) == Token_identifier )
+		break;
+#endif
+	} else if( tk == ',' || tk == ';' || tk == '>' ||
+		   tk == Token_assign || tk == ']' ||
+		   tk == ')' || tk == '}' || tk == ':' ){
+	    break;
+	} else {
+	    lex->nextToken();
+	}
+    }
+
+    if( start == lex->index() )
+        return false;
+
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
+    return true;
+}
+
+bool Parser::skipAssignmentExpression( AST::Node& node )
+{
+    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipAssignmentExpression()" << endl;
+
+    int start = lex->index();
+
+    while( !lex->lookAhead(0).isNull() ){
+	int tk = lex->lookAhead( 0 );
+
+	if( tk == '(' ){
+	    if( !skip('(', ')') ){
+		return false;
+	    } else
+		lex->nextToken();
+	} else if( tk == '<' ){
+	    if( !skip('<', '>') ){
+		return false;
+	    } else
+		lex->nextToken();
+	} else if( tk == '[' ){
+	    if( !skip('[', ']') ){
+		return false;
+	    } else
+		lex->nextToken();
+#ifdef ROB
+	} else if( tk == Token_identifier ){
+	    lex->nextToken();
+	    if( lex->lookAhead(0) == Token_identifier )
+		break;
+#endif
+	} else if( tk == ',' || tk == ';' ||
+		   tk == '>' || tk == ']' || tk == ')' ||
+		   tk == Token_assign ){
+	    break;
+	} else
+	    lex->nextToken();
+    }
+
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
+    return true;
+}
+
+bool Parser::skipCommaExpression( AST::Node& node )
+{
+    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipCommaExpression()" << endl;
+
+    int start = lex->index();
+
+    AST::Node expr;
+    if( !skipExpression(expr) )
+	return false;
+
+    while( lex->lookAhead(0) == ',' ){
+	lex->nextToken();
+
+	if( !skipExpression(expr) ){
+	    reportError( i18n("expression expected") );
+	    return false;
+	}
+    }
+
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+
+    return true;
+}
+
+bool Parser::skipExpression( AST::Node& node )
+{
+    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipExpression()" << endl;
+
+    int start = lex->index();
+
+    while( !lex->lookAhead(0).isNull() ){
+	int tk = lex->lookAhead( 0 );
+
+	switch( tk ){
+	case '(':
+	    skip( '(', ')' );
+	    lex->nextToken();
+	    break;
+
+	case '[':
+	    skip( '[', ']' );
+	    lex->nextToken();
+	    break;
+
+#ifdef ROB
+	case Token_identifier:
+	    lex->nextToken();
+	    if( lex->lookAhead( 0 ) == Token_identifier )
+		return true;
+	    break;
+#endif
+
+	case ';':
+	case ',':
+	case ']':
+	case ')':
+	case '{':
+	case '}':
+	case Token_case:
+	case Token_default:
+	case Token_if:
+	case Token_while:
+	case Token_do:
+	case Token_for:
+	case Token_break:
+	case Token_continue:
+	case Token_return:
+	case Token_goto:
+	{
+	    AST::Node ast = CreateNode<AST>();
+	    UPDATE_POS( ast, start, lex->index() );
+	    node = ast;
+	}
+	return true;
+
+	default:
+	    lex->nextToken();
+	}
+    }
+
+    return false;
+}
+
 bool Parser::parseName( NameAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseName()" << endl;
@@ -1506,56 +1685,6 @@ bool Parser::parseTypeId( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::skipConstantExpression( AST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipConstantExpression()" << endl;
-
-    int start = lex->index();
-
-    while( !lex->lookAhead(0).isNull() ){
-	int tk = lex->lookAhead( 0 );
-
-	if( tk == '(' ){
-	    if( !skip('(', ')') ){
-		return false;
-	    }
-	    lex->nextToken();
-	} else if( tk == '[' ){
-	    if( !skip('[', ']') ){
-		return false;
-	    }
-	    lex->nextToken();
-	} else if( tk == '<' ){
-	    if( !skip('<', '>') ){
-		return false;
-	    }
-	    lex->nextToken();
-#ifdef ROB
-	} else if( tk == Token_identifier ){
-	    lex->nextToken();
-	    if( lex->lookAhead( 0 ) == Token_identifier )
-		break;
-#endif
-	} else if( tk == ',' || tk == ';' || tk == '>' ||
-		   tk == Token_assign || tk == ']' ||
-		   tk == ')' || tk == '}' || tk == ':' ){
-	    break;
-	} else {
-	    lex->nextToken();
-	}
-    }
-
-    if( start == lex->index() )
-        return false;
-
-    AST::Node ast = CreateNode<AST>();
-    UPDATE_POS( ast, start, lex->index() );
-    node = ast;
-
-    return true;
-}
-
-
 bool Parser::parseInitDeclaratorList( InitDeclaratorListAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseInitDeclaratorList()" << endl;
@@ -1963,7 +2092,7 @@ bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 	lex->nextToken();
 
 	AST::Node expr;
-	if( !skipExpression(expr) ){
+	if( !parseConstantExpression(expr) ){
 	    reportError( i18n("Constant expression expected") );
 	}
 	node->setExpr( expr );
@@ -1996,50 +2125,7 @@ bool Parser::parseInitDeclarator( InitDeclaratorAST::Node& node )
     return true;
 }
 
-bool Parser::skipAssignmentExpression( AST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipAssignmentExpression()" << endl;
 
-    int start = lex->index();
-
-    while( !lex->lookAhead(0).isNull() ){
-	int tk = lex->lookAhead( 0 );
-
-	if( tk == '(' ){
-	    if( !skip('(', ')') ){
-		return false;
-	    } else
-		lex->nextToken();
-	} else if( tk == '<' ){
-	    if( !skip('<', '>') ){
-		return false;
-	    } else
-		lex->nextToken();
-	} else if( tk == '[' ){
-	    if( !skip('[', ']') ){
-		return false;
-	    } else
-		lex->nextToken();
-#ifdef ROB
-	} else if( tk == Token_identifier ){
-	    lex->nextToken();
-	    if( lex->lookAhead(0) == Token_identifier )
-		break;
-#endif
-	} else if( tk == ',' || tk == ';' ||
-		   tk == '>' || tk == ']' || tk == ')' ||
-		   tk == Token_assign ){
-	    break;
-	} else
-	    lex->nextToken();
-    }
-
-    AST::Node ast = CreateNode<AST>();
-    UPDATE_POS( ast, start, lex->index() );
-    node = ast;
-
-    return true;
-}
 
 bool Parser::parseBaseClause( BaseClauseAST::Node& node )
 {
@@ -2223,32 +2309,6 @@ bool Parser::parseMemInitializerId( NameAST::Node& node )
 }
 
 
-bool Parser::skipCommaExpression( AST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipCommaExpression()" << endl;
-
-    int start = lex->index();
-
-    AST::Node expr;
-    if( !skipExpression(expr) )
-	return false;
-
-    while( lex->lookAhead(0) == ',' ){
-	lex->nextToken();
-
-	if( !skipExpression(expr) ){
-	    reportError( i18n("expression expected") );
-	    return false;
-	}
-    }
-
-    AST::Node ast = CreateNode<AST>();
-    UPDATE_POS( ast, start, lex->index() );
-    node = ast;
-
-    return true;
-}
-
 // nested-name-specifier
 //   class-or-namespace-name "::" nested-name-specifier-opt
 //   class-or-namespace-name "::" "template"-opt unqualified-id
@@ -2422,68 +2482,6 @@ bool Parser::parseStringLiteral( AST::Node& /*node*/ )
     }
     return true;
 }
-
-bool Parser::skipExpression( AST::Node& node )
-{
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipExpression()" << endl;
-
-    int start = lex->index();
-
-    while( !lex->lookAhead(0).isNull() ){
-	int tk = lex->lookAhead( 0 );
-
-	switch( tk ){
-	case '(':
-	    skip( '(', ')' );
-	    lex->nextToken();
-	    break;
-
-	case '[':
-	    skip( '[', ']' );
-	    lex->nextToken();
-	    break;
-
-#ifdef ROB
-	case Token_identifier:
-	    lex->nextToken();
-	    if( lex->lookAhead( 0 ) == Token_identifier )
-		return true;
-	    break;
-#endif
-
-	case ';':
-	case ',':
-	case ']':
-	case ')':
-	case '{':
-	case '}':
-	case Token_case:
-	case Token_default:
-	case Token_if:
-	case Token_while:
-	case Token_do:
-	case Token_for:
-	case Token_break:
-	case Token_continue:
-	case Token_return:
-	case Token_goto:
-	{
-	    //kdDebug(9007) << "last token is ---------------> tk = " << lex->lookAhead(0).toString() << endl;
-	    //kdDebug(9007) << "expr is ---------------> tk = " << toString(start, lex->index()) << endl;
-	    AST::Node ast = CreateNode<AST>();
-	    UPDATE_POS( ast, start, lex->index() );
-	    node = ast;
-	}
-	return true;
-
-	default:
-	    lex->nextToken();
-	}
-    }
-
-    return false;
-}
-
 
 bool Parser::skipExpressionStatement( StatementAST::Node& node )
 {
