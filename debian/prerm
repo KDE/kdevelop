@@ -15,7 +15,6 @@ if [ "$1" = remove -o "$1" = upgrade ] && \
   command -v install-docs >/dev/null 2>&1; then
     install-docs -r kdevelop-kdelibref
     install-docs -r kdevelop-tutorial
-    install-docs -r kdevelop-addendum
     install-docs -r kdevelop-programming
     install-docs -r kdevelop-user
 fi
