@@ -1,0 +1,259 @@
+/** \file TODO.dox
+  * \brief High priority tasks
+  */
+/** \page TODO High priority tasks!
+
+\section fixmajbugs Fixing major/annoying bugs
+  <ul>
+    <li>
+      konsole part
+
+      <ul>
+        <li>cd's when selecting a file, but doesn't when selecting a dir,
+        desired: a menu option to "cd" to that directory</li>
+      </ul>
+    </li>
+
+    <li>
+      automake part
+
+      <ul>
+        <li>Should be able to DND files from other targets / file list /
+        konq to add to targets</li>
+      </ul>
+    </li>
+
+    <li>
+      UI bugs
+
+      <ul>
+        <li>Editor options dialog missing when all views are closed</li>
+
+        <li>If you click an error in the output view, "Next Error"/"Previous
+        Error" should then start from that point</li>
+
+        <li>Messages in status bar would look nicer if they appeared with
+        the same border as other items</li>
+
+        <li>Browser tool bar should truncate long menu entries so it doesn't
+        take so much space</li>
+
+        <li>Open last open panel in the sidebars on startup, if possible
+        (should be stored in project session file, not globally)</li>
+
+        <li>Tag file creation fails silently if ctags is not installed</li>
+      </ul>
+    </li>
+
+    <li>
+      misc
+
+      <ul>
+        <li>Project name should be able to contain spaces</li>
+      </ul>
+    </li>
+
+    <li>
+      c++ debugger
+
+      <ul>
+        <li>Fix "core file" handling</li>
+
+        <li>Fix "attach to" handling</li>
+
+        <li>Breakpoints can disappear at odd times</li>
+
+        <li>When the target program crashes, the debugger can't be started
+        again. (intermittant?)</li>
+
+        <li>Break on method() - could have multiple methods which require a
+        choice. How to handle this?</li>
+      </ul>
+    </li>
+  </ul>
+
+\section KDevelop2compat KDevelop 2 compatibility
+(These are things that must be accomplished before we can say that gideon
+&gt;= kdevelop 2.x UI-wise and functionality-wise!)
+
+  <ul>
+    <li>
+      general UI issues:
+
+      <ul>
+        <li>toplevel UI mode broken concerning to the accels</li>
+
+        <li>[Modified] missing in mainframe caption</li>
+
+        <li>captions missing for toolbar buttons</li>
+      </ul>
+    </li>
+
+    <li>
+      build/configuration:
+
+      <ul>
+        <li>cross-compiling feature missing</li>
+
+        <li>make "MIN_VERSION" configurable on new project creation</li>
+      </ul>
+    </li>
+
+    <li>
+      doctreeview:
+
+      <ul>
+        <li>implement "Make User Manual"</li>
+
+        <li>use kdoc to update Qt/KDE docs</li>
+      </ul>
+    </li>
+  </ul>
+  Solve the regression bugs. These are the <a href= "http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&priority=HI">ones
+maked with priority "HI" in the bug database</a>
+
+\section MissingUIs Missing UIs (other than 2)
+UIs that intuitively ought to be there
+
+  <ul>
+    <li>
+      IDEAl UI-mode:
+
+      <ul>
+        <li>Extend KDevPlugin-API in order to have a preferred border for at
+        least the selection parts (Automake Manager, Class Browser, File
+        Groups, etc...)</li>
+      </ul>
+    </li>
+  </ul>
+
+\section newfeat New features
+  <ul>
+    <li>
+      short-term:
+
+      <ul>
+        <li>improve documentation browsing</li>
+      </ul>
+    </li>
+
+    <li>
+      mid-term:
+
+      <ul>
+        <li>use mimetype to determine code files, not extension</li>
+      </ul>
+    </li>
+
+    <li>
+      long-term:
+
+      <ul>
+        <li>write a lot more plugins ;) ideas here for which ones</li>
+
+        <li>sourcenav database and navigation tools</li>
+      </ul>
+    </li>
+
+    <li>
+      c++ debugger
+
+      <ul>
+        <li>
+          variable widget
+
+          <ul>
+            <li>set variable by editing the value in the tree</li>
+
+            <li>cast value by editing the type in the tree</li>
+          </ul>
+        </li>
+
+        <li>
+          disassembly
+
+          <ul>
+            <li>add breakpoint display</li>
+
+            <li>set breakpoint by selecting a line as in the edit
+            window</li>
+
+            <li>allow scrolling of disassembled code about and below current
+            limits</li>
+
+            <li>add source to disassembled code as comments</li>
+
+            <li>basically just re-work the whole disassemble window :)</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+\section codereftodo Code refactoring/improvements
+  <ul>
+    <li>
+      architecture:
+
+      <ul>
+        <li>implement multiple-views per document</li>
+      </ul>
+    </li>
+
+    <li>
+      modularity:
+
+      <ul>
+        <li>make sure all lib interfaces are available via DCOP</li>
+      </ul>
+    </li>
+
+    <li>
+      improvement:
+
+      <ul>
+        <li>find a nicer way to remove dynamic menu entries from context
+        menus</li>
+
+        <li>make all functions using filenames use KURLs instead</li>
+      </ul>
+    </li>
+
+    <li>optimization:</li>
+
+    <li>
+      Import existing directory: Should be named "Import existing project"
+      and more intuitive (wizard-like)
+
+      <ul>
+        <li>Question from the wizard: "I have found C++ files in your
+        project directory. Should C++ be the primary language of your
+        project?" User: [Yes/No] =&gt; Next Step...</li>
+
+        <li>Something intuitive for the binary/-ies (for debugger and
+        execution of program), libtool ([Yes/No] for the debugger), build
+        tool (qmake, automake,...?), etc.., too.</li>
+      </ul>
+    </li>
+  </ul>
+
+\section misctodo Misc.
+  <ul>
+    <li>Update configure.in when sub projects are added and the project
+    doesn't use am_edit</li>
+
+    <li>Implement Add Plugin</li>
+
+    <li>Show .po files in project management</li>
+
+    <li>Distinguish vanilla c++ support from c++ + Qt extensions and show
+    signals/slots in the class view only with Qt.</li>
+
+    <li>Perhaps use konsole part for the application frontend</li>
+
+    <li>Check if a man page exists before offering the context menu item
+    'Goto manpage'</li>
+
+    <li>Show intro page on startup</li>
+  </ul>
+*/
