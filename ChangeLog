@@ -1,3 +1,8 @@
+2003-03-07 Alexander Dymo <cloudtemple@mksat.net>
+    * New configuration options for the documentation browser.
+      It is now capable of using any doxygen and kdoc documentation,
+      not only kdelibs documentation.
+
 2003-03-07 F@lk Brettschneider <falkbr@kdevelop.org>
 	* added third level called "Very short compiler output"
 	* now you can switch between the output versions without recompiling
