@@ -1,3 +1,14 @@
+2000-04-10 Walter Tasin  <tasin@kdevelop.de>
+	* shared library support
+	  this allows you now to convert a static library (i. e.
+	  subdirectory of your project) to a shared library
+	  and vice-versa.
+	  This can be done by a right mouse click on the sub directory
+	  in the RFV.
+	* Implementing "Update Makefile.am" to cause KDevelop
+	  to correct the KDevelop specific part of a Makefile.am
+	  from the .kdevprj settings.
+
 2000-04-09 Ralf Nolden <rnolden@kdevelop.de>
         * disabled open project button and accelerators when loading project
         * fixed doc-tree refresh when no project is loaded on startup
@@ -7,7 +18,6 @@
 	* Updated kdevelop.pot
 	* Updated de.po
  
-
 2000-04-09 Walter Tasin  <tasin@kdevelop.de>
 	* Bug #2972 fixed
           thanks to Richard Dale <Richard_Dale@tipitina.demon.co.nz>
