@@ -158,6 +158,9 @@ bool MdiMainFrmComponent::event( QEvent *e)
   kdDebug(9005) << "running MdiMainFrmComponent::event..." << endl;
 
   bool ret = KDevViewHandler::event( e);
+  // ### Are you sure that you are sending that event from KDevelop?
+  //     See also http://lists.kde.org/?l=kde-devel&m=96469534324495&w=2
+  //     (Simon)
   if (KParts::GUIActivateEvent::test( e)) {
     KParts::GUIActivateEvent* ae = (KParts::GUIActivateEvent*) e;
     if (ae->activated()) {
