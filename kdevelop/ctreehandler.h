@@ -77,7 +77,9 @@ public: // Public methods
    * @param parent Which parent should this item be added to.
    */
   QListViewItem *addItem( const char *aName, THType iconType,
-                          QListViewItem *parent );
+                          QListViewItem *parent,
+													const char* =0, const char* =0,
+													const char* =0, const char* =0 );
 
 public: // Public queries
 
@@ -112,7 +114,7 @@ private: // Private attributes
   QListViewItem *lastRootItem;
 
   /** Array containing all pixmaps used */
-  static QPixmap *icons;
+  static QPixmap **icons;
 
   /** Tells if the icons has been read or not. */
   static bool iconsRead;
