@@ -138,7 +138,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
-        action = new KAction( i18n("Execute Program"), "exec", Key_F5,
+        action = new KAction( i18n("Execute Program"), "exec", Key_F9,
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
     }
@@ -638,7 +638,7 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
 
 void AutoProjectPart::slotBuild()
 {
-    m_lastCompilationFailed = false;
+    //m_lastCompilationFailed = false;
 
     if( m_needMakefileCvs ){
 	slotMakefilecvs();
@@ -655,6 +655,8 @@ void AutoProjectPart::buildTarget(QString relpath, TargetItem* titem)
 
   if ( !titem )
     return;
+
+  //m_lastCompilationFailed = false;
 
   // Calculate the complete name of the target and store it in name
   QString name = titem->name;
@@ -1009,6 +1011,9 @@ void AutoProjectPart::slotCommandFinished( const QString& command )
     }
 
     emit projectCompiled();
+
+    // reset the "last compilation has failed" flag
+    m_lastCompilationFailed = false;
 
     if( m_executeAfterBuild ){
 	slotExecute();
