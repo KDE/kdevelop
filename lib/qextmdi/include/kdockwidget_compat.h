@@ -255,6 +255,8 @@ public:
   /// @since 3.1
   void showUndockButton(bool show);
 
+  /// @since 3.2
+  void forceCloseButtonHidden(bool enable=true);
 #ifndef NO_KDE2
   /**
    * Saves the current button state to a KDE config container object.
@@ -641,14 +643,12 @@ public:
    * @since 3.2
    */
    void setPixmap(const QPixmap& pixmap=QPixmap());
-		    
   /**
    * Returns the dockwidget's associated caption/dock tab pixmap
    *
    * @since 3.2
    */
    const QPixmap& pixmap() const;
-				     
 public slots:
   /**
    * subject to changes. It doesn't completely work yet without small hacks from within the calling application (Perhaps
@@ -1493,6 +1493,7 @@ public:
   virtual void load(KConfig *cfg);
 #endif
   virtual void setToolTip (KDockWidget *, QString &);
+  virtual void  setPixmap(KDockWidget*,const QPixmap&);
   QStringList containedWidgets() const;
 protected:
   friend class KDockManager;

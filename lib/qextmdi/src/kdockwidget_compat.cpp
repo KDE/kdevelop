@@ -234,16 +234,19 @@ public:
   KDockWidgetHeaderPrivate( QObject* parent )
         : QObject( parent )
   {
+    forceCloseButtonHidden=false;
     toDesktopButton = 0;
     showToDesktopButton = true;
     topLevel = false;
+    dummy=0;
   }
   KDockButton_Private* toDesktopButton;
 
   bool showToDesktopButton;
   bool topLevel;
   QPtrList<KDockButton_Private> btns;
-
+  bool forceCloseButtonHidden;
+  QWidget *dummy;
 };
 
 /**
@@ -408,15 +411,20 @@ KDockWidgetHeader::KDockWidgetHeader( KDockWidget* parent, const char* name )
   d->toDesktopButton->setPixmap( const_cast< const char** >(todesktop_xpm));
   d->toDesktopButton->setFixedSize(closeButton->pixmap()->width(),closeButton->pixmap()->height());
   connect( d->toDesktopButton, SIGNAL(clicked()), parent, SLOT(toDesktop()));
-
   stayButton->hide();
 
+  d->dummy = new QWidget( this );
+  d->dummy->setFixedSize( 1,closeButton->pixmap()->height() );
+
+  
   layout->addWidget( drag );
   layout->addWidget( dockbackButton );
   layout->addWidget( d->toDesktopButton );
+  layout->addWidget( d->dummy);
   layout->addWidget( stayButton );
   layout->addWidget( closeButton );
   layout->activate();
+  d->dummy->hide();
   drag->setFixedHeight( layout->minimumSize().height() );
 }
 
@@ -438,12 +446,27 @@ void KDockWidgetHeader::setTopLevel( bool isTopLevel )
   } else {
     dockbackButton->hide();
     stayButton->hide();
-    closeButton->show();
+    if (!d->forceCloseButtonHidden) closeButton->show();
     if( d->showToDesktopButton )
       d->toDesktopButton->show();
   }
   layout->activate();
+  
+   bool dontShowDummy=drag->isVisibleTo(this) || dockbackButton->isVisibleTo(this) ||
+        d->toDesktopButton->isVisibleTo(this) || stayButton->isVisibleTo(this) ||
+        closeButton->isVisibleTo(this);
+   for (QPtrListIterator<KDockButton_Private> it( d->btns );it.current()!=0;++it) {
+        dontShowDummy=dontShowDummy || (it.current()->isVisibleTo(this));
+   }
+   if (dontShowDummy) d->dummy->hide(); else d->dummy->show();
+
   updateGeometry();
+}
+
+void KDockWidgetHeader::forceCloseButtonHidden(bool hidden) {
+  d->forceCloseButtonHidden=hidden;
+  if (hidden) closeButton->hide();
+  else closeButton->show();
 }
 
 void KDockWidgetHeader::setDragPanel( KDockWidgetHeaderDrag* nd )
@@ -459,12 +482,17 @@ void KDockWidgetHeader::setDragPanel( KDockWidgetHeaderDrag* nd )
 
   layout->addWidget( drag );
   layout->addWidget( dockbackButton );
+  layout->addWidget( d->dummy );
   layout->addWidget( d->toDesktopButton );
   layout->addWidget( stayButton );
+  bool dontShowDummy=drag->isVisibleTo(this) || dockbackButton->isVisibleTo(this) ||
+	d->toDesktopButton->isVisibleTo(this) || stayButton->isVisibleTo(this) ||
+	closeButton->isVisibleTo(this);
   for (QPtrListIterator<KDockButton_Private> it( d->btns );it.current()!=0;++it) {
       layout->addWidget(it.current());
+	dontShowDummy=dontShowDummy || (it.current()->isVisibleTo(this));
   }
-
+  if (dontShowDummy) d->dummy->hide(); else d->dummy->show();
   layout->addWidget( closeButton );
   layout->activate();
   drag->setFixedHeight( layout->minimumSize().height() );
@@ -488,10 +516,16 @@ void KDockWidgetHeader::addButton(KDockButton_Private* btn) {
 	layout->addWidget( drag );
  	layout->addWidget( dockbackButton );
 	layout->addWidget( d->toDesktopButton );
+	layout->addWidget( d->dummy);
 	layout->addWidget( stayButton );
-	for (QPtrListIterator<KDockButton_Private> it( d->btns );it.current()!=0;++it) {
-		layout->addWidget(it.current());
-	}
+	 bool dontShowDummy=drag->isVisibleTo(this) || dockbackButton->isVisibleTo(this) ||
+	        d->toDesktopButton->isVisibleTo(this) || stayButton->isVisibleTo(this) ||
+        	closeButton->isVisibleTo(this);
+	 for (QPtrListIterator<KDockButton_Private> it( d->btns );it.current()!=0;++it) {
+	        layout->addWidget(it.current());
+		dontShowDummy=dontShowDummy || (it.current()->isVisibleTo(this));
+   	}
+  	if (dontShowDummy) d->dummy->hide(); else d->dummy->show();
 	layout->addWidget( closeButton );
 	layout->activate();
 	drag->setFixedHeight( layout->minimumSize().height() );
@@ -517,6 +551,7 @@ bool KDockWidgetHeader::dragEnabled() const
 
 void KDockWidgetHeader::showUndockButton(bool show)
 {
+//  kdDebug()<<"KDockWidgetHeader::showUndockButton("<<show<<")"<<endl;
   if( d->showToDesktopButton == show )
     return;
 
@@ -3028,6 +3063,7 @@ void KDockContainer::removeWidget (KDockWidget *dw){
 //m_children.remove(dw->name());}
 void KDockContainer::undockWidget (KDockWidget *){;}
 void KDockContainer::setToolTip(KDockWidget *, QString &){;}
+void KDockContainer::setPixmap(KDockWidget*,const QPixmap&){;}
 #ifndef NO_KDE2
 void KDockContainer::load (KConfig*){;}
 void KDockContainer::save (KConfig*){;}
