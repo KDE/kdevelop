@@ -4,8 +4,12 @@
   <Menu name="build" >
     <Action name="project_build" />
     <Action name="project_clean" />
+    <Action name="project_distclean" />
     <Action name="project_makefilecvs" />
+    <Separator/>
+    <Action name="project_execute" />
     <Action name="project_configure" />
+    <Action name="project_addtranslation" />
   </Menu>
 </MenuBar>
 </kpartgui>

@@ -43,6 +43,8 @@ private slots:
     void slotDistClean();
     void slotMakefilecvs();
     void slotConfigure();
+    void slotExecute();
+    void slotAddTranslation();
     
 private:
     void startMakeCommand(const QString &dir, const QString &target);
@@ -50,6 +52,7 @@ private:
     QGuardedPtr<AutoProjectWidget> m_widget;
     friend class AutoProjectWidget;
     friend class ProjectOptionsWidget;
+    friend class AddTranslationDialog;
 };
 
 #endif

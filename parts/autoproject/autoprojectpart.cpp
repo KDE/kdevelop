@@ -20,9 +20,11 @@
 #include "domutil.h"
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
+#include "kdevappfrontend.h"
 #include "autoprojectfactory.h"
 #include "autoprojectwidget.h"
 #include "projectoptionswidget.h"
+#include "addtranslationdlg.h"
 #include "autoprojectpart.h"
 
 
@@ -46,7 +48,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
 
     KAction *action;
 
-    action = new KAction( i18n("&Build project"), Key_F8,
+    action = new KAction( i18n("&Build project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "project_build" );
     
@@ -65,6 +67,14 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
     action = new KAction( i18n("Run configure"), 0,
                           this, SLOT(slotConfigure()),
                           actionCollection(), "project_configure" );
+
+    action = new KAction( i18n("Execute program"), "exec", 0,
+                          this, SLOT(slotExecute()),
+                          actionCollection(), "project_execute" );
+
+    action = new KAction( i18n("Add translation"), 0,
+                          this, SLOT(slotAddTranslation()),
+                          actionCollection(), "project_addtranslation" );
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -185,7 +195,11 @@ void AutoProjectPart::slotDistClean()
 
 void AutoProjectPart::slotMakefilecvs()
 {
-    QString cmdline = "make -f Makefile.cvs";
+    QString cmdline = DomUtil::readEntry(*document(), "/kdevautoproject/make/makebin");
+    if (cmdline.isEmpty())
+        cmdline = "make";
+    cmdline += " -f Makefile.cvs";
+    
     QFileInfo fi(projectDirectory() + "/Makefile.cvs");
     if (!fi.exists()) {
         fi.setFile(projectDirectory() + "/autogen.sh");
@@ -240,6 +254,20 @@ void AutoProjectPart::slotConfigure()
     dircmd += " && ";
 
     makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
+}
+
+
+void AutoProjectPart::slotExecute()
+{
+    QString program = project()->projectDirectory() + "/" + project()->mainProgram();
+    appFrontend()->startAppCommand(program);
+}
+
+
+void AutoProjectPart::slotAddTranslation()
+{
+    AddTranslationDialog dlg(this, m_widget);
+    dlg.exec();
 }
 
 #include "autoprojectpart.moc"
