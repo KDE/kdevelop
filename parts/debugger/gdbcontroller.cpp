@@ -441,7 +441,7 @@ void GDBController::parseLine(char* buf)
         {
             DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
             programNoApp(QString(buf), false);
-            programHasExited_ = true;   // FIXME - a nasty switch
+            programHasExited_ = true;   // FIXME: - a nasty switch
             return;
         }
 
@@ -455,7 +455,7 @@ void GDBController::parseLine(char* buf)
             else
                 programNoApp(QString(buf), false);
 
-            programHasExited_ = true;   // FIXME - a nasty switch
+            programHasExited_ = true;   // FIXME: - a nasty switch
             return;
         }
 
@@ -479,7 +479,7 @@ void GDBController::parseLine(char* buf)
                 DBG_DISPLAY("Parsed (SIG...) <" + QString(buf) + ">");
                 destroyCmds();
                 actOnProgramPause(QString(buf));
-                programHasExited_ = true;   // FIXME - a nasty switch
+                programHasExited_ = true;   // FIXME: - a nasty switch
                 return;
             }
         }

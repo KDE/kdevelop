@@ -998,7 +998,7 @@ bool CppNewClassDialog::ClassGenerator::validateInput()
     return false;
   }
 
-  // FIXME
+  // FIXME:
   if (header.find('/') != -1 || implementation.find('/') != -1) {
     KMessageBox::error(&dlg, i18n("Generated files will always be added to the "
 				  "active directory, so you must not give an "

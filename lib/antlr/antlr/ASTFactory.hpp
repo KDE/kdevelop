@@ -87,7 +87,7 @@ public:
 	RefAST make(ANTLR_USE_NAMESPACE(std)vector<RefAST>& nodes);
 	/** Make a tree from a list of nodes, where the nodes are contained
 	 * in an ASTArray object. The ASTArray is deleted after use.
-	 * @todo FIXME! I have a feeling we can get rid of this ugly ASTArray thing
+	 * FIXME: I have a feeling we can get rid of this ugly ASTArray thing
 	 */
 	RefAST make(ASTArray* nodes);
 	/// Make an AST the root of current AST

@@ -270,7 +270,7 @@ bool ProjectManager::closeProject()
   unloadLanguageSupport();
   unloadProjectPart();
 
-  /// @todo, if this fails, user is screwed
+  /// @todo if this fails, user is screwed
   saveProjectFile();
 
   API::getInstance()->setProjectDom(0);

@@ -247,7 +247,7 @@ void TrollProjectPart::addFiles ( const QStringList &fileList )
 
 void TrollProjectPart::removeFile(const QString & /* fileName */)
 {
-    // FIXME
+    // FIXME:
 /*	QStringList fileList;
 	fileList.append ( fileName );
 	
@@ -256,14 +256,14 @@ void TrollProjectPart::removeFile(const QString & /* fileName */)
 
 void TrollProjectPart::removeFiles ( const QStringList& fileList )
 {
-// FIXME
+// FIXME:
 // 	QStringList::ConstIterator it;	
 // 	
 // 	it = fileList.begin();
 //
 // 	for ( ; it != fileList.end(); ++it )
 // 	{
-// 		FIXME
+// 		FIXME:
 // 	}
 
 	emit removedFilesFromProject ( fileList );

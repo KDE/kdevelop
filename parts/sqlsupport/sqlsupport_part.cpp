@@ -220,7 +220,7 @@ void SQLSupportPart::savedFile( const QString &fileName )
 
 KDevLanguageSupport::Features SQLSupportPart::features()
 {
-    return Features( 0 ); /// @todo...
+    return Features( 0 ); /// @todo ...
 }
 
 KMimeType::List SQLSupportPart::mimeTypes( )

@@ -1034,7 +1034,7 @@ void CppSupportPart::setupCatalog( )
                 QFile::remove( *it );
                 ++it;
             }
-            // TODO: regenerate the pcs list
+            // @todo regenerate the pcs list
             pcsList.clear();
         } else {
             return;
