@@ -135,7 +135,7 @@ PHPSupportPart::~PHPSupportPart()
 
     if(m_phpErrorView){
       mainWindow()->removeView( m_phpErrorView );
-      delete( m_phpErrorView );
+      //Seems, that removeView already frees the pointer, so we don't need to free it here
       m_phpErrorView = 0;
     }
 }
