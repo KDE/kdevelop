@@ -16,7 +16,6 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <qregexp.h>
-#include <qtooltip.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
