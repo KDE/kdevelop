@@ -4,7 +4,7 @@
 EXTRA_DIST = classwiz.png compfile.png debugger.png file_properties.png \
         indent.png unindent.png graphview.png grep.png lookup.png \
         make_kdevelop.png manual.png mini-book1.png mini-book2.png mini-doc.png \
-        newwidget.png output_win.png rebuild.png \
+        mini-doc2.png inst_file.png newwidget.png output_win.png rebuild.png \
         reload_page.png save_all.png start_page.png \
         tree_win.png \
         dbgbreak.png dbgmemview.png dbgnext.png \
