@@ -653,6 +653,9 @@ void CKDevelop::slotProjectMessages(){
   if(!CToolClass::searchProgram("xgettext")){
     return;
   }
+
+  slotDebugStop();
+
   error_parser->toogleOff();
   showOutputView(true);
   setToolMenuProcess(false);
@@ -672,6 +675,7 @@ void CKDevelop::slotProjectAPI(){
   if(!CToolClass::searchProgram("kdoc")){
     return;
   }
+  slotDebugStop();
   showOutputView(true);
 
   setToolMenuProcess(false);
@@ -798,6 +802,7 @@ void CKDevelop::slotProjectManual(){
     CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
     if(dlg.exec()){
 	
+  slotDebugStop();
 	showOutputView(true);
 	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
 	setToolMenuProcess(false);
@@ -842,6 +847,7 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
+  slotDebugStop();
   showOutputView(true);
   error_parser->toogleOff();
   setToolMenuProcess(false);

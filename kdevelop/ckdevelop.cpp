@@ -1066,12 +1066,14 @@ void CKDevelop::slotBuildDebug()
 
 void CKDevelop::setupInternalDebugger()
 {
+  ASSERT(!dbgController);
+  if (dbgController)
+    return;
+
   saveTimer->stop();  // stop the autosaving
 
   slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
                   (prj->getBinPROGRAM()).data()));
-
-  ASSERT(!dbgController);
 
   dbgController = new GDBController(var_viewer->varTree(), frameStack);
   dbgShuttingDown = false;
@@ -1152,6 +1154,9 @@ void CKDevelop::slotBuildMake(){
     return;
   }
 
+  // Kill the debugger if it's running
+  slotDebugStop();
+
   //save/generate dialog if needed
   kdlgedit->generateSourcecodeIfNeeded();
   error_parser->reset();
@@ -1221,6 +1226,7 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+  slotDebugStop();
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -1241,6 +1247,8 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+
+  slotDebugStop();
   //  QString shell = getenv("SHELL");
   QString flaglabel;
   //  if(shell == "/bin/bash"){
@@ -1284,6 +1292,8 @@ void CKDevelop::slotBuildDistClean(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+
+  slotDebugStop();
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -1303,6 +1313,8 @@ void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("autoconf")){
     return;
   }
+
+  slotDebugStop();
   showOutputView(true);
   error_parser->toogleOff();
   setToolMenuProcess(false);
@@ -1324,15 +1336,16 @@ void CKDevelop::slotBuildAutoconf(){
 void CKDevelop::slotBuildConfigure(){
     //    QString shell = getenv("SHELL");
 
-    QString args=prj->getConfigureArgs();
-    CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
-    if(argdlg.exec()){
-	prj->setConfigureArgs(argdlg.getArguments());		
-	prj->writeProject();
-    }
-    else{
-	return;
-    }
+  QString args=prj->getConfigureArgs();
+  CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
+  if(argdlg.exec()){
+	  prj->setConfigureArgs(argdlg.getArguments());		
+	  prj->writeProject();
+	
+  } else {
+	  return;
+  }
+  slotDebugStop();
 
   slotStatusMsg(i18n("Running ./configure..."));
   QString flaglabel;
@@ -1404,33 +1417,33 @@ void CKDevelop::slotBuildStop(){
 
 void CKDevelop::slotToolsTool(int tool){
 
-    if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
-	return;
-    }
-    if(!bKDevelop)
-	switchToKDevelop();
+  if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
+    return;
+  }
+  if(!bKDevelop)
+    switchToKDevelop();
     
-    showOutputView(false);
+  showOutputView(false);
 
-    QString argument=tools_argument.at(tool);
+  QString argument=tools_argument.at(tool);
  		
-    // This allows us to replace the macro %H with the header file name, %S with the source file name
-    // and %D with the project directory name.  Any others we should have?
-    argument.replace( QRegExp("%H"), header_widget->getName() );
-    argument.replace( QRegExp("%S"), cpp_widget->getName() );
-    if(project){
-      argument.replace( QRegExp("%D"), prj->getProjectDir() );
-    }
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    if(argument.isEmpty()){
-      swallow_widget->setExeString(tools_exe.at(tool));
-    }
-    else{
-      swallow_widget->setExeString(tools_exe.at(tool)+argument);
-    }
-    swallow_widget->sWExecute();
-    swallow_widget->init();
+  // This allows us to replace the macro %H with the header file name, %S with the source file name
+  // and %D with the project directory name.  Any others we should have?
+  argument.replace( QRegExp("%H"), header_widget->getName() );
+  argument.replace( QRegExp("%S"), cpp_widget->getName() );
+  if(project){
+    argument.replace( QRegExp("%D"), prj->getProjectDir() );
+  }
+  s_tab_view->setCurrentTab(TOOLS);
+  swallow_widget->sWClose(false);
+  if(argument.isEmpty()){
+    swallow_widget->setExeString(tools_exe.at(tool));
+
+  } else {
+    swallow_widget->setExeString(tools_exe.at(tool)+argument);
+  }
+  swallow_widget->sWExecute();
+  swallow_widget->init();
 }
 
 
