@@ -1,12 +1,9 @@
 /***************************************************************************
                cclasstooldlg.cpp  -  implementation
-
                              -------------------
-
     begin                : Fri Mar 19 1999
-
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
 
  ***************************************************************************/
 
@@ -21,13 +18,15 @@
 
 
 #include "cclasstooldlg.h"
+#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <qtooltip.h>
-#include <assert.h>
 #include <qlistbox.h>
 #include <qheader.h>
+#include <iostream.h>
+#include "classparser/ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -262,9 +261,18 @@ void CClassToolDlg::setActiveClass( const char *aName )
  *                                                                   *
  ********************************************************************/
 
+/*---------------------------------------- CClassToolDlg::setStore()
+ * setStore()
+ *   Set the store to use to search for classes.
+ *
+ * Parameters:
+ *   store     Store to search for classes in.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassToolDlg::setStore( CClassStore *aStore )
 {
-  assert( aStore != NULL );
+  REQUIRE( "Valid store", aStore != NULL );
 
   QStrList *list;
 
@@ -279,15 +287,40 @@ void CClassToolDlg::setStore( CClassStore *aStore )
   delete list;
 }
 
+/*---------------------------------------- CClassToolDlg::setClass()
+ * setClass()
+ *   Set the class to view.
+ *
+ * Parameters:
+ *   aName     Name of the class to view.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassToolDlg::setClass( const char *aName )
 {
-  assert( aName != NULL && strlen( aName ) > 0 );
-  assert( store != NULL );
+  REQUIRE( "Valid name", aName != NULL && strlen( aName ) > 0 );
 
   setActiveClass( aName );
   currentClass = store->getClassByName( aName );
+
+  // If we can't find the class something is very wring
+  if( currentClass == NULL )
+  {
+    QString warning = "Couldn't find class: ";
+    warning += aName;
+    QMessageBox::warning( this, "Class error", warning );
+  }
 }
 
+/*---------------------------------------- CClassToolDlg::setClass()
+ * setClass()
+ *   Set the class to view.
+ *
+ * Parameters:
+ *   aClass    The class to view.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassToolDlg::setClass( CParsedClass *aClass )
 {
   if (aClass == NULL ) return;
@@ -296,6 +329,15 @@ void CClassToolDlg::setClass( CParsedClass *aClass )
   currentClass = aClass;
 }
 
+/*---------------------------------------- CClassToolDlg::addClasses()
+ * addClasses()
+ *   Add a list of classes as subitems to the current class.
+ *
+ * Parameters:
+ *   list      List of classes to add.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CClassToolDlg::addClasses( QList<CParsedClass> *list )
 {
   CParsedClass *aClass;
@@ -318,6 +360,8 @@ void CClassToolDlg::addClasses( QList<CParsedClass> *list )
 
 void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
 {
+  REQUIRE( "Valid class", currentClass != NULL );
+
   QListViewItem *root;
   
   // Insert root item(the current class);
@@ -330,6 +374,8 @@ void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
 
 void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
 {
+  REQUIRE( "Valid class", currentClass != NULL );
+
   QListViewItem *root;
   
   // Insert root item(the current class);
@@ -342,6 +388,8 @@ void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
 
 void CClassToolDlg::addAllClassMethods()
 {
+  REQUIRE( "Valid class", currentClass != NULL );
+
   CParsedParent *aParent;
   CParsedClass *aClass;
 
@@ -364,6 +412,8 @@ void CClassToolDlg::addAllClassMethods()
 
 void CClassToolDlg::addAllClassAttributes()
 {
+  REQUIRE( "Valid class", currentClass != NULL );
+
   CParsedParent *aParent;
   CParsedClass *aClass;
 
@@ -421,7 +471,9 @@ void CClassToolDlg::changeCaption()
   }
 
   caption += i18n(" of class ");
-  caption += currentClass->name;
+
+  if( currentClass != NULL )
+    caption += currentClass->name;
 
   setCaption( caption );
 }
@@ -435,6 +487,8 @@ void CClassToolDlg::changeCaption()
 /** View the parents of the current class. */
 void CClassToolDlg::viewParents()
 {
+  REQUIRE( "Valid class", currentClass != NULL );
+
   CParsedParent *aParent;
   QListViewItem *root;
   
@@ -460,7 +514,7 @@ void CClassToolDlg::viewParents()
 /** View the children of the current class. */
 void CClassToolDlg::viewChildren()
 {
-  assert( currentClass != NULL );
+  REQUIRE( "Valid current class", currentClass != NULL );
 
   QList<CParsedClass> *list;
   
@@ -475,7 +529,7 @@ void CClassToolDlg::viewChildren()
 /** View all classes that has this class as an attribute. */
 void CClassToolDlg::viewClients()
 {
-  assert( currentClass != NULL );
+  REQUIRE( "Valid current class", currentClass != NULL );
 
   QList<CParsedClass> *list;
   
@@ -490,7 +544,7 @@ void CClassToolDlg::viewClients()
 /** View all classes that this class has as attributes. */
 void CClassToolDlg::viewSuppliers()
 {
-  assert( currentClass != NULL );
+  REQUIRE( "Valid current class", currentClass != NULL );
 
   QList<CParsedClass> *list;
 
@@ -505,7 +559,7 @@ void CClassToolDlg::viewSuppliers()
 /** View methods in this class and parents. */
 void CClassToolDlg::viewMethods()
 {
-  assert( currentClass != NULL );
+  REQUIRE( "Valid current class", currentClass != NULL );
 
   currentOperation = CTMETH;
 
@@ -516,7 +570,7 @@ void CClassToolDlg::viewMethods()
 /** View attributes in this class and parents. */
 void CClassToolDlg::viewAttributes()
 {
-  assert( currentClass != NULL );
+  REQUIRE( "Valid current class", currentClass != NULL );
 
   currentOperation = CTATTR;
 
@@ -526,9 +580,7 @@ void CClassToolDlg::viewAttributes()
 
 void CClassToolDlg::viewVirtuals()
 {
-  assert( currentClass != NULL );
-
-  QString caption;
+  REQUIRE( "Valid current class", currentClass != NULL );
 
   currentOperation = CTVIRT;
 
@@ -615,6 +667,7 @@ void CClassToolDlg::slotExportComboChoice(int idx)
 void CClassToolDlg::slotClassComboChoice(int idx)
 {
   setClass( classCombo.currentText() );
+
   // Update the view if the choice affected the data.
   switch( currentOperation )
   {
@@ -662,4 +715,3 @@ void CClassToolDlg::OK()
 {
   accept();
 }
-
