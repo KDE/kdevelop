@@ -1,3 +1,7 @@
+2001-04-16  F@lk Brettschneider <falk@kdevelop.org>
+    * supported set/get the setting if the mainframe is in 'maximized Childframe mode'
+      added loading of that in CKDevelop::readOptions()
+
 2001-04-12  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: switching in View->Tab_Text works again but not completely right, use latest KDE sources from HEAD (12/04/2001)
 
