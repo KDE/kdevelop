@@ -1614,7 +1614,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 application with session-management, "
+    apphelp->setText (i18n("Create a KDE application with session-management, "
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
@@ -1640,7 +1640,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 application with an empty main widget."));
+    apphelp->setText (i18n("Create a KDE application with an empty main widget."));
   }
   else if (kde2mdiitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1663,7 +1663,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 MDI (Multiple Document Interface) application with "
+    apphelp->setText (i18n("Create a KDE MDI (Multiple Document Interface) application with "
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
@@ -1711,7 +1711,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 KIO Slave.\n"
+    apphelp->setText (i18n("Create a KDE KIO Slave.\n"
                       "KIOSlaves are the foundation for all protocols in KDE2."));
   }
   else if (kpartitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
@@ -1735,7 +1735,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 KPart Plugin. \nTo create a generic plugin for the Konqeror web browser use this template.  This template can also be modified to create generic plugins."));
+    apphelp->setText (i18n("Create a KDE KPart Plugin. \nTo create a generic plugin for the Konqeror web browser use this template.  This template can also be modified to create generic plugins."));
   }
   else if (kickeritem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1758,7 +1758,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 kicker applet.  \nThese are applets for KDE2's panel."));
+    apphelp->setText (i18n("Create a KDE Kicker applet.  \nThese are applets for KDE's panel."));
   }
   else if (kcmoduleitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1781,7 +1781,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 Control Center Module.\n"
+    apphelp->setText (i18n("Create a KDE Control Center Module.\n"
     									"This template enables you to write your own modules"
     									"to add new system-wide configuration dialogs."));
   }
@@ -1807,8 +1807,8 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a native KDE-2 theme.\n"
-    										"Use this template to create native KDE-2 widget themes in C++."));
+    apphelp->setText (i18n("Create a native KDE theme.\n"
+    										"Use this template to create native KDE widget themes in C++."));
 	}
 
   else if (	(qt2normalitem->isSelected() || qtobjcnormalitem->isSelected())

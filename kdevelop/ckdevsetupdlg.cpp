@@ -400,12 +400,12 @@ void CKDevSetupDlg::addDocTab()
   grid2->addWidget(kde_label,1,0);
   kde_label->setText( i18n("KDE-Libraries-Doc:") );
 
-  QString kdedocMsg = i18n("Enter the path to your KDE-Documentation\n"
-                                 "here. To access the path easier please\n"
-                                 "press the pushbutton on the right to change\n"
+  QString kdedocMsg = i18n("Enter the path to your KDE documentation\n"
+                                 "here. To access the path more easily,\n"
+                                 "press the button on the right to change\n"
                                  "directories.\n\n"
-                                 "If you have no kdelibs Documentation installed,\n"
-                                 "you can create it by selecting the Update button\n"
+                                 "If you have no kdelibs documentation installed,\n"
+                                 "you can create it by pressing the Update button\n"
                                  "below.");
   QWhatsThis::add(kde_edit, kdedocMsg);
   QWhatsThis::add(kde_button, kdedocMsg);
@@ -423,7 +423,7 @@ void CKDevSetupDlg::addDocTab()
   QLabel* update_label;
   update_label = new QLabel( docOptionsGroup, "update_label" );
   grid2->addWidget(update_label,0,0);
-  update_label->setText(i18n("Update KDE-Documentation:"));
+  update_label->setText(i18n("Update KDE documentation:"));
   update_label->setAlignment( 289 );
   update_label->setMargin( -1 );
 
@@ -435,16 +435,17 @@ void CKDevSetupDlg::addDocTab()
   update_button->setAutoRepeat( FALSE );
   update_button->setAutoResize( FALSE );
 
-  QString updateMsg = i18n("Update KDE-Documentation\n\n"
+  QString updateMsg = i18n("Update KDE documentation\n\n"
                                      "This lets you create or update the\n"
-                                     "HTML-documentation of the KDE-libs.\n"
-                                     "Mind that you have kdoc installed to\n"
-                                     "use this function. Also, the kdelibs\n"
-                                     "sources have to be available to create\n"
-                                     "the documentation, as well as the \n"
-                                     "Qt-Documentation path has to be set to\n"
-                                     "cross-reference the KDE-Documentation\n"
-                                     "with the Qt-classes.");
+                                     "HTML documentation of the KDE-libs.\n"
+                                     "To use this function, ensure that"
+				     "you have kdoc installed, the kdelibs\n"
+                                     "sources available to create the\n"
+				     "documentation, and the path set for\n"
+                                     "the Qt documentation.\n"
+                                     "The path must be set in order to\n"
+                                     "cross-reference the KDE documentation\n"
+                                     "with the Qt classes.");
   QWhatsThis::add(update_label, updateMsg);
   QWhatsThis::add(update_button, updateMsg);
 
