@@ -120,7 +120,7 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		@temp={"z"=>"zed", "p"=>"pee"}>
 	//
 	QRegExp ppref_re("(#<\\w+:0x[\\da-f]+[^\n]*)\n");
-	QRegExp ppvalue_re("\\s*([^\n\\s]+)=([^\n]+)[,>]\n");
+	QRegExp ppvalue_re("\\s*([^\n\\s=]+)=([^\n]+)[,>]\n");
 	
 	pos = ppref_re.search(buf);
 	if (pos != -1) {
