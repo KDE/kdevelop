@@ -53,7 +53,7 @@
                         <cstring>checkAddToChangelog</cstring>
                     </property>
                     <property name="text">
-                        <string>Add to Changelog </string>
+                        <string>Add to changelog:</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">

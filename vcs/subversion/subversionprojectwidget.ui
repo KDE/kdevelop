@@ -47,7 +47,7 @@
                 <cstring>init</cstring>
             </property>
             <property name="title">
-                <string>Create standard directories (tags/ trunk/ branches/) ?</string>
+                <string>Create Standard Directories (tags/trunk/branches/)?</string>
             </property>
             <vbox>
                 <property name="name">

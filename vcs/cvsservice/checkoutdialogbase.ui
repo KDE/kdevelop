@@ -152,7 +152,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Server path (i.e. :pserver:marios@cvs.kde.org:/h:ome/kde)</string>
+                                <string>Server path (i.e. :pserver:marios@cvs.kde.org:/h:ome/kde):</string>
                             </property>
                         </widget>
                     </grid>
@@ -164,7 +164,7 @@
                 <cstring>groupBox2</cstring>
             </property>
             <property name="title">
-                <string>Select module</string>
+                <string>Select Module</string>
             </property>
             <vbox>
                 <property name="name">
@@ -216,7 +216,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Tag/Branch:</string>
+                                <string>Tag/branch:</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit" row="1" column="2">

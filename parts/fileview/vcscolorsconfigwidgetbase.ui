@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Colors for VCS visual feedback</string>
+        <string>Colors for VCS Visual Feedback</string>
     </property>
     <vbox>
         <property name="name">
@@ -24,7 +24,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Colors to use for Version Control feedback</string>
+                <string>Colors to Use for Version Control Feedback</string>
             </property>
             <vbox>
                 <property name="name">
@@ -43,7 +43,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Added</string>
+                                <string>Added:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">
@@ -66,7 +66,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Updated</string>
+                                <string>Updated:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">
@@ -89,7 +89,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Modified</string>
+                                <string>Modified:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">
@@ -112,7 +112,7 @@
                                 <cstring>textLabel4</cstring>
                             </property>
                             <property name="text">
-                                <string>Conflict</string>
+                                <string>Conflict:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">
@@ -135,7 +135,7 @@
                                 <cstring>textLabel5</cstring>
                             </property>
                             <property name="text">
-                                <string>Sticky</string>
+                                <string>Sticky:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">
@@ -158,7 +158,7 @@
                                 <cstring>textLabel6</cstring>
                             </property>
                             <property name="text">
-                                <string>Unknown</string>
+                                <string>Unknown:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">
@@ -181,7 +181,7 @@
                                 <cstring>textLabel6_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Default</string>
+                                <string>Default:</string>
                             </property>
                         </widget>
                         <widget class="KColorCombo">

@@ -24,7 +24,7 @@
                 <cstring>commit_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Commits</string>
+                <string>Recursive commits</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -35,7 +35,7 @@
                 <cstring>update_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Updates</string>
+                <string>Recursive updates</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -46,7 +46,7 @@
                 <cstring>switch_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Switch</string>
+                <string>Recursive switch</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -57,7 +57,7 @@
                 <cstring>diff_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Diff</string>
+                <string>Recursive diff</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -68,7 +68,7 @@
                 <cstring>merge_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Merge</string>
+                <string>Recursive merge</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -79,7 +79,7 @@
                 <cstring>add_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Add</string>
+                <string>Recursive add</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -90,7 +90,7 @@
                 <cstring>remove_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Remove</string>
+                <string>Recursive remove</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -101,7 +101,7 @@
                 <cstring>revert_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Revert</string>
+                <string>Recursive revert</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -112,7 +112,7 @@
                 <cstring>resolve_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Resolve</string>
+                <string>Recursive resolve</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -123,7 +123,7 @@
                 <cstring>propset_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Propset</string>
+                <string>Recursive propset</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -134,7 +134,7 @@
                 <cstring>propget_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Propget</string>
+                <string>Recursive propget</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -145,7 +145,7 @@
                 <cstring>proplist_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Proplist</string>
+                <string>Recursive proplist</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -156,7 +156,7 @@
                 <cstring>relocate_recurse</cstring>
             </property>
             <property name="text">
-                <string>Recursive Relocate</string>
+                <string>Recursive relocate</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -167,7 +167,7 @@
                 <cstring>remove_force</cstring>
             </property>
             <property name="text">
-                <string>Force Remove (delete locally modified files / non versioned files)</string>
+                <string>Force remove (delete locally modified files/non versioned files)</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
@@ -178,7 +178,7 @@
                 <cstring>merge_force</cstring>
             </property>
             <property name="text">
-                <string>Force Merge (overwrite locally modified / unversioned files)</string>
+                <string>Force merge (overwrite locally modified/unversioned files)</string>
             </property>
             <property name="checked">
                 <bool>true</bool>

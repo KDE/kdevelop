@@ -21,7 +21,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Subversion module checkout</string>
+        <string>Subversion Module Checkout</string>
     </property>
     <vbox>
         <property name="name">
@@ -59,7 +59,7 @@
                                 <cstring>textLabel3</cstring>
                             </property>
                             <property name="text">
-                                <string>Checkout from :</string>
+                                <string>Checkout from:</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
@@ -90,7 +90,7 @@
                                 <cstring>textLabel1_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Revision :</string>
+                                <string>Revision:</string>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -122,7 +122,7 @@
                         <enum>Sunken</enum>
                     </property>
                     <property name="title">
-                        <string>This project has standard trunk/ branches/ tags/ directories :</string>
+                        <string>This Project has Standard Trunk/Branches/Tags/Directories</string>
                     </property>
                     <property name="exclusive">
                         <bool>true</bool>
@@ -196,7 +196,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Checkout in :</string>
+                                <string>Checkout in:</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
@@ -227,7 +227,7 @@
                                 <cstring>textLabel2</cstring>
                             </property>
                             <property name="text">
-                                <string>Name of the newly created directory :</string>
+                                <string>Name of the newly created directory:</string>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -277,7 +277,7 @@
                                 <cstring>ok</cstring>
                             </property>
                             <property name="text">
-                                <string>Ok</string>
+                                <string>&amp;OK</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">
@@ -285,7 +285,7 @@
                                 <cstring>cancel</cstring>
                             </property>
                             <property name="text">
-                                <string>Cancel</string>
+                                <string>&amp;Cancel</string>
                             </property>
                         </widget>
                     </hbox>
