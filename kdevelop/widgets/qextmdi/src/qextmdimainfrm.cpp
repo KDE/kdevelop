@@ -1358,9 +1358,9 @@ void QextMdiMainFrm::activateView(int index)
    if (m_pDockbaseOfTabPage && (m_mdiMode == QextMdi::TabPageMode)) {
 #if !defined(NO_KDE2) && (QT_VERSION >= 300)
       QTabWidget* pTab = (QTabWidget*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
+      pTab->setCurrentPage(index);
 #else
       KDockTabCtl* pTab = (KDockTabCtl*) m_pDockbaseOfTabPage->parentWidget()->parentWidget();
-#endif
       QWidget* pPage = pTab->getFirstPage();
       int i = 0;
       while (pPage && (i < index)) {
@@ -1370,6 +1370,7 @@ void QextMdiMainFrm::activateView(int index)
       if (pPage) {
          pTab->setVisiblePage(pPage);
       }
+#endif
    }
 }
 
