@@ -207,3 +207,5 @@ void KMdiToolViewAccessor::hide() {
 #ifndef NO_INCLUDE_MOCFILES
 //# include "kmditoolviewaccessor.moc"
 #endif
+
+#include "kmditoolviewaccessor.moc"

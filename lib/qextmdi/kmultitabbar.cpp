@@ -662,3 +662,5 @@ void KMultiTabBar::setPosition(KMultiTabBarPosition pos)
 QPtrList<KMultiTabBarTab>* KMultiTabBar::tabs() {return m_internal->tabs();}
 QPtrList<KMultiTabBarButton>* KMultiTabBar::buttons() {return &m_buttons;}
 
+
+#include "kmultitabbar.moc"
