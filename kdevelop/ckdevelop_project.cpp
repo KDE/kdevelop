@@ -783,16 +783,19 @@ void CKDevelop::slotProjectAPI(){
 #else
  
   config->setGroup("Doc_Location");
-  QString doc_kde=config->readEntry("doc_kde");
-  QString qt_ref_file=doc_kde+"kdoc-reference/qt.kdoc";
-  QString kde_ref_file=doc_kde+"kdoc-reference/kdecore.kdoc";
-  QString khtmlw_ref_file=doc_kde+"kdoc-reference/khtmlw.kdoc";
+  QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
+  if (idx_path.isEmpty())
+      idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+          + "/kdoc-reference";
+  QString qt_ref_file=idx_path+"/qt.kdoc";
+  QString kde_ref_file=idx_path+"/kdecore.kdoc";
+  QString khtmlw_ref_file=idx_path+"/khtmlw.kdoc";
 
 	QStrList headerlist(prj->getHeaders());
 	uint i;
 
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-	QString dir=QDir::currentDirPath();
+  QString dir=QDir::currentDirPath();
   uint dirlength=dir.length()+1;
 
   shell_process.clearArguments();
@@ -812,8 +815,8 @@ void CKDevelop::slotProjectAPI(){
   else if(!QFileInfo(qt_ref_file).exists()){
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
-    shell_process << "-L" + doc_kde + "kdoc-reference";
+    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api/";
+    shell_process << "-L" + idx_path;
     shell_process << prj->getProjectName();
 		for (i=0; i < headerlist.count(); i++){
 			QString file=headerlist.at(i);
@@ -831,8 +834,8 @@ void CKDevelop::slotProjectAPI(){
   else{
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
-    shell_process << "-L" + doc_kde + "kdoc-reference";
+    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api/";
+    shell_process << "-L" + idx_path;
     shell_process << prj->getProjectName();
 		for (i=0; i < headerlist.count(); i++){
 			QString file=headerlist.at(i);
@@ -846,6 +849,7 @@ void CKDevelop::slotProjectAPI(){
 		else{
     	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
 		}
+
   }
   
 #endif
