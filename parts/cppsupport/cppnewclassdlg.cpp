@@ -99,7 +99,6 @@ void CppNewClassDialog::implementationChanged()
 
 void CppNewClassDialog::accept()
 {
-
   ClassGenerator generator(*this);
   generator.generate();
 
@@ -301,7 +300,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 		"public:\n"
 		"  $CLASSNAME$($ARGS$);\n"
 		"  ~$CLASSNAME$();\n"
-		"}\n"
+		"};\n"
 		"\n")
       + namespaceEnd
       +         "#endif\n";
@@ -359,11 +358,20 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   hstream << classIntf;
   hfile.close();
 
-  kdDebug(9007) << "Adding to project " << endl;
-  project->addFile(project->activeDirectory() + "/" + header);
-  project->addFile(project->activeDirectory() + "/" + implementation);
-  kdDebug(9007) << "Added to project " << endl;
+	QStringList fileList;
 
+	if ( project->activeDirectory() == QString::null )
+	{
+		fileList.append ( header );
+		fileList.append ( implementation );
+	}
+	else
+	{
+		fileList.append ( project->activeDirectory() + "/" + header );
+		fileList.append ( project->activeDirectory() + "/" + implementation );
+	}
+
+	project->addFiles ( fileList );
 }
 
 
