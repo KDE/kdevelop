@@ -130,6 +130,109 @@ void StoreWalker::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 
 void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 {
+    TypeSpecifierAST* typeSpec = ast->typeSpec();
+    GroupAST* funSpec = ast->functionSpecifier();
+    GroupAST* storageSpec = ast->storageSpecifier();
+
+    DeclaratorAST* d = ast->initDeclarator()->declarator();
+
+    bool isFriend = false;
+    bool isVirtual = false;
+    bool isStatic = false;
+    bool isInline = false;
+
+    if( funSpec ){
+	QPtrList<AST> l = funSpec->nodeList();
+	QPtrListIterator<AST> it( l );
+	while( it.current() ){
+	    QString text = it.current()->text();
+	    if( text == "virtual" ) isVirtual = true;
+	    else if( text == "inline" ) isInline = true;
+	    ++it;
+	}
+    }
+
+    if( storageSpec ){
+	QPtrList<AST> l = storageSpec->nodeList();
+	QPtrListIterator<AST> it( l );
+	while( it.current() ){
+	    QString text = it.current()->text();
+	    if( text == "friend" ) isFriend = true;
+	    else if( text == "static" ) isStatic = true;
+	    ++it;
+	}
+    }
+    
+    int startLine, startColumn;
+    int endLine, endColumn;
+    ast->getStartPosition( &startLine, &startColumn );
+    ast->getEndPosition( &endLine, &endColumn );
+
+    QString id = d->declaratorId()->unqualifiedName()->text();
+    NestedNameSpecifierAST* nestedName = d->declaratorId()->nestedName();
+
+    QStringList scope = m_currentScope;
+    if( nestedName ){
+	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
+	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
+	while( it.current() ){
+	    scope << it.current()->text();
+	    ++it;
+	}
+    }
+
+    ParsedClass* cl = m_currentClass;
+    if( !cl )
+	cl = m_store->getClassByName( scope.join(".") );
+
+    ParsedMethod* method = new ParsedMethod();
+    method->setName( id );
+    method->setIsConst( d->constant() != 0 );
+
+    parseFunctionArguments( d, method );
+
+    ParsedClassContainer* c = cl ? (ParsedClassContainer*) cl : (ParsedClassContainer*) m_currentScopeContainer;
+    if( cl )
+	method->setAccess( m_currentAccess );
+    if( isStatic )
+	method->setIsStatic( isStatic );
+    if( cl && isVirtual )
+	method->setIsVirtual( isVirtual );
+    
+    bool isDestructor = id.startsWith("~");
+    method->setIsDestructor( isDestructor );
+    
+    bool isConstructor = cl && typeSpec == 0 && id == cl->name();
+    method->setIsConstructor( isConstructor );
+    
+    if( isConstructor || isDestructor )
+	method->setType( id + "*" );
+    else
+	method->setType( typeOfDeclaration(typeSpec, d) );
+    
+    ParsedMethod* m = c->getMethod( method );
+    bool isStored = m != 0;
+    kdDebug(9007) << "-----------------> isStored = " << isStored << endl;
+    
+    if( m != 0 )
+    {
+	delete( method );
+	method = m;
+    }
+
+    method->setDefinedOnLine( startLine );
+    method->setDefinedInFile( m_fileName );
+
+    if( !isStored && cl ){
+	if( m_inSlots )
+	    cl->addSlot( method );
+	else if( m_inSignals )
+	    cl->addSignal( method );
+	else
+	    cl->addMethod( method );
+    } else if( !isStored )
+	m_currentScopeContainer->addMethod( method );
+
     TreeParser::parseFunctionDefinition( ast );
 }
 
@@ -218,6 +321,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
     while( it.current() ){
 	ParsedClassContainer* c = m_currentClass ? (ParsedClassContainer*) m_currentClass : (ParsedClassContainer*) m_currentScopeContainer;
 	ParsedAttribute* attr = findOrInsertAttribute( c, it.current()->id()->text() );
+	attr->setType( "int" );
 	
 	int startLine, startColumn;
 	int endLine, endColumn;
@@ -274,6 +378,8 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     attr->setDeclaredOnLine( startLine );
     attr->setDeclaredInFile( m_fileName );
     attr->setDeclarationEndsOnLine( endLine );
+    attr->setDefinedOnLine( startLine );
+    attr->setDefinedInFile( m_fileName );
 }
 
 void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
@@ -323,7 +429,8 @@ ParsedAttribute * StoreWalker::findOrInsertAttribute( ParsedClassContainer * sco
     return attr;
 }
 
-void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl )
+void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec, 
+					     TypeSpecifierAST * typeSpec, InitDeclaratorAST * decl )
 {
     bool isFriend = false;
     bool isVirtual = false;
@@ -373,9 +480,18 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     method->setIsVirtual( isVirtual );
     method->setIsPure( isPure );
     method->setType( typeOfDeclaration(typeSpec, d) );
+    parseFunctionArguments( d, method );
+    
     if( m_currentClass ){
-	method->setIsDestructor( id.startsWith("~") );
-	method->setIsConstructor( typeSpec == 0 && id == m_currentClass->name() );
+	
+	bool isDestructor = id.startsWith("~");
+	method->setIsDestructor( isDestructor );
+	
+	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
+	method->setIsConstructor( isConstructor );
+	
+	if( isConstructor || isDestructor )
+	    method->setType( id + "*" );	
     }
     method->setIsConst( d->constant() != 0 );
  
@@ -388,8 +504,6 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 	c->removeMethod( m );	
     }
     
-    parseFunctionArguments( d, method );
-
     if( m_currentClass ){
 	if( m_inSlots )
 	    m_currentClass->addSlot( method );
@@ -404,19 +518,19 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 void StoreWalker::parseFunctionArguments( DeclaratorAST* declarator, ParsedMethod* method )
 {
     ParameterDeclarationClauseAST* clause = declarator->parameterDeclarationClause();
-    ParameterDeclarationListAST* params = clause->parameterDeclarationList();
-    
-    if( params ){
+
+    if( clause && clause->parameterDeclarationList() ){
+        ParameterDeclarationListAST* params = clause->parameterDeclarationList();
 	QPtrList<ParameterDeclarationAST> l( params->parameterList() );
 	QPtrListIterator<ParameterDeclarationAST> it( l );
 	while( it.current() ){
 	    ParameterDeclarationAST* param = it.current();
 	    ++it;
-	    
+
 	    ParsedArgument* arg = new ParsedArgument();
-	    if( param->declarator()->declaratorId() )
+	    if( param->declarator() && param->declarator()->declaratorId() )
 		arg->setName( param->declarator()->declaratorId()->text() );
-	    
+
 	    arg->setType( typeOfDeclaration(param->typeSpec(), param->declarator()) );
 	    method->addArgument( arg );
 	}
@@ -429,20 +543,20 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
         return QString::null;
 
     QString text;
-    
+
     if( typeSpec->cvQualify() ){
 	QPtrList<AST> l = typeSpec->cvQualify()->nodeList();
 	QPtrListIterator<AST> it( l );
 	while( it.current() ){
 	    text += it.current()->text();
 	    ++it;
-	    
+
 	    text += " ";
 	}
     }
-    
+
     text += typeSpec->text();
-    
+
     if( typeSpec->cv2Qualify() ){
 	text += " ";
 	QPtrList<AST> l = typeSpec->cv2Qualify()->nodeList();
@@ -450,19 +564,19 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
 	while( it.current() ){
 	    text += it.current()->text();
 	    ++it;
-	    
+
 	    text += " ";
 	}
     }
-    
+
     text = text.simplifyWhiteSpace();
-    
+
     QPtrList<AST> ptrOpList = declarator->ptrOpList();
     for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){
 	text += it.current()->text();
 	++it;
     }
-    
+
     return text;
 }
 
