@@ -224,6 +224,7 @@ public:
   void slotCVViewDefinition(int index);
 
   void slotSTabSelected(int item);
+  void slotSCurrentTab(int item);
   void slotMenuBuffersSelected(int id);
   void slotClickedOnMessagesWidget();
   void slotKeyPressedOnStdinStdoutWidget(int key);

@@ -1,0 +1,84 @@
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.05 [en] (X11; I; Linux 2.0.35 i586) [Netscape]">
+   <TITLE>The KDevelop Handbook: Usage </TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#0000EF" VLINK="#51188E" ALINK="#FF0000">
+<A HREF="index-2.html">Предыдущий </A> <A HREF="index-4.html">Следующий</A>
+<A HREF="index.html#toc3"> Содержание</A>&nbsp;
+<HR>
+<H2>
+<A NAME="s3"></A>3. Использование</H2>
+
+<H2>
+<A NAME="ss3.1"></A>3.1 Общие вопросы</H2>
+&nbsp;
+<BLOCKQUOTE>На заметку: KQuickhelp (краткие подсказки) доступны практически 
+везде!&nbsp; Всего лишь нажмите правую кнопку мыши для ее получения на 
+интересующем вам объекте.
+<BR>Если запуск KDevelop происходит впервые, то основное окно и окна 
+просмотрщиков слассов и файлов, а также окно выводв, будут пусты.&nbsp; 
+Сначала вы должны указать просмотрщику документации KDevelop путь к
+документации по KDE и QT путем&nbsp; вызова&nbsp; диалога настройки через
+"Настройки"- "KDevelop":
+
+<P>&nbsp;<IMG SRC="../../en/kdevelop/kdevsetup.gif" HEIGHT=246 WIDTH=470>
+<BR><B><I>Рисунок 1: Диалог настройки KDevelop для указания путей доступа к
+документации</I></B>
+<BR>&nbsp;
+
+<P>Если у вас нет документации по библиотекам KDE, особенно если вы используете
+текущий снапшот, не беспокойтесь.&nbsp; Выберите пункт меню "Документация"-
+"Обновить документацию по KDE..."
+<BR>Он предоставит вам следующий диалог, имеющий несколько опций, позволяющих
+вам получить самую свежую версию документации по библиотекам KDE.
+<BR>&nbsp;
+<BR>&nbsp;<IMG SRC="../../en/kdevelop/kdevdocupdate.gif" HEIGHT=408 WIDTH=538>
+<BR><B><I>Рисунок 2: Диалог обновления документации KDE - быстрый и простой
+способ получения новой документации по библиотекам KDE</I></B>
+<BR>&nbsp;
+
+<P>&nbsp;Каждый проект создается KAppWizard (мастер приложений) выбором пункта
+меню "Файл"-"Новый проект":
+
+<P><IMG SRC="../../en/kdevelop/kappwiz.gif" HEIGHT=428 WIDTH=408>
+<BR><B><I>Рисунок 3: Начальная страница мастера приложений</I></B>
+
+<P>KAppWizard leads you through several steps towards creating a frame
+application which you can work on.&nbsp; When the wizard is finished, files
+are copied to your development directory and classnames adapted to your
+application name.&nbsp; Your work starts like this (where KBase is the
+name of your application):
+
+<P><IMG SRC="../../en/kdevelop/kdevwork.gif" HEIGHT=569 WIDTH=707>
+<BR><B><I>Рисунок 3: the working environment after creation of a frame
+for the application KBase</I></B>
+
+<P>As you can see, we already switched to the documentation view of the
+Application KBase.&nbsp; It already contains three classes:
+<BR>- KBaseApp:&nbsp;&nbsp;&nbsp; inherits KTMainWindow and contains the
+code for the menubar, toolbar and statusbar and creates instances of the
+other classes
+<BR>- KBaseDoc:&nbsp;&nbsp;&nbsp;&nbsp; inherits QObject&nbsp; as a general
+class so it is SIGNAL-SLOT enabled (see QT Documentation).&nbsp; The document
+stores all data which it gets from
+<BR>- KBaseView:&nbsp;&nbsp; inherits QWidget.&nbsp; On itself, it creates
+an empty widget which you have to set up by implementing childwidgets or
+a complete new widget.
+
+<P>All files can be accessed by clicking on the filename on the left panner-
+the file opens automatically in the right tab of the right side for editing.
+
+<P>TODO:&nbsp; Go ahead and write a new application for the KDE-project
+!
+
+<P>Вы можете прочесть <A HREF="tutorial.html">руководства</A> о том, как
+расширить каркас вышего приложения до многофункционального KDE-приложения.
+
+<P>Наслаждайтесь использованием KDevelop !!</BLOCKQUOTE>
+
+<HR><A HREF="index-2.html">Предыдущий </A> <A HREF="index-4.html">Следующий</A>
+<A HREF="index.html#toc3"> Содержание</A>
+</BODY>
+</HTML>

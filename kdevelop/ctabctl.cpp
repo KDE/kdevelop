@@ -33,7 +33,8 @@ CTabCtl::CTabCtl(QWidget* parent,char* name,QString type) : KTabCtl(parent,name)
 void CTabCtl::setCurrentTab(int id){
 
   tabs->setCurrentTab(id);
-//  tabSelected(id);
+  tabSelected(id);
+  showTab(id); 
 }
 
 int CTabCtl::getCurrentTab(){

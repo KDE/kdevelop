@@ -10,12 +10,12 @@ small patches and bugfixes:
 -Jost Schenk <Jost@Schenk.de>
 -David Barth <dbarth@videotron.ca>
 
+Translation:
+
+lmar Habibulin <ilmar@ints.ru> - russian 
+
 
 KDevelop contains sourcecode from KWrite 0.97 
 (c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
-
-KDevelop 0.2 contains  sourcecode from the "kswallowwidget"
-developed by Matthias Hoelzer and modified by Thomas Tanghus.At the moment it is only a test
-and it's not visible for user.
 
 

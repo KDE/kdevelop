@@ -268,7 +268,10 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
-  appl_process.writeStdin("5\n",3);
+   
+}
+void CKDevelop::slotSCurrentTab(int item){
+  s_tab_view->setCurrentTab(item);
 }
 
 void CKDevelop::closeEvent(QCloseEvent* e){
@@ -708,14 +711,20 @@ void CKDevelop::slotBuildRun(){
   next_job = "run";
 }
 void CKDevelop::slotBuildDebug(){
+
+  if(!CToolClass::searchProgram("kdgb")){
+    return;
+  }
   if(!prj.getBinPROGRAM()){
-  slotBuildMake();}
+    slotBuildMake();
+  }
+  
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
     view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
+    //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+    //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -916,7 +925,6 @@ void CKDevelop::slotBuildAPI(){
   shell_process << "*.h";
   
   shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-
 }
 
 void CKDevelop::slotBuildManual(){
@@ -1116,7 +1124,7 @@ void CKDevelop::slotSTabSelected(int item){
   }
  
   //  s_tab_current = item;
-  
+ 
 }
 
 void CKDevelop::slotMenuBuffersSelected(int id){
@@ -1178,14 +1186,34 @@ void CKDevelop::slotDocTreeSelected(int index){
   QString* str;
   path = doc_tree->itemPath(index);
   str = path->pop();
+
+  KLocale *kloc = KApplication::getKApplication()->getLocale();
+
+  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString file;
+
   config->setGroup("Doc_Location");
   if(*str == "Tutorial"){
-    slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() + 
-		    "/en/kdevelop/tutorial.html",1,"test");
+
+    
+    // first try the locale setting
+    file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
+    if( !QFileInfo( file ).exists() ){
+      // not found: use the default
+      file = strpath + "default/" + "kdevelop/tutorial.html";
+    }
+    
+    slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
   if(*str == "Manual"){
-    slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() + 
-		    "/en/kdevelop/index.html",1,"test");
+    // first try the locale setting
+    file = strpath + kloc->language() + '/' + "kdevelop/index.html";
+
+    if( !QFileInfo( file ).exists() ){
+      // not found: use the default
+      file = strpath + "default/" + "kdevelop/index.html";
+    }
+    slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
   if(*str == "Qt-Library"){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_qt") + "index.html",1,"test");
@@ -1220,6 +1248,10 @@ void CKDevelop::slotDocTreeSelected(int index){
   }
 }
 void CKDevelop::slotToolsKIconEdit(){
+
+  if(!CToolClass::searchProgram("kiconedit")){
+    return;
+  }
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
@@ -1239,6 +1271,9 @@ void CKDevelop::slotToolsKIconEdit(){
 
 void CKDevelop::slotToolsKDbg(){
 
+  if(!CToolClass::searchProgram("kdbg")){
+    return;
+  }
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
@@ -1259,6 +1294,10 @@ void CKDevelop::slotToolsKDbg(){
 
 
 void CKDevelop::slotToolsKTranslator(){
+  if(!CToolClass::searchProgram("ktranslator")){
+    return;
+  }
+  
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
@@ -1269,7 +1308,7 @@ void CKDevelop::slotToolsKTranslator(){
     view->resize(rMainGeom.width()-1,rMainGeom.height());
     view->resize(rMainGeom.width()+1,rMainGeom.height());
   }
-
+  
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("ktranslator");
@@ -1280,8 +1319,19 @@ void CKDevelop::slotToolsKTranslator(){
 
 
 void CKDevelop::slotHelpContent(){
-  slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() + 
-		  "/en/kdevelop/index.html",1,"test");
+  
+  KLocale *kloc = KApplication::getKApplication()->getLocale();
+  
+  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString file;
+  // first try the locale setting
+  file = strpath + kloc->language() + '/' + "kdevelop/index.html";
+  
+  if( !QFileInfo( file ).exists() ){
+    // not found: use the default
+    file = strpath + "default/" + "kdevelop/index.html";
+  }
+  slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 void CKDevelop::slotHelpHomepage(){
   //  slotURLSelected(browser_widget,"http://anakonda.alpha.org/~smeier/kdevelop/index.html",1,"test");

@@ -28,37 +28,27 @@ CKDevelop::CKDevelop(){
   init();
   initConnections();
   initProject(); 
-
-//  config->setGroup("General Options");
-
-   config->setGroup("Files");
-   filename = config->readEntry("browser_file");
-   if(!filename.isEmpty()){
-     slotURLSelected(browser_widget,filename,1,"test");
-   }
-   else{
-     slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() +
-		  "/en/kdevelop/index.html",1,"test");
-
-   }
-
-// if first start, the onlinehelp is shown, so outputview is false
-// else show output view according to value in config file  -Ralf
-   config->setGroup("General Options");
-   bool showOutput=config->readBoolEntry("show_output_view",false);
-   if( showOutput=true)
-   { slotOptionsTOutputView();}
-
-
-								
-//  This all doesn't work, don't know why. Set default Tab to TOOLS and shows HEADER...-Ralf
-//  s_tab_view->setCurrentTab(BROWSER);
-
+  
+  //  config->setGroup("General Options");
+  
+  config->setGroup("Files");
+  filename = config->readEntry("browser_file");
+  if(!filename.isEmpty()){
+    slotURLSelected(browser_widget,filename,1,"test");
+  }
+  else{
+    slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() +
+		    "/en/kdevelop/index.html",1,"test");
+    
+  }
+  
+  // if first start, the onlinehelp is shown, so outputview is false
+  // else show output view according to value in config file  -Ralf
   config->setGroup("General Options");
-//  slotSTabSelected(lastActiveTab);
-  s_tab_view->setCurrentTab(config->readNumEntry("LastActiveTab", BROWSER));
-  s_tab_view->repaint();
-
+  bool showOutput=config->readBoolEntry("show_output_view",false);
+  if( showOutput=true)
+      { slotOptionsTOutputView();}
+  
 }
 
 // all the init-stuff
@@ -278,8 +268,8 @@ void CKDevelop::init(){
   initMenu();
   initToolbar();
   initStatusBar();
-
-
+  
+  
   // initialize output_view_pos
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     output_view_pos=view->separatorPos();
@@ -288,9 +278,9 @@ void CKDevelop::init(){
     config->setGroup("General Options");
     output_view_pos=config->readNumEntry("output_view_pos", 80);
   }
-
+  
   // initialize tree_view_pos
-
+  
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     tree_view_pos=top_panner->separatorPos();
   }
@@ -306,8 +296,6 @@ void CKDevelop::init(){
   edit2->modified=false;
   edit_infos.append(edit1);
   edit_infos.append(edit2);
-
-
 }
 void CKDevelop::initMenu(){
   // build a menubar

@@ -21,19 +21,21 @@
 
 int main(int argc, char* argv[]) {
 
-  KWMModuleApplication a(argc,argv,"kdevelop");  
-  a.connectToKWM();
-  
-  if (a.isRestored()){
-    RESTORE(CKDevelop);
-  }
-  else {
-    CKDevelop* kdevelop = new CKDevelop;
-    a.setMainWidget(kdevelop);
-    a.setTopWidget(kdevelop);
-    kdevelop->show();
-  }  
- 
-  int rc = a.exec();
-  return rc;
+    KWMModuleApplication a(argc,argv,"kdevelop");  
+    a.connectToKWM();
+    
+    if (a.isRestored()){
+	RESTORE(CKDevelop);
+    }
+    else {
+	CKDevelop* kdevelop = new CKDevelop;
+	a.setMainWidget(kdevelop);
+	a.setTopWidget(kdevelop);
+	kdevelop->show();
+	a.getConfig()->setGroup("General Options");
+	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
+    }
+    
+    int rc = a.exec();
+    return rc;
 }
