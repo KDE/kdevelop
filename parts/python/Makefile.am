@@ -21,5 +21,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevpython.desktop
 
-scriptdir = $(kde_datadir)/gideon/python
+scriptdir = $(kde_datadir)/kdevpython
 script_DATA = init.py gideon.py

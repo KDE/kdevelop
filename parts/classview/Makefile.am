@@ -21,8 +21,7 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevclassview.desktop
 
-#rcdir = $(kde_datadir)/kdevclassview
-rcdir = $(kde_datadir)/gideon
+rcdir = $(kde_datadir)/kdevclassview
 rc_DATA = kdevclassview.rc
 
 

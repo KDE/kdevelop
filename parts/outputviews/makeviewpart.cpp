@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qwhatsthis.h>
 #include <qdir.h>
@@ -26,9 +25,7 @@
 MakeViewPart::MakeViewPart(KDevApi *api, QObject *parent, const char *name)
     : KDevMakeFrontend(api, parent, name)
 {
-#ifndef GIDEON
-    setInstance(OutputFactory::instance());
-#endif
+    setInstance(OutputViewsFactory::instance());
     
     setXMLFile("kdevmakeview.rc");
 

@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qwhatsthis.h>
 #include <kdebug.h>
@@ -28,9 +27,7 @@
 AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name)
     : KDevProject(api, parent, name)
 {
-#ifndef GIDEON
     setInstance(AutoProjectFactory::instance());
-#endif
 
     setXMLFile("kdevautoproject.rc");
 

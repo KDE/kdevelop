@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <Python.h>
 #include <stdlib.h>
@@ -33,9 +32,7 @@ extern "C" {
 PythonPart::PythonPart(KDevApi *api, QObject *parent, const char *name)
     : KDevPart(api, parent, name)
 {
-#ifndef GIDEON
     setInstance(PythonFactory::instance());
-#endif
     
     QString xml = QString::fromLatin1("<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">\n"
                                       "<kpartgui version=\"1\" name=\"editorpart\">\n"
@@ -55,7 +52,7 @@ PythonPart::PythonPart(KDevApi *api, QObject *parent, const char *name)
 
     python_part = this;
 
-    QString moddir = KGlobal::dirs()->findResourceDir("appdata", "python/gideon.py") + "python";
+    QString moddir = KGlobal::dirs()->findResourceDir("data", "kdevpython/gideon.py") + "python";
     char *env = strdup(QString::fromLatin1("PYTHONPATH=%1").arg(moddir).latin1());
     putenv(env);
     Py_Initialize();
@@ -64,7 +61,7 @@ PythonPart::PythonPart(KDevApi *api, QObject *parent, const char *name)
 
     PyRun_SimpleString((char*)"import gideon");
 
-    QString initfile = locate("appdata", "python/init.py");
+    QString initfile = locate("data", "kdevpython/init.py");
     FILE *f1 = fopen(initfile.latin1(), "r");
     PyRun_SimpleFile(f1, (char*)"");
     fclose(f1);

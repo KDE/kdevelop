@@ -13,7 +13,7 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevpart_tipofday.desktop
 
 tip_DATA = tips
-tipdir = $(kde_datadir)/kdevelop
+tipdir = $(kde_datadir)/kdevtipofday
 
 
 rc_DATA = kdevpart_tipofday.rc

@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qvbox.h>
 #include <qwhatsthis.h>

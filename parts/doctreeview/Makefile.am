@@ -25,5 +25,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevdoctreeview.desktop
 
-rcdir = $(kde_datadir)/gideon
+rcdir = $(kde_datadir)/kdevdoctreeview
 rc_DATA = kdevdoctreeview.rc

@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qwhatsthis.h>
 #include <qdir.h>
@@ -26,9 +25,7 @@
 AppOutputViewPart::AppOutputViewPart(KDevApi *api, QObject *parent, const char *name)
     : KDevAppFrontend(api, parent, name)
 {
-#ifndef GIDEON
-    setInstance(OutputFactory::instance());
-#endif
+    setInstance(OutputViewsFactory::instance());
 
     m_dcop = new KDevAppFrontendIface(this);
 

@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qpopupmenu.h>
 #include <qvbox.h>
@@ -33,9 +32,7 @@
 DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name)
     : KDevPart(api, parent, name)
 {
-#ifndef GIDEON
-    setInstance(DocTreeFactory::instance());
-#endif
+    setInstance(DocTreeViewFactory::instance());
 
     setXMLFile("kdevdoctreeview.rc");
     

@@ -17,5 +17,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevappoutputview.desktop kdevmakeview.desktop
 
-rcdir = $(kde_datadir)/gideon
+rcdir = $(kde_datadir)/kdevmakeview
 rc_DATA = kdevmakeview.rc

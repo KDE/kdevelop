@@ -10,7 +10,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
@@ -38,9 +37,7 @@
 CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const char *name)
     : KDevLanguageSupport(api, parent, name)
 {
-#ifndef GIDEON
     setInstance(CppSupportFactory::instance());
-#endif
     
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );

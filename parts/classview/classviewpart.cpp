@@ -10,7 +10,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#define GIDEON
 
 #include <qlcdnumber.h>
 #include <qpopupmenu.h>
@@ -35,9 +34,7 @@
 ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
     : KDevPart(api, parent, name)
 {
-#ifndef GIDEON
-    setInstance(ClassViewPartFactory::instance());
-#endif
+    setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");
     
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );

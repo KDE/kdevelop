@@ -21,5 +21,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevautoproject.desktop
 
-rcdir = $(kde_datadir)/gideon
+rcdir = $(kde_datadir)/kdevautoproject
 rc_DATA = kdevautoproject.rc

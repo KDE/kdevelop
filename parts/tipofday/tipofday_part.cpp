@@ -55,7 +55,7 @@ void TipOfDayPart::showTip()
       _tipWidget = new TipOfDay(kapp->mainWidget());
 
       KTextBrowser *text = _tipWidget->TipText;
-      text->mimeSourceFactory()->addFilePath(KGlobal::dirs()->findResourceDir("data", "kdevelop/pics") + "kdevelop/pics/");
+      text->mimeSourceFactory()->addFilePath(KGlobal::dirs()->findResourceDir("data", "kdevtipofday/pics") + "kdevtipofday/pics/");
       QStringList icons = KGlobal::dirs()->resourceDirs("icon");
       QStringList::Iterator it;
       for (it = icons.begin(); it != icons.end(); ++it)
@@ -70,7 +70,7 @@ void TipOfDayPart::showTip()
     }
 
   if (!_tipDatabase)
-    _tipDatabase = new KTipDatabase("kdevelop/tips");
+    _tipDatabase = new KTipDatabase("kdevtipofday/tips");
 
   nextTip();
   _tipWidget->show();
