@@ -145,7 +145,12 @@ public:
   void setForcedFixedHeight(KDockWidget *dw,int h);
   void restoreFromForcedFixedSize(KDockWidget *dw);
 
-  Orientation orientation(){return m_orientation;}
+  Orientation orientation()
+#if __GNUC__ >= 3
+// gcc-2.95.3 won't swallow this so leave it out
+  {return m_orientation;}
+#endif
+;
 
 protected:
   friend class  KDockContainer;
@@ -190,6 +195,12 @@ protected:
 private:
   bool moveMouse;
 };
+
+#if __GNUC__ < 3
+  KDockSplitter::Orientation KDockSplitter::orientation() {
+    return m_orientation;
+  }
+#endif
 
 /**
  * resizing enum
