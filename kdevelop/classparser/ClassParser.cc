@@ -18,6 +18,7 @@
 // 1999-07-27 added kapp->processEvents() to line 1381 - Ralf
 
 #include <iostream.h>
+#include <qstring.h>
 #include <qregexp.h> 
 #include <assert.h>
 #include <kapp.h>
@@ -30,7 +31,7 @@ extern int comment_start;
 extern int comment_end;
 
 /** Last parsed comment. */
-extern char comment[2048];
+extern QString comment;
 
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
 
