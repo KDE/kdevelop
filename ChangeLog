@@ -1,3 +1,8 @@
+1999-03-26  Stefan Bartel  <bartel@rz.uni-potsdam.de>
+        * ported the RFV to QListView
+	* added icon "inst_file.xpm" for RFV
+	* added context menu to RFV
+	
 1999-03-26  Pascal Krahmer  <pascal@breast.de>
         * completely reorganised and cleaned filestructure in kdlgedit
         * items can be selected (only pushbuttons up to now)
@@ -6,16 +11,15 @@
 	* added Bookmarks-menu for the header and cpp widget with key-accelerators
 	
 1999-03-26  Pascal Krahmer  <pascal@breast.de>
+>>>>>>> 1.105
         * added Rulers to the KDlgEditWidget (ToDo : Arrows in rulers should follow the mouse cursor)
         * added a first grid to the widget-items
         * fixed the widget placement bug
 
 1999-03-25   Sandy Meier <smeier@rz.uni-potsdam.de>
-
 	* Converted the LFV to QListView.
 	* move all print-related files to the subdir print
 	* commit new automoc and changed some Makefiles.am
-
 
 1999-03-25  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
         * fixed panner-devider bug in switching when Browsertoolbar is disabled
