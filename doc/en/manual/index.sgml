@@ -3057,6 +3057,10 @@ the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Sh
 and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
 <item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
 The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+<item>Enable separate terminal for application i/o: This allows you to enter terminal input when your application contains
+terminal input code (eg cin, fgets etc.). If you use terminal input in your app, then tick this option. Otherwise leave this off.
+<bf>Tip:</bf> This option is most useful, if you use it in combination with <ref id="The floating toolbar" name="the floating
+toolbar">, because this way, the terminal window won't be hidden behind the KDevelop window when you control the debugger.
 </itemize>
 <p>
 
@@ -3461,9 +3465,9 @@ have to uncheck this option to generate the API documentation without errors.
  
 <sect>Debugger <label id="Debugger">
 <p>
-The default setup for KDevelop is to use the internal debugger. Click on "Use external debugger" if you wish to use a different 
-debugger and enter the name of the debugger to use. See your debuggers documentation on how to run it.
-
+The default setup for KDevelop is to use <ref id="The Internal Debugger" name="the internal debugger">. Click on "Use external
+debugger" if you wish to use a different debugger and enter the name of the debugger to use. See your debuggers documentation on
+how to run it.
 Selecting the internal debugger enables an additional set of options you can choose from:
 <p>
 <itemize>
@@ -3477,6 +3481,8 @@ the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Sh
 and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
 <item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons. 
 The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+<item>Enable separate terminal for application i/o: This allows you to enter terminal input when your application contains
+terminal input code (eg cin, fgets etc.). If you use terminal input in your app, then tick this option. Otherwise leave this off.
 </itemize>
 
 <sect>Setting Paths <label id="Setting Paths">

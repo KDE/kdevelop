@@ -3151,6 +3151,11 @@ ausgeschaltet.
 <item>Schwebende Werkzeugleiste: Dies erlaubt Ihnen zusätzlich die Steuerung des Debuggers mit Hilfe der schwebenden 
 Werkzeugleiste. Die Werkzeugleiste ist bestens zum Debuggen von GUI Anwendungen geeignet. Details finden Sie unter 
 <ref id="Die schwebende Werkzeugleiste" name="Die schwebende Werkzeugleiste">.
+<item>Separates Terminal für Anwendungs I/O einschalten: Dies ermöglicht Ihnen, Terminaleingaben zu machen, wenn Ihre Anwendung
+Terminaleingabecode enthält (z.B. cin, fgets etc.). Wenn Ihre Anwendung solchen Code enthält, wählen Sie diese Option, sonst
+lassen Sie sie ausgeschaltet. <bf>Tip:</bf> Diese Option wird am sinnvollsten zusammen mit der <ref id="Die schwebende
+Werkzeugleiste" name="schwebenden Werkzeugleiste"> eingesetzt, da so das Terminalfenster nicht vom KDevelopfenster verdeckt wird,
+wenn Sie den Debugger bedienen.
 </itemize>
 <p>
 
@@ -3566,9 +3571,9 @@ generieren können.
 
 <sect>Debugger <label id="Debugger">
 <p>
-Standardmäßig verwendet KDevelop den internen Debugger. Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben 
-Sie den Namen des externen Debuggers ein. Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
-
+Standardmäßig verwendet KDevelop den <ref id="Der interne Debugger" name="internen Debugger">. Aktivieren Sie das Kontrollkästchen
+"Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben Sie den Namen des externen Debuggers ein.
+Zur Bedienung Ihres Debuggers konsultieren Sie bitte die entsprechende Dokumentation.
 Bei Auswahl des internen Debuggers erhalten Sie eine Anzahl zusätzlicher Optionen aus denen Sie auswählen können:
 <p>
 <itemize>
@@ -3586,6 +3591,9 @@ ausgeschaltet.
 <item>Schwebende Werkzeugleiste: Dies erlaubt Ihnen zusätzlich die Steuerung des Debuggers mit Hilfe der schwebenden 
 Werkzeugleiste. Die Werkzeugleiste ist bestens zum Debuggen von GUI Anwendungen geeignet. Details finden Sie unter 
 <ref id="Die schwebende Werkzeugleiste" name="Die schwebende Werkzeugleiste">.
+<item>Separates Terminal für Anwendungs I/O einschalten: Dies ermöglicht Ihnen, Terminaleingaben zu machen, wenn Ihre Anwendung
+Terminaleingabecode enthält (z.B. cin, fgets etc.). Wenn Ihre Anwendung solchen Code enthält, wählen Sie diese Option, sonst
+lassen Sie sie ausgeschaltet.
 </itemize>
 
 <sect>Setzen der Pfade<label id="Setzen der Pfade">

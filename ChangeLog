@@ -1,3 +1,6 @@
+2000-04-05  Ralf Funken <rfunken@kdevelop.de>
+	* Added items for the new debugger feature to en and de manuals.
+
 2000-04-04 Walter Tasin  <tasin@kdevelop.de>
 	* adding all extensions (*.hh, *.cxx, etc.) to
 	  the messages-rule of skel/Makefile.am
