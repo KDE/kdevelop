@@ -189,6 +189,8 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     QToolTip::add( projectconfButton, i18n( "Configure the project" ) );
 
     // Project button connections
+    connect ( addSubdirButton, SIGNAL ( clicked () ), this, SLOT ( slotAddSubdir () ) );
+    connect ( createScopeButton, SIGNAL ( clicked () ), this, SLOT ( slotCreateScope () ) );
     connect ( buildButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
     connect ( rebuildButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
     connect ( runButton, SIGNAL ( clicked () ), this, SLOT ( slotRunProject () ) );
@@ -565,6 +567,68 @@ void TrollProjectWidget::slotRebuildProject()
   m_part->topLevel()->lowerView(this);
 }
 
+void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
+{
+  if (spitem==0 && m_shownSubproject==0)
+    return;
+  else
+    spitem = m_shownSubproject;
+  QString relpath = spitem->path.mid(projectDirectory().length());
+  bool ok = FALSE;
+  QString scopename = QInputDialog::getText(
+                      i18n( "Create scope" ),
+                      i18n( "Please enter a name for the new scope." ),
+                      QLineEdit::Normal, QString::null, &ok, this );
+  if ( ok && !scopename.isEmpty() )
+  {
+    QString newScopeString;
+    if (spitem->scopeString != "")
+      newScopeString = spitem->scopeString + ":" + scopename;
+    else 
+      newScopeString = scopename;
+
+    spitem->m_RootBuffer->makeScope(newScopeString);
+    parseScope(spitem,newScopeString,spitem->m_RootBuffer);
+    updateProjectFile(spitem);
+  }
+  else
+    return;
+}
+
+void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
+{
+  if (spitem==0 && m_shownSubproject==0)
+    return;
+  else
+    spitem = m_shownSubproject;
+  QString relpath = spitem->path.mid(projectDirectory().length());
+                
+  bool ok = FALSE;
+  QString subdirname = QInputDialog::getText(
+                    i18n( "Add Subdir" ),
+                    i18n( "Please enter a name for the new subdir." ),
+                    QLineEdit::Normal, QString::null, &ok, this );
+  if ( ok && !subdirname.isEmpty() )
+  {
+    QDir dir(projectDirectory()+relpath);
+    if (!dir.mkdir(subdirname))
+    {
+      KMessageBox::error(this,i18n("Failed to create subdirectory. "
+                                   "Do you have write permission "
+                                   "in the project folder?" ));
+      return;
+    }
+    spitem->subdirs.append(subdirname);
+    updateProjectFile(spitem);
+    SubprojectItem *newitem = new SubprojectItem(spitem, subdirname,"");
+    newitem->subdir = subdirname;
+    newitem->path = spitem->path + "/" + subdirname;
+    parse(newitem);
+  }
+  else
+    return;
+}
+
 void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
     if (!item)
@@ -579,73 +643,35 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idProjectConfiguration = -2;
     int idAddSubproject = -2;
     int idRemoveScope = -2; 
+    int idAddScope = -2;
     
 
     if (!spitem->isScope)
     {
       idBuild = popup.insertItem(SmallIcon("make_kdevelop.png"),i18n("Build"));
       idQmake = popup.insertItem(SmallIcon("qmakerun.png"),i18n("Run qmake"));
-      idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject settings"));
+      popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
+      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create scope..."));
+      popup.insertSeparator();
+      idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject settings"));
     }
     else
     {
+      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create scope..."));
       idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove.png"),i18n("Remove scope..."));
     }
-    int idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create scope..."));
     
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
     if (r == idAddSubproject)
     {
-
-      bool ok = FALSE;
-      QString subdirname = QInputDialog::getText(
-                        i18n( "Add Subdir" ),
-                        i18n( "Please enter a name for the new subdir." ),
-                        QLineEdit::Normal, QString::null, &ok, this );
-      if ( ok && !subdirname.isEmpty() )
-      {
-        QDir dir(projectDirectory()+relpath);
-        if (!dir.mkdir(subdirname))
-        {
-          KMessageBox::error(this,i18n("Failed to create subdirectory. "
-                                       "Do you have write permission "
-                                       "in the project folder?" ));
-          return;
-        }
-        spitem->subdirs.append(subdirname);
-        updateProjectFile(spitem);
-        SubprojectItem *newitem = new SubprojectItem(spitem, subdirname,"");
-        newitem->subdir = subdirname;
-        newitem->path = spitem->path + "/" + subdirname;
-        parse(newitem);
-      }
-      else
-        return;
+      slotAddSubdir(spitem);
     }
     if (r == idAddScope)
     {
-      bool ok = FALSE;
-      QString scopename = QInputDialog::getText(
-                        i18n( "Create scope" ),
-                        i18n( "Please enter a name for the new scope." ),
-                        QLineEdit::Normal, QString::null, &ok, this );
-      if ( ok && !scopename.isEmpty() )
-      {
-        QString newScopeString;
-        if (spitem->scopeString != "")
-          newScopeString = spitem->scopeString + ":" + scopename;
-        else 
-          newScopeString = scopename;
-
-        spitem->m_RootBuffer->makeScope(newScopeString);
-        parseScope(spitem,newScopeString,spitem->m_RootBuffer);
-        updateProjectFile(spitem);
-      }
-      else
-        return;
+      slotAddSubdir(spitem);
     }
     else if (r == idBuild)
     {
