@@ -1,5 +1,6 @@
 #include <qcombobox.h>
 #include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kapplication.h>
 #include <kdeversion.h>
@@ -44,6 +45,21 @@ void EditorChooserWidget::load()
 
     if (index >=0)
         EditorPart->setCurrentItem(index);
+
+	QString dirtyAction = config->readEntry( "DirtyAction" );
+	
+	if ( dirtyAction == "reload" )
+	{
+		reload->setChecked( true );
+	}
+	else if ( dirtyAction == "alert" )
+	{
+		alert->setChecked( true );
+	}
+	else
+	{
+		nothing->setChecked( true );
+	}
 }
 
 
@@ -60,6 +76,19 @@ void EditorChooserWidget::save()
         {
             config->writePathEntry("EmbeddedKTextEditor", (*it)->name());
         }
+
+	if ( reload->isChecked() )
+	{
+		config->writeEntry( "DirtyAction", "reload" );
+	}
+	else if ( alert->isChecked() )
+	{
+		config->writeEntry( "DirtyAction", "alert" );
+	}
+	else 
+	{
+		config->writeEntry( "DirtyAction", "nothing" );
+	}
 
     config->sync();
 }
