@@ -176,7 +176,7 @@
                             <cstring>builddir_label</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Build directory:</string>
+                            <string>&amp;Build directory (must be different for every different Configuration):</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>builddir_edit</cstring>
