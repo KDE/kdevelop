@@ -44,8 +44,7 @@ namespace FileCreate {
       hbox->setMargin( 5 );
       hbox->setSpacing( 5 );
       m_filetypes = new KComboBox( hbox, "combo" );
-      m_addToProject = new QCheckBox( i18n("Add to project (on checkbox)", i18n("Add to project") ),
-				      hbox, "addproject" );
+      m_addToProject = new QCheckBox( i18n("Add to project"), hbox, "addproject" );
       lay->addWidget( hbox );
       
       lay->addItem( new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Expanding) );
