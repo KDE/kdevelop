@@ -566,12 +566,14 @@ void KDevelop::switchToToplevelMode()
     QextMdiMainFrm::switchToToplevelMode();
     if (m_dockSzenario & EditorEnv)
         m_dockSzenario = EditorEnv | TopLevelMode;
+    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
 }
 
 void KDevelop::switchToChildframeMode()
 {
     if (!isInTopLevelMode())
         return;
+    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
     saveCurrentDockAndMdiSzenario();
     QextMdiMainFrm::switchToChildframeMode();
     if (m_dockSzenario & EditorEnv)
