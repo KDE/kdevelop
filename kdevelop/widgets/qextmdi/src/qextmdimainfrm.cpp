@@ -30,7 +30,7 @@
 #include <qclipboard.h>
 #include <qobjcoll.h>
 #ifndef NO_KDE2
-#  include <kmenubar.h>
+#include <kmenubar.h>
 #endif
 #include <qtoolbutton.h>
 
@@ -41,15 +41,15 @@
 #include "qextmdichildview.h"
 
 #ifdef _OS_WIN32_
-#  include "win_undockbutton.xpm"
-#  include "win_minbutton.xpm"
-#  include "win_restorebutton.xpm"
-#  include "win_closebutton.xpm"
+#include "win_undockbutton.xpm"
+#include "win_minbutton.xpm"
+#include "win_restorebutton.xpm"
+#include "win_closebutton.xpm"
 #else // in case of UNIX: KDE look
-#  include "kde_undockbutton.xpm"
-#  include "kde_minbutton.xpm"
-#  include "kde_restorebutton.xpm"
-#  include "kde_closebutton.xpm"
+#include "kde_undockbutton.xpm"
+#include "kde_minbutton.xpm"
+#include "kde_restorebutton.xpm"
+#include "kde_closebutton.xpm"
 #endif
 
 //============ constructor ============//
@@ -71,7 +71,7 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_oldMainFrmMinHeight(0)
    ,m_oldMainFrmMaxHeight(0)
 {
-   setRightJustification( TRUE);
+//   setRightJustification( TRUE);
 
    // Create the local list of windows
    m_pWinList = new QList<QextMdiChildView>;
@@ -878,5 +878,5 @@ void QextMdiMainFrm::popupWindowMenu(QPoint p)
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#  include "qextmdimainfrm.moc"
+#include "qextmdimainfrm.moc"
 #endif

@@ -570,5 +570,5 @@ void QextMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#  include "qextmdichildarea.moc"
+#include "qextmdichildarea.moc"
 #endif

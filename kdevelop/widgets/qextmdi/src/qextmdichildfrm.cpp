@@ -52,18 +52,18 @@
 
 #include "filenew.xpm"
 #ifdef _OS_WIN32_
-#  include "win_closebutton.xpm"
-#  include "win_minbutton.xpm"
-#  include "win_maxbutton.xpm"
-#  include "win_restorebutton.xpm"
-#  include "win_undockbutton.xpm"
+#include "win_closebutton.xpm"
+#include "win_minbutton.xpm"
+#include "win_maxbutton.xpm"
+#include "win_restorebutton.xpm"
+#include "win_undockbutton.xpm"
 
 #else // in case of UNIX: KDE look
-#  include "kde_closebutton.xpm"
-#  include "kde_minbutton.xpm"
-#  include "kde_maxbutton.xpm"
-#  include "kde_restorebutton.xpm"
-#  include "kde_undockbutton.xpm"
+#include "kde_closebutton.xpm"
+#include "kde_minbutton.xpm"
+#include "kde_maxbutton.xpm"
+#include "kde_restorebutton.xpm"
+#include "kde_undockbutton.xpm"
 #endif
 
 QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
@@ -944,5 +944,5 @@ void QextMdiChildFrm::slot_resizeViaSystemMenu()
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#  include "qextmdichildfrm.moc"
+#include "qextmdichildfrm.moc"
 #endif

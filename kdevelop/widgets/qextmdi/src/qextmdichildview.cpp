@@ -573,5 +573,5 @@ void QextMdiChildView::hide()
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#  include "qextmdichildview.moc"
+#include "qextmdichildview.moc"
 #endif

@@ -298,5 +298,5 @@ void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#  include "qextmditaskbar.moc"
+#include "qextmditaskbar.moc"
 #endif

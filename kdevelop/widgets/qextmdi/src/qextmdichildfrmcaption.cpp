@@ -227,5 +227,5 @@ void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
 }
 
 #ifndef NO_INCLUDE_MOCFILES
-#  include "qextmdichildfrmcaption.moc"
+#include "qextmdichildfrmcaption.moc"
 #endif
