@@ -48,6 +48,9 @@
 #include <qwhatsthis.h>
 #include <knumvalidator.h>
 
+#include <qlayout.h>
+#include <qgrid.h>
+
 //#include <iostream.h>
 
 
@@ -568,24 +571,24 @@ void CKAppWizard::initPages()
   // create the thirth page
   page2 = new QWidget(this);
   page2->setEnabled(true);
+  QGridLayout *grid1 = new QGridLayout(page2,2,2,15,7);
+
   addPage(page2, i18n("Version Control System Support"));
   setFinishEnabled ( page2, true );
 
   qtarch_ButtonGroup_1 = new QButtonGroup( page2, "ButtonGroup_1" );
-  qtarch_ButtonGroup_1->setGeometry( 20, 50, 460, 360 );
-  qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
+  //  qtarch_ButtonGroup_1->setGeometry( 20, 50, 460, 360 );
+  //  qtarch_ButtonGroup_1->setMinimumSize( 0, 0 );
+  //  qtarch_ButtonGroup_1->setMaximumSize( 32767, 32767 );
   qtarch_ButtonGroup_1->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_1->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_1->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_1->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_1->setFrameStyle( 49 );
   qtarch_ButtonGroup_1->setAlignment( 1 );
+  grid1->addMultiCellWidget(qtarch_ButtonGroup_1, 1, 1, 0, 1);
 
   vsSupport = new QLabel( page2, "vsSupport" );
-  vsSupport->setGeometry( 30, 10, 150, 30 );
-  vsSupport->setMinimumSize( 0, 0 );
-  vsSupport->setMaximumSize( 32767, 32767 );
   vsSupport->setFocusPolicy( QWidget::NoFocus );
   vsSupport->setBackgroundMode( QWidget::PaletteBackground );
   vsSupport->setFontPropagation( QWidget::NoChildren );
@@ -593,24 +596,23 @@ void CKAppWizard::initPages()
   vsSupport->setText(i18n( "VCS Support" ));
   vsSupport->setAlignment( 289 );
   vsSupport->setMargin( -1 );
+  grid1->addWidget(vsSupport,0,0);
 
   vsBox = new QComboBox( FALSE, page2, "vsBox" );
-  vsBox->setGeometry( 180, 10, 100, 30 );
-  vsBox->setMinimumSize( 0, 0 );
-  vsBox->setMaximumSize( 32767, 32767 );
   vsBox->setFocusPolicy( QWidget::StrongFocus );
   vsBox->setBackgroundMode( QWidget::PaletteBackground );
   vsBox->setFontPropagation( QWidget::AllChildren );
   vsBox->setPalettePropagation( QWidget::AllChildren );
   vsBox->setSizeLimit( 10 );
   vsBox->setAutoResize( FALSE );
-  vsBox->insertItem( "NONE" );
-  vsBox->insertItem( "CVS" );
+  vsBox->insertItem( i18n("NONE") );
+  vsBox->insertItem( i18n("CVS") );
+  grid1->addWidget(vsBox,0,1);
 
-  vsInstall = new QLabel( page2, "vsInstall" );
-  vsInstall->setGeometry( 40, 80, 140, 30 );
-  vsInstall->setMinimumSize( 0, 0 );
-  vsInstall->setMaximumSize( 32767, 32767 );
+  QGridLayout *grid2 = new QGridLayout( qtarch_ButtonGroup_1,5,3,15,7);
+
+
+  vsInstall = new QLabel(  qtarch_ButtonGroup_1, "vsInstall" );
   vsInstall->setFocusPolicy( QWidget::NoFocus );
   vsInstall->setBackgroundMode( QWidget::PaletteBackground );
   vsInstall->setFontPropagation( QWidget::NoChildren );
@@ -618,11 +620,11 @@ void CKAppWizard::initPages()
   vsInstall->setText(i18n( "VCS Location") );
   vsInstall->setAlignment( 289 );
   vsInstall->setMargin( -1 );
+  grid2->addWidget(vsInstall,0,0);
 
-  vsLocation = new QLineEdit( page2, "vsLocation" );
-  vsLocation->setGeometry( 180, 80, 240, 30 );
-  vsLocation->setMinimumSize( 0, 0 );
-  vsLocation->setMaximumSize( 32767, 32767 );
+
+
+  vsLocation = new QLineEdit(qtarch_ButtonGroup_1, "vsLocation" );
   vsLocation->setFocusPolicy( QWidget::StrongFocus );
   vsLocation->setBackgroundMode( QWidget::PaletteBase );
   vsLocation->setFontPropagation( QWidget::NoChildren );
@@ -631,11 +633,9 @@ void CKAppWizard::initPages()
   vsLocation->setMaxLength( 32767 );
   vsLocation->setEchoMode( QLineEdit::Normal );
   vsLocation->setFrame( TRUE );
+  grid2->addWidget(vsLocation,0,1);
 
-  locationbutton = new QPushButton( page2, "locationbutton" );
-  locationbutton->setGeometry( 430, 80, 30, 30 );
-  locationbutton->setMinimumSize( 0, 0 );
-  locationbutton->setMaximumSize( 32767, 32767 );
+  locationbutton = new QPushButton( qtarch_ButtonGroup_1, "locationbutton" );
   locationbutton->setFocusPolicy( QWidget::TabFocus );
   locationbutton->setBackgroundMode( QWidget::PaletteBackground );
   locationbutton->setFontPropagation( QWidget::NoChildren );
@@ -643,11 +643,10 @@ void CKAppWizard::initPages()
   locationbutton->setPixmap(pix);
   locationbutton->setAutoRepeat( FALSE );
   locationbutton->setAutoResize( FALSE );
+  grid2->addWidget(locationbutton,0,2);
 
-  projectVSLocation = new QLabel( page2, "projectVSLocation" );
-  projectVSLocation->setGeometry( 40, 150, 140, 30 );
-  projectVSLocation->setMinimumSize( 0, 0 );
-  projectVSLocation->setMaximumSize( 32767, 32767 );
+
+  projectVSLocation = new QLabel( qtarch_ButtonGroup_1, "projectVSLocation" );
   projectVSLocation->setFocusPolicy( QWidget::NoFocus );
   projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
   projectVSLocation->setFontPropagation( QWidget::NoChildren );
@@ -655,11 +654,10 @@ void CKAppWizard::initPages()
   projectVSLocation->setText(i18n( "Repository in VCS") );
   projectVSLocation->setAlignment( 289 );
   projectVSLocation->setMargin( -1 );
+  grid2->addWidget(projectVSLocation,1,0);
 
-  projectlocationline = new QLineEdit( page2, "projectlocationline" );
-  projectlocationline->setGeometry( 180, 150, 280, 30 );
-  projectlocationline->setMinimumSize( 0, 0 );
-  projectlocationline->setMaximumSize( 32767, 32767 );
+
+  projectlocationline = new QLineEdit( qtarch_ButtonGroup_1, "projectlocationline" );
   projectlocationline->setFocusPolicy( QWidget::StrongFocus );
   projectlocationline->setBackgroundMode( QWidget::PaletteBase );
   projectlocationline->setFontPropagation( QWidget::NoChildren );
@@ -668,11 +666,11 @@ void CKAppWizard::initPages()
   projectlocationline->setMaxLength( 32767 );
   projectlocationline->setEchoMode( QLineEdit::Normal );
   projectlocationline->setFrame( TRUE );
+  grid2->addWidget(projectlocationline,1,1);
 
-  vendorTag = new QLabel( page2, "vendorTag" );
-  vendorTag->setGeometry( 40, 220, 140, 30 );
-  vendorTag->setMinimumSize( 0, 0 );
-  vendorTag->setMaximumSize( 32767, 32767 );
+
+
+  vendorTag = new QLabel(qtarch_ButtonGroup_1 , "vendorTag" );
   vendorTag->setFocusPolicy( QWidget::NoFocus );
   vendorTag->setBackgroundMode( QWidget::PaletteBackground );
   vendorTag->setFontPropagation( QWidget::NoChildren );
@@ -680,11 +678,9 @@ void CKAppWizard::initPages()
   vendorTag->setText(i18n( "Vendor Tag") );
   vendorTag->setAlignment( 289 );
   vendorTag->setMargin( -1 );
+  grid2->addWidget(vendorTag,2,0);
 
-  vendorline = new QLineEdit( page2, "vendorline" );
-  vendorline->setGeometry( 180, 220, 280, 30 );
-  vendorline->setMinimumSize( 0, 0 );
-  vendorline->setMaximumSize( 32767, 32767 );
+  vendorline = new QLineEdit( qtarch_ButtonGroup_1, "vendorline" );
   vendorline->setFocusPolicy( QWidget::StrongFocus );
   vendorline->setBackgroundMode( QWidget::PaletteBase );
   vendorline->setFontPropagation( QWidget::NoChildren );
@@ -693,11 +689,10 @@ void CKAppWizard::initPages()
   vendorline->setMaxLength( 32767 );
   vendorline->setEchoMode( QLineEdit::Normal );
   vendorline->setFrame( TRUE );
+  grid2->addWidget(vendorline,2,1);
 
-  logMessage = new QLabel( page2, "logMessage" );
-  logMessage->setGeometry( 40, 290, 140, 30 );
-  logMessage->setMinimumSize( 0, 0 );
-  logMessage->setMaximumSize( 32767, 32767 );
+
+  logMessage = new QLabel( qtarch_ButtonGroup_1, "logMessage" );
   logMessage->setFocusPolicy( QWidget::NoFocus );
   logMessage->setBackgroundMode( QWidget::PaletteBackground );
   logMessage->setFontPropagation( QWidget::NoChildren );
@@ -705,11 +700,11 @@ void CKAppWizard::initPages()
   logMessage->setText(i18n( "Log Message") );
   logMessage->setAlignment( 289 );
   logMessage->setMargin( -1 );
+  grid2->addWidget(logMessage,3,0);
 
-  messageline = new QLineEdit( page2, "messageline" );
-  messageline->setGeometry( 180, 290, 280, 30 );
-  messageline->setMinimumSize( 0, 0 );
-  messageline->setMaximumSize( 32767, 32767 );
+
+
+  messageline = new QLineEdit( qtarch_ButtonGroup_1, "messageline" );
   messageline->setFocusPolicy( QWidget::StrongFocus );
   messageline->setBackgroundMode( QWidget::PaletteBase );
   messageline->setFontPropagation( QWidget::NoChildren );
@@ -718,11 +713,10 @@ void CKAppWizard::initPages()
   messageline->setMaxLength( 32767 );
   messageline->setEchoMode( QLineEdit::Normal );
   messageline->setFrame( TRUE );
+  grid2->addWidget( messageline,3,1);
 
-  releaseTag = new QLabel( page2, "releaseTag" );
-  releaseTag->setGeometry( 40, 360, 140, 30 );
-  releaseTag->setMinimumSize( 0, 0 );
-  releaseTag->setMaximumSize( 32767, 32767 );
+
+  releaseTag = new QLabel( qtarch_ButtonGroup_1, "releaseTag" );
   releaseTag->setFocusPolicy( QWidget::NoFocus );
   releaseTag->setBackgroundMode( QWidget::PaletteBackground );
   releaseTag->setFontPropagation( QWidget::NoChildren );
@@ -730,11 +724,10 @@ void CKAppWizard::initPages()
   releaseTag->setText(i18n( "Release Tag") );
   releaseTag->setAlignment( 289 );
   releaseTag->setMargin( -1 );
+  grid2->addWidget( releaseTag,4,0);
 
-  releaseline = new QLineEdit( page2, "releaseline" );
-  releaseline->setGeometry( 180, 360, 280, 30 );
-  releaseline->setMinimumSize( 0, 0 );
-  releaseline->setMaximumSize( 32767, 32767 );
+
+  releaseline = new QLineEdit( qtarch_ButtonGroup_1, "releaseline" );
   releaseline->setFocusPolicy( QWidget::StrongFocus );
   releaseline->setBackgroundMode( QWidget::PaletteBase );
   releaseline->setFontPropagation( QWidget::NoChildren );
@@ -743,6 +736,7 @@ void CKAppWizard::initPages()
   releaseline->setMaxLength( 32767 );
   releaseline->setEchoMode( QLineEdit::Normal );
   releaseline->setFrame( TRUE );
+  grid2->addWidget( releaseline,4,1);
 
   qtarch_ButtonGroup_1->insert( locationbutton );
 
@@ -793,12 +787,11 @@ void CKAppWizard::initPages()
   page3 = new QWidget(this);
   page3->setEnabled(true);
   addPage(page3, i18n("Headertemplate for .h-files"));
+  grid1 = new QGridLayout(page3,2,3,15,7);
+
   setFinishEnabled ( page3, true );
 
   hheader = new QCheckBox( page3, "hheader" );
-  hheader->setGeometry( 20, 20, 230, 30 );
-  hheader->setMinimumSize( 0, 0 );
-  hheader->setMaximumSize( 32767, 32767 );
   hheader->setFocusPolicy( QWidget::TabFocus );
   hheader->setBackgroundMode( QWidget::PaletteBackground );
   hheader->setFontPropagation( QWidget::NoChildren );
@@ -806,11 +799,9 @@ void CKAppWizard::initPages()
   hheader->setText( i18n("headertemplate for .h-files") );
   hheader->setAutoRepeat( FALSE );
   hheader->setAutoResize( FALSE );
+  grid1->addWidget(hheader,0,0);
 
   hload = new QPushButton( page3, "hload" );
-  hload->setGeometry( 260, 20, 100, 30 );
-  hload->setMinimumSize( 0, 0 );
-  hload->setMaximumSize( 32767, 32767 );
   hload->setFocusPolicy( QWidget::TabFocus );
   hload->setBackgroundMode( QWidget::PaletteBackground );
   hload->setFontPropagation( QWidget::NoChildren );
@@ -818,11 +809,10 @@ void CKAppWizard::initPages()
   hload->setText(i18n( "Load..." ));
   hload->setAutoRepeat( FALSE );
   hload->setAutoResize( FALSE );
+  grid1->addWidget(hload,0,1);
+
 
   hnew = new QPushButton( page3, "hnew" );
-  hnew->setGeometry( 380, 20, 100, 30 );
-  hnew->setMinimumSize( 0, 0 );
-  hnew->setMaximumSize( 32767, 32767 );
   hnew->setFocusPolicy( QWidget::TabFocus );
   hnew->setBackgroundMode( QWidget::PaletteBackground );
   hnew->setFontPropagation( QWidget::NoChildren );
@@ -830,13 +820,11 @@ void CKAppWizard::initPages()
   hnew->setText( i18n("New" ));
   hnew->setAutoRepeat( FALSE );
   hnew->setAutoResize( FALSE );
+  grid1->addWidget(hnew,0,2);
 
   hedit = new KEdit(page3 );
   QFont f("fixed",10);
   hedit->setFont(f);
-  hedit->setGeometry( 20, 70, 460, 350 );
-  hedit->setMinimumSize( 0, 0 );
-  hedit->setMaximumSize( 32767, 32767 );
   hedit->setFocusPolicy( QWidget::StrongFocus );
   hedit->setBackgroundMode( QWidget::PaletteBase );
   hedit->setFontPropagation( QWidget::SameFont );
@@ -844,6 +832,7 @@ void CKAppWizard::initPages()
   hedit->insertLine( "" );
   hedit->setReadOnly( FALSE );
   hedit->setOverwriteMode( FALSE );
+  grid1->addMultiCellWidget(hedit,1,1,0,2);
 
   QToolTip::add(hload,i18n("Press this button to select an\n"
          "existing header template file"));
@@ -865,11 +854,10 @@ void CKAppWizard::initPages()
   page4->setEnabled(true);
   addPage(page4, i18n("Headertemplate for .cpp-files"));
   setFinishEnabled ( page4, true );
+  grid1 = new QGridLayout(page4,2,3,15,7);
+
 
   cppheader = new QCheckBox( page4, "cppheader" );
-  cppheader->setGeometry( 20, 20, 230, 30 );
-  cppheader->setMinimumSize( 0, 0 );
-  cppheader->setMaximumSize( 32767, 32767 );
   cppheader->setFocusPolicy( QWidget::TabFocus );
   cppheader->setBackgroundMode( QWidget::PaletteBackground );
   cppheader->setFontPropagation( QWidget::NoChildren );
@@ -877,11 +865,9 @@ void CKAppWizard::initPages()
   cppheader->setText( i18n("headertemplate for .cpp-files") );
   cppheader->setAutoRepeat( FALSE );
   cppheader->setAutoResize( FALSE );
+  grid1->addWidget(cppheader,0,0);
 
   cppload = new QPushButton( page4, "cppload" );
-  cppload->setGeometry( 260, 20, 100, 30 );
-  cppload->setMinimumSize( 0, 0 );
-  cppload->setMaximumSize( 32767, 32767 );
   cppload->setFocusPolicy( QWidget::TabFocus );
   cppload->setBackgroundMode( QWidget::PaletteBackground );
   cppload->setFontPropagation( QWidget::NoChildren );
@@ -889,11 +875,9 @@ void CKAppWizard::initPages()
   cppload->setText( i18n("Load...") );
   cppload->setAutoRepeat( FALSE );
   cppload->setAutoResize( FALSE );
+  grid1->addWidget(cppload,0,1);
 
   cppnew = new QPushButton( page4, "cppnew" );
-  cppnew->setGeometry( 380, 20, 100, 30 );
-  cppnew->setMinimumSize( 0, 0 );
-  cppnew->setMaximumSize( 32767, 32767 );
   cppnew->setFocusPolicy( QWidget::TabFocus );
   cppnew->setBackgroundMode( QWidget::PaletteBackground );
   cppnew->setFontPropagation( QWidget::NoChildren );
@@ -901,12 +885,10 @@ void CKAppWizard::initPages()
   cppnew->setText( i18n("New") );
   cppnew->setAutoRepeat( FALSE );
   cppnew->setAutoResize( FALSE );
+  grid1->addWidget(cppnew,0,2);
 
   cppedit = new KEdit(page4);
   cppedit->setFont(f);
-  cppedit->setGeometry( 20, 70, 460, 350 );
-  cppedit->setMinimumSize( 0, 0 );
-  cppedit->setMaximumSize( 32767, 32767 );
   cppedit->setFocusPolicy( QWidget::StrongFocus );
   cppedit->setBackgroundMode( QWidget::PaletteBase );
   cppedit->setFontPropagation( QWidget::SameFont );
@@ -914,6 +896,7 @@ void CKAppWizard::initPages()
   cppedit->insertLine( "" );
   cppedit->setReadOnly( FALSE );
   cppedit->setOverwriteMode( FALSE );
+  grid1->addMultiCellWidget(cppedit,1,1,0,2);
 
   QToolTip::add(cppload,i18n("Press this button to select an\n"
            "existing header template file"));
@@ -936,12 +919,10 @@ void CKAppWizard::initPages()
   addPage(page5, i18n("Processes"));
   setFinishEnabled ( page5, true );
   setNextEnabled( page5, false );
+  grid1 = new QGridLayout(page5,7,1,15,0);
 
   // create a MultiLineEdit for the processes of kAppWizard
   output = new QMultiLineEdit( page5, "output" );
-  output->setGeometry( 10, 10, 480, 330 );
-  output->setMinimumSize( 0, 0 );
-  output->setMaximumSize( 32767, 32767 );
   output->setFocusPolicy( QWidget::StrongFocus );
   output->setBackgroundMode( QWidget::PaletteBase );
   output->setFontPropagation( QWidget::SameFont );
@@ -949,11 +930,9 @@ void CKAppWizard::initPages()
   output->insertLine( "" );
   output->setReadOnly( TRUE );
   output->setOverwriteMode( FALSE );
+  grid1->addMultiCellWidget(output,0,4,0,0);
 
   errOutput = new QMultiLineEdit( page5, "errOutput" );
-  errOutput->setGeometry( 10, 340, 480, 80 );
-  errOutput->setMinimumSize( 0, 0 );
-  errOutput->setMaximumSize( 32767, 32767 );
   errOutput->setFocusPolicy( QWidget::StrongFocus );
   errOutput->setBackgroundMode( QWidget::PaletteBase );
   errOutput->setFontPropagation( QWidget::SameFont );
@@ -963,6 +942,7 @@ void CKAppWizard::initPages()
   errOutput->setOverwriteMode( FALSE );
   QFont font("helvetica",10);
   output->setFont(font);
+  grid1->addMultiCellWidget(errOutput,5,6,0,0);
   QToolTip::add(output,i18n("Displays the normal output of the project generator"));
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));

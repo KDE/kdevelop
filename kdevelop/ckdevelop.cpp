@@ -2525,12 +2525,11 @@ void CKDevelop::slotBookmarksPrevious()
 ///////////////////////////////////////////////////////////////////////////////////////
 // HELP-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
-void CKDevelop::slotHelpBack(){
+void CKDevelop::slotHelpBack()
+{
   slotStatusMsg(i18n("Switching to last page..."));
   QString str = history_list.prev();
   if (str != 0){
-//    if(!bKDevelop)
-//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2539,12 +2538,11 @@ void CKDevelop::slotHelpBack(){
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotHelpForward(){
+void CKDevelop::slotHelpForward()
+{
   slotStatusMsg(i18n("Switching to next page..."));
   QString str = history_list.next();
   if (str != 0){
-//    if(!bKDevelop)
-//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2552,13 +2550,13 @@ void CKDevelop::slotHelpForward(){
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotHelpHistoryBack( int id_){
+void CKDevelop::slotHelpHistoryBack(int id)
+{
   slotStatusMsg(i18n("Opening history page..."));
-  
-  QString str = history_list.at(id_);
+
+	int index = history_prev->indexOf(id);
+  QString str = history_list.at(index);
   if (str != 0){
-//    if(!bKDevelop)
-//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2567,14 +2565,14 @@ void CKDevelop::slotHelpHistoryBack( int id_){
 
 }
 
-void CKDevelop::slotHelpHistoryForward( int id_){
+void CKDevelop::slotHelpHistoryForward( int id)
+{
   slotStatusMsg(i18n("Opening history page..."));
 
+	int index = history_next->indexOf(id);
   int cur=history_list.at()+1;
-  QString str = history_list.at(cur+id_);
+  QString str = history_list.at(cur+index);
   if (str != 0){
-//    if(!bKDevelop)
-//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2582,10 +2580,9 @@ void CKDevelop::slotHelpHistoryForward( int id_){
   slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotHelpBrowserReload(){
+void CKDevelop::slotHelpBrowserReload()
+{
   slotStatusMsg(i18n("Reloading page..."));
-//  if(!bKDevelop)
-//    switchToKDevelop();
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->view()->setFocus();
   browser_widget->showURL(browser_widget->currentURL(), true);
@@ -3122,22 +3119,17 @@ void CKDevelop::slotNewUndo(){
 }
 
 
-void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*){
-//  enableCommand(ID_HELP_BROWSER_STOP);
-//  if(!bKDevelop)
-//    switchToKDevelop();
-  //showOutputView(false);
-
+void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*)
+{
   if (url.isEmpty())
     return;
 
-  s_tab_view->setCurrentTab(BROWSER);
-  browser_widget->view()->setFocus();
   QString url_str = url;
 
   // add file: directive only if it is an absolute path
   if (url_str.left(1)=="/")
      url_str=QString("file:") + url;
+
   if(url_str.contains("kdevelop/search_result.html") != 0){
     browser_widget->showURL(url_str,true); // with reload if equal
   }
@@ -3150,6 +3142,12 @@ void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*){
   if (str.contains("kdevelop/search_result.html")){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
+
+	if (s_tab_view->getCurrentTab() != BROWSER)
+	{
+  	s_tab_view->setCurrentTab(BROWSER);
+  	browser_widget->view()->setFocus();
+	}
 }
 
 void CKDevelop::slotURLonURL(const QString& url )
@@ -3197,7 +3195,7 @@ void CKDevelop::slotDocumentDone()
   // insert into the history-list
   // the following if-statement isn't necessary, because
   //   slotDocumentDone isn't called in the other cases [use of KFMclient for non file://....htm(l)]
-  if(actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1)
+  if (actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1)
   {
     // http aren't added to the history list ...
     if (found == -1)
@@ -3253,7 +3251,7 @@ void CKDevelop::slotDocumentDone()
     // reorganize the prev- and the next-historylist
     history_next->clear();
     history_prev->clear();
-    
+
     int i;
     for ( i =0 ; i < cur; i++)
        history_prev->insertItem(history_title_list.at(i));

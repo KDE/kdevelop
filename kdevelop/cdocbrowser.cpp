@@ -122,7 +122,7 @@ void CDocBrowser::showURL(const QString& url, bool reload)
   m_refTitle = ref;
 
   if (pos!=-1)
-   url_wo_ref = complete_url.left(pos);
+   	url_wo_ref = complete_url.left(pos);
 
   if(complete_url.left(7) == "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1)
   {
@@ -142,6 +142,8 @@ void CDocBrowser::showURL(const QString& url, bool reload)
 	  kapp->setOverrideCursor( Qt::waitCursor );
 		KURL kurl(complete_url);
 		openURL(kurl);
+		if (ref.isEmpty())
+    	view()->setContentsPos(0,0);
   	kapp->restoreOverrideCursor();
 //  }
 

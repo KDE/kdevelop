@@ -1312,29 +1312,12 @@ void CKDevelop::readOptions()
     doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
   }
 	
-  QString filename;
-  filename = config->readEntry("browser_file","");
-  if(!filename.isEmpty()){
+  QString filename = config->readEntry("browser_file","");
+  if (filename.isEmpty())
+		filename = DocTreeKDevelopBook::locatehtml("welcome/index.html");
+
+  if(!filename.isEmpty())
     slotURLSelected(browser_widget,filename,1,"test");
-  }
-  else
-  {
-    // first try the locale setting
-    QString file = locate("html", KGlobal::locale()->language() + "/kdevelop/welcome/index.html");
-
-    // not found: use the default
-    if( file.isEmpty() )
-      file = locate("html", "default/kdevelop/welcome/index.html");
-
-    if( !file.isEmpty() )
-      slotURLSelected(browser_widget, file,1,"test");
-  }
-
-//  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
-//  if(switchKDevelop)
-//    switchToKDevelop();
-//  else
-//    startDesigner();
 }
 
 void CKDevelop::saveOptions(){
