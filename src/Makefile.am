@@ -10,7 +10,7 @@ libkdevshell_la_LDFLAGS = $(all_libraries)
 libkdevshell_la_LIBADD = \
 	$(top_builddir)/src/profileengine/lib/libprofileengine.la $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/lib/widgets/libkdevwidgets.la $(top_builddir)/lib/interfaces/extras/libkdevextras.la \
-        $(LIB_KDEVMDI) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) -lktexteditor
+        $(LIB_KDEVMDI) $(LIB_KHTML) -lktexteditor
 libkdevshell_la_SOURCES = api.cpp core.cpp documentationpart.cpp \
 	editorproxy.cpp generalinfowidget.cpp languageselectwidget.cpp mainwindowshare.cpp \
 	newmainwindow.cpp partcontroller.cpp partselectwidget.cpp plugincontroller.cpp \
@@ -23,7 +23,7 @@ kdevelop_SOURCES = main.cpp kdevideextension.cpp settingswidget.ui
 
 kdevelop_METASOURCES = AUTO
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kdevelop_LDADD = $(top_builddir)/src/libkdevshell.la
+kdevelop_LDADD = libkdevshell.la
 
 rcdir = $(kde_datadir)/kdevelop
 rc_DATA = kdevelopui.rc eventsrc
@@ -35,7 +35,7 @@ kdevelopdata_DATA = kdeveloprc
 SUBDIRS = profiles profileengine
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevassistant_SOURCES = main_assistant.cpp kdevassistantextension.cpp
-kdevassistant_LDADD = $(top_builddir)/src/libkdevshell.la
+kdevassistant_LDADD = libkdevshell.la
 
 rc_assistantdir = $(kde_datadir)/kdevassistant
 rc_assistant_DATA =  kdevassistantui.rc
