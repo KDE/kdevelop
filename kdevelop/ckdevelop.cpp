@@ -86,12 +86,29 @@ void CKDevelop::slotFileOpen(){
   slotStatusMsg(i18n("Opening file..."));
 
   QString str;
-  if(project){
+
+  //modif by Benoit Cerrina 15 Dec 99
+  if(!lastOpenDir.isEmpty())
+  {
+  	str = KFileDialog::getOpenFileName(lastOpenDir,"*",this);
+  }
+  else if(project){
     str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this);
   }
   else{
     str = KFileDialog::getOpenFileName(0,"*",this);
   }  
+  if (!str.isEmpty())
+  {
+		int lSlashPos = str.findRev('/');
+		if (lSlashPos != -1)
+		{
+			lastOpenDir = str;
+			lastOpenDir.truncate(lSlashPos);
+		}
+  }
+  //end modif
+
   if (!str.isEmpty()) // nocancel
   {
     switchToFile(str);

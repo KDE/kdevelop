@@ -923,6 +923,7 @@ private:
 
   int lasttab;
   QString lastfile;
+  QString lastOpenDir;
 
   /** debugger additions for the internal debugger */
 

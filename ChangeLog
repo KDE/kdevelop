@@ -1,5 +1,9 @@
+2000-01-09 Christian Couder <chcouder@club-internet.fr>
+	* Added Benoit Cerrina's FileOpenPatch.
+
 2000-01-08 Christian Couder <chcouder@club-internet.fr>
-	* Added "Toggle Bookmark" features and removed "Add Bookmark" and "Set Bookmark" features.
+	* Added "Toggle Bookmark" features and removed 
+	  "Add Bookmark" and "Set Bookmark" features.
 	* Moved the bookmark information to the TextLine.
 	* "Toggle Bookmark" works for the document browser.
 
