@@ -1,7 +1,7 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>distpart_ui</class>
 <author>Ian Reinhart Geiser &lt;geiseri@yahoo.com&gt;</author>
-<widget class="QDialog">
+<widget class="QWidget">
     <property name="name">
         <cstring>packaging_dialog</cstring>
     </property>
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>961</width>
-            <height>738</height>
+            <width>606</width>
+            <height>609</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -36,11 +36,11 @@
     <property name="caption">
         <string>Prepare for Release</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>Layout30</cstring>
             </property>
@@ -70,26 +70,9 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>&lt;H1&gt;Project Packaging &amp; Publishing&lt;/H1&gt;</string>
+                        <string>&lt;H2&gt;Project Packaging &amp; Publishing&lt;/H2&gt;</string>
                     </property>
                 </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>KDevelopGraphic</cstring>
@@ -104,18 +87,18 @@
                     </property>
                     <property name="minimumSize">
                         <size>
-                            <width>80</width>
-                            <height>80</height>
+                            <width>48</width>
+                            <height>48</height>
                         </size>
                     </property>
                     <property name="maximumSize">
                         <size>
-                            <width>80</width>
-                            <height>80</height>
+                            <width>48</width>
+                            <height>48</height>
                         </size>
                     </property>
                     <property name="pixmap">
-                        <pixmap>image0</pixmap>
+                        <pixmap>"kdevelop"</pixmap>
                     </property>
                     <property name="scaledContents">
                         <bool>true</bool>
@@ -123,7 +106,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="3">
+        <widget class="QTabWidget">
             <property name="name">
                 <cstring>actions_box</cstring>
             </property>
@@ -149,7 +132,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QListBox" row="1" column="1" rowspan="2" colspan="1">
+                    <widget class="KListBox" row="1" column="1" rowspan="2" colspan="1">
                         <property name="name">
                             <cstring>srcDistFileListBox</cstring>
                         </property>
@@ -214,7 +197,7 @@
                                                     <cstring>archNameFormatLineEdit</cstring>
                                                 </property>
                                             </widget>
-                                            <widget class="QLineEdit">
+                                            <widget class="KLineEdit">
                                                 <property name="name">
                                                     <cstring>archNameFormatLineEdit</cstring>
                                                 </property>
@@ -243,7 +226,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>createSrcArchPushButton</cstring>
                                 </property>
@@ -259,7 +242,7 @@
                                     <string>Create Source &amp;Archive</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="KPushButton">
                                 <property name="name">
                                     <cstring>resetSrcPushButton</cstring>
                                 </property>
@@ -301,311 +284,482 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLineEdit" row="5" column="1">
+                    <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>summaryLineEdit</cstring>
+                            <cstring>layout12</cstring>
                         </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout11</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KLineEdit" row="4" column="1">
+                                        <property name="name">
+                                            <cstring>licenseLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="3" column="0">
+                                        <property name="name">
+                                            <cstring>vendorLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Ve&amp;ndor:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>vendorLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="2" column="1">
+                                        <property name="name">
+                                            <cstring>releaseLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>appNameLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="3" column="1">
+                                        <property name="name">
+                                            <cstring>vendorLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>appNameLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Application name:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>appNameLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="5" column="0">
+                                        <property name="name">
+                                            <cstring>summaryLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>S&amp;ummary:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>summaryLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="4" column="0">
+                                        <property name="name">
+                                            <cstring>licenseLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;License:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>licenseLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="2" column="0">
+                                        <property name="name">
+                                            <cstring>releaseLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>R&amp;elease:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>releaseLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="1" column="0">
+                                        <property name="name">
+                                            <cstring>versionLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Version:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>versionLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="5" column="1">
+                                        <property name="name">
+                                            <cstring>summaryLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="7" column="1">
+                                        <property name="name">
+                                            <cstring>packagerLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="1" column="1">
+                                        <property name="name">
+                                            <cstring>versionLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="6" column="0">
+                                        <property name="name">
+                                            <cstring>groupLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Group:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>groupLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="7" column="0">
+                                        <property name="name">
+                                            <cstring>packagerLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Pac&amp;kager:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>packagerLineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit" row="6" column="1">
+                                        <property name="name">
+                                            <cstring>groupLineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>2</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <widget class="QButtonGroup">
+                                <property name="name">
+                                    <cstring>advancedOptionsGroupBox</cstring>
+                                </property>
+                                <property name="title">
+                                    <string>Advanced Package Op&amp;tions</string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>devPackageCheckBox</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Create development package</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>docsPackageCheckBox</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Create documentation package</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>appIconCheckBox</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Include application icon</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>archLabel</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Architecture target:&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox">
+                                        <item>
+                                            <property name="text">
+                                                <string>i386</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>i586</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>i686</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>AMD K6</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>AMD K7</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>PPC</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>PPC G3</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>PPC Altevec</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Dec Alpha (AXP)</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Sparc</string>
+                                            </property>
+                                        </item>
+                                        <property name="name">
+                                            <cstring>archComboBox</cstring>
+                                        </property>
+                                        <property name="currentItem">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="autoResize">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="sizeLimit">
+                                            <number>10</number>
+                                        </property>
+                                        <property name="autoCompletion">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
                     </widget>
-                    <widget class="QLabel" row="0" column="0">
+                    <widget class="QLayoutWidget" row="1" column="1">
                         <property name="name">
-                            <cstring>appNameLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Application name:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>appNameLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>releaseLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="4" column="0">
-                        <property name="name">
-                            <cstring>licenseLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;License:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>licenseLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="5" column="0">
-                        <property name="name">
-                            <cstring>summaryLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>S&amp;ummary:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>summaryLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="3" column="1">
-                        <property name="name">
-                            <cstring>vendorLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="6" column="0">
-                        <property name="name">
-                            <cstring>groupLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Group:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>groupLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="3" column="0">
-                        <property name="name">
-                            <cstring>vendorLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Ve&amp;ndor:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>vendorLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="0" column="1">
-                        <property name="name">
-                            <cstring>appNameLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="1" column="1">
-                        <property name="name">
-                            <cstring>versionLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="4" column="1">
-                        <property name="name">
-                            <cstring>licenseLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>releaseLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>R&amp;elease:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>releaseLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="6" column="1">
-                        <property name="name">
-                            <cstring>groupLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="1" column="0">
-                        <property name="name">
-                            <cstring>versionLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Version:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>versionLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QButtonGroup" row="0" column="2" rowspan="9" colspan="1">
-                        <property name="name">
-                            <cstring>advancedOptionsGroupBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Advanced Package Op&amp;tions</string>
+                            <cstring>layout13</cstring>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>devPackageCheckBox</cstring>
+                                    <cstring>layout8</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Create development package</string>
-                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>srcPackagePushButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Build Source 
+Package</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>buildAllPushButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Build Binary 
+Package</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>exportSPECPushButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Export 
+Build Files</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>importSPECPushButton</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Import 
+Build Files</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
                             </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>docsPackageCheckBox</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Create documentation package</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>appIconCheckBox</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Include application icon</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer15</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Fixed</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>archLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Architecture target:&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox">
-                                <item>
-                                    <property name="text">
-                                        <string>i386</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>i586</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>i686</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>AMD K6</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>AMD K7</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>PPC</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>PPC G3</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>PPC Altevec</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Dec Alpha (AXP)</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Sparc</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>archComboBox</cstring>
-                                </property>
-                                <property name="currentItem">
-                                    <number>0</number>
-                                </property>
-                                <property name="autoResize">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="sizeLimit">
-                                    <number>10</number>
-                                </property>
-                                <property name="autoCompletion">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer16</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>0</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
                         </vbox>
                     </widget>
-                    <widget class="QLineEdit" row="7" column="1">
+                    <widget class="QLayoutWidget" row="1" column="0">
                         <property name="name">
-                            <cstring>packagerLineEdit</cstring>
+                            <cstring>layout16</cstring>
                         </property>
-                    </widget>
-                    <widget class="QLabel" row="7" column="0">
-                        <property name="name">
-                            <cstring>packagerLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Pac&amp;kager:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>packagerLineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="8" column="0">
-                        <property name="name">
-                            <cstring>projectDescriptionLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Description:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>projectDescriptionMultilineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="8" column="1">
-                        <property name="name">
-                            <cstring>TextLabel1</cstring>
-                        </property>
-                        <property name="text">
-                            <string>C&amp;hangelog:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>projectChangelogMultilineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QMultiLineEdit" row="9" column="0">
-                        <property name="name">
-                            <cstring>projectDescriptionMultilineEdit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QMultiLineEdit" row="9" column="1">
-                        <property name="name">
-                            <cstring>projectChangelogMultilineEdit</cstring>
-                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout14</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>projectDescriptionLabel</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Description:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>projectDescriptionMultilineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KTextEdit">
+                                        <property name="name">
+                                            <cstring>projectDescriptionMultilineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>3</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="resizePolicy">
+                                            <enum>Manual</enum>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout15</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>TextLabel1</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>5</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="text">
+                                            <string>C&amp;hangelog:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>projectChangelogMultilineEdit</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="KTextEdit">
+                                        <property name="name">
+                                            <cstring>projectChangelogMultilineEdit</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>3</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
                     </widget>
                 </grid>
             </widget>
@@ -713,7 +867,7 @@
                                     <property name="margin">
                                         <number>0</number>
                                     </property>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>genHTMLPushButton</cstring>
                                         </property>
@@ -721,7 +875,7 @@
                                             <string>&amp;Generate</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>resetHTMLPushButton</cstring>
                                         </property>
@@ -752,7 +906,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QListBox" row="1" column="1">
+                            <widget class="KListBox" row="1" column="1">
                                 <property name="name">
                                     <cstring>uploadFileListBox</cstring>
                                 </property>
@@ -810,7 +964,7 @@
                                             </size>
                                         </property>
                                     </spacer>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>uploadAddFileToolButton</cstring>
                                         </property>
@@ -826,7 +980,7 @@
                                             <string>+</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton">
+                                    <widget class="KPushButton">
                                         <property name="name">
                                             <cstring>uploadRemoveToolButton</cstring>
                                         </property>
@@ -888,7 +1042,7 @@
                                             </size>
                                         </property>
                                     </spacer>
-                                    <widget class="QPushButton" row="7" column="0">
+                                    <widget class="KPushButton" row="7" column="0">
                                         <property name="name">
                                             <cstring>uploadSubmitPushButton</cstring>
                                         </property>
@@ -896,7 +1050,7 @@
                                             <string>Submit</string>
                                         </property>
                                     </widget>
-                                    <widget class="QLineEdit" row="3" column="0" rowspan="1" colspan="2">
+                                    <widget class="KLineEdit" row="3" column="0" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>uploadURLLineEdit</cstring>
                                         </property>
@@ -904,7 +1058,7 @@
                                             <string>ftp://username:password@ftp.server.com/path/</string>
                                         </property>
                                     </widget>
-                                    <widget class="QPushButton" row="7" column="1">
+                                    <widget class="KPushButton" row="7" column="1">
                                         <property name="name">
                                             <cstring>uploadResetPushButton</cstring>
                                         </property>
@@ -927,49 +1081,34 @@
                 </vbox>
             </widget>
         </widget>
-        <widget class="QPushButton" row="2" column="1">
-            <property name="name">
-                <cstring>okayPushButton</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;OK</string>
-            </property>
-            <property name="default">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="2" column="2">
-            <property name="name">
-                <cstring>cancelPushButton</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Cancel</string>
-            </property>
-        </widget>
-        <spacer row="2" column="0">
-            <property name="name">
-                <cstring>Spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>460</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-    </grid>
+    </vbox>
 </widget>
-<images>
-    <image name="image0">
-        <data format="XPM.GZ" length="10206">789cdd98db5223c91186efe72988adbb0d47ad4edd5287c31702040289a3249070f8222bbb2504081012e8e0f0bb3bbbf2afdec32cccc19e7084b7b767f8c8aefc33b3b2aaabe7979f7786e7273b3ffff269b1a4e59477f8965e767e4e5f67b3cddffff1b77f7efaa9d6d891ffabd568a7f2d35f3efd74b1dce19dd3a7c72c877422604afe3fcf53704dd9d63c37ca8d52c3db29e772a3cc65cfd4cbb9520a9c72e08a1f4f7365f98dda5d60b5bb2ab8a66c26e006ecdbc0b5b2e72b3057131f1fc6574b15cf7c1158eda604ae453e79b6e046d5fbb3ddc0b1b7bbb2721469bc0efee2a4acf9249e934a0df63118f1daac608da704467d58eb9184f8dc5160cd8f7be09ab2d1f8925a2922fffc2538f89f8283ff73e528417c6d700afb3630c63f29c7a9e6e73605ebf8b572bd0cfbac60f5770b8e602f15acf638e76ab98af94e1f026bfd7901ae818fc18d9acf979b6056a63be51ac69b7160d4af0f467fd0817284fee376608c7f0bacf5250b0ef5790e8cf806ca71a276ba04a79a1f4f9443fed400633ef83a30fa3b0387f91906863d516ea0de74010efd791318fa8f60f867dfcfd524d49f56e0d0af9dc05a2f8ec0acf9b96e60d8b5fe490debc95e81835de34962e89bd7c0fabc3b540ef5313781317f237088bfaadc28a31e883fe44b6fe050cf0770a89fce7f9294918faf4fedd77ebc0763bd711d8cfced45609dfff436b03e6f4939f45f6ac1c11fec5109fdbc070ef5182ac765ec57a781b51fb9034eb0ff413fd48b9ec1b09b4ec13afe0a8cfe7503e5a27ec8b7a8df49603cdf00877a9e17acfd1f2b17f56d8123f05960f8835e02ffecf7bf1a85f5cd35e55ad8ef3b05ebfed704e379f7a25c2f637f78522ef4dec0d0a369c11adf3d38c5fbc4e41c55427f73026e60be9e9465bfd0fe7f0547e073e538f049e07ad573059ca23f5e03eb7c9b6d60bc8f104f1dfd42f01fe2278c0ff1d36d60f4a35faf91d44bfda733e5b0dfd92770047e002760070ef1a97f92fed478ae94eba15fef0323fe3d30fcf3997282fea4081ce2af05467dc605ebf3184f65f47fab608dd7db63990facdf2538d1784c198cfada3be518f1da0138d4e32d30f2a904d6f924034e1a9e4da6dcc0f334530ef1d12318ebd724056b7d4781d13f7e7dc752ef58e3998223f03d38513627e014f6ba723de47baddcc07cb99e7282faf0a132c16e8660c27c570bd67c4e955d05f5f25caf16fb7d2d30fa7f0c4e51bf43e57a19bc544e103fed2b5386788e03633e1bcaae02be06c7a8bf3fbfd49df8779efbe048d9c660c4c7bb057b3b2fc1a9b2a904d6f9b66565423f183c5fc4b32858f39980437c958235bf34b0fa733edf46b51e412f05a3dfec2d38c4b3a72c0776e54730c6f3a97282fcdc028cfc1cec44980f07ce50af92b2aba83f825e88d71c8131ded40bd6fabd8033f8577612affa3f0247e0089c80fbe0549937ca211e9e8163e41305463d8681939a8f670e467c3406235f33088cf1be3fe4f81d61fc0a9c28bb604f95899493b2323318e3dd5459e257bd2b30f4dc6bc16ac77846bee6b060ad873f8f262cfaeced1b65d1f7ec46e048996ec009b803c678b7afec08f9687e1cf41c05463ddae018f13e0786bd07863ff6fd4c520fd27a2cc189320dc129ecac4c6565ee2a8bbec65f06c7c8bf0f26c4e302abbebd2958f355bbe44fea6fa42c7a9ed3313802676052b60b70a6ccfbca5c81bf2698347e7300cec08fca6905f9fafab91a454ef3ad80499936e04cd9b2b2abe0f91638069f2873acf1b8188cf8cd9372d0b7a382d54e608c27bf3fb954f452cf6d70accc2b30299b3538c3f39972f067a681355e3303235ff6fb3d472ee6c88f1f8009dc0567cab6a9cc15657e01633c1f80837f070ee3a157c463c1211f03463eac2cf9b1e6b755167dcf6e0e8e613f029332bf8131dec4ca29f2339760c4472705ebf30fca19f24d7d3ca9e49b6a3efb6052a66b70062e29a7153cdf0687f18972867c4c2bb0da4d04467ee62e30c6fbf8d34cfcfb7f7fb22fe05899333081d7e04cd9dc2b6788df9c15acff9ee5f713518bb3d8fbdf82093c0167caee5a39ab80313ec378b3070e7afbe010cf79603c7fa13c0efe544f9ece34df96b2e879767d700cfb064ccaa6090ef1da82d5beab1cf44cad606fa77b30fcb3ef0fa178acf59883499916e00c8ce7833fdb0b0c7b0a0ef1af03c3bfdf1fc663f137f6f1df2987f1f6b0606f375570187f50b0b7138311af5d15eced76061e2b5f2c7fecf5bfd0b0c6d28fd5b0ceb24d6df64335c676222ab736b3537b67a73fa856f75ee5c1cee47ab44f3f42c3e7f2ec15e6f6c52eecd2bee2f7aff6bfa7f16657a2b0963f37766b9b7657bc3fd93dc96ff57d79fd89c6bdddb72df17720f7a1786edb237b2caab972c776ed893db567f6dc5efc47793cda4bdb139f6bf1cab62f3fe70a037b65afedd08eec8d5c255bb6155bb5b5efd11095a9ccc35c7298d948f2c8e726b675dbb089b1c6d89121e3ec8d61b9529399b1997cbb86cfa5e9677c9b57c8dc9aa9b933f7e6415466a2f3689eccb35c73f3621666695ecddb7768dc9b95599b4d9e83d98af7a6d9357b66dfb4bccacc1cc87568dae648ae63b93aa6fbad1a174b732275ca73383567e6dcaecd85a8dccb65cca5af56cff4cdc05c491ed7666846e6c694be59a32c759a998ab9344d51a8da95a9894a24358b51adb65c75a9d7b16998c48cc892f9360d22a9538f9cf8dc3517c4a646a96471269a978628f3b33ea0b159d024cf836e694a77df341f7b5229cde2ccecd13d3df8f5a26ba467cea5568fc8a39ecf07cde8919ee899e65faf412f76460b5aca0c3f88ca2ebc87f52fb7a8f7258b81cc47436623a157d178a3d59735cc09ad6575dc9274146da929958fe8e1370af9adeb7f6e9bb44b7be688f6e56a4926b9c6c1471a7428ef8d3dbfdee4a2b6afd4a374d1998f7de62b95ffbd96fc8ee8983ad4a593bc73e954b238a373d1b8a04bea7da0d1f75ef2180f6890ff4c57d2a331e6c1dfe2fd9ada34a411ddc85d92df94a9628654956fc78862aa5383920ff3e839ebef95ac6fa989338ef29591d7dfc7dea68e7312ff5014868e69e1ac4ba92a3dd592ae7aa258be7132377e5fc32e6920916dedc44d6894c7ed6eddd4dd49ddf773ef1277b86ffcdd95bdf89016b23e646db87b3a770fa230738fef6bb827f76c176e2efb6c53765ad90fdd8b5b48dd6f24f69b3cf6f0b7ff7929f11cfabc5f258b57f72659acdcda6ddcf6a33c5cd34ef3d16ed71e39168d3db72fbd15e2fedd9d578a1679775153ea54732d7720591cbab63bfa52efba63fbe03aae4bf24e7227ee54bc3443ec88dfdf34c873b01b999357c9e2cc9dd385685cb84b798b75be6e0d4a4ef23e773d998d835f7391e883dab5cf61e1fa66eede5c8bdedc40e662e3aeec5666ca7c8d867d75d792c9d06e24de43b30ef14b2547f27747def4790ea9eb4ba56251b871255128bb0a95a8edaa5fa32199d4442372fbe245ea2eb91415732359a13e07c9347675e9a7864ba4521bb66cecf68f0a1f9d77e53d3893af5827e7878dec83920bb37cc7ca4d47e2fddaf5e59b762cfbc79b4b78c2b73ce53b3b31ebcfcfb2efeeed7d3939c8aec2f7727e68f183f4519786cc79c544b525594c7826fe1bfc480d7ee2679edb2dbfd8252fbe4e8397b2975c8bb75ce595df3893f999f34aea44b4e1b5a866bc11ef6fb24735dc9ab7dc2451a043deb5777f547967ce9dec207359effe54c27bbc2f3f4da43a2d379235dae2033ecc73f0f350e236cbe922df29cd899c01c67cf4650da9d3cc59bf47bdc87ace558eb963e6dce5133e25c76779fc792fc93c9cf3052f283f4fb27de54be9b95b7be7ba5fd2903788ac0b3f0747baa6bd4e8ffb3ce02bbee6a1f81ef18dbbe4129765be5e44616cc76643375c91b7742a75301f69c85baa277b512af5cfec8b594bfd9712677e56ec71d5c65cf3ff8a53e76b897c2b79b6e4bdf364fb6e6959f68785cbdfd4e3dfaef63f398b3ee56f0ac9a46d2fb9e1987739b19dd4f24a7e7b2097ac0ddf5772a786ba29a52e65db4a53d9a107344833e9bfdd8f35f23dd86ef8cdcdd3b159e5bb573ac16f1fcc4ad64796cf3fafa4f71ed3db5079fb904ea5df26b6c9ab34739ddf7e8bbdb797c8cabe91ef104a7f77969533fd4cea7dc4bbf4c2cbd4fec1fa2c3b763f4dd3bbdf7ff1bdb70665d6e8f3d524e7e09974f08aba8eddf1e7bb866bca7ba829674cf916a362c57fdbb773ded5fefbea922b762fbd7fefb9fcbb52ce36e67b344c7eb6eae5fde6d86c52fbc19327d67da9561fa8cc6c4b76f0d1e7efa2f7ae6fd638b12bd9bb9a364a1f7e94463a731d4e5cf7cfdea9ff2d8defb9fe6f34fef5d74fff06e7be0ad7</data>
-    </image>
-</images>
+<connections>
+    <connection>
+        <sender>buildAllPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>packaging_dialog</receiver>
+        <slot>slotbuildAllPushButtonPressed()</slot>
+    </connection>
+    <connection>
+        <sender>exportSPECPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>packaging_dialog</receiver>
+        <slot>slotexportSPECPushButtonPressed()</slot>
+    </connection>
+    <connection>
+        <sender>srcPackagePushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>packaging_dialog</receiver>
+        <slot>slotsrcPackagePushButtonPressed()</slot>
+    </connection>
+    <connection>
+        <sender>importSPECPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>packaging_dialog</receiver>
+        <slot>slotimportSPECPushButtonPressed()</slot>
+    </connection>
+</connections>
 <tabstops>
     <tabstop>actions_box</tabstop>
     <tabstop>customProjectCheckBox</tabstop>
@@ -1005,12 +1144,22 @@
     <tabstop>uploadAddFileToolButton</tabstop>
     <tabstop>uploadRemoveToolButton</tabstop>
     <tabstop>uploadFileListBox</tabstop>
-    <tabstop>okayPushButton</tabstop>
-    <tabstop>cancelPushButton</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in implementation">kiconloader.h</include>
+    <include location="global" impldecl="in implementation">kpushbutton.h</include>
+    <include location="global" impldecl="in implementation">klistbox.h</include>
+    <include location="global" impldecl="in implementation">klineedit.h</include>
+    <include location="global" impldecl="in implementation">ktextedit.h</include>
 </includes>
+<slots>
+    <slot>slotbuildAllPushButtonPressed()</slot>
+    <slot>slotexportSPECPushButtonPressed()</slot>
+    <slot>slotimportSPECPushButtonPressed()</slot>
+    <slot>slotsrcPackagePushButtonPressed()</slot>
+</slots>
+<pixmapfunction>DesktopIcon</pixmapfunction>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

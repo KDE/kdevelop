@@ -1,30 +1,39 @@
+/***************************************************************************
+ *   Copyright (C) 2004 by ian reinhart geiser                             *
+ *   geiseri@kde.org                                                       *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #ifndef __PACKAGEBASE_H__
 #define __PACKAGEBASE_H__
 
-#include <qwidget.h>
-
-#include "distpart_ui.h"
 #include <kurl.h>
 #include <qstringlist.h>
-#include <qvbox.h>
 
-class DistpartPart;
-class DistpartDialog;
-
-class packageBase : public QWidget
+class packageBase
 {
-    Q_OBJECT
-    
-public:
-   packageBase(DistpartPart * part, QString name);
-   virtual ~packageBase();
 
-   QVBox * area();
+public:
+   packageBase();
+   virtual ~packageBase();
    
 // Generic accessors and mutators for child classes
-   virtual bool generatePackage(QString &errorCode);
-   virtual bool loadFile(KURL theFile);
-   virtual bool saveFile(KURL theFile);
+   virtual QString generatePackage( ) = 0 ;
+   //virtual bool loadFile(KURL theFile) = 0;
+   //virtual bool saveFile(KURL theFile) = 0;
 
    virtual QString getAppName();
    virtual QString getAppVersion();
@@ -41,27 +50,35 @@ public:
    virtual QString getAppSource();
    virtual QStringList getAppFileList();
    
-   virtual void setAppName(QString);
-   virtual void setAppVersion(QString);
-   virtual void setAppRevision(QString);
-   virtual void setAppGroup(QString);
-   virtual void setAppPackager(QString);
-   virtual void setAppURL(QString);
-   virtual void setAppSummary(QString);
-   virtual void setAppVendor(QString);
-   virtual void setAppLicense(QString);
-   virtual void setAppArch(QString);
-   virtual void setAppDescription(QString);
-   virtual void setAppChangelog(QString);
+   virtual void setAppName(const QString&);
+   virtual void setAppVersion(const QString&);
+   virtual void setAppRevision(const QString&);
+   virtual void setAppGroup(const QString&);
+   virtual void setAppPackager(const QString&);
+   virtual void setAppURL(const QString&);
+   virtual void setAppSummary(const QString&);
+   virtual void setAppVendor(const QString&);
+   virtual void setAppLicense(const QString&);
+   virtual void setAppArch(const QString&);
+   virtual void setAppDescription(const QString&);
+   virtual void setAppChangelog(const QString&);
+   virtual void setAppFileList(const QStringList &list);
    
    private:
-   DistpartPart * m_part;
-   DistpartDialog * m_dlg;
-   QVBox * box;
-   
-   protected:
-   QString dir;
-   
+   	QString AppName;
+	QString AppVersion;
+	QString AppRevision;
+	QString AppGroup;
+	QString AppPackager;
+	QString AppURL;
+	QString AppSummary;
+	QString AppVendor;
+	QString AppLicense;
+	QString AppArch;
+	QString AppDescription;
+	QString AppChangelog;
+	QString AppSource;
+	QStringList AppFileList;
 };
 
 #endif

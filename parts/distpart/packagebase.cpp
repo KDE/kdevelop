@@ -1,138 +1,117 @@
 #include "packagebase.h"
-#include "packagebase.moc"
-#include "distpart_part.h"
-#include "distpart_widget.h"
-#include <qtabwidget.h>
-#include "kdevproject.h"
 
-packageBase::packageBase(DistpartPart * part, QString name) {
-    m_part = part;
-    dir = m_part->project()->projectDirectory();
-    m_dlg = m_part->getDlg();
-    box = new QVBox(m_dlg->plug_box);
-    m_dlg->plug_box->insertTab(box,name);
+packageBase::packageBase() {
+
 }
 
 packageBase::~packageBase() {}
 
-
-QVBox * packageBase::area() {
-    return box;
-}
-
-bool packageBase::generatePackage(QString &error) {
-    Q_UNUSED( error );
-    return false;
-}
-
-bool packageBase::saveFile(KURL /*theFile*/) { return false; }
-
-
-bool packageBase::loadFile(KURL /*theFile*/) { return false; }
-
-
-
 QString packageBase::getAppName() {
-    return m_dlg->getappNameFormatLineEditText();
+    return AppName;
 }
 
 QString packageBase::getAppVersion() {
-    return m_dlg->getversionLineEditText();
+    return AppVersion;
 }
 
 QString packageBase::getAppRevision() {
-    return m_dlg->getreleaseLineEditText();
+    return AppRevision;
 }
 
 QString packageBase::getAppGroup() {
-    return m_dlg->getgroupLineEditText();
+    return AppGroup;
 }
 
 QString packageBase::getAppPackager() {
-    return m_dlg->getpackagerLineEditText();
+    return AppPackager;
 }
 
 QString packageBase::getAppURL() {
-    return "";
+    return AppURL;
 }
 
 QString packageBase::getAppSummary() {
-    return m_dlg->getsummaryLineEditText();
+    return AppSummary;
 }
 
 QString packageBase::getAppVendor() {
-    return m_dlg->getvendorLineEditText();
+    return AppVendor;
 }
 
 QString packageBase::getAppLicense() {
-    return m_dlg->getlicenseLineEditText();
+    return AppLicense;
 }
 
 QString packageBase::getAppArch() {
-    return m_dlg->getarchComboBoxText();
+    return AppArch;
 }
 
 QString packageBase::getAppDescription() {
-    return m_dlg->getprojectDescriptionMultilineEditText();
+    return AppDescription;
 }
 
 QString packageBase::getAppChangelog() {
-    return m_dlg->getprojectChangelogMultilineEditText();
+    return AppChangelog;
 }
 
 QString packageBase::getAppSource() {
-    return m_dlg->getSourceName();
+    return AppSource;
 }
 
 QStringList packageBase::getAppFileList() {
-    return QStringList();
+    return AppFileList;
 }
 
-void packageBase::setAppName(QString name) {
-    m_dlg->setappNameFormatLineEditText(name);
+void packageBase::setAppName(const QString& name) {
+    AppName = name;
 }
 
-void packageBase::setAppVersion(QString version){
-    m_dlg->setversionLineEditText(version);
+void packageBase::setAppVersion(const QString& version){
+   AppVersion = version;
 }
 
-void packageBase::setAppRevision(QString revision){
-    m_dlg->setreleaseLineEditText(revision);
+void packageBase::setAppRevision(const QString& revision){
+    AppRevision = revision;
 }
 
-void packageBase::setAppGroup(QString group){
-    m_dlg->setgroupLineEditText(group);
+void packageBase::setAppGroup(const QString& group){
+   AppGroup = group;
 }
 
-void packageBase::setAppPackager(QString packager){
-    m_dlg->setpackagerLineEditText(packager);
+void packageBase::setAppPackager(const QString& packager){
+    AppPackager = packager;
 }
 
-void packageBase::setAppURL(QString url)
+void packageBase::setAppURL(const QString& url)
 {
-    Q_UNUSED( url );
+    AppURL = url;
 }
 
-void packageBase::setAppSummary(QString summary){
-    m_dlg->setsummaryLineEditText(summary);
+void packageBase::setAppSummary(const QString& summary){
+    AppSummary = summary;
 }
 
-void packageBase::setAppVendor(QString vendor){
-    m_dlg->setvendorLineEditText(vendor);
+void packageBase::setAppVendor(const QString& vendor){
+    AppVendor = vendor;
 }
 
-void packageBase::setAppLicense(QString licence){
-    m_dlg->setlicenseLineEditText(licence);
+void packageBase::setAppLicense(const QString& licence){
+    AppLicense = licence;
 }
 
-void packageBase::setAppArch(QString arch){
-    Q_UNUSED( arch );
+void packageBase::setAppArch(const QString& arch){
+    AppArch = arch;
 }
 
-void packageBase::setAppDescription(QString description){
-    m_dlg->setprojectDescriptionMultilineEditText(description);
+void packageBase::setAppDescription(const QString& description){
+    AppDescription = description;
 }
 
-void packageBase::setAppChangelog(QString changelog){
-    m_dlg->setprojectChangelogMultilineEditText(changelog);
+void packageBase::setAppChangelog(const QString& changelog){
+    AppChangelog = changelog;
+}
+
+void packageBase::setAppFileList( const QStringList & list )
+{
+	AppFileList = list;
 }
