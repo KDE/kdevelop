@@ -229,7 +229,7 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
     }
     // else we just take the first in the list
     if ( !ptr ) {
-      KService::Ptr ptr = offers.first();
+      ptr = offers.first();
     }
     return static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library().latin1()));
   }
@@ -532,8 +532,6 @@ void PartController::slotPopupAboutToShow()
   if (!popup)
     return;
 
-  kdDebug() << "COUNT BEFORE: " << popup->count() << endl;
-
   // ugly hack: mark the "original" items 
   m_popupIds.resize(popup->count());
   for (uint index=0; index < popup->count(); ++index)
@@ -583,8 +581,6 @@ void PartController::slotPopupAboutToHide()
   for (int index=popup->count()-1; index >= 0; --index)
     if (m_popupIds.contains(popup->idAt(index)) == 0)
       popup->removeItemAt(index);
-
-  kdDebug() << "COUNT AFTER: " << popup->count() << endl;
 }
 
 
