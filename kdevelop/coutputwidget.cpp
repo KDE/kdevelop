@@ -177,7 +177,7 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
         break;
       default:
         // Runtime check for broken Qt version. Don't add empty new lines.
-        if (line[0]=='\n' && !(isAboveQt303())) {
+        if (line[0]=='\n' && (isAboveQt303())) {
           break;
         }
           

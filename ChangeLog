@@ -1,3 +1,21 @@
+2002-08-29  Roland Krause  <roland@ca.wai.com>
+    * This was it. Thanks to my friends Falk and Harry 
+      and to the many other people that made this version 
+      as cool as could be.
+
+      There once was a hacker named Harry 
+      Who's speed was at least - lets say - scary
+      In C plus he was witted
+      So he hacked and committed 
+      Until one day he met the code fairy
+
+      There once was a hacker named Falk
+      Whom windows was reason to balk
+      Many views to juggle
+      Was his furious struggle
+      Til' he vanished in null pointer calc.
+
+
 2002-07-23  Harald Fernengel <harry@kdevelop.org>
     * bugfix: Applied Jens Zurheide's memory leak patches
     * bugfix: Fix outputwidget for Qt 3.0.5
