@@ -174,8 +174,6 @@ void CClassView::initPopups()
   projectPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
   projectPopup.insertItem(SmallIconSet("classnew"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   projectPopup.insertSeparator();
-  projectPopup.insertItem(SmallIconSet("folder_new"),i18n("Add Folder..."), this,
-      SLOT(slotFolderNew()),0, ID_CV_FOLDER_NEW);   projectPopup.insertSeparator();
   projectPopup.insertItem(SmallIconSet("configure"),i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
   projectPopup.insertItem(SmallIconSet("graphview"),i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
 
@@ -252,7 +250,6 @@ void CClassView::initPopups()
   folderPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
   folderPopup.insertItem(SmallIconSet("classnew"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   folderPopup.insertSeparator();
-  folderPopup.insertItem( SmallIconSet("folder_new"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
 
   connect(&attributePopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
@@ -1423,21 +1420,7 @@ void CClassView::slotSlotDelete()
 //{
 //}
 
-void CClassView::slotFolderNew() 
-{
-  CCVAddFolderDlg dlg;
-  QListViewItem *item;
-
-  if( dlg.exec() )
-  {
-    item = ((CClassTreeHandler *)treeH)->addItem( dlg.folderEdit->text(),
-                                                  THFOLDER,
-                                                  currentItem() );
-    setOpen( item, true );
-  }
-}
-
-void CClassView::slotFolderDelete() 
+void CClassView::slotFolderDelete()
 {
   QListViewItem *parent;
 
