@@ -1,3 +1,6 @@
+2002-01-24  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: QextMDI compile error on Irix fixed
+
 2002-01-23  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: switch from TabPage mode to Toplevel mode repaired
 
