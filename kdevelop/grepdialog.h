@@ -15,15 +15,18 @@
  ***************************************************************************/
 
 
-#ifndef _GRAPE_H_
-#define _GRAPE_H_
+#ifndef _GREPDIALOG_H_
+#define _GREPDIALOG_H_
 
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qlistbox.h>
-#include <kprocess.h>
-#include <qcombobox.h>
+
+class QLineEdit;
+class QComboBox;
+class QCheckBox;
+class QListBox;
+class QPushButton;
+class QLabel;
+class KProcess;
 
 
 class GrepDialog : public QDialog
@@ -35,10 +38,8 @@ public:
   ~GrepDialog();
   void  setDirName(QString);
 
-  signals:
-  void itemSelected(QString abs_filename,int line);
-protected:
-    virtual void done(int);
+signals:
+    void itemSelected(QString abs_filename, int line);
     
 private slots:
     void dirButtonClicked();
@@ -52,14 +53,16 @@ private slots:
 
 private:
     void processOutput();
+    void finish();
     
     QLineEdit *pattern_edit, *template_edit, *dir_edit;
+    QComboBox *files_combo;
     QCheckBox *recursive_box;
     QListBox *resultbox;
     QPushButton *search_button, *cancel_button;
+    QLabel *status_label, *matches_label;
     KProcess *childproc;
     QString buf;
-  QComboBox* files_combo;
 };
 
 

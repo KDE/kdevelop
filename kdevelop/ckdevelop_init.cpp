@@ -347,12 +347,14 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Replace"), "Replace",IDK_EDIT_REPLACE );
   accel->connectItem( "Replace", this, SLOT(slotEditReplace() ) );
 
+  accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_SEARCH_IN_FILES );
+  accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ) );
+  
   accel->insertItem( i18n("Indent"), "Indent",IDK_EDIT_INDENT );
   accel->connectItem( "Indent", this, SLOT(slotEditIndent() ) );
 
   accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
   accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ) );
-
 
   //view menu
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
@@ -1053,6 +1055,7 @@ if(bKDevelop){
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH,"Search" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,"Replace" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
 

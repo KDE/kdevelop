@@ -285,6 +285,7 @@
 #define IDK_EDIT_SEARCH								CTRL+Key_F
 #define IDK_EDIT_REPEAT_SEARCH				Key_F3
 #define IDK_EDIT_REPLACE							CTRL+Key_R
+#define IDK_EDIT_SEARCH_IN_FILES						CTRL+ALT+Key_F
 
 #define IDK_EDIT_INDENT								CTRL+Key_I
 #define IDK_EDIT_UNINDENT							CTRL+Key_U

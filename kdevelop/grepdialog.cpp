@@ -19,12 +19,16 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qlineedit.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qlistbox.h>
 #include <qregexp.h>
-#include <qmessagebox.h>
+#include <qlabel.h>
 #include <kquickhelp.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
+#include <kprocess.h>
 #include <kapp.h>
 #include <htmltoken.h>
 
@@ -51,34 +55,37 @@ const char *template_str[] = {
 GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     : QDialog(parent, name, false), childproc(0)
 {
-  setCaption(i18n("Search in Files..."));
-    QGridLayout *layout = new QGridLayout(this, 4, 3, 10, 4);
-    layout->addRowSpacing(1, 10);
+    setCaption(i18n("Search in Files..."));
+    
+    QGridLayout *layout = new QGridLayout(this, 6, 3, 10, 4);
+    layout->setColStretch(0, 10);
     layout->addColSpacing(1, 10);
-    layout->setRowStretch(0, 1);
-    layout->setRowStretch(1, 0);
-    layout->setRowStretch(2, 10);
-    layout->setColStretch(0, 5);
     layout->setColStretch(1, 0);
     layout->setColStretch(2, 1);
+    layout->addRowSpacing(1, 10);
+    layout->setRowStretch(1, 0);
+    layout->setRowStretch(2, 10);
+    layout->addRowSpacing(4, 10);
+    layout->setRowStretch(4, 0);
     
     QGridLayout *input_layout = new QGridLayout(4, 2, 10);
     layout->addLayout(input_layout, 0, 0);
     input_layout->setColStretch(0, 1);
-    input_layout->setColStretch(1, 10);
+    input_layout->setColStretch(1, 20);
 
-    QLabel *pattern_label = new QLabel(i18n("Pattern:"), this);
+    QLabel *pattern_label = new QLabel(i18n("&Pattern:"), this);
     pattern_label->setAlignment(AlignRight | AlignVCenter);
     pattern_label->setMinimumSize(pattern_label->sizeHint());
     pattern_label->setFixedHeight(pattern_label->sizeHint().height());
     input_layout->addWidget(pattern_label, 0, 0);
 
     pattern_edit = new QLineEdit(this);
+    pattern_label->setBuddy(pattern_edit);
     pattern_edit->setFocus();
     pattern_edit->setMinimumSize(pattern_edit->sizeHint());
     input_layout->addWidget(pattern_edit, 0, 1);
     
-    QLabel *template_label = new QLabel(i18n("Template:"), this);
+    QLabel *template_label = new QLabel(i18n("&Template:"), this);
     template_label->setAlignment(AlignRight | AlignVCenter);
     template_label->setMinimumSize(template_label->sizeHint());
     template_label->setFixedHeight(template_label->sizeHint().height());
@@ -88,6 +95,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     input_layout->addLayout(template_layout, 1, 1);
     
     template_edit = new QLineEdit(this);
+    template_label->setBuddy(template_edit);
     template_edit->setText(template_str[0]);
     template_edit->setMinimumSize(template_edit->sizeHint());
     template_layout->addWidget(template_edit);
@@ -98,13 +106,14 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     template_combo->setFixedSize(template_combo->size());
     template_layout->addWidget(template_combo);
 
-    QLabel *files_label = new QLabel(i18n("Files:"), this);
+    QLabel *files_label = new QLabel(i18n("&Files:"), this);
     files_label->setAlignment(AlignRight | AlignVCenter);
     files_label->setMinimumSize(files_label->sizeHint());
     files_label->setFixedHeight(files_label->sizeHint().height());
     input_layout->addWidget(files_label, 2, 0);
 
-    files_combo = new QComboBox(true,this);
+    files_combo = new QComboBox(true, this);
+    files_label->setBuddy(files_combo->focusProxy());
     files_combo->setMinimumSize(files_combo->sizeHint());
     files_combo->insertItem("*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c");
     files_combo->insertItem("*.cpp,*.cc,*.C,*.cxx,*.c");
@@ -112,7 +121,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     files_combo->insertItem("*");
     input_layout->addWidget(files_combo, 2, 1);
 
-    QLabel *dir_label = new QLabel(i18n("Directory:"), this);
+    QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
     dir_label->setAlignment(AlignRight | AlignVCenter);
     dir_label->setMinimumSize(files_label->sizeHint());
     dir_label->setFixedHeight(files_label->sizeHint().height());
@@ -122,18 +131,20 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     input_layout->addLayout(dir_layout, 3, 1);
     
     dir_edit = new QLineEdit(this);
+    dir_label->setBuddy(dir_edit);
     dir_edit->setText(dirname);
     dir_edit->setMinimumSize(dir_edit->sizeHint());
     dir_layout->addWidget(dir_edit, 10);
 
     QPushButton *dir_button = new QPushButton("...", this);
-    dir_button->setMinimumHeight(dir_button->sizeHint().height());
+    dir_button->setFixedHeight(dir_edit->sizeHint().height());
     dir_button->setFixedWidth(30);
     dir_layout->addWidget(dir_button);
     
-    recursive_box = new QCheckBox(i18n("Recursive"), this);
+    recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setMinimumSize(recursive_box->sizeHint());
     recursive_box->setChecked(true);
+    dir_layout->addSpacing(10);
     dir_layout->addWidget(recursive_box);
 
     KButtonBox *actionbox = new KButtonBox(this, KButtonBox::VERTICAL);
@@ -147,13 +158,31 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     actionbox->layout();
 
     resultbox = new QListBox(this);
-    QFontMetrics fm(resultbox->fontMetrics());
-    resultbox->setMinimumSize(fm.width("0")*40,
-			      fm.lineSpacing()*15);
+    QFontMetrics rb_fm(resultbox->fontMetrics());
+    resultbox->setMinimumSize(rb_fm.width("0")*45,
+			      rb_fm.lineSpacing()*15);
     layout->addMultiCellWidget(resultbox, 2, 2, 0, 2);
 
+    QFrame *status_frame = new QFrame(this);
+    status_frame->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    QBoxLayout *status_layout = new QHBoxLayout(status_frame, 2);
+
+    status_label = new QLabel(i18n("Ready"), status_frame);
+    status_layout->addWidget(status_label, 10);
+
+    matches_label = new QLabel(status_frame);
+    QFontMetrics ml_fm(matches_label->fontMetrics());
+    matches_label->setFixedWidth(ml_fm.width(i18n("9999 matches")));
+    matches_label->setFixedHeight(ml_fm.lineSpacing());
+    status_layout->addWidget(matches_label, 0);
+
+    status_layout->activate();
+    status_frame->adjustSize();
+    status_frame->setMinimumSize(status_frame->size());
+    layout->addMultiCellWidget(status_frame, 3, 3, 0, 2);
+
     KButtonBox *buttonbox = new KButtonBox(this);
-    layout->addMultiCellWidget(buttonbox, 3, 3, 0, 2);
+    layout->addMultiCellWidget(buttonbox, 5, 5, 0, 2);
     QPushButton *clear_button = buttonbox->addButton(i18n("Clear"));
     buttonbox->addStretch();
     QPushButton *done_button = buttonbox->addButton(i18n("Done"));
@@ -178,11 +207,14 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 			 "<bold>{<i>n</i>,}</bold> - The preceding item is matched <i>n</i> or more times\n"
 			 "<bold>{,<i>n</i>}</bold> - The preceding item is matched at most <i>n</i> times\n"
 			 "<bold>{<i>n</i>,<i>m</i>}</bold> - The preceding item is matched at least <i>n</i>,\n"
-			 "   but at most <i>m</i> times"
-			 // ... to be continued
+			 "   but at most <i>m</i> times.\n"
+			 "\n"
+			 "Furthermore, backreferences to bracketed subexpressions are\n"
+			 "available via the notation \\<i>n</i>."
 			 ));
     KQuickHelp::add(files_combo,
-		    i18n("Enter the file pattern of the files to search here.\n"));
+		    i18n("Enter the file name pattern of the files to search here.\n"
+			 "You may give several patterns separated by commas"));
     KQuickHelp::add(template_edit,
 		    i18n("You can choose a template for the pattern from the combo box\n"
 			 "and edit it here. The string %s in the template is replaced\n"
@@ -214,13 +246,6 @@ GrepDialog::~GrepDialog()
 {
     if (childproc)
       delete childproc;
-}
-
-
-void GrepDialog::done(int res)
-{
-    QDialog::done(res);
-    //    delete this;
 }
 
 
@@ -267,6 +292,11 @@ void GrepDialog::processOutput()
 	resultbox->insertItem(item);
       buf = buf.right(buf.length()-pos-1);
     }
+  
+  QString str;
+  str.setNum(resultbox->count());
+  str += i18n(" matches");
+  matches_label->setText(str);
 }
 
 
@@ -292,6 +322,7 @@ void GrepDialog::slotSearch()
     files = files + " -o -name " + "'"+QString(tokener.nextToken())+ "'";
   }
 
+    status_label->setText(i18n("Searching..."));
 
     QString pattern = template_edit->text();
     pattern.replace(QRegExp("%s"), pattern_edit->text());
@@ -314,9 +345,6 @@ void GrepDialog::slotSearch()
     *childproc << (QString("-e '") + pattern + "'");
     *childproc << filepattern;
     *childproc << "/dev/null";
-    *childproc << "< /dev/null";
-
-    cerr << endl << filepattern;
 
     connect( childproc, SIGNAL(processExited(KProcess *)),
 	     SLOT(childExited()) );
@@ -326,7 +354,7 @@ void GrepDialog::slotSearch()
 }
 
 
-void GrepDialog::slotCancel()
+void GrepDialog::finish()
 {
     search_button->setEnabled(true);
     cancel_button->setEnabled(false);
@@ -339,11 +367,26 @@ void GrepDialog::slotCancel()
 }
 
 
+void GrepDialog::slotCancel()
+{
+    finish();
+
+    status_label->setText(i18n("Canceled"));
+}
+
+
 void GrepDialog::childExited()
 {
-    if (childproc->exitStatus() == 1)
-	QMessageBox::information(this, "Grep", i18n("No matches found"));
-    slotCancel();
+    int status = childproc->exitStatus();
+    
+    finish();
+
+    status_label->setText( (status == 1)? i18n("No matches found")
+			   : (status == 2)? i18n("Syntax error in pattern")
+			   : i18n("Ready") );
+    if (status != 0)
+	matches_label->setText("");
+    
 }
 
 
@@ -356,8 +399,11 @@ void GrepDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
 
 void GrepDialog::slotClear()
 {
-    //    slotCancel();
+    finish();
     resultbox->clear();
+
+    status_label->setText(i18n("Ready"));
+    matches_label->setText("");
 }
 
 
