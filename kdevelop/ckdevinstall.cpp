@@ -627,7 +627,7 @@ void CKDevInstall::slotAuto() // proceed >>
     make_str="make"+not_found+"\n";
   QString gmake_str;
   if(gmake){
-    gmake_str="gmake"+found+" -- setting make-command to gmake\n";
+    gmake_str="gmake"+found+i18n(" -- setting make-command to gmake\n");
     config->setGroup("General Options");
     config->writeEntry("Make","gmake");
   }
@@ -652,12 +652,12 @@ void CKDevInstall::slotAuto() // proceed >>
   if(sgml2html)
     sgml2html_str="sgml2html"+found+"\n";
   else
-    sgml2html_str="sgml2html"+not_found+" -- generating application handbooks will not be possible\n";
+    sgml2html_str="sgml2html"+not_found+i18n(" -- generating application handbooks will not be possible\n");
   QString kdoc_str;
   if(kdoc)
     kdoc_str="kdoc"+found+"\n";
   else
-    kdoc_str="kdoc"+not_found+" -- generating API-documentations will not be possible\n";
+    kdoc_str="kdoc"+not_found+i18n(" -- generating API-documentations will not be possible\n");
   QString dbg_str;
   if(dbg){
     dbg_str="kdbg"+found+"\n";
@@ -666,7 +666,7 @@ void CKDevInstall::slotAuto() // proceed >>
 		tools_argument.append(" ");
 	}
   else
-    dbg_str="kdbg"+not_found+" -- debugging within KDevelop will not be possible\n";
+    dbg_str="kdbg"+not_found+i18n(" -- debugging within KDevelop will not be possible\n");
   QString kiconedit_str;
   if(kiconedit){
     kiconedit_str="KIconedit"+found+"\n";
@@ -675,7 +675,7 @@ void CKDevInstall::slotAuto() // proceed >>
 		tools_argument.append(" ");
 	}
   else
-    kiconedit_str="KIconedit"+not_found+" -- editing icons will not be possible\n";
+    kiconedit_str="KIconedit"+not_found+i18n(" -- editing icons will not be possible\n");
 	QString kpaint_str;
 	if(kpaint){
     kpaint_str="KPaint"+found+"\n";
@@ -853,8 +853,8 @@ void CKDevInstall::slotAuto() // proceed >>
 
   if (!kde_test) {
     config->writeEntry("doc_kde",dir);
-    KMsgBox::message(0, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
-								     +"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
+    KMsgBox::message(this, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n")+dir
+								     +i18n("\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
      slotProcessExited(0);
      return; //ok, nothing more to do, we are leaving	
   }

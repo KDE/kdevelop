@@ -6,14 +6,18 @@
 data Information
 {
    Filename="/home/rnolden/Projects/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
-   KDevelopVersion="0.4"
+   KDevelopVersion="1.1"
    DlgEditVersion="0.1alpha"
-   LastChanged="Tue Feb 15 23:14:38 2000"
+   LastChanged="Fri Mar 3 19:42:52 2000"
 }
 
 data SessionManagement
 {
-   OpenedRootCount="0"
+   OpenedRoot_1="Appearance"
+   OpenedRoot_2="C++ Code"
+   OpenedRoot_3="General"
+   OpenedRoot_4="Geometry"
+   OpenedRootCount="4"
 }
 
 item QWidget
@@ -70,12 +74,13 @@ item QWidget
       Name="NoName"
       VarName="QLabel_1"
       X="10"
-      Y="80"
-      Width="170"
-      Height="30"
+      Y="50"
+      Width="220"
+      Height="60"
       MinWidth="0"
       MinHeight="0"
-      Text="Manual-File:"
+      Text="Manufdfdsfffffffffffffffffffffffffffffffdfdfdddfd\n"sfdssddfdsfile:""
+      isAutoResize="true"
    }
 
    item QRadioButton
