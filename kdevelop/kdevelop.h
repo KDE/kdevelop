@@ -30,35 +30,40 @@ class KDevelopCore;
 
 class KDevelop : public QextMdiMainFrm //KParts::DockMainWindow
 {
- Q_OBJECT
+    Q_OBJECT
 public:
-  /** construtor */
-  KDevelop(QWidget* pParent = 0L, const char *name=0L , WFlags f = 0);
-  /** destructor */
-  ~KDevelop();
-  // Session management
-  virtual void saveProperties(KConfig*);
-  virtual void readProperties(KConfig*);
+    /** construtor */
+    KDevelop(QWidget* pParent = 0L, const char *name=0L , WFlags f = 0);
+    /** destructor */
+    ~KDevelop();
+    /** Session management - reads the configuration */
+    virtual void saveProperties(KConfig*);
+    /** Session management - reads the configuration */
+    virtual void readProperties(KConfig*);
   
-  bool queryClose();
-  bool queryExit();
+    bool queryClose();
+    bool queryExit();
 public slots:
-   /** Embed the widgets of components in the GUI. */
-   void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
+    /** Embed the widgets of components in the GUI. */
+    void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
+    /**
+    * Undocks all view windows (unix-like)
+    */
+    virtual void switchToToplevelMode();
+    /**
+    * Docks all view windows (Windows-like)
+    */
+    virtual void switchToChildframeMode();
 
 protected: // Protected methods
-   /** fit the system menu button position to the menu position */
-   virtual void resizeEvent( QResizeEvent * );
+    /** fit the system menu button position to the menu position */
+    virtual void resizeEvent( QResizeEvent * );
 
 protected slots: // Protected slots
-   /** reimplemented from KParts::MainWindow */
-   //  void slotSetStatusBarText( const QString &text);
+    /** reimplemented from KParts::MainWindow */
+    //  void slotSetStatusBarText( const QString &text);
 
- signals:
- void addView( QWidget*);
- 
- private:
- 
+private:
     void initActions();
     /** initializes the help messages (whats this and
         statusbar help) on the KActions
@@ -70,23 +75,23 @@ protected slots: // Protected slots
     void initQextMDI();
 
   
-  //
-  // the covering dockwidgets for all views
-  //
-  /** The initial dock cover for document views */
-  KDockWidget*              m_dockbaseAreaOfDocumentViews;
+    //
+    // the covering dockwidgets for all views
+    //
+    /** The initial dock cover for document views */
+    KDockWidget*              m_dockbaseAreaOfDocumentViews;
 
-  // TODO: Workaround for bug in dock window stuff when using protected members
-  // DockL and DockB
-  KDockWidget*              m_dockOnLeft;
-  KDockWidget*              m_dockOnBottom;
+    // TODO: Workaround for bug in dock window stuff when using protected members
+    // DockL and DockB
+    KDockWidget*              m_dockOnLeft;
+    KDockWidget*              m_dockOnBottom;
 
-  KDevelopCore*             m_pCore;
+    KDevelopCore*             m_pCore;
 
-  QList<QextMdiChildView>   m_MDICoverList;
+    QList<QextMdiChildView>   m_MDICoverList;
 
 private slots:
-   void slotOptionsEditToolbars();
+    void slotOptionsEditToolbars();
 };
 
 #endif

@@ -18,6 +18,7 @@
 
 #include <qdialog.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -38,9 +39,8 @@
 #include <kedittoolbar.h>
 #include <kconfig.h>
 
-KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f) :
-//  KParts::DockMainWindow( pParent, name, f)
-   QextMdiMainFrm( pParent, name, f)
+KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
+:  QextMdiMainFrm( pParent, name, f)
    ,m_dockbaseAreaOfDocumentViews(0L)
    ,m_dockOnLeft(0L)
    ,m_dockOnBottom(0L)
@@ -55,7 +55,13 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f) :
     m_pCore = new KDevelopCore(this);
     createGUI(0);
     initQextMDI();
+
+    // load all kpart components and let them create their partial GUI
     m_pCore->loadInitialComponents();
+
+    // insert the Window menu provided by QextMDI, we don't need KParts here.
+    menuBar()->removeItemAt( 6);
+    menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, 6);
 
     resize(800,600); // temp
 }
@@ -505,14 +511,14 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
         {
           QextMdiChildView* pMDICover = new QextMdiChildView( w->caption());
           m_MDICoverList.append( pMDICover);
-
-          w->reparent( pMDICover, 0, QPoint(0,0));
           QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
+
+          w->reparent( pMDICover, QPoint(0,0));
+          QApplication::sendPostedEvents();
           pLayout->addWidget( w);
 
           pMDICover->setName( w->name());
           addWindow( pMDICover, QextMdi::StandardAdd);
-          pLayout->activate();
         }
         m_dockOnLeft = nextWidget;
       }
@@ -541,5 +547,63 @@ void KDevelop::resizeEvent( QResizeEvent *pRSE)
    setSysButtonsAtMenuPosition();
 }
 
+void KDevelop::switchToToplevelMode()
+{
+    QObjectList* pObjList = queryList( "KDockWidget");
+    QObjectListIt it( *pObjList);
+    QObject* pObj;
+    QList<KDockWidget> rootDockWidgetList;
+
+    // for all dockwidgets (which are children of this):
+    while ((pObj = it.current()) != 0L) {
+        ++it;
+        KDockWidget* pDockW = (KDockWidget*) pObj;
+        KDockWidget* pRootDockW = 0L;
+        KDockWidget* pUndockCandidate = 0L;
+        QWidget* pW = pDockW;
+        // find the second oldest ancestor of the current dockwidget that is also a dockwidget
+        while (!pW->isTopLevel()) {
+            if (pW->inherits("KDockWidget")) {
+                pUndockCandidate = (KDockWidget*) pW;
+                if (pUndockCandidate->enableDocking() != KDockWidget::DockNone)
+                    pRootDockW = pUndockCandidate;
+            }
+            pW = pW->parentWidget();
+        }
+        if (pRootDockW) {
+            // if that second oldest ancestor is not already in the list, append it
+            bool found = false;
+            QListIterator<KDockWidget> it2( rootDockWidgetList);
+            if (!rootDockWidgetList.isEmpty()) {
+                for ( ; it2.current() && !found; ++it2 ) {
+                    KDockWidget* pDockW = it2.current();
+                    if (pDockW == pRootDockW)
+                        found = true;
+                }
+                if (!found)
+                    rootDockWidgetList.append( pDockW);
+            }
+            else
+                rootDockWidgetList.append( pRootDockW);
+        }
+    }
+
+    // undock all found second oldest ancestors (being KDockWidgets)
+    QListIterator<KDockWidget> it3( rootDockWidgetList);
+    for ( ; it3.current(); ++it3 ) {
+        KDockWidget* pDockW = it3.current();
+        pDockW->undock();
+        pDockW->show();
+//        pDockW->makeDockVisible();
+    }
+
+    // don't forget to undock the MDI views of QextMDI
+    QextMdiMainFrm::switchToToplevelMode();
+}
+
+void KDevelop::switchToChildframeMode()
+{
+    QextMdiMainFrm::switchToChildframeMode();
+}
 
 #include "kdevelop.moc"
