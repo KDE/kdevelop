@@ -106,5 +106,7 @@ Another tasks:
     - Browser tool bar should truncate long menu entries so it doesn't
       take so much space
     .
+  - Integrate kontact's TODO-List and knotes plugin. (We need something like a
+    server/client system that all the knotes/toto-clients are always synced.)
 
 */
