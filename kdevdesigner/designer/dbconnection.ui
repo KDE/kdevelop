@@ -55,7 +55,7 @@
                 <cstring>TextLabel3</cstring>
             </property>
             <property name="text">
-                <string>&amp;Database Name:</string>
+                <string>&amp;Database name:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>editDatabase</cstring>
@@ -88,7 +88,7 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>D&amp;river</string>
+                <string>D&amp;river:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>comboDriver</cstring>
@@ -148,7 +148,7 @@
                 <cstring>TextLabel1_2</cstring>
             </property>
             <property name="text">
-                <string>P&amp;ort</string>
+                <string>P&amp;ort:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>editPort</cstring>

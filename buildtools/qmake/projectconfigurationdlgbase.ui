@@ -982,7 +982,7 @@
                             <cstring>TextLabel2_2_4_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Lib directories ou&amp;tside project:</string>
+                            <string>Library directories ou&amp;tside project:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>outsideinc_listview</cstring>

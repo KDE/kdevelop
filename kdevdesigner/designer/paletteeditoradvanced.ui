@@ -84,7 +84,7 @@
                         <enum>MShadow</enum>
                     </property>
                     <property name="text">
-                        <string>Select &amp;Palette:</string>
+                        <string>Select &amp;palette:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>paletteCombo</cstring>
@@ -140,7 +140,7 @@
                         <cstring>checkBuildInactive</cstring>
                     </property>
                     <property name="text">
-                        <string>Build the &amp;inactive palette from the active palette.</string>
+                        <string>Build the &amp;inactive palette from the active palette</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -151,7 +151,7 @@
                         <cstring>checkBuildDisabled</cstring>
                     </property>
                     <property name="text">
-                        <string>Build the &amp;disabled palette from the active palette.</string>
+                        <string>Build the &amp;disabled palette from the active palette</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -164,7 +164,7 @@
                 <cstring>groupCentral</cstring>
             </property>
             <property name="title">
-                <string>Central color roles</string>
+                <string>Central Color Roles</string>
             </property>
             <vbox>
                 <property name="name">
@@ -284,7 +284,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>Choose Pi&amp;xmap:</string>
+                                <string>Choose pi&amp;xmap:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>buttonPixmap</cstring>
@@ -330,7 +330,7 @@
                                 </size>
                             </property>
                             <property name="text">
-                                <string>&amp;Select Color:</string>
+                                <string>&amp;Select color:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>buttonCentral</cstring>
@@ -368,7 +368,7 @@
                 <cstring>groupEffect</cstring>
             </property>
             <property name="title">
-                <string>3-D shadow effects</string>
+                <string>3-D Shadow Effects</string>
             </property>
             <vbox>
                 <property name="name">
@@ -399,7 +399,7 @@
                                 <cstring>checkBuildEffect</cstring>
                             </property>
                             <property name="text">
-                                <string>Build &amp;from button color</string>
+                                <string>Build &amp;from button color:</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -497,7 +497,7 @@
                                 </size>
                             </property>
                             <property name="text">
-                                <string>Select Co&amp;lor:</string>
+                                <string>Select co&amp;lor:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>buttonEffect</cstring>

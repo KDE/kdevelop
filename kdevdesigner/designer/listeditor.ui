@@ -38,7 +38,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Edit...</string>
+        <string>Edit</string>
     </property>
     <grid>
         <property name="name">

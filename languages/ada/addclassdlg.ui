@@ -318,6 +318,25 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
+        <widget class="QPushButton" row="5" column="3">
+            <property name="name">
+                <cstring>PushButton3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Help</string>
+            </property>
+        </widget>
+        <spacer row="5" column="2">
+            <property name="name">
+                <cstring>Spacer5</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+        </spacer>
         <widget class="QPushButton" row="5" column="0">
             <property name="name">
                 <cstring>PushButton1</cstring>
@@ -335,25 +354,6 @@
             </property>
             <property name="text">
                 <string>&amp;Cancel</string>
-            </property>
-        </widget>
-        <spacer row="5" column="2">
-            <property name="name">
-                <cstring>Spacer5</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-        </spacer>
-        <widget class="QPushButton" row="5" column="3">
-            <property name="name">
-                <cstring>PushButton3</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Help</string>
             </property>
         </widget>
     </grid>

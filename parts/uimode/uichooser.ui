@@ -147,7 +147,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                         <cstring>HoverCloseGroup</cstring>
                     </property>
                     <property name="title">
-                        <string>Use Close On Hover</string>
+                        <string>Use Close on Hover</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>The document tab can optionally be used to close the document, by clicking on the tab icon.</string>
@@ -180,7 +180,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                                 <cstring>DoDelayedCloseOnHover</cstring>
                             </property>
                             <property name="text">
-                                <string>Yes, Delayed</string>
+                                <string>Yes, delayed</string>
                             </property>
                         </widget>
                     </vbox>
@@ -203,7 +203,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                         <string>Toolview Tab Layout</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Three different modes for the IDEAl toolview tabs. "Text and Icons" is the most informative, but takes a lot of space. Those with a smaller screen will typically want "Icons".</string>
+                        <string>Three different modes for the IDEAl toolview tabs. "Text and icons" is the most informative, but takes a lot of space. Those with a smaller screen will typically want "Icons".</string>
                     </property>
                     <vbox>
                         <property name="name">
@@ -233,7 +233,7 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                                 <cstring>TextAndIcons</cstring>
                             </property>
                             <property name="text">
-                                <string>Text and Icons</string>
+                                <string>Text and icons</string>
                             </property>
                         </widget>
                     </vbox>

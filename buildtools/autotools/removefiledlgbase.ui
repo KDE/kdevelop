@@ -117,7 +117,7 @@
                                 </size>
                             </property>
                             <property name="text">
-                                <string>&lt;b&gt;Note:&lt;/b&gt; you will not be able to undelete the file.</string>
+                                <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undelete the file.</string>
                             </property>
                         </widget>
                     </vbox>

@@ -24,7 +24,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Colors to use for version control feedback</string>
+                <string>Colors to Use for Version Control Feedback</string>
             </property>
             <grid>
                 <property name="name">

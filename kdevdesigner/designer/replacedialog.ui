@@ -69,7 +69,7 @@
                         <cstring>TextLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>R&amp;eplace</string>
+                        <string>R&amp;eplace:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>comboReplace</cstring>
@@ -80,7 +80,7 @@
                         <cstring>TextLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Find</string>
+                        <string>&amp;Find:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>comboFind</cstring>
@@ -218,7 +218,7 @@
                         <cstring>checkBegin</cstring>
                     </property>
                     <property name="text">
-                        <string>Start at &amp;Beginning</string>
+                        <string>Start at &amp;beginning</string>
                     </property>
                 </widget>
             </vbox>

@@ -64,7 +64,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Template &amp;Name:</string>
+                <string>Template &amp;name:</string>
             </property>
             <property>
                 <name>buddy</name>
@@ -181,7 +181,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>&amp;Baseclass for Template:</string>
+                <string>&amp;Baseclass for template:</string>
             </property>
             <property>
                 <name>buddy</name>

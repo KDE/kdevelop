@@ -95,7 +95,7 @@
                         <cstring>radioProjectImageFile</cstring>
                     </property>
                     <property name="text">
-                        <string>Project &amp;Imagefile</string>
+                        <string>Project &amp;image file</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Use the Project's Image file for pixmaps</string>
@@ -124,7 +124,7 @@
                         <cstring>radioPixmapFunction</cstring>
                     </property>
                     <property name="text">
-                        <string>Use &amp;Function:</string>
+                        <string>Use &amp;function:</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Use the given function for pixmaps</string>
@@ -196,7 +196,7 @@
                         <cstring>TextLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Class &amp;Name:</string>
+                        <string>Class &amp;name:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>editClassName</cstring>
@@ -275,7 +275,7 @@
                         <cstring>TextLabel2_2</cstring>
                     </property>
                     <property name="text">
-                        <string>D&amp;efault Spacing:</string>
+                        <string>D&amp;efault spacing:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>spinSpacing</cstring>
@@ -286,7 +286,7 @@
                         <cstring>checkLayoutFunctions</cstring>
                     </property>
                     <property name="text">
-                        <string>Use Func&amp;tions:</string>
+                        <string>Use func&amp;tions:</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Use functions to get the margin and spacing</string>
@@ -319,7 +319,7 @@
                         <cstring>TextLabel1_3</cstring>
                     </property>
                     <property name="text">
-                        <string>Default Mar&amp;gin:</string>
+                        <string>Default mar&amp;gin:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>spinMargin</cstring>

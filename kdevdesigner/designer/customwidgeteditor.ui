@@ -378,7 +378,7 @@
                             <cstring>Label7</cstring>
                         </property>
                         <property name="text">
-                            <string>Si&amp;ze Hint:</string>
+                            <string>Si&amp;ze hint:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>spinWidth</cstring>
@@ -389,7 +389,7 @@
                             <cstring>TextLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Size P&amp;olicy</string>
+                            <string>Size p&amp;olicy:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>sizeHor</cstring>
@@ -539,7 +539,7 @@
                             <cstring>checkContainer</cstring>
                         </property>
                         <property name="text">
-                            <string>Con&amp;tainer Widget</string>
+                            <string>Con&amp;tainer widget</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string>Container Widget</string>
@@ -1081,7 +1081,7 @@
                             <cstring>TextLabel2_2</cstring>
                         </property>
                         <property name="text">
-                            <string>P&amp;roperty Name:</string>
+                            <string>P&amp;roperty name:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>editProperty</cstring>

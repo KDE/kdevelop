@@ -155,7 +155,7 @@
                                 <cstring>classNameLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>C&amp;lass Name:</string>
+                                <string>C&amp;lass name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>classNameEdit</cstring>
@@ -192,7 +192,7 @@
                                 <cstring>fileNameLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;File Name:</string>
+                                <string>&amp;File name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>fileNameEdit</cstring>

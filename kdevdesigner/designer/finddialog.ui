@@ -221,7 +221,7 @@
                         <cstring>checkBegin</cstring>
                     </property>
                     <property name="text">
-                        <string>Start at &amp;Beginning</string>
+                        <string>Start at &amp;beginning</string>
                     </property>
                 </widget>
             </vbox>

@@ -66,7 +66,7 @@
                         <cstring>noticeLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Note:&lt;/b&gt; you will not be able to undo this operation.</string>
+                        <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undo this operation.</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter</set>

@@ -215,7 +215,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>Real path</string>
+                            <string>Real Path</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>

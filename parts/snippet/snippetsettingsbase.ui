@@ -65,7 +65,7 @@
                         <cstring>btnGroup</cstring>
                     </property>
                     <property name="title">
-                        <string>Input method for variables</string>
+                        <string>Input Method for Variables</string>
                     </property>
                     <grid>
                         <property name="name">
@@ -120,7 +120,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Delimiter</string>
+                                <string>Delimiter:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>kLineEdit1</cstring>

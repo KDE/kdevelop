@@ -38,7 +38,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>View and Edit Connections</string>
+        <string>View & Edit Connections</string>
     </property>
     <grid>
         <property name="name">

@@ -73,7 +73,7 @@
                             <cstring>TextLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Project File:</string>
+                            <string>&amp;Project file:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>editProjectFile</cstring>
@@ -108,7 +108,7 @@
                             <cstring>TextLabel1_2_2_2</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Database File:</string>
+                            <string>&amp;Database file:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>editDatabaseFile</cstring>

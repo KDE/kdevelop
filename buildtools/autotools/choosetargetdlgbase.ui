@@ -171,7 +171,7 @@
                 <cstring>neverAskAgainCheckBox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Do not ask me again and use always my Active Target.</string>
+                <string>&amp;Do not ask me again and use always my active target</string>
             </property>
         </widget>
         <spacer>

@@ -64,7 +64,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>&amp;Enter arguments for loading the pixmap</string>
+                <string>&amp;Enter arguments for loading the pixmap:</string>
             </property>
             <property>
                 <name>buddy</name>

@@ -83,7 +83,7 @@
                                 <cstring>pagesLabel</cstring>
                             </property>
                             <property name="text">
-                                <string>Wizard Pages:</string>
+                                <string>Wizard pages:</string>
                             </property>
                         </widget>
                         <widget class="QListBox">
@@ -210,20 +210,6 @@
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>buttonApply</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Apply</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Apply all changes.</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
                         <cstring>buttonOk</cstring>
                     </property>
                     <property name="text">
@@ -237,6 +223,20 @@
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Close the dialog and apply all the changes.</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonApply</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Apply</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Apply all changes.</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">

@@ -74,7 +74,7 @@
                         <cstring>PushButton3</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
@@ -85,7 +85,7 @@
                         <cstring>PushButton4</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>

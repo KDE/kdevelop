@@ -87,7 +87,7 @@
                                     <cstring>checkBoxAutoSave</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Enable Auto Sa&amp;ve</string>
+                                    <string>Enable auto sa&amp;ve</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+V</string>
@@ -109,7 +109,7 @@
                                             <cstring>textLabelAutoSave</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Auto Save &amp;Interval:</string>
+                                            <string>Auto save &amp;interval:</string>
                                         </property>
                                         <property name="buddy" stdset="0">
                                             <cstring>timeEditAutoSave</cstring>
@@ -191,7 +191,7 @@
                                     <cstring>checkBoxWorkspace</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Restore Last &amp;Workspace on Startup</string>
+                                    <string>Restore last &amp;workspace on startup</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+W</string>
@@ -211,7 +211,7 @@
                                     <cstring>checkBoxSplash</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show &amp;Splash Screen on Startup</string>
+                                    <string>Show &amp;splash screen on startup</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -228,7 +228,7 @@
                                     <cstring>checkBoxStartDialog</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show Start &amp;Dialog</string>
+                                    <string>Show start &amp;dialog</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -239,7 +239,7 @@
                                     <cstring>checkAutoEdit</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Disable Data&amp;base Auto-Edit in Preview</string>
+                                    <string>Disable data&amp;base auto-edit in preview</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+B</string>
@@ -253,7 +253,7 @@
                                     <cstring>checkBoxTextLabels</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show Toolbutton Lab&amp;els</string>
+                                    <string>Show toolbutton lab&amp;els</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+E</string>
@@ -295,7 +295,7 @@
                                     <cstring>checkBoxSnapGrid</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Sn&amp;ap to Grid</string>
+                                    <string>Sn&amp;ap to grid</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+A</string>
