@@ -1,5 +1,9 @@
-2203-03-18 Caleb Tennis <caleb@aei-tech.com>
+2003-03-19 Caleb Tennis <caleb@aei-tech.com>
+	* Tagged Alpha 4
+
+2003-03-18 Caleb Tennis <caleb@aei-tech.com>
 	* Modified IDEAl panel layouts to be a little smarter (hopefully)
+	* Committed patches by Amilcar do Carmo Lucas
 
 2003-03-18 Roberto Raggi <roberto@kdevelop.org>
 	* added the new "Add Methods" wizard
