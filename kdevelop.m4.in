@@ -402,6 +402,49 @@ fi
 ])
 
 dnl  **********
+dnl  Simple Check for Berkeley DB >= 3
+dnl  **********
+
+AC_DEFUN(KDEV_CHECK_BDB,
+[
+  AC_MSG_CHECKING(for Berkeley DB >= 3)
+
+  AC_CACHE_VAL(ac_cv_bdb,
+  [
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
+
+    save_CXXFLAGS="$CXXFLAGS"
+
+    CXXFLAGS="$CXXFLAGS $X_CFLAGS -ldb"
+
+    AC_TRY_LINK([
+      #include <db.h>
+    ],
+    [
+      #if DB_VERSION_MAJOR < 3
+         choke me
+      #else
+         DB *db;
+         db->open( db, "test.db", NULL, DB_BTREE, DB_CREATE, 0644 );
+      #endif
+    ],
+      ac_cv_bdb=yes,
+      ac_cv_bdb=no
+    )
+    CXXFLAGS="$save_CXXFLAGS"
+    AC_LANG_RESTORE
+   ])
+
+  if test "$ac_cv_bdb" != "yes"; then
+    AC_MSG_ERROR(no - please install Berkeley DB >= 3)
+  else
+    AC_MSG_RESULT(yes)
+  fi
+])
+
+
+dnl  **********
 dnl  Very ugly hack to see whether QT_VERSION > 3.0.4. Remove it when
 dnl  KDevelop needs Qt > 3.0.4 anyways
 dnl  stolen from licq's qt-plugin, thank you guys ;)
