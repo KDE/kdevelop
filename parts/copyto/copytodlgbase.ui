@@ -71,7 +71,7 @@
                 <string>Copy Mode</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Traditional means like 'cp' - all the files goes to the same target directory. \nRelative means that the local project relative path will be appended to the target path.</string>
+                <string>Traditional means like 'cp' - all the files go to the same target directory. \nRelative means that the local project relative path will be appended to the target path.</string>
             </property>
             <vbox>
                 <property name="name">
