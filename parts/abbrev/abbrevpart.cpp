@@ -82,7 +82,11 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     docIface = 0;
     editIface = 0;
     viewCursorIface = 0;
-    completionIface = 0;    
+    completionIface = 0;
+
+    m_prevLine = -1;
+    m_prevColumn = -1;
+    m_sequenceLength = 0;
 }
 
 
@@ -417,29 +421,51 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
 	
 	connect( doc, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
     }
+
+    m_prevLine = -1;
+    m_prevColumn = -1;
+    m_sequenceLength = 0;
 }
 
 void AbbrevPart::slotTextChanged()
 {
     unsigned int line, col;
     viewCursorIface->cursorPositionReal( &line, &col );
-    QChar ch = editIface->textLine( line )[ col ];
-    if( !ch.isLetterOrNumber() && !m_inCompletion && currentWord().length() >= 3 )
+
+    if( m_prevLine != int(line) || m_prevColumn+1 != int(col) || col == 0 ){
+        m_prevLine = line;
+        m_prevColumn = col;
+	m_sequenceLength = 1;
+	return;
+    }
+
+    QChar ch = editIface->textLine( line )[ col-1 ];
+
+    if( m_inCompletion || !(ch.isLetterOrNumber() || ch == QChar('_')) ){
+        // reset
+        m_prevLine = -1;
+	return;
+    }
+
+    if( m_sequenceLength >= 3 )
 	slotExpandText();
-    	
+
+    ++m_sequenceLength;
+    m_prevLine = line;
+    m_prevColumn = col;
 }
 
 void AbbrevPart::slotFilterInsertString( KTextEditor::CompletionEntry* entry, QString* text )
 {
     kdDebug(9028) << "AbbrevPart::slotFilterInsertString()" << endl;
-    
+
     if( !entry || !text || !viewCursorIface || !editIface )
 	return;
-        
+
     QString expand( " <abbrev>" );
     if( entry->userdata && entry->text.endsWith(expand) ){
 	QString macro = entry->text.left( entry->text.length() - expand.length() );
-	*text = "";	
+	*text = "";
         uint line, col;
         viewCursorIface->cursorPositionReal( &line, &col );
         editIface->removeText( line, col-currentWord().length(), line, col );

@@ -70,7 +70,10 @@ private:
     void insertChars( const QString &chars );
     QAsciiDict<CodeTemplate> m_templates;
     bool m_inCompletion;
-    
+    int m_prevLine;
+    int m_prevColumn;
+    int m_sequenceLength;
+
     KTextEditor::Document* docIface;
     KTextEditor::EditInterface* editIface;
     KTextEditor::ViewCursorInterface* viewCursorIface;
