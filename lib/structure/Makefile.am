@@ -4,10 +4,12 @@ INCLUDES=$(all_includes)
 
 #libstructure_la_SOURCES=
 
-noinst_PROGRAMS=test-trie test-string-trie
+TESTS=test-trie test-string-trie
 
-test_trie_SOURCES=test-trie.cpp
-test_trie_LDADD=-lqt
-test_string_trie_SOURCES=test-string-trie.cxx
+#noinst_PROGRAMS=test-trie test-string-trie
+
+#test_trie_SOURCES=test-trie.cpp
+#test_trie_LDADD=$(all_libraries)
+#test_string_trie_SOURCES=test-string-trie.cxx
 
 METASOURCES=auto

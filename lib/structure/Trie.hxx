@@ -31,11 +31,13 @@ public:
   Trie_Impl(const Symbol & s, const Component & c) : node(s,c) {}
 
   // destruct
-  ~Trie_Impl() {
-    for (Subtries::iterator i=children.begin(); i!=children.end(); i++) {
+  ~Trie_Impl()
+  {
+    for (typename Subtries::iterator i=children.begin();
+	 i!=children.end(); i++) {
       delete *i;
     }
-  }
+//   }
 
   class Node {
   public:
@@ -128,8 +130,8 @@ private:
 };
 
 // This is trie interface
-template <typename Symbol, typename String, typename Component>
-class Trie : public Trie_Impl<Symbol, String, Component>
+template <typename _Symbol, typename _String, typename _Component>
+class Trie : public Trie_Impl<_Symbol, _String, _Component>
 {
 public:
   typedef Trie_Impl<Symbol, String, Component> Base;
