@@ -1,11 +1,10 @@
 /***************************************************************************
-                 ctoolclass.h - some methods,that would be normal global,but I
-		              hate global function :-)
+                 ctoolclass.h - some important methods 
                              -------------------                                         
 
     begin                : 20 Jan 1999                        
-    copyright            : (C) 1999 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    copyright            : (C) 1999 by Sandy Meier
+    email                : smeier@kdevelop.org                                 
  ***************************************************************************/
 
 /***************************************************************************
@@ -21,7 +20,7 @@
 #define CTOOLCLASS_H
 
 /**
- * some methods,that would be normaly global,but I hate global functions :-)
+ * some important methods
  * @author Sandy Meier
  */
 class CToolClass {
@@ -44,6 +43,7 @@ public:
   static QString getRelativePath(QString source_dir,QString dest_dir);
 
   static QString getAbsolutePath(QString source_dir, QString rel_path);
+  static QString getAbsoluteFile(QString sourceDir, QString relFile);
 
   /** Change a text string for search in a way,
    *  which makes it useable for a regular expression search.

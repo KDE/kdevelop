@@ -45,7 +45,7 @@ class Project : public QObject {
   QStringList allSources();
 
   /** returns all files*/
-  QStringList allFileNames();
+  QStringList allAbsoluteFileNames();
   RegisteredFile fileProperties(QString filename);
 
   QString version();

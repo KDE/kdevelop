@@ -188,3 +188,13 @@ QString CToolClass::getAbsolutePath(QString source_dir, QString rel_path){
   }
   return dir.absPath() + "/";
 }
+QString CToolClass::getAbsoluteFile(QString sourceDir, QString relFile){
+   QDir dir(sourceDir);
+   QFileInfo fileInfo(relFile);
+   QString dirPath = fileInfo.dirPath();
+   if(!dir.cd(dirPath)){
+    kdDebug(9000) << "Error in CToolClass::getAbsoluteFile, directory doesn't exists" << endl;
+    return "";
+  }
+   return dir.absPath() + "/" + fileInfo.fileName();
+}

@@ -26,8 +26,20 @@
 #include <qdom.h>
 class KAboutData;
 
+class FileGroup {
+ public:
+  void setName(QString name);
+  QString name();
+  void setFilter(QString filter);
+  QString filter();
+
+ protected:
+  QString m_name;
+  QString m_filter;
+};
+
 /**handles toplevel dir, configure.in, and all projects
-    data are stored in NAME.kdevpsp and NAME_local.kdevpsp
+    data are stored in NAME.kdevpsp and .NAME.kdevpsp
   *@author Sandy Meier
   */
 
@@ -46,6 +58,11 @@ class ProjectSpace : public KDevComponent {
   static QString projectSpacePluginName(QString fileName);
   /** factory to create new ProjectSpaces */
   static ProjectSpace* createNewProjectSpace(const QString& name,QObject* parent=0);
+
+  /** returns the default files groups, can be used in ProjectView...*/
+  virtual QList<FileGroup> defaultFileGroups();
+  /** returns all registered projects*/
+  QList<Project>* allProjects();
 
   virtual void setupGUI();
   void addProject(Project* prj);

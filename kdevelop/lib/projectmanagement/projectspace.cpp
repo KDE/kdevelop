@@ -36,7 +36,18 @@
 #include <ktrader.h>
 #include <klibloader.h>
 
-
+void FileGroup::setName(QString name) {
+  m_name = name;
+}
+QString FileGroup::name(){
+  return m_name;
+}
+void FileGroup::setFilter(QString filter){
+  m_filter = filter;
+}
+QString FileGroup::filter(){
+  return m_filter;
+}
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(parent,name){
   m_pProjects = new QList<Project>;
@@ -45,6 +56,7 @@ ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(par
   m_pLanguageSupport =0;
   m_pCurrentProject =0;
 }
+
 ProjectSpace::~ProjectSpace(){
 }
 void ProjectSpace::setupGUI(){
@@ -603,6 +615,22 @@ void ProjectSpace::languageSupportOpened(KDevLanguageSupport *ls){
 }
 void ProjectSpace::languageSupportClosed(){
   m_pLanguageSupport = 0;
+}
+QList<FileGroup> ProjectSpace::defaultFileGroups(){
+  QList<FileGroup> list;
+  FileGroup* pGroup = new FileGroup();
+  pGroup->setName(i18n("Source Files"));
+  pGroup->setFilter("*.cpp;*.c");
+
+  list.append(pGroup);
+  pGroup = new FileGroup();
+  pGroup->setName(i18n("Header Files"));
+  pGroup->setFilter("*.h");
+  list.append(pGroup);
+  return list;
+}
+QList<Project>* ProjectSpace::allProjects(){
+  return m_pProjects;
 }
 
 #include "projectspace.moc"

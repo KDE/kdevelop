@@ -41,12 +41,23 @@ QString Project::userProjectFile(){
 }
 /** */
 QStringList Project::allSources(){
+  QStringList list;
+  return list;
 }
 
 /** returns all files*/
-QStringList Project::allFileNames(){
+QStringList Project::allAbsoluteFileNames(){
+  cerr  << "kdevelop (project): Project::allFileNames() " << endl;
+  QStringList list;
+  RegisteredFile* pFile;
+  for(pFile = m_pFiles->first(); pFile != 0;pFile =  m_pFiles->next() ){
+    list.append(CToolClass::getAbsoluteFile(m_absPath,pFile->relativeFile()));
+  }
+  return list;
 }
 RegisteredFile Project::fileProperties(QString filename){
+  RegisteredFile file;
+  return file;
 }
 QString Project::version(){
   return m_version;

@@ -36,7 +36,7 @@ ProjectView::~ProjectView()
 
 void ProjectView::setupGUI()
 {
-    kdDebug(9003) << "Building ClassTreeWidget" << endl;
+    kdDebug(9003) << "Building ProjectTreeWidget" << endl;
 
     m_pProjectTree = new ProjectTreeWidget(this);
     //    w->setIcon()
