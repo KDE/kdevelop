@@ -37,6 +37,7 @@ CustomMakeConfigWidget::CustomMakeConfigWidget(CustomProjectPart* part, const QS
     jobs_box->setValue(DomUtil::readIntEntry(m_dom, m_configGroup + "/make/numberofjobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(m_dom, m_configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/makebin"));
+    makeoptions_edit->setText(DomUtil::readEntry(m_dom, m_configGroup + "/make/makeoptions"));
 
     envs_combo->setValidator(new QRegExpValidator(QRegExp("^\\D.*"), this));
     m_allEnvironments = m_part->allMakeEnvironments();
@@ -116,6 +117,7 @@ void CustomMakeConfigWidget::accept()
     DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", jobs_box->value());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());
+    DomUtil::writeEntry(m_dom, m_configGroup + "/make/makeoptions", makeoptions_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/selectedenvironment", m_currentEnvironment);
     m_envWidget->accept();
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CustomMakeConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -19,52 +19,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLabel" row="3" column="0">
-            <property name="name">
-                <cstring>jobs_label</cstring>
-            </property>
-            <property name="text">
-                <string>Number of simultaneous &amp;jobs:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>jobs_box</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>makebin_label</cstring>
-            </property>
-            <property name="text">
-                <string>Name of make e&amp;xecutable:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>makebin_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="2" column="1">
-            <property name="name">
-                <cstring>makebin_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QSpinBox" row="3" column="1">
-            <property name="name">
-                <cstring>jobs_box</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="maxValue">
-                <number>30</number>
-            </property>
-            <property name="minValue">
-                <number>1</number>
-            </property>
-        </widget>
         <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>abort_box</cstring>
@@ -84,7 +38,7 @@
                 <string>Only di&amp;splay commands without actually executing them</string>
             </property>
         </widget>
-        <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="2">
+        <widget class="QGroupBox" row="6" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>env_var_group</cstring>
             </property>
@@ -92,7 +46,7 @@
                 <string>Environment &amp;Variables</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>layout3</cstring>
             </property>
@@ -179,6 +133,68 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QSpinBox" row="4" column="1">
+            <property name="name">
+                <cstring>jobs_box</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="maxValue">
+                <number>30</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>jobs_label</cstring>
+            </property>
+            <property name="text">
+                <string>Number of simultaneous &amp;jobs:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>jobs_box</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>makebin_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>makebin_label</cstring>
+            </property>
+            <property name="text">
+                <string>Name of make e&amp;xecutable:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>makebin_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>makeoptions_label</cstring>
+            </property>
+            <property name="text">
+                <string>A&amp;dditional make options:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>makeoptions_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>makeoptions_edit</cstring>
+            </property>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -217,7 +233,12 @@
     <tabstop>abort_box</tabstop>
     <tabstop>dontact_box</tabstop>
     <tabstop>makebin_edit</tabstop>
+    <tabstop>makeoptions_edit</tabstop>
     <tabstop>jobs_box</tabstop>
+    <tabstop>envs_combo</tabstop>
+    <tabstop>addenvs_button</tabstop>
+    <tabstop>copyenvs_button</tabstop>
+    <tabstop>removeenvs_button</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>

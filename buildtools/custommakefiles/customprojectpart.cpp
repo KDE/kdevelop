@@ -518,6 +518,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
         }
         if (DomUtil::readBoolEntry(dom, "/kdevcustomproject/make/dontact"))
             cmdline += " -n";
+        cmdline += " " + DomUtil::readEntry(dom, "/kdevcustomproject/make/makeoptions");
     }
 
     cmdline += " ";
