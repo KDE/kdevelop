@@ -19,7 +19,7 @@
 #ifndef EDITORVIEW_H
 #define EDITORVIEW_H
 
-#include "component.h"
+//#include "component.h"
 #include "./widgets/qextmdi/qextmdichildview.h"
 #include <kapp.h>
 #include <qdatetime.h>
@@ -32,7 +32,7 @@ class CEditWidgetPrivat;
 /** An abstraction layer for the editwidget.
   *@author Sandy Meier
   */
-class EditorView : public QextMdiChildView, public Component {
+class EditorView : public QextMdiChildView { //, public Component {
   Q_OBJECT
 
 public: // Constructor and destructor
