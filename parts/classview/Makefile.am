@@ -1,6 +1,9 @@
 # Here resides the class view part.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces \
+	   -I$(top_srcdir)/lib/sourceinfo \
+	   -I$(top_srcdir)/lib/util \
+	   $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
@@ -13,7 +16,9 @@ libkdevclassview_la_SOURCES = classviewpart.cpp \
 			      classtoolwidget.cpp \
 			      classtooldlg.cpp \
 			      hierarchydlg.cpp \
-			      digraphview.cpp
+			      digraphview.cpp \
+			      classviewconfigwidgetbase.ui \
+			      classviewconfigwidget.cpp
 
 METASOURCES = AUTO
 

@@ -35,9 +35,15 @@ private slots:
     void slotScopeModeChanged();
 
 private:
-    void buildTree(bool fromScratch);
+    void buildClassFolderHierarchy(ClassTreeItem *organizerItem,
+                                   const QStringList &dirNames,
+                                   QMap<QString, ClassTreeItem*> *folders);
+    void buildClassFolderFlatList(ClassTreeItem *organizerItem,
+                                  const QStringList &dirNames,
+                                  QMap<QString, ClassTreeItem*> *folders);
     void buildTreeByCategory(bool fromScratch);
     void buildTreeByNamespace(bool fromScratch);
+    void buildTree(bool fromScratch);
 
     static void sortFolder(QListViewItem* item);
 };

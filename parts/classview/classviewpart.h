@@ -15,11 +15,12 @@
 #define _CLASSVIEWPART_H_
 
 #include <qguardedptr.h>
+#include <kgenericfactory.h>
 #include "kdevplugin.h"
 #include "kdevlanguagesupport.h"
 
-#include <kgenericfactory.h>
 
+class KDialogBase;
 class ClassTreeWidget;
 class ClassToolDialog;
 class HierarchyDialog;
@@ -56,6 +57,7 @@ private slots:
     // Connected with core
     void projectOpened();
     void projectClosed();
+    void projectConfigWidget(KDialogBase *dlg);
     // Connected with languageSupport
     void updatedSourceInfo();
     // Internal

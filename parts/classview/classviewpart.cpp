@@ -14,9 +14,11 @@
 #include "classviewpart.h"
 
 #include <qpopupmenu.h>
+#include <qvbox.h>
 #include <qwhatsthis.h>
 #include <kaction.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -27,9 +29,11 @@
 #include "classstore.h"
 
 #include "classviewwidget.h"
+#include "classviewconfigwidget.h"
 #include "classactions.h"
 #include "classtooldlg.h"
 #include "hierarchydlg.h"
+
 
 K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
 
@@ -41,6 +45,8 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
     
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
+    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
 
     m_classtree = new ClassViewWidget(this);
     m_classtree->setIcon(SmallIcon("CVclass"));
@@ -80,6 +86,7 @@ ClassViewPart::~ClassViewPart()
     delete m_classtree;
 }
 
+
 bool ClassViewPart::langHasFeature(KDevLanguageSupport::Features feature)
 {
     bool result = false;
@@ -87,6 +94,7 @@ bool ClassViewPart::langHasFeature(KDevLanguageSupport::Features feature)
         result = (feature & languageSupport()->features());
     return result;
 }
+
 
 void ClassViewPart::setupPopup()
 {
@@ -113,6 +121,14 @@ void ClassViewPart::setupPopup()
         popup->insertItem(SmallIcon("methodnew"), i18n("Add Method..."), this, SLOT(selectedAddMethod()));
     if (hasAddAttribute)
         popup->insertItem(SmallIcon("variablenew"), i18n("Add Attribute..."), this, SLOT(selectedAddAttribute()));
+}
+
+
+void ClassViewPart::projectConfigWidget(KDialogBase *dlg)
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Class View"));
+    ClassViewConfigWidget *w = new ClassViewConfigWidget(this, vbox, "class view config widget");
+    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
 
