@@ -14,7 +14,7 @@
 #include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <ktexteditor/editinterface.h>
 
 #include "kdevpartcontroller.h"
@@ -23,8 +23,9 @@
 #include "texttoolswidget.h"
 
 
-typedef KGenericFactory<TextToolsPart> TextToolsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevtexttools, TextToolsFactory( "kdevtexttools" ) )
+typedef KDevGenericFactory<TextToolsPart> TextToolsFactory;
+static const KAboutData data("kdevtexttools", I18N_NOOP("Text Structure"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevtexttools, TextToolsFactory( &data ) )
 
 TextToolsPart::TextToolsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("TextTools", "texttools", parent, name ? name : "TextToolsPart")

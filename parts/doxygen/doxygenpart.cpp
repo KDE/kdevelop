@@ -17,7 +17,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
@@ -32,8 +32,9 @@
 #include "config.h"
 
 
-typedef KGenericFactory<DoxygenPart> DoxygenFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( "kdevdoxygen" ) )
+typedef KDevGenericFactory<DoxygenPart> DoxygenFactory;
+static const KAboutData data("kdevdoxygen", I18N_NOOP("Doxygen"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( &data ) )
 
 DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("Doxgen", "doxygen", parent, name ? name : "DoxygenPart")

@@ -26,7 +26,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
@@ -50,8 +50,9 @@
 #include "envvartools.h"
 
 
-typedef KGenericFactory<CustomProjectPart> CustomProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( "kdevcustomproject" ) )
+typedef KDevGenericFactory<CustomProjectPart> CustomProjectFactory;
+static const KAboutData data("kdevcustomproject", I18N_NOOP("Build Tool"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( &data ) )
 
 CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QStringList &)
     : KDevProject("CustomProject", "customproject", parent, name ? name : "CustomProjectPart")

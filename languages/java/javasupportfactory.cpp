@@ -13,16 +13,17 @@
 #include <kstandarddirs.h>
 #include "javasupportfactory.h"
 
+static const KAboutData data("kdevjavasupport", I18N_NOOP("Language"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevjavasupport, JavaSupportFactory )
 
 JavaSupportFactory::JavaSupportFactory()
-    : KGenericFactory<JavaSupportPart>( "kdevjavasupport" )
+    : KDevGenericFactory<JavaSupportPart>( &data )
 {
 }
 
 KInstance *JavaSupportFactory::createInstance()
 {
-    KInstance *instance = KGenericFactory<JavaSupportPart>::createInstance();
+    KInstance *instance = KDevGenericFactory<JavaSupportPart>::createInstance();
     KStandardDirs *dirs = instance->dirs();
     dirs->addResourceType( "newclasstemplates", KStandardDirs::kde_default("data") + "kdevjavasupport/newclass/" );
     dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevjavasupport/pcs/" );

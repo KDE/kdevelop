@@ -33,14 +33,16 @@
 #include "kdevpartcontroller.h"
 #include "kdevlanguagesupport.h"
 #include "kdevcompileroptions.h"
+#include "kdevgenericfactory.h"
 
 #include "adaproject_widget.h"
 #include "adaproject_part.h"
 #include "adaprojectoptionsdlg.h"
 #include "adaglobaloptionsdlg.h"
 
-typedef KGenericFactory<AdaProjectPart> AdaProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevadaproject, AdaProjectFactory( "kdevadaproject" ) )
+typedef KDevGenericFactory<AdaProjectPart> AdaProjectFactory;
+static const KAboutData data("kdevadaproject", I18N_NOOP("Build Tool"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevadaproject, AdaProjectFactory( &data ) )
 
 AdaProjectPart::AdaProjectPart(QObject *parent, const char *name, const QStringList& )
     :KDevProject("AdaProject", "adaproject", parent, name ? name : "AdaProjectPart" )

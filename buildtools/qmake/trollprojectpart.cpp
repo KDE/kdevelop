@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <qmessagebox.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kparts/part.h>
 #include <kprocess.h>
@@ -44,8 +44,9 @@
 #include "envvartools.h"
 
 
-typedef KGenericFactory<TrollProjectPart> TrollProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( "kdevtrollproject" ) )
+typedef KDevGenericFactory<TrollProjectPart> TrollProjectFactory;
+static const KAboutData data("kdevtrollproject", I18N_NOOP("QMake Manager"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( &data ) )
 
 TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStringList& args )
     : KDevProject("TrollProject", "trollproject", parent, name ? name : "TrollProjectPart")

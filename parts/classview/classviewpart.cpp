@@ -26,7 +26,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kmimetype.h>
@@ -55,8 +55,9 @@
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/clipboardinterface.h>
 
-typedef KGenericFactory<ClassViewPart> ClassViewFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) )
+typedef KDevGenericFactory<ClassViewPart> ClassViewFactory;
+static const KAboutData data("kdevclassview", I18N_NOOP("Class browser"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( &data ) )
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" ), sync(false)

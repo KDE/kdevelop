@@ -29,14 +29,15 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
 
 
-typedef KGenericFactory<PythonSupportPart> PythonSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( "kdevpythonsupport" ) )
+typedef KDevGenericFactory<PythonSupportPart> PythonSupportFactory;
+static const KAboutData data("kdevpythonsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( &data ) )
 
 PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("PythonSupport", "python", parent, name ? name : "PythonSupportPart")

@@ -15,7 +15,7 @@
 #include <kdialogbase.h>
 #include "kdevlanguagesupport.h"
 #include <kio/job.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include <ktexteditor/editinterface.h>
 
@@ -81,6 +81,6 @@ private:
     KTextEditor::EditInterface *m_editInterface;
 };
 
-typedef KGenericFactory<PHPSupportPart> PHPSupportFactory;
+typedef KDevGenericFactory<PHPSupportPart> PHPSupportFactory;
 
 #endif

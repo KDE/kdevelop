@@ -12,11 +12,11 @@
 #ifndef _APPWIZARDFACTORY_H_
 #define _APPWIZARDFACTORY_H_
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include "appwizardpart.h"
 
-class AppWizardFactory : public KGenericFactory<AppWizardPart>
+class AppWizardFactory : public KDevGenericFactory<AppWizardPart>
 {
 public:
     AppWizardFactory();

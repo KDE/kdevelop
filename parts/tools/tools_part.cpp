@@ -30,7 +30,8 @@
 #include "toolsconfigwidget.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) )
+static const KAboutData data("kdevtools", I18N_NOOP("External Tools"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( &data ) )
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin( "Tools", "tools", parent, name ? name : "ToolsPart")

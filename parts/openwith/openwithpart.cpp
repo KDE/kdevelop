@@ -3,7 +3,7 @@
 #include <qfile.h>
 
 #include <kpopupmenu.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <ktrader.h>
@@ -14,7 +14,8 @@
 #include "kdevcore.h"
 
 
-K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KGenericFactory<OpenWithPart>("kdevopenwith"))
+static const KAboutData data("kdevopenwith", I18N_NOOP("Open With"), "1.0");
+K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KDevGenericFactory<OpenWithPart>(&data))
 
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("OpenWith", "openwith", parent, name ? name : "OpenWithPart")

@@ -19,7 +19,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -28,8 +28,9 @@
 #include "filegroupswidget.h"
 #include "filegroupsconfigwidget.h"
 
-typedef KGenericFactory<FileGroupsPart> FileGroupsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( "kdevfilegroups" ) )
+typedef KDevGenericFactory<FileGroupsPart> FileGroupsFactory;
+static const KAboutData data("kdevfilegroups", I18N_NOOP("File Group View"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( &data ) )
 
 FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("FileGroups", "filegroups", parent, name ? name : "FileGroupsPart")

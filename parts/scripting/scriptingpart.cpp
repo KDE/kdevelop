@@ -16,7 +16,7 @@
 #include <dcopobject.h>
 #include <kaction.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kstandarddirs.h>
 
 #include "kdevcore.h"
@@ -30,8 +30,9 @@ extern "C" {
     int __kde_do_not_unload;
 }
 
-typedef KGenericFactory<ScriptingPart> ScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( "kdevscripting" ) );
+typedef KDevGenericFactory<ScriptingPart> ScriptingFactory;
+static const KAboutData data("kdevscripting", ("Python Scripting Support"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevscripting, ScriptingFactory( &data ) );
 
 ScriptingPart::ScriptingPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("PythonScripting", "scripting", parent, name ? name : "ScriptingPart")

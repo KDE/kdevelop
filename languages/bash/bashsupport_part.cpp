@@ -16,7 +16,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kprocess.h>
 #include <kdebug.h>
 #include <kaction.h>
@@ -33,8 +33,9 @@
 #include <domutil.h>
 #include <codemodel.h>
 
-typedef KGenericFactory<BashSupportPart> BashSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( "kdevbashsupport" ) )
+typedef KDevGenericFactory<BashSupportPart> BashSupportFactory;
+static const KAboutData data("kdevbashsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( &data ) )
 
 BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStringList& )
 : KDevLanguageSupport ("KDevPart", "kdevpart", parent, name ? name : "BashSupportPart" )

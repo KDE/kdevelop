@@ -14,16 +14,17 @@
 
 #include "appwizardfactory.h"
 
+static const KAboutData data("kdevappwizard", I18N_NOOP("Create New Project"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevappwizard, AppWizardFactory )
 
 AppWizardFactory::AppWizardFactory()
-    : KGenericFactory<AppWizardPart>( "kdevappwizard" )
+    : KDevGenericFactory<AppWizardPart>( &data )
 {
 }
 
 KInstance *AppWizardFactory::createInstance()
 {
-    KInstance *instance = KGenericFactory<AppWizardPart>::createInstance();
+    KInstance *instance = KDevGenericFactory<AppWizardPart>::createInstance();
     KStandardDirs *dirs = instance->dirs();
     dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
     dirs->addResourceType("appimports", KStandardDirs::kde_default("data") + "kdevappwizard/imports/");

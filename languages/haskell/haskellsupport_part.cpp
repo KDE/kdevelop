@@ -20,7 +20,7 @@
 #include <qtimer.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kstatusbar.h>
@@ -34,8 +34,9 @@
 
 #include "haskellsupport_part.h"
 
-typedef KGenericFactory<HaskellSupportPart> HaskellSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevhaskellsupport, HaskellSupportFactory( "kdevhaskellsupport" ) );
+typedef KDevGenericFactory<HaskellSupportPart> HaskellSupportFactory;
+static const KAboutData data("kdevhaskellsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevhaskellsupport, HaskellSupportFactory( &data ) );
 
 HaskellSupportPart::HaskellSupportPart(QObject *parent, const char *name, const QStringList& )
   : KDevLanguageSupport("KDevPart", "kdevpart", parent, name ? name : "HaskellSupportPart" )

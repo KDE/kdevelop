@@ -3,7 +3,7 @@
 #include <qvbox.h>
 
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -12,8 +12,9 @@
 #include "uichooser_widget.h"
 
 
-typedef KGenericFactory<UIChooserPart> UIChooserFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( "kdevuichooser" ) )
+typedef KDevGenericFactory<UIChooserPart> UIChooserFactory;
+static const KAboutData data("kdevuichooser", I18N_NOOP("User Interface"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( &data ) )
 
 UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin( "UIChooser", "uichooser", parent, name ? name : "UIChooserPart")

@@ -12,12 +12,12 @@
 #ifndef _OUTPUTVIEWSFACTORY_H_
 #define _OUTPUTVIEWSFACTORY_H_
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include "appoutputviewpart.h"
 #include "makeviewpart.h"
 
 typedef K_TYPELIST_2( AppOutputViewPart, MakeViewPart ) OutputViews;
-typedef KGenericFactory< OutputViews > OutputViewsFactory;
+typedef KDevGenericFactory< OutputViews > OutputViewsFactory;
 
 #endif

@@ -54,7 +54,8 @@
 
 using namespace std;
 
-K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( "kdevphpsupport" ) )
+static const KAboutData data("kdevphpsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( &data ) )
 
 PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("PHPSupport", "php", parent, name ? name : "PHPSupportPart")

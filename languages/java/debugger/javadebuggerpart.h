@@ -17,7 +17,7 @@
 #include <qguardedptr.h>
 #include "kdevplugin.h"
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 namespace JAVADebugger
 {
@@ -67,7 +67,7 @@ private:
     //    QGuardedPtr<DbgToolBar> floatingToolBar;
 };
 
-typedef KGenericFactory<JavaDebuggerPart> JavaDebuggerFactory;
+typedef KDevGenericFactory<JavaDebuggerPart> JavaDebuggerFactory;
 
 }
 

@@ -9,7 +9,7 @@
 #include <qdir.h>
 
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
@@ -31,8 +31,9 @@
 #include "antprojectpart.h"
 
 
-typedef KGenericFactory<AntProjectPart> AntProjectFactory;
-K_EXPORT_COMPONENT_FACTORY(libkdevantproject, AntProjectFactory("kdevantproject"))
+typedef KDevGenericFactory<AntProjectPart> AntProjectFactory;
+static const KAboutData data("kdevantproject", I18N_NOOP("Build Tool"), "1.0");
+K_EXPORT_COMPONENT_FACTORY(libkdevantproject, AntProjectFactory( &data ))
 
 
 AntOptions::AntOptions()
@@ -380,7 +381,7 @@ void AntProjectPart::parseBuildXML()
   m_antOptions.m_defaultTarget = dom.documentElement().attribute("default", "");
 
   QDomNode node = dom.documentElement().firstChild();
-  while (!node.isNull()) 
+  while (!node.isNull())
   {
     if (node.toElement().tagName() == "target")
     {
@@ -396,7 +397,7 @@ void AntProjectPart::parseBuildXML()
 
     /// @todo Handle property files
     /// @todo evaluate properties' values
-    
+
     node = node.nextSibling();
   }
 }

@@ -19,7 +19,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <ktrader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -44,8 +44,9 @@ inline QString QDomDocument_toString(QDomDocument & cQDomDocument, int indent )
 };
 #endif // Qt<3.1.0
 
-typedef KGenericFactory<GenericProjectPart> GenericProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevgenericproject, GenericProjectFactory( "kdevgenericproject" ) )
+typedef KDevGenericFactory<GenericProjectPart> GenericProjectFactory;
+static const KAboutData data("kdevgenericproject", I18N_NOOP("Build Tool"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevgenericproject, GenericProjectFactory( &data ) )
 
 GenericProjectPart::GenericProjectPart(QObject *parent, const char *name, const QStringList& )
     : KDevProject("KDevPart", "kdevpart", parent, name ? name : "GenericProjectPart" )

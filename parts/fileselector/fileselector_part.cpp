@@ -11,7 +11,7 @@
 #include <ktextbrowser.h>
 #include <kconfig.h>
 #include <kfileitem.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdiroperator.h>
 #include <kdialogbase.h>
 
@@ -26,8 +26,9 @@
 #include "fileselector_widget.h"
 #include "fileselector_part.h"
 
-typedef KGenericFactory<FileSelectorPart> FileSelectorFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( "kdevfileselector" ) )
+typedef KDevGenericFactory<FileSelectorPart> FileSelectorFactory;
+static const KAboutData data("kdevfileselector", I18N_NOOP("File Selector"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( &data ) )
 
 FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("FileSelector", "fileselector", parent, name ? name : "FileSelectorPart")

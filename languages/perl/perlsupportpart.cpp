@@ -19,7 +19,7 @@
 #include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <qregexp.h>
@@ -43,8 +43,9 @@
 #include "domutil.h"
 //#include "programmingbycontract.h"
 
-typedef KGenericFactory<PerlSupportPart> PerlSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( "kdevperlsupport" ) );
+typedef KDevGenericFactory<PerlSupportPart> PerlSupportFactory;
+static const KAboutData data("kdevperlsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( &data ) );
 
 PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("PerlSupport", "perl", parent, name ? name : "PerlSupportPart")

@@ -15,7 +15,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kstatusbar.h>
@@ -42,8 +42,9 @@ struct PascalSupportPartData{
         {}
 };
 
-typedef KGenericFactory<PascalSupportPart> PascalSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpascalsupport, PascalSupportFactory( "kdevpascalsupport" ) )
+typedef KDevGenericFactory<PascalSupportPart> PascalSupportFactory;
+static const KAboutData data("kdevpascalsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevpascalsupport, PascalSupportFactory( &data ) )
 
 PascalSupportPart::PascalSupportPart(QObject *parent, const char *name, const QStringList &)
   : KDevLanguageSupport("PascalSupport", "pascal", parent, name ? name : "KDevPascalSupport" ),

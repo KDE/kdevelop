@@ -7,7 +7,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kaction.h>
 #include <kparts/part.h>
@@ -28,8 +28,9 @@
 #include "sqloutputwidget.h"
 #include "domutil.h"
 
-typedef KGenericFactory<SQLSupportPart> SQLSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsqlsupport, SQLSupportFactory( "kdevsqlsupport" ) );
+typedef KDevGenericFactory<SQLSupportPart> SQLSupportFactory;
+static const KAboutData data("kdevsqlsupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevsqlsupport, SQLSupportFactory( &data ) );
 
 SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QStringList& )
         : KDevLanguageSupport ( "KDevPart", "kdevpart", parent, name ? name : "SQLSupportPart" )

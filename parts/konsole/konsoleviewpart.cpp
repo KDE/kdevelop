@@ -13,7 +13,7 @@
 
 #include <qwhatsthis.h>
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -23,7 +23,8 @@
 #include "konsoleviewwidget.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>( "kdevkonsoleview" ) )
+static const KAboutData data("kdevkonsoleview", I18N_NOOP("Konsole"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KDevGenericFactory<KonsoleViewPart>( &data ) )
 
 KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("Konsole", "konsole", parent, name ? name : "KonsoleViewPart")

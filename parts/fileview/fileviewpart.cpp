@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdialogbase.h>
 
 #include "kdevcore.h"
@@ -46,8 +46,9 @@ VCSColors FileViewPart::vcsColors;
 // class factory
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef KGenericFactory<FileViewPart> FileViewFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( "kdevfileview" ) )
+typedef KDevGenericFactory<FileViewPart> FileViewFactory;
+static const KAboutData data("kdevfileview", I18N_NOOP("File Tree"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( &data ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class FileTreeWidget

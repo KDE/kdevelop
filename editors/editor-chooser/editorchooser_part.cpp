@@ -4,7 +4,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include <kdevcore.h>
 
@@ -12,8 +12,9 @@
 #include "editorchooser_part.h"
 #include "editorchooser_widget.h"
 
-typedef KGenericFactory<EditorChooserPart> EditorChooserFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( "kdeveditorchooser" ) )
+typedef KDevGenericFactory<EditorChooserPart> EditorChooserFactory;
+static const KAboutData data("kdeveditorchooser", I18N_NOOP("Editor"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( &data ) )
 
 EditorChooserPart::EditorChooserPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("EditorChooser", "editorchooser", parent, name ? name : "EditorChooserPart")

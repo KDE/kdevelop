@@ -12,10 +12,10 @@
 #ifndef _JAVASUPPORTFACTORY_H_
 #define _JAVASUPPORTFACTORY_H_
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include "javasupportpart.h"
 
-class JavaSupportFactory : public KGenericFactory<JavaSupportPart>
+class JavaSupportFactory : public KDevGenericFactory<JavaSupportPart>
 {
 public:
     JavaSupportFactory();

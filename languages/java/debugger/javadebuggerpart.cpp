@@ -21,7 +21,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kstatusbar.h>
-#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -41,8 +40,8 @@
 
 namespace JAVADebugger
 {
-
-K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) )
+static const KAboutData data("kdevjavadebugger", I18N_NOOP("Debugger"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( &data ) )
 
 JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("JavaDebugger", "debugger", parent, name ? name : "JavaDebuggerPart"),

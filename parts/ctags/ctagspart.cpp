@@ -15,7 +15,7 @@
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kmainwindow.h>
@@ -32,8 +32,9 @@
 #include "ctagsdlg.h"
 
 
-typedef KGenericFactory<CTagsPart> CTagsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( "kdevctags" ) )
+typedef KDevGenericFactory<CTagsPart> CTagsFactory;
+static const KAboutData data("kdevctags", I18N_NOOP("CTags..."), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( &data ) )
 
 CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin("CTags", "ctags", parent, name ? name : "CTagsPart")

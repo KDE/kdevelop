@@ -25,7 +25,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include <kmainwindow.h>
 
@@ -34,8 +34,9 @@
 #include <kdevpartcontroller.h>
 #include <kdevproject.h>
 
-typedef KGenericFactory<QuickOpenPart> QuickOpenFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( "kdevquickopen" ) )
+typedef KDevGenericFactory<QuickOpenPart> QuickOpenFactory;
+static const KAboutData data("kdevquickopen", I18N_NOOP("Quick Open..."), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( &data ) )
 
 QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "QuickOpenPart" )

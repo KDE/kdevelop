@@ -19,6 +19,7 @@
 #include <fstream>
 #include <strstream>
 
+#include "kdevgenericfactory.h"
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmainwindow.h"
@@ -37,9 +38,10 @@
 enum { KDEV_DB_VERSION = 3 };
 enum { KDEV_PCS_VERSION = 2 };
 
-typedef KGenericFactory<AdaSupportPart> AdaSupportPartFactory;
+typedef KDevGenericFactory<AdaSupportPart> AdaSupportPartFactory;
 
-K_EXPORT_COMPONENT_FACTORY (libkdevadasupport, AdaSupportPartFactory ("kdevadasupport"))
+static const KAboutData data("kdevadasupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY (libkdevadasupport, AdaSupportPartFactory (&data))
 
 
 struct AdaSupportPartData {

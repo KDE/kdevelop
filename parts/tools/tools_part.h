@@ -9,7 +9,7 @@
 
 #include <qguardedptr.h>
 #include <kdevplugin.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 
 class QPopupMenu;
@@ -51,6 +51,6 @@ private:
     QString m_contextFileName;
   };
 
-typedef KGenericFactory<ToolsPart> ToolsFactory;
+typedef KDevGenericFactory<ToolsPart> ToolsFactory;
 
 #endif

@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <kparts/part.h>
 #include <kstandarddirs.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kconfig.h>
 #include <kio/netaccess.h>
@@ -37,17 +37,18 @@
 #include "kdevpartcontroller.h"
 #include "abbrevconfigwidget.h"
 
+static const KAboutData data("kdevabbrev", I18N_NOOP("Abbreviations"), "1.0");
 
-class AbbrevFactory : public KGenericFactory<AbbrevPart>
+class AbbrevFactory : public KDevGenericFactory<AbbrevPart>
 {
 public:
     AbbrevFactory()
-        : KGenericFactory<AbbrevPart>( "kdevabbrev" )
+        : KDevGenericFactory<AbbrevPart>( &data )
     { }
 
     virtual KInstance *createInstance()
     {
-        KInstance *instance = KGenericFactory<AbbrevPart>::createInstance();
+        KInstance *instance = KDevGenericFactory<AbbrevPart>::createInstance();
         KStandardDirs *dirs = instance->dirs();
         dirs->addResourceType( "codetemplates",
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/templates/" );

@@ -12,7 +12,7 @@
 #ifndef _FILTERPART_H_
 #define _FILTERPART_H_
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include "kdevplugin.h"
 
 class ShellInsertDialog;
@@ -36,6 +36,6 @@ private:
     ShellFilterDialog *m_filterDialog;
 };
 
-typedef KGenericFactory<FilterPart> FilterFactory;
+typedef KDevGenericFactory<FilterPart> FilterFactory;
 
 #endif

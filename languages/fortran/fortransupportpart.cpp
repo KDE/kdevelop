@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kregexp.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 
 #include <kdevcore.h>
@@ -42,8 +42,9 @@
 
 
 
-typedef KGenericFactory<FortranSupportPart> FortranSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( "kdevfortransupport" ) )
+typedef KDevGenericFactory<FortranSupportPart> FortranSupportFactory;
+static const KAboutData data("kdevfortransupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( &data ) )
 
 FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("FortranSupport", "fortran", parent, name ? name : "FortranSupportPart")

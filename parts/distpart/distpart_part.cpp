@@ -4,7 +4,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 
 #include "kdevcore.h"
@@ -13,8 +13,9 @@
 #include "specsupport.h"
 #include "lsmsupport.h"
 
-typedef KGenericFactory<DistpartPart> DistpartFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) )
+typedef KDevGenericFactory<DistpartPart> DistpartFactory;
+static const KAboutData data("kdevdistpart", I18N_NOOP("Project Distribution && Publishing"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( &data ) )
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("Distribution", "dist", parent, name ? name : "DistpartPart") {

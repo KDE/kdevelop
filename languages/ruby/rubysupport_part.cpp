@@ -3,7 +3,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kprocess.h>
 #include <kdebug.h>
 #include <kaction.h>
@@ -22,8 +22,9 @@
 #include "rubyconfigwidget.h"
 #include "domutil.h"
 
-typedef KGenericFactory<RubySupportPart> RubySupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( "kdevrubysupport" ) )
+typedef KDevGenericFactory<RubySupportPart> RubySupportFactory;
+static const KAboutData data("kdevrubysupport", I18N_NOOP("Language"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( &data ) )
 
 RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStringList& )
   : KDevLanguageSupport ("KDevPart", "kdevpart", parent, name ? name : "RubySupportPart" )

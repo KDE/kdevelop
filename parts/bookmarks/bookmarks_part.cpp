@@ -16,7 +16,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
@@ -33,8 +33,9 @@
 #include "bookmarks_settings.h"
 #include "bookmarks_config.h"
 
-typedef KGenericFactory<BookmarksPart> BookmarksFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( "kdevbookmarks" ) )
+typedef KDevGenericFactory<BookmarksPart> BookmarksFactory;
+static const KAboutData data("kdevbookmarks", I18N_NOOP("Bookmarks"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( &data ) )
 
 BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringList& )
 	: KDevPlugin("bookmarks", "bookmarks", parent, name ? name : "BookmarksPart" )

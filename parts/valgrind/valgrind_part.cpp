@@ -4,7 +4,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -20,8 +20,9 @@
 #include "valgrind_dialog.h"
 #include "valgrinditem.h"
 
-typedef KGenericFactory<ValgrindPart> ValgrindFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( "kdevvalgrind" ) )
+typedef KDevGenericFactory<ValgrindPart> ValgrindFactory;
+static const KAboutData data("kdevvalgrind", "Valgrind", "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( &data ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
   : KDevPlugin( "Valgrind", "valgrind", parent, name ? name : "ValgrindPart" )

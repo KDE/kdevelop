@@ -23,7 +23,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -34,8 +34,9 @@
 #include "scriptnewfiledlg.h"
 
 
-typedef KGenericFactory<ScriptProjectPart> ScriptProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( "kdevscriptproject" ) )
+typedef KDevGenericFactory<ScriptProjectPart> ScriptProjectFactory;
+static const KAboutData data("kdevscriptproject", I18N_NOOP("Build Tool"), "1.0");
+K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( &data ) )
 
 ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QStringList &)
     : KDevProject("ScriptProject", "scriptproject", parent, name ? name : "ScriptProjectPart")
