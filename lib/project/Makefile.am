@@ -9,4 +9,6 @@ noinst_LTLIBRARIES = libkdevproject.la
 libkdevproject_la_SOURCES = runoptionswidget.cpp runoptionswidgetbase.ui makeoptionswidget.cpp makeoptionswidgetbase.ui addenvvardlg.cpp subclassesdlgbase.ui subclassesdlg.cpp environmentvariableswidgetbase.ui environmentvariableswidget.cpp addfilesdialog.cpp envvartools.cpp projectconfigurationwidget.cpp removesubprojectdialog.cpp removesubprojectdlgbase.ui
 
 METASOURCES = AUTO
-noinst_HEADERS = addenvvardlg.h addfilesdialog.h environmentvariableswidget.h environmentvariableswidgetbase.h makeoptionswidget.h makeoptionswidgetbase.h runoptionswidget.h runoptionswidgetbase.h subclassesdlg.h subclassesdlgbase.h envvartools.h projectconfigurationwidget.h
+
+kdevelopincludedir = $(includedir)/kdevelop
+kdevelopinclude_HEADERS =  addenvvardlg.h addfilesdialog.h environmentvariableswidget.h environmentvariableswidgetbase.h envvartools.h makeoptionswidget.h makeoptionswidgetbase.h projectconfigurationwidget.h removesubprojectdialog.h removesubprojectdlgbase.h runoptionswidget.h runoptionswidgetbase.h subclassesdlg.h subclassesdlgbase.h
