@@ -32,6 +32,6 @@ libkdlgloader_la_SOURCES = kdlgldr.cpp kdlgldr_itemstuff.cpp kdlgptrdb.cpp
 
 EXTRA_DIST = README
 
-LDFLAGS = $(QT_LDFLAGS) $(X_LDFLAGS)
+LDFLAGS = $(QT_LDFLAGS) $(X_LDFLAGS) $(USER_LDFLAGS)
 libkdlgloader_la_LDFLAGS = -version-info $(SOMAJOR):$(SOMINOR) $(LDFLAGS)
 libkdlgloader_la_LIBADD =  -lXext  $(LIB_QT)
