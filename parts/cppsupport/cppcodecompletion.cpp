@@ -839,7 +839,7 @@ CppCodeCompletion::completeText( )
 	isInstance = false;
     }
 
-    kdDebug(9007) << "===========================> type is: " << type << endl;
+    kdDebug(9007) << "===========================> type is: " << type.join(" ") << endl;
     kdDebug(9007) << "===========================> word is: " << word << endl;
 
     if( !showArguments ){
