@@ -1,3 +1,38 @@
+What is this part?
+------------------
+
+This is the Doxygen part. It integrates Doxygen (www.doxygen.org) into
+KDevelop. It allows you to call the Doxygen executable from a KDevelop menu.
+It integrates a GUI into the "KDevelop Project Configuration dialog" to
+configure Doxygen (it reads and writes Doxygen Conpatible configuration files).
+
+
+Features:
+---------
+
+- Call Doxygen executable from a KDevelop menu.
+- Configure Doxygen inside KDevelop.
+- Create a configuration file with correct ProjectName, Author, Version and
+  location of source files whenever a new project KDevelop is created.
+- Automaticaly generate a Doxygen search database whenever you "Run Doxygen"
+  and the "search engine" option in Doxygen configuration is activated.
+
+
+Requirements:
+-------------
+
+You need to install the Doxygen binaries in your machine.
+It is recomended that you also install dot (tool to generate graphical
+dependencies).
+
+
+Caveats and known bugs:
+-----------------------
+- It doesn't call the Config::check() function whenever you click "OK" in the
+  configuration dialog. So the configuration is not checked and you don't
+  get warning messages when you enter invalid settings.
+
+
 To update to a newer doxygen version:
 -------------------------------------
 
