@@ -13,11 +13,9 @@ libkdevtrollproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevtrollproject_la_SOURCES = caret.cpp\
                                  filebuffer.cpp\
 				 projectconfigurationdlgbase.ui \
-				 projectrunoptionsdlgbase.ui \
 				 filepropertybase.ui \
 				 filepropertydlg.cpp \
 				 projectconfigurationdlg.cpp \
-				 projectrunoptionsdlg.cpp \
 				 trollprojectpart.cpp \
 				 trollprojectwidget.cpp
 
