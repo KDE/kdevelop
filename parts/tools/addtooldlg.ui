@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AddToolDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>537</width>
-            <height>414</height>
+            <width>314</width>
+            <height>514</height>
         </rect>
     </property>
     <property name="caption">
@@ -206,4 +206,10 @@
     <slot access="private">treeSelectionChanged( QListViewItem * lvi )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kdevapplicationtree.h</includehint>
+</includehints>
 </UI>
