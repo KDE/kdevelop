@@ -1,3 +1,8 @@
+2004-02-07 jbb <jbb@kdevelop.org>
+    * Robert Gruber's patch
+        - fix whatis when toggling to hex display
+        - fix refresh display setting global output radix.
+
 2004-02-07 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Moved all of the plugin loading logic to PluginController
 	* Moved FileCreatePart to the globally loaded "default parts"
