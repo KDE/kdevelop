@@ -1,3 +1,7 @@
+2004-05-08 Alexander Dymo <cloudtemple@mksat.net>
+    * Devhelp and KDevelopTOC documentation plugins are implemented. Indexes that exist
+      in devhelp and kdeveloptoc files are now taken into account.
+
 2004-05-04 Alexander Dymo <cloudtemple@mksat.net>
     * Doxygen documentation plugin (toc and index) is implemented.
       This means that kdevassistant can browse KDE API docs and has table of contents and index!
