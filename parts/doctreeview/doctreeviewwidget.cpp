@@ -681,7 +681,7 @@ void DocTreeProjectFolder::refresh()
 
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : QVBox(0, "doc tree widget"), m_keepSearching ( false ), m_activeTreeItem ( 0L )
+    : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
 	KActionCollection* actions = new KActionCollection(this);
@@ -717,8 +717,8 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	showButton->setToggleButton ( true );
 	showButton->setMinimumHeight ( 23 );
 
-	QLabel* label = new QLabel ( i18n ( " Look For" ), searchToolbar, "introduction text" );
-	label->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );
+//	QLabel* label = new QLabel ( i18n ( " Look For" ), searchToolbar, "introduction text" );
+//	label->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, label->sizePolicy().hasHeightForWidth() ) );
 
 	completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
 	
@@ -732,17 +732,17 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 	stopButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType ) 0, 0, 0, stopButton->sizePolicy().hasHeightForWidth() ) );
 	stopButton->setEnabled ( false );
 	QToolTip::add ( stopButton, i18n ( "Stop searching." ) );
-/*
-	nextButton = new QToolButton ( docToolbar, "next match button" );
+////////////////////////////////
+	nextButton = new QToolButton ( searchToolbar, "next match button" );
 	nextButton->setPixmap ( SmallIcon ( "next" ) );
 	nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth() ) );
 	QToolTip::add ( nextButton, i18n ( "Jump to next matching entry." ) );
 
-	prevButton = new QToolButton ( docToolbar, "previous match button" );
+	prevButton = new QToolButton ( searchToolbar, "previous match button" );
 	prevButton->setPixmap ( SmallIcon ( "previous" ) );
 	prevButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, prevButton->sizePolicy().hasHeightForWidth() ) );
 	QToolTip::add ( prevButton, i18n ( "Jump to last matching entry." ) );
-*/
+//////////////////////////
 	docToolbar->setMaximumHeight ( docConfigButton->height() );
 
 	docView = new KListView ( this, "documentation list view" );
@@ -792,11 +792,12 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 
 	connect ( showButton, SIGNAL ( toggled ( bool ) ), this, SLOT ( slotShowButtonToggled ( bool ) ) );
 	connect ( docConfigButton, SIGNAL ( clicked() ), this, SLOT ( slotConfigure() ) );
-	//connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
-	//connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
+	connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
+	connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
 	connect ( startButton, SIGNAL ( clicked() ), this, SLOT ( slotStartSearching() ) );
 	connect ( stopButton, SIGNAL ( clicked() ), this, SLOT ( slotStopSearching() ) );
 	connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotHistoryReturnPressed ( const QString& ) ) );
+//	connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotStartSearching() ) );
 
     connect( docView, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -813,66 +814,38 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 DocTreeViewWidget::~DocTreeViewWidget()
 {}
 
-DocTreeItem* DocTreeViewWidget::searchForItem ( DocTreeItem* item, const QString& currentText )
+void DocTreeViewWidget::searchForItem ( const QString& currentText )
 {
-	DocTreeItem* foundItem = 0L;
-	
-	//kdDebug ( 9002 ) << "Opening item: " << item->text ( 0 ) << endl;
-	item->setOpen ( true );
-
-	foundItem = static_cast <DocTreeItem*> ( docView->findItem ( currentText, 0, Qt::BeginsWith ) );
-
-	if ( foundItem != 0 )
+	QListViewItemIterator  docViewIterator( docView );
+	while( docViewIterator.current() )
 	{
-		//kdDebug ( 9002 ) << "Found a matching entry!" << endl;
-		docView->setSelected ( foundItem, true );
-		docView->ensureItemVisible ( foundItem );
-		m_keepSearching = false;
-		stopButton->setEnabled ( false );
-		slotItemExecuted ( foundItem );
-		return foundItem;
+		if( docViewIterator.current()->text(0).contains( currentText )>0) {
+			searchResultList.append( docViewIterator.current() );
+		}
+		++docViewIterator;
 	}
-
-	DocTreeItem* old = item;
-
-	//kdDebug ( 9002 ) << "Searching for " << item->text ( 0 ) << " with " << item->childCount() << " children." << endl;
-
-	for ( int i = 0; i < old->childCount(); i++ )
-	{
-		//kdDebug ( 9002 ) << "The " << i << ". child of " << old->text ( 0 );
-
-		DocTreeItem* itemBelow = static_cast <DocTreeItem*> ( item->itemBelow() );
-
-		//kdDebug ( 9002 ) << " which is " << itemBelow->text ( 0 ) << endl;
-
-		foundItem = searchForItem ( itemBelow, currentText );
-
-		if ( foundItem != 0 ) break;
-		if ( !m_keepSearching ) break;
-
-		item = itemBelow; //static_cast <DocTreeItem*> ( itemBelow->nextSibling() );
-
-		//kdDebug ( 9002 ) << "Sibling: " << item->text ( 0 ) << endl;
-
-		qApp->processEvents();
-	}
-
-	//kdDebug ( 9002 ) << "End searching for " << old->text ( 0 ) << endl;
-
-	//kdDebug ( 9002 ) << "Closing item: " << old->text ( 0 ) << endl;
-	if ( !foundItem ) old->setOpen ( false );
-
-	return foundItem;
 }
 
 void DocTreeViewWidget::slotJumpToNextMatch()
 {
+	if( searchResultList.next() ) {}
+	else
+	searchResultList.first();   // wrap around
 
+	docView->setSelected ( searchResultList.current(), true );
+	docView->ensureItemVisible ( searchResultList.current() );
+	slotItemExecuted ( searchResultList.current() );
 }
 
 void DocTreeViewWidget::slotJumpToPrevMatch()
-{
+{        
+	if( searchResultList.prev() ) {}
+	else
+	searchResultList.last();   // wrap around
 
+	docView->setSelected ( searchResultList.current(), true );
+	docView->ensureItemVisible ( searchResultList.current() );
+	slotItemExecuted ( searchResultList.current() );
 }
 
 void DocTreeViewWidget::slotShowButtonToggled ( bool on )
@@ -892,42 +865,30 @@ void DocTreeViewWidget::slotShowButtonToggled ( bool on )
 void DocTreeViewWidget::slotStartSearching()
 {
 	QString currentText = completionCombo->currentText();
-
 	slotHistoryReturnPressed ( currentText );
 }
 
 void DocTreeViewWidget::slotStopSearching()
 {
-	m_keepSearching = false;
-
 	stopButton->setEnabled ( false );
 }
 
 void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
 {
-	DocTreeItem* foundItem = 0L;
-	DocTreeItem* folderItem = static_cast<DocTreeItem*> ( docView->selectedItem() );
-	//DocTreeItem* folderItem = 0L;
-	if ( !folderItem ) folderItem = static_cast<DocTreeItem*> ( docView->firstChild() );
-
+	searchResultList.clear();
 	stopButton->setEnabled ( true );
 
-	m_keepSearching = true;
+	searchForItem( currentText ); //fills searchResultList
 	
-	qApp->processEvents();
-	
-	//folderItem->setOpen ( true );
-
-	for ( int i = 0; i < docView->childCount(); i++ )
+	if ( searchResultList.count() )
 	{
-		//kdDebug ( 9000 ) << "Searching: " << folderItem->text ( 0 ) << endl;
-
-		if ( searchForItem ( folderItem, currentText ) != 0 ) break;
-		if ( !m_keepSearching ) break;
-
-		folderItem = static_cast <DocTreeItem*>  ( folderItem->nextSibling() );
-
-		qApp->processEvents();
+		kdDebug ( 9002 ) << "Found a matching entry!" << endl;
+		docView->setSelected ( searchResultList.first(), true );
+		docView->ensureItemVisible (  searchResultList.first() );
+		slotItemExecuted ( searchResultList.first() );
+		stopButton->setEnabled ( false );
+	} else {
+		stopButton->setEnabled ( false );
 	}
 }
 
@@ -973,7 +934,7 @@ void DocTreeViewWidget::slotConfigure()
         page = DocTreeConfigWidget::Libraries;
     else
         page = DocTreeConfigWidget::Bookmarks;
-
+                                                                                            
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize documentation tree"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                     "customization dialog");

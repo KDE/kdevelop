@@ -64,10 +64,11 @@ private slots:
 	void slotShowButtonToggled ( bool );
 	
 protected:
-	DocTreeItem* searchForItem ( DocTreeItem*, const QString& );
+	void searchForItem ( const QString& );
 
 private: 
-	KListView* docView;
+    KListView* docView;
+    QPtrList<QListViewItem> searchResultList;
 
     QListViewItem *contextItem;
     DocTreeItem *folder_kdevelop;
@@ -92,7 +93,6 @@ private:
 	QToolButton* stopButton;
 	KHistoryCombo* completionCombo;
 	
-	bool m_keepSearching;
 	DocTreeItem* m_activeTreeItem;
 	
 	QStringList historyList;
