@@ -44,6 +44,7 @@ protected:
     virtual void newClassRequested();
     virtual void addMethodRequested(const QString &className);
     virtual void addAttributeRequested(const QString &className);
+    virtual QStringList fileFilters();
 
 private:
     QString asHeaderCode(ParsedMethod *pm);

@@ -5,6 +5,7 @@
 #define _KDEVLANGUAGESUPPORT_H_
 
 #include <qstring.h>
+#include <qstringlist.h>
 #include "kdevcomponent.h"
 
 
@@ -40,6 +41,14 @@ public:
      * method to the sources.
      */
     virtual void addAttributeRequested(const QString &className);
+
+    /** 
+     * returns a typical filterlist  for the support language
+     * should be configurable in the languagesupport dialog
+     * example "*.cpp;*.h;*.c";
+     * used in grepview, adding files
+     */
+    virtual QStringList fileFilters();
 
 signals:
     /**

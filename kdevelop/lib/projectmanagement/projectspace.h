@@ -37,6 +37,11 @@ class ProjectSpace : public KDevComponent {
   ProjectSpace(QObject* parent=0,const char* name=0);
   ~ProjectSpace();
 
+  // from KDevComponent
+  void languageSupportOpened(KDevLanguageSupport *ls);
+  void languageSupportClosed();
+
+
   /** nesessary to bootstrap a ProjectSpace*/
   static QString projectSpacePluginName(QString fileName);
   /** factory to create new ProjectSpaces */
@@ -107,6 +112,7 @@ class ProjectSpace : public KDevComponent {
 
   protected slots:
     void slotProjectSetActivate( int id);
+  void slotProjectAddExistingFiles();
 protected:
 
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
@@ -149,6 +155,9 @@ protected:
   QString m_email;
   QString m_company;
   QString m_author;
+
+  // the current languagesupport
+  KDevLanguageSupport* m_pLanguageSupport;
  
  private:
   void fillActiveProjectPopupMenu();

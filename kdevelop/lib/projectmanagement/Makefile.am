@@ -3,21 +3,23 @@ INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
 
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
-libkdevprojectmanagement_la_SOURCES = appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
+libkdevprojectmanagement_la_SOURCES =  addtreedlgbase.ui appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
 		pmc.cpp project.cpp projectspace.cpp filepropspage.cpp \
 		registeredfile.cpp \
-		appwizardbase.ui filepropspagebase.ui
+		appwizardbase.ui filepropspagebase.ui addexistingfilesbase.ui \
+		addexistingfilesdlg.cpp flatdirtreeview.cpp  addtreedlg.cpp
 
-noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
+noinst_HEADERS = addtreedlgbase.h appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				pmc.h project.h projectspace.h \
 				filepropspage.h registeredfile.h \
-				appwizardbase.h filepropspagebase.h
+				appwizardbase.h filepropspagebase.h addexistingfilesdlg.h \
+				flatdirtreeview.h  addtreedlg.h
 
 METASOURCES = AUTO
 
 #noinst_PROGRAMS = testprj
 
-#testprj_SOURCES = testprj.cpp
+#testprj_SOURCES = addtreedlgbase.ui addtreedlg.cpp testprj.cpp addexistingfilesbase.ui addexistingfilesdlg.cpp  
 
 # the library search path. 
 #testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -25,5 +27,5 @@ METASOURCES = AUTO
 # that depend on the following ones.
 
 #testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
-#		$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
+#	$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
 #		$(LIB_KFILE) $(LIB_KPARTS)

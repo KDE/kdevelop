@@ -26,3 +26,8 @@ void KDevLanguageSupport::addMethodRequested(const QString &className)
 void KDevLanguageSupport::addAttributeRequested(const QString &className)
 {
 }
+QStringList KDevLanguageSupport::fileFilters(){
+  QStringList list;
+  list << "*";
+  return list;
+}

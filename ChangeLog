@@ -1,3 +1,9 @@
+2000-10-07 Sandy Meier   <smeier@kdevelop.org>
+	* implemented new and fresh "add existing files" dialog  
+		TODO: working recursive adding, adding files to Project
+	* added KDevLanguageSupport::fileFilters(), 
+		used by the "add existing files", but can also be used by grepview or similar
+
 2000-10-03  Sandy Meier  <smeier@kdevelop.org>
 	* removed CProject (yet another old class from KDevelop1) and all references to this class, 
 	ProjectSpace is the successor

@@ -290,3 +290,11 @@ QString CppSupport::asHeaderCode(ParsedAttribute *pa)
 
     return str;
 }
+QStringList CppSupport::fileFilters(){
+  QStringList list;
+  list << "*.h;*.hxx;*.cpp;*.cc;*.C;*.cxx;*.idl;*.c";
+  list << "*.cpp;*.cc;*.C;*.cxx;*.c";
+  list << "*.h;*.hxx;*.idl";
+  list << "*";
+  return list;
+}

@@ -107,11 +107,6 @@ void KDevelopCore::initActions()
     pAction->setStatusText( i18n("Closes the current project") );
 
     
-
-    pAction = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
-                          m_pKDevelopGUI->actionCollection(), "project_add_existing_files");
-    pAction->setEnabled(false);
-    pAction->setStatusText( i18n("Adds existing file(s) to the project") );
     
     pAction = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
                           m_pKDevelopGUI->actionCollection(), "project_options");
@@ -521,9 +516,6 @@ void KDevelopCore::slotProjectClose()
 }
 
 
-void KDevelopCore::slotProjectAddExistingFiles()
-{
-}
 
 
 void KDevelopCore::slotProjectAddNewTranslationFile()

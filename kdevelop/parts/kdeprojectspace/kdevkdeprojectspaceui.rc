@@ -2,6 +2,7 @@
 <kpartgui name="KDE" version="1">
 <MenuBar>
  <Menu name="project">
+	<Action name="project_add_existing_files" />
 	<Action name="project_add_translation" />
 	<Action name="project_set_active"/>
  </Menu>

@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 #include "projectspace.h"
+#include "addexistingfilesdlg.h"
+#include "kdevlanguagesupport.h"
 #include <kprocess.h>
 #include <kstddirs.h>
 #include <iostream.h>
@@ -40,6 +42,7 @@ ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(par
   m_pProjects = new QList<Project>;
   m_pUserDoc = 0;
   m_pGlobalDoc = 0;
+  m_pLanguageSupport =0;
 }
 ProjectSpace::~ProjectSpace(){
 }
@@ -48,14 +51,35 @@ void ProjectSpace::setupGUI(){
   KActionMenu* pActionMenu = new KActionMenu(i18n("Set active Project"),actionCollection(),"project_set_active");
   connect( pActionMenu->popupMenu(), SIGNAL( activated( int ) ),
 	   this, SLOT( slotProjectSetActivate( int ) ) );
+
+   KAction* pAction = new KAction(i18n("Add existing File(s)..."), "file", 0, 
+			 this, SLOT( slotProjectAddExistingFiles() ),
+			 actionCollection(), "project_add_existing_files");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Adds existing file(s) to the active project") );
+  
 }
 void ProjectSpace::slotProjectSetActivate( int id){
-  kdDebug(9000) << "KDevelopCore::slotProjectSetActivate";
+  kdDebug(9000) << "ProjectSpace::slotProjectSetActivate";
   KActionCollection *pAC = actionCollection();
   QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
   QString name = pMenu->text(id);
   setCurrentProject(name);
   fillActiveProjectPopupMenu();
+}
+void ProjectSpace::slotProjectAddExistingFiles(){
+   kdDebug(9000) << "ProjectSpace::slotProjectAddExistingFiles";
+   QStringList fileFilters;
+   if(m_pLanguageSupport != 0){
+     fileFilters = m_pLanguageSupport->fileFilters();
+   }
+   else {
+     fileFilters << "*"; // default
+   }
+   AddExistingFilesDlg dlg(0,"addDlg",m_path,fileFilters);
+   if(dlg.exec()){
+     QStringList files = dlg.addedFiles();
+   }
 }
 QString ProjectSpace::projectSpacePluginName(QString fileName){
   QFile file(fileName);
@@ -553,6 +577,12 @@ ProjectSpace* ProjectSpace::createNewProjectSpace(const QString& name,QObject* p
   }
   ProjectSpace *pComp = (ProjectSpace*) pObj;
   return pComp;
+}
+void ProjectSpace::languageSupportOpened(KDevLanguageSupport *ls){
+  m_pLanguageSupport = ls;
+}
+void ProjectSpace::languageSupportClosed(){
+  m_pLanguageSupport = 0;
 }
 
 #include "projectspace.moc"

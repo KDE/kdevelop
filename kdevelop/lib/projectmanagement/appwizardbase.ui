@@ -13,12 +13,12 @@
             <x>0</x>
             <y>0</y>
             <width>414</width>
-            <height>435</height>
+            <height>437</height>
         </rect>
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Form1</string>
+        <string>Application Wizard</string>
     </property>
     <property>
         <name>toolTip</name>

@@ -24,7 +24,6 @@
    <Action name="project_open_recent" />
    <Action name="project_close" />
    <Separator/>
-   <Action name="project_add_existing_files" />
    <Merge/>
    <Action name="project_make_messages" />
    <Action name="project_make_api_doc" />

@@ -54,7 +54,6 @@ private slots:
     void slotProjectOpen();
     void slotProjectOpenRecent(const KURL &url);
     void slotProjectClose();
-    void slotProjectAddExistingFiles();
     void slotProjectAddNewTranslationFile();
     void slotProjectOptions();
     void slotStop();

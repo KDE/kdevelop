@@ -25,34 +25,42 @@
 #include <kcmdlineargs.h>
 #include <iostream.h>
 #include <filepropspage.h>
+#include "flatdirtreeview.h"
+#include "addexistingfilesdlg.h"
 
 int main(int argc, char* argv[]){
   KCmdLineArgs::init( argc, argv,"testprj","","");
   KApplication a;
-  FilePropsPage* page = new FilePropsPage();
-  page->show();
-  
-  ProjectSpace* space = new ProjectSpace();
-    space->setName("SPACE");
-  space->setAbsolutePath("/home/smeier/testprj/jk");
+  QStringList list;
+  list << "*.h;*.hxx;*.cpp;*.cc;*.C;*.cxx;*.idl;*.c";
+  list << "*.cpp;*.cc;*.C;*.cxx;*.c";
+  list << "*.h;*.hxx;*.idl";
+  list << "*";
+  AddExistingFilesDlg* view = new AddExistingFilesDlg(0,"","/home/smeier/",list);
+  view->show();
+  /*  
+      ProjectSpace* space = new ProjectSpace();
+      space->setName("SPACE");
+      space->setAbsolutePath("/home/smeier/testprj/jk");
+      
+      Project* prj = new Project();
+      prj->setName("PROJECT");
+      prj->setAbsolutePath("/home/smeier/testprj/jk/tetris");
+      
+      Project* prj1 = new Project();
+      
+      prj->addFile("/home/smeier/main.cpp");
+      space->addProject(prj);
+      space->writeConfig();
+      
+      space->readConfig("/home/smeier/testprj/jk/SPACE.kdevpsp");
+      
+      
+      // test some function in ProjectSpace
+      QString rel_path = CToolClass::getRelativePath("/home/smeier/","/usr/bin/");
+      cerr << endl << "ABS:" << CToolClass::getAbsolutePath("/home/smeier/",rel_path) << endl;
 
-  Project* prj = new Project();
-  prj->setName("PROJECT");
-  prj->setAbsolutePath("/home/smeier/testprj/jk/tetris");
-
-  Project* prj1 = new Project();
-
-  prj->addFile("/home/smeier/main.cpp");
-  space->addProject(prj);
-  space->writeConfig();
-  
-  space->readConfig("/home/smeier/testprj/jk/SPACE.kdevpsp");
-  
-
-  // test some function in ProjectSpace
-  QString rel_path = CToolClass::getRelativePath("/home/smeier/","/usr/bin/");
-  cerr << endl << "ABS:" << CToolClass::getAbsolutePath("/home/smeier/",rel_path) << endl;
-  
-  a.setMainWidget(page);
+  */  
+  a.setMainWidget(view);
   a.exec();
 }
