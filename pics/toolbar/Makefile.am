@@ -1,1 +1,2 @@
-KDE_ICON = AUTO
+kdevelopdir = $(kde_datadir)/kdevelop/pics
+kdevelop_ICON = AUTO
