@@ -301,7 +301,7 @@ QStrList *CParsedContainer::getSortedAttributeAsStringList()
  *-----------------------------------------------------------------*/
 QList<CParsedAttribute> *CParsedContainer::getSortedAttributeList()
 {
-  return getSortedDictList<CParsedAttribute>( attributes );
+  return getSortedDictList<CParsedAttribute>( attributes, false );
 }
 
 /*--------------------------- CParsedContainer::getStructByName()
@@ -348,7 +348,7 @@ QStrList *CParsedContainer::getSortedStructNameList()
  *-----------------------------------------------------------------*/
 QList<CParsedStruct> *CParsedContainer::getSortedStructList()
 {
-  return getSortedDictList<CParsedStruct>( structs );
+  return getSortedDictList<CParsedStruct>( structs, true );
 }
 
 /*--------------------------- CParsedContainer::removeWithReferences()
