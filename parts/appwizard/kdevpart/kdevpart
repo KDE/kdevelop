@@ -1,6 +1,6 @@
 # KDE Config File
 [General]
-Name=KDevelop Part
+Name=KDevelop Part (KDevelop source tree build)
 Category=C++/KDevelop/
-Comment=This generates a KPart for KDevelop
+Comment=This generates a KPart for KDevelop, for building within the KDevelop source tree
 FileTemplates=h,CStyle,cpp,CStyle
