@@ -99,6 +99,8 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     // connections
     connect( m_editor, SIGNAL(textChanged()),
              doc(), SIGNAL(textChanged()) );
+    connect( doc(), SIGNAL(newStatus()),
+             this, SIGNAL(newStatus()) );
     connect( m_editor, SIGNAL(selectionChanged()),
              doc(), SIGNAL(selectionChanged()) );
 

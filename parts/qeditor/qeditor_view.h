@@ -282,6 +282,7 @@ public:
 
 signals:
     void needTextHint( int line, int column, QString& );
+    void newStatus();
 
 private:
     QEditorPart* m_document;

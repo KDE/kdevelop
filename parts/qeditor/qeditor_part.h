@@ -313,6 +313,7 @@ public:
 
 signals:
     void textChanged ();
+    void newStatus ();
     void charactersInteractivelyInserted(int ,int ,const QString&);
 
 // -- CursorInterface ------------------------------------------------------------------------

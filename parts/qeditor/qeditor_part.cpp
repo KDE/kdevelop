@@ -167,6 +167,8 @@ void QEditorPart::setModified(bool modified)
         save->setEnabled(true);
     else
         save->setEnabled(false);
+
+    emit newStatus();
 }
 
 bool QEditorPart::openFile()
