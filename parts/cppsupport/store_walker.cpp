@@ -11,7 +11,7 @@
 
 #include "store_walker.h"
 #include "ast_utils.h"
-#include "cppsupport_utils.h"
+#include "urlutil.h"
 
 #include <kdebug.h>
 #include <qfileinfo.h>
@@ -20,7 +20,7 @@
 StoreWalker::StoreWalker( const QString& fileName, CodeModel* store )
     : m_store( store ), m_anon( 0 )
 {
-    m_fileName = kdevCanonicalPath( fileName );
+    m_fileName = URLUtil::canonicalPath(fileName);
 
     //kdDebug(9007) << "StoreWalker::StoreWalker(" << m_fileName << ")" << endl;
 }

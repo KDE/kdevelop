@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-
 #include <qpopupmenu.h>
 #include <qfile.h>
 #include <qlayout.h>
@@ -42,6 +41,7 @@
 #include "ksavealldialog.h"
 
 #include "kdevproject.h"
+#include "urlutil.h"
 
 #include "partcontroller.h"
 
@@ -222,7 +222,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   if (url.isLocalFile())
   {
     QString path = url.path();
-    path = QDir(path).canonicalPath();
+    path = URLUtil::canonicalPath(path);
     if ( !path.isEmpty() )
       url.setPath(path);
   }
