@@ -28,17 +28,35 @@ public class JavaSupportPart extends KDevLanguageSupport
 		super(api, parent, name);
 		setInstance(JavaSupportFactory.instance());
 
+//		setXMLFile("kdevjavasupport.rc");
+
 	    connect( (QObject) core(), SIGNAL("projectOpened()"), this, SLOT("projectOpened()") );
 	    connect( (QObject) core(), SIGNAL("projectClosed()"), this, SLOT("projectClosed()") );
 	    connect( (QObject) core(), SIGNAL("savedFile(String)"),
 	             this, SLOT("savedFile(String)") );
 	    connect( (QObject) core(), SIGNAL("contextMenu(QPopupMenu, org.kde.koala.Context)"),
 	             this, SLOT("contextMenu(QPopupMenu, org.kde.koala.Context)") );
+//	    connect( (QObject) core().editor(), SIGNAL("documentActivated(Document)"),
+//             this, SLOT("documentActivated(Document)") );
 
 		m_parser = null;
-		setFeatures(Classes | AddMethod | AddAttribute);
+		setFeatures(Classes | NewClass | AddMethod | AddAttribute);
 		setFileFilters( new String[] { "*.java" } );
 	    connect( this, SIGNAL("updatedJavaSourceInfo()"), this, SLOT("updatedJavaSourceInfo()") );
+	}
+
+	public void documentActivated(Document doc)
+	{
+		boolean enabled = false;
+
+		if (doc != null) {
+			QFileInfo fi = new QFileInfo(doc.url().path());
+			String ext = fi.extension();
+   			if (ext.equals("java"))
+            	enabled = true;
+    	}
+
+		actionCollection().action("edit_switchheader").setEnabled(enabled);
 	}
 
 	public void projectOpened()
@@ -75,6 +93,7 @@ public class JavaSupportPart extends KDevLanguageSupport
 	    String path = fi.filePath();
 	    String ext = fi.extension();
 	    if (ext.equals("java")) {
+			classStore().removeWithReferences(fileName);
 	        m_parser.parse(fileName);
 	    }
 	}
@@ -86,13 +105,23 @@ public class JavaSupportPart extends KDevLanguageSupport
 
 	    if (project() != null) {
 	        KApplication.kApplication().setOverrideCursor(KCursor.waitCursor());
+
+			QProgressDialog progress = new QProgressDialog();
+			progress.setCancelButton(null);
+
         	ArrayList files = project().allSourceFiles();
 			Iterator it = files.iterator();
 
+			int n = 0;
+			progress.setTotalSteps(files.size());
 			while (it.hasNext()) {
+            	progress.setProgress(n);
+            	KApplication.kApplication().processEvents();
 				maybeParse((String) it.next());
+				++n;
     		}
 
+			progress.reset();
         	emit("updatedJavaSourceInfo");
         	KApplication.kApplication().restoreOverrideCursor();
     	} else {
