@@ -1,18 +1,3 @@
-Compilation under KDE 2.2 and KDE 3
------------------------------------
-Currently, compile and execution is supported for both KDE 2.2 and KDE 3 (HEAD). You can maintain 
-buildtrees for both systems by using VPATH:
-mkdir kde22
-mkdir kde3
-make -f Makefile.cvs
-cd kde22
-.././configure --with-qt-dir=/your-qt-2.3.x-dir --prefix=/your-kde22-dir --enable-gideon-qt2; make
-cd ../kde3
-.././configure --with-qt-dir=/your-qt-copy-dir --prefix=/your-kde3-dir; make
-
-The keyword is --enable-gideon-qt2 if you want to build kdevelop under KDE 2.2
-
-
 KDE/Qt API Documentation
 ---------------------------
 If the Qt and KDE API documentation do not exist, they can be created
