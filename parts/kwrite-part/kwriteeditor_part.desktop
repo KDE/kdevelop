@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=KWriteEditorPart
+ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KDevelop/Editor
+X-KDE-Library=libkwriteeditorpart
+Type=Service
+InitialPreference=100
