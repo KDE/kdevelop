@@ -109,6 +109,7 @@ void CClassView::initPopups()
   classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
+  classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()));
   classPopup.insertSeparator();
   classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()));
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
@@ -231,6 +232,9 @@ void CClassView::refresh()
   QString str;
   QListViewItem *item;
   QString treeStr;
+  QList<CParsedMethod> *methodList;
+  QList<CParsedAttribute> *attributeList;
+  QList<CParsedStruct> *structList;
 
   debug( "CClassView::refresh()" );
 
@@ -249,13 +253,22 @@ void CClassView::refresh()
 
   // Add all global items.
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
-  ((CClassTreeHandler *)treeH)->addGlobalStructs( store->getSortedGlobalStructList(), item );
+  structList = store->globalContainer.getSortedStructList();
+  ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
+  delete structList;
+
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
-  ((CClassTreeHandler *)treeH)->addGlobalFunctions( store->getGlobalFunctions(), item );
+  methodList = store->globalContainer.getSortedMethodList();
+  ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
+  delete methodList;
+
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Variables" ), THFOLDER, globalsItem );
-  ((CClassTreeHandler *)treeH)->addGlobalVariables( store->getSortedGlobalVarList(), item );
+  attributeList = store->globalContainer.getSortedAttributeList();
+  ((CClassTreeHandler *)treeH)->addGlobalVariables( attributeList, item );
+  delete attributeList;
+
   treeH->setLastItem( item );
 
   // Open the classes and globals folder.
@@ -594,7 +607,7 @@ void CClassView::buildInitalClassTree()
        aPC = list->next() )
   {
     // Try to determine if this is a subdirectory.
-    str = aPC->hFilename;
+    str = aPC->definedInFile;
     str = str.remove( 0, projDir.length() );
     str = str.remove( 0, str.find( '/', 1 ) );
     str = str.remove( str.findRev( '/' ), 10000 );
@@ -757,6 +770,10 @@ void CClassView::slotAttributeDelete()
 }
 
 void CClassView::slotAddSlotSignal()
+{
+}
+
+void CClassView::slotImplementVirtual()
 {
 }
 

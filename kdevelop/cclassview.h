@@ -92,6 +92,7 @@ protected: // Protected signals and slots
     void slotMethodDelete();
     void slotAttributeNew();
     void slotAttributeDelete();
+    void slotImplementVirtual();
     void slotAddSlotSignal();
     void slotFolderNew();
     void slotFolderDelete();
