@@ -6,19 +6,9 @@
   this way because header files don't appear in _SOURCES
   in KDE projects :-(
 
-* In subproject options dialog, implement check list with
-  include directories.
-
-* In target options dialog, implement check list with (convenience)
-  libraries which can be linked with.
-
 * Implement modification of build order.
 
 * Perhaps use konsole part for the application frontend
-
-* Split the documentation tree in two halves, so that class lists
-  appear separately. In the current setup, one can easily get lost
-  when opening a class list.
 
 * Complete STL index. Preferably convert STL documentation to docbook :-)
 
