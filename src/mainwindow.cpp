@@ -234,8 +234,8 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QWidget> *pViews):
 }
 
 // ====================================================== class MainWindow
-MainWindow::MainWindow(QWidget *parent, const char *name)
-  : KMdiMainFrm(parent, name)
+MainWindow::MainWindow(QWidget *parent, const char *name, KMdi::MdiMode mdimode)
+  : KMdiMainFrm(parent, name, mdimode)
   ,m_myWindowsReady(false)
   ,m_pShowOutputViews(0L)
   ,m_pShowTreeViews(0L)
@@ -406,7 +406,7 @@ void MainWindow::createActions()
   m_toggleViewbar->setToolTip( i18n("Show viewbar") );
   m_toggleViewbar->setWhatsThis(i18n("<b>Show viewbar</b><p>Hides or shows the viewbar."));
   showViewTaskBar(); // because start state must be equal to the action state
-  if (m_mdiMode == KMdi::TabPageMode) {
+  if (m_mdiMode == KMdi::TabPageMode || m_mdiMode == KMdi::IDEAlMode) {
     slotToggleViewbar();
     m_toggleViewbar->setEnabled(false);
   }
@@ -691,7 +691,7 @@ void MainWindow::loadMDISettings()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  int mdiMode = config->readNumEntry("MDIMode", KMdi::ChildframeMode);
+  int mdiMode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
   switch (mdiMode)
   {
   case KMdi::ToplevelMode:

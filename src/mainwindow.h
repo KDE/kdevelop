@@ -45,7 +45,7 @@ class MainWindow : public KMdiMainFrm, public KDevMainWindow
 
 public:
 
-  MainWindow(QWidget* parent=0, const char *name=0);
+  MainWindow(QWidget* parent=0, const char *name=0, KMdi::MdiMode = KMdi::IDEAlMode);
   ~MainWindow();
 
   void embedPartView(QWidget *view, const QString &title, const QString &toolTip = QString::null );    //!< Embeds a view as part view in the main working area at position (0,0)
