@@ -484,7 +484,6 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
 
 void AutoProjectPart::slotBuild()
 {
-    mainWindow()->raiseView(makeFrontend()->widget());
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 
@@ -540,6 +539,9 @@ void AutoProjectPart::slotBuildActiveTarget()
 
   // build it
   buildTarget(relpath, titem);  
+
+  // hide the autoproject toolbar (if not sticky)
+  mainWindow()->lowerView( m_widget );
 }
 
 
