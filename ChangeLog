@@ -1,3 +1,9 @@
+2001-06-05 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+    * Reenabled the signals when files are loaded and
+      saved, so Bernd can test ;)
+      (This was a hotfix, I will do the real one later)
+
 2001-06-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added Add application desktop file dialog
