@@ -222,7 +222,11 @@ void JavaDebuggerPart::setupController()
 {
     VariableTree *variableTree = variableWidget->varTree();
 
-    controller = new JDBController(variableTree, framestackWidget);
+    if (project()) {
+		controller = new JDBController(variableTree, framestackWidget, project()->projectDirectory(), project()->mainProgram());
+    } else {
+		controller = new JDBController(variableTree, framestackWidget, "", "");
+	}
 
     // variableTree -> controller
     connect( variableTree,     SIGNAL(expandItem(VarItem*)),
@@ -304,10 +308,7 @@ void JavaDebuggerPart::startDebugger()
     //    }
 
     setupController();
-    QString program;
-    if (project())
-        program = project()->projectDirectory() + "/" + project()->mainProgram();
-    controller->slotStart(program, "", "");
+    controller->slotStart("", "", "");
     breakpointWidget->slotSetPendingBPs();
 }
 

@@ -41,6 +41,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+
 #define BREAKPOINT_HIT 1
 #define MARK_FOUND 2
 #define JDB_MONITOR 1
@@ -84,9 +85,12 @@
  *
  *
 */
-JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack)
+JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack, QString projectDirectory, QString mainProgram)
     : DbgController(),
-      
+
+	  classpath_(projectDirectory + "/src:" + (getenv("CLASSPATH") == 0 ? "." : getenv("CLASSPATH"))),
+	  mainclass_(mainProgram),
+	  projectDirectory_(projectDirectory + "/src"),
       frameStack_(frameStack),
       varTree_(varTree),
       currentFrame_(0),
@@ -112,7 +116,7 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
     config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
     
 #if defined (JDB_MONITOR)
-    cout << "Conenct\n";
+    cout << "Connect\n";
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
               SLOT(slotDbgStatus(const QString&, int)));
 #endif
@@ -368,7 +372,13 @@ void JDBController::programNoApp(const QString &, bool)
 
 enum lineStarts
     {
-        START_Brea  = 0x61657242,
+// Note that these values will differ according to the endianess of the architecture.
+// A bad idea surely?
+// On Intel:
+//      START_Brea  = 0x61657242,
+// On PowerPC:
+        START_Brea  = 0x42726561,
+
         START_Step  = 0x70657453
     };
 
@@ -379,17 +389,22 @@ enum lineStarts
 // int. Hence those big numbers you see above.
 char* JDBController::parseLine(char *buf)
 {
-    
+
     // TODO: ignore empty lines
-    
+
     
     // Doing this copy should remove any alignment problems that
     // some systems have (eg Solaris).
-    int sw;
-    memcpy (&sw, buf, sizeof(int));
-    
-    switch (sw) {
-    case START_Brea: {
+	// - jbb?
+
+	// I don't believe this will work on SPARC as the bytes are round the other way, it
+	// certainly doesn't work on a PowerPC machine.
+	//	- Richard Dale
+
+//    int sw;
+//    memcpy (&sw, buf, sizeof(int));
+
+	if (memcmp(buf, "Brea", 4) == 0) {
             cout << "Checking for breakpoint\n";
             if ((strncmp(buf, "Breakpoint hit: thread", 22) == 0)) {
                 KRegExp ex( "Breakpoint hit: thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*), bci\\=[0-9]*.*\\n[^\\[]*\\[[0-9]*\\] ");
@@ -409,16 +424,15 @@ char* JDBController::parseLine(char *buf)
                     }
 
 
-                    emit showStepInSource(QCString("/home/olistrut/testprj/jdb/src/JavaDebugController.java"),
+                    emit showStepInSource(QCString(classpath_ + "/" + mainclass_ + ".java"),
                                           atoi(ex.group(3)), "");
                     actOnProgramPause(QString("Reached Breakpoint in line ")+ex.group(3));
 
                     return buf + ex.groupEnd(0);
                 }
-            
+
             }
-    }
-    case START_Step: {
+    } else if (memcmp(buf, "Step", 4) == 0) {
             if ((strncmp(buf, "Step completed:", 15) == 0)) {
                 cout << "STEP: " << buf << "\n";
                 KRegExp ex( " thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*)");
@@ -447,8 +461,8 @@ char* JDBController::parseLine(char *buf)
             }
     
     }
-    }
-    return 0;
+
+	return 0;
 }
 
 // **********************************************************************
@@ -1038,26 +1052,10 @@ void JDBController::modifyBreakpoint(Breakpoint *)
 */
 void JDBController::slotStart(const QString &application, const QString &args, const QString &sDbgShell)
 {
-    QString classPath = "/usr/lib/java2/jre/lib/rt.jar:/usr/lib/java2/classes";
-    QString sourcePath = "";
-    QString srcPath = "/home/olistrut/testprj/jdb/src";
-
-    badCore_ = QString();
-    
     ASSERT (!dbgProcess_ && !tty_);
     
     // Remove .class suffix and leading path information from appname
     // (should not be there anyway)
-
-    QUrl appUrl(application);
-    
-    QString app = appUrl.fileName();
-
-    if (app.findRev(".class", -1, FALSE) == app.length()-6) {
-        app = app.left(app.length()-6);
-    }
-
-    mainclass_ = app;
 
     tty_ = new STTY(config_dbgTerminal_, "konsole");
     if (!config_dbgTerminal_) {
@@ -1073,45 +1071,39 @@ void JDBController::slotStart(const QString &application, const QString &args, c
                                    "As root you may need to \"chmod ug+rw\" tty* and pty* devices\n"
                                    "and/or add the user to the tty group using\n"
                                    "\"usermod -G tty username\""));
-        
+
         delete tty_;
         tty_ = 0;
         return;
     }
 
-    JDB_DISPLAY("\nStarting JDB - app:["+application+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
-    dbgProcess_ = new KProcess;
+	JDB_DISPLAY("\nStarting JDB - app:["+mainclass_+"] classpath:["+classpath_+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
+	dbgProcess_ = new KProcess;
     
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
              this,        SLOT(slotDbgStdout(KProcess *, char *, int)) );
     
     connect( dbgProcess_, SIGNAL(receivedStderr(KProcess *, char *, int)),
              this,        SLOT(slotDbgStderr(KProcess *, char *, int)) );
-    
+
     connect( dbgProcess_, SIGNAL(wroteStdin(KProcess *)),
              this,        SLOT(slotDbgWroteStdin(KProcess *)) );
     
     connect( dbgProcess_, SIGNAL(processExited(KProcess*)),
              this,        SLOT(slotDbgProcessExited(KProcess*)) );
-    
-    QString path = " -classpath " + srcPath + ":" + classPath;
-/*    if (!args.isEmpty())
-        app += " " + args;*/
-
-/*    if (!sDbgShell.isEmpty())
-        *dbgProcess_ << "/bin/sh -c" + sDbgShell + " " + config_jdbPath_ + "jdb " + app2;
-    else*/
 
 
-    // For now app has to be in the java classpath
-    *dbgProcess_ << QString("jdb");
-    *dbgProcess_ << QString("-classpath");
-    *dbgProcess_ << srcPath + ":" + classPath;
-    *dbgProcess_ << app;
-    *dbgProcess_ << args;
-    
-    dbgProcess_->start( KProcess::NotifyOnExit,
-                        KProcess::Communication(KProcess::All));
+    if (!sDbgShell.isEmpty())
+        *dbgProcess_<<"/bin/sh"<<"-c"<<sDbgShell+" "+config_jdbPath_+
+            QString("jdb")<<"-classpath"<<classpath_<<mainclass_<<args;
+    else
+        *dbgProcess_<<config_jdbPath_+QString("jdb")<<"-classpath"<<classpath_<<mainclass_<<args;
+
+    if (! dbgProcess_->start(	KProcess::NotifyOnExit,
+                        		KProcess::Communication(KProcess::All) ) )
+	{
+		JDB_DISPLAY("\nFailed to start JDB - app:["+mainclass_+"]\n");
+	}
 
     // JDB takes some time to start up
     setStateOn(s_dbgNotStarted);
@@ -1288,7 +1280,6 @@ void JDBController::slotSetLocalViewState(bool)
 // Data from jdb gets processed here.
 void JDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
-    
     // Allocate some buffer space, if adding to this buffer will exceed it
     if (jdbOutputLen_+buflen+1 > jdbSizeofBuf_) {
         jdbSizeofBuf_ = jdbOutputLen_+buflen+1;
@@ -1360,11 +1351,7 @@ void JDBController::slotDbgProcessExited(KProcess*)
 */
 QString JDBController::getFile(QString className)
 {
-    if (className == "Class2") {
-        return "/home/olistrut/testprj/jdb/src/Class2.java";
-    } else {
-        return "/home/olistrut/testprj/jdb/src/JavaDebugController.java";
-    }
+	return QString(projectDirectory_ + "/" + className + ".java");
 }
 
 // **********************************************************************

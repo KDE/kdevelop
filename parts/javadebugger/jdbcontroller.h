@@ -57,7 +57,7 @@ class JDBController : public DbgController
     Q_OBJECT
     
 public:
-    JDBController(VariableTree *varTree, FramestackWidget *frameStack);
+    JDBController(VariableTree *varTree, FramestackWidget *frameStack, QString projectDirectory, QString mainProgram);
     ~JDBController();
     void reConfig();
     
@@ -95,7 +95,9 @@ private:
     void setStateOff(int stateOff)  { state_ &= ~stateOff; }
     bool stateIsOn(int state)       { return state_  &state; }
 
-    QString mainclass_, delimniter;
+    QString classpath_;
+    QString mainclass_;
+    QString projectDirectory_;
     QString curLine;
     QString curMethod, locals;
     QDict<JDBVarItem> localData;
@@ -173,13 +175,11 @@ private:
     
     STTY*             tty_;
     bool              programHasExited_;
-    QString           badCore_;
-    
-    // Configuration values
+
+	// Configuration values
     bool    config_breakOnLoadingLibrary_;
     bool    config_forceBPSet_;
     bool    config_displayStaticMembers_;
-    bool    config_asmDemangle_;
     bool    config_dbgTerminal_;
     QString config_jdbPath_;
 };
