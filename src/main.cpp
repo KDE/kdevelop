@@ -67,12 +67,9 @@ int main(int argc, char *argv[])
   PluginController::getInstance()->loadInitialPlugins();
 
   TopLevel::getInstance()->loadSettings();
-  TopLevel::getInstance()->main()->show();
-
-  Core::getInstance()->doEmitCoreInitialized();
-  
-  // load project after core initialization
   ProjectManager::getInstance()->loadDefaultProject();
+  TopLevel::getInstance()->main()->show();
+  Core::getInstance()->doEmitCoreInitialized();
   
   delete splash;
 
