@@ -39,7 +39,9 @@ DocumentImpl::DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget)
   new DebugIfaceImpl(m_view, this, parent);
 
   setXMLFile("kwriteeditor_part.rc", true);
-   
+  
+  insertChildClient(m_view);
+
   m_view->setFocus();
 }
 
