@@ -201,7 +201,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     if( m_pSupport->getEnableCC( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
 
-	QObject::connect(part, SIGNAL( cursorPositionChanged() ), this,
+	QObject::connect(part->widget(), SIGNAL( cursorPositionChanged() ), this,
                  SLOT( slotCursorPositionChanged() ) );
 
 	QObject::connect(part, SIGNAL(charactersInteractivelyInserted(int,int,const QString&)), 
@@ -211,7 +211,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
         connect( m_pCompletionIface, SIGNAL( argHintHided( ) ), this,
                  SLOT( slotArgHintHided( ) ) );
 */
-	QObject::connect(part, SIGNAL( completionAborted( ) ), this,
+	QObject::connect(part->widget(), SIGNAL( completionAborted( ) ), this,
                  SLOT( slotCompletionBoxHided( ) ) );
     }
 }
