@@ -718,21 +718,29 @@ private:
   //  KSwallowWidget* swallow_widget;
  
   /** The classview. */
+  DockWidget* dockbase_class_tree;
   CClassView* class_tree;
   /** The logical fileview. */
+  DockWidget* dockbase_log_file_tree;
   CLogFileView* log_file_tree;
   /** The real fileview. */
+  DockWidget* dockbase_real_file_tree;
   CRealFileView* real_file_tree;
   /** The documentation tree. */
+  DockWidget* dockbase_doc_tree;
   DocTreeView* doc_tree;
   /** splitview, contains a WidgetsView and a PropertyView */
+  DockWidget* dockbase_widprop_split_view;
   WidgetsPropSplitView*  widprop_split_view;
   
   /** Output from the compiler ... */
+  DockWidget* dockbase_messages_widget;
   MakeView *messages_widget;
   /** Output from grep */
+  DockWidget* dockbase_grepview;
   GrepView *grepview;
   /** Output from the application */
+  DockWidget* dockbase_outputview;
   OutputView *outputview;
 
   QString version;

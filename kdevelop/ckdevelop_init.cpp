@@ -120,14 +120,20 @@ void CKDevelop::initView(){
   dockbase_o_tab_view = createDockWidget(i18n("Output messages"), BarIcon("filenew"));
   o_tab_view = new CTabCtl(dockbase_o_tab_view,"output_tabview","output_widget");
 	
-  messages_widget = new MakeView(o_tab_view, "messages_widget");
-  grepview = new GrepView(o_tab_view, "grepview");
-  outputview = new OutputView(o_tab_view, "outputview");
-  
+//  messages_widget = new MakeView(o_tab_view, "messages_widget");
+  dockbase_messages_widget = createDockWidget(i18n("messages"), BarIcon("filenew"));
+  messages_widget = new MakeView(dockbase_messages_widget, "messages_widget");
+//  grepview = new GrepView(o_tab_view, "grepview");
+  dockbase_grepview = createDockWidget(i18n("search"), BarIcon("filenew"));
+  grepview = new GrepView(dockbase_grepview, "grepview");
+//  outputview = new OutputView(o_tab_view, "outputview");
+  dockbase_outputview = createDockWidget(i18n("output"), BarIcon("filenew"));
+  outputview = new OutputView(dockbase_outputview, "outputview");
 
-  o_tab_view->addTab(messages_widget,i18n("messages"));
-  o_tab_view->addTab(grepview, i18n("search"));
-  o_tab_view->addTab(outputview, i18n("output"));
+
+//  o_tab_view->addTab(messages_widget,i18n("messages"));
+//  o_tab_view->addTab(grepview, i18n("search"));
+//  o_tab_view->addTab(outputview, i18n("output"));
 
   ////////////////////////
   // Top Panner
@@ -142,25 +148,35 @@ void CKDevelop::initView(){
   // Treeviews
   ////////////////////////
 
-  class_tree = new CClassView(t_tab_view,"cv");
+//  class_tree = new CClassView(t_tab_view,"cv");
+  dockbase_class_tree = createDockWidget(i18n("CV"), BarIcon("filenew"));
+  class_tree = new CClassView(dockbase_class_tree,"cv");
   class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-  log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
+//  log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
+  dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("filenew"));
+  log_file_tree = new CLogFileView(dockbase_log_file_tree,"lfv",config->readBoolEntry("lfv_show_path",false));
   //  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-  real_file_tree = new CRealFileView(t_tab_view,"RFV");
+//  real_file_tree = new CRealFileView(t_tab_view,"RFV");
+  dockbase_real_file_tree = createDockWidget(i18n("RFV"), BarIcon("filenew"));
+  real_file_tree = new CRealFileView(dockbase_real_file_tree,"RFV");
   //  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-  doc_tree = new DocTreeView(t_tab_view,"DOC");
+//  doc_tree = new DocTreeView(t_tab_view,"DOC");
+  dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("filenew"));
+  doc_tree = new DocTreeView(dockbase_doc_tree,"DOC");
   //  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
-  widprop_split_view = new WidgetsPropSplitView(t_tab_view,"DLG");
-  
-  t_tab_view->addTab(class_tree,i18n("CV"));
-  t_tab_view->addTab(log_file_tree,i18n("LFV"));
-  t_tab_view->addTab(real_file_tree,i18n("RFV"));
-  t_tab_view->addTab(doc_tree,i18n("DOC"));
-  t_tab_view->addTab(widprop_split_view,i18n("DLG"));
+//  widprop_split_view = new WidgetsPropSplitView(t_tab_view,"DLG");
+  dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("filenew"));
+  widprop_split_view = new WidgetsPropSplitView(dockbase_widprop_split_view,"DLG");
+
+//  t_tab_view->addTab(class_tree,i18n("CV"));
+//  t_tab_view->addTab(log_file_tree,i18n("LFV"));
+//  t_tab_view->addTab(real_file_tree,i18n("RFV"));
+//  t_tab_view->addTab(doc_tree,i18n("DOC"));
+//  t_tab_view->addTab(widprop_split_view,i18n("DLG"));
 
   initDlgEditor();
 
@@ -199,9 +215,18 @@ void CKDevelop::initView(){
   // dock the 2 base widgets
   //
   
-  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, DockBottom);
-  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, DockLeft);
-  // set the mainwidget
+//  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, DockBottom);
+//  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, DockLeft);
+
+  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, DockBottom);
+  dockbase_grepview->manualDock(dockbase_messages_widget, DockCenter);
+  dockbase_outputview->manualDock(dockbase_messages_widget, DockCenter);
+
+  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, DockLeft);
+  dockbase_log_file_tree->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_real_file_tree->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_doc_tree->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_widprop_split_view->manualDock(dockbase_class_tree, DockCenter);
 
   initKeyAccel();
 
