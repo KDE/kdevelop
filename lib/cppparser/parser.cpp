@@ -502,6 +502,9 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	    TypeSpecifierAST::Node spec;
 	    AST::Node declarator;
 	    if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
+            Comment* com = com = lex->comment(start);
+	    	if (com != 0)
+	    		spec ->setComment(com->text());
 	        spec->setCvQualify( cv );
 
 	        GroupAST::Node cv2;
@@ -2864,7 +2867,7 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseDeclarationInternal()" << endl;
 
     int start = lex->index();
-
+    int declindex_comment = start;
     // that is for the case '__declspec(dllexport) int ...' or
     // '__declspec(dllexport) inline int ...', etc.
     GroupAST::Node winDeclSpec;
@@ -3021,6 +3024,9 @@ start_decl:
 	    {
 		lex->nextToken();
 		SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
+        Comment* com = lex->comment(declindex_comment);
+		if (com != 0)
+			ast->setComment(com->text());
 		ast->setStorageSpecifier( storageSpec );
 		ast->setFunctionSpecifier( funSpec );
 		ast->setText( toString(start, endSignature) );
@@ -3041,6 +3047,9 @@ start_decl:
 	        StatementListAST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+            Comment* com = lex->comment(declindex_comment);
+            if (com != 0)
+                ast->setComment(com->text());
 		    ast->setWinDeclSpec( winDeclSpec );
 		    ast->setStorageSpecifier( storageSpec );
 		    ast->setFunctionSpecifier( funSpec );

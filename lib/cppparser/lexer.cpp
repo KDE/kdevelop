@@ -120,6 +120,7 @@ Lexer::Lexer( Driver* driver )
       m_reportMessages( false )
 {
     m_tokens.setAutoDelete( true );
+    m_commentTable.setAutoDelete(true);
     reset();
     d->beginScope();
 }
@@ -253,8 +254,10 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     } else if( ch == '/' && ch1 == '*' ){
 	int start = currentPosition();
 	nextChar( 2 );
-	readMultiLineComment();
-
+	QString comment;
+	readMultiLineComment(comment);
+	if (comment.startsWith("/**") || comment.startsWith("/*!"))
+		m_commentTable.insert(m_size,  new Comment(comment, startLine, m_currentLine, startColumn, m_currentColumn));
 	if( recordComments() ){
 	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );

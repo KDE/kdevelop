@@ -210,7 +210,7 @@ private:
     int m_problems;
     int m_maxProblems;
     bool objcp;
-
+    
 private:
     Parser( const Parser& source );
     void operator = ( const Parser& source );

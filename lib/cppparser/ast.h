@@ -391,14 +391,33 @@ private:
 class DeclarationAST: public AST
 {
 public:
+    ~DeclarationAST(){
+        if(m_comment != 0)
+            delete m_comment;
+    }
+    
     typedef AUTO_PTR<DeclarationAST> Node;
     enum { Type = NodeType_Declaration };
 
     DECLARE_ALLOC( DeclarationAST )
     
+    QString comment() const{
+        if (m_comment != 0)
+            return *m_comment;
+        else
+            return QString::null;
+    }
+    
+    void setComment(const QString& cmt){
+        if (m_comment != 0)
+            delete m_comment;
+    	m_comment = new QString(cmt);
+    }
+    
 public:
     DeclarationAST();
-
+    QString* m_comment;
+    
 private:
     DeclarationAST( const DeclarationAST& source );
     void operator = ( const DeclarationAST& source );
@@ -438,7 +457,10 @@ public:
     
 public:
     TypeSpecifierAST();
-
+    ~TypeSpecifierAST(){
+        if(m_comment != 0)
+            delete m_comment;
+    }
     virtual NameAST* name() { return m_name.get(); }
     virtual void setName( NameAST::Node& name );
 
@@ -449,12 +471,26 @@ public:
     void setCv2Qualify( GroupAST::Node& cv2Qualify );
 
     virtual QString text() const;
-
+    
+    QString comment() const{
+        if (m_comment != 0)
+            return *m_comment;
+        else
+            return QString::null;
+    }
+    
+    void setComment(const QString& cmt){
+        if (m_comment != 0)
+            delete m_comment;
+    	m_comment = new QString(cmt);
+    }
+    
 private:
     NameAST::Node m_name;
     GroupAST::Node m_cvQualify;
     GroupAST::Node m_cv2Qualify;
-
+    QString* m_comment;
+    
 private:
     TypeSpecifierAST( const TypeSpecifierAST& source );
     void operator = ( const TypeSpecifierAST& source );

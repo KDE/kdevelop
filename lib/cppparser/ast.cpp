@@ -248,7 +248,7 @@ QString NameAST::text() const
 }
 
 // ------------------------------------------------------------------------
-DeclarationAST::DeclarationAST()
+DeclarationAST::DeclarationAST() : m_comment(0)
 {
 }
 
@@ -472,7 +472,7 @@ QString ClassOrNamespaceNameAST::text() const
 }
 
 // ------------------------------------------------------------------------
-TypeSpecifierAST::TypeSpecifierAST()
+TypeSpecifierAST::TypeSpecifierAST() : m_comment(0)
 {
 }
 
