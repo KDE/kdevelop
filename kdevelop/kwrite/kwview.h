@@ -15,6 +15,7 @@ class Highlight;
 
 //icon-paint
 const int iconBorderWidth		= 16;
+const int iconBorderHeight	= 800;
 
 //search flags
 const int sfCaseSensitive   = 1;
@@ -100,6 +101,8 @@ class KIconBorder : public QWidget {
 		void paintLine(int line);
 		/** Clear line*/
 		void clearLine(int line);
+		/** Clear the icon border */
+		void clearAll();
 		/** Paint a bookmark on the line if needed */
 		void paintBookmark(int line);
 		/** Paint a breakpoint on the line if needed */
@@ -112,6 +115,9 @@ class KIconBorder : public QWidget {
   	/**  */
     virtual void paintEvent(QPaintEvent* e);
 
+protected:
+		/** Clear some pixel lines */
+		void clearPixelLines(int startPixelLine, int numberPixelLine);
   	/** Paint an icon to y */
 		void showIcon(const QPixmap& icon, int y);
 
