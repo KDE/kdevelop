@@ -2,7 +2,7 @@
 Encoding=UTF-8
 BinaryPattern=kdevelop;
 Type=Application
-Exec=gideon -caption "%c" %i %m --project %u
+Exec=gideon --project %u
 MimeType=application/x-kdevelop;
 Icon=gideon
 DocPath=kdevelop/index.html
