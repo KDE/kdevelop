@@ -133,7 +133,6 @@ void CRealFileView::addFilesFromDir( const QString& directory,
        fileList.next() )
   {
     item = treeH->addItem( fileList.current(), THC_FILE, parent );
-    //    debug( "Added item %s", fileList.current() );
     
     // If this is an installed file, we change the icon.
     if( isInstalledFile( getRelFilename( item ) ) )
@@ -165,7 +164,6 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   // Recurse through all directories
   while( dirList.current() ) 
   {
-    debug( "Added dir %s", dirList.current() );
     lastFolder = treeH->addItem( dirList.current(), THFOLDER, parent );
     lastFolder->setOpen( true );
     
