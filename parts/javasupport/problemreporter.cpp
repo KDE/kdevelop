@@ -155,3 +155,4 @@ void ProblemReporter::configure()
     m_active = config->readBoolEntry( "EnableJavaBgParser", TRUE );
     m_delay = config->readNumEntry( "JavaBgParserDelay", 1000 );
 }
+#include "problemreporter.moc"

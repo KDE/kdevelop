@@ -67,3 +67,4 @@ extern "C"
 }
 
 #include "$APPNAMELC$.moc"
+#include "module.moc"

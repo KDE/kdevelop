@@ -289,3 +289,4 @@ void $APPNAME$::aboutQt()
 {
     QMessageBox::aboutQt( this, "Qt Application Example" );
 }
+#include "qmakeapp.moc"

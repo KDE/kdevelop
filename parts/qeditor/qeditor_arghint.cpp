@@ -198,3 +198,4 @@ bool QEditorArgHint::eventFilter( QObject*, QEvent* e )
     }
     return FALSE;
 }
+#include "qeditor_arghint.moc"

@@ -264,3 +264,4 @@ void ToolsConfigWidget::accept()
 {
     storeConfig();
 }
+#include "toolsconfigwidget.moc"

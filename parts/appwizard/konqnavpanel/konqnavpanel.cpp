@@ -31,3 +31,4 @@ extern "C"
         return new $APPNAME$(instance,par,widp,desktopname,name);
     }
 };
+#include "konqnavpanel.moc"

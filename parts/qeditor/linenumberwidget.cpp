@@ -99,3 +99,4 @@ void LineNumberWidget::resizeEvent( QResizeEvent *e )
 	QWidget::resizeEvent( e );
 }
 
+#include "linenumberwidget.moc"

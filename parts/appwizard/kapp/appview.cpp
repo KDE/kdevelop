@@ -106,3 +106,4 @@ void $APPNAME$View::slotSetTitle(const QString& title)
     emit signalChangeCaption(title);
 }
 #include "$APPNAMELC$view.moc"
+#include "appview.moc"

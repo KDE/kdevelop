@@ -219,3 +219,4 @@ const QPtrList<class QEditorView>& QEditorPartFactory::views()
 {
     return *s_views;
 }
+#include "qeditor_factory.moc"

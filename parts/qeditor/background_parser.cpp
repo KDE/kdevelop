@@ -152,3 +152,4 @@ bool BackgroundParser::isParsed( QTextParagraph* p ) const
 
     return 0;
 }
+#include "background_parser.moc"

@@ -556,3 +556,4 @@ void QEditor::executeMacro()
         QApplication::sendEvent( this, &e );
     }
 }
+#include "qeditor.moc"

@@ -202,3 +202,4 @@ void LevelWidget::mousePressEvent( QMouseEvent* e )
 
     doRepaint();
 }
+#include "levelwidget.moc"

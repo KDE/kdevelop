@@ -312,3 +312,4 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
     doRepaint();
     // emit markersChanged();
 }
+#include "markerwidget.moc"

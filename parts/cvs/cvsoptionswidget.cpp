@@ -45,3 +45,4 @@ void CvsOptionsWidget::accept() {
     storeConfig();
 //    emit m_part->configChange();
 }
+#include "cvsoptionswidget.moc"

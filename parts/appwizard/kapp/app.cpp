@@ -278,3 +278,4 @@ void $APPNAME$::changeCaption(const QString& text)
     setCaption(text);
 }
 #include "$APPNAMELC$.moc"
+#include "app.moc"

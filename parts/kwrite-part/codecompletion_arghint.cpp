@@ -351,3 +351,4 @@ QString KDevArgHint::markCurArg()
 }
 
 //#include "codecompletion_arghint.moc"
+#include "codecompletion_arghint.moc"

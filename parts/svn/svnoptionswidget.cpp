@@ -52,3 +52,4 @@ void svnOptionsWidget::accept() {
 	m_part->readConf();
 }
 /* vim: set ai ts=8 sw=8 : */
+#include "svnoptionswidget.moc"

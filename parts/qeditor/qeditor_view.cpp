@@ -527,3 +527,4 @@ void QEditorView::selectAll( )
 {
     m_editor->selectAll();
 }
+#include "qeditor_view.moc"
