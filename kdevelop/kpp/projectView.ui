@@ -4,7 +4,7 @@
     <class>QDialog</class>
     <property stdset="1">
         <name>name</name>
-        <cstring>NoName</cstring>
+        <cstring>projectView</cstring>
     </property>
     <property stdset="1">
         <name>geometry</name>
