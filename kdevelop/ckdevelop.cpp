@@ -3210,7 +3210,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen)
 //   }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  messages_widget->insertAtEnd(QCString(buffer,buflen+1), MakeOutputItem::Diagnostic);
+  messages_widget->insertAtEnd(QCString(buffer,buflen+1), CMakeOutputWidget::Diagnostic);
   dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
   // QString str1 = messages_widget->text();
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){

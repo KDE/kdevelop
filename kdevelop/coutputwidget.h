@@ -23,8 +23,8 @@
 
 #include <qmultilineedit.h>
 #include <qpalette.h>
-#include <qlistbox.h>
 #include <qstack.h>
+#include <qmap.h>
 
 
 /** the view for the compiler and tools-output
@@ -41,43 +41,34 @@ public:
   virtual ~COutputWidget(){};
 
   void insertAtEnd(const QString& s);
-
-protected:
-  void mouseReleaseEvent(QMouseEvent* event);
-  void keyPressEvent ( QKeyEvent* event);
-  
-signals:
-  /** emited, if the mouse was clicked over the widget*/
-  void clicked();
-  void keyPressed(int key);
 };
 
-class MakeOutputItem : public QListBoxText
-{
-public:
-  enum Type { Diagnostic, Normal, Error };
-  MakeOutputItem(const QString &text, Type type, const QString& filename=QString::null, int lineNo=-1);
-  QString filename() const    { return m_filename; }
-  int lineNo() const          { return m_lineNo; }
 
-private:
-  virtual void paint(QPainter *p);
 
-  Type m_type;
-  QString m_filename;
-  int m_lineNo;
-};
-
-class CMakeOutputWidget : public QListBox
+class CMakeOutputWidget : public QMultiLineEdit
 {
   Q_OBJECT
 
 public:
+
+  enum MakeOutputErrorType { Error, Diagnostic, Normal };
+  class ErrorDetails
+  {
+    public:
+    ErrorDetails(const QString& filename, int lineNumber, MakeOutputErrorType type) :
+      m_fileName(filename), m_lineNumber(lineNumber), m_type(type) {};
+
+    ErrorDetails() : m_fileName(QString::null), m_lineNumber(-1), m_type(Normal) {};
+
+    QString m_fileName;
+    int m_lineNumber;
+    MakeOutputErrorType m_type;
+  };
+
   CMakeOutputWidget(QWidget* parent, const char* name=0);
   ~CMakeOutputWidget() {};
 
-  void insertAtEnd(const QString& s,
-                MakeOutputItem::Type defaultType=MakeOutputItem::Normal);
+  void insertAtEnd(const QString& s, MakeOutputErrorType defaultType=Normal);
 
   void start();
   void viewNextError();
@@ -86,17 +77,27 @@ public:
 signals:
   void switchToFile(const QString& filename, int lineNo);
 
-public slots:
-  void slotClicked (QListBoxItem* item);
-
 private:
-  void processLine(const QString& line, MakeOutputItem::Type defaultType);
-  QString buf;
-  QStack<QString> dirStack;
-  KRegExp enterDir;
-  KRegExp leaveDir;
-  KRegExp errorGcc;
-  KRegExp errorJade;
+  void processLine(const QString& line, MakeOutputErrorType defaultType);
+  void checkForError();
+  MakeOutputErrorType lineType(int row);
+  void selectLine(int line);
+
+  // override from QMultiLineEdit
+  void keyPressEvent( QKeyEvent* keyEvent );
+  void mouseReleaseEvent(QMouseEvent* event);
+  void paintCell(QPainter* p, int row, int col);
+  int mapToView( int xIndex, int line );
+
+  QString m_buf;
+  QStack<QString> m_dirStack;
+  KRegExp m_enterDir;
+  KRegExp m_leaveDir;
+  KRegExp m_errorGcc;
+
+  typedef QMap<int, ErrorDetails> ErrorMap;
+  ErrorMap m_errorMap;
+  ErrorMap::Iterator it;
 };
 
 #endif

@@ -1,3 +1,9 @@
+2001-05-11  jbb <jbb@kdevelop.org>
+    * Replace the CMakeOuputWidget with one derived from 
+      qmultilineedit. Hmmm - haven't we been here before? Wel
+      not quite this does more than the old qmultilineedit widget
+      and is faster than the qlistview approach.
+      
 2001-05-11  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: if a file is changed outside the application,
       it will now be noticed with focus change
