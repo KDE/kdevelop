@@ -5,8 +5,11 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kiconloader.h>
+#include <kmainwindow.h>
 
+#include "kdevmainwindow.h"
 #include "partcontroller.h"
+#include "toplevel.h"
 
 
 #include "documentationpart.h"
@@ -40,6 +43,17 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
 {
   KPopupMenu *m_popup = new KPopupMenu( i18n( "Documentation Viewer" ), this->widget() );
 
+  // Install the global back and forward actions, if they are available
+  KActionCollection *actions = TopLevel::getInstance()->main()->actionCollection();
+  KAction *backAction = actions->action("browser_back");
+  KAction *forwardAction = actions->action("browser_forward");
+  if(backAction && forwardAction)
+  {
+    backAction->plug(m_popup);
+    forwardAction->plug(m_popup);
+    m_popup->insertSeparator();
+  }
+  
   duplicateAction->plug(m_popup);
   int idNewWindow = -2;
   if (!url.isEmpty())
