@@ -9,11 +9,58 @@ KDevViewHandler instead of Kdevviewhandler.
 - tabs replaced by spaces
 - no prefix "get" at the beginning of a get function.
 
-KDevelop Component architecture: (only some short hints at the moment :-( )
+------KDevelop Component architecture: (only some short hints at the moment :-( )--------
 
 - every component should be derived from KDevComponent as defined in kdevelop/lib/general/kdevcomponent.h
-- events betweens component are handled by Qt signals, the class KDevelopCore (kdevelop/kdevelopcore.h) is the dispatcher
+- events betweens component are handled by Qt signals, the class KDevelopCore (kdevelop/kdevelopcore.h) is dispatcher
 -there are different types of component: languagesupport,viewhandler,processview... (all defined in kdevelop/lib/general/
 -all projectmangement related interfaces are defined in kdevelop/lib/projectmanagement/
 -implementations of components are located at kdevelop/parts/ (grepview/projectview are a good examples)
 -small plugins (for projectmanagement..) are located in kdevelop/plugin
+
+------KDevNode (kdevnodes.h in lib/general)------------
+
+a KDevNode is data structure which holds information for a object in KDevelop. This can be used if 
+components want exchange information about a specific object. 
+For instance a Projectspace can raise the signal "sigAddedFileToProject(KDevFileNode*)" to inform all 
+other running components that a file was added. The KDevFileNode is a subclass of KDevNode and 
+contains information about Projectspace,Projectname and of course the filenname of this file.
+
+-----KDevNodeAction (kdevactions.h in lib/general)---------
+
+KDevNodeAction is a special KAction which stores a KDevNode and raise it if the action was activated.
+In combination with the signal 
+"KDevComponent::needKDevNodeActions(KDevNode*)" and the methods
+"QList<KAction>* KDevComponent::kdevNodeActions(KDevNode* pNode)" and 
+"KDevComponet::setKDevNodeActions(QList<KAction>* pActions)" it is very easy to extend the popup menus in the treeviews or similar things at _runtime_ for every object _indivual_.
+
+An example: the Projectview need some actions (the user clicked the right mousebutton) for the file "main.cpp" in the project "foobar",projectspace "foo". 
+It creates a KDevFileNode with these properties and raise the signal
+"needKDevNodeActions(KDevNode*)",
+the KDevelopCore instance (component manager) catch this signal and ask now every running component to give some actions for this KDevNode. 
+(QList<KAction>* kdevNodeActions(KDevNode*)). 
+
+An implemention from a ProjectSpace component which add a "Move to" action could look like this:
++++
+QList<KAction>* ProjectSpace::kdevNodeActions(KDevNode* pNode){
+  QList<KAction>* pList = new QList<KAction>;
+
+  KDevNodeAction* pAction=0;
+  if(pNode->inherits("KDevFileNode")){
+    pList->append(new KActionSeparator());
+    pAction = new KDevNodeAction(pNode,"Move to..."); // pNode is stored in the Action
+    connect(pAction,SIGNAL(activated(KDevNode*)),this,
+	    SLOT(slotMoveFileTo(KDevNode*)));
+    pList->append(pAction);
+...
+return pList;
+}
++++
+
+After the KDevelopCore class ask all components about Actions,the result list is stored with setKDevNodeActions(QList<KAction>* pActions) into the ProjectView. The ProjectView can now plug all actions into the created popupmenu
++++
+for(pAction=pList->first();pAction!=0;pAction= pList->next()){
+     pAction->plug(pPopup,-1);// add all available actions to the popupmenu
+}
++++
+

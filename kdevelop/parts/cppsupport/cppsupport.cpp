@@ -23,6 +23,7 @@
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
 #include "main.h"
+#include "kdevnodes.h"
 
 
 CppSupport::CppSupport(QObject *parent, const char *name)
@@ -66,18 +67,20 @@ void CppSupport::classStoreClosed()
 }
 
 
-void CppSupport::addedFileToProject(const QString &fileName)
+void CppSupport::addedFileToProject(KDevFileNode* pNode)
 {
-    kdDebug(9007) << "CppSupport::addedFileToProject()" << endl;
-    m_parser->parse(fileName);
-
-    emit updateSourceInfo();
+  kdDebug(9007) << "CppSupport::addedFileToProject()" << endl;
+  QString fileName = pNode->absoluteFileName();
+  m_parser->parse(fileName);
+  
+  emit updateSourceInfo();
 }
 
 
-void CppSupport::removedFileFromProject(const QString &fileName)
+void CppSupport::removedFileFromProject(KDevFileNode* pNode)
 {
     kdDebug(9007) << "CppSupport::removedFileFromProject()" << endl;
+    QString fileName = pNode->absoluteFileName();
     m_parser->removeWithReferences(fileName);
 
     emit updateSourceInfo();

@@ -13,6 +13,7 @@
 #define _PROJECTVIEW_H_
 
 #include "kdevcomponent.h"
+#include "kdevnodes.h"
 
 class ProjectTreeWidget;
 
@@ -30,11 +31,14 @@ public:
                     PublicSlot, ProtectedSlot, PrivateSlot,
                     Signal, GlobalFunction, GlobalVariable };
 
-    QList<KAction>* assembleFileActions(const QString& absFileName,const QString& projectName);
+    QList<KAction>* assembleKDevNodeActions(KDevNode* pNode);
 
     virtual void readProjectSpaceGlobalConfig(QDomDocument& doc);
     virtual void writeProjectSpaceGlobalConfig(QDomDocument& doc);
-    virtual void setFileActions(QList<KAction>* pActions);
+    virtual void setKDevNodeActions(QList<KAction>* pActions);
+    virtual void addedFileToProject(KDevFileNode* pNode);
+    virtual void removedFileFromProject(KDevFileNode* pNode);
+    
 
    
 

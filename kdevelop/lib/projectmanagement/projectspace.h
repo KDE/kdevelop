@@ -26,6 +26,7 @@
 #include <qdom.h>
 #include "kaction.h"
 class KAboutData;
+class KDevFileNode;
 
 class FileGroup {
  public:
@@ -53,7 +54,7 @@ class ProjectSpace : public KDevComponent {
   // from KDevComponent
   void languageSupportOpened(KDevLanguageSupport *ls);
   void languageSupportClosed();
-  virtual QList<KAction>* fileActions(const QString& absFileName,const QString& projectName);
+  virtual QList<KAction>* kdevNodeActions(KDevNode* pNode);
 
 
   /** nesessary to bootstrap a ProjectSpace*/
@@ -70,11 +71,9 @@ class ProjectSpace : public KDevComponent {
   virtual void setupGUI();
   void addProject(Project* prj);
   void removeProject(QString name);
-
   void setCurrentProject(Project* prj);
   void setCurrentProject(QString name);
   Project* currentProject();
-  
   
   /** set the projectspace name*/
   void setName(QString name);
@@ -83,16 +82,12 @@ class ProjectSpace : public KDevComponent {
   /** returns the absolute filelocation*/
   QString projectSpaceFile();
   void setVersion(QString version);
-  
   /** Store the name of version control system */
   void setVCSystem(QString vcsystem);
-  
   /** stored in the user file*/
   void setAuthor(QString name);
-
   /** set the email, stored in the user file */
   void setEmail(QString email);
-
   void setCompany(QString company);
 
   /** method to fill up a string template with actual projectspace info
@@ -103,16 +98,12 @@ class ProjectSpace : public KDevComponent {
 	// member
   /** returns the name of the projectspace*/
   QString name();
-
   /** Fetch the name of the version control system */
   QString VCSystem();
-
   /** Fetch the authors name. stored in the *_local files*/
   QString author();
-
   /** Fetch the authors eMail-address,  stored in the *_local files */
   QString email();
-  
   QString company();
   QString programmingLanguage();
   QStringList allProjectNames();
@@ -128,21 +119,24 @@ class ProjectSpace : public KDevComponent {
   virtual bool readConfig(QString abs_filename);
   QDomDocument* readGlobalDocument();
   QDomDocument* readUserDocument();
+
   virtual void dump();
+
+ signals:
+  void sigAddedFileToProject(KDevFileNode* pNode);
 
   protected slots:
     virtual void slotProjectSetActivate( int id);
   virtual void slotProjectAddExistingFiles();
-  virtual void slotRenameFile(const QString& absFileName,const QString& projectName);
-  virtual void slotDeleteFile(const QString& absFileName,const QString& projectName);
-  virtual void slotRemoveFileFromProject(const QString& absFileName,const QString& projectName);
-  virtual void slotMoveFileTo(const QString& absFileName,const QString& projectName);
-  virtual void slotCopyFileTo(const QString& absFileName,const QString& projectName);
+  virtual void slotRenameFile(KDevNode* pNode);
+  virtual void slotDeleteFile(KDevNode* pNode);
+  virtual void slotRemoveFileFromProject(KDevNode* pNode);
+  virtual void slotMoveFileTo(KDevNode* pNode);
+  virtual void slotCopyFileTo(KDevNode* pNode);
 protected:
 
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
   virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
-  
   /** add the data to the psElement (Projectspace)*/
   virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
   virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);

@@ -15,29 +15,27 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <kaction.h>
+#include "kdevnodes.h"
 
 
-class KDevFileAction : public KAction {
+class KDevNodeAction : public KAction {
   Q_OBJECT
-public:
-  KDevFileAction( const QString& text, const QString& pix, int accel = 0, QObject* parent = 0, const char* name = 0 );
-  KDevFileAction( const QString& text,int accel = 0, QObject* parent = 0, const char* name = 0 );
-  
+    public:
+  KDevNodeAction( KDevNode* pNode,const QString& text, const QString& pix, int accel = 0, QObject* parent = 0, const char* name = 0 );
+  KDevNodeAction( KDevNode* pNode,const QString& text,int accel = 0, QObject* parent = 0, const char* name = 0 );
   int plug( QWidget *widget, int index );
-  void setAbsFileName(QString absFileName);
-  void setProjectName(QString projectName);
-  
-  virtual ~KDevFileAction() {}
+  KDevNode kdevNode();
+  virtual ~KDevNodeAction() {}
 
-protected slots:
-virtual void slotActivated();
-
-  signals:
-/** connect to this*/
-void activated(const QString& absFileName,const QString& projectName);
+ signals:
+  /** connect to this*/
+  void activated(KDevNode* pNode);
   
-private:
-  QString m_absFileName;
-  QString m_projectName;
+  protected slots:
+    virtual void slotActivated();
+  
+ private:
+  KDevNode* m_pNode;
 };
+
 #endif

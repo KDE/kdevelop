@@ -5,7 +5,6 @@
 
 
 
-
 KDevComponent::KDevComponent(QObject *parent, const char *name)
     : KParts::Part(parent, name)
 {
@@ -64,11 +63,11 @@ void KDevComponent::classStoreClosed()
 {
 }
 
-void KDevComponent::addedFileToProject(const QString&)
+void KDevComponent::addedFileToProject(KDevFileNode*)
 {
 }
 
-void KDevComponent::removedFileFromProject(const QString&)
+void KDevComponent::removedFileFromProject(KDevFileNode*)
 {
 }
 
@@ -88,12 +87,11 @@ QWidget *KDevComponent::widget()
 KAboutData* KDevComponent::aboutPlugin(){
   return 0;
 }
-void KDevComponent::setFileActions(QList<KAction>*){
+void KDevComponent::setKDevNodeActions(QList<KAction>*){
 }
-QList<KAction>* KDevComponent::fileActions(const QString&,const QString&){
+QList<KAction>* KDevComponent::kdevNodeActions(KDevNode*){
   return 0;
 }
-
 void KDevComponent::writeProjectSpaceGlobalConfig(QDomDocument&){
 }
 void KDevComponent::writeProjectSpaceUserConfig(QDomDocument&){

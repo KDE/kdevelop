@@ -64,8 +64,8 @@ void KDevelopCore::initComponent(KDevComponent *pComponent)
              this, SLOT(gotoSourceFile(const QString&, int)) );
     connect( pComponent, SIGNAL(gotoDocumentationFile(const QString&)),
              this, SLOT(gotoDocumentationFile(const QString&)) );
-    connect( pComponent,SIGNAL(needFileActions(KDevComponent*,const QString&,const QString&)),
-	     this,SLOT(needFileActions(KDevComponent*,const QString&,const QString&)));
+    connect( pComponent,SIGNAL(needKDevNodeActions(KDevComponent*,KDevNode*)),
+	     this,SLOT(needKDevNodeActions(KDevComponent*,KDevNode*)));
     connect( pComponent, SIGNAL(gotoProjectApiDoc()),
              this, SLOT(gotoProjectApiDoc()) );
     connect( pComponent, SIGNAL(gotoProjectManual()),
@@ -374,7 +374,10 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
       for (; it4.current(); ++it4)
 	(*it4)->languageSupportOpened(m_pLanguageSupport);
     }
-    
+    // some special connections only from the projectspace interface
+    connect( m_pProjectSpace, SIGNAL(sigAddedFileToProject(KDevFileNode*)),
+             this, SLOT(addedFileToProject(KDevFileNode*)) );
+
     // some actions
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
     pAC->action("project_close")->setEnabled(true);
@@ -625,20 +628,28 @@ void KDevelopCore::readProjectSpaceUserConfig(QDomDocument& doc){
   }
 }
 
-void KDevelopCore::needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName){
+void KDevelopCore::needKDevNodeActions(KDevComponent* pWho,KDevNode* pNode){
   QList<KAction>* pAllList = new QList<KAction>;
   QList<KAction>* pList=0;
   KAction* pAction=0;
   QListIterator<KDevComponent> it(m_components);
   for (; it.current(); ++it){ // ask every component
-    pList = (*it)->fileActions(absFileName,projectName);
+    pList = (*it)->kdevNodeActions(pNode);
     if(pList !=0){
       for(pAction=pList->first();pAction !=0;pAction = pList->next()){
 	pAllList->append(pAction);
       }
     }
   }
-  pWho->setFileActions(pAllList);
+  pWho->setKDevNodeActions(pAllList);
+}
+
+void KDevelopCore::addedFileToProject(KDevFileNode* pNode) {
+  kdDebug(9000) << "KDevelopCore::addedFileToProject" << endl;  
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){ // every component
+    (*it)->addedFileToProject(pNode);
+  }
 }
 
 #include "kdevelopcore.moc"

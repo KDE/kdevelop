@@ -41,7 +41,7 @@ ProjectTreeWidget::~ProjectTreeWidget()
 {}
 
 void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoint& p,int){
-  cerr << "kdevelop (projectview): ProjectTreeWidget::slotRightButtonPressed" << endl;
+   cerr << "kdevelop (projectview): ProjectTreeWidget::slotRightButtonPressed" << endl;
   ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
   QPopupMenu* pPopUp = createPopup(pPItem);
   if(pPopUp){
@@ -239,8 +239,10 @@ QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
     pPopup->insertItem( i18n("Open"),this, SLOT(slotOpenFile()) );
     FileItem* pFileItem = static_cast<FileItem*>(pItem);
     // got the action from the part/kdevelopcomponent
+    KDevFileNode* pNode = new KDevFileNode(pFileItem->absFileName(),
+				       m_pProjectSpace->name(),pFileItem->projectName());
     QList<KAction>* pList = 
-      m_pProjectView->assembleFileActions(pFileItem->absFileName(),pFileItem->projectName());
+      m_pProjectView->assembleKDevNodeActions(pNode);
     
     KAction* pAction =0;
     for(pAction=pList->first();pAction!=0;pAction= pList->next()){
@@ -251,7 +253,16 @@ QPopupMenu* ProjectTreeWidget::createPopup(ProjectTreeItem* pItem){
 
   return pPopup;
 }
+
 void ProjectTreeWidget::slotOpenFile(){
+}
+
+void ProjectTreeWidget::addedFileToProject(KDevFileNode* pNode){
+  cerr << endl << "kdevelop (projectview): ProjectTreeWidget::addedFileToProject";
+}
+
+void ProjectTreeWidget::removedFileFromProject(KDevFileNode* pNode){
+  cerr << endl << "kdevelop (projectview): ProjectTreeWidget::removeFileFromProject";
 }
 
 void ProjectTreeItem::paintCell( QPainter * p, const QColorGroup & cg,

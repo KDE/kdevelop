@@ -1,6 +1,10 @@
+2000-11-14  Sandy Meier  <smeier@kdevelop.org>
+	* implemented yet another new concept "KDevNodes and KDevNodeAction" (the old FileActions were removed)
+	please read README.devel for an explanation
+
 2000-11-12 Sandy Meier <smeier@kdevelop.org>
 	* implemented fileaction: "copy to","move to","delete","remove file from project" (all ProjectSpace)
-	TODO: refresh the ProjectView
+	TODO: update the ProjectView
 	
 2000-11-07 Sandy Meier   <smeier@kdevelop.org>
 	* implemented fileaction rename, incl. rename dlg

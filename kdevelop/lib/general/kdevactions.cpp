@@ -18,33 +18,25 @@
 #include <kaction.h>
 #include "kdevactions.h"
 
-KDevFileAction::KDevFileAction (const QString& text, const QString& pix, int accel, QObject* parent, const char* name)
+KDevNodeAction::KDevNodeAction (KDevNode* pNode,const QString& text, const QString& pix, int accel, QObject* parent, const char* name)
   : KAction(text,pix,accel,parent,name){
-  m_absFileName = "not set";
-  m_projectName = "not set";
+  m_pNode = pNode;
 }
 
-KDevFileAction::KDevFileAction( const QString& text,int accel, QObject* parent, const char* name)
+KDevNodeAction::KDevNodeAction(KDevNode* pNode, const QString& text,int accel, QObject* parent, const char* name)
   : KAction(text,accel,parent,name) {
-  m_absFileName = "not set";
-  m_projectName = "not set";
+  m_pNode = pNode;
 }
 
-void KDevFileAction::setAbsFileName(QString absFileName){
-  m_absFileName = absFileName;
-}
-void KDevFileAction::setProjectName(QString projectName){
-  m_projectName = projectName;
-}
-
-int KDevFileAction::plug( QWidget *widget, int index ){
+int KDevNodeAction::plug( QWidget *widget, int index ){
   connect(this,SIGNAL(activated()),this,SLOT(slotActivated()));
   return KAction::plug( widget, index );
 }
 
-void KDevFileAction::slotActivated(){
-  cerr <<  "KDevFileAction::slotActived: emit " << m_absFileName << ":" << m_projectName << endl;
-  emit activated(m_absFileName,m_projectName); // fire the filename
+void KDevNodeAction::slotActivated(){
+  cerr <<  "KDevNodeAction::slotActived: emited " << endl;
+  //  m_pNode->show();
+  emit activated(m_pNode); // fire the node
 }
 
 

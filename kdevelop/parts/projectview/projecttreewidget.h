@@ -17,6 +17,7 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <kaction.h>
+#include "kdevnodes.h"
 
 class ProjectView;
 class QPopupMenu;
@@ -32,7 +33,7 @@ public:
     ~ProjectTreeWidget();
     void setProjectSpace(ProjectSpace* pProjectSpace);
 
-    // from KDevComponent
+    // indirect from KDevComponent
     void readProjectSpaceGlobalConfig(QDomDocument& doc);
     /**
        <Project name = "">
@@ -45,6 +46,9 @@ public:
        </project>
     */
     void writeProjectSpaceGlobalConfig(QDomDocument& doc);
+    void addedFileToProject(KDevFileNode* pNode);
+    void removedFileFromProject(KDevFileNode* pNode);
+    
     
     protected slots:
       void slotRightButtonPressed( QListViewItem* item, const QPoint&,int);

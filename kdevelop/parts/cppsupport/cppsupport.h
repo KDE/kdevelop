@@ -21,6 +21,7 @@ class ParsedMethod;
 class ParsedAttribute;
 class ClassStore;
 class CClassParser;
+class KDevFileNode;
 
 
 class CppSupport : public KDevLanguageSupport
@@ -36,8 +37,8 @@ protected:
     virtual void projectSpaceClosed();
     virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
-    virtual void addedFileToProject(const QString &fileName);
-    virtual void removedFileFromProject(const QString &fileName);
+    virtual void addedFileToProject(KDevFileNode* pNode);
+    virtual void removedFileFromProject(KDevFileNode* pNode);
     virtual void savedFile(const QString &fileName);
 
     virtual bool hasFeature(Features feature);

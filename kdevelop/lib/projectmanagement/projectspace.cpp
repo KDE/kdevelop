@@ -39,6 +39,8 @@
 #include "renamefiledlg.h"
 #include <kio/job.h>
 #include <kfiledialog.h>
+#include "kdevnodes.h"
+
 void FileGroup::setName(QString name) {
   m_name = name;
 }
@@ -102,6 +104,8 @@ void ProjectSpace::slotProjectAddExistingFiles(){
      if (m_pCurrentProject != 0){
        for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) { 
 	 m_pCurrentProject->addFile(*it);
+	 KDevFileNode* pNode = new KDevFileNode(*it,m_name,m_pCurrentProject->name());
+	 emit sigAddedFileToProject(pNode); // inform the other components
        }
      }
      else{
@@ -646,52 +650,52 @@ Project* ProjectSpace::project(QString projectName){
   return 0;
 }
 
-QList<KAction>* ProjectSpace::fileActions(const QString& absFileName,const QString& projectName){
+QList<KAction>* ProjectSpace::kdevNodeActions(KDevNode* pNode){
   QList<KAction>* pList = new QList<KAction>;
 
-  KDevFileAction* pAction;
-  
-  pList->append(new KActionSeparator());
-  pAction = new KDevFileAction("Move to...");
-  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
-  pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&,const QString&)),this,
-	  SLOT(slotMoveFileTo(const QString&,const QString&)));
-  pList->append(pAction);
-  
-  pAction = new KDevFileAction("Copy to...","editcopy");
-  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
-  pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&,const QString&)),this,
-	  SLOT(slotCopyFileTo(const QString&,const QString&)));
-  pList->append(pAction);
-
-  pAction = new KDevFileAction("Rename...");
-  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
-  pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&,const QString&)),
-	  this,SLOT(slotRenameFile(const QString&,const QString&)));
-  pList->append(pAction);
-
-  pList->append(new KActionSeparator());
-  pAction = new KDevFileAction("Remove from Project...");
-  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
-  pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&,const QString&)),
-	  this,SLOT(slotRemoveFileFromProject(const QString&,const QString&)));
-  pList->append(pAction);
-
-  pAction = new KDevFileAction("Delete File...","edittrash");
-  pAction->setAbsFileName(absFileName); // stored to get is from the activated signal 
-  pAction->setProjectName(projectName);
-  connect(pAction,SIGNAL(activated(const QString&,const QString&)),
-	  this,SLOT(slotDeleteFile(const QString&,const QString&)));
-  pList->append(pAction);
+  KDevNodeAction* pAction=0;
+  if(pNode->inherits("KDevFileNode")){
+    pList->append(new KActionSeparator());
+    pAction = new KDevNodeAction(pNode,"Move to...");
+    connect(pAction,SIGNAL(activated(KDevNode*)),this,
+	    SLOT(slotMoveFileTo(KDevNode*)));
+    pList->append(pAction);
+    
+    pAction = new KDevNodeAction(pNode,"Copy to...","editcopy");
+    connect(pAction,SIGNAL(activated(KDevNode*)),this,
+	    SLOT(slotCopyFileTo(KDevNode*)));
+    pList->append(pAction);
+    
+    pAction = new KDevNodeAction(pNode,"Rename...");
+    connect(pAction,SIGNAL(activated(KDevNode*)),
+	    this,SLOT(slotRenameFile(KDevNode*)));
+    pList->append(pAction);
+    
+    pList->append(new KActionSeparator());
+    pAction = new KDevNodeAction(pNode,"Remove from Project...");
+    connect(pAction,SIGNAL(activated(KDevNode*)),
+	    this,SLOT(slotRemoveFileFromProject(KDevNode*)));
+    pList->append(pAction);
+    
+    pAction = new KDevNodeAction(pNode,"Delete File...","edittrash");
+    connect(pAction,SIGNAL(activated(KDevNode*)),
+	    this,SLOT(slotDeleteFile(KDevNode*)));
+    pList->append(pAction);
+  }
   return pList;
 }
 
-void ProjectSpace::slotRenameFile(const QString& absFileName,const QString& projectName){
-  kdDebug(9000) << "renameFile called: " <<  absFileName << endl;
+void ProjectSpace::slotRenameFile(KDevNode* pNode){
+  kdDebug(9000) << "renameFile called: ";
+  pNode->show();
+  if (!pNode->inherits("KDevFileNode")){
+    kdDebug(9000) << "ProjectSpace::slotRenameFile() pNode doesn't inherit KDevFileNode" << endl;
+    return;
+  }
+  KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  QString absFileName = pFileNode->absoluteFileName();
+  QString projectName = pFileNode->projectName();
+
   
   RenameFileDlg dlg(0,"renamedlg",true);
   QFileInfo info(absFileName);
@@ -713,6 +717,8 @@ void ProjectSpace::slotRenameFile(const QString& absFileName,const QString& proj
 	cerr << "dirPath:" << info.dirPath() << endl;
 	RegisteredFile* pRegFile = pProject->file(filePath + info.fileName());
 	pRegFile->setRelativeFile(filePath + newName);
+	KDevFileNode* pNode = new KDevFileNode(info.dirPath() + "/" +newName,m_name,pProject->name());
+	emit sigAddedFileToProject(pNode); // inform the other components
       }
       else {
 	kdDebug(9000) << "slotRenameFile() No Project found:" << projectName << endl;	
@@ -724,8 +730,17 @@ void ProjectSpace::slotRenameFile(const QString& absFileName,const QString& proj
     }
   }
 }
-void ProjectSpace::slotDeleteFile(const QString& absFileName,const QString& projectName){
-  kdDebug(9000) << "deleteFile called: " <<  absFileName << endl;
+void ProjectSpace::slotDeleteFile(KDevNode* pNode){
+  kdDebug(9000) << "deleteFile called: ";
+  pNode->show();
+  if (!pNode->inherits("KDevFileNode")){
+    kdDebug(9000) << "ProjectSpace::slotDeleteFile() pNode doesn't inherit KDevFileNode" << endl;
+    return;
+  }
+  KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  QString absFileName = pFileNode->absoluteFileName();
+  QString projectName = pFileNode->projectName();
+
   QFileInfo info(absFileName);
   if (KMessageBox::warningYesNo(0, i18n("Do you really want to delete the file \"%1\"?\nThere is no way to restore it!").arg(info.fileName())) == KMessageBox::No){
     return;
@@ -742,8 +757,17 @@ void ProjectSpace::slotDeleteFile(const QString& absFileName,const QString& proj
   KIO::DeleteJob* pJob = KIO::del(srcURL);
   
 }
-void ProjectSpace::slotRemoveFileFromProject(const QString& absFileName,const QString& projectName){
-  kdDebug(9000) << "removeFileFromProject called: (KDE)" <<  absFileName << endl;
+void ProjectSpace::slotRemoveFileFromProject(KDevNode* pNode){
+  kdDebug(9000) << "removeFileFromProject called:";
+  pNode->show();
+  if (!pNode->inherits("KDevFileNode")){
+    kdDebug(9000) << "ProjectSpace::slotRemoveFileFromProject() pNode doesn't inherit KDevFileNode" << endl;
+    return;
+  }
+  KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  QString absFileName = pFileNode->absoluteFileName();
+  QString projectName = pFileNode->projectName();
+
   QFileInfo info(absFileName);
   if (KMessageBox::warningYesNo(0, i18n("Do you really want to remove the file \"%1\"\nfrom project? It will remain on disk.").arg(info.fileName())) == KMessageBox::No){
     return;
@@ -758,8 +782,17 @@ void ProjectSpace::slotRemoveFileFromProject(const QString& absFileName,const QS
   }
   
 }
-void ProjectSpace::slotMoveFileTo(const QString& absFileName,const QString& projectName){
-  kdDebug(9000) << "slotMoveFileTo called: (KDE)" <<  absFileName << endl;
+void ProjectSpace::slotMoveFileTo(KDevNode* pNode){
+  kdDebug(9000) << "slotMoveFileTo called:";
+  pNode->show();
+  if (!pNode->inherits("KDevNode")){
+    kdDebug(9000) << "ProjectSpace::slotMoveFileTo() pNode doesn't inherit KDevFileNode" << endl;
+    return;
+  }
+  KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  QString absFileName = pFileNode->absoluteFileName();
+  QString projectName = pFileNode->projectName();
+
   QString dir = KFileDialog::getExistingDirectory(QString::null,0,i18n("Destination directory..."));
   if(dir.isEmpty()){
     return; // cancel or no directory
@@ -776,6 +809,8 @@ void ProjectSpace::slotMoveFileTo(const QString& absFileName,const QString& proj
     pNewFile->setRelativeFile(relFile);
     pProject->removeFile(pFile);
     pProject->addFile(pNewFile);
+    KDevFileNode* pNode = new KDevFileNode(dir + "/" +info.fileName(),m_name,pProject->name());
+    emit sigAddedFileToProject(pNode); // inform the other components
   }
   
   KURL srcURL(absFileName);
@@ -783,8 +818,17 @@ void ProjectSpace::slotMoveFileTo(const QString& absFileName,const QString& proj
   KIO::FileCopyJob* pJob = KIO::file_move(srcURL,destURL);
   
 }
-void ProjectSpace::slotCopyFileTo(const QString& absFileName,const QString& projectName){
-  kdDebug(9000) << "slotCopyFileTo called: (KDE)" <<  absFileName << endl;
+void ProjectSpace::slotCopyFileTo(KDevNode* pNode){
+  kdDebug(9000) << "slotCopyFileTo called:";
+  pNode->show();
+  if (!pNode->inherits("KDevFileNode")){
+    kdDebug(9000) << "ProjectSpace::slotCopyFileTo() pNode doesn't inherit KDevFileNode" << endl;
+    return;
+  }
+  KDevFileNode* pFileNode = static_cast<KDevFileNode*> (pNode);
+  QString absFileName = pFileNode->absoluteFileName();
+  QString projectName = pFileNode->projectName();
+
   QString dir = KFileDialog::getExistingDirectory(QString::null,0,i18n("Destination directory..."));
   if(dir.isEmpty()){
     return; // cancel or no directory
@@ -800,6 +844,9 @@ void ProjectSpace::slotCopyFileTo(const QString& absFileName,const QString& proj
     kdDebug(9000) << "relFile" <<  relFile << endl;
     pNewFile->setRelativeFile(relFile);
     pProject->addFile(pNewFile);
+    KDevFileNode* pNode = new KDevFileNode(dir + "/" + info.fileName(),m_name,pProject->name());
+    kdDebug(9000) << "emit sigAddedFileToProject";
+    emit sigAddedFileToProject(pNode); // inform the other components
   }
   
   KURL srcURL(absFileName);

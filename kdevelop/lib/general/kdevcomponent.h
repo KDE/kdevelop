@@ -30,6 +30,8 @@ class ProjectSpace;
 class ClassStore;
 class KDialogBase;
 class KAboutData;
+class KDevNode;
+class KDevFileNode;
 
 
 
@@ -97,15 +99,13 @@ public:
     virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
     /**
-     * A file has been added to the project. The filename is
-     * given relative to the project dir.
+     * A file has been added to the project
      */
-    virtual void addedFileToProject(const QString&);
+    virtual void addedFileToProject(KDevFileNode* pNode);
     /**
-     * A file has been removed from the project. The filename is
-     * given relative to the project dir.
+     * A file has been removed from the project. 
      */
-    virtual void removedFileFromProject(const QString&);
+    virtual void removedFileFromProject(KDevFileNode* pNode);
     /**
      * A file has been saved. The filename is
      * given relative to the project dir.
@@ -115,14 +115,13 @@ public:
     /** returns some data about this Component, should be static?*/
     virtual KAboutData* aboutPlugin();
   
-  /** set the assembled Fileactions for the File absFileName, asked in needFileActions(QString),
+  /** set the assembled Actions , asked in needKDevNodeActions(KDevNode),
    */
-  virtual  void setFileActions(QList<KAction>* pActions);
+  virtual  void setKDevNodeActions(QList<KAction>* pActions);
   /**
-     return a list of KDevFileActions which are implemented by this component for this file
-     and project,both together are unique
+     return a list of KDevFileActions which are implemented by this component for this KDevNode
   */
-  virtual QList<KAction>* fileActions(const QString& absFileName,const QString& projectName);
+  virtual QList<KAction>* kdevNodeActions(KDevNode* pNode);
   
 
     /** write the ProjectSpace related configuration to the document
@@ -160,12 +159,12 @@ signals:
      * all components get a stopButtonClicked().
      */
   void running(bool runs);
-  /** get all fileactions for this file from every component,
-      set through setFileActions(QList<KDevFileAction>* actions);
-      assembled with QList<KAction>* fileActions(QString absFileName)
+  /** get all Actions for this file from every component,
+      set through setKDevNodeActions(QList<KDevNodeAction>* actions);
+      assembled with QList<KAction>* kdevNodeActions(KDevNode* pNode)
       pWho is the sender
    */
-  void needFileActions(KDevComponent* pWho,const QString& absFileName,const QString& projectName);
+  void needKDevNodeActions(KDevComponent* pWho,KDevNode* pNode);
 
     void gotoSourceFile(const QString &fileName, int lineNo);
     void gotoDocumentationFile(const QString &fileName);
