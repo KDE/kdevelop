@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: Debugging Applications</TITLE>
+<TITLE>The User Manual to KDevelop: The Internal Debugger</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,16 +18,16 @@
  <A HREF="index-11.html">Previous</A>
  <A HREF="index.html#toc12">Table of Contents</A>
 </P>
-<H3><A NAME="Debugging Applications"></A> <A NAME="s12">12. Debugging Applications</A></H3>
+<H3><A NAME="The Internal Debugger"></A> <A NAME="s12">12. The Internal Debugger</A></H3>
 
 <H3><A NAME="ss12.1">12.1 Setup</A>
 </H3>
 
 <P>
 <P>The default setup for KDevelop is to use the internal debugger. You can
-change this under Options select the &quot;KDevelop setup&quot; menu item,
+change this under Options select the "KDevelop setup" menu item,
 and then the Debugger tab.
-<P>Click on &quot;Use external debugger&quot; if you wish to use a different
+<P>Click on "Use external debugger" if you wish to use a different
 debugger and enter the name of the debugger to use. See your debuggers documentation
 on how to run it.
 <P>
@@ -44,7 +44,7 @@ on how to run it.
 <UL>
 <LI>VAR tab : A tree view of the local variables at the current place in
 the  program you have stopped at. You can also see local variables in the
-function  that called this funtions. The VAR tab also contains a watch window.
+function  that called this functions. The VAR tab also contains a watch window.
 This allows  you to see the value of global variables, or perhaps you may want
 to see only  one local variable rather than the variable in a large list of
 local variables.</LI>
@@ -54,7 +54,7 @@ local variables.</LI>
 
 <P>
 <UL>
-<LI>breakpoint : A list of breakpoints set and there currrent state.</LI>
+<LI>breakpoint : A list of breakpoints set and their current state.</LI>
 <LI>framestack : The calling stack.</LI>
 <LI>disassemble : A machine instruction view of the code showing the current instruction to be executed.</LI>
 </UL>
@@ -75,7 +75,7 @@ with global variables.
 <H4>Set/Unset breakpoints</H4>
 
 <P>
-<P>Simple one click set/unset. Click on the &quot;icon&quot; border to the
+<P>Simple one click set/unset. Click on the "icon" border to the
 left of the text in the editor at the line you want the breakpoint. Click again
 on this line to unset the breakpoint.
 <P>
@@ -94,7 +94,7 @@ This contains the following fields :
 <OL>
 <LI>Conditional: Enter the condition that must be met before gdb will interrupt
 the program execution.</LI>
-<LI>Ignore count: How many times you want to the code to past through this
+<LI>Ignore count: How many times you want the code to past through this
 breakpoint before gdb interrupts the program execution.</LI>
 <LI>Enable: When enabled gdb will break at this breakpoint. When disabled gdb
 will not break here.</LI>
@@ -115,26 +115,26 @@ the variable goes out of scope the program breaks and the watchpoint is deleted.
 <P>WARNING: This is known to be problematic, so use caution when setting
 watchpoints on local variables.
 <P>The watchpoint can also be set by a right mouse click on a previously entered
-watch variable, and selecting &quot;toggle watchpoint&quot;
+watch variable, and selecting "toggle watchpoint"
 <P>
 <H4>Set/Unset Watch variables</H4>
 
 <P>
-<P>At the bottom of the VAR view there is the &quot;Watch&quot; field where
+<P>At the bottom of the VAR view there is the "Watch" field where
 you can enter the variable name you wish to see display in the watch list.
-Enter the variable name and type &quot;enter&quot; or click on the &quot;Add&quot;
+Enter the variable name and type "enter" or click on the "Add"
 button alongside the field. Right Mouse clicking on the watch variable in the
 treeview will bring up a menu so that you can remove the variable from the
 list.
-<P>You can also enter a watch variable by right mouse clicking on a variabel
-name in the editor window. This displays a popup menu with &quot;watch: variable
-name&quot; on it.
+<P>You can also enter a watch variable by right mouse clicking on a variable
+name in the editor window. This displays a popup menu with "watch: variable
+name" on it.
 <H4>Changing variable values</H4>
 
 <P>
-<P>This is done via the watch variable. If you have a variable &quot;test&quot;
-then to set &quot;test&quot; to 5 type &quot;test=5&quot; in the watch
-field and add it to the list. Note that &quot;test&quot; will be set to &quot;5&quot;
+<P>This is done via the watch variable. If you have a variable "test"
+then to set "test" to 5 type "test=5" in the watch
+field and add it to the list. Note that "test" will be set to "5"
 EVERY time the program stops at a breakpoint, so once you have set the variable,
 usually you should remove the item from the watch view.
 <P>
@@ -142,8 +142,8 @@ usually you should remove the item from the watch view.
 
 <P>
 <P>The debugger toolbar is either on top of all windows displayed, or docked
-in the panel. When docked you can run you code by clicking on the docked icon.
-The function this performs is the &quot;step over&quot; function. Right clicking
+in the panel. When docked you can run your code by clicking on the docked icon.
+The function this performs is the "step over" function. Right clicking
 on the docked item allows you to restore the toolbar and optionally place focus
 on kdevelop.
 <P>The functions available are:
@@ -154,7 +154,7 @@ line of code in the same surce file. This will run any functions encountered
 until the above condition is met.</LI>
 <LI>Step over i(nstruction) : Execute one machine instruction as above.</LI>
 <LI>Step in : Execute exactly one source line of code. This
-means you will &quot;step into&quot; the current function, if necessary</LI>
+means you will "step into" the current function, if necessary</LI>
 <LI>Step in i(nstruction) : Execute one machine instruction as above.</LI>
 <LI>Step out : Run to the end of the current stack frame (function)</LI>
 <LI>View : Allows a variety of views into the data.
@@ -169,16 +169,47 @@ Currently implemented views are:
 <LI>Interrupt : Stop the application executing.</LI>
 <LI>Set focus on kdevelop : Set the focus on kdevelop</LI>
 <LI>Set focus on app : This sets the focus on the window that had focus
-when you pressed the &quot;set focus on kdevelop&quot; button. This is a
+when you pressed the "set focus on kdevelop" button. This is a
 compromise, it should set the focus on the application being debugged but this
 is difficult to do. If anyone has a better solution than the current functionality
 then please let us know.</LI>
 </UL>
 <P>When gdb interrupts the program, probably because a breakpoint has been
-triggered, we highlight the &quot;Set focus on kdevelop&quot;. We do not
+triggered, we highlight the "Set focus on kdevelop". We do not
 automatically switch focus to kdevelop so that you can view the application
-window at this point. Click on the &quot;set focus&quot; button to switch
+window at this point. Click on the "set focus" button to switch
 to kdevelop or press a button on the toolbar to perform your selected function.
+<P>
+<H3><A NAME="ss12.3">12.3 Shared libraries and breakpoints</A>
+</H3>
+
+<P>
+<P>Shared libraries and breakpoints have a problem that has a reasonable solution.
+The problem is that gdb will not accept breakpoints in source that is in a
+shared library which has not yet been opened but will be opened via a
+dlopen.
+<P>The solution is to get gdb to tell us when a shared library has been opened. 
+We do so by setting "stop-on 1".
+This means that when the user sets a breakpoint, we flag this breakpoint as
+pending, try to set the breakpoint and if gdb says it succeeded then flag it
+as active. If gdb is not successful then we leave the breakpoint as pending.
+The next instruction will always be "continue" .
+<P>This is known as "lazy breakpoints"
+<P>You have to be careful, though. If you inadvertantly set a breakpoint in a file
+that is really outside the program, that is it's neither part of the program nor of any
+shared library inside the project, then this breakpoint will always be pending. There's
+nothing you can do about that, because it might be in a shared library.
+<P>Now here's the problem with this. If the user "step"s over code that  contains a library
+dlopen, then it isn't predictable what will happen. The dlopen will be catched by gdb, thus
+the code will stop. Now there are two possibilities, either there are pending breakpoints,
+then they will be marked as active and "continue" will lead to there. Or there aren't any pending
+breakpoints in this frame stack. Then the program will "continue" until it waits for input or
+it may lead us straight to the end, none of which is what we expected. In this situation, I do not do a
+continue but leave it stopped with the status line reflecting the stopped state.
+The frame stack is in the routine that caused the stop.
+<P>There isn't any way around this, but I could alleviate the problem somewhat
+by only doing a "set stop-on 1" when we have pending breakpoints.
+<P>
 <P>
 <P ALIGN="RIGHT">
 

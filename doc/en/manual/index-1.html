@@ -45,7 +45,7 @@ autoconf,</LI>
 <LI> Internationalization support for your application, allowing translators to easily add their target language to a project,</LI>
 <LI> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in dialog editor,</LI>
 <LI> managing your project via CVS by providing an easy-to-use frontend for the most needed functions,</LI>
-<LI> Debugging your application, optionally by KDevelop's internal debugger or by using KDbg,</LI>
+<LI> Debugging your application by integrating KDbg,</LI>
 <LI> Editing of project-specific pixmaps with KIconEdit,</LI>
 <LI> The inclusion of any other program you need for development by adding it to the "Tools"-menu according to your individual needs.</LI>
 </UL>
@@ -60,13 +60,19 @@ anywhere within the IDE.
 <H3><A NAME="ss1.1">1.1 Changes</A>
 </H3>
 
-<P>Version 1.1 of KDevelop extends the already well-known and successful 1.0 version by various new features that were requested.
-Improvements were achieved by adding an integrated debugger that allows KDevelop users for the first time to test and debug their
-projects now within the IDE, which makes it another time even much easier to make at the same time use of the projectmanagement and
-codewatch; but at the same time leaving it open to stay with KDbg optionally. Further improvements are made in the classparser now
-capable of namespace handling, the editor's bookmark behavoir, updated filehandling and various fixes for BSD OS's, comment/uncomment
-of codeblocks and much more. The provided documentation also was updated and adapted to the additions since the 1.0 release, along with
-the recent development tendencies taking place at KDE 2.
+<P>Version 1.0 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 0.1 release followed by the 0.2, 0.3 and 0.4 releases; each of them were tested and bugs
+fixed. We believe that the current version is to be expected as the final release for the KDE 1.x series, giving developers the
+environment they want to use.
+<P>Improvements were made in the following sections:
+<P>
+<UL>
+<LI>fast classparser and -browser with graphical class-tree view and dialog-based adding of members and classes,</LI>
+<LI>CVS support for most needed functions such as adding, removing, updating and committing files and directories,</LI>
+<LI>updated and extended documentation, now covering five handbooks shipping with KDevelop,</LI>
+<LI>bugfixed classparser, dialogeditor and errorfinder.</LI>
+</UL>
+<P>Any comments about the IDE, its documentation or feature requests are welcome.
 <P>
 <H3><A NAME="ss1.2">1.2 About this Handbook</A>
 </H3>
@@ -104,11 +110,9 @@ editing.</LI>
 <A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, features the integrated visual GUI constructor and how it
 generates C++ output.</LI>
 <LI>Chapter
-<A HREF="index-12.html#Debugging Applications">Debugging Applications</A>,gives an overview over debugging setup and use of
-the internal debugger</LI>
+<A HREF="index-12.html#The Internal Debugger">The Internal Debugger</A>,gives an overview over debugging setup and use of the internal debugger</LI>
 <LI>Chapter 
-<A HREF="index-14.html#General Configuration">General Configuration</A> shows how you can set overall preferences for using
-KDevelop.</LI>
+<A HREF="index-14.html#General Configuration">General Configuration</A> shows how you can set overall preferences for using KDevelop.</LI>
 <LI>Chapter 
 <A HREF="index-15.html#Questions and Answers">Questions and Answers</A>, covers questions that regard to the usage of KDevelop
 under different flavors of Unix systems and problem solutions in general.</LI>
