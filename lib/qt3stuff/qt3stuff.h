@@ -1,9 +1,9 @@
-#if QT_VERSION < 300
 #ifndef QT3STUFF_H
 #define QT3STUFF_H
 
 // This file is where the dirty hacks go :)
 #include <qnamespace.h>
+#include <qglobal.h>
 
 namespace Qt3 { // can't be Qt, a class already exists with that name :(
 
@@ -71,6 +71,8 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 
 };
 
+#if QT_VERSION < 300
+
 // Called _blah in Qt 2 and Q_blah in Qt 3
 #if defined(_WS_X11)
 #define Q_WS_X11
@@ -84,6 +86,6 @@ namespace Qt3 { // can't be Qt, a class already exists with that name :(
 #define QPtrVector QVector
 #define QMemArray QArray
 
-#endif // QNAMESPACE_H
-
 #endif // QT_VERSION
+
+#endif // QT3STUFF_H 
