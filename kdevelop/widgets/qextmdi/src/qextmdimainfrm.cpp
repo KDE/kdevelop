@@ -422,9 +422,10 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       lpC->show();
    }
 
-   m_pCurrentWindow  = pWnd;  // required for checking the active item
    QFocusEvent *fe = new QFocusEvent(QEvent::FocusIn);
    QApplication::sendEvent( pWnd, fe);
+
+   m_pCurrentWindow  = pWnd;  // required for checking the active item
 }
 
 //============= detachWindow ==============//
@@ -633,17 +634,24 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
       m_pDockbaseOfTabPage = (KDockWidget*) pWnd->parentWidget();
    }
    else {
-      if (pWnd->isAttached()){
+      pWnd->show();
+      if (pWnd->isAttached()) {
+         if (m_pMdi->topChild() == pWnd->mdiParent()) {
+            pWnd->activate();
+         }
          pWnd->mdiParent()->raiseAndActivate();
       }
-      else {
-         if (!pWnd->hasFocus() || !pWnd->isActiveWindow()) {
-            pWnd->show();
-            pWnd->setActiveWindow();
-            pWnd->raise();
-         }
+      if (!pWnd->isAttached()) {
+         pWnd->activate();
          m_pMdi->setTopChild(0L); // lose focus in the mainframe window
-         pWnd->setFocus();
+         if (!pWnd->isActiveWindow()) {
+            pWnd->m_bInterruptActivation = TRUE;
+            pWnd->setActiveWindow();
+         }
+         pWnd->raise();
+         if (!pWnd->hasFocus()) {
+            pWnd->setFocus();
+         }
       }
    }
    pWnd->m_bMainframesActivateViewIsPending = FALSE;
@@ -682,16 +690,25 @@ bool QextMdiMainFrm::event( QEvent* e)
 
 bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
 {
-   if(e->type() == QEvent::WindowActivate ) {
-      if ( m_pCurrentWindow && !m_pCurrentWindow->isHidden() && !m_pCurrentWindow->isAttached() && m_pMdi->topChild()) {
-         return TRUE;   // eat the event
-      }
-      else {
-         if (m_pMdi) {
-            m_pMdi->focusTopChild();
+   if( e->type() == QEvent::FocusIn) {
+      QFocusEvent* pFE = (QFocusEvent*) e;
+      if (pFE->reason() == QFocusEvent::ActiveWindow) {
+         if (m_pCurrentWindow && !m_pCurrentWindow->isHidden() && !m_pCurrentWindow->isAttached() && m_pMdi->topChild()) {
+            return TRUE;   // eat the event
+         }
+         else {
+            if (m_pMdi) {
+               static bool bFocusTCIsPending = FALSE;
+               if (!bFocusTCIsPending) {
+                  bFocusTCIsPending = TRUE;
+                  m_pMdi->focusTopChild();
+                  bFocusTCIsPending = FALSE;
+               }
+            }
          }
       }
    }
+   
    return DockMainWindow::eventFilter( obj, e);
 }
 

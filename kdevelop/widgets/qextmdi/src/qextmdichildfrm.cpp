@@ -872,14 +872,12 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                bIsSecondClick = TRUE;  // of a possible double click
             }
             if ( !(((obj == m_pWinIcon) || (obj == m_pUnixIcon)) && bIsSecondClick) ) {
-               qDebug("1");
                // in case we didn't click on the icon button
                QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
                QApplication::postEvent(qApp->mainWidget(), pFE);
                QApplication::sendPostedEvents();
                if (m_pClient)
-                  m_pClient->setFocus();
-               raiseAndActivate();
+                  m_pClient->activate();
                QWidget* w = (QWidget*) obj;
                if( (w->parent() != m_pCaption) && (w != m_pCaption))
                   w->setFocus();

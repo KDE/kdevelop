@@ -43,7 +43,6 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
   ,m_stateChanged(TRUE)
-  ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
   ,m_bInterruptActivation(FALSE)
   ,m_bMainframesActivateViewIsPending(FALSE)
@@ -67,7 +66,6 @@ QextMdiChildView::QextMdiChildView( QWidget* parentWidget, const char* name, WFl
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
   ,m_stateChanged(TRUE)
-  ,m_bFocusActivationIsPending(FALSE)
   ,m_bToolView(FALSE)
 {
    setGeometry( 0, 0, 0, 0);  // reset
@@ -339,7 +337,9 @@ void QextMdiChildView::focusInEvent(QFocusEvent *e)
    if (e && ((e->reason())==QFocusEvent::Popup)) {
       return;
    }
+
    // XXX TODO: call QWidget::focusInEvent() ???
+
    m_bFocusInEventIsPending = TRUE;
    activate();
    m_bFocusInEventIsPending = FALSE;
@@ -351,6 +351,13 @@ void QextMdiChildView::focusInEvent(QFocusEvent *e)
 
 void QextMdiChildView::activate()
 {
+   // avoid circularity
+   static bool s_bActivateIsPending = FALSE;
+   if (s_bActivateIsPending) {
+      return;
+   }
+   s_bActivateIsPending = TRUE;
+
    if (!m_bFocusInEventIsPending) {
       setFocus();
    }
@@ -363,10 +370,12 @@ void QextMdiChildView::activate()
    // check if someone wants that we interrupt the method (because it's probably unnecessary)
    if (m_bInterruptActivation) {
       m_bInterruptActivation = FALSE;
+      s_bActivateIsPending = FALSE;
       return;   // nothing to do, we are the active childview, already
    }
    else {
-     emit activated(this);
+      qDebug("QextMdiChildView::activate() called!");
+      emit activated(this);
    }
 
    if( m_focusedChildWidget != 0L) {
@@ -378,6 +387,7 @@ void QextMdiChildView::activate()
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
    }
+   s_bActivateIsPending = FALSE;
 }
 
 //============= focusOutEvent ===============//
@@ -445,10 +455,11 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          }
       }
       else {   // is toplevel
-         if (!m_bFocusActivationIsPending) {
-            m_bFocusActivationIsPending = TRUE;
+         static bool m_bActivationIsPending = FALSE;
+         if (!m_bActivationIsPending) {
+            m_bActivationIsPending = TRUE;
             activate(); // sets the focus
-            m_bFocusActivationIsPending = FALSE;
+            m_bActivationIsPending = FALSE;
          }
       }
    }

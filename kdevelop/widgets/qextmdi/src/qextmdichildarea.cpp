@@ -157,7 +157,6 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
 {
    if(m_pZ->last() != lpC){
-      //qDebug("setTopChild");
       m_pZ->setAutoDelete(FALSE);
       if (lpC) {
          m_pZ->removeRef(lpC);
@@ -296,8 +295,12 @@ void QextMdiChildArea::focusTopChild()
       if(pC != lpC)pC->m_pCaption->setActive(FALSE);
    }
    lpC->raise();
-   if(!lpC->hasFocus())lpC->setFocus();
-   lpC->m_pClient->setFocus();
+   if(!lpC->hasFocus()) {
+      lpC->setFocus();
+   }
+   if (!lpC->m_pClient->hasFocus()) {
+      lpC->m_pClient->setFocus();
+   }
 }
 
 //============= cascadeWindows ===============//

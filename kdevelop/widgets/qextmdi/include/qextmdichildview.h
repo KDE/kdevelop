@@ -84,10 +84,6 @@ protected:
    * For example it could be that a 'maximize' is pending, if this variable is TRUE.
    */
    bool        m_stateChanged;
-   /**
-   *
-   */
-   bool        m_bFocusActivationIsPending;
 
 private:
    /**
@@ -104,7 +100,7 @@ private:
    */
    bool m_bMainframesActivateViewIsPending;
    /**
-   * Internally used to prevent cycles between focusInEvent() and activate().
+   * 
    */
    bool m_bFocusInEventIsPending;
 
