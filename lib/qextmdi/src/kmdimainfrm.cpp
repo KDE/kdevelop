@@ -1654,7 +1654,7 @@ void KMdiMainFrm::findToolViewsDockedToMain(QPtrList<KMdiDockWidget>* list,KMdiD
 		}
 
 		if (widget) {
-			KDockTabGroup *tg=static_cast<KDockTabGroup*>(widget->
+			KDockTabGroup *tg=dynamic_cast<KDockTabGroup*>(widget->
 				getWidget());
 			if (tg) {
 				kdDebug()<<"KDockTabGroup found"<<endl;
