@@ -20,7 +20,7 @@ SplashScreen::SplashScreen()
   : QObject()
 {
   m_splash = new QWidget( 0,
-    "splash", WStyle_NoBorder | WStyle_Customize | WStyle_StaysOnTop | WX11BypassWM );
+    "splash", WStyle_NoBorder | WStyle_Customize | WStyle_StaysOnTop /*| WX11BypassWM */);
 
   m_splash->installEventFilter( this );
 
