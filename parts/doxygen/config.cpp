@@ -513,7 +513,7 @@ char *yytext;
  *
  * 
  *
- * Copyright (C) 1997-2003 by Dimitri van Heesch.
+ * Copyright (C) 1997-2004 by Dimitri van Heesch.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation under the terms of the GNU General Public License is hereby 
@@ -529,7 +529,6 @@ char *yytext;
  */
 #include <stdio.h>
 #include <stdlib.h>
-//#include <iostream.h>
 #include <assert.h>
 #include <ctype.h>
 #include <stdarg.h>
@@ -2517,19 +2516,19 @@ static void substEnvVarsInStrList(QStrList &sl)
 	sl.insert(sl.at(),result.right(l-p)); // insert new item before current item.
 	sl.next();                 // current item is now the old item
       }
-
-      // remove the old unexpanded string from the list
-      i=sl.at();
-      sl.remove(); // current item index changes if the last element is removed.
-      if (sl.at()==i)     // not last item
-	s = sl.current();
-      else                // just removed last item
-	s = 0;
     }
     else // just goto the next element in the list
     {
-      s=sl.next();
+      sl.insert(sl.at(),result);
+      sl.next();
     }
+    // remove the old unexpanded string from the list
+    int i=sl.at();
+    sl.remove(); // current item index changes if the last element is removed.
+    if (sl.at()==i)     // not last item
+	s = sl.current();
+    else                // just removed last item
+	s = 0;
   }
 }
 
@@ -3057,7 +3056,7 @@ void Config::create()
                     "The default language is English, other supported languages are: \n"
 		    "Brazilian, Catalan, Chinese, Chinese-Traditional, Croatian, Czech, Danish, Dutch, \n"
 		    "Finnish, French, German, Greek, Hungarian, Italian, Japanese, Japanese-en \n"
-		    "(Japanese with English messages), Korean, Norwegian, Polish, Portuguese, \n"
+		    "(Japanese with English messages), Korean, Korean-en, Norwegian, Polish, Portuguese, \n"
 		    "Romanian, Russian, Serbian, Slovak, Slovene, Spanish, Swedish, and Ukrainian.\n",
 		    "English"
                    );
@@ -3110,6 +3109,7 @@ void Config::create()
 #endif
 #ifdef LANG_KR
   ce->addValue("Korean");
+  ce->addValue("Korean-en");
 #endif
 #ifdef LANG_NO
   ce->addValue("Norwegian");
@@ -3411,6 +3411,14 @@ void Config::create()
                     "alphabetically by member name. If set to NO the members will appear in \n"
                     "declaration order. \n",
                     TRUE
+                 );
+  cb = addBool(
+                    "SORT_BRIEF_DOCS",
+                    "If the SORT_BRIEF_DOCS tag is set to YES then doxygen will sort the \n"
+                    "brief documentation of file, namespace and class members alphabetically \n"
+                    "by member name. If set to NO (the default) the members will appear in \n"
+                    "declaration order. \n",
+                    FALSE
                  );
   cb = addBool(
                     "GENERATE_TODOLIST",
@@ -4182,7 +4190,7 @@ void Config::create()
                  );
   cb->addDependency("ENABLE_PREPROCESSING");
   //-----------------------------------------------------------------------------------------------
-  addInfo(  "External","Configuration::addtions related to external references   ");
+  addInfo(  "External","Configuration::additions related to external references   ");
   //-----------------------------------------------------------------------------------------------
   cl = addList(
                     "TAGFILES",
@@ -4401,7 +4409,7 @@ void Config::create()
   cb->addDependency("HAVE_DOT");
 
   //-----------------------------------------------------------------------------------------------
-  addInfo(  "Search","Configuration::addtions related to the search engine   ");
+  addInfo(  "Search","Configuration::additions related to the search engine   ");
   //-----------------------------------------------------------------------------------------------
   cb = addBool(
                     "SEARCHENGINE",
