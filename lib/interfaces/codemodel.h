@@ -386,9 +386,8 @@ class FunctionModel: public CodeModelItem
 {
 protected:
     FunctionModel( CodeModel* model );
-    
+
 public:
-    ~FunctionModel();
     typedef FunctionDom Ptr;
 
     virtual bool isFunction() const { return true; }
@@ -428,20 +427,6 @@ public:
     bool addArgument( ArgumentDom arg );
     void removeArgument( ArgumentDom arg );
 
-    /**
-    *	Get the documentation of the function.
-    *	@return The documentation of the function, return QString::null, when no documentation is set.
-    *	@author Jonas Jacobi <jonas.jacobi@web.de>
-    */
-    QString documentation() const;
-    /*
-    *	Set the documentation of the function.
-    *	@param doc A QString containing the richtext-formatted documentation of the function.
-    *	@see parseDoxygen
-    *	@author Jonas Jacobi <jonas.jacobi@web.de>
-    */
-    void setDocumentation(const QString& doc);
-    
     virtual void read( QDataStream& stream );
     virtual void write( QDataStream& stream ) const;
 
@@ -465,8 +450,6 @@ private:
     QString m_resultType;
     ArgumentList m_arguments;
 
-    QString* m_documentation;
-    
 private:
     FunctionModel( const FunctionModel& source );
     void operator = ( const FunctionModel& source );
