@@ -722,13 +722,7 @@ DocTreeQtFolder::DocTreeQtFolder(QString xml, QString name, KListView *parent,
 
 void DocTreeQtFolder::refresh()
 {
-    KConfig *config = DocTreeViewFactory::instance()->config();
-    if(config) 
-    {
-        config->setGroup("General");
-        QString tmp = config->readEntry("qtdocdir", QT_DOCDIR);
-        if (!tmp.isEmpty())  filename = tmp + QString("/") + m_xml;
-    }
+    filename = m_xml;
     
     QFileInfo fi(filename);
 
@@ -749,6 +743,8 @@ void DocTreeQtFolder::refresh()
 
     QDomElement docEl = doc.documentElement();
     QDomElement titleEl = docEl.namedItem("DCF").toElement();
+    
+    setFileName(fi.dirPath( true ) +"/"+ docEl.attribute("ref", QString::null));
 
     QDomElement childEl = docEl.lastChild().toElement();
     while (!childEl.isNull())
@@ -809,9 +805,7 @@ bool DocTreeViewWidget::initKDocKDELibs()
 /**************************************/
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : QVBox(0, "doc tree widget"), folder_qt( 0L ),
-    folder_qtassistant(0L), folder_qtdesigner (0L), folder_qtlinguist(0L), folder_qtqmake(0L),
-    folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
+    : QVBox(0, "doc tree widget"), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
     searchToolbar = new QHBox ( this, "search toolbar" );
@@ -873,54 +867,35 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         pChild = pChild->nextSibling();
     }
 
-    // dymo: don't disable qt docs even if doxygen's found,
-    //       because there can be some extras docs with qt
-//    if (!pChild) {
-        // qt docu not found in doxygen subtree
-        KConfig *config = DocTreeViewFactory::instance()->config();
-        if (config)
-        {
-            config->setGroup("General");
-            QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
-            if (!qtdocdir.isEmpty())
-            {
-                folder_qt = new DocTreeQtFolder("qt.xml", "Qt Reference Documentation", docView, "ctx_qt");
-                if (folder_qt)
-                {
-                    folder_qt->setFileName(qtdocdir + "/index.html");
-                    folder_qt->refresh();
-                }
-                folder_qtassistant = new DocTreeQtFolder("assistant.xml", "Qt Assistant Manual", docView, "ctx_qt");
-                if (folder_qtassistant)
-                {
-                    folder_qtassistant->setFileName(qtdocdir + "/assistant.html");
-                    folder_qtassistant->refresh();
-                }
-                folder_qtdesigner = new DocTreeQtFolder("designer.xml", "Qt Designer Manual", docView, "ctx_qt");
-                if (folder_qtdesigner)
-                {
-                    folder_qtdesigner->setFileName(qtdocdir + "/designer-manual.html");
-                    folder_qtdesigner->refresh();
-                }
-                folder_qtlinguist = new DocTreeQtFolder("linguist.xml", "Guide to the Qt Translation Tools", docView, "ctx_qt");
-                if (folder_qtlinguist)
-                {
-                    folder_qtlinguist->setFileName(qtdocdir + "/linguist-manual.html");
-                    folder_qtlinguist->refresh();
-                }
-                folder_qtqmake = new DocTreeQtFolder("qmake.xml", "qmake User Guide", docView, "ctx_qt");
-                if (folder_qtqmake)
-                {
-                    folder_qtqmake->setFileName(qtdocdir + "/qmake-manual.html");
-                    folder_qtqmake->refresh();
-                }
-            }
-        }
-/*    }
-    else
+    KConfig *config = DocTreeViewFactory::instance()->config();
+    if (config)
     {
-        folder_qt = 0L;
-    }*/
+        config->setGroup("General Qt");
+        QMap<QString, QString> emap = config->entryMap("General Qt");
+
+        QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
+        if (emap.empty() && (!qtdocdir.isEmpty()))
+        {
+            config->writePathEntry("Qt Reference Documentation", QString(QT_DOCDIR) + QString("/qt.xml"));
+            emap["Qt Reference Documentation"] = QString(QT_DOCDIR) + QString("/qt.xml");
+            config->writePathEntry("Qt Assistant Manual", QString(QT_DOCDIR) + QString("/assistant.xml"));
+            emap["Qt Assistant Manual"] = QString(QT_DOCDIR) + QString("/assistant.xml");
+            config->writePathEntry("Qt Designer Manual", QString(QT_DOCDIR) + QString("/designer.xml"));
+            emap["Qt Designer Manual"] = QString(QT_DOCDIR) + QString("/designer.xml");
+            config->writePathEntry("Guide to the Qt Translation Tools", QString(QT_DOCDIR) + QString("/linguist.xml"));
+            emap["Guide to the Qt Translation Tools"] = QString(QT_DOCDIR) + QString("/linguist.xml");
+            config->writePathEntry("qmake User Guide", QString(QT_DOCDIR) + QString("/qmake.xml"));
+            emap["qmake User Guide"] = QString(QT_DOCDIR) + QString("/qmake.xml");
+        }
+
+        QMap<QString, QString>::Iterator it;
+        for (it = emap.begin(); it != emap.end(); ++it)
+        {
+            DocTreeQtFolder *qtf = new DocTreeQtFolder(it.data(), it.key(), docView, "ctx_qt");
+            qtf->refresh();
+            folder_qt.append(qtf);
+        }
+    }
 
     connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
     connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
@@ -1157,10 +1132,8 @@ void DocTreeViewWidget::refresh()
     folder_project->refresh();
     if( folder_kdelibs )
         folder_kdelibs->refresh();
-    if( folder_qt )
-        folder_qt->refresh();
-    
 
+   
     DocTreeTocFolder *item;
     for ( item = folder_toc.first(); item; item = folder_toc.next() )
         delete item;
@@ -1177,6 +1150,23 @@ void DocTreeViewWidget::refresh()
             folder_toc.append(new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit)));
     }
 
+    folder_qt.setAutoDelete(true);
+    folder_qt.clear();
+    folder_qt.setAutoDelete(false);
+    
+    KConfig *config = DocTreeViewFactory::instance()->config();
+    if (config)
+    {
+        config->setGroup("General Qt");
+        QMap<QString, QString> emap = config->entryMap("General Qt");
+        QMap<QString, QString>::Iterator it;
+        for (it = emap.begin(); it != emap.end(); ++it)
+        {
+            DocTreeQtFolder *qtf = new DocTreeQtFolder(it.data(), it.key(), docView, "ctx_qt");
+            qtf->refresh();
+            folder_qt.append(qtf);
+        } 
+    }
 }
 
 
@@ -1201,7 +1191,11 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         docView->takeItem(it1.current());
 
     if(folder_doxygen) docView->takeItem(folder_doxygen);
-    if(folder_qt) docView->takeItem(folder_qt);
+    
+    QListIterator<DocTreeQtFolder> itq(folder_qt);
+    for (; itq.current(); ++itq)
+        docView->takeItem(itq.current());
+//    if(folder_qt) docView->takeItem(folder_qt);
     if(folder_kdelibs) docView->takeItem(folder_kdelibs);
 //    docView->takeItem(folder_kdevelop);
 
@@ -1224,7 +1218,10 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         if (!ignoretocs.contains("kde"))
             docView->insertItem(folder_kdelibs);
 
-    if(folder_qt) docView->insertItem(folder_qt);
+    QListIterator<DocTreeQtFolder> itq2(folder_qt);
+    for (; itq2.current(); ++itq2)
+        docView->insertItem(itq2.current());
+//    if(folder_qt) docView->insertItem(folder_qt);
 
     docView->triggerUpdate();
 }

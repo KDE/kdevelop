@@ -74,11 +74,6 @@ private:
     QPtrList<QListViewItem> searchResultList;
 
     QListViewItem *contextItem;
-    DocTreeQtFolder *folder_qt;
-    DocTreeQtFolder *folder_qtassistant;
-    DocTreeQtFolder *folder_qtdesigner;
-    DocTreeQtFolder *folder_qtlinguist;
-    DocTreeQtFolder *folder_qtqmake;
     DocTreeDoxygenFolder *folder_doxygen;
     DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeBookmarksFolder *folder_bookmarks;
@@ -86,6 +81,7 @@ private:
     DocTreeProjectFolder *folder_project;
     QPtrList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;
+    QPtrList<DocTreeQtFolder> folder_qt;
 
     QHBox* searchToolbar;
 
