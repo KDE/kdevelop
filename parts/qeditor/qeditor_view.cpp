@@ -525,9 +525,22 @@ void QEditorView::replace( const QString&, int matchingIndex,
 void QEditorView::ensureTextIsVisible( QTextParagraph* p)
 {
     internalEnsureVisibleBlock( p );
-
+    
     m_editor->refresh();
     doRepaint();
+    
+    // some math
+    QRect r = m_editor->paragraphRect(p->paragId());
+    int y = r.y();
+    int h = r.height();
+    y = y + h/2;
+    int cY = m_editor->contentsY();
+    h = m_editor->viewport()->size().height();
+    
+    // if the paragraph is in the lower quarter of the viewport, center it
+    if (y > (cY + (3*h)/4)) {
+	m_editor->center(0, y);
+    }
 }
 
 void QEditorView::internalEnsureVisibleBlock( QTextParagraph* p )
