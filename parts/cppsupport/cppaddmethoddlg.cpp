@@ -49,6 +49,7 @@ CppAddMethodDialog::CppAddMethodDialog(ClassStore *_store, const QString &classN
     connect( rbMethod, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
     connect( rbSlot, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
     connect( rbSignal, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+    connect( rbKonstruktor, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
     connect( cbVirtual, SIGNAL ( clicked() ), SLOT( slotVirtualClicked() ) );
 
     connect( pbNew, SIGNAL( clicked() ), SLOT( slotNewPara() ) );
@@ -104,13 +105,13 @@ ParsedMethod *CppAddMethodDialog::asSystemObj()
         aMethod->setAccess( PIE_PRIVATE );
     
     // Set the modifiers if they are enabled.
-    if( cbPure->isEnabled() )
+    if( cbPure->isChecked() )
         aMethod->setIsPure( true );
-    if( cbStatic->isEnabled() )
+    if( cbStatic->isChecked() )
         aMethod->setIsStatic( true );
-    if( cbConst->isEnabled() )
+    if( cbConst->isChecked() )
         aMethod->setIsConst( true );
-    if( cbVirtual->isEnabled())
+    if( cbVirtual->isChecked())
         aMethod->setIsVirtual( true );
     
     // Set comment
@@ -122,6 +123,12 @@ ParsedMethod *CppAddMethodDialog::asSystemObj()
 
 void CppAddMethodDialog::slotToggleModifier()
 {
+    //reset
+    edType->setEnabled(true);
+    edType->clear();
+    edName->clear();    
+    rbPublic->setChecked(true);
+
     if (rbSignal->isChecked()) {
         rbPublic->setEnabled(false);
         rbPrivate->setEnabled(false);
@@ -143,6 +150,12 @@ void CppAddMethodDialog::slotToggleModifier()
         cbVirtual->setEnabled(true);
         slotVirtualClicked();
     }
+    if (rbKonstruktor->isChecked()) {
+	cbStatic->setEnabled(false);
+	cbConst->setEnabled(false);
+	cbVirtual->setEnabled(false);
+	edType->setEnabled(false);
+    }
 }
 
 
@@ -155,13 +168,14 @@ void CppAddMethodDialog::slotVirtualClicked()
 
 void CppAddMethodDialog::accept()
 {
-  /* //should there be a type - a constructor doesn't have one
-    if (edType->text().isEmpty()) {
-        KMessageBox::sorry(this, i18n("You have to specify a type."), i18n("No type") );
-        edType->setFocus();
-        return false;
+    if (!rbKonstruktor->isChecked()) {
+	if (edType->text().isEmpty()) {
+	    KMessageBox::sorry(this, i18n("You have to specify a type."), i18n("No type") );
+	    edType->setFocus();
+	    return;
+	}
     }
-  */
+  
     if (edName->text().isEmpty()) {
         KMessageBox::sorry(this, i18n("You have to specify a name."), i18n("No name") );
         edName->setFocus();
@@ -321,7 +335,7 @@ QString CppAddMethodDialog::getDocu()
         docu += "\n *  @param " + name.mid(namepos+1) + " " + txt.mid(docupos+COMMLEN);
      }
   }
-  docu += "\n */";
+  docu += "\n\t*/";
   return docu;
 }
 

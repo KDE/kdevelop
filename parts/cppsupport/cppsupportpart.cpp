@@ -766,7 +766,7 @@ void CppSupportPart::addMethod(const QString &className)
 
     editiface = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
-        editiface->insertLine(atLine, cppCode);
+        editiface->insertLine(editiface->numLines(), cppCode);
     else
         kdDebug(9007) << "no edit" << endl;
 
@@ -826,9 +826,9 @@ void CppSupportPart::addAttribute(const QString &className)
 
 QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 {
-    QString str = "  ";
+    QString str = "\n\t";
     str += pm->comment();
-    str += "\n  ";
+    str += "\n\t";
 
     if (pm->isVirtual())
         str += "virtual ";
@@ -857,7 +857,8 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
     if (pm->isPure() || pm->isSignal())
         return QString();
 
-    QString str = pm->comment();
+    QString str = "\n";
+    str += pm->comment();
     str += "\n";
 
     str += pm->type();
@@ -867,7 +868,7 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
     if (pm->isConst())
         str += " const";
 
-    str += "{\n}\n";
+    str += "{\n}\n\n";
 
     return str;
 }
@@ -875,9 +876,9 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
 
 QString CppSupportPart::asHeaderCode(ParsedAttribute *pa)
 {
-    QString str = "  ";
+    QString str = "\n\t";
     str += pa->comment();
-    str += "\n  ";
+    str += "\n\t";
 
     if (pa->isConst())
         str += "const ";
