@@ -90,7 +90,7 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
 void ReplaceWidget::showDialog()
 {
     if ( ! m_part->project() )
-        return; // TODO feedback?
+        return; /// @todo feedback?
 
     m_dialog->show( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" );
 }

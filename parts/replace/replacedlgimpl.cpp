@@ -17,9 +17,9 @@
 
 namespace
 {
-//TODO This is the same function as in ../grepview/grepviewwidget.cpp and
-//should probably be placed in a common place. For now it seemed like too
-//little code to bother with.
+/// @todo This is the same function as in ../grepview/grepviewwidget.cpp and
+/// should probably be placed in a common place. For now it seemed like too
+/// little code to bother with.
 QString escape(const QString &str)
 {
     QString escaped("[]{}()\\^$?.+-*");

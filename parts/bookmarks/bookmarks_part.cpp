@@ -60,7 +60,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
 		this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
 
-	_context = 3; 	// TODO make this a setting
+	_context = 3; 	/// @todo make this a setting
 
 	storeBookmarksForAllURLs();
 	updateContextStringForAll();
