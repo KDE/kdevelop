@@ -135,8 +135,9 @@ bool KDevelop::queryExit(){
     // More specifically the pEmbeddedView pointer points to a QTimer and 
     // crashes when trying to delete it.
     // Why there is a QTimer in the list, I have no fscking idea.
-#warning FIXME To see a crash just #define CRASH 
-#ifdef CRASH
+    // Having an editor window open does do double deletion
+    // Does DocumentView and editorView behave different? 
+#warning FIXME This will crash with an open document view  
     
     QListIterator<QextMdiChildView> it(m_MDICoverList);
     for ( ; it.current(); ++it ) {
@@ -145,7 +146,6 @@ bool KDevelop::queryExit(){
         if (pEmbeddedView)
             delete pEmbeddedView;
     }
-#endif
     return true;
 }
 
