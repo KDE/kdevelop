@@ -21,8 +21,8 @@
 <H3><A NAME="Entwicklung mit KDevelop"></A> <A NAME="s4">4. Entwicklung mit KDevelop</A></H3>
 
 <P>Dieses Kapitel wird Ihnen eine allgemeine Übersicht geben, wie Sie KDevelop und den internen Dialogeditor benutzen können, um eigene
-Applikationen zu entwickeln. Dabei werden alle Werkzeuge nach ihrer Verwendung im Entwicklungsprozeß beschrieben. Wenn sie Anfänger im
-Bereich C++/GUI Projektierung und Programmierung sind, sollten sie auch 
+Applikationen zu entwickeln. Dabei werden alle Werkzeuge nach ihrer Verwendung im Entwicklungsprozeß beschrieben. Wenn Sie Anfänger im
+Bereich C++/GUI Projektierung und Programmierung sind, sollten Sie auch 
 <A HREF="programming.html">Das KDevelop Programmierhandbuch</A> lesen, welches einige Grundlagen in Bezug auf Programmdesign behandelt und detailierter auf die Benutzung von
 KDevelop mit Hilfe von Beispielprojekten, denen Sie Schritt für Schritt folgen können, um sich mit der Art und Weise vertraut zu
 machen, wie Applikationen mit KDevelop erzeugt werden. Auch sollten Sie das Kapitel 
@@ -51,7 +51,7 @@ KAppWizard. Dort können Sie auch den Projekttyp nach den Bedürfnissen Ihres Prog
 der Benutzeroberfläche an, indem Sie Widgets, die schon fertig in den Bibliotheken enthalten sind, hinzufügen und nur von Ihrem
 Programm aufgerufen werden müssen, oder durch Eigenkreationen, die mit dem Dialogeditor erstellt werden können. Danach folgt die
 Erweiterung der Benutzerschnittstelle durch Änderung oder Erweiterung der Teile, die schon von KDevelop gestellt werden wie die
-Statuszeile, Menüleiste oder Werkzeugleiste. Da die Ressourcen in einer Resource-Datei gesammelt sind, können sie dies einfach durch
+Statuszeile, Menüleiste oder Werkzeugleiste. Da die Ressourcen in einer Resource-Datei gesammelt sind, können Sie dies einfach durch
 hinzufügen von Werten zu den Existierenden gestalten; die Vorgaben können gleichzeitig als eine Richtlinie zur Erzeugung Ihrer
 spezifischen genommen werden. Nach der Implementierung der Funktionalität in entsprechenden Methoden die entweder durch den
 Dialogeditor erzeugt wurden oder schon Code für Standard-Aktionen enthalten, sollten Sie das Benutzerhandbuch erweitern, indem Sie die
@@ -81,7 +81,7 @@ Hilfebrowser als auch der Klassenbrowser reduzieren die Menge an Arbeit, die ein
 einfache Benutzung macht das schreiben von Applikationen für Unix eine Freude an sich und wird sich in kürzeren Release-Zyklen und
 besseren Entwickungen niederschlagen. Von hier aus beherrschen Sie Ihr Projekt in all seinen Details, halten die Übersicht über Ihre
 Klassen und macht die Verwendung zusätzlicher Konsolen überflüssig, genauso wie die Intergrierung aller Benutzeroberflächen darin
-resultiert, das sie nur mit einem Fenster unter X arbeiten müssen und nicht gleichzeitig mehrere auf Ihrem Desktop im Auge behalten
+resultiert, das Sie nur mit einem Fenster unter X arbeiten müssen und nicht gleichzeitig mehrere auf Ihrem Desktop im Auge behalten
 müssen.
 <P>
 <H4>Der Dialogeditor</H4>
@@ -99,7 +99,7 @@ zu wechseln. Eine Detailliertere Beschreibung finden Sie im Kapitel
 
 <P>Der KAppWizard und die Klassenwerkzeuge, die zur Projektgenerierung und automatischer Code-Erweiterung zur Verfügung stehen, sind dazu
 gedacht, die Erzeugung von Applikationen so einfach und sicher wie möglich zu gestalten und bieten gerade Anfängern einen guten Start
-in die Qt/KDE Programmierung und die Details des GUI Designs, da sie sehr schnell zum Ziel gelangen.
+in die Qt/KDE Programmierung und die Details des GUI Designs, da Sie sehr schnell zum Ziel gelangen.
 <P>
 <P>
 <H4>KAppWizard</H4>
@@ -164,7 +164,7 @@ Implementierung angezeigt. Eine vollständige Beschreibung finden Sie unter dem K
 Programm-Skelett mit KAppWizard erstellen, dann besteht der "Rest" der Entwicklung durch die Verwendung der Funktionen von KDevelop,
 die nur Ihre Fähigkeiten als Programmierer verlangen. Um den Entwicklungsprozeß zu beschreiben, gehen wir hier davon aus, das Sie eine
 Qt/KDE Applikation erzeugen möchten, was implizit die Benutzung der meisten Funktionen von KDevelop bei der Bearbeitung dieses
-Projekttyps bietet; somit haben sie einen generellen Überblick.
+Projekttyps bietet; somit haben Sie einen generellen Überblick.
 <P>
 <H4>Erzeugen eines Programmgerüsts</H4>
 
@@ -178,14 +178,14 @@ persönliche Informationen angeben. Seite 3 und 4 erlauben die Bearbeitung von Da
 automatisch eingefügt werden. Wenn Sie schon über Dateiköpfe verfügen, die Sie benutzen möchten, können Sie die Datei, die diesen
 enthält, angeben. Die letzte Seite enthält das Ausgabefenster und die Fehlermeldungen. Nach Auswahl der Schaltfläche "Erzeugen" wird
 die Applikation generiert und die ausgeführten Befehle erscheinen im Ausgabefenster. Sobald dort READY erscheint, können Sie über
-die Schaltfläche "Beenden" den Wizard verlassen, um zur Programmierumgebung zurückzukehren. Um die Binärdatei zu erstellen, wählen sie
+die Schaltfläche "Beenden" den Wizard verlassen, um zur Programmierumgebung zurückzukehren. Um die Binärdatei zu erstellen, wählen Sie
 "Erstellen" aus dem "Bauen"-Menü oder betätigen Sie die entsprechende Schaltfläche in der Werkzeugleiste. Sie können auch schon die
 vorhandenen Funktionen des Programms testen, indem Sie "Ausführen" aus dem "Bauen" Menü wählen.
 <P>
 <H4>Entwicklung einer Applikation</H4>
 
 <P>Dieser Abschnitt beschreibt die Entwicklungsphase von Applikationen mit KDevelop und dem Dialogeditor- und aller Arbeiten, die
-innerhalb der IDE erledigt werden können.
+innerhalb der Entwicklungsumgebung erledigt werden können.
 <P>Die Entwicklungsschritte sind ganz allgemein die Bearbeitung der Quellcode-Dateien, die Übersetzung des Projekts gefolgt vom Linker,
 der alle Objektdateien zur letztlichen Binärdatei bindet. Dann müssen Fehler lokalisiert werden die entweder die Übersetzung oder den
 Linkervorgang verhinderten oder semantische Fehler sind, die nur in einer Debug-Sitzung gefunden werden können. Schließlich muß die
@@ -214,7 +214,7 @@ die sofort zu benutzen sind wie etwa ein Druckdialog. Die KDE-Bibliotheken schli
 enthalten Ersetzungen für spezielle Dialoge genauso wie zusätzliche Widgets, die in Ihrer Applikation verwendet werden können. Wenn Sie
 also damit beginnen, das Verhalten Ihrer Applikation gegenüber dem Benutzer zu entwerfen, sollten Sie sich zuerst mit den Widgets
 vertraut machen, die von Qt und KDE bereitgestellt werden. Die Online-Dokumentation von Qt bietet Screenshots für die
-meisten an, deshalb sollten sie zuerst dort nachsehen. Weiterhin raten wir, das Sie einen näheren Blick auf die KDE-UI Bibliothek
+meisten an, deshalb sollten Sie zuerst dort nachsehen. Weiterhin raten wir, das Sie einen näheren Blick auf die KDE-UI Bibliothek
 werfen, die weitere Widgets enthält. Bibliotheken wie die KHTMLW Bibliothek enthalten sehr spezialisierte Widgets, die von vielen
 Programmen benutzt werden. Es vereinfacht das Applikationsdesign wie die vordefinierten Dialoge von Qt. Für Ihre eigenen Dialoge
 benötigen Sie meist die einfachen widgets. Ein Dialog besteht grob gesagt aus einer Kollektion verschiedener Widgets, die in ihrer
@@ -237,7 +237,7 @@ schwer. Um mehr Information zur Erstellung von Dialogen zu erhalten, schlagen Si
 <P>
 <H4>Einbinden neuer Elemente</H4>
 
-<P>Nachdem sie Ihre Benutzerschnittstellen erzeugt und den Quellcode generiert haben, sind Sie bereit, Ihrer Applikation beizubringen, sie
+<P>Nachdem Sie Ihre Benutzerschnittstellen erzeugt und den Quellcode generiert haben, sind Sie bereit, Ihrer Applikation beizubringen, sie
 durch Objekte zu benutzen. Wie oben beschrieben, besteht ein gewöhnliches GUI-Basiertes Programm aus Leisten und der Hauptansicht;
 zusätzlich operiert die Hauptansicht mit den Leisten, die ein Teil der Haupt-Applikationsklasse sind, und dem Dokumentenobjekt, das mit
 der Ansicht verbunden ist. Im Terminus Objekt-orientierten Designs würde man die gegebene Architektur als
@@ -257,7 +257,7 @@ und daher ebenso in KDE). Allgemein gibt es drei verschiedene Wege, die gegebene
 Funktionalität enthalten- entfernen Sie einfach die View-Klasse und ersetzen Sie das view-Objekt durch ein anderes.</LI>
 <LI>ändern der Vererbung der View-Klasse. Wechseln Sie die Vererbung z.B. zu QMultiLineEdit und Ihre Applikation wird ein Editor.</LI>
 <LI>wenn ihre Hauptansicht aus mehreren separaten Teilen bestehen soll, erzeugen Sie die Widgets und deren Klassen, die Sie
-benötigen, mit dem Dialogeditor und erstellen sie Objekte dieser Klassen in dem View-Klassen Konstruktor, der mit der Kombination die
+benötigen, mit dem Dialogeditor und erstellen Sie Objekte dieser Klassen in dem View-Klassen Konstruktor, der mit der Kombination die
 Hauptansicht bildet.</LI>
 </UL>
 <P>Bei Dialogen sind die Dinge etwas verschieden. Der übliche Weg wäre, einen Dialog über einen Menüleisteneintrag aufzurufen und
@@ -267,27 +267,27 @@ Menüleiste umsehen, der den Dialog aufruft, wenn er vom Benutzer ausgewählt wird
 genügen, erzeugen Sie ein neues Popup Menü wie die anderen und fügen den Eintrag und den Slot hinzu, den Sie aufrufen, wenn der Eintrag
 aktiviert wird. Dann implementieren Sie den Slot durch erzeugen einer Instanz der Dialogklasse und rufen den Dialog mit den Methoden
 der Basisklasse auf. Zusätzlich müssen Sie dem Menüeintrag eine ID-Nummer geben. Die Rahmenapplikationen beinhalten alle schon
-verwendeten ID's in einer Datei resource.h, so das sie nur die ID und die Nummer hinzufügen müssen. Dann sind sie fertig- zusätzlich
+verwendeten ID's in einer Datei resource.h, so das Sie nur die ID und die Nummer hinzufügen müssen. Dann sind Sie fertig- zusätzlich
 können Sie ein weiteres Werkzeugleisten-Symbol erzeugen und die Statuszeilen-Hilfe vervollständigen. Ihre Applikation bietet nun eine
 neue Funktionalität, die dem Benutzer sichtbar ist. Jetzt fügen Sie noch die entsprechende Implementation von Methoden hinzu, die Ihr
-Dialog benötigt, um die gewünschten Werte zu verändern. Schließlich rufen sie noch das Erstellungsprogramm oder "Ausführen" auf und die
+Dialog benötigt, um die gewünschten Werte zu verändern. Schließlich rufen Sie noch das Erstellungsprogramm oder "Ausführen" auf und die
 geänderten Dateien werden neu übersetzt; das Ergebnis Ihrer Änderungen können Sie dann sofort testen.
 <P>
 <H4>Der Vollständige Entwicklungsprozeß</H4>
 
 <P>Im oberen Abschnitt diskutierten wir den gewöhnlichen Weg, den man nimmt um mit KDevelop eine neue Applikation zu erstellen und die
-Benutzerschnittstelle zu erweitern. Nun, dies sind die Standardfunktionen, bei denen Ihnen die IDE hilft, aber KDevelop kann mehr als
+Benutzerschnittstelle zu erweitern. Nun, dies sind die Standardfunktionen, bei denen Ihnen die Entwicklungsumgebung hilft, aber KDevelop kann mehr als
 Ihnen Werkzeuge zur Applikationserstellung und die Gestaltung der visuellen Elemente zur Verfügung zu stellen. Im Folgenden bekommen
 Sie eine kurze Beschreibung der Hauptfunktionalität, die Ihnen geboten wird um die Applikationsentwicklung zu vereinfachen.
 <P>
 <H4>Organisation des Quellcodes</H4>
 
-<P>Die KDevelop IDE bietet dem Programmierer eine Menge an Funktionalität, um sein Ziel innerhalb der kürzesten Zeit zu erreichen. Wie
+<P>Die KDevelop Entwicklungsumgebung bietet dem Programmierer eine Menge an Funktionalität, um sein Ziel innerhalb der kürzesten Zeit zu erreichen. Wie
 oben erklärt, verringern der KAppWizard und der Dialogeditor schon erheblich den Aufwand, den Sie durch herkömmliche Arbeitsweisen vor
 sich hätten. Aber dies beinhaltete nicht die Arbeit, die ein Programmierer für gewöhnlich ausführt: die Arbeit an der Implementation
-seiner Applikation, um eine saubere Ausführung beim End-Benutzer zu gewährleisten. Nun, warum ist KDevelop die IDE, die Sie als
+seiner Applikation, um eine saubere Ausführung beim End-Benutzer zu gewährleisten. Nun, warum ist KDevelop die Entwicklungsumgebung, die Sie als
 Programmierumgebung bevorzugen würden, auch um Applikationen ohne graphische Oberfläche zu entwickeln ?
-<P>Implizit übernimmt die IDE die Verwaltung Ihres Projekts; das bedeutet, das Sie sich i.A. nicht um das Abspeichern von Änderungen, die
+<P>Implizit übernimmt die Entwicklungsumgebung die Verwaltung Ihres Projekts; das bedeutet, das Sie sich i.A. nicht um das Abspeichern von Änderungen, die
 Makefile-generierung etc. kümmern müssen- es wird volles Projektmanagemnt bereitgestellt, und KDevelop spielt hier seine Stärken in
 jeder Art von C++ Applikationsentwickung aus. Es ist sehr einfach nachzuvollziehen, das der Programmierer sich nach der Wegnahme des
 Managements voll auf die Implementierung des Quellcodes konzentieren kann. Andererseits ist der Code jedoch über viele verschiedene
@@ -310,9 +310,9 @@ Um mehr Informationen zu erhalten, lesen Sie auch das Kapitel
 <P>
 <H4>Erstellen und Ausführen Ihrer Applikation</H4>
 
-<P>Die KDevelop IDE ist speziell dafür entwickelt worden, Ihnen periodisch wiederkehrende Arbeitsschritte wie das Erstellen und Ausführen
+<P>Die KDevelop Entwicklungsumgebung ist speziell dafür entwickelt worden, Ihnen periodisch wiederkehrende Arbeitsschritte wie das Erstellen und Ausführen
 Ihres Programms und die Fehlerlokalisierung im Quellcode abzunehmen.
-<P>Den Erstellungsprozeß rufen sie auf durch:
+<P>Den Erstellungsprozeß rufen Sie auf durch:
 <UL>
 <LI>Klick auf die Schaltfläche "Erstellen" oder "Alles neu erstellen" in der Werkzeugleiste</LI>
 <LI>oder durch Auswahl von "Erstellen"/"Alles neu erstellen" aus dem "Bauen"-Menü.</LI>
@@ -345,7 +345,7 @@ Fehler zu gelangen, nur zur Beseitigung der Fehlerursache sind Ihre Fähigkeiten 
 <P>Laufzeitfehler, die während der Ausführung auftreten und meist in einer Speicherverletzung (segmentation fault) enden, sind manchmal
 sehr schwer zu finden. Deshalb können Sie den Compiler anweisen, zusätzliche Informationen in der Binärdatei zu speichern um die
 Ausführung mit dem Quellcode zu beobachten. Ein Debugger ist dann ein weiteres Programm, das Ihnen dies ermöglicht, indem er Ihr
-Programm startet und Sie im Quellcode Haltepunkte setzen läßt, an denen die Ausführung anhält; somit können sie kritische
+Programm startet und Sie im Quellcode Haltepunkte setzen läßt, an denen die Ausführung anhält; somit können Sie kritische
 Implementierungen kontrollieren und damit zumindest die Zeile finden, an der der Fehler ausgelöst wird. Das finden dieser Fehler ist
 eine weitere Aufgabe, die dem Progammierer obliegt. Der <B>gdb</B> ist ein Debugger, der mit dem GNU Compilern geliefert wird und
 Programme wie <EM>ddd</EM> oder <EM>KDbg</EM> sind sog. Frontends, die eine einfachere Benutzung erlauben. Deshalb verwendet KDevelop KDbg und
@@ -358,7 +358,7 @@ Information zum Debuggen von Applikationen sei auf das Kapitel
 </H3>
 
 <P>Die Themengebiete, die in diesem Kapitel angesprochen wurden, werden detaillierter an folgenden Stellen innerhalb der Dokumentation der
-KDevelop IDE und anderen Dokumentation behandelt:
+KDevelop Entwicklungsumgebung und anderen Dokumentation behandelt:
 <P>
 <UL>
 <LI>

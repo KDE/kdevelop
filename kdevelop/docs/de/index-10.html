@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>Benutzerhandbuch zu KDevelop: The Class Browser</TITLE>
+<TITLE>Benutzerhandbuch zu KDevelop: Der Klassen-Browser</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,79 +18,86 @@
  <A HREF="index-9.html">Zurück</A>
  <A HREF="index.html#toc10">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="The Class Browser"></A> <A NAME="s10">10. The Class Browser</A></H3>
+<H3><A NAME="Der Klassen-Browser"></A> <A NAME="s10">10. Der Klassen-Browser</A></H3>
 
 <P>
-<H3><A NAME="ss10.1">10.1 The Classviewer</A>
+<H3><A NAME="ss10.1">10.1 Die Klassenansicht</A>
 </H3>
 
-<P>The KDevelop Classviewer is one of the most useful and important tools that the IDE provides a developer for managing his project
-sources. When a project is loaded, a classparser reads all project sources for functions, classes etc., then displays the results in
-the CV treeview. This chapter shows you how to use the Classviewer and the provided functionality and how it can improve your work.
-<P>Classes and their methods can also be accessed by the browser toolbar. There, the left combo selects the class; the right
-lets you choose the methods of the selected class. When you select a method, the classbrowser will automatically bring you to the
-implementation file and sets the cursor to the method. Finally, the class-assistant button on the right of the method combo will bring
-you to the declaration of the method on a click; on another click to the definition. The delayed popup menu, displayed by the
-down-arrow on the button, offers additional functionality that is also available in the classbrowser context menus, such as:
+<P>Die Klassenansicht von KDevelop ist eine der nützlichsten und wichtigsten Werkzeuge, die die Entwicklungsumgebung dem Entwickler zur
+Bearbeitung seiner Projektdateien bietet. Sobald ein Projekt geladen wird, liest der Klassenanalysator die Projektdateien nach
+Funktionen, Klassen etc. durch und zeigt das Ergebnis in der CV-Baumansicht an. Dieses Kapitel erläutert Ihnen, wie Sie die
+Klassenansicht und weitere Funktionen verwenden und wie Sie Ihre Arbeit vereinfachen können.
+<P>Klassen und deren Methoden können Sie ebenfalls über die Browser-Werkzeugleiste auswählen. Dort befinden sich in der linken Combobox
+die Klassen, in der rechten können Sie die zugehörigen Methoden auswählen. Wenn Sie eine Methode gewählt haben, wird Sie der
+Klassen-Browser automatisch zur Implementationsdatei bringen und den Cursor an die Methode setzen. Schließlich bietet Ihnen die
+Schaltfläche des Klassenassistenten rechts der Methoden-Combobox an, Sie beim ersten betätigen zur Deklaration der Methode zu bringen;
+bei einer weiteren Betätigung wieder zurück zur Definition. Das verzögerte Popup-Menü, das durch den Abwärtspfeil dargestellt wird,
+bietet zusätzliche Funktionen, die ebenfalls in den Kontextmenüs der Klassenansicht zur Verfügung stehen:
 <P>
 <UL>
-<LI>Goto Declaration: browses to the declaration of the method</LI>
-<LI>Goto Definition: browses to the definition of the method</LI>
-<LI>Goto Class Declaration: browses to the class declaration</LI>
-<LI>New Class: opens the New Class dialog to construct a new class</LI>
-<LI>Add Method: adds a method to the selected class</LI>
-<LI>Add Attribute: adds an attribute to the selected class</LI>
+<LI>Goto Declaration: wechselt zur Deklaration der Methode</LI>
+<LI>Goto Definition: wechselt zur Definition der Methode</LI>
+<LI>Goto Class Declaration: wechselt zur Klassendeklaration</LI>
+<LI>Neue Klasse: öffnet das Dialogfeld "Neue Klasse"</LI>
+<LI>Add Method: fügt der aktuellen Klasse eine Methode hinzu</LI>
+<LI>Add Attribute: fügt der aktuellen Klasse ein Attribut hinzu</LI>
 </UL>
 <P>
-<H4>Available Objects</H4>
+<H4>Verfügbare Objekte</H4>
 
-<P>By available objects, we describe a term that means that C++ code can be seen as a collection of objects- classes, their members,
-global functions and the like. The classtree displays these objects logically and orders them by character, so they are easy to locate
-in the tree as well by their according icon. Therefore the classtree contains a "Classes" and a "Globals" folder. Thereby the "Classes"
-folder generally contains the project's classes; if your project contains subfolders to manage your sourcefiles, these are also
-displayed by their original folder name and contain all classes that are stored in the files located in the subfolder.
-<P>Further, when popping up a class, the classtree displays the class contents by separating methods and attributes. As these can have
-attributes as well like public, private and protected, these are displayed by modified icons as well. You see that a class displayed in
-the Class Browser contains all the objects that are present in the class declaration.
-<P>Now, classes are a very common thing when programming in C++ and will contain most of the code. But applications also contain objects
-that have a "Global" appearance to the program. These would be structs, functions etc. Especially the <CODE>main()</CODE> function appears in
-every application and you need to modify it in one or the other way sometimes. To access these objects, the Classviewer provides the
-"Globals" folder, containing subfolders for the following object types:
-<UL>
-<LI>Structs</LI>
-<LI>Functions</LI>
-<LI>Variables</LI>
-</UL>
-<P>As the icons displaying these items are similar to those used in the class-viewer, their meaning is easy to guess and to remember by
-the programmer.
-<P>Finally, it can be stated that the classviewer displays your project graphically by their objects related to their appearance in the
-code. In the following section you will learn how to use the classviewer and it's tools in conjunction with your code.
+<P>Mit verfügbaren Objekten beschreiben wir den Umstand, das man C++ Code auch als eine Sammlung von Objekten betrachten kann- Klassen,
+deren Member-Funktionen, globale Funktionen und so weiter. Der Klassenbaum zeigt diese Objekte logisch und nach ihrem
+Charakter geordnet an, sodass sie sehr einfach durch ihr zugehöriges Symbol im Baum lokalisiert werden können. Daher enthält der
+Klassenbaum einen "Klassen" und "Globals"-Ordner, wobei der "Klassen" Ordner allgemein die Klassen des Projekts enthält; wenn Ihr
+Projekt Unterordner beinhaltet, um Quelldateien besser zu sortieren, werden die darin enthaltenen Klassen durch den Namen des
+Unterordners ebenfalls in Ordnern untergebracht.
+<P>Weiterhin zeigt Ihnen der Klassenbaum bei Auswahl einer Klasse den Inhalt nach Methoden und Attributen an. Da diese ebenfalls Attribute
+wie public, private und protected besitzen, werden diese mit leicht geänderten Symbolen angezeit. Sie sehen, das eine Klasse, die im
+Klassen-Browser angezeigt wird, alle Objekte enthält wie sie in der Klassendeklaration erscheinen.
+<P>Nun, Klassen sind wohl die üblichsten Objekte, wenn man in C++ programmiert und werden den meisten Teil des Codes abdecken. Aber
+Applikationen enthalten auch Elemente, die eine "Globale" Erscheinung im Programm aufweisen. Dies wären Strukturen, Funktionen etc.
+Speziell die <CODE>main()</CODE> Funktion erscheint in jeder Applikation und Sie werden Sie in der ein oder anderen Weise modifizieren wollen.
+Um auf diese Objekte zuzugreifen, enthält die Klassenansicht einen Ordner "Globals", der wiederum Unterordner für folgende Objekttypen
+enthält:
 <P>
-<H4>Browsing Object Declarations and Implementations</H4>
+<UL>
+<LI>Strukturen</LI>
+<LI>Funktionen</LI>
+<LI>Variablen</LI>
+</UL>
+<P>Da die Symbole, die diese Elemente repräsentieren, denen der Klassen sehr ähnlich sind, ist ihre Bedeutung leicht zu merken.
+<P>Schließlich können wir sagen, das die Klassenansicht Ihr Projekt graphisch durch die Objekte darstellt, wie sie im Code erscheinen. Im
+folgenden werden Sie mit der Benutzung der Klassenansicht und seiner Werkzeuge in Verbindung mit Ihrem Code vertraut gemacht.
+<P>
+<H4>Wechseln zu Deklaration und Implementation von Objekten</H4>
 
-<P>The Classviewer's best strength is providing a fast and good access to his code by the code's contents independent of the location
-within files. Therefore, selections by a mouse click will result in the following actions:
+<P>Die größte Stärke der Klassenansicht sind die zur Verfügung stehenden Funktionen, den Code durch seinen Inhalt zugängig zu
+machen, unabhängig von der Plazierung in den Projektdateien. Daher bringt Sie die Auswahl über
 <P>
 <UL>
-<LI><B>On a classname:</B>  Switches to the class declaration</LI>
-<LI><B>On a class method:</B> Switches to the method implementation</LI>
-<LI><B>On a class attribute:</B> Switches to the attibute's declaration in the class declaration</LI>
-<LI><B>On a struct:</B> Switches to the struct's declaration</LI>
-<LI><B>On a global function:</B> Switches to the function's implementation</LI>
+<LI><B>einer Klasse:</B>  zur Klassendeklaration</LI>
+<LI><B>einer Methode:</B> zur Methoden-Implementierung</LI>
+<LI><B>eines Klassenattributs:</B> zur Deklaration des Attributs innerhalb der Klassendeklaration</LI>
+<LI><B>einer Struktur (struct):</B> zur Deklaration der Struktur</LI>
+<LI><B>einer globalen Funktion:</B> zur Funktion-Implementierung</LI>
 </UL>
-<P>Now, this provides you the most needed access towards code objects. Apparently, it may be needed to change a method's header, resulting
-that you have to change it's declaration in the class as well as the implementation. The classviewer supports this by providing
-right-button context menus over items. On a method or function, this means that you can select where to go:
+<P>Nun, dies bietet Ihnen die meistbenötigten Funktionen, um Objekte zu lokalisieren. Gelegentlich ist es jedoch nötig eine
+Funktionsdeklaration oder ähnliches zu ändern, wobei sie zum Ort der Deklaration innerhalb der Klasse als auch zur Implementation
+gelangen müssen. Die Klassenansicht unterstützt Sie dabei über Kontextmenüs über Elementen. Über einer Methode oder Funktion bedeutet
+dies, das Sie wählen können, wohin Sie wollen:
 <P>
 <UL>
-<LI><B>Go to definition:</B> Switches to the implementation- this is the default for a left click as described above</LI>
-<LI><B>Go to declaration:</B> Switches to the declaration of the method or function.</LI>
+<LI><B>Gehe zu Definition:</B> Wechselt  zur Impelentation- auch standardmäßig über einfache Auswahl wie oben beschrieben</LI>
+<LI><B>Gehe zu Deklaration:</B> Wechselt zur Deklaration der Methode oder Funktion</LI>
 </UL>
-<P>By this behavoir, the Class Browser offers you access to every place you have to go for coding your C++ application.
-<P>The following sections give you a description of the other tools that the Class Browser offers- you will find them very useful when
-working with large projects as they enhance working object-orientated on C++ programs.
+<P>Mit diesem Verhalten bietet Ihnen der Klassen-Browser unbeschränkten Zugang zu allen Orten, die Sie bei der Programmierung von C++
+Applikationen benötigen.
+<P>Der folgende Abschnitt gibt Ihnen eine Beschreibung der weiteren Werkzeuge, die der Klassen-Browser bietet- Sie werden sie sehr
+nützlich finden, wenn Sie an größeren Projekten arbeiten, da Sie die Idee der Objekt-Orientierten Arbeit an C++ Programmen stark
+erweitern.
 <P>
-<H3><A NAME="ss10.2">10.2 The Classtools</A>
+<H3><A NAME="ss10.2">10.2 Die Klassenwerkzeuge</A>
 </H3>
 
 <P>The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes. As the

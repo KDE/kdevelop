@@ -1,13 +1,71 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
-
-
-EXTRA_DIST = tipdatabase 
-
-install-data-local:
-	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/
-	$(INSTALL_DATA) tipdatabase $(kde_htmldir)/de/kdevelop/tipdatabase
+	
+EXTRA_DIST = index-9.html index-1.html index-10.html index-11.html index-12.html index-13.html \
+							index-14.html index-15.html index-2.html index-3.html index-4.html index-5.html \
+							index-6.html index-7.html index-8.html index.html logotp3.gif tipdatabase index-16.html index.sgml
+							
+install-data-local: 	
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/ 	
+	$(INSTALL_DATA) logotp3.gif $(DESTDIR)$(kde_htmldir)/de/kdevelop/logotp3.gif 	
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) tipdatabase $(DESTDIR)$(kde_htmldir)/de/kdevelop/tipdatabase
+	
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-1.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-1.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-2.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-2.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-3.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-3.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-4.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-4.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-5.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-5.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-6.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-6.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-7.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-7.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-8.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-8.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-9.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-9.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-10.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-10.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-11.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-11.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-12.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-12.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-13.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-13.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-14.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-14.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-15.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-15.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/de/kdevelop/
+	$(INSTALL_DATA) index-16.html $(DESTDIR)$(kde_htmldir)/de/kdevelop/index-16.html
 
 uninstall-local:
+	-rm -f $(kde_htmldir)/de/kdevelop/logotp3.gif
 	-rm -f $(kde_htmldir)/de/kdevelop/tipdatabase
 
+	-rm -f $(kde_htmldir)/de/kdevelop/index.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-1.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-2.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-3.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-4.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-5.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-6.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-7.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-8.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-9.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-10.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-11.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-12.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-13.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-14.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-15.html
+	-rm -f $(kde_htmldir)/de/kdevelop/index-16.html
+
 ####### kdevelop will overwrite this part!!! (end)############
+

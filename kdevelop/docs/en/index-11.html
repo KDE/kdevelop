@@ -20,21 +20,21 @@
 </P>
 <H3><A NAME="The Dialog Editor"></A> <A NAME="s11">11. The Dialog Editor</A></H3>
 
-<P>The KDevelop integrated Dialog Editor allows the easy construction of widgets and dialogs your application uses all by graphical means.
-You see the direct appearance of your dialog as it will be presented to the user. Using the dialogeditor is usually the first step you
+<P>The KDevelop integrated dialog editor allows the easy construction of widgets and dialogs your application uses all by graphical means.
+You see the direct appearance of your dialog as it will be presented to the user. Using the dialog editor is usually the first step you
 would take after creating a new project with the KAppWizard to create your main view, the user interaction dialogs and, after finishing
 the graphical work, the code generation. This way, your project will contain all the usually considered "difficult" parts that normally
 would take a long time to implement. Then, the "rest" of your work is implementing the functionality in the generated code. This
-chapter deals with how to use the dialogeditor to create your project widgets as well as what to do in case you see your widgets need
+chapter deals with how to use the dialog editor to create your project widgets as well as what to do in case you see your widgets need
 corrections or additions during the further development process.
-<P>You can switch to the Dialog Editor either by selecting "Dialog Editor" from the "Tools"-menu or by the according toolbar icon.
-To switch back to the Project Editor, select "KDevelop" from the dialogeditor's "Tools"-menu or by the icon in the toolbar.
-<P>What else does the dialogeditor's interface offer you ?  Mainly, that its appearance is almost the same as the project editor in term
-of the main view separation as well as the menu- and toolbars. This allows you to make yourself accustomed with the dialogeditor very
-quickly and, as he completely interacts with the project management, stay in the dialogeditor if you want to control your
+<P>You can switch to the dialog editor either by selecting "Dialog Editor" from the "Tools"-menu or by the according toolbar icon.
+To switch back to the Project Editor, select "KDevelop" from the dialog editor's "Tools"-menu or by the icon in the toolbar.
+<P>What else does the dialog editor's interface offer you ?  Mainly, that its appearance is almost the same as the project editor in term
+of the main view separation as well as the menu- and toolbars. This allows you to make yourself accustomed with the dialog editor very
+quickly and, as he completely interacts with the project management, stay in the dialog editor if you want to control your
 build-process. Actions that require to switch back to KDevelop will do that automatically for you, like accessing the documentation
 browser. Just select the menu commands, and KDevelop reacts to your will.
-<P>The following chapters give you an overview of the dialogeditor interface, how to create a new dialog initially and how set up the
+<P>The following chapters give you an overview of the dialog editor interface, how to create a new dialog initially and how set up the
 properties of the child widgets that your dialog contains.
 <P>
 <H3><A NAME="ss11.1">11.1 The Dialog Editor View</A>
@@ -43,7 +43,7 @@ properties of the child widgets that your dialog contains.
 <P>
 <H4>The Mainview</H4>
 
-<P>The dialogeditor's view is logically seperated by:
+<P>The dialog editor's view is logically seperated by:
 <UL>
 <LI>The Widgets Tabulator, containing the "Widgets", "Dialogs" and "Items" tabs. These are described in 
 <A HREF="#Adding Widgets">Adding Widgets</A>.</LI>
@@ -80,7 +80,7 @@ and Y size in the coordinate system. For Statusbar help, you are provided the sa
 </H3>
 
 <P>After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
-the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
+the project types KDE and Qt application, the dialog editor recognizes this and offers widget construction by the widgets that are
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
 information about widget design, see 
 <A HREF="programming-6.html">The KDevelop Programming Handbook</A>.
@@ -104,30 +104,30 @@ widgets that you create.</LI>
 </OL>
 <P><B>Custom Properties</B>
 <P>For the inheritance of a custom class as selected in the dialog class field, you have to specify the classname, which goes to "Custom
-Class". The dialogeditor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
+Class". The dialog editor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
 filename of the custom class has to be set.
 <P>
 <H4>Files</H4>
 
 <P>In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
 for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
-When inserting the Classname, the filenames are given by the dialogeditor, but you can as well change the filenames.
+When inserting the Classname, the filenames are given by the dialog editor, but you can as well change the filenames.
 <P>Now, what about the files ? When you are ready with constructing the widget visually, you will have to generate the files that contain
 the implementation for your widget. As this will be a class, the dialog will exist by the header file containing the classdeclaration,
 a C++ file containing the method implementation for your widget's methods and slots. The Data file is the file that will contain a
 function that is called by the constructor of your widget, the <EM>initDialog()</EM> method. The file itself shouldn't be changed as it
-will contain the generated code from the dialogeditor to create the widget on the screen. If you ever have to chage values, you should
+will contain the generated code from the dialog editor to create the widget on the screen. If you ever have to chage values, you should
 do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
-overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialogeditor writes;
+overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialog editor writes;
 these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
 changees will get lost by the next code-creation.
 <P>
 <H4>Location</H4>
 
-<P>For generating the widget's sources, the dialogeditor needs to know the location where these will go. The default value for the output
+<P>For generating the widget's sources, the dialog editor needs to know the location where these will go. The default value for the output
 directory is the current project subdirectory containing the sources already present.
 <P>After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
-your own widget. Mind that the dialogeditor currently only supports static widgets without geometry management. If you're about to use
+your own widget. Mind that the dialog editor currently only supports static widgets without geometry management. If you're about to use
 geometry management for your widgets, you should make yourself accustomed with the classes that Qt provides for this, create a new
 class with the classgenerator and write your widget by hand. For more information, see 
 <A HREF="programming.html">The KDevelop Programming Handbook</A>.
@@ -165,7 +165,7 @@ Over a selected widget, the context menu shows the class name of the selected it
 <H4>The Widgets Tabulator</H4>
 
 <P>The widgets tab represents the available widgets you can place on the dialog. If you want information about a certain widget, press the
-right mouse button over a widget icon and select "Quick-Help" from the popup-menu. Mind that the dialogeditor automatically determines,
+right mouse button over a widget icon and select "Quick-Help" from the popup-menu. Mind that the dialog editor automatically determines,
 if your project type is Qt-only or KDE. This prevents you from using KDE-widgets in a Qt application.
 <P>After you selected a widget item, it is placed with default sizes and values on the editing window and marked selected by a frame and
 darkened corners. To resize a widget, move your mouse over one of the dark spots and your cursor will change to display which resizing
@@ -218,9 +218,9 @@ the widget's constructors.
 </H3>
 
 <P>After creating a widget, you have to generate the sourcecode to make it available in your project. This can be done either with the
-"Generate Sources" from the "Build"-menu or by the according icon in the dialogeditor toolbar. Your Makefiles will be updated
+"Generate Sources" from the "Build"-menu or by the according icon in the dialog editor toolbar. Your Makefiles will be updated
 automatically to include the new widget in the compiling process; therefore, after calling "Generate Sources", you can build your
-project again within the dialogeditor. The output window pops up below the Widget-Editor window as in Project Editor mode.
+project again within the dialog editor. The output window pops up below the Widget-Editor window as in Project Editor mode.
 <P>Now that your project contains a new widget, your work as a programmer is to implement functionality to the used slots and eventually
 add other methods you may need.
 <P>For more information about implementation of the widgets functions, see 

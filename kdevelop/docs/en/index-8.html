@@ -46,7 +46,7 @@ classes may not be viewed that way, but it's construction is at least created mo
 <LI>a KDE-based application frame window. This application type offers most flexibility to those wanting to develop their
 program from scratch, but can also be used as a basis for developing wizard applications or modules.
 </LI>
-<LI>a Qt-only based program framework. For those programmers who want to use the Qt library as the GUI interface alone, we
+<LI>a Qt-only based program framework. For those programmers who want to use the Qt-library as the GUI interface alone, we
 tried to offer you a smart framework to support your application development. As Qt programming is fully supported, you should
 have no problems to create a full-functional application by using Qt only.
 </LI>
@@ -189,7 +189,7 @@ look in your Makefile.am where the location macros are specified.
 that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
 this seems a trivial task. You would add a subdirectory labeled by the desired language, e.g. <CODE>de</CODE> for german, to the
 <CODE>docs</CODE> directory of your project and copy the english documentation into that directory. Then you would generate the
-documentation and set all project file options for the installation directories. Then you could start translating the sgml file to
+documentation and set all project file options for the installation directories. Then you could start translating the SGML file to
 your desired language and regenerate the documentation; then you're done.
 For the application, this seems a bit more difficult for the programmer. Now, we want to explain how to enable
 internationalization support for your application and how to add the languages you want to support.
@@ -202,7 +202,7 @@ have to be read out of the sources and get stored in the application's translati
 subdirectory). This task is done by the program xgettext, and to do this, you would enter <CODE>make messages</CODE> in your prject
 directory containing the sources. As xgettext depends on the <CODE>i18n()</CODE> macro, the original function won't do the job.
 <P>For translations themselves, you first have to create the message file containing all strings that are used in your sources with
-the <CODE>i18n()</CODE> macro. This can be done by choosing "Make Messages and merge" from the Build-menu.
+the <CODE>i18n()</CODE> macro. This can be done by choosing "Make messages and merge" from the Build-menu.
 Then you have to add the languages that your application wants to support. Therefore, select "Add Tranlation File" from the
 Project-menu. This opens a language selection dialog. Select the language and press OK. This will build the ASCII file containing
 entries for the filename of the string and the line where the original string is placed. Then you will see a <CODE>msgid</CODE> line
@@ -229,12 +229,12 @@ could write to and who will help you with this. Also read
 
 <P>All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
 installation, project name and version as well as the author name and email-address. As KDevelop uses SGML-templates, it's very
-easy to extend the documentation to a full descriptive helpsystem. The only thing you have to do is editing the sgml file, placed
+easy to extend the documentation to a full descriptive helpsystem. The only thing you have to do is editing the SGML file, placed
 in docs/en as index.sgml. The reference documentation included with your sgml-tools package can be added to the helpbrowser and
 allow you direct access to special tags as well as a short description of how to extend the documentation. SGML has a lot of
-advantages, whereas KDE makes wide use by this documentation type with the additional ksgml2html tool. This creates the typical
+advantages, whereas KDE makes wide use by this documentation type with the additional KSgml2Html tool. This creates the typical
 KDE-style documentation and makes it look nicer. Anyway, the sgmltools alone are enough to produce a html output that is already
-included in your application. To create the documents using ksgml2html, install the tool and run "Make User-Manual" from the
+included in your application. To create the documents using KSgml2Html, install the tool and run "Make User-Manual" from the
 Build-menu. The Documentation Browser allows a direct controlling of the output by selecting "Project User-Manual" from the
 Help-menu or the according icon in the DOC-tree. Then you can browse the documentation online in KDevelop and have a better
 overview by the output over errors that result in missing tags.
@@ -243,7 +243,7 @@ project as each <CODE>sect</CODE>-tag creates a new HTML file. The output genera
 so you don't have to care for their installation path. What you have to watch out for is any index-xx.html file, where xx is
 higher than 6 (as the first six pages are already included in the project). After generating the documentation, switch to the RFV
 and browse to your documentation directory. Press the right mouse button over the files to add and select "Add". Further,
-ksgml2html adds the KDE logo to the documentation directory. This file, <CODE>logotp3.gif</CODE>, has to be added to the project as well.
+KSgml2Html adds the KDE logo to the documentation directory. This file, <CODE>logotp3.gif</CODE>, has to be added to the project as well.
 Then you have to select the "File Properties" either from the Project menu or by the popup menu in the file-viewers. The easiest
 way to set the installation path is to select a documentation file already set up for installation such as <CODE>index.html</CODE>. You
 see that <CODE>Install</CODE> is checked and the Installdir+filename already contains the destination. Mark the Installdir and enter
@@ -258,7 +258,7 @@ way to specify the installation path. For more options about specifying installa
 <P>When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
 correctly under certain circumstances, as well as changes will not result in updating the Makefiles. To change any settings for
 your project, you have to use the given menuentries like e.g. for adding files or setting file properties. For experts that are
-not comfortable with certain options for e.g. the linker or need additional project configuration, you should work yourself into
+not comfortable with certain options for e.g. the Linker or need additional project configuration, you should work yourself into
 the Makefile.am macros and add all changes in the Makefile.am's after the section separated with the entry "KDevelop write area".
 As the GNU-tools are using the commands at the end of all macro files, you can overwrite KDevelop's settings with this. Mind that
 this will prevent using KDevelop for any changes related to project configuration.
@@ -266,10 +266,10 @@ this will prevent using KDevelop for any changes related to project configuratio
 <H3><A NAME="ss8.5">8.5 Compiler and Linker Flags for Projects</A>
 </H3>
 
-<P>Each new project contains all needed options for the compiler and linker as well as general settings. By default, your project
+<P>Each new project contains all needed options for the Compiler and Linker as well as general settings. By default, your project
 is set to use debugging by the -g flag, and warnings are set to the standard, -Wall. This ensures you can debug your application
-and detect constructions that may cause program errors. For some applications, you would need additional compiler or linker flags,
-especially if you're using libraries that are not currently included by the linker. Then you need to update the project by
+and detect constructions that may cause program errors. For some applications, you would need additional Compiler or Linker flags,
+especially if you're using libraries that are not currently included by the Linker. Then you need to update the project by
 configuring the correct settings with the Project Options dialog. See 
 <A HREF="index-9.html#Build Settings">Build Settings</A> for more
 information how and where to set Compiler Options, Warnings and Linker Options.
@@ -280,7 +280,7 @@ information how and where to set Compiler Options, Warnings and Linker Options.
 <P>Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
 empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
 compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
-will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing
+will be copied into your project directory and the Makefile.am's are updated.   Please change all Makefile.am entries existing
 before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
 compiled and installed after the conversion to ensure the project's consistancy.
 <P>

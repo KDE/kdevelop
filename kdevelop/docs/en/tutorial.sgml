@@ -1,8 +1,10 @@
 
 <!doctype linuxdoc system>
-<article>
+<book>
+<titlepag>
 <title>KDE Application Tutorials
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, The KDevelop Team
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+<inst>The KDevelop Team
 <date>Version 0.1 , Mon Jun 21 1999
 <abstract>
 The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment, a tutorial collection on how to create KDE
@@ -13,7 +15,7 @@ id="Copyright" name="Copyright"> for more information.
 
 <toc>
 
-<sect>Introduction
+<chapt>Introduction
 <p>
 As KDE is currently becoming a standard for Unix System's desktops, more and more developers want to take advantage of the well-written
 API that the KDE project includes to create new applications that offer a GUI as well as an easy use of the classes provided with
@@ -35,14 +37,14 @@ application in detail.
 The KDevelop Team wishes you success in learing about KDE and Qt with this handbook and hope it will enable you to become another
 programmer contributing to the KDE project.
 
-<sect1>What you should know already
+<sect>What you should know already
 <p>
 This handbook requires a base knowledge about the C++ programming language as a minimum to understand the code examples and their
 functionality. Further, it is assumed that you have read <htmlurl url="index.html" name="The User Manual to KDevelop"> as well as
 <htmlurl url="programming.html" name="The KDevelop Programming Handbook"> and know how the KDevelop IDE works in general and what
 generated projects are.
 
-<sect>Getting Started
+<chapt>Getting Started
 <p>
 Getting Started- that means, you should have set up KDevelop to work correctly first. Ensure you have access to the Qt online reference
 documentation by the "Help" menu or the according book in the documentation tree. When looking a the first page of the Ot
@@ -98,9 +100,9 @@ Now the application is already set up. You could do an "Execute" or "Make", but 
 go ahead and change the code first to create our tutorial examples- which we'll do in the next step.
 
 
-<sect>Building the Qt Tutorials
+<chapt>Building the Qt Tutorials
 <p>
-<sect1>Step One: Hello World!
+<sect>Step One: Hello World!
 <p>
 As the previous chapter explains, we created a project called <tt/MyWidget/- now, when looking at the first tutorial page of the Qt
 documentation, you will see that the first application only uses a <tt/main()/ function. Therefore, we only have to change the given
@@ -110,14 +112,14 @@ To access the <tt/main()/ function, select it from the classviewer's "Globals" f
 all non-class functions are listed. This will open the file <tt/main.cpp/ in the "C/C++ Files" window and the editing cursor is already
 set in front of the first line of <tt/main()/.
 
-<sect2>What to change first
+<sect1>What to change first
 <p>
 We could start changing the given code towards the desired one which is listed in the tutorial- but it can be even easier. Select the
 contents of the <tt/main()/ function with the mouse or by holding the Shift-key pressed while selecting the lines with the down-arrow
 key. Then select "Cut" from the "Edit" menu or press the DEL-key to remove the selected code. This will clear the main function and we
 can start from scratch to build our first tutorial.
 
-<sect2>Entering the tutorial code
+<sect1>Entering the tutorial code
 <p>
 Now, to insert the code from the tutorial, you could first read it carefully and try to remember which line contained which code. Then,
 after reading the tutorial's line-by-line description, you could use it as an example to write the tutorial by yourself.
@@ -136,7 +138,7 @@ Finally, add the according header files outside the <tt/main()/ function:
 
 That's it ! The source code is done for your first tutorial application.
 
-<sect2>Building Hello World!
+<sect1>Building Hello World!
 <p>
 To build the first tutorial, select "Make" from the "Build" menu or press the according toolbar icon. Optionally, you could choose
 "Execute" as well, which results in running the application after the build was successful.
@@ -146,7 +148,7 @@ search for an error just when you decided to program for KDE and/or Qt, but you 
 find an error, you have two options: either select the according error message in the output window, which will bring you to the
 according line the error occured, or press the F4 key; optionally you could use the "Next Error" entry in the "View" menu.
 
-<sect2>Exercises
+<sect1>Exercises
 <p>
 You may ask "Exercises ? This one was so simple, I don't need to excercise !", but be assured, things will get more complicated. This
 one was the easiest example, but the more complex they will get the more thinking is asked on your side to understand and follow the
@@ -163,7 +165,7 @@ instance first that contains the size
 <item>play with the sizes to see which is width and heigth
 </enum>
 
-<sect1>Step 2 and 3: Extensions
+<sect>Step 2 and 3: Extensions
 <p>
 The tutorial steps 2 and 3 are extending the facilities of the first tutorial. There, you will learn about signals and slots as well as
 parent-child relationships between widgets.
@@ -177,7 +179,7 @@ anymore because of it's flexibility. Understanding the signal/slot mechanism the
 Another thing to watch out for is the fact that the button terminates the <tt/QApplication/ instance by calling <tt/quit()/. You will
 meet <tt/quit()/ again when working with <tt/QApplication/'s KDE-pendant, <tt/KApplication/
 
-<sect1>Writing your own Widgets
+<sect>Writing your own Widgets
 <p>
 Now, after having successfully modified and extended the <tt/main()/ function, you will hit the point to create a new widget- a unique
 widget that only can be constructed with the class you're about to write in step 4.  Actually, the class has been created by the
@@ -193,7 +195,7 @@ Therefore, add <tt/#include &lt;qfont.h&gt;/ to the top of the <tt/mywidget.cpp/
 
 To run the new application, just hit "Execute". This will result in compling the changes after an autosaving.
 
-<sect1>Extending the Widget Class
+<sect>Extending the Widget Class
 <p>
 Now, in lesson 5 the target is to extend the widget class. Therefore, you will learn about virtual functions as well. Here, the
 <tt/resizeEvent()/ is reimplemented. What is important to learn here (besides extending a class) is that Qt works with user events by
@@ -222,7 +224,7 @@ have to insert a formal parameter into the function header, most developers eith
 Then, you can process the event's parameters. For a <tt/QMouseEvent/, you have to ask if the right, middle or left mouse button was the
 one that caused the event.
 
-<sect1>Adding a new Class
+<sect>Adding a new Class
 <p>
 With lesson 6, you will have to add a class to the tutorial application. Now, normally you would think "I just will create a header
 file and an implementation file- then I'm done"- but KDevelop will make it easier for you. When adding a class, you should always use
@@ -239,7 +241,7 @@ As the filenames are automatically inserted, you don't have to care for that. Th
 documentation. It is always a good style to add a desciptive documentation to the class, especially as the classname <tt/LCDRange/
 doesn't inform you specifically about the purpose of the widget.
 
-<sect1>Step 7-14
+<sect>Step 7-14
 <p>
 For the rest of the tutorial steps, you are prepared and know everything you have to know- adding the classes required and doing the
 changes.
@@ -250,7 +252,7 @@ additionally, you should play with KDevelop's options for "Build"- execute the a
 in the next chapter.
 
 
-<sect>Copyright <label id="Copyright">
+<chapt>Copyright <label id="Copyright">
 <p>
 <tscreen><verb>
 
@@ -271,7 +273,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
-</article>
+</book>
+
 
 
 

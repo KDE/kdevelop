@@ -1,18 +1,19 @@
 
 <!doctype linuxdoc system>
-<article>
+<book>
 <title>The KDE Library Reference Guide
-<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">, The KDevelop Team
+<subtitle>The Reference Guide to C++ Application Design for the K Desktop Environment (KDE).
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+<inst>The KDevelop Team
 <date>Version 0.1 , Mon Jun 21 1999
 <abstract>
-The Reference Guide to C++ Application Design for the K Desktop Environment (KDE). This handbook itself is part of the
-KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
-id="Copyright" name="Copyright"> for more information.
+This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
+Public License; see <ref id="Copyright" name="Copyright"> for more information.
 </abstract>
 
 <toc>
 
-<sect>Introduction
+<chapt>Introduction
 <p>
 As the K Desktop Environment offers an easy way for application designers to offer their products with an intuitive way of user
 interaction, it provides all means to solve common tasks by a set of library classes that extend the facilities of the Qt toolkit.
@@ -58,11 +59,11 @@ dramatically and provide a common look.
 
 The Qt library is adressed in this handbook as far as it offers solutions not provided by KDE.
 
-<sect1>About this Handbook
+<sect>About this Handbook
 <p>
 The descriptions for various classes are taken from the KDE library documentation.
 
-<sect>Class Categories
+<chapt>Class Categories
 <p>
 The KDE/Qt C++ class libraries offer easy solutions to extend applications dramatically with a minimum amount of coding on the side of
 the application programmer. This chapter therefore sorts the classes provided towards their usage by certain categories:
@@ -91,7 +92,7 @@ the application programmer. This chapter therefore sorts the classes provided to
 	</itemize>
 </itemize>
 
-<sect1>Baseclass
+<sect>Baseclass
 <p>
 
 Most of the KDE/Qt classes have <tt/QObject/ as their baseclass in their inheritance hierarchy. <tt/QObject/ can be described as a
@@ -99,7 +100,7 @@ baseclass because it offers the usage of Qt's signal/slot mechanism which allows
 virtual methods and should be used as the baseclass for any self-created classes that are supposed to emit signals or can connect to
 signals by slots.
 
-<sect1>Application Architecture Classes
+<sect>Application Architecture Classes
 <p>
 KDE applications usually consist of a set of objects that interact with each other. The programmer has to use the provided classes to
 create a KDE application either by creating a class instance or by inheritance. A typical application contains:
@@ -111,7 +112,7 @@ create a KDE application either by creating a class instance or by inheritance. 
 </itemize>
 
 
-<sect2>Application objects of KDE
+<sect1>Application objects of KDE
 <p>
 The K Desktop Environment provides a set of functionality that an application can use to integrate into the KDE. The class
 <tt/KApplication/ therefore is the baseclass for any application that targets KDE. A KDE application only contains one object of the
@@ -140,7 +141,7 @@ The <tt/KApplication/ object provides:
 
 The <tt/kdeui/ library additionally offers two classes that inherit <tt/KApplication/ for specialized purposes:
 
-<sect2>KWMModuleApplication
+<sect1>KWMModuleApplication
 <p>
 <bf/Includes:/ <tt/#include &lt;kwmmapp.h&gt;/
 
@@ -150,7 +151,7 @@ The class KWMModuleApplication is the base class for KDE windowmanager modules. 
 windows and changes to them (via Qt signals). There are no methods to manipulate windows. These are defined in the class KWM (see
 kwm.h). An example for using KWMModuleApplication is kcontrol.
 
-<sect2>KControlApplication
+<sect1>KControlApplication
 <p>
 
 <bf/Includes:/ <tt/#include &lt;kcontrol.h&gt;/
@@ -160,7 +161,7 @@ kwm.h). An example for using KWMModuleApplication is kcontrol.
 KControlApplication is the common base for setup applications. It provides a tab dialog and functionality common to most setup
 programs. The configuration dialogs for the KDE are examples of KControlApplications.
 
-<sect2>KWM
+<sect1>KWM
 <p>
 <bf/Includes:/ <tt/#include &lt;kwm.h&gt;/
 
@@ -173,7 +174,7 @@ KWM::&lt;method()&gt;
 depending on the purpose of the desired functionality.
 
 
-<sect2>Application Configuration
+<sect1>Application Configuration
 <p>
 The class <tt/KConfig/ provides the usage of a configuration object which can write its entries into configuration files. Dependent of
 the values to read and write you have to call the methods of the class <tt/KConfigBase/.
@@ -185,7 +186,7 @@ For internationalization, the <tt/KApplication/ object uses the class <tt/KLocal
 selected language. Instead of using the <tt/klocale->translate()/ method, KDE applications should use the <tt/i18n()/ macro that
 contains the string to be translated as the message extraction depends on this macro.
 
-<sect2>Main Windows
+<sect1>Main Windows
 <p>
 As the application's <tt/KApplication/ instance is non-visible, it only provides the basic means to create a KDE application.
 Therefore a KDE application needs to have a main window representing the application towards the user graphically. The main window
@@ -201,7 +202,7 @@ The main window usually takes the responsibility to terminate the application by
 Most KDE applications will use <tt/KTMainWindow/ to represent the application graphically.
 
 
-<sect1>User Interface Objects
+<sect>User Interface Objects
 <p>
 This section covers the user interface object the KDE libraries provide. By category, these can be devided by their purpose. A user
 element can be:
@@ -213,7 +214,7 @@ element can be:
 <item>menus which allow calling of methods directly.
 </itemize>
 
-<sect2>Views
+<sect1>Views
 <p>
 View are generally the content area of an application. Therefore it can be the main widget or a part of a main widget that additionally
 offers a set of functionality such as <tt/KTMainWindow/
@@ -232,7 +233,7 @@ For use with <tt/KTMainWindow/, create your view instance and call <tt/setView(Q
 
 Individual views are usually created by inheritance of <tt/QWidget/.
 
-<sect2>Dialogs
+<sect1>Dialogs
 <p>
 Dialogs are a main part of the user interaction whereever the application requires parameters that have to be set by the user.
 Fortunately, the KDE library already offers a set of dialogs that are ready to use for standard parameters such as fonts and colors. In
@@ -265,7 +266,7 @@ Additionally, the Qt library offers:
 <item>QProgressDialog
 </itemize>
 
-<sect1>Control Elements
+<sect>Control Elements
 <p>
 Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
 control elements that the Qt library provides, KDE offers:
@@ -291,22 +292,22 @@ control elements that the Qt library provides, KDE offers:
 <item>KTreeList: tree list widget
 </itemize>
 
-<sect1>General Purpose Classes
+<sect>General Purpose Classes
 <p>
-<sect2>Files
+<sect1>Files
 <p>
 For loading and saving files, use the class <tt/QFile/ which operates with streams.
-<sect2>Data Objects
+<sect1>Data Objects
 <p>
 The Qt library supports data objects by classes that offer handling of lists, arrays, streams, strings and the like. See the Qt
 documentation for mor information.
 
-<sect2>Graphics
+<sect1>Graphics
 <p>
 Qt supports a set of graphics formats that can be used for drawings or image programs. The graphics device for painting is
 <tt/QPainter/.
 
-<sect2>Processes
+<sect1>Processes
 <p>
 As applications can have different types of application communication with other programs available on the system such as standard Unix
 actions, developers can make use of the class <tt/KProcess/ to call another application. As the application is running independent from
@@ -314,7 +315,7 @@ the one that invoked it, you can only receive the current status of the applicat
 can be done with various intitialization values. Finally, the process can inform the application wether it has been terminated or
 ended. See <tt/KProcess/ for details.
 
-<sect>Copyright<label id="Copyright">
+<chapt>Copyright<label id="Copyright">
 <p>
 <tscreen><verb>
 
@@ -335,7 +336,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
-</article>
+</book>
 
 
 

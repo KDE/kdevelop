@@ -51,193 +51,202 @@ ermöglichen, damit Sie die Implementierung prüfen können, ohne einen vollständig
 <P>Dies können Sie, wenn das C/C++ Fenster sichtbar ist, durch Auswahl von "Datei compilieren" aus dem "Bauen" Menü oder das
 entsprechende Symbol der Werkzeugleiste aufrufen. Ihre Datei wird dann gespeichert und übersetzt, wie üblich stehen Ihnen dann die
 Compilermeldungen im Ausgabe-Fenster zur Verfügung.
-<P>Innerhalb der IDE können Sie soviele Dateien öffnen, wie Sie möchten. Alle geöffneten Dateien werden im Fenster-Menü aufgelistet, damit
+<P>Innerhalb der Entwicklungsumgebung können Sie soviele Dateien öffnen, wie Sie möchten. Alle geöffneten Dateien werden im Fenster-Menü aufgelistet, damit
 Sie zwischen den Dateien durch Auswahl des Dateinamens wechseln können. Weiterhin wird der Dateiname der aktuell geöffneten Datei in
 der Titelleiste von KDevelop angezeigt.
 <P>
 <H4>Erzeugen und Speichern von Dateien</H4>
 
-<P>To create a new file, choose "New" from the File-menu or select "Add File(s) to project"-&gt;"New File". This opens the "New File"
-dialog, where you can specify the filename and type. Additionally, you have to set the destination directory as well if the file
-is added to the project or not. Finally, you can also use your header template for the project in case you want to add a new
-sourcefile without generating a new class by the Class-Generator.
-<P>After the file has been created, you can edit the new file as usual; if you have to switch between different files, you can always
-turn back to the file either via the file-trees or by the Window-menu.
-<P>For saving any changes, KDevelop offers a whole variety of options. The standard way would be to save the file by selecting "Save"
-or "Save As" from the File-menu or by the Save-button on the toolbar. For saving all changed files at once, you could as well
-select "Save all" from the File-menu.
-<P>Now, when working on a project, it is very annoying if something critical happens while you have done a lot of changes on your
-files; sometimes you will bite yourself that you have forgotten to save the changes. KDevelop takes care of this by offering
-"Autosaving", which is by default enabled and set to save all files in intervalls of 5 minutes. To select another saving period or
-to disable this, see 
-<A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A>, where the setup options are described.
-<P>Additionally, KDevelop takes care for all changes if you open another project or exit KDevelop. You will be asked for saving the
-changed files, where you also have the option to specify which one to save and which you want to stay unsaved. Further, when
-invoking any build-processes, your files get saved automatically, so you won't ever wonder why your application doesn't run the
-way you expected it to do after your changes to the sourcefiles. The only exception is the "Compile File" command, which only
-saves the currently opened source file visible in the source editor window.
+<P>Um eine neue Datei anzulegen, wählen Sie "Neu" aus dem Menü "Datei". Dies öffnet das Dialogfeld "Neue Datei", in dem Sie den Dateinamen
+und Typ angeben. Zuätzlich können Sie das Verzeichnis auswählen, in dem die Datei angelegt werden soll und ob die Datei dem Projekt
+hinzugefügt werden soll. Schließlich können Sie neben fertigen Dateischablonen auch Ihre Header-Vorlage verwenden, um Quelltextdateien
+dem Projekt hinzuzufügen.
+<P>Nachdem die Datei angelegt wurde, könne Sie diese wie gewohnt bearbeiten; wenn Sie zwischen Dateien wechseln, können Sie wieder
+zurückkehren, indem Sie die Datei entweder in den Dateibäumen oder dem Fenster-Menü auswählen.
+<P>Um Änderungen zu speichern bietet KDevelop eine Reihe von Möglichkeiten. Normalerweise würden Sie Dateien durch Auswahl von "Speichern"
+oder "Speichern unter" aus dem Menü Datei oder über das entsprechende Symbol der Werkzeugleiste sichern. Um alle geänderten Dateien
+gleichzeitig zu sichern, können Sie im Menü Datei auch "Alles Speichern" auswählen.
+<P>Nun, wenn Sie an einem Projekt arbeiten, wäre es sehr unangenehm, wenn Sie durch kritische Systemzustände Ihre Änderungen verlieren
+würden weil das Abspeichern vergessen wurde. KDevelop kann dies für Sie übernehmen, indem es automatisches Abspeichern anbietet, das
+Standardmäßig eingeschaltet ist und alle Änderungen in Intervallen von 5 Minuten abspeichert. Sie können auch ein anderes Intervall
+einstellen oder das automatische Abspeichern zu verhindern, näheres dazu finden Sie im Abschnitt 
+<A HREF="index-12.html#KDevelop Setup">KDevelop Setup</A>.
+<P>Zusätzlich dazu übernimmt KDevelop die Kontrolle über Ihre Änderungen, wenn Sie zu einem anderen Projekt wechseln oder die Entwicklungsumgebung
+verlassen wollen. Sie werden dann gefragt, ob Sie die geänderten Dateien speichern wollen, wobei Sie ebenso angeben können, welche
+Datei Sie sichern möchten und welche nicht. Weiterhin werden beim Aufruf eines Erstellungsprozesses Ihre Dateien automatisch
+gespeichert, so das Sie sich nie fragen müssen, warum Ihre Applikation nach durchgeführten Änderungen nicht das tut, was Sie
+beabsichtigten. Die einzige Ausnahme davon bildet das Kommando "Datei compilieren", welches nur die aktuelle Quellcodedatei speichert
+und diese dann übersetzt.
 <P>
 <H4>Öffnen und Schließen von Dateien</H4>
 
-<P>To open a source file, you have a lot of options as well. One way could be, as the standard for editors, to select "Open" from the
-File-menu. You will be presented an "Open File" dialog, which allows you to choose the file you want to edit. Another, probably
-more frequently used way is to select the file from the LFV, the Logical File Viewer, or the RFV, the Real File Viewer (see 
-<@@ref>OverviewOverview</A>
-). The advantage of the file trees is that they provide a quick visual access to your files, especially the LFV,
-which only displays your project files by their type, collected into folders. You can as well configure the LFV towards sorting
-your files in another manner by a right mouseclick on the tree. Select "New Group" from the popup-menu, and you can configure a
-new group, or select "Edit Group" to install new file filters by specifying the goup's file extensions, separated by commas.
-<P>The standard file groups for a project generated by KAppWizard are the Headers, Sources, GNU and Others. Additionally, after
-adding a translation file, KDevelop adds a folder "Translations", containing your *.po files.
-<P>To close files, select the file to close from the Window-menu, which loads the opened file into the front editor. Then select
-"Close" from the File-menu. If your file has been changed, you will be asked to save it. When closing a project, all currently
-opened files will be checked for changes and you will be asked for saving as well.
+<P>Um eine Quellcodedatei zu öffnen, bieten Sich ebenfalls mehrere Möglichkeiten. Eine könnte sein, das Sie wie bei normalen Editoren den
+Eintrag "Öffnen" im Menü Datei auswählen. Dann zeigt sich Ihnen ein "Datei öffnen" Dialog, in dem Sie die zu öffnende Datei auswählen.
+Ein weiterer, wahrscheinlich schnellerer Weg ist, die gewünschte Datei aus der Logischen Dateiansicht (LFV) oder dem RFV auszuwählen
+(siehe 
+<A HREF="index-5.html#Übersicht">Übersicht</A>
+). Der Vorteil der Dateibäume ist, das Sie Ihnen einen schnellen visuellen Zugang zu Ihren Dateien bieten,
+besonders der LFV, der nur Ihre Projektdateien nach Typ sortiert anzeigt. Sie können den LFV auch in seiner Sortierfunktion
+konfigurieren, indem Sie das Kontextmenü über der Dateiansicht verwenden. Wählen Sie hier "Neue Gruppe" um eine neue Sortierung
+hinzuzufügen, "Eigenschaften", um die aktuelle Konfiguration einer Gruppe zu ändern und "Gruppe entfernen" um den Dateifilter und die
+Gruppe zu löschen. Beim hinzufügen einer Gruppe geben Sie den Gruppennamen und den Dateifiler an, indem Sie eine durch Kommata
+getrennte Liste der Dateierweiterungen angeben.
+<P>Die Standardgruppen eines Projekts werden durch den KAppWizard festgelegt durch Header, Sources, GNU und Others. Zusätzlich fügt
+KDevelop automatisch eine Gruppe "Translations" (Übersetzungen) beim Anlegen einer Übersetzungsdatei hinzu, die Ihre *.po Dateien
+enthält.
+<P>Um Dateien zu schließen, wählen Sie die zu schließende Datei aus dem Fenster-Menü, um Sie in den aktuellen Editor zu laden. Dann wählen
+Sie aus dem Menü "Datei" den Eintrag "Schließen". Sollte die Datei als geändert markiert sein, werden Sie gefragt, ob Sie die
+Änderungen speichern möchten. Wenn Sie ein Projekt schließen, werden alle geöffneten Dateien auf Änderungen geprüft und Sie werden dann
+ebenfalls um Abspeicherung gefragt.
 <P>
 <H3><A NAME="ss7.2">7.2 Navigieren innerhalb von Dateien</A>
 </H3>
 
-<P>The following gives you a general guideline how to locate certain positions within your files for a quicker access.
-<P><B>&raquo; How to find a certain line in a file</B>
+<P>Folgender Abschnitt gibt Ihnen eine allgemeine Beschreibung, wie Sie bestimmte Positionen innerhalb Ihrer Dateien schneller erreichen.
+<P><B>&raquo; Wie Sie eine bestimmte Zeile in einer Datei finden</B>
 <P>
 <OL>
-<LI>Select "Line" in the "View"-menu or press STRG+L. The dialogfiled "Goto Line" appears.</LI>
-<LI>Insert the linenumber you want to go to.</LI>
-<LI>Press OK.</LI>
+<LI>Wählen Sie "Gehe zu Zeile" aus dem Menü Ansicht oder die entsprechende Schnelltaste STRG+G. Das Dialogfeld "Gehe zu Zeile"
+erscheint.</LI>
+<LI>Geben Sie die gewünschte Zeilennummer ein, zu der Sie wechseln möchten.</LI>
+<LI>Wählen Sie die Schaltfläche OK.</LI>
 </OL>
-<P><B>&raquo; How to set a bookmark</B>
+<P><B>&raquo; Wie Sie ein Lesezeichen setzen</B>
 <P>
 <OL>
-<LI>Set the cursor to the line you want to access via a bookmark</LI>
-<LI>Select "Set Bookmark" from the "Bookmarks"-menu.</LI>
-<LI>A popup-menu opens that allows you to select the bookmark number you want to set for the new bookmark.</LI>
-<LI>Select the bookmark number.</LI>
+<LI>Setzen Sie den Cursor in die Zeile, die Sie über ein Lesezeichen erreichen wollen.</LI>
+<LI>Wählen Sie "Lesezeichen setzen" aus dem "Lesezeichen"-Menü.</LI>
+<LI>Ein Popup-Menü erscheint, indem Sie die Lesezeichen-Nummer angeben können, über die Sie das Lesezeichen erreichen.</LI>
+<LI>Wählen Sie die zu vergebende Lesezeichen-Nummer</LI>
 </OL>
-<P>Another way to set bookmarks would be to select "Add Bookmark" from the "Bookmarks"-menu. This sets a bookmark to the current line
-and appends it to the bookmarks-list. The documentation browser also offers setting a bookmark to the current page by a context menu
-entry "Add Bookmark".
-<P><B>&raquo; How to delete bookmarks</B>
-<P>The bookmarks are set for each editing window separately- mind that your bookmarks aren't connected to a certain file you set the
-bookmark for. To delete all bookmaks, select "Delete Bookmarks" from the "Bookmarks"-menu. This deletes the bookmarks for the
-window actually on top, either the Header window, the C++ window or the browser window.
-<P><B>&raquo; How to go to a bookmarked line</B>
+<P>Ein weiterer Weg, Lesezeichen zu Setzen, wäre der Befehl "Lesezeichen hinzufügen" aus dem "Lesezeichen"-Menü. Dies fügt die aktuelle
+Zeile der Lesezeichen-Liste hinzu. Der Dokumentationsbrowser bietet ebenfalls das Setzen eines Lesezeichens zur aktuellen Seite über
+einen zusätzlichen Eintrag im Kontext-Menü an.
+<P><B>&raquo; Wie Sie Lesezeichen löschen</B>
+<P>Die Lesezeichen sind für jedes Fenster separat gesetzt- bedenken Sie, das Ihre Lesezeichen nicht mit einer bestimmten Datei verbunden
+sind. Um alle Lesezeichen zu löschen, wählen Sie "Lesezeichen löschen" aus dem Lesezeichen-Menü. Dies löscht die Lesezeichen des
+aktuell geöffneten Fensters.
+<P><B>&raquo; Wie Sie zu einem Lesezeichen wechseln</B>
 <P>
 <OL>
-<LI>Select the "Bookmarks"-menu and open the popup menu containing the bookmarks for the window containing the bookmark you want
-to view; either the C++-Window or the Header-Window entry.</LI>
-<LI>Select the bookmarked line.</LI>
+<LI>Wählen Sie das Lesezeichen-Menü und öffnen Sie das Menü, das die Lesezeichen für das Fenster enthält, in dem sich die gewünschte
+Datei befindet.</LI>
+<LI>Wählen Sie den gesuchten Eintrag aus, um zum Lesezeichen zu wechseln.</LI>
 </OL>
-<P>Selecting a bookmark for the browser window will open the browser and loads the page.
+<P>Wenn Sie ein Browser-Lesezeichen auswählen, wird der Browser mit der entsprechenden Seite geöffnet.
 <P>
 <H3><A NAME="ss7.3">7.3 Arbeiten mit Schnelltasten</A>
 </H3>
 
-<P>For using the editor, you should make yourself comfortable with some keyboard shortcuts that make it easier to position the cursor
-and edit the file. The complete shortcut reference is also listed in section 
-<@@ref>OverviewOverview</A>.
+<P>Wenn Sie mit dem Editor arbeiten, sollten Sie sich mit den gebotenen Schnelltasten vertraut machen, die es Ihnen vereinfachen, den
+Cursor zu positionieren und Dateien zu bearbeiten. Eine vollständige Tastatur-Kurzreferenz finden Sie ebenfalls im Abschnitt 
+<A HREF="index-5.html#Übersicht">Übersicht</A>.
 <P>
 <HR>
 <PRE>
-one letter to the left                           Left Arrow
-one letter to the right                          Right Arrow
-one word to the left                             CTRL+Left Arrow
-one word to the right                            CTRL+Right Arrow
-one line upwards                                 Up Arrow
-one line downwards                               Down Arrow
-to the beginning of the line                     POS 1
-to the end of the line                           END
-one page up                                      PageUp
-one page down                                    PageDown
-to the beginning of the current file             CTRL+PageUp
-to the end of the current file                   CTRL+PageDown
-one letter to the left                           SHIFT+Left Arrow
-one letter to the right                          SHIFT+Right Arrow
-one word to the left                             CTRL+SHIFT+Left Arrow
-one word to the right                            CTRL+SHIFT+Right Arrow
-one line upwards                                 CTRL+Up
-one line downwards                               CTRL+Down
-to the beginning of the current line             CTRL+POS 1
-to the end of the current line                   CTRL+END
-one page up                                      SHIFT+PageUp
-one page down                                    SHIFT+PageDown
-to the beginning of the current file             CTRL+SHIFT+PageUp
-to the end of the current file                   CTRL+SHIFT+PageDown
-en/disable insertmode                            INS
-copy selection to the clipboard                  CTRL+C, CTRL+INS
-insert text from the clipboard                   CTRL+V, SHIFT+INS
-delete current line                              CTRL+K
-insert line after current line                   END, then Enter
-insert line before current line                  POS 1, then Enter
-undo editing step                                CTRL+Z
-redo an undo step                                CTRL+Y
-tabulator                                        TAB
-delete letter left of cursor position            Backspace
-delete letter right of cursor position           Delete
-delete selected text                             Select text, then Backspace
+um ein Zeichen nach links                               LINKS
+um ein Zeichen nach rechts                              RECHTS
+um ein Wort nach links                                  STRG+LINKS
+um ein Wort nach rechts                                 STRG+RECHTS
+eine Zeile nach oben                                    OBEN
+eine Zeile nach unten                                   UNTEN
+zum Anfang der aktuellen Zeile                          POS 1
+zum Ende der aktuellen Zeile                            ENDE
+eine Bildschirmseite nach oben                          BILD-OBEN
+eine Bildschirmseite nach unten                         BILD-UNTEN
+zum Anfang der Datei                                    STRG+BILD-OBEN
+zum Ende der Datei                                      STRG+BILD-UNTEN
+um ein Zeichen nach links                               UMSCHALT+LINKS
+um ein Zeichen nach rechts                              UMSCHALT+RECHTS
+um ein Wort nach links                                  STRG+UMSCHALT+LINKS
+um ein Wort nach rechts                                 STRG+UMSCHALT+RECHTS
+um eine Zeile nach oben                                 STRG+OBEN
+um eine Zeile nach unten                                STRG+UNTEN
+zum Anfang der aktuellen Zeile                          STRG+POS 1
+zum Ende der aktuellen Zeile                            STRG+ENDE
+um eine Bildschirmseite nach oben                       UMSCHALT+BILD-OBEN
+um eine Bildschirmseite nach unten                      UMSCHALT+BILD-UNTEN
+bis zum Anfang der Datei                                STRG+UMSCHALT+BILD-OBEN
+bis zum Ende der Datei                                  STRG+UMSCHALT+BILD-UNTEN
+Einfügemodus ein/ausschalten                            EINFG
+markierten Text in die Zwischenablage kopieren          STRG+C, STRG+EINF
+Inhalt der Zwischenablage einfügen                      STRG+V, UMSCHALT+EINF
+aktuelle Zeile löschen                                  STRG+K
+Absatz nach der aktuellen Zeile einfügen                ENDE, dann EINGABETASTE
+Absatz vor der aktuellen Zeile einfügen                 POS 1, dann EINGABETASTE
+Bearbeitung rückgängig machen                           STRG+Z
+Rückgängig gemachte Bearbeitung wiederherstellen        STRG+Y
+Tabulator einfügen                                      TAB
+Zeichen links vom Cursor löschen                        RÜCKTASTE
+Zeichen rechts vom Cursor löschen                       ENTF
+markierten Text löschen                                 Text auswählen, dann RÜCKTASTE oder ENTF
 </PRE>
 <HR>
 <P>
 <P>
-<H3><A NAME="ss7.4">7.4 Editor Einstellungen</A>
+<H3><A NAME="ss7.4">7.4 Einstellen des Editors</A>
 </H3>
 
-<P>The editor inside KDevelop can be configured towards special editing needs with a global effect on all editing windows. Thereby
-you can set the color modes, highlighting colors (also configurable in reference to the programming language of the file) and
-automatic text settings like tab-with and selection modes. The following describes how to set these options by the configuration
-dialogs provided in the "Options"-menu.
+<P>Den Editor von KDevelop können Sie nach Ihren individuellen Bedürfnissen konfigurieren. Dabei können Sie die Farbdarstellung,
+Hervorhebungen (auch konfigurierbar entsprechend der Programmiersprache von Dateien) und automatischen Texteinstellungen wie die
+Tabulatorweite und Auswahl-Modi einstellen. Im Folgenden wird Ihnen das Einstellen dieser Optionen durch die Konfigurationsdialoge
+beschrieben, die Sie im Menü "Einstellungen" finden.
 <P>
-<H4>Allgemeine EinstellungenGeneral Settings</H4>
+<H4>Allgemeine Einstellungen</H4>
 
-<P>The editor's general settings can be configured with the "Editor" entry in the "Options"-menu. Select the according values and
-press OK after you finished with your configuration.
+<P>Die allgemeinen Einstellungen des Editors können Sie durch auswählen des Eintrags "Editor" im "Einstellungen" Menü konfigurieren.
+Wählen Sie die gewünschten Einstellungen aus und beenden Sie den Dialog mit OK, um die neue Konfiguration zu übernehmen.
 <P>
 <H4>Bearbeitungsoptionen</H4>
 
 <P>
 <DL>
-<DT><B>Auto Indent:</B><DD><P>this sets the edior to place the cursor below the first literal when a new line is entered.
+<DT><B>Automatisch einrücken:</B><DD><P>Setzt den Cursor unter das erste Zeichen der oberen Zeile nach Eingabe von ENTER
 <P>
-<DT><B>Backspace Indent:</B><DD><P>this option sets the cursor below the first literal of the line above when backspace is pressed.
+<DT><B>Ausrückung:</B><DD><P>Setzt den Cursor unter das erste Zeichen der oberen Zeile nach Eingabe von RÜCKTASTE
 <P>
-<DT><B>Word Wrap:</B><DD><P>words are taken into the next line after the column set in "Wrap Words At:"
+<DT><B>Zeilenumbruch:</B><DD><P>automatischer Zeilenumbruch, falls Text über die in "Zeilenumbruch bei:" angegebene Spalte hinausragt
 <P>
-<DT><B>Replace Tabs:</B><DD><P>tabulators in the current text are replaced with tabulators of the "Tab Width:" value
+<DT><B>Tabs ersetzen:</B><DD><P>Tabularoren im aktuellen Text durch Tabulatoren der Weite "Tabbreite:" ersetzen
 <P>
-<DT><B>Remove Trailing Spaces:</B><DD><P>removes trailing spaces
+<DT><B>Leerzeichen am Zeilenende:</B><DD><P>entfernt nachfolgende Leerzeichen am Zeilenende
 <P>
-<DT><B>Wrap Cursor:</B><DD><P>sets the cursor to the end of the last line when backspace enters the beginning of a line
+<DT><B>Zeilenumbruch am Cursor:</B><DD><P>Setzt den Cursor an das Ende der oberen Zeile, wenn RÜCKTASTE am Anfang einer Zeile eingegeben wird
 <P>
-<DT><B>Auto Brackets:</B><DD><P>creates a closing bracket in front of the cursor when a bracket (any kind) is opened.
+<DT><B>Automatische Klammern:</B><DD><P>fügt eine schließende Klammer vor dem Cursor ein, falls eine öffnende Klammer eingegeben wird (jede
+Klammerart)
 </DL>
 <P>
 <H4>Auswahloptionen</H4>
 
 <P>
 <DL>
-<DT><B>Persistent Selections:</B><DD><P>selections made stay marked after setting the cursor to a different place
+<DT><B>Durchgehende Auswahl:</B><DD><P>bleibende Auswahl nach Plazierung des Cursors an anderer Stelle
 <P>
-<DT><B>Multiple Selections:</B><DD><P>allows multiple independent selections within the text
+<DT><B>Mehrfache Auswahl:</B><DD><P>erlaubt mehrfache Auswahl innerhalb des Texts
 <P>
-<DT><B>Vertical Selections:</B><DD><P>when selecting multiple lines, the selection is also made horizontal and doesn't cover the
-whole line
+<DT><B>Vertikale Auswahl:</B><DD><P>erlaubt die vertikale Auswahl von Text
 <P>
-<DT><B>Delete On Input:</B><DD><P>deletes a selection when writing in the selection.
+<DT><B>Beim Eingeben löschen:</B><DD><P>löscht markierten Text bei Eingabe innerhalb der Auswahl
 <P>
-<DT><B>Toggle Old:</B><DD><P>allows only one selection. A selection made gets deselected when another selection is made.
+<DT><B>Alt ein</B><DD><P>aus:/ erlaubt nur eine Auswahl. Eine bereits getroffene Auswahl wird bei erneuter Markierung abgewälht
 <P>
-<DT><B>Wrap Words At:</B><DD><P>sets the maximum columns that a line can have. The word that contains a letter that reaches over this value
-will be automatically broken into the next line.
+<DT><B>Zeilenumbruch bei:</B><DD><P>stellt die maximale Spaltenzahl ein, die eine Zeile umfasst. Das letzte Wort wird bei überschreiten der
+Spaltenzahl in die nächste Zeile umgebrochen.
 </DL>
 <P>
 <H4>Farben</H4>
 
-<P>For changing the editor's general appearance, you can define a set of colors that the editor uses by selecting "Editor Colors"
-from the "Options"-menu. You can configure colors for:
+<P>Um die allgemeine Erscheinung des Editors anzupassen, können Sie über den Eintrag "Editor-Farben" im Menü "Einstellungen" folgende
+Farbdarstellungen konfigurieren:
+<P>
 <UL>
-<LI><B>background:      </B>        the editor's background</LI>
-<LI><B>text background:  </B>           the background of displayed text</LI>
-<LI><B>selected:         </B>       the color of selected text to display the selection</LI>
-<LI><B>found:            </B>       the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".</LI>
-<LI><B>selected + found: </B>       the color of text selected to search for and found</LI>
+<LI><B>Hintergrund:        </B>       Hintergrundfarbe des Editors</LI>
+<LI><B>Texthintergrund:    </B>         Hintergrundfarbe des dargestellten Textes</LI>
+<LI><B>Gewählt:            </B>       Farbdarstellung von markiertem Text</LI>
+<LI><B>Gefunden:           </B>       Farbdarstellung von gefundenen Textstellen bei Suchen über die Einträge "Suchen", "Suche
+wiederholen" und "Ersetzen" im Menü "Bearbeiten"</LI>
+<LI><B>Gewählt + Gefunden: </B>       Farbdarstellung von gefundenen Textstellen innerhalb von Auswahlen.</LI>
 </UL>
 <P>
 <H4>Hervorhebungen</H4>

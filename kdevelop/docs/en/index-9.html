@@ -25,7 +25,7 @@ used for the Makefile.am's and the configure.in script (e.g. version number chan
 compilation preferences as well.. After changing the project options, you should invoke "make clean" or "rebuild all" to compile
 your project with the new options. Please mind that debugging is only available if the project options are set to create debugging
 information, the amount can be set with the debug level (0-3). If you add functions that belong to a library that is not included
-in the linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
+in the Linker flags, your program will not link correctly if those are not updated, so keep track of your library linking.
 <P>For a release build of your application or for distributing the sourcecode package, you should watch the following standard
 settings:
 <P>
@@ -53,9 +53,9 @@ and the like.
 
 <P>The target box contains three options that can be set:
 <P>Target Machine: You have the choice to set the target machine option here by choosing between your machine (default) and i386v,
-which is the option if you configured your compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
-option sets the -b flag to the compiler. Usually you would leave this to the default.
-<P>only syntax-check: If checked, the -fsyntax-only flag is set. This means that the compiler will check your code only for
+which is the option if you configured your Compiler as a cross-compiler for an Intel 386-compatible machine running System V. This
+option sets the -b flag to the Compiler. Usually you would leave this to the default.
+<P>only syntax-check: If checked, the -fsyntax-only flag is set. This means that the Compiler will check your code only for
 correctness in regards to the syntax, but doesn't check anything beyond that.
 <P>Optimize: You can enable optimization for your build process by this option, meaning to set the -O flag. If not checked, the flag
 is set to -O0, so no optimization will be used. If you enable optimization by checking this option, you can as well specify the
@@ -64,31 +64,31 @@ optimization level below from 1 to 3.
 <P>
 <H4>Debugging</H4>
 
-<P>Right of the Target box, you can see the Debugging-section. This means that you can set your compiler to include information for
+<P>Right of the Target box, you can see the debugging-section. This means that you can set your Compiler to include information for
 debuggers within the final binary, so the programmer can follow the execution of the application with the debugger in direct
 context to the sourcecode.
 <P>Enable debugging therefore sets the -g flag; the debugging level specifies the amount of information to be included in the binary.
 Availabel are level 1 to 3 to choose from. Mind that the binary execution will be slower by setting any debugging option and that
 the binary size will increase by the debugging level.
-<P>Generate extra information for gprof: sets the -pg flag, resulting that the compiler will include information for the gprof
+<P>Generate extra information for gprof: sets the -pg flag, resulting that the Compiler will include information for the gprof
 program that displays caller graphs of your program's function.
 <P>Store temporary intermediate files: sets the -save-temps flag. This will result in storing the usually temporary files produced by
 the preprocessor and the assembler. A compilation of a sourcefile will therefore produce three output files: an *.o file which is
-the final output of the compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
+the final output of the Compiler, an *.i file produced by the preprocessor and an *.s file as the output of the assembler.
 <P>For a release of your project, disable any debugging.
 <P>
 <H4>Additional Options</H4>
 
-<P>The text entry field on the bottom is intended for you to manually set any flags for the compiler by setting the CXXFLAGS
-environment variable in the makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
-description of all available compiler flags you should see your compiler documentation; for gcc and egcs this can be done by
-<B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the compiler.
+<P>The text entry field on the bottom is intended for you to manually set any flags for the Compiler by setting the CXXFLAGS
+environment variable in the Makefiles, so make sets the flags before the build process and reset them afterwards. For a complete
+description of all available Compiler flags you should see your Compiler documentation; for gcc and egcs this can be done by
+<B>man gcc</B>; <B>man g++</B> will show you information about the c++ script that is used to lead the Compiler.
 <P>
 <P>
 <H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
 </H3>
 
-<P>The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
+<P>The following gives a desciption about the Compiler warning options that can be set on page 3 of the project options dialog. The
 explanations are taken from the man page for GCC, egcs version 1.1.1.
 The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
 <P>
@@ -105,7 +105,7 @@ information.
 <DT><B>-Wshadow</B><DD><P>Warn whenever a local variable shadows another local variable.
 <P>
 <DT><B>-Wid-clash-LEN</B><DD><P>Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
-that will compile with certain obsolete, brain-damaged compilers.
+that will compile with certain obsolete, brain-damaged Compilers.
 <P>
 <DT><B>-Wlarger-then-LEN</B><DD><P>Warn whenever an object of larger than LEN bytes is defined.
 <P>
@@ -168,7 +168,7 @@ the base class, but with a type signature that doesn't match any virtual functio
 </H3>
 
 <P>The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
-libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
+libraries that your application uses to link them to your binary with the Linker, e.g. your application uses the class
 KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
 not listed as checkboxes, use the <B>"additonal libraries"</B> field.
 <P>
@@ -183,21 +183,21 @@ a development stage and not released as final, you should leave this option disa
 <DT><B>prevent using shared libraries:</B><DD><P>This option disables the use of shared libraries on systems that support this. On systems
 using no shared libraries, this option will have no effect.
 <P>
-<DT><B>additional flags:</B><DD><P>Here, you can enter additional flags for the linker, setting the LDFLAGS environment variable by make. The
-available options can be taken from the man page for <B>ld</B> or your compiler manpage.
+<DT><B>additional flags:</B><DD><P>Here, you can enter additional flags for the Linker, setting the LDFLAGS environment variable by make. The
+available options can be taken from the man page for <B>ld</B> or your Compiler manpage.
 </DL>
 <P>
 <H4>Libraries</H4>
 
 <P>The libraries section contains checkboxes for the most needed libraries in conjuction with Qt/KDE application
-development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
+development. You have to enable those libraries that your application uses, otherwise the Linker will complain about unresolved
 symbol tables.
 <DL>
 <DT><B>X11</B><DD><P>The X11 library. Recommended for all X-Window programs.
 <P>
 <DT><B>Xext</B><DD><P>The X11 extension library. Also most X-Window programs depend on Xext.
 <P>
-<DT><B>qt</B><DD><P>The Qt library. Recommended for Qt and KDE applications.
+<DT><B>qt</B><DD><P>The Qt-library. Recommended for Qt and KDE applications.
 <P>
 <DT><B>kdecore</B><DD><P>The KDE Core library; contains the classes for KDE Application frameworks.
 <P>
@@ -233,7 +233,7 @@ build-run.
 <DT><B>Environment variables</B><DD><P>give the current environment variables a higher priority than the currently used variables in
 the Makefiles.
 <DT><B>No built-in rules</B><DD><P>doesn't use built-in rules for make.
-<DT><B>Touch files</B><DD><P>don't run the compiler on changed files; instead only touches them. This sets them as already processed by make.
+<DT><B>Touch files</B><DD><P>don't run the Compiler on changed files; instead only touches them. This sets them as already processed by make.
 <DT><B>Ignore all errors</B><DD><P>Ignores all errors that occur
 <DT><B>Silent operation</B><DD><P>doesn't print out any information about the build-process
 <DT><B>Print working directory</B><DD><P>prints the current directory during the make-process.

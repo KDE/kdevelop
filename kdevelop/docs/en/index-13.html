@@ -111,7 +111,7 @@ AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>
-<P><B>Q:</B>  I  get the following linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
+<P><B>Q:</B>  I  get the following Linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
 <BLOCKQUOTE><CODE>
 <PRE>
 /usr/lib/libqt.so:
@@ -153,7 +153,7 @@ them or get an updated rpm of the kdelibs from
 <P><B>Q:</B> If I add files to my project, will they be automatically included and compiled ?
 <P><B>A:</B> Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new
 added files will be included as well.
-<P><B>Q:</B> If I removed a file, I get some weird linker messages. What is wrong with my project ?
+<P><B>Q:</B> If I removed a file, I get some weird Linker messages. What is wrong with my project ?
 <P><B>A:</B> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
 automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
 according *.moc.cpp file and rebuild the project.

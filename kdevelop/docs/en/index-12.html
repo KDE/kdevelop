@@ -23,7 +23,7 @@
 <P>This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
 found by the according entry in the Options-menu.
 <P>
-<H3><A NAME="Configuring the &quot;Tools&quot; Menu"></A> <A NAME="ss12.1">12.1 Configuring the "Tools" Menu</A>
+<H3><A NAME="Configuring the &quot;&lt;idx/Tools/&quot; Menu"></A> <A NAME="ss12.1">12.1 Configuring the "Tools" Menu</A>
 </H3>
 
 <P>As KDevelop supports the use of third-party programs within it's user interface, you are able to configure any program that suits
@@ -88,10 +88,10 @@ configuration can be changed by checking values like the Alt / Ctrl key etc.
 <P>
 <H4>Directories</H4>
 
-<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML- documentation
+<P>For setting up the documentation browser to work correctly, KDevelop needs some information about where the HTML-documentation
 is placed on the system. Therefore, the Documentation Path properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
-<P>Usually, the Qt-documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
+as well as the path to the KDE-Library documentation.
+<P>Usually, the Qt-Documentation is placed in the same directory where Qt is installed; e.g. if Qt resides in /usr/local/qt, the path
 you have to enter is /usr/local/qt/html. For the KDE- Documentation, you have to set the directory to the root of the
 documentation, assumed all KDE-Libs documentation resides in the same directory. Both path's can be selected by pressing the
 according buttons, displaying a path-selection. If your system doesn't contain the documentation for the KDE-libs,  you should
@@ -105,8 +105,8 @@ also setting the KDE Library Doc path automatically.
 
 <P>For those users who don't have a recent documentation of the KDE-libraries, especially the documentation for the files
 installed on the system, the Update KDE-Documentation dialog creates a new one or updates existing documentations. This
-function requires your system to have kdoc and qt2kdoc installed, included in the kdesdk package. First of, you have to set
-up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
+function requires your system to have KDoc and qt2KDoc installed, included in the KDE-SDK package. First of, you have
+to set up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
 /home/rnolden/kdelibs-1.1/.
 <P>Then, you can choose three different installation modes, as:
 <P>
@@ -122,17 +122,17 @@ kdelibs version.</LI>
 </UL>
 <P>The "new KDE Libs Documentation path" is to be set  for option 2 and 3 of the installation mode.  This is also recommended for
 users who generate a new documentation from scratch.
-<P>After pressing the OK button, KDevelop will create a subdirectory "kdoc-reference" in the documentation path containing the kdoc
+<P>After pressing the OK button, KDevelop will create a subdirectory "KDoc-reference" in the documentation path containing the KDoc
 reference files.  First, the qt library documentation classes will be indexed to connect the Qt documentation with the
 documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by qt2kdoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
+that it can be found by qt2KDoc. Finally, the KDE libs will be indexed and the documentation will be build with crossreferences to
 give browsing the most functionality.
 <P>
 <H4>Create Search Database</H4>
 
 <P>The Create Search Database dialog, accessed via the create-button, allows the programmer to create a database to search for a
 keyword interactively.  To create and use the documentation search function, you must have the program glimpse 4.1 installed.
-Preset are the options to index the given KDE-library documentation as well as the Qt-documentation, assuming the path to the
+Preset are the options to index the given KDE-Library documentation as well as the Qt-Documentation, assuming the path to the
 documentation files were set in the "Documentation Path" dialog of the options- menu.   Additionally, the index can include
 directories the user can set up himself by the "additional directories to index"-field.  After setting a path to an addional
 directory, the "Add" - button must be pushed to set the path.  A path once set can be removed from the index by selecting the path

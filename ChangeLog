@@ -1,3 +1,7 @@
+1999-07-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* changed sgml masters to use <book> instead of <article> completly
+	* added more german documentation
+
 1999-06-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added more german docs and fixed some misspellings in the english original
 	* added internationalized Cancel button for the initial progressdialog
