@@ -1,21 +1,27 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
- <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
- <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: A belsõ nyomkövetõ</TITLE>
- <LINK HREF="index-13.html" REL=next>
- <LINK HREF="index-11.html" REL=previous>
- <LINK HREF="index.html#toc12" REL=contents>
+<TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: A belsõ nyomkövetõ</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
-<BODY>
-<A HREF="index-13.html">Tovább</A>
-<A HREF="index-11.html">Vissza</A>
-<A HREF="index.html#toc12">Tartalom</A>
-<HR>
-<H2><A NAME="The Internal Debugger"></A> <A NAME="s12">12. A belsõ nyomkövetõ</A></H2>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
 
-<H2><A NAME="ss12.1">12.1 Setup</A>
-</H2>
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Next</A>
+<A HREF="index-11.html">Previous</A>
+<A HREF="index.html#toc12">Table of Contents</A>
+</P>
+<H3><A NAME="The Internal Debugger"></A> <A NAME="s12">12. A belsõ nyomkövetõ</A></H3>
+
+<H3><A NAME="ss12.1">12.1 Setup</A>
+</H3>
 
 <P>
 <P>The default setup for KDevelop is to use the internal debugger. You can change this under Options select the "KDevelop setup" menu 
@@ -40,14 +46,14 @@ The toolbar is most useful for debugging GUI applications. For details see
 </UL>
 <P>
 <P>
-<H2><A NAME="ss12.2">12.2 Using the internal debugger</A>
-</H2>
+<H3><A NAME="ss12.2">12.2 Using the internal debugger</A>
+</H3>
 
 <P>
-<H3>Changes made in the tree and output view window</H3>
+<H4>Changes made in the tree and output view window</H4>
 
 <P>If you choose the internal debugger, four tabs are added to your tree and output view windows.
-<H3>On the tree view window</H3>
+<H4>On the tree view window</H4>
 
 <P>
 <UL>
@@ -57,7 +63,7 @@ global variables, or perhaps you may want to see only  one local variable rather
 local variables.</LI>
 </UL>
 <P>
-<H3>On the output view window</H3>
+<H4>On the output view window</H4>
 
 <P>
 <UL>
@@ -67,14 +73,14 @@ local variables.</LI>
 </UL>
 <P>
 <P>
-<H3>Changes made in the Debug menu and on the panel</H3>
+<H4>Changes made in the Debug menu and on the panel</H4>
 
 <P>
-<H3>On the panel</H3>
+<H4>On the panel</H4>
 
 <P>Two normal and two dropdown buttons to control the debugger functions will be accessible as soon as you start the debugger.
 <P>
-<H3>In the Debug menu</H3>
+<H4>In the Debug menu</H4>
 
 <P>When you start debugging, ten items to control the debugger will be enabled.
 <P>Available functions: 
@@ -104,27 +110,27 @@ Currently implemented views are:
 </UL>
 <P>
 <P>
-<H3>Details</H3>
+<H4>Details</H4>
 
 <P>
 <P>
-<H3>Breakpoints</H3>
+<H4>Breakpoints</H4>
 
 <P>Breakpoints can be set against source lines in a file (referred to as breakpoints) or on variables in the source (referred to as watchpoints). 
 Both types of breakpoints can be set at anytime, however watchpoints on local variables only have meaning  in the variables local 
 scope. Watchpoints have more meaning when you are dealing with global variables.
 <P>
-<H3>Set/Unset breakpoints</H3>
+<H4>Set/Unset breakpoints</H4>
 
 <P>Simple one click set/unset. Click on the "icon" border to the left of the text in the editor at the line you want the breakpoint. Click again 
 on this line to unset the breakpoint.
 <P>
-<H3>Alternative beakpoint manipulating via menus</H3>
+<H4>Alternative beakpoint manipulating via menus</H4>
 
 <P>By right clicking on a breakpoint in the breakpoint list or on a breakpoint  in the editors icon border you will get a menu of breakpoint 
 options. This allows you to remove this breakpoint, clear all breakpoints, or edit the breakpoint.
 <P>
-<H3>Editing breakpoints</H3>
+<H4>Editing breakpoints</H4>
 
 <P>Use the above menu to display the edit breakpoint dialog. This contains the following fields :
 <OL>
@@ -133,11 +139,11 @@ options. This allows you to remove this breakpoint, clear all breakpoints, or ed
 <LI>Enable: When enabled gdb will break at this breakpoint. When disabled gdb will not break here.</LI>
 </OL>
 <P>
-<H3>Clear all breakpoints</H3>
+<H4>Clear all breakpoints</H4>
 
 <P>Removes all the breakpoints for this program.
 <P>
-<H3>Set/Unset watchpoints</H3>
+<H4>Set/Unset watchpoints</H4>
 
 <P>In the VAR view click with the Right Mouse button on a variable. A popup menu will be displayed allowing you to set a watchpoint on 
 the local variable. This functionality is limited to the scope that the local variable is in. As the variable goes out of scope the program 
@@ -145,7 +151,7 @@ breaks and the watchpoint is deleted.
 <P>WARNING: This is known to be problematic, so use caution when setting watchpoints on local variables.
 <P>The watchpoint can also be set by a right mouse click on a previously entered watch variable, and selecting "toggle watchpoint"
 <P>
-<H3>Set/Unset Watch variables</H3>
+<H4>Set/Unset Watch variables</H4>
 
 <P>At the bottom of the VAR view there is the "Watch" field where you can enter the variable name you wish to see display in the watch 
 list. Enter the variable name and type "enter" or click on the "Add" button alongside the field. Right Mouse clicking on the watch 
@@ -153,14 +159,14 @@ variable in the treeview will bring up a menu so that you can remove the variabl
 <P>You can also enter a watch variable by right mouse clicking on a variable name in the editor window. This displays a popup menu 
 with "watch: variable name" on it.
 <P>
-<H3>Changing variable values</H3>
+<H4>Changing variable values</H4>
 
 <P>This is done via the watch variable. If you have a variable "test" then to set "test" to 5 type "test=5" in the watch field and add it to the 
 list. Note that "test" will be set to "5" EVERY time the program stops at a breakpoint, so once you have set the variable, usually you 
 should remove the item from the watch view.
 <P>
-<H2><A NAME="The floating toolbar"></A> <A NAME="ss12.3">12.3 The floating toolbar </A>
-</H2>
+<H3><A NAME="The floating toolbar"></A> <A NAME="ss12.3">12.3 The floating toolbar </A>
+</H3>
 
 <P>The floating toolbar is a feature of the internal debugger, which greatly improves your comfort in debugging GUI applications. 
 The toolbar is either on top of all windows displayed, or docked into the panel. When docked you can run your code by clicking on the 
@@ -181,8 +187,8 @@ then please let us know.</LI>
 not automatically switch focus to kdevelop so that you can view the application window at this point. Click on the "set focus" button to 
 switch to kdevelop or press a button on the toolbar to perform your selected function.
 <P>
-<H2><A NAME="Shared libraries and breakpoints"></A> <A NAME="ss12.4">12.4 Shared libraries and breakpoints </A>
-</H2>
+<H3><A NAME="Shared libraries and breakpoints"></A> <A NAME="ss12.4">12.4 Shared libraries and breakpoints </A>
+</H3>
 
 <P>Shared libraries and breakpoints have a problem that has a reasonable solution. The problem is that gdb will not accept breakpoints in 
 source that is in a shared library which has not yet been opened but will be opened via a dlopen.
@@ -195,9 +201,17 @@ break on the library load, and, normally the debugger would do a "continue" (ie 
 however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere
 inside a dlopen command). This is disconcerting but cannot be helped.
 <P>
-<HR>
-<A HREF="index-13.html">Tovább</A>
-<A HREF="index-11.html">Vissza</A>
-<A HREF="index.html#toc12">Tartalom</A>
+<P ALIGN="RIGHT">
+
+<A HREF="index-13.html">Next</A>
+<A HREF="index-11.html">Previous</A>
+<A HREF="index.html#toc12">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
 </BODY>
 </HTML>

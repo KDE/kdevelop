@@ -4,11 +4,11 @@
 <titlepag>
 <title>The KDevelop Programming Handbook
 <subtitle>The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version
-1.1</subtitle></title>
+1.2</subtitle></title>
 <author>
 <name>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 2.1 , July 7, 1999
+<date>Version 1.2 , March 21, 2000
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -2540,12 +2540,12 @@ following lists the according tags for this, taken from the sgml source of this 
 &lt;book&gt;
 &lt;titlepag&gt;
 &lt;title&gt;The KDevelop Programming Handbook
-&lt;subtitle&gt;The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.1
+&lt;subtitle&gt;The User Guide to C++ Application Design for the K Desktop Environment (KDE) with the KDevelop IDE, Version 1.2
 &lt;author&gt;
 &lt;name&gt;Ralf Nolden &lt;htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de"
                                    name = "&lt;Ralf.Nolden@post.rwth-aachen.de&gt;"&gt;
 &lt;inst&gt;The KDevelop Team
-&lt;date&gt;Version 2.1 , July 7, 1999
+&lt;date&gt;Version 1.2 , March 21, 2000
 &lt;abstract&gt;
 This handbook itself is part of the KDevelop Integrated Development Environment
 and is therefore also licensed under the GNU General Public License;

@@ -1,25 +1,31 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
- <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
- <TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Áttekintés</TITLE>
- <LINK HREF="index-6.html" REL=next>
- <LINK HREF="index-4.html" REL=previous>
- <LINK HREF="index.html#toc5" REL=contents>
+<TITLE>KDevelop Felhasználói Kézikönyv -Fordítás alatt: Áttekintés</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
 </HEAD>
-<BODY>
-<A HREF="index-6.html">Tovább</A>
-<A HREF="index-4.html">Vissza</A>
-<A HREF="index.html#toc5">Tartalom</A>
-<HR>
-<H2><A NAME="Overview"></A> <A NAME="s5">5. Áttekintés</A></H2>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-6.html">Next</A>
+<A HREF="index-4.html">Previous</A>
+<A HREF="index.html#toc5">Table of Contents</A>
+</P>
+<H3><A NAME="Overview"></A> <A NAME="s5">5. Áttekintés</A></H3>
 
 <P>Looking at KDevelop, the user interface can be described by it's logical separation: the main window, the treeview and the output
 window, surrounded by the menubar, toolbars and the statusbar. This section describes the purpose of each part of the interface,
 starting by the windows, followed by the bars and the functions they provide.
 <P>
-<H2><A NAME="ss5.1">5.1 A Fõ ablak</A>
-</H2>
+<H3><A NAME="ss5.1">5.1 A Fõ ablak</A>
+</H3>
 
 <P>The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
 window for headers and any other text files like the documentation SGML's, then the C/C++ window for sourcecodes. These are
@@ -30,12 +36,12 @@ of third-party programs can easily be done by a configuration dialog (see
 <A HREF="index-7.html#Working with the Editor">Working with the Editor</A>, and for the Helpbrowser, you should look at section 
 <A HREF="index-6.html#Using the Documentation Browser">Using the Documentation Browser</A>.
 <P>
-<H2><A NAME="ss5.2">5.2 Az Osztályböngészõ és a fájlnézegetõk</A>
-</H2>
+<H3><A NAME="ss5.2">5.2 Az Osztályböngészõ és a fájlnézegetõk</A>
+</H3>
 
 <P>
 <P>
-<H3>The Class Viewer</H3>
+<H4>The Class Viewer</H4>
 
 <P>The Class Viewer (CV) shows the classes of your project as well as global functions and variables.  Opening the tree will show
 all member functions and members with symbols for attributes (private, protected and public, signals and slots), so you can see the
@@ -46,7 +52,7 @@ the cursor at the line the element is declarated.       The classviewer also pro
 see 
 <A HREF="index-10.html#The Class Browser">The Class Browser</A> for more detailed information.
 <P>
-<H3>The Logical File Viewer</H3>
+<H4>The Logical File Viewer</H4>
 
 <P>The Logical File Viewer (LFV) allows sorting files by filters in groups. Individual groups can be added by the properties
 entry of the project menu or by a right click on the tree items. This allows a more specialized search for files that you want to
@@ -54,20 +60,20 @@ access quickly, in the first place only showing project-included files. Accordin
 when selected. You will like the LFV for things like selecting pixmaps- this will start KIconEdit (if installed on the system) in
 the Tools-window and opens the chosen picture.
 <P>
-<H3>The Real File Viewer</H3>
+<H4>The Real File Viewer</H4>
 
 <P>The Real File Viewer (RFV) shows the project directory tree with all files, so you can edit non-project files or files hidden by
 the LFV like configure.in and Makefiles.
 Popup-menus also provide functions like adding or removing files to the current project.
 <P>
-<H3>The Documentation Tree</H3>
+<H4>The Documentation Tree</H4>
 
 <P>The Documentation Tree (DOC) displays all available HTML-based documentation that is configured as books. Selecting a book will
 open the first page in the Browser window. Also, a popup-menu provides personal configuration for additional HTML-based
 documentation packages.
 <P>
-<H2><A NAME="ss5.3">5.3 A Kimeneti ablak</A>
-</H2>
+<H3><A NAME="ss5.3">5.3 A Kimeneti ablak</A>
+</H3>
 
 <P>The Output window is separated as well into a messages window, a stdin/stdout
 window and a stderr window for the following necessities:
@@ -81,12 +87,12 @@ produces. This is useful for testing purposes. The Output window is programmed t
 such as make or a terminal application.</LI>
 </UL>
 <P>
-<H2><A NAME="ss5.4">5.4 Menubar Commands</A>
-</H2>
+<H3><A NAME="ss5.4">5.4 Menubar Commands</A>
+</H3>
 
 <P>
 <P>
-<H3>File Management and Printing</H3>
+<H4>File Management and Printing</H4>
 
 <P>This section covers the functions that KDevelop provides about files; accessed via the File-menu in the menubar or by the
 according icons in the toolbar:
@@ -117,7 +123,7 @@ lpr<P>
 </UL>
 <P>
 <P>
-<H3>Editing Files</H3>
+<H4>Editing Files</H4>
 
 <P>
 <!--
@@ -170,7 +176,7 @@ becomes selected.<P>
 </UL>
 <P>
 <P>
-<H3>View Configuration</H3>
+<H4>View Configuration</H4>
 
 <P>
 <!--
@@ -204,7 +210,7 @@ RFV and DOC-tree.<P>
 </UL>
 <P>
 <P>
-<H3>Creating and Maintaining Projects</H3>
+<H4>Creating and Maintaining Projects</H4>
 
 <P>
 <!--
@@ -266,7 +272,7 @@ release with optimization.<P>
 </UL>
 <P>
 <P>
-<H3>Building Projects</H3>
+<H4>Building Projects</H4>
 
 <P>
 <!--
@@ -311,7 +317,7 @@ Configure again.<P>
 </UL>
 <P>
 <P>
-<H3>Calling Tools</H3>
+<H4>Calling Tools</H4>
 
 <P>
 <!--
@@ -325,7 +331,7 @@ see
 <A HREF="index-14.html#Configuring the ">Configuring the </A>
 Tools" Menu" name="Configuring the "Tools" Menu">.
 <P>
-<H3>Changing KDevelop's settings</H3>
+<H4>Changing KDevelop's settings</H4>
 
 <P>
 <!--
@@ -363,7 +369,7 @@ key-configuration and the Documentation settings. The Documentation settings als
 HTML-library documentation and the rebuilding of the search index for the Helpbrowser.</LI>
 </UL>
 <P>
-<H3>The Window Menu</H3>
+<H4>The Window Menu</H4>
 
 <P>
 <!--
@@ -373,7 +379,7 @@ HTML-library documentation and the rebuilding of the search index for the Helpbr
 The Window menu contains a list with all currently open files. This allows a quick switch to another file you're currently working
 on.
 <P>
-<H3>Managing Bookmarks</H3>
+<H4>Managing Bookmarks</H4>
 
 <P>
 <!--
@@ -402,7 +408,7 @@ Header-Window.</LI>
 <LI><B>Browser Window</B> Contains the browser bookmarks. Selecting a bookmark will open the browser with the selected page.</LI>
 </UL>
 <P>
-<H3>Online Help</H3>
+<H4>Online Help</H4>
 
 <P>
 <!--
@@ -488,14 +494,14 @@ HTML-output generated by KSgml2Html
 email-addresses as well as reference to the licensing of KDevelop.</LI>
 </UL>
 <P>
-<H2><A NAME="ss5.5">5.5 Toolbar Items</A>
-</H2>
+<H3><A NAME="ss5.5">5.5 Toolbar Items</A>
+</H3>
 
 <P>KDevelop provides quick access to a various set of commands by it's toolbars. These are the standard and the browser toolbar; in
 dialog editor mode only the standard toolbar is visible. Both can be en-/disabled by the according menu entries in the "View" menu; also
 dragged out of the main window and replaced on each side of the working area.
 <P>
-<H3>The Standard Toolbar</H3>
+<H4>The Standard Toolbar</H4>
 
 <P>The standard toolbar provides quick access to the most recently used functions for file processing and editing as well as building your
 application. The buttons execute the following commands from left to right:
@@ -551,7 +557,7 @@ button.</LI>
 <LI>What's this..? help button - changes the cursor to a question arrow and lets you get information about GUI components of KDevelop</LI>
 </UL>
 <P>
-<H3>The Browser Toolbar</H3>
+<H4>The Browser Toolbar</H4>
 
 <P>The browser toolbar is another toolbar that provides a lot of useful commands for browsing files and the documentation. The
 toolbar contains:
@@ -577,15 +583,15 @@ history.</LI>
 <LI>Search for Help on... - opens the the Search for Help on.. dialog to let you enter a keyword to search in the documentation</LI>
 </UL>
 <P>
-<H2><A NAME="ss5.6">5.6 Billentyûkombinációk</A>
-</H2>
+<H3><A NAME="ss5.6">5.6 Billentyûkombinációk</A>
+</H3>
 
 <P>This section handles the predefined as well as the standard values for configurable keyboard commands used in the KDevelop IDE.
 You should see section 
 <A HREF="index-14.html#Changing Keyboard Shortcuts">Changing Keyboard Shortcuts</A> for a detailed explanation how
 to change assigned values to commands.
 <P>
-<H3>Shortcuts for Text Processing</H3>
+<H4>Shortcuts for Text Processing</H4>
 
 <P>
 <!--
@@ -594,7 +600,7 @@ Keyboard Shortcuts
 <!--
 Shortcuts
 -->
-<H3>Cursor Movements</H3>
+<H4>Cursor Movements</H4>
 
 <P>
 <HR>
@@ -615,7 +621,7 @@ to the end of the current file                   CTRL+PageDown
 <HR>
 <P>
 <P>
-<H3>Text Selections</H3>
+<H4>Text Selections</H4>
 
 <P>
 <HR>
@@ -636,7 +642,7 @@ to the end of the current file                   CTRL+SHIFT+PageDown
 <HR>
 <P>
 <P>
-<H3>Inserting and Copying Text, Tabulators</H3>
+<H4>Inserting and Copying Text, Tabulators</H4>
 
 <P>
 <HR>
@@ -654,7 +660,7 @@ tabulator                                        TAB
 <HR>
 <P>
 <P>
-<H3>Deleting Text</H3>
+<H4>Deleting Text</H4>
 
 <P>
 <HR>
@@ -666,7 +672,7 @@ delete selected text                             Select text, then Backspace or 
 <HR>
 <P>
 <P>
-<H3>Searching Text within the Editor</H3>
+<H4>Searching Text within the Editor</H4>
 
 <P>
 <HR>
@@ -685,7 +691,7 @@ locate previous error                            SHIFT+F4
 <HR>
 <P>
 <P>
-<H3>Searching Text with the Documentation Browser</H3>
+<H4>Searching Text with the Documentation Browser</H4>
 
 <P>
 <HR>
@@ -699,7 +705,7 @@ search selected browser text within project                      SHIFT+F2
 <HR>
 <P>
 <P>
-<H3>Browser Shortcuts</H3>
+<H4>Browser Shortcuts</H4>
 
 <P>
 <HR>
@@ -710,7 +716,7 @@ next page                                        ALT+ Right Arrow
 <HR>
 <P>
 <P>
-<H3>Managing Bookmarks</H3>
+<H4>Managing Bookmarks</H4>
 
 <P>
 <HR>
@@ -721,7 +727,7 @@ clear bookmark list                              CTRL+ALT+C
 <HR>
 <P>     
 <P>
-<H3>Shortcuts for Toolbar Symbols</H3>
+<H4>Shortcuts for Toolbar Symbols</H4>
 
 <P>
 <HR>
@@ -746,12 +752,12 @@ Symbol "Search Marked Text"                      F2
 <HR>
 <P>
 <P>
-<H3>Window Management</H3>
+<H4>Window Management</H4>
 
 <P>To switch to a certain window, press ALT plus the underlined letter in the window title, e.g. Tools would be Alt+T
 <P>
 <P>
-<H3>Shortcuts to Compilation Processes</H3>
+<H4>Shortcuts to Compilation Processes</H4>
 
 <P>
 <HR>
@@ -764,9 +770,17 @@ Stop the current process                         F10
 </PRE>
 <HR>
 <P>
-<HR>
-<A HREF="index-6.html">Tovább</A>
-<A HREF="index-4.html">Vissza</A>
-<A HREF="index.html#toc5">Tartalom</A>
+<P ALIGN="RIGHT">
+
+<A HREF="index-6.html">Next</A>
+<A HREF="index-4.html">Previous</A>
+<A HREF="index.html#toc5">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
 </BODY>
 </HTML>
