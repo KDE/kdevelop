@@ -21,6 +21,7 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+#include <kdeversion.h>
 #include <kregexp.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -75,7 +76,11 @@ void RegexpTestDialog::checkQRegExp()
     QRegExp rx( pattern_edit->text() );
     rx.setMinimal( qregexp_min_button->isChecked() );
     if ( !rx.isValid() ) {
+#if (KDE_VERSION > 308)
 	success_label->setText( rx.errorString() );
+#else
+	success_label->setText( i18n("Error compiling the regular expression.") );
+#endif
 	return;
     }
     if ( rx.search( teststring_edit->text() ) < 0 ) {
@@ -83,7 +88,12 @@ void RegexpTestDialog::checkQRegExp()
 	return;
     }
     success_label->setText( i18n("Successfully matched") );
-    for ( int i = 0; i < rx.numCaptures(); ++i ) {
+#if (KDE_VERSION > 308)
+    int numCaptures = rx.numCaptures();
+#else
+    int numCaptures = 10;
+#endif
+    for ( int i = 0; i < numCaptures; ++i ) {
 	new QListViewItem( subgroups_listview, QString::number( i ), rx.cap( i ) );
     }
 }
