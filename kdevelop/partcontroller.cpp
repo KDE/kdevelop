@@ -319,5 +319,8 @@ void PartController::clearExecutionPoint()
 {
 }
 
+void PartController::setEncoding(const QString &encoding)
+{
+}
 
 #include "partcontroller.moc"

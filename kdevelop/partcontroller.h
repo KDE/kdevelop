@@ -53,6 +53,7 @@ public:
   void gotoExecutionPoint(const KURL &url, int lineNum=-1);
   void clearExecutionPoint();
 
+  void setEncoding(const QString &encoding);
 
 public slots:
 

@@ -482,7 +482,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
                     type = getTypeOfMethod( pThis, e1 );
                 }
                 if( type.isEmpty() ){
-                    type = getTypeOfMethod( &API::getInstance()->classStore()->globalContainer,
+                    type = getTypeOfMethod( API::getInstance()->classStore()->globalScope(),
                                             e1 );
                 }
             }
@@ -497,7 +497,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
                     type = getTypeOfAttribute( pThis, e1 );
                 }
                 if( type.isEmpty() ){
-                    type = getTypeOfAttribute( &API::getInstance()->classStore()->globalContainer,
+                    type = getTypeOfAttribute( API::getInstance()->classStore()->globalScope(),
                                                e1 );
                 }
             }
@@ -507,7 +507,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
     type = purify( type );
     ParsedContainer* pContainer = sigma->getClassByName( type );
     if( !pContainer ){
-        pContainer = sigma->globalContainer.getStructByName( type );
+        pContainer = sigma->globalScope()->getStructByName( type );
         kdDebug() << "is a struct??" << endl;
     }
     kdDebug() << "pContainer = " << pContainer << endl;
@@ -527,13 +527,13 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
             type = getTypeOfMethod( pContainer, e );
             pContainer = sigma->getClassByName( type );
             if( !pContainer ){
-                pContainer = sigma->globalContainer.getStructByName( type );
+                pContainer = sigma->globalScope()->getStructByName( type );
             }
         } else {
             type = getTypeOfAttribute( pContainer, e );
             pContainer = sigma->getClassByName( type );
             if( !pContainer ){
-                pContainer = sigma->globalContainer.getStructByName( type );
+                pContainer = sigma->globalScope()->getStructByName( type );
             }
         }
     }
@@ -618,7 +618,7 @@ QValueList<KTextEditor::CompletionEntry> KDevCodeCompletion::getEntryListForClas
 
     ParsedContainer* pContainer = API::getInstance()->classStore()->getClassByName( strClass );
     if( !pContainer ){
-        pContainer = API::getInstance()->classStore()->globalContainer.getStructByName( strClass );
+        pContainer = API::getInstance()->classStore()->globalScope()->getStructByName( strClass );
     }
 
     if ( pContainer )
@@ -873,7 +873,7 @@ void KDevCodeCompletion::getParentMethodListForClass( ParsedClass* pClass,
 
 QStringList KDevCodeCompletion::getFunctionList( QString strMethod )
 {
-    ParsedScopeContainer* pScope = &API::getInstance()->classStore()->globalContainer;
+    ParsedScopeContainer* pScope = API::getInstance()->classStore()->globalScope();
     QStringList functionList;
     QValueList<ParsedMethod*> pMethodList;
 

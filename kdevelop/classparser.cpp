@@ -240,8 +240,8 @@ void CClassParser::fillInParsedStruct( ParsedContainer *aContainer )
     aContainer->addStruct( aStruct );
 
     // Always add structs to the global container.
-    if( aContainer != &store->globalContainer )
-      store->globalContainer.addStruct( aStruct );
+    if( aContainer != store->globalScope() )
+      store->globalScope()->addStruct( aStruct );
 
   }
 }
@@ -2398,9 +2398,9 @@ void CClassParser::parseToplevel()
     declStart = getLineno();
 
     if( isGenericLexem() )
-      parseGenericLexem( &store->globalContainer );
+      parseGenericLexem( store->globalScope() );
     else
-      parseTopLevelLexem( &store->globalContainer );
+      parseTopLevelLexem( store->globalScope() );
 
   	kapp->processEvents(500);
     getNextLexem();

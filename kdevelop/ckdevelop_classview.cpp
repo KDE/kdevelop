@@ -777,7 +777,7 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
       }
       break;
     case THGLOBAL_FUNCTION:
-      aMethod = API::getInstance()->classStore()->globalContainer.getMethodByNameAndArg( itemName );
+      aMethod = API::getInstance()->classStore()->globalScope()->getMethodByNameAndArg( itemName );
       break;
     case THCLASS:
       switchToFile( aContainer->definedInFile(), aContainer->definedOnLine() );
@@ -878,11 +878,11 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
       break;
     case THGLOBAL_FUNCTION:
     case THGLOBAL_VARIABLE:
-      aAttr = API::getInstance()->classStore()->globalContainer.getMethodByNameAndArg( itemName );
+      aAttr = API::getInstance()->classStore()->globalScope()->getMethodByNameAndArg( itemName );
       if(!aAttr)
-        aAttr = API::getInstance()->classStore()->globalContainer.getAttributeByName( itemName );
+        aAttr = API::getInstance()->classStore()->globalScope()->getAttributeByName( itemName );
       if(!aAttr)
-        aStruct = API::getInstance()->classStore()->globalContainer.getStructByName( itemName );
+        aStruct = API::getInstance()->classStore()->globalScope()->getStructByName( itemName );
       break;
     default:
       debug( "Unknown type %d in CVGotoDeclaration.", itemType );
@@ -992,7 +992,7 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
   lb->setAutoUpdate( false );
 
   if((classCombo->currentText()==i18n("(Globals)"))){
-    QValueList<ParsedMethod*> globalmeth=API::getInstance()->classStore()->globalContainer.getSortedMethodList( );
+    QValueList<ParsedMethod*> globalmeth=API::getInstance()->classStore()->globalScope()->getSortedMethodList( );
     QValueList<ParsedMethod*>::ConstIterator globalmethit;
     for (globalmethit = globalmeth.begin(); globalmethit != globalmeth.end(); ++globalmethit)
       {
@@ -1000,7 +1000,7 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
         methodCombo->insertItem(SmallIcon("CVglobal_meth"), str );
         method_comp->addItem(str);
       }
-    QValueList<ParsedAttribute*> globalattr=API::getInstance()->classStore()->globalContainer.getSortedAttributeList( );
+    QValueList<ParsedAttribute*> globalattr=API::getInstance()->classStore()->globalScope()->getSortedAttributeList( );
     QValueList<ParsedAttribute*>::ConstIterator  globalattrit;
     for (globalattrit = globalattr.begin(); globalattrit != globalattr.end(); ++globalattrit)
       {
@@ -1008,7 +1008,7 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
         methodCombo->insertItem(SmallIcon("CVglobal_var"), str );
         method_comp->addItem(str);
       }
-    QValueList<ParsedStruct*> globalstruct=API::getInstance()->classStore()->globalContainer.getSortedStructList( );
+    QValueList<ParsedStruct*> globalstruct=API::getInstance()->classStore()->globalScope()->getSortedStructList( );
     QValueList<ParsedStruct*>::ConstIterator globalstructit;
     for (globalstructit = globalstruct.begin(); globalstructit != globalstruct.end(); ++globalstructit)
       {
@@ -1115,10 +1115,10 @@ ParsedContainer *CKDevelop::CVGetContainer( const char *containerPath,
         CVClassSelected( containerPath );
       break;
     case THSTRUCT:
-      aContainer = API::getInstance()->classStore()->globalContainer.getStructByName( containerPath );
+      aContainer = API::getInstance()->classStore()->globalScope()->getStructByName( containerPath );
       break;
     case THSCOPE:
-      aContainer = API::getInstance()->classStore()->globalContainer.getScopeByName( containerPath );
+      aContainer = API::getInstance()->classStore()->globalScope()->getScopeByName( containerPath );
       break;
     default:
       debug( "Didn't find class/struct/scope %s[%d]", containerPath, containerType );

@@ -463,20 +463,20 @@ void CClassView::refresh()
 
   // Add global namespaces
   item = treeH->addItem( i18n( "Namespaces" ), THFOLDER, globalsItem );
-  scopeList = store->globalContainer.getSortedScopeList();
+  scopeList = store->globalScope()->getSortedScopeList();
   ((CClassTreeHandler *)treeH)->addScopes( scopeList, item );
   item->sortChildItems(0,true);
 
   // Add global Structures
   item = treeH->addItem( i18n( "Structures" ), THFOLDER, globalsItem );
-  structList = store->getSortedStructList();
+  structList = store->globalScope()->getSortedStructList();
   ((CClassTreeHandler *)treeH)->addGlobalStructs( structList, item );
   item->sortChildItems(0,true);
 
   // Add global functions
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Functions" ), THFOLDER, globalsItem );
-  methodList = store->globalContainer.getSortedMethodList();
+  methodList = store->globalScope()->getSortedMethodList();
   kdDebug() << "Got " << methodList.count() << " methods" << endl;
   ((CClassTreeHandler *)treeH)->addGlobalFunctions( methodList, item );
   item->sortChildItems(0,true);
@@ -484,7 +484,7 @@ void CClassView::refresh()
   // Add global variables
   treeH->setLastItem( item );
   item = treeH->addItem( i18n( "Variables" ), THFOLDER, globalsItem );
-  attributeList = store->globalContainer.getSortedAttributeList();
+  attributeList = store->globalScope()->getSortedAttributeList();
   ((CClassTreeHandler *)treeH)->addGlobalVariables( attributeList, item );
   item->sortChildItems(0,true);
 
@@ -1141,7 +1141,7 @@ bool CClassView::validClassDecl( const char *className,
     if( !retVal )
     {
       str = i18n("The struct %1 couldn't be found.").arg(className == NULL ? "" : className);
-      retVal = store->hasStruct( className );
+      retVal = store->globalScope()->hasStruct( className );
     }
   }
 
