@@ -1,3 +1,7 @@
+2002-12-16 F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: now Partloader loads editor part exactly as set in common Gideon editor settings
+    * this makes the Kate editor now also availabe for the KDE-3.0.x-compiled Gideon.
+
 2002-12-15 Harald Fernengel <harry@kdevelop.org>
     * added new RMB menu item for text documents: difference to saved file
       that will show you the modifications since your last save.
