@@ -535,7 +535,15 @@ void CClassView::slotViewDeclaration( const char *parentPath,
  *-----------------------------------------------------------------*/
 CParsedClass *CClassView::getCurrentClass()
 {
-  return store->getClassByName( currentItem()->text(0) );
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 parentType, itemType );
+  return store->getClassByName( parentPath );
 }
 
 
@@ -974,7 +982,16 @@ void CClassView::slotClassViewSelected()
 
 void CClassView::slotMethodNew()
 {
-  emit signalAddMethod( currentItem()->text( 0 ) );
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 parentType, itemType );
+  if (itemType==THCLASS)
+   emit signalAddMethod( parentPath );
 }
 
 void CClassView::slotMethodDelete()
@@ -993,7 +1010,16 @@ void CClassView::slotMethodDelete()
 
 void CClassView::slotAttributeNew()
 {
-  emit signalAddAttribute( currentItem()->text( 0 ) );
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 parentType, itemType );
+  if (itemType==THCLASS)
+   emit signalAddAttribute( parentPath );
 }
 
 void CClassView::slotAttributeDelete()
