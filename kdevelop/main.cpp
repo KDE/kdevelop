@@ -16,6 +16,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "ckdevelop.h"
 #include "ckdevinstall.h"
 
@@ -25,6 +29,9 @@
 #include <kcmdlineargs.h>
 #include <kglobal.h>
 #include <klocale.h>
+
+static const char *description =
+        I18N_NOOP("The KDevelop C/C++ Integrated Development Environment");
 
 static KCmdLineOptions options[] =
 {
@@ -36,21 +43,21 @@ static KCmdLineOptions options[] =
 int main(int argc, char* argv[])
 {
   KAboutData aboutData( "kdevelop",
-                              I18N_NOOP("KDevelop"),
-                              "1.4",
-                              I18N_NOOP("The KDevelop C/C++ Integrated Development Environment"),
-                              KAboutData::License_GPL,
-                              "(c) 1998-2001, The KDevelop Team",
-                              I18N_NOOP("The KDevelop C/C++ IDE - a success story "
-                                    "in the world of free software since 1998.\n\n"
-                                    "Think about joining our project to contribute "
-                                    "and enhance the product you are using for your\n"
-                                    "everyday work - or think about writing a KDE "
-                                    "application that will contribute to the KDE project.\n\n"
-                                    "For questions about this product, its usage and license issues,\n"
-                                    "please contact the KDE project (http://www.kde.org) or any \n"
-                                    "of the team officials in the Authors section."),
-                                    "http://www.kdevelop.org"  );
+                        I18N_NOOP("KDevelop"),
+                        VERSION,
+                        description,
+                        KAboutData::License_GPL,
+                        "(c) 1998-2001, The KDevelop Team",
+                        I18N_NOOP("The KDevelop C/C++ IDE - a success story "
+                                  "in the world of free software since 1998.\n\n"
+                                  "Think about joining our project to contribute "
+                                  "and enhance the product you are using for your\n"
+                                  "everyday work - or think about writing a KDE "
+                                  "application that will contribute to the KDE project.\n\n"
+                                  "For questions about this product, its usage and license issues,\n"
+                                  "please contact the KDE project (http://www.kde.org) or any \n"
+                                  "of the team officials in the Authors section."),
+                                  "http://www.kdevelop.org"  );
 
   aboutData.addAuthor("Sandy Meier",I18N_NOOP("Maintainer"), "smeier@kdevelop.org");
   aboutData.addAuthor("Ralf Nolden",I18N_NOOP("Configuration Functionality,"

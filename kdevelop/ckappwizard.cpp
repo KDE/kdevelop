@@ -2078,7 +2078,7 @@ void CKAppWizard::slotProcessExited() {
     because this removes "entries.XXXXXX", which is a temporary file
   */
   if (vsBox->currentItem() != 0) {
-    prj_dir = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/";
+    prj_dir = locateLocal("appdata", "kdeveloptemp") + "/"; // QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/";
     prj_str = prj_dir + namelow + ".kdevprj";
   }
   else {
@@ -2674,7 +2674,7 @@ void CKAppWizard::slotProcessExited() {
   KShellProcess p;
   if (vsBox->currentItem() == 1)
   {
-    dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
+    dir.setCurrent(locateLocal("appdata", "kdeveloptemp"));   //QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
 
     QString message=messageline->text();
     if (!message.isEmpty())
@@ -2694,7 +2694,7 @@ void CKAppWizard::slotProcessExited() {
     project = 0;
 
     dir.setCurrent(QDir::homeDirPath());
-    QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
+    QString deltemp = "rm -r -f " + locateLocal("appdata", "kdeveloptemp");   //QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
     p.clearArguments();
     p << deltemp;
     p.start(KProcess::Block, KProcess::AllOutput);
