@@ -36,18 +36,18 @@ AddGlobalDlg::AddGlobalDlg( QWidget* parent, const char* name, bool modal, WFlag
 
     Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
 
-    buttonHelp = new QPushButton( this, "buttonHelp" );
+    buttonHelp = new KPushButton( this, "buttonHelp" );
     buttonHelp->setAutoDefault( TRUE );
     Layout1->addWidget( buttonHelp );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout1->addItem( spacer );
 
-    buttonOk = new QPushButton( this, "buttonOk" );
+    buttonOk = new KPushButton( this, "buttonOk" );
     buttonOk->setAutoDefault( TRUE );
     buttonOk->setDefault( TRUE );
     Layout1->addWidget( buttonOk );
 
-    buttonCancel = new QPushButton( this, "buttonCancel" );
+    buttonCancel = new KPushButton( this, "buttonCancel" );
     buttonCancel->setAutoDefault( TRUE );
     Layout1->addWidget( buttonCancel );
 
@@ -88,11 +88,11 @@ AddGlobalDlg::~AddGlobalDlg()
 void AddGlobalDlg::languageChange()
 {
     setCaption( tr2i18n( "Select Global File Types" ) );
-    buttonHelp->setText( tr2i18n( "&Help" ) );
+    buttonHelp->setGuiItem( KStdGuiItem::help() );
     buttonHelp->setAccel( QKeySequence( tr2i18n( "F1" ) ) );
-    buttonOk->setText( tr2i18n( "&OK" ) );
+    buttonOk->setGuiItem( KStdGuiItem::ok() );
     buttonOk->setAccel( QKeySequence( QString::null ) );
-    buttonCancel->setText( tr2i18n( "&Cancel" ) );
+    buttonCancel->setGuiItem( KStdGuiItem::cancel() );
     buttonCancel->setAccel( QKeySequence( QString::null ) );
     fcglobal_view->header()->setLabel( 0, tr2i18n( "Type extension:" ) );
     fcglobal_view->header()->setLabel( 1, tr2i18n( "Type name:" ) );

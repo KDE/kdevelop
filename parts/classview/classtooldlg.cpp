@@ -36,7 +36,7 @@ ClassToolDialog::ClassToolDialog( ClassViewPart *part )
 
     class_combo = new QComboBox(false, this);
 
-    QPushButton *close_button = new QPushButton(i18n("&Close"), this);
+    QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
 
     parents_button = new QToolButton(this);
     parents_button->setPixmap( UserIcon("CTparents", KIcon::DefaultState, ClassViewFactory::instance()) );

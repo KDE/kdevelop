@@ -13,10 +13,11 @@
 
 #include <kdialog.h>
 #include <klocale.h>
+#include <kpushbutton.h>
+#include <kstdguiitem.h>
 
 #include <qlayout.h>
 #include <qlistview.h>
-#include <qpushbutton.h>
 #include <qsplitter.h>
 
 #include "kdevlanguagesupport.h"
@@ -36,7 +37,7 @@ HierarchyDialog::HierarchyDialog( ClassViewPart *part )
     namespace_combo = new KComboView(false, 150, this);
 //    namespace_combo->setMinimumWidth(150);
 
-    QPushButton *close_button = new QPushButton(i18n("&Close"), this);
+    QPushButton *close_button = new KPushButton(KStdGuiItem::close(), this);
 
     QSplitter *splitter = new QSplitter(Vertical, this);
     digraph = new DigraphView(splitter, "digraph view");

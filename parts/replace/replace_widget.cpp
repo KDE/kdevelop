@@ -29,6 +29,7 @@
 #include <kdevpartcontroller.h>
 #include <kcombobox.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -63,7 +64,7 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
     QVBoxLayout * layout = new QVBoxLayout( this );
     QHBoxLayout * buttonlayout = new QHBoxLayout( layout );
 
-    _cancel = new QPushButton( i18n("Cancel"), this );
+    _cancel = new KPushButton( KStdGuiItem::cancel(), this );
     _replace = new QPushButton( i18n("Replace"), this );
 
     _cancel->setEnabled( false );
