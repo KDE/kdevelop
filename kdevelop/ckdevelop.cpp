@@ -2776,7 +2776,7 @@ void CKDevelop::slotHelpBugReport(){
 
 void CKDevelop::slotHelpAPI(){
   if(project){
-    QString api_file=prj->getProjectDir() + prj->getProjectName().lower() +  "/api/index.html";
+    QString api_file=prj->getProjectDir() + prj->getProjectName().lower() +  "-api/index.html";
    	//MB
 #ifndef WITH_KDOC2
    	if (doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))

@@ -994,7 +994,7 @@ void CKDevelop::slotProjectAPI(){
   QDir::setCurrent(prj->getProjectDir());
   shell_process.clearArguments();
   shell_process << "kdoc";
-  shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "/api'";
+  shell_process << "-p -d '" + prj->getProjectDir() + prj->getProjectName().lower() +  "-api'";
   if (!link.isEmpty())
       {
           shell_process << ("-L" + idx_path);
