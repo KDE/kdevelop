@@ -1,4 +1,10 @@
-2003-02-12 jbb <jbb@kdevelop.org> 
+2003-02-12  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+        * lib/structure:
+	  - fix: Trie_Impl apply() should apply only to non_empty
+	    components
+          - update docs, planning to take over the world again
+
+2003-02-12 jbb <jbb@kdevelop.org>
     * parts/debugger
     - Sync source with thread patch in kdevelop2.1.x. Some bits were missed
             from a previous merge. This should fix some thread issues.
@@ -12,8 +18,6 @@
         * lib/structure:
           - implemented take(), I wonder why I left it like that
           - fix: size() returns number of components
-	  - fix: Trie_Impl apply() should apply only to non_empty
-	    components
 
 2003-02-11 Mickael Marchand <marchand@kde.org>
 	* parts/svn:
