@@ -87,7 +87,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
-	     this, SLOT(activePartChanged(KParts::Part*)));
+             this, SLOT(activePartChanged(KParts::Part*)));
 
     KAction *action;
 
@@ -127,7 +127,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     withcpp = false;
     if ( args.count() == 1 && args[ 0 ] == "Cpp" )
-	withcpp = true;
+        withcpp = true;
 
     // daniel
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,
@@ -139,16 +139,16 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_pCHWidget = 0;
     QDomElement element = projectDom( )->documentElement( )
                           .namedItem( "cppsupportpart" ).toElement( )
-			  .namedItem( "codecompletion" ).toElement( )
-			  .namedItem( "codehinting" ).toElement( );
+                          .namedItem( "codecompletion" ).toElement( )
+                          .namedItem( "codehinting" ).toElement( );
 
     if( !element.isNull( ) ){
-	if( element.attribute( "enablech" ).toInt( ) ){
-	    if( element.attribute( "selectview" ).toInt( ) )
-		slotEnableCodeHinting( true, false );
-	    else
-		slotEnableCodeHinting( true, true );
-	}
+        if( element.attribute( "enablech" ).toInt( ) ){
+            if( element.attribute( "selectview" ).toInt( ) )
+                slotEnableCodeHinting( true, false );
+            else
+                slotEnableCodeHinting( true, true );
+        }
     } 
 }
 
@@ -172,20 +172,20 @@ void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
 
     connect( w, SIGNAL( enablePersistantClassStore( bool ) ),
-	     this, SLOT( slotEnablePersistantClassStore( bool ) ) );
-	     
+             this, SLOT( slotEnablePersistantClassStore( bool ) ) );
+
     connect( w, SIGNAL( enablePreParsing( bool ) ),
-	     this, SLOT( slotEnablePreParsing( bool ) ) );
-	     
+             this, SLOT( slotEnablePreParsing( bool ) ) );
+
     connect( w, SIGNAL( changedPreParsingPath( ) ),
-	     this, SLOT( slotChangedPreParsingPath( ) ) );
-    
+             this, SLOT( slotChangedPreParsingPath( ) ) );
+
     connect( w, SIGNAL( enableCodeHinting( bool, bool ) ),
-	     this, SLOT( slotEnableCodeHinting( bool, bool ) ) );
-	     
+             this, SLOT( slotEnableCodeHinting( bool, bool ) ) );
+
     connect( w, SIGNAL( enableCodeCompletion( bool ) ),
-	     this, SLOT( slotEnableCodeCompletion( bool ) ) );
-	     
+             this, SLOT( slotEnableCodeCompletion( bool ) ) );
+
 }
 
 
@@ -214,7 +214,7 @@ void
 CppSupportPart::slotEnableCodeCompletion( bool setEnable )
 {
     if( m_pCompletion )
-	m_pCompletion->setEnableCodeCompletion( setEnable );
+        m_pCompletion->setEnableCodeCompletion( setEnable );
 }
 
 
@@ -222,24 +222,24 @@ void
 CppSupportPart::slotEnableCodeHinting( bool setEnable, bool setOutputView )
 {
     if( setEnable == false ){
-	if( m_pCHWidget ){
-	    topLevel( )->removeView( m_pCHWidget );
-	    delete m_pCHWidget;
-	    m_pCHWidget = 0;
-	}
-	return;
+        if( m_pCHWidget ){
+            topLevel( )->removeView( m_pCHWidget );
+            delete m_pCHWidget;
+            m_pCHWidget = 0;
+        }
+        return;
     }
     // enable it
     else {
-	if( m_pCHWidget )
-	    topLevel()->removeView( m_pCHWidget );
-	else
-	    m_pCHWidget = new CppSupportWidget( this );
+        if( m_pCHWidget )
+            topLevel()->removeView( m_pCHWidget );
+        else
+            m_pCHWidget = new CppSupportWidget( this );
 
-	if( setOutputView )
-	    topLevel()->embedOutputView( m_pCHWidget, i18n("Code Hinting"));
-	else
-	    topLevel()->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );	    
+        if( setOutputView )
+            topLevel()->embedOutputView( m_pCHWidget, i18n("Code Hinting"));
+        else
+            topLevel()->embedSelectView( m_pCHWidget, i18n( "Code Hinting" ) );	    
     }
 }
 
@@ -296,10 +296,10 @@ CppSupportPart::projectClosed( )
     bool enablePCS = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepcs" );
 
     if( enablePCS == true ){
-	QString projectFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
-	QString pcsFile = projectFile + pcsFileExt( );
-	if ( !classStore()->storeAll(pcsFile) )
-	    kdDebug(9007) << "EE: can't write file '" << pcsFile << "'" << endl;
+        QString projectFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
+        QString pcsFile = projectFile + pcsFileExt( );
+        if ( !classStore()->storeAll(pcsFile) )
+            kdDebug(9007) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
 
     // todo: save -pp file from new slot
@@ -334,21 +334,21 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (!context->hasType("editor"))
         return;
-    
+
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
     QString str = econtext->currentLine();
     if (str.isEmpty())
         return;
-    
+
     QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
     if (!re.exactMatch(str))
         return;
-    
+
     QString popupstr = re.cap(1);
     m_contextFileName = findHeader(project()->allFiles(), popupstr);
     if (m_contextFileName.isEmpty())
         return;
-    
+
     popup->insertSeparator();
     popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
                        this, SLOT(slotGotoIncludeFile()) );
@@ -359,7 +359,7 @@ void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClas
 {
     if (!fileExtensions().contains(QFileInfo(fileName).extension()))
         return;
-    
+
     store->removeWithReferences(fileName);
     parser->parse(fileName);
 }
@@ -369,7 +369,7 @@ void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClas
 static QStringList reorder(const QStringList &list)
 {
     QStringList headers, others;
-    
+
     QStringList headerExtensions = QStringList::split(",", "h,H,hh,hxx,hpp");
 
     QStringList::ConstIterator it;
@@ -378,7 +378,7 @@ static QStringList reorder(const QStringList &list)
             headers << (*it);
         else
             others << (*it);
-    
+
     return headers + others;
 }
 
@@ -387,25 +387,25 @@ void CppSupportPart::initialParse()
 {
     // For debugging
     showMemUsage();
-    
+
     if( !project( ) ){
-    	// messagebox ?
-	kdDebug( 9007 ) << "No project" << endl;
-	return;
+        // messagebox ?
+        kdDebug( 9007 ) << "No project" << endl;
+        return;
     }
 
     bool enablePCS = DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepcs" );
     bool createProjectPCS = true;
     bool createPreParseCS = true;
     QString pcsFile = project( )->projectDirectory( ) + "/" + project( )->projectName( );
-    
+
     QLabel* label = new QLabel( "", topLevel( )->statusBar( ) );
     label->setMinimumWidth( 600 );
     topLevel( )->statusBar( )->addWidget( label );
     label->show( );    
-    
+
     if( enablePCS == true ){
-        
+
         label->setText( i18n("Wait please - loading classstore-file: %1")
                         .arg(pcsFile + pcsFileExt()) );
         kapp->processEvents();
@@ -416,7 +416,7 @@ void CppSupportPart::initialParse()
                           << pcsFile << pcsFileExt( ) << "'" << endl;
             createProjectPCS = false;
             emit updatedSourceInfo( );
-	} else {
+        } else {
             kdDebug(9007) << "pcs-file: '" << pcsFile << pcsFileExt( ) << "' couldn't be opened" << endl;
         }
 
@@ -431,96 +431,96 @@ void CppSupportPart::initialParse()
         } else {
             kdDebug(9007) << "persistant preparse file: '" << pcsFile << ppFileExt( )
                           << "' couldn't be opened" << endl;
-	}
-        
-	label->setText( i18n("Done") );
-	kapp->restoreOverrideCursor();
-        
+        }
+
+        label->setText( i18n("Done") );
+        kapp->restoreOverrideCursor();
+
     }
 
     if( createProjectPCS ){
-	// pcsFiles don't exist or couldn't be opened - normal procedure
+        // pcsFiles don't exist or couldn't be opened - normal procedure
         kdDebug(9007) << "no persistant classstore - starting to parse" << endl;
-	kapp->setOverrideCursor(waitCursor);
+        kapp->setOverrideCursor(waitCursor);
 
         QStringList files = reorder( project()->allFiles() );
 
         QProgressBar* bar = new QProgressBar( files.count( ), topLevel( )->statusBar( ) );
-	bar->setMinimumWidth( 120 );
+        bar->setMinimumWidth( 120 );
         bar->setCenterIndicator( true );
-	topLevel( )->statusBar( )->addWidget( bar );
+        topLevel( )->statusBar( )->addWidget( bar );
         bar->show( );
 
-	int n = 0;
-	for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ){
-	    bar->setProgress( n++ );
-    	    kapp->processEvents( );
-	    maybeParse( *it, classStore( ), m_pParser );
-	}
+        int n = 0;
+        for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ){
+            bar->setProgress( n++ );
+            kapp->processEvents( );
+            maybeParse( *it, classStore( ), m_pParser );
+        }
 
-	topLevel( )->statusBar( )->removeWidget( bar );
-	delete bar;
+        topLevel( )->statusBar( )->removeWidget( bar );
+        delete bar;
 
-	emit updatedSourceInfo( );
+        emit updatedSourceInfo( );
 
-	kapp->restoreOverrideCursor( );
+        kapp->restoreOverrideCursor( );
     }
 
     // For debugging
     showMemUsage();
 
     if( createPreParseCS ){
-	if( DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" ) == false ) {
+        if( DomUtil::readBoolEntry( *projectDom( ), "/cppsupportpart/classstore/enablepp" ) == false ) {
             delete label;
-	    return;
+            return;
         }
 
-	// ok, from here we're pre-parsing directories
-	kapp->setOverrideCursor( waitCursor );
+        // ok, from here we're pre-parsing directories
+        kapp->setOverrideCursor( waitCursor );
 
-	QDomElement ppDirs = projectDom( )->documentElement( )
-			     .namedItem( "cppsupportpart" ).toElement( )
-			     .namedItem( "classstore" ).toElement( )
-			     .namedItem( "preparsing" ).toElement( )
-			     .firstChild( ).toElement( );	
-	
-	label->setText( i18n( "Preparsing" ) );
+        QDomElement ppDirs = projectDom( )->documentElement( )
+                             .namedItem( "cppsupportpart" ).toElement( )
+                             .namedItem( "classstore" ).toElement( )
+                             .namedItem( "preparsing" ).toElement( )
+                             .firstChild( ).toElement( );	
 
-	QProgressBar* bar = new QProgressBar( 0, topLevel( )->statusBar( ) );
-	bar->setMinimumWidth( 120 );
+        label->setText( i18n( "Preparsing" ) );
+
+        QProgressBar* bar = new QProgressBar( 0, topLevel( )->statusBar( ) );
+        bar->setMinimumWidth( 120 );
         bar->setCenterIndicator( true );
-	topLevel( )->statusBar( )->addWidget( bar );
+        topLevel( )->statusBar( )->addWidget( bar );
         bar->show( );
 
-	QDir    dirObject;
-	QString startDir = dirObject.absPath( ); // should be the project dir ?
+        QDir    dirObject;
+        QString startDir = dirObject.absPath( ); // should be the project dir ?
 
         // going through the dirs stored in the projectDOM
-	while( !ppDirs.isNull( ) ){
-	    if( ppDirs.tagName( ) == "directory" )
-		parseDirectory( ppDirs.attribute( "dir" ), ppDirs.attribute( "parsesubdir" ) == "Yes",
+        while( !ppDirs.isNull( ) ){
+            if( ppDirs.tagName( ) == "directory" )
+                parseDirectory( ppDirs.attribute( "dir" ), ppDirs.attribute( "parsesubdir" ) == "Yes",
                                 bar, label );
-	    else
-		cerr << "ClassStoreOptionsWidget::ClassStoreOptionsWidget unknown tag: '"
+            else
+                cerr << "ClassStoreOptionsWidget::ClassStoreOptionsWidget unknown tag: '"
                      << ppDirs.tagName( ) << "'" << endl;
 
-	    ppDirs = ppDirs.nextSibling( ).toElement( );
-	}
-	dirObject.cd( startDir );
-	
-	label->setText( i18n( "Saving ccClassStore: " ) + pcsFile + ppFileExt( ) );
-	if ( !ccClassStore()->storeAll(pcsFile + ppFileExt()) )
-	    kdDebug(9007) << "EE: saving ccclassstore not successful!" << endl;
+            ppDirs = ppDirs.nextSibling( ).toElement( );
+        }
+        dirObject.cd( startDir );
 
-	topLevel( )->statusBar( )->removeWidget( bar );
-	delete bar;
+        label->setText( i18n( "Saving ccClassStore: " ) + pcsFile + ppFileExt( ) );
+        if ( !ccClassStore()->storeAll(pcsFile + ppFileExt()) )
+            kdDebug(9007) << "EE: saving ccclassstore not successful!" << endl;
 
-	kapp->restoreOverrideCursor( );
+        topLevel( )->statusBar( )->removeWidget( bar );
+        delete bar;
+
+        kapp->restoreOverrideCursor( );
     }
 
     topLevel( )->statusBar( )->removeWidget( label );
     delete label;
-    
+
     topLevel( )->statusBar( )->message( i18n( "Done" ), 2000 );
 }
 
@@ -535,17 +535,17 @@ void CppSupportPart::parseDirectory(const QString &startDir, bool withSubDir,
     dirObject.cd( startDir );
 
     if( withSubDir == true ){
-	dirObject.setFilter( QDir::Dirs );
-	const QFileInfoList* list = dirObject.entryInfoList( );
-	QFileInfoListIterator it( *list );
+        dirObject.setFilter( QDir::Dirs );
+        const QFileInfoList* list = dirObject.entryInfoList( );
+        QFileInfoListIterator it( *list );
 
         // if we find a directory we call recursively parseDirectory( )
-	while( ( fi = it.current( ) ) ){
+        while( ( fi = it.current( ) ) ){
             // skipping ".", ".." and so all "dot-directories"
-	    if( fi->fileName( ).at( 0 ) != '.' )
-		parseDirectory( fi->dirPath( true ) + "/" + fi->fileName( ), withSubDir, bar, label );
-	    ++it;
-	}
+            if( fi->fileName( ).at( 0 ) != '.' )
+                parseDirectory( fi->dirPath( true ) + "/" + fi->fileName( ), withSubDir, bar, label );
+            ++it;
+        }
 
     }
 
@@ -558,10 +558,10 @@ void CppSupportPart::parseDirectory(const QString &startDir, bool withSubDir,
     int n = 0;
 
     while( ( fi = it.current( ) ) ){
-	bar->setProgress( n++ );
-	label->setText( i18n( "Currently parsing: '" ) + fi->filePath( ) );
-	maybeParse( fi->filePath( ), ccClassStore ( ), m_pCCParser );
-	++it;
+        bar->setProgress( n++ );
+        label->setText( i18n( "Currently parsing: '" ) + fi->filePath( ) );
+        maybeParse( fi->filePath( ), ccClassStore ( ), m_pCCParser );
+        ++it;
     }
 }
 
@@ -590,7 +590,7 @@ void CppSupportPart::savedFile(const QString &fileName)
     kdDebug(9007) << "savedFile()" << endl;
 
     if (project()->allFiles().contains(fileName)) {
-	// changed - daniel
+        // changed - daniel
         maybeParse( fileName, classStore( ), m_pParser );
         emit updatedSourceInfo();
     }
@@ -621,7 +621,7 @@ void CppSupportPart::slotSwitchHeader()
     } else if (QStringList::split(',', "c,cc,cpp,cxx,C,m,mm,M").contains(ext)) {
         candidates << (base + "h");
         candidates << (base + "hxx");
-	candidates << (base + "hpp");
+        candidates << (base + "hpp");
     }
 
     QStringList::ConstIterator it;
@@ -772,7 +772,7 @@ void CppSupportPart::addMethod(const QString &className)
         editiface->insertLine(atLine, cppCode);
     else
         kdDebug(9007) << "no edit" << endl;
-    
+
     delete pm;
 }
 
