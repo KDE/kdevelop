@@ -33,6 +33,17 @@
 class FileSelectorPart;
 class KDevProject;
 
+class KDnDDirOperator : public KDirOperator
+{
+	Q_OBJECT
+
+	public:
+		KDnDDirOperator ( const KURL& urlName = KURL(), QWidget *parent = 0, const char* name = 0 );
+
+	protected:
+		virtual KFileView* createView( QWidget* parent, KFile::FileView view );
+};
+
 
 class FileSelectorWidget : public QWidget
 {
@@ -42,7 +53,7 @@ public:
     FileSelectorWidget(FileSelectorPart *part);
     ~FileSelectorWidget();
 
-	KDirOperator * dirOperator(){return dir;}
+	KDnDDirOperator * dirOperator(){return dir;}
 
 public slots:
 	void slotFilterChange(const QString&);
@@ -69,7 +80,7 @@ private:
 	KURLComboBox *cmbPath;
 	KHistoryCombo * filter;
 	QLabel* filterIcon;
-	KDirOperator * dir;
+	KDnDDirOperator * dir;
 	QPushButton *home, *up, *back, *forward, *cfdir;
 
     QArray<int> m_popupIds;

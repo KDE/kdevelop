@@ -40,7 +40,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 	connect(core(),SIGNAL(projectOpened()),this,SLOT(slotProjectOpened()));
 
     m_filetree->setCaption(i18n("File Selector"));
-	topLevel()->embedSelectView(m_filetree, i18n("FileSel"));
+	topLevel()->embedSelectView(m_filetree, i18n("File Selector"));
 
 }
 

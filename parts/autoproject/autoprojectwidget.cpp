@@ -281,7 +281,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
                                    this, SLOT(slotAddNewFile()), actions, "add new file");
     addExistingFileAction = new KAction(i18n("Add existing file(s)..."), "fileimport", 0,
                                         this, SLOT(slotAddExistingFile()), actions, "add existing file");
-    addIconAction = new KAction(i18n("Add icon..."), "window_new", 0,
+    addIconAction = new KAction(i18n("Add icon..."), "iconadd_kdevelop", 0,
                                 this, SLOT(slotAddIcon()), actions, "add icon");
     buildTargetAction = new KAction(i18n("Build target..."), "launch", 0,
                                     this, SLOT(slotBuildTarget()), actions, "build target");
@@ -610,7 +610,7 @@ void AutoProjectWidget::slotAddSubproject()
 
 void AutoProjectWidget::slotAddExistingSubproject()
 {
-    ImportExistingDialog dlg(m_part, m_shownSubproject,
+    ImportExistingDialog dlg(m_part, this, m_shownSubproject,
                              this, "add existing subprojects");
     dlg.setCaption(i18n("Add existing subprojects to this subproject"));
     dlg.exec();
@@ -689,7 +689,7 @@ void AutoProjectWidget::slotAddExistingFile()
     if (!titem)
         return;
 
-    ImportExistingDialog dlg(m_part, m_shownSubproject, titem,
+    ImportExistingDialog dlg(m_part, this, m_shownSubproject, titem,
                              this, "add existing files");
     dlg.setCaption(i18n("Add existing files to this target"));
     dlg.exec();

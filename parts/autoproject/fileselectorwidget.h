@@ -27,11 +27,26 @@
 #include <kurlcompletion.h>
 #include <kcombobox.h>
 #include <kprotocolinfo.h>
+
+#include <kfileview.h>
+#include <kfileitem.h>
+
 #include <kdiroperator.h>
 
 class AutoProjectPart;
-class TargetItem;
+class SubprojectItem;
 class KFile;
+
+class KDnDDirOperator : public KDirOperator
+{
+	Q_OBJECT
+
+	public:
+		KDnDDirOperator ( const KURL& urlName = KURL(), QWidget *parent = 0, const char* name = 0 );
+
+	protected:
+		virtual KFileView* createView( QWidget* parent, KFile::FileView view );
+};
 
 class FileSelectorWidget : public QWidget
 {
@@ -41,7 +56,7 @@ public:
     FileSelectorWidget(AutoProjectPart* part, KFile::Mode, QWidget* parent = 0, const char* name = 0 );
     ~FileSelectorWidget();
 
-	KDirOperator * dirOperator(){return dir;}
+	KDnDDirOperator * dirOperator(){return dir;}
 
 public slots:
 	void slotFilterChanged(const QString&);
@@ -64,7 +79,7 @@ private:
 	KURLComboBox *cmbPath;
 	KHistoryCombo * filter;
 	QLabel* filterIcon;
-	KDirOperator * dir;
+	KDnDDirOperator * dir;
 	QPushButton *home, *up, *back, *forward;
     AutoProjectPart* m_part;
 

@@ -40,6 +40,31 @@
 #include "fileselector_part.h"
 #include "fileselectorwidget.h"
 
+#include "kfilednddetailview.h"
+#include "kfiledndiconview.h"
+
+KDnDDirOperator::KDnDDirOperator ( const KURL &urlName, QWidget* parent, const char* name ) : KDirOperator ( urlName, parent, name )
+{
+
+}
+
+KFileView* KDnDDirOperator::createView( QWidget* parent, KFile::FileView view )
+{
+    KFileView* new_view = 0L;
+
+    if( (view & KFile::Detail) == KFile::Detail ) {
+		kdDebug ( 9000 ) << "Create drag 'n drop enabled detailed view for file selector" << endl;
+        new_view = new KFileDnDDetailView( parent, "detail view");
+    }
+    else if ((view & KFile::Simple) == KFile::Simple ) {
+		kdDebug ( 9000 ) << "Create drag 'n drop enabled simple view for file selector" << endl;
+        new_view = new KFileDnDIconView( parent, "simple view");
+        new_view->setViewName( i18n("Short View") );
+    }
+
+    return new_view;
+}
+
 
 FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
     : QWidget(0, "file selector widget"), m_popup(0)
@@ -50,6 +75,8 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 	QVBoxLayout* lo = new QVBoxLayout(this);
 
 	QHBox *hlow = new QHBox (this);
+    hlow->setMargin ( 2 );
+    hlow->setSpacing ( 2 );
 	lo->addWidget(hlow);
 
 	home = new QPushButton( hlow );
@@ -68,7 +95,7 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 	// HACK
 	QWidget* spacer = new QWidget(hlow);
 	hlow->setStretchFactor(spacer, 1);
-	hlow->setMaximumHeight(up->height());
+	hlow->setMaximumHeight(home->height());
 
 	cmbPath = new KURLComboBox( KURLComboBox::Directories, true, this, "path combo" );
 	cmbPath->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
@@ -76,7 +103,7 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 	cmbPath->setCompletionObject( cmpl );
 	lo->addWidget(cmbPath);
 
-	dir = new KDirOperator(QString::null, this, "operator");
+	dir = new KDnDDirOperator(QString::null, this, "operator");
 	dir->setView(KFile::Detail);
 	lo->addWidget(dir);
 	lo->setStretchFactor(dir, 2);

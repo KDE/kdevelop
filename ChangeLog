@@ -1,3 +1,10 @@
+2002-06-30 Victor Röder <victor_roeder@gmx.de>
+	* continued the import existing dialog
+		-> ONLY adding existing files works at the moment!
+	* add Björn Sahlström's drag 'n drop support to the FileSelector
+		-> see kfilednd*view.* for details
+	* everything needs a little bit code clean-up, so don't worry :-)
+
 2002-06-28 Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* save and restore the dock mode in IDEAl
 

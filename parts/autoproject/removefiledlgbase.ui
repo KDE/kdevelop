@@ -22,14 +22,14 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>445</width>
-            <height>250</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>446</width>
-            <height>290</height>
+            <width>32767</width>
+            <height>32767</height>
         </size>
     </property>
     <property name="baseSize">
@@ -102,16 +102,42 @@
                             <property name="name">
                                 <cstring>directoryStaticLabel</cstring>
                             </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <bold>1</bold>
+                                </font>
+                            </property>
                             <property name="text">
-                                <string>&lt;b&gt;Directory:&lt;/b</string>
+                                <string>Directory:</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="0">
                             <property name="name">
                                 <cstring>targetStaticLabel</cstring>
                             </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font">
+                                <font>
+                                    <bold>1</bold>
+                                </font>
+                            </property>
                             <property name="text">
-                                <string>&lt;b&gt;Target:&lt;/b&gt;</string>
+                                <string>Target:</string>
                             </property>
                         </widget>
                     </grid>
@@ -125,7 +151,7 @@
             <property name="minimumSize">
                 <size>
                     <width>0</width>
-                    <height>70</height>
+                    <height>0</height>
                 </size>
             </property>
             <property name="maximumSize">

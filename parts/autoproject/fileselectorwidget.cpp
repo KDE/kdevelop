@@ -26,21 +26,51 @@
 #include <kurlcombobox.h>
 #include <kurlcompletion.h>
 #include <kprotocolinfo.h>
-#include <kdiroperator.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kcombobox.h>
 
 #include <kdebug.h>
 
+#include "fileselectorwidget.h"
+#include <kdiroperator.h>
+#include <kcombiview.h>
+#include <kfilepreview.h>
+#include <kfileview.h>
+#include <kfileitem.h>
+#include <kimagefilepreview.h>
+
 #include "autoprojectwidget.h"
 #include "autoprojectpart.h"
 #include "kdevlanguagesupport.h"
-#include "fileselectorwidget.h"
+
+#include "kfilednddetailview.h"
+#include "kfiledndiconview.h"
+
+KDnDDirOperator::KDnDDirOperator ( const KURL &urlName, QWidget* parent, const char* name ) : KDirOperator ( urlName, parent, name )
+{
+
+}
+
+KFileView* KDnDDirOperator::createView( QWidget* parent, KFile::FileView view )
+{
+    KFileView* new_view = 0L;
+
+    if( (view & KFile::Detail) == KFile::Detail ) {
+        new_view = new KFileDnDDetailView( parent, "detail view");
+    }
+    else if ((view & KFile::Simple) == KFile::Simple ) {
+        new_view = new KFileDnDIconView( parent, "simple view");
+        new_view->setViewName( i18n("Short View") );
+    }
+
+    return new_view;
+}
 
 
 FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, QWidget* parent, const char* name ) : QWidget(parent, name)
 {
+    m_part = part;
 
 	// widgets and layout
 	QVBoxLayout* lo = new QVBoxLayout(this);
@@ -72,7 +102,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	cmbPath->setCompletionObject( cmpl );
 	lo->addWidget(cmbPath);
 
-	dir = new KDirOperator(QString::null, this, "operator");
+	dir = new KDnDDirOperator(QString::null, this, "operator");
 	dir->setView(KFile::Simple);
     dir->setMode(mode);
 
@@ -104,8 +134,6 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 
     dirUrlEntered( dir->url() );
 
-    m_part = part;
-
     QStringList list;
 
     /* read the file patterns from the project DOM */
@@ -124,8 +152,6 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
     }
 
     filter->setHistoryItems ( list );
-
-    setDir ( part->project()->projectDirectory() );
 
     dir->rereadDir();
 }
