@@ -599,8 +599,8 @@ void GDBBreakpointWidget::slotAddBlankBreakpoint(int idx)
     if (btr)
     {
         QTableSelection ts;
-    ts.init(btr->row(), 0);
-    ts.expandTo(btr->row(), numCols );
+        ts.init(btr->row(), 0);
+        ts.expandTo(btr->row(), numCols );
         m_table->addSelection(ts);
         m_table->editCell(btr->row(), Location, false);
     }
@@ -633,7 +633,7 @@ void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 
 void GDBBreakpointWidget::slotRowSelected(int row, int col, int, const QPoint &)
 {
-    kdDebug(9012) << "in slotRowSelected row=" << row << endl;
+//    kdDebug(9012) << "in slotRowSelected row=" << row << endl;
     BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
     if (btr)
     {
@@ -651,7 +651,7 @@ void GDBBreakpointWidget::slotRowSelected(int row, int col, int, const QPoint &)
 
 void GDBBreakpointWidget::slotEditRow(int row, int col, const QPoint &)
 {
-    kdDebug(9012) << "in slotEditRow row=" << row << endl;
+//    kdDebug(9012) << "in slotEditRow row=" << row << endl;
     BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
     if (btr)
     {
@@ -664,7 +664,7 @@ void GDBBreakpointWidget::slotEditRow(int row, int col, const QPoint &)
 
 void GDBBreakpointWidget::slotNewValue(int row, int col)
 {
-    kdDebug(9012) << "in slotNewValue row=" << row << endl;
+//    kdDebug(9012) << "in slotNewValue row=" << row << endl;
     BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
 
     if (btr)
@@ -691,8 +691,8 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
         {
             if (bp->location() != m_table->text(btr->row(), Location))
             {
-                kdDebug(9012) << "Old location [" << bp->location() << "]" << endl;
-                kdDebug(9012) << "New location [" << m_table->text(btr->row(), Location) << "]" << endl;
+//                kdDebug(9012) << "Old location [" << bp->location() << "]" << endl;
+//                kdDebug(9012) << "New location [" << m_table->text(btr->row(), Location) << "]" << endl;
                 bp->setActionDie();
                 emit publishBPState(*bp);
                 bp->setPending(true);
@@ -707,8 +707,8 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
         {
             if (bp->conditional() != m_table->text(btr->row(), Condition))
             {
-                kdDebug(9012) << "Old condition [" << bp->conditional() << "]" << endl;
-                kdDebug(9012) << "New condition [" << m_table->text(btr->row(), Condition) << "]" << endl;
+//                kdDebug(9012) << "Old condition [" << bp->conditional() << "]" << endl;
+//                kdDebug(9012) << "New condition [" << m_table->text(btr->row(), Condition) << "]" << endl;
                 bp->setConditional(m_table->text(btr->row(), Condition));
                 bp->setPending(true);
                 bp->setActionModify(true);
@@ -721,8 +721,8 @@ void GDBBreakpointWidget::slotNewValue(int row, int col)
         {
             if (bp->ignoreCount() != m_table->text(btr->row(), IgnoreCount).toInt())
             {
-                kdDebug(9012) << "Old ignoreCount [" << bp->ignoreCount() << "]" << endl;
-                kdDebug(9012) << "New ignoreCount [" << m_table->text(btr->row(), IgnoreCount) << "]" << endl;
+//                kdDebug(9012) << "Old ignoreCount [" << bp->ignoreCount() << "]" << endl;
+//                kdDebug(9012) << "New ignoreCount [" << m_table->text(btr->row(), IgnoreCount) << "]" << endl;
                 bp->setIgnoreCount(m_table->text(btr->row(), IgnoreCount).toInt());
                 bp->setPending(true);
                 bp->setActionModify(true);

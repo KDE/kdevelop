@@ -129,13 +129,12 @@ QString Breakpoint::statusDisplay(int activeFlag) const
     else
     if (s_pending_)
     {
-        status = i18n("Pending");
         if (s_actionAdd_)
-            status += i18n(" add");
+            status = i18n("Pending (add)");
         if (s_actionClear_)
-            status += i18n(" clear");
+            status = i18n("Pending (clear)");
         if (s_actionModify_)
-            status += i18n(" modify");
+            status = i18n("Pending (modify)");
     }
     else
     if (isActive(activeFlag))

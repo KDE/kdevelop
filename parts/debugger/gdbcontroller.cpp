@@ -437,11 +437,24 @@ void GDBController::parseLine(char* buf)
 
     if (strncmp(buf, "Prog", 4) == 0)
     {
-        if ((strncmp(buf, "Program exited", 14) == 0) ||
-                (strncmp(buf, "Program terminated", 18) == 0))
+        if ((strncmp(buf, "Program exited", 14) == 0))
         {
             DBG_DISPLAY("Parsed (exit) <" + QString(buf) + ">");
             programNoApp(QString(buf), false);
+            programHasExited_ = true;   // FIXME - a nasty switch
+            return;
+        }
+
+        if (strncmp(buf, "Program terminated", 18) == 0)
+        {
+            if (stateIsOn(s_core))
+            {
+                destroyCmds();
+                actOnProgramPause(QString(buf));
+            }
+            else
+                programNoApp(QString(buf), false);
+
             programHasExited_ = true;   // FIXME - a nasty switch
             return;
         }
@@ -1344,6 +1357,8 @@ void GDBController::slotStopDebugger()
 void GDBController::slotCoreFile(const QString &coreFile)
 {
     setStateOff(s_silent);
+    setStateOn(s_core);
+
     queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD,
                                 NOTINFOCMD, 0));
     if (stateIsOn(s_viewThreads))

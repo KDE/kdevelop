@@ -31,6 +31,13 @@ High priority tasks!
   - remove the annoying conflict from automatic word completion(abbrevpart)
     and language specific code completion(like the one in cppsupport)
 
+* c++ debugger
+  - Fix "core file" handling
+  - Fix "attach to" handling
+  - breakpoints can disappear at odd times.
+  - when the target program crashes, the debugger can't be started again. (intermittant?)
+  - break on method() - could have multiple methods which require a choice. How to handle this?
+  
 2. KDevelop 2 compatibility
 ---------------------------
 
@@ -88,7 +95,17 @@ Other Issues
   - write a lot more plugins ;) ideas here for which ones
   - sourcenav database and navigation tools
 
-
+* c++ debugger
+  - variable widget
+    . set variable by editing the value in the tree
+    . cast value by editing the type in the tree
+  - disassembly
+    . add breakpoint display
+    . set breakpoint by selecting a line as in the edit window.
+    . allow scrolling of disassembled code about and below current limits.
+    . add source to disassembled code as comments
+    . basically just re-work the whole disassemble window :)
+    
 5. Code refactoring/improvements
 --------------------------------
 

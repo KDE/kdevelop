@@ -781,34 +781,11 @@ void DebuggerPart::slotActivePartChanged( KParts::Part* part )
 
 void DebuggerPart::restorePartialProjectSession(const QDomElement* el)
 {
-//     QDomElement generalEl = el->namedItem("general").toElement();
-//     if (!generalEl.isNull())
-//     {
-//         bool enableFloatingToolBar = bool(generalEl.attribute( "dbgToolbar", "0").toInt());
-//         if (enableFloatingToolBar)
-//         {
-//             floatingToolBar = new DbgToolBar(this, mainWindow()->main());
-//             floatingToolBar->show();
-//         }
-//     }
     gdbBreakpointWidget->restorePartialProjectSession(el);
 }
 
 void DebuggerPart::savePartialProjectSession(QDomElement* el)
 {
-//     QDomDocument domDoc = el->ownerDocument();
-//     if (domDoc.isNull())
-//         return;
-//
-//     if (floatingToolBar)
-//     {
-//         // (hmm...shouldn't this be written to the application config file (gideonrc)?
-//         //  otherwise you would need to set it again and again in every project)
-//         QDomElement generalEl = domDoc.createElement("general");
-//         generalEl.setAttribute("dbgToolbar", true);
-//         el->appendChild(generalEl);
-//     }
-
     gdbBreakpointWidget->savePartialProjectSession(el);
 }
 
