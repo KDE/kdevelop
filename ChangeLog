@@ -5,14 +5,20 @@
 
 1999-11-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Framework for a modularized customization dialog
-
+	
+1999-11-15  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* first try to add splited views, it doesn't work at the moment
+	
 1999-11-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Rewritten and completed the cool new documentation 
 	  tree configurator and restructured DocTreeView
 	* Made the hack for project api and project manual
 	  pages internal; proper signals are emitted now
 	* Made KListView more general
-
+	
+1999-11-10 Sandy Meier    <smeier@rz.uni-potsdam.de>
+	* fixed bug in KWrite, (context menues in the editors are visible again)
+	
 1999-11-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Bug fixed Open Project
 	* Trying to enable builddir != srcdir
