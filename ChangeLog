@@ -1,3 +1,6 @@
+2002-03-15  Harald Fernengel <harry@kdevelop.org>
+    * applied patch from John Birch: removed flickering in output-view, highlight error messages and fix memory leak
+
 2002-03-23  Walter Tasin <tasin@kdevelop.org>
     * applied patch of John Birch
       crash fixing: using external debugger and calling "debug app with arguments"
