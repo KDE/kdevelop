@@ -42,16 +42,20 @@ void UIChooserWidget::load()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
+
   if (config->readEntry("MajorUIMode", "IDEAl") == "IDEAl")
   {
     modeIDEA->setChecked(true);
     return;
   }
 
-  int mdi = config->readNumEntry("MDIMode", 1);
+  int mdi = config->readNumEntry("MDIMode", 3);
 
   switch (mdi)
   {
+  case 1:
+    modeMDI->setChecked(true);
+    break;
   case 2:
     modeTab->setChecked(true);
     break;
@@ -59,7 +63,7 @@ void UIChooserWidget::load()
     modeToplevel->setChecked(true);
     break;
   default:
-    modeMDI->setChecked(true);
+    modeIDEAl->setChecked(true);
     break;
   }
 }
@@ -69,6 +73,7 @@ void UIChooserWidget::save()
 {
   KConfig *config = kapp->config();
   config->setGroup("UI");
+
 
   if (modeIDEA->isChecked())
   {
@@ -82,8 +87,10 @@ void UIChooserWidget::save()
       config->writeEntry("MDIMode", 2);
     else if (modeToplevel->isChecked())
       config->writeEntry("MDIMode", 0);
-    else
+    else if (modeMDI->isChecked())
       config->writeEntry("MDIMode", 1);
+    else
+      config->writeEntry("MDIMode", 3); // KMdi-IDEA
   }
 
   config->sync();
@@ -95,7 +102,11 @@ void UIChooserWidget::accept()
   save();
   Q_ASSERT(m_pMyPart);
   
-  if (modeIDEA->isChecked()) { // immediate switch not supported yet 
+  if (modeIDEA->isChecked()) { // obsolete
+      //no intermediate swich supported  //m_pMyPart->mainWindow()->setUserInterfaceMode("IDEAl");
+  }
+  else if (modeIDEAl->isChecked()) {
+      m_pMyPart->mainWindow()->setUserInterfaceMode("KMDI-IDEAl");
   }
   else if (modeTab->isChecked()) {
       m_pMyPart->mainWindow()->setUserInterfaceMode("TabPage");

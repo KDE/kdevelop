@@ -100,6 +100,8 @@ public slots:
   virtual void switchToChildframeMode();
   /** Reimplemented from KMdiMainFrm to save chosen mode */
   virtual void switchToTabPageMode();
+  /** Reimplemented from KMdiMainFrm to save chosen mode */
+  virtual void switchToIDEAlMode();
 
 
   /** Fills the show-hide menu for the output views */

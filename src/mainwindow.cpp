@@ -762,6 +762,9 @@ void MainWindow::fillWindowMenu()
    bool bTabPageMode = FALSE;
    if (m_mdiMode == KMdi::TabPageMode)
       bTabPageMode = TRUE;
+   bool bIDEAlMode = FALSE;
+   if (m_mdiMode == KMdi::IDEAlMode)
+      bIDEAlMode = TRUE;
 
    bool bNoViewOpened = FALSE;
    if (m_pDocumentViews->isEmpty()) {
@@ -782,7 +785,7 @@ void MainWindow::fillWindowMenu()
       m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
       m_pWindowMenu->setItemEnabled(closeAllOtherId, FALSE);
    }
-   if (!bTabPageMode) {
+   if (!bTabPageMode && !bIDEAlMode) {
       int iconifyId = m_pWindowMenu->insertItem(i18n("&Minimize All"), this, SLOT(iconifyAllViews()));
       m_windowMenus.append(iconifyId);
       if (bNoViewOpened) {
@@ -790,7 +793,7 @@ void MainWindow::fillWindowMenu()
       }
    }
    m_windowMenus.append(m_pWindowMenu->insertSeparator());
-   if (!bTabPageMode) {
+   if (!bTabPageMode && !bIDEAlMode) {
       int placMenuId = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
       m_windowMenus.append(placMenuId);
       m_pPlacingMenu->clear();
@@ -1142,7 +1145,7 @@ void MainWindow::switchToToplevelMode()
 {
   saveMDISettings();
   m_toggleViewbar->setEnabled(true);
-  if (mdiMode() == KMdi::TabPageMode) {
+  if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
   }
   KMdiMainFrm::switchToToplevelMode();
@@ -1152,7 +1155,7 @@ void MainWindow::switchToChildframeMode()
 {
   saveMDISettings();
   m_toggleViewbar->setEnabled(true);
-  if (mdiMode() == KMdi::TabPageMode) {
+  if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
   }
   KMdiMainFrm::switchToChildframeMode();
@@ -1166,6 +1169,16 @@ void MainWindow::switchToTabPageMode()
   }
   m_toggleViewbar->setEnabled(false);
   KMdiMainFrm::switchToTabPageMode();
+}
+
+void MainWindow::switchToIDEAlMode()
+{
+  saveMDISettings();
+  if (isViewTaskBarOn()) {
+      slotToggleViewbar();
+  }
+  m_toggleViewbar->setEnabled(false);
+  KMdiMainFrm::switchToIDEAlMode();
 }
 
 void MainWindow::slotReactToProjectOpened()
@@ -1204,7 +1217,7 @@ void MainWindow::slotRestoreAdditionalViewProperties(const QString& viewName, co
   bool bAttached = (bool) viewEl->attribute( "Attach", "1").toInt();
 
   // restore appearence
-  if ((mdiMode() != KMdi::TabPageMode) && (mdiMode() != KMdi::ToplevelMode)) {
+  if ((mdiMode() != KMdi::TabPageMode) && (mdiMode() != KMdi::ToplevelMode) && (mdiMode() != KMdi::IDEAlMode)) {
     if ((!pMDICover->isAttached()) && (bAttached) ) {
       pMDICover->attach();
     }
@@ -1253,7 +1266,7 @@ void MainWindow::slotSaveAdditionalViewProperties(const QString& viewName, QDomE
   viewEl->setAttribute( "Height", geom.height());
 
   // MDI stuff
-  viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == KMdi::TabPageMode));
+  viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == KMdi::TabPageMode) || (mdiMode() == KMdi::IDEAlMode));
 }
 
 void MainWindow::slotToggleViewbar()
@@ -1272,6 +1285,9 @@ void MainWindow::setUserInterfaceMode(const QString& uiMode)
     }
     else if (uiMode == "Toplevel") {
 	switchToToplevelMode();
+    }
+    else if (uiMode == "KMDI-IDEAl") {
+        switchToIDEAlMode();
     }
 }
 

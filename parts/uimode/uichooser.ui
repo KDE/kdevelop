@@ -73,6 +73,17 @@ A typical example of this user interface mode is Borland Delphi 6.0.</string>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
+                        <cstring>modeIDEAl</cstring>
+                    </property>
+                    <property name="text">
+                        <string>I&amp;DEAl window mode (alpha state!)</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This is a clone of the IDEA user interface, similar to the Tabbed pages mode.</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>modeIDEA</cstring>
                     </property>
                     <property name="text">
