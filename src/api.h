@@ -5,11 +5,18 @@
 #include "kdevapi.h"
 
 
+class ClassStore;
+
+
 class API : public KDevApi
 {
 public:
 
-  virtual KDevPartController *getPartController();
+  virtual KDevPartController *partController();
+  virtual KDevCore *core();
+  virtual ClassStore *classStore();
+  virtual ClassStore *ccClassStore();
+
   
   static void createInstance();
   static API *getInstance();
@@ -25,6 +32,8 @@ protected:
 private:
 
   static API *s_instance;
+
+  ClassStore *m_classStore, *m_ccClassStore;
 
 };
 

@@ -121,7 +121,7 @@ bool ProjectManager::loadProjectFile(const QString &fileName)
     return false;
   }
 
-  API::getInstance()->projectDom = &m_info->m_document;
+  API::getInstance()->setProjectDom(&m_info->m_document);
 
   fin.close();
 
@@ -174,7 +174,7 @@ void ProjectManager::loadProjectPart()
     if (!part)
       return;
 
-    API::getInstance()->project = static_cast<KDevProject*>(part);
+    API::getInstance()->setProject(static_cast<KDevProject*>(part));
     integratePart(part);
   }
   else
@@ -194,7 +194,7 @@ void ProjectManager::loadLanguageSupport()
     if (!part)
       return;
 
-    API::getInstance()->languageSupport = static_cast<KDevLanguageSupport*>(part);
+    API::getInstance()->setLanguageSupport(static_cast<KDevLanguageSupport*>(part));
     integratePart(part);
   }
   else
@@ -271,7 +271,7 @@ void ProjectManager::checkNewService(KService *service)
 
 void ProjectManager::initializeProjectSupport()
 {
-  if (!API::getInstance()->project)
+  if (!API::getInstance()->project())
     return;
 
   QFileInfo fi(m_info->m_fileName);
@@ -279,8 +279,8 @@ void ProjectManager::initializeProjectSupport()
   QString projectName = fi.baseName();
   kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 
-  API::getInstance()->project->openProject(projectDir);
-  API::getInstance()->project->setProjectName(projectName);
+  API::getInstance()->project()->openProject(projectDir);
+  API::getInstance()->project()->setProjectName(projectName);
 
   Core::getInstance()->doEmitProjectOpened();
 }
@@ -306,25 +306,25 @@ void ProjectManager::closeProject()
 
   storePartInfo();
 
-  if (API::getInstance()->project)
+  if (API::getInstance()->project())
   {
     if (!closeProjectSources())
       return;
       
     Core::getInstance()->doEmitProjectClosed();
 
-    API::getInstance()->project->closeProject();
+    API::getInstance()->project()->closeProject();
 
     unloadLocalParts();
     unloadLanguageSupport();
     saveProjectFile();
 
-    removePart(API::getInstance()->project);
-    API::getInstance()->project = 0;
+    removePart(API::getInstance()->project());
+    API::getInstance()->setProject(0);
   }
 
-  API::getInstance()->classStore->wipeout();
-  API::getInstance()->ccClassStore->wipeout();
+  API::getInstance()->classStore()->wipeout();
+  API::getInstance()->ccClassStore()->wipeout();
 
   delete m_info;
   m_info = 0;
@@ -333,7 +333,7 @@ void ProjectManager::closeProject()
 
 bool ProjectManager::closeProjectSources()
 {
-  QStringList sources = API::getInstance()->project->allSourceFiles();
+  QStringList sources = API::getInstance()->project()->allSourceFiles();
   return PartController::getInstance()->closeDocuments(sources);
 }
 
@@ -348,7 +348,7 @@ void ProjectManager::storePartInfo()
   // store the ignore parts to the projectfile
   if (ignorepartsEl.isNull())
   {
-    ignorepartsEl = API::getInstance()->projectDom->createElement("ignoreparts");
+    ignorepartsEl = API::getInstance()->projectDom()->createElement("ignoreparts");
     generalEl.appendChild(ignorepartsEl);
   }
 
@@ -359,8 +359,8 @@ void ProjectManager::storePartInfo()
   QStringList::Iterator ignoreIterator = m_info->m_ignoreParts.begin();
   while (ignoreIterator != m_info->m_ignoreParts.end())
   {
-    QDomElement partEl = API::getInstance()->projectDom->createElement("part");
-    partEl.appendChild(API::getInstance()->projectDom->createTextNode(*ignoreIterator));
+    QDomElement partEl = API::getInstance()->projectDom()->createElement("part");
+    partEl.appendChild(API::getInstance()->projectDom()->createTextNode(*ignoreIterator));
     ignorepartsEl.appendChild(partEl);
     ignoreIterator++;
    }
@@ -368,7 +368,7 @@ void ProjectManager::storePartInfo()
   // store the loaded parts
   if (loadpartsEl.isNull())
   {
-    loadpartsEl = API::getInstance()->projectDom->createElement("loadparts");
+    loadpartsEl = API::getInstance()->projectDom()->createElement("loadparts");
     generalEl.appendChild(loadpartsEl);
   }
 
@@ -379,8 +379,8 @@ void ProjectManager::storePartInfo()
   QStringList::Iterator loadIterator = m_info->m_loadParts.begin();
   while (loadIterator != m_info->m_loadParts.end())
   {
-    QDomElement partEl = API::getInstance()->projectDom->createElement("part");
-    partEl.appendChild(API::getInstance()->projectDom->createTextNode(*loadIterator));
+    QDomElement partEl = API::getInstance()->projectDom()->createElement("part");
+    partEl.appendChild(API::getInstance()->projectDom()->createTextNode(*loadIterator));
     loadpartsEl.appendChild(partEl);
     loadIterator++;
   }
@@ -399,30 +399,30 @@ void ProjectManager::unloadLocalParts()
 
 void ProjectManager::unloadLanguageSupport()
 {
-  if (API::getInstance()->languageSupport)
+  if (API::getInstance()->languageSupport())
   {
-    removePart(API::getInstance()->languageSupport);
-    API::getInstance()->languageSupport = 0;
+    removePart(API::getInstance()->languageSupport());
+    API::getInstance()->setLanguageSupport(0);
   }
 }
 
 
 void ProjectManager::saveProjectFile()
 {
-  if (API::getInstance()->projectDom)
+  if (API::getInstance()->projectDom())
   {
     QFile fout(m_info->m_fileName);
     if (fout.open(IO_WriteOnly))
     {
       QTextStream stream(&fout);
-      API::getInstance()->projectDom->save(stream, 2);
+      API::getInstance()->projectDom()->save(stream, 2);
     }
     else
       KMessageBox::sorry(TopLevel::getInstance(), i18n("Could not write the project file."));
 
     fout.close();
 
-    API::getInstance()->projectDom = 0;
+    API::getInstance()->setProjectDom(0);
   }
 }
 

@@ -38,8 +38,6 @@ Core::Core()
 {
   s_instance = this;
   
-  API::getInstance()->core = this;
-
   m_dcopIface = new KDevCoreIface(this);
   kapp->dcopClient()->registerAs("gideon");
 }

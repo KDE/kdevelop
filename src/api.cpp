@@ -9,9 +9,27 @@
 API *API::s_instance = 0;
 
 
-KDevPartController *API::getPartController()
+KDevPartController *API::partController()
 {
   return PartController::getInstance();
+}
+
+
+KDevCore *API::core()
+{
+  return Core::getInstance();
+}
+
+
+ClassStore *API::classStore()
+{
+  return m_classStore;
+}
+
+
+ClassStore *API::ccClassStore()
+{
+  return m_ccClassStore;
 }
 
 
@@ -32,8 +50,8 @@ API *API::getInstance()
 API::API()
   : KDevApi()
 {
-  classStore = new ClassStore();
-  ccClassStore = new ClassStore();
+  m_classStore = new ClassStore();
+  m_ccClassStore = new ClassStore();
 }
 
 

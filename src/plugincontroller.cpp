@@ -66,10 +66,11 @@ void PluginController::loadDefaultParts()
     return;
   service = *makeFrontendOffers.begin();
   part = loadPlugin(service, "KDevMakeFrontend", Core::getInstance());
-  if (!part)
-    return;
-  API::getInstance()->makeFrontend = static_cast<KDevMakeFrontend*>(part);
-  integratePart(part);
+  if (part)
+  {
+    API::getInstance()->setMakeFrontend(static_cast<KDevMakeFrontend*>(part));
+    integratePart(part);
+  }
 
   // App frontend
   KTrader::OfferList appFrontendOffers = KTrader::self()->query(QString::fromLatin1("KDevelop/AppFrontend"), QString::null);
@@ -77,10 +78,11 @@ void PluginController::loadDefaultParts()
     return;
   service = *appFrontendOffers.begin();
   part = loadPlugin(service, "KDevAppFrontend", Core::getInstance());
-  if (!part)
-    return;
-  API::getInstance()->appFrontend = static_cast<KDevAppFrontend*>(part);
-  integratePart(part);
+  if (part)
+  {
+    API::getInstance()->setAppFrontend(static_cast<KDevAppFrontend*>(part));
+    integratePart(part);
+  }
 }
 
 

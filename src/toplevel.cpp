@@ -233,7 +233,7 @@ void TopLevel::slotProjectOptions()
                   "project options dialog");
 
   QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
-  PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom, vbox, "part selection widget");
+  PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
   connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);

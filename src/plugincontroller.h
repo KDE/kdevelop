@@ -17,7 +17,7 @@ public:
   static PluginController *getInstance();
 
 
-  KDevPart *loadPlugin(KService *service, const char *className, QObject *parent);
+  static KDevPart *loadPlugin(KService *service, const char *className, QObject *parent);
 
 
 protected:
