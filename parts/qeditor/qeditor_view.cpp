@@ -39,6 +39,7 @@
 #include "gotolinedialog.h"
 #include "koFind.h"
 #include "koReplace.h"
+#include "qeditor_texthint.h"
 
 #include <qregexp.h>
 #include <qlayout.h>
@@ -53,7 +54,7 @@
 
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
     : KTextEditor::View( document, parent, name ),
-      m_document( document )
+      m_document( document ), m_textHintToolTip( 0 )
 {
     setInstance( QEditorPartFactory::instance() );
 
@@ -78,7 +79,7 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
              m_markerWidget, SLOT(doRepaint()) );
     connect( m_markerWidget, SIGNAL(markChanged(KTextEditor::Mark,KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
              document, SIGNAL(markChanged(KTextEditor::Mark,KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
-    
+
     m_levelWidget = new LevelWidget( m_editor, this );
     connect( m_levelWidget, SIGNAL(expandBlock(QTextParagraph*)),
 	     this, SLOT(expandBlock(QTextParagraph*)) );
@@ -93,7 +94,7 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     setFocusProxy( m_editor );
     connect( m_editor, SIGNAL(cursorPositionChanged(int, int)),
 	     this, SIGNAL(cursorPositionChanged()) );
-    
+
     // connections
     connect( m_editor, SIGNAL(textChanged()),
              doc(), SIGNAL(textChanged()) );
@@ -102,7 +103,7 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 
     connect( m_editor, SIGNAL(ensureTextIsVisible(QTextParagraph*)),
              this, SLOT(ensureTextIsVisible(QTextParagraph*)) );
-    
+
     m_pCodeCompletion = new QEditorCodeCompletion( this );
     connect(m_pCodeCompletion,SIGNAL(completionAborted()),
 	    this,SIGNAL(completionAborted()));
@@ -119,8 +120,10 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     setXMLFile( "qeditor_part.rc" );
 
     setupActions();
-    
+
     configChanged();
+
+    //enableTextHints( 500 );
 }
 
 QEditorView::~QEditorView()
@@ -682,5 +685,29 @@ void QEditorView::collapseAllBlocks()
     m_editor->refresh();
     doRepaint();
 }
-    
+
+QString QEditorView::computeTextHint( int line, int column )
+{
+    QString s;
+    emit needTextHint( line, column, s );
+    return s;
+}
+
+void QEditorView::enableTextHints( int timeout )
+{
+    if( !m_textHintToolTip )
+        m_textHintToolTip = new QEditorTextHint( this );
+
+    m_textHintToolTip->setWakeUpDelay( timeout );
+}
+
+void QEditorView::disableTextHints()
+{
+    if( m_textHintToolTip ){
+        delete m_textHintToolTip;
+	m_textHintToolTip = 0;
+    }
+}
+
+
 #include "qeditor_view.moc"

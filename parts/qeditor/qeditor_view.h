@@ -21,7 +21,7 @@
 #ifndef qeditor_view_h
 #define qeditor_view_h
 
-
+#include <kdeversion.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/clipboardinterface.h>
@@ -29,6 +29,11 @@
 class QPopupMenu;
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
+#if (KDE_VERSION > 310)
+#  include <ktexteditor/texthintinterface.h>
+#else
+# include "kde30x_texthintinterface.h"
+#endif
 
 class QEditor;
 class QEditorPart;
@@ -41,13 +46,15 @@ class KoReplaceDialog;
 class KoFind;
 class KoReplace;
 class QTextParagraph;
+class QEditorTextHint;
 
 class QEditorView:
     public KTextEditor::View,
     public KTextEditor::ClipboardInterface,
     public KTextEditor::ViewCursorInterface,
     public KTextEditor::PopupMenuInterface,
-    public KTextEditor::CodeCompletionInterface
+    public KTextEditor::CodeCompletionInterface,
+    public KTextEditor::TextHintInterface
 {
     Q_OBJECT
 public:
@@ -262,6 +269,14 @@ signals:
      */
     void filterInsertString(KTextEditor::CompletionEntry*,QString*);
 
+public:
+    QString computeTextHint( int line, int column );
+    void enableTextHints( int timeout );
+    void disableTextHints();
+
+signals:
+    void needTextHint( int line, int column, QString& );
+
 private:
     QEditorPart* m_document;
     QEditor* m_editor;
@@ -269,6 +284,7 @@ private:
     LineNumberWidget* m_lineNumberWidget;
     MarkerWidget* m_markerWidget;
     LevelWidget* m_levelWidget;
+    QEditorTextHint* m_textHintToolTip;
 };
 
 #endif
