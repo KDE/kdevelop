@@ -29,6 +29,8 @@ public:
 
   virtual void realClose();
 
+  virtual bool isClosing() const = 0;
+
 };
 
 
