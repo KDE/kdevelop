@@ -11,6 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "abbrevpart.h"
+
 #include <qfile.h>
 #include <qvbox.h>
 #include <kdebug.h>
@@ -23,9 +25,8 @@
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
-
 #include "abbrevconfigwidget.h"
-#include "abbrevpart.h"
+
 
 class AbbrevFactory : public KGenericFactory<AbbrevPart>
 {
@@ -67,6 +68,7 @@ AbbrevPart::~AbbrevPart()
 {
     save();
 }
+
 
 void AbbrevPart::load()
 {
@@ -161,12 +163,14 @@ void AbbrevPart::slotExpandAbbrev()
     if (pos != -1)
         suffix.remove(0, pos+1);
 
-    KTextEditor::EditInterface *editiface = dynamic_cast<KTextEditor::EditInterface*>(part);
+    KTextEditor::EditInterface *editiface
+        = dynamic_cast<KTextEditor::EditInterface*>(part);
     if (!editiface) {
         kdDebug() << "no edit" << endl;
         return;
     }
-    KTextEditor::ViewCursorInterface *cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+    KTextEditor::ViewCursorInterface *cursoriface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
     if (!cursoriface) {
         kdDebug() << "no viewcursor" << endl;
         return;

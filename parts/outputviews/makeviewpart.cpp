@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "makeviewpart.h"
+
 #include <qwhatsthis.h>
 #include <qdir.h>
 #include <kdebug.h>
@@ -21,7 +23,6 @@
 
 #include "outputviewsfactory.h"
 #include "makewidget.h"
-#include "makeviewpart.h"
 
 
 MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList &)

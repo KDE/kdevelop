@@ -11,6 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "classtooldlg.h"
 
 #include <qlistbox.h>
 #include <qpushbutton.h>
@@ -23,7 +24,6 @@
 #include "classstore.h"
 #include "parsedclass.h"
 #include "classviewpart.h"
-#include "classtooldlg.h"
 
 
 ClassToolDialog::ClassToolDialog( ClassViewPart *part )

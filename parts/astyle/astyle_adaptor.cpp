@@ -1,11 +1,10 @@
-#include <string>
+#include "astyle_adaptor.h"
 
+#include <string>
 
 #include <kapplication.h>
 #include <kconfig.h>
 
-
-#include "astyle_adaptor.h"
 
 
 ASStringIterator::ASStringIterator(const QString &text)

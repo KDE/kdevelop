@@ -11,6 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "classviewpart.h"
+
 #include <qpopupmenu.h>
 #include <qwhatsthis.h>
 #include <kaction.h>
@@ -24,7 +26,6 @@
 #include "kdevpartcontroller.h"
 #include "classstore.h"
 
-#include "classviewpart.h"
 #include "classviewwidget.h"
 #include "classactions.h"
 #include "classtooldlg.h"

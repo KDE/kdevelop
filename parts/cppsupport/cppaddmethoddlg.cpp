@@ -1,5 +1,5 @@
 /***************************************************************************
-                          addclassmethoddialog.cpp  -  description
+                          cppaddmethoddlg.cpp  -  description
                              -------------------
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@cenacle.se
@@ -16,6 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "cppaddmethoddlg.h"
+
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -31,7 +33,6 @@
 
 #include "parsedmethod.h"
 #include "cclonefunctiondlg.h"
-#include "cppaddmethoddlg.h"
 
 //#define TEST_DEBUG_ONLY  1
 

@@ -125,7 +125,7 @@ void CppNewClassDialog::accept()
 
     QString istr;
     if (filetemplate_box->isChecked())
-        istr = FileTemplate::read(m_part, "templates/cpp");
+        istr = FileTemplate::read(m_part, "cpp");
 
     if (objc) {
         istr += QString("\n"

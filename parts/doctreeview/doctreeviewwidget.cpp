@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "doctreeviewwidget.h"
+
 #include <stdio.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -36,8 +38,6 @@
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 #include "doctreeconfigwidget.h"
-#include "doctreeviewwidget.h"
-
 
 
 class DocTreeItem : public QListViewItem

@@ -1,3 +1,5 @@
+#include "distpart_widget.h"
+
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
@@ -8,7 +10,7 @@
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include "distpart_part.h"
-#include "distpart_widget.h"
+
 
 DistpartDialog::DistpartDialog(DistpartPart *part)
 	: distpart_ui(0, "distpart widget")

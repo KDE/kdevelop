@@ -13,6 +13,7 @@
 #define _PYTHONCONFIGWIDGET_H_
 
 #include "pythonconfigwidgetbase.h"
+#include <qdom.h>
 
 
 class PythonConfigWidget : public PythonConfigWidgetBase

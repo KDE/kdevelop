@@ -11,6 +11,8 @@
  *                                                                         *
 ***************************************************************************/
 
+#include "doxygenconfigwidget.h"
+
 #include <qscrollview.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -19,7 +21,6 @@
 
 #include "config.h"
 #include "input.h"
-#include "doxygenconfigwidget.h"
 
 
 DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *parent, const char *name)

@@ -11,12 +11,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "docsearchdlg.h"
+
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qpushbutton.h>
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <kapplication.h>
@@ -27,9 +30,6 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
-
-#include "docsearchdlg.h"
-#include <qpushbutton.h>
 
 
 DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)

@@ -61,7 +61,7 @@ sub installFileTemplate
 {
         return if $FILETEMPLATES eq "";
 
-        print "Installing file template\n";
+        print "Installing file templates\n";
         mkdir( "${dest}/templates", 0777 );
         my %templates = split(/,/, $FILETEMPLATES);
         while (($suffix, $filename) = each %templates) {

@@ -1,3 +1,5 @@
+#include "pydoc.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -6,8 +8,6 @@
 #include <qtextstream.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
-
-#include "pydoc.h"
 
 using namespace KIO;
 

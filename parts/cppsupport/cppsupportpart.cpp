@@ -11,7 +11,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "cppsupportpart.h"
+
+#include <qdir.h>
+#include <qdom.h>
 #include <qfileinfo.h>
+#include <qguardedptr.h>
 #include <qpopupmenu.h>
 #include <qprogressdialog.h>
 #include <qstringlist.h>
@@ -20,19 +25,20 @@
 #include <qprogressbar.h>
 #include <qregexp.h>
 #include <qlabel.h>
+#include <qvbox.h>
+#include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
+#include <kgenericfactory.h>
 #include <klocale.h>
 #include <kregexp.h>
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
-#include <kgenericfactory.h>
-#include <kaction.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
-
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -40,8 +46,6 @@
 #include "classstore.h"
 #include "kdevpartcontroller.h"
 
-
-#include "cppsupportpart.h"
 #include "parsedclass.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
@@ -50,17 +54,11 @@
 #include "cppnewclassdlg.h"
 #include "cppaddmethoddlg.h"
 #include "cppcodecompletion.h"
-
-// daniel
-#include "kdialogbase.h"
+#include "cppsupportwidget.h"
 #include "ccconfigwidget.h"
 #include "config.h"
-#include <qvbox.h>
 #include "domutil.h"
-#include <qdom.h>
-#include <qdir.h>
-#include <qguardedptr.h>
-#include "cppsupportwidget.h"
+
 
 typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
@@ -565,7 +563,8 @@ void CppSupportPart::addedFileToProject(const QString &fileName)
 {
     kdDebug(9007) << "addedFileToProject()" << endl;
     // changed - daniel
-    maybeParse( fileName, classStore( ), m_pParser );
+    QString path = project()->projectDirectory() + "/" + fileName;
+    maybeParse( path, classStore( ), m_pParser );
     emit updatedSourceInfo();
 }
 
@@ -573,7 +572,8 @@ void CppSupportPart::addedFileToProject(const QString &fileName)
 void CppSupportPart::removedFileFromProject(const QString &fileName)
 {
     kdDebug(9007) << "removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(fileName);
+    QString path = project()->projectDirectory() + "/" + fileName;
+    classStore()->removeWithReferences(path);
     emit updatedSourceInfo();
 }
 

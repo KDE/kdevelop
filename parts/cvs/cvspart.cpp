@@ -9,17 +9,19 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "cvspart.h"
+
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <kdebug.h>
+#include <kgenericfactory.h>
 #include <klocale.h>
 #include <kprocess.h>
-#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "commitdlg.h"
-#include "cvspart.h"
+
 
 typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );

@@ -11,6 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "classtreebase.h"
 
 #include <qtooltip.h>
 #include <qheader.h>
@@ -30,7 +31,6 @@
 #include "classviewpart.h"
 #include "classviewpart.h"
 #include "classtooldlg.h"
-#include "classtreebase.h"
 
 
 void ClassTreeItem::init(const QString &text)

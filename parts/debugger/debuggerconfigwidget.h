@@ -16,6 +16,8 @@
 
 #include "debuggerconfigwidgetbase.h"
 
+#include <qdom.h>
+
 
 class DebuggerConfigWidget : public DebuggerConfigWidgetBase
 { 

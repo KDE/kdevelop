@@ -1,3 +1,5 @@
+#include "perldoc.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -8,8 +10,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
-
-#include "perldoc.h"
 
 using namespace KIO;
 

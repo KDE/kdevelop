@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "doctreeviewpart.h"
+
 #include <qpopupmenu.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -28,7 +30,6 @@
 
 #include "docsearchdlg.h"
 #include "docindexdlg.h"
-#include "doctreeviewpart.h"
 #include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
 #include "doctreeconfigwidget.h"

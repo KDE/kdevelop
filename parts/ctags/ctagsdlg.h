@@ -14,6 +14,7 @@
 
 #include <qdialog.h>
 #include <qdict.h>
+#include <qvaluelist.h>
 
 class QCheckBox;
 class QLineEdit;

@@ -6,12 +6,13 @@
  * license  : gpl version >= 2
  */
 
+#include "cppsupportwidget.h"
+
 #include <qstring.h>
 
 #include <keditcl.h>
 #include <klocale.h>
 
-#include "cppsupportwidget.h"
 #include "cppsupportpart.h"
 
 #include <iostream>

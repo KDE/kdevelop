@@ -11,6 +11,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "classviewwidget.h"
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -23,7 +24,6 @@
 #include "classstore.h"
 #include "classtooldlg.h"
 #include "classviewpart.h"
-#include "classviewwidget.h"
 
 
 ClassViewWidget::ClassViewWidget(ClassViewPart *part)

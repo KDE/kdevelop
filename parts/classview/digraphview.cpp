@@ -9,8 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "digraphview.h"
+
 #include <math.h>
 #include <stdlib.h>
+#include <qapplication.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qtextstream.h>
@@ -20,9 +23,6 @@
 #include <kprocess.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
-
-#include "digraphview.h"
-#include "digraphview.moc"
 
 
 struct DigraphNode
@@ -394,3 +394,4 @@ dw->addEdge(	"System V.2", "System V.3");
 }
 #endif
 
+#include "digraphview.moc"

@@ -16,6 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addclassmethoddlg.h"
+
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -31,7 +33,6 @@
 
 #include "parsedmethod.h"
 #include "cclonefunctiondlg.h"
-#include "addclassmethoddlg.h"
 
 //#define TEST_DEBUG_ONLY  1
 

@@ -11,6 +11,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef _HTDIGINDEX_H_
+#define _HTDIGINDEX_H_
+
 #include <stdio.h>
 #include <qdom.h>
 #include <qlabel.h>
@@ -55,3 +58,5 @@ private:
     volatile int filesToDig, filesDigged, filesScanned;
     bool htdigRunning, htmergeRunning;
 };
+
+#endif

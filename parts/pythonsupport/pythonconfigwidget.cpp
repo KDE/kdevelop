@@ -9,14 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "pythonconfigwidget.h"
+
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include "domutil.h"
 
-#include "pythonconfigwidget.h"
 
-
-PythonConfigWidget::PythonConfigWidget(QDomDocument &projectDom, QWidget *parent, const char *name)
+PythonConfigWidget::PythonConfigWidget(QDomDocument &projectDom,
+                                       QWidget *parent, const char *name)
     : PythonConfigWidgetBase(parent, name), dom(projectDom)
 {
     interpreter_edit->setText(DomUtil::readEntry(dom, "/kdevpython/run/interpreter"));
@@ -30,8 +31,8 @@ PythonConfigWidget::~PythonConfigWidget()
 
 void PythonConfigWidget::accept()
 {
-    DomUtil::writeEntry(dom,     "/kdevpython/run/interpreter", interpreter_edit->text());
-    DomUtil::writeBoolEntry(dom, "/kdevpython/run/terminal",    terminal_box->isChecked());
+    DomUtil::writeEntry(dom, "/kdevpython/run/interpreter", interpreter_edit->text());
+    DomUtil::writeBoolEntry(dom, "/kdevpython/run/terminal", terminal_box->isChecked());
 }
 
 #include "pythonconfigwidget.moc"

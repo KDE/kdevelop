@@ -1,3 +1,5 @@
+#include "astyle_widget.h"
+
 #include <qradiobutton.h>
 #include <qtabwidget.h>
 #include <qmultilineedit.h>
@@ -5,16 +7,11 @@
 #include <qcheckbox.h>
 #include <qspinbox.h>
 
-
 #include <kconfig.h>
 #include <kapplication.h>
 #include <kdebug.h>
 
-
 #include <kdevcore.h>
-
-
-#include "astyle_widget.h"
 
 
 AStyleWidget::AStyleWidget(QWidget *parent, const char *name)

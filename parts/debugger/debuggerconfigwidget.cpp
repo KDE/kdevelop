@@ -11,11 +11,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "debuggerconfigwidget.h"
+
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include "domutil.h"
-
-#include "debuggerconfigwidget.h"
 
 
 DebuggerConfigWidget::DebuggerConfigWidget(QDomDocument &projectDom, QWidget *parent, const char *name)

@@ -1,3 +1,12 @@
+2002-04-18  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* filter plugin
+	* Added methods addFile() and removeFile()
+	  to KDevProject interface, not implemented
+	  currently
+	* Add File dialog in auto project uses the
+	  FileTemplate class now
+
 2002-04-17  Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* introduced a facade to access the KTextEditor interfaces

@@ -16,6 +16,7 @@
 #include <qdialog.h>
 #include <qdom.h>
 #include <qlist.h>
+#include <qstringlist.h>
 
 class QCheckBox;
 class KComboBox;

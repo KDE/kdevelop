@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ftnchekconfigwidget.h"
+
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qheader.h>
@@ -18,8 +20,6 @@
 #include <klocale.h>
 
 #include "domutil.h"
-#include "ftnchekconfigwidget.h"
-
 
 
 class FtnchekItem : public QCheckListItem

@@ -1,26 +1,25 @@
+#include "astyle_part.h"
+
 #include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qtextstream.h>
 
-
+#include <kdebug.h>
+#include <kdialogbase.h>
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kdialogbase.h>
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
-#include <kdebug.h>
-#include <kgenericfactory.h>
+#include <ktexteditor/editinterface.h>
 
 #include <kdevcore.h>
 #include <kdevapi.h>
 #include <kdevpartcontroller.h>
 
-
-#include <ktexteditor/editinterface.h>
-
-#include "astyle_part.h"
 #include "astyle_widget.h"
 #include "astyle_adaptor.h"
+
 
 typedef KGenericFactory<AStylePart> AStyleFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( "kdevastyle" ) );

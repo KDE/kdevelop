@@ -7,7 +7,7 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  autoproject scriptproject trollproject customproject \
 	  debugger javadebugger distpart \
 	  konsole astyle tools ctags regexptest cvs doxygen \
-	  manager fileselector visualboyadvance tipofday abbrev \
+	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith windowmenu \
 	  $(SCRIPTING_SUBDIR) $(JAVA_SUBDIRS) 
 

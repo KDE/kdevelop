@@ -12,9 +12,9 @@
 #ifndef _DIGRAPHVIEW_H_
 #define _DIGRAPHVIEW_H_
 
-
 #include <qlist.h>
 #include <qscrollview.h>
+#include <qstringlist.h>
 
 class DigraphNode;
 class DigraphEdge;

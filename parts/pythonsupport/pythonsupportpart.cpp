@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "pythonsupportpart.h"
+
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qstringlist.h>
@@ -31,10 +33,10 @@
 #include "classstore.h"
 #include "domutil.h"
 
-#include "pythonsupportpart.h"
 #include "pythonconfigwidget.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
+
 
 typedef KGenericFactory<PythonSupportPart> PythonSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( "kdevpythonsupport" ) );
@@ -143,7 +145,7 @@ void PythonSupportPart::initialParse()
 void PythonSupportPart::addedFileToProject(const QString &fileName)
 {
     kdDebug(9014) << "addedFileToProject()" << endl;
-    maybeParse(fileName);
+    maybeParse(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 
@@ -151,7 +153,7 @@ void PythonSupportPart::addedFileToProject(const QString &fileName)
 void PythonSupportPart::removedFileFromProject(const QString &fileName)
 {
     kdDebug(9014) << "removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(fileName);
+    classStore()->removeWithReferences(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 

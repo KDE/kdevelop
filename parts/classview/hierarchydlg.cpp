@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "hierarchydlg.h"
+
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qlistview.h>
@@ -22,7 +24,6 @@
 #include "classstore.h"
 #include "classtoolwidget.h"
 #include "digraphview.h"
-#include "hierarchydlg.h"
 
 
 HierarchyDialog::HierarchyDialog( ClassViewPart *part )

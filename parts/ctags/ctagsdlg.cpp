@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ctagsdlg.h"
+
 #include <qcheckbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -18,6 +20,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qlistview.h>
+#include <qpushbutton.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <kbuttonbox.h>
@@ -33,8 +36,6 @@
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevproject.h"
-#include "ctagsdlg.h"
-#include <qpushbutton.h>
 
 
 struct CTagsKindMapping {
@@ -399,7 +400,7 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
     layout->addRowSpacing(3, 10);
     layout->addWidget(tag_label, 0, 0);
     layout->addWidget(tag_edit, 0, 1);
-    layout->addWidget(kinds_label, 1, 0);
+    layout->addWidget(kinds_label, 2, 0);
     layout->addWidget(regexp_box, 1, 1);
     layout->addWidget(kinds_listview, 2, 1);
     layout->addMultiCellWidget(actionbox, 0, 2, 2, 2);

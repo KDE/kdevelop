@@ -11,6 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "debuggerpart.h"
+
 #include <qdir.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
@@ -41,7 +43,6 @@
 #include "dbgtoolbar.h"
 #include "memviewdlg.h"
 #include "debuggerconfigwidget.h"
-#include "debuggerpart.h"
 
 typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );

@@ -18,12 +18,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "addclassattributedlg.h"
+
 #include <qwhatsthis.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-
-#include "addclassattributedlg.h"
 
 
 AddClassAttributeDialog::AddClassAttributeDialog(QWidget *parent, const char *name)

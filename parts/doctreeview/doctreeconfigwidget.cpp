@@ -10,6 +10,8 @@
  ***************************************************************************/
 #define GIDEON
 
+#include "doctreeconfigwidget.h"
+
 #include <qcheckbox.h>
 #include <qdom.h>
 #include <qfile.h>
@@ -32,7 +34,6 @@
 #include "misc.h"
 #include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
-#include "doctreeconfigwidget.h"
 
 
 class DocTreeConfigListItem : public QCheckListItem

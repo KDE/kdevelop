@@ -9,14 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "commitdlg.h"
+
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qpushbutton.h>
 #include <kapplication.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
-
-#include "commitdlg.h"
-#include <qpushbutton.h>
 
 
 CommitDialog::CommitDialog()

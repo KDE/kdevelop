@@ -20,12 +20,12 @@
 #include "domutil.h"
 
 
-QString FileTemplate::read(KDevPlugin *part, const QString &relName)
+QString FileTemplate::read(KDevPlugin *part, const QString &name)
 {
     KDevProject *project = part->project();
     QDomDocument &dom = *part->projectDom();
     
-    QString fileName = project->projectDirectory() + "/" + relName;
+    QString fileName = project->projectDirectory() + "/templates/" + name;
 
     QFile f(fileName);
     if (!f.open(IO_ReadOnly))
@@ -46,4 +46,19 @@ QString FileTemplate::read(KDevPlugin *part, const QString &relName)
     str.replace(QRegExp("\\$YEAR\\$"),year);
 
     return str;
+}
+
+
+void FileTemplate::copy(KDevPlugin *part, const QString &name,
+                        const QString &dest)
+{
+    QString text = read(part, name);
+
+    QFile f(dest);
+    if (!f.open(IO_WriteOnly))
+        return;
+
+    QTextStream stream(&f);
+    stream << text;
+    f.close();
 }

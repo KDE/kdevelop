@@ -9,10 +9,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "appoutputwidget.h"
+
 #include <klocale.h>
 
 #include "appoutputviewpart.h"
-#include "appoutputwidget.h"
 
 
 AppOutputWidget::AppOutputWidget()

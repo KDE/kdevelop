@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "docindexdlg.h"
+
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qfile.h>
@@ -35,7 +37,6 @@
 #include "misc.h"
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
-#include "docindexdlg.h"
 
 
 DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const char *name)

@@ -11,10 +11,11 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "abbrevconfigwidget.h"
+
 #include <qlistview.h>
 #include <qmultilineedit.h>
 
-#include "abbrevconfigwidget.h"
 #include "addtemplatedlg.h"
 #include "abbrevpart.h"
 

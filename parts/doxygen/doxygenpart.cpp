@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "doxygenpart.h"
+
 #include <qvbox.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -18,7 +20,7 @@
 #include "kdevmakefrontend.h"
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
-#include "doxygenpart.h"
+
 
 typedef KGenericFactory<DoxygenPart> DoxygenFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( "kdevdoxygen" ) );
@@ -31,7 +33,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 
     KAction *action;
     
-    action = new KAction( i18n("Run doxygen..."), 0,
+    action = new KAction( i18n("Run doxygen"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
 

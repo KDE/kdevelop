@@ -12,9 +12,10 @@
 #ifndef _CVSPART_H_
 #define _CVSPART_H_
 
-class Context;
-
 #include "kdevplugin.h"
+
+class Context;
+class QPopupMenu;
 
 
 class CvsPart : public KDevPlugin

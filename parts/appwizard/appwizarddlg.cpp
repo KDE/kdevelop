@@ -11,6 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "appwizarddlg.h"
+
 #include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qdir.h>
@@ -38,11 +40,10 @@
 #include <ktempfile.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-#include "kdevmakefrontend.h"
 
+#include "kdevmakefrontend.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
-#include "appwizarddlg.h"
 #include "filepropspage.h"
 #include "misc.h"
 

@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "appoutputviewpart.h"
+
 #include <qwhatsthis.h>
 #include <qdir.h>
 #include <kdebug.h>
@@ -20,7 +22,6 @@
 #include "kdevtoplevel.h"
 #include "outputviewsfactory.h"
 #include "appoutputwidget.h"
-#include "appoutputviewpart.h"
 
 
 AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QStringList &)

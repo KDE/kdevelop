@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "makewidget.h"
+
 #include <qapplication.h>
 #include <qdir.h>
 #include <qtimer.h>
@@ -23,7 +25,6 @@
 #include "kdevpartcontroller.h"
 
 #include "makeviewpart.h"
-#include "makewidget.h"
 
 
 class MakeItem

@@ -1,15 +1,15 @@
-#include <qwhatsthis.h>
+#include "distpart_part.h"
 
+#include <qwhatsthis.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 
-#include <kdevcore.h>
-
+#include "kdevcore.h"
 
 #include "distpart_widget.h"
-#include "distpart_part.h"
+
 
 typedef KGenericFactory<DistpartPart> DistpartFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) );

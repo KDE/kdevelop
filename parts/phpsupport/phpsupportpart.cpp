@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "phpsupportpart.h"
+
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qtextstream.h>
@@ -34,7 +36,6 @@
 #include "classstore.h"
 #include <kdevpartcontroller.h>
 
-#include "phpsupportpart.h"
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
 #include "phpcodecompletion.h"
@@ -48,6 +49,7 @@
 #include "parsedclass.h"
 #include "parsedmethod.h"
 #include "domutil.h"
+
 
 using namespace std;
 
@@ -119,7 +121,7 @@ void PHPSupportPart::slotActivePartChanged(KParts::Part *part)
 }
 
 void PHPSupportPart::slotTextChanged(){
-  cerr << "text changed" << endl;
+  kdDebug(9018) << "text changed" << endl;
 
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
   if (!ro_part)
@@ -141,7 +143,7 @@ void PHPSupportPart::slotTextChanged(){
 
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
-  cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename.latin1() << line;
+  kdDebug(9018) << endl << "slotWebResult()" << filename.latin1() << line;
   partController()->editDocument(filename,line);
 }
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
@@ -207,7 +209,7 @@ void PHPSupportPart::executeOnWebserver(){
 }
 
 void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
-  cerr << endl << "job started" << job->progressId();
+  kdDebug(9018) << endl << "job started" << job->progressId();
   if (job->className() == QString("KIO::TransferJob")){
     KIO::TransferJob *tjob = static_cast<KIO::TransferJob*>(job);
     connect(tjob,  SIGNAL(data(KIO::Job*, const QByteArray&)),
@@ -218,18 +220,18 @@ void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
 }
 
 void PHPSupportPart::slotWebData(KIO::Job* job,const QByteArray& data){
-  cerr << "kdevelop (phpsupport): slotWebData()" << endl;
+  kdDebug(9018) << "slotWebData()" << endl;
   QString strData(data);
   m_phpExeOutput += strData;
 }
 
 void PHPSupportPart::slotWebResult(KIO::Job* job){
-  cerr << "kdevelop (phpsupport): slotWebResult()" << endl;
+  kdDebug(9018) << "slotWebResult()" << endl;
   m_phpErrorView->parse(m_phpExeOutput);
 }
 
 void PHPSupportPart::executeInTerminal(){
-  cerr << "kdevelop (phpsupport): slotExecuteInTerminal()" << endl;
+  kdDebug(9018) << "slotExecuteInTerminal()" << endl;
   QString file;
   if(m_htmlView==0){
     m_htmlView = new PHPHTMLView();
@@ -250,7 +252,7 @@ void PHPSupportPart::executeInTerminal(){
   }
 
   *phpExeProc << file;
-  cerr << "kdevelop (phpsupport): " << file.latin1() << endl;
+  kdDebug(9018) << "" << file.latin1() << endl;
   phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
 
 
@@ -258,26 +260,26 @@ void PHPSupportPart::executeInTerminal(){
   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
 }
 void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* proc, char* buffer, int buflen){
-  cerr << "kdevelop (phpsupport): slotPHPExeStdout()" << endl;
+  kdDebug(9018) << "slotPHPExeStdout()" << endl;
   m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QCString(buffer,buflen+1);
 }
 
 void PHPSupportPart::slotReceivedPHPExeStderr (KProcess* proc, char* buffer, int buflen){
-  cerr << "kdevelop (phpsupport): slotPHPExeStderr()" << endl;
+  kdDebug(9018) << "slotPHPExeStderr()" << endl;
   m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QCString(buffer,buflen+1);
 }
 
 void PHPSupportPart::slotPHPExeExited (KProcess* proc){
-  cerr << "kdevelop (phpsupport): slotPHPExeExited()" << endl;
+  kdDebug(9018) << "slotPHPExeExited()" << endl;
   m_htmlView->end();
   m_phpErrorView->parse(m_phpExeOutput);
 }
 
 void PHPSupportPart::projectOpened()
 {
-    cerr << "kdevelop (phpsupport): projectOpened()" << endl;
+    kdDebug(9018) << "projectOpened()" << endl;
 
     connect( project(), SIGNAL(addedFileToProject(const QString &)),
              this, SLOT(addedFileToProject(const QString &)) );
@@ -303,7 +305,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
     if ((fi.extension().contains("inc") || fi.extension().contains("php")
 	|| fi.extension().contains("html")
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
-      cerr << "remove and parse" << fileName.latin1() << endl;
+      kdDebug(9018) << "remove and parse" << fileName.latin1() << endl;
         classStore()->removeWithReferences(fileName);
         m_parser->parseFile(fileName);
     }
@@ -312,7 +314,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
 
 void PHPSupportPart::initialParse()
 {
-    cerr << "kdevelop (phpsupport): initialParse()" << endl;
+    kdDebug(9018) << "initialParse()" << endl;
 
     if (project()) {
       //  kdDebug(9016) << "project" << endl;
@@ -337,30 +339,30 @@ void PHPSupportPart::initialParse()
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
-        cerr << "kdevelop (phpsupport): No project" << endl;
+        kdDebug(9018) << "No project" << endl;
     }
 }
 
 
 void PHPSupportPart::addedFileToProject(const QString &fileName)
 {
-    cerr << "kdevelop (phpsupport): addedFileToProject()" << endl;
-    maybeParse(fileName);
+    kdDebug(9018) << "addedFileToProject()" << endl;
+    maybeParse(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 
 
 void PHPSupportPart::removedFileFromProject(const QString &fileName)
 {
-    cerr << "kdevelop (phpsupport): removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(fileName);
+    kdDebug(9018) << "removedFileFromProject()" << endl;
+    classStore()->removeWithReferences(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 
 
 void PHPSupportPart::savedFile(const QString &fileName)
 {
-    cerr << "kdevelop (phpsupport): savedFile()" << endl;
+    kdDebug(9018) << "savedFile()" << endl;
 
     if (project()->allSourceFiles().contains(fileName)) {
         maybeParse(fileName);

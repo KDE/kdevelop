@@ -20,7 +20,19 @@ class KDevPlugin;
 class FileTemplate
 {
 public:
+    /**
+     * Reads a template with the given name (e.g. "cpp")
+     * and makes variable substitutions (like $AUTHOR$ etc.)
+     * in it. The resulting string is returned.
+     */
     static QString read(KDevPlugin *part, const QString &relName);
+    /**
+     * Copies a file template with the given name to the
+     * file with the name dest and - while copying -
+     * performs variable substitutions.
+     */
+    static void copy(KDevPlugin *part, const QString &name,
+                     const QString &dest);
 };
 
 #endif

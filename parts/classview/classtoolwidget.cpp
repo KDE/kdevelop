@@ -11,13 +11,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "classtoolwidget.h"
 
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kpopupmenu.h>
 #include "classstore.h"
-#include "classtoolwidget.h"
+
 
 ClassToolWidget::ClassToolWidget(ClassViewPart *part, QWidget *parent)
     : ClassTreeBase(part, parent, "class tool widget")

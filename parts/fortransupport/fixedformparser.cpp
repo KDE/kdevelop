@@ -9,12 +9,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "fixedformparser.h"
+
 #include <qfile.h>
 #include <qtextstream.h>
 #include <kdebug.h>
 #include "classstore.h"
-
-#include "fixedformparser.h"
 
 
 FixedFormParser::FixedFormParser(ClassStore *classstore)

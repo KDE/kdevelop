@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "importdlg.h"
 #include <qcombobox.h>
 #include <qdir.h>
 #include <qfile.h>
@@ -28,10 +29,9 @@
 #include <kstandarddirs.h>
 #include "kdevcore.h"
 
-#include "importdlg.h"
-#include "misc.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
+#include "misc.h"
 
 
 ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *name)

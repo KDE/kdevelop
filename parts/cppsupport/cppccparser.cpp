@@ -8,9 +8,10 @@
 
 #define ENABLEMESSAGEOUTPUT
 #define ENABLEDEBUGOUTPUT
-#include "dbg.h"
 
 #include "cppccparser.h"
+#include "dbg.h"
+
 
 #define PUSH_LEXEM( ) lexemStack.push( new CParsedLexem( lexem, getText( ) ) )
 

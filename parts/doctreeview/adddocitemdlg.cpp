@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 1999 by Sandy Meier                                     *
+ *   smeier@kdevelop.org                                                   *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,14 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "adddocitemdlg.h"
+
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+#include <qwhatsthis.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-
-#include "adddocitemdlg.h"
 
 
 AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
@@ -39,7 +40,16 @@ AddDocItemDialog::AddDocItemDialog(QWidget *parent, const char *name)
     url_button->setFixedSize(30, 25);
 
     connect( url_button, SIGNAL(clicked()), this, SLOT(fileButtonClicked()));
-        
+
+    QString s = i18n("Enter the name of the entry here.");
+    QWhatsThis::add(title_label, s);
+    QWhatsThis::add(title_edit, s);
+    s = i18n("Enter the file name of the entry here.");
+    QWhatsThis::add(url_label, s);
+    QWhatsThis::add(url_edit, s);
+    s = i18n("Here you can browse through your file system to select a file for the entry.");
+    QWhatsThis::add(url_button, s);
+    
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
     
     QGridLayout *grid = new QGridLayout(2, 3);

@@ -9,13 +9,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "ctagspart.h"
+
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
 
 #include "kdevcore.h"
 #include "ctagsdlg.h"
-#include "ctagspart.h"
+
 
 typedef KGenericFactory<CTagsPart> CTagsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( "kdevctags" ) );

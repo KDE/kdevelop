@@ -19,27 +19,25 @@
 #include "kdevregexp.h"
 
 #include <kdebug.h>
-#include <kregexp.h>
-#include <ktempfile.h>
-#include <kmainwindow.h>
-#include <kstatusbar.h>
-#include <kparts/part.h>
-
-#include <qstring.h>
-#include <qfile.h>
-#include <qstringlist.h>
-#include <qdatastream.h>
-#include <qregexp.h>
-#include <qmap.h>
-
-#include <kmessagebox.h>
 #include <klocale.h>
-#include <qstatusbar.h>
+#include <kmainwindow.h>
+#include <kmessagebox.h>
+#include <kparts/part.h>
+#include <kregexp.h>
+#include <kstatusbar.h>
+#include <ktempfile.h>
 
-#include <kdevpartcontroller.h>
+#include <qdatastream.h>
+#include <qfile.h>
+#include <qmap.h>
+#include <qregexp.h>
+#include <qstatusbar.h>
+#include <qstring.h>
+#include <qstringlist.h>
+
+#include "kdevpartcontroller.h"
 #include "kdevtoplevel.h"
 #include "kdevcore.h"
-
 
 
 static QValueList<KTextEditor::CompletionEntry>

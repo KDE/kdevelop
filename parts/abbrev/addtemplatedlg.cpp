@@ -19,6 +19,7 @@
  *
  */
 #include "addtemplatedlg.h"
+
 #include <qcombobox.h>
 #include <qlineedit.h>
 

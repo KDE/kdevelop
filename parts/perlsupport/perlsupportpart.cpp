@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "perlsupportpart.h"
+
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qstringlist.h>
@@ -26,10 +28,9 @@
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "classstore.h"
-
-#include "perlsupportpart.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
+
 
 typedef KGenericFactory<PerlSupportPart> PerlSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( "kdevperlsupport" ) );
@@ -117,7 +118,7 @@ void PerlSupportPart::initialParse()
 void PerlSupportPart::addedFileToProject(const QString &fileName)
 {
     kdDebug(9016) << "addedFileToProject()" << endl;
-    maybeParse(fileName);
+    maybeParse(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 
@@ -125,7 +126,7 @@ void PerlSupportPart::addedFileToProject(const QString &fileName)
 void PerlSupportPart::removedFileFromProject(const QString &fileName)
 {
     kdDebug(9016) << "removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(fileName);
+    classStore()->removeWithReferences(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 

@@ -8,7 +8,7 @@
 
 class KDialogBase;
 #include <kaction.h>
-
+#include <kparts/part.h>
 #include <kdevplugin.h>
 
 

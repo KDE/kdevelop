@@ -11,12 +11,13 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "classactions.h"
+
 #include <qpopupmenu.h>
 #include <qstringlist.h>
 #include <qtl.h>
 #include <ktoolbar.h>
 #include "classstore.h"
-#include "classactions.h"
 
 
 ClassListAction::ClassListAction(ClassStore *store, const QString &text, int accel,

@@ -11,6 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "htdigindex.h"
+
 #include <qapplication.h>
 #include <qdir.h>
 #include <qfile.h>
@@ -28,7 +30,6 @@
 
 #define INDEXER
 #include "misc.cpp"
-#include "htdigindex.moc"
 
 
 ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
@@ -500,3 +501,5 @@ int main(int argc, char *argv[])
     
     return 0;
 }
+
+#include "htdigindex.moc"

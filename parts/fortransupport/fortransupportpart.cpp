@@ -13,6 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "fortransupportpart.h"
+
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qstringlist.h>
@@ -38,7 +40,7 @@
 
 #include "ftnchekconfigwidget.h"
 #include "fixedformparser.h"
-#include "fortransupportpart.h"
+
 
 typedef KGenericFactory<FortranSupportPart> FortranSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( "kdevfortransupport" ) );
@@ -214,7 +216,7 @@ void FortranSupportPart::initialParse()
 void FortranSupportPart::addedFileToProject(const QString &fileName)
 {
     kdDebug(9019) << "addedFileToProject()" << endl;
-    maybeParse(fileName);
+    maybeParse(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 
@@ -222,7 +224,7 @@ void FortranSupportPart::addedFileToProject(const QString &fileName)
 void FortranSupportPart::removedFileFromProject(const QString &fileName)
 {
     kdDebug(9019) << "removedFileFromProject()" << endl;
-    classStore()->removeWithReferences(fileName);
+    classStore()->removeWithReferences(project()->projectDirectory() + "/" + fileName);
     emit updatedSourceInfo();
 }
 
