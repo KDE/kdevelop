@@ -24,7 +24,7 @@
 
 class KDevVersionControl;
 class KDevLanguageSupport;
-class CProject;
+class ProjectSpace;
 class ClassStore;
 class KDialogBase;
 class KAboutData;
@@ -68,13 +68,13 @@ public:
      */
     virtual void stopButtonClicked();
     /**
-     * A project has been opened.
+     * A projectspace  has been opened.
      */
-    virtual void projectOpened(CProject *prj);
+    virtual void projectSpaceOpened(ProjectSpace *projectSpace);
     /**
-     * The project has beeen closed.
+     * The projectspace has been closed.
      */
-    virtual void projectClosed();
+    virtual void projectSpaceClosed();
     /**
      * A new version control version has been created.
      */

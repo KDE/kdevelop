@@ -16,8 +16,8 @@ public:
 protected:
   virtual void setupGUI();
   virtual void compilationAborted();
-  virtual void projectClosed();
-  virtual void projectOpened(CProject *prj);
+  virtual void projectSpaceClosed();
+  virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
   
 private slots:
   void slotDebugStart();

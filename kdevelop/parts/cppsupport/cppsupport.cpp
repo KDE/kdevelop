@@ -14,7 +14,7 @@
 #include <kdebug.h>
 
 #include "cppsupport.h"
-#include "cproject.h"
+#include "projectspace.h"
 #include "parsedclass.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
@@ -39,15 +39,15 @@ CppSupport::~CppSupport()
 {}
 
 
-void CppSupport::projectOpened(CProject *prj)
+void CppSupport::projectSpaceOpened(ProjectSpace *)
 {
-    kdDebug(9007) << "CppSupport::projectOpened()" << endl;
+    kdDebug(9007) << "CppSupport::projectSpaceOpened()" << endl;
 }
 
 
-void CppSupport::projectClosed()
+void CppSupport::projectSpaceClosed()
 {
-    kdDebug(9007) << "CppSupport::projectClosed()" << endl;
+    kdDebug(9007) << "CppSupport::projectSpaceClosed()" << endl;
 }
 
 

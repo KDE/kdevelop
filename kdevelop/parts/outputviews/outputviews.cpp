@@ -14,7 +14,7 @@
 #include <klocale.h>
 #include <kaction.h>
 
-#include <cproject.h>
+#include "projectspace.h"
 #include "main.h"
 #include "makewidget.h"
 #include "appoutputwidget.h"
@@ -27,7 +27,7 @@ MakeView::MakeView(QObject *parent, const char *name)
     setInstance(OutputFactory::instance());
     setXMLFile("kdevmakeview.rc");
 
-    m_prj = 0;
+    m_pProjectSpace = 0;
     m_widget = 0;
 }
 
@@ -65,23 +65,23 @@ void MakeView::setupGUI()
 
 void MakeView::commandRequested(const QString &command)
 {
-    if (!m_prj) {
+    if (!m_pProjectSpace) {
         kdDebug(9004) << "MakeView: compilation started with project?" << endl;
     }
     
-    m_widget->startJob(m_prj->getProjectDir(), command);
+    m_widget->startJob(m_pProjectSpace->absolutePath(), command);
 }
 
 
-void MakeView::projectOpened(CProject *prj)
+void MakeView::projectSpaceOpened(ProjectSpace *pProjectSpace)
 {
-    m_prj = prj;
+    m_pProjectSpace = pProjectSpace;
 }
 
 
-void MakeView::projectClosed()
+void MakeView::projectSpaceClosed()
 {
-    m_prj = 0;
+    m_pProjectSpace = 0;
     m_widget->clear();
 }
 

@@ -21,7 +21,6 @@
 
 
 #include "classstore.h"
-#include "cproject.h"
 #include "projectoptionsdlg.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
@@ -40,7 +39,7 @@ KDevelopCore::KDevelopCore(KDevelop *pGUI)
    ,m_pLanguageSupport(0L)
    ,m_pMakeFrontend(0L)
    ,m_pAppFrontend(0L)
-   ,m_pProject(0L)
+   ,m_pProjectSpace(0L)
    ,m_pViewHandler(0L)
 {
     m_pClassStore = new ClassStore();
@@ -300,39 +299,6 @@ void KDevelopCore::unloadLanguageSupport()
   m_pLanguageSupport = 0;
 }
 
-bool KDevelopCore::loadProjectSpace(const QString &name){
-  QString constraint = QString("[Name] == '%1'").arg(name);
-  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
-  if (offers.isEmpty()) {
-    KMessageBox::sorry(m_pKDevelopGUI,
-		       i18n("No ProjectSpace component for %1 found").arg(name));
-    return false;
-  }
-
-  KService *pService = *offers.begin();
-  kdDebug(9000) << "Found ProjectSpace Component " << pService->name() << endl;
-
-  KLibFactory *pFactory = KLibLoader::self()->factory(pService->library());
-
-  QStringList args;
-  QVariant prop = pService->property("X-KDevelop-Args");
-  if (prop.isValid())
-    args = QStringList::split(" ", prop.toString());
-
-  QObject *pObj = pFactory->create(m_pKDevelopGUI, pService->name().latin1(),
-				                       "ProjectSpace", args);
-
-  if (!pObj->inherits("ProjectSpace")) {
-    kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
-    return false;
-  }
-  ProjectSpace *pComp = (ProjectSpace*) pObj;
-  m_pProjectSpace = pComp;
-  initComponent(pComp);
-  m_pKDevelopGUI->guiFactory()->addClient( m_pProjectSpace);
-
-  return true;
-}
 
 
 void KDevelopCore::newFile()
@@ -346,34 +312,67 @@ void KDevelopCore::newFile()
 void KDevelopCore::unloadProjectSpace(){
   QDomDocument* pDoc=0;
   pDoc = m_pProjectSpace->writeGlobalDocument();
-  QListIterator<KDevComponent> it1(m_components);
-  for (; it1.current(); ++it1){
-    (*it1)->writeProjectSpaceGlobalConfig(*pDoc);
+  QListIterator<KDevComponent> it6(m_components);
+  for (; it6.current(); ++it6){
+    (*it6)->writeProjectSpaceGlobalConfig(*pDoc);
   }
   
   pDoc = m_pProjectSpace->writeUserDocument();
-  QListIterator<KDevComponent> it2(m_components);
-  for (; it2.current(); ++it2){
-    (*it2)->writeProjectSpaceUserConfig(*pDoc);
+  QListIterator<KDevComponent> it7(m_components);
+  for (; it7.current(); ++it7){
+    (*it7)->writeProjectSpaceUserConfig(*pDoc);
   }
   m_pProjectSpace->saveConfig();
   m_components.remove(m_pProjectSpace);
   delete m_pProjectSpace;
   m_pProjectSpace = 0L;
+
+  if (m_pLanguageSupport) {
+    QListIterator<KDevComponent> it1(m_components);
+    for (; it1.current(); ++it1)
+      (*it1)->languageSupportClosed();
+    unloadLanguageSupport();
+  }
+  
+  if (m_pVersionControl) {
+    QListIterator<KDevComponent> it2(m_components);
+    for (; it2.current(); ++it2)
+      (*it2)->versionControlClosed();
+    unloadVersionControl();
+  }
+
+  QListIterator<KDevComponent> it3(m_components);
+  for (; it3.current(); ++it3)
+    (*it3)->classStoreClosed();
+  m_pClassStore->wipeout();
+  
+  QListIterator<KDevComponent> it4(m_components);
+  for (; it4.current(); ++it4)
+    (*it4)->projectSpaceClosed();
+  
+  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+  pAC->action("project_close")->setEnabled(false);
+  /*pAC->action("project_add_existing_files")->setEnabled(false);
+    pAC->action("project_add_translation")->setEnabled(false);
+    pAC->action("project_file_properties")->setEnabled(false);
+    pAC->action("project_options")->setEnabled(false);
+  */
+  
 }
 
-void KDevelopCore::loadProject(const QString &fileName)
+bool KDevelopCore::loadProjectSpace(const QString &fileName)
 {
-
-  m_pProject = new CProject("../kdevelop.kdevprj"); // will be removed soon
   // project must define a version control system
   // hack until implemented
   QString vcservice = QString::fromLatin1("CVSInterface");
 
     //ok, a little bit bootstrapping
   QString projectSpace = ProjectSpace::projectSpacePluginName(fileName);
+  m_pProjectSpace = ProjectSpace::createNewProjectSpace(projectSpace);
 
-  if(loadProjectSpace(projectSpace)){
+  if(m_pProjectSpace != 0){
+    initComponent(m_pProjectSpace);
+    m_pKDevelopGUI->guiFactory()->addClient( m_pProjectSpace);
     m_pProjectSpace->readConfig(fileName);
     m_pProjectSpace->dump();
     loadLanguageSupport(m_pProjectSpace->programmingLanguage());
@@ -381,99 +380,67 @@ void KDevelopCore::loadProject(const QString &fileName)
     
     // read the config for all components (maybe also other plugins?)
     QDomDocument* pDoc = m_pProjectSpace->readGlobalDocument();
-    QListIterator<KDevComponent> it1(m_components);
-    for (; it1.current(); ++it1){
-      (*it1)->readProjectSpaceGlobalConfig(*pDoc);
+    QListIterator<KDevComponent> it7(m_components);
+    for (; it7.current(); ++it7){
+      (*it7)->readProjectSpaceGlobalConfig(*pDoc);
     }
 
     pDoc = m_pProjectSpace->readUserDocument();
-    QListIterator<KDevComponent> it2(m_components);
-    for (; it2.current(); ++it2){
-      (*it2)->readProjectSpaceUserConfig(*pDoc);
+    QListIterator<KDevComponent> it6(m_components);
+    for (; it6.current(); ++it6){
+      (*it6)->readProjectSpaceUserConfig(*pDoc);
     }
-   
-  }
-  
-  QListIterator<KDevComponent> it1(m_components);
-  for (; it1.current(); ++it1)
-    (*it1)->projectOpened(m_pProject);
-  
-  QListIterator<KDevComponent> it2(m_components);
-  for (; it2.current(); ++it2)
-        (*it2)->classStoreOpened(m_pClassStore);
-  
-  
-  if (m_pVersionControl) {
-    QListIterator<KDevComponent> it3(m_components);
-       for (; it3.current(); ++it3)
-        (*it3)->versionControlOpened(m_pVersionControl);
-  }
-
-  
-  if (m_pLanguageSupport) {
-    QListIterator<KDevComponent> it4(m_components);
-        for (; it4.current(); ++it4)
-            (*it4)->languageSupportOpened(m_pLanguageSupport);
-  }
-  
-  // some actions
-  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-  pAC->action("project_close")->setEnabled(true);
-  /*
-    pAC->action("project_add_existing_files")->setEnabled(true);
-    pAC->action("project_add_translation")->setEnabled(true);
-    pAC->action("project_file_properties")->setEnabled(true);
-    pAC->action("project_options")->setEnabled(true);
     
-    ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
-  */
+    
+    QListIterator<KDevComponent> it1(m_components);
+    for (; it1.current(); ++it1)
+      (*it1)->projectSpaceOpened(m_pProjectSpace);
+    
+    QListIterator<KDevComponent> it2(m_components);
+    for (; it2.current(); ++it2)
+      (*it2)->classStoreOpened(m_pClassStore);
   
-#if 1
-  // Hack to test the class viewer
-  QListIterator<KDevComponent> it5(m_components);
-  for (; it5.current(); ++it5)
-    (*it5)->savedFile("parts/classview/test.cpp");
-#endif
-}
-
-
-void KDevelopCore::unloadProject()
-{
-  unloadProjectSpace(); // temp
-    if (m_pLanguageSupport) {
-        QListIterator<KDevComponent> it1(m_components);
-        for (; it1.current(); ++it1)
-            (*it1)->languageSupportClosed();
-        unloadLanguageSupport();
-    }
-
+    
     if (m_pVersionControl) {
-        QListIterator<KDevComponent> it2(m_components);
-        for (; it2.current(); ++it2)
-            (*it2)->versionControlClosed();
-        unloadVersionControl();
+      QListIterator<KDevComponent> it3(m_components);
+      for (; it3.current(); ++it3)
+        (*it3)->versionControlOpened(m_pVersionControl);
     }
-
-    QListIterator<KDevComponent> it3(m_components);
-    for (; it3.current(); ++it3)
-        (*it3)->classStoreClosed();
-    m_pClassStore->wipeout();
-
-    QListIterator<KDevComponent> it4(m_components);
-    for (; it4.current(); ++it4)
-        (*it4)->projectClosed();
-
-    delete m_pProject;
-    m_pProject = 0;
-
+    
+    
+    if (m_pLanguageSupport) {
+      QListIterator<KDevComponent> it4(m_components);
+      for (; it4.current(); ++it4)
+	(*it4)->languageSupportOpened(m_pLanguageSupport);
+    }
+    
+    // some actions
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-    pAC->action("project_close")->setEnabled(false);
-    /*pAC->action("project_add_existing_files")->setEnabled(false);
-    pAC->action("project_add_translation")->setEnabled(false);
-    pAC->action("project_file_properties")->setEnabled(false);
-    pAC->action("project_options")->setEnabled(false);
+    pAC->action("project_close")->setEnabled(true);
+    /*
+      pAC->action("project_add_existing_files")->setEnabled(true);
+      pAC->action("project_add_translation")->setEnabled(true);
+      pAC->action("project_file_properties")->setEnabled(true);
+      pAC->action("project_options")->setEnabled(true);
+      
+      ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
     */
+    
+#if 1
+    // Hack to test the class viewer
+    QListIterator<KDevComponent> it5(m_components);
+    for (; it5.current(); ++it5)
+      (*it5)->savedFile("parts/classview/test.cpp");
+#endif
+  }
+  else {
+    KMessageBox::sorry(m_pKDevelopGUI,
+		       i18n("No ProjectSpace component for %1 found").arg(projectSpace));
+    return false;
+  }
+  return true;
 }
+
 
 
 void KDevelopCore::slotFilePrint()
@@ -519,10 +486,10 @@ void KDevelopCore::slotProjectOpen()
 
     }
 
-    if (m_pProject)
-        unloadProject();
+    if (m_pProjectSpace)
+        unloadProjectSpace();
 
-    loadProject(fileName);
+    loadProjectSpace(fileName);
 }
 
 
@@ -530,17 +497,17 @@ void KDevelopCore::slotProjectOpenRecent(const KURL &url)
 {
     QString fileName = url.fileName();
 
-    if (m_pProject)
-        unloadProject();
+    if (m_pProjectSpace)
+        unloadProjectSpace();
 
-    loadProject(fileName);
+    loadProjectSpace(fileName);
 }
 
 
 void KDevelopCore::slotProjectClose()
 {
     // Ask for confirmation?
-    unloadProject();
+    unloadProjectSpace();
 }
 
 

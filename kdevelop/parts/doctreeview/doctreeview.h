@@ -34,8 +34,8 @@ public:
 protected:
     virtual void setupGUI();
     virtual void configWidgetRequested(KDialogBase *dlg);
-    virtual void projectClosed();
-    virtual void projectOpened(CProject *prj);
+    virtual void projectSpaceClosed();
+    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
     
 signals:
     void projectAPISelected();

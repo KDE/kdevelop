@@ -24,7 +24,6 @@
 #include "classtooldlg.h"
 //#include "hierarchydlg.h"
 #include "main.h"
-#include "cproject.h"
 #include "classstore.h"
 #include "kdevlanguagesupport.h"
 

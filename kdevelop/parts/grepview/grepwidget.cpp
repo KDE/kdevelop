@@ -14,11 +14,11 @@
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kprocess.h>
-#include "cproject.h"
 #include "ctoolclass.h"
 #include "grepwidget.h"
 #include "grepview.h"
 #include "grepdlg.h"
+#include "projectspace.h"
 
 
 class GrepListBoxItem : public ProcessListBoxItem
@@ -193,7 +193,7 @@ void GrepWidget::insertStdoutLine(const QString &line)
 }
 
 
-void GrepWidget::setProject(CProject *prj)
+void GrepWidget::setProjectSpace(ProjectSpace *pProjectSpace)
 {
-    grepdlg->setDirectory(prj->getProjectDir());
+    grepdlg->setDirectory(pProjectSpace->absolutePath());
 }

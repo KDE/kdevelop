@@ -55,10 +55,10 @@ void DbgManager::setupGUI()
 void DbgManager::compilationAborted()
 {}
 
-void DbgManager::projectClosed()
+void DbgManager::projectSpaceClosed()
 {}
 
-void DbgManager::projectOpened(CProject *prj)
+void DbgManager::projectSpaceOpened(ProjectSpace*)
 {}
 
 void DbgManager::slotDebugStart()

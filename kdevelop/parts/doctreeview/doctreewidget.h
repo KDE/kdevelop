@@ -21,7 +21,7 @@ class DocTreeOthersFolder;
 class DocTreeProjectFolder;
 class DocTreeDocbaseFolder;
 class DocTreeView;
-class CProject;
+class ProjectSpace;
 class CustomizeDialog;
 
 
@@ -35,8 +35,8 @@ public:
 
     void configurationChanged();
     void docPathChanged();
-    void projectClosed();
-    void projectOpened(CProject *prj);
+    void projectSpaceClosed();
+    void projectSpaceOpened(ProjectSpace *pProjectSpace);
     
 private slots:
     void slotConfigure();

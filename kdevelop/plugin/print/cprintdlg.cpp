@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "cproject.h"
 #include "ctoolclass.h"
 #include "cprintdlg.h"
 #include "cfileprintdlg.h"
@@ -1234,45 +1233,47 @@ QString CPrintDlg::createFileString() {
   globalpara = settings->readEntry("FileSettings");
   settings->setGroup("Files");
   prj_str2 = settings->readEntry("project_file");
-  CProject *project = new CProject(prj_str2);
-  project->readProject();
+  //  CProject *project = new CProject(prj_str2);
+  //  project->readProject();
   prj_str2.truncate(prj_str2.findRev("/"));
   test = prj_str2;
   test2 = prj_str2;
   test.truncate(test.findRev("/"));
   underdir = test2.remove(0,test.length());
-  if (!strcmp(globalpara,"current")) {
+  /*
+    if (!strcmp(globalpara,"current")) {
     delete (project);
     return oldfiles;
-  }
-  else if (!strcmp(globalpara,"cppFiles")) {
+    }
+    else if (!strcmp(globalpara,"cppFiles")) {
     filelist = project->getSources();
     for(str= filelist.first();str !=0;str = filelist.next()){
-      sources =  str + " " + sources ;
+    sources =  str + " " + sources ;
     }
     delete (project);
     return sources;
-  }
-  else if (!strcmp(globalpara,"allFiles")) {
+    }
+    else if (!strcmp(globalpara,"allFiles")) {
     project->getAllFiles(filelist);
     for(str= filelist.first();str !=0;str = filelist.next()){
-      sources =  prj_str2 + "/" + str + " " + sources ;
+    sources =  prj_str2 + "/" + str + " " + sources ;
     }
     delete (project);
     return sources;
-  }
-  else if (!strcmp(globalpara,"headerFiles")) {
+    }
+    else if (!strcmp(globalpara,"headerFiles")) {
     filelist = project->getHeaders();
     for(str= filelist.first();str !=0;str = filelist.next()){
-      sources =  str + " " + sources ;
+    sources =  str + " " + sources ;
     }
     delete (project);
     return sources;
-  } 
-  else {
+    } 
+    else {
     delete (project);
     return globalpara;
-  } 
+    } 
+  */
 }
 
 void CPrintDlg::loadSettings() {

@@ -27,11 +27,11 @@ void KDevComponent::stopButtonClicked()
 {
 }
 
-void KDevComponent::projectOpened(CProject*)
+void KDevComponent::projectSpaceOpened(ProjectSpace*)
 {
 }
 
-void KDevComponent::projectClosed()
+void KDevComponent::projectSpaceClosed()
 {
 }
 
@@ -79,7 +79,7 @@ void KDevComponent::setWidget(QWidget*)
 
 QWidget *KDevComponent::widget()
 {
-    return 0;
+  return 0;
 }
 KAboutData* KDevComponent::aboutPlugin(){
   return 0;

@@ -39,6 +39,8 @@ class ProjectSpace : public KDevComponent {
 
   /** nesessary to bootstrap a ProjectSpace*/
   static QString projectSpacePluginName(QString fileName);
+  /** factory to create new ProjectSpaces */
+  static ProjectSpace* createNewProjectSpace(const QString& name,QObject* parent=0);
 
   virtual void setupGUI();
   void addProject(Project* prj);

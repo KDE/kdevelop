@@ -1,3 +1,7 @@
+2000-10-03  Sandy Meier  <smeier@kdevelop.org>
+	* removed CProject (yet another old class from KDevelop1) and all references to this class, 
+	ProjectSpace is the successor
+
 2000-09-31 Sandy Meier   <smeier@kdevelop.org>
 	* KDevComponents can write their project related configuration 
 		to the ProjectSpace file now (*.kdevpsp)

@@ -17,7 +17,7 @@
 
 
 class MakeWidget;
-class CProject;
+class ProjectSpace;
 
 class MakeView : public KDevComponent
 {
@@ -30,14 +30,14 @@ public:
 protected:
     virtual void setupGUI();
     virtual void commandRequested(const QString &command);
-    virtual void projectOpened(CProject *prj);
-    virtual void projectClosed();
+    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
+    virtual void projectSpaceClosed();
     
 private:
     QGuardedPtr<MakeWidget> m_widget;
     friend class MakeWidget;
 
-    CProject *m_prj;
+    ProjectSpace *m_pProjectSpace;
 };
 
 

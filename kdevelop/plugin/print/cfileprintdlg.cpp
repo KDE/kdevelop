@@ -21,7 +21,6 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include "cproject.h"
 #include "cfileprintdlg.h"
 
 
@@ -821,34 +820,38 @@ void CFilePrintDlg::slotOkClicked() {
     settings->writeEntry("FileSettings",sources);
   }
   else {
-    QStrList filelist;
-    QString sources = "";
-    QString str = "";
-    QString prj_str = "";
-    QString directory = "";
-    QDateTime beginDateTime (beginDate, beginTime);
-    QDateTime endDateTime (endDate, endTime);
-    QFileInfo fileInfo;
-    settings->setGroup("Files");
-    prj_str = settings->readEntry("project_file");
-    CProject project (prj_str);
-    project.readProject();
-    prj_str.truncate(prj_str.findRev("/")); 
-    directory = prj_str;
-    project.getAllFiles(filelist);
-    for(str= filelist.first();str !=0;str = filelist.next()){
+    /*QStrList filelist;
+      QString sources = "";
+      QString str = "";
+      QString prj_str = "";
+      QString directory = "";
+      QDateTime beginDateTime (beginDate, beginTime);
+      QDateTime endDateTime (endDate, endTime);
+      QFileInfo fileInfo;
+      settings->setGroup("Files");
+      prj_str = settings->readEntry("project_file");
+      
+      CProject project (prj_str);
+      project.readProject();
+      prj_str.truncate(prj_str.findRev("/")); 
+      directory = prj_str;
+      project.getAllFiles(filelist);
+      for(str= filelist.first();str !=0;str = filelist.next()){
       fileInfo.setFile(directory + "/" + str);
       if (beginDateTime != endDateTime) {
-	if ((beginDateTime < fileInfo.lastModified()) && (fileInfo.lastModified() < endDateTime)) {
-	  sources =  prj_str + "/" + str + " " + sources ;
-	}
+      if ((beginDateTime < fileInfo.lastModified()) && (fileInfo.lastModified() < endDateTime)) {
+      sources =  prj_str + "/" + str + " " + sources ;
       }
-    }
-    settings->setGroup("LastSettings");
-    settings->writeEntry("FileSettings",sources);
+      }
+      }
+      settings->setGroup("LastSettings");
+      settings->writeEntry("FileSettings",sources);
+      }
+    */
+    
+    settings->sync();
+    reject();
   }
-  settings->sync();
-  reject();
 }
 
 void CFilePrintDlg::loadSettings() {

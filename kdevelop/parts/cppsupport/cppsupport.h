@@ -32,8 +32,8 @@ public:
     ~CppSupport();
 
 protected:
-    virtual void projectOpened(CProject *prj);
-    virtual void projectClosed();
+    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
+    virtual void projectSpaceClosed();
     virtual void classStoreOpened(ClassStore *store);
     virtual void classStoreClosed();
     virtual void addedFileToProject(const QString &fileName);

@@ -24,9 +24,9 @@
 #include "config.h"
 
 #include "ctoolclass.h"
-#include "cproject.h"
 #include "doctreewidget.h"
 #include "doctreeview.h"
+#include "projectspace.h"
 
 
 class DocTreeItem : public QListViewItem
@@ -454,12 +454,12 @@ class DocTreeProjectFolder : public DocTreeItem
 {
 public:
     DocTreeProjectFolder(DocTreeWidget *parent);
-    void setProject(CProject *prj)
-        { project = prj; }
+    void setProjectSpace(ProjectSpace *pProjectSpace)
+        { m_pProjectSpace = pProjectSpace; }
     void refresh();
     
 private:
-    CProject *project;
+    ProjectSpace *m_pProjectSpace;
 };
 
 
@@ -473,12 +473,14 @@ void DocTreeProjectFolder::refresh()
     DocTreeItem::clear();
 
     setExpandable(false);
-    if (project && project->valid) {
-        setExpandable(true);
-        
-        (void) new DocTreeItem(this, Book, i18n("API documentation"), "internal:projectAPI");
-        (void) new DocTreeItem(this, Book, i18n("User manual"), "internal:projectManual");
+#warning not implemented yet
+    /*    if (project && project->valid) {
+	  setExpandable(true);
+	  
+	  (void) new DocTreeItem(this, Book, i18n("API documentation"), "internal:projectAPI");
+	  (void) new DocTreeItem(this, Book, i18n("User manual"), "internal:projectManual");
     }
+    */
 }
 
 
@@ -586,9 +588,9 @@ void DocTreeWidget::docPathChanged()
 }
 
 
-void DocTreeWidget::projectOpened(CProject *prj)
+void DocTreeWidget::projectSpaceOpened(ProjectSpace *pProjectSpace)
 {
-    folder_project->setProject(prj);
+    folder_project->setProjectSpace(pProjectSpace);
     folder_kdevelop->refresh();
     folder_kdelibs->refresh();
     folder_others->refresh();
@@ -596,8 +598,8 @@ void DocTreeWidget::projectOpened(CProject *prj)
 }
 
 
-void DocTreeWidget::projectClosed()
+void DocTreeWidget::projectSpaceClosed()
 {
-    folder_project->setProject(0);
+    folder_project->setProjectSpace(0);
 }
 

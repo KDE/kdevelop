@@ -15,7 +15,7 @@
 #include "processview.h"
 
 class GrepDialog;
-class CProject;
+class ProjectSpace;
 class GrepView;
 
 
@@ -27,7 +27,7 @@ public:
     GrepWidget(GrepView *part);
     ~GrepWidget();
 
-    void setProject(CProject *prj);
+    void setProjectSpace(ProjectSpace *pProjectSpace);
 
 public slots:
     void showDialog();

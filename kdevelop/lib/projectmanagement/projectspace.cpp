@@ -31,6 +31,9 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <kaboutdata.h>
+#include <ktrader.h>
+#include <klibloader.h>
+
 
 
 ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(parent,name){
@@ -519,6 +522,33 @@ bool ProjectSpace::saveConfig(){
   file.close();
   return true;
 }
+// factory
+ProjectSpace* ProjectSpace::createNewProjectSpace(const QString& name,QObject* parent){
+  QString constraint = QString("[Name] == '%1'").arg(name);
+  KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
+  if (offers.isEmpty()) {
+    return 0;
+  }
+  
+  KService *pService = *offers.begin();
+  kdDebug(9000) << "Found ProjectSpace Component " << pService->name() << endl;
+  
+  KLibFactory *pFactory = KLibLoader::self()->factory(pService->library());
 
+  QStringList args;
+  QVariant prop = pService->property("X-KDevelop-Args");
+  if (prop.isValid())
+    args = QStringList::split(" ", prop.toString());
+  
+  QObject *pObj = pFactory->create(parent, pService->name().latin1(),
+				   "ProjectSpace", args);
+  
+  if (!pObj->inherits("ProjectSpace")) {
+    kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
+    return 0;
+  }
+  ProjectSpace *pComp = (ProjectSpace*) pObj;
+  return pComp;
+}
 
 #include "projectspace.moc"

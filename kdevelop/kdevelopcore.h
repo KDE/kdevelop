@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2000 by The KDevelop Team                               *
- *   kdevelop-team@fara.cs.uni-potsdam.de                                  *
+ *   kdevelop-team@kdevelop.org                                            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,6 @@ class KDevComponent;
 class KDevVersionControl;
 class KDevLanguageSupport;
 class KDevViewHandler;
-class CProject;
 class ProjectSpace;
 
 class KDevelopCore : QObject
@@ -43,10 +42,8 @@ private:
     void loadLanguageSupport(const QString &lang);
     void unloadLanguageSupport();
     void newFile();
-    bool loadProjectSpace(const QString &name);
+    bool loadProjectSpace(const QString &fileName);
     void unloadProjectSpace();
-    void loadProject(const QString &fileName);
-    void unloadProject();
     
 
 private slots:
@@ -85,7 +82,6 @@ private:
     KDevLanguageSupport *m_pLanguageSupport;
     KDevComponent *m_pMakeFrontend;
     KDevComponent *m_pAppFrontend;
-    CProject *m_pProject;
     ClassStore *m_pClassStore;
     ProjectSpace* m_pProjectSpace;
     KDevViewHandler* m_pViewHandler;

@@ -83,16 +83,16 @@ void GrepView::stopButtonClicked()
 }
 
 
-void GrepView::projectOpened(CProject *prj)
+void GrepView::projectSpaceOpened(ProjectSpace *pProjectSpace)
 {
-    kdDebug(9001) << "GrepView::projectOpened()" << endl;
-    m_widget->setProject(prj);
+    kdDebug(9001) << "GrepView::projectSpaceOpened()" << endl;
+    m_widget->setProjectSpace(pProjectSpace);
 }
 
 
-void GrepView::projectClosed()
+void GrepView::projectSpaceClosed()
 {
-    kdDebug(9001) << "GrepView::projectClosed()" << endl;
+    kdDebug(9001) << "GrepView::projectSpaceClosed()" << endl;
 }
 //at the moment GrepView writes only data that are user depended,
 void GrepView::readProjectSpaceUserConfig(QDomDocument& doc){

@@ -30,8 +30,8 @@ protected:
     virtual void setupGUI();
     virtual void configWidgetRequested(KDialogBase *dlg);
     virtual void stopButtonClicked();
-    virtual void projectClosed();
-    virtual void projectOpened(CProject *prj);
+    virtual void projectSpaceClosed();
+    virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);
     virtual void readProjectSpaceUserConfig(QDomDocument& doc);
     virtual void writeProjectSpaceUserConfig(QDomDocument& doc);
 private:
