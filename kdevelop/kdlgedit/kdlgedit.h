@@ -20,6 +20,8 @@
 #define KDLGEDIT_H
 
 #include <qobject.h>
+#include "../cproject.h"
+#include "items.h"
 class CProject;
 
 /**
@@ -64,13 +66,24 @@ void slotFileNew();
   void slotViewGrid();
   
   /** generates the sources for the current edited widget */
-  void  slotBuildGenerate();
+  void slotBuildGenerate();
+  void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
 
   void slotOpenDialog(QString file);
 protected:
+  
+  void generateInitialHeaderFile(TDialogFileInfo info);
+  void generateInitialSourceFile(TDialogFileInfo info);
+
+  
   CProject* project;
   QString dialog_file;
-  
+  /** filled at the generation process, needed for the header*/
+  QStrList variables;
+  /** filled at the generation process, needed for the header*/
+  QStrList includes;
 };
 
 #endif

@@ -15,7 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "qdir.h"
+#include <qdir.h>
+#include <qfileinfo.h>
 #include "kdlgedit.h"
 #include "../ckdevelop.h"
 #include "kdlgeditwidget.h"
@@ -25,6 +26,7 @@
 #include "kdlgotherdlgs.h"
 #include "kdlgnewdialogdlg.h"
 #include "kdlgdialogs.h"
+#include "../cgeneratenewfile.h"
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
@@ -62,6 +64,13 @@ void KDlgEdit::slotFileNew(){
 	((CKDevelop*)parent())->newSubDir();
       }
       ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
+
+      // generate the new files;
+      // header
+      generateInitialHeaderFile(info);
+      generateInitialSourceFile(info);
+      slotBuildGenerate();
+
       ((CKDevelop*)parent())->refreshTrees();
     }
   }
@@ -76,6 +85,7 @@ void KDlgEdit::slotOpenDialog(QString file){
   dialog_file = file;
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile(file);
   ((CKDevelop*)parent())->setCaption(i18n("KDevelop Dialog Editor: ")+file); 
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
 }
 
 void KDlgEdit::slotFileClose()
@@ -131,8 +141,92 @@ void KDlgEdit::slotViewRefresh()
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->recreateItem();
 }
 
-void KDlgEdit::slotBuildGenerate()
-{
+void KDlgEdit::slotBuildGenerate(){
+  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
+
+  ///////////////////////////// datafile/////////////////////////
+  QFile file(prj->getProjectDir() + info.data_file);
+  QTextStream stream( &file );
+  if ( file.open(IO_WriteOnly) ){
+    QFileInfo header_file_info(prj->getProjectDir()+info.header_file);
+    stream << "#include \"" << header_file_info.fileName() << "\"\n\n";
+    
+    stream << info.classname + "::initDialog(){\n";
+    ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
+    variables.clear();
+    includes.clear();
+    generateWidget(((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget(),&stream,"this");
+    stream << "}\n";
+  }
+  file.close();
+
+  ///////////////////////////headerfile////////////////////////
+  
+  if(((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetAdded() 
+     || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetRemoved()){
+    QString var;
+    
+    file.setName(prj->getProjectDir() + info.header_file);
+    QStrList list;
+    bool ok = true;
+    QString str;
+    
+    if(file.open(IO_ReadOnly)){ // read the header
+      while(!stream.eof()){
+	list.append(stream.readLine());
+      }
+    }
+    file.close();
+    
+    if(file.open(IO_WriteOnly)){
+      str = list.first();
+      ////////////////////////////includes/////////////////////////////
+      while(str != 0 && ok){
+	if(str.contains("//Generated area. DO NOT EDIT!!!(begin)") != 0){
+	  stream << str << "\n";
+	  for(var = includes.first();var != 0;var = includes.next()){ // generate the includes
+	    stream << var << endl;
+	  }
+	  ok = false; // finished
+	}
+	else{
+	  stream << str << "\n";
+	}
+	str = list.next();
+      }
+      ok = true;
+      while(str != 0 && ok){
+	if(str.contains("//Generated area. DO NOT EDIT!!!(end)") != 0){
+	  stream << str << "\n";
+	  ok = false;
+	}
+	str = list.next();
+      }
+      ok = true;
+      ////////////////////////////variables/////////////////////////////
+      while(str != 0 && ok){
+	if(str.contains("//Generated area. DO NOT EDIT!!!(begin)") !=0){
+	  stream << str << "\n";
+	  for(var = variables.first();var != 0;var = variables.next()){
+	    stream << "\t" << var << endl;
+	  }
+	  ok = false; // finished
+	}
+	else{
+	  stream << str << "\n";
+	}
+	str = list.next();
+      }
+      ok = true;
+      while(str != 0 && ok){
+	if(str.contains("//Generated area. DO NOT EDIT!!!(end)") != 0){
+	  stream << str << "\n";
+	}
+	str = list.next();
+      }
+    } 
+  }
 }
 
 void KDlgEdit::slotViewGrid()
@@ -155,3 +249,230 @@ QString KDlgEdit::getRelativeName(QString abs_filename){
   return abs_filename;
 }
   
+void KDlgEdit::generateInitialHeaderFile(TDialogFileInfo info){
+  CGenerateNewFile generator;
+  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  QString header_file = prj->getProjectDir() + info.header_file;
+  generator.genHeaderFile(header_file,prj);
+
+
+  // modify the header
+  QStrList list;
+  QFile file(header_file);
+  QTextStream stream(&file);
+  QString str;
+  
+  if(file.open(IO_ReadOnly)){ // 
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+  
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str != 0;str = list.next()){
+      stream << str << "\n";
+    }
+    QFileInfo fileinfo(header_file);
+    stream << "\n#ifndef " + fileinfo.baseName().upper() + "_H\n";
+    stream << "#define "+ fileinfo.baseName().upper() + "_H\n\n";
+    if(info.baseclass != "Custom"){
+      stream << "//Generated area. DO NOT EDIT!!!(begin)\n";
+      stream << "//Generated area. DO NOT EDIT!!!(end)\n";
+    }
+    stream << "\n#include <"+info.baseclass.lower() +".h>\n";
+    
+    stream << "\n/**\n";
+    stream << "  *@author "+ prj->getAuthor() + "\n";
+    stream << "  */\n\n";
+    stream << "class " + info.classname;
+    stream << " : ";
+    stream << "public ";
+    if(info.baseclass != "Custom"){
+      stream << info.baseclass + " ";
+    }
+    stream << " {\n";
+    stream << "   Q_OBJECT\n";
+    
+    stream << "public: \n";
+    stream << "\t" + info.classname+"(";
+    stream << "QWidget *parent=0, const char *name=0";
+    stream << ");\n";
+    stream << "\t~" + info.classname +"();\n\n";
+
+    stream << "protected: \n";
+    stream << "\tvoid initDialog();\n";
+    stream << "\t//Generated area. DO NOT EDIT!!!(begin)\n";
+    stream << "\t//Generated area. DO NOT EDIT!!!(end)\n\n";
+    stream << "private: \n";
+    stream << "};\n\n#endif\n";
+  }
+}
+void KDlgEdit::generateInitialSourceFile(TDialogFileInfo info){
+  CGenerateNewFile generator;
+  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  QString source_file = prj->getProjectDir() + info.source_file;
+  generator.genCPPFile(source_file,prj);
+  QFileInfo header_file_info(prj->getProjectDir() + info.header_file);
+  
+
+  // modify the source
+  QStrList list;
+  QFile file(source_file);
+  QTextStream stream(&file);
+  QString str;
+  
+  if(file.open(IO_ReadOnly)){ // 
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+  
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str != 0;str = list.next()){
+      stream << str << "\n";
+    }
+    stream << "#include \"" << header_file_info.fileName() << "\"\n\n";
+
+
+    // constructor
+    if(info.baseclass == "QDialog"){
+      stream << info.classname + "::" + info.classname 
+	+ "(QWidget *parent, const char *name) : QDialog(parent,name,true){\n";
+    }
+    
+    stream << "\tinitDialog();\n}\n\n";
+    // destructor
+    stream << info.classname + "::~" + info.classname +"(){\n}\n";
+  }
+}
+
+void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  if ((!wid) || (!stream)){
+    return;
+  }
+  if(wid->itemClass() == "QPushButton"){
+    variables.append("QPushbutton *"+wid->getProps()->getPropValue("VarName")+";");
+    if(includes.contains("#include <qpushbutton.h>") == 0){
+      includes.append("#include <qpushbutton.h>");
+    }
+    generateQPushButton(wid,stream,parent);
+  }
+  
+  if (wid->itemClass().upper() == "QWIDGET"){
+    if(wid->getProps()->getPropValue("VarName") != "this"){
+      variables.append("QWidget *"+wid->getProps()->getPropValue("VarName")+";");
+    }
+    if(includes.contains("#include <qwidget.h>") == 0){
+      includes.append("#include <qwidget.h>");
+    }
+    generateQWidget(wid,stream,parent);
+    KDlgItemDatabase *cdb = wid->getChildDb();
+    if (cdb)
+      {
+	KDlgItem_Base *cdit = cdb->getFirst();
+	while (cdit)
+	  {
+	    generateWidget( (KDlgItem_Widget*)cdit, stream, wid->getProps()->getPropValue("VarName"));
+	    cdit = cdb->getNext();
+	  }
+      }
+  }
+}
+
+void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  *stream << "\t" + props->getPropValue("VarName") +" = new QPushButton(" + parent +",\"" 
+    +props->getPropValue("Name") + "\");\n";
+  generateQWidget(wid,stream,parent);
+
+  QString varname_p = "\t"+props->getPropValue("VarName") + "->";
+  //setText
+  *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
+  //isDefault
+  if(props->getPropValue("isDefault") == "TRUE"){
+    *stream << varname_p + "setDefault(true);\n";
+  }
+  //IsAutoDefaul
+  if(props->getPropValue("isAutoDefault") == "TRUE"){
+    *stream << varname_p + "setAutoDefault(true);\n";
+  }
+  //IsToogleButton
+  if(props->getPropValue("isToggleButton") == "TRUE"){
+    *stream << varname_p + "setToogleButton(true);\n";
+  }
+  //isToogledOn
+  if(props->getPropValue("isToggledOn") == "TRUE"){
+    *stream << varname_p + "setToogleOn(true);\n";
+  }
+  //IsMenuButton
+  if(props->getPropValue("isMenuButton") == "TRUE"){
+    *stream << varname_p + "setIsMenuButton(true);\n";
+  }
+  //isAutoResize
+  if(props->getPropValue("isAutoResize") == "TRUE"){
+    *stream << varname_p + "setAutoResize(true);\n";
+  }
+  //isAutoRepeat
+  if(props->getPropValue("isAutoRepeat") == "TRUE"){
+    *stream << varname_p + "setAutoRepeat(true);\n";
+  }
+  //Pixmap
+  if(props->getPropValue("Pixmap") != ""){
+    *stream << varname_p + "setPixmap(QPixmap(\""+props->getPropValue("Pixmap")+"\"));\n";
+  }
+  *stream << "\n";
+  
+}
+void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent){
+  KDlgPropertyBase* props = wid->getProps();
+  QString varname_p;
+  // new
+  if(props->getPropValue("VarName") != "this" && wid->itemClass() == "QWidget"){
+    *stream << "\t" + props->getPropValue("VarName") +" = new QWidget(" + parent +",\"" 
+      +props->getPropValue("Name") + "\");\n";
+  }
+   
+  varname_p = "\t"+props->getPropValue("VarName") + "->";
+  ///////////////////////////////////////geometry////////////////////////////////////
+  // setGeometry
+  *stream << varname_p + "setGeometry("+props->getPropValue("X")+","
+    +props->getPropValue("Y")+","+props->getPropValue("Width")+","+props->getPropValue("Height")+");\n";
+
+  //setMinimumSize
+  *stream << varname_p + "setMiniumSize("+props->getPropValue("MinWidth")+","
+    +props->getPropValue("MinHeight")+");\n";
+
+  //setMaximumSize
+  if(props->getPropValue("MaxWidth") != "" && props->getPropValue("MaxHeight") != ""){
+    *stream << varname_p + "setMaximumSize("+props->getPropValue("MaxWidth")+","
+    +props->getPropValue("MaxHeight")+");\n";
+  }
+  //setFixedSize
+  if(props->getPropValue("IsFixedSize") == "TRUE"){
+    *stream << varname_p + "setFixedSize("+props->getPropValue("Width")
+      +","+props->getPropValue("Height")+");\n";
+  }
+  //setSizeIncrement ( int w, int h )
+  if(props->getPropValue("SizeIncX") != "" && props->getPropValue("SizeIncY") != ""){
+    *stream << varname_p + "setSizeIncrement("+props->getPropValue("SizeIncX")
+      +","+props->getPropValue("SizeIncY")+");\n";
+  }
+  /////////////////////////////////General///////////////////////////
+  //IsHidden
+  if(props->getPropValue("IsHidden") != "FALSE"){
+    *stream << varname_p + "hide();\n";
+  }
+  //isEnabled
+  if(props->getPropValue("IsEnabled") != "TRUE"){
+    *stream << varname_p + "setEnabled(false);\n";
+  }
+  ////////////////////////////////C++ Code//////////////////////////
+  
+  
+  ////////////////////////////////Appearance/////////////////////////
+  //BgMode
+  
+
+}

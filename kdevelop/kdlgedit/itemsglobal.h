@@ -182,7 +182,11 @@ class KDlgPropertyBase
      * returns a pointer to the KDlgPropertyEntry (see above) given by <i>name</i>.
      * @param name The name of the property (i.e. "Width").
     */
-    KDlgPropertyEntry* getProp(QString name);
+  KDlgPropertyEntry* getProp(QString name);
+  /**
+   * return the value of a property by a given prop name
+   */
+  QString getPropValue(QString name){return getProp(name)->value;}
 
     /**
      * sets all entries of a propertyentry in one step.
