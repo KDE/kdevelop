@@ -768,6 +768,10 @@ sub changeQtApp {
     #Replacements and name changing in underDirectory
     chdir ($underDirectory);
 
+      rename ("bank.dsp",     $nameLittle.".dsp") if ( -e "bank.dsp" );
+      rename ("bank.dsw",     $nameLittle.".dsw") if ( -e "bank.dsw" );
+      rename ("bank.pro",     $nameLittle.".pro") if ( -e "bank.pro" );
+
     rename ("bank.cpp",     $nameLittle.".cpp");
     rename ("bank.h",       $nameLittle.".h");
     rename ("bankdoc.cpp",  $nameLittle."doc.cpp");
@@ -779,6 +783,11 @@ sub changeQtApp {
     replaceValuesInFile(\%changings, "main.cpp");
     replaceValuesInFile(\%changings, "$nameLittle.cpp");
     replaceValuesInFile(\%changings, "$nameLittle.h");
+
+      replaceValuesInFile(\%changings, "$nameLittle.dsp") if ( -e "$nameLittle.dsp" );
+      replaceValuesInFile(\%changings, "$nameLittle.dsw") if ( -e "$nameLittle.dsw" );
+      replaceValuesInFile(\%changings, "$nameLittle.pro") if ( -e "$nameLittle.pro" );
+
     replaceValuesInFile(\%changings, "${nameLittle}doc.cpp");
     replaceValuesInFile(\%changings, "${nameLittle}view.cpp");
     replaceValuesInFile(\%changings, "${nameLittle}doc.h");
