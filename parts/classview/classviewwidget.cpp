@@ -165,6 +165,9 @@ void ClassViewWidget::slotProjectOpened( )
     m_projectItem->setOpen( true );
 
     m_projectDirectory = QDir(m_part->project()->projectDirectory()).canonicalPath();
+    if( m_projectDirectory.isEmpty() )
+	m_projectDirectory = m_part->project()->projectDirectory();
+    
     m_projectDirectoryLength = m_projectDirectory.length() + 1;
 
     connect( m_part->languageSupport(), SIGNAL(updatedSourceInfo()),
@@ -182,6 +185,8 @@ void ClassViewWidget::slotProjectClosed( )
 void ClassViewWidget::insertFile( const QString& fileName )
 {
     QString fn = QDir( fileName ).canonicalPath();
+    if( fn.isEmpty() )
+	fn = fileName;
     //kdDebug() << "======================== insertFile(" << fn << ")" << endl;
 
     FileDom dom = m_part->codeModel()->fileByName( fn );
@@ -225,6 +230,8 @@ void ClassViewWidget::insertFile( const QString& fileName )
 void ClassViewWidget::removeFile( const QString& fileName )
 {
     QString fn = QDir( fileName ).canonicalPath();
+    if( fn.isEmpty() )
+	fn = fileName;
     //kdDebug() << "======================== removeFile(" << fn << ")" << endl;
 
     FileDom dom = m_part->codeModel()->fileByName( fn);
