@@ -12,6 +12,8 @@
 #ifndef _DIFFPART_H_
 #define _DIFFPART_H_
 
+#include <qguardedptr.h>
+
 #include "kdevplugin.h"
 #include "kdevdifffrontend.h"
 
@@ -33,7 +35,7 @@ public slots:
     void slotExecDiff();
 
 private:
-    DiffWidget* diffWidget;
+    QGuardedPtr<DiffWidget> diffWidget;
 
 };
 

@@ -34,6 +34,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   setXMLFile("kdevdiff.rc");
 
   diffWidget = new DiffWidget();
+  connect( diffWidget, SIGNAL(destroyed()), this, SLOT(widgetDeleted()) );
   QString nm( i18n( "Difference Viewer" ) );
   diffWidget->setCaption( nm );
   topLevel()->embedOutputView( diffWidget, nm );
@@ -46,7 +47,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
 
 DiffPart::~DiffPart()
 {
-  delete diffWidget;
+  delete (DiffWidget*) diffWidget;
 }
 
 void DiffPart::openURL( const KURL& url )
