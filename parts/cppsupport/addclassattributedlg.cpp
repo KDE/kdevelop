@@ -20,13 +20,15 @@
 
 #include "addclassattributedlg.h"
 
+#include "classstore.h"
 #include <qwhatsthis.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
 
-AddClassAttributeDialog::AddClassAttributeDialog(QWidget *parent, const char *name)
+AddClassAttributeDialog::AddClassAttributeDialog(ClassStore *store, ClassStore *libstore,
+						 QWidget *parent, const char *name)
     : QDialog(parent, name, true),
       topLayout( this, 5 ),
       varLayout( 9, 3, 10, "functionLayout" ),
@@ -48,12 +50,21 @@ AddClassAttributeDialog::AddClassAttributeDialog(QWidget *parent, const char *na
       staticCb( this, "staticCb" ),
       constCb( this, "constCb" ),
       okBtn( this, "okBtn" ),
-      cancelBtn( this, "cancelBtn" )
+      cancelBtn( this, "cancelBtn" ),
+      comp(0)
 {
     setCaption( i18n("Add Member Variable") );
 
     setWidgetValues();
+    setStdCompletion();
+    setCompletion(store);
+    setCompletion(libstore);
     setCallbacks();
+}
+
+AddClassAttributeDialog::~AddClassAttributeDialog()
+{
+    delete comp;
 }
 
 
@@ -162,10 +173,30 @@ void AddClassAttributeDialog::setWidgetValues()
     typeEdit.setFocus();
 }
 
+  
+void AddClassAttributeDialog::setStdCompletion()
+{
+  comp = typeEdit.completionObject();
+  comp->addItem("int");
+  comp->addItem("long int");
+  comp->addItem("unsigned int");
+  comp->addItem("unsigned long int");
+  comp->addItem("float");
+  comp->addItem("double");
+  comp->addItem("char");
+  comp->addItem("bool");
+}
+
+void AddClassAttributeDialog::setCompletion(ClassStore *store)
+{
+  QValueList<ParsedClass*> classlist = store->getSortedClassList();
+  QValueList<ParsedClass*>::iterator it;
+  for ( it = classlist.begin(); it != classlist.end(); ++it )
+    comp->addItem((*it)->name());
+}
 
 void AddClassAttributeDialog::setCallbacks()
 {
-    
     // Ok and cancel buttons.
     connect( &okBtn, SIGNAL( clicked() ), SLOT( accept() ) );
     connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );

@@ -68,7 +68,7 @@
                         <cstring>ClassName</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
+                <widget class="KLineEdit">
                     <property name="name">
                         <cstring>edType</cstring>
                     </property>
@@ -404,7 +404,7 @@
                                         <cstring>paraDefault</cstring>
                                     </property>
                                 </widget>
-                                <widget class="QLineEdit" row="0" column="1">
+                                <widget class="KLineEdit" row="0" column="1">
                                     <property name="name">
                                         <cstring>paraType</cstring>
                                     </property>

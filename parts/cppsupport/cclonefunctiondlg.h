@@ -42,7 +42,8 @@ class ParsedClass;
 class CCloneFunctionDlg : public QDialog  {
    Q_OBJECT
 public: 
-	CCloneFunctionDlg( ClassStore * store,const QString& currentClass, QWidget *parent=0, const char *name=0);
+  CCloneFunctionDlg( ClassStore * store, ClassStore * libstore,
+		     const QString& currentClass, QWidget *parent=0, const char *name=0);
   /** get the selected method */
   bool getMethod(QString& type, QString& decl, QString& comment,
                   bool& ispriv, bool& isprot, bool& ispub, bool& isvirt, bool& isSlot, bool& isSignal);
@@ -70,9 +71,10 @@ protected: // Private widgets
   QPushButton* okBtn;
   QPushButton* cancelBtn;
 
-	/** pointer to all the classes */
-	const QString& classname;
+  /** pointer to all the classes */
+  const QString& classname;
   ClassStore* classtree;
+  ClassStore* libclasstree;
 
 private slots: // Private slots
   /** update methods */

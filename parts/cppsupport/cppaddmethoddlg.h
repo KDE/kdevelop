@@ -23,6 +23,7 @@
 
 class ParsedMethod;
 class ClassStore;
+class KCompletion;
 
 /**
  * Adds a new method to a class.
@@ -30,7 +31,7 @@ class ClassStore;
 class CppAddMethodDialog : public CppAddMethodDialogBase  {
     Q_OBJECT
 public:
-    CppAddMethodDialog(ClassStore *store, const QString &className,
+    CppAddMethodDialog(ClassStore *store, ClassStore *libstore, const QString &className,
                        QWidget *parent, const char *name);
     ~CppAddMethodDialog();
 
@@ -64,6 +65,8 @@ private: // Private methods
   QString getDocu();
   /** return name + parameters */
   QString getDecl();
+  /** fill Completion from classstore */
+  void setCompletion();
 private slots: // Private slots
   /** Debug only - show Message boxes
 with values */
@@ -77,6 +80,8 @@ with values */
 private: // Private attributes
   /** pointer to list: all classes */
   ClassStore * store;
+  /** pointer to list: all classes (libaries) */
+  ClassStore * libstore;
   /** name of currently selected class */
   const QString& currentClass;
   /** - prevent loops via signal/slot calls
@@ -84,6 +89,8 @@ private: // Private attributes
     * the widget (learned that the hard way ;-)
     */
   bool editactive;
+  /** type completion */
+  KCompletion *comp;
 };
 
 #endif

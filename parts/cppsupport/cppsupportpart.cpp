@@ -570,7 +570,8 @@ void CppSupportPart::addMethod(const QString &className)
 	return;
     }
     
-    CppAddMethodDialog dlg( m_pParser->getClassStore(), className, 0, "methodDlg"); //TODO: Leak ?
+    CppAddMethodDialog dlg( m_pParser->getClassStore(), m_pCCParser->getClassStore(), 
+			    className, 0, "methodDlg"); //TODO: Leak ?
     if (!dlg.exec())
         return;
 
@@ -656,7 +657,7 @@ void CppSupportPart::addAttribute(const QString &className)
 	return;
     }    
     
-    AddClassAttributeDialog dlg(0, "attrDlg");
+    AddClassAttributeDialog dlg(m_pParser->getClassStore(), m_pCCParser->getClassStore(), 0, "attrDlg");
     if( !dlg.exec() )
       return;
 

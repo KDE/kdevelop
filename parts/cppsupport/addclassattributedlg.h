@@ -31,9 +31,11 @@
 #include <qlabel.h>
 #include <qmultilinedit.h>
 #include <qlayout.h> 
+#include <klineedit.h>
 #include "parsedattribute.h"
 
-
+class ClassStore;
+class KCompletion;
 /**
  * Dialog to create a new attibute for a class.
  * @author Jonas Nordin
@@ -44,8 +46,8 @@ class AddClassAttributeDialog : public QDialog
 
 public: // Constructor & Destructor
 
-    AddClassAttributeDialog( QWidget *parent=0, const char *name=0 );
-
+    AddClassAttributeDialog( ClassStore *store, ClassStore *libstore, QWidget *parent=0, const char *name=0 );
+    ~AddClassAttributeDialog();
 public: // Public queries
 
     ParsedAttribute *asSystemObj();
@@ -80,7 +82,7 @@ public: // Public widgets
     QButtonGroup accessGrp;
     
     QLabel typeLbl;
-    QLineEdit typeEdit;
+    KLineEdit typeEdit;
     QLabel nameLbl;
     QLineEdit nameEdit;
     QLabel docLbl;
@@ -100,8 +102,13 @@ private: // Private methods
 
     void setWidgetValues();
     void setCallbacks();
+    void setStdCompletion();
+    void setCompletion(ClassStore *store);
     
     virtual void accept();
+    
+private:
+    KCompletion * comp;
 };
 
 #endif

@@ -38,8 +38,9 @@ enum templatetype {
   c_unaer_member,    /* class operator@ () */
   c_member,          /* class operator@ (class) */
   c_bin_compare,   /* friend bool operator@ (class, class) */
-  c_bin_nonmember_assign,   /* friend class operator@ (class, class) and class operator@ (class)
-                               friend class operator@= (class, class) and class operator@= (class)*/
+  c_bin_nonmember_assign,   
+          /* friend class operator@ (class, class) and class operator@ (class)
+             friend class operator@= (class, class) and class operator@= (class)*/
   inp,               /* oper >> */
   outp               /* oper << */
 };
@@ -82,11 +83,11 @@ static struct {
 
 static const int templatescount = sizeof templatesdata/(sizeof templatesdata[0]);
 
-CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, const QString& currentClass,
+CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, ClassStore *libstore, const QString& currentClass,
                                       QWidget *parent, const char *name )
   : QDialog(parent,name,true),
     classname(currentClass),
-    classtree(store)
+    classtree(store), libclasstree(libstore)
 {
 	// set up dialog
   setCaption( i18n("Select Function to Copy") );
@@ -114,7 +115,8 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, const QString& currentC
   okBtn = new QPushButton( i18n("&OK"), this );
   okBtn->setDefault( TRUE );
 
-  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+  QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, 
+					 QSizePolicy::Minimum );
 
   cancelBtn = new QPushButton( i18n("&Cancel"), this );
 
@@ -157,6 +159,13 @@ void CCloneFunctionDlg::initClasses()
             allclasses->setCurrentItem(allclasses->count()-1);
     }
 
+    all = libclasstree->getSortedClassList();
+    for (it = all.begin(); it != all.end(); ++it) {
+        allclasses->insertItem((*it)->name());
+        if ((*it)->name() == parentName)
+            allclasses->setCurrentItem(allclasses->count()-1);
+    }
+    
     slotNewClass( allclasses->currentText () );
     
     // change methods on class selection
@@ -181,26 +190,27 @@ void CCloneFunctionDlg::OK()
 /** update methods/slots */
 void CCloneFunctionDlg::slotNewClass(const QString& name)
 {
-    ParsedClass *theClass = classtree->getClassByName( classname );
-        
     methods->clear();
-    
+
     if (name == templates) {	
         QString noarg (" ( )");
         QString oparg1( " (const "+classname+"& rhs)" );
         QString oparg2( " (const "+classname+"& lhs, const " + classname + "& rhs)" );
 
         // set/get attributes
-        QValueList<ParsedAttribute*> attrList = theClass->getSortedAttributeList();
-        QValueList<ParsedAttribute*>::ConstIterator it;
-        for (it = attrList.begin(); it != attrList.end(); ++it) {
+	ParsedClass *theClass = classtree->getClassByName( classname );
+	if (theClass) {
+	  QValueList<ParsedAttribute*> attrList = theClass->getSortedAttributeList();
+	  QValueList<ParsedAttribute*>::ConstIterator it;
+	  for (it = attrList.begin(); it != attrList.end(); ++it) {
             QString name = (*it)->name();
             QString type = (*it)->type();
             type.replace( QRegExp("[&\\*]"), "" );
             type = type.stripWhiteSpace();
             methods->insertItem(type + "& get" + name + "()");
             methods->insertItem("void set" + name + "(const " + type + "& newval)" );
-        }
+	  }
+	}
         
         // operators
         for(int i=0; i < templatescount; i++) {
@@ -231,15 +241,23 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
                 break;
                 
             case inp:         /* oper >> */
- 	        methods->insertItem(QString("friend istream& operator >> (istream& is, "+ classname + "& val)"));
+ 	        methods->insertItem(QString("friend istream& operator >> (istream& is, "
+					    + classname + "& val)"));
                 break;
                 
             case outp:         /* oper << */
-                methods->insertItem(QString("friend ostream& operator << (ostream& os, const "+ classname + "& val)"));
+                methods->insertItem(QString("friend ostream& operator << (ostream& os, const "
+					    + classname + "& val)"));
                 break;
             }
         }
     } else {
+        ParsedClass *theClass = classtree->getClassByName( name );
+	if (theClass == 0)
+	  theClass = libclasstree->getClassByName( name );
+	if (theClass == 0)
+	  return;
+    
         // all Methods
         QValueList<ParsedMethod*> all;
         QValueList<ParsedMethod*>::ConstIterator it;
@@ -265,49 +283,56 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment,
                                   bool& ispriv, bool& isprot, bool& ispub,
                                   bool& isvirt, bool& isSlot, bool& isSignal) {
- 	QString str;
- 	const QString name = allclasses->currentText();
- 	const QString selected = methods->currentText();
- 	if(name == templates) {
-  	static ParsedMethod result;
- 	
-  	int blank    = selected.find(' ') + 1;
-  	if (selected.contains(QRegExp("^friend")))
-      	blank    = selected.find(' ', blank) + 1;
-  	int argend   = selected.length();
-  	int argbegin = selected.findRev('(', argend);
-  	type = selected.left(blank);
-  	decl = selected.mid(blank, argend-blank+1);
-  	comment = selected.mid(blank, argbegin-blank);
-  	comment.replace( QRegExp("^set"), "set ");
-  	comment.replace( QRegExp("^get"), "get ");
-  	if (selected.contains(QRegExp("^friend")))
-       comment = "friend of class " + classname + "\n" + comment;
-   	ispub = true;
-  	ispriv = false;
-  	isprot = false;
+
+ TODO: const
+
+  QString str;
+  const QString name = allclasses->currentText();
+  const QString selected = methods->currentText();
+  if(name == templates) {
+    static ParsedMethod result;
+    
+    int blank    = selected.find(' ') + 1;
+    if (selected.contains(QRegExp("^friend")))
+      blank    = selected.find(' ', blank) + 1;
+    int argend   = selected.length();
+    int argbegin = selected.findRev('(', argend);
+    type = selected.left(blank);
+    decl = selected.mid(blank, argend-blank+1);
+    comment = selected.mid(blank, argbegin-blank);
+    comment.replace( QRegExp("^set"), "set ");
+    comment.replace( QRegExp("^get"), "get ");
+    if (selected.contains(QRegExp("^friend")))
+      comment = "friend of class " + classname + "\n" + comment;
+    ispub = true;
+    ispriv = false;
+    isprot = false;
     isvirt = false;
     isSlot = false;
     isSignal = false;
-  	return true;
+    return true;
   }
 
   ParsedClass *theClass = classtree->getClassByName( name );
+  if (theClass == 0)
+    theClass = libclasstree->getClassByName( name );
+  if (theClass == 0)
+    return false;
   ParsedMethod* res = searchMethod(theClass, selected);
   if (res) {
-  	type = res->type();
-  	decl = res->asString();
-  	comment = res->comment();
-  	ispub  = res->isPublic();
-  	ispriv = res->isPrivate();
-  	isprot = res->isProtected();
+    type = res->type();
+    decl = res->asString();
+    comment = res->comment();
+    ispub  = res->isPublic();
+    ispriv = res->isPrivate();
+    isprot = res->isProtected();
     isvirt = res->isVirtual();
     isSlot = res->isSlot();
     isSignal = res->isSignal();
-
-		return true;
+    
+    return true;
   } else
-  	return false;
+    return false;
 }
 
 ParsedMethod* CCloneFunctionDlg::searchMethod(ParsedClass *theClass, QString selected)
