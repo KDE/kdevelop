@@ -49,7 +49,6 @@ using namespace std;
 
 class Symbol{
 public:
-public:
 	Symbol( const QString& name, int kind )
 		: m_name( name ), m_kind(kind), m_sourceStart( 0 ), m_sourceEnd( 0 )
 		{}
@@ -391,7 +390,8 @@ bool Parser::parseTranslationUnit()
     while( !lex->lookAhead(0).isNull() ){
 		DeclarationAST* decl = 0;
         if( parseDefinition(m_globalSymbolTable, decl) ){
-			translationUnit.addDeclaration( decl );
+			if( decl )
+				translationUnit.addDeclaration( decl );
 		} else {
             // error recovery
             skipUntilDeclaration();
@@ -452,8 +452,11 @@ bool Parser::parseLinkageSpecification( SymbolTable* symtab, DeclarationAST*& de
     }
     lex->nextToken();
 
-	QString type = lex->lookAhead( 0 ).toString();
-    ADVANCE( Token_identifier, "identifier" );
+	QString type;
+	if( lex->lookAhead(0) == Token_string_literal ){
+		type = lex->lookAhead( 0 ).toString();
+		lex->nextToken();
+	}
 
     if( lex->lookAhead(0) == '{' ){
 		BlockLinkageSpecificationAST* spec = new BlockLinkageSpecificationAST();		
@@ -1540,13 +1543,8 @@ bool Parser::parseExceptionSpecification()
     lex->nextToken();
 
 
-    ADVANCE( '(', "(" );
-	
-    if( !parseTypeIdList() ){
-        reportError( i18n("Type id list expected") );
-        return false;
-    }
-
+    ADVANCE( '(', "(" );	
+    parseTypeIdList();
 	ADVANCE( ')', ")" );
 
     return true;
@@ -2349,6 +2347,7 @@ bool Parser::parseDeclarationStatement( SymbolTable* symtab )
 
 bool Parser::parseDeclaration( SymbolTable* symtab, DeclarationAST*& decl )
 {
+	decl = 0;
 #warning "TODO: Parser::parseDeclaration() -- fill abstract syntax tree"
 	QStringList functionSpec;
 	QString s;
