@@ -1,4 +1,4 @@
-# Here resides the doc tree view plugin.
+# Here resides the class view part.
 
 INCLUDES = -I$(top_srcdir)/kdevelop/lib -I$(top_srcdir)/kdevelop/classparser $(all_includes)
 
@@ -7,9 +7,11 @@ libkdevclassview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libkdevclassview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
 			     $(top_builddir)/kdevelop/classparser/libkdevclassparser.la $(LIB_KDEUI)
 
-libkdevclassview_la_SOURCES = main.cpp classview.cpp classactions.cpp
+libkdevclassview_la_SOURCES = main.cpp classview.cpp classactions.cpp \
+			      caddclassmethoddlg.cpp caddclassattributedlg.cpp
 
-noinst_HEADERS = main.h classview.h classactions.h
+noinst_HEADERS = main.h classview.h classactions.h \
+		 caddclassmethoddlg.h caddclassattributedlg.h
 
 METASOURCES = AUTO
 

@@ -36,6 +36,9 @@ private slots:
     void switchedDeclImpl();
     void selectedGotoDeclaration();
     void selectedGotoImplementation();
+    void selectedGotoClassDeclaration();
+    void selectedAddMethod();
+    void selectedAddAttribute();
     
 private:
     ClassWidget *classWidget()

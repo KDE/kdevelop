@@ -1,4 +1,4 @@
-# Here resides the doc tree view plugin.
+# Here resides the doc tree view part.
 
 INCLUDES = -I$(top_srcdir)/kdevelop/lib $(all_includes)
 

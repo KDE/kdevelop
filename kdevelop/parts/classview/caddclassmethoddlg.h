@@ -32,7 +32,7 @@
 #include <qlabel.h>
 #include <qmultilinedit.h>
 #include <qlayout.h> 
-#include "./classparser/ParsedMethod.h"
+#include "ParsedMethod.h"
 
 /** Dialog to create a new method for a class. 
  * @author Jonas Nordin

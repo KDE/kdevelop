@@ -32,7 +32,7 @@
 #include <qlabel.h>
 #include <qmultilinedit.h>
 #include <qlayout.h> 
-#include "./classparser/ParsedAttribute.h"
+#include "ParsedAttribute.h"
 
 /** Dialog to create a new attibute for a class.
  * @author Jonas Nordin
