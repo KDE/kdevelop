@@ -32,6 +32,7 @@
 #include <kmessagebox.h>
 #include <kparts/part.h>
 #include <kpopupmenu.h>
+#include <kdeversion.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -469,7 +470,7 @@ void CustomProjectPart::updateTargetMenu()
         }
         QTextStream stream(&f);
         //QRegExp re(".PHONY\\s*:(.*)");
-	QRegExp re("^[^($%.#].*[^)\s][:].*$");
+	QRegExp re("^[^($%.#].*[^)\\s][:].*$");
 	QString str = "";
         while (!stream.atEnd()) {
             QString str = stream.readLine();
@@ -482,7 +483,11 @@ void CustomProjectPart::updateTargetMenu()
             if (str.contains(re) == 1)
             {
 	        kdDebug(9025) << "Adding target: " << str.simplifyWhiteSpace() << endl;
+#if KDE_VERSION > 305
 	        m_targets += QStringList::split(" ", str.simplifyWhiteSpace())[0].replace(':', "");
+#else
+		//FIXME
+#endif
             }
         }
         f.close();
