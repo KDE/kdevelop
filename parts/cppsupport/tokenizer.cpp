@@ -22,8 +22,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-#include <iostream.h>
-#include <unistd.h>
+#include <iostream.h>;
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -704,8 +703,11 @@ goto find_rule; \
   #include <stdlib.h>
   #include <qstring.h>
   #include <iostream.h>
+
   #include "tokenizer.h"
   #include "FlexLexer.h"
+
+#undef gettext
 
   /** This class is a stupid trick to make it possible 
    * to access the gettext method. */
@@ -728,7 +730,7 @@ goto find_rule; \
   static bool beginComment(MyLexer *lex);
   static void inComment(MyLexer *lex);
   static bool endComment(MyLexer *lex);
-#line 732 "tokenizer.cpp"
+#line 734 "tokenizer.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -852,13 +854,13 @@ YY_MALLOC_DECL
 YY_DECL
 	{
 	register yy_state_type yy_current_state;
-	register char *yy_cp, *yy_bp;
+	register char *yy_cp = NULL, *yy_bp = NULL;
 	register int yy_act;
 
-#line 67 "./tokenizer.l"
+#line 70 "./tokenizer.l"
 
     /*==============> Strip whitespace <==============*/
-#line 862 "tokenizer.cpp"
+#line 864 "tokenizer.cpp"
 
 	if ( yy_init )
 		{
@@ -957,400 +959,400 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 69 "./tokenizer.l"
+#line 72 "./tokenizer.l"
 {}
 	YY_BREAK
 /*==============> Special keyword <==============*/
 case 2:
 YY_RULE_SETUP
-#line 72 "./tokenizer.l"
+#line 75 "./tokenizer.l"
 {return CPCLASS;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 73 "./tokenizer.l"
+#line 76 "./tokenizer.l"
 {return CPPUBLIC;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 74 "./tokenizer.l"
+#line 77 "./tokenizer.l"
 {return CPPROTECTED;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 75 "./tokenizer.l"
+#line 78 "./tokenizer.l"
 {return CPPRIVATE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 76 "./tokenizer.l"
+#line 79 "./tokenizer.l"
 {return CPCONST;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 77 "./tokenizer.l"
+#line 80 "./tokenizer.l"
 {return CPVOLATILE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 78 "./tokenizer.l"
+#line 81 "./tokenizer.l"
 {return CPSTATIC;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 79 "./tokenizer.l"
+#line 82 "./tokenizer.l"
 {return CPVIRTUAL;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 80 "./tokenizer.l"
+#line 83 "./tokenizer.l"
 {return QTSIGNAL;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 81 "./tokenizer.l"
+#line 84 "./tokenizer.l"
 {return QTSLOT;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 82 "./tokenizer.l"
+#line 85 "./tokenizer.l"
 {return CPENUM;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 83 "./tokenizer.l"
+#line 86 "./tokenizer.l"
 {return CPTYPEDEF;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 84 "./tokenizer.l"
+#line 87 "./tokenizer.l"
 {return CPFRIEND;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 85 "./tokenizer.l"
+#line 88 "./tokenizer.l"
 {return CPSTRUCT;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 86 "./tokenizer.l"
+#line 89 "./tokenizer.l"
 {return CPUNION;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 87 "./tokenizer.l"
+#line 90 "./tokenizer.l"
 {return CPOPERATOR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 88 "./tokenizer.l"
+#line 91 "./tokenizer.l"
 {return CPTEMPLATE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 89 "./tokenizer.l"
+#line 92 "./tokenizer.l"
 {return CPTHROW;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 90 "./tokenizer.l"
+#line 93 "./tokenizer.l"
 {return CPNAMESPACE;}
 	YY_BREAK
 /*==============> Ignored stuff <==============*/
 /*========== added to avoid extern "C" trouble--rnolden 03232000====*/
 case 21:
 YY_RULE_SETUP
-#line 94 "./tokenizer.l"
+#line 97 "./tokenizer.l"
 {}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 95 "./tokenizer.l"
+#line 98 "./tokenizer.l"
 {}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 96 "./tokenizer.l"
+#line 99 "./tokenizer.l"
 {}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 97 "./tokenizer.l"
+#line 100 "./tokenizer.l"
 {}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 98 "./tokenizer.l"
+#line 101 "./tokenizer.l"
 {}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 99 "./tokenizer.l"
+#line 102 "./tokenizer.l"
 {}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 100 "./tokenizer.l"
+#line 103 "./tokenizer.l"
 {}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 101 "./tokenizer.l"
+#line 104 "./tokenizer.l"
 {}
 	YY_BREAK
 /*==============> Objective-C keyword <==============*/
 case 29:
 YY_RULE_SETUP
-#line 104 "./tokenizer.l"
+#line 107 "./tokenizer.l"
 {return CPOBJCCLASS;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 105 "./tokenizer.l"
+#line 108 "./tokenizer.l"
 {return CPOBJCINTERFACE;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 106 "./tokenizer.l"
+#line 109 "./tokenizer.l"
 {return CPOBJCPROTOCOL;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 107 "./tokenizer.l"
+#line 110 "./tokenizer.l"
 {return CPOBJCPRIVATE;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 108 "./tokenizer.l"
+#line 111 "./tokenizer.l"
 {return CPOBJCPROTECTED;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 109 "./tokenizer.l"
+#line 112 "./tokenizer.l"
 {return CPOBJCPUBLIC;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 110 "./tokenizer.l"
+#line 113 "./tokenizer.l"
 {return CPOBJCIMPLEMENTATION;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 111 "./tokenizer.l"
+#line 114 "./tokenizer.l"
 {return CPOBJCEND;}
 	YY_BREAK
 /*==============> String <==============*/
 case 37:
 YY_RULE_SETUP
-#line 114 "./tokenizer.l"
+#line 117 "./tokenizer.l"
 {return STRING;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 115 "./tokenizer.l"
+#line 118 "./tokenizer.l"
 {return STRING;}
 	YY_BREAK
 /*==============> Normal operators <==============*/
 case 39:
 YY_RULE_SETUP
-#line 118 "./tokenizer.l"
+#line 121 "./tokenizer.l"
 {return ':';}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 119 "./tokenizer.l"
+#line 122 "./tokenizer.l"
 {return CLCL;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 120 "./tokenizer.l"
+#line 123 "./tokenizer.l"
 {return '~';}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 121 "./tokenizer.l"
+#line 124 "./tokenizer.l"
 {return '=';}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 122 "./tokenizer.l"
+#line 125 "./tokenizer.l"
 {return '<';}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 123 "./tokenizer.l"
+#line 126 "./tokenizer.l"
 {return '>';}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 124 "./tokenizer.l"
+#line 127 "./tokenizer.l"
 {return '&';}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 125 "./tokenizer.l"
+#line 128 "./tokenizer.l"
 {return '+';}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 126 "./tokenizer.l"
+#line 129 "./tokenizer.l"
 {return '-';}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 127 "./tokenizer.l"
+#line 130 "./tokenizer.l"
 {return '*';}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 128 "./tokenizer.l"
+#line 131 "./tokenizer.l"
 {return '/';}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 129 "./tokenizer.l"
+#line 132 "./tokenizer.l"
 {return '%';}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 130 "./tokenizer.l"
+#line 133 "./tokenizer.l"
 {return '|';}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 131 "./tokenizer.l"
+#line 134 "./tokenizer.l"
 {return '^';}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 132 "./tokenizer.l"
+#line 135 "./tokenizer.l"
 {return '!';}
 	YY_BREAK
 /*==============> End of Phrase <==============*/
 case 54:
 YY_RULE_SETUP
-#line 135 "./tokenizer.l"
+#line 138 "./tokenizer.l"
 {return ';';}
 	YY_BREAK
 /*==============> Comma <==============*/
 case 55:
 YY_RULE_SETUP
-#line 138 "./tokenizer.l"
+#line 141 "./tokenizer.l"
 {return ',';}
 	YY_BREAK
 /*==============> Paranthesis <==============*/
 case 56:
 YY_RULE_SETUP
-#line 141 "./tokenizer.l"
+#line 144 "./tokenizer.l"
 {return '(';}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 142 "./tokenizer.l"
+#line 145 "./tokenizer.l"
 {return ')';}
 	YY_BREAK
 /*==============> Brackets <==============*/
 case 58:
 YY_RULE_SETUP
-#line 145 "./tokenizer.l"
+#line 148 "./tokenizer.l"
 {return '{';}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 146 "./tokenizer.l"
+#line 149 "./tokenizer.l"
 {return '}';}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 147 "./tokenizer.l"
+#line 150 "./tokenizer.l"
 {return '[';}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 148 "./tokenizer.l"
+#line 151 "./tokenizer.l"
 {return ']';}
 	YY_BREAK
 /*==============> Identifiers <==============*/
 case 62:
 YY_RULE_SETUP
-#line 151 "./tokenizer.l"
+#line 154 "./tokenizer.l"
 {return ID;}
 	YY_BREAK
 /*==============> Numbers <==============*/
 case 63:
 YY_RULE_SETUP
-#line 154 "./tokenizer.l"
+#line 157 "./tokenizer.l"
 {return NUM;}
 	YY_BREAK
 /*==============> Skip preprocessor directives <==============*/
 case 64:
 YY_RULE_SETUP
-#line 157 "./tokenizer.l"
+#line 160 "./tokenizer.l"
 {BEGIN (PREPARSER);}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 158 "./tokenizer.l"
+#line 161 "./tokenizer.l"
 { BEGIN (0);}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 159 "./tokenizer.l"
+#line 162 "./tokenizer.l"
 {beginComment((MyLexer *) this);
                                   BEGIN (PPCOMMENT);}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 161 "./tokenizer.l"
+#line 164 "./tokenizer.l"
 { endComment((MyLexer *) this);
                        BEGIN (PREPARSER); }
 	YY_BREAK
 /*==============> Strip // comments <==============*/
 case 68:
 YY_RULE_SETUP
-#line 165 "./tokenizer.l"
+#line 168 "./tokenizer.l"
 {}
 	YY_BREAK
 /*==============> Strip comments <==============*/
 case 69:
 YY_RULE_SETUP
-#line 168 "./tokenizer.l"
+#line 171 "./tokenizer.l"
 {beginComment((MyLexer *) this);
                                   BEGIN (COMMENT);}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 171 "./tokenizer.l"
+#line 174 "./tokenizer.l"
 { endComment((MyLexer *) this);
                        BEGIN (0); }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 174 "./tokenizer.l"
+#line 177 "./tokenizer.l"
 {inComment((MyLexer *) this);}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 175 "./tokenizer.l"
+#line 178 "./tokenizer.l"
 {inComment((MyLexer *) this);}
 	YY_BREAK
 /*==============> All other characters are ignored <==============*/
 case 73:
 YY_RULE_SETUP
-#line 178 "./tokenizer.l"
+#line 181 "./tokenizer.l"
 {}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 179 "./tokenizer.l"
+#line 182 "./tokenizer.l"
 {}
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 181 "./tokenizer.l"
+#line 184 "./tokenizer.l"
 ECHO;
 	YY_BREAK
-#line 1354 "tokenizer.cpp"
+#line 1356 "tokenizer.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(COMMENT):
 			case YY_STATE_EOF(PREPARSER):
@@ -1954,7 +1956,6 @@ void yyFlexLexer::yy_delete_buffer( YY_BUFFER_STATE b )
 	}
 
 
-#include<unistd.h>
 void yyFlexLexer::yy_init_buffer( YY_BUFFER_STATE b, istream* file )
 
 	{
@@ -2158,7 +2159,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 181 "./tokenizer.l"
+#line 184 "./tokenizer.l"
 
 
 static bool beginComment(MyLexer *lex)

@@ -21,8 +21,11 @@
   #include <stdlib.h>
   #include <qstring.h>
   #include <iostream.h>
+
   #include "tokenizer.h"
   #include "FlexLexer.h"
+
+#undef gettext
 
   /** This class is a stupid trick to make it possible 
    * to access the gettext method. */
