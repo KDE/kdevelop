@@ -149,7 +149,7 @@ void TrollProjectPart::addFile(const QString &fileName)
 }
 
 
-void TrollProjectPart::removeFile(const QString &fileName)
+void TrollProjectPart::removeFile(const QString & /* fileName */)
 {
     // FIXME
 }

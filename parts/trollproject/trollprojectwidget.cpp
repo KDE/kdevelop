@@ -853,6 +853,8 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
     case GroupItem::Forms:
       titem->owner->forms.append(filename);
       break;
+    default:
+      break;
   }
 }
 
@@ -885,6 +887,8 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
       break;
     case GroupItem::Forms:
       m_shownSubproject->forms.append(filename);
+      break;
+    default:
       break;
   }
 }
