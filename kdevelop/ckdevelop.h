@@ -61,6 +61,7 @@ class CAddExistingFileDlg;
 #include "structdef.h"
 #include "resource.h"
 #include "cprintdlg.h"
+#include "./classparser/ParsedClass.h"
 
 #include "./kdlgedit/kdlgedit.h"
 #include "./kdlgedit/kdlgeditwidget.h"
@@ -108,6 +109,8 @@ public:
   void delFileFromProject(QString rel_filename);
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
+  /** Switch to a certain line in a certain file. */
+  void switchToFile(QString filename, int lineNo);
   void switchToWorkspace(int id);
   int getTabLocation(QString filename);
 
@@ -386,9 +389,8 @@ public:
 
   
   // return the position of the classdeclaration begin
-  int CVGotoClassDecl(QString classname);
-  void CVGotoClassVarDecl(QString classname,QString var_name);
-  void CVGotoMethodeImpl(QString classname,QString name);
+  void CVGotoDefinition(int index);
+  void CVGotoDeclaration(int index);
 
   void slotCVViewDeclaration(int index);
   void slotCVViewDefinition(int index);
@@ -397,7 +399,8 @@ public:
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);
   QString searchToolGetURL(QString str);
-  void refreshClassCombos();
+  void refreshClassCombo();
+  void refreshMethodCombo( CParsedClass *aClass );
   void  saveCurrentWorkspaceIntoProject();
 
   void switchToKDevelop();
