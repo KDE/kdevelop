@@ -576,7 +576,7 @@ int main(int argc, char *argv[])
 #if 0
     static KCmdLineOptions options[] = {
         { "+dirs", I18N_NOOP("The directories to index."), 0 },
-        { 0, 0, 0 }
+        KCmdLineLastOption
     };
 #endif
 

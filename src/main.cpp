@@ -22,7 +22,7 @@ static KCmdLineOptions options[] =
 {
     { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
     { "+file(s)",		I18N_NOOP("Files to load"), 0 },
-    { 0,0,0 }
+    KCmdLineLastOption
 };
 
 int main(int argc, char *argv[])
