@@ -425,27 +425,36 @@ QString MakeWidget::directory(int parag) const
 	return QString::null;
 }
 
+// hackish function that will return true and put string "file" in "fName" if the file
+// exists
+static bool checkFileExists( const QString& file, QString& fName )
+{
+    if ( QFile::exists( file ) ) {
+        fName = file;
+        return true;
+    }
+    return false;
+}
+
 QString MakeWidget::guessFileName( const QString& fName, int parag ) const
 {
     // pathological case
     if ( ! m_part->project() ) return fName;
 
-    QString name;
+    QString name = fName;
+    QString dir = directory( parag );
 
-    if ( fName.startsWith( "/" ) )
+    if ( ( fName.contains( "/" ) ) && ( !dir.isEmpty() ) )
     {
-        // absolute path given
-        name = fName;
-    }
-    else if ( fName.contains( "/" ) )
-    {
-        // assume relative path to the build dir
-        name = m_part->project()->buildDirectory() + "/" + fName;
+        name = dir + fName;
     }
     else
     {
-        // no path given, try to guess the active directory from output
-        name = directory( parag ) + fName;
+        // now it gets tricky - no directory navigation messages,
+        // no absolute path - let's guess.
+        if ( !checkFileExists( m_part->project()->projectDirectory() + "/" + fName, name ) &&
+	     !checkFileExists( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" + fName, name ) )
+            checkFileExists( m_part->project()->buildDirectory() + "/" + fName, name );
     }
 
     // GNU make resolves symlinks. if "name" is a real path to a file the
