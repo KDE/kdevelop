@@ -1967,13 +1967,24 @@ void CKDevelop::slotToolsTool(int tool)
 
   QString argument = toolApp.getArgs();
      
-  // This allows us to replace the macro %H with the header file name, %S with the source file name
+  // This allows us to replace the macro %H with the header file name, %S with the source file name,
+  // %T with the currently selected text, %W with the currently selected word
   // and %D with the project directory name.  Any others we should have?
+
   KWriteDoc* ced = m_docViewManager->currentEditDoc() ;
   if (ced) {
     QString fName = ced->fileName();
     argument.replace( QRegExp("%H"), fName );
     argument.replace( QRegExp("%S"), fName );
+  }
+  CEditWidget* cev = m_docViewManager->currentEditView();
+  if (cev) {
+    QString mText = cev->markedText();
+    QString cWord = cev->currentWord();
+    KRun::shellQuote(mText); // encode the strings for the shell
+    KRun::shellQuote(cWord);
+    argument.replace( QRegExp("%T"), mText );
+    argument.replace( QRegExp("%W"), cWord );
   }
   if(project){
     argument.replace( QRegExp("%D"), prj->getProjectDir() );

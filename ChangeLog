@@ -1,3 +1,8 @@
+2001-11-01  Harald Fernengel <harry@bnro.de>
+    * applyed a patch by Markus Kuehni <markus.kuehni@trilab.ch>:
+        * fixed saving of argument list for the external Tool apps
+        * Added %W (current word) and %T (current Text) to argument list of external Tool apps
+
 2001-11-01  F@lk Brettschneider <falk@kdevelop.org>
     * workaround for a strange behaviour of kdoc: don't try libkmid when building the API documentation of the project
       --> at least building the API docu works now again
