@@ -1,3 +1,4 @@
+
 if include_ada
 ADA_LANGUAGE = ada
 else
@@ -69,5 +70,18 @@ SQL_LANGUAGE = sql
 else
 SQL_LANGUAGE =
 endif
+
+#kdevelop: ADA_LANGUAGE = ada
+#kdevelop: BASH_LANGUAGE = bash
+#kdevelop: CPP_LANGUAGE = cpp
+#kdevelop: FORTRAN_LANGUAGE = fortran
+#kdevelop: HASKELL_LANGUAGE = haskell
+#kdevelop: JAVA_LANGUAGE = java
+#kdevelop: PASCAL_LANGUAGE = pascal
+#kdevelop: PERL_LANGUAGE = perl
+#kdevelop: PHP_LANGUAGE = php
+#kdevelop: PYTHON_LANGUAGE = python
+#kdevelop: RUBY_LANGUAGE = ruby
+#kdevelop: SQL_LANGUAGE = sql
 
 SUBDIRS = $(ADA_LANGUAGE) $(BASH_LANGUAGE) $(CPP_LANGUAGE) $(FORTRAN_LANGUAGE) $(HASKELL_LANGUAGE) $(JAVA_LANGUAGE) $(PASCAL_LANGUAGE) $(PERL_LANGUAGE) $(PHP_LANGUAGE) $(PYTHON_LANGUAGE) $(RUBY_LANGUAGE) $(SQL_LANGUAGE)
