@@ -442,21 +442,14 @@ void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *p
   QString str;
   QList<CParsedMethod> *list;
 
-  THType type = THPUBLIC_SIGNAL;
-
+  // Add all signals.
   list = aPC->getSortedSignalList();
-  // Add the methods
   for( aMethod = list->first();
        aMethod != NULL;
        aMethod = list->next() )
   {
-    if( aMethod->isProtected() )
-      type = THPROTECTED_SIGNAL;
-    else if( aMethod->isPrivate() )
-      type = THPRIVATE_SIGNAL;
-
     aMethod->asString( str );
-    addItem( str, type, parent );
+    addItem( str, THSIGNAL, parent );
   }
 
   delete list;
@@ -630,7 +623,6 @@ void CClassTreeHandler::getCurrentNames( const char **className,
   QListViewItem *item;
   QListViewItem *parent;
   THType parentType;
-  CParsedItem *parentItem = NULL;
 
   item = tree->currentItem();
   parent = item->parent();
