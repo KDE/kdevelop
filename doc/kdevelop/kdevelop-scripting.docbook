@@ -12,33 +12,45 @@
 <sect1 id="running-scripts">
 <title>Running Scripts</title>
 <para>
-  (... to be written ...)
-  <menuchoice><guimenu>Tools</guimenu>
-<guimenuitem>S</guimenuitem></menuchoice>
+  To access a script that is available to &kdevelop; use the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Scripts</guimenuitem></menuchoice> menu.  If there there is no such menu item then there are no installed scripts available to KDevelop.
 </para>
 </sect1>
 
 <sect1 id="adding-scripts">
 <title>Adding Scripts</title>
 <para>
-(... to be written ...)
+  Once you have added KScript support to your host application adding the scripts is just as easy. The scripts are comprised of two parts, a desktop file that contains meta-data about the script and the script itself. This approach was used because of security and simplicity. The desktop file provides meta-information for menus and script type. This keeps the host application from having to inspect for load each script. An example of this file is shown below:
+</para>
+<para>
+  The above example demonstrates the main parts that KScript will look for. The first item the "Name" is the name that will appear to the user in the host application and the "Comment" will be usually provided as a tool tip. The "Type" is the most important. This is used to select the proper script engine to run the script. Currently the ones available to KDE are "ShellScript/bash" and "JavaScript/kjs"
+The next step is to create the actual script. For the above example the Type of script that is used is "ShellScript/bash". The shellscript script engine provides a few things for the developer. The first element is the DCOP ID of the host application. This is passed to the script as the first argument. This means from anywhere in the script the value of "$1" will return the host's DCOP ID. An example shell script is shown below:
 </para>
 
+<para>This script is quite simple and just executes a command and sets the text of the first document to the output of "ls -l"</para>
+
+<para>One of the most useful tools in developing scripts for applications is the KDCOP application.</para>
 <figure id="screenshot-kdcop" float="1">
-  <title>KDCOP Browsing DCOP Interfaces in KDevelop</title>
+  <title>KDCOP Browsing DCOP Interfaces in &kdevelop;</title>
   <mediaobject>
     <imageobject><imagedata fileref="kdcop_browsing.png"/></imageobject>
   </mediaobject>
 </figure>
 
+<para>The KDCOP tool allows script developers to browse and debug the current interfaces of the host application. KDCOP also provides a neat feature of allowing users to select a method and drag the current code to their text editor. This simplifies use for people who are not savvy to the DCOP methods of the host language. Currently KDCOP supports KJSEmbed, Python, and UNIX Shell method for accessing DCOP.</para>
+
+<para>Once the script is complete it is ready to be installed. Application developers should document the location that will be scanned for scripts. In the case of the above example for Kate the scripts are located in "$KDEDIRS/share/apps/kate/scripts".</para>
+
 <figure id="screenshot-scripts" float="1">
-  <title>KDevelop Scripts on the Filesystem</title>
+  <title>&kdevelop; Scripts on the Filesystem</title>
   <mediaobject>
     <imageobject><imagedata fileref="script_location.png"/></imageobject>
   </mediaobject>
 </figure>
 
-</sect1> <!-- loading-recent-project -->
+<para>The script desktop file, and its associated script should be in the same directory. For script developers it is also recommended that all other script resources such as UI files, or data files should also reside in the script directory. In the above example the script will appear under the Tools->KDE Scripts menu. One important thing for script developers to note is that they should not perform operations that could block for a long time, or go into an eventloop. This is because the current version of the script interface is geared for automated tasks that run until completion. This is being addressed and extended for KDE 4.
+</para>
+
+</sect1>
 
 
-</chapter> <!-- projects-advanced -->
+</chapter>
