@@ -74,6 +74,10 @@ QString nodeTypeToString( NodeType type )
 	return "WhileStatement";
     case NodeType_DoStatement:
 	return "DoStatement";
+    case NodeType_ForStatement:
+	return "ForStatement";
+    case NodeType_SwitchStatement:
+	return "SwitchStatement";
     case NodeType_StatementList:
 	return "StatementList";
     case NodeType_TranslationUnit:
@@ -1031,3 +1035,56 @@ void DoStatementAST::setStatement( StatementAST::Node& statement )
     if( m_statement.get() ) m_statement->setParent( this );
 }
 
+// --------------------------------------------------------------------------
+ForStatementAST::ForStatementAST()
+{
+}
+
+ForStatementAST::~ForStatementAST()
+{
+}
+
+void ForStatementAST::setCondition( AST::Node& condition )
+{
+    m_condition = condition;
+    if( m_condition.get() ) m_condition->setParent( this );
+}
+
+void ForStatementAST::setExpression( AST::Node& expression )
+{
+    m_expression = expression;
+    if( m_expression.get() ) m_expression->setParent( this );
+}
+
+void ForStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}
+
+void ForStatementAST::setInitStatement( StatementAST::Node& initStatement )
+{
+    m_initStatement = initStatement;
+    if( m_initStatement.get() ) m_initStatement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+SwitchStatementAST::SwitchStatementAST()
+{
+}
+
+SwitchStatementAST::~SwitchStatementAST()
+{
+}
+
+void SwitchStatementAST::setCondition( AST::Node& condition )
+{
+    m_condition = condition;
+    if( m_condition.get() ) m_condition->setParent( this );
+}
+
+void SwitchStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}

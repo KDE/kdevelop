@@ -2293,9 +2293,11 @@ bool Parser::parseDoStatement( StatementAST::Node& node )
     return true;
 }
 
-bool Parser::parseForStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseForStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseForStatement()" << endl;
+    int start = lex->index();
+    
     ADVANCE( Token_for, "for" );
     ADVANCE( '(', "(" );
         
@@ -2313,11 +2315,18 @@ bool Parser::parseForStatement( StatementAST::Node& /*node*/ )
     ADVANCE( ')', ")" );
     
     StatementAST::Node body;
-    if( parseStatement(body) ){
-        return true;
-    }
+    if( !parseStatement(body) )
+	return false;
     
-    return false;
+    ForStatementAST::Node ast = CreateNode<ForStatementAST>();
+    ast->setInitStatement( init );
+    ast->setCondition( cond );
+    // ast->setExpression( expression );
+    ast->setStatement( body );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    
+    return true;
 }
 
 bool Parser::parseForInitStatement( StatementAST::Node& node )
@@ -2406,9 +2415,10 @@ bool Parser::parseIfStatement( StatementAST::Node& node )
     return true;
 }
 
-bool Parser::parseSwitchStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseSwitchStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseSwitchStatement()" << endl;
+    int start = lex->index();
     ADVANCE( Token_switch, "switch" );
     
     ADVANCE( '(' , "(" );
@@ -2425,6 +2435,13 @@ bool Parser::parseSwitchStatement( StatementAST::Node& /*node*/ )
 	syntaxError();
 	return false;
     }
+    
+    SwitchStatementAST::Node ast = CreateNode<SwitchStatementAST>();
+    ast->setCondition( cond );
+    ast->setStatement( stmt );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    
     return true;
 }
 

@@ -63,6 +63,8 @@ enum NodeType
     NodeType_IfStatement,
     NodeType_WhileStatement,
     NodeType_DoStatement,
+    NodeType_ForStatement,
+    NodeType_SwitchStatement,
     NodeType_TranslationUnit,
     NodeType_FunctionDeclaration,
     NodeType_FunctionDefinition,
@@ -807,6 +809,64 @@ private:
 private:
     DoStatementAST( const DoStatementAST& source );
     void operator = ( const DoStatementAST& source );
+};
+
+class ForStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<ForStatementAST> Node;
+    enum { Type = NodeType_ForStatement };
+
+public:
+    ForStatementAST();
+    virtual ~ForStatementAST();
+    
+    StatementAST* initStatement() { return m_initStatement.get(); }
+    void setInitStatement( StatementAST::Node& statement );
+    
+    AST* condition() const { return m_condition.get(); }
+    void setCondition( AST::Node& condition );
+    
+    AST* expression() const { return m_expression.get(); }
+    void setExpression( AST::Node& expression );
+    
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+    
+private:
+    AST::Node m_condition;
+    StatementAST::Node m_initStatement;
+    StatementAST::Node m_statement;
+    AST::Node m_expression;
+    
+private:
+    ForStatementAST( const ForStatementAST& source );
+    void operator = ( const ForStatementAST& source );
+};
+
+class SwitchStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<SwitchStatementAST> Node;
+    enum { Type = NodeType_SwitchStatement };
+
+public:
+    SwitchStatementAST();
+    virtual ~SwitchStatementAST();
+    
+    AST* condition() const { return m_condition.get(); }
+    void setCondition( AST::Node& condition );
+    
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+    
+private:
+    AST::Node m_condition;
+    StatementAST::Node m_statement;
+    
+private:
+    SwitchStatementAST( const SwitchStatementAST& source );
+    void operator = ( const SwitchStatementAST& source );
 };
 
 class StatementListAST: public StatementAST
