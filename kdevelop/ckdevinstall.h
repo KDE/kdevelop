@@ -19,16 +19,17 @@
 #ifndef CKDEVINSTALL_H
 #define CKDEVINSTALL_H
 
+#include <qprogressdialog.h>
 #include <qdialog.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qlined.h>
 #include <qpushbt.h>
 #include <kapp.h>
-
+#include <kprocess.h>
 /**Provides an installation module checking
-for installed programs needed by KDevelop. Uses CToolClass
-for checking programs.
+  *installed programs needed by KDevelop. Uses CToolClass
+  *for checking programs.
   *@author Ralf Nolden
   */
 
@@ -47,7 +48,6 @@ protected slots:
     void slotHelp();
     void slotAuto();
     void slotCancel();
-
 protected:
 	  KConfig *config;
     QFrame* main_frame;
@@ -66,14 +66,15 @@ protected:
     QPushButton* help_button;
     QPushButton* auto_button;
     QPushButton* cancel_button;
-
 private:
     bool qt_test;
     bool kde_test;
     bool successful;
+
 };
 
 #endif
+
 
 
 

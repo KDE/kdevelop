@@ -1,3 +1,8 @@
+1999-03-05  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * finished the installation process. Mind that the doc-generation and indexing
+    is not shown with progress, so the indexing will not be complete if it
+    is started before the shellprocess for kdoc is finished !!
+
 1999-03-05  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
 	* implemented nextSearch (F3) to the docbrowser

@@ -27,20 +27,14 @@ int main(int argc, char* argv[]) {
 
     KStartupLogo* start_logo=0L;
     KTipofDay* tipdlg=0L;
-//    CKDevInstall* install=0L;
     KWMModuleApplication a(argc,argv,"kdevelop");
     a.getConfig()->setGroup("General Options");
     bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
-//    bool bInstall=a.getConfig()->readBoolEntry("Install",false);  // this is incomplete, so leave it false everybody -Ralf
+    bool bInstall=a.getConfig()->readBoolEntry("Install",true);  // this is incomplete, so leave it false everybody -Ralf
     if(bStartLogo){
       start_logo= new KStartupLogo;
       start_logo->show();
     }
-/*    if(bInstall){
-      install=new CKDevInstall;
-      start_logo->hide();
-      install->exec();
-    }*/
     a.connectToKWM();
 
     if (a.isRestored()){
@@ -50,9 +44,14 @@ int main(int argc, char* argv[]) {
 	    CKDevelop* kdevelop = new CKDevelop;
 	    a.setMainWidget(kdevelop);
 	    a.setTopWidget(kdevelop);
+	    if(bInstall){
+        CKDevInstall* install=new CKDevInstall(kdevelop,"install");
+        install->show();
+        delete install;
+      }
 	    kdevelop->show();
 	    a.getConfig()->setGroup("General Options");
-    	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
+      kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
       kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
       if (argc > 1)
         kdevelop->slotProjectOpenCmdl(argv[1]);
@@ -72,6 +71,10 @@ int main(int argc, char* argv[]) {
     int rc = a.exec();
     return rc;
 }
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@
 #include <kapp.h>
 #include <kfiledialog.h>
 #include <kmsgbox.h>
-
+#include <qprogressdialog.h>
 #include "cupdatekdedocdlg.h"
 
 
@@ -237,6 +237,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
 
   connect(doc_button,SIGNAL(clicked()),SLOT(slotDocButtonClicked()));
   connect(source_button,SIGNAL(clicked()),SLOT(slotSourceButtonClicked()));
+
 }
 CUpdateKDEDocDlg::~CUpdateKDEDocDlg(){
 }
@@ -404,6 +405,7 @@ void CUpdateKDEDocDlg::OK(){
     } // end cross-reference qt
   }   // end use old khtmlw
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+
   accept();
 }
 void CUpdateKDEDocDlg::slotLeaveNewRadioButtonClicked(){
@@ -433,6 +435,11 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
     source_edit->setText(name);
   }
 }
+
+
+
+
+
 
 
 
