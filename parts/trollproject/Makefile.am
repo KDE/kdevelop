@@ -1,6 +1,6 @@
 # Here resides the troll project part for tmake or qmake
 
-#SUBDIRS = subclassing_template
+SUBDIRS = subclassing_template
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/project -I$(top_builddir)/lib/project \
