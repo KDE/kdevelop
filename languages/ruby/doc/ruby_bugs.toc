@@ -1,0 +1,7 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>Ruby bugs</title>
+<base href="http://www.ruby-lang.org/cgi-bin/"/>
+<tocsect1 name="Query" url="ruby-bugs">
+</tocsect1>
+</kdeveloptoc>

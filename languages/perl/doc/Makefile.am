@@ -1,5 +1,5 @@
 tocdir = ${kde_datadir}/kdevdoctreeview/tocs
-toc_DATA = perl.toc
+toc_DATA = perl.toc perl_bugs.toc
 
 #indexdir = ${kde_datadir}/devdoctreeview/indices
 #index_DATA =

@@ -26,6 +26,7 @@
       <group pattern="*.ui" name="User Interface" />
       <group pattern="*.png" name="Icons" />
       <group pattern="*.po;*.ts" name="Translations" />
+      <group pattern="*script" name="scripts" />
       <group pattern="*" name="Others" />
       <hidenonprojectfiles>true</hidenonprojectfiles>
     </groups>
@@ -58,6 +59,18 @@
       <toc>ada</toc>
       <toc>clanlib</toc>
       <toc>haskell</toc>
+      <toc>ada_bugs_gcc</toc>
+      <toc>bash_bugs</toc>
+      <toc>fortran_bugs_gcc</toc>
+      <toc>gtk_bugs</toc>
+      <toc>haskell_bugs_ghc</toc>
+      <toc>java_bugs_gcc</toc>
+      <toc>java_bugs_sun</toc>
+      <toc>php_bugs</toc>
+      <toc>pascal_bugs_fp</toc>
+      <toc>perl_bugs</toc>
+      <toc>python_bugs</toc>
+      <toc>ruby_bugs</toc>
     </ignoretocs>
     <projectdoc>
       <userdocDir>html/</userdocDir>

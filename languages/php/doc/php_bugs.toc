@@ -1,0 +1,7 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>PHP bugs</title>
+<base href="http://bugs.php.net/"/>
+<tocsect1 name="Query" url="index.html">
+</tocsect1>
+</kdeveloptoc>

@@ -1,0 +1,7 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>GTK bugs</title>
+<base href="http://bugzilla.gnome.org/"/>
+<tocsect1 name="Query" url="query.cgi">
+</tocsect1>
+</kdeveloptoc>
