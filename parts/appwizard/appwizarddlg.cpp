@@ -62,6 +62,7 @@
 
 #include <qlayout.h>
 
+#include "domutil.h"
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
 #include "kdevpartcontroller.h"
@@ -437,6 +438,9 @@ void AppWizardDialog::accept()
 	m_pCurrentAppInfo->subMap.insert("LICENSE", license_combo->currentText() );
 	m_pCurrentAppInfo->subMap.insert( "I18N", "i18n" );
 
+	QStringList cleanUpSubstMap;
+	cleanUpSubstMap << "src" << "dest" << "I18N" << "kdevelop";
+	
 	// Add template files to the fileList
 	installDir templateDir;
 	templateDir.dir = "%{dest}/templates";
@@ -457,7 +461,9 @@ void AppWizardDialog::accept()
 		QTextStream temps(&f);
 		temps << templateText;
 		f.flush();
-		m_pCurrentAppInfo->subMap.insert( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper(), KMacroExpander::expandMacros(templateText , m_pCurrentAppInfo->subMap)  );
+		QString templateName( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper() );
+		cleanUpSubstMap << templateName;
+		m_pCurrentAppInfo->subMap.insert( templateName, KMacroExpander::expandMacros(templateText , m_pCurrentAppInfo->subMap)  );
 
 		installFile file;
 		file.source = tempFile->name();
@@ -585,7 +591,13 @@ void AppWizardDialog::accept()
     
 	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
 	
-	openAfterGeneration();
+	QStringList::Iterator cleanIt = cleanUpSubstMap.begin();
+	for(;cleanIt != cleanUpSubstMap.end(); ++cleanIt )
+	{
+		m_pCurrentAppInfo->subMap.remove( *cleanIt );
+	}
+
+	openAfterGeneration( m_pCurrentAppInfo->subMap );
 	
 	QWizard::accept();
 }
@@ -820,13 +832,30 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
     return 0;
 }
 
-void AppWizardDialog::openAfterGeneration()
+void AppWizardDialog::openAfterGeneration( QMap<QString,QString>& substMap )
 {
 	QString prjName( appname_edit->text() );
 	QString prjNameLC( prjName.lower() );
 	QString prjNameUC( prjName.upper() );
 	
-	m_part->core()->openProject( finalLoc_label->text() + "/" + prjNameLC + ".kdevelop" );
+	QString projectFile( finalLoc_label->text() + "/" + prjNameLC + ".kdevelop" );
+	
+	QFile file( projectFile );
+	if( !file.open( IO_ReadOnly ) )
+		return;
+	QDomDocument projectDOM;
+	projectDOM.setContent( &file );
+	file.close();
+	
+	DomUtil::writeMapEntry( projectDOM, "substmap", substMap );
+	
+	if( !file.open( IO_WriteOnly ) )
+		return;
+	QTextStream ts( &file );
+	ts << projectDOM.toString(2);
+	file.close();
+	
+	m_part->core()->openProject( projectFile );
 	
 	QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
 	for( ; it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it )
