@@ -15,7 +15,7 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
       startPnt = e->globalPos();
       lastPnt = e->globalPos();
       origRect = geometry();
-      pressedEdge = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height());
+      pressedEdge = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), ((QWidget*)this)->width(), ((QWidget*)this)->height());
     }
 
   if (e->button() == RightButton)
@@ -82,7 +82,7 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mouseMoveEvent ( QMouseEvent *e )
   if (isItemActive)
     {
        int pE;
-       if (isMBPressed) pE = pressedEdge; else pE = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height());
+       if (isMBPressed) pE = pressedEdge; else pE = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), ((QWidget*)this)->width(), ((QWidget*)this)->height());
        KDlgItemsSetMouseCursor(this, pE);
     }
   else

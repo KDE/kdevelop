@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 
+#define DONTINC_ALL
+#define INC_MULTILINEEDIT
 #include "items.h"
 #include "itemsglobal.h"
 

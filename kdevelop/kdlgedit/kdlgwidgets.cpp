@@ -141,6 +141,63 @@ void KDlgWidgets::clicked_QGroupBox()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QGroupBox");
 }
+void KDlgWidgets::clicked_QListView()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("QListView");
+}
+void KDlgWidgets::clicked_KCombo()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KCombo");
+}
+void KDlgWidgets::clicked_KDatePicker()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KDatePicker");
+}
+void KDlgWidgets::clicked_KDateTable()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KDateTable");
+}
+void KDlgWidgets::clicked_KColorButton()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KColorButton");
+}
+
+void KDlgWidgets::clicked_KLed()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
+}
+
+void KDlgWidgets::clicked_KLedLamp()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KLedLamp");
+}
+
+void KDlgWidgets::clicked_KProgress()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KProgress");
+}
+
+void KDlgWidgets::clicked_KKeyButton()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KKeyButton");
+}
+
+void KDlgWidgets::clicked_KRestrictedLine()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KRestrictedLine");
+}
+
+void KDlgWidgets::clicked_KTreeList()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KTreeList");
+}
+
+void KDlgWidgets::clicked_KSeparator()
+{
+  pCKDevel->kdlg_get_edit_widget()->addItem("KSeparator");
+}
+
+
 KDlgWidgets::myScrollView::~myScrollView()
 {
   int i;
@@ -167,9 +224,10 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
     }
 
   btnsCount = 0;
+  bool kdebtn = false;
 
   #define macroAddButton(fn, wd, mt, ht) \
-    addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd); \
+    addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd, kdebtn); \
     connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt())); \
     KQuickHelp::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht));
 
@@ -197,6 +255,21 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_QSlider.xpm",      "QSlider",       clicked_QSlider      ,i18n("Sets a value in a program-defined range by a slider."));
   macroAddButton("kdlg_QProgressBar.xpm",      "QProgressBar",       clicked_QProgressBar      ,i18n("Displays the progress of an action that takes a longer time to be finished."));
   macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber     ,i18n("Displays a number in the style of LC-displays\noften used in clocks."));
+  macroAddButton("kdlg_QListView.xpm",     "QListView",      clicked_QListView     ,i18n("A list view lets your application display a multi-column list or tree."));
+  kdebtn = true;
+  macroAddButton("kdlg_KCombo.xpm",     "KCombo",      clicked_KCombo     ,i18n("Just like QComboBox."));
+  macroAddButton("kdlg_KDatePicker.xpm",     "KDatePicker",      clicked_KDatePicker     ,i18n("Lets the user choose a date."));
+  macroAddButton("kdlg_KDateTable.xpm",     "KDateTable",      clicked_KDateTable     ,i18n("Views a calendar in a tableview."));
+  macroAddButton("kdlg_KColorButton.xpm",     "KColorButton",  clicked_KColorButton   ,i18n("This is a button displaying the selected color."));
+
+  macroAddButton("kdlg_KLed.xpm",             "KLed",          clicked_KLed           ,i18n("A round led widget."));
+  macroAddButton("kdlg_KLedLamp.xpm",         "KLedLamp",      clicked_KLedLamp       ,i18n("A CDE-style LED lamp widget."));
+  macroAddButton("kdlg_KProgress.xpm",        "KProgress",     clicked_KProgress      ,i18n("A Progress indicator widget."));
+  macroAddButton("kdlg_KKeyButton.xpm",       "KKeyButton",    clicked_KKeyButton     ,i18n("A push button that looks like a keyboard key."));
+  macroAddButton("kdlg_KRestrictedLine.xpm",  "KRestrictedLine",clicked_KRestrictedLine,i18n("Restricted Editline: Only selected Characters are valid input."));
+  macroAddButton("kdlg_KTreeList.xpm",        "KTreeList",     clicked_KTreeList      ,i18n("A collapsible treelist widget"));
+  macroAddButton("kdlg_KSeparator.xpm",       "KSeparator",    clicked_KSeparator     ,i18n("'KSeparator' is a small class to provide a identically look of horizontal or vertical lines in all KDE applications."));
+
   #undef macroAddButton
 
   QFont f;

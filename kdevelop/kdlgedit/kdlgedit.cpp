@@ -23,7 +23,6 @@
 #include "kdlgeditwidget.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
-#include "items.h"
 #include "kdlgotherdlgs.h"
 #include "kdlgnewdialogdlg.h"
 #include "kdlgdialogs.h"
@@ -31,6 +30,9 @@
 #include "../cproject.h"
 #include <kfiledialog.h>
 #include <qstring.h>
+#define DONTINC_ALL
+#define INC_WIDGET
+#include "items.h"
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
@@ -896,13 +898,13 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
   if(props->getPropValue("isAutoDefault") == "TRUE"){
     *stream << varname_p + "setAutoDefault(true);\n";
   }
-  //IsToogleButton
+  //IsToggleButton
   if(props->getPropValue("isToggleButton") == "TRUE"){
-    *stream << varname_p + "setToogleButton(true);\n";
+    *stream << varname_p + "setToggleButton(true);\n";
   }
   //isToogledOn
   if(props->getPropValue("isToggledOn") == "TRUE"){
-    *stream << varname_p + "setToogleOn(true);\n";
+    *stream << varname_p + "setToggleOn(true);\n";
   }
   //IsMenuButton
   if(props->getPropValue("isMenuButton") == "TRUE"){

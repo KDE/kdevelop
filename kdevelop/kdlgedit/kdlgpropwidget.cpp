@@ -1063,7 +1063,7 @@ void AdvLvi_ColorEdit::resizeEvent ( QResizeEvent *e )
   AdvLvi_Base::resizeEvent( e );
 
   if (btn)
-    btn->setGeometry(0,0,width(),height()+1);
+    btn->setGeometry(width()-height(),0,height(),height()+1);
 }
 
 QString AdvLvi_ColorEdit::getText()

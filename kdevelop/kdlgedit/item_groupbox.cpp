@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 
+#define DONTINC_ALL
+#define INC_GROUPBOX
 #include "items.h"
 #include "itemsglobal.h"
 

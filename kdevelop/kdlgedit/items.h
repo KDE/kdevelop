@@ -25,21 +25,37 @@
 #include <kcursor.h>
 #include "kdlgeditwidget.h"
 #include <kruler.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
 #include <kpopmenu.h>
-#include <qlabel.h>
-#include <qlcdnumber.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlistbox.h>
-#include <qprogressbar.h>
-#include <qmultilinedit.h>
-#include <qspinbox.h>
-#include <qscrollbar.h>
-#include <qgroupbox.h>
-#include <qslider.h>
+
+#ifndef DONTINC_ALL
+  #define INC_LINEEDIT
+  #define INC_PUSHBUTTON
+  #define INC_LABEL
+  #define INC_LCDNUMBER
+  #define INC_RADIOBUTTON
+  #define INC_CHECKBOX
+  #define INC_COMBOBOX
+  #define INC_LISTBOX
+  #define INC_MULTILINEEDIT
+  #define INC_PROGRESSBAR
+  #define INC_SPINBOX
+  #define INC_SLIDER
+  #define INC_SCROLLBAR
+  #define INC_GROUPBOX
+  #define INC_LISTVIEW
+  #define INC_KCOLORBUTTON
+  #define INC_KCOMBO
+  #define INC_KDATEPICKER
+  #define INC_KDATETABLE
+
+  #define INC_KLED
+  #define INC_KLEDLAMP
+  #define INC_KPROGRESS
+  #define INC_KKEYBUTTON
+  #define INC_KRESTRICTEDLINE
+  #define INC_KTREELIST
+  #define INC_KSEPARATOR
+#endif
 
 class KDlgEditWidget;
 
@@ -164,6 +180,8 @@ class KDlgItem_Widget : public KDlgItem_Base
 };
 
 
+#ifdef INC_LINEEDIT
+#include <qlineedit.h>
 class KDlgItem_LineEdit : public KDlgItem_Base
 {
   Q_OBJECT
@@ -174,8 +192,11 @@ class KDlgItem_LineEdit : public KDlgItem_Base
   #define MyWidgetAdd virtual void keyPressEvent ( QKeyEvent * ) {}
   #include "item_class.cpp.inc"
 };
+#endif
 
 
+#ifdef INC_PUSHBUTTON
+#include <qpushbutton.h>
 class KDlgItem_PushButton : public KDlgItem_Base
 {
   Q_OBJECT
@@ -186,8 +207,11 @@ class KDlgItem_PushButton : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
 
 
+#ifdef INC_LABEL
+#include <qlabel.h>
 class KDlgItem_Label : public KDlgItem_Base
 {
   Q_OBJECT
@@ -198,8 +222,11 @@ class KDlgItem_Label : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
 
 
+#ifdef INC_LCDNUMBER
+#include <qlcdnumber.h>
 class KDlgItem_LCDNumber : public KDlgItem_Base
 {
   Q_OBJECT
@@ -210,8 +237,11 @@ class KDlgItem_LCDNumber : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
 
 
+#ifdef INC_RADIOBUTTON
+#include <qradiobutton.h>
 class KDlgItem_RadioButton : public KDlgItem_Base
 {
   Q_OBJECT
@@ -222,8 +252,11 @@ class KDlgItem_RadioButton : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
 
 
+#ifdef INC_CHECKBOX
+#include <qcheckbox.h>
 class KDlgItem_CheckBox : public KDlgItem_Base
 {
   Q_OBJECT
@@ -234,7 +267,10 @@ class KDlgItem_CheckBox : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
 
+#ifdef INC_COMBOBOX
+#include <qcombobox.h>
 class KDlgItem_ComboBox : public KDlgItem_Base
 {
   Q_OBJECT
@@ -245,6 +281,10 @@ class KDlgItem_ComboBox : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_LISTBOX
+#include <qlistbox.h>
 class KDlgItem_ListBox : public KDlgItem_Base
 {
   Q_OBJECT
@@ -255,6 +295,10 @@ class KDlgItem_ListBox : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_MULTILINEEDIT
+#include <qmultilinedit.h>
 class KDlgItem_MultiLineEdit : public KDlgItem_Base
 {
   Q_OBJECT
@@ -265,6 +309,10 @@ class KDlgItem_MultiLineEdit : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_PROGRESSBAR
+#include <qprogressbar.h>
 class KDlgItem_ProgressBar : public KDlgItem_Base
 {
   Q_OBJECT
@@ -275,6 +323,10 @@ class KDlgItem_ProgressBar : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_SPINBOX
+#include <qspinbox.h>
 class KDlgItem_SpinBox : public KDlgItem_Base
 {
   Q_OBJECT
@@ -285,6 +337,10 @@ class KDlgItem_SpinBox : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_SLIDER
+#include <qslider.h>
 class KDlgItem_Slider : public KDlgItem_Base
 {
   Q_OBJECT
@@ -295,6 +351,10 @@ class KDlgItem_Slider : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_SCROLLBAR
+#include <qscrollbar.h>
 class KDlgItem_ScrollBar : public KDlgItem_Base
 {
   Q_OBJECT
@@ -305,6 +365,10 @@ class KDlgItem_ScrollBar : public KDlgItem_Base
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+#endif
+
+#ifdef INC_GROUPBOX
+#include <qgroupbox.h>
 class KDlgItem_GroupBox : public KDlgItem_Base
 {
   Q_OBJECT
@@ -316,3 +380,182 @@ class KDlgItem_GroupBox : public KDlgItem_Base
   #include "item_class.cpp.inc"
 };
 #endif
+
+#ifdef INC_LISTVIEW
+#include <qlistview.h>
+class KDlgItem_ListView : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_ListView
+  #define widgettype QListView
+  #define classdesc "QListView"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+
+
+
+
+#ifdef INC_KCOLORBUTTON
+#include <kcolorbtn.h>
+class KDlgItem_KColorButton : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KColorButton
+  #define widgettype KColorButton
+  #define classdesc "KColorButton"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KCOMBO
+#include <kcombo.h>
+class KDlgItem_KCombo : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KCombo
+  #define widgettype KCombo
+  #define classdesc "KCombo"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KDATEPICKER
+#include <kdatepik.h>
+class KDlgItem_KDatePicker : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KDatePicker
+  #define widgettype KDatePicker
+  #define classdesc "KDatePicker"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KDATETABLE
+#include <kdatetbl.h>
+class KDlgItem_KDateTable : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KDateTable
+  #define widgettype KDateTable
+  #define classdesc "KDateTable"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KLED
+#include <kled.h>
+class KDlgItem_KLed: public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KLed
+  #define widgettype KLed
+  #define classdesc "KLed"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KLEDLAMP
+#include <kledlamp.h>
+class KDlgItem_KLedLamp : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KLedLamp
+  #define widgettype KLedLamp
+  #define classdesc "KLedLamp"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KPROGRESS
+#include <kprogress.h>
+class KDlgItem_KProgress : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KProgress
+  #define widgettype KProgress
+  #define classdesc "KProgress"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KKEYBUTTON
+#include <kkeydialog.h>
+class KDlgItem_KKeyButton : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KKeyButton
+  #define widgettype KKeyButton
+  #define classdesc "KKeyButton"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KRESTRICTEDLINE
+#include <krestrictedline.h>
+class KDlgItem_KRestrictedLine : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KRestrictedLine
+  #define widgettype KRestrictedLine
+  #define classdesc "KRestrictedLine"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KTREELIST
+#include <ktreelist.h>
+class KDlgItem_KTreeList : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KTreeList
+  #define widgettype KTreeList
+  #define classdesc "KTreeList"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+#ifdef INC_KSEPARATOR
+#include <kseparator.h>
+class KDlgItem_KSeparator : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_KSeparator
+  #define widgettype KSeparator
+  #define classdesc "KSeparator"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+#endif
+
+
+
+
+#endif
+
+

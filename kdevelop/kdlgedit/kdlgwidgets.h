@@ -80,6 +80,18 @@ class KDlgWidgets : public QWidget  {
   void clicked_QSlider();
   void clicked_QScrollBar();
   void clicked_QGroupBox();
+  void clicked_QListView();
+  void clicked_KCombo();
+  void clicked_KDatePicker();
+  void clicked_KDateTable();
+  void clicked_KColorButton();
+  void clicked_KLed();
+  void clicked_KLedLamp();
+  void clicked_KProgress();
+  void clicked_KKeyButton();
+  void clicked_KRestrictedLine();
+  void clicked_KTreeList();
+  void clicked_KSeparator();
 };
 
 #endif

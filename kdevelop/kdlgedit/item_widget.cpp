@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 
+#define DONTINC_ALL
+#define INC_WIDGET
 #include "items.h"
 #include <qpainter.h>
 

@@ -109,7 +109,7 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   itm->setMinimumHeight(props->getIntFromProp("MinHeight",0));
   itm->setMaximumHeight(props->getIntFromProp("MaxHeight",32767));
 
-
+/*
   QString val = Prop2Str("BgMode");
   if (val.lower() == "fixedcolor")
     itm->setBackgroundMode(QWidget::FixedColor);
@@ -135,7 +135,7 @@ void KDlgItem_Base::repaintItem(QWidget *it)
     itm->setBackgroundMode(QWidget::PaletteBase);
   else
     itm->setBackgroundMode(QWidget::PaletteBackground);
-
+*/
 
   ifBTrue("IsFixedSize")
     itm->setFixedSize( props->getIntFromProp("Width",itm->width()),
@@ -158,8 +158,8 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   else
     itm->show();
 
-  ifBValid("IsEnabled")
-    itm->setEnabled(b);
+//  ifBValid("IsEnabled")
+//    itm->setEnabled(b);
 
   setStr2Prop("BgPixmap");
   if (strNotEmpty(str))

@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 
+#define DONTINC_ALL
+#define INC_PUSHBUTTON
 #include "items.h"
 #include <qpushbutton.h>
 #include "itemsglobal.h"

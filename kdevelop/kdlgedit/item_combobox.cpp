@@ -15,7 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#define DONTINC_ALL
+#define INC_COMBOBOX
 #include "items.h"
 #include "itemsglobal.h"
 

@@ -504,7 +504,7 @@ QString KDlgLimitLines(QString src, unsigned maxlen)
 {
   QString helptext = "";
   QString lastword = "";
-  int linelen = 0;
+  unsigned linelen = 0;
   int i;
   int istag = 0;
   for (i=0; i<=(signed)src.length(); i++)

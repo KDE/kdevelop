@@ -778,7 +778,7 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
           } \
       }
   
-  macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
+    macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
     macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
     macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
     macro_CreateIfRightOne("QLabel", KDlgItem_Label )
@@ -793,7 +793,20 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("QSlider", KDlgItem_Slider )
     macro_CreateIfRightOne("QScrollBar", KDlgItem_ScrollBar )
     macro_CreateIfRightOne("QGroupBox", KDlgItem_GroupBox )
-    
+    macro_CreateIfRightOne("QListView", KDlgItem_ListView )
+    macro_CreateIfRightOne("KCombo", KDlgItem_KCombo )
+    macro_CreateIfRightOne("KDatePicker", KDlgItem_KDatePicker )
+    macro_CreateIfRightOne("KDateTable", KDlgItem_KDateTable )
+    macro_CreateIfRightOne("KColorButton", KDlgItem_KColorButton )
+
+    macro_CreateIfRightOne("KLed", KDlgItem_KLed )
+    macro_CreateIfRightOne("KLedLamp", KDlgItem_KLedLamp )
+    macro_CreateIfRightOne("KProgress", KDlgItem_KProgress )
+    macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )
+    macro_CreateIfRightOne("KRestrictedLine", KDlgItem_KRestrictedLine )
+    macro_CreateIfRightOne("KTreeList", KDlgItem_KTreeList )
+    macro_CreateIfRightOne("KSeparator", KDlgItem_KSeparator )
+
 #undef macro_CreateIfRightOne
 
   setModified(true);

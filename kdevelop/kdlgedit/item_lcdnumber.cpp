@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 
+#define DONTINC_ALL
+#define INC_LCDNUMBER
 #include "items.h"
 #include "itemsglobal.h"
 

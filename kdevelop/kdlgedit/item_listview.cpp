@@ -1,5 +1,5 @@
 /***************************************************************************
-                     item_label.cpp  -  description
+                     item_listbox.cpp  -  description
                              -------------------                                         
     begin                : Thu Mar 18 1999                                           
     copyright            : (C) 1999 by Pascal Krahmer
@@ -17,13 +17,13 @@
 
 
 #define DONTINC_ALL
-#define INC_RADIOBUTTON
+#define INC_LISTVIEW
 #include "items.h"
 #include "itemsglobal.h"
 
-#define CALLER_ITEMCLASS_NAME KDlgItem_RadioButton
-#define ITEMCLASS_NAME KDlgItem_RadioButton
-#define ITEMCLASS_TYPE QRadioButton
+#define CALLER_ITEMCLASS_NAME KDlgItem_ListView
+#define ITEMCLASS_NAME KDlgItem_ListView
+#define ITEMCLASS_TYPE QListView
 
 #include "item_all.cpp.inc"
 
@@ -68,12 +68,6 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
-  props->addProp("Text",           "RadioButton",       "General",        ALLOWED_STRING);
-  props->addProp("isChecked",      "FALSE",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoResize",   "FALSE",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoRepeat",   "FALSE",             "General",        ALLOWED_BOOL);
-
-  props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -88,17 +82,4 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   #define strIsDef(s) (!Prop2Str(s).isNull())
   #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
-  if (strIsDef("Text"))
-    itm->setText(Prop2Str("Text"));
-
-  if (Prop2Str("Pixmap").isEmpty())
-    {
-      if (itm->pixmap())
-        itm->setPixmap(QPixmap());
-    }
-  else
-    itm->setPixmap(QPixmap(Prop2Str("Pixmap")));
-
-  itm->setChecked(Prop2Bool("isChecked") == 1 ? TRUE : FALSE);
-  itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
 }

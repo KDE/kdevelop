@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 
+#define DONTINC_ALL
+#define INC_SPINBOX
 #include "items.h"
 #include "itemsglobal.h"
 
@@ -34,6 +36,9 @@ ITEMCLASS_NAME::MyWidget::MyWidget(ITEMCLASS_NAME* wid, QWidget* parent, const c
   isMBPressed = false;
   isMainwidget = false;
   setCursor(arrowCursor);
+
+  ((QWidget*)editor())->setCursor(arrowCursor);
+
 }
 
 void ITEMCLASS_NAME::MyWidget::paintEvent ( QPaintEvent *e )
