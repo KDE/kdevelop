@@ -99,6 +99,12 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
     info_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoInfo));
     
     useAssistant_box->setChecked(m_part->isAssistantUsed());
+	
+	// Having app-specific settings isn't pretty, but this setting is nonsensical in kdevassistant
+	if ( kapp->instanceName().find("kdevassistant") != -1 )
+	{
+		useAssistant_box->hide();
+	}
 }
 
 DocGlobalConfigWidget::~DocGlobalConfigWidget()

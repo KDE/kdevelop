@@ -591,6 +591,12 @@ QCString DocumentationPart::startAssistant()
 
 bool DocumentationPart::isAssistantUsed() const
 {
+	// hack to solve BR #90334 - don't call kdevassistant via DCOP if we ARE kdevassistant
+	if ( kapp->instanceName().find("kdevassistant") != -1 )
+	{
+		return false;
+	}
+	
     return m_assistantUsed;
 }
 
