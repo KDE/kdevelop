@@ -78,6 +78,7 @@
 #include <kdevmainwindow.h>
 #include <classstore.h>
 #include <kdevpartcontroller.h>
+#include <kdevmakefrontend.h>
 
 #include <parsedclass.h>
 #include <parsedattribute.h>
@@ -118,6 +119,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
              this, SLOT(activePartChanged(KParts::Part*)));
     connect( partController(), SIGNAL(partRemoved(KParts::Part*)),
              this, SLOT(partRemoved(KParts::Part*)));
+    
+    connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
+	     this, SLOT(slotCommandFinished(const QString&)) );
 
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
@@ -1186,5 +1190,12 @@ void CppSupportPart::partRemoved( KParts::Part* part )
     }
 }
 
+void CppSupportPart::slotCommandFinished( const QString& command )
+{
+    kdDebug(9007) << "CppSupportPart::slotCommandFinished()" << endl;
+    
+    Q_UNUSED( command );
+    parseProject();
+}
 
 #include "cppsupportpart.moc"
