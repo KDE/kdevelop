@@ -7,7 +7,7 @@
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  cppsupport pythonsupport perlsupport phpsupport fortransupport \
 	  autoproject scriptproject trollproject customproject \
-	  cvs perforce antproject \
+	  cvs perforce antproject diff \
 	  debugger distpart konsole astyle tools ctags regexptest doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith windowmenu history \
