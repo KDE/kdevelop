@@ -1,5 +1,6 @@
 2001-08-23  Harald Fernengel  <harry@bnro.de>
     * pop up normal search dialog if user presses "Find again" without specifying a search string before
+    * hopefully fixed the "I can't close any windows anymore" bug
 
 2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: 0x0 access in DocViewMan::doSwitchToFile
