@@ -14,6 +14,8 @@ libkdevtrollproject_la_SOURCES = caret.cpp\
                                  filebuffer.cpp\
 				 projectconfigurationdlgbase.ui \
 				 filepropertybase.ui \
+				 newwidgetdlgbase.ui \
+				 newwidgetdlg.cpp \
 				 filepropertydlg.cpp \
 				 projectconfigurationdlg.cpp \
 				 trollprojectpart.cpp \

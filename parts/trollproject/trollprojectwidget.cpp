@@ -1092,6 +1092,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(title, this);
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
         int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
+        int idNewWidget = popup.insertItem(SmallIconSet("widget"),i18n("Insert New Widget..."));
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -1146,6 +1147,16 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
+        if (r == idNewWidget)
+        {
+          QStringList newFileNames;
+          NewWidgetDlg *dlg = new NewWidgetDlg(newFileNames);
+          dlg->exec();
+          for (int i=0;i<newFileNames.count();i++)
+            QMessageBox::information(0,"File",newFileNames[i]);
+
+        }
+
 
     } else if (pvitem->type() == ProjectItem::File) {
 

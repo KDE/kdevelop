@@ -26,6 +26,7 @@
 #include "filebuffer.h"
 #include "projectconfigurationdlg.h"
 #include "filepropertydlg.h"
+#include "newwidgetdlg.h"
 
 class TrollProjectPart;
 class KListView;
