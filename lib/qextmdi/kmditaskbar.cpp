@@ -26,17 +26,17 @@
 //
 //----------------------------------------------------------------------------
 
-#include "kmditaskbar.h"
-#include "kmdimainfrm.h"
-#include "kmdichildview.h"
-#include "kmdidefines.h"
-
+#include <qnamespace.h>
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <qwidget.h>
 #include <qstyle.h>
 
-#include <qnamespace.h>
+#include "kmdimainfrm.h"
+#include "kmdichildview.h"
+#include "kmdidefines.h"
+#include "kmditaskbar.h"
+
 
 /*
    @quickhelp: KMdiTaskBar

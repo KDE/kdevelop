@@ -37,6 +37,7 @@
 #include <qpixmap.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qmainwindow.h>
 
 #include "kmdidefines.h"
 

@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kmdidockcontainer.h"
 #include <qwidgetstack.h>
 #include <qlayout.h>
 #include <qtimer.h>
@@ -33,6 +32,8 @@
 #include <kconfig.h>
 #include <klocale.h>
 #endif
+
+#include "kmdidockcontainer.h"
 
 static const char* const not_close_xpm[]={
 "5 5 2 1",

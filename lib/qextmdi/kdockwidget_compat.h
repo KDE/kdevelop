@@ -34,15 +34,17 @@
 #include <qtabwidget.h>
 
 #ifdef NO_KDE2
-//#include "exportdockclass.h"
-#include "kmdidummy.h"
+# ifdef _WINDOWS
+#   include "kmdidefines.h"
+# endif
+# include "kmdidummy.h"
 #else
-#include <kmainwindow.h>
-#include <netwm_def.h>
-#include <kaction.h>
-#include <kparts/part.h>
-#undef  EXPORT_DOCKCLASS
-#define EXPORT_DOCKCLASS
+# include <kmainwindow.h>
+# include <netwm_def.h>
+# include <kaction.h>
+# include <kparts/part.h>
+# undef  DLL_IMP_EXP_KMDICLASS
+# define DLL_IMP_EXP_KMDICLASS
 #endif
 
 class QObjectList;
@@ -58,25 +60,16 @@ class KConfig;
 class QToolBar;
 #endif
 
-namespace KDockWidget_Compat {
-class KDockWidgetAbstractHeader;
-class KDockWidgetAbstractHeaderDrag;
-class KDockWidgetHeaderDrag;
-class KDockWidgetHeader;
-class KDockTabGroup;
-class KDockWidget;
-class KDockManager;
-class KDockMainWindow;
-class KDockArea;
-class KDockContainer;
-class DockMainWindow;
-}
-
 class KDockSplitter;
 class KDockMoveManager;
 class KDockButton_Private;
 class KDockWidgetPrivate;
 class KDockWidgetHeaderPrivate;
+class KMdiMainFrm;
+
+namespace KDockWidget_Compat {
+
+class KDockWidget;
 
 /**
  * An abstract base clase for all dockwidget headers (and member of the dockwidget class set).
@@ -85,7 +78,7 @@ class KDockWidgetHeaderPrivate;
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockWidgetAbstractHeader : public QFrame
+class DLL_IMP_EXP_KMDICLASS KDockWidgetAbstractHeader : public QFrame
 {
   Q_OBJECT
 public:
@@ -134,7 +127,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockWidgetAbstractHeaderDrag : public QFrame
+class DLL_IMP_EXP_KMDICLASS KDockWidgetAbstractHeaderDrag : public QFrame
 {
   Q_OBJECT
 public:
@@ -179,7 +172,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockWidgetHeaderDrag : public KDockWidgetAbstractHeaderDrag
+class DLL_IMP_EXP_KMDICLASS KDockWidgetHeaderDrag : public KDockWidgetAbstractHeaderDrag
 {
   Q_OBJECT
 public:
@@ -220,7 +213,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockWidgetHeader : public KDockWidgetAbstractHeader
+class DLL_IMP_EXP_KMDICLASS KDockWidgetHeader : public KDockWidgetAbstractHeader
 {
   Q_OBJECT
 public:
@@ -338,7 +331,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockTabGroup : public QTabWidget
+class DLL_IMP_EXP_KMDICLASS KDockTabGroup : public QTabWidget
 {
   Q_OBJECT
 public:
@@ -398,7 +391,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockWidget: public QWidget
+class DLL_IMP_EXP_KMDICLASS KDockWidget: public QWidget
 {
   Q_OBJECT
 friend class KDockManager;
@@ -868,11 +861,18 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockManager: public QObject
+class DLL_IMP_EXP_KMDICLASS KDockManager: public QObject
 {
   Q_OBJECT
 friend class KDockWidget;
 friend class KDockMainWindow;
+
+public:
+    enum EnReadDockConfigMode {
+        Unknown,
+        WrapExistingWidgetsOnly,
+        RestoreAllDockwidgets
+    };
 
 public:
   /**
@@ -1023,6 +1023,10 @@ public:
   void setSpecialTopDockContainer(KDockWidget* container);  
   void setSpecialRightDockContainer(KDockWidget* container);  
   void setSpecialBottomDockContainer(KDockWidget* container);  
+
+  void removeFromAutoCreateList(KDockWidget* pDockWidget);
+  void finishReadDockConfig();
+  void setReadDockConfigMode(int mode);
 
 signals:
 
@@ -1253,7 +1257,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidget_Compat::KDockMainWindow : public KMainWindow
+class DLL_IMP_EXP_KMDICLASS KDockMainWindow : public KMainWindow
 {
   Q_OBJECT
 
@@ -1434,7 +1438,7 @@ private:
 
 
 
-class KDockWidget_Compat::KDockArea : public QWidget
+class DLL_IMP_EXP_KMDICLASS KDockArea : public QWidget
 {
   Q_OBJECT
 
@@ -1497,7 +1501,7 @@ private:
   KDockMainWindowPrivate *d;
 };
 
-class KDockWidget_Compat::KDockContainer
+class DLL_IMP_EXP_KMDICLASS KDockContainer
 {
 public:
   KDockContainer();
@@ -1539,6 +1543,8 @@ private:
   bool m_overlapMode;
   int m_nonOverlapSize;
 };
+
+}; // KDockWidget_Compat
 
 #endif
 

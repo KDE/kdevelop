@@ -649,6 +649,7 @@ public:
   QGuardedPtr<KDockWidget> topContainer;
   QGuardedPtr<KDockWidget> rightContainer;
   QGuardedPtr<KDockWidget> bottomContainer;
+  int m_readDockConfigMode;
 };
 
 
@@ -984,7 +985,7 @@ void KDockWidget::applyToWidget( QWidget* s, const QPoint& p )
     ((KDockMainWindow*)s)->setView( this );
   }
 
-  if ( s == manager->main ){
+  if ( manager && s == manager->main ){
       setGeometry( QRect(QPoint(0,0), manager->main->geometry().size()) );
   }
 
@@ -1784,6 +1785,7 @@ KDockManager::KDockManager( QWidget* mainWindow , const char* name )
   d->splitterOpaqueResize = false;
   d->splitterKeepSize = false;
   d->splitterHighResolution = false;
+  d->m_readDockConfigMode = WrapExistingWidgetsOnly; // default as before
 
   main->installEventFilter( this );
 
@@ -2510,10 +2512,28 @@ void KDockManager::readConfig(QDomElement &base)
     if (isMainVisible)
         main->show();
 
+    if (d->m_readDockConfigMode == WrapExistingWidgetsOnly) {
+        finishReadDockConfig(); // remove empty dockwidgets
+    }
+}
+
+void KDockManager::removeFromAutoCreateList(KDockWidget* pDockWidget)
+{
+    autoCreateDock->setAutoDelete(false);
+    autoCreateDock->removeRef(pDockWidget);
+    autoCreateDock->setAutoDelete(true);
+}
+
+void KDockManager::finishReadDockConfig()
+{
     delete autoCreateDock;
     autoCreateDock = 0;
 }
 
+void KDockManager::setReadDockConfigMode(int mode)
+{
+    d->m_readDockConfigMode = mode;
+}
 
 #ifndef NO_KDE2
 void KDockManager::writeConfig( KConfig* c, QString group )
@@ -2783,8 +2803,9 @@ void KDockManager::readConfig( KConfig* c, QString group )
 
   }
   // delete all autocreate dock
-  delete autoCreateDock;
-  autoCreateDock = 0L;
+  if (d->m_readDockConfigMode == WrapExistingWidgetsOnly) {
+    finishReadDockConfig(); // remove empty dockwidgets
+  }
 
   c->setGroup( group );
   QRect mr = c->readRectEntry("Main:Geometry");

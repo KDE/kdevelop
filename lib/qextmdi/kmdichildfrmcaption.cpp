@@ -32,10 +32,10 @@
 #include <qpopupmenu.h>
 
 #include "kmdidefines.h"
-#include "kmdichildfrmcaption.h"
 #include "kmdichildfrm.h"
 #include "kmdichildarea.h"
 #include "kmdimainfrm.h"
+#include "kmdichildfrmcaption.h"
 #include <iostream>
 //////////////////////////////////////////////////////////////////////////////
 // Class   : KMdiChildFrmCaption

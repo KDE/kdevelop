@@ -23,10 +23,9 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-#include <kmdidockwidget.h>
 #include <qmap.h>
-
 #include <qpushbutton.h>
+#include <kmdidockwidget.h>
 
 class QWidgetStack;
 class KMultiTabBar;

@@ -28,6 +28,8 @@
 
 class DockMainWindowPrivate;
 
+namespace KDockWidget_Compat {
+
 /**
  * A KPart-aware main window with ability for docking widgets, whose user interface is described in XML.
  *
@@ -37,7 +39,7 @@ class DockMainWindowPrivate;
  * It implements all internal interfaces in the case of a @ref KDockMainWindow as host:
  * the builder and servant interface (for menu merging).
  */
-class KDockWidget_Compat::DockMainWindow : public KDockWidget_Compat::KDockMainWindow, virtual public KParts::PartBase
+class DockMainWindow : public KDockMainWindow, virtual public KParts::PartBase
 {
   Q_OBJECT
  public:
@@ -75,5 +77,7 @@ protected:
  private:
   DockMainWindowPrivate *d;
 };
+
+}; // KDockWidget_Compat
 
 #endif   // DOCKMAINWINDOW_COMPAT_H

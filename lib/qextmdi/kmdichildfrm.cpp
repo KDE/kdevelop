@@ -40,8 +40,8 @@
 #include "kmdidefines.h"
 #include "kmdichildfrmcaption.h"
 #include "kmdichildarea.h"
-#include "kmdichildfrm.h"
 #include "kmdimainfrm.h"
+#include "kmdichildfrm.h"
 
 
 //////////////////////////////////////////////////////////////////////////////

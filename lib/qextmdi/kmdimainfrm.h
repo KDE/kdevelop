@@ -249,7 +249,6 @@ protected:
    static KMdi::FrameDecor m_frameDecoration;
    bool                    m_bSDIApplication;
    KMdiDockWidget*         m_pDockbaseAreaOfDocumentViews;
-   KMdiDockWidget*         m_pDockbaseOfTabPage;
    QDomDocument*           m_pTempDockSession;
    bool                    m_bClearingOfWindowMenuBlocked;
 
