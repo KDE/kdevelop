@@ -47,6 +47,7 @@ MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
+		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
 		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
@@ -163,6 +164,14 @@ void MakeActionFilter::test()
 		"|| echo '/home/john/src/kde/kdevelop/src/'`/home/john/src/kde/kdevelop/src/mainwindowideal.cpp; then mv "
 		"\".deps/mainwindowideal.Tpo\" \".deps/mainwindowideal.Po\"; else rm -f \".deps/mainwindowideal.Tpo\"; exit 1; fi",
 		"compiling", "g++", "mainwindowideal.cpp" )
+	<< TestItem( // automake and libtool compiling *.c files
+		"if /bin/sh ../../libtool --silent --tag=CC --mode=compile gcc -DHAVE_CONFIG_H -I. -I. -I../.. -I../../lib/interfaces"
+		"-I../../lib/util -I/opt/kde3/include -I/usr/lib/qt3/include -I/usr/X11R6/include -DQT_THREAD_SUPPORT -D_REENTRANT "
+		"-std=iso9899:1990 -W -Wall -Wchar-subscripts -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings "
+		"-D_XOPEN_SOURCE=500 -D_BSD_SOURCE -g3 -fno-inline -Wformat-security -Wmissing-format-attribute -MT readtags.lo "
+		"-MD -MP -MF \".deps/readtags.Tpo\" -c -o readtags.lo readtags.c; then mv -f \".deps/readtags.Tpo\" "
+		"\".deps/readtags.Plo\"; else rm -f \".deps/readtags.Tpo\"; exit 1; fi",
+		i18n("compiling"), "gcc", "readtags.c" )
 	<< TestItem(
 		"source='makewidget.cpp' object='makewidget.lo' libtool=yes depfile='.deps/makewidget.Plo' "
 		"tmpdepfile='.deps/makewidget.TPlo' depmode=gcc3 /bin/sh ../../admin/depcomp /bin/sh ../../libtool --mode=compile "
