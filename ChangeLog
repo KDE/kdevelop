@@ -1,3 +1,7 @@
+2000-01-29 Ralf Funken <funken.ruk@netcologne.de>
+	* Updated english and german manuals chapter (internal debugger)
+	* Updated de.po (some orthographic fixups)
+
 2000-01-29 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* implementing new automake/autoconf framework
 	  with NetBSD compatibility
