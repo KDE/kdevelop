@@ -484,6 +484,12 @@ void QEditorPart::setupHighlighting()
     m_modes.append( mode );
 
     mode = new HLMode;
+    mode->name = "javascript";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.js" << "*.qs";
+    m_modes.append( mode );
+
+    mode = new HLMode;
     mode->name = "csharp";
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.cs";

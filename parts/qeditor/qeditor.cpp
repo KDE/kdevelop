@@ -46,6 +46,7 @@
 #include "qsourcecolorizer.h"
 #include "cpp_colorizer.h"
 #include "java_colorizer.h"
+#include "js_colorizer.h"
 #include "jsp_colorizer.h"
 #include "python_colorizer.h"
 #include "xml_colorizer.h"
@@ -136,7 +137,7 @@ QEditor::QEditor( QWidget* parent, const char* name )
     : KTextEdit( parent, name )
 {
     document()->setUseFormatCollection( FALSE );
-    
+
     parenMatcher = new ParenMatcher();
 
     m_tabIndent = TRUE;
@@ -204,7 +205,7 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 		indent();
 	    else
 		insert( "\t" );
-	} else 
+	} else
 	    insert( "\t" );
 	e->accept();
     } else if( m_electricKeys.contains( e->ascii() ) ){
@@ -225,10 +226,10 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	    }
 	case Qt::Key_Left: {
 	    QTextCursor* cur = textCursor();
-	    if (cur->index() < 1) { 
-		moveCursor( MoveBackward, bRemove ); break; 
+	    if (cur->index() < 1) {
+		moveCursor( MoveBackward, bRemove ); break;
 	    }
-	    QChar c(cur->paragraph()->at(cur->index()-1)->c);   
+	    QChar c(cur->paragraph()->at(cur->index()-1)->c);
 	    bool firstMove = true; // make sure we do move
 	    if (c.isSpace()) {
 		while (cur->index() > 0 && (cur->paragraph()->at(cur->index()-1)->c.isSpace() || firstMove)) {
@@ -255,7 +256,7 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	case Qt::Key_Right: {
 	    QTextCursor* cur = textCursor();
 	    if (cur->atParagEnd()) {
-		moveCursor( MoveForward, bRemove ); break; 
+		moveCursor( MoveForward, bRemove ); break;
 	    }
 	    QChar c(cur->paragraph()->at(cur->index())->c);
 	    bool firstMove = true; // make sure we do move
@@ -283,7 +284,7 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	if (bRemove) {
 	    removeSelectedText();
         }
-    } 
+    }
     else if( e->key() == Key_Backspace ){
 	if( backspaceIndentEnabled() ){
 	    backspaceIndent( e );
@@ -337,7 +338,7 @@ void QEditor::drawCursor( bool visible )
 void QEditor::configChanged()
 {
     updateStyles();
-    
+
     if( QEditorSettings::self()->wordWrap() ){
 	setWordWrap( QEditor::WidgetWidth );
 	setHScrollBarMode( QScrollView::AlwaysOff );
@@ -347,7 +348,7 @@ void QEditor::configChanged()
 	setHScrollBarMode( QScrollView::AlwaysOn );
 	setVScrollBarMode( QScrollView::AlwaysOn );
     }
-    
+
     refresh();
 }
 
@@ -476,10 +477,14 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent(this) );
+    } else if( m_language == "javascript" ){
+        setElectricKeys( "{}" );
+	document()->setPreProcessor( new JSColorizer(this) );
+	document()->setIndent( new CIndent(this) );
     } else if( m_language == "jsp" ){
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new JspColorizer(this) );
-	document()->setIndent( new SimpleIndent(this) );	
+	document()->setIndent( new SimpleIndent(this) );
     } else if( m_language == "csharp" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );
@@ -644,7 +649,7 @@ void QEditor::indent()
     if( !hasSelectedText() && text( textCursor()->paragraph()->paragId() ).stripWhiteSpace().isEmpty() )
 	moveCursor( MoveLineEnd, false );
 }
-    
+
 void QEditor::contentsMouseDoubleClickEvent( QMouseEvent * e )
 {
     if ( e->button() != Qt::LeftButton ) {
@@ -659,7 +664,7 @@ void QEditor::contentsMouseDoubleClickEvent( QMouseEvent * e )
     int para = 0;
     int index = charAt( e->pos(), &para );
     setCursorPosition(para, index);
-    
+
     QTextCursor* cur = textCursor();
     QTextCursor c1 = *cur;
     QTextCursor c2 = *cur;
