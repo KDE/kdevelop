@@ -33,22 +33,24 @@
 #include "kdevcomponent.h"
 #include "kdevelopfactory.h"
 #include "kdevelopcore.h"
-
+#include "kdevviewhandler.h"
+#include <kparts/event.h>
 
 KDevelop::KDevelop(const char *name) :
-  KParts::DockMainWindow( name ),
-  m_dockbaseAreaOfDocumentViews(0L),
-  m_dockOnLeft(0L),
-  m_dockOnBottom(0L)
+  KParts::DockMainWindow( name )
+   ,m_dockbaseAreaOfDocumentViews(0L)
+   ,m_dockOnLeft(0L)
+   ,m_dockOnBottom(0L)
+   ,m_pCore(0L)
 {
   initActions();
   initHelp();
 
   setXMLFile( "kdevelopui.rc" );
 
-  KDevelopCore *core = new KDevelopCore(this);
+  m_pCore = new KDevelopCore(this);
   createGUI(0);
-  core->loadInitialComponents();
+  m_pCore->loadInitialComponents();
 }
 
 
@@ -703,6 +705,8 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
         {
           // call the view handler service
           emit addView( w);
+          KParts::GUIActivateEvent ev( true );
+          QApplication::sendEvent( m_pCore->viewHandler(), &ev );
         }
         else
         {
