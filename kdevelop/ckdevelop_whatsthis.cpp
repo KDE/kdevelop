@@ -149,7 +149,17 @@ void CKDevelop::initWhatsThis(){
 	              "message that the index.html file is not found.");	
 	whats_this->add(toolBar()->getButton(ID_BUILD_RUN),build_run_str);
 	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_RUN),build_run_str);
-	
+
+	QString build_debug_str=i18n("Debug program\n\n"
+								"Opens KDbg in the tools window with your actual"
+	       				"program and allows you to execute it step by step"
+	           		"by setting breakpoints in the sourcecode."
+	             	"Note that you have to open your sourcecodes in KDbg"
+	              "to access it.");
+	whats_this->add(toolBar()->getButton(ID_BUILD_DEBUG),build_debug_str);
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_DEBUG),build_debug_str);
+
+/*	
 	QString build_debug_str=i18n("Debug program\n\n"
 								"Opens KDbg in the tools window with your actual"
 	       				"program and allows you to execute it step by step"
@@ -158,6 +168,7 @@ void CKDevelop::initWhatsThis(){
 	              "to access it.");
 	whats_this->add(toolBar()->getButton(ID_DEBUG_RUN),build_debug_str);
 //	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_RUN),build_debug_str);
+*/
 	
 	QString build_stop_str=i18n("Stop\n\n"
 								"If activated, the stop-command will interrupt "
