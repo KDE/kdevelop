@@ -1,3 +1,7 @@
+2004-02-06 jbb <jbb@kdevelop.org>
+    * Add (global) Output radix to debugger options.
+    * Robert Gruber's patch to add hex/dec toggle to watch window items
+
 2004-01-28 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Ported Doxygen plugin, autotools part, FileTree and FileGroups to demand loaded config page
 
