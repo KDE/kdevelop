@@ -1,3 +1,6 @@
+2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
+    * got rid of s_tab_view, DocViewMan::currentDocType() added and used
+
 2001-03-12  F@lk Brettschneider <falk@kdevelop.org>
     * bugfixes: crash on exit (wrong type casts, forgot to remove browser view from MDI control)
 
