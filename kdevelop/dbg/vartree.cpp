@@ -635,11 +635,17 @@ void VarItem::checkForRequests()
   // Signature for a QT2.0.x QT2.1 QString
   // TODO - This handling is not that good - but it works sufficiently well
   // at the moment to leave it here, and it won't cause bad things to happen.
+
+  // Updated to handle Qt3 Strings as well by harryF
   if (strncmp(cache_, "d = 0x", 6) == 0)      // Eeeek - too small
   {
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
-           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+           // use the latin1() method. Shouldn't have any side-effects, but is dog-slow
+           // we have to do it because the internal spec of QString has changed in Qt3
+           QCString().sprintf("%s.latin1()",
+//           This was the old way
+//           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 

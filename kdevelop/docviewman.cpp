@@ -888,6 +888,7 @@ void DocViewMan::slot_viewActivated(QextMdiChildView* pMDICover)
                .arg(filename), i18n("File modified")
                ,i18n("&Yes"), i18n("&No")) == KMessageBox::Yes) {
         loadKWriteDoc(m_pCurEditDoc, filename, 1);
+        m_pCurEditDoc->setLastFileModifDate(file_info.lastModified());
       }
       else {
         m_pCurEditDoc->setLastFileModifDate(file_info.lastModified());

@@ -1,3 +1,7 @@
+2001-06-22  Harald Fernengel  <harry@bnro.de>
+   * fixed bug when file was modified outside editor
+   * KDevelop can now debug Qt 3.x strings too.
+
 2001-06-21  F@lk Brettschneider <falk@kdevelop.org>
    * finished the redesign of the KDevelop setup by a QWizard
    * I noticed htdig hasn't got a htdig.conf file in the KDevelop installation
