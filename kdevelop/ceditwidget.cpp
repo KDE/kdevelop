@@ -28,9 +28,16 @@
 #include <kiconloader.h>
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/highlight.h"
-#include "resource.h"
+//#include "resource.h"
 #include "ceditwidget.h"
 
+#define ID_EDIT_UNDO 10000
+#define ID_EDIT_REDO 10001
+#define ID_EDIT_CUT 10002
+#define ID_EDIT_COPY 10003
+#define ID_EDIT_PASTE 10004
+#define ID_EDIT_SEARCH_IN_FILES 10005
+#define ID_HELP_SEARCH_TEXT     10006
 
 // We don't want to clutter the global namespace with this stuff.
 class CEditWidgetPrivate
