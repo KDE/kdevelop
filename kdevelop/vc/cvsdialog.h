@@ -31,7 +31,7 @@ private:
     QMultiLineEdit *resultbox;
     QPushButton *button;
     KProcess *childproc;
-    QString buf;
+    QCString buf;
 };
 
 #endif

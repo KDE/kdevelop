@@ -59,6 +59,8 @@
 #include "../config.h"
 #include "structdef.h"
 #include "vc/versioncontrol.h"
+#include "print/configenscriptdlg.h"
+#include "print/configa2psdlg.h"
 
 
 extern KGuiCmdManager cmdMngr;
@@ -1152,7 +1154,7 @@ void CKDevelop::slotOptionsConfigureEnscript(){
   if (!CToolClass::searchProgram("enscript")) {
     return;
   }
-  enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+  CConfigEnscriptDlg *enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
   enscriptconf->resize(610,510);
   enscriptconf->exec();
   delete (enscriptconf);
@@ -1162,7 +1164,7 @@ void CKDevelop::slotOptionsConfigureA2ps(){
   if (!CToolClass::searchProgram("a2ps")) {
     return;
   }
-  a2psconf = new CConfigA2psDlg(this, "confdialog");
+  CConfigA2psDlg *a2psconf = new CConfigA2psDlg(this, "confdialog");
   a2psconf->resize(600,430);
   a2psconf->exec();
   delete (a2psconf);

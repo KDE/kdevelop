@@ -32,6 +32,8 @@
 #include <kapp.h>
 #include <htmltoken.h>
 #include <klocale.h>
+#include "misc.h"
+
 
 const char *template_desc[] = {
     "normal",

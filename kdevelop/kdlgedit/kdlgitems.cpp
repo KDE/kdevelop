@@ -15,19 +15,19 @@
  *                                                                         *
  ***************************************************************************/
 
+
+#include <qstring.h>
+#include <qheader.h>
+#include <kiconloader.h>
+#include <kapp.h>
+#include <kpopmenu.h>
+#include <kglobal.h>
+#include "../ckdevelop.h"
+#include "kdlgproplvis.h"
+#include "kdlgeditwidget.h"
 #include "items.h"
 #include "kdlgitems.h"
 
-#include <ktreelist.h>
-#include <kiconloader.h>
-#include <kapp.h>
-#include <qstring.h>
-#include <qheader.h>
-#include "kdlgproplvis.h"
-#include "../ckdevelop.h"
-
-#include "kdlgeditwidget.h"
-#include "kpopmenu.h"
 
 KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
@@ -42,10 +42,10 @@ KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWi
                        SLOT(rightButtonPressed(QListViewItem *, const QPoint &, int)));
   connect ( treelist, SIGNAL(selectionChanged ()), SLOT(itemSelected()));
 
-  KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
+  KIconLoader *icon_loader = KGlobal::iconLoader();
 
-  folder_pix = icon_loader->loadMiniIcon("folder.xpm");
-  entry_pix = icon_loader->loadMiniIcon("mini-default.xpm");
+  folder_pix = icon_loader->loadIcon("folder.xpm");
+  entry_pix = icon_loader->loadIcon("mini-default.xpm");
 
 }
 
@@ -56,8 +56,8 @@ KDlgItems::~KDlgItems()
 
 void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
 {
-  #define mkQPixTb(fn) QPixmap(KApplication::kde_toolbardir() + QString("/") +fn)
-  #define mkQPixDd(fn) QPixmap(KApplication::kde_datadir() + QString("/kdevelop/toolbar/") + fn)
+    //  #define mkQPixTb(fn) QPixmap(KApplication::kde_toolbardir() + QString("/") +fn)
+    //  #define mkQPixDd(fn) QPixmap(KApplication::kde_datadir() + QString("/kdevelop/toolbar/") + fn)
 
   KDlgEditWidget *edwid = pCKDevel->kdlg_get_edit_widget();
   if (!edwid)
@@ -78,18 +78,18 @@ void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
   phelp.setTitle( edwid->selectedWidget()->itemClass() );
   if (edwid->mainWidget() != edwid->selectedWidget())
     {
-      phelp.insertItem( mkQPixTb("prev.xpm"), i18n("&Raise"), edwid, SLOT(slot_raiseSelected()) );
-      phelp.insertItem( mkQPixTb("next.xpm"), i18n("&Lower"), edwid, SLOT(slot_lowerSelected()) );
-      phelp.insertItem( mkQPixTb("top.xpm"), i18n("Raise to &top"),    edwid, SLOT(slot_raiseTopSelected()) );
-      phelp.insertItem( mkQPixTb("bottom.xpm"), i18n("Lower to &bottom"), edwid, SLOT(slot_lowerBottomSelected()) );
+      phelp.insertItem( BarIcon("prev"), i18n("&Raise"), edwid, SLOT(slot_raiseSelected()) );
+      phelp.insertItem( BarIcon("next"), i18n("&Lower"), edwid, SLOT(slot_lowerSelected()) );
+      phelp.insertItem( BarIcon("top"), i18n("Raise to &top"),    edwid, SLOT(slot_raiseTopSelected()) );
+      phelp.insertItem( BarIcon("bottom"), i18n("Lower to &bottom"), edwid, SLOT(slot_lowerBottomSelected()) );
       phelp.insertSeparator();
-      phelp.insertItem( mkQPixDd("cut.xpm"), i18n("C&ut"),   edwid, SLOT(slot_cutSelected()) );
-      phelp.insertItem( mkQPixTb("delete.xpm"), i18n("&Delete"),edwid, SLOT(slot_deleteSelected()) );
-      phelp.insertItem( mkQPixDd("copy.xpm"), i18n("&Copy"),  edwid, SLOT(slot_copySelected()) );
+      phelp.insertItem( BarIcon("cut"), i18n("C&ut"),   edwid, SLOT(slot_cutSelected()) );
+      phelp.insertItem( BarIcon("delete"), i18n("&Delete"),edwid, SLOT(slot_deleteSelected()) );
+      phelp.insertItem( BarIcon("copy"), i18n("&Copy"),  edwid, SLOT(slot_copySelected()) );
     }
-  phelp.insertItem( mkQPixDd("paste.xpm"), i18n("&Paste"), edwid, SLOT(slot_pasteSelected()) );
+  phelp.insertItem( BarIcon("paste"), i18n("&Paste"), edwid, SLOT(slot_pasteSelected()) );
   phelp.insertSeparator();
-  phelp.insertItem( mkQPixTb("help.xpm"), i18n("&Help"),  edwid, SLOT(slot_helpSelected()) );
+  phelp.insertItem( BarIcon("help.xpm"), i18n("&Help"),  edwid, SLOT(slot_helpSelected()) );
   phelp.exec(QCursor::pos());
 }
 

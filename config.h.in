@@ -3,27 +3,6 @@
 /* Define if lex declares yytext as a char * by default, not a char[].  */
 #undef YYTEXT_POINTER
 
-/* Define if the C++ compiler supports BOOL */
-#undef HAVE_BOOL
-
-/* defines if having libgif (always 1) */
-#undef HAVE_LIBGIF
-
-/* defines if having libjpeg (always 1) */
-#undef HAVE_LIBJPEG
-
-/* defines if having libtiff */
-#undef HAVE_LIBTIFF
-
-/* defines if having libpng */
-#undef HAVE_LIBPNG
-
-/* defines which to take for ksize_t */
-#undef ksize_t
-
-/* Define to 1 if NLS is requested.  */
-#undef ENABLE_NLS
-
 #undef QT_DOCDIR
 #undef KDELIBS_DOCDIR
 #undef KDOC_INDEXDIR
@@ -35,6 +14,31 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* Define if NLS is requested */
+#undef ENABLE_NLS
+
+/* Define if you have libz */
+#undef HAVE_LIBZ
+
+/* Define if you have libpng */
+#undef HAVE_LIBPNG
+
+/* Define the type of the third argument for getsockname
+ */
+#undef ksize_t
+
+/* Define if you have libgif */
+#undef HAVE_LIBGIF
+
+/* Define if you have libjpeg */
+#undef HAVE_LIBJPEG
+
+/* Define if you have libtiff */
+#undef HAVE_LIBTIFF
+
+/* Define if you have libtiff */
+#undef HAVE_LIBTIFF
 
 
 #ifndef HAVE_BOOL

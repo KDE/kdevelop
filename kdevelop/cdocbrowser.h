@@ -28,7 +28,7 @@
 #include <qpopupmenu.h>
 #include <qframe.h>
 
-#include <htmlview.h>
+#include <khtmlview.h>
 #include <kiconloader.h>
 #include <kapp.h>
 #include <kconfig.h>

@@ -18,8 +18,6 @@ int CALLER_ITEMCLASS_NAME::MyWidget::recPosY(int py)
 {
     int ynew = py+y();
     if ((!parent()) || (parent()!=parentObject->getEditWidget()))
-	return ((KDlgItem_Widget::MyWidget*)parent())->recPosY(ynew);
-    else
 	return py;
 }
 

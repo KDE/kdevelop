@@ -1400,13 +1400,15 @@ QString KWrite::text() {
 QString KWrite::currentTextLine() {
   TextLine *textLine;
   textLine = kWriteDoc->textLine(kWriteView->cursor.y);
-  return QString(textLine->getText(), textLine->length());
+#warning FIXME
+  return QCString(textLine->getText(), textLine->length());
 }
 
 QString KWrite::textLine(int num) {
   TextLine *textLine;
   textLine = kWriteDoc->textLine(num);
-  return QString(textLine->getText(), textLine->length());
+#warning FIXME
+  return QCString(textLine->getText(), textLine->length());
 }
 
 QString KWrite::currentWord() {
@@ -1559,7 +1561,7 @@ void KWrite::loadURL(const char *url, int flags) {
         s += '/';
       }
       s += url;
-      u.parse(s);
+      u = s;
     }
     if (u.isMalformed()) {
 	s.sprintf(i18n("Malformed URL\n%s"),url);

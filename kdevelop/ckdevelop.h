@@ -36,19 +36,17 @@ class CKDevelop;
 #include <keditcl.h>
 #include <kapp.h>
 #include <ktmainwindow.h>
-#include <ktreelist.h>
+//#include <ktreelist.h>
 #include <kprocess.h>
-#include <htmlview.h>
-#include <htmltoken.h>
-#include <kfm.h>
+#include <khtmlview.h>
 #include <kiconloader.h>
-#include <knewpanner.h>
 #include <kfiledialog.h>
-#include <kmsgbox.h>
 #include <kaccel.h>
 #include <kprogress.h>
 
 #include "./kwrite/kguicommand.h"
+
+class QSplitter;
 
 class CDocBrowser;
 class CClassView;
@@ -731,11 +729,11 @@ private:
   KStatusBar* kdev_statusbar;
   KStatusBar* kdlg_statusbar;
 
-  KNewPanner* view;
-  KNewPanner* top_panner;
+  QSplitter* view;
+  QSplitter* top_panner;
   /** Divides the top_panner for edit and properties widget 
    * of the dialogeditor */
-  KNewPanner* kdlg_top_panner;  
+  QSplitter* kdlg_top_panner;  
   
   /** main class for the dialogeditor- 
    *  handles menu/toolbar etc. events specified for the dialogeditor. */
@@ -852,8 +850,10 @@ private:
   QString make_cmd;
 //   QString make_with_cmd;
 
+#if 0
   CConfigEnscriptDlg* enscriptconf;
   CConfigA2psDlg* a2psconf;
+#endif
 
   CAddExistingFileDlg* add_dlg;
   GrepDialog* grep_dlg;

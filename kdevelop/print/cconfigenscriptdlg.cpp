@@ -15,13 +15,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cconfigenscriptdlg.h"
-#include <kapp.h>
+
 #include <iostream.h>
-#include "../ctoolclass.h"
-#include <kmsgbox.h>
+#include <stdlib.h>
+#include <qmessagebox.h>
+#include <qfile.h>
+#include <kconfig.h>
+#include <kapp.h>
 #include <kquickhelp.h>
 #include <klocale.h>
+
+#include "../ctoolclass.h"
+#include "../misc.h"
+#include "cconfigenscriptdlg.h"
+
 
 CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabDialog(parent, name, true){
   init();
@@ -2739,7 +2746,7 @@ void CConfigEnscriptDlg::slotModificationAmpmClicked(int prog) {
 
 void CConfigEnscriptDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
+    QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
    return;
   }
   QString dir,data1,data2,param,text;
@@ -2858,161 +2865,56 @@ bool CConfigEnscriptDlg::lookProgram(QString name) {
 void CConfigEnscriptDlg::loadSettings() {
   settings = kapp->getConfig();
   settings->setGroup("Enscript");
-  if (!strcmp(settings->readEntry("Header"),"true")) {
-    headerButton->setChecked(true);
-  }
-  else {
-   headerButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("FancyHeader"),"true")) {
- fancyHeaderButton->setChecked(true);
-  }
-  else {
- fancyHeaderButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Headertext"),"true")) {
-  headertextButton->setChecked(true);
-  }
-  else {
-  headertextButton->setChecked(false);
-  }
+  headerButton->setChecked(!strcmp(settings->readEntry("Header"),"true"));
+  fancyHeaderButton->setChecked(!strcmp(settings->readEntry("FancyHeader"),"true"));
+  headertextButton->setChecked(!strcmp(settings->readEntry("Headertext"),"true"));
   headertextLine->setText(settings->readEntry("HeadertextLine"));
-    headertextPosition->setCurrentItem((settings->readEntry("HeadertextPosition")).toInt());
-  if (!strcmp(settings->readEntry("Login"),"true")) {
-  loginButton->setChecked(true);
-  }
-  else {
-  loginButton->setChecked(false);
-  }
+  headertextPosition->setCurrentItem((settings->readEntry("HeadertextPosition")).toInt());
+  loginButton->setChecked(!strcmp(settings->readEntry("Login"),"true"));
   loginPosition->setCurrentItem((settings->readEntry("LoginPosition")).toInt());
-  if (!strcmp(settings->readEntry("Filename"),"true")) {
-  filenameLine->setChecked(true);
-  }
-  else {
-  filenameLine->setChecked(false);
-  }
-    filenameSize->setCurrentItem((settings->readEntry("FilenameSize")).toInt());
+  filenameLine->setChecked(!strcmp(settings->readEntry("Filename"),"true"));
+  filenameSize->setCurrentItem((settings->readEntry("FilenameSize")).toInt());
   filenamePosition->setCurrentItem((settings->readEntry("FilenamePosition")).toInt());
-  if (!strcmp(settings->readEntry("Hostname"),"true")) {
-  hostnameButton->setChecked(true);
-  }
-  else {
-    hostnameButton->setChecked(false);
-  }
+  hostnameButton->setChecked(!strcmp(settings->readEntry("Hostname"),"true"));
   hostnameSize->setCurrentItem((settings->readEntry("HostnameSize")).toInt());
   hostnamePosition->setCurrentItem((settings->readEntry("HostnamePosition")).toInt());
-  if (!strcmp(settings->readEntry("CurrentDate"),"true")) {
-  currentDateButton->setChecked(true);
-  }
-  else {
-  currentDateButton->setChecked(false);
-  }
+  currentDateButton->setChecked(!strcmp(settings->readEntry("CurrentDate"),"true"));
   currentDateFormat->setCurrentItem((settings->readEntry("CurrentDateFormat")).toInt());
   currentDatePosition->setCurrentItem((settings->readEntry("CurrentDatePosition")).toInt());
-  if (!strcmp(settings->readEntry("CurrentTime"),"true")) {
-  currentTimeButton->setChecked(true);
-  }
-  else {
-  currentTimeButton->setChecked(false);
-  }
+  currentTimeButton->setChecked(!strcmp(settings->readEntry("CurrentTime"),"true"));
   currentTimeAmpm->setCurrentItem((settings->readEntry("CurrentTimeAmpm")).toInt());
   currentTimeFormat->setCurrentItem((settings->readEntry("CurrentTimeFormat")).toInt());
   currentTimePosition->setCurrentItem((settings->readEntry("CurrentTimePosition")).toInt());
-  if (!strcmp(settings->readEntry("ModificationDate"),"true")) {
-  modificationDateButton->setChecked(true);
-  }
-  else {
-  modificationDateButton->setChecked(false);
-  }
+  modificationDateButton->setChecked(!strcmp(settings->readEntry("ModificationDate"),"true"));
   modificationDateFormat->setCurrentItem((settings->readEntry("ModificationDateFormat")).toInt());
   modificationDatePosition->setCurrentItem((settings->readEntry("ModificationDatePosition")).toInt());
-  if (!strcmp(settings->readEntry("ModificationTime"),"true")) {
-  modificationTimeButton->setChecked(true);
-  }
-  else {
-  modificationTimeButton->setChecked(false);
-  }
+  modificationTimeButton->setChecked(!strcmp(settings->readEntry("ModificationTime"),"true"));
   modificationTimeAmpm->setCurrentItem((settings->readEntry("ModificationTimeAmpm")).toInt());
   modificationTimeFormat->setCurrentItem((settings->readEntry("ModificationTimeFormat")).toInt());
   modificationTimePosition->setCurrentItem((settings->readEntry("ModificationTimePosition")).toInt());
-  if (!strcmp(settings->readEntry("NumberingLines"),"true")) {
-  numberingLineButton->setChecked(true);
-  }
-  else {
-  numberingLineButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Borders"),"true")) {
-  bordersButton->setChecked(true);
-  }
-  else {
-  bordersButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("NumberingPages"),"true")) {
-  numberingPagesButton->setChecked(true);
-  }
-  else {
-  numberingPagesButton->setChecked(false);
-  }
+  numberingLineButton->setChecked(!strcmp(settings->readEntry("NumberingLines"),"true"));
+  bordersButton->setChecked(!strcmp(settings->readEntry("Borders"),"true"));
+  numberingPagesButton->setChecked(!strcmp(settings->readEntry("NumberingPages"),"true"));
   numberingPagesList->setCurrentItem((settings->readEntry("NumberingPagesPosition")).toInt());
   alignFileList->setCurrentItem((settings->readEntry("AlignFiles")).toInt());
   linesPerPage->setValue((settings->readEntry("LinesPerPageLine")).toInt());
   setTabSize->setValue((settings->readEntry("TabSize")).toInt());
   fontForHeaderButton->setText(settings->readEntry("FontForHeader"));
   fontForBodyButton->setText(settings->readEntry("FontForBody"));
-  if (!strcmp(settings->readEntry("CutLines"),"true")) {
-  cutLinesButton->setChecked(true);
-  }
-  else {
-  cutLinesButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Replace"),"true")) {
-  replaceButton->setChecked(true);
-  }
-  else {
-  replaceButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("TOC"),"true")) {
-  tocButton->setChecked(true);
-  }
-  else {
-  tocButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("HighlightBars"),"true")) {
-  highlightBarsButton->setChecked(true);
-  }
-  else {
-  highlightBarsButton->setChecked(false);
-  }
+  cutLinesButton->setChecked(!strcmp(settings->readEntry("CutLines"),"true"));
+  replaceButton->setChecked(!strcmp(settings->readEntry("Replace"),"true"));
+  tocButton->setChecked(!strcmp(settings->readEntry("TOC"),"true"));
+  highlightBarsButton->setChecked(!strcmp(settings->readEntry("HighlightBars"),"true"));
   cycleOfChange->setValue((settings->readEntry("CycleOfChange")).toInt());
-  if (!strcmp(settings->readEntry("WrappedLines"),"true")) {
-  markedWrappedLinesButton->setChecked(true);
-  }
-  else {
-  markedWrappedLinesButton->setChecked(false);
-  }
+  markedWrappedLinesButton->setChecked(!strcmp(settings->readEntry("WrappedLines"),"true"));
   valueForWrappedLine->setCurrentItem((settings->readEntry("WrappedLInesValue")).toInt());
-  if (!strcmp(settings->readEntry("Underlay"),"true")) {
-  underlayButton->setChecked(true);
-  }
-  else {
-  underlayButton->setChecked(false);
-  }
+  underlayButton->setChecked(!strcmp(settings->readEntry("Underlay"),"true"));
   underlaytextLine->setText(settings->readEntry("Underlaytext"));
-  if (!strcmp(settings->readEntry("UnderlayPositionDefault"),"true")) {
-  underlayPositionDefaultButton->setChecked(true);
-  }
-  else {
-  underlayPositionDefaultButton->setChecked(false);
-  }
+  underlayPositionDefaultButton->setChecked(!strcmp(settings->readEntry("UnderlayPositionDefault"),"true"));
   underlayXPosition->setValue((settings->readEntry("UnderlayXPosition")).toInt());
   underlayYPosition->setValue((settings->readEntry("UnderlayYPosition")).toInt());
   underlayFontButton->setText(settings->readEntry("Underlayfont"));
-  if (!strcmp(settings->readEntry("UnderlayAngleDefault"),"true")) {
-  underlayAngleDefault->setChecked(true);
-  }
-  else {
-  underlayAngleDefault->setChecked(false);
-  }
+  underlayAngleDefault->setChecked(!strcmp(settings->readEntry("UnderlayAngleDefault"),"true"));
   underlayAngle->setValue((settings->readEntry("UnderlayAngle")).toInt());
   underlayGray->setValue((settings->readEntry("UnderlayGray")).toFloat());
   underlayStyle->setCurrentItem((settings->readEntry("UnderlayStyle")).toInt());
@@ -3024,5 +2926,3 @@ void CConfigEnscriptDlg::loadSettings() {
   slotHighlightBarsClicked();
   slotNumberingPagesClicked();
 }
-
-

@@ -15,16 +15,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qlined.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
+#include <qlistbox.h>
+#include <qlabel.h>
 #include <qfileinfo.h>
+#include <qmessagebox.h>
 
 #include <kfiledialog.h>
-#include <qmessagebox.h>
 #include <kquickhelp.h>
+#include <kiconloader.h>
+#include <kapp.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include "ctoolsconfigdlg.h"
 #include "ctoolclass.h"
+
 
 CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
 	setCaption(i18n("Tools-Menu Configuration"));	
@@ -88,9 +95,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	executable_button->setGeometry( 410, 240, 30, 30 );
 	KQuickHelp::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
 	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
-	QPixmap pix;
-	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-	executable_button->setPixmap(pix);
+	executable_button->setPixmap(BarIcon("open"));
 	executable_button->setAutoRepeat( FALSE );
 	executable_button->setAutoResize( FALSE );
         KQuickHelp::add(executable_edit,KQuickHelp::add(executable_button,i18n("Enter the name of the executable file here.")));
@@ -150,9 +155,9 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 
 }
 
+
 CToolsConfigDlg::~CToolsConfigDlg(){
 }
-
 
 
 void CToolsConfigDlg::slotToolAdd()
@@ -185,6 +190,7 @@ void CToolsConfigDlg::slotToolAdd()
 		
 }
 
+
 void CToolsConfigDlg::slotToolDelete()
 {
 	int current=tools_listbox->currentItem();
@@ -195,6 +201,7 @@ void CToolsConfigDlg::slotToolDelete()
 	tools_listbox->removeItem(current);
 
 }
+
 
 void CToolsConfigDlg::slotToolMoveUp()
 {
@@ -208,7 +215,8 @@ void CToolsConfigDlg::slotToolMoveUp()
   if(current-1 ==0) move_up_button->setEnabled(false);
   move_down_button->setEnabled(true);
 }
-#include <iostream.h>
+
+
 void CToolsConfigDlg::slotToolMoveDown()
 {
   int current = tools_listbox->currentItem();
@@ -245,6 +253,7 @@ void CToolsConfigDlg::slotToolsExeSelect()
   }
 }
 
+
 void CToolsConfigDlg::slotShowToolProp(int index){
   
   executable_edit->setText(tools_exe.at(index));
@@ -253,19 +262,10 @@ void CToolsConfigDlg::slotShowToolProp(int index){
 
   delete_button->setEnabled( TRUE );
 
-  if(index != 0){
-    move_up_button->setEnabled( TRUE);
-  }
-  else{
-    move_up_button->setEnabled( FALSE);
-  }
-  if(index+1 != tools_listbox->count()){
-    move_down_button->setEnabled( TRUE );
-  }
-  else{
-    move_down_button->setEnabled( FALSE);
-  }
+  move_up_button->setEnabled( index != 0 );
+  move_down_button->setEnabled( index+1 != tools_listbox->count() );
 }
+
 
 void CToolsConfigDlg::readConfig(){
   
@@ -293,6 +293,8 @@ void CToolsConfigDlg::slotHelp()
 {
   kapp->invokeHTMLHelp("kdevelop/index-12.html", "ss12.1" );
 }
+
+
 void CToolsConfigDlg::swap(int item1,int item2){
   
   QString str1,str2;
@@ -317,25 +319,3 @@ void CToolsConfigDlg::swap(int item1,int item2){
   tools_argument.remove(item2);
   tools_argument.insert(item2,str1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -15,16 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cfileprintdlg.h"
-#include <qlabel.h>
+#include <qmessagebox.h>
 #include <qbuttongroup.h>
-#include <iostream.h>
-#include <kapp.h>
-#include <kmsgbox.h>
-#include <qdatetime.h>
-#include "../cproject.h"
 #include <kquickhelp.h>
 #include <klocale.h>
+
+#include "../cproject.h"
+#include "cfileprintdlg.h"
+
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -815,12 +813,13 @@ void CFilePrintDlg::slotOkClicked() {
       sources = (QString) selfChoosenFileLine->text();
     }
     else {
-      KMsgBox::message(0,i18n("No File to print !"),i18n("You need to select at least one file for printing. "
-      "This can be done by entering the filename on the left at the file entry field."),KMsgBox::EXCLAMATION);
-      return;     } 			
-		settings->writeEntry("FileSettings",sources);
-		}
-	else {
+      QMessageBox::information(0,i18n("No File to print !"),i18n("You need to select at least one file for printing. "
+      "This can be done by entering the filename on the left at the file entry field."));
+      return;
+    }
+    settings->writeEntry("FileSettings",sources);
+  }
+  else {
     QStrList filelist;
     QString sources = "";
     QString str = "";

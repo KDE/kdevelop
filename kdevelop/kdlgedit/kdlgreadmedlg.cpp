@@ -18,13 +18,15 @@
 
 
 #include <qwidget.h>
-#include "kdlgreadmedlg.h"
 #include <qpixmap.h>
 #include <qmultilinedit.h>
 #include <qpushbutton.h>
 #include <qcolor.h>
 #include <qpalette.h>
 #include <kapp.h>
+#include <klocale.h>
+#include "kdlgreadmedlg.h"
+
 
 KDlgReadmeDlg::KDlgReadmeDlg(QWidget *parent)
  : QDialog(parent, "readmedlg", TRUE)

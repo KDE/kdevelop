@@ -527,7 +527,7 @@ bool KDlgEditWidget::openFromFile( QString fname )
                 res = 1;
               if (res == 1)
                 {
-                  printf("  kdlgedit ERROR : %s \"%s\"\n", i18n("Aborted reading dialog file"), (const char*)fname);
+                  printf("  kdlgedit ERROR : %s \"%s\"\n", i18n("Aborted reading dialog file").ascii(), (const char*)fname);
                   QMessageBox::information( this, fname,
                            i18n("Reading aborted !\n\nThe dialog has not been loaded completely."
                                 "\nOpen another dialog or create a new one\nif you don't like the result."));
@@ -801,7 +801,6 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("KProgress", KDlgItem_KProgress )
     macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )
     macro_CreateIfRightOne("KRestrictedLine", KDlgItem_KRestrictedLine )
-    macro_CreateIfRightOne("KTreeList", KDlgItem_KTreeList )
     macro_CreateIfRightOne("KSeparator", KDlgItem_KSeparator )
 
 #undef macro_CreateIfRightOne

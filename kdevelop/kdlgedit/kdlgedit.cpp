@@ -149,10 +149,10 @@ bool KDlgEdit::slotFileClose(){
   if (dialog_file == "") return true;
   int result = 1;
   if(((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
-    result = KMsgBox::yesNoCancel(0,i18n("Question"),i18n("You have modified the current dialog\nDo you want to save it?"));
+    result = QMessageBox::information(0, i18n("Question"),i18n("You have modified the current dialog\nDo you want to save it?"), i18n("Yes"), i18n("No"), i18n("Cancel"));
   }
-  if(result == 3) return false; // cancel
-  if(result == 1) { // ok
+  if(result == 2) return false; // cancel
+  if(result == 0) { // ok
     slotFileSave();
   }
   ((CKDevelop*)parent())->kdlg_get_edit_widget()->hide();
@@ -1373,7 +1373,7 @@ void KDlgEdit::slotViewPreview()
   dlg.exec();
 }
 void KDlgEdit::slotDeleteDialog(QString file){
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected dialog?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
+  if(KMessageBox::warningYesNo(0, i18n("Do you really want to delete the selected dialog?\n        There is no way to restore it!")) == KMessageBox::No){
     return;
   }
   slotFileCloseForceSave();

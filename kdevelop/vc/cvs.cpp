@@ -1,5 +1,5 @@
-#include <kapp.h>
 #include <qfileinfo.h>
+#include <klocale.h>
 #include <stdio.h>
 #include "cvsdialog.h"
 #include "commitdialog.h"

@@ -20,13 +20,13 @@
 #define CTOOLSCONFIGDLG_H
 
 #include <qdialog.h>
-#include <qlabel.h>
-#include <qlined.h>
-#include <qlistbox.h>
-#include <qpushbt.h>
 #include <qstrlist.h>
 
-#include <kapp.h>
+class QListBox;
+class QPushButton;
+class QLabel;
+class QLineEdit;
+class KConfig;
 
 
 /**a dialog to configure the tools-menu in the kdevelop menubar.

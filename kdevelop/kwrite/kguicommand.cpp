@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-#include "kckey.h"
+// #include "kckey.h"
 
 #include "kguicommand.h"
 

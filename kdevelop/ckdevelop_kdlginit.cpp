@@ -46,7 +46,8 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
   kdlg_tabctl->addTab(kdlg_items_view,i18n("Items"));
 
-  kdlg_top_panner = new KNewPanner(top_panner,"kdlg_top_panner",KNewPanner::Vertical);
+#warning kdlg_top_panner was a KNewPanner
+  kdlg_top_panner = new QSplitter(Vertical, top_panner, "kdlg_top_panner");
 
   kdlg_prop_widget = new KDlgPropWidget(this,kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
   kdlg_edit_widget = new KDlgEditWidget(this,kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg

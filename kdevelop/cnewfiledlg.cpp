@@ -15,17 +15,27 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
+
+#include <qmessagebox.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
+#include <ktabctl.h>
+#include <kquickhelp.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kiconloader.h>
+#include <kfiledialog.h>
 #include "cnewfiledlg.h"
 #include "cgeneratenewfile.h"
 #include "cproject.h"
-#include <qmessagebox.h>
-#include <kmsgbox.h>
-#include <iostream.h>
-#include <kfiledialog.h>
-#include <kquickhelp.h>
-#include <klocale.h>
-#include <qlayout.h>
 #define LAYOUT_BORDER (10)
+
 
 CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CProject* p_prj) 
   : QDialog(parent,name,modal,f){
@@ -172,9 +182,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
 	loc_button->setFontPropagation( QWidget::NoChildren );
 	loc_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-	loc_button->setPixmap(pix);
+	loc_button->setPixmap(BarIcon("open"));
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
 	KQuickHelp::add(loc_button,i18n("Here you can choose a directory where the new file will be located."));
@@ -297,8 +305,8 @@ void CNewFileDlg::slotOKClicked(){
   complete_filename = location() + filename;
   
   if(QFile::exists(complete_filename)){
-    if(KMsgBox::yesNo(0,i18n("Files exists!"),
-		      i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?")) == 2){
+    if(KMessageBox::warningYesNo(0,i18n("Files exists!"),
+		      i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?")) == KMessageBox::No){
       return;
     }
   }

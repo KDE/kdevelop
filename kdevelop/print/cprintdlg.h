@@ -19,16 +19,18 @@
 #ifndef CPRINTDLG_H
 #define CPRINTDLG_H
 
-#include "cconfigenscriptdlg.h"
-#include "cconfiga2psdlg.h"
 #include <qdialog.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <kfiledialog.h>
+
+class QButtonGroup;
+class QCheckBox;
+class QPushButton;
+class QLineEdit;
+class QSpinBox;
+class QComboBox;
+class QLabel;
+class KShellProcess;
+class KConfig;
+
 
 /** the KDE-Printdialog
   *@author Stefan Heidrich
@@ -67,8 +69,6 @@ protected:
    *pageSide,*pagePerSide,*prettyCombBox,*mediaCombBox;
  QSpinBox *copySpinBox;
  QCheckBox *prettyPrintCheckBox,*prettyColorCheckBox,*printToFileButton;
- CConfigEnscriptDlg *enscriptconf;  
- CConfigA2psDlg *a2psconf;
  QString string,oldfiles;
  KShellProcess *process,*process2;
  KConfig *settings;
@@ -84,6 +84,3 @@ protected:
  QWidget *printwidget;
 };
 #endif
-
-
-

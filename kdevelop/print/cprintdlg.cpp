@@ -16,8 +16,6 @@
  ***************************************************************************/
 
 
-#include "cprintdlg.h"
-#include "cfileprintdlg.h"
 #include <qpixmap.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -26,13 +24,18 @@
 #include <string.h>
 #include <kapp.h>
 #include <klocale.h>
-#include "../ctoolclass.h"
-#include <kmsgbox.h>
-#include "../cproject.h"
 #include <kquickhelp.h>
+#include "../misc.h"
+#include "../ctoolclass.h"
+#include "../cproject.h"
 #include "../cdocbrowser.h"
 #include "../resource.h"
 #include "../ckdevelop.h"
+#include "cprintdlg.h"
+#include "cfileprintdlg.h"
+#include "cconfigenscriptdlg.h"
+#include "cconfiga2psdlg.h"
+
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) : QDialog(parent, name, true){
   init();
@@ -993,12 +996,12 @@ void CPrintDlg::slotCreateParameters() {
 
 void CPrintDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
+    QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
     return;
   }
   files = createFileString();
   if (!strcmp(files,"")) {
-    KMsgBox::message(0,"No File","No file is printing!",KMsgBox::EXCLAMATION); 
+    QMessageBox::information(0,"No File","No file is printing!");
     return;
   }
   else {
@@ -1072,7 +1075,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     if (!CToolClass::searchProgram("a2ps")) {
       return;
     }
-    a2psconf = new CConfigA2psDlg(this, "confdialog");
+    CConfigA2psDlg *a2psconf = new CConfigA2psDlg(this, "confdialog");
     a2psconf->resize(600,430);
     a2psconf->setCaption("A2ps Configdialog");
     a2psconf->exec();
@@ -1086,7 +1089,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     if (!CToolClass::searchProgram("enscript")) {
       return;
     }
-    enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+    CConfigEnscriptDlg *enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
       enscriptconf->resize(610,510);
       enscriptconf->setCaption("Enscript Configdialog");
       enscriptconf->exec(); 
@@ -1139,19 +1142,19 @@ void CPrintDlg::slotOkClicked() {
   settings->sync();
 
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+    QMessageBox::information(0, i18n("Program not found!"), i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"));
     return;
   }
   if (printToFileButton->isChecked()) {
     QString filetext = printToFileLine->text();
     if (!strcmp(filetext.right(1),"/") || !strcmp(printToFileLine->text(),"")) {
-      KMsgBox::message(0,"No Filename","You need a filename.\nPlease enter one!",KMsgBox::EXCLAMATION); 
+      QMessageBox::information(0, i18n("No Filename"), i18n("You need a filename.\nPlease enter one!"));
       return;
     }
   }
   files = createFileString();
   if (!strcmp(files,"")) {
-    KMsgBox::message(0,"No File","No file is printing!",KMsgBox::EXCLAMATION); 
+    QMessageBox::information(0, i18n("No File"), i18n("No file is printing!"));
     return;
   }
   else {

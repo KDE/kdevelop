@@ -36,7 +36,6 @@
 
 #include <kfontdialog.h>
 #include <kprocess.h>
-#include <htmltoken.h>
 #include <kapp.h>
 
 class CConfigEnscriptDlg : public QTabDialog {

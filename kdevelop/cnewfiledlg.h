@@ -21,16 +21,16 @@
 #define CNEWFILEDLG_H
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qbuttongroup.h>
-#include <ktabctl.h>
 
-//#include "cproject.h"
 class CProject;
+class QLineEdit;
+class QLabel;
+class QPushButton;
+class QCheckBox;
+class QListBox;
+class QButtonGroup;
+class KTabCtl;
+
 
 /** the new file dialog
   *@author Sandy Meier

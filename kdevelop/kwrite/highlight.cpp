@@ -20,14 +20,16 @@
 
 #include <string.h>
 
-//#include <qcombobox.h>
+#include <qnamespace.h>
 #include <qgroupbox.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+#include <qfile.h>
 
 #include <kapp.h>
 #include <kfontdialog.h>
 #include <kcharsets.h>
+#include <kglobal.h>
 
 #include <X11/Xlib.h> //used in getXFontList()
 
@@ -36,7 +38,7 @@
 #include "kmimemagic.h"
 
 //colors with Qt-scope do not work with Qt 1.42
-#define Qt
+//#define Qt
 
 // ISO/IEC 9899:1990 (aka ANSI C)
 // "interrupt" isn´t an ANSI keyword, but an extension of some C compilers
@@ -1420,7 +1422,7 @@ void PerlHighlight::createItemData(ItemDataList &list) {
   list.append(new ItemData("String"     ,dsString));
   list.append(new ItemData("String Char",dsChar));
   list.append(new ItemData("Comment"    ,dsComment));
-  list.append(new ItemData("Pod"        ,dsOthers,darkYellow,yellow,false,true));
+  list.append(new ItemData("Pod"        ,dsOthers,Qt::darkYellow,Qt::yellow,false,true));
 }
 
 /*
@@ -1829,7 +1831,7 @@ int HlManager::mimeFind(const char *contents, int len, const char *fname)
       if (p2 == -1) p2 = w.length();
       if (p1 < p2) {
         QRegExp regExp(w.mid(p1,p2 - p1),true,true);
-        if (regExp.match(result->getContent()) == 0) return hlList.at();
+        if (regExp.match(result->mimeType()) == 0) return hlList.at();
       }
       p1 = p2 + 1;
     }
@@ -1869,11 +1871,13 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
-      KCharset(defaultFont.charset).setQFont(font);
+#warning FIXME
+//      KCharset(defaultFont.charset).setQFont(font);
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
-      KCharset(itemData->charset).setQFont(font);
+#warning FIXME
+//      KCharset(itemData->charset).setQFont(font);
     }
     a[z].setFont(font);
   }
@@ -1913,16 +1917,16 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
 
   list.setAutoDelete(true);
   //ItemStyle(color, selected color, bold, italic)
-  list.append(new ItemStyle(black,white,false,false));     //normal
-  list.append(new ItemStyle(black,white,true,false));      //keyword
-  list.append(new ItemStyle(darkRed,white,false,false));   //datatype
-  list.append(new ItemStyle(blue,cyan,false,false));       //decimal/value
-  list.append(new ItemStyle(darkCyan,cyan,false,false));   //base n
-  list.append(new ItemStyle(darkMagenta,cyan,false,false));//float
-  list.append(new ItemStyle(magenta,magenta,false,false)); //char
-  list.append(new ItemStyle(red,red,false,false));         //string
-  list.append(new ItemStyle(darkGray,gray,false,true));    //comment
-  list.append(new ItemStyle(darkGreen,green,false,false)); //others
+  list.append(new ItemStyle(Qt::black,Qt::white,false,false));     //normal
+  list.append(new ItemStyle(Qt::black,Qt::white,true,false));      //keyword
+  list.append(new ItemStyle(Qt::darkRed,Qt::white,false,false));   //datatype
+  list.append(new ItemStyle(Qt::blue,Qt::cyan,false,false));       //decimal/value
+  list.append(new ItemStyle(Qt::darkCyan,Qt::cyan,false,false));   //base n
+  list.append(new ItemStyle(Qt::darkMagenta,Qt::cyan,false,false));//float
+  list.append(new ItemStyle(Qt::magenta,Qt::magenta,false,false)); //char
+  list.append(new ItemStyle(Qt::red,Qt::red,false,false));         //string
+  list.append(new ItemStyle(Qt::darkGray,Qt::gray,false,true));    //comment
+  list.append(new ItemStyle(Qt::darkGreen,Qt::green,false,false)); //others
 
   config = kapp->getConfig();
   config->setGroup("Default Item Styles");
@@ -2230,8 +2234,9 @@ void FontChanger::displayCharsets() {
   const char *charset;
   KCharsets *charsets;
 
-  charsets = kapp->getCharsets();
-  QStrList lst = charsets->displayable(font->family);
+  charsets = KGlobal::charsets();
+#warning FIXME
+  QStrList lst; // = charsets->displayable(font->family);
   charsetCombo->clear();
   for(z = 0; z < (int) lst.count(); z++) {
     charset = lst.at(z);

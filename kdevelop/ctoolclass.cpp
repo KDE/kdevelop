@@ -16,10 +16,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ctoolclass.h"
 #include <iostream.h>
 #include <qfile.h>
 #include <qmessagebox.h>
+#include "ctoolclass.h"
+#include "misc.h"
+
 
 bool CToolClass::searchProgram(QString name){
   StringTokenizer tokener;

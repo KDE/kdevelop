@@ -55,7 +55,7 @@
   #define INC_KPROGRESS
   #define INC_KKEYBUTTON
   #define INC_KRESTRICTEDLINE
-  #define INC_KTREELIST
+//  #define INC_KTREELIST
   #define INC_KSEPARATOR
 #endif
 

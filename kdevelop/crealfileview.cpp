@@ -17,14 +17,13 @@
  ***************************************************************************/
 
 
-#include "qdir.h"
-#include "qstrlist.h"
+#include <qdir.h>
+#include <qstrlist.h>
 #include <qmessagebox.h>
-#include <kmsgbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <klocale.h>
-#include <iostream.h>
+#include <kmessagebox.h>
 #include <assert.h>
 #include "crealfileview.h"
 #include "cproject.h"
@@ -116,7 +115,7 @@ void CRealFileView::addFilesFromDir( const QString& directory,
                                      QListViewItem* parent )
 {
   QDir theDir( directory );
-  QStrList fileList;
+  QStringList fileList;
   QListViewItem* item;
 
   // Add all files for this directory
@@ -138,7 +137,7 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
 {
   QString currentPath;
   QListViewItem* lastFolder;
-  QStrList dirList;
+  QStringList dirList;
   QDir dir(directory);
 
   // Stop recursion if the directory doesn't exist.
@@ -297,9 +296,8 @@ void CRealFileView::slotSelectionChanged(QListViewItem* selection)
 void CRealFileView::slotAddFileToProject() {
 
   QString filename=getFullFilename(currentItem());
-  QString msg;
-  msg.sprintf(i18n("Do you want to add the file\n%s\nto the project ?"), filename.data());
-  if (KMsgBox::yesNo(0, i18n("Question"), msg, KMsgBox::QUESTION) == 2)
+  QString msg = i18n("Do you want to add the file\n%1\nto the project ?").arg(filename.data);
+  if (KMessageBox::yesNo(0, msg) == KMessageBox::No)
     return;
 
   currentItem()->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
@@ -309,9 +307,8 @@ void CRealFileView::slotAddFileToProject() {
 void CRealFileView::slotRemoveFileFromProject() {
 
   QString filename=getRelFilename(currentItem());
-  QString msg;
-  msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
-  if (KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
+  QString msg = i18n("Do you really want to remove the file\n%1\nfrom project?\n\t\tIt will remain on disk.").arg(filename);
+  if (KMessageBox::warningYesNo(0, msg) == KMessageBox::No)
     return;
 
   emit removeFileFromProject(filename);
@@ -320,9 +317,8 @@ void CRealFileView::slotRemoveFileFromProject() {
 void CRealFileView::slotDeleteFilePhys() {
 
   QString filename=getRelFilename(currentItem());
-  QString msg;
-  msg.sprintf(i18n("Do you really want to delete the file\n%s\nfrom the disk?\nThere is no way to restore it!"), filename.data());
-  if(KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
+  QString msg = i18n("Do you really want to delete the file\n%1\nfrom the disk?\nThere is no way to restore it!").arg(filename);
+  if (KMessageBox::warningYesNo(0, msg) == KMessageBox::No)
     return;
 
   QFile::remove(getFullFilename(currentItem()));

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 
+#include <klocale.h>
 #include "../cproject.h"
 #include "kdlgdialogs.h"
 

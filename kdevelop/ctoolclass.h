@@ -20,9 +20,6 @@
 #ifndef CTOOLCLASS_H
 #define CTOOLCLASS_H
 
-#include <stdlib.h>
-#include <htmltoken.h>
-
 /**
  * some methods,that would be normaly global,but I hate global functions :-)
  * @author Sandy Meier

@@ -27,6 +27,7 @@
 #include <kapp.h>
 #include <qwidget.h>
 #include <qstring.h>
+#include <qtextstream.h>
 #include "kdlgptrdb.h"
 
 void WatchMsg(const char* msg);

@@ -89,8 +89,8 @@ void CKDevelop::initView(){
   ////////////////////////
   // Main view panner
   ////////////////////////
-
-  view = new KNewPanner(this,"view",KNewPanner::Horizontal);
+#warning view was a KNewPanner
+  view = new KNewPanner(this, "view");
 
   ////////////////////////
   // Outputwindow
@@ -118,7 +118,8 @@ void CKDevelop::initView(){
   ////////////////////////
 
   //  s_tab_current = 0;
-  top_panner = new KNewPanner(view,"top_panner",KNewPanner::Vertical,KNewPanner::Absolute);
+  #warning top_panner was a KNewPanner
+  top_panner = new QSplitter(Vertical, view, "top_panner");
   t_tab_view = new CTabCtl(top_panner);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
@@ -200,8 +201,8 @@ void CKDevelop::initView(){
   s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
 
 
-  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  view->activate(top_panner,o_tab_view); 
+  //  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
+  //  view->activate(top_panner,o_tab_view); 
 
   // set the mainwidget
   setView(view);

@@ -15,15 +15,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "cconfiga2psdlg.h"
-#include <kapp.h>
-#include <qpixmap.h>
-#include <qlayout.h>
-#include <iostream.h>
-#include "../ctoolclass.h"
-#include <kmsgbox.h>
-#include <kquickhelp.h>
+
+#include <stdlib.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qspinbox.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qcombobox.h>
+#include <qbuttongroup.h>
+#include <qmessagebox.h>
+#include <qfile.h>
 #include <klocale.h>
+#include <kprocess.h>
+#include <kconfig.h>
+#include <kquickhelp.h>
+#include <kapp.h>
+
+#include "../ctoolclass.h"
+#include "../misc.h"
+#include "cconfiga2psdlg.h"
+
 
 CConfigA2psDlg::CConfigA2psDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -811,7 +823,7 @@ QString CConfigA2psDlg::slotCreateParameters() {
 
 void CConfigA2psDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!"),KMsgBox::EXCLAMATION); 
+    QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
     return;
   }
   QString dir,data1,data2,text;
@@ -939,107 +951,30 @@ void CConfigA2psDlg::loadSettings() {
   selectedProgram();
   settings = kapp->getConfig();
   settings->setGroup("A2ps");
-  if (!strcmp(settings->readEntry("Header"),"true")) {
-    headerButton->setChecked(true);
-  }
-  else {
-    headerButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Headertext"),"true")) {
-    headertextButton->setChecked(true);
-  }
-  else {
-    headertextButton->setChecked(false);
-  }
-    slotHeadertextButtonClicked();
+  headerButton->setChecked(!strcmp(settings->readEntry("Header"),"true"));
+  headertextButton->setChecked(!strcmp(settings->readEntry("Headertext"),"true"));
+  slotHeadertextButtonClicked();
+  headertextLine->setText(settings->readEntry("HeadertextLine"));
 
-    headertextLine->setText(settings->readEntry("HeadertextLine"));
-
-  if (!strcmp(settings->readEntry("Login"),"true")) {
-    loginButton->setChecked(true);
-  }
-  else {
-    loginButton->setChecked(false);
-  }
-   if (!strcmp(settings->readEntry("DateTime"),"true")) {
-     currentDateButton->setChecked(true);
-   }
-   else {
-     currentDateButton->setChecked(false);
-   }
-   if (!strcmp(settings->readEntry("NumberingLines"),"true")) {
-     numberingLineButton->setChecked(true);
-   }
-   else {
-     numberingLineButton->setChecked(false);
-   }
-  if (!strcmp(settings->readEntry("Borders"),"true")) {
-    bordersButton->setChecked(true);
-  }
-  else {
-    bordersButton->setChecked(false);
-  } 
+  loginButton->setChecked(!strcmp(settings->readEntry("Login"),"true"));
+  currentDateButton->setChecked(!strcmp(settings->readEntry("DateTime"),"true"));
+  numberingLineButton->setChecked(!strcmp(settings->readEntry("NumberingLines"),"true"));
+  bordersButton->setChecked(!strcmp(settings->readEntry("Borders"),"true"));
   numberingPagesList->setCurrentItem( (settings->readEntry("NumberingPages")).toInt());
   
   setTabSize->setValue((settings->readEntry("TabSize")).toInt());
   a2psFontSize->setValue((settings->readEntry("FontsizeLine")).toInt());
   linesPerPage->setValue((settings->readEntry("LinesPerPageLine")).toInt());
-  if (!strcmp(settings->readEntry("CutLines"),"true")) {
-    cutLinesButton->setChecked(true);
-  }
-  else {
-    cutLinesButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("PrintAscii"),"true")) {
-    printAsISOLatin->setChecked(true);
-  }
-  else {
-    printAsISOLatin->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("BoldFont"),"true")) {
-    boltFontButton->setChecked(true);
-  }
-  else {
-    boltFontButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("AlignFiles"),"true")) {
-    alignFilesButton->setChecked(true);
-  }
-  else {
-    alignFilesButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Interpret"),"true")) {
-    interpretButton->setChecked(true);
-  }
-  else {
-    interpretButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Filename"),"true")) {
-    filenameLine->setChecked(true);
-  }
-  else {
-    filenameLine->setChecked(false);
-  }
+  cutLinesButton->setChecked(!strcmp(settings->readEntry("CutLines"),"true"));
+  printAsISOLatin->setChecked(!strcmp(settings->readEntry("PrintAscii"),"true"));
+  boltFontButton->setChecked(!strcmp(settings->readEntry("BoldFont"),"true"));
+  alignFilesButton->setChecked(!strcmp(settings->readEntry("AlignFiles"),"true"));
+  interpretButton->setChecked(!strcmp(settings->readEntry("Interpret"),"true"));
+  filenameLine->setChecked(!strcmp(settings->readEntry("Filename"),"true"));
   slotFilenameClicked();
-  if (!strcmp(settings->readEntry("Replace"),"true")) {
-    replaceButton->setChecked(true);
-  }
-  else {
-    replaceButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("Fontsize"),"true")) {
-    fontsizeButton->setChecked(true);
-  }
-  else {
-    fontsizeButton->setChecked(false);
-  }
-  if (!strcmp(settings->readEntry("LinesPerPage"),"true")) {
-    linesButton->setChecked(true);
-  }
-  else {
-    linesButton->setChecked(false);
-  }
+  replaceButton->setChecked(!strcmp(settings->readEntry("Replace"),"true"));
+  fontsizeButton->setChecked(!strcmp(settings->readEntry("Fontsize"),"true"));
+  linesButton->setChecked(!strcmp(settings->readEntry("LinesPerPage"),"true"));
   slotFontsizeClicked();
   slotLinesClicked();
 }
-

@@ -39,7 +39,7 @@ dnl don't have i18n support, you may want to remove this, but leaving it
 dnl here doesn't hurt
 AM_KDE_WITH_NLS
 
-KDE_USE_QT(1)
+KDE_USE_QT(2)
 
 dnl definitly the biggest macro. Checks for X, qt, moc, KDE and the
 dnl correct paths to install to. This macro adds about 1700 lines to

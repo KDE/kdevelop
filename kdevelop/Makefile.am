@@ -42,14 +42,14 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputw
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
 	ctoolsconfigdlg.cpp cbugreportdlg.cpp cclasstooltreeview.cpp \
-	cmakemanualdlg.cpp cmakemanualdlgdata.cpp 
+	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp
 
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a -lkfile -lkfm -lkspell $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -ldb -ldl
+kdevelop_LDADD   = ./vc/libvc.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a -lkfile -lkio -lkspell -lkhtml -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl -ldb -ldl
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \

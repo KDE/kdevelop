@@ -30,7 +30,8 @@
 #include <qtoolbutton.h>
 #include <kfiledialog.h>
 #include <krestrictedline.h>
-#include <kspinbox.h>
+#include <kfontdialog.h>
+#include <kglobal.h>
 #include <stdio.h>
 #include "../ckdevelop.h"
 #include "kdlgproplv.h"
@@ -743,9 +744,9 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
   int numGrp;
   AdvLvi_Base *adv = 0;
 
-  KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
+  KIconLoader *icon_loader = KGlobal::iconLoader();
 
-  QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
+  QPixmap folder_pix = icon_loader->loadIcon("folder.xpm");
 
   KDlgPropertyEntry *prop;
   int i,n;

@@ -1581,7 +1581,8 @@ QString KWriteDoc::text() {
     len += textLine->length() + 1;
   }
   QString s;
-  s.resize(len);
+#warning FIXME
+//  s.resize(len);
   len = 0;
   for (z = 0; z < lines; z++) {
     textLine = contents.at(z);
@@ -1606,7 +1607,8 @@ QString KWriteDoc::getWord(PointStruc &cursor) {
   while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
   len = end - start;
   QString s;
-  s.resize(len +1);
+#warning FIXME
+  //s.resize(len +1);
   for (z = 0; z < len; z++) s[z] = textLine->getChar(start + z);
   s[len] = '\0';
   return s;
@@ -1643,7 +1645,8 @@ QString KWriteDoc::markedText(int flags) {
       if (textLine->isSelected()) len++;
     }
     QString s;
-    s.resize(len);
+#warning FIXME
+//    s.resize(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
@@ -1669,7 +1672,8 @@ QString KWriteDoc::markedText(int flags) {
       len += textLine->numSelected() + 1;
     }
     QString s;
-    s.resize(len);
+#warning FIXME
+//    s.resize(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);

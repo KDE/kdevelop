@@ -37,6 +37,9 @@
 #include "./kdlgedit/kdlgedit.h"
 #include "cmakemanualdlg.h"
 #include "cgeneratenewfile.h"
+#include "misc.h"
+
+
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *

@@ -15,14 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
+
+#include <qmessagebox.h>
+#include <qfile.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kiconloader.h>
 #include "cmakemanualdlg.h"
 #include "ctoolclass.h"
-#include <qmessagebox.h>
-#include <kfiledialog.h>
-#include <qfile.h>
-#include <kapp.h>
-#include <qpixmap.h>
-#include <klocale.h>
+
 
 CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name,QString  manual_file) : QDialog(parent,name,true){
 	initDialog();
@@ -34,9 +35,7 @@ CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name,QString  manual
 	program_group->insert(ksgml2html_radiobutton);
 	program_group->lower();
 
-	QPixmap pix;
-	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-	file_button->setPixmap(pix);
+	file_button->setPixmap(BarIcon("open"));
 	file_edit->setText(manual_file);
 
 	ok_button->setDefault(true);

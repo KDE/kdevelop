@@ -19,16 +19,16 @@
 #define CCONFIGA2PSTDLG
 
 #include <qdialog.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
-#include <kprocess.h>
-#include <htmltoken.h>
-#include <kapp.h>
+
+class QCheckBox;
+class QComboBox;
+class QLineEdit;
+class QSpinBox;
+class QButtonGroup;
+class QLabel;
+class KConfig;
+class KShellProcess;
+
 
 /** the KDevelop-A2psConfigdialog
   *@author Stefan Heidrich

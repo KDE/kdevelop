@@ -16,8 +16,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "kdlgldr.h"
+#include <stdio.h>
 #include <qmessagebox.h>
+#include <qfile.h>
+#include <klocale.h>
+#include "kdlgldr.h"
 
 extern "C" {
 

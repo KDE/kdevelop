@@ -679,7 +679,7 @@ void CKDevelop::switchToKDevelop(){
 
   top_panner->hide();
   top_panner->deactivate();
-  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
+  //  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
   top_panner->show();
 
   //////// change the event dispatchers ///////////
@@ -758,7 +758,7 @@ void CKDevelop::switchToKDlgEdit(){
 
   top_panner->hide();
   top_panner->deactivate();
-  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
+  //  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
   top_panner->show();
 
   //////// change the event dispatchers ///////////
