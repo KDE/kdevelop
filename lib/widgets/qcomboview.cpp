@@ -777,12 +777,12 @@ void QComboView::popup()
     lb->setVScrollBarMode(QScrollView::Auto);
 
 //#ifndef QT_NO_EFFECTS
-    if ( QApplication::isEffectEnabled( UI_AnimateCombo ) ) {
+/*    if ( QApplication::isEffectEnabled( UI_AnimateCombo ) ) {
         if ( lb->y() < mapToGlobal(QPoint(0,0)).y() )
         qScrollEffect( lb, QEffects::UpScroll );
         else
         qScrollEffect( lb );
-    } else
+    } else*/
 //#endif
         lb->show();
     d->poppedUp = TRUE;
