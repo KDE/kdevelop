@@ -253,6 +253,29 @@ bool CParsedClass::hasParent( const char *aName )
   return aParent != NULL;
 }
 
+/*-------------------------------- CParsedClass::hasVirtual()
+ * hasVirtual()
+ *   Check if the class has any virtual methods.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   bool               If the class has virtual functions.
+ *-----------------------------------------------------------------*/
+bool CParsedClass::hasVirtual()
+{
+  bool retVal = false;
+
+  for( methodIterator.toFirst();
+       methodIterator.current() && !retVal;
+       ++methodIterator )
+  {
+    retVal = methodIterator.current()->isVirtual;
+  }
+
+  return retVal;
+}
+
 /*------------------------------- CParsedClass::getSortedSignalList()
  * getSortedSignalList()
  *   Get all signals in sorted order. 
@@ -322,6 +345,30 @@ QList<CParsedMethod> *CParsedClass::getSortedSlotList()
        str = srted.next() )
   {
     retVal->append( getSlotByNameAndArg( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------------- CParsedClass::getVirtualMethodList()
+ * getVirtualMethodList()
+ *   Get all virtual methods.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedMethod> *  The list.
+ *-----------------------------------------------------------------*/
+QList<CParsedMethod> *CParsedClass::getVirtualMethodList()
+{
+  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+
+  for( methodIterator.toFirst();
+       methodIterator.current();
+       ++methodIterator )
+  {
+    if( methodIterator.current()->isVirtual )
+      retVal->append( methodIterator.current() );
   }
 
   return retVal;

@@ -130,8 +130,14 @@ public: // Public queries
   /** Get all slots in sorted order. */
   QList<CParsedMethod> *getSortedSlotList();
 
+  /** Get all virtual methods. */
+  QList<CParsedMethod> *getVirtualMethodList();
+
   /** Check if this class has the named parent. */
   bool hasParent( const char *aName );
+
+  /** Check if the class has any virtual methods. */
+  bool hasVirtual();
 
 public: // Implementation of virtual methods
 
