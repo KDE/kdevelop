@@ -535,6 +535,7 @@ char *yytext;
 #include <stdarg.h>
 
 #include <qfileinfo.h>
+#include <qfile.h>
 #include <qdir.h>
 #include <qtextstream.h>
 #include <qregexp.h>
@@ -2644,9 +2645,9 @@ void Config::check()
 	int i = stripFromPath.at();
 	stripFromPath.remove();
 	if (stripFromPath.at()==i) // did not remove last item
-	  stripFromPath.insert(i,fi.absFilePath()+"/");
+	  stripFromPath.insert(i,QFile::encodeName( fi.absFilePath()+"/" ).data());
 	else
-	  stripFromPath.append(fi.absFilePath()+"/");
+	  stripFromPath.append(QFile::encodeName( fi.absFilePath()+"/" ).data());
       }
     }
     sfp = stripFromPath.next();
@@ -2759,7 +2760,7 @@ void Config::check()
     }
     else
     {
-      dotPath=dp.dirPath(TRUE)+"/";
+      dotPath=QFile::encodeName( dp.dirPath(TRUE)+"/" );
 #if defined(_WIN32) // convert slashes
       uint i=0,l=dotPath.length();
       for (i=0;i<l;i++) if (dotPath.at(i)=='/') dotPath.at(i)='\\';
@@ -2777,7 +2778,7 @@ void Config::check()
   {
     //config_err("Error: tag INPUT: no input files specified after the INPUT tag.\n");
     //exit(1);
-    inputSources.append(QDir::currentDirPath());
+    inputSources.append(QFile::encodeName( QDir::currentDirPath() ));
     //config_warn("Warning: no files after the INPUT tag, defaulting to the current dir\n");
   }
   else

@@ -279,8 +279,8 @@ void InputString::clear()
 
 void InputString::textChanged(const QString &s)
 {
-    if (str!=(const char *)s) {
-        str = s;
+    if (str!=s.latin1()) {
+        str = s.latin1();
         emit changed();
     }
 }
@@ -304,8 +304,8 @@ void InputString::browse()
     
         if (!fileName.isNull()) {
             le->setText(fileName);
-            if (str != (const char *)le->text()) {
-                str = le->text(); 
+            if (str != le->text().latin1()) {
+                str = le->text().latin1(); 
                 emit changed();
             }
         }
@@ -314,8 +314,8 @@ void InputString::browse()
 
         if (!dirName.isNull()) {
             le->setText( dirName ); 	
-            if (str != (const char *)le->text()) {
-                str = le->text();
+            if (str != le->text().latin1()) {
+                str = le->text().latin1();
                 emit changed();
             }
         }	
@@ -417,7 +417,7 @@ void InputStrList::addString()
 {
     if (!le->text().isEmpty()) {
         lb->insertItem(le->text());
-        strList.append(le->text());
+        strList.append(le->text().latin1());
         emit changed();
         le->clear();
     }
@@ -439,7 +439,7 @@ void InputStrList::updateString()
 {
     if (lb->currentItem() != -1 && !le->text().isEmpty()) {
         lb->changeItem(le->text(),lb->currentItem());
-        strList.insert(lb->currentItem(),le->text());
+        strList.insert(lb->currentItem(),le->text().latin1());
         strList.remove(lb->currentItem()+1);
         emit changed();
     }
@@ -475,7 +475,7 @@ void InputStrList::browseFiles()
         QStringList::Iterator it;
         for (it = fileNames.begin(); it != fileNames.end(); ++it) {
             lb->insertItem(*it);
-            strList.append(*it);
+            strList.append(( *it ).latin1());
             emit changed();
         }
         le->setText(*fileNames.begin());
@@ -489,7 +489,7 @@ void InputStrList::browseDir()
     
     if (!dirName.isNull()) {
         lb->insertItem(dirName);
-        strList.append(dirName);
+        strList.append(dirName.latin1());
         emit changed();
         le->setText(dirName);
     }

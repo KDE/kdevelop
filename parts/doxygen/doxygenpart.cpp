@@ -98,7 +98,7 @@ void DoxygenPart::adjustDoxyfile()
   ConfigString *name = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NAME"));
   if (name)
   {
-    name->setDefaultValue(project()->projectName());
+    name->setDefaultValue(project()->projectName().latin1());
     name->init();
   }
 
@@ -106,7 +106,7 @@ void DoxygenPart::adjustDoxyfile()
   ConfigString *version = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NUMBER"));
   if (version)
   {
-    version->setDefaultValue(DomUtil::readEntry(*projectDom(), "/general/version"));
+    version->setDefaultValue(DomUtil::readEntry(*projectDom(), "/general/version").latin1());
     version->init();
   }
 
