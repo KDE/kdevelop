@@ -77,17 +77,17 @@ void PartController::setupActions()
     ac, "file_revert_all");
   m_revertAllFilesAction->setEnabled(false);
 
-  m_closeWindowAction = new KAction(i18n("&Close Window"), Key_F4,
+  m_closeWindowAction = KStdAction::close(
     this, SLOT(slotCloseWindow()),
-    ac, "file_closewindow");
+    ac, "file_close");
   m_closeWindowAction->setEnabled(false);
 
-  m_closeAllWindowsAction = new KAction(i18n("Close All &Windows"), 0,
+  m_closeAllWindowsAction = new KAction(i18n("Close All"), 0,
     this, SLOT(slotCloseAllWindows()),
-    ac, "file_closeall");
+    ac, "file_close_all");
   m_closeAllWindowsAction->setEnabled(false);
 
-  m_closeOtherWindowsAction = new KAction(i18n("Close All &Other Windows"), 0,
+  m_closeOtherWindowsAction = new KAction(i18n("Close All &Others"), 0,
     this, SLOT(slotCloseOtherWindows()),
     ac, "file_closeother");
   m_closeOtherWindowsAction->setEnabled(false);

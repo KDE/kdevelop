@@ -1,21 +1,37 @@
 <!DOCTYPE kpartgui >
 <kpartgui version="1" name="gideon" >
 <MenuBar>
-  <Menu name="file">
-    <text>&amp;File</text>
+  <Menu name="file" noMerge="1"><text>&amp;File</text>
+    <Action name="file_new"/>
+    <DefineGroup name="new_merge"/>
+    <Action name="file_open"/>
+    <Action name="file_open_recent"/>
+    <DefineGroup name="open_merge"/>
+    <Separator/>
+    <DefineGroup name="save_merge"/>
+    <Action name="file_save_all"/>
+    <DefineGroup name="revert_merge"/>
+    <Action name="file_revert_all"/>
+    <Separator/>
+    <DefineGroup name="print_merge"/>
     <Merge/>
     <Separator/>
-    <Action name="file_closewindow"/>
-    <Action name="file_closeall"/>
+    <Action name="file_close"/>
+    <DefineGroup name="close_merge"/>
+    <Action name="file_close_all"/>
     <Action name="file_closeother"/>
+    <Separator/>
+    <Action name="file_quit"/>
   </Menu>
-  <Menu name="edit">
-    <text>&amp;Edit</text>
-    <DefineGroup name="undoredo"/>
+  <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
+    <DefineGroup name="edit_undo_merge"/>
     <Separator/>
-    <DefineGroup name="cutcopypaste"/>
+    <DefineGroup name="edit_paste_merge"/>
     <Separator/>
-    <DefineGroup name="find"/>
+    <DefineGroup name="edit_select_merge"/>
+    <Separator/>
+    <DefineGroup name="edit_find_merge"/>
+    <Separator/>
     <Merge/>
   </Menu>
   <Menu name="view">
@@ -49,9 +65,11 @@
   <Menu name="settings">
     <text>&amp;Settings</text>
     <Action name="settings_show_toolbar"/>
+    <DefineGroup name="show_toolbar_merge"/>
     <Separator/>
     <Action name="settings_configure_toolbars"/>
     <Action name="settings_configure"/>
+    <DefineGroup name="configure_merge"/>
   </Menu>
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
