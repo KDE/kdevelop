@@ -39,7 +39,7 @@ public slots:
     void slotDisassemble(char *buf);
     void slotActivate(bool activate);
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
-    void slotBPState(const Breakpoint *BP);
+    void slotBPState(const Breakpoint& BP);
 
 signals:
     void disassemble(const QString &start, const QString &end);
