@@ -38,7 +38,7 @@ enum { KDEV_PCS_VERSION = 2 };
 
 typedef KGenericFactory<AdaSupportPart> AdaSupportPartFactory;
 
-K_EXPORT_COMPONENT_FACTORY (libkdevadasupport, AdaSupportPartFactory ("kdevadasupport"));
+K_EXPORT_COMPONENT_FACTORY (libkdevadasupport, AdaSupportPartFactory ("kdevadasupport"))
 
 
 struct AdaSupportPartData {
