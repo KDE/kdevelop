@@ -288,7 +288,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
                                     this, SLOT(slotBuildTarget()), actions, "build target");
     setActiveTargetAction = new KAction(i18n("Make Target Active..."), "", 0,
                                         this, SLOT(slotSetActiveTarget()), actions, "set active target");
-    removeFileAction = new KAction(i18n("Remove File..."), "editdelete", 0,
+    removeFileAction = new KAction(i18n("Remove File"), "editdelete", 0,
                                    this, SLOT(slotRemoveFile()), actions, "remove file");
 
     connect( subProjectOptionsButton, SIGNAL(clicked()), this, SLOT(slotSubprojectOptions()) );

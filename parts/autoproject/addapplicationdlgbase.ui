@@ -50,7 +50,7 @@
                         <cstring>terminal_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Start in &amp;Terminal</string>
+                        <string>Start in &amp;terminal</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="3">
@@ -253,7 +253,7 @@
                         </font>
                     </property>
                     <property name="text">
-                        <string>&amp;File Name:</string>
+                        <string>&amp;File name:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter|AlignRight</set>

@@ -30,7 +30,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>Select virtual methods to implement</string>
+                <string>Select virtual methods to implement:</string>
             </property>
         </widget>
         <widget class="QListView">

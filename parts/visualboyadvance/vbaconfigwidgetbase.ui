@@ -115,7 +115,7 @@
                 <cstring>TextLabel4</cstring>
             </property>
             <property name="text">
-                <string>Additional Parameters:</string>
+                <string>Additional parameters:</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
@@ -218,7 +218,7 @@
                 <cstring>fullscreenCheckBox</cstring>
             </property>
             <property name="text">
-                <string>Fullscreen</string>
+                <string>Full screen</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="3" column="3">

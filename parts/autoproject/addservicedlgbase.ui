@@ -160,7 +160,7 @@
                         </font>
                     </property>
                     <property name="text">
-                        <string>&amp;File Name:</string>
+                        <string>&amp;File name:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter|AlignRight</set>

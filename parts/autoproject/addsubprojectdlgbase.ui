@@ -99,7 +99,7 @@
                                 </font>
                             </property>
                             <property name="text">
-                                <string>Enter Subproject Name:</string>
+                                <string>Enter subproject name:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>spEdit</cstring>

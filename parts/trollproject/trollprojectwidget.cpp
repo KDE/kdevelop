@@ -654,14 +654,14 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
       idQmake = popup.insertItem(SmallIcon("qmakerun.png"),i18n("Run qmake"));
       popup.insertSeparator();
       idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
-      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create scope..."));
+      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create Scope..."));
       popup.insertSeparator();
-      idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject settings"));
+      idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject Settings"));
     }
     else
     {
-      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create scope..."));
-      idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove.png"),i18n("Remove scope..."));
+      idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create Scope..."));
+      idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove.png"),i18n("Remove Scope"));
     }
     
     int r = popup.exec(p);
@@ -1050,7 +1050,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         KPopupMenu popup(title, this);
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
-        int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert new file..."));
+        int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -1112,7 +1112,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         FileItem *fitem = static_cast<FileItem*>(pvitem);
 
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
-        int idRemoveFile = popup.insertItem(i18n("Remove File..."));
+        int idRemoveFile = popup.insertItem(i18n("Remove File"));
         int idFileProperties = popup.insertItem(i18n("Properties..."));
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);

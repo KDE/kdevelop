@@ -39,7 +39,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Remove File From this Target</string>
+        <string>Remove File From This Target</string>
     </property>
     <vbox>
         <property name="name">
@@ -200,7 +200,7 @@
                                 <cstring>removeCheckBox</cstring>
                             </property>
                             <property name="text">
-                                <string>Also remove it from disk?</string>
+                                <string>Also remove it from disk</string>
                             </property>
                         </widget>
                     </vbox>

@@ -600,7 +600,7 @@
                             <cstring>TextLabel1</cstring>
                         </property>
                         <property name="text">
-                            <string>ChangeLog:</string>
+                            <string>Changelog:</string>
                         </property>
                     </widget>
                     <widget class="QMultiLineEdit" row="9" column="0">

@@ -89,7 +89,7 @@
                 <cstring>GroupBox2</cstring>
             </property>
             <property name="title">
-                <string>Environment variables</string>
+                <string>Environment Variables</string>
             </property>
             <grid>
                 <property name="name">

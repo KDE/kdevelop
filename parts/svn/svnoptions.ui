@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Subversion options</string>
+        <string>Subversion Options</string>
     </property>
     <widget class="QCheckBox">
         <property name="name">

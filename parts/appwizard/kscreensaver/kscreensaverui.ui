@@ -44,7 +44,7 @@
                     <cstring>CheckBox1</cstring>
                 </property>
                 <property name="text">
-                    <string>Set some setting...</string>
+                    <string>Set some setting</string>
                 </property>
             </widget>
             <widget class="QLayoutWidget" row="1" column="0">

@@ -28,7 +28,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>cvs options</string>
+            <string>CVS options:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -57,7 +57,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>commit options</string>
+            <string>Commit options:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -99,7 +99,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>update options</string>
+            <string>Update options:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -128,7 +128,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>add options</string>
+            <string>Add options:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -157,7 +157,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>remove options</string>
+            <string>Remove options:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -194,7 +194,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>diff options</string>
+            <string>Diff options:</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -223,7 +223,7 @@
             </rect>
         </property>
         <property name="text">
-            <string>log options</string>
+            <string>Log options:</string>
         </property>
     </widget>
 </widget>

@@ -178,7 +178,7 @@
                                     <cstring>TextLabel1_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Path</string>
+                                    <string>Path:</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="0">
@@ -186,7 +186,7 @@
                                     <cstring>TextLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Output file</string>
+                                    <string>Output file:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -261,7 +261,7 @@
                             <cstring>groupBuildMode</cstring>
                         </property>
                         <property name="title">
-                            <string>Build mode</string>
+                            <string>Build Mode</string>
                         </property>
                         <property name="toolTip" stdset="0">
                             <string>Set project to be built in release mode</string>
@@ -432,7 +432,7 @@
                                     <cstring>TextLabel1</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Defines</string>
+                                    <string>Defines:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -464,7 +464,7 @@
                                     <cstring>TextLabel2_2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Release flags</string>
+                                    <string>Release flags:</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0">
@@ -472,7 +472,7 @@
                                     <cstring>TextLabel2_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Debug flags</string>
+                                    <string>Debug flags:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="0" column="1">
@@ -543,7 +543,7 @@
                                 <cstring>TextLabel2_2_2_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Release flags</string>
+                                <string>Release flags:</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -551,7 +551,7 @@
                                 <cstring>TextLabel2_2_3</cstring>
                             </property>
                             <property name="text">
-                                <string>Debug flags</string>
+                                <string>Debug flags:</string>
                             </property>
                         </widget>
                         <widget class="KLineEdit" row="0" column="1">
@@ -602,7 +602,7 @@
                             </rect>
                         </property>
                         <property name="text">
-                            <string>Includepath</string>
+                            <string>Include path:</string>
                         </property>
                     </widget>
                     <widget class="KLineEdit">

@@ -30,7 +30,7 @@
                 <cstring>bgParserCheckbox</cstring>
             </property>
             <property name="text">
-                <string>Enable Background Parsing</string>
+                <string>Enable background parsing</string>
             </property>
         </widget>
         <widget class="QSlider">
