@@ -783,7 +783,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     w = kWrite->width() - 4;
     h = kWrite->height() - 4;
 
-    xMax = kWriteDoc->textWidth() - w;
+    xMax = kWriteDoc->textWidth() - w + iconBorderWidth;
     b = (xPos > 0 || xMax > 0);
     if (b) h -= 16;
     yMax = kWriteDoc->textHeight() - h;

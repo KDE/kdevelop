@@ -1,3 +1,8 @@
+2001-02-26  jbb <jbb@kdevelop.org>
+    * Fixed: Window placement at startup was wrong
+             Screen width missed iconBorder width adjustment.
+             patch Jens Zurheide <jens.zurheide@gmx.de>
+
 2001-02-25  jbb <jbb@kdevelop.org>
     * Fixed: CPrint dialog had problems with null params.
              based on patch from 
