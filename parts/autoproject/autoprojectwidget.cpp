@@ -378,8 +378,19 @@ QStringList AutoProjectWidget::allFiles()
 		for ( ; tit.current(); ++tit )
 		{
 			QListIterator<FileItem> fit( tit.current() ->sources );
-			for ( ; fit.current(); ++fit )
+			for ( ; fit.current(); ++fit ){
+
+				QFileInfo fileInfo( (*fit)->name );
+				if( fileInfo.extension() == "ui" ){
+				    kdDebug(902) << "-----> add " << (relPath + fileInfo.baseName() + ".h") << endl;
+				    kdDebug(902) << "-----> add " << (relPath + fileInfo.baseName() + ".cpp") << endl;
+				    
+				    list.append( relPath + fileInfo.baseName() + ".h" );
+				    list.append( relPath + fileInfo.baseName() + ".cpp" );
+				}
+
 				list.append( relPath + ( *fit ) ->name );
+			}
 		}
 	}
 
