@@ -25,7 +25,7 @@ public:
     CreatedFile( const CreatedFile& source )
       : dir( source.dir ), filename( source.filename ),
         ext( source.ext ), subtype( source.subtype ),
-	status( source.status ) {}
+	status( source.status ), addToProject(false) {}
 
     CreatedFile& operator = ( const CreatedFile& source )
     {
@@ -34,6 +34,7 @@ public:
 	ext = source.ext;
 	subtype = source.subtype;
 	status = source.status;
+        addToProject = source.addToProject;
 	return( *this );
     }
 
@@ -44,7 +45,8 @@ public:
 	   filename == source.filename &&
 	   ext == source.ext &&
 	   subtype == source.subtype &&
-	   status == source.status;
+	   status == source.status &&
+           addToProject == source.addToProject;
     }
 
     // this should be private
@@ -53,6 +55,7 @@ public:
     QString ext;
     QString subtype;
     Status status;
+    bool addToProject;
   };
 
 

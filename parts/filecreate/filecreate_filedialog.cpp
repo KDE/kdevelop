@@ -30,15 +30,17 @@ namespace FileCreate {
       if (extraWidget) setPreviewWidget(extraWidget);
 #endif
 
+    setOperationMode(Saving);
+
     m_extraWidget = extraWidget;
     m_typeChooser = dynamic_cast<TypeChooser*>(extraWidget);
-     
+
     connect(this, SIGNAL(filterChanged(const QString &)), this, SLOT(slotActionFilterChanged(const QString &)) );
     connect(locationEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotActionTextChanged(const QString &)) );
 
   }
 
-  FileDialog::~FileDialog() { } 
+  FileDialog::~FileDialog() { }
 
 
   void FileDialog::initGUI()
@@ -61,8 +63,8 @@ namespace FileCreate {
     m_typeChooser->setCurrent(filetype);
   }
 
-  
-  
+
+
 }
 
 #include "filecreate_filedialog.moc"

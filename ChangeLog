@@ -1,3 +1,7 @@
+2003-03-11 Julian Rockey <linux@jrockey.com>
+	* parts/filecreate
+	  - finally got round to replacing file dialog with smaller, leaner widget
+	
 2003-03-11 Caleb Tennis <caleb@aei-tech.com>
 	* added library version number support for QMake project
 

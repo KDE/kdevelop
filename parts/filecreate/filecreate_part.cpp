@@ -38,6 +38,7 @@
 #include "filecreate_part.h"
 #include "filecreate_filetype.h"
 #include "filecreate_filedialog.h"
+#include "filecreate_newfile.h"
 #include "fcconfigwidget.h"
 
 typedef KGenericFactory<FileCreatePart> FileCreateFactory;
@@ -138,9 +139,11 @@ void FileCreatePart::slotProjectOpened() {
 
   // read in global template information
   QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
+  kdDebug(9034) << "Found global template info info " << globalXMLFile << endl;
   QDomDocument globalDom;
   if (!globalXMLFile.isNull() &&
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
+    kdDebug(9034) << "Reading global template info..." << endl;
     readTypes(globalDom, m_filetypes, false);
   }
 
@@ -181,8 +184,8 @@ void FileCreatePart::slotProjectOpened() {
     // found in project file
     QDir templDir( project()->projectDirectory() + "/templates/" );
     if (templDir.exists()) {
-    templDir.setFilter( QDir::Files );
-    const QFileInfoList * list = templDir.entryInfoList();
+      templDir.setFilter( QDir::Files );
+      const QFileInfoList * list = templDir.entryInfoList();
       if( list ){
         QFileInfoListIterator it( *list );
         QFileInfo *fi;
@@ -311,6 +314,8 @@ FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
 
 // KDevFileCreate interface
 
+// This is the old way -- to be removed if everyone's OK with the new way!
+#if 0
 KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype) {
 
   KDevCreateFile::CreatedFile result;
@@ -428,6 +433,85 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   return result;
 
 }
+#endif
+
+KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype)
+{
+  KDevCreateFile::CreatedFile result;
+  KURL projectURL( project()->projectDirectory() );
+  KURL selectedURL;
+
+  NewFileChooser dialog;
+  dialog.setFileTypes(m_filetypes);
+  const FileType *filetype = getType(ext,subtype);
+  kdDebug(9034) << "Looking for filetype pointer for " << ext << "/" << subtype << endl;
+  if (filetype) {
+    kdDebug(9034) << "found filetype" << endl;
+  } else {
+    kdDebug(9034) << "could not find filetype" << endl;
+  }
+
+  if (!dir.isNull())
+    dialog.setDirectory(dir);
+  else
+    dialog.setDirectory( project()->projectDirectory() );
+  if (!name.isNull()) dialog.setName(name);
+  if (filetype) dialog.setCurrent(filetype);
+
+  int dialogResult = dialog.exec();
+
+  if (dialogResult == KDialogBase::Rejected) {
+    result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
+    return result;
+  }
+
+  // OK was pressed
+
+  result.addToProject = dialog.addToProject();
+  selectedURL = dialog.url();
+  const FileType *selectedFileType = dialog.selectedType();
+
+  if (dialog.addToProject() && !projectURL.isParentOf(selectedURL)) {
+    result.status = KDevCreateFile::CreatedFile::STATUS_NOTWITHINPROJECT;
+    return result;
+  }
+
+  if (selectedFileType) {
+    ext = selectedFileType->ext();
+    subtype = selectedFileType->subtypeRef();
+  }
+
+
+  // work out the path relative to the project directory
+  QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
+
+  // add appropriate extension, if not already there
+  if (!relToProj.endsWith("." + ext)) relToProj+="." + ext;
+
+  QString filename = URLUtil::filename(relToProj);
+
+  kdDebug(9034) << "relative to proj dir = " << relToProj << endl;
+  kdDebug(9034) << "filename = " << filename << endl;
+
+  // add in subtype, if specified
+  if (!subtype.isEmpty())
+    ext += "-" + subtype;
+
+  // create file from template, and add it to the project
+  if (FileTemplate::exists(this, ext)) {
+    if (FileTemplate::copy(this, ext, project()->projectDirectory() + relToProj))
+      if (result.addToProject)
+        project()->addFile(relToProj.mid(1));
+  }
+
+
+  // tell the caller what we did
+  result.filename = filename;
+  result.dir = URLUtil::directory(relToProj);
+  result.status = KDevCreateFile::CreatedFile::STATUS_OK;
+  return result;
+}
+
 
 void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
   kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : QString::fromLatin1("Null") ) << endl;
