@@ -51,7 +51,7 @@ QuickOpenDialog::~QuickOpenDialog()
 /*$SPECIALIZATION$*/
 void QuickOpenDialog::slotExecuted( QListBoxItem* item )
 {
-    m_part->partController()->editDocument( item->text() );
+    m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + item->text() );
     accept();
 }
 
@@ -68,7 +68,7 @@ void QuickOpenDialog::accept()
 void QuickOpenDialog::slotReturnPressed( )
 {
     if( m_fileList.contains(fileNameEdit->text()) ) {
-        m_part->partController()->editDocument( fileNameEdit->text() );
+        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + fileNameEdit->text() );
         accept();
     }
 }
