@@ -48,20 +48,19 @@ apidox-am-yes:
 		if test -n "$(DOXYGEN_EXCLUDE)"; then \
 			patterns= ;\
 			dirs= ;\
-			for item in "$(DOXYGEN_EXCLUDE)"; do \
-				if test -d "$(top_srcdir)/$$item"; then \
+			exclude_items='$(DOXYGEN_EXCLUDE) '; for item in $$exclude_items; do \
+				if test -d "$(PWD)/$$item"; then \
 					dirs="$$dirs $$item" ;\
 				else \
 					patterns="$$paterns $$item" ;\
 				fi ;\
 			done ;\
-## There is a bug and the two following lines are not working \
-##		echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
-##		echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
-			echo "EXCLUDE               += $(DOXYGEN_EXCLUDE)">> Doxyfile; \
+			echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
+			echo "EXCLUDE_PATTERNS      += $$patterns" >> Doxyfile; \
 		fi ;\
-	## example path for howToAddTemplates.
+		## example path for HowToAddTemplates.dox
 		echo "EXAMPLE_PATH           = parts/appwizard/khello" >> Doxyfile; \
+		## example path for HowToDocument.dox
 		echo "EXAMPLE_PATH          += parts/appwizard/kdevpart" >> Doxyfile; \
 		echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
 		##--------------------------------------------------------------------------- \

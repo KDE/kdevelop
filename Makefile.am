@@ -66,7 +66,6 @@ DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces km
 ## Exclude the application wizard templates
 DOXYGEN_EXCLUDE = parts/appwizard/adahello/ \
                   parts/appwizard/qtopiasimple/ \
-                  parts/appwizard/kdevpartjava/ \
                   parts/appwizard/adahello/ \
                   parts/appwizard/chello_gba/ \
                   parts/appwizard/chello/ \
