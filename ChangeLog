@@ -1,3 +1,8 @@
+2004-10-23  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Implemented ruby slots/signals declaration navigation in the class browser
+ * Atrr accessor and access control method lists can span multiple lines
+
 2004-10-23 Alexander Dymo <adymo@kdevelop.org>
     * KDevelop documentation viewer and KDevAssistant:
       - implemented font configuration options;

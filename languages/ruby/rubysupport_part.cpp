@@ -151,7 +151,7 @@ void RubySupportPart::savedFile(const KURL &fileName)
 
 KDevLanguageSupport::Features RubySupportPart::features()
 {
-  return Features(Classes | Functions);
+  return Features(Classes | Functions | Declarations | Signals | Slots);
 }
 
 void RubySupportPart::parse(const QString &fileName)
@@ -166,6 +166,9 @@ void RubySupportPart::parse(const QString &fileName)
   QRegExp accessre("^\\s*(private|protected|public)\\s*((:([A-Za-z0-9_]+[!?=]?|\\[\\]=?|\\*\\*||\\-|[!~+*/%&|><^]|>>|<<||<=>|<=|>=|==|===|!=|=~|!~),?\\s*)*)$");
   QRegExp attr_accessorre("^\\s*(attr_accessor|attr_reader|attr_writer)\\s*((:([A-Za-z0-9_]+),?\\s*)*)$");
   QRegExp symbolre(":([^,]+),?");
+  QRegExp line_contre(",\\s*$");
+  QRegExp slot_signalre("^\\s*(slots|signals)\\s*(('([A-Za-z0-9_]+)[^)]+\\)',?\\s*)*)$");
+  QRegExp memberre("'([A-Za-z0-9_]+)[^)]+\\)',?");
  
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
@@ -206,27 +209,42 @@ void RubySupportPart::parse(const QString &fileName)
           m_file->addClass( lastClass );
       }
     } else if (methodre.search(line) != -1) {
-      FunctionDom method = codeModel()->create<FunctionModel>();
+      FunctionDom methodDecl;
+      if ( lastClass != 0 && lastClass->hasFunction( methodre.cap(2) ) ) {
+        FunctionList methods = lastClass->functionByName( methodre.cap(2) );
+	    methodDecl = methods[0];
+	  } else {
+        methodDecl = codeModel()->create<FunctionModel>();
+        methodDecl->setFileName( fileName );
+        methodDecl->setStartPosition( lineNo, 0 );
+        methodDecl->setName(methodre.cap(2));
+	  }
+      FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
       method->setName(methodre.cap(2));
       kdDebug() << "Add method: " << method->name() << endl;
       method->setFileName( fileName );
       method->setStartPosition( lineNo, 0 );
-	  if (method->name() == "initialize") {
+	  if (methodDecl->name() == "initialize") {
 	    // Ruby constructors are alway private
-	    method->setAccess( CodeModelItem::Private );
+	    methodDecl->setAccess( CodeModelItem::Private );
 	  } else {
-	    method->setAccess( lastAccess );
+	    methodDecl->setAccess( lastAccess );
 	  }
 	  if (methodre.cap(1) != "") {
 	    // A ruby class/singleton method of the form <classname>.<methodname>
-	  	method->setStatic( true );
+	  	methodDecl->setStatic( true );
 	  }
 
       if (lastClass && rawline.left(3) != "def") {
-        if( !lastClass->hasFunction(method->name()) ) 
-          lastClass->addFunction( method );
-      } else if( !m_file->hasFunction(method->name()) ){
-        m_file->addFunction( method );
+        if( !lastClass->hasFunction(method->name()) ) {
+          lastClass->addFunction( methodDecl );
+		}
+        if( !lastClass->hasFunctionDefinition(method->name()) ) {
+          lastClass->addFunctionDefinition( method );
+		}
+      } else if( !m_file->hasFunctionDefinition(method->name()) ){
+        m_file->addFunction( methodDecl );
+        m_file->addFunctionDefinition( method );
         lastClass = 0;
       }
     } else if (accessre.search(line) != -1) {
@@ -243,45 +261,115 @@ void RubySupportPart::parse(const QString &fileName)
 	  	lastAccess = currentAccess;
 	  } else {
 		QString symbolList( accessre.cap(2) );
-		FunctionDom method;
+		FunctionDefinitionDom method;
         int pos = 0;
 		
         while ( pos >= 0 ) {
           pos = symbolre.search( symbolList, pos );
-          if ( pos > -1 ) {
+		  if (pos == -1) {
+			if (line_contre.search(line) != -1) {
+              rawline = stream.readLine();
+			  if (!stream.atEnd()) {
+                line = rawline.stripWhiteSpace().local8Bit();
+                ++lineNo;
+			    symbolList = line;
+			    pos = 0;
+			  }
+			}
+		  } else {
             if ( lastClass->hasFunction( symbolre.cap(1) ) ) {
               FunctionList methods = lastClass->functionByName( symbolre.cap(1) );
 			  methods[0]->setAccess( currentAccess );
 			}
-            pos  += symbolre.matchedLength();
+            pos += symbolre.matchedLength();
           }
         }
 	  }	  
-    } else if (attr_accessorre.search(line) != -1) {
+    } else if (slot_signalre.search(line) != -1) {
+      QString memberList( slot_signalre.cap(2) );
+	  FunctionDom method;
+      int pos = 0;
+		
+      while ( pos >= 0 ) {
+        pos = memberre.search( memberList, pos );
+		if (pos == -1) {
+	      if (line_contre.search(line) != -1) {
+            rawline = stream.readLine();
+			if (!stream.atEnd()) {
+              line = rawline.stripWhiteSpace().local8Bit();
+              ++lineNo;
+			  memberList = line;
+			  pos = 0;
+			}
+		  }
+		} else {
+          FunctionDom method;
+          if (lastClass != 0 && lastClass->hasFunction( memberre.cap(1) ) ) {
+            FunctionList methods = lastClass->functionByName( memberre.cap(1) );
+	        method = methods[0];
+	      } else {
+            method = codeModel()->create<FunctionModel>();
+		  }
+          method->setName(memberre.cap(1));
+          method->setFileName( fileName );
+          method->setStartPosition( lineNo, 0 );
+			 
+		  if (slot_signalre.cap(1) == "slots") {
+		    method->setSlot( true );
+		  } else {
+		    method->setSignal( true );
+		  }
+          if ( lastClass != 0 && !lastClass->hasFunction(method->name()) ) {
+            lastClass->addFunction( method );
+		  }
+          pos += memberre.matchedLength();
+        }
+	  }
+	} else if (attr_accessorre.search(line) != -1) {
 	  QString attr( attr_accessorre.cap(1) );
 	  QString symbolList( attr_accessorre.cap(2) );
       int pos = 0;
 		
       while ( pos >= 0 ) {
         pos = symbolre.search( symbolList, pos );
-        if ( pos > -1 ) {
+		if (pos == -1) {
+		  if (line_contre.search(line) != -1) {
+            rawline = stream.readLine();
+			if (!stream.atEnd()) {
+              line = rawline.stripWhiteSpace().local8Bit();
+              ++lineNo;
+			  symbolList = line;
+			  pos = 0;
+			}
+		  }
+		} else {
           if ( !lastClass->hasFunction(symbolre.cap(1)) ) { 
 			if (attr == "attr_accessor" || attr == "attr_reader") {
-              FunctionDom method = codeModel()->create<FunctionModel>();
+              FunctionDom methodDecl = codeModel()->create<FunctionModel>();
+              FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
+              methodDecl->setName(symbolre.cap(1));
               method->setName(symbolre.cap(1));
               kdDebug() << "Add method: " << method->name() << endl;
+              methodDecl->setFileName( fileName );
+              methodDecl->setStartPosition( lineNo, 0 );
               method->setFileName( fileName );
               method->setStartPosition( lineNo, 0 );
-              lastClass->addFunction( method );
+              lastClass->addFunction( methodDecl );
+              lastClass->addFunctionDefinition( method );
 			}
 			
 			if (attr == "attr_accessor" || attr == "attr_writer") {
-              FunctionDom method = codeModel()->create<FunctionModel>();
+              FunctionDom methodDecl = codeModel()->create<FunctionModel>();
+              FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
+              methodDecl->setName(symbolre.cap(1) + "=");
               method->setName(symbolre.cap(1) + "=");
               kdDebug() << "Add method: " << method->name() << endl;
+              methodDecl->setFileName( fileName );
+              methodDecl->setStartPosition( lineNo, 0 );
               method->setFileName( fileName );
               method->setStartPosition( lineNo, 0 );
-              lastClass->addFunction( method );
+              lastClass->addFunction( methodDecl );
+              lastClass->addFunctionDefinition( method );
 			}
 			
             pos  += symbolre.matchedLength();
