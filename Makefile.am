@@ -79,3 +79,7 @@ install-apidox-kdevelop:
 	fi
 
 ## Install KDE Libs tag files
+
+
+## Coolo: I also need to add this on the make install command
+## ln -s $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon
