@@ -1,3 +1,6 @@
+2003-03-06 Stephane ANCELOT <sancelot@free.fr>
+	* enhanced grepview, there is no need to display the filename in each line
+
 2003-03-06 Roberto Raggi <roberto@kdevelop.org>
 	* Addded support for tmake projects
 	* Added template for QTopia 1.6
@@ -8,7 +11,7 @@
     * GTK tocs renamed to GNOME 1.0 API Reference. Incorrect links fixed, Bonobo
       chapter included. More to come.
     * Started adding W3C TR tocs to the documentation browser.
-    
+
 2003-03-02 F@lk Brettschneider <falkbr@kdevelop.org>
 	* completed the new behaviour of the make-output view
 	  (can be configured via contextmenu or Gideon settings dialog)
