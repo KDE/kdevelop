@@ -171,16 +171,16 @@ void MultiProperty::setValueList(const QMap<QString, QVariant> &valueList)
         property->setValueList(valueList);
 }
 
-void MultiProperty::operator <<(Property *prop)
+void MultiProperty::addProperty(Property *prop)
 {
     list.append(prop);
 }
 
-void MultiProperty::operator >>(Property *prop)
+void MultiProperty::removeProperty(Property *prop)
 {
 /*    qWarning("op >>            removing %s", prop->name().ascii());
     qWarning("op >>            list is %d", list.count());*/
-    bool b = list.remove(prop);
+    /*bool b = */list.remove(prop);
 /*    qWarning("op >>            list is %d", list.count());
     qWarning("op >>            removal is %s", b?"true":"false");    */
 }
@@ -201,18 +201,18 @@ bool MultiProperty::operator ==(const Property &prop) const
     return false;
 }
 
-void MultiProperty::operator <<( MultiProperty *prop)
+void MultiProperty::addProperty( MultiProperty *prop)
 {
     Property *property;
     for (property = prop->list.first(); property; property = prop->list.next())
-        *this << property;
+        addProperty(property);
 }
 
-void MultiProperty::operator >>( MultiProperty *prop)
+void MultiProperty::removeProperty( MultiProperty *prop)
 {
     Property *property;
     for (property = prop->list.first(); property; property = prop->list.next())
-        *this >> property;
+        removeProperty(property);
 }
 
 QVariant MultiProperty::findValueDescription() const

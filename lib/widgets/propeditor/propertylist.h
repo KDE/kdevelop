@@ -81,6 +81,8 @@ public:
     
     virtual void clear();
     virtual bool contains(const QString &name);
+    
+    QPtrList<Property> properties(const QString &name);
 
 signals:
     /**Emitted when the value of the property is changed.*/

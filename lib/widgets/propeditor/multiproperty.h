@@ -33,37 +33,34 @@ class MultiProperty
 public:
     MultiProperty(PropertyList *propertyList);
     MultiProperty(PropertyList *propertyList, Property *prop);
-    virtual ~MultiProperty();
+    ~MultiProperty();
     
-    virtual bool operator ==(const MultiProperty &prop) const;
-    virtual bool operator ==(const Property &prop) const;
+    bool operator ==(const MultiProperty &prop) const;
+    bool operator ==(const Property &prop) const;
 
-    virtual void operator <<(Property *prop);
-    virtual void operator >>(Property *prop);
-
-    virtual void operator <<(MultiProperty *prop);
-    virtual void operator >>(MultiProperty *prop);
+    void addProperty(Property *prop);
+    void removeProperty(Property *prop);
+    void addProperty(MultiProperty *prop);
+    void removeProperty(MultiProperty *prop);
         
-    virtual QString name() const;
-    virtual int type() const;
-    virtual QVariant value() const;
-    virtual QString description() const;
-    virtual bool readOnly() const;
-    virtual bool visible() const;
+    QString name() const;
+    int type() const;
+    QVariant value() const;
+    QString description() const;
+    bool readOnly() const;
+    bool visible() const;
     /**The string-to-value correspondence list of the property.*/
-    virtual QMap<QString, QVariant> valueList() const;
+    QMap<QString, QVariant> valueList() const;
     
-/*    virtual void setName(const QString& name);
-    virtual void setType(int type);*/
-    virtual void setValue(const QVariant& value);
-    virtual void setValue(const QVariant& value, bool emitChange);
-    virtual void setDescription(const QString &description);
-    virtual void setValueList(const QMap< QString, QVariant >& valueList);
+    void setValue(const QVariant& value);
+    void setValue(const QVariant& value, bool emitChange);
+    void setDescription(const QString &description);
+    void setValueList(const QMap< QString, QVariant >& valueList);
     
     /**Finds string description for a value.*/
-    virtual QVariant findValueDescription() const;
+    QVariant findValueDescription() const;
     /**Finds string description for a value.*/
-    virtual QVariant findValueDescription(QVariant val) const;
+    QVariant findValueDescription(QVariant val) const;
     
     bool valid() const;
     

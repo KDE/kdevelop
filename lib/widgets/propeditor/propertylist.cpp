@@ -53,7 +53,7 @@ void PropertyList::addProperty(Property *property)
     if ( m_list.contains(property->name()) )
     {
         mp = m_list[property->name()];
-        *mp << property;
+        mp->addProperty(property);
     }
     else
     {
@@ -72,7 +72,7 @@ void PropertyList::addProperty(const QString &group, Property *property)
     if (m_list.contains(property->name()))
     {
         mp = m_list[property->name()];
-        *mp << property;
+        mp->addProperty(property);
     }
     else
     {
@@ -94,7 +94,7 @@ void PropertyList::removeProperty(Property *property)
     QString group = m_groupOfProperty[mp];
     removeFromGroup(mp);
     QString pname = property->name();
-    *mp >> property;
+    mp->removeProperty(property);
     if (m_propertyOwner)
         delete property;
     if (mp->list.count() == 0)
@@ -119,7 +119,7 @@ void PropertyList::removeProperty(const QString &name)
             if (m_propertyOwner)
                 emit aboutToDeleteProperty(property);
 
-            *(m_list[property->name()]) >> property;
+            m_list[property->name()]->removeProperty(property);
             if (m_propertyOwner)
                 delete property;
         }
@@ -222,7 +222,7 @@ void PropertyBuffer::intersect(const PropertyList *list)
             && (list->m_groupOfProperty[list->m_list[it.key()]] == m_groupOfProperty[it.data()]) )
             {
 //                qWarning("intersect::     equal properties, adding");
-                *(it.data()) << list->m_list[it.key()];
+                it.data()->addProperty(list->m_list[it.key()]);
                 continue;
             }
         }
@@ -256,6 +256,13 @@ bool PropertyList::contains( const QString & name )
     if (m_list.contains(name))
         return true;
     return false;
+}
+
+QPtrList<Property> PropertyList::properties(const QString &name)
+{
+    if (m_list.contains(name))
+        return m_list[name]->list;
+    return QPtrList<Property>();
 }
 
 #ifndef PURE_QT
