@@ -262,7 +262,7 @@
                                     <string>Text Labels</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Text labels will be usin in the toolbars if this is checked.</string>
+                                    <string>Text labels will be used in the toolbars if this is checked.</string>
                                 </property>
                             </widget>
                         </vbox>

@@ -175,7 +175,7 @@
                 <cstring>checkShowInFuture</cstring>
             </property>
             <property name="text">
-                <string>&amp;Don't show this dialog in the future</string>
+                <string>&amp;Do not show this dialog in the future</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">

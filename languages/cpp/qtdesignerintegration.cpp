@@ -58,7 +58,7 @@ void QtDesignerIntegration::addFunction(const QString& formName, KInterfaceDesig
     
     ClassDom klass = m_implementations[formName];
     if (!klass)
-        KMessageBox::error(0, i18n("Can not find implementation class for form: %1").arg(formName));
+        KMessageBox::error(0, i18n("Cannot find implementation class for form: %1").arg(formName));
 
     addFunctionToClass(function, klass);
 }

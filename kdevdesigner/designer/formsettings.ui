@@ -113,10 +113,10 @@
                         <bool>false</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Specify Pixmap-Loader function (only the function's name, no parentheses!)</string>
+                        <string>Specify Pixmap-Loader function (only the function's name, no parentheses.)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;b&gt;Specify Pixmap-Loader function&lt;/b&gt;&lt;p&gt;Specify the function which should be used for loading a pixmap in the generated code. &lt;em&gt;Only enter the function's name, with no parentheses.&lt;/em&gt;</string>
+                        <string>&lt;b&gt;Specify Pixmap-Loader function&lt;/b&gt;&lt;p&gt;Specify the function which should be used for loading a pixmap in the generated code. &lt;em&gt;Only enter the function's name, without parentheses.&lt;/em&gt;</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
@@ -380,10 +380,10 @@
                         <bool>false</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Specify spacing function (only the function's name, no parentheses!)</string>
+                        <string>Specify spacing function (only the function's name, no parentheses.)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;b&gt;Specify spacing function&lt;/b&gt;&lt;p&gt;Specify the function which should be used for getting the spacing in the generated code. &lt;em&gt;Only enter the function's name, with no parentheses.&lt;/em&gt;</string>
+                        <string>&lt;b&gt;Specify spacing function&lt;/b&gt;&lt;p&gt;Specify the function which should be used for getting the spacing in the generated code. &lt;em&gt;Only enter the function's name, without parentheses.&lt;/em&gt;</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="3">
@@ -402,10 +402,10 @@
                         </sizepolicy>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Specify margin function (only the function's name, no parentheses!)</string>
+                        <string>Specify margin function (only the function's name, no parentheses.)</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;b&gt;Specify margin function&lt;/b&gt;&lt;p&gt;Specify the function which should be used for getting the margin in the generated code. &lt;em&gt;Only enter the function's name, with no parentheses.&lt;/em&gt;</string>
+                        <string>&lt;b&gt;Specify margin function&lt;/b&gt;&lt;p&gt;Specify the function which should be used for getting the margin in the generated code. &lt;em&gt;Only enter the function's name, without parentheses.&lt;/em&gt;</string>
                     </property>
                 </widget>
             </grid>

@@ -41,7 +41,7 @@
         <string>Edit Text</string>
     </property>
     <property name="whatsThis" stdset="0">
-        <string>&lt;b&gt;Multiline Edit&lt;/b&gt;&lt;p&gt;This is a simple richtext editor. For an easier working, it provides the most common html tags in form of toolbar items respectively shortcuts. By clicking on such an icon, the regarding tag will be written to the editor and you can insert your text. If you have already written a text and want to format it, just mark it and click on the wished tag button. For a better visualization this editor supports also a simple html syntax highlighting.</string>
+        <string>&lt;b&gt;Multiline Edit&lt;/b&gt;&lt;p&gt;This is a simple richtext editor. To improve its usability it provides toolbar items for the most common html tags: by clicking on a toolbar item, the corresponding tag will be written to the editor, where you can insert your text. If you have already written some text and want to format it, hilight it and click on the desired button.  To improve visualization this editor also supports a simple html-syntax-highlighting scheme.</string>
     </property>
     <hbox>
         <property name="name">

@@ -306,7 +306,7 @@
                                     <string>Choose headerfile</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Look for the header file using a filedialog.</string>
+                                    <string>Look for the header file using a file dialog.</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -1026,7 +1026,7 @@
                             <string>Select property type</string>
                         </property>
                         <property name="whatsThis" stdset="0">
-                            <string>&lt;b&gt;Select the type of the property.&lt;/b&gt;&lt;p&gt;The propertiy must be implemented in the class using Qt's property system.&lt;/p&gt;&lt;p&gt;You can use integer types to support enumeration properties in the property editor.&lt;/p&gt;</string>
+                            <string>&lt;b&gt;Select the type of the property.&lt;/b&gt;&lt;p&gt;The property must be implemented in the class using Qt's property system.&lt;/p&gt;&lt;p&gt;You can use integer types to support enumeration properties in the property editor.&lt;/p&gt;</string>
                         </property>
                     </widget>
                     <widget class="QListView" row="0" column="0" rowspan="1" colspan="4">
