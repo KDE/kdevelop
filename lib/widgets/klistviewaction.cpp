@@ -29,6 +29,7 @@ KListViewAction::~KListViewAction()
     KConfig *config = KGlobal::config();
     if (config && m_view->name())
     {
+        config->setGroup("KListViewAction");
         config->writeEntry(m_view->name(), m_view->width());
     }
     delete m_view;
@@ -74,6 +75,7 @@ void KListViewAction::loadComboWidth( )
     KConfig *config = KGlobal::config();
     if (config && m_view->name())
     {
+        config->setGroup("KListViewAction");
         m_view->setMinimumWidth(config->readNumEntry(m_view->name(), m_view->defaultWidth()));
     }
 }
