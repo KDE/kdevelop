@@ -12,6 +12,7 @@
 #ifndef _SQLACTION_H_
 #define _SQLACTION_H_
 
+#include <kdeversion.h>
 #include <kaction.h>
 
 //only for KDE < 3.1
