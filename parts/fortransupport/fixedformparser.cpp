@@ -53,7 +53,7 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
 
     ParsedMethod *old = store->globalScope()->getMethod(method);
     if( old ){
-        delete( method )
+        delete( method );
         method = old;
     } else {
         store->globalScope()->addMethod(method);
