@@ -318,8 +318,8 @@ möchten, können Sie die Verzeichnisse auswählen und der Indexerstellung hinzufüg
 danach bis zur Aufforderung zum nächsten Schritt.
 
 <item> Wenn alle Installationsschritte erfolgreich durchgeführt wurden, zeigt Ihnen eine abschließende Dialogbox an, das KDevelop
-gestartet wird, nachdem Sie "OK" wählen. Beachten Sie, das Sie zusätzliche Optionen wie automatisches Speichern im <ref
-id="Konfiguration" name="KDevelop Setup"> Dialog, der über das "Einstellungen" Menü aufgerufen wird, einstellen können.
+gestartet wird, nachdem Sie "OK" wählen. Beachten Sie, das Sie zusätzliche Optionen wie automatisches Speichern im 
+<ref id="KDevelop Setup" name="KDevelop Setup"> Dialog, der über das "Einstellungen" Menü aufgerufen wird, einstellen können.
 </enum>
 
 <bf>Abbrechen:</bf> Zeigt einen Warnhinweis an, das der Installationsprozess abgebrochen wird. Diese Warnung erlaubt es Ihnen, nochmals
@@ -898,8 +898,8 @@ Quellcodes. Auf diese folgt das Dokumentationsfenster, das eine HTML-Formate anz
 zur Arbeit mit externen Programmen wie KIconedit oder KDbg, die in die Entwicklungsumgebung eingebettet sind. Jedes Werkzeug, das registriert ist,
 können Sie über das "Werkzeuge" Menü aufrufen; die Registrierung von weiteren Programmen können Sie über einen Konfigurationsdialog
 vornehmen (sehen Sie <ref id="General Configuration" name="General Configuration">). Eine Beschreibung der Editorfunktionen finden Sie
-im Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, zum Hilfebrowser schlagen Sie bitte <ref id="Benutzung
-des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
+im Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, zum Hilfebrowser schlagen Sie bitte 
+<ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
 
 <sect>Der Klassenbrowser und die Dateiansichten
 <p>
@@ -1097,8 +1097,8 @@ kann, rufen Sie nochmals Autoconf auf, um das configure-Skript zu erstellen.<p>
 Das Werkzeuge-Menü enthält standardmäßig die Einträge für folgende Programme, falls diese installiert sind: KDbg, KIconEdit und
 KTranslator. Diese werden durch das KDevelop Installationsprogramm geprüft und in dieser Reihenfolge eingefügt. Der Aufruf eines
 Programms öffnet das "Werkzeuge"-Fenster und startet das Programm innerhalb dieses Fensters. Die Programme können Sie über den
-"Werkzeuge" Eintrag des Einstellungen-Menüs konfigurieren; lesen Sie dazu <ref id="Konfiguration des &dquot;Werzeuge&dquot;-Menüs"
-name="Konfiguration des &dquot;Werzeuge&dquot;-Menüs">.
+"Werkzeuge" Eintrag des Einstellungen-Menüs konfigurieren; lesen Sie dazu 
+<ref id="Configuring the &dquot;Tools&dquot; Menu" name="Configuring the &dquot;Tools&dquot; Menu">.
 
 <sect1>Anpassen von KDevelop
 <p>
@@ -1169,7 +1169,7 @@ können.<p>
 <item><bf/Tip des Tages/ Öffnet den Tip des Tages Dialog, um Sie über weitere Features von KDevelop zu informieren.<p>
 <item><bf/KDevelop Homepage/ Bringt Sie zur Homepage von KDevelop, falls Sie über einen Internet-Zugang verfügen.<p>
 <item><bf/Bugreport.../ Öffnet den Bugreport-Dialog, in dem Sie dem KDevelop-Team eine Fehlerbeschreibung per E-Mail senden können;
-siehe auch <ref id="Bug Report" name="Bug Report"><p>
+siehe auch <ref id="Bug Reporting" name="Bug Reporting"><p>
 <item><bf>C/C++ Referenz</bf> Zeigt die Index-Seite der C/C++ Referenz an. Ist diese nicht installiert, zeigt Ihnen eine
 Fehlerseite an, wie Sie die Referenz nachinstallieren.<p>
 <item><bf/Qt-Bibliothek/ Wechselt zur Index-Seite der Qt-Dokumentation, die Sie mit Ihrer Kopie der Qt-Bibliothek erhalten
@@ -1254,8 +1254,7 @@ Dokumentation zu durchsuchen.
 <sect>Tastenbefehle
 <p>
 Dieser Abschnitt behandelt die vordefinierten als auch die Standard-Konfiguration der Schnelltasten für Kommandos, die Sie in der
-KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Ändern von Schnelltasten" name="Ändern
-von Schnelltasten">.
+KDevelop Entwicklungsumgebung verwenden können. Um die Belegung zu ändern, lesen Sie bitte das Kapitel <ref id="Changing Keyboard Shortcuts" name="Changing Keyboard Shortcuts">.
 
 <sect1>Tastaturbelegung für Textbearbeitung
 <p>
@@ -1494,7 +1493,7 @@ Zur besseren Lokalisierung von Verknüpfungen können Sie zusätzlich einstellen, o
 Durh aktivieren der Schaltfläche "Übernehmen" aktivieren Sie die durchgeführten Änderungen, während "OK" die Änderungen durchführt und
 den Dialog beendet. "Abbrechen" verläßt den Dialog, ohne Änderungen zu übernehmen.
 
-<sect>Benutzung des Dokumentationsbrowser<label id="Benutzung des Documentationsbrowsers">
+<sect>Benutzung des Dokumentationsbrowsers<label id="Benutzung des Dokumentationsbrowsers">
 <p>
 Der Dokumentationsbrowser erlaubt den schnellen und einfachen Zugriff auf alle Handbücher und Dokumentationen, die Ihnen mit der
 KDevelop Entwicklungsumgebung zur Verfügung gestellt wurden oder automatisch generiert wurden, einschließlich der Online-Dokumentation zu den
@@ -1520,8 +1519,7 @@ dazu finden Sie im <htmlurl url="programming.html" name="KDevelop Programmierhan
 Ausgabefenster angezeigt, womit Sie wie übllich sofort zur Fehlerzeile springen können. Das Programm "Glimpse" wird zur Erzeugung eines
 Persönlichen Such-Indexes zu Ihrer Dokumentation benötigt. Der Index wird gewöhnlich während des Installationsprogramms erstellt, Sie
 können dies aber jederzeit nachholen, indem Sie die entsprechende Option im <ref id="General Configuration" name="KDevelop Setup">
-Dialog auswählen. Zur Verwendung der zur Verfügung stehenden Suchfunktionen lesen Sie bitte auch <ref id="Benutzen des Suchindexes"
-name="Benutzen des Suchindexes">.
+Dialog auswählen. Zur Verwendung der zur Verfügung stehenden Suchfunktionen lesen Sie bitte auch <ref id="Verwendung des Suchindexes" name="Verwendung des Suchindexes">.
 
 <sect1>Zur Verfügung Stehende Dokumentation
 <p>
@@ -1572,7 +1570,7 @@ der Schlatfläche mit dem geöffneten Ordner aufrufen. Dies erlaubt Ihnen das Schn
 Startseite. Bedenken Sie, das Sie nur auf HTML-Dokumentation zugreifen können, also nur HTML-Dateien sind zur Auswahl erlaubt. Wählen
 Sie OK, um den Eintrag dem Dokumentationsbaum hinzuzufügen.
 
-<sect1>Benutzen des Suchindexes<label id="Benutzen des Suchindexes">
+<sect1>Verwendung des Suchindexes<label id="Verwendung des Suchindexes">
 <p>
 KDevelop enthält eine ganze Reihe von Funktionen, die Ihnen helfen, Informationen innerhalb der HTML-Dokumentation zu suchen. Um diese
 Fähigkeiten zu nutzen, benötigen Sie das Programm "Glimpse", einem frei erhältlichen Datenbank-Generator, der den Suchindex erstellt
@@ -3264,52 +3262,53 @@ Es gibt keinen Ausweg aus dieser Situation, aber so konnte das Problem ein wenig
 
 <chapt>CVS Integration
 <p>
-KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
-groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
-located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
-added or removed to the CVS by the developers.
+Kdevelop unterstützt auch die Verwaltung Ihrer Projekte mit Hilfe von CVS Archiven. CVS (Concurrent Version System) hat zum Ziel, 
+Gruppen von Entwicklern das voneinander unabhängige Arbeiten am gleichen Quellcode zu ermöglichen und die Änderungen im 
+Repositorium zu verschmelzen. Normalerweise befindet sich das Repositorium auf einem Server. Das anfängliche Archiv enthält 
+einen Grundstock an Dateien; die Verzeichnisse und Dateien werden dann von den Entwicklern dem CVS hinzugefügt oder aus ihm 
+entfernt.
 
-Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
-at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
-receive the changes.
+Der Entwickler arbeitet lokal mit seiner Kopie des CVS Baumes. Er nimmt die Änderungen an seinen Dateien vor und testet, ob sein 
+Projekt weiterhin arbeitet, wenigstens insoweit, daß unvollständige Quellen nicht die Arbeit der anderen Entwickler, die seine 
+Änderungen erhalten, behindern oder unmöglich machen.
 
-<sect>Enabling CVS Support
+<sect>Einschalten der CVS Unterstützung
 <p>
-As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
-KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
-the option for Version Control to "CVS".
+Da CVS Unterstützung im allgemeinen nur von professionellen Entwicklern oder Firmen, sowie von KDE Entwicklern, die Ihre Projekte 
+über den KDE CVS Server verwalten benötigt wird, ist die Verwendung der CVS Kommandos in KDevelop optional. Die CVS 
+Unterstützung kann eingeschaltet werden, indem Sie im Projekt Optionen Dialog die Einstellung für Versionskontrolle auf "CVS" ändern.
 
-<sect>Using CVS Commands
+<sect>Verwendung von CVS Kommandos
 <p>
-Then the following commands are available in the LFV and RFV by context menus:
+Damit stehen Ihnen die folgenden Kommandos unter LFV und RFV zur Verfügung:
 
-Over a file not included in the repository:
+Für Dateien die nicht im Archiv sind:
 <itemize>
-<item><bf/Add to Repository/: adds the file to the repository. The file is set up to be added and will be introduced to the repository
-on the next <tt/commit/ command that includes the directory where the added file is located locally.
+<item><bf/Zum Archiv hinzufügen/: Fügt die Datei zum Archiv hinzu. Die Datei wird als hinzuzufügen markiert, wird aber erst beim 
+nächsten <tt/Änderungen einspielen/ tatsächlich dem Archiv hinzugefügt.
 </itemize>
 
-Over a file included in the repository:
+Für Dateien die bereits im Archiv sind:
 <itemize>
-<item><bf/Update/: update the selected file with the CVS version
-<item><bf/Commit/: commit the selected file to the CVS repository
-<item><bf/Remove from Repository/: remove the file from the repository
+<item><bf/Aktualisieren/: Update der ausgewählten Datei von der CVS Version
+<item><bf/Änderungen einspielen/: Führt ein "commit" der ausgewählten Datei in das CVS Archiv aus
+<item><bf/Vom Archiv entfernen/: Entfernt die Datei aus dem Repositorium
 </itemize>
 
-Over a folder:
+Für Verzeichnisse:
 <itemize>
-<item><bf/Add/: adds the folder to the repository
-<item><bf/Remove/: removes the folder from the repository
-<item><bf/Update/: update the folder recursively to be in sync with the repository
-<item><bf/Commit/: commit any changes recursively to the repository
+<item><bf/Zum Archiv hinzufügen/: Fügt den Order zum Repositorium hinzu
+<item><bf/Vom Archiv entfernen/: Entfernt das Verzeichnis aus dem Repositorium
+<item><bf/Aktualisieren/: Synchronisiert das Verzeichnis rekursiv mit dem CVS Archiv
+<item><bf/Änderungen einspielen/: Führt ein rekursives "commit" in das CVS Archiv aus
 </itemize>
 
-The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
-the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
-successful or not.
+Die CVS Kommandos benötigen eine funktionierende Netzverbindung zum CVS Server. Wenn Sie ein Kommando aufrufen, sehen Sie 
+einen Dialog der Ihnen anzeigt, welches Kommando gesendet wurde und wie die Antwort des Servers war. Dadurch haben Sie eine 
+Kontrolle darüber, welche Aktionen tatsächlich durchgeführt wurden, und ob Ihr Kommando erfolgreich abgeschlossen werden konnte.
 
-As the CVS commands of KDevelop only work with the <tt/cvs/ system command and its commandline options, you should have no trouble to
-use the cvs features.
+Da die CVS Kommandos von KDevelop nur mit dem <tt/cvs/ System Kommando und dessen Kommandozeilenoptionen arbeiten, sollten 
+Sie keine Probleme haben CVS zu benutzen.
 
 
 <chapt>General Configuration<label id="General Configuration">
@@ -3436,7 +3435,7 @@ directory, the "Add" - button must be pushed to set the path.  A path once set c
 in the path field and pushing "Remove". Furthermore, the user is offered three different modes for the index size: tiny, small and
 medium.  The higher the index size, the more the index files will grow. On the other hand, a search in a bigger searchdatabase
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
-<ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
+<ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers">.
 
 
 <chapt>Questions and Answers<label id="Questions and Answers">
