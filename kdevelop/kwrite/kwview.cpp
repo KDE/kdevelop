@@ -44,7 +44,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kfiledialog.h>
-#include <kio_job.h>
+#include <kio/job.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -1946,18 +1946,18 @@ void KWrite::loadURL(const QString &url, int flags) {
     // url
     emit statusMsg(i18n("Loading..."));
 
-    KIOJob * iojob = new KIOJob;
-    iojob->setGUImode ( KIOJob::NONE );
+#warning Is this correct?
+    KIO::Job *iojob;
     QString tmpFile;
     tmpFile = QString(_PATH_TMP"/kwrite%1").arg(time(0L));
 
-    m_sNet.insert( iojob->id(), new QString(u.url()) );
-    m_sLocal.insert( iojob->id(), new QString(tmpFile));
-    m_flags.insert( iojob->id(), new int(flags));
+//    m_sNet.insert( iojob->id(), new QString(u.url()) );
+//    m_sLocal.insert( iojob->id(), new QString(tmpFile));
+//    m_flags.insert( iojob->id(), new int(flags));
 
     connect(iojob,SIGNAL(sigFinished( int )),this,SLOT(slotGETFinished( int )));
     connect(iojob,SIGNAL(sigError(int, const char *)),this,SLOT(slotIOJobError(int, const char *)));
-    iojob->copy(url, tmpFile);
+    iojob = KIO::copy(url, tmpFile);
   }
 }
 
@@ -1981,18 +1981,20 @@ void KWrite::writeURL(const QString &url, int flags) {
   } else {
     // url
     emit statusMsg(i18n("Saving..."));
-    KIOJob * iojob = new KIOJob;
-    iojob->setGUImode ( KIOJob::NONE );
+
+#warning Is this correct?
+    KIO::Job *iojob;
+
     QString tmpFile;
     tmpFile = QString(_PATH_TMP"/kwrite%1").arg(time(0L));
 
-    m_sNet.insert( iojob->id(), new QString(u.url()) );
-    m_sLocal.insert( iojob->id(), new QString(tmpFile));
-    m_flags.insert( iojob->id(), new int(flags));
+//    m_sNet.insert( iojob->id(), new QString(u.url()) );
+//    m_sLocal.insert( iojob->id(), new QString(tmpFile));
+//    m_flags.insert( iojob->id(), new int(flags));
 
     connect(iojob,SIGNAL(sigFinished( int )),this,SLOT(slotPUTFinished( int )));
     connect(iojob,SIGNAL(sigError(int, const char *)),this,SLOT(slotIOJobError(int, const char *)));
-    iojob->copy(tmpFile, url);
+    iojob = KIO::copy(tmpFile, url);
 
     if (!writeFile(tmpFile)) return;
   }
@@ -3279,4 +3281,5 @@ void KWrite::spellCleanDone ()
 
   emit spellcheck_done();
 }
+
 
