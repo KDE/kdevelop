@@ -479,15 +479,13 @@ void CKDevelop::synchronizeDocAndInfo()
 {
   debug("synchronize ! \n");
   // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-  QList<int> allDocs = m_docViewManager->docs();
-  QListIterator<int> docIter(allDocs);
+  QList<int> allKWriteDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
+  QListIterator<int> docIter(allKWriteDocs);
   for ( ; docIter.current(); ++docIter) { // for all kwrite documents
-    int curDocId = *(docIter.current());
-
-    // The doc object can be a CDocBrowser or a KWriteDoc
-    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (m_docViewManager->docPointer( curDocId));
-    if(pDoc)
-      setInfoModified(pDoc->fileName(), pDoc->isModified());
+    int curKWriteDocId = *(docIter.current());
+    // Because of our filter from above the doc object is always a KWriteDoc, and we'll always get id's for existing docs
+    KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curKWriteDocId);
+    setInfoModified(pDoc->fileName(), pDoc->isModified());
   }
 }
 
