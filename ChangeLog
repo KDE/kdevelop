@@ -1,5 +1,6 @@
 1999-06-15 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added toolbar button for the graphical classview.
+	* fixed asForest method so the tree is generated correctly.
 
 1999-06-14 Jörgen Olsson <jorgen@cenacle.net>
 	* added graphical class view dialog
