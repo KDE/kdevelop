@@ -85,12 +85,12 @@ dist=true
 install=false
 type=SOURCE
 [Workspace_1]
-openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/docs/en/tutorial.sgml,/home/rnolden/Development/kdevelop/ChangeLog,
-show_outputview=true
+openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,
+show_outputview=false
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/ChangeLog
+header_file=Untitled.h
 cpp_file=/home/rnolden/Development/kdevelop/kdevelop/main.cpp
-browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/tutorial.html
+browser_file=file:/usr/lib/qt/doc/html/qwidget.html
 [kdevelop/kdlgedit/item_slider.cpp]
 install_location=
 dist=true

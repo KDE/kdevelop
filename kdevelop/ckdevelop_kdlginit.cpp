@@ -410,25 +410,6 @@ void CKDevelop::initKDlgStatusBar(){
   }
 }
 
-
-/*
-void CKDevelop::initKDlgKeyAccel(){
-  accel->connectItem( KAccel::Close , kdlgedit, SLOT(slotFileClose()) );
-  accel->connectItem( KAccel::Save , kdlgedit, SLOT(slotFileSave()) );
-
-  //edit menu
-  accel->connectItem( KAccel::Undo , kdlgedit, SLOT(slotEditUndo()) );
-  accel->connectItem( KAccel::Cut , kdlgedit, SLOT(slotEditCut()) );
-  accel->connectItem( KAccel::Copy , kdlgedit, SLOT(slotEditCopy()) );
-  accel->connectItem( KAccel::Paste , kdlgedit, SLOT(slotEditPaste()) );
-
-  // tools-menu
-  accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
-  accel->connectItem( "Preview dialog", kdlgedit, SLOT(slotViewPreview()));
-
-  accel->readSettings();
-}
-*/
 void CKDevelop::setKDlgCaption()
 {
   setCaption(kdlg_caption);
@@ -449,6 +430,7 @@ void CKDevelop::slotHelpDlgNotes()
 
   delete readmedlg;
 }
+
 
 
 

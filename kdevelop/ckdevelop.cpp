@@ -2363,9 +2363,6 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_KDLG_BUILD_GENERATE:
     kdlgedit->slotBuildGenerate();
     break;
-  case ID_CV_GRAPHICAL_VIEW:
-    slotClassbrowserViewTree();
-    break;
   case ID_CV_WIZARD:
     // Make the button toggle between declaration and definition.
     if(cv_decl_or_impl){
@@ -2549,6 +2546,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 

@@ -80,6 +80,8 @@ install-data-local:
 	$(INSTALL_DATA) tutorial-15.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-15.html
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) tutorial-16.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-16.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) tutorial-17.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/tutorial-17.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/index-9.html
@@ -120,5 +122,6 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-14.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-15.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-16.html
+	-rm -f $(kde_htmldir)/en/kdevelop/tutorial-17.html
 
 

@@ -1,3 +1,8 @@
+1999-06-17  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added KDE-FSS usage to the programming handbook
+	* added almost all menucommands to the accelerator configuration as empty accelerators
+	* moved the graphical view button to the classbrowser delayed popup (agreed with Jonas ;-))
+	
 1999-06-16  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added internationalization, KDE-mini-HOWTO and KDE-FSS to the Programming handbook
 
@@ -1204,5 +1209,6 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
 
 

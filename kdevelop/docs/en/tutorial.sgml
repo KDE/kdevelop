@@ -106,7 +106,7 @@ applications for both platforms.
 
 The KDE Team (<htmlurl url="http://www.kde.org" name="http://www.kde.org">) joined together with the goal to make using Unix
 Systems more friendly, and decided to use the Qt toolkit for the development of a window manager on X-Window, plus a variety of tools
-included with the KDE packages. The K Desktop Environment therefore contains the window manager <em/kdm/, the file manager <em/kfm/ and
+included with the KDE packages. The K Desktop Environment therefore contains the window manager <em/kwm/, the file manager <em/kfm/ and
 the launch panel <em/kpanel/ as the main components plus a variety of first-class utilities and applications. After KDE was out, a lot
 of developers turned their eyes towards the new environment and what it has to offer them. The KDE libraries are providing essential
 methods and classes that make all applications designed with them look similar and consistent, so the user has the great advantage that
@@ -3034,8 +3034,285 @@ Toolbar icons for library widgets.
 </itemize>
 Any other bitmaps for library widgets.
 
+<sect>File System Usage for KDevelop Projects
+<p>
+As the last chapter covered the KDE File System Standard, this chapter deals with what you have to do to use the file system. A KDE 
+project uses the file system at least for installation routines; therefore we will discuss setting installation properties for your 
+project files. Your application may make use of files that are installed afterwards, where it is important to know how to get the 
+relative pathname by the standard. This enables your application to work wherever the KDE file system may be and prevents hardcoding 
+any file information.
+ 
+<sect1>Accessing Files during Runtime
+<p>
+After the installation of your project by end-users, your application may require file information during runtime. During the 
+development process, you will experience at least one error which is caused when running your application within the KDevelop IDE and 
+requiring the application manual by "Help"-"Contents" or pressing the F1 key. This will result in a message box, saying that the 
+index.html file could not be found- if you haven't installed your application on your local KDE file system. Your application asks 
+KDEHelp to open your index page with detecting the installation directory first through <tt/KApplication/'s methods to access the file 
+system, therefore, we will have a look at what <tt/KApplication/ offers and make some example usage. Also other classes of 
+<tt/KDE-Core/ make use of the KDE File System like <tt/KIconLoader/ and <tt/KLocale/, which will be reviewed afterwards.
+ 
+<sect1>KApplication Methods
+<p>
 
-<sect>KDE Developer's mini-HOWTO
+The KApplication class offers the following methods to access the KDE File System:
+<tscreen><verb>
+void invokeHTMLHelp ( QString aFilename, QString aTopic ) const 
+static const QString& kde_htmldir ()  
+static const QString& kde_appsdir ()  
+static const QString& kde_icondir ()  
+static const QString& kde_datadir ()  
+static const QString& kde_localedir ()  
+static const QString& kde_cgidir ()  
+static const QString& kde_sounddir ()  
+static const QString& kde_toolbardir ()  
+static const QString& kde_wallpaperdir ()  
+static const QString& kde_bindir ()  
+static const QString& kde_partsdir ()  
+static const QString& kde_configdir ()  
+static const QString& kde_mimedir ()  
+static QString localkdedir ()  
+static QString localconfigdir ()  
+static QString findFile ( const char *file )  
+</verb></tscreen>
+
+The methods are generally used with the <tt/KApplication/ object of your application, where <tt/KApplication/ offers the macro 
+<tt/kapp/ to receive the pointer:
+
+#define kapp KApplication::getKApplication()
+
+Therefore, the methods are generally used like this:
+<tscreen><verb>
+QString sounddir=kapp->kde_sounddir();
+</verb></tscreen>
+This example stores the path of the KDE sounddirectory under a <tt/QString/, where you would append e.g. the sound filename. Then you 
+can process this information and play a sound file that is located there. You should always test for the existance of a file by using 
+<tt/QFileInfo/'s <tt/exists()/ method.
+
+Within these methods, 
+
+<tscreen><verb>
+void invokeHTMLHelp( QString aFilename, QString aTopic ) const [public]
+</verb></tscreen>
+takes a special position to invoke the KDE help. Generally, you should use it everywhere a user needs to access information, e.g. when 
+he is presented a modal dialog. The F1 key will not work to invoke the help contents, also the user should be presented the according 
+help page. To make a good use of it, add a "Help" button to your dialog and create a slot that is used to connect on signal 
+<tt/pressed()/. In this method, use <tt/invokeHTMLHelp()/ with the according page and subject; in case your application's documentation 
+isn't written completely yet, leave this open to complete it after the documentation is in sync with the application.
+ 
+The documentation of <tt/KApplication/ says:
+
+Invoke the kdehelp HTML help viewer. 
+
+Parameters: aTopic
+This allows context-sensitive help. Its value will be appended to the filename, prefixed with a "#" (hash) character.
+
+aFilename: The filename that is to be loaded. Its location is computed automatically according to the KFSSTND. If aFilename is empty, 
+the logical appname with .html appended to it is used. 
+
+
+The methods of  <tt/KApplication/ will retrieve the following path's.  
+
+<tscreen><verb>
+kde_htmldir()         kdedir()/share/doc/HTML         Returns the directory where KDE stores
+                                                      its HTML documentation
+
+kde_appsdir()         kdedir()/share/applnk           Returns the directory where KDE applications 
+                                                      store their .kdelnk file
+
+kde_icondir()         kdedir()/share/icons            Returns the directory where KDE icons are stored
+
+kde_datadir()         kdedir()/share/apps             Returns the directory where KDE applications
+                                                      store their specific data
+
+kde_localedir()       kdedir()/share/locale           Returns the directory where locale-specific
+                                                      information (like translated on-screen messages) are stored 
+
+kde_cgidir()          kdedir()/cgi-bin                Returns the directory where cgi scripts are stored
+
+kde_sounddir()        kdedir()/share/sounds           Returns the directory where sound data are stored.
+                                                      This directory is for KDE specific sounds.
+                                                      Sound data of Applications should go 
+                                                      into kde_datadir() 
+
+kde_toolbardir()      kdedir()/share/toolbar          Returns the directory where toolbar icons are stored
+
+kde_wallpaperdir()    kdedir()/share/wallpapers       Returns the directory where KDE wallpaper files are stored
+
+kde_bindir()          kdedir()/bin                    Returns the directory where KDE application binaries are stored
+
+kde_partsdir()        kdedir()/parts                  Returns the directory where KParts are stored
+
+kde_configdir()       kdedir()/share/config           Returns the directory where config files are stored
+
+kde_mimedir()         kdedir()/share/mimelnk          Returns the directory where mimetypes are stored
+
+localkdedir()         $HOME/.kde                      Get the local KDE base dir
+
+localconfigdir()      $HOME/.kde/share/config         Get the local KDE config dir
+</verb></tscreen>
+
+To search for a specific file, use <tt/findFile(const char *file)/ which will search several path's of the KDE File System:
+
+<enum>
+<item>$KDEDIR, 
+<item>$KDEPATH,
+<item>"&lsqb;KDE Setup&rsqb;:Path=" entry in a config file. 
+</enum>
+
+If the file is not found, the QString method isEmpty() will  return True 
+
+<sect1>KIconLoader Methods
+<p>
+
+QPixmap loadIcon ( const QString &amp;name, int w = 0, int h = 0 )  
+
+QPixmap reloadIcon ( const QString &amp;name, int w = 0, int h = 0)  
+
+QPixmap loadMiniIcon ( const QString &amp;name , int w = 0, int h = 0 )  
+
+QPixmap loadApplicationIcon ( const QString &amp;name, int w = 0, int h = 0 )  
+
+QPixmap loadApplicationMiniIcon ( const QString &amp;name, int w = 0, int h = 0 )  
+
+bool insertDirectory ( int index, const QString &amp;dir_name )
+
+<sect1>Setting File Installation Properties
+<p>
+As the above explained where KDE applications should place their files and how to access them at runtime, the following will explain 
+how to set the file properties correctly to ensure the files get installed at the right place. The Makefiles support a set of macros to 
+install your files into the KDE File System and which have to be used for setting the file installation properties.
+
+To set the properties, open your project and select "Project"-"File Properties" which opens the File Properties dialog.
+The file properties are displayed if you select a filename currently included in the project. First of all, a file has a type property, 
+which can be one of the following:
+
+<itemize>
+<item><bf/HEADER:/  specifies a file as a header file
+<item><bf/SOURCE:/ specifies a file as a source file
+<item><bf/SCRIPT:/ specifies a file as a script file
+<item><bf/DATA:/ specifies a file as a data file that usually gets installed like pixmaps or HTML documentation files
+<item><bf/PO:/ specifies a file as a translation file
+<item><bf/KDEV_DIALOG:/ specifies a file as a dialog file to be interpreted by the dialog library
+</itemize> 
+
+Further, a file is included in the project, if "Include in Distribution" is checked. This ensures that the file is included in the 
+distribution tarball or package.
+
+If a file has to be installed, you have to enable "Install". This will allow setting the Installation path for the selected file, where 
+the filename is already inserted.
+
+Now, as said above, the Makefile already is capable of a set of macros for the KDE File System Standard. These are used to set the 
+installation path and ensure that the files actually will land in the KDE file system and not somewhere else. Macros that can be used, 
+have to be embraced in round brackets and are marked with the dollar sign in front of the macro. When configure builds the Makefiles on 
+the end-user's system, it will determine values for these macros that match the real directory name and will expand the Makefile.am 
+macro towards the actual destination.
+  
+When looking a standard KDE application project, you will see on the file property of your <tt/index.html/ file that it already uses a 
+macro to determine where it should go:
+   
+$(kde_htmldir)/en/kscribble/index.html 
+
+This says, that make should install the file index.html in the kde-html directory, subdirectory en for english, the application 
+subdirectory and the filename. You could as well use another filename if you like to rename the file on the installation destination.
+
+For the destination of your binary you currently have to edit the project's Makefile.am if your destination should be different form 
+the "Applications" section of kpanel:
+
+APPSDIR = $(kde_appsdir)/Applications
+
+Possible values are (as the KDE-File System Standard says):
+
+<itemize>
+<item>Applications
+<item>Games
+<item>Graphics
+<item>Internet
+<item>Multimedia
+<item>Settings
+<item>System
+<item>Utilities
+</itemize>
+
+Setting no directory will end your applink directly in kpanel's root.
+
+The following list contains the macros that can be used in the installation setup for files:
+
+<tscreen><verb>
+kde_htmldir       Where your docs should go to. (contains lang subdirs)
+kde_appsdir       Where your application file (.kdelnk) should go to. 
+kde_icondir       Where your icon should go to.
+kde_minidir       Where your mini icon should go to.
+kde_datadir       Where you install application data. (Use a subdir)
+kde_locale        Where translation files should go to.(contains lang subdirs)
+kde_cgidir        Where cgi-bin executables should go to.
+kde_confdir       Where config files should go to.
+kde_mimedir       Where mimetypes should go to.
+kde_toolbardir    Where general toolbar icons should go to.
+kde_wallpaperdir  Where general wallpapers should go to.
+</verb></tscreen>
+
+Use these macros in conjunction with the according necessary subdirectories and the filename for setting the installation properties.
+By default, the currently created HTML documentation files, the kdelnk file, Icon, Miniicon and the translation files (also newly 
+create ones) are already set up for their destination; therefore you don't have to make any changes for your default installation 
+routine that has been set up by the application wizard of KDevelop.
+
+<sect1>Organizing Project Data
+<p>
+Another issue in creating projects often appears to the programmer if he has or wants to include additional data that have to be 
+installed with the project. You already know where to install it, but what about organizing it in the source tree ?
+
+A good advice here may be to collect all data in directories that more or less match the KDE File System Standard, e.g. your 
+application needs additional toolbar icons. Creating these icons in the main project directory is potentially not a good idea as they 
+will be difficult to locate in the real file viewer and a removal will result in much work for each icon. Therefore, create your icon 
+with "File"- "New" and choose a subdirectory <tt/toolbar/; if it doesn't exist, it can be easily created with the "select directory"
+dialog. Existing icons can be copied and included into the project with "Project"-"Add existing file(s)", where you have to choose the 
+files and the destination. When selecting the destination directory, you can create the <tt/toolbar/ subdirectory first within the 
+selection dialog. After being finished, press OK and the files will be copied as well as included in the project.
+
+As an example, a toolbar icon should go to the following:
+
+$(kde_datadir)/<em/&lt;appname&gt;//toolbar/<em/&lt;youricon&gt;/.xpm
+
+Pictures or additional icons that are not used as toolbar icons should go to a subdirectory <em/pics/ instead of <em/toolbar/.
+
+<sect1>The <tt/kdelnk/ File
+<p>
+The <em/&lt;appname&gt;/.kdelnk file currently included in your project will install itself in KDE's kpanel structure. You should think 
+it is already created and complete, therefore shouldn't require any further notification. Despite of KDevelop's advanced qualities to 
+help you with creating, programming and designing applications, it cannot determine the exact purpose of your application- and that is 
+the information you have to add to the kdelnk file. As this is a text file, select it from the RFV or the LFV; it will be opened in the 
+Header/Resource window.
+
+The sample kdelnk file would look like this:
+<tscreen><verb>
+# KDE Config File  
+&lsqb;KDE Desktop Entry&rsqb;
+Type=Application
+Exec=kscribble  
+Icon=kscribble.xpm
+DocPath=kscribble/index.html
+Comment=
+Comment&lsqb;de&rsqb;=
+Terminal=0
+Name=kscribble
+Name&lsqb;de&rsqb;=kscribble
+</verb></tscreen>
+
+This already contains the basic configuration for the application specific data such as the icon, binary name, application name etc.
+You see that the section Comment is still empty. There you have to insert the QuickTip that will be displayed when the mouse cursor 
+moves over the kdelnk file icon on the desktop or in kpanel. If scribble would be a small drawing program, you would enter e.g. 
+
+<tscreen><verb>
+Comment=A simple drawing program 
+</verb></tscreen>
+
+Each comment line afterwards will contain the same description translated in the language the brackets symbolize. Ask translators to 
+insert a good translation in their native language or include the kdelnk file when asking for translating the application's po file; 
+the same applies to the name of the application set in the Name lines. 
+
+
+<sect>KDE Developer Information 
 <p>
 This mini-HOWTO covers issues that are collected by David Sweet <htmlurl url="mailto:dsweet@chaos.umd.edu" 
 name="<dsweet@chaos.umd.edu>">  in his <em/The KDE Developer's mini-HOWTO (May 21, 1999)/ and was mailed at the KDE-Developer's 
@@ -3359,7 +3636,7 @@ the tar.gz file.
 I'd like to thank the following people for their suggestions (in no particular order): Roberto Alsina, Waldo Bastian, Harri Porten, 
 Samuel Wuethrich, Daniel Naber, Martin Konold.
 
-<sect>Authors
+<sect>References
 <p>
 
 The KDevelop Programming Handbook contains information that are taken from various sources on the internet and by mails to various 
@@ -3399,6 +3676,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
 
 
 

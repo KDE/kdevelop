@@ -133,6 +133,7 @@ as distribution packages and thereby can be installed easily.
 <item>autoconf 2.12, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
 <item>automake 1.2, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
 <item>flex 2.5.4, 
+<item>GNU gettext, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
 <item>Qt 1.42, avaliable at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
 <item><idx/KDE/ 1.1.x, available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">
 </itemize>

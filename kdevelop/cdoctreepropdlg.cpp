@@ -82,7 +82,8 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
-
+	ok_button->setDefault(true);
+  
   cancel_button = new QPushButton( this, "cancel_button" );
   cancel_button->setGeometry( 230, 120, 100, 30 );
   cancel_button->setMinimumSize( 0, 0 );
