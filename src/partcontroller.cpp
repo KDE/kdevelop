@@ -251,7 +251,29 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
     KTextEditor::PopupMenuInterface *iface = dynamic_cast<KTextEditor::PopupMenuInterface*>(part->widget());
     if (iface)
       iface->installPopup(contextPopupMenu());
+
+    // HACK: this is a workaround. The kate-part does not emit "completed" when
+    // it save a file yet.
+    // FIXME: remove this line once kate-part emits the right signal
+    connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
   }
+
+  // tell the parts we loaded a document
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
+  if (ro_part && ro_part->url().isLocalFile())
+    emit loadedFile(ro_part->url().path());
+
+  // let's get notified when a document has been changed
+  connect(part, SIGNAL(completed()), this, SLOT(slotUploadFinished()));
+}
+
+
+void PartController::slotUploadFinished()
+{
+  const KParts::ReadWritePart *rw_part = dynamic_cast<const KParts::ReadWritePart*>(sender());
+
+  if (rw_part && rw_part->url().isLocalFile())
+      emit savedFile(rw_part->url().path());
 }
 
 

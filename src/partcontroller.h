@@ -78,6 +78,9 @@ private slots:
   void slotPopupAboutToShow();
   void slotPopupAboutToHide();
 
+  void slotUploadFinished();
+
+
 private:
 
   void setLineNumber(int lineNum);
