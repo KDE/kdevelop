@@ -1,16 +1,1 @@
-# not a GNU package. You can remove this line, if
-# have all needed files, that a GNU package needs
-AUTOMAKE_OPTIONS = foreign 1.4
-
-SUBDIRS = src pixmaps
-
-EXTRA_DIST = $APPNAMELC$.lsm $APPNAMELC$.desktop 
-
-install-data-local:
-	$(mkinstalldirs) $(datadir)/applications/
-	$(INSTALL_DATA) $(srcdir)/$APPNAMELC$.desktop $(datadir)/applications
-
-uninstall-local:
-	-rm -f $(datadir)/applications
-
-
+SUBDIRS = src macros

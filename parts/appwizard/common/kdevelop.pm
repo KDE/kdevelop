@@ -180,6 +180,18 @@ sub installGNOME
         unlink( "gnome.tar" );
 }
 
+sub installWX
+{
+        print "Installing wxWindows autoconf macros\n";
+		  copy( "${src}/template-common/wxwindows.tar.gz", "${dest}/wxwindows.tar.gz" );
+		  chdir( $dest ) || die "Could not chdir to $dest\n";
+        system( 'gunzip', '-f', 'wxwindows.tar.gz' );
+        system( 'tar', 'xf', 'wxwindows.tar' );
+        move( "wx-Makefile.am", "Makefile.am" );
+        move( "wx-Makefile.cvs", "Makefile.cvs" );
+        move( "wx-configure.in", "configure.in" );
+        unlink( "wxwindows.tar" );
+}
 
 sub installDocbook()
 {
