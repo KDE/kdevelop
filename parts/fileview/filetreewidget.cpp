@@ -311,10 +311,14 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
     }
 
     // Submenu for visualization options
+/*
     KPopupMenu *subMenu = new KPopupMenu( &popup );
     m_actionToggleShowVCSFields->plug( subMenu );
     m_actionToggleShowNonProjectFiles->plug( subMenu );
     popup.insertItem( i18n("View options"), subMenu );
+*/
+    m_actionToggleShowVCSFields->plug( &popup );
+    m_actionToggleShowNonProjectFiles->plug( &popup );
 
     if( item != 0 )
     {
