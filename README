@@ -1,3 +1,11 @@
+KDevelop 3.0 Alpha 1 Release
+----------------------------
+
+Since this project is code named Gideon, the binary that builds is called
+"gideon" instead of "kdevelop".  This will allow users to use older
+versions of kdevelop while still being able to experiment with this new
+version.
+
 KDE/Qt API Documentation
 ---------------------------
 If the Qt and KDE API documentation do not exist, they can be created
