@@ -247,7 +247,7 @@ void ClassViewPart::selectedAddMethod( )
     if (!ci)
         return;
     if (languageSupport())
-        languageSupport()->addMethod(ci->dom()->name());
+        languageSupport()->addMethod(ci->dom());
 }
 
 void ClassViewPart::selectedAddAttribute( )
@@ -256,7 +256,7 @@ void ClassViewPart::selectedAddAttribute( )
     if (!ci)
         return;
     if (languageSupport())
-        languageSupport()->addAttribute(ci->dom()->name());
+        languageSupport()->addAttribute(ci->dom());
 }
 
 void ClassViewPart::graphicalClassView( )

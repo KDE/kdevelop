@@ -237,6 +237,12 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
     m_actionOpenDeclaration->setEnabled( item && item->hasDeclaration() );
     m_actionOpenImplementation->setEnabled( item && item->hasImplementation() );
 
+    if( item && item->isClass() ){
+        m_actionAddMethod->plug( &menu );
+	m_actionAddAttribute->plug( &menu );
+	menu.insertSeparator();
+    }
+
     int oldViewMode = viewMode();
     m_actionOpenDeclaration->plug( &menu );
     m_actionOpenImplementation->plug( &menu );
@@ -715,10 +721,14 @@ void ClassViewWidget::slotNewClass( )
 
 void ClassViewWidget::slotAddMethod( )
 {
+    if( m_part->languageSupport()->features() & KDevLanguageSupport::AddMethod )
+        m_part->languageSupport()->addMethod( static_cast<ClassDomBrowserItem*>( selectedItem() )->dom() );
 }
 
 void ClassViewWidget::slotAddAttribute( )
 {
+    if( m_part->languageSupport()->features() & KDevLanguageSupport::AddAttribute )
+        m_part->languageSupport()->addAttribute( static_cast<ClassDomBrowserItem*>( selectedItem() )->dom() );
 }
 
 void ClassViewWidget::slotOpenDeclaration( )
