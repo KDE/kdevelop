@@ -72,6 +72,7 @@ protected:
 private:
     class KDevDriver* m_driver;
     QStringList m_fileList;
+    QString m_currentFile;
     QWaitCondition m_canParse;
     QWaitCondition m_isEmpty;
     QWaitCondition* m_consumed;

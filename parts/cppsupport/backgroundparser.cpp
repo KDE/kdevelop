@@ -335,8 +335,8 @@ void BackgroundParser::close()
 bool BackgroundParser::filesInQueue()
 {
     QMutexLocker locker( &m_mutex );
-
-    return m_fileList.count();
+    
+    return m_fileList.count() || !m_currentFile.isEmpty();
 }
 
 void BackgroundParser::run()
@@ -360,7 +360,8 @@ void BackgroundParser::run()
         }
 
         QString fileName = deepCopy( m_fileList.front() );
-        m_fileList.pop_front();
+	m_currentFile = fileName;
+	m_fileList.pop_front();
 
         m_mutex.unlock();
 
@@ -379,9 +380,11 @@ void BackgroundParser::run()
 
             KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName, unit->problems) );
 
+	    m_currentFile = QString::null;
+	    
 	    if( m_consumed )
 	        m_consumed->wait();
-
+	    
 	    if( m_fileList.isEmpty() )
 	        m_isEmpty.wakeAll();
 	}
