@@ -20,10 +20,14 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <ktmainwindow.h>
+#include <kparts/event.h>
+
 #include "mdimainfrmcomponent.h"
 #include "mdiframe.h"
 #include "mdiview.h"
 #include "main.h"
+
+//---------------------------------------------------------------------------
 
 MdiMainFrmComponent::MdiMainFrmComponent(QObject *parent, const char *name)
     : KDevViewHandler(parent, name)
@@ -33,20 +37,27 @@ MdiMainFrmComponent::MdiMainFrmComponent(QObject *parent, const char *name)
   setXMLFile("kdevmdimainfrmcomponent.rc");
 }
 
+//---------------------------------------------------------------------------
+
 MdiMainFrmComponent::~MdiMainFrmComponent()
 {
 }
+
+//---------------------------------------------------------------------------
 
 void MdiMainFrmComponent::setupGUI()
 {
   kdDebug(9005) << "running MdiMainFrmComponent::setupGUI..." << endl;
 
+  // embed the MDI mainframe in KDevelop
   m_mainframe = new MdiFrame(0L);
   emit embedWidget(m_mainframe, AreaOfDocumentViews, i18n("QextMdi-MainFrm"), i18n("source file views area"));
 
+  // give the application menubar to QextMDI
   KTMainWindow* tlw = (KTMainWindow*) m_mainframe->topLevelWidget();
   m_mainframe->setMenuForSDIModeSysButtons( (QMenuBar*) tlw->menuBar());
 
+  // construct 'Window' popupmenu of KDevelop by actions
   KAction *action;
   action = new KAction( i18n("&Close"), 0, m_mainframe, SLOT(closeActiveView()),
                         actionCollection(), "close_view");
@@ -87,31 +98,72 @@ void MdiMainFrmComponent::setupGUI()
                         actionCollection(), "childframe_mode");
   action->setStatusText( i18n("Docks all document views to the views area of KDevelop") );
 
-  action = new KAction( i18n("Test"), 0, 0, SLOT(test()),
-                        actionCollection());
-  m_viewList.append(action);
-  action = new KAction( i18n("Test2"), 0, m_mainframe, SLOT(switchToToplevelMode()),
-                        actionCollection());
-  m_viewsDockList.append(action);
-  plugActionList( QString::fromLatin1("viewlist"), m_viewList );
-  plugActionList( QString::fromLatin1("views_docklist"), m_viewsDockList );
-
-  action = new KAction( i18n("xxx"), 0, m_mainframe, SLOT(switchToToplevelMode()),
-                        actionCollection(), "window");
+//  action = new KAction( i18n("Test"), 0, 0, SLOT(test()),
+//                        actionCollection());
+//  m_viewList.append(action);
+//  action = new KAction( i18n("Test2"), 0, m_mainframe, SLOT(switchToToplevelMode()),
+//                        actionCollection());
+//  m_viewsDockList.append(action);
+//  plugActionList( QString::fromLatin1("viewlist"), m_viewList );
+//  plugActionList( QString::fromLatin1("views_docklist"), m_viewsDockList );
+//
+//  action = new KAction( i18n("xxx"), 0, m_mainframe, SLOT(switchToToplevelMode()),
+//                        actionCollection(), "window");
 }
+
+//---------------------------------------------------------------------------
 
 void MdiMainFrmComponent::projectClosed()
 {
   m_mainframe->closeAllViews();
 }
 
+//---------------------------------------------------------------------------
+
 void MdiMainFrmComponent::addView( QWidget* w)
 {
   kdDebug(9005) << "running MdiMainFrmComponent::addView..." << endl;
+
   MdiView* wrapper = new MdiView( w, "New Document");
-  m_mainframe->addWindow( wrapper);
+  int flags = QextMdi::StandardAdd;
+  if (m_mainframe->isInMaximizedChildFrmMode())
+    flags |= QextMdi::Maximize;
+  if (m_mainframe->isInTopLevelMode())
+    flags |= QextMdi::Detach;
+
+  m_mainframe->addWindow( wrapper, flags);
 }
+
+//---------------------------------------------------------------------------
 
 void MdiMainFrmComponent::removeView( QWidget* w)
 {
+  kdDebug(9005) << "running MdiMainFrmComponent::removeView..." << endl;
+
+  if (!w->parentWidget())
+    return;
+  if (!w->parentWidget()->inherits("QextMdiChildView"))
+    return;
+
+  QextMdiChildView* pParent = (QextMdiChildView*) w->parentWidget();
+  pParent->hide();
+
+  m_mainframe->removeWindowFromMdi( pParent);  // Note: the inner widget w keeps still alive!
 }
+
+//---------------------------------------------------------------------------
+
+bool MdiMainFrmComponent::event( QEvent *e)
+{
+  kdDebug(9005) << "running MdiMainFrmComponent::event..." << endl;
+
+  bool ret = KDevViewHandler::event( e);
+  if (KParts::GUIActivateEvent::test( e)) {
+    KParts::GUIActivateEvent* ae = (KParts::GUIActivateEvent*) e;
+    if (ae->activated()) {
+      // rebuild the action lists
+    }
+  }
+  return ret;
+}
+

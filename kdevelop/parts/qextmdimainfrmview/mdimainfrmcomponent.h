@@ -35,6 +35,7 @@ public:
   // changes are accepted. Maybe this could be done through
   // the component system (but maybe not ;-)
 //  void configurationChanged();
+  virtual bool event( QEvent *);
 
 public slots:
   virtual void addView( QWidget*);
