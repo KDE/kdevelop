@@ -485,6 +485,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 }
 
 void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
+  filename = QFileInfo(filename).absFilePath();
   if (edit_widget)
     lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
@@ -1144,14 +1145,7 @@ void CKDevelop::readOptions(){
     slotURLSelected(browser_widget,filename,1,"test");
   }
   else{
-    QString file;
-    // first try the locale setting
-    file = locate("html",KGlobal::locale()->language()+"/kdevelop/welcome/index.html");
-
-    if( !QFileInfo( file ).exists() ){
-      // not found: use the default
-      file = locate("html","default/kdevelop/welcome/index.html");
-    }
+    QString file = CToolClass::locatehtml("kdevelop/welcome/index.html");
     slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
 

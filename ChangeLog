@@ -1,4 +1,10 @@
-1999-09-24 The KDevelop Team>
+1999-09-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed some KMessageBoxes which have caption and text
+	  swapped compared to QMessageBox
+        * Centralized locatehtml() functions into CToolClass
+        * new automake framework
+
+1999-09-24 The KDevelop Team
 	* KDevelop 1.0 Beta3 released
 
 1999-09-23 Walter Tasin  <tasin@e-technik.fh-muenchen.de>

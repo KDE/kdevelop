@@ -32,7 +32,8 @@ public:
   static bool searchInstProgram(QString name);
   /** return the absolute filename if found, otherwise ""*/
   static QString findProgram(QString name);
-  
+
+  static QString locatehtml(const QString &filename);
 };
 
 #endif

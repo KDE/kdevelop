@@ -21,6 +21,8 @@
 #include <qfile.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 #include "ctoolclass.h"
 #include "misc.h"
 
@@ -81,3 +83,11 @@ QString CToolClass::findProgram(QString name){
   return "";
 }
 
+
+QString CToolClass::locatehtml(const QString &filename)
+{
+    QString path = locate("html", KGlobal::locale()->language() + '/' + filename);
+    if (path.isNull())
+        path = locate("html", "default/" + filename);
+    return path;
+}

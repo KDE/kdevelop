@@ -574,7 +574,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   // save bugreport-email
   BugEmail=bug_email;
 
-  KMessageBox::information(0, "Bugreport Dialog",
+  KMessageBox::information(0, 
                            i18n("Please remember writing your bugreport in english,\n"
                                 "so every developer is able to understand it. Thanks!"));
 
@@ -606,7 +606,7 @@ void CBugReportDlg::ok() {
   
   if (generateEmail()) {
     if(sendEmail()){
-      KMessageBox::information(this, i18n("Bug Report"),
+      KMessageBox::information(this, 
                                i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
     }
   }

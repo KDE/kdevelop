@@ -313,7 +313,7 @@ void CNewFileDlg::slotOKClicked(){
   complete_filename = location() + filename;
   
   if(QFile::exists(complete_filename)){
-    if(KMessageBox::warningYesNo(0,i18n("Files exists!"),
+    if(KMessageBox::warningYesNo(0,
 		      i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?")) == KMessageBox::No){
       return;
     }

@@ -771,9 +771,8 @@ void CKDevInstall::slotAuto() // proceed >>
 	if(!qt_test){
   	  config->setGroup("Doc_Location");
 	  config->writeEntry("doc_qt",qt);
-	  KMessageBox::information(this, i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
-					 +i18n("\n\nThe correct path has been set.\n "),
-                                         i18n("Qt Documentation found"));
+	  KMessageBox::information(this, i18n("\nThe Qt-Documentation has been found at:\n\n%1"
+                                              "\n\nThe correct path has been set.\n ").arg(qt));
 	}
   	else{  // return to the setup to set it manually ?
 	  if (KMessageBox::questionYesNo(this, i18n("\nThe Qt-library documentation could not\n"
@@ -820,9 +819,8 @@ void CKDevInstall::slotAuto() // proceed >>
   }
   
   if (kde_test) {
-    KMessageBox::information(0,i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
-				    +"\n\nThe correct path has been set.\n "),
-                                    i18n("KDE-Library Documentation found"));
+    KMessageBox::information(0, i18n("\nThe KDE-Library-Documentation has been found at:\n\n%1"
+				     "\n\nThe correct path has been set.\n").arg(dir));
      slotProcessExited(0);
      return; //ok, nothing more to do, we are leaving	
   }

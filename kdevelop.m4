@@ -120,16 +120,3 @@ if test "$enable_kdoc2" = "yes"; then
   AC_DEFINE_UNQUOTED(WITH_KDOC2)
 fi
 ])
-
-
-dnl
-dnl Needed to make am_edit work
-dnl
-dnl AC_DEFUN(KDE_CHECK_FINAL,
-dnl [
-dnl  KDE_USE_FINAL_TRUE="#"
-dnl  KDE_USE_FINAL_FALSE=""
-dnl  AC_SUBST(KDE_USE_FINAL_TRUE)
-dnl  AC_SUBST(KDE_USE_FINAL_FALSE)
-dnl ])   
-

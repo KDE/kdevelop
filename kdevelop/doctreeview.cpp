@@ -34,6 +34,7 @@
 
 #include "cdoctreepropdlg.h"
 #include "cproject.h"
+#include "ctoolclass.h"
 #include "doctreeview.h"
 
 #if HAVE_CONFIG_H
@@ -160,13 +161,7 @@ private:
 
 QString DocTreeKDevelopBook::locatehtml(const QString &filename)
 {
-    QString path = locate("html", KGlobal::locale()->language()+"/kdevelop/"+filename);
-    if (path.isNull())
-        path = locate("html", "default/kdevelop/"+filename);
-    cerr << "PATH" << path;
-    return path;
-
-
+    return CToolClass::locatehtml("kdevelop/" + filename);
 }
 
 

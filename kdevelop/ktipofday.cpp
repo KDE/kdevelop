@@ -22,9 +22,10 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <kapp.h>
-#include "ktipofday.h"
 #include <klocale.h>
 #include <kglobal.h>
+#include "ctoolclass.h"
+#include "ktipofday.h"
 
 
 
@@ -156,14 +157,8 @@ void KTipofDay::slotOK()
 void KTipofDay::slotNext()
 {
 
-  QString file;
-
-  file = locate("html",KGlobal::locale()->language() + "/kdevelop/tip.database");
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = locate("html","/default/kdevelop/tip.database");
-  }
-  if( !QFileInfo( file ).exists() ){
+  QString file = CToolClass::locatehtml("kdevelop/tip.database");
+  if (file.isNull()) {
     tip_label->setText(i18n("Tipdatabase not found ! Please check your installation."));
     return;
   }

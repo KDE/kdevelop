@@ -318,7 +318,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   if(actual_info == 0) return false; //oops :-(
 
   if(file_info.lastModified() != actual_info->last_modified){
-    if (KMessageBox::questionYesNo(this, i18n("File modified"),
+    if (KMessageBox::questionYesNo(this, 
                                    i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
         == QMessageBox::No)
         return false;
@@ -1593,19 +1593,10 @@ void CKDevelop::slotHelpSearch(){
 }
 
 
-static QString locatehtml(const QString &filename)
-{
-    QString path = locate("html", KGlobal::locale()->language() + '/' + filename);
-    if (path.isNull())
-        path = locate("html", "default/" + filename);
-    return path;
-}
-
-
 void CKDevelop::slotHelpReference(){
-  QString file = locatehtml("kdevelop/reference/C/cref.html");
+  QString file = CToolClass::locatehtml("kdevelop/reference/C/cref.html");
   if (file.isNull())
-      file = locatehtml("kdevelop/cref.html");
+      file = CToolClass::locatehtml("kdevelop/cref.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 
@@ -1696,12 +1687,12 @@ void CKDevelop::slotHelpManual(){
 }
 
 void CKDevelop::slotHelpContents(){
-  QString file = locatehtml("kdevelop/index.html");
+  QString file = CToolClass::locatehtml("kdevelop/index.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
 
 void CKDevelop::slotHelpTutorial(){
-  QString file = locate("html", "kdevelop/programming/index.html");
+  QString file = CToolClass::locatehtml("kdevelop/programming/index.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 	
 }
@@ -2061,7 +2052,7 @@ void CKDevelop::slotNewLineColumn()
 {
   // if edit_widget isn't shown don't proceed
   if (edit_widget==0l)
-      return false;
+      return;
   QString str = i18n("Line: %1 Col: %2")
       .arg(edit_widget->currentLine()+1)
       .arg(edit_widget->currentColumn()+1);
