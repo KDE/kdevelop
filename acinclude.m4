@@ -1,38 +1,38 @@
-##    -*- shell-script -*-
+##   -*- shell-script -*-
 
-##    This file is part of the KDE libraries/packages
-##    Copyright (C) 1997 Janos Farkas (chexum@shadow.banki.hu)
-##              (C) 1997 Stephan Kulow (coolo@kde.org)
+dnl    This file is part of the KDE libraries/packages
+dnl    Copyright (C) 1997 Janos Farkas (chexum@shadow.banki.hu)
+dnl              (C) 1997,98,99 Stephan Kulow (coolo@kde.org)
 
-##    This file is free software; you can redistribute it and/or
-##    modify it under the terms of the GNU Library General Public
-##    License as published by the Free Software Foundation; either
-##    version 2 of the License, or (at your option) any later version.
+dnl    This file is free software; you can redistribute it and/or
+dnl    modify it under the terms of the GNU Library General Public
+dnl    License as published by the Free Software Foundation; either
+dnl    version 2 of the License, or (at your option) any later version.
 
-##    This library is distributed in the hope that it will be useful,
-##    but WITHOUT ANY WARRANTY; without even the implied warranty of
-##    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-##    Library General Public License for more details.
+dnl    This library is distributed in the hope that it will be useful,
+dnl    but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+dnl    Library General Public License for more details.
 
-##    You should have received a copy of the GNU Library General Public License
-##    along with this library; see the file COPYING.LIB.  If not, write to
-##    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-##    Boston, MA 02111-1307, USA.        
+dnl    You should have received a copy of the GNU Library General Public License
+dnl    along with this library; see the file COPYING.LIB.  If not, write to
+dnl    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+dnl    Boston, MA 02111-1307, USA.        
 
-## IMPORTANT NOTE:
-## Please do not modify this file unless you expect your modifications to be
-## carried into every other module in the repository. If you decide that you
-## really want to modify it, contact coolo@kde.org mentioning that you have
-## and that the modified file should be committed to every module.
-##
-## Single-module modifications are best placed in configure.in for kdelibs
-## and kdebase or configure.in.1 if present.
+dnl IMPORTANT NOTE:
+dnl Please do not modify this file unless you expect your modifications to be
+dnl carried into every other module in the repository. If you decide that you
+dnl really want to modify it, contact coolo@kde.org mentioning that you have
+dnl and that the modified file should be committed to every module.
+dnl
+dnl Single-module modifications are best placed in configure.in for kdelibs
+dnl and kdebase or configure.in.in if present.
 
 
-## ------------------------------------------------------------------------
-## Find a file (or one of more files in a list of dirs)
-## ------------------------------------------------------------------------
-##
+dnl ------------------------------------------------------------------------
+dnl Find a file (or one of more files in a list of dirs)
+dnl ------------------------------------------------------------------------
+dnl
 AC_DEFUN(AC_FIND_FILE,
 [
 $3=NO
@@ -48,114 +48,121 @@ do
 done
 ])
 
-## ------------------------------------------------------------------------
-## Find the meta object compiler in the PATH, in $QTDIR/bin, and some
-## more usual places
-## ------------------------------------------------------------------------
-##
+AC_DEFUN(KDE_FIND_PATH,
+[
+   AC_MSG_CHECKING([for $1])
+   AC_CACHE_VAL(kde_cv_path_$1,
+   [
+     kde_cv_path_$1="NONE"
+     if test -n "$$2"; then
+        kde_cv_path_$1="$$2";
+     else
+	dirs="$3"
+	kde_save_IFS=$IFS
+	IFS=':'
+	for dir in $PATH; do
+	  dirs="$dirs $dir"
+        done
+	IFS=$kde_save_IFS
+
+        for dir in $dirs; do
+	  if test -x "$dir/$1"; then
+	    if test -n "$5"
+	    then
+              evalstr="$dir/$1 $5 2>&1 "
+	      if eval $evalstr; then
+                kde_cv_path_$1="$dir/$1"
+                break
+	      fi
+            else
+		kde_cv_path_$1="$dir/$1"
+                break
+	    fi
+          fi
+	done
+
+     fi
+         
+   ])
+
+   if test -z "$kde_cv_path_$1" || test "$kde_cv_path_$1" = "NONE"; then
+      AC_MSG_RESULT(not found)
+      $4
+   else 
+     AC_MSG_RESULT($kde_cv_path_$1)
+     $2=$kde_cv_path_$1
+   fi
+])
+
+AC_DEFUN(KDE_MOC_ERROR_MESSAGE,
+[
+    AC_MSG_ERROR([No Qt meta object compiler (moc) found!
+Please check whether you installed Qt correctly. 
+You need to have a running moc binary.
+configure tried to run $ac_cv_path_moc and the test didn't
+succeed. If configure shouldn't have tried this one, set
+the environment variable MOC to the right one before running
+configure.
+])
+])
+
+dnl ------------------------------------------------------------------------
+dnl Find the meta object compiler in the PATH, in $QTDIR/bin, and some
+dnl more usual places
+dnl ------------------------------------------------------------------------
+dnl
 AC_DEFUN(AC_PATH_QT_MOC,
 [
-AC_PATH_PROG(MOC, moc, /usr/bin/moc,
- $ac_qt_bindir $QTDIR/bin $PATH /usr/bin /usr/X11R6/bin /usr/lib/qt/bin /usr/local/qt/bin)
+   KDE_FIND_PATH(moc, MOC, [$ac_qt_bindir $QTDIR/bin \
+	    /usr/bin /usr/X11R6/bin /usr/lib/qt/bin \
+	    /usr/local/qt/bin], [KDE_MOC_ERROR_MESSAGE])
+ 
+   if test -z "$MOC"; then
+     if test -n "$ac_cv_path_moc"; then
+       output=`eval "$ac_cv_path_moc --help 2>&1 | sed -e '1q' | grep Qt"`
+     fi
+     echo "configure:__oline__: tried to call $ac_cv_path_moc --help 2>&1 | sed -e '1q' | grep Qt" >&AC_FD_CC
+     echo "configure:__oline__: moc output: $output" >&AC_FD_CC
+
+     if test -z "$output"; then
+       KDE_MOC_ERROR_MESSAGE
+    fi
+   fi
+   
+   AC_SUBST(MOC)
 ])
 
 AC_DEFUN(KDE_REPLACE_ROOT,
   $1=`echo "$$1" | sed -e "s#^/#\$\{install_root\}/#"`
 )
 
-AC_DEFUN(AC_CREATE_KFSSTND,
+AC_DEFUN(KDE_CHECK_PATH_HEADERS,
 [
-AC_REQUIRE([AC_CHECK_RPATH])
-AC_REQUIRE([AC_CHECK_BOOL])
-
-if test "$1" = "default"; then
-
-  AC_MSG_CHECKING(for KDE paths)
-
-  if test -z "$kde_htmldir"; then
-    kde_htmldir="\$(prefix)/share/doc/HTML"
-  fi
-  if test -z "$kde_appsdir"; then
-    kde_appsdir="\$(prefix)/share/applnk"
-  fi
-  if test -z "$kde_icondir"; then
-    kde_icondir="\$(prefix)/share/icons"
-  fi
-  if test -z "$kde_sounddir"; then
-    kde_sounddir="\$(prefix)/share/sounds"
-  fi
-  if test -z "$kde_datadir"; then
-    kde_datadir="\$(prefix)/share/apps"
-  fi
-  if test -z "$kde_locale"; then
-    kde_locale="\$(prefix)/share/locale"
-  fi
-  if test -z "$kde_cgidir"; then
-    kde_cgidir="\$(exec_prefix)/cgi-bin"
-  fi
-  if test -z "$kde_confdir"; then
-    kde_confdir="\$(prefix)/share/config"
-  fi
-  if test -z "$kde_mimedir"; then
-    kde_mimedir="\$(prefix)/share/mimelnk"
-  fi
-  if test -z "$kde_toolbardir"; then
-    kde_toolbardir="\$(prefix)/share/toolbar"
-  fi
-  if test -z "$kde_wallpaperdir"; then
-    kde_wallpaperdir="\$(prefix)/share/wallpapers"
-  fi
-  if test -z "$kde_bindir"; then
-    kde_bindir="\$(exec_prefix)/bin"
-  fi
-  if test -z "$kde_partsdir"; then
-    kde_partsdir="\$(exec_prefix)/parts"
-  fi
-  AC_MSG_RESULT(defaults)	
-
-else 
-
-AC_CACHE_VAL(kde_cv_all_paths,
-[
-AC_MSG_CHECKING([for kde headers installed])
-AC_LANG_CPLUSPLUS
+    AC_MSG_CHECKING([for KDE headers installed])
+    AC_LANG_CPLUSPLUS
 cat > conftest.$ac_ext <<EOF
 #include <stdio.h>
 #include "confdefs.h"
-#include "config.h.bot"
 #include <kapp.h>
 
 int main() {
-printf("kde_htmldir=\\"%s\\"\n", KApplication::kde_htmldir().data());
-printf("kde_appsdir=\\"%s\\"\n", KApplication::kde_appsdir().data());
-printf("kde_icondir=\\"%s\\"\n", KApplication::kde_icondir().data());
-printf("kde_sounddir=\\"%s\\"\n", KApplication::kde_sounddir().data());
-printf("kde_datadir=\\"%s\\"\n", KApplication::kde_datadir().data());
-printf("kde_locale=\\"%s\\"\n", KApplication::kde_localedir().data());
-printf("kde_cgidir=\\"%s\\"\n", KApplication::kde_cgidir().data());
-printf("kde_confdir=\\"%s\\"\n", KApplication::kde_configdir().data());
-printf("kde_mimedir=\\"%s\\"\n", KApplication::kde_mimedir().data());
-printf("kde_toolbardir=\\"%s\\"\n", KApplication::kde_toolbardir().data());
-printf("kde_wallpaperdir=\\"%s\\"\n", KApplication::kde_wallpaperdir().data());
-printf("kde_bindir=\\"%s\\"\n", KApplication::kde_bindir().data());
-printf("kde_partsdir=\\"%s\\"\n", KApplication::kde_partsdir().data());
-return 0;
-}
+    printf("kde_htmldir=\\"%s\\"\n", KApplication::kde_htmldir().data());
+    printf("kde_appsdir=\\"%s\\"\n", KApplication::kde_appsdir().data());
+    printf("kde_icondir=\\"%s\\"\n", KApplication::kde_icondir().data());
+    printf("kde_sounddir=\\"%s\\"\n", KApplication::kde_sounddir().data());
+    printf("kde_datadir=\\"%s\\"\n", KApplication::kde_datadir().data());
+    printf("kde_locale=\\"%s\\"\n", KApplication::kde_localedir().data());
+    printf("kde_cgidir=\\"%s\\"\n", KApplication::kde_cgidir().data());
+    printf("kde_confdir=\\"%s\\"\n", KApplication::kde_configdir().data());
+    printf("kde_mimedir=\\"%s\\"\n", KApplication::kde_mimedir().data());
+    printf("kde_toolbardir=\\"%s\\"\n", KApplication::kde_toolbardir().data());
+    printf("kde_wallpaperdir=\\"%s\\"\n", 
+	KApplication::kde_wallpaperdir().data());
+    printf("kde_bindir=\\"%s\\"\n", KApplication::kde_bindir().data());
+    printf("kde_partsdir=\\"%s\\"\n", KApplication::kde_partsdir().data());
+    return 0;
+    }
 EOF
-
-if test -n "$kde_libraries"; then
-  KDE_TEST_RPATH="-rpath $kde_libraries"
-fi
-
-if test -n "$qt_libraries"; then
-  KDE_TEST_RPATH="$KDE_TEST_RPATH -rpath $qt_libraries"
-fi
-
-if test -n "$x_libraries"; then
-  KDE_TEST_RPATH="$KDE_TEST_RPATH -rpath $x_libraries"
-fi
-
-KDE_TEST_RPATH="$KDE_TEST_RPATH $KDE_EXTRA_RPATH"
 
 ac_compile='${CXX-g++} -c $CXXFLAGS $all_includes $CPPFLAGS conftest.$ac_ext'
 if AC_TRY_EVAL(ac_compile); then
@@ -164,9 +171,103 @@ else
   AC_MSG_ERROR([your system is not able to compile a small KDE application!
 Check, if you installed the KDE header files correctly.])
 fi
+])
 
-AC_MSG_CHECKING([for kde libraries installed])
-ac_link='/bin/sh ./libtool --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext $LIBS -lkdecore -lqt -lXext -lX11 $LIBSOCKET $KDE_TEST_RPATH 1>&5'
+AC_DEFUN(AC_CREATE_KFSSTND,
+[
+AC_REQUIRE([AC_CHECK_RPATH])
+AC_REQUIRE([AC_CHECK_BOOL])
+
+AC_MSG_CHECKING([for KDE paths])
+kde_result=""
+
+AC_CACHE_VAL(kde_cv_all_paths,
+[
+if test "$1" = "default"; then
+
+  if test -z "$kde_htmldir"; then
+    kde_htmldir='\$(prefix)/share/doc/HTML'
+  fi
+  if test -z "$kde_appsdir"; then
+    kde_appsdir='\$(prefix)/share/applnk'
+  fi
+  if test -z "$kde_icondir"; then
+    kde_icondir='\$(prefix)/share/icons'
+  fi
+  if test -z "$kde_sounddir"; then
+    kde_sounddir='\$(prefix)/share/sounds'
+  fi
+  if test -z "$kde_datadir"; then
+    kde_datadir='\$(prefix)/share/apps'
+  fi
+  if test -z "$kde_locale"; then
+    kde_locale='\$(prefix)/share/locale'
+  fi
+  if test -z "$kde_cgidir"; then
+    kde_cgidir='\$(exec_prefix)/cgi-bin'
+  fi
+  if test -z "$kde_confdir"; then
+    kde_confdir='\$(prefix)/share/config'
+  fi
+  if test -z "$kde_mimedir"; then
+    kde_mimedir='\$(prefix)/share/mimelnk'
+  fi
+  if test -z "$kde_toolbardir"; then
+    kde_toolbardir='\$(prefix)/share/toolbar'
+  fi
+  if test -z "$kde_wallpaperdir"; then
+    kde_wallpaperdir='\$(prefix)/share/wallpapers'
+  fi
+  if test -z "$kde_bindir"; then
+    kde_bindir='\$(exec_prefix)/bin'
+  fi
+  if test -z "$kde_partsdir"; then
+    kde_partsdir='\$(exec_prefix)/parts'
+  fi
+
+  kde_cv_all_paths="kde_have_all_paths=\"yes\" \
+	kde_htmldir=\"$kde_htmldir\" \
+	kde_appsdir=\"$kde_appsdir\" \
+	kde_icondir=\"$kde_icondir\" \
+	kde_sounddir=\"$kde_sounddir\" \
+	kde_datadir=\"$kde_datadir\" \
+	kde_locale=\"$kde_locale\" \
+	kde_cgidir=\"$kde_cgidir\" \
+	kde_confdir=\"$kde_confdir\" \
+	kde_mimedir=\"$kde_mimedir\" \
+	kde_toolbardir=\"$kde_toolbardir\" \
+	kde_wallpaperdir=\"$kde_wallpaperdir\" \
+	kde_bindir=\"$kde_bindir\" \
+	kde_partsdir=\"$kde_partsdir\" \
+	kde_result=defaults"
+
+else 
+
+AC_MSG_RESULT([compiling])
+
+KDE_CHECK_PATH_HEADERS
+
+KDE_TEST_RPATH=
+
+if test -n "$USE_RPATH"; then
+
+  if test -n "$kde_libraries"; then
+    KDE_TEST_RPATH="-rpath $kde_libraries"
+  fi
+
+  if test -n "$qt_libraries"; then
+    KDE_TEST_RPATH="$KDE_TEST_RPATH -rpath $qt_libraries"
+  fi
+
+  if test -n "$x_libraries"; then
+    KDE_TEST_RPATH="$KDE_TEST_RPATH -rpath $x_libraries"
+  fi
+
+  KDE_TEST_RPATH="$KDE_TEST_RPATH $KDE_EXTRA_RPATH"
+fi
+
+AC_MSG_CHECKING([for KDE libraries installed])
+ac_link='/bin/sh ./libtool --silent --mode=link ${CXX-g++} -o conftest $CXXFLAGS $all_includes $CPPFLAGS $LDFLAGS $all_libraries conftest.$ac_ext $LIBS -lkdecore $LIBQT $KDE_TEST_RPATH 1>&5'
 
 if AC_TRY_EVAL(ac_link) && test -s conftest; then 
   AC_MSG_RESULT(yes)
@@ -176,14 +277,13 @@ Check, if your compiler is installed correctly and if you have used the
 same compiler to compile Qt and kdelibs as you did use now])
 fi
 
-AC_MSG_CHECKING([for KDE paths])
-if eval `./conftest 2>&5`; then
-  AC_MSG_RESULT(done)
+if eval `KDEDIR= ./conftest 2>&5`; then
+  kde_result=done
 else
-  AC_MSG_RESULT(problems)
+  kde_result=problems
 fi
 
-./conftest 2> /dev/null >&5 # make an echo for config.log
+KDEDIR= ./conftest 2> /dev/null >&5 # make an echo for config.log
 kde_have_all_paths=yes
 AC_LANG_CPLUSPLUS
 
@@ -201,10 +301,12 @@ kde_cv_all_paths="kde_have_all_paths=\"yes\" \
 	kde_toolbardir=\"$kde_toolbardir\" \
 	kde_wallpaperdir=\"$kde_wallpaperdir\" \
 	kde_bindir=\"$kde_bindir\" \
-	kde_partsdir=\"$kde_partsdir\""
+	kde_partsdir=\"$kde_partsdir\" \
+	kde_result=$kde_result"
 fi
 rm -fr conftest*
 
+fi
 ])
 
 eval "$kde_cv_all_paths"
@@ -219,7 +321,12 @@ if test -z "$kde_htmldir" || test -z "$kde_appsdir" ||
   kde_have_all_paths=no
   AC_MSG_ERROR([configure could not run a little KDE program to test the environment. 
 Since it had compiled and linked before, it must be a strange problem on your system.
-Look at config.log for details. If you are not able to fix this, please contact Stephan Kulow <coolo@kde.org>.])
+Look at config.log for details. If you are not able to fix this, look at
+http://www.kde.org/faq/installation.html or any www.kde.org mirror.
+(If you're using an egcs version on Linux, you may update binutils!)
+])
+else
+  AC_MSG_RESULT($kde_result)
 fi
 
 if test -n "$install_root"; then
@@ -237,8 +344,6 @@ if test -n "$install_root"; then
   KDE_REPLACE_ROOT(kde_bindir)
   KDE_REPLACE_ROOT(kde_partsdir)
   AC_SUBST(install_root)
-fi
-
 fi
 
 bindir=$kde_bindir
@@ -273,14 +378,15 @@ AC_DEFUN(KDE_MISC_TESTS,
    AC_CHECK_LIB(crypt, main, [LIBCRYPT="-lcrypt"]) dnl for BSD
    AC_SUBST(LIBCRYPT)
    AC_CHECK_KSIZE_T
+   AC_LANG_C
    AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
    if test $ac_cv_lib_dnet_dnet_ntoa = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
         [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
    fi
-   AC_CHECK_FUNC(gethostbyname)
-   if test $ac_cv_func_gethostbyname = no; then
-     AC_CHECK_LIB(nsl, gethostbyname, X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl")
+   AC_CHECK_FUNC(inet_ntoa)
+   if test $ac_cv_func_inet_ntoa = no; then
+     AC_CHECK_LIB(nsl, inet_ntoa, X_EXTRA_LIBS="$X_EXTRA_LIBS -lnsl")
    fi
    AC_CHECK_FUNC(connect)
    if test $ac_cv_func_connect = no; then
@@ -299,7 +405,7 @@ AC_DEFUN(KDE_MISC_TESTS,
      AC_CHECK_LIB(ipc, shmat, X_EXTRA_LIBS="$X_EXTRA_LIBS -lipc")
    fi
 
-   LIBSOCKET=$X_EXTRA_LIBS
+   LIBSOCKET="$X_EXTRA_LIBS"
    AC_SUBST(LIBSOCKET)
    AC_SUBST(X_EXTRA_LIBS)
    AC_CHECK_LIB(ucb, killpg, [LIBUCB="-lucb"]) dnl for Solaris2.4
@@ -316,52 +422,65 @@ AC_DEFUN(KDE_MISC_TESTS,
 
 ])
 
-## ------------------------------------------------------------------------
-## Find the header files and libraries for X-Windows. Extended the 
-## macro AC_PATH_X
-## ------------------------------------------------------------------------
-##
+dnl ------------------------------------------------------------------------
+dnl Find the header files and libraries for X-Windows. Extended the 
+dnl macro AC_PATH_X
+dnl ------------------------------------------------------------------------
+dnl
 AC_DEFUN(K_PATH_X,
 [
+AC_REQUIRE([AC_PROG_CPP])
 AC_MSG_CHECKING(for X)
+AC_LANG_SAVE
+AC_LANG_C
 AC_CACHE_VAL(ac_cv_have_x,
 [# One or both of the vars are not set, and there is no cached value.
-ac_x_includes=NO ac_x_libraries=NO
+if test "{$x_includes+set}" = set || test "$x_includes" = NONE; then
+   ac_x_includes=NO
+else
+   ac_x_includes=$x_includes
+fi
+if test "{$x_libraries+set}" = set || test "$x_libraries" = NONE; then
+   ac_x_libraries=NO
+else
+   ac_x_libraries=$x_libraries
+fi
 AC_PATH_X_DIRECT
 AC_PATH_X_XMKMF
-if test "$ac_x_includes" = NO || test "$ac_x_libraries" = NO; then
+if test "$ac_x_includes" = NO || test -z "$ac_x_includes"; then
   AC_MSG_ERROR([Can't find X includes. Please check your installation and add the correct paths!])
-else
-  # Record where we found X for the cache.
-  ac_cv_have_x="have_x=yes \
-                ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
-fi])dnl
+fi
+
+if test "$ac_x_libraries" = NO || test -z "$ac_x_libraries"; then
+  AC_MSG_ERROR([Can't find X libraries. Please check your installation and add the correct paths!])
+fi
+
+# Record where we found X for the cache.
+ac_cv_have_x="have_x=yes \
+         ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
+])dnl
 eval "$ac_cv_have_x"
  
 if test "$have_x" != yes; then
   AC_MSG_RESULT($have_x)
   no_x=yes
 else
-  # If each of the values was on the command line, it overrides each guess.
-  test "x$x_includes" = xNONE && x_includes=$ac_x_includes
-  test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
-  # Update the cache value to reflect the command line values.
-  ac_cv_have_x="have_x=yes \
-                ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
-  AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
+  AC_MSG_RESULT([libraries $ac_x_libraries, headers $ac_x_includes])
 fi
 
-if test -z "$x_includes" || test "x$x_includes" = xNONE; then
+if test -z "$ac_x_includes" || test "x$ac_x_includes" = xNONE; then
   X_INCLUDES=""
   x_includes="."; dnl better than nothing :-
  else
+  x_includes=$ac_x_includes
   X_INCLUDES="-I$x_includes"
 fi
 
-if test -z "$x_libraries" || test "x$x_libraries" = xNONE; then
+if test -z "$ac_x_libraries" || test "x$ac_x_libraries" = xNONE; then
   X_LDFLAGS=""
   x_libraries="/usr/lib"; dnl better than nothing :-
  else
+  x_libraries=$ac_x_libraries
   X_LDFLAGS="-L$x_libraries"
 fi
 all_includes="$all_includes $X_INCLUDES"  
@@ -371,6 +490,11 @@ AC_SUBST(X_INCLUDES)
 AC_SUBST(X_LDFLAGS)
 AC_SUBST(x_libraries)
 AC_SUBST(x_includes)
+
+LIB_X11='-lX11 $(LIBSOCKET)'
+AC_SUBST(LIB_X11)
+
+AC_LANG_RESTORE
 ])
 
 AC_DEFUN(KDE_PRINT_QT_PROGRAM,
@@ -378,12 +502,16 @@ AC_DEFUN(KDE_PRINT_QT_PROGRAM,
 AC_LANG_CPLUSPLUS
 cat > conftest.$ac_ext <<EOF
 #include "confdefs.h"
-#include <qmovie.h>
+#include <qglobal.h>
 #include <qapplication.h>
+#include <qobjcoll.h>
+
+#if ! (QT_VERSION >= 142)
+#error 1
+#endif
+
 int main() {
-  QMovie m;
-  m.setSpeed(20);
-  return 0;
+    return 0;
 }
 EOF
 ])
@@ -436,29 +564,30 @@ else
 fi
 ])
 
-## ------------------------------------------------------------------------
-## Try to find the Qt headers and libraries.
-## $(QT_LDFLAGS) will be -Lqtliblocation (if needed)
-## and $(QT_INCLUDES) will be -Iqthdrlocation (if needed)
-## ------------------------------------------------------------------------
-##
+dnl ------------------------------------------------------------------------
+dnl Try to find the Qt headers and libraries.
+dnl $(QT_LDFLAGS) will be -Lqtliblocation (if needed)
+dnl and $(QT_INCLUDES) will be -Iqthdrlocation (if needed)
+dnl ------------------------------------------------------------------------
+dnl
 AC_DEFUN(AC_PATH_QT_1_3,
 [
 AC_REQUIRE([K_PATH_X])
 
 AC_MSG_CHECKING([for Qt])
+LIBQT="-lqt -lXext -lX11 $LIBSOCKET"
 ac_qt_includes=NO ac_qt_libraries=NO ac_qt_bindir=NO
 qt_libraries=""
 qt_includes=""
 AC_ARG_WITH(qt-dir,
-    [  --with-qt-dir           where the root of qt is installed ],
+    [  --with-qt-dir=DIR       where the root of Qt is installed ],
     [  ac_qt_includes="$withval"/include
        ac_qt_libraries="$withval"/lib
        ac_qt_bindir="$withval"/bin
     ])
 
 AC_ARG_WITH(qt-includes,
-    [  --with-qt-includes      where the Qt includes are. ],
+    [  --with-qt-includes=DIR  where the Qt includes are. ],
     [  
        ac_qt_includes="$withval"
     ])
@@ -466,12 +595,10 @@ AC_ARG_WITH(qt-includes,
 kde_qt_libs_given=no
 
 AC_ARG_WITH(qt-libraries,
-    [  --with-qt-libraries     where the Qt library is installed.],
+    [  --with-qt-libraries=DIR where the Qt library is installed.],
     [  ac_qt_libraries="$withval"
        kde_qt_libs_given=yes
     ])
-
-if test "$ac_qt_includes" = NO || test "$ac_qt_libraries" = NO; then
 
 AC_CACHE_VAL(ac_cv_have_qt,
 [#try to guess Qt locations
@@ -495,16 +622,16 @@ for dir in $qt_libdirs; do
   if test=`eval $try 2> /dev/null`; then qt_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 
-dnl AC_FIND_FILE(libqt.so libqt.so.1.40 libqt.so.1.41 libqt.so.1 libqt.a libqt.sl, $qt_libdirs, qt_libdir)
+dnl AC_FIND_FILE(libqt.so libqt.so.1.40 libqt.so.1.41 libqt.so.1.42 libqt.so.1 libqt.a libqt.sl, $qt_libdirs, qt_libdir)
 ac_qt_libraries="$qt_libdir"
 
 ac_cxxflags_safe="$CXXFLAGS"
 ac_ldflags_safe="$LDFLAGS"
 ac_libs_safe="$LIBS"
 
-CXXFLAGS="$CXXFLAGS -I$qt_incdir"
-LDFLAGS="-L$qt_libdir $X_LDFLAGS"
-LIBS="$LIBS -lqt -lXext -lX11 $LIBSOCKET"
+CXXFLAGS="$CXXFLAGS -I$qt_incdir $all_includes"
+LDFLAGS="-L$qt_libdir $all_libraries"
+LIBS="$LIBS $LIBQT"
 
 KDE_PRINT_QT_PROGRAM
 
@@ -533,14 +660,11 @@ if test "$ac_qt_includes" = NO || test "$ac_qt_libraries" = NO; then
     ac_qt_notfound="(libraries)";
   fi
 
-  AC_MSG_ERROR([Qt-1.4 $ac_qt_notfound not found. Please check your installation! ]);
+  AC_MSG_ERROR([Qt >= 1.42 $ac_qt_notfound not found. Please check your installation! ]);
 else
   have_qt="yes"
 fi
 ])
-else
-  have_qt="yes"
-fi
 
 eval "$ac_cv_have_qt"
 
@@ -579,6 +703,10 @@ fi
 AC_SUBST(QT_INCLUDES)
 AC_SUBST(QT_LDFLAGS)
 AC_PATH_QT_MOC
+
+LIB_QT='-lqt $(LIB_X11)'
+AC_SUBST(LIB_QT)
+
 ])
 
 AC_DEFUN(AC_PATH_QT,
@@ -586,14 +714,15 @@ AC_DEFUN(AC_PATH_QT,
 AC_PATH_QT_1_3
 ])
 
-## ------------------------------------------------------------------------
-## Now, the same with KDE
-## $(KDE_LDFLAGS) will be the kdeliblocation (if needed)
-## and $(kde_includes) will be the kdehdrlocation (if needed)
-## ------------------------------------------------------------------------
-##
+dnl ------------------------------------------------------------------------
+dnl Now, the same with KDE
+dnl $(KDE_LDFLAGS) will be the kdeliblocation (if needed)
+dnl and $(kde_includes) will be the kdehdrlocation (if needed)
+dnl ------------------------------------------------------------------------
+dnl
 AC_DEFUN(AC_BASE_PATH_KDE,
 [
+AC_PREREQ([2.13])
 AC_REQUIRE([KDE_MISC_TESTS])
 AC_REQUIRE([AC_PATH_QT])dnl
 AC_MSG_CHECKING([for KDE])
@@ -621,24 +750,26 @@ AC_CACHE_VAL(ac_cv_have_kde,
 
 if test -z "$1"; then
 
-kde_incdirs="$ac_kde_includes /usr/lib/kde/include /usr/local/kde/include /usr/kde/include /usr/include/kde /usr/include /opt/kde/include $x_includes $qt_includes"
+kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/kde/include /usr/include/kde /usr/include /opt/kde/include $x_includes $qt_includes"
 test -n "$KDEDIR" && kde_incdirs="$KDEDIR/include $KDEDIR $kde_incdirs"
+kde_incdirs="$ac_kde_includes $kde_incdirs"
 AC_FIND_FILE(ksock.h, $kde_incdirs, kde_incdir)
 ac_kde_includes="$kde_incdir"
 
 if test -n "$ac_kde_includes" && test ! -r "$ac_kde_includes/ksock.h"; then
   AC_MSG_ERROR([
-in the prefix, you've chosen, are no kde headers installed. This will fail.
+in the prefix, you've chosen, are no KDE headers installed. This will fail.
 So, check this please and use another prefix!])
 fi
 
-kde_libdirs="$ac_kde_libraries /usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib /usr/X11R6/lib /opt/kde/lib /usr/X11R6/kde/lib"
+kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib /usr/X11R6/lib /opt/kde/lib /usr/X11R6/kde/lib"
 test -n "$KDEDIR" && kde_libdirs="$KDEDIR/lib $KDEDIR $kde_libdirs"
+kde_libdirs="$ac_kde_libraries $kde_libdirs"
 AC_FIND_FILE(libkdecore.la, $kde_libdirs, kde_libdir)
 
 if test -n "$ac_kde_libraries" && test ! -r "$ac_kde_libraries/libkdecore.la"; then
 AC_MSG_ERROR([
-in the prefix, you've chosen, are no kde libraries installed. This will fail.
+in the prefix, you've chosen, are no KDE libraries installed. This will fail.
 So, check this please and use another prefix!])
 fi
 ac_kde_libraries="$kde_libdir"
@@ -704,7 +835,7 @@ fi
 AC_SUBST(KDE_LDFLAGS)
 AC_SUBST(KDE_INCLUDES)
 
-KDE_CHECK_EXTRA_LIBS
+AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 
 AC_SUBST(all_includes)
 AC_SUBST(all_libraries)
@@ -714,7 +845,8 @@ AC_SUBST(all_libraries)
 AC_DEFUN(KDE_CHECK_EXTRA_LIBS,
 [
 AC_MSG_CHECKING(for extra includes)
-AC_ARG_WITH(extra-includes, [  --with-extra-includes   adds non standard include paths], 
+AC_ARG_WITH(extra-includes, [  --with-extra-includes=DIR
+                          adds non standard include paths], 
   kde_use_extra_includes="$withval",
   kde_use_extra_includes=NONE
 )
@@ -736,7 +868,7 @@ fi
 AC_MSG_RESULT($kde_use_extra_includes)
 
 AC_MSG_CHECKING(for extra libs)
-AC_ARG_WITH(extra-libs, [  --with-extra-libs       adds non standard library paths], 
+AC_ARG_WITH(extra-libs, [  --with-extra-libs=DIR   adds non standard library paths], 
   kde_use_extra_libs=$withval,
   kde_use_extra_libs=NONE
 )
@@ -762,13 +894,35 @@ AC_MSG_RESULT($kde_use_extra_libs)
 
 AC_DEFUN(KDE_CHECK_KIMGIO,
 [
+   AC_REQUIRE([AC_BASE_PATH_KDE])
+   AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
    AC_REQUIRE([AC_FIND_TIFF])
    AC_REQUIRE([AC_FIND_JPEG]) 
    AC_REQUIRE([AC_FIND_PNG]) 
+   AC_REQUIRE([KDE_CREATE_LIBS_ALIASES])
+   
+   if test "$1" = "existance"; then
+     AC_LANG_SAVE
+     AC_LANG_CPLUSPLUS
+     kde_save_LIBS="$LIBS"
+     LIBS="$LIBS $all_libraries $LIBJPEG $LIBTIFF $LIBPNG $LIBQT -lm"
+     AC_CHECK_LIB(kimgio, kimgioRegister, [
+      LIBKIMGIO_EXISTS=yes],LIBKIMGIO_EXISTS=no)
+      LIBS="$kde_save_LIBS"
+      AC_LANG_RESTORE   
+   else
+      LIBKIMGIO_EXISTS=yes
+   fi
 
-   LIB_KIMGIO='-lkimgio $(LIBJPEG) $(LIBTIFF) $(LIBPNG) -lm'
+   if test "$LIBKIMGIO_EXISTS" = "yes"; then
+     LIB_KIMGIO='-lkimgio $(LIBJPEG) $(LIBTIFF) $(LIBPNG) $(LIB_QT) -lm'
+     LIB_KHTMLW='-lkhtmlw $(LIB_KIMGIO) -ljscript'
+   else
+     LIB_KIMGIO=''
+     LIB_KHTMLW='-lkhtmlw $(LIBJPEG) -ljscript $(LIB_QT)'
+   fi
    AC_SUBST(LIB_KIMGIO)
-   LIB_KHTMLW='-lkhtmlw $(LIB_KIMGIO) -ljscript'
+   
    AC_SUBST(LIB_KHTMLW)
    LIB_KHTML='-lkhtml $(LIB_KIMGIO) -ljscript'
    AC_SUBST(LIB_KHTML)
@@ -777,11 +931,8 @@ AC_DEFUN(KDE_CHECK_KIMGIO,
 AC_DEFUN(KDE_CREATE_LIBS_ALIASES,
 [
    AC_REQUIRE([KDE_MISC_TESTS])
+   AC_REQUIRE([K_PATH_X])
 
-   LIB_X11='-lX11 $(LIBSOCKET)'
-   AC_SUBST(LIB_X11)
-   LIB_QT='-lqt $(LIB_X11)'
-   AC_SUBST(LIB_QT)
    LIB_KDECORE='-lkdecore -lXext $(LIB_QT)'
    AC_SUBST(LIB_KDECORE)
    LIB_KDEUI='-lkdeui $(LIB_KDECORE)'
@@ -790,6 +941,10 @@ AC_DEFUN(KDE_CREATE_LIBS_ALIASES,
    AC_SUBST(LIB_KFM)
    LIB_KFILE='-lkfile $(LIB_KFM) $(LIB_KDEUI)'
    AC_SUBST(LIB_KFILE)
+   LIB_KAB='-lkab $(LIB_KIMGIO) $(LIB_KDECORE)'
+   AC_SUBST(LIB_KAB)
+   LIB_MEDIATOOL='-lmediatool $(LIB_KDECORE)'
+   AC_SUBST(LIB_MEDIATOOL) 
 ])
 
 AC_DEFUN(AC_PATH_KDE,
@@ -804,7 +959,7 @@ AC_DEFUN(AC_PATH_KDE,
   ], [ac_use_path_checking=""]
   )
 
-  AC_ARG_WITH(install-root, [  --with-install-root     the root, where to install to [default=/]],
+  AC_ARG_WITH(install-root, [  --with-install-root=DIR the root, where to install to [default=/]],
   [
   if test "$withval" = "no";
     then kde_install_root="";
@@ -944,6 +1099,31 @@ fi
 LIBS="$ac_libs_safe"
 ])
 
+AC_DEFUN(AC_CHECK_RANDOM,
+[
+AC_LANG_CPLUSPLUS
+
+AC_MSG_CHECKING([for random])
+AC_CACHE_VAL(ac_cv_func_random,
+[
+ac_libs_safe="$LIBS"
+LIBS="$LIBS $LIBUCB"
+AC_TRY_LINK([
+#include <stdlib.h>
+],
+[
+random();
+],
+ac_cv_func_random=yes,
+ac_cv_func_random=no)
+])
+AC_MSG_RESULT($ac_cv_func_random)
+if eval "test \"`echo `$ac_cv_func_random\" = yes"; then
+  AC_DEFINE(HAVE_RANDOM)
+fi
+LIBS="$ac_libs_safe"
+])
+
 AC_DEFUN(AC_FIND_GIF,
    [AC_MSG_CHECKING([for giflib])
 AC_CACHE_VAL(ac_cv_lib_gif,
@@ -970,14 +1150,16 @@ if eval "test \"`echo $ac_cv_lib_gif`\" = yes"; then
   AC_MSG_RESULT(yes)
   AC_DEFINE_UNQUOTED(HAVE_LIBGIF)
 else
-  AC_MSG_ERROR(You need giflib23. Please install the kdesupport package)
+  AC_MSG_ERROR(You need giflib30. Please install the kdesupport package)
 fi
 ])
 
 AC_DEFUN(AC_FIND_JPEG,
    [AC_MSG_CHECKING([for jpeglib])
 AC_CACHE_VAL(ac_cv_lib_jpeg,
-[ac_save_LIBS="$LIBS"
+[
+AC_LANG_C
+ac_save_LIBS="$LIBS"
 LIBS="$all_libraries -ljpeg -lm"
 AC_TRY_LINK(
 [/* Override any gcc2 internal prototype to avoid an error.  */
@@ -1033,10 +1215,15 @@ fi
 
 AC_DEFUN(AC_FIND_ZLIB,
 [
+AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 AC_MSG_CHECKING([for libz])
 AC_CACHE_VAL(ac_cv_lib_z,
-[ac_save_LIBS="$LIBS"
+[
+AC_LANG_C
+kde_save_LIBS="$LIBS"
 LIBS="$all_libraries -lz $LIBSOCKET"
+kde_save_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS $all_includes"
 AC_TRY_LINK(dnl
 [
 #include<zlib.h>
@@ -1044,7 +1231,8 @@ AC_TRY_LINK(dnl
             [return (zlibVersion() == ZLIB_VERSION); ],
             eval "ac_cv_lib_z='-lz'",
             eval "ac_cv_lib_z=no")
-LIBS="$ac_save_LIBS"
+LIBS="$kde_save_LIBS"
+CFLAGS="$kde_save_CFLAGS"
 ])dnl
 if eval "test ! \"`echo $ac_cv_lib_z`\" = no"; then
 dnl  AC_DEFINE_UNQUOTED(HAVE_LIBZ)
@@ -1058,56 +1246,87 @@ else
 fi
 ])
 
-AC_DEFUN(AC_FIND_TIFF,
+AC_DEFUN(KDE_TRY_TIFFLIB,
 [
-AC_REQUIRE([AC_FIND_ZLIB])
-AC_REQUIRE([AC_FIND_JPEG])
-AC_MSG_CHECKING([for libtiff])
-AC_CACHE_VAL(ac_cv_lib_tiff,
-[ac_save_LIBS="$LIBS"
-LIBS="$all_libraries -ltiff $LIBJPEG $LIBZ -lX11 $LIBSOCKET"
+AC_MSG_CHECKING([for libtiff $1])
+
+AC_CACHE_VAL(kde_cv_libtiff_$1, 
+[
+AC_LANG_C
+kde_save_LIBS="$LIBS"
+LIBS="$all_libraries -l$1 $LIBJPEG $LIBZ -lX11 $LIBSOCKET -lm"
+kde_save_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS $all_includes"
+
 AC_TRY_LINK(dnl
 [
 #include<tiffio.h>
 ],
-            [return (TIFFOpen( "", "r") == 0); ],
-            eval "ac_cv_lib_tiff='-ltiff $LIBJPEG $LIBZ'",
-            eval "ac_cv_lib_tiff=no")
-LIBS="$ac_save_LIBS"
-])dnl
-if eval "test ! \"`echo $ac_cv_lib_tiff`\" = no"; then
-  AC_DEFINE_UNQUOTED(HAVE_LIBTIFF)
-  LIBTIFF="$ac_cv_lib_tiff"
-  AC_SUBST(LIBTIFF)
-  AC_MSG_RESULT($ac_cv_lib_tiff)
+    [return (TIFFOpen( "", "r") == 0); ],
+[
+    kde_cv_libtiff_$1="-l$1 $LIBJPEG $LIBZ"
+], [
+    kde_cv_libtiff_$1=no
+])
+
+LIBS="$kde_save_LIBS"
+CFLAGS="$kde_save_CFLAGS"
+
+])
+
+if test "$kde_cv_libtiff_$1" = "no"; then
+    AC_MSG_RESULT(no)
+    LIBTIFF=""
+    $3
 else
-  AC_MSG_RESULT(no)
-  LIBTIFF=""
-  AC_SUBST(LIBTIFF)
+    LIBTIFF="$kde_cv_libtiff_$1"
+    AC_MSG_RESULT(yes)
+    AC_DEFINE_UNQUOTED(HAVE_LIBTIFF)
+    $2
 fi
+
+])
+
+AC_DEFUN(AC_FIND_TIFF,
+[
+AC_REQUIRE([K_PATH_X])
+AC_REQUIRE([AC_FIND_ZLIB])
+AC_REQUIRE([AC_FIND_JPEG])
+AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
+
+KDE_TRY_TIFFLIB(tiff, [],
+   KDE_TRY_TIFFLIB(tiff34))
+
+AC_SUBST(LIBTIFF)
 ])
 
 
 AC_DEFUN(AC_FIND_PNG,
 [
 AC_REQUIRE([AC_FIND_ZLIB])
+AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 AC_MSG_CHECKING([for libpng])
 AC_CACHE_VAL(ac_cv_lib_png,
-[ac_save_LIBS="$LIBS"
-LIBS="$all_libraries -lpng $LIBZ -lm -lX11 $LIBSOCKET"
+[
+kde_save_LIBS="$LIBS"
+LIBS="$LIBS $all_libraries -lpng $LIBZ -lm -lX11 $LIBSOCKET"
+kde_save_CFLAGS="$CFLAGS"
+CFLAGS="$CFLAGS $all_includes"
 AC_LANG_C
 AC_TRY_LINK(dnl
     [
     #include<png.h>
     ],
     [
-    png_structp png_ptr = png_create_read_struct(  // image ptr
+    png_structp png_ptr = png_create_read_struct(  /* image ptr */
 		PNG_LIBPNG_VER_STRING, 0, 0, 0 );
     return( png_ptr != 0 ); 
     ],
     eval "ac_cv_lib_png='-lpng $LIBZ -lm'",
-    eval "ac_cv_lib_png=no")
-    LIBS="$ac_save_LIBS"
+    eval "ac_cv_lib_png=no"
+)
+LIBS="$kde_save_LIBS"
+CFLAGS="$kde_save_CFLAGS"
 ])dnl
 if eval "test ! \"`echo $ac_cv_lib_png`\" = no"; then
   AC_DEFINE_UNQUOTED(HAVE_LIBPNG)
@@ -1171,7 +1390,7 @@ AC_DEFUN(AC_CHECK_COMPILERS,
   dnl this is somehow a fat lie, but prevents other macros from double checking
   AC_PROVIDE([AC_PROG_CC])
   AC_PROVIDE([AC_PROG_CPP])
-  AC_ARG_ENABLE(debug,[  --enable-debug 	  creates debugging code [default=no]],
+  AC_ARG_ENABLE(debug,[  --enable-debug          creates debugging code [default=no]],
   [ 
    if test $enableval = "no"; dnl 
      then ac_use_debug_code="no"
@@ -1302,6 +1521,16 @@ EOF
       ac_cv_prog_CC=no
     fi
     AC_MSG_RESULT($ac_cv_prog_CC)
+    if test "$ac_cv_prog_CC" = "yes"; then
+      AC_MSG_ERROR([Sparc CC doesn't work on KDE sources at least til version
+4.2. This compiler has several problems accepting legal C++ code 
+including the builtin C++ type bool. Since KDE is a freeware project,
+we decided, that we don't want to support that broken compilers. 
+
+If you really want to see support for Sparc CC within KDE, make reasonable
+patches and join the KDE project. More information about KDE can be found
+on www.kde.org])
+    fi
   fi
 
   if test -z "$CXXFLAGS"; then 
@@ -1341,7 +1570,25 @@ EOF
     case "$host" in
       *-*-sysv4.2uw*) CXXFLAGS="$CXXFLAGS -D_UNIXWARE";;
     esac    
+  
+    AC_PROVIDE(AC_PROG_CXXCPP)
 
+    AC_MSG_CHECKING(how to run the C++ preprocessor)
+    if test -z "$CXXCPP"; then
+      AC_CACHE_VAL(ac_cv_prog_CXXCPP,
+      [
+         AC_LANG_SAVE[]dnl
+         AC_LANG_CPLUSPLUS[]dnl
+         CXXCPP="${CXX-g++} -E"
+         AC_TRY_CPP([#include <stdlib.h>], , CXXCPP=/lib/cpp)
+         ac_cv_prog_CXXCPP="$CXXCPP"
+         AC_LANG_RESTORE[]dnl
+     ])dnl
+     CXXCPP="$ac_cv_prog_CXXCPP"
+     fi
+    AC_MSG_RESULT($CXXCPP)
+    AC_SUBST(CXXCPP)dnl
+    
 ])
 
 dnl just a wrapper to clean up configure.in
@@ -1351,13 +1598,14 @@ AC_REQUIRE([AM_ENABLE_SHARED])
 AC_REQUIRE([AM_ENABLE_STATIC])
 dnl libtool is only for C, so I must force him
 dnl to find the correct flags for C++
-ac_save_cc=$CC
-ac_save_cflags="$CFLAGS"
+kde_save_cc=$CC
+kde_save_cflags="$CFLAGS"
 CC=$CXX
 CFLAGS="$CXXFLAGS"
+AM_SET_LIBTOOL_VARIABLE([--silent])
 AM_PROG_LIBTOOL dnl for libraries
-CC=$ac_save_cc
-CFLAGS="$ac_save_cflags"
+CC=$kde_save_cc
+CFLAGS="$kde_save_cflags"
 ])
 
 AC_DEFUN(KDE_DO_IT_ALL,
@@ -1379,6 +1627,7 @@ AC_MSG_CHECKING(for rpath)
 AC_ARG_ENABLE(rpath,
       [  --disable-rpath         do not use the rpath feature of ld],
       USE_RPATH=$enableval, USE_RPATH=yes)
+
 if test -z "$KDE_RPATH" && test "$USE_RPATH" = "yes"; then
 
   KDE_RPATH="-rpath \$(kde_libraries)"
@@ -1440,9 +1689,22 @@ AC_DEFINE_UNQUOTED(ksize_t, $ac_cv_ksize_t)
 
 ])
 
-
 dnl This is a merge of some macros out of the gettext aclocal.m4
 dnl since we don't need anything, I took the things we need
+dnl the copyright for them is:
+dnl >
+dnl Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
+dnl This Makefile.in is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+dnl even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+dnl PARTICULAR PURPOSE.
+dnl >
+dnl for this file it is relicensed under LGPL
+
 AC_DEFUN(AM_KDE_WITH_NLS,
   [AC_MSG_CHECKING([whether NLS is requested])
     AC_LANG_CPLUSPLUS
@@ -1461,10 +1723,12 @@ AC_DEFUN(AM_KDE_WITH_NLS,
          [test -n "`$ac_dir/$ac_word --version 2>&1 | grep 'GNU gettext'`"], msgfmt)
       AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
 
-      if test -z "`$MSGFMT --version 2>&1 | grep 'GNU gettext'`"; then
+      if test -z "`$GMSGFMT --version 2>&1 | grep 'GNU gettext'`"; then
         AC_MSG_RESULT([found msgfmt program is not GNU msgfmt; ignore it])
-        msgfmt=":"
+        GMSGFMT=":"
       fi
+      MSGFMT=$GMSGFMT
+      AC_SUBST(GMSGFMT)
       AC_SUBST(MSGFMT)
 
       AM_PATH_PROG_WITH_TEST_KDE(XGETTEXT, xgettext,
@@ -1625,6 +1889,7 @@ __argz_count __argz_stringify __argz_next stpcpy])
 
 AC_DEFUN(AC_HAVE_XPM,
  [AC_REQUIRE_CPP()dnl
+  AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 
  test -z "$XPM_LDFLAGS" && XPM_LDFLAGS=
  test -z "$XPM_INCLUDE" && XPM_INCLUDE=
@@ -1657,9 +1922,9 @@ AC_DEFUN(AC_HAVE_XPM,
   else
     AC_DEFINE(HAVE_XPM)
     if test "$XPM_LDFLAGS" = ""; then
-       XPMLIB="-lXpm"
+       XPMLIB='-lXpm $(LIB_X11)'
     else
-       XPMLIB="-L$XPM_LDFLAGS -lXpm"
+       XPMLIB="-L$XPM_LDFLAGS -lXpm "'$(LIB_X11)'
     fi
     if test "$XPM_INCLUDE" = ""; then
        XPMINC=""
@@ -1676,6 +1941,7 @@ AC_DEFUN(AC_HAVE_XPM,
 
 AC_DEFUN(AC_HAVE_GL,
  [AC_REQUIRE_CPP()dnl
+  AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 
  test -z "$GL_LDFLAGS" && GL_LDFLAGS=
  test -z "$GL_INCLUDE" && GL_INCLUDE=
@@ -1708,9 +1974,9 @@ AC_DEFUN(AC_HAVE_GL,
   else
     AC_DEFINE(HAVE_GL)
     if test "$GL_LDFLAGS" = ""; then
-       GLLIB="-lMesaGL -lMesaGLU"
+       GLLIB='-lMesaGL -lMesaGLU $(LIB_X11)'
     else
-       GLLIB="-L$GL_LDFLAGS -lMesaGL -lMesaGLU"
+       GLLIB="$GL_LDFLAGS -lMesaGL -lMesaGLU "'$(LIB_X11)'
     fi
     if test "$GL_INCLUDE" = ""; then
        GLINC=""
@@ -1774,9 +2040,11 @@ AC_DEFUN(AC_HAVE_GL,
 ])
 
 AC_DEFUN(AC_PATH_PAM,
- [AC_REQUIRE_CPP()dnl
+ [
+  AC_REQUIRE([KDE_CHECK_LIBDL])
+  AC_REQUIRE_CPP()dnl
 
-  AC_CHECK_LIB(pam_misc, main, [PAM_MISC_LIB="-lpam_misc"], [], [-lpam -ldl])
+  AC_CHECK_LIB(pam_misc, main, [PAM_MISC_LIB="-lpam_misc"], [], [-lpam $LIBDL])
 
  AC_MSG_CHECKING(for PAM)
  AC_ARG_WITH(pam, 
@@ -1818,7 +2086,7 @@ AC_DEFUN(AC_PATH_PAM,
  test "x$pam_libraries" = xNONE && pam_libraries=$ac_pam_libraries
  
  if test ! "x$pam_includes" = xNONE && test ! "x$pam_libraries" = xNONE; then
-   ac_pam_libs="-lpam $PAM_MISC_LIB -ldl"
+   ac_pam_libs="-lpam $PAM_MISC_LIB $LIBDL"
    ac_cv_path_pam="no_pam= ac_pam_includes=$ac_pam_includes ac_pam_libraries=$ac_pam_libraries ac_pam_libs=\"$ac_pam_libs\""
  else
    ac_cv_path_pam="no_pam=yes"
@@ -1988,6 +2256,7 @@ fi
 AC_DEFUN(KDE_CHECK_MICO,
 [
 AC_REQUIRE([KDE_CHECK_LIBDL])
+AC_REQUIRE([KDE_MISC_TESTS])
 AC_MSG_CHECKING(for MICO)
 AC_ARG_WITH(micodir,
   [  --with-micodir=micodir  where mico is installed ],
@@ -2054,7 +2323,7 @@ else
   AC_MSG_RESULT([$kde_cv_mico_version (minimum version $1, ok)])
 fi
 
-LIBMICO="-lmico$kde_cv_mico_version $LIBDL"
+LIBMICO="-lmico$kde_cv_mico_version $LIBCRYPT $LIBDL"
 AC_SUBST(LIBMICO)
 IDL=$kde_micodir/bin/idl
 AC_SUBST(IDL)
@@ -2161,7 +2430,7 @@ fi
 
 PYTHONINC=-I$python_incdir
 
-python_libdirs="$ac_python_dir/lib/python$version/config /usr/lib/python$version/config /usr/local/python$version/config"
+python_libdirs="$ac_python_dir/lib/python$version/config /usr/lib/python$version/config /usr/local/python$version/config /usr/lib"
 AC_FIND_FILE(libpython$version.a, $python_libdirs, python_libdir)
 if test ! -r $python_libdir/libpython$version.a; then
   AC_MSG_ERROR(libpython$version.a not found.)
@@ -2174,14 +2443,17 @@ AC_MSG_RESULT(header $python_incdir library $python_libdir)
 
 dnl Note: this test is very weak
 AC_MSG_CHECKING(if an Python application links)
-KDE_TRY_LINK_PYTHON(normal, "", AC_MSG_RESULT(yes),
+KDE_TRY_LINK_PYTHON(normal, "", 
+[AC_MSG_RESULT(yes)
+ LIBPYTHON="$LIBPYTHON $LIBDL $LIBSOCKET"
+],
  [
     AC_MSG_RESULT(no)
     AC_MSG_CHECKING(if Python depends on -lpthread)
     KDE_TRY_LINK_PYTHON(pthread, "$LIBPTHREAD",
     [  
        AC_MSG_RESULT(yes)
-       LIBPYTHON="$LIBPYTHON $LIBPTHREAD $LIBDL"
+       LIBPYTHON="$LIBPYTHON $LIBPTHREAD $LIBDL $LIBSOCKET"
     ],
     [
        AC_MSG_RESULT(no)
@@ -2189,7 +2461,7 @@ KDE_TRY_LINK_PYTHON(normal, "", AC_MSG_RESULT(yes),
        KDE_TRY_LINK_PYTHON(tcl, "-ltcl",
        [
 	  AC_MSG_RESULT(yes)
-	  LIBPYTHON="$LIBPYTHON -ltcl"
+	  LIBPYTHON="$LIBPYTHON -ltcl $LIBDL $LIBSOCKET"
        ],
        [
 	  AC_MSG_RESULT(no)
@@ -2266,10 +2538,14 @@ AC_DEFUN(KDE_CHECK_STL,
 
 AC_DEFUN(AC_FIND_QIMGIO,
    [AC_REQUIRE([AC_FIND_JPEG])
+AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
 AC_MSG_CHECKING([for qimgio])
 AC_CACHE_VAL(ac_cv_lib_qimgio,
-[ac_save_LIBS="$LIBS"
-LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"
+[
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+ac_save_LIBS="$LIBS"
+LIBS="$all_libraries -lqimgio -lpng -lz $LIBJPEG $LIBQT"
 AC_TRY_LINK(dnl
 [
 void qInitImageIO ();
@@ -2278,6 +2554,7 @@ void qInitImageIO ();
             eval "ac_cv_lib_qimgio=yes",
             eval "ac_cv_lib_qimgio=no")
 LIBS="$ac_save_LIBS"
+AC_LANG_RESTORE
 ])dnl
 if eval "test \"`echo $ac_cv_lib_qimgio`\" = yes"; then
   LIBQIMGIO="-lqimgio -lpng -lz $LIBJPEG"
@@ -2334,6 +2611,219 @@ AC_DEFUN(KDE_CHECK_INSURE,
        then CC="insure"; CXX="insure"; dnl CFLAGS="$CLAGS -fno-rtti -fno-exceptions "????
    fi
 ])          
+
+AC_DEFUN(AM_DISABLE_LIBRARIES,
+[
+    AC_PROVIDE([AM_ENABLE_STATIC])
+    AC_PROVIDE([AM_ENABLE_SHARED])
+    enable_static=no
+    enable_shared=no
+])
+
+
+AC_DEFUN(AC_CHECK_UTMP_FILE,
+[
+    AC_MSG_CHECKING([for utmp file])
+ 
+    AC_CACHE_VAL(kde_cv_utmp_file,
+    [
+    kde_cv_utmp_file=no
+ 
+    for ac_file in    \
+                      \
+	/var/run/utmp \
+	/var/adm/utmp \
+	/etc/utmp     \
+     ; \
+    do
+     if test -r "$ac_file"; then
+       kde_cv_utmp_file=$ac_file
+       break
+     fi
+    done
+    ])
+ 
+    AC_MSG_RESULT($kde_cv_utmp_file)
+    if test "$kde_cv_utmp_file" != "no"; then
+	AC_DEFINE_UNQUOTED(UTMP, "$kde_cv_utmp_file")
+    fi
+])
+
+
+AC_DEFUN(KDE_CREATE_SUBDIRSLIST,
+[
+
+DO_NOT_COMPILE="$DO_NOT_COMPILE CVS debian bsd-port admin"
+
+if test ! -s $srcdir/inst-apps && test -s $srcdir/subdirs; then
+ cp $srcdir/subdirs $srcdir/inst-apps
+fi
+
+if test ! -s $srcdir/inst-apps; then
+  TOPSUBDIRS=""
+  files=`cd $srcdir && ls -1`
+  dirs=`for i in $files; do if test -d $i; then echo $i; fi; done`
+  for i in $dirs; do 
+    echo $i >> $srcdir/subdirs
+  done
+  cp $srcdir/subdirs $srcdir/inst-apps
+fi    
+
+if test -s $srcdir/inst-apps; then
+  ac_topsubdirs="`cat $srcdir/inst-apps`"
+fi  
+
+for i in $ac_topsubdirs; do
+  AC_MSG_CHECKING([if $i should be compiled])
+  if test -d $srcdir/$i; then
+    install_it="yes"
+    for j in $DO_NOT_COMPILE; do 
+      if test $i = $j; then
+        install_it="no"
+      fi
+    done
+  else
+    install_it="no"
+  fi
+  AC_MSG_RESULT($install_it)
+  if test $install_it = "yes"; then 
+    TOPSUBDIRS="$TOPSUBDIRS $i"
+  fi
+done
+
+AC_SUBST(TOPSUBDIRS)
+])
+
+AC_DEFUN(KDE_CHECK_NAMESPACES,
+[
+AC_MSG_CHECKING(whether C++ compiler supports namespaces)
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+],
+[
+namespace Foo {
+  extern int i;
+  namespace Bar {
+    extern int i;
+  }
+}
+
+int Foo::i = 0;
+int Foo::Bar::i = 1;
+],[
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_NAMESPACES)
+], [
+AC_MSG_RESULT(no)
+])
+])
+
+AC_DEFUN(KDE_CHECK_NEWLIBS,
+[
+AC_MSG_CHECKING([for new KDE libraries to be present])
+AC_CACHE_VAL(kde_cv_newlibs,
+[
+AC_LANG_CPLUSPLUS
+cat > conftest.$ac_ext <<EOF
+#include <stdio.h>
+#include "confdefs.h"
+#include <k2url.h>
+
+int main() {
+    K2URL::List l;
+    return 0;
+}
+EOF
+
+ac_compile='${CXX-g++} -c $CXXFLAGS $all_includes $CPPFLAGS conftest.$ac_ext'
+if AC_TRY_EVAL(ac_compile); then
+  kde_cv_newlibs=yes
+else
+  kde_cv_newlibs=no
+fi
+
+rm -rf conftest.*
+
+])
+
+if test "$kde_cv_newlibs" = "yes"; then
+    AC_MSG_RESULT(yes)
+else
+  AC_MSG_ERROR([we can't find k2url.h. It may be that you have to
+compile kdelibs with --enable-new-stuff!])
+fi
+
+LIB_KDEUTIL='-lkdeutil'
+AC_SUBST(LIB_KDEUTIL)
+
+LIB_KIO='-lkio $(LIB_KDEUI) $(LIB_KDEUTIL)'
+AC_SUBST(LIB_KIO)
+])
+
+dnl ------------------------------------------------------------------------
+dnl Check for S_ISSOCK macro. Doesn't exist on Unix SCO. faure@kde.org
+dnl ------------------------------------------------------------------------
+dnl
+AC_DEFUN(AC_CHECK_S_ISSOCK,
+[
+AC_MSG_CHECKING(for S_ISSOCK)
+AC_CACHE_VAL(ac_cv_have_s_issock,
+[
+AC_LANG_SAVE
+AC_LANG_C
+AC_TRY_LINK(
+[
+#include <sys/stat.h>
+],
+[
+struct stat buff;
+int b = S_ISSOCK( buff.st_mode );
+],
+ac_cv_have_s_issock=yes,
+ac_cv_have_s_issock=no)
+AC_LANG_RESTORE
+])
+AC_MSG_RESULT($ac_cv_have_s_issock)
+if test "$ac_cv_have_s_issock" = "yes"; then
+  AC_DEFINE_UNQUOTED(HAVE_S_ISSOCK)
+fi
+])
+
+dnl ------------------------------------------------------------------------
+dnl Check for MAXPATHLEN macro, defines KDEMAXPATHLEN. faure@kde.org
+dnl ------------------------------------------------------------------------
+dnl
+AC_DEFUN(AC_CHECK_KDEMAXPATHLEN,
+[
+AC_MSG_CHECKING(for MAXPATHLEN)
+AC_CACHE_VAL(ac_cv_maxpathlen,
+[
+AC_LANG_C
+cat > conftest.$ac_ext <<EOF
+#include <stdio.h>
+#include <sys/param.h>
+#ifndef MAXPATHLEN
+#define MAXPATHLEN 1024
+#endif
+
+KDE_HELLO MAXPATHLEN
+
+EOF
+
+ac_try="$ac_cpp conftest.$ac_ext 2>/dev/null | grep '^KDE_HELLO' >conftest.out"
+
+if AC_TRY_EVAL(ac_try) && test -s conftest.out; then 
+    ac_cv_maxpathlen=`sed 's#KDE_HELLO \([0-9]*\).*#\1#' conftest.out`
+else
+    ac_cv_maxpathlen=1024
+fi
+
+rm conftest.*
+
+])
+AC_MSG_RESULT($ac_cv_maxpathlen)
+AC_DEFINE_UNQUOTED(KDEMAXPATHLEN,$ac_cv_maxpathlen)
+])
 
 dnl this is for kdm:
 
@@ -2440,11 +2930,12 @@ if test -z "$PASSWDLIB" && test "$shadow_support" = "yes"; then
     ])
 fi
 AC_SUBST(PASSWDLIB)
+AC_REQUIRE([KDE_MISC_TESTS])
 AC_CHECK_LIB(util, main, [LIBUTIL="-lutil"]) dnl for FreeBSD
 AC_SUBST(LIBUTIL)
 AC_CHECK_LIB(s, main, [LIB_LIBS="-ls"]) dnl for AIX
 AC_SUBST(LIB_LIBS)
-AC_CHECK_LIB(Xdmcp, main, [LIBXDMCP="-lXdmcp"], , $X_LDFLAGS -lX11) dnl for Unixware
+AC_CHECK_LIB(Xdmcp, main, [LIBXDMCP="-lXdmcp"], , $X_LDFLAGS -lX11 $LIBSOCKET) dnl for Unixware
 AC_SUBST(LIBXDMCP)
 
 if test -n "$LIBXDMCP"; then
@@ -2479,20 +2970,20 @@ fi
 ## configuration script generated by Autoconf, you may include it under
 ## the same distribution terms that you use for the rest of that program.
 
-# serial 24 AM_PROG_LIBTOOL
+# serial 29 AM_PROG_LIBTOOL
 AC_DEFUN(AM_PROG_LIBTOOL,
 [AC_REQUIRE([AM_ENABLE_SHARED])dnl
 AC_REQUIRE([AM_ENABLE_STATIC])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
+AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_REQUIRE([AC_PROG_RANLIB])dnl
 AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AM_PROG_LD])dnl
 AC_REQUIRE([AM_PROG_NM])dnl
+AC_REQUIRE([AM_SYS_NM_PARSE])dnl
 AC_REQUIRE([AC_PROG_LN_S])dnl
+AC_REQUIRE([AM_SET_LIBTOOL_VARIABLE])dnl
 dnl
-# Always use our own libtool.
-LIBTOOL='$(SHELL) $(top_builddir)/libtool --silent'
-AC_SUBST(LIBTOOL)dnl
 
 # Check for any special flags to pass to ltconfig.
 libtool_flags=
@@ -2526,31 +3017,57 @@ case "$host" in
 
 *-*-sco3.2v5*)
   # On SCO OpenServer 5, we need -belf to get full-featured binaries.
+  SAVE_CFLAGS="$CFLAGS"
   CFLAGS="$CFLAGS -belf"
+  AC_CACHE_CHECK([whether the C compiler needs -belf], lt_cv_cc_needs_belf,
+    [AC_TRY_LINK([],[],[lt_cv_cc_needs_belf=yes],[lt_cv_cc_needs_belf=no])])
+  if test x"$lt_cv_cc_needs_belf" != x"yes"; then
+    # this is probably gcc 2.8.0, egcs 1.0 or newer; no need for -belf
+    CFLAGS="$SAVE_CFLAGS"
+  fi
   ;;
+
+*-*-cygwin32*)
+  AM_SYS_LIBTOOL_CYGWIN32
+  ;;
+
 esac
+
+# enable the --disable-libtool-lock switch
+
+AC_ARG_ENABLE(libtool-lock,
+[  --disable-libtool-lock  force libtool not to do file locking],
+need_locks=$enableval,
+need_locks=yes)
+
+if test x"$need_locks" = xno; then
+  libtool_flags="$libtool_flags --disable-lock"
+fi
+
 
 # Actually configure libtool.  ac_aux_dir is where install-sh is found.
 CC="$CC" CFLAGS="$CFLAGS" CPPFLAGS="$CPPFLAGS" \
 LD="$LD" NM="$NM" RANLIB="$RANLIB" LN_S="$LN_S" \
-${CONFIG_SHELL-/bin/sh} $ac_aux_dir/ltconfig \
+DLLTOOL="$DLLTOOL" AS="$AS" \
+${CONFIG_SHELL-/bin/sh} $ac_aux_dir/ltconfig --no-reexec \
 $libtool_flags --no-verify $ac_aux_dir/ltmain.sh $host \
 || AC_MSG_ERROR([libtool configure failed])
+
+# Redirect the config.log output again, so that the ltconfig log is not
+# clobbered by the next message.
+exec 5>>./config.log
 ])
 
 # AM_ENABLE_SHARED - implement the --enable-shared flag
 # Usage: AM_ENABLE_SHARED[(DEFAULT)]
 #   Where DEFAULT is either `yes' or `no'.  If omitted, it defaults to
 #   `yes'.
-AC_DEFUN(AM_ENABLE_SHARED_EX,
+AC_DEFUN(AM_ENABLE_SHARED,
 [define([AM_ENABLE_SHARED_DEFAULT], ifelse($1, no, no, yes))dnl
-AC_PROVIDE(AM_ENABLE_SHARED)
 AC_ARG_ENABLE(shared,
 changequote(<<, >>)dnl
-<<  --enable-shared         build shared libraries [default=>>AM_ENABLE_SHARED_DEFAULT]
+<<  --enable-shared[=PKGS]  build shared libraries [default=>>AM_ENABLE_SHARED_DEFAULT],
 changequote([, ])dnl
-[  --enable-shared=PKGS    only build shared libraries if the current package
-                          appears as an element in the PKGS list],
 [p=${PACKAGE-default}
 case "$enableval" in
 yes) enable_shared=yes ;;
@@ -2570,23 +3087,6 @@ esac],
 enable_shared=AM_ENABLE_SHARED_DEFAULT)dnl
 ])
 
-AC_DEFUN(AM_ENABLE_SHARED,
-[define([AM_ENABLE_SHARED_DEFAULT], ifelse($1, no, no, yes))dnl
-AC_ARG_ENABLE(shared,
-changequote(<<, >>)dnl
-<<  --enable-shared         build shared libraries [default=>>AM_ENABLE_SHARED_DEFAULT],
-changequote([, ])dnl
-[
-if test "$enableval" = no; then
-  enable_shared=no
-else
-  enable_shared=yes
-fi
-],
-enable_shared=AM_ENABLE_SHARED_DEFAULT)dnl
-])
-
-
 # AM_DISABLE_SHARED - set the default shared flag to --disable-shared
 AC_DEFUN(AM_DISABLE_SHARED,
 [AM_ENABLE_SHARED(no)])
@@ -2599,15 +3099,12 @@ AC_DEFUN(AM_DISABLE_STATIC,
 # Usage: AM_ENABLE_STATIC[(DEFAULT)]
 #   Where DEFAULT is either `yes' or `no'.  If omitted, it defaults to
 #   `yes'.
-AC_DEFUN(AM_ENABLE_STATIC_EX,
+AC_DEFUN(AM_ENABLE_STATIC,
 [define([AM_ENABLE_STATIC_DEFAULT], ifelse($1, no, no, yes))dnl
-AC_PROVIDE(AM_ENABLE_STATIC)
 AC_ARG_ENABLE(static,
 changequote(<<, >>)dnl
-<<  --enable-static         build static libraries [default=>>AM_ENABLE_STATIC_DEFAULT]
+<<  --enable-static[=PKGS]  build static libraries [default=>>AM_ENABLE_STATIC_DEFAULT],
 changequote([, ])dnl
-[  --enable-static=PKGS    only build shared libraries if the current package
-                          appears as an element in the PKGS list],
 [p=${PACKAGE-default}
 case "$enableval" in
 yes) enable_static=yes ;;
@@ -2627,44 +3124,65 @@ esac],
 enable_static=AM_ENABLE_STATIC_DEFAULT)dnl
 ])
 
-AC_DEFUN(AM_ENABLE_STATIC,
-[define([AM_ENABLE_STATIC_DEFAULT], ifelse($1, no, no, yes))dnl
-AC_ARG_ENABLE(static,
-changequote(<<, >>)dnl
-<<  --enable-static         build static libraries [default=>>AM_ENABLE_STATIC_DEFAULT],
-changequote([, ])dnl
-[if test "$enableval" = no; then
-  enable_static=no
-else
-  enable_static=yes
-fi],
-enable_static=AM_ENABLE_STATIC_DEFAULT)dnl
-])
-
-AC_DEFUN(AM_DISABLE_LIBRARIES,
-[
-AC_PROVIDE([AM_ENABLE_STATIC])
-AC_PROVIDE([AM_ENABLE_SHARED])
-enable_static=no
-enable_shared=no
-])
 
 # AM_PROG_LD - find the path to the GNU or non-GNU linker
 AC_DEFUN(AM_PROG_LD,
 [AC_ARG_WITH(gnu-ld,
 [  --with-gnu-ld           assume the C compiler uses GNU ld [default=no]],
 test "$withval" = no || with_gnu_ld=yes, with_gnu_ld=no)
-AC_REQUIRE([AC_PROG_CC])
+AC_REQUIRE([AC_PROG_CC])dnl
+AC_REQUIRE([AC_CANONICAL_HOST])dnl
+AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 ac_prog=ld
 if test "$ac_cv_prog_gcc" = yes; then
   # Check if gcc -print-prog-name=ld gives a path.
   AC_MSG_CHECKING([for ld used by GCC])
   ac_prog=`($CC -print-prog-name=ld) 2>&5`
   case "$ac_prog" in
-  # Accept absolute paths.
-  /* | [A-Za-z]:\\*)
-    test -z "$LD" && LD="$ac_prog"
-    ;;
+    # Accept absolute paths.
+changequote(,)dnl
+    /* | [A-Za-z]:/*)
+      # Canonicalize the path of ld
+      re_direlt='/[^/][^/]*/\.\./'
+      sub_uncdrive='s%^\([A-Za-z]\):/%//\1/%'
+changequote([,])dnl
+      while echo $ac_prog | grep "$re_direlt" > /dev/null 2>&1; do
+        ac_prog=`echo $ac_prog| sed "s%$re_direlt%/%"`
+      done
+      case "$host_os" in
+      cygwin*)
+        # Convert to a UNC path for cygwin
+        test -z "$LD" && LD=`echo X$ac_prog | $Xsed -e "$sub_uncdrive"`
+	;;
+      *)
+        test -z "$LD" && LD="$ac_prog"
+	;;
+      esac
+      ;;
+    ##
+    ## FIXME:  The code fails later on if we try to use an $LD with
+    ##         '\\' path separators.
+    ##
+changequote(,)dnl
+    [A-Za-z]:[\\]*)
+      # Canonicalize the path of ld
+      re_direlt='\\[^\\][^\\]*\\\.\.\(\\\)'
+      sub_uncdrive='s%^\([A-Za-z]\):\\%//\1/%'
+changequote([,])dnl
+      sub_uncdir='s%\\%/%g'
+      while echo $ac_prog | grep "$re_direlt" > /dev/null 2>&1; do
+        ac_prog=`echo $ac_prog| sed "s%$re_direlt%\1%"`
+      done
+      case "$host_os" in
+      cygwin*)
+        # Convert to a UNC path for cygwin
+        test -z "$LD" && LD=`echo X$ac_prog | sed -e 's%^X%%' -e "$sub_uncdrive" -e "$sub_uncdir"`
+	;;
+      *)
+        test -z "$LD" && LD="$ac_prog"
+	;;
+      esac
+      ;;
   "")
     # If it fails, then pretend we aren't using GCC.
     ac_prog=ld
@@ -2725,11 +3243,10 @@ fi])
 AC_DEFUN(AM_PROG_NM,
 [AC_MSG_CHECKING([for BSD-compatible nm])
 AC_CACHE_VAL(ac_cv_path_NM,
-[case "$NM" in
-/* | [A-Za-z]:\\*)
-  ac_cv_path_NM="$NM" # Let the user override the test with a path.
-  ;;
-*)
+[if test -n "$NM"; then
+  # Let the user override the test.
+  ac_cv_path_NM="$NM"
+else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in /usr/ucb /usr/ccs/bin $PATH /bin; do
     test -z "$ac_dir" && ac_dir=.
@@ -2749,9 +3266,230 @@ AC_CACHE_VAL(ac_cv_path_NM,
   done
   IFS="$ac_save_ifs"
   test -z "$ac_cv_path_NM" && ac_cv_path_NM=nm
-  ;;
-esac])
+fi])
 NM="$ac_cv_path_NM"
 AC_MSG_RESULT([$NM])
 AC_SUBST(NM)
+])
+
+# AM_SYS_NM_PARSE - Check for command ro grab the raw symbol name followed
+# by C symbol name from nm.
+AC_DEFUN(AM_SYS_NM_PARSE,
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl
+AC_REQUIRE([AM_PROG_NM])dnl
+# Check for command to grab the raw symbol name followed by C symbol from nm.
+AC_MSG_CHECKING([command to parse $NM output])
+AC_CACHE_VAL(ac_cv_sys_global_symbol_pipe,
+[# These are sane defaults that work on at least a few old systems.
+# {They come from Ultrix.  What could be older than Ultrix?!! ;)}
+
+changequote(,)dnl
+# Character class describing NM global symbol codes.
+ac_symcode='[BCDEGRSTU]'
+
+# Regexp to match symbols that can be accessed directly from C.
+ac_sympat='\([_A-Za-z][_A-Za-z0-9]*\)'
+
+# Transform the above into a raw symbol and a C symbol.
+ac_symxfrm='\1 \1'
+
+# Define system-specific variables.
+case "$host_os" in
+aix*)
+  ac_symcode='[BCDTU]'
+  ;;
+sunos* | cygwin32* | mingw32*)
+  ac_sympat='_\([_A-Za-z][_A-Za-z0-9]*\)'
+  ac_symxfrm='_\1 \1'
+  ;;
+irix*)
+  # Cannot use undefined symbols on IRIX because inlined functions mess us up.
+  ac_symcode='[BCDEGRST]'
+  ;;
+solaris*)
+  ac_symcode='[BDTU]'
+  ;;
+esac
+
+# If we're using GNU nm, then use its standard symbol codes.
+if $NM -V 2>&1 | egrep '(GNU|with BFD)' > /dev/null; then
+  ac_symcode='[ABCDGISTUW]'
+fi
+
+case "$host_os" in
+cygwin32* | mingw32*)
+  # We do not want undefined symbols on cygwin32.  The user must
+  # arrange to define them via -l arguments.
+  ac_symcode='[ABCDGISTW]'
+  ;;
+esac
+changequote([,])dnl
+
+# Write the raw and C identifiers.
+ac_cv_sys_global_symbol_pipe="sed -n -e 's/^.* $ac_symcode $ac_sympat$/$ac_symxfrm/p'"
+
+# Check to see that the pipe works correctly.
+ac_pipe_works=no
+cat > conftest.$ac_ext <<EOF
+#ifdef __cplusplus
+extern "C" {
+#endif
+char nm_test_var;
+void nm_test_func(){}
+#ifdef __cplusplus
+}
+#endif
+int main(){nm_test_var='a';nm_test_func;return 0;}
+EOF
+if AC_TRY_EVAL(ac_compile); then
+  # Now try to grab the symbols.
+  ac_nlist=conftest.nm
+  if AC_TRY_EVAL(NM conftest.$ac_objext \| $ac_cv_sys_global_symbol_pipe \> $ac_nlist) && test -s "$ac_nlist"; then
+
+    # Try sorting and uniquifying the output.
+    if sort "$ac_nlist" | uniq > "$ac_nlist"T; then
+      mv -f "$ac_nlist"T "$ac_nlist"
+      ac_wcout=`wc "$ac_nlist" 2>/dev/null`
+changequote(,)dnl
+      ac_count=`echo "X$ac_wcout" | sed -e 's,^X,,' -e 's/^[ 	]*\([0-9][0-9]*\).*$/\1/'`
+changequote([,])dnl
+      (test "$ac_count" -ge 0) 2>/dev/null || ac_count=-1
+    else
+      rm -f "$ac_nlist"T
+      ac_count=-1
+    fi
+
+    # Make sure that we snagged all the symbols we need.
+    if egrep ' nm_test_var$' "$ac_nlist" >/dev/null; then
+      if egrep ' nm_test_func$' "$ac_nlist" >/dev/null; then
+	cat <<EOF > conftest.c
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+EOF
+        # Now generate the symbol file.
+        sed 's/^.* \(.*\)$/extern char \1;/' < "$ac_nlist" >> conftest.c
+
+	cat <<EOF >> conftest.c
+#if defined (__STDC__) && __STDC__
+# define __ptr_t void *
+#else
+# define __ptr_t char *
+#endif
+
+/* The number of symbols in dld_preloaded_symbols, -1 if unsorted. */
+int dld_preloaded_symbol_count = $ac_count;
+
+/* The mapping between symbol names and symbols. */
+struct {
+  char *name;
+  __ptr_t address;
+}
+changequote(,)dnl
+dld_preloaded_symbols[] =
+changequote([,])dnl
+{
+EOF
+        sed 's/^\(.*\) \(.*\)$/  {"\1", (__ptr_t) \&\2},/' < "$ac_nlist" >> conftest.c
+        cat <<\EOF >> conftest.c
+  {0, (__ptr_t) 0}
+};
+
+#ifdef __cplusplus
+}
+#endif
+EOF
+        # Now try linking the two files.
+        mv conftest.$ac_objext conftestm.$ac_objext
+	ac_save_LIBS="$LIBS"
+	ac_save_CFLAGS="$CFLAGS"
+        LIBS="conftestm.$ac_objext"
+	CFLAGS="$CFLAGS$no_builtin_flag"
+        if AC_TRY_EVAL(ac_link) && test -s conftest; then
+          ac_pipe_works=yes
+        else
+          echo "configure: failed program was:" >&AC_FD_CC
+          cat conftest.c >&AC_FD_CC
+        fi
+        LIBS="$ac_save_LIBS"
+	CFLAGS="$ac_save_CFLAGS"
+      else
+        echo "cannot find nm_test_func in $ac_nlist" >&AC_FD_CC
+      fi
+    else
+      echo "cannot find nm_test_var in $ac_nlist" >&AC_FD_CC
+    fi
+  else
+    echo "cannot run $ac_cv_sys_global_symbol_pipe" >&AC_FD_CC
+  fi
+else
+  echo "$progname: failed program was:" >&AC_FD_CC
+  cat conftest.c >&AC_FD_CC
+fi
+rm -rf conftest*
+
+# Do not use the global_symbol_pipe unless it works.
+test "$ac_pipe_works" = yes || ac_cv_sys_global_symbol_pipe=
+])
+
+ac_result=yes
+if test -z "$ac_cv_sys_global_symbol_pipe"; then
+   ac_result=no
+fi
+AC_MSG_RESULT($ac_result)
+])
+
+# AM_SYS_LIBTOOL_CYGWIN32 - find tools needed on cygwin32
+AC_DEFUN(AM_SYS_LIBTOOL_CYGWIN32,
+[AC_CHECK_TOOL(DLLTOOL, dlltool, false)
+AC_CHECK_TOOL(AS, as, false)
+])
+
+AC_DEFUN(AM_SET_LIBTOOL_VARIABLE,
+[# Always use our own libtool.
+LIBTOOL='$(SHELL) $(top_builddir)/libtool $1'
+AC_SUBST(LIBTOOL)dnl
+])
+
+# AM_SYS_SYMBOL_UNDERSCORE - does the compiler prefix global symbols
+#                            with an underscore?
+AC_DEFUN(AM_SYS_SYMBOL_UNDERSCORE,
+[AC_REQUIRE([AM_PROG_NM])dnl
+AC_REQUIRE([AM_SYS_NM_PARSE])dnl
+AC_MSG_CHECKING([for _ prefix in compiled symbols])
+AC_CACHE_VAL(ac_cv_sys_symbol_underscore,
+[ac_cv_sys_symbol_underscore=no
+cat > conftest.$ac_ext <<EOF
+void nm_test_func(){}
+int main(){nm_test_func;return 0;}
+EOF
+if AC_TRY_EVAL(ac_compile); then
+  # Now try to grab the symbols.
+  ac_nlist=conftest.nm
+  if AC_TRY_EVAL(NM conftest.$ac_objext \| $ac_cv_sys_global_symbol_pipe \> $ac_nlist) && test -s "$ac_nlist"; then
+    # See whether the symbols have a leading underscore.
+    if egrep '^_nm_test_func' "$ac_nlist" >/dev/null; then
+      ac_cv_sys_symbol_underscore=yes
+    else
+      if egrep '^nm_test_func ' "$ac_nlist" >/dev/null; then
+        :
+      else
+        echo "configure: cannot find nm_test_func in $ac_nlist" >&AC_FD_CC
+      fi
+    fi
+  else
+    echo "configure: cannot run $ac_cv_sys_global_symbol_pipe" >&AC_FD_CC
+  fi
+else
+  echo "configure: failed program was:" >&AC_FD_CC
+  cat conftest.c >&AC_FD_CC
+fi
+rm -rf conftest*
+])
+AC_MSG_RESULT($ac_cv_sys_symbol_underscore)
+if test x$ac_cv_sys_symbol_underscore = xyes; then
+  AC_DEFINE(WITH_SYMBOL_UNDERSCORE,1,
+  [define if compiled symbols have a leading underscore])
+fi
 ])

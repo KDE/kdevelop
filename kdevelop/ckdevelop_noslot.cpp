@@ -351,7 +351,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_KDLG_BUILD_GENERATE);
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_RUN_WITH_ARGS);
-    enableCommand(ID_BUILD_SET_ARGS);
     enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);
     enableCommand(ID_BUILD_REBUILD_ALL);
@@ -360,16 +359,16 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_BUILD_CONFIGURE);
     if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
-      disableCommand(ID_BUILD_MESSAGES);
+      disableCommand(ID_PROJECT_MESSAGES);
     }
     else{
-      enableCommand(ID_BUILD_MESSAGES);
+      enableCommand(ID_PROJECT_MESSAGES);
     }
     disableCommand(ID_BUILD_STOP);
-    enableCommand(ID_BUILD_MAKE_PROJECT_API);
-    enableCommand(ID_BUILD_MAKE_USER_MANUAL);
-	  if(bAutosave)
-  	  saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
+    enableCommand(ID_PROJECT_MAKE_PROJECT_API);
+    enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+    if(bAutosave)
+      saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
 
   }
   else {
@@ -378,7 +377,6 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_KDLG_BUILD_GENERATE);
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
-    disableCommand(ID_BUILD_SET_ARGS);
     disableCommand(ID_BUILD_RUN);
     disableCommand(ID_BUILD_DEBUG);
     disableCommand(ID_BUILD_MAKE);
@@ -387,12 +385,12 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_DISTCLEAN);
     disableCommand(ID_BUILD_AUTOCONF);
     disableCommand(ID_BUILD_CONFIGURE);
-    disableCommand(ID_BUILD_MESSAGES);
+    disableCommand(ID_PROJECT_MESSAGES);
     enableCommand(ID_BUILD_STOP);
-    disableCommand(ID_BUILD_MAKE_PROJECT_API);
-    disableCommand(ID_BUILD_MAKE_USER_MANUAL);
+    disableCommand(ID_PROJECT_MAKE_PROJECT_API);
+    disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
     if(bAutosave)
-    	saveTimer->stop();  // stop the autosaving if make or something is running
+      saveTimer->stop();  // stop the autosaving if make or something is running
   }
 }
 

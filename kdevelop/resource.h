@@ -93,8 +93,6 @@
 #define ID_PROJECT_OPEN			        13230
 #define ID_PROJECT_CLOSE            13240
 #define ID_PROJECT_NEW_CLASS        13250
-#define ID_PROJECT_ADD_FILE         13260
-#define ID_PROJECT_ADD_FILE_NEW     13270
 #define ID_PROJECT_ADD_FILE_EXIST   13280
 #define ID_PROJECT_ADD_NEW_TRANSLATION_FILE 13285
 #define ID_PROJECT_REMOVE_FILE      13290
@@ -107,6 +105,12 @@
 #define ID_PROJECT_WORKSPACES_3      13106
 #define ID_PROJECT_FILE_PROPERTIES  13110
 #define ID_PROJECT_OPTIONS          13120
+#define ID_PROJECT_MESSAGES	          14120
+#define ID_PROJECT_MAKE_PROJECT_API   14130
+#define ID_PROJECT_MAKE_USER_MANUAL   14140
+
+#define ID_PROJECT_MAKE_DISTRIBUTION  14200
+#define ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ  14210
 
 
 ///////////////////////////////////////////////////////////////////
@@ -127,13 +131,7 @@
 #define ID_BUILD_CONFIGURE          14100
 #define ID_BUILD_DISTCLEAN          14110
 
-#define ID_BUILD_SET_ARGS						14115
-#define ID_BUILD_MESSAGES	          14120
-#define ID_BUILD_MAKE_PROJECT_API   14130
-#define ID_BUILD_MAKE_USER_MANUAL   14140
 
-#define ID_BUILD_MAKE_DISTRIBUTION  14200
-#define ID_BUILD_MAKE_DISTRIBUTION_SOURCE_TGZ  14210
 
 
 ///////////////////////////////////////////////////////////////////
@@ -184,6 +182,7 @@
 #define ID_HELP_PROJECT_API			      18120
 #define ID_HELP_USER_MANUAL          18130
 #define ID_HELP_HOMEPAGE            18140
+#define ID_HELP_BUG_REPORT          18145
 #define ID_HELP_ABOUT               18150
 
 #define ID_HELP_WHATS_THIS     			18160

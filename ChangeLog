@@ -1,3 +1,16 @@
+1999-05-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* the Application Wizard store the authorname and emailaddress
+	 for the next "new project..."
+	* merged the "execute with arguments" and "set arguments..."
+	
+1999-05-08 Stefan Bartel <bartel@rz.uni-potsdam.de>
+	* added bugreport dialog, "help->bug report..."
+	
+1999-05-07  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* CPrjOptionsDlg: fixed some bugs (KHTMLW) and added more "intelligence"
+	whether makefiles should be generated or not
+	* moved some entries from the build menu to the project menu
+
 1999-05-05  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* the CXXFLAGS and LDFLAGS are given to "configure" and not hardcoded in the Makefile.am's
 	as in the past

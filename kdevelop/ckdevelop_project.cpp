@@ -249,15 +249,13 @@ bool CKDevelop::slotProjectClose(){
     
     // prj menu
     disableCommand(ID_PROJECT_CLOSE);
-    disableCommand(ID_PROJECT_ADD_FILE);
-    disableCommand(ID_PROJECT_ADD_FILE_NEW);
     disableCommand(ID_PROJECT_ADD_FILE_EXIST);
     disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
     disableCommand(ID_PROJECT_REMOVE_FILE);
     disableCommand(ID_PROJECT_NEW_CLASS);
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
-    disableCommand(ID_BUILD_MAKE_DISTRIBUTION);
+    disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
     
   }
   slotStatusMsg(IDS_DEFAULT);
@@ -377,10 +375,14 @@ void CKDevelop::slotProjectOptions(){
       showOutputView(true);
       QDir::setCurrent(prj->getProjectDir());
       shell_process.clearArguments();
-      shell_process << make_cmd << " -f Makefile.dist  && ./configure";
+      shell_process << make_cmd << " -f Makefile.dist  && "  << "CXXFLAGS=\" " 
+		    << prj->getCXXFLAGS() << " " << prj->getAdditCXXFLAGS() << "\""
+		    << "LDFLAGS=\" " << prj->getLDFLAGS() << "\" " << "./configure";
       shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      return;
     }
-    else{
+    if(prjdlg.needMakefileUpdate()){
+      prj->updateMakefilesAm();
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running configure..."));
       messages_widget->clear();
@@ -515,12 +517,20 @@ void CKDevelop::slotProjectNewAppl(){
   }
   
   slotStatusMsg(i18n("Creating a new frame application..."));
-  CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
-  kappw->setCaption("ApplicationWizard");
-  kappw->exec();
-  QString file = kappw->getProjectFile();
+  config->setGroup("General Options");
+  CKAppWizard kappw(this,"zutuz",config->readEntry("author_name",""),
+		    config->readEntry("author_email",""));
   
-  if(kappw->generatedProject()){
+  
+  kappw.setCaption("ApplicationWizard");
+  kappw.exec();
+  QString file = kappw.getProjectFile();
+  
+  if(kappw.generatedProject()){
+    config->setGroup("General Options");
+    config->writeEntry("author_name",kappw.getAuthorName());
+    config->writeEntry("author_email",kappw.getAuthorEmail());
+    config->sync();
     readProjectFile(file);
     if (prj->getProjectType() == "normal_kde" || prj->getProjectType() == "mini_kde") {
       slotBuildMessages();
@@ -707,8 +717,6 @@ bool CKDevelop::readProjectFile(QString file){
 
   // prj menu
   enableCommand(ID_PROJECT_CLOSE);
-  enableCommand(ID_PROJECT_ADD_FILE);
-  enableCommand(ID_PROJECT_ADD_FILE_NEW);
   enableCommand(ID_PROJECT_ADD_FILE_EXIST);
 
   if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
@@ -733,7 +741,7 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_WORKSPACES);
 
   enableCommand(ID_BUILD_AUTOCONF);
-  enableCommand(ID_BUILD_MAKE_DISTRIBUTION);
+  enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 	
   project=true;
   return true;

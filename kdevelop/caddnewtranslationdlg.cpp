@@ -29,6 +29,7 @@
 CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, CProject* p_prj) 
   : QDialog(parent,name,true) {
   
+  setCaption(i18n("Add new Translation File"));
 	
 	ok_button = new QPushButton( this, "ok_button" );
 	ok_button->setGeometry( 60, 100, 100, 30 );
@@ -75,7 +76,7 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	setMinimumSize( 0, 0 );
 	setMaximumSize( 32767, 32767 );
 
-	setCaption(i18n("Add new Translation File..."));
+
 	connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
 	connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
 

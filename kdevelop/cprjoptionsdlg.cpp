@@ -26,11 +26,20 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
     : QTabDialog( parent, name,TRUE )
 {
   prj_info = prj;
-  old_version = prj->getVersion();
-  need_configure_in_update = false;
   QString cxxflags=prj->getCXXFLAGS();
   QString ldflags=prj->getLDFLAGS();
   QString ldadd=prj->getLDADD();
+  
+  old_version = prj->getVersion();
+  old_ldflags =  ldflags.stripWhiteSpace();
+  old_ldadd = ldadd.stripWhiteSpace();
+  old_addit_flags = prj->getAdditCXXFLAGS().stripWhiteSpace();
+  old_cxxflags = cxxflags.stripWhiteSpace();
+
+  need_configure_in_update = false;
+  need_makefile_generation = false;
+
+  
   setFixedSize(520,350);
   QStrList short_info;
   int pos;
@@ -694,7 +703,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   addit_ldflags=new QLineEdit(w4,"addit_ldflags");
   addit_ldflags->setGeometry(120,70,370,30);
-  // ldflags.remove(0,1);
+  ldflags.remove(ldflags.length()-1,1);
+  ldflags.remove(0,1);
   addit_ldflags->setText(ldflags);
   KQuickHelp::add(addit_ldflags_label,
   KQuickHelp::add(addit_ldflags, i18n("Insert other linker options here\n"
@@ -775,10 +785,10 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   l_khtmlw=new QCheckBox(w4,"l_khtmlw");
   l_khtmlw->setGeometry(140,160,110,20);
   l_khtmlw->setText("khtmlw");
-  if (ldadd.contains(" (LIB_KHTMLW)")) {
+  if (ldadd.contains("-lpng -ljpeg -ltiff -lkimgio")) {
     l_khtmlw->setChecked(true);
-    pos=ldadd.find("(LIB_KHTMLW)")-1;
-    ldadd.remove(pos,14);
+    pos=ldadd.find(" -lpng -ljpeg -ltiff -lkimgio");
+    ldadd.remove(pos,29);
     //    cerr << "-htmlw OK" << endl;
   } else {
     l_khtmlw->setChecked(false);
@@ -844,7 +854,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   addit_ldadd=new QLineEdit(w4,"addit_ldadd");
   addit_ldadd->setGeometry(140,230,350,30);
-  // ldadd.remove(0,1);
+  ldadd.remove(ldadd.length()-1,1);
+  ldadd.remove(0,1);
+ 
   addit_ldadd->setText(ldadd);
   KQuickHelp::add(addit_ldadd_label,
   KQuickHelp::add(addit_ldadd, i18n("Add additional libraries here.")));
@@ -912,6 +924,9 @@ void CPrjOptionsDlg::ok(){
     text+=" -save-temps";
   }
   prj_info->setAdditCXXFLAGS(addit_gcc_options->text());
+  if(old_addit_flags != prj_info->getAdditCXXFLAGS().stripWhiteSpace()){
+    need_makefile_generation = true;
+  }
   //***********gcc-warnings***********
   if (w_all->isChecked()) {
     text+=" -Wall";
@@ -989,9 +1004,12 @@ void CPrjOptionsDlg::ok(){
     text+=" -Werror";
   }
   prj_info->setCXXFLAGS(text);
+  if(old_cxxflags !=  prj_info->getCXXFLAGS().stripWhiteSpace()){
+    need_makefile_generation = true;
+  }
   //**********linker options*************
-  text="";
-  text+=addit_ldflags->text();
+  text=addit_ldflags->text();
+
   if (l_remove_symbols->isChecked()) {
     text+=" -s ";
   }
@@ -999,8 +1017,12 @@ void CPrjOptionsDlg::ok(){
     text+=" -static";
   }
   prj_info->setLDFLAGS(text);
-  text="";
-  text+=addit_ldadd->text();
+  if(old_ldflags != prj_info->getLDFLAGS().stripWhiteSpace()){
+    need_makefile_generation = true;
+  }
+  
+  text= addit_ldadd->text();
+
   if (l_kab->isChecked()) {
     text+=" -lkab";
   }
@@ -1014,7 +1036,7 @@ void CPrjOptionsDlg::ok(){
     text+=" -lkfm";
   }
   if (l_khtmlw->isChecked()) {
-    text+=" $(LIB_KHTMLW)";
+    text+=" -lpng -ljpeg -ltiff -lkimgio";
   }
   if (l_kdeui->isChecked()) {
     text+=" -lkdeui";
@@ -1032,10 +1054,11 @@ void CPrjOptionsDlg::ok(){
     text+=" -lX11";
   }
   prj_info->setLDADD(text);
+  if(old_ldadd != prj_info->getLDADD().stripWhiteSpace()){
+    need_makefile_generation = true;
+  }
   // write it to the disk
   prj_info->writeProject();
-  prj_info->updateMakefilesAm();
-
   if (version_edit->text() != old_version){
     need_configure_in_update = true;
   }

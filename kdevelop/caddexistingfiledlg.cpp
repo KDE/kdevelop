@@ -2,9 +2,6 @@
                           caddexistingfiledlg.cpp  -                              
                              -------------------                                         
 
-
-
-    version              :                                   
     begin                : Tue Oct 20 1998                                           
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -31,7 +28,7 @@
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
   prj = p_prj;
-  setCaption(i18n("Add existing files to project..."));
+  setCaption(i18n("Add existing files to project"));
   source_edit = new QLineEdit( this, "source_edit" );
   source_edit->setGeometry( 120, 30, 220, 30 );
   source_edit->setMinimumSize( 0, 0 );

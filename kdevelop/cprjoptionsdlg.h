@@ -49,6 +49,7 @@ public:
     /**constructor*/
     CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj );
   bool needConfigureInUpdate();
+  bool needMakefileUpdate(){return need_makefile_generation;}
 protected:
   /** local projectinfo object*/
   CProject* prj_info; 
@@ -113,7 +114,12 @@ protected:
 
 private:
   QString old_version;
+  QString old_ldflags;
+  QString old_ldadd;
+  QString old_addit_flags;
+  QString old_cxxflags;
   bool need_configure_in_update;
+  bool need_makefile_generation;
 protected slots:
    /** is called, if the ok-button were clicked*/
   void  ok();

@@ -278,7 +278,6 @@ public:
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
-	void slotBuildSetExecuteArgs();
   void slotBuildMessages();
   void slotBuildAPI();
   void slotBuildManual();
@@ -361,7 +360,10 @@ public:
   void slotHelpManual();
   /** shows the KDevelop manual */
   void slotHelpContents();
+  /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
+  /** shows the bug report dialog*/
+  void slotHelpBugReport();
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 

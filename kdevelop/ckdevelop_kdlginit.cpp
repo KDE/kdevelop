@@ -141,11 +141,7 @@ void CKDevelop::initKDlgMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Project-menu entries
 
-  // submenu for adding projectfiles
-  QPopupMenu* kdlg_p2 = new QPopupMenu;
-  kdlg_p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
-  kdlg_p2->insertItem(i18n("&Existing File(s)..."), this,
-		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
+ 
 
   // project-menu
   kdlg_project_menu = new QPopupMenu;
@@ -156,16 +152,23 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_project_menu->insertSeparator();
   kdlg_project_menu->insertItem(i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
-  kdlg_project_menu->insertItem(i18n("&Add File(s) to Project"),kdlg_p2,ID_PROJECT_ADD_FILE);
+  kdlg_project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   //  kdlg_project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
 
   kdlg_project_menu->insertItem(i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
-  kdlg_project_menu->insertSeparator();		
+  	
   kdlg_project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
+  kdlg_project_menu->insertSeparator();	
+  kdlg_project_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_PROJECT_MESSAGES);
+  kdlg_project_menu->insertItem(i18n("Make &API-Doc"), this,
+				SLOT(slotBuildAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
+  kdlg_project_menu->insertItem(i18n("Make &User-Manual"), this,
+				SLOT(slotBuildManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
+  kdlg_project_menu->insertSeparator();	
   kdlg_project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
   //  kdlg_project_menu->insertSeparator();		
 
@@ -176,9 +179,10 @@ void CKDevelop::initKDlgMenuBar(){
   //  workspaces_submenu->insertItem(i18n("Workspace 3"),ID_PROJECT_WORKSPACES_3);
   //  kdlg_project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
   //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
-
+  
+  
   kdlg_menubar->insertItem(i18n("&Project"), kdlg_project_menu);
-
+  
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries
 
@@ -206,13 +210,8 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   kdlg_build_menu->insertItem(i18n("&Autoconf"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   kdlg_build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
-  kdlg_build_menu->insertSeparator();
-	kdlg_build_menu->insertItem(i18n("Execution &arguments"),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
-	kdlg_build_menu->insertItem(i18n("Make &messages"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
-  kdlg_build_menu->insertItem(i18n("Make &API-Doc"), this,
-			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
-  kdlg_build_menu->insertItem(i18n("Make &User-Manual"), this,
-			 SLOT(slotBuildManual()),0,ID_BUILD_MAKE_USER_MANUAL);
+	
+	
 
   kdlg_menubar->insertItem(i18n("&Build"), kdlg_build_menu);
 
@@ -269,7 +268,6 @@ void CKDevelop::initKDlgMenuBar(){
   connect(kdlg_file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_edit_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_view_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(kdlg_p2,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_project_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(kdlg_tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
@@ -291,17 +289,20 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_KDLG_EDIT_PASTE);
   disableCommand(ID_KDLG_EDIT_DELETE);
 
-  disableCommand(ID_PROJECT_ADD_FILE_NEW);
   disableCommand(ID_PROJECT_CLOSE);
   disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-  disableCommand(ID_PROJECT_ADD_FILE);
+
   //  disableCommand(ID_PROJECT_REMOVE_FILE);
   disableCommand(ID_PROJECT_NEW_CLASS);
   disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   disableCommand(ID_PROJECT_FILE_PROPERTIES);
   disableCommand(ID_PROJECT_OPTIONS);
   disableCommand(ID_PROJECT_WORKSPACES);
-
+  disableCommand(ID_PROJECT_MESSAGES);  	
+  disableCommand(ID_PROJECT_MAKE_PROJECT_API);
+  disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+  disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+ 
   disableCommand(ID_BUILD_RUN);
   disableCommand(ID_BUILD_RUN_WITH_ARGS);
   disableCommand(ID_BUILD_DEBUG);
@@ -312,12 +313,9 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_DISTCLEAN);
   disableCommand(ID_BUILD_AUTOCONF);
   disableCommand(ID_BUILD_CONFIGURE);
-  disableCommand(ID_BUILD_MESSAGES);  	
-  disableCommand(ID_BUILD_MAKE_PROJECT_API);
-  disableCommand(ID_BUILD_MAKE_USER_MANUAL);
+  
   disableCommand(ID_BUILD_COMPILE_FILE);
-  disableCommand(ID_BUILD_SET_ARGS);
-  disableCommand(ID_BUILD_MAKE_DISTRIBUTION);
+  
 
   disableCommand(ID_HELP_BACK);
   disableCommand(ID_HELP_FORWARD);

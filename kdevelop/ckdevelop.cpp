@@ -53,6 +53,7 @@
 #include "kswallow.h"
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
+#include "cbugreportdlg.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -550,10 +551,13 @@ void CKDevelop::slotBuildRun(){
 }
 
 void CKDevelop::slotBuildRunWithArgs(){
-  slotBuildMake();
-  slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
-  beep=false;
-  next_job = "run_with_args";
+  CExecuteArgDlg argdlg(this,"Arguments",prj);
+  if(argdlg.exec()){
+    slotBuildMake();
+    slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
+    beep=false;
+    next_job = "run_with_args";
+  }
 }
 void CKDevelop::slotBuildDebug(){
 
@@ -741,11 +745,7 @@ void CKDevelop::slotBuildConfigure(){
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
    beep = true;
 }
-void CKDevelop::slotBuildSetExecuteArgs(){
-  slotStatusMsg(i18n("Setting execution arguments..."));
-  CExecuteArgDlg* argdlg= new CExecuteArgDlg(this,"Arguments",prj);
-  argdlg->show();
-}
+
 
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
@@ -1317,6 +1317,13 @@ void CKDevelop::slotHelpHomepage(){
     _exit(0);
   }
 }
+void CKDevelop::slotHelpBugReport(){
+  config->setGroup("General Options");
+  CBugReportDlg dlg(this,"bug",config->readEntry("author_name",""),config->readEntry("author_email",""),
+		    config->readEntry("kdevelop_bug_report_email","kdevelop-bug-report@fara3.cs.uni-potsdam.de"));
+  dlg.show();
+  
+}
 void CKDevelop::slotHelpAbout(){
   KMsgBox::message(this,i18n("About KDevelop..."),i18n("\t   KDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
 Sandy Meier <smeier@rz.uni-potsdam.de>
@@ -1785,13 +1792,13 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       }
 
       appl_process.clearArguments();
-			cerr<<"running with arguments"<< prj->getExecuteArgs()<<endl;
+      cerr<<"running with arguments"<< prj->getExecuteArgs()<<endl;
       // Warning: not every user has the current directory in his path !
-//      appl_process << "./" + prj->getBinPROGRAM().lower()+" "+prj->getExecuteArgs();
-			QString args=prj->getExecuteArgs();
-			if(args.isEmpty())
+      //      appl_process << "./" + prj->getBinPROGRAM().lower()+" "+prj->getExecuteArgs();
+      QString args=prj->getExecuteArgs();
+      if(args.isEmpty())
       	appl_process << "./" + prj->getBinPROGRAM().lower();
-			else
+      else
       	appl_process << "./" + prj->getBinPROGRAM().lower() <<args;				
       setToolMenuProcess(false);
       appl_process.start(KProcess::NotifyOnExit,KProcess::All);
@@ -2092,8 +2099,6 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with KAppWizard"))
   ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
   ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			  i18n("Closes the current project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE,              			  i18n("Adds a file to the current project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_NEW,          			  i18n("Adds a new file to the project"))
   ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        			  i18n("Adds an existing file to the project"))
   ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           			  i18n("Removes file from the project"))
 
@@ -2101,7 +2106,8 @@ BEGIN_STATUS_MSG(CKDevelop)
 
   ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       			  i18n("Shows the current file properties"))
   ON_STATUS_MSG(ID_PROJECT_OPTIONS,               			  i18n("Sets project and compiler options"))
-
+   ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,        			  i18n("Creates the Project's API with KDoc"))
+  ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,        			  i18n("Creates the Project's User Manual with the sgml-file"))
   
   ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
   ON_STATUS_MSG(ID_KDLG_BUILD_GENERATE,                   i18n("Generates the sourcefiles for the dialog"))
@@ -2114,8 +2120,7 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
   ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
   ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
-  ON_STATUS_MSG(ID_BUILD_MAKE_PROJECT_API,        			  i18n("Creates the Project's API with KDoc"))
-  ON_STATUS_MSG(ID_BUILD_MAKE_USER_MANUAL,        			  i18n("Creates the Project's User Manual with the sgml-file"))
+ 
 
   ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,												i18n("Changes to the KDevelop dialogeditor"))
   ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,										i18n("Changes to KDevelop project editor"))

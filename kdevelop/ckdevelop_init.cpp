@@ -555,11 +555,8 @@ void CKDevelop::initMenu(){
   ///////////////////////////////////////////////////////////////////
   // Project-menu entries
   
-  // submenu for adding projectfiles
-  QPopupMenu* p2 = new QPopupMenu;
-  p2->insertItem(i18n("&New File..."), this, SLOT(slotProjectAddNewFile()),0,ID_PROJECT_ADD_FILE_NEW);
-  p2->insertItem(i18n("&Existing File(s)..."), this,
-		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
+  
+  
   
   // project-menu
   project_menu = new QPopupMenu;
@@ -570,7 +567,7 @@ void CKDevelop::initMenu(){
   project_menu->insertSeparator();
   project_menu->insertItem(i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
-  project_menu->insertItem(i18n("&Add File(s) to Project"),p2,ID_PROJECT_ADD_FILE);
+  project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
   project_menu->insertItem(i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
@@ -579,9 +576,23 @@ void CKDevelop::initMenu(){
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
   
 
-  project_menu->insertSeparator();		
+ 		
   project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
+  project_menu->insertSeparator();
+  
+  	project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotBuildMessages()),0, ID_PROJECT_MESSAGES);
+  project_menu->insertItem(i18n("Make AP&I-Doc"), this,
+			 SLOT(slotBuildAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
+  project_menu->insertItem(i18n("Make &User-Manual"), this, 
+			 SLOT(slotBuildManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
+  // submenu for making dists
+
+  QPopupMenu*  p2 = new QPopupMenu;
+  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotBuildMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
+  project_menu->insertItem(i18n("Make D&istribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
+  project_menu->insertSeparator();
+  
   project_menu->insertItem(i18n("&Options..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
   //  project_menu->insertSeparator();		
 
@@ -594,7 +605,7 @@ void CKDevelop::initMenu(){
   //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
 
   kdev_menubar->insertItem(i18n("&Project"), project_menu);
-
+  
 
 ///////////////////////////////////////////////////////////////////
 // Build-menu entries
@@ -620,25 +631,12 @@ void CKDevelop::initMenu(){
   build_menu->insertSeparator();
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
-	build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
+	build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
   build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure"), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
-  build_menu->insertSeparator();
-	build_menu->insertItem(i18n("Execution ar&guments..."),this,SLOT(slotBuildSetExecuteArgs()),0,ID_BUILD_SET_ARGS);
-	build_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotBuildMessages()),0, ID_BUILD_MESSAGES);
-  build_menu->insertItem(i18n("Make AP&I-Doc"), this,
-			 SLOT(slotBuildAPI()),0,ID_BUILD_MAKE_PROJECT_API);
-  build_menu->insertItem(i18n("Make &User-Manual"), this, 
-			 SLOT(slotBuildManual()),0,ID_BUILD_MAKE_USER_MANUAL);
-
-  // submenu for making dists
-  p2 = new QPopupMenu;
-  p2->insertItem(i18n("&Source-tgz"), this, SLOT(slotBuildMakeDistSourceTgz()),0,ID_BUILD_MAKE_DISTRIBUTION_SOURCE_TGZ);
-  
-  build_menu->insertItem(i18n("Make D&istribution"),p2,ID_BUILD_MAKE_DISTRIBUTION);
 
   kdev_menubar->insertItem(i18n("&Build"), build_menu);
 
@@ -725,6 +723,7 @@ void CKDevelop::initMenu(){
   help_menu->insertSeparator();
   help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContents()),0 ,ID_HELP_CONTENTS);
   help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help_menu->insertItem(i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertItem(Icon("mini/mini-book1.xpm"),i18n("&Qt-Library"),this, SLOT(slotHelpQtLib()),0,ID_HELP_QT_LIBRARY);

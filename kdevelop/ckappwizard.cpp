@@ -25,13 +25,21 @@
 #include "debug.h"
 #include <kmsgbox.h>
 
-CKAppWizard::CKAppWizard(QWidget* parent,const char* name) : KWizard(parent,name,true){
-    q = new KShellProcess();
-    gen_prj = false;
-    setCaption(i18n("Application Wizard"));
-    init();
-    initPages();
-    slotDefaultClicked();    
+CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
+  q = new KShellProcess();
+  gen_prj = false;
+  setCaption(i18n("Application Wizard"));
+  init();
+  initPages();
+  m_author_email = author_email;
+  m_author_name = author_name;
+  cerr << ":" << m_author_name << ":";
+  cerr << ":" << m_author_email << ":";
+  
+  slotDefaultClicked();    
+
+ 
+  
 }
 
 CKAppWizard::~CKAppWizard () {
@@ -74,105 +82,105 @@ void CKAppWizard::initPages(){
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/kAppWizard.bmp");
   
   // create a widget and paint a picture on it
-	widget1a = new QWidget( widget0, "widget1a" );
-	widget1a->setGeometry( 0, 0, 500, 160 );
-	widget1a->setMinimumSize( 0, 0 );
-	widget1a->setMaximumSize( 32767, 32767 );
-	widget1a->setFocusPolicy( QWidget::NoFocus );
-	widget1a->setBackgroundMode( QWidget::PaletteBackground );
-	widget1a->setFontPropagation( QWidget::NoChildren );
-	widget1a->setPalettePropagation( QWidget::NoChildren );
-	widget1a->setBackgroundPixmap (pm);
-
-	applications = new QListView( widget0, "applications" );
-	applications->setGeometry( 20, 170, 170, 250 );
-	applications->setMinimumSize( 0, 0 );
-	applications->setMaximumSize( 32767, 32767 );
-	applications->setFocusPolicy( QWidget::TabFocus );
-	applications->setBackgroundMode( QWidget::PaletteBackground );
-	applications->setFontPropagation( QWidget::NoChildren );
-	applications->setPalettePropagation( QWidget::NoChildren );
-	applications->setResizePolicy( QScrollView::Manual );
-	applications->setVScrollBarMode( QScrollView::Auto );
-	applications->setHScrollBarMode( QScrollView::Auto );
-	applications->setTreeStepSize( 20 );
-	applications->setMultiSelection( FALSE );
-	applications->setAllColumnsShowFocus( FALSE );
-	applications->setItemMargin( 1 );
-	applications->setRootIsDecorated( TRUE );
-	applications->addColumn( "Applications", -1 );
-	applications->setColumnWidthMode( 0, QListView::Maximum );
-	applications->setColumnAlignment( 0, 1 );
-	applications->setSorting (-1,FALSE);
-	applications->header()->hide();
-
-	// create another widget for a picture
-	widget1b = new QWidget( widget0, "widget1b" );
-	widget1b->setGeometry( 280, 170, 190, 140 );
-	widget1b->setMinimumSize( 0, 0 );
-	widget1b->setMaximumSize( 32767, 32767 );
-	widget1b->setFocusPolicy( QWidget::NoFocus );
-	widget1b->setBackgroundMode( QWidget::PaletteBackground );
-	widget1b->setFontPropagation( QWidget::NoChildren );
-	widget1b->setPalettePropagation( QWidget::NoChildren );
-
-	apphelp = new QLabel( widget0, "apphelp" );
-	apphelp->setGeometry( 230, 330, 240, 90 );
-	apphelp->setMinimumSize( 0, 0 );
-	apphelp->setMaximumSize( 32767, 32767 );
-	apphelp->setFocusPolicy( QWidget::NoFocus );
-	apphelp->setBackgroundMode( QWidget::PaletteBackground );
-	apphelp->setFontPropagation( QWidget::NoChildren );
-	apphelp->setPalettePropagation( QWidget::NoChildren );
-	apphelp->setText( "Label:" );
-	apphelp->setAlignment( 289 );
-	apphelp->setMargin( -1 );
-
-	othersentry = new QListViewItem (applications, "others");
-	othersentry->setExpandable (true);
-	othersentry->setOpen (TRUE);
-	othersentry->sortChildItems (0,FALSE);
-	customprojitem = new QListViewItem (othersentry,"custom project");
-
-	/*	gtkentry = new QListViewItem (applications, "GTK");
-		gtkentry->setExpandable (true);
-		gtkentry->setOpen (TRUE);
-		gtkentry->sortChildItems (0,FALSE);	
-		gtkminiitem = new QListViewItem (gtkentry,"Mini");
-		gtknormalitem = new QListViewItem (gtkentry,"Normal");
-	*/
-	ccppentry = new QListViewItem (applications, "C/C++");
-	ccppentry->setExpandable (true);
-	ccppentry->setOpen (TRUE);
-	ccppentry->sortChildItems (0,FALSE);
-	cppitem = new QListViewItem (ccppentry,"C++");
-	//citem = new QListViewItem (ccppentry,"C");
-	
-	qtentry = new QListViewItem (applications, "QT");
-	qtentry->setExpandable (true);
-	qtentry->setOpen (TRUE);
-	qtentry->sortChildItems (0,FALSE);
-	//qtminiitem = new QListViewItem (qtentry,"Mini");
-	qtnormalitem = new QListViewItem (qtentry,"Normal");
-	
-	kdeentry = new QListViewItem (applications,"KDE");
-	kdeentry->setExpandable (true);
-	kdeentry->setOpen (TRUE);
-	kdeentry->sortChildItems (0,FALSE);
-	//komitem = new QListViewItem (kdeentry,"KOM");
-	//corbaitem = new QListViewItem (kdeentry,"Corba");
-	kdeminiitem = new QListViewItem (kdeentry,"Mini");
-	kdenormalitem = new QListViewItem (kdeentry,"Normal");
-
-	applications->setFrameStyle( QListView::Panel | QListView::Sunken );
-	applications->setLineWidth( 2 );
-
-	separator0 = new KSeparator (widget0);
-	separator0->setGeometry(0,160,515,5);
-
-	connect (applications,SIGNAL(selectionChanged ()),SLOT(slotApplicationClicked()));
+  widget1a = new QWidget( widget0, "widget1a" );
+  widget1a->setGeometry( 0, 0, 500, 160 );
+  widget1a->setMinimumSize( 0, 0 );
+  widget1a->setMaximumSize( 32767, 32767 );
+  widget1a->setFocusPolicy( QWidget::NoFocus );
+  widget1a->setBackgroundMode( QWidget::PaletteBackground );
+  widget1a->setFontPropagation( QWidget::NoChildren );
+  widget1a->setPalettePropagation( QWidget::NoChildren );
+  widget1a->setBackgroundPixmap (pm);
   
-    
+  applications = new QListView( widget0, "applications" );
+  applications->setGeometry( 20, 170, 170, 250 );
+  applications->setMinimumSize( 0, 0 );
+  applications->setMaximumSize( 32767, 32767 );
+  applications->setFocusPolicy( QWidget::TabFocus );
+  applications->setBackgroundMode( QWidget::PaletteBackground );
+  applications->setFontPropagation( QWidget::NoChildren );
+  applications->setPalettePropagation( QWidget::NoChildren );
+  applications->setResizePolicy( QScrollView::Manual );
+  applications->setVScrollBarMode( QScrollView::Auto );
+  applications->setHScrollBarMode( QScrollView::Auto );
+  applications->setTreeStepSize( 20 );
+  applications->setMultiSelection( FALSE );
+  applications->setAllColumnsShowFocus( FALSE );
+  applications->setItemMargin( 1 );
+  applications->setRootIsDecorated( TRUE );
+  applications->addColumn( "Applications", -1 );
+  applications->setColumnWidthMode( 0, QListView::Maximum );
+  applications->setColumnAlignment( 0, 1 );
+  applications->setSorting (-1,FALSE);
+  applications->header()->hide();
+  
+  // create another widget for a picture
+  widget1b = new QWidget( widget0, "widget1b" );
+  widget1b->setGeometry( 280, 170, 190, 140 );
+  widget1b->setMinimumSize( 0, 0 );
+  widget1b->setMaximumSize( 32767, 32767 );
+  widget1b->setFocusPolicy( QWidget::NoFocus );
+  widget1b->setBackgroundMode( QWidget::PaletteBackground );
+  widget1b->setFontPropagation( QWidget::NoChildren );
+  widget1b->setPalettePropagation( QWidget::NoChildren );
+  
+  apphelp = new QLabel( widget0, "apphelp" );
+  apphelp->setGeometry( 230, 330, 240, 90 );
+  apphelp->setMinimumSize( 0, 0 );
+  apphelp->setMaximumSize( 32767, 32767 );
+  apphelp->setFocusPolicy( QWidget::NoFocus );
+  apphelp->setBackgroundMode( QWidget::PaletteBackground );
+  apphelp->setFontPropagation( QWidget::NoChildren );
+  apphelp->setPalettePropagation( QWidget::NoChildren );
+  apphelp->setText( "Label:" );
+  apphelp->setAlignment( 289 );
+  apphelp->setMargin( -1 );
+  
+  othersentry = new QListViewItem (applications, "others");
+  othersentry->setExpandable (true);
+  othersentry->setOpen (TRUE);
+  othersentry->sortChildItems (0,FALSE);
+  customprojitem = new QListViewItem (othersentry,"custom project");
+  
+  /*	gtkentry = new QListViewItem (applications, "GTK");
+	gtkentry->setExpandable (true);
+	gtkentry->setOpen (TRUE);
+	gtkentry->sortChildItems (0,FALSE);	
+	gtkminiitem = new QListViewItem (gtkentry,"Mini");
+	gtknormalitem = new QListViewItem (gtkentry,"Normal");
+  */
+  ccppentry = new QListViewItem (applications, "C/C++");
+  ccppentry->setExpandable (true);
+  ccppentry->setOpen (TRUE);
+  ccppentry->sortChildItems (0,FALSE);
+  cppitem = new QListViewItem (ccppentry,"C++");
+  //citem = new QListViewItem (ccppentry,"C");
+  
+  qtentry = new QListViewItem (applications, "QT");
+  qtentry->setExpandable (true);
+  qtentry->setOpen (TRUE);
+  qtentry->sortChildItems (0,FALSE);
+  //qtminiitem = new QListViewItem (qtentry,"Mini");
+  qtnormalitem = new QListViewItem (qtentry,"Normal");
+  
+  kdeentry = new QListViewItem (applications,"KDE");
+  kdeentry->setExpandable (true);
+  kdeentry->setOpen (TRUE);
+  kdeentry->sortChildItems (0,FALSE);
+  //komitem = new QListViewItem (kdeentry,"KOM");
+  //corbaitem = new QListViewItem (kdeentry,"Corba");
+  kdeminiitem = new QListViewItem (kdeentry,"Mini");
+  kdenormalitem = new QListViewItem (kdeentry,"Normal");
+  
+  applications->setFrameStyle( QListView::Panel | QListView::Sunken );
+  applications->setLineWidth( 2 );
+  
+  separator0 = new KSeparator (widget0);
+  separator0->setGeometry(0,160,515,5);
+  
+  connect (applications,SIGNAL(selectionChanged ()),SLOT(slotApplicationClicked()));
+  
+  
   /************************************************************/
   
   // create the second page
@@ -182,47 +190,46 @@ void CKAppWizard::initPages(){
   page1->title = (i18n("Generate settings"));
   addPage(page1);  
   
-	directoryload = new QPushButton( widget1, "directoryload" );
-	directoryload->setGeometry( 440, 50, 30, 30 );
-	directoryload->setMinimumSize( 0, 0 );
-	directoryload->setMaximumSize( 32767, 32767 );
-	directoryload->setFocusPolicy( QWidget::TabFocus );
-	directoryload->setBackgroundMode( QWidget::PaletteBackground );
-	directoryload->setFontPropagation( QWidget::NoChildren );
-	directoryload->setPalettePropagation( QWidget::NoChildren );
-	directoryload->setText( "..." );
-	directoryload->setAutoRepeat( FALSE );
-	directoryload->setAutoResize( FALSE );
-
-	emailline = new QLineEdit( widget1, "emailline" );
-	emailline->setGeometry( 140, 170, 290, 30 );
-	emailline->setMinimumSize( 0, 0 );
-	emailline->setMaximumSize( 32767, 32767 );
-	emailline->setFocusPolicy( QWidget::StrongFocus );
-	emailline->setBackgroundMode( QWidget::PaletteBase );
-	emailline->setFontPropagation( QWidget::NoChildren );
-	emailline->setPalettePropagation( QWidget::NoChildren );
-	emailline->setText( "" );
-	emailline->setMaxLength( 32767 );
-	emailline->setEchoMode( QLineEdit::Normal );
-	emailline->setFrame( TRUE );
-
-	authorline = new QLineEdit( widget1, "authorline" );
-	authorline->setGeometry( 140, 130, 290, 30 );
-	authorline->setMinimumSize( 0, 0 );
-	authorline->setMaximumSize( 32767, 32767 );
-	authorline->setFocusPolicy( QWidget::StrongFocus );
-	authorline->setBackgroundMode( QWidget::PaletteBase );
-	authorline->setFontPropagation( QWidget::NoChildren );
-	authorline->setPalettePropagation( QWidget::NoChildren );
-	authorline->setText( "" );
-	authorline->setMaxLength( 32767 );
-	authorline->setEchoMode( QLineEdit::Normal );
-	authorline->setFrame( TRUE );
-
-	versionline = new QLineEdit( widget1, "versionline" );
-	versionline->setGeometry( 140, 90, 290, 30 );
-	versionline->setMinimumSize( 0, 0 );
+  directoryload = new QPushButton( widget1, "directoryload" );
+  directoryload->setGeometry( 440, 50, 30, 30 );
+  directoryload->setMinimumSize( 0, 0 );
+  directoryload->setMaximumSize( 32767, 32767 );
+  directoryload->setFocusPolicy( QWidget::TabFocus );
+  directoryload->setBackgroundMode( QWidget::PaletteBackground );
+  directoryload->setFontPropagation( QWidget::NoChildren );
+  directoryload->setPalettePropagation( QWidget::NoChildren );
+  directoryload->setText( "..." );
+  directoryload->setAutoRepeat( FALSE );
+  directoryload->setAutoResize( FALSE );
+  
+  emailline = new QLineEdit( widget1, "emailline" );
+  emailline->setGeometry( 140, 170, 290, 30 );
+  emailline->setMinimumSize( 0, 0 );
+  emailline->setMaximumSize( 32767, 32767 );
+  emailline->setFocusPolicy( QWidget::StrongFocus );
+  emailline->setBackgroundMode( QWidget::PaletteBase );
+  emailline->setFontPropagation( QWidget::NoChildren );
+  emailline->setPalettePropagation( QWidget::NoChildren );
+  
+  emailline->setMaxLength( 32767 );
+  emailline->setEchoMode( QLineEdit::Normal );
+  emailline->setFrame( TRUE );
+  
+  authorline = new QLineEdit( widget1, "authorline" );
+  authorline->setGeometry( 140, 130, 290, 30 );
+  authorline->setMinimumSize( 0, 0 );
+  authorline->setMaximumSize( 32767, 32767 );
+  authorline->setFocusPolicy( QWidget::StrongFocus );
+  authorline->setBackgroundMode( QWidget::PaletteBase );
+  authorline->setFontPropagation( QWidget::NoChildren );
+  authorline->setPalettePropagation( QWidget::NoChildren );
+  authorline->setMaxLength( 32767 );
+  authorline->setEchoMode( QLineEdit::Normal );
+  authorline->setFrame( TRUE );
+  
+  versionline = new QLineEdit( widget1, "versionline" );
+  versionline->setGeometry( 140, 90, 290, 30 );
+  versionline->setMinimumSize( 0, 0 );
 	versionline->setMaximumSize( 32767, 32767 );
 	versionline->setFocusPolicy( QWidget::StrongFocus );
 	versionline->setBackgroundMode( QWidget::PaletteBase );
@@ -938,6 +945,9 @@ void CKAppWizard::okPermited() {
 // connection of this (cancelButton)
 void CKAppWizard::slotAppEnd() {
   nametext = nameline->text();
+  m_author_name = authorline->text();
+  m_author_email = emailline->text();
+
   if ((!(okButton->isEnabled())) && (nametext.length() >= 1)) {
 
     delete (project);
@@ -1185,9 +1195,9 @@ void CKAppWizard::slotDefaultClicked() {
   iconload->setPixmap(QPixmap(KApplication::kde_icondir() + "/edit.xpm"));
   cppedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/cpp_template",cppedit->OPEN_READWRITE);
   hedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/header_template",hedit->OPEN_READWRITE);
-  authorline->setText(0);
-  emailline->setText(0);
-  versionline->setText(0);
+  authorline->setText(m_author_name);
+  emailline->setText(m_author_email);
+  versionline->setText("0.1");
 }
 
 // connection of nameline
