@@ -30,6 +30,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <qtimer.h>
+#include <kstringhandler.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -97,7 +98,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                               "To change a variable value in your "
                               "running app use a watch variable (&eg; a=5)."));
     mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("Debugger variable-view"));
-    mainWindow()->setViewAvailable(variableWidget, false);
+//    mainWindow()->setViewAvailable(variableWidget, false);
 
     gdbBreakpointWidget = new GDBBreakpointWidget( 0, "gdbBreakpointWidget" );
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
@@ -443,7 +444,8 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
     }
     if (!m_contextIdent.isEmpty())
     {
-        int id = popup->insertItem( i18n("Watch: %1").arg(m_contextIdent), this, SLOT(contextWatch()) );
+        QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
+        int id = popup->insertItem( i18n("Watch: %1").arg(squeezed), this, SLOT(contextWatch()) );
         popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Adds an expression under the cursor to the Variables/Watch list."));
     }
 }
@@ -613,7 +615,7 @@ bool DebuggerPart::startDebugger()
                                            "been activated or the interrupt was pressed).") );
 
 
-    mainWindow()->setViewAvailable(variableWidget, true);
+//    mainWindow()->setViewAvailable(variableWidget, true);
     mainWindow()->setViewAvailable(framestackWidget, true);
     mainWindow()->setViewAvailable(disassembleWidget, true);
     mainWindow()->setViewAvailable(gdbOutputWidget, true);
@@ -654,7 +656,7 @@ void DebuggerPart::slotStopDebugger()
     disassembleWidget->setEnabled(false);
     gdbOutputWidget->setEnabled(false);
 
-    mainWindow()->setViewAvailable(variableWidget, false);
+//    mainWindow()->setViewAvailable(variableWidget, false);
     mainWindow()->setViewAvailable(framestackWidget, false);
     mainWindow()->setViewAvailable(disassembleWidget, false);
     mainWindow()->setViewAvailable(gdbOutputWidget, false);

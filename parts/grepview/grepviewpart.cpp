@@ -20,6 +20,7 @@
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <kprocess.h>
+#include <kstringhandler.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -114,7 +115,8 @@ void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
     QString ident = econtext->currentWord();
     if (!ident.isEmpty()) {
         m_popupstr = ident;
-        int id = popup->insertItem( i18n("Grep: %1").arg(ident),
+        QString squeezed = KStringHandler::csqueeze(ident, 30);
+        int id = popup->insertItem( i18n("Grep: %1").arg(squeezed),
                            this, SLOT(slotContextGrep()) );
         popup->setWhatsThis(id, i18n("<b>Grep</b><p>Opens the search in files dialog "
                                "and sets the pattern to a text under the cursor."));

@@ -23,6 +23,7 @@
 #include <kprocess.h>
 #include <qregexp.h>
 #include <ktempfile.h>
+#include <kstringhandler.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -96,11 +97,12 @@ void CTagsPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
 
     m_contextString = ident;
-    int id = popup->insertItem( i18n("Go to ctags Declaration: %1").arg(ident),
+    QString squeezed = KStringHandler::csqueeze(ident, 30);
+    int id = popup->insertItem( i18n("Go to ctags Declaration: %1").arg(squeezed),
                        this, SLOT(slotGotoDeclaration()) );
     popup->setWhatsThis(id, i18n("<b>Go to ctags declaration</b><p>Searches in the tags database for a symbol "
         "under the cursor and opens a file that contains the symbol declaration."));
-    id = popup->insertItem( i18n("Go to ctags Definition: %1").arg(ident),
+    id = popup->insertItem( i18n("Go to ctags Definition: %1").arg(squeezed),
                        this, SLOT(slotGotoDefinition()) );
     popup->setWhatsThis(id, i18n("<b>Go to ctags definition</b><p>Searches in the tags database for a symbol "
         "under the cursor and opens a file that contains the symbol definition."));
