@@ -35,11 +35,6 @@
         <cxxflags>-O0 -g3</cxxflags>
       </debug>
     </configurations>
-  <configurations>
-      <default>
-        <ldflags>-lSDL</ldflags>
-      </default>
-  </configurations>
  </kdevautoproject>
  <kdevfileview>
   <groups>
