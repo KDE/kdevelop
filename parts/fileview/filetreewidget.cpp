@@ -198,11 +198,10 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
 
     KPopupMenu popup( i18n("File Tree"), this );
 
-    m_impl->fillPopupMenu( &popup, item );
-
     // If an item is selected, fill the file context with selected files' list
-    if (item != 0)
+    if (item)
     {
+        m_impl->fillPopupMenu( &popup, item );
         FileContext context( m_impl->selectedPathUrls() );
         m_part->core()->fillContextMenu( &popup, &context );
     }
