@@ -262,6 +262,7 @@ protected slots:
     bool bIsPainting;
 
     QPixmap *drawBuffer;
+	  bool m_hasFocus;
 };
 
 /*

@@ -1,3 +1,10 @@
+2001-07-23  F@lk Brettschneider <falk@kdevelop.org>
+    * speed up KWriteView by avoiding unnecessary focusInEvent processing
+    
+2001-07-22  F@lk Brettschneider <falk@kdevelop.org>
+    * several bugfixes concerning the Toplevel MDI mode
+    * hopefully fixed the setMainCaption crash bug
+
 2001-07-21  F@lk Brettschneider <falk@kdevelop.org>
     * big bugfix: accelerators for undocked MDI views work again! :-)
       --> Toplevel MDI mode is really ready to use now

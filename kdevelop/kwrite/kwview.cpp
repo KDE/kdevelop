@@ -343,6 +343,7 @@ void KIconBorder::slotGetRange()
 }
 
 KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
+	m_hasFocus = false;
   kWrite = write;
   kWriteDoc = doc;
   bIsPainting = false;
@@ -949,6 +950,10 @@ void KWriteView::focusInEvent(QFocusEvent *e) {
    if (e && ((e->reason())==QFocusEvent::Popup)) {
       return;
    }
+	 if (m_hasFocus)
+		  return;
+	 else
+		  m_hasFocus = true;
 
 //  printf("got focus %d\n",cursorTimer);
 
@@ -980,6 +985,7 @@ void KWriteView::focusOutEvent(QFocusEvent *) {
     cursorOn = false;
     paintCursor();
   }
+	m_hasFocus = false;
 }
 
 void KWriteView::scroll( int dx, int dy ) {
