@@ -413,7 +413,7 @@ was compiled with PHP support.</string>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string></string>
+                                    <string>...</string>
                                 </property>
                                 <property stdset="1">
                                     <name>pixmap</name>

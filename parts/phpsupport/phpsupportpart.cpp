@@ -116,6 +116,7 @@ void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
 void PHPSupportPart::slotRun(){
   configData = new PHPConfigData(document());
   if(validateConfig()){
+    core()->raiseWidget(m_phpErrorView);
     PHPConfigData::InvocationMode mode = configData->getInvocationMode() ;
     if(mode == PHPConfigData::Web){
       executeOnWebserver();
@@ -185,6 +186,8 @@ void PHPSupportPart::slotWebResult(KIO::Job* job){
 }
 
 void PHPSupportPart::executeInTerminal(){
+  cerr << "kdevelop (phpsupport): slotExecuteInTerminal()" << endl;
+  QString file;
   if(m_htmlView==0){
     m_htmlView = new PHPHTMLView();
     core()->embedWidget(m_htmlView->view(), KDevCore::DocumentView, i18n("PHP"));
@@ -194,16 +197,25 @@ void PHPSupportPart::executeInTerminal(){
 
   m_phpExeOutput="";
   phpExeProc->clearArguments();
-  *phpExeProc << "php";
+  *phpExeProc << configData->getPHPExecPath();
   *phpExeProc << "-f";
-  *phpExeProc << "/home/smeier/phpHello/app.php";
-  phpExeProc->start(KProcess::Block,KProcess::Stdout);
 
-  cerr << "kdevelop (phpsupport): slotExecuteInTerminal()" << endl;
+
+  KEditor::Editor* editor = core()->editor();
+  if(editor){
+    file = editor->currentDocument()->url().path();
+  }
+  
+  *phpExeProc << file; 
+  cerr << "kdevelop (phpsupport): " << file << endl;
+  phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
+  
+
+
   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
 }
 void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* proc, char* buffer, int buflen){
-  cerr << "kdevelop (phpsupport): slotPHPExeStderr()" << endl;
+  cerr << "kdevelop (phpsupport): slotPHPExeStdout()" << endl;
   m_htmlView->write(buffer,buflen+1);
   m_phpExeOutput += QCString(buffer,buflen+1);
 }

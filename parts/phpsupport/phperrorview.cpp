@@ -20,7 +20,7 @@
 #include <iostream.h>
 
 PHPErrorView::PHPErrorView(PHPSupportPart *part) : QListBox(0,"PHP Error View") {
-  connect(this,SIGNAL(highlighted(int)),this,SLOT(slotItemSelected(int)));
+  connect(this,SIGNAL(selected(int)),this,SLOT(slotItemSelected(int)));
 }
 
 PHPErrorView::~PHPErrorView(){
@@ -44,6 +44,8 @@ void PHPErrorView::parse(QString& phpOutput){
   KRegExp parseError("^<b>Parse error</b>:  parse error in <b>(.*)</b> on line <b>(.*)</b>.*$");
   KRegExp undefFunctionError("^<b>Fatal error</b>:  Call to undefined function:  (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
   KRegExp warning("^<b>Warning</b>.*<b>(.*)</b> on line <b>(.*)</b>.*$");
+  KRegExp generalFatalError("^<b>Fatal error</b>: (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
+  
 
   QStringList list = QStringList::split("\n",phpOutput);
   QStringList::Iterator it;
@@ -71,6 +73,15 @@ void PHPErrorView::parse(QString& phpOutput){
       errorItem = new ErrorItem();
       errorItem->filename = QString(warning.group(1));
       errorItem->line = QString(warning.group(2)).toInt();
+      errorDict.insert(currentLine,errorItem);
+      currentLine++; 
+    }
+    else if(generalFatalError.match(*it)){
+      insertItem(QString(generalFatalError.group(1)) + " in " +
+		 QString(generalFatalError.group(2)) + " on line " + QString(generalFatalError.group(3)));
+      errorItem = new ErrorItem();
+      errorItem->filename = QString(generalFatalError.group(2));
+      errorItem->line = QString(generalFatalError.group(3)).toInt();
       errorDict.insert(currentLine,errorItem);
       currentLine++;
       

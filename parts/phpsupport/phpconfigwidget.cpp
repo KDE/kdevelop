@@ -5,6 +5,7 @@
 #include <qcstring.h>
 #include <iostream.h>
 #include <qradiobutton.h>
+#include <kfiledialog.h>
 
 #include "phpinfodlg.h"
 #include "phpconfigwidget.h"
@@ -109,9 +110,11 @@ void PHPConfigWidget::slotAboutClicked()
 void PHPConfigWidget::slotReceivedPHPInfo (KProcess* proc, char* buffer, int buflen){
   m_phpInfo += QCString(buffer,buflen+1);
 }
-void PHPConfigWidget::slotPHPExeButtonClicked()
-{
-    qWarning( "PHPConfigWidget::slotPHPExeButtonClicked(): Not implemented yet!" );
+void PHPConfigWidget::slotPHPExeButtonClicked(){
+  QString exe = KFileDialog::getOpenFileName(QFileInfo(exe_edit->text()).filePath());
+  if(!exe.isEmpty()){
+    exe_edit->setText(exe);
+  }
 }
 
 void PHPConfigWidget::slotPHPIniButtonClicked()
