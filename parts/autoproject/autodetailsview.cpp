@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 19.01.2003
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rder
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -47,6 +47,7 @@
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
+#include "subclassesdlg.h"
 
 AutoDetailsView::AutoDetailsView(AutoProjectWidget* widget, AutoProjectPart* part, QWidget *parent, const char *name)
   : KListView(parent, name)
@@ -55,6 +56,9 @@ AutoDetailsView::AutoDetailsView(AutoProjectWidget* widget, AutoProjectPart* par
 	m_part = part;
 
 	initActions();
+	QDomDocument &dom = *(m_part->projectDom());
+	m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                                                    "subclass","sourcefile", "uifile");
 }
 
 
@@ -91,8 +95,6 @@ void AutoDetailsView::initActions()
 
 QString AutoDetailsView::getUiFileLink(const QString &relpath, const QString& filename)
 {
-	qWarning("relpath: %s fname: %s", relpath.latin1(), filename.latin1()  );
-	
 	DomUtil::PairList::iterator it;
 	
 	for (it=m_subclasslist.begin();it != m_subclasslist.end(); ++it)
@@ -124,19 +126,32 @@ void AutoDetailsView::slotAddNewFile()
 	if ( !titem )
 		return ;
 
-	AddFileDialog dlg( m_part, m_widget, m_widget->selectedSubproject(), titem,
+	KDevCreateFile * createFileSupport = m_part->createFileSupport();
+	if (createFileSupport) 
+	{
+		KDevCreateFile::CreatedFile crFile =
+			createFileSupport->createNewFile(QString::null, m_widget->selectedSubproject()->path);
+/*		if (crFile.status == KDevCreateFile::CreatedFile::STATUS_OK)
+        {
+			FileItem *fitem = m_widget->createFileItem(crFile.filename, m_widget->selectedSubproject());
+			titem->sources.append(fitem);
+			titem->insertItem(fitem);
+			emit selectionChanged( titem ); // update list view
+		}*/
+    } else {
+		AddFileDialog dlg( m_part, m_widget, m_widget->selectedSubproject(), titem,
 	                   this, "add file dialog" );
+		QString caption;
+		if ( titem->name.isEmpty() )
+			caption = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
+		else
+			caption = titem->name;
+		
+		dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( caption ) );
 
-	QString caption;
-	if ( titem->name.isEmpty() )
-		caption = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
-	else
-		caption = titem->name;
-	
-	dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( caption ) );
-
-	if ( dlg.exec() )
-		emit selectionChanged( titem ); // update list view
+		if ( dlg.exec() )
+			emit selectionChanged( titem ); // update list view
+	}
 }
 
 
@@ -324,11 +339,13 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		FileContext context( m_widget->selectedSubproject()->path + "/" + fitem->name, false );
 
 		int idSubclassWidget = idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget...") );
+        int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
 		int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
 		int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
 
 		if (!fitem->name.contains(QRegExp("ui$")))
 		{
+            popup.removeItem(idUISubclasses);
 			popup.removeItem(idViewUIH);
 			popup.removeItem(idSubclassWidget);
 		}
@@ -387,6 +404,29 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 			
 			m_part->languageSupport()->updateWidget(m_widget->selectedSubproject()->path + "/" + uifile, noext);
 		}
+        else if (r == idUISubclasses)
+        {
+            QDomDocument &dom = *(m_part->projectDom());
+            DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                                                    "subclass","sourcefile", "uifile");
+            SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_widget->selectedSubproject()->path + "/" + fitem->name).remove(0,m_part->projectDirectory().length()),
+                list, m_part->projectDirectory());
+                
+            if (sbdlg->exec())
+            {
+                QDomElement el = DomUtil::elementByPath( dom,  "/kdevautoproject");
+                QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevautoproject/subclassing");
+                if ( (!el.isNull()) && (!el2.isNull()) ) 
+                {
+                    el.removeChild(el2);
+                }
+                
+                DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass", "sourcefile", "uifile", list);
+
+                m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                    "subclass","sourcefile", "uifile");
+            }
+        }
 	}
 }
 

@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : Frag' mich was leichteres
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rder
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -298,7 +298,7 @@ void AddExistingFilesDialog::slotOk()
 		m_spitem->variables [ varname ] += ( " " + ( *items )->name() );
 		replaceMap.insert ( varname, m_spitem->variables [ varname ] );
 
-		fitem = m_widget->createFileItem ( ( *items )->name() );
+		fitem = m_widget->createFileItem ( ( *items )->name(), m_spitem );
 		m_titem->sources.append ( fitem );
 		m_titem->insertItem ( fitem );
 

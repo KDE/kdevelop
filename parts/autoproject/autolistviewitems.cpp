@@ -2,7 +2,7 @@
 *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
 *   bernd@kdevelop.org                                                    *
 *                                                                         *
-*   Copyright (C) 2002 by Victor Röder                                    *
+*   Copyright (C) 2002 by Victor Rder                                    *
 *   victor_roeder@gmx.de                                                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -79,18 +79,13 @@ QString SubprojectItem::relativePath()
     QString relpath = subdir;
 
     SubprojectItem *it = this;
-    qWarning("prepend: %s", subdir.latin1());
     while ( (it= dynamic_cast<SubprojectItem*>(it->parent())) )
     {
-        qWarning("prepend: %s", it->subdir.latin1());
         relpath.prepend(it->subdir + "/");
     }
     relpath.remove(0, 2);
 
-    qWarning("_________CREATED relpath is %s", relpath.latin1());
     return relpath;
-//    return path.remove(0,projectDirectory().length());
-//    return subdir;
 }
 
 

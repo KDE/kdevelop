@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 19.01.2003
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rder
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -30,6 +30,7 @@ class AutoProjectWidget;
 
 class AutoDetailsView : public KListView
 {
+	friend class RemoveFileDialog;
 	Q_OBJECT
 
 	public:

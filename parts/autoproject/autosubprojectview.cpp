@@ -1,7 +1,7 @@
 /***************************************************************************
                              -------------------
     begin                : 19.01.2003
-    copyright            : (C) 2002 by Victor Röder
+    copyright            : (C) 2002 by Victor Rder
     email                : victor_roeder@gmx.de
  ***************************************************************************/
 
@@ -305,7 +305,7 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 			
 			QMap<QString, bool>::Iterator dictIt = dict.begin();
 			while( dictIt != dict.end() ){
-				FileItem *fitem = m_widget->createFileItem( dictIt.key() );
+				FileItem *fitem = m_widget->createFileItem( dictIt.key(), item );
 				++dictIt;
 				
 				titem->sources.append( fitem );								
@@ -332,7 +332,7 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 		QStringList::Iterator it3;
 		for ( it3 = l.begin(); it3 != l.end(); ++it3 )
 		{
-			FileItem *fitem = m_widget->createFileItem( *it3 );
+			FileItem *fitem = m_widget->createFileItem( *it3, item );
 			titem->sources.append( fitem );
 		}
 	}
@@ -345,7 +345,7 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 
 		for ( it1 = l.begin(); it1 != l.end(); ++it1 )
 		{
-			FileItem *fitem = m_widget->createFileItem( *it1 );
+			FileItem *fitem = m_widget->createFileItem( *it1, item );
 			titem->sources.append( fitem );
 		}
 	}
@@ -374,7 +374,7 @@ void AutoSubprojectView::parseKDEDOCS( SubprojectItem *item,
 	{
 		if ( !re.exactMatch( *it ) )
 		{
-			FileItem * fitem = m_widget->createFileItem( *it );
+			FileItem * fitem = m_widget->createFileItem( *it, item );
 			titem->sources.append( fitem );
 		}
 	}
@@ -418,7 +418,7 @@ void AutoSubprojectView::parseKDEICON( SubprojectItem *item,
 	{
 		if ( re.exactMatch( *it ) )
 		{
-			FileItem * fitem = m_widget->createFileItem( *it );
+			FileItem * fitem = m_widget->createFileItem( *it, item );
 			titem->sources.append( fitem );
 		}
 	}

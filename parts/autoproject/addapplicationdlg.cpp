@@ -189,7 +189,7 @@ void AddApplicationDialog::accept()
         subProject->targets.append(titem);
     }
     // Add this file to the target
-    FileItem *fitem = m_widget->createFileItem(fileName);
+    FileItem *fitem = m_widget->createFileItem(fileName, subProject);
     titem->sources.append(fitem);
         
     subProject->variables[varname] += (" " + fileName);

@@ -109,7 +109,7 @@ void AddFileDialog::accept()
 		    f.close();
 	}
 
-	FileItem *fitem = m_widget->createFileItem(name);
+	FileItem *fitem = m_widget->createFileItem(name, subProject);
 	target->sources.append(fitem);
 	target->insertItem(fitem);
 

@@ -29,6 +29,7 @@
 #include "misc.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
+#include "autodetailsview.h"
 
 
 static bool fileListContains(const QPtrList<FileItem> &list, const QString &name)
@@ -64,6 +65,7 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, AutoProjectPart* p
 		QString joinedtargets = "    *" + targets.join("\n    *");
 		removeFromTargetsCheckBox->setText ( i18n ( "The file %1 is still used by the following targets:\n%2\n"
 												"Remove it from all of them?").arg(filename).arg(joinedtargets) );
+        setMinimumSize(QSize(size().width(), size().height() + removeFromTargetsCheckBox->size().height()*2) );
 	}
 
 	removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b>?" ).arg ( filename ) );
@@ -138,6 +140,35 @@ void RemoveFileDialog::accept()
 
 	AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
+/*  TODO: review configuration cleanup in the project file after removing subclassing related source
+    TODO: crash is here ;)
+    QDomDocument &dom = *(m_part->projectDom());
+    DomUtil::PairList list = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+                                            "subclass","sourcefile", "uifile");
+    
+    DomUtil::PairList::iterator it;
+    for ( it = list.begin(); it != list.end(); ++it )
+    {
+        qWarning("first: %s, second: %s -> %s", (*it).first.latin1(),(*it).second.latin1(),
+            QString("/" + subProject->path + "/" + fitem->name).latin1() );
+        if ( ((*it).second == QString("/" + subProject->path + "/" + fitem->name) )
+            || ((*it).first == QString("/" + subProject->path + "/" + fitem->name) ) )
+        {
+            list.remove(*it);
+        }
+    }
+                                            
+    QDomElement el = DomUtil::elementByPath( dom,  "/kdevautoproject");
+    QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevautoproject/subclassing");
+    if ( (!el.isNull()) && (!el2.isNull()) ) 
+    {
+        el.removeChild(el2);
+    }
+    DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass", "sourcefile", "uifile", list);
+    m_widget->m_detailView->m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
+        "subclass","sourcefile", "uifile");
+    */
+    
 	if (removeCheckBox->isChecked())
 		QFile::remove(subProject->path + "/" + fileName);
 

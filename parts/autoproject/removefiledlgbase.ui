@@ -9,140 +9,63 @@
             <x>0</x>
             <y>0</y>
             <width>447</width>
-            <height>270</height>
+            <height>219</height>
         </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
-    <property name="maximumSize">
-        <size>
-            <width>32767</width>
-            <height>32767</height>
-        </size>
-    </property>
-    <property name="baseSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
     </property>
     <property name="caption">
         <string>Remove File From This Target</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <property name="margin">
-            <number>11</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
-        </property>
-        <widget class="QGroupBox">
+        <widget class="QLayoutWidget" row="2" column="0">
             <property name="name">
-                <cstring>targetBox</cstring>
-            </property>
-            <property name="title">
-                <string>Subproject Information</string>
+                <cstring>layout4</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QLayoutWidget">
+                <spacer>
                     <property name="name">
-                        <cstring>targetLayout</cstring>
+                        <cstring>buttonSpacer</cstring>
                     </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <property name="margin">
-                            <number>0</number>
-                        </property>
-                        <property name="spacing">
-                            <number>6</number>
-                        </property>
-                        <widget class="KSqueezedTextLabel" row="0" column="1">
-                            <property name="name">
-                                <cstring>directoryLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>[TARGET DIRECTORY]</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="1">
-                            <property name="name">
-                                <cstring>targetLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>[TARGET NAME]</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>directoryStaticLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Directory:</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="0">
-                            <property name="name">
-                                <cstring>targetStaticLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="font">
-                                <font>
-                                </font>
-                            </property>
-                            <property name="text">
-                                <string>Target:</string>
-                            </property>
-                        </widget>
-                    </grid>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>247</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>removeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;ancel</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>fileGroupBox</cstring>
             </property>
@@ -150,12 +73,6 @@
                 <size>
                     <width>0</width>
                     <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>32767</width>
-                    <height>140</height>
                 </size>
             </property>
             <property name="title">
@@ -207,82 +124,109 @@
                 </widget>
             </vbox>
         </widget>
-        <spacer>
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
-                <cstring>Spacer2</cstring>
+                <cstring>targetBox</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
+            <property name="title">
+                <string>Subproject Information</string>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>buttonLayout</cstring>
-            </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>0</number>
+                    <number>11</number>
                 </property>
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <spacer>
+                <widget class="QLabel" row="1" column="1">
                     <property name="name">
-                        <cstring>buttonSpacer</cstring>
+                        <cstring>targetLabel</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>30</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>removeButton</cstring>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
+                        <string>[TARGET NAME]</string>
                     </property>
                 </widget>
-                <widget class="QPushButton">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>cancelButton</cstring>
+                        <cstring>directoryStaticLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
-                        <string>C&amp;ancel</string>
+                        <string>Directory:</string>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>targetStaticLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Target:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>directoryLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>[DIRECTORY NAME]</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
-    </vbox>
+    </grid>
 </widget>
 <includes>
     <include location="global" impldecl="in implementation">ksqueezedtextlabel.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>ksqueezedtextlabel.h</includehint>
-</includehints>
 </UI>

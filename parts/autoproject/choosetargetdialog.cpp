@@ -284,8 +284,7 @@ void ChooseTargetDialog::accept ()
 
 		if ( !found )
 		{
-			fitem = m_widget->createFileItem( fileName );
-			fitem->uiFileLink = m_widget->getDetailsView()->getUiFileLink(m_choosenSubproject->relativePath()+"/",fileName);
+			fitem = m_widget->createFileItem( fileName,m_choosenSubproject );
 			m_choosenTarget->sources.append( fitem );
 			m_choosenTarget->insertItem( fitem );
 

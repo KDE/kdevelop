@@ -104,7 +104,7 @@ void AddIconDialog::accept()
         proc.start(KProcess::DontCare);
     }
     
-    FileItem *fitem = m_widget->createFileItem(name);
+    FileItem *fitem = m_widget->createFileItem(name, m_subProject);
     m_target->sources.append(fitem);
     m_target->insertItem(fitem);
 

@@ -42,7 +42,7 @@ class QStringList;
 class AutoProjectWidget : public QVBox
 {
 	Q_OBJECT
-
+	friend class RemoveFileDialog;
 public:
 	AutoProjectWidget(AutoProjectPart *part, bool kde);
 	~AutoProjectWidget();
@@ -131,7 +131,7 @@ public:
 	/**
 	* Creates a FileItem instance without a parent item.
 	*/
-	FileItem *createFileItem(const QString &name);
+	FileItem *createFileItem(const QString &name, SubprojectItem *subproject);
 
 	/**
 	 * Returns the Subproject that contains the Active Target. The Active Target is a special target

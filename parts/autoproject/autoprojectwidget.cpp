@@ -505,7 +505,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 				fileName = ( *it );
 			}
 
-                        //FileItem * fitem = createFileItem( fileName );
+                        //FileItem * fitem = createFileItem( fileName,m_activeSubproject );
 			//m_activeTarget->sources.append( fitem );
 			//m_activeTarget->insertItem( fitem );
 
@@ -564,8 +564,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 
 void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
 {
-	FileItem * fitem = createFileItem( fileName );
-	fitem->uiFileLink = m_detailView->getUiFileLink(spitem->relativePath()+"/", fileName );
+	FileItem * fitem = createFileItem( fileName, spitem );
 	titem->sources.append( fitem );
 	titem->insertItem( fitem );
 
@@ -759,9 +758,10 @@ TargetItem *AutoProjectWidget::createTargetItem( const QString &name,
 }
 
 
-FileItem *AutoProjectWidget::createFileItem( const QString &name )
+FileItem *AutoProjectWidget::createFileItem( const QString &name, SubprojectItem *subproject )
 {
 	FileItem * fitem = new FileItem( m_subprojectView, name );
+	fitem->uiFileLink = m_detailView->getUiFileLink(subproject->relativePath()+"/", name );
 	m_subprojectView->takeItem( fitem );
 	fitem->name = name;
 
