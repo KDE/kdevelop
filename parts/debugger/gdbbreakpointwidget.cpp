@@ -640,7 +640,10 @@ void GDBBreakpointWidget::slotAddBlankBreakpoint(int idx)
 
     if (btr)
     {
-        m_table->selectRow(btr->row());
+        QTableSelection ts;
+	ts.init(btr->row(), 0);
+	ts.expandTo(btr->row(), numCols );
+        m_table->addSelection(ts);
         m_table->editCell(btr->row(), Location, false);
     }
 }
@@ -796,7 +799,10 @@ void GDBBreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNu
 
     if (btr)
     {
-        m_table->selectRow(btr->row());
+        QTableSelection ts;
+	ts.init(btr->row(), 0);
+	ts.expandTo(btr->row(), numCols);
+        m_table->addSelection(ts);
         m_table->editCell(btr->row(), Location, false);
     }
 

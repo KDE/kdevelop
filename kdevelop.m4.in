@@ -507,7 +507,7 @@ AC_DEFUN(KDEV_CHECK_COMPAT,
   else
     AC_MSG_RESULT(yes)
     COMPAT_SUBDIR=compat
-    LIB_KDEVCOMPAT="$(top_builddir)/lib/compat/libkdevcompat.la"
+    LIB_KDEVCOMPAT="../lib/compat/libkdevcompat.la"
   fi
 AC_SUBST(COMPAT_SUBDIR)
 AC_SUBST(LIB_KDEVCOMPAT)

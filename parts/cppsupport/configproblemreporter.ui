@@ -29,9 +29,6 @@
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
-            <property name="frameShape">
-                <enum>GroupBoxPanel</enum>
-            </property>
             <property name="frameShadow">
                 <enum>Sunken</enum>
             </property>
