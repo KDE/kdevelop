@@ -1,3 +1,24 @@
+2001-02-09 Omid Givi <omid@givi.nl>
+	* Created KDevCompiler. This represent a compiler Entity which
+	  holds compiler dependant attributes (like name, icon, pointer to
+	  the options widget, etc.) and provides some methods dealing with
+	  these attributes.
+
+	* Created ProjectOptionsDlg which is responsible for the dialog
+	  'Project Options'. It communicates with the project space and
+	  sets up the project dependant stuff dynamically (e.g. compiler
+	  options)
+
+	* Reanimated Project Options Dialog with a tree theme
+
+	* Moved the gccoptions from plugin to the residance of the
+	  compiler options.
+
+	* Added to the kdeprojectspace: the initialization of the
+	  instances Gcc, Cpp of KDevCompiler.
+
+	* Created Project Information Widget page (Not complete yet)
+
 2001-01-07  Ivan Hawkes <linuxgroupie@ivanhawkes.com>
     * Created new virtual base class for the core
       and placed it into the lib/general lib.
