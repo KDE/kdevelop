@@ -56,6 +56,7 @@ DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(false)
   ,m_pStore(pStore)
+  ,m_bCloseActionPending(false)
 {
   m_MDICoverList.setAutoDelete(true);
 
@@ -121,13 +122,15 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
     // handle file if it was modified on disk by another editor/cvs
     QFileInfo file_info(filename);
     if ((file_info.lastModified() != pEditDoc->getLastFileModifDate()) && bShowModifiedBox) {
-      if(KMessageBox::questionYesNo(m_pParent,
-                                    i18n("The file %1 was modified outside this editor.\n"
-                                         "Open the file from disk and delete the current Buffer?")
-                                    .arg(filename),
-                                    i18n("File modified"))==KMessageBox::Yes) {
-        bForceReload = true;
-        pEditDoc->setLastFileModifDate(file_info.lastModified());
+      if (!m_bCloseActionPending) {
+        if(KMessageBox::questionYesNo(m_pParent,
+                                      i18n("The file %1 was modified outside this editor.\n"
+                                           "Open the file from disk and delete the current Buffer?")
+                                      .arg(filename),
+                                      i18n("File modified"))==KMessageBox::Yes) {
+          bForceReload = true;
+          pEditDoc->setLastFileModifDate(file_info.lastModified());
+        }
       }
     }
 
@@ -950,7 +953,7 @@ void DocViewMan::slot_viewActivated(QextMdiChildView* pMDICover)
     if ((file_info.lastModified() != m_pCurEditDoc->getLastFileModifDate())) {
       bModifiedOutside = true;
     }
-    if (bModifiedInside && bModifiedOutside) {
+    if (!m_bCloseActionPending && bModifiedInside && bModifiedOutside) {
       if (KMessageBox::warningYesNo(m_pParent
                ,i18n("This file %1 was modified inside but also outside this editor.\n"
                      "Do you want to keep your changes or reload it from disk?")
@@ -962,7 +965,7 @@ void DocViewMan::slot_viewActivated(QextMdiChildView* pMDICover)
         m_pCurEditDoc->setLastFileModifDate(file_info.lastModified());
       }
     }
-    else if (bModifiedOutside) {
+    else if (!m_bCloseActionPending && bModifiedOutside) {
       if (KMessageBox::questionYesNo(m_pParent
                ,i18n("This file %1 was modified outside this editor.\n"
                     "Do you want reload it from disk?")
@@ -1092,6 +1095,7 @@ void DocViewMan::doFileCloseAll()
         case SaveAllDialog::Yes:
         { // Yes- only save the current file
           // save file as if Untitled and close file
+          m_bCloseActionPending = true;
           if(m_pParent->isUntitled(pDoc->fileName()))
           {
             m_pParent->switchToFile(pDoc->fileName());
@@ -1105,6 +1109,7 @@ void DocViewMan::doFileCloseAll()
             m_pParent->slotFileSave();
             cont = !currentEditView()->isModified(); //something went wrong
           }
+          m_bCloseActionPending = false;
           break;
         }
 
@@ -1162,6 +1167,7 @@ bool DocViewMan::doProjectClose()
 
         // what to do
       if(result==SaveAllDialog::Yes) {  // Yes- only save the actual file
+        m_bCloseActionPending = true;
         // save file as if Untitled and close file
         if(m_pParent->isUntitled(pDoc->fileName())) {
           m_pParent->switchToFile(pDoc->fileName());
@@ -1177,6 +1183,7 @@ bool DocViewMan::doProjectClose()
           m_pParent->slotFileSave();
           cont = ! pDoc->isModified(); //something went wrong
         }
+        m_bCloseActionPending = false;
       }
 
       if(result==SaveAllDialog::No) {   // No - no save but close

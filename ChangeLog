@@ -1,3 +1,7 @@
+2002-02-27  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: don't ask for reload of files during the closing of files
+      (happened when they were changed outside of KDevelop)
+
 2002-02-26  Roberto Raggi <raggi@cli.di.unipi.it>
     * added scope support
 

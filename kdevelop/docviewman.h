@@ -349,7 +349,8 @@ private:
   KHTMLView*                m_pCurBrowserView;
 
   bool                      m_curIsBrowser;
-  CClassStore* m_pStore;
+  CClassStore*              m_pStore;
+  bool                      m_bCloseActionPending;
 
 };
 
