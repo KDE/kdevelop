@@ -1,7 +1,7 @@
 INCLUDES    = $(all_includes)
 METASOURCES = AUTO
 
-KDE_ICON = %{APPNAMELC}
+KDE_ICON = AUTO
 
 # Install this plugin in the KDE modules directory
 kde_module_LTLIBRARIES = lib%{APPNAMELC}plugin.la

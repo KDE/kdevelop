@@ -1,6 +1,6 @@
 INCLUDES = $(all_includes)
 
-KDE_ICON = kbear%{APPNAMELC}
+KDE_ICON = AUTO
 
 kde_module_LTLIBRARIES = libkbear%{APPNAMELC}.la
 
