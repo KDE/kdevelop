@@ -18,7 +18,7 @@
 
 class QStringList;
 class QDomDocument;
-
+class CppSupportPart;
 
 class SlotItem : public QCheckListItem
 {
@@ -41,10 +41,10 @@ class SlotItem : public QCheckListItem
 class SubclassingDlg : public SubclassingDlgBase
 {
 public:
-                        SubclassingDlg(const QString &formFile,QStringList &newFileNames,
+                        SubclassingDlg(CppSupportPart* cppSupport, const QString &formFile,QStringList &newFileNames,
                                        QWidget* parent = 0, const char* name = 0,
                                        bool modal = FALSE, WFlags fl = 0 );
-                        SubclassingDlg(const QString &formFile,const QString &filename,QStringList &dummy,
+                        SubclassingDlg(CppSupportPart* cppSupport, const QString &formFile,const QString &filename,QStringList &dummy,
                                        QWidget* parent = 0, const char* name = 0,
                                        bool modal = FALSE, WFlags fl = 0 );
                         ~SubclassingDlg();
@@ -76,7 +76,7 @@ protected:
   bool                  m_canBeModal;
   QValueList<SlotItem*> m_slots;
   QValueList<SlotItem*> m_functions;
-
+  CppSupportPart* m_cppSupport;
 };
 
 #endif

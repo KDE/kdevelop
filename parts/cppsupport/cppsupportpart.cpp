@@ -1388,7 +1388,7 @@ void CppSupportPart::slotMakeMember()
 QStringList CppSupportPart::subclassWidget(QString formName)
 {
     QStringList newFileNames;
-    SubclassingDlg *dlg = new SubclassingDlg(formName, newFileNames);
+    SubclassingDlg *dlg = new SubclassingDlg(this, formName, newFileNames);
     dlg->exec();
     return newFileNames;
 }
@@ -1396,7 +1396,7 @@ QStringList CppSupportPart::subclassWidget(QString formName)
 QStringList CppSupportPart::updateWidget(QString formName, QString fileName)
 {
     QStringList dummy;
-    SubclassingDlg *dlg = new SubclassingDlg(formName, fileName, dummy);
+    SubclassingDlg *dlg = new SubclassingDlg(this, formName, fileName, dummy);
     dlg->exec();
     return dummy;
 }

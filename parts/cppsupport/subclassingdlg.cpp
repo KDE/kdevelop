@@ -10,6 +10,10 @@
  ***************************************************************************/
 
 #include "subclassingdlg.h"
+#include "cppsupportpart.h"
+#include "backgroundparser.h"
+#include "store_walker.h"
+
 #include <qradiobutton.h>
 #include <qstringlist.h>
 #include <qcheckbox.h>
@@ -24,7 +28,6 @@
 #include <klocale.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include "classparser.h"
 
 
 #define WIDGET_CAPTION_NAME "widget/property|name=caption/string"
@@ -82,10 +85,10 @@ void SlotItem::setAllreadyInSubclass()
 }
 
 
-SubclassingDlg::SubclassingDlg(const QString &formFile,QStringList &newFileNames,
+SubclassingDlg::SubclassingDlg(CppSupportPart* cppSupport, const QString &formFile,QStringList &newFileNames,
                                QWidget* parent, const char* name,bool modal, WFlags fl)
 : SubclassingDlgBase(parent,name,modal,fl),
-m_newFileNames(newFileNames)
+m_newFileNames(newFileNames), m_cppSupport( cppSupport )
 //=================================================
 {
   m_formFile = formFile;
@@ -94,18 +97,25 @@ m_newFileNames(newFileNames)
 }
 
 
-SubclassingDlg::SubclassingDlg(const QString &formFile,const QString &filename,QStringList &dummy,
+SubclassingDlg::SubclassingDlg(CppSupportPart* cppSupport, const QString &formFile,const QString &filename,QStringList &dummy,
                                QWidget* parent, const char* name,bool modal, WFlags fl)
 : SubclassingDlgBase(parent,name,modal,fl),
-m_newFileNames(dummy)
+m_newFileNames(dummy), m_cppSupport( cppSupport )
 //=================================================
 {
   m_formFile = formFile;
   m_creatingNewSubclass = false;
-  m_filename = filename;
+  m_filename = filename;  
   ClassStore classcontainer;
-  CClassParser parser(&classcontainer);
-  parser.parse(filename + ".h");
+  
+  m_cppSupport->backgroundParser()->lock();
+  TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
+  if( translationUnit ){
+      StoreWalker w( filename + ".h", &classcontainer );
+      w.parseTranslationUnit( translationUnit );
+  }
+  m_cppSupport->backgroundParser()->lock();
+  
   QStringList pathsplit(QStringList::split('/',filename));
 
   QStringList classes(classcontainer.getSortedClassNameList());

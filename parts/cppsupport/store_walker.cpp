@@ -10,6 +10,8 @@
  ***************************************************************************/
 
 #include "store_walker.h"
+#include "ast_utils.h"
+
 #include <classstore.h>
 #include <parsedscopecontainer.h>
 #include <kdebug.h>
@@ -372,12 +374,13 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     if( !d->subDeclarator() && d->parameterDeclarationClause() )
 	return parseFunctionDeclaration( funSpec, storageSpec, typeSpec, decl );
 
-    QString id;
-    
     DeclaratorAST* t = d;
     while( t && t->subDeclarator() )
 	t = t->subDeclarator();
-    id = t->declaratorId()->text();
+    
+    QString id;
+    if( t )
+	id = t->declaratorId()->text();
     
     ParsedAttribute* attr = findOrInsertAttribute( (m_currentClass ?
 						    (ParsedClassContainer*) m_currentClass :
@@ -563,8 +566,9 @@ void StoreWalker::parseFunctionArguments( DeclaratorAST* declarator, ParsedMetho
 	    ++it;
 
 	    ParsedArgument* arg = new ParsedArgument();
-	    if( param->declarator() && param->declarator()->declaratorId() )
-		arg->setName( param->declarator()->declaratorId()->text() );
+	    
+	    if( param->declarator() )
+		arg->setName( declaratorToString(param->declarator(), QString::null, true) );
 
 	    arg->setType( typeOfDeclaration(param->typeSpec(), param->declarator()) );
 	    method->addArgument( arg );
