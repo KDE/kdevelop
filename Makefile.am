@@ -60,8 +60,7 @@ include admin/deps.am
 ## Doxygen stuff
 ##
 
-## Use KDE Libs tag files
-DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
+DOXYGEN_INPUT = src lib parts plugins doc/api
 
 ## Exclude the application wizard templates
 DOXYGEN_EXCLUDE = parts/appwizard/adahello/ \
@@ -119,6 +118,14 @@ DOXYGEN_EXCLUDE = parts/appwizard/adahello/ \
                   parts/pascalsupport/ \
                   parts/javasupport \
                   lib/antlr
+
+## Use KDE Libs tag files
+DOXYGEN_LINK_WITH_KDE_QT_APIDOX = NO
+DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
+
+## Use Search engine (Versions 1.3.4 and above only!)
+DOXYGEN_SEARCHENGINE = NO
+
 include Doxyfile.am
 
 install-data-local: install-gideon-kdevelop
