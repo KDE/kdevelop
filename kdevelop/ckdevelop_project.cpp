@@ -772,8 +772,7 @@ void CKDevelop::slotProjectGenerate(){
 
   shell_process.clearArguments();
   shell_process << QString("cd '")+dir +"' && ";
-  shell_process << "echo ""Generating project from directory " + dir + """ && ";
-  shell_process <<  "kimport > " + file;
+  shell_process <<  "kimport -o=" + file + " -b="+relDir;
   shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
   beep = true;
   next_job="load_new_prj";
