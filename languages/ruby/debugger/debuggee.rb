@@ -258,7 +258,9 @@ class Context
     ary.sort!
     for c in ary
 	  str = debug_inspect(obj.module_eval(c))
-      if c.to_s != str && c.to_s !~ /SCRIPT_LINES__|TRUE|FALSE|NIL|MatchingData/ &&
+      if c.to_s != str &&
+	    str !~ /^Qt::|^KDE::/ && c.to_s !~ /@@classes$|@@cpp_names$|@@idclass$|@@debug_level$/ &&
+	    c.to_s !~ /^DCOPMeta$|^Meta$|SCRIPT_LINES__|TRUE|FALSE|NIL|MatchingData/ &&
         c.to_s !~ /^PLATFORM$|^RELEASE_DATE$|^VERSION$|SilentClient|SilentObject/ &&
         c.to_s !~ /^Client$|^Context$|^DEBUG_LAST_CMD$|^MUTEX$|^Mutex$|^SimpleDelegater$|^Delegater$/ &&
         c.to_s !~ /IPsocket|IPserver|UDPsocket|UDPserver|TCPserver|TCPsocket|UNIXserver|UNIXsocket/
