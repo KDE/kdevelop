@@ -57,6 +57,16 @@ signals:
 };
 
 /**
+ * @short Internal class
+ * This special event will be useful, if the view has to be informed when its childframe window is being moved.
+ */
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmMovedEvent : public QCustomEvent
+{
+public:
+	QextMdiChildFrmMovedEvent( QMoveEvent *me) : QCustomEvent( QEvent::Type(QEvent::User+1), me) {};
+};
+
+/**
   * @short Internal class.
   * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
   */
@@ -176,6 +186,7 @@ protected:
 	virtual void mouseMoveEvent(QMouseEvent *e);
 	virtual void mousePressEvent(QMouseEvent *e);
 	virtual void mouseReleaseEvent(QMouseEvent *);
+   virtual void moveEvent(QMoveEvent* me);
    virtual void leaveEvent(QEvent *);
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
    //   virtual bool focusNextPrevChild( bool next ) { return TRUE; };
