@@ -419,6 +419,9 @@ public:
   //////////////////////////////////
   // Classbrowser wizardbutton slots
   //////////////////////////////////
+
+  /** View the graphical classtree. */
+  void slotClassbrowserViewTree();
   /** View the declaration of a class/method. */
   void slotClassbrowserViewDeclaration();
   /** View the definition of a class/method. */

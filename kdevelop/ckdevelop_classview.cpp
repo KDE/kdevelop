@@ -30,6 +30,20 @@
  *                                                                   *
  ********************************************************************/
 
+/*--------------------------------- CKDevelop::slotClassbrowserViewTree()
+ * slotClassbrowserViewTree()
+ *   Event when the user clicks the graphical view toolbar button.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotClassbrowserViewTree()
+{
+  class_tree->viewGraphicalTree();
+}
+
 /*--------------------------------- CKDevelop::slotClassChoiceCombo()
  * slotClassChoiceCombo()
  *   Event when the user selects an item in the classcombo.

@@ -751,6 +751,10 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CLASSBROWSER_WIZARD,
                                                classbrowser_popup);
   
+  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("graphview.xpm"),
+                                            ID_CLASSBROWSER_GRAPHVIEW, true,
+                                            i18n("Show graphical classview"));
 
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 

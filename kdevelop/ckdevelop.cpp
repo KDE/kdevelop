@@ -16,8 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
-
 #include <iostream.h>
 
 #include <qclipboard.h>
@@ -2335,23 +2333,27 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_KDLG_BUILD_GENERATE:
     kdlgedit->slotBuildGenerate();
     break;
+  case ID_CLASSBROWSER_GRAPHVIEW:
+    slotClassbrowserViewTree();
+    break;
   case ID_CLASSBROWSER_WIZARD:
-		if(cv_decl_or_impl){
-	    slotClassbrowserViewDeclaration();
-			cv_decl_or_impl=false;
-		}
-		else{
-	    slotClassbrowserViewDefinition();
-			cv_decl_or_impl=true;
-		}		
+    // Make the button toggle between declaration and definition.
+    if(cv_decl_or_impl){
+      slotClassbrowserViewDeclaration();
+      cv_decl_or_impl=false;
+    }
+    else{
+      slotClassbrowserViewDefinition();
+      cv_decl_or_impl=true;
+    }		
     break;
   }
 }
 
 void CKDevelop::statusCallback(int id_){
-	switch(id_){
-  ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
-  ON_STATUS_MSG(ID_FILE_OPEN,   							            i18n("Opens an existing file"))
+  switch(id_){
+    ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
+    ON_STATUS_MSG(ID_FILE_OPEN,   							            i18n("Opens an existing file"))
   ON_STATUS_MSG(ID_FILE_CLOSE,       						          i18n("Closes the actual file"))
 
   ON_STATUS_MSG(ID_FILE_SAVE,        						          i18n("Save the actual document"))
@@ -2505,33 +2507,3 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
