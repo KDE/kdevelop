@@ -2,7 +2,7 @@
 [General]
 Name=KBear Plugin
 Category=C++/KDE
-Icon=preview.png
+Icon=kbearplugin.png
 Comment=Generates a simple KBear plugin with a config page and an output widget.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/kbearAPPNAMELCplugin.cpp

@@ -1,8 +1,8 @@
 dataFiles = kbearplugin.desktop subdirs hi32-action-plugin.png \
-	outputwidget.cpp plugin.h script configwidget.cpp \
+	outputwidget.cpp plugin.h configwidget.cpp \
 	outputwidget.h plugin.rc src-Makefile.am Makefile.am \
 	kbearplugin-configure.in.in configwidget.h plugin.cpp \
-	plugin.kdevelop preview.png
+	plugin.kdevelop kbearplugin.png
 templateName = kbearplugin
 
 ### no need to change below:

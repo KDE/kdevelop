@@ -1,5 +1,5 @@
 dataFiles = src-Makefile.am app.cpp app.h main.cpp appui.rc app.kdevelop \
-	subdirs app.desktop preview.png widget.cpp widget.h widgetbase.ui
+	subdirs app.desktop khello2.png widget.cpp widget.h widgetbase.ui
 
 templateName = khello2
 

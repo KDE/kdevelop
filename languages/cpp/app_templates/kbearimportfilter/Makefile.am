@@ -1,6 +1,6 @@
 dataFiles = kbearimportfilter-configure.in.in plugin.cpp plugin.kdevelop \
 	src-Makefile.am kbearimportfilter kbearimportfilter.desktop \
-	plugin.h script subdirs preview.png
+	plugin.h subdirs kbearimportfilter.png
 templateName = kbearimportfilter
 
 ### no need to change below:

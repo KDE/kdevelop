@@ -1,5 +1,5 @@
 dataFiles = README.devel kfile_plugin.cpp kfile_plugin.desktop \
-	kfile_plugin.h plugin.kdevelop kfileplugin preview.png \
+	kfile_plugin.h plugin.kdevelop kfileplugin kfileplugin.png \
 	src-Makefile.am subdirs
 templateName = kfileplugin
 

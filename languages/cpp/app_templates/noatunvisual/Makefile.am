@@ -1,5 +1,5 @@
 dataFiles = src-Makefile.am plugin_app.cpp plugin_app.h plugin_impl.cpp \
-	plugin_impl.h noatunplugin.png plugin.plugin plugin.kdevelop \
+	plugin_impl.h noatunvisual.png plugin.plugin plugin.kdevelop \
 	subdirs noatunvisual-configure.in.in
 templateName = noatunvisual
 

@@ -1,6 +1,6 @@
 dataFiles = src-Makefile.am plugin_app.cpp plugin_app.h \
 	plugin_app.rc hi16-action-plugin.png hi22-action-plugin.png \
-	kateplugin.png plugin.kdevelop subdirs plugin.desktop
+	kateplugin2.png plugin.kdevelop subdirs plugin.desktop
 
 templateName = kateplugin2
 
