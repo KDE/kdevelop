@@ -38,6 +38,7 @@ public:
   
 public slots:
     void slotFileCancelClicked();
+ void slotSelfChoosenFilesActive(int);
   
 protected:
     QListBox* selfChoosenFilesMultiLine;
@@ -52,12 +53,22 @@ protected:
     QRadioButton* selfChoosenFilesButton;
     QRadioButton* changedFilesButton;
     QLineEdit* dateBetweenLine;
-    QLineEdit* dateAndLIne;
+    QLineEdit* dateAndLine;
     QLineEdit* timeAndLine;
     QLineEdit* timeBetweenLine;
     QLineEdit* timeSinceLine;
     QLabel* dateSinceLine;
-
+    QButtonGroup *qtarch_ButtonGroup_143;
+    QLabel* qtarch_Label_84;
+    QLabel* qtarch_Label_83;
+    QLabel* qtarch_Label_81;
+    QLabel* qtarch_Label_80;
+    QLabel* qtarch_Label_79;
+    QLabel* qtarch_Label_78;
+    QLabel* qtarch_Label_77;
+    QButtonGroup* qtarch_ButtonGroup_142;
+    QButtonGroup* qtarch_ButtonGroup_141;
+    QButtonGroup* qtarch_ButtonGroup_140;
 };
 #endif // CFILEPRINTDLG
 

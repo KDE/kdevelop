@@ -18,12 +18,12 @@
 
 #include "cprintdlg.h"
 #include "cfileprintdlg.h"
-#include "cconfigprintdlg.h"
 #include <qpixmap.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbttngrp.h>
 #include <iostream.h>
+#include <string.h>
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -41,7 +41,7 @@ void CPrintDlg::init(){
   mainwidget->resize (600,480);
   QWidget *printwidget = new QWidget(this,"printing");
   printwidget->resize(600,430);
-  QButtonGroup* qtarch_ButtonGroup_35;
+
   qtarch_ButtonGroup_35 = new QButtonGroup( printwidget, "ButtonGroup_35" );
   qtarch_ButtonGroup_35->setGeometry( 20, 280, 140, 60 );
   qtarch_ButtonGroup_35->setMinimumSize( 0, 0 );
@@ -67,7 +67,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_8->setTitle(( "Outprinting" ));
   qtarch_ButtonGroup_8->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_9;
   qtarch_ButtonGroup_9 = new QButtonGroup( printwidget, "ButtonGroup_9" );
   qtarch_ButtonGroup_9->setGeometry( 330, 290, 240, 120 );
   qtarch_ButtonGroup_9->setMinimumSize( 0, 0 );
@@ -80,7 +79,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_9->setTitle(( "Pretty-print" ));
   qtarch_ButtonGroup_9->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_34;
   qtarch_ButtonGroup_34 = new QButtonGroup( printwidget, "ButtonGroup_34" );
   qtarch_ButtonGroup_34->setGeometry( 350, 340, 200, 60 );
   qtarch_ButtonGroup_34->setMinimumSize( 0, 0 );
@@ -93,7 +91,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_34->setTitle(( "Pretty-print mode" ));
   qtarch_ButtonGroup_34->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_11;
   qtarch_ButtonGroup_11 = new QButtonGroup( printwidget, "ButtonGroup_11" );
   qtarch_ButtonGroup_11->setGeometry( 330, 220, 240, 60 );
   qtarch_ButtonGroup_11->setMinimumSize( 0, 0 );
@@ -171,7 +168,7 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_4->setTitle(( "Default printsettings" ));
   qtarch_ButtonGroup_4->setAlignment( 1 );
   
-  QButtonGroup* qtarch_ButtonGroup_3;
+  //QButtonGroup* qtarch_ButtonGroup_3;
   qtarch_ButtonGroup_3 = new QButtonGroup( printwidget, "ButtonGroup_3" );
   qtarch_ButtonGroup_3->setGeometry( 170, 280, 140, 60 );
   qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
@@ -299,6 +296,7 @@ void CPrintDlg::init(){
   printToFileDlg->setText( "..." );
   printToFileDlg->setAutoRepeat( FALSE );
   printToFileDlg->setAutoResize( FALSE );
+  connect (printToFileDlg,SIGNAL(clicked()),SLOT(slotPrintToFileDlgClicked()));
   
   formatCombBox = new QComboBox( FALSE, printwidget, "formatCombBox" );
   formatCombBox->setGeometry( 180, 300, 120, 30 );
@@ -506,9 +504,6 @@ void CPrintDlg::init(){
   cancelButton->setText(("Cancel"));
   cancelButton->setGeometry( 140, 440, 100, 30 );
   connect(cancelButton,SIGNAL(clicked()),SLOT(slotCancelClicked()));
-  helpButton = new QPushButton( mainwidget, "helpButton" );
-  helpButton->setText(("Help"));
-  helpButton->setGeometry( 480, 440, 100, 30 );
 
   mainwidget->show();
 }
@@ -521,6 +516,10 @@ void CPrintDlg::slotProgramActivated(int i) {
       slotPrettyPrintClicked(false);
       formatCombBox->setEnabled(true);
       pageSide->setEnabled(true);
+      qtarch_ButtonGroup_35->setEnabled(true);
+      qtarch_ButtonGroup_9->setEnabled(true);
+      qtarch_ButtonGroup_11->setEnabled(true);
+      qtarch_ButtonGroup_3->setEnabled(true);
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
@@ -544,6 +543,10 @@ void CPrintDlg::slotProgramActivated(int i) {
       slotPrettyPrintClicked(false);
       formatCombBox->setEnabled(false);
       pageSide->setEnabled(false);
+      qtarch_ButtonGroup_35->setEnabled(false);
+      qtarch_ButtonGroup_9->setEnabled(false);
+      qtarch_ButtonGroup_11->setEnabled(false);
+      qtarch_ButtonGroup_3->setEnabled(false);
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
@@ -567,6 +570,7 @@ void CPrintDlg::slotPrettyPrintClicked(bool status) {
     {
       prettyCombBox->setEnabled(true);
       prettyColorCheckBox->setEnabled(true);
+      qtarch_ButtonGroup_34->setEnabled(true);
     }
   else
     {
@@ -574,6 +578,7 @@ void CPrintDlg::slotPrettyPrintClicked(bool status) {
       prettyColorCheckBox->setEnabled(false);
       prettyPrintCheckBox->setChecked(false);
       prettyColorCheckBox->setChecked(false);
+      qtarch_ButtonGroup_34->setEnabled(false);
     }
 }
 
@@ -600,7 +605,21 @@ void CPrintDlg::slotFilesConfClicked() {
 }
 
 void CPrintDlg::slotPrintingConfClicked() {
- CConfigPrintDlg *printconf = new CConfigPrintDlg(this, "confdialog");
- printconf->resize(600,510);
- printconf->exec(); 
+  int prog=programCombBox->currentItem();
+  if (prog==0) {
+    printconf = new CConfigPrintDlg(this, "confdialog",1);
+  }
+  else
+    if (prog==1) {
+      printconf = new CConfigPrintDlg(this, "confdialog",2);
+    }
+  printconf->resize(610,510);
+  printconf->setCancelButton();
+  printconf->setDefaultButton();
+  printconf->setApplyButton("Preview");
+  printconf->exec(); 
+}
+
+void CPrintDlg::slotPrintToFileDlgClicked() {
+  printToFileLine->setText(KFileDialog::getOpenFileName());
 }

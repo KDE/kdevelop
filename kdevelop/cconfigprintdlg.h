@@ -39,19 +39,45 @@
 #include <qlined.h>
 #include <qspinbox.h>
 #include <qcombo.h>
+#include <qpushbt.h>
+#include <qlabel.h>
+#include <kfontdialog.h>
+#include <qfont.h>
+#include <qfontinfo.h>
 
 class CConfigPrintDlg : public QTabDialog {
   Q_OBJECT
 public:
-  CConfigPrintDlg(QWidget* parent=0,const char* name=0);
+  CConfigPrintDlg(QWidget* parent=0,const char* name=0,int prog=1);
   ~CConfigPrintDlg();
-  void init();
-  void initTab1(QWidget*parent);
-  void initTab2(QWidget*parent);
-  void initTab3(QWidget*parent);
-  void initTab4(QWidget*parent);
+  void init(int);
+  void initTab1(QWidget*parent,int);
+  void initTab2(QWidget*parent,int);
+  void initTab3(QWidget*parent,int);
+  void initTab4(QWidget*parent,int);
   
 public slots:
+      void slotHeader1Clicked();
+ void slotHeader2Clicked();
+ void slotNoHeader();
+ void slotHeadertext1Clicked();
+ void slotHeadertext2Clicked();
+ void slotLoginClicked();
+ void slotFilenameClicked();
+ void slotHostnameClicked();
+ void slotCurrentDate1Clicked();
+ void slotCurrentTime1Clicked();
+ void slotCurrentDate2Clicked();
+ void slotCurrentTime2Clicked();
+ void slotModiDateClicked();
+ void slotModiTimeClicked();
+ void slotCutLinesClicked();
+ void slotWrappedLinesClicked();
+ void slotHighlightBarsClicked();
+ void slotUnderlayButtonClicked();
+ void slotFontClicked();
+ void slotUnderlayPositionDefaultClicked();
+ void slotUnderlayAngleDefaultClicked();
 
 protected:
     QCheckBox* headerButton;
@@ -67,6 +93,20 @@ protected:
     QCheckBox* hostnameButton;
     QComboBox* hostnamePosition;
     QComboBox* hostnameSize;
+    QButtonGroup* qtarch_ButtonGroup_62;
+    QButtonGroup* qtarch_ButtonGroup_66;
+    QLabel* qtarch_Label_19;
+    QLabel* qtarch_Label_24;
+    QLabel* qtarch_Label_21;
+    QLabel* qtarch_Label_25;
+    QLabel* qtarch_Label_23; 
+    QLabel* qtarch_Label_22;
+    QLabel* qtarch_Label_20;
+    QButtonGroup* qtarch_ButtonGroup_59;
+    QButtonGroup* qtarch_ButtonGroup_61;
+    QButtonGroup* qtarch_ButtonGroup_60;
+    QButtonGroup* qtarch_ButtonGroup_65;
+
     QCheckBox* bordersButton;
     QCheckBox* tocButton;
     QCheckBox* markedWrappedLinesButton;
@@ -83,10 +123,11 @@ protected:
     QCheckBox* replaceButton;
     QCheckBox* printAsISOLatin;
     QCheckBox* boltFontButton;
-    QComboBox* fontForBody;
-    QComboBox* fontForHeader;
     QSpinBox* setTabSize;
-    QSpinBox* changeFontsize;
+    QPushButton* a2psFontButton;
+    QPushButton* fontForBodyButton;
+    QPushButton* fontForHeaderButton;
+
     QCheckBox* currentDateButton;
     QCheckBox* modificationDateButton;
     QCheckBox* currentTimeButton;
@@ -101,9 +142,30 @@ protected:
     QComboBox* modificationTimeFormat;
     QComboBox* modificationDatePosition;
     QComboBox* currentDateFormat;
+    QLabel *qtarch_Label_3;
+    QButtonGroup* qtarch_ButtonGroup_51;
+    QButtonGroup* qtarch_ButtonGroup_52;
+    QLabel* qtarch_Label_14;
+    QButtonGroup* qtarch_ButtonGroup_53;
+    QLabel* qtarch_Label_13;
+    QLabel* qtarch_Label_4;
+    QLabel* qtarch_Label_5;
+    QButtonGroup* qtarch_ButtonGroup_77;
+    QButtonGroup* qtarch_ButtonGroup_87;
+    QButtonGroup* qtarch_ButtonGroup_88;
+    QButtonGroup* qtarch_ButtonGroup_89;
+    QButtonGroup* qtarch_ButtonGroup_90;
+    QButtonGroup* qtarch_ButtonGroup_76;
+    QButtonGroup* qtarch_ButtonGroup_86;
+    QButtonGroup* qtarch_ButtonGroup_85;
+    QButtonGroup* qtarch_ButtonGroup_84;
+    QButtonGroup* qtarch_ButtonGroup_75;
+    QButtonGroup* qtarch_ButtonGroup_72;
+    QButtonGroup* qtarch_ButtonGroup_71;
+    QButtonGroup* qtarch_ButtonGroup_78;
+    QButtonGroup* qtarch_ButtonGroup_74;
+
     QCheckBox* underlayButton;
-    QComboBox* underlayFontList;
-    QSpinBox* underlayFontsize;
     QSpinBox* underlayAngle;
     QSpinBox* underlayXPosition;
     QSpinBox* underlayYPosition;
@@ -112,7 +174,23 @@ protected:
     QComboBox* underlayStyle;
     QCheckBox* underlayPositionDefaultButton;
     QLineEdit* underlaytextLine;
+    QPushButton* underlayFontButton;
+    QButtonGroup* qtarch_ButtonGroup_138;
+    QLabel* qtarch_Label_75;
+    QLabel* qtarch_Label_74;
+    QLabel* qtarch_Label_73;
+    QLabel* qtarch_Label_72;
+    QLabel* qtarch_Label_71;
+    QButtonGroup* qtarch_ButtonGroup_133;
+    QLabel* qtarch_Label_70;
+    QButtonGroup* qtarch_ButtonGroup_132;
+    QButtonGroup* qtarch_ButtonGroup_131;
+    QButtonGroup* qtarch_ButtonGroup_134;
+    QButtonGroup* qtarch_ButtonGroup_135;
+    QButtonGroup* qtarch_ButtonGroup_136;
+    QButtonGroup* qtarch_ButtonGroup_137;
 
+    KFontDialog* fontDialog;
 };
 
 #endif // CCONFIGPRINTDLG

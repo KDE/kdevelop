@@ -19,6 +19,7 @@
 #ifndef CPRINTDLG_H
 #define CPRINTDLG_H
 
+#include "cconfigprintdlg.h"
 #include <qdialog.h>
 #include <qbttngrp.h>
 #include <qchkbox.h>
@@ -26,8 +27,7 @@
 #include <qlined.h>
 #include <qspinbox.h>
 #include <qcombo.h>
-#include <qkeycode.h>
-#include <qregexp.h>
+#include <kfiledialog.h>
 
 /** the KDE-Printdialog
   *@author Stefan Heidrich
@@ -47,9 +47,10 @@ public slots:
  void slotCancelClicked();
  void slotFilesConfClicked();
  void slotPrintingConfClicked();
+ void slotPrintToFileDlgClicked();
 
 protected:
- QButtonGroup* paperFormatGroup;
+ QButtonGroup *paperFormatGroup,*qtarch_ButtonGroup_35,*qtarch_ButtonGroup_34,*qtarch_ButtonGroup_9,*qtarch_ButtonGroup_11,*qtarch_ButtonGroup_3;
  QPushButton *printingConfButton,*printToFileDlg,*filesConfButton,
    *okButton,*cancelButton,*helpButton;
  QLineEdit *printToFileLine,*printerLine;
@@ -57,6 +58,6 @@ protected:
    *pageSide,*sidePerPage,*pagePerSide,*prettyCombBox,*mediaCombBox;
  QSpinBox *copySpinBox;
  QCheckBox *prettyPrintCheckBox,*prettyColorCheckBox,*printToFileButton;
-  
+ CConfigPrintDlg *printconf;  
 };
 #endif

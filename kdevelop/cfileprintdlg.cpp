@@ -18,10 +18,12 @@
 #include "cfileprintdlg.h"
 #include <qlabel.h>
 #include <qbttngrp.h>
-
+#include <iostream.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
+  slotSelfChoosenFilesActive(1);
+  selfChoosenFilesMultiLine->setEnabled(false);
 }
 
 CFilePrintDlg::~CFilePrintDlg(){
@@ -32,7 +34,6 @@ void CFilePrintDlg::init() {
   mainwidget->resize (600,480);
   QWidget *filewidget = new QWidget(this,"files");
   filewidget->resize(600,430);
-	QButtonGroup* qtarch_ButtonGroup_143;
 	qtarch_ButtonGroup_143 = new QButtonGroup( this, "ButtonGroup_143" );
 	qtarch_ButtonGroup_143->setGeometry( 350, 10, 230, 410 );
 	qtarch_ButtonGroup_143->setMinimumSize( 0, 0 );
@@ -45,7 +46,6 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_143->setTitle( "Self choosen files" );
 	qtarch_ButtonGroup_143->setAlignment( 1 );
 
-	QButtonGroup* qtarch_ButtonGroup_140;
 	qtarch_ButtonGroup_140 = new QButtonGroup( this, "ButtonGroup_140" );
 	qtarch_ButtonGroup_140->setGeometry( 20, 180, 320, 240 );
 	qtarch_ButtonGroup_140->setMinimumSize( 0, 0 );
@@ -58,7 +58,6 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_140->setTitle( "Changed files" );
 	qtarch_ButtonGroup_140->setAlignment( 1 );
 
-	QButtonGroup* qtarch_ButtonGroup_141;
 	qtarch_ButtonGroup_141 = new QButtonGroup( this, "ButtonGroup_141" );
 	qtarch_ButtonGroup_141->setGeometry( 30, 310, 300, 100 );
 	qtarch_ButtonGroup_141->setMinimumSize( 0, 0 );
@@ -71,7 +70,6 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_141->setTitle( "Time" );
 	qtarch_ButtonGroup_141->setAlignment( 1 );
 
-	QButtonGroup* qtarch_ButtonGroup_142;
 	qtarch_ButtonGroup_142 = new QButtonGroup( this, "ButtonGroup_142" );
 	qtarch_ButtonGroup_142->setGeometry( 30, 200, 300, 100 );
 	qtarch_ButtonGroup_142->setMinimumSize( 0, 0 );
@@ -145,7 +143,6 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesAddButton->setAutoRepeat( FALSE );
 	selfChoosenFilesAddButton->setAutoResize( FALSE );
 
-	QLabel* qtarch_Label_77;
 	qtarch_Label_77 = new QLabel( this, "Label_77" );
 	qtarch_Label_77->setGeometry( 40, 260, 70, 30 );
 	qtarch_Label_77->setMinimumSize( 0, 0 );
@@ -158,7 +155,6 @@ void CFilePrintDlg::init() {
 	qtarch_Label_77->setAlignment( 289 );
 	qtarch_Label_77->setMargin( -1 );
 
-	QLabel* qtarch_Label_78;
 	qtarch_Label_78 = new QLabel( this, "Label_78" );
 	qtarch_Label_78->setGeometry( 40, 220, 70, 30 );
 	qtarch_Label_78->setMinimumSize( 0, 0 );
@@ -196,7 +192,6 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesPushButton->setAutoRepeat( FALSE );
 	selfChoosenFilesPushButton->setAutoResize( FALSE );
 
-	QLabel* qtarch_Label_79;
 	qtarch_Label_79 = new QLabel( this, "Label_79" );
 	qtarch_Label_79->setGeometry( 50, 130, 30, 30 );
 	qtarch_Label_79->setMinimumSize( 0, 0 );
@@ -257,7 +252,7 @@ void CFilePrintDlg::init() {
 	selfChoosenFilesButton->setAutoRepeat( FALSE );
 	selfChoosenFilesButton->setAutoResize( FALSE );
 
-	changedFilesButton = new QRadioButton( this, "RadioButton_8" );
+	changedFilesButton = new QRadioButton( this, "changedFilesButton" );
 	changedFilesButton->setGeometry( 180, 60, 140, 30 );
 	changedFilesButton->setMinimumSize( 0, 0 );
 	changedFilesButton->setMaximumSize( 32767, 32767 );
@@ -265,7 +260,7 @@ void CFilePrintDlg::init() {
 	changedFilesButton->setBackgroundMode( QWidget::PaletteBackground );
 	changedFilesButton->setFontPropagation( QWidget::NoChildren );
 	changedFilesButton->setPalettePropagation( QWidget::NoChildren );
-	changedFilesButton->setText( "changedFilesButton" );
+	changedFilesButton->setText( "changed files" );
 	changedFilesButton->setAutoRepeat( FALSE );
 	changedFilesButton->setAutoResize( FALSE );
 
@@ -282,7 +277,6 @@ void CFilePrintDlg::init() {
 	dateBetweenLine->setEchoMode( QLineEdit::Normal );
 	dateBetweenLine->setFrame( TRUE );
 
-	QLabel* qtarch_Label_80;
 	qtarch_Label_80 = new QLabel( this, "Label_80" );
 	qtarch_Label_80->setGeometry( 210, 260, 30, 30 );
 	qtarch_Label_80->setMinimumSize( 0, 0 );
@@ -295,7 +289,6 @@ void CFilePrintDlg::init() {
 	qtarch_Label_80->setAlignment( 289 );
 	qtarch_Label_80->setMargin( -1 );
 
-	QLabel* qtarch_Label_81;
 	qtarch_Label_81 = new QLabel( this, "Label_81" );
 	qtarch_Label_81->setGeometry( 40, 330, 70, 30 );
 	qtarch_Label_81->setMinimumSize( 0, 0 );
@@ -308,20 +301,19 @@ void CFilePrintDlg::init() {
 	qtarch_Label_81->setAlignment( 289 );
 	qtarch_Label_81->setMargin( -1 );
 
-	dateAndLIne = new QLineEdit( this, "dateAndLIne" );
-	dateAndLIne->setGeometry( 240, 260, 80, 30 );
-	dateAndLIne->setMinimumSize( 0, 0 );
-	dateAndLIne->setMaximumSize( 32767, 32767 );
-	dateAndLIne->setFocusPolicy( QWidget::StrongFocus );
-	dateAndLIne->setBackgroundMode( QWidget::PaletteBase );
-	dateAndLIne->setFontPropagation( QWidget::NoChildren );
-	dateAndLIne->setPalettePropagation( QWidget::NoChildren );
-	dateAndLIne->setText( "" );
-	dateAndLIne->setMaxLength( 32767 );
-	dateAndLIne->setEchoMode( QLineEdit::Normal );
-	dateAndLIne->setFrame( TRUE );
+	dateAndLine = new QLineEdit( this, "dateAndLine" );
+	dateAndLine->setGeometry( 240, 260, 80, 30 );
+	dateAndLine->setMinimumSize( 0, 0 );
+	dateAndLine->setMaximumSize( 32767, 32767 );
+	dateAndLine->setFocusPolicy( QWidget::StrongFocus );
+	dateAndLine->setBackgroundMode( QWidget::PaletteBase );
+	dateAndLine->setFontPropagation( QWidget::NoChildren );
+	dateAndLine->setPalettePropagation( QWidget::NoChildren );
+	dateAndLine->setText( "" );
+	dateAndLine->setMaxLength( 32767 );
+	dateAndLine->setEchoMode( QLineEdit::Normal );
+	dateAndLine->setFrame( TRUE );
 
-	QLabel* qtarch_Label_83;
 	qtarch_Label_83 = new QLabel( this, "Label_83" );
 	qtarch_Label_83->setGeometry( 40, 370, 70, 30 );
 	qtarch_Label_83->setMinimumSize( 0, 0 );
@@ -373,7 +365,6 @@ void CFilePrintDlg::init() {
 	timeSinceLine->setEchoMode( QLineEdit::Normal );
 	timeSinceLine->setFrame( TRUE );
 
-	QLabel* qtarch_Label_84;
 	qtarch_Label_84 = new QLabel( this, "Label_84" );
 	qtarch_Label_84->setGeometry( 210, 370, 30, 30 );
 	qtarch_Label_84->setMinimumSize( 0, 0 );
@@ -409,32 +400,164 @@ void CFilePrintDlg::init() {
 	qtarch_ButtonGroup_143->insert( selfChoosenFilesCleanButton );
 	qtarch_ButtonGroup_143->insert( selfChoosenFilesDeleteButton );
 	qtarch_ButtonGroup_143->insert( selfChoosenFilesAddButton );
-
-
-
-
 	qtarch_ButtonGroup_139->insert( selfChoosenFilesPushButton );
-	qtarch_ButtonGroup_139->insert( currentButton );
-	qtarch_ButtonGroup_139->insert( allInBufferButton );
-	qtarch_ButtonGroup_139->insert( allInProjectButton );
-	qtarch_ButtonGroup_139->insert( selfChoosenFilesButton );
-	qtarch_ButtonGroup_139->insert( changedFilesButton );
+	qtarch_ButtonGroup_139->insert( currentButton ,1);
+	qtarch_ButtonGroup_139->insert( allInBufferButton ,2);
+	qtarch_ButtonGroup_139->insert( allInProjectButton ,3);
+	qtarch_ButtonGroup_139->insert( selfChoosenFilesButton ,5);
+	qtarch_ButtonGroup_139->insert( changedFilesButton ,4);
+      	qtarch_ButtonGroup_139->setButton(1);
 
-  okButton = new QPushButton( mainwidget, "okButton" );
-  okButton->setText(("Ok"));
-  okButton->setGeometry( 20, 440, 100, 30 );
-  cancelButton = new QPushButton( mainwidget, "cancelButton" );
-  cancelButton->setText(("Cancel"));
-  cancelButton->setGeometry( 140, 440, 100, 30 );
-  connect(cancelButton,SIGNAL(clicked()),SLOT(slotFileCancelClicked()));
-  helpButton = new QPushButton( mainwidget, "helpButton" );
-  helpButton->setText(("Help"));
-  helpButton->setGeometry( 480, 440, 100, 30 );
+	okButton = new QPushButton( mainwidget, "okButton" );
+	okButton->setText(("Ok"));
+	okButton->setGeometry( 20, 440, 100, 30 );
+	cancelButton = new QPushButton( mainwidget, "cancelButton" );
+	cancelButton->setText(("Cancel"));
+	cancelButton->setGeometry( 140, 440, 100, 30 );
+	connect(cancelButton,SIGNAL(clicked()),SLOT(slotFileCancelClicked()));
 
-
+	connect(qtarch_ButtonGroup_139,SIGNAL(clicked(int)),SLOT(slotSelfChoosenFilesActive(int)));
+	
 	mainwidget->show();
 }
 
 void CFilePrintDlg::slotFileCancelClicked() {
   reject();
+}
+
+void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
+  if (number==5) {
+    selfChoosenFilesPushButton->setEnabled(true);
+    selfChoosenFileLine->setEnabled(true);
+    selfChoosenFilesAddButton->setEnabled(true);
+    selfChoosenFilesDeleteButton->setEnabled(true);
+    selfChoosenFilesCleanButton->setEnabled(true);
+    selfChoosenFilesMultiLine->setEnabled(true);
+    qtarch_ButtonGroup_143->setEnabled(true);
+    qtarch_Label_79->setEnabled(true);
+    
+    qtarch_Label_77->setEnabled(false);
+    qtarch_Label_78->setEnabled(false);
+    qtarch_Label_80->setEnabled(false);
+    qtarch_Label_81->setEnabled(false);
+    qtarch_Label_83->setEnabled(false);
+    qtarch_Label_84->setEnabled(false);
+    qtarch_ButtonGroup_140->setEnabled(false);
+    qtarch_ButtonGroup_141->setEnabled(false);
+    qtarch_ButtonGroup_142->setEnabled(false);
+    dateBetweenLine->setEnabled(false);
+    dateAndLine->setEnabled(false);
+    dateSinceLine->setEnabled(false);
+    timeBetweenLine->setEnabled(false);
+    timeAndLine->setEnabled(false);
+    timeSinceLine->setEnabled(false);
+  }
+  else
+    if (number==1) {
+      selfChoosenFilesPushButton->setEnabled(false);
+      selfChoosenFileLine->setEnabled(false);
+      selfChoosenFilesAddButton->setEnabled(false);
+      selfChoosenFilesDeleteButton->setEnabled(false);
+      selfChoosenFilesCleanButton->setEnabled(false);
+      selfChoosenFilesMultiLine->setEnabled(false);
+      qtarch_ButtonGroup_143->setEnabled(false);
+      qtarch_Label_79->setEnabled(false);
+      
+      qtarch_Label_77->setEnabled(false);
+      qtarch_Label_78->setEnabled(false);
+      qtarch_Label_80->setEnabled(false);
+      qtarch_Label_81->setEnabled(false);
+      qtarch_Label_83->setEnabled(false);
+      qtarch_Label_84->setEnabled(false);
+      qtarch_ButtonGroup_140->setEnabled(false);
+      qtarch_ButtonGroup_141->setEnabled(false);
+      qtarch_ButtonGroup_142->setEnabled(false);
+      dateBetweenLine->setEnabled(false);
+      dateAndLine->setEnabled(false);
+      dateSinceLine->setEnabled(false);
+      timeBetweenLine->setEnabled(false);
+      timeAndLine->setEnabled(false);
+      timeSinceLine->setEnabled(false);
+    }
+    else
+      if (number==2) {
+	selfChoosenFilesPushButton->setEnabled(false);
+	selfChoosenFileLine->setEnabled(false);
+	selfChoosenFilesAddButton->setEnabled(false);
+	selfChoosenFilesDeleteButton->setEnabled(false);
+	selfChoosenFilesCleanButton->setEnabled(false);
+	selfChoosenFilesMultiLine->setEnabled(false);
+	qtarch_ButtonGroup_143->setEnabled(false);
+	qtarch_Label_79->setEnabled(false);
+	
+	qtarch_Label_77->setEnabled(false);
+	qtarch_Label_78->setEnabled(false);
+	qtarch_Label_80->setEnabled(false);
+	qtarch_Label_81->setEnabled(false);
+	qtarch_Label_83->setEnabled(false);
+	qtarch_Label_84->setEnabled(false);
+	qtarch_ButtonGroup_140->setEnabled(false);
+	qtarch_ButtonGroup_141->setEnabled(false);
+	qtarch_ButtonGroup_142->setEnabled(false);
+	dateBetweenLine->setEnabled(false);
+	dateAndLine->setEnabled(false);
+	dateSinceLine->setEnabled(false);
+	timeBetweenLine->setEnabled(false);
+	timeAndLine->setEnabled(false);
+	timeSinceLine->setEnabled(false);
+      }
+      else 
+	if (number==3) {
+	  selfChoosenFilesPushButton->setEnabled(false);
+	  selfChoosenFileLine->setEnabled(false);
+	  selfChoosenFilesAddButton->setEnabled(false);
+	  selfChoosenFilesDeleteButton->setEnabled(false);
+	  selfChoosenFilesCleanButton->setEnabled(false);
+	  selfChoosenFilesMultiLine->setEnabled(false);
+	  qtarch_ButtonGroup_143->setEnabled(false);
+	  qtarch_Label_79->setEnabled(false);
+	  
+	  qtarch_Label_77->setEnabled(false);
+	  qtarch_Label_78->setEnabled(false);
+	  qtarch_Label_80->setEnabled(false);
+	  qtarch_Label_81->setEnabled(false);
+	  qtarch_Label_83->setEnabled(false);
+	  qtarch_Label_84->setEnabled(false);
+	  qtarch_ButtonGroup_140->setEnabled(false);
+	  qtarch_ButtonGroup_141->setEnabled(false);
+	  qtarch_ButtonGroup_142->setEnabled(false);
+	  dateBetweenLine->setEnabled(false);
+	  dateAndLine->setEnabled(false);
+	  dateSinceLine->setEnabled(false);
+	  timeBetweenLine->setEnabled(false);
+	  timeAndLine->setEnabled(false);
+	  timeSinceLine->setEnabled(false);
+	}
+	else
+	  if (number==4) {
+	    selfChoosenFilesPushButton->setEnabled(false);
+	    selfChoosenFileLine->setEnabled(false);
+	    selfChoosenFilesAddButton->setEnabled(false);
+	    selfChoosenFilesDeleteButton->setEnabled(false);
+	    selfChoosenFilesCleanButton->setEnabled(false);
+	    selfChoosenFilesMultiLine->setEnabled(false);
+	    qtarch_ButtonGroup_143->setEnabled(false);
+	    qtarch_Label_79->setEnabled(false);
+
+	    qtarch_Label_77->setEnabled(true);
+	    qtarch_Label_78->setEnabled(true);
+	    qtarch_Label_80->setEnabled(true);
+	    qtarch_Label_81->setEnabled(true);
+	    qtarch_Label_83->setEnabled(true);
+	    qtarch_Label_84->setEnabled(true);
+	    qtarch_ButtonGroup_140->setEnabled(true);
+	    qtarch_ButtonGroup_141->setEnabled(true);
+	    qtarch_ButtonGroup_142->setEnabled(true);
+	    dateBetweenLine->setEnabled(true);
+	    dateAndLine->setEnabled(true);
+	    dateSinceLine->setEnabled(true);
+	    timeBetweenLine->setEnabled(true);
+	    timeAndLine->setEnabled(true);
+	    timeSinceLine->setEnabled(true);
+	  }
 }
