@@ -1,3 +1,10 @@
+2001-06-06  Ralf Nolden <nolden@kde.org>
+   * restored the spashlogo as it was before. Now it shows all of the time
+      the last project is loaded which can take a while ad which is why it worked
+      the former way :)
+   * removed the KTipOfDay class and dialog. We´re using KTipDialog from kdelibs now :)
+      tip.database changed to XML accordingly.
+
 2001-06-06  Christian Couder <christian@kdevelop.org>
     * Moved some slots from the CKDevelop class to DocViewMan.
     * New signal in DocViewMan to change the status message. 
