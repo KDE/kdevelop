@@ -41,7 +41,8 @@ Create a directory <code>template-khello</code> with the files
     - template-khello/src-Makefile.am
     - template-khello/subdirs
     .
-</pre></code><b>note:</b><br> The directory name must begin with <code>"template-"</code>.
+</pre></code>
+\note The directory name must begin with <code>"template-"</code>.
 
 \subsection templates_1_2 I.2. Step 2: The Files in Detail
 
@@ -79,7 +80,7 @@ The application wizard looks into this file to get
     - and the file templates the project uses (<code>FileTemplates=</code>).
     .
 
-<b>attention:</b><br> The file <code>template-khello/khello</code> must have the same name as
+\attention The file <code>template-khello/khello</code> must have the same name as
 the right half of the directory! If the directory is <code>template-foobar</code>
 the file must be <code>template-foobar/foobar</code>.
 
@@ -103,22 +104,25 @@ The following script is used to install the template and replaces all
 variables by the corresponding value. The result is a hopefully working
 kdevelop project!
 \verbinclude khello/script
-<br><b>note:</b><br> There are several application templates which use some identical
+<br>
+\note There are several application templates which use some identical
 files - that's why some files are taken from the <code>"template-common"</code>-directory.
 
 \section templates_2 II. Registration/Installation Of The Application Template
 
-The easiest way to install your template is to provide an "install.sh" script.\n
+The easiest way to install your template is to provide an "install.sh" shell script.\n
 Example:
 \code
 #!/bin/sh
 
+kde_prefix=`kde-config --prefix`
 if  [ `id -u` = 0 ]; then
   # we are root so install the template into the global kde directory
   kde_dir=`kde-config --prefix`
 else
   # we are a user so install it into $HOME/.kde/share/apps/kdevappwizard directory
   kde_dir=`kde-config --localprefix`
+  echo "Note: It would be better to install as root. Press CTRL+C to abort"
 fi
 
 # use usual path or another one?
@@ -128,9 +132,10 @@ read newdir
 if [ "$newdir"a = a ]; then newdir="${kde_dir}/share/apps/kdevappwizard/"; fi
 
 # make sure the directories exist
-if [ ! -e "${newdir}" ]; then mkdir -p "$newdir" ; fi;
 if [ ! -e "${newdir}/template-khello" ]; then mkdir -p "${newdir}/template-khello" ; fi;
 if [ ! -e "${newdir}/templates" ]; then mkdir -p "${newdir}/templates" ; fi;
+if [ ! -e "${newdir}" ]; then mkdir -p "$newdir" ; fi;
+if [ ! -e "${newdir}/template-common" ]; then ln -s "${kde_prefix}/share/apps/kdevappwizard/template-common" "${newdir}/template-common" ; fi;
 
 # install now
 cp -R --target-directory "$newdir" template-khello
@@ -140,7 +145,7 @@ mv "$newdir/template-khello/khello" "$newdir/templates/"
 echo "done"
 \endcode
 \n
-<b>attention:</b><br> Please test your template whether it installs and behaves correctly! Test, test and test again! ;)
+\attention Please test your template whether it installs and behaves correctly! Test, test and test again! ;)
 
 \section templates_3 III. How To Add The Template To KDevelop CVS HEAD
 
@@ -159,8 +164,8 @@ script.local
     - <code>"Makefile.am"</code> looks like this:
     \verbinclude khello/Makefile.am
     .
-Finally add <code>"template-khello"</code> to "SUBDIRS = " in <code>kdevelop/languages/cpp/app_templates/Makefile.am</code>.<br><br>
-<b>attention:</b><br> Please test your template whether it installs and behaves correctly!
+Finally add <code>"template-khello"</code> to "SUBDIRS = " in <code>kdevelop/languages/cpp/app_templates/Makefile.am</code>.\n
+\attention Please test your template whether it installs and behaves correctly!
 Test, test and test again! It works? Well - now talk to the kdevelop guys so
 that they know what's going on and probably you may commit. ;)
 
