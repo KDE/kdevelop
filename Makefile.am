@@ -66,7 +66,7 @@ DOXYGEN_INPUT = src lib parts plugins doc/api
 DOXYGEN_EXCLUDE = parts/appwizard/adahello/ parts/appwizard/qtopiasimple/ parts/appwizard/adahello/ parts/appwizard/chello_gba/ parts/appwizard/chello/ parts/appwizard/bashhello/ parts/appwizard/javahello/ parts/appwizard/imports/ parts/appwizard/gnomeapp/ parts/appwizard/fpcsharedlib/ parts/appwizard/fpchello/ parts/appwizard/fpcgtk/ parts/appwizard/fortranhello/ parts/appwizard/dcopservice/  parts/appwizard/cppsdlhello/ parts/appwizard/cpphello/ parts/appwizard/wxhello/ parts/appwizard/superwaba/ parts/appwizard/rubyhello/ parts/appwizard/qtopiaapp/ parts/appwizard/qmakesimple/ parts/appwizard/qmakeapp/ parts/appwizard/pythonhello/ parts/appwizard/pyqt/ parts/appwizard/prc-tool/ parts/appwizard/phphello/ parts/appwizard/perlhello/ parts/appwizard/pascalhello/ parts/appwizard/noatunui/ parts/appwizard/noatunvisual/ parts/appwizard/kscreensaver/ parts/appwizard/kpartplugin/ parts/appwizard/kpartapp/ parts/appwizard/konqnavpanel/ parts/appwizard/kofficepart/ parts/appwizard/kioslave/ parts/appwizard/kicker/ parts/appwizard/khello/ parts/appwizard/kdevpart2/ parts/appwizard/kdevpart/ parts/appwizard/kdedcop/ parts/appwizard/kcmodule/ parts/appwizard/kateplugin/ parts/appwizard/kateplugin2/ parts/appwizard/common/ parts/appwizard/kapp/ parts/appwizard/haskellhello/ parts/appwizard/xulhello/ parts/appwizard/kappjava/ parts/appwizard/kdevlang parts/appwizard/generichello parts/cppsupport/subclassing_template parts/pascalsupport/ parts/javasupport lib/antlr
 
 ## Use KDE Libs tag files
-DOXYGEN_LINK_WITH_KDE_QT_APIDOX = NO
+DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
 DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
 
 ## Use Search engine (Versions 1.3.4 and above only!)
