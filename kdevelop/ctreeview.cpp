@@ -73,7 +73,7 @@ CTreeView::~CTreeView()
 
 /*********************************************************************
  *                                                                   *
- *                          PUBLIC QUERIES                           *
+ *                          PUBLIC METHODS                           *
  *                                                                   *
  ********************************************************************/
 
@@ -93,6 +93,23 @@ void CTreeView::setTreeHandler( CTreeHandler *aHandler )
 
   treeH = aHandler;
   treeH->setTree( this );
+}
+
+/*------------------------------------- CTreeView::setTreeHandler()
+ * setTreeHandler()
+ *   Find an entry by using its' name.
+ *
+ * Parameters:
+ *   aName          Name of the entry to find.
+ *
+ * Returns:
+ *   QListViewItem  The item.
+ *   NULL           No item was found.
+ *-----------------------------------------------------------------*/
+QListViewItem *CTreeView::findByName( const char *aName )
+{
+  debug( "CTreeView::findByName NOT IMPLEMENTED YET!" );
+  return NULL;
 }
 
 /*********************************************************************

@@ -51,6 +51,9 @@ public: // Public methods
   /** Set a new treehandler. */
   void setTreeHandler( CTreeHandler *aHandler );
 
+  /** Find an entry by using its' name. */
+  QListViewItem *findByName( const char *aName );
+
 protected: // Protected attributes
 
   /** The position at the last mousepress-event. */
