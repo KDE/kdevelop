@@ -163,7 +163,7 @@ class CProject
 {
 
 public: 
-  /** construtor */
+  /** constructor */
   CProject(const QString& file);
   /** destructor */
   ~CProject();
