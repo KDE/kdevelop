@@ -350,7 +350,7 @@ void PartController::slotPartRemoved(KParts::Part *part)
 }
 
 
-void PartController::slotPartAdded(KParts::Part *part)
+void PartController::slotPartAdded(KParts::Part *)
 {
   updateBufferMenu();
   updateMenuItems();
@@ -507,8 +507,9 @@ void PartController::slotPopupAboutToShow()
     return;
 
   // ugly hack: mark the "original" items 
-  for (uint index=0; index<popup->count(); ++index)
-    popup->setItemParameter(popup->idAt(index), popup->idAt(index)+1);
+  m_popupIds.resize(popup->count());
+  for (uint index=0; index < popup->count(); ++index)
+    m_popupIds[index] = popup->idAt(index);
   
   // first fill the menu in the file context
 
@@ -533,7 +534,6 @@ void PartController::slotPopupAboutToShow()
   if (!cursorIface || !editIface)
   {
     Core::getInstance()->fillContextMenu(popup, 0);
-    kdDebug() << "fillContextMenu with empty context" << endl;
   }
   else
   {
@@ -541,7 +541,6 @@ void PartController::slotPopupAboutToShow()
     cursorIface->cursorPosition(&line, &col);
     EditorContext context(editIface->textLine(line), col);
     Core::getInstance()->fillContextMenu(popup, &context);
-    kdDebug() << "fillContextMenu with Editor context" << endl;
   }
 }
 
@@ -553,9 +552,17 @@ void PartController::slotPopupAboutToHide()
     return;
 
   // ugly hack: remove all but the "original" items
-  for (uint index=0; index<popup->count(); ++index)
-    if (popup->itemParameter(popup->idAt(index) != popup->idAt(index)+1))
-      popup->removeItemAt(index);
+  bool remove = true;
+  while (remove)
+  {
+    remove = false;
+    for (uint index=0; index<popup->count(); ++index)
+      if (m_popupIds.contains(popup->idAt(index)) == 0)
+      {
+        popup->removeItemAt(index);
+	remove = true;
+      }
+  }
 }
 
 

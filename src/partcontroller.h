@@ -4,6 +4,7 @@
 
 #include <qwidget.h>
 #include <qptrlist.h>
+#include <qarray.h>
 
 
 class QTabWidget;
@@ -107,6 +108,8 @@ private:
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
+
+  QArray<int> m_popupIds;
 
 };
 
