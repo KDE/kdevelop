@@ -2,15 +2,20 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=%{APPNAME}
-Comment[pt]=%{APPNAME$}
-Comment[xx]=xx%{APPNAME}xx
 Name=KDev%{APPNAME}
-Name[sv]=KDevelop %{APPNAME}
-Name[ta]=கெடெவ்%{APPNAME}
-Name[xx]=xxKDev%{APPNAME}xx
+GenericName=%{APPNAME} Plugin
+Comment=%{APPNAME} Description
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin
-X-KDevelop-Scope=Global
+
+X-KDevelop-Plugin-Version=1
+X-KDevelop-Plugin-Homepage=
+X-KDevelop-Plugin-BugsEmailAddress=%{EMAIL}
+X-KDevelop-Plugin-Copyright=(C) by %{AUTHOR}
+
+X-KDevelop-Args=
+
+X-KDevelop-Scope=%{SCOPE}
 X-KDE-Library=libkdev%{APPNAMELC}
-X-KDevelop-Version=1
+X-KDevelop-Version=3
+X-KDevelop-Properties=%{PROPS}
