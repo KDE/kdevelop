@@ -105,6 +105,28 @@ static const char *const message_xpm[] =
         "...####...."
     };
 
+namespace
+{
+// code from qt-3.1.2 version of QDir::canonicalPath()
+QString canonicalPath( QString const & path )
+{
+    QString r;
+    char cur[PATH_MAX+1];
+    if ( ::getcwd( cur, PATH_MAX ) )
+    {
+        char tmp[PATH_MAX+1];
+        if( ::realpath( QFile::encodeName( path ), tmp ) )
+        {
+            r = QFile::decodeName( tmp );
+        }
+        //always make sure we go back to the current dir
+        ::chdir( cur );
+    }
+    return r;
+}
+
+}
+
 class SelectionPreserver
 {
 public:
@@ -427,9 +449,7 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     while ( it != projectFiles.end() )
     {
         QString file = m_part->project()->projectDirectory() + "/" + *it;
-        QFileInfo fileinfo(file);
-        QString canonicalFile = fileinfo.dir().canonicalPath() + "/" + fileinfo.fileName();
-        if ( name == canonicalFile )
+        if ( name == canonicalPath( file ) )
         {
             kdDebug(9004) << "Found file in project - " << file << " == " << name << endl;
             return file;
