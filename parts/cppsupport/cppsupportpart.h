@@ -51,9 +51,9 @@ public:
     ~CppSupportPart();
 
     bool isValid() const { return m_valid; }
-    
-    void setEnableCC( bool b ){ m_bEnableCC = b;    };
-    bool getEnableCC( void   ){ return m_bEnableCC; };
+
+    void setCodeCompletionEnabled( bool b ){ m_bEnableCC = b;    };
+    bool codeCompletionEnabled( void   ){ return m_bEnableCC; };
 
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }

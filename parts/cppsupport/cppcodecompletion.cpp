@@ -274,7 +274,7 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     }
 
     // here we have to investigate :)
-    if( m_pSupport && m_pSupport->getEnableCC( ) == true ){
+    if( m_pSupport && m_pSupport->codeCompletionEnabled( ) == true ){
         kdDebug( 9007 ) << "enabling code completion" << endl;
 	connect(part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 	connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
