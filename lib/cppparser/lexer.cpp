@@ -164,23 +164,6 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
     if( ch.isNull() || ch.isSpace() ){
 	/* skip */
-    } else if( ch == '/' && ch1 == '/' ){
-	int start = currentPosition();
-	readLineComment();
-	if( recordComments() ){
-	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
-	    tk.setStartPosition( startLine, startColumn );
-	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	}
-    } else if( ch == '/' && ch1 == '*' ){
-	int start = currentPosition();
-	nextChar( 2 );
-	readMultiLineComment();
-	if( recordComments() ){
-	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
-	    tk.setStartPosition( startLine, startColumn );
-	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	}
     } else if( m_startLine && ch == '#' ){
 
 	nextChar(); // skip #
@@ -204,6 +187,24 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
         m_startLine = true;
         m_preprocessorEnabled = d;
         return;
+    } else if( ch == '/' && ch1 == '/' ){
+	int start = currentPosition();
+	readLineComment();
+	if( recordComments() ){
+	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	}
+    } else if( ch == '/' && ch1 == '*' ){
+	int start = currentPosition();
+	nextChar( 2 );
+	readMultiLineComment();
+
+	if( recordComments() ){
+	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
+	    tk.setStartPosition( startLine, startColumn );
+	    tk.setEndPosition( m_currentLine, m_currentColumn );
+	}
     } else if( ch == '\'' ){
 	int start = currentPosition();
 	readCharLiteral();
