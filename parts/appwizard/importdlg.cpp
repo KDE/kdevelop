@@ -27,7 +27,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kcursor.h>
+
 #include "kdevcore.h"
+#include "kdevversioncontrol.h"
 
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
@@ -54,6 +57,10 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     }
 
     setProjectType("c");
+
+    scanAvailableVCS();
+    connect( fetchModuleButton, SIGNAL(clicked()),
+        this, SLOT(slotFetchModulesFromRepository()) );
 }
 
 
@@ -326,5 +333,34 @@ void ImportDialog::setProjectType(const QString &type)
         ++i;
     }
 }
+
+void ImportDialog::scanAvailableVCS()
+{
+    vcsCombo->insertStringList( m_part->registeredVersionControls() );
+}
+
+void ImportDialog::slotFinishedCheckout( QString destinationDir )
+{
+    dir_edit->setText( destinationDir );
+
+    setCursor( KCursor::arrowCursor() );
+//    setEnabled( true );
+}
+
+void ImportDialog::slotFetchModulesFromRepository()
+{
+    KDevVersionControl *vcs = m_part->versionControlByName( vcsCombo->currentText() );
+    if (!vcs)
+        return;
+
+    setCursor( KCursor::waitCursor() );
+//    setEnabled( false );
+
+    connect( vcs, SIGNAL(finishedFetching(QString)),
+        this, SLOT(slotFinishedCheckout(QString)) );
+
+    vcs->fetchFromRepository( this );
+}
+
 
 #include "importdlg.moc"

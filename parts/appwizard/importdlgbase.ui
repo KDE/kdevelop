@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>455</width>
-            <height>231</height>
+            <width>463</width>
+            <height>317</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,19 +19,79 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
-        <widget class="QLabel" row="2" column="0">
+        <widget class="QLabel" row="0" column="0">
             <property name="name">
-                <cstring>project_label</cstring>
+                <cstring>dir_label</cstring>
             </property>
             <property name="text">
-                <string>&amp;Project type:</string>
+                <string>&amp;Directory:</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>project_combo</cstring>
+                <cstring>dir_edit</cstring>
             </property>
         </widget>
-        <spacer row="3" column="1">
+        <widget class="QComboBox" row="1" column="1">
+            <property name="name">
+                <cstring>vcsCombo</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>fetchModuleButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Fetch module</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Fetch from</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>name_label</cstring>
+            </property>
+            <property name="text">
+                <string>Project &amp;name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>name_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>name_edit</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+        <spacer row="4" column="2">
             <property name="name">
                 <cstring>Spacer1</cstring>
             </property>
@@ -48,18 +108,20 @@
                 </size>
             </property>
         </spacer>
-        <widget class="QLabel" row="5" column="0">
+        <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>TextLabel5</cstring>
+                <cstring>author_edit</cstring>
             </property>
-            <property name="text">
-                <string>&amp;Email:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>email_edit</cstring>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
         </widget>
-        <widget class="QLabel" row="4" column="0">
+        <widget class="QLabel" row="5" column="0">
             <property name="name">
                 <cstring>author_label</cstring>
             </property>
@@ -70,63 +132,18 @@
                 <cstring>author_edit</cstring>
             </property>
         </widget>
-        <widget class="QLineEdit" row="4" column="1">
+        <widget class="QLabel" row="6" column="0">
             <property name="name">
-                <cstring>author_edit</cstring>
+                <cstring>TextLabel5</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+            <property name="text">
+                <string>&amp;Email:</string>
             </property>
-        </widget>
-        <widget class="QLineEdit" row="5" column="1">
-            <property name="name">
+            <property name="buddy" stdset="0">
                 <cstring>email_edit</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
         </widget>
-        <widget class="QComboBox" row="2" column="1">
-            <property name="name">
-                <cstring>project_combo</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-        </widget>
-        <spacer row="6" column="1">
-            <property name="name">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget" row="7" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="9" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>Layout1</cstring>
             </property>
@@ -137,7 +154,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>Spacer3</cstring>
@@ -173,9 +189,9 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLineEdit" row="1" column="1">
+        <widget class="QLineEdit" row="6" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>name_edit</cstring>
+                <cstring>email_edit</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -186,18 +202,31 @@
                 </sizepolicy>
             </property>
         </widget>
-        <widget class="QLabel" row="1" column="0">
+        <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>name_label</cstring>
+                <cstring>project_combo</cstring>
             </property>
-            <property name="text">
-                <string>Project &amp;name:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>name_edit</cstring>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
         </widget>
-        <widget class="QLineEdit" row="0" column="1">
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>project_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Project type:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>project_combo</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>dir_edit</cstring>
             </property>
@@ -210,25 +239,14 @@
                 </sizepolicy>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>dir_label</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Directory:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>dir_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="0" column="2">
+        <widget class="QPushButton" row="0" column="3">
             <property name="name">
                 <cstring>dir_button</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>3</vsizetype>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
@@ -247,6 +265,37 @@
             </property>
             <property name="text">
                 <string>...</string>
+            </property>
+        </widget>
+        <spacer row="7" column="2">
+            <property name="name">
+                <cstring>Spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="Line" row="8" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
             </property>
         </widget>
     </grid>
@@ -277,13 +326,25 @@
         <slot>dirChanged()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>dir_edit</tabstop>
+    <tabstop>dir_button</tabstop>
+    <tabstop>vcsCombo</tabstop>
+    <tabstop>fetchModuleButton</tabstop>
+    <tabstop>name_edit</tabstop>
+    <tabstop>project_combo</tabstop>
+    <tabstop>author_edit</tabstop>
+    <tabstop>email_edit</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+</tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">dirButtonClicked()</slot>
     <slot>dirChanged()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

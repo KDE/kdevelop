@@ -22,7 +22,7 @@ class AppWizardPart;
 class ImportDialog : public ImportDialogBase
 {
     Q_OBJECT
-    
+
 public:
     ImportDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~ImportDialog();
@@ -31,13 +31,18 @@ protected:
     virtual void accept();
     virtual void dirButtonClicked();
     virtual void dirChanged();
-    
+
+private slots:
+    void slotFinishedCheckout( QString destinationDir );
+    void slotFetchModulesFromRepository();
+
 private:
+    void scanAvailableVCS();
     void scanLegacyKDevelopProject(const QString &fileName);
     void scanLegacyStudioProject(const QString &fileName);
     void scanAutomakeProject(const QString &dirName);
     void setProjectType(const QString &type);
-    
+
     QStringList importNames;
     AppWizardPart *m_part;
 };
