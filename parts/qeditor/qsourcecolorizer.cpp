@@ -49,6 +49,7 @@ QSourceColorizer::QSourceColorizer( QEditor* editor )
     DECLARE_FORMAT_ITEM( Normal, "Normal", defaultFont, Qt::black );
     DECLARE_FORMAT_ITEM( PreProcessor, "PreProcessor", defaultFont, QColor( 0x80, 0x00, 0x80 ) ); //Qt::darkGreen
     DECLARE_FORMAT_ITEM( Keyword, "Keyword", defaultFont, QColor( 0x0e, 0x23, 0xad ) ); //QColor( 0xff, 0x77, 0x00 )
+    DECLARE_FORMAT_ITEM( BuiltInClass, "Built-in Class", defaultFont, QColor( 0xff, 0x77, 0x00 ) );
     DECLARE_FORMAT_ITEM( Operator, "Operator", defaultFont, Qt::black );
     DECLARE_FORMAT_ITEM( Comment, "Comment", defaultFont, QColor( 0x06, 0x78, 0x17) ); //QColor( 0xdd, 0x00, 0x00 )
     DECLARE_FORMAT_ITEM( Constant, "Constant", defaultFont, QColor( 0x00, 0x00, 0xff ) ); //Qt::darkBlue

@@ -32,6 +32,12 @@ public:
     virtual ~CppColorizer();
     
     int computeLevel( QTextParagraph* parag, int startLevel );
+	
+private:
+    void loadDynamicKeywords();
+    
+private:
+    QMap<QString, int> m_dynamicKeywords;
 };
 
 #endif

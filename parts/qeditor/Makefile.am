@@ -1,6 +1,6 @@
 # this has all of the subdirectories that make will recurse into.  if
 # there are none, comment this out
-#SUBDIRS = .
+SUBDIRS = data
 
 # set the include path for X, qt and KDE
 INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)

@@ -28,9 +28,13 @@
 #include <qfont.h>
 #include <private/qrichtext_p.h>
 
+#include <qdom.h>
+#include <qfile.h>
+
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kstandarddirs.h>
 
 
 static const char *cpp_keywords[] = {
@@ -94,6 +98,8 @@ using namespace std;
 CppColorizer::CppColorizer( QEditor* editor )
     : QSourceColorizer( editor )
 {
+    loadDynamicKeywords();
+	
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
     context0->appendChild( new CppPreprocHLItem( PreProcessor, 4 ) );
@@ -101,10 +107,11 @@ CppColorizer::CppColorizer( QEditor* editor )
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
     context0->appendChild( new StringHLItem( "/*", Comment, 3 ) );
-    context0->appendChild( new StartsWithHLItem( "//", Comment, 0 ) );
-    context0->appendChild( new KeywordsHLItem( cpp_keywords, Keyword, Normal, 0 ) );
+    context0->appendChild( new StartsWithHLItem( "//", Comment, 0 ) );	
     context0->appendChild( new HexHLItem( Constant, 0 ) );
     context0->appendChild( new NumberHLItem( Constant, 0 ) );
+    context0->appendChild( new KeywordsHLItem( m_dynamicKeywords, BuiltInClass, Normal, 0, false ) );
+    context0->appendChild( new KeywordsHLItem( cpp_keywords, Keyword, Normal, 0 ) );
 
     HLItemCollection* context1 = new HLItemCollection( String );
     context1->appendChild( new StringHLItem( "\\\\", String, 1 ) );
@@ -133,6 +140,62 @@ CppColorizer::CppColorizer( QEditor* editor )
 
 CppColorizer::~CppColorizer()
 {
+}
+
+void CppColorizer::loadDynamicKeywords()
+{
+    QString strFileNameTag( "name" );
+    QString strClassNameTag( "name" );
+    
+    m_dynamicKeywords.clear();
+    
+    QString hlFileDir = KGlobal::dirs()->findResourceDir( "data", "qeditorpart/highlight/highlighting.xml" );
+    
+    hlFileDir += "qeditorpart/highlight/";
+    
+    //kdDebug(9032) << "Highlighting Dir: " << hlFileDir << endl;
+    
+    if( hlFileDir == QString::null )
+	return;
+    
+    QDomDocument hlFile( "hlfile" ), curDoc ( "classlist" );
+    QFile hlRawFile( hlFileDir + "highlighting.xml" );
+    int keywordIndex = 0;
+    if( !hlRawFile.open( IO_ReadOnly ) )
+	return;
+    if( !hlFile.setContent( &hlRawFile ) ) {
+	hlRawFile.close();
+	return;
+    }
+    hlRawFile.close();
+    
+    QDomElement e = hlFile.documentElement();
+    QDomNode n = e.firstChild();
+    while( !n.isNull() ) {
+	e = n.toElement();
+	if( !e.isNull() ) {
+	    
+	    // kdDebug(9032) << "Loading classes-file: " << (hlFileDir + e.attribute( strFileNameTag )) << endl;
+	    
+	    QFile clsRawFile( hlFileDir + e.attribute( strFileNameTag ) );
+	    if( clsRawFile.open( IO_ReadOnly ) && curDoc.setContent( &clsRawFile ) ) {
+	    
+		QDomElement e = curDoc.documentElement();
+		QDomNode n = e.firstChild();
+		while( !n.isNull() ) {
+		    e = n.toElement();
+		    if( !e.isNull()) {
+			// kdDebug(9032) << "Adding dynamic keyword: '" << e.attribute( strClassNameTag ) << "'" << endl;
+			m_dynamicKeywords.insert( e.attribute( strClassNameTag ), keywordIndex++ );
+		    }
+		    n = n.nextSibling();
+		}
+		
+	    }
+	    clsRawFile.close();
+	}
+	n = n.nextSibling();
+    }
 }
 
 int CppColorizer::computeLevel( QTextParagraph* parag, int startLevel )

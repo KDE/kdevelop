@@ -100,12 +100,17 @@ public:
 
 class KeywordsHLItem: public HLItem{
 public:
-    KeywordsHLItem( const char** keywords, int state, int ide_state, int context )
-        : HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state) {
+    KeywordsHLItem( const char** keywords, int state, int ide_state, int context, bool finalize = true )
+        : HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state), m_finalize(finalize) {
             int i = 1;
             while( *keywords ){
                 m_keywords.insert( QString(*keywords++), i++ );
             }
+    }
+	
+    KeywordsHLItem( const QMap<QString, int> keywords, int state, int ide_state, int context, bool finalize = true )
+	: HLItem( state, context ), m_ok(false), m_state(state), m_ide_state(ide_state), m_finalize(finalize) {
+	    m_keywords = keywords;
     }
     
     int attr() const { return m_ok ? m_state : m_ide_state; }
@@ -121,7 +126,7 @@ public:
 	if( start_pos != pos )
 	    m_ok = m_keywords.contains( QString(buffer+start_pos, pos-start_pos) );
 	
-	return pos;
+	return ( m_ok || m_finalize ) ? pos : start_pos;
     }
 
 private:
@@ -129,6 +134,7 @@ private:
     bool m_ok;
     int m_state;
     int m_ide_state;
+    bool m_finalize; //!< setting finalize to false allows to have another KeywordsHLItem in HLItemCollection after this one
 };
 
 class StartsWithHLItem: public HLItem{
@@ -248,11 +254,12 @@ public:
 	Normal=0,
 	PreProcessor,
 	Keyword,
-        Operator,
+	BuiltInClass,
+	Operator,
 	Comment,
 	Constant,
 	String,
-
+	
 	Custom = 1000
     };
 
