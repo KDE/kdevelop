@@ -451,11 +451,11 @@ void CKDevelop::slotProjectOptions(){
      		QString arch=config->readEntry("Architecture","i386");
      		QString platf=config->readEntry("Platform","linux");
      		config->setGroup("Compilearch "+arch+"-"+platf);
-     		shell_process << "\" "<< "CPP="<< config->readEntry("CPP","cpp")<< " ";
-     		shell_process << "\" "<< "CC=" << config->readEntry("CC","gcc")<< " ";
-     		shell_process << "\" "<< "CXX=" << config->readEntry("CXX","g++")<< " ";
-    		shell_process << "\" "<< "CPPFLAGS=\"" << cppflags << "\" ";
-        shell_process << "\" "<< "CFLAGS=\"" << cflags << "\" ";			
+     		shellcommand += " CPP=" + config->readEntry("CPP","cpp")+ " ";
+     		shellcommand += " CC=" + config->readEntry("CC","gcc")+ " ";
+     		shellcommand += " CXX=" + config->readEntry("CXX","g++")+ " ";
+     		shellcommand += " CPPFLAGS=\"" + cppflags + "\" ";
+        shellcommand += " CFLAGS=\"" + cflags + "\" ";
     		// if the project type is normal_c, the cflags were stored in the cxxflags
     		// of the old project type. Therefore, when the project is normal_c, continue
     		// to export the CXXFLAGS as CFLAGS.
@@ -465,10 +465,10 @@ void CKDevelop::slotProjectOptions(){
        	else{
            shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
        	}
-        shell_process  << "\" " << "LDFLAGS=\" " << ldflags << "\" ";
-				// the configure script is always in the project directory, no matter where we are
-			  shell_process << prj->getProjectDir() +"/configure "<< args;
-			}
+        shellcommand  += " LDFLAGS=\" " + ldflags + "\" ";
+ 				// the configure script is always in the project directory, no matter where we are
+ 			  shellcommand += prj->getProjectDir() + "/configure " + args;
+ 			}
       setToolMenuProcess(false);
       messages_widget->start();
       showOutputView(true);		
