@@ -239,17 +239,17 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Toggle Breakpoint"), 0, 0,
                          this, SLOT(toggleBreakpoint()),
                          actionCollection(), "debug_toggle_breakpoint");
-    action = new KAction(i18n("Disable Breakpoint"), 0, 0,
-                         this, SLOT(slotDisableBreakpoint()),
-                         actionCollection(), "debug_disable_breakpoint");
+//    action = new KAction(i18n("Disable Breakpoint"), 0, 0,
+//                         this, SLOT(slotDisableBreakpoint()),
+//                         actionCollection(), "debug_disable_breakpoint");
                          
     connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );
     
-    connect( core(), SIGNAL(projectOpened()),
-             this, SLOT(projectOpened()) );
-    connect( core(), SIGNAL(projectClosed()),
-             this, SLOT(projectClosed()) );
+//    connect( core(), SIGNAL(projectOpened()),
+//             this, SLOT(projectOpened()) );
+//    connect( core(), SIGNAL(projectClosed()),
+//             this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     
