@@ -80,7 +80,7 @@ void QEditorArgHint::reset( int line, int col )
     m_escAccel = new QAccel( (QWidget*) parent() );
     m_escAccel->insertItem( Key_Escape, 1 );
     m_escAccel->setEnabled( true );
-//    connect( m_escAccel, SIGNAL(activated(int)), this, SLOT(slotDone()) );
+    connect( m_escAccel, SIGNAL(activated(int)), this, SLOT(slotDone()) );
 }
 
 void QEditorArgHint::slotDone()
