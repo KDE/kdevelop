@@ -74,7 +74,7 @@ QStringList CppImplementationWidget::createClassFiles()
     QFile ifile(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_cpp));
     if (!ifile.open(IO_WriteOnly)) {
         KMessageBox::error(0, i18n("Cannot write to implementation file"));
-        return false;
+        return QStringList();
     }
     QTextStream istream(&ifile);
     istream << template_cpp;
@@ -83,7 +83,7 @@ QStringList CppImplementationWidget::createClassFiles()
     QFile hfile(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_h));
     if (!hfile.open(IO_WriteOnly)) {
         KMessageBox::error(0, i18n("Cannot write to header file"));
-        return false;
+        return QStringList();
     }
     QTextStream hstream(&hfile);
     hstream << template_h;
