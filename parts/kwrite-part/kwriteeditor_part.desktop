@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=KWriteEditorPart
-Comment=KWrite Editor Part
-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KDevelop/Editor
-X-KDE-Library=libkwriteeditorpart
-Type=Service
-InitialPreference=100
