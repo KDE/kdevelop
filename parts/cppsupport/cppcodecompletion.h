@@ -105,6 +105,8 @@ private:
     void computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col );
 
     QString getText( int startLine, int startColumn, int endLine, int endColumn );
+    
+    QString findClass( const QString& className );
 
 private:
     QGuardedPtr<CppSupportPart> m_pSupport;

@@ -147,6 +147,7 @@ private:
 struct CppCodeCompletionData
 {
     QPtrList<RecoveryPoint> recoveryPoints;
+    QStringList classNameList;
 
     CppCodeCompletionData()
     {
@@ -506,6 +507,8 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 
 QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 {
+    d->classNameList = m_pSupport->classStore()->getSortedClassNameList() + m_pSupport->classStore()->getSortedStructNameList();
+    
     bool global = false;
     if( expr.startsWith("::") ){
 	expr = expr.mid( 2 );
@@ -863,7 +866,7 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
     if( name.isEmpty() )
 	return type;
  
-    QString key = scope.join( "." );
+    QString key = findClass( scope.join( "." ) );
     if( m_pSupport->classStore()->hasClass(key) ){
 	return typeOf( name, m_pSupport->classStore()->getClassByName(key) );
     } else if( m_pSupport->classStore()->hasStruct(key) ){
@@ -1349,7 +1352,7 @@ QStringList CppCodeCompletion::typeOf( const QString & name, const QValueList< P
 
 void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::CompletionEntry > & entryList, const QStringList & type )
 {
-    QString key = type.join( "." );
+    QString key = findClass( type.join( "." ) );
     if( m_pSupport->classStore()->hasClass(key) ){
 	computeCompletionEntryList( entryList, m_pSupport->classStore()->getClassByName(key) );
     } else if( m_pSupport->classStore()->hasStruct(key) ){
@@ -1525,7 +1528,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 
 void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const QString & name, const QStringList & scope )
 {
-    QString key = scope.join( "." );
+    QString key = findClass( scope.join( "." ) );
     if( m_pSupport->classStore()->hasClass(key) ){
 	computeSignatureList( signatureList, name, m_pSupport->classStore()->getClassByName(key) );
 	return;
@@ -1615,6 +1618,15 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	    signature += " const";
 	signatureList << signature;
     }
+}
+
+QString CppCodeCompletion::findClass( const QString & className )
+{
+    QStringList lst = d->classNameList.grep( QRegExp("\\b" + className + "$") );
+    if( lst.size() )
+	return lst[ 0 ];
+    
+    return className;
 }
 
 #include "cppcodecompletion.moc"
