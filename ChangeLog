@@ -1,3 +1,11 @@
+2001-07-05  Richard Dale <duke@tipitina.demon.co.uk
+
+	* Fixed crash in class tool attribute display. Method and attribute
+          icons now displayed correctly
+        * Regenerated sources for Java plugin api
+        * References in the class store are cleared, before a source file 
+          is parsed
+
 2001-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Quick hack for a tmake/qmake project management
