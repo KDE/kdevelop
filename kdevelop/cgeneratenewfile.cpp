@@ -256,7 +256,33 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   file.close();  
   return file.name();
 }
-QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){  
+
+QString  CGenerateNewFile::genEngDocBook(QString abs_name,CProject* prj){
+
+  QString template_handbook = KApplication::kde_datadir() +
+    "/kdevelop/templates/docbook_en_template";
+  QStrList list;
+  QString str;
+
+  QFile file(template_handbook);
+  QTextStream stream(&file);
+  if(file.open(IO_ReadOnly)){ // read the handbook_template
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+  file.setName(abs_name);
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str !=0;str = list.next()){
+      stream << prj->setInfosInString(str) << '\n';
+    }
+  }
+  file.close();
+  return file.name();
+}
+
+QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
   QString template_kdelnk = KApplication::kde_datadir() + "/kdevelop/templates/kdelnk_template";
   QString project_name = prj->getProjectName().lower();
   QString str;

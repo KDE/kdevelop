@@ -49,7 +49,8 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_linux->setCurrentItem(0);
 
   list_manuals = new QListBox( tab, "list_manuals" );
-  list_manuals->insertItem(i18n("english (.sgml)"));
+  list_manuals->insertItem(i18n("LinuxDoc SGML (english) (*.sgml)"));
+  list_manuals->insertItem(i18n("DocBook SGML (english) (*.docbook)"));
   list_manuals->setMultiSelection( FALSE );
   list_manuals->setCurrentItem(0);
 
@@ -271,6 +272,10 @@ void CNewFileDlg::slotOKClicked(){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .sgml !"),KMsgBox::EXCLAMATION);
     return;
   }
+  if ( (fileType() == "EN_DOCBOOK") && (text.right(8) != ".docbook")){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .docbook !"),KMsgBox::EXCLAMATION);
+    return;
+  }
   if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"),KMsgBox::EXCLAMATION);
     return;
@@ -335,6 +340,10 @@ void CNewFileDlg::slotOKClicked(){
       generator.genEngHandbook(complete_filename,prj);
       type = "DATA";
     }
+    if (filetype == "EN_DOCBOOK"){
+      generator.genEngDocBook(complete_filename,prj);
+      type = "DATA";
+    }
     if (filetype == "LEXICAL"){
       generator.genLEXICALFile(complete_filename,prj);
       type = "SOURCE";
@@ -395,8 +404,11 @@ QString CNewFileDlg::fileType(){
   
   if (current == 1){ // manuals
     str = list_manuals->text(list_manuals->currentItem());
-    if (str == i18n("english (.sgml)")){
+    if (str == i18n("LinuxDoc SGML (english) (*.sgml)")){
       return "EN_SGML";
+    }
+    if (str == i18n("DocBook SGML (english) (*.docbook)")){
+      return "EN_DOCBOOK";
     }
   }
   if (current == 2){ // /linux/kde
@@ -465,6 +477,9 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
       }
       if (filetype == "EN_SGML" ) {
 	edit->setText(text + QString(".sgml"));
+      }
+      if (filetype == "EN_DOCBOOK" ) {
+	edit->setText(text + QString(".docbook"));
       }
       if (filetype == "LSM" ) {
 	edit->setText(text + QString(".lsm"));

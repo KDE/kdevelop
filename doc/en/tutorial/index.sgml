@@ -1549,7 +1549,7 @@ time ? This will reduce performance most often and lead to a so-called "flicker"
 there are some ways to reduce this behavoir. Instead of calling <tt>repaint()</tt>, we could call <tt>repaint(false)</tt> as well. This
 will not erase the widget contents before redrawing it. As we copy the document contents directly into the widget, we don´t need to
 erase it anyway, because all the data will be overwritten anyway. In conjunction with <tt>QScrollView</tt>, we will reduce the painting
-even more: we limit the update method to call <tt>repaint()</tt> on the viewport() widget, because that will call 
+even more: we limit the update method to call <tt>repaint()</tt> on the viewport() widget, because that will call
 <tt>viewportPaintEvent()</tt>. On the other hand, the painting area we use is the rectangle containing the document contents, which, when the
 document size is smaller than the viewport size. So we can limit the paint event to the rectangle of the viewport where the document 
 is displayed, whose visible width and height we can retrieve and compose to the rectangle. Additionally, we use the erase parameter with false,
@@ -1557,8 +1557,8 @@ so the document area doesn´t get erased:
 
 <code>
 void KScribbleView::update(KScribbleView* pSender){
-if(pSender != this)
-viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
+  if(pSender != this)
+    viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
 }
 </code>
 
@@ -1704,14 +1704,108 @@ void KScribbleApp::slotFileSaveAs()
 }
 </code>
 
-<sect>Final Conclusion
+
+<chapt>Adding Printing Functionality
 <p>
 
-This has been the last step of our tutorial. All in all, we learned how to create KDE applications with KDevelop, compile and execute
-programs and to give an application the functionality to make it a new one in the row of the daily growing number of freely available
-KDE programs. We hope you had fun reading and learning by the means of our tutorial and KDevelop, and although there is much more to
-discover when it comes to KDE and Qt application design and usage of the class libraries, you won a first insight into the ease of
-development for KDE with KDevelop.
+In this chapter we will show you how easy it is to implement printing functions using Qt. It´s actually just one line of code for us to
+do here, but we will start understanding who is actually doing the printing job. When the user presses the print button in
+<em>KScribble</em> or chooses "Print" from the "File" menu, the <tt>slotFilePrint()</tt> method is called in <tt>KScribbleApp</tt>.
+This method detects which child window is currently activ and creates a printer instance of the class <tt>QPrinter</tt>. Then it calls
+the widget´s printing method, <tt>KScribbleView::print()</tt>. Here, the framework already contains the base implementation - which
+already shows you that for printing you just have to use <tt>QPainter</tt> which then draws on the printer. This method also calls the
+printing dialog.
+
+What we have to do here is to use <tt>QPainter</tt> methods to draw the pixmap of the document connected to the view. As
+<tt>QPainter</tt> already offers a whole set of methods <tt>drawPixmap()</tt>, we will of course use one of them:
+
+<code>
+void KScribbleView::print(QPrinter *pPrinter)
+{
+  if (pPrinter->setup(this))
+  {
+		QPainter p;
+		p.begin(pPrinter);
+	  	
+		///////////////////////////////
+		// TODO: add your printing code here
+->	p.drawPixmap(0,0,doc->buffer);
+		///////////////////////////////
+		p.end();
+  }
+}
+</code>
+
+Here, we paint into the offset of the printer page at 0,0 with our buffer pixmap of the document. That´s all !
+
+You can just go ahead and test it - now you can print any graphics that <em>KScribble</em> is able to open.
+
+
+<chapt>Cut, Copy and Paste: Using the Clipboard
+<p>
+
+After we have added the base functionality of <em>KScribble</em> like the drawing functions, opening and saving files as well as
+printing, we´re now going over to implement the methods for cutting, copying and pasting selections. The standard framework already
+contains the base functionality for that - it provides the "Edit" menu with the according entries, keyboard shortcuts and toolbar
+buttons. The methods that are called from these actions are:
+
+<itemize>
+<item>KScribbleApp::slotEditCut()
+<item>KScribbleApp::slotEditCopy()
+<item>KScribbleApp::slotEditPaste()
+</itemize>
+
+These methods are already prepared for implementing these functions. Looking at one of them, you can see that the actual executing
+method call, m->cut() is commented out - this is what we have to implement in our widget class <tt>KScribbleView</tt>:
+
+<code>
+void KScribbleApp::slotEditCut()
+{
+  slotStatusMsg(i18n("Cutting selection..."));
+	
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	if ( m )
+//		m->cut();	
+
+  slotStatusMsg(i18n("Ready."));
+}
+</code>
+
+But before we start implementing these methods, we have to think how a selection can be made within the widget and which kind of data
+we may require. After that, we can go on to use <tt>QClipboard</tt> to cut, copy and paste to and from.
+
+The reason why this part is included in the tutorial is that this is sometimes the hardest part when developing an application or
+implementing a widget´s behavoir. Also, the code for drawing the rectangle for selecting an area on the widget is often required as
+well in other applications, so you don´t have to reinvent the wheel every time you need such an implementation.
+
+
+<sect>Drawing a Selection Rectangle
+<p>
+
+Obviously, we already overwrote some of the virtual methods <tt>QScrollView</tt> provides for the viewport widget, including the mouse
+event handlers. We had a boolean value <tt>mousePressed</tt> to store if the mouse button is held down to determine wether we want to
+draw or not on mouse movements. This will not last when we want to extend the functionality to drawing a selection. Of course, we want
+to add the cut, copy and paste actions as well, so we may need a better value that will do the job. Therefore we will add an enum type
+<tt>Action</tt> to <tt>KScribbleView</tt>, which defines five states: IDLE for when we don´t want to draw (matches mousePressed=false
+before), DRAW (matches mousePressed=true), SELECT for the selection action, PASTE for when we want to paste the clipboard contents, and
+DRAG to determine a Drag´n Drop action. We already add this value here, the implementation for Drag´n Drop will follow in the next
+chapter. The variable holding the state will be <tt>action</tt>, which we change as needed and ask for the current state. Further, we
+add a pointer to <tt>QClipboard</tt> which we will initialize in the widget´s constructor. At last, we use a <tt>QRect</tt> instance
+for storing the rectangle data. We will set the points of the rect when reimplementing the mouse event handlers. The rect itself will
+be used to draw a dash line around a selection so the user gets a visual feedback where his selection is as well as drawing the
+selection itself within that rectangle, so the user can move it around until he decided where to insert for example the pasted pixmap.
+
+Change the private area to look like the following:
+
+<code>
+	  /** the document instance */
+	  KScribbleDoc *doc;
+  		
+  private:
+->    QRect select;
+->    QClipboard *cb;
+->    enum Action{IDLE=0, DRAW, SELECT, PASTE, DRAG} action;
+</code>
 
   	
 <chapt>Copyright <label id="Copyright">

@@ -1000,8 +1000,7 @@ void CKAppWizard::slotOkClicked() {
   if (!(CToolClass::searchInstProgram("sgml2html") || CToolClass::searchInstProgram("ksgml2html"))) {
   	userdoc->setChecked(false);
   	KMsgBox msg (0,i18n("sgml2html and ksgml2html do not exist!"),
-    i18n("If you want to generate the user-documentation, you need one of these programs.\n"
-    		 "If you do not have one, the user-documentation will not be generate."),16,i18n("Ok"));
+    i18n("If you want to generate the user-documentation, you need one of these programs."),16,i18n("Ok"));
     msg.show();
   }
 
@@ -2087,7 +2086,6 @@ void CKAppWizard::slotProcessExited() {
   else if (kdenormalitem->isSelected()) {
     project->setProjectType("normal_kde");
   }
-  // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
   else if (kdenormaloglitem->isSelected())
   {
     project->setProjectType("normalogl_kde");
@@ -2123,7 +2121,10 @@ void CKAppWizard::slotProcessExited() {
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
   if (userdoc->isChecked()) {
-    project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.sgml");
+    if(kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+      project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.docbook");
+    else
+      project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.sgml");
   }
   project->setBinPROGRAM (namelow);
   project->setLDFLAGS (" ");
@@ -2185,9 +2186,7 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "prog_main";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   if (userdoc->isChecked()) {
     //    sub_dir_list.append("docs");
@@ -2196,28 +2195,24 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
   makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
   if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() ||
   		 qt2normalitem->isSelected() || qt2mdiitem->isSelected() || qextmdiitem->isSelected()) &&
-CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.am";
-//    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
+        CToolClass::searchProgram("xgettext"))
+  {
+    makeAmInfo.rel_name = "po/Makefile.am";
     makeAmInfo.type = "po";
-//    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
     sub_dir_list.clear();
     makeAmInfo.sub_dirs = sub_dir_list;
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
@@ -2454,108 +2449,35 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     project->addFileToProject (namelow + "/fileopen.xpm",fileInfo);
   } 
   
-  if (userdoc->isChecked()) {
-    fileInfo.rel_name = namelow + "/docs/en/index-1.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())
-      	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
-      else 
-	      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
-    } 
-    
-    project->addFileToProject (namelow + "/docs/en/index-1.html",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/docs/en/index-2.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
-      } 
-      else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
-    } 
-    project->addFileToProject (namelow + "/docs/en/index-2.html",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/docs/en/index-3.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
-      } 
-      else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
-    } 
-    project->addFileToProject (namelow + "/docs/en/index-3.html",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/docs/en/index-4.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
-      } 
-      else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
-    } 
-    project->addFileToProject (namelow + "/docs/en/index-4.html",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/docs/en/index-5.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
-      } 
-      else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
-    }
-    project->addFileToProject (namelow + "/docs/en/index-5.html",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/docs/en/index-6.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
-      } 
-      else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
-    } 
-    project->addFileToProject (namelow + "/docs/en/index-6.html",fileInfo);
-    
-    fileInfo.rel_name = namelow + "/docs/en/index.html";
-    fileInfo.type = DATA;
-    fileInfo.dist = true;
-    if (!cppitem->isSelected() && !citem->isSelected()) {
-      fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
-      } 
-      else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
-    } 
-    project->addFileToProject (namelow + "/docs/en/index.html",fileInfo);
-    QFile gif (directory + "/" + namelow + "/docs/en/" + namelow + ".gif");
-    if (gif.exists()) {
-      fileInfo.rel_name = namelow + "/docs/en/" + namelow + ".gif";
+  if (userdoc->isChecked() && !(kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()))
+  {
+    for (int i=0; i<7; i++){
+      QString num;
+      num.setNum(i);
+      num.prepend("-");
+      if(i==0) num="";
+      fileInfo.rel_name = namelow + "/docs/en/index"+num+".html";
       fileInfo.type = DATA;
       fileInfo.dist = true;
-      fileInfo.install = true;
-      project->addFileToProject (namelow + "/docs/en/" + namelow + ".gif",fileInfo);
+      if (!cppitem->isSelected() && !citem->isSelected()) {
+        fileInfo.install = true;
+        if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())
+        	fileInfo.install_location = "$(prefix)/doc/";
+        else
+  	      fileInfo.install_location = "$(kde_htmldir)/en/";
+	      fileInfo.install_location += namelow+ "/index"+num+".html";
+      }
+      project->addFileToProject (namelow + "/docs/en/index"+num+".html",fileInfo);
     }
   }
-  
-  
+  if (userdoc->isChecked() && (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()))
+  {
+      fileInfo.rel_name = namelow + "/docs/en/index.docbook";
+      fileInfo.type = DATA;
+      fileInfo.dist = true;
+      fileInfo.install = false;
+      project->addFileToProject (namelow + "/docs/en/index.docbook",fileInfo);
+  }
   QStrList group_filters;
   group_filters.append("*");
   project->addLFVGroup (i18n("Others"),"");
@@ -2621,7 +2543,9 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
-  if (CToolClass::searchInstProgram("ksgml2html")) {
+  if ((kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || kdeminiitem->isSelected())
+      && CToolClass::searchInstProgram("ksgml2html"))
+  {
     KShellProcess process;
     QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
     process.clearArguments();
@@ -2680,12 +2604,12 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
 // enable cancelbutton if everything is done
 void CKAppWizard::slotMakeEnd() {
   QString extension= (citem->isSelected()) ? "c" : "cpp";
+  nametext = nameline->text();
+  nametext = nametext.lower();
+  directorytext = directoryline->text();
   if (!generatesource->isChecked()) {
     QFile file;
     q->clearArguments();
-    directorytext = directoryline->text();
-    nametext = nameline->text();
-    nametext = nametext.lower();
     file.remove (directorytext + "/" + nametext + "/main."+extension);
     if (!citem->isSelected() && !cppitem->isSelected())
     {
@@ -2708,6 +2632,27 @@ void CKAppWizard::slotMakeEnd() {
       file.remove (directorytext + "/" + nametext + "/" + "tabprocessingeditwidget.h");
     }
   }
+  TFileInfo fileInfo;
+  QFileInfo gif (directorytext + "/" + nametext + "/docs/en/logotp3.gif");
+  if (gif.exists()) {
+    fileInfo.rel_name = nametext + "/docs/en/logotp3.gif";
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = true;
+  	fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.gif";
+    project->addFileToProject (nametext + "/docs/en/logotp3.gif",fileInfo);
+  }
+  QFileInfo png (directorytext + "/" + nametext + "/docs/en/logotp3.png");
+  if (png.exists()) {
+    fileInfo.rel_name = nametext + "/docs/en/logotp3.png";
+    fileInfo.type = DATA;
+    fileInfo.dist = true;
+    fileInfo.install = true;
+  	fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.png";
+    project->addFileToProject (nametext + "/docs/en/logotp3.png",fileInfo);
+  }
+  project->writeProject ();
+  project->updateMakefilesAm ();
 
   cancelButton->setEnabled(true);
   gen_prj = true;

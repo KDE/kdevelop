@@ -296,15 +296,25 @@ sub condCopyLsmFile {
 
 sub condCopyUserDocFiles {	
 
-    #if USER-Docs was chosen in kAppWizard
-    if ($processes{USER} eq "yes") {
-    
-	#copying, rename and replace in the handbook-en-template
-	chdir ($templatedir);
-	copy ("handbook_en_template", "$underDirectory/docs/en/index.sgml");
-	chdir ("$underDirectory/docs/en");
-        replaceValuesInFile(\%changings, "index.sgml");
+  #if USER-Docs was chosen in kAppWizard
+  if ($processes{USER} eq "yes")
+  {
+  	#copying, rename and replace in the handbook-en-template
+  	chdir ($templatedir);
+    if ($processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal" ||
+  			$processes{APPLICATION} eq "kde2mdi")
+    {
+    	copy ("docbook_en_template", "$underDirectory/docs/en/index.docbook");
+    	chdir ("$underDirectory/docs/en");
+      replaceValuesInFile(\%changings, "index.docbook");
     }
+    else
+    {
+    	copy ("handbook_en_template", "$underDirectory/docs/en/index.sgml");
+    	chdir ("$underDirectory/docs/en");
+      replaceValuesInFile(\%changings, "index.sgml");
+    }
+	}
   
     #if USER-Docs was not chosen in kAppWizard
     if ($processes{USER} eq "no") {
@@ -318,7 +328,7 @@ sub condCopyUserDocFiles {
 	chdir ($overDirectory);
 	replaceValuesInFile(\%emptyIT, "configure.in");
 
-    }
+  }
 }
 
 
