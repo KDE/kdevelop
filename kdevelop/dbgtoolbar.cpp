@@ -148,20 +148,18 @@ void DbgMoveHandle::mouseMoveEvent(QMouseEvent *e)
 
 // This class adds text _and_ a pixmap to a button. Why doesn't QPushButton
 // support that? It only allowed text _or_ pixmap.
-// Hmmm, not sure this stuff looks that nice. Perhaps that's why.
 class DbgButton : public QPushButton
 {
 public:
   DbgButton(const char* text, const QPixmap& pixmap, DbgToolbar* parent) :
     QPushButton(parent),
-    text_(text),
     pixmap_(pixmap)
-    {};
+    { setText(text); }
   virtual ~DbgButton()  {};
   void drawButtonLabel(QPainter *painter);
+  QSize sizeHint() const;
 
 private:
-  QString     text_;
   QPixmap     pixmap_;
 };
 
@@ -169,23 +167,28 @@ private:
 
 void DbgButton::drawButtonLabel(QPainter *painter)
 {
-  if (!pixmap_.isNull())
-  {
-    int dx;
-    if (text_.isEmpty())
-      dx = (width()-pixmap_.width()) / 2;
-    else
-      dx = (height() - pixmap_.width()) / 2;
+  // We always have a pixmap (today...)
+  // Centre it if there's no text
+  int x = ((text() ? height() : width()) - pixmap_.width()) / 2;
+  int y = (height() - pixmap_.height()) / 2;
+  painter->drawPixmap(x, y, pixmap_);
 
-    int dy = (height() - pixmap_.height()) / 2;
-    painter->drawPixmap(dx, dy, pixmap_);
-  }
-
-  if (!text_.isEmpty())
+  if (text())
   {
     painter->setPen(colorGroup().text());
-    painter->drawText( height()+2, 0, width()-(height()+2), height(), AlignLeft|AlignVCenter, text_);
+    painter->drawText( height()+2, 0, width()-(height()+2), height(), AlignLeft|AlignVCenter, text());
   }
+}
+
+// **************************************************************************
+
+QSize DbgButton::sizeHint() const
+{
+  QString s(text());
+  if (s.isEmpty())
+    return pixmap_.size();
+	
+  return QPushButton::sizeHint();	
 }
 
 // **************************************************************************
@@ -262,13 +265,13 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   DbgButton*    bInterrupt  = new DbgButton(i18n("Interrupt"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
-  DbgButton*    bNext       = new DbgButton("", pm, this);
+  DbgButton*    bNext       = new DbgButton(0, pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
   DbgButton*    bNexti      = new DbgButton(i18n("i"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
-  DbgButton*    bStep       = new DbgButton("", pm, this);
+  DbgButton*    bStep       = new DbgButton(0, pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
   DbgButton*    bStepi      = new DbgButton(i18n("i"), pm, this);
@@ -279,14 +282,13 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
   DbgButton*    bView       = new DbgButton(i18n("View"), pm, this);
 
-//  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstop.xpm");
-//  DbgButton*    bStop       = new DbgButton(i18n("Stop"), pm, this);
-
   pm.load(KApplication::kde_icondir() + "/mini/kdevelop.xpm");
   bKDevFocus_ = new DbgButton(0, pm,  this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
   bPrevFocus_ = new DbgButton(0, pm,  this);
+
+  bStep->setAccel(CTRL+'S');
 
   connect(bRun,         SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugRun()));
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));
@@ -296,7 +298,6 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   connect(bStepi,       SIGNAL(clicked()),  dbgController,  SLOT(slotStepIntoIns()));
   connect(bFinish,      SIGNAL(clicked()),  dbgController,  SLOT(slotStepOutOff()));
   connect(bView,        SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugMemoryView()));
-//  connect(bStop,        SIGNAL(clicked()),                  SLOT(slotDbgStop()));
   connect(bKDevFocus_,  SIGNAL(clicked()),                  SLOT(slotDbgKdevFocus()));
   connect(bPrevFocus_,  SIGNAL(clicked()),                  SLOT(slotDbgPrevFocus()));
 
@@ -308,37 +309,16 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into fn if appropriate") );
   QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
   QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewer") );
-//  QToolTip::add( bStop,       i18n("Stop the debugger") );
   QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
   QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when \"kdev\" was pressed") );
 
-  int w = QMAX(bNext->sizeHint().width(),  bRun->sizeHint().width());
-      w = QMAX(w, bStep->sizeHint().width());
-      w = QMAX(w, bFinish->sizeHint().width());
-      w = QMAX(w, bInterrupt->sizeHint().width());
-      w = QMAX(w, bView->sizeHint().width());
-//      w = QMAX(w, bStop->sizeHint().width());
-
-//  int h = QMAX(bNext->sizeHint().height(), bRun->sizeHint().height());
-//      h = QMAX(h, bStep->sizeHint().height());
-//      h = QMAX(h, bFinish->sizeHint().height());
-//      h = QMAX(h, bInterrupt->sizeHint().height());
-//      h = QMAX(h, bView->sizeHint().height());
-//      h = QMAX(h, bStop->sizeHint().height());
-
-  // they should have the same height, so don't be too fussy
-  int h = bFinish->sizeHint().height();
-
   topLayout->addWidget(moveHandle);
   topLayout->addWidget(bRun);
-//  topLayout->addWidget(bNext);
-//  topLayout->addWidget(bStep);
   topLayout->addLayout(nextLayout);
   topLayout->addLayout(stepLayout);
   topLayout->addWidget(bFinish);
   topLayout->addWidget(bView);
   topLayout->addWidget(bInterrupt);
-//  topLayout->addWidget(bStop);
   topLayout->addLayout(focusLayout);
 
   focusLayout->addWidget(bKDevFocus_);
@@ -350,8 +330,15 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   nextLayout->addWidget(bNext);
   nextLayout->addWidget(bNexti);
 
-  setMinimumSize(w+16, h*7);
-  setMaximumSize(w+16, h*7);
+  int w = QMAX(bRun->sizeHint().width(), bFinish->sizeHint().width());
+      w = QMAX(w, bInterrupt->sizeHint().width());
+      w = QMAX(w, bView->sizeHint().width());
+
+  // they should have the same height, so don't be too fussy
+  int h = bFinish->sizeHint().height();
+
+  setMinimumSize(w, h*7);
+  setMaximumSize(w, h*7);
 
   setAppIndicator(appIsActive_);
   topLayout->activate();
