@@ -1,3 +1,8 @@
+1999-08-01 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* fixed some bugs in printdialog
+	* if you remove a file from repository the treeview refreshed
+	* finished the work on vsc in applicationwizard
+
 1999-08-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * removed redundant output view code in slotBuildxx
   * optional check for Makefile.cvs in slotBuildAutoconf

@@ -36,7 +36,7 @@ if ($processes{VSSUPPORT} eq "none") {
 	$underDirectory = $overDirectory . $nameLittle;
 }
 else {
-	$overDirectory = $homedirectory . "/kdeveloptemp/";
+	$overDirectory = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/";
 	$underDirectory = $overDirectory . $nameLittle;
 }
 	
@@ -73,35 +73,35 @@ elsif ($processes{APPLICATION} eq "customproj") {
 }
 
 if ($processes{VSSUPPORT} eq "cvs") {
-	chdir ($homedirectory . "/kdeveloptemp/");
+	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/");
   $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
-	$copydes = $homedirectory . "/kdeveloptemp/.cvsignore";
+	$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/.cvsignore";
   system ("cp $copysrc $copydes");
 
-  chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/templates/");
-  $copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
+  chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/");
+  $copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
   system ("cp $copysrc $copydes");
 
- 	chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/");
-	$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/.cvsignore";
+ 	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/");
+	$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/.cvsignore";
 	system ("cp $copysrc $copydes");
 
   if ($processes{APPLICATION} ne "customproj") {
-   	chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/");
-		$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/.cvsignore";
+   	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/");
+		$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/.cvsignore";
 		system ("cp $copysrc $copydes");
 
-   	chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/en/");
-   	$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/en/.cvsignore";
+   	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/");
+   	$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/docs/en/.cvsignore";
    	system ("cp $copysrc $copydes");
   			
   	if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal") {	
-			chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/api/");				
-			$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
+			chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/");				
+			$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
 			system ("cp $copysrc $copydes");
 				
-    	chdir ($homedirectory . "/kdeveloptemp/po/");
-			$copydes = $homedirectory . "/kdeveloptemp/po/.cvsignore";
+    	chdir ($homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/");
+			$copydes = $homedirectory . "/.kde/share/apps/kdevelop/kdeveloptemp/po/.cvsignore";
 			system ("cp $copysrc $copydes");
     }
   }

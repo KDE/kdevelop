@@ -262,7 +262,7 @@ KPopupMenu *CLogFileView::getCurrentPopup()
               id = popup->insertItem( i18n("Add to Repository"),
                                       this, SLOT(slotAddToRepository()) );
               popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
-              id = popup->insertItem( i18n("Remove from Repository"),
+              id = popup->insertItem( i18n("Remove from Repository (and Disk)"),
                                       this, SLOT(slotRemoveFromRepository()) );
               popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
           }
@@ -485,6 +485,7 @@ void CLogFileView::slotAddToRepository()
 void CLogFileView::slotRemoveFromRepository()
 {
     project->getVersionControl()->remove(getFullFilename(currentItem()));
+    refresh(project);
 }
  
 
@@ -498,4 +499,8 @@ void CLogFileView::slotCommit()
 {
     project->getVersionControl()->commit(getFullFilename(currentItem()));
 }
+
+
+
+
 

@@ -218,7 +218,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
                                  this, SLOT(slotCommit()) );
               popup->insertItem( i18n("Add to Repository"),
                                  this, SLOT(slotAddToRepository()) );
-              popup->insertItem( i18n("Remove from Repository"),
+              popup->insertItem( i18n("Remove from Repository (and Disk)"),
                                  this, SLOT(slotRemoveFromRepository()) );
               break;
           }
@@ -243,7 +243,7 @@ KPopupMenu *CRealFileView::getCurrentPopup()
           id = popup->insertItem( i18n("Add to Repository"),
                                   this, SLOT(slotAddToRepository()) );
           popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
-          id = popup->insertItem( i18n("Remove from Repository"),
+          id = popup->insertItem( i18n("Remove from Repository (and disk)"),
                                   this, SLOT(slotRemoveFromRepository()) );
           popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
       }
@@ -345,6 +345,7 @@ void CRealFileView::slotAddToRepository()
 void CRealFileView::slotRemoveFromRepository()
 {
     project->getVersionControl()->remove(getFullFilename(currentItem()));
+    refresh(project);
 }
  
 
@@ -359,3 +360,7 @@ void CRealFileView::slotCommit()
     project->getVersionControl()->commit(getFullFilename(currentItem()));
 }
  
+
+
+
+

@@ -615,7 +615,7 @@ void CKAppWizard::initPages(){
 	projectlocationline->setGeometry( 180, 150, 280, 30 );
 	projectlocationline->setMinimumSize( 0, 0 );
 	projectlocationline->setMaximumSize( 32767, 32767 );
-	projectlocationline->setFocusPolicy( QWidget::NoFocus );
+	projectlocationline->setFocusPolicy( QWidget::StrongFocus );
 	projectlocationline->setBackgroundMode( QWidget::PaletteBase );
 	projectlocationline->setFontPropagation( QWidget::NoChildren );
 	projectlocationline->setPalettePropagation( QWidget::NoChildren );
@@ -703,9 +703,9 @@ void CKAppWizard::initPages(){
   					
 	connect(locationbutton,SIGNAL(clicked()),SLOT(slotLocationButtonClicked()));
 	connect(vsBox,SIGNAL(activated(int)),SLOT(slotVSBoxChanged(int)));
-	connect(projectlocationline,SIGNAL(textChanged(const char*)),SLOT(slotPrjVSLocationEntry()));
 	connect(vendorline,SIGNAL(textChanged(const char*)),SLOT(slotVendorEntry()));
 	
+	projectlocationline->setEnabled(false);
 	
 	KQuickHelp::add(messageline,
 		  KQuickHelp::add(logMessage,
@@ -1187,9 +1187,9 @@ void CKAppWizard::okPermited() {
   QString copydes;
   QString vcsInit;
   if (vsBox->currentItem() == 1) {
-  	copydes = QDir::homeDirPath() + "/kdeveloptemp";
-  	dir.mkdir(QDir::homeDirPath() + "/kdeveloptemp");
-  	dir.setCurrent(QDir::homeDirPath() + "/kdeveloptemp");
+  	copydes = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
+  	dir.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
+  	dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
   	vcsInit = (QString) "cvs -d " + vsLocation->text() + (QString) " init";
   	p.clearArguments();
 	  p << vcsInit;
@@ -1278,7 +1278,6 @@ void CKAppWizard::okPermited() {
  	releaseTag->setEnabled(false);
  	vsInstall->setEnabled(false);
  	projectVSLocation->setEnabled(false);
- 	projectlocationline->setEnabled(false);
  	vsLocation->setEnabled(false);
  	locationbutton->setEnabled(false);
  	qtarch_ButtonGroup_1->setEnabled(false);
@@ -1785,7 +1784,7 @@ void CKAppWizard::slotProcessExited() {
   QString directory = directoryline->text();
   QString prj_str;
   if (vsBox->currentItem() != 0) {
-    prj_str = QDir::homeDirPath() + "/kdeveloptemp/" + namelow + ".kdevprj";
+    prj_str = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/" + namelow + ".kdevprj";
   }
   else {
     prj_str = directory + "/" + namelow + ".kdevprj";
@@ -2271,7 +2270,7 @@ void CKAppWizard::slotProcessExited() {
   KShellProcess p;
   QDir dir;
 	if (vsBox->currentItem() == 1) {
-	  dir.setCurrent(QDir::homeDirPath() + "/kdeveloptemp");
+	  dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
 	  QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
 	    (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
 	    (QString) " " + releaseline->text();
@@ -2281,7 +2280,7 @@ void CKAppWizard::slotProcessExited() {
 
 	if (vsBox->currentItem() != 0) {
 		dir.setCurrent(QDir::homeDirPath());
-		QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/kdeveloptemp";
+		QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
 		p.clearArguments();
  	 	p << deltemp;
     p.start(KProcess::Block, KProcess::AllOutput);
@@ -2385,7 +2384,6 @@ void CKAppWizard::slotVSBoxChanged(int item) {
   	releaseTag->setEnabled(false);
   	vsInstall->setEnabled(false);
   	projectVSLocation->setEnabled(false);
-  	projectlocationline->setEnabled(false);
   	vsLocation->setEnabled(false);
   	locationbutton->setEnabled(false);
   	qtarch_ButtonGroup_1->setEnabled(false);
@@ -2400,7 +2398,6 @@ void CKAppWizard::slotVSBoxChanged(int item) {
   	releaseTag->setEnabled(true);
   	vsInstall->setEnabled(true);
   	projectVSLocation->setEnabled(true);
-  	projectlocationline->setEnabled(true);
   	vsLocation->setEnabled(true);
   	locationbutton->setEnabled(true);
   	qtarch_ButtonGroup_1->setEnabled(true);
@@ -2412,3 +2409,4 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
+

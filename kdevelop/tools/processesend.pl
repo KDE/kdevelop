@@ -24,23 +24,6 @@ $name =  $processes{NAME};
 $overDirectory = $processes{DIRECTORY} . "/" . $processes{PRJVSLOCATION} . "/";
 $underDirectory = $overDirectory . $nameLittle;
 
-#if ($processes{VSSUPPORT} eq "cvs") {
-#  	chdir ($homedirectory . "/kdeveloptemp/");
-#  	$vsimport = "cvs -d " . $processes{VSLOCATION} . " import -m \"" . $processes{LOGMESSAGE} . "\" " .
-#    						$processes{PRJVSLOCATION} . " "  . $processes{VENDORTAG} . " " . $processes{RELEASETAG};
-#    system ("$vsimport");
-#}
-
-#if ($processes{VSSUPPORT} ne "none") {
-#		chdir ($homedirectory);
-#		$removetemp ="rm -r -f " . $homedirectory . "/kdeveloptemp";
-# 	 	system ("$removetemp");
-
-#  	chdir ($processes{DIRECTORY});
-#		$checkout = "cvs -d " . $processes{VSLOCATION} . " co " . $processes{PRJVSLOCATION};
-#		system ("$checkout");
-#  }
-
 if ($processes{APPLICATION} eq "customproj") {}
 else {
   #start make -f Makefile.dist
