@@ -321,7 +321,7 @@
                                 <string>New Item</string>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>add a new parameter</string>
+                                <string>Add a new parameter</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">

@@ -132,10 +132,10 @@
                                     <cstring>radioSubdirs</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Subdirs</string>
+                                    <string>&amp;Subdirectories</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This project holds subdirs</string>
+                                    <string>This project holds subdirectories</string>
                                 </property>
                             </widget>
                         </vbox>

@@ -57,7 +57,7 @@
                             <enum>Sunken</enum>
                         </property>
                         <property name="title">
-                            <string>Persistant Class Store</string>
+                            <string>Persistent Class Store</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -74,7 +74,7 @@
                                     <cstring>cbEnablePCS</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Enable persistant &amp;class store</string>
+                                    <string>Enable persistent &amp;class store</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -93,7 +93,7 @@
                                     <cstring>lbPCSFile</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Persistant class store &amp;file (information only):</string>
+                                    <string>Persistent class store &amp;file (information only):</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>lePCSFile</cstring>
@@ -167,13 +167,13 @@
                                     <cstring>TextLabel2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include these paths for Pre-Parsing:</string>
+                                    <string>Include these paths for pre-parsing:</string>
                                 </property>
                             </widget>
                             <widget class="QListView">
                                 <column>
                                     <property name="text">
-                                        <string>With SubDirs</string>
+                                        <string>With Subdirectories</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>

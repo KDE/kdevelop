@@ -148,12 +148,7 @@
                         <string>Display static &amp;members</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Displaying static members makes gdb slower in
-producing data within kde and qt.
-It may change the "signature" of the data
-which QString and friends rely on.
-But if you need to debug into these values then
-check this option</string>
+                        <string>Displaying static members makes GDB slower in producing data within kde and qt. It may change the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -164,9 +159,7 @@ check this option</string>
                         <string>Display &amp;demangled names</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>When displaying the disassembled code you
-can select to see the methods mangled names
-However, non-mangled names are easier to read.</string>
+                        <string>When displaying the disassembled code you can select to see the methods' mangled names. However, non-mangled names are easier to read.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
