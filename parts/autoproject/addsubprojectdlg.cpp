@@ -18,6 +18,7 @@
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <klineedit.h>
 #include <kmessagebox.h>
 
 #include "kdevmakefrontend.h"
@@ -28,12 +29,12 @@
 
 AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidget *widget,
                                          SubprojectItem *item, QWidget *parent, const char *name)
-    : QDialog(parent, name, true)
+    : AddSubprojectDlgBase(parent, name, true)
 {
-    setCaption(("Add Subproject"));
+//    setCaption(("Add Subproject"));
     setIcon(SmallIcon("folder_new.png"));
     
-    QLabel *name_label = new QLabel(i18n("&Name:"), this);
+ /*   QLabel *name_label = new QLabel(i18n("&Name:"), this);
     name_edit = new QLineEdit(this);
     name_edit->setFocus();
     name_label->setBuddy(name_edit);
@@ -57,7 +58,10 @@ AddSubprojectDialog::AddSubprojectDialog(AutoProjectPart *part, AutoProjectWidge
     connect( ok, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
     buttonbox->layout();
-    layout->addWidget(buttonbox, 0);
+    layout->addWidget(buttonbox, 0);*/
+    
+	connect( createButton, SIGNAL(clicked()), this, SLOT(accept()) );
+    connect( cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
     m_subProject = item;
     m_widget = widget;
@@ -71,7 +75,7 @@ AddSubprojectDialog::~AddSubprojectDialog()
 
 void AddSubprojectDialog::accept()
 {
-    QString name = name_edit->text().stripWhiteSpace();
+    QString name = spEdit->text().stripWhiteSpace();
 
     if (name.isEmpty()) {
         KMessageBox::sorry(this, i18n("You have to give the subproject a name"));

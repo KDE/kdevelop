@@ -33,7 +33,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Add new created file to this target</string>
+        <string>Add New Created File To Target</string>
     </property>
     <widget class="QGroupBox">
         <property name="name">
@@ -206,6 +206,9 @@
                         </property>
                         <property name="text">
                             <string>Enter new file name:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>fileEdit</cstring>
                         </property>
                     </widget>
                     <widget class="KLineEdit">

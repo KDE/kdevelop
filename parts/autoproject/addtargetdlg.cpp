@@ -42,6 +42,8 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
 
     if (widget->kdeMode())
         ldflagsother_edit->setText("$(all_libraries)");
+
+    setIcon ( SmallIcon ( "targetnew_kdevelop.png" ) );
 }
 
 

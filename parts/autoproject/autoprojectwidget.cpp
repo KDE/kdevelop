@@ -183,10 +183,10 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
     addSubprojectButton->setPixmap(SmallIcon("folder_new"));
     QToolTip::add(addSubprojectButton, i18n("Add new subproject to currently selected subproject..."));
 
-    addExistingSubprojectButton = new QToolButton(overviewButtonBox);
+/*    addExistingSubprojectButton = new QToolButton(overviewButtonBox);
     addExistingSubprojectButton->setPixmap(SmallIcon("fileimport"));
     QToolTip::add(addExistingSubprojectButton, i18n("Add existing subproject to currently selected subproject..."));
-
+*/
     addTargetButton = new QToolButton(overviewButtonBox);
     addTargetButton->setPixmap(SmallIcon("targetnew_kdevelop"));
     QToolTip::add(addTargetButton, i18n("Add new target to currently selected subproject..."));
@@ -264,8 +264,8 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
                                           this, SLOT(slotSubprojectOptions()), actions, "subproject options");
     addSubprojectAction = new KAction(i18n("Add Subproject..."), "folder_new", 0,
                                       this, SLOT(slotAddSubproject()), actions, "add subproject");
-    addExistingSubprojectAction = new KAction(i18n("Add Existing Subproject..."), "fileimport", 0,
-                                              this, SLOT(slotAddExistingSubproject()), actions, "add existing subproject");
+/*    addExistingSubprojectAction = new KAction(i18n("Add Existing Subprojects..."), "fileimport", 0,
+                                              this, SLOT(slotAddExistingSubproject()), actions, "add existing subproject");*/
     addTargetAction = new KAction(i18n("Add Target..."), "targetnew_kdevelop", 0,
                                   this, SLOT(slotAddTarget()), actions, "add target");
     addServiceAction = new KAction(i18n("Add Service..."), "servicenew_kdevelop", 0,
@@ -277,9 +277,9 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
 
     targetOptionsAction = new KAction(i18n("Options..."), "configure", 0,
                                       this, SLOT(slotTargetOptions()), actions, "target options");
-    addNewFileAction = new KAction(i18n("Create new File..."), "filenew", 0,
-                                   this, SLOT(slotAddNewFile()), actions, "add new file");
-    addExistingFileAction = new KAction(i18n("Add Existing File(s)..."), "fileimport", 0,
+    addNewFileAction = new KAction(i18n("Create New File..."), "filenew", 0,
+                                  this, SLOT(slotAddNewFile()), actions, "add new file");   
+	addExistingFileAction = new KAction(i18n("Add Existing Files..."), "fileimport", 0,
                                         this, SLOT(slotAddExistingFile()), actions, "add existing file");
     addIconAction = new KAction(i18n("Add Icon..."), "iconadd_kdevelop", 0,
                                 this, SLOT(slotAddIcon()), actions, "add icon");
@@ -292,7 +292,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
 
     connect( subProjectOptionsButton, SIGNAL(clicked()), this, SLOT(slotSubprojectOptions()) );
     connect( addSubprojectButton, SIGNAL(clicked()), this, SLOT(slotAddSubproject()) );
-    connect( addExistingSubprojectButton, SIGNAL(clicked()), this, SLOT(slotAddExistingSubproject()) );
+//    connect( addExistingSubprojectButton, SIGNAL(clicked()), this, SLOT(slotAddExistingSubproject()) );
     connect( addTargetButton, SIGNAL(clicked()), this, SLOT(slotAddTarget()) );
     connect( addServiceButton, SIGNAL(clicked()), this, SLOT(slotAddService()) );
     connect( addApplicationButton, SIGNAL(clicked()), this, SLOT(slotAddApplication()) );
@@ -540,7 +540,7 @@ void AutoProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
     m_shownSubproject = static_cast<SubprojectItem*>(item);
         
     // Insert all TargetItems and all of their children into the view
-    QListIterator<TargetItem> it2(m_shownSubproject->targets);
+	QListIterator<TargetItem> it2(m_shownSubproject->targets);
     for (; it2.current(); ++it2) {
         details->insertItem(*it2);
         QListIterator<FileItem> it3((*it2)->sources);
@@ -621,7 +621,7 @@ void AutoProjectWidget::slotAddExistingSubproject()
 {
     ImportExistingDialog dlg(m_part, this, m_shownSubproject,
                              this, "add existing subprojects");
-    dlg.setCaption(i18n("Add existing subprojects to this subproject"));
+    dlg.setCaption(i18n("Add Existing Subprojects"));
     dlg.exec();
 }
 
@@ -700,7 +700,7 @@ void AutoProjectWidget::slotAddExistingFile()
 
     ImportExistingDialog dlg(m_part, this, m_shownSubproject, titem,
                              this, "add existing files");
-    dlg.setCaption(i18n("Add existing files to this target"));
+    dlg.setCaption(i18n("Add Existing Files"));
     dlg.exec();
 }
 
@@ -778,8 +778,8 @@ void AutoProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item
     subProjectOptionsAction->plug(&popup);
     popup.insertSeparator();
     addSubprojectAction->plug(&popup);
-    addExistingSubprojectAction->plug(&popup);
-    popup.insertSeparator();
+    //addExistingSubprojectAction->plug(&popup);
+    //popup.insertSeparator();
     addTargetAction->plug(&popup);
     addServiceAction->plug(&popup);
     addApplicationAction->plug(&popup);

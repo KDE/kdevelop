@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>510</width>
-            <height>327</height>
+            <width>585</width>
+            <height>407</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Add Target</string>
+        <string>Add New Target</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -43,7 +43,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
@@ -51,12 +51,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -153,6 +147,11 @@
                             <property name="name">
                                 <cstring>ldflagsother_label</cstring>
                             </property>
+                            <property name="font">
+                                <font>
+                                    <bold>1</bold>
+                                </font>
+                            </property>
                             <property name="text">
                                 <string>Other:</string>
                             </property>
@@ -170,8 +169,16 @@
             <property name="name">
                 <cstring>primary_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Primary:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>primary_combo</cstring>
@@ -186,8 +193,16 @@
             <property name="name">
                 <cstring>prefix_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>Pre&amp;fix:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>prefix_combo</cstring>
@@ -202,8 +217,16 @@
             <property name="name">
                 <cstring>filename_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>File &amp;name:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>filename_edit</cstring>
@@ -215,7 +238,7 @@
             </property>
         </widget>
         <spacer row="1" column="2">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer21</cstring>
             </property>
             <property name="orientation">
@@ -224,15 +247,9 @@
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
         </spacer>
         <spacer row="3" column="1">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer22</cstring>
             </property>
             <property name="orientation">

@@ -50,6 +50,11 @@
                         <property name="name">
                             <cstring>cflags_label</cstring>
                         </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
                         <property name="text">
                             <string>Compiler flags for C compiler (&amp;CFLAGS):</string>
                         </property>
@@ -109,7 +114,7 @@
                         </hbox>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer2</cstring>
                         </property>
                         <property name="orientation">
@@ -118,16 +123,15 @@
                         <property name="sizeType">
                             <enum>Preferred</enum>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
                     </spacer>
                     <widget class="QLabel">
                         <property name="name">
                             <cstring>cxxflags_label</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
                         </property>
                         <property name="text">
                             <string>Compiler flags for C++ compiler (C&amp;XXFLAGS):</string>
@@ -180,7 +184,7 @@
                         </hbox>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer3</cstring>
                         </property>
                         <property name="orientation">
@@ -189,16 +193,15 @@
                         <property name="sizeType">
                             <enum>Preferred</enum>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
                     </spacer>
                     <widget class="QLabel">
                         <property name="name">
                             <cstring>fflags_label</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
                         </property>
                         <property name="text">
                             <string>Compiler flags for Fortran compiler (&amp;FFLAGS):</string>
@@ -251,7 +254,7 @@
                         </hbox>
                     </widget>
                     <spacer>
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer4</cstring>
                         </property>
                         <property name="orientation">
@@ -259,12 +262,6 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
                         </property>
                     </spacer>
                 </vbox>
@@ -309,6 +306,11 @@
                         <property name="name">
                             <cstring>insideinc_label</cstring>
                         </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
                         <property name="text">
                             <string>Directories in&amp;side project:</string>
                         </property>
@@ -339,6 +341,11 @@
                         <property name="name">
                             <cstring>TextLabel2_2</cstring>
                         </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
                         <property name="text">
                             <string>Directories ou&amp;tside project:</string>
                         </property>
@@ -361,7 +368,7 @@
                                 <number>6</number>
                             </property>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer1_2</cstring>
                                 </property>
                                 <property name="orientation">
@@ -369,12 +376,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QPushButton">
@@ -410,7 +411,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer2_2</cstring>
                                 </property>
                                 <property name="orientation">
@@ -418,12 +419,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                         </vbox>
@@ -443,7 +438,7 @@
                                 <number>6</number>
                             </property>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer2_3</cstring>
                                 </property>
                                 <property name="orientation">
@@ -451,12 +446,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QPushButton">
@@ -476,7 +465,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer3_2</cstring>
                                 </property>
                                 <property name="orientation">
@@ -485,17 +474,11 @@
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
                             </spacer>
                         </vbox>
                     </widget>
                     <spacer row="2" column="0">
-                        <property name="name" stdset="0">
+                        <property name="name">
                             <cstring>Spacer4_2</cstring>
                         </property>
                         <property name="orientation">
@@ -503,12 +486,6 @@
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
                         </property>
                     </spacer>
                 </grid>
@@ -567,6 +544,11 @@
                         <property name="name">
                             <cstring>prefixes_label</cstring>
                         </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
                         <property name="text">
                             <string>Custom prefixes:</string>
                         </property>
@@ -586,7 +568,7 @@
                                 <number>6</number>
                             </property>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer5</cstring>
                                 </property>
                                 <property name="orientation">
@@ -594,12 +576,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QPushButton">
@@ -619,7 +595,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer6</cstring>
                                 </property>
                                 <property name="orientation">
@@ -627,12 +603,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                         </vbox>
@@ -671,7 +641,7 @@
                                 <number>6</number>
                             </property>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer2_3_2</cstring>
                                 </property>
                                 <property name="orientation">
@@ -679,12 +649,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                             <widget class="QPushButton">
@@ -704,7 +668,7 @@
                                 </property>
                             </widget>
                             <spacer>
-                                <property name="name" stdset="0">
+                                <property name="name">
                                     <cstring>Spacer3_2_2</cstring>
                                 </property>
                                 <property name="orientation">
@@ -712,12 +676,6 @@
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
                                 </property>
                             </spacer>
                         </vbox>
@@ -745,6 +703,11 @@
                         <property name="name">
                             <cstring>buildorder_label</cstring>
                         </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
                         <property name="text">
                             <string>Order in which sub projects are built:</string>
                         </property>
@@ -767,7 +730,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -775,12 +738,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">

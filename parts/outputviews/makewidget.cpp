@@ -79,9 +79,9 @@ static const char *const warning_xpm[] = {
 static const char *const message_xpm[] = {
 "11 11 5 1",
 ". c None",
-"b c #00c200",
+"b c #3100c5",
 "# c #313062",
-"c c #41ff41",
+"c c #3189ff",
 "a c #6265cd",
 "...........",
 "...####....",

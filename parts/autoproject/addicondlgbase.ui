@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>301</width>
-            <height>200</height>
+            <height>202</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Add Icon</string>
+        <string>Add New Icon</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -32,8 +32,16 @@
             <property name="name">
                 <cstring>type_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Type:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>type_combo</cstring>
@@ -43,8 +51,16 @@
             <property name="name">
                 <cstring>size_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Size:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>size_combo</cstring>
@@ -59,8 +75,16 @@
             <property name="name">
                 <cstring>filename_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>File name:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>filename_edit</cstring>
@@ -70,8 +94,16 @@
             <property name="name">
                 <cstring>name_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Name:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>name_edit</cstring>

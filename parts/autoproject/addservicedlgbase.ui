@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>551</width>
-            <height>389</height>
+            <width>701</width>
+            <height>511</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Add Service</string>
+        <string>Add New Service</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -43,7 +43,7 @@
                     <number>6</number>
                 </property>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
@@ -51,12 +51,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -95,8 +89,16 @@
             <property name="name">
                 <cstring>comment_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>Co&amp;mment:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>comment_edit</cstring>
@@ -114,8 +116,16 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Service types:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignTop|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>chosentypes_listview</cstring>
@@ -133,8 +143,16 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Properties:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignTop|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>properties_listview</cstring>
@@ -144,8 +162,16 @@
             <property name="name">
                 <cstring>name_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Name:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>name_edit</cstring>
@@ -155,8 +181,16 @@
             <property name="name">
                 <cstring>filename_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;File name:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>filename_edit</cstring>
@@ -199,7 +233,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -207,12 +241,6 @@
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
             </hbox>
@@ -229,8 +257,16 @@
             <property name="name">
                 <cstring>icon_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Icon:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>icon_button</cstring>
@@ -248,8 +284,16 @@
             <property name="name">
                 <cstring>library_label</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Library:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>library_combo</cstring>
@@ -311,7 +355,7 @@
                             <number>6</number>
                         </property>
                         <spacer>
-                            <property name="name" stdset="0">
+                            <property name="name">
                                 <cstring>Spacer4</cstring>
                             </property>
                             <property name="orientation">
@@ -319,12 +363,6 @@
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
                             </property>
                         </spacer>
                         <widget class="QPushButton">
@@ -344,7 +382,7 @@
                             </property>
                         </widget>
                         <spacer>
-                            <property name="name" stdset="0">
+                            <property name="name">
                                 <cstring>Spacer5</cstring>
                             </property>
                             <property name="orientation">
@@ -352,12 +390,6 @@
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
                             </property>
                         </spacer>
                     </vbox>

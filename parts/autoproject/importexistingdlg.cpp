@@ -1,19 +1,34 @@
+/***************************************************************************
+                             -------------------
+    begin                : Frag' mich was leichteres
+    copyright            : (C) 2002 by Victor Röder
+    email                : victor_roeder@gmx.de
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+/** Here resides the Import-existing-dialog of the Automake Manager **/
+/** (a Gideon build tool part) **/
+
 #include <qapplication.h>
-#include <qvariant.h>
 #include <qgroupbox.h>
-#include <qheader.h>
 #include <qlabel.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qfontmetrics.h>
 #include <qrect.h>
-#include <qsize.h>
 
 #include <kdebug.h>
 #include <kfileview.h>
@@ -99,7 +114,7 @@ void KImportIconView::somethingDropped ( bool dropped )
 ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, TargetItem* titem, QWidget* parent, const char* name, bool modal, WFlags fl )
         : ImportExistingDlgBase ( parent, name, modal, fl )
 {
-    m_bImportingFiles = true;
+	m_bImportingFiles = true;
 
 	m_spitem = spitem;
 	m_titem = titem;
@@ -109,24 +124,24 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
 
 	KFile::Mode mode = KFile::Files;
 
-    if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )
-    {
-        destStaticLabel->setText ( i18n ( "Target:" ) );
-        destLabel->setText ( titem->name );
-        targetLabel->setText ( titem->name );
-        directoryLabel->setText ( spitem->path );
-    }
+	if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )
+	{
+		destStaticLabel->setText ( i18n ( "Target:" ) );
+		destLabel->setText ( titem->name );
+		targetLabel->setText ( titem->name );
+		directoryLabel->setText ( spitem->path );
+	}
 
-    sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
-    sourceGroupBoxLayout->addWidget ( sourceSelector );
+	sourceSelector = new FileSelectorWidget ( part, mode, sourceGroupBox, "source file selector" );
+	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-    importView = new KImportIconView ( "Drag one or more files from above and drop it here!", destGroupBox, "destination icon view" );
+	importView = new KImportIconView ( "Drag one or more files from above and drop it here!", destGroupBox, "destination icon view" );
    destGroupBoxLayout->addWidget ( importView );
-    //destGroupBoxLayout->setStretchFactor(dir, 2);
+	//destGroupBoxLayout->setStretchFactor(dir, 2);
 
-    setIcon ( SmallIcon ( "fileimport.png" ) );
+	setIcon ( SmallIcon ( "fileimport.png" ) );
 
-    init();
+	init();
 }
 
 ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectWidget *widget, SubprojectItem* spitem, QWidget* parent, const char* name, bool modal, WFlags fl )
@@ -165,7 +180,7 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
  */
 ImportExistingDialog::~ImportExistingDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
+    // no need to delete child widgets, Qt does it all for me
 }
 
 
@@ -282,6 +297,8 @@ void ImportExistingDialog::importItems()
 
 void ImportExistingDialog::slotOk()
 {
+    	if ( importView->items()->count() == 0 ) QDialog::accept();
+    
 	progressBar->show();
 	progressBar->setFormat ( i18n ( "Importing... %p%" ) );
 	

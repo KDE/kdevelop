@@ -15,12 +15,14 @@
 #include <qdialog.h>
 #include <qlineedit.h>
 
+#include "addsubprojectdlgbase.h"
+
 class AutoProjectPart;
 class AutoProjectWidget;
 class SubprojectItem;
 
 
-class AddSubprojectDialog : public QDialog
+class AddSubprojectDialog : public AddSubprojectDlgBase
 {
     Q_OBJECT
 
