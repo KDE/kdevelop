@@ -52,6 +52,8 @@ AddIconDialog::AddIconDialog(AutoProjectPart *part, AutoProjectWidget *widget,
 
     somethingChanged();
 
+    setIcon ( SmallIcon ( "iconadd_kdevelop" ) );
+
     m_part = part;
     m_widget = widget;
     m_subProject = spitem;
