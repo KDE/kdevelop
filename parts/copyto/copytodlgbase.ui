@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Copy To...</string>
+        <string>Copy To</string>
     </property>
     <vbox>
         <property name="name">
@@ -68,7 +68,7 @@
                 <cstring>buttonGroup1</cstring>
             </property>
             <property name="title">
-                <string>Copy mode</string>
+                <string>Copy Mode</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Traditional means like 'cp' - all the files goes to the same target directory. \nRelative means that the local project relative path will be appended to the target path.</string>
@@ -128,7 +128,7 @@
                         <cstring>okbutton</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>&amp;OK</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -136,7 +136,7 @@
                         <cstring>cancelbutton</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>

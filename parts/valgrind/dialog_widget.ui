@@ -12,9 +12,6 @@
             <height>306</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -100,9 +97,6 @@
                                 <property name="text">
                                     <string>Memory &amp;leak check</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+L</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -142,9 +136,6 @@
                                         <property name="text">
                                             <string>&amp;Show still reachable blocks</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+S</string>
-                                        </property>
                                     </widget>
                                 </hbox>
                             </widget>
@@ -154,9 +145,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Trace children</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+T</string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -284,9 +272,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Trace children</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+T</string>
                                 </property>
                             </widget>
                         </grid>

@@ -108,7 +108,7 @@
                         <cstring>rNoFilter</cstring>
                     </property>
                     <property name="text">
-                        <string>No Filter</string>
+                        <string>No filter</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -119,7 +119,7 @@
                         <cstring>rFilterStr</cstring>
                     </property>
                     <property name="text">
-                        <string>Filter for String</string>
+                        <string>Filter for string</string>
                     </property>
                 </widget>
                 <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="3">
@@ -135,7 +135,7 @@
                         <cstring>rFilterRegExp</cstring>
                     </property>
                     <property name="text">
-                        <string>Filter with RegExp</string>
+                        <string>Filter with regular expression</string>
                     </property>
                 </widget>
                 <spacer row="0" column="3">
@@ -160,7 +160,7 @@
                         <cstring>cbCase</cstring>
                     </property>
                     <property name="text">
-                        <string>Match Case-Sensitve</string>
+                        <string>Match case-sensitve</string>
                     </property>
                 </widget>
             </grid>

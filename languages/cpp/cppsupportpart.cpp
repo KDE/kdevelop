@@ -596,7 +596,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 			{
 				if ( comparator(*it) ) //functiondefintion found for declaration the cursor is currently above
 				{
-					int tmpId = popup->insertItem(i18n("Go to definition of this function")/* + text*/, this, SLOT(gotoLine(int))); 
+					int tmpId = popup->insertItem(i18n("Go to Definition of This Function")/* + text*/, this, SLOT(gotoLine(int))); 
 					int linel, coll;
 					(*it)->getStartPosition(&linel, &coll);
 					popup->setItemParameter(tmpId, linel);
@@ -615,7 +615,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 			for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it )
 				if (CodeModelUtils::compareDeclarationToDefinition(*it, currentFunctionDefintion))
 				{
-					int tmpId = popup->insertItem(i18n("Go to declaration of this function")/* + curFuncDefText*/, this, SLOT(gotoDeclarationLine(int))); 
+					int tmpId = popup->insertItem(i18n("Go to Declaration of This Function")/* + curFuncDefText*/, this, SLOT(gotoDeclarationLine(int))); 
 					int linel, coll;
 					(*it)->getStartPosition(&linel, &coll);
 					popup->setItemParameter(tmpId, linel);
