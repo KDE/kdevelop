@@ -53,7 +53,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevelop_LDADD   = ./widgets/dockwidgets/libdockwidgets.a ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
 	./gfxview/libgfxview.a ./kwrite/libkwrite.a \
 	./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dlgedit/libdlgedit.a \
-	$(LIB_KHTML) -lkspell -lkfile -lkio -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldl $(LIBSOCKET) 
+	$(LIB_KHTML) -lkspell -lkfile -lfl  
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
@@ -76,10 +76,8 @@ EXTRA_DIST = kdeveloprc \
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
 	los-app-development_package.png lom-app-kdevelop.png los-app-kdevelop.png lom-app-kdevelop_project.png  	
 
-# make messages.po. Move this one to ../po/ and "make merge" in po
-# the -x is for skipping messages already translated in kdelibs
 messages:
-	$(XGETTEXT) -C -kI18N_NOOP -ki18n -x $(includedir)/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` && mv messages.po $(podir)/kdevelop.pot 
+	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot 
 
 appsdir   = $(kde_appsdir)/Applications/Development
 KDE_ICON  = kdevelop kdevelop_project development_package
