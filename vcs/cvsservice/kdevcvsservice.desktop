@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=CVS Integration using Cervisia's cvsservice (needs KDE 3.2) http://www.kde.org/apps/cervisia/
+Comment=CVS Integration using Cervisia's cvsservice. http://www.kde.org/apps/cervisia/
 Comment[ca]=Integració amb el CVS emprant el cvsservice de Cervisia (necessita KDE 3.2). http://www.kde.org/apps/cervisia/
 Comment[da]=CVS Integration ved brug af Cervisia's cvsservice (behøver KDE 3.2) http://www.kde.org/apps/cervisia/
 Comment[de]=CVS-Integration mit Hilfe von Cervisia's cvsservice (ab KDE 3.2). http://www.kde.org/apps/cervisia/
