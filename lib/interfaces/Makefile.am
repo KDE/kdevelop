@@ -24,6 +24,7 @@ noinst_HEADERS = kdevapi.h
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = kdeveloppart.desktop kdevelopcompileroptions.desktop \
 		   kdevelopmakefrontend.desktop kdevelopappfrontend.desktop \
-		   kdevelopproject.desktop kdeveloplanguagesupport.desktop
+		   kdevelopproject.desktop kdeveloplanguagesupport.desktop \
+		   kdevelopplugin.desktop
 
 METASOURCES = AUTO

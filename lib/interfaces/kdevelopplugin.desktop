@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/Plugin
+Name=KDevelop Part
+
+[PropertyDef::X-KDevelop-Scope]
+Type=QString
+
+# only important for project plugins, you can add a list of programming languages which are supported
+# the plugin will be loaded by default, if the project use this language
+[PropertyDef::X-KDevelop-ProgrammingLanguages]
+Type=QStringList
+
+[PropertyDef::X-KDevelop-Args]
+Type=QString
