@@ -226,6 +226,6 @@ void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
    m_offset = mapFromGlobal( QCursor::pos());
 }
 
-#ifdef INCLUDE_MOCFILES
+#ifndef NO_INCLUDE_MOCFILES
 #  include "qextmdichildfrmcaption.moc"
 #endif

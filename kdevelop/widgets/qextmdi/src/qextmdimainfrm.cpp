@@ -53,9 +53,8 @@
 #endif
 
 //============ constructor ============//
-
 QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
-: KMainWindow( parentWidget, name, flags)
+: KParts::DockMainWindow( parentWidget, name, flags)
    ,m_pMdi(0L)
    ,m_pTaskBar(0L)
    ,m_pWinList(0L)
@@ -79,11 +78,11 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    m_pWinList->setAutoDelete(FALSE);
    // This seems to be needed (re-check it after Qt2.0 comed out)
    setFocusPolicy(ClickFocus);
-   
+
    // And start creating self
    createMdiManager();
    createTaskBar();
-   
+
    // Apply options for the MDI manager
    applyOptions();
 
@@ -165,11 +164,7 @@ void QextMdiMainFrm::resizeEvent(QResizeEvent *e)
       if( e->oldSize().height() != e->size().height()) {
          return;
       }
-#ifdef NO_KDE2
-   QMainWindow::resizeEvent(e);
-#else
-   KMainWindow::resizeEvent(e);
-#endif
+   KParts::DockMainWindow::resizeEvent(e);
 }
 
 //================ setMinimumSize ===============//
@@ -178,11 +173,7 @@ void QextMdiMainFrm::setMinimumSize( int minw, int minh)
 {
    if( m_bTopLevelMode && !parentWidget())
       return;
-#ifdef NO_KDE2
-   QMainWindow::setMinimumSize( minw, minh);
-#else
-   KMainWindow::setMinimumSize( minw, minh);
-#endif
+   KParts::DockMainWindow::setMinimumSize( minw, minh);
 }
 
 //================ addWindow ===============//
@@ -208,7 +199,7 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
    QObject::connect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(windowMenuItemActivated(int)) );
    QObject::connect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
-   
+
    m_pWinList->append(pWnd);
    QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
    QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
@@ -260,7 +251,7 @@ void QextMdiMainFrm::addToolWindow( QextMdiChildView* pWnd)
 //============ attachWindow ============//
 void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 {
-   // decide whether window shall be cascaded 
+   // decide whether window shall be cascaded
    bool bCascade = false;
    QRect frameGeo = pWnd->frameGeometry();
    QPoint topLeftScreen = pWnd->mapToGlobal(QPoint(0,0));
@@ -349,7 +340,7 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
    //
 
    //  arrangeWindow(pWnd);
-  
+
    // this will show it...
    if (bShow) {
       activateView(pWnd);
@@ -365,17 +356,17 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    QObject::disconnect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
    QObject::disconnect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(windowMenuItemActivated(int)) );
    QObject::disconnect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
-   
+
    //Closes a child window. sends no close event : simply deletes it
    m_pWinList->removeRef(pWnd);
-   
+
    QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
    // changed signale (mmorin)
    if (but != 0L) {
       QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
    }
    m_pTaskBar->removeWinButton(pWnd);
-   
+
    if(pWnd->isAttached()) {
       pWnd->mdiParent()->hide();
       m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
@@ -392,9 +383,9 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
    m_pWinList->removeRef(pWnd);
    if( m_pWinList->count() == 0L)
       m_pCurrentWindow = 0L;
-   
+
    m_pTaskBar->removeWinButton(pWnd, layoutTaskBar);
-   
+
    if(pWnd->isAttached())
       m_pMdi->destroyChild(pWnd->mdiParent());
    else
@@ -482,7 +473,7 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
          pWnd->setActiveWindow();
          pWnd->raise();
       }
-   }  
+   }
    pWnd->setFocus();
 }
 
@@ -517,11 +508,7 @@ bool QextMdiMainFrm::event( QEvent* e)
          closeWindow( pWnd);
       return TRUE;
    }
-#ifdef NO_KDE2
-   return QMainWindow::event( e);
-#else
-   return KMainWindow::event( e);
-#endif
+   return KParts::DockMainWindow::event( e);
 }
 
 /**
@@ -890,6 +877,6 @@ void QextMdiMainFrm::popupWindowMenu(QPoint p)
    m_pWindowMenu->popup( p);
 }
 
-#ifdef INCLUDE_MOCFILES
+#ifndef NO_INCLUDE_MOCFILES
 #  include "qextmdimainfrm.moc"
 #endif

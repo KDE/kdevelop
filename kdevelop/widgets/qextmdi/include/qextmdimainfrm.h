@@ -30,13 +30,15 @@
 #define _QEXTMDIMAINFRM_H_
 
 #ifndef NO_KDE2
- #include <kmainwindow.h>
- #include <kmenubar.h>
- #include <kpopupmenu.h>
+#  include <kmainwindow.h>
+#  include <kmenubar.h>
+#  include <kpopupmenu.h>
+#  include "kparts/dockmainwindow.h"
 #else
- #include <qmainwindow.h>
- #include <qmenubar.h>
- #include <qpopupmenu.h>
+#  include <qmainwindow.h>
+#  include <qmenubar.h>
+#  include <qpopupmenu.h>
+#  include "dummykpartsdockmainwindow.h"
 #endif
 
 #include <qlist.h>
@@ -53,28 +55,28 @@
 
 namespace QextMdi {
 
-/** 
-* During @ref QextMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system 
+/**
+* During @ref QextMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system
 */
 typedef enum {
-      /** 
-      * standard is: show normal, attached, visible, document view (not toolview) 
+      /**
+      * standard is: show normal, attached, visible, document view (not toolview)
       */
       StandardAdd = 0,
-      /** 
-      * add a maximized view 
+      /**
+      * add a maximized view
       */
       Maximize    = 1,
-      /** 
-      * add a minimized view 
+      /**
+      * add a minimized view
       */
       Minimize    = 2,
-      /** 
-      * add a view that is not visible for the moment but under MDI control 
+      /**
+      * add a view that is not visible for the moment but under MDI control
       */
       Hide        = 4,
-      /** 
-      * add a view that appears toplevel 
+      /**
+      * add a view that appears toplevel
       */
       Detach      = 8,
       /**
@@ -96,20 +98,6 @@ public:
    QextMdiViewCloseEvent( QextMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {};
 };
 
-#ifdef NO_KDE2
-/**
-  * @short The base class of QextMdiMainFrm in case of QextMDI without KDE2 support
-  *
-  */
-class DLL_IMP_EXP_QEXTMDICLASS KMainWindow : public QMainWindow
-{
-   Q_OBJECT
-public:
-   KMainWindow( QWidget* parentWidget = 0L, const char* name = "", WFlags flags = WType_TopLevel) : QMainWindow( parentWidget, name, flags) {};
-   ~KMainWindow() {};
-};
-#endif
-
 /**
   * @short Base class for all your special main frames.
   *
@@ -118,15 +106,14 @@ public:
   * Provides functionality for docking/undocking view windows and manages the taskbar.<br>
   * Usually you just need to know about this class and the child view class.
   */
-class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KMainWindow
+class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KParts::DockMainWindow
 {
    friend class QextMdiChildView;
    friend class QextMdiTaskBar;
-
    Q_OBJECT
 
 // attributes
-protected:  
+protected:
    QextMdiChildArea        *m_pMdi;
    QextMdiTaskBar          *m_pTaskBar;
    QList<QextMdiChildView> *m_pWinList;
@@ -167,11 +154,11 @@ protected:
 
 // methods
 public:
-   /** 
-   * Constructor. 
+   /**
+   * Constructor.
    */
    QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
-   /** 
+   /**
    * Destructor.
    */
    ~QextMdiMainFrm();
@@ -189,7 +176,7 @@ public:
    * Returns the focused attached MDI view.
    */
    QextMdiChildView * activeWindow();
-   /** 
+   /**
    * Returns a popup menu filled according to the MDI view state. You can override this
    * method to insert additional entries there. The popup menu is usually popuped when the user
    * clicks with the right mouse button on a taskbar entry. The default entries are:
@@ -197,24 +184,24 @@ public:
    * menu called Operations.
    */
    virtual QPopupMenu * taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWindowPopup = FALSE);
-   /** 
+   /**
    * Returns a popup menu with only a title "Window". You can fill it with own operations entries
    * on the MDI view. This popup menu is inserted as last menu item in @ref QextMdiMainFrm::taskBarPopup .
    */
    virtual QPopupMenu * windowPopup(QextMdiChildView *pWnd,bool bIncludeTaskbarPopup = TRUE);
-   /** 
+   /**
    * Called in the constructor (forces a resize of all MDI views)
    */
    virtual void applyOptions();
-   /** 
+   /**
    * Returns the QextMdiChildView belonging to the given caption string.
    */
    QextMdiChildView * findWindow(const QString& caption);
-   /** 
+   /**
    * Returns whether this MDI child view is under MDI control (using @ref QextMdiMainFrm::addWindow ) or not.
    */
    bool windowExists(QextMdiChildView *pWnd);
-   /** 
+   /**
    * Catches certain Qt events and processes it here.
    * Currently, here this catches only the @ref QextMdiViewCloseEvent (a QextMDI user event) which is sent
    * from itself in @ref QextMdiMainFrm::childWindowCloseRequest right after a @ref QextMdiChildView::closeEvent .
@@ -227,20 +214,20 @@ public:
    * This method calls QMainWindow::event , additionally.
    */
    virtual bool event(QEvent* e);
-   /** 
+   /**
    * If there's a main menubar given, it will create the 4 maximize mode buttons there (undock, minimize, restore, close).
    */
    virtual void setSysButtonsAtMenuPosition();
-   /** 
+   /**
    * Returns the height of the taskbar.
    */
    virtual int taskBarHeight() { return m_pTaskBar->height(); };
-   /** 
+   /**
    * Sets an offset value that is used on @ref QextMdiMainFrm::detachWindow . The undocked window
    * is visually moved on the desktop by this offset.
    */
    virtual void setUndockPositioningOffset( QPoint offset) { m_undockPositioningOffset = offset; };
-   /** 
+   /**
    * If you don't want to know about the inner structure of the QextMDI system, you can use
    * this iterator to handle with the MDI view list in a more abstract way.
    * The iterator hides what special data structure is used in QextMDI.
@@ -258,21 +245,21 @@ public:
    * Usually, you insert this popup menu in your main menubar as "Window" menu.
    */
    QPopupMenu* windowMenu() { return m_pWindowMenu; };
-   /** 
+   /**
    * Sets a background colour for the MDI view area widget.
    */
    virtual void setBackgroundColor( const QColor &c) { m_pMdi->setBackgroundColor( c); };
-   /** 
+   /**
    * Sets a background pixmap for the MDI view area widget.
    */
    virtual void setBackgroundPixmap( const QPixmap &pm) { m_pMdi->setBackgroundPixmap( pm); };
-   /** 
+   /**
    * Sets a size that is used as the default size for a newly to the MDI system added @ref QextMdiChildView .
    *  By default this size is 600x400. So all non-resized added MDI views appear in that size.
    */
    void setDefaultChildFrmSize( const QSize& sz)
       { m_pMdi->m_defaultChildFrmSize = sz; };
-   /** 
+   /**
    * Returns the default size for a newly added QextMdiChildView. See @ref QextMdiMainFrm::setDefaultChildFrmSize .
    */
    QSize defaultChildFrmSize()

@@ -572,6 +572,6 @@ void QextMdiChildView::hide()
    QWidget::hide();
 }
 
-#ifdef INCLUDE_MOCFILES
+#ifndef NO_INCLUDE_MOCFILES
 #  include "qextmdichildview.moc"
 #endif

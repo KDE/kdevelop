@@ -943,6 +943,6 @@ void QextMdiChildFrm::slot_resizeViaSystemMenu()
    setResizeCursor( m_iResizeCorner);
 }
 
-#ifdef INCLUDE_MOCFILES
+#ifndef NO_INCLUDE_MOCFILES
 #  include "qextmdichildfrm.moc"
 #endif

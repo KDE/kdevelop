@@ -1,3 +1,7 @@
+2000-10-16   Falk Brettschneider  <falk@kdevelop.org>
+	* QextMdiMainFrm inherits KParts::DockMainWindow now
+          (using KDE2-mode of QextMDI and kdelibs/kdeui of today)
+
 2000-10-10   Falk Brettschneider  <falk@kdevelop.org>
 	* QextMDI synchronized with current cvs-Version (bugfixes, KDE2-support)
         * directory structure synchronized with original QextMDI
