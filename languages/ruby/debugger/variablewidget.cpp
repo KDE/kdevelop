@@ -721,19 +721,23 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
     if (column == VALUE_COLUMN) {
 		// Show color values as colors, and make the text color the same
 		// as the base color
-		if (QRegExp("^#[\\da-f]+$").search(text(column)) != -1) {
-        	QColorGroup color_cg(	cg.foreground(), cg.background(), cg.light(),
-                           			cg.dark(), cg.mid(), 
-									QColor(text(column)), 
-									QColor(text(column)) );
-        	QListViewItem::paintCell(p, color_cg, column, width, align);
-			return;
+		if (dataType_ == COLOR_TYPE) {
+			QRegExp color_re("\\s(#.*)>");
+			
+			if (color_re.search(text(column)) != -1) {
+        		QColorGroup color_cg(	cg.foreground(), cg.background(), 
+										cg.light(), cg.dark(), cg.mid(), 
+										QColor(color_re.cap(1)), QColor(color_re.cap(1)) );
+        		QListViewItem::paintCell(p, color_cg, column, width, align);
+				return;
+			}
 		}
 		
 		// Highlight recently changed items in red
 		if (highlight_) {
-        	QColorGroup hl_cg(	cg.foreground(), cg.background(), cg.light(),
-                           		cg.dark(), cg.mid(), red, cg.base() );
+        	QColorGroup hl_cg(	cg.foreground(), cg.background(), 
+								cg.light(), cg.dark(), cg.mid(), 
+								red, cg.base() );
         	QListViewItem::paintCell(p, hl_cg, column, width, align);
 			return;
 		}

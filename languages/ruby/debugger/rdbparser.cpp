@@ -64,7 +64,12 @@ void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
 		while (pos != -1) {
 			varName = var_re.cap(1);
 			if (ref_re.search(var_re.cap(2)) != -1) {
-				value = (ref_re.cap(1) + ">").latin1();
+				if (var_re.cap(2).contains("=") > 0) {
+					value = (ref_re.cap(1) + ">").latin1();
+				} else {
+					// There are no 'name=value' pairs, as in #<Qt::Color:0x0 #ff0000>
+					value = var_re.cap(2).latin1();
+				}
 			} else if (struct_re.search(var_re.cap(2)) != -1) {
 				value = (QString("#<Struct::") + struct_re.cap(1) + ">").latin1();
 			} else {
@@ -132,7 +137,12 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 				varName = ppvalue_re.cap(1);
 				
 				if (ppref_re.search(ppvalue_re.cap(2)) != -1) {
-					value = (ppref_re.cap(1) + ">").latin1();
+					if (ppvalue_re.cap(2).contains("=") > 0) {
+						value = (ppref_re.cap(1) + ">").latin1();
+					} else {
+						// There are no 'name=value' pairs, as in #<Qt::Color:0x0 #ff0000>
+						value = ppvalue_re.cap(2).latin1();
+					}
 				} else {
 					value = ppvalue_re.cap(2).latin1();
 				}
@@ -275,6 +285,7 @@ void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
         item->update();
         break;
 
+    case COLOR_TYPE:
     case VALUE_TYPE:
         item->setText(VALUE_COLUMN, value);
 		item->setExpandable(false);
@@ -294,6 +305,8 @@ DataType RDBParser::determineType(char *buf)
 	
 	if (qstrncmp(buf, "#<struct", strlen("#<struct")) == 0) {
 		return STRUCT_TYPE;
+	} else if (qstrncmp(buf, "#<Qt::Color:0x", strlen("#<Qt::Color:0x")) == 0) {
+		return COLOR_TYPE;
 	} else if (qstrncmp(buf, "#<", strlen("#<")) == 0 && strstr(buf, "=") != 0) {
 		// An object instance reference is only expandable and a 'REFERENCE_TYPE'
 		// if it contains an '=' (ie it has at least one '@instance_variable=value').
