@@ -47,7 +47,12 @@
                         <cstring>modeMDI</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Multiple document interface (MDI)</string>
+                        <string>&amp;Childframe window mode</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>All tool views are initially docked to the mainframe.
+Editor and browser views will live like toplevel windows within a view area of the mainframe.
+A typical example of this user interface mode is MS Visual Studio 6.0.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -55,7 +60,12 @@
                         <cstring>modeTab</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Tabbed document interface</string>
+                        <string>&amp;Tabbed pages mode</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>All tool views are initially docked to the mainframe.
+Editor and browser views will be stacked in a tab window.
+A typical example of this user interface mode is KDEStudio, our friend C++-IDE in the world of KDE.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -63,7 +73,12 @@
                         <cstring>modeToplevel</cstring>
                     </property>
                     <property name="text">
-                        <string>Toplevel &amp;window interface</string>
+                        <string>T&amp;oplevel window mode</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>All editor, browser and tool views will be toplevel windows (directly on desktop).
+The main widget contains the menu, toolbars and statusbar, only.
+A typical example of this user interface mode is Borland Delphi 6.0.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -71,7 +86,10 @@
                         <cstring>modeIDEA</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;IDEAl user-interface</string>
+                        <string>&amp;IDEAl mode</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>This is a clone of the IDEA user interface, similar to the Tabbed pages mode.</string>
                     </property>
                 </widget>
             </vbox>
@@ -89,7 +107,7 @@
                 <number>0</number>
             </property>
             <property name="text">
-                <string>Please note that a change in the major user-interface mode will only take effect after the next restart.</string>
+                <string>Please note that a change to and from IDEAl mode requires a restart of the program.</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignVCenter</set>
@@ -104,6 +122,12 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>0</width>
+                    <height>20</height>
+                </size>
             </property>
         </spacer>
     </vbox>

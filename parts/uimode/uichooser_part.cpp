@@ -31,7 +31,7 @@ UIChooserPart::~UIChooserPart()
 
 void UIChooserPart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("UI"));
+  QVBox *vbox = dlg->addVBoxPage(i18n("User Interface"));
   UIChooserWidget *w = new UIChooserWidget(vbox);
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
