@@ -97,6 +97,7 @@ private slots:
   void slotTabSelected(QWidget*);
   void slotFillWindowMenu();
   void slotPartAdded(KParts::Part*);
+  void slotDocChanged(const KURL& url);
   void slotNewStatus();
   void slotPartJobCompleted();
   void slotBottomTabsChanged();

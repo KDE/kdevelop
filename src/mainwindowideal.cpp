@@ -59,7 +59,7 @@
 #include "settingswidget.h"
 #include "statusbar.h"
 #include "kpopupmenu.h"
-
+#include "documentationpart.h"
 
 #include "toplevel.h"
 #include "mainwindowshare.h"
@@ -542,8 +542,15 @@ void MainWindowIDEAl::slotBufferSelected() {
 }
 
 void MainWindowIDEAl::slotPartAdded(KParts::Part* part) {
+    if( !part ) return;
 
-    if ( !part || !part->inherits("KTextEditor::Document") )
+    if( QString(part->name()) == "DocumentationPart" ){
+        connect( part, SIGNAL( fileNameChanged(const KURL&) ),
+                 this, SLOT(slotDocChanged(const KURL&) ) );
+        return;
+    }
+
+    if ( /*!part || */!part->inherits("KTextEditor::Document") )
         return;
 
     // listen to the part's 'completed' signal in order to
@@ -638,6 +645,14 @@ void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
             m_tabWidget->changeTab( rw_part->widget(), rw_part->url().fileName() );
         }
     }
+}
+
+void MainWindowIDEAl::slotDocChanged(const KURL& url)
+{
+    QObject * senderobj = const_cast<QObject*>( sender() );
+    DocumentationPart* doc = dynamic_cast<DocumentationPart*>( senderobj );
+    if( !doc ) return;
+    m_tabWidget->changeTab( doc->widget(), url.fileName() );
 }
 
 void MainWindowIDEAl::slotBottomTabsChanged() {

@@ -180,6 +180,7 @@ bool DocumentationPart::openURL(const KURL &url)
 {
   QString path = resolveEnvVarsInURL(url.url());
   KURL newUrl(path);
+  emit fileNameChanged(newUrl);
   return KHTMLPart::openURL(newUrl);
 }
 

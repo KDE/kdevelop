@@ -19,7 +19,7 @@ public:
   static QString resolveEnvVarsInURL(const QString& url);
 
 signals:
-  void fileNameChanged();
+  void fileNameChanged(const KURL& url);
 
 private slots:
  
