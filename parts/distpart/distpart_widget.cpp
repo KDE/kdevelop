@@ -150,7 +150,7 @@ void DistpartDialog::slotcreateSrcArchPushButtonPressed() {
     	tar.close( );
 	prog->hide();
 	delete prog;
-	KMessageBox::information(this, "Archive made at: " + filename,"Archive Done");
+	KMessageBox::information( this, i18n("Archive made at: ") + filename, i18n("Archive Done") );
 
     }
     else
