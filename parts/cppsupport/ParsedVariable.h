@@ -1,5 +1,5 @@
 #include <qstring.h>
-#include "tokenizer.h"
+#include "tokenizer-cc.h"
 #include "Scope.h"
 
 /**
