@@ -1,5 +1,5 @@
 EXTRA_DIST = tip.database
-SUBDIRS = welcome tutorial
+SUBDIRS = welcome tutorial manual
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/zh_CN.GB2312/kdevelop/
