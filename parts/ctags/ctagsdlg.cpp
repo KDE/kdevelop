@@ -13,7 +13,6 @@
 
 #include <qcheckbox.h>
 #include <qfile.h>
-#include <qfileinfo.h>
 #include <qhbox.h>
 #include <qheader.h>
 #include <qlabel.h>
@@ -29,315 +28,12 @@
 #include <klistbox.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
-#include <kregexp.h>
 
 #include "kdevplugin.h"
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevproject.h"
-
-
-struct CTagsKindMapping {
-    char abbrev;
-    const char *verbose;
-};
-
-
-struct CTagsExtensionMapping {
-    const char *extension;
-    CTagsKindMapping *kinds;
-};
-
-
-static CTagsKindMapping kindMappingAsm[] = {
-    { 'd', I18N_NOOP("define")              },
-    { 'l', I18N_NOOP("label")               },
-    { 'm', I18N_NOOP("macro")               },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingAsp[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 's', I18N_NOOP("subroutine")          },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingAwk[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingBeta[] = {
-    { 'f', I18N_NOOP("fragment definition") },
-    { 'p', I18N_NOOP("any pattern")         },
-    { 's', I18N_NOOP("slot")                },
-    { 'v', I18N_NOOP("pattern")             },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingC[] = {
-    { 'c', I18N_NOOP("class")               },
-    { 'd', I18N_NOOP("macro")               },
-    { 'e', I18N_NOOP("enumerator")          },
-    { 'f', I18N_NOOP("function")            },
-    { 'g', I18N_NOOP("enumeration")         },
-    { 'm', I18N_NOOP("member")              }, 
-    { 'n', I18N_NOOP("namespace")           },
-    { 'p', I18N_NOOP("prototype")           },
-    { 's', I18N_NOOP("struct")              },
-    { 't', I18N_NOOP("typedef")             },
-    { 'u', I18N_NOOP("union")               },
-    { 'v', I18N_NOOP("variable")            },
-    { 'x', I18N_NOOP("external variable")   },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingCobol[] = {
-    { 'p', I18N_NOOP("paragraph")           },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingEiffel[] = {
-    { 'c', I18N_NOOP("class")               },
-    { 'f', I18N_NOOP("feature")             },
-    { 'l', I18N_NOOP("local entity")        },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingFortran[] = {
-    { 'b', I18N_NOOP("block")               },
-    { 'c', I18N_NOOP("common")              },
-    { 'e', I18N_NOOP("entry")               },
-    { 'f', I18N_NOOP("function")            },
-    { 'i', I18N_NOOP("interface")           },
-    { 'k', I18N_NOOP("type component")      },
-    { 'l', I18N_NOOP("label")               },
-    { 'L', I18N_NOOP("local")               },
-    { 'm', I18N_NOOP("module")              },
-    { 'n', I18N_NOOP("namelist")            },
-    { 'p', I18N_NOOP("program")             },
-    { 's', I18N_NOOP("subroutine")          },
-    { 't', I18N_NOOP("type")                },
-    { 'v', I18N_NOOP("variable")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingJava[] = {
-    { 'c', I18N_NOOP("class")               },
-    { 'f', I18N_NOOP("field")               },
-    { 'i', I18N_NOOP("interface")           },
-    { 'm', I18N_NOOP("method")              },
-    { 'p', I18N_NOOP("package")             },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingLisp[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingMake[] = {
-    { 'm', I18N_NOOP("macro")               },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingPascal[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 'p', I18N_NOOP("procedure")           },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingPerl[] = {
-    { 's', I18N_NOOP("subroutine")          },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingPHP[] = {
-    { 'c', I18N_NOOP("class")               },
-    { 'f', I18N_NOOP("function")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingPython[] = {
-    { 'c', I18N_NOOP("class")               },
-    { 'f', I18N_NOOP("function")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingRexx[] = {
-    { 's', I18N_NOOP("subroutine")          },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingRuby[] = {
-    { 'c', I18N_NOOP("class")               },
-    { 'f', I18N_NOOP("function")            },
-    { 'm', I18N_NOOP("mixin")               },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingScheme[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 's', I18N_NOOP("set")                 },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingSh[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingSlang[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 'n', I18N_NOOP("namespace")           },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingTcl[] = {
-    { 'p', I18N_NOOP("procedure")           },
-    { 0  , 0                                }
-};
-
-
-static CTagsKindMapping kindMappingVim[] = {
-    { 'f', I18N_NOOP("function")            },
-    { 0  , 0                                }
-};
-
-
-static CTagsExtensionMapping extensionMapping[] = {
-    { "asm",    kindMappingAsm     },
-    { "s",      kindMappingAsm     },
-    { "S",      kindMappingAsm     },
-    { "asp",    kindMappingAsp     },
-    { "asa",    kindMappingAsp     },
-    { "awk",    kindMappingAwk     },
-    { "c++",    kindMappingC       },
-    { "cc",     kindMappingC       },
-    { "cp" ,    kindMappingC       },
-    { "cpp",    kindMappingC       },
-    { "cxx",    kindMappingC       },
-    { "h"  ,    kindMappingC       },
-    { "h++",    kindMappingC       },
-    { "hh" ,    kindMappingC       },
-    { "hp" ,    kindMappingC       },
-    { "hpp",    kindMappingC       },
-    { "hxx",    kindMappingC       },
-    { "beta",   kindMappingBeta    },
-    { "cob",    kindMappingCobol   },
-    { "COB",    kindMappingCobol   },
-    { "e",      kindMappingEiffel  },
-    { "f"   ,   kindMappingFortran },
-    { "for" ,   kindMappingFortran },
-    { "ftn" ,   kindMappingFortran },
-    { "f77" ,   kindMappingFortran },
-    { "f90" ,   kindMappingFortran },
-    { "f95" ,   kindMappingFortran },
-    { "java",   kindMappingJava    },
-    { "cl",     kindMappingLisp    },
-    { "clisp",  kindMappingLisp    },
-    { "el",     kindMappingLisp    },
-    { "l",      kindMappingLisp    },
-    { "lisp",   kindMappingLisp    },
-    { "lsp",    kindMappingLisp    },
-    { "ml",     kindMappingLisp    },
-    { "mak",    kindMappingMake    },
-    { "p",      kindMappingPascal  },
-    { "pas",    kindMappingPascal  },
-    { "pl",     kindMappingPerl    },
-    { "pm",     kindMappingPerl    },
-    { "perl",   kindMappingPerl    },
-    { "php",    kindMappingPHP     },
-    { "php3",   kindMappingPHP     },
-    { "phtml",  kindMappingPHP     },
-    { "py",     kindMappingPython  },
-    { "python", kindMappingPython  },
-    { "cmd",    kindMappingRexx    },
-    { "rexx",   kindMappingRexx    },
-    { "rx",     kindMappingRexx    },
-    { "rb",     kindMappingRuby    },
-    { "sch",    kindMappingScheme  },
-    { "scheme", kindMappingScheme  },
-    { "scm",    kindMappingScheme  },
-    { "sm",     kindMappingScheme  },
-    { "SCM",    kindMappingScheme  },
-    { "SM",     kindMappingScheme  },
-    { "sh",     kindMappingSh      },
-    { "SH",     kindMappingSh      },
-    { "bsh",    kindMappingSh      },
-    { "bash",   kindMappingSh      },
-    { "ksh",    kindMappingSh      },
-    { "zsh",    kindMappingSh      },
-    { "sl",     kindMappingSlang   },
-    { "tcl",    kindMappingTcl     },
-    { "wish",   kindMappingTcl     },
-    { "vim",    kindMappingVim     },
-    { 0     , 0                    }
-};
-
-
-static CTagsKindMapping *findKindMapping(const QString &extension)
-{
-    const char *pextension = extension.latin1();
-    
-    CTagsExtensionMapping *pem = extensionMapping;
-    while (pem->extension != 0) {
-        if (strcmp(pem->extension, pextension) == 0)
-            return pem->kinds;
-        ++pem;
-    }
-
-    return 0;
-}
-
-
-static QString findKind(char kindChar, const QString &extension)
-{
-    QString res;
-
-    CTagsKindMapping *kindMapping = findKindMapping(extension);
-    if (kindMapping) {
-        CTagsKindMapping *pkm = kindMapping;
-        while (pkm->verbose != 0) {
-            if (pkm->abbrev == kindChar)
-                return i18n(QString::fromLatin1(pkm->verbose));
-            ++pkm;
-        }
-    }
-
-    return QString::null;
-}
-
-
-struct CTagsTagInfo
-{
-    QString fileName;
-    QString pattern;
-    int lineNum;
-    char kind;
-};
-
+#include "ctagskinds.h"
 
 
 class CTagsResultItem : public QListBoxText
@@ -353,6 +49,7 @@ public:
     { return m_fileName; }
     QString pattern() const
     { return m_pattern; }
+
 private:
     QString m_fileName;
     QString m_pattern;
@@ -360,79 +57,72 @@ private:
 };
 
 
-CTagsDialog::CTagsDialog(KDevPlugin *part)
+CTagsDialog::CTagsDialog(CTagsPart *part)
     : QDialog(0, "ctags dialog", false)
 {
-    setCaption("Search in Tags");
+    setCaption(i18n("Search in Tags"));
     QFontMetrics fm(fontMetrics());
 
-    QLabel *tag_label = new QLabel(i18n("&Tag:"), this);
+    QLabel *tagLabel = new QLabel(i18n("&Tag:"), this);
 
-    tag_edit = new QLineEdit(this);
-    tag_edit->setFocus();
-    tag_label->setBuddy(tag_edit);
-    tag_edit->setMinimumWidth(fm.width('X')*30);
+    tagEdit = new QLineEdit(this);
+    tagEdit->setFocus();
+    tagLabel->setBuddy(tagEdit);
+    tagEdit->setMinimumWidth(fm.width('X')*30);
     
-    regexp_box = new QCheckBox(i18n("&Regular expression match"), this);
-    regexp_box->setChecked(true);
+    regexpBox = new QCheckBox(i18n("&Regular expression match"), this);
+    regexpBox->setChecked(true);
     
-    QLabel *kinds_label = new QLabel(i18n("&Kinds:"), this);
+    QLabel *kindsLabel = new QLabel(i18n("&Kinds:"), this);
 
-    kinds_listview = new QListView(this);
-    kinds_label->setBuddy(kinds_listview);
-    kinds_listview->setResizeMode(QListView::LastColumn);
-    kinds_listview->addColumn(QString::null);
-    kinds_listview->header()->hide();
-    kinds_listview->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
+    kindsListView = new QListView(this);
+    kindsLabel->setBuddy(kindsListView);
+    kindsListView->setResizeMode(QListView::LastColumn);
+    kindsListView->addColumn(QString::null);
+    kindsListView->header()->hide();
+    kindsListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
 
-    KButtonBox *actionbox = new KButtonBox(this, Qt::Vertical);
-    actionbox->addStretch();
-    QPushButton *regenerate_button = actionbox->addButton(i18n("&Regenerate"));
-    regenerate_button->setDefault(true);
-    QPushButton *cancel_button = actionbox->addButton(i18n("Close"));
-    actionbox->addStretch();
-    actionbox->layout();
+    KButtonBox *actionBox = new KButtonBox(this, Qt::Vertical);
+    actionBox->addStretch();
+    QPushButton *regenerateButton = actionBox->addButton(i18n("&Regenerate"));
+    regenerateButton->setDefault(true);
+    QPushButton *cancelButton = actionBox->addButton(i18n("Close"));
+    actionBox->addStretch();
+    actionBox->layout();
 
-    results_listbox = new KListBox(this);
-    results_listbox->setMinimumHeight(fm.lineSpacing()*10);
-    results_listbox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
+    resultsListBox = new KListBox(this);
+    resultsListBox->setMinimumHeight(fm.lineSpacing()*10);
+    resultsListBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
 
     QGridLayout *layout = new QGridLayout(this, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
     layout->addRowSpacing(3, 10);
-    layout->addWidget(tag_label, 0, 0);
-    layout->addWidget(tag_edit, 0, 1);
-    layout->addWidget(regexp_box, 1, 1);
-    layout->addWidget(kinds_label, 2, 0);
-    layout->addWidget(kinds_listview, 2, 1);
-    layout->addMultiCellWidget(actionbox, 0, 2, 2, 2);
-    layout->addMultiCellWidget(results_listbox, 4, 4, 0, 2);
+    layout->addWidget(tagLabel, 0, 0);
+    layout->addWidget(tagEdit, 0, 1);
+    layout->addWidget(regexpBox, 1, 1);
+    layout->addWidget(kindsLabel, 2, 0);
+    layout->addWidget(kindsListView, 2, 1);
+    layout->addMultiCellWidget(actionBox, 0, 2, 2, 2);
+    layout->addMultiCellWidget(resultsListBox, 4, 4, 0, 2);
 
-    connect( tag_edit, SIGNAL(textChanged(const QString&)),
+    connect( tagEdit, SIGNAL(textChanged(const QString&)),
              this, SLOT(slotSearch()) );
-    connect( kinds_listview, SIGNAL(clicked(QListViewItem*)),
+    connect( kindsListView, SIGNAL(clicked(QListViewItem*)),
              this, SLOT(slotSearch()) );
-    connect( kinds_listview, SIGNAL(returnPressed(QListViewItem*)),
+    connect( kindsListView, SIGNAL(returnPressed(QListViewItem*)),
              this, SLOT(slotSearch()) );
-    connect( regexp_box, SIGNAL(toggled(bool)),
+    connect( regexpBox, SIGNAL(toggled(bool)),
              this, SLOT(slotSearch()) );
-    connect( regenerate_button, SIGNAL(clicked()),
+    connect( regenerateButton, SIGNAL(clicked()),
              this, SLOT(slotRegenerate()) );
-    connect( cancel_button, SIGNAL(clicked()),
+    connect( cancelButton, SIGNAL(clicked()),
              this, SLOT(reject()) );
-    connect( results_listbox, SIGNAL(clicked(QListBoxItem*)),
+    connect( resultsListBox, SIGNAL(clicked(QListBoxItem*)),
              this, SLOT(slotResultClicked(QListBoxItem*)) );
-    connect( results_listbox, SIGNAL(returnPressed(QListBoxItem*)),
+    connect( resultsListBox, SIGNAL(returnPressed(QListBoxItem*)),
              this, SLOT(slotResultClicked(QListBoxItem*)) );
-
-    connect( part->core(), SIGNAL(projectOpened()),
-             this, SLOT(projectChanged()) );
-    connect( part->core(), SIGNAL(projectClosed()),
-             this, SLOT(projectChanged()) );
     
     m_part = part;
-    m_tags = 0;
-
-    projectChanged();
+    updateInfo();
 }
 
 
@@ -440,55 +130,59 @@ CTagsDialog::~CTagsDialog()
 {}
 
 
-void CTagsDialog::projectChanged()
+void CTagsDialog::updateInfo()
 {
-    if (!m_part->project()) {
-        delete m_tags;
-        m_tags = 0;
-    } else
-        ensureTagsLoaded();
+    m_tags = m_part->tags();
+    m_kindStrings = m_part->kindStrings();
+
+    kindsListView->clear();
+    
+    QStringList::ConstIterator it;
+    for (it = m_kindStrings.begin(); it != m_kindStrings.end(); ++it) {
+        QCheckListItem *item = new QCheckListItem(kindsListView, (*it), QCheckListItem::CheckBox);
+        item->setOn(true);
+    }
 }
 
 
 void CTagsDialog::slotSearch()
 {
     kdDebug(9022) << "search tag" << endl;
-    ensureTagsLoaded();
-    if (!m_tags)
+    if (m_tags.isEmpty())
         return;
 
     // Collect wanted kinds
     QStringList kindStringList;
-    QCheckListItem *clitem = static_cast<QCheckListItem*>(kinds_listview->firstChild());
+    QCheckListItem *clitem = static_cast<QCheckListItem*>(kindsListView->firstChild());
     while (clitem) {
         if (clitem->isOn())
             kindStringList.append(clitem->text());
         clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
     }
-    results_listbox->clear();
+    resultsListBox->clear();
 
-    if (regexp_box->isChecked()) {
+    if (regexpBox->isChecked()) {
         // Do the regexp search
-        QRegExp re("^" + tag_edit->text() + "$");
-        QDictIterator<CTagsTagInfoList> it(*m_tags);
-        for (; it.current(); ++it)
-            if (re.match(it.currentKey(), 0) != -1)
-                insertResult(it.current(), kindStringList);
+        QRegExp re(tagEdit->text());
+        CTagsMapConstIterator it;
+        for (it = m_tags.begin(); it != m_tags.end(); ++it)
+            if (re.exactMatch(it.key()))
+                insertResult(it.data(), kindStringList);
     } else {
         // Do the exact search
-        CTagsTagInfoList *result = m_tags->find(tag_edit->text());
-        if (result)
-            insertResult(result, kindStringList);
+        CTagsMapIterator result = m_tags.find(tagEdit->text());
+        if (result != m_tags.end())
+            insertResult(*result, kindStringList);
     }
 }
 
 
-void CTagsDialog::insertResult(CTagsTagInfoList *result, const QStringList &kindStringList)
+void CTagsDialog::insertResult(const CTagsTagInfoList &result, const QStringList &kindStringList)
 {
     // Iterate over all found items, check if they have one of the wanted
     // kinds, and insert them in the result box
-    CTagsTagInfoListIterator it;
-    for (it = result->begin(); it != result->end(); ++it) {
+    CTagsTagInfoListConstIterator it;
+    for (it = result.begin(); it != result.end(); ++it) {
         QString extension;
         if ((*it).fileName.right(9) == "/Makefile")
             extension = "mak";
@@ -499,24 +193,25 @@ void CTagsDialog::insertResult(CTagsTagInfoList *result, const QStringList &kind
         }
         if (extension.isNull())
             continue;
-        QString kindString = findKind((*it).kind, extension);
+        QString kindString = CTagsKinds::findKind((*it).kind, extension);
         if (!kindStringList.contains(kindString))
             continue;
         
-        new CTagsResultItem(results_listbox, (*it).fileName, (*it).pattern, kindString);
+        new CTagsResultItem(resultsListBox, (*it).fileName, (*it).pattern, kindString);
     }
 }
 
 
 void CTagsDialog::slotRegenerate()
 {
-    QString tagsFileName = m_part->project()->projectDirectory() + "/tags";
-    QFileInfo fi(tagsFileName);
-    if (!createTagsFile()) {
+    if (!m_part->createTagsFile()) {
         KMessageBox::sorry(this, i18n("Could not create tags file"));
         return;
     }
-    loadTagsFile(tagsFileName);
+    
+    m_part->loadTagsFile();
+
+    updateInfo();
 }
 
 
@@ -538,134 +233,6 @@ void CTagsDialog::slotResultClicked(QListBoxItem *item)
     }
     
     m_part->partController()->editDocument(fileName, lineNum-1);
-}
-
-
-void CTagsDialog::ensureTagsLoaded()
-{
-    if (!m_tags) {
-        if (!m_part->project())
-            return;
-
-        kdDebug(9022) << "create/load tags" << endl;
-        
-        QString tagsFileName = m_part->project()->projectDirectory() + "/tags";
-        QFileInfo fi(tagsFileName);
-        if (!fi.exists()) {
-            int r = KMessageBox::questionYesNo(this, i18n("A ctags file for this project does not exist yet. Create it now?"));
-            if (r != KMessageBox::Yes)
-                return;
-            if (!createTagsFile()) {
-                KMessageBox::sorry(this, i18n("Could not create tags file"));
-                return;
-            }
-        }
-        kdDebug(9022) << "load tags from " << tagsFileName << endl;
-        loadTagsFile(tagsFileName);
-    }
-}
-
-
-bool CTagsDialog::createTagsFile()
-{
-    kdDebug(9022) << "create tags file" << endl;
-
-    QString cmd = "cd ";
-    cmd += m_part->project()->projectDirectory();
-    cmd += " && ctags -n ";
-
-    QStringList l = m_part->project()->allFiles();
-    QStringList::ConstIterator it;
-    for (it = l.begin(); it != l.end(); ++it) {
-        cmd += (*it);
-        cmd += " ";
-    }
-
-    KShellProcess proc("/bin/sh");
-    proc << cmd;
-    return proc.start(KProcess::Block);
-}
-
-
-void CTagsDialog::loadTagsFile(const QString &fileName)
-{
-    kdDebug(9022) << "load tags file" << endl;
-
-    kinds_listview->clear();
-    
-    QFile f(fileName);
-    if (!f.open(IO_ReadOnly))
-        return;
-
-    m_tags = new QDict<CTagsTagInfoList>;
-    m_tags->setAutoDelete(true);
-
-    QTextStream stream(&f);
-    KRegExp re("^([^\t]*)\t([^\t]*)\t([^;]*);\"\t(.*)$");
-        
-    QCString line;
-    while (!stream.atEnd()) {
-        line = stream.readLine();
-        //        kdDebug() << "Line: " << line << endl;
-        if (!re.match(line))
-            continue;
-
-        
-        QString tag = re.group(1);
-        QString file = re.group(2);
-        QString pattern = re.group(3);
-        QString extfield = re.group(4);
-        //        kdDebug() <<"Tag " << tag << ", file " << file << ", pattern "
-        //                  << pattern << ", extfield " << extfield << endl;
-        CTagsTagInfoList *tilist = m_tags->find(tag);
-        if (!tilist) {
-            tilist = new CTagsTagInfoList;
-            m_tags->insert(tag, tilist);
-        }
-        CTagsTagInfo ti;
-        ti.fileName = re.group(2);
-        ti.pattern = re.group(3);
-        ti.kind = re.group(4)[0];
-        tilist->append(ti);
-        
-        // Put kind in kind list view if not already there
-        QString extension;
-        if (ti.fileName.right(9) == "/Makefile")
-            extension = "mak";
-        else {
-            int pos = ti.fileName.findRev('.');
-            if (pos > 0)
-                extension = ti.fileName.mid(pos+1);
-        }
-        if (extension.isNull())
-            continue;
-        
-        QString kindString = findKind(ti.kind, extension);
-        if (kindString.isNull())
-            continue;
-        
-        QCheckListItem *clitem = static_cast<QCheckListItem*>(kinds_listview->firstChild());
-        while (clitem && clitem->text(0) != kindString)
-            clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
-        if (!clitem) {
-            kdDebug() << "New kind " << kindString << " with extension " << extension << endl;
-            QCheckListItem *item = new QCheckListItem(kinds_listview, kindString, QCheckListItem::CheckBox);
-            item->setOn(true);
-        }
-    }
-    
-    f.close();
-
-#if 0
-    QDictIterator<CTagsTagInfoList> it(tags);
-    for (; it.current(); ++it) {
-        kdDebug() << "Id: " << it.currentKey() << endl;
-        CTagsTagInfoList *l = it.current();
-        QValueList<CTagsTagInfo>::ConstIterator it2;
-        for (it2 = l->begin(); it2 != l->end(); ++it2)
-            kdDebug() << "at " << (*it2).fileName << "," << (*it2).pattern << endl;
-    }
-#endif
 }
 
 #include "ctagsdlg.moc"

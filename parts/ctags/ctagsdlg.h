@@ -15,16 +15,13 @@
 #include <qdialog.h>
 #include <qdict.h>
 #include <qvaluelist.h>
+#include "ctagspart.h"
 
 class QCheckBox;
 class QLineEdit;
 class QListBox;
 class QListBoxItem;
 class QListView;
-class CTagsTagInfo;
-class KDevPlugin;
-typedef QValueList<CTagsTagInfo> CTagsTagInfoList;
-typedef QValueList<CTagsTagInfo>::Iterator CTagsTagInfoListIterator;
 
 
 class CTagsDialog : public QDialog
@@ -32,28 +29,27 @@ class CTagsDialog : public QDialog
     Q_OBJECT
     
 public:
-    CTagsDialog( KDevPlugin *part );
+    CTagsDialog( CTagsPart *part );
     ~CTagsDialog();
 
 private slots:
-    void projectChanged();
     void slotSearch();
     void slotRegenerate();
     void slotResultClicked(QListBoxItem *item);
     
 private:
-    void insertResult(CTagsTagInfoList *result, const QStringList &kindStringList);
-    void ensureTagsLoaded();
-    bool createTagsFile();
-    void loadTagsFile(const QString &fileName);
+    void updateInfo();
+    void insertResult(const CTagsTagInfoList &result, const QStringList &kindStringList);
     
-    QLineEdit *tag_edit;
-    QCheckBox *regexp_box;
-    QListView *kinds_listview;
-    QListBox *results_listbox;
+    CTagsMap m_tags;
+    QStringList m_kindStrings;
+
+    QLineEdit *tagEdit;
+    QCheckBox *regexpBox;
+    QListView *kindsListView;
+    QListBox *resultsListBox;
     
-    KDevPlugin *m_part;
-    QDict<CTagsTagInfoList> *m_tags;
+    CTagsPart *m_part;
 };
 
 #endif

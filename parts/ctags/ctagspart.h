@@ -16,6 +16,23 @@
 #include <kdialogbase.h>
 #include "kdevplugin.h"
 
+struct CTagsTagInfo
+{
+    QString fileName;
+    QString pattern;
+    int lineNum;
+    char kind;
+};
+
+typedef QValueList<CTagsTagInfo> CTagsTagInfoList;
+typedef QValueList<CTagsTagInfo>::Iterator CTagsTagInfoListIterator;
+typedef QValueList<CTagsTagInfo>::ConstIterator CTagsTagInfoListConstIterator;
+typedef QMap<QString,CTagsTagInfoList> CTagsMap;
+typedef QMap<QString,CTagsTagInfoList>::Iterator CTagsMapIterator;
+typedef QMap<QString,CTagsTagInfoList>::ConstIterator CTagsMapConstIterator;
+
+class QPopupMenu;
+class Context;
 class CTagsDialog;
 
 
@@ -27,11 +44,29 @@ public:
     CTagsPart( QObject *parent, const char *name, const QStringList & );
     ~CTagsPart();
 
+    bool ensureTagsLoaded();
+    bool loadTagsFile();
+    bool createTagsFile();
+
+    CTagsMap tags()
+    { return *m_tags; }
+    QStringList kindStrings()
+    { return m_kindStrings; }
+
 private slots:
-    void slotTags();
+    void projectClosed();
+    void contextMenu(QPopupMenu *popup, const Context *context);
+    void slotSearchTags();
+    void slotGotoDeclaration();
+    void slotGotoDefinition();
     
 private:
+    void gotoTag(const QString &tag, const QString &kindChars);
+    
     CTagsDialog *m_dialog;
+    CTagsMap *m_tags;
+    QStringList m_kindStrings;
+    QString m_contextString;
 };
 
 #endif
