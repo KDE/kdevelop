@@ -104,7 +104,7 @@ void CvsPart::slotCommit() {
         dir = fi.absFilePath();
         name = ".";
     } else {
-        dir = fi.dirPath();
+        dir = fi.dirPath( true ); // Use the absolute path
         name = fi.fileName();
     }
 
@@ -143,7 +143,7 @@ void CvsPart::slotUpdate() {
         dir = fi.absFilePath();
         name = ".";
     } else {
-        dir = fi.dirPath();
+        dir = fi.dirPath( true );  // Use the absolute path
         name = fi.fileName();
     }
 
@@ -165,7 +165,7 @@ void CvsPart::slotUpdate() {
 
 void CvsPart::slotAdd() {
     QFileInfo fi(popupfile);
-    QString dir = fi.dirPath();
+    QString dir = fi.dirPath( true ); // Use the absolute path
     QString name = fi.fileName();
 
     QDomDocument &dom = *this->projectDom();
@@ -186,7 +186,7 @@ void CvsPart::slotAdd() {
 
 void CvsPart::slotRemove() {
     QFileInfo fi(popupfile);
-    QString dir = fi.dirPath();
+    QString dir = fi.dirPath( true );  // Use the absolute path
     QString name = fi.fileName();
 
     QDomDocument &dom = *this->projectDom();
@@ -212,7 +212,7 @@ void CvsPart::slotReplace() {
         dir = fi.absFilePath();
         name = ".";
     } else {
-        dir = fi.dirPath();
+        dir = fi.dirPath( true ); // Use the absolute path
         name = fi.fileName();
     }
 
@@ -239,7 +239,7 @@ void CvsPart::slotLog() {
 
 void CvsPart::slotDiff() {
     QFileInfo fi(popupfile);
-    QString dir = fi.dirPath();
+    QString dir = fi.dirPath( true ); // Use the absolute path
     QString name = fi.fileName();
     QStringList args;
     QStringList env;
