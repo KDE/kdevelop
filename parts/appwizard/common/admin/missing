@@ -28,8 +28,6 @@ if test $# -eq 0; then
   exit 1
 fi
 
-run=:
-
 # In the cases where this matters, `missing' is being run in the
 # srcdir already.
 if test -f configure.ac; then
@@ -43,7 +41,28 @@ case "$1" in
   # Try to run requested program, and just exit if it succeeds.
   run=
   shift
-  "$@" && exit 0
+  exec="$@"
+
+  # Suck in the AUTOCONF detection code.
+  admindir=`echo "$0" | sed 's%[\\/][^\\/][^\\/]*$%%'`
+  test "x$admindir" = "x$0" && admindir=.  
+  . $admindir/detect-autoconf.sh
+
+  case "$1" in
+  aclocal)
+    exec="`echo $exec|sed -e \"s^aclocal^$ACLOCAL^\"`"
+    ;;
+  autoheader)
+    exec="`echo $exec|sed -e \"s^autoheader^$AUTOHEADER^\"`"
+    ;; 
+  autoconf)
+    exec="`echo $exec|sed -e \"s^autoconf^$AUTOCONF^\"`"
+    ;;
+  automake)
+    exec="`echo $exec|sed -e \"s^automake^$AUTOMAKE^\"`"
+    ;;
+  esac
+  $exec && exit 0
   ;;
 esac
 

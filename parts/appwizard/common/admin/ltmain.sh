@@ -2383,9 +2383,6 @@ EOF
 		    $echo "$modename: \`$deplib' is not a valid libtool archive" 1>&2
 		    exit 1
 		  fi
-		  if test "$absdir" != "$libdir"; then
-		    $echo "$modename: warning: \`$deplib' seems to be moved" 1>&2
-		  fi
 		  path="-L$absdir"
 		fi
 		;;
@@ -3921,6 +3918,17 @@ static const void *lt_preloaded_setup() {
 	compile_command=`$echo "X$compile_command" | $Xsed -e "s% @SYMFILE@%%"`
 	finalize_command=`$echo "X$finalize_command" | $Xsed -e "s% @SYMFILE@%%"`
       fi
+
+      # AIX runtime linking requires linking programs with -Wl,-brtl and libs with -Wl,-G
+      # Also add -bnolibpath to the beginning of the link line, to clear the hardcoded runpath.
+      # Otherwise, things like the -L path to libgcc.a are accidentally hardcoded by ld.
+      # This does not apply on AIX for ia64, which uses a SysV linker.
+      case "$host" in
+        ia64-*-aix5*) ;;
+        *-*-aix4* | *-*-aix5*)
+                   compile_command=`$echo "X$compile_command $wl-brtl" | $Xsed -e "s/\$CC/\$CC $wl-bnolibpath/1"`
+                   finalize_command=`$echo "X$finalize_command $wl-brtl" | $Xsed -e "s/\$CC/\$CC $wl-bnolibpath/1"` ;;
+      esac
 
       if test "$need_relink" = no || test "$build_libtool_libs" != yes; then
 	# Replace the output file specification.
