@@ -30,16 +30,17 @@
 #include "projectspace.h"
 #include "newprojectdlg.h"
 
-KDevelopCore::KDevelopCore(KDevelop *gui)
-    : QObject(gui, "kdevelop core")
+KDevelopCore::KDevelopCore(KDevelop *pGUI)
+    : QObject(pGUI, "kdevelop core")
+   ,m_pKDevelopGUI(pGUI)
+   ,m_pVersionControl(0L)
+   ,m_pLanguageSupport(0L)
+   ,m_pMakeFrontend(0L)
+   ,m_pAppFrontend(0L)
+   ,m_pProject(0L)
+   ,m_pViewHandler(0L)
 {
-    m_kdevelopgui = gui;
-    m_versioncontrol = 0;
-    m_languagesupport = 0;
-    m_makefrontend = 0;
-    m_appfrontend = 0;
-    m_project = 0;
-    m_classstore = new ClassStore();
+    m_pClassStore = new ClassStore();
 
     initActions();
 }
@@ -49,88 +50,88 @@ KDevelopCore::~KDevelopCore()
 {}
 
 
-void KDevelopCore::initComponent(KDevComponent *component)
+void KDevelopCore::initComponent(KDevComponent *pComponent)
 {
-    connect( component, SIGNAL(executeMakeCommand(const QString&)),
+    connect( pComponent, SIGNAL(executeMakeCommand(const QString&)),
              this, SLOT(executeMakeCommand(const QString&)) );
-    connect( component, SIGNAL(executeAppCommand(const QString&)),
+    connect( pComponent, SIGNAL(executeAppCommand(const QString&)),
              this, SLOT(executeAppCommand(const QString&)) );
-    connect( component, SIGNAL(running(bool)),
+    connect( pComponent, SIGNAL(running(bool)),
              this, SLOT(running(bool)) );
-    connect( component, SIGNAL(gotoSourceFile(const QString&, int)),
+    connect( pComponent, SIGNAL(gotoSourceFile(const QString&, int)),
              this, SLOT(gotoSourceFile(const QString&, int)) );
-    connect( component, SIGNAL(gotoDocumentationFile(const QString&)),
+    connect( pComponent, SIGNAL(gotoDocumentationFile(const QString&)),
              this, SLOT(gotoDocumentationFile(const QString&)) );
-    connect( component, SIGNAL(gotoProjectApiDoc()),
+    connect( pComponent, SIGNAL(gotoProjectApiDoc()),
              this, SLOT(gotoProjectApiDoc()) );
-    connect( component, SIGNAL(gotoProjectManual()),
+    connect( pComponent, SIGNAL(gotoProjectManual()),
              this, SLOT(gotoProjectManual()) );
-    connect( component, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
-             m_kdevelopgui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
+    connect( pComponent, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
+             m_pKDevelopGUI, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
 
-    component->setupGUI();
-    m_components.append(component);
+    pComponent->setupGUI();
+    m_components.append(pComponent);
 }
 
 
 void KDevelopCore::initActions()
 {
-    KAction *action;
+    KAction *pAction;
     
-//    action = KStdAction::print( this, SLOT( slotFilePrint() ),
-//                                m_kdevelopgui->actionCollection(), "file_print");
-//    action->setStatusText( i18n("Prints the current document") );
-//    action->setWhatsThis( i18n("Print\n\n"
+//    pAction = KStdAction::print( this, SLOT( slotFilePrint() ),
+//                                m_pKDevelopGUI->actionCollection(), "file_print");
+//    pAction->setStatusText( i18n("Prints the current document") );
+//    pAction->setWhatsThis( i18n("Print\n\n"
 //                               "Opens the printing dialog. There, you can "
 //                               "configure which printing program you wish "
 //                               "to use, and print your project files.") );
     
-//    action = new KAction( i18n("&New"), 0, this, SLOT( slotFileNew() ),
-//                          m_kdevelopgui->actionCollection(), "file_new");
-//    action->setStatusText( i18n("Creates a new file and opens a default view, automatically") );
-//    action->setWhatsThis(  i18n("New file\n\n"
+//    pAction = new KAction( i18n("&New"), 0, this, SLOT( slotFileNew() ),
+//                          m_pKDevelopGUI->actionCollection(), "file_new");
+//    pAction->setStatusText( i18n("Creates a new file and opens a default view, automatically") );
+//    pAction->setWhatsThis(  i18n("New file\n\n"
 //                                "Creates a new file "
 //                                "and opens a default view, automatically") );
 
     
-    action = new KAction( i18n("&New..."),0, this, SLOT( slotProjectNew() ),
-                          m_kdevelopgui->actionCollection(), "project_new");
-    action->setStatusText( i18n("Creates a new Projectspace/Project") );
-    action->setWhatsThis(  i18n("new project...") );
+    pAction = new KAction( i18n("&New..."),0, this, SLOT( slotProjectNew() ),
+                          m_pKDevelopGUI->actionCollection(), "project_new");
+    pAction->setStatusText( i18n("Creates a new Projectspace/Project") );
+    pAction->setWhatsThis(  i18n("new project...") );
 
-    action = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
-                          m_kdevelopgui->actionCollection(), "project_open");
-    action->setStatusText( i18n("Opens an existing project") );
+    pAction = new KAction( i18n("&Open..."), "openprj", 0, this, SLOT( slotProjectOpen() ),
+                          m_pKDevelopGUI->actionCollection(), "project_open");
+    pAction->setStatusText( i18n("Opens an existing project") );
 
-    action = new KRecentFilesAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent(const KURL&) ),
-                                     m_kdevelopgui->actionCollection(), "project_open_recent");
+    pAction = new KRecentFilesAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent(const KURL&) ),
+                                     m_pKDevelopGUI->actionCollection(), "project_open_recent");
 
-    action = new KAction( i18n("C&lose"), 0, this, SLOT( slotProjectClose() ),
-                          m_kdevelopgui->actionCollection(), "project_close");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Closes the current project") );
+    pAction = new KAction( i18n("C&lose"), 0, this, SLOT( slotProjectClose() ),
+                          m_pKDevelopGUI->actionCollection(), "project_close");
+    pAction->setEnabled(false);
+    pAction->setStatusText( i18n("Closes the current project") );
     
-    action = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
-                          m_kdevelopgui->actionCollection(), "project_add_existing_files");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Adds existing file(s) to the project") );
+    pAction = new KAction( i18n("&Add existing File(s)..."), 0, this, SLOT( slotProjectAddExistingFiles() ),
+                          m_pKDevelopGUI->actionCollection(), "project_add_existing_files");
+    pAction->setEnabled(false);
+    pAction->setStatusText( i18n("Adds existing file(s) to the project") );
     
-    action = new KAction( i18n("Add new &Translation File..."), "locale", 0, this, SLOT( slotProjectAddNewTranslationFile() ),
-                          m_kdevelopgui->actionCollection(), "project_add_translation");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Adds a new language for internationalization to the project") );
+    pAction = new KAction( i18n("Add new &Translation File..."), "locale", 0, this, SLOT( slotProjectAddNewTranslationFile() ),
+                          m_pKDevelopGUI->actionCollection(), "project_add_translation");
+    pAction->setEnabled(false);
+    pAction->setStatusText( i18n("Adds a new language for internationalization to the project") );
 
-    action = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
-                          m_kdevelopgui->actionCollection(), "project_options");
-    action->setStatusText( i18n("Sets project and compiler options") );
+    pAction = new KAction( i18n("&Options..."), 0, this, SLOT( slotProjectOptions() ),
+                          m_pKDevelopGUI->actionCollection(), "project_options");
+    pAction->setStatusText( i18n("Sets project and compiler options") );
 
-    action = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
-                          m_kdevelopgui->actionCollection(), "options_kdevelop_setup");
-    action->setStatusText( i18n("Configures KDevelop") );
+    pAction = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
+                          m_pKDevelopGUI->actionCollection(), "options_kdevelop_setup");
+    pAction->setStatusText( i18n("Configures KDevelop") );
 
-    action = new KAction( i18n("&Stop"), "stop_proc", 0, this, SLOT( slotStop() ),
-                          m_kdevelopgui->actionCollection(), "stop_everything");
-    action->setEnabled(false);
+    pAction = new KAction( i18n("&Stop"), "stop_proc", 0, this, SLOT( slotStop() ),
+                          m_pKDevelopGUI->actionCollection(), "stop_everything");
+    pAction->setEnabled(false);
 }
 
 
@@ -157,32 +158,31 @@ void KDevelopCore::loadInitialComponents()
     }
 
     kdDebug(9000) << "Found view-handler component " << (*it)->name() << endl;
-    KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
+    KLibFactory *pFactory = KLibLoader::self()->factory((*it)->library());
 
     QStringList args;
     QVariant prop = (*it)->property("X-KDevelop-Args");
     if (prop.isValid())
       args = QStringList::split(" ", prop.toString());
 
-    QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(), "KDevComponent", args);
-    if (!obj->inherits("KDevComponent")) {
+    QObject *pObj = pFactory->create(m_pKDevelopGUI, (*it)->name().latin1(), "KDevComponent", args);
+    if (!pObj->inherits("KDevComponent")) {
       kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
       return;
     }
-    KDevViewHandler *vh = (KDevViewHandler*) obj;
-    QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), vh, SLOT(addView(QWidget*)) );
-
+    m_pViewHandler = (KDevViewHandler*) pObj;
+    QObject::connect( m_pKDevelopGUI, SIGNAL(addView(QWidget*)), m_pViewHandler, SLOT(addView(QWidget*)) );
     // initialize the view handler component and it's GUI (the mainframe widget)
-    initComponent( vh);
-    m_kdevelopgui->guiFactory()->addClient( vh);
+    initComponent( m_pViewHandler);
+    m_pKDevelopGUI->guiFactory()->addClient( m_pViewHandler);
   }
 
   if (viewHandlerOffers.isEmpty() || !bUseViewHandler) {
     kdDebug(9000) << "No KDevelop view-handler components. Setting to default (stacked KDockWidgets)..." << endl;
     // create a default dockwidget (required as main widget)
-    QWidget* qw = new QWidget( m_kdevelopgui, "default");
-    m_kdevelopgui->embedWidget( qw, KDevComponent::AreaOfDocumentViews, "default view", 0L );
-    QObject::connect( m_kdevelopgui, SIGNAL(addView(QWidget*)), m_kdevelopgui, SLOT(stackView(QWidget*)) );
+    QWidget* pW = new QWidget( m_pKDevelopGUI, "default");
+    m_pKDevelopGUI->embedWidget( pW, KDevComponent::AreaOfDocumentViews, "default view", 0L );
+    QObject::connect( m_pKDevelopGUI, SIGNAL(addView(QWidget*)), m_pKDevelopGUI, SLOT(stackView(QWidget*)) );
   }
 
   //
@@ -202,27 +202,27 @@ void KDevelopCore::loadInitialComponents()
     if (prop.isValid())
       args = QStringList::split(" ", prop.toString());
 
-    QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(),
+    QObject *pObj = factory->create(m_pKDevelopGUI, (*it)->name().latin1(),
                                   "KDevComponent", args);
 
-    if (!obj->inherits("KDevComponent")) {
+    if (!pObj->inherits("KDevComponent")) {
       kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
       return;
     }
-    KDevComponent *comp = (KDevComponent*) obj;
+    KDevComponent *pComp = (KDevComponent*) pObj;
 
-    if (!m_makefrontend && (*it)->hasServiceType("KDevelop/MakeFrontend")) {
-      m_makefrontend = comp;
+    if (!m_pMakeFrontend && (*it)->hasServiceType("KDevelop/MakeFrontend")) {
+      m_pMakeFrontend = pComp;
       kdDebug(9000) << "is make frontend" << endl;
     }
 
-    if (!m_appfrontend && (*it)->hasServiceType("KDevelop/AppFrontend")) {
-      m_appfrontend = comp;
+    if (!m_pAppFrontend && (*it)->hasServiceType("KDevelop/AppFrontend")) {
+      m_pAppFrontend = pComp;
       kdDebug(9000) << "is app frontend" << endl;
     }
 
-    initComponent(comp);
-    m_kdevelopgui->guiFactory()->addClient(comp);
+    initComponent(pComp);
+    m_pKDevelopGUI->guiFactory()->addClient(pComp);
   }
 }
 
@@ -231,38 +231,38 @@ void KDevelopCore::loadVersionControl(const QString &name)
 {
     KService::Ptr service = KService::serviceByName(name);
     if (!service) {
-        KMessageBox::sorry(m_kdevelopgui,
+        KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No version control component %1 found").arg(name));
         return;
     }
 
     kdDebug(9000) << "Loading VersionControl Component " << service->name() << endl;
 
-    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+    KLibFactory *pFactory = KLibLoader::self()->factory(service->library());
 
     QStringList args;
     QVariant prop = service->property("X-KDevelop-Args");
     if (prop.isValid())
         args = QStringList::split(" ", prop.toString());
-    
-    QObject *obj = factory->create(m_kdevelopgui, service->name().latin1(),
-                                   "KDevVersionControl", args);
-        
-    if (!obj->inherits("KDevVersionControl")) {
+
+    QObject *pObj = pFactory->create(m_pKDevelopGUI, service->name().latin1(),
+                                    "KDevVersionControl", args);
+
+    if (!pObj->inherits("KDevVersionControl")) {
         kdDebug(9000) << "Component does not inherit KDevVersionControl" << endl;
         return;
     }
-    KDevVersionControl *comp = (KDevVersionControl*) obj;
-    m_versioncontrol = comp;
-    initComponent(comp);
+    KDevVersionControl *pComp = (KDevVersionControl*) pObj;
+    m_pVersionControl = pComp;
+    initComponent(pComp);
 }
 
 
 void KDevelopCore::unloadVersionControl()
 {
-    m_components.remove(m_versioncontrol);
-    delete m_versioncontrol;
-    m_versioncontrol = 0;
+    m_components.remove(m_pVersionControl);
+    delete m_pVersionControl;
+    m_pVersionControl = 0;
 }
 
 
@@ -271,70 +271,70 @@ void KDevelopCore::loadLanguageSupport(const QString &lang)
     QString constraint = QString("[X-KDevelop-Language] == '%1'").arg(lang);
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/LanguageSupport", constraint);
     if (offers.isEmpty()) {
-        KMessageBox::sorry(m_kdevelopgui,
+        KMessageBox::sorry(m_pKDevelopGUI,
                            i18n("No language support component for %1 found").arg(lang));
         return;
     }
 
-    KService *service = *offers.begin();
-    kdDebug(9000) << "Found LanguageSupport Component " << service->name() << endl;
+    KService *pService = *offers.begin();
+    kdDebug(9000) << "Found LanguageSupport Component " << pService->name() << endl;
 
-    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+    KLibFactory *pFactory = KLibLoader::self()->factory(pService->library());
 
     QStringList args;
-    QVariant prop = service->property("X-KDevelop-Args");
+    QVariant prop = pService->property("X-KDevelop-Args");
     if (prop.isValid())
         args = QStringList::split(" ", prop.toString());
-    
-    QObject *obj = factory->create(m_kdevelopgui, service->name().latin1(),
-                                   "KDevLanguageSupport", args);
-        
-    if (!obj->inherits("KDevLanguageSupport")) {
+
+    QObject *pObj = pFactory->create(m_pKDevelopGUI, pService->name().latin1(),
+                                     "KDevLanguageSupport", args);
+
+    if (!pObj->inherits("KDevLanguageSupport")) {
         kdDebug(9000) << "Component does not inherit KDevLanguageSupport" << endl;
         return;
     }
-    KDevLanguageSupport *comp = (KDevLanguageSupport*) obj;
-    m_languagesupport = comp;
-    initComponent(comp);
+    KDevLanguageSupport *pComp = (KDevLanguageSupport*) pObj;
+    m_pLanguageSupport = pComp;
+    initComponent(pComp);
 }
 
 
 void KDevelopCore::unloadLanguageSupport()
 {
-  m_components.remove(m_languagesupport);
-  delete m_languagesupport;
-  m_languagesupport = 0;
+  m_components.remove(m_pLanguageSupport);
+  delete m_pLanguageSupport;
+  m_pLanguageSupport = 0;
 }
 
 bool KDevelopCore::loadProjectSpace(const QString &name){
   QString constraint = QString("[Name] == '%1'").arg(name);
   KTrader::OfferList offers = KTrader::self()->query("KDevelop/ProjectSpace", constraint);
   if (offers.isEmpty()) {
-    KMessageBox::sorry(m_kdevelopgui,
+    KMessageBox::sorry(m_pKDevelopGUI,
 		       i18n("No ProjectSpace component for %1 found").arg(name));
     return false;
   }
-  
-  KService *service = *offers.begin();
-  kdDebug(9000) << "Found ProjectSpace Component " << service->name() << endl;
-  
-  KLibFactory *factory = KLibLoader::self()->factory(service->library());
+
+  KService *pService = *offers.begin();
+  kdDebug(9000) << "Found ProjectSpace Component " << pService->name() << endl;
+
+  KLibFactory *pFactory = KLibLoader::self()->factory(pService->library());
 
   QStringList args;
-  QVariant prop = service->property("X-KDevelop-Args");
+  QVariant prop = pService->property("X-KDevelop-Args");
   if (prop.isValid())
     args = QStringList::split(" ", prop.toString());
-    
-  QObject *obj = factory->create(m_kdevelopgui, service->name().latin1(),
-				 "ProjectSpace", args);
-        
-  if (!obj->inherits("ProjectSpace")) {
+
+  QObject *pObj = pFactory->create(m_pKDevelopGUI, pService->name().latin1(),
+				                       "ProjectSpace", args);
+
+  if (!pObj->inherits("ProjectSpace")) {
     kdDebug(9000) << "Component does not inherit ProjectSpace" << endl;
     return false;
   }
-  ProjectSpace *comp = (ProjectSpace*) obj;
-  m_projectspace = comp;
-  initComponent(comp);
+  ProjectSpace *pComp = (ProjectSpace*) pObj;
+  m_pProjectSpace = pComp;
+  initComponent(pComp);
   return true;
 }
 
@@ -343,20 +343,20 @@ void KDevelopCore::newFile()
 {
   //just a test!
   QWidget* pEV = new QWidget(0L);
-  m_kdevelopgui->embedWidget( pEV, KDevComponent::DocumentView, "Document", 0L);
+  m_pKDevelopGUI->embedWidget( pEV, KDevComponent::DocumentView, "Document", 0L);
   pEV->show();
 }
 
 void KDevelopCore::unloadProjectSpace(){
-  m_components.remove(m_projectspace);
-  delete m_projectspace;
-  m_projectspace = 0;
+  m_components.remove(m_pProjectSpace);
+  delete m_pProjectSpace;
+  m_pProjectSpace = 0L;
 }
 
 void KDevelopCore::loadProject(const QString &fileName)
 {
 
-  m_project = new CProject("../kdevelop.kdevprj"); // will be removed soon 
+  m_pProject = new CProject("../kdevelop.kdevprj"); // will be removed soon
     // project must define a version control system
     // hack until implemented
     QString vcservice = QString::fromLatin1("CVSInterface");
@@ -366,39 +366,39 @@ void KDevelopCore::loadProject(const QString &fileName)
     config.setGroup("General");
     QString projectspace = config.readEntry("plugin_name");
     if(loadProjectSpace(projectspace)){
-      m_projectspace->readConfig(fileName);
-      loadLanguageSupport(m_projectspace->getProgrammingLanguage());
+      m_pProjectSpace->readConfig(fileName);
+      loadLanguageSupport(m_pProjectSpace->getProgrammingLanguage());
       loadVersionControl(vcservice);
     }
 
     QListIterator<KDevComponent> it1(m_components);
     for (; it1.current(); ++it1)
-        (*it1)->projectOpened(m_project);
+        (*it1)->projectOpened(m_pProject);
 
     QListIterator<KDevComponent> it2(m_components);
     for (; it2.current(); ++it2)
-        (*it2)->classStoreOpened(m_classstore);
+        (*it2)->classStoreOpened(m_pClassStore);
 
-    if (m_versioncontrol) {
+    if (m_pVersionControl) {
         QListIterator<KDevComponent> it3(m_components);
         for (; it3.current(); ++it3)
-            (*it3)->versionControlOpened(m_versioncontrol);
+            (*it3)->versionControlOpened(m_pVersionControl);
     }
 
-    if (m_languagesupport) {
+    if (m_pLanguageSupport) {
         QListIterator<KDevComponent> it4(m_components);
         for (; it4.current(); ++it4)
-            (*it4)->languageSupportOpened(m_languagesupport);
+            (*it4)->languageSupportOpened(m_pLanguageSupport);
     }
 
-    KActionCollection *ac = m_kdevelopgui->actionCollection();
-    ac->action("project_close")->setEnabled(true);
-    ac->action("project_add_existing_files")->setEnabled(true);
-    ac->action("project_add_translation")->setEnabled(true);
-    ac->action("project_file_properties")->setEnabled(true);
-    ac->action("project_options")->setEnabled(true);
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    pAC->action("project_close")->setEnabled(true);
+    pAC->action("project_add_existing_files")->setEnabled(true);
+    pAC->action("project_add_translation")->setEnabled(true);
+    pAC->action("project_file_properties")->setEnabled(true);
+    pAC->action("project_options")->setEnabled(true);
 
-    ((KRecentFilesAction*)ac->action("project_open_recent"))->addURL(KURL(fileName));
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
 
 #if 1
     // Hack to test the class viewer
@@ -411,14 +411,14 @@ void KDevelopCore::loadProject(const QString &fileName)
 
 void KDevelopCore::unloadProject()
 {
-    if (m_languagesupport) {
+    if (m_pLanguageSupport) {
         QListIterator<KDevComponent> it1(m_components);
         for (; it1.current(); ++it1)
             (*it1)->languageSupportClosed();
         unloadLanguageSupport();
     }
 
-    if (m_versioncontrol) {
+    if (m_pVersionControl) {
         QListIterator<KDevComponent> it2(m_components);
         for (; it2.current(); ++it2)
             (*it2)->versionControlClosed();
@@ -428,21 +428,21 @@ void KDevelopCore::unloadProject()
     QListIterator<KDevComponent> it3(m_components);
     for (; it3.current(); ++it3)
         (*it3)->classStoreClosed();
-    m_classstore->wipeout();
+    m_pClassStore->wipeout();
 
     QListIterator<KDevComponent> it4(m_components);
     for (; it4.current(); ++it4)
         (*it4)->projectClosed();
 
-    delete m_project;
-    m_project = 0;
-    
-    KActionCollection *ac = m_kdevelopgui->actionCollection();
-    ac->action("project_close")->setEnabled(false);
-    ac->action("project_add_existing_files")->setEnabled(false);
-    ac->action("project_add_translation")->setEnabled(false);
-    ac->action("project_file_properties")->setEnabled(false);
-    ac->action("project_options")->setEnabled(false);
+    delete m_pProject;
+    m_pProject = 0;
+
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    pAC->action("project_close")->setEnabled(false);
+    pAC->action("project_add_existing_files")->setEnabled(false);
+    pAC->action("project_add_translation")->setEnabled(false);
+    pAC->action("project_file_properties")->setEnabled(false);
+    pAC->action("project_options")->setEnabled(false);
 }
 
 
@@ -450,21 +450,21 @@ void KDevelopCore::slotFilePrint()
 {
     // this hardcoded file name is hack ...
     // will be replaced by a trader-based solution later
-    KLibFactory *factory = KLibLoader::self()->factory("libkdevprintplugin");
-    if (!factory)
+    KLibFactory *pFactory = KLibLoader::self()->factory("libkdevprintplugin");
+    if (!pFactory)
         return;
 
     QStringList args;
     args << "/vmlinuz"; // temporary ;-)
-    QObject *obj = factory->create(m_kdevelopgui, "print dialog", "KDevPrintDialog", args);
-    if (!obj->inherits("QDialog")) {
+    QObject *pObj = pFactory->create(m_pKDevelopGUI, "print dialog", "KDevPrintDialog", args);
+    if (!pObj->inherits("QDialog")) {
         kdDebug(9000) << "Print plugin doesn't provide a dialog" << endl;
         return;
     }
 
-    QDialog *dlg = (QDialog *)obj;
-    dlg->exec();
-    delete dlg;
+    QDialog *pDlg = (QDialog *)pObj;
+    pDlg->exec();
+    delete pDlg;
 }
 
 void KDevelopCore::slotFileNew()
@@ -482,13 +482,13 @@ void KDevelopCore::slotProjectNew(){
 void KDevelopCore::slotProjectOpen()
 {
     QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevpsp",
-                                                    m_kdevelopgui, i18n("Open project"));
+                                                    m_pKDevelopGUI, i18n("Open project"));
     if (fileName ==""){
       return; // cancel
-      
+
     }
 
-    if (m_project)
+    if (m_pProject)
         unloadProject();
 
     loadProject(fileName);
@@ -499,7 +499,7 @@ void KDevelopCore::slotProjectOpenRecent(const KURL &url)
 {
     QString fileName = url.fileName();
 
-    if (m_project)
+    if (m_pProject)
         unloadProject();
 
     loadProject(fileName);
@@ -525,9 +525,9 @@ void KDevelopCore::slotProjectAddNewTranslationFile()
 
 void KDevelopCore::slotProjectOptions()
 {
-    ProjectOptionsDialog *dlg = new ProjectOptionsDialog(m_kdevelopgui, "project options dialog");
-    dlg->exec();
-    delete dlg;
+    ProjectOptionsDialog *pDlg = new ProjectOptionsDialog(m_pKDevelopGUI, "project options dialog");
+    pDlg->exec();
+    delete pDlg;
 }
 
 
@@ -541,39 +541,39 @@ void KDevelopCore::slotStop()
 
 void KDevelopCore::slotOptionsKDevelopSetup()
 {
-    KDialogBase *dlg = new KDialogBase(KDialogBase::TreeList, i18n("Customize KDevelop"),
-                                       KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_kdevelopgui,
-                                       "customize dialog");
-    
+    KDialogBase *pDlg = new KDialogBase(KDialogBase::TreeList, i18n("Customize KDevelop"),
+                                        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_pKDevelopGUI,
+                                        "customize dialog");
+
     QListIterator<KDevComponent> it(m_components);
     for (; it.current(); ++it) {
-        (*it)->configWidgetRequested(dlg);
+        (*it)->configWidgetRequested(pDlg);
     }
 
-    dlg->exec();
-    delete dlg;
+    pDlg->exec();
+    delete pDlg;
 }
 
 
 void KDevelopCore::executeMakeCommand(const QString &command)
 {
-    if (!m_makefrontend) {
+    if (!m_pMakeFrontend) {
         kdDebug(9000) << "No make frontend!" << command << endl;
         return;
     }
 
-    m_makefrontend->commandRequested(command);
+    m_pMakeFrontend->commandRequested(command);
 }
 
 
 void KDevelopCore::executeAppCommand(const QString &command)
 {
-    if (!m_appfrontend) {
+    if (!m_pAppFrontend) {
         kdDebug(9000) << "No app frontend!" << command << endl;
         return;
     }
 
-    m_appfrontend->commandRequested(command);
+    m_pAppFrontend->commandRequested(command);
 }
 
 
@@ -582,17 +582,17 @@ void KDevelopCore::running(bool runs)
     const KDevComponent *comp = static_cast<const KDevComponent*>(sender());
 
     if (runs)
-        m_runningcomponents.append(comp);
+        m_runningComponents.append(comp);
     else
-        m_runningcomponents.remove(comp);
+        m_runningComponents.remove(comp);
 
     kdDebug(9000) << "Running components" << endl;
-    QListIterator<KDevComponent> it(m_runningcomponents);
+    QListIterator<KDevComponent> it(m_runningComponents);
     for (; it.current(); ++it)
         kdDebug(9000) << comp->name() << endl;
 
-    KActionCollection *ac = m_kdevelopgui->actionCollection();
-    ac->action("stop_everything")->setEnabled(!m_runningcomponents.isEmpty());
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    pAC->action("stop_everything")->setEnabled(!m_runningComponents.isEmpty());
 }
 
 
@@ -619,5 +619,9 @@ void KDevelopCore::gotoProjectManual()
     kdDebug(9000) << "KDevelopCore::gotoProjectManual" << endl;
 }
 
+KDevViewHandler* KDevelopCore::viewHandler()
+{
+   return m_pViewHandler;
+}
 
 #include "kdevelopcore.moc"

@@ -19,6 +19,7 @@ class KDevelop;
 class KDevComponent;
 class KDevVersionControl;
 class KDevLanguageSupport;
+class KDevViewHandler;
 class CProject;
 class ProjectSpace;
 
@@ -31,6 +32,7 @@ public:
     virtual ~KDevelopCore();
 
     void loadInitialComponents();
+    KDevViewHandler* viewHandler();
 
 private:
     void initActions();
@@ -70,17 +72,18 @@ private slots:
     void gotoProjectManual();
 
 private:
-    KDevelop *m_kdevelopgui;
+    KDevelop *m_pKDevelopGUI;
     QList<KDevComponent> m_components;
-    QList<KDevComponent> m_runningcomponents;
+    QList<KDevComponent> m_runningComponents;
     
-    KDevVersionControl *m_versioncontrol;
-    KDevLanguageSupport *m_languagesupport;
-    KDevComponent *m_makefrontend;
-    KDevComponent *m_appfrontend;
-    CProject *m_project;
-    ClassStore *m_classstore;
-    ProjectSpace* m_projectspace;
+    KDevVersionControl *m_pVersionControl;
+    KDevLanguageSupport *m_pLanguageSupport;
+    KDevComponent *m_pMakeFrontend;
+    KDevComponent *m_pAppFrontend;
+    CProject *m_pProject;
+    ClassStore *m_pClassStore;
+    ProjectSpace* m_pProjectSpace;
+    KDevViewHandler* m_pViewHandler;
 };
 
 #endif
