@@ -2488,8 +2488,16 @@ void CKDevelop::slotToolbarClicked(int item){
 
 void CKDevelop::slotSwitchToChildframeMode() {
   showMaximized();
-  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, DockBottom);
-  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, DockLeft);
+
+  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, DockBottom);
+  dockbase_grepview->manualDock(dockbase_messages_widget, DockCenter);
+  dockbase_outputview->manualDock(dockbase_messages_widget, DockCenter);
+
+  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, DockLeft);
+  dockbase_log_file_tree->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_real_file_tree->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_doc_tree->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_widprop_split_view->manualDock(dockbase_class_tree, DockCenter);
 }
 
 void CKDevelop::slotSwitchToToplevelMode() {
@@ -2499,31 +2507,102 @@ void CKDevelop::slotSwitchToToplevelMode() {
 
   int tbHeight = mdi_main_frame->taskBarHeight();
 
-  // calculate the output tab view geometry (mapped to desktop)
-  int oHeight = dockbase_o_tab_view->height();
-  int oWidth  = dockbase_o_tab_view->width();
-  QPoint oPos( dockbase_o_tab_view->pos());
-  QPoint oGlobPos( dockbase_o_tab_view->mapToGlobal( oPos) - oPos);
-  QRect oGlobRect( oGlobPos.x(), oGlobPos.y()+dy1+tbHeight/2, oWidth-dx2, oHeight-dy2-tbHeight/2);
+  QPoint bPos;
+  QPoint bGlobPos;
+  QRect bGlobRect;
+  int bHeight = 0;
+  int bWidth = 0;
+  if( DockB.dock != 0L) {
+    // calculate the bottom widget geometry (mapped to desktop)
+    bHeight = DockB.dock->height();
+    bWidth  = DockB.dock->width();
+    bPos = QPoint( DockB.dock->pos());
+    bGlobPos = QPoint( DockB.dock->mapToGlobal( bPos) - bPos);
+    bGlobRect = QRect( bGlobPos.x(), bGlobPos.y()+dy1+tbHeight/2, bWidth-dx2, bHeight-dy2-tbHeight/2);
+  }
 
-  // calculate the tree tab view geometry (mapped to desktop)
-  int tHeight = dockbase_t_tab_view->height();
-  int tWidth  = dockbase_t_tab_view->width();
-  QPoint tPos( dockbase_t_tab_view->pos());
-  QPoint tGlobPos( dockbase_t_tab_view->mapToGlobal( tPos) - tPos);
-  QRect tGlobRect( tGlobPos.x(), tGlobPos.y()+dy1+tbHeight, tWidth-dx2, tHeight-dy2-tbHeight/2 );
+  QPoint lPos;
+  QPoint lGlobPos;
+  QRect lGlobRect;
+  int lHeight = 0;
+  int lWidth = 0;
+  if( DockL.dock != 0L) {
+    // calculate the left view geometry (mapped to desktop)
+    lHeight = DockL.dock->height();
+    lWidth  = DockL.dock->width();
+    lPos = QPoint( DockL.dock->pos());
+    lGlobPos = QPoint( DockL.dock->mapToGlobal( lPos) - lPos);
+    lGlobRect = QRect( lGlobPos.x(), lGlobPos.y()+dy1+tbHeight, lWidth-dx2, lHeight-dy2-tbHeight/2 );
+  }
+
+  QPoint rPos;
+  QPoint rGlobPos;
+  QRect rGlobRect;
+  int rHeight = 0;
+  int rWidth = 0;
+  if( DockR.dock != 0L) {
+    // calculate the right tab view geometry (mapped to desktop)
+    rHeight = DockR.dock->height();
+    rWidth  = DockR.dock->width();
+    rPos = QPoint( DockR.dock->pos());
+    rGlobPos = QPoint( DockR.dock->mapToGlobal( rPos) - rPos);
+    rGlobRect = QRect( rGlobPos.x(), rGlobPos.y()+dy1+tbHeight, rWidth-dx2, rHeight-dy2-tbHeight/2 );
+  }
+
+  QPoint tPos;
+  QPoint tGlobPos;
+  QRect tGlobRect;
+  int tHeight = 0;
+  int tWidth = 0;
+  if( DockT.dock != 0L) {
+    // calculate the top tab view geometry (mapped to desktop)
+    tHeight = DockT.dock->height();
+    tWidth  = DockT.dock->width();
+    tPos = QPoint( DockT.dock->pos());
+    tGlobPos = QPoint( DockT.dock->mapToGlobal( tPos) - tPos);
+    tGlobRect = QRect( tGlobPos.x(), tGlobPos.y()+dy1+tbHeight, tWidth-dx2, tHeight-dy2-tbHeight/2 );
+  }
 
   // undock the trees window and the output window (make them toplevel)
-  dockbase_o_tab_view->unDock();
-  resize( width(), height()-oHeight);
-  dockbase_t_tab_view->unDock();
+  DockWidget* dockB = DockB.dock;
+  DockWidget* dockL = DockL.dock;
+  DockWidget* dockR = DockR.dock;
+  DockWidget* dockT = DockT.dock;
+  if( DockB.dock != 0L) {
+    DockB.dock->unDock();
+    resize( width(), height() - bHeight);
+  }
+  if( DockL.dock != 0L) {
+    DockL.dock->unDock();
+    resize( width(), height() - lHeight + tbHeight);
+  }
+  if( DockR.dock != 0L) {
+    DockR.dock->unDock();
+    if( dockL == 0L)
+      resize( width(), height() - rHeight + tbHeight);
+  }
+  if( DockT.dock != 0L) {
+    DockT.dock->unDock();
+    resize( width(), height() - tHeight);
+  }
 
   // resize and position all on the desktop
-  resize( width(), height() - tHeight + tbHeight);
-  dockbase_o_tab_view->setGeometry( oGlobRect);
-  dockbase_o_tab_view->show();
-  dockbase_t_tab_view->setGeometry( tGlobRect);
-  dockbase_t_tab_view->show();
+  if( dockB != 0L) {
+    dockB->setGeometry( bGlobRect);
+    dockB->show();
+  }
+  if( dockL != 0L) {
+    dockL->setGeometry( lGlobRect);
+    dockL->show();
+  }
+  if( dockR != 0L) {
+    dockR->setGeometry( rGlobRect);
+    dockR->show();
+  }
+  if( dockT != 0L) {
+    dockT->setGeometry( tGlobRect);
+    dockT->show();
+  }
 }
 
 void CKDevelop::statusCallback(int id_){
