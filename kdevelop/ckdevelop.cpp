@@ -2885,7 +2885,15 @@ void CKDevelop::slotClassbrowserNewMethod()
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
-    slotCVAddMethod( classname );
+  {
+// TODO
+//    // Make class the current one
+//    CParsedClass *aClass;
+//    aClass = class_tree->store->getClassByName( classname );
+//
+//    // and do the work
+//    class_tree->slotMethodNew();
+  }
 }
 
 /*------------------------- CKDevelop::slotClassbrowserNewAttribute()
@@ -2904,7 +2912,69 @@ void CKDevelop::slotClassbrowserNewAttribute()
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
-    slotCVAddAttribute( classname );
+  {
+// TODO
+//    // Make class the current one
+//    CParsedClass *aClass;
+//    aClass = class_tree->store->getClassByName( classname );
+//
+//    // and do the work
+//    class_tree->slotAttributeNew();
+  }
+}
+
+/*------------------------- CKDevelop::slotClassbrowserNewSignal()
+ * slotClassbrowserNewSignal()
+ *   Event when the user wants to create a new signal from the
+ *   browser toolbar/menu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotClassbrowserNewSignal()
+{
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QString classname = classCombo->currentText();
+
+  if( !classname.isEmpty() )
+  {
+// TODO
+//    // Make class the current one
+//    CParsedClass *aClass;
+//    aClass = class_tree->store->getClassByName( classname );
+//
+//    // and do the work
+//    class_tree->slotSignalNew();
+  }
+}
+
+/*------------------------- CKDevelop::slotClassbrowserNewSlot()
+ * slotClassbrowserNewSlot()
+ *   Event when the user wants to create a new slot from the
+ *   browser toolbar/menu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotClassbrowserNewSlot()
+{
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QString classname = classCombo->currentText();
+
+  if( !classname.isEmpty() )
+  {
+// TODO
+//    // Make class the current one
+//    CParsedClass *aClass;
+//    aClass = class_tree->store->getClassByName( classname );
+//
+    // and do the work
+//    class_tree->slotSlotNew();
+  }
 }
 
 /////////////////////////////////////////////////////////////////////

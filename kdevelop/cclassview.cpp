@@ -179,8 +179,11 @@ void CClassView::initPopups()
   classPopup.insertTitle(SmallIcon("CVclass"), i18n("Class"));
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
 //  classPopup.insertItem(SmallIcon("CVclass"), i18n("Class Properties & tool"),this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
+  classPopup.insertSeparator();
   classPopup.insertItem(SmallIconSet("methodnew"), i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
   classPopup.insertItem(SmallIconSet("variablenew"), i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0,ID_CV_ATTRIBUTE_NEW);
+  classPopup.insertItem(SmallIconSet("CVpublic_signal"), i18n("Add signal..."), this, SLOT(slotSignalNew()),0, ID_CV_SIGNAL_NEW);
+  classPopup.insertItem(SmallIconSet("CVpublic_slot"), i18n("Add slot..."), this, SLOT(slotSlotNew()),0,ID_CV_SLOT_NEW);
 //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0,ID_CV_IMPLEMENT_VIRTUAL);
 //  classPopup.setItemEnabled( id, false );
   classPopup.insertSeparator();
@@ -1299,13 +1302,75 @@ void CClassView::slotAttributeDelete()
   }
 }
 
-void CClassView::slotAddSlotSignal()
+void CClassView::slotSignalNew()
 {
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
+  CParsedClass * aClass;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 parentType, itemType );
+  if (itemType==THCLASS)
+  {
+      cerr << "parentPath = " << parentPath.data() << endl;
+      aClass = store -> getClassByName ( parentPath );
+      cerr << "got class: " << aClass -> name.data() << endl;
+      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDSIGNAL);
+      dlg -> show();
+  }
 }
 
-void CClassView::slotImplementVirtual()
+void CClassView::slotSignalDelete()
 {
+  if( KMessageBox::questionYesNo( this,
+                      i18n("Are you sure you want to delete this signal?"),
+                      i18n("Delete signal")) == KMessageBox::Yes )
+  {
+    KMessageBox::error( this,
+                      i18n("This function isn't implemented yet."),
+                      i18n("Not implemented") );
+  }
 }
+
+void CClassView::slotSlotNew()
+{
+  QString parentPath;
+  QString itemName;
+  THType parentType;
+  THType itemType;
+  CParsedClass * aClass;
+
+  // Fetch the current data for classname etc..
+  ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
+                                                 parentType, itemType );
+  if (itemType==THCLASS)
+  {
+      cerr << "parentPath = " << parentPath.data() << endl;
+      aClass = store -> getClassByName ( parentPath );
+      cerr << "got class: " << aClass -> name.data() << endl;
+      CClassPropertiesDlgImpl* dlg = createCTDlg((int) CTPADDSLOT);
+      dlg -> show();
+  }
+}
+
+void CClassView::slotSlotDelete()
+{
+  if( KMessageBox::questionYesNo( this,
+                      i18n("Are you sure you want to delete this slot?"),
+                      i18n("Delete slot")) == KMessageBox::Yes )
+  {
+    KMessageBox::error( this,
+                      i18n("This function isn't implemented yet."),
+                      i18n("Not implemented") );
+  }
+}
+
+//void CClassView::slotImplementVirtual()
+//{
+//}
 
 void CClassView::slotFolderNew() 
 {

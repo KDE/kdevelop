@@ -969,11 +969,18 @@ void CKDevelop::initMenuBar(){
                                   SLOT(slotClassbrowserViewClass()), 0, ID_CV_VIEW_CLASS_DECLARATION);
   classbrowser_popup->insertItem( SmallIconSet("classnew"),i18n("New class..."), this,
                                   SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
+
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( SmallIconSet("methodnew"),i18n("Add member function..."), this,
                                   SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
   classbrowser_popup->insertItem( SmallIconSet("variablenew"),i18n("Add member variable..."), this,
                                   SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_ATTRIBUTE_NEW );
+  classbrowser_popup->insertItem( SmallIconSet("CVpublic_signal"),i18n("Add signal..."), this,
+                                  SLOT(slotClassbrowserNewSignal()), 0, ID_CV_SIGNAL_NEW );
+  classbrowser_popup->insertItem( SmallIconSet("CVpublic_slot"),i18n("Add slot..."), this,
+                                  SLOT(slotClassbrowserNewSlot()), 0, ID_CV_SLOT_NEW );
+
+  classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( SmallIconSet("graphview"), i18n("Show graphical classview"), this,
   																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
 

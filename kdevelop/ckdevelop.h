@@ -550,7 +550,11 @@ public:
   void slotClassbrowserNewMethod();
   /** Add a new attribute to a class. */
   void slotClassbrowserNewAttribute();
-  
+  /** Add a new signal to a class - called from the toolbar */
+  void slotClassbrowserNewSignal();
+  /** Add a new slot to a class - called from the toolbar */
+  void slotClassbrowserNewSlot();
+
   ////////////////////////
   // All slots which are used if the user clicks or selects something in the view
   ///////////////////////

@@ -705,6 +705,12 @@ void CClassPropertiesDlgImpl::init()
         case CTPADDMETH:
             tabWidget -> setCurrentPage( CTPMETHOD );
             break;
+        case CTPADDSIGNAL:
+            tabWidget -> setCurrentPage( CTPSIGNAL );
+            break;
+        case CTPADDSLOT:
+            tabWidget -> setCurrentPage( CTPSLOT );
+            break;
         default:
             break;
     }

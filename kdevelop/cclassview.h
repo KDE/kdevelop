@@ -123,14 +123,10 @@ protected slots:
   void slotClassNew();
   void slotClassDelete();
   void slotClassViewSelected();
-  void slotMethodNew();
-  void slotMethodDelete();
-  void slotAttributeNew();
-  void slotAttributeDelete();
-  void slotImplementVirtual();
-  void slotAddSlotSignal();
+
   void slotFolderNew();
   void slotFolderDelete();
+
   void slotClassBaseClasses();
   void slotClassDerivedClasses();
   void slotClassTool();
@@ -148,6 +144,18 @@ protected slots:
   void slotClassWizard();
   void slotGrepText();
 
+public slots:
+  void slotMethodNew();
+  void slotMethodDelete();
+  void slotAttributeNew();
+  void slotAttributeDelete();
+  void slotSignalNew();
+  void slotSignalDelete();
+  void slotSlotNew();
+  void slotSlotDelete();
+
+//  void slotImplementVirtual();
+//  void slotAddSlotSignal();
 signals:
   void selectedFileNew();
   void selectedFileNew(const char* dir);

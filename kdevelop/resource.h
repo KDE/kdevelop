@@ -211,6 +211,12 @@
 #define ID_CV_ADD_SLOT_SIGNAL           14531
 #define ID_CV_CLASSWIZARD               14532
 
+#define ID_CV_SIGNAL_NEW                14534
+#define ID_CV_SIGNAL_DELETE             14535
+
+#define ID_CV_SLOT_NEW                  14537
+#define ID_CV_SLOT_DELETE               14538
+
 #define	ID_CV_TOOLBAR_CLASS_CHOICE	14540
 #define	ID_CV_TOOLBAR_METHOD_CHOICE	14541
 #define	ID_CV_TOOLBAR_WIZARD_CHOICE	14542
