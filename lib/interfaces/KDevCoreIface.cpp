@@ -5,10 +5,8 @@
 
 
 KDevCoreIface::KDevCoreIface(KDevCore *core)
-    : QObject(), DCOPObject("KDevCore")
+    : QObject(core), DCOPObject("KDevCore"), m_core(core)
 {
-    m_core = core;
-
     connect( m_core, SIGNAL(projectOpened()), this, SLOT(forwardProjectOpened()) );
     connect( m_core, SIGNAL(projectClosed()), this, SLOT(forwardProjectClosed()) );
 }
