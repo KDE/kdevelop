@@ -310,8 +310,9 @@ void JavaClassParser::fillInParsedVariableHead( ParsedAttribute *anAttr )
     }
   }
 
-
-  anAttr->setType(anAttr->type() + addDecl);
+  if (!addDecl.isEmpty()) {
+    anAttr->setType(addDecl);
+  }
   anAttr->setDeclaredInFile( currentFile );
   anAttr->setDeclaredOnLine( /* declStart */ getLineno());
   anAttr->setDefinedInFile( currentFile );
@@ -342,9 +343,9 @@ void JavaClassParser::fillInParsedVariable( ParsedAttribute *anAttr )
   fillInParsedType( type );
 
   // Set values in the variable.
-  if( !type.isEmpty() )
+  if( !type.isEmpty() ) {
     anAttr->setType( type + anAttr->type() );
-
+  }
   anAttr->setNamePos( type.length() );
 
   // Skip default values
@@ -509,8 +510,9 @@ void JavaClassParser::parseFunctionArgs( ParsedMethod *method )
       if( !anAttr->name().isEmpty() )
         anArg->setName( anAttr->name() );
 
-      if( !anAttr->type().isEmpty() )
+      if( !anAttr->type().isEmpty() ) {
         anArg->setType( anAttr->type() );
+	  }
 
       anArg->setNamePos( anAttr->namePos() );
       // Add the argument to the method.
@@ -556,9 +558,9 @@ void JavaClassParser::fillInParsedMethod(ParsedMethod *aMethod)
 
   // Set the type of the method.
   fillInParsedType( type );
-  if( !type.isEmpty() )
+  if( !type.isEmpty() ) {
     aMethod->setType( type );
-
+  }
   // Jump to first argument or ')'
   getNextLexem();
 

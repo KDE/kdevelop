@@ -658,7 +658,7 @@ void CClassParser::fillInParsedVariableHead( ParsedAttribute *anAttr )
     }
   }
 
-  anAttr->type()+=addDecl;
+  anAttr->setType(addDecl);
   anAttr->setDeclaredInFile( currentFile );
   anAttr->setDeclaredOnLine( /* declStart */ getLineno());
   anAttr->setDefinedInFile( currentFile );
