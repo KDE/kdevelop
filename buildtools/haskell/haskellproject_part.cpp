@@ -165,6 +165,7 @@ QString HaskellProjectPart::mainProgram( bool relative ) const
 	    	}
 	  	}
 	}      
+	return QString::fromLatin1("");
 }
 
 QString HaskellProjectPart::runDirectory() const
