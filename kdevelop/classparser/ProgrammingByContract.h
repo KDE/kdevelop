@@ -18,7 +18,7 @@
 #ifndef _PROGRAMMINGBYCONTRACT_H_INCLUDED_
 #define _PROGRAMMINGBYCONTRACT_H_INCLUDED_
 
-#ifdef ASSERTIONS
+//#ifdef ASSERTIONS
 #define REQUIRE( TAG, REQ ) \
 if( !(REQ) ) \
 { \
@@ -34,9 +34,11 @@ if( !(REQ) ) \
   cerr << "  " << TAG << ": " << #REQ << endl; \
   return RETVAL; \
 }
-#else
+/*#else
 #define REQUIRE( TAG, REQ )
 #define REQUIRE1( TAG, REQ, RETVAL )
 #endif
+
+*/
 
 #endif
