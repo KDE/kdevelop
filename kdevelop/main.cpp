@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
                         VERSION,
                         description,
                         KAboutData::License_GPL,
-                        "(c) 1998-2001, The KDevelop Team",
+                        "(c) 1998-2002, The KDevelop Team",
                         I18N_NOOP("The KDevelop C/C++ IDE - a success story "
                                   "in the world of free software since 1998.\n\n"
                                   "Think about joining our project to contribute "
