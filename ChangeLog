@@ -1,3 +1,8 @@
+2002-06-23  F@lk Brettschneider  <falk@kdevelop.org>
+	* updated QextMDI copy with its upcoming version 3
+	  - drops Qt2 support
+	  - adds view closebutton for TabPage mode
+
 2002-06-20  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Ported my KDE architecture documentation to
