@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=ServiceType
-X-KDE-ServiceType=KDevelop/AppFrontend
-Name=App frontend interface
-
-[PropertyDef::X-KDevelop-Args]
-Type=QString
