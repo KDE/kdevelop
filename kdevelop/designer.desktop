@@ -2,9 +2,9 @@
 BinaryPattern=designer;
 Comment=Qt Interface Designer
 Comment[C]=Qt Interface Designer
-Exec=designer -client %i %m %U
+Exec=designer 
 Icon=designer
-InitialPreference=3
+InitialPreference=5
 MapNotify=true
 MimeType=application/x-designer
 Name=Qt Desinger
