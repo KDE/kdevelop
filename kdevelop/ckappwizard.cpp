@@ -2320,6 +2320,7 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" -lqt -lXext -lX11");
   }
   else if (qextmdiitem->isSelected()) {
+    project->setAdditCXXFLAGS (" -DNO_KDE2");   
     project->setLDADD (" -lqt -lXext -lX11 -lqextmdi");
   }
   else if (gnomenormalitem->isSelected()) {
