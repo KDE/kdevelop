@@ -421,7 +421,7 @@ void CKDevelop::initMenu(){
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("&KDevelop..."),this,
 		SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);    
-  options_menu->insertItem(i18n("Documentation-Browser"),this,
+  options_menu->insertItem(i18n("Documentation-Browser..."),this,
 		SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
   options_menu->insertSeparator();
   options_menu->insertItem(i18n("Update KDE-Documentation..."),this,

@@ -94,7 +94,6 @@ public:
   void removeLFVGroup(QString name);
   void getFilters(QString group,QStrList& filters);
   void setFilters(QString group,QStrList& filters);
-  TFileInfo getFileInfo(QString filename);
   void writeFileInfo(TFileInfo info);
   void writeMakefileAmInfo(TMakefileAmInfo info);
   void addFileToProject(QString rel_name);
@@ -118,12 +117,17 @@ public:
   QString getCXXFLAGS();
   QString getLDADD();
   QString getAdditCXXFLAGS();
+  TFileInfo getFileInfo(QString filename);
+  TMakefileAmInfo getMakefileAmInfo(QString rel_name);
   
   /* return the sources(.cpp,.c,.C,.cxx) for the main-makefile*/
   QStrList& getSources();
   /** return the headers(.h.) for the main-makefile*/
   QStrList& getHeaders();
-
+  
+  /* usefull information methods*/
+  /** check if a subdir is in the project (registered)*/
+  bool isDirInProject(QString rel_name);
 
   void createMakefilesAm();
   //  void createBinMakefileAm();
@@ -134,7 +138,6 @@ public:
   void writeProject(); 
   /** true if the project was read*/
   bool valid; 
-
 
 protected:
 

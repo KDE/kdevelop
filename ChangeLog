@@ -1,3 +1,9 @@
+1999-01-30  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+
+	* added a new application (terminal application) in the KApplicationwizard
+	* bugfixed some replacements in the base applications
+	* changed the working directory in KApplicationwizard to $home/.kde/share/apps/kdevelop
+
 1999-01-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
         * completed Sandy's ToggleTreeView and ToggleOutputView 
 	  including saving of geometry parameters & tested it

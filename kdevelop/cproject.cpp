@@ -220,8 +220,7 @@ TFileInfo CProject::getFileInfo(QString rel_filename){
   info.dist = config->readBoolEntry("dist");
   info.install = config->readBoolEntry("install");
   info.install_location = config->readEntry("install_location");
-  return info;
-  
+  return info;  
 }
 
 void CProject::writeFileInfo(TFileInfo info){
@@ -234,6 +233,26 @@ void CProject::writeFileInfo(TFileInfo info){
   info.install_location.replace("[\\$]","$$");
   config->writeEntry("install_location",info.install_location);
 }
+
+TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
+  TMakefileAmInfo info;
+  config->setGroup(rel_name);
+  info.rel_name = rel_name;
+  info.type = config->readEntry("type");
+  config->readListEntry("sub_dirs",info.sub_dirs);
+  return info;
+  
+}
+
+void CProject::writeMakefileAmInfo(TMakefileAmInfo info){
+  QString rel_name = info.rel_name;
+  config->setGroup(rel_name);
+  config->writeEntry("type",info.type);
+  config->writeEntry("sub_dirs",info.sub_dirs);
+}
+
+
+
 void CProject::getLFVGroups(QStrList& groups){
   groups.clear();
   config->setGroup("LFV Groups");
@@ -246,8 +265,10 @@ void CProject::getFilters(QString group,QStrList& filters){
   config->readListEntry(group,filters);
 }
 void CProject::addFileToProject(QString rel_name){
+
   QStrList list_files;
   QString makefile_name;
+
   int slash_pos = rel_name.findRev('/');
   if(slash_pos == -1) { // not found
     makefile_name = "Makefile.am";
@@ -257,13 +278,60 @@ void CProject::addFileToProject(QString rel_name){
     makefile_name.truncate(slash_pos+1);
     makefile_name += "Makefile.am";
   }
+
   config->setGroup(makefile_name);
-  config->readListEntry("files",list_files); 
+  config->readListEntry("files",list_files);
   list_files.append(rel_name);
   config->writeEntry("files",list_files);
+  
+  
+  //add Makefile.am and the toplevels makefile.ams to the project if needed (begin)
+  QStrList makefile_list;
+  QStrList check_makefile_list;
+  // find the makefiles to check
+  int slash2_pos;
+
+  check_makefile_list.append(makefile_name);
+
+  cerr << endl << makefile_name;
+  
+  while((slash_pos = makefile_name.findRev('/')) != -1){ // if found
+    slash2_pos = makefile_name.findRev('/',slash_pos-1);
+    if(slash2_pos != -1){
+      makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
+      check_makefile_list.append(makefile_name);
+      cerr << endl << makefile_name;
+    } 
+else{
+	makefile_name = "";
+}
+  }
+
+  
+  
+
+  for(makefile_name=check_makefile_list.first();makefile_name!=0;makefile_name=check_makefile_list.next()){ 
+    // check if current makefile exists and all makefile above
+    
+    bool exists = false;
+    QString makefile_str;
+    config->setGroup("General");
+    config->readListEntry("makefiles",makefile_list);
+    for(makefile_str=makefile_list.first();makefile_str!=0;makefile_str=makefile_list.next()){
+      if(makefile_str == makefile_name){
+	exists = true;
+      }
+    }
+    if(!exists){
+      addMakefileAmToProject(makefile_name);
+    }
+  }
+  //add Makefile to the project if needed (end)
+  
+  
+  
   setSourcesHeaders();
   createMakefilesAm();
-  
 }
 void CProject::removeFileFromProject(QString rel_name){
   QStrList list_files;
@@ -486,12 +554,7 @@ void CProject::setKDevelopWriteArea(QString makefile){
     }
   }
 }
-void CProject::writeMakefileAmInfo(TMakefileAmInfo info){
-  QString rel_name = info.rel_name;
-  config->setGroup(rel_name);
-  config->writeEntry("type",info.type);
-  config->writeEntry("sub_dirs",info.sub_dirs);
-}
+
 void CProject::setFilters(QString group,QStrList& filters){
   config->setGroup("LFV Groups");
   config->writeEntry(group,filters);
@@ -524,4 +587,27 @@ void CProject::addMakefileAmToProject(QString rel_name){
   config->readListEntry("makefiles",makefile_list); 
   makefile_list.append(rel_name);
   config->writeEntry("makefiles",makefile_list);
+}
+bool CProject::isDirInProject(QString rel_name){
+
+  int pos = rel_name.findRev('/');
+  QString dir_name;
+   
+  
+  if(pos == -1){ // not found
+    dir_name = rel_name.copy();
+    rel_name = "Makefile.am";
+  }
+  else{
+    dir_name = rel_name.right(rel_name.length()-pos-1);
+    rel_name.truncate(pos+1);
+    rel_name.append("Makefile.am");
+  }
+  
+  TMakefileAmInfo info = getMakefileAmInfo(rel_name);
+  QString str;
+  
+  for(str=info.sub_dirs.first();str!=0;str=info.sub_dirs.next()){
+    cerr << endl << str;
+  }
 }

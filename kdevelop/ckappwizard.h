@@ -84,6 +84,7 @@ void slotDirDialogClicked();
   void slotDefaultClicked();
   void slotAppClicked();
   void slotMiniClicked();
+  void slotCPPClicked();
   void slotProjectnameEntry();
   void slotIconButtonClicked();
   void slotMiniIconButtonClicked();
@@ -103,7 +104,7 @@ private:
   QWidget *widget0,*widget1,*widget2,*widget3,*widget4,*widget5,*widget1a,*widget1b;
   KWizardPage *page0,*page1,*page2,*page3,*page4,*page5;  
   QButtonGroup* bgroup;
-  QRadioButton *kna,*kma;
+  QRadioButton *kna,*kma,*ta;
   QLabel *name,*directory,*authorname,*email,*versionnumber;
   QLineEdit *nameline,*directoryline,*authorline,*emailline,*versionline;
   QCheckBox *apidoc,*userdoc,*lsmfile,*gnufiles,*progicon,*miniicon,*datalink,*hheader,*cppheader;

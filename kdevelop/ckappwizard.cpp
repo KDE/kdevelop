@@ -78,9 +78,9 @@ void CKAppWizard::initPages(){
   separator0->setGeometry(0,140,400,5);
   // create the RadioButtonGroup with all buttons, bubble-help and connections
   bgroup = new QButtonGroup(i18n("Application"),widget0);
-  bgroup->setGeometry(20,170,180,100);
+  bgroup->setGeometry(20,150,180,140);
   kna = new QRadioButton (i18n("KDE-Application"),widget0);
-  kna->setGeometry(30,190,145,30);
+  kna->setGeometry(30,170,145,30);
 //  QToolTip::add(kna,i18n("use for a KDE-Application with toolbar ect."));
   KQuickHelp::add(kna,
 	i18n("Select this to create a complete framework for\n"
@@ -93,7 +93,7 @@ void CKAppWizard::initPages(){
  
   connect(kna,SIGNAL(clicked()),SLOT(slotAppClicked()));
   kma = new QRadioButton (i18n("KDE-Mini-Application"),widget0);
-  kma->setGeometry(30,230,150,30);
+  kma->setGeometry(30,210,150,30);
 //  QToolTip::add(kma,i18n("use for a minimal KDE-Application"));
   KQuickHelp::add(kma,
 	i18n("Select this to create a mini-Application.\n"
@@ -101,8 +101,19 @@ void CKAppWizard::initPages(){
 		"class which inherits QWidget until now."));
 
   connect(kma,SIGNAL(clicked()),SLOT(slotMiniClicked()));
+
+  ta = new QRadioButton (i18n("C/C++-Application"),widget0);
+  ta->setGeometry(30,250,150,30);
+  //  QToolTip::add(ta,i18n("use for a minimal C++-Application"));
+  KQuickHelp::add(ta,
+	i18n("Select this to create a C/C++-Terminal-Application.\n"
+	 	"This will only contain the main widget\n"
+		"class which inherits QWidget until now."));
+
+  connect(ta,SIGNAL(clicked()),SLOT(slotCPPClicked()));
   bgroup->insert( kna );
   bgroup->insert( kma );
+  bgroup->insert ( ta );
     
   /************************************************************/
   
@@ -274,7 +285,7 @@ void CKAppWizard::initPages(){
   QToolTip::add(hnew,i18n("you can clear the headertemplate here"));
   connect(hnew,SIGNAL(clicked()),SLOT(slotNewHeaderButtonClicked()));
   hedit = new KEdit(kapp,widget3);
-  QFont f("fixed",10);
+  QFont f("courier",10);
   hedit->setFont(f);
   hedit->setGeometry(20,60,340,230);
   QToolTip::add(hedit,i18n("you can edit your headertemplate here"));
@@ -321,13 +332,13 @@ void CKAppWizard::initPages(){
   // create a MultiLineEdit for the processes of kAppWizard
   output = new QMultiLineEdit(widget5);
   output->setGeometry(5,5,375,225);
-  output->setReadOnly(true);
+  output->setReadOnly(false);
   QFont font("helvetica",10);
   output->setFont(font);
   QToolTip::add(output,i18n("you can see the normal outputs here"));
   errOutput = new QMultiLineEdit(widget5);
   errOutput->setGeometry(5,230,375,65);
-  errOutput->setReadOnly(true);
+  errOutput->setReadOnly(false);
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("you can see all warnings and errormessages here"));
   // go to page 2 then to page 1
@@ -382,19 +393,22 @@ void CKAppWizard::slotOkClicked() {
   errOutput->clear();
   output->clear();
   QDir kdevelop;
-  kdevelop.mkdir(QDir::homeDirPath() + "/.kdevelop");
-  cppedit->setName(QDir::homeDirPath() + "/.kdevelop/cpp");
+  kdevelop.mkdir(QDir::homeDirPath() + "/.kde/share/apps/kdevelop");
+  cppedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/cpp");
   cppedit->toggleModified(true);
   cppedit->doSave();
-  hedit->setName(QDir::homeDirPath() + "/.kdevelop/header");
+  hedit->setName(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/header");
   hedit->toggleModified(true);
   hedit->doSave();
-  ofstream entries (QDir::homeDirPath() + "/.kdevelop/entries");
+  ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/entries");
   entries << "APPLICATION\n";
   if (kna->isChecked()) 
     entries << "standard\n";
   else 
-    entries << "mini\n";
+    if (kma->isChecked())
+      entries << "mini\n";
+    else 
+      entries << "terminal\n";
   entries << "NAME\n";
   entries << nameline->text() << "\n";
   entries << "DIRECTORY\n";
@@ -452,7 +466,39 @@ void CKAppWizard::slotOkClicked() {
   
   namelow = nameline->text();
   namelow = namelow.lower();
+  QDir directory;
+  directory.mkdir(directoryline->text() + QString("/") + namelow);
   p = new KProcess();
+  QString copysrc;
+  QString copydes = directoryline->text() + QString ("/") + namelow;
+  if (kma->isChecked()) { 
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
+    *p << "cp";
+    cout << copysrc << endl;
+    *p << copysrc;
+    cout << copydes << endl;
+    *p << copydes;
+    p->start(KProcess::Block,KProcess::AllOutput);
+  } 
+  else if (kna->isChecked()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
+    *p << "cp";
+    cout << copysrc << endl;
+    *p << copysrc;
+    cout << copydes << endl;
+    *p << copydes;
+    p->start(KProcess::Block,KProcess::AllOutput);
+  }
+  else {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
+    *p << "cp";
+    cout << copysrc << endl;
+    *p << copysrc;
+    cout << copydes << endl;
+    *p << copydes;
+    p->start(KProcess::Block,KProcess::AllOutput);
+  }
+  p->clearArguments();
   connect(p,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(p,SIGNAL(receivedStdout(KProcess *, char *, int)),
           this,SLOT(slotPerlOut(KProcess *, char *, int)));
@@ -469,6 +515,7 @@ void CKAppWizard::slotOkClicked() {
   }
   kma->setEnabled(false);
   kna->setEnabled(false);
+  ta->setEnabled(false);
   apidoc->setEnabled(false);
   lsmfile->setEnabled(false);
   cppheader->setEnabled(false);
@@ -526,10 +573,21 @@ void CKAppWizard::slotMiniClicked() {
   widget1b->setBackgroundPixmap(pm);
 }
 
+// connection of ta
+void CKAppWizard::slotCPPClicked() {
+  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
+  widget1b->setBackgroundPixmap(pm);
+  userdoc->setEnabled(false);
+  userdoc->setChecked(false);
+  apidoc->setEnabled(false);
+  apidoc->setChecked(false);
+}
+
 // connection of this
 void CKAppWizard::slotDefaultClicked() {
   kma->setChecked(false);
   kna->setChecked(true);
+  ta->setChecked(false);
   pm.load(KApplication::kde_datadir() +"/kdevelop/pics/normalApp.bmp");
   widget1b->setBackgroundPixmap(pm);
   apidoc->setChecked(true);
@@ -649,6 +707,16 @@ void CKAppWizard::slotProcessExited() {
   QString prj_str = directory + "/" + namelow + "/" + namelow + ".kdevprj";
   project = new CProject();
   project->readProject (prj_str);
+  project->setKDevPrjVersion("0.2");
+  if (ta->isChecked()) {
+    project->setProjectType("normal_cpp");
+  }
+  else if (kma->isChecked()) {
+    project->setProjectType("mini_kde");  
+  }
+  else {
+    project->setProjectType("normal_kde");
+  }
   project->setProjectName (nameline->text());
   project->setSubDir (namelow + "/");
   project->setAuthor (authorline->text());
@@ -658,7 +726,9 @@ void CKAppWizard::slotProcessExited() {
   project->setSGMLFile ("index.sgml");
   }
   project->setBinPROGRAM (namelow);
+  if (!(ta->isChecked())) {
   project->setLDFLAGS (" -s ");
+  }
   project->setCXXFLAGS ("-O2 -Wall");
 
   if (kna->isChecked()) {
@@ -776,6 +846,7 @@ void CKAppWizard::slotProcessExited() {
   fileInfo.install = false;
   fileInfo.install_location = "";
   project->writeFileInfo (fileInfo);
+  if (!(ta->isChecked())) {
   project->addFileToProject (namelow + "/" + namelow + ".cpp");
   fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
   fileInfo.type = "SOURCE";
@@ -790,6 +861,7 @@ void CKAppWizard::slotProcessExited() {
   fileInfo.install = false;
   fileInfo.install_location = "";
   project->writeFileInfo (fileInfo);
+  }
 
   if (kna->isChecked()) {
   project->addFileToProject (namelow + "/" + namelow + "doc.cpp");

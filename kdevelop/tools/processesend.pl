@@ -6,7 +6,7 @@ $homedirectory = $ENV{HOME};
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kdevelop/entries") || die "kann Datei nicht öffnen: $!";
+open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "kann Datei nicht öffnen: $!";
 while ( defined ($name = <PROCESSLIST> )) {
     chomp ($name);
     $process = <PROCESSLIST>;

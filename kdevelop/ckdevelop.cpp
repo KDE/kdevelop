@@ -263,7 +263,6 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
-  
 }
 
 void CKDevelop::closeEvent(QCloseEvent* e){

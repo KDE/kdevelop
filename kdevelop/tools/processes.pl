@@ -6,12 +6,12 @@ $homedirectory = $ENV{HOME};
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kdevelop/entries") || die "kann Datei nicht öffnen: $!";
+open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "kann Datei nicht öffnen: $!";
 while ( defined ($name = <PROCESSLIST> )) {
-    chomp ($name);
-    $process = <PROCESSLIST>;
-    chomp ($process);
-    $processes{$name} = $process;
+  chomp ($name);
+  $process = <PROCESSLIST>;
+  chomp ($process);
+  $processes{$name} = $process;
 }
 close (PROCESSLIST);
 
@@ -27,8 +27,8 @@ $underDirectory = $processes{DIRECTORY} . $nameLittle . "/" . $nameLittle;
 #create the projectdirectory 
 printflush (STDOUT, "change directory...\n");
 chdir ($processes{DIRECTORY});
-printflush (STDOUT,"make projectdirectory...\n"); 
-mkdir("$nameLittle",0777);
+#printflush (STDOUT,"make projectdirectory...\n"); 
+#mkdir("$nameLittle",0777);
 $kdedirectory = $ENV{KDEDIR};
 $date = `date`;
 @time = localtime();
@@ -39,30 +39,44 @@ chdir ($overDirectory);
 #copy the file in the projectdirectory and unpacked it
 if ($processes{APPLICATION} eq "standard") {
   
-  printflush (STDOUT,"copy standardapp to projectdirectory...\n");
-  chdir ($kdedirectory);
-  $sourceDir = $kdedirectory . "/share/apps/kdevelop/templates/normal.tar.gz";
-  $installDir = $overDirectory . "/normal.tar.gz";
-  copy ($sourceDir, $installDir);
+#  printflush (STDOUT,"copy standardapp to projectdirectory...\n");
+#  chdir ($kdedirectory);
+#  $sourceDir = $kdedirectory . "/share/apps/kdevelop/templates/normal.tar";
+#  $installDir = $overDirectory . "/normal.tar";
+#  copy ($sourceDir, $installDir);
   chdir ($overDirectory);
   printflush (STDOUT,"unzip file...\n");
   system ("gunzip normal.tar.gz");
   printflush (STDOUT,"untar file...\n");
-  system ("tar xf normal.tar");
+  system ("tar -xf normal.tar");
   unlink "normal.tar";
 }
 elsif ($processes{APPLICATION} eq "mini") {
-    printflush (STDOUT,"copy miniapp to projectdirectory...\n");
-    chdir ($kdedirectory);
-  $sourceDir = $kdedirectory . "/share/apps/kdevelop/templates/mini.tar.gz";
-  $installDir = $overDirectory . "/mini.tar.gz";
-  copy ($sourceDir, $installDir);
+
+
+
+  chdir ($overDirectory);
+#  printflush (STDOUT,"unzip file...\n");
+  system ("gunzip mini.tar.gz");
+
+  printflush (STDOUT,"untar file...\n");
+  system ("tar -xf mini.tar");
+#  for($i=0;$i!=1000000;$i++){
+#  }
+  unlink "mini.tar";
+}
+elsif ($processes{APPLICATION} eq "terminal") {
+#  printflush (STDOUT,"copy terminalapp to projectdirectory...\n");
+#  chdir ($kdedirectory);
+#  $sourceDir = $kdedirectory . "/share/apps/kdevelop/templates/cpp.tar";
+#  $installDir = $overDirectory . "/cpp.tar";
+#  copy ($sourceDir, $installDir);
   chdir ($overDirectory);
   printflush (STDOUT,"unzip file...\n");
-  system ("gunzip mini.tar.gz");
+  system ("gunzip cpp.tar.gz");
   printflush (STDOUT,"untar file...\n");
-  system ("tar xf mini.tar");
-  unlink "mini.tar";
+  system ("tar -xf cpp.tar");
+  unlink "cpp.tar";
 }
 
 #renamed the directory
@@ -86,17 +100,17 @@ mkdir ("templates",0777);
 if ($processes{CPP} eq "no" and $processes{HEADER} eq "no") {}
 else {
   if ($processes{HEADER} eq "yes") {
-    $directory = $homedirectory . "/.kdevelop/header";
+    $directory = $homedirectory . "/.kde/share/apps/kdevelop/header";
     $targetdirectory = $underDirectory . "/templates";
-    system ("cp $directory $targetdirectory");
+    copy ($directory, $targetdirectory);
     chdir ($targetdirectory);
     rename ("header","header_template");
   }
   
   if ($processes{CPP} eq "yes") {
-    $directory = $homedirectory . "/.kdevelop/cpp";
+    $directory = $homedirectory . "/.kde/share/apps/kdevelop/cpp";
     $targetdirectory = $underDirectory . "/templates";
-    system ("cp $directory $targetdirectory");
+    copy ($directory, $targetdirectory);
     chdir ($targetdirectory);
     rename ("cpp","cpp_template");
   }
@@ -120,78 +134,82 @@ $oldfile = "Makefile.am";
 $replace = $nameLittle;
 replaceOldFile($word,$replace,$oldfile);
 if ($processes{APPLICATION} eq "standard") {
-    $word = "kbase";
-    $oldfile = "skel.h";
-    replaceOldFile($word,$replace,$oldfile);
+  $word = "kbase";
+  $oldfile = "skel.h";
+  replaceOldFile($word,$replace,$oldfile);
 }
 $oldfile = "main.cpp";
 replaceOldFile($word,$replace,$oldfile);
-$oldfile = "skel.cpp";
-replaceOldFile($word,$replace,$oldfile);
+
+if ($processes{APPLICATION} ne "terminal") {
+  $oldfile = "skel.cpp";
+  replaceOldFile($word,$replace,$oldfile);
+}
 
 #replaced Skel with the projectname in different files
 if ($processes{APPLICATION} eq "standard") {
-    $word = "KBase";
+  $word = "KBase";
 }
 else {
-    $word = "Skel";
+  $word = "Skel";
 }
 $oldfile = "main.cpp";
 $replace = $name;
 replaceOldFile($word,$replace,$oldfile);
-$oldfile = "skel.cpp";
-replaceOldFile($word,$replace,$oldfile);
-$oldfile = "skel.h";
-replaceOldFile($word,$replace,$oldfile);
-
-#replaced AUTHOR with the authorname in skel.cpp
-$word = "AUTHOR";
-$oldfile = "skel.cpp";
-$replace = $processes{AUTHOR};
-replaceOldFile($word,$replace,$oldfile);
-
-#replaced SKEL with the projectname in skel.h
-if ($processes{APPLICATION} eq "standard") {
+if ($processes{APPLICATION} ne "terminal") {
+  $oldfile = "skel.cpp";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = "skel.h";
+  replaceOldFile($word,$replace,$oldfile);
+  
+  #replaced AUTHOR with the authorname in skel.cpp
+  $word = "AUTHOR";
+  $oldfile = "skel.cpp";
+  $replace = $processes{AUTHOR};
+  replaceOldFile($word,$replace,$oldfile);
+  
+  #replaced SKEL with the projectname in skel.h
+  if ($processes{APPLICATION} eq "standard") {
     $word = "KBASE";
-}
-else {
+  }
+  else {
     $word = "SKEL";
+  }
+  $oldfile = "skel.h";
+  $replace = $nameBig;
+  replaceOldFile($word,$replace,$oldfile);
+  
+  #renamed skel with the projectname
+  rename ("skel.cpp", $nameLittle . ".cpp");
+  rename ("skel.h", $nameLittle . ".h");
 }
-$oldfile = "skel.h";
-$replace = $nameBig;
-replaceOldFile($word,$replace,$oldfile);
-
-#renamed skel with the projectname
-rename ("skel.cpp", $nameLittle . ".cpp");
-rename ("skel.h", $nameLittle . ".h");
-
 
 if ($processes{APPLICATION} eq "standard") {
-    chdir ($underDirectory);
-    $word = "KBase";
-    $oldfile = $nameLittle . "doc.cpp";
-    $replace = $name;
-    replaceOldFile($word,$replace,$oldfile);
-    $oldfile = $nameLittle . "doc.h";
-    replaceOldFile($word,$replace,$oldfile);
-    $oldfile = $nameLittle . "view.cpp";
-    replaceOldFile($word,$replace,$oldfile);
-    $oldfile = $nameLittle . "view.h";
-    replaceOldFile($word,$replace,$oldfile);
-    $oldfile = "resource.h";
-    replaceOldFile($word,$replace,$oldfile);
-    $word = "KBASE";
-    $replace = $nameBig;
-    $oldfile = $nameLittle . "doc.h";
-    replaceOldFile($word,$replace,$oldfile);
-    $oldfile = $nameLittle . "view.h";
-    replaceOldFile($word,$replace,$oldfile);
-    $word = "kbase";
-    $oldfile = $nameLittle . "doc.cpp";
-    $replace = $nameLittle;
-    replaceOldFile($word,$replace,$oldfile);
-    $oldfile = $nameLittle . "view.cpp";
-    replaceOldFile($word,$replace,$oldfile);
+  chdir ($underDirectory);
+  $word = "KBase";
+  $oldfile = $nameLittle . "doc.cpp";
+  $replace = $name;
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = $nameLittle . "doc.h";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = $nameLittle . "view.cpp";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = $nameLittle . "view.h";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = "resource.h";
+  replaceOldFile($word,$replace,$oldfile);
+  $word = "KBASE";
+  $replace = $nameBig;
+  $oldfile = $nameLittle . "doc.h";
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = $nameLittle . "view.h";
+  replaceOldFile($word,$replace,$oldfile);
+  $word = "kbase";
+  $oldfile = $nameLittle . "doc.cpp";
+  $replace = $nameLittle;
+  replaceOldFile($word,$replace,$oldfile);
+  $oldfile = $nameLittle . "view.cpp";
+  replaceOldFile($word,$replace,$oldfile);
 }
 
 chdir ($underDirectory . "/docs/en");
@@ -205,12 +223,12 @@ if ($processes{GNU} eq "yes") {
   
   #copying the GNU-Files and renamed these
   chdir ($kdedirectory);
-  system ("cp share/apps/kdevelop/templates/AUTHORS_template $overDirectory");
-  system ("cp share/apps/kdevelop/templates/COPYING_template $overDirectory");
-  system ("cp share/apps/kdevelop/templates/ChangeLog_template $overDirectory");
-  system ("cp share/apps/kdevelop/templates/INSTALL_template $overDirectory");
-  system ("cp share/apps/kdevelop/templates/README_template $overDirectory");
-  system ("cp share/apps/kdevelop/templates/TODO_template $overDirectory");
+  copy ("share/apps/kdevelop/templates/AUTHORS_template", $overDirectory);
+  copy ("share/apps/kdevelop/templates/COPYING_template", $overDirectory);
+  copy ("share/apps/kdevelop/templates/ChangeLog_template", $overDirectory);
+  copy ("share/apps/kdevelop/templates/INSTALL_template", $overDirectory);
+  copy ("share/apps/kdevelop/templates/README_template", $overDirectory);
+  copy ("share/apps/kdevelop/templates/TODO_template", $overDirectory);
   chdir ($overDirectory);
   rename ("AUTHORS_template", "AUTHORS");
   rename ("COPYING_template", "COPYING");
@@ -234,7 +252,7 @@ if ($processes{LSM} eq "yes") {
   
   #copying, rename and replace in the lsm-template
   chdir ($kdedirectory);
-  system ("cp share/apps/kdevelop/templates/lsm_template $overDirectory");
+  copy ("share/apps/kdevelop/templates/lsm_template", $overDirectory);
   chdir ($overDirectory);
   rename ("lsm_template", $nameLittle . ".lsm");
   $oldfile = $nameLittle . ".lsm";
@@ -255,11 +273,11 @@ if ($processes{LSM} eq "yes") {
 
 #if USER-Docs was chosen in kAppWizard
 if ($processes{USER} eq "yes") {
-  
+    
   #copying, rename and replace in the handbook-en-template
   chdir ($kdedirectory);
   $targetdirectory = $underDirectory . "/docs/en";
-  system ("cp share/apps/kdevelop/templates/handbook_en_template $targetdirectory");
+  copy ("share/apps/kdevelop/templates/handbook_en_template", $targetdirectory);
   chdir ($targetdirectory);
   rename ("handbook_en_template", "index.sgml");
   $oldfile = "index.sgml";
@@ -281,7 +299,7 @@ if ($processes{USER} eq "yes") {
   $word = "YEAR";
   $replace = $year;
   replaceOldFile($word,$replace,$oldfile);
-
+  
 }
 
 #if USER-Docs was not chosen in kAppWizard
@@ -302,105 +320,105 @@ if ($processes{USER} eq "no") {
 
 #if cpp-template was chosen in kAppWizard
 if ($processes{CPP} eq "yes") {
-  
-  #copying, rename and replace in the cpp-file
-  chdir ($homedirectory);
-  system ("cp .kdevelop/cpp $underDirectory");
-  chdir ($underDirectory);
-  $oldfile = "cpp";
-  $word = "FILENAME";
-  $replace = $nameLittle . ".cpp";
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "AUTHOR";
-  $replace = $processes{AUTHOR};
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "EMAIL";
-  $replace = $processes{EMAIL};
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "DATE";
-  $replace = $date;
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "YEAR";
-  $replace = $year;
-  replaceOldFile($word,$replace,$oldfile);
-  
-  # summarized the files cpp and project.cpp
-  $file = $nameLittle . ".cpp";
-  open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-  open (OUTPUT,">>cpp");
-  while ( defined ($line = <INPUT> )) {
+  if ($processes{APPLICATION} ne "terminal") {
+    #copying, rename and replace in the cpp-file
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/cpp", $underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "cpp";
+    $word = "FILENAME";
+    $replace = $nameLittle . ".cpp";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    # summarized the files cpp and project.cpp
+    $file = $nameLittle . ".cpp";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>cpp");
+    while ( defined ($line = <INPUT> )) {
       print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("cpp" , $file);
+    unlink ("cpp");
   }
-  close (INPUT);
-  close (OUTPUT);
-  rename ("cpp" , $file);
-  unlink ("cpp");
   
   if ($processes{APPLICATION} eq "standard") {
-      
-      chdir ($homedirectory);
-      system ("cp .kdevelop/cpp $underDirectory");
-      chdir ($underDirectory);
-      $oldfile = "cpp";
-      $word = "FILENAME";
-      $replace = $nameLittle . "view.cpp";
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "AUTHOR";
-      $replace = $processes{AUTHOR};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "EMAIL";
-      $replace = $processes{EMAIL};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "DATE";
-      $replace = $date;
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "YEAR";
-      $replace = $year;
-      replaceOldFile($word,$replace,$oldfile);
-      
-      # summarized the files cpp and projectview.cpp
-      $file = $nameLittle . "view.cpp";
-      open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-      open (OUTPUT,">>cpp");
-      while ( defined ($line = <INPUT> )) {
-	  print OUTPUT $line;
-      }
-      close (INPUT);
-      close (OUTPUT);
-      rename ("cpp" , $file);
-      unlink ("cpp");
-      
-      chdir ($homedirectory);
-      system ("cp .kdevelop/cpp $underDirectory");
-      chdir ($underDirectory);
-      $oldfile = "cpp";
-      $word = "FILENAME";
-      $replace = $nameLittle . "doc.cpp";
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "AUTHOR";
-      $replace = $processes{AUTHOR};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "EMAIL";
-      $replace = $processes{EMAIL};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "DATE";
-      $replace = $date;
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "YEAR";
-      $replace = $year;
-      replaceOldFile($word,$replace,$oldfile);
-      
-      # summarized the files cpp and projectdoc.cpp
-      $file = $nameLittle . "doc.cpp";
-      open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-      open (OUTPUT,">>cpp");
-      while ( defined ($line = <INPUT> )) {
-	  print OUTPUT $line;
-      }
-      close (INPUT);
-      close (OUTPUT);
-      rename ("cpp" , $file);
-      unlink ("cpp");
+    
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/cpp", $underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "cpp";
+    $word = "FILENAME";
+    $replace = $nameLittle . "view.cpp";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    
+    # summarized the files cpp and projectview.cpp
+    $file = $nameLittle . "view.cpp";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>cpp");
+    while ( defined ($line = <INPUT> )) {
+      print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("cpp" , $file);
+    unlink ("cpp");
+    
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/cpp", $underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "cpp";
+    $word = "FILENAME";
+    $replace = $nameLittle . "doc.cpp";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    
+    # summarized the files cpp and projectdoc.cpp
+    $file = $nameLittle . "doc.cpp";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>cpp");
+    while ( defined ($line = <INPUT> )) {
+      print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("cpp" , $file);
+    unlink ("cpp");
       
   }
   
@@ -408,144 +426,144 @@ if ($processes{CPP} eq "yes") {
 
 #if header-template was chosen in kAppWizard
 if ($processes{HEADER} eq "yes") {
-  
-  #copying, rename and replace in the header-file
-  chdir ($homedirectory);
-  system ("cp .kdevelop/header $underDirectory");
-  chdir ($underDirectory);
-  $oldfile = "header";
-  $word = "FILENAME";
-  $replace = $nameLittle . ".h";
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "AUTHOR";
-  $replace = $processes{AUTHOR};
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "EMAIL";
-  $replace = $processes{EMAIL};
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "DATE";
-  $replace = $date;
-  replaceOldFile($word,$replace,$oldfile);
-  $word = "YEAR";
-  $replace = $year;
-  replaceOldFile($word,$replace,$oldfile);
-    
-  # summarized the files header and project.h
-  $file = $nameLittle . ".h";
-  open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-  open (OUTPUT,">>header");
-  while ( defined ($line = <INPUT> )) {
+  if ($processes{APPLICATION} ne "terminal") {    
+    #copying, rename and replace in the header-file
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/header", $underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "header";
+    $word = "FILENAME";
+    $replace = $nameLittle . ".h";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    # summarized the files header and project.h
+    $file = $nameLittle . ".h";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>header");
+    while ( defined ($line = <INPUT> )) {
       print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("header" , $file);
+    unlink ("header");
   }
-  close (INPUT);
-  close (OUTPUT);
-  rename ("header" , $file);
-  unlink ("header");
   
   if ($processes{APPLICATION} eq "standard") {
-      chdir ($homedirectory);
-      system ("cp .kdevelop/header $underDirectory");
-      chdir ($underDirectory);
-      $oldfile = "header";
-      $word = "FILENAME";
-      $replace = $nameLittle . "view.h";
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "AUTHOR";
-      $replace = $processes{AUTHOR};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "EMAIL";
-      $replace = $processes{EMAIL};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "DATE";
-      $replace = $date;
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "YEAR";
-      $replace = $year;
-      replaceOldFile($word,$replace,$oldfile);
-      
-      # summarized the files header and project.h
-      $file = $nameLittle . "view.h";
-      open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-      open (OUTPUT,">>header");
-      while ( defined ($line = <INPUT> )) {
-	  print OUTPUT $line;
-      }
-      close (INPUT);
-      close (OUTPUT);
-      rename ("header" , $file);
-      unlink ("header");
-      chdir ($homedirectory);
-      system ("cp .kdevelop/header $underDirectory");
-      chdir ($underDirectory);
-      $oldfile = "header";
-      $word = "FILENAME";
-      $replace = $nameLittle . "doc.h";
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "AUTHOR";
-      $replace = $processes{AUTHOR};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "EMAIL";
-      $replace = $processes{EMAIL};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "DATE";
-      $replace = $date;
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "YEAR";
-      $replace = $year;
-      replaceOldFile($word,$replace,$oldfile);
-      
-      # summarized the files header and project.h
-      $file = $nameLittle . "doc.h";
-      open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-      open (OUTPUT,">>header");
-      while ( defined ($line = <INPUT> )) {
-	  print OUTPUT $line;
-      }
-      close (INPUT);
-      close (OUTPUT);
-      rename ("header" , $file);
-      unlink ("header");
-      chdir ($homedirectory);
-      system ("cp .kdevelop/header $underDirectory");
-      chdir ($underDirectory);
-      $oldfile = "header";
-      $word = "FILENAME";
-      $replace = "resource.h";
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "AUTHOR";
-      $replace = $processes{AUTHOR};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "EMAIL";
-      $replace = $processes{EMAIL};
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "DATE";
-      $replace = $date;
-      replaceOldFile($word,$replace,$oldfile);
-      $word = "YEAR";
-      $replace = $year;
-      replaceOldFile($word,$replace,$oldfile);
-      
-      # summarized the files header and project.h
-      $file = "resource.h";
-      open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-      open (OUTPUT,">>header");
-      while ( defined ($line = <INPUT> )) {
-	  print OUTPUT $line;
-      }
-      close (INPUT);
-      close (OUTPUT);
-      rename ("header" , $file);
-      unlink ("header");
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/header",$underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "header";
+    $word = "FILENAME";
+    $replace = $nameLittle . "view.h";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    
+    # summarized the files header and project.h
+    $file = $nameLittle . "view.h";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>header");
+    while ( defined ($line = <INPUT> )) {
+      print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("header" , $file);
+    unlink ("header");
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/header", $underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "header";
+    $word = "FILENAME";
+    $replace = $nameLittle . "doc.h";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    
+    # summarized the files header and project.h
+    $file = $nameLittle . "doc.h";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>header");
+    while ( defined ($line = <INPUT> )) {
+      print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("header" , $file);
+    unlink ("header");
+    chdir ($homedirectory);
+    copy (".kde/share/apps/kdevelop/header", $underDirectory);
+    chdir ($underDirectory);
+    $oldfile = "header";
+    $word = "FILENAME";
+    $replace = "resource.h";
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "AUTHOR";
+    $replace = $processes{AUTHOR};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "EMAIL";
+    $replace = $processes{EMAIL};
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "DATE";
+    $replace = $date;
+    replaceOldFile($word,$replace,$oldfile);
+    $word = "YEAR";
+    $replace = $year;
+    replaceOldFile($word,$replace,$oldfile);
+    
+    # summarized the files header and project.h
+    $file = "resource.h";
+    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (OUTPUT,">>header");
+    while ( defined ($line = <INPUT> )) {
+      print OUTPUT $line;
+    }
+    close (INPUT);
+    close (OUTPUT);
+    rename ("header" , $file);
+    unlink ("header");
   }
   
 }
 
 #if .kdelnk-file was chosen in kAppWizard
 if ($processes{KDELNK} eq "yes") {
-
+  
   #copying, rename and replace in the kdelnk-file
   chdir ($kdedirectory);
-  system ("cp share/apps/kdevelop/templates/kdelnk_template $underDirectory");
+  copy ("share/apps/kdevelop/templates/kdelnk_template", $underDirectory);
   chdir ($underDirectory);
   rename ("kdelnk_template", $nameLittle . ".kdelnk");
   $word = PROJECT_NAME;
@@ -560,7 +578,7 @@ if ($processes{PROGICON} eq "no") {}
 #if the default ProgIcon was chosen in kAppWizard
 elsif ($processes{PROGICON} eq "(null)") {
   chdir ($kdedirectory);
-  system  ("cp share/icons/edit.xpm $underDirectory");
+  copy ("share/icons/edit.xpm", $underDirectory);
   chdir ($underDirectory);
   chmod (0666,"edit.xpm");
   rename ("edit.xpm", $nameLittle . ".xpm");
@@ -569,10 +587,10 @@ elsif ($processes{PROGICON} eq "(null)") {
 #if a new ProgIcon was chosen in kAppWizard
 else {
   $icon = $kdedirectory . "/share/icons/" . $processes{PROGICON};
-  $copying = system ("cp $icon  $underDirectory");
+  $copying = copy ($icon, $underDirectory);
   if ($copying)  {
     $icon = $homedirectory . "/.kde/share/icons/" . $processes{PROGICON};
-    system ("cp $icon  $underDirectory");
+    copy ($icon, $underDirectory);
   }
   chmod (0666,$processes{PROGICON});
   rename ($processes{PROGICON}, $nameLittle . ".xpm");
@@ -584,7 +602,7 @@ if ($processes{MINIICON} eq "no") {}
 #if the default MiniIcon was chosen in kAppWizard
 elsif ($processes{MINIICON} eq "(null)") {
   chdir ($kdedirectory);
-  system ("cp share/icons/mini/application_settings.xpm $underDirectory");
+  copy ("share/icons/mini/application_settings.xpm", $underDirectory);
   chdir ($underDirectory);
   chmod (0666,"application_settings.xpm");
   rename ("application_settings.xpm","mini-" . $nameLittle . ".xpm");
@@ -593,15 +611,14 @@ elsif ($processes{MINIICON} eq "(null)") {
 #if a new MiniIcon was chosen in kAppWizard
 else {
   $icon = $kdedirectory . "/share/icons/mini/" . $processes{MINIICON};
-  $copying = system ("cp $icon  $underDirectory");
+  $copying = copy ($icon, $underDirectory);
   if ($copying)  {
     $icon = $homedirectory . "/.kde/share/icons/mini/" . $processes{MINIICON};
-    system ("cp $icon  $underDirectory");
-}
+    copy ($icon, $underDirectory);
+  }
   chmod (0666,$processes{MINIICON});
   rename ($processes{MINIICON}, "mini-" . $nameLittle . ".xpm");
 }
-
 
 #if API-Files was chosen in kAppWizard
 if ($processes{API} eq "yes") {
