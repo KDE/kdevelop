@@ -25,6 +25,8 @@
 #include <kconfig.h>
 #include <kstddirs.h>
 #include <qfile.h>
+#include <qlayout.h>
+#include <qgrid.h>
 
 CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabDialog(parent, name, true){
   init();
@@ -639,119 +641,15 @@ void CConfigEnscriptDlg::initTab1(QWidget*parent) {
 
 }
 
-void CConfigEnscriptDlg::initTab2(QWidget*parent) {
-  qtarch_ButtonGroup_78 = new QButtonGroup( parent, "ButtonGroup_78" );
-  qtarch_ButtonGroup_78->setGeometry( 20, 217, 560, 100 );
-  qtarch_ButtonGroup_78->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_78->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_78->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_78->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_78->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_78->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_78->setFrameStyle( 49 );
-  qtarch_ButtonGroup_78->setTitle(i18n("Current time") );
-  qtarch_ButtonGroup_78->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_77 = new QButtonGroup( parent, "ButtonGroup_77" );
-  qtarch_ButtonGroup_77->setGeometry( 20, 320, 560, 100 );
-  qtarch_ButtonGroup_77->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_77->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_77->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_77->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_77->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_77->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_77->setFrameStyle( 49 );
-  qtarch_ButtonGroup_77->setTitle(i18n("Modification time") );
-  qtarch_ButtonGroup_77->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_87 = new QButtonGroup( parent, "ButtonGroup_87" );
-  qtarch_ButtonGroup_87->setGeometry( 420, 350, 150, 60 );
-  qtarch_ButtonGroup_87->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_87->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_87->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_87->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_87->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_87->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_87->setFrameStyle( 49 );
-  qtarch_ButtonGroup_87->setTitle(i18n("Format") );
-  qtarch_ButtonGroup_87->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_88 = new QButtonGroup( parent, "ButtonGroup_88" );
-  qtarch_ButtonGroup_88->setGeometry( 260, 350, 150, 60 );
-  qtarch_ButtonGroup_88->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_88->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_88->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_88->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_88->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_88->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_88->setFrameStyle( 49 );
-  qtarch_ButtonGroup_88->setTitle(i18n("Position") );
-  qtarch_ButtonGroup_88->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_89 = new QButtonGroup( parent, "ButtonGroup_89" );
-  qtarch_ButtonGroup_89->setGeometry( 420, 250, 150, 60 );
-  qtarch_ButtonGroup_89->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_89->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_89->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_89->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_89->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_89->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_89->setFrameStyle( 49 );
-  qtarch_ButtonGroup_89->setTitle(i18n("Format") );
-  qtarch_ButtonGroup_89->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_90 = new QButtonGroup( parent, "ButtonGroup_90" );
-  qtarch_ButtonGroup_90->setGeometry( 260, 250, 150, 60 );
-  qtarch_ButtonGroup_90->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_90->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_90->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_90->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_90->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_90->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_90->setFrameStyle( 49 );
-  qtarch_ButtonGroup_90->setTitle(i18n("Position") );
-  qtarch_ButtonGroup_90->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_76 = new QButtonGroup( parent, "ButtonGroup_76" );
-  qtarch_ButtonGroup_76->setGeometry( 21, 114, 560, 100 );
-  qtarch_ButtonGroup_76->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_76->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_76->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_76->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_76->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_76->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_76->setFrameStyle( 49 );
-  qtarch_ButtonGroup_76->setTitle( i18n("Modification date") );
-  qtarch_ButtonGroup_76->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_86 = new QButtonGroup( parent, "ButtonGroup_86" );
-  qtarch_ButtonGroup_86->setGeometry( 420, 140, 150, 60 );
-  qtarch_ButtonGroup_86->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_86->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_86->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_86->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_86->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_86->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_86->setFrameStyle( 49 );
-  qtarch_ButtonGroup_86->setTitle( i18n("Format") );
-  qtarch_ButtonGroup_86->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_85 = new QButtonGroup( parent, "ButtonGroup_85" );
-  qtarch_ButtonGroup_85->setGeometry( 260, 140, 150, 60 );
-  qtarch_ButtonGroup_85->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_85->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_85->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_85->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_85->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_85->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_85->setFrameStyle( 49 );
-  qtarch_ButtonGroup_85->setTitle( i18n("Position") );
-  qtarch_ButtonGroup_85->setAlignment( 1 );
-  
+void CConfigEnscriptDlg::initTab2(QWidget*parent)
+{
+  QVBoxLayout *box = new QVBoxLayout( parent );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  /**current date */
   qtarch_ButtonGroup_74 = new QButtonGroup( parent, "ButtonGroup_74" );
-  qtarch_ButtonGroup_74->setGeometry( 20, 10, 560, 100 );
-  qtarch_ButtonGroup_74->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_74->setMaximumSize( 32767, 32767 );
+  box->addWidget(qtarch_ButtonGroup_74);
   qtarch_ButtonGroup_74->setFocusPolicy( QWidget::NoFocus );
   qtarch_ButtonGroup_74->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_ButtonGroup_74->setFontPropagation( QWidget::NoChildren );
@@ -759,59 +657,12 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   qtarch_ButtonGroup_74->setFrameStyle( 49 );
   qtarch_ButtonGroup_74->setTitle( i18n("Current date") );
   qtarch_ButtonGroup_74->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_84 = new QButtonGroup( parent, "ButtonGroup_84" );
-  qtarch_ButtonGroup_84->setGeometry( 420, 40, 150, 60 );
-  qtarch_ButtonGroup_84->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_84->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_84->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_84->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_84->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_84->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_84->setFrameStyle( 49 );
-  qtarch_ButtonGroup_84->setTitle(i18n("Format") );
-  qtarch_ButtonGroup_84->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_75 = new QButtonGroup( parent, "ButtonGroup_75" );
-  qtarch_ButtonGroup_75->setGeometry( 260, 40, 150, 60 );
-  qtarch_ButtonGroup_75->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_75->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_75->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_75->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_75->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_75->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_75->setFrameStyle( 49 );
-  qtarch_ButtonGroup_75->setTitle(i18n("Position") );
-  qtarch_ButtonGroup_75->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_72 = new QButtonGroup( parent, "ButtonGroup_72" );
-  qtarch_ButtonGroup_72->setGeometry( 160, 350, 90, 60 );
-  qtarch_ButtonGroup_72->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_72->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_72->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_72->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_72->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_72->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_72->setFrameStyle( 49 );
-  qtarch_ButtonGroup_72->setTitle(i18n("AM/PM") );
-  qtarch_ButtonGroup_72->setAlignment( 1 );
-  
-  qtarch_ButtonGroup_71 = new QButtonGroup( parent, "ButtonGroup_71" );
-  qtarch_ButtonGroup_71->setGeometry( 160, 250, 90, 60 );
-  qtarch_ButtonGroup_71->setMinimumSize( 0, 0 );
-  qtarch_ButtonGroup_71->setMaximumSize( 32767, 32767 );
-  qtarch_ButtonGroup_71->setFocusPolicy( QWidget::NoFocus );
-  qtarch_ButtonGroup_71->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_ButtonGroup_71->setFontPropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_71->setPalettePropagation( QWidget::NoChildren );
-  qtarch_ButtonGroup_71->setFrameStyle( 49 );
-  qtarch_ButtonGroup_71->setTitle(i18n("AM/PM") );
-  qtarch_ButtonGroup_71->setAlignment( 1 );
-  
-  currentDateButton = new QCheckBox( parent, "currentDateButton" );
-  currentDateButton->setGeometry( 30, 30, 200, 30 );
-  currentDateButton->setMinimumSize( 0, 0 );
-  currentDateButton->setMaximumSize( 32767, 32767 );
+
+  QHBoxLayout *box1 = new QHBoxLayout( qtarch_ButtonGroup_74 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  currentDateButton = new QCheckBox( qtarch_ButtonGroup_74, "currentDateButton" );
   currentDateButton->setFocusPolicy( QWidget::TabFocus );
   currentDateButton->setBackgroundMode( QWidget::PaletteBackground );
   currentDateButton->setFontPropagation( QWidget::NoChildren );
@@ -819,94 +670,24 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   currentDateButton->setText( i18n("current date") );
   currentDateButton->setAutoRepeat( FALSE );
   currentDateButton->setAutoResize( FALSE );
+  box1->addWidget(currentDateButton);
   connect(currentDateButton,SIGNAL(clicked()),SLOT(slotCurrentDateClicked()));
-  
-  modificationDateButton = new QCheckBox( parent, "modificationDateButton" );
-  modificationDateButton->setGeometry( 31, 134, 200, 30 );
-  modificationDateButton->setMinimumSize( 0, 0 );
-  modificationDateButton->setMaximumSize( 32767, 32767 );
-  modificationDateButton->setFocusPolicy( QWidget::TabFocus );
-  modificationDateButton->setBackgroundMode( QWidget::PaletteBackground );
-  modificationDateButton->setFontPropagation( QWidget::NoChildren );
-  modificationDateButton->setPalettePropagation( QWidget::NoChildren );
-  modificationDateButton->setText( i18n("modification date") );
-  modificationDateButton->setAutoRepeat( FALSE );
-  modificationDateButton->setAutoResize( FALSE );
-  connect(modificationDateButton,SIGNAL(clicked()),SLOT(slotModiDateClicked()));
-  
-  currentTimeButton = new QCheckBox( parent, "currentTimeButton" );
-  currentTimeButton->setGeometry( 30, 237, 110, 30 );
-  currentTimeButton->setMinimumSize( 0, 0 );
-  currentTimeButton->setMaximumSize( 32767, 32767 );
-  currentTimeButton->setFocusPolicy( QWidget::TabFocus );
-  currentTimeButton->setBackgroundMode( QWidget::PaletteBackground );
-  currentTimeButton->setFontPropagation( QWidget::NoChildren );
-  currentTimeButton->setPalettePropagation( QWidget::NoChildren );
-  currentTimeButton->setText( i18n("current time") );
-  currentTimeButton->setAutoRepeat( FALSE );
-  currentTimeButton->setAutoResize( FALSE );
-  connect(currentTimeButton,SIGNAL(clicked()),SLOT(slotCurrentTimeClicked()));
-  
-  modificationTimeButton = new QCheckBox( parent, "modificationTimeButton" );
-  modificationTimeButton->setGeometry( 30, 340, 110, 30 );
-  modificationTimeButton->setMinimumSize( 0, 0 );
-  modificationTimeButton->setMaximumSize( 32767, 32767 );
-  modificationTimeButton->setFocusPolicy( QWidget::TabFocus );
-  modificationTimeButton->setBackgroundMode( QWidget::PaletteBackground );
-  modificationTimeButton->setFontPropagation( QWidget::NoChildren );
-  modificationTimeButton->setPalettePropagation( QWidget::NoChildren );
-  modificationTimeButton->setText( i18n("modification time") );
-  modificationTimeButton->setAutoRepeat( FALSE );
-  modificationTimeButton->setAutoResize( FALSE );
-  connect(modificationTimeButton,SIGNAL(clicked()),SLOT(slotModiTimeClicked()));
-  
-  currentTimePosition = new QComboBox( FALSE, parent, "currentTimePosition" );
-  currentTimePosition->setGeometry( 270, 270, 130, 30 );
-  currentTimePosition->setMinimumSize( 0, 0 );
-  currentTimePosition->setMaximumSize( 32767, 32767 );
-  currentTimePosition->setFocusPolicy( QWidget::StrongFocus );
-  currentTimePosition->setBackgroundMode( QWidget::PaletteBackground );
-  currentTimePosition->setFontPropagation( QWidget::NoChildren );
-  currentTimePosition->setPalettePropagation( QWidget::NoChildren );
-  currentTimePosition->setSizeLimit( 10 );
-  currentTimePosition->setAutoResize( FALSE );
-  currentTimePosition->insertItem(i18n("left"));
-  currentTimePosition->insertItem(i18n("center"));
-  currentTimePosition->insertItem(i18n("right"));
-  
-  currentTimeAmpm = new QComboBox( FALSE, parent, "currentTimeAmpm" );
-  currentTimeAmpm->setGeometry( 170, 270, 70, 30 );
-  currentTimeAmpm->setMinimumSize( 0, 0 );
-  currentTimeAmpm->setMaximumSize( 32767, 32767 );
-  currentTimeAmpm->setFocusPolicy( QWidget::StrongFocus );
-  currentTimeAmpm->setBackgroundMode( QWidget::PaletteBackground );
-  currentTimeAmpm->setFontPropagation( QWidget::NoChildren );
-  currentTimeAmpm->setPalettePropagation( QWidget::NoChildren );
-  currentTimeAmpm->setSizeLimit( 10 );
-  currentTimeAmpm->setAutoResize( FALSE );
-  currentTimeAmpm->insertItem( "am/pm" );
-  currentTimeAmpm->insertItem( "24 h" );
-  connect(currentTimeAmpm,SIGNAL(activated(int)),SLOT(slotCurrentAmpmClicked(int)));
-  
-  modificationDateFormat = new QComboBox( FALSE, parent, "modificationDateFormat" );
-  modificationDateFormat->setGeometry( 430, 160, 130, 30 );
-  modificationDateFormat->setMinimumSize( 0, 0 );
-  modificationDateFormat->setMaximumSize( 32767, 32767 );
-  modificationDateFormat->setFocusPolicy( QWidget::StrongFocus );
-  modificationDateFormat->setBackgroundMode( QWidget::PaletteBackground );
-  modificationDateFormat->setFontPropagation( QWidget::NoChildren );
-  modificationDateFormat->setPalettePropagation( QWidget::NoChildren );
-  modificationDateFormat->setSizeLimit( 10 );
-  modificationDateFormat->setAutoResize( FALSE );
-  modificationDateFormat->insertItem( "dd.mm.yyyy" );
-  modificationDateFormat->insertItem( "yy-mm-dd" );
-  modificationDateFormat->insertItem( "yy/mm/dd" );
-  modificationDateFormat->insertItem( "mm/dd/yy" );
-  
-  currentDatePosition = new QComboBox( FALSE, parent, "currentDatePosition" );
-  currentDatePosition->setGeometry( 270, 60, 130, 30 );
-  currentDatePosition->setMinimumSize( 0, 0 );
-  currentDatePosition->setMaximumSize( 32767, 32767 );
+
+  qtarch_ButtonGroup_88 = new QButtonGroup( qtarch_ButtonGroup_74, "ButtonGroup_88" );
+  qtarch_ButtonGroup_88->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_88->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_88->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_88->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_88->setFrameStyle( 49 );
+  qtarch_ButtonGroup_88->setTitle(i18n("Position") );
+  qtarch_ButtonGroup_88->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_88);
+
+  QHBoxLayout *box2 = new QHBoxLayout( qtarch_ButtonGroup_88 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+  currentDatePosition = new QComboBox( FALSE,qtarch_ButtonGroup_88 , "currentDatePosition" );
   currentDatePosition->setFocusPolicy( QWidget::StrongFocus );
   currentDatePosition->setBackgroundMode( QWidget::PaletteBackground );
   currentDatePosition->setFontPropagation( QWidget::NoChildren );
@@ -916,79 +697,26 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   currentDatePosition->insertItem(i18n("left"));
   currentDatePosition->insertItem(i18n("center"));
   currentDatePosition->insertItem(i18n("right"));
-  
-  modificationTimeAmpm = new QComboBox( FALSE, parent, "modificationTimeAmpm" );
-  modificationTimeAmpm->setGeometry( 170, 370, 70, 30 );
-  modificationTimeAmpm->setMinimumSize( 0, 0 );
-  modificationTimeAmpm->setMaximumSize( 32767, 32767 );
-  modificationTimeAmpm->setFocusPolicy( QWidget::StrongFocus );
-  modificationTimeAmpm->setBackgroundMode( QWidget::PaletteBackground );
-  modificationTimeAmpm->setFontPropagation( QWidget::NoChildren );
-  modificationTimeAmpm->setPalettePropagation( QWidget::NoChildren );
-  modificationTimeAmpm->setSizeLimit( 10 );
-  modificationTimeAmpm->setAutoResize( FALSE );
-  modificationTimeAmpm->insertItem( "am/pm" );
-  modificationTimeAmpm->insertItem( "24 h" );
-  connect(modificationTimeAmpm,SIGNAL(activated(int)),SLOT(slotModificationAmpmClicked(int)));
-  
-  currentTimeFormat = new QComboBox( FALSE, parent, "currentTimeFormat" );
-  currentTimeFormat->setGeometry( 430, 270, 130, 30 );
-  currentTimeFormat->setMinimumSize( 0, 0 );
-  currentTimeFormat->setMaximumSize( 32767, 32767 );
-  currentTimeFormat->setFocusPolicy( QWidget::StrongFocus );
-  currentTimeFormat->setBackgroundMode( QWidget::PaletteBackground );
-  currentTimeFormat->setFontPropagation( QWidget::NoChildren );
-  currentTimeFormat->setPalettePropagation( QWidget::NoChildren );
-  currentTimeFormat->setSizeLimit( 10 );
-  currentTimeFormat->setAutoResize( FALSE );
-  currentTimeFormat->insertItem( "hh:mm:ss" );
-  currentTimeFormat->insertItem( "hh:mm" );
-  
-  modificationTimePosition = new QComboBox( FALSE, parent, "modificationTimePosition" );
-  modificationTimePosition->setGeometry( 270, 370, 130, 30 );
-  modificationTimePosition->setMinimumSize( 0, 0 );
-  modificationTimePosition->setMaximumSize( 32767, 32767 );
-  modificationTimePosition->setFocusPolicy( QWidget::StrongFocus );
-  modificationTimePosition->setBackgroundMode( QWidget::PaletteBackground );
-  modificationTimePosition->setFontPropagation( QWidget::NoChildren );
-  modificationTimePosition->setPalettePropagation( QWidget::NoChildren );
-  modificationTimePosition->setSizeLimit( 10 );
-  modificationTimePosition->setAutoResize( FALSE );
-  modificationTimePosition->insertItem(i18n("left"));
-  modificationTimePosition->insertItem(i18n("center"));
-  modificationTimePosition->insertItem(i18n("right"));
-  
-  modificationTimeFormat = new QComboBox( FALSE, parent, "modificationTimeFormat" );
-  modificationTimeFormat->setGeometry( 430, 370, 130, 30 );
-  modificationTimeFormat->setMinimumSize( 0, 0 );
-  modificationTimeFormat->setMaximumSize( 32767, 32767 );
-  modificationTimeFormat->setFocusPolicy( QWidget::StrongFocus );
-  modificationTimeFormat->setBackgroundMode( QWidget::PaletteBackground );
-  modificationTimeFormat->setFontPropagation( QWidget::NoChildren );
-  modificationTimeFormat->setPalettePropagation( QWidget::NoChildren );
-  modificationTimeFormat->setSizeLimit( 10 );
-  modificationTimeFormat->setAutoResize( FALSE );
-  modificationTimeFormat->insertItem( "hh:mm:ss" );
-  modificationTimeFormat->insertItem( "hh:mm" );
-  
-  modificationDatePosition = new QComboBox( FALSE, parent, "modificationDatePosition" );
-  modificationDatePosition->setGeometry( 270, 160, 130, 30 );
-  modificationDatePosition->setMinimumSize( 0, 0 );
-  modificationDatePosition->setMaximumSize( 32767, 32767 );
-  modificationDatePosition->setFocusPolicy( QWidget::StrongFocus );
-  modificationDatePosition->setBackgroundMode( QWidget::PaletteBackground );
-  modificationDatePosition->setFontPropagation( QWidget::NoChildren );
-  modificationDatePosition->setPalettePropagation( QWidget::NoChildren );
-  modificationDatePosition->setSizeLimit( 10 );
-  modificationDatePosition->setAutoResize( FALSE );
-  modificationDatePosition->insertItem(i18n("left"));
-  modificationDatePosition->insertItem(i18n("center"));
-  modificationDatePosition->insertItem(i18n("right"));
-  
-  currentDateFormat = new QComboBox( FALSE, parent, "currentDateFormat" );
-  currentDateFormat->setGeometry( 430, 60, 130, 30 );
-  currentDateFormat->setMinimumSize( 0, 0 );
-  currentDateFormat->setMaximumSize( 32767, 32767 );
+  box2->addWidget(currentDatePosition);
+
+
+  qtarch_ButtonGroup_87 = new QButtonGroup( qtarch_ButtonGroup_74, "ButtonGroup_87" );
+  qtarch_ButtonGroup_87->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_87->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_87->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_87->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_87->setFrameStyle( 49 );
+  qtarch_ButtonGroup_87->setTitle(i18n("Format") );
+  qtarch_ButtonGroup_87->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_87);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_87 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+
+
+  currentDateFormat = new QComboBox( FALSE, qtarch_ButtonGroup_87, "currentDateFormat" );
   currentDateFormat->setFocusPolicy( QWidget::StrongFocus );
   currentDateFormat->setBackgroundMode( QWidget::PaletteBackground );
   currentDateFormat->setFontPropagation( QWidget::NoChildren );
@@ -999,11 +727,313 @@ void CConfigEnscriptDlg::initTab2(QWidget*parent) {
   currentDateFormat->insertItem( "yy-mm-dd" );
   currentDateFormat->insertItem( "yy/mm/dd" );
   currentDateFormat->insertItem( "mm/dd/yy" );
-  
-  qtarch_ButtonGroup_78->insert( currentTimeButton );
-  qtarch_ButtonGroup_77->insert( modificationTimeButton );
-  qtarch_ButtonGroup_76->insert( modificationDateButton );
-  qtarch_ButtonGroup_74->insert( currentDateButton );
+  box2->addWidget(currentDateFormat);
+
+
+  /********************************************************************************/
+
+  /**modification date */
+  qtarch_ButtonGroup_76 = new QButtonGroup( parent, "ButtonGroup_76" );
+  qtarch_ButtonGroup_76->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_76->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_76->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_76->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_76->setFrameStyle( 49 );
+  qtarch_ButtonGroup_76->setTitle( i18n("Modification date") );
+  qtarch_ButtonGroup_76->setAlignment( 1 );
+  box->addWidget(qtarch_ButtonGroup_76);
+
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_76 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+
+
+  modificationDateButton = new QCheckBox( qtarch_ButtonGroup_76, "modificationDateButton" );
+  modificationDateButton->setFocusPolicy( QWidget::TabFocus );
+  modificationDateButton->setBackgroundMode( QWidget::PaletteBackground );
+  modificationDateButton->setFontPropagation( QWidget::NoChildren );
+  modificationDateButton->setPalettePropagation( QWidget::NoChildren );
+  modificationDateButton->setText( i18n("modification date") );
+  modificationDateButton->setAutoRepeat( FALSE );
+  modificationDateButton->setAutoResize( FALSE );
+  connect(modificationDateButton,SIGNAL(clicked()),SLOT(slotModiDateClicked()));
+  box1->addWidget(modificationDateButton);
+
+
+  qtarch_ButtonGroup_90 = new QButtonGroup( qtarch_ButtonGroup_76, "ButtonGroup_90" );
+  qtarch_ButtonGroup_90->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_90->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_90->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_90->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_90->setFrameStyle( 49 );
+  qtarch_ButtonGroup_90->setTitle(i18n("Position") );
+  qtarch_ButtonGroup_90->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_90);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_90 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+  modificationDatePosition = new QComboBox( FALSE,  qtarch_ButtonGroup_90, "modificationDatePosition" );
+  modificationDatePosition->setFocusPolicy( QWidget::StrongFocus );
+  modificationDatePosition->setBackgroundMode( QWidget::PaletteBackground );
+  modificationDatePosition->setFontPropagation( QWidget::NoChildren );
+  modificationDatePosition->setPalettePropagation( QWidget::NoChildren );
+  modificationDatePosition->setSizeLimit( 10 );
+  modificationDatePosition->setAutoResize( FALSE );
+  modificationDatePosition->insertItem(i18n("left"));
+  modificationDatePosition->insertItem(i18n("center"));
+  modificationDatePosition->insertItem(i18n("right"));
+  box2->addWidget(modificationDatePosition);
+
+
+  qtarch_ButtonGroup_84 = new QButtonGroup( qtarch_ButtonGroup_76, "ButtonGroup_84" );
+  qtarch_ButtonGroup_84->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_84->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_84->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_84->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_84->setFrameStyle( 49 );
+  qtarch_ButtonGroup_84->setTitle(i18n("Format") );
+  qtarch_ButtonGroup_84->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_84);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_84 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+  modificationDateFormat = new QComboBox( FALSE, qtarch_ButtonGroup_84, "modificationDateFormat" );
+  modificationDateFormat->setFocusPolicy( QWidget::StrongFocus );
+  modificationDateFormat->setBackgroundMode( QWidget::PaletteBackground );
+  modificationDateFormat->setFontPropagation( QWidget::NoChildren );
+  modificationDateFormat->setPalettePropagation( QWidget::NoChildren );
+  modificationDateFormat->setSizeLimit( 10 );
+  modificationDateFormat->setAutoResize( FALSE );
+  modificationDateFormat->insertItem( "dd.mm.yyyy" );
+  modificationDateFormat->insertItem( "yy-mm-dd" );
+  modificationDateFormat->insertItem( "yy/mm/dd" );
+  modificationDateFormat->insertItem( "mm/dd/yy" );
+  box2->addWidget(modificationDateFormat);
+
+  /***********************************************************************************/
+
+  /*current time*/
+  qtarch_ButtonGroup_78 = new QButtonGroup( parent, "ButtonGroup_78" );
+  qtarch_ButtonGroup_78->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_78->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_78->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_78->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_78->setFrameStyle( 49 );
+  qtarch_ButtonGroup_78->setTitle(i18n("Current time") );
+  qtarch_ButtonGroup_78->setAlignment( 1 );
+  box->addWidget(qtarch_ButtonGroup_78);
+
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_78 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  currentTimeButton = new QCheckBox( qtarch_ButtonGroup_78, "currentTimeButton" );
+  currentTimeButton->setFocusPolicy( QWidget::TabFocus );
+  currentTimeButton->setBackgroundMode( QWidget::PaletteBackground );
+  currentTimeButton->setFontPropagation( QWidget::NoChildren );
+  currentTimeButton->setPalettePropagation( QWidget::NoChildren );
+  currentTimeButton->setText( i18n("current time") );
+  currentTimeButton->setAutoRepeat( FALSE );
+  currentTimeButton->setAutoResize( FALSE );
+  connect(currentTimeButton,SIGNAL(clicked()),SLOT(slotCurrentTimeClicked()));
+  box1->addWidget(currentTimeButton);
+
+  qtarch_ButtonGroup_71 = new QButtonGroup( qtarch_ButtonGroup_78, "ButtonGroup_71" );
+  qtarch_ButtonGroup_71->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_71->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_71->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_71->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_71->setFrameStyle( 49 );
+  qtarch_ButtonGroup_71->setTitle(i18n("AM/PM") );
+  qtarch_ButtonGroup_71->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_71);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_71 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+
+  currentTimeAmpm = new QComboBox( FALSE,qtarch_ButtonGroup_71 , "currentTimeAmpm" );
+  currentTimeAmpm->setFocusPolicy( QWidget::StrongFocus );
+  currentTimeAmpm->setBackgroundMode( QWidget::PaletteBackground );
+  currentTimeAmpm->setFontPropagation( QWidget::NoChildren );
+  currentTimeAmpm->setPalettePropagation( QWidget::NoChildren );
+  currentTimeAmpm->setSizeLimit( 10 );
+  currentTimeAmpm->setAutoResize( FALSE );
+  currentTimeAmpm->insertItem( "am/pm" );
+  currentTimeAmpm->insertItem( "24 h" );
+  connect(currentTimeAmpm,SIGNAL(activated(int)),SLOT(slotCurrentAmpmClicked(int)));
+  box2->addWidget(currentTimeAmpm);
+
+
+  qtarch_ButtonGroup_85 = new QButtonGroup( qtarch_ButtonGroup_78, "ButtonGroup_85" );
+  qtarch_ButtonGroup_85->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_85->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_85->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_85->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_85->setFrameStyle( 49 );
+  qtarch_ButtonGroup_85->setTitle( i18n("Position") );
+  qtarch_ButtonGroup_85->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_85);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_85 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+  currentTimePosition = new QComboBox( FALSE, qtarch_ButtonGroup_85, "currentTimePosition" );
+  currentTimePosition->setFocusPolicy( QWidget::StrongFocus );
+  currentTimePosition->setBackgroundMode( QWidget::PaletteBackground );
+  currentTimePosition->setFontPropagation( QWidget::NoChildren );
+  currentTimePosition->setPalettePropagation( QWidget::NoChildren );
+  currentTimePosition->setSizeLimit( 10 );
+  currentTimePosition->setAutoResize( FALSE );
+  currentTimePosition->insertItem(i18n("left"));
+  currentTimePosition->insertItem(i18n("center"));
+  currentTimePosition->insertItem(i18n("right"));
+  box2->addWidget(currentTimePosition);
+
+
+  qtarch_ButtonGroup_89 = new QButtonGroup( qtarch_ButtonGroup_78, "ButtonGroup_89" );
+  qtarch_ButtonGroup_89->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_89->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_89->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_89->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_89->setFrameStyle( 49 );
+  qtarch_ButtonGroup_89->setTitle(i18n("Format") );
+  qtarch_ButtonGroup_89->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_89);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_89 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+
+  currentTimeFormat = new QComboBox( FALSE, qtarch_ButtonGroup_89, "currentTimeFormat" );
+  currentTimeFormat->setFocusPolicy( QWidget::StrongFocus );
+  currentTimeFormat->setBackgroundMode( QWidget::PaletteBackground );
+  currentTimeFormat->setFontPropagation( QWidget::NoChildren );
+  currentTimeFormat->setPalettePropagation( QWidget::NoChildren );
+  currentTimeFormat->setSizeLimit( 10 );
+  currentTimeFormat->setAutoResize( FALSE );
+  currentTimeFormat->insertItem( "hh:mm:ss" );
+  currentTimeFormat->insertItem( "hh:mm" );
+  box2->addWidget(currentTimeFormat);
+
+  /***********************************************************************************/
+
+  /*modification time*/
+  qtarch_ButtonGroup_77 = new QButtonGroup( parent, "ButtonGroup_77" );
+  qtarch_ButtonGroup_77->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_77->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_77->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_77->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_77->setFrameStyle( 49 );
+  qtarch_ButtonGroup_77->setTitle(i18n("Modification time") );
+  qtarch_ButtonGroup_77->setAlignment( 1 );
+  box->addWidget(qtarch_ButtonGroup_77);
+
+  box1 = new QHBoxLayout( qtarch_ButtonGroup_77 );
+  box1->setMargin( 15 );
+  box1->setSpacing( 15 );
+
+  modificationTimeButton = new QCheckBox( qtarch_ButtonGroup_77, "modificationTimeButton" );
+  modificationTimeButton->setFocusPolicy( QWidget::TabFocus );
+  modificationTimeButton->setBackgroundMode( QWidget::PaletteBackground );
+  modificationTimeButton->setFontPropagation( QWidget::NoChildren );
+  modificationTimeButton->setPalettePropagation( QWidget::NoChildren );
+  modificationTimeButton->setText( i18n("modification time") );
+  modificationTimeButton->setAutoRepeat( FALSE );
+  modificationTimeButton->setAutoResize( FALSE );
+  connect(modificationTimeButton,SIGNAL(clicked()),SLOT(slotModiTimeClicked()));
+  box1->addWidget(modificationTimeButton);
+
+  qtarch_ButtonGroup_72 = new QButtonGroup( qtarch_ButtonGroup_77, "ButtonGroup_72" );
+  qtarch_ButtonGroup_72->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_72->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_72->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_72->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_72->setFrameStyle( 49 );
+  qtarch_ButtonGroup_72->setTitle(i18n("AM/PM") );
+  qtarch_ButtonGroup_72->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_72);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_72 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+
+  modificationTimeAmpm = new QComboBox( FALSE, qtarch_ButtonGroup_72, "modificationTimeAmpm" );
+  modificationTimeAmpm->setFocusPolicy( QWidget::StrongFocus );
+  modificationTimeAmpm->setBackgroundMode( QWidget::PaletteBackground );
+  modificationTimeAmpm->setFontPropagation( QWidget::NoChildren );
+  modificationTimeAmpm->setPalettePropagation( QWidget::NoChildren );
+  modificationTimeAmpm->setSizeLimit( 10 );
+  modificationTimeAmpm->setAutoResize( FALSE );
+  modificationTimeAmpm->insertItem( "am/pm" );
+  modificationTimeAmpm->insertItem( "24 h" );
+  connect(modificationTimeAmpm,SIGNAL(activated(int)),SLOT(slotModificationAmpmClicked(int)));
+  box2->addWidget(modificationTimeAmpm);
+
+
+  qtarch_ButtonGroup_75 = new QButtonGroup( qtarch_ButtonGroup_77, "ButtonGroup_75" );
+  qtarch_ButtonGroup_75->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_75->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_75->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_75->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_75->setFrameStyle( 49 );
+  qtarch_ButtonGroup_75->setTitle(i18n("Position") );
+  qtarch_ButtonGroup_75->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_75);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_75 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+  modificationTimePosition = new QComboBox( FALSE,  qtarch_ButtonGroup_75, "modificationTimePosition" );
+  modificationTimePosition->setFocusPolicy( QWidget::StrongFocus );
+  modificationTimePosition->setBackgroundMode( QWidget::PaletteBackground );
+  modificationTimePosition->setFontPropagation( QWidget::NoChildren );
+  modificationTimePosition->setPalettePropagation( QWidget::NoChildren );
+  modificationTimePosition->setSizeLimit( 10 );
+  modificationTimePosition->setAutoResize( FALSE );
+  modificationTimePosition->insertItem(i18n("left"));
+  modificationTimePosition->insertItem(i18n("center"));
+  modificationTimePosition->insertItem(i18n("right"));
+  box2->addWidget(modificationTimePosition);
+
+  qtarch_ButtonGroup_86 = new QButtonGroup( qtarch_ButtonGroup_77, "ButtonGroup_86" );
+  qtarch_ButtonGroup_86->setFocusPolicy( QWidget::NoFocus );
+  qtarch_ButtonGroup_86->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_ButtonGroup_86->setFontPropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_86->setPalettePropagation( QWidget::NoChildren );
+  qtarch_ButtonGroup_86->setFrameStyle( 49 );
+  qtarch_ButtonGroup_86->setTitle( i18n("Format") );
+  qtarch_ButtonGroup_86->setAlignment( 1 );
+  box1->addWidget(qtarch_ButtonGroup_86);
+
+  box2 = new QHBoxLayout( qtarch_ButtonGroup_86 );
+  box2->setMargin( 5 );
+  box2->setSpacing( 10 );
+
+  modificationTimeFormat = new QComboBox( FALSE, qtarch_ButtonGroup_86, "modificationTimeFormat" );
+  modificationTimeFormat->setFocusPolicy( QWidget::StrongFocus );
+  modificationTimeFormat->setBackgroundMode( QWidget::PaletteBackground );
+  modificationTimeFormat->setFontPropagation( QWidget::NoChildren );
+  modificationTimeFormat->setPalettePropagation( QWidget::NoChildren );
+  modificationTimeFormat->setSizeLimit( 10 );
+  modificationTimeFormat->setAutoResize( FALSE );
+  modificationTimeFormat->insertItem( "hh:mm:ss" );
+  modificationTimeFormat->insertItem( "hh:mm" );
+  box2->addWidget( modificationTimeFormat);
+
+
+
+  /***********************************************************************************/
 
   QWhatsThis::add(currentTimeButton,
 	i18n("If you wish to print the current time, then check it."));
@@ -1156,7 +1186,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_label->setText(i18n("lines per page"));
   qtarch_label->setAlignment( 289 );
   qtarch_label->setMargin( -1 );
-  
+
   numberingPagesButton = new QCheckBox( parent, "numberingPagesButton" );
   numberingPagesButton->setGeometry( 30, 70, 115, 30 );
   numberingPagesButton->setMinimumSize( 0, 0 );
@@ -1303,7 +1333,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   qtarch_Label_4->setText(i18n("font for header"));
   qtarch_Label_4->setAlignment( 289 );
   qtarch_Label_4->setMargin( -1 );
-  
+
   qtarch_Label_5 = new QLabel( parent, "Label_5" );
   qtarch_Label_5->setGeometry( 30, 370, 100, 30 );
   qtarch_Label_5->setMinimumSize( 0, 0 );
@@ -1356,7 +1386,7 @@ void CConfigEnscriptDlg::initTab3(QWidget*parent) {
   fontForHeaderButton->setText( "" );
   fontForHeaderButton->setAutoRepeat( FALSE );
   fontForHeaderButton->setAutoResize( FALSE );
-  
+
   alignFileList = new QComboBox( FALSE, parent, "alignFileList" );
   alignFileList->setGeometry( 160, 120, 130, 30 );
   alignFileList->setMinimumSize( 0, 0 );
@@ -1999,14 +2029,14 @@ void CConfigEnscriptDlg::slotHostnameClicked() {
 
 void CConfigEnscriptDlg::slotCurrentDateClicked() {
   if (currentDateButton->isChecked()) {
-    qtarch_ButtonGroup_75->setEnabled(true);
-    qtarch_ButtonGroup_84->setEnabled(true);
+    qtarch_ButtonGroup_88->setEnabled(true);
+    qtarch_ButtonGroup_87->setEnabled(true);
     currentDatePosition->setEnabled(true);
     currentDateFormat->setEnabled(true);
   }
   else {
-    qtarch_ButtonGroup_75->setEnabled(false);
-    qtarch_ButtonGroup_84->setEnabled(false);
+    qtarch_ButtonGroup_88->setEnabled(false);
+    qtarch_ButtonGroup_87->setEnabled(false);
     currentDatePosition->setEnabled(false);
     currentDateFormat->setEnabled(false);
   }
@@ -2014,21 +2044,21 @@ void CConfigEnscriptDlg::slotCurrentDateClicked() {
 
 void CConfigEnscriptDlg::slotCurrentTimeClicked() {
   if (currentTimeButton->isChecked()) {
-    qtarch_ButtonGroup_90->setEnabled(true);
     qtarch_ButtonGroup_71->setEnabled(true);
+    qtarch_ButtonGroup_85->setEnabled(true);
     qtarch_ButtonGroup_89->setEnabled(true);
     currentTimeAmpm->setEnabled(true);
     currentTimePosition->setEnabled(true);
     if (currentTimeAmpm->currentItem()==0) {
       currentTimeFormat->setEnabled(false);
-    } 
+    }
     else {
       currentTimeFormat->setEnabled(true);
     }
   }
   else {
-    qtarch_ButtonGroup_90->setEnabled(false);
     qtarch_ButtonGroup_71->setEnabled(false);
+    qtarch_ButtonGroup_85->setEnabled(false);
     qtarch_ButtonGroup_89->setEnabled(false);
     currentTimeAmpm->setEnabled(false);
     currentTimePosition->setEnabled(false);
@@ -2039,14 +2069,14 @@ void CConfigEnscriptDlg::slotCurrentTimeClicked() {
 
 void CConfigEnscriptDlg::slotModiDateClicked() {
   if (modificationDateButton->isChecked()) {
-    qtarch_ButtonGroup_86->setEnabled(true);
-    qtarch_ButtonGroup_85->setEnabled(true);
+    qtarch_ButtonGroup_90->setEnabled(true);
+    qtarch_ButtonGroup_84->setEnabled(true);
     modificationDatePosition->setEnabled(true);
     modificationDateFormat->setEnabled(true);
   }
   else {
-    qtarch_ButtonGroup_86->setEnabled(false);
-    qtarch_ButtonGroup_85->setEnabled(false);
+    qtarch_ButtonGroup_90->setEnabled(false);
+    qtarch_ButtonGroup_84->setEnabled(false);
     modificationDatePosition->setEnabled(false);
     modificationDateFormat->setEnabled(false);
   }
@@ -2054,22 +2084,22 @@ void CConfigEnscriptDlg::slotModiDateClicked() {
 
 void CConfigEnscriptDlg::slotModiTimeClicked() {
   if (modificationTimeButton->isChecked()) {
-    qtarch_ButtonGroup_88->setEnabled(true);
+    qtarch_ButtonGroup_75->setEnabled(true);
     qtarch_ButtonGroup_72->setEnabled(true);
-    qtarch_ButtonGroup_87->setEnabled(true);
+    qtarch_ButtonGroup_86->setEnabled(true);
     modificationTimeAmpm->setEnabled(true);
     modificationTimePosition->setEnabled(true);
     if (modificationTimeAmpm->currentItem()==0) {
       modificationTimeFormat->setEnabled(false);
-    } 
+    }
     else {
       modificationTimeFormat->setEnabled(true);
     }
   }
   else {
-    qtarch_ButtonGroup_87->setEnabled(false);
+    qtarch_ButtonGroup_75->setEnabled(false);
     qtarch_ButtonGroup_72->setEnabled(false);
-    qtarch_ButtonGroup_88->setEnabled(false);
+    qtarch_ButtonGroup_86->setEnabled(false);
     modificationTimeAmpm->setEnabled(false);
     modificationTimePosition->setEnabled(false);
     modificationTimeFormat->setEnabled(false);
@@ -2192,81 +2222,62 @@ void CConfigEnscriptDlg::slotFontUnderlayClicked() {
   QFont font;
   QString string1,string2,string3,string;
   int size;
-  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
-  fontDialog->setCaption("UnderlayFontDialog");
-  fontDialog->exec();
-  if (fontDialog->result()) {
-    font=fontDialog->font();
-    string1=font.family();
-    string=string1.left(1).upper();
-    string1=string1.replace(0,1,string);
-    if (font.bold()) {
-      string1 = string1 + "-Bold";
-    }
-    if (font.italic()) {
-      string3="Italic";
-    }
-    else {
-      string3="Roman";
-    }
-    size=font.pointSize();
-    underlayFontButton->setText(string1+ "-" + string3 + string2.setNum(size));
-  }
-  delete (fontDialog);
+  //fontDialog->setCaption("UnderlayFontDialog");
+  if (KFontDialog::getFont( font,true,this ) )
+        {
+        string1=font.family();
+        string=string1.left(1).upper();
+        string1=string1.replace(0,1,string);
+        if (font.bold())
+                string1 = string1 + "-Bold";
+        if (font.italic())
+                string3="Italic";
+        else
+                string3="Roman";
+        size=font.pointSize();
+        underlayFontButton->setText(string1+ "-" + string3 + string2.setNum(size));
+        }
 }
 
 void CConfigEnscriptDlg::slotFontBodyClicked() {
   QFont font;
   QString string1,string2,string3,string;
   int size;
-  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
-  fontDialog->setCaption("BodyFontDialog");
-  fontDialog->exec();
-  if (fontDialog->result()) {
-    font=fontDialog->font();
-    string1=font.family();
-    string=string1.left(1).upper();
-    string1=string1.replace(0,1,string);
-    if (font.bold()) {
-      string1 = string1 + "-Bold";
-    }
-    if (font.italic()) {
-      string3="Italic";
-    }
-    else {
-      string3="Roman";
-    }
-    size=font.pointSize();
-    fontForBodyButton->setText(string1+ "-" + string3 + string2.setNum(size));
-  }
-  delete (fontDialog);
+//  fontDialog->setCaption("BodyFontDialog");
+    if (KFontDialog::getFont( font,true,this ) )
+        {
+        string1=font.family();
+        string=string1.left(1).upper();
+        string1=string1.replace(0,1,string);
+        if (font.bold())
+                string1 = string1 + "-Bold";
+        if (font.italic())
+                string3="Italic";
+        else
+                string3="Roman";
+        size=font.pointSize();
+        fontForBodyButton->setText(string1+ "-" + string3 + string2.setNum(size));
+        }
 }
 
 void CConfigEnscriptDlg::slotFontHeaderClicked() {
   QFont font;
   QString string1,string2,string3,string;
   int size;
-  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
-  fontDialog->setCaption("HeaderFontDialog");
-  fontDialog->exec();
-  if (fontDialog->result()) {
-    font=fontDialog->font();
-    string1=font.family();
-    string=string1.left(1).upper();
-    string1=string1.replace(0,1,string);
-    if (font.bold()) {
-      string1 = string1 + "-Bold";
-    }
-    if (font.italic()) {
-      string3="Italic";
-    }
-    else {
-      string3="Roman";
-    }
+  if (KFontDialog::getFont( font,true,this ) )
+        {
+        string1=font.family();
+        string=string1.left(1).upper();
+        string1=string1.replace(0,1,string);
+        if (font.bold())
+                string1 = string1 + "-Bold";
+        if (font.italic())
+                string3="Italic";
+        else
+                string3="Roman";
     size=font.pointSize();
     fontForHeaderButton->setText(string1+ "-" + string3 + string2.setNum(size));
-  }
-  delete (fontDialog);
+    }
 }
 
 void CConfigEnscriptDlg::slotDefaultClicked() {
