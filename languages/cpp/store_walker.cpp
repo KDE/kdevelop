@@ -37,10 +37,11 @@ void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
     m_currentScope.clear();
     m_currentNamespace.clear();
     m_currentClass.clear();
-
+    
     m_currentAccess = CodeModelItem::Public;
     m_inSlots = false;
     m_inSignals = false;
+    m_inStorageSpec = false;
     m_anon = 0;
     m_imports.clear();
 
@@ -56,7 +57,10 @@ void StoreWalker::parseDeclaration( DeclarationAST* ast )
 
 void StoreWalker::parseLinkageSpecification( LinkageSpecificationAST* ast )
 {
+    int inStorageSpec = m_inStorageSpec;
+    m_inStorageSpec = true;
     TreeParser::parseLinkageSpecification( ast );
+    m_inStorageSpec = inStorageSpec;
 }
 
 void StoreWalker::parseNamespace( NamespaceAST* ast )
@@ -347,6 +351,9 @@ void StoreWalker::parseTypeDeclaratation( TypeSpecifierAST* typeSpec )
 
 void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl )
 {
+    if( m_inStorageSpec )
+	    return;
+    
     DeclaratorAST* d = decl->declarator();
 
     if( !d )

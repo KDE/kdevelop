@@ -71,6 +71,7 @@ private:
     bool m_inSlots;
     bool m_inSignals;
     int m_anon;
+    bool m_inStorageSpec;
 
     QValueStack<NamespaceDom> m_currentNamespace;
     QValueStack<ClassDom> m_currentClass;
