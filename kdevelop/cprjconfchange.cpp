@@ -23,13 +23,16 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 
-#include <kregexp.h>
+#include <kdevregexp.h>
 #include <kdebug.h>
 #include <iostream.h>
 
 #define COMMENT				"^dnl[\\s]+"
-#define COMMENTKDEV		".*[\\s]+dnl[\\s]+__kdevelop__[\\s]*$"
-#define OPTIONSUFFIX	" dnl __kdevelop__"
+#define COMMENTKDEV		".*[\\s]+dnl[\\s]+__kdev"
+#define ENDREGEXP			"__[\\s]*$"
+#define OPTIONSUFFIX	" dnl __kdev"
+#define ENDSUFFIX	"__"
+#define COMMENTPREFIX	"dnl "
 
 
 CPrjConfChange::CPrjConfChange(const QString &confDir) : bChanged(false)
@@ -89,7 +92,7 @@ bool CPrjConfChange::readConfFile()
     QRegExp exp("\\\\[\\s]*$");
     int pos;
     
-    cerr << "-- read " << confFile.latin1() << "--" << endl;
+//    cerr << "-- read " << confFile.latin1() << "--" << endl;
     
     content.clear();
     if(file.open(IO_ReadOnly))
@@ -102,7 +105,7 @@ bool CPrjConfChange::readConfFile()
         if (pos==-1)
         {
           fullLine+=line;
-          cerr << fullLine.latin1() << endl;
+//          cerr << fullLine.latin1() << endl;
           content.append(fullLine);
           fullLine="";
         }  
@@ -115,11 +118,11 @@ bool CPrjConfChange::readConfFile()
       file.close();
       if (!fullLine.isEmpty())
       {
-        cerr << fullLine.latin1() << endl;
+//        cerr << fullLine.latin1() << endl;
         content.append(fullLine);
       }
       
-      cerr << endl << "--" << endl;  
+//      cerr << endl << "--" << endl;  
       bOk=true;
     }
   }
@@ -138,7 +141,7 @@ bool CPrjConfChange::writeConfFile()
     QTextStream stream(&file);
     QString fullLine;
     
-    cerr << "-- write " << confFile.latin1() << "--" << endl;
+//    cerr << "-- write " << confFile.latin1() << "--" << endl;
     
     if(file.open(IO_WriteOnly))
     { 
@@ -148,10 +151,10 @@ bool CPrjConfChange::writeConfFile()
          fullLine.replace(QRegExp("[\\n]"),"\\\n");
          
          stream << fullLine; 
-         cerr << fullLine.latin1();
+//         cerr << fullLine.latin1();
        
          stream << "\n";
-         cerr << endl;
+//         cerr << endl;
       } 
       file.close();
       bOk=true;
@@ -168,7 +171,7 @@ bool CPrjConfChange::writeConfFile()
    - this search is case sensitive
    - remember: the passed string is a regexp!!
 */
-bool CPrjConfChange::isOptionAvailable(const QString &option) const
+bool CPrjConfChange::isOptionAvailable(const QString &option, const QString &suffix) const
 {
   bool bAvail=false;
   QString fullLine;
@@ -177,6 +180,14 @@ bool CPrjConfChange::isOptionAvailable(const QString &option) const
   // prepare the regexps
   disabledOption+=option+QString(COMMENTKDEV);
   enabledOption+=QString(COMMENTKDEV);
+  
+  if (!suffix.isEmpty())
+  {
+    disabledOption+=suffix; 
+    enabledOption+=suffix; 
+  }
+  disabledOption+=QString(ENDREGEXP);
+  enabledOption+=QString(ENDREGEXP);
   
   for (QStringList::ConstIterator it = content.begin(); it != content.end() && !bAvail; ++it)
   {
@@ -190,7 +201,9 @@ bool CPrjConfChange::isOptionAvailable(const QString &option) const
   return bAvail;
 }
 
-bool CPrjConfChange::setOption(const QString &option, const QString &value) 
+// enables the option inside configure.in(.in) with the 
+//   value given as param no. 2
+bool CPrjConfChange::enableOption(const QString &option, const QString &value, const QString &suffix) 
 {
   bool bFound=false;
   QString fullLine;
@@ -199,6 +212,14 @@ bool CPrjConfChange::setOption(const QString &option, const QString &value)
   // prepare the regexps
   disabledOption+=option+QString(COMMENTKDEV);
   enabledOption+=QString(COMMENTKDEV);
+  
+  if (!suffix.isEmpty())
+  {
+    disabledOption+=suffix; 
+    enabledOption+=suffix; 
+  }
+  disabledOption+=QString(ENDREGEXP);
+  enabledOption+=QString(ENDREGEXP);
   
   for (QStringList::Iterator it = content.begin(); it != content.end() && !bFound; ++it)
   {
@@ -210,7 +231,47 @@ bool CPrjConfChange::setOption(const QString &option, const QString &value)
     
     if (bFound)
     {
-      (*it)=option+value+OPTIONSUFFIX;  
+      (*it)=option+((value.isNull()) ? QString("") : value)+OPTIONSUFFIX+
+        ((suffix.isNull()) ? QString("") : suffix)+ENDSUFFIX;  
+      bChanged=true;
+    }
+  }  
+  return bFound;
+}
+
+// disables the option (with the value given as param no. 2) inside configure.in(.in)
+//   [it simply prefixes the line with "dnl "]
+bool CPrjConfChange::disableOption(const QString &option, const QString &value, const QString &suffix) 
+{
+  bool bFound=false;
+  QString fullLine;
+  QString disabledOption(COMMENT), enabledOption(option);
+  
+  // prepare the regexps
+  disabledOption+=option+QString(COMMENTKDEV);
+  enabledOption+=QString(COMMENTKDEV);
+  if (!suffix.isEmpty())
+  {
+    disabledOption+=suffix; 
+    enabledOption+=suffix; 
+  }
+  disabledOption+=QString(ENDREGEXP);
+  enabledOption+=QString(ENDREGEXP);
+  
+  
+  for (QStringList::Iterator it = content.begin(); it != content.end() && !bFound; ++it)
+  {
+    fullLine=*it;
+    if (fullLine.find(QRegExp(disabledOption))!=-1)
+      bFound=true;
+    if (fullLine.find(QRegExp(enabledOption))!=-1)
+      bFound=true;
+    
+    if (bFound)
+    {
+      (*it)=QString(COMMENTPREFIX)+option+((value.isNull()) ? QString("") : value)+
+        OPTIONSUFFIX+
+        ((suffix.isNull()) ? QString("") : suffix)+ENDSUFFIX;
       bChanged=true;
     }
   }  
@@ -220,7 +281,7 @@ bool CPrjConfChange::setOption(const QString &option, const QString &value)
 /*
    check if the required option is enabled
 */
-bool CPrjConfChange::isOptionEnabled(const QString &option) const
+bool CPrjConfChange::isOptionEnabled(const QString &option, const QString &suffix) const
 {
   bool bEnabled=false;
   QString fullLine;
@@ -228,6 +289,12 @@ bool CPrjConfChange::isOptionEnabled(const QString &option) const
   
   // prepare the regexp
   enabledOption+=option+QString(COMMENTKDEV);
+  if (!suffix.isEmpty())
+  {
+    enabledOption+=suffix; 
+  }
+  enabledOption+=QString(ENDREGEXP);
+  
   
   for (QStringList::ConstIterator it = content.begin(); it != content.end() && !bEnabled; ++it)
   {
@@ -237,6 +304,95 @@ bool CPrjConfChange::isOptionEnabled(const QString &option) const
       
   }  
   return bEnabled;
+}
+
+/* 
+ * raw access to configure.in(.in)
+ *
+ */
+
+/* returns the first line of configure.in(.in), which corrisponds
+   with the regexp passed as param 1
+   returns an empty string, unless the regexp wasn't found
+ */
+QString CPrjConfChange::getLine(const QString &regExpLine) const
+{
+  QString fullLine, result;
+  
+  for (QStringList::ConstIterator it = content.begin(); it != content.end() && result.isEmpty(); ++it)
+  {
+    fullLine=*it;
+    if (fullLine.find(QRegExp(regExpLine))!=-1)
+    {
+      result=fullLine;
+    }
+  }  
+  
+  return result;
+}
+
+/* returns true if the desired regexp is available
+ */
+bool CPrjConfChange::isLineAvailable(const QString &regExpLine) const
+{
+  bool result=false;
+  
+  for (QStringList::ConstIterator it = content.begin(); it != content.end() && !result; ++it)
+  {
+    if ((*it).find(QRegExp(regExpLine))!=-1)
+      result=true;
+  }  
+  
+  return result;
+}
+
+/* returns the parameters inside a macro-call
+   returns an empty string, unless the regexp wasn't found
+ */
+QString CPrjConfChange::getMacroParameter(const QString &regExpLine) const
+{
+  QString fullLine, result, rxLine(regExpLine);
+  KDevRegExp rx;
+  
+  if (rxLine.findRev("\\(")==-1)
+    rxLine+="\\(";
+  rxLine+="(.*)\\)";  
+  rx.setPattern(rxLine);
+  
+  for (QStringList::ConstIterator it = content.begin(); it != content.end() && result.isEmpty(); ++it)
+  {
+    fullLine=*it;
+    if (rx.exactMatch(fullLine))
+    {
+      result=rx.cap(1);
+    }
+  }  
+  
+  return result;
+}
+
+/* sets the first line of configure.in(.in), which fits
+   with the regexp passed as param 1 and replaces it with parm no. 2
+   returns tre on success (means the regexp was found)
+ */
+bool CPrjConfChange::setLine(const QString &regExpLine, const QString &line) 
+{
+  bool bFound=false;
+  QString fullLine;
+  
+  for (QStringList::Iterator it = content.begin(); it != content.end() && !bFound; ++it)
+  {
+    fullLine=*it;
+    if (fullLine.find(QRegExp(regExpLine))!=-1)
+      bFound=true;
+    
+    if (bFound)
+    {
+      (*it)=line;  
+      bChanged=true;
+    }
+  }  
+  return bFound;
 }
 
 

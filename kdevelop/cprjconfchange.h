@@ -26,7 +26,7 @@ class CPrjConfChange
 
 public: 
   /* set up the class with the directory, where configure.in(.in) should be */ 
-  CPrjConfChange(const QString &);
+  CPrjConfChange(const QString & = QString::null);
   virtual ~CPrjConfChange();
 
   
@@ -38,12 +38,22 @@ public:
   
   bool isConfChanged() const {return bChanged; };
   
-  bool isOptionAvailable(const QString &option) const;
-  bool isOptionEnabled(const QString &option) const;
-  bool isOptionDisabled(const QString &option) const 
-      { return !isOptionEnabled(option); };
-  bool setOption(const QString &option, const QString &value);
+  bool isOptionAvailable(const QString &option, const QString &suffix=QString::null) const;
+  bool isOptionEnabled(const QString &option, const QString &suffix=QString::null) const;
+  bool isOptionDisabled(const QString &option, const QString &suffix=QString::null) const 
+      { return !isOptionEnabled(option, suffix); };
   
+  bool enableOption(const QString &option, const QString &val =QString::null, 
+     const QString &suffix=QString::null);
+  bool disableOption(const QString &option, const QString &val =QString::null, 
+     const QString &suffix=QString::null);
+  
+  // raw access to configure.in(.in)
+  bool isLineAvailable(const QString &regExpLine) const;
+  QString getLine(const QString &line) const;
+  bool setLine(const QString &, const QString &line=QString::null);
+  QString getMacroParameter(const QString &regExpLine) const;
+
 protected:
   void searchConfFile(); 
   QStringList getConfContent(); 
