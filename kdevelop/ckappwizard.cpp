@@ -492,16 +492,16 @@ void CKAppWizard::initPages()
         "the end-user."));
 
   QWhatsThis::add(gnufiles, i18n("Generate a set of GNU standard files for your project.\n"
-         "These will give the end-user of the sourcepackage an overview about\n"
-         "the licensing, readme's etc, as well as a ChangeLog file for you to\n"
-         "protocol your changes."));
+         "These will give the end-user of the source package an overview of\n"
+         "the licensing, readme's, etc, as well as a ChangeLog file for you to\n"
+         "use the correct protocol for your changes."));
   QWhatsThis::add(progicon, i18n("Add a program icon to your project that represents\n"
          "your application in the window manager."));
   QWhatsThis::add(miniicon, i18n("Add a mini program icon to your project that is used\n"
          "for window-manager popup menus."));
   QWhatsThis::add(datalink, i18n("Add a KDE link file which is installed in\n"
          "the KDE panel of the end-user. By default, your application's\n"
-         "link file will be installed in the Applications-menu. You can\n"
+         "link file will be installed in the Applications menu. You can\n"
          "change this destination by editing the installation properties\n"
          "for the link file later."));
   QWhatsThis::add(iconload, i18n("Lets you select another icon for your program\n"
@@ -1614,7 +1614,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE application with session-management, "
+    apphelp->setText (i18n("Create a KDE 2 application with session-management, "
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
@@ -1640,7 +1640,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE application with an empty main widget."));
+    apphelp->setText (i18n("Create a KDE 2 application with an empty main widget."));
   }
   else if (kde2mdiitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1663,7 +1663,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE MDI (Multiple Document Interface) application with "
+    apphelp->setText (i18n("Create a KDE 2 MDI (Multiple Document Interface) application with "
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
   }
@@ -1711,8 +1711,8 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE KIO Slave.\n"
-                      "KIOSlaves are the foundation for all protocols in KDE2."));
+    apphelp->setText (i18n("Create a KDE 2 KIO Slave.\n"
+                      "KIOSlaves are the foundation for all protocols in KDE 2."));
   }
   else if (kpartitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1735,7 +1735,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE KPart Plugin. \nTo create a generic plugin for the Konqeror web browser use this template.  This template can also be modified to create generic plugins."));
+    apphelp->setText (i18n("Create a KDE 2 KPart Plugin. \nTo create a generic plugin for the Konqeror web browser use this template.  This template can also be modified to create generic plugins."));
   }
   else if (kickeritem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1758,7 +1758,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE Kicker applet.  \nThese are applets for KDE's panel."));
+    apphelp->setText (i18n("Create a KDE 2 Kicker applet.  \nThese are applets for KDE's panel."));
   }
   else if (kcmoduleitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1781,7 +1781,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE Control Center Module.\n"
+    apphelp->setText (i18n("Create a KDE 2 Control Center Module.\n"
     									"This template enables you to write your own modules"
     									"to add new system-wide configuration dialogs."));
   }
@@ -1807,8 +1807,8 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a native KDE theme.\n"
-    										"Use this template to create native KDE widget themes in C++."));
+    apphelp->setText (i18n("Create a native KDE 2 theme.\n"
+    										"Use this template to create native KDE 2 widget themes in C++."));
 	}
 
   else if (	(qt2normalitem->isSelected() || qtobjcnormalitem->isSelected())
@@ -1833,7 +1833,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a Qt-2.x Application with a main window containing "
+    apphelp->setText (i18n("Create a Qt 2.x application with a main window containing "
                           "a menubar, toolbar and statusbar, including support for "
                           "a single document-view interface (SDI) model."));
   }
@@ -1858,7 +1858,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a Qt-2.2 Application with a main window containing "
+    apphelp->setText (i18n("Create a Qt 2.2 application with a main window containing "
                           "a menubar, toolbar and statusbar, including support for "
                           "a multiple document interface (MDI) model."));
   }
@@ -1883,13 +1883,13 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create an MDI framework based on the QextMDI library and Qt2.0x. "
-                          "Allows to switch between both modes, Toplevel and Childframe. "
-                          "Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm)"));
+    apphelp->setText (i18n("Create an MDI framework based on the QextMDI library and Qt 2.0x. "
+                          "Allows switching between both modes, Toplevel and Childframe. "
+                          "Requires QextMDI! (www.geocities.com/gigafalk/qextmdi.htm)"));
     KMessageBox::information(0,
                     i18n("If you choose this kind of project:\n\n"
-                          "An environment variable QEXTMDIDIR should be set!\n"
-                          "Because the wizard searches\n"
+                          "An environment variable QEXTMDIDIR should be set,\n"
+                          "because the wizard searches\n"
                           "the header files in:  $(QEXTMDIDIR)/include\n"
                           "and libqextmdi.so in: $(QEXTMDIDIR)/lib"),
                     i18n("Important hint for a QextMDI project"));
