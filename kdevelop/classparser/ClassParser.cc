@@ -1091,8 +1091,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       if( childClass != NULL )
       {
         childClass->setDeclaredInClass( aClass->name );
-        store.addClass( childClass );
-        aClass->addChildClass( childClass->name );
+        aClass->addClass( childClass );
       }
       break;
     case CPVIRTUAL:
