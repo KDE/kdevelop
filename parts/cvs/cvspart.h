@@ -12,19 +12,28 @@
 #ifndef _CVSPART_H_
 #define _CVSPART_H_
 
+#include <kdialogbase.h>
+
 #include "kdevplugin.h"
 
 class Context;
 class QPopupMenu;
 
 
-class CvsPart : public KDevPlugin
-{
+class CvsPart : public KDevPlugin {
     Q_OBJECT
 
 public:
     CvsPart( QObject *parent, const char *name, const QStringList & );
     ~CvsPart();
+
+    const QString default_cvs;
+    const QString default_commit;
+    const QString default_update;
+    const QString default_add;
+    const QString default_remove;
+    const QString default_diff;
+    const QString default_log;
 
 private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
@@ -35,6 +44,10 @@ private slots:
     void slotLog();
     void slotDiff();
     void slotDiffFinished( const QString& diff, const QString& err );
+
+    void projectConfigWidget(KDialogBase *dlg);
+
+    void projectConfigWidget(KDialogBase *dlg);
 
 private:
     QString popupfile;

@@ -1,0 +1,237 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>CvsOptionsWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>cvs_options_widget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>437</width>
+            <height>374</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Cvs Options</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>cvs_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>11</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>cvs options</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>cvs_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>31</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>commit_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>60</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>commit options</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>commit_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>80</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>update_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>update_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>110</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>update options</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>add_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>180</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>add_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>160</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>add options</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>remove_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>230</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>remove_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>210</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>remove options</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>diff_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>280</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>diff_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>260</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>diff options</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>log_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>330</y>
+                <width>416</width>
+                <height>22</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>log_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>310</y>
+                <width>416</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>log options</string>
+        </property>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>cvs_edit</tabstop>
+</tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">cvsoptionswidgetbase.ui.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
