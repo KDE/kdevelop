@@ -22,7 +22,7 @@ class FileTreeWidget : public KFileTreeView
     Q_OBJECT
 
     friend class MyFileTreeViewItem;
-    
+
 public:
     FileTreeWidget( FileViewPart *part, QWidget *parent=0, const char *name=0 );
     ~FileTreeWidget();
@@ -30,6 +30,8 @@ public:
     bool shouldBeShown( KFileTreeViewItem* item );
     QString projectDirectory();
     QStringList projectFiles();
+
+    KURL::List selectedPathUrls();
 
 public slots:
     void hideOrShow();
@@ -42,16 +44,19 @@ private slots:
     void slotToggleShowNonProjectFiles();
     void slotReloadTree();
 
+    void slotSelectionChanged();
+
 private:
     bool matchesHidePattern(const QString &fileName);
 
     FileViewPart *m_part;
     KFileTreeBranch * m_rootBranch;
-    
+
     QStringList m_hidePatterns;
     QStringList m_projectFiles;
     bool m_showNonProjectFiles;
 
+    QPtrList<QListViewItem> m_selectedItems;
 };
 
 #endif

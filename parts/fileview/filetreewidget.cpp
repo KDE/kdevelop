@@ -20,12 +20,15 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kfileitem.h>
+#include <kurl.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 #include "kdevmainwindow.h"
 #include "domutil.h"
+#include "urlutil.h"
+
 #include "fileviewpart.h"
 
 class MyFileTreeViewItem : public KFileTreeViewItem
@@ -165,8 +168,8 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     setSorting(0);
     header()->hide();
     addColumn(QString::null);
-
-    setDragEnabled( true );
+	setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
+	setDragEnabled( false );
 
     m_part = part;
 
@@ -176,7 +179,8 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
-
+    connect( this, SIGNAL(selectionChanged()),
+             this, SLOT(slotSelectionChanged()) );
     QDomDocument &dom = *m_part->projectDom();
     m_showNonProjectFiles = !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles");
 
@@ -263,7 +267,7 @@ void FileTreeWidget::slotItemExecuted( QListViewItem* item )
     m_part->mainWindow()->lowerView( this );
 }
 
-void FileTreeWidget::slotContextMenu( KListView*, QListViewItem* item, const QPoint &p )
+void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QPoint &p )
 {
     KPopupMenu popup(i18n("File Tree"), this);
 
@@ -277,8 +281,11 @@ void FileTreeWidget::slotContextMenu( KListView*, QListViewItem* item, const QPo
     popup.setItemChecked(id, m_showNonProjectFiles);
 
     if( item != 0 ) {
-      KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
-      FileContext context( ftitem->path(), ftitem->isDir() );
+//      KFileTreeViewItem* ftitem = static_cast<KFileTreeViewItem*>(item);
+//      FileContext context( ftitem->path(), ftitem->isDir() );
+
+      FileContext context( selectedPathUrls() );
+
       m_part->core()->fillContextMenu(&popup, &context);
     }
 
@@ -348,6 +355,70 @@ void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
             item->setProjectFile( file, false );
         }
     }
+}
+
+void FileTreeWidget::slotSelectionChanged()
+{
+	//FIXME: m_selectedItems will grow to the infinite: we must clean it up in some way!!!
+
+    kdDebug(9017) << "FileTreeWidget::slotSelectionChanged()" << endl;
+
+	// Check for this item
+    MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem*>( currentItem() );
+    if (item->isSelected())
+	{
+        if (m_selectedItems.find( item ) != -1)
+        {
+           kdDebug(9017) << "Warning: Item " << item->path() << " is already present. Skipping." << endl;
+		   return;
+        }
+        m_selectedItems.append( item );
+
+        kdDebug(9017) << "Added item: " << item->path() << " ( " << m_selectedItems.count() << " )" << endl;
+    }
+    else // It has	 been removed
+    {
+        m_selectedItems.remove( item );
+
+        kdDebug(9017) << "Removed item: " << item->path() << " ( " << m_selectedItems.count() << " )" << endl;
+    }
+
+	// Now we clean-up the selection of old elements which are no more selected.
+	// FIXME: Any better way?
+	QListViewItem *it = m_selectedItems.first();
+	while (it != 0)
+	{
+		if (!it->isSelected()) {
+			QListViewItem *toDelete = it;
+			it = m_selectedItems.next();
+			m_selectedItems.remove( toDelete );
+		}
+		else
+		{
+			it = m_selectedItems.next();
+		}
+	}
+}
+
+KURL::List FileTreeWidget::selectedPathUrls()
+{
+    kdDebug(9017) << "FileTreeWidget::selectedPathUrls()" << endl;
+
+	QStringList pathUrls;
+
+	// They should be all selected but I want to be sure about this.
+	MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem *>( m_selectedItems.first() );
+	while (item)
+	{
+		if (item->isSelected())
+		{
+			pathUrls << item->path();
+        	kdDebug(9017) << "Added path " << item->path() << endl;
+		}
+		item = static_cast<MyFileTreeViewItem *>( m_selectedItems.next() );
+	}
+
+	return KURL::List( pathUrls );
 }
 
 #include "filetreewidget.moc"
