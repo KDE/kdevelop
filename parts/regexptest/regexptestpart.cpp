@@ -12,15 +12,19 @@
 #include "regexptestpart.h"
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 
 #include "kdevcore.h"
 #include "regexptestdlg.h"
 
+static const KAboutData data("kdevregexptest", I18N_NOOP("Debug Regular Expression..."), "1.0");
 
-typedef KGenericFactory<RegexpTestPart> RegexpTestFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( "kdevregexptest" ) )
+//typedef KDevGenericFactory<CloserPart> CloserFactory;
+//K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( &data ) )
+
+typedef KDevGenericFactory<RegexpTestPart> RegexpTestFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( &data ) )
 
 RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("RegExpTest", "regexptest", parent, name ? name : "RegexpTestPart")

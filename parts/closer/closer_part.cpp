@@ -29,8 +29,8 @@
 
 static const KAboutData data("kdevcloser", I18N_NOOP("Close Selected Windows..."), "1.0");
 
-typedef KGenericFactory<CloserPart> CloserFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( "kdevcloser" ) )
+typedef KDevGenericFactory<CloserPart> CloserFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( &data ) )
 
 CloserPart::CloserPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin("Selected Window Closer", "closer", parent, name ? name : "closerPart" )

@@ -14,7 +14,8 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+//#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 
@@ -24,8 +25,13 @@
 #include "replace_widget.h"
 #include "replace_part.h"
 
-typedef KGenericFactory<ReplacePart> ReplaceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) )
+static const KAboutData data("kdevreplace", I18N_NOOP("Replace"), "1.0");
+
+//typedef KGenericFactory<ReplacePart> ReplaceFactory;
+//K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) )
+
+typedef KDevGenericFactory<ReplacePart> ReplaceFactory;
+K_EXPORT_COMPONENT_FACTORY(libkdevreplace, ReplaceFactory(&data))
 
 ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
         : KDevPlugin( "Project Wide Replace", "", parent, name ? name : "ReplacePart" )
