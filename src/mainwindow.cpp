@@ -315,7 +315,10 @@ bool MainWindow::queryExit()
 
 void MainWindow::prepareToCloseViews()
 {
-    //writeDockConfig();
+#if KDE_VERSION <= 305    
+    // seems not to work with KDE-3.1 and 3.2 :-(
+    writeDockConfig();
+#endif    
 }
 
 KMainWindow *MainWindow::main()
@@ -1161,7 +1164,10 @@ void MainWindow::switchToTabPageMode()
 
 void MainWindow::slotReactToProjectOpened()
 {
-    // readDockConfig( dockEl );
+#if KDE_VERSION <= 305
+    // seems not to work with KDE-3.1 and 3.2 :-(
+    readDockConfig();
+#endif    
 
     // This is a workaround for a bug in KDockWidget::readDockConfig() called above:
     // We must hide the unavailable views again because they are somehow shown again here
