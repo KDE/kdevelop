@@ -24,11 +24,11 @@ EXTRA_DIST = java.g java.tree.g java.store.g
 #			JavaRecognizer.cpp JavaRecognizer.hpp \
 #			JavaStoreWalker.cpp JavaStoreWalker.hpp
 #
-JavaLexer.hpp JavaLexer.cpp JavaRecognizer.hpp JavaRecognizer.cpp: # java.g
-	antlr $<
-
-JavaStoreWalker.hpp JavaStoreWalker.cpp: # java.store.g
-	antlr $<
+#JavaLexer.hpp JavaLexer.cpp JavaRecognizer.hpp JavaRecognizer.cpp: java.g
+#	antlr $<
+#
+#JavaStoreWalker.hpp JavaStoreWalker.cpp: java.store.g
+#	antlr $<
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevjavasupport.desktop
