@@ -39,6 +39,7 @@ public:
   QString genCPPFile(QString abs_name,CProject* prj);
   QString genHeaderFile(QString abs_name,CProject* prj);
   QString genEngHandbook(QString abs_name,CProject* prj);
+  QString genLEXICALFile(QString abs_name,CProject* prj);
   QString genKDELnkFile(QString abs_name,CProject* prj);
   QString genLSMFile(QString abs_name,CProject* prj);
   QString genIcon(QString abs_name);

@@ -43,6 +43,7 @@ typedef enum _Project_enum
   DATA,
   PO,
   KDEV_DIALOG,
+  LEXICAL,
   PT_END_POS
 } ProjectFileType;
 
@@ -91,7 +92,7 @@ struct TDialogFileInfo {
 struct TFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
-  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG*/
+  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG, LEXICAL*/
   ProjectFileType type;
   /** include in distribution?*/
   bool dist;

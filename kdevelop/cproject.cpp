@@ -41,6 +41,7 @@ CProject::CProject(QString file)
   ptStringMap[ DATA ] = "DATA";
   ptStringMap[ PO ] = "PO";
   ptStringMap[ KDEV_DIALOG ] = "KDEV_DIALOG";
+  ptStringMap[ LEXICAL ] = "SOURCE";
 }
 
 CProject::~CProject(){
@@ -285,6 +286,8 @@ ProjectFileType CProject::getType( const char *aFile )
 	retVal = CPP_SOURCE;
       else if( ext == ".h" || ext == ".hxx" )
 	retVal = CPP_HEADER;
+      else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")
+	retVal = LEXICAL;
       else if( ext == ".idl" )
 	retVal = CORBA_SOURCE;
       else if( ext == ".kdevdlg" )
@@ -977,6 +980,12 @@ void CProject::updateConfigureIn(){
       stream << ")\n";
       
     }
+   //  else if(str.find("AC_PROG_LEX") != -1) {
+//       stream << "AC_PROG_LEX" << endl;
+//     }
+//     else if(str.find("AC_DECL_YYTEXT") != -1) {
+//       stream << "AC_DECL_YYTEXT" << endl;
+//     }
     else if(str.find("KDE_DO_IT_ALL(") != -1){
       stream << "KDE_DO_IT_ALL(";
       stream << getProjectName().lower() << "," << getVersion();

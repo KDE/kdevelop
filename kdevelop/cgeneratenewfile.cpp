@@ -120,6 +120,33 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj){
   file.close();  
   return file.name();
 }
+
+QString  CGenerateNewFile::genLEXICALFile(QString abs_name,CProject* prj){
+  QString name  = QFileInfo(abs_name).fileName();
+  QString lexical_header = KApplication::kde_datadir() + "/kdevelop/templates/lexical_template";
+
+  QStrList list;
+  QString str;
+  
+  QFile file(lexical_header);
+  QTextStream stream(&file);
+  if(file.open(IO_ReadOnly)){ // read the header_template
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+  file.setName(abs_name);
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str !=0;str = list.next()){
+      str.replace(QRegExp("\\|FILENAME\\|"),name);
+      stream << prj->setInfosInString(str) << '\n';
+    }
+  }
+  file.close();  
+  return file.name();
+}
+
 QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   
   QString template_handbook = KApplication::kde_datadir() + 

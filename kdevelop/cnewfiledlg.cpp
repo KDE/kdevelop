@@ -50,6 +50,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->insertItem(i18n("Qt/KDE Dialog (*.kdevdlg)"));
+  list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
 
@@ -250,6 +251,10 @@ void CNewFileDlg::slotOKClicked(){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .xpm !"),KMsgBox::EXCLAMATION);
     return;
   }
+  if ( (fileType() == "LEXICAL") && !(text.right(4) == ".l++" || text.right(4) == ".lxx" || text.right(3) == ".ll" || text.right(2) == ".l")){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .l, .ll, .lxx or .l++ !"), KMsgBox::EXCLAMATION);
+    return;
+  }
   if (text.isEmpty()){
     KMsgBox::message(this,i18n("Error..."),i18n("You must enter a filename!"),KMsgBox::EXCLAMATION);
     return;
@@ -270,7 +275,7 @@ void CNewFileDlg::slotOKClicked(){
       return;
     }
   }
-  
+
   /*************----------generate the new File----------****************/
   
   QString section;
@@ -282,7 +287,6 @@ void CNewFileDlg::slotOKClicked(){
    
    // check if generate a empty file or generate one
   if (useTemplate() && (filetype != "TEXTFILE") && filetype != "ICON"){ // generate one,textfile always empty
-    
     if (filetype == "HEADER"){
       generator.genHeaderFile(complete_filename,prj);
       type = "HEADER";
@@ -295,15 +299,26 @@ void CNewFileDlg::slotOKClicked(){
       generator.genLSMFile(complete_filename,prj);
       type = "DATA";
     }
-     if (filetype == "KDELNK"){
-       generator.genKDELnkFile(complete_filename,prj);
-       type = "DATA";
-     }
-     if (filetype == "EN_SGML"){
-       generator.genEngHandbook(complete_filename,prj);
-       type = "DATA";
-     }
-   }
+    if (filetype == "KDELNK"){
+      generator.genKDELnkFile(complete_filename,prj);
+      type = "DATA";
+    }
+    if (filetype == "EN_SGML"){
+      generator.genEngHandbook(complete_filename,prj);
+      type = "DATA";
+    }
+    if (filetype == "LEXICAL"){
+      generator.genLEXICALFile(complete_filename,prj);
+      type = "SOURCE";
+      // Make sure that we link against -lfl or -ll as controlled by
+      // autoconf.
+      if ((prj->getLDADD()).contains( "@LEXLIB@", FALSE ) == 0){
+	prj->setLDADD( prj->getLDADD() + " @LEXLIB@ ");
+      }
+      KMsgBox::message(this,i18n("Information..."),i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!")
+			,KMsgBox::EXCLAMATION);
+    }
+  }
   else { // no template, -> empty file or icon
     if(filetype == "ICON"){
       generator.genIcon(complete_filename);
@@ -318,9 +333,9 @@ void CNewFileDlg::slotOKClicked(){
   }
   if( filetype == "DIALOG"){
     QFile file(complete_filename);
-      file.remove();
-      file.open(IO_ReadWrite);
-      file.close();
+    file.remove();
+    file.open(IO_ReadWrite);
+    file.close();
   }
   accept();
 }
@@ -343,6 +358,9 @@ QString CNewFileDlg::fileType(){
     }
     if(str == i18n("Qt/KDE Dialog (*.kdevdlg)")){
       return "DIALOG";
+    }
+    if(str == i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)")){
+      return "LEXICAL";
     }
   }
   
@@ -418,6 +436,9 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
       }
       if (filetype == "CPP" ) {
 	edit->setText(text + extension);
+      }
+      if (filetype == "LEXICAL") {
+	edit->setText(text + QString(".l"));
       }
       if (filetype == "KDELNK" ) {
 	edit->setText(text + QString(".kdelnk"));
