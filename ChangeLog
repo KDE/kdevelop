@@ -1,3 +1,7 @@
+1999-08-11 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+        * deactivating 'file save', if file in edit window isn't modified
+        * deactivating certain file commands, if Doc- or Tools-Tab is active
+
 1999-08-11 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* added .hh .H .hpp to header-extensions
 	* now underline is able in classname
