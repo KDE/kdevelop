@@ -1136,6 +1136,10 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
   beep = true;
 }
 
+void CKDevelop::slotProjectMakeRPM(){
+
+}
+
 /*********************************************************************
  *                                                                   *
  *                          PUBLIC METHODS                           *
