@@ -550,6 +550,9 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 		    (*it)->getStartPosition( &line, &column );
 		    m2->setItemParameter( id, line );
                 }
+		if(m2->count() == 0)
+		  popup->removeItem(id);
+		
 //                kdDebug() << "CppSupportPart::contextMenu 4" << endl;
            }
 
@@ -580,6 +583,8 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	           (*it)->getStartPosition( &line, &column );
 	           m->setItemParameter( id, line );
                }
+       	       if(m->count() == 0)
+		popup->removeItem(id);
            }
        }
 
