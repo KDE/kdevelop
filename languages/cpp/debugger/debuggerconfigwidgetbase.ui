@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>549</width>
-            <height>456</height>
+            <width>469</width>
+            <height>412</height>
         </rect>
     </property>
     <property name="caption">
@@ -194,23 +194,6 @@ If you use terminal input in your application then check this option.
 Otherwise leave it unchecked.</string>
             </property>
         </widget>
-        <spacer row="13" column="2">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QButtonGroup" row="10" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>globalOutputRadix</cstring>
@@ -248,46 +231,27 @@ Otherwise leave it unchecked.</string>
                 </widget>
             </hbox>
         </widget>
-        <spacer row="3" column="1">
-            <property name="name">
-                <cstring>spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <spacer row="9" column="1">
-            <property name="name">
-                <cstring>spacer2_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QGroupBox" row="12" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
                 <string>Remote Debugging</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>The goal of "Run shell script" is to start gdbserver (or an application with
+embedded gdbstub on the target). Key command here is:
+        ssh ${ruser} gdbserver jeloin:2345 "${remote##/*/}" 
+where jeloin:2345 is the host and a port. 
+"${remote##/*/}" is magic for remote filename without (the host local) path.
+
+The goal of "Run gdb script" (gdb commands) is to connect with that target.
+Key command in this file is: target remote dox:2345
+where dox:2345 is the target with a port.
+
+(Note that the gdb script is run from the execution directory - often ./src
+not the projects base - see "Run options")
+</string>
             </property>
             <grid>
                 <property name="name">
@@ -368,23 +332,6 @@ or if your executable contains the gdb stub
                 </widget>
             </grid>
         </widget>
-        <spacer row="11" column="1">
-            <property name="name">
-                <cstring>spacer2_3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
     </grid>
 </widget>
 <customwidgets>
@@ -408,8 +355,10 @@ or if your executable contains the gdb stub
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>
