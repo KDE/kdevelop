@@ -271,8 +271,10 @@ void ClassTreeClassItem::setOpen(bool o)
 
 ClassTreeStructItem::ClassTreeStructItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                          ParsedStruct *parsedStruct)
-    : ClassTreeItem(parent, lastSibling, parsedStruct)
+    : ClassTreeItem(parent, lastSibling, 0)
 {
+    if ( parsedStruct )
+      m_item = new ParsedStruct( *parsedStruct );
     setExpandable(true);
     setPixmap(0, UserIcon("CVstruct", KIcon::DefaultState, ClassViewFactory::instance()));
 }
@@ -309,10 +311,14 @@ void ClassTreeStructItem::setOpen(bool o)
 
 ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                          ParsedMethod *parsedMethod)
-    : ClassTreeItem(parent, lastSibling, parsedMethod)
+    : ClassTreeItem(parent, lastSibling, 0)
 {
     QString icon;
     
+    if ( !parsedMethod )
+      return;
+    m_item = new ParsedMethod( *parsedMethod );
+
     if (parsedMethod->isSignal())
         icon = "CVpublic_signal";
     else if (parsedMethod->isSlot()) {
@@ -367,10 +373,14 @@ QString ClassTreeMethodItem::text( int ) const
 
 ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastSibling,
                                      ParsedAttribute *parsedAttr)
-    : ClassTreeItem(parent, lastSibling, parsedAttr)
+    : ClassTreeItem(parent, lastSibling, 0)
 {
     QString icon;
     
+    if ( !parsedAttr )
+      return;
+    m_item = new ParsedAttribute( *parsedAttr );
+
     if (parsedAttr->isPublic())
         icon = "CVpublic_var";
     else if (parsedAttr->isProtected())

@@ -67,11 +67,16 @@ class ClassTreeItem : public QListViewItem
 {
 public:
     ClassTreeItem( ClassTreeBase *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
-        : QListViewItem(parent, lastSibling), m_item(parsedItem) {}
+        : QListViewItem(parent, lastSibling), m_item(parsedItem)
+    {
+    }
     ClassTreeItem( ClassTreeItem *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
-        : QListViewItem(parent, lastSibling), m_item(parsedItem) {}
+        : QListViewItem(parent, lastSibling), m_item(parsedItem)
+    {
+    }
     ~ClassTreeItem()
-        {}
+    {
+    }
 
     KPopupMenu *createPopup();
     bool isOrganizer() { return !m_item; }
@@ -120,14 +125,24 @@ class ClassTreeScopeItem : public ClassTreeItem
 public:
     ClassTreeScopeItem( ClassTreeBase *parent, ClassTreeItem *lastSibling,
                         ParsedScopeContainer *parsedScope )
-        : ClassTreeItem(parent, lastSibling, parsedScope)
-        { init(); }
+        : ClassTreeItem(parent, lastSibling, 0)
+    { 
+      if ( parsedScope )
+        m_item = new ParsedScopeContainer( *parsedScope );
+      init();
+    }
     ClassTreeScopeItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
                         ParsedScopeContainer *parsedScope )
-        : ClassTreeItem(parent, lastSibling, parsedScope)
-        { init(); }
+        : ClassTreeItem(parent, lastSibling, 0)
+    { 
+      if ( parsedScope )
+        m_item = new ParsedScopeContainer( *parsedScope );
+      init();
+    }
     ~ClassTreeScopeItem()
-        {}
+    {
+      delete (ParsedScopeContainer*)m_item;
+    }
 
     virtual QString text( int ) const;
     virtual void setOpen(bool o);
@@ -142,14 +157,24 @@ class ClassTreeClassItem : public ClassTreeItem
 public:
     ClassTreeClassItem( ClassTreeBase *parent, ClassTreeItem *lastSibling,
                         ParsedClass *parsedClass )
-        : ClassTreeItem(parent, lastSibling, parsedClass)
-        { init(); }
+        : ClassTreeItem(parent, lastSibling, 0)
+        {
+          if ( parsedClass )
+            m_item = new ParsedClass( *parsedClass );
+          init();
+        }
     ClassTreeClassItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
                         ParsedClass *parsedClass )
-        : ClassTreeItem(parent, lastSibling, parsedClass)
-        { init(); }
+        : ClassTreeItem(parent, lastSibling, 0)
+        {
+          if ( parsedClass )
+            m_item = new ParsedClass( *parsedClass );
+          init();
+        }
     ~ClassTreeClassItem()
-        {}
+        {
+          delete (ParsedClass*)m_item;
+        }
 
     virtual void setOpen(bool o);
 
@@ -164,7 +189,9 @@ public:
     ClassTreeStructItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
                          ParsedStruct *parsedStruct );
     ~ClassTreeStructItem()
-        {}
+        {
+          delete (ParsedStruct*)m_item;
+        }
 
     virtual void setOpen(bool o);
 };
@@ -176,7 +203,9 @@ public:
     ClassTreeMethodItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
                          ParsedMethod *parsedMethod );
     ~ClassTreeMethodItem()
-        {}
+        {
+          delete (ParsedMethod*)m_item;
+        }
 
     virtual QString text( int ) const;
 };
@@ -188,7 +217,9 @@ public:
     ClassTreeAttrItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
                        ParsedAttribute *parsedAttr );
     ~ClassTreeAttrItem()
-        {}
+        {
+          delete (ParsedAttribute*)m_item;
+        }
 
     virtual QString text( int ) const;
 };
