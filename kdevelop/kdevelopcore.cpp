@@ -124,13 +124,13 @@ void KDevelopCore::initActions()
 }
 
 void KDevelopCore::saveProperties(KConfig* pConfig){
-  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-  ((KRecentFilesAction*)pAC->action("project_open_recent"))->saveEntries(pConfig);
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->saveEntries(pConfig);
 }
 
 void KDevelopCore::readProperties(KConfig* pConfig){
-  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
-  ((KRecentFilesAction*)pAC->action("project_open_recent"))->loadEntries(pConfig);
+    KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->loadEntries(pConfig);
 }
 
 void KDevelopCore::loadInitialComponents()
