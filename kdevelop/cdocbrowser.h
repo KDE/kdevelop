@@ -28,7 +28,7 @@
 #include <qpopupmenu.h>
 #include <qframe.h>
 
-#include <khtmlview.h>
+#include <htmlview.h>
 #include <kiconloader.h>
 #include <kapp.h>
 #include <kconfig.h>
@@ -72,7 +72,7 @@ public slots:
   void signalURLForward();
   void signalSearchText();
   void signalGrepText(QString text);
-	void signalBookmarkAdd();
+	void signalBookmarkToggle();
 	void enableStop(int);	
 protected:
   QString old_url, complete_url;

@@ -68,11 +68,14 @@ class TextLine {
     int getBPId(){ return bpID; }
     bool isBPEnabled()	{ return bpEnabled; }
     bool isBPPending()	{ return bpPending; }
-		
+
     void setBPId( int id, bool enabled, bool pending)
 												{ bpID = id; bpEnabled = enabled; bpPending = pending; }
     void delBPId()			{ bpID = 0; }
 
+		bool isBookmarked() { return bookmarked; }
+		void toggleBookmark() { bookmarked = !bookmarked; }
+		
   protected:
     void resize(int);
 
@@ -88,6 +91,7 @@ class TextLine {
     int bpID;
     bool bpEnabled;
     bool bpPending;
+		bool bookmarked;
 };
 
 

@@ -31,17 +31,16 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qclipboard.h>
-#include <qfile.h>
+
 
 #include <kapp.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kconfig.h>
-#include <kmessagebox.h>
+#include <kmsgbox.h>
+#include <kfm.h>
 #include <kcolorbtn.h>
 #include <kcursor.h>
 #include <kprocess.h>
-#include <kio_netaccess.h>
 
 #include "resource.h"
 
@@ -58,15 +57,15 @@ bool CDocBrowser::forceDefaults;
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
 
   doc_pop = new QPopupMenu();
-  doc_pop->insertItem(BarIcon("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
-  doc_pop->insertItem(BarIcon("forward"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
+  doc_pop->insertItem(Icon("back.xpm"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
+  doc_pop->insertItem(Icon("forward.xpm"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(BarIcon("copy"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
-  doc_pop->insertItem(i18n("Add Bookmark"),this, SIGNAL(signalBookmarkAdd()),0,ID_BOOKMARKS_ADD);
-  doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
+  doc_pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
+	doc_pop->insertItem(i18n("Toggle Bookmark"),this, SIGNAL(signalBookmarkToggle()),0,ID_BOOKMARKS_TOGGLE);
+	doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(BarIcon("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
-  doc_pop->insertItem(BarIcon("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
+	doc_pop->insertItem(Icon("grep.xpm"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
+  doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
 	
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
@@ -121,7 +120,7 @@ void CDocBrowser::showURL(QString url,bool reload){
 
   if( (url_wo_ref != old_url) || reload){
     QString str="";
-    KIONetAccess::download(url,str);
+    KFM::download(url,str);
     
     //cerr << endl << "STR:" << str;
     
@@ -145,11 +144,11 @@ void CDocBrowser::showURL(QString url,bool reload){
 
       end();
       show();
-      KIONetAccess::removeTempFile(str);
+      KFM::removeTempFile(str);
       file.close();
     }
     else{
-      KMessageBox::error(0, i18n("file \"%1\" not found!").arg(str));
+      KMsgBox::message(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"),KMsgBox::INFORMATION);
        return;
     }
 //  htmlview->setCursor( KCursor::arrowCursor() );
@@ -277,15 +276,15 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
-    doc_pop->changeItem(BarIcon("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(BarIcon("lookup"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(Icon("grep.xpm"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
   }
   else{
     doc_pop->setItemEnabled(ID_EDIT_COPY,false);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,false);
     doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,false);
-    doc_pop->changeItem(BarIcon("grep"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(BarIcon("lookup"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(Icon("grep.xpm"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
   }
   doc_pop->popup(pnt);
 }
@@ -660,7 +659,6 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
-
 
 
 

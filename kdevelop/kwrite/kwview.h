@@ -241,6 +241,7 @@ protected slots:
     QPixmap *drawBuffer;
 };
 
+/*
 class KWBookmark {
   public:
     KWBookmark();
@@ -249,6 +250,7 @@ class KWBookmark {
     PointStruc cursor;
     QString Name;
 };
+*/
 
 /** An edit widget with many options, document/view architecture and syntax
     highlight.
@@ -549,23 +551,23 @@ class KWrite : public QWidget {
     void installBMPopup(QPopupMenu *);
     /** Sets the actual edit position as bookmark number n
     */
-    void setBookmark(int n);
+//    void setBookmark(int n);
     /** Is there a bookmark on the line?
     */
     bool bookmarked(int line);
     /** Get a pointer to the bookmark list
     */
-    QList<KWBookmark>* getBookmarks() { return &bookmarks; }
+//    QList<KWBookmark>* getBookmarks() { return &bookmarks; }
 public slots:
     /** Shows a popup that lets the user choose the bookmark number
     */
-    void setBookmark();
-    /** Adds the actual edit position to the end of the bookmark list
+//    void setBookmark();
+    /** Toggle a bookmark at the actual edit position
     */
-    void addBookmark();
-    /** Remove the bookmark at line from the bookmark list
+    void toggleBookmark();
+    /** Toggle a bookmark at line
     */
-		void removeBookmark(int line);
+		void toggleBookmark(int line);
     /** Go to the next bookmark
     */
 		void nextBookmark();
@@ -580,9 +582,9 @@ public slots:
     void gotoBookmark(int n);
   protected slots:
     void updateBMPopup();
-  protected:
-    QList<KWBookmark> bookmarks;
-    int bmEntries;
+//  protected:
+//    QList<KWBookmark> bookmarks;
+//    int bmEntries;
 
 //config file / session management functions
   public:
