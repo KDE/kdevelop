@@ -107,6 +107,7 @@ void KonsoleViewWidget::setDirectory(const KURL &dirUrl)
 void KonsoleViewWidget::partDestroyed()
 {
     part = 0;
+	activate();
 }
 
 
