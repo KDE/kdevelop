@@ -950,6 +950,8 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          }
       }
       break;
+	 default:
+			break;
    }
    return QWidget::eventFilter( obj, e);  // standard event processing
 }
