@@ -1,3 +1,7 @@
+1999-07-24  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* Bernd: I commented out the #include "commitdilalog.moc" in
+commitdialog.cpp to make it compile.
+
 1999-07-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Combobox for version control in project options
 
