@@ -306,8 +306,19 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
 {
     if (appId.find("drkonqi-") == 0) {
-        kapp->dcopClient()->send(appId, "krashinfo", "registerDebuggingApplication(QString)", i18n("Debug in &KDevelop"));
-        connectDCOPSignal(appId, "krashinfo", "acceptDebuggingApplication()", "slotDebugExternalProcess()", true);
+        QByteArray answer;
+        QCString replyType;
+
+        kapp->dcopClient()->call(appId, "krashinfo", "appName()", QByteArray(), replyType, answer, true, 5000);
+
+        QDataStream d(answer, IO_ReadOnly);
+        QCString appName;
+        d >> appName;
+
+        if (appName.length() && project() && project()->mainProgram().endsWith(appName)) {
+            kapp->dcopClient()->send(appId, "krashinfo", "registerDebuggingApplication(QString)", i18n("Debug in &KDevelop"));
+            connectDCOPSignal(appId, "krashinfo", "acceptDebuggingApplication()", "slotDebugExternalProcess()", true);
+        }
     }
 }
 
@@ -316,8 +327,15 @@ ASYNC DebuggerPart::slotDebugExternalProcess()
     QByteArray answer;
     QCString replyType;
 
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
     kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true, 5000);
-
+# else
+    kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true);
+# endif
+#else
+    kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true);
+#endif
     QDataStream d(answer, IO_ReadOnly);
     int pid;
     d >> pid;
