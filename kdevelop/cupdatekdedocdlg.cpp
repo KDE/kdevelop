@@ -275,6 +275,7 @@ rm -f -r khtmlw/;rm -f -r khtml/;rm -f -r kfmlib/;rm -f -r kab/;rm -f -r kspell"
   }
   proc->clearArguments();
   QDir::setCurrent(kdelibs_path);
+  QDir().mkdir(new_doc_path.data());
   
   conf->setGroup("Doc_Location");
   QString qtPath=conf->readEntry("doc_qt");
