@@ -33,7 +33,7 @@ public slots:
     void accept();
 
 private slots:
-    void toggle(const char *, bool);
+    void toggle(const QString&, bool);
     void changed();
 
 private:

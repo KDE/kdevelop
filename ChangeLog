@@ -1,3 +1,9 @@
+2001-07-16  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Made doxygen config widget more KDE compliant, i.e.
+	  KDE icons, KFileDialog instead of QFileDialog,
+	  cleanup
+
 2001-07-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Elementary cvs support (add, remove, update, commit)

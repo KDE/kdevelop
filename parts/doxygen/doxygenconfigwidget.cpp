@@ -18,10 +18,7 @@
 #include <kmessagebox.h>
 
 #include "config.h"
-#include "inputbool.h"
-#include "inputstring.h"
-#include "inputstrlist.h"
-#include "inputint.h"
+#include "input.h"
 #include "doxygenconfigwidget.h"
 
 
@@ -142,7 +139,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
     QDictIterator<QObject> di(*m_switches);
     for (; di.current(); ++di) {
         QObject *obj = di.current();
-        connect(obj, SIGNAL(toggle(const char *,bool)), this, SLOT(toggle(const char *,bool)));
+        connect(obj, SIGNAL(toggle(const QString&, bool)), this, SLOT(toggle(const QString&, bool)));
         // UGLY HACK: assumes each item depends on a boolean without checking!
         emit toggle(di.currentKey(), ((InputBool *)obj)->getState());
     }
@@ -186,7 +183,7 @@ void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
 }
 
 
-void DoxygenConfigWidget::toggle(const char *name, bool state)
+void DoxygenConfigWidget::toggle(const QString &name, bool state)
 {
     QList<IInput> *inputs = m_dependencies->find(name);
     IInput *input = inputs->first();
@@ -212,7 +209,7 @@ void DoxygenConfigWidget::init()
     QDictIterator<QObject> dio(*m_switches);
     for (; dio.current(); ++dio) {
         QObject *obj = dio.current();
-        connect(obj, SIGNAL(toggle(const char *,bool)), this, SLOT(toggle(const char *,bool)));
+        connect(obj, SIGNAL(toggle(const QString&, bool)), this, SLOT(toggle(const QString&, bool)));
         // UGLY HACK: assumes each item depends on a boolean without checking!
         emit toggle(dio.currentKey(), ((InputBool *)obj)->getState());
     }

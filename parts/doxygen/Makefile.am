@@ -9,11 +9,7 @@ libkdevdoxygen_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevdoxygen_la_SOURCES = doxygenfactory.cpp \
 			    doxygenpart.cpp \
 			    doxygenconfigwidget.cpp \
-			    inputbool.cpp \
-			    inputint.cpp \
-			    inputstring.cpp \
-			    inputstrlist.cpp \
-			    pixmaps.cpp \
+			    input.cpp \
 			    config.cpp \
 			    version.cpp
 
