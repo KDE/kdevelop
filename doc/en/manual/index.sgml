@@ -98,6 +98,7 @@ editing.
 <item>Chapter <ref id="The Class Browser" name="The Class Browser">, tells you how to make use of KDevelop's powerful Class Browser.
 <item>Chapter <ref id="The Dialog Editor" name="The Dialog Editor">, features the integrated visual <idx/GUI/ constructor and how it
 generates C++ <idx/output/.
+<item>Chapter<ref id="Debugging your application" name="Debugging your application">,gives an overview over debugging setup and use of the internal debugger
 <item>Chapter <ref id="General Configuration" name="General Configuration"> shows how you can set overall preferences for using KDevelop.
 <item>Chapter <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of KDevelop
 under different flavors of Unix systems and problem solutions in general.
@@ -2984,6 +2985,164 @@ Now that your project contains a new widget, your work as a programmer is to imp
 add other methods you may need. <footnote>See <htmlurl url="programming/index-6.html" name="The KDevelop Programming Handbook, The
 Dialogeditor"> for more information about widget properties and sourcecode generation.</footnote>
 
+<chapt>Debugging your application<label id="Debugging your application">
+<sect>Setup
+<p>
+
+The default setup for KDevelop is to use the internal debugger. You can
+ change this under Options select the &dquot;KDevelop setup&dquot; menu item,
+ and then the Debugger tab.
+
+Click on &dquot;Use external debugger&dquot; if you wish to use a different
+ debugger and enter the name of the debugger to use. See your debuggers documentation
+ on how to run it.
+
+<sect>Using the internal debugger
+<p>
+<sect1>Changes made in the tree and output view window
+<p>
+If you choose the internal debugger, three tabs are added to your tree and output view windows.
+<sect2>On the tree view window
+<p>
+<itemize>
+<item>VAR tab : A tree view of the local variables at the current place in
+the  program you have stopped at. You can also see local variables in the
+function  that called this funtions. The VAR tab also contains a watch window.
+This allows  you to see the value of global variables, or perhaps you may want
+to see only  one local variable rather than the variable in a large list of
+local variables.</itemize>
+
+<sect2>On the output view window
+<p>
+<itemize>
+<item>breakpoint : A list of breakpoints set and there currrent state.
+<item>framestack : The calling stack.
+<item>disassemble : A machine instruction view of the code showing the current instruction to be executed.
+</itemize>
+
+<sect1>Details
+<p>
+
+<sect2>Breakpoints
+<p>
+
+Breakpoints can be set against source lines in a file (referred to as breakpoints)
+ or on variables in the source (referred to as watchpoints). Both types of breakpoints
+ can be set at anytime, however watchpoints on local variables only have meaning
+ in the variables local scope. Watchpoints have more meaning when you are dealing
+ with global variables.
+
+<sect2>Set/Unset breakpoints
+<p>
+
+Simple one click set/unset. Click on the &dquot;icon&dquot; border to the
+ left of the text in the editor at the line you want the breakpoint. Click again
+ on this line to unset the breakpoint.
+
+<sect2>Alternative beakpoint manipulating via menus
+<p>
+
+By right clicking on a breakpoint in the breakpoint list or on a breakpoint
+ in the editors icon border you will get a menu of breakpoint options. This
+ allows you to remove this breakpoint, clear all breakpoints, or edit the breakpoint.
+
+<sect2>Editing breakpoints
+<p>
+
+Use the above menu to display the edit breakpoint dialog. 
+This contains the following fields :
+<enum>
+<item>Conditional: Enter the condition that must be met before gdb will interrupt
+ the program execution.
+<item>Ignore count: How many times you want to the code to past through this
+ breakpoint before gdb interrupts the program execution.
+<item>Enable: When enabled gdb will break at this breakpoint. When disabled gdb
+ will not break here.
+</enum>
+
+<sect2>Clear all breakpoints
+<p>
+
+Removes all the breakpoints for this program.
+
+<sect2>Set/Unset watchpoints
+<p>
+
+In the VAR view click with the Right Mouse button on a variable. A popup
+ menu will be displayed allowing you to set a watchpoint on the local variable.
+ This functionality is limited to the scope that the local variable is in. As
+ the variable goes out of scope the program breaks and the watchpoint is deleted.
+
+WARNING: This is known to be problematic, so use caution when setting
+ watchpoints on local variables.
+
+The watchpoint can also be set by a right mouse click on a previously entered
+ watch variable, and selecting &dquot;toggle watchpoint&dquot;
+
+<sect2>Set/Unset Watch variables
+<p>
+
+At the bottom of the VAR view there is the &dquot;Watch&dquot; field where
+ you can enter the variable name you wish to see display in the watch list.
+ Enter the variable name and type &dquot;enter&dquot; or click on the &dquot;Add&dquot;
+ button alongside the field. Right Mouse clicking on the watch variable in the
+ treeview will bring up a menu so that you can remove the variable from the
+ list.
+
+You can also enter a watch variable by right mouse clicking on a variabel
+ name in the editor window. This displays a popup menu with &dquot;watch: variable
+ name&dquot; on it.
+<sect2>Changing variable values
+<p>
+
+This is done via the watch variable. If you have a variable &dquot;test&dquot;
+ then to set &dquot;test&dquot; to 5 type &dquot;test=5&dquot; in the watch
+ field and add it to the list. Note that &dquot;test&dquot; will be set to &dquot;5&dquot;
+ EVERY time the program stops at a breakpoint, so once you have set the variable,
+ usually you should remove the item from the watch view.
+
+<sect1>The floating toolbar
+<p>
+
+The debugger toolbar is either on top of all windows displayed, or docked
+ in the panel. When docked you can run you code by clicking on the docked icon.
+ The function this performs is the &dquot;step over&dquot; function. Right clicking
+ on the docked item allows you to restore the toolbar and optionally place focus
+ on kdevelop.
+
+The functions available are:
+<itemize>
+<item>Run : Continue the program from the current point.
+<item>Step over  : Execute one line of code stopping on the next
+ line of code in the same surce file. This will run any functions encountered
+ until the above condition is met.
+<item>Step over i(nstruction) : Execute one machine instruction as above.
+<item>Step in : Execute exactly one source line of code. This
+ means you will &dquot;step into&dquot; the current function, if necessary
+<item>Step in i(nstruction) : Execute one machine instruction as above.
+<item>Step out : Run to the end of the current stack frame (function)
+<item>View : Allows a variety of views into the data.
+Currently implemented views are:
+<enum>
+<item> Memory address
+<item> Disassemble code
+<item> Current registers
+<item> Current libraries
+</enum>
+<item>Interrupt : Stop the application executing.
+<item>Set focus on kdevelop : Set the focus on kdevelop
+<item>Set focus on app : This sets the focus on the window that had focus
+ when you pressed the &dquot;set focus on kdevelop&dquot; button. This is a
+ compromise, it should set the focus on the application being debugged but this
+ is difficult to do. If anyone has a better solution than the current functionality
+ then please let us know.
+</itemize>
+
+When gdb interrupts the program, probably because a breakpoint has been
+ triggered, we highlight the &dquot;Set focus on kdevelop&dquot;. We do not
+ automatically switch focus to kdevelop so that you can view the application
+ window at this point. Click on the &dquot;set focus&dquot; button to switch
+ to kdevelop or press a button on the toolbar to perform your selected function.
 
 <chapt>CVS Integration
 <p>
