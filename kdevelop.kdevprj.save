@@ -36,7 +36,7 @@ install_location=
 type=DATA
 
 [General]
-AMChanged=false
+AMChanged=true
 author=kdevelop-team
 configure_args=--enable-debug
 email=kdevelop-team@kdevelop.org
@@ -72,7 +72,7 @@ User Interface=*.ui,*.kdevdlg,*.rc,
 groups=Images,Headers,Sources,GNU,Translations,User Interface,Desktop,Others
 
 [Makefile.am]
-files=AUTHORS,BUGS,COPYING,ChangeLog,FAQ,INSTALL,Menushortcuts.html,README,README.htdig,TODO,acconfig.h,config.guess,config.h.bot,configure.in.in,kdevelop.lsm,kdevelop.m4,acinclude.m4,configure.files,subdirs,aclocal.m4,configure.in,stamp-h.in,config.h.in,kdevelop.kdevprj.save,admin
+files=AUTHORS,BUGS,COPYING,ChangeLog,FAQ,INSTALL,Menushortcuts.html,README,README.htdig,TODO,acconfig.h,config.guess,config.h.bot,configure.in.in,kdevelop.lsm,kdevelop.m4,acinclude.m4,configure.files,subdirs,aclocal.m4,configure.in,stamp-h.in,config.h.in,kdevelop.kdevprj.save,admin,configure.in.mid
 sub_dirs=doc,kdevelop,po,
 type=normal
 
@@ -155,6 +155,12 @@ install_location=
 type=DATA
 
 [configure.in.in]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[configure.in.mid]
 dist=true
 install=false
 install_location=

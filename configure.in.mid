@@ -1,0 +1,6 @@
+if test "$GXX" = "yes"; then
+  KDE_CHECK_COMPILER_FLAG(ftemplate-depth-99,
+  [
+    CXXFLAGS="$CXXFLAGS -ftemplate-depth-99"
+  ])
+fi
