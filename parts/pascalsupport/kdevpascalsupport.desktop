@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Pascal Language Support
+Name=KDevPascalSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevpascalsupport
+X-KDevelop-Language=Pascal
