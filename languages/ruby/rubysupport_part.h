@@ -33,13 +33,21 @@ protected:
     virtual KMimeType::List mimeTypes();
 
 private slots:
-    void slotRun();
     void projectConfigWidget(KDialogBase *dlg);
+    void projectOpened();
+    void savedFile(const QString &fileName);
+    void addedFilesToProject(const QStringList &fileList);
+    void removedFilesFromProject(const QStringList &fileList);
+    void slotRun();
+
+    void initialParse();
 
 private:
     void startApplication(const QString &program);
     QString interpreter();
 
+    void maybeParse(const QString fileName);
+    void parse(const QString &fileName);
 };
 
 
