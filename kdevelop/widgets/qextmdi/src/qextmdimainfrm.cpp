@@ -31,7 +31,9 @@
 #include <qobjcoll.h>
 #ifndef NO_KDE2
 #include <kmenubar.h>
+#if (QT_VERSION >= 300)
 #include <kapplication.h>
+#endif
 #endif
 #include <qtoolbutton.h>
 #include <qlayout.h>
