@@ -19,16 +19,33 @@
 
 /* Yet to come file abstraction layer */
 
+#include <kmimetype.h>
+
 class KDevFile
 {
 public:
+	/**
+	 * Styles of comment-formats a source file can take
+	 */
 	enum CommentingStyle
 	{
-		CPPStyle,
-		CStyle,
-		AdaStyle,
-		PascalStyle,
-		BashStyle,
-		XMLStyle
-	};	
+		NoCommenting,	//!< file seems unable to contain comments
+		CPPStyle,	//!< C++ Style:		/* comment */
+		CStyle,		//!< (old) C Style:	// comment
+		AdaStyle,	//!< ADA-Style:		-- comment --
+		PascalStyle,	//!< Pascal-Style:	{  comment  }
+		BashStyle,	//!< Shell-Style:	#  comment
+		XMLStyle	//!< XML-Style:		<!-- comment -->
+	};
+	
+public:
+	/**
+	 * return a commenting style for a given mime type.
+	 */
+	static CommentingStyle commentingStyleFromMimeType( const QString& mimeType );
+	
+	/**
+	 * return a commenting style for a given mime type.
+	 */
+	static CommentingStyle commentingStyleFromMimeType( KMimeType::Ptr mimeType );
 };
