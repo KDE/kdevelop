@@ -57,6 +57,7 @@ private:
     G77Tab *g77;
     Warnings1Tab *warnings1;
     Warnings2Tab *warnings2;
+    QStringList unrecognizedFlags;
 };
 
 #endif

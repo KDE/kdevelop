@@ -109,7 +109,7 @@ GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char 
     new FlagCheckBox(output_group, controller,
                      "-fsyntax-only", i18n("Only check the code for syntax errors. Don't produce object code"));
     new FlagCheckBox(output_group, controller,
-                     "-fg",           i18n("Generate extra code to write profile information for gprof."));
+                     "-pg",           i18n("Generate extra code to write profile information for gprof."));
     new FlagCheckBox(output_group, controller,
                      "-save-temps",   i18n("Do not delete intermediate output like assembler files."));
 
@@ -123,7 +123,7 @@ GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char 
                      "-fno-exception");
     } else {
     new FlagCheckBox(codegen_group, controller,
-                     "-fno-exceptions",     i18n("Enable exception handling."),
+                     "-fno-exceptions",     i18n("Disable exception handling."),
                      "-fexception");
     }
     // The following two are somehow mutually exclusive, but the default is
@@ -332,7 +332,10 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagListItem(wallBox,
                      "-Wcomment",            i18n("<qt>Warn when a comment-start sequence /* appears inside a comment.</qt>"));
     new FlagListItem(wallBox,
-                     "-Wformat",             i18n("<qt>Check calls to <i>printf()</i>, <i>scanf()</i> etc.</qt>"));
+                     "-Wformat",             i18n("<qt>Check calls to <i>printf()</i>, <i>scanf()</i> etc\n"
+                                                  "to make sure that the arguments supplied have types appropriate\n"
+                                                  "to the format string specified, and that the conversions specified\n"
+                                                  "in the format string make sense.</qt>"));
     new FlagListItem(wallBox,
                      "-Wimplicit-int",       i18n("<qt>Warn when a declaration does not specify a type.</qt>"));
     new FlagListItem(wallBox,
@@ -346,9 +349,17 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagListItem(wallBox,
                      "-Wmultichar",          i18n("<qt>Warn when multicharacter constants are encountered.</qt>"));
     new FlagListItem(wallBox,
+                     "-Wmissing-braces",     i18n("<qt>Warn if an aggregate or union initializer is not fully bracketed.</qt>"));
+    new FlagListItem(wallBox,
                      "-Wparentheses",        i18n("<qt>Warn when parentheses are omitted in certain context.</qt>"));
     new FlagListItem(wallBox,
+                     "-Wsequence-point",     i18n("<qt>Warn about code that may have undefined semantics because of\n"
+                                                  "violations of sequence point rules in the C standard.</qt>"));
+    new FlagListItem(wallBox,
                      "-Wreturn-type",        i18n("<qt>Warn when a function without explicit return type is defined.</qt>"));
+    new FlagListItem(wallBox,
+                     "-Wswitch",             i18n("<qt>Warn whenever a <i>switch</i> statement has an index of enumeral type\n"
+                                                  "and lacks a <i>case</i> for one or more of the named codes of that enumeration.</qt>"));
     new FlagListItem(wallBox,
                      "-Wtrigraphs",          i18n("<qt>Warn when trigraphs are encountered.</qt>"));
     new FlagListItem(wallBox,
@@ -357,7 +368,7 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
                      "-Wuninitialized",      i18n("<qt>Warn when a variable is used without being initialized first.</qt>"));
     new FlagListItem(wallBox,
                      "-Wunknown-pragmas",    i18n("<qt>Warn when an unknown #pragma statement is encountered.</qt>"));
-    if (type == GccOptionsPlugin::GPP) { 
+    if (type == GccOptionsPlugin::GPP) {
     new FlagListItem(wallBox,
                      "-Wreorder",            i18n("<qt>Warn when the order of member initializers is different from\n"
                                                   "the order in the class declaration.</qt>"));
@@ -396,17 +407,14 @@ Warnings2Tab::Warnings2Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagListItem(wrestBox,
                      "-W",                    i18n("<qt>Set options not included in -Wall which are very specific.</qt>"));
     new FlagListItem(wrestBox,
-                     "-Wtraditional",         i18n("<qt>Warn about certain constructs that behave differently\n"
-                                                   "in traditional and ANSI C.</qt>"));
+                     "-Wfloat-equal",         i18n("<qt>Warn if floating point values are used in equality comparisons.</qt>"));
     new FlagListItem(wrestBox,
-                     "-Wundef",               i18n("<qt>Warn if an undefined identifier is evaluated in an `#if' directive</qt>"));
+                     "-Wundef",               i18n("<qt>Warn if an undefined identifier is evaluated in an <i>#if</i> directive</qt>"));
     new FlagListItem(wrestBox,
                      "-Wshadow",              i18n("<qt>Warn whenever a local variable shadows another local variable.</qt>"));
     new FlagListItem(wrestBox,
                      "-Wpointer-arith",       i18n("<qt>Warn about anything that depends on the <i>sizeof</i> a\n"
                                                    "function type or of <i>void</i>.</qt>"));
-    new FlagListItem(wrestBox,
-                     "-Wbad-function-cast",   i18n("<qt>Warn whenever a function call is cast to a non-matching type.</qt>"));
     new FlagListItem(wrestBox,
                      "-Wcast-qual",           i18n("<qt>Warn whenever a pointer is cast so as to remove a type\n"
                                                    "qualifier from the target type.</qt>"));
@@ -425,33 +433,103 @@ Warnings2Tab::Warnings2Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
                                                    "could produce an incorrect result when the signed value\n"
                                                    "is converted to unsigned.</qt>"));
     new FlagListItem(wrestBox,
+                     "-Wmissing-noreturn",    i18n("<qt>Warn about functions which might be candidates for attribute 'noreturn'</qt>"));
+    new FlagListItem(wrestBox,
                      "-Waggregate-return",    i18n("<qt>Warn if any functions that return structures or unions are\n"
                                                    "defined or called.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wmissing-declarations",i18n("<qt>Warn if a global function is defined without a previous declaration.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wno-deprecated-declarations",
+                                              i18n("<qt>Do not warn about uses of functions, variables, and types marked as\n"
+                                                   "deprecated by using the 'deprecated' attribute.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wpacked",              i18n("<qt>Warn if a structure is given the packed attribute, but the packed\n"
+                                                   "attribute has no effect on the layout or size of the structure.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wpadded",              i18n("<qt>Warn if padding is included in a structure, either to align an\n"
+                                                   "element of the structure or to align the whole structure.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wredundant-decls",     i18n("<qt>Warn if anything is declared more than once in the same scope</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wunreachable-code",    i18n("<qt>Warn if the compiler detects that code will never be executed.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Winline",              i18n("<qt>Warn if an <i>inline</qt> function can not be inlined</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wlong-long",           i18n("<qt>Warn if the <i>long long</i> type is used.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wdisabled-optimization",i18n("<qt>Warn if a requested optimization pass is disabled.</qt>"));
+
+
+    if (type == GccOptionsPlugin::GCC) {
+    new FlagListItem(wrestBox,
+                     "-Wtraditional",         i18n("<qt>Warn about certain constructs that behave differently\n"
+                                                   "in traditional and ANSI C.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wbad-function-cast",   i18n("<qt>Warn whenever a function call is cast to a non-matching type.</qt>"));
     new FlagListItem(wrestBox,
                      "-Wstrict-prototypes",   i18n("<qt>Warn if a function is declared or defined without specifying\n"
                                                    "the argument types.</qt>"));
     new FlagListItem(wrestBox,
                      "-Wmissing-prototypes",  i18n("<qt>Warn if a global function is defined without a previous prototype declaration.</qt>"));
     new FlagListItem(wrestBox,
-                     "-Wmissing-declarations",i18n("<qt>Warn if a global function is defined without a previous declaration.</qt>"));
-    new FlagListItem(wrestBox,
-                     "-Wredundant-decls",     i18n("<qt>Warn if anything is declared more than once in the same scope</qt>"));
-    new FlagListItem(wrestBox,
                      "-Wnested-externs",      i18n("<qt>Warn if an <i>extern</i> declaration is encountered within a function.</qt>"));
-    new FlagListItem(wrestBox,
-                     "-Winline",              i18n("<qt>Warn if an <i>inline</qt> function can not be inlined</qt>"));
-    new FlagListItem(wrestBox,
-                     "-Wold-style-cast",      i18n("<qt>Warn if an old-style (C-style) cast is used within a program</qt>"));
-    new FlagListItem(wrestBox,
-                     "-Wlong-long",           i18n("<qt>Warn if the <i>long long</i> type is used.</qt>"));
-    
+    }
+
+
     if (type == GccOptionsPlugin::GPP) {
     new FlagListItem(wrestBox,
-                     "-Woverloaded-virtual",  i18n("<qt>Warn when a derived class function declaration may be an\n"
-                                                   "error in defining a virtual function.</qt>"));
+                     "-Woverloaded-virtual",  i18n("<qt>Warn when a function declaration hides virtual\n"
+                                                   "functions from a base class.</qt>"));
     new FlagListItem(wrestBox,
                      "-Wsynth",               i18n("<qt>Warn when g++'s synthesis behavior does\n"
                                                    "not match that of cfront.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wctor-dtor-privacy",   i18n("<qt>Warn when a class seems unusable, because all the constructors or\n"
+                                                   "destructors in a class are private and the class has no friends or\n"
+                                                   "public static member functions.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wnon-virtual-dtor",    i18n("<qt>Warn when a class declares a non-virtual destructor that should\n"
+                                                   "probably be virtual, because it looks like the class will be used\n"
+                                                   "polymorphically.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wsign-promo",          i18n("<qt>Warn when overload resolution chooses a promotion from unsigned or\n"
+                                                   "enumeral type to a signed type over a conversion to an unsigned\n"
+                                                   "type of the same size. Previous versions of G++ would try to\n"
+                                                   "preserve unsignedness, but the standard mandates the current behavior.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wabi",                 i18n("<qt>Warn when G++ generates code that is probably not compatible with\n"
+                                                   "the vendor-neutral C++ ABI.</qt>"));
+/*    new FlagListItem(wrestBox,
+                     "-Wreorder",             i18n("<qt>Warn when the order of member initializers given in the code does\n"
+                                                   "not match the order in which they must be executed.</qt>"));*/
+    new FlagListItem(wrestBox,
+                     "-Weffc++",              i18n("<qt>Warn about violations of the following style guidelines from Scott\n"
+                                                   "Meyers' 'Effective C++' book:\n"
+                                                   "* Item 11:  Define a copy constructor and an assignment\n"
+                                                   "  operator for classes with dynamically allocated memory.\n"
+                                                   "* Item 12:  Prefer initialization to assignment in constructors.\n"
+                                                   "* Item 14:  Make destructors virtual in base classes.\n"
+                                                   "* Item 15:  Have `operator=' return a reference to `*this'.\n"
+                                                   "* Item 23:  Don't try to return a reference when you must\n"
+                                                   "  return an object.\n"
+                                                   "\n"
+                                                   "and about violations of the following style guidelines from Scott\n"
+                                                   "Meyers' 'More Effective C++' book:\n"
+                                                   "* Item 6:  Distinguish between prefix and postfix forms of\n"
+                                                   "  increment and decrement operators.\n"
+                                                   "* Item 7:  Never overload '&&', '||', or ','.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wno-deprecated",       i18n("<qt>Do not warn about usage of deprecated features.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wno-non-template-friend", i18n("<qt>Disable warnings when non-templatized friend functions are declared\n"
+                                                   "within a template.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wold-style-cast",      i18n("<qt>Warn if an old-style (C-style) cast to a non-void type is used\n"
+                                                   "within a C++ program.</qt>"));
+    new FlagListItem(wrestBox,
+                     "-Wno-pmf-conversions",  i18n("<qt>Disable the diagnostic for converting a bound pointer to member\n"
+                                                   "function to a plain pointer.</qt>"));
     }
 }
 
@@ -489,10 +567,10 @@ GccOptionsDialog::GccOptionsDialog(GccOptionsPlugin::Type type, QWidget *parent,
         g77 = new G77Tab(vbox, "g77 tab");
     } else
         g77 = 0;
-        
+
     vbox = addVBoxPage(i18n("Warnings I"));
     warnings1 = new Warnings1Tab(type, vbox, "warnings1 tab");
-        
+
     vbox = addVBoxPage(i18n("Warnings II"));
     warnings2 = new Warnings2Tab(type, vbox, "warnings2 tab");
 }
@@ -515,6 +593,7 @@ void GccOptionsDialog::setFlags(const QString &flags)
     warnings1->readFlags(&flaglist);
     warnings2->readFlags(&flaglist);
     general->readFlags(&flaglist);
+    unrecognizedFlags = flaglist;
 }
 
 
@@ -532,6 +611,11 @@ QString GccOptionsDialog::flags() const
     QString flags;
     QStringList::ConstIterator li;
     for (li = flaglist.begin(); li != flaglist.end(); ++li) {
+        flags += (*li);
+        flags += " ";
+    }
+
+    for (li = unrecognizedFlags.begin(); li != unrecognizedFlags.end(); ++li) {
         flags += (*li);
         flags += " ";
     }
