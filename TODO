@@ -1,9 +1,9 @@
--- auto indent
+-- indentation
+  - add a TabIndent mode (not the same thing as AutoIndent)
   - display modes in status bar
   - indent-region
   - undo doesn't work after indent
-  - indent close brace
-  - indent open paren/close paren
+  - indent open paren/close paren, etc.
   - indent << 
   - indent public:, ...
   - fix: leftmost { doesn't autoindent
