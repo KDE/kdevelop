@@ -370,19 +370,30 @@ void CUpdateKDEDocDlg::OK(){
       }
   else
       {
-          cmd = "qt2kdoc --url=";
-          cmd += qtPath;
-          cmd += " --outdir=";
-          cmd += new_doc_path;
-          cmd += "kdoc-reference --compress ";
-          cmd += qtPath;
-          cmd += ";\n";
+          QString qt_kdoc=new_doc_path+"kdoc-reference/qt.kdoc.gz";
+	  if (QFileInfo(qt_kdoc).exists())
+		QFile::remove(qt_kdoc);
+
+          // don´t try to create the qt.kdoc.gz file if it isn't removed...
+          //  it would block KDevelop
+	  if (!QFileInfo(qt_kdoc).exists())
+          {
+            cmd = "qt2kdoc --url=file:";
+            cmd += qtPath;
+            cmd += " --outdir=";
+            cmd += new_doc_path;
+            cmd += "kdoc-reference --compress ";
+            cmd += qtPath;
+            cmd += ";\n";
+          }
       }
 
   cmd += "makekdedoc --libdir=";
   cmd += new_doc_path;
   cmd += "kdoc-reference --outputdir=";
   cmd += new_doc_path;
+  cmd += " --srcdir=";
+  cmd += kdelibs_path;
   *proc << cmd;
   
 #else

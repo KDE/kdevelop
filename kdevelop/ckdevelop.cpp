@@ -1836,7 +1836,9 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
     {
         config->writeEntry("doc_kde",dlg.getDocPath());
         config->sync();
-        doc_tree->refresh(prj);
+        // doc_tree->refresh(prj);
+        // doing this by next_job ... if the documentation generation has finished
+	next_job="doc_refresh";
     }
   }
 }
@@ -3070,7 +3072,12 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if ( proc== &appl_process)
       result.sprintf(i18n("*** exit-code: %i ***\n"), 
 		     proc->exitStatus());
-    
+    if (next_job=="doc_refresh")
+    {
+      doc_tree->refresh(prj);
+      next_job="";
+    }
+
     if (next_job == make_cmd){ // rest from the rebuild all
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
       process.clearArguments();

@@ -752,7 +752,13 @@ void CKDevelop::slotProjectAPI(){
   // This could me made a lot smarter...
   if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() ||
        QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
-      link += "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
+      link += "-lkdecore -lkdeui -lkfile -lkfmlib -ljscript -lkab -lkspell";
+  if ( QFileInfo(idx_path + "/khtmlw.kdoc").exists() ||
+       QFileInfo(idx_path + "/khtmlw.kdoc.gz").exists() )
+      link += " -lkhtmlw";
+  if ( QFileInfo(idx_path + "/khtml.kdoc").exists() ||
+      QFileInfo(idx_path + "/khtml.kdoc.gz").exists() )
+      link += " -lkhtml";
 
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
   int dirlength = QDir::currentDirPath().length()+1;

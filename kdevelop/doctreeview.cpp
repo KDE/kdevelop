@@ -277,7 +277,6 @@ private:
     QString idx_filename;
 };
 
-
 DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
                                         const char *libname )
     : ListViewBookItem(parent, text, locatehtml(libname)), name(libname)
@@ -289,7 +288,6 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
     QString doc_dir, idx_path;
     doc_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     idx_path= doc_dir + "/kdoc-reference";
-
     if (!doc_dir.isEmpty())
         {
             // If we have a kdoc2 index in either uncompressed
