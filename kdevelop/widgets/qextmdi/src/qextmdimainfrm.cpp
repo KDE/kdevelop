@@ -68,11 +68,7 @@ using namespace KParts;
 #if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
 QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::Win95Look;
 #else
-#ifdef NO_KDE2
-QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE1Look;
-#else
 QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
-#endif
 #endif
 
 QextMdi::MdiMode QextMdiMainFrm::m_mdiMode = QextMdi::ChildframeMode;
@@ -1499,7 +1495,7 @@ void QextMdiMainFrm::fillWindowMenu()
       m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
    }
    if (!bTabPageMode) {
-      int iconifyId = m_pWindowMenu->insertItem(tr("&Iconify All"), this, SLOT(iconifyAllViews()));
+      int iconifyId = m_pWindowMenu->insertItem(tr("&Minimize All"), this, SLOT(iconifyAllViews()));
       if (bNoViewOpened) {
          m_pWindowMenu->setItemEnabled(iconifyId, FALSE);
       }
@@ -1525,12 +1521,12 @@ void QextMdiMainFrm::fillWindowMenu()
    }
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
-      int placMenuId = m_pWindowMenu->insertItem(tr("&Placing..."), m_pPlacingMenu);
+      int placMenuId = m_pWindowMenu->insertItem(tr("&Tile..."), m_pPlacingMenu);
          m_pPlacingMenu->clear();
          m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
          m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
-         m_pPlacingMenu->insertItem(tr("Expand &vertical"), m_pMdi,SLOT(expandVertical()));
-         m_pPlacingMenu->insertItem(tr("Expand &horizontal"), m_pMdi,SLOT(expandHorizontal()));
+         m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
+         m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
          m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
          m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
          m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));

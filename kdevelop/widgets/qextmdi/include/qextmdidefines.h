@@ -23,10 +23,10 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#include <qglobal.h>
-
 #ifndef _MDIDEFINES_H_
 #define _MDIDEFINES_H_
+
+#include <qglobal.h>
 
 #define QEXTMDI_MDI_CHILDFRM_SEPARATOR 2
 #define QEXTMDI_MDI_CHILDFRM_BORDER 3
@@ -61,32 +61,17 @@ namespace QextMdi
    */
    enum AddWindowFlags {
       /**
-      * standard is: show normal, attached, visible, document view (not toolview)
+      * standard is: show normal, attached, visible, document view (not toolview). Maximize, Minimize, Hide adds
+      * appropriately. Detach adds a view that appears toplevel, ToolWindow adds the view as tool view.
+      * That means it is stay-on-top and toplevel. UseQextMDISizeHint should use the restore geometry of the
+      * latest current top childframe but is not supported yet.
       */
       StandardAdd = 0,
-      /**
-      * add a maximized view
-      */
       Maximize    = 1,
-      /**
-      * add a minimized view
-      */
       Minimize    = 2,
-      /**
-      * add a view that is not visible for the moment but under MDI control
-      */
       Hide        = 4,
-      /**
-      * add a view that appears toplevel
-      */
       Detach      = 8,
-      /**
-      * add the view as tool view. That means it is stay-on-top and toplevel
-      */
       ToolWindow  = 16,
-      /**
-      * uses the restore geometry of the latest current top childframe
-      */
       UseQextMDISizeHint = 32
    };
 
@@ -111,7 +96,7 @@ namespace QextMdi
 #   define _DLL_IMP_EXP_MSG_
 #endif
 
-#ifdef Q_WS_WIN
+#if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
   /* QT linked libraries compiled with MSVC */
 #  ifdef MAKEDLL_QEXTMDI
     /* for building qextmdi */

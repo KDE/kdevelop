@@ -1075,7 +1075,7 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
       if( state() != Maximized)
          m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
       if( state() != Minimized)
-         m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
+         m_pSystemMenu->insertItem(tr("&Minimize"),this, SLOT(minimizePressed()));
       if( state() != Maximized)
          m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
       if( state() == Normal)
