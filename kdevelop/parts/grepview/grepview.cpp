@@ -1,4 +1,5 @@
 #include <qvbox.h>
+#include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -32,6 +33,12 @@ void GrepView::setupGUI()
     m_widget = new GrepWidget(this);
     m_widget->setIcon(SmallIcon("find"));
     m_widget->setCaption(i18n("Grep"));
+    QWhatsThis::add(m_widget, i18n("Grep\n\n"
+                                   "This window contains the output of a grep "
+                                   "command. Clicking on an item in the list "
+                                   "will automatically open the corresponding "
+                                   "source file and set the cursor to the line "
+                                   "with the match."));
 
     emit embedWidget(m_widget, OutputView, i18n("Grep"), i18n("grep output view"));
 

@@ -1,3 +1,4 @@
+#include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -29,7 +30,13 @@ void MakeView::setupGUI()
     kdDebug(9004) << "Building MakeWidget" << endl;
 
     m_widget = new MakeWidget(this);
-    m_widget->setCaption(i18n("Compiler messages"));
+    m_widget->setCaption(i18n("Messages output"));
+    QWhatsThis::add(m_widget, i18n("Messages output\n\n"
+                                   "The messages window shows the output of the compiler and "
+                                   "used utilities like kdoc reference documentation. "
+                                   "For compiler error messages, click on the error message. "
+                                   "This will automatically open the source file and set the "
+                                   "cursor to the line that caused the compiler error/warning."));
 
     emit embedWidget(m_widget, OutputView, i18n("Messages"), i18n("messages output view"));
 
@@ -83,6 +90,10 @@ void AppOutputView::setupGUI()
 
     m_widget = new AppOutputWidget();
     m_widget->setCaption(i18n("Application output"));
+    QWhatsThis::add(m_widget, i18n("Application output\n\n"
+                                   "The stdout/stderr output window is a replacement for "
+                                   "terminal-based application communication. Running terminal "
+                                   "applications are using this instead of a terminal window."));
 
     emit embedWidget(m_widget, OutputView, i18n("Application"), i18n("application output view"));
 }

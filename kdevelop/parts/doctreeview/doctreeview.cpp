@@ -1,4 +1,5 @@
 #include <qvbox.h>
+#include <qwhatsthis.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -29,7 +30,11 @@ void DocTreeView::setupGUI()
 
     m_widget = new DocTreeWidget(this);
     m_widget->setIcon(SmallIcon("mini-book1"));
-    m_widget->setCaption(i18n("Documentation"));
+    m_widget->setCaption(i18n("Documentation Tree"));
+    QWhatsThis::add(m_widget, i18n("Documentation Tree\n\n"
+                                   "The documentation tree gives access to library "
+                                   "documentation and the KDevelop manuals. It can "
+                                   "be configured individually."));
     
     emit embedWidget(m_widget, SelectView, i18n("DOC"), i18n("documentation tree view"));
 }

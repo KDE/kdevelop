@@ -1,5 +1,6 @@
 #include <qlcdnumber.h>
 #include <qpopupmenu.h>
+#include <qwhatsthis.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
@@ -34,6 +35,12 @@ void ClassView::setupGUI()
     w->display(42);
     //    w->setIcon()
     w->setCaption(i18n("Class view"));
+    QWhatsThis::add(w, i18n("Class View\n\n"
+                            "The class viewer shows all classes, methods and variables "
+                            "of the current project files and allows switching to declarations "
+                            "and implementations. The right button popup menu allows more specialized "
+                            "functionality."));
+
     embedWidget(w, SelectView, i18n("CV"), i18n("class tree view"));
     
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
