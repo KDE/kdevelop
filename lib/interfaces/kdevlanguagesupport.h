@@ -81,6 +81,7 @@ public:
         NewClass=512        /**<Language support can create classes.*/,
         AddMethod=1024      /**<Language support can create methods.*/,
         AddAttribute=2048   /**<Language support can create class attributes.*/,
+		CreateAccessMethods=4096  /**<Language support can create get/set methods for attributes.*/,
     };
 
     /**Constructs a language support plugin.
@@ -143,6 +144,14 @@ public:
     Define AddAttribute feature if you reimplement this method.
     @param klass The class DOM to add an attribute to.*/
     virtual void addAttribute(ClassDom klass);
+	
+	/**
+	 * Opens an "create get/set methods" dialog and adds the configured methods to the sources.
+	 * Define CreateAccessMethods feature if you reimplement this method.
+	 * @param theClass The class the methods should be added to.
+	 * @param theVariable The attribute the access methods should be generated for.
+	 */
+	virtual void createAccessMethods(ClassDom theClass, VariableDom theVariable);
     
     /**Opens an "Subclass Widget" dialog for given Qt .ui file (formName)
     and propmts to implement it's slots.

@@ -138,4 +138,8 @@ void KDevLanguageSupport::openFunction( DesignerType type, const QString & formN
     designerIntegration->openFunction(formName, functionName);
 }
 
+void KDevLanguageSupport::createAccessMethods( ClassDom theClass, VariableDom theVariable )
+{
+}
+
 #include "kdevlanguagesupport.moc"
