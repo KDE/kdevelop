@@ -38,6 +38,9 @@ public slots:
     virtual void addFunction(const QString& formName, KInterfaceDesigner::Function function);
     virtual void editFunction(const QString& formName, KInterfaceDesigner::Function oldFunction, KInterfaceDesigner::Function function);
     virtual void removeFunction(const QString& formName, KInterfaceDesigner::Function function);
+    
+    virtual void saveSettings(QDomDocument dom, QString path);
+    virtual void loadSettings(QDomDocument dom, QString path);
 
 protected:
     bool selectImplementation(const QString &formName);

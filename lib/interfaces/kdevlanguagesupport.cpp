@@ -24,6 +24,8 @@
 */
 #include "codemodel.h"
 
+#include <kdebug.h>
+
 #include "kdevdesignerintegration.h"
 #include "kdevlanguagesupport.h"
 
@@ -94,10 +96,17 @@ QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool /*
 
 void KDevLanguageSupport::addFunction( DesignerType type, const QString & formName, Function function )
 {
+    kdDebug() << "KDevLanguageSupport::addFunction: 1" << endl;
     KDevDesignerIntegration *designerIntegration = designer(type);
+    kdDebug() << "KDevLanguageSupport::addFunction: 2" << endl;
     if (!designerIntegration)
+    {
+        kdDebug() << "KDevLanguageSupport::addFunction: x" << endl;
         return;
+    }
+    kdDebug() << "KDevLanguageSupport::addFunction: 3" << endl;
     designerIntegration->addFunction(formName, function);
+    kdDebug() << "KDevLanguageSupport::addFunction: 4" << endl;
 }
 
 void KDevLanguageSupport::editFunction( DesignerType type, const QString & formName, Function oldFunction, Function function )

@@ -434,6 +434,13 @@ void CppSupportPart::projectClosed( )
     }
     DomUtil::writeListEntry( *project()->projectDom(), "kdevcppsupport/references", "pcs", enabledPCSs );
 
+    for (QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*>::const_iterator it =  m_designers.begin();
+        it != m_designers.end(); ++it)
+    {
+        kdDebug() << "calling save settings fro designer integration" << endl;
+        it.data()->saveSettings(*project()->projectDom(), "kdevcppsupport/designerintegration");
+    }
+    
     saveProjectSourceInfo();
 
     m_pCompletionConfig->store();
@@ -1098,6 +1105,7 @@ void CppSupportPart::MakeMemberHelper(QString& text, int& atLine, int& atColumn)
 	    atLine = m_activeEditor->numLines() - 1;
 	    atColumn = 0;
 	}
+         kdDebug() << "at line in mm: " << atLine << endl;
     }
     m_backgroundParser->unlock();
 }
@@ -1112,6 +1120,8 @@ if(!text.isEmpty())
 { 
  m_backgroundParser->lock();
 
+         kdDebug() << "at line in mm: " << atLine  << " atCol: " << atColumn << endl;
+         kdDebug() << "text: " << text << endl;
  if( m_activeEditor )
   m_activeEditor->insertText( atLine, atColumn, text );
  if( m_activeViewCursor )
@@ -1767,9 +1777,16 @@ KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::Designer
         case KInterfaceDesigner::QtDesigner:
             des = m_designers[type];
             if (des == 0)
+            {
                 des = new QtDesignerIntegration(this);
+                kdDebug() << "1" << endl;
+                des->loadSettings(*project()->projectDom(), "kdevcppsupport/designerintegration");
+                kdDebug() << "2" << endl;
+                m_designers[type] = des;
+            }
             break;
     }
+    kdDebug() << "3" << endl;
     return des;
 }
 

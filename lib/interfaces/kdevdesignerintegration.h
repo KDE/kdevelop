@@ -21,6 +21,7 @@
 
 #include "designer.h"
 #include <qobject.h>
+#include <qdom.h>
 
 class KDevDesignerIntegration : public QObject
 {
@@ -28,6 +29,9 @@ Q_OBJECT
 public:
     KDevDesignerIntegration(QObject *parent = 0, const char *name = 0);
     ~KDevDesignerIntegration();
+    
+    virtual void saveSettings(QDomDocument dom, QString path) = 0;
+    virtual void loadSettings(QDomDocument dom, QString path) = 0;
     
 public slots:
     virtual void addFunction(const QString &formName, KInterfaceDesigner::Function function) = 0;

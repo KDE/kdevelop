@@ -21,13 +21,17 @@
 #include "qtdesignerintegration.h"
 
 #include <qpair.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/viewcursorinterface.h>
 
+#include <domutil.h>
 #include <kdevpartcontroller.h>
 #include <kdevcreatefile.h>
 
@@ -101,7 +105,6 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
 
     // compute the insertion point map
     QMap<QString, QPair<int,int> > points;
-    QStringList accessList;
 
     const FunctionList functionList = klass->functionList();
     for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it )
@@ -112,62 +115,53 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
         QPair<int, int> funEndPoint = qMakePair( funEndLine, funEndColumn );
 
         if( !points.contains(access) || points[access] < funEndPoint ){
-            accessList.remove( access );
-            accessList.push_back( access ); // move 'access' at the end of the list
-
             points[ access ] = funEndPoint;
         }
     }
 
     int insertedLine = 0;
 
-    QString newAccess = function.access + ( function.type == "slot" ? " slots" : "" );
-    if( !(accessList.contains(newAccess)) )
-        accessList.push_back( newAccess );
-//    accessList += newAccessList( accessList );
+    QString access = function.access + ( function.type == KInterfaceDesigner::ftQtSlot ? " slots" : "" );
 
-    for( QStringList::iterator it=accessList.begin(); it!=accessList.end(); ++it )
-    {
-        QString access = (*it).lower();
+    QString str = function.returnType + " " + function.function;
+    if (function.specifier == "virtual")
+        str = "virtual " + str;
+    else if (function.specifier == "pure virtual")
+        str = "virtual " + str + " = 0";
+    else if (function.specifier == "static")
+        str = "static " + str;
+    str += ";\n";
+    str = "    " + str;
 
-        QString str = function.returnType + " " + function.function;
-        if (function.specifier == "virtual")
-            str = "virtual " + str;
-        else if (function.specifier == "pure virtual")
-            str = "virtual " + str + " = 0";
-        else if (function.specifier == "static")
-            str = "static " + str;
-        str += ";\n";
-
-        QPair<int, int> pt;
-        if( points.contains(*it) ) {
-            pt = points[ *it ];
-        } else {
-            str.prepend( access + ":\n" );
-            points[ *it ] = qMakePair( line-1, 0 );
-            pt = points[ *it ]; // end of class declaration
-        }
-
-        editIface->insertText( pt.first + insertedLine + 1, 0 /*pt.second*/, str );
-        insertedLine += str.contains( QChar('\n') );
+    QPair<int, int> pt;
+    if( points.contains(access) ) {
+        pt = points[access];
+    } else {
+        str.prepend( access + ":\n" );
+        points[access] = qMakePair( line-1, 0 );
+        pt = points[access]; // end of class declaration
     }
+
+    editIface->insertText( pt.first + insertedLine + 1, 0 /*pt.second*/, str );
+    insertedLine += str.contains( QChar('\n') );
 
     m_part->backgroundParser()->addFile( klass->fileName() );
 
     if (function.specifier == "pure virtual")
         return;
 
-    QString str = function.returnType + " " + klass->name() + "::" + function.function;
+    QString stri = "\n" + function.returnType + " " + klass->name() + "::" + function.function;
     if (function.specifier == "static")
-        str = "static " + str;
-    str += "\n{\n}\n";
+        stri = "static " + stri;
+    stri += "\n{\n}\n";
         
     QFileInfo fi(klass->fileName());
-    QString implementationFile = fi.baseName() + ".cpp";
+    QString implementationFile = fi.absFilePath();
+    implementationFile.replace(".h", ".cpp");
 
     QFileInfo fileInfo( implementationFile );
     if( !QFile::exists(fileInfo.absFilePath()) ){
-        m_part->createFileSupport()->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.baseName() );
+        m_part->createFileSupport()->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.fileName() );
     }
 
     m_part->partController()->editDocument( KURL( implementationFile ) );
@@ -175,8 +169,45 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
     if( !editIface )
         return;
 
-    editIface->insertLine( editIface->numLines(), QString::fromLatin1("") );
-    editIface->insertText( editIface->numLines()-1, 0, str );
+    int atLine = 0, atColumn = 0;
+    TranslationUnitAST *translationUnit = m_part->backgroundParser()->translationUnit(implementationFile);
+    if (translationUnit){
+        translationUnit->getEndPosition( &atLine, &atColumn );
+        kdDebug() << "atLine: " << atLine << endl;
+        stri = "\n" + stri;
+    } else {
+        atLine = editIface->numLines();
+        line = editIface->numLines();
+        while (line > 0)
+        {
+            if (editIface->textLine(line).isEmpty())
+            {
+                --line;
+                continue;
+            }
+            else
+            {
+                if (editIface->textLine(line).contains(QRegExp(".*#include .*\\.moc.*")))
+                    atLine = line;
+                break;
+            }
+        }
+        kdDebug() << "atLine (2): " << atLine << endl;
+        atColumn = 0;
+    }
+    
+//    editIface->insertLine( atLine + 1, QString::fromLatin1("") );
+         kdDebug() << "at line in intg: " << atLine  << " atCol: " << atColumn << endl;
+         kdDebug() << "text: " << stri << endl;
+    editIface->insertText( atLine, atColumn, stri );
+    KTextEditor::View *activeView = dynamic_cast<KTextEditor::View*>( m_part->partController()->activePart()->widget() );
+    if (activeView)
+    {
+        KTextEditor::ViewCursorInterface* cursor = dynamic_cast<KTextEditor::ViewCursorInterface*>(activeView );
+        if (cursor)
+            cursor->setCursorPositionReal( atLine+3, 1 );
+    }
+    
     m_part->backgroundParser()->addFile( implementationFile );
 }
 
@@ -204,6 +235,41 @@ QString QtDesignerIntegration::accessID(FunctionDom fun) const
     }
 
     return QString::null;
+}
+
+void QtDesignerIntegration::loadSettings(QDomDocument dom, QString path)
+{
+    QDomElement el = DomUtil::elementByPath(dom, path + "/qtdesigner");
+    if (el.isNull())
+        return;
+    QDomNodeList impls = el.elementsByTagName("implementation");
+    for (uint i = 0; i < impls.count(); ++i)
+    {
+        QDomElement el = impls.item(i).toElement();
+        if (el.isNull())
+            continue;
+        FileDom file = m_part->codeModel()->fileByName(el.attribute("implementationpath"));
+        if (!file)
+            continue;
+        ClassList cllist = file->classByName(el.attribute("class"));
+        if (cllist.count() > 0)
+            m_implementations[el.attribute("path")] = cllist.first();
+    }
+}
+
+void QtDesignerIntegration::saveSettings(QDomDocument dom, QString path)
+{
+    kdDebug() << "QtDesignerIntegration::saveSettings" << endl;
+    QDomElement el = DomUtil::createElementByPath(dom, path + "/qtdesigner");
+    for (QMap<QString, ClassDom>::const_iterator it = m_implementations.begin(); 
+        it != m_implementations.end(); ++it)
+    {
+        QDomElement il = dom.createElement("implementation");
+        el.appendChild(il);
+        il.setAttribute("path", it.key());
+        il.setAttribute("implementationpath", it.data()->fileName());
+        il.setAttribute("class", it.data()->name());
+    }
 }
 
 

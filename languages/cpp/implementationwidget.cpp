@@ -183,6 +183,8 @@ bool ImplementationWidget::createClass()
     fileList.append(file_h);
     fileList.append(file_cpp);
     m_part->project()->addFiles(fileList);
+    
+    return true;
 }
 
 #include "implementationwidget.moc"
