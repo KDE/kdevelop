@@ -17,6 +17,8 @@
 
 #include <qcheckbox.h>
 #include <qvbox.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -38,6 +40,9 @@
 #include "projectmanager.h"
 #include "core.h"
 #include "settingswidget.h"
+#include "api.h"
+#include "kdevmakefrontend.h"
+
 #include "mainwindowshare.h"
 
 MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
@@ -206,7 +211,16 @@ void MainWindowShare::slotSettings()
     KConfig* config = kapp->config();
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
+    config->setGroup("MakeView");
     gsw->setMessageFont(config->readFontEntry("Messages Font"));
+    gsw->lineWrappingCheckBox->setChecked(config->readBoolEntry("LineWrapping",true));
+    gsw->dirNavigMsgCheckBox->setChecked(config->readBoolEntry("ShowDirNavigMsg",false));
+    gsw->compilerOutputButtonGroup->setRadioButtonExclusive(true);
+    int id = config->readBoolEntry("ShortCompilerOutput",true) ?
+	     gsw->compilerOutputButtonGroup->id(gsw->shortCompilerOutputRadioButton) :
+	     gsw->compilerOutputButtonGroup->id(gsw->fullCompilerOutputRadioButton);
+    gsw->compilerOutputButtonGroup->setButton(id);
+    config->setGroup("General Options");
     gsw->setApplicationFont(config->readFontEntry("Application Font"));
     gsw->changeMessageFontButton->setText(gsw->messageFont().family());
     gsw->changeMessageFontButton->setFont(gsw->messageFont());
@@ -217,8 +231,14 @@ void MainWindowShare::slotSettings()
 
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-    config->writeEntry("Messages Font",gsw->messageFont());
     config->writeEntry("Application Font", gsw->applicationFont());
+    config->setGroup("MakeOutputView");
+    config->writeEntry("Messages Font",gsw->messageFont());
+    config->writeEntry("LineWrapping",gsw->lineWrappingCheckBox->isChecked());
+    config->writeEntry("ShowDirNavigMsg",gsw->dirNavigMsgCheckBox->isChecked());
+    config->writeEntry("ShortCompilerOutput",gsw->compilerOutputButtonGroup->selected() == gsw->shortCompilerOutputRadioButton);
+    config->sync();
+    API::getInstance()->makeFrontend()->updateSettingsFromConfig();
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog

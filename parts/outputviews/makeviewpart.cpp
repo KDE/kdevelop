@@ -55,6 +55,8 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
 
     connect( core(), SIGNAL(stopButtonClicked()),
              m_widget, SLOT(killJob()) );
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             m_widget, SLOT(configWidget(KDialogBase*)) );
 }
 
 
@@ -79,6 +81,11 @@ bool MakeViewPart::isRunning()
 QWidget* MakeViewPart::widget()
 {
     return m_widget.operator->();
+}
+
+void MakeViewPart::updateSettingsFromConfig()
+{
+    m_widget->updateSettingsFromConfig();
 }
 
 #include "makeviewpart.moc"

@@ -37,11 +37,14 @@ public:
      * Returns whether the application is currently running.
      */
     virtual bool isRunning() = 0;
-
+    /**
+     * Advices to synchronize the settings from KConfig because they've changed externally.
+     */
+    virtual void updateSettingsFromConfig() = 0;
+signals:
     /**
      * Only emitted if the command was succesfully finished.
      */
-signals:
     void commandFinished(const QString &command);
 };
 

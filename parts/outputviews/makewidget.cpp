@@ -105,7 +105,6 @@ static const char *const message_xpm[] =
         "...####...."
     };
 
-
 class MakeItem
 {
 public:
@@ -120,13 +119,30 @@ public:
 
 
 MakeWidget::MakeWidget(MakeViewPart *part)
-        : QTextEdit(0, "make widget")
+: QTextEdit(0, "make widget")
+ ,m_part(part)
  ,m_vertScrolling(false)
  ,m_horizScrolling(false)
- ,m_bLineWrapping(true)
- ,m_bShortCompilerOutput(false)
- ,m_bShowDirNavMsg(true)
+ ,m_errorGccFileGroup(1)
+ ,m_errorGccRowGroup(2)
+ ,m_errorGccTextGroup(3)
+ ,m_errorFtnchekFileGroup(1)
+ ,m_errorFtnchekRowGroup(2)
+ ,m_errorFrnchekTextGroup(3)
+ ,m_errorJadeFileGroup(1)
+ ,m_errorJadeRowGroup(2)
+ ,m_errorJadeTextGroup(3)
+ ,m_fileNameGroup(1)
 {
+    updateSettingsFromConfig();
+    
+    m_pErrorGccRx = new KRegExp("([^: \t]+):([0-9]+):(.*)");
+    m_pErrorFtnchekRx = new KRegExp("\"(.*)\", line ([0-9]+):(.*)");
+    m_pErrorJadeRx = new KRegExp("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)");
+    m_pCompileFile1 = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].*`.*`(.+)");
+    m_pCompileFile2 = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-c ([^ ]+).*");
+    m_pLinkFile = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-o ([^ ]+).*");
+    
     if (m_bLineWrapping) {
 	setWordWrap(WidgetWidth);
     }
@@ -161,12 +177,6 @@ MakeWidget::MakeWidget(MakeViewPart *part)
     parags = 0;
     moved = false;
 
-    m_part = part;
-    
-    KConfig *config = kapp->config();
-    config->setGroup("General Options");
-    setFont(config->readFontEntry("Messages Font"));
-
     updateColors();
 }
 
@@ -176,6 +186,13 @@ MakeWidget::~MakeWidget()
     delete mimeSourceFactory();
     delete childproc;
     delete procLineMaker;
+    
+    delete m_pErrorGccRx;
+    delete m_pErrorFtnchekRx;
+    delete m_pErrorJadeRx;
+    delete m_pCompileFile1;
+    delete m_pCompileFile2;
+    delete m_pLinkFile;
 }
 
 
@@ -539,24 +556,6 @@ bool MakeWidget::matchLeaveDir( const QString& line, QString& dir )
 
 void MakeWidget::insertLine1(const QString &line, Type type)
 {
-    // KRegExp has ERE syntax
-    static KRegExp errorGccRx("([^: \t]+):([0-9]+):(.*)");
-    static KRegExp errorFtnchekRx("\"(.*)\", line ([0-9]+):(.*)");
-    static KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)");
-    static KRegExp compileFile1("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].*`.*`(.+)");
-    static KRegExp compileFile2("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-c ([^ ]+).*");
-    static KRegExp linkFile("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-o ([^ ]+).*");
-    const int errorGccFileGroup = 1;
-    const int errorGccRowGroup = 2;
-    const int errorGccTextGroup = 3;
-    const int errorFtnchekFileGroup = 1;
-    const int errorFtnchekRowGroup = 2;
-    const int errorFrnchekTextGroup = 3;
-    const int errorJadeFileGroup = 1;
-    const int errorJadeRowGroup = 2;
-    const int errorJadeTextGroup = 3;
-    const int fileNameGroup = 1;
-
     QString eDir;
     if (matchEnterDir(line, eDir))
     {
@@ -592,27 +591,27 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     QString text;
 
     bool hasmatch = false;
-    if (errorGccRx.match(line))
+    if (m_pErrorGccRx->match(line))
     {
         hasmatch = true;
-        fn = errorGccRx.group(errorGccFileGroup);
-        row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
-        text = QString(errorGccRx.group(errorGccTextGroup));
+        fn = m_pErrorGccRx->group(m_errorGccFileGroup);
+        row = QString(m_pErrorGccRx->group(m_errorGccRowGroup)).toInt()-1;
+        text = QString(m_pErrorGccRx->group(m_errorGccTextGroup));
     }
-    else if (errorFtnchekRx.match(line))
+    else if (m_pErrorFtnchekRx->match(line))
     {
         kdDebug() << "Matching " << line << endl;
         hasmatch = true;
-        fn = errorFtnchekRx.group(errorFtnchekFileGroup);
-        row = QString(errorFtnchekRx.group(errorFtnchekRowGroup)).toInt()-1;
-        text = QString(errorFtnchekRx.group(errorFrnchekTextGroup));
+        fn = m_pErrorFtnchekRx->group(m_errorFtnchekFileGroup);
+        row = QString(m_pErrorFtnchekRx->group(m_errorFtnchekRowGroup)).toInt()-1;
+        text = QString(m_pErrorFtnchekRx->group(m_errorFrnchekTextGroup));
     }
-    else if (errorJadeRx.match(line))
+    else if (m_pErrorJadeRx->match(line))
     {
         hasmatch = true;
-        fn = errorGccRx.group(errorJadeFileGroup);
-        row = QString(errorJadeRx.group(errorJadeRowGroup)).toInt()-1;
-        text = QString(errorJadeRx.group(errorJadeTextGroup));
+        fn = m_pErrorGccRx->group(m_errorJadeFileGroup);
+        row = QString(m_pErrorJadeRx->group(m_errorJadeRowGroup)).toInt()-1;
+        text = QString(m_pErrorJadeRx->group(m_errorJadeTextGroup));
     }
 
     if( hasmatch )
@@ -635,25 +634,25 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         items.append(new MakeItem(parags, fn, row, text));
 	insertLine2(line, Error);
     }
-    else if (m_bShortCompilerOutput && compileFile1.match(line)) {
+    else if (m_bShortCompilerOutput && m_pCompileFile1->match(line)) {
 	QString explain(i18n("compiling ")); 
 	QString tool;
 	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + compileFile1.group(fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	insertLine2(explain + "<b>" + m_pCompileFile1->group(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
 	return;
     }
-    else if (m_bShortCompilerOutput && compileFile2.match(line)) {
+    else if (m_bShortCompilerOutput && m_pCompileFile2->match(line)) {
 	QString explain(i18n("compiling ")); 
 	QString tool;
 	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + compileFile2.group(fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	insertLine2(explain + "<b>" + m_pCompileFile2->group(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
 	return;
     }
-    else if (m_bShortCompilerOutput && linkFile.match(line)) {
+    else if (m_bShortCompilerOutput && m_pLinkFile->match(line)) {
 	QString explain(i18n("linking ")); 
 	QString tool;
 	if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	insertLine2(explain + "<b>" + linkFile.group(fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	insertLine2(explain + "<b>" + m_pLinkFile->group(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
 	return;
     }
     else {
@@ -758,8 +757,12 @@ QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 void MakeWidget::toggleLineWrapping()
 {
     m_bLineWrapping = !m_bLineWrapping;
+    KConfig *pConfig = kapp->config();
+    pConfig->setGroup("MakeOutputView");
+    pConfig->writeEntry("LineWrapping", m_bLineWrapping);
+    pConfig->sync();
     if (m_bLineWrapping) {
-	setWordWrap(WidgetWidth);	
+	setWordWrap(WidgetWidth);
     }
     else {
 	setWordWrap(NoWrap);
@@ -769,11 +772,29 @@ void MakeWidget::toggleLineWrapping()
 void MakeWidget::toggleCompilerOutput()
 {
     m_bShortCompilerOutput = !m_bShortCompilerOutput;
+    KConfig *pConfig = kapp->config();
+    pConfig->setGroup("MakeOutputView");
+    pConfig->writeEntry("ShortCompilerOutput", m_bShortCompilerOutput);
+    pConfig->sync();
 }
 
 void MakeWidget::toggleShowDirNavigMessages()
 {
     m_bShowDirNavMsg = !m_bShowDirNavMsg;    
+    KConfig *pConfig = kapp->config();
+    pConfig->setGroup("MakeOutputView");
+    pConfig->writeEntry("ShowDirNavigMsg", m_bShowDirNavMsg);
+    pConfig->sync();
+}
+
+void MakeWidget::updateSettingsFromConfig()
+{
+    KConfig *pConfig = kapp->config();
+    pConfig->setGroup("MakeOutputView");
+    setFont(pConfig->readFontEntry("Messages Font"));
+    m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
+    m_bShortCompilerOutput = pConfig->readBoolEntry("ShortCompilerOutput", true);
+    m_bShowDirNavMsg = pConfig->readBoolEntry("ShowDirNavigMsg", false);
 }
 
 #include "makewidget.moc"

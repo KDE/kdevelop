@@ -22,6 +22,7 @@
 class MakeViewPart;
 class MakeItem;
 class KProcess;
+class KRegExp;
 class ProcessLineMaker;
 
 
@@ -34,6 +35,7 @@ public:
 
     void queueJob(const QString &dir, const QString &command);
     bool isRunning();
+    void updateSettingsFromConfig();
 
 public slots:
     void startNextJob();
@@ -41,7 +43,7 @@ public slots:
     void nextError();
     void prevError();
     void copy();
-
+    
 protected:
     void paletteChange(const QPalette& oldPalette);
     virtual QPopupMenu *createPopupMenu( const QPoint& pos );
@@ -81,13 +83,32 @@ private:
     int parags;
     bool moved;
     QString normalColor, errorColor, diagnosticColor;
-    bool m_vertScrolling, m_horizScrolling;
 
+    MakeViewPart *m_part;
+    
+    bool m_vertScrolling, m_horizScrolling;
+    
     bool m_bLineWrapping;
     bool m_bShortCompilerOutput;
     bool m_bShowDirNavMsg;
     
-    MakeViewPart *m_part;
+    int m_errorGccFileGroup;
+    int m_errorGccRowGroup;
+    int m_errorGccTextGroup;
+    int m_errorFtnchekFileGroup;
+    int m_errorFtnchekRowGroup;
+    int m_errorFrnchekTextGroup;
+    int m_errorJadeFileGroup;
+    int m_errorJadeRowGroup;
+    int m_errorJadeTextGroup;
+    int m_fileNameGroup;
+ 
+    KRegExp* m_pErrorGccRx;
+    KRegExp* m_pErrorFtnchekRx;
+    KRegExp* m_pErrorJadeRx;
+    KRegExp* m_pCompileFile1;
+    KRegExp* m_pCompileFile2;
+    KRegExp* m_pLinkFile;
 };
 
 #endif

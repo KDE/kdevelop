@@ -1,3 +1,7 @@
+2003-03-02 F@lk Brettschneider <falkbr@kdevelop.org>
+	* completed the new behaviour of the make-output view
+	  (can be configured via contextmenu or Gideon settings dialog)
+
 2003-03-01  Roberto Raggi <roberto@kdevelop.org>
 	* added javahello template to appwizard
 

@@ -8,14 +8,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>475</width>
-            <height>325</height>
+            <width>566</width>
+            <height>512</height>
         </rect>
     </property>
     <property name="caption">
         <string>Form1</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -25,15 +25,15 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QCheckBox">
             <property name="name">
                 <cstring>lastProjectCheckbox</cstring>
             </property>
             <property name="text">
-                <string>Load last project on startup</string>
+                <string>&amp;Load last project on startup</string>
             </property>
         </widget>
-        <widget class="Line" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="Line">
             <property name="name">
                 <cstring>line1</cstring>
             </property>
@@ -47,63 +47,240 @@
                 <enum>Horizontal</enum>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>GroupBox1</cstring>
             </property>
-            <grid>
+            <property name="title">
+                <string>&amp;Message Output View</string>
+            </property>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>0</number>
+                    <number>11</number>
                 </property>
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QPushButton" row="1" column="0">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>changeApplicationFontButton</cstring>
+                        <cstring>Layout9</cstring>
                     </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>buttonLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Window &amp;Font:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>changeMessageFontButton</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>changeMessageFontButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>3</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>Spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>170</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
                 </widget>
-                <widget class="QLabel" row="1" column="1">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>buttonLabel_2</cstring>
+                        <cstring>Layout4</cstring>
                     </property>
-                    <property name="text">
-                        <string>Application Output Window Font</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>Layout3</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>6</number>
+                                </property>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>lineWrappingCheckBox</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Line &amp;Wrapping</string>
+                                    </property>
+                                </widget>
+                                <widget class="QCheckBox">
+                                    <property name="name">
+                                        <cstring>dirNavigMsgCheckBox</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Directory Navigation Messages</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QButtonGroup">
+                            <property name="name">
+                                <cstring>compilerOutputButtonGroup</cstring>
+                            </property>
+                            <property name="title">
+                                <string>&amp;Compiler Output</string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>11</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>6</number>
+                                </property>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>shortCompilerOutputRadioButton</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Short</string>
+                                    </property>
+                                </widget>
+                                <widget class="QRadioButton">
+                                    <property name="name">
+                                        <cstring>fullCompilerOutputRadioButton</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>F&amp;ull</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </hbox>
                 </widget>
-                <widget class="QLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>buttonLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Message Window Font</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="0">
-                    <property name="name">
-                        <cstring>changeMessageFontButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-            </grid>
+            </vbox>
         </widget>
-        <spacer row="3" column="1">
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>GroupBox2</cstring>
+            </property>
+            <property name="title">
+                <string>&amp;Application Output View</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>buttonLabel_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Window F&amp;ont:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>changeApplicationFontButton</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>changeApplicationFontButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>Spacer3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>190</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <spacer>
             <property name="name">
                 <cstring>Spacer1</cstring>
             </property>
@@ -116,11 +293,11 @@
             <property name="sizeHint">
                 <size>
                     <width>0</width>
-                    <height>130</height>
+                    <height>247</height>
                 </size>
             </property>
         </spacer>
-    </grid>
+    </vbox>
 </widget>
 <connections>
     <connection>
