@@ -227,7 +227,7 @@ int main( int argc, char **argv )
 {
 QApplication a( argc, argv );
 
-QPushButton hello( "Hello world!" );
+QPushButton hello( "Hello world!", 0 );
 hello.resize( 100, 30 );
 
 a.setMainWidget( &amp;hello );
@@ -479,12 +479,12 @@ int main( int argc, char **argv )
 {
 QApplication a( argc, argv );
 
-QPushButton hello( "Hello world!" );
+QPushButton hello( "Hello world!" , 0);
 hello.resize( 100, 30 );
 
 a.setMainWidget( &amp;hello );
 
-connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
+QObject::connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
 
 hello.show();
 return a.exec();
@@ -573,12 +573,12 @@ int main( int argc, char **argv )
 {
 KApplication a( argc, argv );
 
-QPushButton hello( "Hello world!" );
+QPushButton hello( "Hello world!", 0 );
 hello.resize( 100, 30 );
 
 a.setTopWidget( &amp;hello );
 
-connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
+QObject::connect(&amp;hello, SIGNAL( clicked() ), &amp;a, SLOT( quit() ));
 
 hello.show();
 return a.exec();
