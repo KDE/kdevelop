@@ -15,8 +15,7 @@
 #include <qobject.h>
 #include <kxmlguiclient.h>
 
-#include <kdevapi.h>
-
+class KDevApi;
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -51,7 +50,6 @@ class KDevPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 
 public:
-	typedef QMap<QString,KDevVersionControl*> VersionControlMap;
     /**
      * Constructs a component.
      */
