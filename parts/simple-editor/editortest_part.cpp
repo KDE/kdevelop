@@ -2,6 +2,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kfiledialog.h>
+#include <kparts/partmanager.h>
 
 
 #include <qfile.h>
@@ -14,37 +15,24 @@
 #include "editortest_factory.h"
 
 
-#include "keditor/cursor_iface.h"
 #include "keditor/clipboard_iface.h"
-#include "keditor/undo_iface.h"
 #include "documents_iface_impl.h"
 
 
 using namespace KEditor;
 
 
-EditorTestPart::EditorTestPart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name )
-  : Editor(parentWidget, widgetName, parent, name)
+EditorTestPart::EditorTestPart(QObject *parent, const char *name )
+  : Editor(parent, name)
 {
   setInstance( EditorTestPartFactory::instance() );
 
-  _stack = new QTabWidget(parentWidget);
-  connect(_stack, SIGNAL(currentChanged(QWidget*)), this, SLOT(currentChanged(QWidget*)));
-  
   // create the interfaces
-  new CursorEditorIface(this);
-  new UndoEditorIface(this);
-  new ClipboardEditorIface(this);
   new DocumentsIfaceImpl(this);
 
-
-  setWidget(_stack);
-
-  setXMLFile("editortest_part.rc");
+  setXMLFile("editortest_part.rc", true);
 
   _documents.setAutoDelete(true);
-
-  _stack->setFocusPolicy(QWidget::ClickFocus);
 }
 
 
@@ -55,16 +43,17 @@ EditorTestPart::~EditorTestPart()
 
 void EditorTestPart::currentChanged(QWidget *widget)
 {
+/*
   QListIterator<DocumentImpl> it(_documents);
   for ( ; it.current(); ++it)
 	if (it.current()->editor() == widget)
 	  emit documentActivated(it.current());		
+*/
 }
 
 
 Document *EditorTestPart::getDocument(const QString &filename)
 {
-  QMultiLineEdit *edit = 0;
   DocumentImpl *impl = 0;
 
   // look for an existing document with that name
@@ -83,8 +72,7 @@ Document *EditorTestPart::getDocument(const QString &filename)
   bool created = false;
   if (!impl)
   {
-    edit = new QMultiLineEdit(_stack);
-    impl = new DocumentImpl(this, edit);
+    impl = new DocumentImpl(this);
 
     if (!filename.isEmpty())
 	impl->load(filename);
@@ -92,46 +80,27 @@ Document *EditorTestPart::getDocument(const QString &filename)
     connect(impl, SIGNAL(fileNameChanged(QString)), this, SLOT(fileNameChanged(QString)));
 
     _documents.append(impl);
-    _stack->addTab(edit, impl->shortName());
 
 	created = true;
   }
  
-  // show the document 
-  edit = impl->editor();
-  _stack->showPage(edit);
-
   if (created)
 	emit Editor::documentAdded();
 
+  emit Editor::activatePart(impl);
+
+  if (impl->widget())
+    emit Editor::activateView(impl->widget());
+  
   return impl;
-}
-
-
-void EditorTestPart::closeDocument(Document *doc)
-{
-  QListIterator<DocumentImpl> it(_documents);
-  for ( ; it.current(); ++it)
-	if (it.current() == doc)
-	  {
-		_stack->removePage(it.current()->editor());
-	    delete it.current()->editor();
-		_documents.remove(it.current());
-
-		emit Editor::documentRemoved();
-	  }
 }
 
 
 Document *EditorTestPart::currentDocument()
 {
-  QWidget *w = _stack->currentPage();
-  if (!w)
-    return 0;
-
   QListIterator<DocumentImpl> it(_documents);
   for ( ; it.current(); ++it)
-    if (it.current()->editor() == w)
+    if (it.current() == it.current()->manager()->activePart())
       return it.current();
 
   return 0;
@@ -140,9 +109,10 @@ Document *EditorTestPart::currentDocument()
 
 void EditorTestPart::fileNameChanged(QString)
 {
-   QListIterator<DocumentImpl> it(_documents);
+ /*  QListIterator<DocumentImpl> it(_documents);
    for ( ; it.current(); ++it)
      _stack->changeTab(it.current()->editor(), it.current()->shortName());
+  */
 }
 
 

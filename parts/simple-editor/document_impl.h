@@ -14,12 +14,10 @@ class DocumentImpl : public KEditor::Document
 
 public:
 
-  DocumentImpl(KEditor::Editor *parent, QMultiLineEdit *widget);
+  DocumentImpl(KEditor::Editor *parent);
 
   virtual bool load(QString filename);
   virtual bool save(QString filename);
-
-  QMultiLineEdit *editor() { return _widget; };
 
 
 private:

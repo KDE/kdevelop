@@ -17,6 +17,7 @@ CursorIfaceImpl::CursorIfaceImpl(QMultiLineEdit *edit, Document *parent, Editor 
 bool CursorIfaceImpl::setCursorPosition(int line, int col)
 {
   m_edit->setCursorPosition(line, col);
+  m_edit->setFocus();
 
   return true;
 }

@@ -20,7 +20,7 @@ KInstance* EditorTestPartFactory::s_instance = 0L;
 KAboutData* EditorTestPartFactory::s_about = 0L;
 
 EditorTestPartFactory::EditorTestPartFactory()
-    : KParts::Factory()
+    : KLibFactory()
 {}
 
 
@@ -34,12 +34,11 @@ EditorTestPartFactory::~EditorTestPartFactory()
   s_instance = 0L;
 }
 
-KParts::Part* EditorTestPartFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
-    QObject *parent, const char *name,
+QObject* EditorTestPartFactory::createObject( QObject *parent, const char *name,
     const char *, const QStringList &)
 {
   // Create an instance of our Part
-  EditorTestPart* obj = new EditorTestPart( parentWidget, widgetName, parent, name );
+  EditorTestPart* obj = new EditorTestPart(parent, name);
 
   return obj;
 }

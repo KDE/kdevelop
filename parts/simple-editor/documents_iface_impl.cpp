@@ -23,10 +23,7 @@ QList<Document> DocumentsIfaceImpl::documents()
   
   QListIterator<DocumentImpl> it(((EditorTestPart*)editor())->_documents);
   for ( ; it.current(); ++it)
-	{
-      kdDebug() << "ADDED to retval: " << it.current()->shortName() << endl;
-	  retval.append(it.current());
-    }
+    retval.append(it.current());
   
   return retval; 
 }

@@ -11,5 +11,5 @@ libeditortestpart_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE) $(top_builddir)/lib/in
 partdesktopdir   = $(kde_servicesdir)
 partdesktop_DATA = editortest_part.desktop
 
-partrcdir   = $(kde_datadir)/editortest_part
+partrcdir   = $(kde_datadir)/editortest
 partrc_DATA = editortest_part.rc

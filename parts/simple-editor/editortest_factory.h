@@ -6,22 +6,25 @@
 #define _EDITORTESTFACTORY_H_
 
 
-#include <kparts/part.h>
-#include <kparts/factory.h>
+#include <klibloader.h>
 
 
 class KInstance;
 class KAboutData;
 
-class EditorTestPartFactory : public KParts::Factory
+
+class EditorTestPartFactory : public KLibFactory
 {
   Q_OBJECT
+		  
 public:
+		  
   EditorTestPartFactory();
   virtual ~EditorTestPartFactory();
-  virtual KParts::Part* createPartObject( QWidget *parentWidget, const char *widgetName,
-                                          QObject *parent, const char *name,
-                                          const char *classname, const QStringList &args );
+  
+  virtual QObject* createObject(QObject *parent, const char *name,
+                                 const char *classname, const QStringList &args );
+
   static KInstance* instance();
 
 private:

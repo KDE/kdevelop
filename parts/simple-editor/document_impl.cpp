@@ -4,6 +4,9 @@
 #include <qtabwidget.h>
 
 
+#include <kparts/partmanager.h>
+
+
 #include "document_impl.h"
 #include "editortest_part.h"
 #include "clipboard_iface_impl.h"
@@ -14,15 +17,27 @@
 using namespace KEditor;
 
 
-DocumentImpl::DocumentImpl(Editor *parent, QMultiLineEdit *widget)
-  : Document(parent), _widget(widget)
+DocumentImpl::DocumentImpl(Editor *parent)
+  : Document(parent), _widget(0)
 {
-  // create interfaces
-  new ClipboardIfaceImpl(widget, this, parent);
-  new UndoIfaceImpl(widget, this, parent);
-  new CursorIfaceImpl(widget, this, parent);
+  // create the editor
+  _widget = new QMultiLineEdit;
+  setWidget(_widget);  
 
-  widget->setFocus();
+  // register with the view manager
+  parent->addView(_widget);
+
+  // create interfaces
+  new ClipboardIfaceImpl(_widget, this, parent);
+  new UndoIfaceImpl(_widget, this, parent);
+  new CursorIfaceImpl(_widget, this, parent);
+
+  setXMLFile("editortest_part.rc", true);
+
+  // register with the part manager
+  parent->addPart(this);
+
+  _widget->setFocus();
 }
 
 
@@ -32,10 +47,10 @@ bool DocumentImpl::load(QString filename)
   if (!f.open(IO_ReadOnly))
 	return false;
 
-  editor()->clear();
+  _widget->clear();
   
   QTextStream ts(&f);
-  editor()->setText(ts.read());
+  _widget->setText(ts.read());
 
   f.close();
 
@@ -52,7 +67,7 @@ bool DocumentImpl::save(QString filename)
 	return false;
 
   QTextStream ts(&f);
-  ts << editor()->text();
+  ts << _widget->text();
 
   f.close();
 

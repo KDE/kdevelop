@@ -23,7 +23,7 @@
   <Menu noMerge="1" name="go_document"><text>&amp;Go</text>
     <Action name="go_goto_line"/>
   </Menu>
-  <Menu name="buffers"> <text>&amp;Buffers</text>
+  <Menu name="buffers"><text>&amp;Buffers</text>
     <ActionList name="buffer_list"/>
     <Merge/>
   </Menu>
