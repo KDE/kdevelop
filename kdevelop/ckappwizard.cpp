@@ -2352,7 +2352,7 @@ void CKAppWizard::slotProcessExited() {
      project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIB_QGL)");
   }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
-    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore $(LIB_QT)");
+    project->setLDADD (" -lkfile -lkdeui -lkdecore $(LIB_QT)");
   }
   else if (qtnormalitem->isSelected() || qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");

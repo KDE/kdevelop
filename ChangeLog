@@ -1,3 +1,6 @@
+2000-10-30 Ralf Nolden <nolden@kde.org>
+  * fixed two bugs introduced yesterday: -lkfm removed from KDE2 templates and make error
+
 2000-10-30 Sandy Meier <smeier@kdevelop.org>
 	* added kdevdlg2ui (tool by Bernd Gehrmann <bernd@kdevelop.org> to convert kdevelop dialogs to qt designer dialogs)
 	* added new splashscreen for KDevelop1.3 (by Ralph Kocher)
