@@ -3010,15 +3010,15 @@ bool KWrite::askReplaceEnd() {
   // ask for continue
   if (!(s.flags & KWrite::sfBackward)) {
     // forward search
-    str = i18n("%n replacement made.\n", "%n replacements made.\n", replaces);
-    str = str + i18n("End of document reached.\n"
+    str = i18n("%n replacement made.", "%n replacements made.", replaces);
+    str = str + i18n("\nEnd of document reached.\n"
                      "Continue from the beginning?");
     query = KMessageBox::questionYesNo(this, str, i18n("Replace"),
 		i18n("Continue"), i18n("Stop"));
   } else {
     // backward search
-    str = i18n("%n replacement made.\n", "%n replacements made.\n", replaces);
-    str = str + i18n("Beginning of document reached.\n"
+    str = i18n("%n replacement made.", "%n replacements made.", replaces);
+    str = str + i18n("\nBeginning of document reached.\n"
                      "Continue from the end?");
     query = KMessageBox::questionYesNo(this, str, i18n("Replace"),
                 i18n("Continue"), i18n("Stop"));
