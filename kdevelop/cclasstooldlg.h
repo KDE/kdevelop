@@ -1,12 +1,9 @@
 /***************************************************************************
                cclasstooldlg.h  -  description
-
                              -------------------
-
     begin                : Fri Mar 19 1999
-
     copyright            : (C) 1999 by Jonas Nordin
-    email                : jonas.nordin@cenacle.se
+    email                : jonas.nordin@syncom.se
 
  ***************************************************************************/
 
@@ -165,6 +162,11 @@ private: // Private methods
   /** Make the supplied class the selected one in the classcombo. */
   void setActiveClass( const char *aName );
   
+  /**
+   * Add a list of classes as subitems to the current class.
+   *
+   * @param list List of classes to add.
+   */
   void addClasses( QList<CParsedClass> *list );
   void addClassAndAttributes( CParsedClass *aClass );
   void addClassAndMethods( CParsedClass *aClass );
