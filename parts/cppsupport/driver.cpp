@@ -155,10 +155,16 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "QT_STATIC_CONST" );
     lexer->addSkipWord( "QT_WIN_PAINTER_MEMBERS" );
     lexer->addSkipWord( "QT_NC_MSGBOX" );
-    
+
+    // flex
+    lexer->addSkipWord( "yyconst" );
+    lexer->addSkipWord( "YY_RULE_SETUP" );
+    lexer->addSkipWord( "YY_BREAK" );
+    lexer->addSkipWord( "YY_RESTORE_YY_MORE_OFFSET" );
+
     // windows
     lexer->addSkipWord( "WINAPI" );
-    
+
     lexer->addSkipWord( "__cdecl" );
 }
 
