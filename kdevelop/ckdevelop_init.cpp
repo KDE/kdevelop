@@ -190,7 +190,7 @@ void CKDevelop::initView(){
   setMainDockWidget( dockbase_mdi_main_frame );
 
   // maybe we should make this configurable :-)
-//  mdi_main_frame->m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
+  mdi_main_frame->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
   
   
 #warning FIXME should we swallow tools in KDevelop 2??
