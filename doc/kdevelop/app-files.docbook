@@ -10,7 +10,7 @@
 <title>Configuration Files Used by &kdevelop;</title>
 
 <para>
-&kdevelop; uses a series of configuration files which are distributed amongst several directories. There are three main groups of configuration files:
+&kdevelop; uses a series of configuration files which are distributed amongst several directories. There are three main groups of configuration files to distinguish:
 </para>
 <itemizedlist>
   <listitem><para>
@@ -150,7 +150,16 @@ There are quite a lot of default configuration subdirectories in <filename class
     <title>Language Specific Parts</title>
     <listitem><para><filename class="directory">kdevadasupport/</filename> &mdash; provides entries in the <guimenu>Tools</guimenu> menu and according tool bar icons needed to develop Ada applications.</para></listitem>
     <listitem><para><filename class="directory">kdevbashsupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu and according tool bar icons needed to develop Bash scripts.</para></listitem>
-    <listitem><para><filename class="directory">kdevcppsupport/</filename> &mdash; contains several files and subdirectories used to build C++ applications.</para></listitem>
+    <listitem>
+      <para><filename class="directory">kdevcppsupport/</filename> &mdash; contains files used by the &appwizard; to build C++ applications:</para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">newclass/</filename> &mdash; contains header and source templates from which the &appwizard; builds the according source files.</para></listitem>
+        <listitem><para><filename class="directory">subclassing/</filename> &mdash; contains templates which the &appwizard; uses to set up initial class declarations/definitions in the source files.</para></listitem>
+        <listitem><para><filename class="directory">templates</filename> &mdash; contains templates from which the &appwizard; sets up the default header and source template files to be used by the &nfwizard;. </para></listitem>
+        <listitem><para><filename>configuration</filename> &mdash; dummy template to add macros.</para></listitem>
+        <listitem><para><filename>kdevcppsupport.rc</filename> &mdash; provides the <guimenuitem>Complete Text</guimenuitem> and <guimenuitem>Make Member</guimenuitem> entries fo the <guimenu>Edit</guimenu> menu, the <guimenuitem>Switch Header/Implementation</guimenuitem> entry for the <guimenu>View</guimenu> menu, and the <guimenuitem>New Class</guimenuitem> entry for the <guimenu>Project</guimenu> menu as well as a <guiicon>New Class</guiicon> icon for the <guilabel>Browser Toolbar</guilabel>.</para></listitem>
+      </itemizedlist>
+    </listitem>
     <listitem><para><filename class="directory">kdevfortransupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu needed to develop Fortran applications.</para></listitem>
     <listitem><para><filename class="directory">kdevhaskellsupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu and according tool bar icons needed to develop Haskell applications.</para></listitem>
      <listitem><para><filename class="directory">kdevjavasupport/</filename> &mdash; contains the UI definition needed to develop &Java; applications.</para></listitem>
@@ -175,8 +184,26 @@ There are quite a lot of default configuration subdirectories in <filename class
 <title>User Modified Configuration</title>
 
 <para>
+All information about user modifications of the default settings is kept in the <filename class="directory">$KDEHOME/share/apps/</filename> and <filename class="directory">$KDEHOME/share/config/</filename> directories.
+</para>
+
+<sect2 id="app-files-user-config">
+<title>&kdevelop; Configuration</title>
+
+<para>
 (... to be written ...)
 </para>
+
+</sect2> <!-- app-files-user-config -->
+
+<sect2 id="app-files-user-apps">
+<title>Application Specific Configuration</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect2> <!-- app-files-user-apps -->
 
 </sect1> <!-- app-files-user -->
 

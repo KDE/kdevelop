@@ -15,6 +15,7 @@
   <!ENTITY egrep "<command>egrep</command>">
   <!ENTITY grep "<command>grep</command>">
   <!ENTITY libtool "<command>libtool</command>">
+  <!ENTITY nfwizard "New File Wizard">
   <!ENTITY python "<application>Python</application>">
   <!ENTITY perl "<application>Perl</application>">
   <!ENTITY php "<application>PHP</application>">
@@ -47,7 +48,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-09-21</date>
+  <date>2004-09-22</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>

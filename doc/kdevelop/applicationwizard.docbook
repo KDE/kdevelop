@@ -7,13 +7,13 @@
   </authorgroup>
 </chapterinfo>
 
-<title>Getting Started&mdash;the &appwizard;</title>
+<title>Getting Started &mdash; the &appwizard;</title>
 
 <indexterm zone="applicationwizard">
   <primary>&appwizard;</primary></indexterm>
 
 <para>
-In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any necessary management facilities such as the make system, access to all components and any additional tools needed to get the application up and running.
+In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and any additional tools needed to get the application up and running.
 </para>
 <para>
 Organizing all development work in projects allows you to easily switch between the global tasks at hand. This is quite handy if you &eg; work on several applications at the same time as is often the case. Tell &kdevelop; to open the project you want to work at and you may proceed in the environment just where you left.
@@ -27,7 +27,7 @@ Organizing all development work in projects allows you to easily switch between 
   <secondary>new</secondary></indexterm>
 
 <para>
-Whenever you want to initiate a new programming project several formal setup procedures need to be completed. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, &etc;
+Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, &etc;
 </para>
 <para>
 &kdevelop; provides an easy way to initiate a new programming project&mdash;the <emphasis>&appwizard;</emphasis>. You will find the &appwizard; at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
@@ -166,6 +166,12 @@ The left hand side of the upper part in this dialog is where you do the selectio
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
+    PHP
+    <indexterm>
+      <primary>PHP</primary>
+      <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
     Pascal
     <indexterm>
       <primary>Pascal</primary>
@@ -175,12 +181,6 @@ The left hand side of the upper part in this dialog is where you do the selectio
     Perl
     <indexterm>
       <primary>Perl</primary>
-      <secondary>new project</secondary></indexterm>
-  </para></listitem>
-  <listitem><para>
-    PHP
-    <indexterm>
-      <primary>PHP</primary>
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
@@ -305,7 +305,7 @@ Thus you must select the name of your new application with care.  If you end up 
 <formalpara>
 <title>The Starting Path</title>
 <para>
-There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (&eg; you might set up a new project for another version of an already existing application). As an alternative you may select another path to the application directory.
+There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (you might &eg; set up for another version of an already existing application). As an alternative you may select another path to the application directory.
 </para>
 </formalpara>
 <para>
@@ -332,13 +332,13 @@ The fields following this are not so critical. Just supply your name (&ie; the n
 <note>
 <orderedlist>
   <listitem><para>
-  The &appwizard; fills these fields with some default values, taken from the Email presets in the <application>KDE control center</application>. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
+  The &appwizard; fills these fields with some default values, taken from the Email presets in the KDE control center. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
   </para></listitem>
   <listitem><para>
   The &appwizard; will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
   </para></listitem>
   <listitem><para>
-  Of all fields, the <guilabel>Email</guilabel> is the only <emphasis>optional</emphasis> field, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
+  Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
   </para></listitem>
 </orderedlist>
 </note>
@@ -358,11 +358,11 @@ If you selected <quote>Custom</quote> from the <guilabel>License</guilabel> tab 
 </para>
 
 <note><para>
-Both version and license information will be integrated into the starting templates in a format suiting the application type you selected.
+Both version and license information will as well be integrated into the starting templates in a suiting format the application type you selected does provide.
 </para></note>
 
 <para>
-Once you have correctly entered all the information, press the <guibutton>Next &gt;</guibutton> button to proceed as shown in the following chapters.
+Once you have correctly entered all this information stuff, press the <guibutton>Next &gt;</guibutton> button to proceed as shown in the following chapters.
 </para>
 </sect3> <!-- new-projects-start-general -->
 
@@ -398,7 +398,7 @@ This discussion concentrates on the needs for project creation only. For more in
 <formalpara>
 <title>No Version Control System Wanted</title>
 <para>
-Initially there is <quote>None</quote> selected in the <guilabel>Version control system</guilabel> tab, and the page will be empty otherwise. If you don't want to use a version control system, just click the <guibutton>Next &gt;</guibutton> button and go on.
+Initially there is <quote>None</quote> selected in the <guilabel>Version control system</guilabel> tab, and the page will be empty otherwise. If you don't want to use a version control system, just click the <guibutton>Next ></guibutton> button and go on.
 </para>
 </formalpara>
 
@@ -513,7 +513,7 @@ for the <quote>password protected server</quote> non-encrypted type, and
 for an rsh or ssh encrypted server type. For example
 </para>
 <para>
-<userinput><filename class="directory">:ext:mylogin@cvs.sourceforge.net:/cvsroot/cervisia</filename></userinput>
+<userinput><filename class="directory">:ext:mylogin@cvs.cervisia.sourceforge.net:/cvsroot/cervisia</filename></userinput>
 </para>
 <para>
 accesses the &cvs; root of the widely used <application>Cervisia</application> &cvs; management tool on the SourceForge server.
@@ -571,7 +571,7 @@ The &appwizard; has put a default <quote>start</quote> tag in here which is a wo
 
 <note>
 <para>
-If any information about version control is wrong &kdevelop; usually will not know until project construction time. It is the &CVS; system which will figure out those errors when it tries to build the repository. Hence you must keep an eye to the <guilabel>Messages</guilabel> window of &kdevelop; when the project is created in the final setup step. If anything was in error with &CVS; you will in most cases see an error message like this:
+When any information of all these is wrong &kdevelop; usually will not know about until project construction time. It is the &CVS; system which will figure out those errors when it tries to build the repository. Hence you must keep an eye to the <guilabel>Messages</guilabel> window of &kdevelop; when the project is created in the final setup step. If anything was in error with &CVS; you will in most cases see an error message like this:
 </para>
 
 <screen><computeroutput><literal>
@@ -590,7 +590,7 @@ If this happens you will have to either manually set up &cvs; (&kdevelop; should
 </note>
 
 <para>
-After you have entered all &CVS; related information, click <guibutton>Next &gt;</guibutton> to proceed.
+After you have entered all &CVS; related information, click the <guibutton>Next &gt;</guibutton> to go on.
 </para>
 
 <note><para>
@@ -638,7 +638,7 @@ If the page is used, &appwizard; will fill in some common header comment which f
 Other templates will provide similar information in a format according to the definitions of the programming language you want to use.
 </para>
 <para>
-As you might have noticed, the applications manager did fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
+As you might have noticed, the applications manager did readily fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
 </para>
 
 <sect3 id="new-projects-start-templates-edit">
@@ -708,7 +708,7 @@ for the GPL license, or
 if you decided to put your application under the BSD license.
 </para>
 <para>
-There are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
+Thee are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
 </para>
 
 <note><para>
@@ -750,7 +750,7 @@ In many cases when your new project has been set up this way, &kdevelop; will au
 Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
 </para>
 <para>
-Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can determine whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
+Then it is adviceable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.
 </para>
 
 <warning id="defaultbuild-warning"> <!-- ### remove this when "default" works again -->
@@ -779,414 +779,5 @@ Then it is adviceable that you <emphasis>compile the initial project</emphasis> 
 </sect2> <!-- new-projects-start-build -->
 
 </sect1> <!-- new-projects -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="applicationwizard-behind">
-<title>Behind the Scenes</title>
-
-<indexterm zone="applicationwizard-behind">
-  <primary>project</primary>
-  <secondary>new</secondary>
-  <tertiary>build</tertiary></indexterm>
-<indexterm zone="applicationwizard-behind">
-  <primary>CVS</primary>
-  <secondary>new project</secondary>
-  <tertiary>build</tertiary></indexterm>
-
-<para>
-It is always advisable to look at the messages output and try to understand what has happened. At least in principle you should know what has been done when the &appwizard; initiated your new project. We cannot go into the details but will have an overview of those messages to get an idea of what was going on behind the scenes.
-</para>
-
-<tip>
-<para>
-If your project was set up for local &CVS; you will have received two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we caught both series in separate runs&mdash;set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
-</para>
-<para>
-You may want to follow this same procedure if anything weird happened and you just could not catch the messages of the first setup step.
-</para>
-</tip>
-<para>
-We will have look at the <guilabel>Messages</guilabel> outputs of both steps:
-<itemizedlist>
-  <listitem><para>
-    <link linkend="applicationwizard-behind-app">Setting up the application</link> as well as
-  </para></listitem>
-  <listitem><para>
-    <link linkend="applicationwizard-behind-cvs">Setting up &CVS;</link>.
-  </para></listitem>
-</itemizedlist>
-</para>
-
-<sect2 id="applicationwizard-behind-app">
-<title>Setting Up the Application</title>
-
-<indexterm zone="applicationwizard-behind-app">
-  <primary>Perl</primary>
-  <secondary>new project</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app">
-  <primary>Perl</primary>
-  <secondary>kdevelop.pm</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app">
-  <primary>kdevelop.pm</primary></indexterm>
-<indexterm zone="applicationwizard-behind-app">
-  <primary>project</primary>
-  <secondary>kdevelop.pm</secondary></indexterm>
-
-<para>
-If you set up <quote>MyApp</quote> as in our previous example the &appwizard; should have printed the following messages (we re-arranged the output a bit for readability and you may click on a line to directly jump to its description):
-</para>
-<screen><computeroutput>
-* <link linkend="applicationwizard-behind-app-perl">perl</link> /opt/kde3/share/apps/kdevappwizard/template-kapp/script \
-  --author='Your Name' \
-  --email='you@you.com' \
-  --version='0.1' \
-  --appname='MyApp' \
-  --dest='/home/devel/projects/myapp' \
-  --source='/opt/kde3/share/apps/kdevappwizard' \
-  --license='GPL' \
-  --licensefile='COPYING' \
-  --filetemplates='h,/tmp/kde-devel/kdevelopcDE5Ja.tmp,\
-                   cpp,/tmp/kde-devel/kdevelopsRrLab.tmp'
-* <link linkend="applicationwizard-behind-app-base">Making destination directory</link>
-* <link linkend="applicationwizard-behind-app-templates">Installing file templates</link>
-* <link linkend="applicationwizard-behind-app-license">Installing license file</link>
-* <link linkend="applicationwizard-behind-app-admin">Installing admin directory</link>
-* <link linkend="applicationwizard-behind-app-gnu">Installing &GNU; coding standard files</link>
-* <link linkend="applicationwizard-behind-app-doc">Installing Docbook template</link>
-* <link linkend="applicationwizard-behind-app-project">Installing project file</link>
-* <link linkend="applicationwizard-behind-app-framework">Installing application framework</link>
-* <link linkend="applicationwizard-behind-app-sources">Installing application sources</link>
-* Finished
-* *** Success ***
-</computeroutput></screen>
-<formalpara id="applicationwizard-behind-app-perl">
-<title>A &perl; Script Called</title>
-<para>
-As you see from the first line, the &appwizard; did construct a &perl; program call from the settings you made in the <guilabel>Create New Project</guilabel> dialog. The called <filename>script</filename> resides in a directory which was determined from the application type template you selected in the upper part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page.
-</para>
-</formalpara>
-<para>
-In our case this <filename>script</filename> is located in the <filename class="directory">/opt/kde3/share/apps/kdevappwizard/template-kapp/</filename> directory. Just replace <filename class="directory">/opt/kde3/</filename> by the &kde; directory on your system.
-</para>
-<para>
-This &perl; <filename>script</filename> is called with a series of parameters, all marked by <quote><computeroutput>--</computeroutput></quote> prefixes, wherein the &appwizard; put information from the other selections you made in the <guilabel>Create New Project</guilabel> dialog.
-</para>
-<para>
-The exact series of initialization steps depends on which &perl; <filename>script</filename> was called. If you want to check, just look into the <filename>script</filename> file the <computeroutput>perl</computeroutput> command on the first <guilabel>Messages</guilabel> window line called.
-</para>
-<note><para>
-The setup scripts make use of a set of &perl; subroutines collected in the <filename>kdevelop.pm</filename> file which you may find in the <filename class="directory">share/apps/kdevwizard/template-common/</filename> subdirectory of your &kde; installation.
-</para></note>
-
-<formalpara id="applicationwizard-behind-app-base">
-<title>The Application Base Directory</title>
-<para>
-When the &perl; script is run, you get a series of messages of what is <emphasis>about to be done</emphasis> in the next installation step. At first a <computeroutput>destination directory</computeroutput> will be set up. This is the base directory of your application, just what you got displayed in the <guilabel>Final location</guilabel> line on the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page. The script uses the value of the <computeroutput>--dest</computeroutput> parameter in the &perl; command above.
-</para>
-</formalpara>
-
-<indexterm zone="applicationwizard-behind-app-templates">
-  <primary>project</primary>
-  <secondary>templates</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-templates">
-  <primary>templates</primary>
-  <secondary>project</secondary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-templates">
-<title>The File Templates</title>
-<para>
-In the next step the file templates you set up in the <guilabel>Create New Project</guilabel> dialog will be copied to the <filename class="directory">templates</filename> subdirectory of this destination directory. As you can see from the <computeroutput>--filetemplates</computeroutput> parameter, the templates are submitted in pairs&mdash;the suffixes they are used for first, followed by the name of a temporary file in which the &appwizard; has copied the contents of the templates dialog pages. These suffixes will be taken as the filenames of where to store the template texts.
-</para>
-</formalpara>
-<para>
-In our example two such template files were installed, namely <filename>templates/h</filename> for C++ header and <filename>templates/cpp</filename> for C++ source files.
-</para>
-
-<indexterm zone="applicationwizard-behind-app-license">
-  <primary>project</primary>
-  <secondary>license</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-license">
-  <primary>license</primary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-license">
-<title>The License File</title>
-<para>
-On the <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog you selected the license you want to put your application under. The &appwizard; initiated two actions from this. One was the license indication it put into the templates. The other action causes the according license file to be copied in your application base directory.
-</para>
-</formalpara>
-<para>
-The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <filename>script</filename> which license text file to copy. In our example the <filename>/home/devel/projects/myapp/COPYING</filename> file will have been installed in this step.
-</para>
-
-<indexterm zone="applicationwizard-behind-app-admin">
-  <primary>project</primary>
-  <secondary>administration</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-admin">
-  <primary>administration</primary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-admin">
-<title>The Administration Directory</title>
-<para>
-&kdevelop; needs a bunch of files to administrate the project. These are put in the <filename class="directory">admin</filename> subdirectory of your application base directory.
-</para>
-</formalpara>
-<para>
-&appwizard; creates the <filename class="directory">admin</filename> subdirectory in this step and extracts the standard set of files it needs from the <filename>share/apps/kdevappwizard/template-common/admin.tar.gz</filename> tarball in your &kde; directory.
-</para>
-<note><para>
-&kdevelop; always uses the same set of standard files for its administration purposes. Hence no parameter is needed in the &perl;  <filename>script</filename> call to set up the <filename class="directory">admin</filename> subdirectory.
-</para></note>
-
-<indexterm zone="applicationwizard-behind-app-gnu">
-  <primary>GNU</primary>
-  <secondary>coding standard</secondary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-gnu">
-<title>The &GNU; Coding Standard Files</title>
-<para>
-There are several standard files to be distributed with every application which conforms to the &GNU; coding standard. The &perl; <filename>script</filename> extracts these files from the <filename>share/apps/kdevappwizard/template-common/gnu.tar.gz</filename> tarball of your &kde; installation directory and customizes them according to the information you provided in the <guilabel>Create New Page</guilabel> dialog.
-</para>
-</formalpara>
-<para>
-After this step you will find the following files in your application base directory:
-<itemizedlist>
-  <listitem><para>
-    <filename>AUTHORS</filename>, initially containing information from the <computeroutput>--author</computeroutput> and <computeroutput>--email</computeroutput> parameters.
-  </para></listitem>
-  <listitem><para>
-    <filename>COPYING</filename>, this is the general &GNU; license, which all &GNU; conforming applications must contain&mdash;even if you decided to put your application under another license.
-  </para></listitem>
-  <listitem><para>
-    <filename>ChangeLog</filename>, initially empty&mdash;you should protocol all major changes here.
-  </para></listitem>
-  <listitem><para>
-    <filename>INSTALL</filename> contains generic installation instructions&mdash;modify this if special precautions and/or procedures are needed to install your application.
-  </para></listitem>
-  <listitem><para>
-    <filename>README</filename>, initially empty&mdash;put any information here the user should know before installing your application.
-  </para></listitem>
-  <listitem><para>
-    <filename>TODO</filename>, initially empty&mdash;put information here about what has to be done to further develop your application. You can use this as a notebook for your own purposes, but it is also really helpful once you have put your application in public domain.
-  </para></listitem>
-</itemizedlist>
-</para>
-
-<indexterm zone="applicationwizard-behind-app-doc">
-  <primary>project</primary>
-  <secondary>documentation</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-doc">
-  <primary>documentation</primary>
-  <secondary>project</secondary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-doc">
-<title>The Initial Application Documentation</title>
-<para>
-Every project you set up will contain an initial <emphasis>DocBook</emphasis> template from where you can start to write your application documentation. The &perl; <filename>script</filename> will in this step have set up <filename class="directory">doc</filename> and <filename class="directory">doc/en</filename> subdirectories of the application base directory with an initial <filename>doc/en/index.docbook</filename> template and some &automake; <filename>Makefile.am</filename> files from which &kdevelop; can later build help system files.
-</para>
-</formalpara>
-
-<indexterm zone="applicationwizard-behind-app-project">
-  <primary>project</primary>
-  <secondary>project file</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-project">
-  <primary>&kdevelop;</primary>
-  <secondary>project file</secondary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-project">
-<title>The Project File</title>
-<para>
-Up to here most of the more global stuff has been set up, things which more or less are to be found in any &kdevelop; project. With this step the more application-specific setup processes start. These may vary upon the type of application you selected. Have a look at the actual &perl; <filename>script</filename> the &appwizard; called up for your new application if you want to lookup details. We will continue to follow the example steps listed above.
-</para>
-</formalpara>
-<para>
-In the first step of these the <emphasis>&kdevelop; project management file</emphasis> is copied out of the template directory, where the &perl; <filename>script</filename> resides. In our case the <filename>share/apps/kdevappwizard/template-kapp/app.kdevelop</filename> file was copied into the application base directory and then customized according to the selections made in the <guilabel>Create New Project</guilabel> dialog.
-</para>
-
-<note><para>
-You may want to have a look at the resulting project file which in our case was saved as <filename>/home/devel/projects/myapp/myapp.kdevelop</filename>. It is written in XML format and easily to be displayed with <application>Kate</application> or any other text editor. But take care nothing to change as &kdevelop; relies on its contents.
-</para></note>
-
-<indexterm zone="applicationwizard-behind-app-framework">
-  <primary>project</primary>
-  <secondary>framework</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-framework">
-  <primary>project</primary>
-  <secondary>application framework</secondary></indexterm>
-<indexterm zone="applicationwizard-behind-app-framework">
-  <primary>framework</primary></indexterm>
-<indexterm zone="applicationwizard-behind-app-framework">
-  <primary>application</primary>
-  <secondary>framework</secondary></indexterm>
-
-<formalpara id="applicationwizard-behind-app-framework">
-<title>The Application Framework</title>
-<para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically depends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be found in other projects, too.
-</para>
-</formalpara>
-<para>
-In our case the following directory structure has been created in the <filename class="directory">/home/devel/projects/myapp/</filename> application base directory:
-<itemizedlist>
-  <listitem><para>
-    The <filename>src</filename> subdirectory is meant to hold the source files of your application.
-  </para></listitem>
-  <listitem><para>
-    The <filename>debug</filename> subdirectory will hold the compiled output of the <emphasis><quote>debug</quote> build configuration</emphasis>. (See the <link linkend="buildconfigurations">Build configurations</link> chapter to learn more about that.) As the name says, you should use this directory for debug purposes.
-  </para></listitem>
-  <listitem><para>
-    The <filename>optimized</filename> subdirectory will hold the compiled output of the <emphasis><quote>optimized</quote> build configuration</emphasis>. You should test an optimized version of your application from within here.
-  </para></listitem>
-  <listitem><para>
-    The <filename>po</filename> subdirectory is meant for <emphasis>translation purposes</emphasis>. It will hold so-called <quote>Portable Object</quote> files (<filename>.po</filename> files) and templates (<filename>.pot</filename> files) which will be processed by a translation program as &eg; <application>KBabel</application>.
-  </para></listitem>
-</itemizedlist>
-</para>
-<para>
-All these directories will not be kept empty but filled with a series of <filename>Makefile</filename> and other files &kdevelop; uses to process the sources of the application. Also some initial icon files for the new application will have been put into the <filename>src</filename> subdirectory, if applicable. In our case you will find two of them: <filename>src/hi16-app-myapp.png</filename> and <filename>src/hi32-app-myapp.png</filename> which both hold standard &kde; application icons.
-</para>
-
-<formalpara id="applicationwizard-behind-app-sources">
-<title>Application Sources Installed</title>
-<para>
-This framework finally will be used to put the <emphasis>initial source files</emphasis> of your new project in the <filename class="directory">src</filename> directory. The actual files highly depend on the application type you selected in the <guilabel>Create New Project</guilabel> dialog. You will soon see yourself as this is the stuff you will actually have to work on.
-</para>
-</formalpara>
-
-</sect2> <!-- applicationwizard-behind-app -->
-
-<sect2 id="applicationwizard-behind-cvs">
-<title>Setting Up &CVS;</title>
-
-<indexterm zone="applicationwizard-behind-cvs">
-  <primary>CVS</primary>
-  <secondary>new project</secondary>
-  <tertiary>build</tertiary></indexterm>
-<indexterm zone="applicationwizard-behind-cvs">
-  <primary>project</primary>
-  <secondary>CVS</secondary></indexterm>
-
-<para>
-Now let us have a look at what the <guilabel>Messages</guilabel> window will contain when the &appwizard; continues to build our example project. If no error occurred during the first pass, the <guilabel>Messages</guilabel> contents will revert to create the local &cvs; repository.
-</para>
-<para>
-As before we reformatted the output lines a bit for readability. And we removed some superfluous lines (where the <quote>. . .</quote> dots are).
-</para>
-
-<screen><computeroutput>
-* cd '/home/devel/projects/myapp' \
-  &amp;&amp; cvs -d '/home/devel/cvsroot' \
-         import -m 'new project' \
-                'MyApp' \
-                'vendor' \
-                'start' \
-  &amp;&amp; sh /opt/kde3/share/apps/kdevcvs/buildcvs.sh . \
-                                                 'MyApp' \
-                                                 '/home/devel/cvsroot'
-  . . .
-* N MyApp/NEWS
-* N MyApp/TODO
-* N MyApp/README
-  . . .
-* N MyApp/admin/configure.in.bot.end
-* N MyApp/templates/h
-* N MyApp/templates/cpp
-*
-* No conflicts created by this import
-*
-* *** Success ***
-</computeroutput></screen>
-
-<para>
-As you see from the first message line, the &appwizard; built another shell command line which conducts the &cvs; work to be done. At first the shell changes to the newly created application base directory to use it as default in the following steps.
-</para>
-
-<formalpara>
-<title>Building the &cvs; Repository</title>
-<para>
-In the second command line part the &CVS; application will be called to <emphasis>import</emphasis> the initial project contents into the wanted repository. Again, the work in detail is commanded by a series of command line arguments to the &CVS; application call.
-</para>
-</formalpara>
-<itemizedlist>
-  <listitem><para>
-    <computeroutput>-d '/home/devel/cvsroot'</computeroutput>&mdash;the <computeroutput>-d</computeroutput> option tells &CVS; which root directory is to be used. In our case this is the <emphasis>local &cvs; root</emphasis> located in <filename class="directory">/home/devel/cvsroot</filename>.
-  </para></listitem>
-  <listitem><para>
-    <computeroutput>import</computeroutput>&mdash;tells the &CVS; application which operation to perform in this root. We want to <emphasis>import</emphasis> files into the &cvs; database. To accomplish this, the <computeroutput>import</computeroutput> command needs some arguments of its own:
-    <itemizedlist>
-      <listitem><para>
-        <computeroutput>-m 'new project'</computeroutput>&mdash;the <computeroutput>-m</computeroutput> option provides import some <emphasis>message text</emphasis> for this action. It will be stored in the database and can later be recalled to identify the data which was kept in this step. In our case <quote><computeroutput>new project</computeroutput></quote> denotes the storage of our first files in the database.
-      </para></listitem>
-      <listitem><para>
-        <computeroutput>'MyApp'</computeroutput>&mdash;the second argument tells &CVS; which <emphasis>repository</emphasis> to use. If it does not exist, it will be created prior to the file import actions. In this case the <filename>MyApp</filename> repository will be created.
-      </para></listitem>
-      <listitem><para>
-        <computeroutput>'vendor'</computeroutput>&mdash;this following argument is a <emphasis>tag</emphasis>, a symbolic name which marks a series of files in the directory. There are several different meanings such a tag can have (see <link linkend="cvs">Using CVS</link> for more information), this one in principle marks the whole bunch of files which subsequently will ever be stored in this repository. It is of no particular use to us, so <quote><computeroutput>vendor</computeroutput></quote> is as good a name as any other.
-      </para></listitem>
-      <listitem><para>
-        <computeroutput>'start'</computeroutput>&mdash;is another tag. It marks the <emphasis>release</emphasis>, in easy words a series of subsequently saved files which belong together. We used <quote><computeroutput>start</computeroutput></quote> here, a meaningful description of the use of this initial series.
-      </para></listitem>
-    </itemizedlist>
-  </para></listitem>
-</itemizedlist>
-
-<formalpara>
-<title>The Imported Files</title>
-<para>
-The &CVS; application will create the repository and then start to import all files from our <filename class="directory">/home/devel/projects/myapp</filename> directory. It subsequently reports any file which is loaded&mdash;this is the contents of the whole bunch of <quote><computeroutput>N</computeroutput></quote> lines following in the <guilabel>Messages</guilabel> window. The <computeroutput>N</computeroutput> denotes that this file was newly imported into the repository.
-</para>
-</formalpara>
-<para>
-Depending on the type of the new application there will be quite a lot of those <quote><computeroutput>N</computeroutput></quote> lines. We truncated the output showing only the first and last three lines as an example.
-</para>
-
-<formalpara>
-<title>The &CVS; Success Message</title>
-<para>
-&CVS; always reports when an operation was successfully performed. In our case the <quote><computeroutput>No conflicts created by this import</computeroutput></quote> message was printed, followed by the general <quote><computeroutput>*** Success ***</computeroutput></quote> line as no other operation had to be performed.
-</para>
-</formalpara>
-
-<note><para>
-There <emphasis>could</emphasis> have been some error messages about conflicting files if the repository already existed because &CVS; checks the file contents according to some formal criteria and will report any conflict it possibly finds.
-</para></note>
-
-<formalpara>
-<title>Building the &cvs; Administration Entries</title>
-<para>
-The &CVS; import operation is concluded at this point. The repository has been set up and all files we want to be kept were stored in the database. Yet there is more work to do, because the &CVS; application needs some administration information kept in every directory of the application. It uses this information later to communicate with the cvs root and repository.
-</para>
-</formalpara>
-<para>
-If we were working with &CVS; alone we had to provide a means for &CVS; to store this information in our working directory. For instance we could <emphasis>check out</emphasis> the files again in an empty base directory in which case &CVS; automatically would write all administrative operation together with the checked out files.
-</para>
-<para>
-In &kdevelop; fortunately there is an easier way. It provides the <filename>buildcvs.sh</filename> shell script in the <filename class="directory">/opt/kde3/share/apps/kdevcvs/</filename> directory (again replace <filename class="directory">/opt/kde</filename> with your &kde; installation directory), which the &appwizard; called after the &CVS; application had successfully finished its work.
-</para>
-<para>
-The <filename>buildcvs.sh</filename> script mainly will put a <filename class="directory">CVS</filename> subdirectory into each directory of the application framework. Each of these  <filename class="directory">CVS</filename> subdirectories will hold three file entries as follows:
-</para>
-<itemizedlist>
-  <listitem><para>
-    <filename>Root</filename> holds the name of the server on which the &cvs; root is located. In our case this is the local <filename>/home/devel/cvsroot</filename> root. The rationale behind this is to always use the same repository for these files, because &CVS; does not store them as a whole but will record only the <emphasis>differences</emphasis> of the subsequent parts. This will save lots of disk space yet makes it mandatory that all subsequent information be kept together under all circumstances.
-  </para></listitem>
-  <listitem><para>
-    <filename>Repository</filename> serves the same purpose. &CVS; keeps the name of the repository to use herein, <filename>MyApp</filename> in our case.
-  </para></listitem>
-  <listitem><para>
-    <filename>Entries</filename> holds the names and some other data about the files &CVS; will care of in this directory. This is because &CVS; does not necessarily keep every application file in the repository. You can tell it which files to store and which to ignore&mdash;this information is kept in the <filename>Entries</filename> file.
-  </para>
-  </listitem>
-</itemizedlist>
-
-<para>
-All these efforts are necessary because &CVS;'s work is <emphasis>directory-oriented</emphasis>. As &CVS; previously had stored all files in the <filename>MyApp</filename> framework, the <filename>buildcvs.sh</filename> script simply scans every directory and puts the names of all application files it finds into the according <filename>CVS/Entries</filename> file.
-</para>
-<para>
-The script runs silently, just closing without any more line in the <guilabel>Messages</guilabel> window when the work was done.
-</para>
-
-</sect2> <!-- applicationwizard-behind-cvs -->
-
-</sect1> <!-- applicationwizard-behind -->
 
 </chapter> <!-- applicationwizard -->
