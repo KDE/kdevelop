@@ -46,12 +46,20 @@ static QValueList<CompletionEntry> getAllWords( const QString& text,
 {
     QMap<QString, bool> map;
     QValueList<CompletionEntry> entries;
+#if QT_VERSION < 300
+    QRegExp rx(QString("[\\s:;,+-*/]") + prefix + "[a-zA-Z0-9_]+[\\s:;,+-*/]");
+#else
     QRegExp rx( QString("\\b") + prefix + "[a-zA-Z0-9_]+\\b" );
+#endif
     int idx = 0;
     int pos = 0;
     int len = 0;
     while( (pos = rx.match(text, idx, &len)) != -1 ){
-        QString word = text.mid( pos, len );
+#if QT_VERSION < 300
+        QString word = text.mid( pos+1, len-2 );
+#else
+	QString word = text.mid( pos, len );
+#endif
         if( map.find(word) == map.end() ){
             CompletionEntry e;
             e.text = word;

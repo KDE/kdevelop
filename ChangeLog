@@ -1,3 +1,7 @@
+2002-02-11  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of Daniel Koebbing <daniel.koebbing@westfleisch.de>
+      for making basic code completion available on KDE 2 as well
+      
 2002-02-10  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Roberto Raggi <raggi@cli.di.unipi.it> 
       for codecompletion and text expansion
