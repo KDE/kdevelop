@@ -1405,30 +1405,20 @@ void CKAppWizard::okPermited()
     hasTemplate = false;
   }
 
-  if (hasTemplate && QFileInfo(copysrc).exists()) {
+  if (hasTemplate /*&& QFileInfo(copysrc).exists()*/) {
     p << "cp";
 		p << "'" + copysrc + "'";
 		p << "'" + copydes + "';";
 
     if( (kickeritem->isSelected()||kde2miniitem->isSelected()||
         kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
-        qt2normalitem->isSelected()||qt2mdiitem->isSelected()) && QFileInfo(adminsrc).exists() )
+        qt2normalitem->isSelected()||qt2mdiitem->isSelected()) /*&& QFileInfo(adminsrc).exists()*/ )
     {
         p << "cp";
    			p << "'" + adminsrc + "'"; 			
    			p << "'" + admindes + "'";
    	}
-    else{
-      KMessageBox::error (this, QString(i18n("The template file admin.tar.gz is missing.\n"
-                  "Please correct your KDevelop installation.")).arg(adminsrc));
-      return;
-    }
     p.start(KProcess::Block,KProcess::AllOutput);
-  }
-  else{
-    KMessageBox::error (this, QString(i18n("The template file is missing.\n"
-                "Please correct your KDevelop installation.")).arg(copysrc));
-    return;
   }
 
   q->clearArguments();
