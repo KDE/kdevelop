@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kaction.h>
+#include <kdeversion.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -224,7 +225,11 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
         return;
 
     FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(item);
+#if defined(KDE_MAKE_VERSION)
     m_part->partController()->editDocument(KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + fgfitem->fileName() ));
+#else
+    m_part->partController()->editDocument(QString("file://") + m_part->project()->projectDirectory() + "/" + fgfitem->fileName() );
+#endif
     m_part->mainWindow()->lowerView(this);
 }
 
