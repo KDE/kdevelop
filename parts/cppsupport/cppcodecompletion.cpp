@@ -819,7 +819,7 @@ CppCodeCompletion::completeText( )
 	    if( !word.isEmpty() ){
 		QStringList fakeType;
 		fakeType << word;
-		computeSignatureList( signatureList, word, word );
+		computeSignatureList( signatureList, word, fakeType );
 	    }
 	} else if( !type.isEmpty() ){
 	    computeSignatureList( signatureList, word, type );
