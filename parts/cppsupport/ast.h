@@ -60,6 +60,8 @@ enum NodeType
     NodeType_SimpleDeclaration,
     NodeType_Statement,
     NodeType_TranslationUnit,
+    NodeType_FunctionDeclaration,
+    NodeType_FunctionDefinition,
 
     NodeType_Custom = 2000
 };
@@ -517,46 +519,6 @@ private:
     void operator = ( const UsingDirectiveAST& source );
 };
 
-class InitDeclaratorListAST: public AST
-{
-public:
-    typedef std::auto_ptr<InitDeclaratorListAST> Node;
-    enum { Type = NodeType_InitDeclaratorList };
-
-public:
-    InitDeclaratorListAST();
-    virtual ~InitDeclaratorListAST();
-    
-private:
-    InitDeclaratorListAST( const InitDeclaratorListAST& source );
-    void operator = ( const InitDeclaratorListAST& source );
-};
-
-class TypedefAST: public DeclarationAST
-{
-public:
-    typedef std::auto_ptr<TypedefAST> Node;
-    enum { Type = NodeType_Typedef };
-
-public:
-    TypedefAST();
-    virtual ~TypedefAST();
-    
-    TypeSpecifierAST* typeSpec();
-    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
-    
-    InitDeclaratorListAST* initDeclaratorList();
-    void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
-    
-private:
-    TypeSpecifierAST::Node m_typeSpec;
-    InitDeclaratorListAST::Node m_initDeclaratorList;
-    
-private:
-    TypedefAST( const TypedefAST& source );
-    void operator = ( const TypedefAST& source );
-};
-
 class DeclaratorAST: public AST
 {
 public:
@@ -623,6 +585,52 @@ private:
     AST::Node m_initializer;
 };
 
+class InitDeclaratorListAST: public AST
+{
+public:
+    typedef std::auto_ptr<InitDeclaratorListAST> Node;
+    enum { Type = NodeType_InitDeclaratorList };
+
+public:
+    InitDeclaratorListAST();
+    virtual ~InitDeclaratorListAST();
+    
+    QPtrList<InitDeclaratorAST> initDeclaratorList() { return m_initDeclaratorList; }
+    void addInitDeclarator( InitDeclaratorAST::Node& decl );
+    
+private:
+    QPtrList<InitDeclaratorAST> m_initDeclaratorList;
+    
+private:
+    InitDeclaratorListAST( const InitDeclaratorListAST& source );
+    void operator = ( const InitDeclaratorListAST& source );
+};
+
+class TypedefAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<TypedefAST> Node;
+    enum { Type = NodeType_Typedef };
+
+public:
+    TypedefAST();
+    virtual ~TypedefAST();
+    
+    TypeSpecifierAST* typeSpec();
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
+    
+    InitDeclaratorListAST* initDeclaratorList();
+    void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
+    
+private:
+    TypeSpecifierAST::Node m_typeSpec;
+    InitDeclaratorListAST::Node m_initDeclaratorList;
+    
+private:
+    TypedefAST( const TypedefAST& source );
+    void operator = ( const TypedefAST& source );
+};
+
 class TemplateDeclarationAST: public DeclarationAST
 {
 public:
@@ -677,6 +685,28 @@ private:
     void operator = ( const SimpleDeclarationAST& source );
 };
 
+class FunctionDeclarationAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<FunctionDeclarationAST> Node;
+    enum { Type = NodeType_FunctionDeclaration };
+
+public:
+    FunctionDeclarationAST();
+    virtual ~FunctionDeclarationAST();
+    
+    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
+    
+private:
+    TypeSpecifierAST::Node m_typeSpec;
+                
+private:
+    FunctionDeclarationAST( const FunctionDeclarationAST& source );
+    void operator = ( const FunctionDeclarationAST& source );
+};
+
+
 class StatementAST: public AST
 {
 public:
@@ -691,6 +721,28 @@ private:
     StatementAST( const StatementAST& source );
     void operator = ( const StatementAST& source );
 };
+
+class FunctionDefinitionAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<FunctionDefinitionAST> Node;
+    enum { Type = NodeType_FunctionDefinition };
+
+public:
+    FunctionDefinitionAST();
+    virtual ~FunctionDefinitionAST();
+                
+    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
+    
+private:
+    TypeSpecifierAST::Node m_typeSpec;
+    
+private:
+    FunctionDefinitionAST( const FunctionDefinitionAST& source );
+    void operator = ( const FunctionDefinitionAST& source );
+};
+
 
 class TranslationUnitAST: public AST
 {

@@ -1254,10 +1254,11 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 	int endLine, endColumn;
 	node->getStartPosition( &startLine, &startColumn );
 	node->getEndPosition( &endLine, &endColumn );
-	textHint = m_activeEditor->textLine( startLine ).simplifyWhiteSpace();
-	//QStringList scope;
-	//scopeOfNode( node, scope );
-	//textHint += i18n(" - scope - ") + scope.join( "::" );
+	kdDebug(9007) << "------------> ast = " << (ast->text() ? tr("<empty>") : ast->text()) << endl;
+	if( node->text() )
+	    textHint = node->text();
+	else
+	    textHint = m_activeEditor->textLine( startLine ).simplifyWhiteSpace();
     }
     m_backgroundParser->unlock();
 }

@@ -70,6 +70,10 @@ QString nodeTypeToString( NodeType type )
 	return "Statement";
     case NodeType_TranslationUnit:
 	return "TranslationUnit";
+    case NodeType_FunctionDeclaration:
+	return "FunctionDeclaration";
+    case NodeType_FunctionDefinition:
+	return "FunctionDefinition";
     case NodeType_Custom:	
 	return "Custom";
     }
@@ -724,10 +728,20 @@ void SimpleDeclarationAST::setInitDeclaratorList( InitDeclaratorListAST::Node& i
 // ------------------------------------------------------------------------
 InitDeclaratorListAST::InitDeclaratorListAST()
 {
+    m_initDeclaratorList.setAutoDelete( true );
 }
 
 InitDeclaratorListAST::~InitDeclaratorListAST()
 {
+}
+
+void InitDeclaratorListAST::addInitDeclarator( InitDeclaratorAST::Node& decl )
+{
+    if( !decl.get() )
+	return;
+    
+    decl->setParent( this );
+    m_initDeclaratorList.append( decl.release() );
 }
 
 // ------------------------------------------------------------------------
@@ -866,3 +880,34 @@ void InitDeclaratorAST::setInitializer( AST::Node& initializer )
     m_initializer = initializer;
     if( m_initializer.get() ) m_initializer->setParent( this );
 }
+
+// --------------------------------------------------------------------------
+FunctionDeclarationAST::FunctionDeclarationAST()
+{
+}
+
+FunctionDeclarationAST::~FunctionDeclarationAST()
+{
+}
+
+void FunctionDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
+{
+    m_typeSpec = typeSpec;
+    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+FunctionDefinitionAST::FunctionDefinitionAST()
+{
+}
+
+FunctionDefinitionAST::~FunctionDefinitionAST()
+{
+}
+
+void FunctionDefinitionAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
+{
+    m_typeSpec = typeSpec;
+    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
+}
+    
