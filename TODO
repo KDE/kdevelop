@@ -1,3 +1,9 @@
+* Implement modification of build order.
+
+* Implement adding and removing sub projects.
+
+* Make more friendly dialog for adding targets.
+
 * Distinguish vanilla c++ support from c++ + Qt extensions
   and show signals/slots in the class view only with Qt.
 
@@ -5,8 +11,6 @@
   whenever the source file is parsed. This is implemented
   this way because header files don't appear in _SOURCES
   in KDE projects :-(
-
-* Implement modification of build order.
 
 * Perhaps use konsole part for the application frontend
 
