@@ -39,9 +39,10 @@ your needs towards application development. This can be done by adding programs 
 "Tools"-menu. To change the tools-menu, select "Tools" from the "Options" menu. This dialog allows to specify the entry
 name, program and additional command line options you want to pass to the execution. To remove a program from the menu, select the
 entry name and choose "Delete". To add a program, specify the menuentry, where a &amp; is used as a menu-accelerator; you may compare the
-already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
-is added to the list. After leaving the configuration dialog, the tools-menu updates itself, so the new configuration is already
-usable without restarting KDevelop.
+already configured entries with the entry list. Select the binary and pass your commandline options (use %S to get the name of the
+current open file and %D for the project directory). Select whether to capture the output of the Tool (displayed in the "messages" 
+and "stderr" panes). Then hit "Add" and the entry is added to the list. After leaving the configuration dialog, the tools-menu 
+updates itself, so the new configuration is already usable without restarting KDevelop.
 <P>
 <H3><A NAME="ss14.2">14.2 File Viewer Options</A>
 </H3>
