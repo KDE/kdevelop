@@ -80,8 +80,10 @@ QString DiffDialog::revB() const
 void DiffDialog::languageChange() {
     DiffDialogBase::languageChange();
     //buttonGroup1->setTitle( tr2i18n( "Build Difference Between" ) );
-    if(!m_entry.revision().isNull())
-      diffLocalHeadRadio->setText( tr2i18n( "Local copy and &HEAD (%1)" ).arg( m_entry.revision()) );
+    
+    //FIXME:  We need a function in CVSEntry to return the latest revision there is in cvs
+//    if(!m_entry.revision().isNull())
+//      diffLocalHeadRadio->setText( tr2i18n( "Local copy and &HEAD (%1)" ).arg( m_entry.revision()) );
 }
 
 #include "diffdialog.moc"
