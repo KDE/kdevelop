@@ -83,7 +83,7 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
 	sourceSelector = new FileSelectorWidget ( m_part, mode, sourceGroupBox, "source file selector" );
 	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-	importView = new KImportIconView ( i18n ( "Drag one or more files from the left view and drop it here!" ), destGroupBox, "destination icon view" );
+	importView = new KImportIconView ( i18n ( "Drag one or more files from the left view and drop it here." ), destGroupBox, "destination icon view" );
 	destGroupBoxLayout->addWidget ( importView );
 	//destGroupBoxLayout->setStretchFactor(dir, 2);
 

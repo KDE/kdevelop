@@ -910,7 +910,7 @@ bool PartController::saveFile( const KURL & url, bool force )
 		case DirtyAndModified:
 			{
 				int code = KMessageBox::warningYesNoCancel( TopLevel::getInstance()->main(),
-					i18n("The file \"%1\" is modified on disc.\n\nAre you sure you want to overwrite it? (External changes will be lost.)").arg( url.path() ),
+					i18n("The file \"%1\" is modified on disk.\n\nAre you sure you want to overwrite it? (External changes will be lost.)").arg( url.path() ),
 					i18n("File Externally Modified") );
 				if ( code == KMessageBox::Yes )
 				{

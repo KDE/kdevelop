@@ -119,7 +119,7 @@ void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
         int id = popup->insertItem( i18n("Grep: %1").arg(squeezed),
                            this, SLOT(slotContextGrep()) );
         popup->setWhatsThis(id, i18n("<b>Grep</b><p>Opens the find in files dialog "
-                               "and sets the pattern to a text under the cursor."));
+                               "and sets the pattern to the text under the cursor."));
         popup->insertSeparator();
     }
 }
