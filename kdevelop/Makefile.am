@@ -42,7 +42,9 @@ mimedir   = $(kde_mimedir)/application
 mime_DATA = x-kdevelop-project.desktop
 
 servicetypedir = $(kde_servicetypesdir)
-servicetype_DATA = kdevelopcomponent.desktop kdevelopversioncontrol.desktop
+servicetype_DATA = kdevelopcomponent.desktop \
+		   kdevelopversioncontrol.desktop \
+		   kdeveloplanguagesupport.desktop
 
 messages:
 	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot

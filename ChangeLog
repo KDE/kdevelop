@@ -1,3 +1,10 @@
+2000-07-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Introduced an interface KDevLanguageSupport for programming
+	  language specific stuff like source parser, or the 'Add method' 
+	  and 'Add attribute' wizards.
+ 	* Component CppSupport implements KDevLanguageSupport for C++ 
+	* Component ClassView is now in principle language-independent
+
 2000-07-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Added version-control related signals to KDevComponent
 	* KDevelopCore can now define actions itself

@@ -72,9 +72,6 @@ public: // Implementation of virtual methods
    * @param anAttribute Attribute to copy. */
   virtual void copy( CParsedAttribute *anAttribute );
 
-  /** Return the attributes code for the headerfile. */
-  virtual void asHeaderCode( QString &str );
-
   /** Return the object as a string(for tooltips etc) */
   virtual const char *asString( QString &str );
 

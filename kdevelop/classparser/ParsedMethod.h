@@ -105,12 +105,6 @@ public: // Public queries
    * @param aMethod Method to copy. */
   virtual void copy( CParsedMethod *aMethod );
 
-  /** Return this methods' header code. */
-  virtual void asHeaderCode( QString &str );
-
-  /** Return this method as a implementation stub. */
-  void asCppCode( QString &buf );
-
   /** Return a string made for persistant storage. */
   virtual const char *asPersistantString( QString &dataStr );
 

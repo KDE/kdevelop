@@ -10,6 +10,7 @@
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevversioncontrol.h"
+#include "kdevlanguagesupport.h"
 #include "kdevelopcore.h"
 
 
@@ -18,6 +19,9 @@ KDevelopCore::KDevelopCore(KDevelop *gui)
 {
     m_kdevelopgui = gui;
     m_versioncontrol = 0;
+    m_languagesupport = 0;
+    m_makefrontend = 0;
+    m_appfrontend = 0;
     m_project = 0;
 
     initActions();
@@ -44,16 +48,18 @@ KDevelopCore::~KDevelopCore()
 
 void KDevelopCore::initComponent(KDevComponent *component)
 {
-    connect( component, SIGNAL(addFileToRepository(const QString&)),
-             this, SLOT(addFileToRepository(const QString&)) );
-    connect( component, SIGNAL(removeFileFromRepository(const QString&)),
-             this, SLOT(removeFileFromRepository(const QString&)) );
-    connect( component, SIGNAL(commitFileToRepository(const QString&)),
-             this, SLOT(commitFileToRepository(const QString&)) );
-    connect( component, SIGNAL(updateFileFromRepository(const QString&)),
-             this, SLOT(updateFileFromRepository(const QString&)) );
-    connect( component, SIGNAL(executeCommand(const QString&)),
-             this, SLOT(executeCommand(const QString&)) );
+    connect( component, SIGNAL(addToRepository(const QString&)),
+             this, SLOT(addToRepository(const QString&)) );
+    connect( component, SIGNAL(removeFromRepository(const QString&)),
+             this, SLOT(removeFromRepository(const QString&)) );
+    connect( component, SIGNAL(commitToRepository(const QString&)),
+             this, SLOT(commitToRepository(const QString&)) );
+    connect( component, SIGNAL(updateFromRepository(const QString&)),
+             this, SLOT(updateFromRepository(const QString&)) );
+    connect( component, SIGNAL(executeMakeCommand(const QString&)),
+             this, SLOT(executeMakeCommand(const QString&)) );
+    connect( component, SIGNAL(executeAppCommand(const QString&)),
+             this, SLOT(executeAppCommand(const QString&)) );
     connect( component, SIGNAL(gotoSourceFile(const QString&, int)),
              this, SLOT(gotoSourceFile(const QString&, int)) );
     connect( component, SIGNAL(gotoDocumentationFile(const QString&)),
@@ -113,19 +119,30 @@ void KDevelopCore::loadInitialComponents()
             return;
         }
         KDevComponent *comp = (KDevComponent*) obj;
+
+        if (!m_makefrontend && (*it)->hasServiceType("KDevelop/MakeFrontend")) {
+            m_makefrontend = comp;
+            kdDebug(9000) << "is make frontend" << endl;
+        }
+            
+        if (!m_appfrontend && (*it)->hasServiceType("KDevelop/AppFrontend")) {
+            m_appfrontend = comp;
+            kdDebug(9000) << "is app frontend" << endl;
+        }
+
         m_kdevelopgui->guiFactory()->addClient(comp);
         initComponent(comp);
     }
 }
 
 
-void KDevelopCore::loadVersionControl(const QString &system)
+void KDevelopCore::loadVersionControl(const QString &vcsystem)
 {
-    QString constraint = "[X-KDevelop-VersionControlSystem] == " + system;
+    QString constraint = "[X-KDevelop-VersionControlSystem] == " + vcsystem;
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", constraint);
     if (offers.isEmpty()) {
         KMessageBox::sorry(m_kdevelopgui,
-                           i18n("No version control component for %1 found").arg(system));
+                           i18n("No version control component for %1 found").arg(vcsystem));
         return;
     }
 
@@ -149,7 +166,6 @@ void KDevelopCore::loadVersionControl(const QString &system)
     KDevVersionControl *comp = (KDevVersionControl*) obj;
     m_versioncontrol = comp;
     initComponent(comp);
-    comp->projectOpened(m_project);
 }
 
 
@@ -158,6 +174,74 @@ void KDevelopCore::unloadVersionControl()
     m_components.remove(m_versioncontrol);
     delete m_versioncontrol;
     m_versioncontrol = 0;
+}
+
+
+void KDevelopCore::loadLanguageSupport(const QString &lang)
+{
+    QString constraint = "[X-KDevelop-Language] == " + lang;
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/LanguageSupport", constraint);
+    if (offers.isEmpty()) {
+        KMessageBox::sorry(m_kdevelopgui,
+                           i18n("No language support component for %1 found").arg(lang));
+        return;
+    }
+
+    KService *service = *offers.begin();
+    kdDebug(9000) << "Found LanguageSupport Component " << service->name() << endl;
+
+    KLibFactory *factory = KLibLoader::self()->factory(service->library());
+
+    QStringList args;
+    QVariant prop = service->property("X-KDevelop-Args");
+    if (prop.isValid())
+        args = QStringList::split(" ", prop.toString());
+    
+    QObject *obj = factory->create(m_kdevelopgui, service->name().latin1(),
+                                   "KDevLanguageSupport", args);
+        
+    if (!obj->inherits("KDevLanguageSupport")) {
+        kdDebug(9000) << "Component does not inherit KDevLanguageSupport" << endl;
+        return;
+    }
+    KDevLanguageSupport *comp = (KDevLanguageSupport*) obj;
+    m_languagesupport = comp;
+    initComponent(comp);
+}
+
+
+void KDevelopCore::unloadLanguageSupport()
+{
+    m_components.remove(m_languagesupport);
+    delete m_languagesupport;
+    m_languagesupport = 0;
+}
+
+
+void KDevelopCore::loadProject()
+{
+    // project must define a version control system
+    // hack until implemented
+    QString vcsystem = QString::fromLatin1("CVS");
+    QString lang = QString::fromLatin1("C++");
+    
+    loadVersionControl(vcsystem);
+    loadLanguageSupport(lang);
+
+    QListIterator<KDevComponent> it(m_components);
+    for (; it.current(); ++it)
+        (*it)->projectOpened(m_project);
+}
+
+
+void KDevelopCore::unloadProject()
+{
+    QListIterator<KDevComponent> it(m_components);
+    for (; it.current(); ++it)
+        (*it)->projectClosed();
+
+    unloadVersionControl();
+    unloadLanguageSupport();
 }
 
 
@@ -199,39 +283,77 @@ void KDevelopCore::slotOptionsKDevelopSetup()
 }
 
 
-void KDevelopCore::addFileToRepository(const QString &filename)
+void KDevelopCore::addMethod(const QString &className)
 {
+    if (m_languagesupport)
+        m_languagesupport->addMethodRequested(className);
 }
 
 
-void KDevelopCore::removeFileFromRepository(const QString &filename)
+void KDevelopCore::addAttribute(const QString &className)
 {
+    if (m_languagesupport)
+        m_languagesupport->addAttributeRequested(className);
 }
 
 
-void KDevelopCore::commitFileToRepository(const QString &filename)
+void KDevelopCore::addToRepository(const QString &fileName)
 {
+    if (m_versioncontrol)
+        m_versioncontrol->addToRepositoryRequested(fileName);
 }
 
 
-void KDevelopCore::updateFileFromRepository(const QString &filename)
+void KDevelopCore::removeFromRepository(const QString &fileName)
 {
+    if (m_versioncontrol)
+        m_versioncontrol->removeFromRepositoryRequested(fileName);
 }
 
 
-void KDevelopCore::executeCommand(const QString &command)
+void KDevelopCore::commitToRepository(const QString &fileName)
 {
-    kdDebug(9000) << "KDevelopCore::executeCommand " << command << endl;
+    if (m_versioncontrol)
+        m_versioncontrol->commitToRepositoryRequested(fileName);
 }
 
 
-void KDevelopCore::gotoSourceFile(const QString &filename, int lineno)
+void KDevelopCore::updateFromRepository(const QString &fileName)
+{
+    if (m_versioncontrol)
+        m_versioncontrol->updateFromRepositoryRequested(fileName);
+}
+
+
+void KDevelopCore::executeMakeCommand(const QString &command)
+{
+    if (!m_makefrontend) {
+        kdDebug(9000) << "No make frontend!" << command << endl;
+        return;
+    }
+
+    m_makefrontend->commandRequested(command);
+}
+
+
+void KDevelopCore::executeAppCommand(const QString &command)
+{
+    if (!m_appfrontend) {
+        kdDebug(9000) << "No app frontend!" << command << endl;
+        return;
+    }
+
+    m_appfrontend->commandRequested(command);
+}
+
+
+void KDevelopCore::gotoSourceFile(const QString &fileName, int lineNo)
 {
     kdDebug(9000) << "KDevelopCore::gotoSourceFile" << endl;
 }
 
 
-void KDevelopCore::gotoDocumentationFile(const QString &filename)
+void KDevelopCore::gotoDocumentationFile(const QString &fileName)
 {
     kdDebug(9000) << "KDevelopCore::gotoDocumentationFile" << endl;
 }

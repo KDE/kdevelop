@@ -10,8 +10,6 @@
 #include "cproject.h"
 #include "ctreehandler.h"
 #include "ClassStore.h"
-#include "caddclassmethoddlg.h"
-#include "caddclassattributedlg.h"
 
 
 ClassView::ClassView(QObject *parent, const char *name)
@@ -218,75 +216,7 @@ void ClassView::selectedGotoImplementation()
  */
 void ClassView::selectedAddMethod()
 {
-    QString className = classes_action->currentText();
-    
-    CAddClassMethodDlg dlg(0, "methodDlg");
-    if (!dlg.exec())
-        return;
-    
-    CParsedMethod *pm = dlg.asSystemObj();
-    pm->setDeclaredInScope(className);
-
-    int atLine = -1;
-    CParsedClass *pc = m_store->getClassByName(className);
-    
-    if (pm->isSignal) {
-        for (pc->signalIterator.toFirst(); pc->signalIterator.current(); ++pc->signalIterator) {
-            CParsedMethod *meth = pc->signalIterator.current();
-            if (meth->exportScope == pm->exportScope && 
-                atLine < meth->declarationEndsOnLine)
-                atLine = meth->declarationEndsOnLine;
-        }
-    } else if (pm->isSlot) {
-        for (pc->slotIterator.toFirst(); pc->slotIterator.current(); ++pc->slotIterator) {
-            CParsedMethod *meth = pc->slotIterator.current();
-            if (meth->exportScope == pm->exportScope && 
-                atLine < meth->declarationEndsOnLine)
-                atLine = meth->declarationEndsOnLine;
-        }
-    } else {
-        for (pc->methodIterator.toFirst(); pc->methodIterator.current(); ++pc->methodIterator) {
-            CParsedMethod *meth = pc->methodIterator.current();
-            if (meth->exportScope == pm->exportScope && 
-                atLine < meth->declarationEndsOnLine)
-                atLine = meth->declarationEndsOnLine;
-        }
-    }
-
-    QString headerCode;
-    pm->asHeaderCode(headerCode);
-    
-    if (atLine == -1) {
-        if (pm->isSignal) 
-            headerCode.prepend(QString("signals:\n"));
-        else if (pm->exportScope == PIE_PUBLIC)
-            headerCode.prepend(QString("public:%1\n").arg(pm->isSlot? " slots" :  ""));
-        else if (pm->exportScope == PIE_PROTECTED)
-            headerCode.prepend(QString("protected:\n").arg(pm->isSlot? " slots" :  ""));
-        else if (pm->exportScope == PIE_PRIVATE) 
-            headerCode.prepend(QString("private:\n").arg(pm->isSlot? " slots" :  ""));
-        else
-            kdDebug(9003) << "ClassView::selectedAddMethod: Unknown exportScope "
-                          << (int)pm->exportScope << endl;
-
-        atLine = pc->declarationEndsOnLine;
-    } else 
-        atLine++;
-
-    gotoDeclaration(className, className, THCLASS);
-    kdDebug(9003) << "####################" << "Adding at line " << atLine << " " 
-                  << headerCode << endl
-                  << "####################";
-
-    QString cppCode;
-    pm->asCppCode(cppCode);
-
-    gotoSourceFile(pc->definedInFile, atLine);
-    kdDebug(9003) << "####################" << "Adding at line " << atLine
-                  << " " << cppCode
-                  << "####################" << endl;
-    
-    delete pm;
+    emit addMethod(classes_action->currentText());
 }
 
 
@@ -295,49 +225,7 @@ void ClassView::selectedAddMethod()
  */
 void ClassView::selectedAddAttribute()
 {
-    QString className = classes_action->currentText();
-
-    CAddClassAttributeDlg dlg(0, "attrDlg");
-    if( !dlg.exec() )
-      return;
-
-    CParsedAttribute *pa = dlg.asSystemObj();
-    pa->setDeclaredInScope(className);
-
-    int atLine = -1;
-    CParsedClass *pc = m_store->getClassByName(className);
-    
-    for (pc->attributeIterator.toFirst(); pc->attributeIterator.current(); ++pc->attributeIterator) {
-        CParsedAttribute *attr = pc->attributeIterator.current();
-        if (attr->exportScope == pa->exportScope && 
-            atLine < attr->declarationEndsOnLine)
-            atLine = attr->declarationEndsOnLine;
-    }
-    
-    QString headerCode;
-    pa->asHeaderCode(headerCode);
-    
-    if (atLine == -1) {
-        if (pa->exportScope == PIE_PUBLIC)
-            headerCode.prepend("public: // Public attributes\n");
-        else if (pa->exportScope == PIE_PROTECTED)
-            headerCode.prepend("protected: // Protected attributes\n");
-        else if (pa->exportScope == PIE_PRIVATE) 
-            headerCode.prepend("private: // Private attributes\n");
-        else
-            kdDebug(9003) << "ClassView::selectedAddAttribute: Unknown exportScope "
-                          << (int)pa->exportScope << endl;
-
-        atLine = pc->declarationEndsOnLine;
-    } else 
-        atLine++;
-
-    gotoDeclaration(className, className, THCLASS);
-    kdDebug(9003) << "####################" << "Adding at line " << atLine
-                  << " " << headerCode
-                  << "####################" << endl;
-
-    delete pa;
+    emit addAttribute(classes_action->currentText());
 }
 
 

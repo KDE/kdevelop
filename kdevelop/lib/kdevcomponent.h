@@ -91,14 +91,45 @@ public:
 
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
-    void addFileToRepository(const QString&);
-    void removeFileFromRepository(const QString&);
-    void commitFileToRepository(const QString&);
-    void updateFileFromRepository(const QString&);
-    
-    void executeCommand(const QString &);
-    void gotoSourceFile(const QString &, int);
-    void gotoDocumentationFile(const QString &);
+    /**
+     * Adds the given file to the version control system.
+     */
+    void addToRepository(const QString &fileName);
+    /**
+     * Removes the given file from the version control system.
+     */
+    void removeFromRepository(const QString &fileName);
+    /**
+     * Commits the file to the version control system.
+     */
+    void commitToRepository(const QString &fileName);
+    /**
+     * Updates the file from the version control system.
+     */
+    void updateFromRepository(const QString &fileName);
+    /**
+     * Opens an "Add method" dialog and adds the configured
+     * method to the sources.
+     */
+    void addMethod(const QString &className);
+    /**
+     * Opens an "Add attribute" dialog and adds the configured
+     * method to the sources.
+     */
+    void addAttribute(const QString &className);
+    /**
+     * Executes a make-like command. The output of the command is put
+     * in a separate view and is parsed for error messages.
+     */
+    void executeMakeCommand(const QString &command);
+    /**
+     * Executes a command to start the application. The output of the command
+     * is put in a separate view (except for terminal applications, which
+     * are started in their own terminal emulator)
+     */
+    void executeAppCommand(const QString &command);
+    void gotoSourceFile(const QString &fileName, int lineNo);
+    void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();
     void gotoProjectManual();
 

@@ -18,40 +18,40 @@ CvsInterface::~CvsInterface()
 {}
 
 
-void CvsInterface::add(const QString &filename)
+void CvsInterface::addToRepositoryRequested(const QString &fileName)
 {
     QString command("cd ");
     command += m_projectpath;
     command += " && cvs add ";
-    command += filename;
+    command += fileName;
     command += " 2>&1";
-    executeCommand(command);
+    emit executeMakeCommand(command);
 }
 
 
-void CvsInterface::remove(const QString &filename)
+void CvsInterface::removeFromRepositoryRequested(const QString &fileName)
 {
     QString command("cd ");
     command += m_projectpath;
     command += " && cvs remove -f ";
-    command += filename;
+    command += fileName;
     command += " 2>&1";
-    executeCommand(command);
+    emit executeMakeCommand(command);
 }
 
 
-void CvsInterface::update(const QString &filename)
+void CvsInterface::updateFromRepositoryRequested(const QString &fileName)
 {
     QString command("cd ");
     command += m_projectpath;
     command += " && cvs update -dP ";
-    command += filename;
+    command += fileName;
     command += " 2>&1";
-    executeCommand(command);
+    emit executeMakeCommand(command);
 }
 
 
-void CvsInterface::commit(const QString &filename)
+void CvsInterface::commitToRepositoryRequested(const QString &fileName)
 {
     CommitDialog *d = new CommitDialog();
     if (d->exec() == QDialog::Rejected)
@@ -66,16 +66,16 @@ void CvsInterface::commit(const QString &filename)
     command += " && cvs commit -m \'";
     command += message;
     command += "\' ";
-    command += filename;
+    command += fileName;
     command += " 2>&1";
 
     delete d;
 
-    executeCommand(command);
+    emit executeMakeCommand(command);
 }
 
 
-KDevVersionControl::State CvsInterface::registeredState(const QString &filename)
+KDevVersionControl::State CvsInterface::registeredState(const QString &fileName)
 {
 #if 0
     char buf[512];
@@ -109,7 +109,7 @@ KDevVersionControl::State CvsInterface::registeredState(const QString &filename)
 	}
     fclose(f);
     return state;
-    return canBeAdded;
 #endif
+    return canBeAdded;
 }
     

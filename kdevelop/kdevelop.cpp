@@ -259,9 +259,6 @@ void KDevelop::initActions(){
   m_paOptionsEditToolbars = KStdAction::configureToolbars(this, SLOT(slotOptionsEditToolbars()), actionCollection(),"options_configure_toolbars");
 
   /////////////////////////////////////
-  // Window Menu
-  ////////////////////////////////////
-  /////////////////////////////////////
   // Bookmarks Menu
   ////////////////////////////////////
   m_paBookmarksToggle = new KAction( i18n("&Toggle Bookmark"), "bookmark_add", 0, this, SLOT( slotBookmarksToggle() ),

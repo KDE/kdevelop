@@ -4,6 +4,6 @@ Exec=blubb
 Comment=Application output view
 Name=AppOutputView
 Icon=
-ServiceTypes=KDevelop/Component
+ServiceTypes=KDevelop/Component,KDevelop/AppFrontend
 X-KDE-Library=libkdevoutputviews
 X-KDevelop-Args=AppOutputView

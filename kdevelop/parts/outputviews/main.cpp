@@ -33,10 +33,10 @@ QObject *OutputFactory::create(QObject *parent, const char *name,
 {
     QObject *obj;
     if (args.count() > 0 && qstrcmp(args[0].latin1(), "AppOutputView") == 0) {
-        kdDebug(9004) << "Building MakeView" << endl;
+        kdDebug(9004) << "Building AppOutputView" << endl;
         obj = new AppOutputView(parent, name);
     } else if (args.count() > 0 && qstrcmp(args[0].latin1(), "MakeView") == 0) {
-        kdDebug(9004) << "Building AppOutputView" << endl;
+        kdDebug(9004) << "Building MakeView" << endl;
         obj = new MakeView(parent, name);
     } else {
         kdDebug(9004) << "Wrong args for kdevoutputviews library" << endl;

@@ -16,11 +16,11 @@ protected:
     virtual void projectClosed();
     virtual void projectOpened(CProject *prj);
 
-    virtual void add(const QString &filename);
-    virtual void remove(const QString &filename);
-    virtual void update(const QString &filename);
-    virtual void commit(const QString &filename);
-    virtual KDevVersionControl::State registeredState(const QString &filename);
+    virtual void addToRepositoryRequested(const QString &fileName);
+    virtual void removeFromRepositoryRequested(const QString &fileName);
+    virtual void updateFromRepositoryRequested(const QString &fileName);
+    virtual void commitToRepositoryRequested(const QString &fileName);
+    virtual KDevVersionControl::State registeredState(const QString &fileName);
 
 private:
     QString m_projectpath;

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/LanguageSupport
+Name=KDevelop Language Support Interface
+
+[PropertyDef::Language]
+Type=QString
