@@ -151,7 +151,7 @@ InputInt::InputInt(const QString &label, QWidget *parent, int &val, int minVal, 
     QHBoxLayout *layout = new QHBoxLayout(this, 5);
     
     sp = new QSpinBox(minVal, maxVal, 1, this);
-    lab = new QLabel(sp, label, this);
+    lab = new QLabel(sp, label+":", this);
     
     init();
   
@@ -199,14 +199,14 @@ InputString::InputString(const QString & label,
     if (m == StringFixed) {
         QHBoxLayout *layout = new QHBoxLayout(this, 5);
         com = new QComboBox(this); 
-	lab = new QLabel(com,label, this);
+	lab = new QLabel(com,label+":", this);
 	layout->addWidget(lab);
         layout->addWidget(com);
         layout->addStretch(1);
     } else {
         QGridLayout *layout = new QGridLayout(this, 1, m==StringFree? 1 : 3, 5);
         le = new QLineEdit(this);
-	lab = new QLabel(le,label, this);
+	lab = new QLabel(le,label+":", this);
 	layout->addWidget(lab, 0, 0);
         le->setText(s);
         layout->addWidget(le, 0, 1);
@@ -326,7 +326,7 @@ InputStrList::InputStrList(const QString & label,
     QWidget *dw = new QWidget(this); /* dummy widget used for layouting */
     QHBoxLayout *boxlayout = new QHBoxLayout(dw, 0, 5);
     le  = new QLineEdit(dw);
-    lab = new QLabel(le,label, this );
+    lab = new QLabel(le,label+":", this );
     layout->addWidget(lab, 0, 0);
     boxlayout->addWidget(le, 1);
 
