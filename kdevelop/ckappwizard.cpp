@@ -218,16 +218,16 @@ void CKAppWizard::initPages(){
   datalink->setGeometry( 30, 390, 200, 30 );
   
   progicon = new QCheckBox( i18n("Program Icon"), widget1, "progicon" );
-  progicon->setGeometry( 290, 330, 110, 30 );
+  progicon->setGeometry( 290, 300, 110, 30 );
 
   iconload = new QPushButton(i18n("Icon"), widget1, "iconload" );
-  iconload->setGeometry( 410, 310, 60, 60 );
+  iconload->setGeometry( 410, 280, 60, 60 );
 
   miniicon = new QCheckBox(i18n("Mini Icon"), widget1, "miniicon" );
-  miniicon->setGeometry( 290, 390, 110, 30 );
+  miniicon->setGeometry( 290, 360, 110, 30 );
   
   miniload = new QPushButton( widget1, "miniload" );
-  miniload->setGeometry( 440, 390, 30, 30 );
+  miniload->setGeometry( 440, 360, 30, 30 );
   
   separator1 = new KSeparator (widget1);
   separator1->setGeometry(0,210,515,5);
@@ -1867,7 +1867,7 @@ void CKAppWizard::slotProcessExited() {
   
 }
 
-// enable cancelbutton if everything is done
+// enable cancel button if everything is done
 void CKAppWizard::slotMakeEnd() {
   QString extension= (citem->isSelected()) ? "c" : "cpp";
   if (!generatesource->isChecked()) {
@@ -1961,6 +1961,7 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
+
 
 
 
