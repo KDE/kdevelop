@@ -1,6 +1,3 @@
-# set the include path for X, wx
-INCLUDES = $(WX_CXXFLAGS) $(all_includes)
-
 # these are the headers for your project
 noinst_HEADERS = $APPNAMELC$.h
 
@@ -13,5 +10,5 @@ bin_PROGRAMS = $APPNAMELC$
 
 # the application source, library search path, and link libraries
 $APPNAMELC$_SOURCES = $APPNAMELC$.cpp
-$APPNAMELC$_LDFLAGS = $(WX_LIBS) $(all_libraries)
+$APPNAMELC$_LDFLAGS = $(WX_LIBS) 
 

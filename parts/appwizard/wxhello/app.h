@@ -12,7 +12,7 @@
  */
 
 class 
-$APPNAME$App : public wxApp
+$APPNAME$app : public wxapp
 {
 	public:
 		virtual bool OnInit();

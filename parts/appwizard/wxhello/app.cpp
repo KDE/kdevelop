@@ -10,11 +10,11 @@ BEGIN_EVENT_TABLE( $APPNAME$Frame, wxFrame )
 	EVT_MENU( Menu_File_About, $APPNAME$Frame::OnAbout )
 END_EVENT_TABLE()
 
-IMPLEMENT_APP($APPNAME$App)
+IMPLEMENT_APP($APPNAME$app)
 	
 
 bool 
-$APPNAME$App::OnInit()
+$APPNAME$app::OnInit()
 {
 	$APPNAME$Frame *frame = new $APPNAME$Frame( "Hello World", wxPoint(50,50), wxSize(450,340) );
 
