@@ -1,3 +1,7 @@
+2000-01-23 Ralf Funken <funken.ruk@netcologne.de>
+	* Updated the german manual
+	* chapter Build Settings translated
+
 2000-01-22 Benoit Cerrina <benoit.cerrina@writeme.com>
 	* fixed bug in class parser regarding incorectly parsed operator implementations
 
