@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <stdlib.h>
+
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
