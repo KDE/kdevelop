@@ -2469,12 +2469,13 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
 //   }
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  if (*(buffer+buflen-1) == '\n')
-    buflen--;
+  stdin_stdout_widget->insertAtEnd(QString(buffer,buflen+1));
+//  if (*(buffer+buflen-1) == '\n')
+//    buflen--;
     
-  QString str(buffer,buflen+1);
-  stdin_stdout_widget->insertLine(str);
-  stdin_stdout_widget->setCursorPosition(stdin_stdout_widget->numLines()-1,0);
+//  QString str(buffer,buflen+1);
+//  stdin_stdout_widget->insertLine(str);
+//  stdin_stdout_widget->setCursorPosition(stdin_stdout_widget->numLines()-1,0);
 
 //  int x,y;
 //  showOutputView(true);
@@ -2483,12 +2484,13 @@ void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
 //  stdin_stdout_widget->insertAt(str,x,y);
 }
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  if (*(buffer+buflen-1) == '\n')
-    buflen--;
+  stderr_widget->insertAtEnd(QString(buffer,buflen+1));
+//  if (*(buffer+buflen-1) == '\n')
+//    buflen--;
     
-  QString str(buffer,buflen+1);
-  stderr_widget->insertLine(str);
-  stderr_widget->setCursorPosition(stderr_widget->numLines()-1,0);
+//  QString str(buffer,buflen+1);
+//  stderr_widget->insertLine(str);
+//  stderr_widget->setCursorPosition(stderr_widget->numLines()-1,0);
 
 //  int x,y;
 //  showOutputView(true);
@@ -2510,14 +2512,15 @@ void CKDevelop::slotApplReceivedStderr(const char* buffer)
 void CKDevelop::slotDebugReceivedStdout(const char* buffer)
 {
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  char* buf = (char*)buffer;
-  int buflen = strlen(buf);
-  if (*(buf+buflen-1) == '\n')
-    buflen--;
+  dbg_widget->insertAtEnd(QString(buffer,strlen(buffer)+1));
+//  char* buf = (char*)buffer;
+//  int buflen = strlen(buf);
+//  if (*(buf+buflen-1) == '\n')
+//    buflen--;
 
-  QString str(buf,buflen+1);
-  dbg_widget->insertLine(str);
-  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
+//  QString str(buf,buflen+1);
+//  dbg_widget->insertLine(str);
+//  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
 #endif
 }
 
