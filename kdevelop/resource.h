@@ -143,6 +143,7 @@
 #define ID_BUILD_AUTOCONF           14090
 #define ID_BUILD_CONFIGURE          14100
 #define ID_BUILD_DISTCLEAN          14110
+#define ID_BUILD_MAKECLEAN          14115
 
 // The debugger entries
 #define ID_DEBUG_RUN                14320

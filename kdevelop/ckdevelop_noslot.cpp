@@ -1044,6 +1044,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_REBUILD_ALL);
     enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
     enableCommand(ID_BUILD_DISTCLEAN);
+    enableCommand(ID_BUILD_MAKECLEAN);
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_BUILD_CONFIGURE);
     QString type=prj->getProjectType();
@@ -1080,6 +1081,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_REBUILD_ALL);
     disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
     disableCommand(ID_BUILD_DISTCLEAN);
+    disableCommand(ID_BUILD_MAKECLEAN);
     disableCommand(ID_BUILD_AUTOCONF);
     disableCommand(ID_BUILD_CONFIGURE);
     disableCommand(ID_PROJECT_MESSAGES);

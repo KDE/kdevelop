@@ -377,6 +377,7 @@ public:
   void slotBuildDebug(bool bWithArgs=false);
   void slotBuildDebugStart();
   void slotBuildDistClean();
+  void slotBuildMakeClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
 

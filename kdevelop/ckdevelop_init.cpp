@@ -460,6 +460,9 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
   
+  accel->insertItem( i18n("Make Clean"), "BuildMakeClean", (unsigned int) 0);
+  accel->connectItem("BuildMakeClean",this, SLOT(slotBuildMakeClean()), true, ID_BUILD_MAKECLEAN );
+  
   accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", (unsigned int) 0);
   accel->connectItem("BuildAutoconf", this,SLOT(slotBuildAutoconf()), true, ID_BUILD_AUTOCONF );
   
@@ -733,6 +736,7 @@ void CKDevelop::initMenuBar(){
 
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
+  build_menu->insertItem(i18n("Ma&ke Clean"),this,SLOT(slotBuildMakeClean()),0,ID_BUILD_MAKECLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
   build_menu->insertItem(i18n("C&onfigure..."), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
 

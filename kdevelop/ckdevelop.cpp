@@ -985,17 +985,6 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        appl_process << exec_str;
        cerr << endl << "EXEC:" << exec_str;
     }
-    else if (prj->getProjectType().find("kde2", 0, false) != -1) {
-	//a KDE2 application
-	const QString oldGroup = config->group();
-	config->setGroup("QT2");
-	QString kde2dir =  QString("KDEDIR=") + config->readEntry("kde2dir") + " ";
-	config->setGroup(oldGroup);
-
-	appl_process << kde2dir << "./" + program;
-	cerr << endl << "EXEC:" << kde2dir << "./" + program;
-	o_tab_view->setCurrentTab(STDERR);
-    }
     else
     {
       appl_process << "./" + program;
@@ -1623,9 +1612,6 @@ void CKDevelop::setupInternalDebugger()
   connect(  dbgController,  SIGNAL(rawGDBDisassemble(char*)),
             disassemble,    SLOT(slotDisassemble(char*)));
 
-  // switch to the VAR tab automatically when starting
-  slotTCurrentTab(VAR);
-  slotTTabSelected(VAR);  
 }
 
 void CKDevelop::slotBuildMake(){
@@ -1827,6 +1813,28 @@ void CKDevelop::slotBuildDistClean(){
   process << make_cmd << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+void CKDevelop::slotBuildMakeClean(){
+  if(!CToolClass::searchProgram(make_cmd)){
+    return;
+  }
+
+  slotDebugStop();
+  error_parser->reset();
+  error_parser->toogleOn();
+  showOutputView(true);
+  setToolMenuProcess(false);
+  slotFileSaveAll();
+  slotStatusMsg(i18n("Running make clean..."));
+  messages_widget->clear();
+  QDir::setCurrent(prj->getSubDir());
+  error_parser->setStartDir(prj->getSubDir());
+
+  process.clearArguments();
+  process << make_cmd << "clean";
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+}
+
 void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
     return;
@@ -3996,6 +4004,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
   ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,										i18n("Lets you set run-arguments to the binary and invokes the make-command"))
   ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
+  ON_STATUS_MSG(ID_BUILD_MAKECLEAN,               			  i18n("Invokes make clean which deletes all object and metaobject files"))
   ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
   ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
 
