@@ -290,7 +290,7 @@ QString PHPCodeCompletion::getClassName(QString varName,QString maybeInstanceOf)
 
 QString PHPCodeCompletion::searchClassNameForVariable(QString varName){
   kdDebug(9018) << "enter PHPCodeCompletion::searchClassNameForVariable:" << varName << ":" << endl;
-  KRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)").local8Bit());
+  KRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[& \t]*new[ \t]+([0-9A-Za-z_]+)").local8Bit());
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->textLine(i);
     if(!lineStr.isNull()){
@@ -444,7 +444,7 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
   if(rightBracket>leftBracket) return false; // we are out of (..)
   start = start.mid(equal,leftBracket-equal+1);
   //  cerr << "NEW: " << start << endl;
-  KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
+  KRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
   if(newre.match(start.local8Bit())){
     if( m_model->globalNamespace()->hasClass(newre.group(1)) ){ // exists this class?
       ClassDom pClass = m_model->globalNamespace()->classByName(newre.group(1))[ 0 ];
@@ -469,7 +469,7 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(QString lineStr,int col,int /
 bool PHPCodeCompletion::checkForNewInstance(QString lineStr,int col,int /*line*/){
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
-  KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)");
+  KRegExp newre("=[& \t]*new[ \t]+([A-Za-z_]+)");
   if(newre.match(start.local8Bit())){
     QString classStart = newre.group(1);
     if(start.right(2) == classStart){
