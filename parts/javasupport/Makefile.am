@@ -21,10 +21,6 @@ METASOURCES = AUTO
 
 EXTRA_DIST = java.g java.tree.g java.store.g
 
-DISTCLEANFILES =	JavaLexer.cpp JavaLexer.hpp \
-			JavaRecognizer.cpp JavaRecognizer.hpp \
-			JavaStoreWalker.cpp JavaStoreWalker.hpp
-
 JavaLexer.hpp JavaLexer.cpp JavaRecognizer.hpp JavaRecognizer.cpp: # java.g
 	antlr java.g
 
