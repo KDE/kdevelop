@@ -198,5 +198,7 @@ Note that the .kdevses is related to a project. User settings equal for all proj
 belong to here. You save them to ~/.kde/share/config/kdeveloprc via class KConfig of the
 kdecore library.
 
+Document your part in the way described at \ref howToDocument (doc/api/HowToDocument.dox file).
+
 */
 

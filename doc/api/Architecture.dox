@@ -5,7 +5,7 @@
 /** \page KDev3Arch KDevelop 3 Architecture
 
 KDevelop uses a plugin based architecture. This will be explained in more
-detail in the next sections. To add a new plugin check this page \ref howToAddPlugins
+detail in the next sections. To add a new plugin check the \ref howToAddPlugins page.
 
 \section overview Source Overview
 
@@ -61,8 +61,8 @@ be viewed according to their functionalities as follows.
 \subsubsection language-parts Programming Language Support Parts
 
 These parts implement a KDevLanguageSupport Class interface.
-
-To add support for a new programming language check the \ref howToAddProgrammingLanguages page (doc/api/HowToAddProgrammingLanguages.dox file)
+To add support for a new programming language check the \ref howToAddProgrammingLanguages page (doc/api/HowToAddProgrammingLanguages.dox file).
+Take a look at \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) to see the current status/features of the programming languages currently supported by KDevelop.
 
   - languages/ada = Support for Ada
     - (see AdaSupportPart)
@@ -169,6 +169,7 @@ These parts implement a KDevVersionControl Class interface.
 \subsubsection editor-parts editor support Specific Parts
 
 These parts implement a KTextEditor Class interface.
+Take a look at \ref EditorsSupportStatus (doc/api/EditorsSupportStatus.dox file) to see the current status/features of the editors currently supported by KDevelop.
 
   - editors/editor-chooser = Chooses an internal text editor
     - (see EditorChooserPart)

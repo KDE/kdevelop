@@ -22,7 +22,7 @@
   - Build tool (make/ant/etc)
   .
 
-Take a look at \ref LangSupportStatus to see the current status of the laguages currently supported by KDevelop.
+Take a look at \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) to see the current status/features of the programming languages currently supported by KDevelop.
 
 \section Expl Explanations, hints, tips, and all around Good Things To Know, regarding that list
 
@@ -168,16 +168,27 @@ There is an ability to create compiler plugin for KDevelop. Compiler plugin prov
 Compiler plugins must implement KDevCompilerOptions interface.
 
 
+\section MiscInf Other Info
+
+In the end you should add the language you implemented to the doc/api/LangSupportStatus.dox file and
+document your language support part in the way described at \ref howToDocument (doc/api/HowToDocument.dox file).
+See also \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file) for an information on how to create a generic KDevelop plugin and how to manage project and global configuration information.
+
+
 
 
 
 \section Editor Language Editor
 
 To edit source files KDevelop uses any editor that supports the KTextEditor
-interface. In case none of the editors does support advanced editing of sources
+interface. The current supported editors and their features are listed
+in the \ref EditorsSupportStatus (doc/api/EditorsSupportStatus.dox file) page.
+
+In case none of the editors does support advanced editing of sources
 written in your language (like code folding, syntax highlighting, line
-indentation) you can improve QEditor included in KDevelop (<code>parts/qeditor</code>).
+indentation) you can improve QEditor included in KDevelop (<code>editors/qeditor</code>).
 By creating QEditorIndenter and QSourceColorizer descendants you can provide the support for an automatic indentation and syntax highlighting that will be available for sure in KDevelop.
+
 
 
 
@@ -189,21 +200,27 @@ The language support is important, but it is unusable without a <B>build tool</B
 that can manage projects written on this language. KDevelop
 currently provides several build tools. They are:
 
+  - ANT build tool
+    - see AntProjectPart at <code>buildtools/ant</code>
+    .
   - Autotools build tool
-    - <code>buildtools/autoproject</code>
+    - see AutoProjectPart at <code>buildtools/autotools</code>
     .
-  - QMake build tool
-    - <code>buildtools/trollproject</code>
-    .
-  - Generic build tool
-    - Offers build tool facilities using project files in xml format (dtd is located in <code>buildtools/generic/kdevxmlproject.dtd</code>). Those xml files can be converted into makefiles, ant xml files or simply shell scripts using build system plugins. Build system plugin is an object that implements KDevBuildSystem interface. Build system plugins are located in <code>buildtools/generic/buildsystem</code>.
-  .
-
-Also available:
-  - Custom makefiles build tool
-    - <code>buildtools/custommakefiles</code>
+  - Custom build tool
+    - see CustomProjectPart at <code>buildtools/custommakefiles</code>
     - (works with custom makefiles, also has ant support)
     .
+  - Generic build tool
+    - see GenericProjectPart at <code>buildtools/generic</code>
+    - Offers build tool facilities using project files in xml format (dtd is located in <code>buildtools/generic/kdevxmlproject.dtd</code>).
+      Those xml files can be converted into makefiles, ant xml files or simply shell scripts using build system plugins.
+      Build system plugin is an object that implements KDevBuildSystem interface. Build system plugins are located in <code>buildtools/generic/buildsystem</code>.
+    .
+  - QMake build tool
+    - see TrollProjectPart at <code>buildtools/qmake</code>
+    .
+
+Also available:
   - Script build tool
     - <code>buildtools/script</code>
     - (the generic build tool for all scripting languages).
@@ -218,11 +235,5 @@ Also available:
 Choose your build tool and if the existing build tools doesn't fit
 in, extend generic build tool via build system plugin.
 
-
-
-
-\section MiscInf Other Info
-
-See also \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file) for an information on how to create a generic KDevelop plugin and how to manage project and global configuration information.
 
 */

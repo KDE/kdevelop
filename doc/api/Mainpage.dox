@@ -24,22 +24,22 @@ the <a href="http://www.kdevelop.org">KDevelop website</a>.
 \section status Current Status
 
 Here you can see the current \ref requirements and the \ref features.
-There is also a \ref LangSupportStatus page.
+There is also a \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) page and a \ref EditorsSupportStatus (doc/api/EditorsSupportStatus.dox file) page.
 
 
 \section expand How to expand KDevelop
 
-First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop:
-  - \ref howToAddPlugins
+First of all read the \ref KDev3Arch (doc/api/Architecture.dox file) then you can find more information on how to expand KDevelop:
+  - \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file)
   - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
   - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
   - \ref howToAddFileTemplates (doc/api/HowToAddFileTemplates.dox file)
 
-Additionally you may also want to find out \ref howToDocument.
+Additionally you may also want to find out \ref howToDocument (doc/api/HowToDocument.dox file).
 
 \section PlannedTasks Planned tasks
 
-First we need to do the \ref HighPriTasks then fix the <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>, then fix the bugs in the \ref bug and finally fix the dispersed \ref todo
+First we need to do the \ref HighPriTasks (doc/api/HighPriTasks.dox file) then fix the <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=bugs.bug_id">reported bugs in bugzilla database</a>, then fix the bugs in the \ref bug and finally fix the dispersed \ref todo
 all over the code.\n
 We also have a list of \ref unmaintained parts in KDevelop. You migth want to "adopt" one. :)
 

@@ -5,6 +5,7 @@
 <tocsect1 name="Overview" url="index.html">
 	<tocsect2 name="KDevelop 3 Architecture" url="KDev3Arch.html"/>
 	<tocsect2 name="Programming Languages Status" url="LangSupportStatus.html"/>
+	<tocsect2 name="Editors Status" url="EditorsSupportStatus.html"/>
 </tocsect1>
 <tocsect1 name="How to" url="index.html#expand">
 	<tocsect2 name="Extend KDevelop via plugins" url="howToAddPlugins.html"/>
