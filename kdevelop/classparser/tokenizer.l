@@ -22,7 +22,7 @@
   #include "tokenizer.h"
   #include "FlexLexer.h"
 
-  class MyLexer : yyFlexLexer
+  class MyLexer : public yyFlexLexer
   {
     public:
     int yyinput() { return yyFlexLexer::yyinput(); }
@@ -156,6 +156,11 @@ void eatPreparser(MyLexer *lex)
 
     switch( c )
     {
+      case '"': // Skip strings.
+        c=lex->yyinput();
+        while( c != '"' && c != EOF )
+          c=lex->yyinput();
+        break;
       case '\\':
         // Take care of escaped '\'
         cont = !cont;
