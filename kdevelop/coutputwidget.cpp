@@ -79,15 +79,13 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
 {
   it = m_errorMap.begin();
   setReadOnly(true);        // -JROC uncommented again
+  setWordWrap(WidgetWidth); // -JROC
+  setWrapPolicy(Anywhere); // -JROC
 #if QT_VERSION >= 300
   setTextFormat(Qt::RichText);
-  setWordWrap(NoWrap);
 
   // This is necessary in order to work around a bug in Qt's RichText widget. (Marcus Gruendler)
   styleSheet()->item( "font" )->setDisplayMode( QStyleSheetItem::DisplayBlock );
-#else
-  setWordWrap(WidgetWidth); // -JROC
-  setWrapPolicy(Anywhere); // -JROC
 #endif
 }
 
@@ -106,12 +104,12 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     // extract file info from this line - if any
     processLine(line, defaultType);
 
+    bool displayAdditions=atEnd();
 #if QT_VERSION < 300
     // add to the end of the text - highlighting is done in the
     // paint routine.
     int row = (numLines() < 1)? 0 : numLines()-1;
     int col = qstrlen(textLine(row));
-    bool displayAdditions=atEnd();
     
     // escapes the string 
     // line = QStyleSheet::convertFromPlainText( line );
@@ -124,8 +122,11 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int currentPara;
     int index;
     getCursorPosition(&currentPara, &index);
+#if QT_VERSION < 304
+    int paraCount = paragraphs()-1;
+#else
     int paraCount = paragraphs();
-    bool displayAdditions = (paraCount-1 == currentPara);
+#endif    
 
     // escape rich edit tags like "&", "<", ">"
     line = QStyleSheet::escape( line );
@@ -141,20 +142,17 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
         append(line);
         break;
       default:
-//  (rokrau 05/31/02) nasty, nasty
-#if QT_VERSION == 304
-          if (line[0] != '\n') {
-#endif
-            line ="<font color=\"black\">" + line + "</font>";
-            append(line);
-#if QT_VERSION == 304
-          }
-#endif
+        // Runtime check for broken Qt version. Don't add empty new lines.
+        if (line[0]=='\n' && strncmp(qVersion(), "3.0.4", sizeof("3.0.4")) == 0)
+          break;
+          
+        line ="<font color=\"black\">" + line + "</font>";
+        append(line);
         break;
     }
 
     if (displayAdditions)
-      setCursorPosition(paraCount, 0);
+      setCursorPosition(paraCount+1, 0);
 
     ensureCursorVisible();
 
@@ -291,7 +289,11 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
+#if QT_VERSION < 304
+    m_errorMap.insert(numLines()-1, errorDetails);
+#else
     m_errorMap.insert(numLines(), errorDetails);
+#endif    
   }
 }
 
