@@ -1,3 +1,8 @@
+2000-06-03 Sandy Meier <smeier@kdevelop.de>
+	* Commited ofstream patch by Stefan Hellwig <stefan@mercury.owl.de>
+	* this solve some problems with broken glibc
+	* if you have still problems please compile KDevelop in debug mode, there are some problems with optimized code on some platforms 
+	
 2000-05-12  Ralf Funken <RFunken@kdevelop.de>
 	* Commited bugfixes for german manual snd logo not shown in
           german lib reference.

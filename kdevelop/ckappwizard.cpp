@@ -29,6 +29,9 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include <iostream.h>
+#include <qstring.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
   q = new KShellProcess();
@@ -1088,196 +1091,216 @@ void CKAppWizard::generateEntries(const QString &filename) {
     }
   }
 
-  ofstream entries (QDir::homeDirPath() + "/.kde/share/apps/kdevelop/"+entriesfilename);
+  // Create filename to open in a secure manner
 
-  entries << "TEMPLATESDIR\n";
-  entries << KApplication::kde_datadir() << "/kdevelop/templates\n";
-  entries << "KDEICONDIR\n";
-  entries << KApplication::kde_icondir() << "\n";
+  QString tmpname( QDir::homeDirPath() );
+  tmpname.append( "/.kde/share/apps/kdevelop/" );
+  tmpname.append( entriesfilename );
 
-  entries << "APPLICATION\n";
-  if (kdeminiitem->isSelected()) {
-    entries << "kdemini\n";
-  }
-  else if (kdenormalitem->isSelected()) {
-    entries << "kdenormal\n";
-  }
-  else if (kdenormaloglitem->isSelected()){
-    entries << "kdenormalogl\n";
-  }
-  else if (kde2miniitem->isSelected()) {
-    entries << "kde2mini\n";
-  }
-  else if (kde2normalitem->isSelected()) {
-    entries << "kde2normal\n";
-  }
-  else if (kde2mdiitem->isSelected()) {
-    entries << "kde2mdi\n";
-  }
-  else if (qtnormalitem->isSelected()) {
-    entries << "qtnormal\n";
-  }
-  else if (qt2normalitem->isSelected()) {
-     entries << "qt2normal\n";
-  }
-  else if (qt2mdiitem->isSelected()) {
-     entries << "qt2mdi\n";
-  }
-  else if (qextmdiitem->isSelected()) {
-     entries << "qextmdi\n";
-  }
-  else if (cppitem->isSelected()) {
-    entries << "cpp\n";
-  }
-  else if (citem->isSelected()) {
-    entries << "c\n";
-  }
-  else if (gnomenormalitem->isSelected()) {
-    entries << "gnomenormal\n";
-  }
-  /*
-    else if (gtkminiitem->isSelected()) {
-    entries << "gtkmini\n";
-    }*/
-  else if (customprojitem->isSelected()) {
-    entries << "customproj\n";
-  }
+  // Open file and attach stream
+  QFile entriesfile( tmpname );
+ 
+  if ( entriesfile.open(IO_ReadWrite) ) {
 
-  if (qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
-	kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
-  {
-    entries << "CONFIGARG\n";
+	  QTextStream entries( &entriesfile );
+	  entries << "TEMPLATESDIR\n";
+	  entries << KApplication::kde_datadir() << "/kdevelop/templates\n";
+	  entries << "KDEICONDIR\n";
+	  entries << KApplication::kde_icondir() << "\n";
 
-    KConfig * config = KApplication::getKApplication()->getConfig();
-    config->setGroup("QT2");
-    QString arg=config->readEntry("qt2dir", "");
-    if(!arg.isEmpty())
-    {
-      if (arg.right(1) == "/" && arg.length()>1)
-        arg=arg.left(arg.length()-1);
-      arg="--with-qt-dir="+arg;
-    }
+	  entries << "APPLICATION\n";
+	  if (kdeminiitem->isSelected()) {
+	    entries << "kdemini\n";
+	  }
+	  else if (kdenormalitem->isSelected()) {
+	    entries << "kdenormal\n";
+	  }
+	  else if (kdenormaloglitem->isSelected()){
+	    entries << "kdenormalogl\n";
+	  }
+	  else if (kde2miniitem->isSelected()) {
+	    entries << "kde2mini\n";
+	  }
+	  else if (kde2normalitem->isSelected()) {
+	    entries << "kde2normal\n";
+	  }
+	  else if (kde2mdiitem->isSelected()) {
+	    entries << "kde2mdi\n";
+	  }
+	  else if (qtnormalitem->isSelected()) {
+	    entries << "qtnormal\n";
+	  }
+	  else if (qt2normalitem->isSelected()) {
+	     entries << "qt2normal\n";
+	  }
+	  else if (qt2mdiitem->isSelected()) {
+	     entries << "qt2mdi\n";
+	  }
+	  else if (qextmdiitem->isSelected()) {
+	     entries << "qextmdi\n";
+	  }
+	  else if (cppitem->isSelected()) {
+	    entries << "cpp\n";
+	  }
+	  else if (citem->isSelected()) {
+	    entries << "c\n";
+	  }
+	  else if (gnomenormalitem->isSelected()) {
+	    entries << "gnomenormal\n";
+	  }
+	  /*
+	    else if (gtkminiitem->isSelected()) {
+	    entries << "gtkmini\n";
+	    }*/
+	  else if (customprojitem->isSelected()) {
+	    entries << "customproj\n";
+	  }
 
-    if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
-    {
-      QString kde2path=config->readEntry("kde2dir", "");
-      if(!kde2path.isEmpty())
-      {
-        if(kde2path.right(1) == "/" && kde2path.length()>1)
-          kde2path=kde2path.left(kde2path.length()-1);
-        arg=arg+" --prefix="+kde2path;
-      }
-    }
-    entries << arg << "\n";
-  }
+	  if (qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
+		kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
+	  {
+	    entries << "CONFIGARG\n";
 
-  entries << "NAME\n";
-  entries << nameline->text() << "\n";
-  entries << "DIRECTORY\n";
+	    KConfig * config = KApplication::getKApplication()->getConfig();
+	    config->setGroup("QT2");
+	    QString arg=config->readEntry("qt2dir", "");
+	    if(!arg.isEmpty())
+	    {
+	      if (arg.right(1) == "/" && arg.length()>1)
+	        arg=arg.left(arg.length()-1);
+	      arg="--with-qt-dir="+arg;
+	    }
+	
+	    if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+	    {
+	      QString kde2path=config->readEntry("kde2dir", "");
+	      if(!kde2path.isEmpty())
+	      {
+	        if(kde2path.right(1) == "/" && kde2path.length()>1)
+	          kde2path=kde2path.left(kde2path.length()-1);
+	        arg=arg+" --prefix="+kde2path;
+	      }
+	    }
+	    entries << arg << "\n";
+	  }
+	
+	  entries << "NAME\n";
+	  entries << nameline->text() << "\n";
+	  entries << "DIRECTORY\n";
+	
+	  QString direct = directoryline->text();
+	  if (direct.right(1) == "/") {
+	    direct = direct.left(direct.length() - 1);
+			/* }
+			   int pos;
+			   pos = direct.findRev ("/");
+			   direct = direct.left (pos);
+			   if(direct.right(1) == "/"){
+			   entries << direct << "\n";*/
+	  }
+	  //		   else{
+	  //		   entries << direct << "/\n";
+	  //		   }
+	  entries << direct << "\n";
+	  
+	  entries << "AUTHOR\n";
+	  entries << authorline->text() << "\n";
+	  entries << "EMAIL\n";
+	  entries << emailline->text() << "\n";
+	  entries << "API\n";
+	  if (apidoc->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "KDOC_CALL\n";
+	
+	  if (!index_path.isEmpty() && !link.isEmpty())
+	    index_path=QString(" -L")+index_path+link;
+	#ifdef WITH_KDOC2
+	  bool bCreateKDoc;
+	
+	  config->setGroup("General Options");
+	  bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
+	  if (bCreateKDoc)
+	   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
+		index_path+" -n "+nameline->text()+" *.h\n";
+	  else
+	   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
+		index_path+" *.h\n";
+	#else
+	   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
+		index_path+" "+nameline->text()+" *.h\n";
+	#endif
+	
+	  entries << "XGETTEXT\n";
+	  if (CToolClass::searchProgram("xgettext"))
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "USER\n";
+	  if (userdoc->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "LSM\n";
+	  if (lsmfile->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "GNU\n";
+	  if (gnufiles->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "PROGICON\n";
+	
+	  if (name1.isNull())
+	    name1 = "";
+	  if (progicon->isChecked())
+	    entries << name1 << "\n";
+	  else
+	    entries << "no\n";
+	
+	  entries << "MINIICON\n";
+	  if (name2.isNull())
+	    name2 = "";
+	  if (miniicon->isChecked())
+	    entries << name2 << "\n";
+	  else
+	    entries << "no\n";
+	  entries << "KDELNK\n";
+	  if (datalink->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "HEADER\n";
+	  if (hheader->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "CPP\n";
+	  if (cppheader->isChecked())
+	    entries << "yes\n";
+	  else entries << "no\n";
+	  entries << "VERSION\n";
+	  entries << versionline->text() << "\n";
+	  entries << "VSSUPPORT\n";
+	  entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
+	  entries << "VENDORTAG\n";
+	  entries << QString(vendorline->text()) + "\n";
+	  entries << "RELEASETAG\n";
+	  entries << QString(releaseline->text()) + "\n";
+	  entries << "VSLOCATION\n";
+	  entries << QString(vsLocation->text()) + "\n";
+	  entries << "PRJVSLOCATION\n";
+	  entries << QString(projectlocationline->text()) + "\n";
+	  entries << "LOGMESSAGE\n";
+	  entries << QString(messageline->text()) + "\n";
 
-  QString direct = directoryline->text();
-  if (direct.right(1) == "/") {
-    direct = direct.left(direct.length() - 1);
-		/* }
-		   int pos;
-		   pos = direct.findRev ("/");
-		   direct = direct.left (pos);
-		   if(direct.right(1) == "/"){
-		   entries << direct << "\n";*/
-  }
-  //		   else{
-  //		   entries << direct << "/\n";
-  //		   }
-  entries << direct << "\n";
-  
-  entries << "AUTHOR\n";
-  entries << authorline->text() << "\n";
-  entries << "EMAIL\n";
-  entries << emailline->text() << "\n";
-  entries << "API\n";
-  if (apidoc->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "KDOC_CALL\n";
 
-  if (!index_path.isEmpty() && !link.isEmpty())
-    index_path=QString(" -L")+index_path+link;
-#ifdef WITH_KDOC2
-  bool bCreateKDoc;
+	entriesfile.flush();
+	entriesfile.close();
 
-  config->setGroup("General Options");
-  bCreateKDoc = config->readBoolEntry("CreateKDoc", false);
-  if (bCreateKDoc)
-   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-	index_path+" -n "+nameline->text()+" *.h\n";
-  else
-   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-	index_path+" *.h\n";
-#else
-   entries << QString("kdoc -p -d |UNDERDIRECTORY|/api")+
-	index_path+" "+nameline->text()+" *.h\n";
-#endif
+	} // if (file open)
+	else
+	{
+		debug( "ERROR: EntriesFile not open!" );
+		exit( 1 );
+	} // end if
 
-  entries << "XGETTEXT\n";
-  if (CToolClass::searchProgram("xgettext"))
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "USER\n";
-  if (userdoc->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "LSM\n";
-  if (lsmfile->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "GNU\n";
-  if (gnufiles->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "PROGICON\n";
-
-  if (name1.isNull())
-    name1 = "";
-  if (progicon->isChecked())
-    entries << name1 << "\n";
-  else
-    entries << "no\n";
-
-  entries << "MINIICON\n";
-  if (name2.isNull())
-    name2 = "";
-  if (miniicon->isChecked())
-    entries << name2 << "\n";
-  else
-    entries << "no\n";
-  entries << "KDELNK\n";
-  if (datalink->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "HEADER\n";
-  if (hheader->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "CPP\n";
-  if (cppheader->isChecked())
-    entries << "yes\n";
-  else entries << "no\n";
-  entries << "VERSION\n";
-  entries << versionline->text() << "\n";
-  entries << "VSSUPPORT\n";
-  entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
-  entries << "VENDORTAG\n";
-  entries << QString(vendorline->text()) + "\n";
-  entries << "RELEASETAG\n";
-  entries << QString(releaseline->text()) + "\n";
-  entries << "VSLOCATION\n";
-  entries << QString(vsLocation->text()) + "\n";
-  entries << "PRJVSLOCATION\n";
-  entries << QString(projectlocationline->text()) + "\n";
-  entries << "LOGMESSAGE\n";
-  entries << QString(messageline->text()) + "\n";
-
-  entries.close();
 }
 
 void CKAppWizard::okPermited() {
