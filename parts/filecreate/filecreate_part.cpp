@@ -13,6 +13,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qvbox.h>
+#include <qtimer.h>
 
 #include <kdeversion.h>
 #include <kiconloader.h>
@@ -23,6 +24,7 @@
 #include <kstandarddirs.h>
 #include <kstdaction.h>
 #include <kaction.h>
+#include <kapplication.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -143,85 +145,7 @@ void FileCreatePart::slotNewFile() {
 }
 
 void FileCreatePart::slotProjectOpened() {
-
-  // read in global template information
-  QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
-  kdDebug(9034) << "Found global template info info " << globalXMLFile << endl;
-  QDomDocument globalDom;
-  if (!globalXMLFile.isNull() &&
-      DomUtil::openDOMFile(globalDom,globalXMLFile)) {
-    kdDebug(9034) << "Reading global template info..." << endl;
-    readTypes(globalDom, m_filetypes, false);
-
-    // use side tab or not?
-    // TODO: this is a very Bad Way to do this. Must remember to move this setting to user's gideonrc config file
-    QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
-    if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
-        m_useSideTab = false;
-    }
-  }
-
-
-  // read in which global templates are to be used for this project
-  QDomElement useGlobalTypes =
-    DomUtil::elementByPath(*projectDom(),"/kdevfilecreate/useglobaltypes");
-  for(QDomNode node = useGlobalTypes.firstChild();
-      !node.isNull();node=node.nextSibling()) {
-    if (node.isElement() && node.nodeName()=="type") {
-      QDomElement element = node.toElement();
-      QString ext = element.attribute("ext");
-      QString subtyperef = element.attribute("subtyperef");
-      // if an extension has been specified as enabled, ensure it
-      // and all its subtypes are enabled
-      if (subtyperef.isNull()) {
-        FileType * filetype = getType(ext);
-        if (filetype) {
-          filetype->setEnabled(true);
-          if (filetype->subtypes().count())
-            filetype->setSubtypesEnabled(true);
-        }
-      } else {
-        // if an extension + subtype have been specified, enable
-        // the subtype and the extension (the 'parent')
-        FileType * filetype = getType(ext);
-        FileType * subtype = getType(ext,subtyperef);
-        if (filetype && subtype) {
-          filetype->setEnabled(true);
-          subtype->setEnabled(true);
-        }
-      }
-    }
-  }
-
-  // read in the list of file types for this project
-  if ( readTypes( *projectDom(), m_filetypes, true )==0  ) {
-    // default by scanning the templates directory if no template info
-    // found in project file
-    QDir templDir( project()->projectDirectory() + "/templates/" );
-    if (templDir.exists()) {
-      templDir.setFilter( QDir::Files );
-      const QFileInfoList * list = templDir.entryInfoList();
-      if( list ){
-        QFileInfoListIterator it( *list );
-        QFileInfo *fi;
-        while ( (fi = it.current()) != 0 ) {
-          addFileType(fi->fileName());
-          ++it;
-        }
-      }
-    }
-/*    else { // it was probably an imported project
-      // KLUDGE: we need a better way to determine file types
-      // the current method looks a bit too restrictive
-      addFileType( "cpp" );
-      addFileType( "h" );
-    }*/
-  }
-
-  setShowSideTab(m_useSideTab);
-
-  // refresh view
-  refresh();
+    QTimer::singleShot( 0, this, SLOT(slotInitialize()) );
 }
 
 void FileCreatePart::addFileType(const QString & filename) {
@@ -265,6 +189,8 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
   QDomElement fileTypes = DomUtil::elementByPath(dom,"/kdevfilecreate/filetypes");
   if (!fileTypes.isNull()) {
     for(QDomNode node = fileTypes.firstChild();!node.isNull();node=node.nextSibling()) {
+      kapp->processEvents();
+
       if (node.isElement() && node.nodeName()=="type") {
         QDomElement element = node.toElement();
         FileType * filetype = new FileType;
@@ -283,6 +209,7 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
         if (node.hasChildNodes()) {
           for(QDomNode subnode = node.firstChild();!subnode.isNull();subnode=subnode.nextSibling()) {
             kdDebug(9034) << "subnode: " << subnode.nodeName().latin1() << endl;
+            kapp->processEvents();
             if (subnode.isElement() && subnode.nodeName()=="subtype") {
               QDomElement subelement = subnode.toElement();
               FileType * subtype = new FileType;
@@ -474,7 +401,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   else
   {
     QString activeDir = project()->activeDirectory();
-    dialog.setDirectory( project()->projectDirectory() + 
+    dialog.setDirectory( project()->projectDirectory() +
         ( activeDir[0] == '/' ? "" : "/" )
         + activeDir );
   }
@@ -549,6 +476,92 @@ void FileCreatePart::setShowSideTab(bool on) {
 void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
   kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : QString::fromLatin1("Null") ) << endl;
   m_filedialogFiletype = filetype;
+}
+
+void FileCreatePart::slotInitialize( )
+{
+  // read in global template information
+  QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
+  kdDebug(9034) << "Found global template info info " << globalXMLFile << endl;
+  QDomDocument globalDom;
+  if (!globalXMLFile.isNull() &&
+      DomUtil::openDOMFile(globalDom,globalXMLFile)) {
+    kdDebug(9034) << "Reading global template info..." << endl;
+    kapp->processEvents();
+    readTypes(globalDom, m_filetypes, false);
+
+    // use side tab or not?
+    // TODO: this is a very Bad Way to do this. Must remember to move this setting to user's gideonrc config file
+    QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
+    if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
+        m_useSideTab = false;
+    }
+  }
+
+
+  // read in which global templates are to be used for this project
+  QDomElement useGlobalTypes =
+    DomUtil::elementByPath(*projectDom(),"/kdevfilecreate/useglobaltypes");
+  for(QDomNode node = useGlobalTypes.firstChild();
+      !node.isNull();node=node.nextSibling()) {
+
+    kapp->processEvents();
+
+    if (node.isElement() && node.nodeName()=="type") {
+      QDomElement element = node.toElement();
+      QString ext = element.attribute("ext");
+      QString subtyperef = element.attribute("subtyperef");
+      // if an extension has been specified as enabled, ensure it
+      // and all its subtypes are enabled
+      if (subtyperef.isNull()) {
+        FileType * filetype = getType(ext);
+        if (filetype) {
+          filetype->setEnabled(true);
+          if (filetype->subtypes().count())
+            filetype->setSubtypesEnabled(true);
+        }
+      } else {
+        // if an extension + subtype have been specified, enable
+        // the subtype and the extension (the 'parent')
+        FileType * filetype = getType(ext);
+        FileType * subtype = getType(ext,subtyperef);
+        if (filetype && subtype) {
+          filetype->setEnabled(true);
+          subtype->setEnabled(true);
+        }
+      }
+    }
+  }
+
+  // read in the list of file types for this project
+  if ( readTypes( *projectDom(), m_filetypes, true )==0  ) {
+    // default by scanning the templates directory if no template info
+    // found in project file
+    QDir templDir( project()->projectDirectory() + "/templates/" );
+    if (templDir.exists()) {
+      templDir.setFilter( QDir::Files );
+      const QFileInfoList * list = templDir.entryInfoList();
+      if( list ){
+        QFileInfoListIterator it( *list );
+        QFileInfo *fi;
+        while ( (fi = it.current()) != 0 ) {
+          addFileType(fi->fileName());
+          ++it;
+        }
+      }
+    }
+/*    else { // it was probably an imported project
+      // KLUDGE: we need a better way to determine file types
+      // the current method looks a bit too restrictive
+      addFileType( "cpp" );
+      addFileType( "h" );
+    }*/
+  }
+
+  setShowSideTab(m_useSideTab);
+
+  // refresh view
+  refresh();
 }
 
 #include "filecreate_part.moc"
