@@ -98,6 +98,12 @@ void EditorProxy::popupAboutToShow()
     }
   }
 
+  // ugly hack: mark the "original" items
+  m_popupIds.resize(popup->count());
+  for (uint index=0; index < popup->count(); ++index)
+    m_popupIds[index] = popup->idAt(index);
+
+
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
   if (!ro_part)
     return;
