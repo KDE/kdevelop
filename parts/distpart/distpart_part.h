@@ -8,7 +8,7 @@
 
 
 #include <qguardedptr.h>
-#include <kdevpart.h>
+#include <kdevplugin.h>
 #include <kaction.h>
 
 #include "packagebase.h"
@@ -16,13 +16,13 @@
 class DistpartDialog;
 
 
-class DistpartPart : public KDevPart
+class DistpartPart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
 
-  DistpartPart(KDevApi *api, QObject *parent=0, const char *name=0);
+  DistpartPart(QObject *parent, const char *name, const QStringList &);
   ~DistpartPart();
 
 public slots:

@@ -3,18 +3,19 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-
+#include <kgenericfactory.h>
 
 #include <kdevcore.h>
 
 
 #include "distpart_widget.h"
-#include "distpart_factory.h"
 #include "distpart_part.h"
 
+typedef KGenericFactory<DistpartPart> DistpartFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) );
 
-DistpartPart::DistpartPart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
   setInstance(DistpartFactory::instance());
  

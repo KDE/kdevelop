@@ -5,6 +5,6 @@ Exec=blubb
 Comment=Aids in building and publishing the final project.
 Name=KDevdistpart
 Icon=kdevelop
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevdistpart
 X-KDevelop-Scope=Project 
