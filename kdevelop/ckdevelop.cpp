@@ -280,8 +280,8 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("width",width());
   config->writeEntry("height",height());
 
-  config->writeEntry("view_panner_pos",view->absSeparatorPos());
-  config->writeEntry("top_panner_pos",top_panner->absSeparatorPos());
+  config->writeEntry("view_panner_pos",view->separatorPos());
+  config->writeEntry("top_panner_pos",top_panner->separatorPos());
 
   config->writeEntry("tree_view_pos",tree_view_pos);
   config->writeEntry("output_view_pos",output_view_pos);
@@ -428,13 +428,13 @@ void CKDevelop::slotOptionsTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
-    view->setSeparatorPos(view->height());
+    view->setSeparatorPos(100);
   }
   else{
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
-//  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+ //  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
 //  resize (width()+1,height());
   QRect rMainGeom= view->geometry();
   view->resize(rMainGeom.width()-1,rMainGeom.height());
@@ -713,7 +713,7 @@ void CKDevelop::slotBuildDebug(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
-    view->setSeparatorPos(view->height());
+    view->setSeparatorPos(100);
 //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
 //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
@@ -955,7 +955,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
-    view->setSeparatorPos(view->height());
+    view->setSeparatorPos(100);
 //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
 //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
@@ -1223,7 +1223,7 @@ void CKDevelop::slotToolsKIconEdit(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
-    view->setSeparatorPos(view->height());
+    view->setSeparatorPos(100);
 //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
 //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
@@ -1242,7 +1242,7 @@ void CKDevelop::slotToolsKDbg(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
-    view->setSeparatorPos(view->height());
+    view->setSeparatorPos(100);
 //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
 //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
@@ -1262,7 +1262,7 @@ void CKDevelop::slotToolsKTranslator(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
-    view->setSeparatorPos(view->height());
+    view->setSeparatorPos(100);
 //    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
 //    resize (width()+1,height());
     QRect rMainGeom= view->geometry();
@@ -1511,6 +1511,12 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
 
 
 

@@ -162,8 +162,8 @@
 
 #define HEADER  0
 #define CPP 	1
-#define TOOLS  3	
-#define BROWSER 2 
+#define BROWSER 2
+#define TOOLS 	3
 
 
 #define MESSAGES 0

@@ -49,13 +49,14 @@ CKDevelop::CKDevelop(){
    if( showOutput=true)
    { slotOptionsTOutputView();}
 
-//  This all doesn't work, don't know why. Set default Tab to TOOLS and shows HEADER...-Ralf
-//   s_tab_view->setCurrentTab(0);
 
-//  config->setGroup("General Options");
-//  int lastActiveTab=config->readNumEntry("LastActiveTab", BROWSER);
+								
+//  This all doesn't work, don't know why. Set default Tab to TOOLS and shows HEADER...-Ralf
+//  s_tab_view->setCurrentTab(BROWSER);
+
+  config->setGroup("General Options");
 //  slotSTabSelected(lastActiveTab);
-//  s_tab_view->setCurrentTab(config->readNumEntry("LastActiveTab", BROWSER));
+  s_tab_view->setCurrentTab(config->readNumEntry("LastActiveTab", BROWSER));
   s_tab_view->repaint();
 
 }
@@ -129,8 +130,8 @@ void CKDevelop::init(){
 
   // create the main view
 
-  view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Absolute,
-  			config->readNumEntry("view_panner_pos",337));  
+  view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Percent,
+  			config->readNumEntry("view_panner_pos",80));
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
   
   messages_widget = new COutputWidget(kapp,o_tab_view);
@@ -162,18 +163,18 @@ void CKDevelop::init(){
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
   log_file_tree->setIndentSpacing(15);
-  log_file_tree->setFocusPolicy(QWidget::NoFocus);
+  log_file_tree->setFocusPolicy(QWidget::ClickFocus);
   
   class_tree = new CClassView(t_tab_view,"cv");
   class_tree->setIndentSpacing(15);
   class_tree->setFocusPolicy(QWidget::NoFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
-  real_file_tree->setFocusPolicy(QWidget::NoFocus);
+  real_file_tree->setFocusPolicy(QWidget::ClickFocus);
   real_file_tree->setIndentSpacing(15);
 
   doc_tree = new CDocTree(t_tab_view,"DOC");
-  doc_tree->setFocusPolicy(QWidget::NoFocus);
+  doc_tree->setFocusPolicy(QWidget::ClickFocus);
   doc_tree->setIndentSpacing(15);
 
   t_tab_view->addTab(class_tree,"CV");
@@ -278,13 +279,14 @@ void CKDevelop::init(){
   initToolbar();
   initStatusBar();
 
+
   // initialize output_view_pos
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     output_view_pos=view->separatorPos();
   }
   else{
     config->setGroup("General Options");
-    output_view_pos=config->readNumEntry("output_view_pos", 337);
+    output_view_pos=config->readNumEntry("output_view_pos", 80);
   }
 
   // initialize tree_view_pos
@@ -670,6 +672,7 @@ void CKDevelop::initStatusBar(){
   if(!bViewStatusbar)
   enableStatusBar();
 }
+
 void CKDevelop::initProject(){
   config->setGroup("Files");
   QString filename = config->readEntry("project_file","");
@@ -697,6 +700,14 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
+
+
+
 
 
 

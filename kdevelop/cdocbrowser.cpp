@@ -119,8 +119,8 @@ void CDocBrowser::setDocBrowserOptions(){
   textColor = config->readColorEntry( "TextColor", &black );
   linkColor = config->readColorEntry( "LinkColor", &blue );
   vLinkColor = config->readColorEntry( "VLinkColor", &darkMagenta );
-  underlineLinks = config->readBoolEntry( "UnderlineLinks", TRUE );
-  forceDefaults = config->readBoolEntry( "ForceDefaultColors", TRUE );
+  underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
+  forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
@@ -425,7 +425,7 @@ void CDocBrowserColor::readOptions()
 	linkColor = config->readColorEntry( "LinkColor", &blue );
 	vLinkColor = config->readColorEntry( "VLinkColor", &magenta );
 	underlineLinks = config->readBoolEntry( "UnderlineLinks", TRUE );
-	forceDefault = config->readBoolEntry( "ForceDefaultColors", false );
+	forceDefault = config->readBoolEntry( "ForceDefaultColors", true );
 
 	changed = false;
 }
@@ -514,6 +514,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
 
 
 
