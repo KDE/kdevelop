@@ -395,7 +395,7 @@ static QString parse_part( const QString &part )
     for ( int i = 0; i < (int)part.length(); ++i ) {
 	QChar c = part[ i ];
 	if ( !inName ) {
-	    if ( c != ' ' && c != '\t' && c != '\n' && c != '=' && c != '\\' )
+	    if ( c != ' ' && c != '+' && c != '\t' && c != '\n' && c != '=' && c != '\\' )
 		inName = TRUE;
 	    else
 		continue;
