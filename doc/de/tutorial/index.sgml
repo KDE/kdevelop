@@ -1,0 +1,518 @@
+
+<!doctype linuxdoc system>
+<book>
+<titlepag>
+<title>KDE Anwendungs Tutorials
+<subtitle>Der KDE Anwendungs-Tutorial Leitfaden für die 
+Integrierte Entwicklungsumgebung KDevelop
+<author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" 
+name = "<Ralf.Nolden@post.rwth-aachen.de>"> 
+<inst>Das KDevelop Team 
+<date>Version 0.1 , Mon Jun 21 1999 <abstract> 
+Das KDE Anwendungs-Tutorial Leitfaden für die Integrierte 
+Entwicklungsumgebung KDevelop; eine Sammlung von 
+Anleitungen, die anhand von Beispielen zeigen, wie man eine 
+KDE Applikation und die mit der QT Bibliothek 
+ausgelieferten Tutorial Beispiele erstellt. Dieser
+Leitfaden ist Teil der Integrierten Entwicklungsumgebung 
+KDevelop und fällt damit unter die GNU General Public 
+Licence. Weitere Informationen hierzu unter <ref 
+id="Copyright" name="Copyright">. </abstract> 
+<toc> 
+<chapt>Einleitung
+<p>
+
+Da KDE derzeit zu einem Standard bei den Oberflächen von 
+UNIX Systemen heranwächst, wollen immer mehr Entwickler die
+Vorzüge des sorgfältig geschriebenen API genießen, das das 
+KDE Projekt zum Erstellen neuer Applikationen bereitstellt, 
+die über ein GUI verfügen, und das die einfache Verwendung 
+der von QT/KDE zur Verfügung gestellten Klassen ermöglicht.
+
+Das KDevelop Projekt hat es sich zur Aufgabe gemacht, eine 
+IDE verfügbar zu machen, die es Entwicklern ermöglicht, ihre
+Anwendungen rasch zu erstellen und weiterzuentwickeln, wobei 
+der Schwerpunkt auf KDE liegt.
+
+Da Anfänger immer mit Startschwierigkeiten zu kämpfen haben, 
+versucht dieser Leitfaden, bestimmte Aspekte der
+Erstellung von KDE Anwendungen zu erläutern. Dieses Ziel 
+soll anhand von Anleitungen zur Vorgehensweise, wie man mit 
+Hilfe der KDevelop IDE aus den mit der QT Bibliothekt 
+ausgelieferten Beispielen, lauffähige Anwendungen erstellt, 
+erreicht werden.
+
+Aus diesem Grund erklärt das folgende Kapitel zunächst, wie 
+Sie mit KDevelop ein Projekt erstellen, das bereits eine 
+komplette Anwendung darstellt. Danach wenden wir uns der 
+Online Dokumentation von QT zu, die Quelltexte mit 
+Beispielen zur Anwendung der QT Bibliothek enthält. Das wird 
+Ihnen einen ersten Eindruck vermitteln, wie die 
+darunterliegende Bibliothek funktioniert und wie man die von 
+ihr bereitgestellten Klassen verwendet.
+
+Die QT Bibliothek ist unser Ausgangspunkt; denn KDE basiert 
+auf den QT Klassen, und die KDE Applikationen nutzen diese
+ausgiebig.
+
+Außerdem werden wir uns ansehen, wie man mit dem Application 
+Wizard eine Mini-KDE Anwendung erstellt. Ausgehend von dem 
+bereitgestellten minimalen Gerüst, erstellen wir eine 
+lauffähige KDE Beispielanwendung, die von den KDE 
+Bibliotheken Gebrauch macht, und erläutern die verschiedenen 
+Bestandteile einer KDE Anwendung bis ins Detail.
+
+Das KDevelop Team wünscht Ihnen viel Erfolg beim Erlernen 
+von KDE und QT mit Hilfe dieses Leitfadens und hofft, daß 
+sie danach in der Lage sind, als Programmierer beim 
+KDE Projekt mitzuhelfen.      
+
+<sect>Welche Kenntnisse sollten Sie mitbringen?<p> 
+
+Dieses Handbuch setzt im mindesten grundlegende Kenntnisse 
+der C++ Programmiersprache voraus, die zum Verständnis der 
+Quelltext Beispiele und deren Funktionalität unerläßlich 
+sind. 
+
+Desweiteren setzen wir voraus, daß Sie <htmlurl 
+url="../manual/index.html" name="Das Benutzerhandbuch zu 
+KDevelop"> und <htmlurl url="../programming/index.html" 
+name="The KDevelop Programming Handbook"> gelesen haben und 
+wissen, wie die KDevelop IDE grundsätzlich funktioniert und 
+was erstellte Projekte sind.
+   
+<chapt>Erste Schritte<p> 
+
+Erste Schritte - das bedeutet, sie sollten KDevelop bereits 
+soweit eingerichtet haben, daß es korrekt arbeitet. Stellen 
+Sie sicher, daß sie über das Menü "Hilfe" oder das 
+entsprechende Buch im Dokumentationsbaum Zugriff auf die 
+Online Referenz-Dokumentation von QT haben. Wenn Sie sich 
+die erste Seite der QT Dokumentation anschauen, werden Sie 
+dort Verweise auf die Abschnitte "Tutorial" und "Example 
+Programs" sehen. Unter "Tutorial" finden Sie eine 
+Einführung, die in 14 Schritten die Verwendung der QT 
+Bibliothek zum Erstellen von Anwendungen aufzeigt.
+
+"Example Programs" führt Sie hingegen zu einer Reihe von 
+Beispielprogrammen, die QT beifügt sind und auf die in 
+den Beschreibungen mancher Klassen als beispielhafte 
+Anwendung verwiesen wird. Wenn Sie ein absoluter Neuling 
+sind, sollte Ihnen die Idee, die hinter QT steckt, angenehm 
+erscheinen; die Bereitstellung einer Bibliothek, die 
+folgendes bietet: 
+
+<itemize>
+<item>Eine Basisklasse für Anwendungen (<tt/QApplication/)
+
+<item>Eine Widget Bibliothek für grafische 
+Benutzerschnittstellen.
+
+<item>Ein Sortiment weiterer Hilfsklassen für Grafiken, 
+Datei- und Datenverwaltung.
+
+<item>Der signal-slot Mechanismus für die Kommunikation 
+zwischen Klassen.
+
+<item>Ereignis Überwachung durch event loops und virtuelle 
+Methoden.
+</itemize>
+
+Wenn Sie damit jetzt noch gar nichts anfangen können, 
+sollten Sie in <htmlurl url="../programming/index-2.html#ss2.1" 
+name="The KDevelop Programming Handbook"> mehr über die QT 
+Bibliothek nachlesen. Dort erfahren Sie detaillierte Einzelheiten 
+zu den Grundlagen für eine QT Anwendung. Desweiteren finden Sie 
+dort eine Einführung in die Unterschiede zwischen QT- und 
+KDE-Anwendungen, im ersten Schritt des QT Tutorials sind 
+das aber nicht sonderlich viele. 
+
+Wenn wir uns zunächst mit der QT vertraut machen, ist das 
+nebenbei ein guter Einstieg in die Programmierung von KDE 
+Anwendungen. Darum legen wir ein Projekt an, das nach dem 
+Bearbeiten die Tutorial Anwendungen erstellt.
+
+Dazu starten wir zunächst KDevelop und wählen im 
+Menü "Projekt" den Menüpunkt "Neu". Der Application 
+Wizard erscheint, und Sie müssen sich entscheiden, welche 
+Art von Projekt Sie erstellen möchten. Für QT Anwendungen
+würden Sie QT wählen, aber wir benutzen zum Erstellen 
+unserer Beispiele das Mini-KDE Projekt. Das hat einen ganz 
+einfachen Grund: Die QT Tutorials enthalten nicht besonders 
+viel Code, und würden wir im Application Wizard die QT 
+Anwendung auswählen, hätten wir eine Arbeit, den 
+vorliegenden Code so zu ändern, daß wir ein "echtes" 
+Beispiel erstellen können. 
+
+Auch wenn die Mini-KDE Anwendung nur aus einem leeren 
+Fenster besteht und ebenfalls auf nach der QT Bibliothek und 
+deren Headerdateien sucht, ist sie für unsere Zwecke genau 
+richtig und verlangt keine großen Änderungen. 
+
+Auf der nächsten Seite des Wizards müssen wir die 
+projektspezifischen Informationen eingeben. Hier können 
+wir sämtliche KDE-spezfischen Zusätze weglassen, 
+beispielsweise das Mini-Icon und das Programm Icon, die 
+Dokumentation, usw. Wir geben nur die Informationen ein, die 
+zum Erstellen einer passenden Basis für die einzelnen 
+Schritte des Tutorials von Nutzen sind. 
+
+Da die einzelnen Tutorial Schritte jeweils auf  
+dem in den vorherigen Schritten erstellten Code 
+aufbauen, beginnen wir mit dem Projektnamen <tt/MyWidget/ 
+beginnen. Dadurch wird bereits die Basisklasse erstellt, die 
+in Kapitel 4 benötigt wird, und wir müssen uns später nicht 
+mehr darum kümmern. Da wir mit dem ersten Schritt des 
+Tutorials beginnen wollen, geben wir als Versionsnummer eine 
+'1' an. Diese wird hochgezählt, wenn wir die nächsten 
+Schritte durchlaufen. 
+
+Nun tragen Sie die restlichen benötigten Informationen wie  
+Ihren  Namen, Ihre E-Mail Adresse und das  
+Projekt-Verzeichnis ein. Mehr brauchen wir nicht, und wir 
+können zur nächsten Seite springen. 
+
+Hier können Sie Informationen bezüglich der Versionsverwaltung 
+CVS eingeben. Aber diese Seite interessiert uns nicht. Wir lassen 
+die Voreinstellung für "VCS Unterstützung" auf "Keine" und 
+gehen direkt zur nächsten Seite.
+
+Tragen Sie hier Ihren Dateikopf für die Headerdateien Ihres 
+Projektes ein, oder belassen Sie die Vorgaben. Das gleiche 
+gilt für die 5. Seite, wo selbiges für den Dateikopf der 
+Quelltext-Dateien eingetragen werden kann.
+
+Schließlich sind wir auf der letzten Seite angelangt. Hier 
+müssen wir auf "Erzeugen" klicken, um das Projekt zu 
+erstellen. Ist der Button nicht verfügbar, gehen wir zur 
+ersten Seite zurück und schauen nach, ob wir nicht 
+irgendwo vergessen haben eine benötigte Information 
+einzugeben. 
+
+Ist alles in Ordnung, wurde das Projekt erstellt, und in 
+der letzten Zeile des Ausgabefensters des Application 
+Wizards steht ***Erfolg***. 
+
+Wählen Sie "Abbrechen", um den Wizard zu beenden. Wenn Sie 
+nun links auf die Baumansicht schauen, erkennen Sie, daß 
+das Projekt bereits eine Klasse "MyWidget" enthält. Das ist 
+so, weil wir uns für diese Bezeichnung als Anwendungsnamen 
+entschieden haben. Öffnen wir im Ordner "Globals" der 
+Klassenansicht den Unterordner "Funktionen", erkennen wir, 
+daß die Anwendung bereits eine Funktion <tt/main()/ besitzt, 
+in der die Ausführung des Programmes beginnt.
+
+Die Anwendung ist damit bereits fertiggestellt. Sie könnten 
+nun auf "Erstellen" oder "Ausführen" gehen. Aber wir wollen 
+ja die Tutorial Anwendungen erzeugen, darum fahren wir fort 
+und änderen zuerst den Code, um unsere Tutorial Beispiele zu 
+erstellen. Das ist der nächste Schritt.
+
+<chapt>Das Erstellen der QT Tutorials<p> 
+
+<sect>Schritt 1: Hallo Welt!<p>
+
+Wie im vorangehenden Kapitel erläutert, haben wir bereits 
+ein Projekt mit dem Namen <tt/MyWidget/ erstellt. Wenn Sie 
+nun die erste Seite des QT Tutorials betrachten, werden Sie 
+feststellen, daß die erste Anwendung nur die Funktion <tt/main()/ 
+verwendet. Darum müssen wir jetzt nur die vorgegebene <tt/main()/
+Funktion unseres Projektes ändern, um das erste Beispiel 
+des Tutorials zum Laufen zu bringen.
+
+Um in den Quelltext der Funktion <tt/main()/ 
+zu springen, gehen Sie mit der Maus in den Ordner "Globals", 
+und von dort in den Unterordner "Funktionen", der alle 
+globalen Funktionen enthält, die keiner Klasse angehören. 
+Durch Anklicken des Eintrages von <tt/main()/ öffnet sich 
+die Datei <tt/main.cpp/ im Fenster "C/C++ Dateien", und der 
+Cursor steht am Anfang der ersten Zeile von <tt/main()/.     
+
+<sect1>Die erste Änderung<p>
+
+Wir könnten nun damit beginnen, den vorhandenen Code so zu 
+ändern, daß er dem im Tutorial aufgeführten entspricht. Aber 
+das geht auch einfacher. Markieren Sie den Inhalt von 
+<tt/main()/ mit der Maus oder durch Festhalten der 
+"Shift"-Taste, während Sie die Zeilen mit der 
+Pfeil-nach-unten Taste markieren. Wählen Sie nun 
+"Ausschneiden" aus dem Menü "Bearbeiten" oder betätigen Sie 
+die "Entf"-Taste, um den markierten Code zu entfernen. 
+Dadurch erhalten wir eine leere main Funktion, und wir 
+können ganz von vorn beginnen, um unser erstes Tutorial zu 
+erstellen.
+
+Fügen Sie nun den Code aus dem Beispiel ein. Dazu könnten 
+Sie zunächst das Beispiel sorgfältig studieren und sich 
+danach merken, welche Zeile welchen Code enthält. 
+Nachdem Sie dann die zeilenweise Beschreibung des Tutorials
+gelesen haben, könnten Sie diese als Anleitung verwenden, um
+den Code selbst zu schreiben.
+
+Nun, wer den einfachen Weg gehen möchte, markiert den Inhalt 
+der <tt/main.()/ Funktion im Dokumentationsbrowser und 
+klickt auf das Icon zum Kopieren in der Werkzeugleiste. 
+Alternativ können Sie hierzu auch das Kontextmenü oder den 
+entsprechenden Eintrag aus dem Menü "Bearbeiten" benutzen. 
+Hierdurch wird die Markierung in die Zwischenablage kopiert 
+und kann, nachdem wir ins Quelltext Fenster zurückgekehrt 
+sind, über "Einfügen" (entweder aus dem Kontextmenü, der 
+Werkzeugleiste oder dem entsprechenden Eintrag im Menü 
+"Bearbeiten") in unsere <tt/main.()/ Funktion eingefügt 
+werden. 
+
+Abschließend fügen Sie die Einträge zum Einbinden der 
+entsprechenden Headerdateien außerhalb (und vor!)der 
+<tt/main()/ Funktion hinzu.  
+
+<tscreen><verb> 
+#include <qapplication.h>
+#include <qpushbutton.h> 
+</verb></tscreen> 
+
+Das war's. Da haben Sie den Quellcode für Ihre erste 
+Tutorial Anwendung!
+ 
+<sect1>Wir übersetzen Hello World!<p> 
+
+Um das erste Tutorial zu übersetzen, wählen Sie im Menü 
+"Erstellen" den Punkt "Erstellen", oder klicken Sie auf das 
+entsprechende Icon in der Werkzeugleiste. Genausogut können 
+Sie "Ausführen" nehmen, was dazu führt, daß die Anwendung 
+nach dem Erstellen gestartet wird. Tritt während des 
+Erstellens ein Fehler auf, können Sie davon ausgehen, daß 
+der Fehler beim Programmierer liegt, nicht beim Tutorial! Es 
+wäre zwar traurig, wenn Sie jetzt schon nach einem Fehler 
+suchen müssen, wo Sie doch gerade erst anfangen KDE und/oder 
+QT zu programmieren, aber nutzen Sie diese Gelegenheit 
+einfach dazu, sich im Umgang mit KDevelop zu üben. 
+
+Jetzt gibt es für Sie zwei Möglichkeiten, einen Fehler zu 
+finden: Entweder Sie gehen auf die entsprechende Zeile in 
+der Ausgabeansicht, oder Sie drücken F4. Beides führt 
+dazu, daß im Quelltext die Zeile angesprungen wird, in der der Fehler 
+auftrat. Das selbe Ziel erreichen Sie im Menü "Ansicht", indem Sie 
+dort den Menüpunkt "Nächster Fehler" auswählen.  
+   
+<sect1>Übungen<p>
+
+Übungen? Was soll das? werden Sie sich fragen. Das war so 
+einfach, ich brauche keine Übungen. Aber seien Sie gewiß, 
+es wird noch komplizierter. Das vorangegangene Beispiel war 
+das leichteste, aber mit wachsender Komplexität wird von 
+Ihnen mehr Mitdenken gefordert werden, damit Sie den
+weiteren Schritten des Tutorials folgen können und die 
+Beispiele verstehen. 
+
+Darüberhinaus lernen Sie durch diese Übungen, wie 
+man KDevelop und seine Möglichkeiten einsetzt. Um noch ein 
+wenig mehr aus dem ersten Tutorial zu lernen, sollten Sie 
+einmal versuchen, am bestehenden Code die nachstehenden
+Änderungen vorzunehmen. Finden Sie heraus, welchen Einfluß 
+diese Änderungen auf das Verhalten der Anwendung haben.
+
+<enum>
+<item>Ändern Sie den Pushbutton in ein QLabel. 
+
+<item>Verzichten Sie auf das direkte Setzen des Textes für 
+den Pushbutton im Konstruktor, und verwenden Sie stattdessen 
+<tt/setText()/.
+
+<item>Verwenden Sie <tt/QPushButton::resize ( const QSize & s )/
+anstelle des direkten Setzens von Höhe und Breite. Legen Sie 
+dazu zunächst eine Instanz von <tt/QSize/ mit der 
+gewünschten Größe an. 
+
+<item>Spielen Sie mit den Größen herum, um zu sehen, welche 
+Höhe oder Breite beeinflußt.
+</enum> 
+
+<sect>Schritt 2 und 3: Erweiterungen<p> 
+
+Die Schritte 2 und 3 des Tutorials erweitern das erste 
+Tutorial. Sie lernen darin etwas über signals und slots und 
+über die Eltern-Kind Beziehungen zwischen Widgets. Aber 
+warum ist es eigentlich so wichtig, etwas darüber zu lernen?
+Nun ja, signals und slots verkörpern die Technologie, die 
+den Unterschied zwischen der QT und anderen Widget 
+Bibliotheken ausmacht. Jedes Mal, wenn sie auf ein 
+Implementierungsproblem stoßen, bei dem zwei Objekte 
+miteinander kommunizieren sollen, vereinfacht dieser 
+Mechanismus die Sache ungemein, und es passiert nichts 
+schlimmes, wenn einmal etwas schiefgeht. Selbst Fehler beim 
+Verbinden der Objekte führen nicht zu einem Absturz. Darin 
+liegt die Stärke der QT Bibliothek, und eine Menge KDE/QT 
+Entwickler würden sie aufgrund ihrer Flexibilität nicht mehr 
+missen wollen. 
+
+Das Verständnis des signal/slot Mechanismus ist wesentlich 
+für die Erstellung jeder KDE/QT Anwendung. 
+
+Beachten Sie auch, daß der Button die Instanz von <tt/QApplication/ 
+durch Aufruf von <tt/quit()/ beendet. Dieses <tt/quit()/ 
+begegnet Ihnen wieder, wenn wir uns mit dem KDE Pendant von 
+<tt/QApplication/, der Klasse <tt/KApplication/ 
+beschäftigen.
+
+              
+<sect>Schreiben Sie Ihre eigenen Widgets<p>
+
+Nachdem Sie nun die <tt/main()/ Funktion erfolgreich 
+verändert und erweitert haben, sind wir an dem Punkt 
+angelangt, an dem Sie ein neues Widget erstellen. Ein 
+einzigartiges Widget, das nur mit der Klasse erzeugt werden 
+kann, die Sie in diesem Schritt erstellen werden.
+
+Eigentlich hat der Application Wizard den Code hierfür 
+bereits für Sie erzeugt, so daß es nicht mehr viel zu tun 
+gibt. Sie müssen nur noch den Code, den Übung 4 der Datei 
+<tt/main.cpp/ hinzufügt, in die Headerdatei und die 
+Implementierungsdatei der Klasse <tt/MyWidget/ eintragen. 
+
+Glücklicherweise müssen Sie die Implementierung nur noch dem 
+Konstruktor von <tt/MyWidget/ hinzufügen. Zum Konstruktor 
+gelangen wir durch Anwählen des Eintrages im 
+Klassenbrowser. Damit springen wir automatisch direkt zur 
+Implementierung im Quelltext, zu der Stelle also, wo Sie den 
+Code einfügen müssen. Sie müssen sich nur noch um das 
+Einbinden von <tt/qfont.h/ kümmern. <tt/QFont/ wird 
+ausschließlich im Konstruktor von <tt/MyWidget/ benutzt. 
+Darum fügen wir die Zeile <tt/#include &lt;qfont.h&gt;/ am 
+Anfang von <tt/mywidget.cpp/ ein. 
+
+Zum Starten der Anwendung, gehen Sie einfach auf 
+"Ausführen". Das führt zunächst nach einem automatischen 
+Speichern zum Übersetzen Ihrer Änderungen.
+         
+<sect>Wir Erweitern die Widget Klasse<p>
+
+Übung 5 hat das Ziel, die Widget Klasse zu erweitern. Darum 
+lernen Sie hier auch etwas über virtuelle Funktionen. In 
+unserem Fall werden wir die Funktion <tt/resizeEvent()/ neu 
+schreiben. Abgesehen vom Erweitern unserer Klassen, ist es 
+wichtig zu wissen, daß QT benutzerdefinierte Ereignisse über 
+virtuelle Funktionen abarbeitet, die ein Ereignisobjekt als 
+Parameter übergeben bekommen.
+   
+Darum sollten Sie sich mit den folgenden Klassen der QT 
+Bibliothek vertraut machen:
+ 
+<itemize> 
+<item>QEvent 
+<item>QChildEvent
+<item>QCloseEvent
+<item>QFocusEvent 
+<item>QKeyEvent
+<item>QMouseEvent
+<item>QMoveEvent 
+<item>QPaintEvent
+<item>QResizeEvent
+<item>QTimerEvent 
+</itemize> 
+
+Jedesmal, wenn Sie ein eigenes Widget schreiben, 
+insbesondere dann, wenn damit sichtbare Teile der Anwendung 
+dargestellt werden, müssen Sie die Standard Implementierung 
+der Event-Methoden des Widgets durch eigene 
+Methoden überschreiben, die bestimmte Ereignisse abarbeiten 
+sollen.
+
+Dazu gehört beispielsweise <tt/virtual void mousePressEvent 
+( QMouseEvent * )/, die für die Verarbeitung der 
+Maus-Ereignisse zuständig ist, die ein Kontextmenü 
+aufklappen lassen. 
+
+Bei der Implementierung müssen Sie im Funktionskopf einen 
+formalen Parameter angeben. Die meisten Entwickler vergeben
+für den Parameter den Namen <tt/event/ oder einfach <tt/e/. 
+Nun können Sie die Parameter des Ereignisses abfragen. Bei 
+einem <tt/QMouseEvent/ müssen Sie feststellen, ob das 
+Ereignis durch die rechte, die mittlere oder die linke
+Maustaste ausgelöst wurde.
+
+<sect>Wir fügen eine neue Klasse hinzu<p> 
+
+In Übung 6 werden Sie der Tutorial Anwendung eine neue 
+Klasse hinzufügen müssen. Normalerweise würden Sie jetzt 
+denken: "Ich muß bloß eine Headerdatei und die 
+Implementierungsdatei anlegen, dann bin ich fertig", aber 
+KDevelop macht Ihnen die Sache noch einfacher.
+
+Wenn Sie eine neue Klasse anlegen, sollten Sie dazu immer 
+den Klassengenerator benutzen. Das nimmt Ihnen die ganze 
+Arbeit ab, und Sie müssen der so angelegten Klasse nur noch 
+den spezifischen Code hinzufügen. Um mit dem 
+Klassengenerator eine neue Klasse anzulegen, wählen Sie im 
+Menü "Projekt" den Menüpunkt "Neue Klasse...". Daraufhin 
+öffnet sich ein Dialog, in dem Sie alle notwendigen 
+Informationen zum Erstellen der Klasse eingeben.
+
+Zunächst müssen wir den Namen der Klasse angeben. Das 
+Tutorial verwendet den Namen <tt/LCDRange/, also geben wir 
+diesen ein.
+
+Nun fahren wir mit der Basisklasse fort. Die Basisklasse ist 
+diejenige Klasse, von der unsere Klasse abgeleitet wird. 
+Wenn wir im Tutorial (QT 1.42)nachsehen, erfahren wir, es 
+handelt sich um <tt/QWidget/. Weil fast alle benötigten GUI 
+Klassen von <tt/QWidget/ abgeleitet werden, macht uns der 
+Klassengenerator die Angelegenheit noch leichter. 
+
+Wir lassen das Feld für die Basisklasse leer und markieren unter 
+"Zusätzliche Optionen" die Checkbox "QWidget-Childklasse 
+erzeugen". Dadurch wird in der Headerdatei der Klasse 
+automatisch das <tt/Q_OBJECT/ Makro eingetragen, das für die 
+später (in Kapitel 7) benötigten slots und signals unbedingt 
+notwendig ist. Da die Dateinamen bereits automatisch 
+eingetragen werden, müssen Sie sich darum nicht mehr 
+kümmern. 
+
+Allerdings empfehlen wir Ihnen, das Feld Dokumentation 
+auszufüllen. Es zählt zum guten Stil, der Klasse eine 
+beschreibende Dokumentation mit auf den Weg zu geben, 
+insbesondere wenn der Name der Klasse, hier <tt/LCDRange/, 
+keine genauere Auskunft über den Verwendungszweck des 
+Widgets gibt.            
+
+<sect>Übung 7-14<p>
+
+Sie sind nun für die restlichen Schritte des Tutorials 
+gerüstet und wissen alles, was sie wissen müssen, um die 
+benötigten Klasse zu erstellen und Änderungen daran 
+vorzunehmen. Nach jeder Änderung sollten Sie die Anwendung
+mit "Erstellen" übersetzen und Ihren Code auf Fehler 
+untersuchen. Starten Sie die Anwendung, und verfolgen Sie 
+deren Ausführung. Außerdem sollten Sie mit den "Erstellen" 
+Optionen von KDevelop herumspielen; führen Sie die Anwendung 
+mit einer Kommandozeilenoption aus, beispielsweise 
+--geometry, und debuggen Sie das Programm mit KDbg aus 
+dem "Werkzeuge"-Menü oder dem internen Debugger von 
+KDevelop. 
+
+Danach sollten Sie in der Lage sein, mit den QT Beispielen
+fortzufahren, die im nächsten Kapitel der QT Dokumentation 
+besprochen werden. 
+
+<chapt>Copyright <label id="Copyright"> <p> 
+
+<tscreen><verb> 
+
+KDevelop Copyright 1998,1999 The KDevelop Team.
+
+Dieses Programm ist Freie Software; Sie können Sie  
+weitergeben und/oder  verändern entsprechend den 
+Bestimmungen der GNU General Public License, wie von der 
+Free Software Foundation veröffentlicht, entweder 
+entsprechend Version 2 der Bestimmungen oder (nach ihrer 
+Wahl) jeder späteren Version. Dieses Programm wird in der 
+Hoffnung, daß es nützlich ist, aber OHNE EINE GARANTIE 
+verbreitet; sogar ohne die implizite Garantie der 
+MARKTGÄNGIGKEIT oder EIGNUNG FüR EINEN BESTIMMTEN ZWECK. 
+Lesen Sie die GNU General Public License, um weitere Details 
+zu erfahren. Sie sollten eine Kopie der GNU General Public 
+License zusammen mit diesem Programm erhalten haben; wenn 
+nicht, so schreiben Sie an die Free Software Foundation, 
+Inc., 675 Mass Ave, Cambridge, MA 02139, USA. 
+
+</verb></tscreen>
+</book>
