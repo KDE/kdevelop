@@ -212,7 +212,7 @@ void CKDevelop::initWhatsThis(){
 																											"or by choosing Dialogeditor in the View-menu."));
 	
 	QString output=i18n("Output-View\n\n"
-											"Enables/ disables the output window. The "																
+											"Enables/Disables the output window. The "																
 											"state of the window is displayed by the "
 											"toggle button: if the button is pressed, "
 											"the window is open, otherwise closed.");
@@ -221,7 +221,7 @@ void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_VIEW_OUTPUTVIEW),output);
 	
 	QString treeview=i18n("Tree-View\n\n"
-											"Enables/ disables the tree window. The "																
+											"Enables/Disables the tree window. The "																
 											"state of the window is displayed by the "
 											"toggle button: if the button is pressed, "
 											"the window is open, otherwise closed.");
