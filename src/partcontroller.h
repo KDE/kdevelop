@@ -183,7 +183,7 @@ private:
 	void addHistoryEntry(const KURL & url, int line = -1, int col = -1 );
 	void jumpTo( const HistoryEntry & );
 		
-	QValueList<HistoryEntry> m_history;;
+	QValueList<HistoryEntry> m_history;
 	QValueList<HistoryEntry>::Iterator m_Current;
 	bool m_isJumping;
 	QGuardedPtr<KParts::ReadOnlyPart> m_latestPart;
