@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>432</width>
-            <height>311</height>
+            <width>427</width>
+            <height>330</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,7 +22,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Qmake Project Configuration</string>
+        <string>Qmake Subproject Configuration</string>
     </property>
     <grid>
         <property name="name">
@@ -212,7 +212,7 @@
                                     </sizepolicy>
                                 </property>
                                 <property name="text">
-                                    <string>...</string>
+                                    <string>Browse...</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Browse</string>
@@ -220,6 +220,23 @@
                             </widget>
                         </grid>
                     </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </vbox>
             </widget>
             <widget class="QWidget">
@@ -227,9 +244,9 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Build &amp;Mode</string>
+                    <string>Build &amp;mode</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
@@ -239,7 +256,62 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="3">
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>groupBuildMode</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Build mode</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Set project to be built in release mode</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioDebugMode</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Debug</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be built in debug mode</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>radioReleaseMode</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Release</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be built in release mode</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>checkWarning</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Enable &amp;warnings</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Show compiler warnings</string>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                    <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>groupRequirements</cstring>
                         </property>
@@ -302,17 +374,50 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="0" column="0" rowspan="1" colspan="3">
+                    <spacer>
                         <property name="name">
-                            <cstring>groupBuildMode</cstring>
+                            <cstring>Spacer2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>30</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Compiler</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>GroupBox3</cstring>
                         </property>
                         <property name="title">
-                            <string>Build mode</string>
+                            <string>Precompiler (-D option)</string>
                         </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Set project to be built in release mode</string>
-                        </property>
-                        <vbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
@@ -322,42 +427,198 @@
                             <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget class="QRadioButton">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
-                                    <cstring>radioDebugMode</cstring>
+                                    <cstring>TextLabel1</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Debug</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in debug mode</string>
+                                    <string>Defines</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="KLineEdit" row="0" column="1">
                                 <property name="name">
-                                    <cstring>radioReleaseMode</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Release</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in release mode</string>
+                                    <cstring>m_defines</cstring>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox">
-                                <property name="name">
-                                    <cstring>checkWarning</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Enable &amp;warnings</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Show compiler warnings</string>
-                                </property>
-                            </widget>
-                        </vbox>
+                        </grid>
                     </widget>
-                </grid>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>GroupBox2</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Compiler</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Release flags</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Debug flags</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_debugFlags</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_releaseFlags</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>Spacer4</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Linker</string>
+                </attribute>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>GroupBox2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>379</width>
+                            <height>79</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Linker</string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>11</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>TextLabel2_2_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Release flags</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>TextLabel2_2_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Debug flags</string>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit" row="0" column="1">
+                            <property name="name">
+                                <cstring>m_debugFlagsLink</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KLineEdit" row="1" column="1">
+                            <property name="name">
+                                <cstring>m_releaseFlagsLink</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Directories</string>
+                </attribute>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>GroupBox5</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>379</width>
+                            <height>180</height>
+                        </rect>
+                    </property>
+                    <property name="title">
+                        <string>Paths (-I option)</string>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>TextLabel3</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>11</x>
+                                <y>18</y>
+                                <width>69</width>
+                                <height>22</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Includepath</string>
+                        </property>
+                    </widget>
+                    <widget class="KLineEdit">
+                        <property name="name">
+                            <cstring>m_includePath</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>40</y>
+                                <width>350</width>
+                                <height>22</height>
+                            </rect>
+                        </property>
+                    </widget>
+                </widget>
             </widget>
         </widget>
     </grid>

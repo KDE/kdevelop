@@ -82,6 +82,12 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
       outputFile = m_projectConfiguration->m_subdirName;
     m_projectConfiguration->m_target = m_targetPath->text() + "/" + outputFile;
   }
+  m_projectConfiguration->m_includepath = m_includePath->text();
+  m_projectConfiguration->m_defines = QStringList::split(" ",m_defines->text());
+  m_projectConfiguration->m_cxxflags_debug = QStringList::split(" ",m_debugFlags->text());
+  m_projectConfiguration->m_cxxflags_release = QStringList::split(" ",m_releaseFlags->text());
+  m_projectConfiguration->m_lflags_debug = QStringList::split(" ",m_debugFlagsLink->text());
+  m_projectConfiguration->m_lflags_release = QStringList::split(" ",m_releaseFlagsLink->text());
 
   QDialog::accept();
 }
@@ -134,7 +140,8 @@ void ProjectConfigurationDlg::UpdateControls()
   {
     checkWarning->setChecked(true);
   }
-
+  
+  // Target
   QString targetString = m_projectConfiguration->m_target;
   int slashPos = targetString.findRev('/');
 
@@ -146,6 +153,14 @@ void ProjectConfigurationDlg::UpdateControls()
   else
     m_targetOutputFile->setText(targetString);
   clickSubdirsTemplate();
+
+  // Includepath
+  m_includePath->setText(m_projectConfiguration->m_includepath);    
+  m_defines->setText(m_projectConfiguration->m_defines.join(" "));
+  m_debugFlags->setText(m_projectConfiguration->m_cxxflags_debug.join(" "));
+  m_releaseFlags->setText(m_projectConfiguration->m_cxxflags_release.join(" "));
+  m_debugFlagsLink->setText(m_projectConfiguration->m_lflags_debug.join(" "));
+  m_releaseFlagsLink->setText(m_projectConfiguration->m_lflags_release.join(" "));
 }
 
 void ProjectConfigurationDlg::clickSubdirsTemplate()

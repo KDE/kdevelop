@@ -148,6 +148,18 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools = new QHBox(overviewContainer,"Project buttons");
     projectTools->setMargin ( 2 );
     projectTools->setSpacing ( 2 );
+    // Add subdir
+    addSubdirButton = new QToolButton ( projectTools, "Make button" );
+    addSubdirButton->setPixmap ( SmallIcon ( "folder_new",22 ) );
+    addSubdirButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addSubdirButton->sizePolicy().hasHeightForWidth() ) );
+    addSubdirButton->setEnabled ( true );
+    QToolTip::add( addSubdirButton, i18n( "Add new subdir..." ) );
+    // Create scope
+    createScopeButton = new QToolButton ( projectTools, "Make button" );
+    createScopeButton->setPixmap ( SmallIcon ( "qmake_scopenew.png",22 ) );
+    createScopeButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, createScopeButton->sizePolicy().hasHeightForWidth() ) );
+    createScopeButton->setEnabled ( true );
+    QToolTip::add( createScopeButton, i18n( "Create scope..." ) );
     // build
     buildButton = new QToolButton ( projectTools, "Make button" );
     buildButton->setPixmap ( SmallIcon ( "make_kdevelop.png",22 ) );
@@ -560,13 +572,28 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 
     SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
 
-    if (spitem->isScope)
-      return;
     KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
-    int idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
-    int idBuild = popup.insertItem(SmallIcon("make_kdevelop.png"),i18n("Build"));
-    int idQmake = popup.insertItem(SmallIcon("execute.png"),i18n("Run qmake"));
-    int idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject settings"));
+    
+    int idBuild = -2;
+    int idQmake = -2;
+    int idProjectConfiguration = -2;
+    int idAddSubproject = -2;
+    int idRemoveScope = -2; 
+    
+
+    if (!spitem->isScope)
+    {
+      idBuild = popup.insertItem(SmallIcon("make_kdevelop.png"),i18n("Build"));
+      idQmake = popup.insertItem(SmallIcon("qmakerun.png"),i18n("Run qmake"));
+      idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject settings"));
+      idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
+    }
+    else
+    {
+      idRemoveScope = popup.insertItem(SmallIcon("qmake_scoperemove.png"),i18n("Remove scope..."));
+    }
+    int idAddScope = popup.insertItem(SmallIcon("qmake_scopenew.png"),i18n("Create scope..."));
+    
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -575,8 +602,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 
       bool ok = FALSE;
       QString subdirname = QInputDialog::getText(
-                        tr( "Add Subdir" ),
-                        tr( "Please enter a name for the new subdir." ),
+                        i18n( "Add Subdir" ),
+                        i18n( "Please enter a name for the new subdir." ),
                         QLineEdit::Normal, QString::null, &ok, this );
       if ( ok && !subdirname.isEmpty() )
       {
@@ -594,6 +621,28 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         newitem->subdir = subdirname;
         newitem->path = spitem->path + "/" + subdirname;
         parse(newitem);
+      }
+      else
+        return;
+    }
+    if (r == idAddScope)
+    {
+      bool ok = FALSE;
+      QString scopename = QInputDialog::getText(
+                        i18n( "Create scope" ),
+                        i18n( "Please enter a name for the new scope." ),
+                        QLineEdit::Normal, QString::null, &ok, this );
+      if ( ok && !scopename.isEmpty() )
+      {
+        QString newScopeString;
+        if (spitem->scopeString != "")
+          newScopeString = spitem->scopeString + ":" + scopename;
+        else 
+          newScopeString = scopename;
+
+        spitem->m_RootBuffer->makeScope(newScopeString);
+        parseScope(spitem,newScopeString,spitem->m_RootBuffer);
+        updateProjectFile(spitem);
       }
       else
         return;
@@ -621,6 +670,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
 {
   FileBuffer *Buffer = &(item->m_FileBuffer);
   QString relpath = item->path.mid(projectDirectory().length());
+  // Template variable
   Buffer->removeValues("TEMPLATE");
   if (item->configuration.m_template == QTMP_APPLICATION)
     Buffer->setValues("TEMPLATE",QString("app"),FileBuffer::VSM_RESET);
@@ -628,6 +678,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     Buffer->setValues("TEMPLATE",QString("lib"),FileBuffer::VSM_RESET);
   if (item->configuration.m_template == QTMP_SUBDIRS)
     Buffer->setValues("TEMPLATE",QString("subdirs"),FileBuffer::VSM_RESET);
+  
+  // Config variable
   Buffer->removeValues("CONFIG");
   QStringList configList;
   if (item->configuration.m_buildMode == QBM_RELEASE)
@@ -647,10 +699,33 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   if (item->configuration.m_requirements & QD_X11)
     configList.append("x11");
   Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+  
+  // Config strings
   Buffer->removeValues("TARGET");
   if (item->configuration.m_target.simplifyWhiteSpace()!="")
     Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("INCLUDEPATH");
+  if (item->configuration.m_includepath.simplifyWhiteSpace()!="")
+    Buffer->setValues("INCLUDEPATH",QString(item->configuration.m_includepath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("DEFINES");
+  if (item->configuration.m_defines.count())
+    Buffer->setValues("DEFINES",item->configuration.m_defines,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("QMAKE_CXXFLAGS_DEBUG");
+  if (item->configuration.m_cxxflags_debug.count())
+    Buffer->setValues("QMAKE_CXXFLAGS_DEBUG",item->configuration.m_cxxflags_debug,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("QMAKE_CXXFLAGS_RELEASE");
+  if (item->configuration.m_cxxflags_release.count())
+    Buffer->setValues("QMAKE_CXXFLAGS_RELEASE",item->configuration.m_cxxflags_release,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("QMAKE_LFLAGS_DEBUG");
+  if (item->configuration.m_lflags_debug.count())
+    Buffer->setValues("QMAKE_LFLAGS_DEBUG",item->configuration.m_lflags_debug,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("QMAKE_LFLAGS_RELEASE");
+  if (item->configuration.m_lflags_release.count())
+    Buffer->setValues("QMAKE_LFLAGS_RELEASE",item->configuration.m_lflags_release,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+
+  // Write to .pro file
   Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
+
 }
 
 SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QString &scopeString)
@@ -788,12 +863,12 @@ void TrollProjectWidget::addFile(const QString &fileName)
 void TrollProjectWidget::slotAddFiles()
 {
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  QString  sourceFiles = "Source files (*.cpp *.c *.hpp *.h *.ui)";
-  QString  allFiles = "All files (*)";
+  QString  sourceFiles = i18n("Source files (*.cpp *.c *.hpp *.h *.ui)");
+  QString  allFiles = i18n("All files (*)");
   QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
                                         sourceFiles,
                                         this,
-                                        "Insert existing files",
+                                        i18n("Insert existing files"),
                                         TRUE);
   dialog->addFilter(allFiles);
   dialog->setMode(QFileDialog::ExistingFiles);
@@ -819,8 +894,8 @@ void TrollProjectWidget::slotNewFile()
   bool ok = FALSE;
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   QString filename = QInputDialog::getText(
-                     tr( "Insert New File"),
-                     tr( "Please enter a name for the new file." ),
+                     i18n( "Insert New File"),
+                     i18n( "Please enter a name for the new file." ),
                      QLineEdit::Normal, QString::null, &ok, this );
   if ( ok && !filename.isEmpty() )
   {
@@ -956,8 +1031,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         {
           bool ok = FALSE;
           QString filename = QInputDialog::getText(
-                            tr( "Insert New File"),
-                            tr( "Please enter a name for the new file." ),
+                            i18n( "Insert New File"),
+                            i18n( "Please enter a name for the new file." ),
                             QLineEdit::Normal, QString::null, &ok, this );
           if ( ok && !filename.isEmpty() )
           {
@@ -1184,6 +1259,19 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.getValues("TARGET",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_target = lst[0];
+    item->m_FileBuffer.getValues("INCLUDEPATH",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_includepath = lst[0];
+    item->m_FileBuffer.getValues("DEFINES",lst,minusListDummy);
+    item->configuration.m_defines = lst;
+    item->m_FileBuffer.getValues("QMAKE_CXXFLAGS_DEBUG",lst,minusListDummy);
+    item->configuration.m_cxxflags_debug = lst;
+    item->m_FileBuffer.getValues("QMAKE_CXXFLAGS_RELEASE",lst,minusListDummy);
+    item->configuration.m_cxxflags_release = lst;
+    item->m_FileBuffer.getValues("QMAKE_LFLAGS_DEBUG",lst,minusListDummy);
+    item->configuration.m_lflags_debug = lst;
+    item->m_FileBuffer.getValues("QMAKE_LFLAGS_RELEASE",lst,minusListDummy);
+    item->configuration.m_lflags_release = lst;
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)

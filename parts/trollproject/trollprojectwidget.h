@@ -46,6 +46,12 @@ struct ProjectConfiguration
   int             m_requirements;
   QString         m_target;
   QString         m_subdirName;
+  QString         m_includepath;
+  QStringList     m_defines;
+  QStringList     m_cxxflags_debug;
+  QStringList     m_cxxflags_release;
+  QStringList     m_lflags_debug;
+  QStringList     m_lflags_release;
 };
 
 
@@ -95,7 +101,7 @@ public:
     QStringList headers_exclude;
     QStringList forms;
     QStringList forms_exclude;
-
+    
     ProjectConfiguration configuration;
 
     FileBuffer m_FileBuffer;
@@ -204,6 +210,8 @@ private:
     QVBox     *overviewContainer;
     KListView *overview;
     QHBox     *projectTools;
+    QToolButton *addSubdirButton;
+    QToolButton *createScopeButton;
     QToolButton *buildButton;
     QToolButton *rebuildButton;
     QToolButton *runButton;
