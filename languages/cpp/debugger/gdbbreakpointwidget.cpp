@@ -235,7 +235,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     header->setLabel( Status,       i18n("Status") );
     header->setLabel( Location,     i18n("Location") );
     header->setLabel( Condition,    i18n("Condition") );
-    header->setLabel( IgnoreCount,  i18n("Ignore count") );
+    header->setLabel( IgnoreCount,  i18n("Ignore Count") );
     header->setLabel( Hits,         i18n("Hits") );
 
     m_table->show();
@@ -650,11 +650,14 @@ void GDBBreakpointWidget::slotRemoveBreakpoint()
 
 void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 {
+  while (m_table->numRows() > 0)
+  {    
     for ( int row = m_table->numRows()-1; row>=0; row-- )
     {
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
         removeBreakpoint(btr);
     }
+  }
 }
 
 /***************************************************************************/
