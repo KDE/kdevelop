@@ -16,13 +16,12 @@
 #include <qdom.h>
 #include <qdir.h>
 #include <qfile.h>
-
 void DoxyDoc::formatType( QString& str ) {
 	str.remove( ' ' );
 };
 
 DoxyDoc::DoxyDoc( const QStringList& dir ) {
-	for (int i = 0; i < dir.count(); ++i)
+	for (uint i = 0; i < dir.count(); ++i)
 		m_dirs.push_back(QDir(*(dir.at(i))));
 }
 
@@ -58,7 +57,7 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 	QString type = tmptype;
 	formatType( type );
 
-	for ( int i = 0; i < m_list.count(); ++i ) {
+	for ( uint i = 0; i < m_list.count(); ++i ) {
 		if ( m_list.item( i ).childNodes().item( 3 ).toElement().text() == name ) {
 			QDomNodeList nodes = m_list.item( i ).childNodes();
 			QString nodetype = nodes.item( 0 ).toElement().text();
@@ -70,20 +69,20 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 			if ( nodetype == type ) {
 				QString nodearguments = "";
 				QString arguments = tmparguments;
-				formatType( arguments );
 				if (!arguments)
 					arguments = "";
 
-				int j = 4;
+				formatType( arguments );
+
+				uint j = 4;
 				for (; j < nodes.count() && nodes.item( j ).nodeName() == "param"; ++j ) {
 					nodearguments += nodes.item( j ).childNodes().item( 0 ).toElement().text() + ",";
 				}
 
-				if ( nodearguments ) {
+				if ( nodearguments != "") {
 					nodearguments = nodearguments.left( nodearguments.length() - 1 );
 					formatType( nodearguments );
-				} else
-					nodearguments = "";
+				}
 
 				if ( arguments == nodearguments ) {
 					if (nodes.item(j).nodeName() == "exceptions")
@@ -93,7 +92,7 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 				QString paramstr = "";
 				QDomNode detail = nodes.item( j );
 				QDomNode descnode;
-				for (int index = 0; index < detail.childNodes().count(); ++index){
+				for (uint index = 0; index < detail.childNodes().count(); ++index){
 					descnode = detail.childNodes().item(index);
 					if (descnode.hasChildNodes() && descnode.childNodes().item(0).nodeName() == "parameterlist"){
 						int tmpcount = descnode.childNodes().count();

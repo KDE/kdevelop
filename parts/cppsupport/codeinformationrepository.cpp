@@ -64,7 +64,7 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
     while( it != m_catalogs.end() ){
         Catalog* catalog = it.data();
         ++it;
-	
+
 	kdDebug(9020) << "try with the catalog " << catalog->dbName() << endl;
 
         tags = catalog->query( args );
@@ -278,11 +278,18 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
 		    }
 		}
 
+		QString comment = tag.attribute("description").toString();
+		if (comment)
+			entry.comment = comment;
+		else
+			entry.comment = "no documentation available!";
+
 		if( signature.isEmpty() )
 		    entry.text += ")";
 		else
 		    entry.postfix = signature + ")";
 	    }
+
 	    break;
 
 	    case Tag::Kind_Enumerator:

@@ -256,6 +256,9 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     parseFunctionArguments( tag, d );
 
+	QString arguments = tag.attribute("a").toStringList().join(",");
+    tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace(".",":"), id, typeOfDeclaration(typeSpec, d), arguments));
+
     tagBuilder.setAccess( TagUtils::stringToAccess(m_currentAccess) );
 
     tagBuilder.setFriend( isFriend );
@@ -536,7 +539,7 @@ void TagCreator::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storage
 
 	QString arguments = tag.attribute("a").toStringList().join(",");
     QString scopeStr = m_currentScope.join("::");
-    tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace('.',"::"), id, type, arguments));
+    tag.setAttribute("description", m_documentation->functionDescription(scopeStr, id, type, arguments));
 
     m_catalog->addItem( tag );
 }
