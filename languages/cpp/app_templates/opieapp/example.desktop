@@ -1,11 +1,14 @@
 [Desktop Entry]
 Comment=An %{APPNAME} Program
+Comment[ar]=An %{APPNAME} برنامج
 Comment[ca]=Un programa %{APPNAME}
 Comment[da]=Et %{APPNAME} program
 Comment[de]=Ein %{APPNAME} Program
 Comment[es]=Un programa %{APPNAME}
 Comment[et]=%{APPNAME} programm
+Comment[eu]=%{APPNAME} programa bat
 Comment[fr]=Un programme %{APPNAME}
+Comment[ga]=Clár %{APPNAME}
 Comment[hu]=%{APPNAME} program
 Comment[it]=Un programma per %{APPNAME}
 Comment[ja]=%{APPNAME} プログラム
