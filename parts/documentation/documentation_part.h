@@ -97,6 +97,9 @@ protected slots:
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
     void contextMenu(QPopupMenu *popup, const Context *context);
     
+private slots:
+    void init();
+    
 private:
     QGuardedPtr<DocumentationWidget> m_widget;
     ConfigWidgetProxy *m_configProxy;

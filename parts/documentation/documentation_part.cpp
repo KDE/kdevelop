@@ -21,6 +21,7 @@
 
 #include <unistd.h>
 
+#include <qtimer.h>
 #include <qdir.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
@@ -104,11 +105,9 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
     
     setupActions();
     
-    loadDocumentationPlugins();
+    QTimer::singleShot(0, this, SLOT(init()));
     
     new KDevDocumentationIface(this);
-
-    loadSettings();
 }
 
 DocumentationPart::~DocumentationPart()
@@ -666,6 +665,12 @@ void DocumentationPart::loadSettings()
                 break;
         }
     }
+}
+
+void DocumentationPart::init( )
+{
+    loadDocumentationPlugins();
+    loadSettings();
 }
 
 #include "documentation_part.moc"
