@@ -272,6 +272,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	        m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	    }
 
+#if 0
 	    m_backgroundParser->lock();
 	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
 		classStore()->removeWithReferences( fileName );
@@ -287,6 +288,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		
 	    }
 	    m_backgroundParser->unlock();	    
+#endif
 	}	
     }
 }
