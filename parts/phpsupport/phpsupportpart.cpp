@@ -124,8 +124,12 @@ PHPSupportPart::~PHPSupportPart()
     }
 
     delete( phpExeProc );
-    delete( m_phpErrorView );
-    mainWindow()->removeView( m_phpErrorView );
+
+    if(m_phpErrorView){
+      mainWindow()->removeView( m_phpErrorView );
+      delete( m_phpErrorView );
+      m_phpErrorView = 0;
+    }
 }
 
 void PHPSupportPart::slotActivePartChanged(KParts::Part *part){
