@@ -31,6 +31,7 @@ qt_docdirs=""
 )
 
 qt_docdirs="/usr/doc/qt-doc/html /usr/local/qt/html /usr/local/lib/qt/html /usr/lib/qt/doc/html /usr/X11/lib/qt/html /usr/X11/lib/qt/doc/html /usr/X11R6/share/doc/qt/html"
+test -n "$QTDIR" && qt_docdirs="$QTDIR/html $QTDIR/doc/html $QTDIR/doc $qt_docdirs"
 qt_docdirs="$ac_qt_docdirs $qt_docdirs"
 AC_FIND_FILE(classes.html, $qt_docdirs, qt_docdir)
 AC_MSG_RESULT($qt_docdir)
