@@ -135,6 +135,8 @@ private: //methods
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
     void loadVcs();
+	void updateNextButtons();
+
 	void populateFavourites();
 	void addFavourite(QListViewItem* item, QString favouriteName="");
 	ApplicationInfo* findFavouriteInfo(QIconViewItem* item);

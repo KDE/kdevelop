@@ -536,6 +536,18 @@
         <slot>templatesTreeViewClicked(QListViewItem*)</slot>
     </connection>
     <connection>
+        <sender>author_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>version_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDialogBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
         <sender>appname_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>AppWizardDialogBase</receiver>

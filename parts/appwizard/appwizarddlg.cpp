@@ -290,20 +290,25 @@ void AppWizardDialog::loadVcs()
 }
 
 
+void AppWizardDialog::updateNextButtons()
+{
+	bool validGeneralPage = m_pCurrentAppInfo
+							&& !appname_edit->text().isEmpty()
+							&& m_pathIsValid;
+	bool validPropsPage = !version_edit->text().isEmpty()
+							&& !author_edit->text().isEmpty();
+
+	setFinishEnabled(m_lastPage, validGeneralPage && validPropsPage);
+	nextButton()->setEnabled(
+		currentPage() == generalPage ? validGeneralPage : validPropsPage );
+}
+
 void AppWizardDialog::textChanged()
 {
     licenseChanged();
 
-    bool invalid = !m_pCurrentAppInfo
-        || appname_edit->text().isEmpty()
-        || !m_pathIsValid
-        || author_edit->text().isEmpty()
-        || version_edit->text().isEmpty();
-    setFinishEnabled(m_lastPage, !invalid);
-    nextButton()->setEnabled(!invalid);
-
+	updateNextButtons();
 }
-
 
 void AppWizardDialog::licenseChanged()
 {
@@ -642,7 +647,6 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             addPage(edit, i18n("Template for .%1 Files").arg(fileTemplate.suffix));
             m_fileTemplates.append(fileTemplate);
         }
-        // licenseChanged(); // update template editors
         textChanged(); // calls licenseChanged() && update Next button state
     } else {
         m_pCurrentAppInfo=0;
@@ -699,13 +703,7 @@ void AppWizardDialog::projectLocationChanged()
   } else {
     m_pathIsValid=true;
   }
-    bool invalid = !m_pCurrentAppInfo
-       || appname_edit->text().isEmpty()
-       || !m_pathIsValid
-       || author_edit->text().isEmpty()
-       || version_edit->text().isEmpty();
-    setFinishEnabled(m_lastPage, !invalid);
-    nextButton()->setEnabled(!invalid);
+	updateNextButtons();
 }
 
 
