@@ -20,8 +20,7 @@ class KDevComponentManager;
 
 class PartLoader
 {
-private:
-	friend class KDevComponentManager;
+public:
   // Loads a component with a known service name.
   static QObject *loadByName(QWidget *parent, const QString &name,
                              const char *className);
