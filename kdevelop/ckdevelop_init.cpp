@@ -1323,7 +1323,7 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
   connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
+//  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
   connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
   // connect the windowsmenu with a method

@@ -314,6 +314,7 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
         kdDebug() << "Error: caugth NULL POINTER! can't be! uh ?" << endl;
         return;
     }
+
     //signalMethod -> asString ( strSigMethod );
     kdDebug() << "signalMethod: " << strSignalMethod.data() << endl;
     kdDebug() << "slotMethod: " << strSlotMethod.data() << endl;
@@ -321,11 +322,19 @@ void CClassPropertiesDlgImpl::applySignalSlotMapImplementation()
     kdDebug() << "implMethod: " << strImplMethod.data() << endl;
 
     if ( Member.isEmpty() )
-      Member = "this";
+    {
+        bMemberIsPointer = true;
+        Member = "this";
+    }
 
-    toAdd = "connect( " + Member + ", ";
-    toAdd = toAdd + "SIGNAL( " + strSignalMethod + " ), ";
-    toAdd = toAdd + "SLOT( " + strSlotMethod + " ) );";
+    toAdd = "connect( "
+            + (bMemberIsPointer) ? QString("") : QString("&")
+            + Member
+            + ", SIGNAL( "
+            + strSignalMethod
+            + " ), SLOT( "
+            + strSlotMethod
+            + " ) );";
 
     kdDebug() << " toAdd = " << toAdd.data() << endl;
 
@@ -1178,6 +1187,10 @@ void CClassPropertiesDlgImpl::getMemberFromString ( const QString& str, QString&
       workClassAttrList = currentClass -> getSortedAttributeList();
 
     spos = str.length() - str.find(" ");
+    if (str.find("*")>-1)
+        bMemberIsPointer = true;
+    else
+        bMemberIsPointer = false;
     //if( spos == -1) spos = 0;
     newName = str.right(spos-1);
     kdDebug() << "parsed name: '" << newName.data() << "'" << endl;

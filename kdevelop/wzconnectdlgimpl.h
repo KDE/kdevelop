@@ -169,6 +169,8 @@ private: // Private attributes
   /**  */
   QList <CParsedAttribute>* workClassAttrList;
   CClassToolDlg* CTDlg;
+  /**  */
+  bool bMemberIsPointer;
   void applyAddAttribute();
   void applyAddMethod();
   void applySignalSlotMapImplementation();
