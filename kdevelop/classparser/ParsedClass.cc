@@ -180,10 +180,7 @@ CParsedMethod *CParsedClass::getMethod( CParsedMethod &aMethod )
 {
   CParsedMethod *retVal = NULL;
 
-  for( retVal = methods.first(); 
-       retVal != NULL && !retVal->isEqual( aMethod );
-       retVal = methods.next() )
-    ;
+  retVal = CParsedContainer::getMethod( aMethod );
 
   // If none was found try with the slots.
   if( retVal == NULL )

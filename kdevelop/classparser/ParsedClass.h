@@ -99,13 +99,19 @@ public: // Metods to set attribute values
 
 public: // Public queries
 
-  /** Get a method by comparing with another method. */
+  /** Get a method by comparing with another method. 
+   * @param aMethod Method to compare with.
+   */
   CParsedMethod *getMethod( CParsedMethod &aMethod );
 
-  /** Get a signal by using its' name and arguments. */
+  /** Get a signal by using its' name and arguments. 
+   * @param aName Name and arguments of the signal to fetch.
+   */
   CParsedMethod *getSignalByNameAndArg( const char *aName );
 
-  /** Get a slot by using its' name and arguments. */
+  /** Get a slot by using its' name and arguments. 
+   * @param aName Name and arguments of the slot to fetch.
+   */
   CParsedMethod *getSlotByNameAndArg( const char *aName );
 
   /** Get all signals in sorted order. */
@@ -117,7 +123,9 @@ public: // Public queries
   /** Get all virtual methods. */
   QList<CParsedMethod> *getVirtualMethodList();
 
-  /** Check if this class has the named parent. */
+  /** Check if this class has the named parent. 
+   * @param aName Name of the parent to check.
+   */
   bool hasParent( const char *aName );
 
   /** Check if the class has any virtual methods. */
@@ -128,11 +136,17 @@ public: // Public queries
 
 public: // Implementation of virtual methods
 
-  /** Initialize the object from a persistant string. */
-  virtual int fromPersistantString( const char *dataStr, int startPos );
-
-  /** Return a string made for persistant storage. */
+  /** Return a string made for persistant storage. 
+   * @param str String to store the result in.
+   * @return Pointer to str.
+   */
   virtual const char *asPersistantString( QString &dataStr );
+
+  /** Initialize the object from a persistant string. 
+   * @param str String to initialize from.
+   * @param startPos Position(0-based) at which to start.
+   */
+  virtual int fromPersistantString( const char *dataStr, int startPos );
 
   /** Output the class as text on stdout. */
   void out();
