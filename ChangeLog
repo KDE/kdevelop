@@ -1,3 +1,6 @@
+2002-04-08  Roberto Raggi <raggi@cli.di.unipi.it>
+	* Fixed text insertion in Multi-language code template
+	
 2002-04-07  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Fixed existing and potential memory leaks in class store
 	  with a more modern api. Big textual changes, no changes 

@@ -75,7 +75,7 @@ void AbbrevPart::load()
         }
     }
 }
-    
+
 
 void AbbrevPart::save()
 {
@@ -152,7 +152,7 @@ void AbbrevPart::slotExpandAbbrev()
         kdDebug() << "no viewcursor" << endl;
         return;
     }
-    
+
     QString word = currentWord(editiface, cursoriface);
     kdDebug(9028) << "Expanding word " << word << " with suffix " << suffix << "." << endl;
 
@@ -186,25 +186,44 @@ void AbbrevPart::insertChars(KTextEditor::EditInterface *editiface,
                              const QString &chars)
 {
     bool bMoveCursor = false;
-    unsigned int line, col;
+    unsigned int line=0, col=0;
+    unsigned int currentLine=0, currentCol=0;
+
+    cursoriface->cursorPositionReal( &currentLine, &currentCol );
+
+    QString spaces;
+    QString s = editiface->textLine( currentLine );
+    uint i=0;
+    while( i<s.length() && s[ i ].isSpace() ){
+        spaces += s[ i ];
+        ++i;
+    }
+
     QStringList l = QStringList::split( "\n", chars, true );
-    for( int i=0; i<l.count(); ++i ) {
+    for( int i=0; i<l.count(); ++i ){
         QString s = l[ i ];
         int idx = s.find( '|' );
-        if( idx != -1 ) {
-            cursoriface->cursorPositionReal( &line, &col );
-            editiface->insertText( line, col, s.left(idx) );
+        if( idx != -1 ){
+            QString tmp = s.left( idx );
+            editiface->insertText( currentLine, currentCol, tmp );
+            currentCol += tmp.length();
+
+            line = currentLine;
+            col = currentCol;
             bMoveCursor = true;
-            cursoriface->cursorPositionReal( &line, &col );
-            editiface->insertText( line, col, s.mid(idx+1) );
+
+            tmp = s.mid( idx + 1 );
+            editiface->insertText( currentLine, currentCol, tmp );
+            currentCol += tmp.length();
         } else {
-            cursoriface->cursorPositionReal( &line, &col );
-            editiface->insertText( line, col, s );
+            editiface->insertText( currentLine, currentCol, s );
+            currentCol += s.length();
         }
 
         if( i != l.count()-1 ){
-            cursoriface->cursorPositionReal( &line, &col );
-            editiface->insertText( line, col, "\n" );
+            editiface->insertLine( ++currentLine, spaces );
+            currentCol = spaces.length();
+            //pView->keyReturn();
         }
     }
 
