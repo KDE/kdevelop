@@ -56,6 +56,8 @@ public slots:
     void configWidget( KDialogBase* );
 
 private slots:
+    void slotPartAdded( KParts::Part* );
+    void slotPartRemoved( KParts::Part* );
     void slotActivePartChanged( KParts::Part* );
     void slotTextChanged();
     void slotSelected( QListViewItem* );

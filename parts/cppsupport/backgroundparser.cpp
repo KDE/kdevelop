@@ -61,6 +61,8 @@ void BackgroundParser::run()
     parser.setFileName( m_fileName );
 
     parser.parseTranslationUnit();
+	
+	kdDebug(9007) << "FINISHED!!" << endl;
 }
 
 

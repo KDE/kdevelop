@@ -82,6 +82,10 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
 
     connect( part->partController(), SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(slotActivePartChanged(KParts::Part*)) );
+    connect( part->partController(), SIGNAL(partAdded(KParts::Part*)),
+             this, SLOT(slotPartAdded(KParts::Part*)) );
+    connect( part->partController(), SIGNAL(partRemoved(KParts::Part*)),
+             this, SLOT(slotPartRemoved(KParts::Part*)) );
 
     connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
 
@@ -218,6 +222,20 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
     ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
     connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
+}
+
+void ProblemReporter::slotPartAdded( KParts::Part* )
+{
+
+}
+
+void ProblemReporter::slotPartRemoved( KParts::Part* part )
+{
+    if( part == m_document ){
+        m_document = 0;
+        m_editor = 0;
+        m_timer->stop();
+    }
 }
 
 #include "problemreporter.moc"
