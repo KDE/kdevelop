@@ -4,7 +4,7 @@
 SUBDIRS = . imports common kapp kpartapp kpartplugin kappjava javahello kcmodule kicker kioslave \
 	  kdevpart kdevpart2 pythonhello pyqt phphello chello cpphello gnomeapp kscreensaver \
 	  kofficepart chello_gba dcopservice konqnavpanel qmakesimple qmakeapp khello kateplugin\
-	  qtopiaapp fortranhello adahello kdedcop \
+	  qtopiaapp fortranhello adahello kdedcop wxhello \
 	  perlhello rubyhello bashhello pascalhello fpcsharedlib fpchello\
 	  fpcgtk superwaba cppsdlhello
 

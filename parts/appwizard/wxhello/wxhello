@@ -1,0 +1,6 @@
+# wxWindows Config File
+[General]
+Name=Simple Hello wxWindows Application
+Category=C++/wxWindows
+Comment=Generates a simple wxWindows Hello application.
+FileTemplates=h,CStyle,cpp,CStyle
