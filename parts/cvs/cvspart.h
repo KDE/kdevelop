@@ -12,7 +12,6 @@
 #ifndef _CVSPART_H_
 #define _CVSPART_H_
 
-#include <kdialogbase.h>
 #include <qguardedptr.h>
 
 #include "kdevplugin.h"
@@ -20,6 +19,7 @@
 class Context;
 class QPopupMenu;
 class CvsWidget;
+class KDialogBase;
 
 class CvsPart : public KDevPlugin {
     Q_OBJECT

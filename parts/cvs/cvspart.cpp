@@ -20,6 +20,7 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
+#include <kdialogbase.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
