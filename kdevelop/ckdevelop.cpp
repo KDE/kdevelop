@@ -2720,14 +2720,16 @@ void CKDevelop::slotSwitchToToplevelMode() {
 }
 
 void CKDevelop::slotUpdateDebuggerViewsMenu(){
-  // check/uncheck menu items
-  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, dockbase_var_viewer->mayBeHide());
-  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, dockbase_brkptManager_view->mayBeHide());
-  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK, dockbase_frameStack_view->mayBeHide());
-  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE, dockbase_disassemble_view->mayBeHide());
+  if(dockbase_brkptManager_view != 0L){ // XXX needs a better rule (when is debug on and off?)
+    // check/uncheck menu items
+    debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, dockbase_var_viewer->mayBeHide());
+    debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, dockbase_brkptManager_view->mayBeHide());
+    debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK, dockbase_frameStack_view->mayBeHide());
+    debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE, dockbase_disassemble_view->mayBeHide());
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER, dockbase_dbg_widget_view->mayBeHide());
+    debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER, dockbase_dbg_widget_view->mayBeHide());
 #endif
+  }
 }
 
 void CKDevelop::statusCallback(int id_){
