@@ -5,5 +5,5 @@ if include_cvsservice
 CVSSERVICE_SUBDIR = cvsservice
 endif
 
-SUBDIRS = clearcase cvs $(CVSSERVICE_SUBDIR) perforce subversion
+SUBDIRS = cvsclient clearcase $(CVSSERVICE_SUBDIR) perforce subversion
 
