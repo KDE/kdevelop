@@ -78,16 +78,31 @@ void AddFileDialog::accept()
 		}
 		child = child->nextSibling();
 	}
-
+	
 	if (templateCheckBox->isChecked()) {
 		QString srcdir = m_widget->projectDirectory();
-		QString destdir = subProject->subdir;
+		QString destdir = subProject->path;
 		QString destpath = destdir + "/" + name;
 		if (QFileInfo(destpath).exists()) {
 			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
 			return;
 		}
-		FileTemplate::copy(m_part, "cpp", destpath);
+		if( !FileTemplate::copy(m_part, "cpp", destpath) )
+		    kdDebug(9020) << "cannot create file " << destpath << endl;
+	} else {
+		// create an empty file
+		QString srcdir = m_widget->projectDirectory();
+		QString destdir = subProject->path;
+		QString destpath = destdir + "/" + name;
+		
+		if (QFileInfo(destpath).exists()) {
+			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
+			return;
+		}
+		
+		QFile f( destpath ); 
+		if( f.open(IO_WriteOnly) )
+		    f.close();
 	}
 
 	FileItem *fitem = m_widget->createFileItem(name);
