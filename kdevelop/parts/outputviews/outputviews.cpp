@@ -101,5 +101,5 @@ void AppOutputView::setupGUI()
 
 void AppOutputView::stopButtonClicked()
 {
-    m_widget->compilationAborted();
+    m_widget->stopButtonClicked();
 }
