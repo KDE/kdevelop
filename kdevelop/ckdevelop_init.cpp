@@ -1244,6 +1244,8 @@ void CKDevelop::initConnections(){
 
 void CKDevelop::initProject(bool witharg){
 
+  config->setGroup("General Options");
+
   bool bLastProject;
   if(!witharg)
     bLastProject= config->readBoolEntry("LastProject",true);
