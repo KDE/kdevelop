@@ -1075,6 +1075,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
     case PROTECTED:
       declaredScope = PIE_PROTECTED;
       methodType = 0;
+      break;
     case PRIVATE:
       declaredScope = PIE_PRIVATE;
       methodType = 0;
