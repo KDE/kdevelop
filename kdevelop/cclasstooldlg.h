@@ -103,7 +103,7 @@ protected: // Private widgets
   QLabel filler;
   QPushButton attributesBtn;
   QPushButton methodsBtn;
-  QPushButton virtualsBtn;
+  //  QPushButton virtualsBtn;
   QComboBox exportCombo;
 
 protected slots:
