@@ -473,7 +473,7 @@ void CNewClassDlg::initQuickHelp(){
   QWhatsThis::add(impl_edit, implMsg);
 
   QString docMsg = i18n("Insert a short description for your new class\n"
-                                "here for documenation purposes. This will be used\n"
+                                "here for documentation purposes. This will be used\n"
                                 "for the API-documentation you can create or update\n"
                                 "after the class is created.");
   QWhatsThis::add(doc_group, docMsg);

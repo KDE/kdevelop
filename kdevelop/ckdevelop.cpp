@@ -2915,7 +2915,12 @@ void CKDevelop::slotStatusMsg(const QString& text)
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
   statProg->reset();
-  m_statusLabel->setText(text );
+
+  int actualWidth = m_statusLabel->fontMetrics().width(text);
+  int realLetterCount = text.length();
+  int newLetterCount = (m_statusLabel->width() * realLetterCount) / actualWidth;
+  if (newLetterCount > 3) newLetterCount -= 4;
+  m_statusLabel->setText(text.left(newLetterCount));
 }
 
 
@@ -3071,8 +3076,13 @@ void CKDevelop::slotURLonURL(const QString& url )
   if (corr.left(5)=="file:")
     url_str=corr;
 
-  if ( url_str )
-    m_statusLabel->setText(url_str );
+  if ( url_str ) {
+    int actualWidth = m_statusLabel->fontMetrics().width(url_str);
+    int realLetterCount = url_str.length();
+    int newLetterCount = (m_statusLabel->width() * realLetterCount) / actualWidth;
+    if (newLetterCount > 3) newLetterCount -= 4;
+    m_statusLabel->setText(url_str.left(newLetterCount));
+  }
   else
     m_statusLabel->setText(i18n("Ready.") );
 }
