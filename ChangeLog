@@ -35,7 +35,6 @@
 1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed portuguese documentation Makefile.am, added png logo
 
->>>>>>> 1.283
 1999-07-18 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* fixed some bugs, when generating bool properties (kdlgedit)
 	* finished the "make manual" dialog implementation
