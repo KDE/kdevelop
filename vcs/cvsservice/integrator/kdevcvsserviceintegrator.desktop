@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KDevCVSIntegrator
+Comment=CVS Service Project Integration Facility
+Icon=cervisia
+Exec=blubb
+ServiceTypes=KDevelop/VCSIntegrator
+X-KDE-Library=libcvsserviceintegrator
+X-KDevelop-Default=true
+X-KDevelop-VCS=CVS
+X-KDevelop-VCSPlugin=KDevCvsService
+X-KDevelop-Version=3

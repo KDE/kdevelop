@@ -1,0 +1,156 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>FetcherDlgBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>FetcherDlgBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>458</width>
+            <height>110</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string></string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QComboBox" row="1" column="1">
+            <property name="name">
+                <cstring>module</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabel1_2_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Branch Tag:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>comboBox5</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Repository:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>repository</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>repository</cstring>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>pushButton2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Fetch &amp;List</string>
+            </property>
+            <property name="accel">
+                <string>Alt+L</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Module:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>module</cstring>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>comboBox5</cstring>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="3" column="1">
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>repository</tabstop>
+    <tabstop>module</tabstop>
+    <tabstop>pushButton2</tabstop>
+    <tabstop>comboBox5</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
