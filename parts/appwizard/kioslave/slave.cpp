@@ -48,9 +48,12 @@ void kio_$APPNAMELC$Protocol::get(const KURL& url )
     kdDebug() << "myURL: " << url.prettyURL() << endl;
     
     infoMessage(i18n("Looking for %1...").arg( remoteServer ) );
+    // Send the mimeType as soon as it is known
+    mimeType("text/plain");
+    // Send the data
     QString theData = "This is a test of $NAME$";
     data(QCString(theData.local8Bit()));
-    data(QByteArray());
+    data(QByteArray()); // empty array means we're done sending the data
     finished();
 }
 
