@@ -29,7 +29,7 @@
 //#include "KDevComponentManager.h"
 
 
-BugListComponent::BugListComponent (QObject *parent, const char *name, const QStringList &args)
+BugListComponent::BugListComponent (QObject *parent, const char *name, const QStringList &)
 :KDevPlugin (parent, name)
 {
 //    setInstance(BugListFactory::instance());
