@@ -92,6 +92,7 @@ private:
   void saveSettings();
 
   void moveRelativeTab(unsigned int);
+  void raiseTabbar( KTabZoomWidget *tabBar );
 
   KAction* m_stopProcesses;
 

@@ -481,28 +481,30 @@ void TopLevelSDI::slotPartAdded(KParts::Part* part)
   connect( part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 }
 
+void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar )
+{
+  if ( !tabBar )
+    return;
+
+  if ( tabBar->isRaised() && !tabBar->isDocked() )
+    tabBar->lowerAllWidgets();
+  else
+    tabBar->raiseWidget( 0 );
+}
+
 void TopLevelSDI::raiseLeftTabbar()
 {
-  if ( !m_leftBar )
-    return;
-  
-  m_leftBar->raiseWidget( 0 );
+  raiseTabbar( m_leftBar );
 }
 
 void TopLevelSDI::raiseRightTabbar()
 {
-  if ( !m_rightBar )
-    return;
-
-  m_rightBar->raiseWidget( 0 );
+  raiseTabbar( m_rightBar );
 }
 
 void TopLevelSDI::raiseBottomTabbar()
 {
-  if ( !m_bottomBar )
-    return;
-
-  m_bottomBar->raiseWidget( 0 );
+  raiseTabbar( m_bottomBar );
 }
 
 void TopLevelSDI::slotTextChanged()
