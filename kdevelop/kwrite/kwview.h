@@ -89,6 +89,7 @@ struct SConfig {
   PointStruc startCursor;
   int flags;
 };
+static int kw_bookmark_keys[] = {Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6,Qt::Key_7,Qt::Key_8,Qt::Key_9};
 
 class KWrite;
 class KWriteView;

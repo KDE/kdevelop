@@ -16,6 +16,7 @@ libkdevelopqextmdi_la_SOURCES = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdi
 
 noinst_HEADERS = ../include/qextmdichildarea.h ../include/qextmdichildfrm.h ../include/qextmdichildfrmcaption.h ../include/qextmdichildview.h ../include/qextmdimainfrm.h ../include/qextmditaskbar.h ../include/qextmdiiterator.h ../include/qextmdilistiterator.h ../include/qextmdinulliterator.h
 
+KDE_OPTIONS = nofinal
 METASOURCES = AUTO
 
 META_INCLUDES=$(srcdir)/../include

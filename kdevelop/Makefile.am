@@ -20,6 +20,7 @@ rcdir = $(kde_datadir)/kdevelop
 rc_DATA = kdevelopui.rc
 
 KDE_ICON = AUTO
+KDE_OPTIONS = nofinal
 
 data_DATA = kdevelop.desktop kdevelop-setup.desktop designer.desktop linguist.desktop
 datadir = $(kde_appsdir)/Development
