@@ -48,8 +48,8 @@
 
 QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* name )
 	: KTextEditor::View( document, parent, name ),
-	  m_document( document ),
-	  m_popupMenu( 0 )
+	  m_popupMenu( 0 ),
+	  m_document( document )
 {
     m_findDialog = new KoFindDialog( this, "FindDialog_0", long(KoFindDialog::FromCursor) );
     m_replaceDialog = new KoReplaceDialog( this, "ReplaceDialog_0",
@@ -155,7 +155,7 @@ void QEditorView::setTabStop( int tabStop )
 
 KTextEditor::Document* QEditorView::document() const
 {
-	return m_document;
+    return m_document;
 }
 
 QPoint QEditorView::cursorCoordinates()
@@ -187,7 +187,7 @@ bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
 #warning "TODO: implement QEditorView::setCursorPosition"
     kdDebug() << "TODO: implement QEditorView::setCursorPosition" << endl;
 
-    m_editor->setCursorPosition( line, col );
+    m_editor->setCursorPosition( line-1, col );
     m_editor->ensureCursorVisible();
 
     return true;
@@ -216,7 +216,7 @@ unsigned int QEditorView::cursorColumn()
     QString text = m_editor->text( line ).left( col );
     col = 0;
 
-    for( int i=0; i<text.length(); ++i ){
+    for( uint i=0; i<text.length(); ++i ){
         if( text[ i ] == QChar('\t') ){
             col += tabwidth - (col % tabwidth);
         } else {
@@ -255,7 +255,7 @@ void QEditorView::installPopup( class QPopupMenu *rmb_Menu )
 }
 
 void QEditorView::showArgHint(QStringList functionList,
-                              const QString& strWrapping,
+                              const QString& /*strWrapping*/,
                               const QString& strDelimiter)
 {
     m_pCodeCompletion->showArgHint( functionList, strDelimiter, strDelimiter );
@@ -317,7 +317,6 @@ void QEditorView::proceed()
     QEditor* edit = m_editor;
     if ( edit && ( m_options & KoFindDialog::FromCursor ) )
     {
-        kdDebug() << "-----> 1" << endl;
         firstParag = edit->textCursor()->parag();
         firstIndex = edit->textCursor()->index();
     } // no else here !
@@ -325,26 +324,19 @@ void QEditorView::proceed()
     // 'Selected Text' option
     if ( edit && ( m_options & KoFindDialog::SelectedText ) )
     {
-        kdDebug() << "-----> 2" << endl;
         if ( !firstParag ) // not set by 'from cursor'
         {
-            kdDebug() << "-----> 3" << endl;
             QTextCursor c1 = edit->document()->selectionStartCursor( QTextDocument::Standard );
             firstParag = c1.parag();
             firstIndex = c1.index();
         }
-        kdDebug() << "-----> 4" << endl;
         QTextCursor c2 = edit->document()->selectionEndCursor( QTextDocument::Standard );
         // Find in the selection
         (void) find_real( firstParag, firstIndex, c2.parag(), c2.index() );
     }
     else // Not 'find in selection', need to iterate over the framesets
     {
-        kdDebug() << "-----> 5" << endl;
         QTextParag * lastParag = edit->document()->lastParag();
-        kdDebug() << "-----> 6" << endl;
-        kdDebug() << "---> lastParag = " << lastParag << endl
-                  << "---> lastParag->length = " << lastParag->length() << endl;
         (void) find_real( firstParag, firstIndex, lastParag, lastParag->length()-1 );
     }
 }
@@ -352,7 +344,6 @@ void QEditorView::proceed()
 bool QEditorView::find_real( QTextParag* firstParag, int firstIndex,
                              QTextParag* lastParag, int lastIndex )
 {
-    kdDebug() << "QEditorView::find_real()" << endl;
     m_currentParag = firstParag;
     m_offset = 0;
 
@@ -441,14 +432,14 @@ bool QEditorView::process( const QString& _text )
     return false;
 }
 
-void QEditorView::highlight( const QString& text, int matchingIndex, int matchedLength, const QRect& )
+void QEditorView::highlight( const QString& /*text*/, int matchingIndex, int matchedLength, const QRect& )
 {
     m_editor->setSelection( m_currentParag->paragId(), matchingIndex,
                             m_currentParag->paragId(), matchingIndex + matchedLength );
 }
 
 void QEditorView::replace( const QString&, int matchingIndex,
-                           int matchingLength, int matchedLength,
+                           int /*matchingLength*/, int matchedLength,
                            const QRect &/*expose*/ )
 {
     m_editor->setSelection( m_currentParag->paragId(), matchingIndex,
