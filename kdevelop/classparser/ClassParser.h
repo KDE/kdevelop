@@ -148,6 +148,9 @@ private: // Private methods
   /** Parse an union. */
   void parseUnion();
 
+  /** Skip a throw() statement. */
+  void skipThrowStatement();
+
   /** Skip all lexems between '{' and '}'. */
   void skipBlock();
 

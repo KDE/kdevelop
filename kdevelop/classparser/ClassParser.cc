@@ -98,6 +98,21 @@ void CClassParser::emptyStack()
     delete lexemStack.pop();
 }
 
+/*---------------------------------- CClassParser::skipThrowStatement()
+ * skipThrowStatement()
+ *   Skip a throw() statement.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::skipThrowStatement()
+{
+  while( lexem != ')' && lexem != 0 )
+    getNextLexem();
+}
+
 /*--------------------------- CClassParser::parseStructDeclarations()
  * parseStructDeclarations()
  *   Parse all declarations inside a structure.
@@ -569,7 +584,7 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
   CParsedAttribute *anAttr;
   CParsedArgument *anArg;
 
-  while( lexem != ')' )
+  while( lexem != ')' && lexem != 0 )
   {
     // Get the variable
     anAttr = parseVariable();
@@ -667,6 +682,10 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   if( lexem == ':' )
     while( lexem != 0 && lexem != '{' )
       getNextLexem();
+
+  // Skip throw statements
+  if( lexem == CPTHROW )
+    skipThrowStatement();
 
   // Skip implementation.
   if( lexem == '{' )
@@ -898,7 +917,7 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
   int export=-1;          // Parent import status(private/public/protected).
 
   // Add parents until we find a {
-  while( lexem != '{' )
+  while( lexem != '{' && lexem != 0 )
   {
     // Fetch next lexem.
     getNextLexem();
@@ -913,7 +932,7 @@ void CClassParser::parseClassInheritance( CParsedClass *aClass )
     }
     
     cname = "";
-    while( lexem != '{' && lexem != ',' )
+    while( lexem != '{' && lexem != ',' && lexem != 0 )
     {
       cname += getText();
       getNextLexem();
@@ -1029,6 +1048,7 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
         childClass = parseClass();
         if( childClass != NULL )
         {
+          // childClass->setDeclaredInClass( aClass->name );
           store.addClass( childClass );
           aClass->addChildClass( childClass->name );
         }
@@ -1220,6 +1240,9 @@ void CClassParser::parseToplevel()
         break;
       case CPTEMPLATE:
         parseTemplate();
+        break;
+      case CPTHROW:
+        debug( "Found throw statement." );
         break;
       case CPCLASS:
         aClass = parseClass();
