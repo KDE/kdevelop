@@ -17,6 +17,26 @@
 #include <qtabwidget.h>
 #include <qmessagebox.h>
 
+// @fixme This is at least the fifth place in the kdevelop code something like this exists
+QString QRegExp_escape(const QString& str )
+{
+#if QT_VERSION >= 0x030100
+    return QRegExp::escape(str);
+#else
+    // this block is copyrighted by Trolltech AS (GPL)
+    static const char meta[] = "$()*+.?[\\]^{|}";
+    QString quoted = str;
+    int i = 0;
+
+    while ( i < (int) quoted.length() ) {
+       if ( strchr(meta, quoted[i].latin1()) != 0 )
+           quoted.insert( i++, "\\" );
+       i++;
+    }
+    return quoted;
+#endif
+}
+
 SpecSupport::SpecSupport(DistpartPart * part) : packageBase(part,"Rpm") {
 
     m_part = part;
@@ -226,8 +246,8 @@ void SpecSupport::parseDotRpmmacros() {
             QRegExp subst("%\\{([^%]*)\\}");
             QString value = re.cap(2).stripWhiteSpace();
 
-            while(subst.search(value) != -1) {
-                value.replace(QRegExp("%\\{"+subst.cap(1)+"\\}"),*map.find(subst.cap(1)));
+            while(subst.search(value) != -1) {			
+                value.replace(QRegExp("%\\{"+ QRegExp_escape( subst.cap(1) ) +"\\}"),*map.find(subst.cap(1)));
             }
             map.insert(re.cap(1),value);
         }
