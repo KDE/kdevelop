@@ -1,3 +1,6 @@
+2003-03-21 Roberto Raggi <roberto@kdevelop.org>
+	*  better support for namespace and inner classes
+
 2003-03-21 jbb <jbb@kdevelop.org>
     * src/debugger.*
     - Finally, after many years, the "sliding" breakpoint problem
