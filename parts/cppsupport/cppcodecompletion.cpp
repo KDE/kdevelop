@@ -130,8 +130,8 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
 
-    QObject::connect( part->partController(), SIGNAL(activePartChanged(KParts::Part*)),
-	     this, SLOT(slotActivePartChanged(KParts::Part*)));
+    QObject::connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
+	    	      this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 }
 
 CppCodeCompletion::~CppCodeCompletion( )
@@ -391,25 +391,32 @@ CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/
 }
 
 /**** TODO: replace this method with a parsing mechanism - very buggy! ****/
-// problem 1: recognizes static method calls as method implementation begin
 QString
 CppCodeCompletion::createTmpFileForParser( int iLine )
 {
     // regular expression for matching a method implementation
-    QRegExp regMethod( "([A-Za-z0-9_]+)\\s*::\\s*[~A-Za-z0-9_]+\\s*\\(\\s[ \\t0-9A-Za-z_,\\*&]*\\s\\)" );
-
+    // looks weird but maintaining is much easier :)
+    QString reg  = "([\\s\t]*[\\w\\d_]+[\\*|\\&]?"; 	// return value
+            reg += "[\\s\t]*([\\w\\d_]+)::[\\w\\d_]+";	// method class and -name
+	    reg += "\\([\\w\\d\\&\\*\\s\t\\,]*\\))"; 	// parameters
+//	    reg += "[\\s\t]*[:([\\s\t\\w\\d_])+]?[\\{]?)" ; // base class - not finished yet :)
+//	    reg += "[\\s\t]*^[\\;])";			// avoid static method calls
+    
+    QRegExp regMethod( reg );
     QString strLine;
     int     iMethodBegin = 0;
 
+    kdDebug( 9007 ) << "using this string as regexp: '" << reg << "'" << endl;
     for( int i = iLine; i > 0; i-- ){
         strLine = m_pEditIface->textLine( i );
+	kdDebug( 9007 ) << "checking line: " << strLine << endl;
 
-        if( regMethod.search( strLine ) >= 0 ){
+        if( regMethod.search( strLine ) > -1 ){
             iMethodBegin = i;
 
             kdDebug( 9007 ) << "method begins @ line '" << iMethodBegin << "'" << endl;
             // test to figure out the current classname
-            m_currentClassName = regMethod.cap(1);
+            m_currentClassName = regMethod.cap( 2 );
             kdDebug( 9007 ) << "method's classname is '" << m_currentClassName << "'" << endl;
             break;
         }
