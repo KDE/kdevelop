@@ -53,7 +53,7 @@ void QtDesignerIntegration::addFunction(const QString& formName, KInterfaceDesig
 {
     kdDebug() << "QtDesignerIntegration::addFunction: form: " << formName << ", function: " << function.function << endl;
 
-    if (!m_implementations[formName])
+    if (!m_implementations.contains(formName))
         if (!selectImplementation(formName))
             return;
 
