@@ -37,6 +37,7 @@
 #include <kmessagebox.h>
 #include <kparts/part.h>
 #include <kdeversion.h>
+#include <kprocess.h>
 
 #include <domutil.h>
 #include <kdevcore.h>
@@ -248,6 +249,10 @@ void AutoProjectPart::setWantautotools()
 
 QString AutoProjectPart::makeEnvironment()
 {
+    // Get the make environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
     DomUtil::PairList envvars = 
         DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/make/envvars", "envvar", "name", "value");
 
@@ -256,7 +261,7 @@ QString AutoProjectPart::makeEnvironment()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-        environstr += (*it).second;
+        environstr += KProcess::quote((*it).second);
         environstr += " ";
     }
     return environstr;
@@ -718,6 +723,10 @@ void AutoProjectPart::slotExecute()
 
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
 
+    // Get the run environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
     DomUtil::PairList envvars =
         DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/run/envvars", "envvar", "name", "value");
 
@@ -726,7 +735,7 @@ void AutoProjectPart::slotExecute()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-        environstr += (*it).second;
+        environstr += KProcess::quote((*it).second);
         environstr += " ";
     }
     program.prepend(environstr);

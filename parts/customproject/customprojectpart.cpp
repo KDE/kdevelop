@@ -21,6 +21,7 @@
 #include <qvaluestack.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -32,6 +33,7 @@
 #include <kparts/part.h>
 #include <kpopupmenu.h>
 #include <kdeversion.h>
+#include <kprocess.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -433,6 +435,10 @@ void CustomProjectPart::slotExecute()
 
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
 
+    // Get the run environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
     DomUtil::PairList envvars =
         DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/run/envvars", "envvar", "name", "value");
 
@@ -441,7 +447,7 @@ void CustomProjectPart::slotExecute()
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-        environstr += (*it).second;
+        environstr += KProcess::quote((*it).second);
         environstr += " ";
     }
     program.prepend(environstr);
