@@ -1,3 +1,8 @@
+2000-04-09 Walter Tasin  <tasin@kdevelop.de>
+	* Bug #2972 fixed
+          thanks to Richard Dale <Richard_Dale@tipitina.demon.co.nz>
+	  for the hint.
+
 2000-04-09 jbb <jbb@ihug.co.nz>
 	* Patches by Richard Dale <Richard_Dale@tipitina.demon.co.nz>
       . Bug#2970 - fixes in translated messages still to be done though.
