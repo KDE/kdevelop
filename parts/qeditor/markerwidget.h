@@ -44,8 +44,10 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qmap.h>
 
 #include <kdeversion.h>
+#include <ktexteditor/markinterface.h>
 #if (KDE_VERSION > 305)
 # include <ktexteditor/markinterfaceextension.h>
 #else
@@ -60,6 +62,10 @@ class MarkerWidget: public QWidget
 public:
     MarkerWidget( QEditor*, QWidget* =0, const char* =0 );
     virtual ~MarkerWidget();
+
+    virtual void setPixmap(KTextEditor::MarkInterface::MarkTypes, const QPixmap &);
+    virtual void setDescription(KTextEditor::MarkInterface::MarkTypes, const QString &);
+    virtual void setMarksUserChangable(uint markMask);
     
 public slots:
     void doRepaint() { repaint( FALSE ); }
@@ -74,15 +80,14 @@ signals:
     virtual void markChanged( KTextEditor::Mark mark,
                               KTextEditor::MarkInterfaceExtension::MarkChangeAction action );
 private:
-    QEditor* m_editor;
-    QPixmap buffer;
-    QPixmap bookmarkPixmap;
-    QPixmap breakpointPixmap;
-    QPixmap execPixmap;
-    QPixmap problemPixmap;
-    QPixmap funStartPixmap;
-
-    bool          m_clickChangesBPs;
+    QEditor*                m_editor;
+    QPixmap                 m_buffer;
+    QMap<int,QPixmap>       m_pixmapMap;
+    bool                    m_clickChangesBPs;
+    bool                    m_changeBookmarksAllowed;
+    bool                    m_changeBreakpointsAllowed;
+    QString                 m_bookmarkDescr;
+    QString                 m_breakpointDescr;
 };
 
 #endif // __markerwidget_h

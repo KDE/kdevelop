@@ -65,6 +65,7 @@ public:
 
     bool isMarkerWidgetVisible() const;
     void setMarkerWidgetVisible( bool );
+    MarkerWidget* markerWidget() { return m_markerWidget; }
 
     bool isLineNumberWidgetVisible() const;
     void setLineNumberWidgetVisible( bool );

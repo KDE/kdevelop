@@ -54,13 +54,16 @@ MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
     : QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
       m_editor( editor )
       ,m_clickChangesBPs(true)
+      ,m_changeBookmarksAllowed(false)
+      ,m_changeBreakpointsAllowed(false)
+      ,m_bookmarkDescr(tr("Bookmark"))
+      ,m_breakpointDescr(tr("Breakpoint"))
 {
-    bookmarkPixmap = SmallIcon( "attach" );
-    breakpointPixmap = SmallIcon( "stop" );
-    execPixmap = SmallIcon( "exec" );
-    problemPixmap = SmallIcon( "stop" );
-    funStartPixmap = SmallIcon( "start" );
-
+    m_pixmapMap.insert(0x01, SmallIcon("attach"));
+    m_pixmapMap.insert(0x05, SmallIcon("exec"));
+    m_pixmapMap.insert(0x200, SmallIcon("stop"));
+    m_pixmapMap.insert(0x400, SmallIcon("fun"));
+    
     setFixedWidth( 20 );
 
     connect( m_editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ),
@@ -77,10 +80,10 @@ MarkerWidget::~MarkerWidget()
 
 void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
 {
-    buffer.fill();
+    m_buffer.fill();
 
     QTextParagraph *p = m_editor->document()->firstParagraph();
-    QPainter painter( &buffer );
+    QPainter painter( &m_buffer );
     int yOffset = m_editor->contentsY();
     while ( p ) {
         if ( !p->isVisible() ) {
@@ -96,53 +99,30 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
 
 
         ParagData* paragData = (ParagData*) p->extraData();
-        if( paragData ){
-            switch( paragData->mark() ){
-            case 0x01:
-                painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - bookmarkPixmap.height() ) / 2 -
-                                    yOffset, bookmarkPixmap );
-                break;
-		
-            case 0x02:
-                painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - breakpointPixmap.height() ) / 2 -
-                                    yOffset, breakpointPixmap );
-                break;
-		
-            case 0x05:
-                painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - execPixmap.height() ) / 2 -
-                                    yOffset, execPixmap );
-                break;
-		
-            case 0x200:
-                painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - problemPixmap.height() ) / 2 -
-                                    yOffset, problemPixmap );
-                break;
-		
-	    case 0x400:
-                painter.drawPixmap( 3, p->rect().y() +
-                                    ( p->rect().height() - funStartPixmap.height() ) / 2 -
-                                    yOffset, funStartPixmap );
-                break;
-		
-            default:
-                break;
+        unsigned int mark = paragData ? paragData->mark() : 0;
+        if (mark) {
+            unsigned int current = 0x01;
+            for (; current < mark+1; current = current << 1) {
+                if (mark & current) {
+                    QMapIterator<int,QPixmap> it = m_pixmapMap.find(current);
+                    if (it != m_pixmapMap.end()) {
+                        painter.drawPixmap( 3,
+                                            p->rect().y() + ( p->rect().height() - (*it).height() ) / 2 - yOffset,
+                                            *it );
+                    }
+                }
             }
         }
-
         p = p->next();
     }
 
     painter.end();
-    bitBlt( this, 0, 0, &buffer );
+    bitBlt( this, 0, 0, &m_buffer );
 }
 
 void MarkerWidget::resizeEvent( QResizeEvent *e )
 {
-    buffer.resize( e->size() );
+    m_buffer.resize( e->size() );
     QWidget::resizeEvent( e );
 }
 
@@ -161,20 +141,21 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
         if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
             ParagData* data = (ParagData*) p->extraData();
             if ( data->mark() & 0x02 )
-                toggleBreakPoint = m.insertItem( tr( "Clear Breakpoint" ) );
+                toggleBreakPoint = m.insertItem( tr( "Clear " ) + m_breakpointDescr );
             else
-                toggleBreakPoint = m.insertItem( tr( "Set Breakpoint" ) );
-
+                toggleBreakPoint = m.insertItem( tr( "Set " ) + m_breakpointDescr );
+            m.setItemEnabled(toggleBreakPoint, m_changeBreakpointsAllowed);
             m.insertSeparator();
 
             if ( data->mark() & 0x01 )
-                toggleBookmark = m.insertItem( tr( "Clear Bookmark" ) );
+                toggleBookmark = m.insertItem( tr( "Clear " ) + m_bookmarkDescr );
             else
-                toggleBookmark = m.insertItem( tr( "Set Bookmark" ) );
-
+                toggleBookmark = m.insertItem( tr( "Set " ) + m_bookmarkDescr );
+            m.setItemEnabled(toggleBookmark, m_changeBookmarksAllowed);
             m.insertSeparator();
-            lmbClickChangesBPs = m.insertItem( tr( "Left mouse button click sets breakpoints" ) );
-            lmbClickChangesBookmarks = m.insertItem( tr( "Left mouse button click sets bookmarks" ) );
+            
+            lmbClickChangesBPs = m.insertItem( tr( "Left mouse button click sets: " ) + m_breakpointDescr );
+            lmbClickChangesBookmarks = m.insertItem( tr( "Left mouse button click sets: " ) + m_bookmarkDescr );
             m.setItemChecked(lmbClickChangesBPs, m_clickChangesBPs);
             m.setItemChecked(lmbClickChangesBookmarks, !m_clickChangesBPs);
                             
@@ -193,24 +174,24 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
     KTextEditor::Mark mark;
     mark.line = p->paragId();
     
-    if ( res == toggleBookmark ) {
+    if ( res == toggleBookmark && m_changeBookmarksAllowed ) {
         mark.type = 0x01;
         if ( data->mark() & 0x01 ) {
-            data->setMark( 0 );
+            data->setMark( data->mark() & ~0x01 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
         }
         else {
-            data->setMark( 0x01 );
+            data->setMark( data->mark() | 0x01 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
         }
-    } else if ( res == toggleBreakPoint ) {
+    } else if ( res == toggleBreakPoint && m_changeBreakpointsAllowed ) {
         mark.type = 0x02;
         if ( data->mark() & 0x02 ) {
-            data->setMark( 0 );
+            data->setMark( data->mark() & ~0x02 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
         }
         else {
-            data->setMark( 0x02 );
+            data->setMark( data->mark() | 0x02 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
         }
     } else if ( res == lmbClickChangesBPs ) {
@@ -241,29 +222,52 @@ void MarkerWidget::mousePressEvent( QMouseEvent * e )
 
     KTextEditor::Mark mark;
     mark.line = p->paragId();
-    if (m_clickChangesBPs) {
+    if (m_clickChangesBPs && m_changeBreakpointsAllowed) {
       mark.type = 0x02;
       if (data->mark() & 0x02) {
-        data->setMark(0);
+        data->setMark(data->mark() & ~0x02);
         emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
       }
       else {
-        data->setMark(0x02);
+        data->setMark(data->mark() | 0x02);
         emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
       }
     }
-    else {
+    else if (m_changeBookmarksAllowed) {
       mark.type = 0x01;
       if (data->mark() & 0x01) {
-        data->setMark(0);
+        data->setMark(data->mark() & ~0x01);
         emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
       }
       else {
-        data->setMark(0x01);
+        data->setMark(data->mark() | 0x01);
         emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
       }
     }
   }
+
+  doRepaint();
+}
+
+void MarkerWidget::setPixmap(KTextEditor::MarkInterface::MarkTypes mt, const QPixmap & pm)
+{
+  if (mt)
+    m_pixmapMap.insert(mt, pm);
+}
+
+void MarkerWidget::setDescription(KTextEditor::MarkInterface::MarkTypes mt, const QString & s)
+{
+  switch (mt) {
+  case KTextEditor::MarkInterface::markType01: m_bookmarkDescr = s; break;
+  case KTextEditor::MarkInterface::markType02: m_breakpointDescr = s; break;
+  default: break;
+  }
+}
+
+void MarkerWidget::setMarksUserChangable(uint markMask)
+{
+  m_changeBookmarksAllowed   = (markMask & KTextEditor::MarkInterface::markType01) ? true : false;
+  m_changeBreakpointsAllowed = (markMask & KTextEditor::MarkInterface::markType02) ? true : false;
 
   doRepaint();
 }

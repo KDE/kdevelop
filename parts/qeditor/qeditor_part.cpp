@@ -19,14 +19,12 @@
  *
  */
 
-#include "qeditor_part.h"
-#include "qeditor_view.h"
-#include "qeditor.h"
-#include "paragdata.h"
-#include "qsourcecolorizer.h"
-#include "qeditor_indenter.h"
-#include "highlightingconfigpage.h"
-#include "generalconfigpage.h"
+#include <qvbox.h>
+#include <qfile.h>
+#include <qtextstream.h>
+#include <qregexp.h>
+#include <qlayout.h>
+#include <private/qrichtext_p.h>
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -38,12 +36,15 @@
 #include <klocale.h>
 #include <kxmlguifactory.h>
 
-#include <qvbox.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qregexp.h>
-#include <qlayout.h>
-#include <private/qrichtext_p.h>
+#include "qeditor_part.h"
+#include "qeditor_view.h"
+#include "qeditor.h"
+#include "paragdata.h"
+#include "qsourcecolorizer.h"
+#include "qeditor_indenter.h"
+#include "highlightingconfigpage.h"
+#include "generalconfigpage.h"
+#include "markerwidget.h"
 
 #include "qeditor_part.moc"
 
@@ -721,19 +722,19 @@ void QEditorPart::clearMarks ()
     }
 }
 
-void QEditorPart::setPixmap(MarkInterface::MarkTypes, const QPixmap &)
+void QEditorPart::setPixmap(KTextEditor::MarkInterface::MarkTypes mt, const QPixmap & pm)
 {
-  // TODO
+    m_currentView->markerWidget()->setPixmap(mt, pm);
 }
 
-void QEditorPart::setDescription(MarkInterface::MarkTypes, const QString &)
+void QEditorPart::setDescription(KTextEditor::MarkInterface::MarkTypes mt, const QString & s)
 {
-  // TODO
+    m_currentView->markerWidget()->setDescription(mt, s);
 }
 
 void QEditorPart::setMarksUserChangable(uint markMask)
 {
-  // TODO
+    m_currentView->markerWidget()->setMarksUserChangable(markMask);
 }
 
 void QEditorPart::configDialog()
