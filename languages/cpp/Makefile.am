@@ -14,8 +14,8 @@ kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -L$(top_srcdir)/bdb/dist
 libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la \
-	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la $(top_builddir)/lib/designer_integration/libdesignerintegration.la \
-	$(top_builddir)/bdb/build_unix/libdb.a
+	$(top_builddir)/languages/lib/interfaces/liblang_interfaces.la \
+	$(top_builddir)/languages/lib/designer_integration/libdesignerintegration.la $(top_builddir)/bdb/build_unix/libdb.a
 
 libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 	ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp \
