@@ -22,19 +22,24 @@ SUBDIRS = ProjectOptions KDevCompiler
 				
 METASOURCES = AUTO
 
+servicetypedir = $(kde_servicetypesdir)
+servicetype_DATA = kdevelopprojectspace.desktop kdevelopappwizard.desktop kdevelopproject.desktop
+
+
+
 #noinst_PROGRAMS = testprj
 
-#testprj_SOURCES = addtreedlgbase.ui addtreedlg.cpp testprj.cpp addexistingfilesbase.ui addexistingfilesdlg.cpp  
-
+#testprj_SOURCES = testprj.cpp
 # the library search path. 
-#testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
+#testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-#testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
-#	$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
+#testprj_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
 #		$(LIB_KFILE) $(LIB_KPARTS)
 
 projectspace.cpp: addexistingfilesbase.h renamefiledlg.h
 
 addexistingfilesdlg.cpp: addtreedlgbase.h
+
+

@@ -1,2 +1,2 @@
-SUBDIRS = print projectmanagement
+SUBDIRS = print projectmanagement Compilers
 

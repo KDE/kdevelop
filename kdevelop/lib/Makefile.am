@@ -16,5 +16,5 @@ libkdevelop_la_LIBADD = $(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = general servicetypes projectmanagement kidetexteditor ComponentManager Interfaces
+SUBDIRS = general projectmanagement kidetexteditor ComponentManager Interfaces
 

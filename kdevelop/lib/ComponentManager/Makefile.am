@@ -9,3 +9,7 @@ libKDevComponentManager_la_LIBADD = $(top_builddir)/kdevelop/lib/ComponentManage
 SUBDIRS = Components
 
 METASOURCES = AUTO
+
+servicetypedir = $(kde_servicetypesdir)
+servicetype_DATA = kdevelopcomponent.desktop
+
