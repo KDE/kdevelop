@@ -116,13 +116,13 @@ public:
 public slots:
 	void	slotApplyPressed();
 	void	slotFontSize( int );
-	void	slotStandardFont( const QString& n );
-	void	slotFixedFont( const QString& n );
+	void	slotStandardFont( const QFont& n );
+	void	slotFixedFont( const QFont& n );
 
 signals:
 	void	fontSize( int );
-	void	standardFont( const QString& );
-	void	fixedFont( const QString& );
+	void	standardFont( const QFont& );
+	void	fixedFont( const QFont& );
 
 private:
 	void	readOptions();
@@ -131,8 +131,8 @@ private:
 
 private:
 	int	fSize;
-	QString	stdName;
-	QString	fixedName;
+	QFont	stdName;
+	QFont	fixedName;
 	QStringList standardFonts;
 	QStringList fixedFonts;
 };

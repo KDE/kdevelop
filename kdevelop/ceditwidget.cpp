@@ -58,9 +58,9 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name) :
   pop->insertItem(SmallIconSet("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
   pop->insertItem(SmallIconSet("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
   pop->insertSeparator();
-  pop->insertItem(SmallIconSet("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
-  pop->insertItem(SmallIconSet("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-  pop->insertItem(SmallIconSet("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+  pop->insertItem(SmallIconSet("editcut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+  pop->insertItem(SmallIconSet("editcopy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+  pop->insertItem(SmallIconSet("editpaste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
   pop->setItemEnabled(ID_EDIT_CUT,false);
   pop->setItemEnabled(ID_EDIT_COPY,false);
   pop->setItemEnabled(ID_EDIT_PASTE,false);

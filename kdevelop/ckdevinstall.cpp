@@ -541,6 +541,11 @@ void CKDevInstall::slotAuto() // proceed >>
       config->writeEntry("Wildcards","*.c;*.C;*.ec");
       config->setGroup("C++ Highlight");
       config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
+
+      config->setGroup("Normal Highlight");
+      config->writeEntry("Mimetypes","");
+      config->writeEntry("Wildcards","");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
     }
 
     config->sync();
@@ -796,23 +801,23 @@ void CKDevInstall::slotAuto() // proceed >>
 
   QString qt_testfile; // for tests if the path really is the qt-doc path
   const char *qt_dirs[]={
-    "/usr/local/qt/html",
-		"/usr/local/lib/qt/html",
+    "/usr/local/qt-2.2.3/html",
+		"/usr/local/lib/qt-2.2.3/html",
+		"/usr/lib/qt-2.2.3/html",
+		"/usr/lib/qt-2.2.3/doc/html",
+		
+		"/usr/lib/qt2/html",
+		"/usr/lib/qt2/doc/html",
+    "/usr/local/qt2/html",
+		"/usr/local/lib/qt2/html",
 		"/usr/lib/qt/html",
 		"/usr/lib/qt/doc/html",
+    "/usr/local/qt/html",
+		"/usr/local/lib/qt/html",
 		"/usr/X11/lib/qt/html",
 		"/usr/X11/lib/qt/doc/html",
 		"/usr/doc/qt-doc/html",
 		
-    "/usr/local/qt2/html",
-		"/usr/local/lib/qt2/html",
-		"/usr/lib/qt2/html",
-		"/usr/lib/qt2/doc/html",
-		
-    "/usr/local/qt-2.2.1/html",
-		"/usr/local/lib/qt-2.2.1/html",
-		"/usr/lib/qt-2.2.1/html",
-		"/usr/lib/qt-2.2.1/doc/html",
 		0l };
 
   // first check the autoconfified path
@@ -864,7 +869,8 @@ void CKDevInstall::slotAuto() // proceed >>
   kde_test=true;
 
   QStringList kde_dirs;
-  kde_dirs  << "/opt/kde/share/doc/HTML/en/kdelibs"     // normal dist
+  kde_dirs  << "/opt/kde2/share/doc/HTML/en/kdelibs"     // normal dist
+            << "/opt/kde/share/doc/HTML/en/kdelibs"     // normal dist
             << "/usr/share/doc/kdelibs"                 // Redhat 6.0
             << "/usr/local/kde/share/doc/kdelibs";      // other locations
 

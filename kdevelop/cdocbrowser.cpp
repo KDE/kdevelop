@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <krun.h>
+#include <kglobalsettings.h>
 
 #include "resource.h"
 
@@ -55,7 +56,7 @@
 
 #warning FIXME This needs some rework to use KHTMLParts
 
-int  CDocBrowser::fSize = 3;
+int  CDocBrowser::fSize = 12;
 QString CDocBrowser::standardFont;
 QString CDocBrowser::fixedFont;
 QColor CDocBrowser::bgColor;
@@ -72,8 +73,8 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   doc_pop->insertItem(SmallIconSet("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
   doc_pop->insertItem(SmallIconSet("forward"),i18n("Forward"),this,SLOT(slotURLForward()),0,ID_HELP_FORWARD);
   doc_pop->insertSeparator();
-  doc_pop->insertItem(SmallIconSet("copy"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
-  doc_pop->insertItem(i18n("Toggle Bookmark"),this, SIGNAL(signalBookmarkToggle()),0,ID_BOOKMARKS_TOGGLE);
+  doc_pop->insertItem(SmallIconSet("editcopy"),i18n("Copy"),this, SLOT(slotCopyText()),0,ID_EDIT_COPY);
+  doc_pop->insertItem(SmallIconSet("bookmark_add"),i18n("Toggle Bookmark"),this, SIGNAL(signalBookmarkToggle()),0,ID_BOOKMARKS_TOGGLE);
   doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
   doc_pop->insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
@@ -173,14 +174,25 @@ void CDocBrowser::setDocBrowserOptions(){
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
 
-  QString fs = config->readEntry( "BaseFontSize" );
-  if ( !fs.isEmpty() )
-  fSize = fs.toInt();
-  fs = "times";
-  standardFont = config->readEntry( "StandardFont", fs );
+//  setDefaultFontBase(config->readNumEntry("DefaultFontBase",3));
+//  setStandardFont(config->readEntry("StandardFont","helvetica"));
+//  setFixedFont(config->readEntry("FixedFont","courier"));
 
-  fs = "courier";
-  fixedFont = config->readEntry( "FixedFont", fs );
+  int i, diff;
+
+  fSize = config->readNumEntry( "BaseFontSize",12 );
+  QFont font (config->readFontEntry("StandardFont"));
+  QString mBodyFamily = font.family();
+  setStandardFont(mBodyFamily);
+
+  QValueList<int> fontsizes;
+//  resetFontSizes();
+  diff = fSize - fontSizes()[3];
+  for (i=0;i<7; i++)
+    fontsizes << fontSizes()[i] + diff;
+
+    setFontSizes(fontsizes);
+
 
   bgColor = config->readColorEntry( "BgColor", &white );
   textColor = config->readColorEntry( "TextColor", &black );
@@ -190,8 +202,8 @@ void CDocBrowser::setDocBrowserOptions(){
   forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
 #warning FIXME KHTMLSettings
-  setFixedFont( fixedFont);
-  setStandardFont( standardFont );
+//  setFixedFont( fixedFont);
+//  setStandardFont( standardFont );
   setURLCursor( KCursor::handCursor() );
 
 //  KHTMLSettings* htmlsettings=settings();
@@ -207,6 +219,13 @@ void CDocBrowser::slotDocFontSize(int size){
 //  KHTMLView* htmlview=view();
 //  htmlview->setDefaultFontBase( size );
 //  htmlview->parse();
+  QValueList<int> fontsizes;
+//  resetFontSizes();
+  int diff = fSize - fontSizes()[3];
+  for (int i=0;i<7; i++)
+    fontsizes << fontSizes()[i] + diff;
+
+  setFontSizes(fontsizes);
   showURL(complete_url, true);
 //  busy = true;
 //  emit enableMenuItems();
@@ -357,15 +376,15 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
   QGridLayout *grid2 = new QGridLayout(bg,1,3,7,7);
   rb = new QRadioButton( i18n("Small"), bg );
   grid2->addWidget(rb,0,0);
-  rb->setChecked( fSize == 3 );
+  rb->setChecked( fSize == 10 );
 
   rb = new QRadioButton( i18n("Medium"), bg );
   grid2->addWidget(rb,0,1);
-  rb->setChecked( fSize == 4 );
+  rb->setChecked( fSize == 12);
 
   rb = new QRadioButton( i18n("Large"), bg );
   grid2->addWidget(rb,0,2);
-  rb->setChecked( fSize == 5 );
+  rb->setChecked( fSize == 14);
 
   label = new QLabel( i18n("Standard Font"), this );
   grid1->addWidget(label,1,0);
@@ -417,25 +436,15 @@ void CDocBrowserFont::readOptions()
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
 
-  QString fs = config->readEntry( "BaseFontSize" );
-  if ( !fs.isEmpty() )
-  {
-    fSize = fs.toInt();
-    if ( fSize < 3 )
-      fSize = 3;
-    else if ( fSize > 5 )
-      fSize = 5;
-  }
-  else
-    fSize = 3;
+  fSize= config->readNumEntry( "BaseFontSize",13 );
 
   stdName = config->readEntry( "StandardFont" );
-  if ( stdName.isEmpty() )
-    stdName = "times";
+  if ( (stdName.family()).isEmpty() )
+    stdName = KGlobalSettings::generalFont();
 
   fixedName = config->readEntry( "FixedFont" );
-  if ( fixedName.isEmpty() )
-    fixedName = "courier";
+  if ( (fixedName.family()).isEmpty() )
+    fixedName =  KGlobalSettings::fixedFont();
 }
 
 void CDocBrowserFont::getFontList( QStringList &list, const char *pattern )
@@ -485,23 +494,17 @@ void CDocBrowserFont::addFont( QStringList &list, const char *xfont )
 
 void CDocBrowserFont::slotApplyPressed()
 {
-  QString o;
 
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
 
-  QString fs;
-  fs.setNum( fSize );
-  o = config->writeEntry( "BaseFontSize", fs );
-  if ( o.isNull() || o.toInt() != fSize )
+  config->writeEntry( "BaseFontSize", fSize );
     emit fontSize( fSize );
 
-  o = config->writeEntry( "StandardFont", stdName );
-  if ( o.isNull() || o != stdName )
+  config->writeEntry( "StandardFont", stdName );
     emit standardFont( stdName );
 
-  o = config->writeEntry( "FixedFont", fixedName );
-  if ( o.isNull() || o != fixedName )
+  config->writeEntry( "FixedFont", fixedName );
     emit fixedFont( fixedName );
 
   config->sync();
@@ -509,15 +512,20 @@ void CDocBrowserFont::slotApplyPressed()
 
 void CDocBrowserFont::slotFontSize( int i )
 {
-  fSize = i+3;
+  if(i==0)
+    fSize=10;
+  else if(i==1)
+    fSize=12;
+  else
+    fSize=14;
 }
 
-void CDocBrowserFont::slotStandardFont( const QString& n )
+void CDocBrowserFont::slotStandardFont( const QFont& n )
 {
   stdName = n;
 }
 
-void CDocBrowserFont::slotFixedFont( const QString& n )
+void CDocBrowserFont::slotFixedFont( const QFont& n )
 {
   fixedName = n;
 }
