@@ -19,3 +19,4 @@ SUBDIRS = pix
 EXTRA_DIST = highlight.cpp highlight.h kwdialog.cpp kwdialog.h kwdoc.cpp kwdoc.h kwview.cpp kwview.h 
 
 ####### kdevelop will overwrite this part!!! (end)############
+KDE_OPTIONS = nofinal

@@ -15,3 +15,4 @@ EXTRA_DIST = ClassParser.cc ClassParser.h ClassStore.cc ClassStore.h ClassTreeNo
 
 tokenizer.cc: tokenizer.l
 	$(LEX) -+ -otokenizer.cc $(srcdir)/tokenizer.l
+KDE_OPTIONS = nofinal

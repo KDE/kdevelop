@@ -19,3 +19,4 @@ EXTRA_DIST = commitdialog.cpp commitdialog.h cvs.cpp cvs.h cvsdialog.cpp cvsdial
 
 ####### kdevelop will overwrite this part!!! (end)############
 
+KDE_OPTIONS = nofinal

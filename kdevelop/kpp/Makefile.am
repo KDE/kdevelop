@@ -35,3 +35,4 @@ uninstall-local:
 
 ####### kdevelop will overwrite this part!!! (end)############
 
+KDE_OPTIONS = nofinal
