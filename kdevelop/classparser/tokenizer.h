@@ -52,12 +52,14 @@
 #define SIGNALTEXT_MAP 267
 #define STRING         268
 #define STATIC         269
-#define VIRTUAL        270
+#define CPVIRTUAL      270
 #define QTSIGNAL       271
 #define QTSLOT         272
 #define CPGLOBAL       273
 #define CPENUM         274
 #define CPTYPEDEF      275
+#define CPFRIEND       276
+#define CPSTRUCT       277
 typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;

@@ -56,12 +56,20 @@ SCHAR        [^"\\\n]|{ESCAPE_SEQUENCE}
 "private"       {return PRIVATE;}
 "const"         {return CONST;}
 "static"        {return STATIC;}
+"virtual"       {return CPVIRTUAL;}
 "signals"       {return QTSIGNAL;}
 "slots"         {return QTSLOT;}
 "enum"          {return CPENUM;}
 "typedef"       {return CPTYPEDEF;}
+"friend"        {return CPFRIEND;}
+"struct"        {return CPSTRUCT;}
 "ON_CMD"        {return SIGNALSLOT_MAP;}
 "ON_STATUS_MSG" {return SIGNALTEXT_MAP;}
+
+
+    /*==============> Ignore Q_EXPORT:s <==============*/
+"Q_EXPORT"       {}
+"Q_EXPORTH"      {}
 
     /*==============> Normal operators <==============*/
 "*"          {return '*';}
