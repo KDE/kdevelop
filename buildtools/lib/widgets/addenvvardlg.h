@@ -24,6 +24,9 @@
 #include <qlineedit.h>
 class QPushButton;
 
+/**
+Dialog to add environment variables.
+*/
 class AddEnvvarDialog : public QDialog
 {
     Q_OBJECT

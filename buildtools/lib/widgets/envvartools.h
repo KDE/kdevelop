@@ -18,8 +18,11 @@
 */
 #include <qstring.h>
 
+/**Environment support functions.*/
 namespace EnvVarTools{
 
+    /**Quotes the argument using double quotes ("). Created as a replacement
+    for KShellProcess::quote.*/
     QString quote(const QString &arg);
 
 }

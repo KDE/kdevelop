@@ -22,6 +22,9 @@
 
 #include "removesubprojectdlgbase.h"
 
+/**
+Subproject removal dialog.
+*/
 class RemoveSubprojectDialog : public RemoveSubprojectDlgBase
 {
   Q_OBJECT

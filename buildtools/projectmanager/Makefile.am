@@ -23,4 +23,5 @@ rcdir = $(kde_datadir)/kdevprojectmanager
 rc_DATA = \
     kdevprojectmanager.rc
 
-
+DOXYGEN_EMPTY = YES
+include ../../Doxyfile.am

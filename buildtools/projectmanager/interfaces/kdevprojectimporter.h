@@ -60,7 +60,7 @@ public:
      */
     virtual ProjectItemDom import(ProjectModel *model, const QString &fileName) = 0;
     
-    /** @return The makefile associated to the item model @dom.
+    /** @return The makefile associated to the item model @p dom.
         @note The makefile list must contains absolute file names 
       
         For instance, for the <b>Automake</b> project you can return
@@ -71,7 +71,7 @@ public:
       */
     virtual QString findMakefile(ProjectFolderDom dom) const = 0;
     
-    /** @return The list of the makefiles from the item model @dom.
+    /** @return The list of the makefiles from the item model @p dom.
         @note The makefile list must contains absolute file names */
     virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
     

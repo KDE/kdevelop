@@ -27,7 +27,9 @@
 
 class EnvironmentVariablesWidget;
 
-
+/**
+Run options widget.
+*/
 class RunOptionsWidget : public RunOptionsWidgetBase
 {
     Q_OBJECT

@@ -5,7 +5,7 @@
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
 	-I$(top_srcdir)/lib/widgets/propeditor $(all_includes)
 
-noinst_LTLIBRARIES = libkdevbuildtoolswidgets.la
+lib_LTLIBRARIES = libkdevbuildtoolswidgets.la
 
 libkdevbuildtoolswidgets_la_SOURCES = runoptionswidget.cpp runoptionswidgetbase.ui \
 	makeoptionswidget.cpp makeoptionswidgetbase.ui addenvvardlg.cpp subclassesdlgbase.ui \
@@ -19,3 +19,8 @@ kdevelopbuildtoolsinclude_HEADERS = addenvvardlg.h addfilesdialog.h \
 	environmentvariableswidget.h environmentvariableswidgetbase.h envvartools.h makeoptionswidget.h \
 	makeoptionswidgetbase.h removesubprojectdialog.h removesubprojectdlgbase.h runoptionswidget.h \
 	runoptionswidgetbase.h subclassesdlg.h subclassesdlgbase.h
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevutil
+DOXYGEN_PROJECTNAME = KDevelop Buildtool Widgets Library
+DOXYGEN_DOCDIRPREFIX = kdevbt
+include ../../../Doxyfile.am

@@ -26,6 +26,9 @@
 
 class EnvironmentVariablesWidget;
 
+/**
+Make options widget.
+*/
 class MakeOptionsWidget : public MakeOptionsWidgetBase
 {
     Q_OBJECT

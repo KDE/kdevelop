@@ -25,7 +25,9 @@
 
 #include <qdom.h>
 
-
+/**
+Environment variables widget.
+*/
 class EnvironmentVariablesWidget : public EnvironmentVariablesWidgetBase
 {
     Q_OBJECT

@@ -22,3 +22,11 @@ servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = \
     kdevelopprojectimporter.desktop \
     kdevelopprojectbuilder.desktop
+
+kdeveloppmincludedir = $(includedir)/kdevelop/buildtools/projectmanager/interfaces
+kdeveloppminclude_HEADERS = kdevprojectbuilder.h  kdevprojecteditor.h  kdevprojectimporter.h  kdevprojectmodel.h
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces
+DOXYGEN_PROJECTNAME = KDevelop Project Manager Interfaces Library
+DOXYGEN_DOCDIRPREFIX = kdevpm
+include ../../../Doxyfile.am

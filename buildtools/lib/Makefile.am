@@ -3,3 +3,6 @@
 # can be shared between parts.
 
 SUBDIRS = widgets base
+
+DOXYGEN_EMPTY = YES
+include ../../Doxyfile.am

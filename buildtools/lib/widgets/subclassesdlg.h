@@ -22,6 +22,9 @@
 #include "domutil.h"
 #include "subclassesdlgbase.h"
 
+/**
+Subclass creation dialog.
+*/
 class SubclassesDlg : public SubclassesDlgBase
 {
   Q_OBJECT

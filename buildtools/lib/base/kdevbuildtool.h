@@ -25,12 +25,15 @@
 class KDevMakeFrontend;
 class KDevAppFrontend;
 
+/**Base class for KDevelop build tool support plugins.*/
 class KDevBuildTool: public KDevProject
 {
 public:
     KDevBuildTool(const KDevPluginInfo* info, QObject* parent, const char* name);
 
+    /**@return The make frontend.*/
     KDevMakeFrontend *makeFrontend();
+    /**@return The application frontend.*/
     KDevAppFrontend *appFrontend();
 
 };
