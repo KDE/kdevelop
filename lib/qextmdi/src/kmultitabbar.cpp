@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 #include "kmultitabbar.h"
-#ifndef NO_INCLUDE_MOCFILES 
+#ifndef NO_INCLUDE_MOCFILES
 #include "kmultitabbar.moc"
 #endif
 #include "kmultitabbar_p.h"
@@ -47,19 +47,20 @@
 
 KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMultiTabBarMode bm):QScrollView(parent)
 {
+	m_expandedTabSize=-1;
 	m_showActiveTabTexts=false;
 	m_tabs.setAutoDelete(true);
 	setHScrollBarMode(AlwaysOff);
 	setVScrollBarMode(AlwaysOff);
 	if (bm==KMultiTabBar::Vertical)
 	{
-		box=new QVBox(viewport());			
+		box=new QVBox(viewport());
 		box->setFixedWidth(24);
 		setFixedWidth(24);
 	}
 	else
 	{
-		box=new QHBox(viewport());			
+		box=new QHBox(viewport());
 		box->setFixedHeight(24);
 		setFixedHeight(24);
 	}
@@ -152,18 +153,16 @@ int KMultiTabBarInternal::appendTab(const QPixmap &pic ,int id,const QString& te
 	KMultiTabBarTab  *tab;
 	m_tabs.append(tab= new KMultiTabBarTab(pic,text,id,box,m_position,m_style));
 	tab->showActiveTabText(m_showActiveTabTexts);
-	if (m_showActiveTabTexts)
+
+	if (m_style==KMultiTabBar::KONQSBC)
 	{
-		int size=0;
-        unsigned int i;
-		for (i=0;i<m_tabs.count();i++)
-		{
-			int tmp=m_tabs.at(i)->neededSize();
-			size=(size<tmp)?tmp:size;
-		}
-		for (i=0;i<m_tabs.count();i++)
-			m_tabs.at(i)->setSize(size);
-	}
+		if (m_expandedTabSize<tab->neededSize()) {
+			m_expandedTabSize=tab->neededSize();
+			for (uint i=0;i<m_tabs.count();i++)
+				m_tabs.at(i)->setSize(m_expandedTabSize);
+
+		} else tab->setSize(m_expandedTabSize);
+	} else tab->updateState();
 	tab->show();
 	return 0;
 }
@@ -272,7 +271,7 @@ void KMultiTabBarTab::updateState()
 		if ((m_style==KMultiTabBar::KDEV3) || (isOn())) {
 			QPushButton::setText(m_text);
 		} else {
-			//kdDebug()<<"KMultiTabBarTab::updateState(): setting text to an empty QString"<<endl;
+			kdDebug()<<"KMultiTabBarTab::updateState(): setting text to an empty QString***************"<<endl;
 			QPushButton::setText(QString::null);
 		}
 
@@ -330,16 +329,16 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 
 	QSize sh;
-	if ((m_style==KMultiTabBar::KDEV3) || (isOn())) sh=QPushButton::sizeHint();	
+	if ((m_style==KMultiTabBar::KDEV3) || (isOn())) sh=QPushButton::sizeHint();
 	else sh=QSize(36,24);
-	
+
 	QPixmap pixmap( sh.width(),24); ///,sh.height());
 	pixmap.fill(eraseColor());
 	QPainter painter(&pixmap);
 
 
 	QStyle::SFlags st=QStyle::Style_Default;
-	
+
 	st|=QStyle::Style_Enabled;
 
 	if (isOn()) st|=QStyle::Style_On;
@@ -350,11 +349,11 @@ void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 	switch (m_position) {
 		case KMultiTabBar::Left:
 			paint->rotate(-90);
-			paint->drawPixmap(-pixmap.width(),0,pixmap);	
+			paint->drawPixmap(-pixmap.width(),0,pixmap);
 			break;
 		case KMultiTabBar::Right:
 			paint->rotate(90);
-			paint->drawPixmap(0,-pixmap.height(),pixmap);	
+			paint->drawPixmap(0,-pixmap.height(),pixmap);
 			break;
 
 		default:
@@ -364,16 +363,16 @@ void KMultiTabBarTab::drawButtonStyled(QPainter *paint) {
 //	style().drawControl(QStyle::CE_PushButtonLabel,painter,this, QRect(0,0,pixmap.width(),pixmap.height()),
 //		colorGroup(),QStyle::Style_Enabled);
 
-	
+
 }
 
 void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 {
         QPixmap pixmap;
-	if ( iconSet()) 
+	if ( iconSet())
         	pixmap = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal );
 	paint->fillRect(0, 0, 24, 24, colorGroup().background());
-	
+
 	if (!isOn())
 	{
 
@@ -460,7 +459,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 			}
 
 		}
-		else 
+		else
 		if (m_position==KMultiTabBar::Top)
 		{
 			paint->fillRect(0,0,width()-1,23,QBrush(colorGroup().light()));
@@ -510,7 +509,7 @@ void KMultiTabBarTab::drawButtonClassic(QPainter *paint)
 
                                 paint->rotate(-90);
                                 kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
-                                
+
 				paint->drawPixmap(-24-tpixmap.width(),2,tpixmap);
 
 			}
@@ -541,7 +540,7 @@ KMultiTabBar::KMultiTabBar(KMultiTabBarMode bm, QWidget *parent,const char *name
 	}
 	m_l->setMargin(0);
 	m_l->setAutoAdd(false);
-	
+
 	m_internal=new KMultiTabBarInternal(this,bm);
 	setPosition((bm==KMultiTabBar::Vertical)?KMultiTabBar::Right:KMultiTabBar::Bottom);
 	setStyle(VSNET);
@@ -553,7 +552,7 @@ KMultiTabBar::KMultiTabBar(KMultiTabBarMode bm, QWidget *parent,const char *name
 	m_btnTabSep->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 	m_btnTabSep->setLineWidth(2);
 	m_btnTabSep->hide();
-	
+
 }
 
 KMultiTabBar::~KMultiTabBar() {
@@ -631,7 +630,7 @@ bool KMultiTabBar::isTabRaised(int id) const
 	{
 		return ttab->isOn();
 	}
-	
+
 	return false;
 }
 
