@@ -29,7 +29,7 @@ Add notes here
 Put verbatin code here if you need
 \endverbatim
 
-\faq <b>How can I have documentation on functions when using codecompletion</b>
+\faq <b>How can I have documentation on functions when using codecompletion ?</b>
   -# Create the xml-output with <a href="http://www.doxygen.org">Doxygen</a> of the files you want to add to the classstore
   -# Create the new PCS-database with r++. Now you have to use the -d command line switch of r++ to have it include the documentation.
      It is used like -d/path/of/doxygen/xml/output (notice that there is _no_ whitespace between -d and the path!).
