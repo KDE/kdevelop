@@ -414,7 +414,7 @@ QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
 
 void MainWindow::embedPartView(QWidget *view, const QString &name, const QString& fullName)
 {
-  QextMdiChildView *child = wrapper(view, name);
+  QextMdiChildView *child = wrapper(view, fullName);
   m_captionDict.insert(fullName, child);
 
   const QPixmap* wndIcon = view->icon();

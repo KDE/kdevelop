@@ -302,7 +302,7 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
     return; // to avoid later crash
   }
 
-  TopLevel::getInstance()->embedPartView(part->widget(), url.url(), url.url());
+  TopLevel::getInstance()->embedPartView(part->widget(), url.filename(), url.url());
 
   addPart(part);
 
