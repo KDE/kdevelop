@@ -14,6 +14,7 @@
 #include <qdir.h>
 #include <qpopupmenu.h>
 #include <qwhatsthis.h>
+#include <qtimer.h>
 
 #include <kpopupmenu.h>
 #include <kdebug.h>
@@ -91,11 +92,7 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 {
     setInstance( CvsFactory::instance() );
 
-    init();
-
-    /// \FIXME (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
-    /// of KDevVersionControl
-    setVersionControl( this );
+    QTimer::singleShot(0, this, SLOT(init()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,6 +129,10 @@ void CvsServicePart::init()
     QWhatsThis::add( m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service.") );
     m_impl->processWidget()->setCaption(i18n("CvsService Output"));
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
+    
+    /// \FIXME (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
+    /// of KDevVersionControl
+    setVersionControl( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

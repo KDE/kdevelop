@@ -123,8 +123,10 @@ private slots:
     //! Called when the user wishes to stop an operation.
     void slotStopButtonClicked( KDevPlugin* );
 
-private:
+private slots:
     void init();
+
+private:
     void setupActions();
     //! Returns the KURL for the currently focused document, if there is any
     bool urlFocusedDocument( KURL &url );
