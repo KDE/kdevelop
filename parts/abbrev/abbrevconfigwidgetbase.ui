@@ -130,7 +130,7 @@
                 <cstring>TextLabel2</cstring>
             </property>
             <property name="text">
-                <string>&amp;Code:</string>
+                <string>Co&amp;de:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>editCode</cstring>
