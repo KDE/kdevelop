@@ -515,11 +515,15 @@ public:
   void statusCallback(int id_);
   /** change Statusbar status of INS and OVR */
   void slotNewStatus();
+  /** change copy & cut status */
+  void slotCPPMarkStatus(KWriteView *, bool);
+  void slotHEADERMarkStatus(KWriteView *, bool);
+  void slotBROWSERMarkStatus(KHTMLView *, bool);
+  /** recognize change of Clipboard data */
+  void slotClipboardChanged(KWriteView *, bool);
   /** change Statusbar status of Line and Column */
   void slotNewLineColumn();
   void slotNewUndo();
-
- 
 
   void slotBufferMenu(const QPoint& pos);
 /*  void slotShowC();
