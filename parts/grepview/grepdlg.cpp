@@ -149,6 +149,11 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     dir_layout->addSpacing(10);
     dir_layout->addWidget(ignore_scm_box);
 
+    case_sens_box = new QCheckBox(i18n("Case &sensitive"), this);
+    case_sens_box->setChecked(true);
+    dir_layout->addSpacing(10);
+    dir_layout->addWidget(case_sens_box);
+    
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
     search_button = new QPushButton(i18n("&Search"), this);

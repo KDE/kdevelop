@@ -207,12 +207,21 @@ void GrepViewWidget::searchActivated()
     command += "| xargs " ;
 
 #ifndef USE_SOLARIS
-    command += "egrep -H -n -e ";
+    command += "egrep -H -n ";
+    if (!grepdlg->caseSensitiveFlag()) {
+      command += "-i ";
+    }
+    command += "-e ";
 #else
     // -H reported as not being available on Solaris,
     // but we're buggy without it on Linux.
-    command += "egrep -n -e ";
+    command += "egrep -n ";
+    if (!grepdlg->caseSensitiveFlag()) {
+      command += "-i ";
+    }
+    command += "-e ";
 #endif
+
     command += KShellProcess::quote(pattern);
     startJob("", command);
 

@@ -53,6 +53,8 @@ public:
 
     bool ignoreSCMDirsFlag() const
         { return ignore_scm_box->isChecked(); }
+    bool caseSensitiveFlag() const
+        { return case_sens_box->isChecked(); }
 
 signals:
     void searchClicked();
@@ -71,6 +73,7 @@ private:
 
     QCheckBox *recursive_box;
     QCheckBox *ignore_scm_box;
+    QCheckBox *case_sens_box;
     KConfig* config;
     QPushButton *search_button;
 	QPushButton *synch_button;
