@@ -1,3 +1,17 @@
+kdevelop (1:1.1beta2-19990131-1) stable; urgency=low
+
+  * New upstream version: 1.1beta2
+  * Use --prefix in configure, set kde_confdir, kde_htmldir explicitly
+    because of new autoconf framework
+
+ -- Bernd Gehrmann <bernd@lina>  Mon, 31 Jan 2000 21:15:04 +0100
+
+kdevelop (1:1.0-19991206-1) stable; urgency=low
+
+  * New upstream version: 1.0
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  6 Dec 1999 20:21:54 +0100
+
 kdevelop (1:1.0beta4.1-19991030-1) unstable; urgency=low
 
   * New upstream changes
