@@ -2375,7 +2375,9 @@ void CKDevelop::openBrowserBookmark(const QString& file)
 
 void CKDevelop::slotBookmarksBrowserSelected(int id_)
 {
-  openBrowserBookmark(doc_bookmarks_list.at(id_));
+  int id_index = doc_bookmarks->indexOf(id_);
+
+  openBrowserBookmark(doc_bookmarks_list.at(id_index));
 }  
 
 void CKDevelop::slotBookmarksNext()
