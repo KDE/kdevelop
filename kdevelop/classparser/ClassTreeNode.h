@@ -39,6 +39,7 @@
 #include <qlist.h>
 #include "ParsedClass.h"
 
+/** Representation of a class as a node in a tree. */
 class CClassTreeNode
 {
 public: // Constructor and Destructor
