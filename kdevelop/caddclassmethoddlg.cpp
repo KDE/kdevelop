@@ -271,10 +271,12 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   
   decl = declEdit.text();
 
+  lpPos = decl.find( '(' );
+
   // If no arguments we add ().
   if( lpPos == -1 )
     aMethod->setName( decl + "()" );
-  else // Else just 
+  else // Else just set the whole thing as the name
     aMethod->setName( decl );
   
   if( publicRb.isChecked() )
