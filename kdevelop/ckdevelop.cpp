@@ -722,7 +722,7 @@ void CKDevelop::slotBuildCompileFile(){
 
 void CKDevelop::slotBuildRun(){
   slotBuildMake();
-  slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
+  slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
   beep=false;
   next_job = "run";
 }
@@ -734,7 +734,7 @@ void CKDevelop::slotBuildRunWithArgs(){
 	prj->setExecuteArgs(argdlg.getArguments());		
 	prj->writeProject();
 	slotBuildMake();
-	slotStatusMsg(i18n("Running "+prj->getBinPROGRAM()));
+	slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
 	beep=false;
 	next_job = "run_with_args";
     }
@@ -753,7 +753,7 @@ void CKDevelop::slotBuildDebug(){
   showOutputView(false);
   showTreeView(false);
   
-  slotStatusMsg(i18n("Running  "+prj->getBinPROGRAM()+"  in KDbg"));
+  slotStatusMsg(i18n("Running  ")+prj->getBinPROGRAM()+i18n("  in KDbg"));
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);

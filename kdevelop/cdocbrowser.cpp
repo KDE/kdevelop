@@ -275,8 +275,8 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
-    doc_pop->changeItem(Icon("grep.xpm"),i18n("grep: "+text), ID_EDIT_SEARCH_IN_FILES);
-    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(Icon("grep.xpm"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
+    doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
   }
   else{
     doc_pop->setItemEnabled(ID_EDIT_COPY,false);
