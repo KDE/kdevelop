@@ -12,6 +12,7 @@
 	* ported the editor chooser plugin to KDevPlugin
 	* ported the code abbreviation plugin to KDevPlugin
 	* ported the astyle plugin to KDevPlugin
+	* ported the classview plugin to KDevPlugin
 	* extended gideon to load global KDevPlugin components
 	* centralized the trader queries for KDevelop/Part (Plugin) with
 	the additional constraint for the plugin scope into a static
@@ -21,6 +22,8 @@
 	method of PluginController
 	* install kdevelop components as KDE modules, not as libraries
 	* PluginController: don't bail out of loading of a kdevpart failed
+	* load kdevpart as well as kdevplugin components at the project
+	scope
 
 2002-04-08  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* emit loadedFile and savedFile again
