@@ -193,7 +193,7 @@ public:
   void slotOptionsAutosave(bool);
   void slotOptionsAutosaveTime(int);
   void slotOptionsAutoswitch(bool);
-  void slotOptionsMake(int id);
+  void slotOptionsMake();
 
   void slotDocBack();
   void slotDocForward();

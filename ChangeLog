@@ -5,7 +5,8 @@
     if you want to add tips, edit the database file tipdatabase in docs/en
     each line is a tip. Then replace 14 in: 	if (next < 14) ktipofday.cpp, l159 to the
     line numbers currently in tipdatabase.
-
+  * changed the make command select to a QLineEdit to set it directly
+  * commented out the progressbar...doesn't show nicely in win95 style.
 
 1999-03-01  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed "compile file" disableing during shell process

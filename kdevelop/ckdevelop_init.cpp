@@ -799,7 +799,7 @@ void CKDevelop::initStatusBar(){
   statusBar()->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
   statusBar()->changeItem("", ID_STATUS_EMPTY_2);
 
-  statusBar()->insertWidget(statProg,150, ID_STATUS_PROGRESS);
+//  statusBar()->insertWidget(statProg,150, ID_STATUS_PROGRESS);
   statusBar()->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
   statusBar()->setInsertOrder(KStatusBar::RightToLeft);
   statusBar()->setAlignment(ID_STATUS_INS_OVR, AlignCenter);

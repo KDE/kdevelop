@@ -44,23 +44,14 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   makeSelectLabel->setText(i18n("Select Make-Command:"));
   makeSelectLabel->setAlignment( 289 );
   makeSelectLabel->setMargin( -1 );
-  
-  makeSelectCombo = new QComboBox( FALSE, w1, "makeSelectCombo" );
-  makeSelectCombo->setGeometry( 270, 30, 130, 25 );
-  connect( makeSelectCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsMake(int)) );
-  makeSelectCombo->setSizeLimit( 10 );
-  makeSelectCombo->setAutoResize( FALSE );
-  makeSelectCombo->insertItem( "make", 0 );
-  makeSelectCombo->insertItem( "gmake", 1 );
-  makeSelectCombo->insertItem( "dmake", 2 );
-  QString make_conf=config->readEntry("Make","make");
-  if(make_conf=="make")
-    makeSelectCombo->setCurrentItem(0);
-  if(make_conf=="gmake")
-    makeSelectCombo->setCurrentItem(1);
-  if(make_conf=="dmake")
-    makeSelectCombo->setCurrentItem(2);
-  
+
+
+  QString make_cmd=config->readEntry("Make","make");
+
+  makeSelectLineEdit = new QLineEdit( w1, "makeSelectCombo" );
+  makeSelectLineEdit->setGeometry( 270, 30, 130, 25 );
+  makeSelectLineEdit->setText(make_cmd);
+
   QButtonGroup* makeGroup;
   makeGroup = new QButtonGroup( w1, "makeGroup" );
   makeGroup->setGeometry( 10, 10, 400, 60 );
@@ -70,8 +61,8 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   makeGroup->lower();
   
   KQuickHelp::add(makeGroup,
-		  KQuickHelp::add(makeSelectLabel,
-				  KQuickHelp::add(makeSelectCombo,i18n("Make-Command\n\n"
+  KQuickHelp::add(makeSelectLabel,
+  KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
 								       "Select your system's make-command.\n"
 								       "At the moment, make, gmake and dmake\n"
 								       "are available."))));
@@ -374,6 +365,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   setOkButton(i18n("OK"));
   setCancelButton(i18n("Cancel"));
   connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
+  connect( this, SIGNAL(applyButtonPressed()),parent, SLOT(slotOptionsMake()) );
   resize(440,420);
   
 }
@@ -400,8 +392,7 @@ void CKDevSetupDlg::ok(){
   bool autoswitch=autoSwitchCheck->isChecked();
   config->writeEntry("Autoswitch",autoswitch);
 
-  int current=makeSelectCombo->currentItem();
-  config->writeEntry("Make",makeSelectCombo->text(current));
+  config->writeEntry("Make",makeSelectLineEdit->text());
 
   bool logo=logoCheck->isChecked();
   config->writeEntry("Logo",logo);
@@ -443,6 +434,10 @@ void CKDevSetupDlg::slotKDEClicked(){
     config->writeEntry("doc_kde",dir);
   }
 }
+
+
+
+
 
 
 

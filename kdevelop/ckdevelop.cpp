@@ -630,18 +630,10 @@ void CKDevelop::slotOptionsAutosaveTime(int time){
 void CKDevelop::slotOptionsAutoswitch(bool autoswitch){
   bAutoswitch=autoswitch;
 }
-void CKDevelop::slotOptionsMake(int id){
-  switch(id){
-  case 0:
-    make_cmd="make";
-    break;
-  case 1:
-    make_cmd="gmake";
-    break;
-  case 2:
-    make_cmd="dmake";
-    break;
-  }
+void CKDevelop::slotOptionsMake(){
+  config->setGroup("General Options");
+  make_cmd=config->readEntry("Make","make");
+
 }
 
 void CKDevelop::slotDocBack(){
@@ -1790,6 +1782,7 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
 
 
 
