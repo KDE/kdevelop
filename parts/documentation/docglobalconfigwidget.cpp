@@ -27,6 +27,7 @@
 #include <qtoolbox.h>
 #include <qcheckbox.h>
 
+#include <kdebug.h>
 #include <kconfig.h>
 #include <kprocess.h>
 #include <kstddirs.h>
@@ -195,6 +196,14 @@ void DocGlobalConfigWidget::accept()
     m_part->setContextFeature(DocumentationPart::GotoInfo, info_box->isChecked());
     
     config->sync();
+    
+    //refill the index
+    kdDebug() << "refill the index" << endl;    
+    if (m_part->m_hasIndex)
+    {
+        kdDebug() << "m_part->m_hasIndex" << endl;
+        m_part->m_widget->index()->refill();
+    }
 }
 
 #include "docglobalconfigwidget.moc"

@@ -131,7 +131,7 @@ void DocKDevTOCPlugin::autoSetupPlugin()
     }
 }
 
-void DocKDevTOCPlugin::createIndex(KListBox* index, DocumentationCatalogItem* item)
+void DocKDevTOCPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* item)
 {
     TOCDocumentationCatalogItem *tocItem = dynamic_cast<TOCDocumentationCatalogItem *>(item);
     if (!tocItem)
@@ -169,7 +169,7 @@ void DocKDevTOCPlugin::createIndex(KListBox* index, DocumentationCatalogItem* it
             QString name = childEl.attribute("name");
             QString url = childEl.attribute("url");
             
-            IndexItem *ii = new IndexItem(this, item, index, name);
+            IndexItemProto *ii = new IndexItemProto(this, item, index, name, item->text(0));
             ii->addURL(KURL(constructURL(base, url)));
         }
         childEl = childEl.nextSibling().toElement();

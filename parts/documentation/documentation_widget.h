@@ -29,7 +29,7 @@ class ContentsView;
 class IndexView;
 class DocumentationCatalogItem;
 class QToolBox;
-class KListBox;
+class IndexBox;
 class SearchView;
 class BookmarkView;
 class KListView;
@@ -44,7 +44,7 @@ public:
     DocumentationPart *part() const { return m_part; }
 
     KListView *contents() const;
-    KListBox *index() const;
+    IndexBox *index() const;
 
 public slots:
     void lookInDocumentationIndex();

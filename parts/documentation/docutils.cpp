@@ -56,7 +56,11 @@ void DocUtils::docItemPopup(DocumentationPart *part, DocumentationItem *docItem,
 void DocUtils::docItemPopup(DocumentationPart *part, IndexItem *docItem, const QPoint &pos,
     bool showBookmark, bool showSearch)
 {
-    docItemPopup(part, docItem->text(), docItem->urls().first(), pos, showBookmark, showSearch);
+    //FIXME: index item can have more than one url, what to do?
+    KURL url;
+    if (docItem->urls().count() > 0)
+        url = docItem->urls().first().second;
+    docItemPopup(part, docItem->text(), url, pos, showBookmark, showSearch);
 }
 
 void DocUtils::docItemPopup(DocumentationPart *part, const QString &title, const KURL &url,

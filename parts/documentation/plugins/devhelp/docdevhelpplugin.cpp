@@ -233,7 +233,7 @@ void DocDevHelpPlugin::pushToScanStack(QValueStack<QString> &stack, const QStrin
     }
 }
 
-void DocDevHelpPlugin::createIndex(KListBox* index, DocumentationCatalogItem* item)
+void DocDevHelpPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* item)
 {
     DevHelpDocumentationCatalogItem *dhItem = dynamic_cast<DevHelpDocumentationCatalogItem *>(item);
     if (!dhItem)
@@ -268,7 +268,7 @@ void DocDevHelpPlugin::createIndex(KListBox* index, DocumentationCatalogItem* it
             QString name = childEl.attribute("name");
             QString url = childEl.attribute("link");
             
-            IndexItem *ii = new IndexItem(this, item, index, name);
+            IndexItemProto *ii = new IndexItemProto(this, item, index, name, item->text(0));
             ii->addURL(KURL(baseUrl+"/"+url));
         }
         childEl = childEl.nextSibling().toElement();

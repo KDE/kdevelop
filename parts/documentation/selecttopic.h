@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   cloudtemple@mksat.net                                                 *
+ *   adymo@mksat.net                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,44 +17,24 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef DOCDOXYGENPLUGIN_H
-#define DOCDOXYGENPLUGIN_H
+#ifndef SELECT_TOPIC_H
+#define SELECT_TOPIC_H
 
-#include <kdevdocumentationplugin.h>
+#include "selecttopicbase.h"
 
-class QDomDocument;
-class QDomElement;
+#include "kdevdocumentationplugin.h"
 
-class DocDoxygenPlugin: public DocumentationPlugin
-{
-    Q_OBJECT
+class SelectTopic: public SelectTopicBase{
+Q_OBJECT
 public:
-    DocDoxygenPlugin(QObject* parent, const char* name, const QStringList args = QStringList());
-    ~DocDoxygenPlugin();
+    SelectTopic(IndexItem::List &urls, QWidget *parent = 0, const char *name = 0);
+    KURL selectedURL();
 
-    virtual QString pluginName() const;
+public slots:
+    virtual void accept();
 
-    virtual DocumentationCatalogItem *createCatalog(KListView *contents, const QString &title, const QString &url);
-    
-    virtual void createTOC(DocumentationCatalogItem* item);
-    virtual void setCatalogURL(DocumentationCatalogItem* item);
-
-    virtual bool needRefreshIndex(DocumentationCatalogItem* item);
-    virtual void createIndex(IndexBox* index, DocumentationCatalogItem* item);
-
-    virtual QStringList fullTextSearchLocations();
-                    
-    virtual QPair<KFile::Mode, QString> catalogLocatorProps();
-    virtual QString catalogTitle(const QString& url);
-    
-    virtual void autoSetupPlugin();
-    
-protected:
-    void createBookTOC(DocumentationItem* item);
-    void createBookIndex(const QString &tagfile, IndexBox* index, DocumentationCatalogItem* item);
-    
-    void createIndexFromTag(QDomDocument &dom, IndexBox* index, DocumentationCatalogItem* item,
-        QDomElement &parentEl, const QString &prefix);
+private:
+    IndexItem::List m_urls;
 };
 
 #endif

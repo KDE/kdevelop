@@ -42,7 +42,7 @@ public:
     virtual DocumentationCatalogItem* createCatalog(KListView* contents, const QString& title, const QString& url);
 
     virtual bool needRefreshIndex(DocumentationCatalogItem* item);
-    virtual void createIndex(KListBox* index, DocumentationCatalogItem* item);
+    virtual void createIndex(IndexBox* index, DocumentationCatalogItem* item);
         
     virtual QStringList fullTextSearchLocations();
     virtual void autoSetupPlugin();

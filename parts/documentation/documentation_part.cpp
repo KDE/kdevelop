@@ -61,7 +61,8 @@ typedef KDevGenericFactory<DocumentationPart> DocumentationFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( &data ) );
 
 DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QStringList& )
-    :KDevPlugin("Documentation", "doctree", parent, name ? name : "DocumentationPart" )
+    :KDevPlugin("Documentation", "doctree", parent, name ? name : "DocumentationPart" ),
+    m_hasIndex(false)
 {
     setInstance(DocumentationFactory::instance());
     setXMLFile("kdevpart_documentation.rc");
@@ -123,15 +124,20 @@ void DocumentationPart::loadDocumentationPlugins()
         {
             kdDebug() << "    success" << endl;
             docPlugin->init(m_widget->contents());
-            connect(this, SIGNAL(indexSelected(KListBox* )), docPlugin, SLOT(createIndex(KListBox* )));
+            connect(this, SIGNAL(indexSelected(IndexBox* )), docPlugin, SLOT(createIndex(IndexBox* )));
             m_plugins.append(docPlugin);
         }
     }
 }
 
-void DocumentationPart::emitIndexSelected(KListBox *indexBox)
+void DocumentationPart::emitIndexSelected(IndexBox *indexBox)
 {
-    emit indexSelected(indexBox);
+    if (!m_hasIndex)
+    {
+        emit indexSelected(indexBox);
+        indexBox->fill();
+        m_hasIndex = true;
+    }
 }
 
 void DocumentationPart::insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo)
@@ -272,8 +278,8 @@ void DocumentationPart::contextInfoPage()
 
 void DocumentationPart::contextFindDocumentation()
 { 
-  mainWindow()->raiseView(m_widget);
-  m_widget->findInDocumentation(m_contextStr);
+    mainWindow()->raiseView(m_widget);
+    m_widget->findInDocumentation(m_contextStr);
 }
 
 void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)

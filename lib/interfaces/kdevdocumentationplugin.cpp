@@ -141,18 +141,43 @@ void DocumentationCatalogItem::activate()
 
 
 
+//class IndexItemProto
+
+IndexItemProto::IndexItemProto(DocumentationPlugin *plugin, DocumentationCatalogItem *catalog, 
+    IndexBox *listbox, const QString &text, const QString &description)
+    : m_listbox(listbox), m_text(text), m_description(description)
+{
+    plugin->indexes[catalog].append(this);
+    m_listbox->addIndexItem(this);
+}
+
+IndexItemProto::~IndexItemProto()
+{
+    m_listbox->removeIndexItem(this);
+}
 
 
 //class IndexItem
 
-IndexItem::IndexItem(DocumentationPlugin *plugin, DocumentationCatalogItem *catalog, 
-    QListBox *listbox, const QString &text)
-    :QListBoxText(listbox, text)
+IndexItem::IndexItem(IndexBox *listbox, const QString &text)
+    :QListBoxText(listbox, text), m_listbox(listbox)
 {
-    plugin->indexes[catalog].append(this);
 }
 
-
+IndexItem::List IndexItem::urls() const
+{
+    List urlList;
+    QValueList<IndexItemProto*> itemProtos = m_listbox->items[text()];
+    for (QValueList<IndexItemProto*>::const_iterator it = itemProtos.begin();
+        it != itemProtos.end(); ++it)
+    {
+        IndexItemProto *proto = *it;
+        KURL::List urls = proto->urls();
+        for (KURL::List::const_iterator uit = urls.begin(); uit != urls.end(); ++uit)
+            urlList.append(qMakePair(proto->description(), *uit));
+    }
+    return urlList;
+}
 
 
 
@@ -276,8 +301,8 @@ void DocumentationPlugin::clearCatalog(DocumentationCatalogItem *item)
             namedCatalogs.remove(it);
     }
     //clear indexes for catalog
-    QValueList<IndexItem *> idx = indexes[item];
-    for (QValueList<IndexItem *>::iterator it = idx.begin(); it != idx.end(); ++it)
+    QValueList<IndexItemProto *> idx = indexes[item];
+    for (QValueList<IndexItemProto *>::iterator it = idx.begin(); it != idx.end(); ++it)
     {
         delete *it;
     }
@@ -287,7 +312,7 @@ void DocumentationPlugin::clearCatalog(DocumentationCatalogItem *item)
     catalogs.remove(item);
 }
 
-void DocumentationPlugin::createIndex(KListBox *index)
+void DocumentationPlugin::createIndex(IndexBox *index)
 {
     if (m_indexCreated)
         return;
@@ -311,18 +336,20 @@ void DocumentationPlugin::cacheIndex(DocumentationCatalogItem *item)
     
     QTextStream str(&cacheFile);
     str.setEncoding(QTextStream::UnicodeUTF8);
+    str << CACHE_VERSION << endl;
 
-    QValueList<IndexItem*> catalogIndexes = indexes[item];
-    for (QValueList<IndexItem*>::const_iterator it = catalogIndexes.constBegin();
+    QValueList<IndexItemProto*> catalogIndexes = indexes[item];
+    for (QValueList<IndexItemProto*>::const_iterator it = catalogIndexes.constBegin();
         it != catalogIndexes.constEnd(); ++it)
     {
-        str << (*it)->text() << "::::" << (*it)->urls().toStringList().join("::::") << endl;
+        str << (*it)->text() << "::::" << (*it)->description() << "::::" 
+            << (*it)->urls().toStringList().join("::::") << endl;
     }
    
     cacheFile.close();
 }
 
-bool DocumentationPlugin::loadCachedIndex(KListBox *index, DocumentationCatalogItem *item)
+bool DocumentationPlugin::loadCachedIndex(IndexBox *index, DocumentationCatalogItem *item)
 {
     QString cacheName = locateLocal("data", QString("kdevdocumentation/index/cache_") + item->text(0));
     QFile cacheFile(cacheName);
@@ -333,13 +360,19 @@ bool DocumentationPlugin::loadCachedIndex(KListBox *index, DocumentationCatalogI
     
     QTextStream str(&cacheFile);
     str.setEncoding(QTextStream::UnicodeUTF8);
+    QString ver = str.readLine();
+    if (ver != CACHE_VERSION)
+    {
+        kdDebug() << "Wrong cache version: " << ver << endl;
+        return false;
+    }
 
     while (!str.eof())
     {
         QStringList cacheItem = QStringList::split("::::", str.readLine(), false);
-        IndexItem *ii = new IndexItem(this, item, index, cacheItem.first());
+        IndexItemProto *ii = new IndexItemProto(this, item, index, cacheItem.first(), cacheItem[1]);
         QStringList::const_iterator it = cacheItem.constBegin();
-        ++it;
+        ++it; ++it;
         for (; it != cacheItem.constEnd(); ++it)
             ii->addURL(KURL(*it));
     }
@@ -377,15 +410,15 @@ void DocumentationPlugin::deleteCatalogConfiguration(const ConfigurationItem *co
 void DocumentationPlugin::clearCatalogIndex(DocumentationCatalogItem *item)
 {
     //clear indexes for catalog
-    QValueList<IndexItem *> idx = indexes[item];
-    for (QValueList<IndexItem *>::iterator it = idx.begin(); it != idx.end(); ++it)
+    QValueList<IndexItemProto *> idx = indexes[item];
+    for (QValueList<IndexItemProto *>::iterator it = idx.begin(); it != idx.end(); ++it)
     {
         delete *it;
     }
     indexes.remove(item);
 }
 
-void DocumentationPlugin::loadIndex(KListBox *index, DocumentationCatalogItem *item)
+void DocumentationPlugin::loadIndex(IndexBox *index, DocumentationCatalogItem *item)
 {
     if (!indexEnabled(item))
         return;
@@ -408,7 +441,7 @@ void DocumentationPlugin::init(KListView *contents)
     }
 }
 
-void DocumentationPlugin::reinit(KListView *contents, KListBox *index, QStringList restrictions)
+void DocumentationPlugin::reinit(KListView *contents, IndexBox *index, QStringList restrictions)
 {
     config->setGroup("Locations");
     QMap<QString, QString> entryMap = config->entryMap("Locations");
@@ -438,6 +471,8 @@ void DocumentationPlugin::reinit(KListView *contents, KListBox *index, QStringLi
             {
                 DocumentationCatalogItem * item = createCatalog(contents, it.key(), config->readPathEntry(it.key()));
                 loadIndex(index, item);
+                index->setDirty(true);
+//                index->refill(indexes[item]);
             }
             else if (!indexEnabled(namedCatalogs[it.key()]))    //clear index if it is disabled in configuration
             {
@@ -447,15 +482,18 @@ void DocumentationPlugin::reinit(KListView *contents, KListBox *index, QStringLi
             else if ( (indexEnabled(namedCatalogs[it.key()]))    //index is requested in configuration but does not yet exist
                 && (!indexes.contains(namedCatalogs[it.key()])) )
             {
-                 kdDebug() << "    index requested " << endl;
-                 loadIndex(index, namedCatalogs[it.key()]);
+                kdDebug() << "    index requested " << endl;
+                loadIndex(index, namedCatalogs[it.key()]);
+                index->setDirty(true);
+//                index->refill(indexes[namedCatalogs[it.key()]]);
             }
-            else if (indexEnabled(namedCatalogs[it.key()]))
+            m_indexCreated = true;
+/*            else if (indexEnabled(namedCatalogs[it.key()]))
                 kdDebug() << "    1" << endl;
             else if (!indexes.contains(namedCatalogs[it.key()]))
                 kdDebug() << "    2" << endl;
             else
-                kdDebug() << "    3" << endl;                
+                kdDebug() << "    3" << endl;                */
         }
     }
 }
@@ -551,5 +589,69 @@ void DocumentationPlugin::setCatalogEnabled(const QString &name, bool e)
     config->writeEntry(name, e);
     config->setGroup(group);
 }
+
+
+
+
+//class IndexBox
+
+IndexBox::IndexBox(QWidget *parent, const char *name)
+    :KListBox(parent, name), m_dirty(false)
+{
+}
+
+void IndexBox::addIndexItem(IndexItemProto *item)
+{
+    items[item->text()].append(item);
+}
+
+void IndexBox::removeIndexItem(IndexItemProto *item)
+{
+    QString text = item->text();
+    items[text].remove(item);
+    if (items[text].count() == 0)
+    {
+        items.remove(text);
+        QListBoxItem *item = findItem(text, Qt::CaseSensitive | Qt::ExactMatch);
+        if (item)
+            delete item;
+    }
+}
+
+void IndexBox::fill()
+{
+    for (QMap<QString, QValueList<IndexItemProto*> >::const_iterator it = items.begin();
+        it != items.end(); ++it)
+    {
+        new IndexItem(this, it.key());
+    }
+}
+
+void IndexBox::setDirty(bool dirty)
+{
+    m_dirty = dirty;
+}
+
+void IndexBox::refill()
+{
+    if (m_dirty)
+    {
+        clear();
+        fill();
+        setDirty(false);
+    }
+}
+
+/*void IndexBox::refill(QValueList<IndexItemProto *> &items)
+{
+    for (QValueList<IndexItemProto*>::const_iterator it = items.begin();
+        it != items.end(); ++it)
+    {
+        IndexItemProto *proto = *it;
+        QListBoxItem *indexItem = findItem(proto->text(), Qt::CaseSensitive | Qt::ExactMatch);
+        if (!indexItem)
+            new IndexItem(this, proto->text());
+    }
+}*/
 
 #include "kdevdocumentationplugin.moc"

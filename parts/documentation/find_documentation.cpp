@@ -261,7 +261,11 @@ void FindDocumentation::searchInIndex()
                 newitem = new DocumentationItem(DocumentationItem::Document, index_item, newitem, item->text());
             else
                 newitem = new DocumentationItem(DocumentationItem::Document, index_item, item->text());
-            newitem->setURL(item->urls().first());
+            //FIXME: index item can have more than one url, what to do?
+            KURL url;
+            if (item->urls().count() > 0)
+                url = item->urls().first().second;
+            newitem->setURL(url);
             item = dynamic_cast<IndexItem*>(item->next());
         }
     }

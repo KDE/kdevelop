@@ -141,7 +141,7 @@ void DocDoxygenPlugin::autoSetupPlugin()
     }
 }
 
-void DocDoxygenPlugin::createIndex(KListBox* index, DocumentationCatalogItem* item)
+void DocDoxygenPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* item)
 {
     QFileInfo fi(item->url().path());
     if (!fi.exists())
@@ -236,7 +236,7 @@ void DocDoxygenPlugin::createBookTOC(DocumentationItem *item)
     }    
 }
 
-void DocDoxygenPlugin::createBookIndex(const QString &tagfile, KListBox* index, DocumentationCatalogItem* item)
+void DocDoxygenPlugin::createBookIndex(const QString &tagfile, IndexBox* index, DocumentationCatalogItem* item)
 {
     QString tagName = tagfile;
     kdDebug() << tagfile << endl;
@@ -260,24 +260,47 @@ void DocDoxygenPlugin::createBookIndex(const QString &tagfile, KListBox* index, 
     f.close();
 
     QDomElement docEl = dom.documentElement();
+    createIndexFromTag(dom, index, item, docEl, KURL(tagfile).directory(false));
+}
+
+void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
+    DocumentationCatalogItem *item, QDomElement &parentEl, const QString &prefix)
+{
+    QDomElement docEl = parentEl;
 
     QDomElement childEl = docEl.firstChild().toElement();
     while (!childEl.isNull())
     {
-        if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class")
+        if (childEl.tagName() == "compound" && 
+            ((childEl.attribute("kind") == "class")
+            || (childEl.attribute("kind") == "struct")
+            || (childEl.attribute("kind") == "namespace") ))
         {
             QString classname = childEl.namedItem("name").firstChild().toText().data();
             QString filename = childEl.namedItem("filename").firstChild().toText().data();
 
-            kdDebug() << "    ch: " << KURL(tagfile).directory(false) + "html/" + filename << endl;
-            if (QFile::exists(KURL(tagfile).directory(false) + "html/" + filename))
-            {
-                IndexItem *indexItem = new IndexItem(this, item, index, classname);
-                indexItem->addURL(KURL(KURL(tagfile).directory(false) + "html/" + filename));
-            }
+            IndexItemProto *indexItem = new IndexItemProto(this, item, index, classname, 
+            i18n("%1 Class Reference").arg(classname));
+            indexItem->addURL(KURL(prefix + "html/" + filename));
+            
+            createIndexFromTag(dom, index, item, childEl, prefix + "html/" + filename);
+        }
+        else if ((childEl.tagName() == "member") && 
+            ((childEl.attribute("kind") == "function")
+            || (childEl.attribute("kind") == "slot")
+            || (childEl.attribute("kind") == "signal") ))
+        {
+            QString classname = parentEl.namedItem("name").firstChild().toText().data();
+            QString membername = childEl.namedItem("name").firstChild().toText().data();
+            QString anchor = childEl.namedItem("anchor").firstChild().toText().data();
+            QString arglist = childEl.namedItem("arglist").firstChild().toText().data();
+            
+            IndexItemProto *indexItem = new IndexItemProto(this, item, index, membername,
+                i18n("%1::%2%3 Member Reference").arg(classname).arg(membername).arg(arglist));
+            indexItem->addURL(KURL(prefix + "#" + anchor));
         }
         childEl = childEl.nextSibling().toElement();
-    }    
+    }
 }
 
 #include "docdoxygenplugin.moc"

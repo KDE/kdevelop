@@ -24,7 +24,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 
-#include <klistbox.h>
 #include <klineedit.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -35,6 +34,7 @@
 #include <kdevdocumentationplugin.h>
 
 #include "docutils.h"
+#include "selecttopic.h"
 #include "documentation_part.h"
 #include "documentation_widget.h"
 
@@ -49,7 +49,7 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
     hl->addWidget(m_edit);
     l->addLayout(hl);
 
-    m_index = new KListBox(this);
+    m_index = new IndexBox(this);
     l->addWidget(m_index);
        
     connect(m_index, SIGNAL(doubleClicked(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
@@ -77,8 +77,19 @@ void IndexView::searchInIndex(QListBoxItem *item)
     IndexItem *indexItem = dynamic_cast<IndexItem*>(item);
     if (!indexItem)
         return;
-    //@todo: adymo: show dialog to select url from a list
-    m_widget->part()->partController()->showDocument(indexItem->urls().first());
+    
+    IndexItem::List urls = indexItem->urls();
+    if (urls.count() == 1)
+        m_widget->part()->partController()->showDocument(urls.first().second);
+    else if (urls.count() == 0) ;
+    else
+    {
+        SelectTopic *dia = new SelectTopic(urls);
+        dia->topicLabel->setText(dia->topicLabel->text().arg(item->text()));
+        if (dia->exec())
+            m_widget->part()->partController()->showDocument(dia->selectedURL());
+        delete dia;
+    }
 }
 
 void IndexView::showIndex(const QString &term)

@@ -22,7 +22,7 @@
 
 #include <qwidget.h>
 
-class KListBox;
+class IndexBox;
 class KLineEdit;
 class QListBoxItem;
 class DocumentationWidget;
@@ -36,7 +36,7 @@ public:
     ~IndexView();
     
     virtual bool eventFilter(QObject *watched, QEvent *e);
-    KListBox *indexBox() const { return m_index; }
+    IndexBox *indexBox() const { return m_index; }
 
 public slots:
     void searchInIndex();
@@ -55,7 +55,7 @@ protected:
 private:
     DocumentationWidget *m_widget;
     
-    KListBox *m_index;
+    IndexBox *m_index;
     KLineEdit *m_edit;
     
 friend class FindDocumentation;

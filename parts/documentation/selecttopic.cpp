@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   cloudtemple@mksat.net                                                 *
+ *   adymo@mksat.net                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,38 +17,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef DOCKDEVTOCPLUGIN_H
-#define DOCKDEVTOCPLUGIN_H
+#include "selecttopic.h"
 
-#include <qdom.h>
-
-#include <kdevdocumentationplugin.h>
-
-class DocKDevTOCPlugin : public DocumentationPlugin
+SelectTopic::SelectTopic(IndexItem::List &urls, QWidget *parent, const char *name)
+    :SelectTopicBase(parent, name), m_urls(urls)
 {
-    Q_OBJECT
-public:
-    DocKDevTOCPlugin(QObject* parent, const char* name, const QStringList args = QStringList());
-    ~DocKDevTOCPlugin();
+    for (IndexItem::List::const_iterator it = m_urls.begin(); it != m_urls.end(); ++it)
+        topicBox->insertItem((*it).first);
+    if (topicBox->item(0))
+    {
+        topicBox->setCurrentItem(0);
+        topicBox->setSelected(topicBox->item(0), true);
+    }
+}
 
-    virtual QString pluginName() const;
-    
-    virtual QString catalogTitle(const QString& url);
-    virtual DocumentationCatalogItem* createCatalog(KListView* contents, const QString& title, const QString& url);
-    virtual void createTOC(DocumentationCatalogItem* item);
-    virtual void setCatalogURL(DocumentationCatalogItem* item);
-    
-    virtual bool needRefreshIndex(DocumentationCatalogItem* item);
-    virtual void createIndex(IndexBox* index, DocumentationCatalogItem* item);
-    
-    virtual QStringList fullTextSearchLocations();
+void SelectTopic::accept()
+{
+    if (topicBox->currentItem() == -1)
+        return;
+    else
+        return QDialog::accept();
+}
 
-    virtual QPair<KFile::Mode, QString > catalogLocatorProps();
-    virtual void autoSetupPlugin();
+KURL SelectTopic::selectedURL()
+{
+    if (topicBox->currentItem() != -1)
+        return m_urls[topicBox->currentItem()].second;
+    return KURL();
+}
 
-protected:
-    void addTocSect(DocumentationItem *parent, QDomElement childEl, const QString &base, uint level);
-    static QString constructURL(const QString &base, const QString &url) ;
-};
-
-#endif
+#include "selecttopic.moc"

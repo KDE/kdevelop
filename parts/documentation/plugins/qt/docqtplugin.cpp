@@ -205,7 +205,7 @@ bool DocQtPlugin::needRefreshIndex(DocumentationCatalogItem *item)
         return false;
 }
 
-void DocQtPlugin::createIndex(KListBox *index, DocumentationCatalogItem *item) 
+void DocQtPlugin::createIndex(IndexBox *index, DocumentationCatalogItem *item) 
 {
     QtDocumentationCatalogItem *qtItem = dynamic_cast<QtDocumentationCatalogItem *>(item);
     if (!qtItem)
@@ -236,12 +236,12 @@ void DocQtPlugin::createIndex(KListBox *index, DocumentationCatalogItem *item)
         if (childEl.tagName() == "section")
         {
             //adymo: do not load section to index for Qt reference documentation
+            QString title = childEl.attribute("title");
             if (fi.fileName() != "qt.dcf")
             {
                 QString ref = childEl.attribute("ref");
-                QString title = childEl.attribute("title");
                 
-                IndexItem *ii = new IndexItem(this, item, index, title);
+                IndexItemProto *ii = new IndexItemProto(this, item, index, title, item->text(0));
                 ii->addURL(KURL(fi.dirPath(true) + "/" + ref));
             }
 
@@ -253,13 +253,13 @@ void DocQtPlugin::createIndex(KListBox *index, DocumentationCatalogItem *item)
                     QString keyRef = grandChild.attribute("ref");
                     QString keyTitle = grandChild.text();
 
-                    IndexItem *ii = new IndexItem(this, item, index, keyTitle);
+                    IndexItemProto *ii = new IndexItemProto(this, item, index, keyTitle, title);
                     ii->addURL(KURL(fi.dirPath(true) + "/" + keyRef));
                 }
                 //adymo: for qt.dcf load only first keyword with class name, not method names
                 //FIXME: make this configurable?
-                if (fi.fileName() == "qt.dcf")
-                    break;
+                /*if (fi.fileName() == "qt.dcf")
+                    break;*/
                 grandChild = grandChild.nextSibling().toElement();
             }
         }

@@ -77,7 +77,7 @@ void DocumentationWidget::tabChanged(int t)
         m_part->emitIndexSelected(m_index->indexBox());
 }
 
-KListBox *DocumentationWidget::index() const
+IndexBox *DocumentationWidget::index() const
 {
     return m_index->indexBox();
 }

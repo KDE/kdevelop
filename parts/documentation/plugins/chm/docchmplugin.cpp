@@ -81,7 +81,7 @@ void DocCHMPlugin::autoSetupPlugin()
     return;
 }
 
-void DocCHMPlugin::createIndex(KListBox* index, DocumentationCatalogItem* item)
+void DocCHMPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* item)
 {
     return;
 }

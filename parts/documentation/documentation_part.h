@@ -26,7 +26,7 @@
 
 class FindDocumentation;
 class DocumentationWidget;
-class KListBox;
+class IndexBox;
 class KConfig;
 class KDialogBase;
 class ConfigWidgetProxy;
@@ -47,7 +47,7 @@ public:
     DocumentationPart(QObject *parent, const char *name, const QStringList &);
     ~DocumentationPart();
     
-    void emitIndexSelected(KListBox *indexBox);
+    void emitIndexSelected(IndexBox *indexBox);
     void emitBookmarkLocation(const QString &title, const KURL &url);
     bool configure(int page = 0);
     
@@ -70,7 +70,7 @@ public slots:
     void contextInfoPage();
     
 signals:
-    void indexSelected(KListBox *indexBox);
+    void indexSelected(IndexBox *indexBox);
     void bookmarkLocation(const QString &title, const KURL &url);
     
 protected:
@@ -89,6 +89,7 @@ private:
     QValueList<DocumentationPlugin*> m_plugins;
     
     QString m_contextStr;
+    bool m_hasIndex;
     
 friend class DocGlobalConfigWidget;
 friend class SearchView;

@@ -28,6 +28,8 @@
 #include <kurl.h>
 #include <kfile.h>
 
+#define CACHE_VERSION "1"
+
 class DocumentationItem: public KListViewItem
 {
 public:
@@ -73,17 +75,56 @@ private:
     bool isActivated;
 };
 
-class IndexItem: public QListBoxText
+class IndexBox;
+
+class IndexItemProto
 {
 public:
-    IndexItem(DocumentationPlugin *plugin, DocumentationCatalogItem *catalog, QListBox *listbox,
-        const QString &text = QString::null);
+    IndexItemProto(DocumentationPlugin *plugin, DocumentationCatalogItem *catalog, IndexBox *listbox,
+        const QString &text, const QString &description);
+    ~IndexItemProto();
 
     void addURL(const KURL &url) { m_urls.append(url); }
     KURL::List urls() const { return m_urls; }
+    QString text() const { return m_text; }
+    QString description() const { return m_description; }
     
 private:
     KURL::List m_urls;
+    IndexBox *m_listbox;
+    QString m_text;
+    QString m_description;
+};
+
+class IndexItem: public QListBoxText {
+public:
+    typedef QPair<QString, KURL> URL;
+    typedef QValueList<URL> List;
+    
+    IndexItem(IndexBox *listbox, const QString &text);
+
+    List urls() const;
+
+private:
+    IndexBox *m_listbox;
+};
+
+class IndexBox: public KListBox{
+public:
+    IndexBox(QWidget *parent = 0, const char *name = 0);
+    
+    virtual void addIndexItem(IndexItemProto *item);
+    virtual void removeIndexItem(IndexItemProto *item);
+    virtual void fill();
+    virtual void refill();
+    virtual void setDirty(bool dirty);
+//    virtual void refill(QValueList<IndexItemProto*> &items);
+    
+private:
+    QMap<QString, QValueList<IndexItemProto*> > items;
+    friend class IndexItem;
+    
+    bool m_dirty;
 };
 
 class QPainter;
@@ -173,7 +214,7 @@ public:
     @param index the listbox with index to update
     @param restrictions the list of catalogs names to remove
     */
-    virtual void reinit(KListView *contents, KListBox *index, QStringList restrictions);
+    virtual void reinit(KListView *contents, IndexBox *index, QStringList restrictions);
     /**Initializes plugin configuration. Documentation plugins should be able to
     initialize the default configuration on startup without any user interaction.
     Call this in the constructor of your plugin.*/
@@ -202,7 +243,7 @@ public:
     IndexItem objects.
     @param index the listbox which contains index items
     */
-    virtual void createIndex(KListBox *index, DocumentationCatalogItem *item) = 0;
+    virtual void createIndex(IndexBox *index, DocumentationCatalogItem *item) = 0;
 
     /**Creates a table of contents for given catalog. Documentation part uses
     lazy loading of toc's to reduce startup time. This means that createTOC
@@ -253,13 +294,13 @@ public:
     /**Loads index from the cache. Reimplement this only if custom
     caching algorythm is used (do not forget to reimplement also @ref cacheIndex
     and @ref createIndex).*/
-    virtual bool loadCachedIndex(KListBox *index, DocumentationCatalogItem *item);
+    virtual bool loadCachedIndex(IndexBox *index, DocumentationCatalogItem *item);
     
 public slots:
     /**Creates index and fills index listbox. Reimplement this only if custom
     caching algorythm is used (do not forget to reimplement also @ref cacheIndex
     and @ref loadCachedIndex).*/
-    virtual void createIndex(KListBox *index);
+    virtual void createIndex(IndexBox *index);
         
 protected:
     /**A list of loaded documentation catalogs.*/
@@ -267,14 +308,14 @@ protected:
     /**A map of names of loaded documentation catalogs.*/
     QMap<QString, DocumentationCatalogItem*> namedCatalogs;
     /**A map of indices of loaded documentation catalogs.*/
-    QMap<DocumentationCatalogItem*, QValueList<IndexItem*> > indexes;
+    QMap<DocumentationCatalogItem*, QValueList<IndexItemProto*> > indexes;
 
     /**Sets capabilities of documentation plugin.*/
     void setCapabilities(int caps) { m_capabilities = caps; }
     /**Clears index of given catalog.*/
     virtual void clearCatalogIndex(DocumentationCatalogItem *item);
     /**Loads index from cache or creates and caches it if does not exist.*/
-    void loadIndex(KListBox *index, DocumentationCatalogItem *item);
+    void loadIndex(IndexBox *index, DocumentationCatalogItem *item);
     
     /**Stores items deleted from configuration. @ref saveCatalogConfiguration
     uses this to remove entries from configuration file.*/
@@ -293,7 +334,7 @@ private:
     bool m_indexCreated;
     
 
-friend class IndexItem;
+friend class IndexItemProto;
 friend class DocumentationCatalogItem;
 };
 
