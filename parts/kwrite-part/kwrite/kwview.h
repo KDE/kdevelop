@@ -160,6 +160,9 @@ class KWriteView : public QWidget {
     void bottom(VConfig &);
     void top_home(VConfig &c);
     void bottom_end(VConfig &c);
+    PointStruc getCursorPosition(){
+      return cursor;
+    }
 
   protected slots:
     void changeXPos(int);
@@ -852,6 +855,9 @@ class KWrite : public KTextEditor::View {
       Set the end of line mode (Unix, Macintosh or Dos)
     */
     void setEol(int);
+    
+    // quick hack!!!! by smeier@kdevelop.org
+    KWriteView* view(){return kWriteView;}
 
 //internal
   protected:
