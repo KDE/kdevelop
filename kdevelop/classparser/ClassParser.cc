@@ -33,6 +33,13 @@
 #include <assert.h>
 #include "ClassParser.h"
 
+#define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
+#define CP_IS_OTHER 0
+#define CP_IS_ATTRIBUTE 1
+#define CP_IS_METHOD 2
+#define CP_IS_METHOD_IMPL 3
+#define CP_IS_ATTR_IMPL 4
+
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
@@ -72,154 +79,263 @@ CClassParser::~CClassParser()
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------ CClassParser::parseClassHeader()
- * parseClassHeader()
- *   Parse a class header, i.e find out classname and possible
- *   parents
+/*---------------------------------------- CClassParser::parseStruct()
+ * parseStruct()
+ *   Parse a structure.
  *
  * Parameters:
- *   list           List of classes to add the new class to.
- *
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseClassHeader()
+CParsedStruct *CClassParser::parseStruct()
 {
-  int export;             // Export status(private/public/protected).
-  CParsedParent *aParent; // A parent of this class.
+  CParsedStruct *aStruct = new CParsedStruct();
+  //  CParsedAttribute *aAttr;
 
-  // Ok, this seems to be a class definition so allocate the
-  // the new object and set some values.
-  currentClass = new CParsedClass();
-  currentClass->setName( getText() );
-  currentClass->setDefinedOnLine( getLineno() );
-  currentClass->setHFilename( currentFile );
-  currentClass->setImplFilename( currentFile );
-  
-  // Check for inheritance
+  // Set the name
   getNextLexem();
-  switch( lexem )
-  {
-    case '{': // It was a class. Yiieha!
-      scopedepth++;
-      isDefiningClass = true;
-      declaredScope = -1;
-      break;
-    case ':': // Class with inheritance
-      isDefiningClass = true;
-      declaredScope = -1;
-      // Add parents until we find a {
-      while( lexem != '{' )
-      {
-        // Fetch next lexem.
-        getNextLexem();
 
-        // For classes with no scope identifier at inheritance.
-        if( lexem == ID )
-          export = PRIVATE;
-        else
-        {
-          // Find out type of inheritance.
-          export = lexem;
-        
-          // Read the name of the parent.
-          getNextLexem();
-          assert( lexem == ID );
-        }
-        
-        // Add the parent.
-        aParent = new CParsedParent();
-        aParent->setName( getText() );
-        aParent->setExport( export );
-        
-        currentClass->addParent( aParent );
-        
-        // Fetch next lexem.
-        getNextLexem();
-        assert( lexem == '{' || lexem == ',' );
-      }
-      scopedepth++;
-      break;
-    default: // Bogus class definition..
-      delete currentClass;
-      currentClass = NULL;
-      break;
+  if( lexem == ID )
+  {
+    aStruct->setName( getText() );
+
+    // Skip the '{'
+    getNextLexem();
+    assert( lexem == '{' );
+  }
+  else
+  {
+    delete aStruct;
+    aStruct = NULL;
   }
 
-  // If this was a classdefinition we add it to the list.
-  if( currentClass != NULL )
-    store.addClass( currentClass );
+  skipBlock();
+
+  // Skip to the ';'
+  while( lexem != ';' )
+    getNextLexem();
+  /*  getNextLexem();
+      
+
+  while( aAttr != NULL )
+  {
+    aAttr = parseVariable();
+    if( aAttr != NULL )
+    {
+      aStruct->addMember( aAttr );
+      getNextLexem();
+    }
+    }*/
+  
+  return aStruct;
 }
 
-/*----------------------------------------- CClassParser::parseType()
- * parseType()
- *   Parse a type declaration of some sort. Works for both function
- *   return types, attribute declarations and function parameters.
+/*---------------------------------------- CClassParser::parseEnum()
+ * parseEnum()
+ *   Parse a enum.
  *
  * Parameters:
- *   aStr           String to store the typedeclaration in.
- *
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseType( QString *aStr )
+void CClassParser::parseEnum()
 {
-  bool isConst = false;
-  bool exit = false;
-
-  if( lexem == CONST )
-  {
-    isConst = true;
+  while( lexem != ';' )
     getNextLexem();
-  }
+}
 
-  *aStr = getText();
-  *aStr += " ";
+/*---------------------------------------- CClassParser::parseUnion()
+ * parseUnion()
+ *   Parse an union.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseUnion()
+{
+  // Get the name
+  getNextLexem();
+  assert( lexem == ID );
 
-  // Check for modifiers.
-  if( strcmp( getText(), "unsigned" ) == 0 ||
-      strcmp( getText(), "short" ) == 0 )
+  // Skip the '{'
+  getNextLexem();
+  assert( lexem == '{' );
+
+  skipBlock();
+}
+
+/*----------------------------------- CClassParser::fillInParsedType()
+ * fillInParsedType()
+ *   Create a type using the arguments on the stack.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::fillInParsedType(QString &type)
+{
+  CParsedLexem *aLexem;
+  type = "";
+
+  while( !lexemStack.isEmpty() )
   {
-    getNextLexem();
-    *aStr += getText();
-    *aStr += " ";
+    aLexem = lexemStack.pop();
+    type = aLexem->text + " " + type;
+    delete aLexem;
   }
+}
+
+/*----------------------------------- CClassParser::skipBlock()
+ * skipBlock()
+ *   Skip all lexems inside a '{' '}' block.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::skipBlock()
+{
+  int depth=1;
+  bool exit=false;
 
   while( !exit )
   {
     getNextLexem();
 
-    switch( lexem )
+    if( lexem == '{' )
+      depth++;
+    if( lexem == '}' )
     {
-      case '<': // Template
-        *aStr += "<";
-        getNextLexem();
-        while( lexem != '>' )
-        {
-          *aStr += getText();
-          getNextLexem();
-        }
-        *aStr += ">";
-        break;
-      case '*': // Pointer
-        *aStr += "*";
-        break;
-      case '&': // Pointer(sort of...)
-        *aStr += "&";
-        break;
-      default:  // No more known lexem found, let's exit.
-        exit = true;
-        break;
+      depth--;
+      exit = ( depth == 0 );
+    }
+  }
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                         VARIABLE METHODS                          *
+ *                                                                   *
+ ********************************************************************/
+
+/*------------------------------------ CClassParser::isEndOfVarDecl()
+ * isEndOfVarDecl()
+ *   Tells if the current lexem is the end of a variable declaration.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   bool           Is it an end?
+ *-----------------------------------------------------------------*/
+bool CClassParser::isEndOfVarDecl()
+{
+  return lexem == ';' || lexem == ',' || lexem == ')' || lexem == '}';
+}
+
+/*------------------------------ CClassParser::fillInParsedVariable()
+ * fillInParsedVariable()
+ *   Initialize a attribute using the arguments on the stack.
+ *
+ * Parameters:
+ *   aMethod        The method to initialize.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
+{
+  CParsedLexem *aLexem;
+  QString type;
+  QString arrayDecl;
+  int lexType;
+  bool exit;
+
+  // Check for an array declaration.
+  if( lexemStack.top()->type == ']' )
+  {
+    exit = false;
+    while( !exit )
+    {
+      aLexem = lexemStack.pop();
+      arrayDecl = aLexem->text + arrayDecl;
+
+      exit = ( aLexem->type == '[' );
+      delete aLexem;
     }
   }
 
-  if( (*aStr)[(*aStr).length() - 1] == ' ' )
-    (*aStr).remove( (*aStr).length() - 1, 1 );
+  // Initial checks if this variable declaration just has a type.
+  lexType = lexemStack.top()->type;
+  if( lexType == ID && lexemStack.count() > 1 )
+  {
+    aLexem = lexemStack.pop();
+    anAttr->setName( aLexem->text );
+    delete aLexem;
+  }
 
-  // if this is a const declaration, add the word.
-  if( isConst )
-    *aStr = "const " + *aStr;
+  // Get the type
+  fillInParsedType( type );
+  type += arrayDecl;
+
+  // Set values in the variable.
+  anAttr->setType( type );
+  anAttr->setDefinedInFile( currentFile );
+  anAttr->setDefinedOnLine( getLineno() );
+  anAttr->setExport( declaredScope );
+
+  // Skip default values
+  if( lexem == '=' )
+    while( lexem != ';' )
+      getNextLexem();
 }
+
+/*-------------------------------------- CClassParser::parseVariable()
+ * parseVariable()
+ *   Parse a variable declaration.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedAttribute *CClassParser::parseVariable()
+{
+  bool skip = false;
+  CParsedAttribute *anAttr = NULL;
+
+  while( !isEndOfVarDecl() )
+  {
+    // Skip all default values.
+    if( lexem == '=' )
+      skip = true;
+    else if( !skip && !isEndOfVarDecl() )
+    {
+      PUSH_LEXEM();
+    }
+
+    getNextLexem();
+  }
+
+  if( !lexemStack.isEmpty() )
+  {
+    anAttr = new CParsedAttribute();
+    fillInParsedVariable( anAttr );
+  }
+
+  return anAttr;
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                          METHOD METHODS                           *
+ *                                                                   *
+ ********************************************************************/
 
 /*-------------------------------- CClassParser::parseFunctionArgs()
  * parseFunctionArgs()
@@ -233,478 +349,448 @@ void CClassParser::parseType( QString *aStr )
  *-----------------------------------------------------------------*/
 void CClassParser::parseFunctionArgs( CParsedMethod *method )
 {
-  QString type;
-  CParsedArgument *arg = NULL;
+  CParsedAttribute *anAttr;
+  CParsedArgument *anArg;
 
   while( lexem != ')' )
   {
-    getNextLexem();
+    // Get the variable
+    anAttr = parseVariable();
 
-    // Array declaration from the last argument.
-    if( lexem == '[' )
+    if( anAttr )
     {
-      type += "[";
-      getNextLexem();
-      while( lexem != ']' )
-      {
-        type += getText();
-        getNextLexem();
-      }
-      type += "]";
+      // Move the values to the argument object.
+      anArg = new CParsedArgument();
+      if( !anAttr->name.isEmpty() )
+        anArg->setName( anAttr->name );
 
-      arg->setType( type );
-
-      // Skip the ].
-      getNextLexem();
+      anArg->setType( anAttr->type );
+      
+      // Add the argument to the method.
+      method->addArgument( anArg );
+      delete anAttr;
     }
 
-    // Skip defaultvalues.
-    if( lexem == '=' )
-      while( lexem != ',' && lexem != ')' )
-        getNextLexem();
-
-    // Skip commas.
     if( lexem == ',' )
       getNextLexem();
-
-    if( lexem != ')' )
-    {
-      parseType( &type );
-
-      // Skip defaultvalues.
-      if( lexem == '=' )
-        while( lexem != ',' && lexem != ')' )
-          getNextLexem();
-      
-      arg = new CParsedArgument();
-      // If the argument has a name, we set it
-      if( lexem != ')' && lexem != ',' )
-        arg->setName( getText() );
-
-      arg->setType( type );
-      method->addArgument( arg );
-    }
   }
+}
 
-  // Check for const declaration.
+/*--------------------------------- CClassParser::fillInParsedMethod()
+ * fillInParsedMethod()
+ *   Initialize a method using the arguments on the stack.
+ *
+ * Parameters:
+ *   aMethod        The method to initialize.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::fillInParsedMethod(CParsedMethod *aMethod)
+{
+  CParsedLexem *aLexem;
+  QString type;
+
+  // Set the method name
+  aLexem = lexemStack.pop();
+  aMethod->setName( aLexem->text );
+  delete aLexem;
+
+  // Set the type of the method.
+  fillInParsedType( type );
+  aMethod->setType( type );
+
+  // Jump to first argument or ')'
   getNextLexem();
 
-  if( lexem == CONST )
-    method->setIsConst( true );
-  else if( isDefiningClass && lexem == '=' ) // Pure virtual
-    while( lexem != ';' )
-      getNextLexem();
+  // Set the arguments of the method, if there are any.
+  if( lexem != ')' )
+    parseFunctionArgs( aMethod );
 
-  // If this klass call other initializers, skip to start of block.
-  if( !isDefiningClass && lexem == ':' )
+  // Set some attributes of the parsed method.
+  aMethod->setDefinedOnLine( getLineno() );
+  aMethod->setDeclaredOnLine( getLineno() );
+  aMethod->setDefinedInFile( currentFile );
+  aMethod->setDeclaredInFile( currentFile );
+  aMethod->setIsStatic( isStatic );
+
+  getNextLexem();
+
+  // Const method
+  if( lexem == CONST )
+  {
+    aMethod->setIsConst( true );
+    getNextLexem();
+  }
+
+  // Other initializers
+  if( lexem == ':' )
     while( lexem != '{' )
       getNextLexem();
 
+  // Skip implementation.
   if( lexem == '{' )
-    scopedepth++;
+    skipBlock();
 }
 
-/*------------------------------------- CClassParser::parseModifier()
- * parseModifier()
- *   Checks for virtal/static... declarations.
+/*---------------------------- CClassParser::parseMethodDeclaration()
+ * parseMethodDeclaration()
+ *   Parse a method declaration.
  *
  * Parameters:
  *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseModifiers( CParsedMethod *method )
+CParsedMethod *CClassParser::parseMethodDeclaration()
 {
-  while( lexem != ID && lexem != CONST )
-  {
-    switch( lexem )
-    {
-      case STATIC:
-        method->setIsStatic( true );
-        break;
-      case CPVIRTUAL:
-        method->setIsVirtual( true );
-        break;
-    }
+  CParsedMethod *aMethod = new CParsedMethod();
 
+  // Add all lexems on the stack until we find the start of the
+  // parameter list.
+  while( lexem != '(' )
+  {
+    PUSH_LEXEM();
     getNextLexem();
   }
+
+  fillInParsedMethod( aMethod );
+
+  return aMethod;
 }
 
-/*------------------------------------ CClassParser::addDeclaration()
- * addDeclaration()
- *   Add the parsed declaration to the correct list.
+/*------------------------------------ CClassParser::parseMethodImpl()
+ * parseMethodImpl()
+ *   Parse a method implementation.
  *
  * Parameters:
- *   method           The parsed method/attribute.
- *   isAttr           Is this an attribute?
- *
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::addDeclaration( CParsedMethod *method, 
-                                   bool isAttr, bool isImpl )
+void CClassParser::parseMethodImpl()
 {
-  // If we're defining a class we add it to the current class.
-  if( isDefiningClass )
-  {
-    // Set the values.
-    method->setIsInHFile( true );
+  CParsedClass *aClass;
+  CParsedLexem *aLexem;
+  QString name;
+  QString className;
+  CParsedMethod aMethod;
+  CParsedMethod *pm;
+  int declLine = getLineno();
 
-    // Add it to the correct list.
-    if( isAttr )
-      currentClass->addAttribute( method );
-    else
-    {
-      switch( methodType )
-      {
-        case QTSIGNAL:
-          currentClass->addSignal( method );
-          break;
-        case QTSLOT:
-          currentClass->addSlot( method );
-          break;
-        default:
-          currentClass->addMethod( method );
-          break;
-      }
-    }
+  // The two first objects on the stack is the name and then the class.
+
+  // Get the method name.
+  aLexem = lexemStack.pop();
+  name = aLexem->text;
+  delete aLexem;
+
+  // Delete '::'
+  aLexem = lexemStack.pop();
+  delete aLexem;
+
+  // Get the classname
+  aLexem = lexemStack.pop();
+  className = aLexem->text;
+  delete aLexem;
+
+  // Remove all other classname'::' declarations.
+  while( lexemStack.top() && lexemStack.top()->type == CLCL )
+  {
+    // Delete '::'
+    aLexem = lexemStack.pop();
+    delete aLexem;
+
+    // Delete classname
+    aLexem = lexemStack.pop();
+    delete aLexem;
   }
-  else // Either an implementation or a global function/variable.
+
+  // To make things easier we push the methodname again.
+  lexemStack.push( new CParsedLexem( ID, name ) );
+
+  // Get the method declaration.
+  fillInParsedMethod( &aMethod );
+
+  // Try to move the values to the declared method.
+  aClass = store.getClassByName( className );
+  if( aClass != NULL )
   {
-    method->setIsInHFile( false );
-
-    // If this is a implementation we need to find the correct
-    // method i.e the one with the same signature.
-    if( isImpl )
+    pm = aClass->getMethod( aMethod );
+    if( pm != NULL )
     {
-      CParsedClass *c;
-      CParsedMethod *m;
-
-      // Fetch the class.
-      c = store.getClassByName( method->declaredInClass );
-      if( c != NULL )
-      {
-        c->setImplFilename( currentFile );
-
-        // Try to fetch a method with the same signature.
-        m = c->getMethod( *method );
-
-        if( m != NULL )
-        {
-          m->setDeclaredInFile( currentFile );
-          m->setDeclaredOnLine( method->declaredOnLine );
-          m->setIsInHFile( false );
-        }
-      }
+      pm->setIsInHFile( false );
+      pm->setDeclaredInFile( currentFile );
+      pm->setDeclaredOnLine( declLine );
     }
     else
-      if( isAttr )
-        store.addGlobalVar( method );
-      else
-        store.addGlobalFunction( method );
+      warning( "No method by the name %s found in class %s", 
+               name.data(), className.data() );
   }
+  else
+    warning( "No class by the name %s found", className.data() );
 }
 
-/*------------------------------------ CClassParser::parseVariableList()
- * parseVariableList()
- *   Parse a whole list of variables declared on one line.
- *
- * Parameters:
- *   type             The original type of the attributes.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassParser::parseVariableList( QString &type )
-{
-  QString realType = type;
-  QString currentT;
-  CParsedMethod *aAttr;
-  
-  // Remove all special chars from the type.
-  realType = realType.replace( "[\*&]", "" );
+/*********************************************************************
+ *                                                                   *
+ *                           CLASS METHODS                           *
+ *                                                                   *
+ ********************************************************************/
 
-  getNextLexem();
-
-  // Parse until we find an ';'.
-  while( lexem != ';' )
-  {
-    currentT = realType;
-    while( lexem != ID )
-    {
-      currentT.append( getText() );
-      getNextLexem();
-    }
-
-    // Add the new attribute.
-    aAttr = new CParsedMethod();
-    aAttr->setDefinedInFile( currentFile );
-    aAttr->setDeclaredInFile( currentFile );
-    aAttr->setExport( declaredScope );
-    aAttr->setType( currentT );
-    aAttr->setName( getText() );
-    aAttr->setDeclaredOnLine( getLineno() );
-    aAttr->setDefinedOnLine( getLineno() );
-    addDeclaration( aAttr, true, false );
-
-    getNextLexem();
-
-    // Skip ','. We can't just skip two chars since it could be ';'.
-    if( lexem == ',' )
-      getNextLexem();
-  }
-}
-
-/*---------------------------------- CClassParser::parseDeclaration()
- * parseDeclaration()
- *   Parses some sort of declaration(methods/attributes/function/vars).
+/*-------------------------------------- CClassParser::checkClassDecl()
+ * checkClassDecl()
+ *   Push lexems on the stack until we find something we know and 
+ *   return what we found.
  *
  * Parameters:
  *   -
  * Returns:
- *   -
+ *   int          Type of element found.
  *-----------------------------------------------------------------*/
-void CClassParser::parseDeclaration()
+int CClassParser::checkClassDecl()
 {
-  QString type = "";
-  QString classPrefix;
-  QString declName;
-  int declLine;  // Line of the declaration.
-  bool skip = false;
-  bool isAttr = false;
-  bool isImpl = false; // Is this a method implementation?
-  CParsedMethod *method = new CParsedMethod();
+  bool isImpl = false;
 
-  // Initialize the object.
-  method->setDefinedInFile( currentFile );
-  method->setDeclaredInFile( currentFile );
-  method->setExport( declaredScope );
-
-  // Check modifiers( virtual/static ).
-  parseModifiers( method );
-
-  // Parse the type
-  parseType( &type );
-
-  // Function with no returntype.
-  if( lexem == '(' || ( !isDefiningClass && lexem == CLCL) )
+  while( lexem != '(' && lexem != ';' && lexem != '=' )
   {
-    declName = type;
-    type = "";
-  }
-
-  // Set the line on which the function is defined/declared.
-  declLine = getLineno();
-
-  // Check for variable declarations with classreferences.
-  if( isDefiningClass && lexem == CLCL )
-  {
-    classPrefix = type;
-    getNextLexem();
-
-    parseType( &type );
-    type = classPrefix + "::" + type;
-  }
-
-  // Save the variable/functionname.
-  if( lexem == ID )
-  {
-    declName = getText();
-    getNextLexem();
-  }
-
-  switch( lexem )
-  {
-    case ',': // Variable with multiple declarations on one row.
-      isAttr = true;
-      parseVariableList( type );
-      break;
-    case '=': // Global variable with default value assignment.
-      isAttr = true;
-      while( lexem != ';' )
-        getNextLexem();
-      break;
-    case ';': // Variable 
-      isAttr = true;
-      break;
-    case ':': // Bit declared variable
-      isAttr = true;
-      // Skip bit specification.
-      getNextLexem();
-      break;
-    case '[': // Array start
-      isAttr = true;
-      type += "[";
-      getNextLexem();
-      while( lexem != ']' )
-      {
-        type += getText();
-        getNextLexem();
-      }
-      type += "]";
-      break;
-    case '(': // Function parameter
-      isAttr = false;
-      parseFunctionArgs( method );
-
-      skip = ( isDefiningClass && lexem != ';' ) ||
-             ( !isDefiningClass && lexem != '{' );
-      break;
-    case CLCL: // Method implementation
-      isAttr = false;
+    if( lexem == CLCL )
       isImpl = true;
-      
-      // Set the classname.
-      method->setDeclaredInClass( declName );
-      
-      // Set the current class using the classname.
-      currentClass = store.getClassByName( declName );
-      
-      // Fetch lexem for the name
+    PUSH_LEXEM();
+    getNextLexem();
+  }
+
+  return ( lexem == '(' ? 
+           ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD ) :
+           ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE ) );
+}
+
+/*----------------------------- CClassParser::parseClassInheritance()
+ * parseClassInheritance()
+ *   Parse the inheritance clause of a class declaration.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseClassInheritance( CParsedClass *aClass )
+{
+  CParsedParent *aParent; // A parent of this class.
+  int export;             // Parent import status(private/public/protected).
+
+  // Add parents until we find a {
+  while( lexem != '{' )
+  {
+    // Fetch next lexem.
+    getNextLexem();
+    
+    // For classes with no scope identifier at inheritance.
+    if( lexem == ID )
+      export = PRIVATE;
+    else
+    {
+      // Find out type of inheritance.
+      export = lexem;
+          
+      // Read the name of the parent.
       getNextLexem();
       assert( lexem == ID );
-      
-      declName = getText();
-      
-      getNextLexem();
-      if( lexem == '(' )
-        parseFunctionArgs( method );
-      else
-      {
-        // Skip until end of declaration.
-        while( lexem != ';' )
-          getNextLexem();
-            
-        currentClass = NULL;
+    }
+        
+    // Add the parent.
+    aParent = new CParsedParent();
+    aParent->setName( getText() );
+    aParent->setExport( export );
+    
+    aClass->addParent( aParent );
+    
+    // Fetch next lexem.
+    getNextLexem();
+    assert( lexem == '{' || lexem == ',' );
+  }
+}
 
-        skip = true;
-      }
+/*------------------------------ CClassParser::parseClassHeader()
+ * parseClassHeader()
+ *   Parse a class header, i.e find out classname and possible
+ *   parents.
+ *
+ * Parameters:
+ *   list           List of classes to add the new class to.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedClass *CClassParser::parseClassHeader()
+{
+  CParsedClass *aClass;
 
-      break;
+  // Skip to the identifier
+  if( lexem == CPCLASS )
+    getNextLexem();
+
+  // Ok, this seems to be a class definition so allocate the
+  // the new object and set some values.
+  aClass = new CParsedClass();
+  aClass->setName( getText() );
+  aClass->setDefinedOnLine( getLineno() );
+  aClass->setHFilename( currentFile );
+  aClass->setImplFilename( currentFile );
+  
+  getNextLexem();
+
+  // Check for inheritance
+  if( lexem == ':' )
+    parseClassInheritance( aClass );
+  else if( lexem != '{' ) // Bogus class definition..
+  {
+    delete aClass;
+    aClass = NULL;
   }
 
-  // Set the common values.
-  method->setType( type );
-  method->setName( declName );
-  method->setDeclaredOnLine( declLine );
-  method->setDefinedOnLine( declLine );
-
-  // Add the declaration to the correct list.
-  if( !skip )
-    addDeclaration( method, isAttr, isImpl );
-  else
-    delete method;
+  return aClass;
 }
 
-/*-------------------------------- CClassParser::parseSignalSlotMap()
- * parseSignalSlotMap()
- *   Parse the and create the relation between a slot a signal.
+/*----------------------------- CClassParser::parseClassDeclarations()
+ * parseClassDeclarations()
+ *   Parse the declarations of a class.
  *
  * Parameters:
- *   -
+ *   aClass         The class which declarations we are parsing.
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseSignalSlotMap()
+void CClassParser::parseClassDeclarations( CParsedClass *aClass )
 {
-  assert( currentClass != NULL );
+  CParsedClass *childClass;
+  CParsedStruct *aStruct;
+  CParsedAttribute *anAttr;
+  CParsedMethod *aMethod;
+  bool exit = false;
 
-  CParsedSignalSlot *aSS = new CParsedSignalSlot();
-  CParsedMethod *m = new CParsedMethod();
+  declaredScope = CPGLOBAL;
 
-  aSS->setSlot( m );
-
-  // Skip the paranthesis
-  getNextLexem();
-  assert( lexem = '(' );
-
-  // Fetch the signalname.
-  getNextLexem();
-  assert( lexem == ID );
-  aSS->setSignal( getText() );
-
-  // Skip the comma.
-  getNextLexem();
-  assert( lexem == ',' );
-
-  // Fetch the slotname.
-  getNextLexem();
-  assert( lexem == ID );
-  m->setName( getText() );
-
-  // Add the mapping.
-  currentClass->addSignalSlotMap( aSS );
-}
-
-/*------------------------------------- CClassParser::parseSignalTextMap()
- * parseSignalTextMap()
- *   Parse the and create the relation between a slot a text.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassParser::parseSignalTextMap()
-{
-  assert( currentClass != NULL );
-
-  CParsedSignalText *aST = new CParsedSignalText();
-  QString txt="";
-
-  // Skip the paranthesis
-  getNextLexem();
-  assert( lexem = '(' );
-
-  // Fetch the signalname.
-  getNextLexem();
-  assert( lexem == ID );
-  aST->setSignal( getText() );
-
-  // Skip the comma.
-  getNextLexem();
-  assert( lexem == ',' );
-
-  while( lexem != ')' )
+  while( !exit )
   {
     getNextLexem();
-    txt += getText();
+    
+    switch( lexem )
+    {
+      case PUBLIC:
+      case PROTECTED:
+      case PRIVATE:
+        declaredScope = lexem;
+        methodType = 0;
+        break;
+      case QTSIGNAL:
+      case QTSLOT:
+        methodType = lexem;
+        break;
+      case CPSTRUCT:
+        aStruct = parseStruct();
+        if( aStruct )
+          store.addGlobalStruct( aStruct );
+        break;
+      case CPENUM:
+        parseEnum();
+        break;
+      case CPUNION:
+        parseUnion();
+        break;
+      case CPCLASS:
+        childClass = parseClass();
+        if( childClass != NULL )
+        {
+          store.addClass( childClass );
+          aClass->addChildClass( childClass->name );
+        }
+        break;
+      case CPVIRTUAL:
+        // Skip the virtual token.
+        getNextLexem();
+
+        // Get the method.
+        aMethod = parseMethodDeclaration();
+
+        if( aMethod != NULL )
+        {
+          aMethod->setIsVirtual( true );
+          aClass->addMethod( aMethod );
+        }
+        break;        
+      case STATIC:
+        isStatic = true;
+        break;
+      case CONST:
+      case ID:
+        // Ignore everything that haven't got any scope declarator.
+        if( declaredScope != CPGLOBAL )
+        {
+          // If the type is signal or slot we KNOW it's a method.
+          if( methodType != 0 )
+          {
+            aMethod = parseMethodDeclaration();
+            if( aMethod && methodType == QTSIGNAL)
+              aClass->addSignal( aMethod );
+            if( aMethod && methodType == QTSLOT)
+              aClass->addSlot( aMethod );
+          }
+          else
+            switch( checkClassDecl() )
+            {
+              case CP_IS_ATTRIBUTE:
+                anAttr = new CParsedAttribute();
+                fillInParsedVariable( anAttr );
+                aClass->addAttribute( anAttr );
+                break;
+              case CP_IS_METHOD:
+                aMethod = new CParsedMethod();
+                fillInParsedMethod( aMethod );
+                aClass->addMethod( aMethod );
+                break;
+            }
+        }
+        isStatic=false;
+        break;
+      case '}':
+        exit = true;
+        break;
+      case 0:
+        exit = true;
+        break;
+      default:
+        break;
+    }
   }
-
-  aST->setText( txt );
-
-  currentClass->addSignalTextMap( aST );
 }
 
-/*---------------------------------------- CClassParser::parseStruct()
- * parseStruct()
- *   Parse a struct header.
+/*---------------------------------------- CClassParser::parseClass()
+ * parseClass()
+ *   Parse a class declaration.
  *
  * Parameters:
  *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseStruct()
+CParsedClass *CClassParser::parseClass()
 {
-  CParsedStruct *aStruct = new CParsedStruct();
+  CParsedClass *aClass;
 
-  // Set the name
-  getNextLexem();
-  assert( lexem == ID );
-  aStruct->setName( getText() );
+  aClass = parseClassHeader();
 
-  getNextLexem();
-  assert( lexem == '{' );
+  if( aClass != NULL )
+    parseClassDeclarations( aClass );
 
-  // TODO! Add parsing of members by adding isParsingStruct and
-  // currentStruct.
-  while( lexem != '}' )
-    getNextLexem();
-
-  store.addGlobalStruct( aStruct );
+  return aClass;
 }
+
+/*********************************************************************
+ *                                                                   *
+ *                         TOP LEVEL METHODS                         *
+ *                                                                   *
+ ********************************************************************/
 
 /*------------------------------------- CClassParser::parseToplevel()
  * parseToplevel()
@@ -718,112 +804,107 @@ void CClassParser::parseStruct()
  *-----------------------------------------------------------------*/
 void CClassParser::parseToplevel()
 {
-  bool isConst = false;
+  CParsedClass *aClass;
+  CParsedStruct *aStruct;
+  CParsedAttribute *anAttr;
+  CParsedMethod *aMethod;
 
   // Ok... Here we go.
   lexem = -1;
-  prevLexem = -1;
 
   while( lexem != 0 )
   {
-    prevLexem = lexem;
     getNextLexem();
 
-    // To parse toplevel definitions.
     switch( lexem )
     {
-      case CPBEGINSTATUSMSG:
-        while( lexem != CPENDSTATUSMSG )
-          getNextLexem();
-        break;
-      case CPSTRUCT:
-        parseStruct();
-        break;
-      case CLASS:
+      case CPTYPEDEF:
         getNextLexem();
-        if( lexem == ID )
-          parseClassHeader();
-        break;
-      case PUBLIC:
-      case PROTECTED:
-      case PRIVATE:
-        if( isDefiningClass )
-          declaredScope = lexem;
-        break;
-      case QTSIGNAL:
-      case QTSLOT:
-        if( isDefiningClass )
-          methodType = lexem;
-        break;
-      case CPENUM: // Skip all enums
-        while( lexem != '}' )
-          getNextLexem();
-        break;
-      case CPTYPEDEF: // Skip all typedefs
+        switch( lexem )
+        {
+          case CPSTRUCT:
+            aStruct = parseStruct();
+            if( aStruct != NULL )
+              store.addGlobalStruct( aStruct );
+            break;
+          case CPENUM:
+            parseEnum();
+            break;
+          case CPUNION:
+            parseUnion();
+            break;
+        }
+
+        // Skip the typedef name.
         while( lexem != ';' )
           getNextLexem();
         break;
-      case ':':
-        if( isDefiningClass && 
-            ( prevLexem == PUBLIC || 
-              prevLexem == PRIVATE || 
-              prevLexem == PROTECTED ) )
-          methodType = 0;
+      case CPSTRUCT:
+        aStruct = parseStruct();
+        if( aStruct != NULL )
+          store.addGlobalStruct( aStruct );
         break;
-      case SIGNALSLOT_MAP:
-        if( !isDefiningClass )
-          parseSignalSlotMap();
+      case CPENUM:
+        parseEnum();
         break;
-      case SIGNALTEXT_MAP:
-        if( !isDefiningClass )
-          parseSignalTextMap();
+      case CPUNION:
+        parseUnion();
         break;
-      case '{':
-        scopedepth++;
+      case CPCLASS:
+        aClass = parseClass();
+        if( aClass != NULL )
+            store.addClass( aClass );
         break;
-      case '}':
-        scopedepth--;
-
-        if( scopedepth == 0 )
-        {
-          // We don't have any scope, so we can't have a class.
-          currentClass = NULL;
-
-          // No scope means global declarations.
-          declaredScope = CPGLOBAL;
-
-          // If we're defining a class and reach scopedepth 0
-          // the class definition is over.
-          if( isDefiningClass )
-            isDefiningClass = false;
-        }
+      case '{': // Skip implementation blocks
+        skipBlock();
         break;
-      case CPFRIEND:
-        if( isDefiningClass )
-        {
-          getNextLexem();
-          if( lexem == CLASS )
-          {
-            getNextLexem();
-            currentClass->addFriend( getText() );
-          }
-          else if( declaredScope != -1 && scopedepth == 1 )
-            parseDeclaration();
-        }
+      case STATIC:
         break;
-      case CPVIRTUAL: // Virtual indicates start of a declaration.
-      case CONST: // Const indicates start of a declaration.
+      case CONST:
       case ID:
-        // Only threat declarations within a class or at 
-        // toplevel.
-        if( ( isDefiningClass && declaredScope != -1 && scopedepth == 1 ) || 
-            ( !isDefiningClass && scopedepth == 0 ) )
-          parseDeclaration();
+        switch( checkClassDecl() )
+        {
+          case CP_IS_ATTR_IMPL:
+            // Empty the stack
+            while( !lexemStack.isEmpty() )
+              delete lexemStack.pop();
+            break;
+          case CP_IS_METHOD_IMPL:
+            parseMethodImpl();
+            break;
+          case CP_IS_ATTRIBUTE:
+            anAttr = new CParsedAttribute();
+            fillInParsedVariable( anAttr );
+            store.addGlobalVar(  anAttr );
+            break;
+          case CP_IS_METHOD:
+            aMethod = new CParsedMethod();
+            fillInParsedMethod( aMethod );
+            store.addGlobalFunction( aMethod );
+            break;
+        }
         break;
       default:
-        isConst = false;
+        break;
     }
   }
+}
+
+
+/*--------------------------------------------- CClassParser::reset()
+ * reset()
+ *   Reset the variables in the class.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::reset()
+{
+  lexem = -1;
+  declaredScope = CPGLOBAL;
+  isStatic=false;
 }
 
 /*----------------------------------------- CClassParser::parseFile()
@@ -843,25 +924,6 @@ void CClassParser::parseFile( ifstream &file )
   lexer = new yyFlexLexer( &file );
   parseToplevel();
   delete lexer;
-}
-
-/*--------------------------------------------- CClassParser::reset()
- * reset()
- *   Reset the variables in the class.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassParser::reset()
-{
-  lexem = -1;
-  declaredScope = CPGLOBAL;
-  currentClass = NULL;
-  isDefiningClass = false;
-  scopedepth = 0;
-  methodType = -1;
 }
 
 /*********************************************************************
