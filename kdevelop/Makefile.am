@@ -50,7 +50,10 @@ kdevelop_METASOURCES = USE_AUTOMOC
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./vc/libvc.a ./dbg/libdbg.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a -lkfile -lkfm -lkspell $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl $(LIBDB) $(LIBDL)
+kdevelop_LDADD   = ./vc/libvc.a ./dbg/libdbg.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a \
+$(LIB_KFILE) $(LIB_KIMGIO) $(LIBTIFF) $(LIBPNG) $(LIBJPEG) \
+$(LIB_KHTMLW) $(LIB_KDEUI) $(LEXLIB) $(LIBDL)
+# -kspell -ldb
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \

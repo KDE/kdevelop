@@ -19,9 +19,11 @@ AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
 dnl the first KDE macro to check for the Compilers needed. The
 dnl default autoconf macro had not the best support for C++ compilers.
 AC_CHECK_COMPILERS
+AC_CHECK_BOOL
 
 dnl Check for a lexer.
 AM_PROG_LEX
+AC_SUBST(LEXLIB)
 
 dnl don't build libraries. This mainly disables the configure switches
 dnl --enable-shared and --enable-static, since they don't make that much
@@ -52,9 +54,8 @@ KDE_CHECK_LIBDL
 
 dnl Image readers/writers
 
-AC_FIND_GIF
-AC_FIND_JPEG
-AC_FIND_TIFF
+dnl AC_FIND_JPEG   will be checked by KDE_CHECK_KIMGIO
+dnl AC_FIND_TIFF               -- " --
 KDE_CHECK_KIMGIO 
 AC_CHECK_HEADERS(nkf.h)
 
@@ -62,6 +63,7 @@ dnl in this space add everything you want to check for
 dnl examples are specific headers, libraries, etc.
 dnl everything to compile and run a KDE program is already checked
 
+KDEV_SUBST_KHTMLW
 KDEV_PATH_QTDOC
 KDEV_PATH_KDELIBSDOC
 KDEV_PATH_KDOCINDEX

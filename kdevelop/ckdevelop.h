@@ -262,7 +262,7 @@ public:
   /** called by popups in the edit and brwoser widgets to grep a string */
   void slotEditSearchInFiles(QString);
   /** runs ispell check on the actual editwidget */
-  void slotEditSpellcheck();
+  /*  void slotEditSpellcheck(); */
   /** opens the search and replace dialog */
   void slotEditReplace();
   void slotEditIndent();

@@ -159,6 +159,7 @@ void CEditWidget::gotoPos(int pos,QString text_str){
   setFocus();
 }
 
+/*
 void CEditWidget::spellcheck(){
    kspell= new KSpell (this, "KDevelop: Spellcheck", this,
 		   SLOT (spellcheck2 (KSpell *)));	
@@ -170,7 +171,7 @@ void CEditWidget::spellcheck2(KSpell *){
 
 //	setReadOnly (TRUE);
 
-/*	connect (kspell, SIGNAL (misspelling (char *, QStrList *, unsigned)),
+	connect (kspell, SIGNAL (misspelling (char *, QStrList *, unsigned)),
 		 this, SLOT (misspelling (char *, QStrList *, unsigned)));
 	connect (kspell, SIGNAL (corrected (char *,
 						 char *, unsigned)),
@@ -184,16 +185,17 @@ void CEditWidget::spellcheck2(KSpell *){
 		 this, SLOT (spellResult (char *)));
 	
 	kspell->setProgressResolution (2);
-*/
+
 	kspell->check (text().data());
 	
       }
-/*    else
+    else
       {
 	KMsgBox::message(this,"KEdit: Error","Error starting KSpell.\n"\
 			 "Please make sure you have ISpell properly configured and in your PATH.", KMsgBox::STOP);
-      }*/
+      }
 }
+*/
 
 /*------------------------------------- CEditWidget::deleteInterval()
  * deleteInterval()

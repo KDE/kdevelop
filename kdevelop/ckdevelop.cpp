@@ -573,9 +573,12 @@ void CKDevelop::slotEditUncomment(){
 	edit_widget->unComment();
 }
 
+/*
 void CKDevelop::slotEditSpellcheck(){
 	edit_widget->spellcheck();
 }
+*/
+
 void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(i18n("Selecting all..."));
   edit_widget->selectAll();

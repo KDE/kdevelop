@@ -1,4 +1,19 @@
 dnl
+dnl If kimgio check succeeded, I assume khtmlw is also present 
+dnl
+
+AC_DEFUN(KDEV_SUBST_KHTMLW,
+[
+   AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
+   if test "$LIBKIMGIO_EXISTS" = "yes"; then
+     LIB_KHTMLW='-lkhtmlw -ljscript'
+   else
+     LIB_KHTMLW=''
+   fi
+   AC_SUBST(LIB_KHTMLW)
+])
+
+dnl
 dnl Check location of Qt documentation
 dnl
 AC_DEFUN(KDEV_PATH_QTDOC,
@@ -43,10 +58,16 @@ kdelibs_docdirs=""
 ],
 )
 
+if test "${prefix}" = NONE; then
+  ac_kde_htmldir="$ac_default_prefix"/share/doc/HTML
+else
+  ac_kde_htmldir="$prefix"/share/doc/HTML
+fi
+
 kdelibs_docdirs="/usr/doc/kdelibs-doc/html"
-if test "$kde_htmldir" != ""; then
- kdelibs_docdirs="$kdelibs_docdirs $kde_htmldir/default/kdelibs"
-fi 
+if test "$ac_kde_htmldir" != ""; then
+ kdelibs_docdirs="$kdelibs_docdirs $ac_kde_htmldir/default/kdelibs"
+fi
 kdelibs_docdirs="$ac_kdelibs_docdirs $kdelibs_docdirs"
 AC_FIND_FILE(kdecore/index.html, $kdelibs_docdirs, kdelibs_docdir)
 AC_MSG_RESULT($kdelibs_docdir)
@@ -126,16 +147,3 @@ if test "$enable_kdoc2" = "yes"; then
   AC_DEFINE_UNQUOTED(WITH_KDOC2)
 fi
 ])
-
-
-dnl
-dnl Needed to make am_edit work
-dnl
-AC_DEFUN(KDE_CHECK_FINAL,
-[
-  KDE_USE_FINAL_TRUE="#"
-  KDE_USE_FINAL_FALSE=""
-  AC_SUBST(KDE_USE_FINAL_TRUE)
-  AC_SUBST(KDE_USE_FINAL_FALSE)
-])   
-
