@@ -506,7 +506,7 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
     f.close();
     return true;//kWriteDoc->setFileName(name);
   }
-  KMessageBox::sorry(0L,  i18n("An Error occured while trying to open this Document"));
+  KMessageBox::sorry(0L,  i18n("An Error occured while trying to save this Document"));
   return false;
 }
 
@@ -1265,8 +1265,8 @@ void DocViewMan::saveModifiedFiles()
         int qYesNo = KMessageBox::Yes;
         handledNames.append(pDoc->fileName());
 
-        kdDebug() << " file info" << "\n";
 
+        kdDebug() << " file info" << "\n";
         QFileInfo file_info(pDoc->fileName());
         if (file_info.lastModified() != pDoc->getLastFileModifDate()) {
           qYesNo = KMessageBox::questionYesNo(m_pParent,
@@ -1276,13 +1276,14 @@ void DocViewMan::saveModifiedFiles()
                                               i18n("File modified"));
         }
 
-        kdDebug() << " KMessageBox::Yes" << "\n";
 
         if (qYesNo == KMessageBox::Yes) {
+          kdDebug() << " KMessageBox::Yes" << "\n";
+          /* please someone review this fix and throw this stuff
+             out (rokrau 04/14/01)
           kdDebug() << " create file_info" << "\n";
           QFileInfo file_info(pDoc->fileName());
           bool isModified;
-
           kdDebug() << " use blind widget " << "\n";
 
           KWriteDoc* pNewDoc = new KWriteDoc(&m_highlightManager);
@@ -1298,10 +1299,18 @@ void DocViewMan::saveModifiedFiles()
 
           delete pBlindWidget;
           delete pNewDoc;
-
           kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
-
           pDoc->setModified(isModified);
+          */
+          bool isModified=true;
+          if (CEditWidget* pEditView=getFirstEditView(pDoc)) {
+            pEditView->doSave();
+            // kind of awkward way to find out whether the save succeeded
+            isModified = pEditView->isModified();
+            kdDebug() << "save document: "
+                      << pEditView->getName() << ", "
+                      << ((!isModified) ? "succeeded" : "failed") << "\n";
+          }
 
           if (!isModified) {
 #ifdef WITH_CPP_REPARSE
