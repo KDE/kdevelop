@@ -26,12 +26,14 @@ class SlotItem : public QCheckListItem
   public:
                   SlotItem(QListView *parent,const QString &text,
                            const QString &specifier, const QString &Access,
-                           const QString &returnType,bool isFunc);
+                           const QString &returnType,bool isFunc,
+                           bool callBaseClass=false);
   QString         m_access;
   QString         m_methodName;
   QString         m_returnType;
   QString         m_specifier;
   bool            m_isFunc;
+  bool            m_callBaseClass;
 };
 
 
@@ -58,6 +60,7 @@ protected:
   QStringList           &m_newFileNames;
   QString               m_formFile;
   QString               m_baseClassName;
+  QString               m_qtBaseClassName;
   QString               m_baseCaption;
   QString               m_formName;
   QString               m_formPath;

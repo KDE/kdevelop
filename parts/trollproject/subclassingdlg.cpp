@@ -31,19 +31,19 @@
 #define WIDGET_FUNCTIONS    "functions"
 
 // All widgets
-#define SLOT_ACCEPT SlotItem(m_slotView,"accept()","virtual","protected","void",false)
-#define SLOT_REJECT SlotItem(m_slotView,"reject()","virtual","protected","void",false)
+#define SLOT_ACCEPT SlotItem(m_slotView,"accept()","virtual","protected","void",false,true)
+#define SLOT_REJECT SlotItem(m_slotView,"reject()","virtual","protected","void",false,true)
 
 // Wizards
-#define SLOT_BACK SlotItem(m_slotView,"back()","virtual","protected","void",false)
-#define SLOT_NEXT SlotItem(m_slotView,"next()","virtual","protected","void",false)
-#define SLOT_HELP SlotItem(m_slotView,"help()","virtual","protected","void",false)
+#define SLOT_BACK SlotItem(m_slotView,"back()","virtual","protected","void",false,true)
+#define SLOT_NEXT SlotItem(m_slotView,"next()","virtual","protected","void",false,true)
+#define SLOT_HELP SlotItem(m_slotView,"help()","virtual","protected","void",false,true)
 
 
 SlotItem::SlotItem(QListView *parent,const QString &methodName,
                    const QString &specifier,
                    const QString &access, const QString &returnType,
-                   bool isFunc)
+                   bool isFunc, bool callBaseClass)
 : QCheckListItem(parent,methodName,QCheckListItem::CheckBox)
 {
   setOn(true);
@@ -52,6 +52,7 @@ SlotItem::SlotItem(QListView *parent,const QString &methodName,
   m_specifier = specifier == "" ? (const QString) "virtual" : specifier;
   m_returnType = returnType == "" ? (const QString) "void" : returnType;
   m_isFunc = isFunc;
+  m_callBaseClass = callBaseClass;
   setText(0,m_methodName);
   setText(1,m_access);
   setText(2,m_specifier);
@@ -63,6 +64,12 @@ SlotItem::SlotItem(QListView *parent,const QString &methodName,
     setOn(false);
     setEnabled(false);
   }
+  if (m_specifier=="pure virtual")
+  {
+    setOn(true);
+    setEnabled(false);
+  }
+
 }
 
 
@@ -78,6 +85,7 @@ m_newFileNames(newFileNames)
   splitPath.pop_back();
   m_formPath = "/" + splitPath.join("/"); // join path to ui-file
 
+  m_btnOk->setEnabled(false);
   QDomDocument doc;
 
   DomUtil::openDOMFile(doc,formFile);
@@ -86,29 +94,57 @@ m_newFileNames(newFileNames)
   m_baseCaption = DomUtil::elementByPathExt(doc,WIDGET_CAPTION_NAME).text();
   setCaption(i18n("Create subclass of ")+m_baseClassName);
 
-  QString QTBaseClass = DomUtil::elementByPathExt(doc,"widget").attribute("class","QDialog");
+  // Special widget specific slots
+  SlotItem *newSlot;
+  m_qtBaseClassName = DomUtil::elementByPathExt(doc,"widget").attribute("class","QDialog");
+
+  newSlot = new SLOT_ACCEPT;
+  newSlot->setOn(false);
+  m_slotView->insertItem(newSlot);
+  m_slots << newSlot;
+  newSlot = new SLOT_REJECT;
+  newSlot->setOn(false);
+  m_slotView->insertItem(newSlot);
+  m_slots << newSlot;
+
+  if (m_qtBaseClassName == "QWizard")
+  {
+    newSlot = new SLOT_NEXT;
+    m_slotView->insertItem(newSlot);
+    m_slots << newSlot;
+    newSlot = new SLOT_BACK;
+    m_slotView->insertItem(newSlot);
+    m_slots << newSlot;
+    newSlot = new SLOT_HELP;
+    newSlot->setOn(false);
+    m_slotView->insertItem(newSlot);
+    m_slots << newSlot;
+  }
+
   QDomElement slotsElem = DomUtil::elementByPathExt(doc,WIDGET_SLOTS);
   QDomNodeList slotnodes = slotsElem.childNodes();
+
   for (unsigned int i=0; i<slotnodes.count();i++)
   {
     QDomElement slotelem = slotnodes.item(i).toElement();
-    SlotItem *newSlot = new SlotItem(m_slotView,slotelem.text(),
-                                     slotelem.attributeNode("specifier").value(),
-                                     slotelem.attributeNode("access").value(),
-                                     slotelem.attributeNode("returnType").value(),false);
+    newSlot = new SlotItem(m_slotView,slotelem.text(),
+                           slotelem.attributeNode("specifier").value(),
+                           slotelem.attributeNode("access").value(),
+                           slotelem.attributeNode("returnType").value(),false);
     m_slotView->insertItem(newSlot);
     m_slots << newSlot;
   }
 
   QDomElement funcsElem = DomUtil::elementByPathExt(doc,WIDGET_FUNCTIONS);
   QDomNodeList funcnodes = funcsElem.childNodes();
+  SlotItem *newFunc;
   for (unsigned int i=0; i<funcnodes.count();i++)
   {
     QDomElement funcelem = funcnodes.item(i).toElement();
-    SlotItem *newFunc = new SlotItem(m_slotView,funcelem.text(),
-                                     funcelem.attributeNode("specifier").value(),
-                                     funcelem.attributeNode("access").value(),
-                                     funcelem.attributeNode("returnType").value(),true);
+    newFunc = new SlotItem(m_slotView,funcelem.text(),
+                           funcelem.attributeNode("specifier").value(),
+                           funcelem.attributeNode("access").value(),
+                           funcelem.attributeNode("returnType").value(),true);
     m_slotView->insertItem(newFunc);
     m_slots << newFunc;
   }
@@ -261,6 +297,14 @@ void SubclassingDlg::accept()
     "{\n"
     "}\n";
 
+  QString implementation_callbase =
+    "/*$SPECIALIZATION$*/\n"
+    "$RETURNTYPE$ $NEWCLASS$::$METHOD$\n"
+    "{\n"
+    "  $QTBASECLASS$::$METHOD$;\n"
+    "}\n";
+
+
   loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.cpp"));
   replaceKeywords(buffer);
   for (i=0; i<m_slots.count(); i++)
@@ -268,10 +312,11 @@ void SubclassingDlg::accept()
     SlotItem *slitem = m_slots[i];
     if (!slitem->isOn())
       continue;
-    QString impl = implementation;
+    QString impl = slitem->m_callBaseClass ? implementation_callbase : implementation;
     replace(impl,"$RETURNTYPE$",slitem->m_returnType);
     replace(impl,"$NEWCLASS$",m_edClassName->text());
     replace(impl,"$METHOD$", slitem->m_methodName);
+    replace(impl,"$QTBASECLASS$", m_qtBaseClassName);
     replace(buffer,"/*$SPECIALIZATION$*/",impl);
   }
   saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
@@ -285,4 +330,9 @@ void SubclassingDlg::onChangedClassName()
 //=======================================
 {
   m_edFileName->setText(m_edClassName->text().lower());
+  if (m_edFileName->text().isEmpty() ||
+      m_edClassName->text().isEmpty())
+    m_btnOk->setEnabled(false);
+  else
+    m_btnOk->setEnabled(true);
 }
