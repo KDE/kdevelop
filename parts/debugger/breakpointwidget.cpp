@@ -275,10 +275,15 @@ BreakpointItem* BreakpointWidget::findKey(int BPKey) const
 
 void BreakpointWidget::removeAllBreakpoints()
 {
-    for( QListViewItemIterator it( this ); it.current(); ++it ) {
-        BreakpointItem* item = (BreakpointItem*)it.current();
-        item->remove();
+    QListViewItem* item = this->firstChild();
+    QListViewItem *next;
+    while (item) {
+        next = item->itemBelow();
+	static_cast<BreakpointItem*>(item)->remove();
+	item = next;
+	
     }
+    
 
     if( childCount() > 0 )
         emit clearAllBreakpoints();
