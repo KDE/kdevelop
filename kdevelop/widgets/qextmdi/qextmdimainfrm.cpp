@@ -513,6 +513,10 @@ void QextMdiMainFrm::setMaximizeModeOn()
    if( !pCurrentChild)
       return;
 
+   // if there is no menubar given, those system buttons aren't possible
+   if( m_pMainMenuBar == 0)
+      return;
+      
    QObject::connect( m_pUndock, SIGNAL(clicked()), pCurrentChild, SLOT(undockPressed()) );
    m_pUndock->show();
    QObject::connect( m_pMinimize, SIGNAL(clicked()), pCurrentChild, SLOT(minimizePressed()) );
@@ -531,6 +535,10 @@ void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
    if( !oldChild)
       return;
 
+   // if there is no menubar given, those system buttons aren't possible
+   if( m_pMainMenuBar == 0)
+      return;
+      
    m_pMainMenuBar->removeItem( m_pMainMenuBar->idAt(0));
 
    QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
@@ -546,6 +554,10 @@ void QextMdiMainFrm::setMaximizeModeOff(QextMdiChildFrm* oldChild)
 /** reconnects the system buttons form maximize mode (SDI mode) with the new child frame */
 void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild)
 {
+   // if there is no menubar given, those system buttons aren't possible
+   if( m_pMainMenuBar == 0)
+      return;
+      
    QObject::disconnect( m_pUndock, SIGNAL(clicked()), oldChild, SLOT(undockPressed()) );
    QObject::disconnect( m_pMinimize, SIGNAL(clicked()), oldChild, SLOT(minimizePressed()) );
    QObject::disconnect( m_pRestore, SIGNAL(clicked()), oldChild, SLOT(maximizePressed()) );
