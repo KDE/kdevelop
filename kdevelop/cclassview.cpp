@@ -1090,19 +1090,12 @@ bool CClassView::validClassDecl( const char *className,
 
   if( retVal && className != NULL )
   {
-    str.sprintf( "%s '%s' %s",
-                 i18n("The class:").latin1(),
-                 className == NULL ? "" : className,
-                 i18n("couldn't be found.").latin1());
-
+    str = i18n("The class %1 couldn't be found.").arg(className == NULL ? "" : className);
     retVal = store->hasClass( className );
 
     if( !retVal )
     {
-      str.sprintf( "%s '%s' %s",
-                   i18n("The struct:").latin1(),
-                   className == NULL ? "" : className,
-                   i18n("couldn't be found.").latin1());
+      str = i18n("The struct %1 couldn't be found.").arg(className == NULL ? "" : className);
       retVal = store->hasStruct( className );
     }
   }

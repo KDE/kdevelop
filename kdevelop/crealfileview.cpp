@@ -436,8 +436,7 @@ void CRealFileView::slotAddFileToProject() {
 void CRealFileView::slotRemoveFileFromProject() {
 
   QString filename=getRelFilename(currentItem());
-  QString msg;
-  msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
+  QString msg = i18n("Do you really want to remove the file\n%1\nfrom project?\n\t\tIt will remain on disk.").arg(filename);
   if (KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 
@@ -448,8 +447,7 @@ void CRealFileView::slotDeleteFilePhys() {
 
   QString filename=getRelFilename(currentItem());
   QString fullfilename=getFullFilename(currentItem());
-  QString msg;
-  msg.sprintf(i18n("Do you really want to delete the file\n%s\nfrom the disk?\nThere is no way to restore it!"), filename.data());
+  QString msg = i18n("Do you really want to delete the file\n%1\nfrom the disk?\nThere is no way to restore it!").arg(filename);
   if(KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 

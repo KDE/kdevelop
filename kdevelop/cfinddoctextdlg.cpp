@@ -96,17 +96,4 @@ void CFindDocTextDlg::slotFind()
   emit signalFind( text );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "cfinddoctextdlg.moc"

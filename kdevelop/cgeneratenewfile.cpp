@@ -17,11 +17,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+//#include <iostream.h>
 #include <qfileinfo.h>
 #include "cgeneratenewfile.h"
 #include "cproject.h"
 #include <kprocess.h>
+#include <kdebug.h>
 
 // added by Alex Kern, Alexander.Kern@saarsoft.de
 //
@@ -41,14 +42,14 @@ bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
   QString dirname = QFileInfo(in_absname).dirPath(true);
   if(dirname.contains(prj->getProjectDir()) == 0 )
   {
-    printf("don't try to create a new subdir outside projectdirectory\n");	
+    kdDebug() << "don't try to create a new subdir outside projectdirectory" << endl;	
     return false;
   }
   else //just mkdir
   {
     QDir dir;
     dir = (const char*)dirname;
-    printf("handleCreateSubDirectory() needs to create a directory '%s'\n", (const char*)dirname);			
+    kdDebug() << "handleCreateSubDirectory() needs to create a directory " <<  dirname << endl;
     if(dir.exists() == false)
     {
       QString dir_to_make;
@@ -67,16 +68,16 @@ bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
         {
           if(dir.mkdir((const char*)dir_to_make, true))
           {
-            printf(i18n("handleCreateSubDirectory() has created directory '%s'\n"), (const char*)dir_to_make);
+            kdDebug() << "handleCreateSubDirectory() has created directory " << dir_to_make << endl;
           }
           else
           {
-            printf("handleCreateSubDirectory() can't create directory '%s'\n", (const char*)dir_to_make);
+            kdDebug() << "handleCreateSubDirectory() can't create directory " << dir_to_make << endl;
             return false;
           }
         }
         else
-          printf("handleCreateSubDirectory() directory '%s' already exists\n", (const char*)dir_to_make);
+          kdDebug() << "handleCreateSubDirectory() directory " << dir_to_make << " already exists" << endl;
       }//next subdir	
     }
   }
@@ -406,7 +407,3 @@ QString CGenerateNewFile::genNifFile(QString abs_name){
   process << abs_name;
   process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
 }
-
-
-
-

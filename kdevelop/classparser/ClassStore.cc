@@ -17,7 +17,6 @@
  ***************************************************************************/
 
 #include "ClassStore.h"
-//#include <iostream.h>
 #include <qregexp.h>
 #include "ProgrammingByContract.h"
 #include <kdebug.h>
@@ -197,11 +196,11 @@ void CClassStore::storeAll()
     aClass = globalContainer.classIterator.current();
     aClass->asPersistantString( str );
 
-    debug( "Storing:" );
-    debug( "----------" );
-    debug( str );
+    kdDebug() << "Storing:" << endl;
+    kdDebug() << "----------" << endl;
+    kdDebug() << str << endl;
     globalStore.storeClass( aClass );
-    debug( "----------" );
+    kdDebug() << "----------" << endl;
   }
 }
 
@@ -548,7 +547,7 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
     // If this isn't the class and the string contains data, we check for it.
     if( str != aName && !str.isEmpty() )
     {
-      debug( "Checking if '%s' is a class", str.data() );
+      kdDebug() << "Checking if '" << str << "'is a class" << endl;
       toAdd = getClassByName( str );
       if( toAdd )
         retVal->append( toAdd );

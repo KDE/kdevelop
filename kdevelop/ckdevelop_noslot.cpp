@@ -401,8 +401,8 @@ bool CKDevelop::fileSaveAs(){
     if(message_result==KMessageBox::Yes && QFile::exists(name))
     {
       message_result=KMessageBox::warningYesNoCancel(this,
-                        i18n("\nThe file\n\n")+name+
-                            i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"),
+                        i18n("\nThe file\n\n%1\n\n"
+                              "already exists.\nDo you want overwrite the old one?\n").arg(name),
                         i18n("File exists!"));
     }
     
@@ -690,7 +690,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   QFileInfo fileInfo(filename);
   // check if the file exists
   if(!fileInfo.exists() && !isUntitled(filename)){
-    KMessageBox::error(this, filename +i18n("\n\nFile does not exist!"));
+    KMessageBox::error(this, i18n("%1\n\nFile does not exist!").arg(filename));
     return;
   }
 
@@ -790,8 +790,9 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   QFileInfo file_info(edit_widget->getName());
   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox)
   {
-    if(KMessageBox::questionYesNo(this, i18n("The file ") + edit_widget->getName() +
-                                          i18n(" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?"),
+    if(KMessageBox::questionYesNo(this, i18n("The file %1 was modified outside this editor.\n"
+                                              "Open the file from disk and delete the current Buffer?")
+                                              .arg(edit_widget->getName()),
                                         i18n("File modified"))==KMessageBox::Yes){
       bForceReload = true;
       actual_info->last_modified = file_info.lastModified();
@@ -1324,7 +1325,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
     TEditInfo* info;
     for(info=edit_infos.first();info != 0;info=edit_infos.next()){
       if(info->modified){
-#warning FIXME missing method	setUnsavedData ( true );
+//#warning FIXME missing method	setUnsavedData ( true );
 	break;
       }
     }

@@ -241,9 +241,10 @@ void CKDevelop::slotFileCloseAll()
 //
 //      int result=files_close->result();
       int result = KMessageBox::warningYesNoCancel(this,
-                          i18n("The project\n")+prjName
-                          +i18n("contains changed files. Save modified file\n\n")
-                          +actual_info->filename+" ?\n\n",
+                          i18n("The project %1\n"
+                                "contains changed files. Save modified file\n\n%2 ?\n\n")
+                          .arg(prjName)
+                          .arg(actual_info->filename),
                           i18n("Save changed files ?"));
 
       // create the save project messagebox
@@ -351,7 +352,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   {
     if (KMessageBox::No == KMessageBox::questionYesNo(this,
 
-                    i18n("The file ") + filename + i18n(" was modified outside\n this editor.Save anyway?"),
+                    i18n("The file %1 was modified outside\n this editor.Save anyway?").arg(filename),
                     i18n("File modified")))
       return false;
   }
@@ -365,7 +366,7 @@ void CKDevelop::slotFileSave(){
 
   QString filename=edit_widget->getName();
   QString sShownFilename=QFileInfo(filename).fileName();
-  slotStatusMsg(i18n("Saving file ")+sShownFilename);
+  slotStatusMsg(i18n("Saving file %1").arg(sShownFilename));
   
  
 
@@ -387,14 +388,10 @@ void CKDevelop::slotFileSave(){
   }
 
   slotStatusMsg(i18n("Ready."));
-  QString sHelpMsg=i18n("File ");
-  sHelpMsg+=sShownFilename;
   if (edit_widget->isModified())
-    sHelpMsg+=i18n(" not saved.");
+    slotStatusHelpMsg(i18n("File %1 not saved.").arg(sShownFilename));
   else
-      sHelpMsg+=i18n(" saved.");
-
-  slotStatusHelpMsg(sHelpMsg);
+      slotStatusHelpMsg(i18n("File %1 saved.").arg(sShownFilename));
 }
 
 void CKDevelop::slotFileSaveAs(){
@@ -866,7 +863,7 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  slotStatusMsg(i18n("Compiling ")+cpp_widget->getName());
+  slotStatusMsg(i18n("Compiling %1").arg(cpp_widget->getName()));
   messages_widget->clear();
   process.clearArguments();
   // get the filename of the implementation file to compile and change extension for make
@@ -1702,14 +1699,14 @@ void CKDevelop::slotBuildMake(){
     else
       makefileGenerator = i18n(". Possibly by tmake?\n");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to make (by running 'make') in\n\n") +
-                         makefileDir +
-                         i18n("\n\nbut there is no Makefile in this directory.\n\n") +
-                         i18n("Hints:\n") +
-                         i18n("1. Possibly you forgot to create the Makefiles.\n") +
-                         i18n("   In that case create them") + makefileGenerator +
-                         i18n("2. Or this directory does not belong to your project.\n") +
-                         i18n("   Check the settings in Project->Options->MakeOptions!"));
+                         i18n("You want to make (by running 'make') in\n\n %1\n\n"
+                              "but there is no Makefile in this directory.\n\n"
+                              "Hints:\n"
+                              "1. Possibly you forgot to create the Makefiles.\n"
+                              "   In that case create them%2\n"
+                              "2. Or this directory does not belong to your project.\n"
+                              "   Check the settings in Project->Options->MakeOptions!")
+                              .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -1821,14 +1818,14 @@ void CKDevelop::slotBuildRebuildAll(){
     else
       makefileGenerator = i18n(". Possibly by tmake?\n");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to rebuild (by running 'make clean;make') in\n\n") +
-                         makefileDir +
-                         i18n("\n\nbut there is no Makefile in this directory.\n\n") +
-                         i18n("Hints:\n") +
-                         i18n("1. Possibly you forgot to create the Makefiles.\n") +
-                         i18n("   In that case create them") + makefileGenerator +
-                         i18n("2. Or this directory does not belong to your project.\n") +
-                         i18n("   Check the settings in Project->Options->MakeOptions!"));
+                         i18n("You want to rebuild (by running 'make clean;make') in\n\n%1\n\n"
+                              "but there is no Makefile in this directory.\n\n"
+                              "Hints:\n"
+                              "1. Possibly you forgot to create the Makefiles.\n"
+                              "   In that case create them%2"
+                              "2. Or this directory does not belong to your project.\n"
+                              "   Check the settings in Project->Options->MakeOptions!")
+                              .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -1893,14 +1890,14 @@ void CKDevelop::slotBuildCleanRebuildAll(){
           makefileGenerator = i18n(" by Build->Configure!\n");
         else
           makefileGenerator = i18n(". Possibly by tmake?\n");
-        QMessageBox::warning(this, QString(i18n(makefile)) + i18n(" not found"),
-                             i18n("You want to distclean and build (by running 'make distclean;make') in\n\n") +
-                             makefileDir +
-                             i18n("\n\nbut there is no ") + i18n(makefile) + i18n(" in this directory.\n\n") +
-                             i18n("Hints:\n") +
-                             i18n("1. Possibly you forgot to create them") + makefileGenerator +
-                             i18n("2. Or this directory does not belong to your project.\n") +
-                             i18n("   Check the settings in Project->Options->MakeOptions!"));
+        QMessageBox::warning(this, i18n("%1 not found").arg(makefile),
+                             i18n("You want to distclean and build (by running 'make distclean;make') in\n\n%1\n\n"
+                                  "but there is no %2  in this directory.\n\n"
+                                  "Hints:\n"
+                                  "1. Possibly you forgot to create them%3"
+                                  "2. Or this directory does not belong to your project.\n"
+                                  "   Check the settings in Project->Options->MakeOptions!")
+                              .arg(makefileDir).arg(makefile).arg(makefileGenerator));
         setToolMenuProcess(true);
         return;
       }
@@ -1971,14 +1968,14 @@ void CKDevelop::slotBuildDistClean(){
     else
       makefileGenerator = i18n(". Possibly by tmake?\n");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to distclean (by running 'make distclean') in\n\n") +
-                         makefileDir +
-                         i18n("\n\nbut there is no Makefile in this directory.\n\n") +
-                         i18n("Hints:\n") +
-                         i18n("1. Possibly you forgot to create the Makefiles.\n") +
-                         i18n("   In that case create them") + makefileGenerator +
-                         i18n("2. Or this directory does not belong to your project.\n") +
-                         i18n("   Check the settings in Project->Options->MakeOptions!"));
+                         i18n("You want to distclean (by running 'make distclean') in\n\n%1\n\n"
+                              "but there is no Makefile in this directory.\n\n"
+                              "Hints:\n"
+                              "1. Possibly you forgot to create the Makefiles.\n"
+                              "   In that case create them%2"
+                              "2. Or this directory does not belong to your project.\n"
+                              "   Check the settings in Project->Options->MakeOptions!")
+                              .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -2027,14 +2024,14 @@ void CKDevelop::slotBuildMakeClean(){
     else
       makefileGenerator = i18n(". Possibly by tmake?\n");
     QMessageBox::warning(this,i18n("Makefile not found"),
-                         i18n("You want to clean up (by running 'make clean') in\n\n") +
-                         makefileDir +
-                         i18n("\n\nbut there is no Makefile in this directory.\n\n") +
-                         i18n("Hints:\n") +
-                         i18n("1. Possibly you forgot to create the Makefiles.\n") +
-                         i18n("   In that case create them") + makefileGenerator +
-                         i18n("2. Or this directory does not belong to your project.\n") +
-                         i18n("   Check the settings in Project->Options->MakeOptions!"));
+                         i18n("You want to clean up (by running 'make clean') in\n\n%1\n\n"
+                              "but there is no Makefile in this directory.\n\n"
+                              "Hints:\n"
+                              "1. Possibly you forgot to create the Makefiles.\n"
+                              "   In that case create them%2"
+                              "2. Or this directory does not belong to your project.\n"
+                              "   Check the settings in Project->Options->MakeOptions!")
+                              .arg(makefileDir).arg(makefileGenerator));
     setToolMenuProcess(true);
     return;
   }
@@ -3013,7 +3010,7 @@ void CKDevelop::slotNewStatus()
 {
   int config;
   config = edit_widget->config();
-  statusBar()->changeItem(config & cfOvr ? "OVR" : "INS",ID_STATUS_INS_OVR);
+  statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
   setMainCaption();
 }
@@ -3398,7 +3395,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*)
 
     if (list.isEmpty()){
 
-       KMessageBox::information(0,"\"" + doc_search_display_text + i18n("\" not found in documentation!"),
+       KMessageBox::information(0,i18n("\"%1\" not found in documentation!").arg(doc_search_display_text),
                                   i18n("Not found!"));
       return;
     }

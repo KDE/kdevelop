@@ -40,8 +40,7 @@ bool CToolClass::searchProgram(QString name, bool allowWarningMsg ){
 
   if(!found && allowWarningMsg){
     KMessageBox::sorry(0,
-                        i18n("KDevelop needs \"")+name+
-                            i18n("\" to work properly.\n\tPlease install it!"),
+                        i18n("KDevelop needs \"%1\" to work properly.\n\tPlease install it!").arg(name),
                         i18n("Program not found!"));
   }
   return found;

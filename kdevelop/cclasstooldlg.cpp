@@ -79,7 +79,7 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
   readIcons();
   setCallbacks();
   setTooltips();
-  #warning Please FIX :CClassToolDlg::resizeEvent() is not called...
+//  #warning Please FIX :CClassToolDlg::resizeEvent() is not called...
   setGeometry(5,5, 480, 340);
 }
 
@@ -318,8 +318,7 @@ void CClassToolDlg::setClass( const char *aName )
   // If we can't find the class something is very wring
   if( currentClass == NULL )
   {
-    QString warning = i18n("Couldn't find class: ");
-    warning += aName;
+    QString warning = i18n("Couldn't find class: %1").arg(aName);
     QMessageBox::warning( this, i18n("Class error"), warning );
   }
   emit signalClassChanged( currentClass );
@@ -451,41 +450,39 @@ void CClassToolDlg::addAllClassAttributes()
 void CClassToolDlg::changeCaption()
 {
   QString caption;
+  QString name;
+  if( currentClass != NULL )
+    name = currentClass->name;
+  else
+    name = " ";
 
   switch( currentOperation )
   {
     case CTPARENT:
-      caption = i18n("Parents");
+      caption.arg(i18n("Parents of class %1")).arg(name);
       break;
     case CTCHILD:
-      caption = i18n("Children");
+      caption.arg(i18n("Children of class %1")).arg(name);
       break;
     case CTCLIENT:
-      caption = i18n("Clients");
+      caption.arg(i18n("Clients of class %1")).arg(name);
       break;
     case CTSUPP:
-      caption = i18n("Suppliers");
+      caption = i18n("Suppliers of class %1").arg(name);
       break;
     case CTATTR:
-      caption = exportCombo.currentText();
-      caption += i18n(" attributes");
+      caption = i18n("%1 attributes of class %2").arg(exportCombo.currentText()).arg(name);
       break;
     case CTMETH:
-      caption = exportCombo.currentText();
-      caption += i18n(" methods");
+      caption = i18n("%1 methods of class %2").arg(exportCombo.currentText()).arg(name);
       break;
     case CTVIRT:
-      caption = exportCombo.currentText();
-      caption += i18n(" virtual methods");
+      caption = i18n("%1 virtual methods of class %2").arg(exportCombo.currentText()).arg(name);
       break;
     default:
-      caption = i18n("Class Tool Dialog");
+      caption = i18n("Class Tool Dialog of class %1").arg(name);
       break;
   }
-
-  caption += QString(" ") + i18n(" of class ") + " ";
-  if( currentClass != NULL )
-    caption += currentClass->name;
 
   setCaption( caption );
 }

@@ -287,7 +287,7 @@ void CKDevelop::slotAddExistingFiles(){
     copy = false;
     progress.setProgress( i );
     if (!QFile::exists((const char*)file)) {
-        KMessageBox::error(this, file +i18n("\n\nFile does not exist!"));
+        KMessageBox::error(this, i18n("%1\n\nFile does not exist!").arg(file));
         continue;
     }
     file_info.setFile(file);
@@ -340,10 +340,10 @@ void CKDevelop::slotAddExistingFiles(){
     else
     if(QFile::exists(dest_name)){
       int result=KMessageBox::warningYesNoCancel(this,
-                                        i18n("\nThe file\n\n")+
-				                            source_name+
-				                            i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"),
-				                        i18n("File exists!"));
+                                  i18n("\nThe file\n\n%1\n\n"
+                                        "already exists.\nDo you want overwrite the old one?\n")
+                                        .arg(source_name),
+                                  i18n("File exists!"));
       if(result==KMessageBox::Yes)
         copy = true;
       if(result==KMessageBox::No)
@@ -549,7 +549,8 @@ void CKDevelop::slotProjectNewClass(const char* folder)
 
 void CKDevelop::slotProjectNewClass(){
   CNewClassDlg dlg(prj,this,"newclass");
-  if(dlg.exec()){
+  if(dlg.exec())
+  {
     QString source_file=dlg.getImplFile() ;
     QString header_file=dlg.getHeaderFile();
     switchToFile(source_file);
@@ -562,11 +563,11 @@ void CKDevelop::slotProjectNewClass(){
       newSubDir();
 
     prj->updateMakefilesAm();
-	QStrList lToRefresh;
-	lToRefresh.autoDelete();
-	lToRefresh.append(source_file);
-	lToRefresh.append(header_file);
-	refreshTrees(&lToRefresh);
+    QStrList lToRefresh;
+    lToRefresh.autoDelete();
+    lToRefresh.append(source_file);
+    lToRefresh.append(header_file);
+    refreshTrees(&lToRefresh);
     //slotViewRefresh();
   }
 }
@@ -1157,7 +1158,7 @@ void CKDevelop::slotProjectMakeDistRPM(){
  connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
 	QStrList shortInfo = prj->getShortInfo();
 	QString qsShortInfo = "";
-	for ( int idx= 0; idx < shortInfo.count();  idx++ )
+	for ( uint idx= 0; idx < shortInfo.count();  idx++ )
 		qsShortInfo += shortInfo.at(idx);
  rpmbuilder->setProjectData(    prj->getProjectName(),
                                 prj->getVersion(),
@@ -1188,7 +1189,7 @@ void CKDevelop::slotConfigMakeDistRPM()
  connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
 	QStrList shortInfo = prj->getShortInfo();
 	QString qsShortInfo = "";
-	for ( int idx= 0; idx < shortInfo.count();  idx++ )
+	for ( uint idx= 0; idx < shortInfo.count();  idx++ )
 		qsShortInfo += shortInfo.at(idx);
  rpmbuilder->setProjectData(    prj->getProjectName(),
                                 prj->getVersion(),
@@ -1559,9 +1560,9 @@ SaveAllDialog::SaveAllDialog(const QString& filename, CProject* prj) :
   QLabel *label1 = new QLabel(this);
   label1->setPixmap(QMessageBox::standardIcon(QMessageBox::Warning, kapp->style().guiStyle()));
   lay->add( label1 );
-  lay->add(  new QLabel(  i18n("The project\n\n")+prj->getProjectName()+
-				        					      i18n("\n\ncontains changed files. Save modified file\n\n")+
-				        					      filename+" ?\n\n",
+  lay->add(  new QLabel(  i18n( "The project\n\n%1\n\n"
+                                "contains changed files. Save modified file\n\n%2"
+                                " ?\n\n").arg(prj->getProjectName()).arg(filename),
                           this) );
 
 

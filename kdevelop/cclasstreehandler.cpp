@@ -99,9 +99,7 @@ void CClassTreeHandler::addScopes( QList<CParsedScopeContainer> *list,
 {
   CParsedScopeContainer *scope;
 
-  for( scope = list->first();
-       scope != NULL;
-       scope = list->next())
+  for( scope = list->first(); scope != NULL; scope = list->next())
     addScope( scope, parent );
 }
 

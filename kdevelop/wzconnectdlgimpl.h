@@ -87,9 +87,13 @@ public:
   /**  */
   void setClassToolDlg( CClassToolDlg* ct);
   /** This function will try to fill up the combo with
-avaible Signals/Slots methods from the class itself and, if possible, 
-from its parent classes. */
+      availble Signals/Slots methods from the class itself and, if possible,
+      from its parent classes. */
   bool fillSignalCombo(CParsedClass* aClass, bool bClear = true);
+
+  /** This build a list of CParsedAttribute items from the current class and its parents classes */
+  QList <CParsedAttribute>* getAllParentAttr(CParsedClass*, bool initList=true);
+
 public slots:
     void slotClone();
     void slotBtnApply();

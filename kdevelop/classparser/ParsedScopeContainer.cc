@@ -209,37 +209,30 @@ void CParsedScopeContainer::out()
   if( path().isEmpty() )
     kdDebug() << "Global ";
   kdDebug() << "Namespaces:" << endl;
-    for( scopeIterator.toFirst(); 
-       scopeIterator.current();
-       ++scopeIterator )
+  for( scopeIterator.toFirst();  scopeIterator.current(); ++scopeIterator )
     scopeIterator.current()->out();
 
   if( path().isEmpty() )
     kdDebug() << "Global ";
   kdDebug() << "Classes:" << endl;
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  for( classIterator.toFirst(); classIterator.current(); ++classIterator )
     classIterator.current()->out();
+
   if( path().isEmpty() )
     kdDebug() << "Global ";
   kdDebug() << "Structures:" << endl;
-  for( structIterator.toFirst();
-       structIterator.current();
-       ++structIterator )
+  for( structIterator.toFirst(); structIterator.current(); ++structIterator )
     structIterator.current()->out();
+
   if( path().isEmpty() )
     kdDebug() << "Global ";
   kdDebug() << "Functions:" << endl;
-  for( methodIterator.toFirst();
-       methodIterator.current();
-       ++methodIterator )
+  for( methodIterator.toFirst(); methodIterator.current(); ++methodIterator )
     methodIterator.current()->out();
+
   if( path().isEmpty() )
     kdDebug() << "Global ";
   kdDebug() << "Variables:" << endl;
-  for( attributeIterator.toFirst(); 
-       attributeIterator.current();
-       ++attributeIterator )
+  for( attributeIterator.toFirst(); attributeIterator.current(); ++attributeIterator )
     attributeIterator.current()->out();
 }

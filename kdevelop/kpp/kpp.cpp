@@ -227,7 +227,7 @@ bool Kpp::startBuild(){
   {
     // the source is not there, display a dialog and exit this dialog.
     kdDebug() << "need source file" << endl;
-    KMessageBox::sorry(0,"You need to generate a source dist first...", "Missing tar.gz file", true);
+    KMessageBox::sorry(0, i18n("You need to generate a source dist first..."), i18n("Missing tar.gz file"), true);
     exitApp();
   }
   else
@@ -266,7 +266,7 @@ bool Kpp::startBuild(){
       // the spec is not filled out correctly do no clobber the dialog
       // but do not start the build.
       kdDebug() << "spec form not filled out completely" << endl;
-      KMessageBox::sorry(0,"You need to generate a spec file first...", "Missing spec file", true);
+      KMessageBox::sorry(0,i18n("You need to generate a spec file first..."), i18n("Missing spec file"), true);
 
       return false;
     }

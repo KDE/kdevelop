@@ -290,16 +290,16 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
 
   DbgMoveHandle*  moveHandle= new DbgMoveHandle(this);
 
-  QPushButton*  bRun        = new DbgButton(BarIcon("dbgrun"),      i18n("Run"),        this);
-  QPushButton*  bInterrupt  = new DbgButton(BarIcon("player_pause"),    i18n("Interrupt"),  this);
-  QPushButton*  bNext       = new DbgButton(BarIcon("dbgnext"),     QString::null,      this);
-  QPushButton*  bNexti      = new DbgButton(BarIcon("dbgnextinst"), QString::null,      this);
-  QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),     QString::null,      this);
-  QPushButton*  bStepi      = new DbgButton(BarIcon("dbgstepinst"), QString::null,      this);
-  QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),  i18n("Step out"),   this);
-  QPushButton*  bView       = new DbgButton(BarIcon("dbgmemview"),  i18n("Viewers"),    this);
-                bKDevFocus_ = new DbgButton(BarIcon("kdevelop"),    QString::null,      this);
-                bPrevFocus_ = new DbgButton(BarIcon("dbgmemview"),  QString::null,      this);
+  QPushButton*  bRun        = new DbgButton(BarIcon("dbgrun"),        i18n("Run"),        this);
+  QPushButton*  bInterrupt  = new DbgButton(BarIcon("player_pause"),  i18n("Interrupt"),  this);
+  QPushButton*  bNext       = new DbgButton(BarIcon("dbgnext"),       QString::null,      this);
+  QPushButton*  bNexti      = new DbgButton(BarIcon("dbgnextinst"),   QString::null,      this);
+  QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),       QString::null,      this);
+  QPushButton*  bStepi      = new DbgButton(BarIcon("dbgstepinst"),   QString::null,      this);
+  QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),    i18n("Step out"),   this);
+  QPushButton*  bView       = new DbgButton(BarIcon("dbgmemview"),    i18n("Viewers"),    this);
+                bKDevFocus_ = new DbgButton(BarIcon("kdevelop"),      QString::null,      this);
+                bPrevFocus_ = new DbgButton(BarIcon("dbgmemview"),    QString::null,      this);
 
   connect(bRun,         SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugRun()));
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));

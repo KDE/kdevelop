@@ -72,8 +72,6 @@ void CParsedStruct::out()
     kdDebug() << "   " << comment << "\n";
 
   kdDebug() << "   " << path() << "\n";
-  for( attributeIterator.toFirst();
-       attributeIterator.current();
-       ++attributeIterator )
+  for( attributeIterator.toFirst(); attributeIterator.current(); ++attributeIterator )
     attributeIterator.current()->out();
 }

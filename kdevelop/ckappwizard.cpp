@@ -944,7 +944,7 @@ void CKAppWizard::initPages()
   errOutput->setFont(font);
   QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
   // go to page 2 then to page 1
-#warning FIXME do these have a reason?
+//#warning FIXME do these have a reason?
 //  gotoPage(1);
 //  gotoPage(0);
 
@@ -1056,10 +1056,10 @@ void CKAppWizard::accept() {
 
   if (!QFileInfo(direct).isWritable())
   {
-    KMessageBox::error(this, i18n("Either the desired directory cannot be created or\n"
-                                  "you haven't enough rights to use it.\n"
-                                  "It isn't possible to generate a new project into this directory."),
-                        direct + (QString) i18n(" isn't writable!"));
+    KMessageBox::error(this,  i18n("Either the desired directory cannot be created or\n"
+                                    "you haven't enough rights to use it.\n"
+                                    "It isn't possible to generate a new project into this directory."),
+                              i18n("%1 isn't writable!").arg(direct));
     return;
   }
 
@@ -1067,7 +1067,7 @@ void CKAppWizard::accept() {
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     KMessageBox::error( this, i18n("It isn't possible to generate a new project into an existing directory."),
-                        directoryline->text() + (QString) i18n(" already exists!"));
+                        i18n("%1 already exists!").arg(directoryline->text()));
       return;
 
   }

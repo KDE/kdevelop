@@ -280,7 +280,7 @@ void CUpdateKDEDocDlg::OK(){
   {
     KMessageBox::error(this,
                         i18n("You need write permission to create\n"
-                          "the documentation in\n")+new_doc_path,
+                          "the documentation in\n%1").arg(new_doc_path),
                   i18n("Error in creating documentation!"));
     return;
   }
@@ -292,10 +292,9 @@ void CUpdateKDEDocDlg::OK(){
     if(!QFileInfo(doc_path).exists())
     {
       KMessageBox::error(this,
-                          i18n("The old documentation path\n")+
-                            doc_path+
-                            i18n("\ndoesn't exist anymore.")+
-                            i18n("\nProcess will continue without deletion..."),
+                          i18n("The old documentation path\n%1"
+                                "\ndoesn't exist anymore."
+                                "\nProcess will continue without deletion...").arg(doc_path),
                           i18n("Old documentation deletion!"));
     }
     else
@@ -304,8 +303,8 @@ void CUpdateKDEDocDlg::OK(){
       {
         KMessageBox::error(this,
                     i18n("You have no write permission to delete\n"
-                            "the old documentation in\n")+doc_path+
-                            i18n("\nProcess will continue without deletion..."),
+                            "the old documentation in\n%1"
+                            "\nProcess will continue without deletion...").arg(doc_path),
                     i18n("Old documentation deletion!"));
       }
       else

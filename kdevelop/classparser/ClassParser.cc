@@ -175,7 +175,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
           parseStruct( aStruct );
           break;
         default:
-          debug( "Found unknown struct declaration." );
+          kdDebug() << "Found unknown struct declaration." << endl;
       }
 
       if( lexem != '}' )
@@ -335,7 +335,7 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
     // check that it is well-formed, moving to beginning of block
     getNextLexem();
     while(lexem != 0 && lexem != '{') {
-      debug("Bad namespace identifier.");
+      kdDebug() << "Bad namespace identifier." << endl;
       getNextLexem();
     }
   }
@@ -1709,7 +1709,7 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
         delete aMethod;
       break;
     case CP_IS_MULTI_ATTR_IMPL:
-      debug( "Found multi attr implementation." );
+      kdDebug() << "Found multi attr implementation." << endl;
       emptyStack();
       break;
     case CP_IS_MULTI_ATTRIBUTE:
@@ -1774,7 +1774,7 @@ void CClassParser::parseGenericLexem(  CParsedContainer *aContainer )
       parseTemplate();
       break;
     case CPTHROW:
-      debug( "Found throw statement." );
+      kdDebug() << "Found throw statement." << endl;
       break;
   }
 }
