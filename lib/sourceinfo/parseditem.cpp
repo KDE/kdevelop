@@ -28,30 +28,20 @@
 /*----------------------------------------- ParsedItem::ParsedItem()
  * ParsedItem()
  *   Constructor.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
  *-----------------------------------------------------------------*/
 ParsedItem::ParsedItem()
 { 
-  itemType = PIT_UNKNOWN; 
-  access = PIE_GLOBAL; 
-  declaredOnLine = -1; 
-  declarationEndsOnLine = -1;
-  definedOnLine = -1; 
-  definitionEndsOnLine = -1;
+    itemType = PIT_UNKNOWN; 
+    access = PIE_GLOBAL; 
+    declaredOnLine = -1; 
+    declarationEndsOnLine = -1;
+    definedOnLine = -1; 
+    definitionEndsOnLine = -1;
 }
 
 /*--------------------------------------- ParsedItem::~ParsedItem()
  * ~ParsedItem()
  *   Destructor.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
  *-----------------------------------------------------------------*/
 ParsedItem::~ParsedItem()
 { 
@@ -97,37 +87,4 @@ QString ParsedItem::path()
     return name;
   else
     return declaredInScope + "." + name;
-}
-
-/*********************************************************************
- *                                                                   *
- *                         PROTECTED METHODS                         *
- *                                                                   *
- ********************************************************************/
-
-/*----------------------------------------- ParsedItem::getSubString()
- * getSubString()
- *   Returns the next substring(ending with \n) starting at position 
- *   start. 
- *
- * Parameters:
- *   buf        This is where the result is stored.
- *   toRead     String to interpret.
- *   start      Position in toRead to start at.
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-int ParsedItem::getSubString( char *buf, const char *toRead, int start )
-{
-  REQUIRE1( "Valid buffer", buf != NULL, -1 );
-  REQUIRE1( "Valid string", toRead != NULL, -1 );
-
-  int endPos=0;
-  
-  buf[ 0 ] = '\0';
-  while( toRead[ start + endPos ] != '\n' )
-    endPos++;
-  strncpy( buf, &toRead[ start ], endPos );
-  
-  return start + endPos + 1;
 }

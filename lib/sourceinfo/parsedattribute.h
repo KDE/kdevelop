@@ -70,21 +70,18 @@ public:
      */
     virtual void copy(ParsedAttribute *anAttribute);
     
+    /** Is the supplied attribute equal to this one(regarding type and name */
+    bool isEqual(ParsedAttribute *attr);
+
     /** Returns the object as a string(for tooltips etc) */
     virtual QString asString();
     
     /** Outputs this object to stdout */
     virtual void out();
-    
-    /** Returns a string made for persistant storage. */
-    virtual QString asPersistantString();
-    
-    /** Initializes the object from a persistant string. */
-    virtual int fromPersistantString(const QString &, int)
-    { return 0; }
-    
-    /** Is the supplied attribute equal to this one(regarding type and name */
-    bool isEqual(ParsedAttribute *attr);
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg);
+QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg);
 
 #endif

@@ -40,25 +40,34 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
                                          "can configure which plugins you want to use for that project</qt>"), this);
     layout->addWidget(info_label);
 
-    QLabel *dir_label = new QLabel(i18n("Directory:"), this);
+    QLabel *name_label = new QLabel(i18n("Project &name:"), this);
+    
+    name_edit = new QLineEdit(this);
+    name_edit->setFocus();
+    name_label->setBuddy(name_edit);
+    
+    QLabel *dir_label = new QLabel(i18n("&Directory:"), this);
 
     dir_edit = new QLineEdit(this);
     QFontMetrics fm(dir_edit->fontMetrics());
     dir_edit->setMinimumWidth(fm.width("X")*35);
+    dir_label->setBuddy(dir_edit);
     
     QPushButton *dir_button = new QPushButton("...", this);
     dir_button->setFixedSize(30, 25);
     connect( dir_button, SIGNAL(clicked()), this, SLOT(dirButtonClicked()) );
     
-    QLabel *project_label = new QLabel(i18n("Project management:"), this);
+    QLabel *project_label = new QLabel(i18n("&Project management:"), this);
 
     KTrader::OfferList projectOffers =
         KTrader::self()->query("KDevelop/Project", QString::null);
     project_combo = new ServiceComboBox(projectOffers, this);
+    project_label->setBuddy(project_combo);
 
-    QLabel *language_label = new QLabel(i18n("Primary programming language:"), this);
+    QLabel *language_label = new QLabel(i18n("Primary programming &language:"), this);
 
     language_combo = new QComboBox(this);
+    language_label->setBuddy(language_combo);
     KTrader::OfferList languageOffers =
         KTrader::self()->query("KDevelop/LanguageSupport", QString::null);
     QValueList<KService::Ptr>::ConstIterator it;
@@ -68,13 +77,15 @@ ImportDialog::ImportDialog(QWidget *parent, const char *name)
     QGridLayout *grid = new QGridLayout(2, 2);
     layout->addLayout(grid);
 
-    grid->addWidget(dir_label, 0, 0);
-    grid->addWidget(dir_edit, 0, 1);
-    grid->addWidget(dir_button, 0, 2);
-    grid->addWidget(project_label, 1, 0);
-    grid->addMultiCellWidget(project_combo, 1, 1, 1, 2);
-    grid->addWidget(language_label, 2, 0);
-    grid->addMultiCellWidget(language_combo, 2, 2, 1, 2);
+    grid->addWidget(name_label, 0, 0);
+    grid->addWidget(name_edit, 0, 1);
+    grid->addWidget(dir_label, 1, 0);
+    grid->addWidget(dir_edit, 1, 1);
+    grid->addWidget(dir_button, 1, 2);
+    grid->addWidget(project_label, 2, 0);
+    grid->addMultiCellWidget(project_combo, 2, 2, 1, 2);
+    grid->addWidget(language_label, 3, 0);
+    grid->addMultiCellWidget(language_combo, 3, 3, 1, 2);
 
     QFrame *frame = new QFrame(this);
     frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
@@ -113,18 +124,30 @@ void ImportDialog::accept()
         return;
     }
 
-    QFile f(dir.filePath("gideonprj"));
+    QString projectName = name_edit->text();
+    if (projectName.isEmpty()) {
+        KMessageBox::sorry(this, i18n("You have to choose a project name."));
+        return;
+    }
+
+    for (uint i=0; i < projectName.length(); ++i)
+        if (!projectName[i].isLetterOrNumber()) {
+            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
+            return;
+        }
+    
+    QFile f(dir.filePath(projectName + ".kdevelop"));
     if (!f.open(IO_WriteOnly)) {
         KMessageBox::sorry(this, i18n("Can not write the project file."));
         return;
     }
 
     QTextStream stream(&f);
-    stream << "<!DOCTYPE gideon>\n<gideon>\n  <general>\n"
+    stream << "<!DOCTYPE kdevelop>\n<kdevelop>\n  <general>\n"
            << "    <projectmanagement>" << project << "</projectmanagement>\n";
     if (!language.isEmpty())
         stream << "    <primarylanguage>" << language << "</primarylanguage>\n";
-    stream << "  </general>\n</gideon>\n";
+    stream << "  </general>\n</kdevelop>\n";
     f.close();
     
     QDialog::accept();
@@ -137,4 +160,5 @@ void ImportDialog::dirButtonClicked()
                                                     i18n("Choose a directory to import"));
     dir_edit->setText(dir);
 }
+
 #include "importdlg.moc"

@@ -34,6 +34,7 @@ private slots:
     void dirButtonClicked();
     
 private:
+    QLineEdit *name_edit;
     QLineEdit *dir_edit;
     ServiceComboBox *project_combo;
     QComboBox *language_combo;

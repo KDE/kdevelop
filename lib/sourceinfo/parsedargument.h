@@ -65,4 +65,8 @@ public:
     void out();
 };
 
+
+QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg);
+QDataStream &operator>>(QDataStream &s, ParsedArgument &arg);
+
 #endif

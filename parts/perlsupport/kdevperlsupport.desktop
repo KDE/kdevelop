@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Perl support
+Name=KDevPerlSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevperlsupport
+X-KDevelop-Language=Perl
+

@@ -97,7 +97,7 @@ private:
     QList<EditorPart> editorParts;
     QList<TextEditorDocument> editedDocs;
     QList<KAction> bufferActions;
-    QString projectDir;
+    QString projectFile;
 };
 
 #endif

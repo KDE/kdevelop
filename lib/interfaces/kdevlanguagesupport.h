@@ -17,19 +17,20 @@ class KDevLanguageSupport : public KDevPart
 public:
 
     enum Features {
-        NewClass, AddMethod, AddAttribute, /* features of the language support part */
-        Signals, Slots, Namespaces         /* features of the language itself       */
+        Classes=1, Structs=2, Functions=4, Variables=8,
+        Namespaces=16, Signals=32, Slots=64,           /* features of the language itself       */
+        NewClass=128, AddMethod=256, AddAttribute=512  /* features of the language support part */
     };
     
     KDevLanguageSupport( KDevApi *api, QObject *parent=0, const char *name=0 );
     ~KDevLanguageSupport();
 
     /**
-     * Returns whether this component supports a given feature.
-     * Other parts can use this information to build appropriate
-     * menus.
+     * Returns the feature set of the language. This is e.g. used
+     * by the class view to decide which organizer items to display
+     * and which not.
      */
-    virtual bool hasFeature(Features feature);
+    virtual Features features();
     /**
      * Opens a "New class" dialog and adds the configured
      * class to the sources.

@@ -190,13 +190,7 @@ void ClassStore::storeAll()
           ++globalContainer.classIterator )
         {
             aClass = globalContainer.classIterator.current();
-            str = aClass->asPersistantString();
-            
-            debug( "Storing:" );
-            debug( "----------" );
-            debug( str );
             globalStore.storeClass( aClass );
-            debug( "----------" );
         }
 }
 

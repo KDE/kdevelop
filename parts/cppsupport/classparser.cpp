@@ -718,7 +718,7 @@ void CClassParser::fillInParsedVariable( ParsedAttribute *anAttr )
  * Parameters:
  *   -
  * Returns:
- *   QList<CParsedAttribute>  List of variables
+ *   -
  *-----------------------------------------------------------------*/
 void CClassParser::fillInMultipleVariable( ParsedContainer *aContainer )
 {
@@ -2429,9 +2429,6 @@ bool CClassParser::parse( const QString &file )
 {
   ifstream f( QFile::encodeName(file) );
   currentFile = file;
-
-  // Remove all items with references to this file.
-  store->removeWithReferences( file );
 
   kdDebug(9007) << "Parsing file " << file << endl;
   

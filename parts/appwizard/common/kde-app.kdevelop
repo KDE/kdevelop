@@ -1,0 +1,7 @@
+<!DOCTYPE kdevelop >
+<kdevelop>
+ <general>
+  <projectmanagement>KDevAutoProject</projectmanagement>
+  <primarylanguage>C++</primarylanguage>
+ </general>
+</kdevelop>

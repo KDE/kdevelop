@@ -2,6 +2,8 @@
 # interfaces in kdevelop/lib/interfaces which are in turn derived
 # from KPart. 
 
-SUBDIRS = autoproject cppsupport javasupport doctreeview classview appwizard \
-	  outputviews grepview debugger javadebugger konsole astyle partselector tipofday manager \
+SUBDIRS = doctreeview classview appwizard outputviews grepview \
+	  debugger javadebugger konsole astyle partselector tipofday manager \
+	  cppsupport javasupport pythonsupport perlsupport \
+	  autoproject scriptproject \
 	  $(PYTHON_SUBDIR)

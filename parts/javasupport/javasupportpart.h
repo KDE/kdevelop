@@ -29,11 +29,11 @@ class JavaSupportPart : public KDevLanguageSupport
     Q_OBJECT
 
 public:
-    JavaSupportPart( bool cpp, KDevApi *api, QObject *parent=0, const char *name=0 );
+    JavaSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
     ~JavaSupportPart();
 
 protected:
-    virtual bool hasFeature(Features feature);
+    virtual KDevLanguageSupport::Features features();
     virtual void newClass();
     virtual void addMethod(const QString &className);
     virtual void addAttribute(const QString &className);

@@ -22,14 +22,14 @@
 #include <assert.h>
 
 
-/** The type of a CParsedItem. */
+/** The type of a ParsedItem. */
 enum PIType { 
     PIT_UNKNOWN, PIT_CLASS, PIT_METHOD, 
     PIT_ATTRIBUTE, PIT_STRUCT, PIT_SCOPE
 };
 
 
-/** Export of a CParsedItem. */
+/** Access of a ParsedItem. */
 enum PIAccess { 
     PIE_GLOBAL, PIE_PUBLIC, 
     PIE_PROTECTED, PIE_PRIVATE 
@@ -62,11 +62,8 @@ public:
     /** Access of this method. */
     PIAccess access;
     
-    /** Where the item is declared. */
-    int declaredOnLine;
-    
-    /** Where the item declaration ends. */
-    int declarationEndsOnLine;
+    /** The file where the item where defined. */
+    QString definedInFile; 
     
     /** Where the item is defined. */
     int definedOnLine;
@@ -77,8 +74,11 @@ public:
     /** The file where the item where declared. */
     QString declaredInFile;
     
-    /** The file where the item where declared. */
-    QString definedInFile;
+    /** Where the item is declared. */
+    int declaredOnLine;
+    
+    /** Where the item declaration ends. */
+    int declarationEndsOnLine;
     
     /** Comment in the vicinity(above/after) of this item. */
     QString comment;
@@ -231,29 +231,6 @@ public:
     
     /** Outputs this object to stdout */
     virtual void out() = 0;
-    
-    /**
-     * Returns a string made for persistant storage. 
-     * @param str String to store the result in.
-     * @return Pointer to str.
-     */
-    virtual QString asPersistantString() = 0;
-    
-    /**
-     * Initializes the object from a persistant string. 
-     * @param str String to initialize from.
-     * @param startPos Position(0-based) at which to start.
-     */
-    virtual int fromPersistantString(const QString &str, int startPos) = 0;
-    
-protected:
-    /**
-     * Returns the next substring(ending with \n) starting at position start. 
-     * @param buf This is where the result is stored.
-     * @param toRead String to interpret.
-     * @param start Position in toRead to start at.
-     */
-    int getSubString(char *buf, const char *toRead, int start);
 };
 
 #endif 

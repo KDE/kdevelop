@@ -46,7 +46,7 @@ ParsedClass::ParsedClass()
     parents.setAutoDelete( true );
     signalList.setAutoDelete( true );
     slotList.setAutoDelete( true );
-    signalMaps.setAutoDelete( true );
+    //signalMaps.setAutoDelete( true );
     classes.setAutoDelete( false );
     
     isSubClass = false;
@@ -185,7 +185,6 @@ void ParsedClass::clearDeclaration()
     signalsByNameAndArg.clear();
     parents.clear();
     friends.clear();
-    signalMaps.clear();
     
     ParsedItem::clearDeclaration();
 }
@@ -252,24 +251,6 @@ void ParsedClass::addSlot( ParsedMethod *aMethod )
     
     slotList.append( aMethod );
     slotsByNameAndArg.insert( aMethod->asString(), aMethod );
-}
-
-
-/*----------------------------------- ParsedClass::addSignalSlotMap()
- * addSignalSlotMap()
- *   Add a signal->slot mapping.
- *
- * Parameters:
- *   aMethod          The signal to slot mapping.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void ParsedClass::addSignalSlotMap( ParsedSignalSlot *aSS )
-{
-    REQUIRE( "Valid signal slot map",  aSS != NULL );
-    
-    signalMaps.append( aSS );
 }
 
 
@@ -509,7 +490,7 @@ void ParsedClass::out()
     QDictIterator<ParsedAttribute> ait( attributes );
     ParsedParent *aParent;
     ParsedMethod *aMethod;
-    ParsedSignalSlot *aSS;
+    //ParsedSignalSlot *aSS;
     char *str;
     
     if ( !comment.isEmpty() )
@@ -538,9 +519,9 @@ void ParsedClass::out()
     cout << "  Slots:" << endl;
     for ( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
         aMethod->out();
-    cout << "  Signal to slot mappings:" << endl;
-    for ( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
-        aSS->out();
+    //    cout << "  Signal to slot mappings:" << endl;
+    //    for ( aSS = signalMaps.first(); aSS != NULL; aSS = signalMaps.next() )
+    //        aSS->out();
     cout << "  Classes:" << endl;
     for ( classIterator.toFirst();
           classIterator.current();
@@ -551,154 +532,106 @@ void ParsedClass::out()
 }
 
 
-/*--------------------------------- ParsedClass::asPersistantString()
- * asPersistantString()
- *   Return a string made for persistant storage.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QString ParsedClass::asPersistantString()
+QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
 {
-    ParsedParent *aParent;
-    ParsedMethod *aMethod;
-    QCString aFriend;
-    
-    QString str = name;
-    str += "\n";
-    str += QString::number(definedOnLine);
-    str += "\n";
+    s << arg.name << arg.definedOnLine;
     
     // Add parents.
-    str += QString::number(parents.count());
-    str += "\n";
-    for ( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
-        str += aParent->asPersistantString();
+    s << arg.parents.count();
+    QListIterator<ParsedParent> parentIt(arg.parents);
+    for (; parentIt.current(); ++parentIt)
+        s << *parentIt.current();
     
     // Add friends.
-    str += QString::number(friends.count());
-    str += "\n";
-    for ( aFriend = friends.first(); aFriend != NULL; aFriend = friends.next() ) {
-        str += aFriend;
-        str + "\n";
-    }
+    s << arg.friends.count();
+    QStrListIterator friendIt(arg.friends);
+    for (; friendIt.current(); ++friendIt)
+        s << friendIt.current();
     
-    // Add methods. 
-    str += QString::number(methods.count());
-    str += "\n";
-    for ( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
-        str += aMethod->asPersistantString();
+    // Add methods.
+    s << arg.methods.count();
+    QListIterator<ParsedMethod> methodIt(arg.methods);
+    for (; methodIt.current(); ++methodIt)
+        s << *methodIt.current();
     
     // Add attributes.
-    str += QString::number(attributeIterator.count());
-    str += "\n";
-    for ( attributeIterator.toFirst(); 
-          attributeIterator.current();
-          ++attributeIterator)
-        str += attributeIterator.current()->asPersistantString();
+    s << arg.attributes.count();
+    QDictIterator<ParsedAttribute> attrIt(arg.attributes);
+    for (; attrIt.current(); ++attrIt)
+        s << *attrIt.current();
     
     // Add signals.
-    str += QString::number(signalList.count());
-    str += "\n";
-    for ( aMethod = signalList.first(); 
-          aMethod != NULL; 
-          aMethod = signalList.next() )
-        str += aMethod->asPersistantString();
-    
+    s << arg.signalList.count();
+    QListIterator<ParsedMethod> signalIt(arg.signalList);
+    for (; signalIt.current(); ++signalIt)
+        s << *signalIt.current();
+
     // Add slots.
-    str += QString::number(slotList.count());
-    str += "\n";
-    for ( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
-        str += aMethod->asPersistantString();
+    s << arg.slotList.count();
+    QListIterator<ParsedMethod> slotIt(arg.slotList);
+    for (; slotIt.current(); ++slotIt)
+        s << *slotIt.current();
     
-    return str;
+    return s;
 }
 
 
-/*--------------------------------- ParsedClass::fromPersistantString()
- * fromPersistantString()
- *   Initialize the object from a persistant string.
- *
- * Parameters:
- *   dataStr      The string with the data.
- *   
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-int ParsedClass::fromPersistantString( const QString &str, int startPos )
+QDataStream &operator<<(QDataStream &s, ParsedClass &arg)
 {
-    REQUIRE1( "Valid string", str != NULL, -1 );
-    REQUIRE1( "Valid startpos", startPos > 0, -1 );
+    QString name;
+    int definedOnLine, n;
     
-    ParsedParent *aParent;
-    ParsedMethod *aMethod;
-    ParsedAttribute *anAttribute;
-    char buf[2048];
-    int count;
-    int i;
-    
-    // Fetch the classname
-    startPos = getSubString( buf, str, startPos );
-    setName( buf );
-    
-    // Fetch definedOnLine.
-    startPos = getSubString( buf, str, startPos );
-    setDefinedOnLine( atoi( buf ) );
-    
+    s >> name >> definedOnLine;
+    arg.setName(name);
+    arg.setDefinedOnLine(definedOnLine);
+
     // Fetch parents
-    startPos = getSubString( buf, str, startPos );
-    count = atoi( buf );
-    for ( i=0; i<count; i++ ) {
-        aParent = new ParsedParent();
-        startPos = aParent->fromPersistantString( str, startPos );
-        addParent( aParent );
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedParent *parent = new ParsedParent;
+        s >> (*parent);
+        arg.addParent(parent);
     }
     
     // Fetch friends
-    startPos = getSubString( buf, str, startPos );
-    count = atoi( buf );
-    for ( i=0; i<count; i++ ) {
-        startPos = getSubString( buf, str, startPos );
-        addFriend( buf );
-    }  
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        QString friendname;
+        s >> friendname;
+        arg.addFriend(friendname);
+    }
     
     // Fetch methods
-    startPos = getSubString( buf, str, startPos );
-    count = atoi( buf );
-    for ( i=0; i<count; i++ ) {
-        aMethod = new ParsedMethod();
-        startPos = aMethod->fromPersistantString( str, startPos );
-        addMethod( aMethod );
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedMethod *method = new ParsedMethod;
+        s >> (*method);
+        arg.addMethod(method);
     }
-    
+
     // Fetch attributes
-    startPos = getSubString( buf, str, startPos );
-    count = atoi( buf );
-    for ( i=0; i<count; i++ ) {
-        anAttribute = new ParsedAttribute();
-        startPos = anAttribute->fromPersistantString( str, startPos );
-        addAttribute( anAttribute );
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedAttribute *attr = new ParsedAttribute;
+        s >> (*attr);
+        arg.addAttribute(attr);
     }
-    
+
     // Fetch signals
-    startPos = getSubString( buf, str, startPos );
-    count = atoi( buf );
-    for ( i=0; i<count; i++ ) {
-        aMethod = new ParsedMethod();
-        startPos = aMethod->fromPersistantString( str, startPos );
-        addSignal( aMethod );
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedMethod *method = new ParsedMethod;
+        s >> (*method);
+        arg.addSignal(method);
     }
-    
+
     // Fetch slots
-    startPos = getSubString( buf, str, startPos );
-    count = atoi( buf );
-    for ( i=0; i<count; i++ ) {
-        aMethod = new ParsedMethod();
-        startPos = aMethod->fromPersistantString( str, startPos );
-        addSlot( aMethod );
+    s >> n;
+    for (int i = 0; i < n; ++i) {
+        ParsedMethod *method = new ParsedMethod;
+        s >> (*method);
+        arg.addSlot(method);
     }
-    
-    return str.length();
+
+    return s;
 }

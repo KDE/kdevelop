@@ -81,9 +81,6 @@ public: // Public Methods
 //  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
 //    { store.getDependentFiles( fileList, dependentList); }
 
-  void removeWithReferences( const char*  aFile )
-      { store->removeWithReferences( aFile ); }
-
 private: // Private attributes
 
   /** Store for the classes. */

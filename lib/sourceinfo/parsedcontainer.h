@@ -18,6 +18,7 @@
 #ifndef _PARSEDCONTAINER_H_
 #define _PARSEDCONTAINER_H_
 
+#include <qdatastream.h>
 #include <qlist.h>
 #include <qstrlist.h>
 #include <qdict.h>
@@ -27,6 +28,7 @@
 #include "parsedmethod.h"
 
 class ParsedStruct;
+class ParsedClass;
 
 
 /**
@@ -266,23 +268,8 @@ public:
     
     /** Outputs this object to stdout */
     virtual void out() {}
-    
-    /**
-     * Returns a string made for persistant storage. 
-     * @param str String to store the result in.
-     * @return Pointer to str.
-     */
-    virtual QString asPersistantString()
-    { return QString::null; }
-    
-    /**
-     * Initializes the object from a persistant string. 
-     * @param str String to initialize from.
-     * @param startPos Position(0-based) at which to start.
-     */
-    virtual int fromPersistantString(const QString &, int startPos)
-    { return startPos; }
-    
+
+    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 };
 
 #include "parsedstruct.h"

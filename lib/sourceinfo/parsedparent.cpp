@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include <iostream.h>
+#include <qdatastream.h>
 #include "parsedparent.h"
 #include "programmingbycontract.h"
 
@@ -30,11 +31,6 @@
 /*------------------------------- ParsedParent::ParsedParent()
  * ParsedParent()
  *   Constructor.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
  *-----------------------------------------------------------------*/
 ParsedParent::ParsedParent()
 {
@@ -43,11 +39,6 @@ ParsedParent::ParsedParent()
 /*------------------------------- ParsedParent::~ParsedParent()
  * ~ParsedParent()
  *   Destructor.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
  *-----------------------------------------------------------------*/
 ParsedParent::~ParsedParent()
 {
@@ -78,11 +69,11 @@ void ParsedParent::setName( const QString &aName )
 }
 
 /*----------------------------------------- ParsedClass::setExport()
- * setExport()
- *   Set the export status of the parent.
+ * setAccess()
+ *   Set the access status of the parent.
  *
  * Parameters:
- *   aExport          The new export status.
+ *   aAccess          The new access status.
  *
  * Returns:
  *   -
@@ -130,36 +121,20 @@ void ParsedParent::out()
 }
 
 
-/*--------------------------------- ParsedClass::asPersistantString()
- * asPersistantString()
- *   Return a string made for persistant storage.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QString ParsedParent::asPersistantString()
+QDataStream &operator<<(QDataStream &s, const ParsedParent &arg)
 {
-    QString str;
-    
-    switch(access)
-        {
-        case PIE_PUBLIC:
-            str = "public";
-            break;
-        case PIE_PROTECTED:
-            str = "protected";
-            break;
-        case PIE_PRIVATE:
-            str = "private";
-            break;
-        default:
-            ;
-        }
-    str += "\n";
-    str += name;
-    str += "\n";
-    
-    return str;
+    return s << arg.name << (int)arg.access;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedParent &arg)
+{
+    QString name;
+    int access;
+
+    s >> name >> access;
+    arg.setName(name);
+    arg.setAccess((PIAccess)access);
+
+    return s;
 }

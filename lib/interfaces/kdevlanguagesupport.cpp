@@ -10,9 +10,9 @@ KDevLanguageSupport::~KDevLanguageSupport()
 {
 }
 
-bool KDevLanguageSupport::hasFeature(Features /*feature*/)
+KDevLanguageSupport::Features KDevLanguageSupport::features()
 {
-    return false;
+    return Features(0);
 }
 
 void KDevLanguageSupport::addClass()

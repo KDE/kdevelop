@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Python support
+Name=KDevPythonSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevpythonsupport
+X-KDevelop-Language=Python

@@ -59,7 +59,7 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::projectOpened()
 {
-    kdDebug(9007) << "CppSupportPart::projectSpaceOpened()" << endl;
+    kdDebug(9007) << "projectOpened()" << endl;
 
     connect( project(), SIGNAL(addedFileToProject(const QString &)),
              this, SLOT(addedFileToProject(const QString &)) );
@@ -119,9 +119,13 @@ void CppSupportPart::maybeParse(const QString fileName)
     QString path = fi.filePath();
     QString ext = fi.extension();
     if (ext == "cpp" || ext == "cc" || ext == "cxx") {
-        m_parser->parse(path.left(path.length()-ext.length()) + "h");
+        QString headerFileName = path.left(path.length()-ext.length()) + "h";
+        classStore()->removeWithReferences(headerFileName);
+        m_parser->parse(headerFileName);
+        classStore()->removeWithReferences(fileName);
         m_parser->parse(fileName);
     } else if (ext == "h") {
+        classStore()->removeWithReferences(fileName);
         m_parser->parse(fileName);
     }
 }
@@ -129,7 +133,7 @@ void CppSupportPart::maybeParse(const QString fileName)
 
 void CppSupportPart::initialParse()
 {
-    kdDebug(9007) << "CppSupportPart::initialParse()" << endl;
+    kdDebug(9007) << "initialParse()" << endl;
     
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
@@ -147,7 +151,7 @@ void CppSupportPart::initialParse()
 
 void CppSupportPart::addedFileToProject(const QString &fileName)
 {
-    kdDebug(9007) << "CppSupportPart::addedFileToProject()" << endl;
+    kdDebug(9007) << "addedFileToProject()" << endl;
     maybeParse(fileName);
     emit updatedSourceInfo();
 }
@@ -155,15 +159,15 @@ void CppSupportPart::addedFileToProject(const QString &fileName)
 
 void CppSupportPart::removedFileFromProject(const QString &fileName)
 {
-    kdDebug(9007) << "CppSupportPart::removedFileFromProject()" << endl;
-    m_parser->removeWithReferences(fileName);
+    kdDebug(9007) << "removedFileFromProject()" << endl;
+    classStore()->removeWithReferences(fileName);
     emit updatedSourceInfo();
 }
 
 
 void CppSupportPart::savedFile(const QString &fileName)
 {
-    kdDebug(9007) << "CppSupportPart::savedFile()" << endl;
+    kdDebug(9007) << "savedFile()" << endl;
 
     if (project()->allSourceFiles().contains(fileName)) {
         maybeParse(fileName);
@@ -181,17 +185,13 @@ void CppSupportPart::slotGotoIncludeFile()
 }
 
 
-bool CppSupportPart::hasFeature(Features feature)
+KDevLanguageSupport::Features CppSupportPart::features()
 {
-    if (!withcpp)
-        return false;
-    
-    return
-        (feature == Signals)
-        || (feature == Slots)
-        || (feature == Namespaces)
-        || (feature == AddMethod)
-        || (feature == AddAttribute);
+    if (withcpp)
+        return Features(Classes | Structs | Functions | Variables | Namespaces
+                        | Signals | Slots | AddMethod | AddAttribute);
+    else
+        return Features (Structs | Functions | Variables);
 }
 
 
@@ -247,7 +247,7 @@ void CppSupportPart::addMethod(const QString &className)
         else if (pm->access == PIE_PRIVATE) 
             headerCode.prepend(QString("private:\n").arg(pm->isSlot? " slots" :  ""));
         else
-            kdDebug(9007) << "CppSupportPart::selectedAddMethod: Unknown access "
+            kdDebug(9007) << "selectedAddMethod: Unknown access "
                           << (int)pm->access << endl;
 
         atLine = pc->declarationEndsOnLine;
@@ -299,7 +299,7 @@ void CppSupportPart::addAttribute(const QString &className)
         else if (pa->access == PIE_PRIVATE) 
             headerCode.prepend("private: // Private attributes\n");
         else
-            kdDebug(9007) << "CppSupportPart::selectedAddAttribute: Unknown access "
+            kdDebug(9007) << "selectedAddAttribute: Unknown access "
                           << (int)pa->access << endl;
 
         atLine = pc->declarationEndsOnLine;

@@ -6,4 +6,3 @@ Name=KDevJavaSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevjavasupport
 X-KDevelop-Language=Java
-X-KDevelop-Args=Java

@@ -122,6 +122,10 @@ public:
 
     void openProject(const QString &dirName);
     void closeProject();
+
+    /**
+     * A list of all files that belong to the project
+     **/
     QStringList allSourceFiles();
 
     /**

@@ -57,8 +57,8 @@ KPopupMenu *ClassTreeItem::createPopup()
         {
             title = i18n("Class");
             KDevLanguageSupport *ls = classTree()->m_part->languageSupport();
-            bool hasAddMethod = ls->hasFeature(KDevLanguageSupport::AddMethod);
-            bool hasAddAttribute = ls->hasFeature(KDevLanguageSupport::AddAttribute);
+            bool hasAddMethod = ls->features() & KDevLanguageSupport::AddMethod;
+            bool hasAddAttribute = ls->features() & KDevLanguageSupport::AddAttribute;
             if (hasAddMethod)
                 popup->insertItem( i18n("Add method..."), classTree(), SLOT(slotAddMethod()));
             if (hasAddAttribute)
@@ -149,6 +149,9 @@ void ClassTreeScopeItem::setOpen(bool o)
         ParsedScopeContainer *pScope = static_cast<ParsedScopeContainer*>(m_item);
         ClassTreeItem *lastItem = 0;
 
+        // Ok, this is a hack...
+        KDevLanguageSupport::Features features = classTree()->m_part->languageSupport()->features();
+        
         // Add namespaces
         QList<ParsedScopeContainer> *scopeList = pScope->getSortedScopeList();
         for ( ParsedScopeContainer *pScope = scopeList->first();
@@ -158,42 +161,50 @@ void ClassTreeScopeItem::setOpen(bool o)
         }
         delete scopeList;
 
-        // Add classes
-        QList<ParsedClass> *classList = pScope->getSortedClassList();
-        for ( ParsedClass *pClass = classList->first();
-              pClass != 0;
-              pClass = classList->next() ) {
-            lastItem = new ClassTreeClassItem(this, lastItem, pClass);
+        if (features & KDevLanguageSupport::Classes) {
+            // Add classes
+            QList<ParsedClass> *classList = pScope->getSortedClassList();
+            for ( ParsedClass *pClass = classList->first();
+                  pClass != 0;
+                  pClass = classList->next() ) {
+                lastItem = new ClassTreeClassItem(this, lastItem, pClass);
+            }
+            delete classList;
         }
-        delete classList;
-
-        // Add structs
-        QList<ParsedStruct> *structList = pScope->getSortedStructList();
-        for ( ParsedStruct *pStruct = structList->first();
-              pStruct != 0;
-              pStruct = structList->next() ) {
-            lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
+            
+        if (features & KDevLanguageSupport::Structs) {
+            // Add structs
+            QList<ParsedStruct> *structList = pScope->getSortedStructList();
+            for ( ParsedStruct *pStruct = structList->first();
+                  pStruct != 0;
+                  pStruct = structList->next() ) {
+                lastItem = new ClassTreeStructItem(this, lastItem, pStruct);
+            }
+            delete structList;
         }
-        delete structList;
-
-        // Add functions
-        QList<ParsedMethod> *methodList = pScope->getSortedMethodList();
-        for ( ParsedMethod *pMethod = methodList->first();
-              pMethod != 0;
-              pMethod = methodList->next() ) {
-            lastItem = new ClassTreeMethodItem(this, lastItem, pMethod);
+            
+        if (features & KDevLanguageSupport::Functions) {
+            // Add functions
+            QList<ParsedMethod> *methodList = pScope->getSortedMethodList();
+            for ( ParsedMethod *pMethod = methodList->first();
+                  pMethod != 0;
+                  pMethod = methodList->next() ) {
+                lastItem = new ClassTreeMethodItem(this, lastItem, pMethod);
+            }
+            delete methodList;
         }
-        delete methodList;
-
-        // Add attributes
-        QList<ParsedAttribute> *attrList = pScope->getSortedAttributeList();
-        for ( ParsedAttribute *pAttr = attrList->first();
-              pAttr != 0;
-              pAttr = attrList->next() ) {
-            lastItem = new ClassTreeAttrItem(this, lastItem, pAttr);
+            
+        if (features & KDevLanguageSupport::Variables) {
+            // Add attributes
+            QList<ParsedAttribute> *attrList = pScope->getSortedAttributeList();
+            for ( ParsedAttribute *pAttr = attrList->first();
+                  pAttr != 0;
+                  pAttr = attrList->next() ) {
+                lastItem = new ClassTreeAttrItem(this, lastItem, pAttr);
+            }
+            delete attrList;
         }
-        delete attrList;
-        
+            
     }
     
     ClassTreeItem::setOpen(o);

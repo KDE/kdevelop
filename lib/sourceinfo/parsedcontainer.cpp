@@ -199,7 +199,7 @@ QList<ParsedMethod> *ParsedContainer::getMethodByName( const QString &aName )
 
 /*--------------------------- ParsedContainer::getMethodByNameAndArg()
  * getMethodByNameAndArg()
- *   Get a method by using its' name and args using the same format
+ *   Get a method by using its name and args using the same format
  *   as in ParsedMethod::toString().
  *
  * Parameters:

@@ -35,25 +35,10 @@ public:
     ParsedStruct();
     ~ParsedStruct();
     
-    /**
-     * Returns a string made for persistant storage. 
-     * @param str String to store the result in.
-     * @return Pointer to str.
-     */
-    virtual QString asPersistantString()
-    { return QString::null; }
-
-    /**
-     * Initializes the object from a persistant string. 
-     * @param str String to initialize from.
-     * @param startPos Position(0-based) at which to start.
-     */
-    virtual int fromPersistantString(const QString &, int)
-    { return 0; }
-    
     /** Outputs this object to stdout. */
     virtual void out();
     
 };
+
 
 #endif

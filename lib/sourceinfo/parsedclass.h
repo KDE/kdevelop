@@ -70,7 +70,7 @@ public:
     QListIterator<ParsedMethod> signalIterator;
     
     /** List of signal<->slot mappings. */
-    QList<ParsedSignalSlot> signalMaps;
+    //QList<ParsedSignalSlot> signalMaps;
     
     /** Tells if this class is declared inside another class. */
     bool isSubClass;
@@ -137,7 +137,7 @@ public:
     ParsedMethod *getMethod(ParsedMethod *aMethod);
     
     /**
-     * Gets a signal by using its' name and arguments. 
+     * Gets a signal by using its name and arguments. 
      * @param aName Name and arguments of the signal to fetch.
      */
     ParsedMethod *getSignalByNameAndArg(const QString &aName);
@@ -168,22 +168,14 @@ public:
     
 public:
 
-    /**
-     * Returns a string made for persistant storage. 
-     * @param str String to store the result in.
-     * @return Pointer to str.
-     */
-    virtual QString asPersistantString();
-    
-    /**
-     * Initializes the object from a persistant string. 
-     * @param str String to initialize from.
-     * @param startPos Position(0-based) at which to start.
-     */
-    virtual int fromPersistantString( const QString &dataStr, int startPos );
-    
     /** Outputs the class as text on stdout. */
     void out();
+
+    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
+QDataStream &operator>>(QDataStream &s, ParsedClass &arg);
 
 #endif

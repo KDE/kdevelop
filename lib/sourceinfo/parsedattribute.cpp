@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <iostream.h>
+#include <qdatastream.h>
 #include <qstring.h>
 #include "parsedattribute.h"
 #include "programmingbycontract.h"
@@ -269,40 +270,38 @@ bool ParsedAttribute::isEqual( ParsedAttribute *attr )
     return (name == attr->name && type == attr->type );
 }
 
-/*--------------------------------- ParsedAttribute::asPersistantString()
- * asPersistantString()
- *   Return a string made for persistant storage.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QString ParsedAttribute::asPersistantString()
+
+QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg)
 {
-    QString str = name;
-    str += "\n";
-    str += type;
-    str += "\n";
-    str += definedInFile;
-    str += "\n";
-    str += declaredInScope;
-    str += "\n";
-    str += QString::number(definedOnLine);
-    str += "\n";
-    str += QString::number(posName);
-    str += "\n";
-    str += ( isInHFile ? "true" : "false" );
-    str += "\n";
-    str += ( isStatic ? "true" : "false" );
-    str += "\n";
-    str += ( isConst ? "true" : "false" );
-    str += "\n";
-    str += QString::number((int)access);
-    str += "\n";
-    str += comment.find( "\n", false );
-    str += "\n";
-    str += comment;
+    s << arg.name << arg.declaredInScope << (int)arg.access
+      << arg.definedInFile << arg.definedOnLine << arg.comment
+      << arg.type << (int)arg.isInHFile << (int)arg.isStatic << (int)arg.isConst << (int)arg.posName;
     
-    return str;
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg)
+{
+    QString name, declaredInScope, definedInFile, comment, type;
+    int access;
+    int definedOnLine, posName;
+    int isInHFile, isStatic, isConst;
+    
+    s >> name >> declaredInScope >> access >> definedInFile >> definedOnLine >> comment
+      >> type >> isInHFile >> isStatic >> isConst >> posName;
+    
+    arg.setName(name);
+    arg.setDeclaredInScope(declaredInScope);
+    arg.setAccess((PIAccess)access);
+    arg.setDefinedInFile(definedInFile);
+    arg.setDefinedOnLine(definedOnLine);
+    arg.setComment(comment);
+    arg.setType(type);
+    arg.setIsInHFile(isInHFile);
+    arg.setIsStatic(isStatic);
+    arg.setIsConst(isConst);
+    arg.setNamePos(posName);
+
+    return s;
 }

@@ -40,26 +40,25 @@ public:
     QList<ParsedArgument> arguments;
     
     /** Is this methods declared virtual? */
-    bool isVirtual;
+    bool isVirtual : 1;
     
     /** Is this method declared as a pure virtual method(method()=0) */
-    bool isPure;
+    bool isPure : 1;
     
     /** Is this a slot? */
-    bool isSlot;
+    bool isSlot : 1;
     
     /** Is this a signal? */
-    bool isSignal;
+    bool isSignal : 1;
     
     /** Is this a constructor? */
-    bool isConstructor;
+    bool isConstructor : 1;
     
     /** Is this a destructor? */
-    bool isDestructor;
+    bool isDestructor : 1;
    
     /** Is this a Objective-C method? */
-    bool isObjectiveC;
-
+    bool isObjectiveC : 1;
 
 public:
     
@@ -108,31 +107,31 @@ public:
     void setIsDestructor(bool aState=true)
     { isDestructor = aState; }
     
-    /** Returns the object as a string(for tooltips etc) */
-    QString asString();
-    
-    /** Outputs this object to stdout */
-    void out();
-    
+    /**
+     * Is the method an Objective-C method? 
+     */
+    void setIsObjectiveC(bool is) { isObjectiveC = is; };
+
     /**
      * Makes this object a copy of the supplied object. 
      * @param aMethod Method to copy.
      */
     virtual void copy(ParsedMethod *aMethod);
     
-    /** Returns a string made for persistant storage. */
-    virtual QString asPersistantString();
-    
     /**
      * Is the supplied method equal to this one
      * (regarding type, name and signature)? */
     bool isEqual(ParsedMethod *method);
 
-    /**
-     * Is the method an Objective-C method? 
-     */
-    void setIsObjectiveC(bool is) { isObjectiveC = is; };
-
+    /** Returns the object as a string(for tooltips etc) */
+    QString asString();
+    
+    /** Outputs this object to stdout */
+    void out();
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg);
+QDataStream &operator>>(QDataStream &s, ParsedMethod &arg);
 
 #endif

@@ -10,6 +10,9 @@ installAdmin();
 installGNU();
 installDocbook();
 
+print "Installing project file\n";
+install( "${src}/template-common/kde-app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
+
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
 mkdir( "${dest}/po", 0777 );

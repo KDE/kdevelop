@@ -18,8 +18,9 @@
 
 #include <iostream.h>
 #include <stdio.h>
-#include "parsedmethod.h"
+#include <qdatastream.h>
 #include <qregexp.h> 
+#include "parsedmethod.h"
 
 /*********************************************************************
  *                                                                   *
@@ -237,39 +238,6 @@ void ParsedMethod::copy( ParsedMethod *aMethod )
 }
 
 
-/*--------------------------------- ParsedClass::asPersistantString()
- * asPersistantString()
- *   Return a string made for persistant storage.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QString ParsedMethod::asPersistantString()
-{
-    ParsedArgument *arg;
-    
-    QString str = ParsedAttribute::asPersistantString();
-    
-    // Add arguments.
-    
-    str += QString::number(arguments.count());
-    str += "\n";
-    for ( arg = arguments.first(); arg != NULL; arg = arguments.next() )
-        str += arg->asPersistantString();
-    
-    str += ( isVirtual ?  "true" : "false" );
-    str += "\n";
-    str += QString::number(declaredOnLine);
-    str += "\n";
-    str += declaredInFile;
-    str += "\n";
-    
-    return str;
-}
-
-
 /*------------------------------------------ ParsedMethod::isEqual()
  * isEqual()
  *   Is the supplied method equal to this one(regarding type, name 
@@ -299,4 +267,59 @@ bool ParsedMethod::isEqual( ParsedMethod *method )
             retVal = retVal && ( m1->type == m2->type );
     
     return retVal;
+}
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg)
+{
+    operator<<(s, (const ParsedAttribute&)arg);
+    
+    // Add arguments.
+    s << arg.arguments.count();
+    QListIterator<ParsedArgument> it(arg.arguments);
+    for (; it.current(); ++it)
+        s << *it.current();
+
+    s << arg.definitionEndsOnLine << arg.declaredInFile
+      << arg.declaredOnLine << arg.declarationEndsOnLine
+      << (int)arg.isVirtual << (int)arg.isPure << (int)arg.isSlot << (int)arg.isSignal
+      << (int)arg.isConstructor << (int)arg.isDestructor << (int)arg.isObjectiveC;
+    
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedMethod &arg)
+{
+    operator>>(s, (ParsedAttribute&) arg);
+    
+    // Add arguments.
+    uint n;
+    s >> n;
+    for (uint i = 0; i < n; ++i) {
+        ParsedArgument *argument = new ParsedArgument;
+        s >> *argument;
+        arg.addArgument(argument);
+    }
+
+    QString declaredInFile;
+    int definitionEndsOnLine, declaredOnLine, declarationEndsOnLine;
+    int isVirtual, isPure, isSlot, isSignal;
+    int isConstructor, isDestructor, isObjectiveC;
+    
+    s >> definitionEndsOnLine >> declaredInFile >> declaredOnLine >> declarationEndsOnLine
+      >> isVirtual >> isPure >> isSlot >> isSignal >> isConstructor >> isDestructor >> isObjectiveC;
+    arg.setDefinitionEndsOnLine(definitionEndsOnLine);
+    arg.setDeclaredInFile(declaredInFile);
+    arg.setDeclaredOnLine(declaredOnLine);
+    arg.setDeclarationEndsOnLine(declarationEndsOnLine);
+    arg.setIsVirtual(isVirtual);
+    arg.setIsPure(isPure);
+    arg.setIsSlot(isSlot);
+    arg.setIsSignal(isSignal);
+    arg.setIsConstructor(isConstructor);
+    arg.setIsDestructor(isDestructor);
+    arg.setIsObjectiveC(isObjectiveC);
+    
+    return s;
 }

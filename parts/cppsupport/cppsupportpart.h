@@ -33,7 +33,7 @@ public:
     ~CppSupportPart();
 
 protected:
-    virtual bool hasFeature(Features feature);
+    virtual KDevLanguageSupport::Features features();
     virtual void newClass();
     virtual void addMethod(const QString &className);
     virtual void addAttribute(const QString &className);

@@ -298,10 +298,12 @@ void Core::closeProject()
             api->languageSupport = 0;
         }
         if (api->document) {
-            QFile fout(projectDir + "/gideonprj");
+            QFile fout(projectFile);
             if (fout.open(IO_WriteOnly)) {
                 QTextStream stream(&fout);
                 api->document->save(stream, 2);
+            } else {
+                KMessageBox::sorry(win, i18n("Could not write the project file."));
             }
             fout.close();
             delete api->document;
@@ -311,7 +313,7 @@ void Core::closeProject()
         api->project = 0;
     }
 
-    projectDir = QString::null;
+    projectFile = QString::null;
     win->setCaption(QString::fromLatin1(""));
     actionCollection()->action("project_close")->setEnabled(false);
 }
@@ -319,45 +321,53 @@ void Core::closeProject()
 
 void Core::openProject()
 {
-    QFile fin(projectDir + "/gideonprj");
-    if (fin.open(IO_ReadOnly)) {
-        QDomDocument *doc = new QDomDocument();
-        if (doc->setContent(&fin) && doc->doctype().name() == "gideon")
-            api->document = doc;
-        else
-            delete doc;
+    QFile fin(projectFile);
+    if (!fin.open(IO_ReadOnly)) {
+        KMessageBox::sorry(win, "Could not read project file.");
+        return;
+    }
+
+    QDomDocument *doc = new QDomDocument();
+    if (!doc->setContent(&fin) || doc->doctype().name() != "kdevelop") {
+        KMessageBox::sorry(win, "This is not a valid project file.");
+        delete doc;
         fin.close();
+        return;
     }
+    api->document = doc;
+    fin.close();
 
-    if (api->document) {
-        QDomElement docEl = api->document->documentElement();
-        QDomElement generalEl = docEl.namedItem("general").toElement();
-        QDomElement projectEl = generalEl.namedItem("projectmanagement").toElement();
-        QString projectPlugin = projectEl.firstChild().toText().data();
-        kdDebug(9000) << "Project plugin: " << projectPlugin << endl;
-        QDomElement primarylanguageEl = generalEl.namedItem("primarylanguage").toElement();
-        QString language = primarylanguageEl.firstChild().toText().data();
-        kdDebug(9000) << "Primary language: " << language << endl;
+    QDomElement docEl = api->document->documentElement();
+    QDomElement generalEl = docEl.namedItem("general").toElement();
+    QDomElement projectEl = generalEl.namedItem("projectmanagement").toElement();
+    QString projectPlugin = projectEl.firstChild().toText().data();
+    kdDebug(9000) << "Project plugin: " << projectPlugin << endl;
+    QDomElement primarylanguageEl = generalEl.namedItem("primarylanguage").toElement();
+    QString language = primarylanguageEl.firstChild().toText().data();
+    kdDebug(9000) << "Primary language: " << language << endl;
+    
+    KDevPart *project =
+        PartLoader::loadByName(projectPlugin, "KDevProject",
+                               api, this);
+    if (project)
+        initComponent(api->project = static_cast<KDevProject*>(project));
+    else
+        KMessageBox::sorry(win, i18n("No project management plugin %1 found.").arg(projectPlugin));
+    
+    KDevPart *languageSupport =
+        PartLoader::loadByQuery(QString::fromLatin1("KDevelop/LanguageSupport"),
+                                QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(language),
+                                "KDevLanguageSupport",
+                                api, this);
+    if (languageSupport)
+        initComponent(api->languageSupport = static_cast<KDevLanguageSupport*>(languageSupport));
+    else
+        KMessageBox::sorry(win, i18n("No language plugin for %1 found.").arg(language));
 
-        KDevPart *project =
-            PartLoader::loadByName(projectPlugin, "KDevProject",
-                                   api, this);
-        if (project)
-            initComponent(api->project = static_cast<KDevProject*>(project));
-        else
-            KMessageBox::sorry(win, i18n("No project management plugin %1 found.").arg(projectPlugin));
-        
-        KDevPart *languageSupport =
-            PartLoader::loadByQuery(QString::fromLatin1("KDevelop/LanguageSupport"),
-                                    QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(language),
-                                    "KDevLanguageSupport",
-                                    api, this);
-        if (languageSupport)
-            initComponent(api->languageSupport = static_cast<KDevLanguageSupport*>(languageSupport));
-        else
-            KMessageBox::sorry(win, i18n("No language plugin for %1 found.").arg(language));
-    }
-
+    QFileInfo fi(projectFile);
+    QString projectDir = fi.dirPath();
+    kdDebug(9000) << "projectDir: " << projectDir << endl;
+    
     if (api->project)
         api->project->openProject(projectDir);
     emit projectOpened();
@@ -692,14 +702,12 @@ void Core::slotQuit()
 
 void Core::slotProjectOpen()
 {
-    QString dirName = KFileDialog::getExistingDirectory(QString::null, win, i18n("Open project"));
-    if (dirName.isNull())
+    QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", win, i18n("Open project"));
+    if (fileName.isNull())
       return;
-    if (dirName[dirName.length()-1] == '/')
-        dirName.truncate(dirName.length()-1);
     
     closeProject();
-    projectDir = dirName;
+    projectFile = fileName;
     openProject();
 }
 

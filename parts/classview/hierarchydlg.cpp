@@ -105,8 +105,12 @@ void HierarchyDialog::classSelected(const QString &name)
     ParsedClass *currentClass = m_part->classStore()->getClassByName(name);
     member_tree->clear();
     if (currentClass) {
-        member_tree->insertAllClassMethods(currentClass, (PIAccess)-1);
-        member_tree->insertAllClassAttributes(currentClass, (PIAccess)-1);
+        KDevLanguageSupport::Features features = m_part->languageSupport()->features();
+        if (features & KDevLanguageSupport::Functions)
+            member_tree->insertAllClassMethods(currentClass, (PIAccess)-1);
+        if (features & KDevLanguageSupport::Variables)
+            member_tree->insertAllClassAttributes(currentClass, (PIAccess)-1);
     }
 }
+
 #include "hierarchydlg.moc"

@@ -40,17 +40,10 @@ JavaSupportFactory::~JavaSupportFactory()
 
 
 KDevPart *JavaSupportFactory::createPartObject(KDevApi *api, QObject *parent,
-                                              const QStringList &args)
+                                              const QStringList &/*args*/)
 {
-    if (args.count() > 0 && qstrcmp(args[0].latin1(), "Java") == 0) {
-        kdDebug(9007) << "Building JavaSupport" << endl;
-        return new JavaSupportPart(true, api, parent, "java support part");
-    } else {
-        kdDebug(9007) << "Wrong args for kdevjavasupport library" << endl;
-        if (args.count() > 0)
-            kdDebug(9007) << args[0] << endl;
-        return 0;
-    }
+    kdDebug(9013) << "Building JavaSupport" << endl;
+    return new JavaSupportPart(api, parent, "java support part");
 }
 
 

@@ -53,6 +53,7 @@ private slots:
 protected:
     ClassViewPart *m_part;
     friend class ClassTreeItem;
+    friend class ClassTreeScopeItem;
 };
 
 
@@ -76,12 +77,12 @@ public:
     void getImplementation(QString *toFile, int *toLine);
 
 protected:
+    ClassTreeBase *classTree()
+        { return static_cast<ClassTreeBase*>(listView()); }
     ParsedItem *m_item;
 
 private:
     void init(const QString &text);
-    ClassTreeBase *classTree()
-        { return static_cast<ClassTreeBase*>(listView()); }
 };
 
 

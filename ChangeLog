@@ -1,8 +1,26 @@
+2001-04-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Implemented a generic project part for scripting languages. 
+	  It essentially consists of a widget that displays all files 
+	  in all subdirectories.
+	* Changed the class view to respect the feature set of the used 
+	  language. I.e. for example for python the sections with 
+	  variables are not displayed, as in python variables are not 
+	  declared.
+	* Sanitized project loading: The user now chooses the project
+	  file in a file dialog, not the directory. The kapp, kpart 
+	  and kpartplugin appwizard scripts install a project file now.
+	* Replaced the persistence stuff (which was not yet used) in the
+	  classstore with serialization routines based on QDataStream.
+	  In principle, we could now send them around via DCOP :-)
+	* Implemented a python support part with parser
+	* Implemented a perl support part with parser
+
 2001-04-22  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Made configure arguments configurable
 	  Patch by Berndt Josef Wulf <wulf@dingo.ping.net.au>
-	* Don't link with libfl in cppsupport
+	* Don't link with libfl in cppsupport and javasupport
 	* Each part now uses its own instance and the corresponding
 	  resource directory
 

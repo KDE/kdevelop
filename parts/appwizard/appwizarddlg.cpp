@@ -91,34 +91,41 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     firstpagegrid->setSpacing(4);
     firstpage->setStretchFactor(firstpagegrid, 2);
 
-    (void) new QLabel(i18n("Application name:"), firstpagegrid);
+    QLabel *appname_label = new QLabel(i18n("Application &name:"), firstpagegrid);
     appname_edit = new QLineEdit(firstpagegrid);
+    appname_label->setBuddy(appname_edit);
+    
 
-    (void) new QLabel(i18n("Location:"), firstpagegrid);
+    QLabel *dest_label = new QLabel(i18n("&Location:"), firstpagegrid);
     dest_edit = new QLineEdit(firstpagegrid);
+    dest_label->setBuddy(dest_edit);
 
     QString author, email;
     guessAuthorAndEmail(&author, &email);
     
-    (void) new QLabel(i18n("Author:"), firstpagegrid);
+    QLabel *author_label = new QLabel(i18n("&Author:"), firstpagegrid);
     author_edit = new QLineEdit(firstpagegrid);
     author_edit->setText(author);
+    author_label->setBuddy(author_edit);
     
-    (void) new QLabel(i18n("Email:"), firstpagegrid);
+    QLabel *email_label = new QLabel(i18n("&Email:"), firstpagegrid);
     email_edit = new QLineEdit(firstpagegrid);
     email_edit->setText(email);
+    email_label->setBuddy(email_edit);
     
-    (void) new QLabel(i18n("Version:"), firstpagegrid);
+    QLabel *version_label = new QLabel(i18n("&Version:"), firstpagegrid);
     version_edit = new QLineEdit(firstpagegrid);
     version_edit->setText("0.1");
+    version_label->setBuddy(version_edit);
     
-    (void) new QLabel(i18n("License:"), firstpagegrid);
+    QLabel *license_label = new QLabel(i18n("L&icense:"), firstpagegrid);
     license_combo = new QComboBox(false, firstpagegrid);
     license_combo->insertItem("BSD");
     license_combo->insertItem("QPL");
     license_combo->insertItem("GPL");
     license_combo->insertItem("LGPL");
     license_combo->insertItem(i18n("Custom"));
+    license_label->setBuddy(license_combo);
     
     secondpage = new QVBox(this);
     secondpage->setMargin(10);
@@ -246,11 +253,17 @@ void AppWizardDialog::accept()
         return;
     }
 
+    if (!fi.dir().exists()) {
+        KMessageBox::sorry(this, i18n("The directory above the chosen location does not exist."));
+        showPage(firstpage);
+        dest_edit->setFocus();
+        return;
+    }
+
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber()) {
-            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers,\n"
-                                          "as it will be used as toplevel directory name."));
+            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
             showPage(firstpage);
             appname_edit->setFocus();
             return;

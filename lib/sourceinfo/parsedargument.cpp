@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include <iostream.h>
+#include <qdatastream.h>
 #include <qstring.h>
 #include "parsedargument.h"
 #include "programmingbycontract.h"
@@ -31,11 +32,6 @@
 /*------------------------------- ParsedArgument::ParsedArgument()
  * ParsedArgument()
  *   Constructor.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
  *-----------------------------------------------------------------*/
 ParsedArgument::ParsedArgument()
 {
@@ -46,11 +42,6 @@ ParsedArgument::ParsedArgument()
 /*------------------------------- ParsedArgument::~ParsedArgument()
  * ~ParsedArgument()
  *   Destructor.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
  *-----------------------------------------------------------------*/
 ParsedArgument::~ParsedArgument()
 {
@@ -186,21 +177,22 @@ void ParsedArgument::out()
 }
 
 
-/*----------------------------- ParsedArgument::asPersistantString()
- * asPersistantString()
- *   Return a string made for persistant storage.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-QString ParsedArgument::asPersistantString()
+QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg)
 {
-    QString str = type;
-    str += "\n";
-    str += name;
-    str += "\n";
-    
-    return str;
+    s << arg.type << arg.name << arg.posName;
+    return s;
+}
+
+
+QDataStream &operator>>(QDataStream &s, ParsedArgument &arg)
+{
+    QString type, name;
+    int posName;
+
+    s >> type >> name >> posName;
+    arg.setType(type);
+    arg.setName(name);
+    arg.setNamePos(posName);
+
+    return s;
 }

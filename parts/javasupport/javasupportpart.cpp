@@ -34,7 +34,7 @@
 #include "javaaddclassattributedlg.h"
 
 
-JavaSupportPart::JavaSupportPart(bool java, KDevApi *api, QObject *parent, const char *name)
+JavaSupportPart::JavaSupportPart(KDevApi *api, QObject *parent, const char *name)
     : KDevLanguageSupport(api, parent, name)
 {
     setInstance(JavaSupportFactory::instance());
@@ -47,7 +47,6 @@ JavaSupportPart::JavaSupportPart(bool java, KDevApi *api, QObject *parent, const
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
     m_parser = 0;
-    withjava = java;
 }
 
 
@@ -111,7 +110,7 @@ void JavaSupportPart::maybeParse(const QString fileName)
 
 void JavaSupportPart::initialParse()
 {
-    kdDebug(9007) << "JavaSupportPart::initialParse()" << endl;
+    kdDebug(9013) << "JavaSupportPart::initialParse()" << endl;
     
     if (project()) {
         kapp->setOverrideCursor(waitCursor);
@@ -122,14 +121,14 @@ void JavaSupportPart::initialParse()
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
-        kdDebug(9007) << "No project" << endl;
+        kdDebug(9013) << "No project" << endl;
     }
 }
 
 
 void JavaSupportPart::addedFileToProject(const QString &fileName)
 {
-    kdDebug(9007) << "JavaSupportPart::addedFileToProject()" << endl;
+    kdDebug(9013) << "JavaSupportPart::addedFileToProject()" << endl;
     maybeParse(fileName);
     emit updatedSourceInfo();
 }
@@ -137,7 +136,7 @@ void JavaSupportPart::addedFileToProject(const QString &fileName)
 
 void JavaSupportPart::removedFileFromProject(const QString &fileName)
 {
-    kdDebug(9007) << "JavaSupportPart::removedFileFromProject()" << endl;
+    kdDebug(9013) << "JavaSupportPart::removedFileFromProject()" << endl;
     m_parser->removeWithReferences(fileName);
     emit updatedSourceInfo();
 }
@@ -145,7 +144,7 @@ void JavaSupportPart::removedFileFromProject(const QString &fileName)
 
 void JavaSupportPart::savedFile(const QString &fileName)
 {
-    kdDebug(9007) << "JavaSupportPart::savedFile()" << endl;
+    kdDebug(9013) << "JavaSupportPart::savedFile()" << endl;
 
     if (project()->allSourceFiles().contains(fileName)) {
         maybeParse(fileName);
@@ -156,14 +155,10 @@ void JavaSupportPart::savedFile(const QString &fileName)
 
 
 
-bool JavaSupportPart::hasFeature(Features feature)
+KDevLanguageSupport::Features JavaSupportPart::features()
 {
-    if (!withjava)
-        return false;
-    
-    return
-        (feature == AddMethod)
-        || (feature == AddAttribute);
+    return Features(Classes | Structs | Functions | Variables | Namespaces
+                    | AddMethod | AddAttribute);
 }
 
 
@@ -194,7 +189,7 @@ void JavaSupportPart::addMethod(const QString &className)
     QString javaCode = asJavaCode(pm);
     
     core()->gotoSourceFile(pc->definedInFile, atLine);
-    kdDebug(9007) << "####################" << "Adding at line " << atLine
+    kdDebug(9013) << "####################" << "Adding at line " << atLine
                   << " " << javaCode
                   << "####################" << endl;
     

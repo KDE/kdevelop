@@ -1039,7 +1039,7 @@ void JavaClassParser::parseGenericLexem(  ParsedContainer *aContainer )
     case JAVASTRICTFP:
       break;
     case JAVATHROW:
-      kdDebug(9010) << "Found throw statement." << endl;
+      kdDebug(9013) << "Found throw statement." << endl;
       break;
   }
 }
@@ -1110,7 +1110,7 @@ void JavaClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 
         aClass->setDeclaredInScope( classPath );
 
-        kdDebug(9007) << "Storing class with path: " << aClass->path() << endl;
+        kdDebug(9013) << "Storing class with path: " << aClass->path() << endl;
 
         // Check if class is in the global store, add it if missing
         if( store->hasClass( aClass->path() ) ) {
@@ -1271,7 +1271,7 @@ bool JavaClassParser::parse( const QString &file )
   // Remove all items with references to this file.
   store->removeWithReferences( file );
 
-  kdDebug(9007) << "Parsing Java file " << file << endl;
+  kdDebug(9013) << "Parsing Java file " << file << endl;
 
   // Parse the file.
   parseFile( f );

@@ -85,9 +85,9 @@ void ClassViewPart::setupPopup()
     popup->insertItem("Dump class tree on console", this, SLOT(dumpTree()));
 
     if (languageSupport()) {
-        bool hasAddMethod = languageSupport()->hasFeature(KDevLanguageSupport::AddMethod);
-        bool hasAddAttribute = languageSupport()->hasFeature(KDevLanguageSupport::AddAttribute);
-        bool hasNewClass =  languageSupport()->hasFeature(KDevLanguageSupport::NewClass);
+        bool hasAddMethod = languageSupport()->features() & KDevLanguageSupport::AddMethod;
+        bool hasAddAttribute = languageSupport()->features() & KDevLanguageSupport::AddAttribute;
+        bool hasNewClass =  languageSupport()->features() & KDevLanguageSupport::NewClass;
         if (hasAddMethod || hasAddAttribute || hasNewClass) 
             popup->insertSeparator();
         if (hasNewClass)

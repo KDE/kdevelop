@@ -46,20 +46,16 @@ public:
     /** Sets the export status */
     void setAccess(PIAccess aAccess);
     
-    /** Returns a string made for persistant storage. */
-    QString asPersistantString();
-    
-    /** Initializes the object from a persistant string. */
-    int fromPersistantString(const QString &, int startPos)
-    { return startPos; }
-    
-    /** Outputs the class as text on stdout */
-    void out();
-    
     inline bool isPublic()    { return ( access == PIE_PUBLIC ); }
     inline bool isProtected() { return ( access == PIE_PROTECTED ); }
     inline bool isPrivate()   { return ( access == PIE_PRIVATE ); }
     
+    /** Outputs the class as text on stdout */
+    void out();
 };
+
+
+QDataStream &operator<<(QDataStream &s, const ParsedParent &arg);
+QDataStream &operator>>(QDataStream &s, ParsedParent &arg);
 
 #endif
