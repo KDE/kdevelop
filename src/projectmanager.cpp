@@ -5,6 +5,7 @@
 #include <qptrlist.h>
 #include <qvbox.h>
 #include <qsize.h>
+#include <qtimer.h>
 
 class QDomDocument;
 
@@ -232,7 +233,7 @@ void ProjectManager::loadDefaultProject()
 
 bool ProjectManager::loadProject(const KURL &url)
 {
-  if (url.isMalformed())
+  if (!url.isValid())
     return false;
 
   // reopen the already opened project?
@@ -254,22 +255,25 @@ bool ProjectManager::loadProject(const KURL &url)
 	return false;  
   }
 
-  // @fixme without this, the old project's plugins aren't properly unloaded 
-  // and the new project will crash. This is a clear indication we need to 
-  // have a look at the plugin unload handling
-  kapp->processEvents();
-
   m_info = new ProjectInfo;
   m_info->m_projectURL = url;
 
+  QTimer::singleShot( 0, this, SLOT(slotLoadProject()) );
+  
+  // no one cares about this value
+  return true;
+}
+
+void ProjectManager::slotLoadProject( )
+{
   if( !loadProjectFile() )
   {
+    m_openRecentProjectAction->removeURL(m_info->m_projectURL);
     delete m_info; m_info = 0;
-    m_openRecentProjectAction->removeURL(url);
     saveSettings();
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
 	kapp->restoreOverrideCursor();
-    return false;
+    return;
   }
 
   getGeneralInfo();
@@ -280,7 +284,7 @@ bool ProjectManager::loadProject(const KURL &url)
     delete m_info; m_info = 0;
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
 	kapp->restoreOverrideCursor();
-    return false;
+    return;
   }
 
   if( !loadProjectPart() ) {
@@ -288,7 +292,7 @@ bool ProjectManager::loadProject(const KURL &url)
     delete m_info; m_info = 0;
 	TopLevel::getInstance()->main()->menuBar()->setEnabled( true );
 	kapp->restoreOverrideCursor();
-    return false;
+    return;
   }
 
   TopLevel::getInstance()->statusBar()->message( i18n("Loading project plugins...") );
@@ -316,8 +320,9 @@ bool ProjectManager::loadProject(const KURL &url)
   
   TopLevel::getInstance()->statusBar()->message( i18n("Project loaded."), 3000 );
   
-  return true;
+  return;
 }
+
 
 bool ProjectManager::closeProject()
 {
@@ -332,7 +337,7 @@ bool ProjectManager::closeProject()
 		m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
 	}
   
-  if ( !PartController::getInstance()->closeAllWindows() )
+  if ( !PartController::getInstance()->closeAllFiles() )
     return false;
 
   Core::getInstance()->doEmitProjectClosed();
@@ -364,7 +369,7 @@ bool ProjectManager::closeProject()
 bool ProjectManager::loadProjectFile()
 {
   QString path;
-  if (!KIO::NetAccess::download(m_info->m_projectURL, path)) {
+  if (!KIO::NetAccess::download(m_info->m_projectURL, path, 0)) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("Could not read project file: %1").arg(m_info->m_projectURL.prettyURL()));
     return false;
@@ -430,7 +435,7 @@ bool ProjectManager::saveProjectFile()
     }
     API::getInstance()->projectDom()->save(*(fout.textStream()), 2);
     fout.close();
-    KIO::NetAccess::upload(fout.name(), m_info->m_projectURL);
+    KIO::NetAccess::upload(fout.name(), m_info->m_projectURL, 0);
   }
 
   return true;
@@ -523,8 +528,10 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   kdDebug(9000) << "Looking for language support for " << lang << endl;
 
   if (lang == m_info->m_activeLanguage)
-    // language already loaded...
+  {
+    kdDebug(9000) << "Language support already loaded" << endl;
     return true;
+  }
 
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
@@ -556,6 +563,7 @@ bool ProjectManager::loadLanguageSupport(const QString& lang)
   m_info->m_activeLanguage = lang;
   m_activeLanguage->setCurrentItem(m_activeLanguage->items().findIndex(lang));
 
+  kdDebug(9000) << "Language support for " << lang << " successfully loaded." << endl;
   return true;
 }
 
@@ -563,6 +571,7 @@ void ProjectManager::unloadLanguageSupport()
 {
   KDevLanguageSupport *langSupport = API::getInstance()->languageSupport();
   if( !langSupport ) return;
+  kdDebug(9000) << "Language support for " << langSupport->name() << " unloading..." << endl;
   PluginController::getInstance()->removePart( langSupport );
   delete langSupport;
   API::getInstance()->setLanguageSupport(0);
@@ -596,7 +605,7 @@ ProjectSession* ProjectManager::projectSession() const
 
 bool ProjectManager::loadKDevelop2Project( const KURL & url )
 {
-    if( url.isMalformed() || !url.isLocalFile() ){
+    if( !url.isValid() || !url.isLocalFile() ){
         KMessageBox::sorry(0, i18n("Invalid URL."));
         return false;
     }

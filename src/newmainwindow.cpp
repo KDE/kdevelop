@@ -209,8 +209,6 @@ void NewMainWindow::openURL( int id )
 			KURL url( (*it).second );
 			if ( !url.isEmpty() )
 			{
-//				PartController::getInstance()->editDocument( url );
-//				PartController::getInstance()->setActivePart( PartController::getInstance()->partForURL( url ) );
 				PartController::getInstance()->activatePart( PartController::getInstance()->partForURL( url ) );
 				return;
 			}
@@ -379,7 +377,7 @@ void NewMainWindow::childWindowCloseRequest( KMdiChildView * childView )
 	{
 		if ( part->widget() && part->widget()->parentWidget() == childView )
 		{
-			PartController::getInstance()->closePartForWidget( part->widget() );
+			PartController::getInstance()->closePart( part );
 			return;
 		}
 		++it;
@@ -601,7 +599,7 @@ void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 
 void NewMainWindow::documentChangedState( const KURL & url, DocumentState state )
 {
-	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( PartController::getInstance()->findOpenDocument( url ) );
+	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( PartController::getInstance()->partForURL( url ) );
 	if ( ro_part && ro_part->widget() )
 	{
 		switch( state )

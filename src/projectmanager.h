@@ -63,6 +63,8 @@ public slots:
 private slots:
   void slotOpenProject();
   void slotProjectOptions();
+  
+  void slotLoadProject();
 
   void loadLocalParts();
 
