@@ -298,7 +298,14 @@ public: // Methods to store project options
 
   void setActiveTarget(const QString& target);
 
+
+  void setAutomaticCompletion( bool );
+  void setAutomaticArgsHint( bool );
+
 public: // Methods to fetch project options
+
+  bool getAutomaticCompletion();
+  bool getAutomaticArgsHint();
 
   /** Fetch the version of the kdevprj file format*/
   QString getKDevPrjVersion() { return readGroupEntry( "General", "kdevprj_version" ); }

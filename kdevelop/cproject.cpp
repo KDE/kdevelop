@@ -1966,3 +1966,31 @@ QString CProject::canonicalizeDirName(const QString& dir_name)
 
   return canonical_dir_name;
 }
+
+void CProject::setAutomaticCompletion( bool enable )
+{
+    config->setGroup("General");
+    config->writeEntry("automatic_completion",enable);
+    config->sync();
+
+}
+
+void CProject::setAutomaticArgsHint( bool enable )
+{
+    config->setGroup("General");
+    config->writeEntry("automatic_argshint",enable);
+    config->sync();
+}
+
+bool CProject::getAutomaticCompletion()
+{
+    config->setGroup("General");
+    return config->readBoolEntry("automatic_completion", true);
+}
+
+bool CProject::getAutomaticArgsHint()
+{
+    config->setGroup("General");
+    return config->readBoolEntry("automatic_argshint", true);
+}
+

@@ -18,6 +18,8 @@
 
 #include "ceditwidget.h"
 #include "cppcodecompletion.h"
+#include "ckdevelop.h"
+#include "cproject.h"
 
 #include <kdebug.h>
 #include <kregexp.h>
@@ -88,8 +90,9 @@ static QValueList<CompletionEntry> getAllWords( const QString& text,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, CClassStore* pStore) :
-    KWrite(doc, parent, name), m_pStore( pStore )
+CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc,
+                         CClassStore* pStore, CKDevelop* dev )
+  : KWrite(doc, parent, name), m_pStore( pStore ), m_pDevelop( dev )
 {
   setFocusProxy (kWriteView);
   pop = new QPopupMenu();
@@ -119,7 +122,7 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, CCla
   pop->insertItem(SmallIconSet("dbgrunto"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
   pop->insertItem(SmallIconSet("dbgwatchvar"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
 
-  m_pCodeCompletion = new CppCodeCompletion( this, m_pStore );
+  m_pCodeCompletion = new CppCodeCompletion( this, m_pStore, m_pDevelop );
 
   // connect( kWriteDoc, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 }

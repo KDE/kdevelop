@@ -11,6 +11,7 @@
 class CEditWidget;
 class KDevArgHint;
 class CClassStore;
+class CKDevelop;
 class CParsedClass;
 class CParsedMethod;
 class CParsedAttribute;
@@ -37,7 +38,7 @@ class CppCodeCompletion : public QObject{
     Q_OBJECT
 public:
 
-    CppCodeCompletion( CEditWidget *edit, CClassStore* );
+    CppCodeCompletion( CEditWidget *edit, CClassStore*, CKDevelop* );
 
     virtual void showArgHint ( QStringList functionList, const QString& strWrapping, const QString& strDelimiter );
     virtual void showCompletionBox(QValueList<CompletionEntry> complList,int offset=0);
@@ -85,6 +86,7 @@ private:
     QVBox *m_completionPopup;
     QListBox *m_completionListBox;
     CClassStore* m_pStore;
+    CKDevelop* m_pDevelop;
     QValueList<CompletionEntry> m_complList;
     int m_lineCursor;
     int m_colCursor;

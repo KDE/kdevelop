@@ -3,6 +3,8 @@
 #include "kwrite/kwdoc.h"
 #include "cppcodecompletion.h"
 #include "ceditwidget.h"
+#include "ckdevelop.h"
+#include "cproject.h"
 #include "kdevregexp.h"
 #include "codecompletion_arghint.h"
 #include "classparser/ClassStore.h"
@@ -102,8 +104,8 @@ static QString remove_comment( QString text ){
     return s;
 }
 
-CppCodeCompletion::CppCodeCompletion( CEditWidget *edit, CClassStore* pStore )
-    : m_edit(edit), m_pStore( pStore )
+CppCodeCompletion::CppCodeCompletion( CEditWidget *edit, CClassStore* pStore, CKDevelop* dev )
+    : m_edit(edit), m_pStore( pStore ), m_pDevelop( dev )
 {
     m_completionPopup = new QVBox( 0, 0, WType_Popup );
     m_completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
@@ -163,14 +165,17 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
         int line = ed->cursorPosition().y();
         int col = ed->cursorPosition().x();
         if( e->type() == QEvent::KeyPress ){
+            CProject* prj = m_pDevelop->getProject();
+            // kdDebug() << "Project = " << prj << endl;
             QKeyEvent* ke = (QKeyEvent*) e;
             if( ke->key() == Key_Tab && !m_edit->currentWord().isEmpty() ){
                 kdDebug() << "--------------------------> expand (disabled by Falk!)" << endl;
 //DISABLED_BY_FALK                m_edit->expandText();
 //DISABLED_BY_FALK                return TRUE;
-            } else if ( ke->key() == Key_Period ||
-                        (ke->key() == Key_Greater &&
-                         col > 0 && m_edit->textLine( line )[ col-1 ] == '-') ) {
+            } else if ( (prj && prj->getAutomaticCompletion()) &&
+                         (ke->key() == Key_Period ||
+                          (ke->key() == Key_Greater &&
+                           col > 0 && m_edit->textLine( line )[ col-1 ] == '-')) ) {
                 m_edit->insertText( ke->text() );
                 TextLine* l = m_edit->doc()->textLine( line );
                 int attr = l->getAttr( col );
@@ -203,7 +208,10 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
                     QString add = text.mid(currentComplText.length());
                     if(item->m_entry.postfix == "()"){ // add (
                         m_edit->insertText(add + "(");
-                        completeText();
+                        CProject* prj = m_pDevelop->getProject();
+                        if( prj && prj->getAutomaticArgsHint() ){
+                            completeText();
+                        }
                         //	    VConfig c;
                         //	    m_edit->view()->getVConfig(c);
                         //	    m_edit->view()->cursorLeft(c);
@@ -297,7 +305,6 @@ void CppCodeCompletion::showArgHint ( QStringList functionList, const QString& s
         nNum++;
     }
     // m_edit->view()->paintCursor();
-    kdDebug() << "---------------------------------------------------------" << endl;
     m_pArgHint->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
     m_pArgHint->show();
 }
@@ -805,8 +812,13 @@ QStringList CppCodeCompletion::getFunctionList( QString strMethod )
     return functionList;
 }
 
+
+#if 0
+
 QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 {
+    kdDebug() << "CppCodeCompletion::getMethodBody()" << endl;
+
     KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
 
     QRegExp qt_rx( "Q_[A-Z]+" );
@@ -820,10 +832,12 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
     for( int i=0; i<iLine; ++i ){
         text += m_edit->textLine( i ).simplifyWhiteSpace() + "\n";
     }
+    kdDebug() << ".... 1 " << endl;
     text += m_edit->textLine( iLine ).left( iCol );
 
     text = remove_comment( text );
     text = remove( text, '[', ']' );
+    kdDebug() << ".... 2 " << endl;
 
     text = text
            .replace( qt_rx, "" )
@@ -832,11 +846,14 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
            .replace( preproc_rx, "" )
            .replace( newline_rx, " " );
 
+    kdDebug() << ".... 3 " << endl;
+
     QValueList<KDevRegExpCap> methods = regMethod.findAll( text );
     if( methods.count() == 0 ){
         kdDebug() << "no method found!!!" << endl;
         return QString::null;
     }
+    kdDebug() << ".... 4 " << endl;
 
     KDevRegExpCap m = methods.last();
 
@@ -848,8 +865,78 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
         *classname = regMethod.cap( 1 );
     }
 
+    kdDebug() << ".... 5 " << endl;
+
     return text;
 }
+
+#else
+
+QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
+{
+    kdDebug() << "CppCodeCompletion::getMethodBody()" << endl;
+
+    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
+
+    QRegExp qt_rx( "Q_[A-Z]+" );
+    QRegExp newline_rx( "\n" );
+    QRegExp const_rx( "[ \t]*const[ \t]*" );
+    QRegExp comment_rx( "//[^\n]*" );
+    QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
+
+
+    QString text = m_edit->textLine( iLine ).left( iCol );
+    --iLine;
+    while( iLine >= 0 ){
+
+        text.prepend( m_edit->textLine( iLine ).simplifyWhiteSpace() + "\n" );
+        if( (iLine % 50) == 0 ){
+            kdDebug() << "---> iLine = " << iLine << endl;
+
+            QString contents = text;
+
+            contents = remove_comment( contents );
+            contents = remove( contents, '[', ']' );
+            kdDebug() << ".... 2 " << endl;
+
+            contents = contents
+                       .replace( qt_rx, "" )
+                       .replace( const_rx, "" )
+                       .replace( comment_rx, "" )
+                       .replace( preproc_rx, "" )
+                       .replace( newline_rx, " " );
+
+            kdDebug() << ".... 3 " << endl;
+
+            QValueList<KDevRegExpCap> methods = regMethod.findAll( contents );
+            if( methods.count() != 0 ){
+
+                kdDebug() << ".... 4 " << endl;
+
+                KDevRegExpCap m = methods.last();
+
+                kdDebug() << "------------------------> m.start = " << m.start() << endl;
+                contents = contents.mid( m.start() );
+                regMethod.search( m.text() );
+                text.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
+                if( classname ){
+                    *classname = regMethod.cap( 1 );
+                }
+
+                return contents;
+            }
+
+            kdDebug() << ".... 5 " << endl;
+
+        }
+
+        --iLine;
+    }
+
+    return QString::null;
+}
+
+#endif
 
 void CppCodeCompletion::completeText()
 {

@@ -22,6 +22,7 @@
 #include "kwview.h"
 
 class CClassStore;
+class CKDevelop;
 class CppCodeCompletion;
 
 /** An abstraction layer for the editwidget.
@@ -38,7 +39,7 @@ public: // Constructor and destructor
    * @param doc           The pointer to the KWrite document for the KWrite constructor.
    * @param contentsType  One of the DocViewMan::ContentsType. Specifies what kind of edit widget this is (header or source file)
    */
-  CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, CClassStore* pStore );
+  CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, CClassStore* pStore, CKDevelop* dev=0 );
   /** Destroys the object.
    */
   ~CEditWidget();
@@ -245,6 +246,7 @@ private:
 // int spell_offset;
     CppCodeCompletion* m_pCodeCompletion;
     CClassStore* m_pStore;
+    CKDevelop* m_pDevelop;
 };
 
 #endif

@@ -110,7 +110,7 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
         QString simplifyLine = remove( line, '(', ')' );
         simplifyLine.replace( assign, "" );
 
-        kdDebug() << "line = |" << line << "|" << endl;
+        //kdDebug() << "line = |" << line << "|" << endl;
 
         if( line.find("{") != -1 ){
             ++lev;

@@ -30,6 +30,7 @@ class KConfig;
 class QMultiLineEdit;
 class CPrjCompOpts;
 class CPrjAddOpts;
+class CPrjCompletionOpts;
 class KDevSession;
 
 #include <kdialogbase.h>
@@ -51,6 +52,7 @@ public:
 
 private:
   void addGeneralPage();
+  void addCompletionOptionsPage();
   void addAdditionalOptionsPage();
   void addCompilerOptionsPage();
   void addCompilerWarningsPage();
@@ -61,6 +63,7 @@ private:
 protected:
 	CPrjCompOpts* compdlg;
 	CPrjAddOpts *addOptsDlg;
+  CPrjCompletionOpts* completionOptsDlg;
   /** local projectinfo object*/
   CProject* prj_info; 
   // TAB General

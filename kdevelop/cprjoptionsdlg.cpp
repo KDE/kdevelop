@@ -19,6 +19,7 @@
 #include "cprjoptionsdlg.h"
 #include "cprjcompopts.h"
 #include "cprjaddopts.h"
+#include "cprjcompletionopts.h"
 
 #include "cproject.h"
 #include "ctoolclass.h"
@@ -76,6 +77,7 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj,KDevSession* session,const QString&
 
   
   addGeneralPage();
+  addCompletionOptionsPage();
   addAdditionalOptionsPage();
   addCompilerOptionsPage();
 //  addCompilerWarningsPage();
@@ -828,6 +830,9 @@ void CPrjOptionsDlg::ok()
   //********gcc-options***************
   compdlg->slotSettingsChanged();
 
+  //********code completion options*******
+  completionOptsDlg->slotSettingsChanged();
+
   if (old_cxxflags !=  prj_info->getCXXFLAGS().stripWhiteSpace())
     need_makefile_generation = true;
 
@@ -1144,4 +1149,16 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked()
     m_makestartpoint_line->setText(file);
   }
 }
+
+void CPrjOptionsDlg::addCompletionOptionsPage()
+{
+  QFrame* additionalPage = addPage(i18n("Code Completion"),i18n("\"configure\" Code Completion"),
+  KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
+  QGridLayout *grid = new QGridLayout(additionalPage);
+  QWhatsThis::add(additionalPage, i18n("Set some configure options of your project here."));
+  completionOptsDlg = new CPrjCompletionOpts(prj_info, additionalPage);
+  grid->addWidget(completionOptsDlg,0,0);
+}
+
+
 #include "cprjoptionsdlg.moc"

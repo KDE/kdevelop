@@ -199,7 +199,7 @@ void DocViewMan::doOptionsEditor()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore );
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore, m_pParent );
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -222,7 +222,7 @@ void DocViewMan::doOptionsEditorColors()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore, m_pParent );
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -246,7 +246,7 @@ void DocViewMan::doOptionsSyntaxHighlightingDefaults()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore, m_pParent );
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -269,7 +269,7 @@ void DocViewMan::doOptionsSyntaxHighlighting()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore, m_pParent );
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -711,7 +711,7 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
 CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
 {
   // create the view and add to MDI
-  CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc, m_pStore );
+  CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc, m_pStore, m_pParent );
   if(!pEW) return 0L;
   pEW->setCaption(pDoc->fileName());
 

@@ -1,3 +1,7 @@
+2002-02-26  Roberto Raggi <raggi@cli.di.unipi.it>
+    * improved CppCodeCompletion::getMethodBody
+    * added project settings for code completion
+
 2002-02-25  F@lk Brettschneider <falk@kdevelop.org>
     * trying to catch some mysterious crashes by QGuardedPtr
     * synchronization with original QextMDI version
