@@ -484,364 +484,26 @@ This utility can be used to convert older &kdevelop; project files to 3.0 files.
 
 </chapter>
 
-
-
 <chapter id="editing">
 <title>Editing</title>
 
-<sect1 id="keyboardmapping">
-<title>Keyboard mapping</title>
-<indexterm zone="keyboardmapping"><primary>keybindings</primary></indexterm>
-
+<sect1 id="editing-intro">
+<title>Introduction</title>
 <para>
-In the following, we will list the default keybindings of the
-default editor. You can configure them as you like (how?)
+By default, &kdevelop; attempts to use the Kate plugin editor as its default editor.  However, 
+&kdevelop; can utilize most plugin editors supported by KDE, such as KVim.  Also, &kdevelop; comes with
+a Qt-Designer like plugin editor.  This gives the end user many different editor choices.
 </para>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-
-<row><entry><para><keycap>
-  Left
-</keycap></para></entry>
-<entry><para>
-  Moves one character left
-</para></entry></row>
-
-<row><entry><para><keycap>
-  Right       
-</keycap></para></entry>
-<entry><para>
-  Moves one character right
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  Left   
-</keycap></keycombo></para></entry>
-<entry><para>
-  Moves one word left
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  Right  
-</keycap></keycombo></para></entry>
-<entry><para>
-  Moves one word right
-</para></entry></row>
-
-<row><entry><para><keycap>
-  Up          
-</keycap></para></entry>
-<entry><para>
-  Moves up one line
-</para></entry></row>
-
-<row><entry><para><keycap>
-  Down        
-</keycap></para></entry>
-<entry><para>
-  Moves down one line
-</para></entry></row>
-
-<row><entry><para><keycap>
-  PgUp        
-</keycap></para></entry>
-<entry><para>
-  Moves up one page
-</para></entry></row>
-
-<row><entry><para><keycap>
-    PgDn        
-</keycap></para></entry>
-<entry><para>
-  Moves down one page
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  PgUp   
-</keycap></keycombo></para></entry>
-<entry><para>
-  Moves to the beginning of the file
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  PgDn   
-</keycap></keycombo></para></entry>
-<entry><para>
-  Moves to the end of the file
-</para></entry></row>
-
-<row><entry><para><keycap>
-    Home        
-</keycap></para></entry>
-<entry><para>
-  Moves to the beginning of the line
-</para></entry></row>
-
-<row><entry><para><keycap>
-    End         
-</keycap></para></entry>
-<entry><para>
-  Moves to the end of the line
-</para></entry></row>
-
-</tbody>
-</tgroup>
-</informaltable>
-
 <para>
-For all the keys above, the Shift can be pressed additionally,
-to mark from the current cursor position to the one afterwards.
+For help on the Kate plugin editor, see the <ulink url="help:/kate">The Kate Handbook</ulink>
 </para>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-
-<row><entry><para><keycap>
-  Backspace   
-</keycap></para></entry>
-<entry><para>
-  Deletes one character left
-</para></entry></row>
-
-<row><entry><para><keycap>
-  Delete      
-</keycap></para></entry>
-<entry><para>
-  Deletes the character under the cursor
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  C
-</keycap></keycombo></para></entry>
-<entry><para>
-  Copies the selected text to the clipboard
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  V
-</keycap></keycombo></para></entry>
-<entry><para>
-  Pastes the selected text from the clipboard
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  X      
-</keycap></keycombo></para></entry>
-<entry><para>
-  Deletes the selected text and puts it into the clipboard
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Ctrl
-</keycap><keycap>
-  Z        
-</keycap></keycombo></para></entry>
-<entry><para>
-  Undo
-</para></entry></row>
-
-<row><entry><para><keycombo><keycap>
-  Shift
-</keycap><keycap>
-  Ctrl
-</keycap><keycap>
-  Z  
-</keycap></keycombo></para></entry>
-<entry><para>
-Redo
-</para></entry></row>
-
-</tbody>
-</tgroup>
-</informaltable>
-
 </sect1>
 
-
-<sect1 id="searchinggrepping">
-<title>Searching and grepping</title>
-<indexterm zone="searchinggrepping"><primary>searching</primary></indexterm>
-<indexterm zone="searchinggrepping"><primary>finding</primary></indexterm>
-
-<simplesect id="searching">
-<title>Searching for text</title>
-
-<para>
-<keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>- Find 
-<keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>- Replace
-</para>
-
-</simplesect>
- 
-
-<simplesect id="isearch">
-<title>ISearch</title>
-<indexterm zone="isearch"><primary>isearch</primary></indexterm>
-<indexterm zone="isearch"><primary>incremental search</primary></indexterm>
-<indexterm zone="isearch"><primary>search</primary><secondary>incremental</secondary></indexterm>
-
-<para>
-The conventional search with <menuchoice><guimenu>Edit</guimenu>
-<guimenuitem>Find</guimenuitem></menuchoice> requires you to specify the full 
-search term before starting. Most of the time, it is much faster to search 
-incrementally. If you click into the edit field labeled 
-<guilabel>ISearch</guilabel> in the toolbar, the search is performed as you 
-type. You will find that often the desired term is already found after typing
-in 3 or 4 letters.
-</para>
-
-</simplesect>
-
-
-<simplesect id="grep">
-<title>Grep</title>
-<indexterm zone="grep"><primary>search</primary><secondary>in files</secondary></indexterm>
-
-<para>
-Both search mechanisms described above are restricted to searching within one
-source file. An additional tool which allows you to search through a (possibly
-large) number of files is available through the
-<guimenuitem>Search in Files...</guimenuitem> item in the 
-<guimenu>Edit</guimenu> menu. It is basically a frontend for the 
-&grep;(1) program.
-</para>
-
-<para>
-In the dialog, you can specify which files are searched. There is a number of 
-wildcard patterns available in a combo box. In this way, you can easily
-restrict the find mechanism to header files. Furthermore, you specify a 
-directory where the search is started. If you check the 
-<guibutton>Recursive</guibutton> box, the search iterates through all 
-directories in the hierarchy below this one.
-</para>
-
-<para>
-The search term is in general a regular expression following POSIX syntax. 
-For example, you can use the term <literal>"\&lt;K.*"</literal> if you want to
-find all words which begin with the letter K. The following characters
-are interpreted in a special way:
-</para>
-
-<informaltable>
-<tgroup cols="2">
-<tbody>
-
-<row><entry>
-  <literal>.</literal>
-</entry><entry>
-  Matches any character 
-</entry></row>
-<row><entry>
-  <literal>^</literal>
-</entry><entry>
-Matches the beginning of a line
-</entry></row>
-<row><entry>
-  <literal>$</literal>
-</entry><entry>
-  Matches the end of a line 
-</entry></row>
-<row><entry>
-  <literal>\&lt;</literal>
-</entry><entry>
-  Matches the beginning of a word 
-</entry></row>
-<row><entry>
-  <literal>\&gt;</literal>
-</entry><entry>
-  Matches the end of a word
-</entry></row>
-<row><entry>
-  <literal>?</literal>
-</entry><entry>
-  The preceding item matches less than once 
-</entry></row>
-<row><entry>
-  <literal>*</literal>
-</entry><entry>
-  The preceding item is matched zero or more times 
-</entry></row>
-<row><entry>
-  <literal>+</literal>
-</entry><entry>
-  The preceding item is matched once or more times 
-</entry></row>
-<row><entry>
-  <literal>{n}</literal>
-</entry><entry>
-  The preceding item is matched exactly n times 
-</entry></row>
-<row><entry>
-  <literal>{n,}</literal>
-</entry><entry>
-  The preceding item is matched n or more times 
-</entry></row>
-<row><entry>
-  <literal>{,n}</literal>
-</entry><entry>
-  The preceding item matches less than n times
-</entry></row>
-<row><entry>
-  <literal>{n,m}</literal>
-</entry><entry>
-  The preceding item matches at least <literal>n</literal> times but less 
-than <literal>m</literal> times
-</entry></row>
-
-</tbody>
-</tgroup>
-</informaltable>
-
-<para>
-Backreferences to bracketed subexpressions are also available by the notation
-<literal>\n</literal>.
-</para>
-
-<para>
-For C++ programmers, as special bonus there are some search templates
-available for typical patterns. These allow you to search for example
-all calls of member functions of a certain object.
-</para>
-
-<para>
-Once you start the search by clicking on the <guibutton>Search</guibutton>
-button, it will be performed by an external, asynchronous process. All found 
-items will appear in the view called <guilabel>Grep</guilabel>. You can then
-jump to the found items by clicking on them. Note that grep scans the files
-as they stored in the file system. If you have modified versions of them in 
-your editor, you may get some mismatches in the line number, or some found
-items will be invalid. You can avoid this by saving all files beforehand.
-</para>
-
-</simplesect>
-
-</sect1>
-  
-
-<sect1 id="newfiles">
-<title>Creating new files and classes</title>
-
+<sect1 id="editing-troll">
+<title>Using the Qt Designer based editor</title>
 <para>
 </para>
-
-</sect1>
+</sect1>  
 
 </chapter>
 
@@ -849,23 +511,23 @@ items will be invalid. You can avoid this by saving all files beforehand.
 
 <chapter id="filebrowsers">
 <title>The file browsers</title>
-
+<sect1 id="filebrowser-intro">
+<title>Introduction</title>
 <para>
 On the left side of the main window, &kdevelop; can display various kinds of
-lists and trees for the selection of files:
+lists and trees for the selection of files.  
 </para>
+</sect1>
 
-<itemizedlist>
-<listitem>
-<formalpara>
+<sect1 id="filebrowser-filetree">
 <title>File Tree</title>
+
 <para>
 This shows a tree view of the file hierarchy below the project directory. If 
 you click on a file, it is loaded into the editor. For files which do not
 contain text, KDevelop starts an application that can handle the respective
 MIME type. 
 </para>
-</formalpara>
 
 <para>
 The file tree is regularly updated whenever something changes in the file 
@@ -894,18 +556,15 @@ the right mouse button on the root item of the tree.
 <imageobject><imagedata fileref="filetree.png"/></imageobject>
 </mediaobject>
 </figure>
+</sect1>
 
-</listitem>
-
-<listitem>
-<formalpara>
+<sect1 id="filebrowser-filegroups">
 <title>File Groups</title>
 <para>
 This shows the files belonging to the project, grouped by their file name 
 extension. As in the file tree, you can edit a file by clicking on it
 with the left mouse button.
 </para>
-</formalpara>
 
 <para>
 The groups shown in this view can be configured under
@@ -920,17 +579,21 @@ be put below more specific ones. For example, an asterisk for the
 <guilabel>Other</guilabel> group should  be the last pattern.
 </para>
 
-</listitem>
-
-</itemizedlist>
+</sect1>
+<sect1 id="filebrowser-fileselector">
+<title>File Selector</title>
+<para>
+</para>
+</sect1>
 
 </chapter>
-
 
 
 <chapter id="classbrowser">
 <title>The class browser</title>
 <indexterm zone="classbrowser"><primary>class browser</primary></indexterm>
+<sect1 id="classbrowser-intro">
+<title>Introduction</title>
 
 <para>
 When working on a project in an object-oriented language, your emphasis when
@@ -939,8 +602,9 @@ classes and their relationships. In order to help you navigating in the space
 of defined classes and symbols, &kdevelop; includes various class browsers 
 that visualize the class structure in different ways.
 </para>
+</sect1>
 
-<sect1 id="classview">
+<sect1 id="classbrowser-classview">
 <title>Class view</title>
 
 <para>
@@ -991,7 +655,7 @@ with an empty implementation.
 </sect1>
 
 
-<sect1 id="classtools">
+<sect1 id="classbrowser-classtools">
 <title>Class tools</title>
 
 <para>
@@ -1002,7 +666,7 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 </sect1>
 
 
-<sect1 id="classhierarchy">
+<sect1 id="classbrowser-classhierarchy">
 <title>Class hierarchy</title>
 
 <para>
@@ -1026,8 +690,6 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 </figure>
 
 </chapter>
-
-
 
 <chapter id="projectmanagement">
 <title>Building and Project management</title>
