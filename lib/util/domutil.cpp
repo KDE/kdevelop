@@ -2,6 +2,7 @@
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *   default support: Eray Ozkural (exa)                                   *
+ *   additions: John Firebaugh <jfirebaugh@kde.org>                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -16,7 +17,13 @@
 #include <qstringlist.h>
 
 
-static QDomElement elementByPath(const QDomDocument &doc, const QString &path)
+void DomUtil::makeEmpty( QDomElement& e )
+{
+    while( !e.firstChild().isNull() )
+        e.removeChild( e.firstChild() );
+}
+
+QDomElement DomUtil::elementByPath(const QDomDocument &doc, const QString &path)
 {
     QStringList l = QStringList::split('/', path);
 
@@ -108,31 +115,34 @@ DomUtil::PairList DomUtil::readPairListEntry(const QDomDocument &doc, const QStr
 }
 
 
-static QDomElement createElementByPath(QDomDocument &doc, const QString &path)
+QDomElement DomUtil::namedChildElement( QDomElement& el, const QString& name )
+{
+    QDomElement child = el.namedItem( name ).toElement();
+    if (child.isNull()) {
+        child = el.ownerDocument().createElement( name );
+        el.appendChild(child);
+    }
+    return child;
+}
+
+
+QDomElement DomUtil::createElementByPath( QDomDocument& doc, const QString& path )
 {
     QStringList l = QStringList::split('/', path);
 
     QDomElement el = doc.documentElement();
     QStringList::ConstIterator it;
-    for (it = l.begin(); it != l.end(); ++it) {
-        QDomElement child = el.namedItem(*it).toElement();
-        if (child.isNull()) {
-            child = doc.createElement(*it);
-            el.appendChild(child);
-        }
-        el = child;
-    }
-
-    while (!el.firstChild().isNull())
-        el.removeChild(el.firstChild());
-
+    for (it = l.begin(); it != l.end(); ++it)
+        el = DomUtil::namedChildElement( el, *it );
+        
     return el;
 }
 
 
 void DomUtil::writeEntry(QDomDocument &doc, const QString &path, const QString &value)
 {
-    QDomElement el = createElementByPath(doc, path);
+    QDomElement el = DomUtil::createElementByPath(doc, path);
+    DomUtil::makeEmpty( el );
     el.appendChild(doc.createTextNode(value));
 }
     

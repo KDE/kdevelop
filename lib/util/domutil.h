@@ -26,7 +26,10 @@ class DomUtil
 public:
     typedef QPair<QString, QString> Pair;
     typedef QValueList<Pair> PairList;
-    
+    /**
+     * Remove all child elements from a given element.
+     */
+    static void makeEmpty( QDomElement& );
     /**
      * Reads a string entry.
      */
@@ -49,6 +52,20 @@ public:
      */
     static PairList readPairListEntry(const QDomDocument &doc, const QString &path, const QString &tag,
                                       const QString &firstAttr, const QString &secondAttr);
+    /**
+     * Retrieves an element by path, return null if any item along
+     * the path does not exist.
+     */
+    static QDomElement elementByPath( const QDomDocument& doc, const QString& path );
+    /**
+     * Retrieves an element by path, creating the necessary nodes.
+     */
+    static QDomElement createElementByPath( QDomDocument& doc, const QString& path );
+    /**
+     * Retrieves a child element, creating it if it does not exist.
+     * The return value is guaranteed to be non isNull()
+     */
+    static QDomElement namedChildElement( QDomElement& el, const QString& name );
     /**
      * Writes a string entry. For example,
      * <code>
