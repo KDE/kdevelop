@@ -50,6 +50,8 @@ separately; therefore these will need a button "Save All" or something. Then you
 static methods and will receive the correct result.
 <P>As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
 compare with <CODE>if()</CODE> for the actions to execute.
+<BLOCKQUOTE>The KDE 2 API contains a modified version of <CODE>KMsgBox</CODE>, <CODE>KMessageBox</CODE>. It provides a similar functionality; the 1.x API
+is no longer available. As a replacement, you can use <CODE>QMessageBox</CODE> as well, providing static methods as well.</BLOCKQUOTE>
 <P>
 <H3><A NAME="ss6.2">6.2 KQuickHelp</A>
 </H3>
@@ -322,27 +324,61 @@ wizard.
 </H3>
 
 <P>
-<P>(kspell) spell checking dialog for use with Ispell
+<P>The <CODE>KSpellDlg</CODE> is part of the <CODE>kspell</CODE> library. This library contains all functionality to use the <CODE>Ispell</CODE> application for
+spell checking. The <CODE>KEdit</CODE> application makes a good use of this library, so you should take a look at the implementation of
+<CODE>KEdit</CODE> on how to implement spell checking functionality. Using the <CODE>KSpell</CODE> class should last in any case.
 <P>
 <H3><A NAME="ss6.9">6.9 DatePickerDialog</A>
 </H3>
 
+<P>
 <P>
 <P>(kab) date selection dialog
 <P>
 <H3><A NAME="ss6.10">6.10 Qt Dialogs</A>
 </H3>
 
+<P>In some cases, it may be needed to use dialogs provided by Qt. In fact, the only dialog where there are no replacements is a
+progressdialog and a printing dialog. Of course you could construct one yourself, but the Qt library offers some good solutions for
+these situations. The following will give you a short overview where to find what you need.
+<P>Important: When using Qt dialogs, including QTabDialog for new dialogs, you have to set the labels again with <CODE>i18n()</CODE> to enable
+internationalization.
+<P>Example:
+<HR>
+<PRE>
+QTabDialog tabdlg = new QTabDialog();
+tabdlg->setDefaultButton(i18n("Default"));
+tabdlg->setCancelButton(i18n("Cancel"));
+tabdlg->setApplyButton(i18n("Apply"));
+tabdlg->setOkButton(i18n("OK"));
+</PRE>
+<HR>
+
+This will add all four buttons to the tabdialog, so you should only set those buttons you really need.
 <P>
 <P>
 <H4>QFileDialog</H4>
 
+<P>Using the QFileDialog, you will have the same functionality like KFileDialog. The KDE development prefers the KFileDialog for a
+consistent look of applications as it offers some nice functionality as well.
+<P>
+<P>
 <H4>QMessageBox</H4>
 
+<P>As mentioned in section KMsgBox, the QMessageBox can be used as well for messages. One situation where a QMessageBox can serve better
+is a messagebox containing a picture for example. Usage is provided through static methods which should cover most cases.
+<P>
 <H4>QPrintDialog</H4>
 
+<P>For printing support, you will most likely use the QPrintDialog. As a view-widget displays a document's contents, it will most likely
+offer routines for printing as well through QPainter drawing on a QPrinter instead of onto a widget.
+<P>
 <H4>QProgressDialog</H4>
 
+<P>When an application is processing data that may take some time to finish, the user expects a notification about that state. For those
+cases, Qt provides the QProgressDialog.  As the class is well documented, including example code for usage, you should take a look at
+the according API documentation.
+<P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-7.html">Next</A>

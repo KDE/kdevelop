@@ -5,7 +5,7 @@
 <subtitle>The Reference Guide to C++ Application Design for the K Desktop Environment (KDE)
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 0.2 , Mon July 7, 1999
+<date>Version 1.0 , July 28, 1999
 <abstract>
 This handbook is part of the KDevelop Integrated Development Environment and is also licensed under the GNU General
 Public License; see Chapter <ref id="Copyright" name="Copyright"> for more information.
@@ -1925,6 +1925,8 @@ static methods and will receive the correct result.
 
 As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
 compare with <tt/if()/ for the actions to execute.
+<footnote>The KDE 2 API contains a modified version of <tt/KMsgBox/, <tt/KMessageBox/. It provides a similar functionality; the 1.x API
+is no longer available. As a replacement, you can use <tt/QMessageBox/ as well, providing static methods as well.</footnote>
 
 <sect>KQuickHelp
 <p>
@@ -2185,38 +2187,129 @@ wizard.
 <sect>KSpellDlg
 <p>
 
- (kspell) spell checking dialog for use with Ispell
+The <tt/KSpellDlg/ is part of the <tt/kspell/ library. This library contains all functionality to use the <tt/Ispell/ application for
+spell checking. The <tt/KEdit/ application makes a good use of this library, so you should take a look at the implementation of
+<tt/KEdit/ on how to implement spell checking functionality. Using the <tt/KSpell/ class should last in any case.
 
 <sect>DatePickerDialog
 <p>
+
 
 (kab) date selection dialog
 
 <sect>Qt Dialogs
 <p>
+In some cases, it may be needed to use dialogs provided by Qt. In fact, the only dialog where there are no replacements is a
+progressdialog and a printing dialog. Of course you could construct one yourself, but the Qt library offers some good solutions for
+these situations. The following will give you a short overview where to find what you need.
+
+Important: When using Qt dialogs, including QTabDialog for new dialogs, you have to set the labels again with <tt/i18n()/ to enable
+internationalization.
+
+Example:
+<code>
+QTabDialog tabdlg = new QTabDialog();
+tabdlg->setDefaultButton(i18n("Default"));
+tabdlg->setCancelButton(i18n("Cancel"));
+tabdlg->setApplyButton(i18n("Apply"));
+tabdlg->setOkButton(i18n("OK"));
+</code>
+This will add all four buttons to the tabdialog, so you should only set those buttons you really need.
+
 
 <sect1>QFileDialog
+<p>
+Using the QFileDialog, you will have the same functionality like KFileDialog. The KDE development prefers the KFileDialog for a
+consistent look of applications as it offers some nice functionality as well.
+
 
 <sect1>QMessageBox
+<p>
+As mentioned in section KMsgBox, the QMessageBox can be used as well for messages. One situation where a QMessageBox can serve better
+is a messagebox containing a picture for example. Usage is provided through static methods which should cover most cases.
 
 <sect1>QPrintDialog
+<p>
+For printing support, you will most likely use the QPrintDialog. As a view-widget displays a document's contents, it will most likely
+offer routines for printing as well through QPainter drawing on a QPrinter instead of onto a widget.
 
 <sect1>QProgressDialog
+<p>
+When an application is processing data that may take some time to finish, the user expects a notification about that state. For those
+cases, Qt provides the QProgressDialog.  As the class is well documented, including example code for usage, you should take a look at
+the according API documentation.
 
 <chapt>Provided Views
 <p>
+As mentioned earlier, a usual application interface contains a so-called "view" or "content" area, usually the center widget surrounded
+by menubar, toolbars and a statusbar. Besides the required construction of a view widget by inheritance of <tt/QWidget/, the KDE and Qt
+libraries offer several complete widgets that can serve as view areas already.  These are widgets that are used commonly over a lot of
+applications and do not necessarily have to be used as a main view; they may also get used in dialogs.
+
+Qt only offers one of these: the <tt/QMultiLineEdit/ class, offering a text editing widget. By using a <tt/QMultiLineEdit/, a developer
+can create a full-functional editor rapidly. The class interface may also serve you as an example what functionality a view area should
+provide.
+
+KDE on the other hand contains two complete widgets. One is again an editor widget, derived from <tt/QMultiLineEdit/ and is
+encapsulated in the <tt/KEdit/ class of the <tt/kdeui/ library; the other a HTML- interpreter widget, <tt/KHTMLWidget/. The following
+will discuss these classes and explain the interface usage by example.
 
 <sect>The KEdit View
 <p>
+As mentioned, the <tt/KEdit/ view is a full-functional editor class that offers a complete interface to build an editor. As it inherits
+<tt/QMultiLineEdit/, it makes use of Qt's basic functionality with the intention to complete the interface beyond the facilities a text
+editor view should provide such as insertion or clipboard communication.
 
-<sect1>KEdGotoLine: Go-to-Line dialog for editors
+The idea is to construct a <tt/KTMainWindow/ based main view with the according items like a menubar, toolbar and statusbar. The
+slots that get called by the popup menus or the toolbar icons are all placed as public methods within the <tt/KEdit/ class. This
+requires the implementation of slots on the main widget that call the according methods.
 
-<sect1>KEdReplace: Search and replace dialog for editors
+An example containing a slot implementation and the use of a slot provided already by <tt/QMultiLineEdit/:
+<code>
+void MyEditor::initMenuBar(){
 
-<sect1>KEdSrch: search dialog for editors
+  // create the "Edit" menu
+  edit_menu= new QPopupMenu();
+  // here we call a slot selectAll() provided by QMultiLineEdit to select the whole text:
+  edit_menu->insertItem(i18n("&amp;Select All"), kedit, SLOT(selectAll()), 0, ID_EDIT_SELECT_ALL);
+
+  // construct a view-menu and insert a menuentry "Font"
+  view_menu= new QPopupMenu();
+  // we have to call a self-created slot to call
+  // the public method selectFont() of KEdit
+  view_menu->insertItem(i18n("&amp;Font"), this, SLOT(slotViewFont()), 0, ID_VIEW_FONT);
+
+
+  // insert the view_menu into the menubar
+  menuBar()->insertItem(i18n("&amp;Edit"), edit_menu);
+  menuBar()->insertItem(i18n("&amp;View"), view_menu);
+}
+
+void MyEditor::slotViewFont(){
+  // call a method of KEdit to call the font selection dialog
+  selectFont ();
+}
+</code>
+
 
 <sect>The KHTML View
 <p>
+The second view area provided by KDE is originally the <tt/KHTMLWidget/. This class actually is the visible widget that interprets HTML
+files including graphics, tables etc. What it doesn't offer is a scrolling functionality which limits the use of the widget. Therefore,
+the class <tt/KHTMLView/ is introduced which serves as a wrapper class that offers this and other functionality.
+
+A lot of applications make wide use of either <tt/KHTMLWidget/, adding the scrolling functionality by code, or using <tt/KHTMLView/
+directly, such as KDEHelp, KDevelop and KFM.
+
+The main reason for a complete HTML widget is that today's applications tend to use HTML-based help functionality almost everywhere, so
+a reuse of this funcitionality is very certain.
+
+The usage can be compared to the implementation example of the last chapter for <tt/KEdit/, as <tt/KHTMLView/ provides signals, slots
+and public methods as well that can be called similar to provide a user interface that handles the widget. When it comes to configuring
+the behavoir of the displaying <tt/KHTMLWidget/, you have to create a pointer to a <tt/KHTMLWidget/ and retrieve the instance of your
+<tt/KHTMLView/'s widget by calling <tt/getKHTMLWidget()/. Then you can set options like color settings and font sizes for your view
+area.
+
 
 <chapt>Process Handling
 <p>
@@ -2299,18 +2392,45 @@ before trying to start it.
 
 <sect1>Communication
 <p>
+The communication with the caller process is another option that has to be set while calling <tt/KProcess::start()/. With this, you can
+retrieve the output of the process where needed. The available communication modes are:
 
 <itemize>
-<item>NoCommunication
-<item>Stdin
-<item>Stdout
-<item>Stderr
-<item>AllOutput
-<item>All
+<item>NoCommunication : Use when you don't want to communicate with the process, e.g. it runs silently without interesting output or
+requiring any input.
+<item>Stdin : To be used if the process asks for user input. Depending on the process, you have to use this communication mode to avoid
+blocking - the process just will wait for input but can never retrieve the information if this mode isn't used.
+<item>Stdout : The output the process sends to StdOut, which would be your terminal for example. This mode has to be used if you want
+to retrieve the output information for displaying it to the user in a widget.
+<item>Stderr : error messages sent by the process to StdErr can be retrieved seperately by this mode. This is useful to check for
+errors.
+<item>AllOutput : Stdout and Stderr OR'ed together. Mind that this doesn't include StdIn communication !
+<item>All: Open all communication channels, meaning that Stdout, Stderr and Stdin are OR'ed together.
 </itemize>
 
-<sect1>Example Usage
+As mentioned for <tt/AllOutput/ and <tt/All/ communication modes, the available modes can be OR'ed together to combine the needed
+modes.
+
+By the according signals and slots, you can connect the communication data channels to e.g. a text widget or a buffer. Displaying the
+output directly into a text widget will be used for Stdout in most cases while error messages can as well be retrieved into a
+non-visible buffer which can be processed to visualize errors by messageboxes.
+
+<sect>KShellProcess
 <p>
+
+The <tt/KShellProcess/ class is a specialized <tt/KProcess/ class. The main difference is that you can call your executable via a Unix
+shell which allows all options the selected shell offers. You should check for available shells as well before calling a shell process
+for a special shell; the normal constructor will check for any shell available but can be set to use e.g. /bin/bash to make use of the
+Bourne shell - but you can't expect any system to have the Bourne shell available. The use of a <tt/KShellProcess/ offers the following
+advantages:
+<itemize>
+<item>Useage of environment variables
+<item>Setting environment variables
+<item>pipe usage
+<item>wildcard usage
+</itemize>
+
+The methods of <tt/KProcess/ then offer the necessary communication and runmodes the process may need.
 
 
 <chapt>Copyright<label id="Copyright">

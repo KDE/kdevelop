@@ -93,20 +93,43 @@ before trying to start it.
 <P>
 <H4>Communication</H4>
 
-<P>
+<P>The communication with the caller process is another option that has to be set while calling <CODE>KProcess::start()</CODE>. With this, you can
+retrieve the output of the process where needed. The available communication modes are:
 <P>
 <UL>
-<LI>NoCommunication</LI>
-<LI>Stdin</LI>
-<LI>Stdout</LI>
-<LI>Stderr</LI>
-<LI>AllOutput</LI>
-<LI>All</LI>
+<LI>NoCommunication : Use when you don't want to communicate with the process, e.g. it runs silently without interesting output or
+requiring any input.</LI>
+<LI>Stdin : To be used if the process asks for user input. Depending on the process, you have to use this communication mode to avoid
+blocking - the process just will wait for input but can never retrieve the information if this mode isn't used.</LI>
+<LI>Stdout : The output the process sends to StdOut, which would be your terminal for example. This mode has to be used if you want
+to retrieve the output information for displaying it to the user in a widget.</LI>
+<LI>Stderr : error messages sent by the process to StdErr can be retrieved seperately by this mode. This is useful to check for
+errors.</LI>
+<LI>AllOutput : Stdout and Stderr OR'ed together. Mind that this doesn't include StdIn communication !</LI>
+<LI>All: Open all communication channels, meaning that Stdout, Stderr and Stdin are OR'ed together.</LI>
 </UL>
+<P>As mentioned for <CODE>AllOutput</CODE> and <CODE>All</CODE> communication modes, the available modes can be OR'ed together to combine the needed
+modes.
+<P>By the according signals and slots, you can connect the communication data channels to e.g. a text widget or a buffer. Displaying the
+output directly into a text widget will be used for Stdout in most cases while error messages can as well be retrieved into a
+non-visible buffer which can be processed to visualize errors by messageboxes.
 <P>
-<H4>Example Usage</H4>
+<H3><A NAME="ss8.2">8.2 KShellProcess</A>
+</H3>
 
 <P>
+<P>The <CODE>KShellProcess</CODE> class is a specialized <CODE>KProcess</CODE> class. The main difference is that you can call your executable via a Unix
+shell which allows all options the selected shell offers. You should check for available shells as well before calling a shell process
+for a special shell; the normal constructor will check for any shell available but can be set to use e.g. /bin/bash to make use of the
+Bourne shell - but you can't expect any system to have the Bourne shell available. The use of a <CODE>KShellProcess</CODE> offers the following
+advantages:
+<UL>
+<LI>Useage of environment variables</LI>
+<LI>Setting environment variables</LI>
+<LI>pipe usage</LI>
+<LI>wildcard usage</LI>
+</UL>
+<P>The methods of <CODE>KProcess</CODE> then offer the necessary communication and runmodes the process may need.
 <P>
 <P>
 <P ALIGN="RIGHT">
