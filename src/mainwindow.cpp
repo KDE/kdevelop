@@ -204,7 +204,7 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QWidget> *pViews):
   noViews              (0)
 {
 
- return;
+  return;
 #warning this crashes in ideal mode, looks like there are dangling pointers on opening another project
   QPtrListIterator<QWidget> it(*pViews);
   for( ; it.current(); ++it)                                        // Iterate through all views
@@ -629,40 +629,13 @@ void MainWindow::raiseView(QWidget *view)
     QPtrList<QWidget> *pViews        = 0L;             // The views to make a menu from
 
     QWidget *wrapper = m_widgetMap[ view ];
-    if (!wrapper) {
-        // find the container
-        if (m_outputViews.contains(view))
-            pViews = &m_outputViews;
-        else if (m_outputViews.contains(view))
-            pViews = &m_selectViews;
-     
-        if (pViews) {
-            QPtrListIterator<QWidget> it(*pViews);
-            const  ToolDockBaseState allWinState(pViews);
-
-            if (allWinState.dockBaseMayBeDockBack) { // If it may be dock back, it is invisible
-                allWinState.pDockBaseWindow->dockBack();  // Show it again
-            }
-            else if (allWinState.dockBaseIsHidden) {      // In toplevel mode the tool window is just hidden
-                allWinState.pDockBaseWindow->show();      // Then show it
-            }
-            else {
-                // not a single tool window found, so we show all of them
-                showAllToolWin( pViews == &m_outputViews ? OutputView : TreeView, 1 );
-            }
-        }
-    }
-    else {
+    if (wrapper)
         wrapper->setFocus();
-    }
-    
+
     KDockWidget* pDock = dockManager->findWidgetParentDock(wrapper ? wrapper : view);
-    if (pDock) {
-        if ((pDock->parentWidget() && pDock->parentWidget()->isVisible()) ||
-            (!pDock->parentWidget() && pDock->isVisible()) ) {
+    if (pDock)
+        if (!pDock->isVisible())
             makeDockVisible(pDock);
-        }
-    }
 }
 
 

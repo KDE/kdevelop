@@ -34,6 +34,7 @@
 #include <klocale.h>
 #endif
 
+#include "kmdimainfrm.h"
 #include "kmdidockcontainer.h"
 
 static const char* const not_close_xpm[]={
@@ -619,6 +620,9 @@ void KMdiDockContainer::toggle() {
 	if (m_tb->isTabRaised(oldtab)) {
 		m_tb->setTab(oldtab,false);
 	    	tabClicked(oldtab);
+            KMdiMainFrm *mainFrm = dynamic_cast<KMdiMainFrm*>(m_mainWin);
+            if (mainFrm)
+                mainFrm->activeWindow()->setFocus();
 	} else {
 		kdDebug()<<"KMdiDockContainer::toggle(): raising tab"<<endl;
 		if (m_tb->tab(m_previousTab)==0) {
