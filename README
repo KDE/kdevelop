@@ -1,4 +1,4 @@
-KDevelop 1.0
+KDevelop 1.1
 
 -------------------------------------
 
@@ -14,7 +14,7 @@ http://www.kdevelop.org
 
 3. Requirements
 
-In order to successfully compile und use KDevelop, you need following
+In order to successfully compile and use KDevelop, you need following
 programs and libraries: 	
 
 required:
@@ -35,8 +35,10 @@ optional:
 KDE-SDK
 sgmltools 1
 Glimpse >= 4.1
+htDig 3.1.x
 KIconEdit
 KDbg
+gdb 4.18 (do not use 4.17, I've been told it has some problems)
 a2ps 4.11
 enscript
 Gv, Ghostview, KGhostview
@@ -50,7 +52,9 @@ to generate documentation. If you have kdoc 2 installed on your system
 
 4. Installation
 
-see INSTALL in this directory
+see INSTALL in this directory.
+If you want to use the htDig search engine please see the
+README.htdig file.
 
 5. Trouble shooting (please read the FAQ for more information)
 
