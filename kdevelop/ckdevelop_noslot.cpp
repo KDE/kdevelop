@@ -589,7 +589,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     || type.startsWith("application/x-kdevelop-project") ) )  // open with krun
   {
     bool bStartWithKRun = true;
-    if (type.startsWith("image/x-xpm")) {
+    if (type.startsWith("image/x-xpm") || type.startsWith("application/x-gettext")) {
       if (KMessageBox::questionYesNo(this, i18n("Do you want to load it as ASCII file?"), i18n("Load decision")) == KMessageBox::Yes) {
         bStartWithKRun = false;
       }
