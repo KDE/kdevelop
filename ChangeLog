@@ -1,4 +1,4 @@
-2002-16-02  Daniel Engelschalt (daniel.engelschalt@gmx.net)
+2002-16-02  Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* added codecompletion-classstore
 	* added removeWidget( )
 	* added config-dialogues for codecompletion/classstores
