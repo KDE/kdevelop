@@ -72,3 +72,5 @@ void DocTreeProjectConfigWidget::setProject(KDevProject* project)
 }
 
 */
+
+#include "doctreeprojectconfigwidget.moc"
