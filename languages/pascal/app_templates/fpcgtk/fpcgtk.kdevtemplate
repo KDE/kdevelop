@@ -29,5 +29,5 @@ Source=%{src}/main.pp
 Dest=%{dest}/src/%{APPNAMELC}.pp
 
 [MSG]
-Type=install
+Type=message
 Comment=A GTK+ application written in pascal was created in %{dest}
