@@ -1,3 +1,7 @@
+2001-06-25  F@lk Brettschneider <falk@kdevelop.org>
+    * Now Options->Editor... also works without opened views
+    * minor changes in QextMDI
+
 2001-06-24  jbb <jbb@kdevelop.org>
     * bugfix: optimize options where never defaulting quite correctly
     * so I fixed and disabled the options for optimize and debug if they

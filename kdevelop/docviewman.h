@@ -79,7 +79,7 @@ public:
   void doOptionsSyntaxHighlighting();
 
   /** */  
-  void doTakeOverOfEditorOptions();
+  void doTakeOverOfEditorOptions(CEditWidget* pView = 0L);
 
   /** Get the modified files and ask if they should be saved */
   void saveModifiedFiles();

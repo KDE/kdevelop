@@ -190,38 +190,94 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
 void DocViewMan::doOptionsEditor()
 {
-  if(currentEditView())
-  {
+  if (currentEditView()) {
     currentEditView()->optDlg();
     doTakeOverOfEditorOptions();
+  }
+  else {
+    KWriteDoc dummyDoc(&m_highlightManager, "/tmp/dummy");
+    KConfig* pConfig = m_pParent->getConfig();
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyDoc.readConfig(pConfig);
+    }
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyView.readConfig(pConfig);
+    }
+    dummyView.optDlg();
+    doTakeOverOfEditorOptions(&dummyView);
   }
 }
 
 void DocViewMan::doOptionsEditorColors()
 {
-  if(currentEditView())
-  {
+  if (currentEditView()) {
     currentEditView()->colDlg();
     doTakeOverOfEditorOptions();
+  }
+  else {
+    KWriteDoc dummyDoc(&m_highlightManager, "/tmp/dummy");
+    KConfig* pConfig = m_pParent->getConfig();
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyDoc.readConfig(pConfig);
+    }
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyView.readConfig(pConfig);
+    }
+    dummyView.colDlg();
+    doTakeOverOfEditorOptions(&dummyView);
   }
 }
 
 
 void DocViewMan::doOptionsSyntaxHighlightingDefaults()
 {
-  if(currentEditView())
-  {
+  if (currentEditView()) {
     currentEditView()->hlDef();
     doTakeOverOfEditorOptions();
+  }
+  else {
+    KWriteDoc dummyDoc(&m_highlightManager, "/tmp/dummy");
+    KConfig* pConfig = m_pParent->getConfig();
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyDoc.readConfig(pConfig);
+    }
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyView.readConfig(pConfig);
+    }
+    dummyView.hlDef();
+    doTakeOverOfEditorOptions(&dummyView);
   }
 }
 
 void DocViewMan::doOptionsSyntaxHighlighting()
 {
-  if(currentEditView())
-  {
+  if (currentEditView()) {
     currentEditView()->hlDlg();
     doTakeOverOfEditorOptions();
+  }
+  else {
+    KWriteDoc dummyDoc(&m_highlightManager, "/tmp/dummy");
+    KConfig* pConfig = m_pParent->getConfig();
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyDoc.readConfig(pConfig);
+    }
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    if (pConfig) {
+      pConfig->setGroup("KWrite Options");
+      dummyView.readConfig(pConfig);
+    }
+    dummyView.hlDlg();
+    doTakeOverOfEditorOptions(&dummyView);
   }
 }
 
@@ -229,20 +285,25 @@ void DocViewMan::doOptionsSyntaxHighlighting()
   * doOptionsEditor, doOptionsEditorColors,
   * doOptionsSyntaxHighlightingDefaults and doOptionsSyntaxHighlighting
   */
-void DocViewMan::doTakeOverOfEditorOptions()
+void DocViewMan::doTakeOverOfEditorOptions(CEditWidget* pView)
 {
+  if (!pView) {
+    pView = currentEditView();
+    if (!pView) return;
+  }
+
   KConfig* config = m_pParent->getConfig();
   if (config) {
     config->setGroup("KWrite Options");
-    currentEditView()->writeConfig(config);
-    currentEditView()->doc()->writeConfig(config);
+    pView->writeConfig(config);
+    pView->doc()->writeConfig(config);
 
     QListIterator<QObject> itDoc(m_documentList);
     for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
       KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
       if (pDoc) {
         CEditWidget* pCurEW = getFirstEditView(pDoc);
-        pCurEW->copySettings(currentEditView());
+        pCurEW->copySettings(pView);
         config->setGroup("KWrite Options");
         pCurEW->readConfig(config);
         pDoc->readConfig(config);
