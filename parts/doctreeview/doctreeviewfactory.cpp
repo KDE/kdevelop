@@ -24,7 +24,7 @@ DocTreeViewFactory::DocTreeViewFactory()
 
 KInstance *DocTreeViewFactory::createInstance()
 {
-    KInstance *instance = KGenericFactory<DocTreeViewPart>::createInstance();
+    KInstance *instance = KDevGenericFactory<DocTreeViewPart>::createInstance();
     KStandardDirs *dirs = instance->dirs();
     dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/indices/");
     dirs->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
