@@ -14,11 +14,11 @@
 # just set the variable
 APPSDIR = $(kde_appsdir)/Applications
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes)
+INCLUDES= $(all_includes) -I./classparser
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit
-
+SUBDIRS = tools docs templates toolbar pics kwrite kdlgedit classparser
+LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
 bin_PROGRAMS = kdevelop
@@ -42,7 +42,7 @@ kdevelop_METASOURCES = USE_AUTOMOC
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-kdevelop_LDADD   = ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a -lkfile -lkfm $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+kdevelop_LDADD   = ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a -lkfile -lkfm $(LIB_KHTMLW) -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET) -lfl
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
