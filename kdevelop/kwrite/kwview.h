@@ -188,6 +188,7 @@ protected slots:
     void updateCursor(PointStruc &newCursor);
     void updateView(int flags, int newXPos = 0, int newYPos = 0);
 //  void scroll2(int, int);
+    void wheelEvent(QWheelEvent *);
     void tagLines(int start, int end);
     void tagAll();
 

@@ -662,7 +662,7 @@ void KWriteView::insLine(int line) {
     yPos += kWriteDoc->fontHeight;
   } else if (line <= endLine) {
     tagAll();
-  }  
+  }
 
 /*
   //bookmarks
@@ -689,7 +689,7 @@ void KWriteView::delLine(int line)
     yPos -= kWriteDoc->fontHeight;
   } else if (line <= endLine) {
     tagAll();
-  }  
+  }
 
 /*
   //bookmarks
@@ -704,6 +704,11 @@ void KWriteView::delLine(int line)
 */
 }
 
+void KWriteView::wheelEvent(QWheelEvent *e)
+{
+    e->accept();
+    yScroll->setValue(yScroll->value() - e->delta());
+}
 void KWriteView::updateCursor() {
   cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
 }
@@ -866,7 +871,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
 
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
-      if (dx || dy) {				
+      if (dx || dy) {
         scroll(dx,dy);
       } else if (cursorOn) paintCursor();
     }
@@ -1386,7 +1391,7 @@ debug(textline);
 	counter=textline.contains("{")-textline.contains("}");
 
 debug("First Counter: %i",counter);
-	
+
 	while (counter<1) {
 		line--;
 		if (line==0) break;
@@ -1409,7 +1414,7 @@ debug("First Counter: %i",counter);
 		kWriteDoc->contents.at(n)->setVisible(false);
 	}
 
-	return line;	
+	return line;
 }
 
 /*
