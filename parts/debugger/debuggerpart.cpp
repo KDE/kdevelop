@@ -46,6 +46,7 @@
 #include "dbgtoolbar.h"
 #include "memviewdlg.h"
 #include "gdbparser.h"
+#include "gdboutputwidget.h"
 #include "debuggerconfigwidget.h"
 #include "processlinemaker.h"
 
@@ -129,11 +130,14 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                             "instruction using the debuggers toolbar "
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
-    mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble view"));
+    mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"),
+                                        i18n("debugger disassemble view"));
     mainWindow()->setViewAvailable(disassembleWidget, false);
 
-    gdbOutputWidget = new ProcessWidget(0);
-    mainWindow()->embedOutputView(gdbOutputWidget, i18n("GDB"), i18n("GDB output"));
+    gdbOutputWidget = new GDBOutputWidget;
+    gdbOutputWidget->setEnabled(false);
+    mainWindow()->embedOutputView(gdbOutputWidget, i18n("GDB"),
+                                                i18n("GDB output"));
     mainWindow()->setViewAvailable(gdbOutputWidget, false);
 
     VariableTree *variableTree = variableWidget->varTree();
@@ -252,18 +256,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          this, SLOT(toggleBreakpoint()),
                          actionCollection(), "debug_toggle_breakpoint");
 
-//    action = new KAction(i18n("Disable Breakpoint"), 0, 0,
-//                         this, SLOT(slotDisableBreakpoint()),
-//                         actionCollection(), "debug_disable_breakpoint");
-
-
     connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );
 
-//    connect( core(), SIGNAL(projectOpened()),
-//             this, SLOT(projectOpened()) );
-//    connect( core(), SIGNAL(projectClosed()),
-//             this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
@@ -291,17 +286,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
              appFrontend(), SLOT(insertStderrLine(const QString&)) );
 
-    gdbLineMaker = new ProcessLineMaker();
-
-    connect( gdbLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
-             gdbOutputWidget, SLOT(insertStdoutLine(const QString&)) );
-    connect( gdbLineMaker, SIGNAL(receivedStderrLine(const QString&)),
-             gdbOutputWidget, SLOT(insertStderrLine(const QString&)) );
-
     setupController();
-
-//    if( project() )
-//        projectOpened();
 }
 
 
@@ -450,6 +435,9 @@ void DebuggerPart::setupController()
     connect( disassembleWidget,SIGNAL(disassemble(const QString&, const QString&)),
              controller,       SLOT(slotDisassemble(const QString&, const QString&)));
 
+    connect( gdbOutputWidget,  SIGNAL(userGDBCmd(const QString &)),
+             controller,       SLOT(slotUserGDBCmd(const QString&)));
+
     // controller -> breakpointWidget
     connect( controller,       SIGNAL(acceptPendingBPs()),
              breakpointWidget, SLOT(slotSetPendingBPs()));
@@ -480,9 +468,9 @@ void DebuggerPart::setupController()
              procLineMaker,    SLOT(slotReceivedStderr(const char*)));
 
     connect( controller,       SIGNAL(gdbStdout(const char*)),
-             gdbLineMaker,     SLOT(slotReceivedStdout(const char*)) );
+             gdbOutputWidget,  SLOT(slotReceivedStdout(const char*)) );
     connect( controller,       SIGNAL(gdbStderr(const char*)),
-             gdbLineMaker,     SLOT(slotReceivedStderr(const char*)) );
+             gdbOutputWidget,  SLOT(slotReceivedStderr(const char*)) );
 }
 
 
@@ -533,10 +521,13 @@ void DebuggerPart::startDebugger()
     disassembleWidget->setEnabled(true);
 
     gdbOutputWidget->clear();
+    gdbOutputWidget->setEnabled(true);
 
     controller->slotStart(shell, program);
-//    breakpointWidget->slotSetPendingBPs(); //This sets the breakpoints again, so when you remove them during
-					    //a debugging session, the app will still stop at those breakpoints...
+
+    //This sets the breakpoints again, so when you remove them during
+    //a debugging session, the app will still stop at those breakpoints...
+    //    breakpointWidget->slotSetPendingBPs();
 }
 
 void DebuggerPart::stopDebugger()
@@ -556,6 +547,7 @@ void DebuggerPart::stopDebugger()
     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
+    gdbOutputWidget->setEnabled(false);
 
     mainWindow()->setViewAvailable(variableWidget, false);
     mainWindow()->setViewAvailable(framestackWidget, false);

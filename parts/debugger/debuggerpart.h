@@ -18,12 +18,12 @@
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
+namespace KParts { class Part; };
+
 class QLabel;
 class QPopupMenu;
 class KDialogBase;
-class VariableWidget;
 class ProcessWidget;
-namespace KParts { class Part; };
 class ProcessLineMaker;
 
 namespace GDBDebugger
@@ -35,6 +35,8 @@ class DisassembleWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
+class VariableWidget;
+class GDBOutputWidget;
 
 class DebuggerPart : public KDevPlugin
 {
@@ -83,7 +85,7 @@ private:
     QGuardedPtr<BreakpointWidget> breakpointWidget;
     QGuardedPtr<FramestackWidget> framestackWidget;
     QGuardedPtr<DisassembleWidget> disassembleWidget;
-    QGuardedPtr<ProcessWidget> gdbOutputWidget;
+    QGuardedPtr<GDBOutputWidget> gdbOutputWidget;
     DbgController *controller;
     QLabel *statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;

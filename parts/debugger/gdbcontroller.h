@@ -116,6 +116,8 @@ public slots:
     // jw - type determination requires a var object, so we do it here
     void slotVarItemConstructed(VarItem *item);
 
+    void slotUserGDBCmd(const QString&);
+
 protected slots:
     void slotDbgStdout(KProcess *proc, char *buf, int buflen);
     void slotDbgStderr(KProcess *proc, char *buf, int buflen);

@@ -1879,6 +1879,17 @@ void GDBController::slotAbortTimedEvent()
 
 // **************************************************************************
 
+void GDBController::slotUserGDBCmd(const QString& cmd)
+{
+    kdDebug(9012) << "Requested user cmd: " << cmd;
+    if (cmd.startsWith("st"))
+        queueCmd(new GDBCommand("step", RUNCMD, NOTINFOCMD, 0));
+    else
+        queueCmd(new GDBCommand(QCString(cmd), NOTRUNCMD, INFOCMD, USERCMD));
+}
+
+// **************************************************************************
+
 // These are here for debug display. I wanted them to be removed if DBG_MONITOR
 // wasn't defined but qt's moc has problems with that.
 #if defined(DBG_MONITOR)

@@ -60,6 +60,8 @@ enum GDBCmd
   INFOTHREAD      = 'T',
   SWITCHTHREAD    = 't',
 
+  USERCMD         = 'U',
+
   SETWATCH        = 'W',
   UNSETWATCH      = 'w',
 
