@@ -1,5 +1,10 @@
+2005-01-09 Jens Dagerbo <jens.dagerbo@swipnet.se>
+ * Finished the new CTags frontend. (Just a few minor issues remain.)
+
 2005-01-08 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Made it possible to finally remove Code Completion databases via the GUI
+ * Cleaned up the context menu mess (at least it's optional now, and the code 
+ is cleaner).
 
 2005-01-03 Robert Gruber <rgruber@users.sourceforge.net>
  * Added support for CVS commands edit, unedit and editors
