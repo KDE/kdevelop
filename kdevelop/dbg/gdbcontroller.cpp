@@ -141,6 +141,7 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   config_forceBPSet_(true),
   config_displayStaticMembers_(false),
   config_asmDemangle_(true),
+  config_dbgTerminal_(false),
   config_gdbPath_()
 {
   KConfig* config = kapp->getConfig();
@@ -152,6 +153,7 @@ GDBController::GDBController(VarTree* varTree, FrameStack* frameStack) :
   config_breakOnLoadingLibrary_ = config->readBoolEntry("Break on loading libs", true);
   config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
   config_gdbPath_               = config->readEntry("GDB path", "");
+  config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
 
 #if defined (GDB_MONITOR)
     connect(  this,   SIGNAL(dbgStatus(const QString&, int)),
@@ -200,7 +202,7 @@ GDBController::~GDBController()
     }
 
     setStateOn(s_waitTimer|s_appBusy);
-    dbgProcess_->writeStdin("quit\n", 5);
+    dbgProcess_->writeStdin((char*)"quit\n", 5);
     GDB_DISPLAY("quit\n")
     timer->start(3000, TRUE);
     DBG_DISPLAY("<quit wait>\n")
@@ -228,14 +230,14 @@ void GDBController::reConfig()
   config->setGroup("Debug");
   ASSERT(!config->readBoolEntry("Use external debugger", false));
 
-  bool old_displayStatic = config_displayStaticMembers_;
-  config_displayStaticMembers_ = config->readBoolEntry("Display static members", false);
+  bool old_displayStatic        = config_displayStaticMembers_;
+  config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
 
-  bool old_asmDemangle = config_asmDemangle_;
-  config_asmDemangle_ = !config->readBoolEntry("Display mangled names", true);
+  bool old_asmDemangle  = config_asmDemangle_;
+  config_asmDemangle_   = !config->readBoolEntry("Display mangled names", true);
 
   bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-  config_breakOnLoadingLibrary_ = config->readBoolEntry("Break on loading libs", true);
+  config_breakOnLoadingLibrary_   = config->readBoolEntry("Break on loading libs", true);
 
   if (( old_displayStatic           != config_displayStaticMembers_   ||
         old_asmDemangle             != config_asmDemangle_            ||
@@ -1140,11 +1142,16 @@ void GDBController::modifyBreakpoint(Breakpoint* BP)
 void GDBController::slotStart(const QString& application, const QString& args)
 {
   badCore_ = QString();
+  QString appName("konsole");
 
   ASSERT (!dbgProcess_ && !tty_);
-  tty_ = new STTY();
-  connect( tty_, SIGNAL(OutOutput( const char* )), SIGNAL(ttyStdout( const char* )) );
-  connect( tty_, SIGNAL(ErrOutput( const char* )), SIGNAL(ttyStderr( const char* )) );
+
+  tty_ = new STTY(config_dbgTerminal_, appName);
+  if (!config_dbgTerminal_)
+  {
+    connect( tty_, SIGNAL(OutOutput( const char* )), SIGNAL(ttyStdout( const char* )) );
+    connect( tty_, SIGNAL(ErrOutput( const char* )), SIGNAL(ttyStderr( const char* )) );
+  }
 
   QString tty(tty_->getSlave());
   if (tty.isEmpty())

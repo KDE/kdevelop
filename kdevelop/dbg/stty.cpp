@@ -2,11 +2,17 @@
                           stty.cpp  -  description
                              -------------------
     begin                : Mon Sep 13 1999
-    copyright            : (C) 1999 by Judin Maxim
+    copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
 
-    This code has been taken, as is, from the KDEStudio project done by
-    Judin Maxim <novaprint@mtu-net.ru>
+  This code was originally written by Judin Maxim, from the
+	KDEStudio project.
+	
+  It was then updated with later code from konsole (KDE).
+
+	It has also been enhanced with an idea from the code in kdbg
+	written by Johannes Sixt<Johannes.Sixt@telecom.at>
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,36 +25,143 @@
  ***************************************************************************/
 
 #include "stty.h"
+#include "kapp.h"
 
 #include <qsocketnotifier.h>
 #include <qstring.h>
 
+/*
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <termios.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#ifdef TIME_WITH_SYS_TIME
+#include <sys/time.h>
+#endif
+#include <sys/resource.h>
+#include <grp.h>
+
+#if defined (_HPUX_SOURCE)
+#define _TERMIOS_INCLUDED
+#include <bsdtty.h>
+#endif
+
+#ifdef HAVE_SYS_STROPTS_H
+#include <sys/stropts.h>
+#define _NEW_TTY_CTRL
+#endif
+
+#include <assert.h>
+#include <time.h>
+#include <signal.h>
+#include <qintdict.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+*/
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <stdlib.h>
 
-STTY::STTY() :
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <sys/stat.h>
+
+#define FIFO_FILE "/tmp/debug_tty"
+
+#define PTY_FILENO 3
+#define BASE_CHOWN "konsole_grantpty"
+
+static int chownpty(int fd, int grant)
+// param fd: the fd of a master pty.
+// param grant: 1 to grant, 0 to revoke
+// returns 1 on success 0 on fail
+{
+  void(*tmp)(int) = signal(SIGCHLD,SIG_DFL);
+  pid_t pid = fork();
+  if (pid < 0)
+  {
+    signal(SIGCHLD,tmp);
+    return 0;
+  }
+  if (pid == 0)
+  {
+    /* We pass the master pseudo terminal as file descriptor PTY_FILENO. */
+    if (fd != PTY_FILENO && dup2(fd, PTY_FILENO) < 0)
+      ::exit(1);
+
+    QString path = KApplication::kde_bindir() + "/" + BASE_CHOWN;
+    execle(path.data(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
+    ::exit(1); // should not be reached
+  }
+  if (pid > 0)
+  { int w;
+//  retry:
+    int rc = waitpid (pid, &w, 0);
+    if (rc != pid)
+      ::exit(1);
+
+//    { // signal from other child, behave like catchChild.
+//      // guess this gives quite some control chaos...
+//      Shell* sh = shells.find(rc);
+//      if (sh) { shells.remove(rc); sh->doneShell(w); }
+//      goto retry;
+//    }
+    signal(SIGCHLD,tmp);
+    return (rc != -1 && WIFEXITED(w) && WEXITSTATUS(w) == 0);
+  }
+  signal(SIGCHLD,tmp);
+  return 0; //dummy.
+}
+
+// **************************************************************************
+
+STTY::STTY(bool ext, const QString &termAppName) :
   QObject(),
   out(0),
-  err(0)
+  err(0),
+  ttySlave(""),
+  pid_(0)
 {
-  fout = findTTY();
-  ttySlave = QString(tty_slave);
-  ferr = findTTY();
-
-  if (fout >= 0 && ferr >= 0)
+  if (ext)
   {
-    out = new QSocketNotifier(fout, QSocketNotifier::Read);
-    connect( out, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
-    err = new QSocketNotifier(ferr, QSocketNotifier::Read);
-    connect( err, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
+    ::unlink(FIFO_FILE);
+    findExternalTTY(termAppName);
+    ::unlink(FIFO_FILE);
   }
   else
-    ttySlave = "";
+  {
+    fout = findTTY();
+    ttySlave = QString(tty_slave);
+    ferr = findTTY();
+
+    if (fout >= 0 && ferr >= 0)
+    {
+      out = new QSocketNotifier(fout, QSocketNotifier::Read);
+      connect( out, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
+      err = new QSocketNotifier(ferr, QSocketNotifier::Read);
+      connect( err, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
+    }
+  }
 }
+
+// **************************************************************************
 
 STTY::~STTY()
 {
+  if (pid_)
+    ::kill(pid_, SIGTERM);
+
   if ( out )
   {
     ::close( fout );
@@ -62,24 +175,26 @@ STTY::~STTY()
   }
 }
 
+// **************************************************************************
+
 int STTY::findTTY()
 {
   int ptyfd = -1;
-//  needGrantPty = TRUE;
+  bool needGrantPty = TRUE;
 
   // Find a master pty that we can open ////////////////////////////////
 
 #ifdef __sgi__
   ptyfd = open("/dev/ptmx",O_RDWR);
   if (ptyfd < 0)
-    {
-      perror("Can't open a pseudo teletype");
-      return(-1);
-    }
+  {
+    perror("Can't open a pseudo teletype");
+    return(-1);
+  }
   strncpy(tty_slave, ptsname(ptyfd), 50);
   grantpt(ptyfd);
   unlockpt(ptyfd);
-//  needGrantPty = FALSE;
+  needGrantPty = FALSE;
 #endif
 
   // first we try UNIX PTY's
@@ -94,9 +209,7 @@ int STTY::findTTY()
     { struct stat sbuf;
       sprintf(tty_slave,"/dev/pts/%d",ptyno);
       if (stat(tty_slave,&sbuf) == 0 && S_ISCHR(sbuf.st_mode))
-      {
-//        needGrantPty = FALSE;
-      }
+        needGrantPty = FALSE;
       else
       {
         close(ptyfd);
@@ -149,20 +262,22 @@ int STTY::findTTY()
 
   if (ptyfd >= 0)
   {
-//  if (needGrantPty && !chownpty(ptyfd,TRUE))
-//  {
-//    fprintf(stderr,"konsole: chownpty failed for device %s::%s.\n",pty_master,tty_slave);
-//    fprintf(stderr,"       : This means the session can be eavesdroped.\n");
-//    fprintf(stderr,"       : Make sure konsole_grantpty is installed in\n");
-//    fprintf(stderr,"       : %s and setuid root.\n",
-//	    KGlobal::dirs()->findResourceDir("exe", "konsole").data());
-//  }
+    if (needGrantPty && !chownpty(ptyfd, TRUE))
+    {
+      fprintf(stderr,"kdevelop: chownpty failed for device %s::%s.\n",pty_master,tty_slave);
+      fprintf(stderr,"        : This means the session can be eavesdroped.\n");
+      fprintf(stderr,"        : Make sure konsole_grantpty is installed and setuid root.\n");
+      close(ptyfd);
+      return -1;  // failed
+    }
 
     ::fcntl(ptyfd, F_SETFL, O_NDELAY);
   }
 
   return ptyfd;
 }
+
+// **************************************************************************
 
 void STTY::OutReceived(int f)
 {
@@ -180,3 +295,84 @@ void STTY::OutReceived(int f)
       emit ErrOutput(buf);
   }
 }
+
+// **************************************************************************
+
+bool STTY::findExternalTTY(const QString &termApp)
+{
+  QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
+
+  // create a fifo that will pass in the tty name
+#ifdef HAVE_MKFIFO
+  if (::mkfifo(FIFO_FILE, S_IRUSR|S_IWUSR) < 0)
+#else
+  if (::mknod(FIFO_FILE, S_IFIFO | S_IRUSR|S_IWUSR, 0) < 0)
+#endif
+    return false;
+
+  int pid = ::fork();
+  if (pid < 0)              // No process
+  {
+    ::unlink(FIFO_FILE);
+    return false;
+  }
+
+  if (pid == 0)             // child process
+  {
+    /*
+    * Spawn a console that in turn runs a shell script that passes us
+    * back the terminal name and then only sits and waits.
+    */
+
+    const char* prog      = appName;
+    const char* scriptStr = "tty>"FIFO_FILE";"            // fifo name
+                            "trap \"\" INT QUIT TSTP;"	  // ignore various signals
+                            "exec<&-;exec>&-;"		        // close stdin and stdout
+                            "while :;do sleep 3600;done";
+    const char* end       = 0;
+
+    ::execlp( prog,       prog,
+              "-name",    "debugio",
+              "-title",   "kdevelop: Program output",
+              "-e",       "sh",
+              "-c",       scriptStr,
+              end);
+
+    // Should not get here, as above should always work
+    ::exit(1);
+  }
+
+  // parent process
+  if (pid <= 0)
+    ::exit(1);
+
+  // Open the communication between us (the parent) and the
+  // child (the process running on a tty console)
+  int f = ::open(FIFO_FILE, O_RDONLY);
+  if (f < 0)
+    return false;
+
+  // Get the ttyname from the fifo buffer that the child process
+  // has sent.
+  char ttyname[50];
+  int n = ::read(f, ttyname, sizeof(ttyname)-sizeof(char));
+
+  ::close(f);
+  ::unlink(FIFO_FILE);
+
+  // No name??
+  if (n <= 0)
+    return false;
+
+  // remove whitespace
+  ttyname[n] = 0;
+  if (char* newline = strchr(ttyname, '\n'))
+    *newline = 0;      // clobber the new line
+
+  ttySlave = ttyname;
+  pid_ = pid;
+
+  return true;
+}
+
+// **************************************************************************

@@ -154,6 +154,7 @@ private:
   bool    config_forceBPSet_;
   bool    config_displayStaticMembers_;
   bool    config_asmDemangle_;
+  bool    config_dbgTerminal_;
   QString config_gdbPath_;
 };
 
