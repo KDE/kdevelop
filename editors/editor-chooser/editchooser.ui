@@ -75,6 +75,9 @@ already open files.</string>
                     <property name="name">
                         <cstring>alert</cstring>
                     </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
                     <property name="text">
                         <string>Alert the user</string>
                     </property>
