@@ -108,7 +108,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
-    action = new KAction( i18n("Execute Main Program"), "exec", 0,
+    action = new KAction( i18n("Execute Main Program"), "exec", SHIFT+Key_F9,
                           m_widget, SLOT(slotExecuteProject()),
                           actionCollection(), "build_execute_project" );
     action->setToolTip(i18n("Execute main program"));
@@ -118,7 +118,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
 
 
 
-    action = new KAction( i18n("&Build Subproject"), "make_kdevelop", 0,
+    action = new KAction( i18n("&Build Subproject"), "make_kdevelop", Key_F7,
                           m_widget, SLOT(slotBuildTarget()),
                           actionCollection(), "build_build_target" );
     action->setToolTip(i18n("Build subproject"));

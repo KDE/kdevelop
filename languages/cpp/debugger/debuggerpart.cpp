@@ -169,7 +169,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     // Now setup the actions
     KAction *action;
 
-    action = new KAction(i18n("&Start"), "1rightarrow", 0,
+    action = new KAction(i18n("&Start"), "1rightarrow", CTRL+SHIFT+Key_F9,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
     action->setToolTip( i18n("Start in debugger") );
