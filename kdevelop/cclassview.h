@@ -157,8 +157,6 @@ protected: // Protected signals and slots
 
 private: // Private constants
 
-  const QString PIXPREFIX = "/kdevelop/pics/mini/";
-
 private: // Popupmenus
 
   /** Popupmenu for the toplevel icon. */
