@@ -1,8 +1,8 @@
 High priority tasks!
 ====================
 
-1. Fixing major bugs
---------------------
+1. Fixing major/annoying bugs
+-----------------------------
 
 2. KDevelop 2 compatibility
 ---------------------------
@@ -12,6 +12,14 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
 doctreeview:
  * forward/back buttons must implement history in doctreeview!
+
+3. Missing UIs
+--------------
+
+UIs that intuitively ought to be there
+
+automakemanager:
+ * install, etc. targets besides "build" for subproject menus & toolbar
 
 New features
 ============
