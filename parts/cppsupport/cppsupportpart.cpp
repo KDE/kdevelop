@@ -200,11 +200,10 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
-    while( m_backgroundParser->filesInQueue() > 0 )
-       m_backgroundParser->isEmpty().wait();
+//    while( m_backgroundParser->filesInQueue() > 0 )
+//       m_backgroundParser->isEmpty().wait();
     //m_backgroundParser->reparse();
     m_backgroundParser->close();
-    m_backgroundParser->canParse().wakeAll();
     m_backgroundParser->wait();
 
     mainWindow( )->removeView( m_problemReporter );

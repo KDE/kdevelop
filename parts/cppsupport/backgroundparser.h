@@ -54,7 +54,6 @@ public:
 
     bool filesInQueue();
 
-    QString fileToParse();
     void addFile( const QString& fileName );
     void removeFile( const QString& fileName );
     void removeAllFiles();

@@ -327,7 +327,9 @@ QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 
 void BackgroundParser::close()
 {
+    QMutexLocker locker( &m_mutex );
     m_close = true;
+    m_canParse.wakeAll();
 }
 
 bool BackgroundParser::filesInQueue()
@@ -341,15 +343,26 @@ void BackgroundParser::run()
 {
     (void) m_cppSupport->codeCompletion()->repository()->getEntriesInScope( QStringList(), false );
 
-    while( true ){
+    while( !m_close ){
 
-	if( m_close )
-	    break;
+        m_mutex.lock();
+	while( !m_fileList.size() ){
+            m_canParse.wait( &m_mutex );
 
-        QString fileName = fileToParse();
+            if( m_close ){
+                break;
+            }
+        }
 
-	if( m_close )
-	    break;
+        if( m_close ){
+            m_mutex.unlock();
+            break;
+        }
+
+        QString fileName = deepCopy( m_fileList.front() );
+        m_fileList.pop_front();
+
+        m_mutex.unlock();
 
 	Unit* unit = parseFile( fileName );
         {
@@ -379,22 +392,4 @@ void BackgroundParser::run()
 
     QThread::exit();
 }
-
-QString BackgroundParser::fileToParse( )
-{
-    while( m_fileList.isEmpty() ){
-        if( m_close )
-            return QString::null;
-
-	m_canParse.wait();
-    }
-
-    QMutexLocker locker( &m_mutex );
-    QString fileName = m_fileList.front();
-    fileName = deepCopy( fileName );
-    m_fileList.pop_front();
-
-    return fileName;
-}
-
 
