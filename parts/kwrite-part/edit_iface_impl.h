@@ -19,7 +19,6 @@ public:
   virtual QString text() const;
   virtual void setText(const QString &text);
 
-  /*
   virtual void append(const QString &text);
   virtual bool insertLine(const QString &text, uint line);
   virtual bool insertAt(const QString &text, uint line, uint col);
@@ -28,7 +27,7 @@ public:
            
   virtual QString line(uint line) const;
   virtual bool setLine(const QString &text, uint line);
-  */
+  
 
 private:
 

@@ -2,6 +2,7 @@
 
 
 #include "kwrite/kwview.h"
+#include "kwrite/kwdoc.h"
 
 
 #include "edit_iface_impl.h"
@@ -21,8 +22,64 @@ QString EditIfaceImpl::text() const
 
 void EditIfaceImpl::setText(const QString &text)
 {
-  // TODO: find a way to set the text so that it is undoable!
-  m_edit->setText(text);
+  m_edit->document()->setText(text);
+  m_edit->document()->setModified(true);
+  ((KWriteDoc*)m_edit->document())->updateViews();
+}
+
+
+void EditIfaceImpl::append(const QString &text)
+{
+  m_edit->document()->insertLine(text);
+  m_edit->document()->setModified(true);
+  ((KWriteDoc*)m_edit->document())->updateViews();
+}
+
+
+bool EditIfaceImpl::insertLine(const QString &text, uint line)
+{
+  m_edit->document()->insertLine(text, line);
+  m_edit->document()->setModified(true);
+  ((KWriteDoc*)m_edit->document())->updateViews();
+  return true;
+}
+
+
+bool EditIfaceImpl::insertAt(const QString &text, uint line, uint col)
+{
+  m_edit->document()->insertAt(text, line, col);
+  m_edit->document()->setModified(true);
+  ((KWriteDoc*)m_edit->document())->updateViews();
+  return true;
+}
+
+
+bool EditIfaceImpl::removeLine(uint line)
+{
+  m_edit->document()->removeLine(line);
+  m_edit->document()->setModified(true);
+  ((KWriteDoc*)m_edit->document())->updateViews();
+  return true;
+}
+
+
+QString EditIfaceImpl::line(uint line) const
+{
+  return m_edit->document()->textLine(line);
+}
+
+
+bool EditIfaceImpl::setLine(const QString &text, uint line)
+{
+  if (line >= m_edit->document()->numLines())
+    return false;
+
+  m_edit->document()->removeLine(line);
+  m_edit->document()->insertLine(text, line);
+  m_edit->document()->setModified(true);
+  ((KWriteDoc*)m_edit->document())->updateViews();
+
+  return true;
 }
 
 
