@@ -1421,9 +1421,9 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 	    }
 	}
 	return true;
-	
+
     } // end switch
-    
+
 
     return false;
 }
@@ -1449,6 +1449,9 @@ bool Parser::parseStorageClassSpecifier( GroupAST::Node& node )
 	    break;
     }
 
+    if( ast->nodeList().count() == 0 )
+       return false;
+
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
     return true;
@@ -1473,6 +1476,9 @@ bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
 	} else
 	    break;
     }
+
+    if( ast->nodeList().count() == 0 )
+       return false;
 
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
@@ -2885,10 +2891,13 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     int start = lex->index();
 
     GroupAST::Node funSpec;
-    parseFunctionSpecifier( funSpec );
+    bool hasFunSpec = parseFunctionSpecifier( funSpec );
 
     GroupAST::Node storageSpec;
-    parseStorageClassSpecifier( storageSpec );
+    bool hasStorageSpec = parseStorageClassSpecifier( storageSpec );
+
+    if( hasStorageSpec && !hasFunSpec )
+        parseFunctionSpecifier( funSpec );
 
     GroupAST::Node cv;
     parseCvQualify( cv );
