@@ -11,6 +11,8 @@ libkdevadasupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la 				$(top_build
 
 libkdevadasupport_la_SOURCES = adasupportpart.cpp problemreporter.cpp backgroundparser.cpp addclassdlg.ui addclass.cpp configproblemreporter.ui ada_utils.cpp adasupport.cpp AdaLexer.cpp AdaParser.cpp AdaTreeParserSuper.cpp AdaStoreWalker.cpp
 
+KDE_OPTIONS = nofinal
+
 METASOURCES = AUTO
 
 EXTRA_DIST = ada.g ada.tree.g ada.store.g
