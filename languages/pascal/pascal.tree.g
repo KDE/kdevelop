@@ -14,7 +14,7 @@
 // construction, and some tree walkers.
 //
 //
-// Adopted to Gideon by Alexander Dymo <cloudtemple@mksat.net>
+// Adopted to KDevelop by Alexander Dymo <cloudtemple@mksat.net>
 //
 
 header "pre_include_hpp" {

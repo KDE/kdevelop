@@ -1,6 +1,8 @@
 /** \class CvsPart
+CVS is a version control system, which allows you to keep old versions of files,
+keep a log of who, when, and why changes occurred. http://www.cvshome.org/
 
-Implementation for the CvsPart command line tool wrapper: it let to do all common
+Implementation for the CvsPart command line tool wrapper: it can do all common
 used cvs operations (add, commit, remove, ...).
 Currently CvsPart is really primitive when compared to Cervisia.
 The better option will be integrating Cervisia within KDevelop (read FAQ).
@@ -40,7 +42,7 @@ What cvspart when compared to Cervisia is really missing:
 \faq <b>Why not integrate Cervisia in KDevelop?</b>
    This would be a nice but CervisiaPart component is not really designed for
    being embedded in KDevelop. We'll need to adapt it at source level to fit
-   in gideon's architecture but this is not possible since Cervisia is QPL.
+   in kdevelop's architecture but this is not possible since Cervisia is QPL.
    The only thing we could try is to use Cervisia's DCOP cvsservice but this
    really needs experimentation since I'm not really proficient with DCOP ;-).
    Feel free to provide and source code for this kind of integration.

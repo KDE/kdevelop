@@ -1,4 +1,4 @@
-# Doxyfile 1.3.3-Gideon
+# Doxyfile 1.3.4-KDevelop
 
 #---------------------------------------------------------------------------
 # Project related configuration options
@@ -24,6 +24,7 @@ TAB_SIZE               = 4
 ALIASES                = obsolete=@deprecated \
                          "feature=\xrefitem features \"Feature(s)\" \"Features\"" \
                          "maintainer=\xrefitem maintainers \"Maintainer(s)\" \"Maintainers\"" \
+                         "unmaintained=\xrefitem unmaintained \"Unmaintained\" \"Unmaintained\"" \
                          "requirement=\xrefitem requirements \"Requirement(s)\" \"Requirements\"" \
                          "faq=\xrefitem FAQ \"F.A.Q.\" \"F.A.Q.\"" \
                          "authors=\xrefitem authors \"Author(s)\" \"Authors\""
@@ -69,7 +70,10 @@ WARN_LOGFILE           =
 INPUT                  = src \
                          lib \
                          parts \
-                         plugins \
+                         languages \
+                         buildtools \
+                         editors \
+                         vcs \
                          doc/api
 FILE_PATTERNS          = *.h \
                          *.cpp \
@@ -81,61 +85,22 @@ FILE_PATTERNS          = *.h \
                          *.h++ \
                          *.hh
 RECURSIVE              = YES
-EXCLUDE                = parts/appwizard/adahello/ \
-                         parts/appwizard/qtopiasimple/ \
-                         parts/appwizard/kdevpartjava/ \
-                         parts/appwizard/adahello/ \
-                         parts/appwizard/chello_gba/ \
-                         parts/appwizard/chello/ \
-                         parts/appwizard/bashhello/ \
-                         parts/appwizard/javahello/ \
-                         parts/appwizard/imports/ \
-                         parts/appwizard/gnomeapp/ \
-                         parts/appwizard/fpcsharedlib/ \
-                         parts/appwizard/fpchello/ \
-                         parts/appwizard/fpcgtk/ \
-                         parts/appwizard/fortranhello/ \
-                         parts/appwizard/dcopservice/ \
-                         parts/appwizard/cppsdlhello/ \
-                         parts/appwizard/cpphello/ \
-                         parts/appwizard/wxhello/ \
-                         parts/appwizard/superwaba/ \
-                         parts/appwizard/rubyhello/ \
-                         parts/appwizard/qtopiaapp/ \
-                         parts/appwizard/qmakesimple/ \
-                         parts/appwizard/qmakeapp/ \
-                         parts/appwizard/pythonhello/ \
-                         parts/appwizard/pyqt/ \
-                         parts/appwizard/prc-tool/ \
-                         parts/appwizard/phphello/ \
-                         parts/appwizard/perlhello/ \
-                         parts/appwizard/pascalhello/ \
-                         parts/appwizard/noatunui/ \
-                         parts/appwizard/noatunvisual/ \
-                         parts/appwizard/kscreensaver/ \
-                         parts/appwizard/kpartplugin/ \
-                         parts/appwizard/kpartapp/ \
-                         parts/appwizard/konqnavpanel/ \
-                         parts/appwizard/kofficepart/ \
-                         parts/appwizard/kioslave/ \
-                         parts/appwizard/kicker/ \
-                         parts/appwizard/khello/ \
-                         parts/appwizard/kdevpart2/ \
-                         parts/appwizard/kdevpart/ \
-                         parts/appwizard/kdedcop/ \
-                         parts/appwizard/kcmodule/ \
-                         parts/appwizard/kateplugin/ \
-                         parts/appwizard/kateplugin2/ \
-                         parts/appwizard/common/ \
-                         parts/appwizard/kapp/ \
-                         parts/appwizard/haskellhello/ \
-                         parts/appwizard/xulhello/ \
-                         parts/appwizard/kappjava/ \
-                         parts/appwizard/kdevlang \
-                         parts/appwizard/generichello \
-                         parts/cppsupport/subclassing_template \
-                         parts/pascalsupport/ \
-                         parts/javasupport \
+EXCLUDE                = languages/ada/app_templates \
+                         languages/cpp/app_templates \
+                         languages/cpp/file_templates \
+                         languages/cpp/subclassing_template \
+                         languages/fortran/app_templates \
+                         languages/haskell/app_templates \
+                         languages/java/app_templates \
+                         languages/pascal/app_templates \
+                         languages/perl/app_templates \
+                         languages/php/app_templates \
+                         languages/python/app_templates \
+                         languages/ruby/app_templates \
+                         languages/sql/app_templates \
+                         languages/xul/app_templates \
+                         languages/pascal/ \
+                         languages/java \
                          lib/antlr
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc.* \
@@ -144,8 +109,8 @@ EXCLUDE_PATTERNS       = *.moc.* \
                          *unload.* \
                          */test/* \
                          */tests/*
-EXAMPLE_PATH           = parts/appwizard/khello \
-                         parts/appwizard/kdevpart
+EXAMPLE_PATH           = languages/cpp/app_templates/khello \
+                         languages/cpp/app_templates/kdevpart
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = ./doc/api
@@ -172,7 +137,7 @@ IGNORE_PREFIX          = K
 GENERATE_HTML          = YES
 HTML_OUTPUT            = ./html
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = 
+HTML_HEADER            = apidocs/common/header.html
 HTML_FOOTER            = apidocs/common/footer.html
 HTML_STYLESHEET        = apidocs/common/doxygen.css
 HTML_ALIGN_MEMBERS     = YES
@@ -182,7 +147,7 @@ HHC_LOCATION           =
 GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
-DISABLE_INDEX          = NO
+DISABLE_INDEX          = YES
 ENUM_VALUES_PER_LINE   = 4
 GENERATE_TREEVIEW      = NO
 TREEVIEW_WIDTH         = 250
@@ -292,4 +257,4 @@ DOT_CLEANUP            = YES
 #---------------------------------------------------------------------------
 # Configuration::addtions related to the search engine   
 #---------------------------------------------------------------------------
-SEARCHENGINE           = YES
+SEARCHENGINE           = NO

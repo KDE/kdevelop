@@ -1,5 +1,5 @@
 /** \class CvsServicePart
-This is an experimental attempt to integrate Cervisia HEAD's cvsservice into gideon (read FAQ).
+This is an experimental attempt to integrate Cervisia HEAD's cvsservice into kdevelop (read FAQ).
 This part _does_ require cvsservice being installed on your system: the configure script
 in the main source directory should autodetect the presence of Cervisia and build it.
 If Cervisia wasn't installed in $KDEDIR than you need to specify paths for lib and include
@@ -16,7 +16,7 @@ which could make this part quite subject to heavy modifications.
 <b>WARNING2:</b> If it doesn't compile try to update your cvsservice.
 
 Implementation of this component is done by:
-  - class CvsServicePart, which does provide integration within gideon, set-up GUI
+  - class CvsServicePart, which does provide integration within kdevelop, set-up GUI
     integration, forward cvs commands to the implementation (m_impl). It does also
     intercepts signals like "new files added to project" and "... removed from ...".
   - class CvsServicePartImpl implements the actual feature: more general speaking
