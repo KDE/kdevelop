@@ -62,6 +62,12 @@
 #include "dlgedit/widgetspropsplitview.h"
 #include "dlgedit/dlgedit.h"
 
+#include "./dbg/dbgcontroller.h"
+#include "./dbg/vartree.h"
+#include "./dbg/framestack.h"
+#include "./dbg/brkptmanager.h"
+#include "./dbg/disassemble.h"
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -117,43 +123,62 @@ void CKDevelop::initView(){
   // Outputwindow
   ////////////////////////
   dockbase_messages_widget = createDockWidget(i18n("messages"), BarIcon("filenew"));
-  messages_widget = new MakeView(0, "messages_widget");
+  messages_widget = new MakeView(0L, "messages_widget");
   dockbase_messages_widget->setWidget(messages_widget);
 
   dockbase_grepview = createDockWidget(i18n("search"), BarIcon("filenew"));
-  grepview = new GrepView(0, "grepview");
+  grepview = new GrepView(0L, "grepview");
 	dockbase_grepview->setWidget(grepview);
 	
   dockbase_outputview = createDockWidget(i18n("output"), BarIcon("filenew"));
-  outputview = new OutputView(0, "outputview");
+  outputview = new OutputView(0L, "outputview");
 	dockbase_outputview->setWidget(outputview);
+
+	dockbase_brkptManager_view = createDockWidget(i18n("breakpoint"), BarIcon("filenew"));
+	brkptManager  = new BreakpointManager(0L, "BPManagerTab");
+	dockbase_brkptManager_view->setWidget(brkptManager);
+	
+	dockbase_frameStack_view = createDockWidget(i18n("frame stack"), BarIcon("filenew"));
+	frameStack    = new FrameStack(0L, "FStackTab");
+	dockbase_frameStack_view->setWidget(frameStack);
+	
+	dockbase_disassemble_view = createDockWidget(i18n("disassemble"), BarIcon("filenew"));
+	disassemble   = new Disassemble(0L, "DisassembleTab");
+	dockbase_disassemble_view->setWidget(disassemble);
+	
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+	dockbase_dbg_widget_view = createDockWidget(i18n("debugger"), BarIcon("filenew"));
+	dbg_widget = new COutputWidget(kapp, 0L, "debuggerTab");
+	dockbase_dbg_widget_view->setWidget(dbg_widget);
+	dbg_widget->insertLine("Start dbg");
+#endif
 
   ////////////////////////
   // Treeviews
   ////////////////////////
 
   dockbase_class_tree = createDockWidget(i18n("CV"), BarIcon("filenew"));
-  class_tree = new CClassView(0,"cv");
+  class_tree = new CClassView(0L,"cv");
   dockbase_class_tree->setWidget(class_tree);
-  class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("filenew"));
-  log_file_tree = new CLogFileView(0,"lfv",config->readBoolEntry("lfv_show_path",false));
+  log_file_tree = new CLogFileView(0L,"lfv",config->readBoolEntry("lfv_show_path",false));
   dockbase_log_file_tree->setWidget(log_file_tree);
-  //  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   dockbase_real_file_tree = createDockWidget(i18n("RFV"), BarIcon("filenew"));
-  real_file_tree = new CRealFileView(0,"RFV");
+  real_file_tree = new CRealFileView(0L,"RFV");
   dockbase_real_file_tree->setWidget(real_file_tree);
-  //  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
+
+	dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("filenew"));
+  var_viewer    = new VarViewer(0L,"VARTab");
+  dockbase_var_viewer->setWidget(var_viewer);
 
   dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("filenew"));
-  doc_tree = new DocTreeView(0,"DOC");
+  doc_tree = new DocTreeView(0L,"DOC");
   dockbase_doc_tree->setWidget(doc_tree);
-  //  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("filenew"));
-  widprop_split_view = new WidgetsPropSplitView(0,"DLG");
+  widprop_split_view = new WidgetsPropSplitView(0L,"DLG");
   dockbase_widprop_split_view->setWidget(widprop_split_view);
 
   initDlgEditor();
@@ -196,12 +221,19 @@ void CKDevelop::initView(){
   // ...the output views
   dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
   dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
-  dockbase_o_tab_view = dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_brkptManager_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_frameStack_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_o_tab_view = dockbase_disassemble_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  dockbase_o_tab_view = dockbase_dbg_widget_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+#endif
   QString nameOfOutputSuperDock = dockbase_o_tab_view->name();
 	// ...the tree views
   dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
   dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+	dockbase_var_viewer->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   dockbase_t_tab_view = dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
   QString nameOfTreeSuperDock = dockbase_t_tab_view->name();	
@@ -211,7 +243,9 @@ void CKDevelop::initView(){
   readDockConfig( config, "Dock Settings");
 	// recover broken pointers after the read of the configuration
   dockbase_o_tab_view = dockManager->getDockWidgetFromName( nameOfOutputSuperDock);
+  QObject::connect(dockbase_o_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTOutputView()));
   dockbase_t_tab_view = dockManager->getDockWidgetFromName( nameOfTreeSuperDock);
+  QObject::connect(dockbase_t_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTTreeView()));
 
 	// disable docking for all trees and output views
 	// (only debugger views are supposed to be able for undocking)
@@ -220,13 +254,25 @@ void CKDevelop::initView(){
 	dockbase_grepview->setEnableDocking( KDockWidget::DockNone);
 	dockbase_grepview->setDockSite( KDockWidget::DockNone);	
 	dockbase_outputview->setEnableDocking( KDockWidget::DockNone);
-	dockbase_outputview->setDockSite( KDockWidget::DockNone);	
+	dockbase_outputview->setDockSite( KDockWidget::DockNone);
+	dockbase_brkptManager_view->setEnableDocking( KDockWidget::DockNone);
+	dockbase_brkptManager_view->setDockSite( KDockWidget::DockNone);
+	dockbase_frameStack_view->setEnableDocking( KDockWidget::DockNone);
+	dockbase_frameStack_view->setDockSite( KDockWidget::DockNone);
+	dockbase_disassemble_view->setEnableDocking( KDockWidget::DockNone);
+	dockbase_disassemble_view->setDockSite( KDockWidget::DockNone);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+	dockbase_dbg_widget_view->setEnableDocking( KDockWidget::DockNone);
+	dockbase_dbg_widget_view->setDockSite( KDockWidget::DockNone);
+#endif
 	dockbase_class_tree->setEnableDocking( KDockWidget::DockNone);
 	dockbase_class_tree->setDockSite( KDockWidget::DockNone);	
 	dockbase_log_file_tree->setEnableDocking( KDockWidget::DockNone);
 	dockbase_log_file_tree->setDockSite( KDockWidget::DockNone);	
 	dockbase_real_file_tree->setEnableDocking( KDockWidget::DockNone);
-	dockbase_real_file_tree->setDockSite( KDockWidget::DockNone);	
+	dockbase_real_file_tree->setDockSite( KDockWidget::DockNone);
+	dockbase_var_viewer->setEnableDocking( KDockWidget::DockNone);
+	dockbase_var_viewer->setDockSite( KDockWidget::DockNone);
 	dockbase_doc_tree->setEnableDocking( KDockWidget::DockNone);
 	dockbase_doc_tree->setDockSite( KDockWidget::DockNone);	
 	dockbase_widprop_split_view->setEnableDocking( KDockWidget::DockNone);

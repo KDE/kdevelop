@@ -603,21 +603,37 @@ void CKDevelop::slotViewTTreeView()
 	bool willshow = !view_menu->isItemChecked(ID_VIEW_TREEVIEW);
 	view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
 	toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, willshow);
-	if (willshow)
-		makeDockVisible(dockbase_t_tab_view);
-	else
-		makeDockInvisible(dockbase_t_tab_view);
+	if (willshow) {
+		if(dockbase_t_tab_view->isTopLevel() && dockbase_t_tab_view->isMinimized())
+			dockbase_t_tab_view->showNormal();
+		else
+			makeDockVisible(dockbase_t_tab_view);
+	}
+	else {
+		if(dockbase_t_tab_view->isTopLevel())
+			dockbase_t_tab_view->showMinimized();
+		else
+			makeDockInvisible(dockbase_t_tab_view);
+	}
 }
 
 void CKDevelop::slotViewTOutputView()
 {
-  bool willshow = !view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
-  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
-  toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, willshow);
-  if (willshow)
-    makeDockVisible(dockbase_o_tab_view);
-  else
-    makeDockInvisible(dockbase_o_tab_view);
+	bool willshow = !view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
+	view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
+	toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, willshow);
+	if (willshow) {
+		if(dockbase_o_tab_view->isTopLevel() && dockbase_o_tab_view->isMinimized())
+			dockbase_o_tab_view->showNormal();
+		else
+			makeDockVisible(dockbase_o_tab_view);
+	}
+	else {
+		if(dockbase_o_tab_view->isTopLevel())
+			dockbase_o_tab_view->showMinimized();
+		else
+			makeDockInvisible(dockbase_o_tab_view);
+	}
 }
 
 
@@ -2509,15 +2525,8 @@ void CKDevelop::slotToolbarClicked(int item){
 void CKDevelop::slotSwitchToChildframeMode() {
   showMaximized();
 
-  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
-  dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
-  dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
-
-  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
-  dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
-  dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
-  dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
-  dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+	dockbase_o_tab_view->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
+	dockbase_t_tab_view->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
 }
 
 void CKDevelop::slotSwitchToToplevelMode() {

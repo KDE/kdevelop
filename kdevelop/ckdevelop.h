@@ -77,7 +77,15 @@ class DlgEdit;
 class CParsedMethod;
 class CParsedClass;
 
-
+// Debugger classes
+class VarViewer;
+class DbgController;
+class FrameStack;
+class BreakpointManager;
+class Breakpoint;
+class Disassemble;
+class DbgToolbar;
+class COutputWidget;
 
 /** the mainclass in kdevelop
   *@author Sandy Meier
@@ -724,6 +732,9 @@ private:
   /** The real fileview. */
   KDockWidget* dockbase_real_file_tree;
   CRealFileView* real_file_tree;
+  /** The debugger's tree of local variables */
+  KDockWidget* dockbase_var_viewer;
+  VarViewer* var_viewer;
   /** The documentation tree. */
   KDockWidget* dockbase_doc_tree;
   DocTreeView* doc_tree;
@@ -731,15 +742,29 @@ private:
   KDockWidget* dockbase_widprop_split_view;
   WidgetsPropSplitView*  widprop_split_view;
   
-  /** Output from the compiler ... */
-  KDockWidget* dockbase_messages_widget;
-  MakeView *messages_widget;
-  /** Output from grep */
-  KDockWidget* dockbase_grepview;
-  GrepView *grepview;
-  /** Output from the application */
-  KDockWidget* dockbase_outputview;
-  OutputView *outputview;
+	/** Output from the compiler ... */
+	KDockWidget* dockbase_messages_widget;
+	MakeView *messages_widget;
+	/** Output from grep */
+	KDockWidget* dockbase_grepview;
+	GrepView *grepview;
+	/** Output from the application */
+	KDockWidget* dockbase_outputview;
+	OutputView *outputview;
+	/** Manages a list of breakpoints - Always active */
+	KDockWidget* dockbase_brkptManager_view;
+	BreakpointManager* brkptManager;
+	/** Manages a frame stack list */
+	KDockWidget* dockbase_frameStack_view;
+	FrameStack* frameStack;
+	/** show disassembled code being run */
+	KDockWidget* dockbase_disassemble_view;
+	Disassemble* disassemble;
+	/** debug aid. Switch on using compile switch GDB_MONITOR
+			or DBG_MONITOR */
+	KDockWidget* dockbase_dbg_widget_view;			
+	COutputWidget* dbg_widget;
+
 
   QString version;
   QString kdev_caption;
