@@ -102,6 +102,14 @@ namespace URLUtil
   * is not null.
   */
   void dump( const KURL::List &urls, const QString &aMessage = QString::null );
+
+  /**
+   * Same as QDir::canonicalPath in later versions of QT. Earlier versions of QT
+   * had this broken, so it's reproduced here.
+   */
+  QString canonicalPath( const QString & path );
+
+
 };
 
 #endif

@@ -17,6 +17,9 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <kdebug.h>
+#include <qdir.h>
+
+#include <unistd.h>
 
 #include "urlutil.h"
 
@@ -189,3 +192,23 @@ QString URLUtil::relativePathToFile( const QString & dirUrl, const QString & fil
 
   return result_up + result_down + resFileName;
 }
+
+// code from qt-3.1.2 version of QDir::canonicalPath()
+
+QString URLUtil::canonicalPath( const QString & path )
+{
+    QString r;
+    char cur[PATH_MAX+1];
+    if ( ::getcwd( cur, PATH_MAX ) )
+    {
+        char tmp[PATH_MAX+1];
+        if( ::realpath( QFile::encodeName( path ), tmp ) )
+        {
+            r = QFile::decodeName( tmp );
+        }
+        //always make sure we go back to the current dir
+        ::chdir( cur );
+    }
+    return r;
+}
+
