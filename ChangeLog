@@ -1,5 +1,6 @@
 2004-02-24 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added FileList plugin
+    * Added CTags2 plugin
 
 2004-02-23 Alexander Dymo <cloudtemple@mksat.net>
     * Added Opie application templates for C++/Embedded development. Templates by Holger Freyther.
