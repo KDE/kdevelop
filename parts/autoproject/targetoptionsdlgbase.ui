@@ -534,7 +534,7 @@
         <sender>outsidemovedown_button</sender>
         <signal>clicked()</signal>
         <receiver>target_options_dialog</receiver>
-        <slot>insideMoveDownClicked()</slot>
+        <slot>outsideMoveDownClicked()</slot>
     </connection>
     <connection>
         <sender>outsideadd_button</sender>
