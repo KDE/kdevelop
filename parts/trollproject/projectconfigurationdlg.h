@@ -16,6 +16,8 @@
 #include "trollprojectwidget.h"
 
 enum QMakeBuildMode    {QBM_DEBUG,QBM_RELEASE};
+enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
+enum QMakeDepends      {QD_QT,QD_OPENGL,QD_THREAD,QD_X11};
 
 class ProjectConfigurationDlg : public ProjectConfigurationDlgBase
 {
