@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <qstring.h>
 #include <assert.h>
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <kmdidockwidget.h>
 #include "kmdimainfrm.h"
@@ -119,9 +120,11 @@ KXMLGUIClient( mdiMainFrm )
 
         setXML( completeDescription, false /*merge*/ );
     }
- 
+
+#if KDE_VERSION > 305	 
     if (actionCollection()->kaccel()==0)
 	    actionCollection()->setWidget(mdiMainFrm);
+#endif		
     m_toolMenu=new KActionMenu(i18n("Tool &Views"),actionCollection(),"kmdi_toolview_menu");
     if (showMDIModeAction) {
 	    m_mdiModeAction=new KSelectAction(i18n("MDI Mode"),0,actionCollection());
