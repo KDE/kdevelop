@@ -53,7 +53,7 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   ,m_pCurEditView(0L)
   ,m_pCurBrowserDoc(0L)
   ,m_pCurBrowserView(0L)
-  ,m_curIsBrowser(true)
+  ,m_curIsBrowser(false)
 {
   m_MDICoverList.setAutoDelete(true);
 
@@ -317,9 +317,9 @@ void DocViewMan::doCreateNewView()
 {
   QWidget* pNewView = 0L;
 
-  if(curDocIsBrowser()) {
-    CDocBrowser* pBrowserDoc = createCDocBrowser(DocTreeKDevelopBook::locatehtml("about/intro.html"));
-    pNewView = createBrowserView(pBrowserDoc, true);
+  if (curDocIsBrowser()) {
+    CDocBrowser* pDoc = createCDocBrowser(DocTreeKDevelopBook::locatehtml("about/intro.html"));
+    pNewView = createBrowserView(pDoc, true);
   }
   else {
     pNewView = createEditView(currentEditDoc(), true);
@@ -716,7 +716,7 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
             "tree to switch between various parts of the documentation."));
   pDoc->showURL(pDoc->currentURL(), true); // with reload if equal
 
-  // Cover it by a QextMDI childview and add that MDI system
+  // Cover it by a QextMDI childview and add it to the MDI system
   addQExtMDIFrame(pNewView, bShow, SmallIcon("contents"));
 
   return pNewView;

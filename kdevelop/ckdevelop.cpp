@@ -3843,8 +3843,14 @@ void CKDevelop::fillWindowMenu()
 {
   QextMdiMainFrm::fillWindowMenu();
   windowMenu()->insertItem(i18n("New &Window"), this, SLOT(slotCreateNewViewWindow()), 0, -1, 0);
-  windowMenu()->removeItemAt(6);
-  windowMenu()->removeItemAt(5);
+	if (mdiMode() != QextMdi::TabPageMode) {
+	  windowMenu()->removeItemAt(6);
+  	windowMenu()->removeItemAt(5);
+	}
+	else {
+	  windowMenu()->removeItemAt(5);
+	  windowMenu()->removeItemAt(4);
+	}
 }
 
 /**
@@ -3854,7 +3860,14 @@ void CKDevelop::fillWindowMenu()
 void CKDevelop::slotCreateNewViewWindow()
 {
   slotStatusMsg(i18n("Creating new view window for the current document..."));
-  m_docViewManager->doCreateNewView();
+  if (m_pWinList->isEmpty()) {
+    // if no view is open at all, we open a browser view, but we need the appropriate document first!
+    CDocBrowser* pDoc = m_docViewManager->createCDocBrowser(DocTreeKDevelopBook::locatehtml("about/intro.html"));
+    m_docViewManager->createBrowserView(pDoc, true);
+  }
+  else {
+    m_docViewManager->doCreateNewView();
+  }
   slotStatusMsg(i18n("Ready."));
 }
 

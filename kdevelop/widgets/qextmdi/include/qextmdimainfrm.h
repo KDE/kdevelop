@@ -106,7 +106,7 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
    QPoint                  m_undockPositioningOffset;
-   QextMdi::MdiMode        m_mdiMode;
+   static QextMdi::MdiMode        m_mdiMode;
    bool                    m_bMaximizedChildFrmMode;
    int                     m_oldMainFrmHeight;
    int                     m_oldMainFrmMinHeight;
@@ -135,7 +135,7 @@ public:
    /**
    * Returns the MDI mode. This can be one of the enumerations QextMdi::MdiMode.
    */
-   QextMdi::MdiMode mdiMode() { return m_mdiMode; };
+   static QextMdi::MdiMode mdiMode() { return m_mdiMode; };
    /**
    * Returns the focused attached MDI view.
    */

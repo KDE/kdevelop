@@ -71,6 +71,8 @@ QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
 #endif
 #endif
 
+QextMdi::MdiMode QextMdiMainFrm::m_mdiMode = QextMdi::ChildframeMode;
+
 //============ constructor ============//
  QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
 : KParts::DockMainWindow( parentWidget, name, flags)
@@ -93,7 +95,6 @@ QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
    ,m_pMinimize(0L)
    ,m_pRestore(0L)
    ,m_pClose(0L)
-   ,m_mdiMode(QextMdi::ChildframeMode)
    ,m_bMaximizedChildFrmMode(FALSE)
    ,m_oldMainFrmHeight(0)
    ,m_oldMainFrmMinHeight(0)
@@ -1342,14 +1343,25 @@ void QextMdiMainFrm::fillWindowMenu()
    if (m_mdiMode == QextMdi::TabPageMode)
       bTabPageMode = TRUE;
 
+	 bool bNoViewOpened = FALSE;
+   if (m_pWinList->isEmpty()) {
+      bNoViewOpened = TRUE;
+   }
    // construct the menu and its submenus
    if (!m_bClearingOfWindowMenuBlocked) {
       m_pWindowMenu->clear();
    }
    m_pWindowMenu->insertItem(tr("&Close"), this, SLOT(closeActiveView()));
    m_pWindowMenu->insertItem(tr("Close &All"), this, SLOT(closeAllViews()));
+   if (bNoViewOpened) {
+      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(0), false);
+      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(1), false);
+   }
    if (!bTabPageMode) {
       m_pWindowMenu->insertItem(tr("&Iconify All"), this, SLOT(iconifyAllViews()));
+      if (bNoViewOpened) {
+         m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(2), false);
+      }
    }
    m_pWindowMenu->insertSeparator();
    m_pWindowMenu->insertItem(tr("&MDI Mode..."), m_pMdiModeMenu);
