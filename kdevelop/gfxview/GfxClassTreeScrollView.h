@@ -5,8 +5,8 @@
                copyright   : (C) 1999 by Jörgen Olsson
                email       : jorgen@cenacle.net
  ***************************************************************************/
- 
- 
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -14,14 +14,14 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/  
+ ***************************************************************************/
 #ifndef GFXCLASSTREESCROLLVIEW_H_INCLUDED
 #define GFXCLASSTREESCROLLVIEW_H_INCLUDED
 
 
 #include <qscrollview.h>
 #include "GfxClassTree.h"
-#include "../classparser/ClassStore.h"
+#include "../sourceinfo/classstore.h"
 
 
 
@@ -32,7 +32,7 @@ class CGfxClassTreeScrollView : public QScrollView
 
  public:
   CGfxClassTree *m_classtree;
-  
+
  public:
   /** Constructor */
   CGfxClassTreeScrollView(QWidget *aparentwidget);

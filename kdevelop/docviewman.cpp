@@ -45,12 +45,12 @@
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
 #include "./ctags/ctagsdialog_impl.h"
-#include "./classparser/ClassStore.h"
+#include "./sourceinfo/classstore.h"
 #include "ckdevaccel.h"
 #include "kdevcodecompletion.h"
 #include "kdevcodetemplate.h"
 
-DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
+DocViewMan::DocViewMan( CKDevelop* parent, ClassStore* pStore )
 : QObject( parent)
   ,m_pParent(parent)
   ,m_pDocBookmarksMenu(0L)
@@ -2289,12 +2289,12 @@ void DocViewMan::slotEditExpandTemplate()
     m_pCodeTemplate->expandTemplate( currentEditView() );
 }
 
-void DocViewMan::setStore( CClassStore* pStore )
+void DocViewMan::setStore( ClassStore* pStore )
 {
     m_pStore = pStore;
 }
 
-CClassStore* DocViewMan::store() const
+ClassStore* DocViewMan::store() const
 {
     return m_pStore;
 }

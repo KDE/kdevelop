@@ -22,7 +22,7 @@
 
 #include "caddclassmethoddlg.h"
 #include "cclonefunctiondlg.h"
-#include "./classparser/ParsedMethod.h"
+#include "./sourceinfo/classstore.h"
 
 #include <kmessagebox.h>
 #include <qwhatsthis.h>
@@ -101,7 +101,7 @@ void CAddClassMethodDlg::setWidgetValues()
   modifierGrp.setAlignment( 1 );
   QWhatsThis::add( &modifierGrp,
                    i18n("You can set modifiers for the member function here."));
-  
+
   typeLbl.setMinimumSize( 40, 20 );
   typeLbl.setFixedHeight( 20 );
   typeLbl.setText( i18n("Type:") );
@@ -115,7 +115,7 @@ void CAddClassMethodDlg::setWidgetValues()
   declLbl.setMinimumSize( 70, 20 );
   declLbl.setFixedHeight( 20 );
   declLbl.setText( i18n("Declaration:") );
-  
+
   declEdit.setMinimumSize( 240, 30 );
   declEdit.setFixedHeight( 30 );
   declEdit.setFrame( TRUE );
@@ -168,7 +168,7 @@ void CAddClassMethodDlg::setWidgetValues()
   staticCb.setMinimumSize( 60, 20 );
   staticCb.setFixedHeight( 20 );
   staticCb.setText( "Static" );
- 
+
   constCb.setMinimumSize( 60, 20 );
   constCb.setFixedHeight( 20 );
   constCb.setText( "Const" );
@@ -263,15 +263,15 @@ void CAddClassMethodDlg::setCallbacks()
   connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
 }
 
-CParsedMethod *CAddClassMethodDlg::asSystemObj()
+ParsedMethod *CAddClassMethodDlg::asSystemObj()
 {
   int lpPos;
   QString decl;
-  CParsedMethod *aMethod = new CParsedMethod();
+  ParsedMethod *aMethod = new ParsedMethod();
   QString comment;
 
   aMethod->setType( typeEdit.text() );
-  
+
   decl = declEdit.text();
 
   lpPos = decl.find( '(' );
@@ -290,12 +290,12 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
 
   // Set the export.
   if( publicRb.isChecked() )
-    aMethod->setExport( PIE_PUBLIC );
+    aMethod->setAccess( PIE_PUBLIC );
   else if( protectedRb.isChecked() )
-    aMethod->setExport( PIE_PROTECTED );
+    aMethod->setAccess( PIE_PROTECTED );
   else if( privateRb.isChecked() )
-    aMethod->setExport( PIE_PRIVATE );
-  
+    aMethod->setAccess( PIE_PRIVATE );
+
   // Set the modifiers if they are enabled.
   if( pureCb.isEnabled() )
     aMethod->setIsPure( pureCb.isChecked() );
@@ -363,14 +363,14 @@ void CAddClassMethodDlg::slotCloneClicked(){
   CCloneFunctionDlg volDlg(classtree, this, "volnameDlg");
 
   if (volDlg.exec()) {
-    CParsedMethod* res = volDlg.getMethod();
+    ParsedMethod* res = volDlg.getMethod();
     if (! res)
     	return;
-    	
+
     // copy type and declaration
     QString str;
-    typeEdit.setText(res->type);;
-    declEdit.setText(res->asString(str));
+    typeEdit.setText(res->type());;
+    declEdit.setText(res->asString());
 
     // the comment needs some adjustment
     str = res->comment;

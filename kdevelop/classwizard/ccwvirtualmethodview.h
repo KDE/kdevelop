@@ -24,13 +24,13 @@
 
 #include <kapp.h>
 #include <qtabdialog.h>
-#include <qlayout.h> 
+#include <qlayout.h>
 #include <qlabel.h>
 #include <qcombo.h>
-#include <qlistbox.h> 
+#include <qlistbox.h>
 #include <qwidget.h>
 #include <qpushbutton.h>
-#include "../classparser/ClassStore.h"
+#include "../sourceinfo/classstore.h"
 
 /** The virtual method view for the classwizard dialog. */
 class CCWVirtualMethodView : public QWidget
@@ -45,17 +45,17 @@ public: // Constructor and destructor
 signals:
 
   /** Emitted when a method should be added to a class. */
-  void addMethod(const char *,CParsedMethod *);
+  void addMethod(const char *,ParsedMethod *);
 
 public: // Methods to set attribute values.
 
   /** Set the store to use to search for classes. */
-  void setStore( CClassStore *aStore );
+  void setStore( ClassStore *aStore );
 
 private: // Private widgets
   /** Main layout for the virtual functions view. */
   QVBoxLayout topLayout;
-  
+
   /** Layout for choosing classes. */
   QHBoxLayout classComboLayout;
 
@@ -104,7 +104,7 @@ protected slots:
   void slotClassComboChoice(int idx);
 
   /** Executed when the user clicks on the add button. */
-  void slotAddMethod(); 
+  void slotAddMethod();
 
 private: // Private methods
 
@@ -115,10 +115,10 @@ private: // Private methods
 private: // Private attributes
 
   /** Store holding all parsed objects. */
-  CClassStore *store;
+  ClassStore *store;
 
   /** Dict holding all available virtual functions. */
-  QDict<CParsedMethod> availDict;
+  QDict<ParsedMethod> availDict;
 };
 
 #endif

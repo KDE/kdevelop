@@ -23,11 +23,11 @@
 //#include "./classparser/ClassParser.h"
 
 class CClassParser;
-class CClassStore;
-class CParsedAttribute;
-class CParsedArgument;
-class CParsedClass;
-class CParsedMethod;
+class ClassStore;
+class ParsedAttribute;
+class ParsedArgument;
+class ParsedClass;
+class ParsedMethod;
 
 /** For what action the dialog was called and current action : */
 enum CTPACTION {CTPVIEW=0, CTPADDATTR, CTPADDMETH, CTPADDSIGNAL, CTPADDSLOT, CTPCONNECTSIG };
@@ -52,7 +52,7 @@ extern ClsHeader QtKde[];
 class CClassToolDlg;
 class CClassView;
 class CClassPropertiesDlgImpl : public CClassPropertiesDlg
-{ 
+{
     Q_OBJECT
 
 public:
@@ -70,18 +70,18 @@ public:
  */
   bool isModified( int tabw );
   /**  */
-  void setImplTabMethList ( QList<CParsedMethod> *MethList, bool bclear=true);
+  void setImplTabMethList ( QList<ParsedMethod> *MethList, bool bclear=true);
   /**  */
-  void setSlotTabSlotList ( QList<CParsedMethod> *MethList , bool bmatchsig=false);
+  void setSlotTabSlotList ( QList<ParsedMethod> *MethList , bool bmatchsig=false);
   /**  */
-  void setSigTabAttrList ( QList<CParsedAttribute> *AttrList );
+  void setSigTabAttrList ( QList<ParsedAttribute> *AttrList );
   /**  */
-  void setClass ( CParsedClass* aClass );;
-  void setStore ( CClassStore* s) { store = s; }
+  void setClass ( ParsedClass* aClass );;
+  void setStore ( ClassStore* s) { store = s; }
   void init();
   /** This function tries guess if aName is a QT or a KDE class then set filename of the include file according to the classname.
  */
-  CParsedClass* unParsedClass( const QString& );
+  ParsedClass* unParsedClass( const QString& );
   /**  */
   void viewParents();
   /**  */
@@ -91,10 +91,10 @@ public:
   /** This function will try to fill up the combo with
       availble Signals/Slots methods from the class itself and, if possible,
       from its parent classes. */
-  bool fillSignalCombo(CParsedClass* aClass, bool bClear = true);
+  bool fillSignalCombo(ParsedClass* aClass, bool bClear = true);
 
-  /** This build a list of CParsedAttribute items from the current class and its parents classes */
-  QList <CParsedAttribute>* getAllParentAttr(CParsedClass*, bool initList=true);
+  /** This build a list of ParsedAttribute items from the current class and its parents classes */
+  QList <ParsedAttribute>* getAllParentAttr(ParsedClass*, bool initList=true);
 
   /** static member to hold completion */
   static KCompletion* typeCompletion;
@@ -104,7 +104,7 @@ public slots:
     void slotBtnUndo();
     void slotSigClassNameEditEnter();
   /**  */
-  void slotClassViewChanged( CParsedClass* );
+  void slotClassViewChanged( ParsedClass* );
 
 protected slots:
     void slotMethVirtualState(int);
@@ -127,13 +127,13 @@ protected slots:
     void slotVarTypeChanged( const QString& );
     void slotTabChanged( QWidget* );
   /**  */
-  //void slotSetClass( CParsedClass* );
+  //void slotSetClass( ParsedClass* );
     protected:
     virtual void resizeEvent( QResizeEvent* e) ;
   /**  */
   void getClassNameFromString( const  QString & aName, QString & newName);
   /**  */
-  void setSignalsMemberList( CParsedClass*, bool bClear = true );
+  void setSignalsMemberList( ParsedClass*, bool bClear = true );
     class CTabData {
         public:
             QString editFields[2];
@@ -148,30 +148,30 @@ public: // Public methods
     CTPACTION ctpAction;
     /** Table of pointer to tabWidgets to use for iteration. internal use.*/
     QWidget* WidgetTable[6];
-    CParsedClass *currentClass;
+    ParsedClass *currentClass;
     /**  */
-    CParsedArgument* Arg;
+    ParsedArgument* Arg;
     /**  */
-    CParsedMethod* slotMethod;
+    ParsedMethod* slotMethod;
     /** current signal member */
-    CParsedMethod* signalMethod;
+    ParsedMethod* signalMethod;
     /**  */
-    CParsedMethod* implMethod;
-    CClassStore* store;
+    ParsedMethod* implMethod;
+    ClassStore* store;
 
 private: // Private attributes
   /**  */
-  CParsedClass* classOfSig;
+  ParsedClass* classOfSig;
   KConfig* config;
   /**  */
   CClassParser* theParser;
   /** Holds the class store of the selected Working class variable member */
-  CParsedClass* selectedSigAttrClass;
+  ParsedClass* selectedSigAttrClass;
   /** used to build the connect instruction.
         If value is 0 ( NULL ) then the default class member [ this ]  is used*/
-  CParsedAttribute* attrMember;
+  ParsedAttribute* attrMember;
   /**  */
-  QList <CParsedAttribute>* workClassAttrList;
+  QList <ParsedAttribute>* workClassAttrList;
   CClassToolDlg* CTDlg;
   /**  */
   bool bMemberIsPointer;
@@ -182,9 +182,9 @@ private: // Private attributes
   void getMemberFromString ( const QString& str, QString& newName);
 signals: // Signals
   /**  */
-  void sigAddMethod( const char *, CParsedMethod*);
-  void sigAddAttribute( const char*, CParsedAttribute*);
-  void sigSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
+  void sigAddMethod( const char *, ParsedMethod*);
+  void sigAddAttribute( const char*, ParsedAttribute*);
+  void sigSigSlotMapImplement ( ParsedClass*, const QString&, ParsedMethod* );
 public: // Public attributes
   /**  */
   CClassView* class_tree;
@@ -198,7 +198,7 @@ protected: // Protected attributes
   /**  */
   QStrList argList;
   /**  */
-  QList <CParsedClass> sigClassList;
+  QList <ParsedClass> sigClassList;
   QString Member;
 };
 

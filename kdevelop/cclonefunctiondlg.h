@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat Nov 18 2000
     copyright            : (C) 2000 by The KDevelop Team
-    email                : 
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,8 +31,8 @@
 #include <qcombobox.h>
 
 class CClassView;
-class CParsedMethod;
-class CParsedClass;
+class ParsedMethod;
+class ParsedClass;
 
 /**clone an existing function/method
   *@author The KDevelop Team
@@ -40,13 +40,13 @@ class CParsedClass;
 
 class CCloneFunctionDlg : public QDialog  {
    Q_OBJECT
-public: 
+public:
 	CCloneFunctionDlg(CClassView* class_tree, QWidget *parent=0, const char *name=0);
   /** get the selected method */
   bool getMethod(QString& type, QString& decl, QString& comment,
                   bool& ispriv, bool& isprot, bool& ispub);
 private:
-  CParsedMethod* searchMethod(CParsedClass* theClass, QString selected);
+  ParsedMethod* searchMethod(ParsedClass* theClass, QString selected);
 
 protected slots:
   void OK();

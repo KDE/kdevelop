@@ -15,7 +15,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 #ifndef GFXCLASSTREEWINDOW_H_INCLUDED
 #define GFXCLASSTREEWINDOW_H_INCLUDED
 
@@ -47,13 +47,13 @@ class CGfxClassTreeWindow : public QWidget
   ~CGfxClassTreeWindow();
 
   /** (re-)Initialize the class tree */
-  void InitializeTree(QList<CClassTreeNode> *forest);
+  void InitializeTree(QList<ClassTreeNode> *forest);
 
   /** Implementation of resizeEvent() */
   virtual void resizeEvent(QResizeEvent *resevent);
 
   signals:
-   void gotoClassDefinition(CParsedClass *);
+   void gotoClassDefinition(ParsedClass *);
 
   public slots:
 
@@ -71,7 +71,7 @@ class CGfxClassTreeWindow : public QWidget
 
   /** Called when a signal to go to the definition from a box
       was emitted */
-  void slotGotoClassDefinition(CParsedClass *pClass);
+  void slotGotoClassDefinition(ParsedClass *pClass);
 };
 
 #endif

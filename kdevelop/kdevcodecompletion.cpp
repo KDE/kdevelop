@@ -20,7 +20,7 @@
 #include "ckdevelop.h"
 #include "kdevregexp.h"
 #include "docviewman.h"
-#include "classparser/ClassStore.h"
+#include "sourceinfo/classstore.h"
 
 #include <kate/document.h>
 #include <kate/view.h>
@@ -420,7 +420,7 @@ QStringList KDevCodeCompletion::splitExpression( const QString& text )
 
 QString KDevCodeCompletion::evaluateExpression( const QString& expr,
                                                SimpleContext* ctx,
-                                               CClassStore* sigma )
+                                               ClassStore* sigma )
 {
     kdDebug() << "KDevCodeCompletion::evaluateExpression()" << endl;
     kdDebug() << "ctx = " << ctx << endl;
@@ -431,7 +431,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
     }
 
     SimpleVariable v_this = ctx->findVariable( "this" );
-    CParsedClass* pThis = sigma->getClassByName( v_this.type );
+    ParsedClass* pThis = sigma->getClassByName( v_this.type );
     QString type;
 
     if( exprs.count() == 0 ){
@@ -503,7 +503,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
     }
 
     type = purify( type );
-    CParsedContainer* pContainer = sigma->getClassByName( type );
+    ParsedContainer* pContainer = sigma->getClassByName( type );
     if( !pContainer ){
         pContainer = sigma->globalContainer.getStructByName( type );
         kdDebug() << "is a struct??" << endl;
@@ -541,7 +541,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
     return type;
 }
 
-QString KDevCodeCompletion::getTypeOfMethod( CParsedContainer* pContainer, const QString& name )
+QString KDevCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const QString& name )
 {
     kdDebug() << "KDevCodeCompletion::getTypeOfMethod()"
               << " - " << pContainer
@@ -550,18 +550,18 @@ QString KDevCodeCompletion::getTypeOfMethod( CParsedContainer* pContainer, const
         return QString::null;
     }
 
-    QList<CParsedMethod>* pMethodList = pContainer->getMethodByName( name );
+    QList<ParsedMethod>* pMethodList = pContainer->getMethodByName( name );
     if( pMethodList->count() != 0 ){
         // TODO: check for method's arguments
-        QString type = pMethodList->at( 0 )->type;
+        QString type = pMethodList->at( 0 )->type();
         return purify( type );
     }
 
-    CParsedClass* pClass = dynamic_cast<CParsedClass*>( pContainer );
+    ParsedClass* pClass = dynamic_cast<ParsedClass*>( pContainer );
     if( pClass ){
-        QList<CParsedParent> parentList = pClass->parents;
-        for( CParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-            CParsedClass* pClass = m_pDockViewMan->store()->getClassByName( pParent->name );
+        QList<ParsedParent> parentList = pClass->parents;
+        for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
+            ParsedClass* pClass = m_pDockViewMan->store()->getClassByName( pParent->name() );
             QString type = getTypeOfMethod( pClass, name );
             type = purify( type );
             if( !type.isEmpty() ){
@@ -572,23 +572,23 @@ QString KDevCodeCompletion::getTypeOfMethod( CParsedContainer* pContainer, const
     return QString::null;
 }
 
-QString KDevCodeCompletion::getTypeOfAttribute( CParsedContainer* pContainer, const QString& name )
+QString KDevCodeCompletion::getTypeOfAttribute( ParsedContainer* pContainer, const QString& name )
 {
     if( !pContainer || !m_pDockViewMan->store() ){
         return QString::null;
     }
 
-    CParsedAttribute* pAttr = pContainer->getAttributeByName( name );
+    ParsedAttribute* pAttr = pContainer->getAttributeByName( name );
     if( pAttr ){
-        QString type = pAttr->type;
+        QString type = pAttr->type();
         return purify( type );
     }
 
-    CParsedClass* pClass = dynamic_cast<CParsedClass*>( pContainer );
+    ParsedClass* pClass = dynamic_cast<ParsedClass*>( pContainer );
     if( pClass ){
-        QList<CParsedParent> parentList = pClass->parents;
-        for( CParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-            CParsedClass* pClass = m_pDockViewMan->store()->getClassByName( pParent->name );
+        QList<ParsedParent> parentList = pClass->parents;
+        for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
+            ParsedClass* pClass = m_pDockViewMan->store()->getClassByName( pParent->name() );
             QString type = getTypeOfAttribute( pClass, name );
             type = purify( type );
             if( !type.isEmpty() ){
@@ -614,15 +614,15 @@ QValueList<KTextEditor::CompletionEntry> KDevCodeCompletion::getEntryListForClas
     kdDebug() << "KDevCodeCompletion::getEntryListForClass()" << endl;
     QValueList<KTextEditor::CompletionEntry> entryList;
 
-    CParsedContainer* pContainer = m_pDockViewMan->store()->getClassByName( strClass );
+    ParsedContainer* pContainer = m_pDockViewMan->store()->getClassByName( strClass );
     if( !pContainer ){
         pContainer = m_pDockViewMan->store()->globalContainer.getStructByName( strClass );
     }
 
     if ( pContainer )
     {
-        QList<CParsedMethod>* pMethodList;
-        QList<CParsedAttribute>* pAttributeList;
+        QList<ParsedMethod>* pMethodList;
+        QList<ParsedAttribute>* pAttributeList;
 
 
         // Load the methods, slots, signals of the current class and its parents into the list
@@ -631,17 +631,17 @@ QValueList<KTextEditor::CompletionEntry> KDevCodeCompletion::getEntryListForClas
         // Load the attributes of the current class and its parents into the list
         pAttributeList = pContainer->getSortedAttributeList();
 
-        CParsedClass* pClass = dynamic_cast<CParsedClass*>( pContainer );
+        ParsedClass* pClass = dynamic_cast<ParsedClass*>( pContainer );
         if( pClass ){
 
-            QList<CParsedMethod>* pTmpList = pClass->getSortedSlotList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            QList<ParsedMethod>* pTmpList = pClass->getSortedSlotList();
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
                 pMethodList->append ( pMethod );
             }
 
             pTmpList = pClass->getSortedSignalList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
                 pMethodList->append ( pMethod );
             }
@@ -650,19 +650,19 @@ QValueList<KTextEditor::CompletionEntry> KDevCodeCompletion::getEntryListForClas
             pAttributeList = getParentAttributeListForClass ( pClass, pAttributeList );
         }
 
-        for ( CParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
+        for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
         {
             KTextEditor::CompletionEntry entry;
-            entry.text = pMethod->name;
+            entry.text = pMethod->name();
             entry.postfix = "()";
             entryList << entry;
         }
 
-        for ( CParsedAttribute* pAttribute = pAttributeList->first();
+        for ( ParsedAttribute* pAttribute = pAttributeList->first();
               pAttribute != 0; pAttribute = pAttributeList->next() )
         {
             KTextEditor::CompletionEntry entry;
-            entry.text = pAttribute->name;
+            entry.text = pAttribute->name();
             entry.postfix = "";
             entryList << entry;
         }
@@ -672,30 +672,30 @@ QValueList<KTextEditor::CompletionEntry> KDevCodeCompletion::getEntryListForClas
     return entryList;
 }
 
-QList<CParsedMethod>* KDevCodeCompletion::getParentMethodListForClass ( CParsedClass* pClass, QList<CParsedMethod>* pList )
+QList<ParsedMethod>* KDevCodeCompletion::getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList )
 {
-    QList<CParsedParent> parentList = pClass->parents;
+    QList<ParsedParent> parentList = pClass->parents;
 
-    for ( CParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
+    for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name );
+        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
-            QList<CParsedMethod>* pTmpList = pClass->getSortedMethodList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            QList<ParsedMethod>* pTmpList = pClass->getSortedMethodList();
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
                 pList->append ( pMethod );
             }
 
             pTmpList = pClass->getSortedSlotList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
                 pList->append ( pMethod );
             }
 
             pTmpList = pClass->getSortedSignalList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
                 pList->append ( pMethod );
             }
@@ -711,18 +711,18 @@ QList<CParsedMethod>* KDevCodeCompletion::getParentMethodListForClass ( CParsedC
     return pList;
 }
 
-QList<CParsedAttribute>* KDevCodeCompletion::getParentAttributeListForClass ( CParsedClass* pClass, QList<CParsedAttribute>* pList )
+QList<ParsedAttribute>* KDevCodeCompletion::getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList )
 {
-    QList<CParsedParent> parentList = pClass->parents;
+    QList<ParsedParent> parentList = pClass->parents;
 
-    for ( CParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
+    for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name );
+        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
-            QList<CParsedAttribute>* pTmpList = pClass->getSortedAttributeList();
-            for ( CParsedAttribute* pAttribute = pTmpList->first(); pAttribute != 0; pAttribute = pTmpList->next() )
+            QList<ParsedAttribute>* pTmpList = pClass->getSortedAttributeList();
+            for ( ParsedAttribute* pAttribute = pTmpList->first(); pAttribute != 0; pAttribute = pTmpList->next() )
             {
                 pList->append ( pAttribute );
             }
@@ -742,40 +742,40 @@ QStringList KDevCodeCompletion::getMethodListForClass( QString strClass, QString
 {
      QStringList functionList;
 
-     CParsedClass* pClass = m_pDockViewMan->store()->getClassByName ( strClass );
+     ParsedClass* pClass = m_pDockViewMan->store()->getClassByName ( strClass );
      if ( pClass )
      {
-         QList<CParsedMethod>* pMethodList;
+         QList<ParsedMethod>* pMethodList;
 
          // Load the methods, slots, signals of the current class and its parents into the list
          pMethodList = pClass->getSortedMethodList();
 
-         QList<CParsedMethod>* pTmpList = pClass->getSortedMethodList();
-         for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+         QList<ParsedMethod>* pTmpList = pClass->getSortedMethodList();
+         for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
          {
-             if( pMethod->name == strMethod ){
+             if( pMethod->name() == strMethod ){
                  QString s;
-                 pMethod->asString( s );
+                 s = pMethod->asString();
                  functionList << s;
              }
          }
 
          pTmpList = pClass->getSortedSlotList();
-         for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+         for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
          {
-             if( pMethod->name == strMethod ){
+             if( pMethod->name() == strMethod ){
                  QString s;
-                 pMethod->asString( s );
+                 s = pMethod->asString();
                  functionList << s;
              }
          }
 
          pTmpList = pClass->getSortedSignalList();
-         for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+         for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
          {
-             if( pMethod->name == strMethod ){
+             if( pMethod->name() == strMethod ){
                  QString s;
-                 pMethod->asString( s );
+                 s = pMethod->asString();
                  functionList << s;
              }
          }
@@ -786,44 +786,44 @@ QStringList KDevCodeCompletion::getMethodListForClass( QString strClass, QString
      return functionList;
 }
 
-void KDevCodeCompletion::getParentMethodListForClass( CParsedClass* pClass,
+void KDevCodeCompletion::getParentMethodListForClass( ParsedClass* pClass,
                                                      QString strMethod,
                                                      QStringList& methodList )
 {
-    QList<CParsedParent> parentList = pClass->parents;
+    QList<ParsedParent> parentList = pClass->parents;
 
-    for ( CParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
+    for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name );
+        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
-            QList<CParsedMethod>* pTmpList = pClass->getSortedMethodList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            QList<ParsedMethod>* pTmpList = pClass->getSortedMethodList();
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
-                if( pMethod->name == strMethod ){
+                if( pMethod->name() == strMethod ){
                     QString s;
-                    pMethod->asString( s );
+                    s = pMethod->asString();
                     methodList << s;
                 }
             }
 
             pTmpList = pClass->getSortedSlotList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
-                if( pMethod->name == strMethod ){
+                if( pMethod->name() == strMethod ){
                     QString s;
-                    pMethod->asString( s );
+                    s = pMethod->asString();
                     methodList << s;
                 }
             }
 
             pTmpList = pClass->getSortedSignalList();
-            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            for ( ParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
             {
-                if( pMethod->name == strMethod ){
+                if( pMethod->name() == strMethod ){
                     QString s;
-                    pMethod->asString( s );
+                    s = pMethod->asString();
                     methodList << s;
                 }
             }
@@ -840,17 +840,17 @@ void KDevCodeCompletion::getParentMethodListForClass( CParsedClass* pClass,
 
 QStringList KDevCodeCompletion::getFunctionList( QString strMethod )
 {
-    CParsedScopeContainer* pScope = &m_pDockViewMan->store()->globalContainer;
+    ParsedScopeContainer* pScope = &m_pDockViewMan->store()->globalContainer;
     QStringList functionList;
-    QList<CParsedMethod>* pMethodList = 0;
+    QList<ParsedMethod>* pMethodList = 0;
 
     pMethodList = pScope->getSortedMethodList();
     if( pMethodList ){
-        for ( CParsedMethod* pMethod = pMethodList->first(); pMethod != 0;
+        for ( ParsedMethod* pMethod = pMethodList->first(); pMethod != 0;
               pMethod = pMethodList->next() ) {
-            if( pMethod->name == strMethod ){
+            if( pMethod->name() == strMethod ){
                 QString s;
-                pMethod->asString( s );
+                s = pMethod->asString();
                 functionList << s;
             }
         }

@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -70,7 +70,7 @@ CClassTreeHandler::~CClassTreeHandler()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::setStore( CClassStore *aStore )
+void CClassTreeHandler::setStore( ClassStore *aStore )
 {
   assert( aStore != NULL );
 
@@ -94,10 +94,10 @@ void CClassTreeHandler::setStore( CClassStore *aStore )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addScopes( QList<CParsedScopeContainer> *list,  
+void CClassTreeHandler::addScopes( QList<ParsedScopeContainer> *list,
                                     QListViewItem *parent )
 {
-  CParsedScopeContainer *scope;
+  ParsedScopeContainer *scope;
 
   for( scope = list->first(); scope != NULL; scope = list->next())
     addScope( scope, parent );
@@ -113,21 +113,21 @@ void CClassTreeHandler::addScopes( QList<CParsedScopeContainer> *list,
  *
  * Returns:
  *   -
- *-----------------------------------------------------------------*/ 
-void CClassTreeHandler::addScope( CParsedScopeContainer *aScope,
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addScope( ParsedScopeContainer *aScope,
                                   QListViewItem *parent )
 {
   assert( aScope != NULL );
   assert( parent != NULL );
 
-  QList<CParsedScopeContainer> *scopeList;
-  QList<CParsedClass> *classList;
-  QList<CParsedStruct> *structList;
-  QList<CParsedMethod> *methodList;
-  QList<CParsedAttribute> *attrList;
+  QList<ParsedScopeContainer> *scopeList;
+  QList<ParsedClass> *classList;
+  QList<ParsedStruct> *structList;
+  QList<ParsedMethod> *methodList;
+  QList<ParsedAttribute> *attrList;
 
-  QListViewItem *item = addItem( aScope->name, THSCOPE, parent );
-  
+  QListViewItem *item = addItem( aScope->name(), THSCOPE, parent );
+
   // Add namespaces
   scopeList = aScope->getSortedScopeList();
   addScopes( scopeList, item );
@@ -165,7 +165,7 @@ void CClassTreeHandler::addScope( CParsedScopeContainer *aScope,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::updateClass( CParsedClass *aClass, 
+void CClassTreeHandler::updateClass( ParsedClass *aClass,
                                      QListViewItem *parent )
 {
   assert( aClass != NULL );
@@ -173,9 +173,9 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
 
   QListViewItem *current;
   QListViewItem *next;
-  
+
   current = parent->firstChild();
-  
+
   // Remove all items belonging to this class.
   while( current != NULL )
   {
@@ -195,7 +195,7 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
 
 /*---------------------------------- CClassTreeHandler::addClasses()
  * addClasses()
- *   Add a list of classes to the view. 
+ *   Add a list of classes to the view.
  *
  * Parameters:
  *   list         List of classes to add.
@@ -204,10 +204,10 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addClasses( QList<CParsedClass> *list, QListViewItem *parent )
+void CClassTreeHandler::addClasses( QList<ParsedClass> *list, QListViewItem *parent )
 {
   QListViewItem *item;
-  CParsedClass *aPC;
+  ParsedClass *aPC;
 
   for( aPC = list->first();
        aPC != NULL;
@@ -221,7 +221,7 @@ void CClassTreeHandler::addClasses( QList<CParsedClass> *list, QListViewItem *pa
 
 /*---------------------------------- CClassTreeHandler::addClass()
  * addClass()
- *   Add a class to the view. 
+ *   Add a class to the view.
  *
  * Parameters:
  *   aClass       Class to add.
@@ -230,18 +230,18 @@ void CClassTreeHandler::addClasses( QList<CParsedClass> *list, QListViewItem *pa
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-QListViewItem *CClassTreeHandler::addClass( CParsedClass *aClass, 
+QListViewItem *CClassTreeHandler::addClass( ParsedClass *aClass,
                                             QListViewItem *parent )
 {
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  return addItem( aClass->name, THCLASS, parent );
+  return addItem( aClass->name(), THCLASS, parent );
 }
 
 /*---------------------------------- CClassTreeHandler::addClass()
  * addClass()
- *   Add a class to the view. 
+ *   Add a class to the view.
  *
  * Parameters:
  *   aName        Class to add.
@@ -250,7 +250,7 @@ QListViewItem *CClassTreeHandler::addClass( CParsedClass *aClass,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-QListViewItem *CClassTreeHandler::addClass( const char *aName, 
+QListViewItem *CClassTreeHandler::addClass( const char *aName,
                                             QListViewItem *parent )
 {
   assert( aName != NULL );
@@ -270,7 +270,7 @@ QListViewItem *CClassTreeHandler::addClass( const char *aName,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
+void CClassTreeHandler::addSubclassesFromClass( ParsedClass *aClass,
                                                 QListViewItem *parent )
 {
   assert( aClass != NULL );
@@ -282,7 +282,7 @@ void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
        aClass->classIterator.current();
        ++aClass->classIterator )
   {
-    ci = addClass( aClass->classIterator.current()->name, parent );
+    ci = addClass( aClass->classIterator.current()->name(), parent );
     updateClass( aClass->classIterator.current(), ci );
     setLastItem( ci );
   }
@@ -290,7 +290,7 @@ void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
 
 /*-------------------------- CClassTreeHandler::addStructsFromClass()
  * addStructsFromClass()
- *   Add a the selected structures from the class to the view. 
+ *   Add a the selected structures from the class to the view.
  *
  * Parameters:
  *   aClass       Class with structs to add.
@@ -299,14 +299,14 @@ void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addStructsFromClass( CParsedClass *aClass,
+void CClassTreeHandler::addStructsFromClass( ParsedClass *aClass,
                                              QListViewItem *parent,
                                              CTHFilter filter )
 {
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  QList<CParsedStruct> *list;
+  QList<ParsedStruct> *list;
 
   list = aClass->getSortedStructList();
   addStructs( list, parent, filter );
@@ -323,21 +323,21 @@ void CClassTreeHandler::addStructsFromClass( CParsedClass *aClass,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addStructs( QList<CParsedStruct> *list,
+void CClassTreeHandler::addStructs( QList<ParsedStruct> *list,
                                     QListViewItem *parent,
                                     CTHFilter filter )
 {
   assert( list != NULL );
   assert( parent != NULL );
 
-  CParsedStruct *aStruct;
+  ParsedStruct *aStruct;
 
   // Add the structures
   for( aStruct = list->first();
        aStruct != NULL;
        aStruct = list->next() )
   {
-    if( filter == CTHALL || filter == (CTHFilter)aStruct->exportScope )
+    if( filter == CTHALL || filter == (CTHFilter)aStruct->access() )
       addStruct( aStruct, parent );
   }
 }
@@ -352,18 +352,18 @@ void CClassTreeHandler::addStructs( QList<CParsedStruct> *list,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
+void CClassTreeHandler::addStruct( ParsedStruct *aStruct,
                                    QListViewItem *parent )
 {
   QListViewItem *root;
-  CParsedAttribute *anAttr;
-  CParsedMethod* anMethod; // --- Daniel
-  QList<CParsedAttribute> *list;
-  QList<CParsedMethod>* method; // --- Daniel
-  QList<CParsedStruct> *structList;
-  CParsedStruct *childStruct;
+  ParsedAttribute *anAttr;
+  ParsedMethod* anMethod; // --- Daniel
+  QList<ParsedAttribute> *list;
+  QList<ParsedMethod>* method; // --- Daniel
+  QList<ParsedStruct> *structList;
+  ParsedStruct *childStruct;
 
-  root = addItem( aStruct->name, THSTRUCT, parent );
+  root = addItem( aStruct->name(), THSTRUCT, parent );
 
   structList = aStruct->getSortedStructList();
 
@@ -401,7 +401,7 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
 
 /*-------------------------- CClassTreeHandler::addMethodsFromClass()
  * addMethodsFromClass()
- *   Add a the selected methods from the class to the view. 
+ *   Add a the selected methods from the class to the view.
  *
  * Parameters:
  *   aClass       Class with methods to add.
@@ -411,14 +411,14 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass,
+void CClassTreeHandler::addMethodsFromClass( ParsedClass *aClass,
                                              QListViewItem *parent,
                                              CTHFilter filter )
 {
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  QList<CParsedMethod> *list;
+  QList<ParsedMethod> *list;
 
   list = aClass->getSortedMethodList();
 
@@ -438,21 +438,21 @@ void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addMethods( QList<CParsedMethod> *list, 
-                                    QListViewItem *parent, 
+void CClassTreeHandler::addMethods( QList<ParsedMethod> *list,
+                                    QListViewItem *parent,
                                     CTHFilter filter )
 {
   assert( list != NULL );
   assert( parent != NULL );
 
-  CParsedMethod *aMethod;
+  ParsedMethod *aMethod;
 
   // Add the methods
   for( aMethod = list->first();
        aMethod != NULL;
        aMethod = list->next() )
   {
-    if( filter == CTHALL || filter == (CTHFilter)aMethod->exportScope )
+    if( filter == CTHALL || filter == (CTHFilter)aMethod->access() )
       addMethod( aMethod, parent );
   }
 }
@@ -468,7 +468,7 @@ void CClassTreeHandler::addMethods( QList<CParsedMethod> *list,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addMethod( CParsedMethod *aMethod, 
+void CClassTreeHandler::addMethod( ParsedMethod *aMethod,
                                    QListViewItem *parent )
 {
   assert( aMethod );
@@ -481,14 +481,14 @@ void CClassTreeHandler::addMethod( CParsedMethod *aMethod,
     type = THPROTECTED_METHOD;
   else if( aMethod->isPrivate() )
     type = THPRIVATE_METHOD;
-  
-  aMethod->asString( str );
+
+  str = aMethod->asString();
   addItem( str, type, parent );
 }
 
 /*-------------------------- CClassTreeHandler::addAttributesFromClass()
  * addAttributesFromClass()
- *   Add a the selected methods from the class to the view. 
+ *   Add a the selected methods from the class to the view.
  *
  * Parameters:
  *   aClass       Class with methods to add.
@@ -498,14 +498,14 @@ void CClassTreeHandler::addMethod( CParsedMethod *aMethod,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addAttributesFromClass( CParsedClass *aClass, 
+void CClassTreeHandler::addAttributesFromClass( ParsedClass *aClass,
                                                 QListViewItem *parent,
                                                 CTHFilter filter )
 {
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  QList<CParsedAttribute> *list;
+  QList<ParsedAttribute> *list;
 
   list = aClass->getSortedAttributeList();
 
@@ -526,21 +526,21 @@ void CClassTreeHandler::addAttributesFromClass( CParsedClass *aClass,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
-                                       QListViewItem *parent, 
+void CClassTreeHandler::addAttributes( QList<ParsedAttribute> *list,
+                                       QListViewItem *parent,
                                        CTHFilter filter )
 {
   assert( list != NULL );
   assert( parent != NULL );
 
-  CParsedAttribute *aAttr;
+  ParsedAttribute *aAttr;
 
   // Add the methods
   for( aAttr = list->first();
        aAttr != NULL;
        aAttr = list->next() )
   {
-    if( filter == CTHALL || filter == (CTHFilter)aAttr->exportScope )
+    if( filter == CTHALL || filter == (CTHFilter)aAttr->access() )
       addAttribute( aAttr, parent );
   }
 }
@@ -556,20 +556,20 @@ void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr, 
+void CClassTreeHandler::addAttribute( ParsedAttribute *aAttr,
                                       QListViewItem *parent )
 {
   assert( aAttr != NULL );
   assert( parent != NULL );
 
   THType type = THPUBLIC_ATTR;
-  
+
   if( aAttr->isProtected() )
     type = THPROTECTED_ATTR;
   else if( aAttr->isPrivate() )
     type = THPRIVATE_ATTR;
 
-  addItem( aAttr->name, type, parent );
+  addItem( aAttr->name(), type, parent );
 }
 
 /*------------------------------------- CClassTreeHandler::addSlots()
@@ -583,14 +583,14 @@ void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent )
+void CClassTreeHandler::addSlotsFromClass( ParsedClass *aPC, QListViewItem *parent )
 {
-  CParsedMethod *aMethod;
+  ParsedMethod *aMethod;
   QString str;
-  QList<CParsedMethod> *list;
+  QList<ParsedMethod> *list;
 
   THType type = THPUBLIC_SLOT;
-  
+
   list = aPC->getSortedSlotList();
 
   // Add the methods
@@ -603,7 +603,7 @@ void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *par
     else if( aMethod->isPrivate() )
       type = THPRIVATE_SLOT;
 
-    aMethod->asString( str );
+    str = aMethod->asString();
     addItem( str, type, parent );
   }
 
@@ -621,11 +621,11 @@ void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *par
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent )
+void CClassTreeHandler::addSignalsFromClass( ParsedClass *aPC, QListViewItem *parent )
 {
-  CParsedMethod *aMethod;
+  ParsedMethod *aMethod;
   QString str;
-  QList<CParsedMethod> *list;
+  QList<ParsedMethod> *list;
 
   // Add all signals.
   list = aPC->getSortedSignalList();
@@ -633,7 +633,7 @@ void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *p
        aMethod != NULL;
        aMethod = list->next() )
   {
-    aMethod->asString( str );
+    str = aMethod->asString();
     addItem( str, THSIGNAL, parent );
   }
 
@@ -651,13 +651,13 @@ void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *p
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addGlobalFunctions( QList<CParsedMethod> *list,
+void CClassTreeHandler::addGlobalFunctions( QList<ParsedMethod> *list,
                                             QListViewItem *parent )
 {
   assert( list != NULL );
   assert( parent != NULL );
 
-  CParsedMethod *aMeth;
+  ParsedMethod *aMeth;
 
   for( aMeth = list->first();
        aMeth != NULL;
@@ -678,7 +678,7 @@ void CClassTreeHandler::addGlobalFunctions( QList<CParsedMethod> *list,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
+void CClassTreeHandler::addGlobalFunc( ParsedMethod *aMethod,
                                        QListViewItem *parent )
 {
   assert( aMethod != NULL );
@@ -686,7 +686,7 @@ void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
 
   QString str;
 
-  aMethod->asString( str );
+  str = aMethod->asString();
   addItem( str, THGLOBAL_FUNCTION, parent );
 }
 
@@ -701,12 +701,12 @@ void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addGlobalVariables( QList<CParsedAttribute> *list, QListViewItem *parent )
+void CClassTreeHandler::addGlobalVariables( QList<ParsedAttribute> *list, QListViewItem *parent )
 {
   assert( list != NULL );
   assert( parent != NULL );
 
-  CParsedAttribute *aAttr;
+  ParsedAttribute *aAttr;
 
   for( aAttr = list->first();
        aAttr != NULL;
@@ -725,13 +725,13 @@ void CClassTreeHandler::addGlobalVariables( QList<CParsedAttribute> *list, QList
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addGlobalVar( CParsedAttribute *aAttr,
+void CClassTreeHandler::addGlobalVar( ParsedAttribute *aAttr,
                                       QListViewItem *parent )
 {
   assert( aAttr != NULL );
   assert( parent != NULL );
 
-  addItem( aAttr->name, THGLOBAL_VARIABLE, parent );
+  addItem( aAttr->name(), THGLOBAL_VARIABLE, parent );
 }
 
 
@@ -746,10 +746,10 @@ void CClassTreeHandler::addGlobalVar( CParsedAttribute *aAttr,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
+void CClassTreeHandler::addGlobalStructs( QList<ParsedStruct> *list,
                                           QListViewItem *parent )
 {
-  CParsedStruct *aStruct;
+  ParsedStruct *aStruct;
 
   for( aStruct = list->first();
        aStruct != NULL;
@@ -771,7 +771,7 @@ void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
  *   -
  *-----------------------------------------------------------------*/
 void CClassTreeHandler::getCurrentNames( QString &parentPath,
-                                         QString &itemName, 
+                                         QString &itemName,
                                          THType &parentType,
                                          THType &aItemType )
 {
@@ -789,12 +789,12 @@ void CClassTreeHandler::getCurrentNames( QString &parentPath,
   parentType = itemType(parent);
 
   // Set the container flag
-  isContainer  = ( aItemType ==THCLASS || 
+  isContainer  = ( aItemType ==THCLASS ||
                    aItemType == THSTRUCT ||
                    aItemType == THSCOPE );
 
   // If we're viewing a container we start the classname iteration at the
-  // current item 
+  // current item
   if( isContainer )
   {
     parentPath = item->text( 0 );

@@ -26,10 +26,10 @@
 #include <qtooltip.h>
 
 class CClassParser;
-class CClassStore;
+class ClassStore;
 class CClassToolDlg;
 class CCVToolTip;
-class CParsedClass;
+class ParsedClass;
 class CProject;
 
 class QListViewItem;
@@ -48,7 +48,7 @@ class CClassView : public CTreeView
 public: // Constructor & Destructor
 
   /** The constructor. Us this exactly as you would with QListView. */
-  CClassView( QWidget* parent = 0,const char* name = 0 );
+  CClassView( ClassStore* pStore, QWidget* parent = 0,const char* name = 0 );
 
   /** Destructor. */
   ~CClassView();
@@ -68,7 +68,7 @@ private: // Private classes
   class SubfolderClassList
   {
   public:
-    SubfolderClassList(const QString& sfname, QList<CParsedClass>* pCL) {
+    SubfolderClassList(const QString& sfname, QList<ParsedClass>* pCL) {
       subfolderName = sfname;
       pClassList = pCL;
     }
@@ -82,7 +82,7 @@ private: // Private classes
       return (subfolderName == scl.subfolderName);
     }
     QString subfolderName;
-    QList<CParsedClass>* pClassList;
+    QList<ParsedClass>* pClassList;
     QListViewItem* pFolderItem;
   };
 
@@ -97,7 +97,7 @@ public: // Public constants
 public: // Public attributes
 
   /** The classtore */
-  CClassStore *store;
+  ClassStore *store;
 
 public: // Public refreshmethods
 
@@ -128,22 +128,22 @@ public: // Public methods
   void tip( const QPoint &p, QRect &r, QString &str );
 
   /** Fetches the currently selected class from the store. */
-  CParsedClass *getCurrentClass();
+  ParsedClass *getCurrentClass();
 
   /** Create a new ClassTool dialog and setup its' attributes.
    * @return A newly allocated classtool dialog.
    */
   //CClassToolDlg
-  CClassPropertiesDlgImpl*createCTDlg(CParsedClass* aClass, int pgn=0);
+  CClassPropertiesDlgImpl*createCTDlg(ParsedClass* aClass, int pgn=0);
 
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
   void resetStatusbarProgress();
-  void sigAddMethod( const char*, CParsedMethod*);
-  void sigAddAttribute( const char*, CParsedAttribute*);
+  void sigAddMethod( const char*, ParsedMethod*);
+  void sigAddAttribute( const char*, ParsedAttribute*);
    /**  */
-  void sigSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
+  void sigSigSlotMapImplement ( ParsedClass*, const QString&, ParsedMethod* );
 protected slots:
   void slotProjectOptions();
   void slotGraphicalView();
@@ -160,7 +160,7 @@ protected slots:
   void slotViewDefinition();
   void slotViewDeclaration();
   /** Views a class definition. */
-  void slotViewClassDefinition(CParsedClass *);
+  void slotViewClassDefinition(ParsedClass *);
   /** Views the definition. */
   void slotViewDefinition( const char *parentPath, const char *itemName,
                            THType parentType, THType itemType );
@@ -248,7 +248,7 @@ private: // Popupmenus
 
 private: // Private attributes
 
-  /** The classparser. */	
+  /** The classparser. */
   CClassParser* cp;
 
   /** The class item. */
@@ -301,14 +301,14 @@ private: // Private methods
   bool validClassDecl( const char *className, const char *declName, THType type );
 
 public slots: // Public slots
-  /** Called from signal CClassPropertiesDlgImpl::sigAddSignal( CParsedClass*, CParsedMethod*)
+  /** Called from signal CClassPropertiesDlgImpl::sigAddSignal( ParsedClass*, ParsedMethod*)
 This method emits signal sigAddSignalMethod(...) for CKdevelop
  */
-  void slotAddMethod( const char *, CParsedMethod* );
+  void slotAddMethod( const char *, ParsedMethod* );
   /**  */
-  void slotSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
+  void slotSigSlotMapImplement ( ParsedClass*, const QString&, ParsedMethod* );
 
-  void slotAddAttribute( const char*, CParsedAttribute*);
+  void slotAddAttribute( const char*, ParsedAttribute*);
 
 };
 

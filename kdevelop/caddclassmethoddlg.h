@@ -23,7 +23,7 @@
 #ifndef CADDCLASSMETHODDLG_H
 #define CADDCLASSMETHODDLG_H
 
-class CParsedMethod;
+class ParsedMethod;
 
 #include <qdialog.h>
 #include <qlineedit.h>
@@ -33,10 +33,10 @@ class CParsedMethod;
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qmultilinedit.h>
-#include <qlayout.h> 
+#include <qlayout.h>
 
 class CClassView;
-/** Dialog to create a new method for a class. 
+/** Dialog to create a new method for a class.
  * @author Jonas Nordin
  */
 class CAddClassMethodDlg : public QDialog
@@ -48,7 +48,7 @@ public: // Constructor & Destructor
 
 public: // Public queries
 
-  CParsedMethod *asSystemObj();
+  ParsedMethod *asSystemObj();
  protected:
   void enterEvent(QEvent* event);
 protected: // Private widgets
@@ -59,7 +59,7 @@ protected: // Private widgets
 
   /** Main layout for the dialog. */
   QVBoxLayout topLayout;
-  
+
   /** Layout for function definition. */
   QGridLayout functionLayout;
 
@@ -130,9 +130,9 @@ protected slots:
   void slotToggleModifier();
 
   /** This slot is executed when the user click the virtual button.
-   * It toggles the pure button on/off.*/ 
-  void slotVirtualClicked(); 
- 
+   * It toggles the pure button on/off.*/
+  void slotVirtualClicked();
+
   void OK();
 
 private: // Private methods

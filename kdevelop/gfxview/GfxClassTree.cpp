@@ -5,8 +5,8 @@
                copyright   : (C) 1999 by Jörgen Olsson
                email       : jorgen@cenacle.net
  ***************************************************************************/
- 
- 
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -14,7 +14,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/    
+ ***************************************************************************/
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
@@ -97,13 +97,13 @@ CGfxClassBox *CGfxClassTree::GetBoxId(int boxid)
   box = m_boxlist.first();
   while((box != NULL) && (box->m_boxid != boxid))
     box = m_boxlist.next();
-  
+
   return(box);
 }
 
 
 
- 
+
 
 /*------------------------------------- CGfxClassTree::getSubtree()
 * getSubtree()
@@ -143,10 +143,10 @@ QList<CGfxClassBox> *CGfxClassTree::getSubtree(CGfxClassBox *abox)
 
 
 
- 
+
 /*-------------------------------------- CGfxClassTree::InsertBox()
 * InsertBox()
-*  Insert a class box 
+*  Insert a class box
 *
 * Parameters:
 *   abox        The (new) box to insert
@@ -196,20 +196,20 @@ void CGfxClassTree::InsertBox(CGfxClassBox *abox,
 * Parameters:
 *   baseclassbox   The base class of this class tree
 *   sibclassbox    Sibling class (previous sibling)
-*   atreenode      A CClassTreeNode containing the class information
+*   atreenode      A ClassTreeNode containing the class information
 *
 * Returns:
 *   CGfxClassBox   Subtree root node (root node on next level)
 *-----------------------------------------------------------------*/
 CGfxClassBox *CGfxClassTree::InsertClassTree(CGfxClassBox *baseclassbox,
 					     CGfxClassBox *sibclassbox,
-					     CClassTreeNode *atreenode)
+					     ClassTreeNode *atreenode)
 {
 
 
   // Create a new class box object
   CGfxClassBox *newbox = new CGfxClassBox(atreenode->theClass,
-					  &atreenode->name,
+					  &atreenode->name(),
 					  this);
 
   // Insert it into the class tree view
@@ -235,11 +235,11 @@ CGfxClassBox *CGfxClassTree::InsertClassTree(CGfxClassBox *baseclassbox,
 *   -
 *-----------------------------------------------------------------*/
 void CGfxClassTree::InsertClassForest(CGfxClassBox *baseclassbox,
-				      QList<CClassTreeNode> *forest)
+				      QList<ClassTreeNode> *forest)
 {
   CGfxClassBox *prevsibling = NULL;
-  CClassTreeNode *treenode = forest->first();
-  
+  ClassTreeNode *treenode = forest->first();
+
   while(treenode != NULL)
   {
     prevsibling = InsertClassTree(baseclassbox,prevsibling,treenode);
@@ -249,7 +249,7 @@ void CGfxClassTree::InsertClassForest(CGfxClassBox *baseclassbox,
 }
 
 
- 
+
 /*------------------------------ CGfxClassTree::RefreshClassForest()
 * RefreshClassForest()
 *  Delete old class forest (if exist) and insert a new.
@@ -260,7 +260,7 @@ void CGfxClassTree::InsertClassForest(CGfxClassBox *baseclassbox,
 * Returns:
 *  -
 *-----------------------------------------------------------------*/
-void CGfxClassTree::RefreshClassForest(QList<CClassTreeNode> *forest)
+void CGfxClassTree::RefreshClassForest(QList<ClassTreeNode> *forest)
 {
   RemoveAll();
   InsertClassForest(NULL,forest);
@@ -308,7 +308,7 @@ void CGfxClassTree::RefreshTreeSize()
     if(h < qwparent->height())
       h = qwparent->height();
   }
-      
+
   resize(w,h);
 }
 
@@ -320,7 +320,7 @@ void CGfxClassTree::RefreshTreeSize()
 *   unfolded   true=unfold entire tree, false=fold entire tree
 *
 * Returns:
-*   - 
+*   -
 *-----------------------------------------------------------------*/
 void CGfxClassTree::SetUnfoldAll(bool unfolded)
 {
@@ -330,7 +330,7 @@ void CGfxClassTree::SetUnfoldAll(bool unfolded)
   {
     node->SetUnfolded(unfolded);
     node = m_boxlist.next();
-  }      
+  }
 
   if((node = m_boxlist.first()) != NULL)
     stateChange(node);
@@ -348,7 +348,7 @@ void CGfxClassTree::SetUnfoldAll(bool unfolded)
 *
 * Returns:
 *   -
-*-----------------------------------------------------------------*/  
+*-----------------------------------------------------------------*/
 void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
 {
   QPainter p;
@@ -383,7 +383,7 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
 	p.setBrush(QBrush(PRINT_CLASSBOXCOL_INSYSTEM,SolidPattern));
       else
 	p.setBrush(QBrush(PRINT_CLASSBOXCOL_NOTINSYSTEM,SolidPattern));
-	
+
       p.drawRect(node->x() - xoffs,
 		 node->y() - yoffs,
 		 node->width(),
@@ -393,29 +393,29 @@ void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
 		 node->width(),
 		 node->height(),
 		 AlignHCenter|AlignVCenter,node->m_name);
-     
+
       // Draw the connection
-      if(node->m_parent != NULL) 
-      {     
+      if(node->m_parent != NULL)
+      {
 	p.moveTo(node->x() + CONN_CHILD_DELTA_STARTX - xoffs,
 		 node->y() + CONN_CHILD_DELTA_STARTY - yoffs);
-	
+
 	p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		 node->y() + CONN_CHILD_DELTA_STOPY - yoffs);
-	
+
 	// If abox has a sibling, draw up to sibling
 	if(node->m_sibling != NULL)
 	  p.lineTo(node->m_sibling->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		   node->m_sibling->y() + CONN_CHILD_DELTA_STOPY - yoffs);
-	
-	// Else draw up to parent 
+
+	// Else draw up to parent
 	else
 	  p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		   node->m_parent->y() + CLASSBOXHEIGHT - yoffs);
       }
     }
     node = boxlist->next();
-  }      
+  }
 
   p.end();
 }
@@ -442,7 +442,7 @@ void CGfxClassTree::resizeEvent(QResizeEvent *)
     if(node->isVisible())
       drawConnection(node);
     node = m_boxlist.next();
-  } 
+  }
   */
 }
 
@@ -456,7 +456,7 @@ void CGfxClassTree::resizeEvent(QResizeEvent *)
 *
 * Returns:
 *   -
-*-----------------------------------------------------------------*/      
+*-----------------------------------------------------------------*/
 void CGfxClassTree::paintEvent(QPaintEvent *)
 {
   CGfxClassBox *node = m_boxlist.first();
@@ -466,18 +466,18 @@ void CGfxClassTree::paintEvent(QPaintEvent *)
     if(node->isVisible())
       drawConnection(node);
     node = m_boxlist.next();
-  }      
+  }
 }
 
 
 
-  
+
 /*------------------------------------- CGfxClassTree::stateChange()
 * stateChange()
 *   When a box in the forest changes state, it signals to this slot,
 *   and this slot signals to all other boxes. If their box id's are
-*   higher than changed boxid, they update their positions. 
-* 
+*   higher than changed boxid, they update their positions.
+*
 * Parameters:
 *   abox     The box object that changed its state
 *
@@ -524,14 +524,14 @@ void CGfxClassTree::drawConnection(CGfxClassBox *abox)
   if(abox->m_sibling != NULL)
     p.lineTo(abox->m_sibling->x() + CONN_CHILD_DELTA_STOPX,
 	     abox->m_sibling->y() + CONN_CHILD_DELTA_STOPY);
-  
-  
-  
-  // Else draw up to parent 
+
+
+
+  // Else draw up to parent
   else {
     /* REMOVED ::      p.lineTo(abox->x() + CONN_CHILD_DELTA_STOPX,
        abox->m_parent->y() + CLASSBOXHEIGHT); */
-    // ADDED BEGIN           
+    // ADDED BEGIN
     const int CONN_ARROW_H = 6;
     const int CONN_ARROW_W = 4;
 
@@ -550,13 +550,13 @@ CONN_ARROW_H + CLASSBOXHEIGHT);
 	       abox->x() + CONN_CHILD_DELTA_STOPX, abox->m_parent->y() +
 	       CLASSBOXHEIGHT);
   }
-  // ADDED END     
-  
+  // ADDED END
+
   p.end();
 }
 
 
-  
+
 
 
 
@@ -566,18 +566,18 @@ CONN_ARROW_H + CLASSBOXHEIGHT);
 *   Called from a CGfxClassBox to print its subtree
 *   (right-click menu on a class box)
 *
-* Parameters: 
+* Parameters:
 *   abox       Root node of a class subtree
 *
 *
-* Returns: 
+* Returns:
 *   -
-*-----------------------------------------------------------------*/          
+*-----------------------------------------------------------------*/
 void CGfxClassTree::slotPrintSubTree(CGfxClassBox *abox)
 {
   QPrinter pr;
   QList<CGfxClassBox> *tmplist;
-  
+
   tmplist = getSubtree(abox);
 
   if(QPrintDialog::getPrinterSetup( &pr ))

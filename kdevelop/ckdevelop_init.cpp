@@ -36,6 +36,8 @@
 #include "./dbg/brkptmanager.h"
 #include "./dbg/disassemble.h"
 
+#include "./sourceinfo/classstore.h"
+
 #include "docviewman.h"
 #include "kdevsession.h"
 
@@ -104,6 +106,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,m_CTagsCmdLine()
   ,m_bToggleToolViewsIsPending(false)
 {
+
+  m_pStore = new ClassStore();
   doctool = DT_KDOC;
 
   version = VERSION;
@@ -192,6 +196,10 @@ CKDevelop::~CKDevelop()
     // i believe this is necessary to guarantee the config is written
     config->sync();
   }
+  if( m_pStore ){
+      delete( m_pStore );
+      m_pStore = 0;
+  }
 }
 
 void CKDevelop::initView()
@@ -203,9 +211,9 @@ void CKDevelop::initView()
   // Treeviews
   ////////////////////////
 
-  class_tree = new CClassView(0L,"cv");
-  class_tree->setFocusPolicy(QWidget::ClickFocus);
-  m_docViewManager->setStore( class_tree->store );
+  class_tree = new CClassView( m_pStore, 0L, "cv" );
+  class_tree->setFocusPolicy( QWidget::ClickFocus );
+  m_docViewManager->setStore( m_pStore );
 
   log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),0L,"lfv");
   log_file_tree->setFocusPolicy(QWidget::ClickFocus);

@@ -50,6 +50,14 @@
 #define NUM            280
 #define CPTHROW        281
 #define CPNAMESPACE    282
+#define CPOBJCCLASS      283
+#define CPOBJCINTERFACE  284
+#define CPOBJCPROTOCOL   285
+#define CPOBJCIMPLEMENTATION 286
+#define CPOBJCEND        287
+#define CPOBJCPRIVATE    288
+#define CPOBJCPROTECTED  289
+#define CPOBJCPUBLIC     290
 
 typedef const char * YYSTYPE;
 

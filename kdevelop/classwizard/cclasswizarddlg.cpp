@@ -22,6 +22,7 @@
 #include <kapp.h>
 #include <qtooltip.h>
 #include <klocale.h>
+#include <assert.h>
 #include "cclasswizarddlg.h"
 
 /*********************************************************************
@@ -65,10 +66,10 @@ void CClassWizardDlg::setTooltips()
 
 void CClassWizardDlg::setCallbacks()
 {
-  connect( &virtualMethodView, 
-           SIGNAL(addMethod(const char *,CParsedMethod *)),
-           SLOT(slotAddMethod(const char *,CParsedMethod *)));
-                  
+  connect( &virtualMethodView,
+           SIGNAL(addMethod(const char *,ParsedMethod *)),
+           SLOT(slotAddMethod(const char *,ParsedMethod *)));
+
 }
 
 /*********************************************************************
@@ -87,7 +88,7 @@ void CClassWizardDlg::setCallbacks()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassWizardDlg::setStore( CClassStore *aStore )
+void CClassWizardDlg::setStore( ClassStore *aStore )
 {
   assert( aStore != NULL );
 
@@ -111,7 +112,7 @@ void CClassWizardDlg::setInitialClass( const char *aClassName )
 
 /** Executed when the user adds a method in some view. */
 void CClassWizardDlg::slotAddMethod( const char *aClassName,
-                                     CParsedMethod *aMethod )
+                                     ParsedMethod *aMethod )
 {
   emit addMethod( aClassName, aMethod );
 }

@@ -24,7 +24,7 @@
 #include <qpushbutton.h>
 #include <qprinter.h>
 #include <qpixmap.h>
-#include "../classparser/ParsedClass.h"
+#include "../sourceinfo/classstore.h"
 
 // Colour of boxes
 #define CLASSBOXCOL_INSYSTEM          QColor(0xd0,0xff,0xd0)
@@ -54,9 +54,9 @@ class CGfxClassBox : public QWidget
 
     // private // Members
     public:
-  CParsedClass *m_class;     // The class that this box represents
+  ParsedClass *m_class;     // The class that this box represents
   CGfxClassBox *m_parent;    // The parent box of this box (Base class)
-  CGfxClassBox *m_sibling;   // The sibling box of this box 
+  CGfxClassBox *m_sibling;   // The sibling box of this box
   CGfxClassBox *m_prevnode;  // Box with boxid = m_boxid - 1
 
   QPushButton *m_foldbtn;        // Button for fold/unfold subtree
@@ -69,11 +69,11 @@ class CGfxClassBox : public QWidget
   QPixmap *minusbtn;
   QString m_name;
 
- public: 
+ public:
   /** Constructor */
-  CGfxClassBox(CParsedClass *aclass,
+  CGfxClassBox(ParsedClass *aclass,
 	       QString *aname,
-	       QWidget *aparentwidget);  
+	       QWidget *aparentwidget);
 
   /** Destructor */
   ~CGfxClassBox();
@@ -125,24 +125,24 @@ class CGfxClassBox : public QWidget
   void paintEvent( QPaintEvent * );
 
   /** Implementation of mousePressEvent */
-  void mousePressEvent ( QMouseEvent *mouseevent ); 
+  void mousePressEvent ( QMouseEvent *mouseevent );
 
   /* ============================================================== */
 
  signals:
   void stateChange(CGfxClassBox *);
   void drawConnection(CGfxClassBox *);
-  void gotoClassDefinition(CParsedClass *);
+  void gotoClassDefinition(ParsedClass *);
   void PrintSubTree(CGfxClassBox *);
 
  public slots:
-  void PosRefresh(int boxid); 
+  void PosRefresh(int boxid);
   void btnClicked();
   void slotGotoDefinition();
   void slotPrintSubTree();
 
-  
+
 };
 
- 
+
 #endif

@@ -3,7 +3,7 @@
                              -------------------
     begin                : Sat Nov 18 2000
     copyright            : (C) 2000 by The KDevelop Team
-    email                : 
+    email                :
  ***************************************************************************/
 
 /***************************************************************************
@@ -16,9 +16,7 @@
  ***************************************************************************/
 
 #include "cclonefunctiondlg.h"
-#include "./classparser/ParsedClass.h"
-#include "./classparser/ClassParser.h"
-#include "./classparser/ParsedAttribute.h"
+#include "./sourceinfo/parsedclass.h"
 #include "cclassview.h"
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -81,7 +79,7 @@ static const int templatescount = sizeof templatesdata/(sizeof templatesdata[0])
 
 CCloneFunctionDlg::CCloneFunctionDlg(CClassView* class_tree, QWidget *parent, const char *name )
   : QDialog(parent,name,true),
-    classname(class_tree->getCurrentClass()->name),
+    classname(class_tree->getCurrentClass()->name()),
     classtree(class_tree)
 {
 	// set up dialog
@@ -133,27 +131,27 @@ CCloneFunctionDlg::CCloneFunctionDlg(CClassView* class_tree, QWidget *parent, co
   // populate the comboboxes
   // look up parent
   QString parentname;
-  CParsedClass* curr = classtree->getCurrentClass();
+  ParsedClass* curr = classtree->getCurrentClass();
 	if ( curr && curr->parents.first() )
-		parentname = curr->parents.first()->name;
+		parentname = curr->parents.first()->name();
 
 	// first: templates
 	allclasses->insertItem(templates);
-	
+
 	// create list of all classes
-  QList<CParsedClass>* all = classtree->store->getSortedClassList();
-	for (CParsedClass* i=all->first(); i != 0; i=all->next() ) {
-		allclasses->insertItem(i->name);
-	  if (i->name == parentname)
+  QList<ParsedClass>* all = classtree->store->getSortedClassList();
+	for (ParsedClass* i=all->first(); i != 0; i=all->next() ) {
+		allclasses->insertItem(i->name());
+	  if (i->name() == parentname)
 	  	allclasses->setCurrentItem(allclasses->count()-1);
 	}
 	delete (all);
 	slotNewClass( allclasses->currentText () );
-				
+
 	// change methods on class selection
 	connect(allclasses, SIGNAL(highlighted(const QString&)),
 			SLOT(slotNewClass(const QString&)) );
-					
+
 	// Set the default focus.
   allclasses->setFocus();
 }
@@ -173,22 +171,22 @@ void CCloneFunctionDlg::OK()
 void CCloneFunctionDlg::slotNewClass(const QString& name)
 {
 	QString str;
-	
+
 	methods->clear();
-	
-	if(name == templates) {	
+
+	if(name == templates) {
 	  QString noarg (" ( )");
 	  QString oparg1( " (const "+classname+"& )" );
 	  QString oparg2( " (const "+classname+"& , const " + classname + "& )" );
 	  // set/get attributes
 	  {
-      CParsedClass *theClass = classtree->store->getClassByName( classname );
-    	QList<CParsedAttribute> *list = theClass->getSortedAttributeList();
-	
-      CParsedAttribute* attr;
+      ParsedClass *theClass = classtree->store->getClassByName( classname );
+    	QList<ParsedAttribute> *list = theClass->getSortedAttributeList();
+
+      ParsedAttribute* attr;
       for ( attr=list->first(); attr != 0; attr=list->next() ) {
-         QString name = attr->name;
-         QString type = attr->type;
+         QString name = attr->name();
+         QString type = attr->type();
          type.replace( QRegExp("[&\\*]"), "" );
          type = type.stripWhiteSpace();
          methods->insertItem(type + "& get" + name + "()");
@@ -236,30 +234,30 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
     }
 	  return;
 	}
-	
-	// all Methods
-  CParsedClass *theClass = classtree->store->getClassByName( name );
-	QList<CParsedMethod> *implList = new QList<CParsedMethod>;
-	QList<CParsedMethod> *availList = new QList<CParsedMethod>;
-  QList<CParsedMethod> *all = theClass->getSortedMethodList();
 
-  for(CParsedMethod* i = all->first(); i != 0; i=all->next() )
-  	if (! (i->isDestructor || i->isConstructor))
-      methods->insertItem(i->asString(str));
+	// all Methods
+  ParsedClass *theClass = classtree->store->getClassByName( name );
+	QList<ParsedMethod> *implList = new QList<ParsedMethod>;
+	QList<ParsedMethod> *availList = new QList<ParsedMethod>;
+  QList<ParsedMethod> *all = theClass->getSortedMethodList();
+
+  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+  	if (! (i->isDestructor() || i->isConstructor()))
+            methods->insertItem(i->asString());
 	delete (all);
 	delete (implList);
 	delete (availList);
 
 	// all slots
   all = theClass->getSortedSlotList();
-  for(CParsedMethod* i = all->first(); i != 0; i=all->next() )
-      methods->insertItem(i->asString(str));
+  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+      methods->insertItem(i->asString());
 	delete (all);
-	
+
   // all signals
   all = theClass->getSortedSignalList();
-  for(CParsedMethod* i = all->first(); i != 0; i=all->next() )
-      methods->insertItem(i->asString(str));
+  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+      methods->insertItem(i->asString());
 	delete (all);
 }
 /** get the selected method */
@@ -269,8 +267,8 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
  	const QString name = allclasses->currentText();
  	const QString selected = methods->currentText();
  	if(name == templates) {
-  	static CParsedMethod result;
- 	
+  	static ParsedMethod result;
+
   	int blank    = selected.find(' ') + 1;
   	if (selected.contains(QRegExp("^friend")))
       	blank    = selected.find(' ', blank) + 1;
@@ -289,12 +287,12 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
   	return true;
   }
 
-  CParsedClass *theClass = classtree->store->getClassByName( name );
-  CParsedMethod* res = searchMethod(theClass, selected);
+  ParsedClass *theClass = classtree->store->getClassByName( name );
+  ParsedMethod* res = searchMethod(theClass, selected);
   if (res) {
-  	type = res->type;
-  	decl = res->asString(str);
-  	comment = res->comment;
+  	type = res->type();
+  	decl = res->asString();
+  	comment = res->comment();
   	ispub  =  res->isPublic();
   	ispriv =  res->isPrivate();
   	isprot =  res->isProtected();
@@ -304,37 +302,37 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
   	return false;
 }
 
-CParsedMethod* CCloneFunctionDlg::searchMethod(CParsedClass *theClass, QString selected)
+ParsedMethod* CCloneFunctionDlg::searchMethod(ParsedClass *theClass, QString selected)
 {
  	QString str;
-  QList<CParsedMethod> *all = theClass->getSortedMethodList();
+  QList<ParsedMethod> *all = theClass->getSortedMethodList();
   // check methods
-  for(CParsedMethod* i = all->first(); i != 0; i=all->next() )
-      if ( selected == i->asString(str)) {
+  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+      if ( selected == i->asString()) {
 	        delete (all);
 	        return i;
 	    }
 	delete (all);
-	
+
 	// not found - try all slot
   all = theClass->getSortedSlotList();
-  for(CParsedMethod* i = all->first(); i != 0; i=all->next() )
-     if ( selected == i->asString(str)) {
+  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+     if ( selected == i->asString()) {
 	        delete (all);
 	        return i;
 	    }
 	delete (all);
-	
+
 	// not found - try all slot
   all = theClass->getSortedSignalList();
-  for(CParsedMethod* i = all->first(); i != 0; i=all->next() )
-     if ( selected == i->asString(str)) {
+  for(ParsedMethod* i = all->first(); i != 0; i=all->next() )
+     if ( selected == i->asString()) {
 	        delete (all);
 	        return i;
 	    }
 
-	// oops 	
+	// oops
 	delete (all);
-	return NULL;									
+	return NULL;
 }
 #include "cclonefunctiondlg.moc"

@@ -28,7 +28,7 @@
 #include <qwidget.h>
 
 
-#include "./classparser/ClassStore.h"
+#include "./sourceinfo/classstore.h"
 #include "cclasstreehandler.h"
 #include "cclasstooltreeview.h"
 
@@ -54,15 +54,15 @@ public: // Public attributes
 public: // Public methods to set attribute values
 
   /** Set the store to use to search for classes. */
-  void setStore( CClassStore *aStore );
+  void setStore( ClassStore *aStore );
 
 //  /** Shares current class. */
-//  CParsedClass *asClass() { return currentClass; }
+//  ParsedClass *asClass() { return currentClass; }
 //  /** Shares current store. */
-//  CClassStore* asStore() { return store; }
+//  ClassStore* asStore() { return store; }
   /** Set the class to view. */
   void setClass( const char *aName );
-  void setClass( CParsedClass *aClass );
+  void setClass( ParsedClass *aClass );
 
   /** View the parents of the current class. */
   void viewParents();
@@ -98,7 +98,7 @@ protected: // Private widgets
 
   QLabel classLbl;
   QComboBox classCombo;
-  
+
   QVBoxLayout topLayout;
   QGridLayout comboLayout;
   QHBoxLayout btnLayout;
@@ -128,7 +128,7 @@ protected slots:
   void slotVirtuals();
   void slotExportComboChoice(int idx);
   void slotClassComboChoice(int idx);
-  
+
   /** Slot from the classtree telling that the user wants to view a
    * declation. */
   void slotCTViewDecl( const char *className, const char *declName, THType type,THType );
@@ -146,15 +146,15 @@ signals: // Signals
   /** This signal is emitted when a user wants to view a definition. */
   void signalViewDefinition( const char *, const char *, THType,THType );
   /** This signal is emitted when a user as choosed an other class */
-  void signalClassChanged( CParsedClass*  );
+  void signalClassChanged( ParsedClass*  );
 
 private: // Private attribues
 
  /** Store that holds all classes in the system. */
- CClassStore *store;
+ ClassStore *store;
 
  /** The class we are currently viewing. */
- CParsedClass *currentClass;
+ ParsedClass *currentClass;
 
  /** The current exportstatus selected in the combo. */
  CTHFilter comboExport;
@@ -177,22 +177,22 @@ private: // Private methods
   void setTooltips();
   /** Make the supplied class the selected one in the classcombo. */
   void setActiveClass( const char *aName );
-  
+
   /**
    * Add a list of classes as subitems to the current class.
    *
    * @param list List of classes to add.
    */
-  void addClasses( QList<CParsedClass> *list );
-  void addClassAndAttributes( CParsedClass *aClass );
-  void addClassAndMethods( CParsedClass *aClass );
-  void addClassAndSlots( CParsedClass *aClass );
-  void addClassAndSignals( CParsedClass *aClass );
+  void addClasses( QList<ParsedClass> *list );
+  void addClassAndAttributes( ParsedClass *aClass );
+  void addClassAndMethods( ParsedClass *aClass );
+  void addClassAndSlots( ParsedClass *aClass );
+  void addClassAndSignals( ParsedClass *aClass );
   void addAllClassMethods();
   void addAllClassSlots();
   void addAllClassSignals();
   void addAllClassAttributes();
-  
+
   /** Change the caption depending on the current operation. */
   void changeCaption();
 };

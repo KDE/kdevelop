@@ -5,7 +5,7 @@
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@cenacle.se
     based on             : ckdevelop_classview.cpp by Sandy Meier
-   
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -23,7 +23,7 @@
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
 //#include <ceditwidget.h>
-#include "classparser/ProgrammingByContract.h"
+#include "sourceinfo/programmingbycontract.h"
 #include "docviewman.h"
 
 #include <kate/document.h>
@@ -68,7 +68,7 @@ void CKDevelop::slotClassbrowserViewTree()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassChoiceCombo(const QString& text)
 {
-  CParsedClass *aClass=NULL;
+  ParsedClass *aClass=NULL;
   aClass = class_tree->store->getClassByName( text );
 
   if ( (!text.isEmpty()) && aClass)
@@ -96,7 +96,7 @@ void CKDevelop::slotMethodChoiceCombo(const QString& text)
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
-  CParsedClass *aClass=NULL;
+  ParsedClass *aClass=NULL;
   aClass = class_tree->store->getClassByName(classname );
 
   if(classCombo->currentText()==i18n("(Globals)"))
@@ -126,14 +126,14 @@ void CKDevelop::slotMethodChoiceCombo(const QString& text)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDeclaration( const char *parentPath, 
-                                       const char *itemName, 
+void CKDevelop::slotCVViewDeclaration( const char *parentPath,
+                                       const char *itemName,
                                        THType parentType,
                                        THType itemType )
 {
   REQUIRE( "Valid parent path", parentPath != NULL );
   REQUIRE( "Valid item name", itemName != NULL );
-  
+
   CVGotoDeclaration( parentPath, itemName, parentType, itemType );
   CVMethodSelected( itemName );
 }
@@ -148,8 +148,8 @@ void CKDevelop::slotCVViewDeclaration( const char *parentPath,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDefinition( const char *parentPath, 
-                                      const char *itemName, 
+void CKDevelop::slotCVViewDefinition( const char *parentPath,
+                                      const char *itemName,
                                       THType parentType,
                                       THType itemType )
 {
@@ -198,13 +198,13 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
   REQUIRE( "Valid class name", aClassName != NULL );
 
   CAddClassMethodDlg dlg( class_tree, this, "methodDlg");
-  
+
   if (bAutosave)
     saveTimer->stop();
   // Show the dialog and let the user fill it out.
   if( dlg.exec() )
   {
-    CParsedMethod *aMethod = dlg.asSystemObj();
+    ParsedMethod *aMethod = dlg.asSystemObj();
     aMethod->setDeclaredInScope( aClassName );
 
     slotCVAddMethod( aClassName, aMethod );
@@ -217,7 +217,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
 
 /*-------------------------------------- CKDevelop::slotCVAddMethod()
  * slotCVAddMethod()
- *   Event when the user adds a method to a class. 
+ *   Event when the user adds a method to a class.
  *
  * Parameters:
  *   aClassName      The class to add the method to.
@@ -226,23 +226,23 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVAddMethod( const char *aClassName, 
-                                 CParsedMethod *aMethod )
+void CKDevelop::slotCVAddMethod( const char *aClassName,
+                                 ParsedMethod *aMethod )
 {
   REQUIRE( "Valid class name", aClassName != NULL );
   REQUIRE( "Valid method", aMethod != NULL );
 
-  CParsedClass *aClass;
+  ParsedClass *aClass;
   QString toAdd;
   QString headerCode;
   int atLine = -1;
-  CParsedMethod *meth = NULL;
+  ParsedMethod *meth = NULL;
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
   REQUIRE( "Valid class", aClass != NULL );
 
-  if( aMethod->isSignal )     // Signals
+  if( aMethod->isSignal() )     // Signals
   {
     // Search for a signal with the same export as the one being added.
     for( aClass->signalIterator.toFirst();
@@ -250,12 +250,12 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
          ++aClass->signalIterator )
     {
       meth = aClass->signalIterator.current();
-      if( meth->exportScope == aMethod->exportScope && 
-          atLine < meth->declarationEndsOnLine )
-        atLine = meth->declarationEndsOnLine;
+      if( meth->access() == aMethod->access() &&
+          atLine < meth->declarationEndsOnLine() )
+        atLine = meth->declarationEndsOnLine();
     }
   }
-  else if( aMethod->isSlot )  // Slots
+  else if( aMethod->isSlot() )  // Slots
   {
     // Search for a slot with the same export as the one being added.
     for( aClass->slotIterator.toFirst();
@@ -263,9 +263,9 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
          ++aClass->slotIterator )
     {
       meth = aClass->slotIterator.current();
-      if( meth->exportScope == aMethod->exportScope && 
-          atLine < meth->declarationEndsOnLine )
-        atLine = meth->declarationEndsOnLine;
+      if( meth->access() == aMethod->access() &&
+          atLine < meth->declarationEndsOnLine() )
+        atLine = meth->declarationEndsOnLine();
     }
   }
   else                        // Methods
@@ -276,41 +276,41 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
          ++aClass->methodIterator )
     {
       meth = aClass->methodIterator.current();
-      if( meth->exportScope == aMethod->exportScope && 
-          atLine < meth->declarationEndsOnLine )
-        atLine = meth->declarationEndsOnLine;
+      if( meth->access() == aMethod->access() &&
+          atLine < meth->declarationEndsOnLine() )
+        atLine = meth->declarationEndsOnLine();
     }
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClassName, "", THCLASS, THCLASS );  
+  CVGotoDeclaration( aClassName, "", THCLASS, THCLASS );
 
-  aMethod->asHeaderCode( headerCode );
+//  aMethod->asHeaderCode( headerCode ); ROBE
 
   if( atLine == -1 )
   {
-    if( aMethod->isSignal )
+    if( aMethod->isSignal() )
       toAdd = "signals: // Signals\n" + headerCode;
     else // Methods and slots
     {
-      switch( aMethod->exportScope )
+      switch( aMethod->access() )
       {
         case PIE_PUBLIC:
-          toAdd.sprintf( "public%s: // Public %s\n%s", 
-                         aMethod->isSlot ? " slots" : "",
-                         aMethod->isSlot ? "slots" : "methods", 
+          toAdd.sprintf( "public%s: // Public %s\n%s",
+                         aMethod->isSlot() ? " slots" : "",
+                         aMethod->isSlot() ? "slots" : "methods",
                          headerCode.data() );
           break;
         case PIE_PROTECTED:
-          toAdd.sprintf( "protected%s: // Protected %s\n%s", 
-                         aMethod->isSlot ? " slots" : "",
-                         aMethod->isSlot ? "slots" : "methods", 
+          toAdd.sprintf( "protected%s: // Protected %s\n%s",
+                         aMethod->isSlot() ? " slots" : "",
+                         aMethod->isSlot() ? "slots" : "methods",
                          headerCode.data() );
           break;
         case PIE_PRIVATE:
-          toAdd.sprintf( "private%s: // Private %s\n%s", 
-                         aMethod->isSlot ? " slots" : "",
-                         aMethod->isSlot ? "slots" : "methods", 
+          toAdd.sprintf( "private%s: // Private %s\n%s",
+                         aMethod->isSlot() ? " slots" : "",
+                         aMethod->isSlot() ? "slots" : "methods",
                          headerCode.data() );
           break;
         default:
@@ -318,7 +318,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
       }
     }
 
-    atLine = aClass->declarationEndsOnLine;
+    atLine = aClass->declarationEndsOnLine();
   }
   else
   {
@@ -334,14 +334,14 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   pDoc->setModified( true );
 
   // Get the code for the .cpp file.
-  aMethod->asCppCode( toAdd );
+//  aMethod->asCppCode( toAdd ); ROBE
 
   // Switch to the .cpp file and add the code if some code was generated.
   if( !toAdd.isEmpty() )
   {
-    switchToFile( aClass->definedInFile );
+    switchToFile( aClass->definedInFile() );
     QString extra = CClassPropertiesDlgImpl::CppCodeExtra;
-	 aMethod->asCppCode( toAdd );
+//	 aMethod->asCppCode( toAdd ); ROBE
 	 kdDebug() << "addmethod: toadd=" << toAdd .data() << endl;
 	 if( !extra.isEmpty() )
 	 {
@@ -352,7 +352,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
 	 //int pos = toAdd.find( aMethod -> name );
     //kdDebug() << aMethod -> name.data() << " 's pos=" << pos << endl;
 	 //if(pos > -1 ) toAdd.insert(pos, QString(QString(aClassName)+"::"));
-	 //kdDebug() << "fixed cpp code : " << toAdd.data() << endl;	
+	 //kdDebug() << "fixed cpp code : " << toAdd.data() << endl;
     // Add the code to the file.
 
     Kate::View* pView = m_docViewManager->currentEditView();
@@ -377,12 +377,12 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
 {
   REQUIRE( "Valid class name", aClassName != NULL );
 
-  CParsedClass *aClass;
-  CParsedAttribute *attr = NULL;
+  ParsedClass *aClass;
+  ParsedAttribute *attr = NULL;
   QString toAdd;
   int atLine = -1;
   CAddClassAttributeDlg dlg(this, "attrDlg" );
-  CParsedAttribute *aAttr;
+  ParsedAttribute *aAttr;
 
   if (bAutosave)
     saveTimer->stop();
@@ -405,22 +405,22 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
        ++aClass->attributeIterator )
   {
     attr = aClass->attributeIterator.current();
-    if( attr->exportScope == aAttr->exportScope &&
-        atLine < attr->declarationEndsOnLine )
-      atLine = attr->declarationEndsOnLine + 1;
+    if( attr->access() == aAttr->access() &&
+        atLine < attr->declarationEndsOnLine() )
+      atLine = attr->declarationEndsOnLine() + 1;
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClass->name, "", THCLASS, THCLASS );
+  CVGotoDeclaration( aClass->name(), "", THCLASS, THCLASS );
 
   // Get the code for the new attribute
-  aAttr->asHeaderCode( toAdd );
+//  aAttr->asHeaderCode( toAdd );
 
   // If we found an attribute with the same export we don't need to output
   // the label as well.
   if( atLine == -1 )
   {
-    switch( aAttr->exportScope )
+    switch( aAttr->access() )
     {
       case PIE_PUBLIC:
         toAdd = "public: // Public attributes\n" + toAdd;
@@ -435,7 +435,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
         break;
     }
 
-    atLine = aClass->declarationEndsOnLine;
+    atLine = aClass->declarationEndsOnLine();
   }
 
   // Add the code to the file.
@@ -458,17 +458,17 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aAttr )
+void CKDevelop::slotCVAddAttribute( const char *aClassName, ParsedAttribute* aAttr )
 {
   REQUIRE( "Valid class name", aClassName != NULL );
 
-  CParsedClass *aClass;
-  CParsedAttribute *attr = NULL;
+  ParsedClass *aClass;
+  ParsedAttribute *attr = NULL;
   QString toAdd;
   int atLine = -1;
 /*
   CAddClassAttributeDlg dlg(this, "attrDlg" );
-  CParsedAttribute *aAttr;
+  ParsedAttribute *aAttr;
 */
   if (bAutosave)
     saveTimer->stop();
@@ -487,22 +487,22 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
        ++aClass->attributeIterator )
   {
     attr = aClass->attributeIterator.current();
-    if( attr->exportScope == aAttr->exportScope &&
-        atLine < attr->declarationEndsOnLine )
-      atLine = attr->declarationEndsOnLine + 1;
+    if( attr->access() == aAttr->access() &&
+        atLine < attr->declarationEndsOnLine() )
+      atLine = attr->declarationEndsOnLine() + 1;
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClass->name, "", THCLASS, THCLASS );
+  CVGotoDeclaration( aClass->name(), "", THCLASS, THCLASS );
 
   // Get the code for the new attribute
-  aAttr->asHeaderCode( toAdd );
+//  aAttr->asHeaderCode( toAdd ); ROBE
 
   // If we found an attribute with the same export we don't need to output
   // the label as well.
   if( atLine == -1 )
   {
-    switch( aAttr->exportScope )
+    switch( aAttr->access() )
     {
       case PIE_PUBLIC:
         toAdd = "public: // Public attributes\n" + toAdd;
@@ -517,7 +517,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
         break;
     }
 
-    atLine = aClass->declarationEndsOnLine;
+    atLine = aClass->declarationEndsOnLine();
   }
 
   // Add the code to the file.
@@ -526,7 +526,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
   pDoc->insertLine( atLine , toAdd );
   pView->setCursorPosition( atLine, 0 );
   slotFileSave();
-  if( !aAttr -> isStatic )
+  if( !aAttr -> isStatic() )
   {
     delete aAttr;
     return;
@@ -536,18 +536,18 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
      - First I have to find a place to add the code.
      - I choose to find the position at the first method...
   */
-  CParsedMethod *aMethod;
-  QList <CParsedMethod>  *lMethod = aClass -> getSortedMethodList();
+  ParsedMethod *aMethod;
+  QList <ParsedMethod>  *lMethod = aClass -> getSortedMethodList();
   aMethod = lMethod -> first();
   QString File="";
   int n, Line = 32767;
   do
   {
-    kdDebug() << "in file " << aMethod -> definedInFile.data() << endl;
-    if( ( aMethod -> definedInFile.find(".h")) == -1)
+    kdDebug() << "in file " << aMethod -> definedInFile().data() << endl;
+    if( ( aMethod -> definedInFile().find(".h")) == -1)
     {
-      File = aMethod -> definedInFile;
-      if ( ((n=aMethod -> definedOnLine) < Line) && ( n > 0) )
+      File = aMethod -> definedInFile();
+      if ( ((n=aMethod -> definedOnLine()) < Line) && ( n > 0) )
       Line = n;
     }
     aMethod = lMethod -> next();
@@ -560,7 +560,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
         if(Line <= 2) Line = 2;
         Line -= 1;
         switchToFile( File, Line );
-        toAdd = aAttr -> type + " " + aClass -> name + "::" + aAttr -> name + ";\n";
+        toAdd = aAttr -> type() + " " + aClass -> name() + "::" + aAttr -> name() + ";\n";
         pDoc->insertLine( atLine , toAdd );
         pView->setCursorPosition( atLine, 0 );
     }
@@ -571,17 +571,17 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
 }
 
 /**  */
-void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString& toAdd, CParsedMethod* implMethod )
+void CKDevelop::slotCVSigSlotMapImplement ( ParsedClass* aClass, const QString& toAdd, ParsedMethod* implMethod )
 {
     if ( implMethod == NULL || aClass == NULL ) return;
-    int atLine = implMethod -> definitionEndsOnLine ;
+    int atLine = implMethod -> definitionEndsOnLine() ;
     if ( atLine ==-1 )
     {
         kdDebug() << "Line# not stored in implement method! Aborting SigSlotMapImplement!" << endl;
         return;
     }
    QString str = "\t" + toAdd + "\n";
-    switchToFile ( aClass -> definedInFile );
+    switchToFile ( aClass -> definedInFile() );
     Kate::View* pView = m_docViewManager->currentEditView();
     Kate::Document* pDoc = pView->getDoc();
     pDoc->insertLine( atLine , toAdd );
@@ -606,8 +606,8 @@ void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString&
 void CKDevelop::slotCVDeleteMethod( const char *aClassName,
                                     const char *aMethodName )
 {
-  CParsedClass *aClass;
-  CParsedMethod *aMethod;
+  ParsedClass *aClass;
+  ParsedMethod *aMethod;
   int line;
 
   aClass = class_tree->store->getClassByName( aClassName );
@@ -621,7 +621,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
     if( aMethod == NULL )
       aMethod = aClass->getSlotByNameAndArg( aMethodName );
 
-    // If it isn't a method or a slot we go for a signal. 
+    // If it isn't a method or a slot we go for a signal.
     if( aMethod == NULL )
       aMethod = aClass->getSignalByNameAndArg( aMethodName );
 
@@ -633,19 +633,19 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
                           i18n("Delete method")) == KMessageBox::Yes )
       {
         // Start by deleting the declaration.
-        switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
+        switchToFile( aMethod->declaredInFile(), aMethod->declaredOnLine() );
         Kate::View* pView = m_docViewManager->currentEditView();
         Kate::Document* pDoc = pView->getDoc();
-        for (int il=aMethod->declaredOnLine; il<aMethod->declarationEndsOnLine; ++il)
+        for (int il=aMethod->declaredOnLine(); il<aMethod->declarationEndsOnLine(); ++il)
         {
           pDoc->removeLine( il );
         }
         // Comment out the definition if it isn't a signal.
-        if( !aMethod->isSignal )
+        if( !aMethod->isSignal() )
         {
-          switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
-          for( line = aMethod->definedOnLine; 
-               line <= aMethod->definitionEndsOnLine;
+          switchToFile( aMethod->definedInFile(), aMethod->definedOnLine() );
+          for( line = aMethod->definedOnLine();
+               line <= aMethod->definitionEndsOnLine();
                line++ )
             pDoc->insertLine( line , i18n("//Del by KDevelop: ") );
         }
@@ -689,7 +689,7 @@ void CKDevelop::CVClassSelected( const char *aName )
 
     for( i=0; i< classCombo->count() && !found; i++ )
       found = ( strcmp( classCombo->text( i ), aName ) == 0 );
-    
+
     if( found )
     {
       i--;
@@ -718,7 +718,7 @@ void CKDevelop::CVMethodSelected( const char *aName )
   // Only bother if the text has changed.
   for( i=0; i< methodCombo->count() && !found; i++ )
     found = ( strcmp( methodCombo->text( i ), aName ) == 0 );
-    
+
   if( found )
   {
     i--;
@@ -736,14 +736,14 @@ void CKDevelop::CVMethodSelected( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDefinition( const char *parentPath, 
-                                  const char *itemName, 
+void CKDevelop::CVGotoDefinition( const char *parentPath,
+                                  const char *itemName,
                                   THType parentType,
                                   THType itemType )
 {
-  CParsedContainer *aContainer = NULL;
-  CParsedMethod *aMethod = NULL;
-  CParsedAttribute *aAttr = NULL;
+  ParsedContainer *aContainer = NULL;
+  ParsedMethod *aMethod = NULL;
+  ParsedAttribute *aAttr = NULL;
   QString toFile;
   int toLine = -1;
   // to get around the method combo selection, we change the type to attribute if there is one of that name
@@ -759,7 +759,7 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
       if( aContainer )
-        aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+        aMethod = ((ParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       if(aMethod)
         break;
     case THPUBLIC_METHOD:
@@ -768,9 +768,9 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
       if( aContainer ){
           aMethod = aContainer->getMethodByNameAndArg( itemName );
         if(!aMethod)
-          aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+          aMethod = ((ParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
         if(!aMethod)
-          aMethod = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
+          aMethod = ((ParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       }
       break;
     case THGLOBAL_FUNCTION:
@@ -780,7 +780,7 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
       debug( "Unknown type %d in CVGotoDefinition.", itemType );
   }
   if( aMethod ){
-    switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+    switchToFile( aMethod->definedInFile(), aMethod->definedOnLine() );
     return;
   }
   // now a new switch for the attributes
@@ -796,8 +796,8 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
   // Fetch the line and file from the attribute if the value is set.
   if( aAttr )
   {
-    toFile = aAttr->declaredInFile;
-    toLine = aAttr->declaredOnLine;
+    toFile = aAttr->declaredInFile();
+    toLine = aAttr->declaredOnLine();
     if( toLine != -1 )
     {
       debug( "  Switching to file %s @ line %d", toFile.data(), toLine );
@@ -817,14 +817,14 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDeclaration( const char *parentPath, 
+void CKDevelop::CVGotoDeclaration( const char *parentPath,
                                    const char *itemName,
                                    THType parentType,
                                    THType itemType )
 {
-  CParsedContainer *aContainer = NULL;
-  CParsedAttribute *aAttr = NULL;
-  CParsedStruct *aStruct = NULL;
+  ParsedContainer *aContainer = NULL;
+  ParsedAttribute *aAttr = NULL;
+  ParsedStruct *aStruct = NULL;
   QString toFile;
   int toLine = -1;
 
@@ -840,8 +840,8 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
     case THSCOPE:
       if( aContainer != NULL )
       {
-        toFile = aContainer->declaredInFile;
-        toLine = aContainer->declaredOnLine;
+        toFile = aContainer->declaredInFile();
+        toLine = aContainer->declaredOnLine();
       }
       break;
     case THPUBLIC_ATTR:
@@ -856,19 +856,19 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
       if( aContainer != NULL )
         aAttr = aContainer->getMethodByNameAndArg( itemName );
       if(!aAttr && aContainer !=NULL)
-        aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+        aAttr = ((ParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       if(!aAttr && aContainer != NULL )
-        aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
+        aAttr = ((ParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
       if( aContainer != NULL )
-        aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+        aAttr = ((ParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       break;
     case THSIGNAL:
       if( aContainer != NULL )
-        aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
+        aAttr = ((ParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
     case THGLOBAL_VARIABLE:
@@ -882,17 +882,17 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
       debug( "Unknown type %d in CVGotoDeclaration.", itemType );
       break;
   }
-  
+
   // Fetch the line and file from the attribute if the value is set.
   if( aAttr != NULL )
   {
-    toFile = aAttr->declaredInFile;
-    toLine = aAttr->declaredOnLine;
+    toFile = aAttr->declaredInFile();
+    toLine = aAttr->declaredOnLine();
   }
   else if( aStruct != NULL )
   {
-    toFile = aStruct->declaredInFile;
-    toLine = aStruct->declaredOnLine;
+    toFile = aStruct->declaredInFile();
+    toLine = aStruct->declaredOnLine();
   }
 
   if( toLine != -1 )
@@ -913,8 +913,8 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
  *-----------------------------------------------------------------*/
 void CKDevelop::CVRefreshClassCombo()
 {
-  CParsedClass *aClass;
-  QList<CParsedClass> *classList;
+  ParsedClass *aClass;
+  QList<ParsedClass> *classList;
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   KComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString savedClass;
@@ -935,14 +935,14 @@ void CKDevelop::CVRefreshClassCombo()
        aClass != NULL;
        aClass = classList->next(), i++ )
   {
-    classCombo->insertItem(SmallIcon("CVclass"), aClass->name );
-    class_comp->addItem(aClass->name);
-    if( aClass->name == savedClass )
+    classCombo->insertItem(SmallIcon("CVclass"), aClass->name() );
+    class_comp->addItem(aClass->name());
+    if( aClass->name() == savedClass )
       savedIdx = i;
 
   }
   delete classList;
-	
+
   if (!savedClass.isEmpty())
   {
 
@@ -970,7 +970,7 @@ void CKDevelop::CVRefreshClassCombo()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
+void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
 {
   QListBox *lb;
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
@@ -987,30 +987,30 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
   lb->setAutoUpdate( false );
 
   if((classCombo->currentText()==i18n("(Globals)"))){
-    QList<CParsedMethod> *globalmeth=class_tree->store->globalContainer.getSortedMethodList( );
+    QList<ParsedMethod> *globalmeth=class_tree->store->globalContainer.getSortedMethodList( );
     for( globalmeth->first();
        globalmeth->current();
        globalmeth->next() )
       {
-        globalmeth->current()->asString(str);
+        str = globalmeth->current()->asString();
         methodCombo->insertItem(SmallIcon("CVglobal_meth"), str );
         method_comp->addItem(str);
       }
-    QList<CParsedAttribute> *globalattr=class_tree->store->globalContainer.getSortedAttributeList( );
+    QList<ParsedAttribute> *globalattr=class_tree->store->globalContainer.getSortedAttributeList( );
     for( globalattr->first();
        globalattr->current();
        globalattr->next() )
       {
-        str=globalattr->current()->name;
+        str=globalattr->current()->name();
         methodCombo->insertItem(SmallIcon("CVglobal_var"), str );
         method_comp->addItem(str);
       }
-    QList<CParsedStruct> *globalstruct=class_tree->store->globalContainer.getSortedStructList( );
+    QList<ParsedStruct> *globalstruct=class_tree->store->globalContainer.getSortedStructList( );
     for( globalstruct->first();
        globalstruct->current();
        globalstruct->next() )
       {
-        str=globalstruct->current()->name;
+        str=globalstruct->current()->name();
         methodCombo->insertItem(SmallIcon("CVstruct"), str );
         method_comp->addItem(str);
       }
@@ -1020,11 +1020,11 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
   }
 
   // Add all methods, slots and signals of this class.
-  for( aClass->methodIterator.toFirst(); 
+  for( aClass->methodIterator.toFirst();
        aClass->methodIterator.current();
        ++aClass->methodIterator )
   {
-    aClass->methodIterator.current()->asString( str );
+    str = aClass->methodIterator.current()->asString();
     method_comp->addItem(str);
     if(aClass->methodIterator.current()->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_meth"), str );
@@ -1039,7 +1039,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
        aClass->slotIterator.current();
        ++aClass->slotIterator )
   {
-    aClass->slotIterator.current()->asString( str );
+    str = aClass->slotIterator.current()->asString();
     method_comp->addItem(str);
     if(aClass->slotIterator.current()->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_slot"), str );
@@ -1053,19 +1053,19 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
        aClass->signalIterator.current();
        ++aClass->signalIterator )
   {
-    aClass->signalIterator.current()->asString( str );
+    str = aClass->signalIterator.current()->asString();
     methodCombo->insertItem(SmallIcon("CVpublic_signal"), str );
     method_comp->addItem(str);
   }
 
   // ADD ATTRIBUTES
-  QList<CParsedAttribute> *list;
+  QList<ParsedAttribute> *list;
   list = aClass->getSortedAttributeList();
   for( list->first();
        list->current();
        list->next() )
   {
-    str=list->current()->name;
+    str=list->current()->name();
     method_comp->addItem(str);
     if(list->current()->isPublic())
       methodCombo->insertItem(SmallIcon("CVpublic_var"), str );
@@ -1087,7 +1087,7 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
 
 /*----------------------------------- CKDevelop::CVRefreshMethodCombo()
  * CVRefreshMethodCombo()
- *   Returns the class for the supplied classname. 
+ *   Returns the class for the supplied classname.
  *
  * Parameters:
  *   className        Name of the class to fetch.
@@ -1095,22 +1095,22 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
  * Returns:
  *   Pointer to the class or NULL if not found.
  *-----------------------------------------------------------------*/
-CParsedContainer *CKDevelop::CVGetContainer( const char *containerPath,
+ParsedContainer *CKDevelop::CVGetContainer( const char *containerPath,
                                              THType containerType )
 {
   REQUIRE1( "Valid container path", containerPath != NULL, NULL );
   REQUIRE1( "Valid container path length", strlen( containerPath ) > 0, NULL );
 
-  CParsedContainer *aContainer;
+  ParsedContainer *aContainer;
 
   switch( containerType )
   {
     case THCLASS:
       // Try to fetch the class.
       aContainer = class_tree->store->getClassByName( containerPath );
-      
+
       // If we found the class and it isn't a subclass we update the combo.
-      if( aContainer != NULL && aContainer->declaredInScope.isEmpty() )
+      if( aContainer != NULL && aContainer->declaredInScope().isEmpty() )
         CVClassSelected( containerPath );
       break;
     case THSTRUCT:

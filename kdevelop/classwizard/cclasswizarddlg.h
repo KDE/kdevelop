@@ -22,7 +22,7 @@
 #define _CCLASSWIZARDDLG_H_INCLUDED
 
 #include "ccwvirtualmethodview.h"
-#include "../classparser/ClassStore.h"
+#include "../sourceinfo/classstore.h"
 
 /** This dialog handles implementation of virtual functions and connecting signals to slots. */
 class CClassWizardDlg : public QTabDialog
@@ -37,25 +37,25 @@ public: // Constructor and destructor
 public: // Methods to set attribute values.
 
   /** Set the store to use to search for classes. */
-  void setStore( CClassStore *aStore );
+  void setStore( ClassStore *aStore );
 
   /** Set the initial classname to startup the. */
   void setInitialClass( const char *aClassName );
 
 private: // Private widgets for virtual function view.
-  
+
   /** Main widget for the virtual functions view. */
   CCWVirtualMethodView virtualMethodView;
 
 protected slots:
 
   /** Executed when the user adds a method in some view. */
-  void slotAddMethod( const char *aClassName,CParsedMethod *aMethod );
+  void slotAddMethod( const char *aClassName,ParsedMethod *aMethod );
 
 signals:
 
   /** Emitted when a method should be added to a class. */
-  void addMethod(const char *,CParsedMethod *);
+  void addMethod(const char *,ParsedMethod *);
 
 private: // Private methods
 
@@ -69,7 +69,7 @@ private: // Private attributes
   QString initialClass;
 
   /** Store holding all parsed objects. */
-  CClassStore *store;
+  ClassStore *store;
 };
 
 #endif

@@ -23,7 +23,7 @@
 #ifndef CADDCLASSATTRIBUTEDLG_H
 #define CADDCLASSATTRIBUTEDLG_H
 
-class CParsedAttribute;
+class ParsedAttribute;
 
 #include <qdialog.h>
 
@@ -49,7 +49,7 @@ public: // Constructor & Destructor
 
 public: // Public queries
 
-  CParsedAttribute *asSystemObj();
+  ParsedAttribute *asSystemObj();
 
 public: // Public widgets
 
@@ -59,7 +59,7 @@ public: // Public widgets
 
   /** Main layout for the dialog. */
   QVBoxLayout topLayout;
-  
+
   /** Layout for function definition. */
   QGridLayout varLayout;
 
@@ -102,7 +102,7 @@ protected:
   void enterEvent(QEvent* event);
  protected slots:
   void OK();
- 
+
 private: // Private methods
 
   void setWidgetValues();

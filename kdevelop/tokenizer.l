@@ -20,6 +20,7 @@
 %{
   #include <stdlib.h>
   #include <qstring.h>
+  #include <iostream.h>
   #include "tokenizer.h"
   #include "FlexLexer.h"
 
@@ -41,9 +42,9 @@
   QString comment;
 
   /* Function prototypes */
-  bool beginComment(MyLexer *lex);
-  void inComment(MyLexer *lex);
-  bool endComment(MyLexer *lex);
+  static bool beginComment(MyLexer *lex);
+  static void inComment(MyLexer *lex);
+  static bool endComment(MyLexer *lex);
 %}
 
 WS           [[:blank:]\r]+
@@ -98,7 +99,19 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"inline"         {}
 <INITIAL>"afx_msg"        {}
 <INITIAL>"extern"         {}
-<INITIAL>"OSG_BEGIN_NAMESPACE"         {}
+    /*========== for ignoring qt-specific macros daniel 18012002 ===*/
+<INITIAL>"Q_PROPERTY("    {}
+<INITIAL>"Q_ENUMS("       {}
+
+    /*==============> Objective-C keyword <==============*/
+<INITIAL>"@class"        {return CPOBJCCLASS;}
+<INITIAL>"@interface"    {return CPOBJCINTERFACE;}
+<INITIAL>"@protocol"     {return CPOBJCPROTOCOL;}
+<INITIAL>"@private"      {return CPOBJCPRIVATE;}
+<INITIAL>"@protected"    {return CPOBJCPROTECTED;}
+<INITIAL>"@public"       {return CPOBJCPUBLIC;}
+<INITIAL>"@implementation"  {return CPOBJCIMPLEMENTATION;}
+<INITIAL>"@end"          {return CPOBJCEND;}
 
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
@@ -170,20 +183,20 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %%
 
-bool beginComment(MyLexer *lex)
+static bool beginComment(MyLexer *lex)
 {
  comment_start = lex->lineno();
  comment="/*";
  return true;
 }
 
-void inComment(MyLexer *lex)
+static void inComment(MyLexer *lex)
 {
   char *text=lex->gettext();
   comment+=text;
 };
 
-bool endComment(MyLexer *lex)
+static bool endComment(MyLexer *lex)
 {
  comment_end = lex->lineno();
  comment+="*/";

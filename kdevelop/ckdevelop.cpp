@@ -1916,7 +1916,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   QString flags, makefile;
 
   if (type!=CMakefile::cvs) {
-  
+
     QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
     if( conf==i18n("(Default)") ) {
 
@@ -1933,11 +1933,11 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 
       QString vpath=m_pKDevSession->getVPATHSubdir(conf);
       QDir dir(vpath);
-      
+
       // change to VPATH subdir, create it if not existant
       if(!dir.exists())
         dir.mkdir(vpath);
-      
+
       QDir::setCurrent(vpath);
       group = "Compilearch " +
         m_pKDevSession->getArchitecture(conf)+"-"+
@@ -2996,7 +2996,7 @@ void CKDevelop::slotClassbrowserNewMethod()
   if (classname.isEmpty() || classname==i18n("(Globals)"))
     return;
 
-  CParsedClass* aClass;
+  ParsedClass* aClass;
   aClass = class_tree->store->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDMETH);
@@ -3021,7 +3021,7 @@ void CKDevelop::slotClassbrowserNewAttribute()
   if  (classname.isEmpty() || classname==i18n("(Globals)"))
     return;
 
-  CParsedClass* aClass;
+  ParsedClass* aClass;
   aClass = class_tree->store->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDATTR);
@@ -3046,7 +3046,7 @@ void CKDevelop::slotClassbrowserNewSignal()
   if (classname.isEmpty() || classname==i18n("(Globals)"))
     return;
 
-  CParsedClass* aClass;
+  ParsedClass* aClass;
   aClass = class_tree->store->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDSIGNAL);
@@ -3070,7 +3070,7 @@ void CKDevelop::slotClassbrowserNewSlot()
 
   if (classname.isEmpty() || classname==i18n("(Globals)"))
     return;
-  CParsedClass* aClass;
+  ParsedClass* aClass;
   aClass = class_tree->store->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDSLOT);

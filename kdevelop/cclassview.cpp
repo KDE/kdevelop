@@ -5,7 +5,7 @@
     copyright            : (C) 1999 by Jonas Nordin
     email                : jonas.nordin@syncom.se
     based on             : cclassview.cpp by Sandy Meier
-   
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -22,9 +22,9 @@
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
 #include "cproject.h"
+#include "classparser.h"
 
 #include "./gfxview/GfxClassTreeWindow.h"
-#include "./classparser/ClassParser.h"
 #include "./classwizard/cclasswizarddlg.h"
 #include "wzconnectdlgimpl.h"
 
@@ -111,13 +111,13 @@ void CClassView::CCVToolTip::maybeTip( const QPoint &p )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassView::CClassView(QWidget* parent, const char* name) :
-  CTreeView (parent, name),
-  cp(new CClassParser)
+CClassView::CClassView(ClassStore* pStore, QWidget* parent, const char* name) :
+  CTreeView (parent, name)
 {
   CLASSROOTNAME = "Classes";
   GLOBALROOTNAME = "Globals";
 
+  cp = new CClassParser( pStore );
 
   project = NULL;		//by default initialize it to null;
 
@@ -125,7 +125,7 @@ CClassView::CClassView(QWidget* parent, const char* name) :
   initPopups();
 
   // Set the store.
-  store = &cp->store;
+  store = pStore;
 
   // Create the tooltip;
   toolTip = new CCVToolTip( this );
@@ -269,7 +269,7 @@ void CClassView::initPopups()
 
 /*---------------------------------------------- CClassView::refresh()
  * refresh()
- *   Add all classes from the project. Reparse and redraw all classes 
+ *   Add all classes from the project. Reparse and redraw all classes
  *   in the view.
  *
  * Parameters:
@@ -304,9 +304,9 @@ void CClassView::refresh( CProject *proj )
   // Get all header and src filenames.
   header = proj->getHeaders();
   src1 = proj->getSources();
-  
-  
-  // a really cool hack.:-), unfortunaly this make the refresh a little bit slower. :-( 
+
+
+  // a really cool hack.:-), unfortunaly this make the refresh a little bit slower. :-(
   //we revert the order of the src's to get the data files (dlgs) first parsed. It's important for the addMethod dlg...
   // -Sandy
   QString filestr;
@@ -314,7 +314,7 @@ void CClassView::refresh( CProject *proj )
       src.append(filestr);
   }
 
-  
+
   // Initialize progressbar.
   totalCount = header.count() + src.count();
   emit resetStatusbarProgress();
@@ -328,7 +328,7 @@ void CClassView::refresh( CProject *proj )
     cp->parse( str );
     emit setStatusbarProgress( ++currentCount );
   }
-	
+
   // Parse sourcefiles.
   QString cur;
   for( cur = src.first(); cur != NULL; cur = src.next() )
@@ -381,7 +381,7 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
   // Initialize progressbar.
   int lTotalCount = 0;
 	lTotalCount += iHeaderList.count()+iSourceList.count();
-		
+
   emit resetStatusbarProgress();
   int lCurCount = 0;
 	emit setStatusbarProgress( lCurCount );
@@ -391,7 +391,7 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
   // Remove all references to the files in the lists
 //  for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
 //    cp->removeWithReferences( lCurFile );
-  		
+
 //  for (lCurFile = iSourceList.first(); lCurFile; lCurFile = iSourceList.next())
 //    cp->removeWithReferences( lCurFile );
 
@@ -415,7 +415,7 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
   QString curSelectedPath = treeH->pathToSelectedItem();
 
   //reset and refresh the tree
-	((CClassTreeHandler *)treeH)->clear();	
+	((CClassTreeHandler *)treeH)->clear();
 	refresh();
 
   // reopen the tree and select the item again
@@ -437,10 +437,10 @@ void CClassView::refresh()
   QString str;
   QListViewItem *item;
   QString treeStr;
-  QList<CParsedScopeContainer> *scopeList;
-  QList<CParsedMethod> *methodList;
-  QList<CParsedAttribute> *attributeList;
-  QList<CParsedStruct> *structList;
+  QList<ParsedScopeContainer> *scopeList;
+  QList<ParsedMethod> *methodList;
+  QList<ParsedAttribute> *attributeList;
+  QList<ParsedStruct> *structList;
 
   kdDebug() << "CClassView::refresh()" << endl;
 
@@ -544,7 +544,7 @@ void CClassView::addFile( const char *aName )
 void CClassView::refreshClassByName( const char *aName )
 {
   QListViewItem *classItem;
-  CParsedClass *aClass;
+  ParsedClass *aClass;
 
   classItem = firstChild();
   while( classItem != NULL && strcmp( classItem->text(0), aName ) != 0 )
@@ -570,9 +570,9 @@ void CClassView::refreshClassByName( const char *aName )
  *-----------------------------------------------------------------*/
 void CClassView::viewGraphicalTree()
 {
-  QList<CClassTreeNode> *forest = store->asForest();
+  QList<ClassTreeNode> *forest = store->asForest();
   CGfxClassTreeWindow *cb = new CGfxClassTreeWindow(NULL);
-  connect(cb, SIGNAL(gotoClassDefinition(CParsedClass *)), SLOT(slotViewClassDefinition(CParsedClass *)));
+  connect(cb, SIGNAL(gotoClassDefinition(ParsedClass *)), SLOT(slotViewClassDefinition(ParsedClass *)));
   cb->setCaption(i18n("Graphical classview"));
   cb->InitializeTree(forest);
   cb->show();
@@ -660,7 +660,7 @@ void CClassView::slotViewDeclaration( const char *parentPath,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedClass *CClassView::getCurrentClass()
+ParsedClass *CClassView::getCurrentClass()
 {
   QString parentPath;
   QString itemName;
@@ -826,7 +826,7 @@ void CClassView::buildTree( const char *str )
   QListViewItem *root=NULL;
   QListViewItem *parent=NULL;
   QListViewItem *ci;
-  CParsedClass *aPC;
+  ParsedClass *aPC;
   char buf[50];
 
   kdDebug() << "CClassView::buildtree( treeStr )"  << endl;
@@ -968,12 +968,12 @@ void CClassView::buildInitalClassTree()
 //	time_t start = time(NULL);
 //	clock_t startClock = clock();
   QString str;
-  CParsedClass *aPC;
-  QList<CParsedClass> *list;
+  ParsedClass *aPC;
+  QList<ParsedClass> *list;
   QString projDir;
   QSortedList<CClassView::SubfolderClassList> listOfClassLists;
   CClassView::SubfolderClassList* pCurClassList;
-  QList<CParsedClass> rootList;
+  QList<ParsedClass> rootList;
 
   kdDebug() << "buildInitalClassTree" << endl;
 
@@ -992,7 +992,7 @@ void CClassView::buildInitalClassTree()
        aPC = list->next())
   {
     // Try to determine if this is a subdirectory.
-    str = aPC->definedInFile;
+    str = aPC->definedInFile();
     str = str.remove( 0, projDir.length() );
     int p = str.find( '/', 1 );
     if (p == -1) {
@@ -1017,7 +1017,7 @@ void CClassView::buildInitalClassTree()
       }
 
       // search if a class list called contents of str already exists
-      QList<CParsedClass>* iterlist = 0L;
+      QList<ParsedClass>* iterlist = 0L;
       bool bFound = false;
       for (pCurClassList = listOfClassLists.first(); !bFound && pCurClassList != 0; pCurClassList = listOfClassLists.next()) {
         if (pCurClassList->subfolderName == str) {
@@ -1027,7 +1027,7 @@ void CClassView::buildInitalClassTree()
       }
       if (!iterlist) {
         // must create a new class list
-        iterlist = new QList<CParsedClass>(); // will be deleted in destructor of pSCL
+        iterlist = new QList<ParsedClass>(); // will be deleted in destructor of pSCL
         pCurClassList = new CClassView::SubfolderClassList( str, iterlist);
         listOfClassLists.append(pCurClassList);
       }
@@ -1083,7 +1083,7 @@ void CClassView::buildInitalClassTree()
  *   A newly allocated classtool dialog.
  *-----------------------------------------------------------------*/
 // CClassToolDlg*
-CClassPropertiesDlgImpl *CClassView::createCTDlg(CParsedClass* aClass, int pgn)
+CClassPropertiesDlgImpl *CClassView::createCTDlg(ParsedClass* aClass, int pgn)
 {
   CClassPropertiesDlgImpl *ctDlg = new CClassPropertiesDlgImpl( this, (CTPACTION) pgn, NULL );
 
@@ -1100,16 +1100,16 @@ CClassPropertiesDlgImpl *CClassView::createCTDlg(CParsedClass* aClass, int pgn)
            SLOT(slotViewDefinition(const char *, const char *, THType, THType ) ) );
 
   connect ( tool,
-            SIGNAL(signalClassChanged(CParsedClass*)), ctDlg,
-            SLOT(slotClassViewChanged( CParsedClass* ) ));
+            SIGNAL(signalClassChanged(ParsedClass*)), ctDlg,
+            SLOT(slotClassViewChanged( ParsedClass* ) ));
 
-  connect ( ctDlg, SIGNAL(sigAddAttribute( const char*, CParsedAttribute*)),
-                        SLOT( slotAddAttribute( const char*, CParsedAttribute*)));
-  connect ( ctDlg, SIGNAL(sigAddMethod( const char*, CParsedMethod*)),
-                        SLOT( slotAddMethod( const char*, CParsedMethod*)));
+  connect ( ctDlg, SIGNAL(sigAddAttribute( const char*, ParsedAttribute*)),
+                        SLOT( slotAddAttribute( const char*, ParsedAttribute*)));
+  connect ( ctDlg, SIGNAL(sigAddMethod( const char*, ParsedMethod*)),
+                        SLOT( slotAddMethod( const char*, ParsedMethod*)));
   connect ( ctDlg,
-            SIGNAL(sigSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod*)),
-            SLOT(slotSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod*)));
+            SIGNAL(sigSigSlotMapImplement ( ParsedClass*, const QString&, ParsedMethod*)),
+            SLOT(slotSigSlotMapImplement ( ParsedClass*, const QString&, ParsedMethod*)));
 
   tool -> setStore( store );
   tool -> setClass( aClass );
@@ -1286,7 +1286,7 @@ void CClassView::slotMethodNew()
   QString itemName;
   THType parentType;
   THType itemType;
-    CParsedClass * aClass;
+    ParsedClass * aClass;
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
                                                  parentType, itemType );
@@ -1294,7 +1294,7 @@ void CClassView::slotMethodNew()
   {
       kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      kdDebug() << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name().data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDMETH);
       dlg -> show();
   }
@@ -1322,7 +1322,7 @@ void CClassView::slotAttributeNew()
   QString itemName;
   THType parentType;
   THType itemType;
-  CParsedClass* aClass;
+  ParsedClass* aClass;
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
                                                  parentType, itemType );
@@ -1330,7 +1330,7 @@ void CClassView::slotAttributeNew()
   {
       kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      kdDebug() << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name().data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDATTR);
       dlg -> show();
   }
@@ -1356,7 +1356,7 @@ void CClassView::slotSignalNew()
   QString itemName;
   THType parentType;
   THType itemType;
-  CParsedClass * aClass;
+  ParsedClass * aClass;
 
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
@@ -1365,7 +1365,7 @@ void CClassView::slotSignalNew()
   {
       kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      kdDebug() << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name().data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDSIGNAL);
       dlg -> show();
   }
@@ -1389,7 +1389,7 @@ void CClassView::slotSlotNew()
   QString itemName;
   THType parentType;
   THType itemType;
-  CParsedClass * aClass;
+  ParsedClass * aClass;
 
   // Fetch the current data for classname etc..
   ((CClassTreeHandler *)treeH)->getCurrentNames( parentPath, itemName,
@@ -1398,7 +1398,7 @@ void CClassView::slotSlotNew()
   {
       kdDebug() << "parentPath = " << parentPath.data() << endl;
       aClass = store -> getClassByName ( parentPath );
-      kdDebug() << "got class: " << aClass -> name.data() << endl;
+      kdDebug() << "got class: " << aClass -> name().data() << endl;
       CClassPropertiesDlgImpl* dlg = createCTDlg(getCurrentClass(), (int) CTPADDSLOT);
       dlg -> show();
   }
@@ -1441,7 +1441,7 @@ void CClassView::slotClassBaseClasses()
   ctDlg->show();
 }
 
-void CClassView::slotClassDerivedClasses() 
+void CClassView::slotClassDerivedClasses()
 {
   CClassPropertiesDlgImpl *ctDlg = createCTDlg(getCurrentClass(), (int) CTPVIEW);
 
@@ -1456,7 +1456,7 @@ void CClassView::slotClassTool()
   ctDlg->show();
 }
 
-void CClassView::slotViewDefinition() 
+void CClassView::slotViewDefinition()
 {
   QString parentPath;
   QString itemName;
@@ -1470,7 +1470,7 @@ void CClassView::slotViewDefinition()
   slotViewDefinition( parentPath, itemName, parentType, itemType );
 }
 
-void CClassView::slotViewClassDefinition(CParsedClass *pClass)
+void CClassView::slotViewClassDefinition(ParsedClass *pClass)
 {
   QString toFile;
   int toLine=-1;
@@ -1478,8 +1478,8 @@ void CClassView::slotViewClassDefinition(CParsedClass *pClass)
   //  if( validClassDecl( className, declName, type ) )
   if (pClass)
   {
-    toFile = pClass->declaredInFile;
-    toLine = pClass->declaredOnLine;
+    toFile = pClass->declaredInFile();
+    toLine = pClass->declaredOnLine();
 
     emit selectFile(toFile, toLine);
   }
@@ -1518,23 +1518,22 @@ void CClassView::slotGrepText(){
   emit signalGrepText(text);
 }
 
-/** Called from signal CClassPropertiesDlgImpl::sigAddxxx(const char *aClassName, CParsedxxx*)
+/** Called from signal CClassPropertiesDlgImpl::sigAddxxx(const char *aClassName, Parsedxxx*)
 This method emits signal sigAddxxx(...) for CKdevelop
  */
-void CClassView::slotAddMethod ( const char * aClassName, CParsedMethod* aMethod)
+void CClassView::slotAddMethod ( const char * aClassName, ParsedMethod* aMethod)
 {
     emit sigAddMethod ( aClassName, aMethod );
 }
 
-void CClassView::slotAddAttribute( const char * aClassName, CParsedAttribute* aAttr)
+void CClassView::slotAddAttribute( const char * aClassName, ParsedAttribute* aAttr)
 {
     emit sigAddAttribute( aClassName, aAttr);
 }
 /**  */
-void CClassView::slotSigSlotMapImplement ( CParsedClass* aClass, const QString& toAdd, CParsedMethod* implMethod)
+void CClassView::slotSigSlotMapImplement ( ParsedClass* aClass, const QString& toAdd, ParsedMethod* implMethod)
 {
     emit sigSigSlotMapImplement ( aClass, toAdd, implMethod );
 }
 
 #include "cclassview.moc"
-

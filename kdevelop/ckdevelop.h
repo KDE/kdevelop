@@ -63,10 +63,10 @@ class GrepDialog;
 class searchTagsDialogImpl;
 class KHTMLView;
 class KHTMLPart;
-class CParsedMethod;
-class CParsedContainer;
-class CParsedClass;
-class CParsedAttribute;
+class ParsedMethod;
+class ParsedContainer;
+class ParsedClass;
+class ParsedAttribute;
 class KStatusBar;
 // does not exist anymore (rokrau 6/28/01)
 //class CEditWidget;
@@ -82,6 +82,7 @@ class View;
 class CKonsoleWidget;
 class QStringList;
 class KPrinter;
+class ClassStore;
 
 // Debugger classes
 class VarViewer;
@@ -700,16 +701,16 @@ public:
    * @param aClassName      The class to add the method to.
    * @param aMethod         The method to add to the class.
    */
-  void slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod );
+  void slotCVAddMethod( const char *aClassName, ParsedMethod *aMethod );
 
   /** Add an attribute to a class.
    * @param aClassName      The class to add the attribute to.
    */
   void slotCVAddAttribute( const char *aClassName );
 
-  void slotCVAddAttribute( const char *aClassName, CParsedAttribute* aAttr );
+  void slotCVAddAttribute( const char *aClassName, ParsedAttribute* aAttr );
   /**  */
-  void slotCVSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
+  void slotCVSigSlotMapImplement ( ParsedClass*, const QString&, ParsedMethod* );
   /** Delete an method.
    * @param aClassName Name of the class holding the method. NULL for global functions.
    * @param aMethodName Name of the method(with arguments) to delete.
@@ -838,7 +839,7 @@ protected: // Protected methods
    * @param parentPath Path of the container.
    * @param parentType Type of container.
    */
-  CParsedContainer *CVGetContainer( const char *parentPath,
+  ParsedContainer *CVGetContainer( const char *parentPath,
                                     THType parentType );
 
   /** Update the class combo with all classes in alpabetical order. */
@@ -848,7 +849,7 @@ protected: // Protected methods
    * class.
    * @param aClass Class to update the methodcombo from.
    */
-  void CVRefreshMethodCombo( CParsedClass *aClass );
+  void CVRefreshMethodCombo( ParsedClass *aClass );
 
 public: // Public methods
 
@@ -875,6 +876,8 @@ public: // Public methods
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
 
+  ClassStore* classStore() const { return m_pStore; }
+
 protected:
   /** reads all options and initializes values*/
   void readOptions();
@@ -898,7 +901,7 @@ protected:
 
 private:
   CProject* initProject( bool loadLastProject );
-  
+
   void printImpl(QStringList& list, KPrinter* printer);
   /** */
   bool isToolViewVisible(QWidget* pToolView);
@@ -1132,6 +1135,8 @@ private:
   QList<KProcess> m_FinishedToolProcesses;
 
   bool m_bToggleToolViewsIsPending;
+
+  ClassStore* m_pStore;
 
 private slots:
   void slotdoneWithKpp();

@@ -18,7 +18,7 @@
 
 
 #include "cclasstooldlg.h"
-#include "classparser/ProgrammingByContract.h"
+#include "sourceinfo/programmingbycontract.h"
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -117,7 +117,7 @@ void CClassToolDlg::setWidgetValues()
   classCombo.setSizeLimit( 10 );
   classCombo.setEditable( true );
   classCombo.setAutoCompletion( true );
-  
+
   parentsBtn.setFixedSize( 30, 30 );
   childrenBtn.setFixedSize( 30, 30 );
   clientsBtn.setFixedSize( 30, 30 );
@@ -176,10 +176,10 @@ void CClassToolDlg::setWidgetValues()
 void CClassToolDlg::readIcons()
 {
   QPixmap pm;
-  
+
   pm = BarIcon("CTparents");
   parentsBtn.setPixmap( pm );
-  
+
   pm = BarIcon("CTchildren");
   childrenBtn.setPixmap( pm );
 
@@ -245,11 +245,11 @@ void CClassToolDlg::setCallbacks()
   connect( &methodsBtn, SIGNAL(clicked()), SLOT(slotMethods()));
   connect( &attributesBtn, SIGNAL(clicked()), SLOT(slotAttributes()));
   //  connect( &virtualsBtn, SIGNAL(clicked()), SLOT(slotVirtuals()));
-  connect( &classTree, 
+  connect( &classTree,
            SIGNAL( signalViewDeclaration(const char *, const char *, THType,THType ) ),
            SLOT(slotCTViewDecl(const char *, const char *, THType,THType ) ) );
-                   
-  connect( &classTree, 
+
+  connect( &classTree,
            SIGNAL( signalViewDefinition(const char *, const char *, THType,THType ) ),
            SLOT(slotCTViewDef(const char *, const char *, THType,THType ) ) );
 }
@@ -292,11 +292,11 @@ void CClassToolDlg::setActiveClass( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassToolDlg::setStore( CClassStore *aStore )
+void CClassToolDlg::setStore( ClassStore *aStore )
 {
   REQUIRE( "Valid store", aStore != NULL );
 
-  QStrList *list;
+  QStringList *list;
 
   store = aStore;
 
@@ -305,7 +305,7 @@ void CClassToolDlg::setStore( CClassStore *aStore )
 
   // Fetch the list and update the combobox.
   list = store->getSortedClassNameList();
-  classCombo.insertStrList( list );
+  classCombo.insertStringList( *list );
   delete list;
 }
 
@@ -343,11 +343,11 @@ void CClassToolDlg::setClass( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassToolDlg::setClass( CParsedClass *aClass )
+void CClassToolDlg::setClass( ParsedClass *aClass )
 {
   if (aClass == NULL ) return;
-  
-  setActiveClass( aClass->name );
+
+  setActiveClass( aClass->name() );
   currentClass = aClass;
 }
 
@@ -360,16 +360,16 @@ void CClassToolDlg::setClass( CParsedClass *aClass )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassToolDlg::addClasses( QList<CParsedClass> *list )
+void CClassToolDlg::addClasses( QList<ParsedClass> *list )
 {
-  CParsedClass *aClass;
+  ParsedClass *aClass;
   QListViewItem *root;
 
   // Clear all previous items in the tree.
   classTree.treeH->clear();
 
   // Insert root item(the current class);
-  root = classTree.treeH->addRoot( currentClass->name, THCLASS );
+  root = classTree.treeH->addRoot( currentClass->name(), THCLASS );
 
   for( aClass = list->first();
        aClass != NULL;
@@ -380,55 +380,55 @@ void CClassToolDlg::addClasses( QList<CParsedClass> *list )
   classTree.setOpen( root, true );
 }
 
-void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
+void CClassToolDlg::addClassAndAttributes( ParsedClass *aClass )
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
   QListViewItem *root;
-  
+
   // Insert root item(the current class);
-  root = classTree.treeH->addRoot( aClass->name, THCLASS );
+  root = classTree.treeH->addRoot( aClass->name(), THCLASS );
 
   ((CClassTreeHandler *)classTree.treeH)->addAttributesFromClass( aClass, root, comboExport );
-  
+
   classTree.setOpen( root, true );
 }
 
-void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
+void CClassToolDlg::addClassAndMethods( ParsedClass *aClass )
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
   QListViewItem *root;
-  
+
   // Insert root item(the current class);
-  root = classTree.treeH->addRoot( aClass->name, THCLASS );
+  root = classTree.treeH->addRoot( aClass->name(), THCLASS );
 
   ((CClassTreeHandler *)classTree.treeH)->addMethodsFromClass( aClass, root, comboExport );
 
   classTree.setOpen( root, true );
 }
 
-void CClassToolDlg::addClassAndSlots( CParsedClass *aClass )
+void CClassToolDlg::addClassAndSlots( ParsedClass *aClass )
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
   QListViewItem *root;
 
   // Insert root item(the current class);
-  root = classTree.treeH->addRoot( aClass->name, THCLASS );
+  root = classTree.treeH->addRoot( aClass->name(), THCLASS );
 
   ((CClassTreeHandler *)classTree.treeH)->addSlotsFromClass( aClass, root);
   classTree.setOpen( root, true );
 }
 
-void CClassToolDlg::addClassAndSignals( CParsedClass *aClass )
+void CClassToolDlg::addClassAndSignals( ParsedClass *aClass )
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
   QListViewItem *root;
 
   // Insert root item(the current class);
-  root = classTree.treeH->addRoot( aClass->name, THCLASS );
+  root = classTree.treeH->addRoot( aClass->name(), THCLASS );
 
   ((CClassTreeHandler *)classTree.treeH)->addSignalsFromClass( aClass, root);
   classTree.setOpen( root, true );
@@ -438,8 +438,8 @@ void CClassToolDlg::addAllClassMethods()
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
-  CParsedParent *aParent;
-  CParsedClass *aClass;
+  ParsedParent *aParent;
+  ParsedClass *aClass;
 
   // Clear all previous items in the tree.
   classTree.treeH->clear();
@@ -449,7 +449,7 @@ void CClassToolDlg::addAllClassMethods()
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    aClass = store->getClassByName( aParent->name );
+    aClass = store->getClassByName( aParent->name() );
     if( aClass != NULL )
       addClassAndMethods( aClass );
   }
@@ -462,8 +462,8 @@ void CClassToolDlg::addAllClassSlots()
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
-  CParsedParent *aParent;
-  CParsedClass *aClass;
+  ParsedParent *aParent;
+  ParsedClass *aClass;
 
   // Clear all previous items in the tree.
   classTree.treeH->clear();
@@ -473,7 +473,7 @@ void CClassToolDlg::addAllClassSlots()
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    aClass = store->getClassByName( aParent->name );
+    aClass = store->getClassByName( aParent->name() );
     if( aClass != NULL )
       addClassAndSlots( aClass );
   }
@@ -486,8 +486,8 @@ void CClassToolDlg::addAllClassSignals()
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
-  CParsedParent *aParent;
-  CParsedClass *aClass;
+  ParsedParent *aParent;
+  ParsedClass *aClass;
 
   // Clear all previous items in the tree.
   classTree.treeH->clear();
@@ -497,7 +497,7 @@ void CClassToolDlg::addAllClassSignals()
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    aClass = store->getClassByName( aParent->name );
+    aClass = store->getClassByName( aParent->name() );
     if( aClass != NULL )
       addClassAndSlots( aClass );
   }
@@ -510,18 +510,18 @@ void CClassToolDlg::addAllClassAttributes()
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
-  CParsedParent *aParent;
-  CParsedClass *aClass;
+  ParsedParent *aParent;
+  ParsedClass *aClass;
 
   // Clear all previous items in the tree.
   classTree.treeH->clear();
-  
+
   // First treat all parents.
   for( aParent = currentClass->parents.first();
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    aClass = store->getClassByName( aParent->name );
+    aClass = store->getClassByName( aParent->name() );
     if( aClass != NULL )
       addClassAndAttributes( aClass );
   }
@@ -536,7 +536,7 @@ void CClassToolDlg::changeCaption()
   QString caption;
   QString name;
   if( currentClass != NULL )
-    name = currentClass->name;
+    name = currentClass->name();
   else
     name = " ";
 
@@ -582,23 +582,23 @@ void CClassToolDlg::viewParents()
 {
   REQUIRE( "Valid class", currentClass != NULL );
 
-  CParsedParent *aParent;
+  ParsedParent *aParent;
   QListViewItem *root;
-  
+
   currentOperation = CTPARENT;
 
   changeCaption();
 
   classTree.treeH->clear();
-  
+
   // Insert root item(the current class);
-  root = classTree.treeH->addRoot( currentClass->name, THCLASS );
+  root = classTree.treeH->addRoot( currentClass->name(), THCLASS );
 
   for( aParent = currentClass->parents.first();
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    ((CClassTreeHandler *)classTree.treeH)->addClass( aParent->name, root );
+    ((CClassTreeHandler *)classTree.treeH)->addClass( aParent->name(), root );
   }
 
   classTree.setOpen( root, true );
@@ -609,12 +609,12 @@ void CClassToolDlg::viewChildren()
 {
   REQUIRE( "Valid current class", currentClass != NULL );
 
-  QList<CParsedClass> *list;
-  
+  QList<ParsedClass> *list;
+
   currentOperation = CTCHILD;
   changeCaption();
 
-  list = store->getClassesByParent( currentClass->name );
+  list = store->getClassesByParent( currentClass->name() );
   addClasses( list );
   delete list;
 }
@@ -624,12 +624,12 @@ void CClassToolDlg::viewClients()
 {
   REQUIRE( "Valid current class", currentClass != NULL );
 
-  QList<CParsedClass> *list;
-  
+  QList<ParsedClass> *list;
+
   currentOperation = CTCLIENT;
   changeCaption();
 
-  list = store->getClassClients( currentClass->name );
+  list = store->getClassClients( currentClass->name() );
   addClasses( list );
   delete list;
 }
@@ -639,12 +639,12 @@ void CClassToolDlg::viewSuppliers()
 {
   REQUIRE( "Valid current class", currentClass != NULL );
 
-  QList<CParsedClass> *list;
+  QList<ParsedClass> *list;
 
   currentOperation = CTSUPP;
   changeCaption();
 
-  list = store->getClassSuppliers( currentClass->name );
+  list = store->getClassSuppliers( currentClass->name() );
   addClasses( list );
   delete list;
 }
@@ -656,7 +656,7 @@ void CClassToolDlg::viewMethods()
 
   currentOperation = CTMETH;
 
-  changeCaption();  
+  changeCaption();
   addAllClassMethods();
 }
 /** View methods in this class and parents. */

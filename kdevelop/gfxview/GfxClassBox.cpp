@@ -18,7 +18,7 @@
 
 
 
-#include <kapp.h> 
+#include <kapp.h>
 #include <klocale.h>
 #include <qpainter.h>
 #include <qcursor.h>
@@ -52,7 +52,7 @@ const char * btnplus_xpm[] = {
   " XXXXXX",
   " ..X..X",
   " ..X..X",
-  ".XXXXXX"};    
+  ".XXXXXX"};
 
 
 /*------------------------------------ CGfxClassBox::CGfxClassBox()
@@ -67,7 +67,7 @@ const char * btnplus_xpm[] = {
 * Returns:
 *   -
 *-----------------------------------------------------------------*/
-CGfxClassBox::CGfxClassBox(CParsedClass *aclass,
+CGfxClassBox::CGfxClassBox(ParsedClass *aclass,
 			   QString *aname,
 			   QWidget *aparentwidget)
   :QWidget(aparentwidget)
@@ -113,7 +113,7 @@ CGfxClassBox::~CGfxClassBox()
 
 
 /*-------------------------------- CGfxClassBox::SetParentClassBox()
-* SetParentClassBox() 
+* SetParentClassBox()
 *   Set parent class box (box object representing base class)
 * Parameters:
 *   aclassbox   A class box object
@@ -128,7 +128,7 @@ void CGfxClassBox::SetParentClassBox(CGfxClassBox *aclassbox)
 
 
 /*------------------------------- CGfxClassBox::SetSiblingClassBox()
-* SetSiblingClassBox() 
+* SetSiblingClassBox()
 *   Set parent class box (box object representing base class)
 * Parameters:
 *   aclassbox   A class box object
@@ -147,7 +147,7 @@ void CGfxClassBox::SetSiblingClassBox(CGfxClassBox *aclassbox)
 *   Set previous class box
 *
 * Parameters:
-*   aclassbox   
+*   aclassbox
 *
 * Returns:
 *   -
@@ -231,7 +231,7 @@ void CGfxClassBox::ShowFoldButton()
 *-----------------------------------------------------------------*/
 bool CGfxClassBox::IsUnfolded()
 {
-  return(m_unfolded 
+  return(m_unfolded
 	 && ((m_parent == NULL) ? true :  m_parent->IsUnfolded()));
 }
 
@@ -276,12 +276,12 @@ bool CGfxClassBox::hasAncestor(CGfxClassBox *abox)
 int CGfxClassBox::GetY()
 {
   int y = 0;
- 
+
   if(m_sibling == NULL)
   {
     if(m_parent != NULL)
       y = m_parent->GetYDepth();
-  }   
+  }
   else
     if(m_prevnode != NULL)
       y = m_prevnode->GetYDepth();
@@ -310,7 +310,7 @@ int CGfxClassBox::GetX()
     x = m_parent->GetXDepth() + CLASSBOX_XSPACE;
   else
     x = CLASSBOX_XSPACE;
-    
+
   return(x);
 }
 
@@ -370,7 +370,7 @@ void CGfxClassBox::paintEvent(QPaintEvent *)
 
   p.setPen(QColor(0x00,0x00,0x00));
   p.drawRect(rect());
-  
+
   p.setPen(QColor(0xff,0xff,0xff));
   p.moveTo(0,height());
   p.lineTo(0,0);
@@ -386,15 +386,15 @@ void CGfxClassBox::paintEvent(QPaintEvent *)
 /*---------------------------------- CGfxClassBox::mousePressEvent()
 * mousePressEvent()
 *  Implementation of mousePressEvent
-* Parameters: 
+* Parameters:
 *  mouseevent   Mouse event info
 *
 *
-* Returns: 
+* Returns:
 *  -
 *
-*-----------------------------------------------------------------*/  
-void CGfxClassBox::mousePressEvent ( QMouseEvent *mouseevent ) 
+*-----------------------------------------------------------------*/
+void CGfxClassBox::mousePressEvent ( QMouseEvent *mouseevent )
 {
   QPopupMenu mnu(NULL);
 
@@ -437,7 +437,7 @@ void CGfxClassBox::PosRefresh(int boxid)
   }
   else
     hide();
-} 
+}
 
 /*--------------------------------------- CGfxClassBox::btnClicked()
 * btnClicked()
@@ -469,12 +469,12 @@ void CGfxClassBox::btnClicked()
 *
 * Returns:
 *  -
-*-----------------------------------------------------------------*/    
+*-----------------------------------------------------------------*/
 void CGfxClassBox::slotGotoDefinition()
 {
   debug("emitting gotoClassDefinition");
   emit gotoClassDefinition(m_class);
-}  
+}
 
 
 
@@ -487,7 +487,7 @@ void CGfxClassBox::slotGotoDefinition()
 *
 * Returns:
 *  -
-*-----------------------------------------------------------------*/    
+*-----------------------------------------------------------------*/
 void CGfxClassBox::slotPrintSubTree()
 {
   emit PrintSubTree(this);

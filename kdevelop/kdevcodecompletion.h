@@ -26,12 +26,12 @@ namespace Kate{
 }
 
 class DocViewMan;
-class CClassStore;
+class ClassStore;
 class CKDevelop;
-class CParsedClass;
-class CParsedContainer;
-class CParsedMethod;
-class CParsedAttribute;
+class ParsedClass;
+class ParsedContainer;
+class ParsedMethod;
+class ParsedAttribute;
 class SimpleContext;
 
 class KDevCodeCompletion: public QObject{
@@ -54,11 +54,11 @@ public:
 protected:
     QString getMethodBody( Kate::Document* doc, int iLine, int iCol, QString* classname );
     QStringList getMethodListForClass( QString strClass, QString strMethod );
-    void getParentMethodListForClass( CParsedClass* pClass, QString strMethod, QStringList& methodList );
+    void getParentMethodListForClass( ParsedClass* pClass, QString strMethod, QStringList& methodList );
     QStringList getFunctionList( QString strMethod );
     QString evaluateExpression( const QString& expr,
                                 SimpleContext* ctx,
-                                CClassStore* sigma );
+                                ClassStore* sigma );
     int expressionAt( const QString& text, int index );
     QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr,
                                                      SimpleContext* ctx );
@@ -66,11 +66,11 @@ protected:
     QStringList splitExpression( const QString& text );
 
     /* methods which are called recursively by getEntryListForClass(...) */
-    QList<CParsedMethod>* getParentMethodListForClass ( CParsedClass* pClass, QList<CParsedMethod>* pList );
-    QList<CParsedAttribute>* getParentAttributeListForClass ( CParsedClass* pClass, QList<CParsedAttribute>* pList );
+    QList<ParsedMethod>* getParentMethodListForClass ( ParsedClass* pClass, QList<ParsedMethod>* pList );
+    QList<ParsedAttribute>* getParentAttributeListForClass ( ParsedClass* pClass, QList<ParsedAttribute>* pList );
 
-    QString getTypeOfMethod( CParsedContainer*, const QString& );
-    QString getTypeOfAttribute( CParsedContainer*, const QString& );
+    QString getTypeOfMethod( ParsedContainer*, const QString& );
+    QString getTypeOfAttribute( ParsedContainer*, const QString& );
     bool checkEnd(const QString &str, const QString &suffix);
     void popFrontStringList(QStringList &slist);
 

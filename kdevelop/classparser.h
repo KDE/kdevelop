@@ -1,5 +1,5 @@
 /***************************************************************************
-                          ClassParser.h  -  description
+                          classparser.h  -  description
                              -------------------
     begin                : Mon Mar 15 1999
     copyright            : (C) 1999 by Jonas Nordin
@@ -11,12 +11,12 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _CLASSPARSER_H_INCLUDED
-#define _CLASSPARSER_H_INCLUDED
+#ifndef _CLASSPARSER_H_
+#define _CLASSPARSER_H_
 
 #include <qstring.h>
 #include <qlist.h>
@@ -24,7 +24,7 @@
 #include <FlexLexer.h>
 #include <fstream.h>
 #include "tokenizer.h"
-#include "ClassStore.h"
+#include "sourceinfo/persistantclassstore.h"
 
 /** This class handles the parsing and generation of all C++ and C
  * constructions. The classparser has a store in which all elements that
@@ -38,7 +38,7 @@ class CClassParser
 {
 public: // Constructor & Destructor
 
-  CClassParser();
+  CClassParser(ClassStore *classstore);
   ~CClassParser();
 
 private: // Private classes
@@ -48,51 +48,45 @@ private: // Private classes
   class CParsedLexem
   {
   public: // Constructor & destructor
-    
-    CParsedLexem( int aType, const char *aText) { type = aType; text = aText; }
+
+    CParsedLexem( int aType, const QString &aText) { type = aType; text = aText; }
     ~CParsedLexem() {}
-    
+
   public: // Public attributes
-    
+
     /** The lexem text. */
     QString text;
-    
+
     /** Type of lexem. */
     int type;
   };
 
-public: // Public attributes
-
-  /** Store for the classes. */
-  CClassStore store;
-
 public: // Public Methods
 
-  /** 
-   * Parse the file and store the parsed classes found. 
+  /**
+   * Parse the file and store the parsed classes found.
    *
    * @param file Name of the file to parse.
    *
    * @return If the parsing was successful.
    */
-  bool parse( const char *file = NULL );
+  bool parse( const QString &file );
 
   /** Remove all parsed classes */
   void wipeout();
 
   /** Output this object as text on stdout */
-  void out()     { store.out(); }
+  void out()     { store->out(); }
+  /** get a list of all classes */
+  ClassStore * getClassStore();
 
 //  void getDependentFiles( QStrList& fileList, QStrList& dependentList)
 //    { store.getDependentFiles( fileList, dependentList); }
 
-  void removeWithReferences( const char*  aFile )
-      { store.removeWithReferences( aFile ); }
-
 private: // Private attributes
 
-  /** flag that helps checkClassDecl() to recognize the lexem */
-  bool m_isParsingClassDeclaration;
+  /** Store for the classes. */
+  ClassStore *store;
 
   /** Lexer used to fetch lexical patterns */
   yyFlexLexer *lexer;
@@ -102,13 +96,13 @@ private: // Private attributes
 
   /** The name of the parsed file. */
   QString currentFile;
-  
+
   /** The scope in which the attributes and metods being defined. */
-  PIExport declaredScope;
+  PIAccess declaredAccess;
 
   /** Stack of lexems currently parsed. */
   QStack<CParsedLexem> lexemStack;
- 
+
   /** Type of method. 0 = NORMAL else QTSIGNAL/QTSLOT. */
   int methodType;
 
@@ -123,12 +117,12 @@ private: // Private methods
   /** Get the next lexem from the lexer. */
   void getNextLexem()        { lexem = lexer->yylex(); }
 
-  /** Fetch the current text from the lexer and return it. 
+  /** Fetch the current text from the lexer and return it.
    * @return The text of the current lexem.
    */
   const char *getText()      { return lexer->YYText(); }
-  
-  /** Fetch the current linenumber from the lexer and return it. 
+
+  /** Fetch the current linenumber from the lexer and return it.
    * @return The current linenumber.
    */
   int getLineno()            { return lexer->lineno() - 1;  }
@@ -139,31 +133,34 @@ private: // Private methods
 
   /** Tells if the last parsed comment is in range to be a comment
    * for the current parsed item. */
-  bool commentInRange( CParsedItem *aItem );
+  bool commentInRange( ParsedItem *aItem );
 
   /** Parse all structure declarations.
    * @param aStruct The struct that holds the declarations.
    */
-  void parseStructDeclarations( CParsedStruct *aStruct);
+  void parseStructDeclarations( ParsedStruct *aStruct);
 
   /** Parse a structure using header declaration from stack.
    * @param aContainer Container to store the parsed struct in.
    */
-  void fillInParsedStruct( CParsedContainer *aContainer );
+  void fillInParsedStruct( ParsedContainer *aContainer );
 
-  /** Parse a structure. 
+  /** Parse a structure.
    * @param aContainer Container to store the parsed struct in.
    */
-  void parseStruct( CParsedContainer *aContainer );
+  void parseStruct( ParsedContainer *aContainer );
 
   /** Parse an enumeration. */
   void parseEnum();
+
+  /** try to parse an enum right */
+  void parseEnum( ParsedContainer* aContainer );
 
   /** Parse an union. */
   void parseUnion();
 
   /** Parse a namespace. */
-  void parseNamespace( CParsedScopeContainer *scope );
+  void parseNamespace( ParsedScopeContainer *scope );
 
   /** Skip a throw() statement. */
   void skipThrowStatement();
@@ -182,51 +179,78 @@ private: // Private methods
 
   /** Initialize a attribute, except the type, using the arguments on
    *   the stack. */
-  void fillInParsedVariableHead( CParsedAttribute *anAttr );
+  void fillInParsedVariableHead( ParsedAttribute *anAttr );
 
   /** Initialize a attribute using the arguments on the stack. */
-  void fillInParsedVariable( CParsedAttribute *anAttr );
+  void fillInParsedVariable( ParsedAttribute *anAttr );
 
-  /** Take what's on the stack and return as a list of variables. 
+  /** Take what's on the stack and return as a list of variables.
    *   Works for variable declarations like int foo, bar, baz.... */
-  void fillInMultipleVariable( CParsedContainer *aContainer );
+  void fillInMultipleVariable( ParsedContainer *aContainer );
 
   /** Parse a variable declaration. */
-  CParsedAttribute *parseVariable();
+  ParsedAttribute *parseVariable();
 
   /** Parse and add all arguments to a function. */
-  void parseFunctionArgs( CParsedMethod *method );
+  void parseFunctionArgs( ParsedMethod *method );
 
   /** Initialize a method using the arguments on the stack. */
-  void fillInParsedMethod(CParsedMethod *aMethod, bool isOperator=false);
+  void fillInParsedMethod(ParsedMethod *aMethod, bool isOperator=false);
 
   /** Parse a method declaration. */
-  CParsedMethod *parseMethodDeclaration();
+  ParsedMethod *parseMethodDeclaration();
 
   /** Parse a method implementation. */
-  void parseMethodImpl(bool isOperator,CParsedContainer *scope);
+  void parseMethodImpl(bool isOperator,ParsedContainer *scope);
 //  void parseMethodImpl(bool isOperator);
 
-  /** Push lexems on the stack until we find something we know and 
+   /** Initialize an Objective-C method */
+   void fillInParsedObjcMethod( ParsedMethod *aMethod );
+
+  /** Push lexems on the stack until we find something we know and
    *   return what we found. */
   int checkClassDecl();
 
   /** Parse the inheritance clause of a class declaration. */
-  void parseClassInheritance( CParsedClass *aClass );
+  void parseClassInheritance( ParsedClass *aClass );
 
   /** Parse a class header, i.e find out classname and possible parents. */
-  CParsedClass *parseClassHeader();
+  ParsedClass *parseClassHeader();
 
-  /** Handle lexem that are specific of a class. 
+  /** Handle lexem that are specific of a class.
    * @param aClass Class to store items in.
    * @return Tells if we should stop parsing.
    */
-  bool parseClassLexem( CParsedClass *aClass );
-  
-  /** Parse a class declaration. 
+  bool parseClassLexem( ParsedClass *aClass );
+
+  /** Parse a class declaration.
    * @return The parsed class or NULL if it was no class.
    */
-  CParsedClass *parseClass(CParsedClass * aClass);
+  ParsedClass *parseClass(ParsedClass * aClass);
+
+   /** Parse an Objective-C category.
+    * @return The (fake!) parsed class - ie <classname>(<category name>).
+    */
+   ParsedClass *parseObjcCategory( QString &aClassName );
+
+   /** Parse an Objective-C class implementation.
+    * @return The parsed class or NULL if it was no class.
+    */
+   ParsedClass *parseObjcImplementation();
+
+   /** Handle lexem that are specific of an Objective-C class.
+    * @param aClass Class to store items in.
+    * @return Tells if we should stop parsing.
+    */
+   bool parseObjcClassLexem( ParsedClass *aClass );
+
+   /** Parse an Objective-C class header, i.e find out classname and possible parent. */
+   ParsedClass *parseObjcClassHeader();
+
+   /** Parse an Objective-C class declaration.
+    * @return The parsed class or NULL if it was no class.
+    */
+   ParsedClass *parseObjcClass();
 
   /** Tells if the current lexem is generic and needs no special
    * handling depending on the current scope.
@@ -235,15 +259,15 @@ private: // Private methods
   bool isGenericLexem();
 
   /** Parse all methods and attributes and add them to the container. */
-  void parseMethodAttributes( CParsedContainer *aContainer );
+  void parseMethodAttributes( ParsedContainer *aContainer );
 
   /** Take care of generic lexem.
    * @param aContainer Container to store parsed items in.
    */
-  void parseGenericLexem( CParsedContainer *aContainer );
+  void parseGenericLexem( ParsedContainer *aContainer );
 
   /** Take care of lexem in a top-level context. */
-  void parseTopLevelLexem( CParsedScopeContainer *aContainer );
+  void parseTopLevelLexem( ParsedScopeContainer *aContainer );
 
   /** Parse toplevel statements */
   void parseToplevel();

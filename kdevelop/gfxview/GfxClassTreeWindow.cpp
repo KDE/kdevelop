@@ -16,7 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kapp.h> 
+#include <kapp.h>
 #include <klocale.h>
 #include <qwidget.h>
 #include <qprinter.h>
@@ -38,7 +38,7 @@
 *
 * Returns:
 *   -
-*-----------------------------------------------------------------*/    
+*-----------------------------------------------------------------*/
 CGfxClassTreeWindow::CGfxClassTreeWindow(QWidget *aparent)
   : QWidget(aparent)
 {
@@ -76,7 +76,7 @@ CGfxClassTreeWindow::CGfxClassTreeWindow(QWidget *aparent)
   m_treescrollview = new CGfxClassTreeScrollView(this);
   m_treescrollview->move(0,m_foldbtn->height());
   m_treescrollview->resize(width(),height()-m_foldbtn->height());
- 
+
   // Show'em
   m_foldbtn->show();
   m_unfoldbtn->show();
@@ -108,7 +108,7 @@ CGfxClassTreeWindow::~CGfxClassTreeWindow()
 
 /*---------------------------- CGfxClassTreeWindow::InitializeTree()
 * InitializeTree()
-*   (re-)Initialize class tree. 
+*   (re-)Initialize class tree.
 *   NOTE: Disposes forest after the initialization is done.
 *
 * Parameters:
@@ -118,18 +118,18 @@ CGfxClassTreeWindow::~CGfxClassTreeWindow()
 * Returns:
 *   -
 *-----------------------------------------------------------------*/
-void CGfxClassTreeWindow::InitializeTree(QList<CClassTreeNode> *forest)
+void CGfxClassTreeWindow::InitializeTree(QList<ClassTreeNode> *forest)
 {
   m_treescrollview->m_classtree->RefreshClassForest(forest);
-  
+
   CGfxClassBox *node =  m_treescrollview->m_classtree->m_boxlist.first();
   while(node != NULL)
   {
     m_classcombo->insertItem(node->m_name,-1);
-    connect(node, SIGNAL(gotoClassDefinition(CParsedClass *)),
-	SLOT(slotGotoClassDefinition(CParsedClass *)));
+    connect(node, SIGNAL(gotoClassDefinition(ParsedClass *)),
+	SLOT(slotGotoClassDefinition(ParsedClass *)));
     node = m_treescrollview->m_classtree->m_boxlist.next();
-  }      
+  }
 
   delete forest;
 }
@@ -166,7 +166,7 @@ void CGfxClassTreeWindow::resizeEvent(QResizeEvent */*resevent*/)
 *-----------------------------------------------------------------*/
 void CGfxClassTreeWindow::foldClicked()
 {
-  m_treescrollview->m_classtree->SetUnfoldAll(false); 
+  m_treescrollview->m_classtree->SetUnfoldAll(false);
 }
 
 
@@ -205,11 +205,11 @@ void CGfxClassTreeWindow::unfoldClicked()
 void CGfxClassTreeWindow::itemSelected(int index)
 {
   CGfxClassBox *node = m_treescrollview->m_classtree->GetBoxId(index + 1);
-  
+
   if(node == NULL)
     return;
 
-  // If the selected box is invisible, make all its ancestors 
+  // If the selected box is invisible, make all its ancestors
   // (base classes) unfolded, and signal a major state change
   node->MakeVisible(true);
   m_treescrollview->m_classtree->stateChange(m_treescrollview->m_classtree->m_boxlist.first());
@@ -224,10 +224,10 @@ void CGfxClassTreeWindow::itemSelected(int index)
 * printClicked()
 *    Called when print button is clicked
 *
-* Parameters: 
+* Parameters:
 *  -
 *
-* Returns: 
+* Returns:
 *  -
 *-----------------------------------------------------------------*/
 void CGfxClassTreeWindow::printClicked()
@@ -239,7 +239,7 @@ void CGfxClassTreeWindow::printClicked()
     m_treescrollview->m_classtree->onPrintTree( &pr, tmp );
 }
 
-void CGfxClassTreeWindow::slotGotoClassDefinition(CParsedClass *pClass)
+void CGfxClassTreeWindow::slotGotoClassDefinition(ParsedClass *pClass)
 {
   emit gotoClassDefinition(pClass);
 }

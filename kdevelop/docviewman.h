@@ -36,7 +36,7 @@ class CKDevelop;
 class KHTMLView;
 class CDocBrowser;
 class CKDevAccel;
-class CClassStore;
+class ClassStore;
 class KDevCodeCompletion;
 class KDevCodeTemplate;
 class KPopupMenu;
@@ -54,11 +54,11 @@ class DocViewMan : public QObject
   Q_OBJECT
 
 public:
-  DocViewMan( CKDevelop* parent, CClassStore* pStore=0 );
+  DocViewMan( CKDevelop* parent, ClassStore* pStore=0 );
   ~DocViewMan();
 
-    void setStore( CClassStore* pStore );
-    CClassStore* store() const;
+    void setStore( ClassStore* pStore );
+    ClassStore* store() const;
 
   /** */
   void doSwitchToFile(QString filename, int line, int col,
@@ -358,7 +358,7 @@ private:
   KHTMLView*                m_pCurBrowserView;
 
   bool                      m_curIsBrowser;
-  CClassStore*              m_pStore;
+  ClassStore*              m_pStore;
   bool                      m_bCloseActionPending;
 
 

@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -19,6 +19,8 @@
 #include <klocale.h>
 #include "ccwvirtualmethodview.h"
 #include <qregexp.h>
+
+#include <assert.h>
 
 /*********************************************************************
  *                                                                   *
@@ -107,7 +109,7 @@ void CCWVirtualMethodView::setWidgetValues()
   classCombo.setMinimumSize( 330, 30 );
   classCombo.setFixedHeight( 30 );
   classCombo.setAutoResize( FALSE );
-  
+
   // Available scrollview
   availLbl.setText( i18n( "Available:" ) );
   availLbl.setMinimumSize( 210, 20 );
@@ -190,17 +192,17 @@ void CCWVirtualMethodView::setCallbacks()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CCWVirtualMethodView::setStore( CClassStore *aStore )
+void CCWVirtualMethodView::setStore( ClassStore *aStore )
 {
   assert( aStore != NULL );
-  QStrList *list;
+  QStringList* list;
 
   store = aStore;
-  
+
   // Fetch the list and update the combobox.
   list = store->getSortedClassNameList();
-  classCombo.insertStrList( list );
-  delete list;
+  classCombo.insertStringList( *list );
+  delete( list );       // ROBE
 }
 
 /*********************************************************************
@@ -211,9 +213,9 @@ void CCWVirtualMethodView::setStore( CClassStore *aStore )
 
 void CCWVirtualMethodView::slotClassComboChoice(int idx)
 {
-  QList<CParsedMethod> availList;
-  QList<CParsedMethod> usedList;
-  CParsedMethod *aMethod;
+  QPtrList<ParsedMethod> availList;
+  QPtrList<ParsedMethod> usedList;
+  ParsedMethod *aMethod;
   QString str;
 
   // Clear the listboxes and the dict.
@@ -225,12 +227,12 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
   store->getVirtualMethodsForClass( classCombo.text( idx ),
                                     &usedList, &availList );
 
-  
+
   for( aMethod = usedList.first();
        aMethod != NULL;
        aMethod = usedList.next() )
   {
-    implLb.inSort( aMethod->asString( str ) );
+    implLb.inSort( aMethod->asString() );
   }
 
   for( aMethod = availList.first();
@@ -238,8 +240,8 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
        aMethod = availList.next() )
   {
     // Create the string like <classname>::<methodname>
-    aMethod->asString( str );
-    str = aMethod->declaredInScope + "::" + str;
+    str = aMethod->asString();
+    str = aMethod->declaredInScope() + "::" + str;
 
     // Replace all . with ::.
     str.replace( QRegExp( "\\." ), "::" );
@@ -255,8 +257,8 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
 /** Executed when the user clicks on the add button. */
 void CCWVirtualMethodView::slotAddMethod()
 {
-  CParsedMethod *aMethod;
-  CParsedMethod *newMethod;
+  ParsedMethod *aMethod;
+  ParsedMethod *newMethod;
 
   if( availLb.currentItem() != -1 )
   {
@@ -264,16 +266,16 @@ void CCWVirtualMethodView::slotAddMethod()
 
     if( aMethod != NULL )
     {
-      newMethod = new CParsedMethod();
+      newMethod = new ParsedMethod();
       newMethod->copy( aMethod );
-      
+
       newMethod->out();
 
       emit addMethod( classCombo.currentText(), newMethod );
 
       // Add the method to the implemented listbox.
       implLb.inSort( availLb.text( availLb.currentItem() ) );
-      
+
       // Remove the method from the available listbox.
       availLb.removeItem( availLb.currentItem() );
 

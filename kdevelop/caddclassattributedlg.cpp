@@ -22,7 +22,7 @@
 
 
 #include "caddclassattributedlg.h"
-#include "./classparser/ParsedAttribute.h"
+#include "./sourceinfo/classstore.h"
 
 #include <kmessagebox.h>
 #include <kapp.h>
@@ -108,7 +108,7 @@ void CAddClassAttributeDlg::setWidgetValues()
   docLbl.setText( i18n("Documentation:") );
   QWhatsThis::add(&docLbl,i18n("You can enter a description of the member variable here."));
   QWhatsThis::add(&docEdit,i18n("You can enter a description of the member variable here."));
-  
+
   docEdit.setMinimumSize( 240, 80 );
 
   publicRb.setMinimumSize( 70, 20 );
@@ -123,11 +123,11 @@ void CAddClassAttributeDlg::setWidgetValues()
   privateRb.setMinimumSize( 60, 20 );
   privateRb.setFixedHeight( 20 );
   privateRb.setText( "Private" );
- 
+
   staticCb.setMinimumSize( 60, 20 );
   staticCb.setFixedHeight( 20 );
   staticCb.setText( "Static" );
- 
+
   constCb.setMinimumSize( 60, 20 );
   constCb.setFixedHeight( 20 );
   constCb.setText( "Const" );
@@ -196,9 +196,9 @@ void CAddClassAttributeDlg::setCallbacks()
 }
 
 
-CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
+ParsedAttribute *CAddClassAttributeDlg::asSystemObj()
 {
-  CParsedAttribute *aAttr = new CParsedAttribute();
+  ParsedAttribute *aAttr = new ParsedAttribute();
   QString comment;
 
   aAttr->setType( typeEdit.text() );
@@ -206,12 +206,12 @@ CParsedAttribute *CAddClassAttributeDlg::asSystemObj()
 
   // Set export
   if( publicRb.isChecked() )
-    aAttr->setExport( PIE_PUBLIC );
+    aAttr->setAccess( PIE_PUBLIC );
   else if( protectedRb.isChecked() )
-    aAttr->setExport( PIE_PROTECTED );
+    aAttr->setAccess( PIE_PROTECTED );
   else if( privateRb.isChecked() )
-    aAttr->setExport( PIE_PRIVATE );
-  
+    aAttr->setAccess( PIE_PRIVATE );
+
   // Set modifiers
   aAttr->setIsStatic( staticCb.isChecked() );
   aAttr->setIsConst( constCb.isChecked() );
