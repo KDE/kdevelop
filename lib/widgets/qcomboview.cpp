@@ -18,6 +18,7 @@
 **********************************************************************/
 
 #include "qcomboview.h"
+#include <kdeversion.h>
 #ifndef QT_NO_COMBOBOX
 #include "qpopupmenu.h"
 #include "qlistview.h"
@@ -651,7 +652,7 @@ void QComboView::popup()
 //    int w = lb->variableWidth() ? lb->sizeHint().width() : width();
     int w = width();
     int h = listHeight( lb, d->sizeLimit ) + 2;
-    QRect screen = QApplication::desktop()->availableGeometry( this );
+    QRect screen = QApplication::desktop()->availableGeometry( const_cast<QComboView*>(this) );
 
     int sx = screen.x();        // screen pos
     int sy = screen.y();
@@ -669,15 +670,17 @@ void QComboView::popup()
         x = sx;
     if (y + h > sy+sh && y - h - height() >= 0 )
         y = y - h - height();
-
-        QRect rect =
-        style().querySubControlMetrics( QStyle::CC_ComboBox, this,
-                        QStyle::SC_ComboBoxListBoxPopup,
-                        QStyleOption( x, y, w, h ) );
-    // work around older styles that don't implement the combobox
-    // listbox popup subcontrol
+#if KDE_VERSION >= 310
+    QRect rect =
+    style().querySubControlMetrics( QStyle::CC_ComboBox, this,
+                    QStyle::SC_ComboBoxListBoxPopup,
+                    QStyleOption( x, y, w, h ) );
     if ( rect.isNull() )
         rect.setRect( x, y, w, h );
+#else
+    QRect rect;
+    rect.setRect( x, y, w, h );
+#endif
     lb->setGeometry( rect );
 
     lb->raise();
