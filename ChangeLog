@@ -1,3 +1,8 @@
+1999-07-31 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* cpp_template is in the templategroup now
+	* fixed cursorproblem in applicationwizard
+	* worked on vcs in applicationwizard
+
 1999-07-30 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* now the applicationwizard uses ksgml2html too
 	* implemented some internal of the vcs tab in wizard

@@ -32,8 +32,8 @@ $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
 if ($processes{VSSUPPORT} eq "none") {
-	$overDirectory = $processes{DIRECTORY};
-	$underDirectory = $processes{DIRECTORY} . $nameLittle;
+	$overDirectory = $processes{DIRECTORY} . "/" . $processes{PRJVSLOCATION} . "/";
+	$underDirectory = $overDirectory . $nameLittle;
 }
 else {
 	$overDirectory = $homedirectory . "/kdeveloptemp/";
@@ -43,7 +43,7 @@ else {
 	
 #create the projectdirectory 
 printflush (STDOUT, "change directory...\n");
-chdir ($processes{DIRECTORY});
+chdir ($overDirectory);
 $date = `date`;
 @time = localtime();
 $year = 1900 + $time[5];
@@ -105,13 +105,6 @@ if ($processes{VSSUPPORT} eq "cvs") {
 			system ("cp $copysrc $copydes");
     }
   }
-}
-
-if ($processes{VSSUPPORT} eq "cvs") {
-  	chdir ($homedirectory . "/kdeveloptemp/");
-  	$vsimport = "cvs -d " . $processes{VSLOCATION} . " import -m \"" . $processes{LOGMESSAGE} . "\" " .
-    						$processes{PRJVSLOCATION} . " "  . $processes{VENDORTAG} . " " . $processes{RELEASETAG};
-    system ("$vsimport")
 }
 
 exit;
@@ -213,7 +206,7 @@ sub condCopyTemplateFiles {
 	
 	if ($processes{CPP} eq "yes") {
 	    copy ("$local_datadir/kdevelop/cpp",
-		  $directory, "$underDirectory/templates/cpp_template");
+		  "$underDirectory/templates/cpp_template");
 	}
     }
 
@@ -701,6 +694,9 @@ sub changeCustomApp {
     condCopyLsmFile();
     
 }
+
+
+
 
 
 

@@ -105,14 +105,13 @@ void slotDirDialogClicked();
   void slotApplicationClicked();
   void slotLocationButtonClicked();
   void slotVSBoxChanged(int);
-  void slotPrjVSLocationEntry();
   void slotVendorEntry();
 
 private:
 
   QString m_author_email;
   QString  m_author_name;
-  bool  gen_prj, modifyDirectory,modifyPrjVSLocation,modifyVendor;
+  bool  gen_prj, modifyDirectory,modifyVendor;
   QObject* o;
   QWidget *widget0,*widget1,*widget1c,*widget2,*widget3,*widget4,*widget1a,*widget1b;
   QListView* applications;

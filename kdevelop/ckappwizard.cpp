@@ -31,7 +31,6 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   gen_prj = false;
   modifyDirectory = false;
   modifyVendor = false;
-  modifyPrjVSLocation = false;
   nameold = "";
   setCaption(i18n("Application Wizard"));
   init();
@@ -616,7 +615,7 @@ void CKAppWizard::initPages(){
 	projectlocationline->setGeometry( 180, 150, 280, 30 );
 	projectlocationline->setMinimumSize( 0, 0 );
 	projectlocationline->setMaximumSize( 32767, 32767 );
-	projectlocationline->setFocusPolicy( QWidget::StrongFocus );
+	projectlocationline->setFocusPolicy( QWidget::NoFocus );
 	projectlocationline->setBackgroundMode( QWidget::PaletteBase );
 	projectlocationline->setFontPropagation( QWidget::NoChildren );
 	projectlocationline->setPalettePropagation( QWidget::NoChildren );
@@ -737,8 +736,10 @@ void CKAppWizard::initPages(){
 				
 	KQuickHelp::add(projectVSLocation,
 		  KQuickHelp::add(projectlocationline,
-				  i18n("Here you can choose the repository of your project in the\n"
-				  		 "version control system.")));
+				  i18n("Here you can see the repository of your project in the\n"
+				  		 "version control system. The repository is dependend on\n"
+				  		 "the directory of your project. You can not change the\n"
+				  		 "repository direct.")));
 				
 				
   /************************************************************/
@@ -1102,11 +1103,19 @@ void CKAppWizard::okPermited() {
   entries << "NAME\n";
   entries << nameline->text() << "\n";
   entries << "DIRECTORY\n";
-  if(QString(directoryline->text()).right(1) == "/"){
-    entries << directoryline->text() << "\n";
+
+	QString direct = directoryline->text();
+  if (direct.right(1) == "/") {
+		direct = direct.left(direct.length() - 1);
+  }
+	int pos;
+	pos = direct.findRev ("/");
+	direct = direct.left (pos);
+  if(direct.right(1) == "/"){
+    entries << direct << "\n";
   }
   else{
-    entries << directoryline->text() << "/" << "\n";
+    entries << direct << "/\n";
   }
   
   
@@ -1154,20 +1163,17 @@ void CKAppWizard::okPermited() {
   entries << "VERSION\n";
   entries << versionline->text() << "\n";
   entries << "VSSUPPORT\n";
-  if (!vsBox->currentItem() == 0) {
-  	entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
-  	entries << "VENDORTAG\n";
-  	entries << QString(vendorline->text()) + "\n";
-  	entries << "RELEASETAG\n";
-  	entries << QString(releaseline->text()) + "\n";
-  	entries << "VSLOCATION\n";
-  	entries << QString(vsLocation->text()) + "\n";
-  	entries << "PRJVSLOCATION\n";
-  	entries << QString(projectlocationline->text()) + "\n";
-  	entries << "LOGMESSAGE\n";
-  	entries << QString(messageline->text()) + "\n";
-  }
-  else entries << "none\n";
+  entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
+  entries << "VENDORTAG\n";
+  entries << QString(vendorline->text()) + "\n";
+  entries << "RELEASETAG\n";
+  entries << QString(releaseline->text()) + "\n";
+  entries << "VSLOCATION\n";
+  entries << QString(vsLocation->text()) + "\n";
+  entries << "PRJVSLOCATION\n";
+  entries << QString(projectlocationline->text()) + "\n";
+  entries << "LOGMESSAGE\n";
+  entries << QString(messageline->text()) + "\n";
 
 
   namelow = nameline->text();
@@ -1623,17 +1629,17 @@ void CKAppWizard::slotDefaultClicked(int page) {
   messageline->setText ("new project started");
   vendorline->setText(QString(nameline->text()).lower());
   releaseline->setText("start");
-  projectlocationline->setText(QString(nameline->text()).lower());
+  projectlocationline->setText(0);
   vsLocation->setText(QDir::homeDirPath() + "/cvsroot");
   vsBox->setCurrentItem(0);
   modifyVendor= false;
-  modifyPrjVSLocation= false;
   modifyDirectory= false;
   slotVSBoxChanged(0);
 }
 
 // connection of nameline
 void CKAppWizard::slotProjectnameEntry() {
+	int position = nameline->cursorPosition();
   nametext = nameline->text();
   nametext = nametext.stripWhiteSpace();
   int length = nametext.length();
@@ -1670,10 +1676,6 @@ void CKAppWizard::slotProjectnameEntry() {
    	directoryline->setText(dir + endname.lower());
   }
 
-  if (!modifyPrjVSLocation) {
-  	projectlocationline->setText(endname.lower());
-  }
-
   if (!modifyVendor) {
   	vendorline->setText(endname.lower());
   }
@@ -1685,12 +1687,25 @@ void CKAppWizard::slotProjectnameEntry() {
   else {
    	okButton->setEnabled(true);
   }
+  nameline->setCursorPosition(position);
 }
 
+// connection of directoryline
 void CKAppWizard::slotDirectoryEntry() {
   if(directoryline->hasFocus()) {
   	modifyDirectory = true;
   }
+  QString directory = directoryline->text();
+  QString enddir;
+  if (directory.right(1) == "/") {
+		directory = directory.left(directory.length() - 1);
+  }
+	int pos;
+	pos = directory.findRev ("/");
+	enddir = directory.right (directory.length() - pos -1);
+	
+  projectlocationline->setText(enddir);
+
 }
 
 // connection of iconload
@@ -1767,34 +1782,12 @@ void CKAppWizard::slotCppHeaderClicked() {
 
 void CKAppWizard::slotProcessExited() {
 
-  KShellProcess p;
-
- 	if (vsBox->currentItem() != 0) {
-		p.clearArguments();
- 	 	QString copydes = (QString) "rm -r -f " + QDir::homeDirPath() + "/kdeveloptemp";
-  	p << copydes;
- 		p.start(KProcess::Block,KProcess::AllOutput);
-
-	  QDir dir;
-  	dir.setCurrent(directoryline->text());
-
-	  p.clearArguments();
-  	QString checkout = (QString) "cvs -d " + vsLocation->text() + " co " + projectlocationline->text();
-	  p << checkout;
-  	p.start(KProcess::Block,KProcess::AllOutput);
-  }
-  	
 	QString directory = directoryline->text();
 	QString prj_str;
-	if (vsBox->currentItem() != 0) {
-	  prj_str = directory + "/" + vsLocation->text() + "/" + namelow + ".kdevprj";
-	}
-	else {
-  	prj_str = directory + "/" + namelow + ".kdevprj";
-  }
+  prj_str = directory + "/" + namelow + ".kdevprj";
   project = new CProject(prj_str);
   project->readProject();
-  project->setKDevPrjVersion("0.3");
+  project->setKDevPrjVersion("1.0beta1");
   if (cppitem->isSelected()) {
     project->setProjectType("normal_cpp");
   } 
@@ -2270,6 +2263,41 @@ void CKAppWizard::slotProcessExited() {
     }
   }
 
+  KShellProcess p;
+  QDir dir;
+	if (vsBox->currentItem() == 1) {
+		dir.setCurrent(QDir::homeDirPath() + "/kdeveloptemp");
+		QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
+										 (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
+										 (QString) " " + releaseline->text();
+		p << import;
+    p.start(KProcess::Block, KProcess::AllOutput);
+	}
+
+	if (vsBox->currentItem() != 0) {
+		dir.setCurrent(QDir::homeDirPath());
+		QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/kdeveloptemp";
+		p.clearArguments();
+ 	 	p << deltemp;
+    p.start(KProcess::Block, KProcess::AllOutput);
+
+		QString direct = directoryline->text();
+  	if (direct.right(1) == "/") {
+			direct = direct.left(direct.length() - 1);
+  	}
+		int pos;
+		pos = direct.findRev ("/");
+		direct = direct.left (pos);
+  	if(direct.right(1) != "/"){
+    	direct = direct + "/";
+  	}
+
+  	dir.setCurrent(direct);
+  	QString checkout = "cvs -d " + (QString) vsLocation->text() + " co " + (QString) projectlocationline->text();
+		p.clearArguments();
+ 	 	p << checkout;
+    p.start(KProcess::Block, KProcess::AllOutput);
+  }
 
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
   q->clearArguments();
@@ -2379,11 +2407,3 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
-
-void CKAppWizard::slotPrjVSLocationEntry() {
-  if(projectlocationline->hasFocus()) {
-  	modifyPrjVSLocation = true;
-  }
-}
-
-
