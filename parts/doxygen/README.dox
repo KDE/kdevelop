@@ -5,7 +5,7 @@ It allows you to call the Doxygen executable from a KDevelop menu.
 It integrates a GUI into the "KDevelop Project Configuration dialog" to
 configure Doxygen (it reads and writes Doxygen Conpatible configuration files).
 
-\section updateDoxygen To update to a newer doxygen version:
+<b>To update to a newer doxygen version:</b>
 
     -# Merge over the config.h and config.cpp files from the addon/doxywizard/
       directory in the doxygen sources.
