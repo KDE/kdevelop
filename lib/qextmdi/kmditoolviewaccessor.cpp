@@ -27,7 +27,6 @@
 #include "kmdimainfrm.h"
 
 #include "kmditoolviewaccessor.h"
-#include "kmditoolviewaccessor_p.h"
 
 KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
 : QObject(parent) 

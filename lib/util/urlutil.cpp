@@ -23,7 +23,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <kdebug.h>
-#include <qdir.h>
 
 #include <unistd.h>
 #include <limits.h>

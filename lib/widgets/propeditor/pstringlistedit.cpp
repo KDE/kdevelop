@@ -31,7 +31,7 @@
 #else
 #include "qeditlistbox.h"
 #include <qpushbutton.h>
-#include <compat_tools.h>
+#include "compat_tools.h"
 #endif
 
 namespace PropertyLib{

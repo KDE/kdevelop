@@ -70,7 +70,6 @@
 #include "kmdichildfrm.h"
 #include "kmdichildarea.h"
 #include "kmdichildview.h"
-#include "kmdidockcontainer.h"
 #include "kmditoolviewaccessor_p.h"
 #include "kmdifocuslist.h"
 #include "kmdidocumentviewtabwidget.h"

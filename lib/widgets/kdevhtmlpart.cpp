@@ -4,7 +4,7 @@
 
 #include <kaction.h>
 #include <kstdaction.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <kiconloader.h>
