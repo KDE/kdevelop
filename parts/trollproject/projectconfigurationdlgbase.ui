@@ -34,55 +34,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>buttonOk</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Ok</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>buttonCancel</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Cancel</string>
-            </property>
-        </widget>
-        <spacer row="1" column="0">
-            <property name="name">
-                <cstring>Spacer1_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>buttonCancel</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Cancel</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>buttonOk</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;OK</string>
-            </property>
-        </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>TabBuild</cstring>
@@ -98,70 +49,24 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <spacer row="2" column="0" rowspan="1" colspan="2">
                         <property name="name">
-                            <cstring>groupTemplate</cstring>
+                            <cstring>Spacer3</cstring>
                         </property>
-                        <property name="title">
-                            <string>Template</string>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
                         </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-                            <property name="spacing">
-                                <number>6</number>
-                            </property>
-                            <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>radioApplication</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Application</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Create an application</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="1" column="0">
-                                <property name="name">
-                                    <cstring>radioLibrary</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Library</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Create a library</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="1">
-                                <property name="name">
-                                    <cstring>checkStatic</cstring>
-                                </property>
-                                <property name="enabled">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="text">
-                                    <string>Static</string>
-                                </property>
-                            </widget>
-                            <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>radioSubdirs</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Subdirectories</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>This project holds subdirectories</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
                         <property name="name">
                             <cstring>GroupBox1</cstring>
                         </property>
@@ -241,23 +146,130 @@
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="2" column="0">
+                    <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
-                            <cstring>Spacer3</cstring>
+                            <cstring>groupTemplate</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
+                        <property name="title">
+                            <string>Template</string>
                         </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
+                        <property name="exclusive">
+                            <bool>true</bool>
                         </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget" row="0" column="0">
+                                <property name="name">
+                                    <cstring>layout1</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioApplication</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Application</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Create an application</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioLibrary</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Library</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Create a library</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioSubdirs</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Subdirectories</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>This project holds subdirectories</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="0" column="1">
+                        <property name="name">
+                            <cstring>groupLibrary</cstring>
                         </property>
-                    </spacer>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="title">
+                            <string>Library</string>
+                        </property>
+                        <property name="exclusive">
+                            <bool>true</bool>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget" row="0" column="0">
+                                <property name="name">
+                                    <cstring>layout2</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioShared</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Shared</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioStatic</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Static</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>radioPlugin</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Plugin</string>
+                                        </property>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </grid>
+                    </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -690,21 +702,42 @@
                 </grid>
             </widget>
         </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>buttonCancel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>buttonOk</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;OK</string>
+            </property>
+        </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>Spacer1_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>330</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
     </grid>
 </widget>
 <connections>
-    <connection>
-        <sender>buttonCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>ProjectConfigurationDlgBase</receiver>
-        <slot>updateProjectConfiguration()</slot>
-    </connection>
     <connection>
         <sender>Browse</sender>
         <signal>clicked()</signal>
@@ -723,12 +756,23 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>radioLibrarytoggled(bool)</slot>
     </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>updateProjectConfiguration()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>reject()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>TabBuild</tabstop>
     <tabstop>radioApplication</tabstop>
     <tabstop>radioLibrary</tabstop>
-    <tabstop>checkStatic</tabstop>
     <tabstop>radioSubdirs</tabstop>
     <tabstop>m_targetPath</tabstop>
     <tabstop>Browse</tabstop>
@@ -748,10 +792,6 @@
     <tabstop>m_releaseFlagsLink</tabstop>
     <tabstop>m_includePath</tabstop>
     <tabstop>m_libraryPath</tabstop>
-    <tabstop>buttonCancel</tabstop>
-    <tabstop>buttonOk</tabstop>
-    <tabstop>buttonOk</tabstop>
-    <tabstop>buttonCancel</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>

@@ -11,6 +11,7 @@
 
 #include "projectconfigurationdlg.h"
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qmessagebox.h>
 #include <kfiledialog.h>
@@ -38,8 +39,8 @@ ProjectConfigurationDlg::~ProjectConfigurationDlg()
 void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
 //=============================================
 {
-	if(!on) checkStatic->setChecked(false);
-	checkStatic->setEnabled(on);
+	groupLibrary->setEnabled(on);
+	//radioShared->setChecked(true);
 	m_targetLibraryVersion->setEnabled(on);
 }
 
@@ -80,9 +81,15 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     m_projectConfiguration->m_requirements += QD_THREAD;
   if (checkX11->isChecked())
     m_projectConfiguration->m_requirements += QD_X11;
-  if (checkStatic->isChecked())
-    m_projectConfiguration->m_requirements += QD_STATIC;
-
+  
+  // Lib mode
+  if (radioStatic->isChecked())
+    m_projectConfiguration->m_lib = QL_STATIC;
+  else if (radioPlugin->isChecked())
+      m_projectConfiguration->m_lib = QL_PLUGIN;
+  else
+      m_projectConfiguration->m_lib = QL_SHARED;
+  
   // Warnings
   m_projectConfiguration->m_warnings = QWARN_OFF;
   if (checkWarning->isChecked())
@@ -125,6 +132,14 @@ void ProjectConfigurationDlg::UpdateControls()
     case QTMP_LIBRARY:
       activateRadiobutton = radioLibrary;
       m_targetLibraryVersion->setText(m_projectConfiguration->m_libraryversion);
+      
+      if (m_projectConfiguration->m_lib == QL_STATIC)
+	  radioStatic->setChecked(true);
+      else if (m_projectConfiguration->m_lib == QL_PLUGIN)
+	  radioPlugin->setChecked(true);
+      else
+	  radioShared->setChecked(true);
+      
       break;
     case QTMP_SUBDIRS:
       activateRadiobutton = radioSubdirs;
@@ -155,9 +170,7 @@ void ProjectConfigurationDlg::UpdateControls()
     checkThread->setChecked(true);
   if (m_projectConfiguration->m_requirements & QD_X11)
     checkX11->setChecked(true);
-  if (m_projectConfiguration->m_requirements & QD_STATIC)
-    checkStatic->setChecked(true);
-
+  
   // Warnings
   if (m_projectConfiguration->m_warnings == QWARN_ON)
   {

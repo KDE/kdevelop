@@ -45,6 +45,7 @@ struct ProjectConfiguration
   QMakeTemplate   m_template;
   QMakeBuildMode  m_buildMode;
   QMakeWarnings   m_warnings;
+  QMakeLibMode    m_lib;
   int             m_requirements;
   QString         m_destdir;
   QString         m_target;
