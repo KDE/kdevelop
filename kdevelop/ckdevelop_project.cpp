@@ -98,7 +98,7 @@ bool CKDevelop::slotProjectClose()
       stderr_widget->clear();
       
       if (dbgController)
-	slotDebugStop();
+    slotDebugStop();
       
       //clear all edit_infos before starting a new project
       // edit_infos.clear(); now in doProjectClose (Christian)
@@ -109,7 +109,7 @@ bool CKDevelop::slotProjectClose()
       // close all documents
       m_docViewManager->doCloseAllDocs();
 
-      // set project to false and disable all ID_s related to project=true	
+      // set project to false and disable all ID_s related to project=true    
       prj->writeProject();
       project=false;
       //    prj->valid = false;   wtf!!!!
@@ -172,13 +172,13 @@ void CKDevelop::slotAddExistingFiles(){
   QString str_files = add_dlg->source_edit->lineEdit()->text();
 
   connect(&add_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-  	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+        this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
 
   connect(&add_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+      this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
 
   connect(&add_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) )) ;
+      this,SLOT(slotProcessExited(KProcess*) )) ;
 
 
   QStringList fileList;
@@ -225,7 +225,7 @@ void CKDevelop::slotAddExistingFiles(){
       add_process.clearArguments();
       add_process << QString("echo '")+
                      i18n("Preparing file: ") << source_name << "';";
-	// give a little message
+    // give a little message
 
       add_process << "cat"; // copy is your friend :-) ...cat, too
 
@@ -253,7 +253,7 @@ void CKDevelop::slotAddExistingFiles(){
       add_process.clearArguments();
       add_process << QString("echo '")+
                      i18n("Add to project: ") << source_name << "';";
-	// give a little message
+    // give a little message
       add_process << "mv";
       add_process << temp_name;
       add_process << dest_name;
@@ -283,7 +283,7 @@ void CKDevelop::slotAddExistingFiles(){
       add_process.clearArguments();
       add_process << QString("echo '")+
                      i18n("Copy and add to project: ") << source_name << "';";
-	// give a little message
+    // give a little message
       add_process << "cat"; // copy is your friend :-) ...cat, too
 
       if (add_dlg->isTemplateChecked())
@@ -310,7 +310,7 @@ void CKDevelop::slotAddExistingFiles(){
     }
 
     new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
-	lNewFiles.append(dest_name);
+    lNewFiles.append(dest_name);
   }
 
   // disconnect all of add_process
@@ -438,7 +438,7 @@ void CKDevelop::slotProjectOptions(){
 
       shell_process  << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
-	shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
+    shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
       shell_process  << "\" " << " ./configure "  << args;
 
       shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -461,11 +461,11 @@ void CKDevelop::slotProjectNewClass(const char* folder)
     if(new_subdir1 || new_subdir2)
       newSubDir();
     prj->updateMakefilesAm();
-  	QStrList lToRefresh;
-  	lToRefresh.autoDelete();
-  	lToRefresh.append(source_file);
-  	lToRefresh.append(header_file);
-  	refreshTrees(&lToRefresh);
+      QStrList lToRefresh;
+      lToRefresh.autoDelete();
+      lToRefresh.append(source_file);
+      lToRefresh.append(header_file);
+      refreshTrees(&lToRefresh);
   }
 }
 
@@ -506,15 +506,15 @@ void CKDevelop::slotShowFileProperties(const QString& rel_name){
 
 void CKDevelop::slotProjectOpen()
 {
-	QString old_project = "";
+    QString old_project = "";
 
-	slotStatusMsg(i18n("Opening project..."));
-	QString str;
+    slotStatusMsg(i18n("Opening project..."));
+    QString str;
 // --- changed by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
   config->setGroup("General Options");
   QString defDir=config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
   str = KFileDialog::getOpenFileName( defDir, "*.kdevprj");
-	slotProjectOpenCmdl(str);
+    slotProjectOpenCmdl(str);
 }
 
 void CKDevelop::slotProjectOpenRecent(int id)
@@ -525,51 +525,51 @@ void CKDevelop::slotProjectOpenRecent(int id)
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname)
 {
-	prjname.replace(QRegExp("file:"),"");
-	QFileInfo info(prjname);
+    prjname.replace(QRegExp("file:"),"");
+    QFileInfo info(prjname);
 
-	//if the new project file is not valid, do nothing
-	if (!info.isFile())
-		return;
+    //if the new project file is not valid, do nothing
+    if (!info.isFile())
+        return;
 
-	// Make sure we have the right permissions to read and write to the prj file
-	if (!(info.isWritable() && info.isReadable()))
-	{
-		KMessageBox::error(0,
-		    i18n("Unable to read the project file because you\n"
-		    "do not have read/write permissions for this project"),
-		    prjname);
-		return;
-	}
+    // Make sure we have the right permissions to read and write to the prj file
+    if (!(info.isWritable() && info.isReadable()))
+    {
+        KMessageBox::error(0,
+            i18n("Unable to read the project file because you\n"
+            "do not have read/write permissions for this project"),
+            prjname);
+        return;
+    }
 
-	project_menu->setEnabled(false);
-	disableCommand(ID_PROJECT_OPEN);
-	accel->setEnabled(false);
+    project_menu->setEnabled(false);
+    disableCommand(ID_PROJECT_OPEN);
+    accel->setEnabled(false);
 
-	QString old_project;
-	if (project)
-	{
-	  if (prj)
-  		old_project = prj->getProjectFile();
-		//the user may have pressed cancel in which case we want to reload
-		// the old project
-		if (!slotProjectClose())
-			prjname = old_project; // just reset the prjname to the old one
-	}
+    QString old_project;
+    if (project)
+    {
+      if (prj)
+          old_project = prj->getProjectFile();
+        //the user may have pressed cancel in which case we want to reload
+        // the old project
+        if (!slotProjectClose())
+            prjname = old_project; // just reset the prjname to the old one
+    }
 //  bool ok = true;
-	if (readProjectFile(prjname)) {
-	  QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
-	  projSessionFileName += "kdevses"; // suffix for a KDeveop session file
-	  if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
+    if (readProjectFile(prjname)) {
+      QString projSessionFileName = prjname.left(prjname.length()-7); // without ".kdevprj"
+      projSessionFileName += "kdevses"; // suffix for a KDeveop session file
+      if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
       debug("error during restoring of the KDevelop session !\n");
-  	}
+      }
     slotViewRefresh();
-  }		
-	else {
-		KMessageBox::error(0,
-		i18n("This does not appear to be a valid or\n"
-		    "supported kdevelop project file"),
-		    prjname);
+  }        
+    else {
+        KMessageBox::error(0,
+        i18n("This does not appear to be a valid or\n"
+            "supported kdevelop project file"),
+            prjname);
     // If there is an old project then try to restore it. (I wonder why - jbb)
     if (!old_project.isEmpty())
     {
@@ -579,10 +579,10 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
     }
   }
 
-	project_menu->setEnabled(true);
-	enableCommand(ID_PROJECT_OPEN);
-	accel->setEnabled(true);
-	slotStatusMsg(i18n("Ready."));
+    project_menu->setEnabled(true);
+    enableCommand(ID_PROJECT_OPEN);
+    accel->setEnabled(true);
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotProjectNewAppl(){
@@ -619,11 +619,11 @@ void CKDevelop::slotProjectNewAppl(){
     config->writeEntry("author_name",kappw.getAuthorName());
     config->writeEntry("author_email",kappw.getAuthorEmail());
     config->sync();
-	
-    if(project)		//now that we know that a new project will be built we can close the previous one
+    
+    if(project)        //now that we know that a new project will be built we can close the previous one
     {
-    	old_project = prj->getProjectFile();
-    	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
+        old_project = prj->getProjectFile();
+        if(!slotProjectClose())                //the user may have pressed cancel in which case the state is undetermined
       {
         if (readProjectFile(old_project))
           slotViewRefresh();
@@ -636,7 +636,7 @@ void CKDevelop::slotProjectNewAppl(){
 
     QString type=prj->getProjectType();
 
-    slotViewRefresh();		// a new project started, this is legitimate
+    slotViewRefresh();        // a new project started, this is legitimate
   }
   slotStatusMsg(i18n("Ready."));
 }
@@ -825,17 +825,17 @@ void CKDevelop::slotProjectAPI(){
   //MB
   if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
   {
-	  QString dir = prj->getProjectDir() + "/";
-	  QString doxconf =  dir +   prj->getProjectName().lower()+".doxygen";
- 		if(!QFileInfo(doxconf).exists())
-   	{
- 		    KMessageBox::error(0,
- 		    						i18n("Doxygen configuration file not found\n"
-                         	"Generate a valid one:\n"		
-                         	"Project->API Doc Tool->Configure doxygen"),
-                         	i18n("Error"));
-    		return;
-   	}
+      QString dir = prj->getProjectDir() + "/";
+      QString doxconf =  dir +   prj->getProjectName().lower()+".doxygen";
+         if(!QFileInfo(doxconf).exists())
+       {
+             KMessageBox::error(0,
+                                     i18n("Doxygen configuration file not found\n"
+                             "Generate a valid one:\n"        
+                             "Project->API Doc Tool->Configure doxygen"),
+                             i18n("Error"));
+            return;
+       }
     slotDebugStop();
     showOutputView(true);
     setToolMenuProcess(false);
@@ -848,8 +848,8 @@ void CKDevelop::slotProjectAPI(){
     shell_process << "doxygen "+prj->getProjectName().lower()+".doxygen";
     next_job="fv_refresh";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-	  beep=true;
- 	  return;
+      beep=true;
+       return;
   }
   else{  // Use KDOC 2.x
     //MB end
@@ -932,20 +932,20 @@ void CKDevelop::slotProjectAPI(){
 #include <vector>
 
 void CKDevelop::slotConfigureDoxygen(){
-	// check for Doxyfile
-	KShellProcess process;
+    // check for Doxyfile
+    KShellProcess process;
   QString dir =prj->getProjectDir();
   QString file= prj->getProjectDir()+"/"+prj->getProjectName().lower()+".doxygen";
   if(!QFileInfo(file).exists())
   {
-	// create default
-	process.clearArguments();
-	process << QString("cd '")+ dir + "' && ";
-	process << "doxygen -s -g "+prj->getProjectName().lower()+".doxygen";
-	process.start(KProcess::Block,KProcess::AllOutput);
-	
-	// fill file with default projectname directories, etc.
-	 QFile f( file );
+    // create default
+    process.clearArguments();
+    process << QString("cd '")+ dir + "' && ";
+    process << "doxygen -s -g "+prj->getProjectName().lower()+".doxygen";
+    process.start(KProcess::Block,KProcess::AllOutput);
+    
+    // fill file with default projectname directories, etc.
+     QFile f( file );
     if ( !f.open( IO_ReadOnly ) )
         return;
     QTextStream t(&f);
@@ -953,49 +953,49 @@ void CKDevelop::slotConfigureDoxygen(){
     while ( !t.eof() )
     {
       QString s = t.readLine();
-    	vec.push_back(s);
-    	if (s.find("#") == 0)
-    		continue;
-    	if (s.find("OUTPUT_DIRECTORY") == 0)
-    		vec.back() = QString("OUTPUT_DIRECTORY\t=")+dir+prj->getProjectName().lower()+"-api/";
-    	if (s.find("TAB_SIZE") == 0)
-    		vec.back() = "TAB_SIZE\t=4";
-    	if (s.find("WARN_IF_UNDOCUMENTED") == 0)
-    		vec.back() = "WARN_IF_UNDOCUMENTED\t=NO";
-    	if (s.find("INPUT") == 0)
-    		vec.back() = QString("INPUT\t=") + dir;
-    	if (s.find("FILE_PATTERNS") == 0)
-    		vec.back().append("*.h \\ \n *.hh \\ \n *.H \\ \n " );
-    	if (s.find("RECURSIVE") == 0)
-    		vec.back() = "RECURSIVE\t=YES";
-     	if (s.find("ALPHABETICAL_INDEX") == 0)
-    		vec.back() = "ALPHABETICAL_INDEX\t=YES";
-    	if (s.find("GENERATE_LATEX") == 0)
-    		vec.back() = "GENERATE_LATEX\t=NO";
-    	if (s.find("GENERATE_RTF") == 0)
-    		vec.back() = "GENERATE_RTF\t=NO";
-    	if (s.find("GENERATE_MAN") == 0)
-    		vec.back() = "GENERATE_MAN\t=NO";
+        vec.push_back(s);
+        if (s.find("#") == 0)
+            continue;
+        if (s.find("OUTPUT_DIRECTORY") == 0)
+            vec.back() = QString("OUTPUT_DIRECTORY\t=")+dir+prj->getProjectName().lower()+"-api/";
+        if (s.find("TAB_SIZE") == 0)
+            vec.back() = "TAB_SIZE\t=4";
+        if (s.find("WARN_IF_UNDOCUMENTED") == 0)
+            vec.back() = "WARN_IF_UNDOCUMENTED\t=NO";
+        if (s.find("INPUT") == 0)
+            vec.back() = QString("INPUT\t=") + dir;
+        if (s.find("FILE_PATTERNS") == 0)
+            vec.back().append("*.h \\ \n *.hh \\ \n *.H \\ \n " );
+        if (s.find("RECURSIVE") == 0)
+            vec.back() = "RECURSIVE\t=YES";
+         if (s.find("ALPHABETICAL_INDEX") == 0)
+            vec.back() = "ALPHABETICAL_INDEX\t=YES";
+        if (s.find("GENERATE_LATEX") == 0)
+            vec.back() = "GENERATE_LATEX\t=NO";
+        if (s.find("GENERATE_RTF") == 0)
+            vec.back() = "GENERATE_RTF\t=NO";
+        if (s.find("GENERATE_MAN") == 0)
+            vec.back() = "GENERATE_MAN\t=NO";
     }
     f.close();
     t.unsetDevice();
     f.open(IO_WriteOnly);
     t.setDevice(&f);
     for (unsigned i=0; i<vec.size(); ++i)
-    	t << vec[i] << "\n";
+        t << vec[i] << "\n";
     f.close();
     t.unsetDevice();
- 	}		 	
-	// doxywizard ?
-	if(!CToolClass::searchInstProgram("doxywizard")) // no dialog
-	{
-   	KMessageBox::error(0,
-			QString("doxwizard ") +i18n(" is not necessary, but you have to edit your Configuration for doxygen by hand.\nMaybe you should look for a newer Version at:\n\n\t http://www.stack.nl/~dimitri/doxygen/download.html\n\n"),
-							i18n("Program not found -- doxywizard "));
-  	return; 	
-	}
+     }             
+    // doxywizard ?
+    if(!CToolClass::searchInstProgram("doxywizard")) // no dialog
+    {
+       KMessageBox::error(0,
+            QString("doxwizard ") +i18n(" is not necessary, but you have to edit your Configuration for doxygen by hand.\nMaybe you should look for a newer Version at:\n\n\t http://www.stack.nl/~dimitri/doxygen/download.html\n\n"),
+                            i18n("Program not found -- doxywizard "));
+      return;     
+    }
 
-  KShellProcess	shell_process;
+  KShellProcess    shell_process;
   shell_process.clearArguments();
   shell_process << QString("cd '")+ dir + "' && ";
   shell_process << "doxywizard "+prj->getProjectName().lower()+".doxygen";
@@ -1008,12 +1008,12 @@ void CKDevelop::slotProjectManual(){
 
  if(prj->isKDE2Project()){
     slotDebugStop();
-  	showOutputView(true);
-//  	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
-  	setToolMenuProcess(false);
-	  slotFileSaveAll();
-  	slotStatusMsg(i18n("Creating project Manual..."));
-  	messages_widget->start();
+      showOutputView(true);
+//      error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+      setToolMenuProcess(false);
+      slotFileSaveAll();
+      slotStatusMsg(i18n("Creating project Manual..."));
+      messages_widget->start();
     shell_process.clearArguments();
     shell_process << "cd '"+prj->getProjectDir()+"/doc"+"' && ";
     shell_process << make_cmd;
@@ -1025,40 +1025,40 @@ void CKDevelop::slotProjectManual(){
 
   CMakeManualDlg dlg(this,"tesr",prj->getSGMLFile());
   if(dlg.exec()){
-	
+    
   slotDebugStop();
-	showOutputView(true);
-//	error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
-	
-	setToolMenuProcess(false);
-	//  slotFileSaveAll();
-	slotStatusMsg(i18n("Creating project Manual..."));
-	messages_widget->start();
-	
-	bool ksgml = true;
-	if(dlg.program == "sgml2html") ksgml = false;
-	prj->setSGMLFile(dlg.file);
-	CGenerateNewFile generator;
-	QFileInfo info(dlg.file);
-	
-	if(ksgml){
-	    
-	    QString nif_file = info.dirPath() + "/" + info.baseName()+ ".nif";
-	    if(!QFile::exists(nif_file)){
-		generator.genNifFile(nif_file);
-	    }
-	}
+    showOutputView(true);
+//    error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
+    
+    setToolMenuProcess(false);
+    //  slotFileSaveAll();
+    slotStatusMsg(i18n("Creating project Manual..."));
+    messages_widget->start();
+    
+    bool ksgml = true;
+    if(dlg.program == "sgml2html") ksgml = false;
+    prj->setSGMLFile(dlg.file);
+    CGenerateNewFile generator;
+    QFileInfo info(dlg.file);
+    
+    if(ksgml){
+        
+        QString nif_file = info.dirPath() + "/" + info.baseName()+ ".nif";
+        if(!QFile::exists(nif_file)){
+        generator.genNifFile(nif_file);
+        }
+    }
         shell_process.clearArguments();
         shell_process << "cd '"+info.dirPath()+"' && ";
-	if(ksgml){
-	    shell_process << "ksgml2html";
-	    shell_process << info.fileName();
-	    shell_process << "en";
-	}
-	else{
-	    shell_process << "sgml2html";
-	    shell_process << info.fileName();
-	}
+    if(ksgml){
+        shell_process << "ksgml2html";
+        shell_process << info.fileName();
+        shell_process << "en";
+    }
+    else{
+        shell_process << "sgml2html";
+        shell_process << info.fileName();
+    }
         next_job="fv_refresh";
         shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
         beep=true;
@@ -1093,25 +1093,25 @@ void CKDevelop::slotProjectMakeDistRPM(){
  connect(rpmbuilder, SIGNAL(stdERR(QString)), this, SLOT(slotGetRPMBuildSTDERR(QString)));
  connect(rpmbuilder, SIGNAL(stdOUT(QString)), this, SLOT(slotGetRPMBuildSTDOUT(QString)));
  connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
-	QStrList shortInfo = prj->getShortInfo();
-	QString qsShortInfo = "";
-	for ( uint idx= 0; idx < shortInfo.count();  idx++ )
-		qsShortInfo += shortInfo.at(idx);
-		rpmbuilder->setProjectData(
-				prj->getProjectName(),
+    QStrList shortInfo = prj->getShortInfo();
+    QString qsShortInfo = "";
+    for ( uint idx= 0; idx < shortInfo.count();  idx++ )
+        qsShortInfo += shortInfo.at(idx);
+        rpmbuilder->setProjectData(
+                prj->getProjectName(),
                                 prj->getVersion(),
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
                                 qsShortInfo,
-				prj->getKPPRPMVersion(),
-				prj->getKPPLicenceType(),
-				prj->getKPPURL(),
-				prj->getKPPAppGroup(),
-				prj->getKPPBuildRoot(),
-				prj->getKPPSummary(),
-				prj->getKPPIcon());
-	rpmbuilder->startBuild();
+                prj->getKPPRPMVersion(),
+                prj->getKPPLicenceType(),
+                prj->getKPPURL(),
+                prj->getKPPAppGroup(),
+                prj->getKPPBuildRoot(),
+                prj->getKPPSummary(),
+                prj->getKPPIcon());
+    rpmbuilder->startBuild();
 }
 
 void CKDevelop::slotConfigMakeDistRPM()
@@ -1125,34 +1125,33 @@ void CKDevelop::slotConfigMakeDistRPM()
  connect(rpmbuilder, SIGNAL(stdERR(QString)), this, SLOT(slotGetRPMBuildSTDERR(QString)));
  connect(rpmbuilder, SIGNAL(stdOUT(QString)), this, SLOT(slotGetRPMBuildSTDOUT(QString)));
  connect(rpmbuilder, SIGNAL(newSpec(QString)), this, SLOT(slotAddSpec(QString)));
-	QStrList shortInfo = prj->getShortInfo();
-	QString qsShortInfo = "";
-	for ( uint idx= 0; idx < shortInfo.count();  idx++ )
-		qsShortInfo += shortInfo.at(idx);
+    QStrList shortInfo = prj->getShortInfo();
+    QString qsShortInfo = "";
+    for ( uint idx= 0; idx < shortInfo.count();  idx++ )
+        qsShortInfo += shortInfo.at(idx);
  rpmbuilder->setProjectData(    prj->getProjectName(),
                                 prj->getVersion(),
                                 prj->getAuthor(),
                                 prj->getEmail(),
                                 prj->getConfigureArgs(),
                                 qsShortInfo,
-				prj->getKPPRPMVersion(),
-				prj->getKPPLicenceType(),
-				prj->getKPPURL(),
-				prj->getKPPAppGroup(),
-				prj->getKPPBuildRoot(),
-				prj->getKPPSummary(),
-				prj->getKPPIcon());
-	rpmbuilder->show();
+                prj->getKPPRPMVersion(),
+                prj->getKPPLicenceType(),
+                prj->getKPPURL(),
+                prj->getKPPAppGroup(),
+                prj->getKPPBuildRoot(),
+                prj->getKPPSummary(),
+                prj->getKPPIcon());
+    rpmbuilder->show();
 }
 
 
 void CKDevelop::slotProjectLoadTags()
 {
-  //
-  debug("in slotProjectLoadTags()\n");
-  slotStatusMsg(i18n("Loading tags file..."));
+  kdDebug() << "in slotProjectLoadTags()\n";
   QTime dt;
   dt.start();
+  slotStatusMsg(i18n("Loading tags file..."));
   QString filename = "tags";
   if (!QFileInfo(filename).exists()) {
     // warn user that the tag file does not exist
@@ -1163,58 +1162,9 @@ void CKDevelop::slotProjectLoadTags()
     // "The tags based features "Goto Definition" and "Goto Declaration"
     // "will not be available"
     // if create and creation unsuccesful return
-  }
-  QFile tagsfile(filename);
-  CTagListDict tags;
-  tags.setAutoDelete(true);
-  if (tagsfile.open(IO_ReadOnly)) {
-    kdDebug() << "tags file opened succefully, now reading...\n" ;
-    QTextStream ts(&tagsfile);
-    QString aline;
-    int n=0;
-    while (!ts.eof()) {
-      ++n;
-      aline = ts.readLine();
-      // do some checking that we have the right version of ctags
-      if (aline[0] == '!') {
-        // we could look at the stuff here that ctags writes
-        // and then move on
-      }
-      // exclude comments from being parsed
-      else {
-        // split line into components according to ctags manual
-        QChar sep('\t');
-        QStringList taglist = QStringList::split(sep,aline);
-        // tag<TAB>filename<TAB>ex command<TAB>ctags extension
-        QStringList::Iterator it = taglist.begin();
-        QStringList::Iterator ptag = it;
-        QStringList::Iterator pfile = ++it;
-        QStringList::Iterator pexcmd = ++it;
-        QStringList::Iterator pext = ++it;
-        //kdDebug() << "1 tag    2 filename    3 ex command    4 ctags ext\n" ;
-        //kdDebug() << (*ptag).latin1() << "    "
-        //          << (*pfile).latin1() << "    "
-        //          << (*pexcmd).latin1() << "    "
-        //          << (*pext).latin1() << "\n";
-        CTagList* pTagList = tags[*ptag];
-        if (!pTagList) {
-          pTagList = new CTagList(*ptag);
-          if (!pTagList) {
-            // error out of memory while attempting to create tags database
-            return;
-          }
-          tags.insert(*ptag,pTagList);
-        }
-        pTagList->append(CTag(*pfile,*pexcmd,*pext));
-      }
-    }
-  }
-  else {
-    // "Unable to open tags file: %1"
     return;
   }
-  tagsfile.close();
-  tags.statistics();
+  prj->ctagsDataBase().reload();
   kdDebug() << "loading tags file completed, time: " << dt.elapsed()/1000.0 << " [s]\n";
 }
 
@@ -1227,12 +1177,12 @@ void CKDevelop::slotProjectMakeTags()
 void CKDevelop::slotAddSpec(QString path)
 {
 
-		QString namelow = (prj->getProjectName()).lower();
-		QStrList myList;
-		prj->getAllFiles(myList);
-		//if(myList.contains(namelow+".spec"))
-		{
-				kdDebug() << "I need to add " << path << " to the project..." << endl;
+        QString namelow = (prj->getProjectName()).lower();
+        QStrList myList;
+        prj->getAllFiles(myList);
+        //if(myList.contains(namelow+".spec"))
+        {
+                kdDebug() << "I need to add " << path << " to the project..." << endl;
         TFileInfo fileInfo;
         fileInfo.rel_name = namelow + ".spec";
         fileInfo.type = DATA;
@@ -1240,15 +1190,15 @@ void CKDevelop::slotAddSpec(QString path)
         fileInfo.install = false;
         fileInfo.install_location = "";
         prj->addFileToProject (namelow + ".spec",fileInfo);
-		}
+        }
 }
 void CKDevelop::slotGetRPMBuildSTDOUT(QString sstdout){
         kdDebug() << sstdout << endl;
-				messages_widget->insertAtEnd(sstdout);
+                messages_widget->insertAtEnd(sstdout);
 }
 void CKDevelop::slotGetRPMBuildSTDERR(QString sstderr){
         kdDebug() << sstderr << endl;
-				stderr_widget->insertAtEnd(sstderr);
+                stderr_widget->insertAtEnd(sstderr);
 }
 void CKDevelop::slotdoneWithKpp(){
  rpmbuilder->hide();
@@ -1256,14 +1206,14 @@ void CKDevelop::slotdoneWithKpp(){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("RPMS Finished"));
   beep = true;
-	//save prefs here
-	prj->setKPPAppGroup(rpmbuilder->getAppGroup());
-	prj->setKPPBuildRoot(rpmbuilder->getBuildRoot());
-	prj->setKPPIcon(rpmbuilder->getIcon());
-	prj->setKPPLicenceType(rpmbuilder->getLicense());
-	prj->setKPPRPMVersion(rpmbuilder->getVersion());
-	prj->setKPPSummary(rpmbuilder->getSummary());
-	prj->setKPPURL(rpmbuilder->getURL());
+    //save prefs here
+    prj->setKPPAppGroup(rpmbuilder->getAppGroup());
+    prj->setKPPBuildRoot(rpmbuilder->getBuildRoot());
+    prj->setKPPIcon(rpmbuilder->getIcon());
+    prj->setKPPLicenceType(rpmbuilder->getLicense());
+    prj->setKPPRPMVersion(rpmbuilder->getVersion());
+    prj->setKPPSummary(rpmbuilder->getSummary());
+    prj->setKPPURL(rpmbuilder->getURL());
 
  delete rpmbuilder;
 }
@@ -1352,7 +1302,7 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   // normalize it a little bit
   rel_name.replace(QRegExp("///"),"/"); // remove ///
   rel_name.replace(QRegExp("//"),"/"); // remove //
-		
+        
   rel_name.remove(0,prj->getProjectDir().length());
   //  rel_name.replace(QRegExp(prj->getProjectDir()),"");
   //  kdDebug() << "getProDir():" << prj->getProjectDir() << endl;
@@ -1507,18 +1457,18 @@ void CKDevelop::newSubDir(){
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
     {
       if (!prj->getCXXFLAGS().isEmpty())
-	shell_process << prj->getCXXFLAGS() << " ";
+    shell_process << prj->getCXXFLAGS() << " ";
       if (!prj->getAdditCXXFLAGS().isEmpty())
-	shell_process << prj->getAdditCXXFLAGS();
+    shell_process << prj->getAdditCXXFLAGS();
     }
 
   shell_process  << "\" " << flagclabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
     {
       if (!prj->getCXXFLAGS().isEmpty())
-	shell_process << prj->getCXXFLAGS() << " ";
+    shell_process << prj->getCXXFLAGS() << " ";
       if (!prj->getAdditCXXFLAGS().isEmpty())
-	shell_process << prj->getAdditCXXFLAGS();
+    shell_process << prj->getAdditCXXFLAGS();
     }
   
   shell_process  << "\" " << "LDFLAGS=\" " ;

@@ -67,6 +67,11 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   pop->setItemEnabled(ID_EDIT_CUT,false);
   pop->setItemEnabled(ID_EDIT_COPY,false);
   pop->setItemEnabled(ID_EDIT_PASTE,false);
+
+  pop->insertSeparator();
+  pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotTagsGotoDefinition()),0,ID_EDIT_TAGS_DEFINITION);
+  pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotTagsGotoDeclaration()),0,ID_EDIT_TAGS_DECLARATION);
+
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(SmallIconSet("help"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
@@ -339,6 +344,10 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_EDIT_ADD_WATCH_VARIABLE, !str.isEmpty());  // TODO: only enable in debugger mode
     pop->setItemEnabled(ID_EDIT_RUN_TO_CURSOR, true);	                // TODO: only enable in debugger mode
     pop->setItemEnabled(ID_EDIT_STEP_OUT_OFF, true);	                // TODO: only enable in debugger mode
+
+    // lookup string class definition in tags database
+    pop->changeItem(SmallIconSet("help"),i18n("Goto Definition: ") + str,ID_EDIT_TAGS_DEFINITION); // tag file search
+    pop->changeItem(SmallIconSet("help"),i18n("Goto Declaration: ") + str,ID_EDIT_TAGS_DECLARATION); // tag file search
 
     pop->changeItem(SmallIconSet("grep"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
     pop->changeItem(SmallIconSet("help"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry

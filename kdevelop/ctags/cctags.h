@@ -106,19 +106,17 @@ public:
   CTagsDataBase();
   /** destructor */
   ~CTagsDataBase();
-  /** refresh CTagsDataBase, creates the database if necessary */
-  void refresh();
 //private:
   /** create a tags file for a CProject */
   void create_tags(KShellProcess& process, CProject& project);
   /** load a tags file and create the search database */
-  void load_tags();
+  void load();
   /** unload, i.e. destroy the current search database */
-  void unload_tags();
+  void unload();
   /** reload, unload current and load regenerated search database */
-  void reload_tags();
+  void reload();
 private:
-  /** true if search database is created */
+  /** true if search database is initialized */
   bool m_init;
   /** searchable database */
   CTagListDict m_taglistdict;
