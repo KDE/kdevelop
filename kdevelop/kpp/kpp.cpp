@@ -31,6 +31,7 @@
 #include <kstddirs.h>
 #include <kprocess.h>
 #include "kpp.h"
+#include <kmessagebox.h>
 
 Kpp::Kpp(QWidget*parent,const char* name, bool modal):projectview(parent,name,modal){
 
@@ -224,6 +225,7 @@ bool Kpp::startBuild(){
         {
          // the source is not there, display a dialog and exit this dialog.
          cerr << "need source file" << endl;
+         KMessageBox::sorry(0,"You need to generate a source dist first...", "Missing tar.gz file", true);
          exitApp();
         }
         else
@@ -257,6 +259,8 @@ bool Kpp::startBuild(){
                         // the spec is not filled out correctly do no clobber the dialog
                         // but do not start the build.
                         cerr << "spec form not filled out completely" << endl;
+                        KMessageBox::sorry(0,"You need to generate a spec file first...", "Missing spec file", true);
+
                         return false;
                }
         }
