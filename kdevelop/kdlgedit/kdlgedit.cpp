@@ -1365,7 +1365,7 @@ class PreviewDlg : public QDialog
     PreviewDlg(QWidget*parent=0,const char* name="Preview_Dialog")
       : QDialog(parent,name, TRUE)
      {
-        QWidget *wid = new QWidget(this);
+        wid = new QWidget(this);
         ldr = new KDlgLoader(wid);
         if (!ldr)
           return;
@@ -1389,10 +1389,14 @@ class PreviewDlg : public QDialog
   ~PreviewDlg()
     {
       delete ldr;
+      ldr=0l;
+      delete wid;
+      wid=0l;
     }
   
   protected:
     KDlgLoader *ldr;
+    QWidget *wid;
 };
 
 
