@@ -35,6 +35,7 @@
 #include <qtimer.h>
 #include <qregexp.h>
 
+
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
     : QListView( parent, name ), m_cppSupport( part ), m_editor( 0 ), m_document( 0 )
 {
@@ -42,7 +43,7 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
     addColumn( i18n("Problem") );
     addColumn( i18n("File") );
     addColumn( i18n("Line") );
-    addColumn( i18n("Column") );
+//    addColumn( i18n("Column") );
     setAllColumnsShowFocus( TRUE );
 
     m_timer = new QTimer( this );

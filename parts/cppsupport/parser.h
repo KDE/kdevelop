@@ -58,8 +58,9 @@ public /*rules*/ :
     bool parseTemplateDeclaration();
     bool parseDeclaration();
     bool parseNestedNameSpecifier();
+    bool parseQualifiedName();
+    bool parseUnqualiedName();
     bool parseName();
-    bool parseName2(); /*internal*/
     bool parseOperatorFunctionId();
     bool parseTemplateArgumentList();
     bool parseOperator();
