@@ -1,3 +1,8 @@
+2001-03-20  F@lk Brettschneider <falk@kdevelop.org>
+    * So this is real MDI now. Create new views for the current document
+      using "Window-->New Window"!
+    * applied bugfixes of Roland Krause <rokrau@yahoo.com>. Thanks a lot, Roland!
+
 2001-03-19  F@lk Brettschneider <falk@kdevelop.org>
     * adapted HTML browser to DocViewMan MDI-mechanism
       (E.g. removed browser_widget and replaced it with m_docViewManager->currentBrowserDoc())
