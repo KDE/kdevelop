@@ -222,7 +222,8 @@ void DoxygenConfigWidget::loadFile()
 
     QFile f(m_fileName);
     if (!f.open(IO_ReadOnly)) {
-        KMessageBox::information(0, i18n("Doxyfile does not exist. Starting with default values."));
+      // I think it confuse the user,if this message pop up on Project->options
+      //KMessageBox::information(0, i18n("Doxyfile does not exist. Starting with default values."));
     } else {
         int fsize = f.size();
         QCString contents(fsize+1);
