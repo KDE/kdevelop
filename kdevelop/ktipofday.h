@@ -19,17 +19,18 @@
 #ifndef KTIPOFDAY_H
 #define KTIPOFDAY_H
 
-#include <qdialog.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qframe.h>
 
+#include "ktipofdaydlg.h"
+
 /**"Tip of the Day" dialog" for KDE/Qt applications
   *@author Ralf Nolden
   */
 
-class KTipofDay : public QDialog  {
+class KTipofDay : public KTipofDayDlg  {
    Q_OBJECT
 public: 
 	KTipofDay(QWidget *parent=0, const char *name=0);
@@ -41,16 +42,6 @@ public slots:
 protected slots:
   void slotOK();
   void slotNext();
-
-protected:
-  QFrame* main_frame;
-  QCheckBox* show_check;
-  QFrame* bmp_frame;
-  QLabel* tip_label;
-  QPushButton* ok_button;
-  QPushButton* next_button;
-
-
 
 };
 

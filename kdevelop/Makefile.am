@@ -1,6 +1,21 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kdevelop
-kdevelop_SOURCES = cclonefunctiondlg.cpp kdevlistview.cpp main.cpp ktipofday.cpp kstartuplogo.cpp klangcombo.cpp grepdialog.cpp doctreeview.cpp dbgtoolbar.cpp dbgpsdlg.cpp cupdatekdedocdlg.cpp ctreeview.cpp ctreehandler.cpp ctoolsconfigdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp cmakemanualdlgdata.cpp cmakemanualdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckdevaccel.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp cexecuteargdlg.cpp cerrormessageparser.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdocbrowser.cpp ccvaddfolderdlg.cpp ccreatedocdatabasedlg.cpp cclassview.cpp cclasstreehandler.cpp cclasstooltreeview.cpp cclasstooldlg.cpp caddnewtranslationdlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp
+kdevelop_SOURCES = cclonefunctiondlg.cpp kdevlistview.cpp main.cpp ktipofday.cpp kstartuplogo.cpp \
+                    klangcombo.cpp grepdialog.cpp doctreeview.cpp dbgtoolbar.cpp dbgpsdlg.cpp \
+                    cupdatekdedocdlg.cpp ctreeview.cpp ctreehandler.cpp ctoolsconfigdlg.cpp \
+                    ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp \
+                    coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp cmakemanualdlgdata.cpp \
+                    cmakemanualdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp \
+                    ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp \
+                    ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckdevaccel.cpp \
+                    ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp \
+                    cfinddoctextdlg.cpp cfilepropdlg.cpp cexecuteargdlg.cpp \
+                    cerrormessageparser.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdocbrowser.cpp \
+                    ccvaddfolderdlg.cpp ccreatedocdatabasedlg.cpp cclassview.cpp \
+                    cclasstreehandler.cpp cclasstooltreeview.cpp cclasstooldlg.cpp \
+                    caddnewtranslationdlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp \
+                    caddclassattributedlg.cpp ktipofdaydlg.ui
+
 kdevelop_LDADD   = ./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dbg/libdbg.a ./gfxview/libgfxview.a ./kwrite/libkwrite.a ./print/libprint.a ./vc/libvc.a -lkhtml -lm -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = classparser classwizard dbg dlgs examples gfxview kwrite pics print tools vc templates
