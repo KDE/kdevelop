@@ -495,13 +495,20 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
 
   // read the information about the documents
   QDomElement docsAndViewsEl = session.namedItem("DocsAndViews").toElement();
-  if(docsAndViewsEl.isNull()){
-		docsAndViewsEl = domdoc.createElement("DocsAndViews");
-  	session.appendChild( docsAndViewsEl);
-	}
- 	else
-  	docsAndViewsEl.clear();
-	
+  if (docsAndViewsEl.isNull()) {
+    docsAndViewsEl = domdoc.createElement("DocsAndViews");
+    session.appendChild( docsAndViewsEl);
+  }
+  else {
+    // we need to remove the old ones before memorizing the current ones (to avoid merging)
+    QDomNode n = docsAndViewsEl.firstChild();
+    while ( !n.isNull() ) {
+      QDomNode toBeRemoved = n;
+      n = n.nextSibling();
+      docsAndViewsEl.removeChild(toBeRemoved);
+    }
+  }
+
   if (m_pDocViewMan->docCount() > 0) {
     QList<KWriteDoc> kWriteDocList = m_pDocViewMan->getKWriteDocList();
     for (kWriteDocList.first(); kWriteDocList.current() != 0; kWriteDocList.next()) {
