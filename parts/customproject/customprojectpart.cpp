@@ -470,7 +470,7 @@ void CustomProjectPart::updateTargetMenu()
         }
         QTextStream stream(&f);
         //QRegExp re(".PHONY\\s*:(.*)");
-	static QRegExp re("^[^($%.#].*[^)\\s][:].*$");
+	QRegExp re("^([^($%.#].*[^)\\s])[:].*$");
 	QString str = "";
         while (!stream.atEnd()) {
             QString str = stream.readLine();
@@ -480,12 +480,10 @@ void CustomProjectPart::updateTargetMenu()
             //    str.remove(str.length()-1, 1);
             //    str += stream.readLine();
             //}
-            if (str.contains(re) == 1)
+            if (re.search(str) != -1)
             {
-	        kdDebug(9025) << "Adding target: " << str.simplifyWhiteSpace() << endl;
-		str = str.simplifyWhiteSpace().section(' ', 0, 0);
-		str.truncate( str.length() - 1 ); // strip the colon
-		m_targets += str;
+	        kdDebug(9025) << "Adding target: " << re.cap(1) << endl;
+		m_targets += re.cap(1).simplifyWhiteSpace();
             }
         }
         f.close();
