@@ -773,17 +773,19 @@ void GDBController::parseProgramLocation(char* buf)
     return;
   }
 
-  QRegExp regExp3("^0x[abcdef0-9]+ ");
-  int start;
-  if ((start = regExp3.match(buf, 0)) >= 0)
-    emit showStepInSource(QString(), -1, QString(buf)); // TODO - the whole buffer???
-  else
-    emit showStepInSource("", -1, "");
-
   if (stateIsOn(s_appBusy))
     actOnProgramPause("No source: "+QString(buf));
   else
     emit dbgStatus ("No source: "+QString(buf), state_);
+
+  QRegExp regExp3("^0x[abcdef0-9]+ ");
+  int start;
+  if ((start = regExp3.match(buf, 0)) >= 0)
+    emit showStepInSource(QString(), -1, QString(buf,
+                              (strchr(buf, ' ')-buf)+1));
+  else
+    emit showStepInSource("", -1, "");
+
 }
 
 // **************************************************************************
