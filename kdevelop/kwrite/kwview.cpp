@@ -284,7 +284,6 @@ void KIconBorder::mousePressEvent(QMouseEvent* e)
             selectMenu.changeItem(menuId_enableBrkpoint, i18n("Disable breakpoint"));
           else
             selectMenu.changeItem(menuId_enableBrkpoint, i18n("Enable breakpoint"));
-          selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
         }
         else
         {
@@ -292,6 +291,7 @@ void KIconBorder::mousePressEvent(QMouseEvent* e)
           selectMenu.setItemEnabled (menuId_enableBrkpoint, false);
           selectMenu.changeItem(menuId_enableBrkpoint, i18n("Enable breakpoint"));
         }
+        selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
       }
       break;
     }
