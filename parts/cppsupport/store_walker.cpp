@@ -202,7 +202,7 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     QString id = d->declaratorId()->unqualifiedName()->text().stripWhiteSpace();
 
     QString scopeStr = scopeOfDeclarator( d );
-    ParsedClassContainer* cl = findContainer( scopeStr );
+    ParsedClassContainer* cl = findContainer( scopeStr, 0, true );
     if( !cl )
        cl = m_currentContainer;
 
@@ -415,7 +415,7 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	id = t->declaratorId()->unqualifiedName()->text();
 
     QString scopeStr = scopeOfDeclarator( d );
-    ParsedClassContainer* cl = findContainer( scopeStr );
+    ParsedClassContainer* cl = findContainer( scopeStr, 0, true );
     if( cl == 0 )
         cl = m_currentContainer;
 
