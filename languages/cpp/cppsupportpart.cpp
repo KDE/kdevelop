@@ -742,12 +742,14 @@ KDevLanguageSupport::Features CppSupportPart::features()
 
 QString CppSupportPart::formatClassName(const QString &name)
 {
-    return name;
+    QString n = name;
+    return n.replace(".", "::");
 }
 
 QString CppSupportPart::unformatClassName(const QString &name)
 {
-    return name;
+    QString n = name;
+    return n.replace("::", ".");
 }
 
 void CppSupportPart::slotNewClass()
