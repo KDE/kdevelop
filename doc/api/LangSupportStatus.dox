@@ -15,7 +15,7 @@
       <th scope=col><a href="classFortranSupportPart.html">Fortran</a></th>
       <th scope=col><a href="classJavaSupportPart.html">Java</a></th>
       <th scope=col><a href="classPascalSupportPart.html">Pascal</a></th>
-      <th scope=col><a href="classPerlSupportPart.html">Perl (disabled)</a></th>
+      <th scope=col><a href="classPerlSupportPart.html">Perl</a></th>
       <th scope=col><a href="classPHPSupportPart.html">PHP</a></th>
       <th scope=col><a href="classPythonSupportPart.html">Python</a></th>
       <th scope=col><a href="classRubySupportPart.html">Ruby</a></th>
