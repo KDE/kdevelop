@@ -1,4 +1,4 @@
-INCLUDES = -I$(QTDIR)/include/private $(all_includes)
+INCLUDES = $(all_includes)
 
 METASOURCES = AUTO
 

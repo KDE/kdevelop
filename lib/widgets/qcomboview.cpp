@@ -29,7 +29,7 @@
 #include "qapplication.h"
 #include "qlineedit.h"
 #include "qbitmap.h"
-#include "qeffects_p.h"
+#include "private/qeffects_p.h"
 #include "qstringlist.h"
 #include "qcombobox.h"
 #include "qstyle.h"
