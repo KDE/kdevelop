@@ -483,6 +483,17 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    }
 
    if (m_mdiMode == QextMdi::TabPageMode) {
+      if (m_pWinList->count() == 0) {
+         if (m_pDockbaseAreaOfDocumentViews == 0L) {
+            m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
+            m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+         }
+         m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockFullSite);
+         m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockCenter);
+         m_pDockbaseAreaOfDocumentViews->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
+         m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+         m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
+      }
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
       pDockW->setWidget(0L);
@@ -493,7 +504,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
       m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
    }
 
-   if(pWnd->isToolView())
+   if (pWnd->isToolView())
       pWnd->m_bToolView = FALSE;
 }
 
@@ -509,12 +520,29 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
       m_pTaskBar->removeWinButton(pWnd, layoutTaskBar);
    }
 
-   if(pWnd->isAttached())
+   if (m_mdiMode == QextMdi::TabPageMode) {
+      if (m_pWinList->count() == 0) {
+         if (m_pDockbaseAreaOfDocumentViews == 0L) {
+            m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
+            m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+         }
+         m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockFullSite);
+         m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockCenter);
+         m_pDockbaseAreaOfDocumentViews->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
+         m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+         m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
+      }
+      KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
+      pWnd->reparent(0L, QPoint(0,0));
+      pDockW->setWidget(0L);
+      delete pDockW;
+   }
+   else if (pWnd->isAttached())
       m_pMdi->destroyChild(pWnd->mdiParent());
    else
       delete pWnd;
 
-   if( !m_pCurrentWindow)
+   if (!m_pCurrentWindow)
       emit lastChildViewClosed();
 }
 
@@ -591,6 +619,7 @@ void QextMdiMainFrm::activateView(QextMdiChildView* pWnd)
 
    if (m_mdiMode == QextMdi::TabPageMode) {
       makeWidgetDockVisible(pWnd);
+      m_pDockbaseOfTabPage = (KDockWidget*) pWnd->parentWidget();
    }
    else {
       if (pWnd->isAttached()){
@@ -987,7 +1016,8 @@ void QextMdiMainFrm::switchToTabPageMode()
    if (pCover) {
       // set the first page as active page
       KDockTabCtl* pTab = (KDockTabCtl*) pCover->parentWidget()->parentWidget();
-      pTab->setVisiblePage(pRemActiveWindow);
+      if (pTab)
+         pTab->setVisiblePage(pRemActiveWindow);
       pRemActiveWindow->setFocus();
    }
 
