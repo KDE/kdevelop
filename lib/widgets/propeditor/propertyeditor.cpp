@@ -99,7 +99,7 @@ public:
     virtual void setup()
     {
         KListViewItem::setup();
-        setHeight((int)(height()*1.5));
+        setHeight(static_cast<int>(height()*1.5));
     }
     
     void setChanged(bool changed)
@@ -142,7 +142,7 @@ public:
     virtual void setup()
     {
         KListViewItem::setup();
-        setHeight((int)(height()*1.4));
+        setHeight(static_cast<int>(height()*1.4));
     }
 
 private:
