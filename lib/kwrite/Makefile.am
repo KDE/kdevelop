@@ -17,9 +17,3 @@ EXTRA_DIST = AUTHORS
 
 syntaxdir = $(kde_datadir)/kwrite
 syntax_DATA = syntax.xml
-
-
-
-
-
-

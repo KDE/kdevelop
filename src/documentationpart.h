@@ -50,7 +50,8 @@ private slots:
     void forwPopupActivated(int id);
     void backShowing();
     void forwShowing();
-    void find();
+    void slotPrint();
+    void slotFind();
         
 private:
     bool openFile();

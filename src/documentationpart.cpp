@@ -18,6 +18,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <khtml_part.h>
+#include <khtmlview.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
@@ -65,7 +66,13 @@ DocumentationPart::DocumentationPart(QWidget *parent, const char */*name*/)
 
     setXML("<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">\n"
            "<kpartgui version=\"1\" name=\"documentationpart\">\n"
+           "<MenuBar>\n"
+           "  <Menu name=\"file\">\n"
+           "    <Action name=\"file_print\" />\n"
+           "  </Menu>\n"
+           "</MenuBar>\n"
            "<ToolBar name=\"mainToolBar\" >\n"
+           "  <Action name=\"file_print\" />\n"
            "  <Action name=\"documentation_back\" />\n"
            "  <Action name=\"documentation_forward\" />\n"
            "  <Action name=\"documentation_find\" />\n"
@@ -95,7 +102,8 @@ DocumentationPart::DocumentationPart(QWidget *parent, const char */*name*/)
              this, SLOT(forwPopupActivated(int)) );
     forwAction->setEnabled(false);
     
-    KStdAction::find(this, SLOT(find()), actionCollection(), "documentation_find");
+    KStdAction::print(this, SLOT(slotPrint()), actionCollection(), "documentation_print");
+    KStdAction::find(this, SLOT(slotFind()), actionCollection(), "documentation_find");
 }
 
 
@@ -274,9 +282,16 @@ void DocumentationPart::forwPopupActivated(int id)
 }
 
 
-void DocumentationPart::find()
+void DocumentationPart::slotPrint()
+{
+    htmlPart->view()->print();
+}
+
+
+void DocumentationPart::slotFind()
 {
     htmlPart->actionCollection()->action("find")->activate();
 }
+
 
 #include "documentationpart.moc"

@@ -5,6 +5,7 @@
 	* Fixed project files in templates to include mainprogram variable
 	* Fixed script project to not show . and .. and to go to a source
 	  file when it is clicked
+	* Implemented printing
 
 2001-05-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

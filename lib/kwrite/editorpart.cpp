@@ -19,6 +19,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kparts/partmanager.h>
+#include <kprinter.h>
+#include <kprocess.h>
 #include <kstdaction.h>
 
 #include "splitter.h"
@@ -58,6 +60,9 @@ EditorPart::EditorPart(QWidget *parent, const char */*name*/)
     setXML("<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">\n"
            "<kpartgui version=\"1\" name=\"editorpart\">\n"
            "<MenuBar>\n"
+           "  <Menu name=\"file\">\n"
+           "    <Action name=\"file_print\" />\n"
+           "  </Menu>\n"
            "  <Menu name=\"edit\">\n"
            "    <Action name=\"edit_undo\" group=\"undoredo\" />\n"
            "    <Action name=\"edit_redo\" group=\"undoredo\" />\n"
@@ -70,9 +75,13 @@ EditorPart::EditorPart(QWidget *parent, const char */*name*/)
            "    <Action name=\"edit_replace\" group=\"find\" />\n"
            "  </Menu>\n"
            "</MenuBar>\n"
+           "<ToolBar name=\"mainToolBar\" >\n"
+           "  <Action name=\"file_print\" />\n"
+           "</ToolBar>\n"
            "</kpartgui>"
            );
     
+    KStdAction::print(this, SLOT(slotPrint()), actionCollection());
     KStdAction::undo(this, SLOT(slotUndo()), actionCollection());
     KStdAction::redo(this, SLOT(slotRedo()), actionCollection());
     (void) new KAction(i18n("Undo/Redo &History..."), 0, this, SLOT(slotUndoHistory()),
@@ -285,6 +294,22 @@ void EditorPart::updateRedoAvailable(bool yes)
     action("edit_redo")->setEnabled(yes);
     bool either = (yes || action("edit_undo")->isEnabled());
     action("edit_undohistory")->setEnabled(either);
+}
+
+
+void EditorPart::slotPrint()
+{
+    QString fileName = view->editorDocument()->fileName();
+    KTempFile tempFile;
+    KShellProcess proc("/bin/sh");
+    proc << "a2ps " << fileName << "-o " << tempFile.name();
+    proc.start(KProcess::Block);
+
+    QStringList fileList;
+    fileList << fileName;
+    
+    KPrinter printer;
+    printer.printFiles(fileList, true);
 }
 
 

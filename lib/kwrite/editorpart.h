@@ -54,6 +54,7 @@ private slots:
     void toggleBreakpointEnabled(int lineNum);
     
     void setWindowCaption(const QString &caption);
+    void slotPrint();
     void slotUndo();
     void slotRedo();
     void slotUndoHistory();
