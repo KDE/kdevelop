@@ -1496,11 +1496,7 @@ void CKDevelop::slotHelpAbout(){
 												"it will be useful, but WITHOUT ANY WARRANTY; \n"
 												"without even the implied warranty of\n"
 												"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-												"See the GNU General Public License for more details.\n\n"
-												"You should have received a copy of the GNU\n"
-												"General Public License along with this program;\n"
-												"if not, write to the Free Software Foundation, Inc.,\n"
-												"675 Mass Ave, Cambridge, MA 02139, USA."));
+												"See the GNU General Public License for more details."));
 
   QPixmap pm;
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/about_logo.bmp");

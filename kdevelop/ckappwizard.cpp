@@ -1781,7 +1781,7 @@ void CKAppWizard::slotProcessExited() {
   }
   project = new CProject(prj_str);
   project->readProject();
-  project->setKDevPrjVersion("1.0beta1");
+  project->setKDevPrjVersion("1.0beta2");
   if (cppitem->isSelected()) {
     project->setProjectType("normal_cpp");
   } 

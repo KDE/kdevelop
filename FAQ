@@ -52,34 +52,13 @@ A: Please change the AC_OUTPUT in the configure.in to a oneline version
    new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 
 
-Q:  I get the following linker errors, what must i do?
-	/usr/lib/libqt.so:
-	warning: multiple common of `QArrayT<char> type_info node'     
-ckdevelop.o: warning: previous common is here      
-ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':     
-ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,    
-unsigned short, char const *,...)'  
-ckdevelop.o(.text+0x839): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'      
-ckdevelop.o(.text+0x89d): undefined reference to `kdebug(unsigned short,    
-unsigned short, char const *,...)'  
-ckdevelop.o: In function `CKDevelop::slotFileSaveAs(void)': 
-ckdevelop.o(.text+0xd28): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'      
-ckdevelop.o: In function `CKDevelop::slotFileClose(void)': 
-ckdevelop.o(.text+0x1216): undefined reference to `kdebug(unsigned short,
-unsigned short, char const *,...)'  
-ckdevelop.o(.text+0x1263): more undefined references to `kdebug(unsigned
-short, unsigned short, char const     *,...)' follow  collect2: ld returned 1
-exit status  make[2]: ***     
-[kdevelop] Error 1  make[2]: Leaving directory
-'/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3/kdevelop'
-make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
-`/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'  
-make: *** [all-recursive-am] Error 2 
+Q: Configure complains about the Qt version not being between 1.44
+and 2.00
+A: You probably have Qt2.00 installed on your system, and this
+messes up ./configure. For the purpose of compiling KDevelop you should
+temporarily uninstall all Qt2.00 components from your system.
 
-A: If you have the SuSE RPM´s of KDE-1.1, you must compile KDE-1.1
-yourself.:-(
-   It's a bug in the SuSE RPM's. 
-
-
+Q: Configure complains about not being able to compile a small KDE
+application. Examining config.log reveals that it can't find the library
+libXext.
+A: Install the package xdevel

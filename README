@@ -1,6 +1,6 @@
 README for
 
-KDevelop 1.0 Beta 1
+KDevelop 1.0 Beta 2 
 
 -------------------------------------
 
@@ -21,13 +21,13 @@ programs and libraries:
 
 required:
 ------------------
-g++ 2.8/egcs 1.1 (or compatible)
+g++ 2.8/egcs 1.0.3 (or compatible)
 GNU make
 perl 5.004
 autoconf 2.12
 automake 1.4
-Qt 1.42
-KDE 1.1 or KDE 1.2
+Qt 1.44 NOT Qt 2.0
+KDE 1.1 or KDE 1.(1).2
 flex
 
 optional:

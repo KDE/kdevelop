@@ -1201,17 +1201,18 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
    
     ///////////////////////////////////////geometry////////////////////////////////////
     
-    if (props->getPropValue("VarName") != "this")
+   //  if (props->getPropValue("VarName") != "this")
 	props->dumpPropCall(stream, "setGeometry",
 			    props->getPropValue("X") + "," +
 			    props->getPropValue("Y") + "," +
 			    props->getPropValue("Width") + "," +
 			    props->getPropValue("Height"));
 
-    else 
-	props->dumpPropCall(stream, "resize",
-			    props->getPropValue("Width") + "," +
-			    props->getPropValue("Height"));
+
+ //   //  else 
+// 	props->dumpPropCall(stream, "resize",
+// 			    props->getPropValue("Width") + "," +
+// 			    props->getPropValue("Height"));
     
     if (props->getPropValue("MinWidth") != "" || props->getPropValue("MinHeight") != "")
 	{

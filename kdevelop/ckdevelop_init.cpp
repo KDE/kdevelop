@@ -41,6 +41,10 @@
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 
 CKDevelop::CKDevelop(bool witharg){
   version = VERSION;

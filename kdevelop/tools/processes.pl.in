@@ -45,6 +45,7 @@ else {
 printflush (STDOUT, "change directory...\n");
 chdir ($overDirectory);
 $date = `date`;
+chomp($date);
 @time = localtime();
 $year = 1900 + $time[5];
 

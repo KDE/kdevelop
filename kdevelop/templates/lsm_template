@@ -3,12 +3,12 @@ Title:          |PRJNAME|
 Version:        |VERSION|
 Entered-date:   
 Description:    
-Keywords:       KDE, X11, Qt 
+Keywords:        
 Author:         |AUTHOR| <|EMAIL|> 
 Maintained-by:  |AUTHOR| <|EMAIL|> 
 Primary-site:   	        
 Home-page:      http:// 
 Original-site:  
-Platforms:       Linux and other Unices, needs Qt and the KDE libs
+Platforms:       Linux and other Unices
 Copying-policy: GNU Public License
 End
