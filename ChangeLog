@@ -1,3 +1,6 @@
+2001-12-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+  * Added a preliminary Trie code to structure lib
+
 2001-11-29  Sandy Meier  <smeier@kdevelop.org>
 	* added Gameboy Advance support including a "Hello World" template and
 	an emulator frontend
