@@ -59,14 +59,14 @@ protected:
     QRadioButton* allInProjectButton;
     QRadioButton* selfChoosenFilesButton;
     QRadioButton* changedFilesButton;
-    QSpinBox* dateSinceLine;
-    QSpinBox* timeSinceLine;
     QRadioButton* headerFilesButton;
     QRadioButton* cppFilesButton;
-    QPushButton* endTimeButton;
     QPushButton* beginTimeButton;
-    QPushButton* endDateButton;
     QPushButton* beginDateButton;
+    QSpinBox* beginTimeMinuteLine;
+    QSpinBox* beginTimeHourLine;
+    QSpinBox* endTimeHourLine;
+    QSpinBox* endTimeMinuteLine;
     QPushButton* selfChoosenFilesPushButton,*okButton,*cancelButton,*helpButton;
     QRadioButton* currentButton;
     QButtonGroup *qtarch_ButtonGroup_143;
@@ -74,16 +74,19 @@ protected:
     QLabel* qtarch_Label_87;
     QLabel* qtarch_Label_84;
     QLabel* qtarch_Label_83;
-    QLabel* qtarch_Label_81;
     QLabel* qtarch_Label_80;
     QLabel* qtarch_Label_79;
-    QLabel* qtarch_Label_78;
     QLabel* qtarch_Label_77;
+    QLabel* qtarch_Label_88;
+    QLabel* qtarch_Label_89;
+    QLabel* qtarch_Label_90;
+    QLabel* qtarch_Label_91;
     QButtonGroup* qtarch_ButtonGroup_142;
     QButtonGroup* qtarch_ButtonGroup_141;
     QButtonGroup* qtarch_ButtonGroup_140;
     KDatePicker* datepik;
     KSimpleConfig *settings;
+    QWidget *widget,*parent2;
 };
 #endif // CFILEPRINTDLG
 

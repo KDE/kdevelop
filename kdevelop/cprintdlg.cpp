@@ -834,7 +834,7 @@ void CPrintDlg::slotPreviewClicked() {
   process->start(KProcess::Block,KProcess::AllOutput);
   process2 = new KShellProcess();
   if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
-    *process2 << "arena";
+    *process2 << "kdehelp";
     *process2 << dir;
     process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
     return;
@@ -862,8 +862,8 @@ void CPrintDlg::slotPreviewClicked() {
 }
 
 void CPrintDlg::slotFilesConfClicked() {
- CFilePrintDlg *fileconf = new CFilePrintDlg(this, "filedialog");
- fileconf->exec(); 
+  CFilePrintDlg *fileconf = new CFilePrintDlg(this, "filedialog");
+  fileconf->exec(); 
 }
 
 void CPrintDlg::slotPrintingConfClicked() {
@@ -885,7 +885,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     if (!CToolClass::searchProgram("enscript")) {
       return;
     }
-      enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
+    enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
       enscriptconf->resize(610,510);
       enscriptconf->exec(); 
       settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
@@ -930,7 +930,9 @@ void CPrintDlg::slotOkClicked() {
     }
   }
   files = createFileString();
-  QString dir,data1,data2,text;
+  QString dir="";
+  QString data1,data2;
+  QString text="";
   process = new KShellProcess();
   if (programCombBox->currentItem()==1) {
     process = new KShellProcess();
@@ -947,7 +949,7 @@ void CPrintDlg::slotOkClicked() {
     else {
       settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
       settings->setGroup("LastSettings");
-      globalpara = settings->readEntry("A2psSettings");
+      globalpara = settings->readEntry("EnscriptSettings");
       delete (settings);
       slotCreateParameters();
       *process << "enscript " + string + " " + files;
@@ -963,6 +965,7 @@ void CPrintDlg::slotOkClicked() {
     }
   }
   process->start(KProcess::Block,KProcess::AllOutput);
+  delete (process);
   reject();
 }
 
@@ -972,7 +975,7 @@ QString CPrintDlg::createFileString() {
   QString sources = "";
   QString dir = "";
   QString underdir = "";
-  //  QStrList *filelist = 0;
+  QStrList filelist;
   settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
   settings->setGroup("LastSettings");
   globalpara = settings->readEntry("FileSettings");
@@ -993,14 +996,14 @@ QString CPrintDlg::createFileString() {
     delete (settings);
     return sources;
   }
-//   else if (!strcmp(globalpara,"allFiles")) {
-//     project->getAllFiles(filelist);
-//     for(str= filelist->first();str !=0;str = filelist->next()){
-//       sources =  prj_str + underdir + "/" + str + " " + sources ;
-//     }
-//     delete (settings);
-//     return sources;
-//   }
+  else if (!strcmp(globalpara,"allFiles")) {
+    project->getAllFiles(filelist);
+    for(str= filelist.first();str !=0;str = filelist.next()){
+      sources =  prj_str + "/" + str + " " + sources ;
+    }
+    delete (settings);
+    return sources;
+  }
   else if (!strcmp(globalpara,"headerFiles")) {
     for(str= project->getHeaders().first();str !=0;str = project->getHeaders().next()){
       sources =  prj_str + underdir + "/" + str + " " + sources ;
@@ -1008,5 +1011,8 @@ QString CPrintDlg::createFileString() {
     delete (settings);
     return sources;
   } 
-  return oldfiles;
+  else {
+    delete (settings);
+    return globalpara;
+  } 
 }

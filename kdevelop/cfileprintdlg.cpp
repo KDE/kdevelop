@@ -20,10 +20,11 @@
 #include <qbuttongroup.h>
 #include <iostream.h>
 #include <kapp.h>
+#include <kmsgbox.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
-  slotSelfChoosenFilesActive(1);
+  slotSelfChoosenFilesActive(6);
   selfChoosenFilesMultiLine->setEnabled(false);
 }
 
@@ -69,7 +70,7 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_141->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_141->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_141->setFrameStyle( 49 );
-  qtarch_ButtonGroup_141->setTitle( "Time" );
+  qtarch_ButtonGroup_141->setTitle( "And" );
   qtarch_ButtonGroup_141->setAlignment( 1 );
   
   qtarch_ButtonGroup_142 = new QButtonGroup( this, "ButtonGroup_142" );
@@ -81,7 +82,7 @@ void CFilePrintDlg::init() {
   qtarch_ButtonGroup_142->setFontPropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_142->setPalettePropagation( QWidget::NoChildren );
   qtarch_ButtonGroup_142->setFrameStyle( 49 );
-  qtarch_ButtonGroup_142->setTitle( "Date" );
+  qtarch_ButtonGroup_142->setTitle( "Between" );
   qtarch_ButtonGroup_142->setAlignment( 1 );
   
   QButtonGroup* qtarch_ButtonGroup_139;
@@ -108,7 +109,7 @@ void CFilePrintDlg::init() {
   selfChoosenFilesMultiLine->setFrameStyle( 51 );
   selfChoosenFilesMultiLine->setLineWidth( 2 );
   selfChoosenFilesMultiLine->setMultiSelection( TRUE );
-
+  
   selfChoosenFilesCleanButton = new QPushButton( this, "selfChoosenFilesCleanButton" );
   selfChoosenFilesCleanButton->setGeometry( 500, 380, 70, 30 );
   selfChoosenFilesCleanButton->setMinimumSize( 0, 0 );
@@ -146,28 +147,16 @@ void CFilePrintDlg::init() {
   selfChoosenFilesAddButton->setAutoResize( FALSE );
   
   qtarch_Label_77 = new QLabel( this, "Label_77" );
-  qtarch_Label_77->setGeometry( 40, 260, 70, 30 );
+  qtarch_Label_77->setGeometry( 40, 220, 70, 30 );
   qtarch_Label_77->setMinimumSize( 0, 0 );
   qtarch_Label_77->setMaximumSize( 32767, 32767 );
   qtarch_Label_77->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_77->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_77->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_77->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_77->setText( "between" );
+  qtarch_Label_77->setText( "date" );
   qtarch_Label_77->setAlignment( 289 );
   qtarch_Label_77->setMargin( -1 );
-
-  qtarch_Label_78 = new QLabel( this, "Label_78" );
-  qtarch_Label_78->setGeometry( 40, 220, 70, 30 );
-  qtarch_Label_78->setMinimumSize( 0, 0 );
-  qtarch_Label_78->setMaximumSize( 32767, 32767 );
-  qtarch_Label_78->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_78->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_78->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_78->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_78->setText( "since" );
-  qtarch_Label_78->setAlignment( 289 );
-  qtarch_Label_78->setMargin( -1 );
   
   selfChoosenFileLine = new QLineEdit( this, "selfChoosenFileLine" );
   selfChoosenFileLine->setGeometry( 100, 130, 190, 30 );
@@ -217,7 +206,7 @@ void CFilePrintDlg::init() {
   currentButton->setText( "current" );
   currentButton->setAutoRepeat( FALSE );
   currentButton->setAutoResize( FALSE );
-  
+	
   allInProjectButton = new QRadioButton( this, "allInProjectButton" );
   allInProjectButton->setGeometry( 30, 60, 140, 30 );
   allInProjectButton->setMinimumSize( 0, 0 );
@@ -255,111 +244,40 @@ void CFilePrintDlg::init() {
   changedFilesButton->setAutoResize( FALSE );
   
   qtarch_Label_80 = new QLabel( this, "Label_80" );
-  qtarch_Label_80->setGeometry( 210, 260, 20, 30 );
+  qtarch_Label_80->setGeometry( 40, 260, 70, 30 );
   qtarch_Label_80->setMinimumSize( 0, 0 );
   qtarch_Label_80->setMaximumSize( 32767, 32767 );
   qtarch_Label_80->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_80->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_80->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_80->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_80->setText( "-" );
-  qtarch_Label_80->setAlignment( 292 );
+  qtarch_Label_80->setText( "time" );
+  qtarch_Label_80->setAlignment( 289 );
   qtarch_Label_80->setMargin( -1 );
-  
-  qtarch_Label_81 = new QLabel( this, "Label_81" );
-  qtarch_Label_81->setGeometry( 40, 330, 70, 30 );
-  qtarch_Label_81->setMinimumSize( 0, 0 );
-  qtarch_Label_81->setMaximumSize( 32767, 32767 );
-  qtarch_Label_81->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_81->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_81->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_81->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_81->setText( "since" );
-  qtarch_Label_81->setAlignment( 289 );
-  qtarch_Label_81->setMargin( -1 );
-  
+
   qtarch_Label_83 = new QLabel( this, "Label_83" );
-  qtarch_Label_83->setGeometry( 40, 370, 70, 30 );
+  qtarch_Label_83->setGeometry( 40, 330, 70, 30 );
   qtarch_Label_83->setMinimumSize( 0, 0 );
   qtarch_Label_83->setMaximumSize( 32767, 32767 );
   qtarch_Label_83->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_83->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_83->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_83->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_83->setText( "between" );
+  qtarch_Label_83->setText( "date" );
   qtarch_Label_83->setAlignment( 289 );
   qtarch_Label_83->setMargin( -1 );
   
   qtarch_Label_84 = new QLabel( this, "Label_84" );
-  qtarch_Label_84->setGeometry( 210, 370, 20, 30 );
+  qtarch_Label_84->setGeometry( 40, 370, 70, 30 );
   qtarch_Label_84->setMinimumSize( 0, 0 );
   qtarch_Label_84->setMaximumSize( 32767, 32767 );
   qtarch_Label_84->setFocusPolicy( QWidget::NoFocus );
   qtarch_Label_84->setBackgroundMode( QWidget::PaletteBackground );
   qtarch_Label_84->setFontPropagation( QWidget::NoChildren );
   qtarch_Label_84->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_84->setText( "-" );
-  qtarch_Label_84->setAlignment( 292 );
+  qtarch_Label_84->setText( "time" );
+  qtarch_Label_84->setAlignment( 289 );
   qtarch_Label_84->setMargin( -1 );
-  
-  dateSinceLine = new QSpinBox( this, "dateSinceLine" );
-  dateSinceLine->setGeometry( 120, 220, 100, 30 );
-  dateSinceLine->setMinimumSize( 0, 0 );
-  dateSinceLine->setMaximumSize( 32767, 32767 );
-  dateSinceLine->setFocusPolicy( QWidget::StrongFocus );
-  dateSinceLine->setBackgroundMode( QWidget::PaletteBackground );
-  dateSinceLine->setFontPropagation( QWidget::NoChildren );
-  dateSinceLine->setPalettePropagation( QWidget::NoChildren );
-  dateSinceLine->setFrameStyle( 50 );
-  dateSinceLine->setLineWidth( 2 );
-  dateSinceLine->setRange( 0, 1000 );
-  dateSinceLine->setSteps( 1, 0 );
-  dateSinceLine->setPrefix( "" );
-  dateSinceLine->setSuffix( "" );
-  dateSinceLine->setSpecialValueText( "" );
-  dateSinceLine->setWrapping( FALSE );
-  
-  timeSinceLine = new QSpinBox( this, "timeSinceLine" );
-  timeSinceLine->setGeometry( 120, 330, 100, 30 );
-  timeSinceLine->setMinimumSize( 0, 0 );
-  timeSinceLine->setMaximumSize( 32767, 32767 );
-  timeSinceLine->setFocusPolicy( QWidget::StrongFocus );
-  timeSinceLine->setBackgroundMode( QWidget::PaletteBackground );
-  timeSinceLine->setFontPropagation( QWidget::NoChildren );
-  timeSinceLine->setPalettePropagation( QWidget::NoChildren );
-  timeSinceLine->setFrameStyle( 50 );
-  timeSinceLine->setLineWidth( 2 );
-  timeSinceLine->setRange( 1, 24 );
-  timeSinceLine->setSteps( 1, 0 );
-  timeSinceLine->setPrefix( "" );
-  timeSinceLine->setSuffix( "" );
-  timeSinceLine->setSpecialValueText( "" );
-  timeSinceLine->setWrapping( FALSE );
-  
-
-  qtarch_Label_86 = new QLabel( this, "Label_86" );
-  qtarch_Label_86->setGeometry( 240, 330, 80, 30 );
-  qtarch_Label_86->setMinimumSize( 0, 0 );
-  qtarch_Label_86->setMaximumSize( 32767, 32767 );
-  qtarch_Label_86->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_86->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_86->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_86->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_86->setText( "hours" );
-  qtarch_Label_86->setAlignment( 289 );
-  qtarch_Label_86->setMargin( -1 );
-  
-  qtarch_Label_87 = new QLabel( this, "Label_87" );
-  qtarch_Label_87->setGeometry( 240, 220, 80, 30 );
-  qtarch_Label_87->setMinimumSize( 0, 0 );
-  qtarch_Label_87->setMaximumSize( 32767, 32767 );
-  qtarch_Label_87->setFocusPolicy( QWidget::NoFocus );
-  qtarch_Label_87->setBackgroundMode( QWidget::PaletteBackground );
-  qtarch_Label_87->setFontPropagation( QWidget::NoChildren );
-  qtarch_Label_87->setPalettePropagation( QWidget::NoChildren );
-  qtarch_Label_87->setText( "days" );
-  qtarch_Label_87->setAlignment( 289 );
-  qtarch_Label_87->setMargin( -1 );
   
   headerFilesButton = new QRadioButton( this, "headerFilesButton" );
   headerFilesButton->setGeometry( 190, 60, 140, 30 );
@@ -385,20 +303,8 @@ void CFilePrintDlg::init() {
   cppFilesButton->setAutoRepeat( FALSE );
   cppFilesButton->setAutoResize( FALSE );
   
-  endTimeButton = new QPushButton( this, "endTimeButton" );
-  endTimeButton->setGeometry( 230, 370, 90, 30 );
-  endTimeButton->setMinimumSize( 0, 0 );
-  endTimeButton->setMaximumSize( 32767, 32767 );
-  endTimeButton->setFocusPolicy( QWidget::TabFocus );
-  endTimeButton->setBackgroundMode( QWidget::PaletteBackground );
-  endTimeButton->setFontPropagation( QWidget::NoChildren );
-  endTimeButton->setPalettePropagation( QWidget::NoChildren );
-  endTimeButton->setText( "" );
-  endTimeButton->setAutoRepeat( FALSE );
-  endTimeButton->setAutoResize( FALSE );
-  
   beginTimeButton = new QPushButton( this, "beginTimeButton" );
-  beginTimeButton->setGeometry( 120, 370, 90, 30 );
+  beginTimeButton->setGeometry( 120, 330, 200, 30 );
   beginTimeButton->setMinimumSize( 0, 0 );
   beginTimeButton->setMaximumSize( 32767, 32767 );
   beginTimeButton->setFocusPolicy( QWidget::TabFocus );
@@ -409,20 +315,8 @@ void CFilePrintDlg::init() {
   beginTimeButton->setAutoRepeat( FALSE );
   beginTimeButton->setAutoResize( FALSE );
   
-  endDateButton = new QPushButton( this, "endDateButton" );
-  endDateButton->setGeometry( 230, 260, 90, 30 );
-  endDateButton->setMinimumSize( 0, 0 );
-  endDateButton->setMaximumSize( 32767, 32767 );
-  endDateButton->setFocusPolicy( QWidget::TabFocus );
-  endDateButton->setBackgroundMode( QWidget::PaletteBackground );
-  endDateButton->setFontPropagation( QWidget::NoChildren );
-  endDateButton->setPalettePropagation( QWidget::NoChildren );
-  endDateButton->setText( "" );
-  endDateButton->setAutoRepeat( FALSE );
-  endDateButton->setAutoResize( FALSE );
-  
   beginDateButton = new QPushButton( this, "beginDateButton" );
-  beginDateButton->setGeometry( 120, 260, 90, 30 );
+  beginDateButton->setGeometry( 120, 220, 200, 30 );
   beginDateButton->setMinimumSize( 0, 0 );
   beginDateButton->setMaximumSize( 32767, 32767 );
   beginDateButton->setFocusPolicy( QWidget::TabFocus );
@@ -433,23 +327,135 @@ void CFilePrintDlg::init() {
   beginDateButton->setAutoRepeat( FALSE );
   beginDateButton->setAutoResize( FALSE );
   
+  beginTimeMinuteLine = new QSpinBox( this, "beginTimeMinuteList" );
+  beginTimeMinuteLine->setGeometry( 200, 260, 60, 30 );
+  beginTimeMinuteLine->setMinimumSize( 0, 0 );
+  beginTimeMinuteLine->setMaximumSize( 32767, 32767 );
+  beginTimeMinuteLine->setFocusPolicy( QWidget::StrongFocus );
+  beginTimeMinuteLine->setBackgroundMode( QWidget::PaletteBackground );
+  beginTimeMinuteLine->setFontPropagation( QWidget::NoChildren );
+  beginTimeMinuteLine->setPalettePropagation( QWidget::NoChildren );
+  beginTimeMinuteLine->setFrameStyle( 50 );
+  beginTimeMinuteLine->setLineWidth( 2 );
+  beginTimeMinuteLine->setRange( 0, 60 );
+  beginTimeMinuteLine->setSteps( 1, 0 );
+  beginTimeMinuteLine->setPrefix( "" );
+  beginTimeMinuteLine->setSuffix( "" );
+  beginTimeMinuteLine->setSpecialValueText( "" );
+  beginTimeMinuteLine->setWrapping( FALSE );
+  
+  beginTimeHourLine = new QSpinBox( this, "beginTimeHourLine" );
+  beginTimeHourLine->setGeometry( 120, 260, 60, 30 );
+  beginTimeHourLine->setMinimumSize( 0, 0 );
+  beginTimeHourLine->setMaximumSize( 32767, 32767 );
+  beginTimeHourLine->setFocusPolicy( QWidget::StrongFocus );
+  beginTimeHourLine->setBackgroundMode( QWidget::PaletteBackground );
+  beginTimeHourLine->setFontPropagation( QWidget::NoChildren );
+  beginTimeHourLine->setPalettePropagation( QWidget::NoChildren );
+  beginTimeHourLine->setFrameStyle( 50 );
+  beginTimeHourLine->setLineWidth( 2 );
+  beginTimeHourLine->setRange( 0, 24 );
+  beginTimeHourLine->setSteps( 1, 0 );
+  beginTimeHourLine->setPrefix( "" );
+  beginTimeHourLine->setSuffix( "" );
+  beginTimeHourLine->setSpecialValueText( "" );
+  beginTimeHourLine->setWrapping( FALSE );
+  
+  qtarch_Label_88 = new QLabel( this, "Label_88" );
+  qtarch_Label_88->setGeometry( 180, 260, 20, 30 );
+  qtarch_Label_88->setMinimumSize( 0, 0 );
+  qtarch_Label_88->setMaximumSize( 32767, 32767 );
+  qtarch_Label_88->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_88->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_88->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_88->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_88->setText( ":" );
+  qtarch_Label_88->setAlignment( 292 );
+  qtarch_Label_88->setMargin( -1 );
+  
+
+  qtarch_Label_89 = new QLabel( this, "Label_89" );
+  qtarch_Label_89->setGeometry( 270, 260, 50, 30 );
+  qtarch_Label_89->setMinimumSize( 0, 0 );
+  qtarch_Label_89->setMaximumSize( 32767, 32767 );
+  qtarch_Label_89->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_89->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_89->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_89->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_89->setText( "o´clock" );
+  qtarch_Label_89->setAlignment( 289 );
+  qtarch_Label_89->setMargin( -1 );
+  
+  endTimeHourLine = new QSpinBox( this, "endTimeHourLine" );
+  endTimeHourLine->setGeometry( 120, 370, 60, 30 );
+  endTimeHourLine->setMinimumSize( 0, 0 );
+  endTimeHourLine->setMaximumSize( 32767, 32767 );
+  endTimeHourLine->setFocusPolicy( QWidget::StrongFocus );
+  endTimeHourLine->setBackgroundMode( QWidget::PaletteBackground );
+  endTimeHourLine->setFontPropagation( QWidget::NoChildren );
+  endTimeHourLine->setPalettePropagation( QWidget::NoChildren );
+  endTimeHourLine->setFrameStyle( 50 );
+  endTimeHourLine->setLineWidth( 2 );
+  endTimeHourLine->setRange( 0, 24 );
+  endTimeHourLine->setSteps( 1, 0 );
+  endTimeHourLine->setPrefix( "" );
+  endTimeHourLine->setSuffix( "" );
+  endTimeHourLine->setSpecialValueText( "" );
+  endTimeHourLine->setWrapping( FALSE );
+  
+  endTimeMinuteLine = new QSpinBox( this, "endTimeMinuteLine" );
+  endTimeMinuteLine->setGeometry( 200, 370, 60, 30 );
+  endTimeMinuteLine->setMinimumSize( 0, 0 );
+  endTimeMinuteLine->setMaximumSize( 32767, 32767 );
+  endTimeMinuteLine->setFocusPolicy( QWidget::StrongFocus );
+  endTimeMinuteLine->setBackgroundMode( QWidget::PaletteBackground );
+  endTimeMinuteLine->setFontPropagation( QWidget::NoChildren );
+  endTimeMinuteLine->setPalettePropagation( QWidget::NoChildren );
+  endTimeMinuteLine->setFrameStyle( 50 );
+  endTimeMinuteLine->setLineWidth( 2 );
+  endTimeMinuteLine->setRange( 0, 60 );
+  endTimeMinuteLine->setSteps( 1, 0 );
+  endTimeMinuteLine->setPrefix( "" );
+  endTimeMinuteLine->setSuffix( "" );
+  endTimeMinuteLine->setSpecialValueText( "" );
+  endTimeMinuteLine->setWrapping( FALSE );
+  
+  qtarch_Label_90 = new QLabel( this, "Label_90" );
+  qtarch_Label_90->setGeometry( 270, 370, 50, 30 );
+  qtarch_Label_90->setMinimumSize( 0, 0 );
+  qtarch_Label_90->setMaximumSize( 32767, 32767 );
+  qtarch_Label_90->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_90->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_90->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_90->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_90->setText( "o´clock" );
+  qtarch_Label_90->setAlignment( 289 );
+  qtarch_Label_90->setMargin( -1 );
+  
+  qtarch_Label_91 = new QLabel( this, "Label_91" );
+  qtarch_Label_91->setGeometry( 180, 370, 20, 30 );
+  qtarch_Label_91->setMinimumSize( 0, 0 );
+  qtarch_Label_91->setMaximumSize( 32767, 32767 );
+  qtarch_Label_91->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_91->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_91->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_91->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_91->setText( ":" );
+  qtarch_Label_91->setAlignment( 292 );
+  qtarch_Label_91->setMargin( -1 );
+  
   qtarch_ButtonGroup_143->insert( selfChoosenFilesCleanButton );
   qtarch_ButtonGroup_143->insert( selfChoosenFilesDeleteButton );
   qtarch_ButtonGroup_143->insert( selfChoosenFilesAddButton );
-  qtarch_ButtonGroup_140->insert( endTimeButton );
   qtarch_ButtonGroup_140->insert( beginTimeButton );
-  qtarch_ButtonGroup_140->insert( endDateButton );
   qtarch_ButtonGroup_140->insert( beginDateButton );
-  qtarch_ButtonGroup_141->insert( endTimeButton );
   qtarch_ButtonGroup_141->insert( beginTimeButton );
-  qtarch_ButtonGroup_142->insert( endDateButton );
   qtarch_ButtonGroup_142->insert( beginDateButton );
-  qtarch_ButtonGroup_139->insert( selfChoosenFilesPushButton );
-  qtarch_ButtonGroup_139->insert( currentButton,0 );
-  qtarch_ButtonGroup_139->insert( allInProjectButton,2 );
+  qtarch_ButtonGroup_139->insert( currentButton,6 );
+  qtarch_ButtonGroup_139->insert( allInProjectButton,4 );
   qtarch_ButtonGroup_139->insert( selfChoosenFilesButton,5 );
-  qtarch_ButtonGroup_139->insert( changedFilesButton,4 );
-  qtarch_ButtonGroup_139->insert( headerFilesButton,3 );
+  qtarch_ButtonGroup_139->insert( changedFilesButton,3 );
+  qtarch_ButtonGroup_139->insert( headerFilesButton,2 );
   qtarch_ButtonGroup_139->insert( cppFilesButton,1 );
   currentButton->setChecked(true);
 
@@ -468,9 +474,7 @@ void CFilePrintDlg::init() {
   connect (selfChoosenFilesDeleteButton,SIGNAL(clicked()),SLOT(slotSelfChoosenFileDeleteClicked()));
   connect(qtarch_ButtonGroup_139,SIGNAL(clicked(int)),SLOT(slotSelfChoosenFilesActive(int)));
   connect(beginDateButton,SIGNAL(clicked()),SLOT(slotDateDlgClicked()));
-  connect(endDateButton,SIGNAL(clicked()),SLOT(slotDateDlgClicked()));
   connect(beginTimeButton,SIGNAL(clicked()),SLOT(slotDateDlgClicked()));
-  connect(endTimeButton,SIGNAL(clicked()),SLOT(slotDateDlgClicked()));
   
   mainwidget->show();
 }
@@ -480,8 +484,11 @@ void CFilePrintDlg::slotFileCancelClicked() {
 }
 
 void CFilePrintDlg::slotDateDlgClicked() {
+  widget = new QWidget();
+  widget->setGeometry(0,0,400,300);
   datepik = new KDatePicker(this);
-  datepik->show();
+  datepik->resize(300,200);
+  widget->show();
 }
 
 void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
@@ -494,25 +501,26 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
     selfChoosenFilesMultiLine->setEnabled(true);
     qtarch_ButtonGroup_143->setEnabled(true);
     qtarch_Label_79->setEnabled(true);
-    
+    qtarch_Label_88->setEnabled(false);
+    qtarch_Label_89->setEnabled(false);
+    qtarch_Label_90->setEnabled(false);
+    qtarch_Label_91->setEnabled(false);
     qtarch_Label_77->setEnabled(false);
-    qtarch_Label_78->setEnabled(false);
     qtarch_Label_80->setEnabled(false);
-    qtarch_Label_81->setEnabled(false);
     qtarch_Label_83->setEnabled(false);
     qtarch_Label_84->setEnabled(false);
     qtarch_ButtonGroup_140->setEnabled(false);
     qtarch_ButtonGroup_141->setEnabled(false);
     qtarch_ButtonGroup_142->setEnabled(false);
     beginDateButton->setEnabled(false);
-    endDateButton->setEnabled(false);
-    dateSinceLine->setEnabled(false);
+    endTimeHourLine->setEnabled(false);
+    endTimeMinuteLine->setEnabled(false);
     beginTimeButton->setEnabled(false);
-    endTimeButton->setEnabled(false);
-    timeSinceLine->setEnabled(false);
+    beginTimeHourLine->setEnabled(false);
+    beginTimeMinuteLine->setEnabled(false);
   }
   else
-    if (number==1) {
+    if (number==3) {
       selfChoosenFilesPushButton->setEnabled(false);
       selfChoosenFileLine->setEnabled(false);
       selfChoosenFilesAddButton->setEnabled(false);
@@ -521,104 +529,51 @@ void CFilePrintDlg::slotSelfChoosenFilesActive(int number) {
       selfChoosenFilesMultiLine->setEnabled(false);
       qtarch_ButtonGroup_143->setEnabled(false);
       qtarch_Label_79->setEnabled(false);
-      
+      qtarch_Label_88->setEnabled(true);
+      qtarch_Label_89->setEnabled(true);
+      qtarch_Label_90->setEnabled(true);
+      qtarch_Label_91->setEnabled(true);
+      qtarch_Label_77->setEnabled(true);
+      qtarch_Label_80->setEnabled(true);
+      qtarch_Label_83->setEnabled(true);
+      qtarch_Label_84->setEnabled(true);
+      qtarch_ButtonGroup_140->setEnabled(true);
+      qtarch_ButtonGroup_141->setEnabled(true);
+      qtarch_ButtonGroup_142->setEnabled(true);
+      beginDateButton->setEnabled(true);
+      endTimeHourLine->setEnabled(true);
+      endTimeMinuteLine->setEnabled(true);
+      beginTimeButton->setEnabled(true);
+      beginTimeHourLine->setEnabled(true);
+      beginTimeMinuteLine->setEnabled(true);
+    }
+    else {
+      selfChoosenFilesPushButton->setEnabled(false);
+      selfChoosenFileLine->setEnabled(false);
+      selfChoosenFilesAddButton->setEnabled(false);
+      selfChoosenFilesDeleteButton->setEnabled(false);
+      selfChoosenFilesCleanButton->setEnabled(false);
+      selfChoosenFilesMultiLine->setEnabled(false);
+      qtarch_ButtonGroup_143->setEnabled(false);
+      qtarch_Label_79->setEnabled(false);
+      qtarch_Label_88->setEnabled(false);
+      qtarch_Label_89->setEnabled(false);
+      qtarch_Label_90->setEnabled(false);
+      qtarch_Label_91->setEnabled(false);     
       qtarch_Label_77->setEnabled(false);
-      qtarch_Label_78->setEnabled(false);
       qtarch_Label_80->setEnabled(false);
-      qtarch_Label_81->setEnabled(false);
       qtarch_Label_83->setEnabled(false);
       qtarch_Label_84->setEnabled(false);
       qtarch_ButtonGroup_140->setEnabled(false);
       qtarch_ButtonGroup_141->setEnabled(false);
       qtarch_ButtonGroup_142->setEnabled(false);
       beginDateButton->setEnabled(false);
-      endDateButton->setEnabled(false);
-      dateSinceLine->setEnabled(false);
+      endTimeHourLine->setEnabled(false);
+      endTimeMinuteLine->setEnabled(false);
       beginTimeButton->setEnabled(false);
-      endTimeButton->setEnabled(false);
-      timeSinceLine->setEnabled(false);
+      beginTimeHourLine->setEnabled(false);
+      beginTimeMinuteLine->setEnabled(false);
     }
-    else
-      if (number==2) {
-	selfChoosenFilesPushButton->setEnabled(false);
-	selfChoosenFileLine->setEnabled(false);
-	selfChoosenFilesAddButton->setEnabled(false);
-	selfChoosenFilesDeleteButton->setEnabled(false);
-	selfChoosenFilesCleanButton->setEnabled(false);
-	selfChoosenFilesMultiLine->setEnabled(false);
-	qtarch_ButtonGroup_143->setEnabled(false);
-	qtarch_Label_79->setEnabled(false);
-	
-	qtarch_Label_77->setEnabled(false);
-	qtarch_Label_78->setEnabled(false);
-	qtarch_Label_80->setEnabled(false);
-	qtarch_Label_81->setEnabled(false);
-	qtarch_Label_83->setEnabled(false);
-	qtarch_Label_84->setEnabled(false);
-	qtarch_ButtonGroup_140->setEnabled(false);
-	qtarch_ButtonGroup_141->setEnabled(false);
-	qtarch_ButtonGroup_142->setEnabled(false);
-	beginDateButton->setEnabled(false);
-	endDateButton->setEnabled(false);
-	dateSinceLine->setEnabled(false);
-	beginTimeButton->setEnabled(false);
-	endTimeButton->setEnabled(false);
-	timeSinceLine->setEnabled(false);
-      }
-      else 
-	if (number==3) {
-	  selfChoosenFilesPushButton->setEnabled(false);
-	  selfChoosenFileLine->setEnabled(false);
-	  selfChoosenFilesAddButton->setEnabled(false);
-	  selfChoosenFilesDeleteButton->setEnabled(false);
-	  selfChoosenFilesCleanButton->setEnabled(false);
-	  selfChoosenFilesMultiLine->setEnabled(false);
-	  qtarch_ButtonGroup_143->setEnabled(false);
-	  qtarch_Label_79->setEnabled(false);
-	  
-	  qtarch_Label_77->setEnabled(false);
-	  qtarch_Label_78->setEnabled(false);
-	  qtarch_Label_80->setEnabled(false);
-	  qtarch_Label_81->setEnabled(false);
-	  qtarch_Label_83->setEnabled(false);
-	  qtarch_Label_84->setEnabled(false);
-	  qtarch_ButtonGroup_140->setEnabled(false);
-	  qtarch_ButtonGroup_141->setEnabled(false);
-	  qtarch_ButtonGroup_142->setEnabled(false);
-	  beginDateButton->setEnabled(false);
-	  endDateButton->setEnabled(false);
-	  dateSinceLine->setEnabled(false);
-	  beginTimeButton->setEnabled(false);
-	  endTimeButton->setEnabled(false);
-	  timeSinceLine->setEnabled(false);
-	}
-	else
-	  if (number==4) {
-	    selfChoosenFilesPushButton->setEnabled(false);
-	    selfChoosenFileLine->setEnabled(false);
-	    selfChoosenFilesAddButton->setEnabled(false);
-	    selfChoosenFilesDeleteButton->setEnabled(false);
-	    selfChoosenFilesCleanButton->setEnabled(false);
-	    selfChoosenFilesMultiLine->setEnabled(false);
-	    qtarch_ButtonGroup_143->setEnabled(false);
-	    qtarch_Label_79->setEnabled(false);
-
-	    qtarch_Label_77->setEnabled(true);
-	    qtarch_Label_78->setEnabled(true);
-	    qtarch_Label_80->setEnabled(true);
-	    qtarch_Label_81->setEnabled(true);
-	    qtarch_Label_83->setEnabled(true);
-	    qtarch_Label_84->setEnabled(true);
-	    qtarch_ButtonGroup_140->setEnabled(true);
-	    qtarch_ButtonGroup_141->setEnabled(true);
-	    qtarch_ButtonGroup_142->setEnabled(true);
-	    beginDateButton->setEnabled(true);
-	    endDateButton->setEnabled(true);
-	    dateSinceLine->setEnabled(true);
-	    beginTimeButton->setEnabled(true);
-	    endTimeButton->setEnabled(true);
-	    timeSinceLine->setEnabled(true);
-	  }
 }
 
 void CFilePrintDlg::slotSelfChoosenFileButtonClicked() {
@@ -658,7 +613,22 @@ void CFilePrintDlg::slotOkClicked() {
     settings->writeEntry("FileSettings","headerFiles");
   }
   else if (selfChoosenFilesButton->isChecked()) {
-    settings->writeEntry("FileSettings","Test");
+    QString str = "";
+    QString sources = "";
+    int counter = selfChoosenFilesMultiLine->count();
+    if (counter != 0) {
+      for (int i=0;i<counter;i++) {
+	sources = (QString) selfChoosenFilesMultiLine->text(i) + (QString) " " + sources;
+      }
+    }
+    else if (strcmp(selfChoosenFileLine->text(),"")) {
+      sources = (QString) selfChoosenFileLine->text();
+    }
+    else {
+      KMsgBox::message(0,"No Files","You need a file.\nPlease chooses one!",KMsgBox::EXCLAMATION); 
+      return;
+    }
+    settings->writeEntry("FileSettings",sources);
   }
   else {
     settings->writeEntry("FileSettings","Test2");

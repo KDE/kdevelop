@@ -1,3 +1,8 @@
+1999-03-03 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* changed the changed files section in the filedialog
+	* fixed some bugs
+	* implemented the all in project button
+
 1999-03-03  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * changed startlogo to show without frame
   * added default button to the setup dialog, does only reset the general options
