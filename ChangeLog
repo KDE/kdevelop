@@ -1,3 +1,6 @@
+2001-08-08  rokrau@yahoo.com
+    * created KDEVELOP_2_BRANCH
+
 2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: last fix concerning a grave GUI bug, was application crash in Toplevel mode
               (clicked Compile when no view of two was activated)
