@@ -129,8 +129,6 @@ protected:
     /**  */
     void slotLMBMenuToggle();
     /**  */
-    void slotToggleBreakpoint();
-    /**  */
     void slotEditBreakpoint();
 
   private:
@@ -328,6 +326,10 @@ class KWrite : public QWidget {
     /** Toggles Overwrite mode
     */
     void toggleOverwrite();
+
+    /**  */
+    void slotToggleBreakpoint();
+
   signals:
     /** The cursor position has changed. Get the values with currentLine()
         and currentColumn()
