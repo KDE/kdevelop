@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "qtbc.h"
 #include <qstrlist.h>
 #include <qfile.h>
 #include <qdict.h>

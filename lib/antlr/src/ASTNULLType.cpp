@@ -81,7 +81,7 @@ int ASTNULLType::getType() const
 	return Token::NULL_TREE_LOOKAHEAD;
 }
 
-void ASTNULLType::initialize(int t, const string& txt)
+void ASTNULLType::initialize(int t, const ANTLR_USE_NAMESPACE(std)string& txt)
 {
 }
 
@@ -107,7 +107,7 @@ void ASTNULLType::setNextSibling(RefAST n)
 {
 }
 
-void ASTNULLType::setText(const string& text)
+void ASTNULLType::setText(const ANTLR_USE_NAMESPACE(std)string& text)
 {
 }
 

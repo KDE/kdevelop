@@ -260,7 +260,7 @@ signals:
 
     /**
      * This signal is emitted just before a completion takes place.
-     * You can use it to modify the @ref CompletionEntry. The modified
+     * You can use it to modify the @ref KTextEditor::CompletionEntry. The modified
      * entry will not be visible in the completion list (because that has
      * just disappeared) but it will be used when the completion is
      * inserted into the text.

@@ -38,7 +38,6 @@
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 
-using namespace FileCreate;
 
 FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *parent, const char *name):
     FCConfigWidgetBase(parent, name), m_part(part), m_global(global)
@@ -402,7 +401,7 @@ void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString des
     }
 }
 
-void FCConfigWidget::loadFileTypes(QPtrList<FileType> list, QListView *view, bool checkmarks)
+void FCConfigWidget::loadFileTypes(QPtrList<FileCreate::FileType> list, QListView *view, bool checkmarks)
 {
     FileType *ft;
 

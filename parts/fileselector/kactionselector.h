@@ -263,7 +263,7 @@ public:
       
   /**
     Sets the pixmap of the button @p button to @p icon.
-    It calls @ref SmallIconSet(pm) to generate the icon set.
+    It calls SmallIconSet(pm) to generate the icon set.
   */
   void setButtonIcon( const QString &icon, MoveButton button );
   
