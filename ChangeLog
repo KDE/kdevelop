@@ -6,14 +6,12 @@
 	* fixed the layout of the ClassTool dialog.
 	* added possibility to addpure virtual methods to
  	  the add method dialog. Fixed minor other issues in that dialog.
-	* commited the patch from Pau Estalella Fernandez <pef@upcnet.upc.es>
-	  regarding the class wizard dialog.
+	* commited the patch from Pau Estalella Fernandez<pau.estalella@upcnet.upc.es> regarding the class wizard dialog. 
 
 1999-08-08 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* commit the patch from Micko Roland <Roland.Micko@icn.siemens.de>
 	  for the highlighting problems (for example the '-symbol)
-	* commit the patch from Pau Estalella Fernandez <pef@upcnet.upc.es>
-	  now the hide-options for widgets in dialogeditor works
+	* commit the patch from Pau Estalella Fernandez <pau.estalella@upcnet.upc.es> now the hide-options for widgets in dialogeditor works
 
 1999-08-08 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* implemented correct filehandling when updating/commiting whole directories with the RFV
