@@ -20,6 +20,7 @@
   <!ENTITY python "<application>Python</application>">
   <!ENTITY perl "<application>Perl</application>">
   <!ENTITY php "<application>PHP</application>">
+  <!ENTITY promanag "Project Manager">
   <!ENTITY qt "Qt">
   <!ENTITY qte "<application>Qt/embedded</application>">
   <!ENTITY ssh "<application>ssh</application>">
@@ -39,7 +40,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2003-10-02</date>
+  <date>2003-10-07</date>
   <releaseinfo>3.0.0a7</releaseinfo>
 
   <authorgroup>
@@ -101,7 +102,7 @@ Entries which require special treatment are marked with comments starting with '
 <!-- ====================================================================== -->
 
 <chapter id="overview-manual">
-<title>About this manual</title>
+<title>About this Manual</title>
 
 <para>
 This user manual is intended to describe the contents and use of the &kdevelop; Integrated Development Environment (IDE) from a user's point of view. It is no programming manual nor does it describe the development process in detail. It's only aim is to guide you in the handling of the IDE.
@@ -176,7 +177,7 @@ You will here find information on the following topics:
 <!-- ### Traditionally, most of this stuff will have be put in a FAQ section. It  is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for. -->
 
 <chapter id="nutshell">
-<title>In a nutshell</title>
+<title>In a Nutshell</title>
 
 <para>
 The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. If you want more information on a topic just follow the link in the title starting that advice.
@@ -186,7 +187,7 @@ The information in this chapter is meant as a quick reference for a head start o
   <title>Projects</title>
   <listitem>
     <formalpara id="nutshell-new-project">
-    <title><link linkend="newprojects">Create new project</link></title>
+    <title><link linkend="newprojects">Create New Project</link></title>
     <para>
     <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> will start the <link linkend="appwizard">&appwizard;</link>.
     </para>
@@ -195,7 +196,7 @@ The information in this chapter is meant as a quick reference for a head start o
 
   <listitem>
     <formalpara id="nutshell-project-options">
-    <title><link linkend="project-options-short">Use project options early</link></title>
+    <title><link linkend="project-options-short">Use Project Options Early</link></title>
     <para>
     Whenever you start a new project do not forget to set the <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project Opions...</guimenuitem></menuchoice> to your needs.
     </para>
@@ -207,7 +208,7 @@ The information in this chapter is meant as a quick reference for a head start o
   <title><link linkend="automakemanager">&automanag;</link></title>
     <listitem>
       <formalpara id="nutshell-new-project-file">
-      <title>Create new files in a project</title>
+      <title>Create New Files in a Project</title>
 
       <indexterm zone="nutshell-new-project-file">
         <primary>project</primary>
@@ -231,7 +232,7 @@ The information in this chapter is meant as a quick reference for a head start o
 
     <listitem>
       <formalpara id="nutshell-add-project-file">
-      <title>Add existing files to a project</title>
+      <title>Add Existing Files to a Project</title>
 
       <indexterm zone="nutshell-add-project-file">
         <primary>project</primary>
@@ -251,7 +252,7 @@ The information in this chapter is meant as a quick reference for a head start o
 
     <listitem>
       <formalpara id="nutshell-del-project-file">
-      <title>Remove a file from a project</title>
+      <title>Remove a File from a Project</title>
 
       <indexterm zone="nutshell-del-project-file">
         <primary>project</primary>
@@ -271,11 +272,11 @@ The information in this chapter is meant as a quick reference for a head start o
   </itemizedlist>
 
 <itemizedlist>
-  <title>Compile/make problems</title>
+  <title>Compile/Make Problems</title>
 
   <listitem>
     <formalpara id="nutshell-autoconf-problem">
-    <title><quote>Wrong <command>autoconf</command> version</quote> etc. error</title>
+    <title><quote>Wrong <command>autoconf</command> version</quote> etc. Error</title>
 
     <indexterm zone="nutshell-autoconf-problem">
       <primary>compiling</primary>
@@ -311,7 +312,7 @@ The information in this chapter is meant as a quick reference for a head start o
   <secondary>development</secondary></indexterm>
 
 <sect1 id="history">
-<title>Some historical remarks</title>
+<title>Some Historical Remarks</title>
 
 <indexterm zone="history"><primary>history</primary></indexterm>
 <indexterm zone="history"><primary>scripting languages</primary></indexterm>
@@ -342,7 +343,7 @@ As time has gone by, both worlds have evolved. While C is still used mainly as a
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-scripting-languages">
-<title>Contemporary scripting languages</title>
+<title>Contemporary Scripting Languages</title>
 <para>
 In the scripting area, there has been a shift away from the shell, which suffers from portability concerns, to languages which unify all commonly needed functionality in their standard libraries, while still being able to interface to the outside through pipes when necessary.
 </para>
@@ -393,7 +394,7 @@ All these scripting languages have in common that they are widely portable betwe
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-dcop">
-<title>The DCOP interface</title>
+<title>The DCOP Interface</title>
 
 <indexterm zone="unixdev-dcop"><primary>DCOP</primary></indexterm>
 <indexterm zone="unixdev-dcop">
@@ -412,14 +413,14 @@ Another evolution on UNIX-like scripting is the <emphasis>DCOP</emphasis> protoc
 There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly. Yet it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
 </para>
 <para>
-For more information, see <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html"><citetitle>The DCOP Desktop COmmunication Protocol library</citetitle></ulink> API reference of the &kde; dcop library.
+For more information, see <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html"><quote>The DCOP Desktop COmmunication Protocol library</quote></ulink> API reference of the &kde; dcop library.
 </para>
 </sect1> <!--  unixdev-dcop -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-buildsystems">
-<title>Build systems</title>
+<title>Build Systems</title>
 
 <para>
 Except in very simple cases your programming project will consist of a lot of building blocks of source code each put into a separate file for easier maintenance. To make this running you have to effectively translate all this stuff into a few machine language units in a suiting format which allows the operating system to load and execute the program.
@@ -453,7 +454,7 @@ When you have a large project consisting of possibly hundreds of source code fil
 </para>
 
 <sect2 id="unixdev-buildsystems-make">
-<title>The make process</title>
+<title>The Make Process</title>
 
 <indexterm zone="unixdev-buildsystems-make">
   <primary>make</primary></indexterm>
@@ -491,7 +492,7 @@ Each rule consists of several building blocks, namely
 Basically the <command>make</command> command will read the rules one after another, check each file in the dependency list of a given target and make this target anew if any one of these files has changed, using the commands listed in that rule.
 </para>
 <para>
-There are several additional possibilities to control such a make process, and a <filename>Makefile</filename> can thus grow very complex. We cannot go into the details here. However, we recommend that you make yourself accustomed to the syntax of <command>make</command>. Even if you do not normally use it directly, an understanding of the fundamentals of the build system can be useful. See the <ulink url="info://make/Top"> <citetitle>GNU Make Manual</citetitle></ulink> for more information. </para>
+There are several additional possibilities to control such a make process, and a <filename>Makefile</filename> can thus grow very complex. We cannot go into the details here. However, we recommend that you make yourself accustomed to the syntax of <command>make</command>. Even if you do not normally use it directly, an understanding of the fundamentals of the build system can be useful. See the <ulink url="info://make/Top"> <quote>GNU Make Manual</quote></ulink> for more information. </para>
 <para>
 For more &kdevelop; specific detail see the <link  linkend="projectmanagement">Building and Project Management</link> chapter of this manual.
 </para>
@@ -505,7 +506,7 @@ There are several tutorials available, see the <link linkend="automake-reference
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-guidevelopment">
-<title>GUI development</title>
+<title>GUI Development</title>
 
 <indexterm zone="unixdev-guidevelopment">
   <primary>GUI</primary></indexterm>
@@ -530,7 +531,7 @@ For &kde; GUI development there is a style guide available. It is found in the <
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="unixdev-ide">
-<title>Integrating concepts and tools: the IDE</title>
+<title>Integrating Concepts and Tools &ndash; the IDE</title>
 
 <indexterm zone="unixdev-ide">
   <primary>IDE</primary></indexterm>
@@ -557,7 +558,7 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
 </para>
 
 <sect2 id="unixdev-ide-kdevelop">
-<title>Basic features of &kdevelop;</title>
+<title>Basic Features of &kdevelop;</title>
 
 <indexterm zone="unixdev-ide-kdevelop">
   <primary>&kdevelop;</primary>
@@ -658,7 +659,7 @@ You will find here all the steps necessary to compile and install the &kdevelop;
 </para>
 
 <sect1 id="kdevelopinstall-howto">
-<title>How to obtain &kdevelop;</title>
+<title>How to Obtain &kdevelop;</title>
 
 <indexterm zone="kdevelopinstall-howto">
   <primary>obtain &kdevelop;</primary></indexterm>
@@ -674,7 +675,7 @@ You may as well obtain the &kdevelop; sources, compile and install them by yours
 </para>
 
 <sect2 id="howto-cvs">
-<title>Get daily &kdevelop; snapshots from &CVS;</title>
+<title>Get Daily &kdevelop; Snapshots from &CVS;</title>
 
 <indexterm zone="howto-cvs">
   <primary>CVS</primary></indexterm>
@@ -683,7 +684,7 @@ You may as well obtain the &kdevelop; sources, compile and install them by yours
 </para>
 
 <sect3 id="howto-cvs-co">
-<title>Initial &CVS; checkout</title>
+<title>Initial &CVS; Checkout</title>
 
 <indexterm zone="howto-cvs-co">
   <primary>checkout</primary></indexterm>
@@ -724,7 +725,7 @@ Once you successfully checked out your &kdevelop; version, you may keep up with 
 </sect3> <!-- howto-cvs-co -->
 
 <sect3 id="howto-cvs-up">
-<title>Keeping your &CVS; copy actual</title>
+<title>Keeping Your &CVS; Copy Actual</title>
 
 <indexterm zone="howto-cvs-up">
   <primary>update</primary></indexterm>
@@ -771,7 +772,7 @@ Now you can compile a new &kdevelop; version as shown in the <link linkend="comp
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="requirements">
-<title>&kdevelop; requirements</title>
+<title>&kdevelop; Requirements</title>
 
 <indexterm zone="requirements">
   <primary>requirements</primary></indexterm>
@@ -891,7 +892,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="compileandinstall">
-<title>&kdevelop; compilation and installation</title>
+<title>&kdevelop; Compilation and Installation</title>
 
 <indexterm zone="compileandinstall">
   <primary>&kdevelop;</primary>
@@ -901,7 +902,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   <secondary>installation</secondary></indexterm>
 
 <sect2 id="compileandinstall-preliminaries">
-<title>Preliminary steps</title>
+<title>Preliminary Steps</title>
 
 <indexterm zone="compileandinstall-preliminaries">
   <primary>preliminaries</primary>
@@ -926,7 +927,7 @@ To avoid typing in all the statements that set the necessary environment variabl
 </para></note>
 
 <sect3 id="compileandinstall-preliminaries-bash">
-<title>bash shell</title>
+<title>bash Shell</title>
 
 <para>
 If you use the bash shell add the following lines:
@@ -941,7 +942,7 @@ export PATH=$QTDIR/bin:$KDEDIR/bin:$PATH
 </sect3> <!-- compileandinstall-preliminaries-bash -->
 
 <sect3 id="compileandinstall-preliminaries-tcsh">
-<title>tcsh shell</title>
+<title>tcsh Shell</title>
 
 <para>
 If you use the tcsh shell add the following lines:
@@ -972,14 +973,14 @@ In the following discussion we assume that you have put your &kdevelop; sources 
 </para></note>
 
 <sect3 id="compileandinstall-make-cvs">
-<title>Special &CVS; compilation considerations</title>
+<title>Special &CVS; Compilation Considerations</title>
 
 <para>
 In case you use a &kdevelop; snapshot from &CVS; the initial compilation steps depend on whether you just did a complete checkout or only updated the source.
 </para>
 
 <formalpara id="compileandinstall-make-cvs-co">
-<title>After a CVS checkout</title>
+<title>After a CVS Checkout</title>
 
 <para>
 You should initialize the make system after a fresh checkout. The same is true every time you need to start over from scratch. (Note that you must have access to the &CVS; repository for the clean-up.) Type:
@@ -994,7 +995,7 @@ and then <emphasis>all</emphasis> of the following steps.
 </para>
 
 <formalpara id="compileandinstall-make-cvs-up">
-<title>After a CVS update</title>
+<title>After a CVS Update</title>
 <para>
 The next step depends on the output of the &CVS; update sequence. If you got something like (note the U marker to the left):
 <screen>
@@ -1013,7 +1014,7 @@ before you proceed with <emphasis>all</emphasis> of the following steps.
 </sect3> <!-- compileandinstall-make-cvs -->
 
 <sect3 id="compileandinstall-make-basic">
-<title>Basic <command>make</command> command sequence</title>
+<title>Basic <command>make</command> Command Sequence</title>
 
 <para>
 Once the basic make system is set up this way you must decide on the type of the &kdevelop; system you want to use. This is done in the following configure step which buids the actual <filename>Makefile</filename> the <command>make</command> command will use.
@@ -1024,7 +1025,7 @@ You may drop the <option>--prefix</option> option in the following <command>conf
 </para></note>
 
 <formalpara>
-<title>A debug-compiled version</title>
+<title>A Debug-Compiled Version</title>
 <para>
 If you want to keep track of what your &kdevelop; application does at run-time you may buid a debug-compiled version. Just command <command>configure</command> to do so:
 </para>
@@ -1035,7 +1036,7 @@ If you want to keep track of what your &kdevelop; application does at run-time y
 </para>
 
 <formalpara>
-<title>A release-compiled version</title>
+<title>A Release-Compiled Version</title>
 <para>
 If you only want to use &kdevelop; as-is a (smaller and faster running) release version suffices. <command>configure</command> defaults to this.
 </para>
@@ -1057,7 +1058,7 @@ If you want to build your own <link linkend="make-api">API documentation</link> 
 </note>
 
 <formalpara>
-<title>Make and install &kdevelop;</title>
+<title>Make and Install &kdevelop;</title>
 <para>
 <command>configure</command> will check the system and build a <filename>Makefile</filename> according to what it found. The <command>make</command> command will use this <filename>Makefile</filename> by default. Thus
 </para>
@@ -1088,7 +1089,7 @@ That was all. If you installed &kdevelop; in the default &kde; directory you can
 </sect2> <!-- compileandinstall-make -->
 
 <sect2 id="compileandinstall-bsd">
-<title>How to compile on FreeBSD</title>
+<title>How to Compile on FreeBSD</title>
 
 <indexterm zone="compileandinstall-bsd">
   <primary>compiling</primary>
@@ -1119,7 +1120,7 @@ You need the <emphasis>berkeley db 4.1</emphasis> installed, if you have another
 </para></note>
 
 <sect3 id="check-berkeley-db">
-<title>Check the berkeley db version</title>
+<title>Check the Berkeley db Version</title>
 <para>
 To find out which berkeley db version you have installed, run:
 </para>
@@ -1136,7 +1137,7 @@ db41-4.1.25_1       The Berkeley DB package, revision 4.1
 </sect3> <!-- check-berkeley-db -->
 
 <sect3 id="more-changes">
-<title>More changes</title>
+<title>More Changes</title>
 <para>
 Change the line
 </para>
@@ -1180,10 +1181,10 @@ Then you can continue with the normal <command>configure</command> and <command>
 </sect2> <!-- compileandinstall-bsd -->
 
 <sect2 id="compileandinstall-options">
-<title>Some notes on <command>configure</command> options</title>
+<title>Some Notes on <command>configure</command> Options</title>
 
 <sect3 id="compileandinstall-options-dir">
-<title>Non-default installation directory</title>
+<title>Non-default Installation Directory</title>
 
 <indexterm zone="compileandinstall-options-dir">
   <primary>&kdevelop;</primary>
@@ -1239,7 +1240,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 </sect3> <!-- compileandinstall-options-dir -->
 
 <sect3 id="other-options">
-<title>Other options</title>
+<title>Other Options</title>
 <!-- *** other configuration options -->
 <para>
 <emphasis>(... to be written ...)</emphasis>
@@ -1250,7 +1251,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 </sect1> <!-- compileandinstall -->
 
 <sect1 id="make-api">
-<title>How to obtain a &kdevelop; API documentation</title>
+<title>How to Obtain a &kdevelop; API Documentation</title>
 
 <para>
 API is the short form of <quote>Application Program Interface</quote>. Actually such an application program interface is a series of descriptions (i.e. calling conventions) by which an application program accesses operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
@@ -1298,7 +1299,7 @@ Once this is done, <command>make</command> will inform you about the directory w
 <!-- ====================================================================== -->
 
 <chapter id="kdevelopoverview">
-<title>Overview: &kdevelop;'s features</title>
+<title>Overview &ndash; Features of &kdevelop;</title>
 
 <indexterm zone="kdevelopoverview">
   <primary>&kdevelop;</primary>
@@ -1340,7 +1341,7 @@ Once this is done, <command>make</command> will inform you about the directory w
 </para>
 
 <sect1 id="uimodes-overview">
-<title>Available user interface modes</title>
+<title>Available User Interface Modes</title>
 
 <indexterm zone="uimodes-overview">
   <primary>&kdevelop;</primary>
@@ -1411,7 +1412,7 @@ Once this is done, <command>make</command> will inform you about the directory w
 </para>
 
 <sect2 id="uimodes-switch">
-<title>How to switch user interface modes</title>
+<title>How to Switch User Interface Modes</title>
 
 <indexterm zone="uimodes-switch">
   <primary>user interface</primary>
@@ -1452,7 +1453,7 @@ Select the radio button of the user interface mode you want to switch to, then p
 </sect2> <!-- uimodes-switch -->
 
 <sect2 id="maximize-workspace">
-<title>How to maximize the work space area</title>
+<title>How to Maximize the Work Space Area</title>
 
 <indexterm zone="maximize-workspace">
   <primary>&kdevelop;</primary>
@@ -1484,14 +1485,14 @@ To maximize space, there is a full-screen window mode available which expands th
 </para>
 
 <formalpara>
-<title>Full screen mode</title>
+<title>Full Screen Mode</title>
 <para>
 To switch to or from full screen mode select <menuchoice> <guimenu>View</guimenu> <guimenuitem>Full-Screen Mode</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>Shift</keycap> <keycap>F</keycap> </keycombo>. There is also a <guiicon>Full-Screen Mode</guiicon> icon in the <guilabel>Browse Toolbar</guilabel> available.
 </para>
 </formalpara>
 
 <formalpara>
-<title>Hide/unhide the menubar</title>
+<title>Hide/Unhide the Menubar</title>
 <para>
 To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, e.g. the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
 </para>
@@ -1504,7 +1505,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="ui-elements">
-<title>Elements of the user interface</title>
+<title>Elements of the User Interface</title>
 
 <para>
 (... to be written ...)
@@ -1514,7 +1515,7 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="makesystems">
-<title>Project management systems</title>
+<title>Project Management Systems</title>
 
 <indexterm zone="makesystems">
   <primary>project management</primary></indexterm>
@@ -1539,7 +1540,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
 </para>
 
 <sect2 id="automake-project">
-<title>Automake project</title>
+<title>Automake Project</title>
 
 <indexterm zone="automake-project">
   <primary>projects</primary>
@@ -1549,7 +1550,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
   <secondary>projects</secondary></indexterm>
 
 <para>
-Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers to use the &gnu; standard development tools. They provide
+Projects created with &kdevelop;'s &automanag; make it very easy for developers to use the &GNU; standard development tools. They provide
 <itemizedlist>
   <listitem><para>
   a better way of <filename>Makefile</filename> generation and
@@ -1562,7 +1563,7 @@ Projects created with &kdevelop;'s Automake Project Manager make it very easy fo
 </sect2> <!-- automake-project -->
 
 <sect2 id="qmake-project">
-<title>QMake project</title>
+<title>QMake Project</title>
 
 <indexterm zone="qmake-project">
   <primary>projects</primary>
@@ -1575,12 +1576,12 @@ Projects created with &kdevelop;'s Automake Project Manager make it very easy fo
 For developers who enjoy the flexibility and feel of &qt;'s qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the GUI.
 </para>
 <para>
-For more information on the QMake project manager see the <citetitle>qmake User Guide</citetitle> which should be included in your distribution or have a look at the <ulink url="http://doc.trolltech.com/">TROLLTECH Documentation</ulink> home page where you may find the QMake documentation of your <citetitle>Qt C++ GUI Application Development Toolkit</citetitle> version.
+For more information on the QMake project manager see the <quote>qmake User Guide</quote> which should be included in your distribution or have a look at the <ulink url="http://doc.trolltech.com/">TROLLTECH Documentation</ulink> home page where you may find the QMake documentation of your <quote>Qt C++ GUI Application Development Toolkit</quote> version.
 </para>
 </sect2> <!-- qmake-project -->
 
 <sect2 id="ant-project">
-<title>ANT project</title>
+<title>ANT Project</title>
 
 <indexterm zone="ant-project">
   <primary>projects</primary>
@@ -1611,7 +1612,7 @@ For more information see <ulink url="http://ant.apache.org/">The Apache Ant Proj
 </sect2> <!-- ant-project -->
 
 <sect2 id="custom-project">
-<title>Custom project</title>
+<title>Custom Project</title>
 
 <indexterm zone="custom-project">
   <primary>projects</primary>
@@ -1631,7 +1632,7 @@ Yet, if you do not <emphasis>really need</emphasis> the extra flexibility and co
 </sect2> <!-- custom-project -->
 
 <sect2 id="makesystems-distribution">
-<title>How to distribute your application</title>
+<title>How to Distribute Your Application</title>
 
 <indexterm zone="makesystems-distribution">
   <primary>distribution</primary></indexterm>
@@ -1679,14 +1680,14 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 </para>
 
 <sect1 id="initialsetup-general">
-<title>General configuration issues</title>
+<title>General Configuration Issues</title>
 
 <para>
 </para>
 </sect1> <!-- initialsetup-general -->
 
 <sect1 id="initialsetup-advanced">
-<title>Advanced configuration</title>
+<title>Advanced Configuration</title>
 
 <para>
 </para>
@@ -1697,7 +1698,7 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 <!-- ====================================================================== -->
 
 <chapter id="appwizard">
-<title>Getting started: the &appwizard;</title>
+<title>Getting Started &ndash; the &appwizard;</title>
 
 <indexterm zone="appwizard">
   <primary>&appwizard;</primary></indexterm>
@@ -1710,7 +1711,7 @@ Organizing all development work in projects allows you to easily switch between 
 </para>
 
 <sect1 id="newprojects">
-<title>New projects</title>
+<title>New Projects</title>
 
 <indexterm zone="newprojects">
   <primary>project</primary>
@@ -1750,7 +1751,7 @@ Let's look at all this in more detail now ...
 </para>
 
 <sect2 id="newprojects-start">
-<title>Initial steps</title>
+<title>Initial Steps</title>
 
 <indexterm zone="newprojects-start">
   <primary>dialog</primary>
@@ -1786,7 +1787,7 @@ As you see, this dialog is divided into an upper and a lower part. In the upper 
 </para>
 
 <sect3 id="newprojects-start-type">
-<title>Select programming language and application type</title>
+<title>Select Programming Language and Application Type</title>
 
 <indexterm zone="newprojects-start-type">
   <primary>project</primary>
@@ -1889,7 +1890,7 @@ Select the template which best fits your application's goals as a starting point
 </sect3> <!-- newprojects-start-type -->
 
 <sect3 id="newprojects-start-general">
-<title>Provide general information</title>
+<title>Provide General Information</title>
 
 <indexterm zone="newprojects-start-general">
   <primary>project</primary>
@@ -1953,7 +1954,7 @@ When you do so, you will notice that the &appwizard; refuses to accept special c
 One prominent cause of this restriction is that the &appwizard; will use this application name as the <emphasis>basis of some class names</emphasis> it will construct when it sets up an initial project. Thus the name of the application must stick to the rules of the programming language you use.
 </para>
 <formalpara>
-<title>The project directory</title>
+<title>The Project Directory</title>
 <para>
 The other prominent cause of this restriction you can see at the bottom line of the <guilabel>Properties</guilabel> area. It is labeled <guilabel>Final location</guilabel> and shows the directory where the &appwizard;  will create the application.
 </para>
@@ -1966,7 +1967,7 @@ Thus you must select the name of your new application with care.  If you end up 
 </para>
 
 <formalpara>
-<title>The starting path</title>
+<title>The Starting Path</title>
 <para>
 There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (you might e.g. set up for another version of an already existing application). As an alternative you may select another path to the application directory.
 </para>
@@ -1986,7 +1987,7 @@ Take care that the path you enter in the <guilabel>Location</guilabel> field alr
 </para></note>
 
 <formalpara>
-<title>Personal information</title>
+<title>Personal Information</title>
 <para>
 The fields following this are not so critical. Just supply your name (i.e. the name of the person who is responsible for the application) in the <guilabel>Author</guilabel> field, and a valid e-mail address in the <guilabel>Email</guilabel> field, so that users can give you feedback on the application.
 </para>
@@ -2007,7 +2008,7 @@ The fields following this are not so critical. Just supply your name (i.e. the n
 </note>
 
 <formalpara>
-<title>Version and license info</title>
+<title>Version and License Info</title>
 <para>
 Finally enter a starting version number for your new application in the <guilabel>Version</guilabel> field, and select the license under which you want your application be put from the <guilabel>License</guilabel> tab.
 </para>
@@ -2032,7 +2033,7 @@ Once you have correctly entered all this information stuff, press the <guibutton
 </sect2> <!-- newprojects-start -->
 
 <sect2 id="newprojects-start-cvs">
-<title>Supply version system information</title>
+<title>Supply Version System Information</title>
 
 <indexterm zone="newprojects-start-cvs">
   <primary>CVS</primary>
@@ -2059,7 +2060,7 @@ This discussion concentrates on the needs for project creation only. For more in
 </para></note>
 
 <formalpara>
-<title>No version control system wanted</title>
+<title>No Version Control System Wanted</title>
 <para>
 Initially there is <quote>None</quote> selected in the <guilabel>Version control system</guilabel> tab, and the page will be empty otherwise. If you don't want to use a version control system, just click the <guibutton>Next ></guibutton> button and go on.
 </para>
@@ -2108,7 +2109,7 @@ A version control system such as &CVS; (which means <quote>Concurrent Versions S
   <secondary>:local:</secondary></indexterm>
 
 <formalpara id="newprojects-start-cvs-root">
-<title>CVS root</title>
+<title>CVS Root</title>
 <para>
 &cvs; needs to <emphasis>manage</emphasis> the versioning database it keeps from your project files. To accomplish this it keeps some special database information in an own directory, called the <emphasis>&cvs; root</emphasis>. The first step on setting up &cvs; for your new project thus is to tell &kdevelop; where this root is located.
 </para>
@@ -2158,7 +2159,7 @@ As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initi
   <secondary>:ext:</secondary></indexterm>
 
 <formalpara id="newprojects-start-cvs-remote">
-<title>Remote &cvs; server types</title>
+<title>Remote &cvs; Server Types</title>
 <para>
 Basically there are two widely used remote &cvs; server types, the <emphasis>pserver</emphasis> which uses a password-secured non-encrypted protocol, and the <emphasis>ext</emphasis> server which uses an rsh or ssh encrypted data transfer. They are distinguished by the URL prefix they use:
 </para>
@@ -2197,7 +2198,7 @@ There is a caveat if you use an encrypted server for &cvs; from within &kdevelop
   <secondary>CVS</secondary></indexterm>
 
 <formalpara id="newprojects-start-cvs-repository">
-<title>The &cvs; repository</title>
+<title>The &cvs; Repository</title>
 <para>
 So far you have told &kdevelop; where the &cvs; root resides which manages the versioning database and how to access it. Now you need to tell &kdevelop; under which name you want &CVS; save your project files in that database. Such a place your project files will be held in &cvs; is called a <emphasis>repository</emphasis>.
 </para>
@@ -2214,7 +2215,7 @@ Just enter the repository name you want to use in the <guilabel>CVS repository</
 </para></warning>
 
 <formalpara>
-<title>The remaining fields</title>
+<title>The Remaining Fields</title>
 <para>
 There is not much work left to do. &appwizard; has already set up the remaining fields for you. In detail:
 </para>
@@ -2263,7 +2264,7 @@ If you want to correct an error on the previous <guilabel>Create New Project</gu
 </sect2> <!-- newprojects-start-cvs -->
 
 <sect2 id="newprojects-start-templates">
-<title>Supply header/source templates</title>
+<title>Supply Header/Source Templates</title>
 
 <para>
 The next step brings you to a series of pages where you can set up common information you want to include in your source and header files, if the task at hand allows.
@@ -2305,7 +2306,7 @@ As you might have noticed, the applications manager did readily fill in some inf
 </para>
 
 <sect3 id="newprojects-start-templates-edit">
-<title>How to edit the templates</title>
+<title>How to Edit the Templates</title>
 
 <indexterm zone="newprojects-start-templates-edit">
   <primary>templates</primary>
@@ -2324,7 +2325,7 @@ You are not restricted to plain text however. &kdevelop; knows of several variab
 </para>
 
 <formalpara>
-<title>Include &doxygen; file information</title>
+<title>Include &doxygen; File Information</title>
 <para>
 If, for example, you want the &doxygen;-built API documentation to display some further information about the file's contents in its filenames list, you may include the following lines in the source file template:
 </para>
@@ -2347,7 +2348,7 @@ Whenever you create a new source file, &kdevelop; will replace the <computeroutp
 You will still have to provide the short description after the <quote>\brief</quote> keyword, but part of the job is automatically done for you.
 </para>
 <formalpara>
-<title>The license text file</title>
+<title>The License Text File</title>
 <para>
 As another example you could include an explicit hint to the license text you want to use into the template. Use the <computeroutput>$LICENSEFILE$</computeroutput> variable for this and add for example this line:
 </para>
@@ -2382,7 +2383,7 @@ The templates you define here will come in effect only after the &appwizard; has
 </sect2> <!-- newprojects-start-templates -->
 
 <sect2 id="newprojects-start-build">
-<title>Build the initial project files</title>
+<title>Build the Initial Project Files</title>
 
 <indexterm zone="newprojects-start-build">
   <primary>project</primary>
@@ -2446,7 +2447,7 @@ Then it is adviceable that you <emphasis>compile the initial project</emphasis> 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="appwizard-behind">
-<title>Behind the scenes</title>
+<title>Behind the Scenes</title>
 
 <indexterm zone="appwizard-behind">
   <primary>project</primary>
@@ -2482,7 +2483,7 @@ We will have look at the <guilabel>Messages</guilabel> outputs of both steps:
 </para>
 
 <sect2 id="appwizard-behind-app">
-<title>Setting up the application</title>
+<title>Setting Up the Application</title>
 
 <indexterm zone="appwizard-behind-app">
   <primary>Perl</primary>
@@ -2524,7 +2525,7 @@ If you set up <quote>YourNewApplication</quote> as in our previous example the &
 * *** Success ***
 </computeroutput></screen>
 <formalpara id="appwizard-behind-app-perl">
-<title>A &perl; script called</title>
+<title>A &perl; Script Called</title>
 <para>
 As you see from the first line, the &appwizard; did construct a &perl; program call from the settings you made in the <guilabel>Create New Project</guilabel> dialog. The called <filename>script</filename> resides in a directory which was determined from the application type template you selected in the upper part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page.
 </para>
@@ -2543,7 +2544,7 @@ The setup scripts make use of a set of &perl; subroutines collected in the <file
 </para></note>
 
 <formalpara id="appwizard-behind-app-base">
-<title>The application base directory</title>
+<title>The Application Base Directory</title>
 <para>
 When the &perl; script is run, you get a series of messages of what is <emphasis>about to be done</emphasis> in the next installation step. At first a <computeroutput>destination directory</computeroutput> will be set up. This is the base directory of your application, just what you got displayed in the <guilabel>Final location</guilabel> line on the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page. The script uses the value of the <computeroutput>--dest</computeroutput> parameter in the &perl; command above.
 </para>
@@ -2557,7 +2558,7 @@ When the &perl; script is run, you get a series of messages of what is <emphasis
   <secondary>project</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-templates">
-<title>The file templates</title>
+<title>The File Templates</title>
 <para>
 In the next step the file templates you set up in the <guilabel>Create New Project</guilabel> dialog will be copied to the <filename class="directory">templates</filename> subdirectory of this destination directory. As you can see from the <computeroutput>--filetemplates</computeroutput> parameter, the templates are submitted in pairs &mdash; the suffixes they are used for first, followed by the name of a temporary file in which the &appwizard; has copied the contents of the templates dialog pages. These suffixes will be taken as the filenames of where to store the template texts.
 </para>
@@ -2573,7 +2574,7 @@ In our example two such template files were installed, namely <filename>template
   <primary>license</primary></indexterm>
 
 <formalpara id="appwizard-behind-app-license">
-<title>The license file</title>
+<title>The License File</title>
 <para>
 On the <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog you selected the license you want to put your application under. The &appwizard; initiated two actions from this. One was the license indication it put into the templates. The other action causes the according license file to be copied in your application base directory.
 </para>
@@ -2589,7 +2590,7 @@ The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <f
   <primary>administration</primary></indexterm>
 
 <formalpara id="appwizard-behind-app-admin">
-<title>The administration directory</title>
+<title>The Administration Directory</title>
 <para>
 &kdevelop; needs a bunch of files to administrate the project. These are put in the <filename class="directory">admin</filename> subdirectory of your application base directory.
 </para>
@@ -2606,7 +2607,7 @@ The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <f
   <secondary>coding standard</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-gnu">
-<title>The &gnu; coding standard files</title>
+<title>The &gnu; Coding Standard Files</title>
 <para>
 There are several standard files to be distributed with every application which conforms to the &gnu; coding standard. The &perl; <filename>script</filename> extracts these files from the <filename>share/apps/kdevappwizard/template-common/gnu.tar.gz</filename> tarball of your &kde; installation directory and customizes them according to the information you provided in the <guilabel>Create New Page</guilabel> dialog.
 </para>
@@ -2643,7 +2644,7 @@ After this step you will find the following files in your application base direc
   <secondary>project</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-doc">
-<title>The initial application documentation</title>
+<title>The Initial Application Documentation</title>
 <para>
 Every project you set up will contain an initial <emphasis>DocBook</emphasis> template from where you can start to write your application documentation. The &perl; <filename>script</filename> will in this step have set up <filename class="directory">doc</filename> and <filename class="directory">doc/en</filename> subdirectories of the application base directory with an initial <filename>doc/en/index.docbook</filename> template and some &automake; <filename>Makefile.am</filename> files from which &kdevelop; can later build help system files.
 </para>
@@ -2657,7 +2658,7 @@ Every project you set up will contain an initial <emphasis>DocBook</emphasis> te
   <secondary>project file</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-project">
-<title>The project file</title>
+<title>The Project File</title>
 <para>
 Up to here most of the more global stuff has been set up, things which more or less are to be found in any &kdevelop; project. With this step the more application-specific setup processes start. These may vary upon the type of application you selected. Have a look at the actual &perl; <filename>sript</filename> the &appwizard; called up for your new application if you want to lookup details. We will continue to follow the example steps listed above.
 </para>
@@ -2683,7 +2684,7 @@ You may want to have a look at the resulting project file which in our case was 
   <secondary>framework</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-framework">
-<title>The application framework</title>
+<title>The Application Framework</title>
 <para>Now it is about time that the directory structures and other maintenance files be set up to put the new application in and have it maintained. A so-called <emphasis>application framework</emphasis> will be set up in this step. Its structure basically dependends on the type of application you selected in the <guilabel>Create New Project</guilabel> dialog, but parts of it are common enough to be found in other projects, too.
 </para>
 </formalpara>
@@ -2694,7 +2695,7 @@ In our case the following directory structure has been created in the <filename 
     The <filename>src</filename> subdirectory is meant to hold the source files of your application.
   </para></listitem>
   <listitem><para>
-    The <filename>debug</filename> subdirectory will hold the compiled output of the <emphasis><quote>debug</quote> build configuration</emphasis>. (See the <link linkend="advanced-buildconfig">Build configurations</link> chapter to learn more about that.) As the name says, you should use this directory for debug purposes.
+    The <filename>debug</filename> subdirectory will hold the compiled output of the <emphasis><quote>debug</quote> build configuration</emphasis>. (See the <link linkend="buildconfigurations">Build configurations</link> chapter to learn more about that.) As the name says, you should use this directory for debug purposes.
   </para></listitem>
   <listitem><para>
     The <filename>optimized</filename> subdirectory will hold the compiled output of the <emphasis><quote>optimized</quote> build configuration</emphasis>. You should test an optimized version of your application from within here.
@@ -2709,7 +2710,7 @@ All these directories will not kept empty but filled with a series of <filename>
 </para>
 
 <formalpara id="appwizard-behind-app-sources">
-<title>Application sources installed</title>
+<title>Application Sources Installed</title>
 <para>
 This framework finally will be used to put the <emphasis>initial source files</emphasis> of your new project in the <filename class="directory">src</filename> directory. The actual files highly depend on the application type you selected in the <guilabel>Create New Project</guilabel> dialog. You will soon see yourself as this is the stuff you will actually have to work on.
 </para>
@@ -2718,7 +2719,7 @@ This framework finally will be used to put the <emphasis>initial source files</e
 </sect2> <!-- appwizard-behind-app -->
 
 <sect2 id="appwizard-behind-cvs">
-<title>Setting up &CVS;</title>
+<title>Setting Up &CVS;</title>
 
 <indexterm zone="appwizard-behind-cvs">
   <primary>CVS</primary>
@@ -2764,7 +2765,7 @@ As you see from the first message line, the &appwizard; built another shell comm
 </para>
 
 <formalpara>
-<title>Building the &cvs; repository</title>
+<title>Building the &cvs; Repository</title>
 <para>
 In the second command line part the &CVS; application will be called to <emphasis>import</emphasis> the initial project contents into the wanted repository. Again, the work in detail is commanded by a series of command line arguments to the &CVS; application call.
 </para>
@@ -2793,7 +2794,7 @@ In the second command line part the &CVS; application will be called to <emphasi
 </itemizedlist>
 
 <formalpara>
-<title>The imported files</title>
+<title>The Imported Files</title>
 <para>
 The &CVS; application will create the repository and then start to import all files from our <filename class="directory">/home/devel/yournewapplication</filename> directory. It subsequently reports any file which is loaded &mdash; this is the contents of the whole bunch of <quote><computeroutput>N</computeroutput></quote> lines following in the <guilabel>Messages</guilabel> window. The <computeroutput>N</computeroutput> denotes that this file was newly imported into the repository.
 </para>
@@ -2803,7 +2804,7 @@ Depending on the type of the new application there will be quite a lot of those 
 </para>
 
 <formalpara>
-<title>The &CVS; success message</title>
+<title>The &CVS; Success Message</title>
 <para>
 &CVS; always reports when an operation was successfully performed. In our case the <quote><computeroutput>No conflicts created by this import</computeroutput></quote> message was printed, followed by the general <quote><computeroutput>*** Success ***</computeroutput></quote> line as no other operation had to be performed.
 </para>
@@ -2814,7 +2815,7 @@ There <emphasis>could</emphasis> have been some error messages about conflicting
 </para></note>
 
 <formalpara>
-<title>Building the &cvs; administration entries</title>
+<title>Building the &cvs; Administration Entries</title>
 <para>
 The &CVS; import operation is concluded at this point. The repository has been set up and all files we want to be kept were stored in the database. Yet there is more work to do, because the &CVS; application needs some administration information kept in every directory of the application. It uses this information later to communinicate with the cvs root and repository.
 </para>
@@ -2855,10 +2856,10 @@ The script runs silently, just closing without any more line in the <guilabel>Me
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="oldprojects">
-<title>Existing projects</title>
+<title>Existing Projects</title>
 
 <sect2 id="importing">
-<title>Importing existing projects</title>
+<title>Importing Existing Projects</title>
 
 <para>
 To import an existing directory in &kdevelop; select <guimenuitem>Import Existing Directory</guimenuitem>
@@ -2866,7 +2867,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 </para>
 
 <figure id="screenshot-importdirectory" float="1">
-<title>The Import Directory dialog</title>
+<title>The Import Directory Dialog</title>
 <mediaobject>
 <imageobject><imagedata fileref="importdirectory.png"/></imageobject>
 </mediaobject>
@@ -2875,7 +2876,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 </sect2> <!-- importing -->
 
 <sect2 id="convertingold">
-<title>Converting old KDevelop project files</title>
+<title>Converting Old KDevelop Project Files</title>
 
 <para>
 &kdevelop; allows you to open old KDevelop 2.x project files and convert them to &kdevelop; files. To do so go to <guimenuitem>Open Project...</guimenuitem> and select <guilabel>KDevelop 2 project files</guilabel> in the <guilabel>Filter:</guilabel>. Then select project file you want to open. The project gets converted to &kdevelop; and saved as a <guilabel>&kdevelop; project file</guilabel>.
@@ -2888,7 +2889,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="project-options-short">
-<title>A short look at project options</title>
+<title>A Short Look at Project Options</title>
 
 <para>
 (... to be written ...)
@@ -2901,10 +2902,10 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <!-- ====================================================================== -->
 
 <chapter id="editing">
-<title>Editing tools</title>
+<title>Editing Tools</title>
 
 <sect1 id="keyboardmapping">
-<title>Keyboard mapping</title>
+<title>Keyboard Mapping</title>
 <indexterm zone="keyboardmapping"><primary>keybindings</primary></indexterm>
 
 <para>
@@ -3091,7 +3092,7 @@ Redo
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="editing-reporter">
-<title>The problem reporter</title>
+<title>The Problem Reporter</title>
 
 <para>
 (... to be written ...)
@@ -3101,12 +3102,12 @@ Redo
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="searchinggrepping">
-<title>Searching and grepping</title>
+<title>Searching and Grepping</title>
 <indexterm zone="searchinggrepping"><primary>searching</primary></indexterm>
 <indexterm zone="searchinggrepping"><primary>finding</primary></indexterm>
 
 <sect2 id="searching">
-<title>Searching for text</title>
+<title>Searching for Text</title>
 
 <para>
 <keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>- Find 
@@ -3272,14 +3273,14 @@ items will be invalid. You can avoid this by saving all files beforehand.
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="newfiles">
-<title>Creating new files and classes</title>
+<title>Creating New Files and Classes</title>
 
 <para>
 (... to be written ...)
 </para>
 
 <sect2 id="newfiles-edittemplates">
-<title>Editing the templates</title>
+<title>Editing the Templates</title>
 
 <para>
 (... to be written ...)
@@ -3293,7 +3294,7 @@ items will be invalid. You can avoid this by saving all files beforehand.
 <!-- ====================================================================== -->
 
 <chapter id="filebrowsers">
-<title>The file browsers</title>
+<title>The File Browsers</title>
 
 <para>
 On the left side of the main window, &kdevelop; can display various kinds of
@@ -3303,7 +3304,7 @@ lists and trees for the selection of files:
 <itemizedlist>
 <listitem>
 <formalpara>
-<title>File tree</title>
+<title>File Tree</title>
 <para>
 This shows a tree view of the file hierarchy below the project directory. If 
 you click on a file, it is loaded into the editor. For files which do not
@@ -3334,7 +3335,7 @@ the right mouse button on the root item of the tree.
 </para>
 
 <figure id="screenshot-filetree" float="1">
-<title>A screenshot of the file tree</title>
+<title>A Screenshot of the File Tree</title>
 <mediaobject>
 <imageobject><imagedata fileref="filetree.png"/></imageobject>
 </mediaobject>
@@ -3344,7 +3345,7 @@ the right mouse button on the root item of the tree.
 
 <listitem>
 <formalpara>
-<title>File groups</title>
+<title>File Groups</title>
 <para>
 This shows the files belonging to the project, grouped by their file name 
 extension. As in the file tree, you can edit a file by clicking on it
@@ -3374,7 +3375,7 @@ be put below more specific ones. For example, an asterisk for the
 <!-- ====================================================================== -->
 
 <chapter id="classbrowser">
-<title>The class browsers</title>
+<title>The Class Browsers</title>
 <indexterm zone="classbrowser"><primary>class browser</primary></indexterm>
 
 <para>
@@ -3386,7 +3387,7 @@ that visualize the class structure in different ways.
 </para>
 
 <sect1 id="classview">
-<title>Class view</title>
+<title>Class View</title>
 
 <para>
 This view is shown on the left side of the main window and contains a linear
@@ -3396,7 +3397,7 @@ methods and attributes of the respective class is shown.
 </para>
 
 <figure id="screenshot-classview" float="1">
-<title>A screenshot of the class view</title>
+<title>A Screenshot of the Class View</title>
 <mediaobject>
 <imageobject><imagedata fileref="classview.png"/></imageobject>
 </mediaobject>
@@ -3438,7 +3439,7 @@ with an empty implementation.
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="classtools">
-<title>Class tools</title>
+<title>Class Tools</title>
 
 <para>
 The class tool dialog is activated by right clicking on a class in the class
@@ -3450,7 +3451,7 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="classhierarchy">
-<title>Class hierarchy</title>
+<title>Class Hierarchy</title>
 
 <para>
 </para>
@@ -3501,11 +3502,11 @@ All this documentation should be easily maintainable and ready at hand whenever 
 <!-- ### doc browser, notes on internal documentation, how to profit from Doxygen -->
 
 <sect1 id="docbrowser">
-<title>The documentation browser</title>
+<title>The Documentation Browser</title>
 
 
 <figure id="screenshot-doctreeview" float="1">
-<title>A screenshot of the documentation tree</title>
+<title>A Screenshot of the Documentation Tree</title>
 <mediaobject>
 <imageobject><imagedata fileref="doctreeview.png"/></imageobject>
 </mediaobject>
@@ -3518,7 +3519,7 @@ All this documentation should be easily maintainable and ready at hand whenever 
 <!-- ====================================================================== -->
 
 <chapter id="projectmanagement">
-<title>Building and project management</title>
+<title>Building and Project Management</title>
 
 <para>
 This chapter deals only with compiled projects, such as C++, Java or
@@ -3527,54 +3528,592 @@ PHP work very differently.
 </para>
 
 <para>
-In <xref linkend="unixdev-buildsystems"/> we have given a rough overview of
-the build systems commonly in use on UNIX systems. We now give a detailed
-introduction into the project management modules supported by &kdevelop;
-The most important one is the <command>autoproject</command> plugin which
-serves as a frontend to the collection of scripts sometimes referred to as
-&gnu; autotools (&automake;, &autoconf;, &libtool;). Almost all application
-templates use this project management.
+You will find here information on:
+<itemizedlist>
+  <listitem><para>
+  <link linkend="automakemanager-summary">Summary of &automanag;</link> containing an overview over &automanag;,
+  </para></listitem>
+  <listitem><para>
+  <link linkend="automakemanager-operation">Automake Manager Operation</link> describing the basics of how to work with &automanag;,
+  </para></listitem>
+</itemizedlist>
+</para>
+<sect1 id="automakemanager-summary">
+<title>Summary of &automanag;</title>
+
+<para>
+<emphasis>(This chapter was contributed by <author><firstname>Ian</firstname> <surname>Wadham</surname></author>, <email>ianw@netspace.net.au</email>)</emphasis>
 </para>
 
 <para>
-In addition, &kdevelop; contains the <command>customproject</command> plugin,
-which can be used for projects for which you maintain your own
-<filename>Makefiles</filename>, but also for projects that use the tool
-<command>ant</command> which is very common in the Java world, or projects
-using <command>qmake</command>.
+In the <link linkend="unixdev-buildsystems">Build systems</link> chapter we have given a rough overview of the build systems commonly in use on UNIX systems. In the following sections we will look at this in more detail.
+</para>
+<para>
+There is some confusion about how to name such things. GNU calls them <quote>build systems</quote> when it describes Automake, Autoconf and Libtool. QMake calls itself <quote>a tool to write Makefiles for different compilers and platforms</quote>. In KDE often the term <quote>project management systems</quote> is used. We will use this term in a broader sense to describe the built-in environments in &kdevelop; which are used to organize and build your projects. In the context of this section, however, we will mostly talk about <quote>automated build systems</quote>.
 </para>
 
-<formalpara id="automake-references">
-<title>Tutorials on Autoconf/Automake</title>
+<sect2 id="automakemanager-summary-buildsys">
+<title>The Need for an Automated Build System</title>
+
 <para>
-There are several tutorials available on Automake and Autoconf tools of which the &automanag; makes use.
+If you have a simple <quote>Hello World</quote> program, written in C, you can compile and link it using <command>gcc</command> <parameter>-o hello hello.c</parameter> and execute it using the command <command>./hello</command>, so you do not even need a <filename>Makefile</filename>.
+</para>
+<para>
+If you have a C application with several modules and header files and you are only going to run it on your own machine (i.e. it is an in-house application), you will only need a simple <filename>Makefile</filename>, which is fairly easy to write by hand (use <userinput>info Make</userinput> to find out more).
+</para>
+<para>
+The complications begin when:
+</para>
+<itemizedlist>
+  <listitem><para>
+  Your source-code, documentation, graphics, sounds, translations, data files, etc. are located in more than one directory,
+  </para></listitem>
+  <listitem><para>
+  You have a hierarchy of directories and sub-directories,
+  </para></listitem>
+  <listitem><para>
+  You are using libraries that are not part of the traditional &UNIX; set, such as the &Qt; Object Library or the &kde; Desktop libraries,
+  </para></listitem>
+  <listitem><para>
+  You are using a pre-processor to generate some of your source-code, such as Qt's MOC pre-compiler,
+  </para></listitem>
+  <listitem><para>
+  You aim to distribute your application worldwide, to people who may not have the same &UNIX;/&Linux; system, software and hardware as you,
+  </para></listitem>
+  <listitem><para>
+  You require an automated Install and Uninstall facility,
+  </para></listitem>
+  <listitem><para>
+  You aim to make your application part of the &kde; Desktop set.
+  </para></listitem>
+</itemizedlist>
+
+<para>
+If you have some or all of the above situations, you probably need a <emphasis>build system</emphasis>. In the example above we used <command>gcc</command> to compile and build the <quote>Hello World</quote> program, but not all C compilers are called <quote><command>gcc</command></quote>. So if you distribute your application to someone who is using some other C compiler, your Makefile must somehow use the name of that person's compiler, otherwise your application will fail to compile &mdash; and that is just simple example of what can go wrong.
+</para>
+<para>
+A build system will iron out these differences for you.
+</para>
+<itemizedlist>
+  <listitem><para>
+  It will check that the libraries you need are present on each receiving machine,
+  </para></listitem>
+  <listitem><para>
+  will automatically scan all your application directories for files to pre-process, compile or install and
+  </para></listitem>
+  <listitem><para>
+  will install the components of your application in the correct receiving directories, making sure that
+  </para></listitem>
+  <listitem><para>
+  the directories are created in the receiving machine as required.
+  </para></listitem>
+</itemizedlist>
+
+<para>
+In brief, a build system offers safe and secure methods for your application to be compiled and installed correctly on any receiving machine. As we have shown before in the <link linkend="makesystems">Project Management Systems</link> overview, &kdevelop; offers three automated build systems and the option of creating your own Makefile, in short (click on the project names to get more information):
+</para>
+<itemizedlist>
+  <listitem><para>
+  <link linkend="automake-project">Automake projects</link> which use the &gnu; standard development tools.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="qmake-project">QMake projects</link> which use the trolltech QMake project manager.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="ant-project">ANT projects</link> which use the Apache ANT project manager for Java development.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="custom-project">Custom projects</link> which require you to maintain your own <filename>Makefiles</filename>.
+  </para></listitem>
+</itemizedlist>
+
+<important>
+<para>
+One of these four alternatives must be chosen when you create a project and <emphasis>the choice is difficult to change later</emphasis>, so you should give it some thought before you start.
+</para>
+</important>
+
+</sect2> <!--  automakemanager-summary-buildsys -->
+
+<sect2 id="automake-references">
+<title>Tutorials on Autoconf/Automake/Libtool</title>
+<para>
+There are several tutorials available on the &GNU; Build System (<command>Autoconf</command>, <command>Automake</command> and <command>Libtool</command>) of which the &automanag; makes use.
+</para>
 <itemizedlist>
   <listitem><para>A short <ulink url="http://www.kdevelop.org/index.html?filename=tutorial_autoconf.html">autoconf tutorial</ulink> written by Christopher W. Curtis available on the KDevelop home page. It concentrates on some basic steps to modify a <filename>Makefile</filename>.
   </para></listitem>
   <listitem><para>
-  A more detailed tutorial can be found at <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual_toc.html"></ulink>. This is part of a greater set of tutorials on <citetitle>Developing software with GNU</citetitle>.
+  A more detailed tutorial can be found at <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual_toc.html"></ulink>. This is part of a greater set of tutorials on <quote>Developing software with GNU</quote>.
   </para></listitem>
   <listitem><para>
-  And there is the famous <quote>Goat Book</quote>, titled <citetitle>Autoconf, Automake, and Libtool</citetitle>, to be found at <ulink url="http://sources.redhat.com/autobook"></ulink>. This is an easily readable, yet concise, introduction in all main aspects of the &GNU; Autotools.
+  And there is the famous <quote>Goat Book</quote>, titled <quote>Autoconf, Automake, and Libtool</quote>, to be found at <ulink url="http://sources.redhat.com/autobook"></ulink>. This is an easily readable, yet concise, introduction in all main aspects of the &GNU; Autotools.
+  </para></listitem>
+</itemizedlist>
+
+</sect2> <!--  automake-references -->
+
+<sect2 id="automakemanager-basics">
+<title>What does &automanag; Do?</title>
+
+<para>
+The <link linkend="appwizard">&appwizard;</link> will have set up some initial <filename>Makefile.am</filename> files when you created a <guilabel>New Project</guilabel> of a type that uses the &GNU; Build System, such as <menuchoice><guimenuitem>C++</guimenuitem> <guimenuitem>KDE</guimenuitem> <guimenuitem>Application framework</guimenuitem></menuchoice>. During development &automanag; creates any other <filename>Makefile.am</filename> files for projects that use the &GNU; Build System and maintains them all, &appwizard; and &automanag; created alike.
+</para>
+<para>
+There will be one <filename>Makefile.am</filename> file in each directory of your project that contains files to be compiled or installed. It will contain your specifications for compiling, building and installing files and a reference to any subdirectories that also have a <filename>Makefile.am</filename> file and possibly some files to compile, build and install.
+</para>
+
+<note><para>
+Your project's directories and source files may be structured to any depth, or you may prefer a flat project-structure with all subdirectories at the top level.
+</para></note>
+
+<para>
+The aim of the &GNU; Build System is to produce source-code file structures that can be compiled, built and installed on any &UNIX; or &Linux; system by using the simple commands:
+</para>
+<screen>
+./configure
+make
+make install    # Usually as "root".
+</screen>
+<para>and can be uninstalled by the command <command>make uninstall</command> (usually as root).
+</para>
+<para>
+How does this work? Well <command>configure</command> is a script that
+<itemizedlist>
+  <listitem><para>
+  works out the details of whatever system it is in, such as what compiler and libraries to use and where they are located, and then
+  </para></listitem>
+  <listitem><para>
+  creates recursive <filename>Makefile</filename> files by filling in the substitutions in the corresponding <filename>Makefile.in</filename> files.
+  </para></listitem>
+</itemizedlist>
+</para>
+<para>
+The <filename>Makefile.in</filename> are <quote>input</quote> files &mdash; templates which provide basic information for the <filename>Makefile</filename>s to be produced from them by filling in some system dependent information. They are generated by the <command>Automake</command> utility from the <filename>Makefile.am</filename> files.
+</para>
+<para>
+The process of going from <filename>Makefile.am</filename> (<filename>.am</filename> denotes <quote>Automake</quote> template files) to <filename>Makefile</filename> files is handled automatically by the KDevelop &promanag;, using the <command>Autoconf</command> utility, <command>M4</command> macros and other arcana we need not go into here.
+</para>
+<para>
+So when <command>make</command> runs, it automatically picks up the correct pieces from the current environment, such as compilers and libraries. Similarly, <command>make install</command> puts your application components, such as executables, documentation and data files in the correct places for that environment.
+</para>
+
+<para>
+If you distribute your application as a <quote>tarball</quote> (a single compressed file that KDevelop can create for you), it will include the <filename>Makefile.in</filename> files and the <filename>configure</filename> script file, so the recipient can compile, build and install your application without having <command>Automake</command>, <command>Autoconf</command> or KDevelop on their machine. The <filename>Makefile.am</filename> files are also included, just in case the receiver needs to do any source-code modifications.
+</para>
+<note><para>
+The rules are rather different if you distribute via a web-based source-code repository such as KDE CVS.
+</para></note>
+
+</sect2> <!--  automakemanager-basics -->
+
+<sect2 id="automakemanager-basics-summary">
+<title>Summary of What Automake Manager Does</title>
+
+<itemizedlist>
+  <listitem><para>
+  Generates <filename>Makefile.am</filename> files in subdirectories it knows as <quote>subprojects</quote>.
+  </para></listitem>
+  <listitem><para>
+  Updates <filename>Makefile.am</filename> files as the project structure changes.
+  </para></listitem>
+  <listitem><para>
+  Updates <filename>Makefile.am</filename> files as files are added to or removed from the project.
+  </para></listitem>
+  <listitem><para>
+  Accepts definitions of how the various files are to be built or installed and modifies the <filename>Makefile.am</filename> accordingly.
+  </para></listitem>
+  <listitem><para>
+  Accepts parameters used in building or installing (e.g. library names) and ensures that they are used in the required compilation and build steps.
+  </para></listitem>
+</itemizedlist>
+
+</sect2> <!--  automakemanager-basics-summary -->
+
+<sect2 id="automake-file-contents">
+<title>Contents of Automake Files</title>
+
+<para>
+A <filename>Makefile.am</filename> file has lines containing variable-names followed by an equals sign and a list of files or parameter values. The <quote>variables</quote> have two-part names, such as <varname>bin_PROGRAMS</varname>, <varname>myapp_SOURCES</varname> or <varname>kdelnk_DATA</varname>. The second part is called the <emphasis>primary</emphasis> and represents something from which to build or install. The first part is called the <emphasis>prefix</emphasis> and represents:
+</para>
+<itemizedlist>
+  <listitem><para>
+  A <emphasis>directory</emphasis> in which to do installation (e.g. <filename>bin</filename>),
+  </para></listitem>
+  <listitem><para>
+  A <emphasis>qualifier</emphasis> for the primary (e.g. <varname>myapp</varname> for <varname>SOURCES</varname>, indicating that the source files listed after <varname>myapp_SOURCES</varname> go into building <filename>myapp</filename>),
+  </para></listitem>
+  <listitem><para>
+  A special <emphasis>prefix</emphasis> <varname>noinst</varname> (short for <quote>no installation</quote>), usually used to list program header files (<filename>.h</filename>),
+  </para></listitem>
+  <listitem><para>
+  Or the special prefix <varname>EXTRA</varname>, for <emphasis>configuration-dependent</emphasis> stuff.
+  </para></listitem>
+</itemizedlist>
+
+<para>
+For more information on <command>Automake</command> and <filename>Makefile.am</filename> files, look up <userinput>info Automake</userinput>.
+</para>
+<para>
+Basically, &automanag; creates and updates the variable-names and lists of files or parameters. See the following example of a <filename>Makefile.am</filename> for a typical application, called <filename>myapp</filename>.
+</para>
+
+<screen>
+## Makefile.am for myapp
+
+# this is the program that gets installed.  it's name is used for all
+# of the other Makefile.am variables
+bin_PROGRAMS = myapp
+
+# set the include path for X, qt and KDE
+INCLUDES = $(all_includes)
+
+# the library search path.
+myapp_LDFLAGS = $(KDE_RPATH) $(all_libraries)
+
+# the libraries to link against.
+myapp_LDADD   = $(LIB_KFILE) $(LIB_KDEPRINT)
+
+# which sources should be compiled for myapp
+myapp_SOURCES = main.cpp myapp.cpp myappview.cpp
+
+# these are the headers for your project
+noinst_HEADERS = myapp.h myappview.h
+
+# let automoc handle all of the meta source files (moc)
+METASOURCES = AUTO
+
+KDE_ICON = myapp
+
+# this is where the kdelnk file will go 
+kdelnkdir = $(kde_appsdir)/Utilities
+kdelnk_DATA = myapp.desktop
+
+# this is where the XML-GUI resource file goes
+rcdir = $(kde_datadir)/myapp
+rc_DATA = myappui.rc
+
+AM_CXXFLAGS = -DMY_C++_PREPROCESSOR_OPTION
+</screen>
+
+<para>
+As you can see, many of the items on the right hand side are symbols of the form <varname>$(xxxx)</varname>. These are <emphasis>environment variables</emphasis> which are defined in the actual &kde; environment and are substituted with real values when <command>./configure</command> generates the final <filename>Makefile</filename> files in the receiving machine.
+</para>
+<para>
+Also, sometime after you have started with KDevelop, it is a good idea to run the command <command>./configure --help</command>, which will show you the range of things you can change at build and installation time, such as for a test environment. In particular, the command:
+<screen>
+./configure --prefix=/where/you/wish
+</screen>
+will re-direct the entire installation to a directory structure of your choice, by changing the internal variable <varname>$(prefix)</varname> to value <filename class="directory">/where/you/wish</filename>.
+</para>
+
+</sect2> <!-- automake-file-contents -->
+
+</sect1> <!--  automakemanager-summary -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="automakemanager-operation">
+<title>Automake Manager Operation</title>
+
+<para>
+<emphasis>(This chapter was contributed by <author><firstname>Ian</firstname> <surname>Wadham</surname></author>, <email>ianw@netspace.net.au</email>)</emphasis>
+</para>
+
+<para>
+In this chapter you will find a basic description of the &automanag; elements and how to use them. This covers:
+<itemizedlist>
+  <listitem><para>
+  <link linkend="automakemanager-operation-window">The &automanag; Window</link> describes the basic structure of the &automanag; main window.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="automakemanager-operation-overviewwindow">The Overview Window</link> describes the elements of the upper subwindow.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="automakemanager-operation-detailwindow">The Detail View Window</link> describes the elements of the lower subwindow.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="automakemanager-operation-navigate">Navigating in the &automanag;</link> lists some basic operations you can perform in the &automanag;.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="automakemanager-operation-popups">Popup Menus in the &automanag;</link> describes the windows which will pop up when you select an action in the &automanag;.
   </para></listitem>
 </itemizedlist>
 </para>
 
-</formalpara>
+<sect2 id="automakemanager-operation-window">
+<title>The &automanag; Window</title>
 
-<sect1 id="buildconfigurations">
-<title>Build configurations</title>
+<informaltable frame="none">
+<tgroup cols="2"><tbody><row>
+  <entry><inlinemediaobject>
+    <imageobject>
+      <imagedata fileref="automakemanager.png" format="PNG"/>
+	</imageobject>
+  </inlinemediaobject></entry>
+  <entry valign="top"><itemizedlist>
+    <listitem><para>
+    &automanag; runs in a split window. The top part is called the <emphasis>Overview</emphasis> and the bottom part is called the <emphasis>Detail View</emphasis>. Between them is a narrow bar that can be dragged with the mouse to adjust the sizes of the views. In IDEAl mode you can also drag the side of the split window to change the width.
+    </para></listitem>
+    <listitem><para>
+    On top of each view there is a <emphasis>toolbar</emphasis>, the buttons in which will become activated when an element in this view is selected. This provides one way you can access the actions provided for that view element. The other are context menus which pop up on right mouse button click as will be discussed below.
+    </para></listitem>
+    <listitem><para>
+    In IDEAl mode there are two additional small buttons in the &automanag; window title bar left hand side &ndash; a triangular shaped right arrow, and a dot button. The arrow button is used to <emphasis>close the window</emphasis>. The dot button on the other hand will <emphasis>keep the window open</emphasis> even if another &kdevelop; window has been selected. (Otherwise the &automanag; window will automatically close whenever another window gets the input focus.)
+    </para></listitem>
+  </itemizedlist></entry>
+</row></tbody></tgroup>
+</informaltable>
+
+</sect2> <!-- automakemanager-operation-window -->
+
+<sect2 id="automakemanager-operation-overviewwindow">
+<title>The Overview Window</title>
 
 <para>
-(... to be written ...)
+The Overview window contains a tree-list of all the directories in your project that contain program files, documentation or data. Each such directory contains a <filename>Makefile.am</filename> file and is known in &automanag; as a <emphasis>subproject</emphasis>. There are three typical subprojects in a &kde;-based project as shown in the above illustration:
 </para>
 
-</sect1> <!-- buildconfigurations -->
+<itemizedlist>
+  <listitem><para>
+  <filename>src</filename> &ndash; source-code files for your application,
+  </para></listitem>
+  <listitem><para>
+  <filename>doc</filename> &ndash; your user manual or Handbook,
+  </para></listitem>
+  <listitem><para>
+  <filename>po</filename> &ndash; extracts of strings in your source-code files that require translation into other human languages (e.g. window titles, menu names, button labels, dialog box text and messages of various kinds).
+  </para></listitem>
+</itemizedlist>
+
+<para>
+Note that the <filename>doc</filename> subproject always has an <filename>en</filename> subproject, which you can see if you click on the <symbol>+</symbol> symbol next to the word <filename>doc</filename>. That is because the base language of all documentation in KDE is English (en). If your application becomes part of KDE, the KDE translation teams may translate your documentation from English into other languages and the translations will go into other subprojects, such as <filename>de</filename> (German) or <filename>fr</filename> (French). The strings in the <filename>po</filename> subproject may also be translated and stored in other files in <filename>po</filename>, thus allowing your application to be operated by people who do not know English.
+</para>
+
+<note><para>
+The <filename>doc</filename> and <filename>po</filename> subprojects serve different purposes. <filename>doc</filename> contains <emphasis>documentation</emphasis> like a user manual, <filename>po</filename> contains translatable text strings of the <emphasis>user interface</emphasis> which is integrated in the source code of this application.
+</para></note>
+
+<para>
+The Overview window serves &mdash; amongst other things &mdash; as a navigation tool. If you select a subproject in the Overview window, the corresponding details will be shown in the Detail View window.
+</para>
+
+</sect2> <!-- automakemanager-operation-overviewwindow -->
+
+<sect2 id="automakemanager-operation-detailwindow">
+<title>The Detail View Window</title>
+
+<para>
+The Detail View contains a tree-list of all the files in the subproject currently selected in the Overview as well as the compilation, build and installation rules for this subproject. Thus the two views together can give you access to all the components of your application and all the information on how to compile, build and install it.
+</para>
+
+<formalpara>
+<title>Targets</title>
+<para>The tree-list in the Detail View has two levels. The top level consists of so-called &automanag; <emphasis>targets</emphasis> and the next level contains lists of files that go to make up each target.
+</para>
+</formalpara>
+<para>
+This concept of an &automanag; target differs somewhat from what a <filename>Makefile</filename> target usually is. In short:
+<itemizedlist>
+  <listitem><para>
+  The definition of how a set of files is to be compiled, built or installed is known as a <emphasis>target</emphasis> in &automanag;, but as a <emphasis>variable</emphasis> in <command>Automake</command> itself.
+  </para></listitem>
+  <listitem><para>
+  A <emphasis>target</emphasis> in <command>make</command> is often something quite different, being the parameter of a <command>make</command> command (e.g. <userinput>make install</userinput>, <userinput>make clean</userinput>).
+  </para>
+  <para>
+  However some <filename>Makefile.am</filename> variables do represent an underlying <emphasis>sub-target</emphasis> in <command>make</command>.
+  </para></listitem>
+</itemizedlist>
+</para>
+
+</sect2> <!-- automakemanager-operation-detailwindow -->
+
+<sect2 id="automakemanager-operation-navigate">
+<title>Navigating in the &automanag;</title>
+
+<para>
+In both the Overview and the Detail View you can left-click on the <symbol>+</symbol> or <symbol>-</symbol> next to a subproject or target name to expand or contract the tree view. If you do that with a <emphasis>subproject</emphasis> in the Overview, it shows or hides the subprojects at the next level down (if any). If you do it with a <emphasis>target</emphasis> in the Detail View, it shows or hides the list of files that go into that target.
+</para>
+
+<formalpara>
+<title>Opening a File for Edit</title>
+<para>
+If you <emphasis>left-click</emphasis> on a file name in the Detail View, the corresponding file opens up in KDevelop's editing window.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Activating the &automanag; Toolbar Buttons</title>
+<para>
+If you <emphasis>left-click</emphasis> on the name of a subproject in the Overview or target in the Detail View, the name is highlighted and some toolbar buttons become active in the top part of that view.
+</para>
+</formalpara>
+
+<note>
+  <para>
+  It is recommended that you use the <emphasis>right mouse-button and popup menus</emphasis>, rather than the toolbar buttons, because it is then much easier to see and understand what you are doing.
+  </para>
+  <para>
+  Operations on subprojects and targets have far-reaching effects on the structure, compilation, building and installation of your application.
+  </para>
+</note>
+
+<formalpara>
+<title>Selecting Actions/Popup Menus</title>
+<para>
+If you <emphasis>right-click</emphasis> on the name of a subproject, target or file, a menu pops up and you can then select actions to perform on the subproject, target or file, such as add a target to the subproject, add a file to a target or logically remove the selected file from its target.
+</para>
+</formalpara>
+
+</sect2> <!-- automakemanager-operation-navigate -->
+
+<sect2 id="automakemanager-operation-popups">
+<title>Popup Menus in the &automanag;</title>
+
+<para>
+The following sections explain in short terms which operations the menus make available which will pop up on right mouse button clicks in the &automanag; window. They are meant for overview only. You will find detailed descriptions of most operations in a later chapter.
+</para>
+<!-- ### add a link to this chapter when ready -->
+
+<sect3 id="automakemanager-operation-popups-file">
+<title>The Popup Menu for a File</title>
+
+<para>
+When you right-click on a <emphasis>file name</emphasis> in the Detail View the following menu will pop up allowing you to select one of several operations to be performed on that file. In the illustration below the <filename>hi-16app-myapp.png</filename> icon file was selected from the <guilabel>Icon data in myapp</guilabel> target of the <guilabel>myapp/src</guilabel> subproject.
+</para>
+
+<informaltable frame="none">
+<tgroup cols="2"><tbody><row>
+  <entry><inlinemediaobject>
+    <imageobject>
+      <imagedata fileref="automake-file-popup.png" format="PNG"/>
+	</imageobject>
+  </inlinemediaobject></entry>
+  <entry valign="bottom"><itemizedlist>
+    <listitem><para>
+    The main popup-menu item for a file is to <guimenuitem>Remove</guimenuitem> the file from its target (i.e. it will no longer be used to compile, build or install that target).
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>CVS</guimenuitem> item offers a variety of CVS operations on the file.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Open With</guimenuitem> item allows you to open the file with a variety of editors or with any application at all (e.g. you can open the icon file in our example with <application>KIcon</application>).
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Perforce</guimenuitem> item is used for similar operations as in CVS using the commercial <quote><application>Perforce</application></quote> version control system.
+    </para></listitem>
+  </itemizedlist></entry>
+</row></tbody></tgroup>
+</informaltable>
+
+</sect3> <!-- automakemanager-operation-popups-file -->
+
+<sect3 id="automakemanager-operation-popups-target">
+<title>The Popup Menu for a Target</title>
+
+<para>
+When you right-click on a <emphasis>target</emphasis> in the Detail View the following menu will pop up allowing you to select one of several operations to be performed on it. In the illustration below the <guilabel>myapp (Program in bin)</guilabel> target of the <guilabel>myapp/src</guilabel> subproject was selected.
+</para>
+
+<informaltable frame="none">
+<tgroup cols="2"><tbody><row>
+  <entry><inlinemediaobject>
+    <imageobject>
+      <imagedata fileref="automake-target-popup.png" format="PNG"/>
+	</imageobject>
+  </inlinemediaobject></entry>
+  <entry valign="bottom"><itemizedlist>
+    <listitem><para>
+    The <guimenuitem>Options</guimenuitem> item for a target only applies to source code files. In the corresponding dialog box you can specify linker flags and paths on which to locate libraries and you can give a list of actual libraries to be linked in to your application.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Create New File</guimenuitem> item brings up a dialog in which you can set the file name and the type of file to be generated (from a drop-down list).
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Add Existing Files</guimenuitem> item brings up a dialog box in which you can add an already existing file to this target.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Remove</guimenuitem> item for a target allows you to logically remove the target and all its files from the project structure.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Make Target Active</guimenuitem> item only applies to targets containing source code files. New files will always be added to such an active target.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Build Target</guimenuitem> item calls all necessary compile and make operations to build the code for this target only.
+    </para></listitem>
+  </itemizedlist></entry>
+</row></tbody></tgroup>
+</informaltable>
+
+</sect3> <!-- automakemanager-operation-popups-target -->
+
+<sect3 id="automakemanager-operation-popups-subproject">
+<title>The Popup Menu for a Subproject</title>
+
+<para>
+When you right-click on a <emphasis>subproject</emphasis> in the Overview window the following menu will pop up which allows you to make major changes to the structure of your project and the way it is compiled, built and installed. You can use it to expand or modify the basic project structure that the &appwizard; has created.
+</para>
+
+
+<informaltable frame="none">
+<tgroup cols="2"><tbody><row>
+  <entry><inlinemediaobject>
+    <imageobject>
+      <imagedata fileref="automake-subproject-popup.png" format="PNG"/>
+	</imageobject>
+  </inlinemediaobject></entry>
+  <entry valign="bottom"><itemizedlist>
+    <listitem><para>
+    The <guimenuitem>Options</guimenuitem> item for a subproject controls the way that the subproject will be compiled, built and installed. The dialog box that pops up has tabs for Compiler, Includes, Prefixes and Build Order.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Add Subproject</guimenuitem> item creates a new directory and skeleton Makefile.am file.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Add Target</guimenuitem> item pops up a dialog in which you can set the rules for compiling, building or installing a group of files within your subproject.
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Add Service</guimenuitem> (... to be written ...)
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Add Application</guimenuitem> (... to be written ...)
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Add Existing Subprojects</guimenuitem> (... to be written ...)
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Remove Subproject</guimenuitem> item in the popup menu for a subproject is the proper way to remove a subproject. It will adjust the <filename>Makefile.am</filename> files accordingly. You will also be offered the option to delete all the files (or links) in the corresponding subdirectory. Obviously, this feature should be used with caution.
+    </para></listitem>
+    <listitem><para>
+    The <guimenuitem>Build</guimenuitem> item calls all necessary compile and make operations to build the code for this subproject only.
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Force Reedit</guimenuitem> (... to be written ...)
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Clean</guimenuitem> (... to be written ...)
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Install</guimenuitem> (... to be written ...)
+    </para></listitem>
+    <listitem><para>
+    <guimenuitem>Install (as root user)</guimenuitem> (... to be written ...)
+    </para></listitem>
+  </itemizedlist></entry>
+</row></tbody></tgroup>
+</informaltable>
+
+</sect3> <!-- automakemanager-operation-popups-subproject -->
+
+</sect2> <!-- automakemanager-operation-popups -->
+
+</sect1> <!-- automakemanager-operation -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="autoproject">
-<title>Automake projects</title>
+<title>Automake Projects</title>
 <indexterm zone="autoproject"><primary><command>autoproject</command></primary></indexterm>
 <indexterm zone="autoproject"><primary>&automake;</primary></indexterm>
 <indexterm zone="autoproject"><primary>&autoconf;</primary></indexterm>
@@ -3592,7 +4131,7 @@ There are several tutorials available on Automake and Autoconf tools of which th
 <indexterm zone="autoconf"><primary><filename>config.h.in</filename></primary></indexterm>
 
 <figure id="flow-configure" float="1">
-<title>Effect of the configure script</title>
+<title>Effect of the Configure Script</title>
 <mediaobject>
 <imageobject><imagedata fileref="configure.png"/></imageobject>
 </mediaobject>
@@ -3647,7 +4186,7 @@ CXX = g++
 
 
 <sect2 id="automakemanager">
-<title>KDevelop's automake manager</title>
+<title>KDevelop's &automanag;</title>
 
 <figure id="screenshot-automakemanager" float="1">
 <title>A screenshot of the automake manager</title>
@@ -3660,7 +4199,7 @@ CXX = g++
 
 
 <sect2 id="automakelibrary">
-<title>Building and installing libraries</title>
+<title>Building and Installing Libraries</title>
 
 <para>
 <itemizedlist>
@@ -3686,7 +4225,7 @@ CXX = g++
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="customproject">
-<title>Custom makefiles and build scripts</title>
+<title>Custom Makefiles and Build Scripts</title>
 <indexterm zone="customproject"><primary><filename>Makefile</filename></primary></indexterm>
 <indexterm zone="customproject"><primary><filename>build.xml</filename></primary></indexterm>
 
@@ -3698,7 +4237,7 @@ CXX = g++
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="compileroptions">
-<title>Compiler options</title>
+<title>Compiler Options</title>
 
 <para>
 </para>
@@ -3708,7 +4247,7 @@ CXX = g++
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="makeoptions">
-<title>Make options</title>
+<title>Make Options</title>
 
 <para>
 </para>
@@ -3720,11 +4259,11 @@ CXX = g++
 <!-- ====================================================================== -->
 
 <chapter id="advancedautoproject">
-<title>Advanced autoproject usage</title>
+<title>Advanced Autoproject Usage</title>
 <indexterm zone="advancedautoproject"><primary>&automake;</primary></indexterm>
 
-<sect1 id="advanced-buildconfig">
-<title>Multiple build configurations</title>
+<sect1 id="buildconfigurations">
+<title>Multiple Build Configurations</title>
 <indexterm zone="buildconfigurations"><primary>build configurations</primary><secondary>multiple</secondary></indexterm>
 
 <para>
@@ -3736,7 +4275,7 @@ CXX = g++
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="crosscompiling">
-<title>Cross-compiling</title>
+<title>Cross-Compiling</title>
 <indexterm zone="crosscompiling"><primary>cross compiling</primary></indexterm>
 <indexterm zone="crosscompiling"><primary>compiling</primary><secondary>cross</secondary></indexterm>
 <indexterm zone="crosscompiling"><primary><option>--host</option></primary></indexterm>
@@ -3856,7 +4395,7 @@ the autoproject project management, you have to add
 <!-- ====================================================================== -->
 
 <chapter id="debugger">
-<title>The debugger interface</title>
+<title>The Debugger Interface</title>
 <indexterm zone="debugger"><primary>debugger</primary></indexterm>
 
 <para>
@@ -3946,7 +4485,7 @@ via the context menu.
 
 <listitem>
 <formalpara>
-<title>Frame stack</title>
+<title>Frame Stack</title>
 <indexterm zone="debugger"><primary>frame stack</primary></indexterm>
 <para>
 </para>
@@ -3966,7 +4505,7 @@ via the context menu.
 
 
 <sect1 id="settingbreakpoints">
-<title>Setting breakpoints</title>
+<title>Setting Breakpoints</title>
 
 <para>
 </para>
@@ -3979,7 +4518,7 @@ via the context menu.
 <title>Options</title>
 
 <formalpara>
-<title>Display mangled names</title>
+<title>Display Mangled Names</title>
 <indexterm zone="debugger"><primary>name mangling</primary></indexterm>
 <indexterm zone="debugger"><primary>mangling</primary><secondary>name</secondary></indexterm>
 
@@ -3999,7 +4538,7 @@ they are easily readable. Alternatively, you can decide to see mangled names.
 </para>
 
 <formalpara>
-<title>Try setting BPs on lib load</title>
+<title>Try Setting BPs on Lib Load</title>
 <indexterm zone="debugger"><primary>lazy breakpoints</primary></indexterm>
 <indexterm zone="debugger"><primary>breakpoints</primary><secondary>lazy</secondary></indexterm>
 
@@ -4017,7 +4556,7 @@ breakpoints.
 </formalpara>
 
 <formalpara>
-<title>Enable floating toolbar</title>
+<title>Enable Floating Toolbar</title>
 <indexterm zone="debugger"><primary>debugger toolbar</primary></indexterm>
 <indexterm zone="debugger"><primary>toolbar</primary><secondary>debugger</secondary></indexterm>
 
@@ -4056,7 +4595,7 @@ breakpoints.
 <indexterm zone="cvs"><primary>revision control</primary></indexterm>
 
 <sect1 id="cvs-basics">
-<title>&CVS; basics</title>
+<title>&CVS; Basics</title>
 
 <para>
 &CVS; is the revision control system which many open source projects -
@@ -4099,7 +4638,7 @@ important for your daily work can be used directly.
 <para>
 Basic knowledge of &CVS; usage is assumed. In particular, you should know 
 how to checkout a given project from the repository. We recommend the
-book <citetitle pubwork="book">Open Source Development With CVS</citetitle> by Karl Fogel which is freely
+book <quote>Open Source Development With CVS</quote> by Karl Fogel which is freely
 distributed (except for the non-technical chapters). See
 <ulink url="http://cvsbook.red-bean.com/cvsbook.html"/>.
 </para>
@@ -4109,7 +4648,7 @@ distributed (except for the non-technical chapters). See
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="cvs-commands">
-<title>&CVS; commands in &kdevelop;</title>
+<title>&CVS; Commands in &kdevelop;</title>
 
 <para>
 In the file views, the following context menu items are available:
@@ -4119,7 +4658,7 @@ In the file views, the following context menu items are available:
 
 <listitem>
 <formalpara>
-<title>Add to repository</title>
+<title>Add to Repository</title>
 <para>Prepares the marked file for addition to the repository. The file
 is transferred to the repository when you commit it (or the containing
 directory) the next time.
@@ -4129,7 +4668,7 @@ directory) the next time.
 
 <listitem>
 <formalpara>
-<title>Remove from repository</title>
+<title>Remove from Repository</title>
 <para>
 Prepares a file for removal from the repository. This also deletes
 the file on the local file system, so use this feature with care!
@@ -4179,10 +4718,10 @@ SourceForge documentation.
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="cvs-behind">
-<title>Behind the scenes</title>
+<title>Behind the Scenes</title>
 
 <sect2 id="cvs-behind-workdir">
-<title>What &CVS; records in the working directory</title>
+<title>What &CVS; Records in the Working Directory</title>
 
 <para>
 (... to be written ...)
@@ -4196,7 +4735,7 @@ SourceForge documentation.
 <!-- ====================================================================== -->
 
 <chapter id="externalprogs">
-<title>Leveraging external programs</title>
+<title>Leveraging External Programs</title>
 <indexterm zone="externalprogs"><primary>programs</primary><secondary>external</secondary></indexterm>
 
 <para>
@@ -4224,7 +4763,7 @@ Other tools will be discussed in the chapter <xref linkend="plugintools"/>.
 <!-- ====================================================================== -->
 
 <chapter id="plugintools">
-<title>Plugin tools</title>
+<title>Plugin Tools</title>
 <indexterm zone="plugintools"><primary>plugins</primary></indexterm>
 
 <para>
@@ -4242,7 +4781,7 @@ into memory.
 <itemizedlist>
 <listitem>
 <formalpara>
-<title>The abbrev plugin</title>
+<title>The <command>abbrev</command> Plugin</title>
 <indexterm zone="plugintools"><primary><command>abbrev</command></primary></indexterm>
 
 <para>
@@ -4268,7 +4807,7 @@ dialog under <guibutton>Abbreviations</guibutton>
 
 <listitem>
 <formalpara>
-<title>The filter plugin</title>
+<title>The <command>filter</command> Plugin</title>
 <indexterm zone="plugintools"><primary><command>filter</command></primary></indexterm>
 
 <para>
@@ -4292,7 +4831,7 @@ command is then inserted into the editor.
 
 <listitem>
 <formalpara>
-<title>The &doxygen; plugin</title>
+<title>The &doxygen; Plugin</title>
 <indexterm zone="plugintools"><primary>&doxygen;</primary></indexterm>
 <indexterm zone="plugintools"><primary>documentation tool</primary></indexterm>
 <indexterm zone="plugintools"><primary>API documentation</primary></indexterm>
@@ -4317,7 +4856,7 @@ is very similar to the &doxywizard; tool.
 
 <listitem>
 <formalpara>
-<title>The ctags plugin</title>
+<title>The &ctags; Plugin</title>
 <indexterm zone="plugintools"><primary>&ctags;</primary></indexterm>
 
 <para>
@@ -4368,7 +4907,7 @@ the button <guibutton>Regenerate</guibutton>.
 
 <listitem>
 <formalpara>
-<title>The astyle plugin</title>
+<title>The <command>astyle</command> Plugin</title>
 <indexterm zone="plugintools"><primary><command>astyle</command></primary></indexterm>
 <indexterm zone="plugintools"><primary><application>Artistic Style</application></primary></indexterm>
 <indexterm zone="plugintools"><primary>indentation</primary></indexterm>
@@ -4380,7 +4919,7 @@ the button <guibutton>Regenerate</guibutton>.
 
 <listitem>
 <formalpara>
-<title>The regexptest plugin</title>
+<title>The <command>regexptest</command> Plugin</title>
 <indexterm zone="plugintools"><primary><command>regexptest</command></primary></indexterm>
 <indexterm zone="plugintools"><primary>debugging</primary><secondary>regular expressions</secondary></indexterm>
 <indexterm zone="plugintools"><primary>regular expressions</primary><secondary>debugging</secondary></indexterm>
@@ -4414,7 +4953,7 @@ the content of the matched subgroups will be shown in a list box.
   
 <listitem>
 <formalpara>
-<title>The konsole plugin</title>
+<title>The <command>konsole</command> Plugin</title>
 <indexterm zone="plugintools"><primary><command>konsole</command></primary></indexterm>
 <indexterm zone="plugintools"><primary>terminal</primary><secondary>embedded</secondary></indexterm>
 
@@ -4447,7 +4986,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 </para>
 
 <table id="table-project-parts">
-<title>Project management parts in &kdevelop;</title>
+<title>Project Management Parts in &kdevelop;</title>
 
 <tgroup cols="2"><tbody>
 <row>
@@ -4470,7 +5009,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 </table>
 
 <table id="table-global-parts">
-<title>Global parts in &kdevelop;</title>
+<title>Global Parts in &kdevelop;</title>
 
 <tgroup cols="2"><tbody>
 <row><entry>Part Name</entry><entry>Description</entry></row>
@@ -4495,7 +5034,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 </table>
 
 <table>
-<title>Language support parts in &kdevelop;</title>
+<title>Language Support Parts in &kdevelop;</title>
 <tgroup cols="2">
 <tbody>
 <row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
@@ -4508,7 +5047,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 </table>
 
 <table>
-<title>Project specific parts in &kdevelop;</title>
+<title>Project Specific Parts in &kdevelop;</title>
 <tgroup cols="2"><tbody>
 <row><entry>astyle</entry><entry></entry></row>
 <row><entry>buglist</entry><entry></entry></row>
@@ -4541,7 +5080,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <!-- ====================================================================== -->
 
 <appendix id="app-menus">
-<title>Menues and toolbars overview</title>
+<title>Menues and Toolbars Overview</title>
 
 <para>
 (... to be written ...)
@@ -4552,10 +5091,10 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <!-- ====================================================================== -->
 
 <appendix id="app-uimodes-examples">
-<title>&kdevelop; user interface mode examples</title>
+<title>&kdevelop; User Interface Mode Examples</title>
 
 <sect1 id="mdi-desc">
-<title>Child frame windows mode</title>
+<title>Child Frame Windows Mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -4580,7 +5119,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="tabbed-desc">
-<title>Tabbed pages mode</title>
+<title>Tabbed Pages Mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -4605,7 +5144,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="toplevel-desc">
-<title>Toplevel windows mode</title>
+<title>Toplevel Windows Mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -4630,7 +5169,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="ideal-desc">
-<title>IDEAl mode</title>
+<title>IDEAl Mode</title>
 
 <para>
 Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
@@ -4657,15 +5196,15 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <!-- ====================================================================== -->
 
 <appendix id="app-misc-info">
-<title>Further information</title>
+<title>Further Information</title>
 <sect1 id="gettinginformation">
-<title>Getting information</title>
+<title>Getting Information</title>
 <para>
 </para>
 </sect1> <!-- gettinginformation -->
 
 <sect1 id="app-reporting-bugs">
-<title>Reporting bugs</title>
+<title>Reporting Bugs</title>
 <para>
 </para>
 </sect1> <!-- app-reporting-bugs -->
@@ -4682,7 +5221,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <appendix id="app-changelog">
 <title>Changes</title>
 <sect1 id="changes">
-<title>Changes to this document</title>
+<title>Changes to This Document</title>
 <para>
 <itemizedlist>
 <listitem><para>
@@ -4700,6 +5239,11 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <appendix id="app-bibliography">
 <title>Bibliography</title>
 
+<para>(... to be written ...)</para>
+
+<!-- ### temporarily disabled as the <bibliography> markup is not used by KDE Docbook
+     (see: Lauri Watts: The KDE DocBook Authors guide, Revision 1.00.00: 2003,
+                        Chapter 19. Tags we do not use)
 <bibliography>
 
 <biblioentry>
@@ -4843,7 +5387,8 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <isbn>ISBN 0596001320</isbn>
 </biblioentry>
 
-</bibliography>
+</bibliography>//
+-->
 
 <para>
 <!-- (dummy paragraph to get DTD right) -->
