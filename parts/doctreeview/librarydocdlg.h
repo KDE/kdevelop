@@ -20,13 +20,14 @@ class LibraryDocDlg : public LibraryDocDlgBase
     Q_OBJECT
 
 public:
-    LibraryDocDlg( QWidget* parent, const char* name, const QString& path, const QString& _default);
+    LibraryDocDlg( QWidget* parent, const char* name, const QString& path, const QString& _default, const QString group);
     ~LibraryDocDlg();
 
 private:
     QString mName;
     QString mPath;
     QString mDef;
+    QString m_group;
 
 protected slots:
     void accept();

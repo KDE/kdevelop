@@ -26,6 +26,7 @@ KInstance *DocTreeViewFactory::createInstance()
     KStandardDirs *dirs = instance->dirs();
     dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/indices/");
     dirs->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
+    dirs->addResourceType("docdevhelp", KStandardDirs::kde_default("data") + "kdevdoctreeview/devhelp/");
     return instance;
 }
 

@@ -3,6 +3,8 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002 by Sebastian Kratzert                              *
  *   skratzert@gmx.de                                                      *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,6 +32,10 @@
 #include <kapp.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+#include <kio/netaccess.h>
+#include <kmessagebox.h>
+#include <klineedit.h>
+#include <kurllabel.h>
 
 DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocTreeViewWidget *widget,
                                                      QWidget *parent, const char *name)
@@ -39,6 +45,7 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     QDomDocument d;
     if(m_part->projectDom()) d = *m_part->projectDom();
     m_ignoreTocs = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoretocs", "toc");
+    m_ignoreDevHelp = DomUtil::readListEntry(d, "/kdevdoctreeview/ignoredevhelp", "toc");
     m_widget = widget;
     readConfig();
     if (!m_part->project())
@@ -46,6 +53,8 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
 //        extEditButton->setEnabled(false);
         extEnableButton->setEnabled(false);
         extDisableButton->setEnabled(false);
+        dhEnableButton->setEnabled(false);
+        dhDisableButton->setEnabled(false);
     }
     
     qtdocs_view->addColumn(i18n("Title"));
@@ -66,9 +75,22 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     
     extListView->addColumn(i18n("Name"));
     extListView->addColumn(i18n("Enabled"));
-    extListView->addColumn(i18n("Location"));
+    extListView->addColumn(i18n("Title"));
+    extListView->addColumn(i18n("URL"));
     extListView->setAllColumnsShowFocus(true);
-    
+
+    dhListView->addColumn(i18n("Name"));
+    dhListView->addColumn(i18n("Enabled"));
+    dhListView->addColumn(i18n("Title"));
+    dhListView->addColumn(i18n("URL"));
+    dhListView->addColumn(i18n("Author"));
+    dhListView->setAllColumnsShowFocus(true);
+        
+    dhURL->setMode((int) KFile::Directory);
+
+    urlDownload->setURL("http://lidn.sourceforge.net");
+    connect(urlDownload, SIGNAL(leftClickedURL(const QString&)), kapp,
+        SLOT(invokeBrowser(const QString&)));
 }
 
 
@@ -154,8 +176,13 @@ void DocTreeGlobalConfigWidget::readConfig()
          ++oit1, ++oit2) {
         new KListViewItem( bListView, *oit1, *oit2);
     }
-    
+
+    config->setGroup("DevHelp");   
+    dhURL->setURL(config->readEntry("DevHelpDir", QString::null));
+        
     readTocConfigs();
+    DocTreeViewTool::scanDevHelpDirs();
+    readDevHelpConfig();
 }
 
 void DocTreeGlobalConfigWidget::readTocConfigs()
@@ -166,10 +193,11 @@ void DocTreeGlobalConfigWidget::readTocConfigs()
     {
         const QString name( QFileInfo(*tit).baseName() );
         const QString location( DocTreeViewTool::tocLocation( *tit ) );
+        const QString title (DocTreeViewTool::tocTitle( *tit ));
         if( m_ignoreTocs.contains( name ) )
-            new KListViewItem( extListView, name, "false", location);
+            new KListViewItem( extListView, name, "false", title, location);
         else
-            new KListViewItem( extListView, name, "true", location);
+            new KListViewItem( extListView, name, "true", title, location);
     }
 }
 
@@ -229,6 +257,9 @@ void DocTreeGlobalConfigWidget::storeConfig()
         }
     }
     DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
+    
+    config->setGroup("DevHelp");
+    config->writeEntry("DevHelpDir", dhURL->url());
 }
 
 
@@ -274,7 +305,7 @@ void DocTreeGlobalConfigWidget::extEdit()
     if( item )
     {
         const QString name( item->text(0) );
-        const QString location( item->text(2) );
+        const QString location( item->text(3) );
         KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
         QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
         QString filePath;
@@ -284,7 +315,9 @@ void DocTreeGlobalConfigWidget::extEdit()
                 filePath = *it;
         }
         const QString _default( DocTreeViewTool::tocDocDefaultLocation( filePath ) );
-        LibraryDocDlg *dlg = new LibraryDocDlg( this, name, location, _default);
+        LibraryDocDlg *dlg = new LibraryDocDlg( this, name, location, _default, "TocDirs");
+        dlg->libName->setEnabled(false);
+        dlg->libSource->setEnabled(false);
         dlg->exec();
         
         delete dlg;
@@ -333,7 +366,7 @@ void DocTreeGlobalConfigWidget::doxygenedit_button_clicked( )
 {
     if (doxygen_view->currentItem())
     {
-        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "", false, 
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "", AddDocItemDialog::None, 
             doxygen_view->currentItem()->text(0), doxygen_view->currentItem()->text(1));
         if (dialog->exec())
         {
@@ -354,7 +387,7 @@ void DocTreeGlobalConfigWidget::doxygenremove_button_clicked( )
 
 void DocTreeGlobalConfigWidget::qtdocsadd_button_clicked( )
 {
-    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", true);
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", AddDocItemDialog::Qt);
     if (dialog->exec())
         new KListViewItem(qtdocs_view, dialog->title(), dialog->url());
     delete dialog;
@@ -364,7 +397,7 @@ void DocTreeGlobalConfigWidget::qtdocsedit_button_clicked( )
 {
     if (qtdocs_view->currentItem())
     {
-        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", true,
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", AddDocItemDialog::Qt,
             qtdocs_view->currentItem()->text(0), qtdocs_view->currentItem()->text(1));
         if (dialog->exec())
         {
@@ -397,7 +430,7 @@ void DocTreeGlobalConfigWidget::kdocedit_button_clicked( )
 {
     if (kdoc_view->currentItem())
     {
-        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "", false,
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::Directory, "", AddDocItemDialog::None,
             kdoc_view->currentItem()->text(0), kdoc_view->currentItem()->text(1));
         if (dialog->exec())
         {
@@ -418,20 +451,183 @@ void DocTreeGlobalConfigWidget::kdocremove_button_clicked( )
 
 void DocTreeGlobalConfigWidget::pushEdit_clicked()
 {
-/*    if (bListView->currentItem())
+    if (bListView->currentItem())
     {
-        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/html", false,
-            kdoc_view->currentItem()->text(0), kdoc_view->currentItem()->text(1));
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/html", AddDocItemDialog::None,
+            bListView->currentItem()->text(0), bListView->currentItem()->text(1));
         if (dialog->exec())
         {
-            QString url = dialog->url();
-            if (url[url.length()-1] == QChar('/')) url.remove(url.length()-1, 1);
-            kdoc_view->currentItem()->setText(0, dialog->title());
-            kdoc_view->currentItem()->setText(1, url);
+            bListView->currentItem()->setText(0, dialog->title());
+            bListView->currentItem()->setText(1, dialog->url());
         }
         delete dialog;
-    }*/
+    }
 }
 
+void DocTreeGlobalConfigWidget::extAddButton_clicked( )
+{
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "*.toc", AddDocItemDialog::KDevelopTOC);
+    if (dialog->exec())
+    {
+        KListViewItem *item = new KListViewItem(extListView);
+        dhListView->setCurrentItem(item);
+        
+        QFileInfo fi(dialog->url());
+        dhListView->currentItem()->setText(0, fi.baseName());
+        dhListView->currentItem()->setText(1, "true");
+        
+//        QString localURL = locateLocal("data", QString("kdevdoctreeview/tocs/") + dialog->title());
+        QString localURL = DocTreeViewFactory::instance()->dirs()->saveLocation("doctocs") + fi.baseName() + ".toc";
+        KURL src;
+        src.setPath(dialog->url());
+        KURL dest;
+        dest.setPath(localURL);
+        KIO::NetAccess::copy(src, dest);
+        
+        dhListView->currentItem()->setText(3, DocTreeViewTool::tocLocation( localURL ));
+        dhListView->currentItem()->setText(2, DocTreeViewTool::tocTitle( localURL ));
+    }
+    delete dialog;    
+}
+
+void DocTreeGlobalConfigWidget::extRemoveButton_clicked( )
+{
+    if (extListView->currentItem())
+    {
+        KURL url;
+        url.setPath(DocTreeViewFactory::instance()->dirs()->findResource("doctocs", 
+            extListView->currentItem()->text(0) + QString(".toc")));
+        if (! KIO::NetAccess::del(url))
+            KMessageBox::error(this, i18n("Could not remove documentation TOC!\nIt may be a part of system-wide KDevelop documentation."));
+        else
+            delete extListView->currentItem();
+    }
+}
+
+void DocTreeGlobalConfigWidget::dhAddButton_clicked( )
+{
+    AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "*.devhelp", AddDocItemDialog::DevHelp);
+    if (dialog->exec())
+    {
+        KListViewItem *item = new KListViewItem(dhListView);
+        dhListView->setCurrentItem(item);
+        
+        QFileInfo fi(dialog->url());
+        
+        BookInfo inf = DocTreeViewTool::devhelpInfo(dialog->url());
+        dhListView->currentItem()->setText(0, fi.baseName(false));
+        dhListView->currentItem()->setText(1, "true");
+        dhListView->currentItem()->setText(2, inf.title);
+        dhListView->currentItem()->setText(3, inf.defaultLocation);
+        dhListView->currentItem()->setText(4, inf.author);
+                
+//        QString localURL = locateLocal("data", QString("kdevdoctreeview/tocs/") + dialog->title());
+        QString localURL = DocTreeViewFactory::instance()->dirs()->saveLocation("docdevhelp") + fi.baseName()  + ".devhelp";
+        KURL src;
+        src.setPath(dialog->url());
+        KURL dest;
+        dest.setPath(localURL);
+        KIO::NetAccess::copy(src, dest);
+    }
+    delete dialog;    
+}
+
+void DocTreeGlobalConfigWidget::dhDisableButton_clicked( )
+{
+    QListViewItem *item( dhListView->selectedItem() );
+    if( item && item->text(1) == "true" ) 
+    {
+        m_ignoreDevHelp << item->text( 0 );
+        DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredevhelp", "toc", m_ignoreDevHelp );
+        item->setText(1, "false");
+    }
+}
+
+void DocTreeGlobalConfigWidget::dhEditButton_clicked( )
+{
+    QListViewItem *item = dhListView->currentItem();
+    if( item )
+    {
+        const QString name( item->text(0) );
+        const QString location( item->text(3) );
+        KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+        QStringList tocs = dirs->findAllResources("docdevhelp", QString::null, false, true);
+        QString filePath;
+        for( QStringList::Iterator it = tocs.begin(); it!=tocs.end(); ++it)
+        {
+            if(QFileInfo(*it).baseName() == name)
+                filePath = *it;
+        }
+        const QString _default( DocTreeViewTool::devhelpInfo(filePath).defaultLocation );
+        LibraryDocDlg *dlg = new LibraryDocDlg( this, name, location, _default, "TocDevHelp");
+        dlg->libName->setEnabled(false);
+        dlg->libSource->setEnabled(false);
+        dlg->exec();
+        
+        delete dlg;
+    }
+    dhListView->clear();
+    readDevHelpConfig();
+}
+
+void DocTreeGlobalConfigWidget::dhEnableButton_clicked( )
+{
+    QListViewItem *item( dhListView->selectedItem() );
+    if( item && item->text(1) == "false" ) 
+    {
+        m_ignoreDevHelp.remove( item->text( 0 ) );
+        DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoredevhelp", "toc", m_ignoreDevHelp );
+        item->setText(1, "true");
+    }
+}
+
+void DocTreeGlobalConfigWidget::dhRemoveButton_clicked( )
+{
+    if (dhListView->currentItem())
+    {
+        KURL url;
+        url.setPath(DocTreeViewFactory::instance()->dirs()->findResource("docdevhelp", 
+            dhListView->currentItem()->text(0) + QString(".devhelp")));
+        if (! KIO::NetAccess::del(url))
+            KMessageBox::error(this, i18n("Could not remove documentation TOC!\nIt may be a part of system-wide KDevelop documentation."));
+        else
+        {
+            KConfig *config = DocTreeViewFactory::instance()->config();
+            config->setGroup("TocDevHelp");
+            config->deleteEntry(dhListView->currentItem()->text(0));
+            delete dhListView->currentItem();
+        }
+    }
+}
+
+void DocTreeGlobalConfigWidget::dhScanButton_clicked( )
+{
+    dhListView->clear();
+    DocTreeViewTool::scanDevHelpDirs(dhURL->url());
+    readDevHelpConfig();
+}
+
+void DocTreeGlobalConfigWidget::readDevHelpConfig()
+{
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+    
+    QStringList tocs = dirs->findAllResources("docdevhelp", QString::null, false, true);
+    for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit) 
+    {        
+        KListViewItem *item = 0;
+    
+        QFileInfo fi(*tit);
+        
+        BookInfo inf = DocTreeViewTool::devhelpInfo(*tit);
+        if( m_ignoreDevHelp.contains( fi.baseName() ) )
+            item = new KListViewItem( dhListView, "", "false");
+        else
+            item = new KListViewItem( dhListView, "", "true");
+        item->setText(0, fi.baseName(false));
+        item->setText(2, inf.title);
+        item->setText(3, DocTreeViewTool::devhelpLocation(fi.baseName() , inf.defaultLocation));
+        item->setText(4, inf.author);
+    }
+}
 
 #include "doctreeglobalconfigwidget.moc"

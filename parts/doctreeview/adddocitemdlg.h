@@ -26,8 +26,10 @@ class AddDocItemDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum TitleType {None, Qt, KDevelopTOC, DevHelp};
+
     AddDocItemDialog( KFile::Mode mode = KFile::File, QString filter = "text/html",
-        bool checkQtDocTitle = false, QString title = "", QString url = "", QWidget *parent=0, const char *name=0 );
+        TitleType checkDocTitle = None, QString title = "", QString url = "", QWidget *parent=0, const char *name=0 );
     ~AddDocItemDialog();
 
     QString title() const
@@ -42,6 +44,7 @@ private:
     QLineEdit *title_edit;
     KURLRequester *url_edit;
     KFile::Mode m_mode;
+    TitleType m_type;
     QString m_filter;
     QCheckBox *title_check;
 };

@@ -45,14 +45,24 @@ private slots:
     void kdocedit_button_clicked();
     void kdocremove_button_clicked();
     void pushEdit_clicked();
+    void extAddButton_clicked();
+    void extRemoveButton_clicked();
+    void dhAddButton_clicked();
+    void dhDisableButton_clicked();
+    void dhEditButton_clicked();
+    void dhEnableButton_clicked();
+    void dhRemoveButton_clicked();
+    void dhScanButton_clicked();
 
 private:
     void readConfig();
     void storeConfig();
     void readTocConfigs();
+    void readDevHelpConfig();
     
     DocTreeViewWidget *m_widget;
     QStringList m_ignoreTocs;
+    QStringList m_ignoreDevHelp;
     DocTreeViewPart *m_part;
 };
 

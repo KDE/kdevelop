@@ -12,6 +12,7 @@
  ***************************************************************************/
 
 #include "adddocitemdlg.h"
+#include "misc.h"
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -23,13 +24,13 @@
 #include <klocale.h>
 
 
-AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, bool checkQtDocTitle, QString title, QString url, QWidget *parent, const char *name)
-    : QDialog(parent, name, true), m_mode(mode), m_filter(filter)
+AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, TitleType checkDocTitle, QString title, QString url, QWidget *parent, const char *name)
+    : QDialog(parent, name, true), m_mode(mode), m_type(checkDocTitle), m_filter(filter)
 {
     setCaption(i18n("Add Documentation Entry"));
 
     title_check = 0;
-    if (checkQtDocTitle)
+    if (m_type == Qt)
         title_check = new QCheckBox(i18n("Custom title"), this);
     
     QLabel *title_label = new QLabel(i18n("&Title:"), this);
@@ -64,7 +65,7 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, bool checkQ
     QVBoxLayout *layout = new QVBoxLayout(this, 10);
 
     QGridLayout *grid = new QGridLayout(2, 3);
-    if (checkQtDocTitle)
+    if (m_type == Qt)
     {
         layout->addWidget(title_check);
     }
@@ -89,10 +90,11 @@ AddDocItemDialog::AddDocItemDialog(KFile::Mode mode, QString filter, bool checkQ
     buttonbox->layout();
     layout->addWidget(buttonbox, 0);
 
-    if (checkQtDocTitle)
+    if (m_type != None)
     {
         title_edit->setEnabled(false);
-        connect(title_check, SIGNAL(toggled(bool)), title_edit, SLOT(setEnabled(bool)));
+        if (m_type == Qt)
+            connect(title_check, SIGNAL(toggled(bool)), title_edit, SLOT(setEnabled(bool)));
         connect(url_edit, SIGNAL(textChanged(const QString&)), this, SLOT(setTitle(const QString&)));
     }
 }
@@ -103,30 +105,54 @@ AddDocItemDialog::~AddDocItemDialog()
 
 void AddDocItemDialog::setTitle(const QString &str)
 {
-    if (title_check == 0)
-        return;
-    else if (title_check->isChecked())
-        return;
+    if ( m_type == Qt)
+    {
+        if (title_check->isChecked())
+            return;
+        title_edit->setText("");
+        QFileInfo fi(str);
+        if (!fi.exists())
+            return;
 
-    title_edit->setText("");
-    QFileInfo fi(str);
-    if (!fi.exists())
-        return;
-    
-    QFile f(str);
-    if (!f.open(IO_ReadOnly)) {
-        return;
-    }
-    QDomDocument doc;
-    if (!doc.setContent(&f) || doc.doctype().name() != "DCF") {
-        return;
-    }
-    f.close();
+        QFile f(str);
+        if (!f.open(IO_ReadOnly)) {
+            return;
+        }
+        QDomDocument doc;
+        if (!doc.setContent(&f) || doc.doctype().name() != "DCF") {
+            return;
+        }
+        f.close();
 
-    QDomElement docEl = doc.documentElement();
-    
-    title_edit->setText(docEl.attribute("title", QString::null));
-    
+        QDomElement docEl = doc.documentElement();
+
+        title_edit->setText(docEl.attribute("title", QString::null));
+    }
+    else if (m_type == DevHelp)
+    {
+        title_edit->setText("");
+        QFileInfo fi(str);
+        if (!fi.exists())
+            return;
+
+        QFile f(str);
+        if (!f.open(IO_ReadOnly)) {
+            return;
+        }
+        QDomDocument doc;
+        if (!doc.setContent(&f)) {
+            return;
+        }
+        f.close();
+
+        QDomElement docEl = doc.documentElement();
+
+        title_edit->setText(docEl.attribute("title", QString::null));
+    }
+    else if (m_type == KDevelopTOC)
+    {
+        title_edit->setText(DocTreeViewTool::tocTitle(str));
+    }
 }
 
 #include "adddocitemdlg.moc"

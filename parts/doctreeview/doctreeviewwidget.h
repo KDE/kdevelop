@@ -29,6 +29,7 @@ class DocTreeDocbaseFolder;
 class DocTreeQtFolder;
 class DocTreeKDELibsFolder;
 class DocTreeTocFolder;
+class DocTreeDevHelpFolder;
 class DocTreeViewPart;
 class KDevProject;
 class CustomizeDialog;
@@ -81,6 +82,7 @@ private:
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
     QPtrList<DocTreeTocFolder> folder_toc;
+    QPtrList<DocTreeDevHelpFolder> folder_devhelp;
     DocTreeViewPart *m_part;
     QPtrList<DocTreeQtFolder> folder_qt;
 

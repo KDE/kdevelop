@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Alexander Dymo                                  *
+ *   cloudtemple@mksat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -15,12 +17,16 @@
 #include <kglobal.h>
 #include <kinstance.h>
 #include <klocale.h>
+#include <kurl.h>
+#include <kstandarddirs.h>
+#include <kio/netaccess.h>
+#include <kapplication.h>
 #include <qdom.h>
 
 #include "domutil.h"
-#ifndef INDEXER
+//#ifndef INDEXER
 #include "doctreeviewfactory.h"
-#endif
+//#endif
 #include "misc.h"
 #include "../../config.h"
 
@@ -170,6 +176,35 @@ QString DocTreeViewTool::tocDocDefaultLocation(const QString& fileName)
     return base;
 }
 
+QString DocTreeViewTool::tocTitle(const QString& fileName)
+{
+    QFile f(fileName);
+    if (!f.open(IO_ReadOnly)) {
+        kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
+        return QString::null;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+        kdDebug(9002) << "Not a valid kdeveloptoc file: " << fileName << endl;
+        return QString::null;
+    }
+    f.close();
+    QDomElement docEl = doc.documentElement();
+    QDomElement childEl = docEl.firstChild().toElement();
+    QString title;
+    while (!childEl.isNull()) 
+    {
+        if (childEl.tagName() == "title") 
+        {
+            title = childEl.text();
+            break;
+        }
+        childEl = childEl.nextSibling().toElement();
+    }
+    return title;
+}
+
+
 QString DocTreeViewTool::tocLocation(const QString& fileName)
 {
     KConfig *config = instanceConfig();
@@ -178,3 +213,101 @@ QString DocTreeViewTool::tocLocation(const QString& fileName)
     return config->readEntry( docName, DocTreeViewTool::tocDocDefaultLocation( fileName ));
 }
 
+QString DocTreeViewTool::devhelpLocation(const QString& docName, const QString &defaultLocation)
+{
+    KConfig *config = instanceConfig();
+    config->setGroup("TocDevHelp");
+    return config->readEntry( docName, defaultLocation);
+}
+
+QString DocTreeViewTool::devhelpLocation(const QString& fileName)
+{
+    KConfig *config = instanceConfig();
+    config->setGroup("TocDevHelp");
+    QString docName = QFileInfo(fileName).baseName();
+    BookInfo inf = DocTreeViewTool::devhelpInfo(fileName);
+    return config->readEntry( docName, inf.defaultLocation);
+}
+
+
+void DocTreeViewTool::scanDevHelpDirs( const QString path )
+{
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+
+    QString devhelpDir;
+    if (path.isEmpty())
+    {
+        KConfig *config = instanceConfig();
+        config->setGroup("DevHelp");
+        devhelpDir = config->readEntry("DevHelpDir", QString::null);
+    }
+    else
+        devhelpDir = path;
+        
+
+    if (devhelpDir.isEmpty())
+        return;
+    
+    if (devhelpDir[devhelpDir.length()-1] == QChar('/')) 
+        devhelpDir.remove(devhelpDir.length()-1, 1);
+    QDir d(devhelpDir + QString("/specs/"));
+    if (! d.exists())
+    {
+        return;
+    }
+    d.setFilter( QDir::Files );
+    //scan for *.devhelp files in spec directory
+    const QFileInfoList *list = d.entryInfoList();
+    QFileInfoListIterator it( *list );
+    QFileInfo *fi;
+    while ( (fi = it.current()) != 0 ) {
+        if (fi->extension() == "devhelp")
+        {
+            //extract document information and store into $docdevhelp$ resource dir
+
+            KURL src;
+            src.setPath(fi->absFilePath());
+            KURL dest;
+            dest.setPath(dirs->saveLocation("docdevhelp") + fi->baseName() + ".devhelp");
+
+            QString contentDirURL = devhelpDir + QString("/books/") + fi->baseName() + "/";
+            QDir contentDir(contentDirURL);
+            if (contentDir.exists())
+            {
+                KConfig *config = DocTreeViewFactory::instance()->config();
+                config->setGroup("TocDevHelp");
+                QString temp = config->readEntry( fi->baseName());
+                if (temp.isEmpty() )
+                    config->writeEntry( fi->baseName(), contentDirURL);                
+            }
+                        
+            KIO::NetAccess::copy(src, dest);
+        }
+        ++it;
+    }
+}
+
+BookInfo DocTreeViewTool::devhelpInfo(const QString& fileName)
+{
+    BookInfo inf;
+    
+    QFileInfo fi(fileName);
+    if (!fi.exists())
+        return inf;
+    QFile f(fileName);
+    if (!f.open(IO_ReadOnly)) {
+        return inf;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f)) {
+        return inf;
+    }
+    f.close();
+    QDomElement docEl = doc.documentElement();
+    inf.name = docEl.attribute("name", QString::null);
+    inf.title = docEl.attribute("title", QString::null);
+    inf.author = docEl.attribute("author", QString::null);
+    inf.defaultLocation = docEl.attribute("base", QString::null);
+    
+    return inf;
+}
