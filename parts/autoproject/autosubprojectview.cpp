@@ -288,21 +288,29 @@ void AutoSubprojectView::parsePrimary( SubprojectItem *item,
 			titem->dependencies = cleanWhitespace( item->variables[ canonname + "_DEPENDENCIES" ] );
 
 			QString sources = item->variables[ canonname + "_SOURCES" ];
-			QStringList l2 = QStringList::split( QRegExp( "[ \t\n]" ), sources );
-			QStringList::Iterator it2;
-			for ( it2 = l2.begin(); it2 != l2.end(); ++it2 )
-			{
-				FileItem *fitem = m_widget->createFileItem( *it2 );
-				titem->sources.append( fitem );
-				if ( !m_widget->kdeMode() || !( *it2 ).endsWith( ".cpp" ) )
-					continue;
-				QString header = ( *it2 ).left( ( *it2 ).length() - 4 ) + ".h";
-				if ( sources.contains( header ) )
-					continue;
-				fitem = m_widget->createFileItem( header );
-				titem->sources.append( fitem );
+			QStringList sourceList = QStringList::split( QRegExp( "[ \t\n]" ), sources );
+			
+			// TODO: only if in a c++ project
+			kdDebug(9020) << "-------------> path = " << (item->path) << endl;
+			QDir dir( item->path );
+			sourceList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
+			
+			QMap<QString, bool> dict;
+			QStringList::Iterator it = sourceList.begin();
+			while( it != sourceList.end() ){
+			    kdDebug(9020) << "------------> include " << (*it) << endl;
+			    dict.insert( *it, true );
+			    ++it;
 			}
-		}
+			
+			QMap<QString, bool>::Iterator dictIt = dict.begin();
+			while( dictIt != dict.end() ){
+				FileItem *fitem = m_widget->createFileItem( dictIt.key() );
+				++dictIt;
+				
+				titem->sources.append( fitem );								
+			}
+		    }
 	}
 	else if ( primary == "SCRIPTS" || primary == "HEADERS" || primary == "DATA" )
 	{
