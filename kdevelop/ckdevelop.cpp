@@ -3910,9 +3910,9 @@ void CKDevelop::statusCallback(int id_){
 
   ON_STATUS_MSG(ID_EDIT_INSERT_FILE,             			    i18n("Inserts a file at the current position"))
 
-  ON_STATUS_MSG(ID_EDIT_SEARCH,                  			    i18n("Searchs the file for an expression"))
+  ON_STATUS_MSG(ID_EDIT_SEARCH,                  			    i18n("Searches the file for an expression"))
   ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           			    i18n("Repeats the last search"))
-  ON_STATUS_MSG(ID_EDIT_REPLACE,                 			    i18n("Searchs and replace expression"))
+  ON_STATUS_MSG(ID_EDIT_REPLACE,                 			    i18n("Searches and replace expression"))
 	ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,									i18n("Opens the search in files dialog to search for expressions over several files"))
 	
 	ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                 		i18n("Run program to this cursor position"))
@@ -3934,12 +3934,12 @@ void CKDevelop::statusCallback(int id_){
 	ON_STATUS_MSG(ID_VIEW_NEXT_ERROR,												i18n("Switches to the file and line the next error was reported"))
 	ON_STATUS_MSG(ID_VIEW_PREVIOUS_ERROR,										i18n("Switches to the file and line the previous error was reported"))
 	
-  ON_STATUS_MSG(ID_VIEW_TREEVIEW,              				    i18n("Enables / disables the treeview"))
-  ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            				    i18n("Enables / disables the outputview"))
+  ON_STATUS_MSG(ID_VIEW_TREEVIEW,              				    i18n("Enables/Disables the treeview"))
+  ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            				    i18n("Enables/Disables the outputview"))
 
-  ON_STATUS_MSG(ID_VIEW_TOOLBAR,                  			  i18n("Enables / disables the standard toolbar"))
-  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       				    i18n("Enables / disables the browser toolbar"))
-  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				    i18n("Enables / disables the statusbar"))
+  ON_STATUS_MSG(ID_VIEW_TOOLBAR,                  			  i18n("Enables/Disables the standard toolbar"))
+  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       				    i18n("Enables/Disables the browser toolbar"))
+  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				    i18n("Enables/Disables the statusbar"))
 
   ON_STATUS_MSG(ID_VIEW_REFRESH,                			    i18n("Refreshes current view"))
   ON_STATUS_MSG(ID_VIEW_IN_KFM,					   								i18n("Opens the current document in the KFM browser"))
@@ -4016,7 +4016,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_BROWSER_STOP,                   	i18n("Cancels the document request"))
 
 
-  ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				i18n("Searchs the selected text in the documentation"))
+  ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				i18n("Searches the selected text in the documentation"))
   ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
 
   ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switches to KDevelop's User Manual"))
@@ -4060,8 +4060,8 @@ void CKDevelop::statusCallback(int id_){
 	ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,											i18n("Saves the current dialog under a new filename"))
 	
 	ON_STATUS_MSG(ID_KDLG_VIEW_PROPVIEW,										i18n("Enables/Disables the properties window"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,											i18n("Enables / disables the standard toolbar"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,										i18n("Enables / disables the statusbar"))
+	ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,											i18n("Enables/Disables the standard toolbar"))
+	ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,										i18n("Enables/Disables the statusbar"))
 
 	ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,											i18n("Refreshes current view"))
 	ON_STATUS_MSG(ID_KDLG_VIEW_GRID,												i18n("Sets the grid size of the editing widget grid snap"))

@@ -1,3 +1,9 @@
+2000-04-09  Ralf Funken <rfunken@kdevelop.de>
+	* Bug #2970 messages fixed, Bug closed.
+	* Updated kdevelop.pot
+	* Updated de.po
+ 
+
 2000-04-09 Walter Tasin  <tasin@kdevelop.de>
 	* Bug #2972 fixed
           thanks to Richard Dale <Richard_Dale@tipitina.demon.co.nz>
