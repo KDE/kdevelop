@@ -16,6 +16,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmenubar.h>
+#include <kstatusbar.h>
 #include <kkeydialog.h>
 #include <kaccel.h>
 #include <kio/netaccess.h>
