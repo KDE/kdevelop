@@ -1429,7 +1429,7 @@ void CKDevelop::slotHelpBugReport(){
     info.qt_version = config->readEntry("qt_version","");
     info.compiler = config->readEntry("compiler","");
 
-    CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","kdevelop-bug-report@fara3.cs.uni-potsdam.de"));
+    CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
     if( dlg.exec()){
 	config->writeEntry("author_name",dlg.name);
 	config->writeEntry("author_email",dlg.email_address);

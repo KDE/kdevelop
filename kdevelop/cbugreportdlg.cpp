@@ -216,7 +216,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   severity_harmless->setBackgroundMode( QWidget::PaletteBackground );
   severity_harmless->setFontPropagation( QWidget::NoChildren );
   severity_harmless->setPalettePropagation( QWidget::NoChildren );
-  severity_harmless->setText( i18n("harmless") );
+  severity_harmless->setText( i18n("normal") );
   severity_harmless->setAutoRepeat( FALSE );
   severity_harmless->setAutoResize( FALSE );
   severity_harmless->setChecked( TRUE );
@@ -229,7 +229,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   severity_serious->setBackgroundMode( QWidget::PaletteBackground );
   severity_serious->setFontPropagation( QWidget::NoChildren );
   severity_serious->setPalettePropagation( QWidget::NoChildren );
-  severity_serious->setText( i18n("serious") );
+  severity_serious->setText( i18n("grave") );
   severity_serious->setAutoRepeat( FALSE );
   severity_serious->setAutoResize( FALSE );
   
@@ -599,33 +599,37 @@ void CBugReportDlg::ok() {
 bool CBugReportDlg::generateEmail() {
 
   //  cout << endl << "start generateEmail";
-  QString text;
-  text="> Bugreport ID : "+strBugID+"\n\n";
-  text.append("> Originator\t: ");text.append(name_edit->text());text.append("\n");
-  text.append("> E-Mail\t: ");text.append(email_edit->text());text.append("\n\n");
-  text.append("> Subject : ");text.append(subject_edit->text());text.append("\n\n");
-  text.append("> Error Class\t: ");text.append(class_combo->currentText());text.append("\n");
-  text.append("> Error Location: ");text.append(location_combo->currentText());text.append("\n");
-  text.append("> Priority\t: ");
+  QString text ="\n";
+  text.append("Package: kdevelop\n");
+  text.append("Version: ");text.append(kdevelop_version_edit->text());text.append("\n");
+  text.append("Severity: ");
+  if (severity_harmless->isChecked()) text.append("normal\n\n");
+  if (severity_serious->isChecked()) text.append("grave\n\n");
+  if (severity_critical->isChecked()) text.append("critical\n\n");
+  
+  text.append("Bugreport ID : "+strBugID+"\n\n");
+  text.append("Originator\t: ");text.append(name_edit->text());text.append("\n");
+  text.append("E-Mail\t: ");text.append(email_edit->text());text.append("\n\n");
+  text.append("Subject : ");text.append(subject_edit->text());text.append("\n\n");
+  text.append("Error Class\t: ");text.append(class_combo->currentText());text.append("\n");
+  text.append("Error Location: ");text.append(location_combo->currentText());text.append("\n");
+  text.append("Priority\t: ");
   if (priority_low->isChecked()) text.append("low\n");
   if (priority_medium->isChecked()) text.append("medium\n");
   if (priority_high->isChecked()) text.append("high\n");
-  text.append("> Severity\t: ");
-  if (severity_harmless->isChecked()) text.append("harmless\n\n");
-  if (severity_serious->isChecked()) text.append("serious\n\n");
-  if (severity_critical->isChecked()) text.append("critical\n\n");
-  text.append("> Bug Description ---------------------------\n\n");
+  
+  text.append("Bug Description ---------------------------\n\n");
   text.append(description_mledit->text());text.append("\n\n");
-  text.append("> How to repeat the error -------------------\n\n");
+  text.append("How to repeat the error -------------------\n\n");
   text.append(repeat_mledit->text());text.append("\n\n");
-  text.append("> Bugfix or Workaround ----------------------\n\n");
+  text.append("Bugfix or Workaround ----------------------\n\n");
   text.append(fix_mledit->text());text.append("\n\n");
-  text.append("> System Information ------------------------\n\n");
-  text.append("> KDevelop version\t: ");text.append(kdevelop_version_edit->text());text.append("\n");
-  text.append("> KDE version\t\t: ");text.append(kde_version_edit->text());text.append("\n");
-  text.append("> QT version\t\t: ");text.append(qt_version_edit->text());text.append("\n");
-  text.append("> OS/Distribution\t: ");text.append(os_edit->text());text.append("\n");
-  text.append("> Compiler\t\t: ");text.append(compiler_edit->text());text.append("\n\n");
+  text.append("System Information ------------------------\n\n");
+  text.append("KDevelop version\t: ");text.append(kdevelop_version_edit->text());text.append("\n");
+  text.append("KDE version\t\t: ");text.append(kde_version_edit->text());text.append("\n");
+  text.append("QT version\t\t: ");text.append(qt_version_edit->text());text.append("\n");
+  text.append("OS/Distribution\t: ");text.append(os_edit->text());text.append("\n");
+  text.append("Compiler\t\t: ");text.append(compiler_edit->text());text.append("\n\n");
 
   QDir dir(KApplication::localkdedir()+"/share/apps/");
   dir.mkdir("kdevelop");

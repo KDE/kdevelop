@@ -5,7 +5,7 @@ show_statusbar=true
 show_browser_toolbar=true
 show_std_toolbar=true
 show_tree_view=true
-kdevelop_bug_report_email=kdevelop-bug-report@fara3.cs.uni-potsdam.de
+kdevelop_bug_report_email=submit@bugs.kde.org
 [Enscript]
 Underlayfont=Times-Roman150
 NumberingLines=false

@@ -1,3 +1,6 @@
+1999-07-19 Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* bugreport-dialog use the bug-report-system on bugs.kde.org now
+
 1999-07-18 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* fixed some bugs, when generating bool properties (kdlgedit)
 	* finished the "make manual" dialog implementation
