@@ -141,7 +141,8 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
 
       //    cerr << endl <<endl << "Filename:" << filename
       // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
-      pCurEditWidget->setFocus();
+      QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
+      pMDICover->activate();
       return;
     }
   }
@@ -176,7 +177,6 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
     loadKWriteDoc(pDoc , filename, 1);
 
     qDebug("and loadDoc");
-    pCurEditWidget->parentWidget()->setFocus();
   }
   else {
     debug(" document type found !\n");
@@ -185,9 +185,6 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
     pCurEditWidget = getFirstEditView(pDoc);
 
     debug(" focus view !\n");
-
-    if (pCurEditWidget)
-      pCurEditWidget->parentWidget()->setFocus();
 
     // Don't use the saved text because it is useless
     // and removes the bookmarks
@@ -213,8 +210,9 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
   pCurEditWidget->setName(filename);
   // info->text = pCurEditWidget->text();
 
-  debug(" set focus on view !\n");
-  pCurEditWidget->setFocus();
+  debug(" set focus on view (this will raise and activate the MDI view!\n");
+  QextMdiChildView* pMDICover = (QextMdiChildView*) pCurEditWidget->parentWidget();
+  pMDICover->activate();
 }
 
 
@@ -591,17 +589,17 @@ CDocBrowser* DocViewMan::findCDocBrowser()
 //-----------------------------------------------------------------------------
 void DocViewMan::closeCDocBrowser(CDocBrowser* pDoc)
 {
-  debug("DocViewMan::closeCDocBrowser : %d !\n", pDoc);
+  debug("DocViewMan::closeCDocBrowser : %d !\n", (int)pDoc);
 
   if(pDoc) {
     debug("getting pView !\n");
     KHTMLView* pView = pDoc->view();
-    debug("pView : %d !\n", pView);
+    debug("pView : %d !\n", (int)pView);
     if(pView) {
       debug("getting pMDICover !\n");
       QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
       if(pMDICover) {
-        debug("pMDICover : %d !\n", pMDICover);
+        debug("pMDICover : %d !\n", (int)pMDICover);
         debug("hiding pMDICover !\n");
         pMDICover->hide();
         debug("reparent pView !\n");
@@ -881,7 +879,7 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
     m_curIsBrowser = true;
   }
 
-  debug("pView : %d !", pView);
+  debug("pView : %d !", (int)pView);
   
   // emit the got focus signal 
   // (connected to CKDevelop but could also be caught by other ones)
@@ -1163,9 +1161,9 @@ void DocViewMan::doFileSave(bool project)
   debug("DocViewMan::doFileSave !\n");
 
   QString filename = docName(m_pCurEditDoc);
-  
+
   // save the current file
-  saveFileFromTheCurrentEditWidget(); 
+  saveFileFromTheCurrentEditWidget();
   // setInfoModified(filename, currentEditView()->isModified());
   QStrList lSavedFile;
   lSavedFile.append(filename);
@@ -1193,7 +1191,7 @@ void DocViewMan::doFileCloseAll()
   // synchronizeDocAndInfo();
 
   QListIterator<QObject> itDoc(m_documentList);
-  for (itDoc.toFirst(); cont && itDoc.current() != 0; ++itDoc) {
+  for ( itDoc.toLast(); count && itDoc.current() != 0L; --itDoc) {
     KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
     if (pDoc
         && pDoc->isModified()
@@ -1229,7 +1227,7 @@ void DocViewMan::doFileCloseAll()
           m_pParent->switchToFile(pDoc->fileName());
           handledNames.append(pDoc->fileName());
           cont = m_pParent->fileSaveAs();
-          itDoc.toFirst(); // start again... 'cause we deleted an entry
+          itDoc.toLast(); // start again... 'cause we deleted an entry
         }
         else { // Save file and close it
           m_pParent->switchToFile(pDoc->fileName());
@@ -1241,9 +1239,9 @@ void DocViewMan::doFileCloseAll()
       else if(result==KMessageBox::No) { // No - no save but close
         handledNames.append(pDoc->fileName());
         pDoc->setModified(false);
-        itDoc.toFirst(); // start again... 'cause we deleted an entry
+        itDoc.toLast(); // start again... 'cause we deleted an entry
       }
-         	
+
 //      if(result==3) { // Save all
 //        slotFileSaveAll();
 //        break;
@@ -1277,7 +1275,7 @@ bool DocViewMan::doProjectClose()
         && handledNames.contains(pDoc->fileName())<1) {
 
       SaveAllDialog::SaveAllResult result = m_pParent->doProjectSaveAllDialog(pDoc->fileName());
-         	
+
         // what to do
       if(result==SaveAllDialog::Yes) {  // Yes- only save the actual file
         // save file as if Untitled and close file
@@ -1296,19 +1294,19 @@ bool DocViewMan::doProjectClose()
           cont = ! pDoc->isModified(); //something went wrong
         }
       }
-         	
+
       if(result==SaveAllDialog::No) {   // No - no save but close
         handledNames.append(pDoc->fileName());
         pDoc->setModified(false);
         // start again... 'cause we deleted an entry
         itDoc.toFirst();
       }
-         	
+
       if(result==SaveAllDialog::SaveAll) {  // Save all
         m_pParent->slotFileSaveAll();
         break;
       }
-       	
+
       if (result==SaveAllDialog::Cancel) { // Cancel
         cont=false;
         break;
@@ -1377,7 +1375,7 @@ bool DocViewMan::saveFileFromTheCurrentEditWidget()
   return true;
 }
 
-void DocViewMan::saveModifiedFiles() 
+void DocViewMan::saveModifiedFiles()
 {
   debug("DocViewMan::saveModifiedFiles ! \n");
 
@@ -1399,11 +1397,11 @@ void DocViewMan::saveModifiedFiles()
     if (pDoc) {
       int i = 0;
       pProgressBar->setProgress(++i);
-      	
+
       kdDebug() << "checking: " << pDoc->fileName() << "\n";
       kdDebug() << " " << ((pDoc->isModified()) ?
       "modified" : "not modified") << "\n";
-      	
+
       if (!m_pParent->isUntitled(pDoc->fileName())
           && pDoc->isModified()
           && handledNames.contains(pDoc->fileName()) < 1) {
@@ -1411,7 +1409,7 @@ void DocViewMan::saveModifiedFiles()
         handledNames.append(pDoc->fileName());
 
         kdDebug() << " file info" << "\n";
-        	
+
         QFileInfo file_info(pDoc->fileName());
         if (file_info.lastModified() != pDoc->getLastFileModifDate()) {
           qYesNo = KMessageBox::questionYesNo(m_pParent,
@@ -1420,15 +1418,15 @@ void DocViewMan::saveModifiedFiles()
                                               .arg(pDoc->fileName()),
                                               i18n("File modified"));
         }
-              	
+
         kdDebug() << " KMessageBox::Yes" << "\n";
-              	
+
         if (qYesNo == KMessageBox::Yes) {
           kdDebug() << " create file_info" << "\n";
           QFileInfo file_info(pDoc->fileName());
           bool isModified;
-          		
-          kdDebug() << " use blind widget " << "\n";		
+
+          kdDebug() << " use blind widget " << "\n";
 
           KWriteDoc* pNewDoc = new KWriteDoc(&m_highlightManager);
           CEditWidget* pBlindWidget = new CEditWidget(0L, 0, pDoc);
@@ -1437,17 +1435,17 @@ void DocViewMan::saveModifiedFiles()
           pBlindWidget->setText(pDoc->text());
           pBlindWidget->toggleModified(true);
 
-          kdDebug() << "doSave" << "\n";		
+          kdDebug() << "doSave" << "\n";
           pBlindWidget->doSave();
           isModified = pBlindWidget->isModified();
 
           delete pBlindWidget;
           delete pNewDoc;
-                  		
+
           kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
-                  		
+
           pDoc->setModified(isModified);
-          		
+
           if (!isModified) {
 #ifdef WITH_CPP_REPARSE
             mod = true;
