@@ -101,8 +101,6 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     // we need an instance
     setInstance( QEditorPartFactory::instance() );
 
-    readConfig();
-
     m_editor = (QEditorView*) createView( parentWidget, widgetName );
     m_editor->editor()->show();
     setWidget( m_editor );
@@ -125,10 +123,13 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 
     // we are not modified since we haven't done anything yet
     setModified(false);
+
+    readConfig();
 }
 
 QEditorPart::~QEditorPart()
 {
+    writeConfig();
 }
 
 void QEditorPart::setupActions()
@@ -149,8 +150,8 @@ void QEditorPart::setupActions()
     KStdAction::gotoLine( m_editor, SLOT(gotoLine()), actionCollection() );
     KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
     KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
-    
-    new KAction( i18n("&Configure Editor..."), 0, 
+
+    new KAction( i18n("&Configure Editor..."), 0,
 		 this, SLOT(configDialog()), actionCollection(),
 		 "settings_configure_editor" );
 }
@@ -218,12 +219,20 @@ void QEditorPart::writeConfig()
     config->sync();
 }
 
-void QEditorPart::readConfig( KConfig* )
+void QEditorPart::readConfig( KConfig* config )
 {
+    m_editor->setMarkerWidgetVisible( config->readBoolEntry( "ShowMarkerWidget", false ) );
+    m_editor->setLineNumberWidgetVisible( config->readBoolEntry( "ShowLineNumberWidget", true ) );
+    m_editor->setLevelWidgetVisible( config->readBoolEntry( "ShowLevelWidget", true ) );
+    m_editor->setTabStop( config->readNumEntry( "TabStop", 8 ) );
 }
 
-void QEditorPart::writeConfig( KConfig* )
+void QEditorPart::writeConfig( KConfig* config )
 {
+    config->writeEntry( "ShowMarkerWidget", m_editor->isMarkerWidgetVisible() );
+    config->writeEntry( "ShowLineNumberWidget", m_editor->isLineNumberWidgetVisible() );
+    config->writeEntry( "ShowLevelWidget", m_editor->isLevelWidgetVisible() );
+    config->writeEntry( "TabStop", m_editor->tabStop() );
 }
 
 bool QEditorPart::openFile()
@@ -729,4 +738,3 @@ void QEditorPart::configDialog()
     dlg.setEditor( this );
     dlg.exec();
 }
-

@@ -39,34 +39,37 @@ class LevelWidget;
 class KoFindDialog;
 class KoReplaceDialog;
 
-class QEditorView: 
-	public KTextEditor::View,
-	public KTextEditor::ClipboardInterface,
-	public KTextEditor::ViewCursorInterface,
-	public KTextEditor::PopupMenuInterface,
-	public KTextEditor::CodeCompletionInterface
+class QEditorView:
+    public KTextEditor::View,
+    public KTextEditor::ClipboardInterface,
+    public KTextEditor::ViewCursorInterface,
+    public KTextEditor::PopupMenuInterface,
+    public KTextEditor::CodeCompletionInterface
 {
     Q_OBJECT
 public:
     QEditorView( QEditorPart*, QWidget*, const char* =0 );
     virtual ~QEditorView();
-	    
+
     KTextEditor::Document* document() const;
     QEditor* editor() const { return m_editor; }
-    
+
     QString currentTextLine() const;
     void insertText( const QString& );
-    
+
     QString language() const;
-    
+
     bool isMarkerWidgetVisible() const;
     void setMarkerWidgetVisible( bool );
-    
+
     bool isLineNumberWidgetVisible() const;
     void setLineNumberWidgetVisible( bool );
-    
+
     bool isLevelWidgetVisible() const;
-    void setLevelWidgetVisible( bool );    
+    void setLevelWidgetVisible( bool );
+
+    int tabStop() const;
+    void setTabStop( int );
 
 public slots:
     void gotoLine();
@@ -81,159 +84,155 @@ private:
     QPopupMenu* m_popupMenu;
     KoFindDialog* m_findDialog;
     KoReplaceDialog* m_replaceDialog;
-    bool m_markerWidgetVisible;
-    bool m_levelWidgetVisible;
-    bool m_lineNumberWidgetVisible;
-	
 
 // ViewCursorInterface ----------------------------------------------------------------------
 public:
-	/**
-	 * Get the current cursor coordinates in pixels.
-	 */
-	virtual QPoint cursorCoordinates ();
+    /**
+     * Get the current cursor coordinates in pixels.
+     */
+    virtual QPoint cursorCoordinates ();
 
-	/**
-	 * Get the cursor position
-	 */
-	virtual void cursorPosition (unsigned int *line, unsigned int *col);
+    /**
+     * Get the cursor position
+     */
+    virtual void cursorPosition (unsigned int *line, unsigned int *col);
 
-	/**
-	 * Get the cursor position, calculated with 1 character per tab
-	 */
-	virtual void cursorPositionReal (unsigned int *line, unsigned int *col);
+    /**
+     * Get the cursor position, calculated with 1 character per tab
+     */
+    virtual void cursorPositionReal (unsigned int *line, unsigned int *col);
 
-	/**
-	 * Set the cursor position
-	 */
-	virtual bool setCursorPosition (unsigned int line, unsigned int col);
+    /**
+     * Set the cursor position
+     */
+    virtual bool setCursorPosition (unsigned int line, unsigned int col);
 
-	/**
-	 * Set the cursor position, use 1 character per tab
-	 */
-	virtual bool setCursorPositionReal (unsigned int line, unsigned int col);
+    /**
+     * Set the cursor position, use 1 character per tab
+     */
+    virtual bool setCursorPositionReal (unsigned int line, unsigned int col);
 
-	virtual unsigned int cursorLine ();
-	virtual unsigned int cursorColumn ();
-	virtual unsigned int cursorColumnReal ();
+    virtual unsigned int cursorLine ();
+    virtual unsigned int cursorColumn ();
+    virtual unsigned int cursorColumnReal ();
 
 signals:
-	void cursorPositionChanged ();
+    void cursorPositionChanged ();
 
 // -- ClipboardInterface ----------------------------------------------------------------------
 public slots:
-	/**
-	 * copies selected text
-	 */
-	virtual void copy ( ) const;
+    /**
+     * copies selected text
+     */
+    virtual void copy ( ) const;
 
-	/**
-	 * copies selected text
-	 */
-	virtual void cut ( );
+    /**
+     * copies selected text
+     */
+    virtual void cut ( );
 
-	/**
-	 * copies selected text
-	 */
-	virtual void paste ( );
+    /**
+     * copies selected text
+     */
+    virtual void paste ( );
 
 // -- PopupMenuInterface ----------------------------------------------------------------------
 public:
-	/**
-	   Install a Popup Menu. The Popup Menu will be activated on
-	   a right mouse button press event.
-	*/
-	virtual void installPopup ( class QPopupMenu *rmb_Menu );
+    /**
+       Install a Popup Menu. The Popup Menu will be activated on
+       a right mouse button press event.
+    */
+    virtual void installPopup ( class QPopupMenu *rmb_Menu );
 
 // -- CodeCompletionInterface ----------------------------------------------------------------------
-	/**
-	 * This shows an argument hint.
-	 */
-	virtual void showArgHint (QStringList functionList, const QString& strWrapping, const QString& strDelimiter);
+    /**
+     * This shows an argument hint.
+     */
+    virtual void showArgHint (QStringList functionList, const QString& strWrapping, const QString& strDelimiter);
 
-	/**
-	 * This shows a completion list. @p offset is the real start of the text that
-	 * should be completed. <code>0</code> means that the text starts at the current cursor
-	 * position. if @p casesensitive is @p true, the popup will only contain completions
-	 * that match the input text regarding case.
-	 */
-	virtual void showCompletionBox (QValueList<KTextEditor::CompletionEntry> complList,int offset=0, bool casesensitive=true);
+    /**
+     * This shows a completion list. @p offset is the real start of the text that
+     * should be completed. <code>0</code> means that the text starts at the current cursor
+     * position. if @p casesensitive is @p true, the popup will only contain completions
+     * that match the input text regarding case.
+     */
+    virtual void showCompletionBox (QValueList<KTextEditor::CompletionEntry> complList,int offset=0, bool casesensitive=true);
 
 signals:
-	/**
-	 * This signal is emitted when the completion list disappears and no completion has
-	 * been done. This is the case e.g. when the user presses Escape.
-	 *
-	 * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
-	 * when the implementation doesn't support it
-	 *
-	 * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
-	 * function, if you support it, declare it as a signal
-	 */
-	void completionAborted();
+    /**
+     * This signal is emitted when the completion list disappears and no completion has
+     * been done. This is the case e.g. when the user presses Escape.
+     *
+     * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
+     * when the implementation doesn't support it
+     *
+     * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
+     * function, if you support it, declare it as a signal
+     */
+    void completionAborted();
 
-	/**
-	 * This signal is emitted when the completion list disappears and a completion has
-	 * been inserted into text. This is the case e.g. when the user presses Return
-	 * on a selected item in the completion list.
-	 *
-	 * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
-	 * when the implementation doesn't support it
-	 *
-	 * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
-	 * function, if you support it, declare it as a signal
-	 */
-	void completionDone();
+    /**
+     * This signal is emitted when the completion list disappears and a completion has
+     * been inserted into text. This is the case e.g. when the user presses Return
+     * on a selected item in the completion list.
+     *
+     * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
+     * when the implementation doesn't support it
+     *
+     * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
+     * function, if you support it, declare it as a signal
+     */
+    void completionDone();
 
-	/**
-	 * This signal is the same as @ref completionDone(), but additionally it carries
-	 * the information which completion item was used.
-	 *
-	 * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
-	 * when the implementation doesn't support it
-	 *
-	 * IMPORTANT: The pointer to the CompleteionEntry, is only valid in the slots connected to this signal
-	 * when the connected slots are left, the data element may be destroyed, depending on the implementation
-	 *
-	 * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
-	 * function, if you support it, declare it as a signal.
-	 *
-	 */
-	void completionDone(KTextEditor::CompletionEntry);
+    /**
+     * This signal is the same as @ref completionDone(), but additionally it carries
+     * the information which completion item was used.
+     *
+     * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
+     * when the implementation doesn't support it
+     *
+     * IMPORTANT: The pointer to the CompleteionEntry, is only valid in the slots connected to this signal
+     * when the connected slots are left, the data element may be destroyed, depending on the implementation
+     *
+     * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
+     * function, if you support it, declare it as a signal.
+     *
+     */
+    void completionDone(KTextEditor::CompletionEntry);
 
-	/**
-	 * This signal is emitted when the argument hint disappears.
-	 * This is the case e.g. when the user moves the cursor somewhere else.
-	 *
-	 * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
-	 * when the implementation doesn't support it
-	 *
-	 * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
-	 * function, if you support it, declare it as a signal
-	 */
-	void argHintHidden();
+    /**
+     * This signal is emitted when the argument hint disappears.
+     * This is the case e.g. when the user moves the cursor somewhere else.
+     *
+     * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
+     * when the implementation doesn't support it
+     *
+     * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
+     * function, if you support it, declare it as a signal
+     */
+    void argHintHidden();
 
-	/**
-	 * This signal is emitted just before a completion takes place.
-	 * You can use it to modify the @ref CompletionEntry. The modified
-	 * entry will not be visible in the completion list (because that has
-	 * just disappeared) but it will be used when the completion is
-	 * inserted into the text.
-	 *
-	 * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
-	 * when the implementation doesn't support it
-	 *
-	 * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
-	 * function, if you support it, declare it as a signal
-	 */
-	void filterInsertString(KTextEditor::CompletionEntry*,QString*);
+    /**
+     * This signal is emitted just before a completion takes place.
+     * You can use it to modify the @ref CompletionEntry. The modified
+     * entry will not be visible in the completion list (because that has
+     * just disappeared) but it will be used when the completion is
+     * inserted into the text.
+     *
+     * IMPORTANT: Please check if a connect to this signal worked, and implement some fallback
+     * when the implementation doesn't support it
+     *
+     * IMPORTANT FOR IMPLEMENTERS: When you don't support this signal, please just override the inherited
+     * function, if you support it, declare it as a signal
+     */
+    void filterInsertString(KTextEditor::CompletionEntry*,QString*);
 
 private:
-	QEditorPart* m_document;
-	QEditor* m_editor;
-	CodeCompletion_Impl* m_pCodeCompletion;
-	LineNumberWidget* m_lineNumberWidget;
-	MarkerWidget* m_markerWidget;
+    QEditorPart* m_document;
+    QEditor* m_editor;
+    CodeCompletion_Impl* m_pCodeCompletion;
+    LineNumberWidget* m_lineNumberWidget;
+    MarkerWidget* m_markerWidget;
     LevelWidget* m_levelWidget;
 };
 

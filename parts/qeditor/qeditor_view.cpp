@@ -45,18 +45,14 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 	  m_document( document ),
 	  m_popupMenu( 0 )
 {
-    m_markerWidgetVisible = false;
-    m_lineNumberWidgetVisible = false;
-    m_levelWidgetVisible = true;
-	    
     m_findDialog = new KoFindDialog();
     m_findDialog->setOptions( KoFindDialog::FromCursor );
-    
+
     m_replaceDialog = new KoReplaceDialog();
     m_replaceDialog->setOptions( KoReplaceDialog::FromCursor );
-    
+
     QHBoxLayout* lay = new QHBoxLayout( this );
-    
+
     m_editor = new QEditor( this );
     m_lineNumberWidget = new LineNumberWidget( m_editor, this );
     m_markerWidget = new MarkerWidget( m_editor, this );
@@ -65,28 +61,16 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
 	     m_editor, SLOT(expandBlock(QTextParag*)) );
     connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
 	     m_editor, SLOT(collapseBlock(QTextParag*)) );
-    
+
     lay->addWidget( m_markerWidget );
     lay->addWidget( m_lineNumberWidget );
     lay->addWidget( m_levelWidget );
     lay->addWidget( m_editor );
-    
-    if( !isMarkerWidgetVisible() ){
-	m_markerWidget->hide();
-    }
-    
-    if( !isLineNumberWidgetVisible() ){
-	m_lineNumberWidget->hide();
-    }
-    
-    if( !isLevelWidgetVisible() ){	
-	m_levelWidget->hide();
-    }
-    
+
     setFocusProxy( m_editor );
     connect( m_editor, SIGNAL(cursorPositionChanged(int, int)),
 	     this, SIGNAL(cursorPositionChanged()) );
-    
+
     m_pCodeCompletion = new CodeCompletion_Impl( this );
     connect(m_pCodeCompletion,SIGNAL(completionAborted()),
 	    this,SIGNAL(completionAborted()));
@@ -109,13 +93,12 @@ QEditorView::~QEditorView()
 
 bool QEditorView::isMarkerWidgetVisible() const
 {
-    return m_markerWidgetVisible;
+    return m_markerWidget->isVisible();
 }
 
 void QEditorView::setMarkerWidgetVisible( bool b )
 {
-    m_markerWidgetVisible = b;
-    if( m_markerWidgetVisible ){
+    if( b ){
 	m_markerWidget->show();
     } else {
 	m_markerWidget->hide();
@@ -124,13 +107,12 @@ void QEditorView::setMarkerWidgetVisible( bool b )
 
 bool QEditorView::isLineNumberWidgetVisible() const
 {
-    return m_lineNumberWidgetVisible;
+    return m_lineNumberWidget->isVisible();
 }
 
 void QEditorView::setLineNumberWidgetVisible( bool b )
 {
-    m_lineNumberWidgetVisible = b;
-    if( m_lineNumberWidgetVisible ){
+    if( b ){
 	m_lineNumberWidget->show();
     } else {
 	m_lineNumberWidget->hide();
@@ -139,17 +121,26 @@ void QEditorView::setLineNumberWidgetVisible( bool b )
 
 bool QEditorView::isLevelWidgetVisible() const
 {
-    return m_levelWidgetVisible;
+    return m_levelWidget->isVisible();
 }
 
 void QEditorView::setLevelWidgetVisible( bool b )
 {
-    m_levelWidgetVisible = b;
-    if( m_levelWidgetVisible ){
+    if( b ){
 	m_levelWidget->show();
     } else {
 	m_levelWidget->hide();
     }
+}
+
+int QEditorView::tabStop() const
+{
+    return m_editor->tabStop();
+}
+
+void QEditorView::setTabStop( int tabStop )
+{
+    m_editor->setTabStop( tabStop );
 }
 
 KTextEditor::Document* QEditorView::document() const
@@ -347,3 +338,4 @@ void QEditorView::doReplace()
 	m_replaceDialog->exec();
 #endif
 }
+

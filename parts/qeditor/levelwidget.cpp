@@ -106,7 +106,7 @@ LevelWidget::LevelWidget( QEditor* editor, QWidget* parent, const char* name )
     }
 
     setFixedWidth( 16 );
-	
+
     connect( m_editor->verticalScrollBar(), SIGNAL( valueChanged( int ) ),
 	     this, SLOT( doRepaint() ) );
     connect( m_editor, SIGNAL( textChanged() ),
@@ -121,7 +121,7 @@ LevelWidget::~LevelWidget()
 void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 {
     buffer.fill( backgroundColor() );
-    
+
     QTextParag *p = m_editor->document()->firstParag();
     QPainter painter( &buffer );
     int yOffset = m_editor->contentsY();
@@ -136,15 +136,15 @@ void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 	}
 	if ( p->rect().y() - yOffset > height() )
 	    break;
-	
+
 	ParagData* data = (ParagData*) p->extraData();
 	if( data ){
-	    
+
 	    int prevLevel = 0;
 	    if( p->prev() ){
 		prevLevel = ((ParagData*) p->prev()->extraData())->level();
 	    }
-	    
+
 	    if( data->isBlockStart() ){
 		if( data->isOpen() ){
 		    painter.drawPixmap( 0, p->rect().y() +
@@ -158,7 +158,7 @@ void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 	    } else if( data->level() < prevLevel ){
 		painter.drawLine( plusPixmap->width() / 2, p->rect().y() - yOffset,
 				  plusPixmap->width() / 2, p->rect().y() + p->rect().height() - yOffset );
-		
+
 		painter.drawLine( plusPixmap->width() / 2 + 2,
 				  p->rect().y() + p->rect().height() - yOffset,
 				  plusPixmap->width() / 2 - 2,
@@ -170,7 +170,7 @@ void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 	}
 	p = p->next();
     }
-    
+
     painter.end();
     bitBlt( this, 0, 0, &buffer );
 }
@@ -187,20 +187,19 @@ void LevelWidget::mousePressEvent( QMouseEvent* e )
     int yOffset = m_editor->contentsY();
     while ( p ) {
 	if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
-	    QTextParagData *d = p->extraData();
-	    if ( !d )
-		return;
-	    ParagData *data = (ParagData*)d;
-	    
-	    if( data->isOpen() ){
-		emit collapseBlock( p );
-	    } else {
-		emit expandBlock( p );
+	    ParagData *data = (ParagData*) p->extraData();
+            if( data && data->isBlockStart() ){
+
+                if( data->isOpen() ){
+                    emit collapseBlock( p );
+                } else {
+                    emit expandBlock( p );
+                }
 	    }
 	    break;
 	}
 	p = p->next();
     }
-    
+
     doRepaint();
 }

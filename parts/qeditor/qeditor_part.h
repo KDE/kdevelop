@@ -95,11 +95,11 @@ public slots:
     void writeConfig( KConfig* );
     void configDialog();
 
-private:
-    void setupActions();
-
 signals:
     void fileNameChanged();
+
+private:
+    void setupActions();
 
 // -- MarkInterface ------------------------------------------------------------------------
 public:
