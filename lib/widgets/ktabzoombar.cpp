@@ -22,7 +22,7 @@ public:
   KTabZoomPosition::Position m_tabPosition;
   int                        m_selected;
   KTabZoomBarLayout          *m_layout;
-  QSignalMapper              *m_toggledMapper, *m_clickedMapper;
+  QSignalMapper              *m_clickedMapper;
   QIntDict<KTabZoomButton>   m_buttons;
   int                        m_count;
   bool                       m_docked;
@@ -46,9 +46,6 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
 
   d->m_selected = -1;
-
-  d->m_toggledMapper = new QSignalMapper(this);
-  connect(d->m_toggledMapper, SIGNAL(mapped(int)), this, SLOT(toggled(int)));
 
   d->m_clickedMapper = new QSignalMapper(this);
   connect(d->m_clickedMapper, SIGNAL(mapped(int)), this, SLOT(clicked(int)));
