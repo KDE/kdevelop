@@ -23,6 +23,7 @@
 #include "vc/versioncontrol.h"
 #include "ctoolclass.h"
 #include "clibpropdlgimpl.h"
+#include "cprjconfchange.h"
 
 #include <kprocess.h>
 #include <kconfigbase.h>
@@ -1375,61 +1376,28 @@ void CProject::addMakefileAmToProject(const QString& rel_name,TMakefileAmInfo in
 void CProject::updateConfigureIn(){
   if( isCustomProject()) return; // do nothing
 
-  QString abs_filename;
-  if(isKDE2Project())
-    abs_filename = getProjectDir() + "/configure.in.in"; // KDE2 templates define only AM_INIT_AUTOMAKE in configure.in.in
-  else
-    abs_filename = getProjectDir() + "/configure.in";
-
-  QFile file(abs_filename);
-  QStrList list;
-  QTextStream stream(&file);
-  QString str;
-  QStrList makefile_list;
-  QString makefile;
-
-
-  if(file.open(IO_ReadOnly)){ // read the configure.in
-    while(!stream.eof()){
-      list.append(stream.readLine());
-    }
+  QStringList makefile_list;
+  QString fullLine, makefile;
+  
+  CPrjConfChange configureIn(getProjectDir());
+  
+  config->setGroup("General");
+  makefile_list=config->readListEntry("makefiles");
+  for(QStringList::Iterator it = makefile_list.begin();
+      it != makefile_list.end(); ++it)
+  {
+      makefile=*it;
+      fullLine+=makefile.remove(makefile.length()-3,3) + " ";
   }
-  file.close();
-
-  file.open(IO_WriteOnly);
-
-  for(str = list.first();str != 0;str = list.next()){
-    if(str.find("AC_OUTPUT(") != -1){ // if found
-      stream << "AC_OUTPUT(";
-      config->setGroup("General");
-      config->readListEntry("makefiles",makefile_list);
-      for(makefile = makefile_list.first();makefile !=0;makefile =makefile_list.next()){
-        stream << makefile.remove(makefile.length()-3,3) << " ";
-      }
-      stream << ")\n";
-
-    }
-   //  else if(str.find("AC_PROG_LEX") != -1) {
-//       stream << "AC_PROG_LEX" << endl;
-//     }
-//     else if(str.find("AC_DECL_YYTEXT") != -1) {
-//       stream << "AC_DECL_YYTEXT" << endl;
-//     }
-    else if(str.find("KDE_DO_IT_ALL(") != -1){
-      stream << "KDE_DO_IT_ALL(";
-      stream << getProjectName().lower() << "," << getVersion();
-      stream << ")\n";
-    }
-    else if(str.find("AM_INIT_AUTOMAKE(") != -1){
-      stream << "AM_INIT_AUTOMAKE(";
-      stream << getProjectName().lower() << "," << getVersion();
-      stream << ")\n";
-    }
-    else{
-      stream << str + "\n";
-    }
-  }
-  file.close();
+  
+  configureIn.setLine("^[\\s]*AC_OUTPUT[\\s]*\\(", "AC_OUTPUT("+fullLine+")");
+  
+  configureIn.setLine("^[\\s]*KDE_DO_IT_ALL[\\s]*\\(", 
+     "KDE_DO_IT_ALL("+getProjectName().lower()+","+getVersion()+")");
+  configureIn.setLine("^[\\s]*AM_INIT_AUTOMAKE[\\s]*\\(", 
+     "AM_INIT_AUTOMAKE("+getProjectName().lower()+","+getVersion()+")");
+  
+  configureIn.writeConfFile();
 
 }
 void  CProject::writeWorkspace(TWorkspace ws){
