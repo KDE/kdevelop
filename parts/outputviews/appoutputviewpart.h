@@ -25,7 +25,7 @@ class AppOutputViewPart : public KDevAppFrontend
     Q_OBJECT
 
 public:
-    AppOutputViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    AppOutputViewPart( QObject *parent, const char *name, const QStringList & );
     ~AppOutputViewPart();
 
 protected:

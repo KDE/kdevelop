@@ -7,4 +7,3 @@ Name=KDevMakeView
 Icon=
 ServiceTypes=KDevelop/MakeFrontend
 X-KDE-Library=libkdevoutputviews
-X-KDevelop-Args=MakeView

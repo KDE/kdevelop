@@ -24,8 +24,8 @@
 #include "makeviewpart.h"
 
 
-MakeViewPart::MakeViewPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevMakeFrontend(api, parent, name)
+MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList &)
+    : KDevMakeFrontend(parent, name)
 {
     setInstance(OutputViewsFactory::instance());
     

@@ -7,4 +7,3 @@ Name=KDevAppOutputView
 Icon=
 ServiceTypes=KDevelop/AppFrontend
 X-KDE-Library=libkdevoutputviews
-X-KDevelop-Args=AppOutputView

@@ -23,8 +23,8 @@
 #include "appoutputviewpart.h"
 
 
-AppOutputViewPart::AppOutputViewPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevAppFrontend(api, parent, name)
+AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QStringList &)
+    : KDevAppFrontend(parent, name)
 {
     setInstance(OutputViewsFactory::instance());
 

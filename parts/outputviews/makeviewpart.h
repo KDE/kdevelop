@@ -25,7 +25,7 @@ class MakeViewPart : public KDevMakeFrontend
     Q_OBJECT
 
 public:
-    MakeViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    MakeViewPart( QObject *parent, const char *name, const QStringList & );
     ~MakeViewPart();
     /* send the signal commandFinished, declared in the KDevMakefrontend Interface*/
     void sendSignalCommandFinished(QString command);

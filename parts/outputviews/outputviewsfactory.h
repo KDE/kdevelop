@@ -12,22 +12,12 @@
 #ifndef _OUTPUTVIEWSFACTORY_H_
 #define _OUTPUTVIEWSFACTORY_H_
 
-#include "kdevfactory.h"
+#include <kgenericfactory.h>
 
+#include "appoutputviewpart.h"
+#include "makeviewpart.h"
 
-class OutputViewsFactory : public KDevFactory
-{
-    Q_OBJECT
-
-public:
-    OutputViewsFactory( QObject *parent=0, const char *name=0 );
-    ~OutputViewsFactory();
-
-    virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
-    static KInstance *instance();
-
-private:
-    static KInstance *s_instance;
-};
+typedef K_TYPELIST_2( AppOutputViewPart, MakeViewPart ) OutputViews;
+typedef KGenericFactory< OutputViews > OutputViewsFactory;
 
 #endif
