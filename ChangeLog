@@ -1,5 +1,6 @@
 2001-11-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: methods with namespace prefix in return type are displayed in class parser now
+    * bugfix: accept *.inl and *.thl as header and source files (important for template-based projects and classparser)
 
 2001-11-06  Roland Krause  <rokrau@klondike.dyndns.org>
     * added patch from Markus Kuehni for ctags browsing of 
