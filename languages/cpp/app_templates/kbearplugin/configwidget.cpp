@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 // Qt specific include files
 #include <qstring.h>

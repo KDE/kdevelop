@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef __%{APPNAMEUC}_OUTPUTWIDGET_H__
 #define __%{APPNAMEUC}_OUTPUTWIDGET_H__

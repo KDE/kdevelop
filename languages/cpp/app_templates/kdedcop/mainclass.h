@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef MAINCLASS_H
 #define MAINCLASS_H

@@ -1,3 +1,4 @@
+%{CC_TEMPLATE}
 
 #include <gtk--/main.h>
 

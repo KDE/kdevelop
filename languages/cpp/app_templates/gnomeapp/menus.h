@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 /*** gnomehello-menush */
 

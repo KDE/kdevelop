@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
  
 #ifndef __KBEARPLUGIN_%{APPNAMEUC}_H__
 #define __KBEARPLUGIN_%{APPNAMEUC}_H__

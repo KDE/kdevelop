@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <qwhatsthis.h>
 #include <qtimer.h>

@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #include <dcopobject.h>
 

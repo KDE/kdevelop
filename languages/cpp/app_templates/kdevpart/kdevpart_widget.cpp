@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <kparts/part.h>
 #include <klibloader.h>

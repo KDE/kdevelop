@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <config.h>
 #include "kfile_%{APPNAMELC}.h"

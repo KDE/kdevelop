@@ -1,3 +1,4 @@
+%{C_TEMPLATE}
 
 /*** gnomehello-menus */
 

@@ -1,3 +1,4 @@
+%{C_TEMPLATE}
 
 #include <config.h>
 #include <gnome.h>

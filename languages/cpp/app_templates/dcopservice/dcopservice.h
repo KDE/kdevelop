@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef _%{APPNAME}_H
 #define _%{APPNAME}_H

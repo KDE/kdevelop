@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef _%{APPNAMEUC}VIEW_H_
 #define _%{APPNAMEUC}VIEW_H_

@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include "plugin_%{APPNAMELC}.h"
 

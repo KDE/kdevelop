@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 // gba.h by eloist
 
 #ifndef GBA_HEADER

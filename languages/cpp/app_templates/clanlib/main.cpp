@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <ClanLib/application.h>
 #include <ClanLib/core.h>

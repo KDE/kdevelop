@@ -1,6 +1,4 @@
-/*
- * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
- */
+%{CPP_TEMPLATE}
 
 #include <kmainwindow.h>
 #include <klocale.h>

@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 // gba.h has all the register definitions
 #include "gba.h"     

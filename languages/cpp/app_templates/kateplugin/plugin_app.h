@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef _PLUGIN_%{APPNAMEUC}_H_
 #define _PLUGIN_%{APPNAMEUC}_H_

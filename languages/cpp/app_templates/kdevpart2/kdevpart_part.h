@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef __KDEVPART_%{APPNAMEUC}_H__
 #define __KDEVPART_%{APPNAMEUC}_H__

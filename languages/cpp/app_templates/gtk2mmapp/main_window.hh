@@ -1,3 +1,4 @@
+%{HH_TEMPLATE}
 
 // newer (non customized) versions of this file go to main_window.hh_new
 

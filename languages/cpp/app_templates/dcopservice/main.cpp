@@ -1,3 +1,4 @@
+%{CPP_TEMPLATE}
 
 #include <kuniqueapplication.h>
 #include <kaboutdata.h>

@@ -1,11 +1,10 @@
+%{CPP_TEMPLATE}
 
 #include <qwhatsthis.h>
-
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
-
 
 #include <kdevelop/kdevcore.h>
 

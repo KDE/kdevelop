@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef __%{APPNAMEUC}_WIDGET_H__
 #define __%{APPNAMEUC}_WIDGET_H__
@@ -16,7 +17,7 @@ class %{APPNAME}Widget : public QWidget
   Q_OBJECT
     
 public:
-		  
+  
   %{APPNAME}Widget(%{APPNAME}Part *part);
   ~%{APPNAME}Widget();
 

@@ -1,6 +1,4 @@
-/*
- * Copyright (C) %{YEAR} %{AUTHOR} <%{EMAIL}>
- */
+%{H_TEMPLATE}
 
 #ifndef _%{APPNAMEUC}WIDGET_H_
 #define _%{APPNAMEUC}WIDGET_H_

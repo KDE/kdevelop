@@ -1,3 +1,4 @@
+%{H_TEMPLATE}
 
 #ifndef __%{APPNAMEUC}_CONFIGWIDGET_H__
 #define __%{APPNAMEUC}_CONFIGWIDGET_H__
