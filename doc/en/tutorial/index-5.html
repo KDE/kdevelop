@@ -22,142 +22,133 @@
 
 <P>
 <P>The first step when creating an application based on the Document-View model should always be to think what kind of data the
-application has to manage and how it will do that. So this will naturally require to define the document structure first by extending
-the document class, in our example <CODE>KScribbleDoc</CODE>. This class is stored in two files, <CODE>kscribbledoc.h</CODE>, containing the
-class declaration, and <CODE>kscribbledoc.cpp</CODE>, where we will find the implementation of the class methods.
-<P>As <EM>KScribble</EM> will be a drawing application, we have to think what kind storing system we could use. The Qt library has a lot
-of possibilites which we will widely use and a lot of advantages especially for drawing operations and graphical data handling.
-Therefore, we will use an instance of the class <CODE>QPixmap</CODE> to serve us as a buffer - an invisible pixmap which we will use to
-draw into from the view instance. This also makes using multiple windows or views for the same document possible, as each view
-connected to the document will redraw it's contents whenever one of the views changed the buffer data.
-<P>To add our data buffer, simply click on the <CODE>KScribbleDoc</CODE> item in the class viewer to open the class declaration in the editor.
-There we will also add some more what is needed: We'll use a <CODE>QPen</CODE> to draw with, a class that defines colors, pen width etc.
-<P>#include 
-<P>at the beginning of the header file where the other already used Qt headers are placed. Within the class declaration, add:
-<P>protected:
-QPixmap buffer;
+application has to manage. This decides how the view class will look like but especially how the document clas will read and write data
+to and from files and offer methods to manipulate the data. As <EM>KScribble</EM> will be a simple drawing application that operates on
+graphical data, we will use the Qt class <CODE>QPixmap</CODE> for storing our paintings while it is edited. <CODE>QPixmap</CODE> also offers
+simple methods to read and write pictures into files, so the serialization of the document data is done in just two lines, one for
+reading and one for writing. Further, we need to define a pen that draws into a document, set it's width and color and make it
+available for the view class to retrieve the pen - actually you want the view offering the drawing methods, but the document as the
+central element for all views has to hold the pen originally, because two views of the same document would otherwise use different
+pens!
+<P>Therefore to define how our document class should work, we will add one instance of <CODE>QPixmap</CODE>, one of <CODE>QPen</CODE> and edit the
+methods <CODE>newDocument()</CODE>, <CODE>openDocument()</CODE> and <CODE>saveDocument()</CODE>.
+<P>
+<H3><A NAME="ss5.1">5.1 Adding the Instances</A>
+</H3>
+
+<P>
+<P>Open the file <CODE>kscribbledoc.h</CODE> by selecting it in one of the fileviewers or by a click on the classviewer over the class
+<CODE>KScribbleDoc</CODE>. Then add the lines marked with -> from the following code snippet:
 <P>
 <P>
-<P>////////////////////////// kscribbledoc.h
-<P>#include #include #include 
-<P>class declaration
-<P>const QString&amp; title() const;
-<P>QPen currentPen(){ return pen;};     
-<P>int penWidth()
-{ return pen.width(); }
-<P>public slots:
-/** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
-* As this view normally repaints itself, it is excluded from the paintEvent.
-*/
-void updateAllViews(KScribbleView *sender);
-<P>protected:
-<P>QPen pen;
-QPointArray polyline;
-QPixmap buffer;
-<P>private:
-/** the modified flag of the current document */
-bool modified;
-<P>//////////////////////////
-kscribbledoc.cpp
-<P>bool KScribbleDoc::newDocument()
-{
-/////////////////////////////////////////////////
-// TODO: Add your document initialization code here
-pen=QPen( Qt::red, 3 );
-polyline=QPointArray(3);
-/////////////////////////////////////////////////
-modified=false;
-return true;
-}
-<P>bool KScribbleDoc::openDocument(const QString , const char *format /*=0*/)
-{
-<P>QFile f( filename );
-if ( !f.open( IO_ReadOnly ) )
-return false;
-/////////////////////////////////////////////////
-// TODO: Add your document opening code here
-if(!buffer.load( filename, "PNG" ))
-return false;
-/////////////////////////////////////////////////
-f.close();
+<HR>
+<PRE>
+->  #include &lt;qpixmap.h>
+->  #include &lt;qpen.h>
+
+    class KScribbleDoc
+    {
+
+->      protected:
+
+->        QPen currentPen(){ return pen;};      
+                
+->              int penWidth()
+->                      { return pen.width(); }
+
+      public slots:
+        void updateAllViews(KScribbleView *sender);
+        
+        protected:
+        
+->              QPixmap buffer;
+        
+      private:
+->              QPen pen;
+        /** the modified flag of the current document */
+        bool modified;
+</PRE>
+<HR>
+<P>As you see, we added pen and buffer as well as currentPen() and penWidth(). As pen is declared private, we offer a possibility to
+retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to add them to
+the implementation file, where we're turning to now.
 <P>
-<P>bool KScribbleDoc::saveDocument(const QString , const char *format /*=0*/)
-{
-QFile f( filename );
-if ( !f.open( IO_WriteOnly ) )
-return false;
-<P>/////////////////////////////////////////////////
-// TODO: Add your document saving code here
-if(!buffer.save( filename, "PNG" ))
-return false;
-/////////////////////////////////////////////////
-<P>f.close();
-<P>//////////////////////////
-kscribbleview.h
-<P>protected:
-/** Pointer to the document connected to the widget */
-KScribbleDoc *doc;
-<P>virtual void mousePressEvent( QMouseEvent *e );
-virtual void mouseReleaseEvent( QMouseEvent *e );
-virtual void mouseMoveEvent( QMouseEvent *e );
-virtual void resizeEvent( QResizeEvent *e );
-virtual void paintEvent( QPaintEvent *e );
-<P>private:
-bool mousePressed;
-/////////////////////////
-kscribbleview.cpp
-void KScribbleView::mousePressEvent( QMouseEvent *e )
-{
-mousePressed = TRUE;
-doc->polyline[2] = doc->polyline[1] = doc->polyline[0] = e->pos();
-doc->updateAllViews(this);
-}
-<P>void KScribbleView::mouseReleaseEvent( QMouseEvent * )
-{
-mousePressed = FALSE;
-doc->updateAllViews(this);
-}
-<P>void KScribbleView::mouseMoveEvent( QMouseEvent *e )
-{
-if ( mousePressed ) {
-<P>QPainter painter;
-painter.begin( >buffer );
-painter.setPen( doc->currentPen() );
-doc->polyline[2] = doc->polyline[1];
-doc->polyline[1] = doc->polyline[0];
-doc->polyline[0] = e->pos();
-painter.drawPolyline( doc->polyline );
-painter.end();
-<P>QRect r = doc->polyline.boundingRect();
-r = r.normalize();
-r.setLeft( r.left() - doc->penWidth() );
-r.setTop( r.top() - doc->penWidth() );
-r.setRight( r.right() + doc->penWidth() );
-r.setBottom( r.bottom() + doc->penWidth() );
-<P>doc->setModified();
-doc->updateAllViews(this);
-bitBlt( this, r.x(), r.y(), >buffer, r.x(), r.y(), r.width(), r.height() );
-}
-}
-<P>void KScribbleView::resizeEvent( QResizeEvent *e )
-{
-QWidget::resizeEvent( e );
-<P>int w = width() > doc->buffer.width() ?
-width() : doc->buffer.width();
-int h = height() > doc->buffer.height() ?
-height() : doc->buffer.height();
-<P>QPixmap tmp( doc->buffer );
-doc->buffer.resize( w, h );
-doc->buffer.fill( Qt::white );
-bitBlt( >buffer, 0, 0, , 0, 0, tmp.width(), tmp.height() );
-}
-<P>void KScribbleView::paintEvent( QPaintEvent *e )
-{
-QWidget::paintEvent( e );
-<P>QRect r = e->rect();
-<P>bitBlt( this, r.x(), r.y(), >buffer, r.x(), r.y(), r.width(), r.height() );
-}
-/////////////////////////////////////
+<H3><A NAME="ss5.2">5.2 Initialization of the Document</A>
+</H3>
+
+<P>
+<P>Select the method newDocument() in the KScribbleDoc class to jump to the method declaration. Here, we're only adding one line, marked
+with the arrow:
+<HR>
+<PRE>
+  kscribbledoc.cpp
+
+  bool KScribbleDoc::newDocument()
+  {
+    /////////////////////////////////////////////////
+    // TODO: Add your document initialization code here
+->  pen=QPen( Qt::black, 3 );
+    /////////////////////////////////////////////////
+    modified=false;
+    return true;
+  }
+</PRE>
+<HR>
+<P>This initializes the pen with the color black and width of 3 pixels; the QPen class has some more constructors, but this one lasts our
+needs here.
+<P>
+<H3><A NAME="ss5.3">5.3 Implementing the Serialization</A>
+</H3>
+
+<P>
+<P>What is left to do is to define how to open and save our pictures. This is done in the according methods:
+<P>
+<HR>
+<PRE>
+    bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
+    {
+
+        QFile f( filename );
+->     //if ( !f.open( IO_ReadOnly ) )
+->     //       return false;
+     /////////////////////////////////////////////////
+     // TODO: Add your document opening code here
+->     if(!buffer.load( filename, "PNG" ))
+->      return false;
+     /////////////////////////////////////////////////
+->     //f.close();
+
+
+    bool KScribbleDoc::saveDocument(const QString &amp;filename, const char *format /*=0*/)
+    {
+      QFile f( filename );
+->     // if ( !f.open( IO_WriteOnly ) )
+->     //       return false;
+
+      /////////////////////////////////////////////////
+      // TODO: Add your document saving code here
+->      if(!buffer.save( filename, "PNG" ))
+->              return false;
+      /////////////////////////////////////////////////
+
+->      //f.close();
+</PRE>
+<HR>
+<P>Add the lines marked with the arrow again to your code. What we did here is to comment out the passages where the file
+<CODE>filename</CODE> is opened, because that is done automatically by the load and save methods of QPixmap, which we add instead. Other
+documents may open a file and read in its contents such as text lines or whatever, so the QFile methods are already present in the
+codeframe. As save() and load() return a boolean value if the operation was successful, we're returning false if not, so the rest of
+the framework gets a return value and can give out warnings if the operation was not successful.
+The load() and save() methods now are already provided in QPixmap. They require the filename and the format as argument; the source
+framework on the other hand <B>does not</B> call the document methods with the format yet. If only one format is used, it lasts to
+set the format here. other methods could detect the format for example- but we will turn to this later. For now, we're using "PNG" as
+format; see QImageIO for more details about the image formats that can be opened.
+<P>Now we're already finished defining our document structure. The QPixmap buffer serves us as a buffer storing the original picture
+contents while we're working on it, the pen is a valid pen for all views connected to the document. Note that the initialization of the
+pen is done in newDocument(). This method is always called after the constructor within the framework internally, so you should add
+document instances initializations there as we did with the pen.
+<P>In the next chapter we will turn to the view class to define how the view shall cooperate with the user as well as how it accesses the
+document- and then we'll be ready to paint !
 <P>
 <P ALIGN="RIGHT">
 
