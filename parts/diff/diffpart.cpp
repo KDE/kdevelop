@@ -48,7 +48,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
 
   diffWidget = new DiffWidget();
   diffWidget->setIcon( SmallIcon("editcopy") );
-  QString nm( i18n( "Difference Viewer" ) );
+  QString nm( i18n( "Diff" ) );
   diffWidget->setCaption( nm );
   QWhatsThis::add(diffWidget, i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
     "Can utilize every installed component that is able to show diff output. "
@@ -98,23 +98,31 @@ static KParts::ReadWritePart* partForURL(const KURL &url, KDevPartController* pc
 
 void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
 {
-  if (!context->hasType( Context::EditorContext ))
-    return;
+	if ( context->hasType( Context::EditorContext ) )
+	{
+		const EditorContext *eContext = static_cast<const EditorContext*>(context);
+		popupFile = eContext->url();
+	}
+	else if ( context->hasType( Context::FileContext ) )
+	{
+		const FileContext * fContext = static_cast<const FileContext*>( context );
+		popupFile.setPath( fContext->fileName() );	//@fixme - assuming absolute path. is this correct?
+	}
+	else
+	{
+		return;
+	}
 
-  const EditorContext *eContext = static_cast<const EditorContext*>(context);
-  popupFile = eContext->url();
-
-  if ( !popupFile.isLocalFile() )
-    return;
-
-  KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
-  if ( !rw_part || !rw_part->isModified() )
-    return;
-
-  int id = popup->insertItem( i18n( "Difference to Saved File" ),
-                     this, SLOT(localDiff()) );
-  popup->setWhatsThis(id, i18n("<b>Difference to saved file</b><p>Shows the difference between "
-    "the file contents in editor and file contents saved on a disk."));
+	KParts::ReadWritePart* rw_part = partForURL( popupFile, partController() );
+	if ( !rw_part ) return;
+	
+	if ( rw_part->isModified() || partController()->isDirty( rw_part ) )
+	{
+		int id = popup->insertItem( i18n( "Difference to disk file" ),
+							this, SLOT(localDiff()) );
+		popup->setWhatsThis(id, i18n("<b>Difference to disk file</b><p>Shows the difference between "
+			"the file contents in this editor and the file contents on disk."));
+	}
 }
 
 DiffPart::~DiffPart()
