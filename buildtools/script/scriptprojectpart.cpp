@@ -137,23 +137,26 @@ void ScriptProjectPart::openProject(const QString &dirName, const QString &proje
         dir.setPath(s.pop());
         kdDebug(9015) << "Examining: " << dir.path() << endl;
         const QFileInfoList *dirEntries = dir.entryInfoList();
-        QPtrListIterator<QFileInfo> it(*dirEntries);
-        for (; it.current(); ++it) {
-            QString fileName = it.current()->fileName();
-            if (fileName == "." || fileName == "..")
-                continue;
-            QString path = it.current()->absFilePath();
-            if (it.current()->isDir()) {
-                kdDebug(9015) << "Pushing: " << path << endl;
-                s.push(path);
-            }
-            else {
-                if (matchesPattern(path, includepatternList)
-                    && !matchesPattern(path, excludepatternList)) {
-                    kdDebug(9015) << "Adding: " << path << endl;
-                    m_sourceFiles.append(path.mid(prefixlen));
-                } else {
-                    kdDebug(9015) << "Ignoring: " << path << endl;
+        if ( dirEntries )
+        {
+            QPtrListIterator<QFileInfo> it(*dirEntries);
+            for (; it.current(); ++it) {
+                QString fileName = it.current()->fileName();
+                if (fileName == "." || fileName == "..")
+                   continue;
+                QString path = it.current()->absFilePath();
+                if (it.current()->isDir()) {
+                    kdDebug(9015) << "Pushing: " << path << endl;
+                    s.push(path);
+                }
+                else {
+                   if (matchesPattern(path, includepatternList)
+                        && !matchesPattern(path, excludepatternList)) {
+                        kdDebug(9015) << "Adding: " << path << endl;
+                        m_sourceFiles.append(path.mid(prefixlen));
+                   } else {
+                        kdDebug(9015) << "Ignoring: " << path << endl;
+                   }
                 }
             }
         }
