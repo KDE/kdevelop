@@ -1,3 +1,6 @@
+2000-02-02 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added tutorial documentation to create KScribble example
+
 2000-02-02 Ralf Funken <funken.ruk@netcologne.de>
 	* Updated chapter 10 (classbrowser) in en and de manual
 	* Eliminated double shortcuts (&char) in de.po
