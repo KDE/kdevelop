@@ -28,6 +28,9 @@
   */
 
 class BugListWidget;
+class KDevLanguageSupport;
+class KDevEditorManager;
+class ProjectSpace;
 
 class BugListComponent : public KDevComponent
 {
@@ -36,14 +39,24 @@ Q_OBJECT
 public:
    	BugListComponent (QObject *parent=0, const char *name=0);
     ~BugListComponent();
+		KDevLanguageSupport* languageSupport();
+		KDevEditorManager* editorManager();
+		ProjectSpace* projectSpace();
+		
+public slots:	
+	void slotProjectChanged();
+	void slotProjectSpaceOpened();
+	void slotProjectSpaceClosed();
+	void slotStopButtonClicked();
+	void slotConfigWidgetRequested(KDialogBase*);
+
+  // Call this slot to let the widget know to create the buglist editor.
+	void slotActivate ();
+  // Call this slot to let the widget know that the widget is closing itself.
+	void slotWidgetClosed ();
 
 protected:
     virtual void setupGUI();
-    virtual void configWidgetRequested(KDialogBase *dlg);
-    virtual void stopButtonClicked();
-    virtual void projectSpaceOpened();
-    virtual void projectSpaceClosed();
-    virtual void projectChanged();
 
 private:
     BugList         *m_pBugList;        // The main buglist object.
@@ -55,17 +68,6 @@ private:
     QString         m_Initials;
     QString         m_UserName;
     QString         m_UserEMail;
-
-public slots:
-    /**
-        Call this slot to let the widget know to create the buglist editor.
-    */
-	void slotActivate ();
-
-    /**
-        Call this slot to let the widget know that the widget is closing itself.
-    */
-	void slotWidgetClosed ();
 };
 
 

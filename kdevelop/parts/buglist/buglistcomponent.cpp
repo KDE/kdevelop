@@ -26,6 +26,10 @@
 #include <kiconloader.h>
 #include <kdialogbase.h>
 
+#include "kdevlanguagesupport.h"
+#include "kdeveditormanager.h"
+#include "KDevComponentManager.h"
+
 
 BugListComponent::BugListComponent (QObject *parent, const char *name)
 : KDevComponent(parent, name)
@@ -37,7 +41,6 @@ BugListComponent::BugListComponent (QObject *parent, const char *name)
     m_pBugList = NULL;
 }
 
-
 BugListComponent::~BugListComponent()
 {
     // Down she downs.
@@ -45,9 +48,21 @@ BugListComponent::~BugListComponent()
         delete m_pBugList;
 }
 
-// Presumably, they pressed the stop button.
+KDevLanguageSupport* BugListComponent::languageSupport(){
+	return static_cast<KDevLanguageSupport*>(componentManager()->component("KDevLanguageSupport"));
+}
 
-void BugListComponent::stopButtonClicked()
+ProjectSpace* BugListComponent::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
+
+KDevEditorManager* BugListComponent::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
+}
+
+
+// Presumably, they pressed the stop button.
+void BugListComponent::slotStopButtonClicked()
 {
     kdDebug(9040) << "BugList::stopButtonClicked()" << endl;
 
@@ -74,14 +89,14 @@ void BugListComponent::setupGUI()
 }
 
 
-void BugListComponent::configWidgetRequested(KDialogBase *dlg)
+void BugListComponent::slotConfigWidgetRequested(KDialogBase *dlg)
 {
 //  QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
 //  (void) new GrepConfigWidget(vbox, "grep config widget");
 }
 
 
-void BugListComponent::projectSpaceOpened()
+void BugListComponent::slotProjectSpaceOpened()
 {
     uint        Count;
     QString     LastProject;
@@ -150,7 +165,7 @@ void BugListComponent::projectSpaceOpened()
     Notification that the project space has now closed.
 */
 
-void BugListComponent::projectSpaceClosed()
+void BugListComponent::slotProjectSpaceClosed()
 {
     kdDebug(9040) << "BugList::closeProjectSpace" << endl;
 
@@ -171,13 +186,14 @@ void BugListComponent::projectSpaceClosed()
 /*  The sub project has changed. Update the filename we will use for
     the XML file. */
 
-void BugListComponent::projectChanged()
+void BugListComponent::slotProjectChanged()
 {
     kdDebug(9040) << "BugList::projectChanged" << endl;
 
     // Parse the project space for the details we need on the new
     // subproject that we changed to.
-    projectSpaceOpened ();
+
+    slotProjectSpaceOpened ();
 }
 
 
