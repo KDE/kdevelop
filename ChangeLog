@@ -1,3 +1,6 @@
+1999-07-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added first version of the KScribble tutorial application
+
 1999-07-23 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* now, you can only generate a new project, if gettext is installed
 	* kapplicationwizard check for sgml2html
