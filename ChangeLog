@@ -1,3 +1,9 @@
+2002-02-21  F@lk Brettschneider <falk@kdevelop.org>
+    * updated kdevelop.kdevprj.save to current project structure
+    * regenerated all Makefile.am's from kdevelop.kdevprj.save
+      (except widgets/qextmdi/Makefile.am because it needs some tweaking)
+    Attention: Do not hack in the paragraphs of Makefile.am's marked with "kdevelop will overwrite this part"!
+
 2002-02-20  Walter Tasin <tasin@kdevelop.org>
     * implementing additional project options 
       [which are set inside configure.in(.in)]
