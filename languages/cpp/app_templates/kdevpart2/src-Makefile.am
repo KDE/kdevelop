@@ -1,7 +1,7 @@
 INCLUDES = $(all_includes) -I$(kde_includes)/kdevelop/interfaces -I$(kde_includes)/kdevelop/util
 
 kde_module_LTLIBRARIES = libkdev%{APPNAMELC}.la
-libkdev%{APPNAMELC}_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkdev%{APPNAMELC}_la_LDFLAGS = -module -avoid-version -no-undefined $(all_libraries) $(KDE_PLUGIN)
 libkdev%{APPNAMELC}_la_LIBADD = -lkdevelop
 libkdev%{APPNAMELC}_la_SOURCES = %{APPNAMELC}part.cpp %{APPNAMELC}widget.cpp %{APPNAMELC}globalconfigbase.ui %{APPNAMELC}globalconfig.cpp %{APPNAMELC}projectconfigbase.ui %{APPNAMELC}projectconfig.cpp
 

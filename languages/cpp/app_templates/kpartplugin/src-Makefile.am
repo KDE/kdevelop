@@ -10,7 +10,7 @@ kde_module_LTLIBRARIES = lib%{APPNAMELC}plugin.la
 # using the KHTML Part
 lib%{APPNAMELC}plugin_la_SOURCES = plugin_%{APPNAMELC}.cpp
 lib%{APPNAMELC}plugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KHTML)
-lib%{APPNAMELC}plugin_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+lib%{APPNAMELC}plugin_la_LDFLAGS = -module -avoid-version -no-undefined $(KDE_PLUGIN) $(all_libraries)
 
 # Install the .rc file in the Part's directory (in this case, the part
 # is KHTMLPart)

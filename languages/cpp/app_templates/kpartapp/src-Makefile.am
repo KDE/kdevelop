@@ -41,7 +41,7 @@ kde_module_LTLIBRARIES = lib%{APPNAMELC}part.la
 
 # the Part's source, library search path, and link libraries
 lib%{APPNAMELC}part_la_SOURCES = %{APPNAMELC}_part.cpp
-lib%{APPNAMELC}part_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+lib%{APPNAMELC}part_la_LDFLAGS = -module -avoid-version -no-undefined $(KDE_PLUGIN) $(all_libraries)
 lib%{APPNAMELC}part_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE)
 
 # this is where the desktop file will go 
