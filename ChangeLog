@@ -1,3 +1,6 @@
+2003-08-28 Harald Fernengel <harry@kdevelop.org>
+    * SQL support now displays tables and fields in the classbrowser
+
 2003-08-27 Harald Fernengel <harry@kdevelop.org>
     * Added language support on the fly - you can switch to
       SQL mode from a CPP project, or to Perl if you have scripts
