@@ -58,8 +58,6 @@
  #include "win_restorebutton.xpm"
  #include "win_undockbutton.xpm"
 
- #include <windows.h>
-
 #else // in case of UNIX: KDE look
  #include "kde_closebutton.xpm"
  #include "kde_minbutton.xpm"
@@ -233,9 +231,11 @@ void QextMdiChildFrm::setResizeCursor(int resizeCorner)
 void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 {
    if(m_resizeMode) {
-      if( !(e->state() & RightButton) && !(e->state() & MidButton))
+      if( !(e->state() & RightButton) && !(e->state() & MidButton)) {
          // same as: if no button or left button pressed
-         resizeWindow(m_iResizeCorner, e->pos().x(), e->pos().y());
+         QPoint p = parentWidget()->mapFromGlobal( e->globalPos() );
+         resizeWindow(m_iResizeCorner, p.x(), p.y());
+      }
       else
          m_resizeMode = FALSE;
    }
@@ -282,7 +282,7 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 	if(minWidth<QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)minWidth=QEXTMDI_MDI_CHILDFRM_MIN_WIDTH;
 	if(minHeight<QEXTMDI_MDI_CHILDFRM_MIN_WIDTH)minHeight=QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT;
 
-	QPoint mousePos( xPos+x(), yPos+y());
+	QPoint mousePos( xPos, yPos);
 	
 	switch (resizeCorner){
 	case QEXTMDI_RESIZE_LEFT:
@@ -327,13 +327,6 @@ void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 		break;
 	}
 
-#ifdef _OS_WIN32_
-   MSG msg;
-   while( PeekMessage( &msg, winId(), WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE ) )
-      ;
-#endif
-   QApplication::syncX();
-	
 	setGeometry( resizeRect);
 
 	if(m_state==Maximized){
@@ -524,7 +517,6 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 void QextMdiChildFrm::setCaption(const QString& text)
 {
 	m_pCaption->setCaption(text);
-//!!!!   m_pManager->fillWindowMenu();
 }
 
 //============ enableClose ==============//
@@ -760,44 +752,32 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
 
 void QextMdiChildFrm::resizeEvent(QResizeEvent *)
 {
-	//Resize the caption
-	int captionHeight=m_pCaption->heightHint();
-	int captionWidth=width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-	m_pCaption->setGeometry(
-		QEXTMDI_MDI_CHILDFRM_BORDER,
-		QEXTMDI_MDI_CHILDFRM_BORDER,
-		captionWidth,
-		captionHeight
-	);
-	//The buttons are caption children
+   //Resize the caption
+   int captionHeight=m_pCaption->heightHint();
+   int captionWidth=width()-QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
+   m_pCaption->setGeometry( QEXTMDI_MDI_CHILDFRM_BORDER, QEXTMDI_MDI_CHILDFRM_BORDER, captionWidth,	captionHeight);
+   //The buttons are caption children
 #ifdef _OS_WIN32_
-	m_pIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
-	m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
-	m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
-	m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
-	m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);   //F.B.
+   m_pIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
+   m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
+   m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
+   m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
+   m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
 #else	// in case of Unix : KDE look
-	m_pIcon->setGeometry(0,0,captionHeight,captionHeight);
-	m_pClose->setGeometry((captionWidth-captionHeight),0,captionHeight,captionHeight);
-	m_pMaximize->setGeometry((captionWidth-(captionHeight*2)),0,captionHeight,captionHeight);
-	m_pMinimize->setGeometry((captionWidth-(captionHeight*3)),0,captionHeight,captionHeight);
-	m_pUndock->setGeometry((captionWidth-(captionHeight*4)),0,captionHeight,captionHeight);   //F.B.
+   m_pIcon->setGeometry(0,0,captionHeight,captionHeight);
+   m_pClose->setGeometry((captionWidth-captionHeight),0,captionHeight,captionHeight);
+   m_pMaximize->setGeometry((captionWidth-(captionHeight*2)),0,captionHeight,captionHeight);
+   m_pMinimize->setGeometry((captionWidth-(captionHeight*3)),0,captionHeight,captionHeight);
+   m_pUndock->setGeometry((captionWidth-(captionHeight*4)),0,captionHeight,captionHeight);
 #endif
-	//Resize the client
-	if(m_pClient) {
+   //Resize the client
+   if(m_pClient) {
       QSize newClientSize(captionWidth,
-			height()-(QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR));
+      height()-(QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER+captionHeight+QEXTMDI_MDI_CHILDFRM_SEPARATOR));
       if (newClientSize != m_pClient->size()) {
-		   m_pClient->resize(newClientSize.width(), newClientSize.height());
+         m_pClient->resize(newClientSize.width(), newClientSize.height());
       }
-	}
-
-#ifdef _OS_WIN32_
-   MSG msg;
-   while( PeekMessage( &msg, winId(), WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE ) )
-      ;
-#endif
-   QApplication::syncX();
+   }
 }
 
 //============= eventFilter ===============//
@@ -815,10 +795,9 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
       int captionHeight = m_pCaption->heightHint();
       QSize newChildFrmSize( re->size().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
                              re->size().height() + captionHeight + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER );
-      resize( newChildFrmSize );
-      QApplication::syncX();
+      if( newChildFrmSize != size())
+         resize( newChildFrmSize );
    }
-
    return FALSE;                           // standard event processing
 }
 
@@ -878,6 +857,7 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
 /** Shows a system menu for child frame windows. */
 void QextMdiChildFrm::showSystemMenu()
 {
+   m_pIcon->setDown( FALSE);
    QPoint popupmenuPosition;
    //qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
    popupmenuPosition = QPoint( m_pIcon->pos().x(),
