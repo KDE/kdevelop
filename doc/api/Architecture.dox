@@ -17,7 +17,7 @@ parts to distinguish, mainly:
 
   - src            = The core part of KDevelop
   - lib/interfaces = Plugin handler interface classes
-  - parts          = The various parts using the KParts framework ( KDevPlugin childs )
+  - parts          = The various parts using the KParts framework ( KDevPlugin children )
   - languages      = \ref language-parts
   - buildtools     = \ref buildtool-parts
   - vcs            = \ref vcs-parts
