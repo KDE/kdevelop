@@ -3,7 +3,6 @@
 
 
 #include <qwidget.h>
-#include <qptrlist.h>
 #include <qarray.h>
 
 
@@ -25,8 +24,6 @@ class KAction;
 
 #include "kdevpartcontroller.h"
 
-
-class PartListEntry;
 
 class PartController : public KDevPartController
 {
@@ -65,10 +62,6 @@ protected:
 
 private slots:
 
-  void slotPartAdded(KParts::Part *part);
-  void slotPartRemoved(KParts::Part *part);
-  void slotActivePartChanged(KParts::Part *part);
-
   void slotSaveAllFiles();
   void slotRevertAllFiles();
 
@@ -79,6 +72,8 @@ private slots:
   void slotCloseOtherWindows();
 
   void slotUploadFinished();
+
+  void updateMenuItems();
 
 
 private:
@@ -97,13 +92,9 @@ private:
   KParts::Part *partForURL(const KURL &url);
   void activatePart(KParts::Part *part);
 
-  void updateMenuItems();
-
   void editText(const KURL &url, int num);
 
   static PartController *s_instance;
-
-  QPtrList<PartListEntry> m_partList;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;

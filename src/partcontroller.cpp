@@ -25,48 +25,15 @@
 #include "partcontroller.h"
 
 
-class PartListEntry
-{
-public:
-
-  PartListEntry(KParts::Part *part, const KURL &url);
-
-  const KURL &url() const { return m_url; };
-  KParts::Part *part() const { return m_part; };
-
-  bool isEqual(const KURL &url);
-
-
-private:
-
-  KURL         m_url;
-  KParts::Part *m_part;
-
-};
-
-
-PartListEntry::PartListEntry(KParts::Part *part, const KURL &url)
-  : m_url(url), m_part(part)
-{
-}
-
-
-bool PartListEntry::isEqual(const KURL &url)
-{
-  // TODO: for local files, check inode identity!
-  return m_url == url;
-}
-
-
 PartController *PartController::s_instance = 0;
 
 
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent)
 {
-  connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)));
-  connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
-  connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
+  connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(updateMenuItems()));
+  connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(updateMenuItems()));
+  connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(updateMenuItems()));
 
   setupActions();
 }
@@ -225,8 +192,6 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
 {
   TopLevel::getInstance()->embedPartView(part->widget(), url.fileName());
 
-  m_partList.append(new PartListEntry(part, url));
-
   addPart(part);
 
   EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
@@ -266,12 +231,22 @@ QPopupMenu *PartController::contextPopupMenu()
 }
 
 
+static bool urlIsEqual(const KURL &a, const KURL &b)
+{
+  // TODO: for local files, check inode identity!
+  return a == b;
+}
+
 KParts::Part *PartController::partForURL(const KURL &url)
 {
-  for (PartListEntry *entry = m_partList.first(); entry != 0; entry = m_partList.next())
-    if (entry->isEqual(url))
-      return entry->part();
-
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it)
+  {
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+    if (urlIsEqual(url, ro_part->url()))
+      return ro_part;
+  }
+  
   return 0;
 }
 
@@ -322,41 +297,17 @@ void PartController::closePart(KParts::Part *part)
 }
 
 
-void PartController::slotPartRemoved(KParts::Part *part)
-{
-  QPtrListIterator<PartListEntry> it(m_partList);
-  for ( ; it.current(); ++it)
-    if (it.current()->part() == part)
-    {
-      m_partList.remove(it.current());
-      break;
-    }
-
-  updateMenuItems();
-}
-
-
-void PartController::slotPartAdded(KParts::Part *)
-{
-  updateMenuItems();
-}
-
-
-void PartController::slotActivePartChanged(KParts::Part *)
-{
-}
-
-
 void PartController::updateMenuItems()
 {
   bool hasWriteParts = false;
   bool hasReadOnlyParts = false;
 
-  for (PartListEntry *entry = m_partList.first(); entry != 0; entry = m_partList.next())
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it)
   {
-    if (entry->part()->inherits("KParts::ReadWritePart"))
+    if (it.current()->inherits("KParts::ReadWritePart"))
       hasWriteParts = true;
-    if (entry->part()->inherits("KParts::ReadOnlyPart"))
+    if (it.current()->inherits("KParts::ReadOnlyPart"))
       hasReadOnlyParts = true;
   }
 
@@ -414,8 +365,8 @@ void PartController::slotCloseWindow()
 
 void PartController::slotCloseAllWindows()
 {
-  while (!m_partList.isEmpty())
-    closePart(m_partList.first()->part());
+  while (parts()->count() > 0)
+    closePart(parts()->getFirst());
 }
 
 
@@ -424,23 +375,23 @@ void PartController::slotCloseOtherWindows()
   if (!activePart())
     return;
 
-  while (m_partList.count() > 1)
+  while (parts()->count() > 1)
   {
-    QPtrListIterator<PartListEntry> it(m_partList);
+    QPtrListIterator<KParts::Part> it(*parts());
     for ( ; it.current(); ++it)
-      if (it.current()->part() != activePart())
-        closePart(it.current()->part());
+      if (it.current() != activePart())
+        closePart(it.current());
   }
 }
 
 
 void PartController::slotCurrentChanged(QWidget *w)
 {
-  QPtrListIterator<PartListEntry> it(m_partList);
+  QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
-    if (it.current()->part()->widget() == w)
+    if (it.current()->widget() == w)
     {
-      setActivePart(it.current()->part(), w);
+      setActivePart(it.current(), w);
       break;
     }
 }
@@ -486,13 +437,13 @@ bool PartController::closeDocuments(const QStringList &documents)
 
 bool PartController::readyToClose()
 {
-  QPtrListIterator<PartListEntry> it(m_partList);
+  QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
   {
-    if (!it.current()->part()->inherits("KParts::ReadWritePart"))
+    KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(it.current());
+    if (!rw_part)
       continue;
 
-    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current()->part());
     if (rw_part->isModified())
     {
       int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(), 
@@ -505,7 +456,6 @@ bool PartController::readyToClose()
       if (res == KMessageBox::Ok)
         rw_part->save();
     }
-
   }
 
   return true;
