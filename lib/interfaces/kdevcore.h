@@ -42,7 +42,13 @@ public:
     /**
     * Builds a context of the specified @p type.
     */
-    Context( const QCString &type );
+    Context( const QString &type );
+    /**
+    * Copy constructor
+    */
+    Context( const Context &);
+    Context &operator=( const Context &);
+
     /**
     * Destructor
     */
@@ -52,7 +58,7 @@ public:
     * Returns the type of this Context, so clients can discriminate
     * between different file contexts.
     */
-    bool hasType( const QCString &type ) const;
+    bool hasType( const QString &type ) const;
 
 private:
     class Private;
@@ -110,6 +116,9 @@ public:
 private:
     class Private;
     Private *d;
+
+    EditorContext( const Context &);
+    EditorContext &operator=( const Context &);
 };
 
 
@@ -125,6 +134,11 @@ public:
     * @param selection selected text
     */
     DocumentationContext( const QString &url, const QString &selection );
+    /**
+    * Copy constructor
+    */
+    DocumentationContext( const DocumentationContext &);
+    DocumentationContext &operator=( const DocumentationContext &);
 
     /**
     * Destructor
@@ -198,6 +212,9 @@ public:
 private:
     class Private;
     Private *d;
+
+    FileContext( const Context &);
+    FileContext &operator=( const Context &);
 };
 
 /**
@@ -227,6 +244,9 @@ public:
 private:
     class Private;
     Private *d;
+
+    ClassContext( const Context &);
+    ClassContext &operator=( const Context &);
 };
 
 /**

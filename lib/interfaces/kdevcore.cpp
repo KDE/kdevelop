@@ -8,6 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <kdebug.h>
+
 #include "KDevCoreIface.h"
 #include "kdevcore.h"
 
@@ -20,29 +22,52 @@
 class Context::Private
 {
 public:
-    Private( const QCString &type ) : m_type(type) {}
+    Private( const QString &type ) : m_type(type) {}
 
-    QCString m_type;
+    QString m_type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Context::Context( const QCString &type )
-    : d( new Private(type))
+Context::Context( const QString &type )
+    : d( new Private(type) )
 {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Context::Context( const Context &aContext )
+    : d( 0 )
+{
+    *this = aContext;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+Context &Context::operator=( const Context &aContext)
+{
+    if (d) {
+        delete d; d = 0;
+    }
+    d = new Private( *aContext.d );
+    return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 Context::~Context()
 {
+    kdDebug() << "Context::~Context()" << endl;
     delete d;
+    d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool Context::hasType( const QCString &type ) const
+bool Context::hasType( const QString &type ) const
 {
+    kdDebug() << "Context::hasType(" << type << "). m_type == " << d->m_type << endl;
+
     return type == d->m_type;
 }
 
@@ -77,7 +102,9 @@ EditorContext::EditorContext( const KURL &url, int line, int col,
 
 EditorContext::~EditorContext()
 {
+    kdDebug() << "EditorContext::~EditorContext()" << endl;
     delete d;
+    d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,7 +192,9 @@ FileContext::FileContext( const QString &fileName, bool isDirectory )
 
 FileContext::~FileContext()
 {
+    kdDebug() << "FileContext::~FileContext()" << endl;
     delete d;
+    d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -214,9 +243,30 @@ DocumentationContext::DocumentationContext( const QString &url, const QString &s
 
 ///////////////////////////////////////////////////////////////////////////////
 
+DocumentationContext::DocumentationContext( const DocumentationContext &aContext )
+    : Context( aContext ), d( 0 )
+{
+    *this = aContext;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+DocumentationContext &DocumentationContext::operator=( const DocumentationContext &aContext)
+{
+    if (d) {
+        delete d; d = 0;
+    }
+    d = new Private( *aContext.d );
+    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 DocumentationContext::~DocumentationContext()
 {
+    kdDebug() << "DocumentationContext::~DocumentationContext()" << endl;
     delete d;
+    d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -256,7 +306,9 @@ ClassContext::ClassContext( const QString &classname )
 
 ClassContext::~ClassContext()
 {
+    kdDebug() << "ClassContext::~ClassContext()" << endl;
     delete d;
+    d = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
