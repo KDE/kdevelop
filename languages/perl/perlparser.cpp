@@ -413,6 +413,8 @@ void perlparser::addPackageSub(const QString& fileName ,int lineNr ,const QStrin
   method->setName(name);
   method->setFileName( fileName );
   method->setStartPosition( lineNr, 0 );
+  if (privatesub)
+     method->setAccess(CodeModelItem::Private);
   if (m_lastpackage) {
     if (!m_lastpackage->hasFunction(method->name()))
        m_lastpackage->addFunction(method);
