@@ -102,7 +102,7 @@ private:
     QValueVector<MakeItem*> m_items;
     QIntDict<MakeItem> m_paragraphToItem;
     long m_paragraphs;
-    bool moved;
+    int m_lastErrorSelected;
 
     MakeViewPart *m_part;
 

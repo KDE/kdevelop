@@ -173,7 +173,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	, m_continuationFilter( m_actionFilter )
 	, m_actionFilter( m_otherFilter )
 	, m_paragraphs(0)
-	, moved(false)
+    , m_lastErrorSelected(-1)
 	, m_part(part)
 	, m_vertScrolling(false)
 	, m_horizScrolling(false)
@@ -286,7 +286,7 @@ void MakeWidget::startNextJob()
 	m_items.clear();
 	m_paragraphToItem.clear();
 	m_paragraphs = 0;
-	moved = false;
+	m_lastErrorSelected = -1;
 
 	insertItem( new CommandItem( currentCommand ) );
 
@@ -339,9 +339,9 @@ void MakeWidget::copy()
 
 void MakeWidget::nextError()
 {
-	int parag, index;
-	if (moved)
-		getCursorPosition(&parag, &index);
+	int parag;
+	if (m_lastErrorSelected != -1)
+		parag = m_lastErrorSelected;
 	else
 		parag = 0;
 
@@ -356,7 +356,6 @@ void MakeWidget::nextError()
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
 			continue;
-		moved = true;
 		parag = it;
 		document()->removeSelection(0);
 		setSelection(parag, 0, parag+1, 0, 0);
@@ -371,9 +370,9 @@ void MakeWidget::nextError()
 
 void MakeWidget::prevError()
 {
-	int parag, index;
-	if (moved)
-		getCursorPosition(&parag, &index);
+	int parag;
+	if (m_lastErrorSelected != -1)
+		parag = m_lastErrorSelected;
 	else
 		parag = 0;
 
@@ -382,7 +381,6 @@ void MakeWidget::prevError()
 		ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[it] );
 		if ( !item )
 			continue;
-		moved = true;
 		parag = it;
 		document()->removeSelection(0);
 		setSelection(parag, 0, parag+1, 0, 0);
@@ -507,6 +505,7 @@ void MakeWidget::searchItem(int parag)
 		}
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);
+        m_lastErrorSelected = parag;
 	}
 }
 
