@@ -19,7 +19,7 @@
 #define _CCLASSTREEHANDLER_H_INCLUDED
 
 #include <kapp.h>
-#include <ktreelist.h>
+#include <qlistview.h>
 #include "./classparser/ClassParser.h"
 #include <qpixmap.h> 
 #include <qlist.h>
@@ -51,47 +51,70 @@ public: // Constructor & destructor
 public: // Public methods to set attribute values.
 
   /** Set the tree to draw in. */
-  void setTree( KTreeList *aTree );
+  void setTree( QListView *aTree );
 
   /** Set the classtore. */
   void setStore( CClassStore *aStore );
 
+  /** Set the last added item. */
+  void setLastItem( QListViewItem *aItem ) { lastItem = aItem; }
+
 public: // Public methods
 
+  /** Clear the view and reset internal state. */
+  void clear();
+
   /** Update methods/attr... of a certain class. */
-  void updateClass( CParsedClass *aClass, KPath *aPath );
+  void updateClass( CParsedClass *aClass, QListViewItem *parent );
+
+  /** Add an item at root level. */
+  QListViewItem *addRoot( const char *aName, CTHType iconType );
+
+  /** Add an item with the selected icon. */
+  QListViewItem *addItem( const char *aName, CTHType iconType,
+                          QListViewItem *parent );
 
   /** Add a class to the view. */
-  void addClass( CParsedClass *aClass, KPath &path );
+  QListViewItem *addClass( CParsedClass *aClass, QListViewItem *parent );
+  QListViewItem *addClass( const char *aClass, QListViewItem *parent );
 
   /** Add the selected methods from the class. */
-  void addMethodsFromClass( CParsedClass *aClass, KPath &path,
+  void addMethodsFromClass( CParsedClass *aClass, QListViewItem *parent,
                             CTHFilter filter = CTHALL );
 
   /** Add all methods to the view. */
-  void addMethods( QList<CParsedMethod> *list,  KPath &path,
+  void addMethods( QList<CParsedMethod> *list,  QListViewItem *parent,
                    CTHFilter filter = CTHALL );
 
   /** Add one method to the tree. */
-  void addMethod( CParsedMethod *aMethod, KPath &path );
+  void addMethod( CParsedMethod *aMethod, QListViewItem *parent );
 
   /** Add the selected attributes from the class. */
   void addAttributesFromClass( CParsedClass *aClass, 
-                               KPath &path,
+                               QListViewItem *parent,
                                CTHFilter filter = CTHALL );
 
   /** Add all signals to the view. */
-  void addAttributes( QList<CParsedAttribute> *list, KPath &path,
+  void addAttributes( QList<CParsedAttribute> *list, QListViewItem *parent,
                       CTHFilter filter = CTHALL );
 
   /** Add one attribute to the view. */
-  void addAttribute( CParsedAttribute *aAttr, KPath &path );
+  void addAttribute( CParsedAttribute *aAttr, QListViewItem *parent );
+
+  /** Add a list of global functions to the view. */
+  void addGlobalFunctions( QList<CParsedMethod> *list, QListViewItem *parent );
+
+  /** Add a global function to the view. */
+  void addGlobalFunc( CParsedMethod *aMethod, QListViewItem *parent );
+
+  /** Add a global variable to the view. */
+  void addGlobalVar( CParsedAttribute *aAttr, QListViewItem *parent );
 
   /** Add all signals to the view. */
-  void addSlots( CParsedClass *aPC, KPath &path );
+  void addSlots( CParsedClass *aPC, QListViewItem *parent );
 
   /** Add all signals to the view. */
-  void addSignals( CParsedClass *aPC, KPath &path );
+  void addSignals( CParsedClass *aPC, QListViewItem *parent );
 
 public: // Public queries
 
@@ -100,7 +123,13 @@ public: // Public queries
 private: // Private attributes
 
   /** The tree to draw in. */
-  KTreeList *tree;
+  QListView *tree;
+
+  /** The last item added to the tree. */
+  QListViewItem *lastItem;
+
+  /** The last rootitem added to the tree. */
+  QListViewItem *lastRootItem;
 
   /** The classtore. */
   CClassStore *store;

@@ -23,7 +23,7 @@
 #define CCLASSTOOLDLG_H
 
 #include <qdialog.h>
-#include <ktreelist.h>
+#include <qlistview.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -83,7 +83,7 @@ protected: // Private widgets
  QPushButton methodsBtn;
  QPushButton virtualsBtn;
  QComboBox exportCombo;
- KTreeList classTree;
+ QListView classTree;
 
  protected slots:
 

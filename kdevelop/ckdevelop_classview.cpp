@@ -36,21 +36,21 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotClassTreeSelected(int index)
+void CKDevelop::slotClassTreeSelected()
 {
   int idxT;
 
   // Only react on clicks on the left mousebutton.
   if( class_tree->mouseBtn == LeftButton )
   {
-    idxT = class_tree->indexType( index );
+    idxT = class_tree->indexType();
 
     // If this is an function of some sort, go to the declaration.
     if( idxT == CVGLOBAL_FUNCTION || 
         idxT == METHOD )
-      CVGotoDeclaration( index );
+      CVGotoDeclaration( class_tree->currentItem() );
     else // Goto the definition.
-      CVGotoDefinition( index );
+      CVGotoDefinition( class_tree->currentItem() );
   }
 }
 
@@ -119,9 +119,9 @@ void CKDevelop::slotMethodChoiceCombo(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDeclaration(int index)
+void CKDevelop::slotCVViewDeclaration()
 {
-  CVGotoDeclaration( index );
+  CVGotoDeclaration( class_tree->currentItem() );
 }
 
 /*-------------------------------- CKDevelop::slotCVViewDefinition()
@@ -134,9 +134,9 @@ void CKDevelop::slotCVViewDeclaration(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDefinition(int index)
+void CKDevelop::slotCVViewDefinition()
 {
-  CVGotoDefinition( index );
+  CVGotoDefinition( class_tree->currentItem() );
 }
 
 /*********************************************************************
@@ -155,37 +155,33 @@ void CKDevelop::slotCVViewDefinition(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDefinition(int index)
+void CKDevelop::CVGotoDefinition(QListViewItem *item)
 {
   CParsedClass *aClass;
   CParsedAttribute *aAttr;
-  KTreeListItem *item;
-  KTreeListItem *parent;
+  QListViewItem *parent;
   QString toFile;
   int idxType;
   int toLine = -1;
 
-  // Fetch the clicked item.
-  item = class_tree->itemAt( index );
-
   // Get the type of declaration at the index.
-  idxType = class_tree->indexType( index );
+  idxType = class_tree->indexType();
   switch( idxType )
   {
     case CVCLASS:
-      aClass = class_tree->store->getClassByName( item->getText() );
+      aClass = class_tree->store->getClassByName( item->text(0) );
       toFile = aClass->hFilename;
       toLine = aClass->definedOnLine;
       break;
     case ATTRIBUTE:
     case METHOD:
-      parent = item->getParent();
-      aClass = class_tree->store->getClassByName( parent->getText() );
+      parent = item->parent();
+      aClass = class_tree->store->getClassByName( parent->text(0) );
       
       // Fetch the attribute/method.
       aAttr = ( idxType == ATTRIBUTE ? 
-                aClass->getAttributeByName( item->getText() ) :
-                aClass->getMethodByNameAndArg( item->getText() ) );
+                aClass->getAttributeByName( item->text(0) ) :
+                aClass->getMethodByNameAndArg( item->text(0) ) );
       
       toFile = aAttr->declaredInFile;
       toLine = aAttr->definedOnLine;
@@ -193,8 +189,8 @@ void CKDevelop::CVGotoDefinition(int index)
     case CVGLOBAL_FUNCTION:
     case CVGLOBAL_VARIABLE:
       aAttr = ( idxType == CVGLOBAL_FUNCTION ?
-                class_tree->store->getGlobalFunctionByNameAndArg( item->getText() ) :
-                class_tree->store->getGlobalVarByName( item->getText() ) );
+                class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) ) :
+                class_tree->store->getGlobalVarByName( item->text(0) ) );
       toFile = aAttr->declaredInFile;
       toLine = aAttr->definedOnLine;
       break;
@@ -219,26 +215,22 @@ void CKDevelop::CVGotoDefinition(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDeclaration(int index)
+void CKDevelop::CVGotoDeclaration(QListViewItem *item)
 {
   CParsedClass *aClass;
   CParsedMethod *aMethod = NULL;
-  KTreeListItem *item;
-  KTreeListItem *parent;
+  QListViewItem *parent;
 
-  // Fetch the clicked item.
-  item = class_tree->itemAt( index );
-
-  switch( class_tree->indexType( index ) )
+  switch( class_tree->indexType() )
   {
     case METHOD:
-      parent = item->getParent();
-      aClass = class_tree->store->getClassByName( parent->getText() );
+      parent = item->parent();
+      aClass = class_tree->store->getClassByName( parent->text(0) );
       if( aClass )
-        aMethod = aClass->getMethodByNameAndArg( item->getText() );
+        aMethod = aClass->getMethodByNameAndArg( item->text(0) );
       break;
     case CVGLOBAL_FUNCTION:
-      aMethod = class_tree->store->getGlobalFunctionByNameAndArg( item->getText() );
+      aMethod = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
       break;
   }
   
@@ -258,6 +250,7 @@ void CKDevelop::CVGotoDeclaration(int index)
 void CKDevelop::refreshClassCombo()
 {
   CParsedClass *aClass;
+  QListBox *lb;
   KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
   KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
 
@@ -265,6 +258,7 @@ void CKDevelop::refreshClassCombo()
   classCombo->clear();
   methodCombo->clear();
 
+  lb = classCombo->listBox();
   // Add all classes.
   for( class_tree->store->classIterator.toFirst(); 
        class_tree->store->classIterator.current(); 
@@ -273,7 +267,7 @@ void CKDevelop::refreshClassCombo()
     aClass = class_tree->store->classIterator.current();
 
     // Add the class.
-    classCombo->insertItem( aClass->name );
+    lb->inSort( aClass->name );
   }
 
   // Update the method combo with the class from the classcombo.
@@ -297,10 +291,12 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
 {
   CParsedMethod *aMethod;
   QList<CParsedMethod> *list;
+  QListBox *lb;
   KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   QString str;
 
   methodCombo->clear();
+  lb = methodCombo->listBox();
 
   // Add all methods, slots and signals of this class.
   list = aClass->getMethods();
@@ -309,7 +305,7 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
        aMethod = list->next() )
   {
     aMethod->toString( str );
-    methodCombo->insertItem( str );
+    lb->inSort( str );
   }
   
   for( aMethod = aClass->slotList.first(); 
@@ -317,7 +313,7 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
        aMethod = aClass->slotList.next() )
   {
     aMethod->toString( str );
-    methodCombo->insertItem( str );
+    lb->inSort( str );
   }
   
   for( aMethod = aClass->signalList.first(); 
@@ -325,6 +321,6 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
        aMethod = aClass->signalList.next() )
   {
     aMethod->toString( str );
-    methodCombo->insertItem( str );
+    lb->inSort( str );
   }
 }

@@ -24,7 +24,7 @@
 #include <qlist.h>
 #include <qpoint.h> 
 #include <qpixmap.h> 
-#include <ktreelist.h>
+#include <qlistview.h>
 #include <kpopmenu.h>
 #include "./classparser/ClassParser.h"
 #include "cproject.h"
@@ -34,7 +34,7 @@
   * @author Jonas Nordin
   */
 
-class CClassView : public KTreeList
+class CClassView : public QListView
 {
   Q_OBJECT
 
@@ -61,8 +61,8 @@ public: // Public attributes
 
 public: // Public queries
 
-  /** Return the type of an object in the view. */
-  int indexType( int aIdx );
+  /** Return the type of the selected item. */
+  int indexType();
 
 public: // Public refreshmethods
   
@@ -73,11 +73,11 @@ public: // Public refreshmethods
   void refresh();
 
   /** Refresh a class by using its' name. */
-  void refreshClassByName( QString &aName );
+  void refreshClassByName( const char *aName );
 
 protected: // Protected signals and slots
   protected slots:
-    void slotSingleSelected(int index);
+    void slotRightButtonPressed(QListViewItem *,const QPoint &,int);
     void slotProjectOptions();
     void slotFileNew();
     void slotClassNew();
@@ -97,8 +97,8 @@ protected: // Protected signals and slots
     void selectedFileNew();
     void selectedClassNew();
     void selectedProjectOptions();
-    void selectedViewDeclaration(int index);
-    void selectedViewDefinition(int index);
+    void selectedViewDeclaration();
+    void selectedViewDefinition();
     void signalAddMethod( CParsedMethod *aMethod );
     void signalAddAttribute( CParsedAttribute *aAttribute );
 

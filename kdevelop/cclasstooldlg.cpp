@@ -26,6 +26,7 @@
 #include <qtooltip.h>
 #include <assert.h>
 #include <qlistbox.h>
+#include <qheader.h>
 
 /*********************************************************************
  *                                                                   *
@@ -183,8 +184,11 @@ void CClassToolDlg::setWidgetValues()
   exportCombo.insertItem( "Private" );
 
   classTree.setGeometry( 10, 90, 500, 400 );
-  classTree.setIndentSpacing(15);
   classTree.setFocusPolicy(QWidget::NoFocus);
+  classTree.setRootIsDecorated( true );
+  classTree.addColumn( "classes" );
+  classTree.header()->hide();
+  classTree.setSorting(-1,false);
 }
 
 void CClassToolDlg::readIcons()
@@ -298,46 +302,40 @@ void CClassToolDlg::setClass( CParsedClass *aClass )
 void CClassToolDlg::addClasses( QList<CParsedClass> *list )
 {
   CParsedClass *aClass;
-  KPath classPath;
+  QListViewItem *root;
 
   // Clear all previous items in the tree.
-  classTree.clear();
+  treeH.clear();
 
   // Insert root item(the current class);
-  classTree.insertItem( currentClass->name, treeH.getIcon( CVCLASS ) );
-  classPath.push( &currentClass->name );
+  root = treeH.addRoot( currentClass->name, CVCLASS );
 
   for( aClass = list->first();
        aClass != NULL;
        aClass = list->next() )
   {
-    treeH.addClass( aClass, classPath );
+    treeH.addClass( aClass, root );
   }
-
-  // View one level deep.
-  classTree.setExpandLevel( 1 );
 }
 
 void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
 {
-  KPath classPath;
+  QListViewItem *root;
   
   // Insert root item(the current class);
-  classTree.insertItem( aClass->name, treeH.getIcon( CVCLASS ) );
-  classPath.push( &aClass->name );
+  root = treeH.addRoot( aClass->name, CVCLASS );
 
-  treeH.addAttributesFromClass( aClass, classPath, comboExport );
+  treeH.addAttributesFromClass( aClass, root, comboExport );
 }
 
 void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
 {
-  KPath classPath;
+  QListViewItem *root;
   
   // Insert root item(the current class);
-  classTree.insertItem( aClass->name, treeH.getIcon( CVCLASS ) );
-  classPath.push( &aClass->name );
+  root = treeH.addRoot( aClass->name, CVCLASS );
 
-  treeH.addMethodsFromClass( aClass, classPath, comboExport );
+  treeH.addMethodsFromClass( aClass, root, comboExport );
 }
 
 void CClassToolDlg::addAllClassMethods()
@@ -346,7 +344,7 @@ void CClassToolDlg::addAllClassMethods()
   CParsedClass *aClass;
 
   // Clear all previous items in the tree.
-  classTree.clear();
+  treeH.clear();
 
   // First treat all parents.
   for( aParent = currentClass->parents.first();
@@ -360,9 +358,6 @@ void CClassToolDlg::addAllClassMethods()
 
   // Add the current class
   addClassAndMethods( currentClass );
-
-  // View one level deep.
-  classTree.setExpandLevel( 1 );
 }
 
 void CClassToolDlg::addAllClassAttributes()
@@ -371,7 +366,7 @@ void CClassToolDlg::addAllClassAttributes()
   CParsedClass *aClass;
 
   // Clear all previous items in the tree.
-  classTree.clear();
+  treeH.clear();
   
   // First treat all parents.
   for( aParent = currentClass->parents.first();
@@ -385,8 +380,6 @@ void CClassToolDlg::addAllClassAttributes()
 
   // Add the current class
   addClassAndAttributes( currentClass );
-
-  classTree.setExpandLevel( 1 );
 }
 
 /** Change the caption depending on the current operation. */
@@ -438,27 +431,23 @@ void CClassToolDlg::changeCaption()
 void CClassToolDlg::viewParents()
 {
   CParsedParent *aParent;
-  KPath classPath;
+  QListViewItem *root;
   
   currentOperation = CTPARENT;
 
   changeCaption();
 
-  classTree.clear();
+  treeH.clear();
   
   // Insert root item(the current class);
-  classTree.insertItem( currentClass->name, treeH.getIcon( CVCLASS ) );
-  classPath.push( &currentClass->name );
+  root = treeH.addRoot( currentClass->name, CVCLASS );
 
   for( aParent = currentClass->parents.first();
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    classTree.addChildItem( aParent->name, treeH.getIcon( CVCLASS ),
-                            &classPath );
+    treeH.addClass( aParent->name, root );
   }
-
-  classTree.setExpandLevel( 1 );
 }
 
 /** View the children of the current class. */

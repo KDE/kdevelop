@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <kiconloader.h>
 #include <kmsgbox.h>
+#include <qheader.h>
 
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
@@ -28,7 +29,7 @@
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
-QString CClassView::GLOBALROOTNAME = "Global";
+QString CClassView::GLOBALROOTNAME = "Globals";
 
 /*********************************************************************
  *                                                                   *
@@ -48,14 +49,20 @@ QString CClassView::GLOBALROOTNAME = "Global";
  *   -
  *-----------------------------------------------------------------*/
 CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
-  : KTreeList (parent, name)
+  : QListView (parent, name)
 {
   initPopups();
 
+  // Initialize the object.
+  setRootIsDecorated( true );
+  addColumn( "classes" );
+  header()->hide();
+  setSorting(-1,false);
+
   // Add callback for clicks in the listview.
-  connect( this, 
-           SIGNAL( singleSelected( int ) ), 
-           SLOT( slotSingleSelected( int ) ) );
+  connect(this,
+          SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int)),
+          SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
 
   // Set the store.
   store = &cp.store;
@@ -106,7 +113,7 @@ void CClassView::refresh( CProject *proj )
   debug( "CClassView::refresh( proj )" );
 
   // Reset the classparser and the view.
-  clear();
+  treeH.clear();
   cp.wipeout();
 
   projDir = proj->getProjectDir();
@@ -122,14 +129,14 @@ void CClassView::refresh( CProject *proj )
     debug( "  parsing:[%s]", str );
     cp.parse( str );
   }
-
+  
   // Parse sourcefiles.
   for( str = src.first(); str != NULL; str = src.next() )
   {
     debug( "  parsing:[%s]", str );
     cp.parse( str );
   }
-
+  
   refresh();
 }
 
@@ -146,18 +153,14 @@ void CClassView::refresh()
 {
   QList<CParsedClass> *list;
   CParsedClass *aPC;
-  QString cstr;
-  QString gstr;
-  KPath classPath;
-  KPath globalPath;
-
-  setUpdatesEnabled( false );
+  QString str;
+  QListViewItem *ci;
+  QListViewItem *classes; 
+  QListViewItem *globals;
 
   // Insert root item
-  cstr = i18n( CLASSROOTNAME );
-  insertItem( cstr, treeH.getIcon( PROJECT ) );
-
-  classPath.push( &cstr );
+  str = i18n( CLASSROOTNAME );
+  classes = treeH.addRoot( str, PROJECT );
 
   list = store->getSortedClasslist();
 
@@ -166,30 +169,27 @@ void CClassView::refresh()
        aPC != NULL;
        aPC = list->next() )
   {
-    // Add the class.
-    addChildItem( aPC->name, treeH.getIcon( CVCLASS ), &classPath );
-    classPath.push( &aPC->name );
+    ci = treeH.addClass( aPC, classes );
 
-    treeH.updateClass( aPC, &classPath );
-    
-    classPath.pop();
+    treeH.updateClass( aPC, ci );
+    treeH.setLastItem( ci );
   }
 
-  // Add all global functions and variables
-  gstr = i18n( GLOBALROOTNAME );
-  insertItem( gstr, treeH.getIcon( PROJECT ) );
-  globalPath.push( &gstr );
-  treeH.addMethods( store->getGlobalFunctions(), globalPath );
-  //  addAttributes( store->gvIterator, globalPath );
+  // Add the globals folder.
+  str = i18n( GLOBALROOTNAME );
+  globals = treeH.addRoot( str, PROJECT );
 
-  // Redraw the view.
-  setExpandLevel( 1 );
-  setUpdatesEnabled( true );
-  repaint();
+  // Add all global functions and variables
+  treeH.addGlobalFunctions( store->getGlobalFunctions(), globals );
+  //  addAttributes( store->gvIterator, globals );
+
+  // Open the classes and globals folder.
+  setOpen( classes, true );
+  setOpen( globals, true );
 }
 
-/*-------------------------------------- CClassView::refreshClassById()
- * refreshClassById()
+/*---------------------------------- CClassView::refreshClassByName()
+ * refreshClassByName()
  *   Reparse and redraw a classes by using its' name.
  *
  * Parameters:
@@ -198,7 +198,7 @@ void CClassView::refresh()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::refreshClassByName( QString &aName )
+void CClassView::refreshClassByName( const char *aName )
 {
 }
 
@@ -210,7 +210,7 @@ void CClassView::refreshClassByName( QString &aName )
 
 /*------------------------------------------ CClassView::indexType()
  * indexType()
- *   Return the type of a certain index.
+ *   Return the type of the currently selected item.
  *
  * Parameters:
  *   aPC             Class that holds the data.
@@ -219,35 +219,35 @@ void CClassView::refreshClassByName( QString &aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-int CClassView::indexType( int aIdx )
+int CClassView::indexType()
 {
-  KTreeListItem *item;
-  KTreeListItem *parent;
+  QListViewItem *item;
+  QListViewItem *parent;
   CParsedClass *aClass;
   int retVal = -1;
 
-  item = itemAt( aIdx );
+  item = currentItem();
 
   // Should add cases for global functions and variables.
-  if( strcmp( item->getText(), i18n( "Classes" ) ) == 0 ) // Root
+  if( strcmp( item->text(0), i18n( CLASSROOTNAME ) ) == 0 ) // Root
     retVal = PROJECT;
-  else if( cp.store.getClassByName( item->getText() ) )
+  else if( cp.store.getClassByName( item->text(0) ) )
     retVal = CVCLASS;
   else // Check for methods and attributes.
   {
-    parent = item->getParent();
-    aClass = cp.store.getClassByName( parent->getText() );
-    if( aClass && aClass->getMethodByNameAndArg( item->getText() ) )
+    parent = item->parent();
+    aClass = cp.store.getClassByName( parent->text(0) );
+    if( aClass && aClass->getMethodByNameAndArg( item->text(0) ) )
       retVal = METHOD;
-    else if( aClass && aClass->getAttributeByName( item->getText() ) )
+    else if( aClass && aClass->getAttributeByName( item->text(0) ) )
       retVal = ATTRIBUTE;
   }
 
   // Check for globals if nothing else has worked.
   if( retVal == -1 )
-    if( store->getGlobalFunctionByNameAndArg( item->getText() ) != NULL )
+    if( store->getGlobalFunctionByNameAndArg( item->text(0) ) != NULL )
       retVal = CVGLOBAL_FUNCTION;
-    else if( store->getGlobalVarByName( item->getText() ) != NULL )
+    else if( store->getGlobalVarByName( item->text(0) ) != NULL )
       retVal = CVGLOBAL_VARIABLE;
 
   return retVal;
@@ -336,7 +336,7 @@ void CClassView::mousePressEvent(QMouseEvent * event)
   if( mouseBtn == LeftButton || mouseBtn == RightButton )
     mousePos = event->pos();
 
-  KTreeList::mousePressEvent( event );
+  QListView::mousePressEvent( event );
 }
 
 /*------------------------------------- CClassView::getCurrentClass()
@@ -350,9 +350,7 @@ void CClassView::mousePressEvent(QMouseEvent * event)
  *-----------------------------------------------------------------*/
 CParsedClass *CClassView::getCurrentClass()
 {
-  KTreeListItem *item;
-  item = itemAt( currentItem() );
-  return store->getClassByName( item->getText() );
+  return store->getClassByName( currentItem()->text(0) );
 }
 
 /*********************************************************************
@@ -361,24 +359,25 @@ CParsedClass *CClassView::getCurrentClass()
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------------- CClassView::slotSingleSelected()
- * slotSingleSelected()
+/*--------------------------------- CClassView::slotRightButtonPressed()
+ * slotRightButtonPressed()
  *   Event when a user selects someting in the tree.
  *
  * Parameters:
- *   index           Index of the selected item
- *
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::slotSingleSelected (int index)
+void CClassView::slotRightButtonPressed(QListViewItem *item,const QPoint &p,int i)
 {
   KPopupMenu *popup;
 
-  // If the right button is pressed we show a popupmenu.
-  if( mouseBtn == RightButton )
+  if( item )
   {
-    switch( indexType( index ) )
+    setSelected( item, true );
+
+    // If the right button is pressed we show a popupmenu.
+    switch( indexType() )
     {
       case PROJECT:
         popup = &projectPopup;
@@ -396,10 +395,10 @@ void CClassView::slotSingleSelected (int index)
         popup = NULL;
         break;
     }
-
-    if( popup )
-      popup->popup( this->mapToGlobal( mousePos ) );
   }
+
+  if( popup )
+    popup->popup( this->mapToGlobal( mousePos ) );
 }
 
 void CClassView::slotProjectOptions()
@@ -446,7 +445,7 @@ void CClassView::slotMethodNew()
     if( aClass )
     {
       aClass->addMethod( aMethod );
-      treeH.updateClass( aClass, itemPath( currentItem() ) );
+      treeH.updateClass( aClass, currentItem() );
     }
 
     emit signalAddMethod( aMethod );
@@ -480,7 +479,7 @@ void CClassView::slotAttributeNew()
     if( aClass )
     {
       aClass->addAttribute( aAttr );
-      treeH.updateClass( aClass, itemPath( currentItem() ) );
+      treeH.updateClass( aClass, currentItem() );
     }
 
     emit signalAddAttribute( aAttr );
@@ -533,10 +532,10 @@ void CClassView::slotClassTool()
 
 void CClassView::slotViewDefinition() 
 {
-  emit selectedViewDefinition( currentItem() );
+  emit selectedViewDefinition();
 }
 
 void CClassView::slotViewDeclaration()
 {
-  emit selectedViewDeclaration( currentItem() );
+  emit selectedViewDeclaration();
 }

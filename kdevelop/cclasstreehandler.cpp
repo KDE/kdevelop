@@ -37,6 +37,9 @@
  *-----------------------------------------------------------------*/
 CClassTreeHandler::CClassTreeHandler()
 {
+  lastItem = NULL;
+  lastRootItem = NULL;
+
   readIcons();
 }
 
@@ -73,7 +76,7 @@ CClassTreeHandler::~CClassTreeHandler()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::setTree( KTreeList *aTree )
+void CClassTreeHandler::setTree( QListView *aTree )
 {
   assert( aTree != NULL );
 
@@ -118,37 +121,122 @@ QPixmap *CClassTreeHandler::getIcon( CTHType anIcon )
   return icons[ anIcon ];
 }
 
-/*---------------------------------- CClassTreeHandler::updateClass()
- * updateClass()
- *   Update the class in the view using the supplied path.
+/** Clear the view and reset internal state. */
+/*---------------------------------------- CClassTreeHandler::clear()
+ * clear()
+ *   Clear the view and reset internal state.
  *
  * Parameters:
- *   aClass       Class to update.
- *   aPath        The path of the class.
+ *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::updateClass( CParsedClass *aClass, KPath *aPath )
+void CClassTreeHandler::clear()
 {
-  KTreeListItem *top;
-  KTreeListItem *current;
-  KTreeListItem *next;
+  tree->clear();
+  lastRootItem=NULL;
+  lastItem=NULL;
+}
+
+/*---------------------------------- CClassTreeHandler::updateClass()
+ * updateClass()
+ *   Update the class in the view using the supplied parent.
+ *
+ * Parameters:
+ *   aClass       Class to update.
+ *   parent       The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::updateClass( CParsedClass *aClass, 
+                                     QListViewItem *parent )
+{
+  assert( aClass != NULL );
+  assert( parent != NULL );
+
+  QListViewItem *current;
+  QListViewItem *next;
   
-  top = tree->itemAt( aPath );
-  current = top->getChild();
+  current = parent->firstChild();
   
   while( current != NULL )
   {
-    next = current->getSibling();
-    top->removeChild( current );
+    next = current->nextSibling();
+    parent->removeItem( current );
     current = next;
   }
 
   // Add parts of the class
-  addMethodsFromClass( aClass, *aPath, CTHALL );
-  addAttributesFromClass( aClass, *aPath, CTHALL );
-  addSlots( aClass, *aPath );
-  addSignals( aClass, *aPath );
+  addMethodsFromClass( aClass, parent, CTHALL );
+  addAttributesFromClass( aClass, parent, CTHALL );
+  addSlots( aClass, parent );
+  addSignals( aClass, parent );
+}
+
+/*---------------------------------- CClassTreeHandler::addRoot()
+ * addRoot()
+ *   Add an item to the view at root level.
+ *
+ * Parameters:
+ *   aName        Name of the item.
+ *   iconType     The icontype.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+QListViewItem *CClassTreeHandler::addRoot( const char *aName, 
+                                           CTHType iconType )
+{
+  assert( aName != NULL );
+
+  QListViewItem *item;
+
+  // Make sure the entry gets added AFTER the last entry.
+  if( lastRootItem != NULL )
+  {
+    item =  new QListViewItem( tree, lastRootItem );
+    item->setText( 0, aName );
+  }
+  else
+    item = new QListViewItem( tree, aName );
+
+  item->setPixmap(0, *(getIcon( iconType )) );
+
+  // Save this as the last entry.
+  lastRootItem = item;
+  lastItem = item;
+
+  return item;
+}
+
+/*---------------------------------- CClassTreeHandler::addItem()
+ * addItem()
+ *   Add an item to the view with the selected parent and icon.
+ *
+ * Parameters:
+ *   aName        Name of the item.
+ *   iconType     The icontype.
+ *   parent       The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+QListViewItem *CClassTreeHandler::addItem( const char *aName, 
+                                           CTHType iconType,
+                                           QListViewItem *parent )
+{
+  assert( aName != NULL );
+  assert( parent != NULL );
+
+  QListViewItem *item = new QListViewItem( parent, lastItem );
+  item->setText( 0, aName );
+  item->setPixmap( 0, *(getIcon( iconType )) );
+
+  // Save this as the last entry.
+  lastItem = item;
+
+  return item;
 }
 
 /*---------------------------------- CClassTreeHandler::addClass()
@@ -157,15 +245,38 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass, KPath *aPath )
  *
  * Parameters:
  *   aClass       Class to add.
- *   aPath        The path of the class.
+ *   parent       The parent item.
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addClass( CParsedClass *aClass, KPath &path )
+QListViewItem *CClassTreeHandler::addClass( CParsedClass *aClass, 
+                                            QListViewItem *parent )
 {
   assert( aClass != NULL );
+  assert( parent != NULL );
 
-  tree->addChildItem( aClass->name, icons[ CVCLASS ], &path );
+  return addItem( aClass->name, CVCLASS, parent );
+}
+
+/*---------------------------------- CClassTreeHandler::addClass()
+ * addClass()
+ *   Add a class to the view. 
+ *
+ * Parameters:
+ *   aName        Class to add.
+ *   parent       The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+QListViewItem *CClassTreeHandler::addClass( const char *aName, 
+                                            QListViewItem *parent )
+{
+  assert( aName != NULL );
+  assert( parent != NULL );
+
+  return addItem( aName, CVCLASS, parent );
 }
 
 /*-------------------------- CClassTreeHandler::addMethodsFromClass()
@@ -174,16 +285,20 @@ void CClassTreeHandler::addClass( CParsedClass *aClass, KPath &path )
  *
  * Parameters:
  *   aClass       Class with methods to add.
- *   aPath        The path of the class.
+ *   parent       The parent item.
  *   filter       The selection.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass, KPath &path,
+void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass,
+                                             QListViewItem *parent,
                                              CTHFilter filter )
 {
-  addMethods( aClass->getSortedMethodList(), path, filter );
+  assert( aClass != NULL );
+  assert( parent != NULL );
+
+  addMethods( aClass->getSortedMethodList(), parent, filter );
 }
 
 /*------------------------------------ CClassTreeHandler::addMethods()
@@ -192,16 +307,18 @@ void CClassTreeHandler::addMethodsFromClass( CParsedClass *aClass, KPath &path,
  *
  * Parameters:
  *   aPC             Class that holds the data.
- *   path            Current path in the view.
+ *   parent          The parent item.
  *   filter          The selection.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CClassTreeHandler::addMethods( QList<CParsedMethod> *list, 
-                                    KPath &path, CTHFilter filter )
+                                    QListViewItem *parent, 
+                                    CTHFilter filter )
 {
   assert( list != NULL );
+  assert( parent != NULL );
 
   CParsedMethod *aMethod;
 
@@ -211,7 +328,7 @@ void CClassTreeHandler::addMethods( QList<CParsedMethod> *list,
        aMethod = list->next() )
   {
     if( filter == CTHALL || filter == aMethod->export )
-      addMethod( aMethod, path );
+      addMethod( aMethod, parent );
   }
 }
 
@@ -221,29 +338,27 @@ void CClassTreeHandler::addMethods( QList<CParsedMethod> *list,
  *
  * Parameters:
  *   aMethod         Method to add.
- *   path            Current path in the view.
+ *   parent          The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addMethod( CParsedMethod *aMethod, KPath &path )
+void CClassTreeHandler::addMethod( CParsedMethod *aMethod, 
+                                   QListViewItem *parent )
 {
   assert( aMethod );
+  assert( parent != NULL );
 
-  QPixmap *icon;
+  CTHType type = PUBLIC_METHOD;
   QString str;
 
-  if( aMethod->isPublic() )
-    icon = icons[ PUBLIC_METHOD ];
-  else if( aMethod->isProtected() )
-    icon = icons[ PROTECTED_METHOD ];
+  if( aMethod->isProtected() )
+    type = PROTECTED_METHOD;
   else if( aMethod->isPrivate() )
-    icon = icons[ PRIVATE_METHOD ];
-  else // Global
-    icon = icons[ PUBLIC_METHOD ];
+    type = PRIVATE_METHOD;
   
   aMethod->toString( str );
-  tree->addChildItem( str, icon, &path );
+  addItem( str, type, parent );
 }
 
 /*-------------------------- CClassTreeHandler::addAttributesFromClass()
@@ -252,17 +367,20 @@ void CClassTreeHandler::addMethod( CParsedMethod *aMethod, KPath &path )
  *
  * Parameters:
  *   aClass       Class with methods to add.
- *   aPath        The path of the class.
+ *   parent       The parent item.
  *   filter       The selection.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CClassTreeHandler::addAttributesFromClass( CParsedClass *aClass, 
-                                                KPath &path,
+                                                QListViewItem *parent,
                                                 CTHFilter filter )
 {
-  addAttributes( aClass->getSortedAttributeList(), path, filter );
+  assert( aClass != NULL );
+  assert( parent != NULL );
+
+  addAttributes( aClass->getSortedAttributeList(), parent, filter );
 }
 
 /*--------------------------------- CClassTreeHandler::addAttributes()
@@ -271,14 +389,18 @@ void CClassTreeHandler::addAttributesFromClass( CParsedClass *aClass,
  *
  * Parameters:
  *   aPC             Class that holds the data.
- *   path            Current path in the view.
+ *   parent       The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
-                                       KPath &path, CTHFilter filter )
+                                       QListViewItem *parent, 
+                                       CTHFilter filter )
 {
+  assert( list != NULL );
+  assert( parent != NULL );
+
   CParsedAttribute *aAttr;
 
   // Add the methods
@@ -287,7 +409,7 @@ void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
        aAttr = list->next() )
   {
     if( filter == CTHALL || aAttr->export == filter )
-      addAttribute( aAttr, path );
+      addAttribute( aAttr, parent );
   }
 }
 
@@ -297,27 +419,94 @@ void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
  *
  * Parameters:
  *   aMethod         Method to add
- *   path            Current path in the view.
+ *   parent          The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr, KPath &path )
+void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr, 
+                                      QListViewItem *parent )
 {
   assert( aAttr != NULL );
+  assert( parent != NULL );
 
-  QPixmap *icon;
+  CTHType type = PUBLIC_ATTR;
   
-  if( aAttr->isPublic() )
-    icon = icons[ PUBLIC_ATTR ];
-  else if( aAttr->isProtected() )
-    icon = icons[ PROTECTED_ATTR ];
+  if( aAttr->isProtected() )
+    type = PROTECTED_ATTR;
   else if( aAttr->isPrivate() )
-    icon = icons[ PRIVATE_ATTR ];
-  else // Global
-    icon = icons[ PUBLIC_ATTR ];
+    type = PRIVATE_ATTR;
     
-  tree->addChildItem( aAttr->name, icon, &path );
+  addItem( aAttr->name, type, parent );
+}
+
+/*------------------------------------ CClassTreeHandler::addGlobalFunctions()
+ * addGlobalFunctions()
+ *   Add a list of global functions to the view.
+ *
+ * Parameters:
+ *   list            List of global functions.
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addGlobalFunctions( QList<CParsedMethod> *list,
+                                            QListViewItem *parent )
+{
+  assert( list != NULL );
+  assert( parent != NULL );
+
+  CParsedMethod *aMeth;
+
+  for( aMeth = list->first();
+       aMeth != NULL;
+       aMeth = list->next() )
+    addGlobalFunc( aMeth, parent );
+}
+
+/*------------------------------------ CClassTreeHandler::addGlobalFunc()
+ * addGlobalFunc()
+ *   Add a global function to the view.
+ *
+ * Parameters:
+ *   aMethod         Method to add
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
+                                       QListViewItem *parent )
+{
+  assert( aMethod != NULL );
+  assert( parent != NULL );
+
+  QString str;
+
+  aMethod->toString( str );
+  addItem( str, CVGLOBAL_FUNCTION, parent );
+}
+
+/*------------------------------------ CClassTreeHandler::addGlobalVar()
+ * addGlobalVar()
+ *   Add a global variable to the view.
+ *
+ * Parameters:
+ *   aAttr           Attribute to add
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addGlobalVar( CParsedAttribute *aAttr,
+                                      QListViewItem *parent )
+{
+  assert( aAttr != NULL );
+  assert( parent != NULL );
+
+  addItem( aAttr->name
+, CVGLOBAL_FUNCTION, parent );
 }
 
 /*------------------------------------- CClassTreeHandler::addSlots()
@@ -326,20 +515,24 @@ void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr, KPath &path )
  *
  * Parameters:
  *   aPC             Class that holds the data.
- *   path            Current path in the view.
+ *   parent          The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSlots( CParsedClass *aPC, KPath &path )
+void CClassTreeHandler::addSlots( CParsedClass *aPC, QListViewItem *parent )
 {
   CParsedMethod *aMethod;
+  QString str;
 
   // Add the methods
   for( aMethod = aPC->slotList.first();
        aMethod != NULL;
        aMethod = aPC->slotList.next() )
-    tree->addChildItem( aMethod->name, icons[ STRUCT ], &path );
+  {
+    aMethod->toString( str );
+    addItem( str, STRUCT, parent );
+  }
 }
 
 /*----------------------------------- CClassTreeHandler::addSignals()
@@ -348,20 +541,24 @@ void CClassTreeHandler::addSlots( CParsedClass *aPC, KPath &path )
  *
  * Parameters:
  *   aPC             Class that holds the data.
- *   path            Current path in the view.
+ *   parent          The parent item.
  *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSignals( CParsedClass *aPC, KPath &path )
+void CClassTreeHandler::addSignals( CParsedClass *aPC, QListViewItem *parent )
 {
   CParsedMethod *aMethod;
+  QString str;
 
   // Add the methods
   for( aMethod = aPC->signalList.first();
        aMethod != NULL;
        aMethod = aPC->signalList.next() )
-    tree->addChildItem( aMethod->name, icons[ STRUCT ], &path );
+  {
+    aMethod->toString( str );
+    addItem( str, STRUCT, parent );
+  }
 }
 
 /*********************************************************************
@@ -392,7 +589,6 @@ void CClassTreeHandler::readIcons()
     icons[ i ] = NULL;
 
   pixDir = KApplication::kde_datadir() + PIXPREFIX;
-  debug( "Fetching pixmaps from: %s", pixDir.data() );
 
   il = KApplication::getKApplication()->getIconLoader();
 
@@ -403,7 +599,9 @@ void CClassTreeHandler::readIcons()
   icons[ PUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
   icons[ PROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
   icons[ PRIVATE_ATTR ] = new QPixmap(pixDir + "CVprivate_var.xpm");
+  icons[ CVGLOBAL_VARIABLE ] = new QPixmap( pixDir + "CVglobal_var.xpm");
   icons[ PUBLIC_METHOD ] = new QPixmap(pixDir + "CVpublic_meth.xpm");
   icons[ PROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
   icons[ PRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
+  icons[ CVGLOBAL_FUNCTION ] = new QPixmap( pixDir + "CVglobal_meth.xpm");
 }
