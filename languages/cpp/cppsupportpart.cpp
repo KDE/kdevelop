@@ -505,6 +505,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                candidate1 = sourceOrHeaderCandidate();
            else
                candidate1 = m_activeFileName;
+           kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
 
            if( codeModel()->hasFile(candidate1) ){
                QPopupMenu* m = new QPopupMenu( popup );
@@ -1492,7 +1493,7 @@ void CppSupportPart::emitFileParsed( )
 bool CppSupportPart::isHeader( const QString& fileName ) const
 {
     KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
-    if( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
+    if( ptr && m_headerMimeTypes.contains( ptr->name() ) )
 	return true;
     
     return m_headerExtensions.contains( QFileInfo(fileName).extension() );
