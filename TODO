@@ -1,3 +1,20 @@
+Short-Term:
+
+mhk: refactor kdevapi, implement accessor methods
+mhk: move function areas of kdevcore into separate classes
+
+Mid-Term:
+
+mhk: improve documentation browsing
+
+
+Long-Term:
+
+all: write a lot more plugins ;)
+
+
+Unsorted:
+
 * Script project options 
 
 * Implement removing sub projects.
