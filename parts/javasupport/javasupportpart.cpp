@@ -79,6 +79,7 @@
 #include <kdevcoderepository.h>
 
 #include <domutil.h>
+#include <urlutil.h>
 #include <config.h>
 
 #if defined(__GLIBC__)
@@ -288,7 +289,7 @@ void JavaSupportPart::activePartChanged(KParts::Part *part)
     m_activeFileName = QString::null;
 
     if (m_activeDocument) {
-	m_activeFileName = kdevCanonicalPath( m_activeDocument->url().path() );
+	m_activeFileName = URLUtil::canonicalPath( m_activeDocument->url().path() );
         QFileInfo fi( m_activeFileName );
         QString ext = fi.extension();
         if (fileExtensions().contains(ext))
@@ -318,7 +319,7 @@ void JavaSupportPart::projectOpened( )
 {
     kdDebug( 9013 ) << "projectOpened( )" << endl;
 
-    m_projectDirectory = kdevCanonicalPath( project()->projectDirectory() );
+    m_projectDirectory = URLUtil::canonicalPath( project()->projectDirectory() );
 
     connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
@@ -376,7 +377,7 @@ void JavaSupportPart::addedFilesToProject(const QStringList &fileList)
 
     for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
-	QString path = kdevCanonicalPath( m_projectDirectory + "/" + (*it) );
+	QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + (*it) );
 
 	maybeParse( path );
 	emit addedSourceInfo( path );
@@ -387,7 +388,7 @@ void JavaSupportPart::removedFilesFromProject(const QStringList &fileList)
 {
     for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it )
     {
-	QString path = kdevCanonicalPath( m_projectDirectory + "/" + *it );
+	QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
 
 	removeWithReferences( path );
 	m_backgroundParser->removeFile( path );
@@ -400,7 +401,7 @@ void JavaSupportPart::changedFilesInProject( const QStringList & fileList )
 
     for ( QStringList::ConstIterator it = files.begin(); it != files.end(); ++it )
     {
-	QString path = kdevCanonicalPath( m_projectDirectory + "/" + *it );
+	QString path = URLUtil::canonicalPath( m_projectDirectory + "/" + *it );
 
 	maybeParse( path );
 	emit addedSourceInfo( path );
@@ -575,7 +576,7 @@ JavaSupportPart::parseProject( )
 	QFileInfo fileInfo( d, *it );
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
-            QString absFilePath = kdevCanonicalPath( fileInfo.absFilePath() );
+            QString absFilePath = URLUtil::canonicalPath( fileInfo.absFilePath() );
 	    kdDebug(9013) << "parse file: " << absFilePath << endl;
 
 	    if( (n%5) == 0 ){
@@ -636,7 +637,7 @@ void JavaSupportPart::maybeParse( const QString& fileName )
         return;
 
     QFileInfo fileInfo( fileName );
-    QString path = kdevCanonicalPath( fileName );
+    QString path = URLUtil::canonicalPath( fileName );
     QDateTime t = fileInfo.lastModified();
 
     if( !fileInfo.exists() ){
@@ -679,7 +680,7 @@ void JavaSupportPart::partRemoved( KParts::Part* part )
 	if( fileName.isEmpty() )
 	    return;
 
-	QString canonicalFileName = kdevCanonicalPath( fileName );
+	QString canonicalFileName = URLUtil::canonicalPath( fileName );
 	m_backgroundParser->removeFile( canonicalFileName );
 	m_backgroundParser->addFile( canonicalFileName, true );
     }
@@ -707,7 +708,7 @@ QStringList JavaSupportPart::modifiedFileList()
 	    continue;
 
 	QDateTime t = fileInfo.lastModified();
-	QString path = kdevCanonicalPath( fileInfo.absFilePath() );
+	QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
 	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( path );
 	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
 	    continue;

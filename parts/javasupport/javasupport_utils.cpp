@@ -1,7 +1,6 @@
 
 #include "javasupport_utils.h"
 #include <codemodel.h>
-#include <qdir.h>
 
 static void typeNameList( QStringList& path, QStringList & lst, const CodeModel * model );
 static void typeNameList( QStringList& path, QStringList & lst, NamespaceDom ns );
@@ -51,11 +50,3 @@ static void typeNameList( QStringList & path, QStringList & lst, ClassDom klass 
     path.pop_back();
 }
 
-QString kdevCanonicalPath( const QString& path )
-{
-    QString cPath = QDir( path ).canonicalPath();
-    if( !cPath.isEmpty() )
-	return cPath;
-    
-    return path;
-}
