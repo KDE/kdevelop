@@ -109,9 +109,8 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    // This seems to be needed (re-check it after Qt2.0 comed out)
    setFocusPolicy(ClickFocus);
 
-   // create the child widgets
+   // create the central widget
    createMdiManager();
-   createTaskBar();
 
    // cover QextMdi's childarea by a dockwidget
    m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
@@ -141,6 +140,9 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    m_pPlacingMenu = new QPopupMenu( this, "placing_menu");
 
    m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
+
+   // the MDI view taskbar
+   createTaskBar();
 }
 
 //============ ~QextMdiMainFrm ============//
