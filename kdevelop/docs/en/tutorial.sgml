@@ -3,6 +3,7 @@
 <book>
 <titlepag>
 <title>KDE Application Tutorials
+<subtitle>The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
 <date>Version 0.1 , Mon Jun 21 1999
@@ -274,6 +275,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
 
 
 

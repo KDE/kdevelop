@@ -1,3 +1,8 @@
+1999-07-04  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added a long passage on kde/qt event handling and signal/slot mechanism to kde_libref
+	* fixed i18n() bug in enscript configuration dialog
+	* translated some more to german
+	
 1999-07-03 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* added "Modify Makefiles" to project options, TODO: make sgml handbook generation configurable
 	* bugreport remembers email/name/compiler/kde_version ... , BRNR [19:58,20.06.99]

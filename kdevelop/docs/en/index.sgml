@@ -2,7 +2,7 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0.
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
 <date>Version 2.0 , Apr 11,1999
@@ -2091,7 +2091,7 @@ information for your files like the file properties, install path, distribution 
 file properties allows you to keep track of where the files should go.
 
 With <idx/KAppWizard/, you can create a new application project according to your choice of application type. For now, <idx/KAppWizard/
-generates three kinds of fram applications, as:
+generates four kinds of frame applications, as:
 
 <itemize>
 <item>a single document interface (SDI) <idx/KDE/-application including a menubar, a toolbar and a statusbar. It contains basic control
@@ -2109,55 +2109,92 @@ have no problems to create a full-functional application by using Qt only.
 
 <item>a C++ program framework. This application type is intended for those wanting to write a terminal based C++ program. Just
 remove the "Hello World" line in main() and construct your <idx/classes/ the same way with KDevelop as for <idx/KDE/ applications.
+<item>a C program framework for C programmers. This is as well a terminal based application but only uses the C compiler.
 </itemize>
-For importing existing applications, we suggest using the <idx/New Project/ option. Select "Project" from the menubar and select "New".
-The <idx/New Project/ dialog offers creates a project directory and subdirectories as well as the project file with the project name and
-type. We advise copying all needed creation files like configure.in, <idx/Makefile.am/'s etc. into the project directory from your
-existing project and choose "Project"&rarr"Add file(s)"&rarr"Add existing file(s)" to copy the sources into your new project directory.
-Note that your <idx/Makefile.am/'s will be changed by KDevelop and you probably will have to change or delete some entries to provide
-clean compilation. You should not edit the KDevelop write area, instead you should read the entries made by KDevelop and delete
-matching titles created yourself. Also note that only one project is supported to work on at the moment, so your source files
-should be in the project's subdirectory which has the same name as the main project directory. In the Logical File Viewer the
-groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
-application and delete the created source and header files. Then you can add existing files as above.
+
+Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
+configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
+as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
+by the classbrowser.
+
+To ensure the buildprocess, your custom project has to have all sources in a subdirectory matching the lowecase name of your project;
+the execution of the binary is also restricted to this lowercase project name.
+
+Mind that KDevelop does not write any information into Makefiles or configuration files. You ar responsible for any project behavoir
+and buildsettings yourself.
 
 <sect1>Libraries
 <p>
+A general project-type to create libraries is not available at the moment. Anyway, building libraries is not impossible with KDevelop.
+Here are a few guidelines and workarounds:
 
-This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
-KDevelop.
+<itemize>
+<item>Whenever your project subdirectory gets another subdirectory that contains source files, KDevelop will build a static library of
+these. That means static libraries are already supported by automatic creation in order to sort project sourcefiles.
+Mind that the static library is part of the binary later and won't get installed.
+<item>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
+subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
+the <htmlurl url="programming-15.html" name="KDevelop Programming Handbook"> offers a Makefile.am template. If the subdirectory's
+Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
+build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
+project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original projectsubdirectory
+according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter <ref
+id="Project Hacking" name="Project Hacking">.
+<item>for installing a shared library, you have to watch the KDE-Filesystem Standard as explained in <htmlurl url="programming-13.html"
+name="The KDevelop Programming Handbook">
+</itemize>
 
 <sect1>Multiple Targets
 <p>
 
 For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
-targets like packages containing several applications. As commands like "Execute" or the Class Browser require that only one
-target is build by the developer, those types of projects are only supported in the way that you have to write your own entries to
-the <idx/Makefile/s and build your directories for the additional libraries or binaries to build. Nevertheless, a build-process always
-invokes your make-program independent from what actually the targets are; so these functions still can be used.
+targets like packages containing several applications. As commands like "Execute" require that only one target is build by the
+developer, those types of projects are only supported in the way that you have to write your own entries to the <idx/Makefile.am/'s and
+creating your directories for the additional libraries or binaries to build. Nevertheless, a build-process always invokes your
+make-program independent from what actually the targets are; so these functions still can be used (with the restriction that the build
+is invoked from the main project subdirectory).
 
-Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move
-their subdirectories in conjunction with the <idx/project files/ to the directory containing all sources later. Then you could load each
+Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move their
+subdirectories in conjunction with the <idx/project files/ to the directory containing all sources later. Then you could load each
 target independently by its project file; this also allows executing and <idx/debugging/ the target.
+
+Multiple binaries or libraries within the main project subdirectory are possible with following the rules explained in section <ref
+id="Project Hacking" name="Project Hacking"> and the following guidelines for editing the main project's subdirectory Makefile.am (all
+modifications outside the KDevelop write area):
+
+<itemize>
+<item>add your target to the bin_PROGRAMS if it is an executable
+<item>add your library declaration line if it is a shared library
+<item>add the same declarations like the original project binary is build:
+	<itemize>
+	<item>newtarget_METASOURCES
+	<item>newtarget_LD_FLAGS
+	<item>DISTCLEANFILES
+	<item>copy the messages: entry for the original binary and replace target_SOURCES with newtarget_SOURCES, target.pot with
+newtarget.pot
+	</itemize>
+<item>add your sources like the KDevelop write area contains outside the write area for your binary or library
+<item>for installing static libraries, create the library with KDevelop's autocreation inside subdirectories. Then modify the
+Makefile.am outside the write area according to the needed settings
+</itemize>
 
 <sect> <idx/New Project/s
 <p>
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a
-framework for each. All projects are FSF-compliant and use the GNU standard development tools as described in the requirements
-section of this handbook. For <idx/KDE/ applications, the wizard offers two different frameworks, the <idx/KDE/-Application, providing
-a complete application with base <idx/classes/ for document type, view and application. This includes the creation of a menubar, toolbar
-and statusbar, the mainwindow inherits the KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This
-type of project can be used for the creation of small desktop tools or other simple applications without too much change on the
-existing code provided by the framework. A Qt-Application offers the creation of a Qt-only program if you wish no dependencies
-towards the <idx/KDE-libraries/ for end-users. (NOTE: The configure script still checks for the <idx/KDE-libraries/.  This will be fixed in
-the next version of KDevelop).	
+The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
+projects use the GNU standard development tools as described in the requirements section of this handbook. For <idx/KDE/ applications,
+the wizard offers two different frameworks, the <idx/KDE/-Application, providing a complete application with base <idx/classes/ for
+document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
+KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This type of project can be used for the creation
+of small desktop tools or other simple applications without too much change on the existing code provided by the framework. A
+Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the <idx/KDE-libraries/ for end-users.
 The Qt-Application also is created by using tree base <idx/classes/ like the KDE-standard-Application and provides a menubar, toolbar
 and statusbar.
 
 The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
 "Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a <idx/GUI/
-first or for those working on commandline programs written in C++ or C.
+first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
+which requires any C-compiler at the minimum.
 
 The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
 Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
@@ -3337,6 +3374,13 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
+
+
+
+
+
+
+
 
 
 

@@ -260,44 +260,6 @@ that already is capable of all needed functions that an application may make use
 <P>The elements of the Widget themselves are already managed by <CODE>KTMainWindow</CODE>'s geometry implementation, therefore you usually don't
 have to take care of that to reimplement an application specific instance for your program.
 <P>
-<P>
-<H3><A NAME="ss3.5">3.5 The Menubar</A>
-</H3>
-
-<P>The menubar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
-the mainview) offers in regards of manipulating the main view's contents. In opposition to Qt's <CODE>QMenuBar</CODE>, KDE offers the use of
-the class <CODE>KMenubar</CODE>. Additionally, the menubar is already constructed for the programmer when using <CODE>KTMainWindow</CODE> with the
-first call of <CODE>menuBar()</CODE>.
-<P>The menubar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
-keyboard accelerators with the ALT-key and the underlined character. The menus that have to pop up on a selection have to be created
-with the class <CODE>QPopupMenu</CODE>, which itself only provides the popups, entries have to be inserted using the methods provided by
-<CODE>QMenuData</CODE>.
-<P>Mind that menubars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
-The menubar also makes use of the <CODE>KApplication</CODE> help menu already provided. Inserting the menu is just easy with
-<P>
-<BLOCKQUOTE><CODE>
-<PRE>
-menuBar()->insertItem(i18n("Help"), kapp->getHelpMenu());
-</PRE>
-</CODE></BLOCKQUOTE>
-<P>
-<H3><A NAME="ss3.6">3.6 The Toolbar</A>
-</H3>
-
-<P>Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
-provides. The KDE libraries are again offering another class to use with KDE applications, <CODE>KToolBar</CODE>; when using <CODE>KTMainWindow</CODE>
-these are created like the menubar by the first call of <CODE>toolBar()</CODE>. As you can use as many toolbars as your application requires,
-you can create them with the number in the <CODE>toolBar()</CODE> method; if the method's paramenter is empty, the first toolbar number is 0.
-<P>
-<H3><A NAME="ss3.7">3.7 The Statusbar</A>
-</H3>
-
-<P>KDE also provides the pendant to Qt's <CODE>QStatusBar</CODE>, <CODE>KStatusBar</CODE>. The statusbar can contain labels as well as widgets, such as
-progressbars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
-application and gives hints about the usage of commands e.g. over toolbars and menubars.
-<P>
-<P>
-<P>
 <P ALIGN="RIGHT">
 
 <A HREF="kde_libref-4.html">Next</A>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDE Library Reference Guide: User Control Elements</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-6.html">Next</A>
+ <A HREF="kde_libref-4.html">Previous</A>
+ <A HREF="kde_libref.html#toc5">Table of Contents</A>
+</P>
+<H3><A NAME="s5">5. User Control Elements</A></H3>
+
+<P>
+<H3><A NAME="ss5.1">5.1 Other Widgets</A>
+</H3>
+
+<P>Control elements are used within visible areas of the application and can be combined together to create a dialog or view. Beyond the
+control elements that the Qt library provides, KDE offers:
+<P>KButton: active raise-lower button
+KButtonBox: manages buttons
+KColorButton: button displaying a color setting
+KCombo: similar to QComboBox
+KDatePicker: Date selection widget
+KIntegerLine: lineedit that only accepts integer values
+KLedLamp: LED lamp
+KLined: line edit
+KPanner: panner devider
+KNewPanner: panner devider managing two widgets
+KPopupMenu: popup menu with title
+KRestrictedLine: lineedit that only accepts certain input
+KSelector: value selector
+KSeparator: standard separator
+KSlider: slider widget
+KSpinBox: like QSpinBox
+KTabCtl: tabulator widget
+KTreeList: tree list widget
+<P>
+<H3><A NAME="The Menubar"></A> <A NAME="ss5.2">5.2 The Menubar</A>
+</H3>
+
+<P>The menubar is a central component of the main window. It allows the user to execute operations that the application (or to be precise:
+the mainview) offers in regards of manipulating the main view's contents. In opposition to Qt's <CODE>QMenuBar</CODE>, KDE offers the use of
+the class <CODE>KMenubar</CODE>. Additionally, the menubar is already constructed for the programmer when using <CODE>KTMainWindow</CODE> with the
+first call of <CODE>menuBar()</CODE>.
+<P>The menubar itself, independent which class is going to be used, contains entries that the user can select with the mouse or by using
+keyboard accelerators with the ALT-key and the underlined character. The menus that have to pop up on a selection have to be created
+with the class <CODE>QPopupMenu</CODE>, which itself only provides the popups, entries have to be inserted using the methods provided by
+<CODE>QMenuData</CODE>.
+<P>Mind that menubars should always contain all functions a program has to offer except those that can be accessed by additional dialogs.
+The menubar also makes use of the <CODE>KApplication</CODE> help menu already provided. Inserting the menu is just easy with
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+menuBar()->insertItem(i18n("Help"), kapp->getHelpMenu());
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<H3><A NAME="ss5.3">5.3 The Toolbar</A>
+</H3>
+
+<P>Toolbars are another component that enhances user interaction with symbols representing most needed functions that an application
+provides. The KDE libraries are again offering another class to use with KDE applications, <CODE>KToolBar</CODE>; when using <CODE>KTMainWindow</CODE>
+these are created like the menubar by the first call of <CODE>toolBar()</CODE>. As you can use as many toolbars as your application requires,
+you can create them with the number in the <CODE>toolBar()</CODE> method; if the method's paramenter is empty, the first toolbar number is 0.
+<P>
+<H3><A NAME="ss5.4">5.4 The Statusbar</A>
+</H3>
+
+<P>KDE also provides the pendant to Qt's <CODE>QStatusBar</CODE>, <CODE>KStatusBar</CODE>. The statusbar can contain labels as well as widgets, such as
+progressbars (those have to have the statusbar as parent). The statusbar is used to display information about the current state of the
+application and gives hints about the usage of commands e.g. over toolbars and menubars.
+<P>
+<H3><A NAME="Keyboard Accelerators"></A> <A NAME="ss5.5">5.5 Keyboard Accelerators</A>
+</H3>
+
+<P>KKeyDialog: keyboard accelerator configuration dialog
+<P>KKeyChooser
+<P>KAccel
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-6.html">Next</A>
+ <A HREF="kde_libref-4.html">Previous</A>
+ <A HREF="kde_libref.html#toc5">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

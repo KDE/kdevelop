@@ -161,8 +161,8 @@ void CConfigEnscriptDlg::init() {
   initTab4(tab4);
   addTab (tab4,i18n("Underlay"));
   selectedProgram();
-  setCancelButton();
-  setDefaultButton();
+  setCancelButton(i18n("Cancel"));
+  setDefaultButton(i18n("Default"));
   connect(this,SIGNAL(defaultButtonPressed()),SLOT(slotDefaultClicked()));
   connect (this,SIGNAL(applyButtonPressed()),SLOT(slotOkClicked()));
 }

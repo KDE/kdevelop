@@ -1,7 +1,12 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = index-9.html cref.html index-1.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html index.html logo3.jpg logotp3.gif tipdatabase tutorial-1.html tutorial-2.html tutorial-3.html tutorial-4.html tutorial-5.html tutorial-6.html tutorial-7.html tutorial-8.html tutorial-9.html tutorial.html index-16.html index.sgml tutorial.sgml tutorial-10.html tutorial-11.html tutorial-12.html tutorial-13.html 
+EXTRA_DIST = index-9.html cref.html index-1.html index-10.html index-11.html index-12.html index-13.html index-14.html index-15.html \
+							index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html index-8.html index.html logotp3.gif \
+							tipdatabase tutorial-1.html tutorial-2.html tutorial-3.html tutorial-4.html tutorial-5.html tutorial-6.html tutorial-7.html \
+							tutorial-8.html tutorial-9.html tutorial.html index-16.html index.sgml tutorial.sgml tutorial-10.html tutorial-11.html \
+							tutorial-12.html tutorial-13.html kde_libref.html kde_libref-1.html kde_libref-2.html kde_libref-3.html kde_libref-4.html \
+							kde_libref.sgml
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
@@ -126,6 +131,8 @@ install-data-local:
 	$(INSTALL_DATA) kde_libref-2.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref-2.html
 	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
 	$(INSTALL_DATA) kde_libref-3.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref-3.html
+	$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/kdevelop/
+	$(INSTALL_DATA) kde_libref-4.html $(DESTDIR)$(kde_htmldir)/en/kdevelop/kde_libref-4.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/index-9.html
@@ -191,3 +198,4 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-1.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-2.html
 	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-3.html
+	-rm -f $(kde_htmldir)/en/kdevelop/kde_libref-4.html

@@ -53,7 +53,7 @@ Standard-Entwicklungsprozessen, genauso wie es Ihnen direkten und transparenten 
 brauchen. Die integrierten Browser Mechanismen wurden entworfen um Dokumentationsanfragen zu unterstützen, die Entwickler in Beziehung
 zu Ihrem Projekt haben.
 
-Der Klassen-Browser und der Fehler-Sucher bringen Sie an jede Stelle ihres Projektcodes mit einem Mausklick ohne das Sie nach Dateien
+Der Klassenbrowser und der Fehler-Sucher bringen Sie an jede Stelle ihres Projektcodes mit einem Mausklick ohne das Sie nach Dateien
 suchen müssen; Dateibäume geben direkten Zugang zu Projektdateien und das integrierte Hilfesystem bietet eine praktischen Zugriff auf
 die Online-Dokumentation überall innerhalb der Entwicklungsumgebung.
 
@@ -89,7 +89,7 @@ zusätzliche Hilfe-funktionen.
 <item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
 <item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und
 Linker Flags und der Projekteinstellungen.
-<item>Kapitel <ref id="Der Klassen-Browser" name="Der Klassen-Browser">, beschreibt Ihnen ausführlich, wie Sie den KDevelp
+<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop
 Klassenbrowser benutzen.
 <item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen
 C++ Code erzeugt.
@@ -596,7 +596,7 @@ Der in KDevelop integrierte Dialogeditor bietet einen einfachen Weg, Benutzersch
 Dialogeditor vollständig in die gewohnte Benutzeroberfläche eingebettet ist, stehen Ihnen die gleichen Befehle wie im Programmiermodus
 zu Verfügung. Dies erlaubt z.B. die Konstruktion eines Dialogs, die Generierung des Ausgabecodes und des sofortigen Tests im Programm
 durch die Verfügbarkeit der Make-Kommandos und Sie können gleichzeitig die Compilerausgabe kontrollieren ohne in den Programmiermodus
-zu wechseln. Eine Detailliertere Beschreibung finden Sie im Kapitel <ref id="The Dialog Editor" name="Dialogeditor">.
+zu wechseln. Eine Detailliertere Beschreibung finden Sie im Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">.
 
 
 <sect1>KAppWizard und die Klassenwerkzeuge
@@ -742,7 +742,7 @@ enthält. Wenn Sie fertig sind, wählen Sie "Quellen erzeugen" aus dem "Bauen"-Men
 sich dann um den Rest kümmern. Sie können testen, ob alles richtig durchgeführt wurde, indem Sie "Erstellen" oder "Ausführen"
 auswählen; dies wird Ihre Applikation inklusive der neuen Quelldateien erstellen. Aber erwarten Sie nicht, das die Dialoge schon sofort
 nutzbar sind- das ist eine Sache der Implementierung wie Sie der Entwickler gewohnt ist. Seien Sie nicht besorgt- es ist nicht sehr
-schwer. Um mehr Information zur Erstellung von Dialogen zu erhalten, schlagen Sie unter <ref id="Der Dialgoeditor" name="Der
+schwer. Um mehr Information zur Erstellung von Dialogen zu erhalten, schlagen Sie unter <ref id="Der Dialogeditor" name="Der
 Dialgoeditor"> nach, Beispiele und Richtlinien finden Sie im <htmlurl url="programming-6.html" name="KDevelop Programmierhandbuch">.
 
 <sect2>Einbinden neuer Elemente
@@ -1997,16 +1997,16 @@ Ausgabemodus.
 <item><bf/Fettdruck:/ Druckt den ganzen Text in Fettdruck
 </itemize>
 
-<sect3>Nummerierung
+<sect3>Numerierung
 <p>
 <itemize>
-<item><bf/Zeilen nummerieren:/  numbers all lines top-down if enabled
-<item><bf/Seiten nummerieren:/ allows selecting page-numbering mode by:
+<item><bf/Zeilen numerieren:/	numeriert alle Zeilen
+<item><bf/Seiten numerieren:/ erlaubt Seitennumerierung nach Modus:
   <itemize>
-  <item><bf/Dateien einzeln:/ numbers each file's pages beginning with 1
-  <item><bf/Dateien zusammen:/  appends all following pages after the first for page numbering
+  <item><bf/Dateien einzeln:/ numeriert die Seiten jeder Datei einzeln beginnend mit 1
+  <item><bf/Dateien zusammen:/ numeriert alle Seiten der Druckausgabe aufeinander folgend
   </itemize>
-<item><bf/Zeilen pro Seite:/  sets the maximum lines per page to be printed.
+<item><bf/Zeilen pro Seite:/ stellt die maximale Anzahl an Zeilen pro Seite ein
 </itemize>
 
 <sect2>Die enscript Konfigurationseinstellungen
@@ -2014,58 +2014,58 @@ Ausgabemodus.
 <sect3>Kopf
 <p>
 <itemize>
-<item><bf/Eigener Kopf:/ adds a fancy header
-<item><bf/Kopftext:/ enables adding a header text
+<item><bf/Eigener Kopf:/ fügt einen eigenen Kopf ein
+<item><bf/Kopftext:/ ermöglicht die Einstellung des Kopftextes
   <itemize>
-  <item><bf/Text:/ sets the text's contents
-  <item><bf/Position:/ sets the text's position to left, center or right
+  <item><bf/Text:/ setzt den Inhalt des Kopftextes
+  <item><bf/Position:/ setzt die Position des Kopftextes auf links, mittig oder rechts
   </itemize>
-<item><bf/Login:/ add the UserID to the header
+<item><bf/Login:/ fügt die User-ID dem Kopf hinzu
   <itemize>
-  <item><bf/Login:/ enables adding UserID
-  <item><bf/Position:/ sets the position for the UserID
+  <item><bf/Login:/ schaltet die Hinzufügung ein
+  <item><bf/Position:/ bestimmt die Position der User ID
   </itemize>
-<item><bf/Dateiname:/ add the filename to the header
+<item><bf/Dateiname:/ Dateinamen dem Kopf hinzufügen
   <itemize>
-  <item><bf/Größe des Dateinamens:/ add filename as full or short, meaning full path or filename only
-  <item><bf/Position:/ sets the position for the filename
+  <item><bf/Größe des Dateinamens:/ gibt den Dateinamen absolut oder relativ an
+  <item><bf/Position:/ Position des Dateinamens
   </itemize>
-<item><bf/Hostname:/ add the hostname to the header
+<item><bf/Hostname:/ fügt den Rechnernamen dem Kopf hinzu
   <itemize>
-  <item><bf/Hostname:/ enables adding hostname
-  <item><bf/Größe des Hostnames:/ sets the size for hostname
-  <item><bf/Position:/ sets the position for hostname
+  <item><bf/Hostname:/ schaltet Hinzufügen ein
+  <item><bf/Größe des Hostnames:/ Größe des Hostnamens im Kopf
+  <item><bf/Position:/ Position des Hostnamens
   </itemize>
 </itemize>
 
 <sect3>Datum und Uhrzeit
 <p>
 <itemize>
-<item><bf/Aktuelles Datum:/ include the current date
+<item><bf/Aktuelles Datum:/ aktuelles Datum einfügen
   <itemize>
-  <item><bf/Aktuelles Datum:/ enables current date adding
-  <item><bf/Position:/ sets the position for the date entry
-  <item><bf/Format:/ sets the date format
+  <item><bf/Aktuelles Datum:/ schaltet aktuelles Datum ein
+  <item><bf/Position:/ Position der Datumsangagbe
+  <item><bf/Format:/ Format des Datums
   </itemize>
-<item><bf/Änderungsdatum:/ include the last modification date
+<item><bf/Änderungsdatum:/ einfügen des letzten Änderungsdatums
   <itemize>
-  <item><bf/Änderungsdaum:/ enables modification date adding
-  <item><bf/Position:/ sets the position for modification date entry
-  <item><bf/Format:/ sets the date format
+  <item><bf/Änderungsdaum:/ einfügen einschalten
+  <item><bf/Position:/ Position des Änderungsdatums
+  <item><bf/Format:/ Datumsformat
   </itemize>
-<item><bf/Aktuelle Uhrzeit:/ include current time
+<item><bf/Aktuelle Uhrzeit:/ aktuelle Uhrzeit angeben
   <itemize>
-  <item><bf/Aktuelle Uhrzeit:/ enables current time adding
-  <item><bf/AM/PM:/ use AM/PM or 24h format
-  <item><bf/Position:/ sets the position for the time entry
-  <item><bf/Format:/ sets the time format
+  <item><bf/Aktuelle Uhrzeit:/ einfügen einschalten
+  <item><bf/AM/PM:/ Verwendung von AM/PM oder 24h Uhrzeitangabe
+  <item><bf/Position:/ Position der Zeitangabe
+  <item><bf/Format:/ Format der Zeitangabe
   </itemize>
-<item><bf/Änderungsuhrzeit:/ include the last modification time
+<item><bf/Änderungsuhrzeit:/ letzte Änderungsuhrzeit einfügen
   <itemize>
-  <item><bf/Änderungsuhrzeit:/ enables adding modification time
-  <item><bf/AM/PM:/ use AM/PM or 24h format
-  <item><bf/Position:/ sets the position for the time entry
-  <item><bf/Format:/ sets the time format
+  <item><bf/Änderungsuhrzeit:/ einfügen einschalten
+  <item><bf/AM/PM:/ Verwendung von AM/PM oder 24h Uhrzeitangabe
+  <item><bf/Position:/ Position der Zeitangabe
+  <item><bf/Format:/ Format der Zeitangabe
   </itemize>
 </itemize>
 
@@ -2074,36 +2074,35 @@ Ausgabemodus.
 <itemize>
 <item><bf/Nummerierung & Rahmen:/
   <itemize>
-  <item><bf/Zeilen nummerieren:/ adds line numbers to the document for printing
-  <item><bf/Rahmen:/ adds a border to the pages for printing
-  <item><bf/Seiten nummerieren:/ numbers pages for printing
-  <item><bf/Dateien ausrichten:/ appends files for page numbering
-  <item><bf/Zeilen pro Seite:/ the maximum value for lines per page
+  <item><bf/Zeilen nummerieren:/ fügt Zeilennumerierungen ein
+  <item><bf/Rahmen:/ fügt den Seiten einen Rahmen hinzu
+  <item><bf/Seiten nummerieren:/ fügt Seitennumerierungen ein
+  <item><bf/Dateien ausrichten:/ hägt die Dateien zum Ausdruck aneinander an
+  <item><bf/Zeilen pro Seite:/ maximale Anzahl Zeilen pro Seite
   </itemize>
 <item><bf/Schrift and TAB:/
   <itemize>
-  <item><bf/TAB-Größe:/ sets the TAB size for interpreting TABs
-  <item><bf/Schrift für Kopf:/ sets the font used for the header text
-  <item><bf/Schrift für Text:/ sets the font for the body text (file contents)
+  <item><bf/TAB-Größe:/ Tabulatorweite bei Ausdruck
+  <item><bf/Schrift für Kopf:/ Schriftart für Kopftext
+  <item><bf/Schrift für Text:/ Schriftart für Dateiinhalt
   </itemize>
 <item><bf/Textdruck:/
   <itemize>
-  <item><bf/Zeilen abschneiden:/ cuts the lines if too large. If unchecked, lines are broken
-  <item><bf/Ersetze nicht-druckbare Zeichen durch leerzeichen:/ replaces characters that the printing charset doesn't support by space
-characters
+  <item><bf/Zeilen abschneiden:/ Zeilen abschneiden, die über den Rand hinausragen
+	<item><bf/Ersetze nicht-druckbare Zeichen durch Leerzeichen:/ ersetzt nicht-druckbare Zeichen durch Leerzeichen
 	</itemize>
 <item><bf/Andere Optionen:/
   <itemize>
-  <item><bf/Inhaltsverzeichnis:/ adds a table of contents page that contains information about printed files, page numbers etc.
+  <item><bf/Inhaltsverzeichnis:/ fügt dem Ausruck ein Inhaltsverzeichnis hinzu
   <item><bf/Hervorhebungsbalken:/
     <itemize>
-    <item><bf/Hervorhebung:/ highlights rows for printing
-    <item><bf/Zyklus der Änderung:/ sets the number of rows to change highlight style
+    <item><bf/Hervorhebung:/ hebt Zeilen abwechselnd im Ausdruck hervor
+    <item><bf/Zyklus der Änderung:/ Anzahl der Zeilen, die jeweils im Block hervorgehoben werden
     </itemize>
   <item><bf/Umgebrochene Zeile:/
     <itemize>
-    <item><bf/Markiere umgebrochene:/ lines that are broken get marked for printing
-    <item><bf/Wert für umgebrochene:/ the preset value for the new line the line is broken into.
+    <item><bf/Markiere umgebrochene:/ umgebrochene Zeilen im Ausdruck markieren
+    <item><bf/Wert für umgebrochene:/ der Aktuelle Wer einer umgebrochenen Zeile
     </itemize>
   </itemize>
 </itemize>
@@ -2111,12 +2110,12 @@ characters
 <sect3>Unterlegungen
 <p>
 <itemize>
-<item><bf/Text:/ sets the text to underlay
-<item><bf/Position:/ sets the position of underlay text
-<item><bf/Font:/ sets the font used for the underlay
-<item><bf/Angle:/ sets the angle for the underlay text
-<item><bf/Gray scaling:/ sets the grayscaling for the underlay text
-<item><bf/Style:/ sets the underlay text to be printed as outlined or filled
+<item><bf/Text:/ Unterlegungstext
+<item><bf/Position:/ Position des Unterlegungstexts
+<item><bf/Font:/ Schriftart der Unterlegung
+<item><bf/Winkel:/ Winkel, unter der der Unterlegungstext von der Horizontalen aus dargestellt wird
+<item><bf/Grauskalierung:/ Grauskalierung der Unterlegung
+<item><bf/Stil:/ Darstellung der Unterlegung als ausgefüllten oder umrandeten Text
 </itemize>
 
 <sect1>Der Druckdialog
@@ -2124,67 +2123,68 @@ characters
 <sect2>Einstellungen zum Sofort-Druck
 <p>
 <itemize>
-<item><bf/Program:/ sets the printing program to be used for printing: a2ps, enscript or lpr
-<item><bf/Printer:/ sets the printer to be used for printing
-<item><bf/Output location:/ for printing into a file, select the output location
-<item><bf/Orientation:/ sets the orientation for printing, either landscape or portrait
-<item><bf/Copy:/ sets the amount of copies to be made per page
-<item><bf/Paper Size:/ sets the paper size to be used
-<item><bf/Output Format:/ for using enscript as printing program, you can choose between postscript or html printing
-<item><bf/Default Printsettings:/ sets the default settings to use for printing
-<item><bf/Outprinting:/
+<item><bf/Programm:/ das zu verwendende Druckprogramm: a2ps, enscript oder lpr
+<item><bf/Drucker:/ den zu verwendenden Drucker
+<item><bf/in Datei drucken:/ Ausgabe in Datei umleiten
+<item><bf/Papierformat:/ Papierformat in Hochformat oder Querformat verwenden
+<item><bf/Kopieren:/ Seiten beim Ausdruck kopieren
+<item><bf/Ausgabemedium:/ zu verwendende Papiergröße
+<item><bf/Ausgabeformat:/ Druck in HTML oder Postscript ausgeben
+<item><bf/Stadardeinstellungen:/ Standardeinstellugen zur Druckausgabe
+<item><bf/Ausgabe:/
   <itemize>
-  <item><bf/Page Printing:/ sets one or two pages on one sheet
-  <item><bf/Pages:/ select all,odd or even for using enscript
-  <item><bf/Pretty Print:/
+  <item><bf/Seitendruck:/ eine oder zwei Seiten pro Blatt
+  <item><bf/Seiten:/ Auswahl von geraden, ungeraden oder allen Seiten bei Verwendung von enscript
+  <item><bf/Schöndruck:/
     <itemize>
-    <item><bf/pretty-print:/ enables pretty-print mode for enscript
-    <item><bf/color:/ use color printing
-    <item><bf/Pretty Print Mode:/ sets the printing mode dependend on your file format
+    <item><bf/Schöndruck:/ Schöndruckmodus bei Verwendung von enscript
+    <item><bf/Farbe:/ Farbdarstellung beim Ausdruck verwenden
+    <item><bf/Schöndruckmodus:/ Schöndruckmodus in Abhängigkeit vom Dateiformat
     </itemize>
   </itemize>
 </itemize>
 
 <sect2>Dateiauswahl
 <p>
-The file selection dialog is accessed by the "Files" button on the printing dialog. The file selection allows specifying which files to
-print out by certain criterias:
+Den Dateiauswahldialog erreichen Sie über die Schaltfläche "Dateien" im Druckdialog. Die Dateiauswahl erlaubt die Angabe der zu
+druckenden Dateien nach speziellen Kriterien:
 <itemize>
-<item><bf/File Selection:/
+<item><bf/Datei-Auswahl:/
   <itemize>
-  <item><bf/current:/ the currently opened file visible in the editing window
-  <item><bf/all in project:/ all files included in the project currently opened
-  <item><bf/self chosen files:/ allows choosing the files to be printed by file-selection
-  <item><bf/all cpp files:/ prints out all source files of the project
-  <item><bf/all headers:/ prints out all header files of the project
-  <item><bf/changed files:/ allows specifying files that are changed in a timespan:
+  <item><bf/Aktuelle:/ die gerade sichtbare Datei im Editor
+  <item><bf/Alle im Projekt:/ alle Projektdateien ausgeben
+  <item><bf/Selbstgewählte Dateien:/ erlaubt Auswahl von Dateien zum Ausdruck
+  <item><bf/Alle Headers:/ druckt alle Headerdateien des Projekts
+  <item><bf/Alle cpp Dateien:/ druckt alle Implementierungsdateien des Projekts
+  <item><bf/Geänderte Dateien:/ erlaubt die Angabe eines Zeitraumes für die Dateiauswahl
   </itemize>
-<item><bf/Changed Files:/
+<item><bf/Geänderte Dateien:/
   <itemize>
-  <item><bf/Between:/ specifies all files changed after:
+  <item><bf/Zwischen:/ druckt alle Dateien nach:
     <itemize>
-    <item><bf/Date:/ the date the files were changed
-    <item><bf/Time:/ the time the files were changed
+    <item><bf/Datum:/ diesem Datum geändert
+    <item><bf/Zeit:/ dieser Uhrzeit geändert
     </itemize>
-  <item><bf/And:/ specifies all files changed before:
+  <item><bf/Und:/ druckt alle Dateien vor:
     <itemize>
-    <item><bf/Date:/ the date the files were changed
-    <item><bf/Time:/ the time the files were changed
+    <item><bf/Datum:/ diesem Datum geändert
+    <item><bf/Zeit:/ dieser Uhrzeit geändert
     </itemize>
   </itemize>
-  <item><bf/Self Chosen Files:/ available if self chosen files is selected (see above)
+  <item><bf/Selbstgewählte Dateien:/ verfügbar, falls selbstgewälte Dateien verwendet wird
   <itemize>
-  <item><bf/add:/ press this to add a file selected for printing in the lineedit field left
-  <item><bf/delete:/ deletes a selected file from the printing list
-  <item><bf/clear:/ clears the printing list
+  <item><bf/Hinzufügen:/ fügt die im Editierfeld links eingestellte Datei der Dateiauswahl hinzu
+  <item><bf/Entfernen:/ entfernt eine markierte Datei aus der Druckauswahl
+  <item><bf/Löschen:/ löscht die Druckauswahl-Liste
   </itemize>
 </itemize>
 
 <sect2>Druckvorschau
 <p>
-Print Preview is available for you to control how the output will look like. Therefore, KDevelop uses the program <em/ghostview/ or
-<em/kghostview/. When the preview-button was pressed on either printing dialog, you will be presented a template output that shows you
-the effect of the currently set options.
+Die Druckvorschau steht Ihnen zur Verfügung, um die Ausgabe zu kontrollieren. Zur Vorschau selbst verwendet KDevelop entweder
+<em/ghostview/ oder <em/kghostview/. Wenn Sie die Schaltfläche "Vorschau" betätigen, wird Ihnen eine Schablone anzeigen, wie die
+Ausgabe durch die aktuellen Einstellungen aussehen wird.
+
 
 <chapt>Projekte<label id="Projekte">
 <p>
@@ -2194,79 +2194,121 @@ the effect of the currently set options.
 
 <sect1>Programme
 <p>
-KDevelop creates a projectfile with the .kdevprj ending. This file contains all your project information, so be careful not to
-delete it. It is stored in the project's base directory and has to be opened to load the project. The projectfile keeps all
-information for your files like the file properties, install path, distribution status and compiler options (CXXFLAGS). Setting
-file properties allows you to keep track of where the files should go.
+KDevelop erzeugt standardmäßig Projektdateien mit der Dateierweiterung .kdevprj. Diese Datei enthält alle Projektinformationen, sodaß
+Sie vorsichtig sein sollten, sie nicht zu löschen. Die Datei wird im Hauptverzeichnis des Projekts gespeichert und muß zum Laden des
+Projekts geöffnet werden. Die Projektdatei enthält alle Informationen ihrer Dateien wie Dateieigenschaften, Installationspfade,
+Distributionsstatus und die Compileroptionen (CXXFLAGS). Das Setzen von Dateioptionen erlaubt Ihnen anzugeben, wohin die Dateien
+installiert werden sollen.
 
-With KAppWizard, you can create a new application project according to your choice of application type. For now, KAppWizard
-generates three kinds of fram applications, as:
+Mit dem KAppWizard können Sie ein neues Applikationsprojekt nach dem gewünschten Typ anlegen. Zur Zeit generiert der KAppWizard vier
+verschiedene Arten von Rahmenapplikationen:
 
 <itemize>
-<item>a single document interface (SDI) <idx/KDE/-application including a menubar, a toolbar and a statusbar. It contains basic control
-resource management to allow extending the frame application into a unique <idx/KDE/ application. The application frame also
-contains statusbar help messages as known from commercial products just like KDevelop itself. From the programmer's point of view,
-it is based on three application-specific classes leaning on the MVC-concept (Model-View-Controller). Technically, the base
-classes may not be viewed that way, but it's construction is at least created most logical to create applications with a GUI.
+<item>eine SDI-(Single Document Interface, Einzeldokument-Schnittstelle) KDE-Applikation inklusive Menüleiste, Werkzeugleiste und
+Statuszeile. Dieser Typ enthält alle Elemente zur einfachen Erweiterung zu einer vollständigen KDE-Applikation. Der Programmrahmen
+verwendet bereits Statuszeilen-Hilfenachrichten, wie sie aus kommerziellen Produkten bekannt sind und wie auch KDevelop sie verwendet.
+Aus Sicht des Programmierers ist dieses Rahmenprogramm an das MVC (Modell-Ansicht-Controller) Konzept durch Aufteilung des Codes in
+drei Klassen ausgelegt. Dieser Applikationstyp bietet bereits eine logische Strukturierung zur Erstellung von Anwendungen mit einer
+graphischen Benutzerschnittstelle.
 
-<item>a <idx/KDE/-based application frame window. This application type offers most flexibility to those wanting to develop their
-program from scratch, but can also be used as a basis for developing wizard applications or modules.
+<item>eine KDE-basiertes Rahmenprogramm. Dieser Applikationstyp bietet die größte Flexibilität für diejenigen, die ihr Programm von
+Grund auf entwickeln möchten, kann aber auch als Ausgangspunkt von Wizards und Modulen verwendet werden.
 
-<item>a Qt-only based program framework. For those programmers who want to use the Qt library as the GUI interface alone, we
-tried to offer you a smart framework to support your application development. As Qt programming is fully supported, you should
-have no problems to create a full-functional application by using Qt only.
+<item>ein rein Qt-basiertes Rahmenprogramm. Für Entwickler, die nur die Qt-Bibliothek als graphische Benutzerschnittstelle verwenden
+möchten, bieten wir dieses intelligente Rahmenprogramm, um die Applikationsenwicklung zu vereinfachen. Da die Qt-Programmierung
+vollständig unterstützt wird, sollten Sie keine Probeme bei der Erstellung vollständiger, rein Qt-basierter Applikation haben.
 
-<item>a C++ program framework. This application type is intended for those wanting to write a terminal based C++ program. Just
-remove the "Hello World" line in main() and construct your classes the same way with KDevelop as for <idx/KDE/ applications.
-</itemize>
-For importing existing applications, we suggest using the New Project option. Select "Project" from the menubar and select "New".
-The New Project dialog offers creates a project directory and subdirectories as well as the project file with the project name and
-type. We advise copying all needed creation files like configure.in, Makefile.am's etc. into the project directory from your
-existing project and choose "Project"&rarr"Add file(s)"&rarr"Add existing file(s)" to copy the sources into your new project directory.
-Note that your Makefile.am's will be changed by KDevelop and you probably will have to change or delete some entries to provide
-clean compilation. You should not edit the KDevelop write area, instead you should read the entries made by KDevelop and delete
-matching titles created yourself. Also note that only one project is supported to work on at the moment, so your source files
-should be in the project's subdirectory which has the same name as the main project directory. In the Logical File Viewer the
-groups have to be set by yourself if you chose to use that importing possibility. Another way could be to create a frame
-application and delete the created source and header files. Then you can add existing files as above.
-
-<sect1>Bibliotheken
-<p>
-
-This type of project isn't supported at the moment. This will be another feature planned to be integrated in later versions of
+<item>ein C++ Rahmenprogramm. Dieser Applikationstyp ist für die Entwickler gedacht, die ein Terminal-basiertes C++ Programm schreiben
+möchten. Enfernen Sie einfach die Zeile mit "Hello World" in der main()-Funktion und konstruieren Sie Ihre Klassen wie gewöhnlich mit
 KDevelop.
 
-<sect1>Mehrere Zielobjekte
+<item>ein C-Rahmenprogramm. Dieser Programmtyp ist auf das Vorhandensein eines C-Compilers beschränkt.
+</itemize>
+
+
+Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
+configure and Makefiles. As far as the execution and the build-process is concerned, the current state only allows the same structure
+as for the other baseclasses. Create a custom project with the application wizard and add your files to the project to allow scanning
+by the classbrowser.
+
+To ensure the buildprocess, your custom project has to have all sources in a subdirectory matching the lowecase name of your project;
+the execution of the binary is also restricted to this lowercase project name.
+
+Mind that KDevelop does not write any information into Makefiles or configuration files. You ar responsible for any project behavoir
+and buildsettings yourself.
+
+<sect1>Libraries
+<p>
+A general project-type to create libraries is not available at the moment. Anyway, building libraries is not impossible with KDevelop.
+Here are a few guidelines and workarounds:
+
+<itemize>
+<item>Whenever your project subdirectory gets another subdirectory that contains source files, KDevelop will build a static library of
+these. That means static libraries are already supported by automatic creation in order to sort project sourcefiles.
+Mind that the static library is part of the binary later and won't get installed.
+<item>to create a shared library, you have the option to create another project subdirectory. The sourcefiles that are created in this
+subdirectory are included in the project and are therefore available in the classviewer as root classes. To create the shared library,
+the <htmlurl url="programming-15.html" name="KDevelop Programming Handbook"> offers a Makefile.am template. If the subdirectory's
+Makefile is added to the configure.in script, you only have to run "Autoconf and automake" and "Configure" to create the Makefiles. The
+build instead is only possible from a make-command within the subdirectory, as KDevelop invokes the build from within the original
+project subdirectory. Another possibility to create shared libraries is changing the Makefile.am of the original projectsubdirectory
+according to the template in the Programming Handbook by hand following the rules for project modifications explained in chapter <ref
+id="Project Hacking" name="Project Hacking">.
+<item>for installing a shared library, you have to watch the KDE-Filesystem Standard as explained in <htmlurl url="programming-13.html"
+name="The KDevelop Programming Handbook">
+</itemize>
+
+<sect1>Multiple Targets
 <p>
 
 For some projects, the facilities of KDevelop at it's current state will not last. Those are projects that include multiple
-targets like packages containing several applications. As commands like "Execute" or the Class Browser require that only one
-target is build by the developer, those types of projects are only supported in the way that you have to write your own entries to
-the Makefiles and build your directories for the additional libraries or binaries to build. Nevertheless, a build-process always
-invokes your make-program independent from what actually the targets are; so these functions still can be used.
+targets like packages containing several applications. As commands like "Execute" require that only one target is build by the
+developer, those types of projects are only supported in the way that you have to write your own entries to the <idx/Makefile.am/'s and
+creating your directories for the additional libraries or binaries to build. Nevertheless, a build-process always invokes your
+make-program independent from what actually the targets are; so these functions still can be used (with the restriction that the build
+is invoked from the main project subdirectory).
 
-Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move
-their subdirectories in conjunction with the project files to the directory containing all sources later. Then you could load each
-target independently by its project file; this also allows executing and debugging the target.
+Another way to still work with this type and to still have access to the binaries themselves are creating empty projects and move their
+subdirectories in conjunction with the <idx/project files/ to the directory containing all sources later. Then you could load each
+target independently by its project file; this also allows executing and <idx/debugging/ the target.
+
+Multiple binaries or libraries within the main project subdirectory are possible with following the rules explained in section <ref
+id="Project Hacking" name="Project Hacking"> and the following guidelines for editing the main project's subdirectory Makefile.am (all
+modifications outside the KDevelop write area):
+
+<itemize>
+<item>add your target to the bin_PROGRAMS if it is an executable
+<item>add your library declaration line if it is a shared library
+<item>add the same declarations like the original project binary is build:
+	<itemize>
+	<item>newtarget_METASOURCES
+	<item>newtarget_LD_FLAGS
+	<item>DISTCLEANFILES
+	<item>copy the messages: entry for the original binary and replace target_SOURCES with newtarget_SOURCES, target.pot with
+newtarget.pot
+	</itemize>
+<item>add your sources like the KDevelop write area contains outside the write area for your binary or library
+<item>for installing static libraries, create the library with KDevelop's autocreation inside subdirectories. Then modify the
+Makefile.am outside the write area according to the needed settings
+</itemize>
 
 <sect>Neue Projekte
 <p>
 
-The KDevelop Application Wizard allows the creation of four different types of projects, constructing a
-framework for each. All projects are FSF-compliant and use the GNU standard development tools as described in the requirements
-section of this handbook. For <idx/KDE/ applications, the wizard offers two different frameworks, the <idx/KDE/-Application, providing
-a complete application with base classes for document type, view and application. This includes the creation of a menubar, toolbar
-and statusbar, the mainwindow inherits the KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This
-type of project can be used for the creation of small desktop tools or other simple applications without too much change on the
-existing code provided by the framework. A Qt-Application offers the creation of a <idx/Qt/-only program if you wish no dependencies
-towards the KDE-libraries for end-users. (NOTE: The configure script still checks for the <idx/KDE-libraries/.  This will be fixed in
-the next version of KDevelop).	
-The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar
+The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each. All
+projects use the GNU standard development tools as described in the requirements section of this handbook. For <idx/KDE/ applications,
+the wizard offers two different frameworks, the <idx/KDE/-Application, providing a complete application with base <idx/classes/ for
+document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
+KTMainWindow class. The <idx/KDE/-Mini-Application only gives a view which is empty. This type of project can be used for the creation
+of small desktop tools or other simple applications without too much change on the existing code provided by the framework. A
+Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the <idx/KDE-libraries/ for end-users.
+The Qt-Application also is created by using tree base <idx/classes/ like the KDE-standard-Application and provides a menubar, toolbar
 and statusbar.
 
 The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
-"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
-first or for those working on commandline programs written in C++ or C.
+"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a <idx/GUI/
+first or for those working on commandline programs written in C++ or C. C programmers can also take advantage of the C-only project,
+which requires any C-compiler at the minimum.
 
 The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name and
 Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the
@@ -2397,7 +2439,7 @@ all done by KDevelop automatically.
 
 For more information about internationalization support, see <htmlurl url="http://www.kde.org" name="http://www.kde.org">; a lot
 of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
-could write to and who will help you with this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl
+could write to and who will help you with this. Also read <ref id="Der Dialogeditor" name="Der Dialogeditor"> and <htmlurl
 url="programming-11.html" name="The KDevelop Programming Handbook"> where questions about internationalization are covered again.
 
 <sect1>Extending the Project Documentation<label id="Extending the Project Documentation">
@@ -2610,7 +2652,7 @@ the base class, but with a type signature that doesn't match any virtual functio
 
 For a release of your project, it is recommended to enable <bf/-Wall/.
 
-<sect>Linker Options<label id="Linker Options">
+<sect>Linker-Einstellungen<label id="Linker-Einstellungen">
 <p>
 The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
 libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
@@ -2685,7 +2727,7 @@ the Makefiles.
 means that the file will be processed by make and compiled if it is a source file.
 <tag/additional options/ set additional options to make; those can be found in your local man page for "GNU Make". </descrip>
 
-<chapt>Der Klassen-Browser<label id="Der Klassen-Browser">
+<chapt>Der Klassenbrowser<label id="Der Klassenbrowser">
 <p>
 <sect>Die Klassenansicht
 <p>
@@ -2696,7 +2738,7 @@ Klassenansicht und weitere Funktionen verwenden und wie Sie Ihre Arbeit vereinfa
 
 Klassen und deren Methoden können Sie ebenfalls über die Browser-Werkzeugleiste auswählen. Dort befinden sich in der linken Combobox
 die Klassen, in der rechten können Sie die zugehörigen Methoden auswählen. Wenn Sie eine Methode gewählt haben, wird Sie der
-Klassen-Browser automatisch zur Implementationsdatei bringen und den Cursor an die Methode setzen. Schließlich bietet Ihnen die
+Klassenbrowser automatisch zur Implementationsdatei bringen und den Cursor an die Methode setzen. Schließlich bietet Ihnen die
 Schaltfläche des Klassenassistenten rechts der Methoden-Combobox an, Sie beim ersten betätigen zur Deklaration der Methode zu bringen;
 bei einer weiteren Betätigung wieder zurück zur Definition. Das verzögerte Popup-Menü, das durch den Abwärtspfeil dargestellt wird,
 bietet zusätzliche Funktionen, die ebenfalls in den Kontextmenüs der Klassenansicht zur Verfügung stehen:
@@ -2721,7 +2763,7 @@ Unterordners ebenfalls in Ordnern untergebracht.
 
 Weiterhin zeigt Ihnen der Klassenbaum bei Auswahl einer Klasse den Inhalt nach Methoden und Attributen an. Da diese ebenfalls Attribute
 wie public, private und protected besitzen, werden diese mit leicht geänderten Symbolen angezeit. Sie sehen, das eine Klasse, die im
-Klassen-Browser angezeigt wird, alle Objekte enthält wie sie in der Klassendeklaration erscheinen.
+Klassenbrowser angezeigt wird, alle Objekte enthält wie sie in der Klassendeklaration erscheinen.
 
 Nun, Klassen sind wohl die üblichsten Objekte, wenn man in C++ programmiert und werden den meisten Teil des Codes abdecken. Aber
 Applikationen enthalten auch Elemente, die eine "Globale" Erscheinung im Programm aufweisen. Dies wären Strukturen, Funktionen etc.
@@ -2763,10 +2805,10 @@ dies, das Sie wählen können, wohin Sie wollen:
 <item><bf/Gehe zu Deklaration:/ Wechselt zur Deklaration der Methode oder Funktion
 </itemize>
 
-Mit diesem Verhalten bietet Ihnen der Klassen-Browser unbeschränkten Zugang zu allen Orten, die Sie bei der Programmierung von C++
+Mit diesem Verhalten bietet Ihnen der Klassenbrowser unbeschränkten Zugang zu allen Orten, die Sie bei der Programmierung von C++
 Applikationen benötigen.
 
-Der folgende Abschnitt gibt Ihnen eine Beschreibung der weiteren Werkzeuge, die der Klassen-Browser bietet- Sie werden sie sehr
+Der folgende Abschnitt gibt Ihnen eine Beschreibung der weiteren Werkzeuge, die der Klassenbrowser bietet- Sie werden sie sehr
 nützlich finden, wenn Sie an größeren Projekten arbeiten, da Sie die Idee der Objekt-Orientierten Arbeit an C++ Programmen stark
 erweitern.
 
@@ -2797,7 +2839,7 @@ Weiterhin erlaubt das Klassenwerzeug die sortierte Anzeige nach Modifizeirer-Att
 
 <sect>Handhabung von Klassen
 <p>
-Der Klassen-Browser erlaubt weiterhin das direkte Hinzufügen von Methoden und Attributen zu Klassen über Dialogfelder. Dies bedeutet,
+Der Klassenbrowser erlaubt weiterhin das direkte Hinzufügen von Methoden und Attributen zu Klassen über Dialogfelder. Dies bedeutet,
 das Sie die Klassendeklaration und Implementationskopf nicht mehr selbst eingeben müssen. Nach dem Hinzufügen einer Methode müssen Sie
 lediglich die Formalparameter dem Implementationskopf hinzufügen (falls diese nicht in der Methodendeklaration enthalten sind).
 
@@ -2820,7 +2862,7 @@ das Hinzufügen einer Methode wird die Methdendeklaration und der Implementations
 sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, sodaß Sie nur die Methode anspringen
 müssen, um den auszuführenden Code einzugeben.
 
-<chapt>Der Dialog-Editor<label id="Der Dialog-Editor">
+<chapt>Der Dialogeditor<label id="Der Dialogeditor">
 <p>
 The KDevelop integrated Dialog Editor allows the easy construction of widgets and dialogs your application uses all by graphical means.
 You see the direct appearance of your dialog as it will be presented to the user. Using the dialogeditor is usually the first step you
@@ -3451,6 +3493,15 @@ Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </book>
+
+
+
+
+
+
+
+
+
 
 
 

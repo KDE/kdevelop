@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDE Library Reference Guide: KDE Dialogs</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-7.html">Next</A>
+ <A HREF="kde_libref-5.html">Previous</A>
+ <A HREF="kde_libref.html#toc6">Table of Contents</A>
+</P>
+<H3><A NAME="s6">6. KDE Dialogs</A></H3>
+
+<P>A very useful thing of the KDE libraries is that they provide already constructed dialogs for various purposes that are common to a lot
+of desktop applications. This has two reasons: a) the user feels comfortable using these dialogs if he knows them already from an
+application and b) lessens the programmer's work a lot. In section 
+<A HREF="kde_libref-5.html#Keyboard Accelerators">Keyboard Accelerators</A>, you
+already got to know one of these dialogs that KDE provides to configure keybindings. For the other dialogs that are mostly part of the
+<CODE>kdeui</CODE> library, the usage is mostly as simple as for the <CODE>KKeyDialog</CODE> and enhances applications within seconds of coding
+efforts. You should always first look for an already existing solution for general value requests from the user before starting to
+implement a new dialog from scratch. Further, you don't have to care about internationalization as these dialogs are part of the KDE
+libraries and are already translated.
+<P>
+<H3><A NAME="ss6.1">6.1 KColorDialog</A>
+</H3>
+
+<P>The <CODE>KColorDialog</CODE> provides an easy-to use interface to receive color values from the user. Color values are always requested, if
+the application is a drawing or painting program to select the current brush as well as for e.g. KDevelop's dialogeditor to set color
+values for widgets.
+<P>The usage itself is often combined with a <CODE>KColorButton</CODE>, which is a specific <CODE>QPushButton</CODE> implemented in <CODE>kdeui</CODE> that
+displays a color and calls the <CODE>KColorDialog</CODE> already when the user presses the button. Anyway, you can call the color dialog from
+your menubar or toolbar as well to retrieve a color value from the user.
+<P>Using the colordialog is very easy inside applications. The class provides a static method which can be called to retrieve the color
+value:
+<P>
+<HR>
+<PRE>
+#include &lt;kcolordlg.h&gt;
+
+
+QColor myColor;
+
+int result = KColorDialog::getColor( myColor );
+</PRE>
+<HR>
+<P>This creates an instance of QColor to store a color value and by calling the static method <CODE>getColor()</CODE> the color gets the selected
+value. The returned integer value will probably be of no interest- it's the result code of <CODE>QDialog</CODE> that specifies the dialog has
+been exited via the OK or Cancel button.
+<P>
+<H3><A NAME="ss6.2">6.2 KWizard</A>
+</H3>
+
+<P>The <CODE>KWizard</CODE> class already contains a predefined dialog to construct wizards that lead the user through an input process. Thereby,
+the wizard dialog provides the necessary buttons and draws the according page numbers already, so that you only have to construct your
+widgets you want to use as the single pages for the dialog and insert them in the order you want the user to proceed while calling the
+wizard.
+<P>
+<P>
+<H3><A NAME="ss6.3">6.3 KFontDialog</A>
+</H3>
+
+<P>The <CODE>KFontDialog</CODE> will retrieve you a value for a font currently avaliable on the system. Therefore using the fontdialog will mostly
+only make sense where you will need a font; the most recent usage is made by text editors but could be used to draw text inside a
+widget as well as into a picture.
+<P>
+<P>
+<H3><A NAME="ss6.4">6.4 KIconLoaderDialog</A>
+</H3>
+
+<P>For applications requiring an icon selection, KDE provides the <CODE>KIconLoaderDialog</CODE>. The main purpose is to select an icon on the
+system to draw it on a button for example. Usage is made by the KDE windowmanager to select the icons for mounted/unmounted states of
+device links. Then the values for the link are displayed on the according button to display the current selection; the filenames get
+stored in the link file and can be drawn on the desktop as a symbol by loading the icons dependent on the state of the connected
+device.
+<P>
+<H3><A NAME="ss6.5">6.5 KMsgBox</A>
+</H3>
+
+<P>The <CODE>KMsgBox</CODE> class provides a whole set of message boxes that match everyday life usage in applications. Using KMsgBox has a lot of
+advantages: you can use one of the static methods to retrieve results on standard questions and you can still influence the behavoir by
+setting text, window text, symbol and button text.
+<P>
+<UL>
+<LI>message(): providing a single message box with an OK button to inform the user</LI>
+<LI>yesNo(): provides a yes/no question box.</LI>
+<LI>yesNoCancel(): provides a yes/no/cancel box with three buttons. Used e.g. to quit an application with the question: Document has
+been modified. Would you like to save changes ?. Then the yes-button would mean saving changes and exiting the application, no would
+mean exit without saving and cancel would stop any exiting and just returns.</LI>
+</UL>
+<P>If this doesn't match your actual need, you could as well create a new KMsgBox instance that can have up to four buttons. This can be
+used by applications that have multiple open files but don't want the user to ask if he would like to save changes for each file
+separately; therefore these will need a button "Save All" or something. Then you could program the dialog towards your needs like the
+static methods and will receive the correct result.
+<P>As usual with dialogs, the return value is that what a programmer usually has to process by retrieving it into a variable and then
+compare with <CODE>if()</CODE> for the actions to execute.
+<P>
+<H3><A NAME="ss6.6">6.6 KFileDialog</A>
+</H3>
+
+<P>The <CODE>KFileDialog</CODE> class provides four static methods to ask the user for a filename. As the filedialog itself can handle the
+creation of new folders, storing bookmarks etc, the user will be thankful if you use this dialog to ask for a filename to open and a
+filename to save files to.
+<P>
+<P>
+<H3><A NAME="ss6.7">6.7 KSpellDlg</A>
+</H3>
+
+<P>
+<P>(kspell) spellchecking dialog for use with ISpell
+<P>
+<H3><A NAME="ss6.8">6.8 DatePickerDialog</A>
+</H3>
+
+<P>
+<P>(kab) date selection dialog
+<P>
+<H3><A NAME="ss6.9">6.9 Qt Dialogs</A>
+</H3>
+
+<P>
+<P>
+<H4>QFileDialog</H4>
+
+<H4>QMessageBox</H4>
+
+<H4>QPrintDialog</H4>
+
+<H4>QProgressDialog</H4>
+
+<P ALIGN="RIGHT">
+
+<A HREF="kde_libref-7.html">Next</A>
+ <A HREF="kde_libref-5.html">Previous</A>
+ <A HREF="kde_libref.html#toc6">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
