@@ -1,3 +1,5 @@
+SUBDIRS = tutorial welcome
+
 EXTRA_DIST = tip.database
 
 install-data-local:
