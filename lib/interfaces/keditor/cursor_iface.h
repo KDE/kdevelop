@@ -25,14 +25,16 @@ public:
   virtual int numberOfLines() const = 0;
   virtual int lengthOfLine(int line) const = 0;
 
+  static CursorDocumentIface *interface(Document *doc);
+
 
 signals:
 
-  void cursorPositionChanged(int line, int col);
+  void cursorPositionChanged(KEditor::Document *doc, int line, int col);
 
 
 private slots:
-	   
+       
   void slotGotoLine();
 
 

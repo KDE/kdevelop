@@ -25,18 +25,21 @@ public:
 
   virtual bool copyAvailable() = 0;
 
+  static ClipboardDocumentIface *interface(KEditor::Document *doc);
+
+
 signals:
 
-  void copyAvailable(bool available);
+  void copyAvailable(KEditor::Document *doc, bool available);
 
 
 public slots:
-		 
+         
   void clipboardChanged();
  
  
 private slots:
-		 
+         
   void slotCopy();
   void slotCut();
   void slotPaste();

@@ -15,7 +15,7 @@ class KAction;
 
 
 namespace KEditor {
-		
+        
 
 class Editor;
 
@@ -33,7 +33,7 @@ class Editor;
 class Document : public KParts::ReadWritePart
 {
   Q_OBJECT
-  		
+          
 public:
  
   /**

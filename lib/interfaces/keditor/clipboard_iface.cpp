@@ -13,10 +13,7 @@
 #include "clipboard_iface.h"
 
 
-using namespace KEditor;
-
-
-ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)  : DocumentInterface(parent, editor)
+KEditor::ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)  : KEditor::DocumentInterface(parent, editor)
 {
   _cutAction = KStdAction::cut(this, SLOT(slotCut()), parent->actionCollection(), "edit_cut");
   _copyAction = KStdAction::copy(this, SLOT(slotCopy()), parent->actionCollection(), "edit_copy");
@@ -26,7 +23,7 @@ ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)
   _copyAction->setEnabled(false);
 
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardChanged()));
-  connect(this, SIGNAL(copyAvailable(bool)), this, SLOT(clipboardChanged()));
+  connect(this, SIGNAL(copyAvailable(KEditor::Document*,bool)), this, SLOT(clipboardChanged()));
 
   // set the initial state of the paste action
   //
@@ -38,7 +35,7 @@ ClipboardDocumentIface::ClipboardDocumentIface(Document *parent, Editor *editor)
 }
 
 
-void ClipboardDocumentIface::clipboardChanged()
+void KEditor::ClipboardDocumentIface::clipboardChanged()
 {
   QString text = QApplication::clipboard()->text();
   _pasteAction->setEnabled(!text.isEmpty());
@@ -48,21 +45,27 @@ void ClipboardDocumentIface::clipboardChanged()
 }
 
 
-void ClipboardDocumentIface::slotCut()
+void KEditor::ClipboardDocumentIface::slotCut()
 {
   (void) cut();
 }
 
 
-void ClipboardDocumentIface::slotCopy()
+void KEditor::ClipboardDocumentIface::slotCopy()
 {
   (void) copy();
 }
 
 
-void ClipboardDocumentIface::slotPaste()
+void KEditor::ClipboardDocumentIface::slotPaste()
 {
   (void) paste();
+}
+
+
+KEditor::ClipboardDocumentIface *KEditor::ClipboardDocumentIface::interface(KEditor::Document *doc)
+{
+  return static_cast<KEditor::ClipboardDocumentIface*>(doc->queryInterface("KEditor::ClipboardDocumentIface"));
 }
 
 

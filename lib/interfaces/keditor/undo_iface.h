@@ -25,11 +25,13 @@ public:
   virtual bool undoAvailable() = 0;
   virtual bool redoAvailable() = 0;
 
+  static UndoDocumentIface *interface(Document *doc);
+
 
 signals:
 
-  void undoAvailable(bool available);
-  void redoAvailable(bool available);
+  void undoAvailable(KEditor::Document *doc, bool available);
+  void redoAvailable(KEditor::Document *doc, bool available);
   
 
 private slots:

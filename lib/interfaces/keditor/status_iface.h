@@ -6,7 +6,7 @@
 
 
 namespace KEditor {
-		
+        
 
 class StatusDocumentIface : public KEditor::DocumentInterface
 {
@@ -19,11 +19,13 @@ public:
   virtual bool modified() = 0;
   virtual QString status() = 0;
 
+  static StatusDocumentIface *interface(Document *doc);
+
 
 signals:
 
-  void statusChanged();
-  void message(const QString &text);
+  void statusChanged(KEditor::Document *doc);
+  void message(KEditor::Document *doc, const QString &text);
 
 };
 

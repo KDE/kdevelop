@@ -34,6 +34,8 @@ public:
   virtual bool setLine(const QString &text, uint line) = 0;
   */
 
+  static EditDocumentIface *interface(Document *doc);
+
 };
 
 

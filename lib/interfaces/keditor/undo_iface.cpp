@@ -4,42 +4,47 @@
 
 
 #include "editor.h"
+
+
 #include "undo_iface.h"
 
 
-using namespace KEditor;
-
-
-UndoDocumentIface::UndoDocumentIface(Document *parent, Editor *editor)
-  : DocumentInterface(parent, editor)
+KEditor::UndoDocumentIface::UndoDocumentIface(Document *parent, Editor *editor)
+  : KEditor::DocumentInterface(parent, editor)
 {
   _undoAction = KStdAction::undo(this, SLOT(slotUndo()), parent->actionCollection(), "edit_undo");
   _redoAction = KStdAction::redo(this, SLOT(slotRedo()), parent->actionCollection(), "edit_redo");
 
-  connect(this, SIGNAL(undoAvailable(bool)), this, SLOT(undoChanged()));
-  connect(this, SIGNAL(redoAvailable(bool)), this, SLOT(undoChanged()));
+  connect(this, SIGNAL(undoAvailable(KEditor::Document*,bool)), this, SLOT(undoChanged()));
+  connect(this, SIGNAL(redoAvailable(KEditor::Document*,bool)), this, SLOT(undoChanged()));
 
   _undoAction->setEnabled(false);
   _redoAction->setEnabled(false);
 }
 
 
-void UndoDocumentIface::undoChanged()
+void KEditor::UndoDocumentIface::undoChanged()
 {
   _undoAction->setEnabled(undoAvailable());
   _redoAction->setEnabled(redoAvailable());
 }
 
 
-void UndoDocumentIface::slotUndo()
+void KEditor::UndoDocumentIface::slotUndo()
 {
   (void) undo();
 }
 
 
-void UndoDocumentIface::slotRedo()
+void KEditor::UndoDocumentIface::slotRedo()
 {
   (void) redo();
+}
+
+
+KEditor::UndoDocumentIface *KEditor::UndoDocumentIface::interface(KEditor::Document *doc)
+{
+  return static_cast<KEditor::UndoDocumentIface*>(doc->queryInterface("KEditor::UndoDocumentIface"));
 }
 
 

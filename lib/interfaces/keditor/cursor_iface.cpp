@@ -10,17 +10,14 @@
 #include "gotoline.h"
 
 
-using namespace KEditor;
-
-
-CursorDocumentIface::CursorDocumentIface(Document *parent, Editor *editor)
-  : DocumentInterface(parent, editor)
+KEditor::CursorDocumentIface::CursorDocumentIface(Document *parent, Editor *editor)
+  : KEditor::DocumentInterface(parent, editor)
 {
   KStdAction::gotoLine(this, SLOT(slotGotoLine()), parent->actionCollection(), "go_goto_line");
 }
 
 
-void CursorDocumentIface::slotGotoLine()
+void KEditor::CursorDocumentIface::slotGotoLine()
 {
   GotoLineDlg dlg(0, "goto_dialog", true);
 
@@ -34,9 +31,15 @@ void CursorDocumentIface::slotGotoLine()
   dlg.LineNumber->setValue(line);
   
   if (dlg.exec() != QDialog::Accepted)
-	return;
+    return;
   
   setCursorPosition(dlg.LineNumber->value(), 0);
+}
+
+
+KEditor::CursorDocumentIface *KEditor::CursorDocumentIface::interface(KEditor::Document *doc)
+{
+  return static_cast<KEditor::CursorDocumentIface*>(doc->queryInterface("KEditor::CursorDocumentIface"));
 }
 
 
