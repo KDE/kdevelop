@@ -614,8 +614,9 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
 {
   CParsedAttribute *anAttr;
   CParsedArgument *anArg;
+  bool exit = false;
 
-  while( lexem != ')' && lexem != 0 )
+  while( !exit )
   {
     // Get the variable
     anAttr = parseVariable();
@@ -635,7 +636,10 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
       delete anAttr;
     }
 
-    if( lexem == ',' )
+    // Loop while we find ,
+    exit = !(lexem == ',');
+
+    if( !exit )
       getNextLexem();
   }
 }
