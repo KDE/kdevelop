@@ -42,3 +42,4 @@ servicepics_DATA = kdev_cvs.png
 rcdir = $(kde_datadir)/kdevcvsservice
 rc_DATA = buildcvs.sh
 
+SUBDIRS = integrator
