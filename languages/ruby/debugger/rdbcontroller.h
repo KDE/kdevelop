@@ -121,8 +121,8 @@ public slots:
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
     void slotSetLocalViewState(bool onOff);
     void slotSetGlobalViewState(bool onOff);
-    void slotAddWatchVariable(const QString& expr, bool execute);
-	void slotRemoveWatchVariable(int displayId);
+    void slotAddWatchExpression(const QString& expr, bool execute);
+	void slotRemoveWatchExpression(int displayId);
 
     // type determination requires a var object, so we do it here
     void slotVarItemConstructed(VarItem *item);
@@ -141,7 +141,7 @@ protected slots:
 signals:
     void acceptPendingBPs     ();
     void unableToSetBPNow     (int BPNo);
-    void addWatchVariable     (const QString&);
+    void addWatchExpression     (const QString&);
 
 private:
     FramestackWidget* frameStack_;

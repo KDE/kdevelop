@@ -34,7 +34,7 @@ namespace RDBDebugger
 
 class Breakpoint;
 class DbgCommand;
-class TrimmableItem;
+class LazyFetchItem;
 class VarItem;
 
 /***************************************************************************/

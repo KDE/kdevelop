@@ -331,7 +331,7 @@ void RDBController::actOnProgramPause(const QString &msg)
         // and we must reset the active flag
         viewedThread_ = currentThread_;
         currentFrame_ = 1;
-        varTree_->setActiveFlag();
+        varTree_->nextActivationId();
         backtraceDueToProgramStop_ = true;
         
         // These two need to be actioned immediately. The order _is_ important
@@ -350,7 +350,7 @@ void RDBController::actOnProgramPause(const QString &msg)
             queueCmd(new RDBCommand("var local", NOTRUNCMD, INFOCMD));
         }
 
-		varTree_->watchRoot()->setActive();
+		varTree_->watchRoot()->setActivationId();
 		        
 		emit acceptPendingBPs();
     }
@@ -371,7 +371,7 @@ void RDBController::programNoApp(const QString &msg, bool msgBox)
     // and we must reset the active flag
     viewedThread_ = -1;
     currentFrame_ = 1;
-    varTree_->setActiveFlag();
+    varTree_->nextActivationId();
 
     // Now wipe the tree out
     varTree_->viewport()->setUpdatesEnabled(false);
@@ -412,7 +412,7 @@ void RDBController::parseProgramLocation(char *buf)
 			sourceFile = sourcepos_re.cap(1);
 			sourceLine = sourcepos_re.cap(2).toInt();
     	} else if (display_re.search(line, 0) >= 0) {
-			varTree_->watchRoot()->updateWatchVariable(display_re.cap(1).toInt(), display_re.cap(2));
+			varTree_->watchRoot()->updateWatchExpression(display_re.cap(1).toInt(), display_re.cap(2));
 		}
 		
 		line = input.readLine();
@@ -541,7 +541,7 @@ void RDBController::parseFrameSelected(char *buf)
 void RDBController::parseDisplay(char *buf, char * expr)
 {
     varTree_->viewport()->setUpdatesEnabled(false);
-    varTree_->watchRoot()->setDisplay(buf, expr);
+    varTree_->watchRoot()->setWatchExpression(buf, expr);
     varTree_->viewport()->setUpdatesEnabled(true);
     varTree_->repaint();
 }
@@ -557,7 +557,7 @@ void RDBController::parseUpdateDisplay(char *buf)
 	
 	int pos = display_re.search(buf);
 	while (pos != -1) {
-		varTree_->watchRoot()->updateWatchVariable(display_re.cap(1).toInt(), display_re.cap(2));
+		varTree_->watchRoot()->updateWatchExpression(display_re.cap(1).toInt(), display_re.cap(2));
 		
 		pos += display_re.matchedLength();
 		pos = display_re.search(buf, pos);
@@ -1164,7 +1164,7 @@ void RDBController::slotRubyInspect(const QString &inspectText)
 // **************************************************************************
 
 // Add a new expression to be displayed in the Watch variable tree
-void RDBController::slotAddWatchVariable(const QString& expr, bool execute)
+void RDBController::slotAddWatchExpression(const QString& expr, bool execute)
 {
 	queueCmd(new RDBCommand(	QCString().sprintf("display %s", expr.latin1()), 
 								NOTRUNCMD, 
@@ -1177,7 +1177,7 @@ void RDBController::slotAddWatchVariable(const QString& expr, bool execute)
 // **************************************************************************
 
 // Add a new expression to be displayed in the Watch variable tree
-void RDBController::slotRemoveWatchVariable(int displayId)
+void RDBController::slotRemoveWatchExpression(int displayId)
 {
     queueCmd(new RDBCommand(	QCString().sprintf("undisplay %d", displayId), 
 								NOTRUNCMD, 

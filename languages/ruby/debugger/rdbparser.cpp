@@ -67,7 +67,7 @@ RDBParser::~RDBParser()
 
 // **************************************************************************
 
-void RDBParser::parseData(TrimmableItem *parent, char *buf)
+void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 {
     static const char *unknown = "?";
 	
@@ -85,8 +85,8 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
         buf = (char*)unknown;
 	}
 		
-	QRegExp var_re("\\s*([^\n\\s]+) => ([^\n]+)\n");
-	QRegExp ref_re("(#<\\w+:0x[\\da-f]+)\\s*(.*)>");
+	QRegExp var_re("\\s*([^\\n\\s]+) => ([^\\n]+)\\n");
+	QRegExp ref_re("(#<[^:]+:0x[\\da-f]+)\\s*([^=]*)>?");
 	
 	// Look for 'dataitem => value' pairs. For example:
 	// 	a => 1
@@ -119,14 +119,34 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		@sleeper=#<Thread:0x3008fd18 sleep>,
  	//		@temp={"z"=>"zed", "p"=>"pee"}>
 	//
-	QRegExp ppref_re("(#<\\w+:0x[\\da-f]+[^\n>]*)>?\n");
-	QRegExp ppvalue_re("\\s*([^\n\\s=]+)=([^\n]+)[,>]\n");
+	QRegExp ppref_re("(#<[^:]+:0x[\\da-f]+)([^\\n>]*)(>?)");
+	QRegExp ppvalue_re("\\s*([^\\n\\s=]+)=([^\\n]+)[,>]");
 	
 	pos = ppref_re.search(buf);
 	if (pos != -1) {
-		parent->setText(ValueCol, ppref_re.cap(1) + ">");
-		pos  += ppref_re.matchedLength();
-		pos = ppvalue_re.search(buf, pos);
+		if (ppref_re.cap(3) != "" && ppvalue_re.search(ppref_re.cap(2)) != -1) {
+			// The line ends with a '>', but we have this case now..
+			// If there is only one instance variable, pp puts everything
+			// on a single line:
+			//     #<MyClass:0x30094b90 @foobar="hello">
+			// So strip out '@foobar="hello"' from the name, and use it as
+			// the first name=value pair
+			parent->setText(ValueCol, ppref_re.cap(1) + ">");
+			pos = 0;
+		} else {
+			// Either a single line like:
+			//     #<Thread:0x3008fd18 sleep>
+			// Or on multiple lines with name=value pairs:
+			//     #<MyClass:0x30093540
+ 			//		@foobar="hello",
+			parent->setText(ValueCol, QString("%1%2>").arg(ppref_re.cap(1)).arg(ppref_re.cap(2)));
+			pos = ppvalue_re.search(buf, pos);
+			
+			// If there are no name=value pairs, then make the item non-expandable
+			if (pos == -1) {
+				parent->setExpandable(false);
+			}
+		}
 				
 		while (pos != -1) {
 			varName = ppvalue_re.cap(1);
@@ -147,8 +167,8 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		[0]="hello"
  	//		[1]=#"goodbye"
 	//
-	QRegExp array_re("(Array \\(\\d+ element\\(s\\)\\))\n");
-	QRegExp pparray_re("\\s*([^=]+)=([^\n]+)\n");
+	QRegExp array_re("(Array \\(\\d+ element\\(s\\)\\))\\n");
+	QRegExp pparray_re("\\s*([^=]+)=([^\\n]+)\\n");
 	
 	pos = array_re.search(buf);
 	if (pos != -1) {
@@ -173,8 +193,8 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
  	//		"greeting"=>"hello"
  	//		"farewell"=>"goodbye"
 	//
-	QRegExp hash_re("(Hash \\(\\d+ element\\(s\\)\\))\n");
-	QRegExp pphash_re("\\s*([^=\\s]+)=([^\n]+)\n");
+	QRegExp hash_re("(Hash \\(\\d+ element\\(s\\)\\))\\n");
+	QRegExp pphash_re("\\s*([^=\\s]+)=([^\n]+)\\n");
 	
 	pos = hash_re.search(buf);
 	if (pos != -1) {
@@ -197,7 +217,7 @@ void RDBParser::parseData(TrimmableItem *parent, char *buf)
 
 // **************************************************************************
 
-void RDBParser::setItem(TrimmableItem *parent, const QString &varName,
+void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
                         DataType dataType, const QCString &value)
 {
 	VarItem *item = parent->findItemWithName(varName);
@@ -214,21 +234,17 @@ void RDBParser::setItem(TrimmableItem *parent, const QString &varName,
 		// Don't set the name in the value column yet, as it gets
 		// set when the pp command returns with the array or hash
 		// expansion
+        item->setText(ValueCol, "");
         item->setCache(value);
-        item->setExpandable(true);
         break;
 
     case typeReference:
-//        item->setText(ValueCol, value);
+        item->setText(ValueCol, "");
         item->setCache(value);
-		// If there's a comma, there must be a list of things
-		// to expand
-        item->setExpandable(value.contains(','));
         break;
 
     case typeValue:
         item->setText(ValueCol, value);
-        item->setExpandable(false);
         break;
 
     default:

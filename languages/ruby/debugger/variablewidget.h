@@ -35,7 +35,7 @@ class KLineEdit;
 namespace RDBDebugger
 {
 
-class TrimmableItem;
+class LazyFetchItem;
 class VarFrameRoot;
 class GlobalRoot;
 class WatchRoot;
@@ -50,12 +50,12 @@ enum DataType { typeUnknown, typeValue, typeReference,
                 typeName };
 				
 enum RttiValues { 
-	RTTI_WATCH_ROOT		= 1001, 
-	RTTI_GLOBAL_ROOT	= 1002, 
-	RTTI_VAR_FRAME_ROOT	= 1003, 
-	RTTI_TRIMMABLE_ITEM = 1004,
-	RTTI_VAR_ITEM		= 1005,
-	RTTI_WATCH_VAR_ITEM	= 1006
+	RTTI_WATCH_ROOT			= 1001, 
+	RTTI_GLOBAL_ROOT		= 1002, 
+	RTTI_VAR_FRAME_ROOT		= 1003, 
+	RTTI_LAZY_FETCH_ITEM 	= 1004,
+	RTTI_VAR_ITEM			= 1005,
+	RTTI_WATCH_VAR_ITEM		= 1006
 }; 
 		   
 
@@ -75,8 +75,8 @@ protected:
     virtual void focusInEvent(QFocusEvent *e);
 
 public slots:
-    void slotAddWatchVariable();
-    void slotAddWatchVariable(const QString &ident);
+    void slotAddWatchExpression();
+    void slotAddWatchExpression(const QString &expr);
 
 private:
     VariableTree *varTree_;
@@ -92,18 +92,18 @@ private:
 class VariableTree : public KListView, public QToolTip
 {
     Q_OBJECT
-//we need this to be able to emit expandItem() from within TrimmableItem
-friend class TrimmableItem;
+//we need this to be able to emit expandItem() from within LazyFetchItem
+friend class LazyFetchItem;
 
 public:
 	VariableTree( VariableWidget *parent, const char *name=0 );
     virtual ~VariableTree();
 	
-	// Clear everything but the Watch and Global frames
+	// Clear everything but the Watch frame
     void clear();
 
-    int activeFlag() const                { return activeFlag_; }
-    void setActiveFlag()                  { activeFlag_++; }
+    int activationId() const                { return activationId_; }
+    void nextActivationId()                 { activationId_++; }
 
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
 	
@@ -111,8 +111,7 @@ public:
     WatchRoot *watchRoot();
 	
     void resetWatchVars();
-    void setCurrentThread(int currentThread)
-                                        { currentThread_ = currentThread; }
+    void setCurrentThread(int currentThread) { currentThread_ = currentThread; }
 
     // Remove items that are not active
     void trim();
@@ -129,20 +128,19 @@ signals:
     void expandItem(VarItem *item, const QCString &request);
     void localViewState(bool localsOn);
     void globalViewState(bool globalsOn);
-    void addWatchVariable(const QString& expr, bool execute);
-    void removeWatchVariable(int displayId);
-
+    void addWatchExpression(const QString& expr, bool execute);
+    void removeWatchExpression(int displayId);
     void varItemConstructed(VarItem *item);
 
 public slots:
-    void slotAddWatchVariable(const QString& watchVar);
+    void slotAddWatchExpression(const QString& watchVar);
 
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
 
 private:
-    int activeFlag_;
+    int activationId_;
     int currentThread_;
 	
 	WatchRoot *		watchRoot_;
@@ -157,31 +155,25 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class TrimmableItem : public KListViewItem
+class LazyFetchItem : public KListViewItem
 {
 public:
-    TrimmableItem(VariableTree *parent);
-    TrimmableItem(TrimmableItem *parent);
+    LazyFetchItem(VariableTree *parent);
+    LazyFetchItem(LazyFetchItem *parent);
 
-    virtual ~TrimmableItem();
+    virtual ~LazyFetchItem();
 
-	virtual int rtti() const { return RTTI_TRIMMABLE_ITEM; }
+	virtual int rtti() const { return RTTI_LAZY_FETCH_ITEM; }
 	
     virtual void trim();
-    virtual QString name() const         { return text(VarNameCol); }
-    virtual VarItem *findItemWithName(const QString& match) const;
-    int  rootActiveFlag() const;
-	void setActive()                        { activeFlag_ = rootActiveFlag(); }
-    bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
-    QString getValue() const                { return text(ValueCol); }
-    bool isTrimmable() const;
-    void waitingForData ()                  { waitingForData_ = true; }
-
-    virtual void updateValue(char */* buf */);
-    virtual DataType dataType() const;
-
-    virtual void setCache(const QCString& value);
-    virtual QCString cache();
+    virtual VarItem *findItemWithName(const QString& name) const;
+    
+	int  currentActivationId() const        { return ((VariableTree*) listView())->activationId(); }
+	void setActivationId()                  { activationId_ = currentActivationId(); }
+    bool isActive() const                   { return activationId_ == currentActivationId(); }
+    
+	void startWaitingForData ()             { waitingForData_ = true; }
+    virtual void stopWaitingForData()       { waitingForData_ = false; }
 
 protected:
 
@@ -189,7 +181,7 @@ protected:
                     int column, int width, int align );
 
 private:
-    int activeFlag_;
+    int activationId_;
     bool waitingForData_;
 };
 
@@ -197,10 +189,10 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class VarItem : public TrimmableItem
+class VarItem : public LazyFetchItem
 {
 public:
-    VarItem( TrimmableItem *parent, const QString &varName, DataType dataType );
+    VarItem( LazyFetchItem *parent, const QString &varName, DataType dataType );
 
     virtual ~VarItem();
 	
@@ -214,7 +206,7 @@ public:
 
     void updateValue(char *data);
 
-    void updateType();
+    QString typeFromValue(const QString& value);
 
     void setCache(const QCString& value);
     QCString cache();
@@ -234,9 +226,6 @@ private:
     QCString  cache_;
     DataType  dataType_;
     bool      highlight_;
-
-    // the non-cast type of the variable
-    QCString originalValueType_;
 };
 
 /***************************************************************************/
@@ -246,12 +235,13 @@ private:
 class WatchVarItem : public VarItem
 {
 public:
-    WatchVarItem( TrimmableItem *parent, const QString &varName, DataType dataType, int displayId = -1);
+    WatchVarItem( LazyFetchItem *parent, const QString &varName, DataType dataType, int displayId = -1);
 
     virtual ~WatchVarItem();
 	
 	virtual int rtti() const { return RTTI_WATCH_VAR_ITEM; }
 	
+	// The id returned by rdb after a display expression is added
 	void setDisplayId(int id);
 	int displayId();
 	
@@ -263,7 +253,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class VarFrameRoot : public TrimmableItem
+class VarFrameRoot : public LazyFetchItem
 {
 public:
     VarFrameRoot(VariableTree *parent, int frameNo, int threadNo);
@@ -290,14 +280,14 @@ private:
     bool    needLocals_;
     int     frameNo_;
     int     threadNo_;
-    QCString locals_;
+    QCString cache_;
 };
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
-class WatchRoot : public TrimmableItem
+class WatchRoot : public LazyFetchItem
 {
 public:
     WatchRoot(VariableTree *parent);
@@ -309,15 +299,15 @@ public:
 		return QString("%1%2").arg(RTTI_WATCH_ROOT).arg(text(column));
 	}
 
-	void setDisplay(char * buf, char * expr);
-	void updateWatchVariable(int id, const QString& expr);
+	void setWatchExpression(char * buf, char * expr);
+	void updateWatchExpression(int id, const QString& expr);
 };
 
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 
-class GlobalRoot : public TrimmableItem
+class GlobalRoot : public LazyFetchItem
 {
 public:
     GlobalRoot(VariableTree *parent);

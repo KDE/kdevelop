@@ -348,7 +348,7 @@ void RubyDebuggerPart::toggleBreakpoint()
 
 void RubyDebuggerPart::contextWatch()
 {
-    variableWidget->slotAddWatchVariable(m_contextIdent);
+    variableWidget->slotAddWatchExpression(m_contextIdent);
 }
 
 // Evaluates the selected text
@@ -377,10 +377,10 @@ void RubyDebuggerPart::setupController()
              controller,            SLOT(slotSetGlobalViewState(bool)));
     connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
              controller,            SLOT(slotVarItemConstructed(VarItem*)));
-    connect( variableTree,          SIGNAL(addWatchVariable(const QString&, bool)),
-             controller,            SLOT(slotAddWatchVariable(const QString&, bool)));  
-    connect( variableTree,          SIGNAL(removeWatchVariable(int)),
-             controller,            SLOT(slotRemoveWatchVariable(int)));  
+    connect( variableTree,          SIGNAL(addWatchExpression(const QString&, bool)),
+             controller,            SLOT(slotAddWatchExpression(const QString&, bool)));  
+    connect( variableTree,          SIGNAL(removeWatchExpression(int)),
+             controller,            SLOT(slotRemoveWatchExpression(int)));  
 
     // variableTree -> rdbBreakpointWidget
 //    connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),

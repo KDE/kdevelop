@@ -74,8 +74,8 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     topLayout->addWidget(varTree_, 10);
     topLayout->addLayout( vbox );
 
-    connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchVariable()) );
-    connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchVariable()) );
+    connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchExpression()) );
+    connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchExpression()) );
 
 }
 
@@ -91,24 +91,24 @@ void VariableWidget::setEnabled(bool bEnabled)
 }
 // **************************************************************************
 
-void VariableWidget::slotAddWatchVariable()
+void VariableWidget::slotAddWatchExpression()
 {
 //    QString watchVar(watchVarEntry_->text());
     QString watchVar(watchVarEditor_->currentText());
     if (!watchVar.isEmpty())
     {
-        slotAddWatchVariable(watchVar);
+        slotAddWatchExpression(watchVar);
     }
 }
 
 // **************************************************************************
 
-void VariableWidget::slotAddWatchVariable(const QString &ident)
+void VariableWidget::slotAddWatchExpression(const QString &ident)
 {
     if (!ident.isEmpty())
     {
         watchVarEditor_->addToHistory(ident);
-        varTree_->slotAddWatchVariable(ident);
+        varTree_->slotAddWatchExpression(ident);
         watchVarEditor_->clearEdit();
     }
 }
@@ -128,7 +128,7 @@ void VariableWidget::focusInEvent(QFocusEvent */*e*/)
 VariableTree::VariableTree(VariableWidget *parent, const char *name)
     : KListView(parent, name),
       QToolTip( viewport() ),
-      activeFlag_(0),
+      activationId_(0),
       currentThread_(-1),
 	  watchRoot_(0),
 	  globalRoot_(0)
@@ -162,7 +162,7 @@ void VariableTree::clear()
     QListViewItem *sibling = firstChild();
     while (sibling != 0) {
 		QListViewItem * current = sibling;
-        sibling = sibling->nextSibling();
+		sibling = sibling->nextSibling();
 		if (current->rtti() != RTTI_WATCH_ROOT) {
 			delete current;
 		}
@@ -193,7 +193,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemoveWatch) {
-			emit removeWatchVariable(((WatchVarItem*)item)->displayId());
+			emit removeWatchExpression(((WatchVarItem*)item)->displayId());
             delete item;
         } else if (res == idCopyToClipboard) {
             QClipboard *qb = KApplication::clipboard();
@@ -212,10 +212,10 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
 // **************************************************************************
 
-void VariableTree::slotAddWatchVariable(const QString &watchVar)
+void VariableTree::slotAddWatchExpression(const QString &watchVar)
 {
     new WatchVarItem(watchRoot(), watchVar, typeUnknown);
-	emit addWatchVariable(watchVar, true);
+	emit addWatchExpression(watchVar, true);
 }
 
 
@@ -296,7 +296,7 @@ void VariableTree::resetWatchVars()
 {
 	for (QListViewItem *child = watchRoot()->firstChild(); child != 0; child = child->nextSibling()) {
 		((WatchVarItem*) child)->setDisplayId(-1);
-        emit addWatchVariable(child->text(VarNameCol), false);
+        emit addWatchExpression(child->text(VarNameCol), false);
 	}
 }
 
@@ -365,32 +365,32 @@ void VariableTree::maybeTip(const QPoint &p)
 // **************************************************************************
 // **************************************************************************
 
-TrimmableItem::TrimmableItem(VariableTree *parent)
+LazyFetchItem::LazyFetchItem(VariableTree *parent)
     : KListViewItem(parent),
-      activeFlag_(0)
+      activationId_(0)
 {
-    setActive();
+    setActivationId();
 }
 
 // **************************************************************************
 
-TrimmableItem::TrimmableItem(TrimmableItem *parent)
+LazyFetchItem::LazyFetchItem(LazyFetchItem *parent)
     : KListViewItem(parent),
-      activeFlag_(0),
+      activationId_(0),
       waitingForData_(false)
 {
-    setActive();
+    setActivationId();
 }
 
 // **************************************************************************
 
-TrimmableItem::~TrimmableItem()
+LazyFetchItem::~LazyFetchItem()
 {
 }
 
 // **************************************************************************
 
-void TrimmableItem::paintCell(QPainter *p, const QColorGroup &cg,
+void LazyFetchItem::paintCell(QPainter *p, const QColorGroup &cg,
                               int column, int width, int align)
 {
     if (p == 0)
@@ -407,22 +407,7 @@ void TrimmableItem::paintCell(QPainter *p, const QColorGroup &cg,
 
 // **************************************************************************
 
-int TrimmableItem::rootActiveFlag() const
-{
-    return ((VariableTree*)listView())->activeFlag();
-}
-
-// **************************************************************************
-
-bool TrimmableItem::isTrimmable() const
-{
-    return !waitingForData_;
-}
-
-
-// **************************************************************************
-
-VarItem *TrimmableItem::findItemWithName(const QString &name) const
+VarItem *LazyFetchItem::findItemWithName(const QString &name) const
 {
 	QListViewItem *child = firstChild();
 
@@ -440,15 +425,15 @@ VarItem *TrimmableItem::findItemWithName(const QString &name) const
 
 // **************************************************************************
 
-void TrimmableItem::trim()
+void LazyFetchItem::trim()
 {
     QListViewItem *child = firstChild();
 
     while (child != 0) {
         QListViewItem *nextChild = child->nextSibling();
-        TrimmableItem *item = (TrimmableItem*) child;
+        LazyFetchItem *item = (LazyFetchItem*) child;
 		// Never trim a branch if we are waiting on data to arrive.
-		if (isTrimmable()) {
+		if (!waitingForData_) {
 			if (item->isActive()) {
 				item->trim();
 			} else {
@@ -459,41 +444,13 @@ void TrimmableItem::trim()
     }
 }
 
-// **************************************************************************
-
-DataType TrimmableItem::dataType() const
-{
-    return typeUnknown;
-}
-
-// **************************************************************************
-
-void TrimmableItem::setCache(const QCString&)
-{
-    Q_ASSERT(false);
-}
-
-// **************************************************************************
-
-QCString TrimmableItem::cache()
-{
-    Q_ASSERT(false);
-    return QCString();
-}
-
-// **************************************************************************
-
-void TrimmableItem::updateValue(char* /* buf */)
-{
-    waitingForData_ = false;
-}
 
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
 
-VarItem::VarItem(TrimmableItem *parent, const QString &varName, DataType dataType)
-    : TrimmableItem (parent),
+VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataType)
+    : LazyFetchItem (parent),
       cache_(QCString()),
       dataType_(dataType),
       highlight_(false)
@@ -548,7 +505,7 @@ QString VarItem::key(int /*column*/, bool /*ascending*/) const
 // and leave a plain '@foobar' as it is.
 QString VarItem::fullName() const
 {
-	QString itemName = name();
+	QString itemName = text(VarNameCol);
     QString vPath("");
     const VarItem *item = this;
 
@@ -583,19 +540,14 @@ QString VarItem::fullName() const
 
 void VarItem::setText(int column, const QString &data)
 {
-    QString strData=data;
-
-    setActive();
+    setActivationId();
+	
     if (column == ValueCol) {
-		updateType();
-		highlight_ = (!text(column).isEmpty() && text(column) != data);
+		QListViewItem::setText(VarTypeCol, typeFromValue(data));
+		highlight_ = (!text(ValueCol).isEmpty() && text(ValueCol) != data);
     }
 
-    QListViewItem::setText(column, strData);
-	
-	if (column == ValueCol) {
-		updateType();
-	}
+    QListViewItem::setText(column, data);
 	
     repaint();
 }
@@ -604,45 +556,43 @@ void VarItem::setText(int column, const QString &data)
 
 void VarItem::updateValue(char *buf)
 {
-    TrimmableItem::updateValue(buf);
+    LazyFetchItem::stopWaitingForData();
 
     RDBParser::getRDBParser()->parseData(this, buf);
-    setActive();
+    setActivationId();
 }
 
 // **************************************************************************
 
-void VarItem::updateType()
+QString VarItem::typeFromValue(const QString& value)
 {
 	QRegExp ref_re("^#<([^:]+):");
 	
-	if (ref_re.search(text(ValueCol)) != -1) {
-		originalValueType_ = ref_re.cap(1).latin1();
-	} else if (QRegExp("^(/|%r)").search(text(ValueCol)) != -1) {
-		originalValueType_ = "Regexp";
-	} else if (QRegExp("^[\"'%<]").search(text(ValueCol)) != -1) {
-		originalValueType_ = "String";
-	} else if (QRegExp("^(\\[)|(Array \\(\\d+ element\\(s\\)\\))").search(text(ValueCol)) != -1) {
-		originalValueType_ = "Array";
-	} else if (QRegExp("^(\\{)|(Hash \\(\\d+ element\\(s\\)\\))").search(text(ValueCol)) != -1) {
-		originalValueType_ = "Hash";
-	} else if (QRegExp("^:").search(text(ValueCol)) != -1) {
-		originalValueType_ = "Symbol";
-	} else if (QRegExp("\\.\\.").search(text(ValueCol)) != -1) {
-		originalValueType_ = "Range";
-	} else if (text(ValueCol) == "true" || text(ValueCol) == "false") {
-		originalValueType_ = "Boolean";
-	} else if (  QRegExp("[0-9_]+").exactMatch(text(ValueCol))
-				|| QRegExp("^[-+]?(0x|0|0b|\\?)").search(text(ValueCol)) != -1 ) 
+	if (ref_re.search(value) != -1) {
+		return ref_re.cap(1);
+	} else if (QRegExp("^(/|%r)").search(value) != -1) {
+		return QString("Regexp");
+	} else if (QRegExp("^[\"'%<]").search(value) != -1) {
+		return QString("String");
+	} else if (QRegExp("^(\\[)|(Array \\(\\d+ element\\(s\\)\\))").search(value) != -1) {
+		return QString("Array");
+	} else if (QRegExp("^(\\{)|(Hash \\(\\d+ element\\(s\\)\\))").search(value) != -1) {
+		return QString("Hash");
+	} else if (QRegExp("^:").search(value) != -1) {
+		return QString("Symbol");
+	} else if (QRegExp("\\.\\.").search(value) != -1) {
+		return QString("Range");
+	} else if (value == "true" || value == "false") {
+		return QString("Boolean");
+	} else if (  QRegExp("[0-9_]+").exactMatch(value)
+				|| QRegExp("^[-+]?(0x|0|0b|\\?)").search(value) != -1 ) 
 	{
-		originalValueType_ = "Integer";
-	} else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(text(ValueCol))) {
-		originalValueType_ = "Float";
+		return QString("Integer");
+	} else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(value)) {
+		return QString("Float");
 	} else {
-    	originalValueType_ = "";
+    	return QString("");
 	}
-			
-    setText(VarTypeCol, QString(originalValueType_));
 }
 
 // **************************************************************************
@@ -654,7 +604,7 @@ void VarItem::setCache(const QCString &value)
     checkForRequests();
     if (isOpen())
         setOpen(true);
-    setActive();
+    setActivationId();
 }
 
 // **************************************************************************
@@ -663,7 +613,7 @@ void VarItem::setOpen(bool open)
 {
     if (open && cache_ != 0) {
 		QCString value = cache_;
-		cache_ = QCString();
+		cache_ = "";
 		RDBParser::getRDBParser()->parseData(this, value.data());
 		trim();
     }
@@ -687,7 +637,7 @@ void VarItem::checkForRequests()
     if ( cache_.isEmpty() ) return;
 
     if (dataType_ == typeReference || dataType_ == typeArray || dataType_ == typeHash) {
-        waitingForData();
+        startWaitingForData();
         emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
     }
 
@@ -742,11 +692,11 @@ QString VarItem::tipText() const
 // **************************************************************************
 
 VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
-    : TrimmableItem(parent),
+    : LazyFetchItem(parent),
       needLocals_(true),
       frameNo_(frameNo),
       threadNo_(threadNo),
-      locals_("")
+      cache_("")
 {
     setExpandable(true);
 }
@@ -761,16 +711,16 @@ VarFrameRoot::~VarFrameRoot()
 
 void VarFrameRoot::addLocals(char *variables)
 {
-    setActive();
-    locals_.append(variables);
+    setActivationId();
+    cache_.append(variables);
 }
 
 // **************************************************************************
 
 void VarFrameRoot::setLocals()
 {
-    setActive();
-    setExpandable(!locals_.isEmpty());
+    setActivationId();
+    setExpandable(!cache_.isEmpty());
     needLocals_ = false;
 	
     if (isOpen()) {
@@ -793,14 +743,14 @@ void VarFrameRoot::setOpen(bool open)
     if (!open)
         return;
 
-    RDBParser::getRDBParser()->parseData(this, locals_.data());
-    locals_ = "";
+    RDBParser::getRDBParser()->parseData(this, cache_.data());
+    cache_ = "";
 }
 
 void VarFrameRoot::setFrameName(const QString &frameName)
 { 
 	if (text(VarNameCol) != frameName) {
-		locals_ = "";
+		cache_ = "";
 	}
 	
 	setText(VarNameCol, frameName); 
@@ -814,15 +764,12 @@ void VarFrameRoot::setFrameName(const QString &frameName)
 
 void GlobalRoot::setGlobals(char * globals)
 {
-    setActive();
+    setActivationId();
     RDBParser::getRDBParser()->parseData(this, globals);
 	
 	return;
 }
 
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
 // **************************************************************************
 
 void GlobalRoot::setOpen(bool open)
@@ -840,7 +787,7 @@ void GlobalRoot::setOpen(bool open)
 // **************************************************************************
 
 GlobalRoot::GlobalRoot(VariableTree *parent)
-    : TrimmableItem(parent)
+    : LazyFetchItem(parent)
 {
     setText(0, i18n("Global"));
     setExpandable(true);
@@ -858,20 +805,26 @@ GlobalRoot::~GlobalRoot()
 // **************************************************************************
 // **************************************************************************
 
-WatchVarItem::WatchVarItem( TrimmableItem *parent, const QString &varName, DataType dataType, int displayId )
+WatchVarItem::WatchVarItem( LazyFetchItem *parent, const QString &varName, DataType dataType, int displayId )
     : VarItem(parent, varName, dataType),
 	displayId_(displayId)
 {
 }
 
+// **************************************************************************
+
 WatchVarItem::~WatchVarItem()
 {
 }
+
+// **************************************************************************
 
 void WatchVarItem::setDisplayId(int id)
 {
 	displayId_ = id;
 }
+
+// **************************************************************************
 
 int WatchVarItem::displayId()
 {
@@ -884,7 +837,7 @@ int WatchVarItem::displayId()
 // **************************************************************************
 
 WatchRoot::WatchRoot(VariableTree *parent)
-    : TrimmableItem(parent)
+    : LazyFetchItem(parent)
 {
     setText(VarNameCol, i18n("Watch"));
     setOpen(true);
@@ -900,10 +853,10 @@ WatchRoot::~WatchRoot()
 
 // Sets the initial value of a new Watch item, along with the
 // display id
-void WatchRoot::setDisplay(char * buf, char * expression)
+void WatchRoot::setWatchExpression(char * buf, char * expression)
 {
 	QString expr(expression);
-	QRegExp display_re("^(\\d+):\\s(.*)$");
+	QRegExp display_re("^(\\d+):\\s([^\n]+)\n");
 	
     for (QListViewItem *child = firstChild(); child; child = child->nextSibling()) {
         WatchVarItem *varItem = (WatchVarItem*) child;
@@ -922,7 +875,7 @@ void WatchRoot::setDisplay(char * buf, char * expression)
 
 // After a program pause, this updates the new value of a Watch item
 // expr is the thing = value part of "1: a = 1", id is the display number
-void WatchRoot::updateWatchVariable(int id, const QString& expr)
+void WatchRoot::updateWatchExpression(int id, const QString& expr)
 {
     for (QListViewItem *child = firstChild(); child; child = child->nextSibling()) {
         WatchVarItem *varItem = (WatchVarItem*) child;
