@@ -502,16 +502,6 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
     QDomDocument &dom = *projectDom();
     bool ant = DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant";
 
-    if (!ant) {
-        QFileInfo fi(dir + "/Makefile");
-	QFileInfo fi2(dir + "/makefile");
-        if (!fi.exists() && !fi2.exists()) {
-            KMessageBox::information(mainWindow()->main(),
-                                     i18n("There is no Makefile in this directory."));
-            return;
-        }
-    }
-
     QString cmdline;
     if (ant) {
         cmdline = "ant";
