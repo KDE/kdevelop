@@ -1,0 +1,173 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DocGlobalConfigWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DocGlobalConfigWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>553</width>
+            <height>397</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Documentation</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QTabWidget" row="0" column="0">
+            <property name="name">
+                <cstring>tabWidget2</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Documentation Collections</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QToolBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>collectionsBox</cstring>
+                        </property>
+                        <property name="currentIndex">
+                            <number>0</number>
+                        </property>
+                        <widget class="QWidget">
+                            <property name="name">
+                                <cstring>page2</cstring>
+                            </property>
+                            <property name="backgroundMode">
+                                <enum>PaletteBackground</enum>
+                            </property>
+                            <attribute name="label">
+                                <string>No Collections</string>
+                            </attribute>
+                        </widget>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="1">
+                        <property name="name">
+                            <cstring>layout1</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>addCollectionButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>editCollectionButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>removeCollectionButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+R</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer1</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>40</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Full Text &amp;Search</string>
+                </attribute>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Bookmarks</string>
+                </attribute>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>addCollectionButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DocGlobalConfigWidgetBase</receiver>
+        <slot>addCollectionButtonClicked()</slot>
+    </connection>
+    <connection>
+        <sender>editCollectionButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DocGlobalConfigWidgetBase</receiver>
+        <slot>editCollectionButtonClicked()</slot>
+    </connection>
+    <connection>
+        <sender>removeCollectionButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DocGlobalConfigWidgetBase</receiver>
+        <slot>removeCollectionButtonClicked()</slot>
+    </connection>
+    <connection>
+        <sender>collectionsBox</sender>
+        <signal>currentChanged(int)</signal>
+        <receiver>DocGlobalConfigWidgetBase</receiver>
+        <slot>collectionsBoxCurrentChanged(int)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>addCollectionButtonClicked()</slot>
+    <slot>editCollectionButtonClicked()</slot>
+    <slot>removeCollectionButtonClicked()</slot>
+    <slot>collectionsBoxCurrentChanged( int )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

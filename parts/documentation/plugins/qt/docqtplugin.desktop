@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DocQtPlugin
+Exec=blubb
+Comment=Documentation plugin for Qt DCF documentation
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdocqtplugin

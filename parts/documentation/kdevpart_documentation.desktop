@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Documentation
+Comment[xx]=xxdocumentationxx
+Name=KDevDocumentation
+Name[xx]=xxKDevdocumentationxx
+Icon=mini-book1
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevdocumentation
+X-KDevelop-Version=1
