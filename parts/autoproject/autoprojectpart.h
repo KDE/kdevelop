@@ -17,6 +17,8 @@
 
 #include <qdict.h>
 #include <qguardedptr.h>
+#include <qmap.h>
+#include <qdatetime.h>
 #include <kgenericfactory.h>
 
 #include "kdevproject.h"
@@ -64,6 +66,8 @@ public:
     QString topsourceDirectory();
     void startMakeCommand(const QString &dir, const QString &target);
 
+    bool isDirty();
+
 protected:
     /**
      * Reimplemented from KDevProject. These methods are only
@@ -86,6 +90,7 @@ private slots:
     void slotExecute();
     void slotBuildConfigChanged(const QString &config);
     void slotBuildConfigAboutToShow();
+    void slotCommandFinished( const QString& command );
     //void slotImportExisting();
     
 private:
@@ -97,6 +102,8 @@ private:
     void setWantautotools();
     QString makefileCvsCommand();
     QString configureCommand();
+    QMap<QString, QDateTime> m_timestamp;
+    bool m_executeAfterBuild;
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;

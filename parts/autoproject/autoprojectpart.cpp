@@ -12,9 +12,16 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <config.h>
+
 #include "autoprojectpart.h"
+#include "configureoptionswidget.h"
+#include "addtranslationdlg.h"
+#include "addicondlg.h"
+#include "autoprojectwidget.h"
 
 #include <qdom.h>
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qstringlist.h>
@@ -28,20 +35,14 @@
 #include <kmessagebox.h>
 #include <kparts/part.h>
 
-#include "domutil.h"
-#include "kdevcore.h"
-#include "kdevmakefrontend.h"
-#include "kdevappfrontend.h"
-#include "kdevmainwindow.h"
-#include "kdevpartcontroller.h"
-#include "makeoptionswidget.h"
-#include "runoptionswidget.h"
-#include "configureoptionswidget.h"
-#include "addtranslationdlg.h"
-#include "addicondlg.h"
-#include "autoprojectwidget.h"
-#include "config.h"
-
+#include <domutil.h>
+#include <kdevcore.h>
+#include <kdevmakefrontend.h>
+#include <kdevappfrontend.h>
+#include <kdevmainwindow.h>
+#include <kdevpartcontroller.h>
+#include <makeoptionswidget.h>
+#include <runoptionswidget.h>
 
 K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) );
 
@@ -51,7 +52,8 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     setInstance(AutoProjectFactory::instance());
 
     setXMLFile("kdevautoproject.rc");
-    
+
+    m_executeAfterBuild = false;
     bool kde = (args[0] == "kde");
 
     m_widget = new AutoProjectWidget(this, kde);
@@ -86,7 +88,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
                           actionCollection(), "build_compilefile" );
-    
+
     action = new KAction( i18n("Run Configure"), 0,
                           this, SLOT(slotConfigure()),
                           actionCollection(), "build_configure" );
@@ -98,11 +100,11 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("Install"), 0,
                           this, SLOT(slotInstall()),
                           actionCollection(), "build_install" );
-    
+
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
-    
+
     action = new KAction( i18n("&Distclean"), 0,
                           this, SLOT(slotDistClean()),
                           actionCollection(), "build_distclean" );
@@ -119,7 +121,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
-        action = new KAction( i18n("Execute Program"), "exec", 0,
+        action = new KAction( i18n("Execute Program"), "exec", Key_F5,
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
     }
@@ -131,6 +133,9 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+
+    connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
+             this, SLOT(slotCommandFinished(const QString&)) );
 
     setWantautotools();
 }
@@ -572,10 +577,18 @@ void AutoProjectPart::slotMakeMessages()
 
 void AutoProjectPart::slotExecute()
 {
+    partController()->saveAllFiles();
+    
+    if( !m_executeAfterBuild && isDirty() ){
+        m_executeAfterBuild = true;
+        slotBuild();
+	return;
+    }
+
     QString program = buildDirectory() + "/" + mainProgram();
     program += " " + DomUtil::readEntry(*projectDom(), "/kdevautoproject/run/programargs");
-    
-    DomUtil::PairList envvars = 
+
+    DomUtil::PairList envvars =
         DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/envvars", "envvar", "name", "value");
 
     QString environstr;
@@ -638,5 +651,48 @@ void AutoProjectPart::savePartialProjectSession ( QDomElement* el )
 	
 	m_widget->saveSession ( el );
 }
+
+void AutoProjectPart::slotCommandFinished( const QString& command )
+{
+    kdDebug(9020) << "AutoProjectPart::slotProcessFinished()" << endl;
+
+    Q_UNUSED( command );
+
+    m_timestamp.clear();
+    QStringList fileList = allFiles();
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+        QString fileName = *it;
+	++it;
+
+	m_timestamp[ fileName ] = QFileInfo( projectDirectory(), fileName ).lastModified();
+    }
+
+    emit projectCompiled();
+
+    if( m_executeAfterBuild ){
+	slotExecute();
+	m_executeAfterBuild = false;
+    }
+}
+
+bool AutoProjectPart::isDirty()
+{
+    QStringList fileList = allFiles();
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+        QString fileName = *it;
+	++it;
+
+	QMap<QString, QDateTime>::Iterator it = m_timestamp.find( fileName );
+	QDateTime t = QFileInfo( projectDirectory(), fileName ).lastModified();
+	if( it == m_timestamp.end() || *it != t ){
+	    return true;
+	}
+    }
+
+    return false;
+}
+
 
 #include "autoprojectpart.moc"
