@@ -148,6 +148,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   initDebugger();
   initWhatsThis();
 
+  // default size if we start for the first time
+  resize(kapp->desktop()->width() - 100, kapp->desktop()->height() - 100);
   // read the previous dock szenario from kdeveloprc
   // (this has to be after all creation of dockwidget-covered tool-views
   readDockConfig(config);

@@ -4,6 +4,7 @@
       ==> that's why: writeDockConfig() re-enabled, KDevelop saves dock szenario to kdeveloprc file again.
     Attention:
       In case of a messed up dock state, please, remove section [dock_setting_default] from $HOME/.kde/share/config/kdeveloprc!
+    * default size if we start for the first time      
 
 2001-07-16  F@lk Brettschneider <falk@kdevelop.org>
     * some bugfixes in QextMDI (synchronized with Dr. Baldeweg AG sources of original QextMDI)
