@@ -2,8 +2,8 @@
                           kdlgpropwidget.h  -  description                              
                              -------------------                                         
     begin                : Wed Mar 17 1999                                           
-    copyright            : (C) 1999 by                          
-    email                :                                      
+    copyright            : (C) 1999 by Pascal Krahmer
+    email                : pascal@beast.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -21,15 +21,22 @@
 
 #include <qwidget.h>
 
+class AdvListView;
+
 /**
-  *@author 
+  *@author Pascal Krahmer
   */
 
 class KDlgPropWidget : public QWidget  {
    Q_OBJECT
-public: 
+public:
 	KDlgPropWidget(QWidget *parent=0, const char *name=0);
 	~KDlgPropWidget();
+protected:
+        virtual void resizeEvent ( QResizeEvent * );
+
+private:
+        AdvListView *lv;
 };
 
 #endif
