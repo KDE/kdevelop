@@ -3,7 +3,7 @@
  <general>
   <author>$AUTHOR$</author>
   <email>$EMAIL$</email>
-  <projectmanagement>KDevTrollProject</projectmanagement>
+  <projectmanagement>KDevTMakeProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
    <keyword>Qt</keyword>

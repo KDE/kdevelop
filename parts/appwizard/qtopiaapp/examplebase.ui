@@ -1,0 +1,55 @@
+<!DOCTYPE UI><UI>
+<class>$APPNAME$Base</class>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>$APPNAME$Base</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>196</width>
+            <height>245</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>$APPNAME$</string>
+    </property>
+    <vbox>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&lt;p&gt;This is just an &lt;i&gt;$APPNAMELC$&lt;/i&gt;. It doesn't do anything interesting at all.</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>quit</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Quit</string>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+</UI>

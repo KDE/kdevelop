@@ -1,0 +1,6 @@
+[Desktop Entry]
+Comment=An $APPNAME$ Program
+Exec=$APPNAMELC$
+Icon=$APPNAME$
+Type=Application
+Name=$APPNAME$

@@ -1,0 +1,7 @@
+# TMake application
+[General]
+Name=QTopia Example Application
+Icon=qmakeapp.png
+Category=C++/QMake project
+Comment=Generate a TMake/Qt based application for QTopia 1.x
+FileTemplates=h,CStyle,cpp,CStyle
