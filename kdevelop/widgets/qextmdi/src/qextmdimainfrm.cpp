@@ -1384,23 +1384,23 @@ void QextMdiMainFrm::fillWindowMenu()
    }
    m_pWindowMenu->insertSeparator();
    m_pWindowMenu->insertItem(tr("&MDI Mode..."), m_pMdiModeMenu);
-      m_pMdiModeMenu->clear();
-      m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
-      m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
-      m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
-      switch (m_mdiMode) {
-      case QextMdi::ToplevelMode:
-         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
-         break;
-      case QextMdi::ChildframeMode:
-         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(1), TRUE);
-         break;
-      case QextMdi::TabPageMode:
-         m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
-         break;
-      default:
-         break;
-      }
+   m_pMdiModeMenu->clear();
+   m_pMdiModeMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
+   m_pMdiModeMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
+   m_pMdiModeMenu->insertItem(tr("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
+   switch (m_mdiMode) {
+   case QextMdi::ToplevelMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
+      break;
+   case QextMdi::ChildframeMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(1), TRUE);
+      break;
+   case QextMdi::TabPageMode:
+      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
+      break;
+   default:
+      break;
+   }
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
       int placMenuId = m_pWindowMenu->insertItem(tr("&Placing..."), m_pPlacingMenu);
@@ -1516,7 +1516,9 @@ void QextMdiMainFrm::dockMenuItemActivated(int id)
 
 void QextMdiMainFrm::popupWindowMenu(QPoint p)
 {
-   m_pWindowMenu->popup( p);
+   if (!isFakingSDIApplication()) {
+      m_pWindowMenu->popup( p);
+   }
 }
 
 //================ setFrameDecorOfAttachedViews ===============//
