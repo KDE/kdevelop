@@ -35,7 +35,6 @@
 #include <kpopupmenu.h>
 #include "kparts/dockmainwindow.h"
 #else
-#include <qmainwindow.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
 #include "dummykpartsdockmainwindow.h"

@@ -169,13 +169,6 @@ void QextMdiMainFrm::slot_toggleTaskBar()
    }
 }
 
-////============ closeEvent ============//
-//void QextMdiMainFrm::closeEvent(QCloseEvent *e)
-//{
-//   e->accept();
-//   delete this;
-//}
-//
 void QextMdiMainFrm::resizeEvent(QResizeEvent *e)
 {
    if( m_bTopLevelMode && !parentWidget())
@@ -289,8 +282,6 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    }
    lpC->setClient(pWnd);
    lpC->setFocus();
-//   if (pWnd->minimumHeight() == pWnd->maximumHeight())
-//      lpC->setFixedHeight (lpC->height());
    pWnd->youAreAttached(lpC);
    if( m_bTopLevelMode && !parentWidget()) {
       setMinimumHeight( m_oldMainFrmMinHeight);
@@ -302,24 +293,11 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       emit leavedTopLevelMode();
    }
 
-   // this is done in activateView
-   //  m_pTaskBar->setActiveButton(pWnd);
-
-   // position and really attach to MDI
-   // this should add all the frame stuff but nothing more
-   // remove the bShow from here
    m_pMdi->manageChild(lpC,FALSE,bCascade);
    if (bShow) {
       lpC->show();
    }
 
-   // now you set the attribute like position and cascadin/maximize etc...
-   // arrangeWindow(pWnd);
-
-   // this will show it...
-//   if (bShow) {
-//      activateView(pWnd);
-//   }
    m_pCurrentWindow  = pWnd;  // required for checking the active item
    QFocusEvent *fe = new QFocusEvent(QEvent::FocusIn);
    QApplication::sendEvent( pWnd, fe);
@@ -328,24 +306,11 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 //============= detachWindow ==============//
 void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
 {
-
-   // ok this part should be fine
-   // NOPE! This is not to be set if bshow is FALSE: leave this to the activateView
-   //  m_pCurrentWindow  = pWnd;
-
    pWnd->youAreDetached();
-
-   // see above
-   //  m_pTaskBar->setActiveButton(pWnd);
-
    // this is only if it was attached and you want to detach it
    if(pWnd->parent() != NULL ) {
-
       QextMdiChildFrm *lpC=pWnd->mdiParent();
-
-      // this one is taking care of te
       lpC->unsetClient( m_undockPositioningOffset);
-
       m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
    }
    else {
@@ -353,11 +318,6 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
          pWnd->setGeometry( QRect( m_pMdi->getCascadePoint(m_pWinList->count()-1), defaultChildFrmSize()));
       }
    }
-
-   // there should be an equivalent of manageChild... here
-   //
-
-   //  arrangeWindow(pWnd);
 
    // this will show it...
    if (bShow) {
@@ -508,10 +468,6 @@ void QextMdiMainFrm::childWindowCloseRequest(QextMdiChildView *pWnd)
    QApplication::postEvent( this, ce);
 }
 
-//##################################################
-// Internal handlers
-//##################################################
-
 void QextMdiMainFrm::focusInEvent(QFocusEvent *)
 {
    //qDebug("QextMdiMainFrm::focusInEvent");
@@ -575,7 +531,7 @@ void QextMdiMainFrm::switchToToplevelMode()
          detachWindow( pView, TRUE);
       }
    }
-   if(!parentWidget()) {
+   if(!m_bTopLevelMode && !parentWidget()) {
       m_oldMainFrmMinHeight = minimumHeight();
       m_oldMainFrmMaxHeight = maximumHeight();
       m_oldMainFrmHeight = height();
