@@ -335,6 +335,24 @@ bool Parser::parseNamespace()
         lex->nextToken();
     }
 
+    if ( lex->lookAhead(0) == '=' ) {
+        // namespace alias
+        lex->nextToken();
+
+        if( parseName() ){
+
+            if( lex->lookAhead(0) != ';' ){
+                reportError( i18n("; expected") );
+                skipUntil( ';' );
+            }
+            lex->nextToken(); // skip ;
+            return true;
+        } else {
+            reportError( i18n("namespace expected") );
+            return false;
+        }
+    }
+
     if( lex->lookAhead(0) != '{' ){
         reportError( i18n("{ expected") );
         skipUntil( '{' );
