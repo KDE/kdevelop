@@ -665,8 +665,6 @@ void CKDevInstall::slotAuto() // proceed >>
 		tools_entry.append("K&Dbg");
 		tools_argument.append(" ");
 	}
-  else
-    dbg_str="kdbg"+not_found+i18n(" -- debugging within KDevelop will not be possible\n");
   QString kiconedit_str;
   if(kiconedit){
     kiconedit_str="KIconedit"+found+"\n";

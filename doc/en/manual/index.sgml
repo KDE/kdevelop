@@ -2,7 +2,7 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.0
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.1
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
 <date>Version 2.2 , July 29,1999
@@ -58,7 +58,7 @@ anywhere within the IDE.
 
 <sect>Changes
 <p>
-Version 1.0 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+Version 1.1 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
 the project made great improvements since the 0.1 release followed by the 0.2, 0.3 and 0.4 releases; each of them were tested and bugs
 fixed. We believe that the current version is to be expected as the final release for the KDE 1.x series, giving developers the
 environment they want to use.
