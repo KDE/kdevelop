@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
   aboutData.addCredit("Marcel Turino", I18N_NOOP("Documentation index view"), "M.Turino@gmx.de");
   aboutData.addCredit("Yann Hodique", I18N_NOOP("Patches"), "Yann.Hodique@lifl.fr");
-  aboutData.addCredit("Tobias Gl\303\244\303\237er" , I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
+  aboutData.addCredit("Tobias Gl\303\244\303\237er" , I18N_NOOP("Documentation Finder,  qmake projectmanager patches, usability improvements, bugfixes ... "), "tobi.web@gmx.de");
   aboutData.addCredit("Andreas Koepfle" , I18N_NOOP("QMake project manager patches"), "koepfle@ti.uni-mannheim.de");
   aboutData.addCredit("Sascha Cunz" , I18N_NOOP("Cleanup and bugfixes for qEditor, AutoMake and much other stuff"), "mail@sacu.de");
 
