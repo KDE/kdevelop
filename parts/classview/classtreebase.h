@@ -45,8 +45,9 @@ protected:
     virtual KPopupMenu *createPopup() = 0;
     
 private slots:
+    void slotReturnPressed(QListViewItem*);
     void slotItemPressed(int button, QListViewItem *item);
-    void slotRightButtonPressed(QListViewItem *item, const QPoint &p);
+    void slotContextMenuRequested(QListViewItem *item, const QPoint &p);
     void slotGotoDeclaration();
     void slotGotoImplementation();
     void slotAddMethod();

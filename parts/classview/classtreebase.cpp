@@ -396,8 +396,10 @@ ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *n
     
     connect( this, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int)),
              this, SLOT(slotItemPressed(int, QListViewItem*)) );
-    connect( this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)),
-             this, SLOT(slotRightButtonPressed(QListViewItem*, const QPoint&)) );
+    connect( this, SIGNAL(returnPressed( QListViewItem*)), 
+             SLOT( slotReturnPressed(QListViewItem*)) );
+    connect( this, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+             this, SLOT(slotContextMenuRequested(QListViewItem*, const QPoint&)) );
 
     m_part = part;
 }
@@ -448,6 +450,18 @@ void ClassTreeBase::setTreeState(TreeState state)
     }
 }
 
+void ClassTreeBase::slotReturnPressed( QListViewItem *item )
+{
+    if (!item)
+        return;
+
+    ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
+    QString toFile;
+    int toLine = -1;
+    ctitem->getImplementation(&toFile, &toLine);
+    m_part->partController()->editDocument(toFile, toLine);
+    m_part->topLevel()->lowerView(this);
+}
 
 void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
 {
@@ -460,20 +474,20 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
     if (button == LeftButton) {
         QString toFile;
         int toLine = -1;
-        static_cast<ClassTreeItem*>(item)->getImplementation(&toFile, &toLine);
+        ctitem->getImplementation(&toFile, &toLine);
 	m_part->partController()->editDocument(toFile, toLine);
 	m_part->topLevel()->lowerView(this);
     } else if (button == MidButton) {
         QString toFile;
         int toLine = -1;
-        static_cast<ClassTreeItem*>(item)->getDeclaration(&toFile, &toLine);
+        ctitem->getDeclaration(&toFile, &toLine);
         m_part->partController()->editDocument(toFile, toLine);
 	m_part->topLevel()->lowerView(this);
     }
 }
 
 
-void ClassTreeBase::slotRightButtonPressed(QListViewItem *item, const QPoint &p)
+void ClassTreeBase::slotContextMenuRequested(QListViewItem *item, const QPoint &p)
 {
     contextItem = static_cast<ClassTreeItem*>(item);
     
