@@ -64,10 +64,22 @@ public: // Public attributes.
   /** Members of the structure. */
   QDictIterator<CParsedAttribute> memberIterator;
 
+  /** Line on which the struct was defined. */
+  int definedOnLine;
+
+  /** File in which the struct was defined. */
+  QString definedInFile;
+
 public: // Public methods to set attribute values.
   
   /** Set the name of the structure. */
   void setName( const char *aName );
+
+  /** Set the line where the struct was defined. */
+  void setDefinedOnLine( int aLine ) { definedOnLine = aLine; }
+
+  /** Set the file where the struct was defined. */
+  void setDefinedInFile( const char *aFile ) { definedInFile = aFile; }
 
   /** Add an member to the structure. */
   void addMember( CParsedAttribute *anAttribute );
