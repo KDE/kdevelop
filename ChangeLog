@@ -1,3 +1,7 @@
+2000-11-14 Falk Brettschneider <falk@kdevelop.org>
+  * fixed slotStartDebug(), no getSubDir() any more
+  * applied patch of Eva Brucherseifer <eva@rt.e-technik.tu-darmstadt.de> concerning to proper call of Qt's Designer. Thanks!
+
 2000-11-11 Falk Brettschneider <falk@kdevelop.org>
   * fixed slotStartRun(), starts chosen binary of Project->Options->Binary
 

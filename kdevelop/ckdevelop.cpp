@@ -1457,9 +1457,6 @@ void CKDevelop::slotStartDebugRunWithArgs()
 
 void CKDevelop::slotStartDebug()
 {
-  QString underDir=prj->getProjectDir() + prj->getSubDir();
-  if (underDir.right(1)!='/')
-    underDir+='/';
   QString binProgram=prj->getBinPROGRAM();
   QString libtool= prj->getProjectDir() +"libtool";
 
@@ -1475,9 +1472,9 @@ void CKDevelop::slotStartDebug()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(underDir);
+    QDir::setCurrent(prj->getProjectDir());
     dbgController->slotStart(binProgram, QString(),
-             (isAScript(underDir+prj->getBinPROGRAM())) ? libtool : QString());
+             (isAScript(prj->getProjectDir()+prj->getBinPROGRAM())) ? libtool : QString());
     brkptManager->slotSetPendingBPs();
     slotDebugRun();
     return;
@@ -1495,7 +1492,7 @@ void CKDevelop::slotStartDebug()
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
-  QDir::setCurrent(underDir);
+  QDir::setCurrent(prj->getProjectDir());
   swallow_widget->setExeString(dbgExternalCmd+ " " + binProgram);
   swallow_widget->sWExecute();
   swallow_widget->init();
