@@ -903,11 +903,13 @@ CppSupportPart::initialParse( )
 bool
 CppSupportPart::parseProject( )
 {
-    QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
-    label->setMinimumWidth( 600 );
-    mainWindow( )->statusBar( )->addWidget( label );
-    label->show( );
+    //QLabel* label = new QLabel( "", mainWindow( )->statusBar( ) );
+    //label->setMinimumWidth( 600 );
+    //mainWindow( )->statusBar( )->addWidget( label );
+    //label->show( );
 
+    mainWindow()->statusBar()->message( i18n("Updating...") );
+    
     kapp->processEvents( );
     kapp->setOverrideCursor( waitCursor );
 
@@ -926,8 +928,6 @@ CppSupportPart::parseProject( )
         bar->setProgress( n++ );
 	QFileInfo fileInfo( d, *it );
 
-	label->setText( i18n( "Currently parsing: '%1'" )
-			.arg( fileInfo.absFilePath() ) );
         maybeParse( fileInfo.absFilePath(), classStore() );
 
 	if( (n%5) == 0 )
@@ -944,8 +944,8 @@ CppSupportPart::parseProject( )
 
     mainWindow( )->statusBar( )->removeWidget( bar );
     delete bar;
-    mainWindow( )->statusBar( )->removeWidget( label );
-    delete label;
+    //mainWindow( )->statusBar( )->removeWidget( label );
+    //delete label;
 
     kapp->restoreOverrideCursor( );
     mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
@@ -1152,12 +1152,7 @@ void CppSupportPart::slotMakeMember()
 	    KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
 	    	    
 	    int line = editiface->numLines() - 1;
-	    
-	    kdDebug(9007) << "editiface = " << editiface << endl;
-	    kdDebug(9007) << "cursoriface = " << cursoriface << endl;
-	    kdDebug(9007) << "text = " << text << endl;
-	    kdDebug(9007) << "line = " << line << endl;
-	    
+	    	    
 	    if( editiface )
 		editiface->insertText( line, 0, text );
 	    if( cursoriface )
