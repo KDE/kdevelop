@@ -152,9 +152,8 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__STL_UNWIND", SkipWordAndArguments );
     lexer->addSkipWord( "__GC_CONST" );
     lexer->addSkipWord( "__HASH_ALLOC_INIT", SkipWordAndArguments );
-    lexer->addSkipWord( "_ROPE_SWAP_SPECIALIZATION", SkipWordAndArguments );
-    lexer->addSkipWord( "__ROPE_DEFINE_ALLOCS", SkipWordAndArguments );
-
+    lexer->addSkipWord( "__STL_DEFAULT_ALLOCATOR",  SkipWordAndArguments, "T" );
+    
 	// antlr
     lexer->addSkipWord( "ANTLR_BEGIN_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_USE_NAMESPACE", SkipWordAndArguments );
