@@ -116,9 +116,9 @@ public slots:
 
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
-  void sig_viewGotFocus(QWidget* pView);
+  void sig_viewGotFocus(QWidget* pView, int docType);
   /** Is emitted when a view handled by the doc view manager looses focus. */
-  void sig_viewLostFocus(QWidget* pView);
+  void sig_viewLostFocus(QWidget* pView, int docType);
 
    /** is emitted when the las view managed by this instance has been closed */
   void sig_lastViewClosed();

@@ -128,10 +128,11 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   config->writeEntry("ShutdownOK", false);
   config->sync();   // force this to be written back
 
+  initKeyAccel();
+
   initView();
   initConnections();
   initStatusBar();
-  initKeyAccel();
   setKeyAccel();
 
   readOptions();
@@ -1205,8 +1206,7 @@ void CKDevelop::initStatusBar()
  *-----------------------------------------------------------------*/
 void CKDevelop::initConnections(){
 
-//FB  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
-//FB  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
+  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
 
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedFileNew(const char*)), SLOT(slotFileNew(const char*)));

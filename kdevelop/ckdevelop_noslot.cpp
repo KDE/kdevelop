@@ -264,29 +264,37 @@ bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
  * Returns:
  *    nothing
  *-----------------------------------------------------------------*/
-void CKDevelop::setMainCaption(int tab_item)
+void CKDevelop::setMainCaption(int item)
 {
   QString capt;
-  switch(tab_item)
+  CEditWidget* pCEW = m_docViewManager->currentEditView();
+  switch(item)
   {
-    case BROWSER:
-      setCaption(browser_widget->currentTitle());
-      break;
+  case BROWSER:
+    setCaption(browser_widget->currentTitle());
+    break;
 
-    default:
-      capt=(project) ? (prj->getProjectName()+" - "+QFileInfo(m_docViewManager->currentEditView()->getName()).fileName()) :
-              QFileInfo(m_docViewManager->currentEditView()->getName()).fileName();
-      if (m_docViewManager->currentEditView()->isModified())
-      {
-        enableCommand(ID_FILE_SAVE);
-        setCaption(capt,true);
-      }
-      else
-      {
-        disableCommand(ID_FILE_SAVE);
-        setCaption(capt,false);
-      }
-      break;
+  default:
+    if (pCEW) {
+      capt = QFileInfo(pCEW->getName()).fileName();
+    }
+    else {
+      capt = "";
+    }
+    if (project) {
+      capt = prj->getProjectName() + " - " + capt;
+    }
+    if (pCEW && pCEW->isModified())
+    {
+      enableCommand(ID_FILE_SAVE);
+      setCaption(capt,true);
+    }
+    else
+    {
+      disableCommand(ID_FILE_SAVE);
+      setCaption(capt,false);
+    }
+    break;
   }
 }
 

@@ -49,6 +49,8 @@ DocViewMan::DocViewMan( CKDevelop* parent)
 {
   m_docsAndViews.setAutoDelete(true);
   m_MDICoverList.setAutoDelete(true);
+
+  connect( this, SIGNAL(sig_viewGotFocus(QWidget*,int)), m_pParent, SLOT(slotViewSelected(QWidget*,int)) );
 }
 
 //------------------------------------------------------------------------------
@@ -389,6 +391,16 @@ QWidget* DocViewMan::createView(int docId)
   if (!pNewView)
     return 0L;  // failed, could not create view
 
+  // connect signals
+//?       connect(pNewView, SIGNAL(sig_updated(QObject*, int)),
+//?               this, SIGNAL(sig_updated(QObject*, int)));
+
+  // connect document with view
+  if (docId >= 0) {
+    // add view to view list of doc
+    pDocViewNode->existingViews.append(pNewView);
+  }
+
   // cover it by a QextMDI childview and add that MDI system
   QextMdiChildView* pMDICover = new QextMdiChildView( pNewView->caption());
   m_MDICoverList.append( pMDICover);
@@ -404,23 +416,14 @@ QWidget* DocViewMan::createView(int docId)
   pMDICover->setTabCaption( shortName);
   connect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
           this, SLOT(slot_gotFocus(QextMdiChildView*)));
-  // take it under MDI mainframe control
+
+  // fake a gotFocus to update the currentEditView/currentBrowserView pointers _before_ adding to MDI control
+  slot_gotFocus( pMDICover);
+
+  // take it under MDI mainframe control (note: this triggers also a setFocus())
   m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
   // show
   pMDICover->show();
-
-  // connect signals
-//?       connect(pNewView, SIGNAL(sig_updated(QObject*, int)),
-//?               this, SIGNAL(sig_updated(QObject*, int)));
-
-  // connect document to view
-  if (docId >= 0) {
-    // add view to view list of doc
-    pDocViewNode->existingViews.append(pNewView);
-  }
-
-  // the connect to this slot was made _after_ the first focusIn event, so we must fake this slot call
-  slot_gotFocus( pMDICover);
 
   return pNewView;
 }
@@ -580,8 +583,8 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
   else
     m_pCurBrowserDoc = (CDocBrowser*) pDoc;
 
-  // emit the got focus signal
-  emit sig_viewGotFocus(pView);
+  // emit the got focus signal (connected to CKDevelop but could also be caught by other ones)
+  emit sig_viewGotFocus( pView, m_currentDocType);
 }
 
 //------------------------------------------------------------------------------

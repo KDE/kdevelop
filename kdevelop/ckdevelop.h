@@ -178,7 +178,7 @@ public:
   void setToolmenuEntries();
 	
   /** sets the Main window caption for KDevelop */
-  void setMainCaption(int tab_item=-1);
+  void setMainCaption(int item=-1);
   			
   void newFile(bool add_to_project,const char* dir=0);
   /** read the projectfile from the disk*/
@@ -585,13 +585,11 @@ public:
   /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
   /** click on the main window tabs: header, source,documentation or tools*/
-  void slotSTabSelected(int item);
+  void slotViewSelected(QWidget* pView, int docType);
   /** click on the output window tabs: messages, stdout, stderr, breakpoint,
       disassemble, frame stack*/
   void slotOTabSelected(int item);
 
-  /** click on the treeview tabs: cv,lfv,wfv,doc*/
-  void slotTTabSelected(int item);
   /** set the tree tab automatically without click */
   void slotTCurrentTab(int item);
 	

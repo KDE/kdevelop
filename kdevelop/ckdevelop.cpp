@@ -1689,7 +1689,6 @@ void CKDevelop::setupInternalDebugger()
             disassemble,    SLOT(slotDisassemble(char*)));
 
   slotTCurrentTab(VAR);
-  slotTTabSelected(VAR);
 }
 
 
@@ -2913,13 +2912,10 @@ void CKDevelop::slotURLSelected(const QString& url,int,const char*)
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
 
-	if (m_docViewManager->currentDocType() != DocViewMan::HTML)
-	{
-    CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
-    if (pCurBrowser) {
-    	pCurBrowser->view()->setFocus();
-    }
-	}
+  CDocBrowser* pCurBrowser = m_docViewManager->currentBrowserDoc();
+  if (pCurBrowser) {
+    pCurBrowser->view()->setFocus();
+  }
 }
 
 void CKDevelop::slotURLonURL(const QString& url )
@@ -3482,17 +3478,11 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   
 }
 
-
-void CKDevelop::slotTTabSelected(int item){
-  if(item == DOC ){
-    // disable the outputview
-    //    showOutputView(false);
-  }
-}
-void CKDevelop::slotSTabSelected(int item){
+void CKDevelop::slotViewSelected(QWidget* pView, int docType)
+{
   lasttab = m_docViewManager->currentDocType();
 
-  if (item == DocViewMan::Header || item == DocViewMan::Source)
+  if (docType == DocViewMan::Header || docType == DocViewMan::Source)
   {
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
     enableCommand(ID_FILE_SAVE_AS);
@@ -3520,7 +3510,7 @@ void CKDevelop::slotSTabSelected(int item){
     enableCommand(ID_EDIT_INVERT_SELECTION);
   }
 
-  if (item == HEADER){
+  if (docType == DocViewMan::Header){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
       if ( bDefaultCV)
         t_tab_view->setCurrentTab(CV);
@@ -3535,7 +3525,7 @@ void CKDevelop::slotSTabSelected(int item){
 //    setMainCaption();  is called by slotNewStatus()
     slotNewLineColumn();
   }
-  if (item == CPP){
+  if (docType == DocViewMan::Source){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
       if ( bDefaultCV)
         t_tab_view->setCurrentTab(CV);
@@ -3553,7 +3543,7 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewLineColumn();
   }
 
-  if (item == HEADER || item == CPP)
+  if (docType == DocViewMan::Header || docType == DocViewMan::Source)
   {
     int state;
     state = m_docViewManager->currentEditView()->undoState();
@@ -3579,7 +3569,7 @@ void CKDevelop::slotSTabSelected(int item){
     }    
   }
 
-  if(item == BROWSER)
+  if (docType == DocViewMan::HTML)
   {
     disableCommand(ID_BUILD_COMPILE_FILE);
 
@@ -3607,7 +3597,8 @@ void CKDevelop::slotSTabSelected(int item){
     disableCommand(ID_EDIT_INVERT_SELECTION);
   }
 
-  if(item == BROWSER){
+  if (docType == DocViewMan::HTML)
+  {
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
     browser_widget->view()->setFocus();
