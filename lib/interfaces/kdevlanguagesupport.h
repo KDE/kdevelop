@@ -48,7 +48,7 @@ public:
     /**
      * Formats a CodeModelItem as used by the CodeModel to the human-readable convention.
      */
-    virtual QString formatModelItem( const CodeModelItem *item );
+    virtual QString formatModelItem( const CodeModelItem *item, bool shortDescription=false );
 
     /**
      * Formats a canonicalized class path as used by the class store

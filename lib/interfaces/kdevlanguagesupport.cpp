@@ -62,7 +62,7 @@ QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const
     return QStringList();
 }
 
-QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item )
+QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool shortDescription )
 {
     return item->name();
 }
