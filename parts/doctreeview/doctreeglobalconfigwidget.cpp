@@ -15,7 +15,8 @@
 #include <qlineedit.h>
 #include <kconfig.h>
 #include <kprocess.h>
-
+//#include <kdebug.h>
+#include <iostream>
 #include "../../config.h"
 #include "domutil.h"
 #include "doctreeviewpart.h"
@@ -41,6 +42,7 @@ void DocTreeGlobalConfigWidget::readConfig()
 
     config->setGroup("General");
     qtdocdirEdit->setText(config->readEntry("qtdocdir", QT_DOCDIR));
+
     kdelibsdoxydirEdit->setText(config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
     
     config->setGroup("Index");
@@ -58,7 +60,7 @@ void DocTreeGlobalConfigWidget::storeConfig()
 
     config->setGroup("General");
     config->writeEntry("qtdocdir", qtdocdirEdit->text());
-    config->readEntry("kdelibsdocdir", kdelibsdoxydirEdit->text());
+    config->writeEntry("kdelibsdocdir", kdelibsdoxydirEdit->text());
 
     config->setGroup("Index");
     config->writeEntry("IndexKDevelop", indexKDevelopBox->isChecked());

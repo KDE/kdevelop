@@ -1,7 +1,10 @@
 2002-08-22 Harald Fernengel <harry@kdevelop.org>
 	* applyed patches by Hornung-Heinz@t-online.de (Heinz Hornung):
 	  don't crash on exit
-	
+	* applyed patches by Yann Hodique (DocBrowser and FileTemplate updates)
+	* Since there is no right pane in MDI modes, add select views to the left
+	  (Automake Manager and Documentation Browser are now available again in MDI mode)
+
 2002-08-19 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollproject:
         * File exclusion on qmake-scope-level now working

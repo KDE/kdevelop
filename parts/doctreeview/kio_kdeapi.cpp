@@ -27,7 +27,7 @@ KdeapiProtocol::KdeapiProtocol(const QCString &pool, const QCString &app)
     config->setGroup("General");
     
     qtdocdir = config->readEntry("qtdocdir", QT_DOCDIR);
-    kdedocdir = config->readEntry("kdedocdir", KDELIBS_DOXYDIR);
+    kdedocdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
 }
 
 

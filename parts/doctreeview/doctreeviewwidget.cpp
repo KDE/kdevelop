@@ -313,7 +313,7 @@ private:
 
 DocTreeDoxygenBook::DocTreeDoxygenBook(DocTreeItem *parent, const QString &name,
                                        const QString &dirName, const QString &context)
-    : DocTreeItem(parent, Book, name, context),
+    : DocTreeItem(parent, Doc, name, context),
       dirname(dirName)
 {
     QString fileName = dirName + "/index.html";
@@ -383,9 +383,8 @@ void DocTreeDoxygenFolder::refresh()
     DocTreeItem::clear();
 
     KConfig *config = DocTreeViewFactory::instance()->config();
+    config->setGroup("General");
     QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
-//	kdDebug ( 9002 ) << "********************************** " << docdir << endl;
-//	docdir = "/usr/local/kde3/share/doc/HTML/en/kdelibs-apidocs";
     QDir d(docdir);
     QStringList fileList = d.entryList("*", QDir::Dirs);
 
