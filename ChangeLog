@@ -1,3 +1,6 @@
+2000-01-27 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* fixed some small bugs in kdlgedit's sourcecode generation
+
 2000-01-27 Falk Brettschneider <gigafalk@yahoo.com>
 	* several improvements for the QextMDI template
 

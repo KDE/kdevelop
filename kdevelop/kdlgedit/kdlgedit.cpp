@@ -739,10 +739,11 @@ void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
     props->dumpConstruct(stream, "QSpinBox", _parent);
     generateCommon(wid,stream,_parent);
 
-    props->dumpIntPropCall(stream, "setValue", "Value");
+   
     
     props->dumpPropCall(stream, "setRange",
 			props->getPropValue("MinValue") +","+props->getPropValue("MaxValue"));
+    props->dumpIntPropCall(stream, "setValue", "Value");
 
     props->dumpBoolPropCall(stream, "setWrapping", "isWrapping", false);
 

@@ -69,6 +69,20 @@ bool KDlgPropertyBase::propValueAsBool(QString name)
 void KDlgPropertyBase::dumpConstruct(QTextStream *stream, QString classname,
 				     QString parentname)
 {
+  if(classname == "KKeyButton"){
+    // last minute workaround -Sandy
+    QString s = "  ";
+    s += getPropValue("VarName");
+    s += "= new ";
+    s += classname;
+    s += "(\"";
+    s += getPropValue("Name");
+    s += "\",";
+    s += parentname;
+    s += ");\n";
+    *stream << s;
+  }
+  else{
     QString s = "  ";
     s += getPropValue("VarName");
     s += "= new ";
@@ -79,6 +93,7 @@ void KDlgPropertyBase::dumpConstruct(QTextStream *stream, QString classname,
     s += getPropValue("Name");
     s += "\");\n";
     *stream << s;
+  }
 }
 
 
