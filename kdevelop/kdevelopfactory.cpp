@@ -50,6 +50,7 @@ const KAboutData *KDevelopFactory::aboutData()
     kdev_aboutData->addAuthor("Bernd Gehrmann",I18N_NOOP("Documentation Tree"), "bernd@physik.hu-berlin.de");
     kdev_aboutData->addAuthor("Walter Tasin",I18N_NOOP("Many, Many Bugfixes, General Enhancements"), "tasin@e-technik.fh-muenchen.de");
     kdev_aboutData->addAuthor("John Birch",I18N_NOOP("Internal Debugger"), "jbb@ihug.co.nz");
+    kdev_aboutData->addAuthor("Falk Brettschneider",I18N_NOOP("Dockwidget/MDI GUI"), "gigafalk@yahoo.com");
   }
   return kdev_aboutData;
 }
