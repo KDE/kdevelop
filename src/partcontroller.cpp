@@ -219,18 +219,21 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
  
 void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, int col, bool activate )
 {
-  kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << " activate? " << activate << endl;
+	kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << " activate? " << activate << endl;
+	
+	KURL url = inputUrl;
+	
+	// is it already open? 
+	// (Try this once before verifying the URL, we could be dealing with a file that no longer exists on disc)
+	if ( KParts::Part *existingPart = partForURL( url ) )
+	{
+		addHistoryEntry();
+		activatePart( existingPart );
+		EditorProxy::getInstance()->setLineNumber( existingPart, lineNum, col );
+		return;
+	}
 
-  KURL url = inputUrl;
-  
-  KConfig *config = kapp->config();
-  config->setGroup("General Options");
-  bool embedKDevDesigner = config->readBoolEntry("Embed KDevDesigner", true);
-  config->setGroup("General");
-  
-  kdDebug(9000) << "    - embed: " << (embedKDevDesigner ? "true" : "false") << endl;
-
-  // Make sure the URL exists
+	// Make sure the URL exists
 	if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
 	{
 		bool done = false;
@@ -313,6 +316,11 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 		m_openNextAsText = true;
 	}
 
+	KConfig *config = kapp->config();
+	config->setGroup("General Options");
+	bool embedKDevDesigner = config->readBoolEntry("Embed KDevDesigner", true);
+//	kdDebug(9000) << "    - embed: " << (embedKDevDesigner ? "true" : "false") << endl;
+
 	if ( !m_openNextAsText && embedKDevDesigner && MimeType->is( "application/x-designer" ) )
 	{
 		KParts::ReadOnlyPart *designerPart = qtDesignerPart();
@@ -343,7 +351,9 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			}
 		}
 	}
-	
+
+	config->setGroup("General");
+
 	QStringList texttypeslist = config->readListEntry( "TextTypes" );
 	if ( texttypeslist.contains( MimeType->name() ) )
 	{
