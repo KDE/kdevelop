@@ -372,6 +372,16 @@ public:
   void slotDebugStatus(const QString& status, int statusFlag);
   /** Shows the debugger output */
   void slotDebugReceivedStdout(const char* buffer);
+  /** Enter a pid and get the debugger to attach to it */
+  void slotDebugAttach();
+  /** Set the internal debugger arguments */
+  void slotDebugSetArgs();
+  /** Setect a core file and examine the contents with the debugger */
+  void slotDebugExamineCore();
+  /** Allow the user to select an arbitary executable to debug */
+  void slotDebugNamedFile();
+  /** Intial debugger setup */
+  void setupInternalDebugger();
 
   ////////////////////////
   // TOOLS-Menu entries
@@ -910,6 +920,9 @@ private:
 
   bool dbgInternal;
   QString dbgExternalCmd;
+
+  // Initiates a variety of debugging sessions.
+  QPopupMenu* debugPopup;
 };
 
 #endif

@@ -144,6 +144,13 @@
 #define ID_DEBUG_MEMVIEW            14370
 #define ID_DEBUG_BREAK_INTO         14380
 
+// The debugger startups (Also ID_BUILD_DEBUG starts the debugger as well)
+#define ID_DEBUG_SET_ARGS           14390
+#define ID_DEBUG_CORE               14392
+#define ID_DEBUG_NAMED_FILE         14394
+#define ID_DEBUG_NORMAL             14396
+#define ID_DEBUG_ATTACH             14398
+
 ///////////////////////////////////////////////////////////////////
 // Classviewer popup entries 
 #define ID_CV_WIZARD                    14510

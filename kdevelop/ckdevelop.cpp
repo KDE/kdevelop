@@ -880,20 +880,139 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
     slotStatusMsg(msg);
 }
 
-void CKDevelop::slotBuildDebug(){
+void CKDevelop::slotDebugAttach()
+{
+  if (dbgInternal)
+  {
+    slotStatusMsg(i18n("Debug running process..."));
+    // TODO - do this properly, list of processes needed
+    CExecuteArgDlg argdlg(this,"Process",i18n("Attach to running process"), QString());
+    if(argdlg.exec())
+    {
+      QString attachTo = argdlg.getArguments();
+      slotStatusMsg(QString().sprintf(i18n("Attach to process %s in %s"),
+                          attachTo.data(), dbgExternalCmd.data()));
 
+      setupInternalDebugger();
+      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+      dbgController->slotStart(prj->getBinPROGRAM(), QString());
+      dbgController->slotAttachTo(attachTo);
+    }
+  }
+  else
+    slotBuildDebug();
+}
+
+void CKDevelop::slotDebugSetArgs()
+{
+  QString args=prj->getDebugArgs();
+  if (args.isEmpty())
+    QString args=prj->getExecuteArgs();
+
+  CExecuteArgDlg argdlg(this,"Arguments",i18n("Set debug arguments"),args);
+  if (argdlg.exec())
+  {
+    prj->setDebugArgs(argdlg.getArguments());		
+    prj->writeProject();
+  }
+}
+
+void CKDevelop::slotDebugExamineCore()
+{
+  if (dbgInternal)
+  {
+    slotStatusMsg(i18n("Enter core file to examine..."));
+
+    if (project)
+    {
+      if (QString coreFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this))
+      {
+        slotStatusMsg(QString().sprintf(i18n("Examine core file %s in %s"),
+                                coreFile.data(), dbgExternalCmd.data()));
+
+        setupInternalDebugger();
+        QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+        dbgController->slotStart(prj->getBinPROGRAM(), QString());
+        dbgController->slotCoreFile(coreFile);
+      }
+    }
+  }
+  else
+    slotBuildDebug();
+}
+
+void CKDevelop::slotDebugNamedFile()
+{
+  if (dbgInternal)
+  {
+    slotStatusMsg(i18n("Enter executable to debug..."));
+    if (project)
+    {
+      if (QString debugFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this))
+      {
+        slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
+                          debugFile.data(), dbgExternalCmd.data()));
+
+        setupInternalDebugger();
+        QDir::setCurrent(debugFile);
+        dbgController->slotStart(debugFile, prj->getDebugArgs());
+        brkptManager->slotSetPendingBPs();
+        slotDebugRun();
+      }
+    }
+  }
+  else
+    slotBuildDebug();
+}
+
+void CKDevelop::slotBuildDebug()
+{
   if(!bKDevelop)
     switchToKDevelop();
 
 // TODO: jbb-991220 - This code isn't quite right
 // The slotBuildMake needs to be above the Internal debugger but it must
-// run to completion before starting _any_ debugger. I've put the internal
+// run to completion _before_ starting _any_ debugger. I've put the internal
 // debugger above the make for now.
-// If fact we should only "make" when "dirty" and we should ask
+// If fact we should only "make" when "dirty" and we should probably ask
 // before "make"ing.
 
   if (dbgInternal)
   {
+    setupInternalDebugger();
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    dbgController->slotStart(prj->getBinPROGRAM(), prj->getDebugArgs());
+    brkptManager->slotSetPendingBPs();
+    slotDebugRun();
+    return;
+  }
+
+  if(!CToolClass::searchProgram(dbgExternalCmd)){
+    return;
+  }
+
+//   maybe the sources have changed, so it has to be compiled
+//
+//  if(!prj->getBinPROGRAM()){
+    slotBuildMake();
+//  }
+
+  showOutputView(false);
+  showTreeView(false);
+
+  slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
+                (prj->getBinPROGRAM()).data(), dbgExternalCmd.data()));
+
+  s_tab_view->setCurrentTab(TOOLS);
+  swallow_widget->sWClose(false);
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  swallow_widget->setExeString(dbgExternalCmd+ " " + prj->getBinPROGRAM());
+  swallow_widget->sWExecute();
+  swallow_widget->init();
+}
+
+void CKDevelop::setupInternalDebugger()
+{
     saveTimer->stop();  // stop the autosaving
 
     slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
@@ -947,9 +1066,6 @@ void CKDevelop::slotBuildDebug(){
     connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
               dbgController,    SLOT(slotRunUntil(const QString&, int)));
 
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    dbgController->slotStart(prj->getBinPROGRAM(), prj->getExecuteArgs());
-
     // We turn off the original toolbar start button and startup the debuggers
     // floating toolbar.
     toolBar()->setItemEnabled(ID_BUILD_DEBUG, false);
@@ -958,36 +1074,6 @@ void CKDevelop::slotBuildDebug(){
 
     connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
               dbgToolbar,     SLOT(slotDbgStatus(const QString&,int)));
-
-    // If there's BP's waiting to be set then do this now
-    brkptManager->slotSetPendingBPs();
-	
-    slotDebugRun();
-    return;
-  }
-
-  if(!CToolClass::searchProgram(dbgExternalCmd)){
-    return;
-  }
-
-//   maybe the sources have changed, so it has to be compiled
-//
-//  if(!prj->getBinPROGRAM()){
-    slotBuildMake();
-//  }
-
-  showOutputView(false);
-  showTreeView(false);
-
-  slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
-                (prj->getBinPROGRAM()).data(), dbgExternalCmd.data()));
-
-  s_tab_view->setCurrentTab(TOOLS);
-  swallow_widget->sWClose(false);
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  swallow_widget->setExeString(dbgExternalCmd+ " " + prj->getBinPROGRAM());
-  swallow_widget->sWExecute();
-  swallow_widget->init();
 }
 
 void CKDevelop::slotBuildMake(){
@@ -3078,32 +3164,6 @@ void CKDevelop::slotToolbarClicked(int item){
       cv_decl_or_impl=true;
     }		
     break;
-/*
-  case ID_DEBUG_RUN:
-    ASSERT(dbgInternal);
-    slotDebugRun();
-    break;
-  case ID_DEBUG_STEP:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotStepInto();
-    break;
-  case ID_DEBUG_NEXT:
-    ASSERT(dbgInternal);
-    dbgController->slotStepOver();
-    break;
-  case ID_DEBUG_STOP:
-    ASSERT(dbgInternal);
-    slotDebugStop();
-    break;
-  case ID_DEBUG_BREAK_INTO:
-    ASSERT(dbgInternal && dbgController);
-    dbgController->slotBreakInto();
-    break;
-  case ID_DEBUG_MEMVIEW:    // change this name
-    ASSERT(dbgInternal && dbgController);
-    slotDebugMemoryView();
-    break;
-*/
   }
 }
 
