@@ -79,7 +79,7 @@ namespace FileCreate {
   void ListItem::init()
   {
     m_iconHeight = 0;
-    setText(0, "." + m_filetype->ext() );
+    setText(0, m_filetype->ext()!="" ? QString("." + m_filetype->ext()) : QString("") );
     setText(1, "<qt><b>"+m_filetype->name()+"</b>. " + m_filetype->descr() );
 
     KIconLoader * loader = KGlobal::iconLoader();

@@ -154,6 +154,7 @@ void FileCreatePart::slotProjectOpened() {
     readTypes(globalDom, m_filetypes, false);
 
     // use side tab or not?
+    // TODO: this is a very Bad Way to do this. Must remember to move this setting to user's gideonrc config file
     QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
     if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
         m_useSideTab = false;
@@ -270,9 +271,10 @@ int FileCreatePart::readTypes(const QDomDocument & dom, QPtrList<FileType> &m_fi
         filetype->setName( element.attribute("name") );
         filetype->setExt( element.attribute("ext") );
         filetype->setCreateMethod( element.attribute("create") );
+
         filetype->setIcon( element.attribute("icon") );
         filetype->setDescr( (DomUtil::namedChildElement(element, "descr")).text() );
-        filetype->setEnabled(enable);
+        filetype->setEnabled(enable || (filetype->ext()==""));
         m_filetypes.append(filetype);
         numRead++;
 
@@ -502,7 +504,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
 
   // add appropriate extension, if not already there
-  if (!relToProj.endsWith("." + ext)) relToProj+="." + ext;
+  if (!ext.isNull() & ext!="" & !relToProj.endsWith("." + ext)) relToProj+="." + ext;
 
   QString filename = URLUtil::filename(relToProj);
 
@@ -514,11 +516,18 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     ext += "-" + subtype;
 
   // create file from template, and add it to the project
-  if (FileTemplate::exists(this, ext)) {
-    if (FileTemplate::copy(this, ext, project()->projectDirectory() + relToProj))
-      if (result.addToProject)
-        project()->addFile(relToProj.mid(1));
+  if (!FileTemplate::exists(this, ext) ||
+      !FileTemplate::copy(this, ext, project()->projectDirectory() + relToProj) ) {
+    // no template, create a blank file instead
+    QFile f(project()->projectDirectory() + relToProj);
+    f.open( IO_WriteOnly );
+    f.close();
   }
+
+  if (result.addToProject)
+    project()->addFile(relToProj.mid(1));
+
+
 
 
   // tell the caller what we did

@@ -2,6 +2,9 @@
 <kdevelop>
   <kdevfilecreate>
     <filetypes>
+      <type ext="" name="Blank file" create="template">
+        <descr>A new blank file.</descr>
+      </type>
       <type ext="py" name="Python" create="template" icon="source_py">
         <descr>A new empty Python source file.</descr>
       </type>
