@@ -420,7 +420,7 @@ void CKDevelop::slotProjectOptions(){
       		cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
       		cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
       		cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
-      		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
+      		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
       		ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
         	// this has to get over and over again per configuration
        		shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
@@ -1603,7 +1603,7 @@ void CKDevelop::newSubDir(){
       		cppflags=m_pKDevSession->getCPPFLAGS(*it).simplifyWhiteSpace();
       		cflags=m_pKDevSession->getCFLAGS(*it).simplifyWhiteSpace();
       		cxxflags=m_pKDevSession->getCXXFLAGS(*it).simplifyWhiteSpace();
-      		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
+      		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(*it).simplifyWhiteSpace();
       		ldflags=m_pKDevSession->getLDFLAGS(*it).simplifyWhiteSpace();
         	// this has to get over and over again per configuration
        		shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";

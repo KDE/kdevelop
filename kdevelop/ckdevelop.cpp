@@ -953,7 +953,7 @@ void CKDevelop::slotBuildCompileFile(){
    		cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
    		cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
    		cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-   		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+   		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
    		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
    	}
    	config->setGroup(group);
@@ -1876,7 +1876,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
    		cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
    		cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
    		cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-   		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+   		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
    		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
    	}
    	config->setGroup(group);
@@ -2080,7 +2080,7 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 		cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
 		cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
 		cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-		addcxxflags==m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+		addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
 		ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
 	}
  	config->setGroup(group);
