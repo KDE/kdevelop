@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "phpcodecompletion.h"
-#include <iostream.h>
+#include <iostream>
 #include "classstore.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
@@ -29,6 +29,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+using namespace std;
 
 PHPCodeCompletion::PHPCodeCompletion(PHPSupportPart *part,KDevCore* core,ClassStore* store){
   m_core = core;
