@@ -61,15 +61,15 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
                          actionCollection(), "view_previous_window");
    action->setStatusText( i18n("Switches to the previous window") );
 
-   m_raiseLeftBar = new KAction( i18n("Raise &Left Tabbar"), ALT+Key_L,
+   m_raiseLeftBar = new KAction( i18n("Switch &Left Tabbar"), ALT+Key_L,
 			 this, SLOT(raiseLeftTabbar()),
 			 actionCollection(), "raise_left_tabbar");
 
-   m_raiseRightBar = new KAction( i18n("Raise &Right Tabbar"), ALT+Key_R,
+   m_raiseRightBar = new KAction( i18n("Switch &Right Tabbar"), ALT+Key_R,
                          this, SLOT(raiseRightTabbar()),
                          actionCollection(), "raise_right_tabbar");
 
-   m_raiseBottomBar = new KAction( i18n("Raise &Bottom Tabbar"), ALT+Key_U,
+   m_raiseBottomBar = new KAction( i18n("Switch &Bottom Tabbar"), ALT+Key_U,
                          this, SLOT(raiseBottomTabbar()),
                          actionCollection(), "raise_bottom_tabbar");
 
@@ -495,7 +495,6 @@ void TopLevelSDI::raiseTabbar( KTabZoomWidget* tabBar )
 
   if ( tabBar->isRaised() ) {
     if ( tabBar->isDocked() ) {
-      qDebug( "tabbar: active: %d", tabBar->isActiveWindow() );
       if ( tabBar->hasFocus() ) {
         if ( m_tabWidget->currentPage() )
           m_tabWidget->currentPage()->setFocus();
