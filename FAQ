@@ -125,6 +125,13 @@ A: Edit the file configure.in(.in) in your toplevel source directory. Here, you
    the configure script
    (or inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
 
+   
+Q: My configure.in.in hasn't any AC_CHECK_COMPILERS() call. Where should I put the
+     CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS"
+   mentioned above?
+A: The new versions of configure.in.in has been simplified you can now add the line
+   after the AM_INIT_AUTOMAKE(<package-name>,<version>).
+   
 
 Q: I´m developing an application which needs run-time-type-info compiled within.
    How can I make it? 
@@ -138,12 +145,21 @@ A: *** OBSOLETE for new project templates ***
    (or inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
 
 
+Q: Why $USE_RTTI isn't used anymore?
+A: On the new templates -frtti is activated by default.
+
+
+Q: Are there some problems with using rtti on?
+A: There are some problems with dlopening a module and using rtti on the 
+   objects defined inside that module.
+
+
 Q: The solutions above are nice, but I want this only for a certain subdirectory
    (e.g. a static lib of my project)
    How can I make it?
 A: Edit the file Makefile.am in the desired source directory. Here, you
    have to enter somewhere outside the KDevelop specific part:
-     KDE_CXXFLAGS=$(USE_RTTI)
+     KDE_CXXFLAGS=$(USE_EXCEPTIONS)
    Take care this works only if your project is using am_edit.
    (It works only for newer acinclude.m4 & am_edit, AFAWK they must be
     younger than 12-09-1999, formerly it was known as APPEND_CXXFLAGS -
