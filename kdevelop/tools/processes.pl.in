@@ -650,6 +650,5 @@ sub changeCustomApp {
 
     condCopyGNUFiles();
     condCopyLsmFile();
-    condCopyUserDocFiles();
     
 }
