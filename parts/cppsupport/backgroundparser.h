@@ -45,7 +45,6 @@ public:
     BackgroundParser( CppSupportPart* );
     virtual ~BackgroundParser();
     
-    void addFile( const QString& fileName );
     void removeAllFiles();
     void removeFile( const QString& fileName );
     

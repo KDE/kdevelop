@@ -59,25 +59,13 @@ void BackgroundParser::removeFile( const QString& fileName )
     unlock();
 }
 
-void BackgroundParser::addFile( const QString& fileName)
-{
-    Unit* unit = parseFile( fileName );
-    
-    lock();
-    m_unitDict.remove( fileName );
-    m_unitDict.insert( fileName, unit );
-    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );    
-    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
-    unlock();
-}
-
 Unit* BackgroundParser::parseFile( const QString& fileName, const QString& contents )
 {
-    Driver driver;    
+    Driver driver;
     Lexer lexer;
-    
+
     // TODO: remove hard coded special words
-    
+
     // stl
     lexer.addSkipWord( "__STL_BEGIN_NAMESPACE" );
     lexer.addSkipWord( "__STL_END_NAMESPACE" );
@@ -135,14 +123,14 @@ Unit* BackgroundParser::parseFile( const QString& fileName, const QString& conte
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
     unit->problems = parser.problems();
- 
+
     return unit;
 }
 
 Unit* BackgroundParser::parseFile( const QString& fileName )
 {
     Unit* unit = 0;
-    
+
     kapp->lock();
     QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
     QPtrListIterator<KParts::Part> it( parts );
@@ -153,7 +141,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
 	if( !doc || !editIface || doc->url().path() != fileName )
 	    continue;
-	
+
 	QString contents = editIface->text();
 	unit = parseFile( fileName, contents );
     }
@@ -168,36 +156,33 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 	    unit = parseFile( fileName, contents );
 	}
     }
-    
+
     return unit;
 }
 
 Unit* BackgroundParser::findOrCreateUnit( const QString& fileName )
 {
     Unit* unit = 0;
-    
+
     unit = m_unitDict.find( fileName );
-    if( !unit ){
-	unit = parseFile( fileName );
-	kdDebug(9007) << "------------------> insert " << fileName << endl;
+    if( !unit && 0 != (unit = parseFile(fileName)) )
 	m_unitDict.insert( fileName, unit );
-    }
-    
+
     return unit;
 }
 
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
     TranslationUnitAST* ast = 0;
-    ast = findOrCreateUnit( fileName )->translationUnit;    
-    return ast;
+    Unit* u = findOrCreateUnit( fileName );
+    return u ? u->translationUnit : 0;
 }
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 {
     QValueList<Problem> problems;
-    problems = findOrCreateUnit( fileName )->problems;
-    return problems;
+    Unit* u = findOrCreateUnit( fileName );
+    return u ? u->problems : QValueList<Problem>();
 }
 
 void BackgroundParser::reparse()
@@ -244,9 +229,7 @@ void BackgroundParser::run()
 #endif
 	    
 	    m_unitDict.remove( fileName );
-	    kdDebug(9007) << "------------------> remove " << fileName << endl;
 	    m_unitDict.insert( fileName, unit );
-	    kdDebug(9007) << "------------------> insert " << fileName << endl;
 
 	    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
 	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
