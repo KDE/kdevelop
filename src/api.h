@@ -17,6 +17,7 @@ public:
   virtual KDevCore *core();
   virtual ClassStore *classStore();
   virtual ClassStore *ccClassStore();
+  virtual KDevDebugger *debugger();
 
   
   static API *getInstance();

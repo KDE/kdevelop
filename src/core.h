@@ -18,8 +18,6 @@ public:
 
   ~Core();
 
-  virtual void setBreakpoint(const QString &fileName, int lineNum,
-                             int id, bool enabled, bool pending);
   virtual void running(KDevPlugin *which, bool runs);
   virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
   virtual void openProject(const QString& projectFileName);

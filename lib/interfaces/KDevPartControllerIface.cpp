@@ -26,9 +26,9 @@ void KDevPartControllerIface::editDocument(const QString &url, int lineNum)
 }
 
 
-void KDevPartControllerIface::showDocument(const QString &url, int lineNum)
+void KDevPartControllerIface::showDocument(const QString &url, const QString &context)
 {
-  m_controller->showDocument(KURL(url), lineNum);
+  m_controller->showDocument(KURL(url), context);
 }
 
 

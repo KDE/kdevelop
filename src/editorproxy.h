@@ -21,6 +21,9 @@ public:
 	
   void setLineNumber(KParts::Part *part, int lineNum);
 
+  void removeBreakpoint(KParts::Part *part, int lineNum);
+  void setBreakpoint(KParts::Part *part, int lineNum, bool enabled, bool pending);
+
   void clearExecutionPoint();
   void setExecutionPoint(KParts::Part *part, int lineNum);
 
@@ -32,6 +35,8 @@ private slots:
   void popupAboutToShow();
   void popupAboutToHide();
   void deletePopup();
+
+  void activePartChanged(KParts::Part *part);
 
   
 private:

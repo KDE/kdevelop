@@ -32,6 +32,7 @@
 #include "kdevtoplevel.h"
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
+#include "kdevdebugger.h"
 #include "domutil.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
@@ -469,7 +470,7 @@ void DebuggerPart::slotStop()
     disassembleWidget->clear();
     disassembleWidget->slotActivate(false);
 
-    partController()->clearExecutionPoint();
+    debugger()->clearExecutionPoint();
     delete floatingToolBar;
     floatingToolBar = 0;
 
@@ -558,10 +559,10 @@ void DebuggerPart::slotMemoryView()
 void DebuggerPart::slotRefreshBPState(Breakpoint *BP)
 {
     if (BP->isActionDie())
-        core()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
+        debugger()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
                               -1, true, false);
     else 
-        core()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
+        debugger()->setBreakpoint(BP->fileName(), BP->lineNum()-1,
                               1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
 }
 
@@ -572,7 +573,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     
     if (state & s_appBusy) {
         stateIndicator = "A";
-        partController()->clearExecutionPoint();
+        debugger()->clearExecutionPoint();
     }
     
     if (state & (s_dbgNotStarted|s_appNotStarted))
@@ -580,7 +581,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     
     if (state & s_programExited) {
         stateIndicator = "E";
-        partController()->clearExecutionPoint();
+        debugger()->clearExecutionPoint();
     }
     
     // And now? :-)
@@ -594,7 +595,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
 void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 {
     // Debugger counts lines from 1
-    partController()->gotoExecutionPoint(fileName, lineNum-1);
+    debugger()->gotoExecutionPoint(fileName, lineNum-1);
 }
 
 

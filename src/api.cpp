@@ -2,6 +2,7 @@
 #include "classstore.h"
 #include "partcontroller.h"
 #include "toplevel.h"
+#include "debugger.h"
 
 
 #include "api.h"
@@ -37,6 +38,12 @@ ClassStore *API::classStore()
 ClassStore *API::ccClassStore()
 {
   return m_ccClassStore;
+}
+
+
+KDevDebugger *API::debugger()
+{
+  return Debugger::getInstance();
 }
 
 

@@ -1,3 +1,11 @@
+2002-04-25 Matthias Hölzer-Klüpfel <mhk@kde.org>
+
+	* started support for debugger handling via the new
+	  KTextEditor interfaces
+	* started with new documentation part handling
+	* added a workaround to open all text files with the
+	  same editor plugin
+
 2002-04-24 Victor Röder <victor_roeder@gmx.de>
 	* renamed Project view to Automake Manager
 	* reorganized Automake Manager

@@ -24,6 +24,7 @@ class ClassStore;
 class QDomDocument;
 class KDevPartController;
 class KDevTopLevel;
+class KDevDebugger;
 
 
 class KDevApiPrivate;
@@ -41,7 +42,8 @@ public:
     virtual KDevCore *core() = 0;
     virtual ClassStore *classStore() = 0;
     virtual ClassStore *ccClassStore() = 0;
-    
+    virtual KDevDebugger *debugger() = 0;
+
     QDomDocument *projectDom();
     void setProjectDom(QDomDocument *dom);
 

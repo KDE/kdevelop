@@ -73,4 +73,9 @@ KDevPartController *KDevPlugin::partController()
     return m_api->partController();
 }
 
+KDevDebugger *KDevPlugin::debugger()
+{
+    return m_api->debugger();
+}
+
 #include "kdevplugin.moc"

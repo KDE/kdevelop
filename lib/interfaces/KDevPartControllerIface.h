@@ -21,7 +21,7 @@ public:
 k_dcop:
 
   void editDocument(const QString &url, int lineNum);
-  void showDocument(const QString &url, int lineNum);
+  void showDocument(const QString &url, const QString &context);
 
   void saveAllFiles();
   void revertAllFiles();

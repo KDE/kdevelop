@@ -10,12 +10,13 @@ bin_PROGRAMS = gideon
 gideon_SOURCES = main.cpp toplevel_mdi.cpp core.cpp partcontroller.cpp \
 		 projectmanager.cpp plugincontroller.cpp api.cpp \
 		 partselectwidget.cpp settingswidget.ui toplevel.cpp \
-		 toplevel_sdi.cpp statusbar.cpp editorproxy.cpp
+		 toplevel_sdi.cpp statusbar.cpp editorproxy.cpp \
+		 debugger.cpp documentationpart.cpp
 
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
-	       	$(LIB_KDEUI) $(LIB_KPARTS) \
+	       	$(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML) \
 		-lktexteditor \
 		$(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 		$(top_builddir)/lib/qextmdi/src/libkdevelopqextmdi.la \

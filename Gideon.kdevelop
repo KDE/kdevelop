@@ -6,6 +6,19 @@
   <keywords>
    <keyword>KDE</keyword>
   </keywords>
+  <ignoreparts>
+   <part>KDevJavaDebugger</part>
+   <part>KDevVisualBoyAdvance</part>
+  </ignoreparts>
+  <loadparts>
+   <part>KDevdistpart</part>
+   <part>KDevClassView</part>
+   <part>KDevCTags</part>
+   <part>KDevDebugger</part>
+   <part>KDevDoxygen</part>
+   <part>KDevFileView</part>
+   <part>KDevCvs</part>
+  </loadparts>
  </general>
  <kdevfileview>
   <groups>
@@ -28,6 +41,51 @@
  <kdevdebugger>
   <general>
    <dbgshell>libtool</dbgshell>
+   <programargs/>
+   <gdbpath/>
+   <breakonloadinglibs>false</breakonloadinglibs>
+   <separatetty>false</separatetty>
+   <floatingtoolbar>false</floatingtoolbar>
   </general>
+  <display>
+   <staticmembers>false</staticmembers>
+   <manglednames>true</manglednames>
+  </display>
  </kdevdebugger>
+ <kdevautoproject>
+  <compiler>
+   <ccompiler>GccOptions</ccompiler>
+   <cxxcompiler>GppOptions</cxxcompiler>
+   <f77compiler>Pgf77Options</f77compiler>
+   <ccompilerbinary/>
+   <cxxcompilerbinary/>
+   <f77compilerbinary/>
+   <cflags/>
+   <cxxflags/>
+   <f77flags/>
+  </compiler>
+  <configure>
+   <configargs/>
+   <builddir/>
+  </configure>
+  <make>
+   <abortonerror>false</abortonerror>
+  </make>
+ </kdevautoproject>
+ <make>
+  <numberofjobs>1</numberofjobs>
+  <dontact>false</dontact>
+  <makebin/>
+ </make>
+ <cppsupportpart>
+  <codecompletion>
+   <enablecc>true</enablecc>
+   <codehinting outputview="1" enablech="1" selectview="0" />
+  </codecompletion>
+  <classstore>
+   <enablepcs>false</enablepcs>
+   <enablepp>false</enablepp>
+   <preparsing/>
+  </classstore>
+ </cppsupportpart>
 </kdevelop>

@@ -25,6 +25,9 @@ class KAction;
 #include "kdevpartcontroller.h"
 
 
+class DocumentationPart;
+
+
 class PartController : public KDevPartController
 {
   Q_OBJECT
@@ -34,7 +37,7 @@ public:
   PartController(QWidget *toplevel);
 
   void editDocument(const KURL &url, int lineNum=-1);
-  void showDocument(const KURL &url, int lineNum=-1);
+  void showDocument(const KURL &url, const QString &context = QString::null);
 
   bool closeDocuments(const QStringList &list);
 
@@ -46,8 +49,7 @@ public:
 
   bool readyToClose();
 
-  void gotoExecutionPoint(const KURL &url, int lineNum=-1);
-  void clearExecutionPoint();
+  KParts::Part *partForURL(const KURL &url);
 
 
 public slots:
@@ -89,7 +91,6 @@ private:
 
   void integratePart(KParts::Part *part, const KURL &url);
 
-  KParts::Part *partForURL(const KURL &url);
   void activatePart(KParts::Part *part);
 
   void editText(const KURL &url, int num);
@@ -98,6 +99,8 @@ private:
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
+
+  DocumentationPart *findDocPart(const QString &context);
 
 };
 

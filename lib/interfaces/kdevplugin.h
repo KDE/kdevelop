@@ -26,6 +26,7 @@ class ClassStore;
 class KDevApi;
 class KDevPartController;
 class KDevTopLevel;
+class KDevDebugger;
 
 
 // 2002-02-08 added ccClassStore( ) - daniel
@@ -98,6 +99,12 @@ public:
      * Returns a reference to the part controller.
      */
     KDevPartController *partController(); 
+
+    /**
+     * Returns a reference to the debugger API.
+     */
+    KDevDebugger *debugger();
+
 
 private:
     KDevApi *m_api;

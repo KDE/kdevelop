@@ -10,14 +10,14 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
 			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp \
 			       KDevPartControllerIface.skel KDevPartControllerIface.cpp \
-			       kdevplugin.cpp
+			       kdevplugin.cpp kdevdebugger.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
 kdevelopinclude_HEADERS = kdevcore.h kdevproject.h \
 			  kdevlanguagesupport.h kdevversioncontrol.h \
 			  kdevmakefrontend.h kdevappfrontend.h kdevcompileroptions.h \
 			  KDevMakeFrontendIface.h KDevAppFrontendIface.h KDevCoreIface.h \
-			  kdevplugin.h
+			  kdevplugin.h kdevdebugger.h
 
 noinst_HEADERS = kdevapi.h
 

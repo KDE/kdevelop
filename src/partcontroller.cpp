@@ -16,11 +16,13 @@
 #include <kmainwindow.h>
 #include <kaction.h>
 #include <kstatusbar.h>
+#include <khtml_part.h>
 
 
 #include "toplevel.h"
 #include "core.h"
 #include "editorproxy.h"
+#include "documentationpart.h"
 
 #include "partcontroller.h"
 
@@ -101,62 +103,74 @@ void PartController::editDocument(const KURL &url, int lineNum)
     return;
   }
 
-  QString mimeType = KMimeType::findByURL(url, 0, true, true)->name();
+  QString preferred, serviceType;
 
-  KParts::Factory *factory = 0;
+  QString mimeType = KMimeType::findByURL(url)->name();
   if (mimeType.startsWith("text/"))
   {
-    KConfig *config = kapp->config();
-    config->setGroup("Editor");
-    QString editor = config->readEntry("EmbeddedKTextEditor", "");
-
-    factory = findPartFactory(mimeType, "KTextEditor/Document", editor);
+    mimeType = "text/plain";
+    kapp->config()->setGroup("Editor");
+    preferred = kapp->config()->readEntry("EmbeddedKTextEditor", "");
   }
 
-  if (!factory)
-    factory = findPartFactory(mimeType, "KParts/ReadWritePart");
+  KParts::Factory *factory = 0;
+
+  QString services[] = {"KTextEditor/Document", "KParts/ReadWritePart", "KParts/ReadOnlyPart"};
+  for (uint i=0; i<3; ++i)
+  {
+    factory = findPartFactory(mimeType, services[i], preferred);
+    if (factory)
+    {
+      serviceType = services[i];
+      break;
+    }
+  }
 
   if (factory)
   {
-    KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(TopLevel::getInstance()->main(), "KParts/ReadWritePart"));
+    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), serviceType));
     part->openURL(url);
     integratePart(part, url);
     EditorProxy::getInstance()->setLineNumber(part, lineNum);
   }
   else
-  {
-    // at least try to show the document
-    showDocument(url, lineNum);
-  }
+    KRun::runURL(url, mimeType);
 }
 
 
-void PartController::showDocument(const KURL &url, int lineNum)
+void PartController::showDocument(const KURL &url, const QString &context)
 {
-  KParts::Part *existingPart = partForURL(url);
-  if (existingPart)
+kdDebug() << "SHOW: " << url.url() << " context=" << context << endl;
+
+  DocumentationPart *part = 0;
+
+  if (!context.isEmpty())
+    part = findDocPart(context);
+
+  if (!part)
   {
-    activatePart(existingPart);
-    EditorProxy::getInstance()->setLineNumber(existingPart, lineNum);
-    return;
-  }
-
-  QString mimeType = KMimeType::findByURL(url, 0, true, true)->name();
-
-  KParts::Factory *factory = findPartFactory(mimeType, "KParts/ReadOnlyPart");
-
-  if (factory)
-  {
-    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), "KParts/ReadOnlyPart"));
-    part->openURL(url);
-    integratePart(part, url);
-    EditorProxy::getInstance()->setLineNumber(part, lineNum);
+    part = new DocumentationPart;
+    part->setContext(context);
+    integratePart(part,url);
   }
   else
+    activatePart(part);
+
+  part->openURL(url);
+}
+
+
+DocumentationPart *PartController::findDocPart(const QString &context)
+{
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it)
   {
-    // try to start a new handling process
-    new KRun(url);
+    DocumentationPart *part = dynamic_cast<DocumentationPart*>(it.current());
+    if (part && (part->context() == context))
+      return part;
   }
+  
+  return 0;
 }
 
 
@@ -459,26 +473,6 @@ bool PartController::readyToClose()
   }
 
   return true;
-}
-
-
-void PartController::clearExecutionPoint()
-{
-  EditorProxy::getInstance()->clearExecutionPoint();
-}
-
-
-void PartController::gotoExecutionPoint(const KURL &url, int lineNum)
-{
-  // open the document in the editor
-  editDocument(url, lineNum);
-
-  // find the part displaying the document
-  KParts::Part *part = partForURL(url);
-  if (!part)
-    return;
-
-  EditorProxy::getInstance()->setExecutionPoint(part, lineNum);
 }
 
 
