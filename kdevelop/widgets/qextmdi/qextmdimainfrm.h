@@ -67,16 +67,15 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 	Q_OBJECT
 
 // attributes
-public:
-	QextMdiChildArea        *m_pMdi;
-	QPopupMenu              *m_pWindowMenu;
-
 protected:	
+	QextMdiChildArea        *m_pMdi;
 	QextMdiTaskBar          *m_pTaskBar;
 	QList<QextMdiChildView> *m_pWinList;
 	QextMdiChildView        *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
+	QPopupMenu              *m_pWindowMenu;
+   QPopupMenu              *m_pDockMenu;
    QMenuBar                *m_pMainMenuBar;
 
    QPixmap                 *m_pUndockButtonPixmap;
@@ -201,7 +200,8 @@ protected slots: // Protected slots
    void setMaximizeModeOff( QextMdiChildFrm* oldChild);
    /** reconnects the system buttons form maximize mode (SDI mode) with the new child frame */
    void updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild);
-   void menuActivated(int id);
+   void windowMenuItemActivated(int id);
+   void dockMenuItemActivated(int id);
    void popupWindowMenu(QPoint p);
 };
 
