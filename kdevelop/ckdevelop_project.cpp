@@ -1789,3 +1789,36 @@ void CKDevelop::slotTagSearch()
   ctags_dlg->raise();
   slotStatusMsg(i18n("Ready."));
 }
+void CKDevelop::slotSwitchDocTool()
+{
+	KToggleAction* pDoxyAction = dynamic_cast<KToggleAction*>
+	                             (actionCollection()->action("project_api_doxygen"));
+	KToggleAction* pKdocAction = dynamic_cast<KToggleAction*>
+	                             (actionCollection()->action("project_api_kdoc"));
+	KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
+	// kdoc used, can we switch to doxygen ?
+	if (pDoxyAction->isChecked())
+	{
+		if(!CToolClass::searchInstProgram("doxygen"))
+		{
+			KMessageBox::error(0,
+			i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
+			i18n("Program not found -- doxygen"));
+			// no doxygen found
+			return;
+		}
+		// yes, we have it
+		pKdocAction->setChecked(false);
+		pDoxyAction->setChecked(true);
+		if (hasProject()) pDoxyConfAction->setEnabled(true);
+		doctool = DT_DOX;
+		return;
+	} else // kdoc
+	{
+		pKdocAction->setChecked(false);
+		pDoxyAction->setChecked(true);
+		pDoxyConfAction->setEnabled(false);
+		doctool = DT_KDOC;
+	}
+}
+//MB end

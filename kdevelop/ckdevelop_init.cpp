@@ -41,7 +41,7 @@
 #include "kdevsession.h"
 
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstdaction.h>		
 
 #include <kaccel.h>
 #include <kapp.h>
@@ -342,55 +342,42 @@ void CKDevelop::initMenuBar(){
 
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
-
-//  view_tab_menu = new QPopupMenu;
-//  view_tab_menu->insertItem(i18n("Text only"), this, SLOT(slotViewTabText()), 0, ID_VIEW_TAB_TEXT);
-//  view_tab_menu->insertItem(i18n("Icons only"), this, SLOT(slotViewTabIcons()), 0, ID_VIEW_TAB_ICONS);
-//  view_tab_menu->insertItem(i18n("Text and Icons"), this, SLOT(slotViewTabTextIcons()),0, ID_VIEW_TAB_TEXT_ICONS);
-//  config->setGroup("General Options");
-//  int mode=config->readNumEntry("tabviewmode", 3);
-//  switch (mode){
-//    case 1:
-//      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT, true);
-//      break;
-//    case 2:
-//      view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS, true);
-//      break;
-//    case 3:
-//      view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS, true);
-//      break;
-//  }
-//
-//  // 2 popup menus for showing/hiding certain single tree and output tool views
-//  toggletreeviews_popup = new QPopupMenu( this, "toggletreeviews_popup_menu");
-//  toggleoutputviews_popup = new QPopupMenu( this, "toggleoutputviews_popup_menu");
-//  toggletreeviews_popup->setCheckable( true);
-//  toggleoutputviews_popup->setCheckable( true);
-//  connect( toggletreeviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleTreeViewsMenu()) );
-//  connect( toggleoutputviews_popup, SIGNAL(aboutToShow()), this, SLOT(fillToggleOutputViewsMenu()) );
-//
-
 	pAction = KStdAction::gotoLine(this,SLOT(slotViewGotoLine()),actionCollection(),"view_goto");
 	pAction = new KAction(i18n("&Next Error"),0,this,SLOT(slotViewNextError()),actionCollection(),"view_next_error");
 	pAction = new KAction(i18n("&Previous Error"),0,this,SLOT(slotViewPreviousError()),actionCollection(),"view_prev_error");
 	pAction = new KAction(i18n("&Dialog Editor"),SmallIconSet("newwidget"),0,this,SLOT(startDesigner()),actionCollection(),"view_designer");
 
 	KToggleAction* pToggleAction = new KToggleAction(i18n("All &Tree Tool-Views"),0,this,SLOT(slotViewTTreeView()),actionCollection(),"view_tree_all");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Classes"),0,this,SLOT(slotViewTClassesView()),actionCollection(),"view_tree_classes");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Groups"),0,this,SLOT(slotViewTGroupsView()),actionCollection(),"view_tree_groups");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Files"),0,this,SLOT(slotViewTFilesView()),actionCollection(),"view_tree_file");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Books"),0,this,SLOT(slotViewTBooksView()),actionCollection(),"view_tree_books");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Watch"),0,this,SLOT(slotViewTWatchView()),actionCollection(),"view_tree_watch");
+	pToggleAction->setChecked(true);
 
 	pToggleAction = new KToggleAction(i18n("All &Output Tool-Views"),0,this,SLOT(slotViewTOutputView()),actionCollection(),"view_out_all");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Messages"),0,this,SLOT(slotViewOMessagesView()),actionCollection(),"view_out_msg");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&StdOut"),0,this,SLOT(slotViewOStdOutView()),actionCollection(),"view_out_stdout");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("S&tdErr"),0,this,SLOT(slotViewOStdErrView()),actionCollection(),"view_out_stderr");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Konsole"),0,this,SLOT(slotViewOKonsoleView()),actionCollection(),"view_out_konsole");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Breakpoints"),0,this,SLOT(slotViewOBreakpointView()),actionCollection(),"view_out_break");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Disassemble"),0,this,SLOT(slotViewODisassembleView()),actionCollection(),"view_out_disasm");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("&Call Stack"),0,this,SLOT(slotViewOFrameStackView()),actionCollection(),"view_out_stack");
+	pToggleAction->setChecked(true);
 	pToggleAction = new KToggleAction(i18n("D&ebugger"),0,this,SLOT(slotViewODebuggerView()),actionCollection(),"view_out_dbg");
+	pToggleAction->setChecked(true);
 
 	pToggleAction = new KToggleAction(i18n("Toolb&ar"),0,this,SLOT(slotViewTStdToolbar()),actionCollection(),"view_toolbar");
 	pToggleAction = new KToggleAction(i18n("&Browser-Toolbar"),0,this,SLOT(slotViewTBrowserToolbar()),actionCollection(),"view_browser");
@@ -403,102 +390,89 @@ void CKDevelop::initMenuBar(){
 
 	pAction = new KAction(i18n("&Refresh"),SmallIconSet("reload"),0,this,SLOT(slotViewRefresh()),actionCollection(),"view_refresh");
 
-
   ///////////////////////////////////////////////////////////////////
   // Project-menu entries
-  project_menu = new QPopupMenu;
-  project_menu->insertItem(SmallIconSet("window_new"),i18n("New..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
-  project_menu->insertItem(SmallIconSet("wizard"),i18n("Generate Project File..."), this, SLOT(slotProjectGenerate()),0,ID_PROJECT_GENERATE);
+	pAction = new KAction(i18n("New..."),SmallIconSet("window_new"),0,this,SLOT(slotProjectNewAppl()),actionCollection(),"project_new");
 
-  project_menu->insertItem(SmallIconSet("project_open"),i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
-
-  recent_projects_menu = new QPopupMenu();
-  connect( recent_projects_menu, SIGNAL(activated(int)), SLOT(slotProjectOpenRecent(int)) );
-  project_menu->insertItem(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
-
-  project_menu->insertItem(SmallIconSet("fileclose"),i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
-
-  project_menu->insertSeparator();
-  project_menu->insertItem(SmallIconSet("classnew"),i18n("&New Class..."), this,
-			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
-  project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
-
-  project_menu->insertItem(SmallIconSet("locale"),i18n("Add new &Translation File..."), this,
-			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-
-  //  project_menu->insertItem(i18n("&Remove File from Project"), this,
-  //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
- 		
-  project_menu->insertItem(SmallIconSet("file_properties"),i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
-			   ,0,ID_PROJECT_FILE_PROPERTIES);
-			
-  project_menu->insertSeparator();
-
-  project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
-  //MB
-  doctool_menu = new QPopupMenu();
-  doctool_menu->insertItem(i18n("kdoc"), this, SLOT(slotSwitchDocTool()),0,ID_PROJECT_DOC_TOOL_KDOC);
-  doctool_menu->insertItem(i18n("doxygen"), this, SLOT(slotSwitchDocTool()),0,ID_PROJECT_DOC_TOOL_DOXYGEN);
-  doctool_menu->insertSeparator();
-  doctool_menu->insertItem(SmallIconSet("configure"),i18n("Configure doxygen"), this, SLOT(slotConfigureDoxygen()),0,ID_PROJECT_DOC_TOOL_CONF_DOXYGEN);
-  project_menu->insertItem(i18n("API Doc Tool..."), doctool_menu, ID_PROJECT_DOC_TOOL );
-  //MB end
-  project_menu->insertItem(i18n("Make AP&I-Doc"), this,
-			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
-  project_menu->insertItem(SmallIconSet("contents2"), i18n("Make &User-Manual..."), this,
-			 SLOT(slotProjectManual()),0,ID_PROJECT_MAKE_USER_MANUAL);
-  // submenu for making dists
-
-  QPopupMenu*  p2 = new QPopupMenu;
-  p2->insertItem(SmallIconSet("tgz"),i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
-  p2->insertSeparator();
-  p2->insertItem(SmallIconSet("rpm"),i18n("&Build RPM Package"), this, SLOT(slotProjectMakeDistRPM()),0,ID_PROJECT_MAKE_DISTRIBUTION_RPM);
-  p2->insertItem(SmallIconSet("rpm"),i18n("&Configure RPM Package"), this, SLOT(slotConfigMakeDistRPM()),0,ID_PROJECT_CONFIG_DISTRIBUTION_RPM);
-
-  project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
-  // create a tags file
-  // Roland: icon tags is missing !  RN
-  // project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
-  // load a tags file
-  project_menu->insertItem(/*SmallIconSet("tags"),*/i18n("Load &tags file"), this, SLOT(slotProjectLoadTags()),0, ID_PROJECT_LOAD_TAGS);
-
-  project_menu->insertSeparator();
-
-  project_menu->insertItem(SmallIconSet("configure"),i18n("O&ptions..."), this, SLOT(slotProjectOptions()),0,ID_PROJECT_OPTIONS);
-
-  menuBar()->insertItem(i18n("&Project"), project_menu);
+	pAction = new KAction(i18n("Generate Project File..."),SmallIconSet("wizard"),0,this,SLOT(slotProjectGenerate()),actionCollection(),"project_generate");
+	pAction = new KAction(i18n("&Open..."),SmallIconSet("project_open"),0,this,SLOT(slotProjectOpen()),actionCollection(),"project_open");
+//
+//  recent_projects_menu = new QPopupMenu();
+//  connect( recent_projects_menu, SIGNAL(activated(int)), ) );
+//  pAction = new KAction(i18n("Open &recent project..."), recent_projects_menu, ID_PROJECT_OPEN_RECENT );
+//
+	KStdAction::openRecent(this,SLOT(slotProjectOpenRecent(int)),actionCollection(),"project_open_recent");
+	pAction = new KAction(i18n("C&lose"),SmallIconSet("fileclose"),0,this,SLOT(slotProjectClose()),actionCollection(),"project_close");
+	pAction = new KAction(i18n("&New Class..."),SmallIconSet("classnew"),0,this,
+	          SLOT(slotProjectNewClass()),actionCollection(),"project_new_class");
+	pAction = new KAction(i18n("&Add existing File(s)..."),0,this,
+	          SLOT(slotProjectAddExistingFiles()),actionCollection(),"project_add_file");
+	pAction = new KAction(i18n("Add new &Translation File..."),SmallIconSet("locale"),0,this,
+	          SLOT(slotProjectAddNewTranslationFile()),actionCollection(),"project_nwe_trans");
+//  pAction = new KAction(i18n("&Remove File from Project"),0,this,
+//  //			   SLOT(slotProjectRemoveFile()),actionCollection(),"project_rm_file");
+	pAction = new KAction(i18n("&File Properties..."),SmallIconSet("file_properties"),0,this,
+	          SLOT(slotProjectFileProperties()),actionCollection(),"project_file_prop");
+	pAction = new KAction(i18n("Make &messages and merge"),0,this,
+	          SLOT(slotProjectMessages()),actionCollection(),"project_make_msg");
+	pToggleAction = new KToggleAction(i18n("kdoc"),0,this,
+	          SLOT(slotSwitchDocTool()),actionCollection(),"project_api_kdoc");
+	pToggleAction = new KToggleAction(i18n("doxygen"),0,this,
+	          SLOT(slotSwitchDocTool()),actionCollection(),"project_api_doxygen");
+	pAction = new KAction(i18n("Configure doxygen"),SmallIconSet("configure"),0,this,
+	          SLOT(slotConfigureDoxygen()),actionCollection(),"project_api_doxyconf");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("Make AP&I-Doc"),0,this,
+	          SLOT(slotProjectAPI()),actionCollection(),"project_make_api_doc");
+	pAction = new KAction(i18n("Make &User-Manual..."),SmallIconSet("contents2"),0,this,
+	          SLOT(slotProjectManual()),actionCollection(),"project_make_user_man");
+	pAction = new KAction(i18n("&Source-tgz"),SmallIconSet("tgz"),0,this,
+	          SLOT(slotProjectMakeDistSourceTgz()),actionCollection(),"project_dist_srctgz");
+	pAction = new KAction(i18n("&Build RPM Package"),SmallIconSet("rpm"),0,this,
+	          SLOT(slotProjectMakeDistRPM()),actionCollection(),"project_build_rpm");
+	pAction = new KAction(i18n("&Configure RPM Package"),SmallIconSet("rpm"),0,this,
+	          SLOT(slotConfigMakeDistRPM()),actionCollection(),"project_conf_rpm");
+	pAction = new KAction(i18n("Load &tags file"),0,this,
+	          SLOT(slotProjectLoadTags()),actionCollection(),"project_load_tags");
+	pAction = new KAction(i18n("O&ptions..."),SmallIconSet("configure"),0,this,
+	          SLOT(slotProjectOptions()),actionCollection(),"project_options");
+	pAction->setEnabled(false);
 
   ///////////////////////////////////////////////////////////////////
   // Build-menu entries
-  build_menu = new QPopupMenu;
-  build_menu->insertItem(SmallIconSet("compfile"),i18n("Compile &File"),
-			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
-  build_menu->insertItem(SmallIconSet("make_kdevelop"),i18n("&Make"),this,
-			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
-
-//   build_menu->insertItem(SmallIconSet("make_kdevelop"),i18n("Make &with"),this,
-// 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
-//   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE_WITH ,"MakeWith" );
-
-  build_menu->insertItem(i18n("Clea&n"),this,SLOT(slotBuildMakeClean()),0,ID_BUILD_MAKECLEAN);
-  build_menu->insertItem(SmallIconSet("rebuild"),i18n("&Rebuild"), this,
-			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
-
-  build_menu->insertItem(i18n("Dist&Clean/Rebuild All"), this,
-			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
-  build_menu->insertSeparator();
-  build_menu->insertItem(SmallIconSet("stop"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
-  build_menu->insertSeparator();
-
-  build_menu->insertItem(SmallIconSet("exec"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
-  build_menu->insertItem(SmallIconSet("exec"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
-
-  build_menu->insertSeparator();
-  build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
-  build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
-  build_menu->insertItem(i18n("C&onfigure..."), this, SLOT(slotBuildConfigure()),0,ID_BUILD_CONFIGURE);
-
-  menuBar()->insertItem(i18n("&Build"), build_menu);
+	pAction = new KAction(i18n("Compile &File"),SmallIconSet("compfile"),0,this,
+	          SLOT(slotBuildCompileFile()),actionCollection(),"build_compile");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("&Make"),SmallIconSet("make_kdevelop"),0,this,
+	          SLOT(slotBuildMake()),actionCollection(),"build_make");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("Clea&n"),0,this,
+	          SLOT(slotBuildMakeClean()),actionCollection(),"build_clean");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("&Rebuild"),SmallIconSet("rebuild"),0,this,
+	          SLOT(slotBuildRebuildAll()),actionCollection(),"build_rebuild");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("Dist&Clean/Rebuild All"),0,this,
+	          SLOT(slotBuildCleanRebuildAll()),actionCollection(),"build_rebuild_all");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("&Stop Build"),SmallIconSet("stop"),0,this,
+	          SLOT(slotBuildStop()),actionCollection(),"build_stop");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("&Execute"),SmallIconSet("exec"),0,this,
+	          SLOT(slotBuildRun()),actionCollection(),"build_exec");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("Execute &with Arguments..."),SmallIconSet("exec"),0,this,
+	          SLOT(slotBuildRunWithArgs()),actionCollection(),"build_exec_args");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("DistC&lean"),0,this,
+	          SLOT(slotBuildDistClean()),actionCollection(),"build_distclean");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("&Autoconf and automake"),0,this,
+	          SLOT(slotBuildAutoconf()),actionCollection(),"build_autoconf");
+	pAction->setEnabled(false);
+	pAction = new KAction(i18n("C&onfigure..."),0,this,
+	          SLOT(slotBuildConfigure()),actionCollection(),"build_configure");
+	pAction->setEnabled(false);
 
   ///////////////////////////////////////////////////////////////////
   // Debug-menu entries
@@ -1327,29 +1301,3 @@ void CKDevelop::initDebugger()
     dbgController->reConfig();
 }
 
-void CKDevelop::slotSwitchDocTool(){
-  // kdoc used, can we switch to doxygen ?
-  if(doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_KDOC))
-  {
-  	if(!CToolClass::searchInstProgram("doxygen"))
-    {
-   	  KMessageBox::error(0,
-			  i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
-				i18n("Program not found -- doxygen"));
-  	  // no doxygen found
-  	  return;
-    }
-    // yes, we have it
-    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,false);
-    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,true);
-  	doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
-  	doctool = DT_DOX;
-   	return;
-  }
-	// kdoc
-  doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,true);
-  doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,false);
-	doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
-  doctool = DT_KDOC;
-}
-//MB end

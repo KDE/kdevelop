@@ -90,18 +90,87 @@
   </Menu>
   <Menu name="project">
     <text>&amp;Project</text>
+    <Action name="project_new" />
+    <Action name="project_generate" />
+    <Action name="project_open" />
+    <Action name="project_open_recent" />
+    <Action name="project_close" />
+    <Separator/>
+    <Action name="project_new_class" />
+    <Action name="project_add_file" />
+    <Action name="project_new_trans" />
+    <Action name="project_file_prop" />
+    <Separator/>
+    <Action name="project_make_msg" />
+    <Menu name="project_api_doc">
+      <text>API Doc Tool</text>
+      <Action name="project_api_kdoc" />
+      <Action name="project_api_doxygen" />
+      <Separator/>
+      <Action name="project_api_doxyconf" />
+    </Menu>
+    <Action name="project_make_api_doc" />
+    <Action name="project_make_user_man" />
+    <Menu name="project_make_dist">
+      <text>Make &amp;Distribution</text>
+      <Action name="project_dist_srctgz" />
+      <Separator/>
+      <Action name="project_build_rpm" />
+      <Action name="project_conf_rpm" />
+    </Menu>
+    <Action name="project_load_tags" />
+    <Separator/>
+    <Action name="project_options" />
   </Menu>
   <Menu name="build">
     <text>&amp;Build</text>
+    <Action name="build_compile" />
+    <Action name="build_make" />
+    <Action name="build_clean" />
+    <Action name="build_rebuild" />
+    <Action name="build_rebuild_all" />
+    <Separator/>
+    <Action name="build_stop" />
+    <Separator/>
+    <Action name="build_exec" />
+    <Action name="build_exec_args" />
+    <Separator/>
+    <Action name="build_distclean" />
+    <Action name="build_autoconf" />
+    <Action name="build_configure" />
   </Menu>
   <Menu name="debug">
     <text>&amp;Debug</text>
+    <Action name="debug_start" />
+    <Action name="debug_start_other" />
+    <Separator/>
+    <Action name="debug_run" />
+    <Action name="debug_run_cursor" />
+    <Action name="debug_step_over" />
+    <Action name="debug_stepi_over" />
+    <Action name="debug_step_into" />
+    <Action name="debug_stepi_into" />
+    <Action name="debug_step_out" />
+    <Separator/>
+    <Action name="debug_viewers" />
+    <Separator/>
+    <Action name="debug_interrupt" />
+    <Action name="debug_stop" />
   </Menu>
   <Menu name="tools">
     <text>&amp;Tools</text>
   </Menu>
   <Menu name="options">
     <text>&amp;Options</text>
+    <Action name="options_editor" />
+    <Action name="options_editor_colors" />
+    <Action name="options_editor_defaults" />
+    <Action name="options_editor_hl" />
+    <Separator/>
+    <Action name="options_doc_browser" />
+    <Action name="options_tools" />
+    <Separator/>
+    <Action name="options_setup" />
   </Menu>
   <Menu name="window">
     <text>&amp;Window</text>

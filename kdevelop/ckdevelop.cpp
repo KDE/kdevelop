@@ -2797,21 +2797,24 @@ void CKDevelop::slotHelpHomepage(){
 void CKDevelop::slotHelpAPI(){
   if(project){
     QString api_file=prj->getProjectDir() + prj->getProjectName().lower() +  "-api/index.html";
-     //MB
-     if (doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
-     {
-       QString api_dir =  prj->getProjectDir() + "/";
+    //MB
+    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+                                   (actionCollection()->action("project_api_doxygen"));
+
+    if (pToggleAction && pToggleAction->isChecked())
+    {
+      QString api_dir =  prj->getProjectDir() + "/";
       QString doxconf = api_dir +  prj->getProjectName().lower()+".doxygen";
       if(!QFileInfo(doxconf).exists())
       {
-           KMessageBox::error(0,
-                       i18n("Doxygen configuration file not found\n"
-                             "Generate a valid one:\n"    
-                             "Project->API Doc Tool->Configure doxygen"));
+        KMessageBox::error(0,
+                           i18n("Doxygen configuration file not found\n"
+                           "Generate a valid one:\n"
+                           "Project->API Doc Tool->Configure doxygen"));
         return;
       }
       api_file=api_dir +  prj->getProjectName().lower() +"-api/html/index.html";
-   }
+    }
     //MB end
     if(!QFileInfo(api_file).exists()){
 //      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
@@ -4242,52 +4245,67 @@ void CKDevelop::fillToggleTreeViewsMenu()
 
 void CKDevelop::slotViewTClassesView()
 {
-  KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(2)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-    adjustTTreesToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_tree_classes"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTGroupsView()
 {
-  KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(3)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-    adjustTTreesToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_tree_groups"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+	pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTFilesView()
 {
-  KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(4)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-    adjustTTreesToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_tree_file"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTBooksView()
 {
-  KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(5)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-    adjustTTreesToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_tree_books"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTTreesToolButtonState();
 }
 
 void CKDevelop::slotViewTWatchView()
 {
-  KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(6)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-    adjustTTreesToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_tree_watch"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTTreesToolButtonState();
 }
 
 void CKDevelop::fillToggleOutputViewsMenu()
@@ -4352,82 +4370,106 @@ void CKDevelop::fillToggleOutputViewsMenu()
 
 void CKDevelop::slotViewOMessagesView()
 {
-  KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(2)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_msg"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOStdOutView()
 {
-  KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(3)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_stdout"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOStdErrView()
 {
-  KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(4)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_stderr"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOKonsoleView()
 {
-  KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(5)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_konsole"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOBreakpointView()
 {
-  KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(6)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_break"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewODisassembleView()
 {
-  KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(7)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_disasm"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewOFrameStackView()
 {
-  KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(8)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_stack"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotViewODebuggerView()
 {
-  KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(9)))
-    pDock->undock();
-  else
-    pDock->dockBack();
-  adjustTOutputToolButtonState();
+	KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
+	KToggleAction* pAction = dynamic_cast<KToggleAction*>
+	                         (actionCollection()->action("view_out_dbg"));
+	if (!pAction) return;
+	if (pAction->isChecked())
+		pDock->undock();
+	else
+		pDock->dockBack();
+	adjustTOutputToolButtonState();
 }
 
 void CKDevelop::slotActivateTView_Class()
@@ -4536,73 +4578,74 @@ void CKDevelop::statusCallback(int id_){
 //
 //    ON_STATUS_MSG(ID_FILE_QUIT,                             i18n("Exits the program"))
 
-    ON_STATUS_MSG(ID_EDIT_UNDO,                             i18n("Reverts the last editing step"))
-    ON_STATUS_MSG(ID_EDIT_REDO,                             i18n("Re-execute the last undone step"))
+//    ON_STATUS_MSG(ID_EDIT_UNDO,                             i18n("Reverts the last editing step"))
+//    ON_STATUS_MSG(ID_EDIT_REDO,                             i18n("Re-execute the last undone step"))
+//
+//    ON_STATUS_MSG(ID_EDIT_CUT,                              i18n("Cuts the selected section and puts it to the clipboard"))
+//    ON_STATUS_MSG(ID_EDIT_COPY,                             i18n("Copys the selected section to the clipboard"))
+//    ON_STATUS_MSG(ID_EDIT_PASTE,                            i18n("Pastes the clipboard contents to current position"))
+//
+//    ON_STATUS_MSG(ID_EDIT_INSERT_FILE,                      i18n("Inserts a file at the current position"))
+//
+//    ON_STATUS_MSG(ID_EDIT_SEARCH,                           i18n("Searches the file for an expression"))
+//    ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,                    i18n("Repeats the last search"))
+//    ON_STATUS_MSG(ID_EDIT_REPLACE,                          i18n("Searches and replace expression"))
+//    ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,                  i18n("Opens the search in files dialog to search for expressions over several files"))
+//    ON_STATUS_MSG(ID_EDIT_TAGS_SWITCH,                      i18n("Switch between header and source file"))
+//
+//    ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                    i18n("Run program to this cursor position"))
+//    ON_STATUS_MSG(ID_EDIT_STEP_OUT_OFF,                     i18n("Run the program until this function/method ends"))
+//    ON_STATUS_MSG(ID_EDIT_ADD_WATCH_VARIABLE,               i18n("Try to display this variable whenever the application execution is paused"))
+//
+//
+//    ON_STATUS_MSG(ID_EDIT_INDENT,                           i18n("Moves the selection to the right"))
+//    ON_STATUS_MSG(ID_EDIT_UNINDENT,                         i18n("Moves the selection to the left"))
+//    ON_STATUS_MSG(ID_EDIT_COMMENT,                          i18n("Adds // to the beginning of each selected line"))
+//    ON_STATUS_MSG(ID_EDIT_UNCOMMENT,                        i18n("Removes // from the beginning of each selected line"))
+//
+//    ON_STATUS_MSG(ID_EDIT_SELECT_ALL,                       i18n("Selects the whole document contents"))
+//    ON_STATUS_MSG(ID_EDIT_DESELECT_ALL,                     i18n("Deselects the whole document contents"))
+//    ON_STATUS_MSG(ID_EDIT_INVERT_SELECTION,                 i18n("Inverts the current selection"))
 
-    ON_STATUS_MSG(ID_EDIT_CUT,                              i18n("Cuts the selected section and puts it to the clipboard"))
-    ON_STATUS_MSG(ID_EDIT_COPY,                             i18n("Copys the selected section to the clipboard"))
-    ON_STATUS_MSG(ID_EDIT_PASTE,                            i18n("Pastes the clipboard contents to current position"))
 
-    ON_STATUS_MSG(ID_EDIT_INSERT_FILE,                      i18n("Inserts a file at the current position"))
+//    ON_STATUS_MSG(ID_VIEW_GOTO_LINE,                        i18n("Goes to Line Number..."))
+//    ON_STATUS_MSG(ID_VIEW_NEXT_ERROR,                       i18n("Switches to the file and line the next error was reported"))
+//    ON_STATUS_MSG(ID_VIEW_PREVIOUS_ERROR,                   i18n("Switches to the file and line the previous error was reported"))
+//
+//    ON_STATUS_MSG(ID_VIEW_TREEVIEW,                         i18n("Enables/Disables the treeview"))
+//    ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,                       i18n("Enables/Disables the outputview"))
+//
+//    ON_STATUS_MSG(ID_VIEW_TOOLBAR,                          i18n("Enables/Disables the standard toolbar"))
+//    ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,                  i18n("Enables/Disables the browser toolbar"))
+//    ON_STATUS_MSG(ID_VIEW_STATUSBAR,                        i18n("Enables/Disables the statusbar"))
+//    ON_STATUS_MSG(ID_VIEW_MDIVIEWTASKBAR,                   i18n("Enables/Disables the MDI-view taskbar"))
+//
+//    ON_STATUS_MSG(ID_VIEW_REFRESH,                          i18n("Refreshes current view"))
+//    ON_STATUS_MSG(ID_VIEW_IN_KFM,                           i18n("Opens the current document in the KFM browser"))
 
-    ON_STATUS_MSG(ID_EDIT_SEARCH,                           i18n("Searches the file for an expression"))
-    ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,                    i18n("Repeats the last search"))
-    ON_STATUS_MSG(ID_EDIT_REPLACE,                          i18n("Searches and replace expression"))
-    ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,                  i18n("Opens the search in files dialog to search for expressions over several files"))
-    ON_STATUS_MSG(ID_EDIT_TAGS_SWITCH,                      i18n("Switch between header and source file"))
-
-    ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                    i18n("Run program to this cursor position"))
-    ON_STATUS_MSG(ID_EDIT_STEP_OUT_OFF,                     i18n("Run the program until this function/method ends"))
-    ON_STATUS_MSG(ID_EDIT_ADD_WATCH_VARIABLE,               i18n("Try to display this variable whenever the application execution is paused"))
-
-
-    ON_STATUS_MSG(ID_EDIT_INDENT,                           i18n("Moves the selection to the right"))
-    ON_STATUS_MSG(ID_EDIT_UNINDENT,                         i18n("Moves the selection to the left"))
-    ON_STATUS_MSG(ID_EDIT_COMMENT,                          i18n("Adds // to the beginning of each selected line"))
-    ON_STATUS_MSG(ID_EDIT_UNCOMMENT,                        i18n("Removes // from the beginning of each selected line"))
-
-    ON_STATUS_MSG(ID_EDIT_SELECT_ALL,                       i18n("Selects the whole document contents"))
-    ON_STATUS_MSG(ID_EDIT_DESELECT_ALL,                     i18n("Deselects the whole document contents"))
-    ON_STATUS_MSG(ID_EDIT_INVERT_SELECTION,                 i18n("Inverts the current selection"))
-
-
-    ON_STATUS_MSG(ID_VIEW_GOTO_LINE,                        i18n("Goes to Line Number..."))
-    ON_STATUS_MSG(ID_VIEW_NEXT_ERROR,                       i18n("Switches to the file and line the next error was reported"))
-    ON_STATUS_MSG(ID_VIEW_PREVIOUS_ERROR,                   i18n("Switches to the file and line the previous error was reported"))
-
-    ON_STATUS_MSG(ID_VIEW_TREEVIEW,                         i18n("Enables/Disables the treeview"))
-    ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,                       i18n("Enables/Disables the outputview"))
-
-    ON_STATUS_MSG(ID_VIEW_TOOLBAR,                          i18n("Enables/Disables the standard toolbar"))
-    ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,                  i18n("Enables/Disables the browser toolbar"))
-    ON_STATUS_MSG(ID_VIEW_STATUSBAR,                        i18n("Enables/Disables the statusbar"))
-    ON_STATUS_MSG(ID_VIEW_MDIVIEWTASKBAR,                   i18n("Enables/Disables the MDI-view taskbar"))
-
-    ON_STATUS_MSG(ID_VIEW_REFRESH,                          i18n("Refreshes current view"))
-    ON_STATUS_MSG(ID_VIEW_IN_KFM,                           i18n("Opens the current document in the KFM browser"))
-    ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,                    i18n("Generates a new project with Application Wizard"))
-    ON_STATUS_MSG(ID_PROJECT_OPEN,                          i18n("Opens an existing project"))
-    ON_STATUS_MSG(ID_PROJECT_CLOSE,                         i18n("Closes the current project"))
-    ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,                i18n("Adds an existing file to the project"))
-    ON_STATUS_MSG(ID_PROJECT_ADD_NEW_TRANSLATION_FILE,      i18n("Adds a new language for internationalization to the project"))
-    ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,                   i18n("Removes file from the project"))
-
-    ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,                     i18n("Creates a new Class frame structure and files"))
-    ON_STATUS_MSG(ID_PROJECT_GENERATE,                      i18n("Creates a project file for an existing automake project"))
-
-    ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,               i18n("Shows the current file properties"))
-    ON_STATUS_MSG(ID_PROJECT_OPTIONS,                       i18n("Sets project and compiler options"))
-    ON_STATUS_MSG(ID_PROJECT_MESSAGES,                      i18n("Invokes make to create the message file by extracting all i18n() macros"))
-  //MB
-    ON_STATUS_MSG(ID_PROJECT_DOC_TOOL,                      i18n("Switches the documentation tool (kdoc/doxygen)"))
-    ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API Documentation"))
-  //MB end
-    ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,              i18n("Creates the Project's User Manual with the sgml-file"))
-    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,             i18n("Creates distribution packages from the current project"))
-    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
-
-    ON_STATUS_MSG(ID_PROJECT_MAKE_TAGS, i18n("Creates a tags file from the current project sources"))
-    ON_STATUS_MSG(ID_PROJECT_LOAD_TAGS, i18n("Load a tags file generated for the current project sources"))
+//    ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,                    i18n("Generates a new project with Application Wizard"))
+//    ON_STATUS_MSG(ID_PROJECT_OPEN,                          i18n("Opens an existing project"))
+//    ON_STATUS_MSG(ID_PROJECT_CLOSE,                         i18n("Closes the current project"))
+//    ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,                i18n("Adds an existing file to the project"))
+//    ON_STATUS_MSG(ID_PROJECT_ADD_NEW_TRANSLATION_FILE,      i18n("Adds a new language for internationalization to the project"))
+//    ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,                   i18n("Removes file from the project"))
+//
+//    ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,                     i18n("Creates a new Class frame structure and files"))
+//    ON_STATUS_MSG(ID_PROJECT_GENERATE,                      i18n("Creates a project file for an existing automake project"))
+//
+//    ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,               i18n("Shows the current file properties"))
+//    ON_STATUS_MSG(ID_PROJECT_OPTIONS,                       i18n("Sets project and compiler options"))
+//    ON_STATUS_MSG(ID_PROJECT_MESSAGES,                      i18n("Invokes make to create the message file by extracting all i18n() macros"))
+//  //MB
+//    ON_STATUS_MSG(ID_PROJECT_DOC_TOOL,                      i18n("Switches the documentation tool (kdoc/doxygen)"))
+//    ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API Documentation"))
+//  //MB end
+//    ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,              i18n("Creates the Project's User Manual with the sgml-file"))
+//    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,             i18n("Creates distribution packages from the current project"))
+//    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
+//
+//    ON_STATUS_MSG(ID_PROJECT_MAKE_TAGS, i18n("Creates a tags file from the current project sources"))
+//    ON_STATUS_MSG(ID_PROJECT_LOAD_TAGS, i18n("Load a tags file generated for the current project sources"))
 
     ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
     ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))

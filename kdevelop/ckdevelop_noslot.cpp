@@ -70,56 +70,56 @@
 
 void CKDevelop::setupRecentProjectMenu()
 {
-    QStringList list=config->readListEntry("Recent Projects");
-  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-    addRecentProject((*it));
+//    QStringList list=config->readListEntry("Recent Projects");
+//  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+//    addRecentProject((*it));
 }
 
 void CKDevelop::saveRecentProjectMenu()
 {
-    QStringList list;
-  for (uint index=0; index < recent_projects_menu->count(); index++)
-  {
-    int id = recent_projects_menu->idAt(index);
-    QString menuFile = recent_projects_menu->text(id);
-    list.append(menuFile);
-  }
-    config->writeEntry("Recent Projects", list);
+//    QStringList list;
+//  for (uint index=0; index < recent_projects_menu->count(); index++)
+//  {
+//    int id = recent_projects_menu->idAt(index);
+//    QString menuFile = recent_projects_menu->text(id);
+//    list.append(menuFile);
+//  }
+//    config->writeEntry("Recent Projects", list);
 }
 
 void CKDevelop::shuffleProjectToTop(int id)
 {
-  QString file = recent_projects_menu->text(id);
-  if (!file.isEmpty())
-  {
-    recent_projects_menu->removeItem(id);
-    recent_projects_menu->insertItem(file, (int) -1, (int)0);
-  }
+//  QString file = recent_projects_menu->text(id);
+//  if (!file.isEmpty())
+//  {
+//    recent_projects_menu->removeItem(id);
+//    recent_projects_menu->insertItem(file, (int) -1, (int)0);
+//  }
 }
 
 QString CKDevelop::getProjectAsString(int id)
 {
-  return recent_projects_menu->text(id);
+//  return recent_projects_menu->text(id);
 }
 
 void CKDevelop::addRecentProject(const QString& file)
 {
-  for (uint index=0; index < recent_projects_menu->count(); index++)
-  {
-    int id = recent_projects_menu->idAt(index);
-    QString menuFile = recent_projects_menu->text(id);
-    if (menuFile == file)
-    {
-//      shuffleProjectToTop(id);
-      return;
-    }
-  }
-
-  if (recent_projects_menu->count() > 7)
-    recent_projects_menu->removeItemAt(7);
-
-  // Add it at the top of the menu
-  recent_projects_menu->insertItem(file, (int)-1, (int)0);
+//  for (uint index=0; index < recent_projects_menu->count(); index++)
+//  {
+//    int id = recent_projects_menu->idAt(index);
+//    QString menuFile = recent_projects_menu->text(id);
+//    if (menuFile == file)
+//    {
+////      shuffleProjectToTop(id);
+//      return;
+//    }
+//  }
+//
+//  if (recent_projects_menu->count() > 7)
+//    recent_projects_menu->removeItemAt(7);
+//
+//  // Add it at the top of the menu
+//  recent_projects_menu->insertItem(file, (int)-1, (int)0);
 }
 
 SaveAllDialog::SaveAllResult 
@@ -907,49 +907,56 @@ void CKDevelop::readOptions()
 		break;
 	}
 
-  // read setting whether to use the ctags search database
-  bCTags = config->readBoolEntry("use_ctags", false);
+	// read setting whether to use the ctags search database
+	bCTags = config->readBoolEntry("use_ctags", false);
 
-  config->setGroup("General Options");
-    /////////////////////////////////////////
-    // RUNTIME VALUES AND FILES
-  bAutosave=config->readBoolEntry("Autosave",true);
-  saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
-  saveTimer=new QTimer(this);
-  connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
-  if(bAutosave){
-    saveTimer->start(saveTimeout);
-  }
-  else{
-    saveTimer->stop();
-  }
-  bAutoswitch=config->readBoolEntry("Autoswitch",true);
-  bDefaultCV=config->readBoolEntry("DefaultClassView",true);
-  make_cmd=config->readEntry("Make","make");
-  //  make_with_cmd=config->readEntry("MakeWith","");
+	config->setGroup("General Options");
+	/////////////////////////////////////////
+	// RUNTIME VALUES AND FILES
+	bAutosave=config->readBoolEntry("Autosave",true);
+	saveTimeout=config->readNumEntry("Autosave Timeout",5*60*1000);
+	saveTimer=new QTimer(this);
+	connect(saveTimer,SIGNAL(timeout()),SLOT(slotFileSaveAll()));
+	if(bAutosave){
+		saveTimer->start(saveTimeout);
+	}
+	else{
+		saveTimer->stop();
+	}
+	bAutoswitch=config->readBoolEntry("Autoswitch",true);
+	bDefaultCV=config->readBoolEntry("DefaultClassView",true);
+	make_cmd=config->readEntry("Make","make");
+//  make_with_cmd=config->readEntry("MakeWith","");
 
-  config->setGroup("Files");
-  setupRecentProjectMenu();
+	config->setGroup("Files");
+	setupRecentProjectMenu();
 
-  //MB
-    doctool = config->readNumEntry("doc_tool_type");
-  // must be done here - cause the call comes AFTER the initialization of Project menue :(
-  if (doctool == DT_KDOC || doctool == 0)
-  {
-    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,true);
-    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,false);
-      doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
-  }
-  if (doctool == DT_DOX)
-  {
-    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,false);
-    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,true);
-      doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
-  }
-    //MB end
-	
+	doctool = config->readNumEntry("doc_tool_type");
+	KToggleAction* pDoxyAction = dynamic_cast<KToggleAction*>
+	                             (actionCollection()->action("project_api_doxygen"));
+	KToggleAction* pKdocAction = dynamic_cast<KToggleAction*>
+	                             (actionCollection()->action("project_api_kdoc"));
+	KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
+
+	// must be done here - cause the call comes AFTER the initialization of Project menue :(
+	if (pDoxyAction && pKdocAction && pDoxyConfAction) {
+		if (doctool == DT_KDOC || doctool == 0)
+		{
+			pKdocAction->setChecked(true);
+			pDoxyAction->setChecked(false);
+			if (getProject())
+				pDoxyConfAction->setEnabled(false);
+		}
+		else if (doctool == DT_DOX)
+		{
+			pDoxyAction->setChecked(true);
+			pKdocAction->setChecked(false);
+			if (getProject())
+				pDoxyConfAction->setEnabled(true);
+		}
+	}
+
 	m_docViewManager->readBookmarkConfig(config);
-
 	/*
 	doc_bookmarks_list.setAutoDelete(TRUE);
 	doc_bookmarks_title_list.setAutoDelete(TRUE);
