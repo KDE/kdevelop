@@ -264,14 +264,6 @@
                                     <string>Import by copying (not recommendable).</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>createButton</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Create New File</string>
-                                </property>
-                            </widget>
                             <spacer>
                                 <property name="name">
                                     <cstring>arrowSpacer2</cstring>
@@ -451,6 +443,9 @@
         <widget class="KProgress">
             <property name="name">
                 <cstring>progressBar</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QLayoutWidget">

@@ -177,9 +177,6 @@ void ImportExistingDialog::resizeEvent ( QResizeEvent* ev )
 
 void ImportExistingDialog::init()
 {
-	progressBar->hide();
-	progressBar->setProgress ( 1 );
-
 	importView->setMode ( KIconView::Select );
     importView->setItemsMovable ( false );
 
@@ -282,7 +279,7 @@ void ImportExistingDialog::importItems()
 
 void ImportExistingDialog::slotOk()
 {
-	progressBar->show();
+	//progressBar->show();
 	progressBar->setFormat ( i18n ( "Importing... %p%" ) );
 
 	KFileItemListIterator items ( *importView->items() );
@@ -301,9 +298,9 @@ void ImportExistingDialog::slotOk()
 			outsideList.append ( ( *items ) );
 		}
 	}
-	
+
 	progressBar->setTotalSteps ( outsideList.count() + importView->items()->count() );
-	
+
 	if ( outsideList.count() > 0 )
 	{
 		if ( KMessageBox::questionYesNoList ( this, i18n (
