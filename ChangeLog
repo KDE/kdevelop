@@ -1,3 +1,10 @@
+2001-06-18  rokrau@yahoo.com
+   * bugfix: KDevelop's treeviews now respect the user setting for 
+     single/double clicks. For this I had to change part of ctreeview
+     and also connect TreeView slots to KListView signals executed() and
+     contextMenu(). This may have introduced some other problems, please
+     test and report. 
+
 2001-06-17  F@lk Brettschneider <falk@kdevelop.org>
    * start kdevelop after its initial setup has finished
    * creation of KDE docu outputs to user now
