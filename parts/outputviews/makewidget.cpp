@@ -448,7 +448,8 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     {
         // absolute path given
         name = fName;
-    } else if ( ( fName.contains( "/" ) ) && ( !dir.isEmpty() ) )
+    }
+    else if ( !dir.isEmpty() )
     {
         name = dir + fName;
     }
@@ -461,6 +462,8 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
 	     !checkFileExists( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" + fName, name ) )
             checkFileExists( m_part->project()->buildDirectory() + "/" + fName, name );
     }
+
+    kdDebug(9004) << "Opening file: " << fName << endl;
 
     // GNU make resolves symlinks. if "name" is a real path to a file the
     // project know by symlink path, we need to return the symlink path
