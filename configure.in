@@ -112,7 +112,5 @@ doc/sv/Makefile \
 doc/zh_CN.GB2312/Makefile \
 doc/zh_CN.GB2312/tutorial/Makefile \
 doc/zh_CN.GB2312/welcome/Makefile \
-) 
-
-
-
+doc/zh_CN.GB2312/manual/Makefile
+)
