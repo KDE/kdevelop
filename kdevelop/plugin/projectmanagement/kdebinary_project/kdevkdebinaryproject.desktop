@@ -6,4 +6,5 @@ Name=KDEBinaryProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevkdebinaryproject
 X-KDevelop-Compilers=KDevCompilerGcc KDevCompilerGpp
+X-KDevelop-Linker=KDevLinkerLd
 Icon=java_src
