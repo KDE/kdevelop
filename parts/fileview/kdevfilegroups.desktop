@@ -2,8 +2,8 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=File Tree
-Name=KDevFileView
+Comment=File Groups
+Name=KDevFileGroups
 ServiceTypes=KDevelop/Plugin
-X-KDE-Library=libkdevfileview
+X-KDE-Library=libkdevfilegroups
 X-KDevelop-Scope=Project

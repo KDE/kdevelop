@@ -28,7 +28,7 @@
 #include "kdevpartcontroller.h"
 #include "domutil.h"
 
-#include "fileviewpart.h"
+#include "filegroupspart.h"
 #include "filegroupsconfigwidget.h"
 
 
@@ -102,7 +102,7 @@ QString FileGroupsFileItem::extractName(const QString &fileName)
 }
 
 
-FileGroupsWidget::FileGroupsWidget(FileViewPart *part)
+FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     : KListView(0, "file view widget")
 {
     setFocusPolicy(ClickFocus);

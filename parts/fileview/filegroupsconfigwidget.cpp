@@ -16,10 +16,10 @@
 
 #include "domutil.h"
 #include "addfilegroupdlg.h"
-#include "fileviewpart.h"
+#include "filegroupspart.h"
 
 
-FileGroupsConfigWidget::FileGroupsConfigWidget(FileViewPart *part,
+FileGroupsConfigWidget::FileGroupsConfigWidget(FileGroupsPart *part,
                                                QWidget *parent, const char *name)
     : FileGroupsConfigWidgetBase(parent, name)
 {

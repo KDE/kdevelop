@@ -14,7 +14,7 @@
 
 #include <klistview.h>
 
-class FileViewPart;
+class FileGroupsPart;
 class KDevProject;
 
 
@@ -23,7 +23,7 @@ class FileGroupsWidget : public KListView
     Q_OBJECT
     
 public:
-    FileGroupsWidget(FileViewPart *part);
+    FileGroupsWidget(FileGroupsPart *part);
     ~FileGroupsWidget();
 
 public slots:
@@ -36,7 +36,7 @@ private slots:
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
 private:
-    FileViewPart *m_part;
+    FileGroupsPart *m_part;
 };
 
 #endif

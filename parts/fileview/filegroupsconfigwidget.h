@@ -14,7 +14,7 @@
 
 #include "filegroupsconfigwidgetbase.h"
 
-class FileViewPart;
+class FileGroupsPart;
 
 
 class FileGroupsConfigWidget : public FileGroupsConfigWidgetBase
@@ -22,7 +22,7 @@ class FileGroupsConfigWidget : public FileGroupsConfigWidgetBase
     Q_OBJECT
 
 public:
-    FileGroupsConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
+    FileGroupsConfigWidget( FileGroupsPart *widget, QWidget *parent, const char *name=0 );
     ~FileGroupsConfigWidget();
 
 public slots:
@@ -37,7 +37,7 @@ private:
     void readConfig();
     void storeConfig();
     
-    FileViewPart *m_part;
+    FileGroupsPart *m_part;
 };
 
 #endif

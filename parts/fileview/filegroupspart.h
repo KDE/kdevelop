@@ -9,24 +9,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWPART_H_
-#define _FILEVIEWPART_H_
+#ifndef _FILEGROUPSPART_H_
+#define _FILEGROUPSPART_H_
 
 #include <qguardedptr.h>
+#include <kdialogbase.h>
 #include "kdevplugin.h"
 
-class FileTreeWidget;
+class FileGroupsWidget;
 
-class FileViewPart : public KDevPlugin
+class FileGroupsPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    FileViewPart( QObject *parent, const char *name, const QStringList & );
-    ~FileViewPart();
+    FileGroupsPart( QObject *parent, const char *name, const QStringList & );
+    ~FileGroupsPart();
+
+public slots:
+    void refresh();
+
+private slots:
+    void projectConfigWidget(KDialogBase *dlg);
 
 private:
-    QGuardedPtr<FileTreeWidget> m_filetree;
+    QGuardedPtr<FileGroupsWidget> m_filegroups;
 };
 
 #endif
