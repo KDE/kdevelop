@@ -64,7 +64,6 @@ public slots:
 
   void slotCurrentChanged(QWidget *w);
   void slotClosePartForWidget(const QWidget *widget);
-  void slotCloseAllButPartForWidget(QWidget *widget);
   void slotActivePartChanged( KParts::Part* part );
   void slotCloseAllWindows();
 
