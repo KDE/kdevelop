@@ -38,7 +38,10 @@ public:
   ~QuickOpenFunctionDialog();
   
   void gotoFile( QString name );
-
+  
+  FunctionDefinitionList* matchingFuncList(){ return funcList; };
+  QuickOpenPart* part(){ return m_part; };
+  
 public slots:
   virtual void slotExecuted(QListBoxItem*);//itemList executed, returnPressed
   virtual void executed(QListBoxItem*);	//
@@ -47,7 +50,8 @@ public slots:
 protected:
 	FunctionDefinitionList *m_functionDefList;
 	QStringList *m_functionStrList;
-
+	FunctionDefinitionList *funcList;
+	
 };
 
 #endif

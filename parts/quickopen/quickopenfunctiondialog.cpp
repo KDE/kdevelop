@@ -57,10 +57,11 @@ QuickOpenFunctionDialog::QuickOpenFunctionDialog( QuickOpenPart *part, QWidget* 
 		m_functionStrList->append( fmodel->name() );
 	}
 	m_completion = new KCompletion();
-	m_functionStrList->sort();
+	//m_functionStrList->sort();
+	m_completion->setOrder( KCompletion::Sorted );
 	m_completion->setItems( *m_functionStrList );
 
-	itemList->insertStringList( *m_functionStrList );
+	itemList->insertStringList( m_completion->items() );
 	itemList->setCurrentItem( 0 );
 }
 
@@ -77,7 +78,8 @@ QuickOpenFunctionDialog::~QuickOpenFunctionDialog()
 void QuickOpenFunctionDialog::gotoFile( QString name )
 {
 	FunctionDefinitionModel *fmodel;
-	FunctionDefinitionList *funcList = new FunctionDefinitionList();
+	//FunctionDefinitionList *funcList = new FunctionDefinitionList();
+	funcList = new FunctionDefinitionList();
 	FunctionDefinitionDom fdom;
 
 	for( FunctionDefinitionList::ConstIterator it = m_functionDefList->begin() ; it!=m_functionDefList->end() ; ++it ){

@@ -8,91 +8,35 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>619</width>
-            <height>304</height>
+            <width>615</width>
+            <height>399</height>
         </rect>
     </property>
     <property name="caption">
         <string>QuickOpenFunctionChooseFormBase</string>
     </property>
-    <widget class="QLabel">
+    <widget class="KSqueezedTextLabel">
         <property name="name">
-            <cstring>textLabel2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>250</x>
-                <y>10</y>
-                <width>170</width>
-                <height>16</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Function Arguments List</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
+            <cstring>filepathlabel</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>10</y>
-                <width>100</width>
-                <height>16</height>
+                <y>320</y>
+                <width>585</width>
+                <height>20</height>
             </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
         <property name="text">
-            <string>File Name</string>
-        </property>
-    </widget>
-    <widget class="KListBox">
-        <property name="name">
-            <cstring>fileBox</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>30</y>
-                <width>220</width>
-                <height>219</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>okBtn</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>290</x>
-                <y>260</y>
-                <width>170</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>OK</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancelBtn</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>480</x>
-                <y>260</y>
-                <width>116</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
+            <string></string>
         </property>
     </widget>
     <widget class="KListBox">
@@ -101,14 +45,137 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>250</x>
-                <y>30</y>
-                <width>350</width>
-                <height>219</height>
+                <x>240</x>
+                <y>40</y>
+                <width>360</width>
+                <height>260</height>
             </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
         <property name="currentItem">
             <number>-1</number>
+        </property>
+    </widget>
+    <widget class="KListBox">
+        <property name="name">
+            <cstring>fileBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>220</width>
+                <height>260</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>11</y>
+                <width>200</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>File Name</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>236</x>
+                <y>11</y>
+                <width>358</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>Function Arguments List</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>okBtn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>240</x>
+                <y>360</y>
+                <width>175</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+        <property name="flat">
+            <bool>false</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancelBtn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>430</x>
+                <y>360</y>
+                <width>170</width>
+                <height>28</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
         </property>
     </widget>
 </widget>
@@ -175,6 +242,7 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>klistbox.h</includehint>
     <includehint>klistbox.h</includehint>
 </includehints>
