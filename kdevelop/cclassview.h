@@ -48,7 +48,7 @@ class CClassView : public CTreeView
 public: // Constructor & Destructor
 
   /** The constructor. Us this exactly as you would with QListView. */
-  CClassView( ClassStore* pStore, QWidget* parent = 0,const char* name = 0 );
+  CClassView( QWidget* parent = 0,const char* name = 0 );
 
   /** Destructor. */
   ~CClassView();
@@ -96,6 +96,7 @@ public: // Public constants
 
 public: // Public attributes
 
+private:
   /** The classtore */
   ClassStore *store;
 

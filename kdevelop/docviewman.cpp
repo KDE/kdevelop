@@ -49,8 +49,9 @@
 #include "ckdevaccel.h"
 #include "kdevcodecompletion.h"
 #include "kdevcodetemplate.h"
+#include "partcontroller.h"
 
-DocViewMan::DocViewMan( CKDevelop* parent, ClassStore* pStore )
+DocViewMan::DocViewMan( CKDevelop* parent )
 : QObject( parent)
   ,m_pParent(parent)
   ,m_pDocBookmarksMenu(0L)
@@ -60,7 +61,6 @@ DocViewMan::DocViewMan( CKDevelop* parent, ClassStore* pStore )
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(false)
   ,m_pKateFactory(0L)
-  ,m_pStore(pStore)
   ,m_bCloseActionPending(false)
 {
   m_MDICoverList.setAutoDelete(true);
@@ -2287,16 +2287,6 @@ void DocViewMan::slotEditExpandTemplate()
 {
     //if( currentEditView() )
     m_pCodeTemplate->expandTemplate( currentEditView() );
-}
-
-void DocViewMan::setStore( ClassStore* pStore )
-{
-    m_pStore = pStore;
-}
-
-ClassStore* DocViewMan::store() const
-{
-    return m_pStore;
 }
 
 #include "docviewman.moc"

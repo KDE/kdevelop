@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "cclassview.h"
-
+#include "api.h"
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
 #include "cproject.h"
@@ -111,21 +111,20 @@ void CClassView::CCVToolTip::maybeTip( const QPoint &p )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassView::CClassView(ClassStore* pStore, QWidget* parent, const char* name) :
+CClassView::CClassView(QWidget* parent, const char* name) :
   CTreeView (parent, name)
 {
   CLASSROOTNAME = "Classes";
   GLOBALROOTNAME = "Globals";
 
-  cp = new CClassParser( pStore );
+  // Set the store.
+  store = API::getInstance()->classStore();
+  cp = new CClassParser( store );
 
   project = NULL;		//by default initialize it to null;
 
   // Create the popupmenus.
   initPopups();
-
-  // Set the store.
-  store = pStore;
 
   // Create the tooltip;
   toolTip = new CCVToolTip( this );

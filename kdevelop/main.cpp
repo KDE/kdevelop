@@ -23,6 +23,7 @@
 #include "ckdevelop.h"
 #include "setup/ckdevinstall.h"
 #include "kstartuplogo.h"
+#include "core.h"
 
 //#include <dcopclient.h>
 #include <kaboutdata.h>
@@ -194,6 +195,8 @@ int main(int argc, char* argv[])
   kdevelop->bStartupIsPending = false;  // see queryClose()
 
   args->clear();
+
+  Core::getInstance()->doEmitCoreInitialized();
 
   int rc = a.exec();
   return rc;

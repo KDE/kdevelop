@@ -22,6 +22,7 @@
 #include "resource.h"
 #include "ccompletionopts.h"
 #include "ccodetemplateopts.h"
+#include "partselectwidget.h"
 
 #include <kmessagebox.h>
 #include <kkeydialog.h>
@@ -69,6 +70,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name, i
   addDebuggerTab();
   addQT2Tab();
   addUserInterfaceTab();
+  addPartSelectTab();
 
 //  connect( this, SIGNAL(defaultButtonPressed()), SLOT(slotDefault()) );
   connect( this, SIGNAL(okClicked()), SLOT(slotOkClicked()) );
@@ -974,6 +976,7 @@ void CKDevSetupDlg::slotOkClicked(){
   completionOptsDlg->slotSettingsChanged();
   // code template
   codeTemplateOptsDlg->slotSettingsChanged();
+  partSelectWidget->accept();
 
 #if QT_VERSION < 300
   m_accel->setKeyDict(keyMap);
@@ -1113,6 +1116,18 @@ void CKDevSetupDlg::addEnhancedCodingTab()
     tab->addTab( codeTemplateOptsDlg, i18n("Code Template") );
     grid->addWidget( tab, 0, 0 );
 
+}
+
+void CKDevSetupDlg::addPartSelectTab()
+{
+    QFrame* additionalPage = addPage(i18n("KDevelop Parts"),
+                                     i18n("KDevelop Parts Configuration"),
+                                     KGlobal::instance()->iconLoader()->loadIcon( "source", KIcon::NoGroup, KIcon::SizeMedium ));
+
+    QGridLayout *grid = new QGridLayout( additionalPage );
+    CKDevelop* pDevelop = (CKDevelop*) parent();
+    partSelectWidget = new PartSelectWidget( additionalPage );
+    grid->addWidget( partSelectWidget, 0, 0 );
 }
 
 #include "ckdevsetupdlg.moc"

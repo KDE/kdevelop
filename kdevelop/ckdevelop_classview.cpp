@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "ckdevelop.h"
-
+#include "api.h"
 #include "cclassview.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
@@ -69,7 +69,7 @@ void CKDevelop::slotClassbrowserViewTree()
 void CKDevelop::slotClassChoiceCombo(const QString& text)
 {
   ParsedClass *aClass=NULL;
-  aClass = class_tree->store->getClassByName( text );
+  aClass = API::getInstance()->classStore()->getClassByName( text );
 
   if ( (!text.isEmpty()) && aClass)
   {
@@ -97,7 +97,7 @@ void CKDevelop::slotMethodChoiceCombo(const QString& text)
   QString classname = classCombo->currentText();
 
   ParsedClass *aClass=NULL;
-  aClass = class_tree->store->getClassByName(classname );
+  aClass = API::getInstance()->classStore()->getClassByName(classname );
 
   if(classCombo->currentText()==i18n("(Globals)"))
   {
@@ -239,7 +239,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   ParsedMethod *meth = NULL;
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( aClassName );
+  aClass = API::getInstance()->classStore()->getClassByName( aClassName );
   REQUIRE( "Valid class", aClass != NULL );
 
   if( aMethod->isSignal() )     // Signals
@@ -397,7 +397,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
     saveTimer->start(saveTimeout);
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( aClassName );
+  aClass = API::getInstance()->classStore()->getClassByName( aClassName );
   REQUIRE( "Valid class", aClass != NULL );
 
   for( aClass->attributeIterator.toFirst();
@@ -479,7 +479,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, ParsedAttribute* aAt
     saveTimer->start(saveTimeout);
 
   // Fetch the current class.
-  aClass = class_tree->store->getClassByName( aClassName );
+  aClass = API::getInstance()->classStore()->getClassByName( aClassName );
   REQUIRE( "Valid class", aClass != NULL );
 
   for( aClass->attributeIterator.toFirst();
@@ -610,7 +610,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
   ParsedMethod *aMethod;
   int line;
 
-  aClass = class_tree->store->getClassByName( aClassName );
+  aClass = API::getInstance()->classStore()->getClassByName( aClassName );
   REQUIRE( "Valid class", aClass != NULL );
 
   if( aClass != NULL )
@@ -774,7 +774,7 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
       }
       break;
     case THGLOBAL_FUNCTION:
-      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
+      aMethod = API::getInstance()->classStore()->globalContainer.getMethodByNameAndArg( itemName );
       break;
     case THCLASS:
       switchToFile( aContainer->definedInFile(), aContainer->definedOnLine() );
@@ -875,11 +875,11 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
       break;
     case THGLOBAL_FUNCTION:
     case THGLOBAL_VARIABLE:
-      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
+      aAttr = API::getInstance()->classStore()->globalContainer.getMethodByNameAndArg( itemName );
       if(!aAttr)
-        aAttr = class_tree->store->globalContainer.getAttributeByName( itemName );
+        aAttr = API::getInstance()->classStore()->globalContainer.getAttributeByName( itemName );
       if(!aAttr)
-        aStruct = class_tree->store->globalContainer.getStructByName( itemName );
+        aStruct = API::getInstance()->classStore()->globalContainer.getStructByName( itemName );
       break;
     default:
       debug( "Unknown type %d in CVGotoDeclaration.", itemType );
@@ -933,7 +933,7 @@ void CKDevelop::CVRefreshClassCombo()
   classCombo->insertItem(i18n("(Globals)") );
   class_comp->addItem(i18n("(Globals)"));
 
-  classList = class_tree->store->getSortedClassList();
+  classList = API::getInstance()->classStore()->getSortedClassList();
   for( aClass = classList->first(),i=0;
        aClass != NULL;
        aClass = classList->next(), i++ )
@@ -950,7 +950,7 @@ void CKDevelop::CVRefreshClassCombo()
   {
 
 		// Update the method combo with the class from the classcombo.
-		aClass = class_tree->store->getClassByName( savedClass );
+		aClass = API::getInstance()->classStore()->getClassByName( savedClass );
 		if( aClass && savedIdx != -1 )
 		{
 			classCombo->setCurrentItem( savedIdx );
@@ -990,7 +990,7 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
   lb->setAutoUpdate( false );
 
   if((classCombo->currentText()==i18n("(Globals)"))){
-    QList<ParsedMethod> *globalmeth=class_tree->store->globalContainer.getSortedMethodList( );
+    QList<ParsedMethod> *globalmeth=API::getInstance()->classStore()->globalContainer.getSortedMethodList( );
     for( globalmeth->first();
        globalmeth->current();
        globalmeth->next() )
@@ -999,7 +999,7 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
         methodCombo->insertItem(SmallIcon("CVglobal_meth"), str );
         method_comp->addItem(str);
       }
-    QList<ParsedAttribute> *globalattr=class_tree->store->globalContainer.getSortedAttributeList( );
+    QList<ParsedAttribute> *globalattr=API::getInstance()->classStore()->globalContainer.getSortedAttributeList( );
     for( globalattr->first();
        globalattr->current();
        globalattr->next() )
@@ -1008,7 +1008,7 @@ void CKDevelop::CVRefreshMethodCombo( ParsedClass *aClass )
         methodCombo->insertItem(SmallIcon("CVglobal_var"), str );
         method_comp->addItem(str);
       }
-    QList<ParsedStruct> *globalstruct=class_tree->store->globalContainer.getSortedStructList( );
+    QList<ParsedStruct> *globalstruct=API::getInstance()->classStore()->globalContainer.getSortedStructList( );
     for( globalstruct->first();
        globalstruct->current();
        globalstruct->next() )
@@ -1110,17 +1110,17 @@ ParsedContainer *CKDevelop::CVGetContainer( const char *containerPath,
   {
     case THCLASS:
       // Try to fetch the class.
-      aContainer = class_tree->store->getClassByName( containerPath );
+      aContainer = API::getInstance()->classStore()->getClassByName( containerPath );
 
       // If we found the class and it isn't a subclass we update the combo.
       if( aContainer != NULL && aContainer->declaredInScope().isEmpty() )
         CVClassSelected( containerPath );
       break;
     case THSTRUCT:
-      aContainer = class_tree->store->globalContainer.getStructByName( containerPath );
+      aContainer = API::getInstance()->classStore()->globalContainer.getStructByName( containerPath );
       break;
     case THSCOPE:
-      aContainer = class_tree->store->globalContainer.getScopeByName( containerPath );
+      aContainer = API::getInstance()->classStore()->globalContainer.getScopeByName( containerPath );
       break;
     default:
       debug( "Didn't find class/struct/scope %s[%d]", containerPath, containerType );

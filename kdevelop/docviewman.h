@@ -54,11 +54,8 @@ class DocViewMan : public QObject
   Q_OBJECT
 
 public:
-  DocViewMan( CKDevelop* parent, ClassStore* pStore=0 );
+  DocViewMan( CKDevelop* parent );
   ~DocViewMan();
-
-    void setStore( ClassStore* pStore );
-    ClassStore* store() const;
 
   /** */
   void doSwitchToFile(QString filename, int line, int col,
@@ -358,7 +355,6 @@ private:
   KHTMLView*                m_pCurBrowserView;
 
   bool                      m_curIsBrowser;
-  ClassStore*              m_pStore;
   bool                      m_bCloseActionPending;
 
 

@@ -24,18 +24,19 @@
 
 
 extern "C" {
-    void *init_libkdevclassview();
-
-/*
     void *init_libkdevdoctreeview();
+    void *init_libkdevclassview();
     void *init_libkdevgrepview();
     void *init_libkdevappwizard();
     void *init_libkdevoutputviews();
-*/
 };
 
 
+static KLibFactory *doctreeviewFactory = 0;
 static KLibFactory *classviewFactory = 0;
+static KLibFactory *grepviewFactory = 0;
+static KLibFactory *appwizardFactory = 0;
+static KLibFactory *outputviewsFactory = 0;
 
 
 static KLibFactory *factoryForService(KService *service)
@@ -50,11 +51,32 @@ static KLibFactory *factoryForService(KService *service)
     // dynamic linker does not look in $kde_moduledir (for a good reason :)
     // (Simon)
 
-    if (service->name() == "KDevClassView") {
+    if (service->name() == "KDevDocTreeView") {
+        if (!doctreeviewFactory)
+            doctreeviewFactory = static_cast<KLibFactory*>(init_libkdevdoctreeview());
+        return doctreeviewFactory;
+    }
+    else if (service->name() == "KDevClassView") {
         if (!classviewFactory)
             classviewFactory = static_cast<KLibFactory*>(init_libkdevclassview());
         return classviewFactory;
     }
+    else if (service->name() == "KDevGrepView") {
+        if (!grepviewFactory)
+            grepviewFactory = static_cast<KLibFactory*>(init_libkdevgrepview());
+        return grepviewFactory;
+    }
+    else if (service->name() == "KDevAppWizard") {
+        if (!appwizardFactory)
+            appwizardFactory = static_cast<KLibFactory*>(init_libkdevappwizard());
+        return appwizardFactory;
+    }
+    else if (service->name() == "KDevMakeView" || service->name() == "KDevAppOutputView") {
+        if (!outputviewsFactory)
+            outputviewsFactory = static_cast<KLibFactory*>(init_libkdevoutputviews());
+        return outputviewsFactory;
+    }
+
     return KLibLoader::self()->factory(QFile::encodeName(service->library()));
 }
 
@@ -62,7 +84,11 @@ static KLibFactory *factoryForService(KService *service)
 
 void PartLoader::cleanup()
 {
+    delete doctreeviewFactory;
     delete classviewFactory;
+    delete grepviewFactory;
+    delete appwizardFactory;
+    delete outputviewsFactory;
 }
 
 

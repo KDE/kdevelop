@@ -58,6 +58,7 @@
 #include <config.h>
 #endif
 
+#define KDE_QTVER 3
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) :
   KWizard(parent,name,true)
@@ -983,7 +984,7 @@ void CKAppWizard::accept() {
 
 /* This function creates the default configure arguments for the actual project */
 
-QString CKAppWizard::createConfigureArgs() 
+QString CKAppWizard::createConfigureArgs()
 {
 
   KConfig *config = KGlobal::config();
@@ -993,30 +994,30 @@ QString CKAppWizard::createConfigureArgs()
   QString args(""), kdeargs(""), qtargs("");
 
   if (/*!sharedlibitem->isSelected() && */ !gnomenormalitem->isSelected() &&
-      !citem->isSelected() && !cppitem->isSelected() && 
+      !citem->isSelected() && !cppitem->isSelected() &&
       !customprojitem->isSelected())
   {
     if (!kde2path.isEmpty())
     {
       if(kde2path.right(1) == "/")
           kde2path=kde2path.remove(kde2path.length()-1,1);
-      kdeargs="--prefix="+kde2path;   
+      kdeargs="--prefix="+kde2path;
     }
-    
+
     if (!qtpath.isEmpty())
     {
       if(qtpath.right(1) == "/")
           qtpath=qtpath.remove(qtpath.length()-1,1);
       qtargs="--with-qt-dir="+qtpath;
     }
-     
+
     if( qextmdiitem->isSelected())
     {
       if (!qtargs.isEmpty())
         qtargs+=" ";
       qtargs+="--enable-kde=no";
     }
-      
+
     if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() || qextmdiitem->isSelected())
        args=qtargs;
     else
@@ -1026,8 +1027,8 @@ QString CKAppWizard::createConfigureArgs()
       args=kdeargs+qtargs;
     }
   }
-  
-  return args;  
+
+  return args;
 }
 
 void CKAppWizard::generateEntries(const QString &filename) {
@@ -1050,7 +1051,7 @@ void CKAppWizard::generateEntries(const QString &filename) {
         libname=fi->fileName();  // get the filename
         if(fi->isFile())
         {
-         if (fi->baseName() != QString("libkmid")) 
+         if (fi->baseName() != QString("libkmid"))
          { // workaround for a strange behaviour of kdoc: don't try libkmid
           libname=" -l"+fi->baseName();  // get only the base of the filename as library name
           link+=libname;
@@ -1138,7 +1139,7 @@ void CKAppWizard::generateEntries(const QString &filename) {
 
     entries << "CONFIGARG\n";
     entries << createConfigureArgs() << "\n";
-      
+
     entries << "NAME\n";
     entries << nameline->text() << "\n";
     entries << "DIRECTORY\n";
@@ -1166,10 +1167,10 @@ void CKAppWizard::generateEntries(const QString &filename) {
     if (apidoc->isChecked())
       entries << "yes\n";
     else entries << "no\n";
-    
+
     entries << "KDE_QTVER\n";
     entries << ((KDE_QTVER==3) ? "3\n" : "2\n");
-    
+
     entries << "KDOC_CALL\n";
 
     if (!index_path.isEmpty() && !link.isEmpty())
@@ -1809,7 +1810,7 @@ void CKAppWizard::slotApplicationClicked() {
     apphelp->setText (i18n("Create a native KDE-2 theme.\n"
     										"Use this template to create native KDE-2 widget themes in C++."));
 	}
-    										
+
   else if (	(qt2normalitem->isSelected() || qtobjcnormalitem->isSelected())
   			&& strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -2346,7 +2347,7 @@ void CKAppWizard::slotProcessExited() {
   project->setAuthor (authorline->text());
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
-  
+
   if (userdoc->isChecked()) {
     if(project->isKDE2Project())
       project->setSGMLFile (directory + "/doc/en/index.docbook");
@@ -2807,7 +2808,7 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject (namelow + "/resource.h",fileInfo);
     }
   }
-  
+
   if (datalink->isChecked()) {
     fileInfo.type = DATA;
     fileInfo.dist = true;

@@ -24,6 +24,7 @@
 #include "ctags/cctags_interf.h"
 #include "ctoolclass.h"
 #include "kdevcore.h"
+#include "kdevtoplevel.h"
 
 #include "resource.h"
 #include "kpp/kpp.h"
@@ -69,7 +70,6 @@ class ParsedContainer;
 class ParsedClass;
 class ParsedAttribute;
 class KStatusBar;
-class KDevCoreImpl;
 // does not exist anymore (rokrau 6/28/01)
 //class CEditWidget;
 class COutputWidget;
@@ -128,7 +128,7 @@ class SaveAllDialog : public KDialog
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public QextMdiMainFrm {
+class CKDevelop : public QextMdiMainFrm, public KDevTopLevel {
   Q_OBJECT
 public:
   /**constructor*/
@@ -263,8 +263,19 @@ public:
   bool getAutomaticArgsHint();
 
   // gideon's part support --- robe
-  void embedToolWidget( QWidget *w, KDevCore::Role role, const QString &shortCaption );
-  void removeToolWidget( QWidget* w, KDevCore::Role role );
+  QextMdiChildView* wrapper(QWidget *view, const QString &name);
+  virtual void embedPartView(QWidget *view, const QString &title);
+  virtual void embedSelectView(QWidget *view, const QString &title);
+  virtual void embedOutputView(QWidget *view, const QString &title);
+  virtual void removeView(QWidget *view);
+  virtual void raiseView(QWidget *view);
+  virtual void lowerView(QWidget *view);
+  virtual void loadSettings();
+  virtual KMainWindow *main();
+  virtual KStatusBar* statusBar()
+      { return (KStatusBar*) QextMdiMainFrm::statusBar(); }
+
+  static CKDevelop* getInstance();
 
  public slots:
 
@@ -857,6 +868,8 @@ protected: // Protected methods
    */
   void CVRefreshMethodCombo( ParsedClass *aClass );
 
+  void slotWidgetDeleted();
+
 public: // Public methods
 
   /** create a ctags file for the current CProject */
@@ -881,8 +894,6 @@ public: // Public methods
 
   /** called if a new subdirs was added to the project, shows a messagebox and start autoconf...*/
   void newSubDir();
-
-  ClassStore* classStore() const { return m_pStore; }
 
 protected:
   /** reads all options and initializes values*/
@@ -1142,8 +1153,10 @@ private:
 
   bool m_bToggleToolViewsIsPending;
 
-  ClassStore* m_pStore;
-  KDevCoreImpl* m_pDevCore;
+  static CKDevelop* m_instance;
+  QMap<QWidget*,QextMdiChildView*> m_widgetMap;
+  QPtrList<QextMdiChildView> m_outputViews, m_selectViews;
+
 
 private slots:
   void slotdoneWithKpp();

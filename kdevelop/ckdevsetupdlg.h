@@ -32,6 +32,7 @@ class QFrame;
 class QButtonGroup;
 class CCompletionOpts;
 class CCodeTemplateOpts;
+class PartSelectWidget;
 
 #include <kdialogbase.h>
 #include <kaccel.h>
@@ -62,6 +63,7 @@ private:
   void addDebuggerTab();
   void addQT2Tab();
   void addUserInterfaceTab();
+  void addPartSelectTab();
 
  private slots:
   void slotOkClicked();
@@ -136,6 +138,7 @@ private:
   CCompletionOpts* completionOptsDlg;
   // code template page
   CCodeTemplateOpts* codeTemplateOptsDlg;
+  PartSelectWidget* partSelectWidget;
 };
 
 #endif

@@ -14,7 +14,7 @@
  ****************************************************************************/
 
 #include "wzconnectdlgimpl.h"
-
+#include "api.h"
 #include "cclasstooldlg.h"
 #include "cclonefunctiondlg.h"
 #include "classparser.h"
@@ -917,7 +917,7 @@ void CClassPropertiesDlgImpl::init()
    typeCompletion->addItem("char");
    typeCompletion->addItem("unsigned char");
    // add list of all classes
-   QList<ParsedClass>* all = class_tree->store->getSortedClassList();
+   QList<ParsedClass>* all = API::getInstance()->classStore()->getSortedClassList();
    for (ParsedClass* i=all->first(); i != 0; i=all->next() )
      typeCompletion->addItem(i->name());
 

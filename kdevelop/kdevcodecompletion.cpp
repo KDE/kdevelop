@@ -21,6 +21,7 @@
 #include "kdevregexp.h"
 #include "docviewman.h"
 #include "classstore.h"
+#include "api.h"
 
 #include <kate/document.h>
 #include <kate/view.h>
@@ -251,7 +252,7 @@ void KDevCodeCompletion::completeText()
         kdDebug() << "---------> no expression ;-)" << endl;
     } else {
         if( showArguments ){
-            QString type = evaluateExpression( expr, ctx, m_pDockViewMan->store() );
+            QString type = evaluateExpression( expr, ctx, API::getInstance()->classStore() );
             QStringList functionList;
 
             functionList = getMethodListForClass( type, word );
@@ -271,7 +272,7 @@ void KDevCodeCompletion::completeText()
             if( expr.isEmpty() && !v.type.isEmpty() ){
                 type = v.type;
             } else {
-                type = evaluateExpression( expr, ctx, m_pDockViewMan->store() );
+                type = evaluateExpression( expr, ctx, API::getInstance()->classStore() );
             }
 
             entries = unique( getEntryListForClass( type ) );
@@ -480,7 +481,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
                     type = getTypeOfMethod( pThis, e1 );
                 }
                 if( type.isEmpty() ){
-                    type = getTypeOfMethod( &m_pDockViewMan->store()->globalContainer,
+                    type = getTypeOfMethod( &API::getInstance()->classStore()->globalContainer,
                                             e1 );
                 }
             }
@@ -495,7 +496,7 @@ QString KDevCodeCompletion::evaluateExpression( const QString& expr,
                     type = getTypeOfAttribute( pThis, e1 );
                 }
                 if( type.isEmpty() ){
-                    type = getTypeOfAttribute( &m_pDockViewMan->store()->globalContainer,
+                    type = getTypeOfAttribute( &API::getInstance()->classStore()->globalContainer,
                                                e1 );
                 }
             }
@@ -546,7 +547,7 @@ QString KDevCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const 
     kdDebug() << "KDevCodeCompletion::getTypeOfMethod()"
               << " - " << pContainer
               << " - " << name << endl;
-    if( !pContainer || !m_pDockViewMan->store() ){
+    if( !pContainer || !API::getInstance()->classStore() ){
         return QString::null;
     }
 
@@ -561,7 +562,7 @@ QString KDevCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const 
     if( pClass ){
         QList<ParsedParent> parentList = pClass->parents;
         for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-            ParsedClass* pClass = m_pDockViewMan->store()->getClassByName( pParent->name() );
+            ParsedClass* pClass = API::getInstance()->classStore()->getClassByName( pParent->name() );
             QString type = getTypeOfMethod( pClass, name );
             type = purify( type );
             if( !type.isEmpty() ){
@@ -574,7 +575,7 @@ QString KDevCodeCompletion::getTypeOfMethod( ParsedContainer* pContainer, const 
 
 QString KDevCodeCompletion::getTypeOfAttribute( ParsedContainer* pContainer, const QString& name )
 {
-    if( !pContainer || !m_pDockViewMan->store() ){
+    if( !pContainer || !API::getInstance()->classStore() ){
         return QString::null;
     }
 
@@ -588,7 +589,7 @@ QString KDevCodeCompletion::getTypeOfAttribute( ParsedContainer* pContainer, con
     if( pClass ){
         QList<ParsedParent> parentList = pClass->parents;
         for( ParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-            ParsedClass* pClass = m_pDockViewMan->store()->getClassByName( pParent->name() );
+            ParsedClass* pClass = API::getInstance()->classStore()->getClassByName( pParent->name() );
             QString type = getTypeOfAttribute( pClass, name );
             type = purify( type );
             if( !type.isEmpty() ){
@@ -603,7 +604,7 @@ QValueList<KTextEditor::CompletionEntry>
 KDevCodeCompletion::getEntryListForExpr( const QString& expr,
                                         SimpleContext* ctx )
 {
-    QString type = evaluateExpression( expr, ctx, m_pDockViewMan->store() );
+    QString type = evaluateExpression( expr, ctx, API::getInstance()->classStore() );
     kdDebug() << "--------> type = " << type << endl;
     QValueList<KTextEditor::CompletionEntry> entries = getEntryListForClass( type );
     return entries;
@@ -614,9 +615,9 @@ QValueList<KTextEditor::CompletionEntry> KDevCodeCompletion::getEntryListForClas
     kdDebug() << "KDevCodeCompletion::getEntryListForClass()" << endl;
     QValueList<KTextEditor::CompletionEntry> entryList;
 
-    ParsedContainer* pContainer = m_pDockViewMan->store()->getClassByName( strClass );
+    ParsedContainer* pContainer = API::getInstance()->classStore()->getClassByName( strClass );
     if( !pContainer ){
-        pContainer = m_pDockViewMan->store()->globalContainer.getStructByName( strClass );
+        pContainer = API::getInstance()->classStore()->globalContainer.getStructByName( strClass );
     }
 
     if ( pContainer )
@@ -678,7 +679,7 @@ QList<ParsedMethod>* KDevCodeCompletion::getParentMethodListForClass ( ParsedCla
 
     for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name() );
+        pClass = API::getInstance()->classStore()->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
@@ -717,7 +718,7 @@ QList<ParsedAttribute>* KDevCodeCompletion::getParentAttributeListForClass ( Par
 
     for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name() );
+        pClass = API::getInstance()->classStore()->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
@@ -742,7 +743,7 @@ QStringList KDevCodeCompletion::getMethodListForClass( QString strClass, QString
 {
      QStringList functionList;
 
-     ParsedClass* pClass = m_pDockViewMan->store()->getClassByName ( strClass );
+     ParsedClass* pClass = API::getInstance()->classStore()->getClassByName ( strClass );
      if ( pClass )
      {
          QList<ParsedMethod>* pMethodList;
@@ -794,7 +795,7 @@ void KDevCodeCompletion::getParentMethodListForClass( ParsedClass* pClass,
 
     for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
     {
-        pClass = m_pDockViewMan->store()->getClassByName ( pParentClass->name() );
+        pClass = API::getInstance()->classStore()->getClassByName ( pParentClass->name() );
 
         if ( pClass )
         {
@@ -840,7 +841,7 @@ void KDevCodeCompletion::getParentMethodListForClass( ParsedClass* pClass,
 
 QStringList KDevCodeCompletion::getFunctionList( QString strMethod )
 {
-    ParsedScopeContainer* pScope = &m_pDockViewMan->store()->globalContainer;
+    ParsedScopeContainer* pScope = &API::getInstance()->classStore()->globalContainer;
     QStringList functionList;
     QList<ParsedMethod>* pMethodList = 0;
 

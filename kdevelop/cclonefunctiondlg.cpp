@@ -18,6 +18,7 @@
 #include "cclonefunctiondlg.h"
 #include "parsedclass.h"
 #include "cclassview.h"
+#include "api.h"
 #include <klocale.h>
 #include <kmessagebox.h>
 //#include <kapp.h>
@@ -139,7 +140,7 @@ CCloneFunctionDlg::CCloneFunctionDlg(CClassView* class_tree, QWidget *parent, co
 	allclasses->insertItem(templates);
 
 	// create list of all classes
-  QList<ParsedClass>* all = classtree->store->getSortedClassList();
+  QList<ParsedClass>* all = API::getInstance()->classStore()->getSortedClassList();
 	for (ParsedClass* i=all->first(); i != 0; i=all->next() ) {
 		allclasses->insertItem(i->name());
 	  if (i->name() == parentname)
@@ -180,7 +181,7 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 	  QString oparg2( " (const "+classname+"& , const " + classname + "& )" );
 	  // set/get attributes
 	  {
-      ParsedClass *theClass = classtree->store->getClassByName( classname );
+      ParsedClass *theClass = API::getInstance()->classStore()->getClassByName( classname );
     	QList<ParsedAttribute> *list = theClass->getSortedAttributeList();
 
       ParsedAttribute* attr;
@@ -236,7 +237,7 @@ void CCloneFunctionDlg::slotNewClass(const QString& name)
 	}
 
 	// all Methods
-  ParsedClass *theClass = classtree->store->getClassByName( name );
+  ParsedClass *theClass = API::getInstance()->classStore()->getClassByName( name );
 	QList<ParsedMethod> *implList = new QList<ParsedMethod>;
 	QList<ParsedMethod> *availList = new QList<ParsedMethod>;
   QList<ParsedMethod> *all = theClass->getSortedMethodList();
@@ -287,7 +288,7 @@ bool CCloneFunctionDlg::getMethod(QString& type, QString& decl, QString& comment
   	return true;
   }
 
-  ParsedClass *theClass = classtree->store->getClassByName( name );
+  ParsedClass *theClass = API::getInstance()->classStore()->getClassByName( name );
   ParsedMethod* res = searchMethod(theClass, selected);
   if (res) {
   	type = res->type();

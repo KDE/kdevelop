@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 #include "ckdevelop.h"
-
+#include "api.h"
 
 #include "cclassview.h"
 #include "setup/ccreatedocdatabasedlg.h"
@@ -108,6 +108,9 @@
 
 #include <iostream>
 using namespace std;
+
+CKDevelop* CKDevelop::m_instance = 0;
+
 
 #define WITH_CPP_REPARSE
 
@@ -2999,7 +3002,7 @@ void CKDevelop::slotClassbrowserNewMethod()
     return;
 
   ParsedClass* aClass;
-  aClass = class_tree->store->getClassByName ( classname );
+  aClass = API::getInstance()->classStore()->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDMETH);
   dlg -> show();
@@ -3024,7 +3027,7 @@ void CKDevelop::slotClassbrowserNewAttribute()
     return;
 
   ParsedClass* aClass;
-  aClass = class_tree->store->getClassByName ( classname );
+  aClass = API::getInstance()->classStore()->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDATTR);
   dlg -> show();
@@ -3049,7 +3052,7 @@ void CKDevelop::slotClassbrowserNewSignal()
     return;
 
   ParsedClass* aClass;
-  aClass = class_tree->store->getClassByName ( classname );
+  aClass = API::getInstance()->classStore()->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDSIGNAL);
   dlg -> show();
@@ -3073,7 +3076,7 @@ void CKDevelop::slotClassbrowserNewSlot()
   if (classname.isEmpty() || classname==i18n("(Globals)"))
     return;
   ParsedClass* aClass;
-  aClass = class_tree->store->getClassByName ( classname );
+  aClass = API::getInstance()->classStore()->getClassByName ( classname );
 
   CClassPropertiesDlgImpl* dlg = class_tree->createCTDlg(aClass, (int) CTPADDSLOT);
   dlg -> show();
@@ -4817,17 +4820,103 @@ bool CKDevelop::getAutomaticArgsHint()
     return config->readBoolEntry("automatic_argshint", true);
 }
 
-void CKDevelop::embedToolWidget( QWidget *w, KDevCore::Role role, const QString &shortCaption )
+QextMdiChildView *CKDevelop::wrapper(QWidget *view, const QString &name)
 {
-    if( role == KDevCore::SelectView || role == KDevCore::DocumentView ){
-        addToolWindow( w, KDockWidget::DockCenter, class_tree, 25, shortCaption, shortCaption );
-    } else {
-        addToolWindow( w, KDockWidget::DockCenter, messages_widget, 25, shortCaption, shortCaption );
+  QextMdiChildView* pMDICover = new QextMdiChildView(name);
+  QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
+  view->reparent(pMDICover, QPoint(0,0));
+  pLayout->addWidget(view);
+  pMDICover->setName(name);
+  QString shortName = name;
+  int length = shortName.length();
+  shortName = shortName.right(length - (shortName.findRev('/') +1));
+  pMDICover->setTabCaption(shortName);
+  pMDICover->setCaption(name);
+
+  m_widgetMap.insert(view, pMDICover);
+
+  return pMDICover;
+}
+
+void CKDevelop::embedPartView(QWidget *view, const QString &name)
+{
+    kdDebug() << "CKDevelop::embedPartView()" << endl;
+    QextMdiChildView *child = wrapper(view, name);
+
+    unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
+
+    addWindow(child, QPoint(0,0), mdiFlags);
+
+    connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
+}
+
+void CKDevelop::embedSelectView(QWidget *view, const QString &name)
+{
+    QextMdiChildView *child = wrapper(view, name);
+    addToolWindow(child, KDockWidget::DockCenter, class_tree, 25, name, name);
+    connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
+    m_selectViews.append(child);
+}
+void CKDevelop::embedOutputView(QWidget *view, const QString &name)
+{
+    QextMdiChildView *child = wrapper(view, name);
+    addToolWindow(child, KDockWidget::DockCenter, messages_widget, 25, name, name);
+    connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
+    m_outputViews.append(child);
+}
+
+void CKDevelop::removeView(QWidget *view)
+{
+    kdDebug() << "CKDevelop::removeView()" << endl;
+    QextMdiChildView *wrapper = m_widgetMap[view];
+    if (wrapper)
+    {
+        closeWindow(wrapper);
+
+        m_selectViews.remove(wrapper);
+        m_outputViews.remove(wrapper);
+
+        m_widgetMap.remove(view);
     }
 }
 
-void CKDevelop::removeToolWidget( QWidget* w, KDevCore::Role role )
+void CKDevelop::raiseView(QWidget *view)
 {
-    //removeToolWindow( w );
-    // delete( w );
+    kdDebug() << "CKDevelop::raiseView()" << endl;
+    QextMdiChildView *wrapper = m_widgetMap[view];
+    if (wrapper)
+    {
+        wrapper->activate();
+        activateView(wrapper);
+    }
+}
+
+void CKDevelop::lowerView(QWidget *view)
+{
+    // ignored in MDI mode!
+    kdDebug() << "CKDevelop::lowerView()" << endl;
+}
+
+void CKDevelop::loadSettings()
+{
+}
+
+KMainWindow * CKDevelop::main()
+{
+    return this;
+}
+
+CKDevelop* CKDevelop::getInstance()
+{
+    if( !m_instance ){
+        new CKDevelop();
+    }
+    return m_instance;
+}
+
+void CKDevelop::slotWidgetDeleted()
+{
+    QWidget *w = (QWidget*)sender();
+
+    removeView(w);
 }
