@@ -74,6 +74,4 @@ private:
     QString         m_UserEMail;
 };
 
-typedef KGenericFactory<BugListComponent> BugListFactory;
-
 #endif

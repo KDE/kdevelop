@@ -28,15 +28,20 @@
 //#include "kdeveditormanager.h"
 //#include "KDevComponentManager.h"
 
+typedef KGenericFactory<BugListComponent> BugListFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevbuglist, BugListFactory( "kdevbuglist" ) );
+
 
 BugListComponent::BugListComponent (QObject *parent, const char *name, const QStringList &)
 :KDevPlugin (parent, name ? name : "BugListComponent")
 {
-//    setInstance(BugListFactory::instance());
-//    setXMLFile("kdevbuglist.rc");
+    setInstance(BugListFactory::instance());
+    setXMLFile("kdevbuglist.rc");
 
     // Ensure it is NULL.
     m_pBugList = NULL;
+
+    setupGUI();
 }
 
 BugListComponent::~BugListComponent()
