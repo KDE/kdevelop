@@ -153,11 +153,11 @@ void DocTreeGlobalConfigWidget::readConfig()
     kdocCheck->setChecked( config->readBoolEntry("displayKDELibsKDoc", false) );
   */
     config->setGroup("Index");
-    indexKDevelopBox->setChecked(config->readEntry("IndexKDevelop"));
-    indexQtBox->setChecked(config->readEntry("IndexQt"));
-    indexKdelibsBox->setChecked(config->readEntry("IndexKdelibs"));
-    indexBooksBox->setChecked(config->readEntry("IndexBooks"));
-    indexBookmarksBox->setChecked(config->readEntry("IndexBookmarks"));
+    indexKDevelopBox->setChecked(config->readBoolEntry("IndexKDevelop"));
+    indexQtBox->setChecked(config->readBoolEntry("IndexQt"));
+    indexKdelibsBox->setChecked(config->readBoolEntry("IndexKdelibs"));
+    indexBooksBox->setChecked(config->readBoolEntry("IndexBooks"));
+    indexBookmarksBox->setChecked(config->readBoolEntry("IndexBookmarks"));
 
     config->setGroup("htdig");
     QString exe = kapp->dirs()->findExe("htdig");
@@ -315,7 +315,7 @@ void DocTreeGlobalConfigWidget::extEdit()
                 filePath = *it;
         }
         const QString _default( DocTreeViewTool::tocDocDefaultLocation( filePath ) );
-        LibraryDocDlg *dlg = new LibraryDocDlg( this, name, location, _default, "TocDirs");
+        LibraryDocDlg *dlg = new LibraryDocDlg( this, name.latin1(), location, _default, "TocDirs");
         dlg->libName->setEnabled(false);
         dlg->libSource->setEnabled(false);
         dlg->exec();
