@@ -1,3 +1,8 @@
+1999-03-23  Jonas Nordin <jonas.nordin@cenacle.se>
+	* added a new classparser(including subdirectory classparser).
+	* fixed the cclassview with respect to this.
+	* added new dialogs to add methods and attributes to a class.
+
 1999-03-22  Pascal Krahmer <pascal@beast.de>
         * added kdlgpropwidget class
 
