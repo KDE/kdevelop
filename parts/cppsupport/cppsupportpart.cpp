@@ -439,6 +439,24 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	popup->insertItem( i18n( "Switch Header/Implementation"),
 			   this, SLOT( slotSwitchHeader() ) );
 
+       kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
+       if( codeModel()->hasFile(m_activeFileName) ){
+           QPopupMenu* m = new QPopupMenu( popup );
+           popup->insertItem( i18n("Go to definition"), m );
+           const FileDom file = codeModel()->fileByName( m_activeFileName );
+           const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
+           for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
+	       QString text = (*it)->scope().join( "::");
+	       if( !text.isEmpty() )
+		   text += "::";
+	       text += formatModelItem( *it, true );
+               int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
+	       int line, column;
+	       (*it)->getStartPosition( &line, &column );
+	       m->setItemParameter( id, line );
+           }
+       }
+
 	const EditorContext *econtext = static_cast<const EditorContext*>(context);
 	QString str = econtext->currentLine();
 	if (str.isEmpty())
@@ -456,6 +474,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 	popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
 			   this, SLOT(slotGotoIncludeFile()) );
+
     } else if( context->hasType(Context::CodeModelItemContext) ){
 	const CodeModelItemContext* mcontext = static_cast<const CodeModelItemContext*>( context );
 
@@ -1189,7 +1208,7 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
 
 QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDescription )
 {
-    if (item->isFunction())
+    if (item->isFunction() || item->isFunctionDefinition() )
     {
         const FunctionModel *model = static_cast<const FunctionModel*>(item);
         QString function;
@@ -1349,6 +1368,11 @@ void CppSupportPart::slotExtractInterface( )
     }
 
     m_activeClass = 0;
+}
+
+void CppSupportPart::gotoLine( int line )
+{
+    m_activeViewCursor->setCursorPositionReal( line, 0 );
 }
 
 #include "cppsupportpart.moc"

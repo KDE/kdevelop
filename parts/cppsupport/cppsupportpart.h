@@ -116,6 +116,7 @@ private slots:
     void slotCompleteText();
     void slotMakeMember();
     void slotExtractInterface();
+    void gotoLine( int line );
 
     void slotNeedTextHint( int, int, QString& );
 

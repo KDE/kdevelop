@@ -4,6 +4,10 @@
  <Menu name="edit">
   <Action name="edit_complete_text"/>
  </Menu>
+ 
+ <Menu name="edit">
+  <Action name="edit_include_header"/>
+ </Menu>
 
  <Menu name="edit">
   <Action name="edit_make_member"/>
