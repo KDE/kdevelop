@@ -5,7 +5,7 @@
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  cppsupport pythonsupport perlsupport phpsupport fortransupport \
 	  autoproject scriptproject trollproject customproject \
-	  debugger javadebugger distpart sourcebrowser \
+	  debugger javadebugger distpart \
 	  konsole astyle tools ctags regexptest cvs doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev \
 	  uimode editor-chooser openwith\
