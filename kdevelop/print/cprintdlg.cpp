@@ -618,7 +618,8 @@ void CPrintDlg::slotProgramActivated(int i) {
       previewButton->setEnabled(true);
       printToFileDlg->setEnabled(true);
       printToFileButton->setEnabled(true);
-      qtarch_ButtonGroup_6->setEnabled(true);
+      qtarch_ButtonGroup_6->setEnabled(true); 
+
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
@@ -646,8 +647,8 @@ void CPrintDlg::slotProgramActivated(int i) {
       mediaCombBox->insertItem( "letterdj" );
     }
   else if (i==0) {
+    
       prettyPrintCheckBox->setEnabled(false);
-      //      slotPrettyPrintClicked(false);
       formatCombBox->setEnabled(false);
       pageSide->setEnabled(false);
       qtarch_ButtonGroup_9->setEnabled(false);
@@ -667,6 +668,13 @@ void CPrintDlg::slotProgramActivated(int i) {
       printToFileDlg->setEnabled(true);
       printToFileButton->setEnabled(true);
       qtarch_ButtonGroup_6->setEnabled(true);
+
+      prettyPrintCheckBox->setChecked(false);
+    prettyCombBox->setEnabled(false);
+    prettyColorCheckBox->setEnabled(false);
+    prettyPrintCheckBox->setChecked(false);
+    qtarch_ButtonGroup_34->setEnabled(false);
+    //slotPrettyPrintClicked(false);
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
@@ -692,8 +700,8 @@ void CPrintDlg::slotProgramActivated(int i) {
       mediaCombBox->insertItem( "letter" );
     }
   else {
-      prettyPrintCheckBox->setEnabled(false);
-      //      slotPrettyPrintClicked(false);
+    
+    prettyPrintCheckBox->setEnabled(false);
       formatCombBox->setEnabled(false);
       pageSide->setEnabled(false);
       qtarch_ButtonGroup_9->setEnabled(false);
@@ -713,6 +721,13 @@ void CPrintDlg::slotProgramActivated(int i) {
       printToFileDlg->setEnabled(false);
       printToFileButton->setEnabled(false);
       qtarch_ButtonGroup_6->setEnabled(false);
+
+      prettyPrintCheckBox->setChecked(false);
+    prettyCombBox->setEnabled(false);
+    prettyColorCheckBox->setEnabled(false);
+    prettyPrintCheckBox->setChecked(false);
+    qtarch_ButtonGroup_34->setEnabled(false);
+    //slotPrettyPrintClicked(false);
   }
 }
 
@@ -1200,8 +1215,9 @@ QString CPrintDlg::createFileString() {
     return oldfiles;
   }
   else if (!strcmp(globalpara,"cppFiles")) {
-    for(str= project->getSources().first();str !=0;str = project->getSources().next()){
-      sources =  prj_str2 + underdir + "/" + str + " " + sources ;
+    filelist = project->getSources();
+    for(str= filelist.first();str !=0;str = filelist.next()){
+      sources =  str + " " + sources ;
     }
     delete (project);
     return sources;
@@ -1215,8 +1231,9 @@ QString CPrintDlg::createFileString() {
     return sources;
   }
   else if (!strcmp(globalpara,"headerFiles")) {
-    for(str= project->getHeaders().first();str !=0;str = project->getHeaders().next()){
-      sources =  prj_str2 + underdir + "/" + str + " " + sources ;
+    filelist = project->getHeaders();
+    for(str= filelist.first();str !=0;str = filelist.next()){
+      sources =  str + " " + sources ;
     }
     delete (project);
     return sources;
