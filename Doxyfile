@@ -12,8 +12,8 @@ BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
 ALWAYS_DETAILED_SEC    = YES
 INLINE_INHERITED_MEMB  = NO
-FULL_PATH_NAMES        = NO
-STRIP_FROM_PATH        = 
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = /local/kde3src/kdevelop/
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
 MULTILINE_CPP_IS_BRIEF = NO
@@ -128,7 +128,10 @@ EXCLUDE                = parts/appwizard/adahello/ \
                          parts/appwizard/xulhello/ \
                          parts/appwizard/kappjava/ \
                          parts/appwizard/kdevlang \
-                         parts/cppsupport/subclassing_template
+                         parts/cppsupport/subclassing_template \
+                         parts/pascalsupport/ \
+                         parts/javasupport \
+                         lib/antlr
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc*
 EXAMPLE_PATH           = 
@@ -236,10 +239,21 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 # Configuration::addtions related to external references   
 #---------------------------------------------------------------------------
-TAGFILES               = 
-GENERATE_TAGFILE       = 
+TAGFILES               = /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/dcop/dcop.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/dcop/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/interfaces/interfaces.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/interfaces/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kdecore/kdecore.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kdecore/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kdefx/kdefx.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kdefx/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kdeui/kdeui.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kdeui/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/khtml/khtml.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/khtml/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kio/kio.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kio/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kjs/kjs.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kjs/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kparts/kparts.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kparts/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kspell/kspell.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kspell/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kutils/kutils.tag=/opt/kde3/share/doc/HTML/en/kdelibs-apidocs/kutils/html/ \
+                         /opt/kde3/share/doc/HTML/en/kdelibs-apidocs/qt/qt.tag=/usr/lib/qt3/doc/html
+GENERATE_TAGFILE       =
 ALLEXTERNALS           = NO
-EXTERNAL_GROUPS        = YES
+EXTERNAL_GROUPS        = NO
 PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool   
