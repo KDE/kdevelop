@@ -482,10 +482,9 @@ void QEditorView::expandBlock( QTextParag* p )
         }
     }
 
-    doRepaint();
-
     m_editor->setCursorPosition( p->paragId(), 0 );
     m_editor->refresh();
+    doRepaint();
 }
 
 void QEditorView::collapseBlock( QTextParag* p )
@@ -511,10 +510,9 @@ void QEditorView::collapseBlock( QTextParag* p )
         }
     }
 
-    doRepaint();
-
     m_editor->setCursorPosition( p->paragId(), 0 );
     m_editor->refresh();
+    doRepaint();
 }
 
 void QEditorView::doRepaint()
@@ -522,4 +520,9 @@ void QEditorView::doRepaint()
     m_markerWidget->doRepaint();
     m_lineNumberWidget->doRepaint();
     m_levelWidget->doRepaint();
+}
+
+void QEditorView::selectAll( )
+{
+    m_editor->selectAll();
 }

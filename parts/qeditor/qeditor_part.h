@@ -335,7 +335,6 @@ public:
      */
     virtual bool removeSelectedText ();
 
-public slots:
     /**
      *  select the whole text
      */

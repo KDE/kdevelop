@@ -13,6 +13,7 @@
     <Action name="edit_cut" group="edit_paste_merge" />
     <Action name="edit_copy" group="edit_paste_merge" />
     <Action name="edit_paste" group="edit_paste_merge" />
+    <Action name="edit_select_all" group="edit_paste_merge" />
     <Action name="edit_find" group="edit_find_merge" />
     <Action name="edit_replace" group="edit_find_merge" />
     <Action name="go_goto_line" />

@@ -84,7 +84,7 @@ void LineNumberWidget::paintEvent( QPaintEvent* /*e*/ )
 
 		painter.drawText( 0, p->rect().y() - yOffset,
 				  buffer.width() - 10, p->rect().height(),
-				  AlignRight | AlignVCenter,
+				  AlignRight | AlignBottom,
 				  QString::number(p->paragId()+1) );
 		p = p->next();
 	}

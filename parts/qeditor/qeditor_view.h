@@ -156,6 +156,11 @@ public slots:
      */
     virtual void paste ( );
 
+    /**
+     * select all text
+     */
+    virtual void selectAll ( );
+
 // -- PopupMenuInterface ----------------------------------------------------------------------
 public:
     /**
