@@ -1,5 +1,5 @@
-/* Copyright (C) 2003
-	 Mickael Marchand <marchand@kde.org>
+/**
+	 Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
 	 modify it under the terms of the GNU General Public
@@ -163,16 +163,7 @@ bool subversionPart::fetchFromRepository() {
 }
 
 KDevVCSFileInfoProvider * subversionPart::fileInfoProvider() const {
-	return 0;
-}
-
-bool subversionPart::isValidDirectory( const QString& dirPath) {
-    QString svn = "/.svn/";
-    QDir svndir( dirPath + svn );
-    QString entriesFileName = dirPath + svn + "entries";
-
-    return svndir.exists() &&
-        QFile::exists( entriesFileName );
+	return m_impl->fileInfoProvider();
 }
 
 void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
@@ -375,10 +366,15 @@ void subversionPart::restorePartialProjectSession(const QDomElement* dom) {
 	base = svn.attribute( "base", "" );
 }
 
-bool subversionPart::isValidDirectory( const QString & // dirPath
-                                       ) const
-{
-    return false;
+bool subversionPart::isValidDirectory( const QString &dirPath) const {
+    QString svn = "/.svn/";
+    QDir svndir( dirPath + svn );
+    QString entriesFileName = dirPath + svn + "entries";
+
+	kdDebug() << "dirpath " << dirPath+"/.svn/" << svndir.exists() << endl;
+	kdDebug() << "entries " << entriesFileName << QFile::exists( entriesFileName ) << endl;
+    return svndir.exists() &&
+        QFile::exists( entriesFileName );
 }
 
 #include "subversion_part.moc"

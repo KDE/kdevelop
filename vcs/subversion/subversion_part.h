@@ -38,14 +38,13 @@ class subversionPart : public KDevVersionControl
 
 public:
 		subversionPart(QObject *parent, const char *name, const QStringList &);
-		~subversionPart();
+		virtual ~subversionPart();
 
 		void setupActions();
 		QWidget* newProjectWidget( QWidget* parent );
 		void createNewProject( const QString& dirname );
 		bool fetchFromRepository();
 		KDevVCSFileInfoProvider * fileInfoProvider() const;
-		bool isValidDirectory( const QString& dirPath);
 		bool urlFocusedDocument( KURL &url );
 		void restorePartialProjectSession(const QDomElement* );
 		void savePartialProjectSession(QDomElement* );

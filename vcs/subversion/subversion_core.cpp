@@ -40,13 +40,19 @@ subversionCore::subversionCore(subversionPart *part)
 		m_widget = new subversionWidget(part, 0 , "subversionprocesswidget");
 		if ( ! connectDCOPSignal("kded", "ksvnd", "subversionNotify(QString,int,int,QString,int,int,long int,QString)", "notification(QString,int,int,QString,int,int,long int,QString)", false ) )
 			kdWarning() << "Failed to connect to kded dcop signal ! Notifications won't work..." << endl;
-	}
+
+        m_fileInfoProvider = new SVNFileInfoProvider( part );
+}
 
 subversionCore::~subversionCore() {
 	if ( processWidget() ) {
 		m_part->mainWindow()->removeView( m_widget );
 		delete m_widget;
 	}
+}
+
+KDevVCSFileInfoProvider *subversionCore::fileInfoProvider() const {
+    return m_fileInfoProvider;
 }
 
 void subversionCore::notification( const QString& path, int action, int kind, const QString& mime_type, int content_state ,int prop_state ,long int revision, const QString& userstring ) {

@@ -1,5 +1,6 @@
-/* Copyright (C) 2003
-	 Mickael Marchand <marchand@kde.org>
+/**
+
+  	 Copyright (C) 2003-2005 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
 	 modify it under the terms of the GNU General Public
@@ -25,6 +26,7 @@
 #include <kio/job.h>
 #include <kurl.h>
 #include <dcopobject.h>
+#include <subversion_fileinfo.h>
 
 class KDevProject;
 class subversionPart;
@@ -47,6 +49,7 @@ public:
 	void revert( const KURL::List&);
 	void checkout();
 	void createNewProject( const QString& dirName, const KURL& importURL, bool init );
+    KDevVCSFileInfoProvider *fileInfoProvider() const;
 
 k_dcop:
 	void notification( const QString&, int,int, const QString&, int,int ,long int, const QString& );
@@ -63,6 +66,7 @@ private:
 	QGuardedPtr<subversionWidget> m_widget;
 	subversionPart *m_part;
 	QString wcPath;
+	SVNFileInfoProvider *m_fileInfoProvider;
 
 };
 
