@@ -158,7 +158,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   
 
   install_loc_label = new QLabel( this, "install_loc_label" );
-  install_loc_label->setGeometry( 350, 280, 190, 20 );
+  install_loc_label->setGeometry( 350, 280, 250, 20 );
   install_loc_label->setMinimumSize( 0, 0 );
   install_loc_label->setMaximumSize( 32767, 32767 );
   install_loc_label->setFocusPolicy( QWidget::NoFocus );

@@ -55,7 +55,7 @@ CClassWizardDlg::~CClassWizardDlg()
 void CClassWizardDlg::setWidgetValues()
 {
   // Add the tabs
-  addTab( &virtualMethodView, "Virtual functions" );
+  addTab( &virtualMethodView,i18n("Virtual functions"));
 }
 
 void CClassWizardDlg::setTooltips()

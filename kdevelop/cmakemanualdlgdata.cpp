@@ -8,6 +8,7 @@
 
 **********************************************************************/
 #include "cmakemanualdlg.h"
+#include <kapp.h>
 
 void  CMakeManualDlg::initDialog(){
   this->resize(350,220);
@@ -15,12 +16,12 @@ void  CMakeManualDlg::initDialog(){
   ok_button= new QPushButton(this,"NoName");
   ok_button->setGeometry(50,170,100,30);
   ok_button->setMinimumSize(0,0);
-  ok_button->setText("OK");
+  ok_button->setText(i18n("OK"));
 
   cancel_button= new QPushButton(this,"NoName");
   cancel_button->setGeometry(190,170,100,30);
   cancel_button->setMinimumSize(0,0);
-  cancel_button->setText("Cancel");
+  cancel_button->setText(i18n("Cancel"));
 
   file_edit= new QLineEdit(this,"NoName");
   file_edit->setGeometry(10,110,280,30);
@@ -30,7 +31,7 @@ void  CMakeManualDlg::initDialog(){
   QLabel_1= new QLabel(this,"NoName");
   QLabel_1->setGeometry(10,80,170,30);
   QLabel_1->setMinimumSize(0,0);
-  QLabel_1->setText("Manual-File:");
+  QLabel_1->setText(i18n("Manual-File:"));
 
   sgml2html_radiobutton= new QRadioButton(this,"NoName");
   sgml2html_radiobutton->setGeometry(200,30,100,30);
@@ -46,6 +47,6 @@ void  CMakeManualDlg::initDialog(){
   file_button= new QPushButton(this,"NoName");
   file_button->setGeometry(310,110,30,30);
   file_button->setMinimumSize(0,0);
-  file_button->setText("Button");
+  file_button->setText(i18n("Button"));
 
 }

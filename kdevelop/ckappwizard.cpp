@@ -130,7 +130,7 @@ void CKAppWizard::initPages(){
   apphelp->setBackgroundMode( QWidget::PaletteBackground );
   apphelp->setFontPropagation( QWidget::NoChildren );
   apphelp->setPalettePropagation( QWidget::NoChildren );
-  apphelp->setText( "Label:" );
+  apphelp->setText( i18n("Label:") );
   apphelp->setAlignment( 1313 );
   apphelp->setMargin( -1 );
   
@@ -545,7 +545,7 @@ void CKAppWizard::initPages(){
 	vsSupport->setBackgroundMode( QWidget::PaletteBackground );
 	vsSupport->setFontPropagation( QWidget::NoChildren );
 	vsSupport->setPalettePropagation( QWidget::NoChildren );
-	vsSupport->setText( "vcs support" );
+	vsSupport->setText(i18n( "vcs support" ));
 	vsSupport->setAlignment( 289 );
 	vsSupport->setMargin( -1 );	
 	
@@ -570,7 +570,7 @@ void CKAppWizard::initPages(){
 	vsInstall->setBackgroundMode( QWidget::PaletteBackground );
 	vsInstall->setFontPropagation( QWidget::NoChildren );
 	vsInstall->setPalettePropagation( QWidget::NoChildren );
-	vsInstall->setText( "vcs location" );
+	vsInstall->setText(i18n( "vcs location") );
 	vsInstall->setAlignment( 289 );
 	vsInstall->setMargin( -1 );
 	
@@ -607,7 +607,7 @@ void CKAppWizard::initPages(){
 	projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
 	projectVSLocation->setFontPropagation( QWidget::NoChildren );
 	projectVSLocation->setPalettePropagation( QWidget::NoChildren );
-	projectVSLocation->setText( "repository in vcs" );
+	projectVSLocation->setText(i18n( "repository in vcs") );
 	projectVSLocation->setAlignment( 289 );
 	projectVSLocation->setMargin( -1 );	
 	
@@ -632,7 +632,7 @@ void CKAppWizard::initPages(){
 	vendorTag->setBackgroundMode( QWidget::PaletteBackground );
 	vendorTag->setFontPropagation( QWidget::NoChildren );
 	vendorTag->setPalettePropagation( QWidget::NoChildren );
-	vendorTag->setText( "vendor tag" );
+	vendorTag->setText(i18n( "vendor tag") );
 	vendorTag->setAlignment( 289 );
 	vendorTag->setMargin( -1 );
 
@@ -657,7 +657,7 @@ void CKAppWizard::initPages(){
 	logMessage->setBackgroundMode( QWidget::PaletteBackground );
 	logMessage->setFontPropagation( QWidget::NoChildren );
 	logMessage->setPalettePropagation( QWidget::NoChildren );
-	logMessage->setText( "log message" );
+	logMessage->setText(i18n( "log message") );
 	logMessage->setAlignment( 289 );
 	logMessage->setMargin( -1 );
 	
@@ -682,7 +682,7 @@ void CKAppWizard::initPages(){
 	releaseTag->setBackgroundMode( QWidget::PaletteBackground );
 	releaseTag->setFontPropagation( QWidget::NoChildren );
 	releaseTag->setPalettePropagation( QWidget::NoChildren );
-	releaseTag->setText( "release tag" );
+	releaseTag->setText(i18n( "release tag") );
 	releaseTag->setAlignment( 289 );
 	releaseTag->setMargin( -1 );
 
@@ -1006,7 +1006,7 @@ void CKAppWizard::slotOkClicked() {
 
   if (!found) {
   	userdoc->setChecked(false);
-  	KMsgBox msg (0,i18n("sgml2html and ksgml2html do not exists!"),
+  	KMsgBox msg (0,i18n("sgml2html and ksgml2html do not exist!"),
     i18n("If you want to generate the user-documentation, you need one of these programs.\n"
     		 "If you do not have one, the user-documentation will not be generate."),16,i18n("Ok"));
     msg.show();
@@ -2209,14 +2209,14 @@ void CKAppWizard::slotProcessExited() {
   if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected())) {
     group_filters.clear();
     group_filters.append("*.po");
-    project->addLFVGroup ("Translations","");
-    project->setFilters("Translations",group_filters);
+    project->addLFVGroup (i18n("Translations"),"");
+    project->setFilters(i18n("Translations"),group_filters);
   } 
   if (!cppitem->isSelected() && !citem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
-    project->addLFVGroup ("Dialogs","");
-    project->setFilters("Dialogs",group_filters);
+    project->addLFVGroup (i18n("Dialogs"),"");
+    project->setFilters(i18n("Dialogs"),group_filters);
   } 
   
   
@@ -2232,16 +2232,16 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.l++");
   group_filters.append("*.ll");
   group_filters.append("*.l");
-  project->addLFVGroup ("Sources","");
-  project->setFilters("Sources",group_filters);
+  project->addLFVGroup (i18n("Sources"),"");
+  project->setFilters(i18n("Sources"),group_filters);
   
   group_filters.clear();
   group_filters.append("*.h");
   group_filters.append("*.hxx");
   group_filters.append("*.hpp");
   group_filters.append("*.H");
-  project->addLFVGroup ("Header","");
-  project->setFilters("Header",group_filters);
+  project->addLFVGroup (i18n("Header"),"");
+  project->setFilters(i18n("Header"),group_filters);
   
   project->writeProject ();
   project->updateMakefilesAm ();
