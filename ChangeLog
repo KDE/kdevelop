@@ -1,3 +1,7 @@
+2003-09-22 Alexander Dymo <cloudtemple@mksat.net>
+    * Finished GUI for enabling and disabling documentation topics in a project configuration
+      dialog. Thanks to Amilcar Lucas for original idea and implementation.
+
 2003-09-10 Alexander Dymo <cloudtemple@mksat.net>
     * Added the GUI to create custom code completion databases
       based on user selected directories.
