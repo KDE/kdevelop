@@ -26,6 +26,7 @@
 #include <kcolorbutton.h>
 #else
 #include <qpushbutton.h>
+#include <qcolordialog.h>
 #endif
 
 namespace PropertyLib {
@@ -91,14 +92,13 @@ void PColorButton::updateProperty(const QColor &color)
     emit propertyChanged(m_property, value());
 }
 
-}
-
 void PColorButton::changeColor()
 {
    QColor color = QColorDialog::getColor(m_color,this);
    updateProperty(color);
 }
 
+}
 #ifndef PURE_QT
 #include "pcolorbutton.moc"
 #endif
