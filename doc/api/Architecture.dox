@@ -32,6 +32,7 @@ There are two types of possible main window objects:
    - Top level mode (see MainWindow::switchToToplevelMode() )
    - Childframe mode (see MainWindow::switchToChildframeMode() )
    - Tab page mode (see MainWindow::switchToTabPageMode() )
+   - IDEAl mode (see MainWindow::switchToIDEAlMode() )
    .
  - MainWindowIDEAl implements an enhanced MDI main window providing a set of
    pre-arranged access tabs around user areas.
@@ -50,7 +51,105 @@ TopLevel class).
 
 All parts reside in dedicated subdirectories of the /parts directory. They can
 be viewed according to their functionalities as follows.
- 
+
+\subsubsection language-parts Programming Language Support Parts in KDevelop
+
+To add support for a new language check this page \ref howToAddProgrammingLanguages
+
+  - parts/adasupport = Support for Ada
+    - (see AdaSupportPart)
+    .
+  - parts/cppsupport = Support for C/C++
+    - (see CppSupportPart)
+    .
+  - parts/fortransupport = Support for Fortran
+    - (see FortranSupportPart)
+    .
+  - parts/javasupport = Support for Java
+    - (see JavaSupportPart)
+    .
+  - parts/pascalsupport = Support for Pascal
+    - (see PascalSupportPart)
+    .
+  - parts/perlsupport = Support for Perl
+    - (see PerlSupportPart)
+    .
+  - parts/phpsupport = Support for PHP
+    - (see PHPSupportPart)
+    .
+  - parts/pythonsupport = Support for Python
+    - (see PythonSupportPart)
+    .
+  - parts/rubysupport = Support for Ruby
+    - (see RubySupportPart)
+    .
+  .
+
+\subsubsection build-tools-parts Build tools Parts in KDevelop
+
+  - parts/adaproject = Ada Project Manager
+    - (see AdaProjectPart)
+    .
+  - parts/antproject = ANT Project Manager
+    - (see AntProjectPart)
+    .
+  - parts/autoproject = Automake Project Manager
+    - (see AutoProjectPart)
+    .
+  - parts/customproject = Custom Project Manager
+    - (see CustomProjectPart)
+    .
+  - parts/genericproject = Generic Project Manager
+    - (see GenericProjectPart)
+    .
+  - parts/pascalproject = Pascal Project Manager
+    - (see PascalProjectPart)
+    .
+  - parts/scriptproject = Script Project Manager
+    - (see ScriptProjectPart)
+    .
+  - parts/trollproject = QMake based Project Manager
+    - (see TrollProjectPart)
+    .
+  .
+
+
+\subsubsection vcs-parts VCS (Version Control System) Parts in KDevelop
+
+  - parts/cervisia = Cervisia Support
+    - (see CervisiaPart)
+    .
+  - parts/cvs = CVS Support
+    - (see CvsPart)
+    .
+  - parts/cvsservice = cvsservice Support (Cervisia interface)
+    - (see CvsServicePart)
+    .
+  - parts/perforce = Version managment system perforce integration
+    - (see PerforcePart)
+    .
+  - parts/svn = Subversion integration
+    - (see SvnPart)
+    .
+  .
+
+
+\subsubsection editor-parts editor support Specific Parts in KDevelop
+
+These parts implement a KTextEditor interface.
+
+  - parts/editor-chooser = Chooses an internal text editor
+    - (see EditorChooserPart)
+    .
+  - parts/nedit = KTextEditor interface for nedit
+    - (see KNEditFactory, Document, View)
+    .
+  - parts/qeditor = QEditor integration
+    - (see QEditorPart)
+    .
+  .
+
+
 \subsubsection global-parts Global Parts in KDevelop
 
 Some of the parts are considered global - that is, they effect the entire
@@ -64,9 +163,6 @@ operation of KDevelop.
     .
   - parts/konsole = Embedded Konsole
     - (see KonsoleViewPart)
-    .
-  - parts/editor-chooser = Chooses an internal text editor
-    - (see EditorChooserPart)
     .
   - parts/doctreeview = Documentation Viewer
     - (see DocTreeViewPart)
@@ -106,97 +202,6 @@ operation of KDevelop.
     .
   .
 
-\subsubsection project-management-parts Project Management Parts in KDevelop
-
-  - parts/adaproject = Ada Project Manager
-    - (see AdaProjectPart)
-    .
-  - parts/antproject = ANT Project Manager
-    - (see AntProjectPart)
-    .
-  - parts/autoproject = Automake Project Manager
-    - (see AutoProjectPart)
-    .
-  - parts/customproject = Custom Project Manager
-    - (see CustomProjectPart)
-    .
-  - parts/genericproject = Generic Project Manager
-    - (see GenericProjectPart)
-    .
-  - parts/pascalproject = Pascal Project Manager
-    - (see PascalProjectPart)
-    .
-  - parts/scriptproject = Script Project Manager
-    - (see ScriptProjectPart)
-    .
-  - parts/trollproject = QMake based Project Manager
-    - (see TrollProjectPart)
-    .
-  .
-
-\subsubsection language-parts Language Support Parts in KDevelop
-
-To add support for a new language check this page \ref howToAddProgrammingLanguages
-
-  - parts/cppsupport = Support for C/C++
-    - (see CppSupportPart)
-    .
-  - parts/fortransupport = Support for Fortran
-    - (see FortranSupportPart)
-    .
-  - parts/javasupport = Support for Java
-    - (see JavaSupportPart)
-    .
-  - parts/perlsupport = Support for Perl
-    - (see PerlSupportPart)
-    .
-  - parts/phpsupport = Support for PHP
-    - (see PHPSupportPart)
-    .
-  - parts/pythonsupport = Support for Python
-    - (see PythonSupportPart)
-    .
-  - parts/rubysupport = Support for Ruby
-    - (see RubySupportPart)
-    .
-  - parts/pascalsupport = Support for Pascal
-    - (see PascalSupportPart)
-    .
-  - parts/adasupport = Support for Ada
-    - (see AdaSupportPart)
-    .
-  .
-
-\subsubsection editor support Specific Parts in KDevelop
-
-These parts implement a KTextEditor interface.
-
-  - parts/nedit = KTextEditor interface for nedit
-    - (see KNEditFactory, Document, View)
-    .
-  - parts/qeditor = QEditor integration
-    - (see QEditorPart)
-    .
-  .
-
-\subsubsection VCS (Version Control System) Parts in KDevelop
-
-  - parts/cervisia = Cervisia Support
-    - (see CervisiaPart)
-    .
-  - parts/cvs = CVS Support
-    - (see CvsPart)
-    .
-  - parts/cvsservice = cvsservice Support (Cervisia interface)
-    - (see CvsServicePart)
-    .
-  - parts/perforce = Version managment system perforce integration
-    - (see PerforcePart)
-    .
-  - parts/svn = Subversion integration
-    - (see SvnPart)
-    .
-  .
 
 \subsubsection project-specific-parts Project Specific Parts in KDevelop
 
