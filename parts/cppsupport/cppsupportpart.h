@@ -79,6 +79,9 @@ public:
 
     virtual void customEvent( QCustomEvent* ev );
     
+signals:
+    void fileParsed( const QString& fileName );
+    
 protected:
     virtual KDevLanguageSupport::Features features();
     virtual QStringList fileFilters();

@@ -10,7 +10,7 @@
  ***************************************************************************/
 
 #include "ast.h"
-
+#include <kdebug.h>
 // ------------------------------------------------------------------------
 AST::AST()
     : m_parent( 0 ),
@@ -60,8 +60,8 @@ void AST::setParent( AST* parent )
 {
     if( m_parent )
 	m_parent->removeChild( this );
-    
-    m_parent = parent;    
+
+    m_parent = parent;
     if( m_parent )
 	m_parent->appendChild( this );
 }

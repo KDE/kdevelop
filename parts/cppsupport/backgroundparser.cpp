@@ -17,6 +17,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "ast.h"
+#include "ast_utils.h"
 
 #include <kparts/part.h>
 
@@ -156,7 +157,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 	unit = parseFile( fileName, contents );
     }
     kapp->unlock();
-    
+
     if( !unit ){
 	QFile f( fileName );
 	QTextStream stream( &f );
@@ -241,10 +242,11 @@ void BackgroundParser::run()
 	    lock();
 	    m_unitDict.remove( fileName );
 	    m_unitDict.insert( fileName, unit );
+
 	    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
 	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
 	    unlock();
-	    	    
+
 	    kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED !!!!!!!!!!!!!!!!!!" << endl;
 	}
     }

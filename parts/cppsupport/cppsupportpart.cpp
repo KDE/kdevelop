@@ -203,6 +203,8 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	}
     } else if( ev->type() == Event_FileParsed ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
+	QString fileName = event->fileName();
+	emit fileParsed( fileName );
 	// topLevel()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
     }
 }

@@ -298,7 +298,9 @@ bool Parser::parseName( NameAST::Node& node )
 bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTranslationUnit()" << endl;
-            
+ 
+    int start = lex->index();
+    
     m_problems.clear();
     TranslationUnitAST::Node tun = CreateNode<TranslationUnitAST>();
     node = tun;
@@ -310,7 +312,8 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 	}
 	node->addDeclaration( def );
     }
-    
+ 
+    UPDATE_POS( node, start, lex->index() );
     return m_problems.size() == 0;
 }
 
