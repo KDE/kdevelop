@@ -56,6 +56,8 @@
 #include <config.h>
 #endif
 
+#include <kdebug.h>
+
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
@@ -598,6 +600,8 @@ void CKDevelop::slotProjectOpenRecent(int id)
 
 void CKDevelop::slotProjectOpenCmdl(QString prjname)
 {
+  kdDebug() << "Here " << prjname;
+
 	QString old_project = "";
 
 	prjname.replace(QRegExp("file:"),"");

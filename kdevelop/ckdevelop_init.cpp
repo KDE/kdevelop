@@ -1294,9 +1294,9 @@ void CKDevelop::initConnections(){
 	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
 }
 
-void CKDevelop::completeStartup(bool witharg)
+void CKDevelop::completeStartup(bool ignoreLastProject)
 {
-  initProject(witharg);
+  initProject(ignoreLastProject);
 
   if (start_logo)
     delete start_logo;
@@ -1306,15 +1306,15 @@ void CKDevelop::completeStartup(bool witharg)
     slotHelpTipOfDay();
 }
 
-void CKDevelop::initProject(bool witharg)
+void CKDevelop::initProject(bool ignoreLastProject)
 {
   config->setGroup("General Options");
 
   bool bLastProject;
-  if(!witharg)
-    bLastProject= config->readBoolEntry("LastProject",true);
-  else
+  if(!ignoreLastProject)
     bLastProject=false;
+  else
+    bLastProject= config->readBoolEntry("LastProject",true);
 
   QString filename="";
   if(bLastProject)
@@ -1322,12 +1322,12 @@ void CKDevelop::initProject(bool witharg)
     if (!lastShutdownOK)
     {
       if ( KMessageBox::No == KMessageBox::questionYesNo(this,
-  	                            i18n( "KDevelop failed to shutdown correctly previously"
-  	                                  "\nWould you like to start with the last loaded project?"),
-            	                  i18n("KDevelop failed to shutdown correctly previously")))
+                                i18n( "KDevelop failed to shutdown correctly previously"
+                                      "\nWould you like to start with the last loaded project?"),
+                          i18n("KDevelop failed to shutdown correctly previously")))
       {
-  	    bLastProject = false;
-  	  }
+        bLastProject = false;
+      }
     }
 
     if (bLastProject)
@@ -1337,7 +1337,6 @@ void CKDevelop::initProject(bool witharg)
       slotProjectOpenCmdl(filename);
     }
   }
-
 }
 
 void CKDevelop::setKeyAccel()

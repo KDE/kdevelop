@@ -100,9 +100,9 @@ public:
   void initToolBar();
   void initStatusBar();
   void initWhatsThis();
-  void initProject(bool witharg);
+  void initProject(bool ignoreLastProject);
   void initDebugger();
-  void completeStartup(bool witharg);
+  void completeStartup(bool ignoreLastProject);
 
 
   /** Remove a specified file from the edit_infos struct

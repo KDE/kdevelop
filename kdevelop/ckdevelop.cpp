@@ -56,6 +56,7 @@
 #include "ktipofday.h"
 
 
+#include <kaboutdialog.h>
 #include <kcombobox.h>
 #include <kcursor.h>
 #include <kfiledialog.h>
