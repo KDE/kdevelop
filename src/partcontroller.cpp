@@ -366,11 +366,13 @@ void PartController::closePart(KParts::Part *part)
 
     if (rw_part->isModified())
     {
-      int res = KMessageBox::warningYesNo(TopLevel::getInstance()->main(),
-                  i18n("The document %1 is modified.\n"
-                       "Close this window anyway?").arg(rw_part->url().url()));
-      if (res == KMessageBox::No)
-        return;
+      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(),
+	          i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()),
+	          i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
+      if (res == KMessageBox::Cancel)
+        return false;
+      if (res == KMessageBox::Ok)
+        rw_part->save();
     }
   }
 
@@ -383,8 +385,6 @@ void PartController::closePart(KParts::Part *part)
 
 void PartController::slotPartRemoved(KParts::Part *part)
 {
-  kdDebug() << "PART REMOVED!!!" << endl;
-
   QPtrListIterator<PartListEntry> it(m_partList);
   for ( ; it.current(); ++it)
     if (it.current()->part() == part)

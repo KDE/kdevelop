@@ -20,12 +20,7 @@ public:
 
   ~Core();
 
-  virtual void gotoFile(const KURL &url);
-  virtual void gotoDocumentationFile(const KURL& url, Embedding embed=Replace);
-  virtual void gotoSourceFile(const KURL& url, int lineNum=0, Embedding embed=Replace);
   virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0);
-  virtual void saveAllFiles();
-  virtual void revertAllFiles();
   virtual void setBreakpoint(const QString &fileName, int lineNum,
                              int id, bool enabled, bool pending);
   virtual void running(KDevPart *which, bool runs);

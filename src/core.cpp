@@ -44,39 +44,9 @@ Core::~Core()
 }
 
 
-void Core::gotoFile(const KURL &url)
-{
-  PartController::getInstance()->editDocument(url);
-}
-
-
-void Core::gotoDocumentationFile(const KURL& url, Embedding)
-{
-  PartController::getInstance()->showDocument(url);
-}
-
-
-void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding)
-{
-  PartController::getInstance()->editDocument(url, lineNum);
-}
-
-
 void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 {
   PartController::getInstance()->editDocument(KURL(fileName), lineNum);
-}
-
-
-void Core::saveAllFiles()
-{
-  PartController::getInstance()->saveAllFiles();
-}
-
-
-void Core::revertAllFiles()
-{
-  PartController::getInstance()->revertAllFiles();
 }
 
 
