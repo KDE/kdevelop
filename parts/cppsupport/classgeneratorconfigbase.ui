@@ -75,35 +75,6 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="2" column="0">
-            <property name="name">
-                <cstring>groupBox9</cstring>
-            </property>
-            <property name="title">
-                <string>Class Documentation</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QCheckBox" row="0" column="0">
-                    <property name="name">
-                        <cstring>author_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Include author name in class documentation</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="1" column="0">
-                    <property name="name">
-                        <cstring>doc_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Generate empty documentation strings</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
         <widget class="QGroupBox" row="1" column="0">
             <property name="name">
                 <cstring>groupBox10</cstring>
@@ -217,6 +188,43 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QGroupBox" row="2" column="0">
+            <property name="name">
+                <cstring>groupBox9</cstring>
+            </property>
+            <property name="title">
+                <string>Class Documentation</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>author_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Include author name in class documentation</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>doc_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Generate empty documentation strings</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0">
+            <property name="name">
+                <cstring>reformat_box</cstring>
+            </property>
+            <property name="text">
+                <string>Reformat source before creating files</string>
+            </property>
+        </widget>
     </grid>
 </widget>
 <connections>
@@ -240,7 +248,4 @@
     <slot access="protected">templateTypeChanged(int type)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>qwidget.h</includehint>
-</includehints>
 </UI>

@@ -40,6 +40,7 @@
 
 #include "kdevplugin.h"
 #include "kdevproject.h"
+#include "kdevsourceformatter.h"
 #include "domutil.h"
 #include "filetemplate.h"
 
@@ -1337,6 +1338,14 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   classImpl.replace(QRegExp("\\$NAMESPACEEND\\$"), namespaceEnd);
   classImpl.replace(QRegExp("\\$FILENAME\\$"), implementation);
 
+  if (dlg.gen_config->reformat_box->isChecked())
+  {
+    KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();
+    if (fmt == 0)
+        qWarning("boo");
+    classImpl = fmt->formatSource(classImpl);
+  }
+
   kdDebug(9007) << "implementationPath = " << implementationPath << endl;
 
   QFile ifile(implementationPath);
@@ -1518,6 +1527,11 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   classIntf.replace(QRegExp("\\$PRIVATESLOTS\\$"), QString("private slots:\n") + advH_private_slots);
   classIntf.replace(QRegExp("\\$NAMESPACEEND\\$"), namespaceEnd);
 
+  if (dlg.gen_config->reformat_box->isChecked())
+  {
+    KDevSourceFormatter *fmt = dlg.m_part->sourceFormatter();
+    classIntf = fmt->formatSource(classIntf);
+  }
 
   QFile hfile(headerPath);
   if (!hfile.open(IO_WriteOnly)) {

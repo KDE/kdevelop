@@ -33,7 +33,7 @@ ClassGeneratorConfig::ClassGeneratorConfig(QString v_cppHeaderText, QString v_cp
     QString v_objcHeaderText, QString v_objcSourceText,
     QString v_gtkHeaderText, QString v_gtkSourceText,
     NameCase v_fileCase, NameCase v_defCase, NameCase v_superCase,
-    bool v_showAuthor, bool v_genDoc,
+    bool v_showAuthor, bool v_genDoc, bool v_reformat,
     QWidget* parent, const char* name, WFlags fl )
     : ClassGeneratorConfigBase(parent,name,fl),
     cppHeaderText(v_cppHeaderText), cppSourceText(v_cppSourceText),
@@ -45,6 +45,7 @@ ClassGeneratorConfig::ClassGeneratorConfig(QString v_cppHeaderText, QString v_cp
     supercase_box->setCurrentItem((int)v_superCase);
     author_box->setChecked(v_showAuthor);
     doc_box->setChecked(v_genDoc);
+    reformat_box->setChecked(v_reformat);
 
     currTemplate = &cppHeaderText;
 }
@@ -155,7 +156,9 @@ void ClassGeneratorConfig::readConfig()
         
         author_box->setChecked(config->readBoolEntry("Show Author Name", 1));
         doc_box->setChecked(config->readBoolEntry("Generate Empty Documentation", 1));
-            
+
+        reformat_box->setChecked(config->readBoolEntry("Reformat Source", 0));
+
         KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
 
         cppHeaderText = templateText( dirs->findResource("newclasstemplates", "cpp_header") );
@@ -199,6 +202,8 @@ void ClassGeneratorConfig::storeConfig()
 
         config->writeEntry("Show Author Name", author_box->isChecked());
         config->writeEntry("Generate Empty Documentation", doc_box->isChecked());
+
+        config->writeEntry("Reformat Source", reformat_box->isChecked());
 
         KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
 

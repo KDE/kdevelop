@@ -27,7 +27,7 @@ public:
         QString v_objcHeaderText, QString v_objcSourceText,
         QString v_gtkHeaderText, QString v_gtkSourceText,
         NameCase v_fileCase, NameCase v_defCase, NameCase v_superCase,
-        bool v_showAuthor, bool v_genDoc,
+        bool v_showAuthor, bool v_genDoc, bool v_reformat,
         QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
 
     ~ClassGeneratorConfig();
