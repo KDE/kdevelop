@@ -192,7 +192,7 @@ void GrepViewWidget::searchActivated()
     QString command = filepattern + " | xargs " ;
 #endif
 
-    command += "egrep -n -e ";
+    command += "egrep -H -n -e ";
     command += KShellProcess::quote(pattern);
     startJob("", command);
 
