@@ -1,6 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KPHPSupport" version="2">
+<kpartgui name="KPHPSupport" version="3">
 <MenuBar>
+  <Menu name="edit">
+    <Action name="edit_complete_text"/>
+  </Menu>
   <Menu name="build" >
     <Action name="build_execute" />
   </Menu>

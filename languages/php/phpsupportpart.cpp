@@ -115,6 +115,9 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
   m_parser = new  PHPParser(core(),codeModel());
   m_codeCompletion = new  PHPCodeCompletion(configData, core(),codeModel());
 
+  new KAction(i18n("Complete Text"), CTRL+Key_Space, m_codeCompletion, SLOT(cursorPositionChanged()),
+	actionCollection(), "edit_complete_text");
+  
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 	  this, SLOT(slotActivePartChanged(KParts::Part *)));
 }

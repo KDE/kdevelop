@@ -51,8 +51,10 @@ public:
   ~PHPCodeCompletion();
   void setActiveEditorPart(KParts::Part *part);
 
-protected slots:
+public slots:
   void cursorPositionChanged();
+  
+protected slots:  
   void argHintHided();
   void completionBoxHided();
 

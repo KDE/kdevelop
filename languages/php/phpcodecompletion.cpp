@@ -123,8 +123,8 @@ void PHPCodeCompletion::setActiveEditorPart(KParts::Part *part)
 
 
   disconnect(part->widget(), 0, this, 0 ); // to make sure that it is't connected twice
-  connect(part->widget(), SIGNAL(cursorPositionChanged()),
-          this, SLOT(cursorPositionChanged()));
+//  connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
+  connect( part, SIGNAL(textChanged()), this, SLOT(cursorPositionChanged()) );
   connect(part->widget(), SIGNAL(argHintHidden()), this, SLOT(argHintHided()));
   connect(part->widget(), SIGNAL(completionAborted()), this, SLOT(completionBoxHided()));
   connect(part->widget(), SIGNAL(completionDone()), this, SLOT(completionBoxHided()));
