@@ -20,4 +20,3 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kscreensaverdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kscreensaverdir)/script
-	rm script.local

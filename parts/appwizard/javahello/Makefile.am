@@ -18,4 +18,3 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(javahellodir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(javahellodir)/script
-	rm script.local

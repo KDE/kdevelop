@@ -19,4 +19,3 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(gnomeappdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(gnomeappdir)/script
-	rm script.local

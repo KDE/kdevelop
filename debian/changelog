@@ -1,3 +1,9 @@
+gideon (1:2.999+cvs20030301-0woody1) unstable; urgency=low
+
+  * Woody rebuild on KDE_3_1_BRANCH
+
+ -- Ralf Nolden (KDE) <nolden@kde.org>  Sat,  1 Mar 2003 15:37:10 +0100
+
 gideon (1:2.999-1) unstable; urgency=low
 
   * Fixed for KDE3.

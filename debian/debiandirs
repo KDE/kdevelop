@@ -19,7 +19,7 @@ export kde_wallpaperdir=/usr/share/wallpapers
 export mandir=/usr/share/man
 export infodir=/usr/share/info
 export sysconfdir=/etc
-export QTDIR=/usr/share/qt
+export QTDIR=/usr/share/qt3
 export IDL=/usr/bin/cuteidl
 export DCOPIDL=/usr/bin/dcopidl
 export DCOPIDL2CPP=/usr/bin/dcopidl2cpp
@@ -27,6 +27,6 @@ export KDB2HTML=/usr/bin/kdb2html
 export MCOPIDL=/usr/bin/mcopidl
 export ARTSCCONFIG=/usr/bin/artsc-config
 export INSTALL_DATA=install -p -c -m 644
-configkde=--disable-debug --enable-final --disable-rpath --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --sysconfdir=$(sysconfdir) --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt --mandir=$(mandir) --infodir=$(infodir)
-configkdevelop=--disable-debug --enable-final --disable-rpath --enable-docbase --enable-kdoc2 --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt --mandir=$(mandir) --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html
-configkdepim=--disable-debug --enable-final --disable-rpath --with-extra-includes=/usr/include/libpisock --enable-shared --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --with-qt-includes=/usr/include/qt --mandir=$(mandir) --infodir=$(infodir)
+configkde=--disable-debug --enable-final --disable-rpath --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --sysconfdir=$(sysconfdir) --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --infodir=$(infodir)
+configkdevelop=--disable-debug --enable-final --disable-rpath --enable-docbase --enable-kdoc2 --libdir=$(kde_libdir) --includedir=$(kde_includedir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --with-kdelibsdoc-dir=/usr/share/doc/kde/HTML/en/kdelibs-apidocs
+configkdepim=--disable-debug --enable-final --disable-rpath --with-extra-includes=/usr/include/libpisock --enable-shared --prefix=$(kde_prefix) --libexecdir=$(kde_bindir) --with-qt-includes=/usr/include/qt3 --mandir=$(mandir) --infodir=$(infodir)

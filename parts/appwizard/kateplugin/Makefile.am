@@ -20,4 +20,3 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kateplugindir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kateplugindir)/script
-	rm script.local

@@ -7,7 +7,7 @@ Standards-Version: 3.5.6.0
 
 Package: gideon
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automaken, kdebase-bin, gideon-data
+Depends: ${shlibs:Depends}, autoconf, automake | automake1.6, kdebase-bin, gideon-data
 Recommends: make, gideon-doc
 Suggests: libqt3-mt-dev, qt3-doc, kdbg, kdelibs-dev, kdebase, kdelibs4-doc, htdig, sgmltools, gettext, a2ps, enscript, gv, qt3-tools, glimpse, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, stl-manual
 Description: An IDE for Unix/X11 - development version
@@ -21,7 +21,6 @@ Description: An IDE for Unix/X11 - development version
 
 Package: gideon-doc
 Architecture: all
-Conflicts: kdevelop-doc
 Suggests: qt-doc, python2.2-doc, glib-reference, gtk-reference, gnome-dev-doc
 Description: An IDE for Unix/X11 - documentation
  KDevelop is an easy to use Integrated Development Environment
@@ -37,7 +36,6 @@ Description: An IDE for Unix/X11 - documentation
 Package: gideon-data
 Architecture: all
 Depends: gideon (= ${Source-Version})
-Conflicts: kdevelop-data
 Description: An IDE for Unix/X11 - data
  KDevelop is an easy to use Integrated Development Environment
  for developing C/C++ applications under X11. It features 

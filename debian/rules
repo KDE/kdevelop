@@ -16,7 +16,6 @@ export DH_OPTIONS
 DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-objdir = $(CURDIR)/obj-$(DEB_BUILD_GNU_TYPE)
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -g
@@ -63,11 +62,8 @@ configure-stamp:
 	fi
 
 	# make build directory
-	mkdir $(objdir)
 
-	# run configure with build tree $(objdir)
-	cd $(objdir) && \
-	../configure $(configkde) --disable-final
+	./configure $(configkdevelop) --disable-final
 
 	touch configure-stamp
 
@@ -75,7 +71,6 @@ build: build-stamp
 build-stamp: configure-stamp 
 	dh_testdir
 
-	cd $(objdir) && \
 	$(MAKE)
 
 	touch build-stamp
@@ -102,16 +97,15 @@ clean:
 	fi
 
 	# Remove build tree
-	rm -rf $(objdir)
 
 	# if Makefile exists run distclean
-	if test -f Makefile; then \
-		$(MAKE) distclean; \
-	fi
+	#if test -f Makefile; then \
+	#	$(MAKE) distclean; \
+	#fi
 
-#	if test -d CVS; then \
-#		$(MAKE) -f admin/Makefile.common cvs-clean ;\
-#	fi
+	if test -d CVS; then \
+		$(MAKE) -f admin/Makefile.common cvs-clean ;\
+	fi
 
 	dh_clean
 
@@ -122,7 +116,6 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	cd $(objdir) && \
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
 	dh_install --list-missing

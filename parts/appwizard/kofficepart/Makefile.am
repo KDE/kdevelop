@@ -21,4 +21,3 @@ script.local: ${srcdir}/script
 install-data-local: script.local
 	$(mkinstalldirs) $(DESTDIR)$(kopartdir)
 	$(INSTALL_DATA) script.local $(DESTDIR)$(kopartdir)/script
-	rm script.local

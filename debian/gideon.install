@@ -1,4 +1,5 @@
 debian/tmp/etc/kde3/*
 debian/tmp/usr/bin/*
-debian/tmp/usr/lib/*
+debian/tmp/usr/lib/libkdevelop.so.*
+debian/tmp/usr/lib/libkdevelopqextmdi.so.*
 debian/tmp/usr/lib/kde3/*
