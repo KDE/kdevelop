@@ -30,7 +30,7 @@
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
     topLayout( this, 5 ),
-    functionLayout( 9, 3, 1, "functionLayout" ),
+    functionLayout( 9, 3, 10, "functionLayout" ),
     accessLayout( 3, 5, 1, "accessLayout" ),
     typeLayout( 3, 5, 1, "typeLayout" ),
     modifierLayout( 3, 6, 1, "modifierLayout" ),
@@ -56,8 +56,7 @@ CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
     staticCb( this, "staticCb" ),
     constCb( this, "constCb" ),
     okBtn( this, "okBtn" ),
-    cancelBtn( this, "cancelBtn" ),
-    btnFill( this, "btnFill" )
+    cancelBtn( this, "cancelBtn" )
 {
   setCaption( i18n("Add class member") );
 
@@ -102,35 +101,22 @@ void CAddClassMethodDlg::setWidgetValues()
   text = i18n("You can set modifiers for the member function here.");
   QWhatsThis::add(&modifierGrp, text);
   
-  typeLbl.setMinimumSize( 40, 20 );
-  typeLbl.setFixedHeight( 20 );
   typeLbl.setText( i18n("Type:") );
-
-  typeEdit.setMinimumSize( 240, 30 );
-  typeEdit.setFixedHeight( 30 );
-  typeEdit.setFrame( TRUE );
 
   text = i18n("Enter the type of the member function here.");
   QWhatsThis::add(&typeLbl, text);
   QWhatsThis::add(&typeEdit, text);
 
-  declLbl.setMinimumSize( 70, 20 );
-  declLbl.setFixedHeight( 20 );
   declLbl.setText( i18n("Declaration:") );
   
-  declEdit.setMinimumSize( 240, 30 );
-  declEdit.setFixedHeight( 30 );
-  declEdit.setFrame( TRUE );
-
   text = i18n("Enter the declaration of the member function here.");
   QWhatsThis::add(&declLbl, text);
   QWhatsThis::add(&declEdit, text);
 
-  docLbl.setMinimumSize( 100, 20 );
-  docLbl.setFixedHeight( 20 );
   docLbl.setText( i18n("Documentation:") );
 
-  docEdit.setMinimumSize( 240, 80 );
+  QFontMetrics fm(docEdit.fontMetrics());
+  docEdit.setMinimumWidth(fm.width("0")*30);
 
   text = i18n("You can enter a description of the member function here.");
   QWhatsThis::add(&docLbl, text);
@@ -179,16 +165,9 @@ void CAddClassMethodDlg::setWidgetValues()
   constCb.setFixedHeight( 20 );
   constCb.setText( "Const" );
 
-  okBtn.setGeometry( 10, 370, 100, 30 );
-  okBtn.setFixedSize( 100, 30 );
   okBtn.setText( i18n("OK") );
   okBtn.setDefault( TRUE );
-
-  cancelBtn.setGeometry( 170, 370, 100, 30 );
-  cancelBtn.setFixedSize( 100, 30 );
   cancelBtn.setText( i18n("Cancel") );
-  cancelBtn.setAutoRepeat( FALSE );
-  cancelBtn.setAutoResize( FALSE );
 
   // Access group
   accessGrp.insert( &publicRb );
@@ -208,7 +187,7 @@ void CAddClassMethodDlg::setWidgetValues()
 
   // Function layout.
   functionLayout.addMultiCellWidget( &functionGrp, 0, 8, 0, 2 );
-  functionLayout.addRowSpacing( 0, 20 );
+  functionLayout.addRowSpacing( 0, 10 );
   functionLayout.addWidget( &typeLbl, 2, 1 );
   functionLayout.addWidget( &typeEdit, 3, 1 );
   functionLayout.addWidget( &declLbl, 4, 1 );
@@ -236,15 +215,17 @@ void CAddClassMethodDlg::setWidgetValues()
   // Modifier layout
   modifierLayout.addMultiCellWidget( &modifierGrp, 0, 2, 0, 5 );
   modifierLayout.addRowSpacing( 0, 20 );
+  modifierLayout.addColSpacing( 0, 10 );
   modifierLayout.addWidget( &virtualCb, 1, 1 );
   modifierLayout.addWidget( &pureCb, 1, 2 );
   modifierLayout.addWidget( &staticCb, 1, 3 );
   modifierLayout.addWidget( &constCb, 1, 4 );
+  modifierLayout.addColSpacing( 5, 10 );
   modifierLayout.addRowSpacing( 2, 10 );
 
   // Button layout
   buttonLayout.addWidget( &okBtn );
-  buttonLayout.addWidget( &btnFill );
+  buttonLayout.addStretch();
   buttonLayout.addWidget( &cancelBtn );
 
   // Set the default focus.

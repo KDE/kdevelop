@@ -30,7 +30,7 @@
 CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
     topLayout( this, 5 ),
-    varLayout( 9, 3, 1, "functionLayout" ),
+    varLayout( 9, 3, 10, "functionLayout" ),
     accessLayout( 3, 5, 1, "accessLayout" ),
     modifierLayout( 3, 4, 1, "modifierLayout" ),
     buttonLayout( 5, "buttonLayout" ),
@@ -85,71 +85,38 @@ void CAddClassAttributeDlg::setWidgetValues()
               "be declared as public, protected or private.");
   QWhatsThis::add(&accessGrp, text);
 
-  typeLbl.setMinimumSize( 40, 20 );
-  typeLbl.setFixedHeight( 20 );
   typeLbl.setText( i18n("Type:") );
-
-  typeEdit.setMinimumSize( 40, 30 );
-  typeEdit.setFixedHeight( 30 );
-  typeEdit.setFrame( TRUE );
 
   text = i18n("Enter the type of the member variable here.");
   QWhatsThis::add(&typeLbl, text);
   QWhatsThis::add(&typeEdit, text);
 
-  nameLbl.setMinimumSize( 70, 20 );
-  nameLbl.setFixedHeight( 20 );
   nameLbl.setText( i18n("Name:") );
-
-  nameEdit.setMinimumSize( 240, 30 );
-  nameEdit.setFixedHeight( 30 );
-  nameEdit.setFrame( TRUE );
 
   text = i18n("Enter the name of the member variable here.");
   QWhatsThis::add(&nameLbl, text);
   QWhatsThis::add(&nameEdit, text);
 
-  docLbl.setMinimumSize( 100, 20 );
-  docLbl.setFixedHeight( 20 );
   docLbl.setText( i18n("Documentation:") );
 
   text = i18n("You can enter a description of the member variable here.");
   QWhatsThis::add(&docLbl, text);
   QWhatsThis::add(&docEdit, text);
   
-  docEdit.setMinimumSize( 240, 80 );
+  QFontMetrics fm(docEdit.fontMetrics());
+  docEdit.setMinimumWidth(fm.width("0")*30);
 
-  publicRb.setMinimumSize( 70, 20 );
-  publicRb.setFixedHeight( 20 );
   publicRb.setText( "Public" );
   publicRb.setChecked( true );
 
-  protectedRb.setMinimumSize( 80, 20 );
-  protectedRb.setFixedHeight( 20 );
   protectedRb.setText( "Protected" );
-
-  privateRb.setMinimumSize( 60, 20 );
-  privateRb.setFixedHeight( 20 );
   privateRb.setText( "Private" );
- 
-  staticCb.setMinimumSize( 60, 20 );
-  staticCb.setFixedHeight( 20 );
   staticCb.setText( "Static" );
- 
-  constCb.setMinimumSize( 60, 20 );
-  constCb.setFixedHeight( 20 );
   constCb.setText( "Const" );
 
-  okBtn.setGeometry( 10, 370, 100, 30 );
-  okBtn.setFixedSize( 100, 30 );
   okBtn.setText( i18n("OK") );
   okBtn.setDefault( TRUE );
-
-  cancelBtn.setGeometry( 170, 370, 100, 30 );
-  cancelBtn.setFixedSize( 100, 30 );
   cancelBtn.setText( i18n("Cancel") );
-  cancelBtn.setAutoRepeat( FALSE );
-  cancelBtn.setAutoResize( FALSE );
 
   // Access group
   accessGrp.insert( &publicRb );
@@ -162,7 +129,7 @@ void CAddClassAttributeDlg::setWidgetValues()
 
   // Var layout.
   varLayout.addMultiCellWidget( &varGrp, 0, 8, 0, 2 );
-  varLayout.addRowSpacing( 0, 20 );
+  varLayout.addRowSpacing( 0, 10 );
   varLayout.addWidget( &typeLbl, 2, 1 );
   varLayout.addWidget( &typeEdit, 3, 1 );
   varLayout.addWidget( &nameLbl, 4, 1 );
@@ -181,14 +148,14 @@ void CAddClassAttributeDlg::setWidgetValues()
 
   // Modifier layout
   modifierLayout.addMultiCellWidget( &modifierGrp, 0, 2, 0, 3 );
-  modifierLayout.addRowSpacing( 0, 20 );
+  modifierLayout.addRowSpacing( 0, 15 );
   modifierLayout.addWidget( &staticCb, 1, 1 );
   modifierLayout.addWidget( &constCb, 1, 2 );
-  modifierLayout.addRowSpacing( 2, 10 );
+  modifierLayout.addRowSpacing( 2, 15 );
 
   // Button layout
   buttonLayout.addWidget( &okBtn );
-  //  buttonLayout.addWidget( &btnFill );
+  buttonLayout.addStretch();
   buttonLayout.addWidget( &cancelBtn );
 
   // Set the default focus.

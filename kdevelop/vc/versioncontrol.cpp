@@ -3,9 +3,11 @@
 #include "cvs.h"
 
 
-void VersionControl::getSupportedSystems(QStrList *list)
+QStringList VersionControl::getSupportedSystems()
 {
-    list->append("CVS");
+    QStringList list;
+    list.append("CVS");
+    return list;
 }
 
 

@@ -19,11 +19,8 @@
 #ifndef CDOCTREEPROPDLG_H
 #define CDOCTREEPROPDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
 #include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
 
 /**
   *@author Sandy Meier
@@ -39,13 +36,6 @@ public:
 public:
   QLineEdit* name_edit;
   QLineEdit* file_edit;
-protected:
-  
-  QLabel* name_label;
-  QLabel* file_label;
-  QPushButton* ok_button;
-  QPushButton* cancel_button;
-  QPushButton* file_button;
 };
 
 #endif

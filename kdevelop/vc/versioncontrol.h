@@ -11,7 +11,7 @@
 #ifndef _VERSIONCONTROL_H_
 #define _VERSIONCONTROL_H_
 
-#include <qstrlist.h>
+#include <qstringlist.h>
 
 
 class VersionControl
@@ -24,7 +24,7 @@ public:
      * Adds to list the names of all supported
      * version control systems.
      */
-    static void getSupportedSystems(QStrList *list);
+    static QStringList getSupportedSystems();
     /**
      * Factory method for a new version control object for the
      * system given by the parameter system.

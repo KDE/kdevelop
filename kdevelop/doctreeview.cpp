@@ -56,7 +56,7 @@ ListViewDocItem::ListViewDocItem(KListViewItem *parent,
                                  const char *text, const char *filename)
     : KListViewItem(parent, text, filename)
 {
-    setPixmap(0, BarIcon("mini-doc.xpm"));
+    setPixmap(0, BarIcon("mini-doc"));
 }
 
 
@@ -84,7 +84,7 @@ ListViewBookItem::ListViewBookItem(KListViewItem *parent,
 
 void ListViewBookItem::setOpen(bool o)
 {
-    setPixmap(0, o? BarIcon("mini-book2.xpm") : BarIcon("mini-book1.xpm"));
+    setPixmap(0, o? BarIcon("mini-book2") : BarIcon("mini-book1"));
     KListViewItem::setOpen(o);
 }
 

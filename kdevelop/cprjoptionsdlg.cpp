@@ -42,14 +42,20 @@ class FlagBox : public QCheckBox
 public:
     FlagBox(const char *flag, QString cxxflags,
             QWidget *parent, const char *name=0);
+    QString flagtext() const;
 };
 
 
 FlagBox::FlagBox(const char *flag, QString cxxflags,
-                 QWidget *parent, const char *name=0)
+                 QWidget *parent, const char *name)
     : QCheckBox(flag, parent, name)
 {
     setChecked(cxxflags.contains(flag));
+}
+
+QString FlagBox::flagtext() const
+{
+    return isChecked()? (QString(" ") + text()) : QString("");
 }
 
 
@@ -73,12 +79,35 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   
   setFixedSize(520,355);
-  QStrList short_info;
-  int pos;
 
   setCaption( i18n("Project Options" ));
-  
+
+  setupTab1();
+  setupTab2();
+  setupTab3();
+  setupTab4();
+  setupTab5();
+
+  // **************set the button*********************
+  setOkButton(i18n("OK"));
+  setCancelButton(i18n("Cancel"));
+  connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
+
+  // **************set tabs enlabe/disable*********************
+
+  if(prj->isCustomProject()){
+    setTabEnabled("Compiler options",false);
+    setTabEnabled("Warnings",false);
+    setTabEnabled("Linker",false);
+  }
+ 
+}
+
+
+void CPrjOptionsDlg::setupTab1()
+{
   // ****************** the General_Widget ********************
+
   QWidget *w = new QWidget( this, "general" );
   QWhatsThis::add(w, i18n("Set the general options of your project here."));
 
@@ -140,7 +169,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   modifymakefiles_checkbox = new QCheckBox( w, "" );
   modifymakefiles_checkbox->setGeometry( 10, 215, 290, 20 );
   modifymakefiles_checkbox->setText( i18n("Modify Makefiles") );
-  modifymakefiles_checkbox->setChecked(prj->getModifyMakefiles());
+  modifymakefiles_checkbox->setChecked(prj_info->getModifyMakefiles());
 
   QLabel *vcsystem_label 
     = new QLabel( i18n("Version Control:"), w, "vcsystem_label" );
@@ -148,10 +177,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   vcsystem_combo = new QComboBox( false, w );
   vcsystem_combo->setGeometry( 190, 240, 60, 30 );
-  QStrList l;
-  VersionControl::getSupportedSystems(&l);
+  QStringList l = VersionControl::getSupportedSystems();
   vcsystem_combo->insertItem(i18n("None"));
-  vcsystem_combo->insertStrList(&l);
+  vcsystem_combo->insertStringList(l);
   QString vcsystem = prj_info->getVCSystem();
   for (int i = 0; i < vcsystem_combo->count(); ++i)
       if (vcsystem_combo->text(i) == vcsystem)
@@ -164,6 +192,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   info_edit=new QMultiLineEdit(w,"info_edit");
   info_edit->setGeometry(270,30,230,240);
+  QStrList short_info;
   short_info=prj_info->getShortInfo();
   short_info.first();
   do {
@@ -179,9 +208,15 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
 
   addTab( w, i18n("General"));
+}
 
+
+void CPrjOptionsDlg::setupTab2()
+{
   // *************** Compiler options *********************
 
+  QString cxxflags = old_cxxflags;
+  
   QWidget *w2= new QWidget(this,"Compiler options");
   QWhatsThis::add(w2, i18n("Set your Compiler options here"));
 
@@ -210,6 +245,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
     target->setCurrentItem(0);
   }
 
+  QString text;
   text = i18n("Specify the machine type for your program.\n"
               "Other machine types than your machine is\n"
               "usually only needed for precompiled\n"
@@ -239,7 +275,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   if (cxxflags.contains("-O1")) optimize_level->setValue(1);
   if (cxxflags.contains("-O2")) optimize_level->setValue(2);
   if (cxxflags.contains("-O3")) optimize_level->setValue(3);
-  connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
+  //  connect( optimize_level, SIGNAL(valueChanged(int)),this , SLOT(slotOptimize_level_changed(int)) );
   
   QLabel* optimize_level_label;
   optimize_level_label=new QLabel(w2,"optimize_level_label");
@@ -273,7 +309,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   if (cxxflags.contains("-g1")) debug_level->setValue(1);
   if (cxxflags.contains("-g2")) debug_level->setValue(2);
   if (cxxflags.contains("-g3")) debug_level->setValue(3);
-  connect( debug_level, SIGNAL(valueChanged(int)),this , SLOT(slotDebug_level_changed(int)) );
+  //  connect( debug_level, SIGNAL(valueChanged(int)),this , SLOT(slotDebug_level_changed(int)) );
 
   QLabel* debug_level_label;
   debug_level_label=new QLabel(w2,"debug_level_label");
@@ -319,10 +355,15 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   QWhatsThis::add(addit_gcc_options, text);
 
   addTab(w2,i18n("Compiler Options"));
+}
 
 
+void CPrjOptionsDlg::setupTab3()
+{
   // *************** Compiler Warnings *********************
 
+  QString cxxflags = old_cxxflags;
+  
   QWidget *w3= new QWidget(this,"Warnings");
   QWhatsThis::add(w3, i18n("Set the Compiler warnings here by checking\n"
 			"the -W options you want to use."));
@@ -553,10 +594,17 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 	i18n("Make all warnings into errors."));
 
   addTab(w3,i18n("Compiler Warnings"));
+}
 
 
+void CPrjOptionsDlg::setupTab4()
+{
   // *************** Linker Options *********************
 
+  QString ldflags = old_ldflags;
+  QString ldadd = old_ldadd;
+  int pos;
+  
   QWidget *w4= new QWidget(this,"Linker");
   QWhatsThis::add(w4, i18n("Set the Linker options and choose the\n"
 			"libraries to add to your project."));
@@ -611,6 +659,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   ldflags.remove(0,1);
   addit_ldflags->setText(ldflags);
 
+  QString text;
   text = i18n("Insert other linker options here\n"
               "to invoke the linker with by setting the\n"
               "LDFLAGS environment variable.");
@@ -772,7 +821,11 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   QWhatsThis::add(addit_ldadd, text);
 
   addTab(w4,i18n("Linker Options"));
+}
 
+
+void CPrjOptionsDlg::setupTab5()
+{
   // ****************** the Make_Widget ********************
   QWidget *w5 = new QWidget( this, "make" );
   QWhatsThis::add(w5, i18n("This dialog is for setting\nyour make options."));
@@ -990,6 +1043,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 					   "rules are considered and which  are  applied---every­\n"
 					   "thing  interesting about how make decides what to do."));
 
+  QString text;
   text = i18n("Set any other additional options for your\n"
               "make program here.");
   QWhatsThis::add(m_optional_label, text);
@@ -1058,22 +1112,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
   m_optional_line->setText(settings->readEntry("OptionalLine"));
   m_job_number->setValue(settings->readNumEntry ("JobNumber"));	
-
-  // **************set the button*********************
-  setOkButton(i18n("OK"));
-  setCancelButton(i18n("Cancel"));
-  connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
-
-  // **************set tabs enlabe/disable*********************
-
-  if(prj->isCustomProject()){
-    setTabEnabled("Compiler options",false);
-    setTabEnabled("Warnings",false);
-    setTabEnabled("Linker",false);
-  }
- 
 }
 
+#if 0
 void CPrjOptionsDlg::slotOptimize_level_changed(int v) {
 
     if (v>3) {
@@ -1095,11 +1136,13 @@ void CPrjOptionsDlg::slotDebug_level_changed(int v) {
     }
 
 }
+#endif
 
-void CPrjOptionsDlg::ok(){
 
+void CPrjOptionsDlg::ok()
+{
+#if 0
   QString text,text2;
-  QStrList short_info;
   int i,n;
 
 
@@ -1115,10 +1158,18 @@ void CPrjOptionsDlg::ok(){
   if (debug_level->value()<1) {
       debug_level->setValue(1);
   }
+#endif
+  ok1();
+  ok2_3();
+  ok4();
+  ok5();
+}
   
 
+void CPrjOptionsDlg::ok1()
+{
   //*********general******************
-  text = prjname_edit->text();
+  QString text = prjname_edit->text();
   prj_info->setProjectName(text);
   text = author_edit->text();
   prj_info->setAuthor(text);
@@ -1126,34 +1177,33 @@ void CPrjOptionsDlg::ok(){
   prj_info->setEmail(text);
   text = version_edit->text();
   prj_info->setVersion(text);
-  n=info_edit->numLines();
-  for (i=0;(i!=n);i++) {
+  int n=info_edit->numLines();
+  QStrList short_info;
+  for (int i=0;(i!=n);i++) {
     text=info_edit->textLine(i);
     short_info.append(text);
   }
   prj_info->setShortInfo(short_info);
-  text="";
-
   prj_info->setVCSystem(vcsystem_combo->currentText());
-  
   prj_info->setModifyMakefiles(modifymakefiles_checkbox->isChecked());
-  
+}
+
+
+void CPrjOptionsDlg::ok2_3()
+{
   //********gcc-options***************
+  QString text="";
+
   if (target->currentItem()) {
     text=" -b "+QString(target->currentText());
   }
   if (syntax_check->isChecked()) {
     text+=" -fsyntax-only";
   }
-  if (optimize->isChecked()) {
-    text2.setNum(optimize_level->value());
-    text+=" -O"+text2;
-  } else {
-    text+=" -O0";
-  }
+  text += QString(" -O%1").arg(optimize->isChecked()? optimize_level->value() : 0);
+
   if (debug->isChecked()) {
-    text2.setNum(debug_level->value());
-    text+=" -g"+text2;
+    text += QString(" -g%1").arg(debug_level->value());
   }
   if (gprof_info->isChecked()) {
     text+=" -pg";
@@ -1166,87 +1216,49 @@ void CPrjOptionsDlg::ok(){
     need_makefile_generation = true;
   }
   //***********gcc-warnings***********
-  if (w_all->isChecked()) {
-    text+=" -Wall";
-  }
-  if (w_->isChecked()) {
-    text+=" -W ";
-  }
-  if (w_traditional->isChecked()) {
-    text+=" -Wtraditional";
-  }
-  if (w_undef->isChecked()) {
-    text+=" -Wundef";
-  }
-  if (w_shadow->isChecked()) {
-    text+=" -Wshadow";
-  }
+  text += w_all->flagtext();
+  text += w_->flagtext();
+  text += w_traditional->flagtext();
+  text += w_undef->flagtext();
+  text += w_shadow->flagtext();
+
   //  if (w_id_clash_len->isChecked()) {
   //    text+=" -Wid-clash-LEN";
   //  }
   //  if (w_larger_than_len->isChecked()) {
   //    text+=" -Wlarger-than-LEN";
   //  }
-  if (w_pointer_arith->isChecked()) {
-    text+=" -Wpointer-arith";
-  }
-  if (w_bad_function_cast->isChecked()) {
-    text+=" -Wbad-function-cast";
-  }
-  if (w_cast_qual->isChecked()) {
-    text+=" -Wcast-qual";
-  }
-  if (w_cast_align->isChecked()) {
-    text+=" -Wcast-align";
-  }
-  if (w_write_strings->isChecked()) {
-    text+=" -Wwrite-strings";
-  }
-  if (w_conversion->isChecked()) {
-    text+=" -Wconversion";
-  }
-  if (w_sign_compare->isChecked()) {
-    text+=" -Wsign-compare";
-  }
-  if (w_aggregate_return->isChecked()) {
-    text+=" -Waggregate-return";
-  }
-  if (w_strict_prototypes->isChecked()) {
-    text+=" -Wstrict-prototypes";
-  }
-  if (w_missing_prototypes->isChecked()) {
-    text+=" -Wmissing-prototypes";
-  }
-  if (w_missing_declarations->isChecked()) {
-    text+=" -Wmissing-declarations";
-  }
-  if (w_redundant_decls->isChecked()) {
-    text+=" -Wredundant-decls";
-  }
-  if (w_nested_externs->isChecked()) {
-    text+=" -Wnested-externs";
-  }
-  if (w_inline->isChecked()) {
-    text+=" -Winline";
-  }
-  if (w_old_style_cast->isChecked()) {
-    text+=" -Wold-style-cast";
-  }
-  if (w_overloaded_virtual->isChecked()) {
-    text+=" -Woverloaded-virtual";
-  }
-  if (w_synth->isChecked()) {
-    text+=" -Wsynth";
-  }
-  if (w_error->isChecked()) {
-    text+=" -Werror";
-  }
+
+  text += w_pointer_arith->flagtext();
+  text += w_bad_function_cast->flagtext();
+  text += w_cast_qual->flagtext();
+  text += w_cast_align->flagtext();
+  text += w_write_strings->flagtext();
+  text += w_conversion->flagtext();
+  text += w_sign_compare->flagtext();
+  text += w_aggregate_return->flagtext();
+  text += w_strict_prototypes->flagtext();
+  text += w_missing_prototypes->flagtext();
+  text += w_missing_declarations->flagtext();
+  text += w_redundant_decls->flagtext();
+  text += w_nested_externs->flagtext();
+  text += w_inline->flagtext();
+  text += w_old_style_cast->flagtext();
+  text += w_overloaded_virtual->flagtext();
+  text += w_synth->flagtext();
+  text += w_error->flagtext();
+
   prj_info->setCXXFLAGS(text);
   if(old_cxxflags !=  prj_info->getCXXFLAGS().stripWhiteSpace()){
     need_makefile_generation = true;
   }
+}
+
+
+void CPrjOptionsDlg::ok4()
+{
   //**********linker options*************
-  text=addit_ldflags->text();
+  QString text=addit_ldflags->text();
 
   if (l_remove_symbols->isChecked()) {
     text+=" -s ";
@@ -1295,7 +1307,11 @@ void CPrjOptionsDlg::ok(){
   if(old_ldadd != prj_info->getLDADD().stripWhiteSpace()){
     need_makefile_generation = true;
   }
+}
 
+
+void CPrjOptionsDlg::ok5()
+{
   //**********make options*************
   KConfig *settings = kapp->getConfig();
   settings->setGroup("MakeOptionsSettings");
@@ -1315,7 +1331,7 @@ void CPrjOptionsDlg::ok(){
   settings->sync();
   // reject();	
 
-  text = "";
+  QString text;
 
   if (m_print_debug_info->isChecked()) {
     text+=" -d";

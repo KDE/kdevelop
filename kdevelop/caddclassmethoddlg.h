@@ -113,7 +113,6 @@ protected: // Private widgets
 
   QPushButton okBtn;
   QPushButton cancelBtn;
-  QLabel btnFill;
 
 protected slots:
 
