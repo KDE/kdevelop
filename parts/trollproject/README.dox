@@ -1,4 +1,4 @@
-/** \class Trollprojectpart
+/** \class TrollProjectPart
 A projectmanager for qmake based projects.
 
 Loads and maintains .pro files (qmake project files). The trollprojectpart
@@ -21,7 +21,7 @@ remove or reconfigure (sub)projects.
 \feature Unsupported qmake features will be left unchanged (hopefully)
  no major testing has been run yet.
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cvs%20part&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">trollproject component at Bugzilla database</a>
+\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=trollproject&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">trollproject component at Bugzilla database</a>
 
 \requirement <a href="http://www.trolltech.com">QMake</a> >= 3.0.3
 
@@ -29,7 +29,7 @@ remove or reconfigure (sub)projects.
   By default a qmake projects created with kdevelop must be distributable,
   therefore all directory-selections must be relative the subproject where
   it is used (user can override this ofcourse). So when a select-directory
-  dialog is opened getRelativeDirectory() (#include pathutil.h)should be
+  dialog is opened getRelativeDirectory() (#include pathutil.h) should be
   called.
 \todo <b>Ignore shell-expressions and qmake-functions (priority 2-3)</b>
   FileBuffer should recognize and ignore shell-expressions and qmake-functions.
