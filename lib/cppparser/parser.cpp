@@ -380,6 +380,9 @@ bool Parser::parseName( NameAST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseName()" << endl;
 
+    GroupAST::Node winDeclSpec;
+    parseWinDeclSpec( winDeclSpec );
+
     int start = lex->index();
 
     NameAST::Node ast = CreateNode<NameAST>();
@@ -2835,6 +2838,9 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 
     int start = lex->index();
 
+    GroupAST::Node winDeclSpec;
+    parseWinDeclSpec( winDeclSpec );
+
     GroupAST::Node funSpec;
     bool hasFunSpec = parseFunctionSpecifier( funSpec );
 
@@ -2856,7 +2862,6 @@ bool Parser::parseDeclarationInternal( DeclarationAST::Node& node )
 
 	InitDeclaratorAST::Node declarator;
 	if( parseInitDeclarator(declarator) ){
-
 	    int endSignature = lex->index();
 
 	    switch( lex->lookAhead(0) ){
@@ -2992,6 +2997,7 @@ start_decl:
 		ast->setFunctionSpecifier( funSpec );
 		ast->setText( toString(start, endSignature) );
 		ast->setTypeSpec( spec );
+		ast->setWinDeclSpec( winDeclSpec );
 		ast->setInitDeclaratorList( declarators );
 		node = ast;
 		UPDATE_POS( node, start, lex->index() );
@@ -3004,10 +3010,10 @@ start_decl:
 		    syntaxError();
 		    return false;
 		}
-
 	        StatementListAST::Node funBody;
 	        if ( parseFunctionBody(funBody) ) {
 		    FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
+		    ast->setWinDeclSpec( winDeclSpec );
 		    ast->setStorageSpecifier( storageSpec );
 		    ast->setFunctionSpecifier( funSpec );
 		    ast->setText( toString(start, endSignature) );

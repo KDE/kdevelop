@@ -644,6 +644,13 @@ void SimpleDeclarationAST::setInitDeclaratorList( InitDeclaratorListAST::Node& i
     if( m_initDeclaratorList.get() ) m_initDeclaratorList->setParent( this );
 }
 
+void SimpleDeclarationAST::setWinDeclSpec( GroupAST::Node& winDeclSpec )
+{
+    m_winDeclSpec = winDeclSpec;
+    if( m_winDeclSpec.get() ) m_winDeclSpec->setParent( this );
+}
+
+
 // ------------------------------------------------------------------------
 InitDeclaratorListAST::InitDeclaratorListAST()
 {
@@ -720,7 +727,6 @@ void DeclaratorAST::addPtrOp( AST::Node& ptrOp )
     m_ptrOpList.append( ptrOp.release() );
 }
 
-
 // --------------------------------------------------------------------------
 InitDeclaratorAST::InitDeclaratorAST()
 {
@@ -771,6 +777,12 @@ void FunctionDefinitionAST::setFunctionBody( StatementListAST::Node& functionBod
 {
     m_functionBody = functionBody;
     if( m_functionBody.get() ) m_functionBody->setParent( this );
+}
+
+void FunctionDefinitionAST::setWinDeclSpec( GroupAST::Node& winDeclSpec )
+{
+    m_winDeclSpec = winDeclSpec;
+    if( m_winDeclSpec.get() ) m_winDeclSpec->setParent( this );
 }
 
 // --------------------------------------------------------------------------

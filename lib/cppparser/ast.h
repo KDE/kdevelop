@@ -471,7 +471,7 @@ public:
 
     GroupAST* winDeclSpec() { return m_winDeclSpec.get(); }
     void setWinDeclSpec( GroupAST::Node& winDeclSpec );
-    
+
     AST* classKey() { return m_classKey.get(); }
     void setClassKey( AST::Node& classKey );
 
@@ -988,11 +988,15 @@ public:
     InitDeclaratorListAST* initDeclaratorList() { return m_initDeclaratorList.get(); }
     void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
 
+    GroupAST* winDeclSpec() { return m_winDeclSpec.get(); }
+    void setWinDeclSpec( GroupAST::Node& winDeclSpec );
+
 private:
     GroupAST::Node m_functionSpecifier;
     GroupAST::Node m_storageSpecifier;
     TypeSpecifierAST::Node m_typeSpec;
     InitDeclaratorListAST::Node m_initDeclaratorList;
+    GroupAST::Node m_winDeclSpec;
 
 private:
     SimpleDeclarationAST( const SimpleDeclarationAST& source );
@@ -1257,12 +1261,16 @@ public:
     StatementListAST* functionBody() { return m_functionBody.get(); }
     void setFunctionBody( StatementListAST::Node& functionBody );
 
+    GroupAST* winDeclSpec() { return m_winDeclSpec.get(); }
+    void setWinDeclSpec( GroupAST::Node& winDeclSpec );
+
 private:
     GroupAST::Node m_functionSpecifier;
     GroupAST::Node m_storageSpecifier;
     TypeSpecifierAST::Node m_typeSpec;
     InitDeclaratorAST::Node m_initDeclarator;
     StatementListAST::Node m_functionBody;
+    GroupAST::Node m_winDeclSpec;
 
 private:
     FunctionDefinitionAST( const FunctionDefinitionAST& source );
