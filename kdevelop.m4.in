@@ -507,7 +507,7 @@ AC_DEFUN(KDEV_CHECK_MDI,
   else		   
     LIB_KDEVMDI='$(top_builddir)/lib/qextmdi/src/libkdevelopqextmdi.la'
     QEXTMDIR="qextmdi"
-    KDEVMDI_INCLUDES='-I$(top_srcdir)/lib/qextmdi/include'
+    KDEVMDI_INCLUDES='-I$(top_srcdir)/lib/qextmdi'
     AC_MSG_RESULT(no)
   fi
  
