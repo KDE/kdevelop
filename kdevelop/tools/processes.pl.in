@@ -75,10 +75,13 @@ if ($processes{APPLICATION} =~/customproj/){
 }
 else{
   unpackFiles ("template.tar");
-#  removed because all projects except custom should use admin-dir (W. Tasin 2001-11-02)
-#  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme|sharedlib/) {
+#  removed because almost all projects except custom and gnome should
+#  use admin-dir (W. Tasin 2001-11-02)
+#  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme|sharedlib/)
+   unless ($processes{APPLICATION} =~ /gnomenormal/)
+   {
     unpackFiles ("admin.tar");
-#  }
+   }
 
   if ($processes{APPLICATION} =~/kde2mini|kickerapp|^kpart$|kioslave|kcmodule|ktheme/) {
 	changeMiniApp();

@@ -1345,12 +1345,14 @@ void CKAppWizard::okPermited()
       p << "'" + copysrc + "'";
       p << "'" + copydes + "';";
 
-/*    All projects with templates also use the admin-dir (W. Tasin 2001-11-02)
+/*    Almost all projects with templates also use the admin-dir (W. Tasin 2001-11-02)
       if( (kthemeitem->isSelected()||kcmoduleitem->isSelected()||kpartitem->isSelected()||kickeritem->isSelected()||kioslaveitem->isSelected()||
 			kde2miniitem->isSelected()||kde2normalitem->isSelected()||kde2mdiitem->isSelected()||
 			qt2normalitem->isSelected()||qt2mdiitem->isSelected() || qextmdiitem->isSelected()))
+*/
+      if ( !gnomenormalitem->isSelected() )
       {
-*/        if (QFileInfo(adminsrc).exists())
+        if (QFileInfo(adminsrc).exists())
         {
           p << "cp";
           p << "'" + adminsrc + "'";
@@ -1362,8 +1364,8 @@ void CKAppWizard::okPermited()
                                   "Please correct your KDevelop installation.")).arg(adminsrc));
           return;
         }
-/*      }
-*/
+      }
+
       p.start(KProcess::Block,KProcess::AllOutput);
     }
     else
