@@ -26,6 +26,7 @@
 
 #include <kmsgbox.h>
 #include <klocale.h>
+#include <kprocess.h>
 
 #include "crealfileview.h"
 #include "ccvaddfolderdlg.h"
@@ -499,5 +500,11 @@ void CRealFileView::slotFolderNew(){
 }
 /**  */
 void CRealFileView::slotFolderDelete(){
+    KShellProcess* childproc = new KShellProcess("/bin/sh");
+    QString dir_name = getFullFilename(currentItem());
+    *childproc << "rm -rf " << dir_name;
 
+    childproc->start(KProcess::Block,
+		     KProcess::Communication(KProcess::Stdout|KProcess::Stderr));
+    refresh(project);
 }

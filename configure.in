@@ -92,6 +92,7 @@ kdevelop/pics/mini/Makefile \
 kdevelop/toolbar/Makefile \
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
+kdevelop/examples/Makefile \
 debian/Makefile \
 debian/doc-base/Makefile \
 doc/Makefile \
