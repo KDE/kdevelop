@@ -132,7 +132,6 @@ void CClassView::refresh( CProject *proj )
   // Parse headerfiles.
   for( str = header.first(); str != NULL; str = header.next() )
   {
-    debug( "  found: %s", str );
     debug( "  parsing:[%s%s]", projDir.data(), str );
     cp.parse( str );
   }
@@ -325,6 +324,7 @@ int CClassView::indexType( int aIdx )
  *-----------------------------------------------------------------*/
 void CClassView::readIcons()
 {
+  QString PIXPREFIX = "/kdevelop/pics/mini/";
   QString projIcon = "folder.xpm";
   QString pixDir;
   KIconLoader *il;
