@@ -279,6 +279,7 @@ void DocTreeGlobalConfigWidget::storeConfig()
 #else
     config->writeEntry("DevHelpDir", dhURL->url());
 #endif
+    config->sync();
 }
 
 

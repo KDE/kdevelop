@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
+#include <kmessagebox.h>
 
 
 DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)
@@ -107,6 +108,7 @@ bool DocSearchDialog::performSearch()
         exe = "/usr/lib/cgi-bin/htsearch";
         QFile f(exe);
         if (!f.exists()) {
+	    KMessageBox::error(this, i18n("Cannot find the htsearch executable!"));
             kdDebug() << "Can not find htsearch" << endl;
             return false;
         }
@@ -148,6 +150,7 @@ bool DocSearchDialog::performSearch()
     searchResult = "";
 
     if (!proc->start(KProcess::NotifyOnExit, KProcess::Stdout)) {
+        KMessageBox::error(this, i18n("Cannot start the htsearch executable!"));
         kdDebug() << "process start failed" << endl;
         delete proc;
         return false;
