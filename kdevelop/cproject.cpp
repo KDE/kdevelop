@@ -416,6 +416,10 @@ void CProject::removeFileFromProject(QString rel_name){
   updateMakefilesAm();
 }
 void CProject::updateMakefilesAm(){
+
+  if ( getProjectType() == "normal_empty" )
+    return;
+
   QString makefile;
   QStrList makefile_list;
   config->setGroup("General");
@@ -572,15 +576,18 @@ void CProject::setSourcesHeaders(){
   
   QStrList files;
   QString str,filename;
+
   config->setGroup(getSubDir() + "Makefile.am");
+
   config->readListEntry("files",files);
   for(str = files.first();str != 0;str = files.next()){
     filename = getName(str);
     if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
-       || filename.right(2) == ".c" || filename.right(4) == ".cxx"){    // added .cxx    990204 rnolden
+       || filename.right(2) == ".c" || filename.right(4) == ".cxx" ){    // added .cxx    990204 rnolden
       cpp_files.append(filename);
     }
-    if(filename.right(2) == ".h" || filename.right(4) == ".hxx"){       // added .hxx    990204 rnolden
+    if(filename.right(2) == ".h" || filename.right(3) == ".hh" || filename.right(2) == ".H"
+       || filename.right(2) == ".H" ){       // added .hxx    990204 rnolden
       header_files.append(filename);
     }
   }

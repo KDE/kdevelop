@@ -52,6 +52,8 @@ protected:
     bool createdCplus();
     bool createdShared();
     bool createdStatic();
+//     bool createdJava();
+    bool createdEmpty();
 
 
     CProject* newPrj;
@@ -75,6 +77,8 @@ protected:
     QRadioButton* m_pTypeCplus;
     QRadioButton* m_pTypeShared;
     QRadioButton* m_pTypeStatic;
+//     QRadioButton* m_pTypeJava;
+    QRadioButton* m_pTypeEmpty;
     QPushButton* m_pOK;
     QPushButton* m_pCancel;
 

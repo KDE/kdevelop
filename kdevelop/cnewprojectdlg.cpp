@@ -27,7 +27,7 @@
 CNewProjectDlg::CNewProjectDlg(QWidget* parent, const char* name):QDialog(parent,name,true)
 {
 	setCaption(i18n("New Project"));
-	
+
 	m_pNameLabel = new QLabel( this, "name_label" );
 	m_pNameLabel->setGeometry( 20, 30, 160, 25 );
 	m_pNameLabel->setText(i18n("Project Name:"));
@@ -210,6 +210,23 @@ CNewProjectDlg::CNewProjectDlg(QWidget* parent, const char* name):QDialog(parent
 	                                "with default values for construction of a static\n"
 	                                "libraries."));
 
+// 	m_pTypeJava = new QRadioButton( this, "type_java" );
+// 	m_pTypeJava->setGeometry( 230, 300, 180, 25 );
+// 	m_pTypeJava->setText(i18n("Java Application"));
+// 	m_pTypeJava->setAutoRepeat( FALSE );
+// 	m_pTypeJava->setAutoResize( FALSE );
+// 	KQuickHelp::add(m_pTypeJava,i18n("Checking Java-Application will execute the\n"
+// 	                                "following actions:\n\n"
+// 	                                "-creating the project directory and projectfile."));
+
+	m_pTypeEmpty = new QRadioButton( this, "type_empty" );
+	m_pTypeEmpty->setGeometry( 230, 330, 180, 25 );
+	m_pTypeEmpty->setText(i18n("Empty Application"));
+	m_pTypeEmpty->setAutoRepeat( FALSE );
+	m_pTypeEmpty->setAutoResize( FALSE );
+	KQuickHelp::add(m_pTypeEmpty,i18n("Checking Empty-Application will execute the\n"
+	                                "following actions:\n\n"
+	                                "-creating the project directory and projectfile."));
 
 	m_pInfoGroup = new QButtonGroup( this, "info" );
 	m_pInfoGroup->setGeometry( 10, 10, 420, 200 );
@@ -230,6 +247,8 @@ CNewProjectDlg::CNewProjectDlg(QWidget* parent, const char* name):QDialog(parent
 	m_pTypeGroup->insert( m_pTypeCplus );
 	m_pTypeGroup->insert( m_pTypeShared );
 	m_pTypeGroup->insert( m_pTypeStatic );
+// 	m_pTypeGroup->insert( m_pTypeJava );
+	m_pTypeGroup->insert( m_pTypeEmpty );
 	m_pTypeGroup->lower();
 
 
@@ -252,6 +271,7 @@ CNewProjectDlg::CNewProjectDlg(QWidget* parent, const char* name):QDialog(parent
   connect(m_pNameEdit,SIGNAL(textChanged(const char*)),SLOT(slotNameChanged()));
 
 	connect(m_pDirSelect,SIGNAL(clicked()),SLOT(slotDirSelect()));
+
   connect(m_pOK,SIGNAL(clicked()),SLOT(slotOK()));
   connect(m_pCancel,SIGNAL(clicked()),SLOT(reject()));
 
@@ -313,7 +333,9 @@ bool CNewProjectDlg::createdProject(){
   QDir* dir=new QDir();
   dir->mkdir(tmpPrjDir);
   dir->setCurrent(tmpPrjDir);
-  dir->mkdir(tmpPrjName.lower());
+
+  if( !m_pTypeEmpty->isChecked() ) // && !m_pTypeJava->isChecked() )
+    dir->mkdir(tmpPrjName.lower());
 
   // Then create the .kdevprj project
   QString prj_str = tmpPrjDir + "/" + tmpPrjName.lower() + ".kdevprj";
@@ -321,37 +343,42 @@ bool CNewProjectDlg::createdProject(){
   newPrj->readProject();
   newPrj->setKDevPrjVersion("0.2");
   newPrj->setProjectName(tmpPrjName);
-  newPrj->setSubDir(tmpPrjName.lower() + "/");
   newPrj->setAuthor(tmpAuthor);
   newPrj->setEmail(tmpEmail);
   newPrj->setVersion(tmpPrjVersion);
   newPrj->setBinPROGRAM(tmpPrjName.lower());
 
+  if( !m_pTypeEmpty->isChecked() ) // && !m_pTypeJava->isChecked() )
+    newPrj->setSubDir(tmpPrjName.lower() + "/");
+  else
+    newPrj->setSubDir("");
 
   // copy GNU file templates
   KProcess* p = new KProcess();
 
-  QString templ_path = KApplication::kde_datadir()+"/kdevelop/templates/";
-  *p << "cp" << templ_path+"AUTHORS_template" <<"AUTHORS";
-  p->start(KProcess::Block,KProcess::AllOutput);
-  p->clearArguments();
-  *p << "cp" << templ_path+"COPYING_template" <<"COPYING";
-  p->start(KProcess::Block,KProcess::AllOutput);
-  p->clearArguments();
-  *p << "cp" << templ_path+"ChangeLog_template" <<"ChangeLog";
-  p->start(KProcess::Block,KProcess::AllOutput);
-  p->clearArguments();
-  *p << "cp" << templ_path+"INSTALL_template" <<"INSTALL";
-  p->start(KProcess::Block,KProcess::AllOutput);
-  p->clearArguments();
-  *p << "cp" << templ_path+"README_template" <<"README";
-  p->start(KProcess::Block,KProcess::AllOutput);
-  p->clearArguments();
-  *p << "cp" << templ_path+"TODO_template" <<"TODO";
-  p->start(KProcess::Block,KProcess::AllOutput);
-  p->clearArguments();
-  *p << "cp" << templ_path+"lsm_template" <<tmpPrjName.lower()+".lsm";
-  p->start(KProcess::Block,KProcess::AllOutput);
+  if( !m_pTypeEmpty->isChecked() ) { // && !m_pTypeJava->isChecked() ) {
+    QString templ_path = KApplication::kde_datadir()+"/kdevelop/templates/";
+    *p << "cp" << templ_path+"AUTHORS_template" <<"AUTHORS";
+    p->start(KProcess::Block,KProcess::AllOutput);
+    p->clearArguments();
+    *p << "cp" << templ_path+"COPYING_template" <<"COPYING";
+    p->start(KProcess::Block,KProcess::AllOutput);
+    p->clearArguments();
+    *p << "cp" << templ_path+"ChangeLog_template" <<"ChangeLog";
+    p->start(KProcess::Block,KProcess::AllOutput);
+    p->clearArguments();
+    *p << "cp" << templ_path+"INSTALL_template" <<"INSTALL";
+    p->start(KProcess::Block,KProcess::AllOutput);
+    p->clearArguments();
+    *p << "cp" << templ_path+"README_template" <<"README";
+    p->start(KProcess::Block,KProcess::AllOutput);
+    p->clearArguments();
+    *p << "cp" << templ_path+"TODO_template" <<"TODO";
+    p->start(KProcess::Block,KProcess::AllOutput);
+    p->clearArguments();
+    *p << "cp" << templ_path+"lsm_template" <<tmpPrjName.lower()+".lsm";
+    p->start(KProcess::Block,KProcess::AllOutput);
+  }
 
   // now create specific files
   if(m_pTypeKDE->isChecked())
@@ -369,6 +396,13 @@ bool CNewProjectDlg::createdProject(){
   if(m_pTypeStatic->isChecked())
     if(!createdStatic())
       return false;
+  if(m_pTypeEmpty->isChecked())
+    if(!createdEmpty())
+      return false;
+//   if(m_pTypeJava->isChecked())
+//     if(!createdJava())
+//       return false;
+
   dir->setCurrent(tmpPrjDir);
   newPrj->writeProject();
   genProjectFile=prj_str;
@@ -405,18 +439,62 @@ bool CNewProjectDlg::createdStatic(){
   return true;
 }
 
+bool CNewProjectDlg::createdEmpty(){
+  QString tmpPrjName=m_pNameEdit->text();
+  QString tmpPrjVersion=m_pVersionEdit->text();
+  QString tmpPrjDir=m_pDirEdit->text();
+  QString tmpAuthor=m_pAuthorEdit->text();
+  QString tmpEmail=m_pEmailEdit->text();
+  QDir* dir=new QDir();
+  dir->setCurrent(tmpPrjDir);
+  newPrj->setProjectType("normal_empty");
 
+  QStrList group_filters;
+  group_filters.append("*");
+  newPrj->addLFVGroup ("Others","");
+  newPrj->setFilters("Others",group_filters);
 
+  group_filters.clear();
+  group_filters.append("*.cpp");
+  group_filters.append("*.c");
+  group_filters.append("*.cc");
+  group_filters.append("*.C");
+  newPrj->addLFVGroup ("Sources","");
+  newPrj->setFilters("Sources",group_filters);
+ 
+  group_filters.clear();
+  group_filters.append("*.h");
+  newPrj->addLFVGroup ("Header","");
+  newPrj->setFilters("Header",group_filters);
 
+  return true;
+}
 
+// bool CNewProjectDlg::createdJava(){
+//   QString tmpPrjName=m_pNameEdit->text();
+//   QString tmpPrjVersion=m_pVersionEdit->text();
+//   QString tmpPrjDir=m_pDirEdit->text();
+//   QString tmpAuthor=m_pAuthorEdit->text();
+//   QString tmpEmail=m_pEmailEdit->text();
+//   QDir* dir=new QDir();
+//   dir->setCurrent(tmpPrjDir);
+//   newPrj->setProjectType("normal_java");
 
+//   QStrList group_filters;
+//   group_filters.append("*");
+//   newPrj->addLFVGroup ("Others","");
+//   newPrj->setFilters("Others",group_filters);
 
+//   group_filters.clear();
+//   group_filters.append("*.java");
+//   newPrj->addLFVGroup ("Sources","");
+//   newPrj->setFilters("Sources",group_filters);
+ 
+//   group_filters.clear();
+//   group_filters.append("*.class");
+//   newPrj->addLFVGroup ("Class","");
+//   newPrj->setFilters("Class",group_filters);
 
-
-
-
-
-
-
-
+//   return true;
+// }
 
