@@ -12,7 +12,7 @@
 #include "cppsupportwidget.h"
 #include "cppsupportpart.h"
 
-#include <iostream.h>
+#include <iostream>
 using namespace std;
 
 CppSupportWidget::CppSupportWidget( CppSupportPart* part )
