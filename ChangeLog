@@ -1,5 +1,6 @@
 2001-07-24  Harald Fernengel  <harry@bnro.de>
     * fix: Save-Button is now enabled when current document gets changed
+    * fix: KDevelop now opens project files that come in as URL from konqueror (ignores the "file:")
 
 2001-07-23  Harald Fernengel  <harry@bnro.de>
     * fix: Wheelmouse works now fine after reaching top or bottom of document
