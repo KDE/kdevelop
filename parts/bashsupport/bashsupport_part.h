@@ -30,6 +30,7 @@ class BashCodeCompletion : QObject
 		~BashCodeCompletion();
 		void setActiveEditorPart(KParts::Part*);
 		void setVars(QStringList);
+		QValueList<KTextEditor::CompletionEntry> getVars(const QString& textHint);
 
 	public slots:
 		void cursorPositionChanged();
@@ -37,7 +38,7 @@ class BashCodeCompletion : QObject
 		void completionBoxAbort();
 
 	private:
-		QValueList<KTextEditor::CompletionEntry> m_vars;
+		QStringList m_vars;
 		bool m_argWidgetShow;
 		bool m_completionBoxShow;
 		KTextEditor::EditInterface *m_editInterface;

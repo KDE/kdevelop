@@ -90,6 +90,7 @@ void BashSupportPart::projectOpened()
 
 void BashSupportPart::projectClosed()
 {
+
 }
 
 void BashSupportPart::slotRun ()
@@ -337,18 +338,29 @@ void BashCodeCompletion::setActiveEditorPart(KParts::Part *part)
 
 }
 
-void BashCodeCompletion::setVars(QStringList vars)
+void BashCodeCompletion::setVars(QStringList lst)
 {
-	kdDebug() << "setVars" << endl;
-	m_vars.clear();
+	m_vars = lst;
+}
+
+QValueList<KTextEditor::CompletionEntry> BashCodeCompletion::getVars(const QString &startText)
+{
+	kdDebug() << "getVars" << endl;
+	QValueList<KTextEditor::CompletionEntry> varList;
 	QValueList<QString>::ConstIterator it;
-	for (it = vars.begin(); it != vars.end(); ++it) {
-		KTextEditor::CompletionEntry e;
-		e.text = (*it);
-		e.postfix ="";
-		e.prefix ="$";
-		m_vars.append(e);
+	for (it = m_vars.begin(); it != m_vars.end(); ++it) {
+		QString var = "$" + (*it);
+		if( var.startsWith( startText ))
+		{
+		  KTextEditor::CompletionEntry e;
+		  e.text = var;
+		  //e.postfix ="";
+		  //e.prefix ="";
+		  varList.append(e);
+		}
 	}
+
+	return varList;
 }
 
 void BashCodeCompletion::cursorPositionChanged()
@@ -373,14 +385,25 @@ void BashCodeCompletion::cursorPositionChanged()
 			return;
 		}
 
-		if ( prevText.findRev(QRegExp("[$][\\d\\w]*\\b$")) == -1)
+		KRegExp prevReg("[$][\\d\\w]*\\b$");
+
+		if ( prevReg.match(prevText))
 		{
-			kdDebug() << "no vars " << prevText << endl;
-			return;
-			// We have a variable
+
+			// We are in completion mode
+
+		      QString startMatch = prevReg.group(0);
+
+		      kdDebug() << "Matching: " << startMatch << endl;
+
+		      m_completionBoxShow=true;
+		      m_codeInterface->showCompletionBox(getVars(startMatch),2);
 		}
-		m_completionBoxShow=true;
-		m_codeInterface->showCompletionBox(m_vars);
+		else
+		{
+			kdDebug() << "no vars in: " << prevText << endl;
+			return;
+		}
 
 //	}
 
@@ -390,11 +413,13 @@ void BashCodeCompletion::completionBoxHidden()
 {
 	kdDebug() << "Complete..." << endl;
 	m_completionBoxShow=false;
-	uint line, col, start;
+/*	uint line, col, start;
 	m_cursorInterface->cursorPositionReal(&line, &col);
 	QString lineStr = m_editInterface->textLine(line);
+
 	start = lineStr.findRev(QRegExp("[$][\\d\\w]*\\b$"));
 	m_editInterface->removeText ( start, col, line, col );
+*/
 }
 
 void BashCodeCompletion::completionBoxAbort()
