@@ -1,3 +1,7 @@
+1999-10-19 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* repatching bugfix of #2167
+	* improvements on class parsing
+
 1999-10-18 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bugfixing segfault in classview if comments or
 	  precompiler messages exeeds 2048 bytes (or 16k flex limit)
