@@ -504,10 +504,7 @@ QString VarItem::fullName() const
   if (vPath.isEmpty())
     return itemName.replace(QRegExp("^static "), "");
 
-  if (dataType_ != typePointer)
-    return varPath() + "." + itemName.replace(QRegExp("^static "), "");
-  else
-    return varPath() + "->" + itemName.replace(QRegExp("^static "), "");
+  return varPath() + "." + itemName.replace(QRegExp("^static "), "");
 }
 
 // **************************************************************************
