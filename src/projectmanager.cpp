@@ -113,6 +113,8 @@ void ProjectManager::slotProjectOptions()
 
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);
   dlg.exec();
+  
+  saveProjectFile();
 }
 
 void ProjectManager::loadSettings()
