@@ -138,7 +138,7 @@ void SpecSupport::slotimportSPECPushButtonPressed() {
             QString info;
             if (!(info = getInfo(s,"Name:")).isEmpty())
                 setAppName(info);
-            else if (!(info = !getInfo(s,"Version:")).isEmpty())
+            else if (!(info = getInfo(s,"Version:")).isEmpty())
                 setAppVersion(info);
             else if (!(info = getInfo(s,"Release:")).isEmpty())
                 setAppRevision(info);
