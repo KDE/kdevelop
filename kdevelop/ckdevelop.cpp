@@ -1463,11 +1463,17 @@ void CKDevelop::slotKDlgViewStatusbar(){
 /////////////////////////////////////////////////////////////////////
 // Slots for the classbrowser wizard button
 /////////////////////////////////////////////////////////////////////
+void CKDevelop::slotClassbrowserViewClass()
+{
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QString classname = classCombo->currentText();
+  CVGotoDefinition( classname, "", THCLASS );
+}
 
 void CKDevelop::slotClassbrowserViewDeclaration()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
@@ -1479,8 +1485,8 @@ void CKDevelop::slotClassbrowserViewDeclaration()
 
 void CKDevelop::slotClassbrowserViewDefinition()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
@@ -1492,7 +1498,7 @@ void CKDevelop::slotClassbrowserViewDefinition()
 
 void CKDevelop::slotClassbrowserNewMethod()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
@@ -1501,7 +1507,7 @@ void CKDevelop::slotClassbrowserNewMethod()
 
 void CKDevelop::slotClassbrowserNewAttribute()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
@@ -2333,10 +2339,10 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_KDLG_BUILD_GENERATE:
     kdlgedit->slotBuildGenerate();
     break;
-  case ID_CLASSBROWSER_GRAPHVIEW:
+  case ID_CV_GRAPHICAL_VIEW:
     slotClassbrowserViewTree();
     break;
-  case ID_CLASSBROWSER_WIZARD:
+  case ID_CV_WIZARD:
     // Make the button toggle between declaration and definition.
     if(cv_decl_or_impl){
       slotClassbrowserViewDeclaration();
@@ -2400,7 +2406,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				    i18n("Enables / disables the statusbar"))
 
   ON_STATUS_MSG(ID_VIEW_REFRESH,                			    i18n("Refreshes current view"))
-    ON_STATUS_MSG(ID_VIEW_IN_KFM,					   i18n("Opens the current document in the KFM browser"))
+  ON_STATUS_MSG(ID_VIEW_IN_KFM,					   								i18n("Opens the current document in the KFM browser"))
   ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with Application Wizard"))
   ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
   ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			  i18n("Closes the current project"))
@@ -2480,12 +2486,24 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
-  ON_STATUS_MSG(ID_CLASSBROWSER_WIZARD,										i18n("Switchs to declaration/implementation"))
+  ON_STATUS_MSG(ID_CV_WIZARD,															i18n("Switchs to declaration/implementation"))
   ON_STATUS_MSG(ID_CV_VIEW_DECLARATION,										i18n("Switchs to the method's declaration"))
   ON_STATUS_MSG(ID_CV_VIEW_DEFINITION,										i18n("Switchs to the method's definition"))
-  ON_STATUS_MSG(ID_CV_NEW_METHOD,													i18n("Opens the New Method dialog"))
-  ON_STATUS_MSG(ID_CV_NEW_ATTRIBUTE,											i18n("Opens the New Attribute dialog"))
-	
+  ON_STATUS_MSG(ID_CV_GRAPHICAL_VIEW,											i18n("Opens the graphical inheritance tree"))
+  ON_STATUS_MSG(ID_CV_CLASS_TOOL,													i18n("Opens the classtool dialog"))
+  ON_STATUS_MSG(ID_CV_CLASS_BASE_CLASSES,									i18n("Displays the inherited classes of the current class"))
+  ON_STATUS_MSG(ID_CV_CLASS_DERIVED_CLASSES,							i18n("Displays the classes who inherit the current class"))
+  ON_STATUS_MSG(ID_CV_FOLDER_NEW,													i18n("Creates a new folder"))
+  ON_STATUS_MSG(ID_CV_FOLDER_DELETE,											i18n("Deletes the current folder"))
+  ON_STATUS_MSG(ID_CV_CLASS_DELETE,												i18n("Deletes the current class"))
+  ON_STATUS_MSG(ID_CV_VIEW_CLASS_DECLARATION,							i18n("Goes to the class declaration"))
+  ON_STATUS_MSG(ID_CV_METHOD_NEW,													i18n("Opens the New Method dialog"))
+  ON_STATUS_MSG(ID_CV_METHOD_DELETE,											i18n("Deletes the current class method"))
+  ON_STATUS_MSG(ID_CV_ATTRIBUTE_NEW,											i18n("Creates a new attribute for the current class"))
+  ON_STATUS_MSG(ID_CV_ATTRIBUTE_DELETE,										i18n("Deletes the current class attribute"))
+  ON_STATUS_MSG(ID_CV_IMPLEMENT_VIRTUAL,									i18n("Creates a virtual method"))
+  ON_STATUS_MSG(ID_CV_ADD_SLOT_SIGNAL,										i18n("Adds a signal/slot mechanism"))
+  
 	ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,												i18n("Closes the current dialog"))
 	ON_STATUS_MSG(ID_KDLG_FILE_SAVE,												i18n("Saves the current dialog"))
 	ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,											i18n("Saves the current dialog under a new filename"))
@@ -2507,3 +2525,6 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+

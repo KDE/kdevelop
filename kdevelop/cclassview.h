@@ -112,7 +112,7 @@ protected: // Protected signals and slots
     void selectedViewDefinition(const char *, const char *,THType);
     void signalAddMethod( const char * );
     void signalAddAttribute( const char * );
-
+		void popupHighlighted(int);
 protected: // Implementations of virtual methods.
 
   /** Initialize popupmenus. */

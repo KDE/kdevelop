@@ -315,8 +315,10 @@ void CKDevelop::initKDlgMenuBar(){
  
   disableCommand(ID_KDLG_BUILD_GENERATE);
 
-  disableCommand(ID_CLASSBROWSER_WIZARD);
-  
+  disableCommand(ID_CV_WIZARD);
+  disableCommand(ID_CV_GRAPHICAL_VIEW);
+  disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+  disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
 
   disableCommand(ID_HELP_BACK);
   disableCommand(ID_HELP_FORWARD);
@@ -447,6 +449,8 @@ void CKDevelop::slotHelpDlgNotes()
 
   delete readmedlg;
 }
+
+
 
 
 

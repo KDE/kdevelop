@@ -617,17 +617,20 @@ void CKDevelop::initMenuBar(){
   ////////////////////////////////////////////////
 
   classbrowser_popup = new QPopupMenu();
-  classbrowser_popup->insertItem( i18n("View declaration"), this,
+  classbrowser_popup->insertItem( i18n("Goto declaration"), this,
                                   SLOT(slotClassbrowserViewDeclaration()),0, ID_CV_VIEW_DECLARATION );
-  classbrowser_popup->insertItem( i18n("View definition"), this,
+  classbrowser_popup->insertItem( i18n("Goto definition"), this,
                                   SLOT(slotClassbrowserViewDefinition()), 0, ID_CV_VIEW_DEFINITION );
   classbrowser_popup->insertSeparator();
+  classbrowser_popup->insertItem( i18n("Goto class declaration"), this,
+                                  SLOT(slotClassbrowserViewClass()), 0, ID_CV_VIEW_CLASS_DECLARATION);
   classbrowser_popup->insertItem( i18n("New class..."), this,
                                   SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
+  classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( i18n("Add member function..."), this,
-                                  SLOT(slotClassbrowserNewMethod()), 0, ID_CV_NEW_METHOD);
+                                  SLOT(slotClassbrowserNewMethod()), 0, ID_CV_METHOD_NEW);
   classbrowser_popup->insertItem( i18n("Add member variable..."), this,
-                                  SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_NEW_ATTRIBUTE );
+                                  SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_ATTRIBUTE_NEW );
 
 
 ///////////////////////////////////////////////////////////////////
@@ -725,35 +728,35 @@ void CKDevelop::initToolBar(){
 
   // Class combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Classes"),
-                                           TOOLBAR_CLASS_CHOICE,true,
+                                           ID_CV_TOOLBAR_CLASS_CHOICE,true,
                                            SIGNAL(activated(int))
                                            ,this,
                                            SLOT(slotClassChoiceCombo(int)),
                                            true,i18n("Classes"),160 );
 
-  KCombo* class_combo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* class_combo = toolBar(1)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   class_combo->setFocusPolicy(QWidget::NoFocus);
 
   // Method combo
   toolBar(ID_BROWSER_TOOLBAR)->insertCombo(i18n("Methods"),
-                                           TOOLBAR_METHOD_CHOICE,true,
+                                           ID_CV_TOOLBAR_METHOD_CHOICE,true,
                                            SIGNAL(activated(int))
                                            ,this,SLOT(slotMethodChoiceCombo(int)),
                                            true,i18n("Methods"),240 );
 
-  KCombo* choice_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* choice_combo = toolBar(1)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   choice_combo->setFocusPolicy(QWidget::NoFocus);
 
   // Classbrowserwizard click button
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("classwiz.xpm"),
-                                            ID_CLASSBROWSER_WIZARD, true,
-                                            i18n("Jump to declaration"));
-  toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CLASSBROWSER_WIZARD,
+                                            ID_CV_WIZARD, true,
+                                            i18n("Declaration/Definition"));
+  toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_CV_WIZARD,
                                                classbrowser_popup);
   
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("graphview.xpm"),
-                                            ID_CLASSBROWSER_GRAPHVIEW, true,
+                                            ID_CV_GRAPHICAL_VIEW, true,
                                             i18n("Show graphical classview"));
 
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
@@ -846,7 +849,8 @@ void CKDevelop::initConnections(){
   connect(class_tree, SIGNAL(selectedViewDefinition(const char *, const char *,THType)), SLOT(slotCVViewDefinition(const char *, const char *,THType)));
   connect(class_tree, SIGNAL(signalAddMethod(const char *)), SLOT(slotCVAddMethod(const char * )));
   connect(class_tree, SIGNAL(signalAddAttribute(const char *)), SLOT(slotCVAddAttribute(const char * )));
-
+	connect(class_tree, SIGNAL(popupHighlighted(int)), SLOT(statusCallback(int)));
+  
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
@@ -1142,6 +1146,14 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
+
+
+
+
 
 
 

@@ -57,7 +57,7 @@ void CKDevelop::slotClassbrowserViewTree()
 void CKDevelop::slotClassChoiceCombo(int index)
 {
   CParsedClass *aClass;
-  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->text( index );
 
   if ( !classname.isEmpty() )
@@ -83,8 +83,8 @@ void CKDevelop::slotMethodChoiceCombo(int index)
   CParsedMethod *aMethod;
   QString toFile;
   int toLine;
-  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->text( index );
 
@@ -311,7 +311,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
  *-----------------------------------------------------------------*/
 void CKDevelop::CVClassSelected( const char *aName )
 {
-  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   bool found = false;
   int i;
 
@@ -338,7 +338,7 @@ void CKDevelop::CVClassSelected( const char *aName )
  *-----------------------------------------------------------------*/
 void CKDevelop::CVMethodSelected( const char *aName )
 {
-  KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   bool found = false;
   int i;
 
@@ -513,8 +513,8 @@ void CKDevelop::refreshClassCombo()
 {
   CParsedClass *aClass;
   QList<CParsedClass> *classList;
-  KCombo* classCombo = toolBar(1)->getCombo(TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString savedClass;
   int savedIdx = -1;
   int i;
@@ -562,7 +562,7 @@ void CKDevelop::refreshClassCombo()
 void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
 {
   QListBox *lb;
-  KCombo* methodCombo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
+  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString str;
   QString savedMethod;
 
@@ -599,4 +599,8 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
       methodCombo->setCurrentItem( i );
   }
 }
+
+
+
+
 

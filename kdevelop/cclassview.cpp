@@ -27,6 +27,7 @@
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
 #include "./gfxview/GfxClassTreeWindow.h"
+#include "resource.h"
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
@@ -94,62 +95,68 @@ void CClassView::initPopups()
   int id;
   // Project popup
   projectPopup.setTitle(i18n ("Project"));
-  projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()));
-  projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()));
+  projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+  projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   projectPopup.insertSeparator();
-  projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()));
+  projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   projectPopup.insertSeparator();
-  projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
-  projectPopup.insertItem(i18n("Graphical classview.."), this, SLOT(slotGraphicalView()));
+  projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
+  projectPopup.insertItem(i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), ID_CV_GRAPHICAL_VIEW);
 
 
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
-  classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
-  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()));
+  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),ID_CV_VIEW_DEFINITION);
+  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()), ID_CV_METHOD_NEW);
+  classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
+  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
   classPopup.setItemEnabled( id, false );
 
   classPopup.insertSeparator();
-  classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()));
-  classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
-  classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()));
+  classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()),0, ID_CV_CLASS_BASE_CLASSES);
+  classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()),0, ID_CV_CLASS_DERIVED_CLASSES);
+  classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()),0, ID_CV_CLASS_TOOL);
   classPopup.insertSeparator();
-  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()));
+  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()),0, ID_CV_ADD_SLOT_SIGNAL);
   classPopup.setItemEnabled( id, false );
-  id = classPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete class"), this, SLOT(slotClassDelete()));
+  id = classPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete class"), this, SLOT(slotClassDelete()), ID_CV_CLASS_DELETE);
   classPopup.setItemEnabled(id, false );
 
   // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()));
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ));
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()), 0, ID_CV_VIEW_DECLARATION);
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ),0,ID_CV_VIEW_DEFINITION);
 	methodPopup.insertSeparator();
-  id = methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
+  id = methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
   methodPopup.setItemEnabled( id, false );
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
-  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDefinition()));
+  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
   attributePopup.insertSeparator();
-  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
+  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()),0, ID_CV_ATTRIBUTE_DELETE);
   attributePopup.setItemEnabled( id, false );
 
   // Slot popup
   slotPopup.setTitle( i18n( "Slot" ) );
-  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()));
-  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition()));
+  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
+  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
   slotPopup.insertSeparator();
-  id = slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()));
+  id = slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
   slotPopup.setItemEnabled( id, false );
 
   // Folder popup
   folderPopup.setTitle( i18n( "Folder" ) );
-  folderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotFolderNew()));
-  id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()));
+  folderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
+  id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
 
+  connect(&attributePopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
+  connect(&classPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
+  connect(&folderPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
+  connect(&methodPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
+  connect(&projectPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
+  connect(&slotPopup ,SIGNAL(highlighted(int)), this, SIGNAL(popupHighlighted(int)));
 }
 
 /*********************************************************************
@@ -886,4 +893,7 @@ void CClassView::slotMoveToFolder()
 //     debug( "Moving items." );
 //   }
 }
+
+
+
 

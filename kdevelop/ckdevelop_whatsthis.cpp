@@ -194,11 +194,11 @@ void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar()->getButton(ID_VIEW_TREEVIEW),treeview);
 	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_VIEW_TREEVIEW),treeview);
 											
-	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
+	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
 	                                                    "Choosing a class will switch to the header "
 	                                                    "file where the class is declarated."));
 	
-	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(TOOLBAR_METHOD_CHOICE),i18n("Methods\n\n"
+	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE),i18n("Methods\n\n"
 	                                                    "Allows selecting a method of the current "
 	                                                    "selected class. This will switch to the "
 	                                                    "implementation of the chosen class."));
@@ -306,6 +306,7 @@ void CKDevelop::initWhatsThis(){
 whats_this->add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
 	                                  																												
 }
+
 
 
 

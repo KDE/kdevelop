@@ -234,8 +234,8 @@ bool CKDevelop::slotProjectClose(){
     //clear all edit_infos before starting a new project
     edit_infos.clear();
     
-    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
-    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);
+    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+    toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
     
     // re-inititalize the edit widgets
     header_widget->setName("Untitled.h");
@@ -282,7 +282,11 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_PROJECT_OPTIONS);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
-    disableCommand(ID_CLASSBROWSER_WIZARD);
+    disableCommand(ID_CV_WIZARD);
+    disableCommand(ID_CV_GRAPHICAL_VIEW);
+	  disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+  	disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+
     file_open_popup->clear();
     file_open_list.clear();
   }
@@ -968,7 +972,10 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 
-  enableCommand(ID_CLASSBROWSER_WIZARD);
+  enableCommand(ID_CV_WIZARD);
+  enableCommand(ID_CV_GRAPHICAL_VIEW);
+  enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+  enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
 
   addRecentProject(file);
   project=true;
@@ -1013,6 +1020,10 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+
 
 
 

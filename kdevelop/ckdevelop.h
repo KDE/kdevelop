@@ -419,7 +419,8 @@ public:
   //////////////////////////////////
   // Classbrowser wizardbutton slots
   //////////////////////////////////
-
+	/** View the class header */
+	void slotClassbrowserViewClass();
   /** View the graphical classtree. */
   void slotClassbrowserViewTree();
   /** View the declaration of a class/method. */
@@ -731,13 +732,13 @@ private:
   CAddExistingFileDlg* add_dlg;
   GrepDialog* grep_dlg;
 
-  enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE,TOOLBAR_WIZARD_CHOICE};
-
   int lasttab;
   QString lastfile;
 
 };
 
 #endif
+
+
 
 
