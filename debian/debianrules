@@ -76,7 +76,7 @@ system("chmod 755 debian/*preinst debian/*postinst");
 exit;
 }
 
-$QTDIR="/usr/lib/qt2";
+$QTDIR="/usr/share/qt";
 $kde_prefix="/usr";
 $kde_htmldir="$kde_prefix/share/doc/kde/HTML";
 $kde_icondir="$kde_prefix/share/icons";
