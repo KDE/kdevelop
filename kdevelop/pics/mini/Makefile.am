@@ -6,7 +6,8 @@ EXTRA_DIST = CTchildren.xpm CTclients.xpm CTparents.xpm CTsuppliers.xpm CTvirtua
 ####### kdevelop will overwrite this part!!! (end)############
 
 mini_pics_DATA = CTchildren.xpm CTclients.xpm CTparents.xpm CTsuppliers.xpm CTvirtuals.xpm CVclass.xpm \
-			CVglobal_meth.xpm CVglobal_var.xpm CVprivate_meth.xpm CVprivate_signal.xpm CVprivate_slot.xpm \
+			CVglobal_meth.xpm CVglobal_var.xpm \
+			CVprivate_meth.xpm CVprivate_signal.xpm CVprivate_slot.xpm CVprivate_var.xpm \
 			CVprotected_meth.xpm CVprotected_signal.xpm CVprotected_slot.xpm  CVprotected_var.xpm \
 			CVpublic_meth.xpm	CVpublic_signal.xpm	CVpublic_slot.xpm	CVpublic_var.xpm CVstruct.xpm \
 			inst_file.xpm \
