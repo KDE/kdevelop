@@ -51,8 +51,8 @@ const char *template_str[] = {
 };
 
 const char *filepatterns[] = {
-    "*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m,*.mm,*.M",
-    "*.cpp,*.cc,*.C,*.cxx,*.c,*.m,*.mm,*.M",
+    "*.h,*.hxx,*.cpp,*.cc,*.C,*.c++,*.cxx,*.idl,*.c,*.m,*.mm,*.M",
+    "*.cpp,*.cc,*.C,*.c++,*.cxx,*.c,*.m,*.mm,*.M",
     "*.h,*.hxx,*.idl",
     "*.java",
     "*",
@@ -83,13 +83,13 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     pattern_combo->insertStringList(config->readListEntry("LastSearchItems"));
     pattern_combo->setInsertionPolicy(QComboBox::NoInsertion);
     layout->addWidget(pattern_combo, 0, 1);
-    
+
     QLabel *template_label = new QLabel(i18n("&Template:"), this);
     layout->addWidget(template_label, 1, 0, AlignRight | AlignVCenter);
 
     QBoxLayout *template_layout = new QHBoxLayout(4);
     layout->addLayout(template_layout, 1, 1);
-    
+
     template_edit = new QLineEdit(this);
     template_label->setBuddy(template_edit);
     template_edit->setText(template_str[0]);
@@ -112,7 +112,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 
     QBoxLayout *dir_layout = new QHBoxLayout(4);
     layout->addLayout(dir_layout, 3, 1);
-    
+
     dir_combo = new QComboBox(true, this);
     dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
     dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
@@ -125,7 +125,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     QPushButton *dir_button = new QPushButton("...", this, "dirButton");
     dir_button->setFixedSize(30, 25);
     dir_layout->addWidget(dir_button);
-    
+
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setChecked(true);
     dir_layout->addSpacing(10);

@@ -41,11 +41,11 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
     email_edit->setText(email);
-    
+
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     importNames = dirs->findAllResources("appimports", QString::null, false, true);
     importNames.sort();
-    
+
     QStringList::ConstIterator it;
     for (it = importNames.begin(); it != importNames.end(); ++it) {
         KConfig config(KGlobal::dirs()->findResource("appimports", *it));
@@ -83,7 +83,7 @@ void ImportDialog::accept()
 
     QString author = author_edit->text();
     QString email = email_edit->text();
-    
+
     QFileInfo finfo(importNames[project_combo->currentItem()]);
     QDir importdir(finfo.dir());
     importdir.cdUp();
@@ -93,7 +93,7 @@ void ImportDialog::accept()
         KMessageBox::sorry(this, i18n("Can not open project template."));
         return;
     }
-    
+
     QFile dest(dir.filePath(projectName + ".kdevelop"));
     if (!dest.open(IO_WriteOnly)) {
         KMessageBox::sorry(this, i18n("Can not write the project file."));
@@ -102,7 +102,7 @@ void ImportDialog::accept()
 
     QTextStream srcstream(&src);
     QTextStream deststream(&dest);
-    
+
     while (!srcstream.atEnd()) {
         QString line = srcstream.readLine();
         line.replace(QRegExp("\\$APPNAMELC\\$"), projectName);
@@ -113,7 +113,7 @@ void ImportDialog::accept()
 
     dest.close();
     src.close();
-    
+
     m_part->core()->openProject(dir.filePath(projectName + ".kdevelop"));
 
     kdDebug(9010) << "OPENING PROJECT: " << dir.filePath(projectName + ".kdevelop") << endl;
@@ -189,14 +189,14 @@ void ImportDialog::dirChanged()
     }
 
     // C++?
-    if (dirHasFiles(dir, "*.cpp,*.cxx,*.C,*.cc")) {
+    if (dirHasFiles(dir, "*.cpp,*.c++,*.cxx,*.C,*.cc")) {
         name_edit->setText(dir.dirName());
         setProjectType("cpp");
         return;
     }
 
     name_edit->setText(dir.dirName());
-    
+
     // Fortran?
     if (dirHasFiles(dir, "*.f77,*.f,*.for,*.ftn")) {
         setProjectType("fortran");
@@ -220,7 +220,7 @@ void ImportDialog::dirChanged()
 void ImportDialog::scanLegacyKDevelopProject(const QString &fileName)
 {
     kdDebug(9010) << "Scanning legacy KDevelop project file " << fileName << endl;
-    
+
     KSimpleConfig config(fileName, true);
     config.setGroup("General");
     author_edit->setText(config.readEntry("author"));
@@ -269,7 +269,7 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
     if (!af.open(IO_ReadOnly))
         return;
     QTextStream astream(&af);
-    
+
     QRegExp authorre("(.*)<(.*)>");
     while (!astream.atEnd()) {
         QString s = astream.readLine();
@@ -280,12 +280,12 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
         }
     }
     af.close();
-      
+
     QFile cf(dirName + "/configure.in");
     if (!cf.open(IO_ReadOnly))
         return;
     QTextStream cstream(&cf);
-    
+
     QRegExp namere("\\s*AM_INIT_AUTOMAKE\\((.*),.*\\).*");
     QRegExp cppre("\\s*AC_PROG_CXX");
     QRegExp f77re("\\s*AC_PROG_F77");
@@ -309,7 +309,7 @@ void ImportDialog::setProjectType(const QString &type)
     kdDebug(9010) << "Setting project type " << type << endl;
     QString suffix = "/" + type;
     int suffixLength = suffix.length();
-    
+
     int i=0;
     QStringList::ConstIterator it;
     for (it = importNames.begin(); it != importNames.end(); ++it) {

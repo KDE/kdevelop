@@ -28,7 +28,7 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin(parent, name)
 {
   setInstance(AStyleFactory::instance());
-	 
+
   setXMLFile("kdevpart_astyle.rc");
 
   _action = new KAction(i18n("&Reformat Source"), 0,
@@ -60,10 +60,10 @@ void AStylePart::beautifySource()
 
   QString output;
   QTextStream os(&output, IO_WriteOnly);
-  
+
   while (formatter.hasMoreLines())
 	os << formatter.nextLine().c_str() << endl;
-  
+
   iface->setText(output);
 }
 
@@ -81,7 +81,7 @@ void AStylePart::activePartChanged(KParts::Part *part)
   bool enabled = false;
 
   KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
-  
+
   if (rw_part)
   {
     KTextEditor::EditInterface *iface = dynamic_cast<KTextEditor::EditInterface*>(rw_part);
@@ -95,7 +95,7 @@ void AStylePart::activePartChanged(KParts::Part *part)
         extension = extension.mid(pos);
       if (extension == ".h" || extension == ".c" || extension == ".java"
 	  || extension == ".cpp" || extension == ".cc" || extension == ".C"
-	  || extension == ".cxx" || extension == ".hxx")
+	  || extension == ".cxx" || extension == ".c++" || extension == ".hxx")
 	enabled = true;
     }
   }

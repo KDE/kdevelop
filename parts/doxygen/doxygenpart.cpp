@@ -39,7 +39,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     setXMLFile("kdevdoxygen.rc");
 
     KAction *action;
-    
+
     action = new KAction( i18n("Run Doxygen"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
@@ -70,11 +70,11 @@ void DoxygenPart::adjustDoxyfile()
   QString fileName = project()->projectDirectory() + "/Doxyfile";
   if (QFile::exists(fileName))
     return;
-  
+
   Config::instance()->init();
 
   QFile f(fileName);
-  if (f.open(IO_ReadOnly)) 
+  if (f.open(IO_ReadOnly))
   {
     QTextStream is(&f);
 
@@ -91,7 +91,7 @@ void DoxygenPart::adjustDoxyfile()
     input_files->init();
     input_files->addValue(QFile::encodeName(project()->projectDirectory()));
   }
-  
+
   // file patterns
   ConfigList *patterns = dynamic_cast<ConfigList*>(Config::instance()->get("FILE_PATTERNS"));
   if (patterns)
@@ -100,6 +100,7 @@ void DoxygenPart::adjustDoxyfile()
     patterns->addValue("*.cpp");
     patterns->addValue("*.cc");
     patterns->addValue("*.C");
+    patterns->addValue("*.c++");
     patterns->addValue("*.cxx");
     patterns->addValue("*.h");
     patterns->addValue("*.H");
@@ -114,7 +115,7 @@ void DoxygenPart::adjustDoxyfile()
   {
     recursive->setValueString("yes");
   }
-  
+
   // project name
   ConfigString *name = dynamic_cast<ConfigString*>(Config::instance()->get("PROJECT_NAME"));
   if (name)
@@ -122,10 +123,10 @@ void DoxygenPart::adjustDoxyfile()
     name->setDefaultValue(project()->projectName());
     name->init();
   }
-  
+
   // write doxy file
   QFile f2(fileName);
-  if (!f2.open(IO_WriteOnly)) 
+  if (!f2.open(IO_WriteOnly))
     KMessageBox::information(0, i18n("Cannot write Doxyfile."));
   else
   {
@@ -139,7 +140,7 @@ void DoxygenPart::adjustDoxyfile()
 void DoxygenPart::slotDoxygen()
 {
     adjustDoxyfile();
-	
+
     QString dir = project()->projectDirectory();
     QString cmdline = "cd ";
     cmdline += dir;
