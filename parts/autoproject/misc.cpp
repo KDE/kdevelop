@@ -14,7 +14,7 @@
 #include <kdebug.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <klibloader.h>
+#include <kparts/componentfactory.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kregexp.h>
@@ -32,29 +32,14 @@ static KDevCompilerOptions *createCompilerOptions(const QString &name, QObject *
         return 0;
     }
     
-    KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
-    if (!factory) {
-        QString errorMessage = KLibLoader::self()->lastErrorMessage();
-        KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
-                                   "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
-        exit(1);
-    }
-
     QStringList args;
     QVariant prop = service->property("X-KDevelop-Args");
     if (prop.isValid())
         args = QStringList::split(" ", prop.toString());
     
-    QObject *obj = factory->create(parent, service->name().latin1(),
-                                   "KDevCompilerOptions", args);
-
-    if (!obj->inherits("KDevCompilerOptions")) {
-        kdDebug(9000) << "Component does not inherit KDevCompilerOptions" << endl;
-        return 0;
-    }
-    KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
-    
-    return dlg;
+    return KParts::ComponentFactory
+        ::createInstanceFromService<KDevCompilerOptions>( service, parent, 
+                                                          service->name().latin1(), args );
 }
 
 
