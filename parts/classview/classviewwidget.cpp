@@ -99,7 +99,7 @@ void ClassViewWidget::buildTree(bool fromScratch)
 {
     if (!m_part->languageSupport())
         return;
-    
+
     KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     if (config->readBoolEntry("ListByNamespace", false))
@@ -198,7 +198,7 @@ void ClassViewWidget::buildClassFolderFlatList(ClassTreeItem *organizerItem,
                                                QMap<QString, ClassTreeItem*> *folders)
 {
     ClassTreeItem *lastItem = 0;
-    
+
     QStringList::ConstIterator it;
     for (it = dirNames.begin(); it != dirNames.end(); ++it) {
         lastItem = new ClassTreeOrganizerItem(organizerItem, lastItem, *it);
@@ -212,12 +212,12 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
     TreeState oldTreeState;
     if (!fromScratch)
         oldTreeState = treeState();
-    
+
     clear();
 
     ClassStore *store = m_part->classStore();
     ParsedScopeContainer *globalScope = store->globalScope();
-    
+
     ClassTreeItem *ilastItem, *lastItem = 0;
 
     KDevLanguageSupport::Features features = m_part->languageSupport()->features();
@@ -234,7 +234,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
             if (depth == 0)
                 depth = 2;
         }
-        
+
         QValueList<ParsedClass*> classList = store->getSortedClassList();
         QValueList<ParsedClass*>::ConstIterator it;
 
@@ -247,28 +247,28 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
             QString fileName = (*it)->definedInFile();
             QString dirName = determineFolder(fileName, projectDir, depth);
             if (!dirName.isNull() && !dirNames.contains(dirName))
-                dirNames.append(dirName);                        
+                dirNames.append(dirName);
         }
         dirNames.sort(); // we insert in sorted order
-        
+
         // Create folders
         QMap<QString, ClassTreeItem*> folders;
         if (foldersAsHierarchy)
             buildClassFolderHierarchy(lastItem, dirNames, &folders);
         else
             buildClassFolderFlatList(lastItem, dirNames, &folders);
-        
+
         ilastItem = 0;
         // Put classes into folders (if appropriate) or directly into the organizer item
         for (it = classList.begin(); it != classList.end(); ++it) {
             QString fileName = (*it)->definedInFile();
             QString dirName = determineFolder(fileName, projectDir, depth);
-            kdDebug(9003) << "inserting " << fileName << " into " << dirName << endl;
+            // kdDebug(9003) << "inserting " << fileName << " into " << dirName << endl;
             QMap<QString, ClassTreeItem*>::ConstIterator fit = folders.find(dirName);
             if (fit == folders.end())
                 ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it);
             else {
-                kdDebug(9003) << "found folder" << endl;
+                //kdDebug(9003) << "found folder" << endl;
                 QListViewItem *iilastItem = (*fit)->firstChild();
                 while (iilastItem && iilastItem->nextSibling())
                     iilastItem = iilastItem->nextSibling();
@@ -278,7 +278,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         if (fromScratch)
             lastItem->setOpen(true);
     }
-    
+
     if (features & KDevLanguageSupport::Structs) {
         // Add structs
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Structs"));
@@ -290,7 +290,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         if (fromScratch)
             lastItem->setOpen(true);
     }
-                                 
+
     if (features & KDevLanguageSupport::Functions) {
         // Add functions
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Global Functions"));
@@ -314,7 +314,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         if (fromScratch)
             lastItem->setOpen(true);
     }
-    
+
     if (features & KDevLanguageSupport::Namespaces) {
         // Add namespaces
         lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Namespaces"));
@@ -359,5 +359,5 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
     if (!fromScratch)
         setTreeState(oldTreeState);
 }
-    
+
 #include "classviewwidget.moc"
