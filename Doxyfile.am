@@ -13,7 +13,7 @@ apidox-am-yes:
 	##--------------------------------------------------------------------------- \
 	## Project related configuration options                                      \
 	##--------------------------------------------------------------------------- \
-	echo "PROJECT_NAME           = \"KDevelop\"" >> Doxyfile; \
+	echo "PROJECT_NAME           = $(DOXYGEN_PROJECT_NAME)" >> Doxyfile; \
 	echo "PROJECT_NUMBER         = \"Version $(VERSION)\"" >> Doxyfile; \
 	echo "OUTPUT_DIRECTORY       = $(top_builddir)/apidocs" >> Doxyfile; \
 	echo "BRIEF_MEMBER_DESC      = YES" >> Doxyfile; \
@@ -72,10 +72,10 @@ apidox-am-yes:
 	## configuration options related to the HTML output                           \
 	##--------------------------------------------------------------------------- \
 	echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
-	echo "HTML_OUTPUT            = $(subdir)/html" >> Doxyfile; \
-##	echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
-##	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
-##	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
+	echo "HTML_OUTPUT            = html" >> Doxyfile; \
+#	echo "HTML_HEADER            = apidocs/common/header.html" >> Doxyfile ;\
+#	echo "HTML_FOOTER            = apidocs/common/footer.html" >> Doxyfile ;\
+#	echo "HTML_STYLESHEET        = apidocs/common/doxygen.css" >> Doxyfile ;\
 	echo "HTML_HEADER            = " >> Doxyfile ;\
 	echo "HTML_FOOTER            = " >> Doxyfile ;\
 	echo "HTML_STYLESHEET        = " >> Doxyfile ;\
@@ -126,7 +126,18 @@ apidox-am-yes:
 	## Configuration options related to the dot tool                              \
 	##--------------------------------------------------------------------------- \
 	echo "HAVE_DOT = $(KDE_HAVE_DOT)" >> Doxyfile ; \
-	$(DOXYGEN) Doxyfile ;
+	##--------------------------------------------------------------------------- \
+	## Run doxygen                                                                \
+	##--------------------------------------------------------------------------- \
+	rm -f $(top_builddir)/apidocs/common ; \
+	if test -d $(top_srcdir)/doc/common; then \
+	   common_dir=`cd $(top_srcdir)/doc/common && pwd` ;\
+	else \
+	   common_dir=$(kde_libs_htmldir)/en/common ;\
+	fi ;\
+	$(LN_S) $$common_dir $(top_builddir)/apidocs/common ;\
+	$(DOXYGEN) Doxyfile; \
+	rm -f Doxyfile
 
 apidox-am-no:
 
