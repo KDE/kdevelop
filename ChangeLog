@@ -1,3 +1,9 @@
+2004-10-13 Alexander Neundorf <neundorf@kde.org>
+    *buildtools/custommakefiles/:
+    -add new tag <filelistdirectory> so that the filelist file can be 
+     located outside the source directory. This is currently only written
+     by the cmake kdevelop3 project file generator
+
 2004-06-21 Robert Gruber <rgruber@users.sourceforge.net>
     * Added drag and drop support to SnippetPart
     * Added filter support to AppOutputView
