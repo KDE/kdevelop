@@ -706,15 +706,16 @@ void DocTreeProjectFolder::refresh()
 class DocTreeQtFolder : public DocTreeItem
 {
 public:
-    DocTreeQtFolder(KListView *parent, const QString &context);
+    DocTreeQtFolder(QString xml, QString name, KListView *parent, const QString &context);
     void refresh();
 private:
     QString filename;
+    QString m_xml;
 };
 
-DocTreeQtFolder::DocTreeQtFolder(KListView *parent, 
+DocTreeQtFolder::DocTreeQtFolder(QString xml, QString name, KListView *parent, 
     const QString &context)
-    : DocTreeItem(parent, Folder, i18n("Qt"), context)
+    : DocTreeItem(parent, Folder, name, context), m_xml(xml)
 {
 //    filename = _fileName;
 }
@@ -726,14 +727,14 @@ void DocTreeQtFolder::refresh()
     {
         config->setGroup("General");
         QString tmp = config->readEntry("qtdocdir", QT_DOCDIR);
-        if (!tmp.isEmpty())  filename = tmp + QString("/qt.xml");
+        if (!tmp.isEmpty())  filename = tmp + QString("/") + m_xml;
     }
     
     QFileInfo fi(filename);
 
     QFile f(filename);
     if (!f.open(IO_ReadOnly)) {
-        kdDebug(9002) << "Could not read qt.xml" << endl;
+        kdDebug(9002) << "Could not read" << m_xml << endl;
         kdDebug(9002) << "  Filename was: " << filename << endl;
         return;
     }
@@ -757,10 +758,11 @@ void DocTreeQtFolder::refresh()
             QString ref = childEl.attribute("ref");
             QString title = childEl.attribute("title");
 
-            int i = title.find("Class Reference");
+            //dymo: enable all qt docs: disable "Class Reference" check
+/*            int i = title.find("Class Reference");
             if( i > 0 )
             {
-                title = title.left(i);
+                title = title.left(i);*/
                 DocTreeItem* item = item = new DocTreeItem(this, Book, title, context());
                 item->setFileName(fi.dirPath( true ) +"/"+ ref);
 
@@ -778,7 +780,7 @@ void DocTreeQtFolder::refresh()
                     grandChild = grandChild.previousSibling().toElement();
                }
                //kdDebug(9002) <<"ref: "<< ref <<"  title: " << title << endl;
-            }
+//            }
             childEl = childEl.previousSibling().toElement();
         }
     }
@@ -807,7 +809,9 @@ bool DocTreeViewWidget::initKDocKDELibs()
 /**************************************/
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : QVBox(0, "doc tree widget"), folder_qt( 0L ), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
+    : QVBox(0, "doc tree widget"), folder_qt( 0L ),
+    folder_qtassistant(0L), folder_qtdesigner (0L), folder_qtlinguist(0L), folder_qtqmake(0L),
+    folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
     searchToolbar = new QHBox ( this, "search toolbar" );
@@ -869,7 +873,9 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
         pChild = pChild->nextSibling();
     }
 
-    if (!pChild) {
+    // dymo: don't disable qt docs even if doxygen's found,
+    //       because there can be some extras docs with qt
+//    if (!pChild) {
         // qt docu not found in doxygen subtree
         KConfig *config = DocTreeViewFactory::instance()->config();
         if (config)
@@ -878,19 +884,43 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
             QString qtdocdir(config->readEntry("qtdocdir", QT_DOCDIR));
             if (!qtdocdir.isEmpty())
             {
-                folder_qt = new DocTreeQtFolder(docView, "ctx_qt");
+                folder_qt = new DocTreeQtFolder("qt.xml", "Qt Reference Documentation", docView, "ctx_qt");
                 if (folder_qt)
                 {
                     folder_qt->setFileName(qtdocdir + "/index.html");
                     folder_qt->refresh();
                 }
+                folder_qtassistant = new DocTreeQtFolder("assistant.xml", "Qt Assistant Manual", docView, "ctx_qt");
+                if (folder_qtassistant)
+                {
+                    folder_qtassistant->setFileName(qtdocdir + "/assistant.html");
+                    folder_qtassistant->refresh();
+                }
+                folder_qtdesigner = new DocTreeQtFolder("designer.xml", "Qt Designer Manual", docView, "ctx_qt");
+                if (folder_qtdesigner)
+                {
+                    folder_qtdesigner->setFileName(qtdocdir + "/designer-manual.html");
+                    folder_qtdesigner->refresh();
+                }
+                folder_qtlinguist = new DocTreeQtFolder("linguist.xml", "Guide to the Qt Translation Tools", docView, "ctx_qt");
+                if (folder_qtlinguist)
+                {
+                    folder_qtlinguist->setFileName(qtdocdir + "/linguist-manual.html");
+                    folder_qtlinguist->refresh();
+                }
+                folder_qtqmake = new DocTreeQtFolder("qmake.xml", "qmake User Guide", docView, "ctx_qt");
+                if (folder_qtqmake)
+                {
+                    folder_qtqmake->setFileName(qtdocdir + "/qmake-manual.html");
+                    folder_qtqmake->refresh();
+                }
             }
         }
-    }
+/*    }
     else
     {
         folder_qt = 0L;
-    }
+    }*/
 
     connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
     connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );

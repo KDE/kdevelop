@@ -75,6 +75,10 @@ private:
 
     QListViewItem *contextItem;
     DocTreeQtFolder *folder_qt;
+    DocTreeQtFolder *folder_qtassistant;
+    DocTreeQtFolder *folder_qtdesigner;
+    DocTreeQtFolder *folder_qtlinguist;
+    DocTreeQtFolder *folder_qtqmake;
     DocTreeDoxygenFolder *folder_doxygen;
     DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeBookmarksFolder *folder_bookmarks;
