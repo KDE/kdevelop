@@ -26,6 +26,9 @@ dnl the first KDE macro to check for the Compilers needed. The
 dnl default autoconf macro had not the best support for C++ compilers.
 AC_CHECK_COMPILERS
 
+dnl Check for a lexer.
+AC_PROG_LEX
+
 dnl don't build libraries. This mainly disables the configure switches
 dnl --enable-shared and --enable-static, since they don't make that much
 dnl sense then :)
@@ -59,6 +62,7 @@ dnl everything to compile and run a KDE program is already checked
 dnl add here all your Makefiles. This are created by configure
 AC_OUTPUT(Makefile
 	kdevelop/kwrite/Makefile \
+	kdevelop/classparser/Makefile \
 	kdevelop/kdlgedit/Makefile \
 	kdevelop/templates/Makefile \
 	kdevelop/tools/Makefile \
