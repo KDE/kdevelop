@@ -24,7 +24,7 @@
                 <cstring>m_dirs</cstring>
             </property>
             <property name="title">
-                <string>Search custom Directories for scripts.</string>
+                <string>Search Custom Directories for Scripts</string>
             </property>
             <property name="checkable">
                 <bool>true</bool>

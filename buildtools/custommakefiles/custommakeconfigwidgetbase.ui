@@ -26,9 +26,6 @@
             <property name="text">
                 <string>A&amp;bort on first error</string>
             </property>
-            <property name="accel">
-                <string>Alt+B</string>
-            </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">

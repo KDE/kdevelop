@@ -120,7 +120,7 @@
                                     <cstring>m_showContextMenuExplosion</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Show Go To Declaration/Definition Submenus</string>
+                                    <string>Show Go To Declaration/Definition submenus</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>Check to show two additional submenus in the editor context menu containing all the declarations and definitions for the current file and its matching header/implementation file.</string>
@@ -190,10 +190,7 @@
                                             </sizepolicy>
                                         </property>
                                         <property name="text">
-                                            <string>Automatic c&amp;ode completion</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+O</string>
+                                            <string>Automatic c&amp;ode completion:</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -260,10 +257,7 @@
                                             <cstring>checkAutomaticArgumentsHint</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>Automatic &amp;arguments hint</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+A</string>
+                                            <string>Automatic &amp;arguments hint:</string>
                                         </property>
                                         <property name="checked">
                                             <bool>true</bool>
@@ -322,7 +316,7 @@
                                     <cstring>m_includeEnums</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include Enums</string>
+                                    <string>Include enums</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -330,7 +324,7 @@
                                     <cstring>m_includeGlobalFunctions</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include Global Functions</string>
+                                    <string>Include global functions</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -338,7 +332,7 @@
                                     <cstring>m_includeTypedefs</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include Typedefs</string>
+                                    <string>Include typedefs</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -346,7 +340,7 @@
                                     <cstring>m_includeTypes</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Include Types</string>
+                                    <string>Include types</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -419,9 +413,6 @@
                                         <property name="text">
                                             <string>&amp;Add...</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+A</string>
-                                        </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>Click to start the Code Completion database creation wizard.</string>
                                         </property>
@@ -432,9 +423,6 @@
                                         </property>
                                         <property name="text">
                                             <string>&amp;Remove</string>
-                                        </property>
-                                        <property name="accel">
-                                            <string>Alt+R</string>
                                         </property>
                                     </widget>
                                     <spacer>

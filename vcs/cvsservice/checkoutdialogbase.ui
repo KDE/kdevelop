@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CheckoutDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>486</width>
-            <height>470</height>
+            <width>671</width>
+            <height>538</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -46,7 +46,7 @@
                         <string>&amp;Local destination directory:</string>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>workDirEdit</cstring>
+                        <cstring>workURLRequester</cstring>
                     </property>
                 </widget>
                 <widget class="KURLRequester">
@@ -86,7 +86,7 @@
                                 <string>&amp;Server path (e.g. :pserver:marios@cvs.kde.org:/home/kde):</string>
                             </property>
                             <property name="buddy" stdset="0">
-                                <cstring>serverPathLineEdit</cstring>
+                                <cstring>serverPaths</cstring>
                             </property>
                         </widget>
                     </grid>
@@ -292,6 +292,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <tabstops>
     <tabstop>workURLRequester</tabstop>
     <tabstop>serverPaths</tabstop>
@@ -303,7 +305,6 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
