@@ -52,7 +52,7 @@ CVSDiffPage::CVSDiffPage( CvsService_stub *cvsService,
 
 CVSDiffPage::~CVSDiffPage()
 {
-    kdDebug() << "CVSDiffPage::~CVSDiffPage()" << endl;
+    kdDebug(9006) << "CVSDiffPage::~CVSDiffPage()" << endl;
     cancel();
     delete m_cvsDiffJob;
 }
@@ -61,7 +61,7 @@ CVSDiffPage::~CVSDiffPage()
 
 void CVSDiffPage::startDiff( const QString &fileName, const QString &v1, const QString &v2 )
 {
-    kdDebug() << "CVSDiffPage::startDiff()" << endl;
+    kdDebug(9006) << "CVSDiffPage::startDiff()" << endl;
 
     if ( v1.isEmpty() || v2.isEmpty() )
     {
@@ -73,13 +73,13 @@ void CVSDiffPage::startDiff( const QString &fileName, const QString &v1, const Q
     DCOPRef job = m_cvsService->diff( fileName, v1, v2, options->diffOptions(), options->contextLines() );
     m_cvsDiffJob = new CvsJob_stub( job.app(), job.obj() );
 
-    kdDebug() << "Running command : " << m_cvsDiffJob->cvsCommand() << endl;
+    kdDebug(9006) << "Running command : " << m_cvsDiffJob->cvsCommand() << endl;
     connectDCOPSignal( job.app(), job.obj(), "jobExited(bool, int)", "slotJobExited(bool, int)", true );
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
     bool success = m_cvsDiffJob->execute();
     if (!success)
     {
-        kdDebug() << "Argh ... cannot start the diff job!" << endl;
+        kdDebug(9006) << "Argh ... cannot start the diff job!" << endl;
     }
 }
 
@@ -87,12 +87,12 @@ void CVSDiffPage::startDiff( const QString &fileName, const QString &v1, const Q
 
 void CVSDiffPage::slotJobExited( bool normalExit, int /*exitStatus*/ )
 {
-    kdDebug() << "CVSDiffPage::slotJobExited(bool, int)" << endl;
+    kdDebug(9006) << "CVSDiffPage::slotJobExited(bool, int)" << endl;
 
     if (normalExit)
     {
         QString diffText = m_cvsDiffJob->output().join( "\n" );
-        kdDebug() << "*** Received: " << diffText << endl;
+        kdDebug(9006) << "*** Received: " << diffText << endl;
 //        m_diffText->setText( diffText );
         m_diffText->setDiff( diffText );
     }
@@ -106,16 +106,16 @@ void CVSDiffPage::slotJobExited( bool normalExit, int /*exitStatus*/ )
 
 void CVSDiffPage::slotReceivedOutput( QString someOutput )
 {
-    kdDebug() << "CVSDiffPage::slotReceivedOutput(QString)" << endl;
-    kdDebug() << "OUTPUT: " << someOutput << endl;
+    kdDebug(9006) << "CVSDiffPage::slotReceivedOutput(QString)" << endl;
+    kdDebug(9006) << "OUTPUT: " << someOutput << endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CVSDiffPage::slotReceivedErrors( QString someErrors )
 {
-    kdDebug() << "CVSDiffPage::slotReceivedErrors(QString)" << endl;
-    kdDebug() << "ERRORS: " << someErrors << endl;
+    kdDebug(9006) << "CVSDiffPage::slotReceivedErrors(QString)" << endl;
+    kdDebug(9006) << "ERRORS: " << someErrors << endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

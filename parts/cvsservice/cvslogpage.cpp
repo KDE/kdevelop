@@ -53,7 +53,7 @@ CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char
 
 CVSLogPage::~CVSLogPage()
 {
-    kdDebug() << "CVSLogPage::~CVSLogPage()" << endl;
+    kdDebug(9006) << "CVSLogPage::~CVSLogPage()" << endl;
     cancel();
     delete m_cvsLogJob;
 }
@@ -62,7 +62,7 @@ CVSLogPage::~CVSLogPage()
 
 void CVSLogPage::startLog( const QString &workDir, const QString &pathName )
 {
-    kdDebug() << "CVSLogPage::start() here! workDir = " << workDir <<
+    kdDebug(9006) << "CVSLogPage::start() here! workDir = " << workDir <<
         ", pathName = " << pathName << endl;
 
 //    CvsOptions *options = CvsOptions::instance();
@@ -78,7 +78,7 @@ void CVSLogPage::startLog( const QString &workDir, const QString &pathName )
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)", true );
 //    connectDCOPSignal( job.app(), job.obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)", true );
 
-    kdDebug() << "Running: " << m_cvsLogJob->cvsCommand() << endl;
+    kdDebug(9006) << "Running: " << m_cvsLogJob->cvsCommand() << endl;
     m_cvsLogJob->execute();
 }
 
@@ -86,7 +86,7 @@ void CVSLogPage::startLog( const QString &workDir, const QString &pathName )
 /*
 void CVSLogPage::parseLogContent( const QString& text )
 {
-    kdDebug() << "CVSLogPage::parseLogContent()" << endl;
+    kdDebug(9006) << "CVSLogPage::parseLogContent()" << endl;
 
     m_base->contents->clear();
 
@@ -126,7 +126,7 @@ void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
     QStringList lines = m_cvsLogJob->output();
     for (size_t i=0; i<lines.count(); ++i) {
         QString s = lines[i];
-        kdDebug() << "Examining line: " << s << endl;
+        kdDebug(9006) << "Examining line: " << s << endl;
         if ( rx_rev.exactMatch(s) )
         {
             QString ver = rx_rev.cap( 1 );
@@ -166,7 +166,7 @@ void CVSLogPage::slotJobExited( bool normalExit, int exitStatus )
 
 void CVSLogPage::slotLinkClicked( const QString &link )
 {
-    kdDebug() << "CVSLogPage::slotLinkClicked()" << endl;
+    kdDebug(9006) << "CVSLogPage::slotLinkClicked()" << endl;
 
     // The text browser clears the page so we go back to our old one
     // @fixme: in this way I lose the source
@@ -188,16 +188,16 @@ void CVSLogPage::slotLinkClicked( const QString &link )
 
 void CVSLogPage::slotReceivedOutput( QString someOutput )
 {
-    kdDebug() << "CVSLogPage::slotReceivedOutput(QString)" << endl;
+    kdDebug(9006) << "CVSLogPage::slotReceivedOutput(QString)" << endl;
 
-    kdDebug() << "OUTPUT: " << someOutput << endl;
+    kdDebug(9006) << "OUTPUT: " << someOutput << endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CVSLogPage::slotReceivedErrors( QString someErrors )
 {
-    kdDebug() << "ERRORS: " << someErrors << endl;
+    kdDebug(9006) << "ERRORS: " << someErrors << endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -114,7 +114,7 @@ void CvsProcessWidget::clear()
 
 bool CvsProcessWidget::startJob( const DCOPRef &aJob )
 {
-    kdDebug() << "CvsProcessWidget::startJob(const DCOPRef &) here!" << endl;
+    kdDebug(9006) << "CvsProcessWidget::startJob(const DCOPRef &) here!" << endl;
 
     clear();
     m_part->mainWindow()->raiseView( this );
@@ -137,7 +137,7 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
     QString cmdLine = m_job->cvsCommand();
     m_part->mainWindow()->statusBar()->message( cmdLine );
 
-    kdDebug() << "Running: " << cmdLine << endl;
+    kdDebug(9006) << "Running: " << cmdLine << endl;
 
     // disconnect 3rd party slots from our signals
     disconnect( SIGNAL(jobFinished(bool, int)) );
@@ -157,7 +157,7 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
 
 void CvsProcessWidget::cancelJob()
 {
-    kdDebug() << "CvsProcessWidget::cancelJob() here!" << endl;
+    kdDebug(9006) << "CvsProcessWidget::cancelJob() here!" << endl;
 
     if (!m_job || !m_job->isRunning())
         return;
@@ -173,10 +173,10 @@ void CvsProcessWidget::cancelJob()
 
 void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 {
-    kdDebug() << "CvsProcessWidget::slotJobExited(bool, int) here!" << endl;
+    kdDebug(9006) << "CvsProcessWidget::slotJobExited(bool, int) here!" << endl;
 #ifdef MYDCOPDEBUG
     g_dcopExitCounter++;
-    kdDebug() << "MYDCOPDEBUG: dcopExitCounter == " << g_dcopExitCounter << endl;
+    kdDebug(9006) << "MYDCOPDEBUG: dcopExitCounter == " << g_dcopExitCounter << endl;
 #endif
     if (m_job)
     {
@@ -199,10 +199,10 @@ void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
 
 void CvsProcessWidget::slotReceivedOutput( QString someOutput )
 {
-    kdDebug() << "CvsProcessWidget::slotReceivedOutput(QString)  here!" << endl;
+    kdDebug(9006) << "CvsProcessWidget::slotReceivedOutput(QString)  here!" << endl;
 #ifdef MYDCOPDEBUG
     g_dcopOutCounter++;
-    kdDebug() << "MYDCOPDEBUG: dcopOutCounter == " << g_dcopOutCounter << endl;
+    kdDebug(9006) << "MYDCOPDEBUG: dcopOutCounter == " << g_dcopOutCounter << endl;
 #endif
     m_outputBuffer += someOutput;
     QStringList strings = processBuffer( m_outputBuffer );
@@ -218,10 +218,10 @@ void CvsProcessWidget::slotReceivedOutput( QString someOutput )
 
 void CvsProcessWidget::slotReceivedErrors( QString someErrors )
 {
-    kdDebug() << "CvsProcessWidget::slotReceivedErrors(QString)  here!" << endl;
+    kdDebug(9006) << "CvsProcessWidget::slotReceivedErrors(QString)  here!" << endl;
 #ifdef MYDCOPDEBUG
     g_dcopErrCounter++;
-    kdDebug() << "MYDCOPDEBUG: dcopErrCounter == " << g_dcopErrCounter << endl;
+    kdDebug(9006) << "MYDCOPDEBUG: dcopErrCounter == " << g_dcopErrCounter << endl;
 #endif
 
     m_errorBuffer += someErrors;

@@ -50,14 +50,14 @@ CVSLogDialog::CVSLogDialog( CvsService_stub *cvsService, QWidget *parent, const 
 
 CVSLogDialog::~CVSLogDialog()
 {
-    kdDebug() << "CVSLogDialog::~CVSLogDialog()" << endl;
+    kdDebug(9006) << "CVSLogDialog::~CVSLogDialog()" << endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CVSLogDialog::startLog( const QString &workDir, const QString &pathName )
 {
-    kdDebug() << "CVSLogDialog::start() here! workDir = " << workDir <<
+    kdDebug(9006) << "CVSLogDialog::start() here! workDir = " << workDir <<
         ", pathName = " << pathName << endl;
 
 //    displayActionFeedback( true );
@@ -76,7 +76,7 @@ void CVSLogDialog::startLog( const QString &workDir, const QString &pathName )
 
 void CVSLogDialog::slotDiffRequested( const QString &pathName, const QString &revA, const QString &revB )
 {
-    kdDebug() << "CVSLogDialog::slotDiffRequested()" << endl;
+    kdDebug(9006) << "CVSLogDialog::slotDiffRequested()" << endl;
 
     // Create a new CVSDiffPage and start diffing process
     QString diffTitle =  i18n("Diff between %1 and %2").arg( revA ).arg( revB );

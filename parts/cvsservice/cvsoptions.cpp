@@ -51,7 +51,7 @@ CvsOptions::CvsOptions()
     m_compressionLevel( default_compression ),
     m_contextLines( default_contextLines )
 {
-    kdDebug( 9999 ) << " **** CvsOptions instance CREATED!" << endl;
+    kdDebug( 9006 ) << " **** CvsOptions instance CREATED!" << endl;
     // We share some configuration data with cvsservice
     m_serviceConfig = new KConfig( "cvsservicerc" );
 }
@@ -60,7 +60,7 @@ CvsOptions::CvsOptions()
 
 CvsOptions::~CvsOptions()
 {
-    kdDebug( 9999 ) << " **** CvsOptions instance DESTROYED!" << endl;
+    kdDebug( 9006 ) << " **** CvsOptions instance DESTROYED!" << endl;
     delete m_serviceConfig;
 
     m_instance = 0;
@@ -81,7 +81,7 @@ CvsOptions* CvsOptions::instance()
 
 void CvsOptions::save( KDevProject *project )
 {
-    kdDebug( 9999 ) << " **** CvsOptions::save( KDevProject* ) here" << endl;
+    kdDebug( 9006 ) << " **** CvsOptions::save( KDevProject* ) here" << endl;
     Q_ASSERT( project );
 
     QDomDocument &dom = *project->projectDom();
@@ -106,7 +106,7 @@ void CvsOptions::save( KDevProject *project )
 
 void CvsOptions::load( KDevProject *project )
 {
-    kdDebug( 9999 ) << " **** CvsOptions::load( KDevProject* ) here" << endl;
+    kdDebug( 9006 ) << " **** CvsOptions::load( KDevProject* ) here" << endl;
     Q_ASSERT( project );
     QDomDocument &dom = *project->projectDom();
 

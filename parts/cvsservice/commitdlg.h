@@ -14,17 +14,18 @@
 #ifndef _COMMITDIALOG_H_
 #define _COMMITDIALOG_H_
 
-#include <qdialog.h>
+//#include <qdialog.h>
 #include <qstringlist.h>
+#include "commitdialogbase.h"
 
 class QTextEdit;
 class QCheckBox;
 
-class CommitDialog : public QDialog
+class CommitDialog : public CommitDialogBase
 {
     Q_OBJECT
 public:
-    CommitDialog();
+    CommitDialog( QWidget *parent = 0 );
 
     //! Returns the text of the log
     QStringList logMessage() const;
@@ -35,10 +36,6 @@ public:
 protected slots:
     //! Override: must check for message not being void.
     virtual void accept();
-
-private:
-    QTextEdit *textEdit;
-    QCheckBox *checkAddToChangelog;
 };
 
 #endif

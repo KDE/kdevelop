@@ -1,9 +1,9 @@
 /** \class CvsServicePart
 This is an experimental attempt to integrate Cervisia HEAD's cvsservice into gideon (read FAQ).
-This part _does_ require cvsservice being installed on
-your system: I'm not an auto* wizard so you have to manually pass to the
-configure script the options:
-
+This part _does_ require cvsservice being installed on your system: the configure script
+in the main source directory should autodetect the presence of Cervisia and build it.
+If Cervisia wasn't installed in $KDEDIR than you need to specify paths for lib and include
+files, for example:
 <code>
     --with-extra-libs=$HOME/kde/lib --with-extra-includes=$HOME/kde/include
 </code>
@@ -19,21 +19,34 @@ Implementation of this component is done by:
   - class CvsServicePart, which does provide integration within gideon, set-up GUI
     integration, forward cvs commands to the implementation (m_impl). It does also
     intercepts signals like "new files added to project" and "... removed from ...".
-  - class CvsServicePartImpl & CvsServiceImpl do implement the actus feature: more general
+  - class CvsServicePartImpl implements the actual feature: more general speaking
     functions (like checking for whether files are in repository, provide checks
-    on file lists, ...) so that it can be used for other implementations: currently
-    I've only provided that using CvsService from Cervisia HEAD.
+    on file lists, ...).
   - class CvsProcessWidget provides output wrapping for commands (ok, it is useful
-    for debugging too ;-). This seems to be pretty *** buggy *** and needs to be
-    fixed.
-  - class CvsOptions provides info about the user preferences when executing commands:
+    for debugging too ;-). It simply starts a DCOP job and awaits notification for
+    its termination.
+  - class CvsOptions* provide info about the user preferences when executing commands:
     settings are stored in myprj.kdevses file, loaded when project is opened and
     saved when project is closed.
   - There is a bunch of dialog classes for collecting useful data about the operations
-    one wants to perform: the only exception is LogForm which does perform some
-    complex text parsing and so encapsulates much logic (It was already made in this
-    way: I simply ported to CvsService ;-)
+    one wants to perform: exception to this are the cvslog* classes which do start
+    cvs jobs independently archiving parallelism with the CvsProcesssWidget.
+  - CVSDir and CVSEntry provide abstraction for accessing to local CVS information
+  - CVSFileInfoProvider is an implementation of KDevVCSFileInfoProvider interface
+    and collects data about files stats: for now implementation only works synchronously
+    (look at status() method) and I hope to finish the async interface in time for 3.0
+    release. (Sync means that information are collected from local CVS dirs which do not
+    provide much information; async mean that a "cvs status <dir-name>" request is
+    launched, output parsed and information returned to the client in _different_ times).
+    Obviously this stuff requires the client (actually only the FileTree viewer)
+    to be aware of this feature ;-)
 
+\todo
+    - Implement the async interface CVSFileInfoProvider
+    - optimization in the CVSFileInfoProvider by using some sort of cache mecanism: this is
+      required since we don't want to make the client to burden with this job (or not?).
+    - Fix the "cvs update" function which behave strangely for sub-directories of the main
+      project dir.
 
 \authors <a href="mailto:mario.scalas AT libero.it">Mario Scalas</a>
 

@@ -207,7 +207,7 @@ CVSEntry CVSDir::fileStatus( const QString &fileName, bool refreshCache ) const
         return m_cachedEntries[ fileName ];
     }
     else
-        return CVSEntry();
+        return CVSEntry( fileName ); // Just the file name
 }
 
 ///////////////////////////////////////////////////////////////////////////////

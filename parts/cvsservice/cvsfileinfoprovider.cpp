@@ -45,7 +45,6 @@ CVSFileInfoProvider::~CVSFileInfoProvider()
 
 VCSFileInfoMap CVSFileInfoProvider::status( const QString &dirPath ) const
 {
-    // @todo
     CVSDir cvsdir( projectDirectory() + QDir::separator() + dirPath );
     // Returns an empty map if dir is invalid
     return cvsdir.dirStatus();
@@ -76,25 +75,27 @@ bool CVSFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 
 void CVSFileInfoProvider::slotJobExited( bool normalExit, int exitStatus )
 {
-    kdDebug(9017) << "CVSFileInfoProvider::slotJobExited(bool,int)" << endl;
+    kdDebug(9006) << "CVSFileInfoProvider::slotJobExited(bool,int)" << endl;
     if (!normalExit)
         return;
 
-    kdDebug(9017) << m_requestStatusJob->output() << endl;
+    kdDebug(9006) << m_requestStatusJob->output() << endl;
 
     emit statusReady( parse( m_requestStatusJob->output() ), m_savedCallerData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSFileInfoProvider::slotReceivedOutput( QString someOutput )
+void CVSFileInfoProvider::slotReceivedOutput( QString /*someOutput*/ )
 {
+    /* Nothing to do: we get the job output in the above method */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CVSFileInfoProvider::slotReceivedErrors( QString someErrors )
+void CVSFileInfoProvider::slotReceivedErrors( QString /*someErrors*/ )
 {
+    /* Nothing to do */
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,7 +174,7 @@ VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
                 fileName, workingRevision, repositoryRevision,
                 String2EnumState( fileStatus ) );
 
-            kdDebug(9017) << vcsInfo.toString() << endl;;
+            kdDebug(9006) << vcsInfo.toString() << endl;;
 
             vcsStates.insert( fileName, vcsInfo );
             state = 0;

@@ -112,7 +112,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
     bool correctlySetup = (m_cvsService != 0) && (m_repository != 0);
     if (!correctlySetup)
     {
-        kdDebug(9000) << "DCOP CvsService is not available!!!" << endl;
+        kdDebug(9006) << "DCOP CvsService is not available!!!" << endl;
         return false;
     }
 
@@ -121,7 +121,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
 
     if (!m_part->project())
     {
-        kdDebug(9000) << "CvsServicePartImpl::prepareOperation(): No project???" << endl;
+        kdDebug(9006) << "CvsServicePartImpl::prepareOperation(): No project???" << endl;
         KMessageBox::sorry( 0, i18n("Open a project first.\nOperation will be aborted.") );
         return false;
     }
@@ -145,7 +145,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
     validateURLs( projectDirectory(),  urls, op );
     if (urls.count() <= 0) // who knows? ;)
     {
-        kdDebug(9000) << "CvsServicePartImpl::prepareOperation(): No valid document URL selected!!!" << endl;
+        kdDebug(9006) << "CvsServicePartImpl::prepareOperation(): No valid document URL selected!!!" << endl;
         KMessageBox::sorry( 0, i18n("None of the file(s) you selected seems to be valid for repository.") );
         return false;
     }
@@ -162,7 +162,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
 
 void CvsServicePartImpl::doneOperation( const KURL::List &/*someUrls*/, CvsOperation /*op*/ )
 {
-    kdDebug(9000) << "CvsServicePartImpl::doneOperation(const KURL::List&, CvsOperation)" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::doneOperation(const KURL::List&, CvsOperation)" << endl;
 
     // @ todo notify clients (filetree) about changed status?)
 }
@@ -188,12 +188,12 @@ QStringList CvsServicePartImpl::fileList( bool relativeToProjectDir ) const
 
 bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirectory, const KURL &url )
 {
-    kdDebug(9000) << "===> CvsServicePartImpl::isRegisteredInRepository() here! " << endl;
+    kdDebug(9006) << "===> CvsServicePartImpl::isRegisteredInRepository() here! " << endl;
 
     // KURL::directory() is a bit tricky when used on file or _dir_ paths ;-)
     KURL projectURL = KURL::fromPathOrURL( projectDirectory );
-    kdDebug(9000) << "projectURL = " << projectURL.url() << endl;
-    kdDebug(9000) << "url        = " << url.url() << endl;
+    kdDebug(9006) << "projectURL = " << projectURL.url() << endl;
+    kdDebug(9006) << "url        = " << url.url() << endl;
 
     if ( projectURL == url)
     {
@@ -206,7 +206,7 @@ bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirecto
 
         if (!cvsdir.isValid())
         {
-            kdDebug(9000) << "===> Error: " << cvsdir.path() << " is not a valid CVS directory " << endl;
+            kdDebug(9006) << "===> Error: " << cvsdir.path() << " is not a valid CVS directory " << endl;
             return false;
         }
         CVSEntry entry = cvsdir.fileStatus( url.fileName() );
@@ -218,13 +218,13 @@ bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirecto
 
 void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op )
 {
-    kdDebug(9000) << "CvsServicePartImpl::validateURLs() here!" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::validateURLs() here!" << endl;
 
     // If files are to be added, we can avoid to check them to see if they are registered in the
     // repository ;)
     if (op == opAdd)
     {
-        kdDebug(9000) << "This is a Cvs Add operation and will not be checked against repository ;-)" << endl;
+        kdDebug(9006) << "This is a Cvs Add operation and will not be checked against repository ;-)" << endl;
         return;
     }
     QValueList<KURL>::iterator it = urls.begin();
@@ -232,13 +232,13 @@ void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::Li
     {
         if (!CvsServicePartImpl::isRegisteredInRepository( projectDirectory, (*it) ))
         {
-            kdDebug(9000) << "Warning: file " << (*it).path() << " does NOT belong to repository and will not be used" << endl;
+            kdDebug(9006) << "Warning: file " << (*it).path() << " does NOT belong to repository and will not be used" << endl;
 
             it = urls.erase( it );
         }
         else
         {
-            kdDebug(9000) << "Warning: file " << (*it).path() << " is in repository and will be accepted" << endl;
+            kdDebug(9006) << "Warning: file " << (*it).path() << " is in repository and will be accepted" << endl;
 
             ++it;
         }
@@ -249,11 +249,11 @@ void CvsServicePartImpl::validateURLs( const QString &projectDirectory, KURL::Li
 
 void CvsServicePartImpl::addToIgnoreList( const QString &projectDirectory, const KURL &url )
 {
-    kdDebug(9000) << "===> CvsServicePartImpl::addToIgnoreList() here! " << endl;
+    kdDebug(9006) << "===> CvsServicePartImpl::addToIgnoreList() here! " << endl;
 
     if ( url.path() == projectDirectory )
     {
-        kdDebug(9000) << "Can't add to ignore list current project directory " << endl;
+        kdDebug(9006) << "Can't add to ignore list current project directory " << endl;
         return;
     }
 
@@ -273,7 +273,7 @@ void CvsServicePartImpl::addToIgnoreList( const QString &projectDirectory, const
 
 void CvsServicePartImpl::removeFromIgnoreList( const QString &/*projectDirectory*/, const KURL &url )
 {
-    kdDebug(9000) << "===> CvsServicePartImpl::removeFromIgnoreList() here! " << endl;
+    kdDebug(9006) << "===> CvsServicePartImpl::removeFromIgnoreList() here! " << endl;
 
     QStringList ignoreLines;
 
@@ -382,8 +382,8 @@ void CvsServicePartImpl::checkout()
 
 void CvsServicePartImpl::commit( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::commit() here!" << endl;
-    kdDebug(9000) << "Commit requested for " << urlList.count() << " file(s)." << endl;
+    kdDebug(9006) << "CvsServicePartImpl::commit() here!" << endl;
+    kdDebug(9006) << "Commit requested for " << urlList.count() << " file(s)." << endl;
 
     if (!prepareOperation( urlList, opCommit ))
         return;
@@ -398,7 +398,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
     DCOPRef cvsJob = m_cvsService->commit( fileList(), logString, false );
     if (!m_cvsService->ok())
     {
-        kdDebug( 9000 ) << "Commit of " << fileList().join( ", " ) << " failed!!!" << endl;
+        kdDebug( 9006 ) << "Commit of " << fileList().join( ", " ) << " failed!!!" << endl;
         return;
     }
 
@@ -424,7 +424,7 @@ void CvsServicePartImpl::commit( const KURL::List& urlList )
 
 void CvsServicePartImpl::update( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::update() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::update() here" << endl;
 
     if (!prepareOperation( urlList, opCommit ))
         return;
@@ -454,7 +454,7 @@ void CvsServicePartImpl::update( const KURL::List& urlList )
 
 void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
 {
-    kdDebug(9000) << "CvsServicePartImpl::add() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::add() here" << endl;
 
     if (!prepareOperation( urlList, opAdd ))
         return;
@@ -471,7 +471,7 @@ void CvsServicePartImpl::add( const KURL::List& urlList, bool binary )
 
 void CvsServicePartImpl::remove( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::remove() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::remove() here" << endl;
 
     if (!prepareOperation( urlList, opRemove ))
         return;
@@ -489,7 +489,7 @@ void CvsServicePartImpl::remove( const KURL::List& urlList )
 
 void CvsServicePartImpl::removeStickyFlag( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::revert() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::revert() here" << endl;
 
     if (!prepareOperation( urlList, opUpdate ))
         return;
@@ -513,7 +513,7 @@ void CvsServicePartImpl::removeStickyFlag( const KURL::List& urlList )
 
 void CvsServicePartImpl::log( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::log() here: " << endl;
+    kdDebug(9006) << "CvsServicePartImpl::log() here: " << endl;
 
     if (!prepareOperation( urlList, opLog ))
         return;
@@ -530,7 +530,7 @@ void CvsServicePartImpl::log( const KURL::List& urlList )
 
 void CvsServicePartImpl::diff( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::diff() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::diff() here" << endl;
 
     if (!prepareOperation( urlList, opDiff ))
         return;
@@ -560,7 +560,7 @@ void CvsServicePartImpl::diff( const KURL::List& urlList )
 
 void CvsServicePartImpl::tag( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::tag() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::tag() here" << endl;
 
     if (!prepareOperation( urlList, opTag ))
         return;
@@ -584,7 +584,7 @@ void CvsServicePartImpl::tag( const KURL::List& urlList )
 
 void CvsServicePartImpl::unTag( const KURL::List& urlList )
 {
-    kdDebug(9000) << "CvsServicePartImpl::unTag() here" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::unTag() here" << endl;
 
     if (!prepareOperation( urlList, opUnTag ))
         return;
@@ -629,7 +629,7 @@ void CvsServicePartImpl::createNewProject( const QString &dirName,
     const QString &message, const QString &module, const QString &vendor,
     const QString &release, bool mustInitRoot )
 {
-    kdDebug( 9000 ) << "====> CvsServicePartImpl::createNewProject( const QString& )" << endl;
+    kdDebug( 9006 ) << "====> CvsServicePartImpl::createNewProject( const QString& )" << endl;
 
     CvsOptions *options = CvsOptions::instance();
     options->setCvsRshEnvVar( cvsRsh );
@@ -657,8 +657,8 @@ void CvsServicePartImpl::createNewProject( const QString &dirName,
         KShellProcess::quote(module) + " " +
         KShellProcess::quote(location);
 
-    kdDebug( 9000 ) << "  ** Will run the following command: " << endl << cmdLine << endl;
-    kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
+    kdDebug( 9006 ) << "  ** Will run the following command: " << endl << cmdLine << endl;
+    kdDebug( 9006 ) << "  ** on directory: " << dirName << endl;
 
     m_part->makeFrontend()->queueCommand( dirName, cmdLine );
 }

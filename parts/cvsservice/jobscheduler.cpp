@@ -46,7 +46,7 @@ bool DirectScheduler::schedule( DCOPRef &job )
 {
     if (job.isNull())
     {
-        kdDebug() << "DirectScheduler::schedule(DCOPRef &): Job is null and will be rejected!" << endl;
+        kdDebug(9006) << "DirectScheduler::schedule(DCOPRef &): Job is null and will be rejected!" << endl;
         return false;
     }
     processWidget()->startJob( job );

@@ -241,7 +241,7 @@ KDevVCSFileInfoProvider *CvsServicePart::fileInfoProvider() const
 
 void CvsServicePart::createNewProject( const QString &dirName )
 {
-    kdDebug( 9000 ) << "====> CvsServicePart::createNewProject( const QString& )" << endl;
+    kdDebug( 9006 ) << "====> CvsServicePart::createNewProject( const QString& )" << endl;
 
     if (!m_cvsConfigurationForm)
         return;
@@ -282,20 +282,20 @@ QWidget* CvsServicePart::newProjectWidget( QWidget *parent )
 
 void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
 {
-    kdDebug(9000) << "contextMenu()" << endl;
+    kdDebug(9006) << "contextMenu()" << endl;
     if (context->hasType( Context::FileContext ) ||
         context->hasType( Context::EditorContext ))
     {
 
         if (context->hasType( Context::FileContext ))
         {
-            kdDebug(9000) << "Requested for a FileContext" << endl;
+            kdDebug(9006) << "Requested for a FileContext" << endl;
             const FileContext *fcontext = static_cast<const FileContext*>( context );
             m_urls = fcontext->urls();
         }
         else
         {
-            kdDebug(9000) << "Requested for an EditorContext" << endl;
+            kdDebug(9006) << "Requested for an EditorContext" << endl;
             const EditorContext *editorContext = static_cast<const EditorContext*>( context );
             m_urls << editorContext->url();
         }
@@ -337,7 +337,7 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
 
 bool CvsServicePart::urlFocusedDocument( KURL &url )
 {
-    kdDebug(9000) << "CvsServicePartImpl::retrieveUrlFocusedDocument() here!" << endl;
+    kdDebug(9006) << "CvsServicePartImpl::retrieveUrlFocusedDocument() here!" << endl;
     KParts::ReadOnlyPart *part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
     if ( part )
     {
@@ -348,7 +348,7 @@ bool CvsServicePart::urlFocusedDocument( KURL &url )
         }
         else
         {
-            kdDebug(9027) << "Cannot handle non-local files!" << endl;
+            kdDebug(9006) << "Cannot handle non-local files!" << endl;
         }
     }
    return false;
@@ -605,7 +605,7 @@ void CvsServicePart::slotStopButtonClicked( KDevPlugin* which )
 
 void CvsServicePart::slotAddFilesToProject( const QStringList &filesToAdd )
 {
-    kdDebug( 9000 ) << "====> CvsServicePart::slotAddFilesToProject(const QStringList &)" << endl;
+    kdDebug( 9006 ) << "====> CvsServicePart::slotAddFilesToProject(const QStringList &)" << endl;
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want to be added to CVS repository too?"),
@@ -615,7 +615,7 @@ void CvsServicePart::slotAddFilesToProject( const QStringList &filesToAdd )
         i18n("askWhenAddingNewFiles") );
     if (s == KMessageBox::Yes)
     {
-        kdDebug( 9000 ) << "Adding these files: " << filesToAdd.join( ", " ) << endl;
+        kdDebug( 9006 ) << "Adding these files: " << filesToAdd.join( ", " ) << endl;
 
         m_urls = KURL::List( prependToStringList( project()->projectDirectory(), filesToAdd ) );
         URLUtil::dump( m_urls );
@@ -627,7 +627,7 @@ void CvsServicePart::slotAddFilesToProject( const QStringList &filesToAdd )
 
 void CvsServicePart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
 {
-    kdDebug( 9000 ) << "====> CvsServicePart::slotRemovedFilesFromProject( const QStringList &)" << endl;
+    kdDebug( 9006 ) << "====> CvsServicePart::slotRemovedFilesFromProject( const QStringList &)" << endl;
 
     int s = KMessageBox::questionYesNo( 0,
         i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
@@ -637,7 +637,7 @@ void CvsServicePart::slotRemovedFilesFromProject(const QStringList &fileToRemove
         i18n("askWhenRemovingFiles") );
     if (s == KMessageBox::Yes)
     {
-        kdDebug( 9000 ) << "Removing these files: " << fileToRemove.join( ", " ) << endl;
+        kdDebug( 9006 ) << "Removing these files: " << fileToRemove.join( ", " ) << endl;
 
         m_urls = KURL::List( prependToStringList( project()->projectDirectory(), fileToRemove ) );
         URLUtil::dump( m_urls );
@@ -649,13 +649,13 @@ void CvsServicePart::slotRemovedFilesFromProject(const QStringList &fileToRemove
 
 void CvsServicePart::slotProjectOpened()
 {
-    kdDebug(9000) << "CvsServicePart::slotProjectOpened() here!" << endl;
+    kdDebug(9006) << "CvsServicePart::slotProjectOpened() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
     CVSDir cvsdir( project()->projectDirectory() );
     if (!cvsdir.isValid())
     {
-        kdDebug(9000) << "Project has no CVS Support: too bad!! :-(" << endl;
+        kdDebug(9006) << "Project has no CVS Support: too bad!! :-(" << endl;
         return;
     }
 
@@ -678,13 +678,13 @@ void CvsServicePart::slotProjectOpened()
 
 void CvsServicePart::slotProjectClosed()
 {
-    kdDebug(9000) << "CvsServicePart::slotProjectClosed() here!" << endl;
+    kdDebug(9006) << "CvsServicePart::slotProjectClosed() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
     CVSDir cvsdir( project()->projectDirectory() );
     if (!cvsdir.isValid())
     {
-        kdDebug(9000) << "Project had no CVS Support: too bad!! :-(" << endl;
+        kdDebug(9006) << "Project had no CVS Support: too bad!! :-(" << endl;
         return;
     }
 

@@ -26,45 +26,16 @@
 
 //#include "ksyntaxhighlighter.h"
 
-CommitDialog::CommitDialog()
-    : QDialog(0, "", true )
+CommitDialog::CommitDialog( QWidget *parent )
+    : CommitDialogBase( parent, "commitdialog", true )
 {
-    setCaption( i18n("CVS Commit") );
-
-    QBoxLayout *layout = new QVBoxLayout(this, 10);
-
-    QLabel *messagelabel = new QLabel(i18n("Enter log message:"), this);
-    messagelabel->setMinimumSize(messagelabel->sizeHint());
-    layout->addWidget(messagelabel, 0);
-
-    textEdit = new QTextEdit(this);
-    QFontMetrics fm(textEdit->fontMetrics());
-    textEdit->setMinimumSize(fm.width("0")*80, fm.lineSpacing()*3);
-    layout->addWidget(textEdit, 10);
-
-    checkAddToChangelog = new QCheckBox( i18n("&Add entry to master changelog too"), this, "checkboxaddtochangelog" );
-    layout->addWidget( checkAddToChangelog, 0 );
-
-    KButtonBox *buttonbox = new KButtonBox(this);
-    buttonbox->addStretch();
-    QPushButton *ok = buttonbox->addButton(i18n("OK"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
-    connect( ok, SIGNAL(clicked()), SLOT(accept()) );
-    connect( cancel, SIGNAL(clicked()), SLOT(reject()) );
-    ok->setDefault(true);
-    buttonbox->layout();
-    layout->addWidget(buttonbox, 0);
-
-    layout->activate();
-    adjustSize();
-
-//    new KDictSpellingHighlighter( textEdit );
+    connect( buttonOk, SIGNAL(clicked()), SLOT(accept()) );
+    connect( buttonCancel, SIGNAL(clicked()), SLOT(reject()) );
 }
 
 QStringList CommitDialog::logMessage() const
 {
     QStringList textLines;
-//    textEdit->setText( "Bla bla bla bla\n" );
     for (int i=0; i<textEdit->paragraphs(); ++i)
     {
         textLines << textEdit->text( i );
@@ -93,9 +64,3 @@ void CommitDialog::accept()
 }
 
 #include "commitdlg.moc"
-
-// Local Variables:
-// c-basic-offset: 4
-// End:
-
-
