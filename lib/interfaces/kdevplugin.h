@@ -118,7 +118,7 @@ public:
      * Retrieve the current DCOP Client for the plugin.
      *
      * The clients name is taken from the name argument in the constructor.
-     * @note: The DCOPClient object will only be created when this method is
+     * @note The DCOPClient object will only be created when this method is
      * called for the first time. Make sure that the part has been loaded
      * before calling this method, if it's the one that contains the DCOP
      * interface that other parts might use.
@@ -203,13 +203,13 @@ public:
      * the newly loaded project. For instance, the debugger part might restore the
      * set breakpoints from the previous debug session for the certain project.
      *
-     * Note: Take attention to the difference to common not-project-related session stuff.
+     * @note Take attention to the difference to common not-project-related session stuff.
      *       They belong to the application rc file (kdeveloprc)
      */
     virtual void restorePartialProjectSession(const QDomElement* el);
 
     /**
-     * See @ restorePartialProjectSession. This is the other way round, the same just for saving.
+     * @sa restorePartialProjectSession - This is the other way round, the same just for saving.
      */
     virtual void savePartialProjectSession(QDomElement* el);
 
