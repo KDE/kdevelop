@@ -1,3 +1,6 @@
+2001-07-29 Victor Röder <victor_roeder@gmx.de>
+	* KDevArgHint improved, i.e. positioning, ui
+
 2001-07-26 Victor Röder <victor_roeder@gmx.de>
 	* KDevArgHint added to KWrite-part (widget that shows the function and its needed arguments)
 		Try it and type in 'test(' at the beginning of an empty line in a C++ project!
