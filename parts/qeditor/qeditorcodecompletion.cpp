@@ -27,7 +27,8 @@
 #include "qeditorcodecompletion.h"
 #include "qeditorcodecompletion.moc"
 
-#include "qeditorcodecompletion_arghint.h"
+// #include "qeditorcodecompletion_arghint.h"
+#include "qeditor_arghint.h"
 #include "qeditor_part.h"
 #include "qeditor_view.h"
 #include "qeditor.h"
@@ -165,7 +166,8 @@ QEditorCodeCompletion::QEditorCodeCompletion( QEditorView* view )
     m_completionPopup->installEventFilter( this );
     m_completionPopup->setFocusProxy( m_completionListBox );
 
-    m_pArgHint = new KDevArgHint( m_view );
+    m_pArgHint = new QEditorArgHint( m_view );
+    m_view->editor()->installEventFilter( m_pArgHint );
     connect( m_pArgHint, SIGNAL(argHintHidden()),
              this, SIGNAL(argHintHidden()) );
 
@@ -342,9 +344,10 @@ void QEditorCodeCompletion::showArgHint ( QStringList functionList,
                                           const QString& strWrapping,
                                           const QString& strDelimiter )
 {
-    m_pArgHint->reset();
-    kdDebug() << "strWrapping = " << strWrapping << endl;
-    kdDebug() << "strDelimiter = " << strDelimiter << endl;
+    unsigned int line, col;
+    m_view->cursorPositionReal( &line, &col );
+    m_pArgHint->reset( line, col );
+
     m_pArgHint->setArgMarkInfos( "()", "," );
 
     int nNum = 0;
@@ -352,7 +355,7 @@ void QEditorCodeCompletion::showArgHint ( QStringList functionList,
     {
         kdDebug() << "Insert function text: " << *it << endl;
 
-        m_pArgHint->setFunctionText ( nNum, ( *it ) );
+        m_pArgHint->addFunction ( nNum, ( *it ) );
 
         nNum++;
     }
@@ -363,7 +366,9 @@ void QEditorCodeCompletion::showArgHint ( QStringList functionList,
 
 void QEditorCodeCompletion::slotCursorPosChanged()
 {
-    m_pArgHint->cursorPositionChanged ( m_view, m_view->cursorLine(), m_view->cursorColumnReal() );
+    unsigned int line, col;
+    m_view->cursorPositionReal( &line, &col );
+    m_pArgHint->cursorPositionChanged( m_view, line, col );
 }
 
 void QEditorCodeCompletion::showComment()

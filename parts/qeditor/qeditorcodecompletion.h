@@ -33,7 +33,7 @@
 
 #include <ktexteditor/codecompletioninterface.h>
 
-class KDevArgHint;
+class QEditorArgHint;
 class QEditorView;
 
 class QEditorCodeCompletionCommentLabel : public QLabel
@@ -85,7 +85,7 @@ private:
   void complete( KTextEditor::CompletionEntry );
   void updateBox( bool newCoordinate = false );
 
-  KDevArgHint*    m_pArgHint;
+  QEditorArgHint*    m_pArgHint;
   QEditorView*       m_view;
   QVBox*          m_completionPopup;
   QListBox*       m_completionListBox;
