@@ -15,6 +15,7 @@
 
 #include <klibloader.h>
 #include <kmessagebox.h>
+#include <kstatusbar.h>
 
 $APPNAME$::$APPNAME$()
     : KParts::MainWindow( 0L, "$APPNAME$" )

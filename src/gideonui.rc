@@ -43,9 +43,9 @@
     <Merge/>
   </Menu>
   <Merge/>
-  <Menu name="buffers">
-    <text>&amp;Buffers</text>
-    <ActionList name="buffer_list"/>
+  <Menu name="tools">
+    <text>&amp;Tools</text>
+    <Merge/>
   </Menu>
   <Menu name="settings">
     <text>&amp;Settings</text>
@@ -53,6 +53,10 @@
     <Separator/>
     <Action name="settings_configure_toolbars"/>
     <Action name="settings_configure"/>
+  </Menu>
+  <Menu name="buffers">
+    <text>&amp;Buffers</text>
+    <ActionList name="buffer_list"/>
   </Menu>
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
@@ -63,7 +67,10 @@
   <Action name="project_open" />
   <Separator/>
   <Merge/>
-  <Action name="stop_processes"/>
   <Action name="help_whats_this"/>
+</ToolBar>
+<ToolBar name="buildToolBar">
+  <Merge/>
+  <Action name="stop_processes"/>
 </ToolBar>
 </kpartgui>
