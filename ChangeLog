@@ -1,0 +1,84 @@
+1999-01-05  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* added Undo/Redo,Invert Selection and KWrite-Configuration Dlgs
+
+1999-01-04  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* begin of the KWrite integration
+ 	* commit some sourcecode (ceditwidget.cpp) from Jochen Wilhelmy for this
+	integration
+
+1998-12-16  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* THE GREAT RENAMING - several class- and filename changes to provide 
+	   consistent names in kdevelop
+	* cprjoptionsdlg.cpp - some bugfixes in the linker-tab
+	* remove some redundant files in "normal.tar.gz" and "mini.tar.gz"
+
+1998-12-14  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	
+	* fixed the TAB bug in the editor
+	* Version 0.2.0.1 released
+	
+1998-12-03 KDevelop-Team
+	
+	* Version 0.2 released
+
+1998-11-30  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* commit the patch from David Barth <dbarth@videotron.ca>
+		- build->run doesn't start the program,if "make" has errors
+		- added build->autoconf target
+		- output_widget isn't writeable now 
+
+1998-11-29  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* bugfix in the documentation-browser (it displayed <PRE>s incorrectly)
+	* change the picture in the Application-Wizard
+	
+1998-11-28  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* several bugfixes
+	* added the rest for the search-engine,I hope it works :-)
+	* added incompatible-dialog for old projects (KDevelop 0.1)
+
+1998-11-20 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	 
+	* Added fillColumnMode to cpp_widget and header_widget in init.cpp because it seems
+	   the 80 coulumn preset for the output_witdget of kedit restricts the columns of the other
+	   widgets as well.   
+	* Added KQuickHelp for the KAppWizard pages as replacement for QToolTip
+	* Added INS and OVR status as well as Line and Column status into statusBar()
+	
+1998-11-19 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* Added KQuickHelp to following dialogs:
+	kappwizard.h, kappwizard.cpp
+  	(KAppWizard, first page)
+	
+	kdevsetup.h, kdevsetup.cpp
+	(Setup Dialog, also changed fixed size vertically)
+	
+	prjoptionsdlg.h, prjoptionsdlg.cpp
+	(Project Options on all 3 Tabs:General, GCC options, GCC Warnings)
+
+	cupdatekdedoc.h, cupdatekdedoc.cpp
+	(Update dialog for kde documention generator)
+	
+	cfilepropdlg.h, cfilepropdlg.cpp
+	(Quickhelp for file properties dialog)
+	* changed the statusbar setup and added resource ID for configure kdevelop in init.cpp
+	* added	statusbar help and status messages in kdevelop.h and kdevelop.cpp
+	* added	macros to the resource.h file
+	TODO: KQuickhelp still missing in KAppWizard pages, new class dialog and newfile dialog
+	
+1998-11	KDevelop-Team
+	* Adding more features and bugfixes for stability
+	
+1998-10	KDevelop-Team
+	* Several changes and bugfixes
+	
+1998-09-22 KDevelop-Team    
+	* Version 0.1 released
+	
+1998-07-20 KDevelop-Team
+  	* begin kdevelop-project (yet another IDE for Unix)

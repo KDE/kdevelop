@@ -1,0 +1,11 @@
+# KDE Config File  
+[KDE Desktop Entry]
+Type=Application
+Exec=PROJECT_NAME  
+Icon=PROJECT_NAME.xpm
+DocPath=PROJECT_NAME/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=PROJECT_NAME
+Name[de]=PROJECT_NAME

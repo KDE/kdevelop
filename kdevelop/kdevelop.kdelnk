@@ -1,0 +1,11 @@
+# KDE Config File  
+[KDE Desktop Entry]
+Type=Application
+Exec=kdevelop  
+Icon=kdevelop.xpm
+DocPath=kdevelop/index.html
+Comment=an IDE for KDE
+Comment[de]=Eine Entwicklungsumgebung für KDE
+Terminal=0
+Name=KDevelop
+Name[de]=KDevelop

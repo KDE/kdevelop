@@ -1,0 +1,15 @@
+# KDE Config File
+[View Configuration]
+show_statusbar=true
+show_browser_toolbar=true
+show_std_toolbar=true
+[Files]
+header_file=Untitled.h
+project_file=
+cpp_file=Untitled.cpp
+browser_file=
+[General Options]
+top_panner_pos=213
+width=792
+height=500
+view_panner_pos=337

@@ -1,0 +1,14 @@
+Begin3
+Title:          KDevelop
+Version:        0.2
+Entered-date:   3. Dec 1998 
+Description:    an IDE for X/Qt/KDE
+Keywords:       IDE, KDE, X11, Qt, development
+Author:         Sandy Meier, Stefan Heidrich,Stefan Bartel,Ralf Nolden 
+Maintained-by:  Sandy Meier <smeier@rz.uni-potsdam.de>
+Primary-site:   
+Home-page:      http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html
+Original-site:  
+Platform:       Linux, needs Qt 1.41 and the kde libs
+Copying-policy: GNU Public License
+End

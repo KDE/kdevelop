@@ -1,0 +1,7 @@
+#!/bin/sh
+
+make distclean
+make -f Makefile.dist
+./configure
+make
+

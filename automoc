@@ -1,0 +1,153 @@
+#! /usr/local/bin/perl
+
+# Changes Makefile.in to work correctly with moc files. When called
+# without parameters, automoc works recursively on all Makefile.in in
+# and below the current subdirectory. When called with parameters,
+# only these Makefile.in are changed.
+#
+# 1998-07-23  Harri Porten <porten@tu-harburg.de>
+#       * small bugfixes for MOCSOURCES
+#
+# 1998-09-16  Harri Porten <porten@tu-harburg.de> & David Faure <faure@kde.org>
+#       * bug fix for invocation with arguments
+
+use Cwd;
+use File::Find;
+use File::Basename;
+
+if ( 0 ne 0 )
+  {
+print "\n\n";
+print "*********************************************\n";
+print "automoc - Software that makes even more sense\n";
+print "*********************************************\n\n";
+print "Welcome to the wonderful world of automoc!\n";
+print "This is really free software, unencumbered by the GPL.\n";
+print "You can do anything you like with it except sueing me.\n";
+print "Copyright 1998 Kalle Dalheimer <kalle\@kde.org>\n";
+print "Concept, design and unnecessary questions about Perl by Matthias Ettrich <ettrich\@kde.org>\n\n";
+  }
+
+if( @ARGV == 0 )
+  {
+
+	find( \&process_makefile1, cwd() );
+  }
+else
+  {
+	$curdir = cwd();
+	while( @ARGV )
+	  {
+		chdir( dirname( $ARGV[0] ) );
+		process_makefile( basename( $ARGV[0] ) );
+		chdir( $curdir );
+		shift @ARGV;
+	  }
+  }
+
+sub process_makefile1()
+  {
+	if( $_ ne "Makefile.in" )
+	  {
+		return;
+	  }
+	else
+	  {
+		process_makefile( $File::Find::name );
+	  }
+  }
+
+
+sub process_makefile()
+  {
+	( $filename ) = @_;
+
+	# print STDERR "Processing $filename\n";
+
+	# search for USE_AUTOMOC
+	@search_use_automoc = `grep USE_AUTOMOC $filename`;
+	return if( @search_use_automoc == 0 );
+
+	# find the name of the program
+	$search_use_automoc[0] =~ /^([^_]*)_/;
+	$programname = $1;
+
+	open( FILEIN, "$filename" ) or die "Could not open $filename: $!\n";
+	open( FILEOUT, ">$filename" . ".tmp" ) or die "Could not open $filename: $!\n"; 
+
+	@mocable_files = `grep -l Q_OBJECT *.h 2> /dev/null`;
+
+	foreach $mocable_file (@mocable_files) {
+	  $thisfile = $mocable_file;
+	  $thisfile =~ s/\.h//;
+	  push @mocnames, $thisfile;
+	  $thisfile = $mocable_file;
+	  $thisfile =~ s/\.h/\.moc\.cpp/;
+	  push @mocsources, $thisfile;
+	}
+
+	$objectline = $programname . "_OBJECTS";
+	$libobjectline = $programname . "_la_OBJECTS";
+	while( <FILEIN> )
+	  {
+		if( /(.*_METASOURCES\s*=\s*)(USE_AUTOMOC)/ )
+		  {
+			print FILEOUT "$1 ";
+			foreach $mocsource (@mocsources) {
+			  chomp $mocsource;
+			  print FILEOUT $mocsource . " ";
+			}
+			print FILEOUT "\n";
+		  }
+		elsif( /^$objectline/ or /^$libobjectline/ ) # look for both programs and libraries
+		  {
+			chomp $_;
+                        $line = $_;
+                        $idx = rindex( $line, "\\");
+                        $morelines = 0;
+			# Found a backslash in the line
+                        if($idx > 0) {
+                          $line = substr( $line, 0, idx-1);
+                          $morelines = 1;
+                        }
+			print FILEOUT "$line ";
+			foreach $mocname (@mocnames) {
+			  chomp $mocname;
+			  if( /^$objectline/ ) {
+			    print FILEOUT $mocname . ".moc.o ";
+			  }
+			  elsif( /^$libobjectline/ ) {
+			    print FILEOUT $mocname . ".moc.lo ";
+			  }
+			}
+                        if($morelines) {
+                          print FILEOUT "\\";
+                        }
+			print FILEOUT "\n";
+		  }
+		elsif( m+cd \$\(top_srcdir\) \&\& \$\(AUTOMAKE\)+ )
+		  {
+			print FILEOUT $_;
+			print FILEOUT "\tperl \$(top_builddir)/automoc " . cwd() . "/Makefile.in\n";
+		  }
+		else
+		  {
+			print FILEOUT $_;
+		  }
+	  }
+
+	print FILEOUT "\n\n";
+	foreach $file (@mocnames) {
+	  chomp $file;
+	  print FILEOUT "$file.moc.cpp: $file.h\n";
+	  print FILEOUT "\t\$(MOC) $file.h -o $file.moc.cpp\n\n"
+	}
+
+	$new = $filename;
+	$old = $filename . ".tmp";
+	rename $old, $new; 
+	undef @mocsources;
+        undef @mocnames;
+  }
+
+

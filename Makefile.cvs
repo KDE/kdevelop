@@ -1,0 +1,26 @@
+default: all
+
+dist:
+	@echo "This file is to make it easier for you to create all you need"
+	aclocal
+	autoheader
+# use --include-deps, if you want to release the stuff. Don't use it for
+# yourself
+	automake --include-deps
+	perl automoc
+	autoconf
+	touch stamp-h.in
+	LIST=`find ./po -name "*.po"`; \
+	for i in $$LIST; do \
+	 file2=`echo $$i | sed -e "s#\.po#\.gmo#"`; \
+	 msgfmt -o $$file2 $$i; \
+	done 
+	rm -f Makefile.dist
+
+all:
+	aclocal
+	autoheader
+	automake
+	perl automoc
+	autoconf
+

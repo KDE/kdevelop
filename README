@@ -1,0 +1,26 @@
+please use only new generated projects,the old ones are incompatible
+
++++++++++++++++++++++++++++
+KDevelop:
+
+KDevelop will be an easy to use IDE (Intergrated Development Enviroment) for
+Unix/X11.At the moment there are only unstable alpha-versions.
+
+Requirements:
+In order to successfully compile und use KDevelop, you need following
+programs and libraries: 	
+
+	g++ 2.8/egcs 1.1 (or compatible) (it should work with gcc 2.7.2)
+	perl 5.004
+	autoconf 2.12
+	automake 1.2
+	Qt 1.41
+	KDE 1.1
+ 	KDE-SDK
+	Glimpse 4.1
+
+Installation:
+see INSTALL in the same directory
+
+Have fun! The KDevelop-Team
+

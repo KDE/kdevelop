@@ -1,0 +1,296 @@
+/***************************************************************************
+                          cupdatekdedocdlg.cpp  -  description                              
+                             -------------------                                         
+
+    version              :                                   
+    begin                : Mon Nov 9 1998                                           
+    copyright            : (C) 1998 by Sandy Meier                         
+    email                : smeier@rz.uni-potsdam.de                                     
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
+
+#include "cupdatekdedocdlg.h"
+#include <kapp.h>
+#include <kfiledialog.h>
+#include <qdir.h>
+
+CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config ) : QDialog(parent,name,true) {
+  
+  conf = config;
+  config->setGroup("Doc_Location");
+  this->doc_path = config->readEntry("doc_kde");
+  this->proc = proc;
+
+  setCaption(i18n("KDE Library Documentation Update..."));
+  install_box = new QButtonGroup( this, "install_box" );
+  install_box->setGeometry( 20, 80, 490, 170 );
+  install_box->setMinimumSize( 0, 0 );
+  install_box->setMaximumSize( 32767, 32767 );
+  install_box->setFocusPolicy( QWidget::NoFocus );
+  install_box->setBackgroundMode( QWidget::PaletteBackground );
+  install_box->setFontPropagation( QWidget::NoChildren );
+  install_box->setPalettePropagation( QWidget::NoChildren );
+  install_box->setFrameStyle( 49 );
+  install_box->setTitle( "Choose installation mode:" );
+  install_box->setAlignment( 1 );
+  
+  source_edit = new QLineEdit( this, "source_edit" );
+  source_edit->setGeometry( 240, 30, 230, 30 );
+  source_edit->setMinimumSize( 0, 0 );
+  source_edit->setMaximumSize( 32767, 32767 );
+  source_edit->setFocusPolicy( QWidget::StrongFocus );
+  source_edit->setBackgroundMode( QWidget::PaletteBase );
+  source_edit->setFontPropagation( QWidget::NoChildren );
+  source_edit->setPalettePropagation( QWidget::NoChildren );
+  source_edit->setText( QDir::homeDirPath() );
+  source_edit->setMaxLength( 32767 );
+  source_edit->setEchoMode( QLineEdit::Normal );
+  source_edit->setFrame( TRUE );
+  
+  source_label = new QLabel( this, "source_label" );
+  source_label->setGeometry( 30, 30, 170, 30 );
+  source_label->setMinimumSize( 0, 0 );
+  source_label->setMaximumSize( 32767, 32767 );
+  source_label->setFocusPolicy( QWidget::NoFocus );
+  source_label->setBackgroundMode( QWidget::PaletteBackground );
+  source_label->setFontPropagation( QWidget::NoChildren );
+  source_label->setPalettePropagation( QWidget::NoChildren );
+  source_label->setText( "new KDE Libs sources path:" );
+  source_label->setAlignment( 289 );
+  source_label->setMargin( -1 );
+  
+  doc_edit = new QLineEdit( this, "doc_edit" );
+  doc_edit->setGeometry( 240, 270, 230, 30 );
+  doc_edit->setMinimumSize( 0, 0 );
+  doc_edit->setMaximumSize( 32767, 32767 );
+  doc_edit->setFocusPolicy( QWidget::StrongFocus );
+  doc_edit->setBackgroundMode( QWidget::PaletteBase );
+  doc_edit->setFontPropagation( QWidget::NoChildren );
+  doc_edit->setPalettePropagation( QWidget::NoChildren );
+  doc_edit->setText(doc_path);
+  doc_edit->setMaxLength( 32767 );
+  doc_edit->setEchoMode( QLineEdit::Normal );
+  doc_edit->setFrame( TRUE );
+  doc_edit->setEnabled(false);
+  
+  doc_label = new QLabel( this, "doc_label" );
+  doc_label->setGeometry( 30, 270, 210, 30 );
+  doc_label->setMinimumSize( 0, 0 );
+  doc_label->setMaximumSize( 32767, 32767 );
+  doc_label->setFocusPolicy( QWidget::NoFocus );
+  doc_label->setBackgroundMode( QWidget::PaletteBackground );
+  doc_label->setFontPropagation( QWidget::NoChildren );
+  doc_label->setPalettePropagation( QWidget::NoChildren );
+  doc_label->setText( "new KDE Libs Documentation path:" );
+  doc_label->setAlignment( 289 );
+  doc_label->setMargin( -1 );
+  doc_label->setEnabled(false);
+  
+  source_button = new QPushButton( this, "source_button" );
+  source_button->setGeometry( 480, 30, 30, 30 );
+  source_button->setMinimumSize( 0, 0 );
+  source_button->setMaximumSize( 32767, 32767 );
+  source_button->setFocusPolicy( QWidget::TabFocus );
+  source_button->setBackgroundMode( QWidget::PaletteBackground );
+  source_button->setFontPropagation( QWidget::NoChildren );
+  source_button->setPalettePropagation( QWidget::NoChildren );
+  source_button->setText( "..." );
+  source_button->setAutoRepeat( FALSE );
+  source_button->setAutoResize( FALSE );
+  
+  doc_button = new QPushButton( this, "doc_button" );
+  doc_button->setGeometry( 480, 270, 30, 30 );
+  doc_button->setMinimumSize( 0, 0 );
+  doc_button->setMaximumSize( 32767, 32767 );
+  doc_button->setFocusPolicy( QWidget::TabFocus );
+  doc_button->setBackgroundMode( QWidget::PaletteBackground );
+  doc_button->setFontPropagation( QWidget::NoChildren );
+  doc_button->setPalettePropagation( QWidget::NoChildren );
+  doc_button->setText( "..." );
+  doc_button->setAutoRepeat( FALSE );
+  doc_button->setAutoResize( FALSE );
+  doc_button->setEnabled(false);
+  
+  ok_button = new QPushButton( this, "ok_button" );
+  ok_button->setGeometry( 140, 320, 100, 30 );
+  ok_button->setMinimumSize( 0, 0 );
+  ok_button->setMaximumSize( 32767, 32767 );
+  ok_button->setFocusPolicy( QWidget::TabFocus );
+  ok_button->setBackgroundMode( QWidget::PaletteBackground );
+  ok_button->setFontPropagation( QWidget::NoChildren );
+  ok_button->setPalettePropagation( QWidget::NoChildren );
+  ok_button->setText( "OK" );
+  ok_button->setAutoRepeat( FALSE );
+  ok_button->setAutoResize( FALSE );
+ 
+  
+  cancel_button = new QPushButton( this, "cancel_button" );
+  cancel_button->setGeometry( 270, 320, 100, 30 );
+  cancel_button->setMinimumSize( 0, 0 );
+  cancel_button->setMaximumSize( 32767, 32767 );
+  cancel_button->setFocusPolicy( QWidget::TabFocus );
+  cancel_button->setBackgroundMode( QWidget::PaletteBackground );
+  cancel_button->setFontPropagation( QWidget::NoChildren );
+  cancel_button->setPalettePropagation( QWidget::NoChildren );
+  cancel_button->setText( "Cancel" );
+  cancel_button->setAutoRepeat( FALSE );
+  cancel_button->setAutoResize( FALSE );
+  
+  del_recent_radio_button = new QRadioButton( this, "del_recent_radio_button" );
+  del_recent_radio_button->setGeometry( 40, 110, 430, 30 );
+  del_recent_radio_button->setMinimumSize( 0, 0 );
+  del_recent_radio_button->setMaximumSize( 32767, 32767 );
+  del_recent_radio_button->setFocusPolicy( QWidget::TabFocus );
+  del_recent_radio_button->setBackgroundMode( QWidget::PaletteBackground );
+  del_recent_radio_button->setFontPropagation( QWidget::NoChildren );
+  del_recent_radio_button->setPalettePropagation( QWidget::NoChildren );
+  del_recent_radio_button->setText( "Delete old Documentation and install to recent Documentation path" );
+  del_recent_radio_button->setAutoRepeat( FALSE );
+  del_recent_radio_button->setAutoResize( FALSE );
+  del_recent_radio_button->setChecked( TRUE );
+  KQuickHelp::add(del_recent_radio_button,
+	i18n("Checking this will delete the current documentation\n"
+		"and replacing it with the new generated documentation\n" 
+		"in the same path.")); 
+
+
+  del_new_radio_button = new QRadioButton( this, "del_new_radio_button" );
+  del_new_radio_button->setGeometry( 40, 150, 440, 30 );
+  del_new_radio_button->setMinimumSize( 0, 0 );
+  del_new_radio_button->setMaximumSize( 32767, 32767 );
+  del_new_radio_button->setFocusPolicy( QWidget::TabFocus );
+  del_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
+  del_new_radio_button->setFontPropagation( QWidget::NoChildren );
+  del_new_radio_button->setPalettePropagation( QWidget::NoChildren );
+  del_new_radio_button->setText( "Delete old Documentation and install to new Documentation path" );
+  del_new_radio_button->setAutoRepeat( FALSE );
+  del_new_radio_button->setAutoResize( FALSE );
+  KQuickHelp::add(del_new_radio_button,
+	i18n("Checking this will delete the current documentation\n"
+		"and lets you choose a path in the input field below\n"
+		"where the new generated documentation will be"
+		"installed.\n"));  
+
+  leave_new_radio_button = new QRadioButton( this, "leave_new_radio_button" );
+  leave_new_radio_button->setGeometry( 40, 190, 450, 30 );
+  leave_new_radio_button->setMinimumSize( 0, 0 );
+  leave_new_radio_button->setMaximumSize( 32767, 32767 );
+  leave_new_radio_button->setFocusPolicy( QWidget::TabFocus );
+  leave_new_radio_button->setBackgroundMode( QWidget::PaletteBackground );
+  leave_new_radio_button->setFontPropagation( QWidget::NoChildren );
+  leave_new_radio_button->setPalettePropagation( QWidget::NoChildren );
+  leave_new_radio_button->setText( "Leave old Documention untouched and install to new Documention path" );
+  leave_new_radio_button->setAutoRepeat( FALSE );
+  leave_new_radio_button->setAutoResize( FALSE );
+  KQuickHelp::add(leave_new_radio_button,
+	i18n("This doesn't delete your current documentation and leaves it\n"
+		"is now and you can select a new path for the new kdelibs\n"
+		"documentation. CAUTION: Don't insert the same path where\n"
+		"your recent documentation is installed- this may mess up\n"
+		"the documentation by mixing old and new files!"));
+
+  install_box->insert( del_recent_radio_button );
+  install_box->insert( del_new_radio_button );
+  install_box->insert( leave_new_radio_button );
+  
+
+  KQuickHelp::add(source_label,
+  KQuickHelp::add(source_edit,
+  KQuickHelp::add(source_button, i18n("Insert the path to the current\n"
+				      "KDE-Libs sourcecodes here. This is\n"
+				      "where you have unpacked e.g. a kdelibs\n"
+				      "snapshot a la /snapshot/kdelibs."))));
+
+  KQuickHelp::add(doc_label,
+  KQuickHelp::add(doc_edit,
+  KQuickHelp::add(doc_button, i18n("Insert the path where you want to have\n"
+				   "the new generated documentation installed\n"
+				   "Note: the path information in Setup will\n"
+               			   "be updated automatically, you don't have\n"
+				   "to change them to the new doc path."))));
+
+
+
+
+  resize( 530,380 );
+  setMinimumSize( 0, 0 );
+  setMaximumSize( 32767, 32767 );
+  
+  connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+  connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
+  connect(leave_new_radio_button,SIGNAL(clicked()),SLOT(slotLeaveNewRadioButtonClicked()));
+  connect(del_new_radio_button,SIGNAL(clicked()),SLOT(slotDelNewRadioButtonClicked()));
+  connect(del_recent_radio_button,SIGNAL(clicked()),SLOT(slotDelRecentRadioButtonClicked()));
+
+  connect(doc_button,SIGNAL(clicked()),SLOT(slotDocButtonClicked()));
+  connect(source_button,SIGNAL(clicked()),SLOT(slotSourceButtonClicked()));
+}
+CUpdateKDEDocDlg::~CUpdateKDEDocDlg(){
+}
+void CUpdateKDEDocDlg::OK(){
+  QString kdelibs_path = source_edit->text();
+  QString new_doc_path = doc_path;
+  if(!del_recent_radio_button->isChecked()){ // not recent doc path
+    new_doc_path = doc_edit->text();
+    conf->setGroup("Doc_Location");
+    conf->writeEntry("doc_kde",new_doc_path);
+  }
+  if(!leave_new_radio_button->isChecked()){ // ok,let's delete it,attentation!!!
+    proc->clearArguments();
+    if(QDir::setCurrent(doc_path)){
+      *proc << "rm -f -r kab/;rm -f -r kfile/;rm -f -r kdecore/;rm -f -r kdeui/;
+                rm -f -r kspell/;rm -f -r khtmlw/;rm -f -r kfmlib/";    
+      proc->start(KShellProcess::Block,KShellProcess::AllOutput);
+    }
+  }
+  proc->clearArguments();
+  QDir::setCurrent(kdelibs_path);
+  
+  
+  *proc << "cd kdeui/;kdoc -d " + new_doc_path + "/kdeui KDE-UI-Library *.h;
+            cd ../kdecore/;kdoc -d "+ new_doc_path +"/kdecore KDE-Core-Library *.h;
+            cd ../kfile/;kdoc -d "+ new_doc_path +"/kfile KDE-KFile-Library *.h;
+            cd ../khtmlw/;kdoc -d "+ new_doc_path +"/khtmlw KDE-HTMLW-Library *.h;
+            cd ../kfmlib/;kdoc -d "+ new_doc_path +"/kfmlib KDE-KFM-Library *.h;
+            cd ../kab/;kdoc -d "+ new_doc_path +"/kab KDE-KAB-Library *.h;
+            cd ../kspell/;kdoc -d "+ new_doc_path +"/kspell KDE-KSpell-Library *.h";
+
+  proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  accept();
+}
+void CUpdateKDEDocDlg::slotLeaveNewRadioButtonClicked(){
+  doc_button->setEnabled(true);
+  doc_edit->setEnabled(true);
+  doc_label->setEnabled(true);
+}
+void CUpdateKDEDocDlg::slotDelNewRadioButtonClicked(){
+  doc_button->setEnabled(true);
+  doc_edit->setEnabled(true);
+  doc_label->setEnabled(true);
+}
+void CUpdateKDEDocDlg::slotDelRecentRadioButtonClicked(){
+  doc_button->setEnabled(false);
+  doc_edit->setEnabled(false);
+  doc_label->setEnabled(false);
+}
+void CUpdateKDEDocDlg::slotDocButtonClicked(){
+  QString name = KDirDialog::getDirectory(doc_edit->text(),this,"New KDE Documentation Directory...");
+  if(!name.isEmpty()){
+    doc_edit->setText(name);
+  }
+}
+void CUpdateKDEDocDlg::slotSourceButtonClicked(){
+  QString name = KDirDialog::getDirectory(source_edit->text(),this,"KDE Libs Directory...");
+  if(!name.isEmpty()){
+    source_edit->setText(name);
+  }
+}

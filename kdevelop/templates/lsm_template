@@ -1,0 +1,14 @@
+Begin3
+Title:          PROJECT_NAME 
+Version:        VERSION
+Entered-date:   
+Description:    
+Keywords:       KDE, X11, Qt 
+Author:         AUTHOR <EMAIL> 
+Maintained-by:  AUTHOR <EMAIL> 
+Primary-site:   	        
+Home-page:      http:// 
+Original-site:  
+Platform:       Linux and other Unices, needs Qt and the KDE libs
+Copying-policy: GNU Public License
+End
