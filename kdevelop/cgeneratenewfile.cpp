@@ -174,15 +174,15 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   file.close();  
   return file.name();
 }
-QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){  
-  QString template_kdelnk = locate("kdev_template", "kdelnk_template");
+QString  CGenerateNewFile::genDesktopFile(QString abs_name,CProject* prj){  
+  QString template_desktop = locate("kdev_template", "desktop_template");
   QString project_name = prj->getProjectName().lower();
   QString str;
   QStrList list;
   
-  QFile file(template_kdelnk);
+  QFile file(template_desktop);
   QTextStream stream(&file);
-  if(file.open(IO_ReadOnly)){ // read the kdelnk_template
+  if(file.open(IO_ReadOnly)){ // read the desktop_template
     while(!stream.eof()){
       list.append(stream.readLine());
     }
@@ -259,6 +259,7 @@ QString CGenerateNewFile::genNifFile(QString abs_name){
     process << abs_name;
     process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
 }
+
 
 
 

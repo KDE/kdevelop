@@ -214,7 +214,7 @@ void CKAppWizard::initPages(){
                            widget1, "lsmfile" );
   lsmfile->setGeometry( 30, 360, 340, 30 );
 
-  datalink = new QCheckBox( i18n(".kdelnk file"), widget1, "datalink" );
+  datalink = new QCheckBox( i18n(".desktop file"), widget1, "datalink" );
   datalink->setGeometry( 30, 390, 200, 30 );
   
   progicon = new QCheckBox( i18n("Program Icon"), widget1, "progicon" );
@@ -321,7 +321,7 @@ void CKAppWizard::initPages(){
 
   /************************************************************/
 
-  // create the thirth page
+  // create the third page
   widget1c = new QWidget(this);
   addPage(widget1c, i18n("Version Control System Support"));
 
@@ -710,7 +710,7 @@ void CKAppWizard::okPermited() {
   if (miniicon->isChecked())
     entries << name2 << "\n";
   else entries << "no\n";
-  entries << "KDELNK\n";
+  entries << "DESKTOP\n";
   if (datalink->isChecked())
     entries << "yes\n";
   else entries << "no\n";
@@ -1587,12 +1587,12 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if (datalink->isChecked()) {
-    fileInfo.rel_name = namelow + "/" + namelow + ".kdelnk";
+    fileInfo.rel_name = namelow + "/" + namelow + ".desktop";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = true;
-    fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
-    project->addFileToProject (namelow + "/" + namelow + ".kdelnk",fileInfo);
+    fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".desktop";
+    project->addFileToProject (namelow + "/" + namelow + ".desktop",fileInfo);
   }
 
   if (progicon->isChecked()) {
@@ -1961,6 +1961,7 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
+
 
 
 

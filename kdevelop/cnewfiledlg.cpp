@@ -348,8 +348,8 @@ void CNewFileDlg::slotOKClicked(){
       generator.genLSMFile(complete_filename,prj);
       type = "DATA";
     }
-    if (filetype == "KDELNK"){
-      generator.genKDELnkFile(complete_filename,prj);
+    if (filetype == "DESKTOP"){
+      generator.genDesktopFile(complete_filename,prj);
       type = "DATA";
     }
     if (filetype == "EN_SGML"){
@@ -526,6 +526,7 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
+
 
 
 
