@@ -39,8 +39,6 @@
 #include <kdevplugincontroller.h>
 #include "domutil.h"
 
-#include "vcsmanagerwidget.h"
-#include "vcsmanagerglobalconfig.h"
 #include "vcsmanagerprojectconfig.h"
 
 typedef KDevGenericFactory<VCSManagerPart> VCSManagerFactory;
