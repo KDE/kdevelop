@@ -25,7 +25,6 @@ CKDevelop::CKDevelop(){
   QString filename;
   version = VERSION;
   project=false;// no project
-
   init();
   initConnections();
   initProject(); 
@@ -43,12 +42,21 @@ CKDevelop::CKDevelop(){
 
    }
 
-//  This all doesn't work, don't know why
+// if first start, the onlinehelp is shown, so outputview is false
+// else show output view according to value in config file  -Ralf
+   config->setGroup("General Options");
+   bool showOutput=config->readBoolEntry("show_output_view",false);
+   if( showOutput=true)
+   { slotOptionsTOutputView();}
+
+//  This all doesn't work, don't know why. Set default Tab to TOOLS and shows HEADER...-Ralf
+//   s_tab_view->setCurrentTab(0);
 
 //  config->setGroup("General Options");
 //  int lastActiveTab=config->readNumEntry("LastActiveTab", BROWSER);
 //  slotSTabSelected(lastActiveTab);
 //  s_tab_view->setCurrentTab(config->readNumEntry("LastActiveTab", BROWSER));
+  s_tab_view->repaint();
 
 }
 
@@ -150,22 +158,22 @@ void CKDevelop::init(){
   			      config->readNumEntry("top_panner_pos", 213));
 
   t_tab_view = new CTabCtl(top_panner);
-  t_tab_view->setFocusPolicy(QWidget::NoFocus);
+  t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv");
   log_file_tree->setIndentSpacing(15);
-//  log_file_tree->setFocusPolicy(QWidget::ClickFocus);
+  log_file_tree->setFocusPolicy(QWidget::NoFocus);
   
   class_tree = new CClassView(t_tab_view,"cv");
   class_tree->setIndentSpacing(15);
-//  class_tree->setFocusPolicy(QWidget::ClickFocus);
+  class_tree->setFocusPolicy(QWidget::NoFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
-//  real_file_tree->setFocusPolicy(QWidget::ClickFocus);
+  real_file_tree->setFocusPolicy(QWidget::NoFocus);
   real_file_tree->setIndentSpacing(15);
 
   doc_tree = new CDocTree(t_tab_view,"DOC");
-//  doc_tree->setFocusPolicy(QWidget::ClickFocus);
+  doc_tree->setFocusPolicy(QWidget::NoFocus);
   doc_tree->setIndentSpacing(15);
 
   t_tab_view->addTab(class_tree,"CV");
@@ -193,12 +201,12 @@ void CKDevelop::init(){
 
   // the tabbar + tabwidgets for edit and browser
   s_tab_view = new CTabCtl(top_panner);
-  s_tab_view->setFocusPolicy(QWidget::NoFocus);
+  s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
 
   header_widget = new CEditWidget(kapp,s_tab_view,"header");
-  header_widget->setFocusPolicy(QWidget::StrongFocus);
+//  header_widget->setFocusPolicy(QWidget::StrongFocus);
 
   header_widget->setFont(font);
   header_widget->setName("Untitled.h");
@@ -213,13 +221,15 @@ void CKDevelop::init(){
 
   edit_widget=header_widget;
   cpp_widget = new CEditWidget(kapp,s_tab_view,"cpp");
-  cpp_widget->setFocusPolicy(QWidget::StrongFocus);
+//  cpp_widget->setFocusPolicy(QWidget::StrongFocus);
   cpp_widget->setFont(font);
   cpp_widget->setName("Untitled.cpp");
   config->setGroup("KWrite Options");
   cpp_widget->readConfig(config);
   cpp_widget->doc()->readConfig(config);
- 
+
+  edit_widget->setFocusPolicy(QWidget::NoFocus);
+
   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
@@ -234,8 +244,9 @@ void CKDevelop::init(){
 
 
   browser_widget = new CDocBrowser(s_tab_view,"browser");
-  browser_widget->setFocusPolicy(QWidget::StrongFocus);
-  
+//  browser_widget->setFocusPolicy(QWidget::StrongFocus);
+  browser_widget->setFocusPolicy(QWidget::NoFocus);
+
   prev_was_search_result= false;
   //init
   browser_widget->setDocBrowserOptions();
@@ -245,7 +256,8 @@ void CKDevelop::init(){
   connect(browser_widget,SIGNAL(documentDone(KHTMLView*)),
 	  this,SLOT(slotDocumentDone(KHTMLView*)));
   swallow_widget = new KSwallowWidget(s_tab_view);
-  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
+//  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
+  swallow_widget->setFocusPolicy(QWidget::NoFocus);
 
   
 
@@ -685,6 +697,8 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
 
 
 

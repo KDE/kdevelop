@@ -46,6 +46,9 @@ void CKDevelop::slotProjectClose(){
 }
 void CKDevelop::slotProjectCompileFile(){
 /* TODO: add a process reading the filename and compiler options->gcc -options -filename ...*/
+  slotFileSave();
+
+
 }
 
 void CKDevelop::slotProjectAddNewFile(){
@@ -241,6 +244,7 @@ void CKDevelop::slotProjectFileProperties(){
   CFilePropDlg dlg(this,"DLG",&prj);
   dlg.show();
 }
+
 
 
 

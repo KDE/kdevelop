@@ -39,9 +39,11 @@ int CKDevelop::getTabLocation(QString filename){
   
   if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
      || filename.right(2) == ".c"){
+    enableCommand(ID_PROJECT_COMPILE_FILE);
     return CPP;
   }
   else{
+    disableCommand(ID_PROJECT_COMPILE_FILE);
     return HEADER;
   }
   
@@ -103,7 +105,7 @@ void CKDevelop::switchToFile(QString filename){
       edit_widget->setName(filename);
       edit_widget->toggleModified(info->modified);
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
-      
+
       //      output_widget->append ("File: was was already there");
       setCaption("KDevelop " + version + ":  "+prj.getProjectName()+":  " + filename);
       return;
@@ -166,6 +168,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   }
 }
+
+
 
 
 

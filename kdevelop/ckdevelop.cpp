@@ -37,7 +37,6 @@
 #include "ctoolclass.h"
 
 
-
 void CKDevelop::slotFileNewAppl(){
   
   if(!CToolClass::searchProgram("perl")){
@@ -101,15 +100,20 @@ void CKDevelop::slotFileOpenPrj(){
 
 void CKDevelop::slotFileSave(){
 
-  slotStatusMsg(i18n("Saving file..."));
-  if((edit_widget->getName() == "Untitled.cpp") || (edit_widget->getName() == "Untitled.h")){
+  QString filename=edit_widget->getName();
+  slotStatusMsg(i18n("Saving file "+filename));
+
+  if((filename== "Untitled.cpp") || (filename == "Untitled.h")){
     slotFileSaveAs();
   }
   else{
     edit_widget->doSave();
+    // only refresh if header file changed
+    if(getTabLocation(filename)==HEADER){
+    slotOptionsRefresh();
+    }
   }
-  slotOptionsRefresh();
-  slotStatusMsg(IDS_DEFAULT); 
+  slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotFileSaveAll(){
   // ok,its a dirty implementation  :-)
@@ -1507,6 +1511,15 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
 
 
 
