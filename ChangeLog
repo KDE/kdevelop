@@ -1,3 +1,7 @@
+1999-12-28 jbb <jbb@ihug.co.nz>
+	* Add debug core file, attach to process, set debug args, debug
+      other executables.
+
 1999-12-26 jbb <jbb@ihug.co.nz>
 	* Add special floating toolbar for the internal debugger.
 
