@@ -65,7 +65,7 @@ public slots:
 // Connect Slots to the following widgets and add
 // accessors and mutators
 //    QCheckBox* customProjectCheckBox;
-    void slotcustomProjectCheckBoxChanged(int state);
+    void slotcustomProjectCheckBoxChanged();
 //  QCheckBox* uploadCustomCheckBox;
     void slotuploadCustomCheckBoxChanged();
 public:

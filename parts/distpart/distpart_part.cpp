@@ -28,6 +28,10 @@ distpartPart::distpartPart(KDevApi *api, QObject *parent, const char *name)
   m_action->setWhatsThis(i18n("Distrabution and Publishing:\n\n"
                  	    "fnork fnork blub.... \n"
                             "bork bork bork....."));
+  m_widget = new distpartWidget(this);
+
+  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
+
 }
 
 
@@ -39,9 +43,8 @@ distpartPart::~distpartPart()
 
 void distpartPart::show()
 {
-  m_widget = new distpartWidget(this);
+// configure the widget
 
-  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
   m_widget->show();
 //  core()->embedWidget(m_widget, KDevCore::SelectView, i18n("distpart"));
 }

@@ -12,8 +12,11 @@
 distpartWidget::distpartWidget(distpartPart *part)
 	: distpart_ui(0, "distpart widget")
 {
-    connect(customProjectCheckBox, SIGNAL(stateChanged ( int ) ),
-           this, SLOT(slotcustomProjectCheckBoxChanged(int)));
+    connect(customProjectCheckBox, SIGNAL(released( ) ),
+           this, SLOT(slotcustomProjectCheckBoxChanged()));
+    connect(uploadCustomCheckBox, SIGNAL(released()),
+           this, SLOT(slotuploadCustomCheckBoxChanged()));
+    
 }
 
 
@@ -73,9 +76,10 @@ void distpartWidget::slotuploadResetPushButtonPressed()
 // Connect Slots to the following widgets and add
 // accessors and mutators
 //    QCheckBox* customProjectCheckBox;
-void distpartWidget::slotcustomProjectCheckBoxChanged(int state)
+void distpartWidget::slotcustomProjectCheckBoxChanged()
 {
-  Layout36->setEnabled(state);
+  kdDebug () << "New State" << customProjectCheckBox->isChecked() << endl;
+  Layout36->setEnabled(customProjectCheckBox->isChecked());
 }
 bool distpartWidget::getcustomProjectCheckBoxState()
 {
@@ -88,7 +92,7 @@ void distpartWidget::setcustomProjectCheckBoxState(bool state)
 //  QCheckBox* uploadCustomCheckBox;
 void distpartWidget::slotuploadCustomCheckBoxChanged()
 {
-    useRPMInfoCheckBox->setEnabled(uploadCustomCheckBox->isChecked());
+    uploadURLLineEdit->setEnabled(uploadCustomCheckBox->isChecked());
 }
 bool distpartWidget::getuploadCustomCheckBoxState()
 {
