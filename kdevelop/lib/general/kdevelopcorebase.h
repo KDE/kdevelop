@@ -23,11 +23,6 @@
 #include <qobject.h>
 #include <qlist.h>
 
-
-// Need to forward declare this baby to prevent recursive inclusion.
-class KDevComponent;
-
-
 class KDevelopCoreBase : public QObject
 {
     Q_OBJECT
@@ -40,17 +35,6 @@ public:
     // Make sure they define some form of session management.
     virtual void writeProperties (KConfig *pConfig) = 0;
     virtual void readProperties (KConfig *pConfig) = 0;
-
-    /** They have changed the subproject they are using, we should notify
-        all the components, to give them a chance to react. */
-    virtual void changeProjectSpace ();
-
-protected:
-    /** A list of all components. */
-    QList<KDevComponent> m_components;
-
-    /** A list of loaded components. */
-    QList<KDevComponent> m_runningComponents;
 };
 
 #endif

@@ -17,30 +17,11 @@
 
 #include "kdevelopcorebase.h"
 #include <kdebug.h>
-#include <kdevcomponent.h>
 
-
-KDevelopCoreBase::KDevelopCoreBase (QObject * parent=0, const char * name=0)
-:QObject (parent, name)
-{
+KDevelopCoreBase::KDevelopCoreBase (QObject * parent, const char * name)
+                 :QObject (parent, name){
 }
 
-
-KDevelopCoreBase::~KDevelopCoreBase ()
-{
-}
-
-
-/*  They have changed the subproject they are using, we should notify
-    all the components, to give them a chance to react. */
-
-void KDevelopCoreBase::changeProjectSpace ()
-{
-    kdDebug(9000) << "KDevelopCore::changeProjectSpace" << endl;
-
-    // Notification
-    QListIterator<KDevComponent> it1(m_components);
-    for (; it1.current(); ++it1)
-        (*it1)->projectChanged();
+KDevelopCoreBase::~KDevelopCoreBase (){
 }
 
