@@ -1,0 +1,158 @@
+<appendix id="app-files">
+
+<appendixinfo>
+  <authorgroup>
+    <author><firstname>Bernd</firstname><surname>Pol</surname></author>
+    <!-- ROLES_OF_TRANSLATORS -->
+  </authorgroup>
+</appendixinfo>
+
+<title>Configuration Files Used by &kdevelop;</title>
+
+<para>
+&kdevelop; uses a series of configuration files which are distributed amongst several directories. There are three main groups of configuration files:
+</para>
+<itemizedlist>
+  <listitem><para>
+    <link linkend="app-files-default">&kdevelop; Default Configuration</link> &mdash; files set up when &kdevelop; was installed.
+  </para></listitem>
+  <listitem><para>
+    <link linkend="app-files-user">User Modified Configuration</link> &mdash; files which contain user modifications of the default settings.
+  </para></listitem>
+  <listitem><para>
+    <link linkend="app-files-project">Project Dependent Configuration</link> &mdash; files which hold configuration information specific to a given project.
+  </para></listitem>
+</itemizedlist>
+
+<sect1 id="app-files-default">
+<title>&kdevelop; Default Configuration</title>
+
+<para>
+On installation, &kdevelop; writes some default information files for setup and configuration purposes into subdirectories of the <filename class="directory">$KDEDIR</filename> installation directory (usually something like <filename class="directory">/opt/kde</filename>, <filename class="directory">/usr/local/kde</filename>, or some other user-defined installation directory, see <link linkend="kdevelop-install">Installing &kdevelop;</link>).
+</para>
+
+<sect2 id="app-files-default-config">
+<title>Default &kdevelop; Configuration</title>
+
+<para>
+There is only one &kdevelop; specific default configuration file in the <filename class="directory">$KDEDIR/share/config/</filename> directory:
+</para>
+<variablelist>
+  <varlistentry>
+  <term><filename>kdeveloprc</filename></term>
+  <listitem><para>
+  This file contains the basic settings &kdevelop; needs to start. It will be copied to the user's <filename class="directory">$KDEHOME/share/config</filename> directory when &kdevelop; does not find a <filename>kdeveloprc</filename> file there on startup.
+  </para></listitem>
+  </varlistentry>
+</variablelist>
+
+</sect2> <!-- app-files-default-config -->
+
+<sect2 id="app-files-default-apps">
+<title>Application Specific Defaults</title>
+
+<para>
+Most &kdevelop; features are provided by KParts. These are basically applications specially designed to run in the &kdevelop; framework (see the overview in the <link linkend="plugin-tools">Plugin Tools</link> appendix). Each KPart application has its own set of configuration files whose defaults will be stored in several subdirectories of the <filename class="directory">$KDEDIR/share/apps/</filename> installation directory.
+</para>
+
+<para>
+There are quite a lot of default configuration subdirectories in <filename class="directory">$KDEDIR/share/apps/</filename> whose names all start with a <filename>kdev</filename> sequence. Most of them are for &kdevelop; internal use only. They might be deliberately grouped for readability as follows:
+</para>
+
+<itemizedlist>
+  <listitem><itemizedlist>
+    <title>Stand-alone Applications</title>
+    <listitem><para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE</para></listitem>
+    <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; documentation browser</para></listitem>
+    <listitem><para><filename class="directory">kdevdesigner/</filename> and <filename class="directory">kdevdesignerpart/</filename> &mdash; provide menu bar and tool bars of the stand-alone &kdevelop; user interface designer</para></listitem>
+  </itemizedlist></listitem>
+
+  <listitem><itemizedlist>
+    <title>Task Specific Parts</title>
+    <listitem><para><filename class="directory">kdevabbrev/</filename> &mdash; contains files used by the <guilabel>Abbreviation Expansion</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevappwizard/</filename> &mdash; contains files used by the &appwizard; part.</para></listitem>
+    <listitem><para><filename class="directory">kdevastyle/</filename> &mdash; provides the <guimenuitem>Reformat Source</guimenuitem> entry in the <guimenu>Edit</guimenu> menu.</para></listitem>
+    <listitem><para><filename class="directory">kdevclassview/</filename> &mdash; contains files used by the <guilabel>Class View</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevcloser/</filename> &mdash; provides the <guimenu>Windows</guimenu> menu close entries.</para></listitem>
+    <listitem><para><filename class="directory">kdevctags/</filename> &mdash; provides the <guimenuitem>CTags</guimenuitem> entry in the <guimenu>Tools</guimenu> menu for the <guilabel>CTags Frontend</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevcvsservice/</filename> &mdash; contains files used by the <guilabel>CVS Integration</guilabel> projct plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevdebugger/</filename> &mdash; provides the <guimenu>Debug</guimenu> menu entries for the <guilabel>Debugger Frontend</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevdiff/</filename> &mdash; provides the <guimenuitem>Difference Viewer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu.</para></listitem>
+    <listitem><para><filename class="directory">kdevdistpart/</filename> &mdash; provides the <guimenuitem>Distribution &amp; Publishing</guimenuitem> entry in the <guimenu>Project</guimenu> menu for the <guilabel>Final Packaging Support</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevdocumentation/</filename> &mdash; contains files used by the <guilabel>Documentation</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevdoxygen/</filename> &mdash; provides the menu entries for the <guilabel>Doxygen Support</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevfilecreate/</filename> &mdash; contains files used by the <guilabel>New File Wizard.</guilabel></para></listitem>
+    <listitem><para><filename class="directory">kdevfilter/</filename> &mdash; provides the <guimenuitem>Execute Command...</guimenuitem> and <guimenuitem>Filter Selection Through Command...</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Shell Filtering and Insertion</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevfullscreen/</filename> &mdash; provides the <guimenuitem>Full Screen Mode</guimenuitem> entry in the <guimenu>View</guimenu> menu and the according tool bar icon.</para></listitem>
+    <listitem><para><filename class="directory">kdevgrepview/</filename> &mdash; provides the <guimenuitem>Find in Files...</guimenuitem>entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Grep Frontend</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevhistory/</filename> &mdash; provides the <guimenuitem>Back</guimenuitem> and <guimenuitem>Forward</guimenuitem> entries in the <guimenu>View</guimenu> menu.</para></listitem>
+    <listitem><para><filename class="directory">kdevjavadebugger/</filename> &mdash; provides a <guimenu>Java Debug</guimenu> menu in order to debug a &Java; application.</para></listitem>
+    <listitem><para><filename class="directory">kdevoutputviews/</filename> &mdash; provides the <guimenuitem>Next Error</guimenuitem> and <guimenuitem>Previous Error</guimenuitem> entries in the <guimenu>View</guimenu> menu.</para></listitem>
+    <listitem><para><filename class="directory">kdevpartexplorer/</filename> &mdash; provides the <guimenuitem>Part Explorer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Part Explorer Tool</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevquickopen/</filename> &mdash; provides the <guimenuitem>Quick Open File..</guimenuitem> entry in the <guimenu>File</guimenu> menu and the <guimenuitem>Quick Open Class...</guimenuitem> and <guimenuitem>Quick Open Method</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Quick Open</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevregexptest/</filename> &mdash; provides the <guimenuitem>Debug Regular Expression...</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Regular Expression Tester</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevreplace/</filename> &mdash; provides the <guimenuitem>Find-Select-Replace...</guimenuitem> entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Replace Part</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevtipofday/</filename> &mdash; provides the <guimenuitem>Tip of the Day</guimenuitem> entry in the <guimenu>Help</guimenu> menu as well as a HTML-File containing the available tips.</para></listitem>
+    <listitem><para><filename class="directory">kdevtools/</filename> &mdash; controls the various menu entries ceated by <guimenu>Tools Menu</guimenu> and <guilabel>External Tools Menu</guilabel> settings provided by the <guilabel>Tools Menu Addition</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevvalgrind/</filename> &mdash; provides the <guimenuitem>Valgrind Memory Leak Check</guimenuitem> and <guimenuitem>Profile with KCachegrind</guimenuitem> entries in the <guimenu>Debug</guimenu> menu used by the <guilabel>Valgrind Frontend</guilabel> plugin.</para></listitem>
+  </itemizedlist></listitem>
+
+  <listitem><itemizedlist>
+    <title>Project Generation Parts</title>
+    <listitem><para><filename class="directory">kdevadaproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons to build an Ada application.</para></listitem>
+    <listitem><para><filename class="directory">kdevantproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu when the Ant project generator is used.</para></listitem>
+    <listitem><para><filename class="directory">kdevautoproject/</filename> &mdash;  provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons when working with the &GNU; Tools based &automake; project generator. Additionally provides the <guimenuitem>Add Translation</guimenuitem> and <guimenuitem>Build Configuration</guimenuitem> entries to the <guimenu>Project</guimenu> menu.</para></listitem>
+    <listitem><para><filename class="directory">kdevcustomproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons when the project is based on custom Makefils.</para></listitem>
+    <listitem><para><filename class="directory">kdevgenericproject/</filename> &mdash; contains menu definitions for an experimental generic project generator. Currently (version 3.1.0) unused.</para></listitem>
+    <listitem><para><filename class="directory">kdevhaskellproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons to build a Haskell application.</para></listitem>
+    <listitem><para><filename class="directory">kdevpascalproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons to build a Pascal application.</para></listitem>
+    <listitem><para><filename class="directory">kdevtrollproject/</filename> &mdash; provides entries for the <guimenu>Build</guimenu> menu and according tool bar icons to build an application using the &Qt; QMake project manager.</para></listitem>
+  </itemizedlist></listitem>
+
+  <listitem><itemizedlist>
+    <title>Language Specific Parts</title>
+    <listitem><para><filename class="directory">kdevadasupport/</filename> &mdash; provides entries in the <guimenu>Tools</guimenu> menu and according tool bar icons needed to develop Ada applications.</para></listitem>
+    <listitem><para><filename class="directory">kdevbashsupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu and according tool bar icons needed to develop Bash scripts.</para></listitem>
+    <listitem><para><filename class="directory">kdevcppsupport/</filename> &mdash; contains several files and subdirectories used to build C++ applications.</para></listitem>
+    <listitem><para><filename class="directory">kdevfortransupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu needed to develop Fortran applications.</para></listitem>
+    <listitem><para><filename class="directory">kdevhaskellsupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu and according tool bar icons needed to develop Haskell applications.</para></listitem>
+     <listitem><para><filename class="directory">kdevjavasupport/</filename> &mdash; contains the UI definition needed to develop &Java; applications.</para></listitem>
+    <listitem><para><filename class="directory">kdevpascalsupport/</filename> &mdash;  contains the UI definition needed to develop Pascal applications.</para></listitem>
+    <listitem><para><filename class="directory">kdevperlsupport/</filename> &mdash; provides <guimenu>Project</guimenu> and <guimenu>Help</guimenu> menu entries needed to develop Perl scripts.</para></listitem>
+    <listitem><para><filename class="directory">kdevphpsupport/</filename> &mdash; contains UI and PHP function definition files needed to develop PHP scripts.</para></listitem>
+    <listitem><para><filename class="directory">kdevpythonsupport/</filename> &mdash; provides <guimenu>Build</guimenu> and <guimenu>Help</guimenu> menu entries and according tool bar icons needed to develop Python scripts.</para></listitem>
+    <listitem><para><filename class="directory">kdevrubysupport/</filename> &mdash; provides <guimenu>Build</guimenu> menu entries and according tool bar icons needed to develop Ruby scripts.</para></listitem>
+    <listitem><para><filename class="directory">kdevscriptproject/</filename> &mdash; provides th UI definitions needed to develop custom projects. Currently (version 3.1.0) unused.</para></listitem>
+    <listitem><para><filename class="directory">kdevsqlsupport/</filename> &mdash; provides th UI definitions needed to develop SQL projects. Currently (version 3.1.0) unused.</para></listitem>
+  </itemizedlist></listitem>
+
+</itemizedlist>
+
+</sect2> <!-- app-files-default-apps -->
+
+</sect1> <!-- app-files-default -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="app-files-user">
+<title>User Modified Configuration</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect1> <!-- app-files-user -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+<sect1 id="app-files-project">
+<title>Project Dependent Configuration</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect1> <!-- app-files-project -->
+
+</appendix> <!-- app-files -->

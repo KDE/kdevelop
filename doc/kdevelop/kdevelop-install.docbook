@@ -356,9 +356,6 @@ Once all requirements are met, you are ready to compile and install &kdevelop;. 
   <link linkend="compile-and-install-make">Compile &kdevelop;</link> deals with obtaining the &kdevelop; sources from &cvs;, how to prepare them for the installation process, and finally shows the steps necessary to compile and install &kdevelop;.
   </para></listitem>
   <listitem><para>
-  <link linkend="compile-and-install-bsd">How to Compile on FreeBSD</link> discusses special considerations about the Berkeley Database systems in order to compile and install &kdevelop;.
-  </para></listitem>
-  <listitem><para>
   <link linkend="compile-and-install-options">Some Notes on configure Options</link> tells you how to run &kdevelop; if it has been installed in a location other than the &kde; directory.
   </para></listitem>
 </itemizedlist>
@@ -564,100 +561,6 @@ That's all. If you installed &kdevelop; in the default &kde; directory you may n
 </sect3> <!-- compile-and-install-make-basic -->
 </sect2> <!-- compile-and-install-make -->
 
-<sect2 id="compile-and-install-bsd">
-<title>How to Compile on FreeBSD</title>
-
-<indexterm zone="compile-and-install-bsd">
-  <primary>compiling</primary>
-  <secondary>&kdevelop;</secondary>
-  <tertiary>BSD</tertiary></indexterm>
-<indexterm zone="compile-and-install-bsd">
-  <primary>&kdevelop;</primary>
-  <secondary>compilation</secondary>
-  <tertiary>BSD</tertiary></indexterm>
-<indexterm zone="compile-and-install-bsd">
-  <primary>BSD</primary></indexterm>
-
-<para>
-If you want compile and install &kdevelop; on a FreeBSD system follow the normal instructions but after
-</para>
-<informalexample><simplelist><member>
-  <prompt>~/kde3src/kdevelop&gt; </prompt>
-  <userinput>make -f Makefile.cvs</userinput>
-</member></simplelist></informalexample>
-<para> you must make the Berkeley specific include files and libraries available to the compiler. This is done through the <envar>CXXFLAGS</envar> environment variable:
-</para>
-<informalexample><simplelist>
-  <member><prompt>~/kde3src/kdevelop&gt; </prompt>
-  <userinput>export CXXFLAGS="-L/usr/X11R6/lib -I/usr/local/include/db41 \</userinput></member>
-  <member><userinput>-I/usr/local/include -L/usr/local/lib -I/usr/X11R6/include"</userinput></member>
-</simplelist></informalexample>
-
-<note><para>
-You need the <emphasis>berkeley db 4.1</emphasis> database version installed, if you have another version, you must adjust the path.
-</para></note>
-
-<sect3 id="check-berkeley-db">
-<title>Check the Berkeley Database Version</title>
-<para>
-To find out which berkeley database version you have installed, run:
-</para>
-<informalexample><simplelist><member>
-  <prompt>~&gt; </prompt>
-  <userinput>pkg_info | grep db41</userinput>
-</member></simplelist></informalexample>
-<para>
-This should return something like:
-<screen>
-db41-4.1.25_1       The Berkeley DB package, revision 4.1
-</screen>
-</para>
-</sect3> <!-- check-berkeley-db -->
-
-<sect3 id="more-changes">
-<title>More Changes</title>
-
-<para>
-Change the line
-</para>
-<para>
-<option>ac_cv_bdb=no</option>
-</para>
-<para>
-to
-</para>
-<para>
-<option>ac_cv_bdb=yes</option>
-</para>
-<para>
-in the <filename>configure</filename> file because otherwise configure can't find the db libraries.
-</para>
-
-<note><para>
-As <command>make -f Makefile.cvs</command> rebuilds the <filename>configure</filename> file you have to change this <option>ac_cv_bdb</option> entry <emphasis>every time</emphasis> after you issued this command.
-</para></note>
-
-<para>
-As the FreeBSD guys renamed <filename>libdb.so</filename> to <filename>libdbxx.so</filename> you must replace
-</para>
-<para>
-<option>libkdevcatalog_la_LIBADD = -ldb</option>
-</para>
-<para>
-by
-</para>
-<para>
-<option>libkdevcatalog_la_LIBADD = -ldb41</option>
-</para>
-<para>
-in the <filename>lib/catalog/Makefile.am</filename> file.
-</para>
-<para>
-Now continue with the usual <command>configure</command> and <command>make</command> steps as shown above.
-</para>
-
-</sect3> <!--  more-changes -->
-</sect2> <!-- compile-and-install-bsd -->
 
 <sect2 id="compile-and-install-options">
 <title>Some Notes on <command>configure</command> Options</title>

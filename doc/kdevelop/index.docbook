@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
-  <!ENTITY kdevrelease "3.0.91">
+  <!ENTITY kdevrelease "3.1.0">
   <!ENTITY apache "<application>Apache</application>">
   <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
@@ -29,6 +29,8 @@
   <!ENTITY applicationwizard SYSTEM "applicationwizard.docbook">
   <!ENTITY project-advanced SYSTEM "project-advanced.docbook">
   <!ENTITY project-management SYSTEM "project-management.docbook">
+  <!ENTITY app-files SYSTEM "app-files.docbook">
+  <!ENTITY app-menu SYSTEM "app-menu.docbook">
   <!-- book related entities -->
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
@@ -45,7 +47,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-07-14</date>
+  <date>2004-09-20</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
@@ -198,6 +200,28 @@ Here you will find information on the following topics:
 
   <listitem><para>
   <link linkend="plugin-tools">Plugin tools</link> &mdash; provides you with an overview of the parts which make up &kdevelop; and how you can tailor it to suit your needs by only loading the parts that are necessary, both IDE and project-wide.
+  </para></listitem>
+
+  <listitem><para>
+  Some commonly used information has been put into the <emphasis>appendix</emphasis>. Amongst others this consists of:
+
+  <itemizedlist>
+    <listitem><para>
+    <link linkend="app-menus">Menus and Toolbars Overview</link> &mdash; provides you with a short overall view of the menu and toolbar selections available.
+    </para></listitem>
+
+    <listitem><para>
+      <link linkend="app-shortcuts">Shortcut Keys</link> &mdash; the keys you can use to work with &kdevelop; without resorting to the mouse.
+    </para></listitem>
+
+    <listitem><para>
+    <link linkend="app-files">Configuration Files Used by &kdevelop;</link> &mdash; lists the files kdevelop uses to save its internal information.
+    </para></listitem>
+
+    <listitem><para>
+    <link linkend="plugin-tools">Plugin Tools</link> &mdash; lists the pluggable tools you can use to taylor the capabilities of &kdevelop; to your needs.
+    </para></listitem>
+  </itemizedlist>
   </para></listitem>
 </itemizedlist>
 </chapter>
@@ -1589,14 +1613,7 @@ Other tools will be discussed in the chapter <xref linkend="plugin-tools"/>.
 
 <!-- ====================================================================== -->
 
-<appendix id="app-menus">
-<title>Menus and Toolbars Overview</title>
-
-<para>
-(... to be written ...)
-</para>
-
-</appendix> <!-- app-menus -->
+&app-menu; <!-- Menus and Toolbars Overview -->
 
 <!-- ====================================================================== -->
 
@@ -1608,6 +1625,10 @@ Other tools will be discussed in the chapter <xref linkend="plugin-tools"/>.
 </para>
 
 </appendix> <!-- app-shortcuts -->
+
+<!-- ====================================================================== -->
+
+&app-files; <!-- Configuration Files Used by &kdevelop; -->
 
 <!-- ====================================================================== -->
 
