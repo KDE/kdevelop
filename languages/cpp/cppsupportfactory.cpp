@@ -15,8 +15,10 @@
 
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory )
 
+static const KAboutData data("kdevcppsupport", I18N_NOOP("C++ Specific"), "1.0");
+
 CppSupportFactory::CppSupportFactory()
-    : KGenericFactory<CppSupportPart>( "kdevcppsupport" )
+    : KDevGenericFactory<CppSupportPart>( &data )
 {
 }
 

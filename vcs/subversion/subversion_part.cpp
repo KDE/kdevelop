@@ -20,7 +20,7 @@
 #include <qwhatsthis.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kpopupmenu.h>
 
@@ -42,8 +42,10 @@
 #include <kdebug.h>
 #include <qwidget.h>
 
-typedef KGenericFactory<subversionPart> subversionFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( "kdevsubversion" ) );
+static const KAboutData data("kdevsubversion", I18N_NOOP("Subversion"), "1.0");
+
+typedef KDevGenericFactory<subversionPart> subversionFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( &data ) );
 
 //bool g_projectWasJustCreated = false;
 

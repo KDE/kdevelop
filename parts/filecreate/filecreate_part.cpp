@@ -18,7 +18,7 @@
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
@@ -43,8 +43,10 @@
 #include "filecreate_newfile.h"
 #include "fcconfigwidget.h"
 
-typedef KGenericFactory<FileCreatePart> FileCreateFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreate" ) )
+static const KAboutData data("kdevfilecreate", I18N_NOOP("New File Wizard"), "1.0");
+
+typedef KDevGenericFactory<FileCreatePart> FileCreateFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( &data ) )
 
 using namespace FileCreate;
 

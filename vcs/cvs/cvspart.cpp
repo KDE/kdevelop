@@ -26,7 +26,7 @@
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include <qdir.h>
 #include <qpopupmenu.h>
@@ -109,8 +109,10 @@ QString g_tempEnvRsh( "" );
 // Plugin factory
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef KGenericFactory<CvsPart> CvsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) )
+static const KAboutData data("kdevcvs", I18N_NOOP("CVS"), "1.0");
+
+typedef KDevGenericFactory<CvsPart> CvsFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( &data ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsPart

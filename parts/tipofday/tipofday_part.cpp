@@ -4,10 +4,11 @@
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 
+#include <kaboutdata.h>
 #include <kaction.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -17,9 +18,10 @@
 #include "kdevapi.h"
 #include "kdevcore.h"
 
+static const KAboutData data("kdevtipofday", I18N_NOOP("A tip how to use KDevelop"), "1.0");
 
-typedef KGenericFactory<TipOfDayPart> TipOfDayFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( "kdevtipofday" ) )
+typedef KDevGenericFactory<TipOfDayPart> TipOfDayFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( &data ) )
 
 TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("TopOfDay", "tipofday", parent, name ? name : "TipOfDayPart")

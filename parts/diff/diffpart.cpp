@@ -15,7 +15,7 @@
 #include <qpopupmenu.h>
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <kprocess.h>
@@ -35,8 +35,10 @@
 #include "diffdlg.h"
 #include "diffwidget.h"
 
-typedef KGenericFactory<DiffPart> DiffFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) )
+static const KAboutData data("kdevdiff", I18N_NOOP("Difference Viewer"), "1.0");
+
+typedef KDevGenericFactory<DiffPart> DiffFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( &data ) )
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
     : KDevDiffFrontend("Diff", "diff", parent, name ? name : "DiffPart"), proc(0)

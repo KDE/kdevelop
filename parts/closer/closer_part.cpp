@@ -15,7 +15,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdevpartcontroller.h>
@@ -27,6 +27,7 @@
 #include "closer_part.h"
 #include "closer_dialogimpl.h"
 
+static const KAboutData data("kdevcloser", I18N_NOOP("Close Selected Windows..."), "1.0");
 
 typedef KGenericFactory<CloserPart> CloserFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( "kdevcloser" ) )

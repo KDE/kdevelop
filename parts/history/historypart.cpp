@@ -2,7 +2,7 @@
 
 #include <kaction.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kmainwindow.h>
 #include <kparts/part.h>
 #include <kpopupmenu.h>
@@ -25,10 +25,11 @@ public:
 
 };
 
+static const KAboutData data("kdevhistory", I18N_NOOP("History"), "1.0");
 
-typedef KGenericFactory<HistoryPart> HistoryPartFactory;
+typedef KDevGenericFactory<HistoryPart> HistoryPartFactory;
 
-K_EXPORT_COMPONENT_FACTORY(libkdevhistory, HistoryPartFactory("kdevhistory"))
+K_EXPORT_COMPONENT_FACTORY(libkdevhistory, HistoryPartFactory(&data))
 
 HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("History", "history", parent, name ? name : "HistoryPart"), m_restoring(false)

@@ -12,10 +12,10 @@
 #ifndef _CPPSUPPORTFACTORY_H_
 #define _CPPSUPPORTFACTORY_H_
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include "cppsupportpart.h"
 
-class CppSupportFactory : public KGenericFactory<CppSupportPart>
+class CppSupportFactory : public KDevGenericFactory<CppSupportPart>
 {
 public:
     CppSupportFactory();

@@ -7,7 +7,7 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kparts/part.h>
@@ -23,9 +23,10 @@
 #include "astyle_widget.h"
 #include <astyle_adaptor.h>
 
+static const KAboutData data("kdevastyle", I18N_NOOP("Reformat Source"), "1.0");
 
-typedef KGenericFactory<AStylePart> AStyleFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( "kdevastyle" ) )
+typedef KDevGenericFactory<AStylePart> AStyleFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( &data ) )
 
 AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   : KDevSourceFormatter("AStyle", "astyle", parent, name ? name : "AStylePart")

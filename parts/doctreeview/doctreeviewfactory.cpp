@@ -13,10 +13,12 @@
 #include <kstandarddirs.h>
 #include "doctreeviewfactory.h"
 
+static const KAboutData data("kdevdoctreeview", I18N_NOOP("Documentation Tree"), "1.0");
+
 K_EXPORT_COMPONENT_FACTORY( libkdevdoctreeview, DocTreeViewFactory )
 
 DocTreeViewFactory::DocTreeViewFactory()
-    : KGenericFactory<DocTreeViewPart>( "kdevdoctreeview" )
+    : KDevGenericFactory<DocTreeViewPart>( &data )
 {
 }
 

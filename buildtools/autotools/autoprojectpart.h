@@ -19,7 +19,7 @@
 #include <qguardedptr.h>
 #include <qmap.h>
 #include <qdatetime.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include "kdevproject.h"
 
@@ -132,6 +132,6 @@ private:
     void queueInternalLibDependenciesBuild(TargetItem* titem);
 };
 
-typedef KGenericFactory<AutoProjectPart> AutoProjectFactory;
+typedef KDevGenericFactory<AutoProjectPart> AutoProjectFactory;
 
 #endif

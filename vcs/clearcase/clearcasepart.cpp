@@ -17,7 +17,7 @@
 
 #include <kpopupmenu.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <klocale.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -31,8 +31,10 @@
 #include "domutil.h"
 #include "kdevmainwindow.h"
 
-typedef KGenericFactory<ClearcasePart> ClearcaseFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( "kdevclearcase" ) )
+static const KAboutData data("kdevclearcase", I18N_NOOP("Clearcase"), "1.0");
+
+typedef KDevGenericFactory<ClearcasePart> ClearcaseFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( &data ) )
 
 ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
         : KDevPlugin( "Clearcase", "clearcase", parent, name ? name : "ClearcasePart" ),

@@ -50,8 +50,9 @@
 #include <runoptionswidget.h>
 #include <envvartools.h>
 
+static const KAboutData data("kdevautoproject", I18N_NOOP("Automake Manager"), "1.0");
 
-K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) )
+K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( &data ) )
 
 AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
     : KDevProject("AutoProject", "autoproject", parent, name ? name : "AutoProjectPart")

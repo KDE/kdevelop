@@ -278,7 +278,6 @@ void PythonSupportPart::parse(const QString &fileName)
                 m_file->addFunction( method );
                 lastClass = 0;
             }
-
         }
         ++lineNo;
     }

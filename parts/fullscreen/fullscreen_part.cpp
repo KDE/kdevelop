@@ -11,7 +11,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kaction.h>
 #include <kmainwindow.h>
 #include <kmenubar.h>
@@ -21,8 +21,10 @@
 
 #include "fullscreen_part.h"
 
-typedef KGenericFactory<FullScreenPart> FullScreenFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( "kdevfullscreen" ) )
+static const KAboutData data("kdevfullscreen", I18N_NOOP("Full-screen mode"), "1.0");
+
+typedef KDevGenericFactory<FullScreenPart> FullScreenFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( &data ) )
 
 FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "FullScreenPart" )

@@ -17,7 +17,7 @@
 #include <qregexp.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <klocale.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -33,8 +33,10 @@
 #include "commitdlg.h"
 #include "execcommand.h"
 
-typedef KGenericFactory<PerforcePart> PerforceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( "kdevperforce" ) )
+static const KAboutData data("kdevperforce", I18N_NOOP("Perforce"), "1.0");
+
+typedef KDevGenericFactory<PerforcePart> PerforceFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( &data ) )
 
 PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin( "Perforce", "perforce", parent, name ? name : "PerforcePart" )

@@ -36,7 +36,7 @@
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
@@ -80,8 +80,9 @@ bool g_projectWasJustCreated = false;
 // Plugin factory
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef KGenericFactory<CvsServicePart> CvsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( "kdevcvsservice" ) )
+static const KAboutData data("kdevcvsservice", I18N_NOOP("CvsService"), "1.0");
+typedef KDevGenericFactory<CvsServicePart> CvsFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( &data ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsServicePart

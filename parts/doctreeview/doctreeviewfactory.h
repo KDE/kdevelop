@@ -12,11 +12,11 @@
 #ifndef _DOCTREEVIEWFACTORY_H_
 #define _DOCTREEVIEWFACTORY_H_
 
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include "doctreeviewpart.h"
 
 
-class DocTreeViewFactory : public KGenericFactory<DocTreeViewPart>
+class DocTreeViewFactory : public KDevGenericFactory<DocTreeViewPart>
 {
 public:
     DocTreeViewFactory();

@@ -19,7 +19,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
@@ -60,8 +60,10 @@
 namespace GDBDebugger
 {
 
-typedef KGenericFactory<DebuggerPart> DebuggerFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) )
+static const KAboutData data("kdevdebugger", I18N_NOOP("Debugger"), "1.0");
+
+typedef KDevGenericFactory<DebuggerPart> DebuggerFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( &data ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( "CppDebugger", "debugger", parent, name ? name : "DebuggerPart" ),

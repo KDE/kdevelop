@@ -13,7 +13,7 @@
 
 #include <kinstance.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kdevgenericfactory.h>
 #include <kdebug.h>
 #include <kaction.h>
 #include <kmainwindow.h>
@@ -22,8 +22,10 @@
 
 #include "partexplorerform.h"
 
-typedef KGenericFactory<PartExplorerPlugin> PartExplorerPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( "kdevpartexplorer" ) )
+static const KAboutData data("kdevpartexplorer", I18N_NOOP("Part Explorer"), "1.0");
+
+typedef KDevGenericFactory<PartExplorerPlugin> PartExplorerPluginFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevpartexplorer, PartExplorerPluginFactory( &data ) )
 
 PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, const QStringList & )
     : KDevPlugin( "PartExplorer", "partexplorer", parent, name ? name : "PartExplorerPlugin" )
