@@ -22,6 +22,7 @@
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "commitdlg.h"
+#include "logform.h"
 
 
 typedef KGenericFactory<CvsPart> CvsFactory;
@@ -59,8 +60,11 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context)
                            this, SLOT(slotAdd()) );
         sub->insertItem( i18n("Remove From Repository: %1").arg(name),
                            this, SLOT(slotRemove()) );
+        sub->insertSeparator();
+        sub->insertItem( i18n("Log: %1").arg(name),
+                           this, SLOT(slotLog()) );
 	popup->insertItem(i18n("CVS"), sub);
-	
+
     }
 }
 
@@ -76,7 +80,7 @@ void CvsPart::slotCommit()
         dir = fi.dirPath();
         name = fi.fileName();
     }
-    
+
     CommitDialog d;
     if (d.exec() == QDialog::Rejected)
         return;
@@ -122,7 +126,7 @@ void CvsPart::slotAdd()
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
-    
+
     QString command("cd ");
     command += dir;
     command += " && cvs add ";
@@ -144,6 +148,13 @@ void CvsPart::slotRemove()
     command += name;
 
     makeFrontend()->queueCommand(dir, command);
+}
+
+void CvsPart::slotLog()
+{
+    LogForm* f = new LogForm();
+    f->show();
+    f->start( popupfile );
 }
 
 #include "cvspart.moc"

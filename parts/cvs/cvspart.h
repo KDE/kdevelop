@@ -32,6 +32,7 @@ private slots:
     void slotUpdate();
     void slotAdd();
     void slotRemove();
+    void slotLog();
 
 private:
     QString popupfile;
