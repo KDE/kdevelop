@@ -18,6 +18,7 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qtextstream.h>
+#include <qapplication.h>
 #include <kdebug.h>
 #include <kicondialog.h>
 #include <klocale.h>
@@ -40,7 +41,12 @@ AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, Subproject
     filename_edit->setFocus();
     chosentypes_listview->header()->hide();
     availtypes_listview->header()->hide();
-    
+    QString addApplication = add_button->text();
+    QString removeApplication = remove_button->text();
+
+    add_button->setText( QApplication::reverseLayout() ? removeApplication : addApplication );
+    remove_button->setText( QApplication::reverseLayout() ? addApplication : removeApplication );
+
     m_widget = widget;
     subProject = spitem;
 
@@ -50,7 +56,7 @@ AddApplicationDialog::AddApplicationDialog(AutoProjectWidget *widget, Subproject
         if ((*tit)->primary == "PROGRAMS")
             executable_combo->insertItem(QString((*tit)->name));
     }
-    
+
     // Fill the list of available mime types
     KMimeType::List l = KMimeType::allMimeTypes();
     KMimeType::List::Iterator it;
@@ -82,7 +88,7 @@ void AddApplicationDialog::addTypeClicked()
     QListViewItem *selitem = availtypes_listview->selectedItem();
     if (!selitem)
         return;
-    
+
     QListViewItem *olditem = chosentypes_listview->firstChild();
     while (olditem) {
         if (selitem->text(0) == olditem->text(0))
@@ -116,7 +122,7 @@ void AddApplicationDialog::accept()
         filename_edit->setFocus();
         return;
     }
-        
+
     QString executable = executable_combo->currentText();
     if (executable.isEmpty()) {
         KMessageBox::sorry(this, i18n("You have to enter the file name of an executable program."));
@@ -141,7 +147,7 @@ void AddApplicationDialog::accept()
         KMessageBox::sorry(this, i18n("Could not open file for writing."));
         return;
     }
-    
+
     QTextStream stream(&f);
     stream << "[Desktop Entry]" << endl;
     stream << "Type=Application" << endl;
@@ -162,7 +168,7 @@ void AddApplicationDialog::accept()
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
         if (it.data() == appsdir)
             break;
-    
+
     QMap<QString, QString> replaceMap;
     QString prefix;
     if (it == subProject->prefixes.end()) {
@@ -173,7 +179,7 @@ void AddApplicationDialog::accept()
         prefix = it.key();
     }
     QString varname = prefix + "_DATA";
-    
+
     // Look if a list view item for this prefix exists already.
     // Create a new one otherwise
     TargetItem *titem = 0;
@@ -191,11 +197,11 @@ void AddApplicationDialog::accept()
     // Add this file to the target
     FileItem *fitem = m_widget->createFileItem(fileName, subProject);
     titem->sources.append(fitem);
-        
+
     subProject->variables[varname] += (" " + fileName);
     replaceMap.insert(varname, subProject->variables[varname]);
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
-    
+
     QDialog::accept();
 }
 
