@@ -207,6 +207,7 @@ private:
     void cleanDetailView(SubprojectItem *item);
     void buildProjectDetailTree(SubprojectItem *item, KListView *listviewControl);
     void removeFile(SubprojectItem *spitem, FileItem *fitem);
+    void setupContext();
     void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
     void parse(SubprojectItem *item);
     QString getHeader();

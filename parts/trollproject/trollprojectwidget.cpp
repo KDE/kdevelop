@@ -95,7 +95,6 @@ void SubprojectItem::init()
   if (scopeString=="")
   {
     isScope = false;
-    setPixmap(0, SmallIcon("folder"));
   }
   else
   {
@@ -370,7 +369,50 @@ QString TrollProjectWidget::subprojectDirectory()
     return m_shownSubproject->path;
 }
 
+void TrollProjectWidget::setupContext()
+{
+    if (!m_shownSubproject)
+      return;
+    bool buildable = true;
+    bool runable = true;
+    bool projectconfigurable = true;
+    bool fileconfigurable = true;
+    bool hasSourceFiles = true;
+    bool hasSubdirs = false;
 
+
+    if (m_shownSubproject->configuration.m_template==QTMP_LIBRARY)
+    {
+      runable = false;
+    }
+    if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
+    {
+      hasSubdirs = true;
+      addSubdirButton->setEnabled(true);
+      runable = false;
+      hasSourceFiles = false;
+      fileconfigurable = false;
+    }
+    if (m_shownSubproject->isScope)
+    {
+      runable = false;
+      projectconfigurable = false;
+      buildable = false;
+    }
+
+
+    // Setup toolbars according to context
+    addSubdirButton->setEnabled(hasSubdirs);
+    buildButton->setEnabled(buildable);
+    rebuildButton->setEnabled(buildable);
+    runButton->setEnabled(runable);
+    projectconfButton->setEnabled(projectconfigurable);
+    configurefileButton->setEnabled(fileconfigurable);
+    newfileButton->setEnabled(hasSourceFiles);
+    removefileButton->setEnabled(hasSourceFiles);
+    addfilesButton->setEnabled(hasSourceFiles);
+    details->setEnabled(hasSourceFiles);
+}
 
 void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
 {
@@ -378,21 +420,9 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
         return;
     cleanDetailView(m_shownSubproject);
     m_shownSubproject = static_cast<SubprojectItem*>(item);
+    setupContext();
     buildProjectDetailTree(m_shownSubproject,details);
-    if (m_shownSubproject->isScope)
-    {
-      buildButton->setEnabled(false);
-      rebuildButton->setEnabled(false);
-      runButton->setEnabled(false);
-      projectconfButton->setEnabled(false);
-    }
-    else
-    {
-      buildButton->setEnabled(true);
-      rebuildButton->setEnabled(true);
-      runButton->setEnabled(true);
-      projectconfButton->setEnabled(true);
-    }
+
     QString subProjPath = m_shownSubproject->path;
     QString relpath = subProjPath.remove(0,projectDirectory().length());
     QDomDocument &dom = *(m_part->projectDom());
@@ -404,7 +434,7 @@ QString TrollProjectWidget::getCurrentTarget()
 {
   if (!m_shownSubproject)
     return "";
-  return m_shownSubproject->configuration.m_target;
+  return m_shownSubproject->configuration.m_destdir+m_shownSubproject->configuration.m_target;
 }
 
 void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
@@ -413,8 +443,8 @@ void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
   // it is a subdir template
   if (item && details->childCount())
   {
-    if (item->configuration.m_template == QTMP_SUBDIRS)
-      return;
+//    if (item->configuration.m_template == QTMP_SUBDIRS)
+//      return;
     // Remove all GroupItems and all of their children from the view
 //    QListIterator<SubprojectItem> it(item->scopes);
 //    for (; it.current(); ++it)
@@ -436,8 +466,8 @@ void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
 
 void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *listviewControl)
 {
-  if (item->configuration.m_template == QTMP_SUBDIRS)
-    return;
+//  if (item->configuration.m_template == QTMP_SUBDIRS)
+//    return;
 
   // Insert all GroupItems and all of their children into the view
   if (listviewControl)
@@ -504,6 +534,7 @@ void TrollProjectWidget::slotConfigureProject()
   ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(&(m_shownSubproject->configuration));
   dlg->exec();
   updateProjectConfiguration(m_shownSubproject);
+  setupContext();
 }
 
 void TrollProjectWidget::slotRunProject()
@@ -514,6 +545,8 @@ void TrollProjectWidget::slotRunProject()
   if (!m_shownSubproject)
     return;
   // can't build from scope
+  if (m_shownSubproject->isScope)
+    return;
   if (m_shownSubproject->isScope)
     return;
   // Only run application projects
@@ -591,7 +624,7 @@ void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
     QString newScopeString;
     if (spitem->scopeString != "")
       newScopeString = spitem->scopeString + ":" + scopename;
-    else 
+    else
       newScopeString = scopename;
 
     spitem->m_RootBuffer->makeScope(newScopeString);
@@ -644,14 +677,14 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
 
     KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
-    
+
     int idBuild = -2;
     int idQmake = -2;
     int idProjectConfiguration = -2;
     int idAddSubproject = -2;
-    int idRemoveScope = -2; 
+    int idRemoveScope = -2;
     int idAddScope = -2;
-    
+
 
     if (!spitem->isScope)
     {
@@ -1290,6 +1323,8 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->configuration.m_buildMode = QBM_RELEASE;
     item->configuration.m_warnings = QWARN_ON;
     item->configuration.m_requirements = 0;
+    item->setPixmap(0,SmallIcon("qmake_app.png"));
+
     // retrieve the project configuration
     item->m_FileBuffer.getValues("TEMPLATE",lst,minusListDummy);
     if (lst.count())
@@ -1297,9 +1332,15 @@ void TrollProjectWidget::parse(SubprojectItem *item)
       if (lst[0] == "app")
         item->configuration.m_template = QTMP_APPLICATION;
       if (lst[0] == "lib")
+      {
+        item->setPixmap(0,SmallIcon("qmake_lib.png"));
         item->configuration.m_template = QTMP_LIBRARY;
+      }
       if (lst[0] == "subdirs")
+      {
+        item->setPixmap(0,SmallIcon("qmake_sub.png"));
         item->configuration.m_template = QTMP_SUBDIRS;
+      }
     }
     item->m_FileBuffer.getValues("CONFIG",lst,minusListDummy);
     if (lst.count())
