@@ -36,6 +36,7 @@ public slots:
 private slots:
     void searchActivated();
     void slotExecuted(QListBoxItem *item);
+    void popupMenu(QListBoxItem *, const QPoint &p);
 
 private:
     virtual void childFinished(bool normal, int status);

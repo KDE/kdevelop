@@ -18,6 +18,8 @@
 #include <kprocess.h>
 #include <kparts/part.h>
 #include <ktexteditor/selectioninterface.h>
+#include <kaction.h>
+#include <kpopupmenu.h>
 using namespace KTextEditor;
 
 #include "kdevcore.h"
@@ -48,7 +50,7 @@ private:
 
 
 GrepListBoxItem::GrepListBoxItem(const QString &fileName, const QString &lineNumber, const QString &text, bool showFilename)
-    : ProcessListBoxItem( QString::null, Normal), 
+    : ProcessListBoxItem( QString::null, Normal),
 	fileName(fileName), lineNumber(lineNumber), text(text.stripWhiteSpace()),
 	show(showFilename)
 {}
@@ -92,6 +94,9 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part)
     : ProcessWidget(0, "grep widget")
     , m_matchCount(0)
 {
+    connect( this, SIGNAL( contextMenuRequested ( QListBoxItem *, const QPoint & ) ),
+             this, SLOT( popupMenu( QListBoxItem *, const QPoint & ) ) );
+
     grepdlg = new GrepDialog( part, this, "grep widget");
     connect( grepdlg, SIGNAL(searchClicked()),
 	     this, SLOT(searchActivated()) );
@@ -196,8 +201,8 @@ void GrepViewWidget::searchActivated()
         command += "| grep -v \"CVS/\" ";
     }
 
-    // quote spaces in filenames going to xargs 
-    command += "| sed \"s/ /\\\\\\ /g\" "; 
+    // quote spaces in filenames going to xargs
+    command += "| sed \"s/ /\\\\\\ /g\" ";
 
     command += "| xargs " ;
 
@@ -270,7 +275,7 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
                         insertItem(new GrepListBoxItem(filename, "0", str, true));
                         insertItem(new GrepListBoxItem(filename, linenumber, str, false));
                     }
-                    else 
+                    else
                     {
                         insertItem(new GrepListBoxItem(filename, linenumber, str, false));
                     }
@@ -287,4 +292,14 @@ void GrepViewWidget::projectChanged(KDevProject *project)
     grepdlg->setDirectory(dir);
 }
 
+void GrepViewWidget::popupMenu(QListBoxItem *, const QPoint &p)
+{
+    if(isRunning()) return;
+    if(KAction *findAction = m_part->actionCollection()->action("edit_grep")) {
+        KPopupMenu rmbMenu;
+        rmbMenu.insertTitle(i18n("Grep"));
+        findAction->plug(&rmbMenu);
+        rmbMenu.exec(p);
+    }
+}
 #include "grepviewwidget.moc"
