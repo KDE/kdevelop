@@ -58,7 +58,6 @@ void CKDevelop::initKDlg(){
   initKDlgMenuBar();
   initKDlgToolBar();
   initKDlgStatusBar();
-
 }
 
 void CKDevelop::initKDlgMenuBar(){
@@ -96,6 +95,8 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_edit_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
   kdlg_edit_menu->insertItem(pix, i18n("C&ut"), kdlgedit, SLOT(slotEditCut()), 0, ID_KDLG_EDIT_CUT);
+  pix.load(KApplication::kde_toolbardir() + "/delete.xpm");
+  kdlg_edit_menu->insertItem(pix, i18n("&Delete"), kdlgedit, SLOT(slotEditDelete()), 0, ID_KDLG_EDIT_DELETE);
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
   kdlg_edit_menu->insertItem(pix, i18n("&Copy"), kdlgedit, SLOT(slotEditCopy()), 0, ID_KDLG_EDIT_COPY);
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
@@ -287,6 +288,7 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_KDLG_EDIT_CUT);
   disableCommand(ID_KDLG_EDIT_COPY);
   disableCommand(ID_KDLG_EDIT_PASTE);
+  disableCommand(ID_KDLG_EDIT_DELETE);
 
   disableCommand(ID_PROJECT_ADD_FILE_NEW);
   disableCommand(ID_PROJECT_CLOSE);

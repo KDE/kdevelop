@@ -30,17 +30,17 @@
         int recPosX(int px) { int xnew = px+x(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((KDlgItem_Widget::MyWidget*)parent())->recPosX(xnew); else return px; }
         int recPosY(int py) { int ynew = py+y(); if ((!parent()) || (parent()!=parentObject->getEditWidget())) return ((KDlgItem_Widget::MyWidget*)parent())->recPosY(ynew); else return py; }
         bool isItemActive;
+        bool isMainwidget;
         void deselect() { if (isItemActive) { isItemActive = false; repaint(); } }
         void select() { if (!isItemActive) { isItemActive = true; repaint(); } }
         void selectMe() { parentObject->getEditWidget()->selectWidget((KDlgItem_Base*)parentObject); }
       protected:
-        bool isMainwidget;
         classname* parentObject;
         bool isMBPressed;
         QPoint startPnt, lastPnt;
         QRect origRect;
         int pressedEdge;
-        void moveRulers( QMouseEvent *e ) { if (!parentObject) return; parentObject->getEditWidget()->horizontalRuler()->slotNewValue(e->pos().x()+recPosX(0));parentObject->getEditWidget()->verticalRuler()->slotNewValue(e->pos().y()+recPosY(0)); }
+        void moveRulers( QMouseEvent *e );
         virtual void paintEvent ( QPaintEvent * );
         virtual void mousePressEvent ( QMouseEvent *e );
         virtual void mouseReleaseEvent ( QMouseEvent * );

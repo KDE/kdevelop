@@ -308,10 +308,10 @@ int KDlgItemsGetClickedRect(int x, int y, int winw, int winh)
   int w = winw;
   int h = winh;
 
+  if ((x>=w-8) && (y>=h-8) && (x<=w) && (y<=h)) return RESIZE_BOTTOM_RIGHT;
   if ((x>=0)   && (y>=0)   && (x<=8) && (y<=8)) return RESIZE_TOP_LEFT;
   if ((x>=w-8) && (y>=0)   && (x<=w) && (y<=8)) return RESIZE_TOP_RIGHT;
   if ((x>=0)   && (y>=h-8) && (x<=8) && (y<=h)) return RESIZE_BOTTOM_LEFT;
-  if ((x>=w-8) && (y>=h-8) && (x<=w) && (y<=h)) return RESIZE_BOTTOM_RIGHT;
 
   if ((x>=(int)(w/2)-4) && (y>=0)   && (x<=(int)(w/2)+4) && (y<=8)) return RESIZE_MIDDLE_TOP;
   if ((x>=(int)(w/2)-4) && (y>=h-8) && (x<=(int)(w/2)+4) && (y<=h)) return RESIZE_MIDDLE_BOTTOM;
@@ -345,30 +345,30 @@ bool KDlgItemsGetResizeCoords(int pressedEdge, int &x, int &y, int &w, int &h, i
         break;
       case RESIZE_TOP_LEFT:
         noMainWidget = true;
-        x += diffx;
-        y += diffy;
+        if (x+diffx<x+w-1) x += diffx; else x += w-1;
+        if (y+diffy<y+h-1) y += diffy; else y += h-1;
         w -= diffx;
         h -= diffy;
         break;
       case RESIZE_TOP_RIGHT:
         noMainWidget = true;
-        y += diffy;
+        if (y+diffy<y+h-1) y += diffy; else y += h-1;
         w += diffx;
         h -= diffy;
         break;
       case RESIZE_MIDDLE_LEFT:
         noMainWidget = true;
-        x += diffx;
+        if (x+diffx<x+w-1) x += diffx; else x += w-1;
         w -= diffx;
         break;
       case RESIZE_MIDDLE_TOP:
         noMainWidget = true;
-        y += diffy;
+        if (y+diffy<y+h-1) y += diffy; else y += h-1;
         h -= diffy;
         break;
       case RESIZE_BOTTOM_LEFT:
         noMainWidget = true;
-        x += diffx;
+        if (x+diffx<x+w-1) x += diffx; else x += w-1;
         w -= diffx;
         h += diffy;
         break;
@@ -381,6 +381,9 @@ void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge)
 {
   switch (pressedEdge)
     {
+      case RESIZE_BOTTOM_RIGHT:
+        caller->setCursor(KCursor::sizeFDiagCursor());
+        break;
       case RESIZE_TOP_LEFT:
         caller->setCursor(KCursor::sizeFDiagCursor());
         break;
@@ -389,9 +392,6 @@ void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge)
         break;
       case RESIZE_BOTTOM_LEFT:
         caller->setCursor(KCursor::sizeBDiagCursor());
-        break;
-      case RESIZE_BOTTOM_RIGHT:
-        caller->setCursor(KCursor::sizeFDiagCursor());
         break;
       case RESIZE_MIDDLE_TOP:
         caller->setCursor(KCursor::sizeVerCursor());
@@ -458,7 +458,7 @@ QString KDlgLimitLines(QString src, unsigned maxlen)
           helptext = helptext + lastword;
           lastword = "";
         }
-      if ((linelen>maxlen) && (((unsigned)lastword.length()<maxlen) && (ch != " ")))
+      if ((linelen>maxlen) && ((lastword.length()<maxlen) && (ch != " ")))
         {
           linelen = 0;
           helptext = helptext+"\n";

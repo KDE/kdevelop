@@ -196,6 +196,7 @@
 #define ID_KDLG_EDIT_CUT            20130
 #define ID_KDLG_EDIT_COPY           20140
 #define ID_KDLG_EDIT_PASTE          20150
+#define ID_KDLG_EDIT_DELETE         20155
 
 #define ID_KDLG_EDIT_PROPERTIES     20160
 

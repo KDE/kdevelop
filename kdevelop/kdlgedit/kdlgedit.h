@@ -45,11 +45,13 @@ public slots:
 	void slotEditUndo();
 	/** redo the last editing step */
 	void slotEditRedo();
-	/** cut out the selected widget or parameter in the properties view */
+	/** cut out the selected widget*/
 	void slotEditCut();
-	/** copy the selected widget to the clipboard or the parameter of the properties view*/
+	/** delete the selected widget*/
+	void slotEditDelete();
+	/** copy the selected widget to the clipboard */
 	void slotEditCopy();
-	/** insert the widget which is on the clipboard or the parameter on the clipboard */
+	/** insert the widget which is on the clipboard */
 	void slotEditPaste();
 	/** show properties of the widget- opens the properties window */
 	void slotEditProperties();

@@ -105,6 +105,9 @@ class KDlgEditWidget : public QWidget  {
 
     int raiseSelected(bool updateMe = true);
     int lowerSelected(bool updateMe = true);
+    int gridSizeX() { return grid_size_x; }
+    int gridSizeY() { return grid_size_y; }
+    void setGridSize(int x, int y);
   public slots:
     int slot_raiseSelected() { return raiseSelected(); }
     int slot_lowerSelected() { return lowerSelected(); }
@@ -118,6 +121,7 @@ class KDlgEditWidget : public QWidget  {
 
   protected:
     int dlgfilelinecnt;
+    int grid_size_x, grid_size_y;
 
     QString dlgReadLine( QTextStream *t );
     bool readGrp_Ignore( QTextStream *t );

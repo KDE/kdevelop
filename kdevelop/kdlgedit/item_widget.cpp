@@ -57,9 +57,36 @@ void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
   p.setClipRect(e->rect());
 
   int x,y;
-  for (x = 0; x < width(); x+=10)
-   for (y = 0; y < height(); y+=10)
-     p.drawPoint(x,y);
+  int gx = parentObject->getEditWidget()->gridSizeX();
+  int gy = parentObject->getEditWidget()->gridSizeY();
+
+  if ((gx<=1) || (gy<=1))
+    {
+      if ((gx>1) || (gy>1))
+        {
+          QPen oldpen = p.pen();
+          QPen newpen(QColor(255,128,128),0,DashDotLine);
+          p.setPen(newpen);
+          if (gx <= 1)
+            {
+              for (y = gy; y < height(); y+=gy)
+                p.drawLine(3,y,width(),y-6);
+            }
+          else
+            {
+              for (x = gx; x < width(); x+=gx)
+                p.drawLine(x,3,x,height()-6);
+            }
+          p.setPen(oldpen);
+        }
+    }
+  else
+    {
+      for (x = gx; x < width(); x+=gx)
+       for (y = gx; y < height(); y+=gy)
+         p.drawPoint(x,y);
+    }
+
 
   if (isItemActive)	
     KDlgItemsPaintRects(&p,width(),height());
@@ -110,6 +137,13 @@ void KDlgItem_Widget::repaintItem(QFrame *it)
     return;
 
   KDlgItem_Base::repaintItem(itm);
+
+  if (((MyWidget*)item)->isMainwidget)
+    {
+      getEditWidget()->horizontalRuler()->setRange(0,item->width());
+      getEditWidget()->verticalRuler()->setRange(0,item->height());
+    }
+
 
 }
 

@@ -40,6 +40,30 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   setBackgroundMode(PaletteLight);
 
+  rulh = new KRuler(KRuler::horizontal, this);
+  rulh->setRulerStyle(KRuler::pixel);
+  rulh->setRange(0,400);
+  rulh->setOffset(0);
+  rulh->setPixelPerMark(5);
+  rulh->setEndLabel("");
+
+  rulh->setFrameStyle(0);
+
+  rulv = new KRuler(KRuler::vertical, this);
+  rulv->setRulerStyle(KRuler::pixel);
+  rulv->setRange(0,300);
+  rulv->setOffset(0);
+  rulv->setPixelPerMark(5);
+  rulv->setEndLabel("");
+
+  rulv->setFrameStyle(rulh->frameStyle());
+
+  setGridSize(10,10);
+
+  QFrame *edgeFrame = new QFrame(this);
+  edgeFrame->setGeometry(0,0,RULER_WIDTH, RULER_HEIGHT);
+  edgeFrame->setFrameStyle(rulh->frameStyle());
+
   main_widget = new KDlgItem_Widget( this, this, true );
   selected_widget = 0;
   selectWidget(main_widget);
@@ -56,26 +80,19 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   if ((parCKD) && parCKD->kdlg_get_prop_widget())
     parCKD->kdlg_get_prop_widget()->refillList(selected_widget);
-
-  rulh = new KRuler(KRuler::horizontal, this);
-  rulh->setRulerStyle(KRuler::pixel);
-  rulh->setRange(0,400);
-  rulh->setOffset(0);
-  rulh->setPixelPerMark(5);
-
-  rulv = new KRuler(KRuler::vertical, this);
-  rulv->setRulerStyle(KRuler::pixel);
-  rulv->setRange(0,300);
-  rulv->setOffset(0);
-  rulv->setPixelPerMark(5);
-
-  QFrame *edgeFrame = new QFrame(this);
-  edgeFrame->setGeometry(0,0,RULER_WIDTH, RULER_HEIGHT);
-  edgeFrame->setFrameStyle(rulh->frameStyle());
 }
 
 KDlgEditWidget::~KDlgEditWidget()
 {
+}
+
+
+void KDlgEditWidget::setGridSize(int x, int y)
+{
+  grid_size_x = x;
+  grid_size_y = y;
+  rulh->setPixelPerMark(x);
+  rulv->setPixelPerMark(y);
 }
 
 
@@ -149,6 +166,9 @@ void KDlgEditWidget::slot_lowerBottomSelected()
 
 void KDlgEditWidget::slot_cutSelected()
 {
+  if ((!selected_widget) || (selected_widget == main_widget))
+    return;
+
   slot_copySelected();
   slot_deleteSelected();
 }
@@ -548,6 +568,11 @@ void KDlgEditWidget::deselectWidget()
     {
       selected_widget -> deselect();
       selected_widget = 0;
+
+      pCKDevel->disableCommand(ID_KDLG_EDIT_CUT);
+      pCKDevel->disableCommand(ID_KDLG_EDIT_COPY);
+      pCKDevel->disableCommand(ID_KDLG_EDIT_PASTE);
+      pCKDevel->disableCommand(ID_KDLG_EDIT_DELETE);
     }
 }
 
@@ -555,6 +580,8 @@ void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
 {
   if (i == selected_widget)
     return;
+
+  KDlgItem_Base *wasSel = selected_widget;
 
   deselectWidget();
 
@@ -567,6 +594,17 @@ void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
          pCKDevel->kdlg_get_prop_widget()->refillList(selected_widget);
     }
 
+  if (!wasSel)
+    return;
+
+  if (selected_widget != main_widget)
+    {
+      pCKDevel->enableCommand(ID_KDLG_EDIT_CUT);
+      pCKDevel->enableCommand(ID_KDLG_EDIT_COPY);
+      pCKDevel->enableCommand(ID_KDLG_EDIT_DELETE);
+    }
+
+  pCKDevel->enableCommand(ID_KDLG_EDIT_PASTE);
 }
 
 

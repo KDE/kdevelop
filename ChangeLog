@@ -1,4 +1,10 @@
 1999-04-11 Pascal Krahmer <pascal@beast.de>
+        * fixed some minor bugs
+        * changes style of rulers in order to let them look better :-)
+        * added grid functionality
+        * added pixmaps to the popupmenu of the widgets
+
+1999-04-11 Pascal Krahmer <pascal@beast.de>
         * added popupmenu in the edit view (rightclick on an item or on the mainwidget)
         * added raise/lower/raise to top/lower to bottom methods (available in GUI through the popup)
         * added delete method (also only in the popup for now)

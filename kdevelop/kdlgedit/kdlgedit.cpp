@@ -19,6 +19,9 @@
 #include "kdlgedit.h"
 #include "../ckdevelop.h"
 #include "kdlgeditwidget.h"
+#include "kdlgitems.h"
+#include "kdlgpropwidget.h"
+#include "items.h"
 
 KDlgEdit::KDlgEdit(QObject *parent, const char *name ) : QObject(parent,name)
 {
@@ -57,14 +60,22 @@ void KDlgEdit::slotEditRedo()
 
 void KDlgEdit::slotEditCut()
 {
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_cutSelected();
+}
+
+void KDlgEdit::slotEditDelete()
+{
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_deleteSelected();
 }
 
 void KDlgEdit::slotEditCopy()
 {
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_copySelected();
 }
 
 void KDlgEdit::slotEditPaste()
 {
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_pasteSelected();
 }
 
 void KDlgEdit::slotEditProperties()
@@ -73,6 +84,14 @@ void KDlgEdit::slotEditProperties()
 
 void KDlgEdit::slotViewRefresh()
 {
+  ((CKDevelop*)parent())->kdlg_get_items_view()->refreshList();
+
+  KDlgItem_Base* sel = ((CKDevelop*)parent())->kdlg_get_edit_widget()->selectedWidget();
+
+  if (sel)
+    ((CKDevelop*)parent())->kdlg_get_prop_widget()->refillList(sel);
+
+  ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->recreateItem();
 }
 
 void KDlgEdit::slotBuildGenerate()
