@@ -315,6 +315,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
 
   QGroupBox *g1 = new QGroupBox(i18n("Edit Options"),this);
   opt1 = new QCheckBox(i18n("Auto &Indent"),g1);
+  opt_tab = new QCheckBox(i18n("&Tab Indent"),g1);
   opt2 = new QCheckBox(i18n("&Backspace Indent"),g1);
   opt3 = new QCheckBox(i18n("&Word Wrap"),g1);
   opt4 = new QCheckBox(i18n("&Replace Tabs"),g1);
@@ -327,6 +328,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
 //  g1->setMinimumHeight(8+8+8+6*4+9*(opt1->sizeHint().height()));
 
   opt1->setChecked(flags & cfAutoIndent);
+  opt_tab->setChecked(flags & cfTabIndent);
   opt2->setChecked(flags & cfBackspaceIndent);
   opt3->setChecked(flags & cfWordWrap);
   opt4->setChecked(flags & cfReplaceTabs);
@@ -417,6 +419,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth,
   QVBoxLayout *vbl1 = new QVBoxLayout(g1, 8, 4);
   vbl1->addSpacing(8);
   vbl1->addWidget( opt1,0,AlignLeft );
+  vbl1->addWidget( opt_tab,0,AlignLeft );
   vbl1->addWidget( opt2,0,AlignLeft );
   vbl1->addWidget( opt3,0,AlignLeft );
   vbl1->addWidget( opt4,0,AlignLeft );
@@ -475,6 +478,7 @@ int SettingsDialog::getFlags() {
 
   flags = 0;
   if (opt1->isChecked()) flags |= cfAutoIndent;
+  if (opt_tab->isChecked()) flags |= cfTabIndent;
   if (opt2->isChecked()) flags |= cfBackspaceIndent;
   if (opt3->isChecked()) flags |= cfWordWrap;
   if (opt4->isChecked()) flags |= cfReplaceTabs;

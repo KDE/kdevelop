@@ -1114,7 +1114,7 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
 
   recordStart(c.cursor);
 
-  if (!(c.flags & cfAutoIndent)) {
+  if (!(c.flags & cfTabIndent)) {
     // auto indentation hasn't been chosen
     // insert regular tab like we know it
     insertChar(view, c, '\t');

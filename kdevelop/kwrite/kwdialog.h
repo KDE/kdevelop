@@ -72,6 +72,7 @@ undoSteps,       QWidget *parent, const char *name = 0);
     int getUndoSteps();
   protected:
     QCheckBox *opt1;
+    QCheckBox *opt_tab;
     QCheckBox *opt2;
     QCheckBox *opt3;
     QCheckBox *opt4;
