@@ -38,6 +38,7 @@
 #include <knotifydialog.h>
 #endif
 
+#include <config.h>
 
 #include "projectmanager.h"
 #include "core.h"
@@ -140,8 +141,7 @@ void MainWindowShare::createActions()
 
 void MainWindowShare::slotReportBug()
 {
-  const KAboutData *ad = m_pMainWnd->instance()->aboutData();
-  KAboutData d2("kdevelop", ad->programName(), ad->version());
+  KAboutData d2("kdevelop", i18n("Gideon"), VERSION);
   KBugReport a(m_pMainWnd, true, &d2);  
   a.exec();
 }

@@ -143,8 +143,6 @@ void MainWindowIDEAl::init() {
     KAction *a = actionCollection()->action("help_report_bug");
     disconnect(a, SIGNAL(activated()), 0, 0);
     connect(a, SIGNAL(activated()), m_pMainWindowShare, SLOT(slotReportBug()));
-    //actionCollection()->remove(a);
-    if(a) qDebug("HI");
 
     m_pWindowMenu = (QPopupMenu*) main()->child( "window", "KPopupMenu" );
 
