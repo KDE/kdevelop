@@ -12,28 +12,4 @@ noinst_HEADERS = ../include/qextmdichildarea.h ../include/qextmdichildfrm.h ../i
 
 METASOURCES = AUTO
 
-# add a dependency for every moc file to keep the src- and include- directory-structure
-$(srcdir)/qextmdichildarea.cpp: qextmdichildarea.moc
-qextmdichildarea.moc: ../include/qextmdichildarea.h
-	$(MOC) ../include/qextmdichildarea.h -o qextmdichildarea.moc
-
-$(srcdir)/qextmdichildfrm.cpp: qextmdichildfrm.moc
-qextmdichildfrm.moc: ../include/qextmdichildfrm.h
-	$(MOC) ../include/qextmdichildfrm.h -o qextmdichildfrm.moc
-
-$(srcdir)/qextmdichildfrmcaption.cpp: qextmdichildfrmcaption.moc
-qextmdichildfrmcaption.moc: ../include/qextmdichildfrmcaption.h
-	$(MOC) ../include/qextmdichildfrmcaption.h -o qextmdichildfrmcaption.moc
-
-$(srcdir)/qextmdichildview.cpp: qextmdichildview.moc
-qextmdichildview.moc: ../include/qextmdichildview.h
-	$(MOC) ../include/qextmdichildview.h -o qextmdichildview.moc
-
-$(srcdir)/qextmdimainfrm.cpp: qextmdimainfrm.moc
-qextmdimainfrm.moc: ../include/qextmdimainfrm.h
-	$(MOC) ../include/qextmdimainfrm.h -o qextmdimainfrm.moc
-
-$(srcdir)/qextmditaskbar.cpp: qextmditaskbar.moc
-qextmditaskbar.moc: ../include/qextmditaskbar.h
-	$(MOC) ../include/qextmditaskbar.h -o qextmditaskbar.moc
-
+META_INCLUDES=$(srcdir)/../include
