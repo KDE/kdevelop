@@ -112,7 +112,9 @@ bool CKDevelop::slotProjectClose()
   m_docViewManager->doCloseAllDocs();
 
   stateChanged("project_open",StateReverse);
-
+  stateChanged("build_project",StateReverse);
+  stateChanged("build",StateReverse);
+  
   project=false;
   delete prj;
   prj = 0;
@@ -640,6 +642,7 @@ void CKDevelop::slotOpenProject( const KURL& url )
   }
 
   stateChanged("project_open");
+  stateChanged("build_project");
 
   slotStatusMsg(i18n("Ready."));
 

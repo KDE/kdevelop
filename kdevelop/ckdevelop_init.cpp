@@ -419,7 +419,7 @@ void CKDevelop::initMenuBar() {
 
   pAction = new KAction(
     i18n("Uninden&t"), "decreaseindent", CTRL+SHIFT+Key_I,
-    this, SLOT(slotEditUnIndent()),
+    this, SLOT(slotEditUnindent()),
     actionCollection(), "edit_unindent" );
 
   pAction = new KAction(
@@ -803,7 +803,7 @@ void CKDevelop::initMenuBar() {
 
   pAction = new KAction(
     i18n("Run to cursor"), "dbgrunto", 0,
-    this, SLOT(lotDebugRunToCursor()),
+    this, SLOT(slotDebugRunToCursor()),
     actionCollection(), "debug_run_cursor" );
 
   pAction = new KAction(
@@ -961,48 +961,102 @@ void CKDevelop::initMenuBar() {
         // set the KPopupMenu for the document view manager
         m_docViewManager->setDocBMPopup(pDocBookmarksPopup);
 
-        ///////////////////////////////////////////////////////////////////
-        // Help-menu entries
-        QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));
-        QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));
-        QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
-        QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
-        pAction = new KAction(i18n("&Back"),"back",0,this,
-                  SLOT(slotHelpBack()),actionCollection(),"help_back");
-        pAction = new KAction(i18n("&Forward"),"forward",0,this,
-                  SLOT(slotHelpForward()),actionCollection(),"help_forward");
-        pAction = new KAction(i18n("&Search Marked Text"),"help",0,this,
-                  SLOT(slotHelpSearchText()),actionCollection(),"help_search_marked");
-        pAction = new KAction(i18n("Search for Help on..."),"filefind",0,this,
-                  SLOT(slotHelpSearch()),actionCollection(),"help_search");
-        pAction = new KAction(i18n("Show Manpage on..."),"help",0,this,
-                  SLOT(slotManpage()),actionCollection(),"help_manpage");
-        pAction = KStdAction::whatsThis(this,
-                  SLOT(contextHelpActivated()),actionCollection(),"help_whatsthis");
-        pAction = KStdAction::helpContents(this,
-                  SLOT(slotHelpContents()),actionCollection(),"help_contents");
-        pAction = new KAction(programming,"contents",0,this,
-                  SLOT(slotHelpProgramming()),actionCollection(),"help_programming");
-        pAction = new KAction(tutorial,"contents",0,this,
-                  SLOT(slotHelpTutorial()),actionCollection(),"help_tutorial");
-        pAction = new KAction(kdelibref,"contents",0,this,
-                  SLOT(slotHelpKDELibRef()),actionCollection(),"help_kdelibref");
-        pAction = new KAction(i18n("C/C++-Reference"),"contents",0,this,
-                  SLOT(slotHelpReference()),actionCollection(),"help_cppreference");
-        pAction = new KAction(i18n("Project &API-Doc"),"contents",0,this,
-                  SLOT(slotHelpAPI()),actionCollection(),"help_apidoc");
-        pAction = new KAction(i18n("Project &User-Manual"),"contents",0,this,
-                  SLOT(slotHelpManual()),actionCollection(),"help_userman");
-        pAction = new KAction(i18n("Tip of the Day"),"idea",0,this,
-                  SLOT(slotHelpTipOfDay(bool)),actionCollection(),"help_tip");
-        pAction = new KAction(i18n("KDevelop Homepage"),"www",0,this,
-                  SLOT(slotHelpHomepage()),actionCollection(),"help_homepage");
-        pAction = KStdAction::reportBug(this,
-                  SLOT(reportBug()),actionCollection(),"help_bugreport");
-        pAction = KStdAction::aboutApp(this,
-                  SLOT(aboutApplication()),actionCollection(),"help_about_app");
-        pAction = KStdAction::aboutKDE(this,
-                  SLOT(aboutKDE()),actionCollection(),"help_about_kde");
+
+
+  ///////////////////////////////////////////////////////////////////
+  // Help
+
+  QString programming=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("programming/index.html"));
+  QString tutorial=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("tutorial/index.html"));
+  QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));
+  QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));
+  
+  pAction = new KAction(
+    i18n("&Back"), "back", 0,
+    this, SLOT(slotHelpBack()),
+    actionCollection(), "help_back" );
+
+  pAction = new KAction(
+    i18n("&Forward"), "forward", 0,
+    this, SLOT(slotHelpForward()),
+    actionCollection(), "help_forward" );
+
+  pAction = new KAction(
+    i18n("&Search Marked Text"), "help", 0,
+    this, SLOT(slotHelpSearchText()),
+    actionCollection(), "help_search_marked" );
+
+  pAction = new KAction(
+    i18n("Search for Help on..."), "filefind", 0,
+    this, SLOT(slotHelpSearch()),
+    actionCollection(), "help_search" );
+
+  pAction = new KAction(
+    i18n("Show Manpage on..."), "help", 0,
+    this, SLOT(slotManpage()),
+    actionCollection(), "help_manpage" );
+
+  pAction = KStdAction::whatsThis(
+    this, SLOT(contextHelpActivated()),
+    actionCollection(), "help_whatsthis" );
+
+  pAction = KStdAction::helpContents(
+    this, SLOT(slotHelpContents()),
+    actionCollection(), "help_contents" );
+
+  pAction = new KAction(
+    programming,"contents", 0,
+    this, SLOT(slotHelpProgramming()),
+    actionCollection(), "help_programming" );
+
+  pAction = new KAction(
+    tutorial, "contents", 0,
+    this, SLOT(slotHelpTutorial()),
+    actionCollection(), "help_tutorial" );
+
+  pAction = new KAction(
+    kdelibref, "contents", 0,
+    this, SLOT(slotHelpKDELibRef()),
+    actionCollection(), "help_kdelibref" );
+        
+  pAction = new KAction(
+    i18n("C/C++-Reference"), "contents", 0,
+    this, SLOT(slotHelpReference()),
+    actionCollection(), "help_cppreference" );
+
+  pAction = new KAction(
+    i18n("Project &API-Doc"), "contents", 0,
+    this, SLOT(slotHelpAPI()),
+    actionCollection(), "help_apidoc" );
+
+  pAction = new KAction(
+    i18n("Project &User-Manual"), "contents", 0,
+    this, SLOT(slotHelpManual()),
+    actionCollection(), "help_userman" );
+
+  pAction = new KAction(
+    i18n("Tip of the Day"), "idea", 0,
+    this, SLOT(slotHelpTipOfDay()),
+    actionCollection(), "help_tip" );
+        
+  pAction = new KAction(
+    i18n("KDevelop Homepage"), "www", 0,
+    this, SLOT(slotHelpHomepage()),
+    actionCollection(), "help_homepage" );
+
+  pAction = KStdAction::reportBug(
+    this, SLOT(reportBug()),
+    actionCollection(), "help_bugreport" );
+
+  pAction = KStdAction::aboutApp(
+    this, SLOT(showAboutApplication()),
+    actionCollection(), "help_about_app" );
+
+  pAction = KStdAction::aboutKDE(
+    this, SLOT(aboutKDE()),
+    actionCollection(), "help_about_kde" );
+
+
 
   ////////////////////////////////////////////////
   // Popupmenu for the classbrowser wizard button

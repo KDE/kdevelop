@@ -1899,76 +1899,85 @@ void CKDevelop::setupInternalDebugger()
 bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 {
   debug("RunMake with target : %s !\n", target.data());
+
+  stateChanged( "build_project", StateReverse );
+  stateChanged( "debug", StateReverse );
+
   // first, lets set the make command
   if(!CToolClass::searchProgram(make_cmd)){
     QMessageBox::warning(this,i18n("Running Make"),
                          i18n("Make command not found"));
     return false;
   }
+
   // second, lets take care of compiler and linker flags  !! formerly excluding normal_empty - why ? R.N.
-         KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-         QString conf=compile_combo->currentText();
+  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+  QString conf=compile_combo->currentText();
   QString flags, makefile;
 
-  if (type!=CMakefile::cvs)
-  {
-           QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
-    if(conf==i18n("(Default)")){
-            QDir::setCurrent(prj->getProjectDir());
-                   cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
-                   addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
-                   ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
-                   config->setGroup("Compiler");
-                   QString arch=config->readEntry("Architecture","i386");
-                   QString platf=config->readEntry("Platform","linux");
-                   group="Compilearch "+arch+"-"+platf;
-                }
-    else{
-            QString vpath=m_pKDevSession->getVPATHSubdir(conf);
-                  QDir dir(vpath);
-                  // change to VPATH subdir, create it if not existant
-                  if(!dir.exists())
-                          dir.mkdir(vpath);
-                  QDir::setCurrent(vpath);
-                   group="Compilearch "+
-                                                                                           m_pKDevSession->getArchitecture(conf)+"-"+
-                                                                                           m_pKDevSession->getPlatform(conf);
-                   cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
-                   cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
-                   cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
-                   addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
-                   ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
-           }
-           config->setGroup(group);
-           flags += "CPP=\""+ config->readEntry("CPP","cpp")+ "\" ";
-           flags += "CC=\"" + config->readEntry("CC","gcc")+ "\" ";
-           flags += "CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
-          flags += "CPPFLAGS=\"" + cppflags + "\" ";
-           if(prj->getProjectType()=="normal_c"){
-                   flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
-           }
-           else{
-       flags += "CFLAGS=\"" + cflags + "\" ";
-       flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
-           }
+  if (type!=CMakefile::cvs) {
+  
+    QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
+    if( conf==i18n("(Default)") ) {
+
+      QDir::setCurrent(prj->getProjectDir());
+      cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
+      addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
+      ldflags=prj->getLDFLAGS().simplifyWhiteSpace();
+      config->setGroup("Compiler");
+      QString arch=config->readEntry("Architecture","i386");
+      QString platf=config->readEntry("Platform","linux");
+      group="Compilearch "+arch+"-"+platf;
+
+    } else {
+
+      QString vpath=m_pKDevSession->getVPATHSubdir(conf);
+      QDir dir(vpath);
+      
+      // change to VPATH subdir, create it if not existant
+      if(!dir.exists())
+        dir.mkdir(vpath);
+      
+      QDir::setCurrent(vpath);
+      group = "Compilearch " +
+        m_pKDevSession->getArchitecture(conf)+"-"+
+        m_pKDevSession->getPlatform(conf);
+      cppflags=m_pKDevSession->getCPPFLAGS(conf).simplifyWhiteSpace();
+      cflags=m_pKDevSession->getCFLAGS(conf).simplifyWhiteSpace();
+      cxxflags=m_pKDevSession->getCXXFLAGS(conf).simplifyWhiteSpace();
+      addcxxflags=m_pKDevSession->getAdditCXXFLAGS(conf).simplifyWhiteSpace();
+      ldflags=m_pKDevSession->getLDFLAGS(conf).simplifyWhiteSpace();
+    }
+
+    config->setGroup(group);
+    flags += "CPP=\""+ config->readEntry("CPP","cpp")+ "\" ";
+    flags += "CC=\"" + config->readEntry("CC","gcc")+ "\" ";
+    flags += "CXX=\"" + config->readEntry("CXX","g++")+ "\" ";
+    flags += "CPPFLAGS=\"" + cppflags + "\" ";
+    if(prj->getProjectType()=="normal_c"){
+      flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
+    } else {
+      flags += "CFLAGS=\"" + cflags + "\" ";
+      flags += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
+    }
     flags += "LDFLAGS=\"" + ldflags+ "\" " ;
   }
+
   if (type==CMakefile::cvs) {
     makefile=prj->getCvsMakefile();
     if (makefile.isNull()) {
-      QMessageBox::warning(0L,i18n("Makefile not found"),
-      i18n("The build-Makefile to create the configure-script "
-                              "wasn't found. Please make sure your toplevel "
-                              "source directory contains a build-Makefile with the "
-                              "respective calls to automake and autoconf to build "
-                              "the configure script. The filename may either be 'Makefile.cvs' "
-                              "or 'Makefile.dist'."));
-                        return false;
-                }
-           QDir::setCurrent(prj->getProjectDir());
-  }
-  // here comes the interesting stuff...
-  else {
+      QMessageBox::warning( this,
+        i18n("Makefile not found"),
+        i18n("The build-Makefile to create the configure-script "
+            "wasn't found. Please make sure your toplevel "
+            "source directory contains a build-Makefile with the "
+            "respective calls to automake and autoconf to build "
+            "the configure script. The filename may either be 'Makefile.cvs' "
+            "or 'Makefile.dist'."));
+      return false;
+    }
+    QDir::setCurrent(prj->getProjectDir());
+  } else {
     if(conf==i18n("(Default)")){
       makefile=prj->getTopMakefile();
       /* it is possible that we dont have a makefile
@@ -1978,33 +1987,34 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
         prj->setTopMakefile();
         makefile=prj->getTopMakefile();
       }
-    }
-    else
+    } else {
       if(QFileInfo("Makefile").exists())
         makefile="Makefile";
+    }
   }
+
   // if we still dont have a makefile something is really wrong
   if (makefile.isNull()) {
-    QMessageBox::warning(0L,i18n("Makefile not found"),
-    i18n("contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-     "You want to build your project by running 'make'"
-     "but there is no Makefile in this directory.\n\n"
-     "Hints:\n"
-     "1. Possibly you forgot to create the Makefiles.\n"
-     "   In that case create them by running Build->Configure\n\n"
-     "2. Or this directory does not belong to your project.\n"
-     "   Check the settings in Project->Options->MakeOptions!"),
-    QMessageBox::Ok,
-    QMessageBox::NoButton,
-    QMessageBox::NoButton);
+    QMessageBox::warning( this,
+      i18n("Makefile not found"),
+      i18n("You want to build your project by running 'make'"
+           "but there is no Makefile in this directory.\n\n"
+           "Hints:\n"
+           "1. Possibly you forgot to create the Makefiles.\n"
+           "   In that case create them by running Build->Configure\n\n"
+           "2. Or this directory does not belong to your project.\n"
+            "   Check the settings in Project->Options->MakeOptions!") );
     return false;
   }
+
   debug("makefile : %s !\n", makefile.data());
+
   // set the path where make will run
-        if(conf==i18n("(Default)")){ // only needed for default, VPATH dir already set above
-          QString makefileDir=QFileInfo(makefile).dirPath(TRUE);
-          QDir::setCurrent(makefileDir);
-        }
+  if(conf==i18n("(Default)")){ // only needed for default, VPATH dir already set above
+    QString makefileDir=QFileInfo(makefile).dirPath(TRUE);
+    QDir::setCurrent(makefileDir);
+  }
+
   // Kill the debugger if it's running
   if (dbgController)
     slotDebugStop();
@@ -2022,40 +2032,41 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   process << make_cmd << prj->getMakeOptions() << " -f" << makefile;
   if (!target.isEmpty())
    process << target;
-        debug("run: %s %s %s -f %s %s", (!flags.isEmpty() ? flags.data() : ""), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
 
-  // why is this beeping business necessary? shouldn't there be a switch?
-  // beep = true;
+  debug("run: %s %s %s -f %s %s", (!flags.isEmpty() ? flags.data() : ""), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
 
   if (next_job.isEmpty())
     next_job="make_end";
 
   // rock'n roll
-  bool success=process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-  return success;
+  return process.start( KProcess::NotifyOnExit, KProcess::AllOutput );
 }
+
 void CKDevelop::slotBuildMake()
 {
-  //DELETE ME debug("slotBuildMake\n");
   slotStatusMsg(i18n("Running make..."));
   RunMake(CMakefile::toplevel,"");
 }
+
 void CKDevelop::slotBuildMakeClean()
 {
   slotStatusMsg(i18n("Running make clean..."));
   RunMake(CMakefile::toplevel,"clean");
 }
+
 void CKDevelop::slotBuildCompileDir(const QString& target)
 {
   slotStatusMsg(i18n("Running make..."));
   RunMake(CMakefile::regular,target);
 }
+
 void CKDevelop::slotBuildRebuildAll()
 {
   slotStatusMsg(i18n("Running make clean and make all..."));
   RunMake(CMakefile::toplevel,"clean");
     next_job = "all";
 }
+
 void CKDevelop::slotBuildDistClean()
 {
   slotStatusMsg(i18n("Running make distclean..."));
