@@ -72,7 +72,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h ckdevaccel.h dbgtoolbar.h dbgpsdlg.h
 
-EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk
+EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk mini-development_package.xpm
 
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES
@@ -96,8 +96,10 @@ install-data-local:
 	$(mkinstalldirs) $(kde_icondir)
 	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
 	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	
+	$(INSTALL_DATA) development_package.xpm $(kde_icondir)
 	$(mkinstalldirs) $(kde_minidir)
 	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_minidir)/kdevelop.xpm
+	$(INSTALL_DATA) mini-development_package.xpm $(kde_minidir)/development_package.xpm
 	$(mkinstalldirs) $(kde_confdir)
 	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
 	$(mkinstalldirs) $(kde_mimedir)/application	
