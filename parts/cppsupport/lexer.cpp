@@ -10,7 +10,6 @@
  ***************************************************************************/
 
 #include "lexer.h"
-#include <kdebug.h>
 
 using namespace std;
 
@@ -22,6 +21,7 @@ static struct {
     // KDE keywords -- start
     { "K_DCOP", Token_K_DCOP },
     { "k_dcop", Token_k_dcop },
+    { "k_dcop_signals", Token_k_dcop_signals },
     // KDE keywords -- end
 
     // Qt keywords -- start
@@ -33,6 +33,7 @@ static struct {
 
     { "and", Token_and },
     { "and_eq", Token_and_eq },
+    { "__asm__", Token_asm },
     { "asm", Token_asm },
     { "auto", Token_auto },
     { "bitand", Token_bitand },
@@ -365,7 +366,6 @@ const QChar* Lexer::readMultiLineComment( const QChar* ptr )
         ++ptr;
     }
 
-    kdDebug(9007) << "Lexer::readMultiLineComment() -- unexpected eof" << endl;
     return ptr;
 }
 
@@ -390,7 +390,7 @@ const QChar* Lexer::readCharLiteral( const QChar* ptr )
         	if( *ptr == '\n' ){
             	newline( ptr+1 );
         	}
-		
+
             ++ptr;
 		}
     }
@@ -423,7 +423,6 @@ const QChar* Lexer::readStringLiteral( const QChar* ptr )
 		}
     }
 
-    kdDebug(9007) << "Lexer::readStringLiteral() -- unexpected eof" << endl;
     return ptr;
 }
 
@@ -449,6 +448,9 @@ void Lexer::addSkipWord( const QString& word, SkipType skipType )
 const QChar* Lexer::skip( const QChar* ptr, const QChar& l, const QChar& r )
 {
     int count = 0;
+    while( ptr<m_endPtr && ptr->isSpace() )
+        ++ptr;
+
     while( ptr<m_endPtr ){
         if( *ptr == l )
             ++count;

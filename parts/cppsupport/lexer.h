@@ -40,6 +40,7 @@ enum Type {
 
     Token_K_DCOP,
     Token_k_dcop,
+    Token_k_dcop_signals,
 
     Token_Q_OBJECT,
     Token_signals,

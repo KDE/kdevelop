@@ -14,6 +14,7 @@
 
 #include "ast.h"
 
+#include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 
@@ -25,7 +26,7 @@ class Token;
 class Error;
 class SymbolTable;
 
-class Parser{
+class Parser: public QObject{
 public:
     Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer );
     virtual ~Parser();
@@ -36,7 +37,7 @@ public:
 
     int errors() const;
 
-    virtual void resetErrors(); 
+    virtual void resetErrors();
     virtual bool reportError( const Error& err );
     /*TODO: remove*/ virtual bool reportError( const QString& msg );
     /*TODO: remove*/ virtual void syntaxError();
@@ -47,7 +48,7 @@ public:
 public /*rules*/ :
 
     bool parseTranslationUnit();
-	
+
     bool parseDefinition( SymbolTable* symtab, DeclarationAST*& decl );
     bool parseBlockDeclaration( SymbolTable* symtab, DeclarationAST*& decl );
     bool parseLinkageSpecification( SymbolTable* symtab, DeclarationAST*& decl );
@@ -74,6 +75,7 @@ public /*rules*/ :
     bool parsePtrOperator();
     bool parseTemplateArgument();
     bool parseTypeSpecifier();
+    bool parseTypeSpecifierOrClassSpec( SymbolTable*, DeclarationAST*& decl );
     bool parseDeclarator( QString& name, int& start, int& end );
     bool parseTemplateParameterList();
     bool parseTemplateParameter();
@@ -81,7 +83,7 @@ public /*rules*/ :
     bool parseFunctionSpecifier( QString& name );
     bool parseConstantExpression();
     bool parseInitDeclaratorList( SymbolTable* symtab );
-    bool parseInitDeclarator( SymbolTable* symtab );
+    bool parseInitDeclarator( SymbolTable* symtab, QString&, int&, int& );
     bool parseParameterDeclarationClause();
     bool parseCtorInitializer();
     bool parsePtrToMember();
@@ -128,6 +130,7 @@ public /*rules*/ :
     bool parseSwitchStatement( SymbolTable* symtab );
     bool parseLabeledStatement( SymbolTable* symtab );
     bool parseDeclarationStatement( SymbolTable* symtab );
+    bool parseTryBlockStatement( SymbolTable* symtab );
 
     bool skipUntil( int token );
     bool skipUntilDeclaration();

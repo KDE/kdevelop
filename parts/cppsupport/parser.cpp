@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 // c++ support
 #include "parser.h"
 #include "driver.h"
@@ -26,7 +26,6 @@
 #include <kdebug.h>
 
 using namespace std;
-
 
 #define ADVANCE(tk, descr) \
 { \
@@ -76,7 +75,7 @@ class SymbolTable{
 public:
 	SymbolTable( const QString& name, SymbolTable* parent=0 )
 		: m_name( name ), m_parent( parent )
-	{ 
+	{
 		m_children.setAutoDelete( true );
 		m_symbols.setAutoDelete( true );
 
@@ -87,7 +86,7 @@ public:
 
 	~SymbolTable()
 	{
-		if( m_parent && m_parent->m_children.findRef(this) ){ 
+		if( m_parent && m_parent->m_children.findRef(this) ){
 			m_parent->m_children.take();
 		}
 	}
@@ -109,7 +108,7 @@ public:
 
 	Symbol* bind( const QString& name, int kind ){
 		Symbol* sym = new Symbol( name, kind );
-		m_symbols.insert( name, sym ); 
+		m_symbols.insert( name, sym );
 		return sym;
 	}
 
@@ -122,8 +121,8 @@ public:
 		else
 			return 0;
 	}
-	
-	
+
+
 
 	void addSymbolTable( SymbolTable* s ){
 		m_children.append( s );
@@ -183,7 +182,7 @@ bool Parser::reportError( const Error& err )
         int line=0, col=0;
         const Token& token = lex->lookAhead( 0 );
         lex->getTokenPosition( token, &line, &col );
-		
+
 		QString s = lex->lookAhead( 0 ).toString();
 		s = s.left( 30 ).stripWhiteSpace();
 		if( s.isEmpty() )
@@ -207,7 +206,7 @@ bool Parser::reportError( const QString& msg )
         int line=0, col=0;
         const Token& token = lex->lookAhead( 0 );
         lex->getTokenPosition( token, &line, &col );
-		
+
         m_problemReporter->reportError( msg,
                                         m_fileName,
                                         line,
@@ -245,7 +244,7 @@ bool Parser::skipUntil( int token )
 bool Parser::skipUntilDeclaration()
 {
     //kdDebug(9007) << "Parser::skipUntilDeclaration()" << endl;
-	
+
 	lex->nextToken();
     while( !lex->lookAhead(0).isNull() ){
         switch( lex->lookAhead(0) ){
@@ -294,7 +293,7 @@ bool Parser::skipUntilDeclaration()
 bool Parser::skipUntilStatement()
 {
     //kdDebug(9007) << "Parser::skipUntilStatement() -- token = " << lex->lookAhead(0).toString() << endl;
-	
+
     while( !lex->lookAhead(0).isNull() ){
         switch( lex->lookAhead(0) ){
 		case ';':
@@ -368,11 +367,11 @@ bool Parser::skip( int l, int r )
 bool Parser::parseName()
 {
     //kdDebug(9007) << "Parser::parseName()" << endl;
-	
+
     if( lex->lookAhead(0) == Token_scope ){
         lex->nextToken();
     }
-	
+
     parseNestedNameSpecifier();
     return parseUnqualiedName();
 }
@@ -381,18 +380,18 @@ bool Parser::parseTranslationUnit()
 {
     //kdDebug(9007) << "Parser::parseTranslationUnit()" << endl;
 
-	if( m_globalSymbolTable )
-		delete( m_globalSymbolTable );
+    if( m_globalSymbolTable )
+        delete( m_globalSymbolTable );
 
-	m_globalSymbolTable = new SymbolTable( "" );
+    m_globalSymbolTable = new SymbolTable( "" );
 
-	TranslationUnitAST translationUnit;
+    TranslationUnitAST translationUnit;
     while( !lex->lookAhead(0).isNull() ){
-		DeclarationAST* decl = 0;
+        DeclarationAST* decl = 0;
         if( parseDefinition(m_globalSymbolTable, decl) ){
-			if( decl )
-				translationUnit.addDeclaration( decl );
-		} else {
+            if( decl )
+                translationUnit.addDeclaration( decl );
+        } else {
             // error recovery
             skipUntilDeclaration();
         }
@@ -412,7 +411,7 @@ bool Parser::parseDefinition( SymbolTable* symtab, DeclarationAST*& decl )
         return true;
 
     case Token_extern: /*ok*/
-        return parseLinkageSpecification( symtab, decl ); 
+        return parseLinkageSpecification( symtab, decl );
 
     case Token_namespace: /*ok*/
         return parseNamespace( symtab, decl );
@@ -459,22 +458,22 @@ bool Parser::parseLinkageSpecification( SymbolTable* symtab, DeclarationAST*& de
 	}
 
     if( lex->lookAhead(0) == '{' ){
-		BlockLinkageSpecificationAST* spec = new BlockLinkageSpecificationAST();		
+		BlockLinkageSpecificationAST* spec = new BlockLinkageSpecificationAST();
 		LinkageBodyAST* linkageBody = 0;
-		
+
 		parseLinkageBody( symtab, linkageBody );
-		
+
 		spec->setType( type );
 		spec->setLinkageBody( linkageBody );
 		decl = spec;
-		
+
     } else {
 		SimpleLinkageSpecificationAST* spec = new SimpleLinkageSpecificationAST();
 		DeclarationAST* def = 0;
         if( !parseDefinition(symtab, def) ){
             reportError( i18n("Declaration syntax error") );
         }
-		
+
 		spec->setType( type );
 		spec->setDeclaration( def );
 		decl = spec;
@@ -490,7 +489,7 @@ bool Parser::parseLinkageBody( SymbolTable* symtab, LinkageBodyAST*& decl )
         return false;
     }
     lex->nextToken();
-	
+
 	decl = new LinkageBodyAST();
 
     while( !lex->lookAhead(0).isNull() ){
@@ -499,7 +498,7 @@ bool Parser::parseLinkageBody( SymbolTable* symtab, LinkageBodyAST*& decl )
         if( tk == '}' )
             break;
 
-		DeclarationAST* def = 0;			
+		DeclarationAST* def = 0;
         if( parseDefinition(symtab, def) ){
 			if( def )
 				decl->addDeclaration( def );
@@ -513,7 +512,7 @@ bool Parser::parseLinkageBody( SymbolTable* symtab, LinkageBodyAST*& decl )
 		reportError( i18n("} expected") );
 	} else
 		lex->nextToken();
-	
+
     return true;
 }
 
@@ -534,7 +533,7 @@ bool Parser::parseNamespace( SymbolTable* symtab, DeclarationAST*& decl )
 
 	if( namespaceName.isEmpty() )
 		namespaceName = "$anon$";
-    
+
 	if ( lex->lookAhead(0) == '=' ) {
         // namespace alias
         lex->nextToken();
@@ -542,9 +541,9 @@ bool Parser::parseNamespace( SymbolTable* symtab, DeclarationAST*& decl )
 		int startName = lex->index();
         if( parseName() ){
 			QString namespaceAlias = toString( startName, lex->index() );
-			
+
 			ADVANCE( ';', ";" );
-			
+
 			NamespaceAliasDefinitionAST* ast = new NamespaceAliasDefinitionAST();
 			ast->setName( namespaceName );
 			ast->setAlias( namespaceAlias );
@@ -589,11 +588,11 @@ bool Parser::parseUsing( SymbolTable* symtab, DeclarationAST*& decl )
 	int startName = lex->index();
     if( !parseName() )
         return false;
-		
+
 	int endName = lex->index();
 
     ADVANCE( ';', ";" )
-	
+
 	UsingDeclarationAST* ast = new UsingDeclarationAST();
 	ast->setName( toString(startName, endName) );
 	decl = ast;
@@ -618,7 +617,7 @@ bool Parser::parseUsingDirective( SymbolTable* /*symtab*/, DeclarationAST*& decl
 	int endName = lex->index();
 
     ADVANCE( ';', ";" );
-	
+
 	UsingDirectiveAST* ast = new UsingDirectiveAST();
 	ast->setName( toString(startName, endName) );
 	decl = ast;
@@ -678,7 +677,7 @@ bool Parser::parseTemplateArgumentList()
     return true;
 }
 
-bool Parser::parseTypedef( SymbolTable* /*symtab*/, DeclarationAST*& decl )
+bool Parser::parseTypedef( SymbolTable* symtab, DeclarationAST*& decl )
 {
     //kdDebug(9007) << "Parser::parseTypedef()" << endl;
 
@@ -688,8 +687,9 @@ bool Parser::parseTypedef( SymbolTable* /*symtab*/, DeclarationAST*& decl )
     lex->nextToken();
 
     //kdDebug(9007) << "token = " << lex->lookAhead(0).toString() << endl;
-    if( !parseTypeSpecifier() ){
+    if( !parseTypeSpecifierOrClassSpec(symtab, decl) ){
         reportError( i18n("Need a type specifier to declare") );
+        return false;
     }
 
     //kdDebug(9007) << "token = " << lex->lookAhead(0).toString() << endl;
@@ -697,10 +697,11 @@ bool Parser::parseTypedef( SymbolTable* /*symtab*/, DeclarationAST*& decl )
 	int nameStart, nameEnd;
     if( !parseDeclarator(name, nameStart, nameEnd) ){
         reportError( i18n("Need an identifier to declare") );
+        return false;
     }
 
 	ADVANCE( ';', ";" );
-	
+
 	TypedefDeclarationAST* ast = new TypedefDeclarationAST();
 	ast->setName( toString(nameStart, nameEnd) );
 	decl = ast;
@@ -742,12 +743,14 @@ bool Parser::parseTemplateDeclaration( SymbolTable* symtab, DeclarationAST*& dec
     }
 
     ADVANCE( Token_template, "template" );
-	
+
 	int parametersStart = lex->index();
-	ADVANCE( '<', "<" );        
-	parseTemplateParameterList();
-	
-	ADVANCE( '>', ">" );
+        if( lex->lookAhead(0) == '<' ){
+            lex->nextToken();
+            parseTemplateParameterList();
+
+            ADVANCE( '>', ">" );
+        }
 	int parametersEnd = lex->index();
 
 	DeclarationAST* def = 0;
@@ -759,7 +762,7 @@ bool Parser::parseTemplateDeclaration( SymbolTable* symtab, DeclarationAST*& dec
 	ast->setParameters( toString(parametersEnd, parametersStart, " ") );
 	ast->setDeclaration( def );
 	decl = ast;
-	
+
     return true;
 }
 
@@ -1021,7 +1024,7 @@ bool Parser::parseEnumSpecifier( SymbolTable* /*symtab*/, DeclarationAST*& decl 
 	EnumDeclarationAST* ast = new EnumDeclarationAST();
 	ast->setName( name );
 	decl = ast;
-	
+
     parseEnumeratorList();
 
 	if( lex->lookAhead(0) != '}' )
@@ -1214,7 +1217,7 @@ bool Parser::parseAbstractDeclarator()
             return false;
 
         }
-		
+
         if( lex->lookAhead(0) != ')'){
             return false;
         }
@@ -1282,14 +1285,16 @@ bool Parser::parseInitDeclaratorList( SymbolTable* symtab )
 {
     //kdDebug(9007) << "Parser::parseInitDeclaratorList()" << endl;
 
-    if( !parseInitDeclarator(symtab) ){
+    QString name;
+    int nameStart, nameEnd;
+    if( !parseInitDeclarator(symtab, name, nameStart, nameEnd) ){
         return false;
     }
 
     while( lex->lookAhead(0) == ',' ){
         lex->nextToken();
 
-        if( !parseInitDeclarator(symtab) ){
+        if( !parseInitDeclarator(symtab, name, nameStart, nameEnd) ){
             parseError();
             break;
         }
@@ -1386,7 +1391,7 @@ bool Parser::parseClassSpecifier( SymbolTable* symtab, DeclarationAST*& decl )
 	QString s;
 	while( parseStorageClassSpecifier(s) )
 		;
-		
+
 
     int kind = lex->lookAhead( 0 );
     if( kind == Token_class || kind == Token_struct || kind == Token_union ){
@@ -1398,10 +1403,14 @@ bool Parser::parseClassSpecifier( SymbolTable* symtab, DeclarationAST*& decl )
 	int nameStart = lex->index();
 	parseUnqualiedName();
 	int nameEnd = lex->index();
-	
+
 	QString name = toString( nameStart, nameEnd );
 
-    parseBaseClause();
+        if( lex->lookAhead(0) == ':' ){
+            if( !parseBaseClause() ){
+                skipUntil( '{' );
+            }
+        }
 
     if( lex->lookAhead(0) != '{' ){
         lex->setIndex( index );
@@ -1409,13 +1418,13 @@ bool Parser::parseClassSpecifier( SymbolTable* symtab, DeclarationAST*& decl )
     }
 
     ADVANCE( '{', '{' );
-	
+
 	ClassDeclarationAST* klass = new ClassDeclarationAST();
 	decl = klass;
 	klass->setName( name );
 
 	SymbolTable* my = new SymbolTable( name, symtab );
-    
+
     while( !lex->lookAhead(0).isNull() ){
         if( lex->lookAhead(0) == '}' )
             break;
@@ -1461,7 +1470,7 @@ bool Parser::parseMemberSpecification( SymbolTable* symtab, DeclarationAST*& dec
     } else if( lex->lookAhead(0) == Token_Q_OBJECT || lex->lookAhead(0) == Token_K_DCOP ){
         lex->nextToken();
         return true;
-    } else if( lex->lookAhead(0) == Token_signals || lex->lookAhead(0) == Token_k_dcop ){
+    } else if( lex->lookAhead(0) == Token_signals || lex->lookAhead(0) == Token_k_dcop || lex->lookAhead(0) == Token_k_dcop_signals ){
         lex->nextToken();
 		ADVANCE( ':', ":" );
         return true;
@@ -1543,7 +1552,7 @@ bool Parser::parseExceptionSpecification()
     lex->nextToken();
 
 
-    ADVANCE( '(', "(" );	
+    ADVANCE( '(', "(" );
     parseTypeIdList();
 	ADVANCE( ')', ")" );
 
@@ -1582,7 +1591,7 @@ bool Parser::parseEnumerator()
     if( lex->lookAhead(0) == '=' ){
         lex->nextToken();
 
-        if( !parseConstantExpression() ){
+        if( !parseExpression() ){
             reportError( i18n("Constant expression expected") );
         }
     }
@@ -1590,12 +1599,11 @@ bool Parser::parseEnumerator()
     return true;
 }
 
-bool Parser::parseInitDeclarator( SymbolTable* symtab )
+bool Parser::parseInitDeclarator( SymbolTable* symtab,
+                                  QString& name, int& nameStart, int& nameEnd )
 {
     //kdDebug(9007) << "Parser::parseInitDeclarator()" << endl;
 
-	QString name;
-	int nameStart, nameEnd;
     if( !parseDeclarator(name, nameStart, nameEnd) ){
         return false;
     }
@@ -1651,7 +1659,6 @@ bool Parser::parseBaseClause()
         return false;
     }
     lex->nextToken();
-
 
     if( !parseBaseSpecifierList() ){
         reportError( i18n("expected base specifier list") );
@@ -1747,10 +1754,9 @@ bool Parser::parseBaseSpecifierList()
     while( lex->lookAhead(0) == ',' ){
         lex->nextToken();
 
-        if( parseBaseSpecifier() ){
-        } else {
+        if( !parseBaseSpecifier() ){
             reportError( i18n("Base class specifier expected") );
-            break;
+            return false;
         }
     }
 
@@ -1969,18 +1975,18 @@ bool Parser::parseExpression()
 
     while( !lex->lookAhead(0).isNull() ){
         int tk = lex->lookAhead( 0 );
-		
+
 		switch( tk ){
 		case '(':
             skip( '(', ')' );
             lex->nextToken();
 			break;
-			
+
         case '[':
             skip( '[', ']' );
             lex->nextToken();
 			break;
-		
+
 		case ';':
 		case ',':
 		case ']':
@@ -1998,7 +2004,7 @@ bool Parser::parseExpression()
 		case Token_return:
 		case Token_goto:
 			return true;
-			
+
 		default:
             lex->nextToken();
     	}
@@ -2012,9 +2018,9 @@ bool Parser::parseExpressionStatement( SymbolTable* /*symtab*/ )
 {
     //kdDebug(9007) << "Parser::parseExpressionStatement()" << endl;
     parseCommaExpression();
-	
+
     ADVANCE( ';', ";" );
-    
+
     return true;
 }
 
@@ -2037,6 +2043,9 @@ bool Parser::parseStatement( SymbolTable* symtab ) // thanks to fiore@8080.it ;-
 
     case Token_switch:
         return parseSwitchStatement( symtab );
+
+    case Token_try:
+        return parseTryBlockStatement( symtab );
 
     case Token_case:
     case Token_default:
@@ -2179,18 +2188,18 @@ bool Parser::parseCompoundStatement( SymbolTable* symtab )
     }
     lex->nextToken();
 
-	SymbolTable* my = new SymbolTable( "$anon$", symtab );
-    
-	while( !lex->lookAhead(0).isNull() ){
+    SymbolTable* my = new SymbolTable( "$anon$", symtab );
+
+    while( !lex->lookAhead(0).isNull() ){
         if( lex->lookAhead(0) == '}' )
             break;
 
         if( !parseStatement(my) ){
-			skipUntilStatement();
-		} 
+            skipUntilStatement();
+        }
     }
 
-	ADVANCE( '}', "}" );
+    ADVANCE( '}', "}" );
     return true;
 }
 
@@ -2209,7 +2218,7 @@ bool Parser::parseIfStatement( SymbolTable* symtab )
 		return false;
     }
     ADVANCE( ')', ")" );
-    
+
 	if( !parseStatement(my) ){
         reportError( i18n("statement expected") );
 		return false;
@@ -2286,6 +2295,10 @@ bool Parser::parseBlockDeclaration( SymbolTable* symtab, DeclarationAST*& decl )
 
     int index = lex->index();
 
+    QString spec;
+    while( parseFunctionSpecifier(spec) )
+        ;
+
     QStringList cv;
     parseCvQualify( cv );
 
@@ -2308,22 +2321,22 @@ bool Parser::parseNamespaceAliasDefinition( SymbolTable* /*symtab*/, Declaration
 	QString name = lex->lookAhead( 0 ).toString();
     ADVANCE( Token_identifier,  "identifier" );
     ADVANCE( '=', "=" );
-	
+
 	int aliasStart = lex->index();
     if( !parseName() ){
 		reportError( i18n("Namespace name expected") );
 	}
 	int aliasEnd = lex->index();
-	
+
 	ADVANCE( ';', ";" );
-	
+
  	NamespaceAliasDefinitionAST* ast = new NamespaceAliasDefinitionAST();
 	ast->setName( name );
 	ast->setAlias( toString(aliasStart, aliasEnd) );
 	decl = ast;
-	
+
 	return true;
-	
+
 }
 
 bool Parser::parseDeclarationStatement( SymbolTable* symtab )
@@ -2347,16 +2360,16 @@ bool Parser::parseDeclarationStatement( SymbolTable* symtab )
 
 bool Parser::parseDeclaration( SymbolTable* symtab, DeclarationAST*& decl )
 {
-	decl = 0;
+    decl = 0;
 #warning "TODO: Parser::parseDeclaration() -- fill abstract syntax tree"
-	QStringList functionSpec;
-	QString s;
-	while( parseFunctionSpecifier(s) )
-		functionSpec << s;
-		
-	QStringList storageSpec;
-	while(  parseStorageClassSpecifier(s) )
-		storageSpec << s;
+    QStringList functionSpec;
+    QString s;
+    while( parseFunctionSpecifier(s) )
+        functionSpec << s;
+
+    QStringList storageSpec;
+    while(  parseStorageClassSpecifier(s) )
+        storageSpec << s;
 
     int index = lex->index();
 
@@ -2366,19 +2379,19 @@ bool Parser::parseDeclaration( SymbolTable* symtab, DeclarationAST*& decl )
         lex->setIndex( index );
 
         parseNestedNameSpecifier();
-		QString nestedName = toString( index, lex->index() );
+        QString nestedName = toString( index, lex->index() );
 
-		QString name;
-		int nameStart, nameEnd;
-        if( parseDeclarator(name, nameStart, nameEnd) ){
+        QString name;
+        int nameStart, nameEnd;
+        if( parseInitDeclarator(symtab, name, nameStart, nameEnd) ){
             switch( lex->lookAhead(0) ){
             case ';':
-				if( !nestedName ){
-                	lex->nextToken();
-                	return true;
-				}
-				syntaxError();
-				return false;
+                if( !nestedName ){
+                    lex->nextToken();
+                    return true;
+                }
+                syntaxError();
+                return false;
             case ':':
                 if( parseCtorInitializer() && parseFunctionBody(symtab) )
                     return true;
@@ -2424,8 +2437,8 @@ bool Parser::parseDeclaration( SymbolTable* symtab, DeclarationAST*& decl )
         if( parseNestedNameSpecifier() ) {
             // maybe a method declaration/definition
 
-			QString name;
-			int nameStart, nameEnd;
+            QString name;
+            int nameStart, nameEnd;
             if ( !parseDeclarator(name, nameStart, nameEnd) ) {
                 syntaxError();
                 return false;
@@ -2471,7 +2484,7 @@ bool Parser::parseFunctionBody( SymbolTable* symtab )
     while( !lex->lookAhead(0).isNull() ){
         if( lex->lookAhead(0) == '}' )
             break;
-			
+
 		if( !parseStatement(my) ){
 			skipUntilStatement();
 		}
@@ -2491,4 +2504,52 @@ QString Parser::toString( int start, int end, const QString& sep )
 	}
 
 	return l.join( sep ).stripWhiteSpace();
+}
+
+bool Parser::parseTypeSpecifierOrClassSpec( SymbolTable* symtab, DeclarationAST*& decl )
+{
+    decl = 0;
+    if( parseClassSpecifier(symtab, decl) )
+        return true;
+    else if( parseEnumSpecifier(symtab, decl) )
+        return true;
+    else if( parseTypeSpecifier() )
+        return true;
+    else
+        return false;
+}
+
+bool Parser::parseTryBlockStatement( SymbolTable* symtab )
+{
+    //kdDebug(9007) << "Parser::parseTryBlockStatement()" << endl;
+
+    if( lex->lookAhead(0) != Token_try )
+        return false;
+    lex->nextToken();
+
+    if( !parseCompoundStatement(symtab) ){
+        syntaxError();
+        return false;
+    }
+
+    if( lex->lookAhead(0) != Token_catch ){
+        reportError( i18n("catch expected") );
+        return false;
+    }
+
+    while( lex->lookAhead(0) == Token_catch ){
+        lex->nextToken();
+        ADVANCE( '(', "(" );
+        if( !parseCondition(symtab) ){
+            reportError( i18n("condition expected") );
+            return false;
+        }
+        ADVANCE( ')', ")" );
+        if( !parseCompoundStatement(symtab) ){
+            syntaxError();
+            return false;
+        }
+    }
+
+    return true;
 }
