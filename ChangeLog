@@ -1,3 +1,6 @@
+2002-03-21  Robertp Raggi  <raggi@cli.di.unipi.it>
+    * added code completion/expand word
+	
 2002-03-21  Roland Krause  <rokrau@yahoo.com>
     * merged changes from KDE_2_2_BRANCH into KDEVELOP_2_BRANCH
        fixed all compile problems but some runtime problems (crashes) seem to remain 

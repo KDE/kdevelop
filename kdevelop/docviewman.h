@@ -37,11 +37,12 @@ class KHTMLView;
 class CDocBrowser;
 class CKDevAccel;
 class CClassStore;
+class KDevCodeCompletion;
 
 //=============================================================================
 // class DocViewMan
 //-----------------------------------------------------------------------------
-/** 
+/**
   MDI manager for document classes of KDevelop (Kate::Documents, CDocBrowser)
   and view classes of KDevelop (CEditWidget, KHTMLView).
 */
@@ -80,10 +81,10 @@ public:
   //void doOptionsEditorColors();
   /** */
   //void doOptionsSyntaxHighlightingDefaults();
-  /** */  
+  /** */
   //void doOptionsSyntaxHighlighting();
 
-  /** */  
+  /** */
   void doTakeOverOfEditorOptions(Kate::View* pView = 0L);
 
   /** Get the modified files and ask if they should be saved */
@@ -204,7 +205,7 @@ public:
   /** Get the currently focused CEditWidget view
       (Note: not the covering MDI widgets but the embedded view) */
   Kate::View* currentEditView() { return m_pCurEditView; };
-  /** Get the currently focused KHTMLView view 
+  /** Get the currently focused KHTMLView view
       (Note: not the covering MDI widgets but the embedded view) */
   KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
 
@@ -357,6 +358,7 @@ private:
 
 
   KParts::Factory*          m_pKateFactory;
+  KDevCodeCompletion*       m_pCodeCompletion;
 };
 
 #endif //DOCVIEWMAN_H

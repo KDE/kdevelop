@@ -50,6 +50,7 @@
 #include "./ctags/ctagsdialog_impl.h"
 #include "./classparser/ClassStore.h"
 #include "ckdevaccel.h"
+#include "kdevcodecompletion.h"
 
 //==============================================================================
 // class implementation
@@ -88,17 +89,19 @@ DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
     ::exit(0);
   }
 
-//  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), 
+//  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)),
 //      m_pParent, SLOT(slotViewSelected(QWidget*)) );
 //  connect( this, SIGNAL(sig_newStatus(const QString&)),
 //      m_pParent, SLOT(slotStatusMsg(const QString&)) );
-    
-  connect( this, SIGNAL(sig_viewActivated(QWidget*)), 
+
+  connect( this, SIGNAL(sig_viewActivated(QWidget*)),
            m_pParent, SLOT(slotViewSelected(QWidget*)) );
   connect( this, SIGNAL(sig_newStatus(const QString&)),
            m_pParent, SLOT(slotStatusMsg(const QString&)) );
   connect( m_pParent, SIGNAL(lastChildViewClosed()),
            this, SLOT(slotResetMainFrmCaption()) );
+
+  m_pCodeCompletion = new KDevCodeCompletion( this );
 }
 
 //------------------------------------------------------------------------------
@@ -464,7 +467,7 @@ Kate::Document* DocViewMan::createKWriteDoc(const QString& strFileName)
 //  if(file_info.exists()) {
 //      pDoc->setLastFileModifDate(file_info.lastModified());
 //  }
-    
+
   // Add the new doc to the list
   m_documentList.append(pDoc);
 
@@ -1459,7 +1462,7 @@ void DocViewMan::reloadModifiedFiles()
     Kate::Document* pDoc = dynamic_cast<Kate::Document*> (itDoc.current());
     if (pDoc) {
       QFileInfo file_info(pDoc->docName());
-        
+
       // Reload only changed files
 //    if(pDoc->getLastFileModifDate() != file_info.lastModified()) {
       // hack, we need a way to check whether the document was modified outside
@@ -2276,22 +2279,14 @@ void DocViewMan::activateView10()
 
 void DocViewMan::slotEditExpandText()
 {
-    kdDebug() << "DocViewMan::slotEditExpandText()" << endl;
-    kdDebug() << "not yet implemented, ask the Kate guys how to do this" << endl;
-// gotta ask JoWenn how to do this with his interface
-// rokrau 03/21/02
-//    if (currentEditView())
-//        currentEditView()->expandText();
+    if (currentEditView())
+        m_pCodeCompletion->expandText();
 }
 
 void DocViewMan::slotEditCompleteText()
 {
-    kdDebug() << "DocViewMan::slotEditCompleteText()" << endl;
-    kdDebug() << "not yet implemented, ask the Kate guys how to do this" << endl;
-// gotta ask JoWenn how to do this with his interface
-// rokrau 03/21/02
-//    if (currentEditView())
-//        currentEditView()->completeText();
+    if (currentEditView())
+        m_pCodeCompletion->completeText();
 }
 
 void DocViewMan::setStore( CClassStore* pStore )

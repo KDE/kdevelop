@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cppcodecompletion.h  -  description
+                          kdevcodecompletion.h  -  description
                              -------------------
     begin                : Sat Jul 21 2001
     copyright            : (C) 2001 by Victor R<F6>der, 2002 by Roberto Raggi
@@ -14,73 +14,45 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
-#ifndef __CPPCODECOMPLETION_H
-#define __CPPCODECOMPLETION_H
+#ifndef kdevcodecompletion_h
+#define kdevcodecompletion_h
 
 #include <qobject.h>
-#include <qvaluelist.h>
-#include <qstringlist.h>
-#include <qvbox.h>
-#include <qlistbox.h>
-#include "simpleparser.h"
+#include <ktexteditor/codecompletioninterface.h>
 
-//class CEditWidget;
-namespace Kate {
-class Document;
-class View;
+namespace Kate{
+    class Document;
+    class View;
 }
-class KDevArgHint;
+
+class DocViewMan;
 class CClassStore;
 class CKDevelop;
 class CParsedClass;
 class CParsedContainer;
 class CParsedMethod;
 class CParsedAttribute;
+class SimpleContext;
 
-class CompletionEntry {
-public:
-    QString type;
-    QString text;
-    QString prefix;
-    QString postfix;
-    QString comment;
-
-    bool operator==( const CompletionEntry &c ) const {
-        return ( c.type == type &&
-                 c.text == text &&
-                 c.postfix == postfix &&
-                 c.prefix == prefix &&
-                 c.comment == comment);
-    }
-};
-
-
-class CppCodeCompletion : public QObject{
+class KDevCodeCompletion: public QObject{
     Q_OBJECT
 public:
+    KDevCodeCompletion( DocViewMan* =0, const char* =0 );
+    virtual ~KDevCodeCompletion();
 
-    CppCodeCompletion( Kate::View *edit, CClassStore*, CKDevelop* );
-
-    virtual void showArgHint ( QStringList functionList, const QString& strWrapping, const QString& strDelimiter );
-    virtual void showCompletionBox(QValueList<CompletionEntry> complList,int offset=0);
-    bool eventFilter( QObject *o, QEvent *e );
-
-    // QT 2.x wrapper methods
-    //    please check if KDevelop will be compiled only for KDE 3
-    bool checkEnd(const QString &str, const QString &suffix);
-    void popFrontStringList(QStringList &slist);
-
-public slots:
+    void expandText();
     void completeText();
 
-signals:
-    void completionAborted();
-    void completionDone();
-    void argHintHided();
+public:
+    static QValueList<KTextEditor::CompletionEntry> getAllWords( const QString&, const QString& );
+    static QValueList<KTextEditor::CompletionEntry> unique( const QValueList<KTextEditor::CompletionEntry>& );
+    static QString remove( QString text, const QChar& l, const QChar& r );
+    static QString remove_keywords( QString text );
+    static QString remove_comment( QString text );
+    static QString purify( const QString& decl );
 
 protected:
-    QString getMethodBody( int iLine, int iCol, QString* classname );
+    QString getMethodBody( Kate::Document* doc, int iLine, int iCol, QString* classname );
     QStringList getMethodListForClass( QString strClass, QString strMethod );
     void getParentMethodListForClass( CParsedClass* pClass, QString strMethod, QStringList& methodList );
     QStringList getFunctionList( QString strMethod );
@@ -88,9 +60,9 @@ protected:
                                 SimpleContext* ctx,
                                 CClassStore* sigma );
     int expressionAt( const QString& text, int index );
-    QValueList<CompletionEntry> getEntryListForExpr( const QString& expr,
+    QValueList<KTextEditor::CompletionEntry> getEntryListForExpr( const QString& expr,
                                                      SimpleContext* ctx );
-    QValueList<CompletionEntry> getEntryListForClass ( QString strClass );
+    QValueList<KTextEditor::CompletionEntry> getEntryListForClass ( QString strClass );
     QStringList splitExpression( const QString& text );
 
     /* methods which are called recursively by getEntryListForClass(...) */
@@ -99,26 +71,11 @@ protected:
 
     QString getTypeOfMethod( CParsedContainer*, const QString& );
     QString getTypeOfAttribute( CParsedContainer*, const QString& );
+    bool checkEnd(const QString &str, const QString &suffix);
+    void popFrontStringList(QStringList &slist);
 
-
-private:
-    void updateBox( bool newCoordinate=false );
-    KDevArgHint* m_pArgHint;
-    Kate::View *m_edit;
-    QVBox *m_completionPopup;
-    QListBox *m_completionListBox;
-    CClassStore* m_pStore;
-    CKDevelop* m_pDevelop;
-    QValueList<CompletionEntry> m_complList;
-    int m_lineCursor;
-    int m_colCursor;
-    int m_offset;
-
-public slots:
-    void slotCursorPosChanged();
+protected:
+    DocViewMan* m_pDockViewMan;
 };
-
-
-
 
 #endif
