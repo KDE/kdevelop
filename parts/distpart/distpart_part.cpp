@@ -41,8 +41,8 @@ void distpartPart::show()
 {
   m_widget = new distpartWidget(this);
 
-  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
-
-  core()->embedWidget(m_widget, KDevCore::OutputView, i18n("distpart"));
+//  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
+  m_widget->show();
+//  core()->embedWidget(m_widget, KDevCore::DocumentView, i18n("distpart"));
 }
 #include "distpart_part.moc"
