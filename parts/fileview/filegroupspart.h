@@ -34,6 +34,7 @@ private slots:
 
 private:
     QGuardedPtr<FileGroupsWidget> m_filegroups;
+    bool deleteRequested;
 };
 
 #endif

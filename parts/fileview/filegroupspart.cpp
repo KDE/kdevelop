@@ -34,6 +34,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( "kdevfilegroup
 FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("FileGroups", "filegroups", parent, name ? name : "FileGroupsPart")
 {
+    deleteRequested = false;
     setInstance(FileGroupsFactory::instance());
 
     m_filegroups = new FileGroupsWidget(this);
@@ -43,7 +44,7 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
                                        "The file group viewer shows all files of the project, "
                                        "in groups which can be configured by you."));
     mainWindow()->embedSelectView(m_filegroups, i18n("File Groups"), i18n("all files of the project"));
-  
+
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
@@ -61,6 +62,7 @@ FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringL
 
 FileGroupsPart::~FileGroupsPart()
 {
+    deleteRequested = true;
     if (m_filegroups)
         mainWindow()->removeView(m_filegroups);
     delete m_filegroups;
@@ -68,6 +70,8 @@ FileGroupsPart::~FileGroupsPart()
 
 void FileGroupsPart::refresh()
 {
+    if (deleteRequested)
+        return;
     // This method may be called from m_filetree's slot,
     // so we make sure not to modify the list view during
     // the execution of the slot
