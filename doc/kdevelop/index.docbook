@@ -41,7 +41,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-01-20</date>
+  <date>2004-02-09</date>
   <releaseinfo>3.0.0</releaseinfo>
 
   <authorgroup>
@@ -1127,7 +1127,7 @@ The <command>cvs-clean</command> command will <emphasis>remove every file</empha
 <formalpara id="compile-and-install-make-cvs-up">
 <title>After a CVS Update</title>
 <para>
-The next step depends on the output of the &CVS; update sequence. If you got something like (note the U marker to the left):
+The next step depends on the output of the &CVS; update sequence. If you got something like (there may be a U or a P marker in the leftmost column, both denoting the file has been changed):
 </para>
 </formalpara>
 <screen>
@@ -1712,7 +1712,7 @@ Globally, a project will rely on some form of project management system.  &kdeve
 </para>
 
 <sect2 id="automake-project">
-<title>Automake Project</title>
+<title>Automake Projects</title>
 
 <indexterm zone="automake-project">
   <primary>projects</primary>
@@ -1735,7 +1735,7 @@ Projects created with &kdevelop;'s &automanag; make it very easy for developers 
 </sect2> <!-- automake-project -->
 
 <sect2 id="qmake-project">
-<title>QMake Project</title>
+<title>QMake Projects</title>
 
 <indexterm zone="qmake-project">
   <primary>projects</primary>
@@ -1753,7 +1753,7 @@ For more information on the QMake project manager see the <quote>qmake User Guid
 </sect2> <!-- qmake-project -->
 
 <sect2 id="ant-project">
-<title>ANT Project</title>
+<title>ANT Projects (Java Projects)</title>
 
 <indexterm zone="ant-project">
   <primary>projects</primary>
@@ -1784,7 +1784,7 @@ For more information see <ulink url="http://ant.apache.org/">The Apache Ant Proj
 </sect2> <!-- ant-project -->
 
 <sect2 id="custom-project">
-<title>Custom Project</title>
+<title>Custom Projects</title>
 
 <indexterm zone="custom-project">
   <primary>projects</primary>
@@ -1978,8 +1978,9 @@ As you see, this dialog is divided into an upper and a lower part. In the upper 
   <secondary>type</secondary></indexterm>
 
 <para>
-The left hand side of the upper part in this dialog is where you do the selection work. When it shows up, you'll find there a list of folders each labeled with a programming language, as for instance:
+The left hand side of the upper part in this dialog is where you do the selection work. When it shows up, you'll find there a list of folders each labeled with a programming language, as there are:
 </para>
+
 <itemizedlist>
   <listitem><para>
     Ada
@@ -2000,9 +2001,24 @@ The left hand side of the upper part in this dialog is where you do the selectio
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
+    Database (SQL Projects)
+    <indexterm>
+      <primary>SQL</primary>
+      <secondary>new project</secondary></indexterm>
+    <indexterm>
+      <primary>Database</primary>
+      <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
     Fortran
     <indexterm>
       <primary>Fortran</primary>
+      <secondary>new project</secondary></indexterm>
+  </para></listitem>
+  <listitem><para>
+    Haskell
+    <indexterm>
+      <primary>Haskell</primary>
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
@@ -2042,7 +2058,10 @@ The left hand side of the upper part in this dialog is where you do the selectio
       <secondary>new project</secondary></indexterm>
   </para></listitem>
   <listitem><para>
-    Shell
+    Shell (Scripts for the Bash Shell)
+    <indexterm>
+      <primary>Bash</primary>
+      <secondary>new project</secondary></indexterm>
     <indexterm>
       <primary>shell</primary>
       <secondary>new project</secondary></indexterm>
@@ -2058,6 +2077,14 @@ We cannot go into detail here on which tasks each template provides, but it's ea
 <para>
 Select the template which best fits your application's goals as a starting point. Then enter the general properties information in the lower field as shown in the next chapter.
 </para>
+
+<formalpara>
+<title>Selecting a Project Management System</title>
+<para>
+Each template is bound to a specific <link linkend="makesystems">Project Management System</link>. Currently there is no direct means to freely select such a Project Management System. You have to find a template which suits your needs or alter your project accordingly after creation.
+</para>
+</formalpara>
+
 </sect3> <!-- new-projects-start-type -->
 
 <sect3 id="new-projects-start-general">
