@@ -107,8 +107,6 @@ private slots:
     void setupCatalog();
 
     void slotNewClass();
-    void slotSwitchHeader();
-    void slotGotoIncludeFile();
     void slotCompleteText();
 
     // code completion related slots - called from config-widget

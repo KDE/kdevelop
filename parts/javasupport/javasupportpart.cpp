@@ -148,20 +148,7 @@ JavaSupportPart::JavaSupportPart(QObject *parent, const char *name, const QStrin
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              this, SLOT(configWidget(KDialogBase*)) );
 
-    KAction *action;
-
-    action = new KAction(i18n("Switch Header/Implementation"), SHIFT+Key_F12,
-                         this, SLOT(slotSwitchHeader()),
-                         actionCollection(), "edit_switchheader");
-    action->setStatusText( i18n("Switch between header and implementation files") );
-    action->setWhatsThis( i18n("Switch between header and implementation files\n\n"
-                               "If you are currently looking at a header file, this "
-                               "brings you to the corresponding implementation file. "
-                               "If you are looking at an implementation file (.java etc.), "
-                               "this brings you to the corresponding header file.") );
-    action->setEnabled(false);
-
-    action = new KAction(i18n("Complete Text"), CTRL+Key_Space,
+            KAction* action = new KAction(i18n("Complete Text"), CTRL+Key_Space,
                          this, SLOT(slotCompleteText()),
                          actionCollection(), "edit_complete_text");
     action->setStatusText( i18n("Complete current expression") );
@@ -318,7 +305,6 @@ void JavaSupportPart::activePartChanged(KParts::Part *part)
             enabled = true;
     }
 
-    actionCollection()->action("edit_switchheader")->setEnabled(enabled);
     actionCollection()->action("edit_complete_text")->setEnabled(enabled);
     actionCollection()->action("edit_make_member")->setEnabled(enabled);
 
@@ -403,50 +389,7 @@ void JavaSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (!context->hasType("editor"))
         return;
-
-    popup->insertSeparator();
-    popup->insertItem( i18n( "Switch Header/Implementation"),
-        this, SLOT( slotSwitchHeader() ) );
-
-    const EditorContext *econtext = static_cast<const EditorContext*>(context);
-    QString str = econtext->currentLine();
-    if (str.isEmpty())
-        return;
-
-    QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
-    if (!re.exactMatch(str))
-        return;
-
-    QString popupstr = re.cap(1);
-    QStringList projectFileList = project()->allFiles();
-    m_contextFileName = findHeader(projectFileList, popupstr);
-    if (m_contextFileName.isEmpty())
-        return;
-
-    popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
-                       this, SLOT(slotGotoIncludeFile()) );
 }
-
-
-// Makes sure that header files come first
-static QStringList reorder(const QStringList &list)
-{
-    QStringList headers, others;
-
-    QStringList headerExtensions = QStringList::split(",", "h,H,hh,hxx,hpp,tlh");
-
-    QStringList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it)
-        if (headerExtensions.contains(QFileInfo(*it).extension()))
-            headers << (*it);
-        else
-            others << (*it);
-
-    return headers + others;
-}
-
-
-
 
 void JavaSupportPart::addedFilesToProject(const QStringList &fileList)
 {
@@ -545,65 +488,9 @@ QString JavaSupportPart::findSourceFile()
     return m_activeFileName;
 }
 
-
-void JavaSupportPart::slotSwitchHeader()
-{
-    KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(partController()->activePart());
-    if (!doc)
-      return;
-
-    QFileInfo fi(doc->url().path());
-    QString path = fi.filePath();
-    QString ext = fi.extension();
-    QString base = path.left(path.length()-ext.length());
-    kdDebug(9007) << "base: " << base << ", ext: " << ext << endl;
-    QStringList candidates;
-    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh") {
-        candidates << (base + "c");
-        candidates << (base + "cc");
-        candidates << (base + "java");
-        candidates << (base + "Java");
-        candidates << (base + "cxx");
-        candidates << (base + "C");
-        candidates << (base + "m");
-        candidates << (base + "mm");
-        candidates << (base + "M");
-	candidates << (base + "inl");
-    } else if (QStringList::split(',', "c,cc,java,Java,cxx,C,m,mm,M,inl").contains(ext)) {
-        candidates << (base + "h");
-        candidates << (base + "H");
-        candidates << (base + "hh");
-        candidates << (base + "hxx");
-        candidates << (base + "hpp");
-        candidates << (base + "tlh");
-    }
-
-    QStringList::ConstIterator it;
-    for (it = candidates.begin(); it != candidates.end(); ++it) {
-        kdDebug(9007) << "Trying " << (*it) << endl;
-        if (QFileInfo(*it).exists()) {
-            partController()->editDocument(*it);
-            return;
-        }
-    }
-}
-
-
-void JavaSupportPart::slotGotoIncludeFile()
-{
-    if (!m_contextFileName.isEmpty())
-        partController()->editDocument(m_contextFileName, 0);
-
-}
-
-
 KDevLanguageSupport::Features JavaSupportPart::features()
 {
-    if (withjava)
-        return Features(Classes | Structs | Functions | Variables | Namespaces | Declarations
-                        | Signals | Slots | AddMethod | AddAttribute);
-    else
-        return Features (Structs | Functions | Variables | Declarations);
+    return Features(Classes | Namespaces | AddMethod | AddAttribute);
 }
 
 QString JavaSupportPart::formatClassName(const QString &name)
@@ -624,10 +511,7 @@ QString JavaSupportPart::unformatClassName(const QString &name)
 
 QStringList JavaSupportPart::fileExtensions() const
 {
-    if (withjava)
-        return QStringList::split(",", "c,C,cc,java,Java,cxx,m,mm,M,h,H,hh,hxx,hpp,inl,tlh,diff,ui.h");
-    else
-        return QStringList::split(",", "c,h");
+    return QStringList::split(",", "java");
 }
 
 
@@ -703,7 +587,7 @@ JavaSupportPart::parseProject( )
     kapp->processEvents( );
     kapp->setOverrideCursor( waitCursor );
 
-    QStringList files = reorder( modifiedFileList() );
+    QStringList files = modifiedFileList();
 
     QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
@@ -941,19 +825,7 @@ KMimeType::List JavaSupportPart::mimeTypes( )
     KMimeType::List list;
     KMimeType::Ptr mime;
 
-    mime = KMimeType::mimeType( "text/x-csrc" );
-    if( mime )
-	list << mime;
-
-    mime = KMimeType::mimeType( "text/x-chdr" );
-    if( mime )
-	list << mime;
-
-    mime = KMimeType::mimeType( "text/x-Javasrc" );
-    if( mime )
-	list << mime;
-
-    mime = KMimeType::mimeType( "text/x-Javahdr" );
+    mime = KMimeType::mimeType( "text/x-java" );
     if( mime )
 	list << mime;
 
