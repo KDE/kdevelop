@@ -373,7 +373,7 @@ class KGuiCmdPopup : public QPopupMenu {
 
 class KGuiCmdApp : public KApplication {
   public:
-    KGuiCmdApp(int &argc, char *argv[]) : KApplication(argc, argv, "kwrite") {}
+    KGuiCmdApp(int &argc, char *argv[]) : KApplication(argc, argv, "kdevelop") {}
     KGuiCmdApp(int &argc, char *argv[], const QCString &rAppname) 
       : KApplication(argc, argv, rAppname) {}
     virtual bool x11EventFilter(XEvent *e);
@@ -386,7 +386,7 @@ class KGuiCmdApp : public KApplication {
 class KGuiCmdKWMModuleApp : public KWMModuleApplication {
   public:
     KGuiCmdKWMModuleApp(int &argc, char *argv[])
-      : KWMModuleApplication(argc, argv, "kwrite" ) {}
+      : KWMModuleApplication(argc, argv, "kdevelop" ) {}
     KGuiCmdKWMModuleApp(int &argc, char *argv[], const QCString &rAppname)
       : KWMModuleApplication(argc, argv, rAppname) {}
     virtual bool x11EventFilter(XEvent *e);
