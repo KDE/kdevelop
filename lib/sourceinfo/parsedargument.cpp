@@ -173,11 +173,11 @@ QString ParsedArgument::toString()
  *-----------------------------------------------------------------*/
 void ParsedArgument::out()
 {
-    cout << toString();
+    cout << toString().latin1();
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedArgument &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedArgument &arg)
 {
     s << arg.type() << arg.name() << arg.namePos();
     return s;

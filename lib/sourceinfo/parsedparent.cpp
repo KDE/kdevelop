@@ -124,7 +124,7 @@ void ParsedParent::out()
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedParent &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedParent &arg)
 {
     return s << arg.name() << (int)arg.access();
 }

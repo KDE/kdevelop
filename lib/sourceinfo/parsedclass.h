@@ -164,7 +164,7 @@ public:
     /** Outputs the class as text on stdout. */
     void out();
 
-    friend QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
+    friend QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 
 private:
     /** List with names of friend classes(if any). */
@@ -174,7 +174,7 @@ private:
 };
 
 
-QDataStream &operator<<(QDataStream &s, ParsedClass &arg);
+QDataStream &operator<<(QDataStream &s, const ParsedClass &arg);
 QDataStream &operator>>(QDataStream &s, ParsedClass &arg);
 
 #endif

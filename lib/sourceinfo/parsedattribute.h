@@ -90,7 +90,7 @@ private:
 };
 
 
-QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg);
+QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg);
 QDataStream &operator>>(QDataStream &s, ParsedAttribute &arg);
 
 #endif

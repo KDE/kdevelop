@@ -48,7 +48,7 @@ public:
      */
     void setIsVirtual(bool aState=true)
         { _isVirtual = aState; }
-    bool isVirtual()
+    bool isVirtual() const
         { return _isVirtual; }
 
     /**
@@ -57,7 +57,7 @@ public:
      */
     void setIsPure(bool aState=true)
         { _isPure = aState; }
-    bool isPure()
+    bool isPure() const
         { return _isPure; }
     
     /**
@@ -66,7 +66,7 @@ public:
      */
     void setIsSlot(bool aState=true)
         { _isSlot = aState; }
-    bool isSlot()
+    bool isSlot() const
         { return _isSlot; }
     
     /**
@@ -75,7 +75,7 @@ public:
      */
     void setIsSignal(bool aState=true)
         { _isSignal = aState; }
-    bool isSignal()
+    bool isSignal() const
         { return _isSignal; }
     
     /**
@@ -84,7 +84,7 @@ public:
      */
     void setIsConstructor(bool aState=true)
         { _isConstructor = aState; }
-    bool isConstructor()
+    bool isConstructor() const
         { return _isConstructor; }
 
     /**
@@ -93,7 +93,7 @@ public:
      */
     void setIsDestructor(bool aState=true)
         { _isDestructor = aState; }
-    bool isDestructor()
+    bool isDestructor() const
         { return _isDestructor; }
 
     /**
@@ -101,7 +101,7 @@ public:
      */
     void setIsObjectiveC(bool is=true)
         { _isObjectiveC = is; }
-    bool isObjectiveC()
+    bool isObjectiveC() const
         { return _isObjectiveC; }
 
     /**
@@ -145,7 +145,7 @@ private:
 };
 
 
-QDataStream &operator<<(QDataStream &s, ParsedMethod &arg);
+QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg);
 QDataStream &operator>>(QDataStream &s, ParsedMethod &arg);
 
 #endif

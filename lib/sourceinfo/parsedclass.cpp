@@ -532,7 +532,7 @@ void ParsedClass::out()
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedClass &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedClass &arg)
 {
     s << arg.name() << arg.definedOnLine();
 
@@ -544,7 +544,7 @@ QDataStream &operator<<(QDataStream &s, ParsedClass &arg)
     
     // Add friends.
     s << arg.friends().count();
-    QStringList::Iterator friendsIt;
+    QStringList::ConstIterator friendsIt;
     for (friendsIt = arg._friends.begin(); friendsIt != arg._friends.end(); ++friendsIt)
         s << (*friendsIt);
     

@@ -270,7 +270,7 @@ bool ParsedAttribute::isEqual( ParsedAttribute *attr )
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedAttribute &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedAttribute &arg)
 {
     s << arg.name() << arg.declaredInScope() << (int)arg.access()
       << arg.definedInFile() << arg.definedOnLine() << arg.comment()

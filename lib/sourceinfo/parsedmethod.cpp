@@ -269,7 +269,7 @@ bool ParsedMethod::isEqual( ParsedMethod *method )
 }
 
 
-QDataStream &operator<<(QDataStream &s, ParsedMethod &arg)
+QDataStream &operator<<(QDataStream &s, const ParsedMethod &arg)
 {
     operator<<(s, (ParsedAttribute&)arg);
 
