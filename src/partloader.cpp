@@ -42,6 +42,12 @@ static KLibFactory *factoryForService(KService *service)
     
     // Currently some factories are directly linked and hard-coded
     // for efficiency reasons
+    // ### FIXME: when these hardcoded entries are removed, then install those
+    // parts into kde_moduledir (using kde_module_LTLIBRARIES) ! That's where 
+    // they belong, but we can't put them there currently, as gideon links 
+    // against them right now and we'll get unresolved symbols on startup as the
+    // dynamic linker does not look in $kde_moduledir (for a good reason :)
+    // (Simon)
     
     if (service->name() == "KDevDocTreeView") {
         if (!doctreeviewFactory)
