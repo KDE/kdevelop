@@ -6,6 +6,6 @@ INCLUDES = -I$(top_srcdir)/lib/util $(all_includes)
 
 noinst_LTLIBRARIES = libkdevproject.la
 
-libkdevproject_la_SOURCES = runoptionswidget.cpp runoptionswidgetbase.ui makeoptionswidget.cpp makeoptionswidgetbase.ui addenvvardlg.cpp subclassesdlgbase.ui subclassesdlg.cpp subclassesdlg.h environmentvariableswidgetbase.ui environmentvariableswidget.h environmentvariableswidget.cpp
+libkdevproject_la_SOURCES = runoptionswidget.cpp runoptionswidgetbase.ui makeoptionswidget.cpp makeoptionswidgetbase.ui addenvvardlg.cpp subclassesdlgbase.ui subclassesdlg.cpp subclassesdlg.h environmentvariableswidgetbase.ui environmentvariableswidget.h environmentvariableswidget.cpp addfilesdialog.h addfilesdialog.cpp
 
 METASOURCES = AUTO
