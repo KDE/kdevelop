@@ -17,6 +17,7 @@
 
 #include "cclasstreehandler.h"
 #include <assert.h>
+#include <iostream.h>
 
 
 /*********************************************************************
@@ -636,7 +637,32 @@ void CClassTreeHandler::addGlobalFunctions( QList<CParsedMethod> *list,
   for( aMeth = list->first();
        aMeth != NULL;
        aMeth = list->next() )
+  {
     addGlobalFunc( aMeth, parent );
+  }
+}
+
+/*-------------------------------- CClassTreeHandler::addGlobalFunc()
+ * addGlobalFunc()
+ *   Add a global function to the view.
+ *
+ * Parameters:
+ *   aMethod         Method to add
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
+                                       QListViewItem *parent )
+{
+  assert( aMethod != NULL );
+  assert( parent != NULL );
+
+  QString str;
+
+  aMethod->asString( str );
+  addItem( str, THGLOBAL_FUNCTION, parent );
 }
 
 /*--------------------------- CClassTreeHandler::addGlobalVariables()
@@ -661,30 +687,6 @@ void CClassTreeHandler::addGlobalVariables( QList<CParsedAttribute> *list, QList
        aAttr != NULL;
        aAttr = list->next() )
     addGlobalVar( aAttr, parent );
-}
-
-/*-------------------------------- CClassTreeHandler::addGlobalFunc()
- * addGlobalFunc()
- *   Add a global function to the view.
- *
- * Parameters:
- *   aMethod         Method to add
- *   parent          The parent item.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
-                                       QListViewItem *parent )
-{
-  assert( aMethod != NULL );
-  assert( parent != NULL );
-
-
-  QString str;
-
-  aMethod->asString( str );
-  addItem( str, THGLOBAL_FUNCTION, parent );
 }
 
 /*------------------------------------ CClassTreeHandler::addGlobalVar()
@@ -755,6 +757,8 @@ void CClassTreeHandler::getCurrentNames( QString &parentPath,
 
   item = tree->currentItem();
   parent = item->parent();
+
+  aItemType = itemType();
 
   // Set the container flag
   isContainer  = ( aItemType ==THCLASS || 
