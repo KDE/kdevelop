@@ -58,8 +58,8 @@ class kjsSupportPart : public KDevLanguageSupport
 		void slotActivePartChanged(KParts::Part *part);
 	private:
 		void parse(const QString &fileName);
-		void addAttribute(const QString &name, ClassDom file, uint lineNo);
-		void addMethod(const QString &name, ClassDom file, uint lineNo);
+		void addAttribute(const QString &name, ClassDom clazz, uint lineNo);
+		void addMethod(const QString &name, ClassDom clazz, uint lineNo);
 		void addAttribute(const QString &name, FileDom file, uint lineNo);
 		void addMethod(const QString &name, FileDom file, uint lineNo);
 		ClassDom addClass(const QString &name, FileDom file, uint lineNo);

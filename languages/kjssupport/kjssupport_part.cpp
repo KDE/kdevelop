@@ -102,7 +102,11 @@ KMimeType::List kjsSupportPart::mimeTypes()
 void kjsSupportPart::slotRun()
 {
 	// Execute the application here.
+
+	kdDebug() << "app " << project()->mainProgram(true ) << endl;
+	m_js->runFile( project()->mainProgram(true ));
 }
+
 void kjsSupportPart::projectConfigWidget(KDialogBase *dlg)
 {
 	Q_UNUSED( dlg );
@@ -199,7 +203,6 @@ void kjsSupportPart::slotActivePartChanged(KParts::Part *part)
  */
 void kjsSupportPart::parse(const QString &fileName)
 {
-	/// @todo implement me
 	QFileInfo fi(fileName);
 	if (fi.extension() == "js")
 	{
@@ -211,6 +214,7 @@ void kjsSupportPart::parse(const QString &fileName)
 	
 		FileDom m_file = codeModel()->create<FileModel>();
 		m_file->setName( fileName );
+		m_file->setFileName( fileName );
 		
                 QFile f(QFile::encodeName(fileName));
                 if (!f.open(IO_ReadOnly))
@@ -289,7 +293,7 @@ ClassDom kjsSupportPart::addClass(const QString &name, FileDom file, uint lineNo
 {
  	ClassDom clazz = codeModel()->create<ClassModel>();
 	clazz->setName(name);
-	clazz->setFileName(file->name());
+	clazz->setFileName(file->fileName());
 	clazz->setStartPosition(lineNo, 0);
 
 	if( !file->hasClass(clazz->name()) ){
@@ -299,30 +303,30 @@ ClassDom kjsSupportPart::addClass(const QString &name, FileDom file, uint lineNo
 	return clazz;
 }
 
-void kjsSupportPart::addMethod(const QString &name, ClassDom file, uint lineNo)
+void kjsSupportPart::addMethod(const QString &name, ClassDom clazz, uint lineNo)
 {
  	FunctionDom method = codeModel()->create<FunctionModel>();
 	method->setName(name);
-	method->setFileName(file->name());
+	method->setFileName(clazz->fileName());
 	method->setStartPosition(lineNo, 0);
 
-	if( !file->hasFunction(method->name()) ){
+	if( !clazz->hasFunction(method->name()) ){
 		kdDebug() << "Add class method " << method->name() << endl;
-		file->addFunction( method );
+		clazz->addFunction( method );
 	}
 }
 
-void kjsSupportPart::addAttribute(const QString &name, ClassDom file, uint lineNo)
+void kjsSupportPart::addAttribute(const QString &name, ClassDom clazz, uint lineNo)
 {
 	VariableDom var = codeModel()->create<VariableModel>();
 	var->setName(name);
-	var->setFileName(file->name());
+	var->setFileName(clazz->fileName());
 	var->setStartPosition( lineNo, 0 );
 	var->setType(i18n("Variable"));
 
-	if( !file->hasVariable(var->name()) ){
+	if( !clazz->hasVariable(var->name()) ){
 		kdDebug() << "Add class attribute " << var->name() << endl;
-		file->addVariable(var);
+		clazz->addVariable(var);
 	}
 }
 
@@ -330,7 +334,7 @@ void kjsSupportPart::addMethod(const QString &name, FileDom file, uint lineNo)
 {
  	FunctionDom method = codeModel()->create<FunctionModel>();
 	method->setName(name);
-	method->setFileName(file->name());
+	method->setFileName(file->fileName());
 	method->setStartPosition(lineNo, 0);
 
 	if( !file->hasFunction(method->name()) ){
@@ -343,7 +347,7 @@ void kjsSupportPart::addAttribute(const QString &name, FileDom file, uint lineNo
 {
 	VariableDom var = codeModel()->create<VariableModel>();
 	var->setName(name);
-	var->setFileName(file->name());
+	var->setFileName(file->fileName());
 	var->setStartPosition( lineNo, 0 );
 	var->setType(i18n("Variable"));
 
