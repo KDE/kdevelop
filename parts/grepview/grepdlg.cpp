@@ -23,6 +23,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <qlabel.h>
 
 #include "grepdlg.h"
 
