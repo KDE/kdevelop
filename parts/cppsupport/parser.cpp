@@ -3227,12 +3227,16 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePrimarExpression()" << endl;
-
-    AST::Node lit;
-    if( parseStringLiteral(lit) )
-        return true;
+    
 
     switch( lex->lookAhead(0) ){
+        case Token_string_literal:
+	{
+	    AST::Node lit;
+  	    parseStringLiteral( lit );
+	}
+	return true;
+	
         case Token_number_literal:
         case Token_char_literal:
         case Token_true:
@@ -3244,21 +3248,65 @@ bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
             lex->nextToken();
             return true;
 
-        case '(':
-            lex->nextToken();
-            //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "token = " << lex->lookAhead(0).toString() << endl;
-	    AST::Node expr;
-            if( !parseExpression(expr) ){
-		return false;
-            }
-	    CHECK( ')', ")" );
-            return true;
-    }
-
-    NameAST::Node name;
-    if( parseName(name) ){
-        return true;
-    }
+	case Token_dynamic_cast:
+        case Token_static_cast:
+        case Token_reinterpret_cast:
+        case Token_const_cast:
+	    {
+		lex->nextToken();
+		
+		CHECK( '<', "<" );
+		AST::Node typeId;
+		parseTypeId( typeId );
+		CHECK( '>', ">" );
+		
+		CHECK( '(', "(" );
+		AST::Node expr;
+		parseCommaExpression( expr );
+		CHECK( ')', ")" );
+	    }
+	    return true;
+	    
+	case Token_typeid:
+	    {
+		lex->nextToken();
+		CHECK( '(', "(" );
+		AST::Node expr;
+		parseCommaExpression( expr );
+		CHECK( ')', ")" );
+	    }
+	    return true;
+	    
+	case '(':
+	    {
+		lex->nextToken();
+		//kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "token = " << lex->lookAhead(0).toString() << endl;
+		AST::Node expr;
+		if( !parseExpression(expr) ){
+		    return false;
+		}
+		CHECK( ')', ")" );
+	    }
+	    return true;
+	    
+	default:
+	    {
+		int start = lex->index();
+		TypeSpecifierAST::Node typeSpec;
+		if( parseSimpleTypeSpecifier(typeSpec) && lex->lookAhead(0) == '(' ){
+		    lex->nextToken();
+		    AST::Node expr;
+		    parseCommaExpression( expr );
+		    CHECK( ')', ")" );
+		    return true;
+		}
+		
+		lex->setIndex( start );
+		NameAST::Node name;
+		if( parseName(name) )
+		    return true;
+	    }	    
+	}
     
     return false;
 }
@@ -3266,114 +3314,82 @@ bool Parser::parsePrimaryExpression( AST::Node& /*node*/ )
 bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePostfixExpression()" << endl;
-    switch( lex->lookAhead(0) ){
-        case Token_typename:
-	{
-            lex->nextToken();
-	    
-	    NameAST::Node name;
-            if( !parseName(name) ){
-		return false;
-            }
-	    
-            CHECK( '(', "(" );
-	    AST::Node expr;
-            parseCommaExpression(expr);
-            CHECK( ')', ")" );
-	}
-	return true;
-
-        case Token_dynamic_cast:
-        case Token_static_cast:
-        case Token_reinterpret_cast:
-        case Token_const_cast:
-	{
-            lex->nextToken();
-	    
-            CHECK( '<', "<" );
-	    AST::Node typeId;
-            parseTypeId( typeId );
-            CHECK( '>', ">" );
-
-            CHECK( '(', "(" );
-	    AST::Node expr;
-            parseCommaExpression( expr );
-            CHECK( ')', ")" );
-	}
-        return true;
-
-        case Token_typeid:
-	{
-            lex->nextToken();
-            CHECK( '(', "(" );
-	    AST::Node expr;
-            parseCommaExpression( expr );
-            CHECK( ')', ")" );
-	}
-        return true;
-
-        default:
-	{
-	    AST::Node expr;
-	    TypeSpecifierAST::Node spec;
-            if( parsePrimaryExpression(expr) )
-                return true;
-            else if( parseSimpleTypeSpecifier(spec) ){
-                CHECK( '(', "(" );
-                parseCommaExpression( expr );
-                CHECK( ')', ")" );
-		return true;
-            }
-	}
- 	return false;
-    }
-
+ 
+    int start = lex->index();
     AST::Node expr;
-    while( !lex->lookAhead(0).isNull() ){
-        switch( lex->lookAhead(0) ){
-            case '[':
-                lex->nextToken();
-                parseCommaExpression( expr );
-                CHECK( ']', "]" );
-                break;
-
-            case '(':
-                lex->nextToken();
-                parseCommaExpression( expr );
-                CHECK( ')', ")" );
-                break;
-
-            case '.':
-            case Token_arrow:
+    if( !parsePrimaryExpression(expr) )
+	return true;
+    
+    while( true ){
+	switch(lex->lookAhead(0))
+	{
+	case '[':
+	    {
+		lex->nextToken();
+		AST::Node e;
+		parseCommaExpression( e );
+		CHECK( ']', "]" );
+	    }
+	    break;
+	    
+	case '(':
+	    {
+		lex->nextToken();
+		AST::Node funArgs;
+		parseCommaExpression( funArgs );
+		CHECK( ')', ")" );
+	    }
+	    break;
+	    
+	case Token_incr:
+	case Token_decr:
+	    lex->nextToken();
+	    break;
+	    
+	case '.':
+	case Token_arrow:
 	    {
                 lex->nextToken();
                 if( lex->lookAhead(0) == Token_template )
                     lex->nextToken();
 
-		NameAST::Node name;
+                NameAST::Node name;
                 if( !parseName(name) ){
                     return false;
                 }
+            }
+            break;
+	 
+	case Token_typename:
+	    {
+		lex->nextToken();
+		
+		NameAST::Node name;
+		if( !parseName(name) ){
+		    return false;
+		}
+		
+		CHECK( '(', "(" );
+		AST::Node expr;
+		parseCommaExpression(expr);
+		CHECK( ')', ")" );
 	    }
-	    break;
-
-            case Token_incr:
-            case Token_decr:
-                lex->nextToken();
-                break;
-
-            default:
-                return true;
-        }
-
-    }
-
+	    return true;
+	    	    
+	default:
+	    return true;
+	    
+	} // end switch
+	
+    } // end while
+    
     return true;
 }
 
 bool Parser::parseUnaryExpression( AST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnaryExpression()" << endl;
+        
     int start = lex->index();
     
     switch( lex->lookAhead(0) ){
@@ -3516,13 +3532,13 @@ bool Parser::parseCastExpression( AST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCastExpression()" << endl;
 
-    int index = lex->lookAhead( 0 );
+    int index = lex->index();
 
     if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
 	AST::Node typeId;
         if ( parseTypeId(typeId) ) {
-            if ( lex->lookAhead(0) == '(' ) {
+            if ( lex->lookAhead(0) == ')' ) {
                 lex->nextToken();
 		AST::Node expr;
                 return parseCastExpression( expr );
@@ -3702,6 +3718,7 @@ bool Parser::parseInclusiveOrExpression( AST::Node& /*node*/, bool templArgs )
 bool Parser::parseLogicalAndExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalAndExpression()" << endl;
+    
     AST::Node expr;
     if( !parseInclusiveOrExpression(expr, templArgs) )
         return false;
@@ -3720,6 +3737,7 @@ bool Parser::parseLogicalAndExpression( AST::Node& /*node*/, bool templArgs )
 bool Parser::parseLogicalOrExpression( AST::Node& /*node*/, bool templArgs )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLogicalOrExpression()" << endl;
+    
     AST::Node expr;
     if( !parseLogicalAndExpression(expr, templArgs) )
         return false;
