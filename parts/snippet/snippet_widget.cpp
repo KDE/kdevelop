@@ -595,26 +595,30 @@ QString SnippetWidget::parseText(QString text, QString del)
   QRect rMulti = _SnippetConfig.getMultiRect();
 
   do {
-    iFound = text.find(QRegExp("\\"+del+"[A-Z,a-z,\\s]*\\"+del), iEnd+1);  //find the next variable by this QRegExp
+    iFound = text.find(QRegExp("\\"+del+"[A-Za-z-_0-9\\s]*\\"+del), iEnd+1);  //find the next variable by this QRegExp
     if (iFound >= 0) {
       iEnd = text.find(del, iFound+1)+1;
       strName = text.mid(iFound, iEnd-iFound);
 
-      if ( strName != del+del  &&  mapVar[strName].length() <= 0 ) {  //if not doubel-delimiter and not already in map
-        if (iInMeth == 0) {  //check config, if input-method "single" is selected
-          strMsg=i18n("Please enter the value for <b>%1</b>:").arg(strName);
-          strNew = showSingleVarDialog( strName, &_mapSaved, rSingle );
-	  if (strNew=="")
-	    return ""; //user clicked Cancle
-	}
+      if ( strName != del+del  ) {  //if not doubel-delimiter 
+        if (iInMeth == 0) { //if input-method "single" is selected
+          if ( mapVar[strName].length() <= 0 ) {  // and not already in map
+            strMsg=i18n("Please enter the value for <b>%1</b>:").arg(strName);
+            strNew = showSingleVarDialog( strName, &_mapSaved, rSingle );
+            if (strNew=="")
+              return ""; //user clicked Cancle
+          } else {
+            continue; //we have already handled this variable
+          }
+        } else {
+          strNew = ""; //for inputmode "multi" just reset new valaue
+        }
       } else {
-        strNew = del;
+        strNew = del; //if double-delimiter -> replace by single character
       }
 
-      if (iInMeth == 0  ||  strName == del+del) {  //check config, if input-method "single" is selected
+      if (iInMeth == 0) {  //if input-method "single" is selected
         str.replace(strName, strNew);
-      } else {
-        strNew = strName;
       }
 
       mapVar[strName] = strNew;
@@ -749,7 +753,9 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
     r.setWidth(iWidth);
     dlg.setGeometry(r);
   }
-  if ( dlg.exec() == QDialog::Accepted ) {
+  if ( i > 0 && // only if there are any variables
+    dlg.exec() == QDialog::Accepted ) {
+
     QMap<QString, KTextEdit *>::Iterator it2;
     for ( it2 = mapVar2Te.begin(); it2 != mapVar2Te.end(); ++it2 ) {
       if (it2.key() == _SnippetConfig.getDelimiter() + _SnippetConfig.getDelimiter())
@@ -781,6 +787,9 @@ bool SnippetWidget::showMultiVarDialog(QMap<QString, QString> * map, QMap<QStrin
   delete layoutVar;
   delete layoutBtn;
   delete layout;
+
+  if (i==0) //if nothing happened this means, that there are no variables to translate
+    return true; //.. so just return OK
 
   return bReturn;
 }
