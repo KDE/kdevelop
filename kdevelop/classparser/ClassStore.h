@@ -157,6 +157,15 @@ public: // Public Methods
    */
   void removeWithReferences( const char *aFile );
 
+  /**
+   *  Given a list of files in the project look for any files that
+   *  depends on this
+   *  @param fileList       - The file that may have dependents
+   *  @param dependentList  - A list of files that depends on the given file
+   *  @returns              - The dependent files added in param dependentList
+   */
+  void getDependentFiles( QStrList& fileList, QStrList& dependentList);
+
   /** Remove a class from the store. 
    * @param aName Name of the class to remove
    */
