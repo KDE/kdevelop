@@ -148,6 +148,10 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
 {
   REQUIRE( "Valid struct", aStruct != NULL );
 
+  PIExport oldScope=declaredScope;
+
+  declaredScope=PIE_PUBLIC;
+
   while( lexem != '}' && lexem != 0 )
   {
     if( lexem != '}' )
@@ -186,6 +190,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
         getNextLexem();
     }
   }
+  declaredScope=oldScope;
 }
 
 /*---------------------------------- CClassParser::fillInParsedStruct()
@@ -1471,6 +1476,7 @@ CParsedClass *CClassParser::parseClass()
 {
   CParsedClass *aClass;
   bool exit = false;
+  PIExport oldScope=declaredScope;
 
   aClass = parseClassHeader();
 
@@ -1480,7 +1486,7 @@ CParsedClass *CClassParser::parseClass()
     if( commentInRange( aClass ) )
       aClass->setComment( comment );
 
-    declaredScope = PIE_GLOBAL;
+    declaredScope = PIE_PRIVATE;
 
     // Iterate until we find the end of the class.
     while( !exit )
@@ -1496,6 +1502,7 @@ CParsedClass *CClassParser::parseClass()
     }    
   }
 
+  declaredScope=oldScope;
   return aClass;
 }
 
