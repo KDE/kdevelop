@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/Component
+Name=KDevelop Component
+
+[PropertyDef::X-KDevelop-Args]
+Type=QString
