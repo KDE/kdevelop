@@ -1246,7 +1246,7 @@ install=false
 install_location=
 type=HEADER
 [kdevelop/ctags/Makefile.am]
-files=kdevelop/ctags/cctags.cpp,kdevelop/ctags/cctags.h
+files=kdevelop/ctags/cctags.cpp,kdevelop/ctags/cctags.h,kdevelop/ctags/cctags_interf.h,kdevelop/ctags/cctags_interf.cpp
 sharedlib_LDFLAGS=-version-info 0:0:1
 sharedlib_rootname=ctags
 sub_dirs=
@@ -1257,6 +1257,16 @@ install=false
 install_location=
 type=SOURCE
 [kdevelop/ctags/cctags.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+[kdevelop/ctags/cctags_interf.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+[kdevelop/ctags/cctags_interf.h]
 dist=true
 install=false
 install_location=
