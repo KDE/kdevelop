@@ -62,23 +62,30 @@ public:
   virtual bool closePartForWidget( const QWidget* widget ) = 0;
   virtual bool closePartForURL( const KURL & url ) = 0;
 
+  /**
+   * Use to query the state of a document
+   */
+  virtual DocumentState documentState( KURL const & ) = 0;
+
 signals:
 
   /**
    * Emitted when a document has been saved.
    */
   void savedFile(const QString &fileName);
+  void savedFile( const KURL & );
 
   /**
    * Emitted when a document has been loaded.
    */
   void loadedFile(const QString &fileName);
+  void loadedFile( const KURL & );
 
   /**
    * Emitted when a file has been modified outside of KDevelop
    */
   void fileDirty(const QString &fileName);
-  void fileDirty( const KURL & url );
+  void fileDirty( const KURL & );
   
 
 };

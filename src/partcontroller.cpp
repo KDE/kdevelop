@@ -491,11 +491,14 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
 
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
-  if (ro_part && ro_part->url().isLocalFile()) {
-//    kdDebug(9000) << "KDirWatch: adding " << url.path() << endl;
-    dirWatcher->addFile( url.path() );
-    accessTimeMap[ ro_part ] = dirWatcher->ctime( url.path() );
-    emit loadedFile(ro_part->url().path());
+  if ( !ro_part ) return;
+  
+  emit loadedFile( ro_part->url() );
+  
+  if ( ro_part->url().isLocalFile() ) 
+  {
+	updateTimestamp( ro_part->url() );
+	emit loadedFile(ro_part->url().path());
   }
 
   // let's get notified when a document has been changed
@@ -539,31 +542,32 @@ void PartController::reinstallPopups( ){
 
 void PartController::slotUploadFinished()
 {
-  const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
-
-  if (!ro_part || !ro_part->url().isLocalFile())
-    return;
-
-  QString path = ro_part->url().path();
-  // can't use KDirWatch's ctime here since it might not be updated yet
-  QFileInfo fi( path );
-//      kdDebug(9000) << "*** uploadFinished() " << fi.lastModified().toString( "mm:ss:zzz" ) << endl;
-  accessTimeMap[ ro_part ] = fi.lastModified();
-  emit savedFile( path );
+	const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
+	if ( !ro_part ) return;
+	
+	emit savedFile( ro_part->url() );
+	
+	if ( !ro_part->url().isLocalFile() ) return;
+	
+	updateTimestamp( ro_part->url() );
+	
+	emit savedFile( ro_part->url().path() );
 }
 
 void PartController::slotFileNameChanged()
 {
-  const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
+	kdDebug(9000) << k_funcinfo << endl;
 
-  if ( !ro_part || !ro_part->url().isLocalFile() )
-      return;
+	const KParts::ReadOnlyPart *ro_part = dynamic_cast<const KParts::ReadOnlyPart*>(sender());
+	if ( !ro_part ) return; 
+	
+	emit partURLChanged( const_cast<KParts::ReadOnlyPart*>(ro_part) );
 
-	  emit partURLChanged( const_cast<KParts::ReadOnlyPart*>(ro_part) );
+	if ( !ro_part->url().isLocalFile() ) return;
+	
+	updateTimestamp( ro_part->url() );
 
-  QString path = ro_part->url().path();
-  accessTimeMap[ ro_part ] = dirWatcher->ctime( path );
-  emit fileDirty( ro_part->url() );
+	emit fileDirty( ro_part->url() );
 }
 
 QPopupMenu *PartController::contextPopupMenu()
@@ -612,18 +616,20 @@ void PartController::closeActivePart()
 
 bool PartController::closePart(KParts::Part *part)
 {
-	if ( !part ) return false;
+	if ( !part ) return true;
 
-  if (part->inherits("KParts::ReadOnlyPart"))
-  {
-    KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(part);
-
-    if (!ro_part->closeURL())
-    {
-      return false;
-    }
-  }
-
+	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
+	{
+		KURL url;
+		if ( ! ro_part->closeURL() )
+		{
+			return false;
+		}
+		//@todo - move these?
+		accessTimeMap.remove( url );
+		dirWatcher->removeFile( url.path() );
+	}
+	
   // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed would
   // get called from the destroyed signal of the part being deleted below.
   // The call chain from that looks like this:
@@ -715,7 +721,9 @@ void PartController::revertFile(KParts::Part *part)
   if (part->inherits("KParts::ReadWritePart")) {
       KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(part);
       if ( rw_part->url().isLocalFile() )
-          accessTimeMap[ static_cast<KParts::ReadOnlyPart*>(part) ] = dirWatcher->ctime( rw_part->url().path() );
+      {
+          updateTimestamp( rw_part->url() );
+      }
       rw_part->openURL(rw_part->url());
     }
 }
@@ -1072,16 +1080,31 @@ void PartController::dirty( const QString& fileName )
 
 bool PartController::isDirty( KParts::ReadOnlyPart* part )
 {
-  if ( !part || !part->url().isLocalFile() )
-    return false;
+	if ( !part ) return false;
 
-  kdDebug( 9000 ) << "isDirty?" << accessTimeMap[ part ].toString( "mm:zzz" ) << " : " << dirWatcher->ctime( part->url().path() ).toString( "mm:zzz" ) << endl;
+	return isDirty( part->url() );
+}
 
-  if ( accessTimeMap.contains( part ) )
-    return ( accessTimeMap[ part ] < dirWatcher->ctime( part->url().path() ) );
+bool PartController::isDirty( KURL const & url )
+{
+	if ( !url.isLocalFile() ) return false;
+	
+	if ( accessTimeMap.contains( url ) )
+	{
+		return ( accessTimeMap[ url ] < QFileInfo( url.path() ).lastModified() );
+	}
+	
+	updateTimestamp( url );
+	return false;
+}
 
-  accessTimeMap[ part ] = dirWatcher->ctime( part->url().path() );
-  return false;
+void PartController::updateTimestamp( KURL const & url )
+{
+	if ( !accessTimeMap.contains( url ) )
+	{
+		dirWatcher->addFile( url.path() );
+	}
+	accessTimeMap[ url ] = QFileInfo( url.path() ).lastModified();
 }
 
 void PartController::slotNewStatus( )
@@ -1092,22 +1115,22 @@ void PartController::slotNewStatus( )
     KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( senderobj );
     if ( view )
     {
-		doEmitState( view->document() );
+		doEmitState( view->document()->url() );
    }
 }
 
-void PartController::doEmitState( KParts::ReadWritePart * rw_part )
+DocumentState PartController::documentState( KURL const & url )
 {
-	kdDebug(9000) << k_funcinfo << endl;
+	KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) );
+	if ( !rw_part ) return Clean;
 	
-	if ( !rw_part ) return;
-
 	DocumentState state = Clean;
 	if ( rw_part->isModified() )
 	{
 		state = Modified;
 	}
-	if ( isDirty( rw_part ) )
+
+	if ( isDirty( url ) )
 	{
 		if ( state == Modified )
 		{
@@ -1118,24 +1141,20 @@ void PartController::doEmitState( KParts::ReadWritePart * rw_part )
 			state = Dirty;
 		}
 	}
-	emit documentChangedState( rw_part->url(), state );
+	
+	return state;
+}
+
+void PartController::doEmitState( KURL const & url )
+{
+	emit documentChangedState( url, documentState( url ) );
 }
  
 void PartController::slotFileDirty( const KURL & url )
 {
 	kdDebug(9000) << k_funcinfo << endl;
 
-	doEmitState( dynamic_cast<KParts::ReadWritePart*>( partForURL( url ) ) );
-}
-
-bool PartController::isModified( KParts::Part * part )
-{
-	if ( !part ) return false;
-	
-	KParts::ReadWritePart * rw_part = dynamic_cast<KParts::ReadWritePart*>( part );
-	if ( !rw_part ) return false;
-	
-	return rw_part->isModified();
+	doEmitState( url );
 }
 
 #include "partcontroller.moc"

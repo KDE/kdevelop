@@ -56,8 +56,9 @@ public:
   void saveAllFiles();
   void revertAllFiles();
 
+  DocumentState documentState( KURL const & );
   bool isDirty(KParts::ReadOnlyPart * part);
-  bool isModified( KParts::Part * );
+  bool isDirty( KURL const & );
   
   bool readyToClose();
 
@@ -134,7 +135,7 @@ private:
 
   QPopupMenu *contextPopupMenu();
   
-  void doEmitState( KParts::ReadWritePart * );
+  void doEmitState( KURL const & );
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName = QString::null );
   KTextEditor::Editor * createEditorPart();
@@ -142,8 +143,6 @@ private:
   void integratePart(KParts::Part *part, const KURL &url, bool isTextEditor=false );
 
   void activatePart(KParts::Part *part);
-
-  void editText(const KURL &url, int num);
 
   // returns a list of modified documents
   KURL::List modifiedDocuments();
@@ -153,6 +152,8 @@ private:
   void revertFile(KParts::Part *part);
   void saveFile(KParts::Part *part);
 
+  void updateTimestamp( KURL const & );
+  
   static PartController *s_instance;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
@@ -166,7 +167,7 @@ private:
   KToolBarPopupAction* m_forwardAction;
   QPtrList< HistoryEntry > m_history;
   KDirWatch* dirWatcher;
-  QMap< const KParts::ReadOnlyPart*, QDateTime > accessTimeMap;
+  QMap< KURL, QDateTime > accessTimeMap;
   bool m_restoring;
   QGuardedPtr<KParts::Factory> _editorFactory;
 };
