@@ -2620,6 +2620,8 @@ void TrollProjectWidget::slotBuildFile()
 void TrollProjectWidget::slotExecuteProject()
 {
     QString program = m_part->mainProgram();
+    if (!program.startsWith("/"))
+        program.prepend("./");
 
     if ( program.isEmpty() ) {
         KMessageBox::sorry(this, i18n("Please specify the executable name in the "

@@ -919,7 +919,13 @@ void AutoProjectPart::slotExecute2()
         environstr += " ";
     }
 
-    QString program = environstr + mainProgram(true) + " " + runArguments();
+    QString program = environstr;
+    // Adds the ./ that is necessary to execute the program in bash shells
+    if (!mainProgram(true).startsWith("/"))
+        program += "./";
+    program += mainProgram(true);
+    program += " " + runArguments();
+
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
 
     kdDebug(9020) << "runDirectory: <" << runDirectory() << ">" <<endl;
