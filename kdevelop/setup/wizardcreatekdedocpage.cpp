@@ -65,7 +65,9 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
 //    kde_dir->mkdir(".kde/share/apps/kdevelop",false);
 //    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
 
-    m_pInstallState->kde = docDir;
+    if(!QFile::exists(m_pInstallState->kde + "/kdeui/KDialog.html")) {
+      m_pInstallState->kde = docDir;
+    }
     pDlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, false, "test");
     vl->addWidget(pDlg);
     QObject::connect(pDlg, SIGNAL(newDocIsCreatedNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );

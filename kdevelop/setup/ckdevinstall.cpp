@@ -62,6 +62,8 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
   m_config->setGroup("Doc_Location");
   QString qtDocuPath = m_config->readEntry("doc_qt", QT_DOCDIR);
   QString kdeDocuPath = m_config->readEntry("doc_kde", KDELIBS_DOCDIR);
+  if(!QFile::exists(kdeDocuPath + "/kdeui/KDialog.html"))
+    kdeDocuPath = KDELIBS_DOCDIR;
   m_pInstallState = new CKDevInstallState( qtDocuPath, kdeDocuPath);
 
   setCaption(i18n("KDevelop Setup"));
