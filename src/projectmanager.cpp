@@ -276,8 +276,14 @@ bool ProjectManager::loadProject(const KURL &url)
 
   // shall we try to load a session file from network?? Probably not.
   if (m_info->m_projectURL.isLocalFile()) {
+    const QDict<KDevPlugin>& globalParts = PluginController::getInstance()->globalParts();
+    QDict<KDevPlugin> allParts = m_info->m_localParts;
+    QDictIterator<KDevPlugin> it(globalParts);
+    for (; it.current(); ++it) {
+      allParts.insert(it.currentKey(), it.current());
+    }
     // first restore the project session stored in a .kdevses file
-    if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), m_info->m_localParts)) {
+    if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), allParts)) {
       kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
     }
   }
@@ -300,9 +306,16 @@ bool ProjectManager::closeProject()
   Q_ASSERT( API::getInstance()->project() );
 
   // save the session if it is a local file
-  if (m_info->m_projectURL.isLocalFile())
-    m_pProjectSession->saveToFile(m_info->sessionFile(), m_info->m_localParts);
-
+  if (m_info->m_projectURL.isLocalFile()) {
+    const QDict<KDevPlugin>& globalParts = PluginController::getInstance()->globalParts();
+    QDict<KDevPlugin> allParts = m_info->m_localParts;
+    QDictIterator<KDevPlugin> it(globalParts);
+    for (; it.current(); ++it) {
+      allParts.insert(it.currentKey(), it.current());
+    }
+    m_pProjectSession->saveToFile(m_info->sessionFile(), allParts);
+  }
+  
   if( !closeProjectSources() )
     return false;
 
