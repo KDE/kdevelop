@@ -20,7 +20,7 @@ Si compila su proyecto y obtiene un error, puede pulsar en el mensaje de error p
 ...puede usar atajos de teclado para mostrar y ocultar la vista de salida o de árbol.
 ...puede depurar programas dentro de KDevelop seleccionando "Depurar" en el menú Construir o pulsando en el icono Depurar ? 
 ...puede saltar entre clases seleccionando la lista desplegable en la barra de herramientas ?
-...puede editar ficheros xpm con kiconedit seleccionándolos en el árbol de vista de ficheros ?
+...puede editar ficheros xpm con KIconedit seleccionándolos en el árbol de vista de ficheros ?
 ...puede seleccionar los avisos del compilador en el diálogo de opciones del proyecto ?
 ...puede buscar cualquier texto marcado incluso dentro de la documentación con el menú del botón derecho ?
 ...puede copiar texto desde el navegador de documentación al portapapeles con el menú del botón derecho e insertarlo en sus fuentes ?
