@@ -5,7 +5,7 @@
 #include "toplevel.h"
 #include "core.h"
 
-//#define NEWMAINWINDOW
+#define NEWMAINWINDOW
 
 #ifdef NEWMAINWINDOW
 #include "newmainwindow.h"

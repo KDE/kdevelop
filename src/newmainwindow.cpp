@@ -160,15 +160,23 @@ void NewMainWindow::init() {
 	connect( Core::getInstance(), SIGNAL(coreInitialized()), this, SLOT(slotCoreInitialized()) );
 	
 /////////////////////////////////////////////////////////
-// NEEDS KDELIBS CHANGES
-/*
+// NEEDS KDELIBS HEAD post 2004-03-12
+
 	if ( tabWidget() )
 	{
-		setTabWidgetVisible( KMdi::NeverShowTabs );
-		tabWidget()->setHoverCloseButton( true );
-		tabWidget()->setHoverCloseButtonDelayed( false );
+		KConfig *config = kapp->config();
+		config->setGroup("UI");
+		
+		int tabvisibility = config->readNumEntry( "TabWidgetVisibility", KMdi::AlwaysShowTabs );
+		setTabWidgetVisibility( (KMdi::TabWidgetVisibility)tabvisibility );
+		
+		bool CloseOnHover = config->readBoolEntry( "CloseOnHover", false );
+		tabWidget()->setHoverCloseButton( CloseOnHover );
+		
+		bool CloseOnHoverDelay = config->readBoolEntry( "CloseOnHoverDelay", false );
+		tabWidget()->setHoverCloseButtonDelayed( CloseOnHoverDelay );
 	}
-*/	
+
 /////////////////////////////////////////////////////////
 }
 
