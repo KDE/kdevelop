@@ -19,6 +19,7 @@ libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 				addapplicationdlg.cpp \
 				addapplicationdlgbase.ui \
 				addtargetdlg.cpp \
+				addtargetdlgbase.ui \
 				addfiledlg.cpp \
 				removefiledlg.cpp \
 				addprefixdlg.cpp \
@@ -27,7 +28,7 @@ libkdevautoproject_la_SOURCES = autoprojectfactory.cpp \
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevautoproject.desktop
+service_DATA = kdevautoproject.desktop kdevkdeautoproject.desktop
 
 rcdir = $(kde_datadir)/kdevautoproject
 rc_DATA = kdevautoproject.rc

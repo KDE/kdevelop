@@ -1,3 +1,10 @@
+2001-06-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Rewritten Add target dialog. Supports additional
+	  LDFLAGS now. Will add a context menu item 'Add KDE plugin'
+	  later which will set KDE_PLUGIN stuff as default
+	* Added a special kde mode to autoproject part. 
+
 2001-06-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* New part regexptest for testing regular expressions

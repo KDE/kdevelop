@@ -2,7 +2,7 @@
 
 * Implement adding and removing sub projects.
 
-* Make more friendly dialog for adding targets.
+* Implement Add Plugin
 
 * Distinguish vanilla c++ support from c++ + Qt extensions
   and show signals/slots in the class view only with Qt.

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=Automake project
-Name=KDevAutoProject
+Comment=KDE Automake project
+Name=KDevKDEAutoProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevautoproject
-X-KDevelop-Args=
+X-KDevelop-Args=kde

@@ -117,7 +117,7 @@ class AutoProjectWidget : public QVBox
     Q_OBJECT
     
 public: 
-    AutoProjectWidget(AutoProjectPart *part);
+    AutoProjectWidget(AutoProjectPart *part, bool kde);
     ~AutoProjectWidget();
 
     void openProject(const QString &dirName);
@@ -135,7 +135,6 @@ public:
      * A list of all files that belong to the project
      **/
     QStringList allSourceFiles();
-
     /**
      * The top level directory of the project.
      **/
@@ -144,6 +143,11 @@ public:
      * The directory of the currently active subproject.
      */
     QString subprojectDirectory();
+    /**
+     * Are we in KDE mode?
+     */
+    bool kdeMode() const
+    { return m_kdeMode; }
 
     TargetItem *createTargetItem(const QCString &name,
                                  const QCString &prefix, const QCString &primary);
@@ -166,6 +170,7 @@ private:
     KListView *details;
     SubprojectItem *activeSubproject;
     AutoProjectPart *m_part;
+    bool m_kdeMode;
 };
 
 #endif

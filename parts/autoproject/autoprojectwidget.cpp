@@ -133,7 +133,7 @@ FileItem::FileItem(QListView *lv, const QString &text)
 }
 
 
-AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part)
+AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
     : QVBox(0, "auto project widget")
 {
     QSplitter *splitter = new QSplitter(Vertical, this);
@@ -162,6 +162,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part)
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
     m_part = part;
+    m_kdeMode = kde;
     activeSubproject = 0;
 }
 
@@ -334,7 +335,7 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
         KPopupMenu pop(i18n("Subproject"));
         int idOptions = pop.insertItem(i18n("Options..."));
         int idAddTarget = pop.insertItem(i18n("Add target..."));
-        int idAddService = pop.insertItem(i18n("Add service..."));
+        int idAddService = pop.insertItem(i18n("Add service desktop file..."));
         int idAddApplication = pop.insertItem(i18n("Add application desktop file..."));
         int idBuild = pop.insertItem(i18n("Build"));
         int r = pop.exec(p);

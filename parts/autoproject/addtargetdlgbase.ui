@@ -1,0 +1,350 @@
+<!DOCTYPE UI><UI>
+<class>AddTargetDialogBase</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>Add_Target</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>510</width>
+            <height>327</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Add Target</string>
+    </property>
+    <property stdset="1">
+        <name>sizeGripEnabled</name>
+        <bool>false</bool>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="5"  column="0"  rowspan="1"  colspan="3" >
+            <class>QLayoutWidget</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>0</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property>
+                        <name>name</name>
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>sizeType</name>
+                        <enum>Expanding</enum>
+                    </property>
+                    <property>
+                        <name>sizeHint</name>
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>okbutton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;OK</string>
+                    </property>
+                    <property stdset="1">
+                        <name>autoDefault</name>
+                        <bool>true</bool>
+                    </property>
+                    <property stdset="1">
+                        <name>default</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>cancelbutton</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property stdset="1">
+                        <name>autoDefault</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget row="4"  column="0"  rowspan="1"  colspan="3" >
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>ldflags_group</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>Linker Flags (&amp;LDFLAGS)</string>
+            </property>
+            <vbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget>
+                    <class>QCheckBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>allstatic_box</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Do not link against shared libraries (-all-static)</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QCheckBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>avoidversion_box</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Do not assign version numbers to libraries (-avoid-version)</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QCheckBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>module_box</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Create a library that can be dynamically loaded (-module)</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QCheckBox</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>noundefined_box</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Library does not depend on external symbols (-no-undefined)</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout11_2</cstring>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>ldflagsother_label</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Other:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QLineEdit</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>ldflagsother_edit</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget row="0"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>primary_label</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Primary:</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring>primary_combo</cstring>
+            </property>
+        </widget>
+        <widget row="0"  column="1" >
+            <class>QComboBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>primary_combo</cstring>
+            </property>
+        </widget>
+        <widget row="1"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>prefix_label</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Pre&amp;fix:</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring>prefix_combo</cstring>
+            </property>
+        </widget>
+        <widget row="1"  column="1" >
+            <class>QComboBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>prefix_combo</cstring>
+            </property>
+        </widget>
+        <widget row="2"  column="0" >
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>filename_label</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>File &amp;name:</string>
+            </property>
+            <property>
+                <name>buddy</name>
+                <cstring>filename_edit</cstring>
+            </property>
+        </widget>
+        <widget row="2"  column="1" >
+            <class>QLineEdit</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>filename_edit</cstring>
+            </property>
+        </widget>
+        <spacer row="1"  column="2" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer21</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Horizontal</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Expanding</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="3"  column="1" >
+            <property>
+                <name>name</name>
+                <cstring>Spacer22</cstring>
+            </property>
+            <property stdset="1">
+                <name>orientation</name>
+                <enum>Vertical</enum>
+            </property>
+            <property stdset="1">
+                <name>sizeType</name>
+                <enum>Fixed</enum>
+            </property>
+            <property>
+                <name>sizeHint</name>
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>okbutton</sender>
+        <signal>clicked()</signal>
+        <receiver>Add_Target</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>cancelbutton</sender>
+        <signal>clicked()</signal>
+        <receiver>Add_Target</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>primary_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>Add_Target</receiver>
+        <slot>primaryChanged()</slot>
+    </connection>
+    <slot access="public">primaryChanged()</slot>
+</connections>
+<tabstops>
+    <tabstop>primary_combo</tabstop>
+    <tabstop>prefix_combo</tabstop>
+    <tabstop>filename_edit</tabstop>
+    <tabstop>allstatic_box</tabstop>
+    <tabstop>avoidversion_box</tabstop>
+    <tabstop>module_box</tabstop>
+    <tabstop>noundefined_box</tabstop>
+    <tabstop>ldflagsother_edit</tabstop>
+    <tabstop>okbutton</tabstop>
+    <tabstop>cancelbutton</tabstop>
+</tabstops>
+</UI>

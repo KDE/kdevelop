@@ -12,16 +12,10 @@
 #ifndef _ADDTARGETDLG_H_
 #define _ADDTARGETDLG_H_
 
-#include <qdialog.h>
-#include <qstrlist.h>
-
-class QComboBox;
-class QLineEdit;
-class SubprojectItem;
-class AutoProjectWidget;
+#include "addtargetdlgbase.h"
 
 
-class AddTargetDialog : public QDialog
+class AddTargetDialog : public AddTargetDialogBase
 {
     Q_OBJECT
     
@@ -30,16 +24,11 @@ public:
                      QWidget *parent=0, const char *name=0 );
     ~AddTargetDialog();
 
-protected:
-    virtual void accept();
-
-private slots:
-    void primaryChanged();
 
 private:
-    QComboBox *primary_combo;
-    QComboBox *prefix_combo;
-    QLineEdit *name_edit;
+    virtual void primaryChanged();
+    virtual void accept();
+
     SubprojectItem *subProject;
     AutoProjectWidget *m_widget;
 };

@@ -25,7 +25,7 @@ class AutoProjectPart : public KDevProject
     Q_OBJECT
 
 public:
-    AutoProjectPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    AutoProjectPart( KDevApi *api, bool kde, QObject *parent=0, const char *name=0 );
     ~AutoProjectPart();
 
 protected:

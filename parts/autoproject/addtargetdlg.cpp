@@ -9,14 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <qgroupbox.h>
 #include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qstrlist.h>
-#include <kbuttonbox.h>
-#include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -27,15 +23,11 @@
 
 AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item,
                                  QWidget *parent, const char *name)
-    : QDialog(parent, name, true)
+    : AddTargetDialogBase(parent, name, true)
 {
-    setCaption(i18n("Add target"));
-
     subProject = item;
     m_widget = widget;
 
-    QLabel *primary_label = new QLabel(i18n("Primary:"), this);
-    primary_combo = new QComboBox(this);
     primary_combo->setFocus();
     primary_combo->insertItem(i18n("Program"));
     primary_combo->insertItem(i18n("Library"));
@@ -46,88 +38,15 @@ AddTargetDialog::AddTargetDialog(AutoProjectWidget *widget, SubprojectItem *item
     primary_combo->insertItem(i18n("Java"));
     connect( primary_combo, SIGNAL(activated(int)), this, SLOT(primaryChanged()) );
 
-    QLabel *prefix_label = new QLabel(i18n("Prefix:"), this);
-    prefix_combo = new QComboBox(this);
-    primaryChanged(); // updates the combo
+    primaryChanged(); // updates prefix combo
 
-    QLabel *name_label = new QLabel(i18n("Name:"), this);
-    name_edit = new QLineEdit(this);
-    
-    QVBoxLayout *layout = new QVBoxLayout(this, 2*KDialog::marginHint(), KDialog::spacingHint());
-    
-    QGridLayout *grid = new QGridLayout(3, 2);
-    layout->addLayout(grid);
-    grid->addWidget(primary_label, 0, 0);
-    grid->addWidget(primary_combo, 0, 1);
-    grid->addWidget(prefix_label, 1, 0);
-    grid->addWidget(prefix_combo, 1, 1);
-    grid->addWidget(name_label, 2, 0);
-    grid->addWidget(name_edit, 2, 1);
-
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-    layout->addWidget(frame, 0);
-
-    KButtonBox *buttonbox = new KButtonBox(this);
-    buttonbox->addStretch();
-    QPushButton *ok_button = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel_button = buttonbox->addButton(i18n("Cancel"));
-    ok_button->setDefault(true);
-    connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
-    connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
-    buttonbox->layout();
-    layout->addWidget(buttonbox, 0);
+    if (widget->kdeMode())
+        ldflagsother_edit->setText("$(all_libraries)");
 }
 
 
 AddTargetDialog::~AddTargetDialog()
 {}
-
-
-void AddTargetDialog::accept()
-{
-    QCString name = name_edit->text().stripWhiteSpace().latin1();
-    QCString prefix = prefix_combo->currentText().latin1();
-
-    QCString primary;
-    switch (primary_combo->currentItem()) {
-    case 0: primary = "PROGRAMS";    break;
-    case 1: primary = "LIBRARIES";   break;
-    case 2: primary = "LTLIBRARIES"; break;
-    case 3: primary = "SCRIPTS";     break;
-    case 4: primary = "HEADERS";     break;
-    case 5: primary = "DATA";        break;
-    case 6: primary = "JAVA";        break;
-    default: ;
-    }
-    
-    if (name.isEmpty()) {
-        KMessageBox::sorry(this, i18n("You have to give the target a name"));
-        return;
-    }
-
-    QListIterator<TargetItem> it(subProject->targets);
-    for (; it.current(); ++it)
-        if (name == (*it)->name) {
-            KMessageBox::sorry(this, i18n("A target with this name already exists"));
-            return;
-        }
-
-    TargetItem *titem = m_widget->createTargetItem(name, prefix, primary);
-    subProject->targets.append(titem);
-    
-    QCString canonname = AutoProjectTool::canonicalize(name);
-    QCString varname = prefix + "_" + primary;
-    subProject->variables[varname] += (QCString(" ") + name);
-    
-    QMap<QCString,QCString> replaceMap;
-    replaceMap.insert(varname, subProject->variables[varname]);
-    replaceMap.insert(canonname + "_SOURCES", "");
-
-    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
-    
-    QDialog::accept();
-}
 
 
 void AddTargetDialog::primaryChanged()
@@ -178,6 +97,74 @@ void AddTargetDialog::primaryChanged()
     QMap<QCString,QCString>::ConstIterator it;
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
         prefix_combo->insertItem(QString(it.key()));
+
+    // Only enable ldflags stuff for libtool libraries
+    ldflags_group->setEnabled(primary_combo->currentItem() == 2);
+}
+
+
+void AddTargetDialog::accept()
+{
+    QCString name = filename_edit->text().stripWhiteSpace().latin1();
+    QCString prefix = prefix_combo->currentText().latin1();
+
+    QCString primary;
+    switch (primary_combo->currentItem()) {
+    case 0: primary = "PROGRAMS";    break;
+    case 1: primary = "LIBRARIES";   break;
+    case 2: primary = "LTLIBRARIES"; break;
+    case 3: primary = "SCRIPTS";     break;
+    case 4: primary = "HEADERS";     break;
+    case 5: primary = "DATA";        break;
+    case 6: primary = "JAVA";        break;
+    default: ;
+    }
+    
+    if (name.isEmpty()) {
+        KMessageBox::sorry(this, i18n("You have to give the target a name"));
+        return;
+    }
+
+    if (primary == "LTLIBRARIES" && name.right(3) != ".la") {
+        KMessageBox::sorry(this, i18n("Libtool libraries must have a .la suffix"));
+        return;
+    }
+    
+    QListIterator<TargetItem> it(subProject->targets);
+    for (; it.current(); ++it)
+        if (name == (*it)->name) {
+            KMessageBox::sorry(this, i18n("A target with this name already exists"));
+            return;
+        }
+
+    QStringList flagslist;
+    if (allstatic_box->isChecked())
+        flagslist.append("-all-static");
+    if (avoidversion_box->isChecked())
+        flagslist.append("-avoid-version");
+    if (module_box->isChecked())
+        flagslist.append("-module");
+    if (noundefined_box->isChecked())
+        flagslist.append("-no-undefined");
+    flagslist.append(ldflagsother_edit->text());
+    QCString ldflags = flagslist.join(" ").latin1();
+
+    TargetItem *titem = m_widget->createTargetItem(name, prefix, primary);
+    subProject->targets.append(titem);
+    
+    QCString canonname = AutoProjectTool::canonicalize(name);
+    QCString varname = prefix + "_" + primary;
+    subProject->variables[varname] += (QCString(" ") + name);
+    
+    QMap<QCString,QCString> replaceMap;
+    replaceMap.insert(varname, subProject->variables[varname]);
+    replaceMap.insert(canonname + "_SOURCES", "");
+    if (primary == "LTLIBRARIES")
+        replaceMap.insert(canonname + "_LDFLAGS", ldflags);
+
+    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
+    
+    QDialog::accept();
 }
 
 #include "addtargetdlg.moc"

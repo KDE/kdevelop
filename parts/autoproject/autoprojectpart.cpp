@@ -26,14 +26,14 @@
 #include "autoprojectpart.h"
 
 
-AutoProjectPart::AutoProjectPart(KDevApi *api, QObject *parent, const char *name)
+AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const char *name)
     : KDevProject(api, parent, name)
 {
     setInstance(AutoProjectFactory::instance());
 
     setXMLFile("kdevautoproject.rc");
 
-    m_widget = new AutoProjectWidget(this);
+    m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("Project"));
     QWhatsThis::add(m_widget, i18n("Project Tree\n\n"

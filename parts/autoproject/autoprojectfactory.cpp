@@ -40,10 +40,15 @@ AutoProjectFactory::~AutoProjectFactory()
 
 
 KDevPart *AutoProjectFactory::createPartObject(KDevApi *api, QObject *parent,
-                                               const QStringList &/*args*/)
+                                               const QStringList &args)
 {
-    kdDebug(9020) << "Building AutoProject" << endl;
-    return new AutoProjectPart(api, parent, "auto project part");
+    if (args.count() > 0 && qstrcmp(args[0].latin1(), "kde") == 0) {
+        kdDebug(9020) << "Build KDEAutoProject" << endl;
+        return new AutoProjectPart(api, true, parent, "auto project part");
+    } else {
+        kdDebug(9020) << "Building AutoProject" << endl;
+        return new AutoProjectPart(api, false, parent, "auto project part");
+    }
 }
 
 
