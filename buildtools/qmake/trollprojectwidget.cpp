@@ -842,8 +842,6 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 
     } else
 	m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
-
-    m_part->mainWindow()->lowerView(this);
 }
 
 
@@ -877,8 +875,8 @@ void TrollProjectWidget::slotExecuteTarget()
   if (m_shownSubproject->configuration.m_template!=QTMP_APPLICATION)
     return;
 
-  QString dircmd = "cd "+subprojectDirectory() + "/" + getCurrentDestDir() + " && ";
-  QString program = "./" + getCurrentOutputFilename();
+  QString dircmd = "cd "+KProcess::quote(subprojectDirectory() + "/" + getCurrentDestDir()) + " && ";
+  QString program = KProcess::quote("./" + getCurrentOutputFilename());
 
     // Build environment variables to prepend to the executable path
     QString runEnvVars = QString::null;
@@ -914,11 +912,9 @@ void TrollProjectWidget::slotBuildProject()
   createMakefileIfMissing(dir, m_rootSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+dir + " && " ;
+  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
   QString buildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + buildcmd);
-  m_part->mainWindow()->lowerView(this);
-
 }
 void TrollProjectWidget::slotBuildTarget()
 {
@@ -933,10 +929,9 @@ void TrollProjectWidget::slotBuildTarget()
   createMakefileIfMissing(dir, m_shownSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+dir + " && " ;
+  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
   QString buildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + buildcmd);
-  m_part->mainWindow()->lowerView(this);
 }
 
 void TrollProjectWidget::slotRebuildProject()
@@ -950,11 +945,9 @@ void TrollProjectWidget::slotRebuildProject()
   createMakefileIfMissing(dir, m_rootSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+dir + " && " ;
+  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
   QString rebuildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile) + " clean && " + constructMakeCommandLine(m_rootSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + rebuildcmd);
-  m_part->mainWindow()->lowerView(this);
-
 }
 
 void TrollProjectWidget::slotRebuildTarget()
@@ -971,10 +964,9 @@ void TrollProjectWidget::slotRebuildTarget()
   createMakefileIfMissing(dir, m_shownSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+dir + " && " ;
+  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
   QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean && " + constructMakeCommandLine(m_shownSubproject->configuration.m_makefile);
   m_part->queueCmd(dir,dircmd + rebuildcmd);
-  m_part->mainWindow()->lowerView(this);
 }
 
 void TrollProjectWidget::slotCreateScope(SubqmakeprojectItem *spitem)
@@ -1145,12 +1137,10 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     {
         slotBuildTarget();
 //        m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
-//        m_part->mainWindow()->lowerView(this);
     }
     else if (r == idQmake)
     {
         m_part->startQMakeCommand(projectDirectory() + relpath);
-        m_part->mainWindow()->lowerView(this);
     }
     else if (r == idProjectConfiguration)
     {
@@ -2990,12 +2980,10 @@ void TrollProjectWidget::slotBuildFile()
     for ( spitem = list.first(); spitem; spitem = list.next() )
     {
         QString buildcmd = constructMakeCommandLine(spitem->configuration.m_makefile);
-        QString dircmd = "cd " + spitem->path + " && " ;
+        QString dircmd = "cd " + KProcess::quote(spitem->path) + " && " ;
         kdDebug(9020) << "builddir " << spitem->path << ", cmd " << dircmd + buildcmd + " " + target << endl;
         m_part->queueCmd(spitem->path, dircmd + buildcmd + " " + target);
     }
-
-    m_part->mainWindow()->lowerView(this);
 
 //    startMakeCommand(buildDir, target);
 
@@ -3028,7 +3016,7 @@ void TrollProjectWidget::slotExecuteProject()
     program.prepend(runEnvVars);
     program.append(" " + DomUtil::readEntry( *(m_part->projectDom()), "/kdevtrollproject/run/programargs" ) + " ");
 
-    QString dircmd = "cd "+this->projectDirectory() + " && " ;
+    QString dircmd = "cd "+KProcess::quote(this->projectDirectory()) + " && " ;
 
     bool inTerminal = DomUtil::readBoolEntry(*(m_part->projectDom()), "/kdevtrollproject/run/terminal");
 //    m_part->appFrontend()->startAppCommand(dircmd + program, inTerminal);
@@ -3046,11 +3034,9 @@ void TrollProjectWidget::slotCleanProject()
   createMakefileIfMissing(dir, m_rootSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+dir + " && " ;
+  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
   QString rebuildcmd = constructMakeCommandLine(m_rootSubproject->configuration.m_makefile) + " clean";
   m_part->queueCmd(dir,dircmd + rebuildcmd);
-  m_part->mainWindow()->lowerView(this);
-
 }
 
 void TrollProjectWidget::slotCleanTarget()
@@ -3067,10 +3053,9 @@ void TrollProjectWidget::slotCleanTarget()
   createMakefileIfMissing(dir, m_shownSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
-  QString dircmd = "cd "+dir + " && " ;
+  QString dircmd = "cd "+KProcess::quote(dir) + " && " ;
   QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean";
   m_part->queueCmd(dir,dircmd + rebuildcmd);
-  m_part->mainWindow()->lowerView(this);
 }
 
 QString TrollProjectWidget::constructMakeCommandLine(const QString makeFileName )
@@ -3155,14 +3140,14 @@ void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & 
       if (cmdline.isEmpty())
           cmdline = MAKE_COMMAND;
       cmdline += " clean";
-      QString dircmd = "cd " + dir + " && ";
+      QString dircmd = "cd " + KProcess::quote(dir) + " && ";
       cmdline.prepend(m_part->makeEnvironment());
       m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
     }
 
     QString cmdline = constructMakeCommandLine() + " " + target;
 
-    QString dircmd = "cd " + dir + " && ";
+    QString dircmd = "cd " + KProcess::quote(dir) + " && ";
 
     cmdline.prepend(m_part->makeEnvironment());
     m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);

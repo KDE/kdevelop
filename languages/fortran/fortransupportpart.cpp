@@ -29,6 +29,7 @@
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
 #include <kregexp.h>
 #include <kdevgenericfactory.h>
 #include <kaction.h>
@@ -89,7 +90,7 @@ void FortranSupportPart::slotFtnchek()
     QDomDocument &dom = *projectDom();
 
     QString cmdline = "cd ";
-    cmdline += project()->projectDirectory();
+    cmdline += KProcess::quote(project()->projectDirectory());
     cmdline += "&& ftnchek -nonovice ";
 
     if (DomUtil::readBoolEntry(dom, "/kdevfortransupport/ftnchek/division"))

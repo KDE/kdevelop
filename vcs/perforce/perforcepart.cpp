@@ -138,7 +138,7 @@ void PerforcePart::execCommand( const QString& cmd, const QString& filename )
     QString name = fi.fileName();
 
     QString command("cd ");
-    command += dir;
+    command += KProcess::quote(dir);
     command += " && p4 " + cmd + " ";
     command += name;
 
@@ -204,7 +204,7 @@ void PerforcePart::update( const QString& filename )
     }
 
     QString command("cd ");
-    command += dir;
+    command += KProcess::quote(dir);
     command += " && p4 sync ";
     command += name;
 

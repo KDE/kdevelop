@@ -164,7 +164,8 @@ QString HaskellProjectPart::mainProgram( bool relative ) const
 	   			return( mainProgram );
 	    	}
 	  	}
-	}      
+	}
+	return QString::null;      
 }
 
 QString HaskellProjectPart::runDirectory() const
@@ -286,7 +287,7 @@ QString HaskellProjectPart::createCmdLine( QString srcFile)
   	QString cmdLine = _compilerExec + " " + createPackageString() + " " + srcFile + " "
    									+ _compilerOpts + " -o " + mainProgram();
   	QString dirCmd = "cd ";
-  	dirCmd += buildDirectory();
+  	dirCmd += KProcess::quote(buildDirectory());
   	dirCmd += " && ";
 	return dirCmd + cmdLine;
 }

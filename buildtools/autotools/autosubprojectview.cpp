@@ -26,6 +26,7 @@
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
+#include <kprocess.h>
 #include <ksqueezedtextlabel.h>
 
 /** KDevelop */
@@ -315,8 +316,6 @@ void AutoSubprojectView::slotBuildSubproject()
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, QString::fromLatin1( "" ) );
-
-	m_part->mainWindow() ->lowerView( m_widget );
 }
 
 void AutoSubprojectView::slotRemoveSubproject()
@@ -439,13 +438,13 @@ void AutoSubprojectView::slotRemoveSubproject()
 	kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
 
 	QString cmdline = "cd ";
-	cmdline += m_part->projectDirectory();
+	cmdline += KProcess::quote(m_part->projectDirectory());
 	cmdline += " && automake ";
-	cmdline += relmakefile;
+	cmdline += KProcess::quote(relmakefile);
 	cmdline += " && cd ";
-	cmdline += m_part->buildDirectory();
+	cmdline += KProcess::quote(m_part->buildDirectory());
 	cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
-	cmdline += relmakefile;
+	cmdline += KProcess::quote(relmakefile);
 	cmdline += " ./config.status";
 	m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );
     }
@@ -803,8 +802,6 @@ void AutoSubprojectView::slotForceReeditSubproject( )
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "force-reedit" );
-
-	m_part->mainWindow() ->lowerView( m_widget );
 }
 
 void AutoSubprojectView::slotInstallSubproject( )
@@ -815,8 +812,6 @@ void AutoSubprojectView::slotInstallSubproject( )
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install" );
-
-	m_part->mainWindow() ->lowerView( m_widget );
 }
 
 void AutoSubprojectView::slotInstallSuSubproject( )
@@ -827,8 +822,6 @@ void AutoSubprojectView::slotInstallSuSubproject( )
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "install", true );
-
-	m_part->mainWindow() ->lowerView( m_widget );
 }
 
 TargetItem * AutoSubprojectView::findNoinstHeaders( SubprojectItem *item )
@@ -861,8 +854,6 @@ void AutoSubprojectView::slotCleanSubproject( )
 	QString relpath = spitem->path.mid( m_part->projectDirectory().length() );
 
 	m_part->startMakeCommand( m_part->buildDirectory() + relpath, "clean" );
-
-	m_part->mainWindow() ->lowerView( m_widget );
 }
 
 #include "autosubprojectview.moc"

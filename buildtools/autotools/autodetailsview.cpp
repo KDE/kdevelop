@@ -211,8 +211,6 @@ void AutoDetailsView::slotBuildTarget()
 
 	QString relpath = m_widget->selectedSubproject()->path.mid( m_part->projectDirectory().length() );
 	m_part->buildTarget(relpath, titem);
-
-	m_part->mainWindow()->lowerView( m_widget );
 }
 
 
@@ -466,7 +464,6 @@ void AutoDetailsView::slotDetailsExecuted( QListViewItem *item )
 	FileItem *fitem = static_cast<FileItem*>( item );
 
 	m_part->partController() ->editDocument( KURL( dirName + "/" + fitem->name ) );
-	m_part->mainWindow()->lowerView( m_widget );
 }
 
 void AutoDetailsView::slotSetActiveTarget()

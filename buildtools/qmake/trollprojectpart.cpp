@@ -478,7 +478,7 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
 //    cmdline += QString::fromLatin1( " -o Makefile" );
 
     QString dircmd = "cd ";
-    dircmd += dir;
+    dircmd += KProcess::quote(dir);
     dircmd += " && ";
 
     cmdline.prepend(makeEnvironment());

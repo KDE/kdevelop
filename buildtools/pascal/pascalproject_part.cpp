@@ -357,7 +357,7 @@ void PascalProjectPart::slotBuild()
     cmdline += fi.fileName();
 
     QString dircmd = "cd ";
-    dircmd += buildDirectory();
+    dircmd += KProcess::quote(buildDirectory());
     dircmd += " && ";
 
     makeFrontend()->queueCommand(buildDirectory(), dircmd + cmdline);

@@ -22,6 +22,7 @@
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 #include <klibloader.h>
+#include <kprocess.h>
 #include <kservice.h>
 #include <kconfig.h>
 
@@ -353,7 +354,7 @@ void AdaProjectPart::slotBuild()
     cmdline += fi.fileName();
 
     QString dircmd = "cd ";
-    dircmd += buildDirectory();
+    dircmd += KProcess::quote(buildDirectory());
     dircmd += " && ";
 
     makeFrontend()->queueCommand(buildDirectory(), dircmd + cmdline);

@@ -176,11 +176,11 @@ void AddSubprojectDialog::accept()
     kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
 
     QString cmdline = "cd ";
-    cmdline += m_part->projectDirectory();
+    cmdline += KProcess::quote(m_part->projectDirectory());
     cmdline += " && automake ";
-    cmdline += relmakefile;
+    cmdline += KProcess::quote(relmakefile);
     cmdline += " && CONFIG_HEADERS=config.h CONFIG_FILES=";
-    cmdline += relmakefile;
+    cmdline += KProcess::quote(relmakefile);
     cmdline += " ./config.status";
 
     m_part->makeFrontend()->queueCommand( m_part->projectDirectory(), cmdline );

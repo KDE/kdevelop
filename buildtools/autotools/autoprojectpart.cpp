@@ -683,9 +683,9 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     cmdline += target;
     cmdline.prepend(makeEnvironment());
 
-    QString dircmd = "cd \"";
-    dircmd += dir;
-    dircmd += "\" && ";
+    QString dircmd = "cd ";
+    dircmd += KProcess::quote(dir);
+    dircmd += " && ";
 
     return preCommand + dircmd + cmdline;
 }
@@ -830,9 +830,6 @@ void AutoProjectPart::slotBuildActiveTarget()
 
   // build it
   buildTarget(activeDirectory(), titem);
-
-  // hide the autoproject toolbar (if not sticky)
-  mainWindow()->lowerView( m_widget );
 }
 
 
@@ -906,15 +903,15 @@ QString AutoProjectPart::configureCommand() const
 
     // if the build directory doesn't exist, add it's creation to the configureCommand
     if ( !QFile::exists(builddir)) {
-        dircmd = "mkdir \"";
-        dircmd += builddir;
-        dircmd += "\" && ";
+        dircmd = "mkdir ";
+        dircmd += KProcess::quote(builddir);
+        dircmd += " && ";
     }
 
     // add "cd into the build directory" to the configureCommand
-    dircmd += "cd \"";
-    dircmd += builddir;
-    dircmd += "\" && ";
+    dircmd += "cd ";
+    dircmd += KProcess::quote(builddir);
+    dircmd += " && ";
 
     return dircmd + cmdline;
 }
@@ -948,9 +945,9 @@ QString AutoProjectPart::makefileCvsCommand() const
 
     cmdline.prepend(makeEnvironment());
 
-    QString dircmd = "cd \"";
-    dircmd += topsourceDirectory();
-    dircmd += "\" && ";
+    QString dircmd = "cd ";
+    dircmd += KProcess::quote(topsourceDirectory());
+    dircmd += " && ";
 
     return dircmd + cmdline;
 }

@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kprocess.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qerrormessage.h>
@@ -92,9 +93,11 @@ void SpecSupport::slotbuildAllPushButtonPressed() {
 	    return;
 	}
 	else
-	    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && cp " + getAppSource() + " " + *(map.find("_sourcedir")));
+	    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote(dir) + 
+		" && cp " + KProcess::quote(getAppSource()) + " " + KProcess::quote(*(map.find("_sourcedir"))));
     }
-    m_part->makeFrontend()->queueCommand(dir,"cd " + (((it = map.find("_specdir")) != map.end()) ? (*it) : dir) + " && rpmbuild -ba " + m_part->project()->projectName() + ".spec");
+    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote((((it = map.find("_specdir")) != map.end()) ? (*it) : dir)) +
+		 " && rpmbuild -ba " + m_part->project()->projectName() + ".spec");
 }
 
 //    QPushButton* exportSPECPushButton;
@@ -179,9 +182,11 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
 	    return;
 	}
 	else
-	    m_part->makeFrontend()->queueCommand(dir,"cd " + dir + " && cp " + getAppSource() + " " + *(map.find("_sourcedir")));
+	    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote(dir) + 
+		" && cp " + KProcess::quote(getAppSource()) + " " + KProcess::quote(*(map.find("_sourcedir"))));
     }
-    m_part->makeFrontend()->queueCommand(dir,"cd " + (((it = map.find("_specdir")) != map.end()) ? (*it) : dir) + " && rpmbuild -bs " + m_part->project()->projectName() + ".spec");
+    m_part->makeFrontend()->queueCommand(dir,"cd " + KProcess::quote((((it = map.find("_specdir")) != map.end()) ? (*it) : dir)) +
+		 " && rpmbuild -bs " + m_part->project()->projectName() + ".spec");
 }
 
 void SpecSupport::parseDotRpmmacros() {
