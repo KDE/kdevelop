@@ -51,7 +51,7 @@ public:
 };
 
 class RegExpComparator : public FileComparator {
-public: 
+public:
 	RegExpComparator(const QString& pattern) : m_exp(pattern, true, true){
 	}
 	bool matches(const QString& name) const{
@@ -94,7 +94,7 @@ FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, c
 	{
 		QString pattern = *ci;
 		QString tail = pattern.right( pattern.length() - 1 );
-		
+
 		if ( (tail).contains('*') || pattern.contains('?') || pattern.contains('[') || pattern.contains(']') )
 		{
 			m_patterns.append( new RegExpComparator( pattern ) );
@@ -120,7 +120,7 @@ bool FileViewFolderItem::matches(const QString &fileName)
     QString fName = QFileInfo(fileName).filePath();
 
     QPtrList<FileComparator>::ConstIterator theend = m_patterns.end();
-    for (QPtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci) 
+    for (QPtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci)
     	if ((*ci)->matches(fName))
 		return true;
 
@@ -212,7 +212,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     KPopupMenu popup(i18n("File Groups"), this);
     /// @todo Add, remove groups
     int customizeId = popup.insertItem(i18n("Customize..."));
-    popup.setWhatsThis(customizeId, i18n("<b>Customize</b><p>Opens <b>Cusomtize File Groups</b> dialog where the groups can be managed."));
+    popup.setWhatsThis(customizeId, i18n("<b>Customize</b><p>Opens <b>Customize File Groups</b> dialog where the groups can be managed."));
     if (item->parent()) {
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
@@ -261,7 +261,7 @@ QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
 		}
 		++it;
 	}
-	
+
 	// append the project relative directory path to all files in the current directory
 	QStringList dirlist = QDir( dir ).entryList( QDir::Files );
 	QValueListIterator<QString> itt = dirlist.begin();
@@ -277,7 +277,7 @@ QStringList FileGroupsWidget::allFilesRecursively( QString const & dir )
 		}
 		++itt;
 	}
-	
+
 	return filelist;
 }
 

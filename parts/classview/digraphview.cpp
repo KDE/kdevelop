@@ -46,14 +46,14 @@ DigraphView::DigraphView(QWidget *parent, const char *name)
     : QScrollView(parent, name, WRepaintNoErase|WStaticContents|WResizeNoErase)
 {
     viewport()->setBackgroundMode(PaletteBase);
-    
+
     QPaintDeviceMetrics m(this);
     xscale = m.logicalDpiX();
     yscale = m.logicalDpiY();
 
     width = -1;
     height = -1;
-    
+
     nodes.setAutoDelete(true);
     edges.setAutoDelete(true);
     selNode = 0;
@@ -103,10 +103,10 @@ void DigraphView::addRenderedEdge(const QString &/*name1*/, const QString &/*nam
 {
     if (coords.count() < 4)
         return;
-    
+
     DigraphEdge *edge = new DigraphEdge;
     edge->points.resize(coords.count()/2);
-    
+
     for (uint i = 0; i < edge->points.count(); ++i)
         edge->points[i] = QPoint(toXPixel(coords[2*i]), toYPixel(coords[2*i+1]));
 
@@ -166,7 +166,7 @@ void DigraphView::ensureVisible(const QString &name)
 QStringList DigraphView::splitLine(QString str)
 {
     QStringList result;
-    
+
     while (!str.isEmpty()) {
         if (str[0] == '"') {
             int pos = str.find('"', 1);
@@ -221,10 +221,10 @@ void DigraphView::process()
 {
     QString cmd = KGlobal::dirs()->findExe("dot");
     if (cmd.isEmpty()) {
-        KMessageBox::sorry(0, i18n("You don't have 'dot' installed.\nIt can be downloaded from www.graphviz.org."));
+        KMessageBox::sorry(0, i18n("You do not have 'dot' installed.\nIt can be downloaded from www.graphviz.org."));
         return;
     }
-    
+
     QStringList results;
 
     KTempFile ifile, ofile;
@@ -243,7 +243,7 @@ void DigraphView::process()
     proc.start(KProcess::Block);
 
     QTextStream &os = *ofile.textStream();
-    while (!os.atEnd()) 
+    while (!os.atEnd())
         results << os.readLine();
     ofile.close();
 
@@ -318,7 +318,7 @@ void DigraphView::contentsMousePressEvent(QMouseEvent *e)
             emit selected(selNode->name);
             updateContents(r);
         }
-            
+
     }
 }
 
@@ -328,13 +328,13 @@ QSize DigraphView::sizeHint() const
     if (width == -1)
         return QSize(100, 100); // arbitrary
 
-#if defined(KDE_IS_VERSION)        
+#if defined(KDE_IS_VERSION)
 #if (KDE_IS_VERSION(3,1,90))
     QSize dsize = KGlobalSettings::desktopGeometry(viewport()).size();
 #else
     QSize dsize = QApplication::desktop()->size();
-#endif    
-#else    
+#endif
+#else
     QSize dsize = QApplication::desktop()->size();
 #endif
     return QSize(width, height).boundedTo(QSize(dsize.width()*2/3, dsize.height()*2/3));
@@ -398,7 +398,7 @@ dw->addEdge(	"System V.0", "System V.2");
 dw->addEdge(	"System V.2", "System V.3");
     dw->process();
     dw->show();
-    
+
     return app.exec();
 }
 #endif

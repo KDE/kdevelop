@@ -79,13 +79,13 @@ static void removeDir( const QString& dirName )
     while( it.current() ){
 	const QFileInfo* fileInfo = it.current();
 	++it;
-	
+
 	if( fileInfo->fileName() == "." || fileInfo->fileName() == ".." )
 	    continue;
-	
+
 	if( fileInfo->isDir() && !fileInfo->isSymLink() )
 	    removeDir( fileInfo->absFilePath() );
-	
+
 	kdDebug(9020) << "remove " << fileInfo->absFilePath() << endl;
 	d.remove( fileInfo->fileName(), false );
     }
@@ -329,7 +329,7 @@ void AutoSubprojectView::slotRemoveSubproject()
 
     SubprojectItem* parent = static_cast<SubprojectItem*>( spitem->parent() );
     if( !parent || !parent->listView() || spitem->childCount() != 0 ){
-	KMessageBox::error( 0, i18n("This item can't be removed"), i18n("Automake Manager") );
+	KMessageBox::error( 0, i18n("This item cannot be removed"), i18n("Automake Manager") );
 	return;
     }
 
@@ -409,7 +409,7 @@ void AutoSubprojectView::slotRemoveSubproject()
 	spitem->targets.clear();
 	delete( spitem );
 	spitem = 0;
-	
+
 	// Adjust SUBDIRS variable in containing Makefile.am
 	QMap<QString,QString> replaceMap;
     if (parent->variables["SUBDIRS"].find("$(TOPSUBDIRS)") != -1)
@@ -437,7 +437,7 @@ void AutoSubprojectView::slotRemoveSubproject()
 
 	QString relmakefile = ( parent->path + "/Makefile" ).mid( m_part->projectDirectory().length()+1 );
 	kdDebug(9020) << "Relative makefile path: " << relmakefile << endl;
-	
+
 	QString cmdline = "cd ";
 	cmdline += m_part->projectDirectory();
 	cmdline += " && automake ";

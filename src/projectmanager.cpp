@@ -333,7 +333,7 @@ bool ProjectManager::closeProject()
   }
   if ( !PartController::getInstance()->closeAllWindows() )
     return false;
-  
+
   Core::getInstance()->doEmitProjectClosed();
 
   TopLevel::getInstance()->prepareToCloseViews();
@@ -355,7 +355,7 @@ bool ProjectManager::closeProject()
   m_closeProjectAction->setEnabled(false);
   m_projectOptionsAction->setEnabled(false);
   m_activeLanguage->setEnabled(false);
-  
+
   PartController::getInstance()->slotCloseAllWindows();
 
   return true;
@@ -674,7 +674,7 @@ bool ProjectManager::checkNewService(const KService::Ptr &service)
   {
     if ( !m_info->m_keywords.contains(*is) ) {
       // no match
-      kdDebug(9000) << "ignoreParts because Keyword doesn't match: " << service->name() << endl;
+      kdDebug(9000) << "ignoreParts because Keyword does not match: " << service->name() << endl;
       m_info->m_ignoreParts << service->name();
       return false;
     }
@@ -710,7 +710,7 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
 
     QString cmd = KGlobal::dirs()->findExe( "kdevprj2kdevelop" );
     if (cmd.isEmpty()) {
-        KMessageBox::sorry(0, i18n("You don't have 'kdevprj2kdevelop' installed."));
+        KMessageBox::sorry(0, i18n("You do not have 'kdevprj2kdevelop' installed."));
         return false;
     }
 

@@ -51,7 +51,7 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
     "reading/writing off the end of malloc'd blocks<br>"
     "reading/writing inappropriate areas on the stack<br>"
     "memory leaks -- where pointers to malloc'd blocks are lost forever<br>"
-    "passing of uninitialised and/or unaddressible memory to system calls<br>"
+    "passing of uninitialised and/or unaddressable memory to system calls<br>"
     "mismatched use of malloc/new/new [] vs free/delete/delete []<br>"
     "some abuses of the POSIX pthread API." ) );
 

@@ -39,7 +39,7 @@
                             <cstring>select_label</cstring>
                         </property>
                         <property name="text">
-                            <string>Please select, how KDevelop should execute your scripts.</string>
+                            <string>Please select how KDevelop should execute your scripts.</string>
                         </property>
                     </widget>
                     <widget class="QButtonGroup" row="1" column="0" rowspan="2" colspan="1">

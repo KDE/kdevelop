@@ -76,7 +76,7 @@ A typical example of this user interface mode is KDEStudio, our friend C++-IDE i
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>All editor, browser and tool views will be toplevel windows (directly on desktop).
-The main widget contains the menu, toolbars and statusbar, only.
+The main widget contains the menu, toolbars and statusbar only.
 A typical example of this user interface mode is Borland Delphi 6.0.</string>
                     </property>
                 </widget>

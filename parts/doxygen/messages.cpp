@@ -56,7 +56,7 @@ QString message(const QCString &key)
     addMessage("Build", i18n("Build"));
     addMessage("EXTRACT_ALL", i18n("Extract undocumented entities"));
     addMessage("EXTRACT_PRIVATE", i18n("Extract private entities"));
-    addMessage("EXTRACT_STATIC", i18n("Extract static entitites"));
+    addMessage("EXTRACT_STATIC", i18n("Extract static entities"));
     addMessage("EXTRACT_LOCAL_CLASSES", i18n("Extract local classes"));
     addMessage("HIDE_UNDOC_MEMBERS", i18n("Hide undocumented members"));
     addMessage("HIDE_UNDOC_CLASSES", i18n("Hide undocumented classes"));
@@ -82,7 +82,7 @@ QString message(const QCString &key)
     addMessage("Messages", i18n("Messages"));
     addMessage("QUIET", i18n("Suppress output"));
     addMessage("WARNINGS", i18n("Show warnings"));
-    addMessage("WARN_IF_UNDOCUMENTED", i18n("Warn about undocumented entitites"));
+    addMessage("WARN_IF_UNDOCUMENTED", i18n("Warn about undocumented entities"));
     addMessage("WARN_IF_DOC_ERROR", i18n("Warn if error in documents"));
     addMessage("WARN_FORMAT", i18n("Warnings format"));
     addMessage("WARN_LOGFILE", i18n("Write warnings to"));
@@ -275,7 +275,7 @@ QString message(const QCString &key)
 
     return key;
   }
-  
+
   return messages[key];
 }
 

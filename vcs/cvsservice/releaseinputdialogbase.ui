@@ -91,7 +91,7 @@
                                 <string>Type your release name here (leave empty for HEAD)</string>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Fill the field with the release or branch name (i.e. &lt;i&gt;make_it_cool, kdevelop_alpha5, ...&lt;/i&gt;)</string>
+                                <string>Fill the field with the release or branch name (e.g. &lt;i&gt;make_it_cool, kdevelop_alpha5, ...&lt;/i&gt;)</string>
                             </property>
                         </widget>
                     </hbox>
@@ -123,7 +123,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>FIll the field with a date (i.e. &lt;i&gt;20030204&lt;/i&gt;)</string>
+                                <string>FIll the field with a date (e.g. &lt;i&gt;20030204&lt;/i&gt;)</string>
                             </property>
                         </widget>
                     </hbox>

@@ -52,7 +52,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setCaption( nm );
   QWhatsThis::add(diffWidget, i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
     "Can utilize every installed component that is able to show diff output. "
-    "For example if you have Kompare installed, Difference Viewer can use it's graphical diff view."));
+    "For example if you have Kompare installed, Difference Viewer can use its graphical diff view."));
   mainWindow()->embedOutputView( diffWidget, nm, i18n("Output of the diff command") );
 
   KAction *action = new KAction( i18n("Difference Viewer..."), 0,

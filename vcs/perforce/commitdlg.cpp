@@ -81,15 +81,15 @@ void CommitDialog::autoGuess()
     if ( cenv ) {
         setUser( QString::fromLocal8Bit( cenv ) );
     }
-    
+
     cenv = getenv( "P4CLIENT" );
     if ( cenv ) {
         setClient( QString::fromLocal8Bit( cenv ) );
     }
 }
 
-void CommitDialog::setFiles( const QStringList& lst ) 
-{ 
+void CommitDialog::setFiles( const QStringList& lst )
+{
     filesBox->clear();
     setDepotFiles( lst );
 }
@@ -132,7 +132,7 @@ QString CommitDialog::changeList() const
     lst += logMessage().replace(QRegExp("\n"), "\n        ") + "\n\n";
 
     lst += "Files:\n";
-    
+
     for ( uint i = 0; i < filesBox->count(); ++i ) {
         lst += "       " + filesBox->text( i ) + "\n";
     }
@@ -145,14 +145,14 @@ void CommitDialog::accept()
     if ( client().isEmpty() ) {
         setDetails( true );
         KMessageBox::error( this, i18n("Please enter the P4 client name.") );
-        clientEdit->setFocus(); 
+        clientEdit->setFocus();
     } else if ( user().isEmpty() ) {
         setDetails( true );
         KMessageBox::error( this, i18n("Please enter the P4 user.") );
         userEdit->setFocus();
     } else if ( filesBox->count() == 0 ) {
         setDetails( true );
-        KMessageBox::error( this, i18n("The changelist doesn't contain any files") );
+        KMessageBox::error( this, i18n("The changelist does not contain any files") );
     } else {
         KDialogBase::accept();
     }

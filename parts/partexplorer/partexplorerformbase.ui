@@ -68,7 +68,7 @@
                 <string></string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;b&gt;Service type&lt;/b&gt;&lt;p&gt;Put here the Service type (i.e. &lt;i&gt;KDevelop/Plugin, KParts/ReadWritePart, ...&lt;/i&gt;).</string>
+                <string>&lt;b&gt;Service type&lt;/b&gt;&lt;p&gt;Put here the Service type (e.g. &lt;i&gt;KDevelop/Plugin, KParts/ReadWritePart, ...&lt;/i&gt;).</string>
             </property>
         </widget>
         <widget class="QLabel">

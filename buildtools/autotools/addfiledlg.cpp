@@ -88,7 +88,7 @@ void AddFileDialog::accept()
 		QString destdir = subProject->path;
 		QString destpath = destdir + "/" + name;
 		if (QFileInfo(destpath).exists()) {
-			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
+			KMessageBox::sorry(this, i18n("<b>A file with this name already exists.</b><br><br>Please use the \"Add existing file\" dialog."));
 			return;
 		}
 		if( !FileTemplate::copy(m_part, QFileInfo(name).extension(), destpath) )
@@ -100,7 +100,7 @@ void AddFileDialog::accept()
 		QString destpath = destdir + "/" + name;
 
 		if (QFileInfo(destpath).exists()) {
-			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
+			KMessageBox::sorry(this, i18n("<b>A file with this name already exists.</b><br><br>Please use the \"Add existing file\" dialog."));
 			return;
 		}
 

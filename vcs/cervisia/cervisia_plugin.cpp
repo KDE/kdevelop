@@ -57,7 +57,7 @@ CervisiaPlugin::CervisiaPlugin(  QObject *parent, const char *name, const QStrin
     {
         // @todo fix this brutal return
         KMessageBox::error( mainWindow()->main()->centralWidget(),
-            i18n("Could not find Cervisia KPart!! This plug-in will be unusable.") );
+            i18n("Could not find Cervisia KPart. This plug-in will be unusable.") );
         return;
     }
 

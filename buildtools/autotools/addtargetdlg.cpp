@@ -138,7 +138,7 @@ void AddTargetDialog::accept()
 	case 6: primary = "JAVA";        break;
 	default: ;
 	}
-	
+
 	if (primary == "DATA"){
 	    // DATA does not need a name; DATA may already exist.
 	    TargetItem *titem = m_widget->createTargetItem(name, prefix, primary, true);
@@ -157,23 +157,23 @@ void AddTargetDialog::accept()
 	}
 
 	if (name.isEmpty()) {
-		KMessageBox::sorry(this, i18n("You have to give the target a name!"));
+		KMessageBox::sorry(this, i18n("You have to give the target a name"));
 		return;
 	}
 
 #if 0
 	if (primary == "LIBRARIES" && !name.startsWith("lib")) {
-		KMessageBox::sorry(this, i18n("Libraries must have a lib prefix!"));
+		KMessageBox::sorry(this, i18n("Libraries must have a lib prefix."));
 		return;
 	}
 
 	if (primary == "LTLIBRARIES" && !name.startsWith("lib")) {
-		KMessageBox::sorry(this, i18n("Libtool libraries must have a lib prefix!"));
+		KMessageBox::sorry(this, i18n("Libtool libraries must have a lib prefix."));
 		return;
 	}
 
 	if (primary == "LTLIBRARIES" && name.right(3) != ".la") {
-		KMessageBox::sorry(this, i18n("Libtool libraries must have a .la suffix!"));
+		KMessageBox::sorry(this, i18n("Libtool libraries must have a .la suffix."));
 		return;
 	}
 
@@ -191,7 +191,7 @@ void AddTargetDialog::accept()
 	QPtrListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
-			KMessageBox::sorry(this, i18n("A target with this name already exists!"));
+			KMessageBox::sorry(this, i18n("A target with this name already exists."));
 			return;
 		}
 

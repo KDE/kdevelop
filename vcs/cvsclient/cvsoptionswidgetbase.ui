@@ -158,7 +158,7 @@
                 <string>sets the CVS_RSH variable</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Set this option to "ssh" to use ssh as remote shell for CVS. Note that you need password-less login (see the ssh howtos how to generate a public/private key pair) otherwise CVS will just hang forever.</string>
+                <string>Set this option to "ssh" to use ssh as remote shell for CVS. Note that you need password-less login (see the ssh documentation for how to generate a public/private key pair) otherwise CVS will just hang forever.</string>
             </property>
         </widget>
     </vbox>

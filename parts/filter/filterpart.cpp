@@ -40,13 +40,13 @@ FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
                           this, SLOT(slotShellInsert()),
                           actionCollection(), "tools_insertshell" );
     action->setToolTip(i18n("Execute shell command"));
-    action->setWhatsThis(i18n("<b>Execute shell command</b><p>Executes a shell command and outputs it's result into the current document."));
+    action->setWhatsThis(i18n("<b>Execute shell command</b><p>Executes a shell command and outputs its result into the current document."));
 
     action = new KAction( i18n("Filter Selection Through Command..."), 0,
                           this, SLOT(slotShellFilter()),
                           actionCollection(), "tools_filtershell" );
-    action->setToolTip(i18n("Filter selection trough a shell command"));
-    action->setWhatsThis(i18n("<b>Filter selection trough shell command</b><p>Filters selection trough a shell command and outputs it's result into the current document."));
+    action->setToolTip(i18n("Filter selection through a shell command"));
+    action->setWhatsThis(i18n("<b>Filter selection through shell command</b><p>Filters selection through a shell command and outputs it's result into the current document."));
 
     m_insertDialog = 0;
     m_filterDialog = 0;

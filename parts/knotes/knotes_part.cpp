@@ -198,7 +198,7 @@ void KNotesPart::slotNewNote()
     QDataStream arg(  data, IO_WriteOnly );
     arg << QString::null << QString::null;
     if ( !kapp->dcopClient()->send(  "knotes", "KNotesIface", "newNote(QString, QString)", data ) )
-	KMessageBox::error(0, i18n("Unable to add a new note!"));
+	KMessageBox::error(0, i18n("Unable to add a new note."));
 
     // reinit knotes and refetch notes
     initKNotes();

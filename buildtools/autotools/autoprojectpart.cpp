@@ -280,7 +280,7 @@ void AutoProjectPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page
 			connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
 		}
 		break;
-		
+
 		case RUN_OPTIONS:
 		{
 			QDomDocument &dom = *projectDom();
@@ -292,7 +292,7 @@ void AutoProjectPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page
 			}
 		}
 		break;
-		
+
 		case MAKE_OPTIONS:
 		{
 			MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevautoproject", page );
@@ -319,7 +319,7 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default") && DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio") == "" ) {
         DomUtil::writeEntry(dom, "/kdevautoproject/run/directoryradio", "executable");
     }
-    
+
     KDevProject::openProject( dirName, projectName );
 }
 
@@ -552,7 +552,7 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 		{
 			if ( !messageBoxShown )
 			{
-				KMessageBox::information(m_widget, i18n("The directory you selected is not the active directory!\n"
+				KMessageBox::information(m_widget, i18n("The directory you selected is not the active directory.\n"
 														"You should 'activate' the target you're currently working on in Automake Manager.\n"
 														"Just right-click a target and choose 'Make Target Active'."),
 														i18n ( "No Active Target Found" ), "No automake manager active target warning" );

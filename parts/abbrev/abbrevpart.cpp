@@ -54,7 +54,7 @@ public:
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/templates/" );
         dirs->addResourceType( "sources",
                                KStandardDirs::kde_default( "data" ) + "kdevabbrev/sources" );
-			       
+
         return instance;
     }
 };
@@ -83,7 +83,7 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
     action->setToolTip( i18n("Expand abbreviation") );
-    action->setWhatsThis( i18n("<b>Expand abbreviation</b><p>Enable and configure abbreviations in <b>KDevelop Settings</b>, <b>Abbrevations</b> tab.") );
+    action->setWhatsThis( i18n("<b>Expand abbreviation</b><p>Enable and configure abbreviations in <b>KDevelop Settings</b>, <b>Abbreviations</b> tab.") );
 
     load();
 
@@ -155,7 +155,7 @@ void AbbrevPart::load()
         files << localTemplatesFile;
     else
         files = dirs->findAllResources("codetemplates", QString::null, false, true);
-	
+
     QString localSourcesFile = locateLocal("sources", "sources", AbbrevFactory::instance());
     QStringList sourceFiles;
     if (KIO::NetAccess::exists(localSourcesFile))
@@ -310,7 +310,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
-    
+
     idx = 0;
     pos = 0;
     len = 0;
@@ -325,7 +325,7 @@ QValueList<KTextEditor::CompletionEntry> AbbrevPart::findAllWords(const QString 
         }
         idx = pos + len + 1;
     }
-    
+
 
     QMap<QString, CodeTemplate*> m = m_templates[suffix];
     for (QMap<QString, CodeTemplate*>::const_iterator it = m.begin(); it != m.end() ; ++it) {

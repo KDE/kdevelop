@@ -54,12 +54,12 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
 //    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
- 
+
     _configProxy = new ConfigWidgetProxy( core() );
     _configProxy->createGlobalConfigPage( i18n("Documentation Tree"), GLOBALDOC_OPTIONS );
     _configProxy->createProjectConfigPage( i18n("Project Documentation"), PROJECTDOC_OPTIONS );
     connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
-    
+
     m_widget = new DocTreeViewWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
     m_widget->setCaption(i18n("Documentation Tree"));
@@ -78,7 +78,7 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     action->setToolTip( i18n("Full text search in the documentation") );
     action->setWhatsThis( i18n("<b>Full text search</b><p>"
                                "Opens the Search in documentation dialog. It allows "
-                               "to enter a search term which will be searched for in "
+                               "a search term to be entered which will be searched for in "
                                "the documentation. For this to work, a "
                                "full text index must be created first, which can be done in the "
                                "configuration dialog of the documentation tree.") );
@@ -115,7 +115,7 @@ void DocTreeViewPart::configWidget(KDialogBase *dlg)
     QVBox *vbox;
 
     vbox = dlg->addVBoxPage(i18n("Documentation Tree"));
-    DocTreeGlobalConfigWidget *w1 = 
+    DocTreeGlobalConfigWidget *w1 =
         new DocTreeGlobalConfigWidget( this, m_widget, vbox, "doc tree config widget");
 
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
@@ -172,7 +172,7 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
                                "configuration dialog of the documentation tree."));
         }
     }
-} 
+}
 
 void DocTreeViewPart::slotSearchDocumentation()
 {
@@ -224,14 +224,14 @@ void DocTreeViewPart::insertConfigWidget( const KDialogBase * dlg, QWidget * pag
 		{
 			DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget( this, m_widget, page, "doc tree config widget");
 			connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
-		
+
 		break;
 		}
 		case PROJECTDOC_OPTIONS:
 		{
 			DocTreeProjectConfigWidget *w1 = new DocTreeProjectConfigWidget(m_widget, page, project(), "doc tree project config");
 			connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
-		
+
 		break;
 		}
 	}

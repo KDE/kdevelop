@@ -104,7 +104,7 @@ QStringList CppSupportPart::m_headerMimeTypes = QStringList() << "text/x-chdr" <
 
 QStringList CppSupportPart::m_sourceExtensions = QStringList::split( ",", "c,C,cc,cpp,c++,cxx,m,mm,M" );
 QStringList CppSupportPart::m_headerExtensions = QStringList::split( ",", "h,H,hh,hxx,hpp,inl,tlh,diff,ui.h" );
-    
+
 class CppDriver: public KDevDriver
 {
 public:
@@ -152,12 +152,12 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
 
-    m_driver = new CppDriver( this );    
+    m_driver = new CppDriver( this );
     m_problemReporter = 0;
 
     m_functionHintTimer = new QTimer( this );
     connect( m_functionHintTimer, SIGNAL(timeout()), this, SLOT(slotFunctionHint()) );
-    
+
     setXMLFile( "kdevcppsupport.rc" );
 
     m_catalogList.setAutoDelete( true );
@@ -266,7 +266,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 
     QTime t;
     t.start();
-    
+
     if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
@@ -314,12 +314,12 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     bool enabled = false;
 
     m_functionHintTimer->stop();
-    
+
     if( m_activeView )
     {
 	disconnect( m_activeView, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()) );
     }
-    
+
     m_activeDocument = dynamic_cast<KTextEditor::Document*>( part );
     m_activeView = part ? dynamic_cast<KTextEditor::View*>( part->widget() ) : 0;
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
@@ -335,7 +335,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
         if( isSource(m_activeFileName) || isHeader(m_activeFileName) )
 	    enabled = true;
     }
-    
+
     actionCollection()->action( "edit_switchheader" )->setEnabled( enabled );
     actionCollection()->action( "edit_complete_text" )->setEnabled( enabled );
     actionCollection()->action( "edit_make_member" )->setEnabled( enabled );
@@ -345,13 +345,13 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     if( !m_activeView )
 	return;
- 
+
     if( m_activeViewCursor )
     {
 	connect( m_activeView, SIGNAL(cursorPositionChanged()),
 		 this, SLOT(slotCursorPositionChanged()) );
     }
-        
+
 #if 0
     KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( m_activeView );
     if( !textHintIface )
@@ -368,10 +368,10 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 void CppSupportPart::projectOpened( )
 {
     kdDebug( 9007 ) << "projectOpened( )" << endl;
-    
+
     m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
     m_backgroundParser->start();
-    
+
     // setup the driver
     QString conf_file_name = specialHeaderName();
     if( QFile::exists(conf_file_name) )
@@ -758,7 +758,7 @@ void CppSupportPart::slotNewClass()
 void CppSupportPart::addMethod( ClassDom klass )
 {
     if( !klass ){
-	KMessageBox::error(0,i18n("Please select a class!"),i18n("Error"));
+	KMessageBox::error(0,i18n("Please select a class."),i18n("Error"));
 	return;
     }
 
@@ -769,7 +769,7 @@ void CppSupportPart::addMethod( ClassDom klass )
 void CppSupportPart::addAttribute( ClassDom klass )
 {
     if( !klass ){
-	KMessageBox::error(0,i18n("Please select a class!"),i18n("Error"));
+	KMessageBox::error(0,i18n("Please select a class."),i18n("Error"));
 	return;
     }
 
@@ -848,11 +848,11 @@ CppSupportPart::parseProject( bool force )
     QMap< QString, QPair<uint, Q_LONG> > pcs;
 
     QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
-    
+
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
     if( !force && !QFile::exists( skip_file_name ) && f.open(IO_ReadOnly) ){
 	stream.setDevice( &f );
- 
+
         createIgnorePCSFile();
 
 	QString sig;
@@ -931,7 +931,7 @@ CppSupportPart::parseProject( bool force )
 
     kapp->restoreOverrideCursor( );
     mainWindow( )->statusBar( )->message( i18n( "Done" ), 2000 );
-    
+
     QFile::remove( skip_file_name );
 
     return true;
@@ -1126,7 +1126,7 @@ QStringList CppSupportPart::modifiedFileList()
 
 	QFileInfo fileInfo( m_projectDirectory, fileName );
 	QString path = URLUtil::canonicalPath(fileInfo.absFilePath());
-	
+
 	if( !(isSource(path) || isHeader(path)) )
 	    continue;
 
@@ -1216,14 +1216,14 @@ KMimeType::List CppSupportPart::mimeTypes( )
     QStringList mimeList;
     mimeList += m_headerMimeTypes;
     mimeList += m_sourceMimeTypes;
-    
+
     KMimeType::List list;
     for( QStringList::Iterator it=mimeList.begin(); it!=mimeList.end(); ++it )
     {
 	if( KMimeType::Ptr mime = KMimeType::mimeType(*it) )
 	    list << mime;
     }
-    
+
     return list;
 }
 
@@ -1294,7 +1294,7 @@ bool CppSupportPart::isValidSource( const QString& fileName ) const
 {
     QFileInfo fileInfo( fileName );
     QString path = URLUtil::canonicalPath( fileInfo.absFilePath() );
- 
+
     return project()->isProjectFile( path )
 	&& (isSource( path ) || isHeader( path ))
 	&& !QFile::exists(fileInfo.dirPath(true) + "/.kdev_ignore");
@@ -1354,12 +1354,12 @@ void CppSupportPart::saveProjectSourceInfo( )
 
     if( !project() || fileList.isEmpty() )
 	return;
-    
+
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
     if( !f.open( IO_WriteOnly ) )
 	return;
-    
-    createIgnorePCSFile();    
+
+    createIgnorePCSFile();
 
     QDataStream stream( &f );
     QMap<QString, Q_ULONG> offsets;
@@ -1391,7 +1391,7 @@ void CppSupportPart::saveProjectSourceInfo( )
 	stream << offset;
 	stream.device()->at( end );
     }
-    
+
     QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
     QFile::remove( skip_file_name );
 }
@@ -1511,7 +1511,7 @@ bool CppSupportPart::isHeader( const QString& fileName ) const
     KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
     if( ptr && m_headerMimeTypes.contains( ptr->name() ) )
 	return true;
-    
+
     return m_headerExtensions.contains( QFileInfo(fileName).extension() );
 }
 
@@ -1520,7 +1520,7 @@ bool CppSupportPart::isSource( const QString& fileName ) const
     KMimeType::Ptr ptr = KMimeType::findByPath( fileName );
     if( ptr && m_sourceMimeTypes.contains( ptr->name() ) )
 	return true;
-    
+
     return m_sourceExtensions.contains( QFileInfo(fileName).extension() );
 }
 
@@ -1579,7 +1579,7 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( int line, int column
 {
     if( !codeModel()->hasFile(m_activeFileName) )
 	return FunctionDefinitionDom();
-    
+
     FileDom file = codeModel()->fileByName( m_activeFileName );
     return functionDefinitionAt( model_cast<NamespaceDom>(file), line, column );
 }
@@ -1588,7 +1588,7 @@ FunctionDefinitionDom CppSupportPart::currentFunctionDefinition( )
 {
     if( !this->m_activeViewCursor )
 	return FunctionDefinitionDom();
-    
+
     unsigned int line, column;
     this->m_activeViewCursor->cursorPositionReal( &line, &column );
     return functionDefinitionAt( line, column );
@@ -1602,21 +1602,21 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( NamespaceDom ns, int
 	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
 	    return def;
     }
-    
+
     ClassList classList = ns->classList();
     for( ClassList::Iterator it=classList.begin(); it!=classList.end(); ++it )
     {
 	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
 	    return def;
     }
-    
+
     FunctionDefinitionList functionDefinitionList = ns->functionDefinitionList();
     for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
     {
 	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
 	    return def;
     }
-    
+
     return FunctionDefinitionDom();
 }
 
@@ -1628,14 +1628,14 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( ClassDom klass, int 
 	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
 	    return def;
     }
-    
+
     FunctionDefinitionList functionDefinitionList = klass->functionDefinitionList();
     for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
     {
 	if( FunctionDefinitionDom def = functionDefinitionAt(*it, line, column) )
 	    return def;
     }
-    
+
     return FunctionDefinitionDom();
 }
 
@@ -1643,19 +1643,19 @@ FunctionDefinitionDom CppSupportPart::functionDefinitionAt( FunctionDefinitionDo
 {
     int startLine, startColumn;
     int endLine, endColumn;
-    
+
     fun->getStartPosition( &startLine, &startColumn );
     fun->getEndPosition( &endLine, &endColumn );
-    
+
     if( ! (line >= startLine && line <= endLine) )
 	return FunctionDefinitionDom();
-    
+
     if( line == startLine && column < startColumn )
 	return FunctionDefinitionDom();
-    
+
     if( line == endLine && column > endColumn )
 	return FunctionDefinitionDom();
-    
+
     return fun;
 }
 
@@ -1674,9 +1674,9 @@ void CppSupportPart::slotFunctionHint( )
 	QString funName = scope.join( "::" );
 	if( !funName.isEmpty() )
 	    funName += "::";
-	
+
 	funName += formatModelItem( fun, true );
-	
+
 	mainWindow()->statusBar()->message( funName, 2000 );
     }
 }
@@ -1684,7 +1684,7 @@ void CppSupportPart::slotFunctionHint( )
 void CppSupportPart::createIgnorePCSFile( )
 {
     static QCString skip_me( "ignore me\n" );
-    
+
     QString skip_file_name = project()->projectDirectory() + "/" + project()->projectName() + ".ignore_pcs";
     QFile skip_pcs_file( skip_file_name );
     if( skip_pcs_file.open(IO_WriteOnly) )
@@ -1698,19 +1698,19 @@ QString CppSupportPart::specialHeaderName( bool local ) const
 {
 	if( local )
 		return ::locateLocal( "data", "kdevcppsupport/configuration", CppSupportFactory::instance() );
-	
+
 	return ::locate( "data", "kdevcppsupport/configuration", CppSupportFactory::instance() );
 }
 
 void CppSupportPart::updateParserConfiguration()
 {
 	m_backgroundParser->updateParserConfiguration();
-	
+
 	QString conf_file_name = specialHeaderName();
 	m_driver->removeAllMacrosInFile( conf_file_name );
-	
+
 	m_driver->parseFile( conf_file_name, true );
-	
+
 	parseProject( true );
 }
 

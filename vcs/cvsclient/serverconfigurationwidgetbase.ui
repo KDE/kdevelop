@@ -161,7 +161,7 @@
                         <cstring>textLabel2_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Pat&amp;h on server (i.e. /home/kde):</string>
+                        <string>Pat&amp;h on server (e.g. /home/kde):</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>serverPathLineEdit</cstring>

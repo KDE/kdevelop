@@ -162,7 +162,7 @@ void AdaProjectPart::openProject(const QString &dirName, const QString &projectN
             }
         }
     } while (!s.isEmpty());
-    
+
     KDevProject::openProject( dirName, projectName );
 }
 
@@ -288,7 +288,7 @@ void AdaProjectPart::listOfFiles(QStringList &result, QString path) const
     QDir d(path);
     if (!d.exists())
         return;
-    
+
     const QFileInfoList *entries = d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden);
     if( !entries )
         return;
@@ -427,7 +427,7 @@ KDevCompilerOptions *AdaProjectPart::createCompilerOptions(const QString &name)
     if (!factory) {
         QString errorMessage = KLibLoader::self()->lastErrorMessage();
         KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
-                                   "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
+                                   "The diagnostics are:\n%2").arg(service->name()).arg(errorMessage));
         exit(1);
     }
 

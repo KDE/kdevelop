@@ -63,7 +63,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                                          "The variable tree allows you to see "
                                          "the variable values as you step "
                                          "through your program using the internal "
-                                         "debugger. Click the RMB on items in "
+                                         "debugger. Click the right mouse button on items in "
                                          "this view to get a popup menu.\n"
                                          "To speed up stepping through your code "
                                          "leave the tree items closed and add the "
@@ -78,7 +78,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     QWhatsThis::add(breakpointWidget, i18n("Breakpoint list\n\n"
                                            "Displays a list of breakpoints with "
                                            "their current status. Clicking on a "
-                                           "breakpoint item with the RMB displays "
+                                           "breakpoint item with the right mouse button displays "
                                            "a popupmenu so you may manipulate the "
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));

@@ -148,7 +148,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         config_gdbPath_()
 {
     gdbSizeofBuf_ = sizeof(gdbOutput_);
-    
+
     configure();
     cmdList_.setAutoDelete(true);
 
@@ -674,7 +674,7 @@ void GDBController::parseLine(char* buf)
             KMessageBox::error( 0,
                                 i18n("gdb message:\n")+badCore_ + "\n" +
                                 QString(buf)+"\n\n"+
-                                i18n("The symbols gdb resolves maybe suspect"),
+                                i18n("The symbols gdb resolves may be suspect"),
                                 i18n("Mismatched Core File"));
 
         return;
@@ -1117,7 +1117,7 @@ char *GDBController::parse(char *buf)
             parsed = parseCmdBlock(unparsed);
         else
             parsed = parseOther(unparsed);
-        
+
         if (!parsed)
             break;
 
@@ -1329,7 +1329,7 @@ void GDBController::slotStopDebugger()
     kdDebug(9012) << "GDBController::slotStopDebugger() called" << endl;
     if (stateIsOn(s_shuttingDown) || !dbgProcess_)
         return;
-        
+
     setStateOn(s_shuttingDown|s_silent);
     kdDebug(9012) << "GDBController::slotStopDebugger() executing" << endl;
     destroyCmds();
@@ -1354,7 +1354,7 @@ void GDBController::slotStopDebugger()
     }
 
     // If the app is attached then we release it here. This doesn't stop
-    // the app running.        
+    // the app running.
     if (stateIsOn(s_attached))
     {
         kdDebug(9012) << "App is busy" << endl;
@@ -1379,7 +1379,7 @@ void GDBController::slotStopDebugger()
     const char *quit="quit\n";
     if (!dbgProcess_->writeStdin(quit, strlen(quit)))
         kdDebug(9012) << "failed to write 'quit' to gdb" << endl;
-    
+
     emit gdbStdout("(gdb) quit");
     start = QTime::currentTime();
     while (-1)
@@ -1466,7 +1466,7 @@ void GDBController::slotRun()
 	    KProcess *proc = new KProcess;
 
 	    *proc << "sh" << "-c";
-	    *proc << config_runShellScript_ + 
+	    *proc << config_runShellScript_ +
 		" " + application_.latin1() + options;
 	    proc->start(KProcess::DontCare);
 	}
@@ -1482,7 +1482,7 @@ void GDBController::slotRun()
 	    queueCmd(new GDBCommand("source " + config_runGdbScript_,
 				    RUNCMD, NOTINFOCMD, 0));
 
-	    // Note: script could contain "run" or "continue" 
+	    // Note: script could contain "run" or "continue"
 	}
 	else {
 	    queueCmd(new GDBCommand("run", RUNCMD, NOTINFOCMD, 0));
@@ -1896,7 +1896,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
         // process from, and make it into a c-string so we can use the string fns
 //        kdDebug(9012)   << "Adding holdingZone_ (" << holdingZone_.length()   << ")" << endl
 //                        << holdingZone_ << endl;
-                        
+
         qstrcpy(gdbOutput_+gdbOutputLen_, holdingZone_);
         gdbOutputLen_ += holdingZone_.length();
         *(gdbOutput_+gdbOutputLen_) = 0;
@@ -1904,13 +1904,13 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 
 //        kdDebug(9012)   << "Output to parse (" << gdbOutputLen_   << ")" << endl
 //                        << gdbOutput_ << endl << "*************" << endl;
-                        
+
         parsing = true;
         char *nowAt = parse(gdbOutput_);
         parsing = false;
 
         if (nowAt)
-        {    
+        {
 //            kdDebug(9012)   << "*** " << nowAt-gdbOutput_ << " bytes have been parsed " << endl;
             Q_ASSERT(nowAt <= gdbOutput_+gdbOutputLen_+1);
             gdbOutputLen_ = strlen(nowAt);
@@ -1921,14 +1921,14 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
             else
                 *gdbOutput_ = 0;
         }
-        
+
 //        kdDebug(9012)   << "Output remaining (" << gdbOutputLen_  << ")" << endl
 //                        << gdbOutput_ << endl << "*************" << endl;
-                        
+
         if (!nowAt && !holdingZone_.length())
             break;
     }
-                        
+
     // check the queue for any commands to send
     executeCmd();
 }

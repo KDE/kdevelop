@@ -131,7 +131,7 @@ void ClassViewPart::setupActions( )
     connect( m_classes->view(), SIGNAL(focusGranted()), this, SLOT(focusClasses()) );
     connect( m_classes->view(), SIGNAL(focusLost()), this, SLOT(unfocusClasses()) );
     m_classes->setToolTip(i18n("Classes"));
-    m_classes->setWhatsThis(i18n("<b>Class selector</b><p>Select a class to view it's members."));
+    m_classes->setWhatsThis(i18n("<b>Class selector</b><p>Select a class to view its members."));
 
     m_functions = new KListViewAction( new KComboView(true, 300, 0, "m_functions_combo"), i18n("Functions"), 0, 0, 0, actionCollection(), "functions_combo", true );
     connect( m_functions->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectFunction(QListViewItem*)) );

@@ -276,11 +276,11 @@ void MainWindow::init()
   createGUI(0);
 
   m_pMainWindowShare->init();
-  
+
   KAction *a = actionCollection()->action("help_report_bug");
   disconnect(a, SIGNAL(activated()), 0, 0);
   connect(a, SIGNAL(activated()), m_pMainWindowShare, SLOT(slotReportBug()));
-  
+
   connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
           this, SLOT(createGUI(KParts::Part*)));
   connect(Core::getInstance(), SIGNAL(projectOpened()),
@@ -293,8 +293,8 @@ void MainWindow::init()
           this, SLOT(slotSaveAdditionalViewProperties(const QString&, QDomElement*)));
 
   connect(this,SIGNAL(viewActivated(KMdiChildView*)),this,SLOT(slotViewActivated(KMdiChildView*)));
-  
-  connect( PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), 
+
+  connect( PartController::getInstance(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )),
     this, SLOT(slotPartURLChanged(KParts::ReadOnlyPart * )) );
 
   if (!isFakingSDIApplication()) {
@@ -307,11 +307,11 @@ void MainWindow::init()
   }
 
   if ( PluginController::pluginServices().isEmpty() ) {
-    KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
+    KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop will not work properly.\nPlease make sure "
         "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
         "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
         "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
-        i18n("Couldn't Find Plugins") );
+        i18n("Could not Find Plugins") );
   }
 }
 
@@ -429,7 +429,7 @@ KMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
 void MainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 {
 	if ( !ro_part || !ro_part->widget() ) return;
-	
+
 	KMdiChildView * child = m_widgetMap[ ro_part->widget() ];
 	if ( child )
 	{
@@ -469,9 +469,9 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
 void MainWindow::checkAndFixToolViewObjectName(QWidget* view, const QString& shortName)
 {
     // a tool-view has to have an object name, otherwise it'll crash when switching the UI modes
-    
+
     static unsigned int s_index4DoubledName = 0;
-    
+
     QString objName = view->name();
     bool fixed = false;
     if (objName.isEmpty()) {
@@ -504,8 +504,8 @@ void MainWindow::embedSelectView(QWidget *view, const QString &name, const QStri
     int length = shortName.length();
     shortName = shortName.right(length - (shortName.findRev('/') +1)).stripWhiteSpace();
     checkAndFixToolViewObjectName(view, shortName);
-  
-    KMdiToolViewAccessor *tmp = 
+
+    KMdiToolViewAccessor *tmp =
         KMdiMainFrm::addToolWindow(view,
                                    KDockWidget::DockLeft,
                                    getMainDockWidget(),
@@ -524,14 +524,14 @@ void MainWindow::embedSelectViewRight(QWidget* view, const QString& title, const
         embedSelectView( view, title, toolTip );
         return;
     }
-    
+
 
     const QPixmap* wndIcon = view->icon();
     kdDebug(9000) << "icon = " << wndIcon << endl;
     if (!wndIcon ) { // || (wndIcon && (wndIcon->size().height() > 16))) {
         view->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
     }
-    
+
     QString shortName = title;
     int length = shortName.length();
     shortName = shortName.right(length - (shortName.findRev('/') +1)).stripWhiteSpace();
@@ -552,7 +552,7 @@ void MainWindow::embedOutputView(QWidget *view, const QString &name, const QStri
     int length = shortName.length();
     shortName = shortName.right(length - (shortName.findRev('/') +1)).stripWhiteSpace();
     checkAndFixToolViewObjectName(view, shortName);
-      
+
     KMdiToolViewAccessor *tmp =
         KMdiMainFrm::addToolWindow(view,
                                    KDockWidget::DockBottom,
@@ -593,7 +593,7 @@ void MainWindow::removeView(QWidget *view)
     return;
   }
   m_bRemoveViewPending = true;
-  
+
   QGuardedPtr<KMdiChildView> wrapper = m_widgetMap[view];
 
   if (wrapper) {
@@ -603,12 +603,12 @@ void MainWindow::removeView(QWidget *view)
     m_childViewMap.remove(wrapper);
     m_captionDict.remove(wrapper->caption());
   }
-  
+
   // Find the KDockWidget which covers the KMdiChildView to remove and delete.
   // Undock the KDockWidget if there is one.
   // This will remove the corresponding tab from the output and tree views.
   QGuardedPtr<KDockWidget> pDock = dockManager->findWidgetParentDock(wrapper ? wrapper : view);
-  
+
   // Note: this reparenting is necessary. Otherwise, the view gets
   // deleted twice: once when the wrapper is deleted, and the second
   // time when the part is deleted.
@@ -620,7 +620,7 @@ void MainWindow::removeView(QWidget *view)
   if (wrapper) {
     closeWindow(wrapper);
   }
-  
+
   if( pDock ) {
 	deleteToolWindow(view);
 /*    pDock->undock();
@@ -633,7 +633,7 @@ void MainWindow::removeView(QWidget *view)
     m_selectViews.remove(view);
     m_outputViews.remove(view);
   }
-  
+
   m_bRemoveViewPending = false;
 }
 
@@ -728,7 +728,7 @@ void MainWindow::loadMDISettings()
 
 void MainWindow::guiRestoringFinished()
 {
-   dockManager->finishReadDockConfig(); 
+   dockManager->finishReadDockConfig();
 }
 
 void MainWindow::prepareToCloseViews()
@@ -789,7 +789,7 @@ void MainWindow::gotoLastWindow()
 //=============== fillWindowMenu ===============//
 // This is more or less a verbatim copy from what is implemented in KMdiMainFrm
 void MainWindow::fillWindowMenu()
-{  
+{
    bool bTabPageMode = FALSE;
    if (m_mdiMode == KMdi::TabPageMode)
       bTabPageMode = TRUE;
@@ -1154,9 +1154,9 @@ void MainWindow::toggleSingleToolWin(const ViewMenuActionPrivateData &ActionData
     else // It does not have a DockWidget
     {
       Q_ASSERT(0);
-#if 0      
+#if 0
          addToolViewWindow(ActionData.eView, ActionData.pChildView, ActionData.pChildView->name(), ActionData.pChildView->name());
-#endif	 
+#endif
     }
   }
 }
@@ -1179,7 +1179,7 @@ void MainWindow::switchToToplevelMode()
 {
   if (m_mdiMode == KMdi::ToplevelMode) return;
   m_bUiModeSwitchPending = true;
-  
+
   m_toggleViewbar->setEnabled(true);
   if (mdiMode() == KMdi::TabPageMode || mdiMode() == KMdi::IDEAlMode) {
       slotToggleViewbar();
@@ -1435,13 +1435,13 @@ void MainWindow::setCaption( const QString & caption )
 	if ( project && !caption.isEmpty() )
 	{
 		QString projectname = project->projectName();
-		
+
 		QString suffix(".kdevelop");
 		if ( projectname.endsWith( suffix ) )
 		{
 			projectname.truncate( projectname.length() - suffix.length() );
 		}
-			
+
 		KMdiMainFrm::setCaption( projectname + " - " + caption );
 	}
 	else

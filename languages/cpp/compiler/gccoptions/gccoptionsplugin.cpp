@@ -107,7 +107,7 @@ GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char 
 
     QVButtonGroup *output_group = new QVButtonGroup(i18n("Output"), this);
     new FlagCheckBox(output_group, controller,
-                     "-fsyntax-only", i18n("Only check the code for syntax errors, don't produce object code"));
+                     "-fsyntax-only", i18n("Only check the code for syntax errors, do not produce object code"));
     new FlagCheckBox(output_group, controller,
                      "-pg",           i18n("Generate extra code to write profile information for gprof"));
     new FlagCheckBox(output_group, controller,
@@ -192,8 +192,8 @@ OptimizationTab::OptimizationTab(GccOptionsPlugin::Type type, QWidget *parent, c
                                                  "doing arithmetic on them</qt>"),
                      "-fno-force-addr");
     new FlagListItem(optBox,
-                     "-omit-frame-pointer", i18n("<qt>Don't keep the frame pointer in a register for functions that "
-                                                 "don't need one</qt>"),
+                     "-omit-frame-pointer", i18n("<qt>Do not keep the frame pointer in a register for functions that "
+                                                 "do not need one</qt>"),
                      "-fno-omit-frame-pointer");
     new FlagListItem(optBox,
                      "-no-inline",          i18n("<qt>Ignore the <i>inline</i> keyword</qt>"),
@@ -218,7 +218,7 @@ OptimizationTab::~OptimizationTab()
 void OptimizationTab::readFlags(QStringList *list)
 {
     optBox->readFlags(list);
-    
+
     QStringList::Iterator sli;
     sli = list->find("-O0");
     if (sli != list->end()) {
@@ -271,7 +271,7 @@ G77Tab::G77Tab(QWidget *parent, const char *name)
                      "-fno-backslah");
     new FlagCheckBox(dialect_group, controller,
                      "-fonetrip",         i18n("DO loops are executed at least once"));
-    
+
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
@@ -351,7 +351,7 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagListItem(wallBox,
                      "-Wmissing-braces",     i18n("<qt>Warn if an aggregate or union initializer is not fully bracketed</qt>"));
     new FlagListItem(wallBox,
-                     "-Wparentheses",        i18n("<qt>Warn when parentheses are omitted in certain context</qt>"));
+                     "-Wparentheses",        i18n("<qt>Warn when parentheses are omitted in certain contexts</qt>"));
     new FlagListItem(wallBox,
                      "-Wsequence-point",     i18n("<qt>Warn about code that may have undefined semantics because of\n"
                                                   "violations of sequence point rules in the C standard</qt>"));
@@ -511,7 +511,7 @@ Warnings2Tab::Warnings2Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
                                                    "* Item 12:  Prefer initialization to assignment in constructors;\n"
                                                    "* Item 14:  Make destructors virtual in base classes;\n"
                                                    "* Item 15:  Have `operator=' return a reference to `*this';\n"
-                                                   "* Item 23:  Don't try to return a reference when you must\n"
+                                                   "* Item 23:  Do not try to return a reference when you must\n"
                                                    "  return an object\n"
                                                    "\n"
                                                    "and about violations of the following style guidelines from Scott\n"

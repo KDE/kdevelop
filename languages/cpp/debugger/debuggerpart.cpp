@@ -89,7 +89,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                               "The variable tree allows you to see "
                               "the variable values as you step "
                               "through your program using the internal "
-                              "debugger. Click the RMB on items in "
+                              "debugger. Click the right mouse button on items in "
                               "this view to get a popup menu.\n"
                               "To speed up stepping through your code "
                               "leave the tree items closed and add the "

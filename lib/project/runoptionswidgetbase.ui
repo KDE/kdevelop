@@ -222,7 +222,7 @@
                         <string>Automatically com&amp;pile before execution</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>If the program is not up-to-date with the source code, compile it before starting it's execution</string>
+                        <string>If the program is not up-to-date with the source code, compile it before starting its execution</string>
                     </property>
                 </widget>
             </hbox>

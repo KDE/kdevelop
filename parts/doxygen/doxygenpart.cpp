@@ -1,7 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
- *   Copyright (C) 2004 by Jonas Jacobi                                    *   
+ *   Copyright (C) 2004 by Jonas Jacobi                                    *
  *    jonas.jacobi@web.de                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -72,13 +72,13 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("Doxygen"), PROJECTOPTIONS );
-	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
-    
+
     m_actionDocumentFunction = new KAction(i18n("Document Current Function"), 0, CTRL+SHIFT+Key_S, this, SLOT(slotDocumentFunction()), actionCollection(), "edit_document_function");
     m_actionDocumentFunction->setToolTip( i18n("Create a documentation template above a function"));
     m_actionDocumentFunction->setWhatsThis(i18n("<b>Document Current Function</b><p>Creates a documentation template according to a function's signature above a function definition/declaration."));
-                  
+
     m_tmpDir.setAutoDelete(true);
     connect(&m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotPreviewProcessExited()));
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )));
@@ -86,7 +86,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     m_actionPreview->setToolTip( i18n("Show a preview of the doxygen output of this file") );
     m_actionPreview->setWhatsThis( i18n("<b>Preview Doxygen output</b><p>Runs Doxygen over the current file and shows the created index.html.") );
 
-    //read Doxygen configuration, if none exists yet, create it with some defaults    
+    //read Doxygen configuration, if none exists yet, create it with some defaults
     adjustDoxyfile();
     QString fileName = project()->projectDirectory() + "/Doxyfile";
 
@@ -112,7 +112,7 @@ void DoxygenPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, u
 	if ( pagenumber == PROJECTOPTIONS )
 	{
 		adjustDoxyfile();
-				
+
 		DoxygenConfigWidget *w = new DoxygenConfigWidget(project()->projectDirectory() + "/Doxyfile", page );
 		connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 	}
@@ -341,35 +341,35 @@ void DoxygenPart::slotRunPreview( )
 {
     if (m_file.isNull())
         return;
-	
+
     if (m_process.isRunning()) {
         if ( KMessageBox::warningYesNo(0, i18n("Previous Doxygen process is still running.\nDo you want to cancel that process?"))  == KMessageBox::Yes )
             m_process.kill();
-	else 
+	else
             return;
     }
-	
+
     m_process.clearArguments();
-    
+
     m_tmpDir.unlink();
     m_tmpDir = KTempDir();
     m_tmpDir.setAutoDelete(true);
-    
+
     Config* config = Config::instance();
-    
+
     ConfigString* poDir = dynamic_cast<ConfigString*>(config->get("OUTPUT_DIRECTORY"));
     ConfigList* pInput = dynamic_cast<ConfigList*>(config->get("INPUT"));
     ConfigString* pHeader = dynamic_cast<ConfigString*>(config->get("HTML_HEADER"));
     ConfigString* pFooter = dynamic_cast<ConfigString*>(config->get("HTML_FOOTER"));
     ConfigString* pStyle = dynamic_cast<ConfigString*>(config->get("HTML_STYLESHEET"));
-    
+
     //store config values to restore them later | override config values to get only the current file processed
     QCString dirVal;
     if (poDir != 0) {
         dirVal = *poDir->valueRef();
         *poDir->valueRef() = m_tmpDir.name().ascii();
     }
-   
+
    QStrList inputVal;
     if (pInput != 0) {
         inputVal = *pInput->valueRef();
@@ -381,12 +381,12 @@ void DoxygenPart::slotRunPreview( )
                                                      "# documented source files. You may enter file names like \"myfile.cpp\" or\n"
                                                      "# directories like \"/usr/src/myproject\". Separate the files or directories\n"
                                                      "# with spaces.");
-        pInput = dynamic_cast<ConfigList*>(config->get("INPUT")); //pinput now has to be != 0 
+        pInput = dynamic_cast<ConfigList*>(config->get("INPUT")); //pinput now has to be != 0
         QStrList xl;
          xl.append(m_file.ascii());
         *pInput->valueRef() = xl;
     }
-    
+
     QCString header;
     QCString footer;
     QCString stylesheet;
@@ -397,25 +397,25 @@ void DoxygenPart::slotRunPreview( )
         QFileInfo info (header);
         if (info.isRelative())
             *pHeader->valueRef() = QString(projectDir + "/" + QString(header)).ascii();
-        else 
+        else
             header = 0;
     }
-    
+
     if (pFooter != 0 && !pFooter->valueRef()->isEmpty()){
         footer = *pFooter->valueRef();
         QFileInfo info (footer);
         if (info.isRelative())
             *pFooter->valueRef() = QString(projectDir + "/" + QString(footer)).ascii();
-        else 
+        else
             footer = 0;
     }
-    
+
     if (pStyle != 0 && !pStyle->valueRef()->isEmpty()){
         stylesheet = *pStyle->valueRef();
         QFileInfo info (stylesheet);
         if (info.isRelative())
             *pStyle->valueRef() = QString(projectDir +"/" + QString(stylesheet)).ascii();
-        else 
+        else
             stylesheet = 0;
     }
 
@@ -424,43 +424,43 @@ void DoxygenPart::slotRunPreview( )
         //restore config values
         if (pInput != 0)
             *pInput->valueRef() = inputVal;
-    
+
         if (poDir != 0)
             *poDir->valueRef() = dirVal;
-        
-        KMessageBox::error(0, "Can't create temporary file '" + file.name() + "'!");
+
+        KMessageBox::error(0, i18n("Cannot create temporary file '" + file.name() + "'"));
         return;
     }
-    
+
     config->writeTemplate(&file, false, false);
-    
+
     if (inputVal.count() == 0) //pInput is always != 0
         *pInput->valueRef() = QStrList();
     else
         *pInput->valueRef() = inputVal;
-    
+
     if (poDir != 0)
         *poDir->valueRef() = dirVal;
-    
+
     if (pHeader != 0 && !header.isNull())
         *pHeader->valueRef() = header;
-    
+
     if (pFooter != 0 && !footer.isNull())
         *pFooter->valueRef() = footer;
-    
+
     if (pStyle != 0 && !stylesheet.isNull())
         *pStyle->valueRef() = stylesheet;
-        
+
 	m_process << "doxygen" << file.name().ascii();
 	m_process.start(KProcess::NotifyOnExit, KProcess::NoCommunication);
-    
+
 }
 
 void DoxygenPart::slotActivePartChanged( KParts::Part * part )
 {
 	// -> idea from cppsupportpart.cpp
 	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part);
-	if (doc != 0) 
+	if (doc != 0)
 		m_file = doc->url().path();
 	else
 		m_file = QString::null;
@@ -474,15 +474,15 @@ void DoxygenPart::slotDocumentFunction(){
         if ( codeModel()->hasFile( m_file ) ) {
             unsigned int cursorLine, cursorCol;
             m_cursor->cursorPosition(&cursorLine, &cursorCol);
-            
+
             FunctionDom function = 0;
             FunctionDefinitionDom functionDef = 0;
-            
+
             FileDom file = codeModel()->fileByName( m_file );
-            
+
             FunctionList functionList = CodeModelUtils::allFunctions(file);
             FunctionList::ConstIterator theend = functionList.end();
-            for( FunctionList::ConstIterator ci = functionList.begin(); ci!= theend; ++ci ){    
+            for( FunctionList::ConstIterator ci = functionList.begin(); ci!= theend; ++ci ){
                 int sline, scol;
                 int eline, ecol;
                 (*ci)->getStartPosition(&sline, &scol);
@@ -493,7 +493,7 @@ void DoxygenPart::slotDocumentFunction(){
             if (function == 0){
                 FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
                 FunctionDefinitionList::ConstIterator theend = functionDefList.end();
-                for( FunctionDefinitionList::ConstIterator ci = functionDefList.begin(); ci!= theend; ++ci ){    
+                for( FunctionDefinitionList::ConstIterator ci = functionDefList.begin(); ci!= theend; ++ci ){
                     int sline, scol;
                     int eline, ecol;
                     (*ci)->getStartPosition(&sline, &scol);
@@ -502,7 +502,7 @@ void DoxygenPart::slotDocumentFunction(){
                         functionDef = *ci;
                 }
             }
-           
+
             int line, col;
             if (function != 0)
                 function->getStartPosition(&line, &col);

@@ -281,7 +281,7 @@
                         <enum>AllColumns</enum>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Shows which groups were matched. See the corresponding documentations how groups are matched.</string>
+                        <string>Shows which groups were matched. See the corresponding documentation for how groups are matched.</string>
                     </property>
                 </widget>
             </hbox>

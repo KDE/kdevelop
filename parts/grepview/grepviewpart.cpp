@@ -37,7 +37,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     : KDevPlugin( "GrepView", "grep", parent, name ? name : "GrepViewPart" )
 {
     setInstance(GrepViewFactory::instance());
-    
+
     setXMLFile("kdevgrepview.rc");
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
@@ -66,7 +66,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "edit_grep");
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("<b>Find in files</b><p>"
-                               "Opens the search in files dialog. There you "
+                               "Opens the 'Search in Files' dialog. There you "
                                "can enter a regular expression which is then "
                                "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
@@ -109,7 +109,7 @@ void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
     kdDebug(9001) << "context in grepview" << endl;
     if (!context->hasType( Context::EditorContext ))
         return;
-    
+
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
     QString ident = econtext->currentWord();
     if (!ident.isEmpty()) {

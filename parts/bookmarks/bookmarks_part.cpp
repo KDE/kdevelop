@@ -52,7 +52,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	_widget->setCaption(i18n("Bookmarks"));
 	_widget->setIcon(SmallIcon("bookmark"));
-	
+
 	_marksChangeTimer = new QTimer( this );
 
 	QWhatsThis::add(_widget, i18n("<b>Bookmarks</b><p>"
@@ -67,14 +67,14 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("Bookmarks"), BOOKMARKSETTINGSPAGE );
-	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
-	
+
 	connect( _widget, SIGNAL( removeAllBookmarksForURL( const KURL & ) ),
 		this, SLOT( removeAllBookmarksForURL( const KURL & ) ) );
 	connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
 		this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
-		
+
 	connect( _marksChangeTimer, SIGNAL( timeout() ), this, SLOT( marksChanged() ) );
 
 	_config = new BookmarksConfig;
@@ -108,7 +108,7 @@ void BookmarksPart::partAdded( KParts::Part * part )
 			{
 				_widget->updateURL( data );
 			}
-			
+
 			// connect to this editor
 			KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( ro_part );
 			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksEvent() ) );
@@ -136,12 +136,12 @@ void BookmarksPart::reload()
 void BookmarksPart::marksEvent()
 {
 	//kdDebug(0) << "BookmarksPart::marksEvent()" << endl;
-	
+
 	if ( ! _settingMarks )
 	{
 		QObject * senderobj = const_cast<QObject*>( sender() );
 		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj );
-		
+
 		if ( partIsSane( ro_part ) && !_dirtyParts.contains( ro_part ) )
 		{
 			_dirtyParts.push_back( ro_part );
@@ -161,7 +161,7 @@ void BookmarksPart::marksChanged()
 		if ( partIsSane( ro_part ) )
 		{
 			if ( dynamic_cast<KTextEditor::MarkInterface*>( ro_part ) )
-			{	
+			{
 				if ( EditorData * data = storeBookmarksForURL( ro_part ) )
 				{
 					updateContextStringForURL( ro_part );
@@ -175,7 +175,7 @@ void BookmarksPart::marksChanged()
 		}
 		++it;
 	}
-	_dirtyParts.clear();	
+	_dirtyParts.clear();
 }
 
 void BookmarksPart::restorePartialProjectSession( const QDomElement * el )
@@ -392,7 +392,7 @@ bool BookmarksPart::clearBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 {
 	//kdDebug(0) << "BookmarksPart::storeBookmarksForURL()" << endl;
-	
+
 	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>( ro_part ) )
 	{
 		EditorData * data = new EditorData;
@@ -477,7 +477,7 @@ KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
 
 bool BookmarksPart::partIsSane( KParts::ReadOnlyPart * ro_part )
 {
-	return ( ro_part != 0 ) && 
+	return ( ro_part != 0 ) &&
 			partController()->parts()->contains( ro_part) &&
 			!ro_part->url().path().isEmpty();
 }
@@ -485,12 +485,12 @@ bool BookmarksPart::partIsSane( KParts::ReadOnlyPart * ro_part )
 void BookmarksPart::insertConfigWidget( const KDialogBase * dlg, QWidget * page, unsigned int pagenumber )
 {
 	kdDebug() << k_funcinfo << endl;
-	
+
 	if ( pagenumber == BOOKMARKSETTINGSPAGE )
 	{
 		BookmarkSettings * w = new BookmarkSettings( this, page );
 		connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
-	}	
+	}
 }
 
 ////////////////////////////////////////////
@@ -513,38 +513,38 @@ QStringList BookmarksPart::getContextFromStream( QTextStream & istream, unsigned
 		}
 		n++;
 	}
-	
+
 	// maybe pad empty lines to the tail
 	while( n < endline )
 	{
 		list.append( " " );
 		n++;
 	}
-	
+
 	// maybe pad empty lines to the head
 	while( list.count() < ( context * 2 + 1) )
 	{
 		list.prepend( " " );
 	}
-	
+
 	return list;
 }
 
 QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsigned int context )
-{	
+{
 	// if the file is open - get the line from the editor buffer
 	if ( KTextEditor::EditInterface * ei = dynamic_cast<KTextEditor::EditInterface*>( partForURL( url ) ) )
 	{
 		kdDebug() << "the file is open - get the line from the editor buffer" << endl;
-		
+
 		QString ibuffer = ei->text();
 		QTextStream istream( &ibuffer, IO_ReadOnly );
 		return getContextFromStream( istream, line, context );
-	} 
+	}
 	else if ( url.isLocalFile() ) // else the file is not open - get the line from the file on disk
 	{
 		kdDebug() << "the file is not open - get the line from the file on disk" << endl;
-		
+
 		QFile file( url.path() );
 		QString buffer;
 
@@ -554,7 +554,7 @@ QStringList BookmarksPart::getContext( KURL const & url, unsigned int line, unsi
 			return getContextFromStream( istream, line, context );
 		}
 	}
-	return QStringList( i18n("Couldn't find file") );
+	return QStringList( i18n("Could not find file") );
 }
 
 BookmarksConfig * BookmarksPart::config( )

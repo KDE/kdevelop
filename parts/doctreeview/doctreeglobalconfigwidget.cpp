@@ -551,7 +551,7 @@ void DocTreeGlobalConfigWidget::extRemoveButton_clicked( )
         url.setPath(DocTreeViewFactory::instance()->dirs()->findResource("doctocs",
             extListView->currentItem()->text(0) + QString(".toc")));
         if (! KIO::NetAccess::del(url))
-            KMessageBox::error(this, i18n("Could not remove documentation TOC!\nIt may be a part of system-wide KDevelop documentation."));
+            KMessageBox::error(this, i18n("Could not remove documentation TOC.\nIt may be a part of system-wide KDevelop documentation."));
         else
             delete extListView->currentItem();
     }
@@ -645,7 +645,7 @@ void DocTreeGlobalConfigWidget::dhRemoveButton_clicked( )
         url.setPath(DocTreeViewFactory::instance()->dirs()->findResource("docdevhelp",
             dhListView->currentItem()->text(0) + QString(".devhelp")));
         if (! KIO::NetAccess::del(url))
-            KMessageBox::error(this, i18n("Could not remove documentation TOC!\nIt may be a part of system-wide KDevelop documentation."));
+            KMessageBox::error(this, i18n("Could not remove documentation TOC.\nIt may be a part of system-wide KDevelop documentation."));
         else
         {
             KConfig *config = DocTreeViewFactory::instance()->config();

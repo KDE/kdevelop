@@ -146,7 +146,7 @@ bool CvsServicePartImpl::prepareOperation( const KURL::List &someUrls, CvsOperat
     if (urls.count() <= 0) // who knows? ;)
     {
         kdDebug(9006) << "CvsServicePartImpl::prepareOperation(): No valid document URL selected!!!" << endl;
-        KMessageBox::sorry( 0, i18n("None of the file(s) you selected seems to be valid for repository.") );
+        KMessageBox::sorry( 0, i18n("None of the file(s) you selected seem to be valid for repository.") );
         return false;
     }
 
@@ -544,7 +544,7 @@ void CvsServicePartImpl::diff( const KURL::List& urlList )
                 dlg.revB(), options->diffOptions(), options->contextLines() );
     if (!m_cvsService->ok())
     {
-        KMessageBox::sorry( 0, i18n("Sorry, cannot diff!"),
+        KMessageBox::sorry( 0, i18n("Sorry, cannot diff."),
             i18n("Error During Diff") );
         return;
     }
@@ -745,7 +745,7 @@ void CvsServicePartImpl::removedFilesFromProject(const QStringList &filesToRemov
         return;
 
     int s = KMessageBox::questionYesNo( 0,
-        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
+        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too."),
         i18n("CVS - Files Removed From Project"),
         KStdGuiItem::yes(),
         KStdGuiItem::no(),

@@ -161,7 +161,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Note:&lt;/b&gt; If you abort, your files will be created, &lt;b&gt;but will not&lt;/b&gt; be added to the project.</string>
+                        <string>&lt;b&gt;Note:&lt;/b&gt; If you abort your files will be created &lt;b&gt;but will not&lt;/b&gt; be added to the project.</string>
                     </property>
                 </widget>
             </vbox>

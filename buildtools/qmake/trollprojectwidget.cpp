@@ -494,7 +494,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
     configurefileButton->setEnabled ( true );
     QToolTip::add( configurefileButton, i18n( "Configure file" ) );
-    QWhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows to exclude file from specified scopes."));
+    QWhatsThis::add(configurefileButton, i18n("<b>Configure file</b><p>Opens <b>File Properties</b> dialog that allows a file to be excluded from specified scopes."));
 
     // detail tree
     details = new KListView(detailContainer, "details widget");
@@ -2312,7 +2312,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
 	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
-          popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file assotiated with the selected .ui."));
+          popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
 	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
           popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
                            "There is possibility to add or remove subclasses from the list."));

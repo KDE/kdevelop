@@ -178,7 +178,7 @@ void PartExplorerForm::slotSearchRequested()
 
     if (serviceType.isNull())  // It is mandatory
     {
-        slotDisplayError( i18n("You must fill at least the service type!!") );
+        slotDisplayError( i18n("You must fill at least the service type.") );
         return;
     }
 
@@ -193,7 +193,7 @@ void PartExplorerForm::slotDisplayError( QString errorMessage )
 {
     if (errorMessage.isEmpty())
     {
-        errorMessage = i18n("Unknown error!");
+        errorMessage = i18n("Unknown error.");
     }
     KMessageBox::error( this, errorMessage );
 }
@@ -206,7 +206,7 @@ void PartExplorerForm::fillServiceList( const KTrader::OfferList &services )
 
     if ( services.isEmpty())
     {
-        slotDisplayError( i18n("No service found matching the criteria!") );
+        slotDisplayError( i18n("No service found matching the criteria.") );
         return;
     }
 

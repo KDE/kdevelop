@@ -184,7 +184,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     m_add->setPixmap ( SmallIcon ( "breakpoint_add" ) );
     QToolTip::add ( m_add, i18n ( "Add empty breakpoint" ) + I18N_NOOP(" <Alt+A>"));
     QWhatsThis::add( m_add, i18n("<b>Add empty breakpoint</b><p>Shows a popup menu that allows to choose "
-        "the type of breakpoint. Then adds a breakpoint of selected type to the breakpoints list."));
+        "the type of breakpoint. Then adds a breakpoint of the selected type to the breakpoints list."));
 
     m_delete    = new QToolButton( toolbar, "delete breakpoint" );
     m_delete->setPixmap ( SmallIcon ( "breakpoint_delete" ) );
@@ -651,7 +651,7 @@ void GDBBreakpointWidget::slotRemoveBreakpoint()
 void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 {
   while (m_table->numRows() > 0)
-  {    
+  {
     for ( int row = m_table->numRows()-1; row>=0; row-- )
     {
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);

@@ -43,18 +43,18 @@ CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
     setXMLFile("kdevctags.rc");
 
     KAction *action;
-    
+
     action = new KAction( i18n("CTags..."), 0,
                           this, SLOT(slotSearchTags()),
                           actionCollection(), "tools_ctags" );
     action->setToolTip(i18n("CTags dialog"));
-    action->setWhatsThis(i18n("<b>CTags</b><p>Allows to create tags database and provides a dialog to search in tags database."));
+    action->setWhatsThis(i18n("<b>CTags</b><p>Creates a tags database and provides a dialog to search it."));
 
     mOccuresTagsDlg = 0;
     mOccuresTagsDlg = new OccuresTagsDlg;
     mOccuresTagsDlg->hide();
 
-    connect( mOccuresTagsDlg->mOcurresList, SIGNAL(clicked( QListBoxItem * )), 
+    connect( mOccuresTagsDlg->mOcurresList, SIGNAL(clicked( QListBoxItem * )),
              this, SLOT(slotGotoTag( QListBoxItem * )) );
     connect( core(), SIGNAL(projectClosed()),
              this, SLOT(projectClosed()) );
@@ -89,12 +89,12 @@ void CTagsPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (!context->hasType( Context::EditorContext ))
         return;
-    
+
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
     QString ident = econtext->currentWord();
     if (ident.isEmpty())
         return;
-    
+
     m_contextString = ident;
     int id = popup->insertItem( i18n("Go to ctags Declaration: %1").arg(ident),
                        this, SLOT(slotGotoDeclaration()) );
@@ -111,7 +111,7 @@ void CTagsPart::gotoTag(const QString &tag, const QString &kindChars)
 {
     if (!ensureTagsLoaded())
         return;
-    
+
     QString fileName, pattern;
     QStringList occuresList;
 
@@ -161,7 +161,7 @@ void CTagsPart::gotoFinalTag( const QString & contextStr )
         KMessageBox::sorry(0, i18n("Currently, only tags with line numbers (option -n) are supported"));
         return;
     }
-    
+
     partController()->editDocument(fileName, lineNum-1);
 }
 
@@ -184,7 +184,7 @@ void CTagsPart::slotSearchTags()
         if( ensureTagsLoaded() )
             m_dialog = new CTagsDialog(this);
     }
-    
+
     if (m_dialog)
         m_dialog->show();
 }
@@ -198,18 +198,18 @@ bool CTagsPart::ensureTagsLoaded()
         return false;
 
     kdDebug(9022) << "create/load tags" << endl;
-    
+
     QFileInfo fi(project()->projectDirectory() + "/tags");
     if (!fi.exists()) {
         int r = KMessageBox::questionYesNo(mainWindow()->main(), i18n("A ctags file for this project does not exist yet. Create it now?"));
         if (r != KMessageBox::Yes)
             return false;
         if (!createTagsFile()) {
-            KMessageBox::sorry(mainWindow()->main(), i18n("Could not create tags file!\n\nPlease make sure 'ctags' can be found in your PATH."));
+            KMessageBox::sorry(mainWindow()->main(), i18n("Could not create tags file.\n\nPlease make sure 'ctags' can be found in your PATH."));
             return false;
         }
     }
-    
+
     kdDebug(9022) << "load tags from " << endl;
     return loadTagsFile();
 }
@@ -228,10 +228,10 @@ bool CTagsPart::loadTagsFile()
     else
         m_tags = new CTagsMap;
     m_kindStrings.clear();
-    
+
     QTextStream stream(&f);
     QRegExp re("^([^\t]*)\t([^\t]*)\t([^;]*);\"\t(.*)$");
-        
+
     QString line;
     while (!stream.atEnd()) {
         line = stream.readLine().latin1();
@@ -239,7 +239,7 @@ bool CTagsPart::loadTagsFile()
         if (re.search(line) == -1)
             continue;
 
-        
+
         QString tag = re.cap(1);
         QString file = re.cap(2);
         QString pattern = re.cap(3);
@@ -255,7 +255,7 @@ bool CTagsPart::loadTagsFile()
         ti.pattern = re.cap(3);
         ti.kind = re.cap(4)[0].latin1();
         (*tiit).append(ti);
-        
+
         // Put kind in kind list if not already there
         QString extension;
         if (ti.fileName.right(9) == "/Makefile")
@@ -267,7 +267,7 @@ bool CTagsPart::loadTagsFile()
         }
         if (extension.isNull())
             continue;
-        
+
         QString kindString = CTagsKinds::findKind(ti.kind, extension);
         if (kindString.isNull())
             continue;
@@ -275,7 +275,7 @@ bool CTagsPart::loadTagsFile()
         if (!m_kindStrings.contains(kindString))
             m_kindStrings.append(kindString);
     }
-    
+
     f.close();
 
     return true;

@@ -16,7 +16,7 @@
 
 /** Qt */
 #include <qregexp.h>
- 
+
  /** KDE Libs */
 #include <kaction.h>
 #include <kdebug.h>
@@ -106,13 +106,13 @@ void AutoDetailsView::initActions()
 QString AutoDetailsView::getUiFileLink(const QString &relpath, const QString& filename)
 {
 	DomUtil::PairList::iterator it;
-	
+
 	for (it=m_subclasslist.begin();it != m_subclasslist.end(); ++it)
 	{
 		if ((*it).first==QString("/")+relpath+filename)
 			return (*it).second;
 	}
-	
+
 	return QString ("");
 }
 
@@ -137,7 +137,7 @@ void AutoDetailsView::slotAddNewFile()
 		return ;
 
 	KDevCreateFile * createFileSupport = m_part->createFileSupport();
-	if (createFileSupport) 
+	if (createFileSupport)
 	{
 		KDevCreateFile::CreatedFile crFile =
 			createFileSupport->createNewFile(QString::null, m_widget->selectedSubproject()->path);
@@ -156,7 +156,7 @@ void AutoDetailsView::slotAddNewFile()
 			caption = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
 		else
 			caption = titem->name;
-		
+
 		dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( caption ) );
 
 		if ( dlg.exec() )
@@ -244,7 +244,7 @@ void AutoDetailsView::slotRemoveDetail()
 		if ( dlg.exec() )
 		{
 			emit selectionChanged( titem );
-			
+
 			if ( sibling)
 			{
 				setSelected ( sibling, true );
@@ -271,7 +271,7 @@ void AutoDetailsView::slotRemoveDetail()
 			//details->takeItem ( titem );
 
 			m_widget->slotOverviewSelectionChanged ( m_widget->selectedSubproject() );
-			
+
 			if ( sibling)
 			{
 				setSelected ( sibling, true );
@@ -359,7 +359,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
         popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
                            "and prompts to implement missing in childclass slots and functions."));
 		int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
-        popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file assotiated with the selected .ui."));
+        popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
 
 		if (!fitem->name.contains(QRegExp("ui$")))
 		{
@@ -408,19 +408,19 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		else if (r == idUpdateWidgetclass)
 		{
 			QString noext = m_widget->selectedSubproject()->path + "/" + fitem->name;
-			
+
 			if (noext.findRev('.')>-1)
 				noext = noext.left(noext.findRev('.'));
-			
+
 			QStringList dummy;
 			QString uifile = fitem->uiFileLink;
-			
+
 			if (uifile.findRev('/')>-1)
 			{
 				QStringList uisplit = QStringList::split('/',uifile);
 				uifile=uisplit[uisplit.count()-1];
 			}
-			
+
 			m_part->languageSupport()->updateWidget(m_widget->selectedSubproject()->path + "/" + uifile, noext);
 		}
         else if (r == idUISubclasses)
@@ -430,16 +430,16 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
                                                     "subclass","sourcefile", "uifile");
             SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_widget->selectedSubproject()->path + "/" + fitem->name).remove(0,m_part->projectDirectory().length()),
                 list, m_part->projectDirectory());
-                
+
             if (sbdlg->exec())
             {
                 QDomElement el = DomUtil::elementByPath( dom,  "/kdevautoproject");
                 QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevautoproject/subclassing");
-                if ( (!el.isNull()) && (!el2.isNull()) ) 
+                if ( (!el.isNull()) && (!el2.isNull()) )
                 {
                     el.removeChild(el2);
                 }
-                
+
                 DomUtil::writePairListEntry(dom, "/kdevautoproject/subclassing", "subclass", "sourcefile", "uifile", list);
 
                 m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevautoproject/subclassing" ,
@@ -461,10 +461,10 @@ void AutoDetailsView::slotDetailsExecuted( QListViewItem *item )
 
 	if ( !m_widget->selectedSubproject() )
 		return;
-		
+
 	QString dirName = m_widget->selectedSubproject()->path;
 	FileItem *fitem = static_cast<FileItem*>( item );
-	
+
 	m_part->partController() ->editDocument( KURL( dirName + "/" + fitem->name ) );
 	m_part->mainWindow()->lowerView( m_widget );
 }

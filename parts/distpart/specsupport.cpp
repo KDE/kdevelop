@@ -70,7 +70,7 @@ void SpecSupport::slotbuildAllPushButtonPressed() {
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {
 	if (!file1.exists()) {
-	    QMessageBox::critical(this,i18n("Error"),i18n("You need to create a source archive first!"));
+	    QMessageBox::critical(this,i18n("Error"),i18n("You need to create a source archive first."));
 	    return;
 	}
 	else
@@ -213,7 +213,7 @@ void SpecSupport::slotsrcPackagePushButtonPressed() {
     QFile file2(*(map.find("_sourcedir")) + "/" + getAppSource());
     if (!file2.exists()) {
 	if (!file1.exists()) {
-	    QMessageBox::critical(this,i18n("Error"),i18n("You need to create a source archive first!"));
+	    QMessageBox::critical(this,i18n("Error"),i18n("You need to create a source archive first."));
 	    return;
 	}
 	else
@@ -246,7 +246,7 @@ void SpecSupport::parseDotRpmmacros() {
             QRegExp subst("%\\{([^%]*)\\}");
             QString value = re.cap(2).stripWhiteSpace();
 
-            while(subst.search(value) != -1) {			
+            while(subst.search(value) != -1) {
                 value.replace(QRegExp("%\\{"+ QRegExp_escape( subst.cap(1) ) +"\\}"),*map.find(subst.cap(1)));
             }
             map.insert(re.cap(1),value);

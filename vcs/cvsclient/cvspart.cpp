@@ -212,8 +212,8 @@ void CvsPart::setupActions()
     actionAddToIgnoreList->setWhatsThis(i18n("<b>Ignore this file when doing CVS operation</b><p>Puts the name of this file onto a .cvsignore list."));
     actionRemoveFromIgnoreList = new KAction( i18n("Do Not Ignore This File When Doing CVS Operation"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(), "cvs_donot_ignore" );
-    actionRemoveFromIgnoreList->setToolTip(i18n("Do not ignore this file when soing CVS operation"));
-    actionRemoveFromIgnoreList->setWhatsThis(i18n("<b>Do not ignore this file when soing CVS operation</b><p>Removes the name of this file from a .cvsignore list."));
+    actionRemoveFromIgnoreList->setToolTip(i18n("Do not ignore this file when doing CVS operation"));
+    actionRemoveFromIgnoreList->setWhatsThis(i18n("<b>Do not ignore this file when doing CVS operation</b><p>Removes the name of this file from a .cvsignore list."));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,7 +263,7 @@ bool CvsPart::prepareOperation( CvsOperation op )
     if (urls.count() <= 0) // who knows? ;)
     {
         kdDebug(9000) << "CvsPart::prepareOperation(): No valid document URL selected!!!" << endl;
-        KMessageBox::sorry( 0, i18n("None of the file(s) you selected seems to be valid for repository.") );
+        KMessageBox::sorry( 0, i18n("None of the file(s) you selected seem to be valid for repository.") );
         return false;
     }
     URLUtil::dump( urls );
@@ -1019,7 +1019,7 @@ void CvsPart::slotRemovedFilesFromProject(const QStringList &fileToRemove)
     kdDebug( 9000 ) << "====> CvsPart::slotRemovedFilesFromProject( const QStringList &)" << endl;
 
     int s = KMessageBox::questionYesNo( 0,
-        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too!"),
+        i18n("Do you want them to be removed from CVS repository too?\nWarning: They will be removed from disk too."),
         i18n("CVS - Files Removed From Project"),
         KStdGuiItem::yes(),
         KStdGuiItem::no(),
