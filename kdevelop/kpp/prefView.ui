@@ -1,0 +1,359 @@
+<!DOCTYPE UI><UI>
+<class>prefview</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>prefView</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>396</width>
+            <height>260</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>prefView</string>
+    </property>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_Okay</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>220</y>
+                <width>100</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>OK</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_Cancel</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>120</x>
+                <y>220</y>
+                <width>100</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Cancel</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_SpecTemplatePath</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Spec Template Path:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_DefaultVendor</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>100</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Default Vendor:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_DefaultURL</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>140</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Default URL:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_SPECSelect</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>310</x>
+                <y>20</y>
+                <width>80</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Select</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_SPECPath</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>130</x>
+                <y>20</y>
+                <width>180</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </widget>
+    <widget>
+        <class>QLineEdit</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLineEdit_Vendor</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>130</x>
+                <y>100</y>
+                <width>260</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </widget>
+    <widget>
+        <class>QLineEdit</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLineEdit_URL</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>130</x>
+                <y>140</y>
+                <width>260</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_DefaultLicense</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>180</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Default License Type:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QComboBox</class>
+        <item>
+            <property>
+                <name>text</name>
+                <string>GPL</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>LGPL</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>BSD</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>QPL</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>MIT</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>MPL</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>Shareware</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>Commercial</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>Freeware</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>OpenSource</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>Artisitc</string>
+            </property>
+        </item>
+        <item>
+            <property>
+                <name>text</name>
+                <string>Apache</string>
+            </property>
+        </item>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QComboBox_1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>140</x>
+                <y>180</y>
+                <width>140</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>insertionPolicy</name>
+            <enum>AtTop</enum>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_buildroot</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>60</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Build Root Directory:</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QLabel_buildRoot</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>130</x>
+                <y>60</y>
+                <width>180</width>
+                <height>20</height>
+            </rect>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>QPushButton_BuildSelect</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>310</x>
+                <y>60</y>
+                <width>80</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Select</string>
+        </property>
+    </widget>
+</widget>
+</UI>

@@ -1,0 +1,208 @@
+<!DOCTYPE UI><UI>
+<class>CLibPropDlg</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>CLibPropDlg</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>440</width>
+            <height>198</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Library properties</string>
+    </property>
+    <property stdset="1">
+        <name>sizeGripEnabled</name>
+        <bool>true</bool>
+    </property>
+    <grid>
+        <property stdset="1">
+            <name>margin</name>
+            <number>11</number>
+        </property>
+        <property stdset="1">
+            <name>spacing</name>
+            <number>6</number>
+        </property>
+        <widget row="2"  column="0" >
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>buttonHelp</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Help</string>
+            </property>
+            <property stdset="1">
+                <name>autoDefault</name>
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget row="2"  column="1" >
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>buttonOk</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;OK</string>
+            </property>
+            <property stdset="1">
+                <name>autoDefault</name>
+                <bool>true</bool>
+            </property>
+            <property stdset="1">
+                <name>default</name>
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget row="2"  column="2" >
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>buttonCancel</cstring>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Cancel</string>
+            </property>
+            <property stdset="1">
+                <name>autoDefault</name>
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget row="0"  column="0"  rowspan="1"  colspan="3" >
+            <class>QButtonGroup</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>rbGroup_LibType</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>Set library type</string>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget>
+                    <class>QRadioButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>enableShared</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Shared library</string>
+                    </property>
+                    <property stdset="1">
+                        <name>checked</name>
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QRadioButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>enableStatic</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Static library</string>
+                    </property>
+                    <property stdset="1">
+                        <name>checked</name>
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget row="1"  column="0"  rowspan="1"  colspan="3" >
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBox1</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>Shared library properties</string>
+            </property>
+            <grid>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget row="0"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>libName</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Library name</string>
+                    </property>
+                </widget>
+                <widget row="0"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>libNameEdit</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="1" >
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>LDFlagsEdit</cstring>
+                    </property>
+                </widget>
+                <widget row="1"  column="0" >
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>LDFLAGS</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>CLibPropDlg</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>CLibPropDlg</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+</UI>

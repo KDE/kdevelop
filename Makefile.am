@@ -1,4 +1,4 @@
-SUBDIRS = lib parts plugins src doc pics
+SUBDIRS = lib parts plugins $(GIDEON_SUBDIR) $(KDEV_SUBDIR) doc pics
 
 EXTRA_DIST = AUTHORS COPYING NEWS ChangeLog INSTALL README TODO HACKING admin configure.in.bot
 
