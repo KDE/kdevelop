@@ -1,3 +1,10 @@
+2000-04-02 Walter Tasin  <tasin@kdevelop.de>
+	* removing a file physically by RFV or LFV
+	  also removes the file from the actual edit buffers
+	* certain missing refreshes of RFV and LFV if a file would be
+	  added to project or removed physically, even if an update of
+ 	  an directory from the cvs repository occurs.
+
 2000-03-31 Ralf Nolden <rnolden@kdevelop.de>
         * updated startlogo and aboutlogo
 
