@@ -15,7 +15,7 @@
 #include <qtextedit.h>
 #include <qstringlist.h>
 
-#include "cvsservicedcopiface.h"
+#include "cvsservicedcopIface.h"
 
 class CvsServicePart;
 class DCOPRef;

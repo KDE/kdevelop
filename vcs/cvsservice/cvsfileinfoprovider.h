@@ -15,7 +15,7 @@
 #include <qmap.h>
 
 #include <kdevvcsfileinfoprovider.h>
-#include "cvsservicedcopiface.h"
+#include "cvsservicedcopIface.h"
 #include "cvsdir.h"
 
 class CvsServicePart;

@@ -13,7 +13,7 @@
 #define CHECKOUTDIALOG_H
 
 #include <kdialogbase.h>
-#include "cvsservicedcopiface.h"
+#include "cvsservicedcopIface.h"
 
 class CvsService_stub;
 class CvsJob_stub;

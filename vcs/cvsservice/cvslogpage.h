@@ -12,7 +12,7 @@
 #ifndef CVSLOGPAGE_H
 #define CVSLOGPAGE_H
 
-#include "cvsservicedcopiface.h"
+#include "cvsservicedcopIface.h"
 #include <qwidget.h>
 
 class CvsJob_stub;

@@ -12,7 +12,7 @@
 #ifndef CVSDIFFPAGE_H
 #define CVSDIFFPAGE_H
 
-#include "cvsservicedcopiface.h"
+#include "cvsservicedcopIface.h"
 #include <qwidget.h>
 
 class CvsJob_stub;
