@@ -3077,11 +3077,17 @@ install_location=$$(kde_datadir)/kdevelop/templates/qtmdi.tar.gz
 type=DATA
 
 [kdevelop/tools/Makefile.am]
-files=kdevelop/tools/kdevdlg2ui,kdevelop/tools/kimport,kdevelop/tools/one2two,kdevelop/tools/processesend.pl,kdevelop/tools/processes.pl.in,
+files=kdevelop/tools/kdevdlg2ui,kdevelop/tools/kimport,kdevelop/tools/one2two,kdevelop/tools/processesend.pl,kdevelop/tools/processes.pl.in,kdevelop/tools/kdevelop2.upd
 sub_dirs=
 type=normal
 
 [kdevelop/tools/kdevdlg2ui]
+dist=true
+install=false
+install_location=
+type=DATA
+
+[kdevelop/tools/kdevelop2.upd]
 dist=true
 install=false
 install_location=
