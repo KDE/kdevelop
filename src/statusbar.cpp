@@ -18,13 +18,16 @@
 
 
 #include <kdebug.h>
+#include <kparts/part.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 
 #include "statusbar.h"
+#include "partcontroller.h"
 
 
 StatusBar::StatusBar(QWidget *parent, const char *name)
-    : KStatusBar(parent, name)
+    : KStatusBar(parent, name), m_cursorIface(0), m_activePart(0)
 {
     setSizeGripEnabled(false);
     
@@ -54,12 +57,49 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
 
     widget = 0; 
 
-	setEditorStatusVisible(false);
+    setEditorStatusVisible(false);
+
+    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+	    this, SLOT(activePartChanged(KParts::Part*)));
 }
 
 
 StatusBar::~StatusBar()
 {}
+
+
+void StatusBar::activePartChanged(KParts::Part *part)
+{
+  if (m_activePart)
+    disconnect(m_activePart, 0, this, 0);
+
+  m_activePart = part;
+  m_cursorIface = 0;
+
+  if (part && part->widget())
+  {
+    m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+    if (m_cursorIface)
+    {
+      connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
+
+      cursorPositionChanged();
+    }
+  }
+  else
+    _cursorPosition->setText("");
+}
+
+
+void StatusBar::cursorPositionChanged()
+{
+  if (m_cursorIface)
+  {
+    uint line, col;
+    m_cursorIface->cursorPositionReal(&line, &col);
+    setCursorPosition(line, col);    
+  }
+}
 
 
 void StatusBar::setEditorStatusVisible(bool visible)

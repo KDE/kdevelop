@@ -39,9 +39,9 @@ void TopLevelSDI::init()
 {
   setXMLFile("gideonui.rc");
 
-  createStatusBar();
   createFramework();
   createActions();
+  createStatusBar();
 
   createGUI(0);
 }

@@ -15,6 +15,8 @@
 #include <kstatusbar.h>
 
 class QLabel;
+namespace KTextEditor { class ViewCursorInterface; };
+namespace KParts { class Part; };
 
 
 /**
@@ -55,7 +57,10 @@ protected:
 
 private slots:
     void timeout();
-    
+    void cursorPositionChanged();
+    void activePartChanged(KParts::Part *part);
+
+
 private:
     QString msg;
     QWidget *widget;
@@ -64,6 +69,9 @@ private:
 	QLabel *_modified;
 	QLabel *_cursorPosition;
 	QLabel *_status;
+
+    KTextEditor::ViewCursorInterface *m_cursorIface;
+    KParts::Part *m_activePart;
 
 };
 
