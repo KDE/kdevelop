@@ -197,6 +197,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 				file.source = templateConfig.readPathEntry("Source");
 				file.dest = templateConfig.readPathEntry("Dest");
 				file.process = templateConfig.readBoolEntry("Process",true);
+				file.isXML = templateConfig.readBoolEntry("EscapeXML",false);
 				file.option = templateConfig.readEntry("Option");
 				info->fileList.append(file);
 			}
@@ -469,6 +470,7 @@ void AppWizardDialog::accept()
 		file.source = tempFile->name();
 		file.dest = QString( "%{dest}/templates/%1" ).arg( (*it).suffix );
 		file.process = true;
+		file.isXML = false;
 		m_pCurrentAppInfo->fileList.append( file );
     }
 	
@@ -489,6 +491,7 @@ void AppWizardDialog::accept()
 				file.source = QString( "%{kdevelop}/template-common/%1" ).arg( *it );
 				file.dest = QString("%{dest}/%1").arg( *it );
 				file.process = true;
+				file.isXML = false;
 				m_pCurrentAppInfo->fileList.append( file );
 			}
 			
@@ -517,6 +520,16 @@ void AppWizardDialog::accept()
 		(*dirIt).dir = KMacroExpander::expandMacros((*dirIt).dir , m_pCurrentAppInfo->subMap);
 	}
 	
+	QMap<QString,QString>::Iterator mapIt( m_pCurrentAppInfo->subMap.begin() );
+	for( ; mapIt != m_pCurrentAppInfo->subMap.end(); ++mapIt )
+	{
+		QString escaped( mapIt.data() );
+		escaped.replace( "&", "&amp;" );
+		escaped.replace( "<", "&lt;" );
+		escaped.replace( ">", "&gt;" );
+		m_pCurrentAppInfo->subMapXML.insert( mapIt.key(), escaped );
+	}
+	
 	// Create dirs
 	dirIt = m_pCurrentAppInfo->dirList.begin();
 	for( ; dirIt != m_pCurrentAppInfo->dirList.end(); ++dirIt)
@@ -524,7 +537,6 @@ void AppWizardDialog::accept()
 		kdDebug( 9000 ) << "Process dir " << (*dirIt).dir  << endl;
 		if( m_pCurrentAppInfo->subMap[(*dirIt).option] != "false" )
 		{
-			
 			if( ! KIO::NetAccess::mkdir( (*dirIt).dir, this ) )
 			{
 				KMessageBox::sorry(this, QString( i18n("The directory %1 cannot be created.")).arg( (*dirIt).dir ) );
@@ -542,7 +554,7 @@ void AppWizardDialog::accept()
 			KTar archive( (*archIt).source, "application/x-gzip" );
 			if( archive.open( IO_ReadOnly ) )
 			{
-				unpackArchive( archive.directory(), (*archIt).dest, m_pCurrentAppInfo->subMap, (*archIt).process );
+				unpackArchive( archive.directory(), (*archIt).dest, (*archIt).process );
 			}
 			else
 			{
@@ -562,7 +574,7 @@ void AppWizardDialog::accept()
 		kdDebug( 9000 ) << "Process file " << (*fileIt).source << endl;
 		if( m_pCurrentAppInfo->subMap[(*fileIt).option] != "false" )
 		{
-			if( !copyFile( (*fileIt).source, (*fileIt).dest, m_pCurrentAppInfo->subMap, (*fileIt).process ) )
+			if( !copyFile( *fileIt ) )
 			{
 				KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( (*fileIt).dest) );
 				return;
@@ -597,12 +609,18 @@ void AppWizardDialog::accept()
 		m_pCurrentAppInfo->subMap.remove( *cleanIt );
 	}
 
-	openAfterGeneration( m_pCurrentAppInfo->subMap );
+	openAfterGeneration();
 	
 	QWizard::accept();
 }
 
-bool AppWizardDialog::copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process )
+bool AppWizardDialog::copyFile( const installFile& file )
+{
+	return
+		copyFile( file.source, file.dest, file.isXML, file.process );
+}
+
+bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool isXML, bool process )
 {
 	kdDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
 	if( process )
@@ -610,6 +628,8 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, cons
 		// Process the file and save it at the destFile location
 		QFile inputFile( source);
 		QFile outputFile( dest );
+		const QMap<QString,QString> &subMap = isXML ?
+			m_pCurrentAppInfo->subMapXML : m_pCurrentAppInfo->subMap;
 		if( inputFile.open( IO_ReadOnly ) && outputFile.open(IO_WriteOnly) )
 		{
 			QTextStream input( &inputFile );
@@ -634,7 +654,7 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, cons
 	return true;
 }
 
-void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString &dest, const QMap<QString,QString> &subMap, bool process )
+void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process )
 {
 	KIO::NetAccess::mkdir( dest , this );
 	kdDebug() << "Dir : " << dir->name() << " at " << dest << endl;
@@ -648,7 +668,7 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 		if( dir->entry( (*entry) )->isDirectory()  )
 		{
 			const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry( (*entry) );
-			unpackArchive( file , dest + "/" + file->name(),  subMap, process);
+			unpackArchive( file , dest + "/" + file->name(), process);
 		}
 		else if( dir->entry( (*entry) )->isFile()  )
 		{
@@ -662,7 +682,9 @@ void AppWizardDialog::unpackArchive( const KArchiveDirectory *dir, const QString
 				KTempFile temp;
 				temp.close();	// cannot write to a still opened file
 				file->copyTo( temp.name() );	// This is plain wrong, KArchiveFile::copyTo takes a directory
-				if ( !copyFile( temp.name(), dest + "/" + file->name() , subMap,  process ) )
+				// assume that an archive does not contain XML files
+				// ( where should we currently get that info from? )
+				if ( !copyFile( temp.name(), dest + "/" + file->name(), false, process ) )
 				{
 					KMessageBox::sorry(this, QString( i18n("The file %1 cannot be created.")).arg( dest) );
 					temp.unlink();
@@ -832,7 +854,7 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
     return 0;
 }
 
-void AppWizardDialog::openAfterGeneration( QMap<QString,QString>& substMap )
+void AppWizardDialog::openAfterGeneration()
 {
 	QString prjName( appname_edit->text() );
 	QString prjNameLC( prjName.lower() );
@@ -840,6 +862,7 @@ void AppWizardDialog::openAfterGeneration( QMap<QString,QString>& substMap )
 	
 	QString projectFile( finalLoc_label->text() + "/" + prjNameLC + ".kdevelop" );
 	
+	// Read the DOM of the newly created project
 	QFile file( projectFile );
 	if( !file.open( IO_ReadOnly ) )
 		return;
@@ -847,16 +870,20 @@ void AppWizardDialog::openAfterGeneration( QMap<QString,QString>& substMap )
 	projectDOM.setContent( &file );
 	file.close();
 	
-	DomUtil::writeMapEntry( projectDOM, "substmap", substMap );
+	// DOM Modifications go here
+	DomUtil::writeMapEntry( projectDOM, "substmap", m_pCurrentAppInfo->subMap );
 	
+	// write the dom back
 	if( !file.open( IO_WriteOnly ) )
 		return;
 	QTextStream ts( &file );
 	ts << projectDOM.toString(2);
 	file.close();
 	
+	// open the new project
 	m_part->core()->openProject( projectFile );
 	
+	// open files to open
 	QStringList::Iterator it = m_pCurrentAppInfo->openFilesAfterGeneration.begin();
 	for( ; it != m_pCurrentAppInfo->openFilesAfterGeneration.end(); ++it )
 	{

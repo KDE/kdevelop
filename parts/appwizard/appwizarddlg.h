@@ -43,6 +43,7 @@ struct installFile
 	QString dest;
 	QString option;
 	bool process;
+	bool isXML;
 };
 
 struct installArchive
@@ -72,6 +73,7 @@ struct ApplicationInfo
     QStringList openFilesAfterGeneration;
     QString templateFile;
     QMap<QString,QString> subMap;
+	QMap<QString,QString> subMapXML;
     QStringList includes;
     
     AutoPropertyMap subValues;
@@ -144,10 +146,11 @@ private: //methods
 	void addFavourite(QListViewItem* item, QString favouriteName="");
 	ApplicationInfo* findFavouriteInfo(QIconViewItem* item);
 	
-	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, const QMap<QString,QString> &subMap, bool process );
-	bool copyFile( const QString &source, const QString &dest, const QMap<QString,QString> &subMap, bool process );
+	void unpackArchive( const KArchiveDirectory *dir, const QString &dest, bool process );
+	bool copyFile( const installFile& file );
+	bool copyFile( const QString &source, const QString &dest, bool isXML, bool process );
 	QString kdevRoot(const QString &templateName ) const;
-	void openAfterGeneration( QMap<QString,QString>& substMap );
+	void openAfterGeneration();
 	
 private: //data
 
