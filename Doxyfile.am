@@ -52,7 +52,7 @@ apidox-am-yes:
 				if test -d "$(PWD)/$$item"; then \
 					dirs="$$dirs $$item" ;\
 				else \
-					patterns="$$paterns $$item" ;\
+					patterns="$$patterns $$item" ;\
 				fi ;\
 			done ;\
 			echo "EXCLUDE               += $$dirs" >> Doxyfile ;\
