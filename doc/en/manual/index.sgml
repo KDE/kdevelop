@@ -650,7 +650,7 @@ don't have to watch for several ones spread all over your desktop.
 
 <sect2>Qt's Designer
 <p>
-In its current release KDevelop  makes use of the Qt Designer for all KDE 2.0/Qt 2.x project templates.
+In its current release, KDevelop makes use of the Qt Designer for all KDE 2.0/Qt 2.x project templates.
 Mind that the Designer has to be included in your PATH variable to be automatically called from within
 KDevelop. The configure scripts of KDE 2.0/Qt 2.x templates will search for the uic as well to generate
 C++ output from your .ui files created with Designer. KDevelop takes care of automatically adding .ui files
@@ -661,7 +661,7 @@ However, KDevelop comes with a converter script (kdlgdesinger) that helps you po
 with the Qt desinger. you can find it in the "tools" subdirectory of your kdevelop installation.
 
 Note that can add native support for KDE in Qt Designer by reconfiguring Qt with the "-kde" switch
- once KDE has been installed. If you then recompile Qt's tools directory, you will get a Designer
+once KDE has been installed. After recompiling Qt's tools directory, you will get a Designer
 that has native support for most of the KDE widgets and integrates seamlessly into KDE in concerns
 of look and feel.
 
@@ -3014,7 +3014,7 @@ KDevelops documentation browser.
 <p>
 If you want to create a new dialog, simply add a new Designer file.  Go to the menubar and choose File -> New. From the box choose "Qt Designer file"
 and enter a name, for example ktestdlg.ui. The .ui file is where the Designer stores the information about the dialog. Now the Designer will come
-up and ask you which kind of template you want to use for your class. For a example, we choose "QDialog". The Designer then will present an
+up and ask you which kind of template you want to use for your class. Let's collose "QDialog" for our example. Now the Designer will present an
 empty form called "Form1" and the <idx/Property Editor/. First, we need to give a human-readable name to our dialog, so we click on the form's
 background and choose a suitable name for it by changing the "name" property from "Form1" to something suitable. For consistancy reasons
 you might want to call the class just like the file it is stored in (or vice versa), so we call it KTestDlg.
@@ -3062,12 +3062,12 @@ debuggers documentation on how to run it.
 Selecting the internal debugger enables an additional set of options you can choose from:
 <p>
 <itemize>
-<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change 
+<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change
 the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option.
-<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names. 
+<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names.
 However, non-mangled names are easier to read.
 <item>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be
-loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set 
+loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set
 the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Shared libraries and breakpoints"> for more details
 and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
 <item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons.
@@ -3088,7 +3088,7 @@ If you choose the internal debugger, four tabs are added to your tree and output
 <p>
 <itemize>
 <item>VAR tab : A tree view of the local variables at the current place in the  program you have stopped at. You can also see local
-variables in the function  that called this functions. The VAR tab also contains a watch window. This allows  you to see the value of 
+variables in the function  that called this functions. The VAR tab also contains a watch window. This allows  you to see the value of
 global variables, or perhaps you may want to see only  one local variable rather than the variable in a large list of
 local variables.
 </itemize>
