@@ -1,5 +1,6 @@
 2003-03-18 Roberto Raggi <roberto@kdevelop.org>
 	* added the new "Add Methods" wizard
+	* added the new "Add Attributes" wizard
 
 2003-03-15 F@lk Brettschneider <falkbr@kdevelop.org>
 	* applied patch of Jens Zurheide (jens.zurheide@gmx.de) that fixes some bugs
