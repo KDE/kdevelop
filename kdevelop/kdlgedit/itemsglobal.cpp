@@ -26,13 +26,15 @@
 
 KDlgItemDatabase::KDlgItemDatabase()
 {
-  for (int i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     items[i] = 0;
 }
 
 KDlgItemDatabase::~KDlgItemDatabase()
 {
-  for (int i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     {
       if (items[i])
         delete items[i];
@@ -44,7 +46,8 @@ int KDlgItemDatabase::numItems()
 {
   int num = 0;
 
-  for (int i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     if (items[i]) num++;
 
   return num;
@@ -62,7 +65,8 @@ bool KDlgItemDatabase::addItem(KDlgItem_Base *item)
       return false;
     }
 
-  for (int i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     if (!items[i])
       {
         items[i]=item;
@@ -74,7 +78,8 @@ bool KDlgItemDatabase::addItem(KDlgItem_Base *item)
 
 void KDlgItemDatabase::removeItem(KDlgItem_Base *item, bool deleteIt)
 {
-  for (int i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     if (items[i]==item)
       {
         if ((deleteIt) && (items[i]))
@@ -106,7 +111,8 @@ KDlgPropertyBase::KDlgPropertyBase(bool fillWithStdEntrys)
 {
   numEntrys = 0;
 
-  for (int i = 0; i<MAX_ENTRYS_PER_WIDGET; i++)
+  int i;
+  for (i = 0; i<MAX_ENTRYS_PER_WIDGET; i++)
     setProp(i,"","","",0);
 
   if (fillWithStdEntrys)
@@ -132,7 +138,8 @@ int KDlgPropertyBase::getIntFromProp(int nr, int defaultval)
 
 KDlgPropertyEntry* KDlgPropertyBase::getProp(QString name)
 {
-  for (int i=0; i<=getEntryCount(); i++)
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
     {
       if (getProp(i)->name.upper() == name.upper())
         return getProp(i);
@@ -143,7 +150,8 @@ KDlgPropertyEntry* KDlgPropertyBase::getProp(QString name)
 
 int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
 {
-  for (int i=0; i<=getEntryCount(); i++)
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
     {
       if ((getProp(i)) && (getProp(i)->name.upper() == name.upper()))
         return getIntFromProp(i,defaultval);
@@ -154,28 +162,32 @@ int KDlgPropertyBase::getIntFromProp(QString name, int defaultval)
 
 void KDlgPropertyBase::setProp_Name   (QString n, QString name)
 {
-  for (int i=0; i<=getEntryCount(); i++)
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
     if ((getProp(i)) && (getProp(i)->name.upper() == n.upper()))
       setProp_Name(i,name);
 }
 
 void KDlgPropertyBase::setProp_Value  (QString n, QString value)
 {
-  for (int i=0; i<=getEntryCount(); i++)
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
     if ((getProp(i)->name.upper() == n.upper()))
       setProp_Value(i,value);
 }
 
 void KDlgPropertyBase::setProp_Group  (QString n, QString group)
 {
-  for (int i=0; i<=getEntryCount(); i++)
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
     if ((getProp(i)) && (getProp(i)->name.upper() == n.upper()))
       setProp_Group(i,group);
 }
 
 void KDlgPropertyBase::setProp_Allowed(QString n, int allowed)
 {
-  for (int i=0; i<=getEntryCount(); i++)
+  int i;
+  for (i=0; i<=getEntryCount(); i++)
     if ((getProp(i)) && (getProp(i)->name.upper() == n.upper()))
       setProp_Allowed(i,allowed);
 }

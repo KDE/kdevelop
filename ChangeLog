@@ -1,4 +1,8 @@
 1999-03-31 Pascal Krahmer <pascal@beast.de>
+        * added the patch from "Moskovkin Vitali" <movit@usa.net> (CTRL+Arrow moves the cursor by words)
+        * fixed a bug for some compilers : for (int i=0;...)  becomes  int i; for (i=0;...)
+
+1999-03-31 Pascal Krahmer <pascal@beast.de>
         * added functionality to "widgets" tab (still buggy ! you have
           to move the slider to the right and back to the left for now :-( )
           ToDo : painting the pixmaps for the buttons (anyone interested in doing that ?)

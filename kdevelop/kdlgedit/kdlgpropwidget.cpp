@@ -140,14 +140,15 @@ void AdvListViewItem::init()
 		
 void AdvListViewItem::hideWidgets()
 {
-  for (int i=0; i<MAX_WIDGETCOLS_PER_LINE; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETCOLS_PER_LINE; i++)
     if (colwid[i])
       colwid[i]->hide();
 
-  AdvListViewItem* i = (AdvListViewItem*)firstChild();
-  while (i) {
-    i->hideWidgets();
-    i = (AdvListViewItem*)i->nextSibling();
+  AdvListViewItem* it = (AdvListViewItem*)firstChild();
+  while (it) {
+    it->hideWidgets();
+    it = (AdvListViewItem*)it->nextSibling();
   }
 }
 
@@ -185,7 +186,8 @@ void AdvListViewItem::clearColumnWidget( int col, bool deleteit )
 */
 void AdvListViewItem::clearAllColumnWidgets( bool deletethem )
 {
-  for (int i=0; i<MAX_WIDGETCOLS_PER_LINE; i++)
+  int i;
+  for (i=0; i<MAX_WIDGETCOLS_PER_LINE; i++)
     clearColumnWidget(i, deletethem);
 }
 
@@ -225,7 +227,8 @@ bool AdvListViewItem::columnWidgetActive( int col )
 
 void AdvListViewItem::testAndResizeAllWidgets()
 {
-  for (int i = 0; i < MAX_WIDGETCOLS_PER_LINE; i++)
+  int i;
+  for (i = 0; i < MAX_WIDGETCOLS_PER_LINE; i++)
     if (colwid[i])
       testAndResizeWidget( i );
 }
@@ -367,7 +370,8 @@ void AdvListViewItem::paintCell( QPainter * p, const QColorGroup & cg,
           //   possible to jump between  several widgets in one line
           //   using the tabulator [tab] key)
           bool flag = true;
-          for (int i=0; i < MAX_WIDGETCOLS_PER_LINE; i++)
+          int i;
+          for (i=0; i < MAX_WIDGETCOLS_PER_LINE; i++)
             if (colwid[i])
               if (colwid[i]->hasFocus())
                 flag = false;
@@ -421,12 +425,13 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
 
 
   KDlgPropertyEntry *prop;
-  for (int i = 0; i<=source->getProps()->getEntryCount(); i++)
+  int i,n;
+  for (i = 0; i<=source->getProps()->getEntryCount(); i++)
     {
       prop = source->getProps()->getProp(i);
 
       numGrp = -1;
-      for (int n = 0; n<grpsCnt; n++)
+      for (n = 0; n<grpsCnt; n++)
         if (prop->group.upper()==grps[n].upper())
           {
             numGrp = n;

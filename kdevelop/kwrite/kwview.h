@@ -94,6 +94,8 @@ class KWriteView : public QWidget {
 
     void cursorLeft(VConfig &);
     void cursorRight(VConfig &);
+    void cursorLeftWord(VConfig &);
+    void cursorRightWord(VConfig &);
     void cursorUp(VConfig &);
     void cursorDown(VConfig &);
     void home(VConfig &);

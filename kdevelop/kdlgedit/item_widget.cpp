@@ -74,8 +74,9 @@ void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
   QPainter p(this);
   p.setClipRect(e->rect());
 
-  for (int x = 0; x < width(); x+=10)
-   for (int y = 0; y < height(); y+=10)
+  int x,y;
+  for (x = 0; x < width(); x+=10)
+   for (y = 0; y < height(); y+=10)
      p.drawPoint(x,y);
 
   if (isItemActive)	

@@ -157,6 +157,51 @@ void KWriteView::cursorRight(VConfig &c) {
 }
 
 
+void KWriteView::cursorLeftWord(VConfig &c) {
+
+  TextLine* CurrLine;
+
+  do{
+    cursor.x--;
+    if (cursor.x < 0) {
+      if (c.flags & cfWrapCursor && cursor.y > 0) {
+        cursor.y--;
+        cursor.x = kWriteDoc->textLength(cursor.y);
+      }else break;  
+    }
+    CurrLine = kWriteDoc->textLine(cursor.y);
+  
+  }while( !isalnum(CurrLine->getChar(cursor.x)) ||
+         isalnum(CurrLine->getChar(cursor.x - 1))
+        );
+
+  cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
+  update(c);
+}
+
+void KWriteView::cursorRightWord(VConfig &c) {
+
+  TextLine* CurrLine;
+
+  do{
+    if (cursor.x >= kWriteDoc->textLength(cursor.y)) {
+      if (c.flags & cfWrapCursor) {
+        if (cursor.y == kWriteDoc->lastLine()) break;
+        cursor.y++;
+        cursor.x = -1;
+      }else break;
+    }  
+    
+    cursor.x++;
+    CurrLine = kWriteDoc->textLine(cursor.y);
+  }while( isalnum(CurrLine->getChar(cursor.x - 1)) ||
+         !isalnum(CurrLine->getChar(cursor.x))
+        );
+
+  cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
+  update(c);
+}
+
 void KWriteView::cursorUp(VConfig &c) {
 
   cursor.y--;
@@ -746,12 +791,12 @@ X      : cut
 //        case Key_X:
             kWriteDoc->cut(this,c);
             break;
-//      case Key_Left:
-//          cursorLeft(c);
-//          break;
-//      case Key_Right:
-//          cursorRight(c);
-//          break;
+       	case Key_Left:
+            cursorLeftWord(c);
+            break;
+       	case Key_Right:
+            cursorRightWord(c);
+            break;
         case Key_Next:
             bottom(c);
             break;

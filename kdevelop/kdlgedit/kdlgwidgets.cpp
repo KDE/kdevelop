@@ -62,7 +62,8 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   viewport()->setBackgroundMode(PaletteBackground);
   setContentsPos(0,0);
 
-  for (int i = 0; i<MAX_BUTTONS; i++)
+  int i;
+  for (i = 0; i<MAX_BUTTONS; i++)
     buttons[i] = 0;
 
   btnsCount = 0;
@@ -104,7 +105,8 @@ void KDlgWidgets::myScrollView::resizeEvent ( QResizeEvent *e )
   int posy = 25;
   int poskde = 0;
 
-  for (int i = 0; i<btnsCount; i++)
+  int i;
+  for (i = 0; i<btnsCount; i++)
     {
       if ((i>=qtCount) && (poskde == 0))
         {
