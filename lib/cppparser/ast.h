@@ -197,6 +197,16 @@ QString nodeTypeToString( int type );
 
 #endif
 
+struct Slice
+{
+    QString source;
+    int position;
+    int length;
+    
+    inline Slice()
+        : position(0), length(0) {}
+};
+
 class AST
 {
 public:
@@ -227,15 +237,28 @@ public:
     void removeChild( AST* child );
 #endif
 
-    virtual QString text() const { return m_text; }
-    virtual void setText( const QString& text ) { m_text = text; }
+    virtual inline QString text() const 
+    { return m_slice.source.mid(m_slice.position, m_slice.length); }
+    
+    inline void setSlice( const Slice& slice ) 
+    { m_slice = slice; }
+
+    inline void setSlice( const QString &text, int position, int length ) 
+    {
+        m_slice.source = text;
+        m_slice.position = position;
+        m_slice.length = length;
+    }
+    
+    inline void setText(const QString &text)
+    { setSlice(text, 0, text.length()); }
 
 private:
     int m_nodeType;
     AST* m_parent;
     int m_startLine, m_startColumn;
     int m_endLine, m_endColumn;
-    QString m_text;
+    Slice m_slice;
 #ifndef CPPPARSER_NO_CHILDREN
     QPtrList<AST> m_children;
 #endif

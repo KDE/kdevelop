@@ -74,12 +74,18 @@ using namespace std;
 #define UPDATE_POS(node, start, end) \
 { \
    int line, col; \
-   (lex)->tokenAt(start).getStartPosition( &line, &col ); \
+   const Token &a = lex->tokenAt(start); \
+   const Token &b = lex->tokenAt( end!=start ? end-1 : end ); \
+   a.getStartPosition( &line, &col ); \
    (node)->setStartPosition( line, col ); \
-   (lex)->tokenAt( end!=start ? end-1 : end ).getEndPosition( &line, &col ); \
+   b.getEndPosition( &line, &col ); \
    (node)->setEndPosition( line, col ); \
-   if( (node)->nodeType() == NodeType_Generic )  \
-       (node)->setText( toString((start),(end)) ); \
+   if( (node)->nodeType() == NodeType_Generic ) { \
+       if ((start) == (end) || (end) == (start)+1) \
+           (node)->setSlice(lex->source(), a.position(), a.length()); \
+       else \
+           (node)->setText( toString((start),(end)) ); \
+   } \
 }
 
 #define AST_FROM_TOKEN(node, tk) \
