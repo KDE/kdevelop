@@ -477,33 +477,53 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_activeVariable = 0;
 
     if( context->hasType(Context::EditorContext) ){
-
+        int id;
+	
+	//Cache some values that are constant in this function
+	bool is_header, is_source;
+	QString source_header_candidate;
+	
+	is_header = isHeader(m_activeFileName);
+	is_source = isSource(m_activeFileName);
+    
         QString text;
         int atline, atcol;
         MakeMemberHelper(text,atline,atcol);
         if(!text.isEmpty())
         {
-         int id = popup->insertItem( i18n( "Make Member"),
+         id = popup->insertItem( i18n( "Make Member"),
                 this, SLOT( slotMakeMember() ) );
          popup->setWhatsThis( id, i18n("<b>Make member</b><p>Creates a class member function in implementation file "
                               "based on the member declaration at the current line."));
         }
         
-
-        int id = popup->insertItem( i18n( "Switch Header/Implementation"),
+	if((source_header_candidate = sourceOrHeaderCandidate()) != QString::null)
+	{
+	
+	 QString tmp;
+	 if(is_source)
+	  tmp = i18n("Switch To Header");
+	 else if(is_header)
+	  tmp = i18n("Switch To Implementation");
+	
+	 if(!tmp.isEmpty())
+	 {
+          id = popup->insertItem( tmp,
                 this, SLOT( slotSwitchHeader() ) );
-        popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
+          popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
                                       "If you are currently looking at a header file, this "
                                       "brings you to the corresponding implementation file. "
                                       "If you are looking at an implementation file (.cpp etc.), "
                                       "this brings you to the corresponding header file.") );
+	 }	 
+	}
 
        kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
        if( codeModel()->hasFile(m_activeFileName) ){
            kdDebug() << "CppSupportPart::contextMenu 1" << endl;
            QString candidate;
-           if (isSource(m_activeFileName))
-               candidate = sourceOrHeaderCandidate();
+           if (is_source)
+               candidate = source_header_candidate;
            else
                candidate = m_activeFileName;
 //           kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
@@ -524,11 +544,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 		    if( !text.isEmpty() )
 			text += "::";
 		    text += formatModelItem( *it, true );
-#if QT_VERSION >= 0x030100
-        text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
-#else
-        text = text.replace( QRegExp(QString::fromLatin1("&")), QString::fromLatin1("&&") );
-#endif
+		    text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
 		    int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
 		    int line, column;
 		    (*it)->getStartPosition( &line, &column );
@@ -538,8 +554,8 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
            }
 
            QString candidate1;
-           if (isHeader(m_activeFileName))
-               candidate1 = sourceOrHeaderCandidate();
+           if (is_header)
+               candidate1 = source_header_candidate;
            else
                candidate1 = m_activeFileName;
 //           kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
@@ -558,11 +574,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	           if( !text.isEmpty() )
 		       text += "::";
 	           text += formatModelItem( *it, true );
-#if QT_VERSION >= 0x030100
-       text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
-#else
-		   text = text.replace( QRegExp(QString::fromLatin1("&")), QString::fromLatin1("&&") );
-#endif
+	           text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
                    int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
 	           int line, column;
 	           (*it)->getStartPosition( &line, &column );
