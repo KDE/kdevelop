@@ -50,8 +50,9 @@ void VCSManagerProjectConfig::setup( )
 	m_vcsPluginNames << "";
 	
 	int current = 0;
-	
-	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", "");
+
+	QString constraint = QString("[X-KDevelop-Version] == %1").arg(KDEVELOP_PLUGIN_VERSION);
+	KTrader::OfferList offers = KTrader::self()->query("KDevelop/VersionControl", constraint );
 	KTrader::OfferList::const_iterator it = offers.begin();
 	for ( int i = 1; it != offers.end(); ++it, ++i )
 	{
