@@ -24,7 +24,7 @@
 #include "../kdevplugin.h"
 #include "../misc.h"
 
-#include "folder.xpm" 
+//#include "folder.xpm" 
 
 
 PluginManagerDlg::PluginManagerDlg(QWidget *parent, const char *name,TImportantPtrInfo* info ) : QDialog(parent,name,true) {

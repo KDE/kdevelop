@@ -41,7 +41,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputw
 	cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
-	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp \
+	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp
 	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp
 
 kdevelop_METASOURCES = USE_AUTOMOC
@@ -64,7 +64,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
 	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
-	cmakemanualdlg.h klistview.h
+	cmakemanualdlg.h klistview.h component.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk
 

@@ -456,11 +456,11 @@ void CKDevelop::CVClassSelected( const char *aName )
   int i;
 
   // Only bother if the text has changed.
-  if( strcmp( classCombo->currentText(), aName ) != 0 )
+  if( classCombo->currentText() != aName )
   {
 
     for( i=0; i< classCombo->count() && !found; i++ )
-      found = ( strcmp( classCombo->text( i ), aName ) == 0 );
+      found = (classCombo->text( i ) == aName);
     
     if( found )
     {
@@ -489,7 +489,7 @@ void CKDevelop::CVMethodSelected( const char *aName )
 
   // Only bother if the text has changed.
   for( i=0; i< methodCombo->count() && !found; i++ )
-    found = ( strcmp( methodCombo->text( i ), aName ) == 0 );
+    found = ( methodCombo->text( i ) == aName );
     
   if( found )
   {

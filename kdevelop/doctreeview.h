@@ -2,8 +2,6 @@
                              doctreeview.h
                              -------------------
 
-    copyright            : (C) 1998 by Sandy Meier
-    email                : smeier@rz.uni-potsdam.de
     copyright            : (C) 1999 The KDevelop Team
     
  ***************************************************************************/
@@ -20,6 +18,7 @@
 #ifndef _DOCTREEVIEW_H_
 #define _DOCTREEVIEW_H_
 
+#include "component.h"
 #include "klistview.h"
 
 
@@ -36,7 +35,7 @@ class CProject;
  * @author Sandy Meier & Bernd Gehrmann (rewrite)
  */
 
-class DocTreeView : public KListView
+class DocTreeView : public KListView, public Component
 {
     Q_OBJECT 
 public: 
@@ -45,6 +44,8 @@ public:
 
     void refresh(CProject *prj);
     QString selectedText();
+
+    virtual void docPathChanged();
 
 protected slots:
     void slotAddDocumentation();

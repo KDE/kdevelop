@@ -1,3 +1,14 @@
+1999-10-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Cleaned up hacks which were used before processes
+	  used /bin/sh
+	* Replaced QMultiLineEdit::insertAt() (which is obsolete)
+	  with QLE::insert(). It's also much simpler now :-)
+	* Replaced strcmp with == for QString
+	* Use keycode 0 for 'undefined' accelerators now
+	  instead of Key_unknown. This works correct as soon
+	  as I fix KAccel in kdelibs
+	* Basic work on Component class
+
 1999-09-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* sync'ed documentation with KDEVELOP_1_0 branch
 

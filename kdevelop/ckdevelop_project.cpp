@@ -146,7 +146,10 @@ bool CKDevelop::slotProjectClose(){
       //      switchToKDevelop();
     }
     //    disableCommand(ID_TOOLS_KDLGEDIT);
-    
+
+    QListIterator<Component> it(components);
+    for ( ; it.current(); ++it)
+        (*it)->projectClosed();
     class_tree->clear();
     log_file_tree->clear();
     real_file_tree->clear();
@@ -395,14 +398,8 @@ void CKDevelop::slotProjectRemoveFile(){
 
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
-  QString shell = getenv("SHELL");
   QString flaglabel;
-  if(shell == "/bin/bash"){
-      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  }
-  else{
-      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-  }
+  flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
   
   QString args=prj->getConfigureArgs();
 
@@ -594,7 +591,6 @@ void CKDevelop::slotProjectNewAppl(){
 		    config->readEntry("author_email",""));
   
   
-  kappw.setCaption("ApplicationWizard");
   kappw.exec();
   QString file = kappw.getProjectFile();
   
@@ -989,6 +985,9 @@ void CKDevelop::delFileFromProject(QString rel_filename){
 
   prj->removeFileFromProject(rel_filename);
   prj->writeProject();
+  QListIterator<Component> it(components);
+  for (; it.current(); ++it)
+      (*it)->removedFileFromProject(rel_filename);
   refreshTrees();
 }
 

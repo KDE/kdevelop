@@ -2,9 +2,6 @@
                              doctreeview.cpp
                              -------------------
 
-    begin                : 3 Oct 1998
-    copyright            : (C) 1998,1999 by Sandy Meier
-    email                : smeier@rz.uni-potsdam.de
     copyright            : (C) 1999 The KDevelop Team
  ***************************************************************************/
 
@@ -114,7 +111,8 @@ ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
 
 void ListViewFolderItem::setOpen(bool o)
 {
-    setPixmap(0, o? KGlobal::iconLoader()->loadApplicationMiniIcon("folder_open.png") : KGlobal::iconLoader()->loadApplicationMiniIcon("folder.png"));
+    QString fn(o? "folder_open.png" : "folder.png");
+    setPixmap(0, KGlobal::iconLoader()->loadApplicationMiniIcon(fn));
     KListViewItem::setOpen(o);
 }
 
@@ -600,6 +598,12 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
 
 DocTreeView::~DocTreeView()
 {}
+
+
+void DocTreeView::docPathChanged()
+{
+    folder_kdelibs->refresh();
+}
 
 
 QString DocTreeView::selectedText()

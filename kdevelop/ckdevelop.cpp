@@ -979,15 +979,8 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  //  QString shell = getenv("SHELL");
   QString flaglabel;
-  //  if(shell == "/bin/bash"){
   flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  //  }
-  //  else{
-  //      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-  //  }
-  
   
 
   error_parser->reset();
@@ -1066,22 +1059,14 @@ void CKDevelop::slotBuildConfigure(){
 
     QString args=prj->getConfigureArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Configure with Arguments"),args);
-    if(argdlg.exec()){
-	prj->setConfigureArgs(argdlg.getArguments());		
-	prj->writeProject();
-    }
-    else{
-	return;
-    }
+    if(!argdlg.exec())
+        return;
+    
+    prj->setConfigureArgs(argdlg.getArguments());		
+    prj->writeProject();
 
   slotStatusMsg(i18n("Running ./configure..."));
-  QString flaglabel;
-//  if(shell == "/bin/bash"){
-      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-//  }
-//  else{
-//      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-//  }
+  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
 
   showOutputView(true);
   setToolMenuProcess(false);
@@ -1309,7 +1294,11 @@ void CKDevelop::slotOptionsKDevelop(){
   //setup->show();
   if (setup->exec()) {
     if (setup->hasChangedPath())
-         doc_tree->refresh(prj);
+        {
+            QListIterator<Component> it(components);
+            for ( ; it.current(); ++it)
+                (*it)->docPathChanged();
+        }
 
     // kwrite keys
     cmdMngr.changeAccels();
@@ -1394,9 +1383,6 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   if(dlg.exec()){
     slotStatusMsg(i18n("Creating Search Database..."));
   }
-
-  return;
-
 }
 	
 void CKDevelop::slotPluginPluginManager(){
@@ -1618,7 +1604,7 @@ void CKDevelop::showLibsDoc(const char *libname)
 {
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  QString url = "file:" + doc_kde + libname + "/index.html";
+  QString url = "file:" + doc_kde + "/" + libname + "/index.html";
   slotURLSelected(browser_widget, url,1,"test");
 }
     
@@ -1640,14 +1626,14 @@ void CKDevelop::slotHelpKDEKFileLib(){
 void CKDevelop::slotHelpKDEHTMLLib(){
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  QString file = doc_kde + "khtml/index.html";
+  QString file = doc_kde + "/khtml/index.html";
   slotURLSelected(browser_widget,"file:" +file  ,1,"test");
 }
 
 
 void CKDevelop::slotHelpAPI(){
   if(project){
-    QString api_file=prj->getProjectDir() + prj->getSubDir() +  "api/index.html";
+    QString api_file=prj->getProjectDir() + prj->getSubDir() +  "/api/index.html";
     if(!QFileInfo(api_file).exists()){
         if (KMessageBox::questionYesNo(this, i18n("The Project API documentation is not present.\n" 
                                                   "Would you like to generate it now ?"))
@@ -2230,95 +2216,31 @@ void CKDevelop::slotDocumentDone( KHTMLView * ){
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
-  int x,y;
-  messages_widget->cursorPosition(&x,&y);
-  QString str;
-  str=QString::fromLatin1(buffer,buflen);
-  messages_widget->insertAt(str,x,y);
+  messages_widget->insert(QString::fromLatin1(buffer, buflen));
   o_tab_view->setCurrentTab(MESSAGES);
-  // QString str1 = messages_widget->text();
-
-//   if(error_parser->getMode() == CErrorMessageParser::MAKE){
-    
-//     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
-//   }
-//   if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-//     error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-//   }
-
-//   //enable/disable the menus/toolbars
-//   if(error_parser->hasNext()){
-//     enableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-  
-//   if(error_parser->hasPrev()){
-//     enableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
 }
 
 
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  int x,y;
-  messages_widget->cursorPosition(&x,&y);
-  QString str;
-  str=QString::fromLatin1(buffer,buflen);
-  messages_widget->insertAt(str,x,y);
+  messages_widget->insert(QString::fromLatin1(buffer, buflen));
   o_tab_view->setCurrentTab(MESSAGES);
-  // QString str1 = messages_widget->text();
-//   if(error_parser->getMode() == CErrorMessageParser::MAKE){
-//     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
-//   }
-//   if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-//     error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-//   }
-
-//   //enable/disable the menus/toolbars
-//   if(error_parser->hasNext()){
-//     enableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_NEXT_ERROR);
-//   }
-  
-//   if(error_parser->hasPrev()){
-//     enableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
-//   else{
-//     disableCommand(ID_VIEW_PREVIOUS_ERROR);
-//   }
 }
 
 
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  int x,y;
+  stdin_stdout_widget->insert(QString::fromLatin1(buffer, buflen));
   showOutputView(true);
-  stdin_stdout_widget->cursorPosition(&x,&y);
-  QString str;
-	str.fromLatin1(buffer,buflen+1);
-  stdin_stdout_widget->insertAt(str,x,y);
 }
 
 
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  int x,y;
+  stderr_widget->insert(QString::fromLatin1(buffer, buflen));
   showOutputView(true);
-  stderr_widget->cursorPosition(&x,&y);
-  QString str;
-	str.fromLatin1(buffer,buflen+1);
-  stderr_widget->insertAt(str,x,y);
 }
 
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
-  QString str;
-	str.fromLatin1(buffer,buflen+1);
-  search_output = search_output + str;
+  search_output += QString::fromLatin1(buffer, buflen);
 }
 
 
@@ -2428,45 +2350,9 @@ void CKDevelop::slotClickedOnMessagesWidget(){
   else{
      XBell(kapp->getDisplay(),100); // not a next found, beep
   }
-    // switchToFile(error_filename);
-//     edit_widget->setCursorPosition(error_line-1,0);
-//     edit_widget->setFocus();
-  // int x,y;
-//   int error_line;
-//   QString text;
-//   QString error_line_str;
-//   QString error_filename;
-//   int pos1,pos2; // positions in the string
-//   QRegExp reg(":[0-9]*:"); // is it an error line?, I hope it works
-
-  
- //  text = messages_widget->textLine(x);
-//   if((pos1=reg.match(text)) == -1) return; // not an error line
-
-//   // extract the error-line
-//   pos2 = text.find(':',pos1+1);
-//   error_line_str = text.mid(pos1+1,pos2-pos1-1);
-//   error_line = error_line_str.toInt();
-
-//   // extract the filename
-//   pos2 = text.findRev(' ',pos1);
-//   if (pos2 == -1) {
-//     pos2 = 0; // the filename is at the begining of the string
-//   }
-//   else { pos2++; }
-
-//   error_filename = text.mid(pos2,pos1-pos2);
-
-//   // switch to the file
-//   if (error_filename.find('/') == -1){ // it is a file outer the projectdir ?
-//     error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
-//   }
-//   if (QFile::exists(error_filename)){
-    
-    //  }
-
-
 }
+
+
 void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("Ready."));
@@ -2511,38 +2397,21 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       }
 
       // Warning: not every user has the current directory in his path !
+      QString exec_str;
       if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
 	o_tab_view->setCurrentTab(STDINSTDOUT);
-	QString term = "xterm";
-	QString exec_str = term + " -e sh -c './" +  program + "'";
-	
-	if(CToolClass::searchInstProgram("konsole")){
-	  term = "konsole";
-	}
-	if(CToolClass::searchInstProgram("ksh")){
-	  exec_str = term + " -e ksh -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-	}
-	if(CToolClass::searchInstProgram("csh")){
-	  exec_str = term +" -e csh -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-	}
-	if(CToolClass::searchInstProgram("tcsh")){
-	  exec_str =  term +" -e tcsh -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-	}
-	if(CToolClass::searchInstProgram("bash")){
-	  exec_str =  term +" -e bash -c './" + program + 
-	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-	}
-	appl_process << exec_str;
-	cerr << endl << "EXEC:" << exec_str;
-      }
-      else{
-	appl_process << "./" + program;
-	cerr << endl << "EXEC:" << "./" +program;
+	exec_str = CToolClass::searchInstProgram("konsole")? "konsole" : "xterm";
+        exec_str += " -e /bin/sh -c './";
+        exec_str += program;
+        exec_str += ";echo \"\n";
+        exec_str += i18n("Press Enter to continue!");
+        exec_str += "\";read'";
+      } else {
 	o_tab_view->setCurrentTab(STDERR);
+	exec_str = "./" + program;
       }
+      appl_process << exec_str;
+      cerr << endl << "EXEC:" << exec_str;
       setToolMenuProcess(false);
       appl_process.start(KProcess::NotifyOnExit,KProcess::All);
       next_job = "";
@@ -2561,9 +2430,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   }
   if (!result.isEmpty())
   {
-     int x,y;
-     messages_widget->cursorPosition(&x,&y);
-     messages_widget->insertAt(result, x, y);
+     messages_widget->insert(result);
   }
   if (ready){ // start the error-message parser
       QString str1 = messages_widget->text();
@@ -2596,6 +2463,8 @@ void CKDevelop::slotTTabSelected(int item){
     showOutputView(false);
   }
 }
+
+
 void CKDevelop::slotSTabSelected(int item){
   lasttab = s_tab_view->getCurrentTab();
 

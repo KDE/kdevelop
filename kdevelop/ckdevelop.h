@@ -60,6 +60,7 @@ class QListViewItem;
 class CErrorMessageParser;
 class GrepDialog;
 class CEditWidget;
+#include "component.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
 //#include "crealfileview.h"
@@ -781,6 +782,7 @@ private:
   //some widgets for the mainview
   ///////////////////////////////
 
+  QList<Component> components;
   /** The tabbar for the sourcescode und browser. */
   CTabCtl* s_tab_view;
   /** The tabbar for the trees. */
@@ -855,11 +857,6 @@ private:
   QString next_job;
   QString make_cmd;
 //   QString make_with_cmd;
-
-#if 0
-  CConfigEnscriptDlg* enscriptconf;
-  CConfigA2psDlg* a2psconf;
-#endif
 
   CAddExistingFileDlg* add_dlg;
   GrepDialog* grep_dlg;
