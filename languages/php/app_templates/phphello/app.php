@@ -1,7 +1,7 @@
 <?php
 
 printHeader();
-echo "<H1>Hello World<H1>";
+echo "<H1>Hello World</H1>";
 printFooter();
 
 function printHeader(){
