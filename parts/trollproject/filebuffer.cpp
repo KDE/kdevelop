@@ -22,7 +22,7 @@ FileBuffer::~FileBuffer()
   for ( FileBufferList::Iterator it = m_subBuffers.begin(); it != m_subBuffers.end(); ++it )
     delete *it;
   for ( ValuesIgnoreList::Iterator it = m_valuesIgnore.begin(); it != m_valuesIgnore.end(); ++it )
-    delete *it;  
+    delete *it;
   m_subBuffers.clear();
 }
 
@@ -45,7 +45,7 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
     else
       return Caret(-1,-1);  QString line = m_buffer[i++];
   line = line.mid(startPos.m_idx,line.length()-startPos.m_idx);
-  for (; i<=m_buffer.count(); i++)
+  for (; i<=m_buffer.count(); ++i)
   {
     int idxSeek = line.find(subString);
 //    qWarning("FILEBUFFER: substring %s in line %s idxSeek = %d", subString.ascii(), line.latin1(), idxSeek);
@@ -77,13 +77,13 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
 void FileBuffer::removeComments()
 //===============================
 {
-  for (uint i=0; i<m_buffer.count(); i++)
+  for (uint i=0; i<m_buffer.count(); ++i)
   {
     QString tmp = m_buffer[i].simplifyWhiteSpace();
     if (tmp[0]=='#')
     {
       pop(i);
-      i--;
+      ++i;
     }
   }
 
@@ -100,7 +100,7 @@ QString FileBuffer::pop(int row)
   if ((unsigned int)row>=m_buffer.count())
     return NULL;
   QStringList::Iterator it=m_buffer.begin();
-  for (int i=0; i<row; ++it,i++);
+  for (int i=0; i<row; ++it,++i);
   QString ReturnStr = *it;
   m_buffer.remove(it);
   return ReturnStr;
@@ -171,8 +171,8 @@ void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer
   }
   QString spacing;
   spacing.fill(' ',line.length());
-  
-  for (i=0; i<values.count(); i++)
+
+  for (i=0; i<values.count(); ++i)
   {
     line = line + values[i] + " ";
     if (!((i+1) % valuesPerRow))
@@ -183,7 +183,7 @@ void FileBuffer::setValues(const QString &variable,QStringList values,FileBuffer
       line = spacing;
     }
   }
-  
+
   if (i % valuesPerRow)
     m_buffer.append(line);
 }
@@ -269,7 +269,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     curValues.clear();
     curValuesIgnore.clear();
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
-    filterOutIgnoreValues(variable,line,curValuesIgnore);
+    filterOutIgnoreValues(line,curValuesIgnore);
     while (!line.isEmpty())
     {
       if (line[line.length()-1]=='\\')
@@ -278,7 +278,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
         curValues += QStringList::split(" ",line);
         lineNum++;
         line = m_buffer[lineNum];
-        filterOutIgnoreValues(variable,line,curValuesIgnore);
+        filterOutIgnoreValues(line,curValuesIgnore);
         continue;
       }
       curValues += QStringList::split(" ",line);
@@ -287,7 +287,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     if (QString("+-*~").find(effectOperator)==-1)
     {
       // operator = resets the variable values
-      
+
       getValuesIgnore(variable)->values.clear();
       getValuesIgnore(variable)->values_exclude.clear();
       plusValues.clear();
@@ -296,10 +296,10 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     if (effectOperator=='-')
     {
       // remove from plus list if in curvalues
-      for (uint i=0; i<curValues.count(); i++)
+      for (uint i=0; i<curValues.count(); ++i)
         plusValues.remove(curValues[i]);
       // remove from plus list if in curvaluesignore
-      for (uint i=0; i<curValuesIgnore.count(); i++)
+      for (uint i=0; i<curValuesIgnore.count(); ++i)
         getValuesIgnore(variable)->values.remove(curValuesIgnore[i]);
       // add curvalues to minuslist
       getValuesIgnore(variable)->values_exclude += curValuesIgnore;
@@ -308,10 +308,10 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     else
     {
       // remove from minus list if in curvalues
-      for (uint i=0; i<curValues.count(); i++)
+      for (uint i=0; i<curValues.count(); ++i)
         minusValues.remove(curValues[i]);
       // remove from minus list if in curvaluesignore
-      for (uint i=0; i<curValuesIgnore.count(); i++)
+      for (uint i=0; i<curValuesIgnore.count(); ++i)
         getValuesIgnore(variable)->values_exclude.remove(curValuesIgnore[i]);
       // add curvalues to pluslist
       getValuesIgnore(variable)->values += curValuesIgnore;
@@ -326,7 +326,6 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
 
 /**
  * Get all VariableSetModes for a variable.
- * Returns: number of ValueSetModes
  */
 void FileBuffer::getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes)
 //=======================================================================================================
@@ -443,7 +442,7 @@ void FileBuffer::saveBuffer(const QString &filename,const QString &qmakeHeader)
   writeBuffer += getBufferTextInDepth();
   if (dataFile.open(IO_WriteOnly))
   {
-    for (unsigned int i=0; i<writeBuffer.count(); i++)
+    for (unsigned int i=0; i<writeBuffer.count(); ++i)
       if (!writeBuffer[i].simplifyWhiteSpace().isEmpty())
         dataFile.writeBlock((writeBuffer[i]+"\n").ascii(),(writeBuffer[i]+"\n").length());
   }
@@ -465,7 +464,7 @@ void FileBuffer::makeScope(const QString &scopeString)
     return;
   // next scope in nested scopeString
   int idx = findChildBuffer(nextScopeName);
-  
+
   if (idx==-1)
   {
     // scope did not exist (create it)
@@ -475,14 +474,14 @@ void FileBuffer::makeScope(const QString &scopeString)
   }
   else
     subBuffer = m_subBuffers[idx];
-  subBuffer->makeScope(scopeStringRest); 
+  subBuffer->makeScope(scopeStringRest);
 }
 
 QStringList FileBuffer::getBufferTextInDepth()
 //========================================
 {
   QStringList resBuffer = m_buffer;
-  for (unsigned int i=0; i<m_subBuffers.count(); i++)
+  for (unsigned int i=0; i<m_subBuffers.count(); ++i)
   {
     resBuffer.append(m_subBuffers[i]->getScopeName() + "{");
     QStringList subBuffer = m_subBuffers[i]->getBufferTextInDepth();
@@ -497,7 +496,7 @@ QStringList FileBuffer::getBufferTextInDepth()
 void FileBuffer::dumpBuffer()
 //===========================
 {
-  for ( unsigned int i=0; i<m_buffer.count(); i++ )
+  for ( unsigned int i=0; i<m_buffer.count(); ++i )
     printf("%s\n", m_buffer[i].latin1());
 }
 
@@ -511,12 +510,12 @@ Caret FileBuffer::findScopeEnd(Caret pos)
     Caret nextScopeEnd = findInBuffer("}",pos,true);
     if (nextScopeStart < nextScopeEnd)
     {
-      scopeDepth++;
+      ++scopeDepth;
       pos = nextScopeStart + Caret(0,1);
     }
     else
     {
-      scopeDepth--;
+      ++scopeDepth;
       pos = nextScopeEnd + Caret(0,1);
     }
     if (nextScopeStart==nextScopeEnd)
@@ -543,7 +542,7 @@ QStringList FileBuffer::copyBlock(const Caret &blockStart, const Caret &blockEnd
   QStringList result;
   QString tmp = m_buffer[blockStart.m_row];
   result.append(tmp.right(tmp.length()-blockStart.m_idx));
-  for (int i=blockStart.m_row+1; i<blockEnd.m_row; i++)
+  for (int i=blockStart.m_row+1; i<blockEnd.m_row; ++i)
     result.append(m_buffer[i]);
   tmp = m_buffer[blockEnd.m_row];
   result.append(tmp.left(blockEnd.m_idx+1));
@@ -565,7 +564,7 @@ QStringList FileBuffer::popBlock(const Caret &blockStart, const Caret &blockEnd)
     m_buffer[blockStart.m_row] = m_buffer[blockStart.m_row].left(blockStart.m_idx);
     poprow = blockStart.m_row+1;
   }
-  for (int i=0; i<blockEnd.m_row-blockStart.m_row-1; i++)
+  for (int i=0; i<blockEnd.m_row-blockStart.m_row-1; ++i)
     pop(poprow);
   QString tmp = m_buffer[poprow];
   if (blockEnd.m_idx >= (int) tmp.length()-1)
@@ -604,13 +603,13 @@ bool FileBuffer::handleScopes()
     QString tmp = m_buffer[startScope.m_row];
     QStringList scopeNames = QStringList::split(":",tmp.left(startScope.m_idx));
     // clean-up scopenames
-    for (i=0;i<scopeNames.count();i++)
+    for (i=0;i<scopeNames.count();++i)
       scopeNames[i]=scopeNames[i].simplifyWhiteSpace();
     if (scopeNames.count()>1)
     {
       // nested scopename
       QString subBufferPrefix = scopeNames[1];
-      for (i=2;i<scopeNames.count();i++)
+      for (i=2;i<scopeNames.count();++i)
         subBufferPrefix = subBufferPrefix + ":" + scopeNames[i];
       subBuffer = popBlock(startScope,endScope);
       subBuffer[0] = subBufferPrefix + subBuffer[0];
@@ -676,7 +675,7 @@ bool FileBuffer::handleScopes()
 int FileBuffer::findChildBuffer(const QString &scopeName)
 //==============================================================
 {
-  for (unsigned int i=0; i<m_subBuffers.count(); i++)
+  for (unsigned int i=0; i<m_subBuffers.count(); ++i)
     if (m_subBuffers[i]->getScopeName()==scopeName)
       return i;
   return -1;
@@ -687,11 +686,11 @@ QStringList FileBuffer::getAllScopeStrings(int depth)
 {
   QStringList result;
   unsigned int i;
-  for (i=0; i<m_subBuffers.count(); i++)
+  for (i=0; i<m_subBuffers.count(); ++i)
     result += m_subBuffers[i]->getAllScopeStrings(depth+1);
   if (depth)
   {
-    for (i=0; i<result.count(); i++)
+    for (i=0; i<result.count(); ++i)
       result[i] = getScopeName() + ":" + result[i];
     result.append(getScopeName());
   }
@@ -703,11 +702,11 @@ QStringList FileBuffer::getAllScopeNames(int depth)
 {
   QStringList result;
   unsigned int i;
-  for (i=0; i<m_subBuffers.count(); i++)
+  for (i=0; i<m_subBuffers.count(); ++i)
     result += m_subBuffers[i]->getAllScopeNames(depth+1);
   if (!depth)
   {
-    for (i=0; i<result.count(); i++)
+    for (i=0; i<result.count(); ++i)
     {
       QString scopeName = result[0];
       result.remove(scopeName);
@@ -730,7 +729,7 @@ QStringList FileBuffer::getChildScopeNames()
 //========================================
 {
   QStringList result;
-  for (unsigned int i=0; i<m_subBuffers.count(); i++)
+  for (unsigned int i=0; i<m_subBuffers.count(); ++i)
     result += m_subBuffers[i]->getScopeName();
   return result;
 }
@@ -740,31 +739,31 @@ bool FileBuffer::getAllExcludeValues(const QString &variable,QStringList &minusV
 {
   unsigned int i;
   QStringList plusDummy,minusTmp;
-  for (i=0; i<m_subBuffers.count(); i++)
+  for (i=0; i<m_subBuffers.count(); ++i)
     m_subBuffers[i]->getAllExcludeValues(variable,minusValues,depth+1);
   if (depth)
   {
-    for (i=0; i<minusValues.count(); i++)
+    for (i=0; i<minusValues.count(); ++i)
       minusValues[i] = getScopeName() + ":" + minusValues[i];
   }
   getValues(variable,plusDummy,minusTmp);
-  for (i=0; i<minusTmp.count(); i++)
+  for (i=0; i<minusTmp.count(); ++i)
     minusTmp[i] = getScopeName() + "-" + minusTmp[i];
   minusValues += minusTmp;
   return true;
 }
 
 
-void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QStringList& valuesignore)
+void FileBuffer::filterOutIgnoreValues(QString& line,QStringList& valuesignore)
 //=====================================================================================================
 {
-  QStringList qmakeFunctions = 
+  QStringList qmakeFunctions =
     QStringList::split(',',"join(,member(,find(,contains(,count(,error(,exists(,"
                        "include(,isEmpty(,system(,message(,infile(,$(");
-                                              
+
   int len=0;
   int closestMatch = -1;
-  for (uint i=0; i<qmakeFunctions.count(); i++)
+  for (uint i=0; i<qmakeFunctions.count(); ++i)
   {
     int match = line.find(qmakeFunctions[i],0);
     if (match==-1)
@@ -776,7 +775,7 @@ void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QSt
       len=qmakeFunctions[i].length();
     }
   }
-  int startpos = closestMatch;   
+  int startpos = closestMatch;
 
   while (startpos>-1)
   {
@@ -784,17 +783,17 @@ void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QSt
     while (bracketCount>0 && startpos+len<(int)line.length())
     {
       if (line[startpos+len]=='(')
-        bracketCount++;
+        ++bracketCount;
       if (line[startpos+len]==')')
-        bracketCount--;
-      len++;
+        --bracketCount;
+      ++len;
     }
-    
+
     valuesignore.append(line.mid(startpos,len));
     line = line.left(startpos)+line.right(line.length()-startpos-len);
-    
+
     closestMatch=-1;
-    for (uint i=0; i<qmakeFunctions.count(); i++)
+    for (uint i=0; i<qmakeFunctions.count(); ++i)
     {
       int match = line.find(qmakeFunctions[i],startpos);
       if (match==-1)
@@ -819,7 +818,7 @@ ValuesIgnore* FileBuffer::getValuesIgnore(const QString &variable)
     if ((*it)->variable == variable)
       return (*it);
   ValuesIgnore* newVar = new ValuesIgnore;
-  newVar->variable = variable;  
+  newVar->variable = variable;
   m_valuesIgnore.append(newVar);
-  return newVar; 
+  return newVar;
 }

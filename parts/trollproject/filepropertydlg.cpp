@@ -105,6 +105,14 @@ QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
       return &(spitem->images_exclude);
     if (m_gtype == GroupItem::IDLs)
       return &(spitem->idls_exclude);
+    if (m_gtype == GroupItem::Translations)
+      return &(spitem->translations_exclude);
+    if (m_gtype == GroupItem::Yaccsources)
+      return &(spitem->yaccsources_exclude);
+    if (m_gtype == GroupItem::Lexsources)
+      return &(spitem->lexsources_exclude);
+    if (m_gtype == GroupItem::Distfiles)
+      return &(spitem->distfiles_exclude);
     if (m_gtype == GroupItem::InstallObject)
     {
       GroupItem* gitem = getInstallObject(spitem,m_installObjectName);

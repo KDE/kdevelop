@@ -76,7 +76,7 @@ public:
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);
   bool              getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
   void              getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes);
-  void              filterOutIgnoreValues(const QString &variable,QString& line,QStringList& valuesignore);
+  void              filterOutIgnoreValues(QString& line,QStringList& valuesignore);
   ValuesIgnore*     getValuesIgnore(const QString &variable);
 
 private:

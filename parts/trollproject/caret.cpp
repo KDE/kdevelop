@@ -12,23 +12,14 @@
 
 #include "caret.h"
 
-Caret::Caret()
-{
-  m_row = 0;
-  m_idx = 0;
-}
+Caret::Caret() : m_row(0), m_idx(0)
+{}
 
-Caret::Caret(const int row, const int idx)
-{
-  m_row = row;
-  m_idx = idx;
-}
+Caret::Caret(const int row, const int idx) : m_row(row), m_idx(idx)
+{}
 
-Caret::Caret(const Caret& value)
-{
-  m_row = value.m_row;
-  m_idx = value.m_idx;
-}
+Caret::Caret(const Caret& value) : m_row(value.m_row), m_idx(value.m_idx)
+{}
 
 bool Caret::operator<(const Caret& compare)
 {
