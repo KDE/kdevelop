@@ -6,6 +6,7 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <kregexp.h>
 
 static QString remove( QString text, const QChar& l, const QChar& r )
 {
@@ -79,7 +80,7 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
     QStringList lines = QStringList::split( ";", contents );
 
-    QRegExp decl_rx( "^\\s*(([\\w_]|::)+)\\s+([\\w_]+)\\b[^{]*$" );
+    KRegExp decl_rx( "^\\s*(([\\w_]|::)+)\\s+([\\w_]+)\\b[^{]*$" );
     QRegExp method_rx( "^\\s*((?:[\\w_]|::)+).*{$" );
     QRegExp ide_rx( "\\b(([\\w_]|::)+)\\s*\\(" );
 
@@ -100,11 +101,10 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
         if( line.startsWith("(") ){
             // pass
-#if QT_VERSION >= 300
-        } else if( decl_rx.exactMatch(simplifyLine) ){
+        } else if( decl_rx.match(simplifyLine) ){
             // parse a declaration
-            QString type = decl_rx.cap( 1 );
-            QString rest = simplifyLine.mid( decl_rx.pos(2) + 1 )
+            QString type = QString::fromLatin1( decl_rx.group( 1 ) );
+            QString rest = simplifyLine.mid( decl_rx.groupStart(2) + 1 )
                            .replace( ws, "" );
 
             QStringList vlist = QStringList::split( ",", rest);
@@ -119,7 +119,6 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 //                    lev,
 //                    type.latin1(),
 //                    vlist.join(", ").latin1() );
-#endif
         }
     }
     return vars;
