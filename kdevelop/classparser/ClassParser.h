@@ -144,8 +144,16 @@ private: // Private methods
   /** Tells if the current lexem is the end of a variable declaration. */
   bool isEndOfVarDecl();
 
+  /** Initialize a attribute, except the type, using the arguments on
+   *   the stack. */
+  void fillInParsedVariableHead( CParsedAttribute *anAttr );
+
   /** Initialize a attribute using the arguments on the stack. */
   void fillInParsedVariable( CParsedAttribute *anAttr );
+
+  /** Take what's on the stack and return as a list of variables. 
+   *   Works for variable declarations like int foo, bar, baz.... */
+  void fillInMultipleVariable( QList<CParsedAttribute> &list );
 
   /** Parse a variable declaration. */
   CParsedAttribute *parseVariable();
@@ -171,6 +179,9 @@ private: // Private methods
 
   /** Parse a class header, i.e find out classname and possible parents. */
   CParsedClass *parseClassHeader();
+
+  /** Parse a variable or method declaration of a class. */
+  void parseClassMethodVariable( CParsedClass *aClass );
 
   /** Parse the declarations of a class. */
   void parseClassDeclarations( CParsedClass *aClass );
