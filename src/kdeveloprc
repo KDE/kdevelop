@@ -54,8 +54,8 @@ Offset=-1
 Position=Top
 
 [Plugins]
-KDevFileSelector=false
 KDevScripting=false
 
 [UI]
-MajorUIMode=IDEAl
+MDIMode=4
+MajorUIMode=QextMDI
