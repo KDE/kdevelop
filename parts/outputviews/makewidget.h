@@ -17,6 +17,8 @@
 #if QT_VERSION < 300
 #include "qrichtext_p.h"
 #else
+#include "qbrush.h"
+#include "qstylesheet.h"
 #include "private/qrichtext_p.h"
 #endif
 

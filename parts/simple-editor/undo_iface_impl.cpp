@@ -7,7 +7,11 @@ using namespace KEditor;
 UndoIfaceImpl::UndoIfaceImpl(QMultiLineEdit *edit, Document *parent, Editor *editor)
   : UndoDocumentIface(parent, editor), m_edit(edit), _undo(false), _redo(false)
 {
+#if QT_VERSION < 300 
   m_edit->setUndoEnabled(true);
+#else
+  m_edit->setUndoRedoEnabled(true);
+#endif
 
   connect(m_edit, SIGNAL(undoAvailable(bool)), this, SLOT(slotUndoAvailable(bool)));
   connect(m_edit, SIGNAL(redoAvailable(bool)), this, SLOT(slotRedoAvailable(bool)));

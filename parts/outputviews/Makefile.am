@@ -2,8 +2,8 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/util \
-	   -I$(top_srcdir)/lib/qt3stuff \
-	   $(all_includes)
+	   $(all_includes) \
+	   -I$(top_srcdir)/lib/qt3stuff
 
 lib_LTLIBRARIES = libkdevoutputviews.la
 libkdevoutputviews_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
