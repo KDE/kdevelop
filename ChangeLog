@@ -1,3 +1,11 @@
+2001-12-22  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+	* generate docs in all source dirs in Doxyfile
+	and enable dot output
+	* kdevelop2 project:
+	  - project type: normal
+	  - don't modify Makefiles
+	  - subdirs: lib src parts
+
 2001-12-20  Sandy Meier  <smeier@kdevelop.org>
 	* added "new class" dialog to the PHP support 
 	incl. Basename completion and persistent class template

@@ -51,7 +51,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = lib/interfaces
+INPUT                  = src lib parts plugins
 FILE_PATTERNS          = *.h
 RECURSIVE              = YES
 EXCLUDE                = 
@@ -133,7 +133,7 @@ PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool   
 #---------------------------------------------------------------------------
-HAVE_DOT               = NO
+HAVE_DOT               = YES
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 INCLUDE_GRAPH          = YES
