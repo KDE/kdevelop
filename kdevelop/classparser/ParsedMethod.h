@@ -41,6 +41,9 @@ public: // Public attributes
   /** Is this methods declared virtual? */
   bool isVirtual;
 
+  /** Is this method declared as a pure virtual method(method()=0) */
+  bool isPure;
+
   /** Is this a slot? */
   bool isSlot;
 
@@ -62,6 +65,11 @@ public: // Public methods to set attribute values
    * @param aState The new state.
    */
   void setIsVirtual( bool aState = true )      { isVirtual = aState; }
+
+  /** Set the status if this is a pure virtual method.
+   * @param aState The new state. 
+   */
+  void setIsPure( bool aState = true )         { isPure = aState; }
 
   /** Set the status if this is a slot. 
    * @param aState The new state.

@@ -53,6 +53,7 @@ CParsedMethod::CParsedMethod()
   setItemType( PIT_METHOD );
   arguments.setAutoDelete( true );
   isVirtual = false;
+  isPure = false;
   isSlot = false;
   isSignal = false;
   isConstructor = false;
@@ -265,6 +266,9 @@ void CParsedMethod::asHeaderCode( QString &str )
   if( isConst )
     str += " const";
 
+  if( isPure )
+    str += " = 0";
+
   str += ";\n";
 }
 
@@ -281,13 +285,18 @@ void CParsedMethod::asHeaderCode( QString &str )
  *-----------------------------------------------------------------*/
 void CParsedMethod::asCppCode( QString &str )
 {
-  str = comment + "\n";
-  str += type + " " + declaredInClass + "::" + name;
-
-  if( isConst )
-    str += " const";
-
-  str += "{\n}\n";
+  if( isPure || isSignal )
+    str = "";
+  else
+  {
+    str = comment + "\n";
+    str += type + " " + declaredInClass + "::" + name;
+    
+    if( isConst )
+      str += " const";
+    
+    str += "{\n}\n";
+  }
 }
 
 /*--------------------------------- CParsedClass::asPersistantString()
