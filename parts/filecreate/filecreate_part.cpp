@@ -33,7 +33,6 @@
 #include "domutil.h"
 #include "urlutil.h"
 
-#include "filecreate_widget.h"
 #include "filecreate_widget2.h"
 #include "filecreate_widget3.h"
 #include "filecreate_part.h"
