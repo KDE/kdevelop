@@ -57,17 +57,15 @@ void ProjectWorkspace::saveFileList( QDomElement& wsElement)
     if (!ro_part)
       continue;
 
-    QString context;
     DocumentationPart* docpart = dynamic_cast<DocumentationPart*>(ro_part);
-    if (docpart)
-        context = docpart->context();
 
     // TODO: Save relative path for project sharing?
     QString url = ro_part->url().url();
 
     QDomElement file = wsElement.ownerDocument().createElement( "file" );
     file.setAttribute( "url", url );
-    file.setAttribute( "context", context );
+    if (docpart)
+        file.setAttribute( "context", docpart->context() );
     openfiles.appendChild( file );
   }
 }
@@ -81,11 +79,12 @@ void ProjectWorkspace::restoreFileList( const QDomElement& wsElement )
     if( file.tagName() != "file" )
       continue;
     KURL url( file.attribute( "url" ) );
-    QString context( file.attribute( "context" ) );
-    if (context.isNull())
-      PartController::getInstance()->editDocument( url );
-    else
+    if (file.hasAttribute( "context" )) {
+      QString context( file.attribute( "context" ) );
       PartController::getInstance()->showDocument( url, context );
+    } else {
+      PartController::getInstance()->editDocument( url );
+    }
   }
 }
 
