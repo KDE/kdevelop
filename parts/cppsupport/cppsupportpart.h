@@ -128,6 +128,8 @@ private:
      */
     void parseDirectory( const QString &directory, bool withSubDirectories,
                          QProgressBar *bar, QLabel *label );
+    
+    QStringList modifiedFileList();
 
     QString asHeaderCode(ParsedMethod *pm);
     QString asCppCode(ParsedMethod *pm);

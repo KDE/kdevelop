@@ -911,7 +911,7 @@ CppSupportPart::parseProject( )
     kapp->processEvents( );
     kapp->setOverrideCursor( waitCursor );
 
-    QStringList files = reorder( project( )->allFiles( ) );
+    QStringList files = reorder( modifiedFileList() );
 
     QProgressBar* bar = new QProgressBar( files.count( ), mainWindow( )->statusBar( ) );
     bar->setMinimumWidth( 120 );
@@ -930,7 +930,8 @@ CppSupportPart::parseProject( )
 			.arg( fileInfo.absFilePath() ) );
         maybeParse( fileInfo.absFilePath(), classStore() );
 
-        kapp->processEvents( );
+	if( (n%5) == 0 )
+	    kapp->processEvents();
 
 	if( m_projectClosed ){
 	    kdDebug(9007) << "ABORT" << endl;
@@ -1204,5 +1205,32 @@ void CppSupportPart::slotProjectCompiled()
     kdDebug(9007) << "CppSupportPart::slotProjectCompiled()" << endl;
     parseProject();
 }
+
+QStringList CppSupportPart::modifiedFileList()
+{
+    QStringList lst;
+    
+    QStringList fileList = project()->allFiles();
+    QStringList::Iterator it = fileList.begin();
+    while( it != fileList.end() ){
+	QString fileName = *it;
+	++it;
+		
+	QFileInfo fileInfo( project()->projectDirectory(), fileName );
+	
+	if( !fileExtensions().contains(fileInfo.extension()) )
+	    continue;
+	
+	QDateTime t = fileInfo.lastModified();
+	QMap<QString, QDateTime>::Iterator dictIt = m_timestamp.find( fileInfo.absFilePath() );
+	if( fileInfo.exists() && dictIt != m_timestamp.end() && *dictIt == t )
+	    continue;
+	
+	lst << fileName;
+    }
+    
+    return lst;
+}
+
 
 #include "cppsupportpart.moc"
