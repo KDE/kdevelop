@@ -1,3 +1,12 @@
+2001-05-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Use flex instead of $(LEX)
+	* Made function prototypes in tokenizer.l static.
+	  Not making them 'static' explicitly makes them
+	  'extern' and causes a conflict
+	* Removed tokenizer.cpp from cvs, so it gets
+	  generated at build time
+
 2001-05-05  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 	
 	* prepared the Tip-of-the-Day plugin to make use of the
