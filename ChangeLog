@@ -1,4 +1,8 @@
-1999-11-27 Jonas Nordin<jonas.nordin@syncom.se>
+1999-11-27 Jonas Nordin  <jonas.nordin@syncom.se>
+	* Added clear method to ParsedScopeContainer.
+	* Added namespaces to classview.
+
+1999-11-27 Jonas Nordin <jonas.nordin@syncom.se>
 	* Fixed some parsing issues. Like how classes are stored in the global
 	  dictionary.
 	* Fixed assertion problems. All assertions are now replaced with
