@@ -126,7 +126,7 @@ QDomElement DomUtil::namedChildElement( QDomElement& el, const QString& name )
 }
 
 
-QDomElement DomUtil::createElementByPath( QDomDocument& doc, const QString& path )
+QDomElement DomUtil::createElementByPath(QDomDocument &doc, const QString &path)
 {
     QStringList l = QStringList::split('/', path);
 
@@ -135,6 +135,9 @@ QDomElement DomUtil::createElementByPath( QDomDocument& doc, const QString& path
     for (it = l.begin(); it != l.end(); ++it)
         el = DomUtil::namedChildElement( el, *it );
         
+    while (!el.firstChild().isNull())
+        el.removeChild(el.firstChild());
+
     return el;
 }
 
@@ -142,7 +145,6 @@ QDomElement DomUtil::createElementByPath( QDomDocument& doc, const QString& path
 void DomUtil::writeEntry(QDomDocument &doc, const QString &path, const QString &value)
 {
     QDomElement el = DomUtil::createElementByPath(doc, path);
-    DomUtil::makeEmpty( el );
     el.appendChild(doc.createTextNode(value));
 }
     
