@@ -41,8 +41,8 @@ int main(int argc, char* argv[]) {
 	    a.setTopWidget(kdevelop);
 	    kdevelop->show();
 	    a.getConfig()->setGroup("General Options");
-    	    kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
-            kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+    	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
+      kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
     }
     if(bStartLogo){
       start_logo->close();
@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
     int rc = a.exec();
     return rc;
 }
+
 
 
 

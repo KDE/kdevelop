@@ -352,7 +352,8 @@ private:
   int saveTimeout;   // timeout time
 
   bool bAutoswitch;
-//  KProgress* statProg;
+  KProgress* statProg;
+//  QProgressBar* statProg;
   //some vars for the searchengine
   QString search_output;
   QString doc_search_text;
@@ -368,6 +369,7 @@ private:
 };
 
 #endif
+
 
 
 

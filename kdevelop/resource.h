@@ -205,7 +205,8 @@
 #define ID_STATUS_INS_OVR           1002
 #define ID_STATUS_LN_CLM            1003
 #define ID_STATUS_EMPTY             1004
-#define ID_STATUS_PROGRESS          1005
+#define ID_STATUS_EMPTY_2           1005
+#define ID_STATUS_PROGRESS          1006
 #define IDS_DEFAULT                 i18n("Ready.")
 
 ///////////////////////////////////////////////////////////////////

@@ -631,7 +631,7 @@ void CKDevelop::initMenu(){
   accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
   help_menu->insertSeparator();
-  help_menu->insertItem(Icon("help.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),0 ,ID_HELP_CONTENT);
+  help_menu->insertItem(Icon("mini/kdehelp.xpm"),i18n("Contents"),this,SLOT(slotHelpContent()),0 ,ID_HELP_CONTENT);
   accel->changeMenuAccel(help_menu, ID_HELP_CONTENT, KAccel::Help );
 
   help_menu->insertSeparator();
@@ -783,18 +783,23 @@ void CKDevelop::initToolbar(){
 
 void CKDevelop::initStatusBar(){
 
-/*  statProg = new KProgress(0,100,0,KProgress::Horizontal,statusBar(),"Progressbar");
+  statProg = new KProgress(0,100,0,KProgress::Horizontal,statusBar(),"Progressbar");
   statProg->setBarColor("blue");
-  statProg->setBarStyle(KProgress::Solid);
+  statProg->setBarStyle(KProgress::Solid);  // Solid or Blocked
   statProg->setTextEnabled(false);
   statProg->setBackgroundMode(PaletteBackground);
-*/
-  statusBar()->insertItem(i18n("                    "), ID_STATUS_EMPTY);
+  statProg->setLineWidth( 1 );                // hehe, this *is* tricky...
+
+  statusBar()->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
   statusBar()->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
   statusBar()->changeItem("", ID_STATUS_EMPTY);
   statusBar()->changeItem("", ID_STATUS_LN_CLM);
+
   statusBar()->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
-//  statusBar()->insertWidget(statProg,150, ID_STATUS_PROGRESS);
+  statusBar()->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
+  statusBar()->changeItem("", ID_STATUS_EMPTY_2);
+
+  statusBar()->insertWidget(statProg,150, ID_STATUS_PROGRESS);
   statusBar()->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
   statusBar()->setInsertOrder(KStatusBar::RightToLeft);
   statusBar()->setAlignment(ID_STATUS_INS_OVR, AlignCenter);

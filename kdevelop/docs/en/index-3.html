@@ -14,9 +14,7 @@ of Contents</a>
 
 <blockquote>&nbsp;&nbsp;&nbsp; This section describes how to set up KDevelop
 to make programming a real enjoyment.&nbsp; We suggest following each step
-of configuration in the given order.
-<br>Most important is 3.5 to 3.7, which enables you direct documentation
-access while coding your application.</blockquote>
+of configuration in the given order.</blockquote>
 
 <h2>
 <a NAME="ss3.1"></a>3.1 Editor</h2>
@@ -60,7 +58,8 @@ deletes a selection when writing in the selection.
 allows only one selection. A selection made gets deselected when another
 selection is made.
 <p>Wrap Words At:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-sets the maximum</blockquote>
+sets the maximum
+<br>&nbsp;</blockquote>
 
 <h2>
 <a NAME="ss3.2"></a>3.2&nbsp; Editor-Colors</h2>
@@ -97,34 +96,77 @@ allows settings for different programming languages and fonts, each independent.
 language and the idiom wich display type you want to change.</blockquote>
 
 <h2>
-<a NAME="ss3.5"></a>3.5&nbsp; Configure Keys</h2>
-
-<blockquote>&nbsp;&nbsp;&nbsp; The Configure Keys dialog lets you configure
-the KDevelop key bindings. Note that global keys can be configured in the
-KDE Control&nbsp;Center, such as open file and print.
-<br>A key function can be configured by choosing the menu entry. Then the
-configuration can be changed by checking values like the Alt / Ctrl key
-etc.&nbsp; The defaults -button will reset all changes made to that keybindings
-configuration.</blockquote>
-
-<h2>
-<a NAME="ss3.6"></a>3.6&nbsp; Documentation Browser</h2>
+<a NAME="ss3.5"></a>3.5&nbsp; Documentation Browser</h2>
 
 <blockquote>&nbsp;&nbsp;&nbsp; The Documentation Browser can be configured
 by this menu, setting colors for HTML links, background etc. Also the font
 size can be changed as well as the fixed and standard font type according
-to the system's installed fonts.</blockquote>
+to the system's installed fonts.
+<br>&nbsp;</blockquote>
 
 <h2>
-<a NAME="ss3.7"></a>3.7&nbsp; Documentation Path</h2>
+<a NAME="ss3.6"></a>3.6&nbsp; Configure Printer...</h2>
+&nbsp;&nbsp;&nbsp; The printer can be configured to use the printing programs
+a2ps and enscript, so please make sure that either one of them is installed
+on your system.
+<br>The configuration is almost similar for both programs, but the options
+must be set differently by using the corresponding configuration dialogs.
+<br>&nbsp;
+<h2>
+<a NAME="ss3.7"></a>3.7&nbsp; KDevelop Setup</h2>
 
-<blockquote>&nbsp;&nbsp;&nbsp; For setting up the documentation browser
-to work correctly, KDevelop needs some information about where the HTML-
-documentation is placed on the system. Therefore, the Documentation Path
-properties dialog needs the path of the Qt- online documentation in HTML
-as well as the path to the KDE-library documentation.
-<p><img SRC="kdevsetup.gif" height=246 width=470>
-<br><b><i><u>Picture 3.1: The Documentation path configuration dialog.</u></i></b>
+<blockquote>
+<h4>
+<a NAME="ss3.7.1"></a>3.7.1&nbsp; General</h4>
+
+<blockquote>Make-command:
+<p>The General Options dialog lets you configure KDevelop's general settings.
+<br>First, you should set the make-command available on your system. If
+the selected program does not exist, KDevelop will warn you the next time
+your're invoking a make command.
+<br>&nbsp;
+<p>Autosave:
+<p>If Autosave is checked, KDevelop will save all changed files periodically.&nbsp;
+The autosaving time range can be set to 3, 5, 15 or 30 minutes.
+<br>&nbsp;
+<p>Autoswitch:
+<p>If Autoswitch is enabled, the KDevelop windows will switch on and off
+according to the usage context, e.g.&nbsp; if you switch to a documentation
+in the Helpmenu, the Documentation browser will be opened, together with
+the documentation tree and the output window turned off.
+<br>&nbsp;
+<p>Startup:
+<p>For starting KDevelop, you have the option to enable/disable the startlogo
+to be shown during the time KDevelop loads.&nbsp; Further, if you don't
+like the last project to be opened on startup, you can disable the default
+behavoir.</blockquote>
+
+<h4>
+</h4>
+
+<h4>
+<a NAME="ss3.7.2"></a>3.7.2&nbsp;&nbsp;&nbsp; Keys</h4>
+
+<blockquote>&nbsp;
+<br>&nbsp;&nbsp;&nbsp; The Configure Keys dialog lets you configure the
+KDevelop key bindings. Note that global keys can be configured in the KDE
+Control Center, such as open file and print.&nbsp; A key function can be
+configured by choosing the menu entry. Then the configuration can be changed
+by checking values like the Alt / Ctrl key etc.
+<br>&nbsp;</blockquote>
+
+<h4>
+<a NAME="ss3.7.3"></a>3.7.3&nbsp;&nbsp;&nbsp; Documentation</h4>
+
+<h4>
+3.7.3.1&nbsp;&nbsp; Directories</h4>
+
+<blockquote>&nbsp;
+<br>&nbsp;&nbsp;&nbsp; For setting up the documentation browser to work
+correctly, KDevelop needs some information about where the HTML- documentation
+is placed on the system. Therefore, the Documentation Path properties dialog
+needs the path of the Qt- online documentation in HTML as well as the path
+to the KDE-library documentation.
 <p>Usually, the Qt-documentation is placed in the same directory where
 Qt is installed; e.g. if Qt resides in /usr/local/qt, the path you have
 to enter is /usr/local/qt/html.
@@ -137,18 +179,20 @@ a path-selection.
 you should first enter the next configuration dialog, Update KDE-Documentation.
 This will create the documentation to a path of your choice, also setting
 the KDE Library Doc path automatically.
-<br>&nbsp;
 <br>&nbsp;</blockquote>
 
-<h2>
-<a NAME="ss3.8"></a>3.8&nbsp; Update KDE-Documentation</h2>
+<h4>
+3.7.3.2&nbsp; Options</h4>
+
+<h4>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update
+KDE-Documentation</h4>
 
 <blockquote>&nbsp;&nbsp;&nbsp; For those users who don't have a recent
 documentation of the KDE-libraries, especially the documentation for the
 files installed on the system, the Update KDE-Documentation dialog creates
 a new one or updates existing documentations.
-<p><img SRC="kdevdocupdate.gif" height=408 width=538>
-<br><b><i><u>Picture 3.2: KDE Library Documentation Update.</u></i></b>
+<br>&nbsp;
 <p>This function requires your system to have kdoc and qt2kdoc installed,
 included in the kdesdk package.
 <br>First of, you have to set up the path to your recent kdelibs sources,
@@ -190,18 +234,16 @@ to ensure that it can be found by qt2kdoc.
 <br>Finally, the KDE libs will be indexed and the documentation will be
 build with crossreferences to give browsing the most functionality.
 <br>&nbsp;
-<br>&nbsp;</blockquote>
-
-<h2>
-<a NAME="ss3.9"></a>3.9&nbsp; Create Search Database</h2>
-
-<blockquote>&nbsp;&nbsp;&nbsp; The Create Search Database dialog, accessed
-via the options-menu, allows the programmer to create a database to search
-for a keyword interactively.&nbsp; To create and use the documentation
-search function, you must have the program glimpse 4.1 installed.&nbsp;
-Preset are the options to index the given KDE-library documentation as
-well as the Qt-documentation, assuming the path to the documentation files
-were set in the "Documentation Path" dialog of the options- menu.&nbsp;&nbsp;
+<br>&nbsp;
+<h4>
+Create Search Database</h4>
+&nbsp;&nbsp;&nbsp; The Create Search Database dialog, accessed via the
+create-button, allows the programmer to create a database to search for
+a keyword interactively.&nbsp; To create and use the documentation search
+function, you must have the program glimpse 4.1 installed.&nbsp; Preset
+are the options to index the given KDE-library documentation as well as
+the Qt-documentation, assuming the path to the documentation files were
+set in the "Documentation Path" dialog of the options- menu.&nbsp;&nbsp;
 Additionally, the index can include directories the user can set up himself
 by the "additional directories to index"-field.&nbsp; After setting a path
 to an addional directory, the "Add" - button must be pushed to set the
@@ -214,17 +256,8 @@ in a bigger searchdatabase will be faster and more successful, so we suggest
 choosing a "medium" size.
 <br>For using the search function, see section&nbsp; <a href="index-4.html#ss4.8">4.8&nbsp;&nbsp;
 Using the Documentation Browser</a></blockquote>
+</blockquote>
 
-<h2>
-<a NAME="ss3.10"></a>3.10&nbsp; Make-Command</h2>
-
-<blockquote>&nbsp;&nbsp;&nbsp; The make-command menu lets you choose between
-various make-programs like make, gmake and dmake. The actually used make
-program is checked, the default value is "make".&nbsp; For FreeBSD and
-other users using gmake, please switch to "Gmake" to invoke the make-process
-by using gmake.</blockquote>
-
-<p><br>
 <hr><a href="index-2.html">Previous</a> <a href="index-4.html">Next</a><a href="index.html#toc3">Table
 of Contents</a>
 </body>

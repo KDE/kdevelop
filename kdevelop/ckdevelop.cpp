@@ -1392,6 +1392,11 @@ void CKDevelop::slotDocTreeSelected(int index){
       // not found: use the default
       file = strpath + "default/" + "kdevelop/reference/C/cref.html";
     }
+    if( !QFileInfo( file ).exists() ){
+      // not found: use the default
+      file = strpath + "default/" + "kdevelop/cref.html";
+    }
+
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
@@ -1506,7 +1511,7 @@ void CKDevelop::slotHelpReference(){
 
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
-    file = strpath + "default/" + "kdevelop/reference/C/cref.html";
+    file = strpath + "default/" + "/en/kdevelop/cref.html";
   }
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 }
@@ -1688,101 +1693,101 @@ void CKDevelop::slotToolbarClicked(int item){
 
 
 BEGIN_STATUS_MSG(CKDevelop)
-  ON_STATUS_MSG(ID_FILE_NEW,                                                   i18n("Creates a new file"))
-  ON_STATUS_MSG(ID_FILE_OPEN,   							i18n("Opens an existing file"))
-  ON_STATUS_MSG(ID_FILE_CLOSE,       						i18n("Closes the actual file"))
+  ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
+  ON_STATUS_MSG(ID_FILE_OPEN,   							            i18n("Opens an existing file"))
+  ON_STATUS_MSG(ID_FILE_CLOSE,       						          i18n("Closes the actual file"))
 
-  ON_STATUS_MSG(ID_FILE_SAVE,        						i18n("Save the actual document"))
-  ON_STATUS_MSG(ID_FILE_SAVE_AS,     						i18n("Save the document as..."))
-  ON_STATUS_MSG(ID_FILE_SAVE_ALL,    						i18n("Save all changed files"))
+  ON_STATUS_MSG(ID_FILE_SAVE,        						          i18n("Save the actual document"))
+  ON_STATUS_MSG(ID_FILE_SAVE_AS,     						          i18n("Save the document as..."))
+  ON_STATUS_MSG(ID_FILE_SAVE_ALL,    						          i18n("Save all changed files"))
 
-  ON_STATUS_MSG(ID_FILE_PRINT,       						i18n("Prints the current document"))
+  ON_STATUS_MSG(ID_FILE_PRINT,       						          i18n("Prints the current document"))
 
 //  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
 
-  ON_STATUS_MSG(ID_FILE_QUIT,        						i18n("Exits the program"))  
+  ON_STATUS_MSG(ID_FILE_QUIT,        						          i18n("Exits the program"))
 
 
-  ON_STATUS_MSG(ID_EDIT_CUT,                     			i18n("Cuts the selected section and puts it to the clipboard"))
-  ON_STATUS_MSG(ID_EDIT_COPY,                    			i18n("Copys the selected section to the clipboard"))
-  ON_STATUS_MSG(ID_EDIT_PASTE,                   			i18n("Pastes the clipboard contents to actual position"))
-  ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              			i18n("Selects the whole document contents"))
-  ON_STATUS_MSG(ID_EDIT_INSERT_FILE,             			i18n("Inserts a file at the current position"))
-  ON_STATUS_MSG(ID_EDIT_SEARCH,                  			i18n("Searchs the file for an expression"))
-  ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           			i18n("Repeats the last search"))
-  ON_STATUS_MSG(ID_EDIT_REPLACE,                 			i18n("Searchs and replace expression"))
+  ON_STATUS_MSG(ID_EDIT_CUT,                     			    i18n("Cuts the selected section and puts it to the clipboard"))
+  ON_STATUS_MSG(ID_EDIT_COPY,                    			    i18n("Copys the selected section to the clipboard"))
+  ON_STATUS_MSG(ID_EDIT_PASTE,                   			    i18n("Pastes the clipboard contents to actual position"))
+  ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              			    i18n("Selects the whole document contents"))
+  ON_STATUS_MSG(ID_EDIT_INSERT_FILE,             			    i18n("Inserts a file at the current position"))
+  ON_STATUS_MSG(ID_EDIT_SEARCH,                  			    i18n("Searchs the file for an expression"))
+  ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           			    i18n("Repeats the last search"))
+  ON_STATUS_MSG(ID_EDIT_REPLACE,                 			    i18n("Searchs and replace expression"))
 
 
-  ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               			i18n("Goes to Line Number..."))
+  ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               			    i18n("Goes to Line Number..."))
 
-  ON_STATUS_MSG(ID_VIEW_TREEVIEW,              				i18n("Enables / disables the treeview"))
-  ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            				i18n("Enables / disables the outputview"))
+  ON_STATUS_MSG(ID_VIEW_TREEVIEW,              				    i18n("Enables / disables the treeview"))
+  ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            				    i18n("Enables / disables the outputview"))
 
-  ON_STATUS_MSG(ID_VIEW_TOOLBAR,                  			i18n("Enables / disables the standard toolbar"))
-  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       				i18n("Enables / disables the browser toolbar"))
-  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				i18n("Enables / disables the statusbar"))
+  ON_STATUS_MSG(ID_VIEW_TOOLBAR,                  			  i18n("Enables / disables the standard toolbar"))
+  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       				    i18n("Enables / disables the browser toolbar"))
+  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				    i18n("Enables / disables the statusbar"))
 
-  ON_STATUS_MSG(ID_VIEW_REFRESH,                			i18n("Refreshes current view"))
+  ON_STATUS_MSG(ID_VIEW_REFRESH,                			    i18n("Refreshes current view"))
 
 
-  ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			i18n("Generates a new project with KAppWizard"))
-  ON_STATUS_MSG(ID_PROJECT_NEW,                   			i18n("Creates a new project"))
-  ON_STATUS_MSG(ID_PROJECT_OPEN,			            	i18n("Opens an existing project"))
-  ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			i18n("Closes the current project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE,              			i18n("Adds a file to the current project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_NEW,          			i18n("Adds a new file to the project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        			i18n("Adds an existing file to the project"))
-  ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           			i18n("Removes file from the project"))
+  ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with KAppWizard"))
+  ON_STATUS_MSG(ID_PROJECT_NEW,                   			  i18n("Creates a new project"))
+  ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
+  ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			  i18n("Closes the current project"))
+  ON_STATUS_MSG(ID_PROJECT_ADD_FILE,              			  i18n("Adds a file to the current project"))
+  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_NEW,          			  i18n("Adds a new file to the project"))
+  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        			  i18n("Adds an existing file to the project"))
+  ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           			  i18n("Removes file from the project"))
 
-  ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             			i18n("Creates a new Class frame structure and files"))
+  ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             			  i18n("Creates a new Class frame structure and files"))
 
-  ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       			i18n("Shows the current file properties"))
-  ON_STATUS_MSG(ID_PROJECT_OPTIONS,               			i18n("Sets project and compiler options"))
+  ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       			  i18n("Shows the current file properties"))
+  ON_STATUS_MSG(ID_PROJECT_OPTIONS,               			  i18n("Sets project and compiler options"))
 
   
-  ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                     	i18n("Compiles the current sourcefile"))  
-  ON_STATUS_MSG(ID_BUILD_RUN,                     			i18n("Invokes make-command and runs the program"))
-  ON_STATUS_MSG(ID_BUILD_DEBUG,                   			i18n("Invokes make and KDbg debugging the binary"))
-  ON_STATUS_MSG(ID_BUILD_MAKE,                    			i18n("Invokes make-command"))
-  ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,             			i18n("Rebuilds the program"))
-  ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       			i18n("Invokes make clean and rebuild all"))
-  ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			i18n("Invokes make distclean and deletes all compiled files"))
-  ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			i18n("Invokes automake and co."))
-  ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			i18n("Invokes ./configure"))
-  ON_STATUS_MSG(ID_BUILD_STOP,                    			i18n("Stops make immediately"))
-  ON_STATUS_MSG(ID_BUILD_MAKE_PROJECT_API,        			i18n("Creates the Project's API with KDoc"))
-  ON_STATUS_MSG(ID_BUILD_MAKE_USER_MANUAL,        			i18n("Creates the Project's User Manual with the sgml-file"))
+  ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
+  ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
+  ON_STATUS_MSG(ID_BUILD_DEBUG,                   			  i18n("Invokes make and KDbg debugging the binary"))
+  ON_STATUS_MSG(ID_BUILD_MAKE,                    			  i18n("Invokes make-command"))
+  ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,             			  i18n("Rebuilds the program"))
+  ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       			  i18n("Invokes make clean and rebuild all"))
+  ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
+  ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
+  ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
+  ON_STATUS_MSG(ID_BUILD_STOP,                    			  i18n("Stops make immediately"))
+  ON_STATUS_MSG(ID_BUILD_MAKE_PROJECT_API,        			  i18n("Creates the Project's API with KDoc"))
+  ON_STATUS_MSG(ID_BUILD_MAKE_USER_MANUAL,        			  i18n("Creates the Project's User Manual with the sgml-file"))
 
-  ON_STATUS_MSG(ID_TOOLS_KDBG,                    			i18n("Starts KDbg in the tools window"))
-  ON_STATUS_MSG(ID_TOOLS_KTRANSLATOR,             			i18n("Starts KTranslator in the tools window"))
-  ON_STATUS_MSG(ID_TOOLS_KICONEDIT,               			i18n("Starts KIconedit in the tools window"))
+  ON_STATUS_MSG(ID_TOOLS_KDBG,                    			  i18n("Starts KDbg in the tools window"))
+  ON_STATUS_MSG(ID_TOOLS_KTRANSLATOR,             			  i18n("Starts KTranslator in the tools window"))
+  ON_STATUS_MSG(ID_TOOLS_KICONEDIT,               			  i18n("Starts KIconedit in the tools window"))
 
-  ON_STATUS_MSG(ID_OPTIONS_EDITOR,              			i18n("Sets the Editor's behavoir"))
-  ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			i18n("Sets the Editor's colors"))
-  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS, 			i18n("Sets the highlighting default colors"))
-  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			i18n("Sets the highlighting colors"))
-  ON_STATUS_MSG(ID_OPTIONS_PRINT,       			i18n("Configures printing options"))
-  ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,       	i18n("Configures the printer to use enscript"))
-  ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,       			i18n("Configures the printer to use a2ps"))
-  ON_STATUS_MSG(ID_OPTIONS_KEYS, 			                i18n("Sets the keyboard accelerators"))
-  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              		i18n("Configures KDevelop"))
-  ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				i18n("Configures the Browser options"))
+  ON_STATUS_MSG(ID_OPTIONS_EDITOR,              			    i18n("Sets the Editor's behavoir"))
+  ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			    i18n("Sets the Editor's colors"))
+  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS,  i18n("Sets the highlighting default colors"))
+  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			    i18n("Sets the highlighting colors"))
+  ON_STATUS_MSG(ID_OPTIONS_PRINT,       			            i18n("Configures printing options"))
+  ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,       	        i18n("Configures the printer to use enscript"))
+  ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,       			        i18n("Configures the printer to use a2ps"))
+  ON_STATUS_MSG(ID_OPTIONS_KEYS, 			                    i18n("Sets the keyboard accelerators"))
+  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              		    i18n("Configures KDevelop"))
+  ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				    i18n("Configures the Browser options"))
 
-  ON_STATUS_MSG(ID_DOC_BACK,                      			i18n("Switchs to last browser page"))
-  ON_STATUS_MSG(ID_DOC_FORWARD,                   			i18n("Switchs to next browser page"))
-  ON_STATUS_MSG(ID_DOC_SEARCH_TEXT,              				i18n("Searchs the selected text in the documentation"))
-  ON_STATUS_MSG(ID_DOC_QT_LIBRARY,                			i18n("Switchs to the QT-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_CORE_LIBRARY,          			i18n("Switchs to the KDE-Core-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_GUI_LIBRARY,           			i18n("Switchs to the KDE-GUI-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_KFILE_LIBRARY,          			i18n("Switchs to the KDE-File-Documentation"))
-  ON_STATUS_MSG(ID_DOC_KDE_HTML_LIBRARY,          			i18n("Switchs to the KDE-Html-Documentation"))
-  ON_STATUS_MSG(ID_DOC_PROJECT_API_DOC,           			i18n("Switchs to the project's API-Documentation"))
-  ON_STATUS_MSG(ID_DOC_USER_MANUAL,               			i18n("Switchs to the project's User-Manual"))
+  ON_STATUS_MSG(ID_DOC_BACK,                      			  i18n("Switchs to last browser page"))
+  ON_STATUS_MSG(ID_DOC_FORWARD,                   			  i18n("Switchs to next browser page"))
+  ON_STATUS_MSG(ID_DOC_SEARCH_TEXT,              				  i18n("Searchs the selected text in the documentation"))
+  ON_STATUS_MSG(ID_DOC_QT_LIBRARY,                			  i18n("Switchs to the QT-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_CORE_LIBRARY,          			  i18n("Switchs to the KDE-Core-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_GUI_LIBRARY,           			  i18n("Switchs to the KDE-GUI-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_KFILE_LIBRARY,          			  i18n("Switchs to the KDE-File-Documentation"))
+  ON_STATUS_MSG(ID_DOC_KDE_HTML_LIBRARY,          			  i18n("Switchs to the KDE-Html-Documentation"))
+  ON_STATUS_MSG(ID_DOC_PROJECT_API_DOC,           			  i18n("Switchs to the project's API-Documentation"))
+  ON_STATUS_MSG(ID_DOC_USER_MANUAL,               			  i18n("Switchs to the project's User-Manual"))
 
-  ON_STATUS_MSG(ID_HELP_SEARCH,                         i18n("Lets you search individually for an expression"))
-  ON_STATUS_MSG(ID_HELP_CONTENT,                  			i18n("Switch to KDevelop's User Manual"))
-  ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			i18n("Enter the KDevelop Homepage"))
-  ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
+  ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
+  ON_STATUS_MSG(ID_HELP_CONTENT,                  			  i18n("Switch to KDevelop's User Manual"))
+  ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
+  ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
 
