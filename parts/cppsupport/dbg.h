@@ -14,6 +14,7 @@
 #define _DBG_H
 
 #include <iostream.h>
+using namespace std;
 
 #ifdef ENABLEDEBUGOUTPUT
 #define err( x ) cerr << x

@@ -8,7 +8,7 @@
 
 #include "codecompletion_iface_impl.h"
 #include <iostream.h>
-
+using namespace std;
 
 class CompletionItem : public QListBoxText
 {

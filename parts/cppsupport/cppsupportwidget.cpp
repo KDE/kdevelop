@@ -13,6 +13,7 @@
 #include "cppsupportpart.h"
 
 #include <iostream.h>
+using namespace std;
 
 CppSupportWidget::CppSupportWidget( CppSupportPart* part )
     : KEdit( 0, "CppSupportPart" )

@@ -19,6 +19,7 @@
 #include "cppsupportpart.h"
 
 #include <iostream.h>
+using namespace std;
 
 CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const char* name )
     : CCConfigWidgetBase( parent, name )

@@ -33,7 +33,6 @@
 #include <algorithm>
 #include <iostream>
 
-
 #define INIT_CONTAINER(container, value)     {if ( (container) != NULL ) delete (container); (container) = (value); }
 #define DELETE_CONTAINER(container)          {if ( (container) != NULL ) delete (container) ; }
 

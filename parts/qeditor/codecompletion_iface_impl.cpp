@@ -9,9 +9,11 @@
 #include <qstringlist.h>
 #include <qsizegrip.h>
 #include <qapplication.h>
-#include <iostream>
 
 using namespace KEditor;
+
+#include <iostream>
+using namespace std;
 
 class CompletionItem : public QListBoxText
 {

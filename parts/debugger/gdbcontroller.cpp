@@ -39,6 +39,7 @@
 #include <iostream>
 #include <ctype.h>
 #include <stdlib.h>
+using namespace std;
 
 #if defined(DBG_MONITOR)
   #define GDB_MONITOR

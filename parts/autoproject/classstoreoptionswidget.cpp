@@ -17,6 +17,7 @@
 #include "classstoreoptionswidget.h"
 
 #include <iostream>
+using namespace std;
 #include <qlistview.h>
 #include <klocale.h>
 #include <kfiledialog.h>
