@@ -81,8 +81,7 @@ if ($processes{USER} eq "yes") {
   #create the html-files
   chdir ($underDirectory . "/docs/en");
 
-  if ( 	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
-       	$processes{APPLICATION} eq "kde2mdi")
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kickerapp|^kpart$|kioslave|kcmodule/)
   {
      # FIXME: there should be the proper call for docbooks
   }
