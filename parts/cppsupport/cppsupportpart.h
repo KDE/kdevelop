@@ -32,6 +32,7 @@ class CppCodeCompletion;
 class QLabel;
 class QProgressBar;
 
+namespace KParts { class Part; }
 namespace KTextEditor { class EditInterface; };
 
 
@@ -40,7 +41,7 @@ class CppSupportPart : public KDevLanguageSupport
     Q_OBJECT
 
 public:
-    CppSupportPart( bool cpp, KDevApi *api, QObject *parent=0, const char *name=0 );
+    CppSupportPart( QObject *parent, const char *name, const QStringList &args );
     ~CppSupportPart();
     
     void setEnableCC( bool b ){ m_bEnableCC = b;    };

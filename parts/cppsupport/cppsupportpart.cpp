@@ -27,6 +27,8 @@
 #include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -40,7 +42,6 @@
 
 
 #include "cppsupportpart.h"
-#include "cppsupportfactory.h"
 #include "parsedclass.h"
 #include "parsedattribute.h"
 #include "parsedmethod.h"
@@ -61,9 +62,11 @@
 #include <qguardedptr.h>
 #include "cppsupportwidget.h"
 
+typedef KGenericFactory<CppSupportPart> CppSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
-CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const char *name)
-    : KDevLanguageSupport(api, parent, name)
+CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
+    : KDevLanguageSupport(parent, name)
 {
     setInstance(CppSupportFactory::instance());
 
@@ -122,7 +125,9 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
     m_pCompletion  = 0;
     m_pEditIface   = 0;
 
-    withcpp = cpp;
+    withcpp = false;
+    if ( args.count() == 1 && args[ 0 ] == "Cpp" )
+	withcpp = true;
 
     // daniel
     connect( core( ), SIGNAL( projectConfigWidget( KDialogBase* ) ), this,

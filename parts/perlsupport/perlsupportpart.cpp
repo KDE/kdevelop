@@ -19,6 +19,8 @@
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -26,13 +28,14 @@
 #include "classstore.h"
 
 #include "perlsupportpart.h"
-#include "perlsupportfactory.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
 
+typedef KGenericFactory<PerlSupportPart> PerlSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevperlsupport, PerlSupportFactory( "kdevperlsupport" ) );
 
-PerlSupportPart::PerlSupportPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevLanguageSupport(api, parent, name)
+PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStringList &)
+    : KDevLanguageSupport(parent, name)
 {
     setInstance(PerlSupportFactory::instance());
 

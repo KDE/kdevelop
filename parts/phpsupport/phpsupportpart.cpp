@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
+#include <kaction.h>
 #include <qprogressbar.h>
 
 #include "kdevcore.h"
@@ -34,7 +35,6 @@
 #include <kdevpartcontroller.h>
 
 #include "phpsupportpart.h"
-#include "phpsupportfactory.h"
 #include "phpconfigdata.h"
 #include "phpconfigwidget.h"
 #include "phpcodecompletion.h"
@@ -51,8 +51,10 @@
 
 using namespace std;
 
-PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevLanguageSupport(api, parent, name)
+K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( "kdevphpsupport" ) );
+
+PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringList &)
+    : KDevLanguageSupport(parent, name)
 {
   m_htmlView=0;
   phpExeProc=0;

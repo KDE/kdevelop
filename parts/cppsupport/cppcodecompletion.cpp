@@ -23,6 +23,7 @@
 #include <ktempfile.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
+#include <kparts/part.h>
 
 #include <qstring.h>
 #include <qfile.h>

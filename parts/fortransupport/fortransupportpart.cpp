@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kregexp.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -37,11 +39,12 @@
 #include "ftnchekconfigwidget.h"
 #include "fixedformparser.h"
 #include "fortransupportpart.h"
-#include "fortransupportfactory.h"
 
+typedef KGenericFactory<FortranSupportPart> FortranSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( "kdevfortransupport" ) );
 
-FortranSupportPart::FortranSupportPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevLanguageSupport(api, parent, name)
+FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const QStringList &)
+    : KDevLanguageSupport(parent, name)
 {
     setInstance(FortranSupportFactory::instance());
     

@@ -22,7 +22,7 @@ class PythonSupportPart : public KDevLanguageSupport
     Q_OBJECT
 
 public:
-    PythonSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    PythonSupportPart( QObject *parent, const char *name, const QStringList & );
     ~PythonSupportPart();
 
 protected:

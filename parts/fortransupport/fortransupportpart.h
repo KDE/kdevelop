@@ -23,7 +23,7 @@ class FortranSupportPart : public KDevLanguageSupport
     Q_OBJECT
 
 public:
-    FortranSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    FortranSupportPart( QObject *parent, const char *name, const QStringList & );
     ~FortranSupportPart();
 
 protected:

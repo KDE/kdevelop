@@ -17,7 +17,6 @@
 #include <qbuttongroup.h>
 #include <qlistview.h>
 // kde includes
-#include <kdevpart.h>
 #include <kdevproject.h>
 #include <kfiledialog.h>
 #include <klocale.h>

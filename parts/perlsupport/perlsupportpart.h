@@ -21,7 +21,7 @@ class PerlSupportPart : public KDevLanguageSupport
     Q_OBJECT
 
 public:
-    PerlSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    PerlSupportPart( QObject *parent, const char *name, const QStringList & );
     ~PerlSupportPart();
 
 protected:

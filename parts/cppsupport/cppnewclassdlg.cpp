@@ -25,13 +25,13 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "kdevpart.h"
+#include "kdevplugin.h"
 #include "kdevproject.h"
 #include "domutil.h"
 #include "filetemplate.h"
 
 
-CppNewClassDialog::CppNewClassDialog(KDevPart *part, QWidget *parent, const char *name)
+CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const char *name)
     : CppNewClassDialogBase(parent, name)
 {
     headerModified = false;

@@ -21,6 +21,8 @@
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -30,14 +32,15 @@
 #include "domutil.h"
 
 #include "pythonsupportpart.h"
-#include "pythonsupportfactory.h"
 #include "pythonconfigwidget.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
 
+typedef KGenericFactory<PythonSupportPart> PythonSupportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( "kdevpythonsupport" ) );
 
-PythonSupportPart::PythonSupportPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevLanguageSupport(api, parent, name)
+PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QStringList &)
+    : KDevLanguageSupport(parent, name)
 {
     setInstance(PythonSupportFactory::instance());
 

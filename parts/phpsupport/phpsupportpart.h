@@ -15,6 +15,7 @@
 #include <kdialogbase.h>
 #include "kdevlanguagesupport.h"
 #include <kio/job.h>
+#include <kgenericfactory.h>
 
 #include <ktexteditor/editinterface.h>
 
@@ -30,7 +31,7 @@ class PHPSupportPart : public KDevLanguageSupport
 {
     Q_OBJECT
 
-public:    PHPSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+public:    PHPSupportPart( QObject *parent, const char *name, const QStringList & );
     ~PHPSupportPart();
 
 protected:
@@ -72,5 +73,7 @@ private:
     PHPParser* m_parser;
     KTextEditor::EditInterface *m_editInterface;
 };
+
+typedef KGenericFactory<PHPSupportPart> PHPSupportFactory;
 
 #endif

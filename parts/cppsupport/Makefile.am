@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(LEXLIB) $(all_libraries) $(KDE_PLUGIN)
 libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lktexteditor
 
-libkdevcppsupport_la_SOURCES = cppsupportfactory.cpp \
-			       cppsupportpart.cpp \
+libkdevcppsupport_la_SOURCES = cppsupportpart.cpp \
 			       cppsupportwidget.cpp \
 			       classparser.cpp \
 			       tokenizer.cpp \

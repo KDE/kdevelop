@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevphpsupport.la
 libkdevphpsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevphpsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(LIB_KHTML) -lktexteditor
 
-libkdevphpsupport_la_SOURCES = phpsupportfactory.cpp \
-				phpsupportpart.cpp phpconfigwidgetbase.ui \
+libkdevphpsupport_la_SOURCES = phpsupportpart.cpp phpconfigwidgetbase.ui \
 				phpconfigwidget.cpp phpinfodlg.ui phphtmlview.cpp \
 				phperrorview.cpp phpconfigdata.cpp \
 				phpcodecompletion.cpp phpparser.cpp \

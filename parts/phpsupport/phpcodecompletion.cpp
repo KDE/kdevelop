@@ -23,7 +23,6 @@
 #include "kdevcore.h"
 #include <qfile.h>
 #include <qtextstream.h>
-#include "phpsupportfactory.h"
 #include "phpsupportpart.h"
 #include <kinstance.h>
 #include <kstandarddirs.h>

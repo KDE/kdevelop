@@ -10,8 +10,7 @@ kde_module_LTLIBRARIES = libkdevpythonsupport.la kio_pydoc.la
 
 libkdevpythonsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevpythonsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
-libkdevpythonsupport_la_SOURCES = pythonsupportfactory.cpp \
-			          pythonsupportpart.cpp \
+libkdevpythonsupport_la_SOURCES = pythonsupportpart.cpp \
 				  pythonconfigwidget.cpp \
 				  pythonconfigwidgetbase.ui
 
