@@ -8,7 +8,7 @@ Comment=Generates a framework for a full KOffice Application.
 Comment[fr]=Génère un squelette de composant logiciel d'une application KOffice.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}_part.cpp
-Archive=kofficepart.tar.gz
+Archive=kopart.tar.gz
 
 [ADMIN]
 Type=include
