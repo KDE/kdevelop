@@ -20,7 +20,6 @@ KInstance* NeditPartFactory::s_instance = 0L;
 KAboutData* NeditPartFactory::s_about = 0L;
 
 NeditPartFactory::NeditPartFactory()
-    : KParts::Factory()
 {}
 
 

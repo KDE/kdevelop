@@ -20,7 +20,6 @@ KInstance* EditorTestPartFactory::s_instance = 0L;
 KAboutData* EditorTestPartFactory::s_about = 0L;
 
 EditorTestPartFactory::EditorTestPartFactory()
-    : KParts::Factory()
 {}
 
 

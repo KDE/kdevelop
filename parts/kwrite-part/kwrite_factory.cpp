@@ -20,7 +20,6 @@ KInstance* KWritePartFactory::s_instance = 0L;
 KAboutData* KWritePartFactory::s_about = 0L;
 
 KWritePartFactory::KWritePartFactory()
-    : KParts::Factory()
 {}
 
 

@@ -38,6 +38,10 @@ protected:
      * of reference counting.
      */
     virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args) = 0;
+
+private:
+    virtual QObject *createObject( QObject *, const char *,
+                                   const char *, const QStringList & );
 };
 
 #endif

@@ -7,13 +7,13 @@
 
 
 #include <kparts/part.h>
-#include <kparts/factory.h>
+#include <klibloader.h>
 
 
 class KInstance;
 class KAboutData;
 
-class KWritePartFactory : public KParts::Factory
+class KWritePartFactory : public KLibFactory
 {
   Q_OBJECT
 public:

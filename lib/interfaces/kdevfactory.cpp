@@ -30,4 +30,10 @@ KDevPart *KDevFactory::createPart(KDevApi *api, QObject *parent, const QStringLi
     return part;
 }
 
+QObject *KDevFactory::createObject( QObject *, const char *, const char *,
+                                    const QStringList & )
+{
+    return 0;
+}
+
 #include "kdevfactory.moc"

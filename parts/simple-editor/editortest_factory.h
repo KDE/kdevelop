@@ -7,14 +7,14 @@
 
 
 #include <kparts/part.h>
-#include <kparts/factory.h>
+#include <klibloader.h>
 
 
 class KInstance;
 class KAboutData;
 
 
-class EditorTestPartFactory : public KParts::Factory
+class EditorTestPartFactory : public KLibFactory
 {
   Q_OBJECT
           

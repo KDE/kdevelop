@@ -7,13 +7,13 @@
 
 
 #include <kparts/part.h>
-#include <kparts/factory.h>
+#include <klibloader.h>
 
 
 class KInstance;
 class KAboutData;
 
-class NeditPartFactory : public KParts::Factory
+class NeditPartFactory : public KLibFactory
 {
   Q_OBJECT
 public:
