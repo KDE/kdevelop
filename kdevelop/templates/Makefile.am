@@ -1,3 +1,9 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
+EXTRA_DIST = AUTHORS_template COPYING_template ChangeLog_template INSTALL_template MAM_shared_template Makefile.am README_template TODO_template admin.tar.gz c.tar.gz cpp.tar.gz cpp_template cvsignore_template docbook_en_template gnome.tar.gz handbook_en_template header_template icon_template kdelnk_template kdemdi.tar.gz lexical_template lsm_template mini.tar.gz mini2.tar.gz nif_template normal.tar.gz normal2.tar.gz normalogl.tar.gz preview1 preview2 qextmdi.tar.gz qt.tar.gz qt2.tar.gz qtmdi.tar.gz 
+
+####### kdevelop will overwrite this part!!! (end)############
 
 
 templates_DATA = AUTHORS_template COPYING_template ChangeLog_template \

@@ -59,10 +59,7 @@ int main(int argc, char* argv[]) {
     kdevelop->slotSCurrentTab(KGlobal::config()->readNumEntry("LastActiveTab",BROWSER));
     kdevelop->slotTCurrentTab(KGlobal::config()->readNumEntry("LastActiveTree",DOC));
     
-    if(!KGlobal::config()->readBoolEntry("show_kdevelop",true))
-      kdevelop->setKDlgCaption();
-    
-    if (argc > 1){ 
+    if (argc > 1){
       if (QString(argv[1]) != "--setup")
         kdevelop->slotProjectOpenCmdl(argv[1]);
     }  

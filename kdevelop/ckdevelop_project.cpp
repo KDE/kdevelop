@@ -37,10 +37,6 @@
 #include "ctoolclass.h"
 #include "ctabctl.h"
 #include "debug.h"
-#include "./kdlgedit/kdlgeditwidget.h"
-#include "./kdlgedit/kdlgpropwidget.h"
-#include "./kdlgedit/kdlgdialogs.h"
-#include "./kdlgedit/kdlgedit.h"
 
 #include <kcursor.h>
 #include <kbuttonbox.h>
@@ -149,12 +145,6 @@ bool CKDevelop::slotProjectClose()
     // cancel wasn't pressed and all sources are saved - project closed
     // clear all widgets
 
-    if(!bKDevelop)
-    {
-      //      switchToKDevelop();
-    }
-    //    disableCommand(ID_TOOLS_KDLGEDIT);
-    
     class_tree->clear();
     log_file_tree->clear();
     real_file_tree->clear();
@@ -165,19 +155,9 @@ bool CKDevelop::slotProjectClose()
     messages_widget->clear();
     stdin_stdout_widget->clear();
     stderr_widget->clear();
-    kdlg_dialogs_view->clear();
 
     if (dbgController)
 			slotDebugStop();
-
-    kdlgedit->slotFileSave();
-    
-    kdlg_edit_widget->hide();
-    kdlg_prop_widget->hide();
-    kdlg_tabctl->setTabEnabled("widgets_view",false);
-    kdlg_tabctl->setTabEnabled("dialogs_view",false);
-    kdlg_tabctl->setTabEnabled("items_view",false);
-    kdlg_tabctl->setCurrentTab(1); // dialogs
 
     //clear all edit_infos before starting a new project
     edit_infos.clear();
@@ -217,8 +197,6 @@ bool CKDevelop::slotProjectClose()
     setToolMenuProcess(false);  
     disableCommand(ID_BUILD_STOP);
     disableCommand(ID_BUILD_AUTOCONF);
-    disableCommand(ID_KDLG_BUILD_GENERATE);
-    disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
 
     // prj menu
     disableCommand(ID_PROJECT_CLOSE);
@@ -652,7 +630,6 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 	if (info.isFile())		//if the new project file is not valid, do nothing
 	{
 		project_menu->setEnabled(false);
-		kdlg_project_menu->setEnabled(false);
     disableCommand(ID_PROJECT_OPEN);
     accel->setEnabled(false);
 		if(project)
@@ -677,7 +654,6 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 			slotViewRefresh();
 		slotStatusMsg(i18n("Ready."));
 		project_menu->setEnabled(true);
-		kdlg_project_menu->setEnabled(true);
 	  enableCommand(ID_PROJECT_OPEN);
     accel->setEnabled(true);
 	}	
@@ -1255,10 +1231,6 @@ void CKDevelop::newFile(bool add_to_project, const char* dir/*=0*/){
 
   // Get the filetype.
   type = CProject::getType( complete_filename );
-  if(type == KDEV_DIALOG){
-      kdlgedit->slotFileCloseForceSave();
-      kdlg_edit_widget->newDialog();
-  }
   // load into the widget
   switchToFile(complete_filename);
 
@@ -1304,32 +1276,14 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   //  cerr << "*rel_name2*:" << rel_name << endl;
 
   TFileInfo info;
-  if( type == KDEV_DIALOG){
-    TDialogFileInfo dinfo;
-    dinfo.rel_name = rel_name;
-    dinfo.type = type;
-    dinfo.dist = true;
-    dinfo.install = false;
-    //...
-    dinfo.is_toplevel_dialog = true;
+  info.rel_name = rel_name;
+  info.type = type;
+  info.dist = ( type != PO );
     
-    new_subdir = prj->addDialogFileToProject(dinfo.rel_name,dinfo);
-    //    ((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
-    //    ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
-    
-    info.rel_name = rel_name;
-  }
-  else{ // normal File
-    info.rel_name = rel_name;
-    info.type = type;
-    info.dist = ( type != PO );
-    
-    info.install=false;
-    info.install_location = "";
-    new_subdir = prj->addFileToProject(rel_name,info);
-    
-    
-  }
+  info.install=false;
+  info.install_location = "";
+  new_subdir = prj->addFileToProject(rel_name,info);
+
   prj->writeProject();
   prj->updateMakefilesAm();
   
@@ -1360,15 +1314,6 @@ bool CKDevelop::readProjectFile(QString file){
   QString str;
   QString extension;
 
-/*
-  prj = new CProject(file);
-  if(!(prj->readProject())){
-    return false;
-  }
-  else {
-      project=true;
-  }
-*/
   CProject * lNewProject = new CProject(file);
   if(!(lNewProject->readProject()))
   {
@@ -1379,11 +1324,6 @@ bool CKDevelop::readProjectFile(QString file){
     project=true;
 	  prj = lNewProject;
   }
-
-  // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
-  //   if(QFile::exists(str)){
-  //     switchToFile(str);
-  //   }
 
   // if this is a c project then change Untitled.cpp to Untitled.c
   if (prj->getProjectType()=="normal_c")
@@ -1427,11 +1367,6 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_CLOSE);
   enableCommand(ID_PROJECT_ADD_FILE_EXIST);
 
-  if(prj->isKDEProject() || prj->isQtProject() || prj->isKDE2Project() || prj->isQt2Project()){
-    enableCommand(ID_TOOLS_KDLGEDIT);
-    kdlg_tabctl->setTabEnabled("dialogs_view",true);
-  }  
-
   if (prj->isKDEProject() || prj->isKDE2Project() || prj->isQt2Project()){
    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   }
@@ -1447,12 +1382,6 @@ bool CKDevelop::readProjectFile(QString file){
     enableCommand(ID_PROJECT_OPTIONS);
   }
   
-  if(prj->isKDEProject() || prj->isQtProject() || prj->isKDE2Project() || prj->isQt2Project() ){
-    kdlg_tabctl->setTabEnabled("dialogs_view",true);
-    kdlg_tabctl->setCurrentTab(1); // dialogs
-  
-  }
-
   enableCommand(ID_PROJECT_REMOVE_FILE);
   enableCommand(ID_PROJECT_WORKSPACES);
   enableCommand(ID_BUILD_AUTOCONF);

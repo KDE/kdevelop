@@ -126,7 +126,6 @@ CKDevelop::CKDevelop(bool witharg) :
 
   initView();
   initConnections();
-  initKDlg();    // create the KDialogEditor
   initStatusBar();
 
   readOptions();
@@ -323,7 +322,8 @@ void CKDevelop::initView()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::initKeyAccel(){
+void CKDevelop::initKeyAccel()
+{
   accel = new CKDevAccel( this );
   //file menu
   accel->connectItem( KStdAccel::New, this, SLOT(slotFileNew()), true, ID_FILE_NEW );
@@ -398,11 +398,11 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
   accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()), true, ID_VIEW_PREVIOUS_ERROR  );
 
-  accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg",(unsigned int) 0);
-  accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()), true, ID_KDLG_TOOLS_KDEVELOP );
+//  accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg",(unsigned int) 0);
+//  accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()), true, ID_KDLG_TOOLS_KDEVELOP );
 
   accel->insertItem( i18n("Dialog Editor"), "Dialog Editor", (unsigned int) 0);
-  accel->connectItem("Dialog Editor", this, SLOT(switchToKDlgEdit()), true, ID_TOOLS_KDLGEDIT );
+  accel->connectItem("Dialog Editor", this, SLOT(startDesigner()), true, ID_TOOLS_DESIGNER );
 
   accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
   accel->connectItem( "Tree-View", this, SLOT(slotViewTTreeView()), true, ID_VIEW_TREEVIEW );
@@ -600,10 +600,6 @@ void CKDevelop::initKeyAccel(){
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::initMenuBar(){
-  //  KDEVELOP MENUBAR //
-  // NOTE: ALL disableCommand(ID_XX) are placed in initKDlgMenuBar() at the end !!!
-  // NEW DISABLES HAVE TO BE ADDED THERE AFTER BOTH MENUBARS ARE CREATED COMPLETELY,
-  // OTHERWISE KDEVELOP CRASHES !!!
 
   kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
 ///////////////////////////////////////////////////////////////////
@@ -671,7 +667,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(i18n("&Previous Error"),this,
 			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
   view_menu->insertSeparator();
-  view_menu->insertItem(BarIcon("newwidget"),i18n("&Dialog Editor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
+  view_menu->insertItem(BarIcon("newwidget"),i18n("&Dialog Editor"),this,SLOT(startDesigner()),0,ID_TOOLS_DESIGNER);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -1023,7 +1019,7 @@ void CKDevelop::initToolBar(){
   sepDlgEd->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,20,sepDlgEd);
 
-  toolBar()->insertButton(BarIcon("newwidget"),ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
+  toolBar()->insertButton(BarIcon("newwidget"),ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
   toolBar()->insertButton(BarIcon("tree_win"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
   toolBar()->insertButton(BarIcon("output_win"),ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
@@ -1130,89 +1126,30 @@ void CKDevelop::initToolBar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::initStatusBar()
 {
-  bool canBeRemoved = true;
-  // We can only have one status bar
-  if (!m_statusBar)
-  {
-    canBeRemoved = false;
-    m_statusBar = new KStatusBar(this,"KDevelop_statusbar");
-    statProg = new QProgressBar(m_statusBar,"Progressbar");
-    statProg->setFixedWidth( 100 );             // arbitrary width
-    statProg->setCenterIndicator(true);
-    statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
-    statProg->setLineWidth(1);
-    statProg->setMidLineWidth(3);
-    statProg->setBackgroundMode( QWidget::PaletteBackground );
+  m_statusBar = new KStatusBar(this,"KDevelop_statusbar");
+  statProg = new QProgressBar(m_statusBar,"Progressbar");
+  statProg->setFixedWidth( 100 );             // arbitrary width
+  statProg->setCenterIndicator(true);
+  statProg->setFrameStyle(QFrame::Box|QFrame::Raised);
+  statProg->setLineWidth(1);
+  statProg->setMidLineWidth(3);
+  statProg->setBackgroundMode( QWidget::PaletteBackground );
 
-    connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
-    connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
-    connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
-  }
+  connect(class_tree,SIGNAL(setStatusbarProgressSteps(int)),statProg,SLOT(setTotalSteps(int)));
+  connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
+  connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
 
-  if (bKDevelop)
-  {
-    if (!m_statusBarIsKDevelop)
-    {
-      m_statusBarIsKDevelop = true;
-      if (canBeRemoved)
-      {
-        m_statusBar->removeItem(ID_STATUS_MSG);
-        m_statusBar->removeItem(ID_KDLG_STATUS_WIDGET);
-        m_statusBar->removeItem(ID_STATUS_EMPTY_2);
-        m_statusBar->removeItem(ID_KDLG_STATUS_XY);
-        m_statusBar->removeItem(ID_KDLG_STATUS_WH);
-        m_statusBar->removeItem(ID_STATUS_EMPTY);
-      }
+  m_statusBar->insertItem("",                                  ID_STATUS_MSG,      1,  false);
+  m_statusBar->insertFixedItem("     ",                        ID_STATUS_DBG,          true);
+  m_statusBar->addWidget(statProg,                                                 0,  true);
+  m_statusBar->insertFixedItem("              ",               ID_STATUS_EMPTY_2,      true);
+  m_statusBar->insertFixedItem("        ",                     ID_STATUS_INS_OVR,      true);
+  m_statusBar->insertFixedItem("                            ", ID_STATUS_LN_CLM,       true);
+  m_statusBar->insertFixedItem("                      ",       ID_STATUS_EMPTY,        true);
 
-      m_statusBar->insertItem("",                                  ID_STATUS_MSG,      1,  false);
-      m_statusBar->insertFixedItem("     ",                        ID_STATUS_DBG,          true);
-      m_statusBar->addWidget(statProg,                                                 0,  true);
-      m_statusBar->insertFixedItem("              ",               ID_STATUS_EMPTY_2,      true);
-      m_statusBar->insertFixedItem("        ",                     ID_STATUS_INS_OVR,      true);
-      m_statusBar->insertFixedItem("                            ", ID_STATUS_LN_CLM,       true);
-      m_statusBar->insertFixedItem("                      ",       ID_STATUS_EMPTY,        true);
-
-      m_statusBar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
-      m_statusBar->setItemAlignment(ID_STATUS_DBG, AlignCenter);
-      m_statusBar->setItemAlignment(ID_STATUS_INS_OVR, AlignCenter);
-    }
-
-    if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-      m_statusBar->show();
-    else
-      m_statusBar->hide();
-  }
-  else
-  {
-    if (m_statusBarIsKDevelop)
-    {
-      m_statusBarIsKDevelop = false;
-      if (canBeRemoved)
-      {
-        m_statusBar->removeItem(ID_STATUS_MSG);
-        m_statusBar->removeItem(ID_STATUS_DBG);
-        m_statusBar->removeWidget(statProg);
-        m_statusBar->removeItem(ID_STATUS_EMPTY_2);
-        m_statusBar->removeItem(ID_STATUS_INS_OVR);
-        m_statusBar->removeItem(ID_STATUS_LN_CLM);
-        m_statusBar->removeItem(ID_STATUS_EMPTY);
-      }
-
-      m_statusBar->insertItem(i18n("Welcome to KDevelop!"),        ID_STATUS_MSG,        1,  false);
-      m_statusBar->insertItem("        ",                          ID_KDLG_STATUS_WIDGET,    true);
-      m_statusBar->insertItem("                           ",       ID_STATUS_EMPTY_2,        true);
-      m_statusBar->insertItem("              ",                    ID_KDLG_STATUS_XY,        true);
-      m_statusBar->insertItem("              ",                    ID_KDLG_STATUS_WH,        true);
-      m_statusBar->insertFixedItem("                      ",       ID_STATUS_EMPTY,          true);
-
-      m_statusBar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
-    }
-
-    if(kdlg_view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-      m_statusBar->show();
-    else
-      m_statusBar->hide();
-  }
+  m_statusBar->setItemAlignment(ID_STATUS_MSG, AlignLeft);
+  m_statusBar->setItemAlignment(ID_STATUS_DBG, AlignCenter);
+  m_statusBar->setItemAlignment(ID_STATUS_INS_OVR, AlignCenter);
 }
 
 /*--------------------------------------- CKDevelop::initConnections()
@@ -1402,127 +1339,64 @@ void CKDevelop::initProject(bool witharg)
 
 }
 
-void CKDevelop::setKeyAccel(){
-if(bKDevelop){
+void CKDevelop::setKeyAccel()
+{
 
-    accel->disconnectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
-//    accel->disconnectItem(KStdAccel::description( KStdAccel::Open ),(QObject*)kdlgedit, SLOT(slotFileOpen()) );
-    accel->disconnectItem( KStdAccel::description(KStdAccel::Close) , (QObject*)kdlgedit, SLOT(slotFileClose()) );
-    accel->disconnectItem(KStdAccel::description(KStdAccel::Save ) , (QObject*)kdlgedit, SLOT(slotFileSave()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Undo ), (QObject*)kdlgedit, SLOT(slotEditUndo()) );
-    accel->disconnectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Cut ), (QObject*)kdlgedit, SLOT(slotEditCut()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Copy ), (QObject*)kdlgedit, SLOT(slotEditCopy()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Paste ), (QObject*)kdlgedit, SLOT(slotEditPaste()) );
-    accel->setItemEnabled("KDevKDlg", false );
-    accel->setItemEnabled("Dialog Editor", true );
+  accel->setItemEnabled("Dialog Editor", true );
 
-    accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
-    accel->connectItem( KStdAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
-    accel->connectItem( KStdAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
-    accel->connectItem( KStdAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO);
-    accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO);
-    accel->connectItem( KStdAccel::Cut , this, SLOT(slotEditCut()), true, ID_EDIT_CUT);
-    accel->connectItem( KStdAccel::Copy , this, SLOT(slotEditCopy()), true, ID_EDIT_COPY);
-    accel->connectItem( KStdAccel::Paste , this, SLOT(slotEditPaste()), true, ID_EDIT_PASTE);
+  accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
+  accel->connectItem( KStdAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
+  accel->connectItem( KStdAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
+  accel->connectItem( KStdAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO);
+  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO);
+  accel->connectItem( KStdAccel::Cut , this, SLOT(slotEditCut()), true, ID_EDIT_CUT);
+  accel->connectItem( KStdAccel::Copy , this, SLOT(slotEditCopy()), true, ID_EDIT_COPY);
+  accel->connectItem( KStdAccel::Paste , this, SLOT(slotEditPaste()), true, ID_EDIT_PASTE);
 
-    accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
-    accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
-    accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
-    accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
-    accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
-    accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
+  accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
+  accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
+  accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
+  accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
+  accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
+  accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
 
-    accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KStdAccel::Undo );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KStdAccel::Cut );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KStdAccel::Copy );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KStdAccel::Paste );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KStdAccel::Find );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
+  accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KStdAccel::Undo );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_CUT, KStdAccel::Cut );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_COPY, KStdAccel::Copy );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_PASTE, KStdAccel::Paste );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH, KStdAccel::Find );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KStdAccel::Replace );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
+  accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
 		
-    accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
-    accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
-    accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
-    accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
-    accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
+  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
 
-    accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
-    accel->changeMenuAccel(project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
+  accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
+  accel->changeMenuAccel(project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
 
-    accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
-    accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
-    accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
-    accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-    accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
+  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
+  accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
 
-    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_TOGGLE ,"Toggle_Bookmarks" );
-    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
-    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
-    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
+  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_TOGGLE ,"Toggle_Bookmarks" );
+  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
+  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_PREVIOUS ,"Previous_Bookmarks" );
+  accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
 
-    accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-    accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KStdAccel::Help );
-
-  }
-  else{
-//    accel->disconnectItem(KStdAccel::description( KStdAccel::Open ), this, SLOT(slotFileOpen()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Close ) , this, SLOT(slotFileClose()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Save ) , this, SLOT(slotFileSave()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Undo ), this, SLOT(slotEditUndo()) );
-    accel->disconnectItem( "Redo" , this, SLOT(slotEditRedo()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Cut ), this, SLOT(slotEditCut()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Copy ), this, SLOT(slotEditCopy()) );
-    accel->disconnectItem(KStdAccel::description( KStdAccel::Paste ), this, SLOT(slotEditPaste()) );
-    accel->setItemEnabled("KDevKDlg", true );
-    accel->setItemEnabled("Dialog Editor", false );
-
-    accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()), true, ID_VIEW_PREVIEW);
-//    accel->connectItem( KStdAccel::Open , (QObject*)kdlgedit, SLOT(slotFileOpen()), true, ID_FILE_OPEN );
-    accel->connectItem( KStdAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()), true, ID_FILE_CLOSE );
-    accel->connectItem( KStdAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()), true, ID_KDLG_FILE_SAVE );
-    accel->connectItem( KStdAccel::Undo , (QObject*)kdlgedit, SLOT(slotEditUndo()), true, ID_KDLG_EDIT_UNDO );
-    accel->connectItem( "Redo" , (QObject*)kdlgedit, SLOT(slotEditRedo()), true, ID_KDLG_EDIT_REDO );
-    accel->connectItem( KStdAccel::Cut , (QObject*)kdlgedit, SLOT(slotEditCut()), true, ID_KDLG_EDIT_CUT );
-    accel->connectItem( KStdAccel::Copy , (QObject*)kdlgedit, SLOT(slotEditCopy()), true, ID_KDLG_EDIT_COPY );
-    accel->connectItem( KStdAccel::Paste , (QObject*)kdlgedit, SLOT(slotEditPaste()), true, ID_KDLG_EDIT_PASTE );
-
-    accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KStdAccel::New );
-    //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_OPEN, KStdAccel::Open );
-    //    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_CLOSE, KStdAccel::Close );
-    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_SAVE, KStdAccel::Save );
-    accel->changeMenuAccel(kdlg_file_menu, ID_FILE_QUIT, KStdAccel::Quit );
-
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_UNDO, KStdAccel::Undo );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_REDO,"Redo" );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_CUT, KStdAccel::Cut );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_COPY, KStdAccel::Copy );
-    accel->changeMenuAccel(kdlg_edit_menu, ID_KDLG_EDIT_PASTE, KStdAccel::Paste );
-
-    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
-    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
-    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_PREVIEW,"Preview dialog");
-
-    accel->changeMenuAccel(kdlg_project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
-    accel->changeMenuAccel(kdlg_project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
-
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_MAKE ,"Make" );
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN ,"Run" );
-		accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-		accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_STOP,"Stop_proc");
-
-    accel->changeMenuAccel(kdlg_help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-    accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KStdAccel::Help );
-
-  }
+  accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+  accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KStdAccel::Help );
 }
 
 void CKDevelop::setToolmenuEntries(){
@@ -1533,13 +1407,10 @@ void CKDevelop::setToolmenuEntries(){
 	config->readListEntry("Tools_argument",tools_argument);
 	
 	uint items;
-	for(items=0;items<tools_entry.count();items++){
+	for(items=0;items<tools_entry.count();items++)
 		tools_menu->insertItem(tools_entry.at(items));
-		kdlg_tools_menu->insertItem(tools_entry.at(items));
-	}
 	
 	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
-	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }
 
 void CKDevelop::initDebugger()

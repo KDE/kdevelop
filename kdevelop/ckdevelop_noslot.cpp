@@ -30,9 +30,6 @@
 #include "doctreeview.h"
 #include "kswallow.h"
 #include "./dbg/brkptmanager.h"
-#include "./kdlgedit/kdlgedit.h"
-#include "./kdlgedit/kdlgdialogs.h"
-#include "./kdlgedit/kdlgreadmedlg.h"
 
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -330,10 +327,6 @@ void CKDevelop::setMainCaption(int tab_item)
       }
       setCaption(kdev_caption);
     }
-//    else
-//    {
-        // not using KDevelop but KDlgEdit
-//    }
 }
 
 
@@ -595,7 +588,6 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   real_file_tree->refresh(prj);
 
   kapp->processEvents(100);
-  kdlg_dialogs_view->refresh(prj);
 
   statusBar()->repaint();
   setCursor(KCursor::arrowCursor());	
@@ -652,8 +644,6 @@ void CKDevelop::refreshTrees(TFileInfo *info)
       real_file_tree->refresh(prj);
       // update dialogs tree
       kapp->processEvents(100);
-      kdlg_dialogs_view->refresh(prj);
-      
     }
   // refresh the file_open_list
   file_open_list=prj->getHeaders();
@@ -695,12 +685,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   QString ext = fileInfo.extension();
-
-  if (ext == "kdevdlg"){
-    switchToKDlgEdit();
-    kdlgedit->slotOpenDialog(filename);
-    return;
-  }
 
   // Load QtDesigner if clicked/loaded an User Interface file (.ui)
   if ( ext == "ui") {
@@ -939,17 +923,15 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
   edit_widget->setCursorPosition( lineNo, 0 );
 }
 
+#warning FIXME this is now redundent??
 void CKDevelop::switchToKDevelop(){
 
-  kdlg_caption = caption();
   setCaption(kdev_caption);
 
   bKDevelop=true;
   setUpdatesEnabled(false);
 
   //////// change the mainview ////////
-  kdlg_tabctl->hide();
-  kdlgTopSplitter->hide();
   s_tab_view->show();
   t_tab_view->show();
 
@@ -959,12 +941,9 @@ void CKDevelop::switchToKDevelop(){
 //  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
   topSplitter->show();
   //////// change the bars ///////////
-  kdlg_menubar->hide();
   kdev_menubar->show();
 //  setMenu(kdev_menubar);
 
-  toolBar(ID_KDLG_TOOLBAR)->hide();
-  toolBar()->show();
   toolBar(ID_BROWSER_TOOLBAR)->show();
 
   // this toolbar toogle is for placing the qsplitter devider correctly
@@ -1005,7 +984,8 @@ void CKDevelop::switchToKDevelop(){
   repaint();
 
 }
-void CKDevelop::switchToKDlgEdit()
+
+void CKDevelop::startDesigner()
 {
 	KShellProcess designer_process("/bin/sh");
 	const QString oldGroup = config->group();
@@ -1017,78 +997,8 @@ void CKDevelop::switchToKDlgEdit()
   	debug("QtDesigner didn't start!");
 	}
   return;
-
-	
-//   KConfig *config = KGlobal::config();
-
-//  config->setGroup("KDlgEdit");
-//  if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
-//    {
-//      KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
-//      readmedlg->exec();
-//
-//      if (!readmedlg->isShowAgain())
-//        config->writeEntry("KDlgEdit_ShowReadme","false");
-//
-//      delete readmedlg;
-//    }
-//
-//
-//  kdev_caption = caption();
-//  setCaption(kdlg_caption);
-//  bKDevelop=false;
-//  setUpdatesEnabled(false);
-//  //////// change the mainview ////////
-//  s_tab_view->hide();
-//  t_tab_view->hide();
-//  kdlg_tabctl->show();
-//  kdlgTopSplitter->show();
-//
-//  topSplitter->hide();
-////  topSplitter->deactivate();
-////  topSplitter->activate(kdlg_tabctl,kdlgTopSplitter);// activate the topSplitter
-//  topSplitter->show();
-//
-//  //////// change the bars ///////////
-//  kdev_menubar->hide();
-//  kdlg_menubar->show();
-////  setMenu(kdlg_menubar);
-//
-//  initStatusBar();
-//
-//  toolBar()->hide();
-//  toolBar(ID_BROWSER_TOOLBAR)->hide();
-//  toolBar(ID_KDLG_TOOLBAR)->show();
-//
-//  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR))
-//    toolBar(ID_KDLG_TOOLBAR)->show();
-//  else
-//    toolBar(ID_KDLG_TOOLBAR)->hide();
-//
-//  setKeyAccel();  // initialize Keys
-//
-//  // this toolbar toogle is for placing the qsplitter devider correctly
-////  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
-////  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
-//
-//  ///////// reset the views status ///////////////
-//  if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-//    showTreeView();
-//  else
-//    showTreeView(false);
-//
-//  if(kdlg_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
-//    showOutputView();
-//  else
-//    showOutputView(false);
-//
-//  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
-//    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
-//  }
-//  kdlg_tabctl->setFocus();
-//  setUpdatesEnabled(true);
-//  repaint();
 }
+	
 
 void CKDevelop::setToolMenuProcess(bool enable){
 
@@ -1261,8 +1171,6 @@ void CKDevelop::readOptions()
 #warning FIXME menubars
 //	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
 //	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
-//	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
-//	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
 
   KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
   toolBar()->setBarPos(tool_bar_pos);
@@ -1285,37 +1193,20 @@ void CKDevelop::readOptions()
   else
     toolBar(ID_BROWSER_TOOLBAR)->hide();
 	
-  // Dialogedit Toolbar	
-  KToolBar::BarPosition kdlg_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("KDlgEdit ToolBar Position", KToolBar::Top);
-  toolBar(ID_KDLG_TOOLBAR)->setBarPos(kdlg_tool_bar_pos);
-	bool kdlg_toolbar=config->readBoolEntry("show_kdlg_toolbar", true);
-  if(kdlg_toolbar)
-  {
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
-    toolBar(ID_KDLG_TOOLBAR)->show();
-  }
-  else{
-    toolBar(ID_KDLG_TOOLBAR)->hide();
-  }
 	// Statusbar
 	bool statusbar=config->readBoolEntry("show_statusbar",true);
 	if (statusbar)
-	{
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-	}
+
   initStatusBar();
   	
 	/////////////////////////////////////////
-	// Outputwindow, TreeView, KDevelop/KDlgEdit
+	// Outputwindow, TreeView, KDevelop
 //	mainSplitter->setSeparatorPos(config->readNumEntry("viewSplitter_pos",80));
 	bool outputview= config->readBoolEntry("show_output_view", true);
 	if(outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
-//    output_view_pos=mainSplitter->separatorPos();
 	}
 	else{
     output_view_pos=config->readNumEntry("output_view_pos", 80);
@@ -1325,26 +1216,12 @@ void CKDevelop::readOptions()
 	bool treeview=config->readBoolEntry("show_tree_view", true);
 	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
-//    tree_view_pos=topSplitter->separatorPos();
 	}
   else{
     tree_view_pos=config->readNumEntry("tree_view_pos", 263);
   }
 	
-
-//  kdlgTopSplitter->setSeparatorPos(config->readNumEntry("kdlgTopSplitter_pos", 80));
-	if(config->readBoolEntry("show_properties_view",true)){
-	  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-//    properties_view_pos=kdlgTopSplitter->separatorPos();
-	}	
-  else{
-    properties_view_pos=config->readNumEntry("properties_view_pos", 80);
-  }
-
-
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
   bAutosave=config->readBoolEntry("Autosave",true);
@@ -1420,7 +1297,7 @@ void CKDevelop::readOptions()
   if(switchKDevelop)
     switchToKDevelop();
   else
-    switchToKDlgEdit();
+    startDesigner();
 }
 
 void CKDevelop::saveOptions(){
@@ -1430,14 +1307,11 @@ void CKDevelop::saveOptions(){
 
 #warning FIXME save options
 //  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
-//  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
-  config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
 
 //  config->writeEntry("mainSplitterPos",mainSplitter->separatorPos());
 //  config->writeEntry("topSplitterPos",topSplitter->separatorPos());
-//  config->writeEntry("kdlgTopSplitterPos",kdlgTopSplitter->separatorPos());
 
   config->writeEntry("tree_view_pos",tree_view_pos);
   config->writeEntry("output_view_pos",output_view_pos);
@@ -1445,11 +1319,9 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
-  config->writeEntry("show_properties_view",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
 
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
-  config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());

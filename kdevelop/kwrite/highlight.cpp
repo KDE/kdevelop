@@ -2298,9 +2298,6 @@ FontChanger::FontChanger(QWidget *parent, int x, int y) :
   label = new QLabel(charsetCombo,i18n("Charset:"),parent);
   connect(charsetCombo,SIGNAL(activated(const QString&)),SLOT(charsetChanged(const QString&)));
 
-//  KCharsets *charsets=KApplication::getKApplication()->getCharsets();
-//  QStrList lst = charsets->displayable(selFont.family());
-
   r.moveBy(0,25);
   label->setGeometry(r);
   r.moveBy(0,25);
@@ -2344,7 +2341,6 @@ void FontChanger::sizeChanged(int n) {
 void FontChanger::charsetChanged(const QString& charset) {
 
   font->charset = charset;
-  //KCharset(chset).setQFont(font);
 }
 
 void FontChanger::displayCharsets() {
@@ -2395,11 +2391,6 @@ DefaultsDialog::DefaultsDialog(HlManager *hlManager, ItemStyleList *styleList,
   for (z = 0; z < hlManager->defaultStyles(); z++) {
     styleCombo->insertItem(i18n(hlManager->defaultStyleName(z)));
   }
-//  for (defStyle = defStyleList->first(); defStyle != 0L;
-//    defStyle = defStyleList->next()) {
-
-//    styleCombo->insertItem(defStyle->name);
-//  }
 
   group = new QGroupBox(i18n("Default Font"),this);
   gr.moveBy(gr.width() + 10,0);

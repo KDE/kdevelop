@@ -38,10 +38,6 @@ void CKDevelop::initWhatsThis(){
         "Shows the open project dialog "
         "to select a project to be opened"));
                                                               
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
-        "Shows the open project dialog "
-        "to select a project to be opened"));
-
   whats_this->add(toolBar()->getButton(ID_FILE_OPEN),i18n("Open file\n\n"
         "Shows the Open file dialog to "
         "select a file to be opened. Holding "
@@ -56,10 +52,6 @@ void CKDevelop::initWhatsThis(){
         "Saves the file opened in the actual "
         "editing view"));
     
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_SAVE),i18n("Save file\n\n"
-        "Saves the file opened in the actual "
-        "editing view"));
-  
   whats_this->add(toolBar()->getButton(ID_FILE_PRINT),i18n("Print\n\n"
         "Opens the printing dialog. There, you can "
         "configure which printing program you wish "
@@ -69,39 +61,19 @@ void CKDevelop::initWhatsThis(){
   whats_this->add(toolBar()->getButton(ID_EDIT_UNDO),i18n("Undo\n\n"
         "Reverts the last editing step."));
   
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_EDIT_UNDO),i18n("Undo\n\n"
-        "Reverts the last editing step."));
-  
   whats_this->add(toolBar()->getButton(ID_EDIT_REDO),i18n("Redo\n\n"
         "If an editing step was undone, redo "
         "lets you do this step again."));
   
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_EDIT_REDO),i18n("Redo\n\n"
-        "If an editing step was undone, redo "
-        "lets you do this step again."));
-
   whats_this->add(toolBar()->getButton(ID_EDIT_CUT),i18n("Cut\n\n"
         "Cuts out the selected text and copies "
-        "it to the system clipboard."));
-  
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_EDIT_CUT),i18n("Cut\n\n"
-        "Cuts out the selected widget and copies "
         "it to the system clipboard."));
   
   whats_this->add(toolBar()->getButton(ID_EDIT_COPY),i18n("Copy\n\n"
         "Copies the selected text into the "
         "system clipboard."));
     
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_EDIT_COPY),i18n("Copy\n\n"
-        "Copies the selected widget into the "
-        "system clipboard."));
-    
   whats_this->add(toolBar()->getButton(ID_EDIT_PASTE),i18n("Paste\n\n"
-        "Inserts the contents of the "
-        "system clipboard at the current "
-        "cursor position. "));
-  
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_EDIT_PASTE),i18n("Paste\n\n"
         "Inserts the contents of the "
         "system clipboard at the current "
         "cursor position. "));
@@ -113,14 +85,6 @@ void CKDevelop::initWhatsThis(){
         "errors occur, clicking on the error line "
         "causes the file window to show you the "
         "line the error occured."));
-
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_BUILD_GENERATE),i18n("Generate files\n\n"
-        "This will actually generate the source "
-        "files for the current dialog opened. "
-        "The sources will be added to the project "
-        "if one is opened, otherwise you will be "
-        "asked to select the output directory for "
-        "the generated files."));
 
   QString build_make_str=i18n("Make\n\n"
         "Invokes the make-command set in the "
@@ -134,8 +98,7 @@ void CKDevelop::initWhatsThis(){
         "error was found and sets the cursor to the "
         "error line.");
   whats_this->add(toolBar()->getButton(ID_BUILD_MAKE),build_make_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_MAKE),build_make_str);
-    
+
   QString build_rebuild_all_str=i18n("Rebuild all\n\n"
         "After saving all files, rebuild all "
         "invokes the make-command set with the "
@@ -143,7 +106,6 @@ void CKDevelop::initWhatsThis(){
         "Then, configure creates new Makefiles and "
         "the make-command will rebuild the project.");
   whats_this->add(toolBar()->getButton(ID_BUILD_REBUILD_ALL),build_rebuild_all_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_REBUILD_ALL),build_rebuild_all_str);
 
   QString build_run_str=i18n("Execute\n\n"
         "After saving all files,the make-command is "
@@ -156,7 +118,6 @@ void CKDevelop::initWhatsThis(){
         "like testing the helpmenu will open an error "
         "message that the index.html file is not found.");
   whats_this->add(toolBar()->getButton(ID_BUILD_RUN),build_run_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_RUN),build_run_str);
 
   QString build_debug_str=i18n("Debug program\n\n"
         "Runs your program in the debugger you have chosen "
@@ -165,7 +126,6 @@ void CKDevelop::initWhatsThis(){
         "step by step by setting breakpoints in the sourcecode." );
 
   whats_this->add(toolBar()->getButton(ID_DEBUG_START),build_debug_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_START),build_debug_str);
 
   QString debug_run_str=i18n("Continue application execution\n\n"
         "Continues the execution of your application in the "
@@ -173,14 +133,12 @@ void CKDevelop::initWhatsThis(){
         "has been halted by the debugger (ie. a breakpoint has been "
         "activated or the interrupt was pressed).");
   whats_this->add(toolBar()->getButton(ID_DEBUG_RUN), debug_run_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_RUN), debug_run_str);
-  
+
   QString debug_step_str=i18n("Step into\n\n"
         "Executes exactly one line of source. If the source line is "
         "a call to a function then execution will stop after "
         "the function has been entered ");
   whats_this->add(toolBar()->getButton(ID_DEBUG_STEP), debug_step_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_STEP), debug_step_str);
 
   QString debug_next_str=i18n("Step over\n\n"
         "Executes one line of source in the current source file. "
@@ -188,8 +146,7 @@ void CKDevelop::initWhatsThis(){
         "is executed and the app will stop at the line following the "
         "function call.");
   whats_this->add(toolBar()->getButton(ID_DEBUG_NEXT), debug_next_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_NEXT), debug_next_str);
-  
+
   QString debug_finish_str=i18n("Step out of\n\n"
         "Executes the application until the currently executing "
         "function is completed. The debugger will then display the "
@@ -197,29 +154,14 @@ void CKDevelop::initWhatsThis(){
         "the outermost frame (ie in main()), then this operation "
         "has no affect.");
   whats_this->add(toolBar()->getButton(ID_DEBUG_FINISH), debug_finish_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_DEBUG_FINISH), debug_finish_str);
 
   QString build_stop_str=i18n("Stop\n\n"
         "If activated, the stop-command will interrupt "
         "the active process. This affects make-commands "
         "as well as documentation generation.");
   whats_this->add(toolBar()->getButton(ID_BUILD_STOP),build_stop_str);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_BUILD_STOP),build_stop_str);
 
-  whats_this->add(toolBar()->getButton(ID_TOOLS_KDLGEDIT),i18n("Dialogeditor\n\n"
-        "This will switch to the internal dialog "
-        "editor of the KDevelop IDE. "
-        "There, you can also switch back to the "
-        "editing mode by choosing the Sourcecode editor "
-        "button or Sourcecode-editor from the View-menu."));
-                                                      
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_TOOLS_KDEVELOP),i18n("Sourcecode Editor\n\n"
-        "This will switch to the sourcecode editor "
-        "providing the usual IDE interface. You can "
-        "switch back to the dialogeditor by choosing "
-        "the Dialogeditor button in the KDevelop toolbar "
-        "or by choosing Dialogeditor in the View-menu."));
-  
+
   QString output=i18n("Output-View\n\n"
         "Enables/Disables the output window. The "
         "state of the window is displayed by the "
@@ -227,16 +169,14 @@ void CKDevelop::initWhatsThis(){
         "the window is open, otherwise closed.");
                       
   whats_this->add(toolBar()->getButton(ID_VIEW_OUTPUTVIEW),output);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_VIEW_OUTPUTVIEW),output);
-  
+
   QString treeview=i18n("Tree-View\n\n"
         "Enables/Disables the tree window. The "
         "state of the window is displayed by the "
         "toggle button: if the button is pressed, "
         "the window is open, otherwise closed.");
   whats_this->add(toolBar()->getButton(ID_VIEW_TREEVIEW),treeview);
-  whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_VIEW_TREEVIEW),treeview);
-                      
+
   whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE),i18n("Classes\n\n"
         "Choosing a class will switch to the header "
         "file where the class is declared."));
@@ -290,31 +230,6 @@ void CKDevelop::initWhatsThis(){
         "documentation and the KDevelop manuals. Can be "
         "configured individually by right-button menu."));
   
-  whats_this->add((QWidget*)kdlg_widgets_view, i18n("Widgets\n\n"
-        "Here, you can select a widget item to add to "
-        "the dialog you're working on. More information "
-        "about the widget items can be found by What's this "
-        "help on the buttons or in the KDevelop documentation. "));
-  
-  whats_this->add((QWidget*)kdlg_dialogs_view, i18n("Dialogs\n\n"
-        "Selecting a dialog in the list will open the dialog "
-        "definition file and dispay the dialog for editing."));
-                                    
-  whats_this->add((QWidget*)kdlg_prop_widget, i18n("Properties\n\n"
-        "The properties window shows the properties for the currently "
-        "selected widget item. You can switch to the different items "
-        "by selecting them in the editing view or by using the drop-down "
-        "menu at the top of the properties window containing a list with "
-        "all used widget items."));
-                                    
-  whats_this->add((QWidget*)kdlg_edit_widget, i18n("Widget Editing Window\n\n"
-        "The Widget Editing Window is the working window of the widget editor "
-        "displaying a resizable widget with a grid to place selected widget items "
-        "on. A click on the items will acitvate them and give a resize-frame around "
-        "with draggable points to resize the item. The properties for the selected item "
-        "are shown in the properties window at the right. New widget items can be added "
-        "by choosing them on the widgets-window on the left."));
-                                    
   whats_this->add(header_widget, i18n("Header/Resource Files\n\n"
         "This window shows header and all other project files "
         "except for source files. The statusbar shows the "

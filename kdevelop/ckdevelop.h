@@ -60,21 +60,13 @@ class KHTMLPart;
 class CParsedMethod;
 class CParsedContainer;
 class CParsedClass;
-class KDlgEdit;
-class KDlgEditWidget;
-class KDlgPropWidget;
-class KDlgWidgets;
-class KDlgDialogs;
-class KDlgItems;
 class KStatusBar;
 class CTabCtl;
 class CEditWidget;
 class COutputWidget;
 class CKDevAccel;
-//struct TFileInfo;
 class KProcess;
 class KWriteView;
-//class KProgress;
 
 // Debugger classes
 class VarViewer;
@@ -163,14 +155,6 @@ public:
   void setKeyAccel();
   void setToolmenuEntries();
 	
-  void initKDlg();
-  void initKDlgMenuBar();
-  void initKDlgToolBar();
-//  void initKDlgStatusBar();
-//  void initKDlgKeyAccel();  not needed because of setKeyAccel(); connecting and disconnecting accelerators
-
-  /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
-  void setKDlgCaption();
   /** sets the Main window caption for KDevelop */
   void setMainCaption(int tab_item=-1);
   			
@@ -207,14 +191,6 @@ public:
     */
   void setToolMenuProcess(bool enable);
   void setDebugMenuProcess(bool enable);
-
-  KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
-  KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
-  KDlgWidgets* kdlg_get_widgets_view()   { return kdlg_widgets_view; }
-  KDlgDialogs* kdlg_get_dialogs_view()   { return kdlg_dialogs_view; }
-  KDlgItems*   kdlg_get_items_view()     { return kdlg_items_view; }
-  KStatusBar*  kdlg_get_statusbar()      { return m_statusBar; }
-  CTabCtl* kdlg_get_tabctl()             { return  kdlg_tabctl;}
 
   /** Get the current project. */
   CProject* getProject()                 {return prj;}
@@ -544,17 +520,8 @@ public:
   /** switches to the handbook selected: manual, programming, tutorial... */  
   void showDocHelp(const char *bookname);
 
-  void slotHelpDlgNotes();
-
   void slotGrepDialogItemSelected(QString filename,int linenumber);
   
-  ////////////////////////
-  // KDlgEdit-View-Menu entries -- managed by kdevelop
-  ///////////////////////
-  void slotKDlgViewPropView();
-  void slotKDlgViewToolbar();
-  void slotKDlgViewStatusbar();
-
   //////////////////////////////////
   // Classbrowser wizardbutton slots
   //////////////////////////////////
@@ -656,7 +623,7 @@ public:
   void slotApplReceivedStderr(const char* buffer);
 
   void switchToKDevelop();
-  void switchToKDlgEdit();
+  void startDesigner();
 
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotProcessExited(KProcess* proc);
@@ -839,35 +806,17 @@ private:
   bool cv_decl_or_impl;
 
   QStrList file_open_list;	
-  // the menus for the dialogeditor- specific. other menus inserted as the standard above
-  QPopupMenu* kdlg_file_menu;
-  QPopupMenu* kdlg_edit_menu;
-  QPopupMenu* kdlg_view_menu;
-  QPopupMenu* kdlg_project_menu;
-  QPopupMenu* kdlg_build_menu;
-  QPopupMenu* kdlg_debug_menu;
-  QPopupMenu* kdlg_tools_menu;
-  QPopupMenu* kdlg_options_menu;
-  QPopupMenu* kdlg_help_menu;
 
   QStrList tools_exe;
   QStrList tools_entry;
   QStrList tools_argument;
   	
   KMenuBar* kdev_menubar;
-  KMenuBar* kdlg_menubar;
 
   QSplitter* mainSplitter;
   QSplitter* topSplitter;
-  /** Divides the topSplitter for edit and properties widget
-   * of the dialogeditor */
-  QSplitter* kdlgTopSplitter;
-  
-  /** main class for the dialogeditor- 
-   *  handles menu/toolbar etc. events specified for the dialogeditor. */
-  KDlgEdit* kdlgedit;
-  
-  /** If this to true, the user wants a beep after a 
+
+  /** If this to true, the user wants a beep after a
    *  process,slotProcessExited() */
   bool beep; 
   
@@ -908,19 +857,6 @@ private:
   /** The tabbar for the output_widgets. */
   CTabCtl* o_tab_view;
 
-  /** The tabbar for the kdlg view. */
-  CTabCtl* kdlg_tabctl;
-  /** The editing view of kdlg. */
-  KDlgEditWidget* kdlg_edit_widget;
-  /** The properties window of kdlg. */
-  KDlgPropWidget* kdlg_prop_widget;
-  /** The first tab of kdlg_tabctl. */
-  KDlgWidgets* kdlg_widgets_view;
-  /** The second tab of kldg_tabctl. */
-  KDlgDialogs* kdlg_dialogs_view;
-  /** the third tab of kldg_tabctl. */
-  KDlgItems*   kdlg_items_view;
-
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources
   CEditWidget* cpp_widget;    //  the editwidget for cpp files
@@ -951,7 +887,6 @@ private:
   CErrorMessageParser* error_parser;
   QString version;
   QString kdev_caption;
-  QString kdlg_caption;
   bool project;
 
   bool  prev_was_search_result;

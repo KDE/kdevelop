@@ -2756,26 +2756,14 @@ void KWrite::hlDef() {
   HlManager *hlManager;
   ItemStyleList defaultStyleList;
   ItemFont defaultFont;
-//  int count, z;
 
   hlManager = kWriteDoc->hlManager;
   defaultStyleList.setAutoDelete(true);
 
   hlManager->getDefaults(defaultStyleList,defaultFont);
-/*
-  defItemStyleList = kWriteDoc->defItemStyleList;
-  count = defItemStyleList->count();
-  for (z = 0; z < count ; z++) {
-    itemStyleList.append(new ItemStyle(*defItemStyleList->at(z)));
-  }
-  */
   dlg = new DefaultsDialog(hlManager,&defaultStyleList,&defaultFont,topLevelWidget());
   if (dlg->exec() == QDialog::Accepted) {
     hlManager->setDefaults(defaultStyleList,defaultFont);
-/*    for (z = 0; z < count; z++) {
-      defItemStyleList->at(z)->setData(*itemStyleList.at(z));
-    }
-    kWriteDoc->defFont->setData(defFont);*/
   }
   delete dlg;
 }
@@ -2785,13 +2773,11 @@ void KWrite::hlDlg() {
   HighlightDialog *dlg;
   HlManager *hlManager;
   HlDataList hlDataList;
-//  int count, z;
 
   hlManager = kWriteDoc->hlManager;
   hlDataList.setAutoDelete(true);
   hlManager->getHlDataList(hlDataList);
   dlg = new HighlightDialog(hlManager,&hlDataList,kWriteDoc->getHighlight(),topLevelWidget());
-//  dlg->hlChanged(kWriteDoc->getHighlight());
   if (dlg->exec() == QDialog::Accepted) {
     hlManager->setHlDataList(hlDataList);
   }

@@ -53,7 +53,6 @@
 #include "./dbg/framestack.h"
 #include "./dbg/memview.h"
 #include "./dbg/disassemble.h"
-#include "./kdlgedit/kdlgedit.h"
 #include "./kwrite/kwdoc.h"
 
 
@@ -740,9 +739,7 @@ void CKDevelop::slotViewPreviousError(){
 void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
 #warning FIXME Splitter separator problems
 //    tree_view_pos=topSplitter->separatorPos();
 //    topSplitter->setSeparatorPos(0);
@@ -751,9 +748,7 @@ void CKDevelop::slotViewTTreeView(){
 #warning FIXME Splitter separator problems
 //    topSplitter->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     toolBar()->setButton(ID_VIEW_TREEVIEW,true);
-    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
   }
   QRect rMainGeom= topSplitter->geometry();
   topSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -763,9 +758,7 @@ void CKDevelop::slotViewTTreeView(){
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
 #warning FIXME Splitter separator problems
 //    output_view_pos=view->separatorPos();
 //    view->setSeparatorPos(100);
@@ -774,9 +767,7 @@ void CKDevelop::slotViewTOutputView(){
 #warning FIXME Splitter separator problems
 //    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
-    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
   QRect rMainGeom= mainSplitter->geometry();
   mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -809,11 +800,9 @@ void CKDevelop::slotViewTBrowserToolbar(){
 void CKDevelop::slotViewTStatusbar(){
   if(view_menu->isItemChecked(ID_VIEW_STATUSBAR)){
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
-    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
   }
   else{
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
   }
 
   initStatusBar();
@@ -1554,11 +1543,6 @@ void CKDevelop::setDebugMenuProcess(bool enable)
   toolBar()->setItemEnabled(ID_DEBUG_NEXT,                  onOff);
   toolBar()->setItemEnabled(ID_DEBUG_FINISH,                onOff);
 
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,    onOff);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,   onOff);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,   onOff);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(ID_DEBUG_FINISH, onOff);
-
   debug_menu->setItemEnabled(ID_DEBUG_RUN,                  onOff);
   debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,           onOff);
   debug_menu->setItemEnabled(ID_DEBUG_NEXT,                 onOff);
@@ -1569,17 +1553,6 @@ void CKDevelop::setDebugMenuProcess(bool enable)
   debug_menu->setItemEnabled(ID_DEBUG_MEMVIEW,              onOff);
   debug_menu->setItemEnabled(ID_DEBUG_BREAK_INTO,           onOff);
   debug_menu->setItemEnabled(ID_DEBUG_STOP,                 enable);
-
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_RUN,             onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,      onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_NEXT,            onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_NEXT_INST,       onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_STEP,            onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_STEP_INST,       onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_FINISH,          onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_MEMVIEW,         onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_BREAK_INTO,      onOff);
-  kdlg_debug_menu->setItemEnabled(ID_DEBUG_STOP,            enable);
 
   // now create/destroy the floating toolbar
   if (onOff && dbgController && dbgEnableFloatingToolbar)
@@ -1688,7 +1661,6 @@ void CKDevelop::slotBuildMake(){
     slotDebugStop();
 
   //save/generate dialog if needed
-  kdlgedit->generateSourcecodeIfNeeded();
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -2281,7 +2253,6 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
   configdlg->show();
 
   tools_menu->clear();
-  kdlg_tools_menu->clear();
   setToolmenuEntries();
   slotStatusMsg(i18n("Ready."));
 }
@@ -2910,38 +2881,6 @@ void CKDevelop::slotHelpAbout(){
   aboutmsg.show();
 }
 
-void CKDevelop::slotKDlgViewPropView(){
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
-#warning FIXME Splitter separator problems
-//    properties_view_pos=kdlgTopSplitter->separatorPos();
-//    kdlgTopSplitter->setSeparatorPos(100);
-  }
-  else{
-#warning FIXME Splitter separator problems
-//    kdlgTopSplitter->setSeparatorPos(properties_view_pos);
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-  }
-  QRect rMainGeom= kdlgTopSplitter->geometry();
-  kdlgTopSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
-  kdlgTopSplitter->resize(rMainGeom.width(),rMainGeom.height());
-
-}
-void CKDevelop::slotKDlgViewToolbar(){
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR)){
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,false);
-    toolBar(ID_KDLG_TOOLBAR)->hide();
-  }
-  else{
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
-    toolBar(ID_KDLG_TOOLBAR)->show();
-  }
-}
-
-void CKDevelop::slotKDlgViewStatusbar(){
-
-}
-
 /*********************************************************************
  *                                                                   *
  *             SLOTS FOR THE CLASSBROWSER WIZARD BUTTON              *
@@ -3074,25 +3013,21 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
 void CKDevelop::enableCommand(int id_)
 {
   kdev_menubar->setItemEnabled(id_,true);
-  kdlg_menubar->setItemEnabled(id_,true);
   accel->setItemEnabled(id_,true);
 
 //  menuBar()->setItemEnabled(id_,true);
   toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,true);
 }
 
 void CKDevelop::disableCommand(int id_)
 {
   kdev_menubar->setItemEnabled(id_,false);
-  kdlg_menubar->setItemEnabled(id_,false);
   accel->setItemEnabled(id_,false);
 
 //  menuBar()->setItemEnabled(id_,false);
   toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,false);
 }
 
 void CKDevelop::slotNewStatus()
@@ -4083,9 +4018,6 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE:
     slotFileSave();
     break;
-  case ID_KDLG_FILE_SAVE:
-    kdlgedit->slotFileSave();
-    break;
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
@@ -4095,32 +4027,17 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_EDIT_UNDO:
     slotEditUndo();
     break;
-  case ID_KDLG_EDIT_UNDO:
-    kdlgedit->slotEditUndo();
-    break;
   case ID_EDIT_REDO:
     slotEditRedo();
-    break;
-  case ID_KDLG_EDIT_REDO:
-    kdlgedit->slotEditRedo();
     break;
   case ID_EDIT_COPY:
     slotEditCopy();
     break;
-  case ID_KDLG_EDIT_COPY:
-    kdlgedit->slotEditCopy();
-    break;
   case ID_EDIT_PASTE:
     slotEditPaste();
     break;
-  case ID_KDLG_EDIT_PASTE:
-    kdlgedit->slotEditPaste();
-    break;
   case ID_EDIT_CUT:
     slotEditCut();
-    break;
-  case ID_KDLG_EDIT_CUT:
-    kdlgedit->slotEditCut();
     break;
   case ID_VIEW_REFRESH:
     slotViewRefresh();
@@ -4146,11 +4063,8 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_STOP:
     slotBuildStop();
     break;
-  case ID_TOOLS_KDLGEDIT:
-    switchToKDlgEdit();
-    break;
-  case ID_KDLG_TOOLS_KDEVELOP:
-    switchToKDevelop();
+  case ID_TOOLS_DESIGNER:
+    startDesigner();
     break;
   case ID_HELP_BACK:
     slotHelpBack();
@@ -4175,9 +4089,6 @@ void CKDevelop::slotToolbarClicked(int item){
     break;
   case ID_HELP_SEARCH:
     slotHelpSearch();
-    break;
-  case ID_KDLG_BUILD_GENERATE:
-    kdlgedit->slotBuildGenerate();
     break;
   case ID_CV_WIZARD:
     // Make the button toggle between declaration and definition.
@@ -4293,7 +4204,6 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
 
     ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
-    ON_STATUS_MSG(ID_KDLG_BUILD_GENERATE,                   i18n("Generates the sourcefiles for the dialog"))
     ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))
     ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,                     i18n("Rebuilds the program"))
     ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,               i18n("Invokes make clean and rebuild all"))
@@ -4322,8 +4232,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
     ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
 
-    ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,                        i18n("Changes to the KDevelop dialogeditor"))
-    ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,                   i18n("Changes to KDevelop project editor"))
+    ON_STATUS_MSG(ID_TOOLS_DESIGNER,                        i18n("Start QT's disigner (dialog editor)"))
 
     ON_STATUS_MSG(ID_OPTIONS_EDITOR,                        i18n("Sets the Editor's behavoir"))
     ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,                 i18n("Sets the Editor's colors"))
@@ -4387,17 +4296,6 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_CV_ATTRIBUTE_DELETE,                   i18n("Deletes the current class attribute"))
     ON_STATUS_MSG(ID_CV_IMPLEMENT_VIRTUAL,                  i18n("Creates a virtual method"))
     ON_STATUS_MSG(ID_CV_ADD_SLOT_SIGNAL,                    i18n("Adds a signal/slot mechanism"))
-
-    ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,                       i18n("Closes the current dialog"))
-    ON_STATUS_MSG(ID_KDLG_FILE_SAVE,                        i18n("Saves the current dialog"))
-    ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,                     i18n("Saves the current dialog under a new filename"))
-
-    ON_STATUS_MSG(ID_KDLG_VIEW_PROPVIEW,                    i18n("Enables/Disables the properties window"))
-    ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,                     i18n("Enables/Disables the standard toolbar"))
-    ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,                   i18n("Enables/Disables the statusbar"))
-
-    ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,                     i18n("Refreshes current view"))
-    ON_STATUS_MSG(ID_KDLG_VIEW_GRID,                        i18n("Sets the grid size of the editing widget grid snap"))
 
     // LFV popups
     ON_STATUS_MSG(ID_LFV_NEW_GROUP,                         i18n("Lets you create a new logical file group"))
