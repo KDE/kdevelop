@@ -460,6 +460,7 @@ void AppWizardDialog::accept()
 	m_pCurrentAppInfo->subMap.insert("dest", finalLoc_label->text() );
 	m_pCurrentAppInfo->subMap.insert("APPNAME", appname_edit->text() );
 	m_pCurrentAppInfo->subMap.insert("APPNAMELC", appname_edit->text().lower() );
+	m_pCurrentAppInfo->subMap.insert("APPNAMESC", QString(appname_edit->text()[0]).upper() + appname_edit->text().mid(1));
 	m_pCurrentAppInfo->subMap.insert("APPNAMEUC", appname_edit->text().upper() );
 	m_pCurrentAppInfo->subMap.insert("AUTHOR", author_edit->text() );
 	m_pCurrentAppInfo->subMap.insert("EMAIL", email_edit->text() );
