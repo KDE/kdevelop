@@ -430,6 +430,77 @@ To more easily accomplish such a scheme, <emphasis>Integrated Development Enviro
 <para>
 For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
 </para>
+
+<sect2 id="unixdev-ide-kdevelop">
+<title>Basic features of &kdevelop;</title>
+
+<indexterm zone="unixdev-ide-kdevelop">
+  <primary>&kdevelop;</primary>
+  <secondary>features</secondary></indexterm>
+<indexterm zone="unixdev-ide-kdevelop">
+  <primary>features</primary></indexterm>
+
+<!-- ### copied from web page, needs to be updated -->
+
+<itemizedlist>
+  <listitem><para>
+  Manages all development tools needed for C++ programming, such as the compiler, linker, debugger and build system
+  </para></listitem>
+  <listitem><para>
+  Provides an &appwizard; which generates complete, ready-to-go sample applications
+  </para></listitem>
+  <listitem><para>
+  An integrated editor based on the programmer's editor KWrite or Trolltec's QEditor
+  </para></listitem>
+  <listitem><para>
+  A class generator, for creating new classes and integrating them into the current project
+  </para></listitem>
+  <listitem><para>
+  File management for sources, headers, documentation etc. to be included in the project
+  </para></listitem>
+  <listitem><para>
+  Assistance in creating application user manuals written with the KDE tools
+  </para></listitem>
+  <listitem><para>
+  Automatic HTML-based API-documentation for a project's classes with cross-references to the used libraries
+  </para></listitem>
+  <listitem><para>
+  Internationalization support, allowing translators to add their target language to a project easily, including support of KBabel
+  </para></listitem>
+  <listitem><para>
+  Support for managing a project via CVS by providing an easy-to-use frontend for the most needed functions
+  </para></listitem>
+  <listitem><para>
+  Integrated debugging
+  </para></listitem>
+  <listitem><para>
+  A console
+  </para></listitem>
+  <listitem><para>
+  Syntax highlighting
+  </para></listitem>
+  <listitem><para>
+  Auto-code completion for class variables, class methods, function arguments and more
+  </para></listitem>
+  <listitem><para>
+  Templates for creating various projects (KControl modules, Kicker (panel) applets, KIOSlaves, Konqueror plugins and desktop styles)
+  </para></listitem>
+  <listitem><para>
+  Four tree views for easily switching between source files, header files, classes and documentation, obvliating the need for an external file manager
+  </para></listitem>
+  <listitem><para>
+  Cross-compiling support, with the ability to specify different compilers, compiler flags, target architecture, etc.
+  </para></listitem>
+  <listitem><para>
+  Support for Qt/Embedded projects (such as the Zaurus and iPAQ)
+  </para></listitem>
+  <listitem><para>
+  Inclusion of any other program you need for development by adding it to the <guimenuitem>Tools</guimenuitem> menu according to your individual needs
+  </para></listitem>
+</itemizedlist>
+
+</sect2> <!-- unixdev-ide-kdevelop -->
+
 </sect1> <!-- unixdev-ide -->
 
 </chapter> <!-- unixdev -->
