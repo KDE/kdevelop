@@ -20,6 +20,8 @@
 #include <qdir.h>
 
 #include <unistd.h>
+#include <limits.h>
+#include <stdlib.h>
 
 #include "urlutil.h"
 
