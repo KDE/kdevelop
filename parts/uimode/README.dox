@@ -1,0 +1,8 @@
+/** \class UIChooserPart
+Allows you to choose the KDevelop UImode (Graphical User Interface mode)
+
+\authors <a href="mailto:hoelzer AT physik.uni-wuerzburg.de">Matthias Hoelzer</a>
+
+\feature Allows you to choose the KDevelop UImode (Graphical User Interface mode)
+
+*/
