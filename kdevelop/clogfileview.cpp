@@ -364,7 +364,7 @@ void CLogFileView::slotFileRemove()
 {
   QString filename=getFileName(currentItem());
   QString msg;
-  msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
+  msg.sprintf(i18n("Do you really want to remove the file\n%s from project?\nIt will remain on disk."), filename.data());
   if (KMessageBox::questionYesNo(0, msg, i18n("Warning")) == KMessageBox::No)
     return;
 
@@ -376,9 +376,10 @@ void CLogFileView::slotFileDelete()
 {
 
   if(KMessageBox::questionYesNo(0,i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),
-                                  i18n("Warning")) == KMessageBox::No){
-    return;
-  }
+				i18n("Warning")) == KMessageBox::No)
+    {
+      return;
+    }
   QString fullname = getFullFilename(currentItem());
   QString name = getFileName(currentItem());
 

@@ -25,15 +25,12 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <qlayout.h>
+#include <kbuttonbox.h>
 
 #define LAYOUT_BORDER (10)
 
 CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
-  : QDialog( parent, name, true ),
-		folderLbl( this, "folderLbl" ),
-	  folderEdit( this, "folderEdit" ),
-	  okBtn( this, "okBtn" ),
-	  cancelBtn( this, "cancelBtn" )
+  : QDialog( parent, name, true )
 {
   setCaption(i18n("Add folder") );
 
@@ -43,62 +40,62 @@ CCVAddFolderDlg::CCVAddFolderDlg( QWidget *parent, const char *name )
 
 void CCVAddFolderDlg::setWidgetValues()
 {
-	QGridLayout * layout = new QGridLayout( this, 2, 3, LAYOUT_BORDER );
-	
-  folderLbl.setText( i18n("Folder name:") );
- 	folderLbl.setMinimumSize( folderLbl.sizeHint() );
-	layout->addWidget( &folderLbl, 0, 0 );
+  QGridLayout * layout = new QGridLayout( this, 2, 2, LAYOUT_BORDER );
+  folderLbl=new QLabel( this, "folderLbl" );
+  folderEdit=new QLineEdit( this, "folderEdit" );
 
-  folderEdit.setMinimumSize( folderEdit.sizeHint() );
-	layout->addWidget( &folderEdit, 0, 1 );
 
-  okBtn.setFocusPolicy( QWidget::TabFocus );
-  okBtn.setBackgroundMode( QWidget::PaletteBackground );
-  okBtn.setFontPropagation( QWidget::NoChildren );
-  okBtn.setPalettePropagation( QWidget::NoChildren );
-  okBtn.setText( i18n("OK") );
-  okBtn.setAutoRepeat( FALSE );
-  okBtn.setAutoResize( FALSE );
-	okBtn.setDefault( true );
+  folderLbl->setText( i18n("Folder name:") );
+  folderLbl->setMinimumSize( folderLbl->sizeHint() );
+  layout->addWidget( folderLbl, 0, 0 );
 
-  cancelBtn.setFocusPolicy( QWidget::TabFocus );
-  cancelBtn.setBackgroundMode( QWidget::PaletteBackground );
-  cancelBtn.setFontPropagation( QWidget::NoChildren );
-  cancelBtn.setPalettePropagation( QWidget::NoChildren );
-  cancelBtn.setText( i18n("Cancel") );
-  cancelBtn.setAutoRepeat( FALSE );
-  cancelBtn.setAutoResize( FALSE );
-	
-	okBtn.setFixedSize( cancelBtn.sizeHint() );
-	cancelBtn.setFixedSize( cancelBtn.sizeHint() );
+  folderEdit->setMinimumSize( folderEdit->sizeHint() );
+  layout->addWidget( folderEdit, 0, 1 );
 
-	layout->addWidget( &okBtn, 0, 2 );
-	layout->addWidget( &cancelBtn, 1, 2 );
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  okBtn = bb->addButton( i18n("OK") );
+  okBtn->setFocusPolicy( QWidget::TabFocus );
+  okBtn->setBackgroundMode( QWidget::PaletteBackground );
+  okBtn->setFontPropagation( QWidget::NoChildren );
+  okBtn->setPalettePropagation( QWidget::NoChildren );
+  okBtn->setAutoRepeat( FALSE );
+  okBtn->setAutoResize( FALSE );
+  okBtn->setDefault( true );
+  cancelBtn = bb->addButton( i18n( "Close" ) );
+  cancelBtn->setFocusPolicy( QWidget::TabFocus );
+  cancelBtn->setBackgroundMode( QWidget::PaletteBackground );
+  cancelBtn->setFontPropagation( QWidget::NoChildren );
+  cancelBtn->setPalettePropagation( QWidget::NoChildren );
+  cancelBtn->setAutoRepeat( FALSE );
+  cancelBtn->setAutoResize( FALSE );
+  bb->layout();
+  layout->addWidget(bb,1,1);
 
-	layout->setRowStretch( 0, 1 );
-	layout->setRowStretch( 1, 1 );
-	layout->setColStretch( 0, 0 );
-	layout->setColStretch( 1, 1 );
-	layout->setColStretch( 2, 0 );
-
-	layout->activate();
+  
+  layout->setRowStretch( 0, 1 );
+  layout->setRowStretch( 1, 1 );
+  layout->setColStretch( 0, 0 );
+  layout->setColStretch( 1, 1 );
+  
+  layout->activate();
   adjustSize();
 	
-  folderEdit.setFocus();
+  folderEdit->setFocus();
 }
 
 void CCVAddFolderDlg::setCallbacks()
 {
 
   // Ok and cancel buttons.
-  connect( &okBtn, SIGNAL( clicked() ), SLOT( OK() ) );
-  connect( &cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
+  connect( okBtn, SIGNAL( clicked() ), SLOT( OK() ) );
+  connect( cancelBtn, SIGNAL( clicked() ), SLOT( reject() ) );
 }
 
 void CCVAddFolderDlg::OK()
 {
 
-  if( strlen( folderEdit.text() ) == 0 )
+  if( folderEdit->text().isEmpty() )
     KMessageBox::error( this,
                         i18n("You have to specify a foldername."),
                         i18n("No name") );

@@ -481,49 +481,59 @@ void CNewFileDlg::slotAddToProject(){
 
 void CNewFileDlg::slotEditTextChanged(const QString& text)
 {
+ if(text.isEmpty())
+   return;
   QString filetype = fileType();
   QString extension = (prj && prj->getProjectType()=="normal_c" || prj->getProjectType()=="normal_gnome")? ".c" : ".cpp";
 
   if(autocompletion){
 
-    if (filetype != "TEXTFILE" ) {
-      autocompletion = false;
-      
-      if (filetype == "HEADER" ) {
-	edit->setText(text + QString(".h"));
+    if (filetype != "TEXTFILE" ) 
+      {
+	autocompletion = false;
+	
+	if (filetype == "HEADER" ) 
+	  {
+	    edit->setText(text + QString(".h"));
+	  }
+	if (filetype == "CPP" ) 
+	  {
+	    edit->setText(text + extension);
+	  }
+	if (filetype == "LEXICAL") 
+	  {
+	    edit->setText(text + QString(".l"));
+	  }
+	if (filetype == "KDELNK" ) 
+	  {
+	    edit->setText(text + QString(".kdelnk"));
+	  }
+	if (filetype == "EN_SGML" ) 
+	  {
+	    edit->setText(text + QString(".sgml"));
+	  }
+	if (filetype == "EN_DOCBOOK" ) 
+	  {
+	    edit->setText(text + QString(".docbook"));
+	  }
+	if (filetype == "LSM" ) 
+	  {
+	    edit->setText(text + QString(".lsm"));
+	  }
+	if (filetype == "ICON" ) 
+	  {
+	    edit->setText(text + QString(".xpm"));
+	  }
+	if (filetype == "DIALOG" ) 
+	  {
+	    edit->setText(text + QString(".kdevdlg"));
+	  }
+	if (filetype == "QT2DIALOG" ) 
+	  {
+	    edit->setText(text + QString(".ui"));
+	  }
+	edit->setCursorPosition(1);
       }
-      if (filetype == "CPP" ) {
-	edit->setText(text + extension);
-      }
-      if (filetype == "LEXICAL") {
-	edit->setText(text + QString(".l"));
-      }
-      if (filetype == "KDELNK" ) {
-	edit->setText(text + QString(".kdelnk"));
-      }
-      if (filetype == "EN_SGML" ) {
-	edit->setText(text + QString(".sgml"));
-      }
-      if (filetype == "EN_DOCBOOK" ) {
-	edit->setText(text + QString(".docbook"));
-      }
-      if (filetype == "LSM" ) {
-	edit->setText(text + QString(".lsm"));
-      }
-      if (filetype == "ICON" ) {
-      edit->setText(text + QString(".xpm"));
-      }
-      if (filetype == "KDELNK" ) {
-	edit->setText(text + QString(".kdelnk"));
-      }
-      if (filetype == "DIALOG" ) {
-	edit->setText(text + QString(".kdevdlg"));
-      }
-      if (filetype == "QT2DIALOG" ) {
-	edit->setText(text + QString(".ui"));
-      }
-      edit->setCursorPosition(1);
-    }
     
   }
 }

@@ -542,7 +542,7 @@ void CRealFileView::slotFolderNew(){
 
   if( dlg.exec() )
   {
-    QString dir_name = getFullFilename(currentItem())+"/"+dlg.folderEdit.text();
+    QString dir_name = getFullFilename(currentItem())+"/"+dlg.folderEdit->text();
     QDir dir;
     dir.setPath(dir_name);
     if(!dir.exists())

@@ -31,9 +31,9 @@
 CAddClassAttributeDlg::CAddClassAttributeDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
     topLayout( this, 5 ),
-    varLayout( 9, 3, 1, "functionLayout" ),
-    accessLayout( 3, 5, 1, "accessLayout" ),
-    modifierLayout( 3, 4, 1, "modifierLayout" ),
+    varLayout( 9, 3, 5, "functionLayout" ),
+    accessLayout( 3, 5, 5, "accessLayout" ),
+    modifierLayout( 3, 4, 5, "modifierLayout" ),
     buttonLayout( 5, "buttonLayout" ),
     modifierGrp( this, "modifierGrp" ),
     varGrp( this, "functionGrp" ),

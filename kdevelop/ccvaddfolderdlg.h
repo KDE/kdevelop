@@ -39,11 +39,11 @@ public: // Constructor & Destructor
 
 public: // Public widgets
 
-  QLabel folderLbl;
-  QLineEdit folderEdit;
+  QLabel *folderLbl;
+  QLineEdit *folderEdit;
 
-  QPushButton okBtn;
-  QPushButton cancelBtn;
+  QPushButton *okBtn;
+  QPushButton *cancelBtn;
 
 protected:
  protected slots:

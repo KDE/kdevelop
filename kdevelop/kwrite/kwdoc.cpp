@@ -6,6 +6,7 @@
 #include <qclipbrd.h>
 #include <qfont.h>
 #include <qpainter.h>
+#include <qdatetime.h>
 
 #include <kcharsets.h>
 
@@ -1137,16 +1138,15 @@ void KWriteDoc::hlChanged() { //slot
   updateViews();
 }
 
-void KWriteDoc::setHighlight(int n) {
-  Highlight *h;
-
-//  hlNumber = n;
-
-  h = hlManager->getHl(n);
-  if (h == highlight) {
+void KWriteDoc::setHighlight(int n)
+{
+	Highlight *h = hlManager->getHl(n);
+  if (h == highlight)
     updateLines();
-  } else {
-    if (highlight) highlight->release();
+  else
+  {
+    if (highlight)
+      highlight->release();
     h->use();
     highlight = h;
     makeAttribs();
@@ -1159,51 +1159,7 @@ void KWriteDoc::makeAttribs() {
   updateFontData();
   updateLines();
 }
-/*
-void KWriteDoc::makeAttribs() {
-  ItemDataList list;
-  ItemData *itemData;
-  DefItemStyle *defItemStyle;
-  int z;
-  QFont font;
 
-  list.setAutoDelete(true);
-  highlight->getItemDataList(list);
-  for (z = 0; z < (int) list.count(); z++) {
-    itemData = list.at(z);
-    if (itemData->defStyle) {
-      defItemStyle = defItemStyleList->at(itemData->defStyleNum);
-      attribs[z].col = defItemStyle->col;
-      attribs[z].selCol = defItemStyle->selCol;
-      font.setBold(defItemStyle->bold);
-      font.setItalic(defItemStyle->italic);
-    } else {
-      attribs[z].col = itemData->col;
-      attribs[z].selCol = itemData->selCol;
-      font.setBold(itemData->bold);
-      font.setItalic(itemData->italic);
-    }
-    if (itemData->defFont) {
-      font.setFamily(defFont->family);
-      font.setPointSize(defFont->size);
-      KCharset(defFont->charset).setQFont(font);
-    } else {
-      font.setFamily(itemData->family);
-      font.setPointSize(itemData->size);
-      KCharset(itemData->charset).setQFont(font);
-    }
-    attribs[z].setFont(font);
-  }
-  for (; z < nAttribs; z++) {
-    attribs[z].col = black;
-    attribs[z].selCol = black;
-    attribs[z].setFont(font);
-  }
-
-  updateFontData();
-  updateLines();
-}
-*/
 void KWriteDoc::updateFontData() {
   int maxAscent, maxDescent;
   int minTabWidth, maxTabWidth;
@@ -1258,28 +1214,37 @@ void KWriteDoc::setTabWidth(int chars) {
 }
 
 
-void KWriteDoc::updateLines(int startLine, int endLine, int flags) {
+void KWriteDoc::updateLines(int startLine, int endLine, int flags)
+{
   TextLine *textLine;
   int line, lastLine;
   int ctxNum, endCtx;
 
   lastLine = (int) contents.count() -1;
-  if (endLine >= lastLine) endLine = lastLine;
+  if (endLine >= lastLine)
+    endLine = lastLine;
 
   line = startLine;
   ctxNum = 0;
-  if (line > 0) ctxNum = contents.at(line - 1)->getContext();
-  do {
+  if (line > 0)
+    ctxNum = contents.at(line - 1)->getContext();
+
+  do
+  {
     textLine = contents.at(line);
-    if (line <= endLine) {
-      if (flags & cfRemoveSpaces) textLine->removeSpaces();
+    if (line <= endLine)
+    {
+      if (flags & cfRemoveSpaces)
+        textLine->removeSpaces();
       updateMaxLength(textLine);
     }
+
     endCtx = textLine->getContext();
     ctxNum = highlight->doHighlight(ctxNum,textLine);
     textLine->setContext(ctxNum);
     line++;
   } while (line <= lastLine && (line <= endLine || endCtx != ctxNum));
+
   tagLines(startLine,line - 1);
 }
 
@@ -2412,19 +2377,16 @@ QString KWriteDoc::fileName() {
   return fName;
 }
 
-void KWriteDoc::setFileName(const QString& s) {
-  int hl;
+void KWriteDoc::setFileName(const QString& s)
+{
   KWriteView *view;
-
   fName = s;
-//  QCString test=s.latin1();
 
   for (view = views.first(); view != 0L; view = views.next())
     emit view->kWrite->newCaption();
 
-  hl = hlManager->getHighlight(fName);
+  int hl = hlManager->getHighlight(fName);
   setHighlight(hl);
-
 	// Read bookmarks, breakpoints, ...
 	readFileConfig();
   updateViews();

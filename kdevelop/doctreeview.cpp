@@ -558,28 +558,28 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
 void DocTreeKDELibsBook::setOpen(bool o)
 {
   int count=0;
-    if (o && childCount() == 0)
-        {
-            FILE *f;
-            if ( (f = fopen(idx_filename, "r")) != 0)
-                {
-                    count=readKdoc2Index(f);
-                    fclose(f);
-                }
-            else if ( (f = popen(QString("gzip -c -d ")
+  if (o && childCount() == 0)
+  {
+    FILE *f;
+    if ( (f = fopen(idx_filename, "r")) != 0)
+    {
+      count=readKdoc2Index(f);
+      fclose(f);
+    }
+    else  if ( (f = popen(QString("gzip -c -d ")
                                  + idx_filename + ".gz 2>/dev/null", "r")) != 0)
-                {
-                    count=readKdoc2Index(f);
-                    pclose(f);
-                }
+          {
+            count=readKdoc2Index(f);
+            pclose(f);
+          }
 
-            if (count==0)
-            {
-              setExpandable(false);
-              o=false;  // the book icons remains closed
-            }
-        }
-    ListViewBookItem::setOpen(o);
+    if (count==0)
+    {
+      setExpandable(false);
+      o=false;  // the book icons remains closed
+    }
+  }
+  ListViewBookItem::setOpen(o);
 }
 
 

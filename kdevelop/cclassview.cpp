@@ -1196,7 +1196,7 @@ void CClassView::slotFolderNew()
 
   if( dlg.exec() )
   {
-    item = ((CClassTreeHandler *)treeH)->addItem( dlg.folderEdit.text(),
+    item = ((CClassTreeHandler *)treeH)->addItem( dlg.folderEdit->text(),
                                                   THFOLDER,
                                                   currentItem() );
     setOpen( item, true );

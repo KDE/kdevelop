@@ -44,6 +44,8 @@
 #include <qprogressbar.h>
 #include <qprogressdialog.h>
 
+#include <qdatetime.h>
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -657,26 +659,26 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 void CKDevelop::refreshTrees(TFileInfo *info)
 {
   if( project )
-    {
-      kapp->processEvents(100);
-      // If this is a sourcefile we parse it and update the classview.
-      if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
-			{
-				class_tree->addFile( prj->getProjectDir() + info->rel_name );
-				CVRefreshClassCombo();
-			}
-      
-      // Update LFV.
-      kapp->processEvents(100);
-      log_file_tree->storeState(prj);
-      log_file_tree->refresh(prj);
-      
-      // Update RFV.
-      kapp->processEvents(100);
-      real_file_tree->refresh(prj);
-      // update dialogs tree
-      kapp->processEvents(100);
-    }
+  {
+    kapp->processEvents(100);
+    // If this is a sourcefile we parse it and update the classview.
+    if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
+		{
+			class_tree->addFile( prj->getProjectDir() + info->rel_name );
+			CVRefreshClassCombo();
+		}
+
+    // Update LFV.
+    kapp->processEvents(100);
+    log_file_tree->storeState(prj);
+    log_file_tree->refresh(prj);
+
+    // Update RFV.
+    kapp->processEvents(100);
+    real_file_tree->refresh(prj);
+    // update dialogs tree
+    kapp->processEvents(100);
+  }
   // refresh the file_open_list
   file_open_list=prj->getHeaders();
   QStrList sources=prj->getSources();
@@ -693,7 +695,8 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
-void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
+void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox)
+{
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
     // not links in files or hardlinks. The _real_ solution
@@ -823,7 +826,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     process.start(KProcess::DontCare);
     return;
   }
-  if((filename).right(6) == ".glade"){
+  if(ext == "glade"){
     if(!CToolClass::searchInstProgram("glade")){
       return;
     }
@@ -832,7 +835,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     process.start(KProcess::DontCare);
     return;
   }
- 
+
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
     edit_widget = cpp_widget;
@@ -929,7 +932,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     }
   }
   // not found -> generate a new edit_info,loading
-  
+
   // build a new info
   QFileInfo fileinfo(filename);
   info = new TEditInfo;
@@ -943,11 +946,10 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   info->last_modified = fileinfo.lastModified();
 
   // update the widget
-//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"switchToFile: %s",filename.data());
   edit_widget->clear();
   edit_widget->loadFile(filename,1);
   edit_widget->setName(filename);
-//  edit_widget->setFocus();
+
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
