@@ -1604,17 +1604,22 @@ void CKDevelop::slotDebugRunWithArgs()
 
 void CKDevelop::slotStartDebugRunWithArgs()
 {
- 	KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
-	QString conf=compile_combo->currentText();
+  // This "fixes" crash when external debugger is being used. We cannot pass
+  // arguments to an external debugger without quite a bit more work being done
+  if (!dbgInternal)
+    return;
+
+  KComboBox* compile_combo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
+  QString conf=compile_combo->currentText();
   QString runFromDir;
   if(conf==i18n("(Default)"))
-		runFromDir = prj->getRunFromDir();
-	else{
-		runFromDir = m_pKDevSession->getVPATHSubdir(conf);
-		if(runFromDir.right(1)!="/")
-			runFromDir+="/";
-		runFromDir+=prj->getSubDir();
-	}
+    runFromDir = prj->getRunFromDir();
+  else{
+    runFromDir = m_pKDevSession->getVPATHSubdir(conf);
+    if(runFromDir.right(1)!="/")
+      runFromDir+="/";
+    runFromDir+=prj->getSubDir();
+  }
   QDir::setCurrent(runFromDir);
   QString libtool     = prj->getLibtool();;
   QString binProgram  = prj->getExecutable();

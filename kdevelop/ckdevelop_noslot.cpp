@@ -657,11 +657,26 @@ void CKDevelop::setToolMenuProcess(bool enable){
     if (m_docViewManager->curDocIsCppFile()){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
-	  enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
+    enableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // enable switching project configs
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_RUN_WITH_ARGS);
     enableCommand(ID_DEBUG_START);
-    enableCommand(ID_DEBUG_START_OTHER);
+    if (dbgInternal)
+    {
+      enableCommand(ID_DEBUG_START_OTHER);
+      debugToolPopup->setItemEnabled(ID_DEBUG_CORE,       true);
+      debugToolPopup->setItemEnabled(ID_DEBUG_NAMED_FILE, true);
+      debugToolPopup->setItemEnabled(ID_DEBUG_ATTACH,     true);
+      debugToolPopup->setItemEnabled(ID_DEBUG_SET_ARGS,   true);
+    }
+    else
+    {
+      disableCommand(ID_DEBUG_START_OTHER);
+      debugToolPopup->setItemEnabled(ID_DEBUG_CORE,       false);
+      debugToolPopup->setItemEnabled(ID_DEBUG_NAMED_FILE, false);
+      debugToolPopup->setItemEnabled(ID_DEBUG_ATTACH,     false);
+      debugToolPopup->setItemEnabled(ID_DEBUG_SET_ARGS,   false);
+    }
     enableCommand(ID_BUILD_MAKE);
     enableCommand(ID_BUILD_REBUILD_ALL);
     enableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
@@ -700,12 +715,16 @@ void CKDevelop::setToolMenuProcess(bool enable){
 //  if (!enable)
   {
     // set the popupmenus enable or disable
-	  disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // disable switching project configs during an operation
+    disableCommand(ID_CV_TOOLBAR_COMPILE_CHOICE); // disable switching project configs during an operation
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
     disableCommand(ID_BUILD_RUN);
     disableCommand(ID_DEBUG_START);
     disableCommand(ID_DEBUG_START_OTHER);
+    debugToolPopup->setItemEnabled(ID_DEBUG_CORE,       false);
+    debugToolPopup->setItemEnabled(ID_DEBUG_NAMED_FILE, false);
+    debugToolPopup->setItemEnabled(ID_DEBUG_ATTACH,     false);
+    debugToolPopup->setItemEnabled(ID_DEBUG_SET_ARGS,   false);
     disableCommand(ID_BUILD_MAKE);
     disableCommand(ID_BUILD_REBUILD_ALL);
     disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);

@@ -787,7 +787,7 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton("rebuild",ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
 //  toolBar()->insertSeparator();
   toolBar()->insertButton("debugger",ID_DEBUG_START, false, i18n("Debug"));
-  QPopupMenu* debugToolPopup = new QPopupMenu();
+  debugToolPopup = new QPopupMenu();
   debugToolPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
   debugToolPopup->insertItem(SmallIconSet("connect_creating"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);

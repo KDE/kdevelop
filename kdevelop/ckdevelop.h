@@ -943,9 +943,10 @@ private:
   QPopupMenu* build_menu;
   QPopupMenu* debug_menu;
   QPopupMenu* debugPopup;
+  QPopupMenu* debugToolPopup;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
-  KHelpMenu* help_menu;
+  KHelpMenu*  help_menu;
   QWhatsThis* whats_this;
 
   QPopupMenu* history_prev;
