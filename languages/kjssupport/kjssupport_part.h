@@ -34,9 +34,11 @@ class KJSEmbedPart;
 class KJSConsoleWidget;
 };
 
+class QPopupMenu;
 class KAction;
 class KJSProblems;
 class JSCodeCompletion;
+class Context;
 
 class typeProperty;
 
@@ -61,6 +63,8 @@ class kjsSupportPart : public KDevLanguageSupport
 		void removedFilesFromProject(const QStringList &fileList);
 		void parse();
 		void slotActivePartChanged(KParts::Part *part);
+		void contextMenu(QPopupMenu *popupMenu, const Context *context);
+		void implementSlots();
 	private:
 		void parse(const QString &fileName);
 		void addAttribute(const QString &name, ClassDom clazz, uint lineNo);
@@ -73,6 +77,8 @@ class kjsSupportPart : public KDevLanguageSupport
 		KJSProblems *m_problemReporter;
 		QDict<typeProperty> m_typeMap;
 		JSCodeCompletion *m_cc;
+		
+		QString m_selectedUI;
 };
 
 

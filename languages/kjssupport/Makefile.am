@@ -1,9 +1,9 @@
-INCLUDES = $(all_includes)
+INCLUDES = -I$(kde_includes)/kdevelop $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevkjssupport.la
 libkdevkjssupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevkjssupport_la_LIBADD = -lkjsembed -lkdevelop
-libkdevkjssupport_la_SOURCES = kjssupport_part.cpp kjsproblems.cpp jscodecompletion.cpp
+libkdevkjssupport_la_SOURCES = kjssupport_part.cpp kjsproblems.cpp jscodecompletion.cpp subclassingdlg.cpp subclassingdlg.h subclassingdlgbase.ui
 
 METASOURCES = AUTO
 
@@ -18,5 +18,5 @@ EXTRA_DIST = $(mimesrc_DATA)
 rcdir = $(kde_datadir)/kdevkjssupport
 rc_DATA = kdevkjssupport.rc
 
-SUBDIRS = template
+SUBDIRS = template subclassing_template
 noinst_HEADERS =  kjsproblems.h
