@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
+Comment=Qt Designer Based Text Editor
+Comment[fr]=Un module externe pour la gestion de l'éditeur de texte « qeditor » basé sur l'application « Qt Designer ».
 Name=Qt Designer Based Text Editor
+GenericName=QEditor Support
+GenericName[fr]=Editeur QEditor
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;text/x-sql;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KTextEditor/Document,KTextEditor/Editor
 X-KDE-Library=libqeditorpart
