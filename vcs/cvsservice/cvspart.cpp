@@ -92,6 +92,12 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
 {
     setInstance( CvsFactory::instance() );
 
+    m_impl = new CvsServicePartImpl( this );
+
+    // Load / store project configuration every time project is opened/closed
+    connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+    connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
+
     QTimer::singleShot(0, this, SLOT(init()));
 }
 
@@ -109,13 +115,8 @@ void CvsServicePart::init()
 {
     setupActions();
 
-    m_impl = new CvsServicePartImpl( this );
     // Re-route our implementation signal for when check-out finishes to the standard signal
     connect( m_impl, SIGNAL(checkoutFinished(QString)), SIGNAL(finishedFetching(QString)) );
-
-    // Load / store project configuration every time project is opened/closed
-    connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
-    connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
     // Context menu
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
