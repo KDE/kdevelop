@@ -19,7 +19,7 @@ install=false
 install_location=
 type=DATA
 [Config for BinMakefileAm]
-addcxxflags=-DGDB_MONITOR -DUSE_QTPRINT_SYSTEM -DUSE_KDE_2_1_1
+addcxxflags=-DGDB_MONITOR
 bin_program=kdevelop
 cxxflags=-O0 -g3 -Wall
 ldadd=./widgets/qextmdi/src/libkdevelopqextmdi.la $(LEXLIB) -lkatecore -lkateinterfaces $(LIB_KFILE) $(LIB_KHTML) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)

@@ -1,3 +1,9 @@
+2001-08-10  rokrau@yahoo.com
+    * Some files were still missing, I have added these now, also there is 
+      a modified kdevprj files. Kwrite and friends are taken out of the 
+      project now, but they remain in cvs for now. Makefile.am's are updated
+      accordingly so this will hopefully now build out of the box. 
+
 2001-08-08  rokrau@yahoo.com
     * Commit of the "Kate patch", which replaces the old, internal kwrite
       based editor with a Kate kpart. To use this you need to get the latest
