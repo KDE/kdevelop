@@ -3941,6 +3941,7 @@ void CKDevelop::slotViewTClassesView()
     pDock->undock();
   else
     pDock->dockBack();
+	adjustTTreesToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -3952,6 +3953,7 @@ void CKDevelop::slotViewTGroupsView()
     pDock->undock();
   else
     pDock->dockBack();
+	adjustTTreesToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -3963,6 +3965,7 @@ void CKDevelop::slotViewTFilesView()
     pDock->undock();
   else
     pDock->dockBack();
+	adjustTTreesToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -3974,6 +3977,7 @@ void CKDevelop::slotViewTBooksView()
     pDock->undock();
   else
     pDock->dockBack();
+	adjustTTreesToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -3985,6 +3989,7 @@ void CKDevelop::slotViewTWatchView()
     pDock->undock();
   else
     pDock->dockBack();
+	adjustTTreesToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4058,6 +4063,7 @@ void CKDevelop::slotViewOMessagesView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4069,6 +4075,7 @@ void CKDevelop::slotViewOStdOutView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4080,6 +4087,7 @@ void CKDevelop::slotViewOStdErrView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4091,6 +4099,7 @@ void CKDevelop::slotViewOKonsoleView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4102,6 +4111,7 @@ void CKDevelop::slotViewOBreakpointView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4113,6 +4123,7 @@ void CKDevelop::slotViewODisassembleView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4124,6 +4135,7 @@ void CKDevelop::slotViewOFrameStackView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
@@ -4135,6 +4147,7 @@ void CKDevelop::slotViewODebuggerView()
     pDock->undock();
   else
     pDock->dockBack();
+  adjustTOutputToolButtonState();
 #endif // #ifndef USE_KDE_2_1_1
 }
 
