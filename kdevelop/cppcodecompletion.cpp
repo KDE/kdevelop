@@ -815,6 +815,7 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
     QRegExp comment_rx( "//[^\n]*" );
     QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
 
+
     QString text;
     for( int i=0; i<iLine; ++i ){
         text += m_edit->textLine( i ).simplifyWhiteSpace() + "\n";
