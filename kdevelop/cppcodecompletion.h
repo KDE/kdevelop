@@ -30,6 +30,7 @@ class KDevArgHint;
 class CClassStore;
 class CKDevelop;
 class CParsedClass;
+class CParsedContainer;
 class CParsedMethod;
 class CParsedAttribute;
 
@@ -92,8 +93,8 @@ protected:
     QList<CParsedMethod>* getParentMethodListForClass ( CParsedClass* pClass, QList<CParsedMethod>* pList );
     QList<CParsedAttribute>* getParentAttributeListForClass ( CParsedClass* pClass, QList<CParsedAttribute>* pList );
 
-    QString getTypeOfMethod( CParsedClass*, const QString& );
-    QString getTypeOfAttribute( CParsedClass*, const QString& );
+    QString getTypeOfMethod( CParsedContainer*, const QString& );
+    QString getTypeOfAttribute( CParsedContainer*, const QString& );
 
 
 private:

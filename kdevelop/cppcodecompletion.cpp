@@ -520,8 +520,13 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     }
 
     type = purify( type );
-    CParsedClass* pClass = sigma->getClassByName( type );
-    while( pClass && exprs.count() ){
+    CParsedContainer* pContainer = sigma->getClassByName( type );
+    if( !pContainer ){
+        pContainer = sigma->globalContainer.getStructByName( type );
+        kdDebug() << "is a struct??" << endl;
+    }
+    kdDebug() << "pContainer = " << pContainer << endl;
+    while( pContainer && exprs.count() ){
 
         QString e = exprs.first().stripWhiteSpace();
         popFrontStringList(exprs);
@@ -534,11 +539,17 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
             break;
         } else if( (first_paren_index = e.find('(')) != -1 ){
             e = e.left( first_paren_index );
-            type = getTypeOfMethod( pClass, e );
-            pClass = sigma->getClassByName( type );
+            type = getTypeOfMethod( pContainer, e );
+            pContainer = sigma->getClassByName( type );
+            if( !pContainer ){
+                pContainer = sigma->globalContainer.getStructByName( type );
+            }
         } else {
-            type = getTypeOfAttribute( pClass, e );
-            pClass = sigma->getClassByName( type );
+            type = getTypeOfAttribute( pContainer, e );
+            pContainer = sigma->getClassByName( type );
+            if( !pContainer ){
+                pContainer = sigma->globalContainer.getStructByName( type );
+            }
         }
     }
 
@@ -547,50 +558,56 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     return type;
 }
 
-QString CppCodeCompletion::getTypeOfMethod( CParsedClass* pClass, const QString& name )
+QString CppCodeCompletion::getTypeOfMethod( CParsedContainer* pContainer, const QString& name )
 {
-    if( !pClass || !m_pStore ){
+    if( !pContainer || !m_pStore ){
         return QString::null;
     }
 
-    QList<CParsedMethod>* pMethodList = pClass->getMethodByName( name );
+    QList<CParsedMethod>* pMethodList = pContainer->getMethodByName( name );
     if( pMethodList->count() != 0 ){
         // TODO: check for method's arguments
         QString type = pMethodList->at( 0 )->type;
         return purify( type );
     }
 
-    QList<CParsedParent> parentList = pClass->parents;
-    for( CParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-        CParsedClass* pClass = m_pStore->getClassByName( pParent->name );
-        QString type = getTypeOfMethod( pClass, name );
-        type = purify( type );
-        if( !type.isEmpty() ){
-            return type;
+    CParsedClass* pClass = dynamic_cast<CParsedClass*>( pContainer );
+    if( pClass ){
+        QList<CParsedParent> parentList = pClass->parents;
+        for( CParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
+            CParsedClass* pClass = m_pStore->getClassByName( pParent->name );
+            QString type = getTypeOfMethod( pClass, name );
+            type = purify( type );
+            if( !type.isEmpty() ){
+                return type;
+            }
         }
     }
     return QString::null;
 }
 
-QString CppCodeCompletion::getTypeOfAttribute( CParsedClass* pClass, const QString& name )
+QString CppCodeCompletion::getTypeOfAttribute( CParsedContainer* pContainer, const QString& name )
 {
-    if( !pClass || !m_pStore ){
+    if( !pContainer || !m_pStore ){
         return QString::null;
     }
 
-    CParsedAttribute* pAttr = pClass->getAttributeByName( name );
+    CParsedAttribute* pAttr = pContainer->getAttributeByName( name );
     if( pAttr ){
         QString type = pAttr->type;
         return purify( type );
     }
 
-    QList<CParsedParent> parentList = pClass->parents;
-    for( CParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
-        CParsedClass* pClass = m_pStore->getClassByName( pParent->name );
-        QString type = getTypeOfAttribute( pClass, name );
-        type = purify( type );
-        if( !type.isEmpty() ){
-            return type;
+    CParsedClass* pClass = dynamic_cast<CParsedClass*>( pContainer );
+    if( pClass ){
+        QList<CParsedParent> parentList = pClass->parents;
+        for( CParsedParent* pParent=parentList.first(); pParent!=0; pParent=parentList.next() ){
+            CParsedClass* pClass = m_pStore->getClassByName( pParent->name );
+            QString type = getTypeOfAttribute( pClass, name );
+            type = purify( type );
+            if( !type.isEmpty() ){
+                return type;
+            }
         }
     }
     return QString::null;
@@ -611,28 +628,41 @@ QValueList<CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString st
     kdDebug() << "CppCodeCompletion::getEntryListForClass()" << endl;
     QValueList<CompletionEntry> entryList;
 
-    CParsedClass* pClass = m_pStore->getClassByName ( strClass );
-    if ( pClass )
+    CParsedContainer* pContainer = m_pStore->getClassByName( strClass );
+    if( !pContainer ){
+        pContainer = m_pStore->globalContainer.getStructByName( strClass );
+    }
+
+    if ( pContainer )
     {
         QList<CParsedMethod>* pMethodList;
         QList<CParsedAttribute>* pAttributeList;
 
+
         // Load the methods, slots, signals of the current class and its parents into the list
-        pMethodList = pClass->getSortedMethodList();
+        pMethodList = pContainer->getSortedMethodList();
 
-        QList<CParsedMethod>* pTmpList = pClass->getSortedSlotList();
-        for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-        {
-            pMethodList->append ( pMethod );
+        // Load the attributes of the current class and its parents into the list
+        pAttributeList = pContainer->getSortedAttributeList();
+
+        CParsedClass* pClass = dynamic_cast<CParsedClass*>( pContainer );
+        if( pClass ){
+
+            QList<CParsedMethod>* pTmpList = pClass->getSortedSlotList();
+            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            {
+                pMethodList->append ( pMethod );
+            }
+
+            pTmpList = pClass->getSortedSignalList();
+            for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
+            {
+                pMethodList->append ( pMethod );
+            }
+
+            pMethodList = getParentMethodListForClass ( pClass, pMethodList );
+            pAttributeList = getParentAttributeListForClass ( pClass, pAttributeList );
         }
-
-        pTmpList = pClass->getSortedSignalList();
-        for ( CParsedMethod* pMethod = pTmpList->first(); pMethod != 0; pMethod = pTmpList->next() )
-        {
-            pMethodList->append ( pMethod );
-        }
-
-        pMethodList = getParentMethodListForClass ( pClass, pMethodList );
 
         for ( CParsedMethod* pMethod = pMethodList->first(); pMethod != 0; pMethod = pMethodList->next() )
         {
@@ -642,12 +672,8 @@ QValueList<CompletionEntry> CppCodeCompletion::getEntryListForClass ( QString st
             entryList << entry;
         }
 
-        // Load the attributes of the current class and its parents into the list
-        pAttributeList = pClass->getSortedAttributeList();
-
-        pAttributeList = getParentAttributeListForClass ( pClass, pAttributeList );
-
-        for ( CParsedAttribute* pAttribute = pAttributeList->first(); pAttribute != 0; pAttribute = pAttributeList->next() )
+        for ( CParsedAttribute* pAttribute = pAttributeList->first();
+              pAttribute != 0; pAttribute = pAttributeList->next() )
         {
             CompletionEntry entry;
             entry.text = pAttribute->name;
@@ -864,12 +890,10 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 
     QString text = m_edit->textLine( iLine ).left( iCol );
     --iLine;
-    int count = 0;
     while( iLine >= 0 ){
 
         text.prepend( m_edit->textLine( iLine ).simplifyWhiteSpace() + "\n" );
-        ++count;
-        if( (count % 50) == 0 ){
+        if( (iLine % 50) == 0 ){
             // kdDebug() << "---> iLine = " << iLine << endl;
 
             QString contents = text;

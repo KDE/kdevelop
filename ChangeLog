@@ -1,4 +1,7 @@
 2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
+    * codecompletion: added struct support
+
+2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
     * codecompletion: added subexpression support
 	
 2002-03-01  F@lk Brettschneider <falk@kdevelop.org>
