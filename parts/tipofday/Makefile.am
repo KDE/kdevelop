@@ -19,6 +19,6 @@ rc_DATA = kdevpart_tipofday.rc
 rcdir = $(kde_datadir)/kdevtipofday
 
 messages: rc.cpp
-	perl ./preparetips > tips.cc
+	$(PREPARETIPS) > tips.cc
 	$(XGETTEXT) *.cpp *.h tips.cc -o $(podir)/kdevtipofday.pot
 	rm -f tips.cc
