@@ -109,7 +109,17 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_button->setAutoRepeat( FALSE );
   destination_button->setAutoResize( FALSE );
   
-  
+
+  KQuickHelp::add(source_edit,
+  KQuickHelp::add(source_label,
+  KQuickHelp::add(source_button, i18n("select the source files to be added\n"
+				"to the project here."))));
+
+  KQuickHelp::add(destination_edit,
+  KQuickHelp::add(destination_label,
+  KQuickHelp::add(destination_button, i18n("select the directory where the new\n"
+					"source files will be copied to here."))));
+
   ok_button = new QPushButton( this, "ok_button" );
   ok_button->setGeometry( 90, 130, 100, 30 );
   ok_button->setMinimumSize( 0, 0 );
@@ -193,3 +203,6 @@ void CAddExistingFileDlg::OK(){
   
   accept();
 }
+
+
+
