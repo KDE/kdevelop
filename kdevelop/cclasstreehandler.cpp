@@ -606,7 +606,7 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
 /*------------------------------- CClassTreeHandler::getCurrentNames()
  * getCurrentNames()
  *   Get the names and types of the currently selected class/declaration.
- *   class == NULL for global declarations.
+ *   class == QString::null global declarations.
  *
  * Parameters:
  *   className       Name of the parent class(if any).
@@ -616,8 +616,8 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::getCurrentNames( const char **className, 
-                                         const char **declName,
+void CClassTreeHandler::getCurrentNames( QString &className,
+                                         QString &declName,
                                          THType *idxType )
 {
   QListViewItem *iter;
@@ -634,9 +634,9 @@ void CClassTreeHandler::getCurrentNames( const char **className,
 
   // If we're viewing a class or struct declName should be empty.
   if( *idxType == THCLASS )
-    *declName = NULL;
+    declName = QString::null;
   else 
-    *declName = item->text(0);
+    declName = item->text(0);
 
   // If we're viewing a class we start the classname iteration at the
   // current item 
@@ -660,7 +660,7 @@ void CClassTreeHandler::getCurrentNames( const char **className,
   // For global items, i.e parent isn't a class or struct, classname is NULL.
   if( parentType == THCLASS || parentType == THSTRUCT || 
       *idxType == THCLASS )
-    *className = ccstr;
+    className = ccstr;
   else
-    *className = NULL;
+    className = QString::null;
 }
