@@ -19,68 +19,67 @@
 #ifndef CTABCTL_H
 #define CTABCTL_H
 
-
-//#include <qtabwidget.h>
-
 /**
   *this class provide the functionality to switchs the tabs, without a mouseclick
   *@author Sandy Meier
   */
 
-//class CTabCtl : public QTabWidget {
-//{
-//  Q_OBJECT
-//
-//public:
-//
-//  /**constructor
-//   type = normal,output_widget
-//  */
-//  CTabCtl(QWidget* parent=0, const char* name=0, const QString& type="normal");
-//  ~CTabCtl(){};
-//
-//  void setCurrentTab(int id);
-//  int getCurrentTab();
-//
-//  void setTabEnabled(const char* name, bool enabled);
-//
-//public slots:
-//  void slotCurrentChanged(QWidget *widget);
-//
-//signals:
-//  void tabSelected(int id);
-//
-//};
+#include <qtabwidget.h>
 
-#include <kdocktabctl.h>
-
-class CTabCtl : public KDockTabCtl {
+class CTabCtl : public QTabWidget
+{
   Q_OBJECT
+
 public:
+
   /**constructor
    type = normal,output_widget
   */
-
   CTabCtl(QWidget* parent=0, const char* name=0, const QString& type="normal");
-  /**destructor*/
   ~CTabCtl(){};
 
-  /** set the top tab*/
   void setCurrentTab(int id);
   int getCurrentTab();
 
-  void addTab(QWidget* widget, const QString& label);
-  void addTab(QWidget* widget, const QPixmap& pixmap, const QString& label);
-  void changeTab(QWidget* widget, const QPixmap& pixmap, const QString& label);
   void setTabEnabled(const char* name, bool enabled);
 
-private slots:
-  void slotPageSelected(QWidget *);
+public slots:
+  void slotCurrentChanged(QWidget *widget);
 
 signals:
   void tabSelected(int id);
 
 };
+
+//#include <kdocktabctl.h>
+//
+//class CTabCtl : public KDockTabCtl {
+//  Q_OBJECT
+//public:
+//  /**constructor
+//   type = normal,output_widget
+//  */
+//
+//  CTabCtl(QWidget* parent=0, const char* name=0, const QString& type="normal");
+//  /**destructor*/
+//  ~CTabCtl(){};
+//
+//  /** set the top tab*/
+//  void setCurrentTab(int id);
+//  int getCurrentTab();
+//
+//  void addTab(QWidget* widget, const QString& label);
+//  void addTab(QWidget* widget, const QPixmap& pixmap, const QString& label);
+//  void changeTab(QWidget* widget, const QPixmap& pixmap, const QString& label);
+//  void setTabEnabled(const char* name, bool enabled);
+//
+//private slots:
+//  void slotPageSelected(QWidget *);
+//
+//signals:
+//  void tabSelected(int id);
+//
+//};
 
 
 #endif

@@ -198,7 +198,7 @@ void BreakpointManager::slotClicked(QListBoxItem *item)
 
 void BreakpointManager::breakpointPopup(Breakpoint* BP)
 {
-  KPopupMenu popup("Breakpoint menu");
+KPopupMenu popup("Breakpoint menu");
   popup.insertItem( i18n("Remove breakpoint"),            this, SLOT(slotRemoveBreakpoint()) );
   popup.insertItem( i18n("Edit breakpoint"),              this, SLOT(slotEditBreakpoint()) );
   if (BP->isEnabled())
