@@ -5,6 +5,7 @@
 #include "$APPNAMELC$.h"
 
 #include <kkeydialog.h>
+#include <kfiledialog.h>
 #include <kconfig.h>
 #include <kurl.h>
 
