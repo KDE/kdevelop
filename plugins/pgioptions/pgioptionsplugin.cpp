@@ -313,9 +313,10 @@ PgiOptionsPlugin::~PgiOptionsPlugin()
 QString PgiOptionsPlugin::exec(QWidget *parent, const QString &flags)
 {
     PgiOptionsDialog *dlg = new PgiOptionsDialog(pgitype, parent, "pgi options dialog");
+    QString newFlags = flags;
     dlg->setFlags(flags);
-    dlg->exec();
-    QString newFlags = dlg->flags();
+    if (dlg->exec() == QDialog::Accepted)
+        newFlags = dlg->flags();
     delete dlg;
     return newFlags;
 }

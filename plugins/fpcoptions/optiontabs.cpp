@@ -31,46 +31,46 @@ FeedbackTab::FeedbackTab(QWidget *parent, const char *name)
 
     QVButtonGroup *output_group = new QVButtonGroup(i18n("Output"), this);
     new FlagCheckBox(output_group, controller,
-                     "-vr", i18n("Format errors like GCC does."));
+                     "-vr", i18n("Format errors like GCC does"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
     QVButtonGroup *verbose_group = new QVButtonGroup(i18n("Verbose"), this);
     new FlagCheckBox(verbose_group, controller,
-                     "-va", i18n("Write all possible info."));
+                     "-va", i18n("Write all possible info"));
     new FlagCheckBox(verbose_group, controller,
-                     "-v0", i18n("Write no messages."));
+                     "-v0", i18n("Write no messages"));
     new FlagCheckBox(verbose_group, controller,
                      "-ve", i18n("Show only errors"));
     new FlagCheckBox(verbose_group, controller,
-                     "-vi", i18n("Show some general information."));
+                     "-vi", i18n("Show some general information"));
     new FlagCheckBox(verbose_group, controller,
-                     "-vw", i18n("Issue warnings."));
+                     "-vw", i18n("Issue warnings"));
     new FlagCheckBox(verbose_group, controller,
-                     "-vn", i18n("Issue notes."));
+                     "-vn", i18n("Issue notes"));
     new FlagCheckBox(verbose_group, controller,
-                     "-vh", i18n("Issue hints."));
+                     "-vh", i18n("Issue hints"));
     new FlagCheckBox(verbose_group, controller,
-                     "-vd", i18n("Write other debugging info."));
+                     "-vd", i18n("Write other debugging info"));
 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
     QVButtonGroup *other_group = new QVButtonGroup(i18n("Other Information"), this);
     new FlagCheckBox(other_group, controller,
-                     "-vl", i18n("Show line numbers when processing files."));
+                     "-vl", i18n("Show line numbers when processing files"));
     new FlagCheckBox(other_group, controller,
-                     "-vu", i18n("Print information on loaded units."));
+                     "-vu", i18n("Print information on loaded units"));
     new FlagCheckBox(other_group, controller,
-                     "-vt", i18n("Print the names of loaded files."));
+                     "-vt", i18n("Print the names of loaded files"));
     new FlagCheckBox(other_group, controller,
-                     "-vm", i18n("Write which macros are defined."));
+                     "-vm", i18n("Write which macros are defined"));
     new FlagCheckBox(other_group, controller,
-                     "-vc", i18n("Warn when processing a conditional."));
+                     "-vc", i18n("Warn when processing a conditional"));
     new FlagCheckBox(other_group, controller,
-                     "-vp", i18n("Print the names of procedures and functions."));
+                     "-vp", i18n("Print the names of procedures and functions"));
     new FlagCheckBox(other_group, controller,
-                     "-vb", i18n("Show all procedure declarations if an overloaded function error occurs."));
+                     "-vb", i18n("Show all procedure declarations if an overloaded function error occurs"));
 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
@@ -190,35 +190,35 @@ LanguageTab::LanguageTab( QWidget * parent, const char * name )
 
     QVButtonGroup *compat_group = new QVButtonGroup(i18n("Pascal Compatibility"), this);
     new FlagCheckBox(compat_group, controller,
-                     "-S2", i18n("Switch on Delphi 2 extensions."));
+                     "-S2", i18n("Switch on Delphi 2 extensions"));
     new FlagCheckBox(compat_group, controller,
-                     "-Sd", i18n("Strict Delphi compatibility mode."));
+                     "-Sd", i18n("Strict Delphi compatibility mode"));
     new FlagCheckBox(compat_group, controller,
-                     "-So", i18n("Borland TP 7.0 compatibility mode."));
+                     "-So", i18n("Borland TP 7.0 compatibility mode"));
     new FlagCheckBox(compat_group, controller,
-                     "-Sp", i18n("GNU Pascal compatibility mode."));
+                     "-Sp", i18n("GNU Pascal compatibility mode"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
     QVButtonGroup *ccompat_group = new QVButtonGroup(i18n("C/C++ Compatibility"), this);
     new FlagCheckBox(ccompat_group, controller,
-                     "-Sc", i18n("Support C style operators *=, +=, /=, -=."));
+                     "-Sc", i18n("Support C style operators *=, +=, /=, -="));
     new FlagCheckBox(ccompat_group, controller,
-                     "-Si", i18n("Support C++ style INLINE."));
+                     "-Si", i18n("Support C++ style INLINE"));
     new FlagCheckBox(ccompat_group, controller,
-                     "-Sm", i18n("Support C style macros."));
+                     "-Sm", i18n("Support C style macros"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
     QVButtonGroup *lang_group = new QVButtonGroup(i18n("Language"), this);
     new FlagCheckBox(lang_group, controller,
-                     "-Sg", i18n("Support the label and goto commands."));
+                     "-Sg", i18n("Support the label and goto commands"));
     new FlagCheckBox(lang_group, controller,
-                     "-Sh", i18n("Use ansistrings by default for strings."));
+                     "-Sh", i18n("Use ansistrings by default for strings"));
     new FlagCheckBox(lang_group, controller,
-                     "-Ss", i18n("Require the name of constuctors to be init\n and the name of destructors to be done."));
+                     "-Ss", i18n("Require the name of constuctors to be init\n and the name of destructors to be done"));
     new FlagCheckBox(lang_group, controller,
-                     "-St", i18n("Allow the static keyword in objects."));
+                     "-St", i18n("Allow the static keyword in objects"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
     layout->addStretch();
@@ -250,13 +250,13 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
 
     QVButtonGroup *info_group = new QVButtonGroup(i18n("Assembler Info"), this);
     new FlagCheckBox(info_group, controller,
-                     "-a", i18n("Do not delete assembler files."));
+                     "-a", i18n("Do not delete assembler files"));
     new FlagCheckBox(info_group, controller,
-                     "-al", i18n("List source."));
+                     "-al", i18n("List source"));
     new FlagCheckBox(info_group, controller,
-                     "-ar", i18n("List register allocation and release info."));
+                     "-ar", i18n("List register allocation and release info"));
     new FlagCheckBox(info_group, controller,
-                     "-at", i18n("List temporary allocations and deallocations."));
+                     "-at", i18n("List temporary allocations and deallocations"));
     layout2->addWidget(info_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     //layout->addSpacing(10);
@@ -277,7 +277,7 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
 
     QVButtonGroup *asm_group = new QVButtonGroup(i18n("Assembler Output"), this);
     new FlagCheckBox(asm_group, controller,
-                     "-P", i18n("Use pipes instead of files when assembling."));
+                     "-P", i18n("Use pipes instead of files when assembling"));
     QRadioButton *m_default = new QRadioButton(i18n("Use default output"), asm_group);
     m_default->setChecked(true);
     new FlagRadioButton(asm_group, asmController,
@@ -307,6 +307,7 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
  AssemblerTab::~ AssemblerTab( )
 {
     delete controller;
+    delete asmController;
 }
 
 void AssemblerTab::readFlags( QStringList * str )
@@ -336,22 +337,22 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
 
     QVButtonGroup *debug_group = new QVButtonGroup(i18n("Debugging"), this);
     new FlagCheckBox(debug_group, controller,
-                     "-g", i18n("Generate information for GDB."), "-!g");
+                     "-g", i18n("Generate information for GDB"), "-!g");
     new FlagCheckBox(debug_group, controller,
-                     "-gd", i18n("Generate information for DBX."), "-!gd");
+                     "-gd", i18n("Generate information for DBX"), "-!gd");
     new FlagCheckBox(debug_group, controller,
-                     "-gl", i18n("Use lineinfo unit."), "-!gl");
+                     "-gl", i18n("Use lineinfo unit"), "-!gl");
     new FlagCheckBox(debug_group, controller,
-                     "-gh", i18n("Use heaptrc unit."), "-!gh");
+                     "-gh", i18n("Use heaptrc unit"), "-!gh");
     new FlagCheckBox(debug_group, controller,
-                     "-gc", i18n("Generate checks for pointers."), "-!gc");
+                     "-gc", i18n("Generate checks for pointers"), "-!gc");
     layout3->addWidget(debug_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout3->addSpacing(10);
 
     QVButtonGroup *profile_group = new QVButtonGroup(i18n("Profiling"), this);
     new FlagCheckBox(profile_group, controller,
-                     "-pg", i18n("Generate profiler code for gprof."), "-!pg");
+                     "-pg", i18n("Generate profiler code for gprof"), "-!pg");
     layout3->addWidget(profile_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout3->addSpacing(10);
@@ -398,9 +399,9 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
 
     QVButtonGroup *optim_group4 = new QVButtonGroup(i18n("Another Optimization"), this);
     new FlagCheckBox(optim_group4, controller,
-                     "-Or", i18n("Use register variables."), "-!Or");
+                     "-Or", i18n("Use register variables"), "-!Or");
     new FlagCheckBox(optim_group4, controller,
-                     "-Ou", i18n("Uncertain optimizations."), "-!Ou");
+                     "-Ou", i18n("Uncertain optimizations"), "-!Ou");
     layout5->addWidget(optim_group4);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
@@ -418,6 +419,7 @@ DebugOptimTab::DebugOptimTab( QWidget * parent, const char * name )
  DebugOptimTab::~ DebugOptimTab( )
 {
     delete controller;
+    delete optimController;
 }
 
 void DebugOptimTab::readFlags( QStringList * str )
@@ -461,21 +463,21 @@ CodegenTab::CodegenTab( QWidget * parent, const char * name )
 
     QVButtonGroup *compile_group = new QVButtonGroup(i18n("Compile Time Checks"), this);
     new FlagCheckBox(compile_group, controller,
-                     "-Sa", i18n("Include assert statements in compiled code."));
+                     "-Sa", i18n("Include assert statements in compiled code"));
     new FlagCheckBox(compile_group, controller,
-                     "-Un", i18n("Do not check the unit name for being the same as the file name."));
+                     "-Un", i18n("Do not check the unit name for being the same as the file name"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
     QVButtonGroup *run_group = new QVButtonGroup(i18n("Run Time Checks"), this);
     new FlagCheckBox(run_group, controller,
-                     "-Cr", i18n("Range checking."));
+                     "-Cr", i18n("Range checking"));
     new FlagCheckBox(run_group, controller,
-                     "-Ct", i18n("Stack checking."));
+                     "-Ct", i18n("Stack checking"));
     new FlagCheckBox(run_group, controller,
-                     "-Ci", i18n("Input/Output checking."));
+                     "-Ci", i18n("Input/Output checking"));
     new FlagCheckBox(run_group, controller,
-                     "-Co", i18n("Integer overflow checking."));
+                     "-Co", i18n("Integer overflow checking"));
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
@@ -523,29 +525,29 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
 
     QVButtonGroup *link_group = new QVButtonGroup(i18n("Linking Stage"), this);
     new FlagCheckBox(link_group, controller,
-                     "-CD", i18n("Create dynamic library."));
+                     "-CD", i18n("Create dynamic library"));
     new FlagCheckBox(link_group, controller,
-                     "-CX", i18n("Create smartlinked units."));
+                     "-CX", i18n("Create smartlinked units"));
     new FlagCheckBox(link_group, controller,
-                     "-Ur", i18n("Generate release units."));
+                     "-Ur", i18n("Generate release units"));
     new FlagCheckBox(link_group, controller,
-                     "-Cn", i18n("Omit the linking stage."));
+                     "-Cn", i18n("Omit the linking stage"));
     new FlagCheckBox(link_group, controller,
-                     "-s",  i18n("Create assembling and linking script."));
+                     "-s",  i18n("Create assembling and linking script"));
     layout2->addWidget(link_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
     QVButtonGroup *exec_group = new QVButtonGroup(i18n("Executable Generation"), this);
     new FlagCheckBox(exec_group, controller,
-                     "-Xs",  i18n("Strip the symbols from the executable."));
+                     "-Xs",  i18n("Strip the symbols from the executable"));
     new FlagCheckBox(exec_group, controller,
-                     "-XS",  i18n("Link with static units."));
+                     "-XS",  i18n("Link with static units"));
     new FlagCheckBox(exec_group, controller,
-                     "-XX",  i18n("Link with smartlinked units."));
+                     "-XX",  i18n("Link with smartlinked units"));
     new FlagCheckBox(exec_group, controller,
-                     "-XD",  i18n("Link with dynamic libraries."));
+                     "-XD",  i18n("Link with dynamic libraries"));
     new FlagCheckBox(exec_group, controller,
-                     "-Xc",  i18n("Link with the C library."));
+                     "-Xc",  i18n("Link with the C library"));
     layout2->addWidget(exec_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
@@ -585,9 +587,9 @@ MiscTab::MiscTab( QWidget * parent, const char * name )
     layout->setAutoAdd(true);
 
     new FlagCheckBox(this, controller,
-                     "-B", i18n("Recompile all used units."));
+                     "-B", i18n("Recompile all used units"));
     new FlagCheckBox(this, controller,
-                     "-n", i18n("Do not read default configuration file."));
+                     "-n", i18n("Do not read default configuration file"));
     new FlagPathEdit(this, "", pathController,
                      "@", i18n("Compiler configuration file:"), KFile::File);
     new FlagSpinEdit(this, 1, 1000, 1, 50, editController,

@@ -30,9 +30,10 @@ FpcOptionsPlugin::~FpcOptionsPlugin()
 QString FpcOptionsPlugin::exec(QWidget *parent, const QString &flags)
 {
     FpcOptionsDialog *dlg = new FpcOptionsDialog(parent, "fpc options dialog");
+    QString newFlags = flags;
     dlg->setFlags(flags);
-    dlg->exec();
-    QString newFlags = dlg->flags();
+    if (dlg->exec() == QDialog::Accepted)
+        newFlags = dlg->flags();
     delete dlg;
     return newFlags;
 }
