@@ -478,7 +478,8 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       // (as we did when we were added to the MDI system).
       QObject* pNewChild = ((QChildEvent*)e)->child();
       if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) &&
-           !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("KMessageBox")) && !(pNewChild->inherits("QFileDialog")) ) {
+           !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("QFileDialog")) &&
+           !(pNewChild->inherits("KMessageBox")) && !(pNewChild->inherits("KDialogBase")) ) {
          QWidget* pNewWidget = (QWidget*)pNewChild;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code
