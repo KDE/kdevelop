@@ -34,6 +34,8 @@
 	  and changed app wizard to use them. 
 	* Fixed absolute paths for locate("appdata", ...)
 	* Made DocTreeView safe against selectionChanged(0)
+	* Fixed CTreeView popups
+	* Documentation fixes
 
 1999-09-14 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bug-fix: empty ClassView caused segfault on
