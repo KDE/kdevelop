@@ -315,7 +315,18 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 	{
 		m_openNextAsText = true;
 	}
-	
+
+	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
+	{
+		KParts::ReadOnlyPart *designerPart = qtDesignerPart();
+		if (designerPart)
+		{
+			activatePart(designerPart);
+			designerPart->openURL(url);
+			return;
+		}
+	}
+
 	// we generally prefer embedding, but if Qt-designer is the preferred application for this mimetype
 	// make sure we launch designer instead of embedding KUIviewer
 /*	if ( !m_openNextAsText && MimeType->is( "application/x-designer" ) )
@@ -327,8 +338,6 @@ void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, i
 			return;
 		}
 	}*/
-        //load kdevdesigner part if it is available
-
 	
 	KConfig *config = kapp->config();
 	config->setGroup("General");
@@ -1476,6 +1485,18 @@ void PartController::slotWaitForFactoryHack( )
 			EditorProxy::getInstance()->installPopup( activePart() );
 		}
 	}
+}
+
+KParts::ReadOnlyPart *PartController::qtDesignerPart()
+{
+	QPtrListIterator<KParts::Part> it(*parts());
+	for ( ; it.current(); ++it)
+	{
+		KInterfaceDesigner::Designer *des =  dynamic_cast<KInterfaceDesigner::Designer*>(it.current());
+		if (des && des->designerType() == KInterfaceDesigner::QtDesigner)
+			return des;
+	}
+	return 0;
 }
 
 

@@ -57,6 +57,7 @@ public:
   void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
   KParts::ReadOnlyPart *partForURL(const KURL &url);
+  KParts::ReadOnlyPart *qtDesignerPart();
   KParts::Part * partForWidget( const QWidget * widget );
   
   void activatePart( KParts::Part * part );
@@ -172,7 +173,6 @@ private:
   QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)
   
   QGuardedPtr<KParts::Factory> _editorFactory;
-
     
 	struct HistoryEntry 
 	{
