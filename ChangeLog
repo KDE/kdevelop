@@ -1,3 +1,6 @@
+2004-10-30 Robert Gruber <rgruber@users.sourceforge.net>
+ * Implemented "grouping of snippets" feature for SnippetPart
+
 2004-10-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Fixed ruby class and instance variable type matching bugs
