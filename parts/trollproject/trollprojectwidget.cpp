@@ -792,6 +792,9 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->removeValues("QMAKE_LFLAGS_RELEASE");
   if (item->configuration.m_lflags_release.count())
     Buffer->setValues("QMAKE_LFLAGS_RELEASE",item->configuration.m_lflags_release,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  Buffer->removeValues("QMAKE_LIBDIR");
+  if (item->configuration.m_librarypath.count())
+    Buffer->setValues("QMAKE_LIBDIR",item->configuration.m_librarypath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
 
   // Write to .pro file
   Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
@@ -1410,6 +1413,8 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->configuration.m_lflags_debug = lst;
     item->m_FileBuffer.getValues("QMAKE_LFLAGS_RELEASE",lst,minusListDummy);
     item->configuration.m_lflags_release = lst;
+    item->m_FileBuffer.getValues("QMAKE_LIBPATH",lst,minusListDummy);
+    item->configuration.m_librarypath = lst;
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)

@@ -594,7 +594,7 @@
                 <attribute name="title">
                     <string>&amp;Directories</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
@@ -604,7 +604,24 @@
                     <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget class="QGroupBox">
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>Spacer6</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>0</width>
+                                <height>70</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QGroupBox" row="0" column="0">
                         <property name="name">
                             <cstring>GroupBox5</cstring>
                         </property>
@@ -621,6 +638,16 @@
                             <property name="spacing">
                                 <number>6</number>
                             </property>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_libraryPath</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>m_includePath</cstring>
+                                </property>
+                            </widget>
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>TextLabel3</cstring>
@@ -629,31 +656,17 @@
                                     <string>Include path:</string>
                                 </property>
                             </widget>
-                            <widget class="KLineEdit" row="0" column="1">
+                            <widget class="QLabel" row="1" column="0">
                                 <property name="name">
-                                    <cstring>m_includePath</cstring>
+                                    <cstring>TextLabel3_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>library path:</string>
                                 </property>
                             </widget>
                         </grid>
                     </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Spacer6</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>0</width>
-                                <height>131</height>
-                            </size>
-                        </property>
-                    </spacer>
-                </vbox>
+                </grid>
             </widget>
         </widget>
     </grid>

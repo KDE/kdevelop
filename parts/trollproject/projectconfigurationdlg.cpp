@@ -90,6 +90,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   m_projectConfiguration->m_cxxflags_release = QStringList::split(" ",m_releaseFlags->text());
   m_projectConfiguration->m_lflags_debug = QStringList::split(" ",m_debugFlagsLink->text());
   m_projectConfiguration->m_lflags_release = QStringList::split(" ",m_releaseFlagsLink->text());
+  m_projectConfiguration->m_librarypath = QStringList::split(" ",m_libraryPath->text());
 
   QDialog::accept();
 }
@@ -166,6 +167,8 @@ void ProjectConfigurationDlg::UpdateControls()
   m_releaseFlags->setText(m_projectConfiguration->m_cxxflags_release.join(" "));
   m_debugFlagsLink->setText(m_projectConfiguration->m_lflags_debug.join(" "));
   m_releaseFlagsLink->setText(m_projectConfiguration->m_lflags_release.join(" "));
+  m_libraryPath->setText(m_projectConfiguration->m_librarypath.join(" "));
+
 }
 
 void ProjectConfigurationDlg::clickSubdirsTemplate()

@@ -50,6 +50,7 @@ struct ProjectConfiguration
   QString         m_target;
   QString         m_subdirName;
   QString         m_includepath;
+  QStringList     m_librarypath;
   QStringList     m_defines;
   QStringList     m_cxxflags_debug;
   QStringList     m_cxxflags_release;
