@@ -43,6 +43,7 @@ ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(par
   m_pUserDoc = 0;
   m_pGlobalDoc = 0;
   m_pLanguageSupport =0;
+  m_pCurrentProject =0;
 }
 ProjectSpace::~ProjectSpace(){
 }
@@ -76,9 +77,22 @@ void ProjectSpace::slotProjectAddExistingFiles(){
    else {
      fileFilters << "*"; // default
    }
-   AddExistingFilesDlg dlg(0,"addDlg",m_path,fileFilters);
+   //AddExistingFilesDlg dlg(0,"addDlg",m_path,fileFilters);
+   AddExistingFilesDlg dlg(0,"addDlg",QDir::homeDirPath(),fileFilters);
+   
+
    if(dlg.exec()){
      QStringList files = dlg.addedFiles();
+
+     if (m_pCurrentProject != 0){
+       for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) { 
+	 m_pCurrentProject->addFile(*it);
+       }
+     }
+     else{
+       kdDebug(9000) << "Error! no current project found!!";
+     }
+     
    }
 }
 QString ProjectSpace::projectSpacePluginName(QString fileName){
@@ -97,20 +111,21 @@ QString ProjectSpace::projectSpacePluginName(QString fileName){
   QDomElement psElement = doc.documentElement(); // get the Projectspace
   return psElement.attribute("pluginName");
 }
-void ProjectSpace::addProject(Project* prj){
+void ProjectSpace::addProject(Project* pProject){
   cerr << endl << "enter ProjectSpace::addProject";
-  m_pProjects->append (prj);
-  m_pCurrentProject = prj;
+  m_pProjects->append (pProject);
+  setCurrentProject(pProject);
 }
 void ProjectSpace::setCurrentProject(Project* prj){
   m_pCurrentProject = prj;
+  fillActiveProjectPopupMenu();
 }
 
 void ProjectSpace::setCurrentProject(QString name){
   Project* pProject;
   for(pProject=m_pProjects->first();pProject !=0;pProject=m_pProjects->next()){
       if(pProject->name() == name){
-	m_pCurrentProject = pProject;
+	setCurrentProject(pProject);
       }
   }  
 }
@@ -462,7 +477,12 @@ void ProjectSpace::dump(){
 
 void ProjectSpace::fillActiveProjectPopupMenu(){
   KActionCollection *pAC = actionCollection();
-  QPopupMenu* pMenu = ((KActionMenu*)pAC->action("project_set_active"))->popupMenu();
+  KActionMenu* pAction = (KActionMenu*)pAC->action("project_set_active");
+  if(pAction == 0){ // no action available
+    return;
+  }
+  //  cerr << endl << "fillActiveProjectPopupMenu()";
+  QPopupMenu* pMenu = pAction->popupMenu();
   pMenu->clear();
   Project* pProject=0;
   int id=0;

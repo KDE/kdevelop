@@ -1,3 +1,6 @@
+2000-10-08   Sandy Meier  <smeier@kdevelop.org>
+	* implemented adding files to Project ("backend")
+
 2000-10-07 Sandy Meier   <smeier@kdevelop.org>
 	* implemented new and fresh "add existing files" dialog  
 		TODO: working recursive adding, adding files to Project

@@ -32,6 +32,9 @@ public:
 
     void loadInitialComponents();
     KDevViewHandler* viewHandler();
+    // Session management
+  virtual void saveProperties(KConfig*);
+  virtual void readProperties(KConfig*);
 
 private:
     void initActions();

@@ -80,7 +80,7 @@ void KDevelopCore::initActions()
 {
     KAction *pAction;
     
-   pAction = KStdAction::print( this, SLOT( slotFilePrint() ),
+    pAction = KStdAction::print( this, SLOT( slotFilePrint() ),
                                m_pKDevelopGUI->actionCollection(), "file_print_advanced");
    pAction->setStatusText( i18n("Prints the current document") );
    pAction->setWhatsThis( i18n("Print\n\n"
@@ -98,8 +98,9 @@ void KDevelopCore::initActions()
                           m_pKDevelopGUI->actionCollection(), "project_open");
     pAction->setStatusText( i18n("Opens an existing project") );
 
-    pAction = new KRecentFilesAction( i18n("Open &recent project..."), 0, this, SLOT( slotProjectOpenRecent(const KURL&) ),
-                                     m_pKDevelopGUI->actionCollection(), "project_open_recent");
+    pAction = new KRecentFilesAction( i18n("Open &recent project..."), 0, 
+				      this, SLOT( slotProjectOpenRecent(const KURL&) ),
+				      m_pKDevelopGUI->actionCollection(), "project_open_recent");
 
     pAction = new KAction( i18n("C&lose"), 0, this, SLOT( slotProjectClose() ),
                           m_pKDevelopGUI->actionCollection(), "project_close");
@@ -122,6 +123,15 @@ void KDevelopCore::initActions()
     pAction->setEnabled(false);
 }
 
+void KDevelopCore::saveProperties(KConfig* pConfig){
+  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+  ((KRecentFilesAction*)pAC->action("project_open_recent"))->saveEntries(pConfig);
+}
+
+void KDevelopCore::readProperties(KConfig* pConfig){
+  KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
+  ((KRecentFilesAction*)pAC->action("project_open_recent"))->loadEntries(pConfig);
+}
 
 void KDevelopCore::loadInitialComponents()
 {
@@ -413,13 +423,16 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
     // some actions
     KActionCollection *pAC = m_pKDevelopGUI->actionCollection();
     pAC->action("project_close")->setEnabled(true);
+    KURL url;
+    url.setPath(fileName);
+    ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(url);
     /*
       pAC->action("project_add_existing_files")->setEnabled(true);
       pAC->action("project_add_translation")->setEnabled(true);
       pAC->action("project_file_properties")->setEnabled(true);
       pAC->action("project_options")->setEnabled(true);
       
-      ((KRecentFilesAction*)pAC->action("project_open_recent"))->addURL(KURL(fileName));
+      
     */
     
 #if 1
@@ -478,6 +491,10 @@ void KDevelopCore::slotProjectNew(){
       kdDebug(9000) << "FILE" << file << endl;
       loadProjectSpace(file);
     }
+    else { // new project
+      kdDebug(9000) << "KDevelopCore::slotProjectNew: add new project" << endl;
+    }
+    
   }
   delete pDlg;
 }
@@ -500,12 +517,12 @@ void KDevelopCore::slotProjectOpen()
 
 void KDevelopCore::slotProjectOpenRecent(const KURL &url)
 {
-    QString fileName = url.fileName();
+    QString file = url.path(0);
 
     if (m_pProjectSpace)
         unloadProjectSpace();
 
-    loadProjectSpace(fileName);
+    loadProjectSpace(file);
 }
 
 

@@ -35,6 +35,7 @@
 #include "kdevviewhandler.h"
 #include <kparts/event.h>
 #include <kedittoolbar.h>
+#include <kconfig.h>
 
 KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f) :
   KParts::DockMainWindow( pParent, name, f)
@@ -62,6 +63,8 @@ KDevelop::~KDevelop()
 void KDevelop::initActions(){
   KAction *pAction;
   pAction = KStdAction::configureToolbars (this,SLOT(slotOptionsEditToolbars()),actionCollection());
+  pAction = KStdAction::quit(this, SLOT(close()), actionCollection());
+  
 }
 void KDevelop::slotOptionsEditToolbars(){
   KEditToolbar dlg(factory());
@@ -69,6 +72,30 @@ void KDevelop::slotOptionsEditToolbars(){
     createGUI(0);
   }
 }
+
+void KDevelop::saveProperties(KConfig* pConfig){
+  kdDebug(9000) << "KDevelop::saveProperties" << endl;  
+  m_pCore->saveProperties(pConfig); 
+  
+}
+
+void KDevelop::readProperties(KConfig* pConfig){
+  kdDebug(9000) << "KDevelop::loadProperties" << endl;  
+  m_pCore->readProperties(pConfig); 
+  
+}
+
+
+bool KDevelop::queryClose(){
+  kdDebug(9000) << "KDevelop::queryClose" << endl;
+  return true;
+  
+}
+bool KDevelop::queryExit(){
+  kdDebug(9000) << "KDevelop::queryExit" << endl;  
+  return true;
+}
+
 /** initializes the help messages (whats this and
 statusbar help) on the KActions */
 void KDevelop::initHelp(){

@@ -35,31 +35,36 @@ public:
   KDevelop(QWidget* pParent = 0L, const char *name=0L , WFlags f = 0);
   /** destructor */
   ~KDevelop();
-
+  // Session management
+  virtual void saveProperties(KConfig*);
+  virtual void readProperties(KConfig*);
+  
+  bool queryClose();
+  bool queryExit();
 public slots:
-  /** Embed the widgets of components in the GUI. */
-  void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
-  /** stacking document views as tabbed KDockWidgets is default behaviour if no view handler library was found.
-   *  Usually connected in KDevelopCore::loadInitialComponents. */
-  void stackView( QWidget*);
-
-protected slots: // Protected slots
-  /** reimplemented from KParts::MainWindow */
-//  void slotSetStatusBarText( const QString &text);
-
-signals:
-  void addView( QWidget*);
-
-private:
-
- void initActions(); 
-  /** initializes the help messages (whats this and
-      statusbar help) on the KActions 
-      !!! isn't used anymore, exists for saving the help texts :-)) !!!
-  */ 
-  void initHelp();
-
+   /** Embed the widgets of components in the GUI. */
+   void embedWidget(QWidget *w, KDevComponent::Role role, const QString &shortCaption, const QString &shortExplanation);
+/** stacking document views as tabbed KDockWidgets is default behaviour if no view handler library was found.
+ *  Usually connected in KDevelopCore::loadInitialComponents. */
+ void stackView( QWidget*);
  
+ protected slots: // Protected slots
+   /** reimplemented from KParts::MainWindow */
+   //  void slotSetStatusBarText( const QString &text);
+   
+ signals:
+ void addView( QWidget*);
+ 
+ private:
+ 
+ void initActions(); 
+ /** initializes the help messages (whats this and
+     statusbar help) on the KActions 
+     !!! isn't used anymore, exists for saving the help texts :-)) !!!
+ */ 
+  void initHelp();
+  
+  
   //
   // the covering dockwidgets for all views
   //
@@ -74,7 +79,7 @@ private:
   KDevelopCore* m_pCore;
 
 private slots:
- void slotOptionsEditToolbars();
+   void slotOptionsEditToolbars();
 };
 
 #endif

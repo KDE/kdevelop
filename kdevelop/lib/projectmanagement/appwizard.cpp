@@ -68,8 +68,8 @@ void AppWizard::init(bool newProjectspace,ProjectSpace* pProjectspace,QString pr
   m_pProject->setRelativePath(relProjectPath);
  
   if(!m_newProjectspace){
-    removePage(page(0)); // remove the name,license page
-    removePage(page(0)); // remove the headerpage
+    //    removePage(page(0)); // remove the name,license page
+    //    removePage(page(0)); // remove the headerpage
   }
   
 }

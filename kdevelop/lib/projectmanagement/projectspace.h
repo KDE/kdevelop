@@ -67,10 +67,10 @@ class ProjectSpace : public KDevComponent {
   /** Store the name of version control system */
   void setVCSystem(QString vcsystem);
   
-  /** stored in the *_local files*/
+  /** stored in the user file*/
   void setAuthor(QString name);
 
-  /** set the email, stored in the *_local file */
+  /** set the email, stored in the user file */
   void setEmail(QString email);
 
   void setCompany(QString company);
