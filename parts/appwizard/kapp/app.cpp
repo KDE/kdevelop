@@ -251,10 +251,15 @@ void $APPNAME$::optionsConfigureKeys()
 void $APPNAME$::optionsConfigureToolbars()
 {
     // use the standard toolbar editor
-    saveMainWindowSettings( KGlobal::config(), autoSaveGroup() );
-    KEditToolbar dlg(actionCollection());
-    connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(newToolbarConfig()));
-    dlg.exec();
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+    saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
+# else
+    saveMainWindowSettings(KGlobal::config());
+# endif
+#else
+    saveMainWindowSettings(KGlobal::config());
+#endif
 }
 
 void $APPNAME$::newToolbarConfig()
@@ -262,7 +267,16 @@ void $APPNAME$::newToolbarConfig()
     // this slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
     // recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
     createGUI();
-    applyMainWindowSettings( KGlobal::config(), autoSaveGroup() );
+
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+    applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
+# else
+    applyMainWindowSettings(KGlobal::config());
+# endif
+#else
+    applyMainWindowSettings(KGlobal::config());
+#endif
 }
 
 void $APPNAME$::optionsPreferences()
