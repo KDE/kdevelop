@@ -148,8 +148,19 @@ To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu
 </screenshot>
 
 <para>
-Select the radio button of the user interface mode you want to switch to, then press <guibutton>OK</guibutton>.
+(Older &kdevelop; versions provide the top mode selection section only.)
 </para>
+
+<para>
+In the <guilabel>Major User-Interface Mode</guilabel> section select the radio button of the user interface mode you want to work in.
+</para>
+<para>
+Dependent on the user interface mode you selected, other configuration sections will become available where you can taylor more details of the look and feel to your preferences. See the <link linkend="setup-ui">Selecting the User Interface</link> chapter for more detail.
+</para>
+
+<note><para>
+Do not forget to restart &kdevelop; in order to let your selections take effect.
+</para></note>
 
 </sect2> <!-- uimodes-switch -->
 
@@ -428,4 +439,3 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 </sect1> <!-- makesystems -->
 
 </chapter> <!-- kdevelop-survey -->
-

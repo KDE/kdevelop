@@ -280,6 +280,127 @@ To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu
 Select the radio button of the user interface mode you want to switch to, then click <guibutton>OK</guibutton>.
 </para>
 
+<note><para>
+Do not forget to restart &kdevelop; in order to let any of these selections take effect.
+</para></note>
+
+<para>
+When you selected either the <guilabel>IDEAl window mode</guilabel> or the <guilabel>Tabbed pages mode</guilabel> two more configuration sections will become available: <link linkend="setup-ui-tabs">Use Tabs</link> and <link linkend="setup-ui-hover">Use Close On Hover</link>. These allow to configure under which circumstances tabs will be shown on top of the document windows and whether you may close the document by a click on the tab icon.
+</para>
+<para>
+In <guilabel>IDEAl window mode</guilabel> only yet another configuration section will be available, <link linkend="setup-ui-toolview">Toolview Tab Layout</link> which effectively allows to select between diferent sizes of the toolview tabs which surround the main working area in this mode.
+</para>
+
+<formalpara id="setup-ui-tabs">
+<title>Configuring the Documents Tab Bar Display</title>
+
+<para>
+In the IDEAl and tabbed pages modes there will be named tabs on the top of the document windows by default, so you can easily select different documents with a &LMB; click. If you prefer to provide more space for the document windows in the &kdevelop; main work area, you may change to another behaviour in the <guilabel>Use Tabs</guilabel> configuration section.
+</para>
+</formalpara>
+
+<variablelist>
+<varlistentry>
+  <term><guilabel>Always</guilabel></term>
+  <listitem><para>
+  This is the default &mdash; show a tab comprising an icon and the document name on top of any document window in the &kdevelop; main area display.
+  </para></listitem>
+</varlistentry>
+<varlistentry>
+  <term><guilabel>When more than one</guilabel></term>
+  <listitem><para>
+  Do not show a tab when only one document is displayed. If there is more than one document, however, &kdevelop; will display an according tab bar as in the <guilabel>Always</guilabel> selection above. You may want to select this mode if you work on a single document most of the time as this provides more vertical space.
+  </para></listitem>
+</varlistentry>
+<varlistentry>
+  <term><guilabel>Never</guilabel></term>
+  <listitem><para>
+  Never show any document selection tab. You may prefer this mode if you seldom use the mouse to switch between documents. It provides more vertical space for all document windows. To select another the document window or to close any, use the &kdevelop; <guimenu>Window</guimenu> menu.
+  </para></listitem>
+</varlistentry>
+</variablelist>
+
+<formalpara id="setup-ui-hover">
+<title>Setting Up to Close a Document by a Click On Its Tab</title>
+<para>
+When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
+</para>
+</formalpara>
+<variablelist>
+<varlistentry>
+  <term><guilabel>No</guilabel></term>
+  <listitem><para>
+  This is standard behaviour. No extra functionality is added to the tabs. They may be used only to select document windows on &LMB; clicks.
+  </para></listitem>
+</varlistentry>
+<varlistentry>
+  <term><guilabel>Yes</guilabel></term>
+  <listitem><para>
+  When you selected this radio button, &kdevelop; will allow to close a document window by a &LMB; click. Use the mouse to point at the small icon on the on the left tab border. It will change to a close symbol. Now click with the &LMB; on this changed symbol and &kdevelop; will close the according document window.
+  </para></listitem>
+</varlistentry>
+<varlistentry>
+  <term><guilabel>Yes, Delayed</guilabel></term>
+  <listitem><para>
+  After selecting this radio button, &kdevelop; will allow to close a document window as shown in the <guilabel>Yes</guilabel> case above. The icon will not change instantly, however, but there will be a short delay before the close icon shows up.
+  </para></listitem>
+</varlistentry>
+</variablelist>
+
+<formalpara id="setup-ui-toolview">
+<title>Configuring the Toolview Tab Layout</title>
+
+<para>
+The <guilabel>Toolview Tab Layout</guilabel> configuration section will be available in IDEAl mode only. Use these radio buttons to set up the look of the toolview tabs which surround the main working area in this mode.
+</para>
+</formalpara>
+<variablelist>
+<varlistentry>
+  <term><guilabel>Icons</guilabel></term>
+  <listitem>
+  <para>
+  Each tab will show an icon only. If the according toolview is displayed, the tab will open and a descriptive text for this toolview be shown. You may want to use this mode if you work on a monitor with limited resolution.
+  </para>
+  <para>
+  The icons are not very descriptive, however. If you want to find out which toolview is assigned to a given tab, point at it with the mouse and wait a second. A short tooltip will then pop up with the toolview name.
+  </para>
+  </listitem>
+</varlistentry>
+<varlistentry>
+  <term><guilabel>Text</guilabel></term>
+  <listitem><para>
+  This is the default toolview tab display mode. Each tab displays the name of its associated toolwiew.
+  </para></listitem>
+</varlistentry>
+<varlistentry>
+  <term><guilabel>Text and Icons</guilabel></term>
+  <listitem><para>
+  If the standard text toolview display looks too flat to you and you are working on a high-resolution monitor you may want to select this radio button. It will cause the name of the assosiated toolview be displayed on each tab plus an icon to the left of it, making the tabs easier to distinguish. See the <link linkend="folded-toolview-tabs">Folded Toolview Tabs</link> illustration below for an example.
+  </para></listitem>
+</varlistentry>
+</variablelist>
+
+<formalpara>
+<title>Folded Toolview Tabs</title>
+<para>
+If you selected the IDEAl mode toolview tabs to display texts (with or without accompagnying icons) you need not worry about them being hidden behind some toolview. If one of the bottom toolviews occupies more space than is available to display all (vertical) tabs, they will fold around as this illustration shows:
+</para>
+</formalpara>
+<screenshot>
+  <mediaobject id="folded-toolview-tabs">
+    <imageobject>
+      <imagedata fileref="folded-tabs.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Toolview tabs fold to not be hidden behind another view
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<note><para>
+The active toolview window must be in <emphasis>overlap mode</emphasis> to force such tab folding. Press the small square in the window border to accomplish this as shown in the example.
+</para></note>
+
 </sect2> <!-- setup-ui -->
 
 <sect2 id="setup-editor">
@@ -371,7 +492,7 @@ The exact outcome of these style formatting definitions depends on the <link lin
 </para></note>
 
 <warning><para>
-Tere may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with an none KDE standard editor.
+There may be incompatibilities between the configuration style settings provided here and the editor you use up to the extent that in extreme cases it even might destroy your files. Make sure you have a backup of your source files before you try out these settings with an none KDE standard editor.
 </para></warning>
 
 <sect3 id="setup-format-general">
@@ -620,7 +741,7 @@ You may enhance readability if you force the source formatter to insert extra sp
   <varlistentry>
     <term><guilabel>Add spaces around parentheses</guilabel></term>
     <listitem>
-    <para>In fact what is meant is to add spaces around the text put in parentheses. This enhances the readbilitiy of function arguments and conditionals.</para>
+    <para>In fact what is meant is to add spaces around the text put in parentheses. This enhances the readabilitiy of function arguments and conditionals.</para>
     <screen>
 if ( isBar( fooArg )==barValue )
     </screen>
@@ -818,7 +939,7 @@ Updating the contents in the <guilabel>File Selector</guilabel> window takes tim
 </formalpara>
 
 <note><para>
-Click the <guilabel>Reload</guilabel> button in the toolbar to update the contents of the <guilabel>File Selector</guilabel>. This toolbar button is not availble by default, however. You must <link linkend="setup-fileselector-add-action">insert it there</link> first.
+Click the <guilabel>Reload</guilabel> button in the toolbar to update the contents of the <guilabel>File Selector</guilabel>. This toolbar button is not available by default, however. You must <link linkend="setup-fileselector-add-action">insert it there</link> first.
 </para></note>
 
 <para>
@@ -853,7 +974,7 @@ You may freely combine these settings to tailor the actualization behaviour of t
 <formalpara>
 <title>Controlling the History in the Comboboxes</title>
 <para>
-There are two comboboxes on top and bottom of the <guilabel>File Selector</guilabel> contents window which control the directory to be diplayed (top combobox) and the filters to be applied to the file display (bottom combobox). A history of the most recent settings is kept in the selection field of each combobox. You can configure the number of history entries as follows.
+There are two comboboxes on top and bottom of the <guilabel>File Selector</guilabel> contents window which control the directory to be displayed (top combobox) and the filters to be applied to the file display (bottom combobox). A history of the most recent settings is kept in the selection field of each combobox. You can configure the number of history entries as follows.
 </para>
 </formalpara>
 
@@ -1344,7 +1465,7 @@ When &kdevelop; was installed usually a series of predefined <filename>.toc</fil
 <title>Altering the &kdevelop; TOC Documentation</title>
 
 <para>
-There are two ways to alter the &kdevelop; TOC Documentation. You may change the docuentation tree list, &ie; add to or remove entries from the <guilabel>KDevelopTOC Documentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page. Additionally you may point an existing documentation to another base location.
+There are two ways to alter the &kdevelop; TOC Documentation. You may change the documentation tree list, &ie; add to or remove entries from the <guilabel>KDevelopTOC Documentation</guilabel> tab of the <guilabel>Documentation Tree</guilabel> configuration page. Additionally you may point an existing documentation to another base location.
 </para>
 
 <formalpara>
@@ -1381,7 +1502,7 @@ If the documentation in an already listed <filename>.toc</filename> file should 
 </para>
 </formalpara>
 
-<!-- ### This is preliminary. Change the following when there will be another edit diaolog. -->
+<!-- ### This is preliminary. Change the following when there will be another edit dialog. -->
 
 <para>
 For historical reasons clicking the <guibutton>Edit</guibutton> button will pop up a different dialog which stems from an older approach to structured library documentation:
@@ -1465,7 +1586,7 @@ When &kdevelop; is installed it will attempt to find all <filename>.devhelp</fil
 <formalpara>
 <title>The Default DevHelp Directory</title>
 <para>
-&kdevelop; usually keeps a list of the <filename>.devhelp</filename> file copies it found in the <filename class="directory">$KDEHOME/share/apps/kdevdoctreeview/devhelp/</filename> of the current user.
+&kdevelop; usually keeps a list of the <filename>.devhelp</filename> file copies it found in the <filename class="directory">$KDEHOME/share/apps/kdevdoctreeview/devhelp/</filename> directory of the current user.
 </para>
 </formalpara>
 
@@ -1480,7 +1601,7 @@ Usually &kdevelop; will not readily be able to access a thus newly added DevHelp
 </para></note>
 
 <formalpara>
-<title>Providing a Base Address&mdash;Edit</title>
+<title>Providing a Base Address &mdash; Edit</title>
 <para>
 To alter the base address to access a given DevHelp documentation, select the entry in the list of the <guilabel>DevHelp Documentation</guilabel> configuration page, then press the <guibutton>Edit</guibutton> button on the right.
 </para>
@@ -1537,7 +1658,7 @@ To remove an entry from the <guilabel>DevHelp Documentation</guilabel> tab first
       <imagedata fileref="configure-doctree-bookmark.png" format="PNG"/>
     </imageobject>
     <caption><para>
-    Eplicitely adding documentation to the bookmarks
+  Explicitelyly adding documentation to the bookmarks
     </para></caption>
   </mediaobject>
 </screenshot>
