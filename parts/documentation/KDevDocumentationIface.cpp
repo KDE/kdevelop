@@ -75,4 +75,9 @@ void KDevDocumentationIface::infoPage()
     m_part->infoPage();
 }
 
+void KDevDocumentationIface::findInFinder( )
+{
+    m_part->findInDocumentation();
+}
+
 #include "KDevDocumentationIface.moc"

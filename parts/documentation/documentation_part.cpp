@@ -104,13 +104,11 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
     
     setupActions();
     
-    KConfig *config = kapp->config();
-    config->setGroup("Documentation");
-    m_assistantUsed = config->readBoolEntry("UseAssistant", false);
-    
     loadDocumentationPlugins();
     
     new KDevDocumentationIface(this);
+
+    loadSettings();
 }
 
 DocumentationPart::~DocumentationPart()
@@ -328,6 +326,17 @@ void DocumentationPart::contextFindDocumentation()
         callAssistant("KDevDocumentation", "findInFinder(QString)", m_contextStr);
     else
         findInDocumentation(m_contextStr);
+}
+
+void DocumentationPart::findInDocumentation()
+{
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "findInFinder()");
+    else
+    {
+        mainWindow()->raiseView(m_widget);
+        m_widget->findInDocumentation();
+    }
 }
 
 void DocumentationPart::findInDocumentation(const QString &term)
@@ -635,5 +644,28 @@ void DocumentationPart::callAssistant(const QCString &interface, const QCString 
         kdDebug() << "problem communicating with: " << ref;
 }
 
+void DocumentationPart::loadSettings()
+{
+    KConfig *config = kapp->config();
+    config->setGroup("Documentation");
+    m_assistantUsed = config->readBoolEntry("UseAssistant", false);
+    
+    if (QString(KGlobal::instance()->aboutData()->appName()) == "kdevassistant")
+    {
+        int page = config->readNumEntry("LastPage", 0);
+        switch (page)
+        {
+            case 1:
+                lookInDocumentationIndex();
+                break;
+            case 2:
+                findInDocumentation();
+                break;
+            case 3:
+                searchInDocumentation();
+                break;
+        }
+    }
+}
 
 #include "documentation_part.moc"

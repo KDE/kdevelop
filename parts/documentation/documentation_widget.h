@@ -51,7 +51,8 @@ public slots:
     void lookInDocumentationIndex(const QString &term);
     void searchInDocumentation();
     void searchInDocumentation(const QString &term);
-    void findInDocumentation(const QString &term = "");
+    void findInDocumentation();
+    void findInDocumentation(const QString &term);
     
 protected:
     virtual void focusInEvent(QFocusEvent *e);

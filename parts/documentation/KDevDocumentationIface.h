@@ -40,6 +40,7 @@ k_dcop:
     void infoPage(QString term);
 
     void lookupInIndex();
+    void findInFinder();
     void searchInDocumentation();
     void manPage();
     void infoPage();

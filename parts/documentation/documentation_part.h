@@ -63,6 +63,7 @@ public slots:
     void lookInDocumentationIndex(const QString &term);
     void contextLookInDocumentationIndex();
     void contextFindDocumentation();
+    void findInDocumentation();
     void findInDocumentation(const QString &term);
     void searchInDocumentation();
     void searchInDocumentation(const QString &term);
@@ -84,6 +85,7 @@ protected:
     void loadDocumentationPlugins();
     KConfig *config();
     void setupActions();
+    void loadSettings();
     void saveProjectDocumentationInfo();
     
     QCString startAssistant();

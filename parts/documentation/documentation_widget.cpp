@@ -21,12 +21,15 @@
 
 #include <qlayout.h>
 #include <qtoolbox.h>
+#include <qlineedit.h>
 
 #include <kparts/part.h>
 #include <klibloader.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include <kdevcore.h>
 #include <kdevdocumentationplugin.h>
@@ -66,6 +69,9 @@ DocumentationWidget::DocumentationWidget(DocumentationPart *part)
 
 DocumentationWidget::~DocumentationWidget()
 {
+    KConfig *config = kapp->config();
+    config->setGroup("Documentation");
+    config->writeEntry("LastPage", m_tab->currentIndex());
 }
 
 void DocumentationWidget::tabChanged(int t)
@@ -114,6 +120,12 @@ void DocumentationWidget::findInDocumentation(const QString &term)
    m_tab->setCurrentItem(m_finder);
    m_finder->setSearchTerm(term);
    m_finder->startSearch();
+}
+
+void DocumentationWidget::findInDocumentation()
+{
+   m_tab->setCurrentItem(m_finder);
+   m_finder->search_term->setFocus();
 }
 
 void DocumentationWidget::focusInEvent(QFocusEvent */*e*/)
