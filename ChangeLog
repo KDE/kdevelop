@@ -1,5 +1,7 @@
 2004-03-17 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Extended diffpart to also handle FileContext and dirty files.
+    * Updated FileList. Now supports filestate feedback and has a context menu for file operations.
+    * More cleanups in Core. Filestate is now emitted from PartController for the receivers to implement.
 
 2004-03-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * NewMainWindow is now enabled by default
