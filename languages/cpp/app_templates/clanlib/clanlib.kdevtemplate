@@ -2,7 +2,7 @@
 [General]
 Name=Simple ClanLib application
 Category=C++
-Icon=preview.png
+Icon=clanlib.png
 Comment=Generates a simple ClanLib application.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=src/main.cpp

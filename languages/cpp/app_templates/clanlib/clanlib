@@ -1,8 +1,0 @@
-# KDE Config File
-[General]
-Name=Simple ClanLib application
-Category=C++
-Icon=preview.png
-Comment=Generates a simple ClanLib application.
-FileTemplates=h,CStyle,cpp,CStyle
-ShowFilesAfterGeneration=src/main.cpp
