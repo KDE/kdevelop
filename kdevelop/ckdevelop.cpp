@@ -1155,9 +1155,14 @@ void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
 
   CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
-  setup->show();
-  if (setup->hasChangedPath())
-    doc_tree->refresh(prj);
+  // setup->show();
+  if (setup->exec())
+  {
+    if (setup->hasChangedPath())
+      doc_tree->refresh(prj);
+  }
+
+  delete setup;
 
   accel->readSettings();
   setKeyAccel();
