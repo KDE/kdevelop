@@ -525,6 +525,16 @@ protected:
   QString getDir(const QString& rel_name);
   QString getName(const QString& rel_name);
 
+  /** How derived variables are named (...from GNU automake manual)
+   * Sometimes a Makefile variable name is derived from some text the user
+   * supplies. For instance program names are rewritten into Makefile macro
+   * names. Automake canonicalizes this text, so that it does not have to
+   * follow Makefile variable naming rules. All characters in the name except
+   * for letters, numbers, and the underscore are turned into underscores when
+   * making macro references. E.g., if your program is named sniff-glue, the
+   * derived variable name would be sniff_glue_SOURCES, not sniff-glue_SOURCES. */
+  QString canonicalDirName(QString dir_name);
+
 private: // Protected attributes
 
   /** The actual project file. */
@@ -535,7 +545,7 @@ private: // Protected attributes
 
   /** Version control object */
   VersionControl *vc;
-    
+
   /** A list of all source-files in the project*/
   QStrList cpp_files;
 

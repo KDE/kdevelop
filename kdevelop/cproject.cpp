@@ -856,13 +856,13 @@ void CProject::updateMakefileAm(const QString& makefile)
             stream << "\nINCLUDES = $(all_includes)\n\n";
 
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
-            stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
+            stream << "lib" << canonicalDirName(dir.dirName()) << "_a_METASOURCES = AUTO\n\n";
           else
             if (QFileInfo(getProjectDir() + "automoc").exists())
-              stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
+              stream << "lib" << canonicalDirName(dir.dirName()) << "_a_METASOURCES = USE_AUTOMOC\n\n";
 
           stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
-          stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
+          stream << "lib" << canonicalDirName(dir.dirName()) << "_a_SOURCES = " << sources << "\n";
           if(isQt2Project())
             // am_edit used only for qt apps requires this switch in Makefile.am´s to use tr instead of i18n and other specific stuff
             stream << "KDE_OPTIONS = qtonly\n";
@@ -1910,4 +1910,14 @@ CProject* currentProject()
 {
   CKDevelop* gkdevelop = dynamic_cast<CKDevelop*>(qApp->mainWidget());
   return gkdevelop?gkdevelop->getProject():0L;
+}
+
+QString CProject::canonicalDirName(QString dir_name)
+{
+  QString canonical_dir_name = dir_name;
+
+  // replaces all character, except for [A-Za-z0-9_] class, with underscore
+  canonical_dir_name.replace(QRegExp("[^A-Za-z0-9_]"), "_");
+
+  return canonical_dir_name;
 }
