@@ -12,6 +12,8 @@
 #ifndef _KDEVAPI_H_
 #define _KDEVAPI_H_
 
+#include <qobject.h>
+
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -26,8 +28,9 @@ class KDevTopLevel;
 
 class KDevApiPrivate;
 
-class KDevApi
+class KDevApi : public QObject
 {
+    Q_OBJECT
 public:
 
     KDevApi();

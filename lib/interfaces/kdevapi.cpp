@@ -102,3 +102,6 @@ void KDevApi::setProjectDom(QDomDocument *dom)
 {
   d->m_projectDom = dom;
 }
+
+#include "kdevapi.moc"
+
