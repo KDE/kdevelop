@@ -131,6 +131,12 @@ void DocIndexDialog::projectChanged()
 }
 
 
+void DocIndexDialog::lookup(const QString &str)
+{
+    term_combo->lineEdit()->setText(str);
+}
+
+
 void DocIndexDialog::readConfig()
 {
     QDomDocument &dom = *m_part->projectDom();

@@ -1,3 +1,17 @@
+2002-05-10  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Put grep into editor context menu
+	* Put 'Lookup in Index' and 'Goto manpage'
+	  into editor context menu
+	* Put 'Lookup in Index' and 'Search in docs'
+	  into documentation context menu
+	* Implemented 'Run to cursor' in debugger part
+	  and put 'Watch: foo' into editor context menu
+	* Removed lots of code duplication in tools config
+	* Tools can be added by DnD from kicker menu
+	* Some preparations for loading files with a
+	  prescribed encoding
+
 2002-05-06  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Fixed history part crashing

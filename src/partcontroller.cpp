@@ -12,6 +12,7 @@
 #include <kparts/part.h>
 #include <kparts/factory.h>
 #include <kparts/partmanager.h>
+#include <kparts/browserextension.h>
 #include <kfiledialog.h>
 #include <kmainwindow.h>
 #include <kaction.h>
@@ -93,6 +94,12 @@ void PartController::setupActions()
 }
 
 
+void PartController::setServiceType(const QString &serviceType)
+{
+  m_presetEncoding = serviceType;
+}
+
+
 void PartController::editDocument(const KURL &url, int lineNum)
 {
   KParts::Part *existingPart = partForURL(url);
@@ -105,7 +112,15 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
   QString preferred, serviceType;
 
-  QString mimeType = KMimeType::findByURL(url)->name();
+  QString mimeType, encoding;
+  if (m_presetEncoding.isNull())
+    mimeType = KMimeType::findByURL(url)->name();
+  else {
+    mimeType = "text/plain";
+    encoding = m_presetEncoding;
+    m_presetEncoding = QString::null;
+  }
+  
   if (mimeType.startsWith("text/")
       || mimeType == "application/x-desktop")
   {
@@ -130,6 +145,14 @@ void PartController::editDocument(const KURL &url, int lineNum)
   if (factory)
   {
     KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), serviceType));
+    KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
+    kdDebug() << "Encoding: " << encoding << ", extension: " << extension << endl;
+    if (extension && !encoding.isNull())
+    {
+      KParts::URLArgs args;
+      args.serviceType = mimeType + ";" + encoding;
+      extension->setURLArgs(args);
+    }
     part->openURL(url);
     integratePart(part, url);
     EditorProxy::getInstance()->setLineNumber(part, lineNum);

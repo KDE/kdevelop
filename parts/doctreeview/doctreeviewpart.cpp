@@ -131,30 +131,25 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
     kdDebug(9002) << "context in doctree" << endl;
     if (context->hasType("editor")) {
         const EditorContext *econtext = static_cast<const EditorContext*>(context);
-        QString str = econtext->linestr();
-        int col = econtext->col();
-        int startPos = QMAX(QMIN(col, (int)str.length()-1), 0);
-        int endPos = startPos;
-        while (startPos > 0 && str[startPos].isLetter())
-            startPos--;
-        while (endPos < (int)str.length() && str[endPos].isLetter())
-            endPos++;
-        QString ident = str.mid(startPos+1, endPos-startPos-1);
-        kdDebug(9002) << "Identifier:" << ident << ":" << endl;
-        
-        kdDebug(9002) << "editor context in doctree" << endl;
-        if (!ident.isEmpty())
-            popupstr = ident;
-            popup->insertItem( i18n("Goto manpage: %1").arg(popupstr),
-                               this, SLOT(slotGotoManpage()) );
-    }
-    else if (context->hasType("documentation")) {
+        QString ident = econtext->currentWord();
+        if (!ident.isEmpty()) {
+            m_popupstr = ident;
+            popup->insertItem( i18n("Lookup in index: %1").arg(ident),
+                               this, SLOT(slotContextLookupIndex()) );
+            popup->insertItem( i18n("Goto manpage: %1").arg(ident),
+                               this, SLOT(slotContextGotoManpage()) );
+        }
+    } else if (context->hasType("documentation")) {
         const DocumentationContext *dcontext = static_cast<const DocumentationContext*>(context);
         kdDebug(9002) << "documentation context in doctree" << endl;
-        if (!dcontext->selection().isEmpty()) {
-            popupstr = dcontext->selection();
-            popup->insertItem( i18n("Search in documentation: %1").arg(KStringHandler::csqueeze(popupstr, 20)),
-                               this, SLOT(slotSearchDocumentationTerm()) );
+        QString selection = dcontext->selection();
+        if (!selection.isEmpty()) {
+            m_popupstr = selection;
+            QString squeezed = KStringHandler::csqueeze(selection, 20);
+            popup->insertItem( i18n("Lookup in index: %1").arg(squeezed),
+                               this, SLOT(slotContextLookupIndex()) );
+            popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
+                               this, SLOT(slotContextFulltextSearch()) );
         }
     }
 } 
@@ -196,20 +191,30 @@ void DocTreeViewPart::slotRaiseWidget()
 }
 
 
-void DocTreeViewPart::slotGotoManpage()
+void DocTreeViewPart::slotContextGotoManpage()
 {
-    QString url = QString::fromLatin1("man:/%1(3)").arg(popupstr);
+    QString url = QString::fromLatin1("man:/%1(3)").arg(m_popupstr);
     partController()->showDocument(KURL(url));
 }
 
 
-void DocTreeViewPart::slotSearchDocumentationTerm()
+void DocTreeViewPart::slotContextLookupIndex()
+{
+    if (!m_indexDialog)
+        m_indexDialog = new DocIndexDialog(this, m_widget, "doc index dialog");
+
+    m_indexDialog->lookup(m_popupstr);
+    m_indexDialog->show();
+}
+
+
+void DocTreeViewPart::slotContextFulltextSearch()
 {
     // We use the dialog for the interaction with htdig,
     // but do not actually show the dialog. Looks like
     // a hack, eh?
     DocSearchDialog dlg(m_widget, "doc search dialog");
-    dlg.setSearchTerm(popupstr);
+    dlg.setSearchTerm(m_popupstr);
     if (dlg.performSearch()) {
         QString indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
         partController()->showDocument(KURL("file://" + indexdir + "/results.html"));

@@ -148,7 +148,18 @@ void EditorProxy::popupAboutToShow()
   {
     uint line, col;
     cursorIface->cursorPosition(&line, &col);
-    EditorContext context(ro_part->url(), line, editIface->textLine(line), col);
+    QString linestr = editIface->textLine(line);
+    int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
+    int endPos = startPos;
+    while (startPos > 0 && linestr[startPos].isLetter())
+        startPos--;
+    while (endPos < (int)linestr.length() && linestr[endPos].isLetter())
+        endPos++;
+    QString wordstr = (startPos==endPos)?
+        QString() : linestr.mid(startPos+1, endPos-startPos-1);
+    kdDebug(9000) << "Word:" << wordstr << ":" << endl;
+    EditorContext context(ro_part->url(), line, col,
+                          linestr, wordstr);
     Core::getInstance()->fillContextMenu(popup, &context);
   }
 }

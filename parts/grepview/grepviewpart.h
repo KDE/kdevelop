@@ -17,6 +17,8 @@
 #include "kdevplugin.h"
 
 class KDialogBase;
+class QPopupMenu;
+class Context;
 class GrepViewWidget;
 
 
@@ -32,9 +34,14 @@ private slots:
     void stopButtonClicked();
     void projectOpened();
     void projectClosed();
+    void contextMenu(QPopupMenu *popup, const Context *context);
+
+    void slotGrep();
+    void slotContextGrep();
 
 private:
     QGuardedPtr<GrepViewWidget> m_widget;
+    QString m_popupstr;
     friend class GrepViewWidget;
 };
 

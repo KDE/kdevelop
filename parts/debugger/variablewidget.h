@@ -45,8 +45,9 @@ public:
 
     virtual void setEnabled(bool b);
 
-private slots:
+public slots:
     void slotAddWatchVariable();
+    void slotAddWatchVariable(const QString &ident);
 
 private:
     VariableTree *varTree_;

@@ -146,7 +146,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
                                  
     if (features & KDevLanguageSupport::Functions) {
         // Add functions
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Functions"));
+        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Global Functions"));
         ilastItem = 0;
         QValueList<ParsedMethod*> methodList = scope->getSortedMethodList();
         QValueList<ParsedMethod*>::ConstIterator it;
@@ -158,7 +158,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
 
     if (features & KDevLanguageSupport::Variables) {
         // Add attributes
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Variables"));
+        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Global Variables"));
         ilastItem = 0;
         QValueList<ParsedAttribute*> attrList = scope->getSortedAttributeList();
         QValueList<ParsedAttribute*>::ConstIterator it;

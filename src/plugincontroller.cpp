@@ -7,7 +7,6 @@
 #include <ktrader.h>
 #include <kmessagebox.h>
 #include <kconfig.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>

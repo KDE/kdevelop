@@ -1498,7 +1498,7 @@ ParsedClass *CClassParser::parseClassHeader()
   aLexem = lexemStack.pop();
 
   if(aLexem == 0) {
-    cerr << "ERROR in classparser: ParsedClass *CClassParser::parseClassHeader()\n";
+      kdDebug(9007) << "ERROR in classparser: ParsedClass *CClassParser::parseClassHeader()" << endl;
     return 0;
   }
 

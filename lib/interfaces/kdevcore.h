@@ -40,21 +40,28 @@ private:
 class EditorContext : public Context
 {
 public:
-    EditorContext(const KURL &url, int line, const QString &linestr, int col)
-        : Context("editor"), m_linestr(linestr), m_line(line), m_col(col), m_url(url) {}
+    EditorContext(const KURL &url, int line, int col,
+                  const QString &linestr, const QString &wordstr)
+        : Context("editor"),
+          m_url(url),
+          m_line(line),
+          m_col(col),
+          m_linestr(linestr),
+          m_wordstr(wordstr) {}
     ~EditorContext() {}
 
     const KURL &url() const { return m_url; }
     int line() const { return m_line; }
-    QString linestr() const
-    { return m_linestr; }
     int col() const
     { return m_col; }
-
+    QString currentLine() const
+    { return m_linestr; }
+    QString currentWord() const
+    { return m_wordstr; }
 private:
-    QString m_linestr;
-    int m_line, m_col;
     KURL m_url;
+    int m_line, m_col;
+    QString m_linestr, m_wordstr;
 };
 
 

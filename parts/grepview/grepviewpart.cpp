@@ -11,6 +11,7 @@
 
 #include "grepviewpart.h"
 
+#include <qpopupmenu.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <kdebug.h>
@@ -37,6 +38,8 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
              this, SLOT(stopButtonClicked()) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
+    connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
+             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
     m_widget = new GrepViewWidget(this);
     m_widget->setIcon(SmallIcon("grep"));
@@ -53,7 +56,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
     KAction *action;
     
     action = new KAction(i18n("&Grep"), "grep", CTRL+ALT+Key_F,
-                         m_widget, SLOT(showDialog()),
+                         this, SLOT(slotGrep()),
                          actionCollection(), "edit_grep");
     action->setStatusText( i18n("Searches for expressions over several files") );
     action->setWhatsThis( i18n("Search in files\n\n"
@@ -88,6 +91,34 @@ void GrepViewPart::projectOpened()
 void GrepViewPart::projectClosed()
 {
     m_widget->projectChanged(0);
+}
+
+
+void GrepViewPart::contextMenu(QPopupMenu *popup, const Context *context)
+{
+    kdDebug(9001) << "context in grepview" << endl;
+    if (!context->hasType("editor"))
+        return;
+    
+    const EditorContext *econtext = static_cast<const EditorContext*>(context);
+    QString ident = econtext->currentWord();
+    if (!ident.isEmpty()) {
+        m_popupstr = ident;
+        popup->insertItem( i18n("Grep: %1").arg(ident),
+                           this, SLOT(slotContextGrep()) );
+    }
+}
+
+
+void GrepViewPart::slotGrep()
+{
+    m_widget->showDialog();
+}
+
+
+void GrepViewPart::slotContextGrep()
+{
+    m_widget->showDialogWithPattern(m_popupstr);
 }
 
 #include "grepviewpart.moc"

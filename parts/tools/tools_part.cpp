@@ -186,9 +186,17 @@ void ToolsPart::updateToolsMenu()
     QList<KAction> actions;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
+        QString menutext = *it;
+        KConfig *config = ToolsFactory::instance()->config();
+        config->setGroup("Tool Menu " + menutext);
+        bool isdesktopfile = config->readBoolEntry("DesktopFile");
         KAction *action = new KAction(*it, 0,
                                       this, SLOT(toolsMenuActivated()),
-                                      (QObject*) 0, (*it).utf8());
+                                      (QObject*) 0, menutext.utf8());
+        if (isdesktopfile) {
+            KDesktopFile df(config->readEntry("CommandLine"));
+            action->setIcon(df.readIcon());
+        }
         actions.append(action);
     }
 
@@ -230,10 +238,15 @@ void ToolsPart::toolsMenuActivated()
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("Tool Menu " + menutext);
     QString cmdline = config->readEntry("CommandLine");
+    bool isdesktopfile = config->readBoolEntry("DesktopFile");
     bool captured = config->readBoolEntry("Captured");
     kdDebug() << "activating " << menutext
-              << "with cmdline " << cmdline << endl;
-    startCommand(cmdline, captured, QString::null);
+              << "with cmdline " << cmdline
+              << "and desktopfile " << isdesktopfile << endl;
+    if (isdesktopfile)
+        kapp->startServiceByDesktopPath(cmdline);
+    else
+        startCommand(cmdline, captured, QString::null);
 }
 
 

@@ -100,7 +100,7 @@ void ClassViewPart::setupPopup()
     popup->insertItem(i18n("Go to Implementation"), this, SLOT(selectedGotoImplementation()));
     popup->insertItem(i18n("Go to Class Declaration"), this, SLOT(selectedGotoClassDeclaration()));
     popup->insertItem(i18n("View Class Hierarchy"), this, SLOT(selectedViewHierarchy()));
-    popup->insertItem("Dump Class Tree on Console", this, SLOT(dumpTree()));
+    //    popup->insertItem("Dump Class Tree on Console", this, SLOT(dumpTree()));
 
     bool hasAddMethod = langHasFeature(KDevLanguageSupport::AddMethod);
     bool hasAddAttribute = langHasFeature(KDevLanguageSupport::AddAttribute);
@@ -324,8 +324,8 @@ ParsedClass *ClassViewPart::getClass(const QString &className)
 
 
 void ClassViewPart::gotoDeclaration(const QString &className,
-                                const QString &memberName,
-                                ItemType type)
+                                    const QString &memberName,
+                                    ItemType type)
 {
     kdDebug(9003) << "ClassViewPart::gotoDeclaration " << className << "::" << memberName << endl;
     
@@ -408,8 +408,8 @@ void ClassViewPart::gotoDeclaration(const QString &className,
 
 
 void ClassViewPart::gotoImplementation(const QString &className,
-                                   const QString &memberName,
-                                   ItemType type)
+                                       const QString &memberName,
+                                       ItemType type)
 {
     kdDebug(9003) << "ClassViewPart::gotoImplementation " << className << "::" << memberName << endl;
 

@@ -351,11 +351,11 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
         return;
     
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
-    QString str = econtext->linestr();
+    QString str = econtext->currentLine();
     if (str.isEmpty())
         return;
     
-    QRegExp re("[ \t]*#include *[<\"](.*)[>\"][ \t]*");
+    QRegExp re("[ \t]*#include[ \t]*[<\"](.*)[>\"][ \t]*");
     if (!re.exactMatch(str))
         return;
     
@@ -372,6 +372,9 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void CppSupportPart::maybeParse(const QString fileName, ClassStore *store, CClassParser *parser)
 {
+    if (!fileExtensions().contains(QFileInfo(fileName).extension()))
+        return;
+    
     store->removeWithReferences(fileName);
     parser->parse(fileName);
 }

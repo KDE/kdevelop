@@ -36,6 +36,7 @@ public:
 
   PartController(QWidget *toplevel);
 
+  void setServiceType(const QString &serviceType);
   void editDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, const QString &context = QString::null);
 
@@ -99,7 +100,8 @@ private:
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
-
+  QString m_presetEncoding;
+    
   DocumentationPart *findDocPart(const QString &context);
 
 };

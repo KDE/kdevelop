@@ -46,6 +46,7 @@ public:
     DocIndexDialog( DocTreeViewPart *part, QWidget *parent=0, const char *name=0 );
     ~DocIndexDialog();
 
+    void lookup(const QString &str);
     void projectChanged();
     
 protected:

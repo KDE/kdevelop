@@ -8,7 +8,7 @@
 #include <krun.h>
 #include <kaction.h>
 
-
+#include "kdevpartcontroller.h"
 #include "kdevcore.h"
 
 
@@ -40,13 +40,15 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
 
   m_url = KURL(ctx->fileName());
 
-  QString mimeType = KMimeType::findByURL(m_url, 0, true, true)->name();
+  KPopupMenu *sub = new KPopupMenu(popup);
 
+  sub->insertItem(i18n("Open as utf8"), this, SLOT(openAsEncoding(int)));
+  
+  QString mimeType = KMimeType::findByURL(m_url, 0, true, true)->name();
   KTrader::OfferList offers = KTrader::self()->query(mimeType, "Type == 'Application'");
 
   if (offers.count() > 0)
   {
-    KPopupMenu *sub = new KPopupMenu(popup);
 
     KTrader::OfferList::Iterator it;
     for (it = offers.begin(); it != offers.end(); ++it)
@@ -59,7 +61,7 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     
     popup->insertItem(i18n("Open With"), sub);
 
-    // make sure the generic "Open with ..." entry get's appended to the submenu
+    // make sure the generic "Open with ..." entry gets appended to the submenu
     popup = sub;
   }
 
@@ -87,5 +89,11 @@ void OpenWithPart::openWithDialog()
   KRun::displayOpenWithDialog(list);
 }
 
+
+void OpenWithPart::openAsEncoding(int /*id*/)
+{
+  partController()->setServiceType("utf8");
+  partController()->editDocument(m_url);
+}
 
 #include "openwithpart.moc"

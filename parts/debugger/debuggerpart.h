@@ -39,12 +39,11 @@ public:
     ~DebuggerPart();
 
 private slots:
-   
-    void fillContextMenu(QPopupMenu *popup, const Context *context);
+    void contextMenu(QPopupMenu *popup, const Context *context);
     void toggleBreakpoint();
-    
-	
+    void contextWatch();
     void projectConfigWidget(KDialogBase *dlg);
+    
     void slotRun();
     void slotExamineCore();
     void slotAttachProcess();
@@ -78,7 +77,9 @@ private:
     QLabel *statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;
 
-    EditorContext m_editorContext;
+    QString m_contextFileName;
+    QString m_contextIdent;
+    int m_contextLine;
 };
 
 #endif

@@ -21,11 +21,13 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <kgenericfactory.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
-#include <kgenericfactory.h>
+#include <kparts/part.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -52,7 +54,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin( parent, name ),
-      controller(0), m_editorContext(KURL(), 0, "", 0)
+      controller(0)
 {
     setInstance(DebuggerFactory::instance());
     
@@ -257,7 +259,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              breakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-	     this, SLOT(fillContextMenu(QPopupMenu *, const Context *)));
+	     this, SLOT(contextMenu(QPopupMenu *, const Context *)));
 }
 
 
@@ -284,21 +286,33 @@ DebuggerPart::~DebuggerPart()
 }
 
 
-void DebuggerPart::fillContextMenu(QPopupMenu *popup, const Context *context)
+void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-  if (!context->hasType("editor"))
-    return;
+    if (!context->hasType("editor"))
+      return;
 
-  m_editorContext = *((EditorContext*)(context));
-
-  popup->insertSeparator();
-  popup->insertItem(i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()));
+    const EditorContext *econtext = static_cast<const EditorContext*>(context);
+    m_contextFileName = econtext->url().path();
+    m_contextIdent = econtext->currentWord();
+    m_contextLine = econtext->line();
+    
+    popup->insertSeparator();
+    if (econtext->url().isLocalFile())
+        popup->insertItem( i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()) );
+    if (!m_contextIdent.isEmpty())
+        popup->insertItem( i18n("Watch: %1").arg(m_contextIdent), this, SLOT(contextWatch()) );
 }
 
 
 void DebuggerPart::toggleBreakpoint()
 {
-  breakpointWidget->slotToggleBreakpoint(m_editorContext.url().path(), m_editorContext.line());
+    breakpointWidget->slotToggleBreakpoint(m_contextFileName, m_contextLine);
+}
+
+
+void DebuggerPart::contextWatch()
+{
+    variableWidget->slotAddWatchVariable(m_contextIdent);
 }
 
 
@@ -500,12 +514,18 @@ void DebuggerPart::slotContinue()
 
 void DebuggerPart::slotRunToCursor()
 {
-    QString fileName;
-    int lineNum = 0;
-    // FIXME: Find out current file name and line number
-    controller->slotRunUntil(fileName, lineNum);
-}
+    KParts::Part *part = partController()->activePart();
+    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>(part);
+    if (!rwpart || !rwpart->url().isLocalFile() || !rwpart->widget())
+        return;
 
+    KTextEditor::ViewCursorInterface *cursorIface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(rwpart->widget());
+    uint line, col;
+    cursorIface->cursorPosition(&line, &col);
+  
+    controller->slotRunUntil(rwpart->url().path(), line);
+}
 
 void DebuggerPart::slotStepOver()
 {

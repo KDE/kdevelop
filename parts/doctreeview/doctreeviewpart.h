@@ -40,13 +40,14 @@ private slots:
     void slotSearchDocumentation();
     void slotManpage();
     void slotRaiseWidget();
-    void slotGotoManpage();
-    void slotSearchDocumentationTerm();
+    void slotContextGotoManpage();
+    void slotContextLookupIndex();
+    void slotContextFulltextSearch();
     
 private:
     QGuardedPtr<DocTreeViewWidget> m_widget;
     QGuardedPtr<DocIndexDialog> m_indexDialog;
-    QString popupstr;
+    QString m_popupstr;
 
     friend class DocTreeViewWidget;
     friend class DocTreeConfigWidget;

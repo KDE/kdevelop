@@ -87,6 +87,7 @@ BPDialog::BPDialog(Breakpoint *BP, QWidget *parent, const char *name)
     topLayout->addWidget( enabled_, 0, 0 );
     
     KButtonBox *buttonbox = new KButtonBox(this);
+    buttonbox->addStretch();
     QPushButton *ok = buttonbox->addButton(i18n("OK"));
     QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
     connect(ok, SIGNAL(clicked()), SLOT(accept()));

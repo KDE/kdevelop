@@ -14,7 +14,14 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
+#include <qdragobject.h>
+#include <qtimer.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <kdesktopfile.h>
+#include <kiconloader.h>
+#include <kmessagebox.h>
+#include <kurl.h>
 #include "addtooldlg.h"
 
 
@@ -22,6 +29,7 @@ struct ToolsConfigEntry
 {
     QString menutext;
     QString cmdline;
+    bool isdesktopfile;
     bool captured;
 };
 
@@ -33,6 +41,11 @@ ToolsConfigWidget::ToolsConfigWidget(QWidget *parent, const char *name)
     m_filecontextEntries.setAutoDelete(true);
     m_dircontextEntries.setAutoDelete(true);
 
+    toolsmenuBox->setAcceptDrops(true);
+    toolsmenuBox->installEventFilter(this);
+    toolsmenuBox->viewport()->setAcceptDrops(true);
+    toolsmenuBox->viewport()->installEventFilter(this);
+    
     readConfig();
 }
 
@@ -41,49 +54,88 @@ ToolsConfigWidget::~ToolsConfigWidget()
 {}
 
 
-void ToolsConfigWidget::readConfig()
+void ToolsConfigWidget::readGroup(const QString &group, QDict<ToolsConfigEntry> *entryDict)
 {
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("External Tools");
-    QStringList toolsmenuList = config->readListEntry("Tool Menu");
-    QStringList filecontextList = config->readListEntry("File Context");
-    QStringList dircontextList = config->readListEntry("Dir Context");
+    QStringList list = config->readListEntry(group);
 
-    QStringList::ConstIterator it1;
-    for (it1 = toolsmenuList.begin(); it1 != toolsmenuList.end(); ++it1) {
-        config->setGroup("Tool Menu " + (*it1));
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        config->setGroup(group + " " + (*it));
         QString cmdline = config->readEntry("CommandLine");
+        bool isdesktopfile = config->readBoolEntry("DesktopFile");
         bool captured = config->readBoolEntry("Captured");
         ToolsConfigEntry *entry = new ToolsConfigEntry;
-        entry->menutext = (*it1);
+        entry->menutext = (*it);
         entry->cmdline = cmdline;
+        entry->isdesktopfile = isdesktopfile;
         entry->captured = captured;
-        m_toolsmenuEntries.append(entry);
+        entryDict->insert(*it, entry);
+    }
+}
+
+
+void ToolsConfigWidget::storeGroup(const QString &group, const QDict<ToolsConfigEntry> &entryDict)
+{
+    KConfig *config = ToolsFactory::instance()->config();
+
+    QStringList list;
+    
+    QDictIterator<ToolsConfigEntry> it(entryDict);
+    for (; it.current(); ++it) {
+        ToolsConfigEntry *entry = it.current();
+        list << entry->menutext;
+        config->setGroup(group + " " + entry->menutext);
+        config->writeEntry("CommandLine", entry->cmdline);
+        config->writeEntry("DesktopFile", entry->isdesktopfile);
+        config->writeEntry("Captured", entry->captured);
     }
 
-    QStringList::ConstIterator it2;
-    for (it2 = filecontextList.begin(); it2 != filecontextList.end(); ++it2) {
-        config->setGroup("File Context " + (*it2));
-        QString cmdline = config->readEntry("CommandLine");
-        bool captured = config->readBoolEntry("Captured");
-        ToolsConfigEntry *entry = new ToolsConfigEntry;
-        entry->menutext = (*it2);
-        entry->cmdline = cmdline;
-        entry->captured = captured;
-        m_filecontextEntries.append(entry);
+    config->setGroup("External Tools");
+    config->writeEntry(group, list);
+}
+
+
+
+void ToolsConfigWidget::fillListBox(QListBox *lb, const QDict<ToolsConfigEntry> &entryDict)
+{
+    lb->clear();
+    
+    QDictIterator<ToolsConfigEntry> it(entryDict);
+    for (; it.current(); ++it) {
+        ToolsConfigEntry *entry = it.current();
+        if (entry->isdesktopfile) {
+            KDesktopFile df(entry->cmdline);
+            lb->insertItem(SmallIcon(df.readIcon()), entry->menutext);
+        } else {
+            lb->insertItem(entry->menutext);
+        }
+    }
+}
+
+
+bool ToolsConfigWidget::addEntry(ToolsConfigEntry *entry, QDict<ToolsConfigEntry> *entryDict)
+{
+    QString menutext = entry->menutext;
+    if (entryDict->find(menutext)) {
+        delete entry;
+        KMessageBox::sorry(this, i18n("An entry with this title exists already."));
+        return false;
     }
 
-    QStringList::ConstIterator it3;
-    for (it3 = dircontextList.begin(); it3 != dircontextList.end(); ++it3) {
-        config->setGroup("Dir Context " + (*it3));
-        QString cmdline = config->readEntry("CommandLine");
-        bool captured = config->readBoolEntry("Captured");
-        ToolsConfigEntry *entry = new ToolsConfigEntry;
-        entry->menutext = (*it3);
-        entry->cmdline = cmdline;
-        entry->captured = captured;
-        m_dircontextEntries.append(entry);
-    }
+    entryDict->insert(menutext, entry);
+
+    updateListBoxes();
+    return true;
+}
+
+
+void ToolsConfigWidget::readConfig()
+{
+    readGroup("Tool Menu", &m_toolsmenuEntries);
+    readGroup("File Context", &m_filecontextEntries);
+    readGroup("Dir Context", &m_dircontextEntries);
 
     updateListBoxes();
 }
@@ -91,76 +143,32 @@ void ToolsConfigWidget::readConfig()
 
 void ToolsConfigWidget::storeConfig()
 {
-    KConfig *config = ToolsFactory::instance()->config();
-
-    QStringList toolsmenuList, filecontextList, dircontextList;
-    
-    QListIterator<ToolsConfigEntry> it1(m_toolsmenuEntries);
-    for (; it1.current(); ++it1) {
-        QString menutext = it1.current()->menutext;
-        toolsmenuList << menutext;
-        config->setGroup("Tool Menu " + menutext);
-        config->writeEntry("CommandLine", it1.current()->cmdline);
-        config->writeEntry("Captured", it1.current()->captured);
-    }
-
-    QListIterator<ToolsConfigEntry> it2(m_filecontextEntries);
-    for (; it2.current(); ++it2) {
-        QString menutext = it2.current()->menutext;
-        filecontextList << menutext;
-        config->setGroup("File Context " + menutext);
-        config->writeEntry("CommandLine", it2.current()->cmdline);
-        config->writeEntry("Captured", it2.current()->captured);
-    }
-
-    QListIterator<ToolsConfigEntry> it3(m_dircontextEntries);
-    for (; it3.current(); ++it3) {
-        QString menutext = it3.current()->menutext;
-        dircontextList << menutext;
-        config->setGroup("Dir Context " + menutext);
-        config->writeEntry("CommandLine", it3.current()->cmdline);
-        config->writeEntry("Captured", it3.current()->captured);
-    }
-
-    config->setGroup("External Tools");
-    config->writeEntry("Tool Menu", toolsmenuList);
-    config->writeEntry("File Context", filecontextList);
-    config->writeEntry("Dir Context", dircontextList);
+    storeGroup("Tool Menu", m_toolsmenuEntries);
+    storeGroup("File Context", m_filecontextEntries);
+    storeGroup("Dir Context", m_dircontextEntries);
 }
 
 
 void ToolsConfigWidget::updateListBoxes()
 {
-    toolsmenuBox->clear();
-    filecontextBox->clear();
-    dircontextBox->clear();
-
-    QListIterator<ToolsConfigEntry> it1(m_toolsmenuEntries);
-    for (; it1.current(); ++it1)
-        toolsmenuBox->insertItem(it1.current()->menutext);
-    QListIterator<ToolsConfigEntry> it2(m_filecontextEntries);
-    for (; it2.current(); ++it2)
-        filecontextBox->insertItem(it2.current()->menutext);
-    QListIterator<ToolsConfigEntry> it3(m_dircontextEntries);
-    for (; it3.current(); ++it3)
-        dircontextBox->insertItem(it3.current()->menutext);
+    fillListBox(toolsmenuBox, m_toolsmenuEntries);
+    fillListBox(filecontextBox, m_filecontextEntries);
+    fillListBox(dircontextBox, m_dircontextEntries);
 }
 
 
 void ToolsConfigWidget::toolsmenuaddClicked()
 {
-    // TODO: Fix code duplication
-    // TODO: Avoid entries with the same menutext
-    
     AddToolDialog dlg(this);
     dlg.setCaption(i18n("Add to Tools menu"));
-    if (dlg.exec()) {
+    while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
         entry->cmdline = dlg.cmdlineEdit->text();
+        entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
-        m_toolsmenuEntries.append(entry);
-        updateListBoxes();
+        if (addEntry(entry, &m_toolsmenuEntries))
+            return;
     }
 }
 
@@ -168,10 +176,7 @@ void ToolsConfigWidget::toolsmenuaddClicked()
 void ToolsConfigWidget::toolsmenuremoveClicked()
 {
     QString menutext = toolsmenuBox->currentText();
-    QListIterator<ToolsConfigEntry> it(m_toolsmenuEntries);
-    for (; it.current(); ++it)
-        if (menutext == it.current()->menutext)
-            m_toolsmenuEntries.remove(it.current());
+    m_toolsmenuEntries.remove(menutext);
     updateListBoxes();
 }
 
@@ -180,13 +185,14 @@ void ToolsConfigWidget::filecontextaddClicked()
 {
     AddToolDialog dlg(this);
     dlg.setCaption(i18n("Add to file context menus"));
-    if (dlg.exec()) {
+    while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
         entry->cmdline = dlg.cmdlineEdit->text();
+        entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
-        m_filecontextEntries.append(entry);
-        updateListBoxes();
+        if (addEntry(entry, &m_filecontextEntries))
+            return;
     }
 }
 
@@ -194,10 +200,7 @@ void ToolsConfigWidget::filecontextaddClicked()
 void ToolsConfigWidget::filecontextremoveClicked()
 {
     QString menutext = filecontextBox->currentText();
-    QListIterator<ToolsConfigEntry> it(m_filecontextEntries);
-    for (; it.current(); ++it)
-        if (menutext == it.current()->menutext)
-            m_filecontextEntries.remove(it.current());
+    m_filecontextEntries.remove(menutext);
     updateListBoxes();
 }
 
@@ -210,9 +213,10 @@ void ToolsConfigWidget::dircontextaddClicked()
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
         entry->cmdline = dlg.cmdlineEdit->text();
+        entry->isdesktopfile = false;
         entry->captured = dlg.capturedBox->isChecked();
-        m_dircontextEntries.append(entry);
-        updateListBoxes();
+        if (addEntry(entry, &m_dircontextEntries))
+            return;
     }
 }
 
@@ -220,11 +224,39 @@ void ToolsConfigWidget::dircontextaddClicked()
 void ToolsConfigWidget::dircontextremoveClicked()
 {
     QString menutext = dircontextBox->currentText();
-    QListIterator<ToolsConfigEntry> it(m_dircontextEntries);
-    for (; it.current(); ++it)
-        if (menutext == it.current()->menutext)
-            m_dircontextEntries.remove(it.current());
+    m_dircontextEntries.remove(menutext);
     updateListBoxes();
+}
+
+
+bool ToolsConfigWidget::eventFilter(QObject *o, QEvent *e)
+{
+    if (e->type() == QEvent::DragEnter || e->type() == QEvent::DragMove) {
+        QDragMoveEvent *dme = static_cast<QDragMoveEvent*>(e);
+        if (QUriDrag::canDecode(dme))
+            dme->accept();
+        return true;
+    } else if (e->type() == QEvent::Drop) {
+        QDropEvent *de = static_cast<QDropEvent*>(e);
+        QStringList fileList;
+        if (QUriDrag::decodeLocalFiles(de, fileList)) {
+            QStringList::ConstIterator it;
+            for (it = fileList.begin(); it != fileList.end(); ++it) {
+                if (KDesktopFile::isDesktopFile(*it)) {
+                    KDesktopFile df(*it);
+                    ToolsConfigEntry *entry = new ToolsConfigEntry;
+                    entry->menutext = df.readName();
+                    entry->cmdline = *it;
+                    entry->isdesktopfile = true;
+                    entry->captured = false;
+                    addEntry(entry, &m_toolsmenuEntries);
+                }
+            }
+        }
+        return true;
+    }
+
+    return ToolsConfigWidgetBase::eventFilter(o, e);
 }
 
 

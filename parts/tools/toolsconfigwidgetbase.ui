@@ -27,7 +27,7 @@
         </property>
         <widget class="QTabWidget">
             <property name="name">
-                <cstring>TabWidget2</cstring>
+                <cstring>tabwidget</cstring>
             </property>
             <widget class="QWidget">
                 <property name="name">

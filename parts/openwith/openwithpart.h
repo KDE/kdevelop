@@ -25,12 +25,11 @@ private slots:
 
   void openWithService();
   void openWithDialog();
-
+  void openAsEncoding(int id);
 
 private:
 
   KURL m_url;
-
 };
 
 #endif

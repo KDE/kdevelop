@@ -218,12 +218,10 @@ void ClassTreeClassItem::setOpen(bool o)
         ClassTreeItem *lastItem = 0;
         
         // Add nested classes
-        QDictIterator<ParsedClass> &classIt = pClass->classIterator;
-        for ( classIt.toFirst();
-              classIt.current();
-              ++classIt) {
-            lastItem = new ClassTreeClassItem(this, lastItem, classIt.current());
-        }
+        QValueList<ParsedClass*> classList = pClass->getSortedClassList();
+        QValueList<ParsedClass*>::ConstIterator classIt;
+        for (classIt = classList.begin(); classIt != classList.end(); ++classIt)
+            lastItem = new ClassTreeClassItem(this, lastItem, *classIt);
 
         // Add nested structs
         QValueList<ParsedStruct*> structList = pClass->getSortedStructList();
