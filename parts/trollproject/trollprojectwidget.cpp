@@ -21,6 +21,7 @@
 #include <qsplitter.h>
 #include <qptrstack.h>
 #include <qtextstream.h>
+#include <qprocess.h>
 #include <qtimer.h>
 #include <qdir.h>
 #include <qinputdialog.h>
@@ -334,9 +335,9 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   spitem->m_FileBuffer.removeValues("HEADERS");
   spitem->m_FileBuffer.setValues("HEADERS",spitem->headers,4);
   spitem->m_FileBuffer.removeValues("FORMS");
-  spitem->m_FileBuffer.setValues("FORMS",spitem->headers,4);
+  spitem->m_FileBuffer.setValues("FORMS",spitem->forms,4);
   spitem->m_FileBuffer.removeValues("INTERFACES");
-  spitem->m_FileBuffer.setValues("INTERFACES",spitem->headers,4);
+  spitem->m_FileBuffer.setValues("INTERFACES",spitem->interfaces,4);
   spitem->m_FileBuffer.saveBuffer(projectDirectory()+relpath+"/"+spitem->subdir+".pro");
 }
 
@@ -401,23 +402,29 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         if (r == idInsExistingFile)
         {
           QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
-                                                "Images ("+ext+")",
+                                                title + " ("+ext+")",
                                                 this,
                                                 "Insert existing "+ title,
                                                 TRUE);
           dialog->setMode(QFileDialog::ExistingFiles);
           dialog->exec();
           QStringList files = dialog->selectedFiles();
-          QString s;
           for (unsigned int i=0;i<files.count();i++)
           {
-            QString copyCommand("cp " + files[i] + " " + projectDirectory()+relpath);
-            //m_part->makeFrontend()->queueCommand(projectDirectory()+relpath,copyCommand);
-            QString filename = files[i].right(files[i].length()-files[i].findRev('/'));
+            // Copy selected files to current subproject folder
+            QProcess *proc = new QProcess( this );
+            proc->addArgument( "cp" );
+            proc->addArgument( "-f" );
+            proc->addArgument( files[i] );
+            proc->addArgument( projectDirectory()+relpath );
+            proc->start();
+            QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
+            // and add them to the filelist
             addFileToCurrentSubProject(titem,filename);
           }
-
+          // Update project file
           updateProjectFile(m_shownSubproject);
+          // Update subprojectview
           slotOverviewSelectionChanged(m_shownSubproject);
         }
         if (r == idInsNewFile)
@@ -466,7 +473,24 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
 
     emitRemovedFile(spitem->path + "/" + fitem->text(0));
+    switch (gitem->groupType)
+    {
+      case GroupItem::Interfaces:
+        spitem->interfaces.remove(fitem->text(0));
+        break;
+      case GroupItem::Sources:
+        spitem->sources.remove(fitem->text(0));
+        break;
+      case GroupItem::Headers:
+        spitem->headers.remove(fitem->text(0));
+        break;
+      case GroupItem::Forms:
+        spitem->forms.remove(fitem->text(0));
+        break;
+      default: ;
+    }
     gitem->files.remove(fitem);
+    updateProjectFile(m_shownSubproject);
 }
 
 
