@@ -588,6 +588,8 @@ void FileCreatePart::slotGlobalInitialize( )
     QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
     if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
         m_useSideTab = false;
+
+		setShowSideTab(m_useSideTab); // not the cleanest thing to do.. but c'mon, look at the rest of this code.. ;)
     }
   }
   
