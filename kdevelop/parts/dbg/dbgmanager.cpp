@@ -1,10 +1,14 @@
 #include "dbgmanager.h"
 
+#include "dbgfactory.h"
+
 #include "kdevcomponent.h"
 
 DbgManager::DbgManager(QObject *parent, const char *name ) :
   KDevComponent(parent, name)
 {
+  setInstance(DbgFactory::instance());
+  setXMLFile("kdevelopdbg.rc" );
 }
 
 DbgManager::~DbgManager()
