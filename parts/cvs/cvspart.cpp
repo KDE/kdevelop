@@ -23,6 +23,7 @@
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "kdevdifffrontend.h"
+#include "kdevappfrontend.h"
 #include "commitdlg.h"
 #include "logform.h"
 #include "execcommand.h"
@@ -34,18 +35,18 @@ typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
 
 CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & ) : KDevPlugin( parent, name ),
-	default_cvs(""),default_commit(""),default_update("-dP"),default_add(""),
-	default_remove("-f"),default_diff(""),default_log("") 
-{
+        default_cvs("-f"),default_commit(""),default_update("-dP"),default_add(""),
+default_remove("-f"),default_diff("-u3 -p"),default_log("") {
     setInstance(CvsFactory::instance());
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-	     this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-	     this, SLOT(projectConfigWidget(KDialogBase*)) );
+             this, SLOT(projectConfigWidget(KDialogBase*)) );
 
 }
 
 CvsPart::~CvsPart() {}
+
 
 void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
     if (context->hasType("file")) {
@@ -74,29 +75,29 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
 	popup->insertItem(i18n("CVS"), sub);
     }
 }
-	
-	
+
+
 void CvsPart::slotCommit() {
     QString dir, name;
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
-	dir = fi.absFilePath();
-	name = ".";
+        dir = fi.absFilePath();
+        name = ".";
     } else {
-	dir = fi.dirPath();
-	name = fi.fileName();
+        dir = fi.dirPath();
+        name = fi.fileName();
     }
-		
+
     CommitDialog d;
     if (d.exec() == QDialog::Rejected)
-	return;
-			
+        return;
+
     QString message = d.logMessage();
     if (!message.isEmpty())
-	message = " -m " + KShellProcess::quote(message);
-		
+        message = " -m " + KShellProcess::quote(message);
+
     QDomDocument &dom = *this->projectDom();
-			
+
     QString command("cd ");
     command += dir;
     command += " && cvs ";
@@ -107,24 +108,24 @@ void CvsPart::slotCommit() {
     command += message;
     command += " ";
     command += name;
-	
+
     makeFrontend()->queueCommand(dir, command);
 }
-	
-	
+
+
 void CvsPart::slotUpdate() {
     QString dir, name;
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
-	dir = fi.absFilePath();
-	name = ".";
+        dir = fi.absFilePath();
+        name = ".";
     } else {
-	dir = fi.dirPath();
-	name = fi.fileName();
+        dir = fi.dirPath();
+        name = fi.fileName();
     }
 
     QDomDocument &dom = *this->projectDom();
-    
+
     QString command("cd ");
     command += dir;
     command += " && cvs ";
@@ -133,18 +134,18 @@ void CvsPart::slotUpdate() {
     command += DomUtil::readEntry(dom,"/kdevcvs/updateoptions",default_update);
     command += " ";
     command += name;
-	
+
     makeFrontend()->queueCommand(dir, command);
 }
-	
-	
+
+
 void CvsPart::slotAdd() {
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
 
-	    QDomDocument &dom = *this->projectDom();
-	    
+    QDomDocument &dom = *this->projectDom();
+
     QString command("cd ");
     command += dir;
     command += " && cvs ";
@@ -153,18 +154,18 @@ void CvsPart::slotAdd() {
     command += DomUtil::readEntry(dom,"/kdevcvs/addoptions",default_add);
     command += " ";
     command += name;
-		
+
     makeFrontend()->queueCommand(dir, command);
 }
-	
-	
+
+
 void CvsPart::slotRemove() {
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
 
-	  QDomDocument &dom = *this->projectDom();
-	    
+    QDomDocument &dom = *this->projectDom();
+
     QString command("cd ");
     command += dir;
     command += " && cvs ";
@@ -173,69 +174,75 @@ void CvsPart::slotRemove() {
     command += DomUtil::readEntry(dom,"/kdevcvs/removeoptions",default_remove);
     command += " ";
     command += name;
-	
+
     makeFrontend()->queueCommand(dir, command);
 }
-	
+
 void CvsPart::slotLog() {
     LogForm* f = new LogForm();
     f->show();
     f->start( popupfile );
 }
-	
+
 void CvsPart::slotDiff() {
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
     QStringList args;
+    QString str;
 
     QDomDocument &dom = *this->projectDom();
-    QString cvsOpts = DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
-    QString diffOpts = DomUtil::readEntry(dom,"/kdevcvs/diffoptions",default_diff);
-    
-    if ( !cvsOpts.isEmpty() )
-      args << cvsOpts; 
-    args << "diff";
-    if ( !diffOpts.isEmpty() )
-      args << diffOpts;
-    args << name;
 
+    str = DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
+    
+    if (str.length()) {
+	QStringList list = QStringList::split(' ',str);
+	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it; 
+    }
+    args << "diff"; // cannot use "-u3 -p" since it will clash with ~/.cvsrc
+    str = DomUtil::readEntry(dom,"/kdevcvs/diffoptions",default_diff);
+    if (str.length()) {
+	QStringList list = QStringList::split(' ',str);
+	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it; 
+    }
+    args << name;
+    
     ExecCommand* cmv = new ExecCommand( "cvs", args, dir, this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
-	     this, SLOT(slotDiffFinished( const QString&, const QString& )) );
+             this, SLOT(slotDiffFinished( const QString&, const QString& )) );
 }
-	
+
 void CvsPart::slotDiffFinished( const QString& diff, const QString& err ) {
     if ( diff == QString::null && err == QString::null ) {
-	kdDebug(9000) << "cvs diff cancelled" << endl;
-	return; // user pressed cancel or an error occured
+        kdDebug(9000) << "cvs diff cancelled" << endl;
+        return; // user pressed cancel or an error occured
     }
 
     if ( diff.isEmpty() && !err.isEmpty() ) {
-	KMessageBox::detailedError( 0, i18n("CVS outputted errors during diff."), err, i18n("Errors During Diff") );
-	return;
+        KMessageBox::detailedError( 0, i18n("CVS outputted errors during diff."), err, i18n("Errors During Diff") );
+        return;
     }
-	
+
     if ( !err.isEmpty() ) {
-	int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diff. Do you still want to continue?"),
-							QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
-	if ( s != KMessageBox::Continue )
-	    return;
+        int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diff. Do you still want to continue?"),
+                QStringList::split( "\n", err, false ), i18n("Errors during Diff") );
+        if ( s != KMessageBox::Continue )
+            return;
     }
-			
+
     if ( diff.isEmpty() ) {
-	KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Differences Found") );
-	return;
+        KMessageBox::information( 0, i18n("There is no difference to the repository"), i18n("No Difference found") );
+        return;
     }
-		
+
     Q_ASSERT( diffFrontend() );
     diffFrontend()->showDiff( diff );
 }
-		
+
 void CvsPart::projectConfigWidget(KDialogBase *dlg) {
     QVBox *vbox = dlg->addVBoxPage(i18n("CVS"));
     CvsOptionsWidget *w = new CvsOptionsWidget(this, (QWidget *)vbox, "cvs config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
-	
+
 #include "cvspart.moc"
