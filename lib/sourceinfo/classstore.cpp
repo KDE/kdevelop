@@ -535,17 +535,17 @@ void ClassStore::removeWithReferences(const QString &fileName)
         removeWithReferences(fileName, *it);
 
     for (QMap<QString, ParsedClass*>::Iterator it = m_allClasses.begin(); it != m_allClasses.end(); ++it) {
-        if ( (*it)->declaredInFile() == fileName )
+        if ( (*it) && (*it)->declaredInFile() == fileName )
             m_allClasses.remove( it );
     }
 
     for (QMap<QString, ParsedClass*>::Iterator it = m_allStructs.begin(); it != m_allStructs.end(); ++it) {
-        if ( (*it)->declaredInFile() == fileName )
+        if ( (*it) && (*it)->declaredInFile() == fileName )
             m_allStructs.remove( it );
     }
 
     for (QMap<QString, ParsedScript*>::Iterator it = m_allScripts.begin(); it != m_allScripts.end(); ++it) {
-        if ( (*it)->declaredInFile() == fileName )
+        if ( (*it) && (*it)->declaredInFile() == fileName )
             m_allScripts.remove( it );
     }
     

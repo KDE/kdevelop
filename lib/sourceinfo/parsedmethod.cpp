@@ -135,7 +135,6 @@ QString ParsedMethod::asString()
 {
     if ( _isObjectiveC ) return name();
 
-    ParsedArgument *arg;
     QString str;
 
     if ( isVirtual() ) str += "virtual ";
