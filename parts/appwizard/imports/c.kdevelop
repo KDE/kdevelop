@@ -6,7 +6,6 @@
   <projectmanagement>KDevCustomProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
   <ignoreparts>
-   <part>KDevJavaDebugger</part>
    <part>KDevFileView</part>
   </ignoreparts>
  </general>

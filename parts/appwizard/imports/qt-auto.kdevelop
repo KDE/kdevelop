@@ -1,9 +1,9 @@
-<!DOCTYPE kdevelop >
+<!DOCTYPE kdevelop>
 <kdevelop>
  <general>
   <author>$AUTHOR$</author>
   <email>$EMAIL$</email>
-  <projectmanagement>KDevCustomProject</projectmanagement>
+  <projectmanagement>KDevKDEAutoProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
    <keyword>Qt</keyword>
@@ -18,14 +18,18 @@
    <group pattern="*" name="Others" />
   </groups>
  </kdevfileview>
- <kdevcustomproject>
-  <run>
-   <mainprogram>src/$APPNAMELC$</mainprogram>
-  </run>
- </kdevcustomproject>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
  <kdevdebugger>
   <general>
-   <dbgshell></dbgshell>
+   <dbgshell>libtool</dbgshell>
   </general>
  </kdevdebugger>
 </kdevelop>

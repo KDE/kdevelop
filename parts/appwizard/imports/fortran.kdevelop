@@ -1,10 +1,11 @@
 <!DOCTYPE kdevelop >
 <kdevelop>
  <general>
-  <projectmanagement>KDevAutoProject</projectmanagement>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <projectmanagement>KDevCustomProject</projectmanagement>
   <primarylanguage>Fortran77</primarylanguage>
   <ignoreparts>
-   <part>KDevJavaDebugger</part>
    <part>KDevFileView</part>
   </ignoreparts>
  </general>
@@ -15,7 +16,7 @@
  </kdevautoproject>
  <kdevdebugger>
   <general>
-   <dbgshell>libtool</dbgshell>
+   <dbgshell></dbgshell>
   </general>
  </kdevdebugger>
 </kdevelop>

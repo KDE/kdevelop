@@ -52,6 +52,8 @@ ImportDialog::ImportDialog(AppWizardPart *part, QWidget *parent, const char *nam
         config.setGroup("General");
         project_combo->insertItem(config.readEntry("Comment"));
     }
+
+    setProjectType("c");
 }
 
 
@@ -128,6 +130,37 @@ void ImportDialog::dirButtonClicked()
 }
 
 
+// Checks if the directory dir and all of its subdirectories
+// (one level recursion) have files that follow patterns
+// patterns is comma-separated
+static bool dirHasFiles(QDir &dir, const QString &patterns)
+{
+    QStringList::ConstIterator pit, sit;
+
+    QStringList patternList = QStringList::split(",", patterns);
+    for (pit = patternList.begin(); pit != patternList.end(); ++pit) {
+        if (!dir.entryList(*pit, QDir::Files).isEmpty()) {
+            kdDebug() << "Has files " << (*pit) << endl;
+            return true;
+        }
+    }
+
+    QStringList subdirList = dir.entryList("*", QDir::Dirs);
+    for (sit = subdirList.begin(); sit != subdirList.end(); ++sit) {
+        QDir subdir(dir);
+        subdir.cd(*sit);
+        for (pit = patternList.begin(); pit != patternList.end(); ++pit) {
+            if (!subdir.entryList(*pit, QDir::Files).isEmpty()) {
+                kdDebug() << "Has files " << (*pit) << " in " << (*sit) << endl;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 void ImportDialog::dirChanged()
 {
     QString dirName = dir_edit->text();
@@ -150,19 +183,34 @@ void ImportDialog::dirChanged()
     }
 
     // Automake based?
-    if (dir.exists("acinclude.m4")) {
+    if (dir.exists("config.guess") || dir.exists("configure.in.in")) {
         scanAutomakeProject(dirName);
         return;
     }
 
+    // C++?
+    if (dirHasFiles(dir, "*.cpp,*.cxx,*.C,*.cc")) {
+        name_edit->setText(dir.dirName());
+        setProjectType("cpp");
+        return;
+    }
+
+    name_edit->setText(dir.dirName());
+    
+    // Fortran?
+    if (dirHasFiles(dir, "*.f77,*.f,*.for,*.ftn")) {
+        setProjectType("fortran");
+        return;
+    }
+
     // Python?
-    if (!dir.entryList("*.py").isEmpty()) {
+    if (dirHasFiles(dir, "*.py")) {
         setProjectType("python");
         return;
     }
 
     // Perl?
-    if (!dir.entryList("*.pl").isEmpty()) {
+    if (dirHasFiles(dir, "*.pl,*.pm")) {
         setProjectType("perl");
         return;
     }
@@ -205,19 +253,29 @@ void ImportDialog::scanLegacyStudioProject(const QString &fileName)
 void ImportDialog::scanAutomakeProject(const QString &dirName)
 {
     kdDebug(9010) << "Scanning automake project directory " << dirName << endl;
-    setProjectType("cpp-auto");
+
+    bool stop = false;
+    if (QFile::exists(dirName + "/admin/am_edit")) {
+        setProjectType("kde");
+        stop = true;
+    } else if (QFile::exists(dirName + "/macros/gnome.m4")) {
+        setProjectType("gnome");
+        stop = true;
+    } else {
+        setProjectType("c-auto");
+    }
 
     QFile af(dirName + "/AUTHORS");
     if (!af.open(IO_ReadOnly))
         return;
     QTextStream astream(&af);
     
-    QRegExp are("(.*)<(.*)>");
+    QRegExp authorre("(.*)<(.*)>");
     while (!astream.atEnd()) {
         QString s = astream.readLine();
-        if (are.search(s) != -1) {
-            author_edit->setText(are.cap(1).stripWhiteSpace());
-            email_edit->setText(are.cap(2).stripWhiteSpace());
+        if (authorre.search(s) != -1) {
+            author_edit->setText(authorre.cap(1).stripWhiteSpace());
+            email_edit->setText(authorre.cap(2).stripWhiteSpace());
             break;
         }
     }
@@ -228,13 +286,19 @@ void ImportDialog::scanAutomakeProject(const QString &dirName)
         return;
     QTextStream cstream(&cf);
     
-    QRegExp cre("AM_INIT_AUTOMAKE\\((.*),.*\\).*");
+    QRegExp namere("\\s*AM_INIT_AUTOMAKE\\((.*),.*\\).*");
+    QRegExp cppre("\\s*AC_PROG_CXX");
+    QRegExp f77re("\\s*AC_PROG_F77");
     while (!cstream.atEnd()) {
         QString s = cstream.readLine();
-        if (cre.search(s) != -1) {
-            name_edit->setText(cre.cap(1).stripWhiteSpace());
-            break;
-        }
+        if (namere.search(s) == 0)
+            name_edit->setText(namere.cap(1).stripWhiteSpace());
+        if (!stop)
+            continue;
+        else if (cppre.search(s) == 0)
+            setProjectType("cpp-auto");
+        else if (f77re.search(s) == 0)
+            setProjectType("fortran-auto");
     }
     cf.close();
 }
