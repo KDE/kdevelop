@@ -244,7 +244,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
        ++di );
   {
     // All classes not found in the system are rootnodes.
-    if( !di.current()->isInSystem )
+    if( di.current() && !di.current()->isInSystem )
       retVal->append( di.current() );
   }
 
