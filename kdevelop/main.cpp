@@ -118,9 +118,7 @@ int main(int argc, char* argv[])
     
     a.config()->setGroup("General Options");
     kdevelop->slotTCurrentTab(a.config()->readNumEntry("LastActiveTree",DOC));
-    
-    if(!a.config()->readBoolEntry("show_kdevelop",true))
-      kdevelop->setKDlgCaption();
+   
     
     if (!args->isSet("setup"))
 	  kdevelop->slotProjectOpenCmdl(argv[1]);

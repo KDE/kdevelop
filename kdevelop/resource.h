@@ -168,10 +168,6 @@
 #define	ID_CV_TOOLBAR_WIZARD_CHOICE	14542
 
 ///////////////////////////////////////////////////////////////////
-// Tools-menu entries 
-
-#define ID_TOOLS_KDLGEDIT           15000
-///////////////////////////////////////////////////////////////////
 // Options-menu entries 
 
 #define ID_OPTIONS_EDITOR          	      	     16010
@@ -228,34 +224,12 @@
 
 #define ID_HELP_WHATS_THIS     			18160
 
-///////////////////////////////////////////////////////////////////
-// KDlg-File-menu-entries
-#define ID_KDLG_FILE_CLOSE          20030
-#define ID_KDLG_FILE_SAVE           20040
-#define ID_KDLG_FILE_SAVE_AS           20050
-///////////////////////////////////////////////////////////////////
-// KDlg-Edit-menu-entries
-#define ID_KDLG_EDIT_UNDO           20110
-#define ID_KDLG_EDIT_REDO           20120
 
-#define ID_KDLG_EDIT_CUT            20130
-#define ID_KDLG_EDIT_COPY           20140
-#define ID_KDLG_EDIT_PASTE          20150
-#define ID_KDLG_EDIT_DELETE         20155
 
-///////////////////////////////////////////////////////////////////
-// KDlg-View-menu-entries
-#define ID_KDLG_VIEW_PROPVIEW       20220
 
-#define ID_KDLG_VIEW_TOOLBAR        20230
-#define ID_KDLG_VIEW_STATUSBAR      20240
-
-#define ID_KDLG_VIEW_REFRESH        20250
 #define ID_VIEW_GRID_DLG           20255
 
-///////////////////////////////////////////////////////////////////
-// KDlg-Tools-menu-entries
-#define ID_KDLG_TOOLS_KDEVELOP      11
+
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-Build-menu-entries
@@ -294,7 +268,6 @@
 ///////////////////////////////////////////////////////////////////
 // Toolbar ID's
 #define ID_BROWSER_TOOLBAR 1
-#define ID_KDLG_TOOLBAR 2
 
 
 ///////////////////////////////////////////////////////////////////
@@ -351,7 +324,6 @@
 #define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_B
 #define IDK_EDIT_COPY	       					CTRL+Key_C						// standard key
 #define IDK_BOOKMARKS_CLEAR						CTRL+ALT+Key_C
-#define IDK_TOOLS_KDEVKDLG            CTRL+Key_D
 #define IDK_EDIT_SEARCH								CTRL+Key_F  					// standard key
 #define IDK_EDIT_SEARCH_IN_FILES			CTRL+ALT+Key_F
 #define IDK_VIEW_GOTO_LINE	    			CTRL+Key_G

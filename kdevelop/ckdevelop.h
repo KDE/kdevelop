@@ -76,12 +76,7 @@ class DlgEdit;
 
 class CParsedMethod;
 class CParsedClass;
-class KDlgEdit;
-class KDlgEditWidget;
-class KDlgPropWidget;
-class KDlgWidgets;
-class KDlgDialogs;
-class KDlgItems;
+
 
 
 /** the mainclass in kdevelop
@@ -115,14 +110,9 @@ public:
   void setKeyAccel();
   void setToolmenuEntries();
 	
-  void initKDlg();
-  void initKDlgMenuBar();
-  void initKDlgToolBar();
-  void initKDlgStatusBar();
-//  void initKDlgKeyAccel();  not needed because of setKeyAccel(); connecting and disconnecting accelerators
+  void initDlgEditor();
+  
 
-  /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
-  void setKDlgCaption();
   /** sets the Main window caption for KDevelop */
   void setMainCaption(int tab_item=-1);
   			
@@ -157,8 +147,6 @@ public:
     * @param enable if true than enable,otherwise disable
     */
   void setToolMenuProcess(bool enable);
-
-  KStatusBar*  kdlg_get_statusbar()      { return kdlg_statusbar; }
 
   /** Get the current project. */
   CProject* getProject()                 {return prj;}
@@ -431,16 +419,9 @@ public:
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 
-  void slotHelpDlgNotes();
 
   void slotSwitchFileRequest(const QString &filename,int linenumber);
   
-  ////////////////////////
-  // KDlgEdit-View-Menu entries -- managed by kdevelop
-  ///////////////////////
-  void slotKDlgViewPropView();
-  void slotKDlgViewToolbar();
-  void slotKDlgViewStatusbar();
 
   //////////////////////////////////
   // Classbrowser wizardbutton slots
@@ -518,7 +499,6 @@ public:
   void slotURLonURL(const QString &url);
 
   void switchToKDevelop();
-  void switchToKDlgEdit();
 
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotProcessExited(KProcess *);
@@ -669,37 +649,15 @@ private:
   bool cv_decl_or_impl;
 
   QStrList file_open_list;	
-  // the menus for the dialogeditor- specific. other menus inserted as the standard above
-  QPopupMenu* kdlg_file_menu;
-  KGuiCmdPopup* kdlg_edit_menu;
-  QPopupMenu* kdlg_view_menu;
-  QPopupMenu* kdlg_project_menu;
-  QPopupMenu* kdlg_build_menu;
-  QPopupMenu* kdlg_tools_menu;
-  QPopupMenu* kdlg_options_menu;
-  QPopupMenu* kdlg_help_menu;
-
+  
   QStrList tools_exe;
   QStrList tools_entry;
   QStrList tools_argument;
   	
   KGuiCmdDispatcher *kdev_dispatcher;
-  KGuiCmdDispatcher *kdlg_dispatcher;
-
   KMenuBar* kdev_menubar;
-  KMenuBar* kdlg_menubar;
-
   KStatusBar* kdev_statusbar;
-  KStatusBar* kdlg_statusbar;
 
-  /** Divides the top_panner for edit and properties widget 
-   * of the dialogeditor */
-  DockWidget* dockbase_kdlg_top_panner;
-  QSplitter* kdlg_top_panner;  
-  
-  /** main class for the dialogeditor- 
-   *  handles menu/toolbar etc. events specified for the dialogeditor. */
-  KDlgEdit* kdlgedit;
   DlgEdit* dlgedit;
   /** If this to true, the user get a beep after a 
    *  process,slotProcessExited() */
@@ -742,7 +700,6 @@ private:
   EditorView* editor_view;
   DocBrowserView* browser_view;
 
-
   
   //  CEditWidget* edit_widget; // a pointer to the actual editwidget
   //  CEditWidget* header_widget; // the editwidget for the headers/resources
@@ -768,12 +725,8 @@ private:
   /** Output from the application */
   OutputView *outputview;
 
-  QValueList<int> kdlg_sizes;
-
-    //  CErrorMessageParser* error_parser;
   QString version;
   QString kdev_caption;
-  QString kdlg_caption;
   bool project;
 
   bool  prev_was_search_result;
@@ -789,7 +742,7 @@ private:
   bool bAutoswitch;
   bool bDefaultCV;
   bool bKDevelop;
-//  KProgress* statProg;
+
   QProgressBar* statProg;
   //some vars for the searchengine
   QString search_output;
@@ -798,10 +751,8 @@ private:
   // values are "run","make" "refresh";
   QString next_job;
   QString make_cmd;
-//   QString make_with_cmd;
 
   CAddExistingFileDlg* add_dlg;
-  //  GrepDialog* grep_dlg;
 
   int lasttab;
   QString lastfile;

@@ -70,7 +70,6 @@ kdlgloader/Makefile \
 kdevelop/classparser/Makefile \
 kdevelop/classwizard/Makefile \
 kdevelop/gfxview/Makefile \
-kdevelop/kdlgedit/Makefile \
 kdevelop/kwrite/Makefile \
 kdevelop/pics/Makefile \
 kdevelop/print/Makefile \

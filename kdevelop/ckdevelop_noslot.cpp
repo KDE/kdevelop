@@ -467,16 +467,12 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
 }
 
 void CKDevelop::switchToKDevelop(){
-//printf("CKDevelop::switchToKDevelop()\n");
-  kdlg_caption = caption();
   setCaption(kdev_caption);
 
   bKDevelop=true;
   this->setUpdatesEnabled(false);
 
   //////// change the mainview ////////
-  //  kdlg_tabctl->hide();
-  kdlg_top_panner->hide();
   mdi_main_frame->show();
   t_tab_view->show();
 
@@ -486,19 +482,16 @@ void CKDevelop::switchToKDevelop(){
 //F.B.  top_panner->show();
 
   //////// change the event dispatchers ///////////
-  kdlg_dispatcher->setEnabled(false);
   kdev_dispatcher->setEnabled(true);
 
   //////// change the bars ///////////
-  kdlg_menubar->hide();
   kdev_menubar->show();
   setMenu(kdev_menubar);
 
-  kdlg_statusbar->hide();
   kdev_statusbar->show();
   setStatusBar(kdev_statusbar);
 
-  toolBar(ID_KDLG_TOOLBAR)->hide();
+
   toolBar()->show();
   toolBar(ID_BROWSER_TOOLBAR)->show();
 
@@ -533,91 +526,7 @@ void CKDevelop::switchToKDevelop(){
   this->repaint();
 
 }
-void CKDevelop::switchToKDlgEdit(){
-//   KConfig *config = kapp->getConfig();  
 
-  config->setGroup("KDlgEdit");
-  if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
-    {
-      KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
-      readmedlg->exec();
-
-      if (!readmedlg->isShowAgain())
-        config->writeEntry("KDlgEdit_ShowReadme","false");
-
-      delete readmedlg;
-    }
-
-
-  kdev_caption = caption();
-  setCaption(kdlg_caption);
-  bKDevelop=false;
-  this->setUpdatesEnabled(false);
-  //////// change the mainview ////////
-  mdi_main_frame->hide();
-  t_tab_view->hide();
-  kdlgedit->kdlg_get_dialogs_view()->show();
-  kdlg_top_panner->show();
-
-//F.B.  top_panner->hide();
-  //  top_panner->deactivate();
-  //  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
-//F.B.  top_panner->show();
-
-  //////// change the event dispatchers ///////////
-  kdev_dispatcher->setEnabled(false);
-  kdlg_dispatcher->setEnabled(true);
-
-  //////// change the bars ///////////
-  kdev_menubar->hide();
-  kdlg_menubar->show();
-  setMenu(kdlg_menubar);
-
-  kdev_statusbar->hide();
-  kdlg_statusbar->show();
-  setStatusBar(kdlg_statusbar);
-
-  toolBar()->hide();
-  toolBar(ID_BROWSER_TOOLBAR)->hide();
-  toolBar(ID_KDLG_TOOLBAR)->show();
-
-  ///////// reset bar status ////////////
-  if(kdlg_view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-    kdlg_statusbar->show();
-  else
-    kdlg_statusbar->hide();
-
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR))
-    enableToolBar(KToolBar::Show, ID_KDLG_TOOLBAR);
-  else
-    enableToolBar(KToolBar::Hide, ID_KDLG_TOOLBAR);
-
-  kdlgedit->showPropWidget(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
-
-  setKeyAccel();  // initialize Keys
-
-  // this toolbar toogle is for placing the panner devider correctly
-  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
-  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
-
-  ///////// reset the views status ///////////////
-  if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-    showTreeView();
-  else
-    showTreeView(false);
-
-  if(kdlg_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
-    showOutputView();
-  else
-    showOutputView(false);
-  
-  //  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
-  //    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
-  //  }
-  //  kdlg_tabctl->setFocus();
-  this->setUpdatesEnabled(true);
-  this->repaint();
-}
 
 void CKDevelop::setToolMenuProcess(bool enable){
     if (enable)
@@ -683,18 +592,12 @@ void CKDevelop::setToolMenuProcess(bool enable){
 
 void CKDevelop::showTreeView(bool show){
 
-   if (bKDevelop)
-   {
+ 
      if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
        t_tab_view->show();
      else
        t_tab_view->hide();
-   }
-   else
-   {
-     kdlgedit->showTabWidget(view_menu->isItemChecked(ID_VIEW_TREEVIEW));
-   }
-
+   
   if(bAutoswitch)
   {
     if(show){
@@ -757,12 +660,6 @@ void CKDevelop::readOptions(){
 	/////////////////////////////////////////
 	// BAR STATUS
 
-// not movable anymore :-(
-//	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
-//	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
-//	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
-//	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
-
 
   KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
   toolBar()->setBarPos(tool_bar_pos);
@@ -786,22 +683,11 @@ void CKDevelop::readOptions(){
     enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
   }
 	
-	// Dialogedit Toolbar	
-  KToolBar::BarPosition kdlg_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("KDlgEdit ToolBar Position", KToolBar::Top);
-  toolBar(ID_KDLG_TOOLBAR)->setBarPos(kdlg_tool_bar_pos);
-  bool kdlg_toolbar=config->readBoolEntry("show_kdlg_toolbar", true);
-  if(kdlg_toolbar){
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
-    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
-  }
-  else{
-    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
-  }
+
 	// Statusbar
   bool statusbar=config->readBoolEntry("show_statusbar",true);
   if(statusbar){
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
   }
   else{
     enableStatusBar();
@@ -828,9 +714,7 @@ void CKDevelop::readOptions(){
 
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
-    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
   }
   else
     o_tab_view->hide();
@@ -845,32 +729,13 @@ void CKDevelop::readOptions(){
 
   if(treeview){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
   }
   else
     t_tab_view->hide();
 
 	
-  int kdlg_tabctl_pos=config->readNumEntry("KDlgTabCtlWidth", size.width()*20/100);
-  int kdlg_editview_pos=config->readNumEntry("KDlgEditWidth", size.width()*60/100);
-  int properties_view_pos=config->readNumEntry("PropertiesWidth", size.width()*20/100);
-  kdlg_sizes.clear();
-  kdlg_sizes << kdlg_tabctl_pos;
-  kdlg_sizes << kdlg_editview_pos;
-  kdlg_sizes << properties_view_pos;
-  kdlg_top_panner->setSizes(kdlg_sizes);
-/*  QValueList<int> kdlg_panner_sizes;
-  kdlg_panner_sizes << config->readNumEntry("kdlg_top_panner_pos", 80);
-  kdlg_top_panner->setSizes(kdlg_panner_sizes);
-*/
-  if(config->readBoolEntry("show_properties_view",true)){
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-  }	
-  else
-
-
+  
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
   bAutosave=config->readBoolEntry("Autosave",true);
@@ -886,7 +751,6 @@ void CKDevelop::readOptions(){
   bAutoswitch=config->readBoolEntry("Autoswitch",true);
   bDefaultCV=config->readBoolEntry("DefaultClassView",true);
   make_cmd=config->readEntry("Make","make");
-  //  make_with_cmd=config->readEntry("MakeWith","");
 
   config->setGroup("Files");
 	recent_projects.setAutoDelete(TRUE);
@@ -916,13 +780,8 @@ void CKDevelop::readOptions(){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
 */
-  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
-  if(switchKDevelop){
     switchToKDevelop();
-  }
-  else{
-    switchToKDlgEdit();
-  }
+ 
 }
 
 void CKDevelop::saveOptions(){
@@ -930,12 +789,9 @@ void CKDevelop::saveOptions(){
   config->setGroup("General Options");
   config->writeEntry("Geometry", size() );
   
-// not moveable anymore :-(
-//  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
-//  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
+
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
-  config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
 
 
   config->writeEntry("EditViewHeight",mdi_main_frame->height());
@@ -944,24 +800,15 @@ void CKDevelop::saveOptions(){
   config->writeEntry("ClassViewWidth",t_tab_view->width());
   config->writeEntry("EditViewWidth",mdi_main_frame->width());
 
-  kdlg_sizes = kdlg_top_panner->sizes();
-  config->writeEntry("KDlgTabCtlWidth", kdlg_sizes[0]);
-  config->writeEntry("KDlgEditWidth", kdlg_sizes[1]);
-  config->writeEntry("PropertiesWidth",kdlg_sizes[2]);
-
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
-  config->writeEntry("show_properties_view",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
 
   config->writeEntry("show_std_toolbar",view_menu->isItemChecked(ID_VIEW_TOOLBAR));
   config->writeEntry("show_browser_toolbar",view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR));
-  config->writeEntry("show_kdlg_toolbar",kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR));
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
-
-  config->writeEntry("show_kdevelop",bKDevelop);
 
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 

@@ -46,7 +46,6 @@
 #include "crealfileview.h"
 #include "ceditwidget.h"
 #include "ctoolclass.h"	
-#include "kswallow.h"
 #include "ctabctl.h"
 #include "grepview.h"
 #include "makeview.h"
@@ -80,10 +79,9 @@ CKDevelop::CKDevelop()
   config = kapp->config();
   kdev_caption=kapp->caption();
 
-  
   initView();
+  
   initConnections();
-  initKDlg();    // create the KDialogEditor
 
   initWhatsThis();
 	
@@ -162,6 +160,8 @@ void CKDevelop::initView(){
   t_tab_view->addTab(doc_tree,i18n("DOC"));
   t_tab_view->addTab(widprop_split_view,i18n("DLG"));
 
+  initDlgEditor();
+
   ////////////////////////
   // Right main window
   ////////////////////////
@@ -169,11 +169,6 @@ void CKDevelop::initView(){
   mdi_main_frame = new MdiFrame( this, "mdi_frame");
   // maybe we should make this configurable :-)
   mdi_main_frame-> m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
-
-
-  // the dialog editor manager
-  dlgedit = new DlgEdit(widprop_split_view->getWidgetsView(),widprop_split_view->getPropertyView());
-  ComponentManager::self()->registerComponent(dlgedit);
   
   
 #warning FIXME should we swallow tools in KDevelop 2??
@@ -271,12 +266,6 @@ void CKDevelop::initKeyAccel(){
   
   accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
   accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()), true, ID_VIEW_PREVIOUS_ERROR);
-
-  accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg",0);
-  accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()), true, ID_KDLG_TOOLS_KDEVELOP);
-  
-  accel->insertItem( i18n("Dialog Editor"), "Dialog Editor", 0);
-  accel->connectItem("Dialog Editor", this, SLOT(switchToKDlgEdit()), true, ID_TOOLS_KDLGEDIT);
   
   accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
   accel->connectItem( "Tree-View", this, SLOT(slotViewTTreeView()), true, ID_VIEW_TREEVIEW);
@@ -516,8 +505,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertItem(i18n("&Previous Error"),this,
 			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
   view_menu->insertSeparator();
-  view_menu->insertItem(BarIcon("newwidget"),i18n("&Dialog Editor"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
-  view_menu->insertSeparator();
+  
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
   view_menu->insertItem(i18n("&Output-View"),this,
@@ -592,7 +580,7 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Build-menu entries
   build_menu = new QPopupMenu;
-  build_menu->insertItem(BarIcon("generate"),i18n("&Generate Sources..."),dlgedit,
+  build_menu->insertItem(BarIcon("generate"),i18n("&Generate Dialog Sources..."),dlgedit,
 			       SLOT(slotBuildGenerate()),0,ID_KDLG_BUILD_GENERATE);  
   build_menu->insertItem(BarIcon("compfile"),i18n("Compile &File"),
 			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
@@ -758,6 +746,56 @@ void CKDevelop::initMenuBar(){
   																SLOT(slotClassbrowserViewTree()),0, ID_CV_GRAPHICAL_VIEW);
   
 
+  disableCommand(ID_FILE_NEW);
+  disableCommand(ID_FILE_PRINT);
+  
+ 
+  // Why??  disableCommand(ID_VIEW_NEXT_ERROR);
+  //  disableCommand(ID_VIEW_PREVIOUS_ERROR);
+
+  disableCommand(ID_EDIT_UNDO);
+  disableCommand(ID_EDIT_REDO);
+  
+
+  disableCommand(ID_PROJECT_CLOSE);
+  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+
+  //  disableCommand(ID_PROJECT_REMOVE_FILE);
+  disableCommand(ID_PROJECT_NEW_CLASS);
+  disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+  disableCommand(ID_PROJECT_FILE_PROPERTIES);
+  disableCommand(ID_PROJECT_OPTIONS);
+  disableCommand(ID_PROJECT_WORKSPACES);
+  disableCommand(ID_PROJECT_MESSAGES);  	
+  disableCommand(ID_PROJECT_MAKE_PROJECT_API);
+  disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
+  disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+ 
+  disableCommand(ID_BUILD_RUN);
+  disableCommand(ID_BUILD_RUN_WITH_ARGS);
+  disableCommand(ID_BUILD_DEBUG);
+  disableCommand(ID_BUILD_MAKE);
+  disableCommand(ID_BUILD_REBUILD_ALL);
+  disableCommand(ID_BUILD_STOP);
+  disableCommand(ID_BUILD_CLEAN_REBUILD_ALL);
+  disableCommand(ID_BUILD_DISTCLEAN);
+  disableCommand(ID_BUILD_AUTOCONF);
+  disableCommand(ID_BUILD_CONFIGURE);
+  
+  disableCommand(ID_BUILD_COMPILE_FILE);
+ 
+  disableCommand(ID_KDLG_BUILD_GENERATE);
+
+  disableCommand(ID_CV_WIZARD);
+  disableCommand(ID_CV_GRAPHICAL_VIEW);
+  disableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+  disableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+
+  disableCommand(ID_HELP_BACK);
+  disableCommand(ID_HELP_FORWARD);
+  disableCommand(ID_HELP_PROJECT_API);
+  disableCommand(ID_HELP_USER_MANUAL);
+
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
   connect(file_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
@@ -827,8 +865,6 @@ void CKDevelop::initToolBar(){
   QFrame *separatorLine2= new QFrame(toolBar());
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,20,separatorLine2);
-
-  toolBar()->insertButton(BarIcon("newwidget"),ID_TOOLS_KDLGEDIT, true,i18n("Switch to the dialogeditor"));
   toolBar()->insertButton(BarIcon("tree_win"),ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
   toolBar()->insertButton(BarIcon("output_win"),ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
@@ -836,7 +872,7 @@ void CKDevelop::initToolBar(){
 
  QFrame *separatorLine3= new QFrame(toolBar());
  separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-toolBar()->insertWidget(0,20,separatorLine3);
+ toolBar()->insertWidget(0,20,separatorLine3);
 
 
   QToolButton *btnwhat = QWhatsThis::whatsThisButton(toolBar());
@@ -1041,6 +1077,12 @@ void CKDevelop::initConnections(){
 	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
 
 }
+void CKDevelop::initDlgEditor(){
+    // the dialog editor manager
+    dlgedit = new DlgEdit(widprop_split_view->getWidgetsView(),widprop_split_view->getPropertyView());
+    ComponentManager::self()->registerComponent(dlgedit);   
+}
+
 
 void CKDevelop::initProject()
 {
@@ -1102,21 +1144,13 @@ void CKDevelop::initProject()
 }
 
 
-void CKDevelop::setKeyAccel(){
-if(bKDevelop){
-    accel->disconnectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()));
-
-    accel->disconnectItem(accel->stdAction( KAccel::Close ) , (QObject*)kdlgedit, SLOT(slotFileClose()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Save ) , (QObject*)kdlgedit, SLOT(slotFileSave()) );
-
-    accel->setItemEnabled("KDevKDlg", false );
-    accel->setItemEnabled("Dialog Editor", true );
-
+void CKDevelop::setKeyAccel(){    
+    
     accel->connectItem( KAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
     accel->connectItem( KAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
     accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
-
-
+    
+    
     accel->changeMenuAccel(file_menu, ID_FILE_NEW, KAccel::New );
     accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KAccel::Open );
     accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KAccel::Close );
@@ -1138,49 +1172,15 @@ if(bKDevelop){
     accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
     accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
     accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
-		accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-		accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
-
+    accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
+    accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
+    
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_ADD ,"Add_Bookmarks" );
     accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
-
+    
     accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
     accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
-  }
-  else{
-
-    accel->disconnectItem(accel->stdAction( KAccel::Close ) , this, SLOT(slotFileClose()) );
-    accel->disconnectItem(accel->stdAction( KAccel::Save ) , this, SLOT(slotFileSave()) );
-
-    accel->setItemEnabled("KDevKDlg", true );
-    accel->setItemEnabled("Dialog Editor", false );
-
-    accel->connectItem( "Preview dialog", (QObject*)kdlgedit, SLOT(slotViewPreview()), true, ID_VIEW_PREVIEW);
-
-    accel->connectItem( KAccel::Close , (QObject*)kdlgedit, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
-    accel->connectItem( KAccel::Save , (QObject*)kdlgedit, SLOT(slotFileSave()), true, ID_FILE_SAVE);
-
-
-    accel->changeMenuAccel(kdlg_file_menu, ID_FILE_NEW, KAccel::New );
-    accel->changeMenuAccel(kdlg_file_menu, ID_KDLG_FILE_SAVE, KAccel::Save );
-    accel->changeMenuAccel(kdlg_file_menu, ID_FILE_QUIT, KAccel::Quit );
-
-    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
-    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
-    accel->changeMenuAccel(kdlg_view_menu,ID_VIEW_PREVIEW,"Preview dialog");
-
-    accel->changeMenuAccel(kdlg_project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
-    accel->changeMenuAccel(kdlg_project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
-
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_MAKE ,"Make" );
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN ,"Run" );
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-    accel->changeMenuAccel(kdlg_build_menu,ID_BUILD_STOP,"Stop_proc");
-
-    accel->changeMenuAccel(kdlg_help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
-    accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );
-  }
+    
 }
 
 void CKDevelop::setToolmenuEntries(){
@@ -1193,12 +1193,11 @@ void CKDevelop::setToolmenuEntries(){
 	uint items;
 	for(items=0;items<tools_entry.count();items++){
 		tools_menu->insertItem(tools_entry.at(items));
-		kdlg_tools_menu->insertItem(tools_entry.at(items));
 	}
   
   
 	
 	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
-	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
+       
 
 }

@@ -62,7 +62,6 @@
 #include "cexecuteargdlg.h"
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/kwdialog.h"
-#include "kswallow.h"
 #include "cbugreportdlg.h"
 #include "../config.h"
 #include "structdef.h"
@@ -599,25 +598,18 @@ void CKDevelop::slotViewTTreeView()
 {
   bool willshow = !view_menu->isItemChecked(ID_VIEW_TREEVIEW);
   view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
-  kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
   toolBar()->setButton(ID_VIEW_TREEVIEW, willshow);
-  toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, willshow);
-  if (bKDevelop)
     if (willshow)
       t_tab_view->show();
     else
       t_tab_view->hide();
-  else 
-    kdlgedit->showTabWidget(willshow);
 }
 
 void CKDevelop::slotViewTOutputView()
 {
   bool willshow = !view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
   view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
-  kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
   toolBar()->setButton(ID_VIEW_OUTPUTVIEW, willshow);
-  toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, willshow);
   if (willshow)
     o_tab_view->show();
   else
@@ -650,11 +642,9 @@ void CKDevelop::slotViewTBrowserToolbar(){
 void CKDevelop::slotViewTStatusbar(){
   if(view_menu->isItemChecked(ID_VIEW_STATUSBAR)){
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
-	  kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
   }
   else{
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-  	kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
   }
   enableStatusBar();
 }
@@ -662,12 +652,10 @@ void CKDevelop::slotViewTStatusbar(){
 void CKDevelop::slotViewTMDIViewTaskbar(){
   if(view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR)){
     view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,false);
-    kdlg_view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,false);
     mdi_main_frame->hideViewTaskBar();
   }
   else{
     view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,true);
     mdi_main_frame->showViewTaskBar();
   }
 }
@@ -750,7 +738,7 @@ void CKDevelop::slotBuildMake(){
   }
 
   //save/generate dialog if needed
-  kdlgedit->generateSourcecodeIfNeeded();
+  //  dlgedit->generateSourcecodeIfNeeded();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -862,7 +850,7 @@ void CKDevelop::slotBuildConfigure(){
     if(!argdlg.exec())
         return;
     
-    prj->setConfigureArgs(argdlg.getArguments());		
+    prj->setConfigureArgs(argdlg.getArguments()); 	
     prj->writeProject();
 
   slotStatusMsg(i18n("Running ./configure..."));
@@ -902,27 +890,6 @@ void CKDevelop::slotToolsTool(int tool){
     
     showOutputView(false);
 
-    
-#warning FIXME should we swallow tools in KDevelop 2 too?
-   //  QString argument=tools_argument.at(tool);
- 		
-//     // This allows us to replace the macro %H with the header file name, %S with the source file name
-//     // and %D with the project directory name.  Any others we should have?
-//     argument.replace( QRegExp("%H"), header_widget->getName() );
-//     argument.replace( QRegExp("%S"), cpp_widget->getName() );
-//     if(project){
-//       argument.replace( QRegExp("%D"), prj->getProjectDir() );
-//     }
-//     s_tab_view->setCurrentTab(TOOLS);
-//     swallow_widget->sWClose(false);
-//     if(argument.isEmpty()){
-//       swallow_widget->setExeString(tools_exe.at(tool));
-//     }
-//     else{
-//       swallow_widget->setExeString(tools_exe.at(tool)+argument);
-//     }
-//     swallow_widget->sWExecute();
-//     swallow_widget->init();
 }
 
 
@@ -1098,8 +1065,7 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
   configdlg->show();
 
   tools_menu->clear();
-  kdlg_tools_menu->clear();
-	setToolmenuEntries();
+  setToolmenuEntries();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1665,26 +1631,7 @@ void CKDevelop::slotHelpAbout(){
   aboutmsg.show();
 }
 
-void CKDevelop::slotKDlgViewPropView(){
-  bool willshow = !kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW);
-  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW, willshow);
-  kdlgedit->showPropWidget(willshow);
-}
 
-void CKDevelop::slotKDlgViewToolbar(){
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR)){
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,false);
-    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
-  }
-  else{
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
-    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
-  }
-}
-
-void CKDevelop::slotKDlgViewStatusbar(){
-
-}
 
 /*********************************************************************
  *                                                                   *
@@ -1818,25 +1765,21 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
 void CKDevelop::enableCommand(int id_)
 {
   kdev_menubar->setItemEnabled(id_,true);
-  kdlg_menubar->setItemEnabled(id_,true);
   accel->setItemEnabled(id_,true);
 
 //  menuBar()->setItemEnabled(id_,true);
   toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,true);
 }
 
 void CKDevelop::disableCommand(int id_)
 {
   kdev_menubar->setItemEnabled(id_,false);
-  kdlg_menubar->setItemEnabled(id_,false);
   accel->setItemEnabled(id_,false);
 
 //  menuBar()->setItemEnabled(id_,false);
   toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
-  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,false);
 }
 
 void CKDevelop::slotNewStatus()
@@ -1867,39 +1810,7 @@ void CKDevelop::slotMarkStatus() {
 }
 
 
-/*
-void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
 
-  int item=s_tab_view->getCurrentTab();
-  if (item==CPP)
-  {
-    if(bMarked){
-      enableCommand(ID_EDIT_CUT);
-      enableCommand(ID_EDIT_COPY);
-    }
-    else{
-      disableCommand(ID_EDIT_CUT);
-      disableCommand(ID_EDIT_COPY);
-    }
-  }		
-}
-
-void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
-{
-  int item=s_tab_view->getCurrentTab();
-  if (item==HEADER)
-  {
-      if(bMarked){
-        enableCommand(ID_EDIT_CUT);
-        enableCommand(ID_EDIT_COPY);
-      }
-      else{
-        disableCommand(ID_EDIT_CUT);
-        disableCommand(ID_EDIT_COPY);
-      }		
-  }
-}
-*/
 void CKDevelop::slotBROWSERMarkStatus(bool bMarked){
     if (browser_view->hasFocus()){
 	if(bMarked){
@@ -1952,234 +1863,227 @@ void CKDevelop::slotNewUndo(){
 
 
 void CKDevelop::slotURLSelected(const QString &url, const QString &, int){
-//	enableCommand(ID_HELP_BROWSER_STOP);
-  if(!bKDevelop)
-      switchToKDevelop();
-  browser_widget->setFocus();
-  
-  if(url.contains("kdevelop/search_result.html") != 0){
-      browser_widget->showURL(url,true); // with reload if equal
-  }
-  else{
-    browser_widget->showURL(url); // without reload if equal
-  }
-
-
-
-  QString str = history_list.current();
-  //if it's a url-request from the search result jump to the correct point
-  if (str.contains("kdevelop/search_result.html")){
-    prev_was_search_result=true; // after this time, jump to the searchkey
-  }
-
+    browser_widget->setFocus();
+    
+    if(url.contains("kdevelop/search_result.html") != 0){
+	browser_widget->showURL(url,true); // with reload if equal
+    }
+    else{
+	browser_widget->showURL(url); // without reload if equal
+    }
+    
+    QString str = history_list.current();
+    //if it's a url-request from the search result jump to the correct point
+    if (str.contains("kdevelop/search_result.html")){
+	prev_was_search_result=true; // after this time, jump to the searchkey
+    }
+    
 }
 
-void CKDevelop::slotURLonURL(const QString &url)
-{
+void CKDevelop::slotURLonURL(const QString &url){
     statusBar()->changeItem(url.isNull()? i18n("Ready.") : url, ID_STATUS_MSG);
 }
 
 void CKDevelop::slotDocumentDone(){
-  QString actualURL=browser_widget->currentURL();
-  QString actualTitle=browser_widget->currentTitle();
-  int cur =  history_list.at()+1; // get the current index
-  int found =  history_list.find(actualURL); // get the current index
-  int pos = actualURL.findRev('#');
-  QString url_wo_ref=actualURL; // without ref
-
-  if(prev_was_search_result){
-    browser_widget->findTextBegin();
-    browser_widget->findTextNext(QRegExp(doc_search_text));
-  }
-
-  if (pos!=-1)
-   url_wo_ref = actualURL.left(pos);
-
-  // insert into the history-list
-  // the following if-statement isn't necessary, because
-  //   slotDocumentDone isn't called in the other cases [use of KFMclient for non file://....htm(l)]
-  if(actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1){
-   // http aren't added to the history list ...
-
-   if (found == -1)
-   {
-    if(cur == 0 ){
-      history_list.append(actualURL);
-      history_title_list.append(actualTitle);
+    QString actualURL=browser_widget->currentURL();
+    QString actualTitle=browser_widget->currentTitle();
+    int cur =  history_list.at()+1; // get the current index
+    int found =  history_list.find(actualURL); // get the current index
+    int pos = actualURL.findRev('#');
+    QString url_wo_ref=actualURL; // without ref
+    
+    if(prev_was_search_result){
+	browser_widget->findTextBegin();
+	browser_widget->findTextNext(QRegExp(doc_search_text));
     }
-    else{
-      history_list.insert(cur,actualURL);
-      history_title_list.insert(cur, actualTitle);
-    }
-   }
-   else
-   {
-     // the desired URL was already found in the list
-
-     if (actualURL.contains("kdevelop/search_result.html") &&
-	history_title_list.at(found)!=actualTitle)
-     {
-         // this means... a new search_result.html is selected and an old one
-         // was found in list
-         //   so append it at the end
-         history_list.remove(found);
-         history_title_list.remove(found);
-         // append now the new one
-         cur=history_list.count();
-         history_list.insert(cur,actualURL);
-         history_title_list.insert(cur, actualTitle);
-     }
-     else
-     if (prev_was_search_result)
-      {
-         // this means... sort the found entry after the search_result.html-entry
-         //   so we can always use the back button to get the last search results
-         history_list.remove(found);
-         history_title_list.remove(found);
-         // correct cur after removing a list element
-         if (found<cur)
-           cur--;
-         history_list.insert(cur,actualURL);
-         history_title_list.insert(cur, actualTitle);
-      }
-      else
-      {
-         cur=found;
-      }
-   }
-
-   // set now the pointer of the history list
-   history_list.at(cur);
-
-   // reorganize the prev- and the next-historylist
-   history_next->clear();
-   history_prev->clear();
+    
+    if (pos!=-1)
+	url_wo_ref = actualURL.left(pos);
+    
+    // insert into the history-list
+    // the following if-statement isn't necessary, because
+    //   slotDocumentDone isn't called in the other cases [use of KFMclient for non file://....htm(l)]
+    if(actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1){
+	// http aren't added to the history list ...
+	
+	if (found == -1)
+	    {
+		if(cur == 0 ){
+		    history_list.append(actualURL);
+		    history_title_list.append(actualTitle);
+		}
+		else{
+		    history_list.insert(cur,actualURL);
+		    history_title_list.insert(cur, actualTitle);
+		}
+	    }
+	else
+	    {
+		// the desired URL was already found in the list
 		
-   int i;
-   for ( i =0 ; i < cur; i++){
-       history_prev->insertItem(history_title_list.at(i));
-   }
-
-   for (i = cur+1 ; i < (int) history_list.count(); i++){
-       history_next->insertItem(history_title_list.at(i));
-   }
-
-   // disable the back button if necessary
-   if (cur == 0){ // no more backwards
- 	disableCommand(ID_HELP_BACK);
-   }
-   else {
- 	enableCommand(ID_HELP_BACK);
-   }
-
-   // disable the forward button if necessary
-   if (cur >= ((int) history_list.count())-1){ // no more forwards
- 	disableCommand(ID_HELP_FORWARD);
-   }
-   else {
- 	enableCommand(ID_HELP_FORWARD);
-   }
-
-  }
-
-  prev_was_search_result=false;
-  disableCommand(ID_HELP_BROWSER_STOP);
+		if (actualURL.contains("kdevelop/search_result.html") &&
+		    history_title_list.at(found)!=actualTitle)
+		    {
+			// this means... a new search_result.html is selected and an old one
+			// was found in list
+			//   so append it at the end
+			history_list.remove(found);
+			history_title_list.remove(found);
+			// append now the new one
+			cur=history_list.count();
+			history_list.insert(cur,actualURL);
+			history_title_list.insert(cur, actualTitle);
+		    }
+		else
+		    if (prev_was_search_result)
+			{
+			    // this means... sort the found entry after the search_result.html-entry
+			    //   so we can always use the back button to get the last search results
+			    history_list.remove(found);
+			    history_title_list.remove(found);
+			    // correct cur after removing a list element
+			    if (found<cur)
+				cur--;
+			    history_list.insert(cur,actualURL);
+			    history_title_list.insert(cur, actualTitle);
+			}
+		    else{
+			cur=found;
+		    }
+	    }
+	
+	// set now the pointer of the history list
+	history_list.at(cur);
+	
+	// reorganize the prev- and the next-historylist
+	history_next->clear();
+	history_prev->clear();
+	
+	int i;
+	for ( i =0 ; i < cur; i++){
+	    history_prev->insertItem(history_title_list.at(i));
+	}
+	
+	for (i = cur+1 ; i < (int) history_list.count(); i++){
+	    history_next->insertItem(history_title_list.at(i));
+	}
+	
+	// disable the back button if necessary
+	if (cur == 0){ // no more backwards
+	    disableCommand(ID_HELP_BACK);
+	}
+	else {
+	    enableCommand(ID_HELP_BACK);
+	}
+	
+	// disable the forward button if necessary
+	if (cur >= ((int) history_list.count())-1){ // no more forwards
+	    disableCommand(ID_HELP_FORWARD);
+	}
+	else {
+	    enableCommand(ID_HELP_FORWARD);
+	}
+	
+    }
+    
+    prev_was_search_result=false;
+    disableCommand(ID_HELP_BROWSER_STOP);
 }
 
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
-  search_output += QString::fromLatin1(buffer, buflen);
+    search_output += QString::fromLatin1(buffer, buflen);
 }
 
 
 void CKDevelop::slotSearchProcessExited(KProcess*){
-	disableCommand(ID_HELP_BROWSER_STOP);
-  //  cerr << search_output;
-  int pos=0;
-  int nextpos=0;
-  QStrList list;
-  QStrList sort_list;
-  QString str;
-  QString found_str;
-  int i=0;
-  int max=0;
-
-  QString filename =locateLocal("appdata","search_result.html");
-  if (useHtDig)
-  {
-    slotURLSelected("file:" + filename, QString(), 1);
-    return;
-  }
-
-  while((nextpos = search_output.find('\n',pos)) != -1){
-    str = search_output.mid(pos,nextpos-pos);
-    list.append(str);
-    pos = nextpos+1;
-  }
-  if (list.isEmpty()){
-
-     KMessageBox::sorry(0, i18n("\"%1\" not found in documentation!").arg(doc_search_display_text));
-    return;
-  }
-
-  // //lets sort it a little bit
-   for(;i<30;i++){
-    max =0;
-    found_str = "";
-    for(str = list.first();str != 0;str = list.next()){
-      if (searchToolGetNumber(str) >= max){
-	found_str = str.copy();
-	max = searchToolGetNumber(str);
-      }
+    disableCommand(ID_HELP_BROWSER_STOP);
+    //  cerr << search_output;
+    int pos=0;
+    int nextpos=0;
+    QStrList list;
+    QStrList sort_list;
+    QString str;
+    QString found_str;
+    int i=0;
+    int max=0;
+    
+    QString filename =locateLocal("appdata","search_result.html");
+    if (useHtDig)
+	{
+	    slotURLSelected("file:" + filename, QString(), 1);
+	    return;
+	}
+    
+    while((nextpos = search_output.find('\n',pos)) != -1){
+	str = search_output.mid(pos,nextpos-pos);
+	list.append(str);
+	pos = nextpos+1;
     }
-    if(found_str != ""){
-      sort_list.append(found_str);
-      list.remove(found_str);
+    if (list.isEmpty()){
+	
+	KMessageBox::sorry(0, i18n("\"%1\" not found in documentation!").arg(doc_search_display_text));
+	return;
     }
-
-  }
-
-   QFile file(filename);
-   QTextStream stream(&file);
-   file.open(IO_WriteOnly);
-
-   stream << "<HTML>";
-   stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
-   stream << "</TITLE></HEAD><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
-   stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
-   QString numstr;
-   for(str = sort_list.first();str != 0;str = sort_list.next() ){
-     stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+
-			   searchToolGetTitle(str)+"</A><TD>"+
-			   numstr.setNum(searchToolGetNumber(str)) + "\n";
-   }
-
-   stream << "\n</TABLE></BODY></HTML>";
-
-   file.close();
+    
+    // //lets sort it a little bit
+    for(;i<30;i++){
+	max =0;
+	found_str = "";
+	for(str = list.first();str != 0;str = list.next()){
+	    if (searchToolGetNumber(str) >= max){
+		found_str = str.copy();
+		max = searchToolGetNumber(str);
+	    }
+	}
+	if(found_str != ""){
+	    sort_list.append(found_str);
+	    list.remove(found_str);
+	}
+	
+    }
+    
+    QFile file(filename);
+    QTextStream stream(&file);
+    file.open(IO_WriteOnly);
+    
+    stream << "<HTML>";
+    stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
+    stream << "</TITLE></HEAD><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
+    stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
+    QString numstr;
+    for(str = sort_list.first();str != 0;str = sort_list.next() ){
+	stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+
+	    searchToolGetTitle(str)+"</A><TD>"+
+	    numstr.setNum(searchToolGetNumber(str)) + "\n";
+    }
+    
+    stream << "\n</TABLE></BODY></HTML>";
+    
+    file.close();
    slotURLSelected("file:" + filename, QString(), 1);
-
+   
 }
 
 
 QString CKDevelop::searchToolGetTitle(QString str){
-  int pos = str.find(' ');
-  pos = str.find(' ',pos);
-  int end_pos = str.find(':',pos);
-  return str.mid(pos,end_pos-pos);
+    int pos = str.find(' ');
+    pos = str.find(' ',pos);
+    int end_pos = str.find(':',pos);
+    return str.mid(pos,end_pos-pos);
 }
 
 
 QString CKDevelop::searchToolGetURL(QString str){
-  int pos = str.find(' ');
-  return str.left(pos);
+    int pos = str.find(' ');
+    return str.left(pos);
 }
 
 
 int CKDevelop::searchToolGetNumber(QString str){
-  int pos =str.findRev(':');
-  QString sub = str.right((str.length()-pos-2));
-  return sub.toInt();
+    int pos =str.findRev(':');
+    QString sub = str.right((str.length()-pos-2));
+    return sub.toInt();
 }
 
 
@@ -2486,9 +2390,6 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE:
     slotFileSave();
     break;
-  case ID_KDLG_FILE_SAVE:
-    kdlgedit->slotFileSave();
-    break;
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
@@ -2498,42 +2399,29 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_EDIT_UNDO:
     slotEditUndo();
     break;
-  case ID_KDLG_EDIT_UNDO:
-    kdlgedit->slotEditUndo();
-    break;
   case ID_EDIT_REDO:
     slotEditRedo();
-    break;
-  case ID_KDLG_EDIT_REDO:
-    kdlgedit->slotEditRedo();
     break;
   case ID_EDIT_COPY:
     slotEditCopy();
     break;
-  case ID_KDLG_EDIT_COPY:
-    kdlgedit->slotEditCopy();
-    break;
+  
   case ID_EDIT_PASTE:
     slotEditPaste();
-    break;
-  case ID_KDLG_EDIT_PASTE:
-    kdlgedit->slotEditPaste();
     break;
   case ID_EDIT_CUT:
     slotEditCut();
     break;
-  case ID_KDLG_EDIT_CUT:
-    kdlgedit->slotEditCut();
-    break;
+  
   case ID_VIEW_REFRESH:
-    slotViewRefresh();
-    break;
-	case ID_VIEW_TREEVIEW:
-		slotViewTTreeView();
-		break;
-	case ID_VIEW_OUTPUTVIEW:
-		slotViewTOutputView();
-		break;
+      slotViewRefresh();
+      break;
+  case ID_VIEW_TREEVIEW:
+      slotViewTTreeView();
+      break;
+  case ID_VIEW_OUTPUTVIEW:
+      slotViewTOutputView();
+      break;
   case ID_BUILD_COMPILE_FILE:
   	slotBuildCompileFile();
   	break;
@@ -2551,12 +2439,6 @@ void CKDevelop::slotToolbarClicked(int item){
     break;
   case ID_BUILD_STOP:
     slotBuildStop();
-    break;
-  case ID_TOOLS_KDLGEDIT:
-    switchToKDlgEdit();
-    break;
-  case ID_KDLG_TOOLS_KDEVELOP:
-    switchToKDevelop();
     break;
   case ID_HELP_BACK:
     slotHelpBack();
@@ -2582,8 +2464,8 @@ void CKDevelop::slotToolbarClicked(int item){
     slotHelpSearch();
     break;
   case ID_KDLG_BUILD_GENERATE:
-    kdlgedit->slotBuildGenerate();
-    break;
+      dlgedit->slotBuildGenerate();
+      break;
   case ID_CV_WIZARD:
     // Make the button toggle between declaration and definition.
     if(cv_decl_or_impl){
@@ -2682,8 +2564,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
  
 
-  ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,												i18n("Changes to the KDevelop dialogeditor"))
-  ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,										i18n("Changes to KDevelop project editor"))
+ 
 
   ON_STATUS_MSG(ID_OPTIONS_EDITOR,              			    i18n("Sets the Editor's behavoir"))
   ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			    i18n("Sets the Editor's colors"))
@@ -2747,15 +2628,8 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_CV_IMPLEMENT_VIRTUAL,									i18n("Creates a virtual method"))
   ON_STATUS_MSG(ID_CV_ADD_SLOT_SIGNAL,										i18n("Adds a signal/slot mechanism"))
   
-	ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,												i18n("Closes the current dialog"))
-	ON_STATUS_MSG(ID_KDLG_FILE_SAVE,												i18n("Saves the current dialog"))
-	ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,											i18n("Saves the current dialog under a new filename"))
-	
-	ON_STATUS_MSG(ID_KDLG_VIEW_PROPVIEW,										i18n("Enables/Disables the properties window"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,											i18n("Enables / disables the standard toolbar"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,										i18n("Enables / disables the statusbar"))
 
-	ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,											i18n("Refreshes current view"))
+
 	ON_STATUS_MSG(ID_VIEW_GRID_DLG,												i18n("Sets the grid size of the editing widget grid snap"))
 
 	// LFV popups

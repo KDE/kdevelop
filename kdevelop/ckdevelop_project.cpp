@@ -62,10 +62,8 @@ bool CKDevelop::slotProjectClose(){
 	if(!bKDevelop){
 	    switchToKDevelop();
 	}
-	disableCommand(ID_TOOLS_KDLGEDIT);
 	ComponentManager::self()->notifyProjectClosed(); // notify all components
 	
-	kdlgedit->slotFileSave();
 	
 	toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
 	toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
@@ -649,10 +647,6 @@ void CKDevelop::newFile(bool add_to_project){
 
   // Get the filetype.
   type = CProject::getType( complete_filename );
-  if(type == KDEV_DIALOG){
-      kdlgedit->slotFileCloseForceSave();
-      kdlgedit->newDialog();
-  }
   // load into the widget
   switchToFile(complete_filename);
   
@@ -705,8 +699,7 @@ bool CKDevelop::addFileToProject(QString complete_filename,
     dinfo.is_toplevel_dialog = true;
     
     new_subdir = prj->addDialogFileToProject(dinfo.rel_name,dinfo);
-    //    ((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
-    //    ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
+    
     
     info.rel_name = rel_name;
   }
@@ -751,70 +744,67 @@ bool CKDevelop::readProjectFile(QString file){
     else {
 	project=true;
     }
-
-
-
-  extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
-  str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
-  if(QFile::exists(str)){
-    switchToFile(str);
-  }
-  str = prj->getProjectDir() + prj->getSubDir() + "main."+extension;
-  if(QFile::exists(str)){
-    switchToFile(str);
-  }
-
-  // set the menus enable
-  // file menu
-  
-  enableCommand(ID_FILE_NEW);
-  // doc menu
-  enableCommand(ID_HELP_PROJECT_API);
-  enableCommand(ID_HELP_USER_MANUAL);
-  // build menu
-  setToolMenuProcess(true);
-
-  // prj menu
-  enableCommand(ID_PROJECT_CLOSE);
-  enableCommand(ID_PROJECT_ADD_FILE_EXIST);
-
-  if(prj->isKDEProject() || prj->isQtProject()){
-    enableCommand(ID_TOOLS_KDLGEDIT);
-    kdlgedit->enableDialogsTab(true);
-  } else
-    kdlgedit->enableDialogsTab(false); 
-
-  if (prj->isKDEProject()){
-   enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-  }
-  else{
-    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
-  }
-  if(prj->isCustomProject()){
-    disableCommand(ID_PROJECT_FILE_PROPERTIES);
-    enableCommand(ID_PROJECT_OPTIONS);
-  }
-  else{
-    enableCommand(ID_PROJECT_FILE_PROPERTIES);
-    enableCommand(ID_PROJECT_OPTIONS);
-  }
-  
-  enableCommand(ID_PROJECT_REMOVE_FILE);
-  enableCommand(ID_PROJECT_WORKSPACES);
-  enableCommand(ID_BUILD_AUTOCONF);
-  enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-
-  if (prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
-  {
-    enableCommand(ID_PROJECT_NEW_CLASS);
-    enableCommand(ID_CV_WIZARD);
-    enableCommand(ID_CV_GRAPHICAL_VIEW);
-    enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
-    enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
-  }
-
-  addRecentProject(file);
-  return true;
+    
+    
+    
+    extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
+    str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
+    if(QFile::exists(str)){
+	switchToFile(str);
+    }
+    str = prj->getProjectDir() + prj->getSubDir() + "main."+extension;
+    if(QFile::exists(str)){
+	switchToFile(str);
+    }
+    
+    // set the menus enable
+    // file menu
+    
+    enableCommand(ID_FILE_NEW);
+    // doc menu
+    enableCommand(ID_HELP_PROJECT_API);
+    enableCommand(ID_HELP_USER_MANUAL);
+    // build menu
+    setToolMenuProcess(true);
+    
+    // prj menu
+    enableCommand(ID_PROJECT_CLOSE);
+    enableCommand(ID_PROJECT_ADD_FILE_EXIST);
+    
+    if(prj->isKDEProject() || prj->isQtProject()){
+    }
+    
+    if (prj->isKDEProject()){
+	enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+    }
+    else{
+	disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+    }
+    if(prj->isCustomProject()){
+	disableCommand(ID_PROJECT_FILE_PROPERTIES);
+	enableCommand(ID_PROJECT_OPTIONS);
+    }
+    else{
+	enableCommand(ID_PROJECT_FILE_PROPERTIES);
+	enableCommand(ID_PROJECT_OPTIONS);
+    }
+    
+    enableCommand(ID_PROJECT_REMOVE_FILE);
+    enableCommand(ID_PROJECT_WORKSPACES);
+    enableCommand(ID_BUILD_AUTOCONF);
+    enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+    
+    if (prj->getProjectType()!="normal_c")  // activate class wizard unless it is a normal C project
+	{
+	    enableCommand(ID_PROJECT_NEW_CLASS);
+	    enableCommand(ID_CV_WIZARD);
+	    enableCommand(ID_CV_GRAPHICAL_VIEW);
+	    enableCommand(ID_CV_TOOLBAR_CLASS_CHOICE);
+	    enableCommand(ID_CV_TOOLBAR_METHOD_CHOICE);
+	}
+    
+    addRecentProject(file);
+    return true;
 }
 
 void CKDevelop::newSubDir(){

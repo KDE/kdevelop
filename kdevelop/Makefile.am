@@ -16,7 +16,7 @@
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc gfxview classwizard plugins widgets dlgedit
+SUBDIRS = tools templates toolbar pics kwrite classparser print vc gfxview classwizard plugins widgets dlgedit
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
@@ -28,7 +28,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
 	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
 	clogfileview.cpp cdocbrowser.cpp cproject.cpp \
-	kswallow.cpp cgeneratenewfile.cpp componentmanager.cpp \
+	cgeneratenewfile.cpp componentmanager.cpp \
 	doctreeview.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
 	cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 	ctoolclass.cpp cdoctreepropdlg.cpp grepviewconfigwidget.cpp \
@@ -51,7 +51,7 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # that depend on the following ones.
 
 kdevelop_LDADD   = ./widgets/dockwidgets/libdockwidgets.a ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc/libvc.a ./print/libprint.a \
-	./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a \
+	./gfxview/libgfxview.a ./kwrite/libkwrite.a \
 	./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dlgedit/libdlgedit.a \
 	$(LIB_KHTML) -lkspell -lkfile -lkio -lkdeui -lkdecore -lqt -lXext -lX11 -lfl -ldl $(LIBSOCKET) 
 
@@ -59,7 +59,7 @@ kdevelop_LDADD   = ./widgets/dockwidgets/libdockwidgets.a ./widgets/qextmdi/libq
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 	clogfileview.h structdef.h cdocbrowser.h cproject.h \
-	cclassview.h kswallow.h cgeneratenewfile.h componentmanager.h \
+	cclassview.h  cgeneratenewfile.h componentmanager.h \
 	doctreeview.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h \
 	ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
