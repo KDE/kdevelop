@@ -1,4 +1,4 @@
-2000-01-04 Christian Couder <chcouder@club-internet.fr>
+2000-01-04 jbb <jbb@ihug.co.nz>
 	* Disassemble window - not complete, but workable.
       Fix attach/detach
       Add pid selector for attach
