@@ -26,6 +26,13 @@ ClassStore *KDevPart::classStore()
     return m_api->classStore;
 }
 
+/* added by daniel */
+ClassStore*
+KDevPart::ccClassStore( )
+{
+    return m_api->ccClassStore;
+}
+
 QDomDocument *KDevPart::projectDom()
 {
     return m_api->projectDom;

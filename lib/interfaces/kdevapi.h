@@ -21,7 +21,7 @@ class KDevAppFrontend;
 class ClassStore;
 class QDomDocument;
 
-
+// 2002-02-08 add ccClassStore - daniel
 class KDevApi
 {
 public:
@@ -33,10 +33,18 @@ public:
           appFrontend(0),
           project(0),
           languageSupport(0),
-          versionControl(0)
+          versionControl(0),
+	  /* added by daniel */
+	  ccClassStore( 0 )
         {}
 
     ClassStore *classStore;
+    /**
+     * a new classstore for codecompletion
+     * added by daniel
+     */
+    ClassStore* ccClassStore;
+     
     QDomDocument *projectDom;
     KDevCore *core;
     KDevMakeFrontend *makeFrontend;

@@ -150,6 +150,12 @@ public:
      * a command is started.
      */
     virtual void raiseWidget(QWidget *) = 0;
+    
+    /**
+     * Remove the given widget from the user interface
+     */
+    virtual void removeWidget( QWidget*, Role ) = 0;
+    
     /**
      * This method should be called by a part that wants to show a
      * context menu. The parameter context should be filled with
