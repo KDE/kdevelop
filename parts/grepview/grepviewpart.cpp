@@ -58,7 +58,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                                    "source file and set the cursor to the line "
                                    "with the match."));
 
-    mainWindow()->embedOutputView(m_widget, i18n("Find in files"), i18n("Output of the grep command"));
+    mainWindow()->embedOutputView(m_widget, i18n("Find in Files"), i18n("Output of the grep command"));
 
     KAction *action;
 

@@ -72,7 +72,7 @@ const char *filepatterns[] = {
 GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
     : QDialog(parent, name, false), m_part( part )
 {
-    setCaption(i18n("Find in files"));
+    setCaption(i18n("Find in Files"));
 
     config = GrepViewFactory::instance()->config();
     config->setGroup("GrepDialog");
