@@ -2441,10 +2441,9 @@ void FontChanger::setRef(ItemFont *f) {
 
   font = f;
   for (z = 0; z < (int) familyCombo->count(); z++) {
-    if (font->family == familyCombo->text(z)) {
+    if (!found && font->family == familyCombo->text(z)) {
       familyCombo->setCurrentItem(z);
       found=true;
-      break;
     }
 
     if (defaultFont.family() == familyCombo->text(z))
@@ -2459,10 +2458,9 @@ void FontChanger::setRef(ItemFont *f) {
 
   found=false; defaultZ=0;
   for (z = 0; fontSizes[z] > 0; z++) {
-    if (font->size == fontSizes[z]) {
+    if (!found && font->size == fontSizes[z]) {
       sizeCombo->setCurrentItem(z);
       found=true;
-      break;
     }
 
     if (defaultFont.pointSize() == fontSizes[z])
