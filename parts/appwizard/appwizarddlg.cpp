@@ -582,6 +582,11 @@ void AppWizardDialog::accept()
     }
     
 	KMessageBox::information(this, KMacroExpander::expandMacros(m_pCurrentAppInfo->message, m_pCurrentAppInfo->subMap));
+	
+	QString projectFile( finalLoc_label->text() + "/" + appname_edit->text() + ".kdevelop" );
+	
+	m_part->core()->openProject( projectFile );
+	
 	QWizard::accept();
 }
 
