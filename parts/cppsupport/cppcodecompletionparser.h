@@ -3,7 +3,7 @@
 #include <qstack.h>
 #include <FlexLexer.h>
 #include <fstream.h>
-#include "tokenizer.h"
+#include "tokenizer-cc.h"
 
 #include "ParsedVariable.h"
 
