@@ -127,9 +127,9 @@ void refreshNamespaces(ClassViewPart *part, KComboView *view)
 {
     view->clear();
 
-    NamespaceItem *global_item = new NamespaceItem( part, view->listView(), i18n("(Global Namespace)"), part->codeModel()->globalNamespace() );
-    view->addItem(global_item);
-    global_item->setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, part->instance()) );
+    part->global_item = new NamespaceItem( part, view->listView(), i18n("(Global Namespace)"), part->codeModel()->globalNamespace() );
+    view->addItem(part->global_item);
+    part->global_item->setPixmap( 0, UserIcon("CVnamespace", KIcon::DefaultState, part->instance()) );
     NamespaceList namespaces = part->codeModel()->globalNamespace()->namespaceList();
     for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
     {
@@ -138,7 +138,7 @@ void refreshNamespaces(ClassViewPart *part, KComboView *view)
         item->setOpen(true);
         processNamespace(part, view, item);
     }
-    view->setCurrentActiveItem(global_item);
+    view->setCurrentActiveItem(part->global_item);
 }
 
 void refreshClasses(ClassViewPart *part, KComboView *view, const QString &dom)

@@ -66,6 +66,8 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
 
     setupActions();
 
+    global_item = 0;
+
     m_widget = new ClassViewWidget(this);
     m_widget->setIcon( SmallIcon("view_tree") );
     mainWindow()->embedSelectView( m_widget, i18n("Classes"), i18n("Class browser") );
@@ -707,8 +709,10 @@ void ClassViewPart::removeFile( const QString & fileName )
         return;
 
     if (ViewCombosOp::removeNamespacesItems(this, m_namespaces->view()->listView(), model_cast<NamespaceDom>(file)))
-        if (nsmap[codeModel()->globalNamespace()->name()])
-            m_namespaces->view()->setCurrentActiveItem(nsmap[codeModel()->globalNamespace()->name()]);
+    {
+        if (global_item)
+            m_namespaces->view()->setCurrentActiveItem(global_item);
+    }
 
     ViewCombosOp::removeClassItems(this, m_namespaces->view()->listView(), model_cast<ClassDom>(file));
 
@@ -844,7 +848,11 @@ void ClassViewPart::removeNamespace( const QString & name )
     {
         NamespaceItem *i = nsmap[name];
         if (i)
+        {
             m_namespaces->view()->removeItem(i);
+            if (global_item)
+                m_namespaces->view()->setCurrentActiveItem(global_item);
+        }
     }
 }
 
