@@ -1,3 +1,6 @@
+2000-03-05 Falk Brettschneider <gigafalk@yahoo.com>
+	* new feature in QextMDI: Dock/Undock menu (the taskbar becomes optional), some important bugfixes  
+
 2000-03-04 Walter Tasin <tasin@kdevelop.de>
 	* updating INSTALL file
 	* making --enable-kdoc2 default option
