@@ -78,7 +78,7 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
   d->m_popup = new KTabZoomFrame(parent, pos);
   
   if(pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
-    d->m_popup->setMinimumWidth(100);
+    d->m_popup->setMinimumWidth(110);
   else
     d->m_popup->setMinimumHeight(125);
 
@@ -116,12 +116,13 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString
   {
   case KTabZoomPosition::Bottom:
   case KTabZoomPosition::Top:
-    if(widget->minimumSizeHint().height() > d->m_popup->minimumHeight() + 12)
+    if(widget->minimumSizeHint().height() + 12 > d->m_popup->minimumHeight())
       d->m_popup->setMinimumHeight(widget->minimumSizeHint().height() + 12);
     break;
   case KTabZoomPosition::Left:
   case KTabZoomPosition::Right:
-    if(widget->minimumSizeHint().width() > d->m_popup->minimumWidth() + 12)
+    qDebug("wmsh: %d, pop_mw: %d", widget->minimumSizeHint().width(), d->m_popup->minimumWidth());
+    if(widget->minimumSizeHint().width() + 12 > d->m_popup->minimumWidth())
       d->m_popup->setMinimumWidth(widget->minimumSizeHint().width() + 12);
     break;
   }  
