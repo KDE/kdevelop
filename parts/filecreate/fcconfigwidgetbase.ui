@@ -135,7 +135,7 @@
                             <cstring>fc_view</cstring>
                         </property>
                         <property name="resizePolicy">
-                            <enum>AutoOne</enum>
+                            <enum>Manual</enum>
                         </property>
                         <property name="allColumnsShowFocus">
                             <bool>true</bool>
@@ -249,9 +249,6 @@
                         <property name="name">
                             <cstring>fcglobal_view</cstring>
                         </property>
-                        <property name="resizePolicy">
-                            <enum>AutoOne</enum>
-                        </property>
                         <property name="allColumnsShowFocus">
                             <bool>true</bool>
                         </property>
@@ -289,9 +286,6 @@
                         </column>
                         <property name="name">
                             <cstring>fctemplates_view</cstring>
-                        </property>
-                        <property name="resizePolicy">
-                            <enum>AutoOne</enum>
                         </property>
                         <property name="allColumnsShowFocus">
                             <bool>true</bool>

@@ -51,7 +51,7 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
         loadGlobalConfig(fcglobal_view, true);
         loadProjectConfig(fc_view);
         loadProjectTemplates(fctemplates_view);
-        sidetab_checkbox->setEnabled(m_part->m_useSideTab);
+        sidetab_checkbox->setEnabled(false);
     }
 
     m_globalfiletypes.setAutoDelete(true);
