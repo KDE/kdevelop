@@ -13,13 +13,45 @@
 
 // ------------------------------------------------------------------------
 AST::AST()
-    : m_start( 0 ), m_end( 0 )
+    : m_startLine( 0 ), m_startColumn( 0 ),
+      m_endLine( 0 ), m_endColumn( 0 )
 {
 }
 
 AST::~AST()
 {
 }
+
+void AST::setStartPosition( int line, int col )
+{
+   m_startLine = line;
+   m_startColumn = col;
+}
+
+void AST::getStartPosition( int* line, int* col ) const
+{
+    if( line )
+        *line = m_startLine;
+	
+    if( col )
+        * col = m_startColumn;
+}
+
+void AST::setEndPosition( int line, int col )
+{
+   m_endLine = line;
+   m_endColumn = col;
+}
+
+void AST::getEndPosition( int* line, int* col ) const
+{
+    if( line )
+        *line = m_endLine;
+	
+    if( col )
+        * col = m_endColumn;
+}
+
 
 // ------------------------------------------------------------------------
 NameAST::NameAST()

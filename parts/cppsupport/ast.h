@@ -38,15 +38,15 @@ public:
     AST();
     virtual ~AST();
     
-    void setStart( int start ) { m_start = start; }
-    int start() const { return m_start; }
+    void setStartPosition( int line, int col );
+    void getStartPosition( int* line, int* col ) const;
     
-    void setEnd( int end ) { m_end = end; }
-    int end() const { return m_end; }
+    void setEndPosition( int line, int col );
+    void getEndPosition( int* line, int* col ) const;
     
 private:
-    int m_start;
-    int m_end;
+    int m_startLine, m_startColumn;
+    int m_endLine, m_endColumn;
     
 private:
     AST( const AST& source );

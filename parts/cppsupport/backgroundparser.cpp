@@ -91,6 +91,19 @@ void BackgroundParser::run()
     QPtrList<DeclarationAST> decls = translationUnit->declarations();
     kdDebug(9007) << "--> found " << decls.count() << " toplevel declarations" << endl;
 
+    if( decls.count() ){
+       DeclarationAST* decl = decls.at( 0 );
+       int startLine, startCol, endLine, endCol;       
+       decl->getStartPosition( &startLine, &startCol );
+       decl->getEndPosition( &endLine, &endCol );       
+       
+       kdDebug(9007) << "decl(0) = " << endl
+		     << " startLine = " << startLine
+		     << " startCol = " << startCol
+		     << " endLine = " << endLine
+		     << " endCol = " << endCol
+		     << endl;
+    }
     kdDebug(9007) << "FINISHED!!" << endl;
 }
 

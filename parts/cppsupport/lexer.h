@@ -146,9 +146,6 @@ public:
     int type() const;
     void setType( int type );
 
-    const QChar* position() const;
-    void setPosition( const QChar* position );
-
     void getStartPosition( int* line, int* column ) const;
     void setStartPosition( int line, int column );
     void getEndPosition( int* line, int* column ) const;
@@ -159,6 +156,10 @@ public:
 
     bool startsWith( const QChar& ch ) const;
 
+protected:
+    const QChar* position() const;
+    void setPosition( const QChar* position );
+
 private:
     int m_type;
     const QChar* m_position;
@@ -167,6 +168,9 @@ private:
     int m_startColumn;
     int m_endLine;
     int m_endColumn;
+
+    friend class Lexer;
+    friend class Parser;
 }; // class Token
 
 class Lexer {

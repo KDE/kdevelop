@@ -45,6 +45,15 @@ lex->nextToken(); \
 			       } \
 }
 
+#define UPDATE_POS(node, start, end) \
+{ \
+   int line, col; \
+   (lex)->tokenAt(start).getStartPosition( &line, &col ); \
+   (node)->setStartPosition( line, col ); \
+   (lex)->tokenAt( end!=start ? end-1 : end ).getEndPosition( &line, &col ); \
+   (node)->setEndPosition( line, col ); \
+}
+
 struct ParserPrivateData
 {
     ParserPrivateData()
@@ -289,8 +298,7 @@ bool Parser::parseName( NameAST::Node& node )
 	node->setGlobal( isGlobal );
 	node->setNestedName( nestedName );
 	node->setUnqualifedName( unqualifedName );
-	node->setStart( start );
-	node->setEnd( lex->index() );
+	UPDATE_POS( node, start, lex->index() );
 	
 	return true;
     }
@@ -394,8 +402,7 @@ bool Parser::parseLinkageSpecification( DeclarationAST::Node& node )
 	ast->setDeclaration( decl );
     }
     
-    ast->setStart( start );
-    ast->setEnd( lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
 
     node = ast;
     
@@ -435,8 +442,7 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
     } else
 	lex->nextToken();
     
-    node->setStart( start );
-    node->setEnd( lex->index() );
+    UPDATE_POS( node, start, lex->index() );
     return true;
 }
 
@@ -468,8 +474,7 @@ bool Parser::parseNamespace( DeclarationAST::Node& node )
 	    NamespaceAliasAST::Node ast = CreateNode<NamespaceAliasAST>();
 	    ast->setNamespaceName( namespaceName );
 	    ast->setAliasName( name );    
-	    ast->setStart( start );
-	    ast->setEnd( lex->index() );
+	    UPDATE_POS( ast, start, lex->index() );
 	    node = ast;
 	    return true;
 	} else {
@@ -488,8 +493,7 @@ bool Parser::parseNamespace( DeclarationAST::Node& node )
     parseLinkageBody( linkageBody );
     
     ast->setLinkageBody( linkageBody );
-    ast->setStart( start );
-    ast->setEnd( lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
     node = ast;
     
     return true;
@@ -510,8 +514,7 @@ bool Parser::parseUsing( DeclarationAST::Node& node )
 	if( !parseUsingDirective(node) ){
 	    return false;
 	}
-	node->setStart( start );
-	node->setEnd( lex->index() );
+	UPDATE_POS( node, start, lex->index() );
 	return true;
     }
     
@@ -531,8 +534,7 @@ bool Parser::parseUsing( DeclarationAST::Node& node )
         
     ADVANCE( ';', ";" );
     
-    ast->setStart( start );
-    ast->setEnd( lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
     node = ast;
     
     return true;
@@ -559,8 +561,7 @@ bool Parser::parseUsingDirective( DeclarationAST::Node& node )
     
     UsingDirectiveAST::Node ast = CreateNode<UsingDirectiveAST>();
     ast->setName( name );
-    ast->setStart( start );
-    ast->setEnd( lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
     node = ast;
         
     return true;
@@ -581,8 +582,7 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
     AST::Node op;    
     if( parseOperator(op) ){
         node = CreateNode<AST>();
-	node->setStart( start );
-	node->setEnd( lex->index() );
+	UPDATE_POS( node, start, lex->index() );
 	return true;
     } else {
 	// parse cast operator
@@ -602,8 +602,7 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
   	    ;	    
 	
         node = CreateNode<AST>();
-	node->setStart( start );
-	node->setEnd( lex->index() );
+	UPDATE_POS( node, start, lex->index() );
 	return true;
     }
 }
@@ -631,8 +630,7 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
 	node->addArgument( templArg );
     }
     
-    node->setStart( start );
-    node->setEnd( lex->index() );
+    UPDATE_POS( node, start, lex->index() );
     
     return true;
 }
@@ -667,8 +665,7 @@ bool Parser::parseTypedef( DeclarationAST::Node& node )
     TypedefAST::Node ast = CreateNode<TypedefAST>();
     ast->setTypeSpec( spec );
     ast->setInitDeclaratorList( declarators );
-    ast->setStart( start );
-    ast->setEnd( lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
     node = ast;
         
     return true;
@@ -728,8 +725,7 @@ bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
     ast->setExport( _export );
     ast->setTemplateParameterList( params );
     ast->setDeclaration( def );
-    ast->setStart( start );
-    ast->setEnd( lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
     node = ast;
         
     return true;
@@ -812,8 +808,7 @@ bool Parser::parseCvQualify( AST::Node& node )
     }
     
     node = CreateNode<AST>();
-    node->setStart( start );
-    node->setEnd( lex->index() );
+    UPDATE_POS( node, start, lex->index() );
     
     return n != 0;
 }
@@ -886,8 +881,7 @@ bool Parser::parseTemplateArgument( AST::Node& node )
     }
     
     node = CreateNode<AST>();
-    node->setStart( start );
-    node->setEnd( lex->index() );
+    UPDATE_POS( node, start, lex->index() );
     
     return true;
 }
@@ -1848,13 +1842,12 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	index = lex->index();
 	
 	AST::Node name = CreateNode<AST>();
-	name->setStart( index );
-	name->setEnd( index + 1);
+	UPDATE_POS( name, start, lex->index() );
 	
 	ClassOrNamespaceNameAST::Node classOrNamespaceName( new ClassOrNamespaceNameAST() );
-	classOrNamespaceName->setStart( index );
 	classOrNamespaceName->setName( name );
-	
+	int startId = lex->index();
+		
 	
 	if( lex->lookAhead(1) == '<' ){
 	    lex->nextToken(); // skip template name
@@ -1878,7 +1871,7 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	    
 	    if ( lex->lookAhead(0) == Token_scope ) {
 	        
-	        classOrNamespaceName->setEnd( lex->index() );
+	    	UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
 		
 		lex->nextToken();
 		ok = true;
@@ -1893,7 +1886,7 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	} else if( lex->lookAhead(1) == Token_scope ){
 	    lex->nextToken(); // skip name
 	    
-	    classOrNamespaceName->setEnd( lex->index() );
+	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
 	    node->addClassOrNamespaceName( classOrNamespaceName );
 	    
 	    lex->nextToken(); // skip ::
@@ -1912,8 +1905,7 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	return false;
     }
     
-    node->setStart( start );
-    node->setEnd( lex->index() );
+    UPDATE_POS( node, start, lex->index() );
     
     return true;
 }
