@@ -323,7 +323,7 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagCheckBox(this, controller,
                      "-pedantic-errors", i18n("Like -pedantic, but errors are produced instead of warnings."));
     new FlagCheckBox(this, controller,
-                     "-Wall",            i18n("All warnings below, combined:"));
+                     "-Wall",            i18n("All warnings below, combined (-Wall):"));
 
     wallBox = new FlagListBox(this);
 
