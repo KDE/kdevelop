@@ -16,6 +16,8 @@
 
 #include <kconfig.h>
 #include <kapp.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 
 #include "kdevfactory.h"
@@ -101,7 +103,12 @@ KDevPart *PartLoader::loadService(KService *service, const char *className, KDev
 
     kdDebug(9000) << "Loading service " << service->name() << endl;
     KLibFactory *factory = factoryForService(service);
-    if (!factory->inherits("KDevFactory")) {
+    if (!factory || !factory->inherits("KDevFactory")) {
+        if (!factory) {
+            QString errorMessage = KLibLoader::self()->lastErrorMessage();
+            KMessageBox::error(0, i18n("Error: could not load part! The error message from libtldl was:\n\n%1").arg(errorMessage));
+            exit(1);
+        }
         kdDebug(9000) << "Does not have a KDevFactory" << endl;
         return 0;
     }  

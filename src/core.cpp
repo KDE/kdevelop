@@ -225,6 +225,8 @@ void Core::initGlobalParts()
         return;
     service = *makeFrontendOffers.begin();
     part = PartLoader::loadService(service, "KDevMakeFrontend", api, this);
+    if (!part)
+        return;
     initPart(api->makeFrontend = static_cast<KDevMakeFrontend*>(part));
 
     // App frontend
@@ -234,6 +236,8 @@ void Core::initGlobalParts()
         return;
     service = *appFrontendOffers.begin();
     part = PartLoader::loadService(service, "KDevAppFrontend", api, this);
+    if (!part)
+        return;
     initPart(api->appFrontend = static_cast<KDevAppFrontend*>(part));
 
     // Global parts
@@ -248,6 +252,8 @@ void Core::initGlobalParts()
             continue;
         }
         part = PartLoader::loadService(*it, "KDevPart", api, this);
+        if (!part)
+            return;
         initPart(part);
         globalParts.append(part);
     }
@@ -525,6 +531,8 @@ void Core::openProject()
     KService::Ptr projectService = KService::serviceByName(projectPlugin);
     if (projectService) {
         KDevPart *part = PartLoader::loadService(projectService, "KDevProject", api, this);
+        if (!part)
+            return;
         initPart(api->project = static_cast<KDevProject*>(part));
     } else {
         KMessageBox::sorry(win, i18n("No project management plugin %1 found.").arg(projectPlugin));
@@ -538,6 +546,8 @@ void Core::openProject()
     if (!languageSupportOffers.isEmpty()) {
         KService *languageSupportService = *languageSupportOffers.begin();
         KDevPart *part = PartLoader::loadService(languageSupportService, "KDevLanguageSupport", api, this);
+        if (!part)
+            return;
         initPart(api->languageSupport = static_cast<KDevLanguageSupport*>(part));
     } else
         KMessageBox::sorry(win, i18n("No language plugin for %1 found.").arg(language));
@@ -556,6 +566,8 @@ void Core::openProject()
       
       if (loadparts.contains((*it)->name())){ // load the part if in loadparts
 	KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
+        if (!part)
+            return;
 	initPart(part);
 	localParts.append(part);
       }
@@ -580,6 +592,8 @@ void Core::openProject()
 	  if(keywordsMatch){
 	    loadparts << (*it)->name();
 	    KDevPart *part = PartLoader::loadService(*it, "KDevPart", api, this);
+            if (!part)
+                return;
 	    initPart(part);
 	    localParts.append(part);
 	  }
