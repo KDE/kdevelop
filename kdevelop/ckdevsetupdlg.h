@@ -73,8 +73,16 @@ private:
   QLineEdit* kde_edit;
   QLineEdit* qt_edit;
 
+  // Dbg external options
+  QButtonGroup* dbgExternalGroup;
   QCheckBox* dbgExternalCheck;
+  QLabel* dbgSelectCmdLabel;
   QLineEdit* dbgExternalSelectLineEdit;
+
+  // Dbg internal options
+  QButtonGroup* dbgInternalGroup;
+  QCheckBox* dbgMembersCheck;
+  QCheckBox* dbgAsmCheck;
 
  private slots:
   void slotOkClicked();

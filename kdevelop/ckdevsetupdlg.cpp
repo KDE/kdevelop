@@ -391,6 +391,8 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   config->setGroup("Debug");
   bool useExternalDbg = config->readBoolEntry("Use external debugger", false);
   QString dbg_cmd=config->readEntry("External debugger program","kdbg");
+  bool displayMangledNames = config->readBoolEntry("Display mangled names", false);
+  bool displayStaticMembers = config->readBoolEntry("Display static members", false);
 
   w3 = new QWidget( this, "debug" );
 
@@ -401,7 +403,11 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   dbgExternalCheck->setAutoResize( FALSE );
   dbgExternalCheck->setChecked(useExternalDbg);
 
-  QButtonGroup* dbgExternalGroup;
+  KQuickHelp::add(dbgExternalCheck, i18n("Select internal or external debugger\n\n"
+	                  "Choose whether to use an external debugger\n"
+	                  "or the internal debugger within kdevelop\n"
+                    "The internal debugger is a frontend to gdb"));
+
   dbgExternalGroup = new QButtonGroup( w3, "dbgExternalGroup" );
   dbgExternalGroup->setGeometry( 10, 40, 400, 70 );
   dbgExternalGroup->setFrameStyle( 49 );
@@ -409,18 +415,22 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   dbgExternalGroup->setAlignment( 1 );
   dbgExternalGroup->lower();
 
-  QLabel* dbgSelectLabel;
-  dbgSelectLabel = new QLabel( w3, "dbgSelectLabel" );
-  dbgSelectLabel->setGeometry( 20, 70, 210, 25 );
-  dbgSelectLabel->setText(i18n("Select debug command:"));
-  dbgSelectLabel->setAlignment( 289 );
-  dbgSelectLabel->setMargin( -1 );
+  dbgSelectCmdLabel = new QLabel( w3, "dbgSelectLabel" );
+  dbgSelectCmdLabel->setGeometry( 20, 70, 210, 25 );
+  dbgSelectCmdLabel->setText(i18n("Select debug command:"));
+  dbgSelectCmdLabel->setAlignment( 289 );
+  dbgSelectCmdLabel->setMargin( -1 );
 
   dbgExternalSelectLineEdit = new QLineEdit( w3, "dbgExternalSelectLineEdit" );
   dbgExternalSelectLineEdit->setGeometry( 270, 70, 130, 25 );
   dbgExternalSelectLineEdit->setText(dbg_cmd);
 
-  QButtonGroup* dbgInternalGroup;
+  KQuickHelp::add(dbgSelectCmdLabel,
+    KQuickHelp::add(dbgExternalSelectLineEdit,
+        i18n("Identify the external debugger\n\n"
+	                  "Enter the program name you wish to run\n"
+	                  "as your debugger")));
+
   dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
   dbgInternalGroup->setGeometry( 10, 120, 400, 90 );
   dbgInternalGroup->setFrameStyle( 49 );
@@ -428,19 +438,33 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   dbgInternalGroup->setAlignment( 1 );
   dbgInternalGroup->lower();
 
-// TODO jbb 991220: More to add
-//  dbgBreakOnLoadingLibrary(true),
-//  dbgForceBPSet(true),
-//  dbgDisplayStaticMembers(false),
-//  dbgAsmDemangle(true)
+  dbgMembersCheck = new QCheckBox( w3, "dbgMembers" );
+  dbgMembersCheck->setGeometry( 20, 150, 210, 25 );
+  dbgMembersCheck->setText(i18n("Display static members"));
+  dbgMembersCheck->setAutoRepeat( FALSE );
+  dbgMembersCheck->setAutoResize( FALSE );
+  dbgMembersCheck->setChecked(displayStaticMembers);
+  KQuickHelp::add(dbgMembersCheck, i18n("Display static members\n\n"
+	                  "Displaying static members makes gdb slower in\n"
+                    "producing data within kde and qt.\n"
+                    "It may change the \"signature\" of the data\n"
+                    "which QString and friends rely on.\n"
+                    "But if you need to debug into these values then\n"
+                    "check this option" ));
+
+  dbgAsmCheck = new QCheckBox( w3, "dbgMembers" );
+  dbgAsmCheck->setGeometry( 20, 180, 210, 25 );
+  dbgAsmCheck->setText(i18n("Display mangled names"));
+  dbgAsmCheck->setAutoRepeat( FALSE );
+  dbgAsmCheck->setAutoResize( FALSE );
+  dbgAsmCheck->setChecked(displayMangledNames);
+  KQuickHelp::add(dbgAsmCheck, i18n("Display mangled names\n\n"
+	                  "When displaying the disassembled code you\n"
+	                  "can elect to see the methods mangled names\n"
+                    "However, non-mangled names are easier to read." ));
 
   slotSetDebug();
   connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
-
-  KQuickHelp::add(dbgExternalGroup,
-		  KQuickHelp::add(dbgSelectLabel,
-		  KQuickHelp::add(dbgExternalSelectLineEdit,i18n("Debug program\n\n"
-							  "Select your system's debug program.\n" ))));
 
   // *********** tabs ****************
   addTab(w1, i18n("General"));
@@ -558,6 +582,8 @@ void CKDevSetupDlg::slotOkClicked(){
   config->setGroup("Debug");
   config->writeEntry("Use external debugger", dbgExternalCheck->isChecked());
   config->writeEntry("External debugger program", dbgExternalSelectLineEdit->text());
+  config->writeEntry("Display mangled names", dbgAsmCheck->isChecked());
+  config->writeEntry("Display static members", dbgMembersCheck->isChecked());
 
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
@@ -615,12 +641,14 @@ void CKDevSetupDlg::slotKDEUpdateReq(){
 void CKDevSetupDlg::slotSetDebug()
 {
   bool externalDbg = dbgExternalCheck->isChecked();
+
+  // external options
+  dbgExternalGroup->setEnabled(externalDbg);
   dbgExternalSelectLineEdit->setEnabled(externalDbg);
+  dbgSelectCmdLabel->setEnabled(externalDbg);
 
-//    dbgInternalGroup->setChecked(true);
-//    dbgBreakOnLoadingLibrary(true),
-//    dbgForceBPSet(true),
-//    dbgDisplayStaticMembers(false),
-//    dbgAsmDemangle(true)
+  // internal options
+  dbgInternalGroup->setEnabled(!externalDbg);
+  dbgMembersCheck->setEnabled(!externalDbg);
+  dbgAsmCheck->setEnabled(!externalDbg);
 }
-
