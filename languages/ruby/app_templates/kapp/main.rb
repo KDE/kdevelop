@@ -37,7 +37,6 @@ else
             widget.load(args.url(i))
         end
     end
-    args.clear
 end
 
 app.exec

@@ -18,7 +18,7 @@
 		<activedir/>
 	</general>
 	<run>
-		<mainprogram>src/main.rb</mainprogram>
+		<mainprogram>src/%{APPNAMELC}</mainprogram>
 	</run>
  </kdevautoproject>
  <kdevfileview>
@@ -79,6 +79,7 @@
      <interpreter>ruby</interpreter>
      <terminal>false</terminal>
      <charactercoding>3</charactercoding>
+     <mainprogram>src/main.rb</mainprogram>
    </run>
  </kdevrubysupport>
   <kdevdocumentation>
