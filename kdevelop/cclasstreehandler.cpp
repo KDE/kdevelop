@@ -567,7 +567,7 @@ void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
 
 /*------------------------------------ CClassTreeHandler::addStruct()
  * addStruct()
- *   Add a global struct to the view.
+ *   Add a struct to the view.
  *
  * Parameters:
  *   aStruct         Structure to add
@@ -579,7 +579,16 @@ void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
 void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
                                    QListViewItem *parent )
 {
-  addItem( aStruct->name, THSTRUCT, parent );
+  QListViewItem *root;
+
+  root = addItem( aStruct->name, THSTRUCT, parent );
+
+  for( aStruct->memberIterator.toFirst();
+       aStruct->memberIterator.current();
+       ++aStruct->memberIterator )
+  {
+    addAttribute( aStruct->memberIterator.current(), root );
+  }
 }
 
 /*------------------------------- CClassTreeHandler::getCurrentNames()
@@ -600,6 +609,7 @@ void CClassTreeHandler::getCurrentNames( const char **className,
                                          THType *idxType )
 {
   CParsedClass *aClass = NULL;
+  CParsedStruct *aStruct = NULL;
   QListViewItem *item;
   QListViewItem *parent;
 
@@ -607,16 +617,33 @@ void CClassTreeHandler::getCurrentNames( const char **className,
   item = tree->currentItem();
   parent = item->parent();
 
+  // Initialize the variables.
+  *className = NULL;
+  *declName = NULL;
+
   if( *idxType == THCLASS )
   {
     aClass = store->getClassByName( item->text(0) );
-    *className = aClass->name;
+    if( aClass != NULL )
+      *className = aClass->name;
   }
   else if( itemType( parent ) == THCLASS )
   {
     aClass = store->getClassByName( parent->text(0) );
-    *className = aClass->name;
-    *declName = item->text(0);
+    if( aClass != NULL )
+    {
+      *className = aClass->name;
+      *declName = item->text(0);
+    }
+  }
+  else if( itemType( parent ) == THSTRUCT )
+  {
+    aStruct = store->getGlobalStructByName( parent->text(0) );
+    if( aStruct != NULL )
+    {
+      *className = aStruct->name;
+      *declName = item->text(0);
+    }
   }
   else // Global item
   {
