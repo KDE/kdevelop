@@ -821,15 +821,16 @@ void CClassParser::parseMethodImpl(bool isOperator)
   className = aLexem->text;
   delete aLexem;
 
-  // Remove all other classname'::' declarations.
-  while( lexemStack.top() && lexemStack.top()->type == CLCL )
+  // Append all other classname'::' declarations.
+  while( !lexemStack.isEmpty() && lexemStack.top()->type == CLCL )
   {
     // Delete '::'
     aLexem = lexemStack.pop();
     delete aLexem;
 
-    // Delete classname
+    // Get next classname and append it.
     aLexem = lexemStack.pop();
+    className = aLexem->text + "." + className;
     delete aLexem;
   }
 
@@ -1068,6 +1069,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
 {
   CParsedClass *childClass;
   CParsedMethod *aMethod;
+  QString childMap;
   bool exit = false;
 
   switch( lexem )
@@ -1094,6 +1096,8 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       {
         childClass->setDeclaredInClass( aClass->name );
         aClass->addClass( childClass );
+        childMap = aClass->name + "." + childClass->name;
+        store.globalContainer.addSubClass( childMap, childClass );
       }
       break;
     case CPVIRTUAL:

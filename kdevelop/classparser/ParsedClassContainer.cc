@@ -93,6 +93,27 @@ void CParsedClassContainer::addClass( CParsedClass *aClass )
   classes.insert( aClass->name, aClass );
 }
 
+/*------------------------------- CParsedClassContainer::addSubClass()
+ * addSubClass()
+ *   Store a subclass pointer using its' hierarchy as the key.
+ *
+ * Parameters:
+ *   key           The hierarchy.
+ *   aClass        The subclass to store.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClassContainer::addSubClass( const char *key, 
+                                         CParsedClass *aClass )
+{
+  assert( aClass != NULL );
+  assert( !aClass->name.isEmpty() );
+  assert( key != NULL );
+
+  classes.insert( key, aClass );
+}
+
 /*------------------------------ CParsedClassContainer::removeClass()
  * removeClass()
  *   Remove a class from the store.
@@ -150,7 +171,7 @@ bool CParsedClassContainer::hasClass( const char *aName )
 
 /*---------------------------- CParsedClassContainer::getClassByName()
  * getClassByName()
- *   Get a class from the list by using its' name.
+ *   Get a class or subclass from the container by using its' name.
  *
  * Parameters:
  *   aName          Name of the class to fetch.

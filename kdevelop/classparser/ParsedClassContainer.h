@@ -35,7 +35,7 @@ public: // Constructor & Destructor
   CParsedClassContainer();
   ~CParsedClassContainer();
 
-private: // Private attributes
+protected: // Private attributes
 
   /** All parsed classes. */
   QDict<CParsedClass> classes;
@@ -53,6 +53,7 @@ public: // Public queries
   bool hasClass( const char *aName );
 
   /** Fetches a class from the store by using its' name. 
+   * @param aName Name of the class to fetch.
    * @return A pointer to the class(not to be deleted) or
    *  NULL if the class wasn't found.
    */
@@ -79,6 +80,12 @@ public: // Public Methods
    * @param aClass Class to add.
    */
   void addClass( CParsedClass *aClass );
+
+  /** Store a subclass pointer using its' hierarchy as the key.
+   * @param key The hierarchy.
+   * @param aClass The childclass to store.
+   */
+  void addSubClass( const char *key, CParsedClass *aClass );
 
   /** Remove a class from the store. 
    * @param aName Name of the class to remove
