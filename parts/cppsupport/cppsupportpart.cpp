@@ -522,6 +522,7 @@ void CppSupportPart::savedFile(const QString &fileName)
     if (projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
 	maybeParse( fileName );
     }
+    emit updatedSourceInfo();
 }
 
 QString CppSupportPart::findSourceFile()
