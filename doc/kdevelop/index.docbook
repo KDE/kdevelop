@@ -320,8 +320,6 @@ Automake Manager, for example, only needs to be active when an Automake based pr
 loaded.  Otherwise, this part will not be active.
 </para>
 
-</sect1>
-
 <para>
 Active parts can have many effects on the &kdevelop;.  Depending on their function, they may add extra menus,
 extra menu items, extra tool buttons, etc.
@@ -383,6 +381,7 @@ extra menu items, extra tool buttons, etc.
 
 </tbody></tgroup>
 </table>
+</sect1>
 
 <sect1 id="makesystems">
 <title>Project Management Systems</title>
@@ -422,7 +421,6 @@ handle qmake based projects (.pro files) within the GUI.
 </sect1>
 
 </chapter>
-
 
 
 <chapter id="appwizard">
