@@ -28,8 +28,8 @@ KEditor::Document *KWritePart::document(const KURL &url)
 {
   QListIterator<DocumentImpl> it(_documents);
   for ( ; it.current(); ++it)
-	if (it.current()->url() == url)
-	  return it.current();
+    if (it.current()->url() == url)
+      return it.current();
 
   return 0;
 }

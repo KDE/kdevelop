@@ -14,6 +14,7 @@
 #include "cursor_iface_impl.h"
 #include "edit_iface_impl.h"
 #include "status_iface_impl.h"
+#include "debug_iface_impl.h"
 
 
 #include "kwrite/kwdoc.h"
@@ -35,6 +36,7 @@ DocumentImpl::DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget)
   new UndoIfaceImpl(m_view, this, parent);
   new EditIfaceImpl(m_view, this, parent);
   new StatusIfaceImpl(m_view, this, parent);
+  new DebugIfaceImpl(m_view, this, parent);
 
   setXMLFile("kwriteeditor_part.rc", true);
    
@@ -58,7 +60,7 @@ bool DocumentImpl::saveFile()
 {
   QFile f(m_file);
   if (!f.open(IO_WriteOnly))
-	return false;
+    return false;
 
   QTextStream ts(&f);
   ts << m_document->text();

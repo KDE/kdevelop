@@ -43,7 +43,7 @@ void CursorIfaceImpl::getCursorPosition(int &line, int &col)
 
 void CursorIfaceImpl::slotCursorChanged()
 {
-  emit CursorDocumentIface::cursorPositionChanged(m_edit->currentLine(), m_edit->currentColumn());
+  emit CursorDocumentIface::cursorPositionChanged(document(), m_edit->currentLine(), m_edit->currentColumn());
 }
 
 

@@ -26,24 +26,24 @@ QString StatusIfaceImpl::status()
 {
   QString s;
   if (m_edit->isOverwriteMode())
-	s = i18n("OVR");
+    s = i18n("OVR");
   else
-	s = i18n("INS");
+    s = i18n("INS");
   if (m_edit->isReadOnly())
-	s += i18n(", ro");
+    s += i18n(", ro");
   return s;
 }
 
 
 void StatusIfaceImpl::slotStatusChanged()
 {
-  emit StatusDocumentIface::statusChanged();
+  emit StatusDocumentIface::statusChanged(document());
 }
 
 
 void StatusIfaceImpl::slotMessage(const QString &text)
 {
-  emit StatusDocumentIface::message(text);
+  emit StatusDocumentIface::message(document(), text);
 }
 
 

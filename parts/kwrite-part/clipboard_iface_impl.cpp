@@ -47,7 +47,7 @@ bool ClipboardIfaceImpl::copyAvailable()
 void ClipboardIfaceImpl::slotCopyAvailable()
 {
   _available = m_edit->hasMarkedText();
-  emit ClipboardDocumentIface::copyAvailable(_available);
+  emit ClipboardDocumentIface::copyAvailable(document(), _available);
 }
 
 

@@ -23,9 +23,9 @@ public:
   virtual void append(const QString &text);
   virtual bool insertLine(const QString &text, uint line);
   virtual bool insertAt(const QString &text, uint line, uint col);
-		 
+         
   virtual bool removeLine(uint line);
-		   
+           
   virtual QString line(uint line) const;
   virtual bool setLine(const QString &text, uint line);
   */

@@ -41,9 +41,9 @@ void UndoIfaceImpl::slotUndoStatus()
 {
   int state = m_edit->undoState();
   _undo = state & 1;
-  emit UndoDocumentIface::undoAvailable(_undo);
+  emit UndoDocumentIface::undoAvailable(document(), _undo);
   _redo = state & 2;
-  emit UndoDocumentIface::redoAvailable(_redo);
+  emit UndoDocumentIface::redoAvailable(document(), _redo);
 }
 
 
