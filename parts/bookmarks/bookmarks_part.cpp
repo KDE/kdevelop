@@ -79,7 +79,10 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 BookmarksPart::~BookmarksPart()
 {
-	delete _widget;
+	if( _widget ) {
+		mainWindow()->removeView( _widget );
+		delete _widget;
+	}
 	delete _config;
 }
 
