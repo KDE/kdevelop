@@ -614,8 +614,6 @@ CppCodeCompletion::completeText( )
     if( !ast ){
         kdDebug(9007) << "------------------- NO AST FOUND --------------------" << endl;
 
-	m_pSupport->backgroundParser()->unlock();
-
         if( RecoveryPoint* recoveryPoint = d->findRecoveryPoint(line, column) ){
             kdDebug(9007) << "node-kind = " << recoveryPoint->kind << endl;
             kdDebug(9007) << "isFunDef = " << (recoveryPoint->kind == NodeType_FunctionDefinition) << endl;
