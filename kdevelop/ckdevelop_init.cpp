@@ -196,16 +196,16 @@ void CKDevelop::initView()
   ////////////////////////
 
   class_tree = new CClassView(0L,"cv");
-  class_tree->setFocusPolicy(QWidget::NoFocus);//???
+  class_tree->setFocusPolicy(QWidget::ClickFocus);
 
   log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),0L,"lfv");
-  log_file_tree->setFocusPolicy(QWidget::NoFocus);//???
+  log_file_tree->setFocusPolicy(QWidget::ClickFocus);
 
   real_file_tree = new CRealFileView(0L,"RFV");
-  real_file_tree->setFocusPolicy(QWidget::NoFocus);//???
+  real_file_tree->setFocusPolicy(QWidget::ClickFocus);
 
   doc_tree = new DocTreeView(0L,"DOC");
-  doc_tree->setFocusPolicy(QWidget::NoFocus);//???
+  doc_tree->setFocusPolicy(QWidget::ClickFocus);
 
   QString class_tree_title = i18n("Classes");
   QString log_file_tree_title = i18n("Groups");
@@ -244,18 +244,19 @@ void CKDevelop::initView()
   ////////////////////////
 	
   messages_widget = new CMakeOutputWidget(0L,"messages");
-  messages_widget->setFocusPolicy(QWidget::ClickFocus);
+  messages_widget->setFocusPolicy(QWidget::NoFocus);
 //  messages_widget->setReadOnly(TRUE);
 
   stdin_stdout_widget = new COutputWidget(0L,"stdin");
   stdin_stdout_widget->setReadOnly(TRUE);
-  stdin_stdout_widget->setFocusPolicy(QWidget::ClickFocus);
+  stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
 
   stderr_widget = new COutputWidget(0L,"stderr");
   stderr_widget->setReadOnly(TRUE);
-  stderr_widget->setFocusPolicy(QWidget::ClickFocus);
+  stderr_widget->setFocusPolicy(QWidget::NoFocus);
 
   konsole_widget = new CKonsoleWidget(0L,"konsole");
+  konsole_widget->setFocusPolicy(QWidget::ClickFocus);
 
   messages_widget->setCaption(i18n("messages"));
   addToolWindow(messages_widget, KDockWidget::DockBottom, m_pMdi, 70, i18n("output of KDevelop"), i18n("messages"));

@@ -4399,19 +4399,16 @@ void CKDevelop::slotActivateTView_VAR()
 void CKDevelop::slotActivateOView_Messages()
 {
   dockManager->findWidgetParentDock(messages_widget->parentWidget())->makeDockVisible();
-  messages_widget->setFocus();
 }
 
 void CKDevelop::slotActivateOView_StdInStdOut()
 {
   dockManager->findWidgetParentDock(stdin_stdout_widget->parentWidget())->makeDockVisible();
-  stdin_stdout_widget->setFocus();
 }
 
 void CKDevelop::slotActivateOView_StdErr()
 {
   dockManager->findWidgetParentDock(stderr_widget->parentWidget())->makeDockVisible();
-  stderr_widget->setFocus();
 }
 
 void CKDevelop::slotActivateOView_Konsole()
