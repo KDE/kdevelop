@@ -351,7 +351,7 @@ if test "$enable_javasupport" = "yes"; then
     AC_MSG_RESULT([not found -- parts/javasupport will NOT be built])
     JAVA_SUBDIRS=""
   else
-    JAVA_SUBDIRS="javasupport"
+    JAVA_SUBDIRS="javasupport javadebugger"
   fi
 fi
 AC_SUBST(JAVA_SUBDIRS)
