@@ -150,18 +150,17 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
     if (!viewedThread_)
         clear();
 
-    if(strstr(str, "No stack.") || !strlen(str))
+    if(!strlen(str) || strstr(str, "No stack."))
         return;
 
     while (char* end = strchr(str, '\n'))
     {
-        // make it a string
-        *end = 0;
-        QString frameDesc = QString(str);
-
         // Don't bother with extra data
         if (*str == '#')
         {
+            // make it a string
+            *end = 0;
+            QString frameDesc = QString(str);
             if (viewedThread_)
                 new FrameStackItem(viewedThread_, frameDesc);
             else
