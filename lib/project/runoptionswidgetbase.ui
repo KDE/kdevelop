@@ -54,6 +54,9 @@
                     <property name="buttonGroupId">
                         <number>1</number>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The build directory depends on the currenty selected configuration (in Configure Options page)</string>
+                    </property>
                 </widget>
                 <widget class="QLabel" row="1" column="2" rowspan="1" colspan="2">
                     <property name="name">
@@ -83,6 +86,9 @@
                     </property>
                     <property name="readOnly">
                         <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>A relative to the project root directory path or an absolute path</string>
                     </property>
                 </widget>
                 <widget class="QPushButton" row="2" column="3">
