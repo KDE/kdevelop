@@ -927,7 +927,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   bool bContinue=true;
    // rest from the buildRun
   appl_process.clearArguments();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  QDir::setCurrent(prj->getProjectDir());
 
   stdin_stdout_widget->clear();
   stderr_widget->clear();

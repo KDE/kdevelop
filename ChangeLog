@@ -1,3 +1,6 @@
+2000-11-11 Falk Brettschneider <falk@kdevelop.org>
+  * fixed slotStartRun(), starts chosen binary of Project->Options->Binary
+
 2000-11-10 Falk Brettschneider <falk@kdevelop.org>
   * fixed all slotBuild...() methods, proper usage of CProject::getDirWhereMakeWillBeCalled()
   * added QMessageBoxes which will warn and give hints, if there's no Makefile
