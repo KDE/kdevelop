@@ -1,4 +1,6 @@
 #!/bin/bash
+# $Id:$
+# $APPNAME$ - Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
 
 
 hello()
