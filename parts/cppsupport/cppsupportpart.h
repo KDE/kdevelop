@@ -40,7 +40,7 @@ class QListViewItem;
 class KListView;
 
 namespace KParts { class Part; }
-namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; };
+namespace KTextEditor { class EditInterface; class SelectionInterface; class ViewCursorInterface; class Document; };
 
 class CppSupportPart : public KDevLanguageSupport
 {
@@ -64,9 +64,11 @@ public:
 
     virtual QStringList subclassWidget(const QString& formName);
     virtual QStringList updateWidget(const QString& formName, const QString& fileName);
-    
+
+    KTextEditor::Document* findDocument( const KURL& url );
+
     static KConfig *config();
-    
+
 signals:
     void fileParsed( const QString& fileName );
 

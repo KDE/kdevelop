@@ -1337,6 +1337,8 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   classImpl.replace(QRegExp("\\$NAMESPACEEND\\$"), namespaceEnd);
   classImpl.replace(QRegExp("\\$FILENAME\\$"), implementation);
 
+  kdDebug(9007) << "implementationPath = " << implementationPath << endl;
+
   QFile ifile(implementationPath);
   if (!ifile.open(IO_WriteOnly)) {
     KMessageBox::error(&dlg, "Cannot write to implementation file");

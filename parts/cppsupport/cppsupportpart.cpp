@@ -756,7 +756,9 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
 	walker.parseTranslationUnit( translationUnit );
     }
     m_backgroundParser->unlock();
-    m_backgroundParser->removeFile( fileName );
+
+    if( !findDocument(fileName) )
+        m_backgroundParser->removeFile( fileName );
 
     partController()->blockSignals( false );
 }
@@ -1003,6 +1005,25 @@ QStringList CppSupportPart::modifiedFileList()
 
     return lst;
 }
+
+KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
+{
+    if( !partController()->parts() )
+        return 0;
+
+    QPtrList<KParts::Part> parts( *partController()->parts() );
+    QPtrListIterator<KParts::Part> it( parts );
+    while( KParts::Part* part = it.current() ){
+        KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
+	if( doc && doc->url() == url )
+	    return doc;
+        ++it;
+    }
+
+    return 0;
+}
+
+
 
 
 #include "cppsupportpart.moc"
