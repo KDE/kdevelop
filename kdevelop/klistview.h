@@ -37,14 +37,15 @@ class KListView : public QListView
 public:
     KListView( QWidget *parent=0, const char *name=0 );
     ~KListView();
-    virtual void insertItem(QListViewItem *item);
-    virtual void clear();
-    QListViewItem *lastChild() const
-	{ return last; }
+    QListViewItem *lastChild() const;
 
- protected:
-    virtual void contentsMousePressEvent(QMouseEvent * event);
-    
+protected:
+    virtual QSize minimumSizeHint() const
+      { return sizeHint(); }
+    virtual QSizePolicy sizePolicy () const
+      { return QSizePolicy(QSizePolicy::MinimumExpanding,
+                           QSizePolicy::MinimumExpanding); }
+
 private:
     QListViewItem *last;
 };

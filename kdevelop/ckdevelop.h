@@ -483,7 +483,7 @@ public:
   /** click action on RFV */
   void slotRealFileTreeSelected(QString file);
   /** click action on DOC */
-  void slotDocTreeSelected(QString url_file);
+  void slotDocTreeSelected(const QString &filename);
   /** selection of classes in the browser toolbar */
   void slotClassChoiceCombo(int index);
   /** selection of methods in the browser toolbar */

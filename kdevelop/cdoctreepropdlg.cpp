@@ -78,6 +78,7 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   connect(file_button,SIGNAL(clicked()),SLOT(slotFileButtonClicked()));
   connect(ok_button,SIGNAL(clicked()),SLOT(accept()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+  resize(sizeHint().width()*2, sizeHint().height());
 }
 
 

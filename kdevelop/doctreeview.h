@@ -1,9 +1,8 @@
 /***************************************************************************
                              doctreeview.h
                              -------------------
-
-    copyright            : (C) 1999 The KDevelop Team
-    
+    copyright            : (C) 1999 by Bernd Gehrmann
+    email                : bernd@physik.hu-berlin.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,11 +29,6 @@ class DocTreeDocbaseFolder;
 class CProject;
 
 
-/**
- * The documentation tree (manual, tutorial, KDE-libs...)
- * @author Sandy Meier & Bernd Gehrmann (rewrite)
- */
-
 class DocTreeView : public KListView, public Component
 {
     Q_OBJECT 
@@ -42,25 +36,24 @@ public:
     DocTreeView( QWidget *parent=0, const char *name=0 );
     ~DocTreeView();
 
-    void refresh(CProject *prj);
-    //    QString selectedText();
-
+protected:
+    // Component notifications:
     virtual void docPathChanged();
+    virtual void projectClosed();
+    virtual void projectOpened(CProject *prj);
 
 protected slots:
-    void slotAddDocumentation();
-    void slotRemoveDocumentation();
-    void slotDocumentationProp();
-    void slotConfigureKDELibs();
-
-    void slotSelectionChanged(QListViewItem *item);
+    void slotConfigure();
+    void slotLeftButtonPressed(QListViewItem *item);
     void slotRightButtonPressed(QListViewItem *item, const QPoint &p, int);
 	
 signals:
-    void fileSelected(QString url_file);
+    void fileSelected(const QString &url_file);
+    void projectAPISelected();
+    void projectManualSelected();
 
 private: 
-    CProject* project;
+    QListViewItem *contextItem;
     DocTreeKDevelopFolder *folder_kdevelop;
     DocTreeKDELibsFolder *folder_kdelibs;
     DocTreeOthersFolder *folder_others;

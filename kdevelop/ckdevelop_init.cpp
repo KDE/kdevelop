@@ -1009,7 +1009,9 @@ void CKDevelop::initConnections(){
   connect(real_file_tree, SIGNAL(updateDirFromVCS(QString)), SLOT(slotUpdateDirFromVCS(QString))); 
 
 
-  connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));
+  connect(doc_tree, SIGNAL(fileSelected(const QString&)), SLOT(slotDocTreeSelected(const QString&)));
+  connect(doc_tree, SIGNAL(projectAPISelected()), SLOT(slotHelpAPI()));
+  connect(doc_tree, SIGNAL(projectManualSelected()), SLOT(slotHelpManual()));
 
   //connect the editor lookup function with slotHelpSText
 #warning FIXME MDI stuff

@@ -31,27 +31,14 @@ KListView::~KListView()
 {}
 
 
-void KListView::insertItem(QListViewItem *item)
+QListViewItem *KListView::lastChild() const
 {
-    last = item;
-    QListView::insertItem(item);
-}
-
-
-void KListView::clear()
-{
-    last = 0;
-    QListView::clear();
-}
-void KListView::contentsMousePressEvent(QMouseEvent * event)
-{
-    QListViewItem* item;
-    item = itemAt(event->pos());
-    if (isSelected(item) && event->button() != RightButton){
-	emit selectionChanged (item);
-    }
-    
-    QListView::contentsMousePressEvent( event );
+    QListViewItem *item = firstChild();
+    if (!item)
+      return 0;    
+    while (item->nextSibling())
+      item = item->nextSibling();
+    return item;
 }
 
 

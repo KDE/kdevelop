@@ -1322,7 +1322,7 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
     {
         config->writeEntry("doc_kde",dlg.getDocPath());
         config->sync();
-        doc_tree->refresh(prj);
+        ComponentManager::self()->notifyDocPathChanged();
     }
   }
 }
@@ -2385,18 +2385,8 @@ void CKDevelop::slotCommitDirToVCS(QString dir){
 //     }
     
 }
-void CKDevelop::slotDocTreeSelected(QString url_file){
-  if(url_file == "API-Documentation"){
-    slotHelpAPI();
-    return;
-  }
-  if(url_file == "User-Manual"){
-    slotHelpManual();
-    return;
-  }
-
-  slotURLSelected("file:" + url_file, QString(), 1);
-  
+void CKDevelop::slotDocTreeSelected(const QString &filename){
+  slotURLSelected("file:" + filename, QString(), 1);
 }
 
 void CKDevelop::slotTCurrentTab(int item){

@@ -1,9 +1,16 @@
+1999-11-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Rewritten and completed the cool new documentation 
+	  tree configurator and restructured DocTreeView
+	* Made the hack for project api and project manual
+	  pages internal; proper signals are emitted now
+	* Made KListView more general
+
 1999-11-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Bug fixed Open Project
 	* Trying to enable builddir != srcdir
 
 1999-11-09  Sandy Meier  <smeier@rz.uni-potsdam.de>
-	* commited new QtextMDI version 0.3 by Falk Brettschneider
+	* commited new QextMDI version 0.3 by Falk Brettschneider
 	* all editoroptions dlgs should work now
 
 1999-11-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>

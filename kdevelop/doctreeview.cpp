@@ -1,8 +1,8 @@
 /***************************************************************************
                              doctreeview.cpp
                              -------------------
-
-    copyright            : (C) 1999 The KDevelop Team
+    copyright            : (C) 1999 by Bernd Gehrmann
+    email                : bernd@physik.hu-berlin.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -20,7 +20,6 @@
 #include <qdir.h>
 #include <kapp.h>
 #include <klocale.h>
-#include <kglobal.h>
 #include <kstddirs.h>
 #include <kiconloader.h>
 #include <kpopmenu.h>
@@ -28,11 +27,10 @@
 #include <kstddirs.h>
 #include <stdio.h>
 
-#include "cdoctreepropdlg.h"
 #include "cproject.h"
 #include "ctoolclass.h"
-#include "doctreeview.h"
 #include "doctreeconfdlg.h"
+#include "doctreeview.h"
 
 #if HAVE_CONFIG_H
 #include "../config.h"
@@ -46,12 +44,12 @@ class ListViewDocItem : public KListViewItem
 {
 public:
     ListViewDocItem( KListViewItem *parent,
-                     const char *text, const char *filename );
+                     const QString &text, const QString &filename );
 };
 
 
 ListViewDocItem::ListViewDocItem(KListViewItem *parent,
-                                 const char *text, const char *filename)
+                                 const QString &text, const QString &filename)
     : KListViewItem(parent, text, filename)
 {
     setPixmap(0, BarIcon("mini-doc"));
@@ -67,13 +65,13 @@ class ListViewBookItem : public KListViewItem
 {
 public:
     ListViewBookItem( KListViewItem *parent,
-                      const char *text, const char *filename );
+                      const QString &text, const QString &filename );
     virtual void setOpen(bool o);
 };
 
 
 ListViewBookItem::ListViewBookItem(KListViewItem *parent,
-                                   const char *text, const char *filename)
+                                   const QString &text, const QString &filename)
     : KListViewItem(parent, text, filename)
 {
     setOpen(false);
@@ -90,20 +88,20 @@ void ListViewBookItem::setOpen(bool o)
 /**
  * A list view item that is decorated with a folder icon.
  * This typically represents one major part in the help tree.
- * Its contents can be refresh()d. The default implementation
- * simply deletes all children.
+ * Its contents can be clear()d, which is usually the first
+ * thing done in the refresh() methods below.
  */
 class ListViewFolderItem : public KListViewItem
 {
 public:
-    ListViewFolderItem( KListView *parent, const char *text );
+    ListViewFolderItem( KListView *parent, const QString &text );
     virtual void setOpen(bool o);
-    virtual void refresh();
+    void clear();
 };
 
 
-ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
-    : KListViewItem(parent, text, "")
+ListViewFolderItem::ListViewFolderItem(KListView *parent, const QString &text)
+    : KListViewItem(parent, text, QString::null)
 {
     setOpen(false);
 }
@@ -112,12 +110,12 @@ ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
 void ListViewFolderItem::setOpen(bool o)
 {
     QString fn(o? "mini/folder_open.png" : "mini/folder.png");
-    setPixmap(0, KGlobal::iconLoader()->loadApplicationIcon(fn));
+    setPixmap(0, kapp->iconLoader()->loadApplicationIcon(fn));
     KListViewItem::setOpen(o);
 }
 
 
-void ListViewFolderItem::refresh()
+void ListViewFolderItem::clear()
 {
     QListViewItem *child = firstChild();
     while (child)
@@ -146,20 +144,19 @@ void ListViewFolderItem::refresh()
 class DocTreeKDevelopBook : public ListViewBookItem
 {
 public:
-    DocTreeKDevelopBook( KListViewItem *parent, const char *text,
-                         const char *filename, bool expandable=false )
-        : ListViewBookItem(parent, text, locatehtml(filename))
-        { setExpandable(expandable); }
+    DocTreeKDevelopBook( KListViewItem *parent, const QString &text,
+                         const QString &filename, bool expandable=false );
     virtual void setOpen(bool o);
 private:
     void readSgmlIndex(FILE *f);
-    static QString locatehtml(const QString &filename);
 };
 
 
-QString DocTreeKDevelopBook::locatehtml(const QString &filename)
+DocTreeKDevelopBook::DocTreeKDevelopBook(KListViewItem *parent, const QString &text,
+                    const QString &filename, bool expandable)
+    : ListViewBookItem(parent, text, filename)
 {
-    return CToolClass::locatehtml("kdevelop/" + filename);
+    setExpandable(expandable);
 }
 
 
@@ -214,28 +211,32 @@ public:
     DocTreeKDevelopFolder(DocTreeView *parent)
         : ListViewFolderItem(parent, i18n("KDevelop"))
         {}
-    virtual void refresh();
+    void refresh();
 };
 
 
 void DocTreeKDevelopFolder::refresh()
 {
-    ListViewFolderItem::refresh();
+    ListViewFolderItem::clear();
 
-    (void) new DocTreeKDevelopBook(this, i18n("Welcome !"),
-                                   "welcome/index.html", false);
-    (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
-                                   "index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
-                                   "programming/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),
-                                   "tutorial/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
-                                   "kde_libref/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("KDE 2 Developer Guide"),
-                                   "addendum/index.html", true);
-    (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
-                                   "reference/C/cref.html");
+    QString path = locate("appdata", "tools/documentation");
+    KSimpleConfig docconfig(path);
+    docconfig.setGroup("Contents");
+    QStringList entries = docconfig.readListEntry("KDevelopEntries");
+    KConfig *config = kapp->config();
+    config->setGroup("DocTree");
+    QStringList nonEntries = config->readListEntry("KDevelopNotShown");
+    
+    for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
+        if (!nonEntries.contains(*it))
+            {
+                docconfig.setGroup("KDevelop-" + (*it));
+                QString name = docconfig.readEntry("Name");
+                QString filename = CToolClass::locatehtml("kdevelop/" + docconfig.readEntry("Path"));
+                bool expandable = docconfig.readBoolEntry("Expandable");
+                (void) new DocTreeKDevelopBook(this, name, filename, expandable);
+                qDebug( "Insert %s", name.ascii() );
+            }
 }
 
 
@@ -253,35 +254,23 @@ void DocTreeKDevelopFolder::refresh()
 class DocTreeKDELibsBook : public ListViewBookItem
 {
 public:
-    DocTreeKDELibsBook( KListViewItem *parent, const char *text,
-                        const char *libname);
+    DocTreeKDELibsBook( KListViewItem *parent, const QString &text,
+                        const QString &filename, const QString &idxfilename );
     virtual void setOpen(bool o);
 private:
     void readKdoc2Index(FILE *f);
-  //    static QString locatehtml(const char *libname);
     QString idx_filename;
 };
 
 
-DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
-                                        const char *libname )
-    : ListViewBookItem(parent, text, libname)
+DocTreeKDELibsBook::DocTreeKDELibsBook(KListViewItem *parent, const QString &text,
+                                       const QString &filename, const QString &idxfilename)
+    : ListViewBookItem(parent, text, filename), idx_filename(idxfilename)
 {
-    KConfig *config = kapp->config();
-    config->setGroup("Doc_Location");
-    QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
-    if (!idx_path.isEmpty())
-        {
-            // If we have a kdoc2 index in either uncompressed
-            // or compressed form, we read it in on demand.
-            idx_filename = idx_path + "/";
-            if (!libname)
-                idx_filename += "qt";
-            else
-                idx_filename += libname;
-            idx_filename += ".kdoc";
-            setExpandable(true);
-        }
+    if (!idxfilename.isNull())
+        // If we have a kdoc2 index in either uncompressed
+        // or compressed form, we read it in on demand.
+        setExpandable(true);
 }
 
 
@@ -345,59 +334,42 @@ public:
     DocTreeKDELibsFolder(DocTreeView *parent)
         : ListViewFolderItem(parent, i18n("Qt/KDE Libraries"))
         {}
-    virtual void refresh();
-    void handleRightButtonPressed(QListViewItem *item,
-                                  const QPoint &p);
-private:
-    void insertBook(const QString &libtitle, const char *libname);
+    void refresh();
 };
-
-
-void DocTreeKDELibsFolder::insertBook(const QString &libtitle, const char *libname)
-{
-    KConfig *config = kapp->config();
-    config->setGroup("Doc_Location");
-    QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-    QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
-
-    QString filename = (!libname)?
-      (qt_path + "/index.html") : (kde_path + "/" + libname + "/index.html");
-
-    if (QFileInfo(filename).exists())
-      (void) new DocTreeKDELibsBook(this, libtitle, filename);
-}
 
 
 void DocTreeKDELibsFolder::refresh()
 {
-    ListViewFolderItem::refresh();
+    ListViewFolderItem::clear();
 
-    insertBook(i18n("Qt Library"),           0);
-    insertBook(i18n("KDE Core Library"),     "kdecore");
-    insertBook(i18n("KDE UI Library"),       "kdeui");
-    insertBook(i18n("KDE KFile Library"),    "kfile");
-    insertBook(i18n("KDE HTML Library"),     "khtml");
-    insertBook(i18n("KDE KAB Library"),      "kab");
-    insertBook(i18n("KDE KSpell Library"),   "kspell");
-    insertBook(i18n("KDE KOM Library"),      "kom");
-    insertBook(i18n("KDE KParts Library"),   "kparts");
-    insertBook(i18n("KDE KPartsUI Library"), "kpartsui");
-    insertBook(i18n("KDE KIO Library"),      "kio");
-    insertBook(i18n("KDE KDE Daemon Library"), "kded");
-}
+    KConfig *config = kapp->config();
+    config->setGroup("Doc_Location");
+    QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+    QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
+    QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
 
-void DocTreeKDELibsFolder::handleRightButtonPressed(QListViewItem *item,
-						    const QPoint &p)
-{
-    if (item == this)
-        {
-            KPopupMenu pop(i18n("Qt/KDE Libraries"));
-            pop.insertItem(i18n("Configure..."),
-                           listView(), SLOT(slotConfigureKDELibs()));
-            pop.exec(p);
-        }
-}
+    QString path = locate("appdata", "tools/documentation");
+    KSimpleConfig docconfig(path);
+    docconfig.setGroup("Contents");
+    QStringList entries = docconfig.readListEntry("LibrariesEntries");
+    config->setGroup("DocTree");
+    QStringList nonEntries = config->readListEntry("LibrariesNotShown");
     
+    for (QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
+        if (!nonEntries.contains(*it))
+            {
+                docconfig.setGroup("Libraries-" + (*it));
+                QString name = docconfig.readEntry("Name");
+                QString filename = (*it == "qt")?
+                    (qt_path + "/index.html") : (kde_path + "/" + (*it) + "/index.html");
+                QString idxfilename = idx_path.isEmpty()?
+                    QString::null : (idx_path + "/" + (*it) + ".kdoc");
+                if (QFileInfo(filename).exists())
+                    (void) new DocTreeKDELibsBook(this, name, filename, idxfilename);
+                qDebug( "Insert %s", name.ascii() );
+            }
+}
+
 
 /*************************************/
 /* Folder "Documentation Base"       */
@@ -413,7 +385,7 @@ public:
         : ListViewFolderItem(parent, i18n("Documentation Base"))
         { setExpandable(true); }
     virtual void setOpen(bool o);
-    virtual void refresh();
+    void refresh();
 private:
     void readDocbaseFile(FILE *f);
 };
@@ -470,7 +442,7 @@ void DocTreeDocbaseFolder::setOpen(bool o)
 
 void DocTreeDocbaseFolder::refresh()
 {
-    ListViewFolderItem::refresh();
+    ListViewFolderItem::clear();
 
     setOpen(isOpen()); // should reparse the doc-base
 }
@@ -486,9 +458,7 @@ class DocTreeOthersFolder : public ListViewFolderItem
 {
 public:
     DocTreeOthersFolder(DocTreeView *parent);
-    virtual void refresh();
-    void handleRightButtonPressed(QListViewItem *item,
-                                  const QPoint &p);
+    void refresh();
 };
 
 
@@ -499,49 +469,21 @@ DocTreeOthersFolder::DocTreeOthersFolder(DocTreeView *parent)
 
 void DocTreeOthersFolder::refresh()
 {
-    QStrList others;
-    
-    ListViewFolderItem::refresh();
+    ListViewFolderItem::clear();
 
     KConfig *config = kapp->config();
-    config->setGroup("Other_Doc_Location");
-    config->readListEntry("others_list", others);
-    config->setGroup("Other_Doc_Location");
-    for (char *s = others.first(); s != 0; s = others.next())
-        {
-            QString filename = config->readEntry(s);
-            (void) new ListViewBookItem(this, s, filename);
-        }
+    config->setGroup("DocTree");
+    QStringList othersShownTitle = config->readListEntry("OthersShownTitle");
+    QStringList othersShownURL = config->readListEntry("OthersShownURL");
+    QStringList::Iterator it1 = othersShownTitle.begin();
+    QStringList::Iterator it2 = othersShownURL.begin();
+    for (; it1 != othersShownTitle.end() && it2 != othersShownURL.end(); ++it1, ++it2)
+        (void) new ListViewBookItem(this, *it1, *it2);
 }
 
-
-void DocTreeOthersFolder::handleRightButtonPressed(QListViewItem *item,
-                                                   const QPoint &p)
-{
-    if (item == this)
-        {
-            KPopupMenu pop(i18n("Others"));
-            pop.insertItem(i18n("Add Entry..."),
-                           listView(), SLOT(slotAddDocumentation()));
-            pop.exec(p);
-        }
-    else if (item->parent() == this)
-        {
-            KPopupMenu pop(i18n("Others"));
-            pop.insertItem(i18n("Add Entry..."),
-                           listView(), SLOT(slotAddDocumentation()));
-            pop.insertItem(i18n("Remove Entry"),
-                           listView(), SLOT(slotRemoveDocumentation()));
-            pop.insertSeparator();
-            pop.insertItem(i18n("Properties..."),
-                           listView(), SLOT(slotDocumentationProp()));
-            pop.exec(p);
-        }
-}
-    
 
 /*************************************/
-/* Folder "Current Project"         */
+/* Folder "Current Project"          */
 /*************************************/
 
 class DocTreeProjectFolder : public ListViewFolderItem
@@ -550,7 +492,7 @@ public:
     DocTreeProjectFolder(DocTreeView *parent)
         : ListViewFolderItem(parent, i18n("Current Project")), project(0)
         {}
-    virtual void refresh();
+    void refresh();
     void setProject(CProject *prj)
         { project = prj; }
     
@@ -561,17 +503,15 @@ private:
 
 void DocTreeProjectFolder::refresh()
 {
-    ListViewFolderItem::refresh();
+    ListViewFolderItem::clear();
 
     setExpandable(false);
     if (project && project->valid)
         {
             setExpandable(true);
 
-            (void) new ListViewBookItem(this, i18n("API documentation"),
-                                        /* strange!? */ "API-Documentation");
-            (void) new ListViewBookItem(this, i18n("User manual"),
-                                        /* strange!? */ "User-Manual");
+            (void) new ListViewBookItem(this, i18n("API documentation"), "internal:projectAPI");
+            (void) new ListViewBookItem(this, i18n("User manual"), "internal:projectManual");
         }
 }
 
@@ -601,13 +541,14 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
 
     folder_kdevelop->setOpen(true);
     folder_kdelibs->setOpen(true);
+    projectOpened(0); // should perhaps be done in the constructors
     
     connect( this,
              SIGNAL(rightButtonPressed(QListViewItem*,const QPoint&,int)),
              SLOT(slotRightButtonPressed(QListViewItem*,const QPoint&,int)) );
     connect( this,
-             SIGNAL(selectionChanged(QListViewItem*)),
-             SLOT(slotSelectionChanged(QListViewItem *)) );
+             SIGNAL(pressed(QListViewItem*)),
+             SLOT(slotLeftButtonPressed(QListViewItem*)) );
 }
 
 
@@ -620,18 +561,8 @@ void DocTreeView::docPathChanged()
     folder_kdelibs->refresh();
 }
 
-#if 0
-QString DocTreeView::selectedText()
-{
-    QString text;
-    if (currentItem())
-        text = currentItem()->text(0);
-    return text;
-}
-#endif
 
-
-void DocTreeView::refresh(CProject *prj)
+void DocTreeView::projectOpened(CProject *prj)
 {
     folder_project->setProject(prj);
     folder_kdevelop->refresh();
@@ -641,105 +572,52 @@ void DocTreeView::refresh(CProject *prj)
 }
 
 
-void DocTreeView::slotRightButtonPressed(QListViewItem *item,
-                                         const QPoint &p, int)
+void DocTreeView::projectClosed()
 {
-    if (!item)
-        return;
-
-    setSelected(item, true);
-
-    // Not very oo style, but works for the first
-    // (as long as other folders don't use right-clicks)
-    folder_kdelibs->handleRightButtonPressed(item, p);
-    folder_others->handleRightButtonPressed(item, p);
+    folder_project->setProject(0);
 }
 
-
-void DocTreeView::slotAddDocumentation()
-{
-    CDocTreePropDlg dlg;
-    dlg.setCaption(i18n("Add Entry..."));
-    if (!dlg.exec())
-        return;
-    
-    KConfig *config = kapp->config();
-    config->setGroup("Other_Doc_Location");
-    QStrList others;
-    config->readListEntry("others_list", others);
-    
-    // find the correct place and add the entry to the list
-    if (currentItem() == folder_others) 
-        others.insert(0, dlg.name_edit->text());
-    else
-        {
-            int pos = others.find(currentItem()->text(0));
-            others.insert(pos+1, dlg.name_edit->text());
-        }
-    //write the list
-    config->writeEntry("others_list", others);
-    // write the props
-    config->writeEntry(dlg.name_edit->text(), dlg.file_edit->text());
-    config->sync();
-
-    folder_others->refresh();
-}
-
-
-void DocTreeView::slotRemoveDocumentation()
-{
-    KConfig *config = kapp->config();
-    config->setGroup("Other_Doc_Location");
-    QStrList others;
-    
-    config->readListEntry("others_list", others);
-    others.remove(currentItem()->text(0));
-    config->writeEntry("others_list", others);
-    config->sync();
-    
-    folder_others->refresh();
-}
-
-
-void DocTreeView::slotDocumentationProp()
-{
-    KConfig *config = kapp->config();
-    config->setGroup("Other_Doc_Location");
-
-    QString name = currentItem()->text(0);
-    QString filename = config->readEntry(name);
-    
-    CDocTreePropDlg dlg;
-    dlg.setCaption(i18n("Properties..."));
-    dlg.name_edit->setText(name);
-    dlg.name_edit->setEnabled(false);
-    dlg.file_edit->setText(filename);
-    
-    if (!dlg.exec())
-        return;
-    
-    config->setGroup("Other_Doc_Location");
-    config->writeEntry(name, dlg.file_edit->text());
-    config->sync();
-
-    folder_others->refresh();
-}
-
-
-void DocTreeView::slotConfigureKDELibs()
-{
-    DocTreeConfigDialog dlg(this);
-    if (dlg.exec() == QDialog::Accepted)
-	folder_kdelibs->refresh();
-}
-
-
-void DocTreeView::slotSelectionChanged(QListViewItem *item)
+void DocTreeView::slotLeftButtonPressed(QListViewItem *item)
 {
     // We assume here that ALL (!) items in the list view
     // are KListViewItem's
     KListViewItem *kitem = static_cast<KListViewItem*>(item);
-    if (kitem && !kitem->ident().isEmpty())
+    if (!kitem)
+        return;
+
+    QString ident = kitem->ident();
+    if (ident == "internal:projectAPI")
+        emit projectAPISelected();
+    else if (ident == "internal:projectManual")
+        emit projectManualSelected();
+    else if (!ident.isEmpty())
         emit fileSelected(kitem->ident());
 }
 
+
+void DocTreeView::slotRightButtonPressed(QListViewItem *item, const QPoint &p, int)
+{
+    contextItem = item;
+    KPopupMenu pop(i18n("Documentation Tree"));
+    pop.insertItem(i18n("Configure..."), this, SLOT(slotConfigure()));
+    pop.exec(p);
+}
+
+
+void DocTreeView::slotConfigure()
+{
+    DocTreeConfigDialog::Page page;
+    if (contextItem == folder_kdevelop || contextItem->parent() == folder_kdevelop)
+        page = DocTreeConfigDialog::KDevelop;
+    else if (contextItem == folder_kdelibs || contextItem->parent() == folder_kdelibs)
+        page = DocTreeConfigDialog::Libraries;
+    else
+        page = DocTreeConfigDialog::Others;
+    DocTreeConfigDialog dlg(page, this);
+    if (dlg.exec() == QDialog::Accepted)
+        {
+            folder_kdevelop->refresh();
+            folder_kdelibs->refresh();
+            folder_others->refresh();
+        }
+}

@@ -360,7 +360,6 @@ bool CKDevelop::fileSaveAs(){
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(){
-  doc_tree->refresh(prj);
   if (!project){
     return; // no project
   }
