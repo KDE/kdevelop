@@ -204,3 +204,80 @@ void NamespaceAliasAST::setAliasName( NameAST::Ptr& name )
     m_aliasName = name;
 }
 
+// ------------------------------------------------------------------------
+UsingAST::UsingAST()
+    : m_typename( false )
+{
+}
+
+UsingAST::~UsingAST()
+{
+}
+
+bool UsingAST::isTypename() const
+{
+    return m_typename;
+}
+
+void UsingAST::setTypename( bool b )
+{
+    m_typename = b;
+}
+
+NameAST* UsingAST::name()
+{
+    return m_name.get();
+}
+
+void UsingAST::setName( NameAST::Ptr& name )
+{
+    m_name = name;
+}
+
+// ------------------------------------------------------------------------
+UsingDirectiveAST::UsingDirectiveAST()
+{
+}
+
+UsingDirectiveAST::~UsingDirectiveAST()
+{
+}
+
+NameAST* UsingDirectiveAST::name()
+{
+    return m_name.get();
+}
+
+void UsingDirectiveAST::setName( NameAST::Ptr& name )
+{
+    m_name = name;
+}
+
+TypedefAST::TypedefAST()
+{
+}
+
+TypedefAST::~TypedefAST()
+{
+}
+
+AST* TypedefAST::typeSpec()
+{
+    return m_typeSpec.get();
+}
+
+void TypedefAST::setTypeSpec( AST::Ptr& typeSpec )
+{
+    m_typeSpec = typeSpec;
+}
+
+AST* TypedefAST::initDeclaratorList()
+{
+    return m_initDeclaratorList.get();
+}
+
+void TypedefAST::setInitDeclaratorList( AST::Ptr& initDeclaratorList )
+{
+    m_initDeclaratorList = initDeclaratorList;
+}
+

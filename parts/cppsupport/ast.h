@@ -179,6 +179,74 @@ private:
     void operator = ( const NamespaceAliasAST& source );
 };
 
+class UsingAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<UsingAST> Ptr;
+    
+public:
+    UsingAST();
+    virtual ~UsingAST();
+    
+    bool isTypename() const;
+    void setTypename( bool b );
+    
+    NameAST* name();
+    void setName( NameAST::Ptr& name );
+    
+private:
+    bool m_typename;
+    NameAST::Ptr m_name;
+    
+private:
+    UsingAST( const UsingAST& source );
+    void operator = ( const UsingAST& source );
+};
+
+class UsingDirectiveAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<UsingDirectiveAST> Ptr;
+    
+public:
+    UsingDirectiveAST();
+    virtual ~UsingDirectiveAST();
+        
+    NameAST* name();
+    void setName( NameAST::Ptr& name );
+    
+private:
+    NameAST::Ptr m_name;
+    
+private:
+    UsingDirectiveAST( const UsingDirectiveAST& source );
+    void operator = ( const UsingDirectiveAST& source );
+};
+
+class TypedefAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<TypedefAST> Ptr;
+    
+public:
+    TypedefAST();
+    virtual ~TypedefAST();
+    
+    AST* typeSpec();
+    void setTypeSpec( AST::Ptr& typeSpec );
+    
+    AST* initDeclaratorList();
+    void setInitDeclaratorList( AST::Ptr& initDeclaratorList );
+    
+private:
+    AST::Ptr m_typeSpec;
+    AST::Ptr m_initDeclaratorList;
+    
+private:
+    TypedefAST( const TypedefAST& source );
+    void operator = ( const TypedefAST& source );
+};
+
 class TranslationUnitAST: public AST
 {
 public:
