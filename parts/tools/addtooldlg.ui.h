@@ -17,7 +17,7 @@ void AddToolDialog::init()
 
 QString AddToolDialog::getApp()
 {
-    return execEdit->text() + " " + paramEdit->text();
+    return execEdit->url() + " " + paramEdit->text();
 }
 
 void AddToolDialog::treeSelectionChanged( QListViewItem * lvi )
@@ -25,6 +25,6 @@ void AddToolDialog::treeSelectionChanged( QListViewItem * lvi )
     KDevAppTreeListItem* item = dynamic_cast<KDevAppTreeListItem*> ( lvi );
     if ( !item || item->isDirectory() )
 	return;
-    execEdit->setText( item->executable() );
+    execEdit->setURL( item->executable() );
     menutextEdit->setText( item->text( 0 ) );   
 }

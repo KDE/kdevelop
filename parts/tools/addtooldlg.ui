@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>511</width>
-            <height>309</height>
+            <width>537</width>
+            <height>414</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,19 +25,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>menutextLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Menu text:</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="2" column="1">
-            <property name="name">
-                <cstring>execEdit</cstring>
-            </property>
-        </widget>
         <widget class="QLabel" row="3" column="0">
             <property name="name">
                 <cstring>cmdlineLabel_2</cstring>
@@ -74,6 +61,14 @@
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>menutextLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Menu text:</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="3" column="1">
@@ -135,9 +130,22 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="KURLRequester" row="2" column="1">
+            <property name="name">
+                <cstring>execEdit</cstring>
+            </property>
+        </widget>
         <widget class="KDevApplicationTree" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>tree</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
         </widget>
     </grid>
@@ -181,7 +189,6 @@
 </connections>
 <tabstops>
     <tabstop>menutextEdit</tabstop>
-    <tabstop>execEdit</tabstop>
     <tabstop>paramEdit</tabstop>
     <tabstop>capturedBox</tabstop>
     <tabstop>okButton</tabstop>
