@@ -640,7 +640,13 @@ void CKDevelop::slotProjectAPI(){
   QString kde_ref_file=doc_kde+"kdoc-reference/kdecore.kdoc";
   QString khtmlw_ref_file=doc_kde+"kdoc-reference/khtmlw.kdoc";
 
+	QStrList headerlist(prj->getHeaders());
+	uint i;
+
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+	QString dir=QDir::currentDirPath();
+  uint dirlength=dir.length()+1;
+
   shell_process.clearArguments();
 
   if( !QFileInfo(kde_ref_file).exists()){
@@ -652,7 +658,13 @@ void CKDevelop::slotProjectAPI(){
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << prj->getProjectName();
-    shell_process << "*.h";
+		for (i=0; i < headerlist.count(); i++){
+			QString file=headerlist.at(i);
+			QString header=file.remove(0,dirlength);
+			shell_process << header;
+			shell_process << " ";
+		}
+//    shell_process << "*.h";
 //    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else if(!QFileInfo(qt_ref_file).exists()){
@@ -661,7 +673,12 @@ void CKDevelop::slotProjectAPI(){
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
     shell_process << prj->getProjectName();
-    shell_process << "*.h";
+		for (i=0; i < headerlist.count(); i++){
+			QString file=headerlist.at(i);
+			QString header=file.remove(0,dirlength);
+			shell_process << header;
+			shell_process << " ";
+		}
 		if(!QFileInfo(khtmlw_ref_file).exists()){
     	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
 		}
@@ -676,7 +693,12 @@ void CKDevelop::slotProjectAPI(){
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
     shell_process << prj->getProjectName();
-    shell_process << "*.h";
+		for (i=0; i < headerlist.count(); i++){
+			QString file=headerlist.at(i);
+			QString header=file.remove(0,dirlength);
+			shell_process << header;
+			shell_process << " ";
+		}
 		if(!QFileInfo(khtmlw_ref_file).exists()){
     	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
 		}

@@ -1,7 +1,7 @@
 1999-05-27  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed tipofday dialog to enable translation of "Did you know...?"
-	* fixed the API-Doc generation bugs for khtmlw
-	
+	* fixed the API-Doc generation bugs for khtmlw and added subdirectory API generation
+		
 1999-05-26  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added tipofday dialog and tutorial to help menu
 	* fixed some i18n() missing
