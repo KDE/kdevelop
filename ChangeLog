@@ -1,4 +1,12 @@
 2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
+    * now QextMDI can look like an SDI application! :-)  (the 4. MDI mode we have got)
+    * new QextMdiChildView constructor added (by Eva Brucherseifer, Thanks!)
+    * some 0L pointer access bugfixes
+    * bugfix: raise on click works now also for afterwards inserted child widgets
+    * setPixmap in childview calls setPixmap in childframe as expected
+    * taskbar button count == 0L works properly now
+
+2001-03-14  F@lk Brettschneider <falk@kdevelop.org>
     * got rid of s_tab_view, DocViewMan::currentDocType() added and used
     * some bugfixes (Roland Krause's crash on startup as well)
     * switch of tree views adapted
