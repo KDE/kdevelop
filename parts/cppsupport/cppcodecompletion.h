@@ -35,6 +35,7 @@
 class ParsedClass;
 class ParsedClassContainer;
 class ParsedScopeContainer;
+class CodeInformationRepository;
 
 class CppCodeCompletion : public QObject
 {
@@ -76,6 +77,9 @@ private slots:
     void slotTimeout();
 
 private:
+    void setupCodeInformationRepository();
+
+private:
     QGuardedPtr<CppSupportPart> m_pSupport;
     ClassStore* m_pStore;
     QTimer* m_ccTimer;
@@ -90,6 +94,8 @@ private:
 
     private: unsigned int m_ccLine;
     private: unsigned int m_ccColumn;
+
+    CodeInformationRepository* m_repository;
 };
 
 #endif

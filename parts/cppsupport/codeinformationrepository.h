@@ -15,6 +15,8 @@
 #include "catalog.h"
 #include <qmap.h>
 
+#include <ktexteditor/codecompletioninterface.h>
+
 class CodeInformationRepository
 {
 public:
@@ -26,8 +28,13 @@ public:
     virtual void addCatalog( const QString& id, Catalog* catalog );
     virtual void removeCatalog( const QString& id );
 
+
+    QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope );
+
+
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
     QValueList<Tag> getTagsInFile( const QString& fileName );
+    QValueList<Tag> getBaseClassList( const QString& className );
 
 private:
     QMap<QString, Catalog*> m_catalogs;

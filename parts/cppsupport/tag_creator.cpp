@@ -343,7 +343,7 @@ void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
     Q_UNUSED( id ); // TODO
 
     if ( ast->baseClause() )
-        parseBaseClause( className, ast->baseClause() );
+        parseBaseClause( tag.path(), ast->baseClause() );
 
     m_currentScope.push_back( className );
     int oldInClass = m_inClass;

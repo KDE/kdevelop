@@ -22,6 +22,7 @@
 #include "backgroundparser.h"
 #include "ast.h"
 #include "ast_utils.h"
+#include "codeinformationrepository.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -184,6 +185,9 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     m_bArgHintShow       = false;
     m_bCompletionBoxShow = false;
 
+    m_repository = new CodeInformationRepository();
+    setupCodeInformationRepository();
+
     connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
 	     this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 
@@ -192,6 +196,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 
 CppCodeCompletion::~CppCodeCompletion( )
 {
+    delete( m_repository );
 }
 
 void CppCodeCompletion::slotTimeout()
@@ -642,6 +647,15 @@ CppCodeCompletion::completeText( )
 	    }
 	} else {
 	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type );
+
+            if( entryList.size() == 0 ){
+                // try with the catalog
+                kdDebug(9020) << "-------> looking for " << type << endl;
+
+                QStringList scope = QStringList::split( "::", type ); // TODO: check :: or . ??!?
+                entryList = m_repository->getEntriesInScope( scope );
+            }
+
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length(), false );
 	}
@@ -1093,5 +1107,22 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 
     return QString::null;
 }
+
+void CppCodeCompletion::setupCodeInformationRepository( )
+{
+    // add all available pcs for now
+
+    int id = 1;
+    CppSupportPart* part = m_pSupport;
+    QPtrListIterator<Catalog> it( part->catalogList() );
+    while( it.current() ){
+        Catalog* catalog = it.current();
+        ++it;
+
+        m_repository->addCatalog( QString::number(id++), catalog );
+    }
+}
+
+
 
 #include "cppcodecompletion.moc"
