@@ -195,7 +195,8 @@ private: // Private methods
   CParsedMethod *parseMethodDeclaration();
 
   /** Parse a method implementation. */
-  void parseMethodImpl(bool isOperator);
+  void parseMethodImpl(bool isOperator,CParsedContainer *scope);
+//  void parseMethodImpl(bool isOperator);
 
   /** Push lexems on the stack until we find something we know and 
    *   return what we found. */

@@ -563,10 +563,14 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
 void CKDevelop::slotProjectOpen(){
 	QString old_project = "";
 
-  
 	slotStatusMsg(i18n("Opening project..."));
 	QString str;
-	str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+// --- changed by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+//	str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+  config->setGroup("General Options");
+  QString defDir=config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
+  str = KFileDialog::getOpenFileName( defDir,
+	                                    "*.kdevprj",this );
 	slotProjectOpenCmdl(str);
 }
 

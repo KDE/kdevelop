@@ -1,3 +1,9 @@
+2000-02-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added patch by Olaf Hartig <OleBowle@gmx.de> to set default project path for
+    KAppWizard and Open Project, fixed layout and KAppWizard to use it.
+   -->Ralf: update de.po and kdevelop.pot again ;-) (copied that from below ;-)
+  * added ClassParser.cc patch for namespaces by Eric OURSEL <eric_oursel@bigfoot.com>
+
 2000-02-23 Ralf Funken <funken.ruk@netcologne.de>
 	* Updated de.po and kdevelop.pot
 

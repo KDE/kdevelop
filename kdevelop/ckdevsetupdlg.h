@@ -75,6 +75,9 @@ private:
   QLineEdit* qt_edit;
   QLineEdit* qt2_edit;
   QLineEdit* kde2_edit;
+// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+	QLineEdit* ppath_edit;
+// ---
 
   // Dbg external options
   QButtonGroup* dbgExternalGroup;
@@ -98,6 +101,9 @@ private:
   void slotSetDebug();
   void slotQt2Clicked();
   void slotKDE2Clicked();
+// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+	void slotPPathClicked();
+// ---
 
 };
 

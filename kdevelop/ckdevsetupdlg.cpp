@@ -551,6 +551,40 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   connect(qt2_button,SIGNAL(clicked()),SLOT(slotQt2Clicked()));
   connect(kde2_button, SIGNAL(clicked()),SLOT(slotKDE2Clicked()));
 
+
+
+  QGroupBox* ppath_box= new QGroupBox(w4,"NoName");
+  ppath_box->setGeometry(10,210,400,100);
+  ppath_box->setMinimumSize(0,0);
+  ppath_box->setTitle(i18n("Default Project Path"));
+
+// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+  config->setGroup("General Options");
+  QLabel* ppath= new QLabel(w4,"NoName");
+  ppath->setGeometry(30,230,300,30);
+  ppath->setMinimumSize(0,0);
+  ppath->setText(i18n("Project Path:"));
+
+  ppath_edit= new QLineEdit(w4,"NoName");
+  ppath_edit->setGeometry(30,260,300,30);
+  ppath_edit->setMinimumSize(0,0);
+
+  QString project_path= config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
+  ppath_edit->setText(project_path);
+
+  QPushButton* ppath_button= new QPushButton(w4,"NoName");
+  ppath_button->setGeometry(340,260,30,30);
+  ppath_button->setMinimumSize(0,0);
+	ppath_button->setPixmap(pix);
+  connect(ppath_button, SIGNAL(clicked()),SLOT(slotPPathClicked()));
+// ---
+
+  KQuickHelp::add(ppath_edit,
+	KQuickHelp::add(ppath_button,
+	KQuickHelp::add(ppath,i18n("Set the start directory where to create/load projects here"))));
+
+
+
   // *********** tabs ****************
   addTab(w1, i18n("General"));
   addTab(w2, i18n("Keys"));
@@ -677,6 +711,11 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("qt2dir", qt2_edit->text());
   config->writeEntry("kde2dir", kde2_edit->text());
 
+// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+  config->setGroup("General Options");
+  config->writeEntry("ProjectDefaultDir", ppath_edit->text());	
+// ---
+
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
   config->sync();
@@ -779,3 +818,14 @@ void CKDevSetupDlg::slotKDE2Clicked(){
                                                               "correct path."),KMsgBox::EXCLAMATION);
 
 }
+
+// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+void CKDevSetupDlg::slotPPathClicked(){
+  QString dir;
+  config->setGroup("General Options");
+  dir = KFileDialog::getDirectory(config->readEntry("ProjectDefaultDir", QDir::homeDirPath()));
+  if (!dir.isEmpty()){
+    ppath_edit->setText(dir);
+  }
+}
+// ---

@@ -347,11 +347,31 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
 
   // skip over '{'
   getNextLexem();
+   // EO start
+   // reference to an already declared namespace
+   // retrieve it
+     CParsedScopeContainer *ns2 = scope->getScopeByName(ns->name);
+     if (ns2)
+     {
+        delete ns;
+				ns = ns2;
+     }
+		 else	
+     {
+			  // this is a namespace declaration
+        scope->addScope( ns );
 
+    // Always add namespaces to the global container.
+    // EO why?
+    // it is possible to have namespaces inside namespaces
+    //    if( scope != &store.globalContainer )
+    //       store.addScope( ns );
+     }
+	  // EO end
   while(lexem != 0 && lexem != '}') 
   {
     declStart = getLineno();
-    
+	
     if( isGenericLexem() )
       parseGenericLexem( ns );
     else
@@ -367,11 +387,11 @@ void CClassParser::parseNamespace( CParsedScopeContainer * scope )
   {
     ns->setDeclarationEndsOnLine( getLineno() );
 
-    scope->addScope( ns );
+//EO    scope->addScope( ns );
 
-    // Always add namespaces to the global container.
-    if( scope != &store.globalContainer )
-      store.addScope( ns );
+    //EO Always add namespaces to the global container.
+//EO    if( scope != &store.globalContainer )
+//EO      store.addScope( ns );
   }
 }
 
@@ -1045,7 +1065,7 @@ CParsedMethod *CClassParser::parseMethodDeclaration()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseMethodImpl(bool isOperator)
+void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
 {
   CParsedClass *aClass;
   CParsedLexem *aLexem;
@@ -1134,7 +1154,32 @@ void CClassParser::parseMethodImpl(bool isOperator)
       }
     }
     else
-      warning( "No class by the name %s found", className.data() );
+// EO
+		{
+			QString path = scope->path() + "." + className;
+      cout << "scope path is " << path << endl;
+    aClass = store.getClassByName( path );
+    if( aClass != NULL)
+    {
+      pm = aClass->getMethod( aMethod );
+      if( pm != NULL )
+      {
+        aClass->setDefinedInFile( currentFile );
+        pm->setIsInHFile( false );
+        pm->setDefinedInFile( currentFile );
+        pm->setDefinedOnLine( declLine );
+        pm->setDefinitionEndsOnLine( getLineno() );
+      }
+      else
+      {
+        warning( "No method by the name %s found in class %s",
+                 name.data(), path.data() );
+        aMethod.out();
+      }
+     }
+     else
+      warning( "No class by the name %s found", path.data() );
+    }
   }
 }
 
@@ -1573,7 +1618,7 @@ void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
       break;
     case CP_IS_OPERATOR_IMPL:
     case CP_IS_METHOD_IMPL:
-      parseMethodImpl( declType == CP_IS_OPERATOR_IMPL );
+      parseMethodImpl( declType == CP_IS_OPERATOR_IMPL,aContainer );
       break;
     case CP_IS_OPERATOR:
     case CP_IS_METHOD:

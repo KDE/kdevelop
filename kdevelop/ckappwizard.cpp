@@ -1886,7 +1886,10 @@ void CKAppWizard::slotDefaultClicked(int page) {
   //Benoit Cerrina 17 Dec 99
   KConfig * lSettings = KApplication::getKApplication()->getConfig();
   lSettings->setGroup("General Options");
-  dir = lSettings->readEntry ( "ProjectDefaultDir", QDir::homeDirPath()) + QString("/");
+//  dir = lSettings->readEntry ( "ProjectDefaultDir", QDir::homeDirPath()) + QString("/");
+  dir = lSettings->readEntry ( "ProjectDefaultDir", QDir::homeDirPath());
+  if(dir.right(1) != "/")
+    dir+="/";
   cout << dir << endl;
   directoryline->setText(dir);
   //end modif by Benoit Cerrina
