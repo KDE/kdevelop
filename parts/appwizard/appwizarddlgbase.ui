@@ -11,13 +11,13 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>554</width>
-            <height>558</height>
+            <width>556</width>
+            <height>551</height>
         </rect>
     </property>
     <property stdset="1">
         <name>caption</name>
-        <string>Form1</string>
+        <string>Create New Project</string>
     </property>
     <widget>
         <class>QWidget</class>
@@ -304,6 +304,10 @@
                     <bool>true</bool>
                 </property>
                 <property stdset="1">
+                    <name>focusPolicy</name>
+                    <enum>NoFocus</enum>
+                </property>
+                <property stdset="1">
                     <name>wordWrap</name>
                     <enum>WidgetWidth</enum>
                 </property>
@@ -369,6 +373,12 @@
 </connections>
 <tabstops>
     <tabstop>templates_listview</tabstop>
+    <tabstop>appname_edit</tabstop>
+    <tabstop>dest_edit</tabstop>
+    <tabstop>author_edit</tabstop>
+    <tabstop>email_edit</tabstop>
+    <tabstop>version_edit</tabstop>
+    <tabstop>license_combo</tabstop>
     <tabstop>filetemplate_edit</tabstop>
 </tabstops>
 </UI>
