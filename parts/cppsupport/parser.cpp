@@ -64,6 +64,10 @@ using namespace std;
        (node)->setText( toString((start),(end)) ); \
 }
 
+#define AST_FROM_TOKEN(node, tk) \
+    AST::Node node = CreateNode<AST>(); \
+    UPDATE_POS( node, (tk), (tk)+1 ); 
+
 struct ParserPrivateData
 {
     ParserPrivateData()
@@ -2158,9 +2162,13 @@ bool Parser::parseBaseSpecifier( BaseSpecifierAST::Node& node )
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseBaseSpecifier()" << endl;
 
     int start = lex->index();
+    BaseSpecifierAST::Node ast = CreateNode<BaseSpecifierAST>();
 
     AST::Node access;
     if( lex->lookAhead(0) == Token_virtual ){
+	AST_FROM_TOKEN( virt, lex->index() );
+	ast->setIsVirtual( virt );
+	
 	lex->nextToken();
 
 	parseAccessSpecifier( access );
@@ -2168,16 +2176,17 @@ bool Parser::parseBaseSpecifier( BaseSpecifierAST::Node& node )
         parseAccessSpecifier( access );
 
 	if( lex->lookAhead(0) == Token_virtual ){
+	    AST_FROM_TOKEN( virt, lex->index() );
+	    ast->setIsVirtual( virt );
 	    lex->nextToken();
 	}
     }
 
     NameAST::Node name;
     if( !parseName(name) ){
-	reportError( i18n("Identifier expected") );
+	reportError( i18n("Class name expected") );
     }
 
-    BaseSpecifierAST::Node ast = CreateNode<BaseSpecifierAST>();
     ast->setAccess( access );
     ast->setName( name );
     UPDATE_POS( ast, start, lex->index() );
