@@ -41,7 +41,6 @@
 #include "docviewman.h"
 #include "kwdoc.h"
 #include "kdevsession.h"
-
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kbuttonbox.h>
@@ -58,11 +57,11 @@
 #include <kurlrequester.h>
 #include <kemailsettings.h>
 
+#include "ctags/cctags.h"
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-#include <kdebug.h>
 
 /*********************************************************************
  *                                                                   *
@@ -1149,6 +1148,7 @@ void CKDevelop::slotConfigMakeDistRPM()
 
 void CKDevelop::slotProjectLoadTags()
 {
+  //
   debug("in slotProjectLoadTags()\n");
   slotStatusMsg(i18n("Loading tags file..."));
   QString filename = "tags";
@@ -1163,6 +1163,8 @@ void CKDevelop::slotProjectLoadTags()
     // if create and creation unsuccesful return
   }
   QFile tagsfile(filename);
+  CTagListDict tags;
+  tags.setAutoDelete(true);
   if (tagsfile.open(IO_ReadOnly)) {
     kdDebug() << "tags file opened succefully, now reading...\n" ;
     QTextStream ts(&tagsfile);
@@ -1171,7 +1173,38 @@ void CKDevelop::slotProjectLoadTags()
     while (!ts.eof()) {
       ++n;
       aline = ts.readLine();
-      kdDebug() << "line: " << n << " " << aline << "\n";
+      // do some checking that we have the right version of ctags
+      if (aline[0] == '!') {
+        // we could look at the stuff here that ctags writes
+        // and then move on
+      }
+      // exclude comments from being parsed
+      else {
+        // split line into components according to ctags manual
+        QChar sep('\t');
+        QStringList taglist = QStringList::split(sep,aline);
+        // tag<TAB>filename<TAB>ex command<TAB>ctags extension
+        QStringList::Iterator it = taglist.begin();
+        QStringList::Iterator ptag = it;
+        QStringList::Iterator pfile = ++it;
+        QStringList::Iterator pexcmd = ++it;
+        QStringList::Iterator pext = ++it;
+        //kdDebug() << "1 tag    2 filename    3 ex command    4 ctags ext\n" ;
+        //kdDebug() << (*ptag).latin1() << "    "
+        //          << (*pfile).latin1() << "    "
+        //          << (*pexcmd).latin1() << "    "
+        //          << (*pext).latin1() << "\n";
+        CTagList* pTagList = tags[*ptag];
+        if (!pTagList) {
+          pTagList = new CTagList(*ptag);
+          if (!pTagList) {
+            // error out of memory while attempting to create tags database
+            return;
+          }
+          tags.insert(*ptag,pTagList);
+        }
+        pTagList->append(CTag(*pfile,*pexcmd,*pext));
+      }
     }
   }
   else {
@@ -1179,6 +1212,7 @@ void CKDevelop::slotProjectLoadTags()
     return;
   }
   tagsfile.close();
+  tags.statistics();
 }
 
 
