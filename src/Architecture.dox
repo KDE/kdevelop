@@ -1,44 +1,8 @@
-/***************************************************************************
-                          mainpage.dox.h  -  description
-                             -------------------
-    begin                : Sam Apr 12 2003
-    copyright            : (C) 2003 by KDevelop Authors
-    email                : kdevelop-devel@kdevelop.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-/** \file  mainpage.dox.h
-  * \brief KDevelop 3 achitecture (Doxygen main page)
+/** \file  Architecture.dox
+  * \brief KDevelop architecture
   */
 
-/** \mainpage KDevelop 3 Architecture
-
-\section intro Introduction
-
-KDevelop is an easy to use IDE for developing C/C++ applications under X11.
-Currently it supports:
-
-  - KDE applications
-  - QT applications
-  - Fortran
-  - Java
-  - Perl
-  - Phyton
-  - PHP
-  - Ruby
-  - Pascal
-  - Ada
-  .
-
-For more info goto: http://www.kdevelop.org
+/** \page KDev3Arch KDevelop 3 Architecture
 
 KDevelop uses a plugin based architecture. This will be explained in more
 detail in the next sections. To add a new plugin check this page \ref howToExtend

@@ -1,0 +1,47 @@
+/**
+@mainpage The KDevelop API Reference
+
+KDevelop is an easy to use IDE for developing applications under X11.
+
+\section intro Introduction
+
+This section contains the KDevelop online class reference for the current
+development version of KDevelop. You can also
+<a href="http://developer.kde.org/~danimo/apidocs.tar.bz2">download
+(~11&nbsp;MB)</a> the complete API documentation.  Additionally, you
+can subscribe or read the mailing lists for any additions and/or
+modifications to the API.
+
+More information about the KDevelop architecture in form of tutorials, HOWTOs,
+and FAQs can be found at
+the <a href="http://www.kdevelop.org">KDevelop website</a>.
+
+
+\section status Current Staus
+
+  - Programming Languages Support Status \ref LangSupportStatus
+  - You can find the \ref Features
+  - You can find the \ref Requirements
+
+
+\section expand How to expand KDevelop
+
+  - You can find more info on \ref KDev3Arch
+  - How to add support for a language in KDevelop \ref howToAddNewLanguage
+  - How to extend KDevelop via plugins \ref howToExtend
+
+
+\section PlannedTasks Planned tasks
+
+First we need to do the \ref HighPriTasks then fix the \ref Bugs and finally fix the dispersed \ref Todo
+all over the code.
+
+
+\section misc Misc
+
+  - You can find the \ref Authors
+  - You can find the \ref Maintainers
+  - You can find the \ref F.A.Q.
+  - You can find the \ref Deprecated List
+
+*/

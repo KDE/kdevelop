@@ -55,3 +55,27 @@ messages:
 $(top_srcdir)/Makefile.am.in: # faking
 include admin/deps.am
 
+## Doxygen stuff
+include admin/Doxyfile.am
+DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
+
+apidox-am-toplevel-yes: apidox-am-toplevel-kdevelop
+
+apidox-am-toplevel-kdevelop: $(top_builddir)/apidocs/qt/qt.tag
+
+$(top_builddir)/apidocs/qt/qt.tag:
+	@echo "*** Creating a tag file for the Qt library:"; \
+	$(mkinstalldirs) $(top_builddir)/apidocs/qt; \
+	doxytag -t $(top_builddir)/apidocs/qt/qt.tag $(QTDOCDIR)
+
+install-data-local: install-apidox-kdevelop
+
+## install the tag file for the Qt documentation
+install-apidox-kdevelop:
+	if test -f $(top_builddir)/apidocs/qt/qt.tag; then \
+		$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt ;\
+		echo $(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
+		$(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
+	fi
+
+## Install KDE Libs tag files

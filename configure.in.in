@@ -88,3 +88,4 @@ AC_DEFINE_UNQUOTED(MAKE_COMMAND, "$gmake_prog", [GNU make command])
 
 CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
 
+KDE_INIT_DOXYGEN([The KDevelop API Reference], [Version $VERSION])

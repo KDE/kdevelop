@@ -1,9 +1,9 @@
-/** \file TODO.dox
+/** \file HighPriTasks.dox
   * \brief High priority tasks
   */
-/** \page TODO High priority tasks!
+/** \page HighPriTasks High priority tasks!
 
-\section fixmajbugs Fixing major/annoying bugs
+\section fixMajBugs Fixing major/annoying bugs
   <ul>
     <li>
       konsole part
