@@ -1,3 +1,7 @@
+1999-07-22 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* added many new c++ keywords to kwrite syntax highlighting, thanks to 
+	Huy Cuong Nguyen <huyc@iquebec.com>
+
 1999-07-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * added german png logo, added italian translator to user manual
 

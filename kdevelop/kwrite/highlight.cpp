@@ -26,7 +26,7 @@ char *cTypes[] = {
 
 char *cppKeywords[] = {
   "class", "delete", "false", "friend", "inline", "new", "operator",
-  "private", "protected", "public", "this", "true", "virtual", 0L};
+  "private", "protected", "public", "this", "true", "virtual","catch","const_cast","dynamic_cast","namespace","reinterpret_cast","sizeof","static_cast","template","throw","try","typeid","typename","using","asm","auto","wchar_t","explicit", 0L};
 
 
 char *cppTypes[] = {
