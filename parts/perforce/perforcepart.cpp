@@ -55,17 +55,19 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 
 	KPopupMenu *sub = new KPopupMenu(popup);
         QString name = fi.fileName();
-        sub->insertItem( i18n("Edit: %1").arg(name),
+	sub->insertTitle( i18n("Actions for %1").arg(name) );
+        sub->insertItem( i18n("Edit"),
                            this, SLOT(slotEdit()) );
-        sub->insertItem( i18n("Revert: %1").arg(name),
+        sub->insertItem( i18n("Revert"),
                            this, SLOT(slotRevert()) );
-        sub->insertItem( i18n("Submit: %1").arg(name),
+        sub->insertItem( i18n("Submit"),
                            this, SLOT(slotCommit()) );
-        sub->insertItem( i18n("Sync: %1").arg(name),
+        sub->insertItem( i18n("Sync"),
                            this, SLOT(slotUpdate()) );
-        sub->insertItem( i18n("Add to Repository: %1").arg(name),
+        sub->insertSeparator();
+        sub->insertItem( i18n("Add to Repository"),
                            this, SLOT(slotAdd()) );
-        sub->insertItem( i18n("Remove From Repository: %1").arg(name),
+        sub->insertItem( i18n("Remove From Repository"),
                            this, SLOT(slotRemove()) );
 	popup->insertItem(i18n("Perforce"), sub);
 	
