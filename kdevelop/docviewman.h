@@ -114,9 +114,11 @@ public:
   void installBMPopup(QPopupMenu *p);
 
 public slots:
-  /** */
+  /** Is called whenever the MDI view gets focus. The update of pointers for the "current..."-methods is made here */
   void slot_gotFocus(QextMdiChildView* pMDICover);
+  /** Updates the bookmarks for each document */
   void updateBMPopup();
+  /** shows the desired bookmark (eventually, switches to file and activates it) */
   void gotoBookmark(int n);
   
 signals:

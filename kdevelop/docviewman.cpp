@@ -430,6 +430,9 @@ QWidget* DocViewMan::createView(int docId)
 
   // take it under MDI mainframe control (note: this triggers also a setFocus())
   m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
+  // correct the default settings of QextMDI ('cause we haven't a tab order for subwidget focuses)
+  pMDICover->setFirstFocusableChildWidget(0L);
+  pMDICover->setLastFocusableChildWidget(0L);
   // show
   pMDICover->show();
 
@@ -656,6 +659,9 @@ void DocViewMan::installBMPopup(QPopupMenu *p)
   connect(p,SIGNAL(activated(int)),SLOT(gotoBookmark(int)));
 }
 
+//------------------------------------------------------------------------------
+// Updates the bookmarks for each document
+//------------------------------------------------------------------------------
 void DocViewMan::updateBMPopup()
 {
   debug("DocViewMan::installBMPopup");
@@ -679,6 +685,9 @@ void DocViewMan::updateBMPopup()
   }
 }
 
+//------------------------------------------------------------------------------
+// shows the desired bookmark (eventually, switches to file and activates it)
+//------------------------------------------------------------------------------
 void DocViewMan::gotoBookmark(int n) {
 
   debug("DocViewMan::gotoBookmark : %d !\n", n);
