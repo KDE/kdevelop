@@ -73,9 +73,6 @@
 /***************************
 WHAT'S NOT WORKING:
 
-The XMLGUI-created 'window' menu is overwritten by kmdi's menu. What's needed is a way
-to make these merge properly. The best way would probably be to make KMdiMainFrm XMLGUI-aware.
-
 Toolview widgets without a name doesn't show in the side toolbars. (Port safety method from old mainwindow)
 Culprits are: debugger views, problem reporter, more???
 
@@ -101,8 +98,7 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
     config->setGroup("UI");
     int mdiStyle = config->readNumEntry("MDIStyle", 1);
 
-    this->setIDEAlModeStyle(mdiStyle); // KDEV3 style of KMultiTabBar
-
+    this->setToolviewStyle( mdiStyle ); // KDEV3 style of KMultiTabBar
     
     m_pMainWindowShare = new MainWindowShare(this);
     
@@ -198,22 +194,23 @@ void NewMainWindow::init() {
 		openNewTabAfterCurrent = config->readBoolEntry( "OpenNewTabAfterCurrent", false );
 		showTabIcons = config->readBoolEntry( "ShowTabIcons", true );
   
-                if (config->readBoolEntry( "ShowCloseTabsButton", true ))
-                {
-                    QToolButton *but = new QToolButton(tabWidget());
-                    but->setIconSet(SmallIcon("tab_remove"));
-                    but->adjustSize();
-                    but->hide();
-                    connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
-                    tabWidget()->setCornerWidget(but, TopRight);
-                }
-                tabWidget()->setTabReorderingEnabled(true);
-                connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
-        }
+		if (config->readBoolEntry( "ShowCloseTabsButton", true ))
+		{
+			QToolButton *but = new QToolButton(tabWidget());
+			but->setIconSet(SmallIcon("tab_remove"));
+			but->adjustSize();
+			but->hide();
+			connect(but, SIGNAL(clicked()), actionCollection()->action( "file_close" ), SIGNAL(activated()));
+			tabWidget()->setCornerWidget(but, TopRight);
+		}
+		tabWidget()->setTabReorderingEnabled(true);
+		connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
+	}
 }
 
-NewMainWindow::~NewMainWindow() {
-    TopLevel::invalidateInstance( this );
+NewMainWindow::~NewMainWindow() 
+{
+	TopLevel::invalidateInstance( this );
 }
 
 void NewMainWindow::slotCoreInitialized( )
@@ -375,37 +372,82 @@ void NewMainWindow::embedPartView(QWidget *view, const QString &name, const QStr
 
     unsigned int mdiFlags = KMdi::StandardAdd | KMdi::UseKMdiSizeHint;
     int tabIndex = -1;
-    if (openNewTabAfterCurrent)
+    if ( tabWidget() && openNewTabAfterCurrent)
         if (tabWidget()->count() > 0)
             tabIndex = tabWidget()->currentPageIndex() + 1;
     addWindow(child, mdiFlags, tabIndex);
 }
 
-
 void NewMainWindow::embedSelectView(QWidget *view, const QString &name, const QString &toolTip) 
 {
-	if( !view ) return;
-	KMdiMainFrm::addToolWindow( view, KDockWidget::DockLeft, getMainDockWidget(), 20, toolTip, name );
-
-	m_availableToolViews.insert( view, ToolViewData( KDockWidget::DockLeft, name, toolTip ) );
+	embedView( KDockWidget::DockLeft, view, name, toolTip );
 }
 
 void NewMainWindow::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip) 
 {
-	if( !view ) return;
-	KMdiMainFrm::addToolWindow( view, KDockWidget::DockRight, getMainDockWidget(), 20, toolTip, name );
-     if (TopLevel::mode == TopLevel::AssistantMode)
-         raiseView(view);
-
-	m_availableToolViews.insert( view, ToolViewData( KDockWidget::DockRight, name, toolTip ) );
+	embedView( KDockWidget::DockRight, view, name, toolTip );
+//	if (TopLevel::mode == TopLevel::AssistantMode)
+//		raiseView(view);
 }
 
 void NewMainWindow::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) 
 {
-	if( !view ) return;
-	KMdiMainFrm::addToolWindow( view, KDockWidget::DockBottom, getMainDockWidget(), 20, toolTip, name );
+	embedView( KDockWidget::DockBottom, view, name, toolTip );
+}
 
-	m_availableToolViews.insert( view, ToolViewData( KDockWidget::DockBottom, name, toolTip ) );
+KDockWidget::DockPosition NewMainWindow::recallToolViewPosition( const QString & widgetName, KDockWidget::DockPosition defaultPos )
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "ToolDockPosition" );
+
+	QString position = config->readEntry( widgetName, "DockNone" );
+
+	if ( position == "DockLeft" ) return KDockWidget::DockLeft;
+	if ( position == "DockRight" ) return KDockWidget::DockRight;
+	if ( position == "DockBottom" ) return KDockWidget::DockBottom;
+	if ( position == "DockTop" ) return KDockWidget::DockTop;
+
+	return defaultPos;
+}
+
+void NewMainWindow::rememberToolViewPosition( const QString & widgetName, KDockWidget::DockPosition pos )
+{
+	KConfig * config = kapp->config();
+	config->setGroup( "ToolDockPosition" );
+
+	QString position = "DockNone";
+
+	switch( pos )
+	{
+		case KDockWidget::DockLeft:
+			position = "DockLeft";
+			break;
+		case KDockWidget::DockRight:
+			position = "DockRight";
+			break;
+		case KDockWidget::DockBottom:
+			position = "DockBottom";
+			break;
+		case KDockWidget::DockTop:
+			position = "DockTop";
+			break;
+		default: ;
+	}
+
+	config->writeEntry( widgetName, position );
+}
+
+void NewMainWindow::embedView( KDockWidget::DockPosition pos, QWidget *view, const QString &name, const QString &toolTip)
+{
+	if( !view ) return;
+
+	if ( !m_availableToolViews.contains( view ) && !m_unAvailableToolViews.contains( view ) )
+	{
+		pos = recallToolViewPosition( view->name(), pos );	// we have a new view. where should it go?
+	}
+	
+	KMdiMainFrm::addToolWindow( view, pos, getMainDockWidget(), 20, toolTip, name );
+	m_availableToolViews.insert( view, ToolViewData( pos, name, toolTip ) );
 }
 
 void NewMainWindow::childWindowCloseRequest( KMdiChildView * childView )
@@ -421,27 +463,6 @@ void NewMainWindow::childWindowCloseRequest( KMdiChildView * childView )
 			return;
 		}
 		++it;
-	}
-}
-
-void NewMainWindow::removeView( QWidget * view )
-{
-    kdDebug(9000) << k_funcinfo << " - view: " << view << endl;
-    
-	if( !view || !view->parentWidget() )
-        return;
-    
-	kdDebug(9000) << "parentWidget: " << view->parentWidget() << endl;
-
-	if( KMdiChildView * childView = static_cast<KMdiChildView*>(view->parentWidget()->qt_cast("KMdiChildView")) ) 
-	{
-		(void) view->reparent(0, QPoint(0,0), false );
-		closeWindow( childView );
-	} 
-	else if( view->parentWidget()->qt_cast("KDockWidget") ) 
-	{
-		(void) view->reparent(0, QPoint(0,0), false );
-		deleteToolWindow( view );
 	}
 }
 
@@ -464,6 +485,28 @@ static KDockWidget::DockPosition getDockWidgetDockingBorder( QWidget * w )
 		w = w->parentWidget();
 	}
 	return KDockWidget::DockNone;
+}
+
+void NewMainWindow::removeView( QWidget * view )
+{
+    kdDebug(9000) << k_funcinfo << " - view: " << view << endl;
+    
+	if( !view || !view->parentWidget() )
+        return;
+    
+	kdDebug(9000) << "parentWidget: " << view->parentWidget() << endl;
+
+	if( KMdiChildView * childView = static_cast<KMdiChildView*>(view->parentWidget()->qt_cast("KMdiChildView")) ) 
+	{
+		(void) view->reparent(0, QPoint(0,0), false );
+		closeWindow( childView );
+	} 
+	else if( view->parentWidget()->qt_cast("KDockWidget") ) 
+	{
+		rememberToolViewPosition( view->name(), getDockWidgetDockingBorder( view ) );
+		(void) view->reparent(0, QPoint(0,0), false );
+		deleteToolWindow( view );
+	}
 }
 
 void NewMainWindow::setViewAvailable(QWidget * view, bool bEnabled) 
@@ -611,6 +654,14 @@ void NewMainWindow::saveSettings()
     ProjectManager::getInstance()->saveSettings();
     writeDockConfig(config);
     saveMainWindowSettings(config, "Mainwindow");
+
+	QValueList<QWidget*> widgetList = m_pToolViews->keys();
+	QValueList<QWidget*>::Iterator it = widgetList.begin();
+	while( it != widgetList.end() )
+	{
+		rememberToolViewPosition( (*it)->name(), getDockWidgetDockingBorder( *it ) );	
+		++it;
+	}
 }
 
 void NewMainWindow::raiseEditor( )
@@ -627,7 +678,7 @@ void NewMainWindow::raiseEditor( )
 void NewMainWindow::setCaption( const QString & caption )
 {
 	KDevProject * project = API::getInstance()->project();
-	if ( project && !caption.isEmpty() )
+	if ( project /*&& !caption.isEmpty()*/ )
 	{
 		QString projectname = project->projectName();
 

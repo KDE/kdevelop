@@ -43,6 +43,7 @@ public:
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
   void embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip);
   void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
+  void embedView( KDockWidget::DockPosition pos, QWidget *view, const QString &name, const QString &toolTip);
 
   void removeView(QWidget *view);
   void setViewAvailable(QWidget *pView, bool bEnabled);
@@ -99,6 +100,8 @@ private slots:
 
 private:
 
+	KDockWidget::DockPosition recallToolViewPosition( const QString & widgetName, KDockWidget::DockPosition defaultPos );
+	void rememberToolViewPosition( const QString & widgetName, KDockWidget::DockPosition pos );
 	struct ToolViewData
 	{
 		ToolViewData() {}
