@@ -24,6 +24,7 @@
 #include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdeversion.h>
 #include <qbutton.h>
 #include "filebuffer.h"
 #include "projectconfigurationdlg.h"
@@ -151,7 +152,12 @@ public:
   {
     prjItem=item;
   }
-  InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item):QCheckListItem(parent,after,item->text(0),QCheckListItem::CheckBox)
+  InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item):
+      QCheckListItem(parent,
+#if KDE_VERSION > 305		     
+		     after,
+#endif		     
+		     item->text(0),QCheckListItem::CheckBox)
   {
     prjItem=item;
   }
