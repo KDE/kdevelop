@@ -52,6 +52,7 @@
 #include "qmake_colorizer.h"
 #include "cs_colorizer.h"
 #include "ocaml_colorizer.h"
+#include "pascal_colorizer.h"
 
 #if defined(HAVE_PERL_MODE)
 #  include "perl_colorizer.h"
@@ -61,6 +62,7 @@
 #include "simple_indent.h"
 #include "python_indent.h"
 #include "cindent.h"
+#include "pascal_indent.h"
 
 #include "parenmatcher.h"
 #include "paragdata.h"
@@ -501,6 +503,10 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( QString::null );
 	document()->setPreProcessor( new OCamlColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
+    } else if( m_language == "pascal" ){
+        setElectricKeys( QString::null );
+	document()->setPreProcessor( new PascalColorizer(this) );
+	document()->setIndent( new PascalIndent(this) );
     } else {
         setElectricKeys( QString::null );
 	document()->setPreProcessor( 0 );
