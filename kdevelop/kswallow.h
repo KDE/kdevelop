@@ -27,7 +27,6 @@
 //#include <X11/X.h>
 #include <qwidget.h>
 #include <qstring.h>
-#include <kwmmapp.h> 
 #include <kprocess.h>
 #include <kwm.h>
 
