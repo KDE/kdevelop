@@ -62,7 +62,7 @@
 #include "docsearchdlg.h"
 
 IndexTreeData::IndexTreeData(const QString &text, const QString &parent, const QString &filename) :
-        m_text(text), m_parent(parent), m_filename(filename), m_visible(false)
+        m_text(text), m_parent(parent), m_filename(filename), m_visible(true)
 {
 }
 
@@ -1000,7 +1000,7 @@ bool DocTreeViewWidget::initKDocKDELibs()
 /**************************************/
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-        : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L ), indexMode ( plainListMode ), // will be switched
+        : QVBox(0, "doc tree widget"), m_activeTreeItem ( 0L ), indexMode ( filteredMode ), // will be switched
         subStringSearch( false )
 {
 
@@ -1029,6 +1029,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     indexModeSwitch->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, 0) );
     indexModeSwitch->setPixmap ( SmallIcon ( "contents" ) );
     indexModeSwitch->setToggleButton(true);
+    indexModeSwitch->setOn( true );
     QToolTip::add ( indexModeSwitch, i18n ( "Show topics for index items" ) );
     QWhatsThis::add(indexModeSwitch, i18n("<b>Show topics for index items</b><p>Index view shows topics to which index items belong if toggled."));
 
@@ -1855,7 +1856,7 @@ void DocTreeViewWidget::slotCurrentTabChanged(int curtab)
         }
         progress.setProgress(30);
 
-        filterMultiReferences();
+//        filterMultiReferences();
 
         progress.setProgress(90);
 

@@ -45,6 +45,7 @@ ChooseDlg::ChooseDlg(QWidget *parent, const char *name, DocTreeViewPart *part)
     layout->addWidget(new QLabel(i18n("Choose your help subtopic:"), this));
     lv = new KListView(this, "topics list");
     lv->setMinimumWidth(600);
+	lv->setAllColumnsShowFocus( true );
     lv->addColumn(i18n("Topic"));
     lv->addColumn(i18n("Filename"));
     layout->addWidget(lv);
