@@ -29,12 +29,12 @@
 
 static const KAboutData data("docpdbplugin", I18N_NOOP("PalmDoc documentation plugin"), "1.0");
 typedef KDevGenericFactory<DocPDBPlugin> DocPDBPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocPDBPluginFactory(&data) )
+K_EXPORT_COMPONENT_FACTORY( libdocpdbplugin, DocPDBPluginFactory(&data) )
 
 DocPDBPlugin::DocPDBPlugin(QObject* parent, const char* name, const QStringList args)
     :DocumentationPlugin(DocPDBPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(PDBDocumentationTitles | ProjectUserManual);
+    setCapabilities(CustomDocumentationTitles | ProjectUserManual);
     autoSetup();
 }
 
