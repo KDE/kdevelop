@@ -2253,6 +2253,9 @@ void KWrite::exposeFound(PointStruc &cursor, int slen, int flags, bool replace) 
     xPos = x2 - kWriteView->width();
     yPos = kWriteDoc->fontHeight*cursor.y - height()/3;
   }
+
+	if(xPos < 0) xPos = 0;
+
   kWriteView->updateView(flags | ufPos,xPos,yPos);
   kWriteDoc->updateViews(kWriteView);
 }
