@@ -1,3 +1,7 @@
+2002-01-26  F@lk Brettschneider <falk@kdevelop.org>
+   * bugfix (Qt3 only): QextMDI mode switch TabPage-->Childframe and TabPage-->Toplevel fixed, bug happened in KBear, too
+   * stepped to version 2.1beta2 (only 2 days left until KDE tagging)
+
 2002-01-24  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: QextMDI compile error on Irix fixed
 

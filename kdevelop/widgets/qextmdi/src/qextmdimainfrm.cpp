@@ -977,19 +977,6 @@ void QextMdiMainFrm::switchToToplevelMode()
    else if (oldMdiMode == QextMdi::TabPageMode) { // if tabified, release all views from their docking covers
       finishTabPageMode();
    }
-#if QT_VERSION < 300
-   QListIterator<QextMdiChildView> it( *m_pWinList);
-#else
-   QPtrListIterator<QextMdiChildView> it( *m_pWinList);
-#endif
-   for( it.toFirst(); it.current(); ++it) {
-      QextMdiChildView* pView = it.current();
-#ifndef NO_KDE2
-      XSetTransientForHint(qt_xdisplay(),pView->winId(),winId());
-#endif
-      if( !pView->isToolView())
-         pView->show();
-   }
 
    // 3.) undock all these found oldest ancestors (being KDockWidgets)
 #if QT_VERSION < 300
@@ -1004,7 +991,6 @@ void QextMdiMainFrm::switchToToplevelMode()
 
    // 4.) recreate the MDI childframe area and hide it
    if (oldMdiMode == QextMdi::TabPageMode) {
-      QApplication::sendPostedEvents();
       if (!m_pDockbaseAreaOfDocumentViews) {
          m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
          m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
@@ -1029,7 +1015,22 @@ void QextMdiMainFrm::switchToToplevelMode()
       }
    }
 
-   // 5.) reset all memorized positions of the undocked ones and show them again
+   // 5. show the child views again
+#if QT_VERSION < 300
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+#else
+   QPtrListIterator<QextMdiChildView> it( *m_pWinList);
+#endif
+   for( it.toFirst(); it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+#ifndef NO_KDE2
+      XSetTransientForHint(qt_xdisplay(),pView->winId(),winId());
+#endif
+      if( !pView->isToolView())
+         pView->show();
+   }
+
+   // 6.) reset all memorized positions of the undocked ones and show them again
    QValueList<QRect>::Iterator it5;
    for (it3.toFirst(), it5 = positionList.begin() ; it3.current(), it5 != positionList.end(); ++it3, ++it5 ) {
        KDockWidget* pDockW = it3.current();
@@ -1097,6 +1098,7 @@ void QextMdiMainFrm::switchToChildframeMode()
       m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
       m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
    }
+   m_pDockbaseAreaOfDocumentViews->show();
    if (m_mdiMode == QextMdi::TabPageMode) {
 #if QT_VERSION < 300
       QListIterator<KDockWidget> it4( rootDockWidgetList);
@@ -1295,6 +1297,9 @@ void QextMdiMainFrm::finishTabPageMode()
          ((KDockWidget*)pParent)->undock(); // this destroys the dockwiget cover, too
          pParent->close();
          delete pParent;
+         if (centralWidget() == pParent) {
+            setCentralWidget(0L); // avoid dangling pointer
+         }
       }
       m_pTaskBar->switchOn(TRUE);
    }
