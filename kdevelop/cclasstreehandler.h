@@ -146,11 +146,18 @@ public: // Public methods
   /** Add all signals to the view. */
   void addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent );
 
-  /** Get the names and types of the currently selected class/declaration.
-   * class == NULL for global declarations. */
-  void getCurrentNames( const char **className,
-                        const char **declName, 
-                        THType *idxType );
+  /** Get the path and type of the currently selected declaration.
+   * If the item is a container itemName and itemType should be ignored.
+   *
+   * @param parentPath Path of the container. Empty for globals.
+   * @param itemName   Name of the selected item. Empty for containers.
+   * @param parentType Type of container. Ignored for globals.
+   * @param itemType   Type of the seleceted item. Ignored for containers.
+   */
+  void getCurrentNames( QString &parentPath,
+                        QString &itemName, 
+                        THType &parentType,
+                        THType &aItemType );
 
 private: // Private attributes
 

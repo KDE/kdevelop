@@ -126,7 +126,7 @@ void CClassTreeHandler::addScope( CParsedScopeContainer *aScope,
   QList<CParsedMethod> *methodList;
   QList<CParsedAttribute> *attrList;
 
-  QListViewItem *item = addItem( aScope->name, THNAMESPACE, parent );
+  QListViewItem *item = addItem( aScope->name, THSCOPE, parent );
   
   // Add namespaces
   scopeList = aScope->getSortedScopeList();
@@ -743,51 +743,53 @@ void CClassTreeHandler::addGlobalStructs( QList<CParsedStruct> *list,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::getCurrentNames( const char **className, 
-                                         const char **declName,
-                                         THType *idxType )
+void CClassTreeHandler::getCurrentNames( QString &parentPath,
+                                         QString &itemName, 
+                                         THType &parentType,
+                                         THType &aItemType )
 {
   QListViewItem *iter;
   QListViewItem *item;
   QListViewItem *parent;
-  THType parentType;
+  bool isContainer;
 
   item = tree->currentItem();
+  aItemType = itemType();
   parent = item->parent();
   parentType = itemType( parent );
 
-  // Set the type of the current item.
-  *idxType = itemType();
+  // Set the container flag
+  isContainer  = ( aItemType ==THCLASS || 
+                   aItemType == THSTRUCT ||
+                   aItemType == THSCOPE );
 
-  // If we're viewing a class or struct declName should be empty.
-  if( *idxType == THCLASS )
-    *declName = NULL;
-  else 
-    *declName = item->text(0);
+  // If we're viewing a container the item should be empty.
+  if( isContainer  )
+    itemName = "";
+  else
+    itemName = item->text(0);
 
-  // If we're viewing a class we start the classname iteration at the
+  // If we're viewing a container we start the classname iteration at the
   // current item 
-  if( *idxType == THCLASS )
-    iter = item;
-  else // Start at the parent.
-    iter = parent;
-
-  // Set inital classname and first iteration step
-  ccstr = iter->text(0);
-  iter = iter->parent();
-
-  while( iter != NULL && itemType( iter ) == THCLASS )
+  if( isContainer )
   {
-    ccstr = "." + ccstr;
-    ccstr = iter->text(0) + ccstr;
+    iter = item->parent();
+    parentPath = iter->text( 0 );
+  }
+  else if( parentType != THFOLDER ) // Start at the parent.
+  {
+    iter = parent->parent();
+    parentPath = iter->text( 0 );
+  }
+  else 
+    iter = NULL;
+
+  // Build the rest of the path
+  while( iter != NULL && itemType( iter ) != THFOLDER )
+  {
+    parentPath = "." + parentPath;
+    parentPath = iter->text(0) + parentPath;
 
     iter = iter->parent();
   }
-
-  // For global items, i.e parent isn't a class or struct, classname is NULL.
-  if( parentType == THCLASS || parentType == THSTRUCT || 
-      *idxType == THCLASS )
-    *className = ccstr;
-  else
-    *className = NULL;
 }
