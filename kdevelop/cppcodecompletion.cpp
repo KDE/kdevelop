@@ -340,9 +340,13 @@ int CppCodeCompletion::expressionAt( const QString& text, int index )
 
     int last = T_UNKNOWN;
     int start = index;
-    while( index > 0 ){
-        while( index > 0 && text[index].isSpace() ){
+    for( ;; ){
+        while( index >= 0 && text[index].isSpace() ){
             --index;
+        }
+
+        if( index < 0 ){
+            break;
         }
 
         QChar ch = text[ index ];
@@ -396,6 +400,7 @@ int CppCodeCompletion::expressionAt( const QString& text, int index )
             last = T_ACCESS;
         } else {
             if( start > index ){
+                kdDebug() << "-----------> incr index" << endl;
                 ++index;
             }
             last = T_UNKNOWN;
@@ -471,9 +476,8 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
 
 
     SimpleVariable v_this = ctx->findVariable( "this" );
-    QString type;
-
     CParsedClass* pThis = sigma->getClassByName( v_this.type );
+    QString type;
 
     if( exprs.count() == 0 ){
         return v_this.type;
@@ -489,13 +493,27 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
     } else {
         int first_paren_index = 0;
         if( (first_paren_index = e1.find('(')) != -1 ){
-            e1 = e1.left( first_paren_index ).stripWhiteSpace();
-            type = getTypeOfMethod( pThis, e1 );
+            if( first_paren_index == 0 ){
+                // e1 is a subexpression or a cast
+                QString subexpr = e1.mid( 1, e1.length() - 2 );
+                subexpr = subexpr.stripWhiteSpace();
+                int start_expr = expressionAt( subexpr, subexpr.length()-1 );
+                if( start_expr != subexpr.length()-1 ){
+                    subexpr = subexpr.mid( start_expr );
+                    kdDebug() << "subexpr = " << subexpr << endl;
+                    type = evaluateExpression( subexpr, ctx, sigma );
+                }
+            } else {
+                e1 = e1.left( first_paren_index ).stripWhiteSpace();
+                type = getTypeOfMethod( pThis, e1 );
+            }
         } else {
             SimpleVariable v = ctx->findVariable( e1 );
             if( v.type ){
+                // e1 is a local variable
                 type = v.type;
             } else {
+                // e1 is an attribute
                 type = getTypeOfAttribute( pThis, e1 );
             }
         }
@@ -509,7 +527,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
         popFrontStringList(exprs);
         type = "";  // no type
 
-        // kdDebug() << "----------> evaluate " << e << endl;
+        kdDebug() << "----------> evaluate " << e << endl;
 
         int first_paren_index;
         if( e.isEmpty() ){
@@ -837,32 +855,43 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
     KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+)[ \t]*::[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*[:{]" );
 
     QRegExp qt_rx( "Q_[A-Z]+" );
+    QRegExp strconst_rx( "\"[^\"]*\"" );
+    QRegExp chrconst_rx( "'[^']*'" );
     QRegExp newline_rx( "\n" );
     QRegExp const_rx( "[ \t]*const[ \t]*" );
     QRegExp comment_rx( "//[^\n]*" );
     QRegExp preproc_rx( "^[ \t]*#[^\n]*$" );
 
-
     QString text = m_edit->textLine( iLine ).left( iCol );
     --iLine;
+    int count = 0;
     while( iLine >= 0 ){
 
         text.prepend( m_edit->textLine( iLine ).simplifyWhiteSpace() + "\n" );
-        if( (iLine % 50) == 0 ){
-            kdDebug() << "---> iLine = " << iLine << endl;
+        ++count;
+        if( (count % 50) == 0 ){
+            // kdDebug() << "---> iLine = " << iLine << endl;
 
             QString contents = text;
 
-            contents = remove_comment( contents );
-            contents = remove( contents, '[', ']' );
             kdDebug() << ".... 2 " << endl;
+
+            contents = remove_comment( contents );
 
             contents = contents
                        .replace( qt_rx, "" )
                        .replace( const_rx, "" )
                        .replace( comment_rx, "" )
                        .replace( preproc_rx, "" )
+                       .replace( strconst_rx, "\"\"" )
+                       .replace( chrconst_rx, "''" )
                        .replace( newline_rx, " " );
+
+            contents = remove( contents, '[', ']' );
+
+
+
+            // kdDebug() << "----> contents = " << contents << endl;
 
             kdDebug() << ".... 3 " << endl;
 
@@ -898,6 +927,8 @@ void CppCodeCompletion::completeText()
 {
     int nLine = m_edit->view()->cursorPosition().y();
     int nCol = m_edit->view()->cursorPosition().x();
+    // kdDebug() << "nLine = " << nLine << endl;
+    // kdDebug() << "nCol = " << nCol << endl;
 
     QString strCurLine = m_edit->textLine( nLine );
     QString className;
@@ -914,8 +945,9 @@ void CppCodeCompletion::completeText()
     kdDebug() << "classname = " << className << endl;
 
     SimpleContext* ctx = SimpleParser::localVariables( contents );
-    if ( !ctx )
+    if( !ctx )
         return;
+
     QValueList<SimpleVariable> variableList;
     SimpleVariable v;
     v.name = "this";
@@ -926,6 +958,7 @@ void CppCodeCompletion::completeText()
 
     QString word;
     int start_expr = expressionAt( contents, contents.length() - 1 );
+    kdDebug() << "start_expr = " << start_expr << endl;
     QString expr;
     if( start_expr != int(contents.length()) - 1 ){
         expr = contents.mid( start_expr, contents.length() - start_expr );

@@ -1,3 +1,6 @@
+2002-03-01  Roberto Raggi <raggi@cli.di.unipi.it>
+    * codecompletion: added subexpression support
+	
 2002-03-01  F@lk Brettschneider <falk@kdevelop.org>
     * applied a patch of Jens Zurheide <jens.zurheide@gmx.de> fixing a crash 
       when opening the config dialog for the documentation browser
