@@ -228,6 +228,7 @@ void CppAddMethodDialog::accept()
     edName->setFocus();
     return;
   }
+  edName->setText(edName->text().simplifyWhiteSpace());
   QDialog::accept();
 }
 
