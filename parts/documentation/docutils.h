@@ -37,6 +37,8 @@ resolve environment variables.*/
 QString envURL(KURLRequester *req);
 /**Resolves environment variables in url.*/
 QString noEnvURL(const QString &url);
+/**Resolves environment variables in url.*/
+KURL noEnvURL(const KURL &url);
 
 void docItemPopup(DocumentationPart *part, DocumentationItem *docItem, const QPoint &pos,
     bool showBookmark = false, bool showSearch = false, int titleCol = 0);

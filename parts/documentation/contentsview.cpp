@@ -62,7 +62,7 @@ void ContentsView::itemExecuted(QListViewItem *item, const QPoint &p, int col)
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
         return;
-    m_widget->part()->partController()->showDocument(docItem->url());
+    m_widget->part()->partController()->showDocument(DocUtils::noEnvURL(docItem->url()));
 }
 
 void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)

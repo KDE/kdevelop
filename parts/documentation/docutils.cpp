@@ -37,6 +37,11 @@ QString DocUtils::noEnvURL(const QString &url)
     return KURLCompletion::replacedPath(url, true, true);
 }
 
+KURL DocUtils::noEnvURL(const KURL &url)
+{
+    return KURL(KURLCompletion::replacedPath(url.url(), true, true));
+}
+
 QString DocUtils::envURL(KURLRequester *req)
 {
     if (req->lineEdit())
