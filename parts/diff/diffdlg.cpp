@@ -17,7 +17,7 @@
 #include <klocale.h>
 #include <kservice.h>
  
-#include <kparts/factory.h>
+#include <kparts/componentfactory.h>
 #include <kparts/part.h>
 
 #include <kio/jobclasses.h>
@@ -63,21 +63,14 @@ void DiffDlg::loadKomparePart( QWidget* parent )
   if ( komparePart )
     return;
 
+  // ### might be easier to use:
+  // createPartInstanceFromQuery( "text/x-diff", QString::null, parent, 0, this, 0 ); (Simon)
+
   KService::Ptr kompareService = KService::serviceByDesktopName( "komparepart" );
   if ( !kompareService )
     return;
 
-  KParts::Factory* factory = static_cast<KParts::Factory*>(KLibLoader::self()->factory( kompareService->library()
-));
-  if ( !factory )
-    return;
-
-  KParts::ReadOnlyPart* part = static_cast<KParts::ReadOnlyPart*>(factory->createPart( parent, 0, this, 0, "KParts::ReadOnlyPart" ));
-  if ( !part ) 
-    return;
-
-  komparePart = part;
-  return;
+  komparePart = KParts::ComponentFactory::createPartInstanceFromService<KParts::ReadOnlyPart>( kompareService, parent, 0, this, 0 );
 }
 
 void DiffDlg::slotClear()
