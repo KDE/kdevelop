@@ -1,5 +1,7 @@
+
 1999-10-12 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* commited patch by Johannes Sixt, fixed the addition of empty lines by switching files
+	* commited patch by p_george <p_george@club-internet.fr>, draw arrow connection in classview
 
 1999-10-02 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* many changes in the source templates
