@@ -165,8 +165,8 @@ void CClassView::initPopups()
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),ID_CV_VIEW_DECLARATION);
-  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()), ID_CV_METHOD_NEW);
+  classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
+  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
   classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
   //  id = classPopup.insertItem( i18n("Implement virtual function..."), this, SLOT(slotImplementVirtual()),0, ID_CV_IMPLEMENT_VIRTUAL);
   //  classPopup.setItemEnabled( id, false );
@@ -189,8 +189,8 @@ void CClassView::initPopups()
 
   // Method popup
   methodPopup.setTitle( i18n( "Method" ) );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DECLARATION);
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DEFINITION);
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DECLARATION);
   methodPopup.insertSeparator();
   methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
@@ -203,8 +203,8 @@ void CClassView::initPopups()
 
   // Slot popup
   slotPopup.setTitle( i18n( "Slot" ) );
-  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DECLARATION);
-  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION);
+  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
+  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
   slotPopup.insertSeparator();
   slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
