@@ -65,12 +65,16 @@ Q: Configure complains about not being able to compile a small KDE
    libXext.
 A: Install the package xdevel
 
-
+Q: Patching configure doesn't help, after starting autoconf my changings are lost.
+   Where should I patch things?
+A: There's a list of file, where you may patch things for the autotools.
+   Makefile.am, configure.in.in, configure.in (only if there is no configure.in.in),
+   
 Q: I´m developing an application where I need to set -D options to the preprocessor.
    If I add these in KDevelop to my project options, everything is ok, but when I
    distribute my package, the -D options set in KDevelop are not used. What do I have
    to do to make this work ?
-A: Edit the file configure.in in your toplevel source directory. Here, you
+A: Edit the file configure.in(.in) in your toplevel source directory. Here, you
    have to enter after the AC_CHECK_COMPILERS macro:
      CPPFLAGS="$CPPFLAGS -DMYDEFINE"
    and after that you have to recreate your new "configure" by invoking
@@ -85,7 +89,7 @@ A: Another version to include DEFINEs in your project is to publish
    Add to acconfig.h of your toplevel project directory the following line:
      #undef MYDEFINE
 
-   and insert in the configure.in, after the macro call
+   and insert in the configure.in(.in), after the macro call
    AC_CONFIG_HEADER(config.h):
      AC_DEFINE_UNQUOTED(MYDEFINE)
 
@@ -95,7 +99,7 @@ A: Another version to include DEFINEs in your project is to publish
 
    Requirements for this solutions are:
      AC_CONFIG_HEADER(config.h)
-   inside configure.in and in the sourcecode a
+   inside configure.in(.in) and in the sourcecode a
      #ifdef HAVE_CONFIG_H
      #include <config.h>
      #endif
@@ -109,7 +113,7 @@ A: Another version to include DEFINEs in your project is to publish
 
 Q: I´m developing an application which needs exception handling.
    How can I make it?
-A: Edit the file configure.in in your toplevel source directory. Here, you
+A: Edit the file configure.in(.in) in your toplevel source directory. Here, you
    have to enter after the AC_CHECK_COMPILERS() macro:
      CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS"
    and after that you have to recreate your new "configure" by invoking
@@ -119,8 +123,9 @@ A: Edit the file configure.in in your toplevel source directory. Here, you
 
 
 Q: I´m developing an application which needs run-time-type-info compiled within.
-   How can I make it?
-A: Edit the file configure.in in your toplevel source directory. Here, you
+   How can I make it? 
+A: *** OBSOLETE for new project templates ***
+   Edit the file configure.in(.in) in your toplevel source directory. Here, you
    have to enter after the AC_CHECK_COMPILERS macro:
      CXXFLAGS="$CXXFLAGS $USE_RTTI"
    and after that you have to recreate your new "configure" by invoking
@@ -171,7 +176,7 @@ A: There is a bug inside automake 1.4, which doesn't add flags to the already
    Take care, these flags are only published by automake version 1.4.
 
    For setting one of these flags for the whole project, please patch the
-   configure.in in the toplevel source directory instead.
+   configure.in(.in) in the toplevel source directory instead.
 
 
 Q: How can I guarantee that a user of my project will build it with automake
@@ -198,12 +203,12 @@ A: No! In these cases there is an ordering problem. The standard CXXFLAGS variab
    and acinclude.m4.
 
 
-Q: Why patching configure.in with CXXFLAGS="$USE_RTTI $CXXFLAGS" doesn't work?
+Q: Why patching configure.in(.in) with CXXFLAGS="$USE_EXCEPTIONS $CXXFLAGS" doesn't work?
 A: Look at the answer to the question "Can AM_CXXFLAGS (inside a Makefile.am)
    be used for flags like -frtti or -fexceptions?" ;-)
 
 
-Q: I am using CXXFLAGS="$USE_RTTI" inside configure.in and it works fine,
+Q: I am using CXXFLAGS="$USE_EXCEPTIONS" inside configure.in(.in) and it works fine,
    why should I use your solution?
 A: If you would use your version before AC_CHECK_COMPILERS() a call like
      CXXFLAGS="-pedantic" ./configure
@@ -212,14 +217,14 @@ A: If you would use your version before AC_CHECK_COMPILERS() a call like
    AC_CHECK_COMPILERS() would be cleared.
    (For example in a "configure --enable-debug" call CXXFLAGS would be
     changed to insert also debug information to your code.)
-   So please use CXXFLAGS="$CXXFLAGS $USE_RTTI" instead.
+   So please use CXXFLAGS="$CXXFLAGS $USE_EXCEPTIONS" instead.
 
 Q: I'm using additional headers and libs for my KDE/QT project. Putting
    -I/usr/include/foo in the compiler options and -L/usr/lib/foo to the
    linker options won't distribute the settings into the tarball.
    What do I have to do?
 A: This is the most difficult part to do it the right way.
-   An easy, but not correct solution would be to add to the configure.in:
+   An easy, but not correct solution would be to add to the configure.in(.in):
 
    all_includes="$all_includes -I/usr/include/foo"
    all_libraries="$all_libraries -L/usr/lib/foo"
@@ -237,7 +242,7 @@ A: This is the most difficult part to do it the right way.
      better if configure did already fail with a more helpful message.
 
    So to make it right you would have to add a macro function to
-   configure.in, which do certain tests and searches for an installed "foo".
+   configure.in(.in), which do certain tests and searches for an installed "foo".
 
    If you want to do so, we can give you here only a hint... try to
    understand the acinclude.m4.in or create a KDE-normal-ogl project,
@@ -251,8 +256,9 @@ A: This is the most difficult part to do it the right way.
 
 Q: On C/C++ terminal application $all_includes and $all_libraries are not used.
    How can I use the solution above for these project types?
-A: The best way would be to use the same concept also for your terminal project.
-   The only thing you have to do patch configure.in:
+A: *** OBSOLETE for new project templates ***
+   The best way would be to use the same concept also for your terminal project.
+   The only thing you have to do patch configure.in(.in):
 
    all_includes="$all_includes -I/usr/include/foo"
    all_libraries="$all_libraries -L/usr/lib/foo"
@@ -274,35 +280,10 @@ A: The best way would be to use the same concept also for your terminal project.
    After that, don´t forget to update configure and all Makefiles.
    (Inside KDevelop by using "Build/Autoconf and Automake" and "Build/Configure...").
 
-
-Q: I'm already running a KDE 2 snapshot and I want to use KDevelop under KDE 2.
-   What is the best way to do this ?
-A: As KDevelop for KDE 2 is currently under development, you should consider using
-   the current stable 1.x release of KDevelop for production usage. Running KDevelop 1.x
-   under KDE 2 can be done by creating a shell-script:
-
-   #/bin/bash
-   QTDIR=/usr/lib/qt-1.44 export QTDIR
-   KDEDIR=/opt/kde export KDEDIR
-   exec /opt/kde/bin/kdevelop
-
-   Save this file as e.g. kdevelop1 and set this file to executable with
-
-   chmod 755 kdevelop1
-
-   Then you can run KDevelop 1.x under KDE 2 by calling kdevelop1.
-   For developing KDE 2 applications with KDevelop 1.x you have to set the correct
-   path in the KDevelop Setup even if you´re running KDevelop under KDE 2 !
-
-Q: I'm using a KDevelop 1.4 which is already KDE2 enabled. There is no dialog editor any
-    more. How do I create my dialogs ?
-A: Since KDevelop 1.4 the QT designer is used for creating dialogs. But not only the tool
-    has changed but also the way how dialogs are designed and used from within KDevelop.
-    To create a new dialog choose new from the file dialog and create a new QT designer (*.ui)
-    file. Now the designer is opened and you can develop your dialog. ATTENTION: most
-    QT packages (*.deb,*.rpm) does not include support for KDE widgets. You need this to
-    use e.g. KListView or other KDE widgets in your dialogs.
-    After creating the dialog, you inherit your dialog class from the newly created dialog.
+Q: In the questions above I always see "configure.in(.in)". I have both files in my 
+   project. Which file should be patched?
+A: If there is a configure.in.in in your top-level project directory patch this one.
+   If you dodn't find a configure.in.in patch configure.in.
 
 Q: I have downloaded the QT-2.2.x packages from ftp.kde.org and there are now KDE
     widgets available in the designer. How can I get them ?
@@ -328,15 +309,15 @@ A: Yes, there is a great tutorial on http://women.kde.org/docs/tut_kdevelop/
 
 Q: I have installed htdig but there is now htsearch available ?
 A: On e.g. RedHat systems the htsearch executable is placed in the /cgi-bin dir of apache.
-    You can create symlinks in /usr/bin or simply add this path ro ~/.bashrc
+   You can create symlinks in /usr/bin or simply add this path ro ~/.bashrc
 
 Q: I have htdig, htmerge and htsearch available but I get an error message thet the config
-    file of htdig could not be found or is invalid ?
+   file of htdig could not be found or is invalid ?
 A: Read README.htdig in the source directory tree and create a htdig.conf file. Then copy
-    it to $KDEDIR/share/apps/kdevelop/tools. Now create your search index with the kdevelop
-    setup menu.
+   it to $KDEDIR/share/apps/kdevelop/tools. Now create your search index with the kdevelop
+   setup menu.
 
-Q: How to change my project framework (aka autotool-project-files) to compile it for KDE/QT version 3
+Q: How do I change my project framework (aka autotool-project-files) to compile it for KDE/QT version 3
    after project creation?
 A: With the actual admin/-content it is possible to select the kde version by changing one line inside 
    configure.in.in:
@@ -361,14 +342,20 @@ A: If you want to develop for another kde/qt version, you have to give configure
    like e.g.
    ./configure --with-qt-dir=/usr/lib/qt3
    ./configure --prefix=/opt/kde2 --with-qt-dir=/usr/local/qt2
-   Of course you must have installed the desired qt/kde version on your system.
+   You must have installed the desired qt/kde version on your system.
  
 Q: I have two KDE versions on my system. If I try to create a KDE 2 project on KDevelop 2.1 (made for
    KDE 2) a configure-call without parameters always uses /opt/kde3 (or /opt/kde) instead of /opt/kde2.
    What's wrong?
 A: Please check first your actual KDEDIR environment variable. In some cases it still points to
-   the wrong directory. 
-   Another solution is to use always --prefix= option within the configure call.
+   the wrong directory (e.g. ~/.profile, ~/.bashrc, /etc/profile).
+   Check also the KDE startscript (e.g. "/opt/kde2/bin/startkde"), because certain distributions
+   (like SuSE) are exporting another KDEDIR.
+   [the first configure-call inside the application wizard (after pressing "Create") shows you the
+    actual environment values of KDEDIR and QTDIR]
+   Another solution is to use always --prefix= option within the configure call. This can be set
+   with KDevelop inside "Options->KDevelop Setup->Path->KDE/QT Pathes" 
+   (or Project->Project Options->Compiler Options/Configure").
 
 Q: I've done so, but the configure call still uses the wrong directory?
 A: Now you have to "DistClean" (i.e. either "Project->DistClean" from within KDevelop or 
