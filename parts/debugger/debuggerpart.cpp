@@ -484,7 +484,7 @@ void DebuggerPart::startDebugger()
     if( !shell.isEmpty() ) {
         QFileInfo info( shell );
         if( info.isRelative() ) {
-            shell = project()->projectDirectory() + "/" + shell;
+            shell = project()->buildDirectory() + "/" + shell;
             info.setFile( shell );
         }
         if( !info.exists() ) {

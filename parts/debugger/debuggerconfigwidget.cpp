@@ -35,17 +35,17 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
 
     QString shell =                        DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
     if( shell == QString("no_value") ) {
-        QFileInfo info( part->project()->projectDirectory() + "/libtool" );
+        QFileInfo info( part->project()->buildDirectory() + "/libtool" );
         if( info.exists() ) {
             shell = "libtool";
         } else {
             // Try one directory up.
-            info.setFile( part->project()->projectDirectory() + "/../libtool" );
+            info.setFile( part->project()->buildDirectory() + "/../libtool" );
             if( info.exists() ) {
                 shell = "../libtool";
             } else {
                 // Give up.
-                shell = QString::null;
+                shell = QString::null;	   
             }
         }
     }
