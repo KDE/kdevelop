@@ -653,3 +653,5 @@ void MiscTab::writeFlags( QStringList * str )
     pathController->writeFlags(str);
     editController->writeFlags(str);
 }
+
+#include "optiontabs.moc"
