@@ -17,7 +17,7 @@
 
 
 #include <kapp.h>
-#include <kmessagebox.h>
+#include <kmsgbox.h>
 #include <klocale.h>
 #include "caddnewtranslationdlg.h"
 #include "cproject.h"
@@ -151,6 +151,10 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	  lang_combo->insertLanguage("hr;Croatian");
 	  lang_list.append("hr");
 	}
+	if(po_files.contains("ja.po") == 0){
+	  lang_combo->insertLanguage("ja;Japanese");
+	  lang_list.append("ja");
+ 	}
 	if(po_files.contains("ko.po") == 0){
 	  lang_combo->insertLanguage("ko;Korean");
 	  lang_list.append("ko");
@@ -212,7 +216,7 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	  lang_list.append("et");
 	}
 	if(lang_list.isEmpty()){
-	  KMessageBox::information(0, i18n("Your sourcecode is already translated to all supported languages."));
+	  KMsgBox::message(0,i18n("Information"),i18n("Your sourcecode is already translated to all supported languages."),KMsgBox::INFORMATION);
 	  ok_button->setEnabled(false);
 	}
 }

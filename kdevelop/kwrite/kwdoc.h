@@ -7,8 +7,17 @@
 #include <qfont.h>
 #include <qfontmet.h>
 
+#ifdef QT_I18N
+#include <stdio.h>
+#define iseucchar(a)  (0xa0 <= (unsigned char)(a) && (unsigned char)(a) <= 0xfe)
+#endif
+
 #include "kwview.h"
 #include "highlight.h"
+
+#if defined(QT_I18N) && defined(HAVE_NKF_H)
+#include <nkf.h>
+#endif
 
 class TextLine {
   public:
@@ -180,6 +189,9 @@ class KWriteDoc : QObject {
     void writeFile(QIODevice &);
 
     void insertChar(KWriteView *, VConfig &, char);
+#ifdef QT_I18N
+    void insertChar(KWriteView *, VConfig &, char *, int len);
+#endif
     void newLine(KWriteView *, VConfig &);
     void killLine(KWriteView *, VConfig &);
     void backspace(KWriteView *, VConfig &);
@@ -318,6 +330,10 @@ class KWriteDoc : QObject {
     int tagEnd;
 
     QWidget *pseudoModal;
+
+#if defined(QT_I18N) && defined(HAVE_NKF_H)
+    Nkf::NkfCode JPcode;
+#endif
 };
 
 #endif //KWDOC_H
