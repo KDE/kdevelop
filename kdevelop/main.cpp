@@ -138,7 +138,6 @@ int main(int argc, char* argv[])
   a.dcopClient()->attach();
   a.dcopClient()->registerAs("kdevelop");
 
-#ifndef USE_KDE_2_1_1
   // KDE version check
   KStandardDirs stddirs;
   QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3.0.0");
@@ -152,7 +151,6 @@ int main(int argc, char* argv[])
                        i18n("KDE version") );
     ::exit(0);
   }
-#endif
 
   config = KGlobal::config();
   config->setGroup("General Options");

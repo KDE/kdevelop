@@ -56,10 +56,7 @@
 #include "docviewman.h"
 #include "kdevsession.h"
 
-#ifndef USE_KDE_2_1_1
 #include <ktip.h>
-#endif
-
 #include <kaboutdialog.h>
 #include <kcombobox.h>
 #include <kcursor.h>
@@ -70,11 +67,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kmessagebox.h>
-#ifdef USE_QTPRINT_SYSTEM
-#include <qprinter.h>
-#else
 #include <kprinter.h>
-#endif
 #include <krun.h>
 #include <kstddirs.h>
 #include <ktabctl.h>
@@ -269,11 +262,7 @@ void CKDevelop::slotFilePrint()
   if (file.isEmpty())
     return;
 
-#ifdef USE_QTPRINT_SYSTEM
-  QPrinter printer;
-#else
   KPrinter printer;
-#endif
 
   // QPrinter::setup() invokes a print dialog, configures the printer object,
   // and returns TRUE if the user wants to print or FALSE if not.
@@ -301,11 +290,7 @@ void CKDevelop::slotFilePrint()
 // (If the same code is used to print as to draw on the screen, it's less likely that
 // you'll have printing-only or screen-only bugs.)
 
-#ifdef USE_QTPRINT_SYSTEM
-void CKDevelop::printImpl(QStringList& list, QPrinter* printer)
-#else
 void CKDevelop::printImpl(QStringList& list, KPrinter* printer)
-#endif
 {
   int pageNo = 1;
   QSize margins = printer->margins();
@@ -1713,12 +1698,6 @@ void CKDevelop::setupInternalDebugger()
   connect(  var_viewer->varTree(),  SIGNAL(setLocalViewState(bool)),
             dbgController,          SLOT(slotSetLocalViewState(bool)));
 
-//FB?  connect(  header_widget,    SIGNAL(runToCursor(const QString&, int)),
-//FB?            dbgController,    SLOT(slotRunUntil(const QString&, int)));
-
-//FB?  connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
-//FB?            dbgController,    SLOT(slotRunUntil(const QString&, int)));
-
   connect(  disassemble,    SIGNAL(disassemble(const QString&, const QString&)),
             dbgController,  SLOT(slotDisassemble(const QString&, const QString&)));
   connect(  dbgController,  SIGNAL(showStepInSource(const QString&,int, const QString&)),
@@ -2546,13 +2525,11 @@ void CKDevelop::slotHelpReference() {
 }
 
 void CKDevelop::slotHelpTipOfDay(bool force){
-#ifndef USE_KDE_2_1_1
   QString file=locate("html", KGlobal::locale()->language()+"/kdevelop/tip.database");
   if(!QFileInfo(file).exists())
   	file=locate("html", "en/kdevelop/tip.database");
 
   KTipDialog::showTip(locate("data", file), force);
-#endif
 }
 
 void CKDevelop::slotHelpHomepage(){
@@ -3910,7 +3887,6 @@ void CKDevelop::slotDockWidgetHasUndocked(KDockWidget*)
 
 bool CKDevelop::isToolViewVisible(QWidget* pToolView)
 {
-#ifndef USE_KDE_2_1_1
   // pointer access checks
   if (pToolView == 0L) return false;
   if (pToolView->parentWidget() == 0L) return false;
@@ -3924,14 +3900,10 @@ bool CKDevelop::isToolViewVisible(QWidget* pToolView)
   QWidget* pTabWidget = pDock->parentDockTabGroup();
   bool bIsVisible = bVisible || (pTabWidget && pTabWidget->isVisible());
   return bIsVisible;
-#else //#ifndef USE_KDE_2_1_1
-  return false;
-#endif //#ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::fillToggleTreeViewsMenu()
 {
-#ifndef USE_KDE_2_1_1
   toggletreeviews_popup->clear();
 
   toggletreeviews_popup->insertItem(i18n("All &Tree Tool-Views"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -3968,72 +3940,60 @@ void CKDevelop::fillToggleTreeViewsMenu()
       toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
     }
   }
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTClassesView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(2)))
     pDock->undock();
   else
     pDock->dockBack();
 	adjustTTreesToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTGroupsView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(3)))
     pDock->undock();
   else
     pDock->dockBack();
 	adjustTTreesToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTFilesView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(4)))
     pDock->undock();
   else
     pDock->dockBack();
 	adjustTTreesToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTBooksView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(5)))
     pDock->undock();
   else
     pDock->dockBack();
 	adjustTTreesToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewTWatchView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(6)))
     pDock->undock();
   else
     pDock->dockBack();
 	adjustTTreesToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::fillToggleOutputViewsMenu()
 {
-#ifndef USE_KDE_2_1_1
   toggleoutputviews_popup->clear();
 
   toggleoutputviews_popup->insertItem(i18n("All &Output Tool-Views"),this,SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
@@ -4090,103 +4050,86 @@ void CKDevelop::fillToggleOutputViewsMenu()
       toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
     }
   }
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOMessagesView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(2)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOStdOutView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(3)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOStdErrView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(4)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOKonsoleView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(5)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOBreakpointView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(6)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewODisassembleView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(7)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewOFrameStackView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(8)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::slotViewODebuggerView()
 {
-#ifndef USE_KDE_2_1_1
   KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(9)))
     pDock->undock();
   else
     pDock->dockBack();
   adjustTOutputToolButtonState();
-#endif // #ifndef USE_KDE_2_1_1
 }
 
 void CKDevelop::statusCallback(int id_){

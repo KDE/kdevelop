@@ -1061,7 +1061,6 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
   CProject* pProj = initProject(ignoreLastProject);
   QApplication::sendPostedEvents();
 
-  // XXXXXXXXXXXX
   if (pProj != 0L) {
     projectOpenCmdl_Part2(pProj);
   }

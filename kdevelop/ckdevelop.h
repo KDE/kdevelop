@@ -76,7 +76,6 @@ class KProcess;
 class KWriteView;
 class CKonsoleWidget;
 class QStringList;
-class QPrinter;
 class KPrinter;
 
 // Debugger classes
@@ -867,11 +866,7 @@ protected:
   virtual void resizeEvent( QResizeEvent *pRSE);
 
 private:
-#ifdef USE_QTPRINT_SYSTEM
-  void printImpl(QStringList& list, QPrinter* printer);
-#else
   void printImpl(QStringList& list, KPrinter* printer);
-#endif
   /** */
   bool isToolViewVisible(QWidget* pToolView);
   /** */
