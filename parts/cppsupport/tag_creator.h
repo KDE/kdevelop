@@ -19,6 +19,12 @@
 class Catalog;
 class Tag;
 
+namespace TagUtils 
+{
+    int stringToAccess( const QString& access );
+    QString accessToString( int id );
+}
+
 class TagCreator: public TreeParser
 {
 public:
@@ -50,8 +56,6 @@ public:
 private:
     QString scopeOfDeclarator( DeclaratorAST* d );
     QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
-    int stringToAccess( const QString& access ) const;
-    QString accessToString( int id ) const;
 
 private:
     Catalog* m_catalog;

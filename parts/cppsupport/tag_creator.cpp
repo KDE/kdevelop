@@ -243,7 +243,7 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     parseFunctionArguments( tag, d );
 
-    tagBuilder.setAccess( stringToAccess(m_currentAccess) );
+    tagBuilder.setAccess( TagUtils::stringToAccess(m_currentAccess) );
 
     tagBuilder.setFriend( isFriend );
     tagBuilder.setVirtual( isVirtual );
@@ -437,7 +437,7 @@ void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, T
     tagBuilder.setType( type );
     tagBuilder.setFriend( isFriend );
     tagBuilder.setStatic( isStatic );
-    tagBuilder.setAccess( stringToAccess(m_currentAccess) );
+    tagBuilder.setAccess( TagUtils::stringToAccess(m_currentAccess) );
 
     m_catalog->addItem( tag );
 }
@@ -615,7 +615,7 @@ void TagCreator::parseBaseClause( const QString& className, BaseClauseAST * base
 
 	tagBuilder.setBaseClass( baseName );
 	tagBuilder.setVirtual( isVirtual );
-	tagBuilder.setAccess( stringToAccess(access) );
+	tagBuilder.setAccess( TagUtils::stringToAccess(access) );
 
 	m_catalog->addItem( tag );
 
@@ -649,7 +649,7 @@ QString TagCreator::scopeOfDeclarator( DeclaratorAST* d )
     return scope.join( "." );
 }
 
-int TagCreator::stringToAccess( const QString & access ) const
+int TagUtils::stringToAccess( const QString & access )
 {
     QStringList l = QStringList() 
 		    << "public" << "protected" << "private" 
@@ -660,7 +660,7 @@ int TagCreator::stringToAccess( const QString & access ) const
     return idx == -1 ? 0 : idx+1;
 }
 
-QString TagCreator::accessToString( int id ) const
+QString TagUtils::accessToString( int id )
 {
     QStringList l = QStringList() 
 		    << "public" << "protected" << "private" 
