@@ -46,10 +46,9 @@
 #include "kswallow.h"
 #include "ctabctl.h"
 #include "cerrormessageparser.h"
-#include "grepdialog.h"
-#include "component.h"
+#include "grepview.h"
+#include "makeview.h"
 #include "ckdevaccel.h"
-#include "processview.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -107,8 +106,11 @@ void CKDevelop::initView(){
   ////////////////////////
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
 	
-  messages_widget = new ProcessView(o_tab_view, "messages_widget");
+  messages_widget = new MakeView(o_tab_view, "messages_widget");
   components.append(messages_widget);
+
+  grepview = new GrepView(o_tab_view, "grepview");
+  components.append(grepview);
 
   stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
   stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
@@ -118,6 +120,7 @@ void CKDevelop::initView(){
   stderr_widget->setFocusPolicy(QWidget::NoFocus);
 
   o_tab_view->addTab(messages_widget,i18n("messages"));
+  o_tab_view->addTab(grepview, i18n("search"));
   o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
   o_tab_view->addTab(stderr_widget,i18n("stderr"));
 
@@ -232,7 +235,9 @@ void CKDevelop::initView(){
   edit_infos.append(edit2);
   
   // init some dialogs
+#if 0
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
+#endif
   
 }
 
@@ -1034,12 +1039,12 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
   connect(browser_widget, SIGNAL(textSelected(KHTMLView *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
-  connect(messages_widget, SIGNAL(rowSelected(int)),this,SLOT(slotClickedOnMessagesWidget(int)));
+  connect(messages_widget, SIGNAL(highlighted(int)),this,SLOT(slotClickedOnMessagesWidget(int)));
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
 
-  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
+  connect(grepview,SIGNAL(itemSelected(const QString&,int)),SLOT(slotGrepDialogItemSelected(const QString&,int)));
   connect(messages_widget, SIGNAL(processExited(KProcess*)),
           this, SLOT(slotProcessExited(KProcess*)));
 

@@ -20,6 +20,8 @@
 
 #include <qstring.h>
 
+class CProject;
+
 /**
  * This is the base class for all components like doc tree view, LFV, RFV
  * and so on. It contains a collection of virtual classes which components
@@ -37,6 +39,14 @@ public:
      */
     virtual void docPathChanged();
     /**
+     * The user has abort the compilation.
+     */
+    virtual void compilationAborted();
+    /**
+     * A project has been opened.
+     */
+    virtual void projectOpened(CProject *prj);
+    /**
      * The project has beeen closed.
      */
     virtual void projectClosed();
@@ -44,12 +54,12 @@ public:
      * A file has been added to the project. The filename is
      * given relative to the project dir.
      */
-    void addedFileToProject(const QString&);
+    virtual void addedFileToProject(const QString&);
     /**
      * A file has been removed from the project. The filename is
      * given relative to the project dir.
      */
-    void removedFileFromProject(const QString&);
+    virtual void removedFileFromProject(const QString&);
 };
 
 

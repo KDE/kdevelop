@@ -168,7 +168,7 @@ void KDlgWidgets::clicked_KColorButton()
 
 void KDlgWidgets::clicked_KLed()
 {
-//  pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
+  pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
 }
 
 void KDlgWidgets::clicked_KLedLamp()

@@ -33,6 +33,7 @@
 #include "cproject.h"
 #include "ctoolclass.h"
 #include "doctreeview.h"
+#include "doctreeconfdlg.h"
 
 #if HAVE_CONFIG_H
 #include "../config.h"
@@ -111,7 +112,7 @@ ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
 
 void ListViewFolderItem::setOpen(bool o)
 {
-    QString fn(o? "folder_open.png" : "folder.png");
+    QString fn(o? "folder_open" : "folder");
     setPixmap(0, KGlobal::iconLoader()->loadApplicationMiniIcon(fn));
     KListViewItem::setOpen(o);
 }
@@ -258,14 +259,14 @@ public:
     virtual void setOpen(bool o);
 private:
     void readKdoc2Index(FILE *f);
-    static QString locatehtml(const char *libname);
+  //    static QString locatehtml(const char *libname);
     QString idx_filename;
 };
 
 
 DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
                                         const char *libname )
-    : ListViewBookItem(parent, text, locatehtml(libname))
+    : ListViewBookItem(parent, text, libname)
 {
     KConfig *config = kapp->getConfig();
     config->setGroup("Doc_Location");
@@ -282,20 +283,6 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
             idx_filename += ".kdoc";
             setExpandable(true);
         }
-}
-
-
-QString DocTreeKDELibsBook::locatehtml(const char *libname)
-{
-    KConfig *config = kapp->getConfig();
-    config->setGroup("Doc_Location");
-    QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-    QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
-
-    if (!libname)
-        return qt_path + "/index.html";
-    else
-        return kde_path + "/" + libname + "/index.html";
 }
 
 
@@ -360,29 +347,58 @@ public:
         : ListViewFolderItem(parent, i18n("Qt/KDE Libraries"))
         {}
     virtual void refresh();
+    void handleRightButtonPressed(QListViewItem *item,
+                                  const QPoint &p);
+private:
+    void insertBook(const QString &libtitle, const char *libname);
 };
+
+
+void DocTreeKDELibsFolder::insertBook(const QString &libtitle, const char *libname)
+{
+    KConfig *config = kapp->getConfig();
+    config->setGroup("Doc_Location");
+    QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
+    QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
+
+    QString filename = (!libname)?
+      (qt_path + "/index.html") : (kde_path + "/" + libname + "/index.html");
+
+    if (QFileInfo(filename).exists())
+      (void) new DocTreeKDELibsBook(this, libtitle, filename);
+}
 
 
 void DocTreeKDELibsFolder::refresh()
 {
     ListViewFolderItem::refresh();
-    
-    (void) new DocTreeKDELibsBook(this, i18n("Qt Library"),         0);
-    (void) new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KFile Library"),  "kfile");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE HTML Library"),  "khtml");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KOM Library"), "kom");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KParts Library"), "kparts");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KPartsUI Library"), "kpartsui");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KIO Library"), "kio");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE KDE Daemon Library"), "kded");
 
-
+    insertBook(i18n("Qt Library"),           0);
+    insertBook(i18n("KDE Core Library"),     "kdecore");
+    insertBook(i18n("KDE UI Library"),       "kdeui");
+    insertBook(i18n("KDE KFile Library"),    "kfile");
+    insertBook(i18n("KDE HTML Library"),     "khtml");
+    insertBook(i18n("KDE KAB Library"),      "kab");
+    insertBook(i18n("KDE KSpell Library"),   "kspell");
+    insertBook(i18n("KDE KOM Library"),      "kom");
+    insertBook(i18n("KDE KParts Library"),   "kparts");
+    insertBook(i18n("KDE KPartsUI Library"), "kpartsui");
+    insertBook(i18n("KDE KIO Library"),      "kio");
+    insertBook(i18n("KDE KDE Daemon Library"), "kded");
 }
 
+void DocTreeKDELibsFolder::handleRightButtonPressed(QListViewItem *item,
+						    const QPoint &p)
+{
+    if (item == this)
+        {
+            KPopupMenu pop(i18n("Qt/KDE Libraries"));
+            pop.insertItem(i18n("Configure..."),
+                           listView(), SLOT(slotConfigureKDELibs()));
+            pop.exec(p);
+        }
+}
+    
 
 /*************************************/
 /* Folder "Documentation Base"       */
@@ -605,7 +621,7 @@ void DocTreeView::docPathChanged()
     folder_kdelibs->refresh();
 }
 
-
+#if 0
 QString DocTreeView::selectedText()
 {
     QString text;
@@ -613,6 +629,7 @@ QString DocTreeView::selectedText()
         text = currentItem()->text(0);
     return text;
 }
+#endif
 
 
 void DocTreeView::refresh(CProject *prj)
@@ -635,6 +652,7 @@ void DocTreeView::slotRightButtonPressed(QListViewItem *item,
 
     // Not very oo style, but works for the first
     // (as long as other folders don't use right-clicks)
+    folder_kdelibs->handleRightButtonPressed(item, p);
     folder_others->handleRightButtonPressed(item, p);
 }
 
@@ -706,6 +724,14 @@ void DocTreeView::slotDocumentationProp()
     config->sync();
 
     folder_others->refresh();
+}
+
+
+void DocTreeView::slotConfigureKDELibs()
+{
+    DocTreeConfigDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted)
+	folder_kdelibs->refresh();
 }
 
 

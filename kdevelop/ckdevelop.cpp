@@ -56,7 +56,8 @@
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
-#include "processview.h"
+#include "makeview.h"
+#include "grepview.h"
 #include "ceditwidget.h"
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
@@ -64,7 +65,6 @@
 #include "./kwrite/kwdialog.h"
 #include "kswallow.h"
 #include "cerrormessageparser.h"
-#include "grepdialog.h"
 #include "cbugreportdlg.h"
 #include "../config.h"
 #include "structdef.h"
@@ -564,30 +564,14 @@ void CKDevelop::slotEditRepeatSearch(){
 
 void CKDevelop::slotEditSearchInFiles(){
   slotStatusMsg(i18n("Searching in Files..."));
-  if(project){
-    grep_dlg->setDirName(prj->getProjectDir());
-  }
-  grep_dlg->show();
+  grepview->showDialog();
   slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotEditSearchInFiles(QString search){
-  int pos;
   slotStatusMsg(i18n("Searching in Files..."));
-
-  if(project){
-    grep_dlg->setDirName(prj->getProjectDir());
-  }
-  grep_dlg->show();
-
-  search.replace(QRegExp("^\n"), "");
-  pos=search.find("\n");
-  if (pos>-1)
-   search=search.left(pos);
-
-  search=realSearchText2regExp(search, true);
-  grep_dlg->slotSearchFor(search);
+  grepview->showDialogWithPattern(search);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -665,12 +649,15 @@ void CKDevelop::slotViewGotoLine(){
 void CKDevelop::slotViewNextError(){
   TErrorMessageInfo info = error_parser->getNext();
   if(info.filename != ""){
+#warning FIXME
+#if 0
     messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
     }
     slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
+#endif
   }
   else{
     XBell(kapp->getDisplay(),100); // not a next found, beep
@@ -697,12 +684,15 @@ void CKDevelop::slotViewNextError(){
 void CKDevelop::slotViewPreviousError(){
   TErrorMessageInfo info = error_parser->getPrev();
   if(info.filename != ""){
+#warning FIXME
+#if 0
     messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
     if(!bKDevelop){
       switchToKDevelop();
     }
     slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
+#endif
   }
   else{
     XBell(kapp->getDisplay(),100); // not a previous found, beep
@@ -959,7 +949,6 @@ void CKDevelop::slotBuildRebuildAll(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean command "));
-  messages_widget->clear();
   messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
   (*messages_widget) << make_cmd << "clean";
   next_job = make_cmd; // checked in slotProcessExited()
@@ -1522,7 +1511,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   //  cerr << ":" << text << ":" << endl;
 
   doc_search_display_text = text.copy(); // save the text
-  text=realSearchText2regExp(text);  // change the text for using with regexp
+  text=CToolClass::escapetext(text, false);  // change the text for using with regexp
   doc_search_text = text.copy();
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
@@ -2317,8 +2306,11 @@ void CKDevelop::slotClickedOnMessagesWidget(int row){
   if(info.filename != ""){
     if(!bKDevelop)
       switchToKDevelop();
+#warning FIXME
+#if 0
     messages_widget->setCursorPosition(info.makeoutputline,0);
     switchToFile(info.filename,info.errorline-1);
+#endif
   }
   else{
      XBell(kapp->getDisplay(),100); // not a next found, beep
@@ -2402,7 +2394,8 @@ void CKDevelop::slotProcessExited(KProcess *proc){
      messages_widget->insert(result);
   }
   if (ready){ // start the error-message parser
-      QString str1 = messages_widget->text();
+#warning FIXME
+      QString str1; // = messages_widget->text();
       
       if(error_parser->getMode() == CErrorMessageParser::MAKE){
 	  error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
@@ -2651,29 +2644,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     slotHelpManual();
     return;
   }
-  QString text = doc_tree->selectedText();
-  
-  if(!QFile::exists(url_file)){
-    if( text == i18n("Qt-Library")){
-      if (KMessageBox::questionYesNo(0, i18n("KDevelop couldn't find the Qt documentation.\n"
-                                             "Do you want to set the correct path?"))
-          == KMessageBox::Yes) {
-          slotOptionsKDevelop();
-      }
-      return;
-    }
-    if(text ==  i18n("KDE-Core-Library") || text == i18n("KDE-UI-Library") ||
-       text == i18n("KDE-KFile-Library") || text == i18n("KDE-KHTMLW-Library") ||
-       text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
-       text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
-      if (KMessageBox::questionYesNo(0, i18n("KDevelop couldn't find the KDE API-Documentation.\n"
-                                             "Do you want to generate it now?"))
-          == KMessageBox::Yes) {
-          slotOptionsUpdateKDEDocumentation();
-      }
-      return;
-    }
-  }
+
   slotURLSelected(browser_widget,"file:"+ url_file,1,"test");
   
 }
@@ -2697,7 +2668,7 @@ void CKDevelop::slotBufferMenu( const QPoint& point ) {
   menu_buffers->popup( point );
 }
 
-void CKDevelop::slotGrepDialogItemSelected(QString filename,int linenumber){
+void CKDevelop::slotGrepDialogItemSelected(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
 }
 

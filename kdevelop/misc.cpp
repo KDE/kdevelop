@@ -76,3 +76,28 @@ StringTokenizer::~StringTokenizer()
     if ( buffer != 0 )
         delete [] buffer;
 }
+
+
+// This is taken from the CVS version of Qt 2.1 and will disappear
+// from here after it is officially released.
+
+QStringList QStringListsplit( const QString &sep, const QString &str )
+{
+    QStringList lst;
+
+    int j = 0;
+    int i = str.find( sep, j );
+
+    while ( i != -1 ) {
+	if ( str.mid( j, i - j ).length() > 0 )
+	    lst.append( str.mid( j, i - j ) );
+	j = i + sep.length();
+	i = str.find( sep, j );
+    }
+
+    int l = str.length() - 1;
+    if ( !str.mid( j, l - j + 1 ).isEmpty() )
+	lst.append( str.mid( j, l - j + 1 ) );
+
+    return lst;
+}

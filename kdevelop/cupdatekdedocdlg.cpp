@@ -244,8 +244,6 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(ProcessView *proc, KConfig *config,
   bUpdated=false;
 
   resize( 530,380 );
-  setMinimumSize( 0, 0 );
-  setMaximumSize( 32767, 32767 );
   
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
   connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
@@ -363,7 +361,6 @@ void CUpdateKDEDocDlg::OK(){
     qt_test=true;
   }
 
-#if WITH_KDOC2
   QString cmd;
   if(! qt_test)
       {
@@ -392,76 +389,6 @@ void CUpdateKDEDocDlg::OK(){
   cmd += " --outputdir=";
   cmd += new_doc_path;
   *proc << cmd;
-  
-#else
-  
-  if(!qt_test){ // don't cross-reference to qt
-    int qt_set=KMessageBox::questionYesNo(this, i18n("The Qt documentation path is not set correctly.\n"
-                                                    "If you want your KDE-library documentation to\n"
-                                                    "be cross-referenced to the Qtlibrary, you have\n"
-                                                    "to set the correct path to your Qt library\n"
-                                                    "documentation first.\n"
-                                                    "Do you want to set the Qt documentation path first ?"));
-    if(qt_set==KMessageBox::Yes)
-      return;  // exit the update dialog
-    else{  // don't return to the setup to set the qt-path and index without qt
-       *proc << "mkdir "+new_doc_path+"kdoc-reference;"
- 	       "cd kdecore;kdoc -d "+ new_doc_path + "kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-                + new_doc_path +"kdoc-reference kdecore *.h;"
-                "cd ../kdeui;kdoc -d " + new_doc_path + "kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-                + new_doc_path +"kdoc-reference kdeui *.h -lkdecore;"
-                "cd ../kio;kdoc -d "+ new_doc_path + "kio -ufile:" + new_doc_path + "kio/ -L"
-                + new_doc_path +"kdoc-reference kio *.h -lkdecore -lkdeui;"
-                "cd ../kimgio;kdoc -d "+ new_doc_path + "kimgio -ufile:" + new_doc_path + "kimio/ -L"
-                + new_doc_path +"kdoc-reference kimgio *.h -lkdecore -lkdeui -lkio;"
-                "cd ../mediatool;kdoc -d "+ new_doc_path + "mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-                + new_doc_path +"kdoc-reference mediatool *.h -lkdecore -lkdeui -lkio;"
-                "cd ../kdeutils;kdoc -d "+ new_doc_path + "kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-                + new_doc_path +"kdoc-reference kdeutils *.h -lkdecore -lkdeui;"
-                "cd ../jscript;kdoc -d "+ new_doc_path + "jscript -ufile:" + new_doc_path + "jscript/ -L"
-                + new_doc_path +"kdoc-reference jscript *.h -lkdecore -lkdeui;"
-                "cd ../khtml;kdoc -d "+ new_doc_path + "khtml -ufile:" + new_doc_path + "khtml/ -L"
-                + new_doc_path +"kdoc-reference khtml *.h -lkdecore -lkdeui -ljscript;"
-                "cd ../kfile;kdoc -d "+ new_doc_path + "kfile -ufile:" + new_doc_path + "kfile/ -L"
-                + new_doc_path +"kdoc-reference kfile *.h -lkdecore -lkdeui;"
-                "cd ../kfmlib;kdoc -d "+ new_doc_path + "kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-                + new_doc_path +"kdoc-reference kfmlib *.h -lkdecore -lkdeui;"
-                "cd ../kab;kdoc -d "+ new_doc_path + "kab -ufile:" + new_doc_path + "kab/ -L"
-                + new_doc_path +"kdoc-reference kab *.h -lkdecore -lkdeui;"
-                "cd ../kspell;kdoc -d "+ new_doc_path + "kspell -ufile:" + new_doc_path + "kspell/ -L"
-                + new_doc_path +"kdoc-reference kspell *.h -lkdecore -lkdeui";
-      }
-    }
-    else{  // cross-reference to qt
-      *proc << "mkdir "+new_doc_path+"kdoc-reference; qt2kdoc -ufile:" + qtPath + " -o" + new_doc_path +
-                "kdoc-reference " + qtPath + "classes.html;"
-                "cd kdecore;kdoc -d "+ new_doc_path + "kdecore -ufile:" + new_doc_path + "kdecore/ -L"
-                + new_doc_path +"kdoc-reference kdecore *.h -lqt;"
-                "cd ../kdeui;kdoc -d " + new_doc_path + "kdeui -ufile:" + new_doc_path + "kdeui/ -L"
-                + new_doc_path +"kdoc-reference kdeui *.h -lqt -lkdecore;"
-                "cd ../kio;kdoc -d "+ new_doc_path + "kio -ufile:" + new_doc_path + "kio/ -L"
-                + new_doc_path +"kdoc-reference kio *.h -lqt -lkdecore -lkdeui;"
-                "cd ../kimgio;kdoc -d "+ new_doc_path + "kimgio -ufile:" + new_doc_path + "kimio/ -L"
-                + new_doc_path +"kdoc-reference kimgio *.h -lqt -lkdecore -lkdeui -lkio;"
-                "cd ../mediatool;kdoc -d "+ new_doc_path + "mediatool -ufile:" + new_doc_path + "mediatool/ -L"
-                + new_doc_path +"kdoc-reference mediatool *.h -lqt -lkdecore -lkdeui -lkio;"
-                "cd ../kdeutils;kdoc -d "+ new_doc_path + "kdeutils -ufile:" + new_doc_path + "kdeutils/ -L"
-                + new_doc_path +"kdoc-reference kdeutils *.h -lqt -lkdecore -lkdeui;"
-                "cd ../jscript;kdoc -d "+ new_doc_path + "jscript -ufile:" + new_doc_path + "jscript/ -L"
-                + new_doc_path +"kdoc-reference jscript *.h -lqt -lkdecore -lkdeui;"
-                "cd ../khtml;kdoc -d "+ new_doc_path + "khtml -ufile:" + new_doc_path + "khtml/ -L"
-                + new_doc_path +"kdoc-reference khtml *.h -lqt -lkdecore -lkdeui -ljscript;"
-                "cd ../kfile;kdoc -d "+ new_doc_path + "kfile -ufile:" + new_doc_path + "kfile/ -L"
-                + new_doc_path +"kdoc-reference kfile *.h -lqt -lkdecore -lkdeui;"
-                "cd ../kfmlib;kdoc -d "+ new_doc_path + "kfmlib -ufile:" + new_doc_path + "kfmlib/ -L"
-                + new_doc_path +"kdoc-reference kfmlib *.h -lqt -lkdecore -lkdeui;"
-                "cd ../kab;kdoc -d "+ new_doc_path + "kab -ufile:" + new_doc_path + "kab/ -L"
-                + new_doc_path +"kdoc-reference kab *.h -lqt -lkdecore -lkdeui;"
-                "cd ../kspell;kdoc -d "+ new_doc_path + "kspell -ufile:" + new_doc_path + "kspell/ -L"
-                + new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
-    } // end cross-reference qt
-
-  #endif
 
    proc->startJob();
    bUpdated=true;

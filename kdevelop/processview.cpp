@@ -1,10 +1,8 @@
 /***************************************************************************
-                      coutputwidget.cpp - the output window in KDevelop
-                             -------------------                                         
+                             processview.h
+                             -------------------
 
-    begin                : 5 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    copyright            : (C) 1999 by The KDevelop Team
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +10,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -22,10 +20,9 @@
 
 
 ProcessView::ProcessView(QWidget *parent, const char *name)
-    : QMultiLineEdit(parent, name)
+    : QListBox(parent, name)
 {
     setFocusPolicy(QWidget::NoFocus);
-    setReadOnly(TRUE);
 
     childproc = new KShellProcess("/bin/sh");
 
@@ -71,15 +68,18 @@ KProcess &ProcessView::operator<<(const QString& arg)
 }
 
 
-void ProcessView::projectClosed()
-{
-    clear();
-}
-
-
 void ProcessView::slotReceivedOutput(KProcess *, char *buffer, int buflen)
 {
-    insert(QString::fromLatin1(buffer, buflen));
+    buf += QString::fromLatin1(buffer, buflen);
+    
+    int pos;
+    while ( (pos = buf.find('\n')) != -1)
+        {
+            QString item = buf.left(pos);
+            if (!item.isEmpty())
+                insert(item);
+            buf = buf.right(buf.length()-pos-1);
+        }
     // TODO: emit a signal which is connected with a slot in CKDevelop
     // which calls o_tab_view->setCurrentTab(MESSAGES);
 }
@@ -91,10 +91,7 @@ void ProcessView::slotProcessExited(KProcess *)
 }
 
 
-void ProcessView::mouseReleaseEvent(QMouseEvent *e)
+void ProcessView::insert(const QString &line)
 {
-    int row, col;
-    QMultiLineEdit::mouseReleaseEvent(e);
-    getCursorPosition(&row, &col);
-    emit rowSelected(row);
+    insertItem(line);
 }

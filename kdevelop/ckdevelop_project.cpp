@@ -28,7 +28,7 @@
 #include "cclassview.h"
 #include "crealfileview.h"
 #include "clogfileview.h"
-#include "processview.h"
+#include "makeview.h"
 #include "ceditwidget.h"
 #include "cprjoptionsdlg.h"
 #include "caddexistingfiledlg.h"
@@ -517,14 +517,16 @@ void CKDevelop::slotProjectOpen(){
     KMessageBox::sorry(0, i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
                                "Please use only new generated projects!"));
     readProjectFile(old_project);
-		slotViewRefresh();
     }
-  	else
-			slotViewRefresh();
+    slotViewRefresh();
 
     slotStatusMsg(i18n("Ready."));
-  }	
+
+    QListIterator<Component> it(components);
+    for ( ; it.current(); ++it)
+        (*it)->projectOpened(prj);
   
+  }	
   
 }
 
@@ -679,8 +681,6 @@ void CKDevelop::slotProjectAPI(){
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
 
-#if 1
-  //#ifdef WITH_KDOC2
   config->setGroup("Doc_Location");
   QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
   if (idx_path.isEmpty())
@@ -720,78 +720,9 @@ void CKDevelop::slotProjectAPI(){
           (*messages_widget) << link;
       }
 
-#else
- 
-  config->setGroup("Doc_Location");
-  QString doc_kde=config->readEntry("doc_kde");
-  QString qt_ref_file=doc_kde+"kdoc-reference/qt.kdoc";
-  QString kde_ref_file=doc_kde+"kdoc-reference/kdecore.kdoc";
-  QString khtmlw_ref_file=doc_kde+"kdoc-reference/khtmlw.kdoc";
-
-	QStrList headerlist(prj->getHeaders());
-	uint i;
-
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-	QString dir=QDir::currentDirPath();
-  uint dirlength=dir.length()+1;
-
-  shell_process.clearArguments();
-
-  if( !QFileInfo(kde_ref_file).exists()){
-    shell_process << "kdoc";
-    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-//    shell_process << "*.h";
-    shell_process << prj->getProjectName();
-		for (i=0; i < headerlist.count(); i++){
-			QString file=headerlist.at(i);
-			QString header=file.remove(0,dirlength);
-			shell_process << header;
-			shell_process << " ";
-		}
-  }
-  else if(!QFileInfo(qt_ref_file).exists()){
-    shell_process << "kdoc";
-    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
-    shell_process << "-L" + doc_kde + "kdoc-reference";
-    shell_process << prj->getProjectName();
-		for (i=0; i < headerlist.count(); i++){
-			QString file=headerlist.at(i);
-			QString header=file.remove(0,dirlength);
-			shell_process << header;
-			shell_process << " ";
-		}
-		if(!QFileInfo(khtmlw_ref_file).exists()){
-    	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
-		}
-		else{
-    	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-		}
-  }
-  else{
-    shell_process << "kdoc";
-    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
-    shell_process << "-L" + doc_kde + "kdoc-reference";
-    shell_process << prj->getProjectName();
-		for (i=0; i < headerlist.count(); i++){
-			QString file=headerlist.at(i);
-			QString header=file.remove(0,dirlength);
-			shell_process << header;
-			shell_process << " ";
-		}
-		if(!QFileInfo(khtmlw_ref_file).exists()){
-    	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
-		}
-		else{
-    	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
-		}
-  }
-  
-#endif
-  
   messages_widget->startJob();
 }
+
 
 void CKDevelop::slotProjectManual(){
 

@@ -34,6 +34,15 @@ public:
   static QString findProgram(QString name);
 
   static QString locatehtml(const QString &filename);
+
+  /** Change a text string for search in a way,
+   *  which makes it useable for a regular expression search.
+   *  This means converting reg. exp. special chars like $, [, !, ecc.
+   *  to \$, \[, \!
+   *  @param szOldString   the string, you want to convert.
+   *  @param bForGrep      special handling for using resultstring with grep
+   */
+  static QString escapetext(const char *szOldText, bool bForGrep);
 };
 
 #endif

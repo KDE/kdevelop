@@ -19,6 +19,8 @@
 #ifndef CKDEVELOP_H
 #define CKDEVELOP_H
 
+#define NO_KIO_COMPATABILITY
+
 //#ifdef HAVE_CONFIG_H
 //#include <config.h>
 //#endif
@@ -51,28 +53,25 @@ class QSplitter;
 class CDocBrowser;
 class CClassView;
 class DocTreeView;
-class ProcessView;
+class MakeView;
+class GrepView;
 class CRealFileView;
 class CLogFileView;
 class KSwallowWidget;
 class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
-class GrepDialog;
 class CEditWidget;
 #include "component.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
 #include "ckdevaccel.h"
-//#include "crealfileview.h"
-//#include "clogfileview.h"
 #include "ctreehandler.h"
 #include "cproject.h"
 #include "cimport.h"
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
-//#include "./classparser/ParsedClass.h"
 
 class CParsedMethod;
 class CParsedClass;
@@ -108,15 +107,6 @@ public:
    *  @param filename           The filename you want to remove.
    */
   void removeFileFromEditlist(const char *filename);
-
-  /** Change a text string for search in a way,
-   *  which makes it useable for a regular expression search.
-   *  This means converting reg. exp. special chars like $, [, !, ecc.
-   *  to \$, \[, \!
-   *  @param szOldString   the string, you want to convert.
-   *  @param bForGrep      special handling for using resultstring with grep
-   */
-  QString realSearchText2regExp(const char *szOldString, bool bForGrep=false);
 
   /** syncs modified-flag in edit_info-structs
    *
@@ -462,7 +452,7 @@ public:
 
   void slotHelpDlgNotes();
 
-  void slotGrepDialogItemSelected(QString filename,int linenumber);
+  void slotGrepDialogItemSelected(const QString &filename,int linenumber);
   
   ////////////////////////
   // KDlgEdit-View-Menu entries -- managed by kdevelop
@@ -815,7 +805,9 @@ private:
   DocTreeView* doc_tree;
   
   /** Output from the compiler ... */
-  ProcessView* messages_widget;
+  MakeView *messages_widget;
+  /** Output from grep */
+  GrepView *grepview;
   /** stdin and stdout output. */
   COutputWidget* stdin_stdout_widget;
   /** stderr output. */
@@ -855,7 +847,7 @@ private:
 //   QString make_with_cmd;
 
   CAddExistingFileDlg* add_dlg;
-  GrepDialog* grep_dlg;
+  //  GrepDialog* grep_dlg;
 
   int lasttab;
   QString lastfile;

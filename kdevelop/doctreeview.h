@@ -43,7 +43,7 @@ public:
     ~DocTreeView();
 
     void refresh(CProject *prj);
-    QString selectedText();
+    //    QString selectedText();
 
     virtual void docPathChanged();
 
@@ -51,6 +51,7 @@ protected slots:
     void slotAddDocumentation();
     void slotRemoveDocumentation();
     void slotDocumentationProp();
+    void slotConfigureKDELibs();
 
     void slotSelectionChanged(QListViewItem *item);
     void slotRightButtonPressed(QListViewItem *item, const QPoint &p, int);

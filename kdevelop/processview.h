@@ -16,19 +16,25 @@
 #ifndef PROCESSVIEW_H
 #define PROCESSVIEW_H
 
-#include <qmultilineedit.h>
+#include <qlistbox.h>
 #include "component.h"
 
 class KProcess;
 
 
-class ProcessView : public QMultiLineEdit, public Component
+class ProcessView : public QListBox, public Component
 {
     Q_OBJECT
 public:
     ProcessView(QWidget *parent, const char *name=0);
     ~ProcessView();
-    
+
+    /**
+     * Inserts one line into the listbox. This can
+     * be overridden by subclasses to implement
+     * syntax highlighting.
+     */
+    virtual void insert(const QString &line);
     /**
      * Clears the child process's arguments and changes
      * into the directory dir.
@@ -46,22 +52,18 @@ public:
      * Sets the next argument for the child process.
      */
     KProcess &operator<<(const QString& arg);
-    
-    virtual void projectClosed();
-    
+
 signals:
     void processExited(KProcess *); 
     void rowSelected(int row);
 
 protected slots:
-  void slotReceivedOutput(KProcess*,char*,int);
-  void slotProcessExited(KProcess*);
-
-protected:
-  virtual void mouseReleaseEvent(QMouseEvent* event);
+    void slotReceivedOutput(KProcess*, char*, int);
+    void slotProcessExited(KProcess*);
 
 private:
     KProcess *childproc;
+    QString buf;
 };
 
 #endif

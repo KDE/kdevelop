@@ -76,4 +76,15 @@ private:
     QString idnt;
 };
 
+
+class KCheckListItem : public QCheckListItem
+{
+public: 
+    KCheckListItem( QListView *parent, const char *text, const char *id );
+    QString ident() const
+	{ return idnt; }
+    
+private:
+    QString idnt;
+};
 #endif

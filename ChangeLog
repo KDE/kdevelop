@@ -1,3 +1,11 @@
+1999-10-12  Bernd Gehrmann <bernd@physik.hu-berlin.de>
+	* The revolutionary new GrepView with syntax-highlighting :-)
+        * In the doc tree, show only existing libraries
+        * First steps for a fully configurable doc tree
+        * General cleanup and removing kdoc1 stuff
+        * ProcessView (baseclass for MakeView and GrepView)
+          now inherits QListBox
+
 1999-10-08 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* sync following modified patches from KDEVELOP_1_0 to HEAD
 	  - Untitled.h problem on closing project

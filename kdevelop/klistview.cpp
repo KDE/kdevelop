@@ -64,3 +64,8 @@ void KListViewItem::insertItem(QListViewItem *item)
     last = item;
     QListViewItem::insertItem(item);
 }
+
+
+KCheckListItem::KCheckListItem(QListView *parent, const char *text, const char *id)
+    : QCheckListItem(parent, text, QCheckListItem::CheckBox), idnt(id)
+{}

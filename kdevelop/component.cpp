@@ -5,6 +5,14 @@ void Component::docPathChanged()
 {
 }
 
+void Component::compilationAborted()
+{
+}
+
+void Component::projectOpened(CProject *prj)
+{
+}
+
 void Component::projectClosed()
 {
 }

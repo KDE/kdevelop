@@ -40,9 +40,10 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputw
 	caddclassmethoddlg.cpp caddclassattributedlg.cpp \
 	cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
 	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
-	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
+	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp \
 	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp processview.cpp \
-	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp ckdevaccel.cpp
+	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp \
+	doctreeconfdlg.cpp grepview.cpp makeview.cpp grepdlg.cpp ckdevaccel.cpp
 
 kdevelop_METASOURCES = AUTO
 # the library search path. 
@@ -63,9 +64,10 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	caddclassmethoddlg.h caddclassattributedlg.h \
 	cclasstooldlg.h cclasstreehandler.h ctreehandler.h \
 	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
-	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h \
+	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
-	cmakemanualdlg.h klistview.h component.h processview.h ckdevaccel.h
+	cmakemanualdlg.h klistview.h component.h processview.h grepview.h \
+	makeview.h grepdlg.h doctreeconfdlg.h ckdevaccel.h
 
 EXTRA_DIST = kdeveloprc \
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \

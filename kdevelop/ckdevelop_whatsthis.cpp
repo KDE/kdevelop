@@ -23,7 +23,7 @@
 #include "crealfileview.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
-#include "processview.h"
+#include "makeview.h"
 #include "ceditwidget.h"
  
 void CKDevelop::initWhatsThis(){

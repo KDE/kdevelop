@@ -1,3 +1,6 @@
+#include <qstringlist.h>
+
+
 // Whoa, this is really a hack to avoid a nameclash with
 // the StringTokenizer class in khtml. 
 
@@ -20,3 +23,6 @@ protected:
     char *buffer;
     int  bufLen;
 };
+
+
+QStringList QStringListsplit( const QString &sep, const QString &str );
