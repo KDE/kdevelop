@@ -118,7 +118,7 @@ void DiffDlg::openURL( const KURL& url )
   if ( job )
     job->kill();
 
-  KIO::TransferJob* job = KIO::get( "/home/harry/temp/coutputwidget.patch" );
+  KIO::TransferJob* job = KIO::get( url );
   if ( !job )
     return;
 
