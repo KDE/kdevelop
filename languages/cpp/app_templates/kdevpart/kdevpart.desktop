@@ -6,6 +6,7 @@ Comment=$APPNAME$
 Comment[xx]=xx$APPNAME$xx
 Name=KDev$APPNAME$
 Name[sv]=KDevelop $APPNAME$
+Name[ta]=கெடெவ் $APPNAME$
 Name[xx]=xxKDev$APPNAME$xx
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin

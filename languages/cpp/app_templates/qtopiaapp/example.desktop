@@ -14,6 +14,7 @@ Comment[pt_BR]=Um Programa $APPNAME$
 Comment[ru]=Программа $APPNAME$
 Comment[sr]=$APPNAME$ програм
 Comment[sv]=Ett $APPNAME$-program
+Comment[ta]=ஒரு $APPNAME$  நிரல் 
 Comment[xx]=xxAn $APPNAME$ Programxx
 Comment[zh_CN]=一个$APPNAME$程序
 Exec=$APPNAMELC$

@@ -20,6 +20,7 @@ Comment[zh_CN]=文件创建
 Name=KDevFileCreate
 Name[de]=Dateierstellungs-Komponente (KDevelop)
 Name[sv]=KDevelop skapa filer
+Name[ta]=KDev உருவாக்கப்பட்ட கோப்பு
 Name[xx]=xxKDevFileCreatexx
 GenericName=FileCreate
 GenericName[ca]=Creació de fitxers
