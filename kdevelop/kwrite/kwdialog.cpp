@@ -261,7 +261,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt1 = new QCheckBox(i18n("Auto &Indent"),group);
   opt2 = new QCheckBox(i18n("&Backspace Indent"),group);
   opt3 = new QCheckBox(i18n("&Word Wrap"),group);
-  opt4 = new QCheckBox(i18n("Replace &Tabs"),group);
+  opt4 = new QCheckBox(i18n("&Replace Tabs"),group);
   opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),group);
   opt6 = new QCheckBox(i18n("Wrap &Cursor"),group);
   opt7 = new QCheckBox(i18n("&Auto Brackets"),group);
@@ -298,7 +298,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt10 = new QCheckBox(i18n("&Vertical Selections"),group);
   opt11 = new QCheckBox(i18n("&Delete On Input"),group);
   opt12 = new QCheckBox(i18n("&Toggle Old"),group);
-  opt13 = new QCheckBox(i18n("&Auto Copy"),group);
+  opt13 = new QCheckBox(i18n("A&uto Copy"),group);
 
   opt8->setChecked(flags & cfPersistent);
   opt9->setChecked(flags & cfKeepSelection);
