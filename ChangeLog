@@ -1,3 +1,7 @@
+2002-12-26 Caleb Tennis <caleb@aei-tech.com>
+	* Get AppWizard name and email settings from KDE emaildefaults
+          file if it's available
+
 2002-12-23 Caleb Tennis <caleb@aei-tech.com>
 	* Fixed bugs with python support; patches by Julian Rockney
 	  (linux@jrockney.com)
