@@ -300,6 +300,10 @@ QString TrollProjectPart::runDirectory() const
     if (pos != -1)
         return buildDirectory() + "/" + DomMainProgram.left(pos);
 
+    if ( DomMainProgram.isEmpty() )
+    {
+        return m_widget->subprojectDirectory();
+    }
     return buildDirectory() + "/" + DomMainProgram;
 
 }
@@ -324,13 +328,18 @@ QString TrollProjectPart::mainProgram(bool relative) const
     if ( directoryRadioString == "custom" )
         return DomMainProgram;
 
-    if ( relative == false )
+    if ( relative == false && !DomMainProgram.isEmpty() )
         return buildDirectory() + "/" + DomMainProgram;
 
     if ( directoryRadioString == "executable" ) {
         int pos = DomMainProgram.findRev('/');
         if (pos != -1)
             return DomMainProgram.mid(pos+1);
+
+        if ( DomMainProgram.isEmpty() )
+        {
+            return runDirectory() + "/" + m_widget->getCurrentOutputFilename();
+        }
         return DomMainProgram;
     }
     else
