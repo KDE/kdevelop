@@ -652,6 +652,7 @@ void CClassParser::parseMethodImpl(bool isOperator)
   }
   else
   {
+    // Add all symbols until we find the operator keyword.
     while( lexemStack.top()->type != CPOPERATOR )
     {
       aLexem = lexemStack.pop();
@@ -663,8 +664,11 @@ void CClassParser::parseMethodImpl(bool isOperator)
     delete lexemStack.pop();
   }
 
+  // Remove strange things until we find a '::'
+  while( lexemStack.top()->type != CLCL )
+    delete lexemStack.pop();
+
   // Delete '::'
-  assert( lexemStack.top()->type == CLCL );
   aLexem = lexemStack.pop();
   delete aLexem;
 
