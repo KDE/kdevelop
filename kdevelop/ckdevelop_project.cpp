@@ -407,7 +407,7 @@ QString CKDevelop::prepareConfigureCommand()
         shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
       }
     
-      shellcommand += "LDFLAGS=\" " + ldflags+ "\" " ;
+      shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
       // the configure script is always in the project directory, no matter where we are
     
       args=m_pKDevSession->getConfigureArgs( (*it) ).simplifyWhiteSpace();
@@ -453,7 +453,7 @@ QString CKDevelop::prepareConfigureCommand()
         shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
      }
     
-     shellcommand  += " LDFLAGS=\" " + ldflags + "\" ";
+     shellcommand  += " LDFLAGS=\"" + ldflags + "\" ";
      // the configure script is always in the project directory, no matter where we are
      args=prj->getConfigureArgs();
      shellcommand += "./configure " + args;
@@ -508,7 +508,7 @@ void CKDevelop::slotProjectOptions(){
       // or for all other configurations to update makefiles.
       QDir::setCurrent(prj->getProjectDir());
     
-      shellcommand=prepareConfigureCommand();
+      shellcommand+=prepareConfigureCommand();
       
       setToolMenuProcess(false);
       messages_widget->start();

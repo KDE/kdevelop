@@ -44,7 +44,7 @@ void CPrjAddOpts::initGUI()
     if (versionAvail)
       old_KDE_QT_ver=configureIn->getMacroParameter("^[\\s]*KDE_USE_QT");
   }
-  
+
   kde_qt_version_label->setEnabled(versionAvail);
   kde_qt_version->setEnabled(versionAvail);
   if (versionAvail)

@@ -2110,7 +2110,7 @@ void CKDevelop::RunConfigure(const QString &conf, bool ask){
      shellcommand += "CFLAGS=\"" + cflags + "\" ";
      shellcommand += "CXXFLAGS=\"" + cxxflags + " " + addcxxflags + "\" ";
  	}
-  shellcommand += "LDFLAGS=\" " + ldflags+ "\" " ;
+  shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
   // this check is only to handle a strange bug
   //   if vpath==project dir the rule for .ui files won't be accepted (Walter)
   if (vpath!=prj->getProjectDir())

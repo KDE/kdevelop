@@ -324,7 +324,7 @@ bool CPrjConfChange::isOptionEnabled(const QString &option, const QString &suffi
  */
 QString CPrjConfChange::getLine(const QString &regExpLine) const
 {
-  QString fullLine, result;
+  QString fullLine, result("");
   
   for (QStringList::ConstIterator it = content.begin(); it != content.end() && result.isEmpty(); ++it)
   {
@@ -358,7 +358,7 @@ bool CPrjConfChange::isLineAvailable(const QString &regExpLine) const
  */
 QString CPrjConfChange::getMacroParameter(const QString &regExpLine) const
 {
-  QString fullLine, result, rxLine(regExpLine);
+  QString fullLine, result(""), rxLine(regExpLine);
   KDevRegExp rx;
   
   if (rxLine.findRev("\\(")==-1)
