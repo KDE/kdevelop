@@ -21,7 +21,14 @@
 </authorgroup>
 
 <date>21/03/00</date> 
-<releaseinfo>1.2.0</releaseinfo>
+<releaseinfo>1.02.00</releaseinfo>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KDevelop</keyword>
+<keyword>application tutorials</keyword>
+</keywordset>
+
 <abstract>
 <para>The KDE Application Tutorials Handbook for the KDevelop Integrated
 Development Environment, a tutorial collection on how to create KDE applications
