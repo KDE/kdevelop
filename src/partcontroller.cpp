@@ -17,6 +17,7 @@
 #include <kmainwindow.h>
 
 #include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/popupmenuinterface.h>
 
 
 #include "toplevel.h"
@@ -225,6 +226,13 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
   m_partList.append(new PartListEntry(part, url));
 
   addPart(part);
+
+  if (part->inherits("KTextEditor::Document") && part->widget())
+  {
+    KTextEditor::PopupMenuInterface *iface = dynamic_cast<KTextEditor::PopupMenuInterface*>(part->widget());
+    if (iface)
+      iface->installPopup((QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main()));
+  }
 }
 
 

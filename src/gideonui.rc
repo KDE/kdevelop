@@ -63,6 +63,16 @@
     <Merge/>
   </Menu>
 </MenuBar>
+
+
+<Menu name="rb_popup">
+  <Merge/>
+  <Separator/>
+  <Action name="file_closewindow"/>
+  <Action name="file_closeother"/>
+</Menu>
+
+
 <ToolBar position="Top" iconText="IconOnly" noMerge="1" name="mainToolBar" fullWidth="false" >
   <Action name="project_open" />
   <Separator/>
