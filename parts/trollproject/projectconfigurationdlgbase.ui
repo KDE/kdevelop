@@ -289,6 +289,9 @@
                                 <property name="text">
                                     <string>Static library</string>
                                 </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
                             </widget>
                             <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
                                 <property name="name">
