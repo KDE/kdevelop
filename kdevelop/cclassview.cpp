@@ -39,6 +39,7 @@
 #include <qmessagebox.h>
 #include <qprogressdialog.h>
 #include <qstrlist.h>
+#include <qsortedlist.h>
 
 #include <time.h>
 #include <assert.h>
@@ -974,17 +975,15 @@ void CClassView::buildInitalClassTree()
 //	clock_t startClock = clock();
   QString str;
   CParsedClass *aPC;
-  QListViewItem *folder;
   QList<CParsedClass> *list;
-  QList<CParsedClass> *iterlist;
   QString projDir;
-  QDict< QList<CParsedClass> > dict;
-  QDictIterator< QList<CParsedClass> > dictI( dict );
+  QSortedList<CClassView::SubfolderClassList> listOfClassLists;
+  CClassView::SubfolderClassList* pCurClassList;
   QList<CParsedClass> rootList;
 
   kdDebug() << "buildInitalClassTree" << endl;
 
-  dict.setAutoDelete( true );
+  listOfClassLists.setAutoDelete(true);
 
   // Insert root item
   str = i18n( CLASSROOTNAME );
@@ -1022,29 +1021,48 @@ void CClassView::buildInitalClassTree()
       if (!str.isEmpty() && (str[0] == '/')) {
         str = str.remove( 0, 1 );
       }
-      iterlist = dict.find( str );
 
-      if( iterlist == NULL )
-      {
-        iterlist = new QList<CParsedClass>();
-        dict.insert( str, iterlist );
+      // search if a class list called contents of str already exists
+      QList<CParsedClass>* iterlist = 0L;
+      bool bFound = false;
+      for (pCurClassList = listOfClassLists.first(); !bFound && pCurClassList != 0; pCurClassList = listOfClassLists.next()) {
+        if (pCurClassList->subfolderName == str) {
+          bFound = true;
+          iterlist = pCurClassList->pClassList;
+        }
+      }
+      if (!iterlist) {
+        // must create a new class list
+        iterlist = new QList<CParsedClass>(); // will be deleted in destructor of pSCL
+        pCurClassList = new CClassView::SubfolderClassList( str, iterlist);
+        listOfClassLists.append(pCurClassList);
       }
 
-      iterlist->append( aPC );
+      iterlist->append(aPC);
     }
   }
 
   delete list;
 
+
   // Add all classes with a folder.
-  for( dictI.toFirst();
-       dictI.current();
-       ++dictI )
-  {
+  // (it's tricky: loop from end to start to ensure the folder items are above the class items)
+  listOfClassLists.sort();
+  for (pCurClassList = listOfClassLists.last(); pCurClassList != 0L; pCurClassList = listOfClassLists.prev()) {
     // Add folder.
-    folder = treeH->addItem( dictI.currentKey(), THFOLDER, classesItem );
-    ((CClassTreeHandler *)treeH)->addClasses( dictI.current(), folder );
-    treeH->setLastItem( folder );
+    pCurClassList->pFolderItem = treeH->addItem(pCurClassList->subfolderName, THFOLDER, classesItem);
+    ((CClassTreeHandler *)treeH)->addClasses(pCurClassList->pClassList, pCurClassList->pFolderItem);
+  }
+
+  // set to last item for the classes without folder
+  QListViewItem* c = classesItem->firstChild();
+  QListViewItem* oldC = c;
+  while (c) {
+    oldC = c;
+    c = c->nextSibling();
+  }
+  if (oldC) {
+    treeH->setLastItem(oldC);
   }
 
   // Add all classes without a folder.

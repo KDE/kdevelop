@@ -252,12 +252,75 @@ QListViewItem *CTreeHandler::addItem( const char *aName,
   assert( aName != NULL );
   assert( parent != NULL );
 
-  QListViewItem *item = new QListViewItem( parent, lastItem, aName, label2, label3, label4, label5 );
-  //item->setText( 0, aName );
-  item->setPixmap( 0, *(getIcon( iconType )) );
+  QListViewItem* item = 0L;
+  QListViewItem* originalParent = parent;
 
-  // Save this as the last entry.
-  setLastItem( item );
+  if (iconType == THFOLDER) {
+    QString str = aName;
+    int pos = str.find('/');
+    QListViewItem* oldC = 0L;
+    while (!str.isEmpty()) {
+      // each subfolder gets an own tree entry, create them step by step
+      QString subfolderName;
+      if (pos == -1) {
+        subfolderName = str;
+      }
+      else {
+        subfolderName = str.left(pos);
+      }
+      if (!subfolderName.isEmpty()) {
+        // check if such subfolder already exists
+        bool bExists = false;
+        oldC = 0L;
+        QListViewItem* c = parent->firstChild();
+        while (c && !bExists) {
+          oldC = c;
+          QString curText = c->text(0);
+          if (curText == subfolderName) {
+            bExists = true; // ok, found; now also go to the last sibling of children of this
+            parent = c;
+            item = c;
+          }
+          else {
+            c = c->nextSibling();
+          }
+        }
+        // if no such subfolder exists, create it
+        if (!bExists) {
+          item = new QListViewItem( parent, subfolderName);
+          item->setPixmap( 0, *(icons[THFOLDER]) );
+          parent = item;
+        }
+        else if (subfolderName == str) {
+          // we're in the last loop step, now go to the right sibling for setLastItem
+          c = item->firstChild();
+          while (c) {
+            oldC = c;
+            c = c->nextSibling();
+          }
+        }
+      }
+      if (pos == -1) {
+        break;
+      }
+      str = str.right(str.length() - pos-1);
+      pos = str.find('/');
+    }
+    // set the last item to the belowest sibling
+    if (oldC) {
+      setLastItem(oldC);
+    }
+    else if (item) {
+      setLastItem(item);
+    }
+  }
+  else {
+    item = new QListViewItem( parent, lastItem, aName, label2, label3, label4, label5 );
+    //item->setText( 0, aName );
+    item->setPixmap( 0, *(getIcon( iconType )) );
+    // Save this as the last entry.
+    setLastItem( item );
+  }
 
   return item;
 }
