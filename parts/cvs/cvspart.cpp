@@ -255,15 +255,6 @@ bool CvsPart::Private::isRegisteredInRepository()
 
 	QString dirName = pathUrl.directory();
 	QString entriesFilePath = dirName + "/CVS/Entries";
-	// Lines in CVS/Entries are like:
-	//   /.cvsignore/1.3/Fri Aug 30 21:21:04 2002//
-	//   /Makefile.am/1.9/Sun Apr  6 16:52:14 2003//
-	// ...
-	// That is: <slash><filename><slash>...
-	// So we just properly "escape" the filename so that "Makefile" does not
-	// match with "Makefile.am" ;-)
-//	QString whatToSearch = "/" + pathUrl.fileName() + "/";
-//	QString whatToSearch = pathUrl.fileName();
 
 	kdDebug(9000) << "===> pathUrl.path()      = " << pathUrl.path() << endl;
 	kdDebug(9000) << "===> dirName             = " << dirName << endl;
@@ -275,15 +266,9 @@ bool CvsPart::Private::isRegisteredInRepository()
 	if (f.open( IO_ReadOnly ))
 	{
 		QTextStream t( &f );
-//		QString s;
 		CvsEntry cvsEntry;
-//		while (!t.eof() && !found)
 		while (cvsEntry.read( t ) && !found)
 		{
-//			s = t.readLine();
-//			kdDebug(9000) << "===> Analyzing line: " << s << endl;
-
-//			if (s.find( whatToSearch ) > -1)
 			if (cvsEntry.fileName == pathUrl.fileName())
 			{
 				kdDebug(9000) << "===> Wow!! *** Found it!!! *** " << endl;
