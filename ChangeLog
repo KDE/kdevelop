@@ -1,3 +1,7 @@
+2001-04-10  F@lk Brettschneider <falk@kdevelop.org>
+    * splitted tree tab view and output tab view into single tool views. Still unfinished, but ready to play with it.
+      (It's a trial. If that is too complex, maybe we could replace it by the old version again later. I hope we needn't to do that.)
+
 2001-04-08  F@lk Brettschneider <falk@kdevelop.org>
     * added MDI-view taskbar entry to "View" menu, actually it should work but it doesn't yet. :-( That taskbar problem will tear me down 6 foot deep...
 
