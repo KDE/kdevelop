@@ -25,6 +25,8 @@ public:
   void embedPartView(QWidget *view, const QString &title);
   void embedSelectView(QWidget *view, const QString &title);
   void embedOutputView(QWidget *view, const QString &title);
+  
+  void embedSelectViewRight ( QWidget* view, const QString& title );
 
   void removeView(QWidget *view);
 

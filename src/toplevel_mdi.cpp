@@ -186,6 +186,10 @@ void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
   m_selectViews.append(child);
 }
 
+void TopLevelMDI::embedSelectViewRight ( QWidget* view, const QString& title )
+{
+	return;
+}
 
 void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 {

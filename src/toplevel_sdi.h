@@ -26,6 +26,8 @@ public:
   void embedPartView(QWidget *view, const QString &title);
   void embedSelectView(QWidget *view, const QString &title);
   void embedOutputView(QWidget *view, const QString &title);
+  
+  void embedSelectViewRight ( QWidget* view, const QString& title );
 
   void removeView(QWidget *view);
 
@@ -73,7 +75,7 @@ private:
   KAction* m_stopProcesses;
 
   QTabWidget *m_tabWidget;
-  KTabZoomWidget *m_leftBar, *m_bottomBar;
+  KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;
 
   bool m_closing;
 

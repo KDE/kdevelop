@@ -15,6 +15,7 @@
 #include <kkeydialog.h>
 
 #include "widgets/ktabzoomwidget.h"
+#include "kdevplugin.h"
 
 
 #include "projectmanager.h"
@@ -91,12 +92,16 @@ void TopLevelSDI::createFramework()
   m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
   m_leftBar->addContent(m_bottomBar);
 
-  m_tabWidget = new QTabWidget(m_bottomBar);
+  m_rightBar = new KTabZoomWidget ( m_bottomBar, KTabZoomPosition::Right );
+  m_bottomBar->addContent ( m_rightBar );
+
+  m_tabWidget = new QTabWidget(m_rightBar);
   m_tabWidget->setMargin(2);
 
   PartController::createInstance(m_tabWidget);
 
   m_bottomBar->addContent(m_tabWidget);
+  m_rightBar->addContent ( m_tabWidget );
 
   connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)), 
 	  PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
@@ -156,6 +161,10 @@ void TopLevelSDI::embedSelectView(QWidget *view, const QString &name)
   m_leftBar->addTab(view, name);
 }
 
+void TopLevelSDI::embedSelectViewRight ( QWidget* view, const QString& title )
+{
+	m_rightBar->addTab ( view, title );
+}
 
 void TopLevelSDI::embedOutputView(QWidget *view, const QString &name)
 {

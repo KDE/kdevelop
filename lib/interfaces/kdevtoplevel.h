@@ -12,6 +12,8 @@ public:
   virtual void embedPartView(QWidget *view, const QString &title) = 0;
   virtual void embedSelectView(QWidget *view, const QString &title) = 0;
   virtual void embedOutputView(QWidget *view, const QString &title) = 0;
+  
+  virtual void embedSelectViewRight ( QWidget* view, const QString& title ) = 0;
 
   virtual void removeView(QWidget *view) = 0;
 
