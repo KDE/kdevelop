@@ -1,5 +1,6 @@
 2003-07-19 Andras Mantia <amantia@freemail.hu>
     * apply the editor settings to the opened files
+    * don't crash on exit [#60658]
 
 2003-07-15 Andras Mantia <amantia@freemail.hu>
     * resolve links before opening a local file

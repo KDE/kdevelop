@@ -25,6 +25,7 @@
 
 #include <qdatetime.h>
 #include <qmap.h>
+#include <qguardedptr.h>
 
 
 class KTabZoomWidget;
@@ -70,7 +71,7 @@ protected:
    /**
    * Pointer to the Window menu. SDI specific. MDI uses the feature of qextmdimainfrm.
    */
-   QPopupMenu              *m_pWindowMenu;
+   QGuardedPtr<QPopupMenu> m_pWindowMenu;
 
 public slots:
 
