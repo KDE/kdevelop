@@ -55,6 +55,7 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), this, SLOT(refreshFileList()) );
 
+        setItemMargin(10);
 	refreshFileList();
 }
 
