@@ -604,8 +604,8 @@ CppCodeCompletion::completeText( )
     QString expr, word;
 
     // sync
-    while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
-         m_pSupport->backgroundParser()->isEmpty().wait();
+    //while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
+    //     m_pSupport->backgroundParser()->isEmpty().wait();
 
     m_pSupport->backgroundParser()->lock();
     AST* ast = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
