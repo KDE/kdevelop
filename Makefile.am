@@ -8,8 +8,7 @@ appsdir = $(kde_appsdir)/Development
 mime_DATA = x-kdevelop.desktop
 mimedir = $(kde_mimedir)/application
 
-utils_SCRIPTS = kdevprj2kdevelop
-utilsdir = $(kde_bindir)
+kde_bin_SCRIPTS = kdevprj2kdevelop
 
 install-data-local:
 	@echo ""
@@ -24,14 +23,7 @@ install-data-local:
 	@echo ""
 	@echo "***************************************************"
 
-$(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
-	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in
-
-$(top_srcdir)/subdirs:
-	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common subdirs
-
-$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/kdevelop.m4.in
-	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in kdevelop.m4.in > acinclude.m4
+$(top_srcdir)/acinclude.m4: $(top_srcdir)/kdevelop.m4.in
 
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files
 
@@ -59,4 +51,7 @@ messages:
 	$(EXTRACTRC) `find $$dirs -maxdepth 1 -name "*.ui"` >> rc.cpp    ;\
 	$(XGETTEXT) rc.cpp `cat files` -o $(podir)/kdevelop.pot
 	@rm -f rc.cpp dirs files
+
+$(top_srcdir)/Makefile.am.in: # faking
+include admin/deps.am
 
