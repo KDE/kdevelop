@@ -1,6 +1,8 @@
 2003-05-21 Roberto Raggi <roberto@kdevelop.org>
     * implemented the support for profiles
     * ported kate file selector to kdevelop
+    * added documentation hint to c++ support, patch provided
+      by Jonas B. Jacobi <jonas.jacobi@web.de>
 
 2003-05-18 Alexander Dymo <cloudtemple@mksat.net>
     * Reformat source option is now available in the "Subclassing" wizard
