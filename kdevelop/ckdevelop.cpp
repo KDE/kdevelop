@@ -1156,8 +1156,11 @@ void CKDevelop::slotOptionsKDevelop(){
 
   CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
   setup->show();
-	accel->readSettings();
-	setKeyAccel();
+  if (setup->hasChangedPath())
+    doc_tree->refresh(prj);
+
+  accel->readSettings();
+  setKeyAccel();
   slotStatusMsg(i18n("Ready."));
 }
 // slots needed by the KDevelop Setup
@@ -1213,6 +1216,12 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   if(dlg.exec()){
     slotStatusMsg(i18n("Generating Documentation..."));
     setToolMenuProcess(false);
+    if (dlg.isUpdated())
+    {
+        config->writeEntry("doc_kde",dlg.getDocPath());
+        config->sync();
+        doc_tree->refresh(prj);
+    }
   }
 }
 void CKDevelop::slotOptionsCreateSearchDatabase(){
