@@ -331,7 +331,7 @@ private:
   QList<QextMdiChildView>   m_MDICoverList;
 
   CKDevelop*                m_pParent;
-  HlManager                 m_highlightManager;
+  //HlManager                 m_highlightManager;
 
   QStrList                  m_docBookmarksList;
   QStrList                  m_docBookmarksTitleList;
