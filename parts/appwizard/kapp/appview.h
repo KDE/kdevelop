@@ -23,7 +23,7 @@ class KURL;
  * @author $AUTHOR$ <$EMAIL$>
  * @version $VERSION$
  */
-class $APPNAME$View : public QWidget, virtual public $APPNAME$Iface
+class $APPNAME$View : public QWidget, public $APPNAME$Iface
 {
     Q_OBJECT
 public:
