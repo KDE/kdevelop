@@ -114,14 +114,18 @@ QString ExitStatusItem::text( EOutputLevel )
 
 bool DirectoryItem::m_showDirectoryMessages = true;
 
-QString EnteringDirectoryItem::text( EOutputLevel )
+QString EnteringDirectoryItem::text( EOutputLevel outputLevel )
 {
-	return i18n("Entering directory %3").arg( directory );
+	if ( outputLevel < eFull )
+		return i18n("Entering directory %3").arg( directory );
+	return m_text;
 }
 
-QString ExitingDirectoryItem::text( EOutputLevel )
+QString ExitingDirectoryItem::text( EOutputLevel outputLevel )
 {
-	return i18n("Leaving directory %3").arg( directory );
+	if ( outputLevel < eFull )
+		return i18n("Leaving directory %3").arg( directory );
+	return m_text;
 }
 
 QString ActionItem::text( EOutputLevel outputLevel )
