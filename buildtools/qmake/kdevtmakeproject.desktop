@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=TMake Project
+Comment[br]=Rektras TMake
 Comment[ca]=Projecte TMake
 Comment[da]=TMake projekt
 Comment[de]=TMake-Projekt für KDevelop
