@@ -1,0 +1,20 @@
+Source: kdevelop
+Section: contrib/devel
+Priority: extra
+Maintainer: Bernd Gehrmann <bernd@physik.hu-berlin.de>
+Standards-Version: 2.3.0.0
+
+Package: kdevelop
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: make
+Suggests: qt-dev, qt-doc, kdelibs2g-dev, autoconf, automake, glimpse
+Description: An IDE for Unix/X11
+ KDevelop is an easy to use Integrated Development Environment
+ for developping C/C++ applications under X11. It features 
+ project management, an advanced editor and a class browser.
+ Moreover, a dialog builder for Qt/KDE and a documentation 
+ browser is integrated.
+ .
+ The application wizard can generate fully functional frameworks
+ for terminal programs, Qt-based or KDE applications.

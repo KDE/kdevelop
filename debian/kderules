@@ -1,0 +1,143 @@
+#!/usr/bin/perl -w
+
+use Shell qw(mv cp mkdir rm) ;
+use File::Find;
+
+open(CHANGELOG,"debian/changelog") 
+	or die "can't read debian/changelog : $!\n";
+$_ = <CHANGELOG>;
+close(CHANGELOG);
+/^(.*) \((.*)\) /;
+$package = $1;
+
+# Find documentation and install it
+sub docwanted {
+	if ($File::Find::dir =~ /debian/) { return 0 ; }
+	/debian/ or /INSTALL/ and return 0 ;
+	/COPYING/ and return ;
+	if ( (! /CVS/ )
+	and ( /^[A-Z]*$/ or /^README$/ or /^ChangeLog$/ or /lsm$/ or /SWALLOW/
+	or /^TODO$/ or /^kdedoc/ or /Header/ or /Documentation/ or /Tutorial/ ) )
+	{	push @docs, "$File::Find::dir/$_" ;
+	}
+}
+
+find(\&docwanted,".");
+
+if (! -d "debian/tmp/usr/doc/$package") {
+	mkdir("-p", "debian/tmp/usr/doc/$package") ;
+}
+
+if (! -d "debian/tmp/usr/X11R6/include/X11/pixmaps") {
+       mkdir("-p", "debian/tmp/usr/X11R6/include/X11/pixmaps");
+}
+
+cp( "-aP", @docs, "debian/tmp/usr/doc/$package") ;
+
+
+# Create doc-base file
+
+if (-d "debian/doc-base") {
+        if (! -d "debian/tmp/usr/share/doc-base") {
+                  mkdir("-p", "debian/tmp/usr/share/doc-base");
+        }
+        cp( "-a", <debian/doc-base/*>, "debian/tmp/usr/share/doc-base") ;
+}
+
+
+# Create applnk files  
+
+sub findkdelnk {
+	/\.kdelnk$/ && push @lnkfiles, "$File::Find::dir/$_" ;
+}
+
+if (-d "debian/tmp/usr/share/applnk") {
+	find(\&findkdelnk,"debian/tmp/usr/share/applnk");
+}
+
+
+# Create debian/menu files    
+
+if (-e "debian/menu.in") {
+	open MENUIN, "debian/menu.in" ;
+	while (<MENUIN>) {
+		chop ;
+		($prog,$type,$sect) = split / /;
+		$type{$prog}=$type;
+		$sect{$prog}=$sect;
+	}
+	close MENUIN;
+}
+
+open MENU, ">debian/menu" or die "can't open debian/menu : $!\n";
+
+foreach $file (@lnkfiles) {
+	open KDELNK, $file;
+	undef %kdelnk;
+	while (<KDELNK>) {
+		/^#/ && next ;
+		/^\[KDE Desktop Entry\]/ && next ;
+		/^\s*$/ && next ;
+		chop ;
+		($what,$value) = split /=/ ;
+		$kdelnk{ucfirst lc $what}=$value;
+	}
+	close KDELNK;
+	if (defined $kdelnk{"Type"}) {
+		if ($kdelnk{"Type"} ne "Application" ) {
+			print "Type is not Application : $file !\n" ;
+			next ;
+		}
+	} else {
+		print "has no Type= defaults to Application : $file !\n" ;
+	}
+	if (! defined $kdelnk{"Exec"}) {
+		print "has no Exec= : $file !\n" ;
+		next ;
+	}
+	($prog,)=split / /, $kdelnk{"Exec"} ;
+	if (! defined($type{$prog})) {
+		open MENUIN, ">>debian/menu.in" ;
+		print MENUIN "$prog x11 SECTION\n";
+		close MENUIN;
+		next ;
+	}
+	if ($sect{$prog} eq "NONE") { next ; }
+	$icon="";
+	if (not defined $kdelnk{"Name"}) {
+		print "No Name : $package $kdelnk";
+		next ;
+	}
+	if (defined $kdelnk{"Icon"}) {
+   	        $icon=$kdelnk{"Icon"} ;
+		if (! -f "debian/tmp/usr/share/icons/$icon" ) {
+                   $icon="";
+	        } else {
+	          system("/usr/bin/X11/convert -map /usr/X11R6/include/X11/pixmaps/cmap.xpm debian/tmp/usr/share/icons/$icon debian/tmp/usr/X11R6/include/X11/pixmaps/$icon");
+	  	  $icon="/usr/X11R6/include/X11/pixmaps/" . $icon ;
+               }
+	}
+	($kdelnk=$file) =~ s/^.*tmp// ;
+	print MENU "?package($package):\\\n" ;
+	print MENU "	needs=$type{$prog}\\\n" ;
+	print MENU "	section=$sect{$prog}\\\n" ;
+	print MENU "	title=\"$kdelnk{Name}\"\\\n" ;
+	print MENU "	command=$prog\\\n" ;
+	print MENU "	icon=\"$icon\"\\\n" ;
+	print MENU "	kdelnk=$kdelnk\n\n" ;
+}
+
+if (-e "debian/menu.add") {
+	open MENUADD, "debian/menu.add" ;
+	while (<MENUADD>) {
+		print MENU $_ ;
+	}
+	close MENUADD;
+}
+
+close MENU;
+
+if (-z "debian/menu") {
+	rm("debian/menu");
+}
+

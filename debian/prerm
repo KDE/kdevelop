@@ -1,0 +1,8 @@
+#! /bin/sh
+if [ -x /usr/sbin/install-docs ]; then
+        /usr/sbin/install-docs -r kdevelop-tutorial
+        /usr/sbin/install-docs -r kdevelop-user
+fi
+
+exit 0
+

@@ -1,0 +1,9 @@
+kdevelop (990422-1) experimental; urgency=low
+
+  * Initial Release 
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Thu, 22 Apr 1999 20:33:18 +0200
+
+Local variables:
+mode: debian-changelog
+End:
