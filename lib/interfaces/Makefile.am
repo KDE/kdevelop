@@ -34,7 +34,7 @@ servicetype_DATA = kdevelopcompileroptions.desktop \
 		   kdevelopmakefrontend.desktop kdevelopappfrontend.desktop \
 		   kdevelopproject.desktop kdeveloplanguagesupport.desktop \
 		   kdevelopplugin.desktop kdevelopdifffrontend.desktop \
-		   kdevelopcreatefile.desktop
+		   kdevelopcreatefile.desktop kdevelopversioncontrol.desktop
 
 
 METASOURCES = AUTO
