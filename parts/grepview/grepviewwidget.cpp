@@ -158,9 +158,9 @@ void GrepViewWidget::searchActivated()
     filepattern += "'";
     if (!grepdlg->recursiveFlag())
         filepattern += " -maxdepth 1";
-    filepattern += " -name ";
+    filepattern += " \\( -name ";
     filepattern += files;
-    filepattern += "`";
+    filepattern += " \\) -print`";
 
     QString command = "grep -n -e ";
     command += KShellProcess::quote(pattern);
