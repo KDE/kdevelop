@@ -26,6 +26,8 @@ KDlgItem_PushButton::MyWidget::MyWidget(KDlgItem_PushButton* wid, QWidget* paren
 {
   parentObject = wid;
   isItemActive = false;
+  isMBPressed = false;
+  isMainwidget = false;
 }
 
 

@@ -29,22 +29,33 @@
 KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
   pCKDevel = CKPar;
-  treelist = new KTreeList( this, i18n("kdlgitems_treelist") );
+  treelist = new QListView( this );
 
-  treelist->setUpdatesEnabled( false );
+  treelist->setRootIsDecorated(true);
   treelist->clear();
+  treelist->addColumn(i18n("Widgets & Items"));
 
   KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
 
   folder_pix = icon_loader->loadMiniIcon("folder.xpm");
   entry_pix = icon_loader->loadMiniIcon("mini-default.xpm");
 
-  connect ( treelist, SIGNAL(highlighted (int)), SLOT(itemSelected(int)));
+  connect ( treelist, SIGNAL(selectionChanged ()), SLOT(itemSelected()));
 }
 
-KDlgItems::MyTreeListItem::MyTreeListItem(KDlgItem_Widget *itemp, const QString& theText , const QPixmap *thePixmap )
-  : KTreeListItem(theText,thePixmap)
+KDlgItems::MyTreeListItem::MyTreeListItem(MyTreeListItem* parent, KDlgItem_Widget *itemp, const QString& theText , const QPixmap *thePixmap )
+  : QListViewItem((QListViewItem*)parent)
 {
+  setText( 0, (const char*)theText );
+  setPixmap( 0, *thePixmap );
+  itemptr = itemp;
+}
+
+KDlgItems::MyTreeListItem::MyTreeListItem(QListView* parent, KDlgItem_Widget *itemp, const QString& theText , const QPixmap *thePixmap )
+  : QListViewItem(parent, (const char*)theText)
+{
+  setText( 0, (const char*)theText );
+  setPixmap( 0, *thePixmap );
   itemptr = itemp;
 }
 
@@ -52,12 +63,12 @@ KDlgItems::~KDlgItems()
 {
 }
 
-void KDlgItems::itemSelected (int index)
+void KDlgItems::itemSelected ()
 {
-  if (!treelist->getCurrentItem())
+  if (!treelist->currentItem())
     return;
 
-  KDlgItem_Widget *itm = ((MyTreeListItem*)treelist->getCurrentItem())->getItem();
+  KDlgItem_Widget *itm = ((MyTreeListItem*)treelist->currentItem())->getItem();
 
   if (!itm)
     return;
@@ -84,10 +95,10 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm)
   if (!itm)
     {
       s.sprintf("%s [%s]", (const char*)i18n("Main Widget"), (const char*)wd->getProps()->getProp("Name")->value);
-      item=new MyTreeListItem(wd, QString(s),&folder_pix);
       treelist->setUpdatesEnabled( FALSE );
       treelist->clear();
-      treelist->insertItem(item);
+      item=new MyTreeListItem(treelist, wd, QString(s),&folder_pix);
+      item->setOpen(true);
     }
 
 
@@ -102,14 +113,13 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm)
 
         if (w->getChildDb())
           {
-            MyTreeListItem *it=new MyTreeListItem((KDlgItem_Widget*)w,s,&folder_pix);
-            item->appendChild(it);
+            MyTreeListItem *it=new MyTreeListItem(item, (KDlgItem_Widget*)w,s,&folder_pix);
+            it->setOpen(true);
             addWidgetChilds((KDlgItem_Widget*)w, it);
           }
         else
           {
-            MyTreeListItem *it=new MyTreeListItem((KDlgItem_Widget*)w,s,&entry_pix);
-            item->appendChild(it);
+            (new MyTreeListItem(item, (KDlgItem_Widget*)w,s,&entry_pix))->setOpen(true);
           }
       }
 
@@ -120,7 +130,7 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm)
     {
 //      treelist->setExpandLevel(2);
       treelist->setUpdatesEnabled( TRUE );
-      treelist->expandItem(0);
+//      treelist->expandItem(0);
       treelist->repaint();
     }
 }

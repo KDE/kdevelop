@@ -25,6 +25,8 @@ KDlgItem_LineEdit::MyWidget::MyWidget(KDlgItem_LineEdit* wid, QWidget* parent, c
 {
   parentObject = wid;
   isItemActive = false;
+  isMBPressed = false;
+  isMainwidget = false;
   setCursor(arrowCursor);
 }
 

@@ -1,4 +1,12 @@
 1999-03-29 Pascal Krahmer <pascal@beast.de>
+        * fixed items behaviour. They don´t hide any more when moving the mouse pointer over it.
+        * added cursor changing capability. If the mouse pointer is moved over the rectangles
+          for resizing the cursor changes.
+        * changed items tab from KTreeList to QListView in order to have the same look&feel
+          as the rest of kdevelop commits.
+        * rulers also resize if the main widget is resized
+
+1999-03-29 Pascal Krahmer <pascal@beast.de>
         * items now are moveable and resizeable
 
 1999-03-29 Jonas Nordin <jonas.nordin@cenacle.se>

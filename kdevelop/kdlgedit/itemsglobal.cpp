@@ -18,6 +18,7 @@
 
 #include "itemsglobal.h"
 #include <kapp.h>
+#include <kcursor.h>
 #include <qmsgbox.h>
 #include "item_base.h"
 #include <qpainter.h>
@@ -312,6 +313,40 @@ bool KDlgItemsGetResizeCoords(int pressedEdge, int &x, int &y, int &w, int &h, i
   return noMainWidget;
 }
 
+void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge)
+{
+  switch (pressedEdge)
+    {
+      case RESIZE_TOP_LEFT:
+        caller->setCursor(KCursor::sizeFDiagCursor());
+        break;
+      case RESIZE_TOP_RIGHT:
+        caller->setCursor(KCursor::sizeBDiagCursor());
+        break;
+      case RESIZE_BOTTOM_LEFT:
+        caller->setCursor(KCursor::sizeBDiagCursor());
+        break;
+      case RESIZE_BOTTOM_RIGHT:
+        caller->setCursor(KCursor::sizeFDiagCursor());
+        break;
+      case RESIZE_MIDDLE_TOP:
+        caller->setCursor(KCursor::sizeVerCursor());
+        break;
+      case RESIZE_MIDDLE_BOTTOM:
+        caller->setCursor(KCursor::sizeVerCursor());
+        break;
+      case RESIZE_MIDDLE_LEFT:
+        caller->setCursor(KCursor::sizeHorCursor());
+        break;
+      case RESIZE_MIDDLE_RIGHT:
+        caller->setCursor(KCursor::sizeHorCursor());
+        break;
+      case RESIZE_MOVE:
+      default:
+        caller->setCursor(KCursor::arrowCursor());
+    };
+
+}
 
 void KDlgItemsPaintRects(QWidget *wid, QPaintEvent *e)
 {

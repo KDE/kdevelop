@@ -21,7 +21,7 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
-#include <ktreelist.h>
+#include <qlistview.h>
 
 //class KTreeList;
 //class KTreeListItem;
@@ -37,19 +37,20 @@ class KDlgItems : public QWidget  {
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 
-    class MyTreeListItem : public KTreeListItem
+    class MyTreeListItem : public QListViewItem
     {
       private:
       Q_OBJECT
       public:
-        MyTreeListItem (KDlgItem_Widget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
+        MyTreeListItem (QListView* parent, KDlgItem_Widget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
+        MyTreeListItem (MyTreeListItem* parent, KDlgItem_Widget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
         KDlgItem_Widget *getItem() { return itemptr; }
 
       protected:
         KDlgItem_Widget *itemptr;
     };
 
-    KTreeList *treelist;
+    QListView *treelist;
     QPixmap folder_pix;
     QPixmap entry_pix;
     CKDevelop *pCKDevel;
@@ -57,12 +58,12 @@ class KDlgItems : public QWidget  {
     KDlgItems(CKDevelop *CKPar, QWidget *parent=0, const char *name=0);
     ~KDlgItems();
 
-    KTreeList *getTreeList() { return treelist; }
+    QListView *getTreeList() { return treelist; }
 
     void addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm=0);
 
   public slots:
-    void itemSelected (int index);
+    void itemSelected ();
 };
 
 #endif

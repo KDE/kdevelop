@@ -33,6 +33,7 @@
 #include "defines_item.h"
 
 
+
 class KDlgItem_Widget : public KDlgItem_Base
 {
   Q_OBJECT

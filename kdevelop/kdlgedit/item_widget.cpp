@@ -28,6 +28,8 @@ KDlgItem_Widget::MyWidget::MyWidget( KDlgItem_Widget* wid, QWidget* parent , boo
   isItemActive = false;
   isMBPressed = false;
 
+  isMainwidget = isMainWidget;
+
   if (isMainWidget)
     setFrameStyle( QFrame::WinPanel | QFrame::Raised );
   else

@@ -19,11 +19,20 @@
 #ifndef KDLG_DEFINES_ITEM_H
 #define KDLG_DEFINES_ITEM_H
 
+#include <kcursor.h>
+
 #define MYITEMCLASS_BEGIN(mytype) protected: class MyWidget : public mytype {
 #define MYITEMCLASS_END };
 
 #define MYITEMCLASS_MOUSEMOVEEVENT \
   moveRulers(e); \
+  if (isItemActive) \
+    { \
+       int pE;\
+       if (isMBPressed) pE = pressedEdge; else pE = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height()); \
+       KDlgItemsSetMouseCursor(this, pE); \
+    } \
+  else setCursor(KCursor::arrowCursor()); \
   if ((!isMBPressed) || (e->pos() == lastPnt)) return; \
   int x = origRect.x(); \
   int y = origRect.y(); \
@@ -35,6 +44,7 @@
   noMainWidget = KDlgItemsGetResizeCoords(pressedEdge, x, y, w, h, diffx, diffy); \
   if ((!noMainWidget) || (!parentObject->isMainWidget)) \
     setGeometry(x,y,w,h); \
+  if (isMainwidget) { parentObject->getEditWidget()->verticalRuler()->setRange(0,h); parentObject->getEditWidget()->horizontalRuler()->setRange(0,w);} \
   lastPnt = e->pos();
 
 
@@ -48,6 +58,7 @@
    void select() { if (!isItemActive) { isItemActive = true; repaint(); } } \
    void selectMe() { parentObject->getEditWidget()->selectWidget((KDlgItem_Base*)parentObject); } \
  protected: \
+   bool isMainwidget; \
    wrappertype* parentObject; \
    bool isMBPressed; \
    QPoint startPnt, lastPnt; \
