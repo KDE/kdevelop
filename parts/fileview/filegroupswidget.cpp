@@ -217,11 +217,12 @@ void FileGroupsWidget::refresh()
 void FileGroupsWidget::addFile(const QString &fileName)
 {
     kdDebug(9017) << "FileView add " << fileName << endl;
-    
+
     QListViewItem *item = firstChild();
     while (item) {
         FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
-        if (fvgitem->matches(fileName)) {
+        if (fvgitem->matches(fileName))
+        {
             (void) new FileGroupsFileItem(fvgitem, fileName);
             fvgitem->sortChildItems(0, true);
             break;
@@ -232,48 +233,48 @@ void FileGroupsWidget::addFile(const QString &fileName)
 
 void FileGroupsWidget::addFiles ( const QStringList& fileList )
 {
-	QStringList::ConstIterator it;
-	
-	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-		this->addFile ( *it );
-	}
+    QStringList::ConstIterator it;
+
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+        this->addFile ( *it );
+    }
 }
 
 void FileGroupsWidget::removeFile(const QString &fileName)
 {
-	kdDebug(9017) << "FileView remove " << fileName << endl;
-	
-	QListViewItem *item = firstChild();
-	while (item)
-	{
-		FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
-		QListViewItem *childItem = fvgitem->firstChild();
-		while (childItem) 
-		{
-			FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(childItem);
-			kdDebug ( 9017 ) << "fvfitem->fileName() is " << fgfitem->fileName() << endl;
-			if (fgfitem->fileName() == fileName ) 
-			{
-				kdDebug ( 9017 ) << "Deleting: " << fgfitem->fileName() << endl;
-				
-				delete fgfitem;
-				return;
-			}
-			childItem = childItem->nextSibling();
-		}
-		item = item->nextSibling();
-	}
+    kdDebug(9017) << "FileView remove " << fileName << endl;
+
+    QListViewItem *item = firstChild();
+    while (item)
+    {
+        FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
+        QListViewItem *childItem = fvgitem->firstChild();
+        while (childItem)
+        {
+            FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(childItem);
+            kdDebug ( 9017 ) << "fvfitem->fileName() is " << fgfitem->fileName() << endl;
+            if (fgfitem->fileName() == fileName )
+            {
+                kdDebug ( 9017 ) << "Deleting: " << fgfitem->fileName() << endl;
+
+                delete fgfitem;
+                return;
+            }
+            childItem = childItem->nextSibling();
+        }
+        item = item->nextSibling();
+    }
 }
 
 void FileGroupsWidget::removeFiles ( const QStringList& fileList )
 {
-	QStringList::ConstIterator it;
-	
-	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-		removeFile ( *it );
-	}
+    QStringList::ConstIterator it;
+
+    for ( it = fileList.begin(); it != fileList.end(); ++it )
+    {
+        removeFile ( *it );
+    }
 }
 
 #include "filegroupswidget.moc"

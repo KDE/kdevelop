@@ -168,8 +168,8 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     setSorting(0);
     header()->hide();
     addColumn(QString::null);
-	setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
-	setDragEnabled( false );
+    setSelectionMode( QListView::Extended ); // Enable multiple items selection by use of Ctrl/Shift
+    setDragEnabled( false );
 
     m_part = part;
 
@@ -359,18 +359,18 @@ void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
 
 void FileTreeWidget::slotSelectionChanged()
 {
-	//FIXME: m_selectedItems will grow to the infinite: we must clean it up in some way!!!
+    //FIXME: m_selectedItems will grow to the infinite: we must clean it up in some way!!!
 
     kdDebug(9017) << "FileTreeWidget::slotSelectionChanged()" << endl;
 
-	// Check for this item
+    // Check for this item
     MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem*>( currentItem() );
     if (item->isSelected())
-	{
+    {
         if (m_selectedItems.find( item ) != -1)
         {
-           kdDebug(9017) << "Warning: Item " << item->path() << " is already present. Skipping." << endl;
-		   return;
+        kdDebug(9017) << "Warning: Item " << item->path() << " is already present. Skipping." << endl;
+        return;
         }
         m_selectedItems.append( item );
 
@@ -383,42 +383,42 @@ void FileTreeWidget::slotSelectionChanged()
         kdDebug(9017) << "Removed item: " << item->path() << " ( " << m_selectedItems.count() << " )" << endl;
     }
 
-	// Now we clean-up the selection of old elements which are no more selected.
-	// FIXME: Any better way?
-	QListViewItem *it = m_selectedItems.first();
-	while (it != 0)
-	{
-		if (!it->isSelected()) {
-			QListViewItem *toDelete = it;
-			it = m_selectedItems.next();
-			m_selectedItems.remove( toDelete );
-		}
-		else
-		{
-			it = m_selectedItems.next();
-		}
-	}
+    // Now we clean-up the selection of old elements which are no more selected.
+    // FIXME: Any better way?
+    QListViewItem *it = m_selectedItems.first();
+    while (it != 0)
+    {
+        if (!it->isSelected()) {
+            QListViewItem *toDelete = it;
+            it = m_selectedItems.next();
+            m_selectedItems.remove( toDelete );
+        }
+        else
+        {
+            it = m_selectedItems.next();
+        }
+    }
 }
 
 KURL::List FileTreeWidget::selectedPathUrls()
 {
     kdDebug(9017) << "FileTreeWidget::selectedPathUrls()" << endl;
 
-	QStringList pathUrls;
+    QStringList pathUrls;
 
-	// They should be all selected but I want to be sure about this.
-	MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem *>( m_selectedItems.first() );
-	while (item)
-	{
-		if (item->isSelected())
-		{
-			pathUrls << item->path();
-        	kdDebug(9017) << "Added path " << item->path() << endl;
-		}
-		item = static_cast<MyFileTreeViewItem *>( m_selectedItems.next() );
-	}
+    // They should be all selected but I want to be sure about this.
+    MyFileTreeViewItem *item = static_cast<MyFileTreeViewItem *>( m_selectedItems.first() );
+    while (item)
+    {
+        if (item->isSelected())
+        {
+            pathUrls << item->path();
+            kdDebug(9017) << "Added path " << item->path() << endl;
+        }
+        item = static_cast<MyFileTreeViewItem *>( m_selectedItems.next() );
+    }
 
-	return KURL::List( pathUrls );
+    return KURL::List( pathUrls );
 }
 
 #include "filetreewidget.moc"

@@ -26,19 +26,18 @@ public:
     FileGroupsWidget(FileGroupsPart *part);
     ~FileGroupsWidget();
     
-
 public slots:
     void refresh();
-	void addFiles ( const QStringList& fileList );
-	void removeFiles ( const QStringList& fileList );
-    
+    void addFiles ( const QStringList& fileList );
+    void removeFiles ( const QStringList& fileList );
+
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
 protected:
-	void addFile(const QString &fileName);
-	void removeFile(const QString &fileName);
+    void addFile(const QString &fileName);
+    void removeFile(const QString &fileName);
 
 private:
     FileGroupsPart *m_part;
