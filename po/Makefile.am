@@ -1,5 +1,9 @@
+####### kdevelop will overwrite this part!!! (begin)##########
 
-GMOFILES = de.gmo 
+
+####### kdevelop will overwrite this part!!! (end)############
+
+GMOFILES = da.gmo de.gmo es.gmo fr.gmo hu.gmo pl.gmo pt.gmo ru.gmo sk.gmo fi.gmo sv.gmo
 POFILES = $(GMOFILES:.gmo=.po) 
 
 localedir = $(kde_locale)
@@ -34,8 +38,8 @@ install-yes: all
 	lang=`echo $$cat | sed 's/\.gmo//'`; \
 	name=$(PACKAGE).mo \
 	dir=$$destdir/$$lang/LC_MESSAGES; \
-	$(mkinstalldirs) $$dir; \
-	$(INSTALL_DATA) $$cat $$dir/$$name; \
+	$(mkinstalldirs) $(DESTDIR)$$dir; \
+	$(INSTALL_DATA) $$cat $(DESTDIR)$$dir/$$name; \
 	  echo "installing $$cat as $$dir/$$name"; \
 	done
 
