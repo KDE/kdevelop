@@ -427,6 +427,7 @@ void ClassStore::wipeout()
     kdDebug(9005) << "ClassStore::wipeout start" << endl;
     m_globalScope->clear();
     m_allClasses.clear();
+    m_allScopes.clear();
     kdDebug(9005) << "ClassStore::wipeout end" << endl;
 }
 
