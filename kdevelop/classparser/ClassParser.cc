@@ -247,6 +247,7 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
     // Always add structs to the global container.
     if( aContainer != &store.globalContainer )
       store.globalContainer.addStruct( aStruct );
+
   }
 }
 

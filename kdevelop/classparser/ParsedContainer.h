@@ -244,7 +244,7 @@ public: // Public methods
   void removeStruct( const char *aName );
 
   /** Clear the internal state. */
-  void clear(bool bAutoDel=true);
+  void clear();
 
 public: // Implementation of virtual methods
 

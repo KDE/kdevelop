@@ -26,7 +26,7 @@
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
  ********************************************************************/
-
+extern int ScopeLevel;
 /*---------------------------------------- CClassStore::CClassStore()
  * CClassStore()
  *   Constructor.
@@ -79,6 +79,7 @@ CClassStore::~CClassStore()
  *-----------------------------------------------------------------*/
 void CClassStore::wipeout()
 {
+  ScopeLevel=0;
   globalContainer.clear();
 }
 
