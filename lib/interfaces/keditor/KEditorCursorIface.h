@@ -41,7 +41,7 @@ k_dcop:
 
 private slots:
 
-  void forwardCursorPositionChanged(Document *doc, int line, int col);
+  void forwardCursorPositionChanged(KEditor::Document *doc, int line, int col);
 
 
 private:

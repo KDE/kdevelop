@@ -39,8 +39,8 @@ k_dcop:
 
 private slots:
 
-  void forwardBreakPointToggled(Document *doc, int line);
-  void forwardBreakPointEnabledToggled(Document *doc, int line);
+  void forwardBreakPointToggled(KEditor::Document *doc, int line);
+  void forwardBreakPointEnabledToggled(KEditor::Document *doc, int line);
   
 
 private:

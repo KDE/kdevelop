@@ -38,8 +38,8 @@ k_dcop:
 
 private slots:
 
-  void forwardStatusChanged(Document *doc);
-  void forwardMessage(Document *doc, const QString &text);
+  void forwardStatusChanged(KEditor::Document *doc);
+  void forwardMessage(KEditor::Document *doc, const QString &text);
 
 
 private:

@@ -41,7 +41,7 @@ k_dcop:
 
 private slots:
 
-  void forwardCopyAvailable(Document *doc, bool available);
+  void forwardCopyAvailable(KEditor::Document *doc, bool available);
 
 
 private:

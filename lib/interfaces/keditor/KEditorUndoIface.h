@@ -41,8 +41,8 @@ k_dcop:
 
 private slots:
 
-  void forwardUndoAvailable(Document *doc, bool available);
-  void forwardRedoAvailable(Document *doc, bool available);
+  void forwardUndoAvailable(KEditor::Document *doc, bool available);
+  void forwardRedoAvailable(KEditor::Document *doc, bool available);
   
 
 private:
