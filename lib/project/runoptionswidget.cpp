@@ -19,6 +19,8 @@
 #include <qlistview.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qpushbutton.h>
 
 #include "domutil.h"
 #include "environmentvariableswidget.h"
@@ -39,6 +41,21 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
       m_buildDirectory = buildDirectory + "/";
     m_buildDirectory.cleanPath();
 
+    buildDirectory_edit->setText(m_buildDirectory.directory(false, false));
+
+
+    QString directoryRadioString = DomUtil::readEntry(dom, configGroup + "/run/directoryradio");
+    if ( directoryRadioString == "build" )
+        buildDirectory_radio->setChecked(true);
+    else
+        if ( directoryRadioString == "custom" )
+            customDirectory_radio->setChecked(true);
+        else
+            executableDirectory_radio->setChecked(true);
+    directoryRadioChanged();
+    
+    customRunDirectory_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/customdirectory"));
+    mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
     mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
@@ -52,6 +69,15 @@ RunOptionsWidget::~RunOptionsWidget()
 
 void RunOptionsWidget::accept()
 {
+    if ( buildDirectory_radio->isChecked() )
+      DomUtil::writeEntry(m_dom, m_configGroup + "/run/directoryradio", "build");
+    else
+      if ( customDirectory_radio->isChecked() )
+        DomUtil::writeEntry(m_dom, m_configGroup + "/run/directoryradio", "custom");
+      else
+        DomUtil::writeEntry(m_dom, m_configGroup + "/run/directoryradio", "executable");
+    
+    DomUtil::writeEntry(m_dom, m_configGroup + "/run/customdirectory", customRunDirectory_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(m_dom, m_configGroup + "/run/programargs", progargs_edit->text());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/run/terminal", startinterminal_box->isChecked());
@@ -61,9 +87,54 @@ void RunOptionsWidget::accept()
 }
 
 
+void RunOptionsWidget::directoryRadioChanged()
+{
+    if ( customDirectory_radio->isChecked() ) {
+        customRunDirectory_edit->setEnabled(true);
+        browseCustomButton->setEnabled(true);
+        mainProgram_relativeness_edit->setText("( absolute path )");
+    } else {
+        customRunDirectory_edit->setEnabled(false);
+        browseCustomButton->setEnabled(false);
+        mainProgram_relativeness_edit->setText("( relative to BUILD directory )");
+    }  
+}
+
+
+void RunOptionsWidget::browseCustomDirectory()
+{
+    KFileDialog *dlg = new KFileDialog(customRunDirectory_edit->text(), QString::null, this, 0, true);
+    QStringList filters;
+    filters << "inode/directories";
+    dlg->setMimeFilter(filters);
+    dlg->setCaption(i18n("Select a directory"));
+    QString path = customRunDirectory_edit->text().stripWhiteSpace();
+    if (!path.isEmpty()) {
+        // pass it to the dialog
+        dlg->setURL(path);
+        dlg->setSelection(path);
+    }
+
+    if (dlg->exec()) {
+    // if after the dialog execution the OK button was selected:
+        path = dlg->selectedFile().stripWhiteSpace();
+        if (!path.isEmpty()) {
+            customRunDirectory_edit->setText(path);
+        }
+    }
+    delete dlg;
+}
+
+
 void RunOptionsWidget::browseMainProgram()
 {
-    KFileDialog *dlg = new KFileDialog(m_buildDirectory.directory(false, false), QString::null, this, 0, true);
+    QString start_directory;
+    if ( customDirectory_radio->isChecked() )
+        start_directory = mainprogram_edit->text().stripWhiteSpace();
+    else
+        start_directory = m_buildDirectory.directory(false, false);
+
+    KFileDialog *dlg = new KFileDialog(start_directory, QString::null, this, 0, true);
     QStringList filters;
     filters << "application/x-executable"
     << "application/x-shellscript"

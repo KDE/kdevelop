@@ -37,6 +37,8 @@ public slots:
     void accept();
 
 private:
+    virtual void directoryRadioChanged();
+    virtual void browseCustomDirectory();
     virtual void browseMainProgram();
 
     QDomDocument &m_dom;

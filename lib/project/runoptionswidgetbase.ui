@@ -16,13 +16,94 @@
         <string>Run Options</string>
     </property>
     <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>directoryButtonGroup</cstring>
+            </property>
+            <property name="title">
+                <string>Directory</string>
+            </property>
+            <grid>
+                <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>executableDirectory_radio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>run from the directory where the executable is</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>buildDirectory_radio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>run from the BUILD directory:</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="2" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>buildDirectory_edit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
+                    </property>
+                    <property name="lineWidth">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="1">
+                    <property name="name">
+                        <cstring>customDirectory_radio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>custom directory:</string>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>2</number>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>customRunDirectory_edit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="readOnly">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="3" rowspan="1" colspan="1">
+                    <property name="name">
+                        <cstring>browseCustomButton</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>Browse...</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>GroupBox1</cstring>
+                <cstring>programGroupBox</cstring>
             </property>
             <property name="frameShape">
                 <enum>Box</enum>
@@ -31,32 +112,40 @@
                 <enum>Sunken</enum>
             </property>
             <property name="title">
-                <string>Run</string>
+                <string>Program</string>
             </property>
             <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-
-                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="1">
                     <property name="name">
-                        <cstring>progargs_label_3</cstring>
+                        <cstring>mainprogram_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Program arguments:</string>
+                        <string>Main program:</string>
                     </property>
-                </widget>
-                <widget class="QLineEdit" row="3" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>progargs_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="0">
-                    <property name="name">
+                    <property name="buddy" stdset="0">
                         <cstring>mainprogram_edit</cstring>
                     </property>
                 </widget>
-                <widget class="QPushButton" row="1" column="1">
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>mainProgram_relativeness_edit</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="0" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>mainprogram_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The path to the main program, defined relative to the above currently selected run directory</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="3">
                     <property name="name">
                         <cstring>browseMainButton</cstring>
                     </property>
@@ -64,12 +153,23 @@
                         <string>Browse...</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>mainprogram_label_3</cstring>
+                        <cstring>progargs_label</cstring>
                     </property>
                     <property name="text">
-                        <string>Main program (relative to build directory):</string>
+                        <string>Program arguments:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>progargs_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="3" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>progargs_edit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The command line arguments to pass to the main program</string>
                     </property>
                 </widget>
             </grid>
@@ -87,15 +187,15 @@
                 <cstring>layout1</cstring>
             </property>
             <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
                 <widget class="QCheckBox">
                     <property name="name">
                         <cstring>startinterminal_box</cstring>
                     </property>
                     <property name="text">
                         <string>Start in external terminal</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start the main program in an external terminal (konsole)</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -105,12 +205,27 @@
                     <property name="text">
                         <string>Automatically compile before execution</string>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>If the program in not update with the source code, compile it before starting it's execution</string>
+                    </property>
                 </widget>
             </hbox>
         </widget>
     </vbox>
 </widget>
 <connections>
+    <connection>
+        <sender>directoryButtonGroup</sender>
+        <signal>clicked(int)</signal>
+        <receiver>run_options_widget</receiver>
+        <slot>directoryRadioChanged()</slot>
+    </connection>
+    <connection>
+        <sender>browseCustomButton</sender>
+        <signal>clicked()</signal>
+        <receiver>run_options_widget</receiver>
+        <slot>browseCustomDirectory()</slot>
+    </connection>
     <connection>
         <sender>browseMainButton</sender>
         <signal>clicked()</signal>
@@ -124,6 +239,8 @@
     <tabstop>startinterminal_box</tabstop>
 </tabstops>
 <slots>
+    <slot>directoryRadioChanged()</slot>
+    <slot>browseCustomDirectory()</slot>
     <slot>browseMainProgram()</slot>
 </slots>
 <includes>
