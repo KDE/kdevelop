@@ -16,12 +16,16 @@
 #include <kfiledialog.h>
 #include <klineedit.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
+#include <qvalidator.h>
 
 ProjectConfigurationDlg::ProjectConfigurationDlg(ProjectConfiguration *conf,QWidget* parent, const char* name, bool modal, WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
 //=================================================
 {
   m_projectConfiguration = conf;
+  m_targetLibraryVersion->setValidator(new QRegExpValidator(
+    QRegExp("\\d+(\\.\\d+)?(\\.\\d+)"), this));
   UpdateControls();
 }
 
@@ -36,6 +40,7 @@ void ProjectConfigurationDlg::radioLibrarytoggled(bool on)
 {
 	if(!on) checkStatic->setChecked(false);
 	checkStatic->setEnabled(on);
+	m_targetLibraryVersion->setEnabled(on);
 }
 
 void ProjectConfigurationDlg::browseTargetPath()
@@ -51,8 +56,11 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   // Template
   if (radioApplication->isChecked())
     m_projectConfiguration->m_template = QTMP_APPLICATION;
-  else if (radioLibrary->isChecked())
+  else if (radioLibrary->isChecked()) {
     m_projectConfiguration->m_template = QTMP_LIBRARY;
+    m_projectConfiguration->m_libraryversion = 
+      m_targetLibraryVersion->text();
+  }
   else if (radioSubdirs->isChecked())
     m_projectConfiguration->m_template = QTMP_SUBDIRS;
 
@@ -116,6 +124,7 @@ void ProjectConfigurationDlg::UpdateControls()
       break;
     case QTMP_LIBRARY:
       activateRadiobutton = radioLibrary;
+      m_targetLibraryVersion->setText(m_projectConfiguration->m_libraryversion);
       break;
     case QTMP_SUBDIRS:
       activateRadiobutton = radioSubdirs;

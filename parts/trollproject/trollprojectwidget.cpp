@@ -784,8 +784,11 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   Buffer->removeValues("TEMPLATE");
   if (item->configuration.m_template == QTMP_APPLICATION)
     Buffer->setValues("TEMPLATE",QString("app"),FileBuffer::VSM_RESET);
-  if (item->configuration.m_template == QTMP_LIBRARY)
+  if (item->configuration.m_template == QTMP_LIBRARY) {
     Buffer->setValues("TEMPLATE",QString("lib"),FileBuffer::VSM_RESET);
+    Buffer->removeValues("VERSION");
+    Buffer->setValues("VERSION",item->configuration.m_libraryversion,FileBuffer::VSM_RESET);
+  }
   if (item->configuration.m_template == QTMP_SUBDIRS)
     Buffer->setValues("TEMPLATE",QString("subdirs"),FileBuffer::VSM_RESET);
 
@@ -1562,6 +1565,10 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         item->configuration.m_template = QTMP_SUBDIRS;
       }
     }
+    item->m_FileBuffer.getValues("VERSION",lst,minusListDummy);
+    if(lst.count())
+      item->configuration.m_libraryversion = lst[0];
+
     item->m_FileBuffer.getValues("CONFIG",lst,minusListDummy);
     if (lst.count())
     {
