@@ -24,6 +24,7 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -72,17 +73,24 @@ void KDevCodeTemplate::insertChars( Kate::View* pView, const QString& chars )
 {
     bool bMoveCursor = false;
     unsigned int line, col;
-    for( uint i=0; i<chars.length(); ++i ){
-        QChar ch = chars[ i ];
-        if( ch == '|' ){
-            pView->cursorPositionReal( &line, &col );
+    QStringList l = QStringList::split( "\n", chars, true );
+    for( int i=0; i<l.count(); ++i ){
+        QString s = l[ i ];
+        int idx = s.find( '|' );
+        if( idx != -1 ){
+            pView->insertText( s.left(idx) );
             bMoveCursor = true;
-        } else if( ch == '\n' ){
-            pView->keyReturn();
+            pView->cursorPositionReal( &line, &col );
+            pView->insertText( s.mid(idx+1) );
         } else {
-            pView->insertText( ch );
+            pView->insertText( s );
+        }
+
+        if( i != l.count()-1 ){
+            pView->keyReturn();
         }
     }
+
     if( bMoveCursor ){
         pView->setCursorPositionReal( line, col );
     }

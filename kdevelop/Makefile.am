@@ -31,6 +31,9 @@ datadir = $(kde_appsdir)/Development
 tip_DATA = tips
 tipdir = $(kde_datadir)/kdevelop
 
+templates_DATA = templates.xml
+templatesdir = $(kde_datadir)/kdevelop
+
 mime_DATA = x-kdevelop-project.desktop
 mimedir = $(kde_mimedir)/application
 
