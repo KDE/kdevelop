@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Shell Filtering and Insertion
+Name=KDevFilter
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevfilter
+X-KDevelop-Scope=Global
+

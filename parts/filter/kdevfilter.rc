@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevFilter" version="1">
+<MenuBar>
+  <Menu name="tools" >
+    <Action name="tools_insertshell"/>
+    <Action name="tools_filtershell"/>
+  </Menu>
+</MenuBar>
+</kpartgui>
+
