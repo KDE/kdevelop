@@ -181,7 +181,6 @@ void CClassView::initPopups()
 
   // Class popup
   classPopup.insertTitle(SmallIcon("CVclass"), i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_CLASS_DEFINITION);
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
 //  classPopup.insertItem(SmallIcon("CVclass"), i18n("Class Properties & tool"),this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
   classPopup.insertSeparator();

@@ -207,9 +207,6 @@ private: // Private methods
   void parseMethodImpl(bool isOperator,CParsedContainer *scope);
 //  void parseMethodImpl(bool isOperator);
 
-  /** Initialize an Objective-C method */
-  void fillInParsedObjcMethod( CParsedMethod *aMethod );
-
   /** Push lexems on the stack until we find something we know and 
    *   return what we found. */
   int checkClassDecl();
@@ -230,30 +227,6 @@ private: // Private methods
    * @return The parsed class or NULL if it was no class.
    */
   CParsedClass *parseClass(CParsedClass * aClass);
-
-   /** Parse an Objective-C category.
-    * @return The (fake!) parsed class - ie <classname>(<category name>).
-    */
-   CParsedClass *parseObjcCategory( QString &aClassName );
-
-   /** Parse an Objective-C class implementation.
-    * @return The parsed class or NULL if it was no class.
-    */
-   CParsedClass *parseObjcImplementation();
-
-   /** Handle lexem that are specific of an Objective-C class.
-    * @param aClass Class to store items in.
-    * @return Tells if we should stop parsing.
-    */
-   bool parseObjcClassLexem( CParsedClass *aClass );
-
-   /** Parse an Objective-C class header, i.e find out classname and possible parent. */
-   CParsedClass *parseObjcClassHeader();
-
-   /** Parse an Objective-C class declaration.
-    * @return The parsed class or NULL if it was no class.
-    */
-   CParsedClass *parseObjcClass();
 
   /** Tells if the current lexem is generic and needs no special
    * handling depending on the current scope.
@@ -285,5 +258,3 @@ private: // Private methods
 };
 
 #endif
-
-

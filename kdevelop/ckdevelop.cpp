@@ -104,8 +104,6 @@
 #include <iostream>
 using namespace std;
 
-#define WITH_CPP_REPARSE
-
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1104,7 +1102,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     slotStatusMsg(i18n("Running %1 (from %2)").arg(binProgram).arg(runFromDir));
     cout << runFromDir << endl;
     // Warning: not every user has the current directory in his path !
-    if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c" || prj->getProjectType() == "normal_objc")
+    if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
     {
        dockManager->findWidgetParentDock(stdin_stdout_widget->parentWidget())->makeDockVisible();
        QString term = "xterm";
@@ -4725,7 +4723,6 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_CV_FOLDER_DELETE,                      i18n("Deletes the current folder"))
     ON_STATUS_MSG(ID_CV_CLASS_DELETE,                       i18n("Deletes the current class"))
     ON_STATUS_MSG(ID_CV_VIEW_CLASS_DECLARATION,             i18n("Goes to the class declaration"))
-    ON_STATUS_MSG(ID_CV_VIEW_CLASS_DEFINITION,				i18n("Goes to the class definition"))
     ON_STATUS_MSG(ID_CV_METHOD_NEW,                         i18n("Opens the New Method dialog"))
     ON_STATUS_MSG(ID_CV_METHOD_DELETE,                      i18n("Deletes the current class method"))
     ON_STATUS_MSG(ID_CV_ATTRIBUTE_NEW,                      i18n("Creates a new attribute for the current class"))

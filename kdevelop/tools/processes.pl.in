@@ -91,9 +91,6 @@ else{
   elsif ($processes{APPLICATION} =~ /qt2normal|qt2mdi|qextmdi/) {
     changeQtApp();
   }
-  elsif ($processes{APPLICATION} =~ /qtobjcnormal/) {
-    changeQtObjcApp();
-  }
   elsif ($processes{APPLICATION} =~  /^cpp$|^sharedlib$/) {
     changeTerminalCPPApp();
   }
@@ -102,9 +99,6 @@ else{
   }
   elsif ($processes{APPLICATION} =~ /gnomenormal/) {
     changeGnomeApp();
-  }
-  elsif ($processes{APPLICATION} eq "objc") {
-    changeTerminalObjcApp();
   }
 }
 
@@ -438,6 +432,7 @@ sub processCppTemplate {
 
 }
 
+
 sub processHeaderTemplate {
 
   my ( $file ) = @_;
@@ -758,44 +753,6 @@ sub changeTerminalCApp {
 
 }
 
-sub changeTerminalObjcApp {
-
-#    unpackFiles("objc.tar");
-#
-    #renamed the directory
-    printflush (STDOUT, "change files...\n");
-    chdir ($overDirectory);
-    rename ("skel", $nameLittle);
-
-    #create the templatedirectory
-    condCopyTemplateFiles();
-
-    #replaced skel with the projectname in different files
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
-
-    chdir ($underDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "main.m");
-
-    chdir ($underDirectory . "/docs/en");
-    replaceValuesInFile(\%changings, "Makefile.am");
-
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
-
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.m");
-    }
-
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
-
-}
-
 sub changeQtApp {
 
 #    unpackFiles("qt.tar");
@@ -881,78 +838,6 @@ sub changeQtApp {
 
 }
 
-sub changeQtObjcApp {
-
-#    unpackFiles("qtobjc.tar");
-#
-    #renamed the directory
-    printflush (STDOUT, "change files...\n");
-    chdir ($overDirectory);
-    rename ("skel", $nameLittle);
-
-    #create the templatedirectory
-    condCopyTemplateFiles();
-
-    #Replacements in overDirectory
-    chdir ($overDirectory);
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "configure.in");
-
-    #Replacements and name changing in underDirectory
-    chdir ($underDirectory);
-
-    rename ("bank.m",     $name.".m");
-    rename ("bank.h",       $name.".h");
-    rename ("bankdoc.m",  $name."Doc.m");
-    rename ("bankdoc.h",    $name."Doc.h");
-    rename ("bankview.m", $name."View.m");
-    rename ("bankview.h",   $name."View.h");
-
-    replaceValuesInFile(\%changings, "Makefile.am");
-    replaceValuesInFile(\%changings, "main.m");
-    replaceValuesInFile(\%changings, "$name.m");
-    replaceValuesInFile(\%changings, "$name.h");
-    replaceValuesInFile(\%changings, "${name}Doc.m");
-    replaceValuesInFile(\%changings, "${name}View.m");
-    replaceValuesInFile(\%changings, "${name}Doc.h");
-    replaceValuesInFile(\%changings, "${name}View.h");
-    replaceValuesInFile(\%changings, "resource.h");
-
-#    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.cpp");
-#    replaceOldFile($name."AppDoc",  $name."Doc",   "skel.h");
-#    replaceOldFile($name."AppView", $name."View",  "skel.cpp");
-#    replaceOldFile($name."AppView", $name."View",  "skel.h");
-#
-#    should be inserted in the template as used with
-#    |NAME|Doc, |NAME|View
-#
-
-    chdir ($underDirectory."/docs/en");
-    replaceValuesInFile(\%changings, "Makefile.am");
-
-    condCopyGNUFiles();
-    condCopyLsmFile();
-    condCopyUserDocFiles();
-
-    if ($processes{CPP} eq "yes") {
-        processCppTemplate("main.m");
-	processCppTemplate("$name.m");
-	processCppTemplate("${name}View.m");
-	processCppTemplate("${name}Doc.m");
-    }
-
-    if ($processes{HEADER} eq "yes") {
-	processHeaderTemplate("$name.h");
-	processHeaderTemplate("${name}View.h");
-	processHeaderTemplate("${name}Doc.h");
-	processHeaderTemplate("resource.h");
-    }
-
-    condCopyKdelnkFile();
-    condCopyProgIcons();
-    condCreateApiDoc();
-
-}
 
 sub changeCustomApp {
 

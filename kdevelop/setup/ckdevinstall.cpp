@@ -276,23 +276,6 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,");
 
-    m_config->setGroup("Objective-C Highlight");
-    m_config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Mimetypes","text/x-c-src");
-    m_config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Wildcards","*.m;*.h");
-    m_config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,");
-
     m_config->setGroup("HTML Highlight");
     m_config->writeEntry("Tag Text","0,0,FFFFFF,1,0,1,courier,12,");
     m_config->writeEntry("Char","0,8000,FF00,0,0,1,courier,12,");
@@ -356,8 +339,6 @@ void CKDevInstall::slotFinished()
 
     m_config->setGroup("C Highlight");
     m_config->writeEntry("Wildcards","*.c;*.C;*.ec;*.xpm;*.po");
-    m_config->setGroup("Objective-C Highlight");
-    m_config->writeEntry("Wildcards","*.m;*.h");
     m_config->setGroup("C++ Highlight");
     m_config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp;*.moc;*.diff;*.inl;*.tlh");
 
@@ -413,6 +394,5 @@ void CKDevInstall::slotEnableCreateKDEDocPage(bool bEnabled)
 {
   setAppropriate( page(6), bEnabled);
 }
-
 
 #include "ckdevinstall.moc"

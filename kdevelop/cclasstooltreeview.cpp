@@ -58,7 +58,6 @@ void CClassToolTreeView::initPopups()
 {
   // Class popup
   classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
 
   // Method popup

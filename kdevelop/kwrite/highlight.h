@@ -358,7 +358,6 @@ class Highlight {
     void use();
     void release();
     virtual bool isInWord(char c) {return !testWw(c);}
-    virtual bool isBracketAttr(int attr) {return true;}
     virtual int doHighlight(int ctxNum, TextLine *textLine);
     virtual int doPreHighlight( QList<TextLine> & /*contents*/ );
 
@@ -407,21 +406,8 @@ class CHighlight : public GenHighlight {
   public:
     CHighlight(const QString& name);
     virtual ~CHighlight();
-		// In C, brackets are symbols, in other languages
-		// the brackets might be 'begin' and 'end' keywords.
-		// So the '13' here is the symbol FSM state for C.
-    virtual bool isBracketAttr(int attr) {return attr == 13;}
   protected:
     virtual void createItemData(ItemDataList &);
-    virtual void makeContextList();
-    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
-};
-
-class ObjcHighlight : public CHighlight {
-  public:
-    ObjcHighlight(const char *name);
-    virtual ~ObjcHighlight();
-  protected:
     virtual void makeContextList();
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
 };

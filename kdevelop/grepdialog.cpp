@@ -42,7 +42,6 @@ const char *template_desc[] = {
     "->MEMBER(",
     "class::MEMBER(",
     "OBJECT->member(",
-    "[OBJECT method",
     0
 };
 
@@ -52,7 +51,6 @@ const char *template_str[] = {
     "\\->[\\t ]*\\<%s\\>[\\t ]*(",
     "[a-z0-9_$]\\+[\\t ]*::[\\t ]*\\<%s\\>[\\t ]*(",
     "\\<%s\\>[\\t ]*\\->[\\t ]*[a-z0-9_$]\\+[\\t ]*(",
-    "\\[[\\t ]*\\<%s\\>[\\t ]*[a-zA-Z0-9_$:]",
     0
 };
 
@@ -122,8 +120,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     files_combo = new QComboBox(true, this);
     files_label->setBuddy(files_combo->focusProxy());
     files_combo->setMinimumSize(files_combo->sizeHint());
-    files_combo->insertItem("*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c,*.m");
-    files_combo->insertItem("*.cpp,*.cc,*.C,*.cxx,*.c,*.m");
+    files_combo->insertItem("*.h,*.hxx,*.cpp,*.cc,*.C,*.cxx,*.idl,*.c");
+    files_combo->insertItem("*.cpp,*.cc,*.C,*.cxx,*.c");
     files_combo->insertItem("*.h,*.hxx,*.idl");
     files_combo->insertItem("*");
     input_layout->addWidget(files_combo, 2, 1);

@@ -56,10 +56,6 @@ public: // Public attributes
   /** Is this a destructor? */
   bool isDestructor;
 
-  /** Is this an Objective-C method? */
-  bool isObjectiveC;
-
-
 public: // Public methods to set attribute values
 
   /** Add an argument to this method. */
@@ -95,12 +91,6 @@ public: // Public methods to set attribute values
    */
   void setIsDestructor( bool aState = true )   { isDestructor = aState; }
 
-  /** Set this method as an Objective-C method
-   * @param aState The new state.
-   */
-  void setIsObjectiveC( bool aState = true )   { isObjectiveC = aState; }
-
-
 public: // Public attributes
 
   /** Return the object as a string(for tooltips etc) */
@@ -131,5 +121,3 @@ public: // Public queries
 };
 
 #endif
-
-

@@ -63,7 +63,6 @@ private:
   QRadioButton* public_button;
   QRadioButton* protected_button;
   QRadioButton* private_button;
-  QRadioButton* public_objc_button;
   QLineEdit* impl_edit;
   QLabel* header_label;
   QLabel* impl_label;

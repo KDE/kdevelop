@@ -71,7 +71,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 
   list_cpp = new QListBox( tab, "list_cpp" );
   list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
-  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C,*.m ...)"));
+  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
   list_cpp->insertItem(i18n("Qt Designer File (*.ui)"));
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
@@ -247,9 +247,9 @@ void CNewFileDlg::slotTabSelected(int item){
 void CNewFileDlg::slotOKClicked(){
   QString text = edit->text();
   if ( (fileType() == "CPP") &&
-       !(text.right(4) == ".cpp" || text.right(3) == ".cc" || text.right(2) == ".m"
+       !(text.right(4) == ".cpp" || text.right(3) == ".cc" 
 	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
-    KMessageBox::error(this,i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec,.m or .ecpp!"));
+    KMessageBox::error(this,i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"));
     return;
   }
   if ( (fileType() == "HEADER") && !(text.right(2) == ".h" || (text.right(4) == ".hxx"))){
@@ -386,7 +386,7 @@ QString CNewFileDlg::fileType(){
   QString str;
   if (current == 0){ // cpp/header
     str = list_cpp->text(list_cpp->currentItem());
-    if (str == i18n("C/C++ File (*.cpp,*.c,*.cc,*.C, *.m ...)")){
+    if (str == i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)")){
       return "CPP";
     }
     if (str == i18n("C/C++ Header (*.h,*.hxx)")){
@@ -464,7 +464,7 @@ void CNewFileDlg::slotEditTextChanged(const QString& text)
  if(text.isEmpty())
    return;
   QString filetype = fileType();
-  QString extension = (prj && prj->getProjectType()=="normal_c" || prj->getProjectType()=="normal_gnome") ? ".c" : ((prj && prj->isObjcProject()) ? ".m" : ".cpp");
+  QString extension = (prj && prj->getProjectType()=="normal_c" || prj->getProjectType()=="normal_gnome")? ".c" : ".cpp";
 
   if(autocompletion){
 
@@ -526,7 +526,6 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
-
 
 /** sets the location for the dialog to start from */
 void CNewFileDlg::setLocation(QString location){

@@ -201,9 +201,6 @@
 #define ID_DEBUG_NORMAL             14396
 #define ID_DEBUG_ATTACH             14398
 
-#define	ID_CV_VIEW_STRUCT_DECLARATION	14544
-#define	ID_CV_VIEW_CLASS_DEFINITION	14545
-
 ///////////////////////////////////////////////////////////////////
 // Classviewer popup entries
 #define ID_CV_WIZARD                    14510

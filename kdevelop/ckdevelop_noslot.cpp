@@ -260,7 +260,7 @@ void CKDevelop::setMainCaption(int item)
 bool CKDevelop::isUntitled(const char* name)
 {
   QString s=(name) ? name : "";
-  return (s==i18n("Untitled.h") || s==i18n("Untitled.c") || s==i18n("Untitled.cpp") || s==i18n("Untitled.m"));
+  return (s==i18n("Untitled.h") || s==i18n("Untitled.c") || s==i18n("Untitled.cpp"));
 }
 
 /*---------------------------------------- CKDevelop::fileSaveAs()

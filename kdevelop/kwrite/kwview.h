@@ -29,7 +29,6 @@ const int sfReplace         = 64;
 const int sfAgain           = 128;
 const int sfWrapped         = 256;
 const int sfFinished        = 512;
-const int sfMatchBrackets   = 1024;
 //dialog results
 const int srYes             = QDialog::Accepted;
 const int srNo              = 10;

@@ -1371,8 +1371,6 @@ void CKDevelop::initDebugger()
     dbgController->reConfig();
 }
 
-
-
 void CKDevelop::slotSwitchDocTool(){
   // kdoc used, can we switch to doxygen ?
   if(doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_KDOC))

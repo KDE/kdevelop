@@ -424,7 +424,7 @@ ProjectFileType CProject::getType( const QString& aFile )
     // Check for a known extension.
     if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
         ext == ".ec" || ext == ".ecpp" || ext == ".C" ||
-        ext == ".cxx" || ext == ".ui" || ext == ".inl" || ext == ".m" )
+        ext == ".cxx" || ext == ".ui" || ext == ".inl" )
       retVal = CPP_SOURCE;
     // .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
     else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" ||
@@ -912,7 +912,7 @@ void CProject::updateMakefileAm(const QString& makefile)
             stream << getLDADD();
           }
 
-          if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "normal_gnome" && getProjectType() != "normal_objc")
+          if(getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "normal_gnome")
             stream << " $(LIBSOCKET)" << "\n";
           else
             stream << "\n";
@@ -1681,8 +1681,7 @@ bool CProject::isKDE2Project()
 {
   if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" ||
       getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kc_module" ||
-      getProjectType()=="kpart_plugin" || getProjectType()=="ktheme" ||
-  	  getProjectType() == "normal_kdeobjc" || getProjectType() == "mini_kdeobjc")
+      getProjectType()=="kpart_plugin" || getProjectType()=="ktheme")
      return true;
   return false;
 }
@@ -1692,8 +1691,7 @@ bool CProject::isQtProject(){
   return false;
 }
 bool CProject::isQt2Project(){
-  if (getProjectType()=="normal_qt2" || getProjectType()=="mdi_qt2"|| getProjectType()== "mdi_qextmdi" ||
-  		getProjectType()== "normal_qtobjc" )
+  if (getProjectType()=="normal_qt2" || getProjectType()=="mdi_qt2"|| getProjectType()== "mdi_qextmdi")
     return true;
   return false;
 }
@@ -1702,11 +1700,6 @@ bool CProject::isQt2Project(){
 bool CProject::isCustomProject(){
   if(getProjectType() == "normal_empty") return true;
   return false;
-}
-
-bool CProject::isObjcProject(){
-  return (	getProjectType() == "normal_objc" || getProjectType() == "normal_qtobjc"
-  			|| getProjectType() == "normal_kdeobjc" || getProjectType() == "mini_kdeobjc" );
 }
 
 // **************************************************************************

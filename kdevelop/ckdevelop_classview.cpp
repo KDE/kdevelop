@@ -759,9 +759,6 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
       break;
-    case THCLASS:
-      switchToFile( aContainer->definedInFile, aContainer->definedOnLine );
-      return;
     default:
       debug( "Unknown type %d in CVGotoDefinition.", itemType );
   }
