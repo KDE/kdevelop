@@ -14,10 +14,15 @@
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <qvbox.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>
+#include <iostream.h>
+#include <khtmlview.h>
+#include <kprocess.h>
+#include <qstringlist.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -25,30 +30,141 @@
 
 #include "phpsupportpart.h"
 #include "phpsupportfactory.h"
+#include "phpconfigwidget.h"
+#include "phphtmlview.h"
+#include "phperrorview.h"
+
 #include "parsedclass.h"
 #include "parsedmethod.h"
+#include "domutil.h"
 
 
 PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
     : KDevLanguageSupport(api, parent, name)
 {
-    setInstance(PHPSupportFactory::instance());
-    
-    connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
-    connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(savedFile(const QString&)),
+  m_htmlView=0;
+  phpExeProc=0;
+  setInstance(PHPSupportFactory::instance());
+  
+  setXMLFile("kdevphpsupport.rc");
+  
+  connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
+  connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
+  connect( core(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
+  connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
+	   this, SLOT(projectConfigWidget(KDialogBase*)) );
+  
+  KAction *action;
+  action = new KAction( i18n("&Run"), Key_F9,
+			this, SLOT(slotRun()),
+			actionCollection(), "build_run" );
 
+  m_phpErrorView = new PHPErrorView(this);
+  core()->embedWidget(m_phpErrorView, KDevCore::OutputView, i18n("PHP"));
+  connect(m_phpErrorView,SIGNAL(fileSelected(const QString&,int)),
+	  this,SLOT(slotErrorMessageSelected(const QString&,int)));
+
+  phpExeProc = new KShellProcess("/bin/sh");
+  connect(phpExeProc, SIGNAL(receivedStdout (KProcess*, char*, int)),
+	  this, SLOT(slotReceivedPHPExeStdout (KProcess*, char*, int)));
+  connect(phpExeProc, SIGNAL(receivedStderr (KProcess*, char*, int)),
+	  this, SLOT(slotReceivedPHPExeStderr (KProcess*, char*, int)));
+  connect(phpExeProc, SIGNAL(processExited(KProcess*)),
+	  this, SLOT(slotPHPExeExited(KProcess*)));
+
+  m_htmlView = new PHPHTMLView();
+  core()->embedWidget(m_htmlView->view(), KDevCore::DocumentView, i18n("PHP"));
+  connect(m_htmlView,  SIGNAL(started(KIO::Job*)), 
+	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 }
 
 
 PHPSupportPart::~PHPSupportPart()
 {}
 
+void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
+  core()->gotoSourceFile(filename,line);
+}
+void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
+  QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));
+  PHPConfigWidget* w = new PHPConfigWidget(document(),vbox, "php config widget");
+  connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+}
+
+void PHPSupportPart::slotRun(){
+  executeOnWebserver();
+}
+
+void PHPSupportPart::executeOnWebserver(){
+  QString weburl = DomUtil::readEntry(*document(), "/kdevphpsupport/webserver/weburl");
+  QString file = DomUtil::readEntry(*document(), "/kdevphpsupport/webserver/defaultFile");
+  m_phpExeOutput="";
+  m_htmlView->openURL(KURL(weburl + file));
+  m_htmlView->show();
+}
+
+void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
+  cerr << endl << "job started" << job->progressId();
+  if (job->className() == QString("KIO::TransferJob")){
+    KIO::TransferJob *tjob = static_cast<KIO::TransferJob*>(job);
+    connect(tjob,  SIGNAL(data(KIO::Job*, const QByteArray&)), 
+	    this, SLOT(slotWebData(KIO::Job*, const QByteArray&)));
+    connect(tjob,  SIGNAL(result(KIO::Job*)),
+	    this, SLOT(slotWebResult(KIO::Job*)));
+  }
+}
+
+void PHPSupportPart::slotWebData(KIO::Job* job,const QByteArray& data){
+  cerr << "kdevelop (phpsupport): slotWebData()" << endl;
+  QString strData(data);
+  m_phpExeOutput += strData;
+}
+
+void PHPSupportPart::slotWebResult(KIO::Job* job){
+  cerr << "kdevelop (phpsupport): slotWebResult()" << endl;
+  m_phpErrorView->parse(m_phpExeOutput);
+}
+
+void PHPSupportPart::executeInTerminal(){
+  if(m_htmlView==0){
+    m_htmlView = new PHPHTMLView();
+    core()->embedWidget(m_htmlView->view(), KDevCore::DocumentView, i18n("PHP"));
+  }
+  m_htmlView->show();
+  m_htmlView->begin();
+
+  m_phpExeOutput="";
+  phpExeProc->clearArguments();
+  *phpExeProc << "php";
+  *phpExeProc << "-f";
+  *phpExeProc << "/home/smeier/phpHello/app.php"; 
+  phpExeProc->start(KProcess::Block,KProcess::Stdout);
+  
+  cerr << "kdevelop (phpsupport): slotExecuteInTerminal()" << endl;
+  //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
+}
+void PHPSupportPart::slotReceivedPHPExeStdout (KProcess* proc, char* buffer, int buflen){
+  cerr << "kdevelop (phpsupport): slotPHPExeStderr()" << endl;
+  m_htmlView->write(buffer,buflen+1);
+  m_phpExeOutput += QCString(buffer,buflen+1);
+}
+
+void PHPSupportPart::slotReceivedPHPExeStderr (KProcess* proc, char* buffer, int buflen){
+  cerr << "kdevelop (phpsupport): slotPHPExeStderr()" << endl;
+  m_htmlView->write(buffer,buflen+1);
+  m_phpExeOutput += QCString(buffer,buflen+1);
+}
+
+void PHPSupportPart::slotPHPExeExited (KProcess* proc){
+  cerr << "kdevelop (phpsupport): slotPHPExeExited()" << endl;
+  m_htmlView->end();
+  m_phpErrorView->parse(m_phpExeOutput);
+}
 
 void PHPSupportPart::projectOpened()
 {
-    kdDebug(9007) << "projectOpened()" << endl;
+    cerr << "kdevelop (phpsupport): projectOpened()" << endl;
 
     connect( project(), SIGNAL(addedFileToProject(const QString &)),
              this, SLOT(addedFileToProject(const QString &)) );
@@ -82,7 +198,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
 
 void PHPSupportPart::initialParse()
 {
-    kdDebug(9016) << "initialParse()" << endl;
+    cerr << "kdevelop (phpsupport): initialParse()" << endl;
     
     if (project()) {
       //  kdDebug(9016) << "project" << endl;
@@ -95,14 +211,14 @@ void PHPSupportPart::initialParse()
         emit updatedSourceInfo();
         kapp->restoreOverrideCursor();
     } else {
-        kdDebug(9016) << "No project" << endl;
+        cerr << "kdevelop (phpsupport): No project" << endl;
     }
 }
 
 
 void PHPSupportPart::addedFileToProject(const QString &fileName)
 {
-    kdDebug(9016) << "addedFileToProject()" << endl;
+    cerr << "kdevelop (phpsupport): addedFileToProject()" << endl;
     maybeParse(fileName);
     emit updatedSourceInfo();
 }
@@ -110,7 +226,7 @@ void PHPSupportPart::addedFileToProject(const QString &fileName)
 
 void PHPSupportPart::removedFileFromProject(const QString &fileName)
 {
-    kdDebug(9016) << "removedFileFromProject()" << endl;
+    cerr << "kdevelop (phpsupport): removedFileFromProject()" << endl;
     classStore()->removeWithReferences(fileName);
     emit updatedSourceInfo();
 }
@@ -118,7 +234,7 @@ void PHPSupportPart::removedFileFromProject(const QString &fileName)
 
 void PHPSupportPart::savedFile(const QString &fileName)
 {
-    kdDebug(9016) << "savedFile()" << endl;
+    cerr << "kdevelop (phpsupport): savedFile()" << endl;
 
     if (project()->allSourceFiles().contains(fileName)) {
         maybeParse(fileName);
@@ -158,9 +274,9 @@ void PHPSupportPart::parse(const QString &fileName)
 	bracketOpen += line.contains("{");
 	bracketClose += line.contains("}");
 
-	//kdDebug(9018) << "try match line: " << line << endl;
+	//cerr << "kdevelop (phpsupport): try match line: " << line << endl;
         if (classre.match(line)) {
-	  //  kdDebug(9018) << "regex match line: " << line << endl;
+	  //  cerr << "kdevelop (phpsupport): regex match line: " << line << endl;
 	  inClass= true;
 	  bracketOpen = line.contains("{");
 	  bracketClose = line.contains("}");
@@ -193,7 +309,7 @@ void PHPSupportPart::parse(const QString &fileName)
 
 	     
         } else if (methodre.match(line)) {
-	  //	  kdDebug(9018) << "regex match line ( method ): " << line << endl;
+	  //	  cerr << "kdevelop (phpsupport): regex match line ( method ): " << line << endl;
 	  ParsedMethod *method = new ParsedMethod;
 	  method->setName(methodre.group(1));
 	  ParsedArgument* anArg = new ParsedArgument();

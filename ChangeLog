@@ -1,3 +1,8 @@
+2001-05-31 Sandy Meier <smeier@kdevelop.org>
+	
+	* added initial php webserver/shell preview and config dialog (phpsupport)
+	* added errormessage parser/view (phpsupport) 
+	
 2001-05-31  Richard Dale <duke@tipitina.demon.co.uk
 
 	* Added a Java JNI based plugin api, and a corresponding

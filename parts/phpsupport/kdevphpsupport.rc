@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KPHPSupport" version="2">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_run" />
+  </Menu>
+</MenuBar>
+</kpartgui>
+
