@@ -33,6 +33,9 @@ Qt 3 port, various patches:
 Help with KParts, KGenericFactory and other KDE infrastructure:
   Simon Hausmann <hausmann@kde.org>
 
+Subversion KPart:
+	Mickael Marchand <marchand@kde.org>
+
 
 Patches:
 domseichter@t-online.de (Dominik Seichter)
