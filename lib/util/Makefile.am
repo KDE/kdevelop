@@ -1,8 +1,10 @@
 INCLUDES = -I$(top_srcdir)/lib/compat  -I$(top_srcdir)/lib/interfaces  -I$(top_srcdir)/lib/sourceinfo  $(all_includes)
 
-noinst_LTLIBRARIES = libkdevutil.la
+noinst_LTLIBRARIES = libkdevutil.la libkdevutillgpl.la
 
 libkdevutil_la_SOURCES = processwidget.cpp processlinemaker.cpp domutil.cpp splitter.cpp execcommand.cpp ksavealldialog.cpp filetemplate.cpp urlutil.cpp pathutil.cpp
+
+libkdevutillgpl_la_SOURCES = processwidget.cpp processlinemaker.cpp splitter.cpp execcommand.cpp ksavealldialog.cpp urlutil.cpp
 
 METASOURCES = AUTO
 
