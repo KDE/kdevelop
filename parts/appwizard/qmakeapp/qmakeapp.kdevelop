@@ -2,7 +2,7 @@
 <kdevelop>
 <general>
 <author/>
-  <email>jsgaarde@jakob.linux</email>
+  <email>$EMAIL$</email>
   <projectmanagement>KDevTrollProject</projectmanagement>
   <primarylanguage>C++</primarylanguage>
   <keywords>
