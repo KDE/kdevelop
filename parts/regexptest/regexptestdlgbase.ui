@@ -22,7 +22,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QLabel" row="0" column="0">
             <property name="name">
                 <cstring>pattern_label</cstring>
@@ -149,7 +148,6 @@
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>insertbutton</cstring>
@@ -207,13 +205,12 @@
                 <cstring>flavor_group</cstring>
             </property>
             <property name="title">
-                <string>&amp;Flavor</string>
+                <string>Regular Expression T&amp;ype</string>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QRadioButton">
                     <property name="name">
                         <cstring>basicposix_button</cstring>
@@ -335,14 +332,14 @@
     <tabstop>cancelbutton</tabstop>
     <tabstop>extendedposix_button</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">insertQuoted()</slot>
     <slot>somethingChanged()</slot>
     <slot access="protected">showRegExpEditor()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>
