@@ -37,6 +37,17 @@
 #define RULER_WIDTH  20
 #define RULER_HEIGHT  20
 
+#define RESIZE_MOVE            0
+#define RESIZE_TOP_LEFT        1
+#define RESIZE_TOP_RIGHT       2
+#define RESIZE_BOTTOM_LEFT     3
+#define RESIZE_BOTTOM_RIGHT    4
+#define RESIZE_MIDDLE_TOP      5
+#define RESIZE_MIDDLE_BOTTOM   6
+#define RESIZE_MIDDLE_LEFT     7
+#define RESIZE_MIDDLE_RIGHT    8
+
+
 #endif
 
 

@@ -50,11 +50,12 @@ class KDlgItem_Base : public QObject
 
     virtual void select() { }
     virtual void deselect() { }
+
+    bool isMainWidget;
   protected:
     KDlgItemDatabase *childs;
     QWidget *item;
     KDlgPropertyBase *props;
-    bool isMainWidget;
     KDlgEditWidget* editWidget;
 };
 

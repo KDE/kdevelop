@@ -33,8 +33,6 @@ class KDlgItem_LineEdit : public KDlgItem_Base
 
   MYITEMCLASS_BEGIN( QLineEdit )
     MYITEMCLASS_STDSTUFF( KDlgItem_LineEdit )
-    virtual void mousePressEvent ( QMouseEvent * ) { selectMe(); }
-    virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
     virtual void keyPressEvent ( QKeyEvent * ) {}
   MYITEMCLASS_END
 

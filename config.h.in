@@ -1,11 +1,10 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
+/* Define if lex declares yytext as a char * by default, not a char[].  */
+#undef YYTEXT_POINTER
+
 /* Define if the C++ compiler supports BOOL */
 #undef HAVE_BOOL
-
-#undef VERSION
-
-#undef PACKAGE
 
 /* defines if having libgif (always 1) */
 #undef HAVE_LIBGIF
@@ -24,6 +23,13 @@
 
 /* Define to 1 if NLS is requested.  */
 #undef ENABLE_NLS
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
 
 #ifndef HAVE_BOOL
 #define HAVE_BOOL

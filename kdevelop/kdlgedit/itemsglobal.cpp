@@ -237,6 +237,82 @@ void KDlgItemsPaintRects(QPainter *p, int w, int h)
   p->fillRect(w-8,(int)(h/2)-4,8,8,b);
 }
 
+
+int KDlgItemsGetClickedRect(int x, int y, int winw, int winh)
+{
+  int w = winw;
+  int h = winh;
+
+  if ((x>=0)   && (y>=0)   && (x<=8) && (y<=8)) return RESIZE_TOP_LEFT;
+  if ((x>=w-8) && (y>=0)   && (x<=w) && (y<=8)) return RESIZE_TOP_RIGHT;
+  if ((x>=0)   && (y>=h-8) && (x<=8) && (y<=h)) return RESIZE_BOTTOM_LEFT;
+  if ((x>=w-8) && (y>=h-8) && (x<=w) && (y<=h)) return RESIZE_BOTTOM_RIGHT;
+
+  if ((x>=(int)(w/2)-4) && (y>=0)   && (x<=(int)(w/2)+4) && (y<=8)) return RESIZE_MIDDLE_TOP;
+  if ((x>=(int)(w/2)-4) && (y>=h-8) && (x<=(int)(w/2)+4) && (y<=h)) return RESIZE_MIDDLE_BOTTOM;
+
+  if ((x>=0)   && (y>=(int)(h/2)-4) && (x<=8) && (y<=(int)(h/2)+4)) return RESIZE_MIDDLE_LEFT;
+  if ((x>=w-8) && (y>=(int)(h/2)-4) && (x<=w) && (y<=(int)(h/2)+4)) return RESIZE_MIDDLE_RIGHT;
+
+  return RESIZE_MOVE;
+}
+
+bool KDlgItemsGetResizeCoords(int pressedEdge, int &x, int &y, int &w, int &h, int diffx, int diffy)
+{
+  bool noMainWidget = false;
+
+  switch (pressedEdge)
+    {
+      case RESIZE_MOVE:
+        noMainWidget = true;
+        x += diffx;
+        y += diffy;
+        break;
+      case RESIZE_BOTTOM_RIGHT:
+        w += diffx;
+        h += diffy;
+        break;
+      case RESIZE_MIDDLE_RIGHT:
+        w += diffx;
+        break;
+      case RESIZE_MIDDLE_BOTTOM:
+        h += diffy;
+        break;
+      case RESIZE_TOP_LEFT:
+        noMainWidget = true;
+        x += diffx;
+        y += diffy;
+        w -= diffx;
+        h -= diffy;
+        break;
+      case RESIZE_TOP_RIGHT:
+        noMainWidget = true;
+        y += diffy;
+        w += diffx;
+        h -= diffy;
+        break;
+      case RESIZE_MIDDLE_LEFT:
+        noMainWidget = true;
+        x += diffx;
+        w -= diffx;
+        break;
+      case RESIZE_MIDDLE_TOP:
+        noMainWidget = true;
+        y += diffy;
+        h -= diffy;
+        break;
+      case RESIZE_BOTTOM_LEFT:
+        noMainWidget = true;
+        x += diffx;
+        w -= diffx;
+        h += diffy;
+        break;
+    }
+
+  return noMainWidget;
+}
+
+
 void KDlgItemsPaintRects(QWidget *wid, QPaintEvent *e)
 {
   if ((!wid) || (!e))

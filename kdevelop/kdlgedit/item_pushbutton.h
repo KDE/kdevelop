@@ -35,8 +35,6 @@ class KDlgItem_PushButton : public KDlgItem_Base
 
   MYITEMCLASS_BEGIN( QPushButton )
     MYITEMCLASS_STDSTUFF( KDlgItem_PushButton )
-    virtual void mousePressEvent ( QMouseEvent * ) { selectMe(); }
-    virtual void mouseMoveEvent ( QMouseEvent *e ) { moveRulers(e); }
   MYITEMCLASS_END
 
   ITEMWRAPPER_STDSTUFF( KDlgItem_PushButton, QPushButton, "PushButton" )

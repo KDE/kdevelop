@@ -1,3 +1,6 @@
+1999-03-29 Pascal Krahmer <pascal@beast.de>
+        * items now are moveable and resizeable
+
 1999-03-29 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added an abstract class CTreeView to be used as parent for
 	  the other four treeviews. Implemented this in the views as well.

@@ -42,7 +42,8 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
   setBackgroundMode(PaletteLight);
 
   main_widget = new KDlgItem_Widget( this, this, true );
-  selected_widget = main_widget;
+  selected_widget = 0;
+  selectWidget(main_widget);
 
   main_widget->getProps()->setProp_Value("X","0");
   main_widget->getProps()->setProp_Value("Y","0");
