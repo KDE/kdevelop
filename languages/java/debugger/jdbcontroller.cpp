@@ -34,7 +34,7 @@
 #include <kprocess.h>
 #include <kdebug.h>
 
-#include <kregexp.h>
+#include <qregexp.h>
 #include <qstring.h>
 #include <qtimer.h>
 #include <qurl.h>
@@ -413,14 +413,14 @@ char* JDBController::parseLine(char *buf)
 	if (memcmp(buf, "Brea", 4) == 0) {
             kdDebug() << "Checking for breakpoint\n";
             if ((strncmp(buf, "Breakpoint hit: thread", 22) == 0)) {
-                KRegExp ex( "Breakpoint hit: thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*), bci\\=[0-9]*.*\\n[^\\[]*\\[[0-9]*\\] ");
-                if (ex.match( buf)) {
-                    DBG_DISPLAY(QString("Breakpoint hit in line ") + ex.group(3));
+                QRegExp ex( "Breakpoint hit: thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*), bci\\=[0-9]*.*\\n[^\\[]*\\[[0-9]*\\] ");
+                if (ex.search( buf) != -1 ) {
+                    DBG_DISPLAY(QString("Breakpoint hit in line ") + ex.cap(3));
                     if (stateIsOn(s_appStarting)) {
                         setStateOff(s_appStarting);
                     }
-                    curMethod = ex.group(2),
-                    curLine = ex.group(3);
+                    curMethod = ex.cap(2),
+                    curLine = ex.cap(3);
 
 
                     if (currentCmd_ && currentCmd_->isARunCmd()) {
@@ -431,21 +431,24 @@ char* JDBController::parseLine(char *buf)
 
 
                     emit showStepInSource(QString(classpath_ + "/" + mainclass_ + ".java").latin1(),
-                                          atoi(ex.group(3)), "");
-                    actOnProgramPause(QString("Reached Breakpoint in line ")+ex.group(3));
+                                          atoi(ex.cap(3).latin1()), "");
+                    actOnProgramPause(QString("Reached Breakpoint in line ")+ex.cap(3));
 
-                    return buf + ex.groupEnd(0);
+                    char *retStr;
+		    QString retQString =  QString( buf + ex.cap(ex.numCaptures()) );
+		    memcpy( retStr, retQString.latin1(), retQString.length() );
+                    return retStr;
                 }
 
             }
     } else if (memcmp(buf, "Step", 4) == 0) {
             if ((strncmp(buf, "Step completed:", 15) == 0)) {
                 kdDebug() << "STEP: " << buf << endl;
-                KRegExp ex( " thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*)");
-                if (ex.match( buf)) {
+                QRegExp ex( " thread=\\\"(.*)\\\", (.*\\)), line=([0-9]*)");
+                if (ex.search( buf) != -1 ) {
                     kdDebug() << "MATCH\n";
-                    curMethod = ex.group(2),
-                    curLine = ex.group(3);
+                    curMethod = ex.cap(2),
+                    curLine = ex.cap(3);
 
 
                     if (currentCmd_ && currentCmd_->typeMatch(STEP)) {
@@ -454,12 +457,12 @@ char* JDBController::parseLine(char *buf)
                         DBG_DISPLAY("Deleting step command");
                     }
 
-                    QString curClass = QString(ex.group(2)).left(QString(ex.group(2)).findRev("."));
+                    QString curClass = QString(ex.cap(2)).left(QString(ex.cap(2)).findRev("."));
                     QString curFile = getFile(curClass);
                     kdDebug() << "Filename: " << curFile <<endl;
-                    emit showStepInSource(curFile, atoi(ex.group(3)), "");
+                    emit showStepInSource(curFile, atoi(ex.cap(3).latin1() ), "");
 
-                    actOnProgramPause(QString("step completed, stopped in ") + ex.group(2));
+                    actOnProgramPause(QString("step completed, stopped in ") + ex.cap(2));
 
                     return buf + QString(buf).length();
                 }
@@ -495,14 +498,17 @@ char* JDBController::parseInfo(char *buf)
 // **********************************************************************
 
 char* JDBController::parseBacktrace(char* buf) {
-    KRegExp* exp = 0;
+    QRegExp* exp = 0;
     // Check for a new line of stacktrace output first
-    exp = new KRegExp( "^ \\[[0-9]+\\][^\\)]+\\)");
-    if (exp->match( buf)) {
+    exp = new QRegExp( "^ \\[[0-9]+\\][^\\)]+\\)");
+    if (exp->search( buf) != -1) {
         DBG_DISPLAY(QString("Found some stacktrace output"));
-        frameStack_->addItem(exp->group(0));
+        frameStack_->addItem(exp->cap(0).latin1() );
         stackLineCount++;
-        buf += exp->groupEnd(0);
+       
+	QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
     }
@@ -510,8 +516,8 @@ char* JDBController::parseBacktrace(char* buf) {
     // If that fails we check if the standard prompt is displayed
     if (stackLineCount > 0) {
     kdDebug() << ">" << *buf<<endl;
-    exp->compile("^[^ ]+\\[[0-9]+\\]");
-    if (exp->match( buf)) {
+    exp->setPattern("^[^ ]+\\[[0-9]+\\]");
+    if (exp->search( buf) != -1) {
         DBG_DISPLAY(QString("Found end of stacktrace (prompt)"));
 
         if (currentCmd_ && currentCmd_->typeMatch(BACKTRACE)) {
@@ -522,7 +528,10 @@ char* JDBController::parseBacktrace(char* buf) {
         setStateOff(s_parsingOutput);
 
         frameStack_->updateDone();
-        buf += exp->groupEnd(0);
+
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
 
@@ -539,71 +548,80 @@ char* JDBController::parseBacktrace(char* buf) {
 
 
 char* JDBController::parseLocalVars(char* buf) {
-    KRegExp* exp = 0;
-    exp = new KRegExp( "^Local variable information not available. Compile with -g to generate variable information\n");
-    if (exp->match( buf)) {
+    QRegExp* exp = 0;
+    exp = new QRegExp( "^Local variable information not available. Compile with -g to generate variable information\n");
+    if (exp->search( buf) != -1) {
         DBG_DISPLAY(QString("No var info available"));
         if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
         varUpdateDone();
-        buf += exp->groupEnd(0);
+
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
     }
 
-    exp->compile( "^No local variables");
-    if (exp->match( buf)) {
+    exp->setPattern( "^No local variables");
+    if (exp->search( buf) != -1) {
         DBG_DISPLAY(QString("No locals"));
 
         // wait for prompt
-        buf += exp->groupEnd(0);
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
     }
 
     // Seems as if Java outputs some very strange spaces sometimes
-    // or \s is partly broken in KRegExp
-    exp->compile( "^  ([^ ]+) \\= ([^\\(\n]+)\\s*\\(id\\=[0-9]*\\)");
-    if (exp->match( buf)) {
+    // or \s is partly broken in QRegExp
+    exp->setPattern( "^  ([^ ]+) \\= ([^\\(\n]+)\\s*\\(id\\=[0-9]*\\)");
+    if (exp->search( buf) != -1 ) {
         DBG_DISPLAY(QString("Var info:"));
         varLineCount++;
-        kdDebug() << "Name: " << exp->group(1) << endl;
-        kdDebug() << "Type: " << exp->group(2) << endl; // Remove possible trailing whitespace
+        kdDebug() << "Name: " << exp->cap(1) << endl;
+        kdDebug() << "Type: " << exp->cap(2) << endl; // Remove possible trailing whitespace
 
         // Queue current var for processing.
-        // kdDebug() << "APPENDING: " << exp->group(1) << endl;
-        nameQueue.append(exp->group(1));
+        // kdDebug() << "APPENDING: " << exp->cap(1) << endl;
+        nameQueue.append(exp->cap(1));
 
-        buf += exp->groupEnd(0);
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
 
     }
 
-    exp->compile("^  ([^ ]+) \\= ([^\n]+)");
-    if (exp->match( buf)) {
+    exp->setPattern("^  ([^ ]+) \\= ([^\n]+)");
+    if (exp->search( buf) != -1) {
         DBG_DISPLAY(QString("Local Var info:"));
 
         varLineCount++;
-        kdDebug() << "Name: " << exp->group(1) << endl;
-        kdDebug() << "Type: " << exp->group(2) << endl; // Remove possible trailing whitespace
+        kdDebug() << "Name: " << exp->cap(1) << endl;
+        kdDebug() << "Type: " << exp->cap(2) << endl; // Remove possible trailing whitespace
 
         // primitive type, add directly
-        analyzeDump(exp->group(0));
+        analyzeDump(exp->cap(0));
 
-        buf += exp->groupEnd(0);
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
 
     }
 
 
-    exp->compile("^([^ ]+)\\[[0-9]+\\] ");
-    if (exp->match(buf)) {
+    exp->setPattern("^([^ ]+)\\[[0-9]+\\] ");
+    if (exp->search(buf) != -1 ) {
         DBG_DISPLAY(QString("Found end of var dump (prompt)"));
-        kdDebug() << ">" << exp->group(0) << "<\n";
+        kdDebug() << ">" << exp->cap(0) << "<\n";
         if (currentCmd_ && currentCmd_->typeMatch(LOCALS)) {
             delete currentCmd_;
             currentCmd_ = 0;
@@ -613,8 +631,9 @@ char* JDBController::parseLocalVars(char* buf) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
 
-        buf += exp->groupEnd(0);
         delete exp;
         return buf;
 
@@ -630,52 +649,56 @@ char* JDBController::parseLocalVars(char* buf) {
 
 char* JDBController::parseDump(char* buf) {
     // Looking for dump output
-    KRegExp *exp;
+    QRegExp *exp;
 
     // compound object
-    exp = new KRegExp( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
-    if (exp->match( buf)) {
+    exp = new QRegExp( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
+    if (exp->search( buf) != -1 ) {
         DBG_DISPLAY(QString("Found dump info"));
 
-        analyzeDump(exp->group(0));
+        analyzeDump(exp->cap(0));
 
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
 
-        buf +=  exp->groupEnd(0);
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
         delete exp;
         return buf;
     }
 
     // Array element
-    exp->compile("^ ([^\\[]+\\[[0-9]+\\]) \\= ([^\n]+)");
-    if (exp->match( buf)) {
+    exp->setPattern("^ ([^\\[]+\\[[0-9]+\\]) \\= ([^\n]+)");
+    if (exp->search( buf) != -1 ) {
         DBG_DISPLAY(QString("Found dump info"));
-        kdDebug() << "Array element: " << exp->group(1) << " - " << exp->group(2) << endl;
-        analyzeDump(exp->group(0));
+        kdDebug() << "Array element: " << exp->cap(1) << " - " << exp->cap(2) << endl;
+        analyzeDump(exp->cap(0));
 
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
 
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
 
-        buf +=  exp->groupEnd(0);
         delete exp;
         return buf;
     }
 
-    exp->compile("^No 'this'.  In native or static method\n");
-    if (exp->match( buf)) {
+    exp->setPattern("^No 'this'.  In native or static method\n");
+    if (exp->search( buf) != -1) {
 
         if (currentCmd_ && currentCmd_->typeMatch(DATAREQUEST)) {
             delete currentCmd_;
             currentCmd_ = 0;
         }
 
-        buf +=  exp->groupEnd(0);
+        QString retQString =  QString( buf + exp->cap(exp->numCaptures()) );
+        memcpy( buf, retQString.latin1(), retQString.length() );
+
         delete exp;
         return buf;
     }
@@ -706,10 +729,10 @@ void JDBController::analyzeDump(QString data)
 
   // case a
   // if we have a primitive type we add it to the list of locals directly
-  KRegExp *exp = new KRegExp( "^  ([^ \\[]+) \\= ([^\n]+)"); // dup if it's really a var of primitive type
-  if (exp->match(data.latin1())) {
-      QString name = exp->group(1);
-      QString value = exp->group(2);
+  QRegExp *exp = new QRegExp( "^  ([^ \\[]+) \\= ([^\n]+)"); // dup if it's really a var of primitive type
+  if (exp->search(data.latin1()) != -1 ) {
+      QString name = exp->cap(1);
+      QString value = exp->cap(2);
       JDBVarItem *item = new JDBVarItem();
       item->value = value;
       item->name = name;
@@ -722,16 +745,16 @@ void JDBController::analyzeDump(QString data)
 
   }
 
-  exp->compile( " ([^ \\[]+)\\[([0-9]+)\\] \\= ([^\n]+)");
-  if (exp->match(data.latin1())) {
-      kdDebug() << "Array element: " << exp->group(1) << "[" << exp->group(2)<< "] = " << exp->group(3) << endl;
+  exp->setPattern( " ([^ \\[]+)\\[([0-9]+)\\] \\= ([^\n]+)");
+  if (exp->search(data.latin1()) != -1) {
+      kdDebug() << "Array element: " << exp->cap(1) << "[" << exp->cap(2)<< "] = " << exp->cap(3) << endl;
 
-      QString name = exp->group(1);
+      QString name = exp->cap(1);
 
       JDBVarItem *item;
       JDBVarItem *subItem = new JDBVarItem();
-      subItem->name = QString(exp->group(1)) + "[" + QString(exp->group(2)) + "]";
-      subItem->value = exp->group(3);
+      subItem->name = QString(exp->cap(1)) + "[" + QString(exp->cap(2)) + "]";
+      subItem->value = exp->cap(3);
       item = localData[name];
       Q_ASSERT((name != 0));
 
@@ -747,18 +770,18 @@ void JDBController::analyzeDump(QString data)
 
 
 
-  exp->compile( "^([^ ]+) \\= instance of ([^[]+)\\[([0-9])+] \\(id\\=[0-9]+\\) {");
-  if (exp->match(data.latin1())) {
+  exp->setPattern( "^([^ ]+) \\= instance of ([^[]+)\\[([0-9])+] \\(id\\=[0-9]+\\) {");
+  if (exp->search(data.latin1()) != -1 ) {
       kdDebug() << "Array...\n";
-      kdDebug() << "Name: " << exp->group(1) << endl;
-      kdDebug() << "Type: " << exp->group(2) << endl;
-      kdDebug() << "Dimension: " << exp->group(3) << endl;
+      kdDebug() << "Name: " << exp->cap(1) << endl;
+      kdDebug() << "Type: " << exp->cap(2) << endl;
+      kdDebug() << "Dimension: " << exp->cap(3) << endl;
 
       kdDebug() << "Adding array to var tree... \n";
       JDBVarItem *item = new JDBVarItem();
-      item->name = exp->group(1);
-      QString name = exp->group(1);
-      if (atoi(exp->group(3)) == 0) {
+      item->name = exp->cap(1);
+      QString name = exp->cap(1);
+      if (atoi(exp->cap(3).latin1()) == 0) {
           item->value="null";
       }
       if (!localData[name]) {
@@ -766,9 +789,9 @@ void JDBController::analyzeDump(QString data)
           localData.insert(name, item);
       } else { /* The object is already being referred to as a property */ }
 
-      for (int i=0; i<atoi(exp->group(3)); i++) {
-          kdDebug() <<  QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]") << endl;
-          nameQueue.append(QString(exp->group(1)) + QString("[") + QString::number((i)) + QString("]"));
+      for (int i=0; i<atoi(exp->cap(3).latin1()); i++) {
+          kdDebug() <<  QString(exp->cap(1)) + QString("[") + QString::number((i)) + QString("]") << endl;
+          nameQueue.append(QString(exp->cap(1)) + QString("[") + QString::number((i)) + QString("]"));
       }
 
       delete exp;
@@ -778,12 +801,12 @@ void JDBController::analyzeDump(QString data)
   // case b
   // otherwise we need to extract all properties and add the name of the current var
   // and link it with its properties
-  exp->compile( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
-  if (exp->match(data.latin1())) {
+  exp->setPattern( "^([^ ]+) \\= ([^\\(]+)\\s*\\(id\\=[0-9]*\\) \\{([^\\}]+)\\}");
+  if (exp->search(data.latin1()) != -1) {
       kdDebug() << "COMPOUND DATA" << endl;
       // create a new jdbvaritem for the name of the object and for each property it
       // contains. the object's jdbvaritem has siblings then
-      QString name = exp->group(1);
+      QString name = exp->cap(1);
       JDBVarItem *item;
       if (!localData[name]) {
           /** oops, we should already have added that object @todo insert assertion */
@@ -799,19 +822,19 @@ void JDBController::analyzeDump(QString data)
 
 
       unsigned int i = data.find("{")+1;
-      exp = new KRegExp("^([^ \\:]+): ([^\n]+)");
+      exp = new QRegExp("^([^ \\:]+): ([^\n]+)");
       QString tmp;
       while (i<data.length()) {
          // I guess this is really slow. Using a char* would be better here
-         if (exp->match(data.mid(i).latin1())) {
-             if (strncmp(exp->group(2), "instance of", 11) != 0) {
+         if (exp->search(data.mid(i).latin1()) != -1) {
+             if (strncmp(exp->cap(2).latin1(), "instance of", 11) != 0) {
                  // property of primitive type
                  kdDebug() << "Primitive type..." << endl;
-                 QString fullName = name + QString(".") + QString(exp->group(1));
+                 QString fullName = name + QString(".") + QString(exp->cap(1));
 
                  // create new item
                  JDBVarItem *subItem = new JDBVarItem();
-                 subItem->value = exp->group(2);
+                 subItem->value = exp->cap(2);
                  subItem->name = fullName;
                  if (!localData[fullName]) {
                      localData.insert(fullName, subItem);
@@ -820,13 +843,13 @@ void JDBController::analyzeDump(QString data)
                  // item.insertSibling(subItem);
                  item->siblings.append(subItem);
 
-                 //DBG_DISPLAY(QString("Appending Name: ") + name + QString(".") + exp->group(1));
-                 //DBG_DISPLAY(QString("Value: ") + exp->group(2));
-             } else if (QString(exp->group(2)).contains("[")) {
+                 //DBG_DISPLAY(QString("Appending Name: ") + name + QString(".") + exp->cap(1));
+                 //DBG_DISPLAY(QString("Value: ") + exp->cap(2));
+             } else if (QString(exp->cap(2)).contains("[")) {
                  // Array property
                  // not parsed yet. just insert some dummy data
 
-                 QString fullName = name + QString(".") + QString(exp->group(1));
+                 QString fullName = name + QString(".") + QString(exp->cap(1));
 
                  JDBVarItem *subItem = new JDBVarItem();
                  subItem->name = fullName;
@@ -834,13 +857,13 @@ void JDBController::analyzeDump(QString data)
                      localData.insert(fullName, subItem);
                  } else { /* Oops */ }  /// @todo insert assertion
 
-                 //kdDebug() << "->Appending Name: " << name << "." << exp->group(1) << endl;
-                 //kdDebug() << "Value: " << exp->group(2) << " as " << (int)subItem << endl;
+                 //kdDebug() << "->Appending Name: " << name << "." << exp->cap(1) << endl;
+                 //kdDebug() << "Value: " << exp->cap(2) << " as " << (int)subItem << endl;
 
                  // get array dimension andn queue elements for parsing
-                 KRegExp *exp2 = new KRegExp("\\[([0-9]+)\\]");
-                 if (exp2->match(exp->group(2))) {
-                     int dimension = atoi(exp2->group(1));
+                 QRegExp *exp2 = new QRegExp("\\[([0-9]+)\\]");
+                 if (exp2->search(exp->cap(2)) != -1 ) {
+                     int dimension = atoi(exp2->cap(1).latin1());
                      kdDebug() << "Array dimension: " << dimension << endl;
                      for (int i=0; i<dimension; i++) {
                          nameQueue.append(fullName + "[" + QString::number((i)) + "]");
@@ -854,7 +877,7 @@ void JDBController::analyzeDump(QString data)
                  // property of non-primitive type, we will request additional
                  // information later
                  kdDebug() << "complex..." << endl;
-                 QString fullName = name + QString(".") + QString(exp->group(1));
+                 QString fullName = name + QString(".") + QString(exp->cap(1));
                  nameQueue.append(fullName);
 
                  JDBVarItem *subItem = new JDBVarItem();
@@ -870,7 +893,7 @@ void JDBController::analyzeDump(QString data)
 
 
              }
-             i += exp->groupEnd(0);
+             i += atoi( exp->cap(exp->numCaptures()).latin1() );
          } else {
              i++;
          }
