@@ -20,9 +20,14 @@
 class KDevCoreIface;
 class KDevApi;
 class KDevFactory;
-class TextEditorDocument;
 class DocumentationPart;
+
+#ifdef NEW_EDITOR
+#include "keditor/editor.h"
+#else
+class TextEditorDocument;
 class EditorPart;
+#endif
 
 
 class Core : public KDevCore
@@ -50,6 +55,10 @@ protected:
     virtual void message(const QString &str);
     virtual KParts::PartManager *partManager() const { return manager; };
 
+#ifdef NEW_EDITOR
+    KEditor::Editor *editor();
+#endif
+	    
 private slots:
     void activePartChanged(KParts::Part *part);
     void docPartDestroyed();
@@ -83,7 +92,11 @@ private:
     void initComponents();
     void removeComponents();
     DocumentationPart *createDocumentationPart();
+#ifdef NEW_EDITOR
+    KEditor::Document *createDocument(const KURL &url);
+#else
     EditorPart *createEditorPart();
+#endif
     void updateBufferMenu();
     void splitWindow(Orientation orient);
  
@@ -98,9 +111,13 @@ private:
     QList<KDevPart> components;
     QList<KDevPart> runningComponents;
     QList<DocumentationPart> docParts;
+#ifdef NEW_EDITOR
+    KEditor::Editor *_editor;
+#else
     QList<EditorPart> editorParts;
     QList<TextEditorDocument> editedDocs;
     QList<KAction> bufferActions;
+#endif
     QString projectFile;
 };
 

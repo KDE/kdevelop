@@ -37,7 +37,14 @@
 #include "KDevCoreIface.h"
 
 #include "documentationpart.h"
+
+#ifdef NEW_EDITOR
+#include "keditor/editor.h"
+#include "keditor/cursor_iface.h"
+#else
 #include "editorpart.h"
+#endif
+
 #include "filenameedit.h"
 #include "importdlg.h"
 #include "toplevel.h"
@@ -47,6 +54,9 @@
 
 Core::Core()
     : KDevCore()
+#ifdef NEW_EDITOR
+      , _editor(0)
+#endif
 {
     api = new KDevApi();
     api->core = this;
@@ -72,11 +82,17 @@ Core::Core()
     initActions();
     win->createGUI(0);
 
+#ifndef NEW_EDITOR
     bufferActions.setAutoDelete(true);
-    
-    //gotoSourceFile("/home/bernd/.emacs", 0);
+#endif 
 
     initComponents();
+
+#ifdef NEW_EDITOR
+    // create editor object
+    (void) editor();
+#endif
+            
     win->show();
 
     emit coreInitialized();
@@ -97,15 +113,17 @@ KActionCollection *Core::actionCollection()
 
 void Core::initActions()
 {
+#ifndef NEW_EDITOR
     KStdAction::saveAs(this, SLOT(slotSaveFileAs()), actionCollection());
-    KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
+#endif
+	KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 
     KAction *action;
     
     action = new KAction( i18n("&Open file..."), "fileopen", CTRL+Key_O,
                           this, SLOT(slotOpenFile()),
                           actionCollection(), "file_open" );
-
+#ifndef NEW_EDITOR
     action = new KAction( i18n("&Save file"), "filesave", 0,
                           this, SLOT(slotSaveFile()),
                           actionCollection(), "file_save" );
@@ -117,6 +135,7 @@ void Core::initActions()
     action = new KAction( i18n("Split window &horizontally"), 0,
                           this, SLOT(slotSplitHorizontally()),
                           actionCollection(), "file_splithorizontally" );
+#endif
 
     action = new KAction( i18n("&Close window"), Key_F4,
                           this, SLOT(slotCloseWindow()),
@@ -227,6 +246,9 @@ void Core::activePartChanged(KParts::Part *part)
     win->createGUI(part);
     activePart = part;
 
+	// TODO: enable/disable actions depending on the current part!
+    	
+#ifndef NEW_EDITOR
     if (activePart && activePart->inherits("EditorPart")) {
         EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
@@ -236,6 +258,7 @@ void Core::activePartChanged(KParts::Part *part)
             doc->openURL(doc->url());
         }
     }
+#endif
 }
 
 
@@ -252,6 +275,36 @@ void Core::docContextMenu(QPopupMenu *popup, const QString &url, const QString &
     emit contextMenu(popup, &context);
 }
 
+#ifdef NEW_EDITOR
+
+KEditor::Editor *Core::editor()
+{
+  if (_editor)
+    return _editor;
+
+  // ask the trader which editor he has to offer
+  KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString::null);
+  if (offers.isEmpty())
+        return 0;
+
+  // for now, pick the first one
+  KService *service = *offers.begin();
+  KLibFactory *factory = KLibLoader::self()->factory(service->library());
+  if (!factory)
+        return 0;
+
+  // cast it, so we can easily access the part later
+  _editor = static_cast<KEditor::Editor*>(factory->create(win, "editor"));
+  if (!_editor)
+        return 0;
+
+  // merge the GUI with ours
+  win->factory()->addClient(_editor);
+
+  return _editor;
+}
+
+#else
 
 EditorPart *Core::createEditorPart()
 {
@@ -277,13 +330,16 @@ EditorPart *Core::createEditorPart()
 
     return part;
 }
+#endif
 
 
 void Core::editorPartDestroyed()
 {
+#ifndef NEW_EDITOR
     kdDebug() << "editor part destroyed" << endl;
     EditorPart *part = (EditorPart*) sender();
     editorParts.removeRef(part);
+#endif
 }
 
 
@@ -297,9 +353,35 @@ void Core::editorContextMenu(QPopupMenu *popup, const QString &linestr, int col)
 
 void Core::updateBufferMenu()
 {
-    win->unplugActionList("buffer_list");
+#ifdef NEW_EDITOR
+	
+	QList<KAction> bufferActions;
+	
+	win->unplugActionList("buffer_list");
+	
+	QListIterator<KParts::Part> it(*partManager()->parts());
+	for ( ; it.current(); ++it)
+	{
+	  kdDebug(9000) << "listing part: " << it.current()->className() << endl;
+	  if (it.current()->inherits("KParts::ReadOnlyPart"))
+	  {
+		KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(it.current());
+		QString name = ro_part->url().url();
+		if (name.isEmpty())
+		    continue;
+		kdDebug(9000) << "Plugging " << name << endl;
+		KAction *action = new KAction(name, 0, 0, name.latin1());
+		connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
+		bufferActions.append(action);
+	  }
+	}
+	
+	win->plugActionList("buffer_list", bufferActions);
+	
+#else
+	win->unplugActionList("buffer_list");
     bufferActions.clear();
-    
+
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         QString fileName = it.current()->fileName();
@@ -309,6 +391,7 @@ void Core::updateBufferMenu()
         bufferActions.append(action);
     }
     win->plugActionList("buffer_list", bufferActions);
+#endif
 }
 
 
@@ -446,13 +529,67 @@ void Core::gotoDocumentationFile(const KURL& url, Embedding embed)
     
     part->gotoURL(url);
     win->raiseWidget(part->widget());
+
+	//TODO: fix the documentation part so that it behaves like a normal
+	//part.
+	//updateBufferMenu();
+}
+
+
+KEditor::Document *Core::createDocument(const KURL &url)
+{
+  KEditor::Document *doc = editor()->createDocument(win, url);
+  if (!doc)
+      return 0;
+
+  partManager()->addPart(doc);
+
+  return doc;
 }
 
 
 void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 {
-    kdDebug(9000) << "Goto source file: " << url.path() << endl;
-    
+    kdDebug(9000) << "Goto source file: " << url.path() << " line: " << lineNum << endl;
+
+#ifdef NEW_EDITOR
+
+	KParts::Part *activePart = partManager()->activePart();
+
+    // activate the requested file
+    KEditor::Document *doc = editor()->document(url);
+    if (!doc)
+	{
+        doc = createDocument(url);
+		updateBufferMenu();
+	}
+    if (!doc)
+        return;
+
+	if (activePart != doc)
+	  partManager()->setActivePart(doc, doc->widget());
+
+    // goto the requested line
+    KEditor::CursorDocumentIface *iface = static_cast<KEditor::CursorDocumentIface*>(doc->queryInterface("KEditor::CursorDocumentIface"));
+    if (iface)
+        iface->setCursorPosition(lineNum, 0);
+
+    if (!doc->widget())
+      return;
+
+	if (doc != activePart)
+	{
+      if (embed == SplitHorizontal || embed == SplitVertical)
+        win->splitDocumentWidget(doc->widget(), activePart ? activePart->widget() : 0, (embed==SplitHorizontal) ? Horizontal : Vertical);
+      else
+        win->embedDocumentWidget(doc->widget(), activePart ? activePart->widget() : 0);
+    }
+
+  if (doc->widget())	
+    win->raiseWidget(doc->widget());
+  
+#else
+
     // See if we have this document already loaded.
     TextEditorDocument *doc = 0;
     QListIterator<TextEditorDocument> it2(editedDocs);
@@ -470,7 +607,7 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
         editedDocs.append(doc);
         updateBufferMenu();
         emit loadedFile(doc->fileName());
-    }       
+    }
 
     // Find a part to load into
     EditorPart *part = 0;
@@ -491,13 +628,19 @@ void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
     
     part->gotoDocument(doc, lineNum);
     win->raiseWidget(part->widget());
+#endif
 }
 
 
 void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
 {
     KURL url(fileName);
-    
+#ifdef NEW_EDITOR
+
+	gotoSourceFile(url, lineNum);
+
+    // TODO: This should use the Breakpoint/Debug iface once it exists!
+#else
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it)
         (*it)->setExecutionPoint(-1);
@@ -513,12 +656,24 @@ void Core::gotoExecutionPoint(const QString &fileName, int lineNum)
             (*it2)->setExecutionPoint(lineNum);
             break;
         }
+#endif
 }
 
 
 void Core::saveAllFiles()
 {
-    QListIterator<TextEditorDocument> it(editedDocs);
+#ifdef NEW_EDITOR
+
+    QListIterator<KParts::Part> it(*partManager()->parts());
+	for ( ; it.current(); ++it)
+	    if (it.current()->inherits("KParts::ReadWritePart"))
+		{
+			KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
+			rw_part->save();
+		}
+		
+#else	
+	QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         TextEditorDocument *doc = it.current();
         if (doc->isModified() && doc->modifiedOnDisk()) {
@@ -534,11 +689,13 @@ void Core::saveAllFiles()
             }
         }
     }
+#endif
 }
 
 
 void Core::revertAllFiles()
 {
+#ifndef NEW_EDITOR
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         TextEditorDocument *doc = it.current();
@@ -548,6 +705,7 @@ void Core::revertAllFiles()
             emit loadedFile(doc->fileName());
         }
     }
+#endif
 }
 
 
@@ -555,7 +713,9 @@ void Core::setBreakpoint(const QString &fileName, int lineNum,
                          int id, bool enabled, bool pending)
 {
     KURL url(fileName);
-    
+
+#ifndef NEW_EDITOR
+
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         if ((*it)->isEditing(url)) {
@@ -563,6 +723,7 @@ void Core::setBreakpoint(const QString &fileName, int lineNum,
             break;
         }
     }
+#endif
 }
 
 
@@ -597,6 +758,7 @@ void Core::openFileInteractionFinished(const QString &fileName)
 
 void Core::saveFileInteractionFinished(const QString &fileName)
 {
+#ifndef NEW_EDITOR
     if (!activePart->inherits("EditorPart"))
         return;
 
@@ -609,7 +771,7 @@ void Core::saveFileInteractionFinished(const QString &fileName)
             KMessageBox::sorry(win, i18n("This filename is already used by another buffer."));
             return;
         }
-    
+
     QFileInfo fi(fileName);
     if (fi.exists()) {
         if (!KMessageBox::warningYesNo
@@ -617,25 +779,22 @@ void Core::saveFileInteractionFinished(const QString &fileName)
                        "Overwrite it?").arg(fileName)))
             return;
     }
-    
+
     doc->saveAs(KURL(fileName));
     part->updateWindowCaption();
     updateBufferMenu();
     win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
     emit savedFile(doc->fileName());
+#endif
 }
 
 
 void Core::slotOpenFile()
 {
-    
 #if 1
-    
     QString fileName = KFileDialog::getOpenFileName();
     openFileInteractionFinished(fileName);
-    
 #else
-    
     // currently broken
     FileNameEdit *w = new FileNameEdit(i18n("Open file:"), win->statusBar());
 
@@ -652,9 +811,7 @@ void Core::slotOpenFile()
 
     connect( w, SIGNAL(finished(const QString &)),
              this, SLOT(openFileInteractionFinished(const QString &)) );
-    
 #endif
-    
 }
 
 
@@ -663,12 +820,13 @@ void Core::slotSaveFile()
     // FIXME: enable/disable this action for active DocumentionPart
     if (!activePart->inherits("EditorPart"))
         return;
-
+#ifndef NEW_EDITOR
     EditorPart *part = static_cast<EditorPart*>(activePart);
     TextEditorDocument *doc = part->editorDocument();
     doc->save();
     win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
     emit savedFile(doc->fileName());
+#endif
 }
 
 
@@ -708,7 +866,11 @@ void Core::slotCloseWindow()
 {
     if (!activePart)
         return;
-    
+
+#ifdef NEW_EDITOR
+    delete activePart;
+
+#else 
     if (activePart->inherits("EditorPart")) {
         EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
@@ -717,8 +879,9 @@ void Core::slotCloseWindow()
                        "Close this window anyway?").arg(doc->url().url())))
             return;
     }
-
+    
     delete activePart->widget();
+#endif
 }
 
 
@@ -726,7 +889,7 @@ void Core::splitWindow(Orientation orient)
 {
     if (!activePart)
         return;
-
+#ifndef NEW_EDITOR
     if (activePart->inherits("EditorPart")) {
         EditorPart *part = static_cast<EditorPart*>(activePart);
         TextEditorDocument *doc = part->editorDocument();
@@ -742,6 +905,7 @@ void Core::splitWindow(Orientation orient)
         newpart->gotoURL(url);
         win->raiseWidget(newpart->widget());
     }
+#endif
 }
 
 
@@ -759,6 +923,7 @@ void Core::slotSplitHorizontally()
 
 void Core::slotKillBuffer()
 {
+#ifndef NEW_EDITOR
     if (!activePart)
         return;
 
@@ -769,21 +934,21 @@ void Core::slotKillBuffer()
             (win, i18n("The file %1 is modified.\n"
                        "Close this window anyway?").arg(doc->url().url())))
             return;
-        
+
         QList<EditorPart> deletedParts;
-        
+
         QListIterator<EditorPart> it1(editorParts);
         for (; it1.current(); ++it1) {
             if (it1.current()->editorDocument() == doc)
                 deletedParts.append(it1.current());
         }
-        
+
         // Kill all parts that are still looking at this document
         // - One may want to change this to Emacs' behaviour
         QListIterator<EditorPart> it2(deletedParts);
         for (; it2.current(); ++it2)
             delete it2.current()->widget();
-        
+
         editedDocs.remove(doc);
         updateBufferMenu();
         delete doc;
@@ -793,11 +958,13 @@ void Core::slotKillBuffer()
         // better idea...
         delete activePart->widget();
     }
+#endif
 }
 
 
 void Core::slotQuit()
 {
+#ifndef NEW_EDITOR
     QListIterator<TextEditorDocument> it(editedDocs);
     for (; it.current(); ++it) {
         TextEditorDocument *doc = it.current();
@@ -811,7 +978,7 @@ void Core::slotQuit()
                 doc->save();
         }
     }
-    
+#endif
     disconnect( manager, SIGNAL(activePartChanged(KParts::Part*)),
                 this, SLOT(activePartChanged(KParts::Part*)) );
 
@@ -850,8 +1017,40 @@ void Core::slotProjectImport()
 
 void Core::slotBufferSelected()
 {
+#ifdef NEW_EDITOR
+
+	// Note: this code is intented to work with more than
+ 	// just editor parts, e.g. with documentation parts. There
+	// are two problems right now: a) the documentation part's
+	// implementation is broken, and b) we need a better mechanism
+	// than the URL to identify the parts.
+	
+    QListIterator<KParts::Part> it(*partManager()->parts());
+	for ( ; it.current(); ++it)
+	{
+	  if (!it.current()->inherits("KParts::ReadOnlyPart"))
+		  continue;
+
+	  KParts::ReadOnlyPart *ro_part = static_cast<KParts::ReadOnlyPart*>(it.current());
+	  if (ro_part->url() == KURL(sender()->name()))
+		{
+		  KParts::Part *activePart = partManager()->activePart();
+
+          partManager()->setActivePart(it.current(), it.current()->widget());
+ 
+		  if (!it.current()->widget())
+		      return;
+
+          if (activePart != ro_part)		  
+	        win->embedDocumentWidget(it.current()->widget(), activePart ? activePart->widget() : 0);
+	
+	      win->raiseWidget(it.current()->widget());	
+		}
+	  }
+#else
     QString fileName = sender()->name();
     gotoSourceFile(KURL(fileName), 0);
+#endif
 }
 
 
