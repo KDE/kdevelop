@@ -18,6 +18,7 @@
 #include <qtimer.h>
 #include <qstatusbar.h>
 #include <qprogressbar.h>
+#include <qregexp.h>
 #include <kapp.h>
 #include <kdebug.h>
 #include <klocale.h>
