@@ -13,6 +13,7 @@
 
 #include <klocale.h>
 #include <kfiledialog.h>
+#include <kdirselectdialog.h>
 #include <urlutil.h>
 
 #include <qlineedit.h>
@@ -21,6 +22,7 @@
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
+#include <qlabel.h>
 
 #include "domutil.h"
 #include "environmentvariableswidget.h"
@@ -41,7 +43,7 @@ RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup
       m_buildDirectory = buildDirectory + "/";
     m_buildDirectory.cleanPath();
 
-    buildDirectory_edit->setText(m_buildDirectory.directory(false, false));
+    buildDirectory_label->setText(m_buildDirectory.directory(false, false));
 
 
     QString directoryRadioString = DomUtil::readEntry(dom, configGroup + "/run/directoryradio");
@@ -92,32 +94,32 @@ void RunOptionsWidget::directoryRadioChanged()
     if ( customDirectory_radio->isChecked() ) {
         customRunDirectory_edit->setEnabled(true);
         browseCustomButton->setEnabled(true);
-        mainProgram_relativeness_edit->setText("( absolute path )");
+        mainProgram_relativeness_label->setText("( absolute path )");
+        /// FIXME: Adjust mainprogram_edit text
+        // mainprogram_edit->setText( absolute path to executable );
     } else {
         customRunDirectory_edit->setEnabled(false);
         browseCustomButton->setEnabled(false);
-        mainProgram_relativeness_edit->setText("( relative to BUILD directory )");
+        mainProgram_relativeness_label->setText("( relative to BUILD directory )");
+        /// FIXME: Adjust mainprogram_edit text
+        // mainprogram_edit->setText( path to executable relative to BUILD directory );
     }  
 }
 
 
 void RunOptionsWidget::browseCustomDirectory()
 {
-    KFileDialog *dlg = new KFileDialog(customRunDirectory_edit->text(), QString::null, this, 0, true);
-    QStringList filters;
-    filters << "inode/directories";
-    dlg->setMimeFilter(filters);
-    dlg->setCaption(i18n("Select a directory"));
     QString path = customRunDirectory_edit->text().stripWhiteSpace();
-    if (!path.isEmpty()) {
-        // pass it to the dialog
-        dlg->setURL(path);
-        dlg->setSelection(path);
-    }
+    KDirSelectDialog *dlg = new KDirSelectDialog(path, false, this, QString::null, true);
+    dlg->setCaption(i18n("Select a directory"));
 
     if (dlg->exec()) {
     // if after the dialog execution the OK button was selected:
-        path = dlg->selectedFile().stripWhiteSpace();
+        path = dlg->url().path();
+        if (path.right(1) != "/")
+            path = path + "/";   // I find these lines dumb. Why the hell do I always have to add this???
+                                 // In *nix whenever a path has a / in the end it is a directory, period!
+                                 // Why does the url() return without this? Even if I add .directory(false, false)?
         if (!path.isEmpty()) {
             customRunDirectory_edit->setText(path);
         }
@@ -128,6 +130,12 @@ void RunOptionsWidget::browseCustomDirectory()
 
 void RunOptionsWidget::browseMainProgram()
 {
+    /// FIXME: Adjust mainprogram_edit text in the end of this function
+    /// mainprogram_edit->setText( path to executable relative to BUILD directory );
+    /// or
+    /// mainprogram_edit->setText( absolute path to executable );
+    /// depending on the current selected run directory
+    
     QString start_directory;
     if ( customDirectory_radio->isChecked() )
         start_directory = mainprogram_edit->text().stripWhiteSpace();
