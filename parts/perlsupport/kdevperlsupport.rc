@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevPerlSupport" version="1">
+<MenuBar>
+ <Menu name="help">
+  <Action name="help_perldocfunction"/>
+  <Action name="help_perldocfaq"/>
+ </Menu>
+</MenuBar>
+</kpartgui>

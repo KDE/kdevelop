@@ -284,7 +284,8 @@ QString AutoProjectWidget::buildDirectory()
 {
     QDomDocument &dom = *m_part->projectDom();
 
-    return DomUtil::readEntry(dom, "/kdevautoproject/configure/builddir");
+    QString dir = DomUtil::readEntry(dom, "/kdevautoproject/configure/builddir");
+    return dir.isEmpty()? projectDirectory() : dir;
 }
 
 
@@ -376,7 +377,8 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
                 slotItemExecuted(spitem);
         }
         else if (r == idBuild) {
-            m_part->startMakeCommand(spitem->path, QString::fromLatin1(""));
+            QString relpath = spitem->path.mid(projectDirectory().length());
+            m_part->startMakeCommand(buildDirectory() + relpath, QString::fromLatin1(""));
         }
     } else if (pvitem->type() == ProjectItem::Target) {
         TargetItem *titem = static_cast<TargetItem*>(pvitem);
@@ -402,7 +404,8 @@ void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const 
                 name + ".a";
             else if (titem->primary == "LTLIBRARIES")
                 name + ".la";
-            m_part->startMakeCommand(activeSubproject->path, titem->name);
+            QString relpath = activeSubproject->path.mid(projectDirectory().length());
+            m_part->startMakeCommand(buildDirectory() + relpath, titem->name);
         }
     } else if (pvitem->type() == ProjectItem::File) {
         FileItem *fitem = static_cast<FileItem*>(pvitem);

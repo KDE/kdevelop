@@ -159,7 +159,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
     QFileInfo fi1(dir + "/Makefile");
     if (!fi1.exists()) {
-        QFileInfo fi2(projectDirectory() + "/configure");
+        QFileInfo fi2(m_widget->buildDirectory() + "/configure");
         if (!fi2.exists()) {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
                                                               "and no configure script for this project.\n"
@@ -203,7 +203,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
 void AutoProjectPart::slotBuild()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1(""));
+    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1(""));
 }
 
 
@@ -211,7 +211,8 @@ void AutoProjectPart::slotConfigure()
 {
     QDomDocument &dom = *projectDom();
     
-    QString cmdline = "./configure";
+    QString cmdline = projectDirectory();
+    cmdline += "/configure";
     QString cc = DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompilerbinary");
     if (!cc.isEmpty())
         cmdline.prepend(QString("CC=%1 ").arg(cc));
@@ -238,10 +239,10 @@ void AutoProjectPart::slotConfigure()
     }
 
     QString dircmd = "cd ";
-    dircmd += projectDirectory();
+    dircmd += m_widget->buildDirectory();
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
+    makeFrontend()->queueCommand(m_widget->buildDirectory(), dircmd + cmdline);
 }
 
 
@@ -273,31 +274,31 @@ void AutoProjectPart::slotMakefilecvs()
 
 void AutoProjectPart::slotInstall()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1("install"));
+    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("install"));
 }
 
 
 void AutoProjectPart::slotClean()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1("clean"));
+    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("clean"));
 }
 
 
 void AutoProjectPart::slotDistClean()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1("distclean"));
+    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("distclean"));
 }
 
 
 void AutoProjectPart::slotMakeMessages()
 {
-    startMakeCommand(projectDirectory(), QString::fromLatin1("package-messages"));
+    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("package-messages"));
 }
 
 
 void AutoProjectPart::slotExecute()
 {
-    QString program = project()->projectDirectory() + "/" + project()->mainProgram();
+    QString program = m_widget->buildDirectory() + "/" + project()->mainProgram();
     
     if (DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal")) {
         QString terminal = "konsole -e /bin/sh -c '";

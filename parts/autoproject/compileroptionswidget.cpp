@@ -12,6 +12,7 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+#include <qtimer.h>
 #include <kdebug.h>
 #include <klibloader.h>
 #include <klocale.h>
@@ -125,7 +126,7 @@ void CompilerOptionsWidget::accept()
     DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77flags", f77flags_edit->text());
 
     if (KMessageBox::questionYesNo(this, i18n("Rerun configure now?")) == KMessageBox::Yes)
-        m_part->slotConfigure();
+        QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
 }
 
 

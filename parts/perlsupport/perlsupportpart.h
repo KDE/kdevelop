@@ -36,6 +36,8 @@ private slots:
 
     // Internal
     void initialParse();
+    void slotPerldocFunction();
+    void slotPerldocFAQ();
 
 private:
     void maybeParse(const QString fileName);

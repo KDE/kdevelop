@@ -9,6 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdir.h>
+#include <qfileinfo.h>
 #include <qlineedit.h>
 
 #include "domutil.h"
@@ -38,4 +40,8 @@ void ConfigureOptionsWidget::accept()
 
     DomUtil::writeEntry(dom, "/kdevautoproject/configure/configargs", configargs_edit->text());
     DomUtil::writeEntry(dom, "/kdevautoproject/configure/builddir", builddir_edit->text());
+
+    QFileInfo fi(builddir_edit->text());
+    QDir dir(fi.dir());
+    dir.mkdir(fi.fileName());
 }

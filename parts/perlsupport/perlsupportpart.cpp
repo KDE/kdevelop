@@ -16,6 +16,7 @@
 #include <qtimer.h>
 #include <kapp.h>
 #include <kdebug.h>
+#include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
 
@@ -33,12 +34,23 @@ PerlSupportPart::PerlSupportPart(KDevApi *api, QObject *parent, const char *name
     : KDevLanguageSupport(api, parent, name)
 {
     setInstance(PerlSupportFactory::instance());
-    
+
+    setXMLFile("kdevperlsupport.rc");
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
+    KAction *action;
+    action = new KAction( i18n("Find Perl function documentation..."), 0,
+                          this, SLOT(slotPerldocFunction()),
+                          actionCollection(), "help_perldocfunction" );
+    action->setStatusText( i18n("Show the documentation page of a Perl function") );
+    action = new KAction( i18n("Find Perl FAQ entry..."), 0,
+                          this, SLOT(slotPerldocFAQ()),
+                          actionCollection(), "help_perldocfaq" );
+    action->setStatusText( i18n("Show the FAQ entry for a keyword") );
 }
 
 
@@ -158,6 +170,30 @@ void PerlSupportPart::parse(const QString &fileName)
     }
     
     f.close();
+}
+
+
+void PerlSupportPart::slotPerldocFunction()
+{
+    bool ok;
+    QString key = KLineEditDlg::getText(i18n("Show Perl documentation for function:"), "", &ok, 0);
+    if (ok && !key.isEmpty()) {
+        QString url = "perldoc:functions/";
+        url += key;
+        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+    }
+}
+
+
+void PerlSupportPart::slotPerldocFAQ()
+{
+    bool ok;
+    QString key = KLineEditDlg::getText(i18n("Show FAQ entry for keyword:"), "", &ok, 0);
+    if (ok && !key.isEmpty()) {
+        QString url = "perldoc:faq/";
+        url += key;
+        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+    }
 }
 
 #include "perlsupportpart.moc"

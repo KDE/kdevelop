@@ -1,3 +1,8 @@
+2001-06-26  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Perldoc support
+	* Finished builddir support
+
 2001-06-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Implemented Add subproject

@@ -214,7 +214,7 @@ void PythonSupportPart::parse(const QString &fileName)
 void PythonSupportPart::slotPydoc()
 {
     bool ok;
-    QString key = KLineEditDlg::getText(i18n("Show Python documentation on key:"), "", &ok, 0);
+    QString key = KLineEditDlg::getText(i18n("Show Python documentation on keyword:"), "", &ok, 0);
     if (ok && !key.isEmpty()) {
         QString url = "pydoc:";
         url += key;

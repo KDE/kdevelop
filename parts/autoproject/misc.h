@@ -34,6 +34,8 @@ public:
      */
     static QCString canonicalize(QString str);
     /**
+     * 
+    /**
      * Parses a Makefile.am and stores its variable assignments
      * in a map.
      */
