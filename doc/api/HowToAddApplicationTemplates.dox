@@ -96,7 +96,7 @@ Further information could be (not required):
 the right half of the directory! If the directory is <code>template-foobar</code>
 the file must be <code>template-foobar/foobar</code>.
 
-\see AppWizardPart#_details for more information.
+\see AppWizardPart for more information.
 
 \subsubsection templates_1_2c I.2.3. Some Additional Files
 
