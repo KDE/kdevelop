@@ -44,7 +44,7 @@
 #include <qlistview.h>
 
 #ifdef ENABLE_KDEWIDGETS
-#include <kcombo.h>
+#include <qcombobox.h>
 #include <kdatepik.h>
 #include <kdatetbl.h>
 #include <kcolorbtn.h>
@@ -1204,7 +1204,7 @@ long KDlgLoader::setProperty_kde(QWidget* w, QString name, QString val, QString 
     {
       if (name == "text")              // Text
         {
-          ((KCombo*)w)->setText(val);
+          ((QComboBox*)w)->setEditText(val);
           Return(KDLGERR_SUCCESS)
         }
     }
@@ -1462,7 +1462,7 @@ QWidget* KDlgLoader::createItem(QWidget*par, QString ctype)
     return (QWidget*)new QListView(par);
 #ifdef ENABLE_KDEWIDGETS
   else if (ctype == "kcombo")
-    return (QWidget*)new KCombo(par);
+    return (QWidget*)new QComboBox(par);
   else if (ctype == "kdatepicker")
     return (QWidget*)new KDatePicker(par);
   else if (ctype == "kdatetable")
