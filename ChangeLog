@@ -1,3 +1,7 @@
+2003-10-04 Alexander Dymo <cloudtemple@mksat.net>
+    * Reenabled Ada language support (ported it to code model and reenabled
+      background parsing).
+
 2003-10-04 Amilcar Lucas <a.lucas@tu-bs.de>
     * On-line, automaticaly updated every 24H, KDevelop API Documentation can be viewed with the doctreeview.
 
