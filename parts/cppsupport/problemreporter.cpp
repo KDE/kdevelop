@@ -114,21 +114,22 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 {
     if( !part )
 	return;
-    
+
     if( m_document ){
 	reparse();
 	disconnect( m_document, 0, this, 0 );
     }
-    
+
     m_document = dynamic_cast<KTextEditor::Document*>( part );
-    
+    m_markIface = 0;
+
     if( m_document ) {
 	m_filename = m_document->url().path();
-		
+
 	if( m_cppSupport->fileExtensions().contains(QFileInfo(m_filename).extension()) ){
-	    
-	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );	    
-	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );	    
+
+	    connect( m_document, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+	    m_markIface = dynamic_cast<KTextEditor::MarkInterface*>( part );
 	    m_timer->changeInterval( m_delay );
 	}
     }
@@ -151,7 +152,7 @@ void ProblemReporter::removeAllErrors( const QString& filename )
 	    delete( i );
     }
 
-    if( m_markIface ){
+    if( m_document && m_markIface ){
 	QPtrList<KTextEditor::Mark> marks = m_markIface->marks();
 	QPtrListIterator<KTextEditor::Mark> it( marks );
 	while( it.current() ){
@@ -237,10 +238,10 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
     KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
-    
+
     if( !iface )
 	return;
-    
+
     iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
 }
 

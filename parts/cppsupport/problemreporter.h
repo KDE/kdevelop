@@ -20,6 +20,7 @@
 #define PROBLEMSREPORTER_H
 
 #include <klistview.h>
+#include <qguardedptr.h>
 
 class CppSupportPart;
 class QTimer;
@@ -65,7 +66,7 @@ private slots:
 
 private:
     CppSupportPart* m_cppSupport;
-    KTextEditor::Document* m_document;
+    QGuardedPtr<KTextEditor::Document> m_document;
     KTextEditor::MarkInterface* m_markIface;
     QTimer* m_timer;
     QString m_filename;
