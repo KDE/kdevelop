@@ -74,6 +74,7 @@ void slotFileNew();
   void  generateSourcecodeIfNeeded();
 
   void slotOpenDialog(QString file);
+  void slotDeleteDialog(QString file);
   
   protected:
   void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);

@@ -117,5 +117,5 @@ void KDlgDialogs::slotNewDialog(){
 void KDlgDialogs::slotDeleteDialog(){
   QListViewItem* item = currentItem();
   if( item != 0)
-    emit deleteDialog(QString(item->text(0)).lower() + ".kdevdlg" );
+    emit deleteDialog(QString(item->text(0)));
 }

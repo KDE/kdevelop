@@ -37,11 +37,14 @@
 #include "kdlgloader.h"
 #include <qdialog.h>
 #include <qmessagebox.h>
+#include <kprocess.h>
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
    connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(kdlgdialogsSelected(QString)),
 	   SLOT(slotOpenDialog(QString)));
+   connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(deleteDialog(QString)),
+	   SLOT(slotDeleteDialog(QString)));
    dialog_file = "";
 }
 
@@ -203,6 +206,14 @@ void KDlgEdit::slotViewRefresh()
 }
 
 void KDlgEdit::generateSourcecodeIfNeeded(){
+  CProject* prj = ((CKDevelop*)parent())->getProject();
+  TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
+  //cerr << ":::::" << info.classname;
+  if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty()){ // no class generated
+  }
+  else{
+    buildGenerate(false);
+  }
 }
 
 void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
@@ -213,7 +224,7 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
 
   CProject* prj = ((CKDevelop*)parent())->getProject(); 
   TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
-  cerr << ":::::" << info.classname;
+  //cerr << ":::::" << info.classname;
   if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty() || force_get_classname_dialog ){ // no class generated
     
     KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
@@ -625,7 +636,7 @@ void KDlgEdit::generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QStr
   *stream << "\n";
 }
 void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString _parent){
-  KDlgPropertyBase* props = wid->getProps();
+KDlgPropertyBase* props = wid->getProps();
   *stream << "\t" + props->getPropValue("VarName") +" = new QLineEdit(" + _parent +",\"" 
     +props->getPropValue("Name") + "\");\n";
   generateQWidget(wid,stream,_parent);
@@ -1349,4 +1360,20 @@ void KDlgEdit::slotViewPreview()
   PreviewDlg dlg;
   dlg.move(100,100);
   dlg.exec();
+}
+void KDlgEdit::slotDeleteDialog(QString file){
+  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected dialog?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
+    return;
+  }
+  if(!slotFileClose()) return;
+
+  ((CKDevelop*)parent())->delFileFromProject(file); // relative filename
+
+  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  file = prj->getProjectDir() + file;
+  KShellProcess* proc = new KShellProcess;
+  QString command = "rm -f " + file;
+  //  cerr << "\n\n" << command << "\n\n";
+  *proc << command;
+  proc->start();
 }
