@@ -498,7 +498,12 @@ void GDBController::parseLine(char* buf)
   if (!*buf)
     return;
 
-  switch (*(int*)buf)
+  // Doing this copy should remove any alignment problems that
+  // some systems have (eg Solaris).
+  int sw;
+  memcpy (&sw, buf, sizeof(int));
+
+  switch (sw)
   {
     case START_Prog:
     {
