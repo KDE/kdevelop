@@ -775,7 +775,7 @@ void GDBController::parseProgramLocation(char* buf)
     return;
   }
 #else
-  QRegExp regExp("(^.*):([0-9]+):[0-9]+:[a-z]+:(0x[a-f0-9])+");
+  QRegExp regExp("(^.*):([0-9]+):[0-9]+:[a-z]+:(0x[a-f0-9]+)");
   if (regExp.search(buf, 0) != -1)
   {
     actOnProgramPause(QString(" "));
