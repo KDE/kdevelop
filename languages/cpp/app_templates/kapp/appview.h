@@ -1,6 +1,3 @@
-/*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
 
 #ifndef _$APPNAMEUC$VIEW_H_
 #define _$APPNAMEUC$VIEW_H_

@@ -1,6 +1,4 @@
-/* Author: $AUTHOR$ <$EMAIL$>
- * Version: v$VERSION$
- */
+
 /* This template is based off of the KOffice example written by Torben Weis <weis@kde.org
    It was converted to a KDevelop template by Ian Reinhart Geiser <geiseri@yahoo.com>
 */

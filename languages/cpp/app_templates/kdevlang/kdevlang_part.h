@@ -1,7 +1,3 @@
-/*
-*  Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
-*/
-
 
 #ifndef __KDEVPART_$APPNAMEUC$_H__
 #define __KDEVPART_$APPNAMEUC$_H__
@@ -15,6 +11,9 @@
 
 class KAction;
 
+/*
+ Please read the README.dox file for more info about this part
+ */
 class $APPNAME$Part : public KDevLanguageSupport
 {
 	Q_OBJECT

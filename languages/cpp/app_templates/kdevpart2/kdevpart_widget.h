@@ -1,3 +1,4 @@
+
 #ifndef __$APPNAMEUC$_WIDGET_H__
 #define __$APPNAMEUC$_WIDGET_H__
 

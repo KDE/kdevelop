@@ -1,6 +1,3 @@
-/**
- *  Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>   
- */
  
 #ifndef __KBEAR_$APPNAMEUC$_IMPORT_FILTER_H__
 #define __KBEAR_$APPNAMEUC$_IMPORT_FILTER_H__

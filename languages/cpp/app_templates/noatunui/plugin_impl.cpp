@@ -1,6 +1,3 @@
-/*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
 
 #include "plugin_$APPNAMELC$_impl.h"
 #include "plugin_$APPNAMELC$_impl.moc"

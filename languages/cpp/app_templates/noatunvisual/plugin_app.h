@@ -1,6 +1,3 @@
-/*
- * Copyright (C) $YEAR$ $AUTHOR$ <$EMAIL$>
- */
  
 /** Note: You only have to change plugin_$APPNAMELC$_impl.[h,cpp]  */
 

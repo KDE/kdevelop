@@ -3,6 +3,7 @@
 use kdevelop;
 
 initKDevelop();
+installFileTemplate();
 installLicense();
 
 print "Installing project file\n";

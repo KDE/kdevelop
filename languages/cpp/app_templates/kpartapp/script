@@ -2,7 +2,6 @@
 
 use kdevelop;
 
-
 initKDevelop();
 installFileTemplate();
 installLicense();

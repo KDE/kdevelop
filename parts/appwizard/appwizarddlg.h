@@ -43,7 +43,8 @@ struct ApplicationInfo
     QString fileTemplates;
     QStringList openFilesAfterGeneration;
 
-    QListViewItem *item; // item pointer to the listview
+    //! item pointer to the listview
+    QListViewItem *item;
 
     ApplicationInfo()
     : item( 0 )
@@ -94,9 +95,9 @@ private:
 
     QPtrList<ApplicationInfo> m_appsInfo;
     QValueList<AppWizardFileTemplate> m_fileTemplates;
-    // Store the category name and the pointer in the treeview
+    //! Store the category name and the pointer in the treeview
     QDict<QListViewItem> m_categoryMap;
-    // A list of currently available version control systems
+    //! A list of currently available version control systems
     QDict<KDevVersionControl> m_availVcs;
 
     AppWizardPart *m_part;

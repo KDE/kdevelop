@@ -3,6 +3,7 @@
 use kdevelop;
 
 initKDevelop();
+installFileTemplate();
 installLicense();
 installAdmin();
 installGNU();
@@ -24,5 +25,6 @@ install( "${src}/template-kdevlang/kdevlang_part.cpp",  "${dest}/src/${APPNAMELC
 install( "${src}/template-kdevlang/kdevlang_part.h",    "${dest}/src/${APPNAMELC}_part.h" );
 install( "${src}/template-kdevlang/kdevlang.rc",   "${dest}/src/kdev${APPNAMELC}.rc" );
 install( "${src}/template-kdevlang/kdevlang.desktop",   "${dest}/src/kdev${APPNAMELC}.desktop" );
+install( "${src}/template-kdevlang/README.dox",   "${dest}/src/README.dox" );
 
 print "Finished\n";

@@ -1,3 +1,4 @@
+
 /* Main code for PalmHello */
 
 #include <PalmOS.h>
