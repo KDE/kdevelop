@@ -4155,7 +4155,6 @@ void CKDevelop::fillToggleOutputViewsMenu()
   toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(8), bCallStackChecked);
   toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(8), (dbgController != 0L));
 
-  bool bDebuggerChecked = true;  // to support the if-statement below
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
   toggleoutputviews_popup->insertItem(i18n("D&ebugger"), this, SLOT(slotViewODebuggerView()));
   pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
@@ -4167,7 +4166,11 @@ void CKDevelop::fillToggleOutputViewsMenu()
 #endif
 
   if (dbgController != 0L) {  // if not debugging, don't consider the disassemble, callstack and debugger views
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked) {
+#else
+    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked) {
+#endif
       toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
     }
   }

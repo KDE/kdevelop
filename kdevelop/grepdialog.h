@@ -27,6 +27,7 @@ class QListBox;
 class QPushButton;
 class QLabel;
 class KProcess;
+class KConfig;
 
 
 class GrepDialog : public QDialog
@@ -58,14 +59,16 @@ private:
     void processOutput();
     void finish();
     
-    QLineEdit *pattern_edit, *template_edit, *dir_edit;
-    QComboBox *files_combo;
+    QLineEdit *template_edit, *dir_edit;
+    QComboBox *files_combo, *pattern_combo;
     QCheckBox *recursive_box;
     QListBox *resultbox;
     QPushButton *search_button, *cancel_button;
     QLabel *status_label, *matches_label;
     KProcess *childproc;
     QString buf;
+    KConfig* config;
+    QStringList lastSearchItems;
 };
 
 

@@ -57,7 +57,11 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     : QDialog(parent, name, false), childproc(0)
 {
     setCaption(i18n("Search in Files..."));
-    
+
+    config = KGlobal::config();
+    config->setGroup("GrepDialog");
+    lastSearchItems = config->readListEntry("LastSearchItems");
+
     QGridLayout *layout = new QGridLayout(this, 6, 3, 10, 4);
     layout->setColStretch(0, 10);
     layout->addColSpacing(1, 10);
@@ -78,11 +82,14 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     pattern_label->setFixedSize(pattern_label->sizeHint());
     input_layout->addWidget(pattern_label, 0, 0, AlignRight | AlignVCenter);
 
-    pattern_edit = new QLineEdit(this);
-    pattern_label->setBuddy(pattern_edit);
-    pattern_edit->setFocus();
-    pattern_edit->setMinimumSize(pattern_edit->sizeHint());
-    input_layout->addWidget(pattern_edit, 0, 1);
+    pattern_combo = new QComboBox(true, this);
+    pattern_combo->insertStringList(lastSearchItems);
+    pattern_combo->setEditText(QString::null);
+    pattern_combo->setInsertionPolicy(QComboBox::NoInsertion);
+    pattern_label->setBuddy(pattern_combo);
+    pattern_combo->setFocus();
+    pattern_combo->setMinimumSize(pattern_combo->sizeHint());
+    input_layout->addWidget(pattern_combo, 0, 1);
     
     QLabel *template_label = new QLabel(i18n("&Template:"), this);
     template_label->setFixedSize(template_label->sizeHint());
@@ -180,7 +187,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 
     layout->activate();
 
-    QWhatsThis::add(pattern_edit,
+    QWhatsThis::add(pattern_combo,
 		    i18n("Enter the regular expression you want to search for here.\n"
 			 "Possible meta characters are:\n"
 			 "<bold>.</bold> - Matches any character\n"
@@ -293,6 +300,9 @@ void GrepDialog::processOutput()
 
 void GrepDialog::slotSearch()
 {
+    if (pattern_combo->currentText().isEmpty())
+        return;
+
     search_button->setEnabled(false);
     cancel_button->setEnabled(true);
 
@@ -312,7 +322,7 @@ void GrepDialog::slotSearch()
     status_label->setText(i18n("Searching..."));
 
     QString pattern = template_edit->text();
-    pattern.replace(QRegExp("%s"), pattern_edit->text());
+    pattern.replace(QRegExp("%s"), pattern_combo->lineEdit()->text());
     pattern.replace(QRegExp("'"), "'\\''");
 
     QString filepattern = "`find '";
@@ -342,8 +352,7 @@ void GrepDialog::slotSearch()
 
 void GrepDialog::slotSearchFor(QString pattern){
     slotClear();
-    pattern_edit->clear();
-    pattern_edit->setText(pattern);
+    pattern_combo->lineEdit()->setText(pattern);
     slotSearch();
 }
 
@@ -357,6 +366,18 @@ void GrepDialog::finish()
     if (childproc)
         delete childproc;
     childproc = 0;
+
+    config->setGroup("GrepDialog");
+    if (lastSearchItems.contains(pattern_combo->lineEdit()->text()) == 0) {
+        pattern_combo->insertItem(pattern_combo->lineEdit()->text(), 0);
+        lastSearchItems.prepend(pattern_combo->lineEdit()->text());
+        if (lastSearchItems.count() > 10) {
+            lastSearchItems.remove(lastSearchItems.fromLast());
+            pattern_combo->removeItem(pattern_combo->count() - 1);
+        }
+        config->writeEntry("LastSearchItems", lastSearchItems);
+    }
+
 }
 
 
