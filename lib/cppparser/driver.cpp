@@ -310,6 +310,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__glibcpp_class2_requires", SkipWordAndArguments );
     lexer->addSkipWord( "__glibcpp_class4_requires", SkipWordAndArguments );
     lexer->addSkipWord( "__glibcpp_function_requires", SkipWordAndArguments );
+    lexer->addSkipWord( "restrict" );
 
     lexer->addSkipWord( "__BEGIN_NAMESPACE_STD" );
     lexer->addSkipWord( "__END_NAMESPACE_STD" );
