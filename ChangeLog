@@ -1,6 +1,7 @@
 2002-06-09  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * autoproject: get rid of symlinks in project directory
         * classview: consider source dirs at any level, rather than 2 levels deep
+        * classview: show source dir hierarchy
 
 2002-06-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * add default support to DomUtil
