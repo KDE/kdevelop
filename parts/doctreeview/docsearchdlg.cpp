@@ -37,7 +37,7 @@ DocSearchDialog::DocSearchDialog(QWidget *parent, const char *name)
 {
     setCaption(i18n("Search in Documentation"));
 
-    QBoxLayout *layout = new QVBoxLayout(this, 2*KDialog::marginHint(), KDialog::spacingHint());
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *searchterm_label = new QLabel(i18n("&Words to search:"), this);
     layout->addWidget(searchterm_label);

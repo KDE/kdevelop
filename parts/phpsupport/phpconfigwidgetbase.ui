@@ -1,321 +1,258 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>PHPConfigWidgetBase</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>PHPConfigWidgetBase</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>500</width>
+            <width>514</width>
             <height>298</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Form1</string>
     </property>
     <grid>
-        <property stdset="1">
-            <name>margin</name>
-            <number>11</number>
+        <property name="name">
+            <cstring>unnamed</cstring>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
-            <number>6</number>
+        <property name="margin">
+            <number>0</number>
         </property>
-        <widget row="0"  column="0" >
-            <class>QTabWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QTabWidget" row="0" column="0">
+            <property name="name">
                 <cstring>TabWidget1</cstring>
             </property>
-            <widget>
-                <class>QWidget</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QWidget">
+                <property name="name">
                     <cstring>tab</cstring>
                 </property>
-                <attribute>
-                    <name>title</name>
+                <attribute name="title">
                     <string>Invocation</string>
                 </attribute>
                 <grid>
-                    <property stdset="1">
-                        <name>margin</name>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
                         <number>11</number>
                     </property>
-                    <property stdset="1">
-                        <name>spacing</name>
+                    <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget row="0"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
                             <cstring>select_label</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>Please select, how KDevelop should execute your scripts.</string>
                         </property>
                     </widget>
-                    <widget row="1"  column="0"  rowspan="2"  colspan="1" >
-                        <class>QButtonGroup</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QButtonGroup" row="1" column="0" rowspan="2" colspan="1">
+                        <property name="name">
                             <cstring>ButtonGroup3</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>title</name>
+                        <property name="title">
                             <string>Invocation Mode</string>
                         </property>
                         <grid>
-                            <property stdset="1">
-                                <name>margin</name>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
                                 <number>11</number>
                             </property>
-                            <property stdset="1">
-                                <name>spacing</name>
+                            <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget row="0"  column="0" >
-                                <class>QRadioButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
                                     <cstring>callPHPDirectly_radio</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>enabled</name>
+                                <property name="enabled">
                                     <bool>true</bool>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>Calling the PHP interpreter directly</string>
                                 </property>
                             </widget>
-                            <widget row="2"  column="0" >
-                                <class>QRadioButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QRadioButton" row="2" column="0">
+                                <property name="name">
                                     <cstring>callWebserver_radio</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>using an existing webserver (local or remote)</string>
                                 </property>
                             </widget>
-                            <widget row="1"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
                                     <cstring>TextLabel1</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>font</name>
+                                <property name="font">
                                     <font>
                                         <family>adobe-helvetica</family>
                                         <pointsize>10</pointsize>
                                     </font>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>The php executable is called directly. Ideal for developers who
 want to develop terminal or graphical applications in PHP. 
 You need a correctly installed php cgi version.</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>alignment</name>
+                                <property name="alignment">
                                     <set>AlignVCenter|AlignLeft</set>
                                 </property>
-                                <property>
-                                    <name>hAlign</name>
+                                <property name="hAlign" stdset="0">
                                 </property>
-                                <property>
-                                    <name>vAlign</name>
+                                <property name="vAlign" stdset="0">
                                 </property>
                             </widget>
-                            <widget row="3"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLabel" row="3" column="0">
+                                <property name="name">
                                     <cstring>TextLabel1_4</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>font</name>
+                                <property name="font">
                                     <font>
                                         <family>adobe-helvetica</family>
                                         <pointsize>10</pointsize>
                                     </font>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>Uses an existing webserver. The pages are previewed in 
 the internal webbrowser. Please make sure that the webserver
 was compiled with PHP support.</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>alignment</name>
+                                <property name="alignment">
                                     <set>AlignVCenter|AlignLeft</set>
                                 </property>
-                                <property>
-                                    <name>hAlign</name>
+                                <property name="hAlign" stdset="0">
                                 </property>
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="1"  column="1" >
-                        <property>
-                            <name>name</name>
+                    <spacer row="1" column="1">
+                        <property name="name" stdset="0">
                             <cstring>Spacer5</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>orientation</name>
+                        <property name="orientation">
                             <enum>Vertical</enum>
                         </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
+                        <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property>
-                            <name>sizeHint</name>
+                        <property name="sizeHint">
                             <size>
                                 <width>20</width>
                                 <height>20</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget row="2"  column="1" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="2" column="1">
+                        <property name="name">
                             <cstring>PixmapLabel1</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>pixmap</name>
+                        <property name="pixmap">
                             <pixmap>image0</pixmap>
                         </property>
-                        <property stdset="1">
-                            <name>scaledContents</name>
+                        <property name="scaledContents">
                             <bool>false</bool>
                         </property>
                     </widget>
                 </grid>
             </widget>
-            <widget>
-                <class>QWidget</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QWidget">
+                <property name="name">
                     <cstring>tab</cstring>
                 </property>
-                <attribute>
-                    <name>title</name>
+                <attribute name="title">
                     <string>Webserver</string>
                 </attribute>
                 <grid>
-                    <property stdset="1">
-                        <name>margin</name>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
                         <number>11</number>
                     </property>
-                    <property stdset="1">
-                        <name>spacing</name>
+                    <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget row="0"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
                             <cstring>TextLabel1_2</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>text</name>
+                        <property name="text">
                             <string>Project root URL on webserver</string>
                         </property>
                     </widget>
-                    <widget row="0"  column="1" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLineEdit" row="0" column="1">
+                        <property name="name">
                             <cstring>weburl_edit</cstring>
                         </property>
                     </widget>
-                    <widget row="1"  column="0"  rowspan="1"  colspan="2" >
-                        <class>QButtonGroup</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="2">
+                        <property name="name">
                             <cstring>ButtonGroup1</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>title</name>
+                        <property name="title">
                             <string>File</string>
                         </property>
                         <grid>
-                            <property stdset="1">
-                                <name>margin</name>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
                                 <number>11</number>
                             </property>
-                            <property stdset="1">
-                                <name>spacing</name>
+                            <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget row="1"  column="0" >
-                                <class>QRadioButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QRadioButton" row="1" column="0">
+                                <property name="name">
                                     <cstring>useDefaultFile_radio</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>use this file as default</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>checked</name>
+                                <property name="checked">
                                     <bool>true</bool>
                                 </property>
                             </widget>
-                            <widget row="1"  column="1" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
                                     <cstring>useDefaultFile_edit</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string></string>
                                 </property>
                             </widget>
-                            <widget row="0"  column="0" >
-                                <class>QRadioButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QRadioButton" row="0" column="0">
+                                <property name="name">
                                     <cstring>useCurrentFile_radio</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>use current file in editor</string>
                                 </property>
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="2"  column="1" >
-                        <property>
-                            <name>name</name>
+                    <spacer row="2" column="1">
+                        <property name="name" stdset="0">
                             <cstring>Spacer12</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>orientation</name>
+                        <property name="orientation">
                             <enum>Vertical</enum>
                         </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
+                        <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property>
-                            <name>sizeHint</name>
+                        <property name="sizeHint">
                             <size>
                                 <width>20</width>
                                 <height>20</height>
@@ -324,217 +261,171 @@ was compiled with PHP support.</string>
                     </spacer>
                 </grid>
             </widget>
-            <widget>
-                <class>QWidget</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QWidget">
+                <property name="name">
                     <cstring>tab</cstring>
                 </property>
-                <attribute>
-                    <name>title</name>
+                <attribute name="title">
                     <string>Shell</string>
                 </attribute>
                 <grid>
-                    <property stdset="1">
-                        <name>margin</name>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
                         <number>11</number>
                     </property>
-                    <property stdset="1">
-                        <name>spacing</name>
+                    <property name="spacing">
                         <number>6</number>
                     </property>
-                    <widget row="0"  column="0" >
-                        <class>QLayoutWidget</class>
-                        <property stdset="1">
-                            <name>name</name>
+                    <widget class="QLayoutWidget" row="0" column="0">
+                        <property name="name">
                             <cstring>Layout5</cstring>
                         </property>
                         <grid>
-                            <property stdset="1">
-                                <name>margin</name>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
                                 <number>0</number>
                             </property>
-                            <property stdset="1">
-                                <name>spacing</name>
+                            <property name="spacing">
                                 <number>6</number>
                             </property>
-                            <widget row="1"  column="0" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLineEdit" row="1" column="0">
+                                <property name="name">
                                     <cstring>exe_edit</cstring>
                                 </property>
                             </widget>
-                            <widget row="5"  column="1" >
-                                <class>QToolButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QToolButton" row="5" column="1">
+                                <property name="name">
                                     <cstring>zend_button</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>enabled</name>
+                                <property name="enabled">
                                     <bool>false</bool>
                                 </property>
-                                <property stdset="1">
-                                    <name>minimumSize</name>
+                                <property name="minimumSize">
                                     <size>
                                         <width>20</width>
                                         <height>0</height>
                                     </size>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>...</string>
                                 </property>
                             </widget>
-                            <widget row="1"  column="2" >
-                                <class>QToolButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QToolButton" row="1" column="2">
+                                <property name="name">
                                     <cstring>about_button</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>About</string>
                                 </property>
                             </widget>
-                            <widget row="1"  column="1" >
-                                <class>QToolButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QToolButton" row="1" column="1">
+                                <property name="name">
                                     <cstring>exe_button</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>minimumSize</name>
+                                <property name="minimumSize">
                                     <size>
                                         <width>22</width>
                                         <height>0</height>
                                     </size>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>...</string>
                                 </property>
-                                <property stdset="1">
-                                    <name>pixmap</name>
+                                <property name="pixmap">
                                     <pixmap></pixmap>
                                 </property>
                             </widget>
-                            <widget row="4"  column="0" >
-                                <class>QCheckBox</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QCheckBox" row="4" column="0">
+                                <property name="name">
                                     <cstring>zend_checkbox</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>Load Zend extension:</string>
                                 </property>
                             </widget>
-                            <widget row="5"  column="0" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLineEdit" row="5" column="0">
+                                <property name="name">
                                     <cstring>zend_edit</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>enabled</name>
+                                <property name="enabled">
                                     <bool>false</bool>
                                 </property>
                             </widget>
-                            <widget row="2"  column="0" >
-                                <class>QCheckBox</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
                                     <cstring>phpini_checkbox</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>Use 'php.ini' file in this directory:</string>
                                 </property>
                             </widget>
-                            <widget row="3"  column="1" >
-                                <class>QToolButton</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QToolButton" row="3" column="1">
+                                <property name="name">
                                     <cstring>phpini_button</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>enabled</name>
+                                <property name="enabled">
                                     <bool>false</bool>
                                 </property>
-                                <property stdset="1">
-                                    <name>minimumSize</name>
+                                <property name="minimumSize">
                                     <size>
                                         <width>20</width>
                                         <height>0</height>
                                     </size>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>...</string>
                                 </property>
                             </widget>
-                            <widget row="0"  column="0" >
-                                <class>QLabel</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
                                     <cstring>TextLabel1_3_2</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>text</name>
+                                <property name="text">
                                     <string>PHP executable:</string>
                                 </property>
                             </widget>
-                            <widget row="3"  column="0" >
-                                <class>QLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
+                            <widget class="QLineEdit" row="3" column="0">
+                                <property name="name">
                                     <cstring>phpini_edit</cstring>
                                 </property>
-                                <property stdset="1">
-                                    <name>enabled</name>
+                                <property name="enabled">
                                     <bool>false</bool>
                                 </property>
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="1"  column="0" >
-                        <property>
-                            <name>name</name>
+                    <spacer row="1" column="0">
+                        <property name="name" stdset="0">
                             <cstring>Spacer11</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>orientation</name>
+                        <property name="orientation">
                             <enum>Vertical</enum>
                         </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
+                        <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property>
-                            <name>sizeHint</name>
+                        <property name="sizeHint">
                             <size>
                                 <width>20</width>
                                 <height>20</height>
                             </size>
                         </property>
                     </spacer>
-                    <spacer row="0"  column="1" >
-                        <property>
-                            <name>name</name>
+                    <spacer row="0" column="1">
+                        <property name="name" stdset="0">
                             <cstring>Spacer28</cstring>
                         </property>
-                        <property stdset="1">
-                            <name>orientation</name>
+                        <property name="orientation">
                             <enum>Horizontal</enum>
                         </property>
-                        <property stdset="1">
-                            <name>sizeType</name>
+                        <property name="sizeType">
                             <enum>Expanding</enum>
                         </property>
-                        <property>
-                            <name>sizeHint</name>
+                        <property name="sizeHint">
                             <size>
                                 <width>20</width>
                                 <height>20</height>
@@ -547,8 +438,7 @@ was compiled with PHP support.</string>
     </grid>
 </widget>
 <images>
-    <image>
-        <name>image0</name>
+    <image name="image0">
         <data format="XPM.GZ" length="18703">789ced5bd9722a39127dbf5fe1e87ceb9850b3144bc5c43c181bef0bc6bb27e62129307803e3dd4cccbfcf91942aab0a0a30f6ede9896e6774f43d566939ca4599aaf26fbf2e9d3576977efdedc7e3133f5d454b518f1f967e6d3fdfddbdfff35ffff8f78f5ff285dc523958ca87b9a5c22f7ffbf1cbc1d352b4b437e87734a06500ca991f8db92b3810bc11e3aac125c1558b69cde06a8c47822379fec0e1bc1daf68713e97b7cfe73406ca497b4b7020f83dc676bc9ac1552d065f385c30cf53497024ed865f21a7c5e0e31887e6f9407020ed7b0e176dfbaec161c18d7f1163d3ce8f8223c13987a5ff99c6c57c3157cc9bf64dc181e037870336cf9bfd2a86c5aaf43f151c05e6792a5a1ce4ca4699d4d038c80739797e4b70609f67165cad144dbb993fe0a02af36d3b5cb2e3ed3b2ce3af088ea47dc3e252ae6cfb9f082e555a66be3387ab065341701846061f695c2a9472767e0e1c96f15f626cdbdb824bd2be27b81d06a6bd6c71396fc7575587d9b42b19bf5cb298ee0cc6fa2c3fee090e65fc5b8785ffb3c3b27f1dc16de17f6371396ff9aa63c1c25fad386cd74bb518dbf5161d96f51e0996fd520587a53d8cb16dcf0b6e0bbf28c6a69d8d3d94b15fb29fab1697f3c28f1c167e6d87ab162bc1a25f55121cda76751263db5e73d8f255cb82455fea30c676fd4d87855f2ec6b6bd6171252f7c9e1c6e59bed7824bd2de74d8b6b3d15719fb25faae386cf9d0abe0b6e5c3cf31b6f67c6471252ffc470ecbfa0f1cb6ebe77dc14e9f1fd83ebf2758f4476f0e0b1fb33f956245f4a1ca0ecb7a76053bfb7a7758fceb52b0b39f3787653daebfec2f751db6f3ab1d8babb2bf3c8a71db3c7f6e70ab22fe80b3c6e2b6eccfabc332df6a8ced7aae2dae8a3ed58d60a72f8ab19d6f5d706831e71d8e4a065f695cc5fa24fe5c3a2cf6fb20b824f67aebb0f075fd9d3ff51c96f6bb18dbf5ac0a6edbf9e9de60ac47c6af3b2cfa1c0a76f674eab0e8a7efb0f02b581c3afbea3a2cebd98eb17dfe4e7049f663a07118a0bf7d3ec6b25e165c8a4c7f7529d8f1bd10ecf8e5636cf91bfb08a350ec8bd71c167d93c3327e47b0f0535b0edbf115c7d88e7f6531cbfac8ac9f0376f1bc2d58ec43b51c96f922c12cfd9f0477da964fcfe256c16236f6c811b3c48f487047ece1c56159efbdc3325ed5e256b96df22936cfb730bee8bf2eb82ceb7d7658d63b7458c66b0a6619ef557047f08ec39db2e96ff6bfd576cfab07c16e7d9518db7caf6c715490f10e05bbf59f386cc767c3372a4505e1ffe8b08cdf172cfdc9b5cbfe73c361195f0976eb37fa89da68b7e385823ba2bf77876dbb5a8fb1e57b6a715bf8d0b1c332bec977da25f73cb52c6ecb7a55c561e1bb1263bbdea16096f6f318dbfe261f6a775cbb3a132cfcf836c676bcbac397b6ddc4bf4eb9e3f4b12eb86cdb95990f9ddd7afa8259fa9b7870697e343e78fa73c95f9cff1cf233392b520c6941229136a403b98474213d7505b93672a36e217790be1aa02ffdbf70363c5bea5e0dd5837a544ff84fcb03e419f222ac1d67c7f855bda97735822cab9a5a812c03af620fea9aff1f9333b86aa66b6a5d6dc4b269383f43bf5be0b80daddea81db5abf6d4be6a787220d254879023c379451d434e8c8cb0273d68ff9bb87f9d33f4aab99eaa33756ee40cff7e00cf0b58e99ecaa9bc2a408a2a3052cc9442428e8cd48475c948d970ffb2debfc2d9b07d5015617b061d0fc174073c35c7aa615858484211c75f732f91b202ee576af07b7336963c34767c66f4aab9ee6175c197984ee36fb95be6e6473327fe7d381bbe0fea895ad482b746ea8622c3753653ad7b5f3eb7378efb913aa6364877204497aaff7339836f14c763b0c50ab45ee75b7391bad4f3e48aae17b208cbfd886ec0f896eee8161aafff1cce86efb361fc8218dc3011e9336b2d529f06744f43230ff4484fd8b1af587c41add03358bf405ee7e73d1f67f0dd02537dc2b68d763fefb3457aa3771ad1722c03bafa02e758e35403ef175a81bcce17d9e6e10cc66d307e01ef1dc37791f505b44a758ff11ae2c1fa82638d3107ef0ddaa42dda867fcf3cc96671361aee98dc49eb77f1885c85ffee789c77d5f982fe9cc57b8ff6a94107f0ef19516d3a6762e44f3a3feee1ccfddafaaad4a4438ff3111dc7e7ef37b156053aa1533aa353f5b62867643c5d9317ef4dc8933e2b3a821d789ccfa9f9456f9ec09b2268fb942e20ed45381bc6dd0c0da74fda49e2f72ac28e4f29e771dea13c15523d92de3d7b8609d100b942818a14508936b23c3b8b3332fa2b305e55937cb888936a4865aa644893aa60d4f54eb380d653112c6495e8d1a42b26d867359ee362c60c4f888ad1045b81b699a9c42dda9ecc7a326730be06e7dd0c8b463ce20851f26892709b3b7c4975758ee29944df3a820d3e3873d7efcd3df4b8e26bbee15bbe333d8a58779f079973a0070df99e8718371ad377a872cce0bc46dbf372368caf51d166f94d95ca9873798694c0e41e5e1b6a4fa02a3fccec31029f3a558c5d7439e9ff13851ff941bde0cc4b6bdbea7a0dcf3ccfc3197efc6a6af829b142ade35498c5c0b080f694b67144b0adb97a2cf335ecb64079e8b935578f5decd3f8491ff213fc5a8f37c63acd19e7f12af84e63acbdb98218311f832ebf18fb3b9d9301ec03b54b8e5f6123f33dbf4c01f2a5dca478c66f58c17b3a2b1de37ca7de21f9699c79044fea7abc9671265ad9e596df62ed0f117b35d5a3056646b896c84745d37cc72bc8c9fd9d7bb433e0ff4122fedbf6dea43c163b5de477b49f4ee38c1c44df4a35a730b611cc8b47f09a77be55152754e7d514ef1daef39ab7c21adfa8331e5a410e3a000f9fc1809e789d57bddf35d4b937430bf69ff0146ea9b63ea5c604b10cad1bea359bb3ba35f770d3188333bffa19156ff210d6aef3810816d6804eeb94b04bdee26de4201fbfd9420ee6dd87f18e1fd30de766328221fe351113a2788e3cf6a49de8b38bb371c22903fbde43eb5b166745bcaf965573564ec80de4f31ff31d8241d5bbd7aad25b2affd09c3dbd20e697bd1e012aae7ac23206887be7b07aef37c676e339a8c07789f31e63f268e2c96a357de0fb7482735fd5c079ba968bd8e74ac21677f835e54b2137e0771f4f1c80811fc18689ca3980f75efbbe8b1d5821bffff25864d695e92379fe42b7c8052671c649c9da629e3338df80f3d12cced44dcd56a77c9233eca98113e4e3894d0a3f7a184ee431d067f755c2379fe01d7e0d9643c468a672d9f42ab2f4ac35fd96b46e9f332c7b059ca75b76ba261cd13b6c39b11eacefd48fc6886991876a88430daf47c08788bbbeb7f7e1ad7ece7340fd141f54e338037ddb3e9ac2595bf771869e0fe7e19c8c60383d1aa91ee9db8165ba4fc4f9865af77be8b31ba79017aff80411cccf790ec76a3064db9cc865f9143b3d71c5887b27daa33338d7e6e05c84dd1ef9b163c27aaac8b713dee8eb5122d887958e555cc8d3fb899c6767ecf42d2213f4e2282f232bc9a876e1697a47d716e63c16c1f4599a580fa236b5d8b7ba47759e60709f8c6094b47c1bc1c2441cafd36a22825511f592394e1bb549c63dd30ccecbb339a7e325bc6a353e45f42d7783cf53d5c403eaa58d0483f54404eb25ac223716c1462682051f73307152cb5d5e4bc5b831ce99b63d52c73338ebba78905acfc8e609dc448dfcc4b7c97c04d9e8b61f6d58bf09f023581511cccfa91a3a8225731ef87fce4883de702e37d50627b3b0366c3ffb36d1c6b08b0cceab73706efa1915fc48bfb959879ca28ab8872f6e2656d345eebc9dd88583640433359a5f331e9a08e66730abdc3733600e9c11c8f17ccf21576164de5dd9fa8a73199cefc079650a63ed7d7d3fe7834fe550551841dd98aa2eb4efb2421ee965cec8430ffd08a66b343f5fe1818e6009566b6e06730b909e610dbb9a9f7a671cf2059edb9fcc1915c6f2744d9b9af0716cde89821d78a0636e22ce5f78bfbda45e2282ada772c808116c12b7c973d450bbe427dc0fa5bdb9eb5719a91a435b772d7384f17711d912f00bb2e6d0f4f0635e9488c1fa56cbb7fc91896083b966d027fdb3b94b9a6699360bf32c7b8cf3409d4cd13432e3d9eb817ecfe8419de1440acca9e29f442df8a47f93af6f997ccbdf4c47b00c1921d6ed5019b5d454c65acbfacc5027d99c8da64f8ca627b14edf6ae5702ef63ce9d039fc51dfcc35918f5695cd54ebe6ce4e4b9b1f10ebfc91756e71efda91eb0cf8159c5712f6b2e5cdb0a5e700db47eccd9d39b9a6e938944a32a1e571cef0e911584fd6b48e607e46d5c3faca09d137b62373035b144e7b54e1c3b8bd9fca1d744d15b7e25f157d0f96a8da86f0efe40c3df4699a5c601adf421cb137e8723a6713bd4f26b34e67c6a8097b5490ef4402b38af137e9f61b8b8f27d29a09fc768cd6e29b84ff17b8e93de1eef2e778abc24fd6ae6923c92fe3ae77d57875dabec7eba5ebe9317301a9e2a4f26a696465dd05df6ae5684fd7cd9c1bbfd7cfb8d37f33ba4eb2d699b1bf9e357accacdf1616788b7f8b14a88b85ded76ac6daae8f27bda3cce04cc2dab7f0546d4f25c4a3afbead4c0a3214e4237e05d3cbae1da6ec9bb6ea03c3b837ce6dcafb2a9fb5e59dca8c918f95bfe59df98704a81efac90c66468e352ef6bd4d299bf1d4f79264fc3a3eb910c1d61311ec81aadfedcde3112c7507334b60773a07317e9cf9e67dfa3b77752bdfe11de9ca9987387dafb0f75aae50e3ceca813ecf79a8ce657c080d55677ec6baba834d5b2bd99ff685c5cc6f2bfae6bcd6da2e32215374d2a369ef3a1693a2beb9f6e6789a7c673d4142f8705934fc3efe86ea739c8d8d5f5b6d532df5cefbbb392ff6d55ca82d9aec8dee32bfcdfe666ace6fa5faea3db6f2820a173c33bf5f42f34e8aad45f3f12c0d7f86b3e1dde3e73f126ff31ea700bec726eaadd1f3bc5f7f7ee6db47e4e2b7e2dd2772fbffbf601e0adb33d873cedc551cd346d6b9f455ce46dba4eab19dfbcc7f3ef7d0b1458ec58857817e93cb396a7ff6ebde05bf65eeabd5d8d24fe2373ee14f616fbf70d45c6bd0ed069da2cabe00e3339c486f8b7cbfbef837eb46e36f1ef371ee8bf20f9323508df6e884f6698b0ec0f78c0e681ff32efcd5fa57ff36013e5e57afc6cbeddf0f58ee35f39705e3eb9f570a9aa95aa11b44a60d5aa14d6a404e699b9e55f92bdfe87f07e758e703c4b73755a657e13ebe034799ef3c4d1b99bfb7014bcd537fa17c275feb6ee2bf17f35d7e6fb1eff27f0ee70477e89d2e2d7bf7171453c4fd748cdc9aafd0ed17d977c08af4174cfdefe1fa7338fbec61f57dd5d37f3ba57740ef0157ac8cf1753f0a6daf78f2f27bfebee6f7e6fc4796bf38ff39e497fffcfdc77f01607f0253</data>
     </image>
 </images>
@@ -565,9 +455,12 @@ was compiled with PHP support.</string>
         <receiver>PHPConfigWidgetBase</receiver>
         <slot>slotPHPExeButtonClicked()</slot>
     </connection>
-    <slot access="public">slotAboutClicked()</slot>
-    <slot access="public">slotPHPExeButtonClicked()</slot>
-    <slot access="public">slotPHPIniButtonClicked()</slot>
-    <slot access="public">slotZendButtonClicked()</slot>
 </connections>
+<slots>
+    <slot>slotAboutClicked()</slot>
+    <slot>slotPHPExeButtonClicked()</slot>
+    <slot>slotPHPIniButtonClicked()</slot>
+    <slot>slotZendButtonClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

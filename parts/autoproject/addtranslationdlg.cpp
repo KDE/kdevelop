@@ -40,7 +40,7 @@ AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *paren
     (void) new QLabel(i18n("Language:"), hbox);
     lang_combo = new QComboBox(hbox);
 
-    QVBoxLayout *layout = new QVBoxLayout(this, 2*KDialog::marginHint(), KDialog::spacingHint());
+    QVBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->addWidget(hbox);
 
     QFrame *frame = new QFrame(this);

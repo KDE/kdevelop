@@ -79,7 +79,7 @@ QWidget *DocTreeConfigWidget::createKDevelopTab()
 {
 #ifndef GIDEON
     QHBox *hbox = new QHBox(this);
-    hbox->setMargin(2*KDialog::marginHint());
+    hbox->setMargin(KDialog::marginHint());
     hbox->setSpacing(KDialog::spacingHint());
     (void) new QLabel(i18n("Items shown in the \n"
                            "KDevelop section \n"
@@ -108,7 +108,7 @@ QWidget *DocTreeConfigWidget::createLibrariesTab()
     libraries_view->addColumn(QString::null);
     libraries_view->header()->hide();
 
-    QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
+    QBoxLayout *layout = new QVBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
     layout->addWidget(libraries_label);
     layout->addWidget(libraries_view);
     
@@ -139,7 +139,7 @@ QWidget *DocTreeConfigWidget::createBookmarksTab()
     connect( new QPushButton(i18n("&Remove"), buttonbox), SIGNAL(clicked()),
              this, SLOT(removeBookmarkClicked()) );
 
-    QGridLayout *layout = new QGridLayout(w, 2, 2, 2*KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *layout = new QGridLayout(w, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
     layout->addMultiCellWidget(bookmarks_label, 0, 0, 0, 1);
     layout->addWidget(bookmarks_view, 1, 0);
     layout->addWidget(buttonbox, 1, 1);
@@ -166,7 +166,7 @@ QWidget *DocTreeConfigWidget::createIndexTab()
     QPushButton *update_button = new QPushButton(i18n("&Update Index Now"), w);
     connect( update_button, SIGNAL(clicked()), this, SLOT(updateIndexClicked()) );
     
-    QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());
+    QBoxLayout *layout = new QVBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
     layout->addStretch(1);
     layout->addWidget(info_label);
     layout->addSpacing(5);
