@@ -72,6 +72,7 @@ int main(int argc, char* argv[])
   aboutData.addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
   aboutData.addAuthor("John Birch",I18N_NOOP("Internal Debugger, port of KDevelop 1.3 to KDE 2.1"), "jbb@kdevelop.org");
 	aboutData.addAuthor("Ian Reinhart Geiser",I18N_NOOP("Kicker templates and the RPM build facility"), "geiseri@linuxppc.com");
+	aboutData.addAuthor("F@lk Brettschneider",I18N_NOOP("MDI"), "falk.brettschneider@gmx.de");
 
 	KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options );

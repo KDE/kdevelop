@@ -210,7 +210,7 @@ void CKDevelop::slotFileClose()
           message_result=KMessageBox::Cancel;       // simulate cancel because doSave went wrong!
       }
     }
-  
+
     debug("KMessageBox::Cancel !\n");
     if (message_result == KMessageBox::Cancel) // cancel
     {
@@ -291,15 +291,19 @@ void CKDevelop::slotFileSaveAll()
 
   debug("setMainCaption ! \n");
   setMainCaption(currentDocType);
-  if (currentDocType == CPP || currentDocType == HEADER)
+  if (currentDocType == DocViewMan::Header || currentDocType == DocViewMan::Source)
     {
-      debug("currentEditView ! \n");
+      debug("currentEditView is Header or Source ! \n");
       activateView( (QextMdiChildView*) m_docViewManager->currentEditView()->parentWidget());
     }
-  if (currentDocType == BROWSER)
+  else if (currentDocType == DocViewMan::HTML)
     {
-      debug("view ! \n");
+      debug("currentDocType is HTML ! \n");
       activateView( (QextMdiChildView*) m_docViewManager->currentBrowserView()->parentWidget());
+    }
+  else if (currentDocType == DocViewMan::Undefined)
+    {
+      debug("currentDocType is unknown. Means, we haven't got any view at all. If a view is still open, it's an inconsisten state in DocViewMan ! \n");
     }
 
   debug("slotStatusMsg ! \n");
