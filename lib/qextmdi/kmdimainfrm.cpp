@@ -262,6 +262,7 @@ KMdiMainFrm::~KMdiMainFrm()
    emit lastChildViewClosed();
    delete m_pDocumentViews;
    delete m_pToolViews;
+   m_pToolViews=0;
    delete m_pDragEndTimer;
 
    delete m_pUndockButtonPixmap;
@@ -277,6 +278,7 @@ KMdiMainFrm::~KMdiMainFrm()
    delete m_pWindowPopup;
    delete m_pWindowMenu;
    delete m_mdiGUIClient;
+   m_mdiGUIClient=0;
 }
 
 //============ applyOptions ============//
@@ -502,29 +504,40 @@ KMdiToolViewAccessor *KMdiMainFrm::createToolWindow()
   return new KMdiToolViewAccessor(this);
 }
 
+
+void KMdiMainFrm::deleteToolWindow( QWidget* pWnd) {
+	if (m_pToolViews->contains(pWnd)) {
+		deleteToolWindow((*m_pToolViews)[pWnd]);
+	}
+}
+
+void KMdiMainFrm::deleteToolWindow( KMdiToolViewAccessor *accessor) {
+	if (!accessor) return;
+	delete accessor;
+}
+
 //============ addWindow ============//
 KMdiToolViewAccessor *KMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos, QWidget* pTargetWnd, int percent, const QString& tabToolTip, const QString& tabCaption)
 {
+   QWidget *tvta=pWnd;
    KDockWidget* pDW = dockManager->getDockWidgetFromName(pWnd->name());
    if (pDW) {
        // probably readDockConfig already created the widgetContainer, use that
-       KMdiToolViewAccessor* mtva = new KMdiToolViewAccessor(this);
-       mtva->d->widget = pDW->getWidget();
-       mtva->d->widgetContainer = pDW;
        pDW->setWidget(pWnd);
+
        if (pWnd->icon()) {
            pDW->setPixmap(*pWnd->icon());
        }
        pDW->setTabPageLabel((tabCaption==0)?pWnd->caption():tabCaption);
        pDW->setToolTipString(tabToolTip);
-       pWnd->show();
        dockManager->removeFromAutoCreateList(pDW);
-       return mtva;
-   }
+       pWnd=pDW;
+    }
 
    QRect r=pWnd->geometry();
+
    KMdiToolViewAccessor *mtva=new KMdiToolViewAccessor(this,pWnd,tabToolTip,(tabCaption==0)?pWnd->caption():tabCaption);
-   m_pToolViews->insert(pWnd,mtva);
+   m_pToolViews->insert(tvta,mtva);
 
    if (pos == KDockWidget::DockNone) {
       mtva->d->widgetContainer->setEnableDocking(KDockWidget::DockNone);

@@ -30,10 +30,16 @@
 #include "kmdidockwidget.h"
 #include "kmdidefines.h"
 
+namespace KMDIPrivate {
+   class KMDIGUIClient;
+}
+
 class DLL_IMP_EXP_KMDICLASS KMdiToolViewAccessor : public QObject
 {
-   friend class KMdiMainFrm;
    Q_OBJECT
+
+   friend class KMdiMainFrm;
+   friend class KMDIPrivate::KMDIGUIClient;
 
 private:
    /**

@@ -46,6 +46,7 @@ private slots:
     void clientAdded( KXMLGUIClient *client );
     void setupActions();
     void changeViewMode(int id);
+    void actionDeleted(QObject*);
     void mdiModeHasBeenChangedTo(KMdi::MdiMode);
 signals:
     void toggleTop();
