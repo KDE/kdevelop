@@ -2,8 +2,6 @@ Short-Term:
 
 mhk: move function areas of kdevcore into separate classes
 mhk: try to implement breakpoints with the MarkInterface
-mhk: check loading of last project file (options)
-mhk: check saving of project file when closing gideon
 
 
 Mid-Term:
@@ -13,6 +11,7 @@ mhk: make all functions using filenames use KURLs instead
 mhk: implement multiple-views per document
 mhk: make the KDevPart template work standalone
 mhk: add doc comments to the lib files I changed ;)
+mhk: find a nicer way to remove dynamic menu entries from context menus
 
 
 Long-Term:
