@@ -109,6 +109,7 @@ void CClassStore::wipeout()
 void CClassStore::addGlobalVar( CParsedAttribute *aVar )
 {
   assert( aVar != NULL );
+  assert( !aVar->name.isEmpty() );
 
   globalVariables.insert( aVar->name, aVar );
 }
@@ -126,6 +127,7 @@ void CClassStore::addGlobalVar( CParsedAttribute *aVar )
 void CClassStore::addGlobalFunction( CParsedMethod *aFunc )
 {
   assert( aFunc != NULL );
+  assert( !aFunc->name.isEmpty() );
 
   QString str;
 
@@ -148,6 +150,7 @@ void CClassStore::addGlobalFunction( CParsedMethod *aFunc )
 void CClassStore::addGlobalStruct( CParsedStruct *aStruct )
 {
   assert( aStruct != NULL );
+  assert( !aStruct->name.isEmpty() );
   
   globalStructures.insert( aStruct->name, aStruct );
 }
@@ -189,7 +192,9 @@ void CClassStore::storeAll( const char *aFilename )
  *-----------------------------------------------------------------*/
 void CClassStore::addClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL && !aClass->name.isEmpty() && !hasClass( aClass->name ) );
+  assert( aClass != NULL );
+  assert( !aClass->name.isEmpty() );
+  assert( !hasClass( aClass->name ) );
 
   classes.insert( aClass->name, aClass );
 }
