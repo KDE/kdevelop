@@ -1,5 +1,7 @@
 # Here resides the C/C++ support part.
 
+SUBDIRS = templates
+
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la

@@ -17,11 +17,16 @@ High priority tasks!
 These are things that must be accomplished before we can say that
 gideon >= kdevelop 2.x UI-wise and functionality-wise!
 
+new file: a File menu to create a new file dammit!
+
+cppsupport:
+ * new class dialog belongs in File menu
+
 doctreeview:
  * forward/back buttons must implement history in doctreeview!
 
-3. Missing UIs
---------------
+3. Missing UIs (other than 2)
+-----------------------------
 
 UIs that intuitively ought to be there
 

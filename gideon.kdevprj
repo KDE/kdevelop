@@ -207,11 +207,11 @@ makefiles=./Makefile.am,admin/Makefile.am,src/Makefile.am,plugins/Makefile.am,pl
 modifyMakefiles=false
 project_name=gideon
 project_type=kde2_normal
-short_info=www.kdevelop.org,,KDevelop is an easy to use,IDE for developing C/C++,applications under X11.
+short_info=www.kdevelop.org,KDevelop is an easy to use,IDE for developing C/C++,applications under X11.
 sub_dir=src/ lib/ parts/ plugins/ pics/
 version=3.0
 version_control=CVS
-workspace=1
+workspace=126062085
 
 [LFV Groups]
 Desktop=*.desktop,

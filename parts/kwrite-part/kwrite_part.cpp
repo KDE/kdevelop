@@ -11,7 +11,7 @@
 
 
 KWritePart::KWritePart(QObject *parent, const char *name )
-  : KEditor::Editor(parent, name)
+  : KTextEditor::Editor(parent, name)
 {
   setInstance(KWritePartFactory::instance());
 
@@ -24,7 +24,7 @@ KWritePart::~KWritePart()
 }
 
 
-KEditor::Document *KWritePart::document(const KURL &url)
+KTextEditor::Document *KWritePart::document(const KURL &url)
 {
   QListIterator<DocumentImpl> it(_documents);
   for ( ; it.current(); ++it)
@@ -35,7 +35,7 @@ KEditor::Document *KWritePart::document(const KURL &url)
 }
 
 
-KEditor::Document *KWritePart::createDocument(QWidget *parentWidget, const KURL &url)
+KTextEditor::Document *KWritePart::createDocument(QWidget *parentWidget, const KURL &url)
 {
   DocumentImpl *impl = new DocumentImpl(this, parentWidget);
   if (!url.isEmpty())

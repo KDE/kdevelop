@@ -1,3 +1,7 @@
+2002-06-03  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+        * classview: fix hierarchical view (It showed only a single
+          level of directories)
+
 2002-06-12  Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* Improved buttons in IDEAl mode: added keyboard navigation 

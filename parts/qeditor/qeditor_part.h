@@ -1,4 +1,4 @@
-/* $Id$
+/* $Id$ -*-c++-*-
  *
  *  Copyright (C) 2001 Roberto Raggi (raggi@cli.di.unipi.it)
  *

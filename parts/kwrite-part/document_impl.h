@@ -2,20 +2,19 @@
 #define __DOCUMENT_IMPL_H__
 
 
-#include <keditor/editor.h>
-
+#include <ktexteditor/document.h>
+#include <ktexteditor/editor.h>
 
 class KWriteDoc;
 class KWrite;
 
-
-class DocumentImpl : public KEditor::Document
+class DocumentImpl : public KTextEditor::Document
 {
   Q_OBJECT
 
 public:
 
-  DocumentImpl(KEditor::Editor *parent, QWidget *parentWidget=0);
+  DocumentImpl(KTextEditor::Editor *parent, QWidget *parentWidget=0);
   virtual ~DocumentImpl();
   
   virtual bool saveFile();

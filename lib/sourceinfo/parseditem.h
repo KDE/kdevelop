@@ -182,8 +182,8 @@ public:
         { return _declarationEndsOnLine; }
 
     /**
-     * Sets the line where the item was defined. 
-     * @param aFile Absoulute filename of the file the item is defined in.
+     * Sets the file where the item was defined. 
+     * @param aFile Absolute filename of the file the item is defined in.
      */
     void setDefinedInFile(const QString &aFile)
         { _definedInFile = aFile; }

@@ -11,11 +11,11 @@
 class KURL;
 
 
-#include "keditor/editor.h"
+#include "ktexteditor/editor.h"
 #include "document_impl.h"
 
 
-class KWritePart : public KEditor::Editor
+class KWritePart : public KTextEditor::Editor
 {
   Q_OBJECT
 
@@ -24,8 +24,8 @@ public:
   KWritePart(QObject *parent, const char *name);
   virtual ~KWritePart();
 
-  virtual KEditor::Document *document(const KURL &url);
-  virtual KEditor::Document *createDocument(QWidget *parentWidget=0, const KURL &url="");
+  virtual KTextEditor::Document *document(const KURL &url);
+  virtual KTextEditor::Document *createDocument(QWidget *parentWidget=0, const KURL &url="");
 
 
 private slots:
