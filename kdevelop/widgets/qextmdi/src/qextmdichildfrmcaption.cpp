@@ -165,7 +165,7 @@ void QextMdiChildFrmCaption::setCaption(const QString& text)
 
 int QextMdiChildFrmCaption::heightHint()
 {
-   int hght=m_pParent->m_pManager->m_captionFontLineSpacing+2;
+   int hght=m_pParent->m_pManager->m_captionFontLineSpacing+3;
    if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look) {
       if(hght<18)hght=18;
    }
@@ -176,6 +176,7 @@ int QextMdiChildFrmCaption::heightHint()
       if(hght<16)hght=16;
    }
    else {   // kde2laptop look
+      hght -= 4;
       if(hght<14)hght=14;
    }
    return hght;
@@ -197,15 +198,15 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
    }
    //Shift the text after the icon
    if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::Win95Look)
-      r.setLeft(r.left()+19);
+      r.setLeft(r.left()+m_pParent->icon()->width()+3);
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look)
       r.setLeft(r.left()+22);
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look)
-      r.setLeft(r.left()+17);
+      r.setLeft(r.left()+m_pParent->icon()->width()+3);
    else  // kde2laptop look
       r.setLeft(r.left()+30);
 
-   int captionWidthForText = width() - 5*heightHint();   // = width - width_for_buttons
+   int captionWidthForText = width() - 4*m_pParent->m_pClose->width() - m_pParent->icon()->width() - 5;
    QString text = abbreviateText( m_szCaption, captionWidthForText);
    p.drawText( r, AlignVCenter|AlignLeft|SingleLine, text);
    
@@ -228,6 +229,9 @@ QString QextMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
    }
    int w = maxWidth+1;
    QString s = origStr;
+   if (newLetterCount <= 0) {
+      s = "";
+   }
    while((w > maxWidth) && (newLetterCount >= 1)) {
       if( newLetterCount < realLetterCount) {
          if(newLetterCount > 3)
@@ -243,7 +247,6 @@ QString QextMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
       w = fm.width(s);
       newLetterCount--;
    }
-
    return s;
 }
 

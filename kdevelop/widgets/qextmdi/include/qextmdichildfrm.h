@@ -342,6 +342,10 @@ protected:
    * It cannot be resized. 
    */
    virtual void switchToMinimizeLayout();
+   /**
+   * Does the actual resize. Called from various places but from resizeEvent in general.
+   */
+   void doResize();
 
 protected slots:
    /** 
