@@ -16,10 +16,7 @@ High priority tasks!
     (projectDirectory() != $(top_builddir) in general)
 
 * UI bugs:
-  - GUI redraw blocked on Gideon startup for the time of project loading 
-  - new editor views are added always maximized, even in non-maximized
-    UI Childframe mode, view-taskbar missing
-  - docking state of all toolviews not restored after Gideon restart
+  - view-taskbar missing
   - editor options dialog missing when all views are closed
   - messages view should hold place when scrolled but new output is
     being added
@@ -30,7 +27,7 @@ High priority tasks!
   - Browser tool bar should truncate long menu entries so it doesn't take so
     much space.
   - Open last open panel in the sidebars on startup, if possible (should be
-    stored in project file, not globally)
+    stored in project session file, not globally)
   - Tag file creation fails silently if ctags is not installed
 
 * misc:
@@ -65,7 +62,6 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - navigation toolbar
 
 * editing:
-  - setting breakpoints in qeditor texteditor impossible
   - RMB on qeditor doesn't have the 'Switch to declaration/definition'
     functionality
 
