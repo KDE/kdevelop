@@ -17,6 +17,7 @@
 #include <vector>
 #include <iterator>
 #include <iostream>
+#include <assert.h>
 
 namespace Structure {
 
