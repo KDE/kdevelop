@@ -568,10 +568,10 @@ GccOptionsDialog::GccOptionsDialog(GccOptionsPlugin::Type type, QWidget *parent,
     } else
         g77 = 0;
 
-    vbox = addVBoxPage(i18n("Warnings I"));
+    vbox = addVBoxPage(i18n("Warnings (safe)"));
     warnings1 = new Warnings1Tab(type, vbox, "warnings1 tab");
 
-    vbox = addVBoxPage(i18n("Warnings II"));
+    vbox = addVBoxPage(i18n("Warnings (unsafe)"));
     warnings2 = new Warnings2Tab(type, vbox, "warnings2 tab");
 }
 
