@@ -9,32 +9,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __KDEVPART_REPLACE_H__
-#define __KDEVPART_REPLACE_H__
+#ifndef __REPLACEVIEW_H__
+#define __REPLACEVIEW_H__
 
+#include <klistview.h>
 
-#include <qguardedptr.h>
-#include <kdevplugin.h>
+class QWidget;
+class ReplaceItem;
 
-
-class ReplaceWidget;
-
-
-class ReplacePart : public KDevPlugin
+class ReplaceView : public KListView
 {
-    Q_OBJECT
-
 public:
-    ReplacePart(QObject *parent, const char *name, const QStringList &);
-    ~ReplacePart();
+    ReplaceView( QWidget *);
 
-public slots:
-    void slotReplace();
+    ReplaceItem * firstChild() const;
 
-private:
-    QGuardedPtr<ReplaceWidget> m_widget;
-
+    void makeReplacements(QString const & pattern, QString const & replacement );
+    void showReplacements( QStringList const & files, QString const & pattern, QString const & replacement );
 };
+
+
 
 
 #endif

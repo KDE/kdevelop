@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens@krypton.supernet                                                 *
+ *   jens.dagerbo@swipnet.se                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,32 +17,24 @@
 #include <kdebug.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/editor.h>
-#include <kmessagebox.h>
-#include <klistview.h>
-
-#include <qlayout.h>
-#include <qpushbutton.h>
-//#include <qprogressbar.h>
-//#include <qlistview.h>
-#include <qheader.h>
-#include <qstringlist.h>
-#include <qlineedit.h>
-#include <qptrlist.h>
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qdir.h>
-
 #include <kdevcore.h>
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
 
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qradiobutton.h>
+#include <qstringlist.h>
+#include <qptrlist.h>
+
 #include "replace_part.h"
 #include "replace_widget.h"
 #include "replacedlg.h"
 #include "replaceitem.h"
+#include "replaceview.h"
 
 //END Includes
 
@@ -55,28 +47,20 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
 
     _cancel = new QPushButton( "Cancel", this );
     _replace = new QPushButton( "Replace", this );
-    //    _progress = new QProgressBar( this );
 
     _cancel->setEnabled( false );
     _replace->setEnabled( false );
 
     buttonlayout->addWidget( _cancel );
     buttonlayout->addWidget( _replace );
-    //    buttonlayout->addWidget( _progress );
 
-    _listview = new KListView( this );
-    _listview->setSorting( -1 );
-    _listview->addColumn( "" );
-    _listview->header()->hide();
-    _listview->setFullWidth();
-
+    _listview = new ReplaceView( this );
     layout->addWidget( _listview );
 
     connect( m_dialog->find_button, SIGNAL( clicked() ), SLOT( find() ) );
     connect( _replace, SIGNAL( clicked() ), SLOT( replace() ) );
     connect( _cancel, SIGNAL( clicked() ), SLOT( clear() ) );
     connect( _listview, SIGNAL( executed(QListViewItem*) ), SLOT( clicked(QListViewItem*) ) );
-    //  connect( _listview, SIGNAL( clicked(QListViewItem*) ), SLOT( clicked(QListViewItem*) ) );
 }
 
 //BEGIN Slots
@@ -84,6 +68,9 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
 void ReplaceWidget::showDialog()
 {
     kdDebug(0) << " ******* ReplaceWidget::showDialog()" << endl;
+
+    m_dialog->all_radio->setEnabled( m_part->project() );
+    m_dialog->all_radio->isEnabled() ? m_dialog->all_radio->setChecked( true ) : m_dialog->open_radio->setChecked( true );
 
     m_dialog->show();
 }
@@ -101,13 +88,10 @@ void ReplaceWidget::find()
     kdDebug(0) << "find string: " << m_dialog->find_line->text() << endl;
     kdDebug(0) << "replacement string: " << m_dialog->replacement_line->text() << endl;
 
-    if ( !m_part->project() )	// TODO: change to work on open files when no project is open
-        return;
-
     _listview->clear();
     m_part->mainWindow()->raiseView(this);
 
-    showReplacements( workFiles(), m_dialog->find_line->text(), m_dialog->replacement_line->text() );
+    _listview->showReplacements( workFiles(), m_dialog->find_line->text(), m_dialog->replacement_line->text() );
 
     _cancel->setEnabled( true );
     _replace->setEnabled( true );
@@ -117,7 +101,7 @@ void ReplaceWidget::replace()
 {
     kdDebug(0) << " ******* ReplaceWidget::replace()" << endl;
 
-    makeReplacements( m_dialog->find_line->text(), m_dialog->replacement_line->text() );
+    _listview->makeReplacements( m_dialog->find_line->text(), m_dialog->replacement_line->text() );
 
     clear();
     reloadOpenFiles();
@@ -152,107 +136,6 @@ void ReplaceWidget::clicked( QListViewItem * item )
 
 //BEGIN Helpers
 
-void ReplaceWidget::makeReplacements(QString const & pattern, QString const & replacement )
-{
-    ReplaceItem * fileitem = static_cast<ReplaceItem*>( _listview->firstChild() );
-    
-    while ( fileitem )
-    {
-        if ( fileitem->isOn() )
-        {
-            kdDebug(0) << " ## " << fileitem->file() << endl;
-
-            QString outfilename = fileitem->file() + "_modified";
-
-            QFile infile( fileitem->file() );
-            QFile outfile( outfilename );
-            if ( ! ( infile.open( IO_ReadOnly ) && outfile.open( IO_WriteOnly ) ) )
-            {
-                kdDebug(0) << " **** ERROR opening file! **** " << endl;
-                return;
-            }
-            QTextStream instream( &infile);
-            QTextStream outstream( &outfile );
-
-            int line = 0;
-
-            ReplaceItem * lineitem = fileitem->firstChild();
-            while ( lineitem )
-            {
-                if ( lineitem->isOn() )
-                {
-                    kdDebug(0) << " #### " << lineitem->text() << endl;
-
-                    while ( line < lineitem->line() )
-                    {
-                        outstream << instream.readLine() << "\n";
-                        line++;
-                    }
-                    // here is the hit
-                    // Q_ASSERT( line == lineitem->line() );
-                    outstream << instream.readLine().replace( pattern, replacement ) << "\n";
-                    line++;
-                }
-
-                lineitem = lineitem->nextSibling();
-            }
-
-            while ( !instream.atEnd() )
-            {
-                outstream << instream.readLine() << "\n";
-            }
-
-            infile.close();
-            outfile.close();
-
-            QDir().rename( outfilename, fileitem->file(), true );
-        }
-        fileitem = fileitem->nextSibling();
-    }
-}
-
-void ReplaceWidget::showReplacements( QStringList files, QString pattern, QString replacement )
-{
-    ReplaceItem::s_listview_done = false;
-
-    ReplaceItem * latestfile = 0;
-
-    QStringList::Iterator it = files.begin();
-    while ( it != files.end() )
-    {
-        ReplaceItem * latestitem = 0;
-
-        QFile file( *it );
-        if ( file.open ( IO_ReadOnly ) )
-        {
-            int line = 0;
-            bool firstline = true;
-            QTextStream stream ( &file );
-
-            while ( !stream.atEnd() )
-            {
-                QString s = stream.readLine();
-
-                if ( s.contains( pattern ) > 0 )
-                {
-                    s.replace( pattern, replacement );
-
-                    if ( firstline )
-                    {
-                        latestfile = new ReplaceItem( _listview, latestfile, *it );
-                        firstline = false;
-                    }
-                    latestitem = new ReplaceItem( latestfile, latestitem, *it, s.stripWhiteSpace(), line );
-                    latestfile->insertItem( latestitem );
-                }
-                line++;
-            }
-        }
-        ++it;
-    }
-    ReplaceItem::s_listview_done = true;
-}
-
 void ReplaceWidget::reloadOpenFiles()
 {
     QPtrList<KParts::Part> * partlist = m_part->partController()->parts();
@@ -270,19 +153,19 @@ void ReplaceWidget::reloadOpenFiles()
     }
 }
 
-QStringList ReplaceWidget::workFiles()
+QStringList const & ReplaceWidget::workFiles()
 {
     if ( m_dialog->all_radio->isChecked() )
     {
-        QStringList list = m_part->project()->allFiles();
+        _list = m_part->project()->allFiles();
 
-        QStringList::iterator it = list.begin();
-        while ( it != list.end() )
+        QStringList::iterator it = _list.begin();
+        while ( it != _list.end() )
         {
             *it = fullProjectPath( *it );
             ++it;
         }
-        return list;
+        return _list;
     }
     // else assume m_dialog->all_radio->isChecked()
     return openEditorPaths();
@@ -308,19 +191,20 @@ QString ReplaceWidget::fullProjectPath( QString path )
     return path;
 }
 
-QStringList ReplaceWidget::openEditorPaths()
+QStringList const & ReplaceWidget::openEditorPaths()
 {
     return getEditorPaths( false );
 }
 
-QStringList ReplaceWidget::modifiedEditorPaths()
+QStringList const & ReplaceWidget::modifiedEditorPaths()
 {
     return getEditorPaths( true );
 }
 
-QStringList ReplaceWidget::getEditorPaths( bool is_modified )
+QStringList const & ReplaceWidget::getEditorPaths( bool is_modified )
 {
-    QStringList urls;
+    QStringList & paths = _list;
+    paths.clear();
 
     QPtrList<KParts::Part> * partlist = m_part->partController()->parts();
     KParts::Part * part = partlist->first();
@@ -331,12 +215,12 @@ QStringList ReplaceWidget::getEditorPaths( bool is_modified )
             if ( ed->isModified() == is_modified )
             {
                 kdDebug(0) << " is_modified = " << is_modified << " - " << ed->url().path() << endl;
-                urls.append( ed->url().path() );
+                paths.append( ed->url().path() );
             }
         }
         part = partlist->next();
     }
-    return urls;
+    return paths;
 }
 
 //END Helpers

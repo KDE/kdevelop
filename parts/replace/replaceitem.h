@@ -1,6 +1,6 @@
 /***************************************************************************
 *   Copyright (C) 2003 by Jens Dagerbo                                    *
-*   jens@krypton.supernet                                                 *
+*   jens.dagerbo@swipnet.se                                                 *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -12,51 +12,16 @@
 #ifndef __REPLACEITEM_H__
 #define __REPLACEITEM_H__
 
+
 #include <kdebug.h>
-#include <klistview.h>
 
-#include <qstringlist.h>
-#include <qptrlist.h>
-
-
-class OneShot
-{
-public:
-
-    OneShot( bool d ) : _default( d ), _b( _default )
-    {}
-    void set()
-    {
-        _b = true;
-    }
-
-    void unset()
-    {
-        _b = false;
-    }
-
-    operator bool()
-    {
-        return test();
-    }
-
-private:
-
-    bool test()
-    {
-        bool b = _b;
-        _b = _default;
-        return b;
-    }
-    bool const _default;
-    bool _b;
-};
+#include "replaceview.h"
 
 class ReplaceItem : public QCheckListItem
 {
 public:
     // the file item
-    ReplaceItem( QListView * parent, ReplaceItem * after, QString file ) :
+    ReplaceItem( ReplaceView * parent, ReplaceItem * after, QString file ) :
             QCheckListItem( parent, after, file, QCheckListItem::CheckBox ),
             _file( file ), _string( file ), _line( 0 ), _isfile( true ),
             _block( false ), _clicked( true )
@@ -74,48 +39,56 @@ public:
         setOn( true );
     }
 
-    QString file()
+    QString const & file() const
     {
         return _file;
     }
 
-    int line()
+    int line() const
     {
         return _line;
     }
 
-    QString string()
+    QString const & string() const
     {
         return _string;
     }
 
-    bool isFile()
+    bool isFile() const
     {
         return _isfile;
     }
 
-    bool blockClick()
+    bool justClicked()
     {
-        return _block;
+        bool t = _clicked;
+        _clicked = true;
+        return t;
     }
 
-    ReplaceItem * parent()
+    bool blockClick()
+    {
+        bool t = _block;
+        _block = false;
+        return t;
+    }
+
+    ReplaceItem * parent() const
     {
         return static_cast<ReplaceItem*>( QListViewItem::parent() );
     }
 
-    ReplaceItem * firstChild()
+    ReplaceItem * firstChild() const
     {
         return static_cast<ReplaceItem*>( QListViewItem::firstChild() );
     }
 
-    ReplaceItem * nextSibling()
+    ReplaceItem * nextSibling() const
     {
         return static_cast<ReplaceItem*>( QListViewItem::nextSibling() );
     }
 
-    // QPtrList<ReplaceItem> getChildren( bool only_checked );
-    bool hasCheckedChildren();
+    bool hasCheckedChildren() const;
     virtual void stateChange( bool state );
 
     static bool s_listview_done;
@@ -123,14 +96,14 @@ public:
 private:
 
     void setChecked( bool checked );
-    // virtual void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align );
 
     QString _file;
     QString _string;
     int _line;
     bool const _isfile;
-    OneShot _block;
-    OneShot _clicked;
+    bool _block;
+    bool _clicked;
+
 };
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens@krypton.supernet                                                 *
+ *   jens.dagerbo@swipnet.se                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,9 +14,9 @@
 bool ReplaceItem::s_listview_done = false;
 
 
-bool ReplaceItem::hasCheckedChildren()
+bool ReplaceItem::hasCheckedChildren() const
 {
-    ReplaceItem * item = firstChild();
+    ReplaceItem const * item = firstChild();
     while ( item )
     {
         if ( item->isOn() )
@@ -32,9 +32,9 @@ void ReplaceItem::stateChange( bool state )
 {
     kdDebug(0) << " ****** ReplaceItem::stateChanged() - " << state << " : " << text() << endl;
 
-    if ( s_listview_done && _clicked )
+    if ( s_listview_done && justClicked() )
     {
-        _block.set();
+        _block = true;
         setChecked( state );
     }
 }
@@ -49,7 +49,7 @@ void ReplaceItem::setChecked( bool checked )
         {
             if ( parent()->isOn() != checked )
             {
-                parent()->_clicked.unset();  // stops setOn from hiding the next click
+                parent()->_clicked = true;
                 parent()->setOn( checked );
             }
         }
@@ -62,54 +62,11 @@ void ReplaceItem::setChecked( bool checked )
     {
         if ( item->isOn() != checked )
         {
-            item->_clicked.unset();	// stops setOn from hiding the next click
+            item->_clicked = true;
             item->setOn( checked );
         }
         item = item->nextSibling();
     }
 }
 
-/**
-QPtrList<ReplaceItem> ReplaceItem::getChildren( bool only_checked )
-{
-    QPtrList<ReplaceItem> list;
-
-    ReplaceItem * item = firstChild();
-    while ( item )
-    {
-        if ( only_checked )
-        {
-            if ( item->isOn() )
-            {
-                list.append( item );
-            }
-        }
-        else
-        {
-            list.append( item );
-        }
-
-        item = item->nextSibling();
-    }
-    return list;
-}
-/**/
-
-/**
-virtual void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
-{
-    if ( isFile() )
-    {
-        QColorGroup cg2(cg);
-        cg2.setColor( QColorGroup::Text, Qt::darkGreen );
-        QCheckListItem::paintCell( p, cg2, column, width, align );
-    }
-    else
-    {
-        QColorGroup cg2(cg);
-        cg2.setColor( QColorGroup::Text, Qt::blue );
-        QCheckListItem::paintCell( p, cg2, column, width, align );
-    }
-}
-/**/
 

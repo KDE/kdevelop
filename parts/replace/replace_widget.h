@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Jens Dagerbo                                    *
- *   jens@krypton.supernet                                                 *
+ *   jens.dagerbo@swipnet.se                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,36 +12,23 @@
 #ifndef __REPLACE_WIDGET_H__
 #define __REPLACE_WIDGET_H__
 
-
 #include <qwidget.h>
 #include <qstring.h>
 
-
-class KDevProject;
+class QPushButton;
+class QListViewItem;
 
 class ReplacePart;
 class ReplaceDlg;
-
-class QPushButton;
-//class QProgressBar;
-//class QListView;
-class QListViewItem;
-class KListView;
-
 class ReplaceItem;
+class ReplaceView;
 
 class ReplaceWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-
     ReplaceWidget(ReplacePart *part);
-
-    QPushButton * _cancel;
-    QPushButton * _replace;
-    // QProgressBar * _progress;
-    KListView * _listview;
 
 public slots:
     void showDialog();
@@ -52,19 +39,24 @@ public slots:
     void clicked( QListViewItem * );
 
 private:
-    void makeReplacements( QString const & pattern, QString const & replacement );
-    void showReplacements( QStringList files, QString pattern, QString replacement );
     void reloadOpenFiles();
 
     QString relativeProjectPath( QString );
     QString fullProjectPath( QString );
-    QStringList workFiles();
-    QStringList openEditorPaths();
-    QStringList modifiedEditorPaths();
-    QStringList getEditorPaths( bool );
+
+    QStringList const & workFiles();
+    QStringList const & openEditorPaths();
+    QStringList const & modifiedEditorPaths();
+    QStringList const & getEditorPaths( bool );
 
     ReplacePart * m_part;
     ReplaceDlg * m_dialog;
+
+    QStringList _list;
+
+    QPushButton * _cancel;
+    QPushButton * _replace;
+    ReplaceView * _listview;
 };
 
 
