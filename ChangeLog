@@ -1,3 +1,6 @@
+2003-01-27 F@lk Brettschneider <falk@kdevelop.org>
+	* QEditor-Plugin: Ctrl+Left, Ctrl+Right, Ctrl+Del and Ctrl+Backspace much more better now
+
 2003-01-24 Harald Fernengel <harry@kdevelop.org>
         * default keys to move to next/prev window are now
           ALT-Right / ALT-Left (as in kate)
