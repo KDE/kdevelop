@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=QEditorPart
-Comment=QT Editor Part
-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KDevelop/Editor
-X-KDE-Library=libqeditorpart
-Type=Service
