@@ -162,7 +162,7 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
 
     if (cmdline.contains("%T") && selection.isNull())
         return;
-    cmdline.replace(QRegExp("%S"), selection);
+    cmdline.replace(QRegExp("%T"), selection);
 
     if (cmdline.contains("%W") && word.isNull())
         return;
