@@ -42,7 +42,7 @@ public:
 
     QString tipText() const
     {
-        QString tip = "Name: %1 | Type: %2 | Value: %3";
+        QString tip = i18n("Name: %1 | Type: %2 | Value: %3");
         return tip.arg( text(0) ).arg( text(1) ).arg( text(2) );
     }
 };
@@ -91,7 +91,7 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     m_resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
         (QSizePolicy::SizeType)3, 0, 0,
         m_resultsList->sizePolicy().hasHeightForWidth() ) );
-    QWhatsThis::add( m_resultsList, i18n("<h2>Matching services</h2>Results (if any) are shows grouped by matching service name") );
+    QWhatsThis::add( m_resultsList, i18n("<h2>Matching services</h2>Results (if any) are shown grouped by matching service name.") );
     m_base->layout()->add( m_resultsList );
     setMainWidget( m_base );
 
@@ -142,7 +142,7 @@ void PartExplorerForm::slotSearchRequested()
 
     if (serviceType.isNull())  // It is mandatory
     {
-        slotDisplayError( i18n("You must fill at least a the service type!!") );
+        slotDisplayError( i18n("You must fill at least the service type!!") );
         return;
     }
 
