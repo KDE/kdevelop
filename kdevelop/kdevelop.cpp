@@ -557,20 +557,20 @@ void KDevelop::resizeEvent( QResizeEvent *pRSE)
 
 void KDevelop::switchToToplevelMode()
 {
-    if (isInTopLevelMode())
+    if (mdiMode() == QextMdi::ToplevelMode)
         return;
     saveCurrentDockAndMdiSzenario();
     QextMdiMainFrm::switchToToplevelMode();
     if (m_dockSzenario & EditorEnv)
         m_dockSzenario = EditorEnv | TopLevelMode;
-    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
+//XXXXX    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
 }
 
 void KDevelop::switchToChildframeMode()
 {
-    if (!isInTopLevelMode())
+    if (mdiMode() == QextMdi::ChildframeMode)
         return;
-    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+//XXXXX    m_dockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
     saveCurrentDockAndMdiSzenario();
     QextMdiMainFrm::switchToChildframeMode();
     if (m_dockSzenario & EditorEnv)
@@ -613,7 +613,7 @@ void KDevelop::saveCurrentDockAndMdiSzenario()
             break;
     }
     pConfig->setGroup( "MDI settings" );
-    pConfig->writeEntry( "toplevel mode", isInTopLevelMode());
+//XXXXX    pConfig->writeEntry( "toplevel mode", isInTopLevelMode());
 }
 
 #include "kdevelop.moc"

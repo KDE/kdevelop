@@ -43,6 +43,7 @@
 #include <qlist.h>
 #include <qrect.h>
 #include <qapplication.h>
+#include <qdom.h>
 
 #include "qextmditaskbar.h"
 #include "qextmdichildarea.h"
@@ -87,8 +88,16 @@ typedef enum {
 typedef enum {
       Win95Look = 0,
       KDE1Look  = 1,
-      KDE2Look  = 2
+      KDE2Look  = 2,
+      KDE2LaptopLook = 3
    } QextMdiFrameDecor;
+
+typedef enum {
+      ToplevelMode   = 0,
+      ChildframeMode = 1,
+      TabPageMode    = 2
+   } MdiMode;
+
 }; //namespace
 
 /**
@@ -126,6 +135,7 @@ protected:
    QPopupMenu              *m_pTaskBarPopup;
    QPopupMenu              *m_pWindowMenu;
    QPopupMenu              *m_pDockMenu;
+   QPopupMenu              *m_pMdiModeMenu;
    QPopupMenu              *m_pPlacingMenu;
 #ifdef NO_KDE2
    QMenuBar                *m_pMainMenuBar;
@@ -143,13 +153,15 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
    QPoint                  m_undockPositioningOffset;
-   bool                    m_bTopLevelMode;
+   QextMdi::MdiMode        m_mdiMode;
    bool                    m_bMaximizedChildFrmMode;
    int                     m_oldMainFrmHeight;
    int                     m_oldMainFrmMinHeight;
    int                     m_oldMainFrmMaxHeight;
    static QextMdi::QextMdiFrameDecor   m_frameDecoration;
-   KDockWidget*            m_dockbaseAreaOfDocumentViews;
+   KDockWidget*            m_pDockbaseAreaOfDocumentViews;
+   KDockWidget*            m_pDockbaseOfTabPage;
+   QDomDocument*           m_pTempDockSession;
 
 // methods
 public:
@@ -166,11 +178,9 @@ public:
    */
    bool isInMaximizedChildFrmMode() { return m_bMaximizedChildFrmMode; };
    /**
-   * Returns whether the MDI application is in Toplevel mode or not. Toplevel mode means that
-   * all MDI views are undocked by one method call @ref QextMdiMainFrm::switchToToplevelMode .
-   * You can call this 'event' via 'Window' menu.
+   * Returns the MDI mode. This can be one of the enumerations QextMdi::MdiMode.
    */
-   bool isInTopLevelMode() { return m_bTopLevelMode; };
+   bool mdiMode() { return m_mdiMode; };
    /**
    * Returns the focused attached MDI view.
    */
@@ -352,10 +362,17 @@ public slots:
    * Undocks all view windows (unix-like) 
    */
    virtual void switchToToplevelMode();
-   /** 
-   * Docks all view windows (Windows-like) 
+   virtual void finishToplevelMode();
+   /**
+   * Docks all view windows (Windows-like)
    */
    virtual void switchToChildframeMode();
+   virtual void finishChildframeMode();
+   /**
+   * Docks all view windows (Windows-like)
+   */
+   virtual void switchToTabPageMode();
+   virtual void finishTabPageMode();
    /**
    * Shows the view taskbar. This should be connected with your "View" menu. 
    */
@@ -473,9 +490,9 @@ signals:
    */
    void lastChildViewClosed();
    /**
-   * Signals that the Toplevel mode has been leaved
+   * Signals that the Toplevel mode has been left
    */
-   void leavedTopLevelMode();
+   void leftTopLevelMode();
 };
 
 #endif //_QEXTMDIMAINFRM_H_
