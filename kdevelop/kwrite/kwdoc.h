@@ -267,6 +267,7 @@ class KWriteDoc : QObject {
     int selectEnd;
 
     bool modified;
+    bool oldMarkState;
     QString fName;
 
     int foundLine;
