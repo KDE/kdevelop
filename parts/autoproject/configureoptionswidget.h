@@ -35,6 +35,7 @@ public slots:
 
 private:
     virtual void builddirClicked();
+    virtual void topsourcedirClicked();
     virtual void setDirty();
     virtual void configChanged(const QString &config);
     virtual void configComboTextChanged(const QString &config);

@@ -136,6 +136,8 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
         builddir = config;
     builddir_edit->setText(builddir);
 
+    topsourcedir_edit->setText(DomUtil::readEntry(dom, prefix + "topsourcedir"));
+
     QString ccompiler = DomUtil::readEntry(dom, prefix + "ccompiler");
     QString cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler");
     QString f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler");
@@ -197,6 +199,7 @@ void ConfigureOptionsWidget::saveSettings(const QString &config)
 
     DomUtil::writeEntry(dom, prefix + "configargs", configargs_edit->text());
     DomUtil::writeEntry(dom, prefix + "builddir", builddir_edit->text());
+    DomUtil::writeEntry(dom, prefix + "topsourcedir", topsourcedir_edit->text());
 
     QFileInfo fi(m_part->buildDirectory());
     QDir dir(fi.dir());
@@ -237,6 +240,13 @@ void ConfigureOptionsWidget::builddirClicked()
         builddir_edit->setText(dir);
 }
 
+void ConfigureOptionsWidget::topsourcedirClicked()
+{
+    QString dir = topsourcedir_edit->text();
+    dir = KFileDialog::getExistingDirectory(dir, this);
+    if (!dir.isNull())
+        topsourcedir_edit->setText(dir);
+}
 
 void ConfigureOptionsWidget::configComboTextChanged(const QString &config)
 {
