@@ -17,7 +17,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 
-#include <kwmmapp.h>
 #include <X11/Xlib.h> //used to have the XEvent type
 
 //key functions
