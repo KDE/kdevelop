@@ -21,11 +21,11 @@ METASOURCES = AUTO
 
 EXTRA_DIST = java.g java.tree.g java.store.g
 
-JavaLexer.hpp JavaLexer.cpp JavaRecognizer.hpp JavaRecognizer.cpp: # java.g
-	antlr java.g
+#JavaLexer.hpp JavaLexer.cpp JavaRecognizer.hpp JavaRecognizer.cpp: # java.g
+#	antlr java.g
 
-JavaStoreWalker.hpp JavaStoreWalker.cpp: # java.store.g
-	antlr java.store.g
+#JavaStoreWalker.hpp JavaStoreWalker.cpp: # java.store.g
+#	antlr java.store.g
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevjavasupport.desktop
