@@ -61,6 +61,7 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   setXMLFile("kdevpart_filecreate.rc");
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
+  connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
   
 	_configProxy = new ConfigWidgetProxy( core() );
 	_configProxy->createProjectConfigPage( i18n("New File Wizard"), PROJECTSETTINGSPAGE );
