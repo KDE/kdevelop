@@ -326,7 +326,9 @@ public: // Public queries
   void getPOFiles(QString rel_name_makefileam,QStrList& po_files);
 
   bool isKDEProject();
+  bool isKDE2Project();
   bool isQtProject();
+  bool isQt2Project();
   bool isCustomProject();
   /** check if a subdir is in the project (registered). */
   bool isDirInProject(QString rel_name);
