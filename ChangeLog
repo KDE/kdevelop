@@ -1,3 +1,6 @@
+2002-12-15 F@lk Brettschneider <falk@kdevelop.org>
+    * breakpoint support in QEditor completed
+
 2002-12-13 F@lk Brettschneider <falk@kdevelop.org>
     * added breakpoint support in QEditor (not yet finished)
     
