@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>473</width>
-            <height>578</height>
+            <height>603</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,7 +22,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-
         <widget class="QTabWidget">
             <property name="name">
                 <cstring>class_tabs</cstring>
@@ -32,7 +31,7 @@
                     <cstring>tab1</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Class In&amp;formation</string>
+                    <string>Class &amp;Information</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -66,7 +65,6 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-
                             <widget class="QLabel">
                                 <property name="name">
                                     <cstring>documentation_label_</cstring>
@@ -96,13 +94,12 @@ doxygen or similar tools.</string>
                             <cstring>filenames_group</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;File Names</string>
+                            <string>File Names</string>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QLabel">
                                 <property name="name">
                                     <cstring>header_label</cstring>
@@ -130,7 +127,7 @@ still edit it afterwards.</string>
                                     <cstring>implementation_label</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Implementation:</string>
+                                    <string>Im&amp;plementation:</string>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>implementation_edit</cstring>
@@ -154,7 +151,7 @@ still edit it afterwards.</string>
                             <cstring>groupBox7</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Class</string>
+                            <string>Class</string>
                         </property>
                         <hbox>
                             <property name="name">
@@ -227,13 +224,12 @@ Namespace1::Namespace2::...::NamespaceN</string>
                             <cstring>inheritance_group</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Inheritance</string>
+                            <string>Inheritance</string>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QPushButton" row="2" column="0">
                                 <property name="name">
                                     <cstring>addbaseclass_button</cstring>
@@ -253,7 +249,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     </size>
                                 </property>
                                 <property name="text">
-                                    <string>A&amp;dd</string>
+                                    <string>&amp;Add</string>
                                 </property>
                                 <property name="autoDefault">
                                     <bool>false</bool>
@@ -573,7 +569,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                             <cstring>optionsBox</cstring>
                         </property>
                         <property name="title">
-                            <string>&amp;Options</string>
+                            <string>Options</string>
                         </property>
                         <vbox>
                             <property name="name">
@@ -584,7 +580,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <cstring>filetemplate_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Use file &amp;templates</string>
+                                    <string>Use file t&amp;emplates</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
@@ -595,7 +591,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <cstring>qobject_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>C&amp;lass is Q_OBJECT</string>
+                                    <string>Generate QOb&amp;ject child class</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -603,7 +599,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <cstring>childclass_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Generate &amp;QWidget child class</string>
+                                    <string>Generate Q&amp;Widget child class</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -619,7 +615,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                     <cstring>objc_box</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Use Objecti&amp;ve-C</string>
+                                    <string>Use Objective-C</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -631,7 +627,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                     <cstring>tab2</cstring>
                 </property>
                 <attribute name="title">
-                    <string>&amp;Advanced Information</string>
+                    <string>Ad&amp;vanced Information</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -646,7 +642,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 <cstring>tab</cstring>
                             </property>
                             <attribute name="title">
-                                <string>Constructors</string>
+                                <string>Constr&amp;uctors</string>
                             </attribute>
                             <vbox>
                                 <property name="name">
@@ -763,7 +759,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <cstring>tab_header</cstring>
                                         </property>
                                         <attribute name="title">
-                                            <string>Header</string>
+                                            <string>&amp;Header</string>
                                         </attribute>
                                         <grid>
                                             <property name="name">
@@ -798,7 +794,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                             <cstring>tab_source</cstring>
                                         </property>
                                         <attribute name="title">
-                                            <string>Source</string>
+                                            <string>&amp;Source</string>
                                         </attribute>
                                         <grid>
                                             <property name="name">
@@ -836,7 +832,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 <cstring>tab</cstring>
                             </property>
                             <attribute name="title">
-                                <string>Methods Overriding</string>
+                                <string>Methods &amp;Overriding</string>
                             </attribute>
                             <vbox>
                                 <property name="name">
@@ -891,7 +887,7 @@ Namespace1::Namespace2::...::NamespaceN</string>
                                 <cstring>tab</cstring>
                             </property>
                             <attribute name="title">
-                                <string>Access Control</string>
+                                <string>&amp;Access Control</string>
                             </attribute>
                             <vbox>
                                 <property name="name">
@@ -993,7 +989,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
                 <property name="margin">
                     <number>0</number>
                 </property>
-
                 <spacer>
                     <property name="name">
                         <cstring>Spacer7_2</cstring>
@@ -1032,23 +1027,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
     </vbox>
 </widget>
 <customwidgets>
-    <customwidget>
-        <class>KLineEdit</class>
-        <header location="global">klineedit.h</header>
-        <sizehint>
-            <width>0</width>
-            <height>0</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>0</hordata>
-            <verdata>7</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
-        <signal>textChanged(const QString &amp;)</signal>
-    </customwidget>
     <customwidget>
         <class>ClassGeneratorConfig</class>
         <header location="local">classgeneratorconfig.h</header>
@@ -1284,6 +1262,9 @@ Namespace1::Namespace2::...::NamespaceN</string>
     <tabstop>gen_config</tabstop>
     <tabstop>constructors_cpp_edit</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">updateClassStore()</slot>
     <slot access="protected">access_view_mouseButtonPressed( int button, QListViewItem * item, const QPoint &amp; p, int c )</slot>
@@ -1325,9 +1306,6 @@ Namespace1::Namespace2::...::NamespaceN</string>
     <slot access="protected">baseIncludeChanged(const QString&amp;)</slot>
     <slot access="protected">scopeboxActivated(int)</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
