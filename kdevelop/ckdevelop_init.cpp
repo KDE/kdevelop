@@ -208,6 +208,7 @@ void CKDevelop::init(){
 	  this,SLOT(slotURLSelected(KHTMLView*,const char*,int,const char*)));
   connect(browser_widget,SIGNAL(documentDone(KHTMLView*)),
 	  this,SLOT(slotDocumentDone(KHTMLView*)));
+
   swallow_widget = new KSwallowWidget(s_tab_view);
   swallow_widget->setFocusPolicy(QWidget::StrongFocus);
 //  swallow_widget->setFocusPolicy(QWidget::NoFocus);
@@ -372,6 +373,9 @@ void CKDevelop::initMenu(){
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
 
+  view_menu->insertItem(i18n("&Search Marked Text"),this,
+				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
+  accel->changeMenuAccel(view_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
 
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
@@ -571,52 +575,40 @@ void CKDevelop::initMenu(){
   menu_buffers = new QPopupMenu;
   menuBar()->insertItem(i18n("&Window"), menu_buffers);
   menuBar()->insertSeparator();
-  
-///////////////////////////////////////////////////////////////////
-// Documentation-menu entries
 
-  documentation_menu = new QPopupMenu;
-  documentation_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
-  documentation_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("&Search Marked Text"),this,
-				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
-  accel->changeMenuAccel(documentation_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&Core-Library"),this,
+///////////////////////////////////////////////////////////////////
+// Help-menu entries
+  QPopupMenu* help_menu = new QPopupMenu();
+  help_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
+  help_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
+  help_menu->insertSeparator();
+  help_menu->insertItem(i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
+
+  help_menu->insertSeparator();
+  help_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
+  help_menu->insertItem(i18n("KDE-&Core-Library"),this,
 				 SLOT(slotDocKDECoreLib()),0,ID_DOC_KDE_CORE_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&GUI-Library"),this,
+  help_menu->insertItem(i18n("KDE-&GUI-Library"),this,
 				 SLOT(slotDocKDEGUILib()),0,ID_DOC_KDE_GUI_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&KFile-Library"),this,
+  help_menu->insertItem(i18n("KDE-&KFile-Library"),this,
 				 SLOT(slotDocKDEKFileLib()),0,ID_DOC_KDE_KFILE_LIBRARY);
-  documentation_menu->insertItem(i18n("KDE-&HTML-Library"),this,
+  help_menu->insertItem(i18n("KDE-&HTML-Library"),this,
 				 SLOT(slotDocKDEHTMLLib()),0,ID_DOC_KDE_HTML_LIBRARY);
-  documentation_menu->insertSeparator();
-  documentation_menu->insertItem(i18n("Project &API-Doc"),this,
+  help_menu->insertSeparator();
+  help_menu->insertItem(i18n("Project &API-Doc"),this,
 				      SLOT(slotDocAPI()),0,ID_DOC_PROJECT_API_DOC);
 
-  documentation_menu->insertItem(i18n("Project &User-Manual"),this,
+  help_menu->insertItem(i18n("Project &User-Manual"),this,
 				      SLOT(slotDocManual()),0,ID_DOC_USER_MANUAL);
-
-  menuBar()->insertItem(i18n("&Documentation"), documentation_menu);
-
+  //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help_menu->insertSeparator();
+  help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
+  menuBar()->insertItem(i18n("&Help"), help_menu);
 
   disableCommand(ID_DOC_BACK);
   disableCommand(ID_DOC_FORWARD);
   disableCommand(ID_DOC_PROJECT_API_DOC);
   disableCommand(ID_DOC_USER_MANUAL);
-
-///////////////////////////////////////////////////////////////////
-// Help-menu entries
-  QPopupMenu* help_menu = new QPopupMenu();
-  help_menu->insertItem(i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
-
-  //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
-  help_menu->insertSeparator();
-  help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
-  
-  menuBar()->insertItem(i18n("&Help"), help_menu);
 
 ///////////////////////////////////////////////////////////////////
 // connects for the statusbar help
@@ -628,7 +620,6 @@ void CKDevelop::initMenu(){
   connect(build_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(tools_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  connect(documentation_menu,SIGNAL(highlighted(int)),SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
 
 }
@@ -653,7 +644,6 @@ void CKDevelop::initToolbar(){
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,10,separatorLine);
 
-//  toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
   toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
@@ -666,15 +656,10 @@ void CKDevelop::initToolbar(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
 	toolBar()->insertButton(pix,ID_EDIT_REDO,false,i18n("Undo"));
 
-//  toolBar()->insertSeparator();
   QFrame *separatorLine1= new QFrame(toolBar());
   separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,20,separatorLine1);
 
-// toolBar()->insertButton(Icon("reload.xpm"),ID_VIEW_REFRESH, true,i18n("Refresh"));
-
-//  toolBar()->insertSeparator();
-//  toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/compfile.xpm");
   toolBar()->insertButton(pix,ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
@@ -686,7 +671,6 @@ void CKDevelop::initToolbar(){
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/stop.xpm");
   toolBar()->insertSeparator();
   toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
-//  toolBar()->insertSeparator();
 
   QFrame *separatorLine2= new QFrame(toolBar());
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
@@ -724,6 +708,7 @@ void CKDevelop::initToolbar(){
 					    true,i18n("Search Text in Documenation"));
   
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
+
   if(config->readBoolEntry("show_browser_toolbar", true)){
     enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
   }
@@ -796,6 +781,11 @@ void CKDevelop::initConnections(){
   //connect the editor lookup function with slotDocSText
   connect(cpp_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
   connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
+
+  // connect Docbrowser rb menu
+  connect(browser_widget,SIGNAL(signalCopyText()),this,SLOT(slotEditCopy()));
+  connect(browser_widget,SIGNAL(signalURLBack()),this,SLOT(slotDocBack()));
+  connect(browser_widget,SIGNAL(signalURLForward()),this,SLOT(slotDocForward()));
 	
 }
 void CKDevelop::initProject(){
@@ -825,6 +815,11 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
 
 
 

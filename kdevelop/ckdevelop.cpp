@@ -28,6 +28,7 @@
 #include <ktabctl.h>
 #include <qregexp.h>
 #include "ckdevsetupdlg.h"
+#include <qclipbrd.h>
 
 #include "cupdatekdedocdlg.h"
 #include <kdebug.h>
@@ -311,8 +312,16 @@ void CKDevelop::slotEditCut(){
 }
 void CKDevelop::slotEditCopy(){
   slotStatusMsg(i18n("Copying..."));
-  edit_widget->copyText();
-  slotStatusMsg(IDS_DEFAULT); 
+  if(s_tab_view->getCurrentTab()==2){
+	  QString text;
+
+	  browser_widget->getSelectedText( text );
+	  QClipboard *cb = kapp->clipboard();
+	  cb->setText( text );
+  }
+	else
+    edit_widget->copyText();
+  slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotEditPaste(){
   slotStatusMsg(i18n("Pasting selection..."));
@@ -1365,7 +1374,7 @@ void CKDevelop::slotHelpHomepage(){
   //  slotURLSelected(browser_widget,"http://anakonda.alpha.org/~smeier/kdevelop/index.html",1,"test");
 }
 void CKDevelop::slotHelpAbout(){
-  KMsgBox::message(this,i18n("About..."),i18n("\tKDevelop Version "+version+" (Alpha) \n\n\t(c) 1998,1999 KDevelop Team \n
+  KMsgBox::message(this,i18n("About KDevelop..."),i18n("\tKDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
 Sandy Meier <smeier@rz.uni-potsdam.de>
 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 Stefan Bartel <bartel@rz.uni-potsdam.de>
@@ -1608,6 +1617,9 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
 
 
 

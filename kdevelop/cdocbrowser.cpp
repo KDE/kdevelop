@@ -29,6 +29,9 @@
 #include <qcombo.h>
 #include <qlabel.h>
 #include <qchkbox.h>
+#include <qclipbrd.h>
+
+
 #include <kapp.h>
 #include <kconfig.h>
 #include <kmsgbox.h>
@@ -47,10 +50,23 @@ bool CDocBrowser::underlineLinks;
 bool CDocBrowser::forceDefaults;
 
 CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
+
+  doc_pop = new QPopupMenu();
+  doc_pop->insertItem(i18n("Back"),this, SLOT(slotURLBack()),0,0);
+  doc_pop->insertItem(i18n("Forward"),this,SLOT(slotURLForward()),0,1);
+
+  edit_pop = new QPopupMenu();
+  edit_pop->insertItem(i18n("Copy"),this, SLOT(slotCopyText()),0,2);
+
+//  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
+  connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
+    this, SLOT( slotPopupMenu( KHTMLView *, const char *, const QPoint & ) ) );
+
 }
 
 CDocBrowser::~CDocBrowser(){
 }
+
 
 void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
@@ -175,6 +191,30 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
   htmlview->parse();
 //	busy = true;
 //	emit enableMenuItems();){
+}
+
+void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint & pnt){
+  if(this->isTextSelected())
+    edit_pop->popup(pnt);
+  else
+    doc_pop->popup(pnt);
+}
+
+void CDocBrowser::slotCopyText(){
+/*	  QString text;
+	  getSelectedText( text );
+	  QClipboard *cb = kapp->clipboard();
+	  cb->setText( text );
+*/
+  emit signalCopyText();
+}
+
+void CDocBrowser::slotURLBack(){
+  emit signalURLBack();
+}
+
+void CDocBrowser::slotURLForward(){
+  emit signalURLForward();
 }
 
 
@@ -514,6 +554,24 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

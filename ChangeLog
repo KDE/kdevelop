@@ -1,3 +1,8 @@
+1999-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * merged Documentation menu into Help menu, search marked text into view_menu
+  * added right button menus to CDocBrowser to copy marked text to clipboard, connected to
+    slotEditCopy() as well; button menu to switch back and forward in the browser window
+
 1999-02-17  Stefan heidrich  <sheidric@rz.uni-potsdam.de>
 	* in the applicationwizard the real installationpath is printed
 	* the applications are generated in debug-mode

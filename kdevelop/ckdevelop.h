@@ -279,14 +279,13 @@ private:
   QPopupMenu* file_menu;
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
-  QPopupMenu* documentation_menu;
-  QPopupMenu* build_menu;
   QPopupMenu* project_menu;
+  QPopupMenu* build_menu;
+  QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
   QPopupMenu* make;
-  QPopupMenu* tools_menu;
   QPopupMenu* menu_buffers;
-  QPopupMenu* menu_help;
+  QPopupMenu* help_menu;
   QWhatsThis* whats_this;
   
   KNewPanner* view;

@@ -21,13 +21,15 @@
 
 
 #include <qwidget.h>
-#include <htmlview.h>
-#include <kiconloader.h>
-#include <kapp.h>
 #include <qstring.h>
 #include <qtabdlg.h>
 #include <qcombo.h>
 #include <qstrlist.h>
+#include <qpopupmenu.h>
+
+#include <htmlview.h>
+#include <kiconloader.h>
+#include <kapp.h>
 #include <kconfig.h>
 #include "structdef.h"
 
@@ -53,8 +55,20 @@ public slots:
   void slotDocFixedFont(const char *);
   void slotDocColorsChanged(const QColor&, const QColor&,
             		const QColor&, const QColor&, const bool, const bool);
+  void slotPopupMenu( KHTMLView *, const char *, const QPoint & );
+  void slotCopyText();
+  void slotURLBack();
+  void slotURLForward();
+ signals:
+  void signalCopyText();
+  void signalURLBack();
+  void signalURLForward();
+
 protected:
   QString old_url;
+//  void  mousePressEvent(QMouseEvent* event);
+  QPopupMenu* doc_pop;
+  QPopupMenu* edit_pop;
 
 private:
 	// html view preferences
@@ -166,4 +180,8 @@ public:
 };
 
 #endif
+
+
+
+
 
