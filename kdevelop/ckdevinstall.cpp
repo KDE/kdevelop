@@ -718,9 +718,9 @@ void CKDevInstall::slotAuto() // proceed >>
     print_str="a2ps / enscript"+not_found+ i18n(" -- printing can only use lpr\n");
 
 
-  KMessageBox::information(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
+  KMessageBox::information(this, i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
-                  +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str);
+                  +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str, i18n("Program test results"));
 
 	config->setGroup("ToolsMenuEntries");
 	config->writeEntry("Tools_exe",tools_exe);
@@ -771,8 +771,9 @@ void CKDevInstall::slotAuto() // proceed >>
 	if(!qt_test){
   	  config->setGroup("Doc_Location");
 	  config->writeEntry("doc_qt",qt);
-	  KMessageBox::information(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
-								     +i18n("\n\nThe correct path has been set.\n "));
+	  KMessageBox::information(this, i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
+					 +i18n("\n\nThe correct path has been set.\n "),
+                                         i18n("Qt Documentation found"));
 	}
   	else{  // return to the setup to set it manually ?
 	  if (KMessageBox::questionYesNo(this, i18n("\nThe Qt-library documentation could not\n"
@@ -819,8 +820,9 @@ void CKDevInstall::slotAuto() // proceed >>
   }
   
   if (kde_test) {
-    KMessageBox::information(0, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
-								     +"\n\nThe correct path has been set.\n "));
+    KMessageBox::information(0,i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
+				    +"\n\nThe correct path has been set.\n "),
+                                    i18n("KDE-Library Documentation found"));
      slotProcessExited(0);
      return; //ok, nothing more to do, we are leaving	
   }
@@ -858,8 +860,9 @@ void CKDevInstall::slotAuto() // proceed >>
       slotProcessExited(shell_process);
     }
 
+    if (dlg.isUpdated())
+        config->writeEntry("doc_kde",dlg.getDocPath());
 
-    
     auto_button->setEnabled(false);
     hint_label->setText(i18n("                Creating KDE documentation                           "
 			     "                                                             "
