@@ -3185,7 +3185,6 @@ bool Parser::parsePostfixExpression( AST::Node& /*node*/ )
 {
     //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parsePostfixExpression()" << endl;
 
-    int start = lex->index();
     AST::Node expr;
     if( !parsePrimaryExpression(expr) )
 	return false;
@@ -3260,8 +3259,6 @@ bool Parser::parseUnaryExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUnaryExpression()" << endl;
         
-    int start = lex->index();
-    
     switch( lex->lookAhead(0) ){
         case Token_incr:
         case Token_decr:
@@ -3666,8 +3663,6 @@ bool Parser::parseConstantExpression( AST::Node& node )
 bool Parser::parseExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseExpression()" << endl;
-    int start = lex->index();
-
     if( !parseCommaExpression(node) )
         return false;
 

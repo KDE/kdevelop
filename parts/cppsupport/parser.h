@@ -159,6 +159,10 @@ private:
     Lexer* lex;
     int m_problems;
     int m_maxProblems;
+
+private:
+    Parser( const Parser& source );
+    void operator = ( const Parser& source );
 };
 
 

@@ -41,12 +41,12 @@ void Driver::clear( const QString & fileName )
 
 void Driver::addDependence( const QString & fileName, const Dependence & dep )
 {
-    findOrInsertDependenceList( fileName )->append( dep );
+    findOrInsertDependenceList( fileName )->insert( dep.first, dep );
 }
 
 void Driver::addMacro( const QString & fileName, const Macro & macro )
 {
-    findOrInsertMacroList( fileName )->append( macro );
+    findOrInsertMacroList( fileName )->insert( macro.name(), macro );
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem )
@@ -54,21 +54,21 @@ void Driver::addProblem( const QString & fileName, const Problem & problem )
     findOrInsertProblemList( fileName )->append( problem );
 }
 
-QValueList < Dependence > * Driver::findOrInsertDependenceList( const QString & fileName )
+QMap< QString, Dependence > * Driver::findOrInsertDependenceList( const QString & fileName )
 {
-    QValueList < Dependence > * l = m_dependences.find( fileName );
+    QMap< QString, Dependence > * l = m_dependences.find( fileName );
     if( l == 0 ){
-	l = new QValueList < Dependence >();
+	l = new QMap< QString, Dependence >();
 	m_dependences.insert( fileName, l );
     }
     return l;
 }
 
-QValueList < Macro > * Driver::findOrInsertMacroList( const QString & fileName )
+QMap< QString, Macro > * Driver::findOrInsertMacroList( const QString & fileName )
 {
-    QValueList < Macro > * l = m_macros.find( fileName );
+    QMap< QString, Macro > * l = m_macros.find( fileName );
     if( l == 0 ){
-	l = new QValueList < Macro >();
+	l = new QMap< QString, Macro >();
 	m_macros.insert( fileName, l );
     }
     return l;
@@ -222,18 +222,18 @@ void Driver::setupParser( Parser * parser )
     Q_UNUSED( parser );
 }
 
-QValueList < Dependence > Driver::dependences( const QString & fileName ) const
+QMap< QString, Dependence > Driver::dependences( const QString & fileName ) const
 {
     if( m_dependences.find(fileName) )
 	return *m_dependences.find(fileName);
-    return QValueList<Dependence>();
+    return QMap<QString, Dependence>();
 }
 
-QValueList < Macro > Driver::macros( const QString & fileName ) const
+QMap< QString, Macro > Driver::macros( const QString & fileName ) const
 {
     if( m_macros.find(fileName) )
 	return *m_macros.find(fileName);
-    return QValueList<Macro>();
+    return QMap<QString, Macro>();
 }
 
 QValueList < Problem > Driver::problems( const QString & fileName ) const
