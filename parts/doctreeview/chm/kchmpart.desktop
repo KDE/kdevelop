@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=foobar
+Comment=Embeddable HTMLHelp Viewer
+MimeType=application/chm
+Name=KChmPart
+ServiceTypes=KParts/ReadOnlyPart,Browser/View
+X-KDE-Library=libkchmpart

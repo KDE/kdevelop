@@ -1,6 +1,6 @@
 # Here resides the doc tree view part.
 
-SUBDIRS = data
+SUBDIRS = data chm
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
