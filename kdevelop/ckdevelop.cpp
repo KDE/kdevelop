@@ -3308,13 +3308,15 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   bool ready = true;
   QString result="";
   if (proc->normalExit()) {
-    
-    result= ((proc->exitStatus()) ? i18n("*** failed ***\n") : 
+
+    result= ((proc->exitStatus()) ? i18n("*** failed ***\n") :
           i18n("*** success ***\n"));
     if ( proc== &appl_process)
-      result.sprintf(i18n("*** exit-code: %i ***\n"), 
+      result.sprintf(i18n("*** exit-code: %i ***\n"),
          proc->exitStatus());
 
+    // 0x0 access test
+    if (prj == 0L) return;
 
     if (next_job=="doc_refresh")
     {
