@@ -672,6 +672,7 @@ void CClassParser::parseMethodImpl(bool isOperator)
     pm = aClass->getMethod( aMethod );
     if( pm != NULL )
     {
+      aClass->setImplFilename( currentFile );
       pm->setIsInHFile( false );
       pm->setDeclaredInFile( currentFile );
       pm->setDeclaredOnLine( declLine );
