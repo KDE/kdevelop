@@ -6,7 +6,8 @@ build:
 	dh_testdir
 	( CFLAGS="-g -O2 -pipe -Wall" \
 	  CXXFLAGS="$$CFLAGS" \
-	  ./configure --enable-debug --disable-rpath )
+	  ./configure --enable-docbase --enable-debug --disable-rpath \
+	  --libdir=/usr/X11R6/lib --includedir=/usr/include/kde )
  
 	make 
 

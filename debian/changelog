@@ -1,9 +1,16 @@
+kdevelop (1:0.4-19990705-1) unstable; urgency=low
+
+  * configure with flag --enable-docbase
+  * install kdlgloader into the correct directories
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  5 Jul 1999 12:21:59 +0200
+
 kdevelop (1:0.4-19990619-1) unstable; urgency=low
 
   * Fixed a competing problem between kderules and dh_installdocs
   * New upstream changes
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 19 Jun 1999 02:3:38 -0400
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 19 Jun 1999 02:03:38 -0400
 
 kdevelop (1:0.4-19990614-1) unstable; urgency=low
 
