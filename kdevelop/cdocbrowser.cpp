@@ -296,7 +296,9 @@ void CDocBrowser::slotCopyText(){
   cb->setText( text );
 }
 
-
+void CDocBrowser::slotFindTextNext(QString str){
+    findTextNext(QRegExp(str));
+}
 
 void CDocBrowser::slotSearchText(){
   emit signalSearchText();
@@ -394,6 +396,7 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
 	connect( bg, SIGNAL( clicked( int ) ), SLOT( slotFontSize( int ) ) );
 }
 
+       
 void CDocBrowserFont::readOptions()
 {
 	KConfig *config = KApplication::getKApplication()->getConfig();

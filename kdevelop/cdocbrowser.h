@@ -66,6 +66,8 @@ public slots:
 	void slotGrepText();
 	void slotSetFileTitle(const char* title);
 	void slotViewInKFM();
+
+	void slotFindTextNext(QString);
 		
  signals:
   void signalURLBack();
