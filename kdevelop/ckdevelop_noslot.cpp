@@ -689,8 +689,8 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     konsole_widget->setDirectory(dirpart);
   }
 
-  lastfile = edit_widget->getName();
-  lasttab = s_tab_view->getCurrentTab();
+//FB  lastfile = edit_widget->getName();
+//FB  lasttab = s_tab_view->getCurrentTab();
 
   QFileInfo fileInfo(filename);
   // check if the file exists
@@ -777,28 +777,30 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   TEditInfo* info;
   TEditInfo* actual_info;
 
+  QString editWidgetName;
+  if (edit_widget)
+    editWidgetName = edit_widget->getName(); //FB
   // We need to look in the list of "open" files for the file that
   // is currently held in the edit_widget. This file needs to
   // be taken out of the editor_widget and stored, so that we can
   // reuse the edit_widget for the new file.
   for (actual_info=edit_infos.first(); actual_info != 0; actual_info=edit_infos.next())
   {
-    if (actual_info->filename == edit_widget->getName())
+    if (actual_info->filename == editWidgetName)
       break;
   }
 
   // Make sure that we found the file in the editor_widget in our list
   // If we haven't then this should be fatal.
-  if(actual_info == 0)
-    return;
+  if(actual_info) { //FB
 
   // handle file if it was modified on disk by another editor/cvs
-  QFileInfo file_info(edit_widget->getName());
+  QFileInfo file_info(editWidgetName);
   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox)
   {
     if(KMessageBox::questionYesNo(this, i18n("The file %1 was modified outside this editor.\n"
                                               "Open the file from disk and delete the current Buffer?")
-                                              .arg(edit_widget->getName()),
+                                              .arg(editWidgetName),
                                         i18n("File modified"))==KMessageBox::Yes){
       bForceReload = true;
       actual_info->last_modified = file_info.lastModified();
@@ -809,8 +811,8 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
      actual_info->last_modified = file_info.lastModified(); 
   }
 
-  if (!bForceReload && filename == edit_widget->getName()){
-    if (line != -1)
+  if (!bForceReload && filename == editWidgetName){
+    if (edit_widget && (line != -1))
       edit_widget->setCursorPosition(line, col);
 
       //    cerr << endl <<endl << "Filename:" << filename
@@ -821,11 +823,14 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   }
 
   // store the old file
-  actual_info->text = edit_widget->text();
-  actual_info->modified = edit_widget->isModified();
-  actual_info->cursor_line = edit_widget->currentLine();
-  actual_info->cursor_col = edit_widget->currentColumn();
-  // output_widget->append("auszuwechseldes file:" + actual_info->filename);
+  if (edit_widget) {
+    actual_info->text = edit_widget->text();
+    actual_info->modified = edit_widget->isModified();
+    actual_info->cursor_line = edit_widget->currentLine();
+    actual_info->cursor_col = edit_widget->currentColumn();
+    // output_widget->append("auszuwechseldes file:" + actual_info->filename);
+  }
+  } //FB
 
   bool found = false;
 
@@ -872,19 +877,27 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
       docId = m_docViewManager->createDoc( docType, filename);
       if (docId != -1)
         edit_widget = (CEditWidget*) m_docViewManager->createView( docId);
+        qDebug("createView for a new created doc");
     }
     else {
-      // view doesn't already exist, create it
+      // a view for this doc exists, already;
+      // use the first view we found of this doc to show the text
       edit_widget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
-      // update the widget
+      qDebug("found view in list of doc");
     }
     m_docViewManager->loadDoc( docId, filename,1);
+    qDebug("and loadDoc");
+    activateView( (QextMdiChildView*) edit_widget->parentWidget());
 //FB    edit_widget->loadFile(filename,1);
   }
   else
   {
+    int docId = m_docViewManager->findDoc( filename);
+    edit_widget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+    activateView( (QextMdiChildView*) edit_widget->parentWidget());
     // The file is in the list so use the saved text
     edit_widget->setText(info->text);
+    qDebug("doc (and at least 1 view) did exist, raise it");
   }
 
   // update the pointers
@@ -1092,15 +1105,15 @@ void CKDevelop::showTreeView(bool show){
     if(show)
     {
       // This is a hack to get around some startup problems
-      if(treedock->isVisible())
-      {
-        view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-        return;
-      }
-      else
-      {
-        slotViewTTreeView();
-      }
+//temp-disabled      if(treedock->isVisible())
+//temp-disabled      {
+//temp-disabled        view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+//temp-disabled        return;
+//temp-disabled      }
+//temp-disabled      else
+//temp-disabled      {
+//temp-disabled        slotViewTTreeView();
+//temp-disabled      }
     }
     else
     {

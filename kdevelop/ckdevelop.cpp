@@ -743,27 +743,27 @@ void CKDevelop::slotViewPreviousError(){
 }
 
 void CKDevelop::slotViewTTreeView(){
-  if(treedock->isVisible()){
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-  }
-  else{
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-    toolBar()->setButton(ID_VIEW_TREEVIEW,true);
-  }
-  treedock->changeHideShowState();
+//////////  if(treedock->isVisible()){
+//////////    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+//////////    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
+//////////  }
+//////////  else{
+//////////    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+//////////    toolBar()->setButton(ID_VIEW_TREEVIEW,true);
+//////////  }
+//////////  treedock->changeHideShowState();
 }
 
 void CKDevelop::slotViewTOutputView(){
-  if(outputdock->isVisible()){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-  }
-  else{
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
-  }
-  outputdock->changeHideShowState();
+//////////  if(outputdock->isVisible()){
+//////////    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+//////////    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
+//////////  }
+//////////  else{
+//////////    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+//////////    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
+//////////  }
+//////////  outputdock->changeHideShowState();
 }
 
 

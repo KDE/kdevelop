@@ -74,21 +74,26 @@
 #include <iostream.h>
 #include <krun.h>
 
-CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop"),
-  process("/bin/sh"),
-  appl_process("/bin/sh"),
-  shell_process("/bin/sh"),
-  search_process("/bin/sh"),
+CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
+  ,process("/bin/sh")
+  ,appl_process("/bin/sh")
+  ,shell_process("/bin/sh")
+  ,search_process("/bin/sh")
 
-  dbgController(0),
-  dbgToolbar(0),
-  var_viewer(0),
-  brkptManager(0),
-  frameStack(0),
-  disassemble(0),
-  dbg_widget(0),
-  dbgInternal(false)
-  ,m_docViewManager(0)
+  ,edit_widget(0L)
+  ,header_widget(0L)
+  ,cpp_widget(0L)
+  ,browser_widget(0L)
+
+  ,dbgController(0L)
+  ,dbgToolbar(0L)
+  ,var_viewer(0L)
+  ,brkptManager(0L)
+  ,frameStack(0L)
+  ,disassemble(0L)
+  ,dbg_widget(0L)
+  ,dbgInternal(false)
+  ,m_docViewManager(0L)
 {
 
   doctool = DT_KDOC;
@@ -178,12 +183,13 @@ void CKDevelop::initView()
 //FB  setMainDockWidget( maindock );
 //FB  maindock->setEnableDocking( KDockWidget::DockNone);   // We cannot remove this window
 
-  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0L, i18n("Tree-View"));
-  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
+//FB  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0L, i18n("Tree-View"));
+//FB  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
  
 //FB  s_tab_view = new CTabCtl(maindock);
   s_tab_view = new CTabCtl(0L);//FB
-  s_tab_view->show();//FB
+  s_tab_view->hide();   //FB
+//FB  s_tab_view->show();//FB
 //FB  maindock->setWidget( s_tab_view );
 	
 //FB  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
@@ -259,55 +265,55 @@ void CKDevelop::initView()
   ////////////////////////////
   // editor and browser window
   ////////////////////////////
-  s_tab_view->setFocusPolicy(QWidget::ClickFocus);
+//FB  s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
 //FB  header_widget = new CEditWidget(s_tab_view,"header");
 //FB  header_widget = new CEditWidget(0L,"header");//FB
-  int newDocId = m_docViewManager->createDoc(DocViewMan::Header, "");
-  if (newDocId != -1)
-    header_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
+//FB//  int newDocId = m_docViewManager->createDoc(DocViewMan::Header, "");
+//FB//  if (newDocId != -1)
+//FB//    header_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
+//FB//
+//FB//  header_widget->setFocusPolicy(QWidget::StrongFocus);
+//FB//
+//FB//  header_widget->setFont(KGlobalSettings::fixedFont());
+//FB//  header_widget->setName(i18n("Untitled.h"));
+//FB//  config->setGroup("KWrite Options");
+//FB//  header_widget->readConfig(config);
+//FB//  header_widget->doc()->readConfig(config);
+//FB//  header_widget->show();//FB
 
-  header_widget->setFocusPolicy(QWidget::StrongFocus);
-
-  header_widget->setFont(KGlobalSettings::fixedFont());
-  header_widget->setName(i18n("Untitled.h"));
-  config->setGroup("KWrite Options");
-  header_widget->readConfig(config);
-  header_widget->doc()->readConfig(config);
-  header_widget->show();//FB
-
-  edit_widget=header_widget;
+//FB//  edit_widget=header_widget;
 //FB  cpp_widget = new CEditWidget(s_tab_view,"cpp");
 //FB  cpp_widget = new CEditWidget(0L,"cpp");//FB
-  newDocId = m_docViewManager->createDoc(DocViewMan::Source, "");
-  if (newDocId != -1)
-    cpp_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
-
-  cpp_widget->setFocusPolicy(QWidget::StrongFocus);
-  cpp_widget->setFont(KGlobalSettings::fixedFont());
-  cpp_widget->setName(i18n("Untitled.cpp"));
-  config->setGroup("KWrite Options");
-  cpp_widget->readConfig(config);
-  cpp_widget->doc()->readConfig(config);
-   cpp_widget->show();//FB
+//FB//  newDocId = m_docViewManager->createDoc(DocViewMan::Source, "");
+//FB//  if (newDocId != -1)
+//FB//    cpp_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
+//FB//
+//FB//  cpp_widget->setFocusPolicy(QWidget::StrongFocus);
+//FB//  cpp_widget->setFont(KGlobalSettings::fixedFont());
+//FB//  cpp_widget->setName(i18n("Untitled.cpp"));
+//FB//  config->setGroup("KWrite Options");
+//FB//  cpp_widget->readConfig(config);
+//FB//  cpp_widget->doc()->readConfig(config);
+//FB//   cpp_widget->show();//FB
 
   // init the 2 first kedits
-  TEditInfo* edit1 = new TEditInfo;
-  TEditInfo* edit2 = new TEditInfo;
-  edit1->filename = header_widget->getName();
-  edit2->filename = cpp_widget->getName();
+//FB//  TEditInfo* edit1 = new TEditInfo;
+//FB//  TEditInfo* edit2 = new TEditInfo;
+//FB//  edit1->filename = header_widget->getName();
+//FB//  edit2->filename = cpp_widget->getName();
 
 //FB  browser_widget = new CDocBrowser(s_tab_view,"browser");
-  newDocId = m_docViewManager->createDoc(DocViewMan::HTML, "browser");
+  int newDocId = m_docViewManager->createDoc(DocViewMan::HTML, "browser");
   if (newDocId != -1) {
-    m_docViewManager->createView( newDocId);
     browser_widget = (CDocBrowser*) m_docViewManager->docPointer( newDocId);
+    browser_widget->setDocBrowserOptions();
+    m_docViewManager->createView( newDocId);
     browser_widget->show();//FB
   }
 
   prev_was_search_result= false;
   //init
-  browser_widget->setDocBrowserOptions();
 
 //FB  s_tab_view->addTab(header_widget,SmallIcon("source_h"),i18n("Header/Reso&urce Files"));
 //FB  s_tab_view->addTab(cpp_widget,SmallIcon("source_cpp"),i18n("&C/C++ Files"));
@@ -344,12 +350,12 @@ void CKDevelop::initView()
   initToolBar();
 
   // the rest of the init for the kedits
-  edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-  edit1->modified=false;
-  edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-  edit2->modified=false;
-  edit_infos.append(edit1);
-  edit_infos.append(edit2);
+//FB//  edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
+//FB//  edit1->modified=false;
+//FB//  edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
+//FB//  edit2->modified=false;
+//FB//  edit_infos.append(edit1);
+//FB//  edit_infos.append(edit2);
 
   // init some dialogs
   grep_dlg = new GrepDialog(QDir::homeDirPath(),0,"grepdialog");
@@ -937,9 +943,9 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu->insertSeparator();
 
   QPopupMenu* header_bookmarks = new QPopupMenu();
-  header_widget->installBMPopup(header_bookmarks);
+//FB  header_widget->installBMPopup(header_bookmarks);
   QPopupMenu* cpp_bookmarks = new QPopupMenu();
-  cpp_widget->installBMPopup(cpp_bookmarks);
+//FB  cpp_widget->installBMPopup(cpp_bookmarks);
 	
   doc_bookmarks = new QPopupMenu();
 
@@ -1266,9 +1272,9 @@ void CKDevelop::initStatusBar()
  *-----------------------------------------------------------------*/
 void CKDevelop::initConnections(){
 
-  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
-  connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
-  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
+//FB  connect(t_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotTTabSelected(int)));
+//FB  connect(s_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotSTabSelected(int)));
+//FB  connect(o_tab_view,SIGNAL(tabSelected(int)),this,SLOT(slotOTabSelected(int)));
 
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedFileNew(const char*)), SLOT(slotFileNew(const char*)));
@@ -1325,51 +1331,51 @@ void CKDevelop::initConnections(){
   connect(doc_tree, SIGNAL(signalUpdateUserManual()), SLOT(slotProjectManual()));
 
 
-  //connect the editor lookup function with slotHelpSText
-  connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-  connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-  connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-  connect(cpp_widget, SIGNAL(markStatus(KWriteView *, bool)),
-      this, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
-  connect(cpp_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
-      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
-  connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-  connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-  connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-  connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-
-  connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-  connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-  connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-  connect(header_widget, SIGNAL(markStatus(KWriteView *, bool)),
-      this, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
-  connect(header_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
-      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
-  connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-  connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-  connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-  connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-
-  connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
-  connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
-  connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
-  connect(browser_widget, SIGNAL(signalBookmarkToggle()),this,SLOT(slotBookmarksToggle()));
-
-  connect(browser_widget, SIGNAL(onURL(const QString&)),this,SLOT(slotURLonURL(const QString&)));
-  connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
-//  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
-//  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
-  connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
-  connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-  connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
-
-  connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
-  // connect the windowsmenu with a method
-  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
-  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
-
-  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
+//FB  //connect the editor lookup function with slotHelpSText
+//FB  connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
+//FB  connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
+//FB  connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+//FB  connect(cpp_widget, SIGNAL(markStatus(KWriteView *, bool)),
+//FB      this, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
+//FB  connect(cpp_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
+//FB      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
+//FB  connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+//FB  connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
+//FB  connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+//FB  connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+//FB
+//FB  connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
+//FB  connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
+//FB  connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+//FB  connect(header_widget, SIGNAL(markStatus(KWriteView *, bool)),
+//FB      this, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
+//FB  connect(header_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
+//FB      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
+//FB  connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
+//FB  connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
+//FB  connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+//FB  connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+//FB
+//FB  connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
+//FB  connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
+//FB  connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
+//FB  connect(browser_widget, SIGNAL(signalBookmarkToggle()),this,SLOT(slotBookmarksToggle()));
+//FB
+//FB  connect(browser_widget, SIGNAL(onURL(const QString&)),this,SLOT(slotURLonURL(const QString&)));
+//FB  connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
+//FB//  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
+//FB//  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
+//FB  connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
+//FB  connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
+//FB  connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+//FB//  connect(browser_widget, SIGNAL(textSelected(KHTMLPart *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
+//FB
+//FB  connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
+//FB  // connect the windowsmenu with a method
+//FB  connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
+//FB  connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBookmarksBrowserSelected(int)));
+//FB
+//FB  connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
 
 
   // connections for the proc -processes
@@ -1629,25 +1635,25 @@ void CKDevelop::initDebugger()
   	// Connect the breakpoint manager to monitor the bp setting - even
   	// when the debugging isn't running
     // ... Must connect up both editors!!!!!
-    connect(  header_widget,  SIGNAL(editBreakpoint(const QString&,int)),
-              brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
-    connect(  cpp_widget,     SIGNAL(editBreakpoint(const QString&,int)),
-              brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
-
-    connect(  header_widget,  SIGNAL(toggleBPEnabled(const QString&,int)),
-              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
-    connect(  cpp_widget,     SIGNAL(toggleBPEnabled(const QString&,int)),
-              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
-
-    connect(  header_widget,  SIGNAL(toggleBreakpoint(const QString&,int)),
-              brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
-    connect(  cpp_widget,     SIGNAL(toggleBreakpoint(const QString&,int)),
-              brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
-
-    connect(  header_widget,  SIGNAL(clearAllBreakpoints()),
-              brkptManager,   SLOT(slotClearAllBreakpoints()));
-    connect(  cpp_widget,     SIGNAL(clearAllBreakpoints()),
-              brkptManager,   SLOT(slotClearAllBreakpoints()));
+//FB    connect(  header_widget,  SIGNAL(editBreakpoint(const QString&,int)),
+//FB              brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
+//FB    connect(  cpp_widget,     SIGNAL(editBreakpoint(const QString&,int)),
+//FB              brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
+//FB
+//FB    connect(  header_widget,  SIGNAL(toggleBPEnabled(const QString&,int)),
+//FB              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
+//FB    connect(  cpp_widget,     SIGNAL(toggleBPEnabled(const QString&,int)),
+//FB              brkptManager,   SLOT(slotToggleBPEnabled(const QString&,int)));
+//FB
+//FB    connect(  header_widget,  SIGNAL(toggleBreakpoint(const QString&,int)),
+//FB              brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
+//FB    connect(  cpp_widget,     SIGNAL(toggleBreakpoint(const QString&,int)),
+//FB              brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
+//FB
+//FB    connect(  header_widget,  SIGNAL(clearAllBreakpoints()),
+//FB              brkptManager,   SLOT(slotClearAllBreakpoints()));
+//FB    connect(  cpp_widget,     SIGNAL(clearAllBreakpoints()),
+//FB              brkptManager,   SLOT(slotClearAllBreakpoints()));
 
     connect(  var_viewer->varTree(),  SIGNAL(toggleWatchpoint(const QString&)),
               brkptManager,           SLOT(slotToggleWatchpoint(const QString&)));
@@ -1666,10 +1672,10 @@ void CKDevelop::initDebugger()
               this,           SLOT(slotDebugBPState(Breakpoint*)));
 
     // connect adding watch variable from the rmb in the editors
-    connect(  header_widget,          SIGNAL(addWatchVariable(const QString&)),
-              var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
-    connect(  cpp_widget,             SIGNAL(addWatchVariable(const QString&)),
-              var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
+//FB    connect(  header_widget,          SIGNAL(addWatchVariable(const QString&)),
+//FB              var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
+//FB    connect(  cpp_widget,             SIGNAL(addWatchVariable(const QString&)),
+//FB              var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
 
     connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int)),
               frameStack,             SLOT(slotSelectFrame(int)));
