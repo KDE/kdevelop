@@ -1,3 +1,6 @@
+2004-01-21 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * Added ConfigWidgetProxy class to lib/util and initially implemented demand loading of config pages for DocTreeViewPart.
+
 2004-01-09 Amilcar Lucas <a.lucas@tu-bs.de>
    * Easy access to bug reports of every supported language in the documentation browser (except SQL)
 
