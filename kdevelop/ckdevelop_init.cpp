@@ -190,9 +190,15 @@ void CKDevelop::initView()
   else
   {
     // Set the default window placement
-    treedock->manualDock(maindock, KDockWidget::DockLeft, 35/*size relation in %*/);
     outputdock->manualDock(maindock, KDockWidget::DockBottom, 70/*size relation in %*/);
+    treedock->manualDock(maindock, KDockWidget::DockLeft, 35/*size relation in %*/);
   }
+  // do not allow to pull off the dockwidgets to desktop or to tab mode
+  // the probs which would be introduced are too hard to handle (in KDevelop-1.x ;-)
+  outputdock->setEnableDocking( KDockWidget::DockCorner);
+  treedock->setEnableDocking( KDockWidget::DockCorner);
+  outputdock->setDockSite( KDockWidget::DockCorner);
+  treedock->setDockSite( KDockWidget::DockCorner);
 
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
