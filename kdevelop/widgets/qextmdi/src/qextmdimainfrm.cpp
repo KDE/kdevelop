@@ -270,9 +270,9 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
    }
    else {
       if( (flags & QextMdi::Detach) || (m_mdiMode == QextMdi::ToplevelMode)) {
-         detachWindow( pWnd); // using TRUE from the default parameter list
+         detachWindow( pWnd, !(flags & QextMdi::Hide));
       } else {
-         attachWindow( pWnd); // -"-
+         attachWindow( pWnd, !(flags & QextMdi::Hide));
       }
 
       if ( m_bMaximizedChildFrmMode || (flags & QextMdi::Maximize) || (m_bSDIApplication && !(flags & QextMdi::Detach)) ) {
