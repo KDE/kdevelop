@@ -32,7 +32,8 @@ enum QMakeDepends      {QD_QT=		1<<0,
 			QD_LIBTOOL=	1<<12,
 			QD_PKGCONF=	1<<13,
 			QD_DLL=		1<<14,
-			QD_CONSOLE=	1<<15
+			QD_CONSOLE=	1<<15,
+			QD_PCH=		1<<16
 			};
 enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
 #include "projectconfigurationdlgbase.h"

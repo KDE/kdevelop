@@ -253,6 +253,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   {
     myProjectItem->configuration.m_requirements += QD_CONSOLE;
   }
+  if (checkPCH->isChecked() )
+    myProjectItem->configuration.m_requirements += QD_PCH;
 
   // Warnings
   myProjectItem->configuration.m_warnings = QWARN_OFF;
@@ -499,7 +501,8 @@ void ProjectConfigurationDlg::UpdateControls()
     stlCheck->setChecked(true);
   if (myProjectItem->configuration.m_requirements & QD_RTTI)
     rttiCheck->setChecked(true);
-
+  if (myProjectItem->configuration.m_requirements & QD_PCH)
+    checkPCH->setChecked(true);
   // Warnings
   if (myProjectItem->configuration.m_warnings == QWARN_ON)
   {
@@ -916,7 +919,6 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
 {
   if (radioLibrary->isChecked())
   {
-    libGroup->setEnabled(true);
 //    staticRadio->setChecked(true);
     TabBuild->setTabEnabled(buildOrderTab, false);
     TabBuild->setTabEnabled(custVarsTab, true);
@@ -925,6 +927,7 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
     TabBuild->setTabEnabled(incaddTab,true);
     TabBuild->setTabEnabled(buildOptsTab,true);
     TabBuild->setTabEnabled(configTab,true);
+    libGroup->setEnabled(true);
   } else {
     libGroup->setEnabled(false);
   }

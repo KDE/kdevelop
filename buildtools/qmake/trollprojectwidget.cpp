@@ -1326,6 +1326,9 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
   }
   if (item->configuration.m_requirements & QD_CONSOLE )
     configList.append("console");
+  
+  if (item->configuration.m_requirements & QD_PCH )
+    configList.append("precompile_header");
 
   if (item->configuration.m_inheritconfig == true)
     Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
@@ -2996,6 +2999,8 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         item->configuration.m_requirements += QD_LIBTOOL;
       if (lst.find("create_pkgconf")!=lst.end())
         item->configuration.m_requirements += QD_PKGCONF;
+      if (lst.find("precompile_header")!=lst.end())
+	item->configuration.m_requirements += QD_PCH;
     }
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())

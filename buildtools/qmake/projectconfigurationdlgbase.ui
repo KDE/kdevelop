@@ -108,6 +108,9 @@
                                 <property name="text">
                                     <string>Librar&amp;y</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+Y</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create a library</string>
                                 </property>
@@ -270,73 +273,80 @@
                 <attribute name="title">
                     <string>Configuration</string>
                 </attribute>
-                <grid>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="3" column="0">
+                    <widget class="QCheckBox">
                         <property name="name">
-                            <cstring>libGroup</cstring>
+                            <cstring>checkDontInheritConfig</cstring>
                         </property>
-                        <property name="enabled">
-                            <bool>false</bool>
+                        <property name="text">
+                            <string>Do not inherit the configuration options of top level projects</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string></string>
+                        </property>
+                    </widget>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>groupBuildMode</cstring>
                         </property>
                         <property name="title">
-                            <string>Library Options</string>
+                            <string>Build Mode</string>
                         </property>
-                        <property name="exclusive">
-                            <bool>true</bool>
+                        <property name="toolTip" stdset="0">
+                            <string>Set project to be built in release mode</string>
                         </property>
-                        <grid>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="2">
+                            <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>staticRadio</cstring>
+                                    <cstring>radioDebugMode</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>St&amp;atic library</string>
+                                    <string>&amp;Debug</string>
                                 </property>
-                                <property name="checked">
-                                    <bool>true</bool>
+                                <property name="accel">
+                                    <string>Alt+D</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be built in debug mode</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
+                            <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>pluginRadio</cstring>
+                                    <cstring>radioReleaseMode</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Plugin</string>
+                                    <string>&amp;Release</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+R</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Set project to be built in release mode</string>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="3" column="0">
+                            <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>textLabel1</cstring>
+                                    <cstring>checkWarning</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Librar&amp;y version:</string>
+                                    <string>Enable &amp;warnings</string>
                                 </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>m_targetLibraryVersion</cstring>
+                                <property name="accel">
+                                    <string>Alt+W</string>
                                 </property>
-                            </widget>
-                            <widget class="QLineEdit" row="3" column="1">
-                                <property name="name">
-                                    <cstring>m_targetLibraryVersion</cstring>
+                                <property name="toolTip" stdset="0">
+                                    <string>Show compiler warnings</string>
                                 </property>
                             </widget>
-                            <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>sharedRadio</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>S&amp;hared library</string>
-                                </property>
-                            </widget>
-                        </grid>
+                        </hbox>
                     </widget>
-                    <widget class="QButtonGroup" row="2" column="0">
+                    <widget class="QButtonGroup">
                         <property name="name">
                             <cstring>groupRequirements</cstring>
                         </property>
@@ -354,6 +364,9 @@
                                 <property name="text">
                                     <string>&amp;Qt</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+Q</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the Qt header files/library</string>
                                 </property>
@@ -367,25 +380,6 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the OpenGL (or Mesa) headers/libraries</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="0">
-                                <property name="name">
-                                    <cstring>checkOrdered</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Ord&amp;ered</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Support required for X11 application or library</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="3" column="0">
-                                <property name="name">
-                                    <cstring>stlCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;STL</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="1">
@@ -409,27 +403,55 @@
                                 <property name="text">
                                     <string>&amp;Thread</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+T</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires support for multi-threaded application or library.</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="3" column="1">
-                                <property name="name">
-                                    <cstring>rttiCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>RTT&amp;I</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="1">
+                            <widget class="QCheckBox" row="0" column="2">
                                 <property name="name">
                                     <cstring>exceptionCheck</cstring>
                                 </property>
                                 <property name="text">
                                     <string>E&amp;xceptions </string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+X</string>
+                                </property>
                             </widget>
-                            <widget class="QCheckBox" row="0" column="2">
+                            <widget class="QCheckBox" row="2" column="1" rowspan="2" colspan="2">
+                                <property name="name">
+                                    <cstring>rttiCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>RTT&amp;I</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+I</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0" rowspan="2" colspan="1">
+                                <property name="name">
+                                    <cstring>stlCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;STL</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+S</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="2">
+                                <property name="name">
+                                    <cstring>checkPCH</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Precompiled Headers</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="2">
                                 <property name="name">
                                     <cstring>checkConsole</cstring>
                                 </property>
@@ -443,94 +465,179 @@
                                     <string>Requires support for multi-threaded application or library.</string>
                                 </property>
                             </widget>
-                            <widget class="QCheckBox" row="1" column="2">
-                                <property name="name">
-                                    <cstring>checkLibtool</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Make libtool archive</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Support required for X11 application or library</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="2">
-                                <property name="name">
-                                    <cstring>checkPkgconf</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Create pkgconf file</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="3" column="2">
-                                <property name="name">
-                                    <cstring>checkDll</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Build as DLL</string>
-                                </property>
-                                <property name="accel">
-                                    <string></string>
-                                </property>
-                            </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="1" column="0">
+                    <widget class="QButtonGroup">
                         <property name="name">
-                            <cstring>groupBuildMode</cstring>
+                            <cstring>libGroup</cstring>
                         </property>
                         <property name="title">
-                            <string>Build Mode</string>
+                            <string>Library Options</string>
                         </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Set project to be built in release mode</string>
+                        <property name="exclusive">
+                            <bool>true</bool>
                         </property>
                         <vbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QRadioButton">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>radioDebugMode</cstring>
+                                    <cstring>layout26</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>&amp;Debug</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in debug mode</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>staticRadio</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>St&amp;atic library</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>sharedRadio</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>S&amp;hared library</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+H</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>pluginRadio</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Plugin</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+P</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
-                            <widget class="QRadioButton">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>radioReleaseMode</cstring>
+                                    <cstring>layout27</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>&amp;Release</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Set project to be built in release mode</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkLibtool</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Make libtool archive</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Support required for X11 application or library</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkPkgconf</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Create pkgconf file</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
-                            <widget class="QCheckBox">
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>checkWarning</cstring>
+                                    <cstring>layout28</cstring>
                                 </property>
-                                <property name="text">
-                                    <string>Enable &amp;warnings</string>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkOrdered</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Ord&amp;ered</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+E</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Support required for X11 application or library</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>checkDll</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="text">
+                                            <string>Build as DLL</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string></string>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout29</cstring>
                                 </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Show compiler warnings</string>
-                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Librar&amp;y version:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>m_targetLibraryVersion</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit">
+                                        <property name="name">
+                                            <cstring>m_targetLibraryVersion</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
                         </vbox>
                     </widget>
-                    <spacer row="4" column="0">
+                    <spacer>
                         <property name="name">
                             <cstring>Spacer2</cstring>
                         </property>
@@ -543,22 +650,11 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>110</height>
+                                <height>16</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QCheckBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>checkDontInheritConfig</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Do not inherit the configuration options of top level projects</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string></string>
-                        </property>
-                    </widget>
-                </grid>
+                </vbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
