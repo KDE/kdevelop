@@ -12,6 +12,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "ast.h"
+
 #include <qstring.h>
 #include <qstringlist.h>
 
@@ -45,18 +47,19 @@ public:
 public /*rules*/ :
 
     bool parseTranslationUnit();
-    bool parseDefinition( SymbolTable* symtab );
-    bool parseBlockDeclaration( SymbolTable* symtab );
-    bool parseLinkageSpecification( SymbolTable* symtab );
-    bool parseLinkageBody( SymbolTable* symtab );
-    bool parseNamespace( SymbolTable* symtab );
-    bool parseNamespaceAliasDefinition( SymbolTable* symtab );
-    bool parseUsing( SymbolTable* symtab );
-    bool parseUsingDirective( SymbolTable* symtab );
-    bool parseTypedef( SymbolTable* symtab );
-    bool parseAsmDefinition( SymbolTable* symtab );
-    bool parseTemplateDeclaration( SymbolTable* symtab );
-    bool parseDeclaration( SymbolTable* symtab );
+	
+    bool parseDefinition( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseBlockDeclaration( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseLinkageSpecification( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseLinkageBody( SymbolTable* symtab, LinkageBodyAST*& decl );
+    bool parseNamespace( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseNamespaceAliasDefinition( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseUsing( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseUsingDirective( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseTypedef( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseAsmDefinition( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseTemplateDeclaration( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseDeclaration( SymbolTable* symtab, DeclarationAST*& decl );
 
 
     bool parseNestedNameSpecifier();
@@ -74,16 +77,16 @@ public /*rules*/ :
     bool parseDeclarator( QString& name, int& start, int& end );
     bool parseTemplateParameterList();
     bool parseTemplateParameter();
-    bool parseStorageClassSpecifier();
-    bool parseFunctionSpecifier();
+    bool parseStorageClassSpecifier( QString& name );
+    bool parseFunctionSpecifier( QString& name );
     bool parseConstantExpression();
     bool parseInitDeclaratorList( SymbolTable* symtab );
     bool parseInitDeclarator( SymbolTable* symtab );
     bool parseParameterDeclarationClause();
     bool parseCtorInitializer();
     bool parsePtrToMember();
-    bool parseEnumSpecifier( SymbolTable* symtab );
-    bool parseClassSpecifier( SymbolTable* symtab );
+    bool parseEnumSpecifier( SymbolTable* symtab, DeclarationAST*& decl );
+    bool parseClassSpecifier( SymbolTable* symtab, DeclarationAST*& decl );
     bool parseElaboratedTypeSpecifier();
     bool parseDeclaratorId();
     bool parseExceptionSpecification();
@@ -96,8 +99,7 @@ public /*rules*/ :
     bool parseAbstractDeclarator();
     bool parseParameterDeclarationList();
     bool parseAssignmentExpression();
-    bool parseMemberSpecificationList( SymbolTable* symtab );
-    bool parseMemberSpecification( SymbolTable* symtab );
+    bool parseMemberSpecification( SymbolTable* symtab, DeclarationAST*& decl );
     bool parseAccessSpecifier();
     bool parseBaseClause();
     bool parseTypeIdList();
@@ -129,6 +131,7 @@ public /*rules*/ :
 
     bool skipUntil( int token );
     bool skipUntilDeclaration();
+	bool skipUntilStatement();
     bool skip( int l, int r );
 	QString toString( int start, int end, const QString& sep="" );
 

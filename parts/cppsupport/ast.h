@@ -12,183 +12,256 @@
 #ifndef AST_H
 #define AST_H
 
+#include "lexer.h"
+
 #include <qstring.h>
 #include <qptrlist.h>
-#include <qdom.h>
 
 class AST{
 public:
-    AST();
-    virtual ~AST();
-
-    virtual int start() const;
-    virtual void setStart( int start );
-
-    virtual int end() const;
-    virtual void setEnd( int end );
-
-    virtual QDomElement toXML( QDomDocument& ) { return QDomElement(); }
-
-private:
-    int m_start;
-    int m_end;
-};
-
-class DeclaratorAST: public AST{
-public:
-    DeclaratorAST();
-    ~DeclaratorAST();
-
-    int nameStart() const;
-    void setNameStart( int start );
-
-    int nameEnd() const;
-    void setNameEnd( int end );
-
-    DeclaratorAST* subDeclarator() const;
-    void setSubDeclarator( DeclaratorAST* sub );
-
-    bool isArray() const;
-    void setIsArray( bool b );
-
-    bool isFunction() const;
-    void setIsFunction( bool b );
-
-private:
-    int m_nameStart;
-    int m_nameEnd;
-    DeclaratorAST* m_sub;
-    bool m_array;
-    bool m_function;
+    AST() {}
+    virtual ~AST() {}
+	
+// properties:
+	Token start;
+	Token end;
 };
 
 class DeclarationAST: public AST{
 public:
-    DeclarationAST();
-    virtual ~DeclarationAST();
+	DeclarationAST() {}
+	virtual ~DeclarationAST() {}
+};
 
-    int nameStart() const;
-    void setNameStart( int start );
-
-    int nameEnd() const;
-    void setNameEnd( int end );
-
+class LinkageBodyAST: public AST{
+public:
+	LinkageBodyAST()
+	{
+		m_declarations.setAutoDelete( true );
+	}
+	
+	virtual ~LinkageBodyAST() {}
+	
+	void addDeclaration( DeclarationAST* decl )
+	{
+		m_declarations.append( decl );
+	}
+		
 private:
-    int m_nameStart;
-    int m_nameEnd;
+	QPtrList<DeclarationAST> m_declarations;
 };
 
-class ClassDeclarationAST: public DeclarationAST{
+class LinkageSpecificationAST: public DeclarationAST{
 public:
-    ClassDeclarationAST();
-    ~ClassDeclarationAST();
+	LinkageSpecificationAST() {}
+	virtual ~LinkageSpecificationAST() {}
+	
+	QString type() const { return m_type; }
+	void setType( const QString& type ) { m_type = type; }
+	
+private:
+	QString m_type;
 };
 
-class MethodDeclarationAST: public DeclarationAST{
+class SimpleLinkageSpecificationAST: public LinkageSpecificationAST{
 public:
-    MethodDeclarationAST();
-    ~MethodDeclarationAST();
+	SimpleLinkageSpecificationAST()
+		: m_declaration( 0 )
+		{}
+		
+	virtual ~SimpleLinkageSpecificationAST() 
+	{
+		delete( m_declaration );
+	}
+	
+	DeclarationAST* declaration() { return m_declaration; }
+	void setDeclaration( DeclarationAST* decl ) { m_declaration = decl; }
+	
+private:
+	DeclarationAST* m_declaration;
 };
 
-class FieldDeclarationAST: public DeclarationAST{
+class BlockLinkageSpecificationAST: public LinkageSpecificationAST{
 public:
-    FieldDeclarationAST();
-    ~FieldDeclarationAST();
+	BlockLinkageSpecificationAST()
+		: m_linkageBody(0) 
+		{}
+		
+	virtual ~BlockLinkageSpecificationAST() 
+	{
+		delete( m_linkageBody );
+	}
+	
+	LinkageBodyAST* linkageBody() const { return m_linkageBody; }
+	void setLinkageBody( LinkageBodyAST* linkageBody ) { m_linkageBody = linkageBody; }
+	
+private:
+	LinkageBodyAST* m_linkageBody;
 };
 
 class NamespaceDeclarationAST: public DeclarationAST{
 public:
-    NamespaceDeclarationAST();
-    ~NamespaceDeclarationAST();
+	NamespaceDeclarationAST()
+		: m_linkageBody( 0 )
+		{}
+		
+	virtual ~NamespaceDeclarationAST()
+	{
+		delete( m_linkageBody );
+	}
+	
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }
+	
+	LinkageBodyAST* linkageBody() const { return m_linkageBody; }
+	void setLinkageBody( LinkageBodyAST* linkageBody ) { m_linkageBody = linkageBody; }
+	
+private:
+	QString m_name;
+	LinkageBodyAST* m_linkageBody;
+};
+
+class NamespaceAliasDefinitionAST: public DeclarationAST{
+public:
+	NamespaceAliasDefinitionAST() {}
+	virtual ~NamespaceAliasDefinitionAST() {}
+	
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }
+	
+	QString alias() const { return m_alias; }
+	void setAlias( const QString& alias ) { m_alias = alias; }
+	
+private:
+	QString m_name;
+	QString m_alias;
 };
 
 class UsingDeclarationAST: public DeclarationAST{
 public:
-    UsingDeclarationAST();
-    ~UsingDeclarationAST();
+	UsingDeclarationAST() {}
+	virtual ~UsingDeclarationAST() {}
+	
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }
+	
+private:
+	QString m_name;
 };
 
-class TranslationUnitAST: public AST{
+class UsingDirectiveAST: public DeclarationAST{
 public:
-    TranslationUnitAST();
-    ~TranslationUnitAST();
-
-    void addDeclaration( DeclarationAST* decl );
-
+	UsingDirectiveAST() {}
+	virtual ~UsingDirectiveAST() {}
+	
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }
+	
 private:
-    QPtrList<DeclarationAST> m_declarations;
+	QString m_name;
 };
 
 class TypedefDeclarationAST: public DeclarationAST{
 public:
-    TypedefDeclarationAST();
-    ~TypedefDeclarationAST();
+	TypedefDeclarationAST() {}
+	virtual ~TypedefDeclarationAST() {}
 
-    void setDeclarator( DeclaratorAST* declarator );
-
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }	
+	
 private:
-    DeclaratorAST* m_declarator;
+	QString m_name;
 };
 
-class AsmDeclaratationAST: public DeclarationAST{
+class AsmDefinitionAST: public DeclarationAST{
 public:
-    AsmDeclaratationAST();
-    ~AsmDeclaratationAST();
+	AsmDefinitionAST() {}
+	virtual ~AsmDefinitionAST() {}
 };
 
 class TemplateDeclarationAST: public DeclarationAST{
 public:
-    TemplateDeclarationAST();
-    ~TemplateDeclarationAST();
-
-    int nameStart() const;
-    int nameEnd() const;
-    void setDeclaration( DeclarationAST* decl );
-
+	TemplateDeclarationAST()
+		: m_declaration( 0 )
+		{}
+		
+	virtual ~TemplateDeclarationAST()
+	{
+		delete( m_declaration );
+	}
+	
+	QString parameters() const { return m_parameters; }
+	void setParameters( const QString& p ) { m_parameters = p; }
+	
+	void setDeclaration( DeclarationAST* decl )
+	{
+		m_declaration = decl;
+	}
+	
 private:
-    DeclarationAST* m_declaration;
+	QString m_parameters;
+	DeclarationAST* m_declaration;
 };
 
-class LinkageBodyAST: public DeclarationAST{
+class ClassDeclarationAST: public DeclarationAST{
 public:
-    LinkageBodyAST();
-    ~LinkageBodyAST();
-
-    void addDeclaration( DeclarationAST* decl );
-
+	ClassDeclarationAST()
+	{
+		m_declarations.setAutoDelete( true );
+	}
+	
+	virtual ~ClassDeclarationAST() 
+		{}
+		
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }
+		
+	void addDeclaration( DeclarationAST* decl )
+	{
+		m_declarations.append( decl );
+	}
+	
 private:
-    QPtrList<DeclarationAST> m_declarations;
+	QString m_name;
+	QPtrList<DeclarationAST> m_declarations;
 };
 
-class NullDeclarationAST: public DeclarationAST{
+class EnumDeclarationAST: public DeclarationAST{
 public:
-    NullDeclarationAST();
-    ~NullDeclarationAST();
+	EnumDeclarationAST() {}
+	virtual ~EnumDeclarationAST() {}
+	
+	QString name() const { return m_name; }
+	void setName( const QString& name ) { m_name = name; }
+	
+private:
+	QString m_name;
 };
 
-class FriendDeclarationAST: public DeclarationAST{
+class DeclaratorAST: public AST{
 public:
-    FriendDeclarationAST();
-    ~FriendDeclarationAST();
-
-    int nameStart() const;
-    int nameEnd() const;
-
-    void setDeclaration( DeclarationAST* decl );
-
-private:
-    DeclarationAST* m_declaration;
+	DeclaratorAST() {}
+	virtual ~DeclaratorAST() {}
 };
 
-class DeclaratorListAST: public AST{
+
+class TranslationUnitAST: public AST{
 public:
-    DeclaratorListAST();
-    ~DeclaratorListAST();
-
-    void addDeclarator( DeclaratorAST* declarator );
-
+	TranslationUnitAST()
+	{
+		m_declarations.setAutoDelete( true );
+	}
+	
+	virtual ~TranslationUnitAST() 
+		{}
+	
+	void addDeclaration( DeclarationAST* decl )
+	{
+		m_declarations.append( decl );
+	}
+		
 private:
-    QPtrList<DeclaratorAST> m_declarators;
+	QPtrList<DeclarationAST> m_declarations;
 };
 
 #endif
