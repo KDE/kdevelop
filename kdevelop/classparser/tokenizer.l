@@ -6,7 +6,8 @@
 * Date    : Mon Mar 15 15:13:45 CET 1999                            *
 *                                                                   *
 * ------------------------------------------------------------------*
-* Purpose : Defining a tokinzer/lexical analyser with errorhandler. *
+* Purpose : Defining a tokenizer/lexical analyser                   *
+*           with errorhandler.                                      *
 *           Removes all comments and handles includes.              *
 *                                                                   *
 * ------------------------------------------------------------------*
@@ -18,8 +19,6 @@
 
 %{
   #include <stdlib.h>
-  #include <stdio.h>
-  #include <ctype.h>
   #include <qstring.h>
   #include "tokenizer.h"
   #include "FlexLexer.h"
@@ -146,7 +145,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
                        BEGIN (PREPARSER); }
 
     /*==============> Strip // comments <==============*/
-<INITIAL,PREPARSER>"//"(.)*[\n<<EOF>>] {}
+<INITIAL>"//"(.)*[\n<<EOF>>] {}
 
     /*==============> Strip comments <==============*/
 <INITIAL>"/*"        {beginComment((MyLexer *) this);
@@ -155,10 +154,12 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <COMMENT>"*/"        { endComment((MyLexer *) this);
                        BEGIN (0); }
 
+<COMMENT,PPCOMMENT>[\n\r]  {inComment((MyLexer *) this);}
 <COMMENT,PPCOMMENT>.  {inComment((MyLexer *) this);}
 
     /*==============> All other characters are ignored <==============*/
-<INITIAL,PREPARSER>.  {}
+<INITIAL,PREPARSER>[\n]  	{}
+<INITIAL,PREPARSER>.  		{}
 
 %%
 
