@@ -1309,8 +1309,8 @@ void CKDevelop::initDebugger()
               this,           SLOT(slotDebugBPState(Breakpoint*)));
 
     // connect adding watch variable from the rmb in the editors
-    connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int)),
-              frameStack,             SLOT(slotSelectFrame(int)));
+    connect(  var_viewer->varTree(),  SIGNAL(selectFrame(int, int)),
+              frameStack,             SLOT(slotSelectFrame(int, int)));
   }
 
   // Enable or disable the tabs, if they exist...

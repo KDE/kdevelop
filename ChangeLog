@@ -1,3 +1,10 @@
+2001-10-27  F@lk Brettschneider <falk@kdevelop.org>
+    * applied patch of John Birch (jbb@kdevelop.org) for debugging of multithreaded applications
+    * as well as his bugfix for displaying Qt3 strings when "show static members" is switched on
+
+2001-10-27  Grisha Mokhin <mokhin@bog.msu.ru>
+    * applied patch of Nikita Youshchenko who fixed the incorrect display of non-latin characters in editor views
+
 2001-10-25  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: don't lose the editor-view cursor when switching tool-views on and off
 
@@ -10,7 +17,7 @@
 
 2001-10-15  jbb <jbb@kdevelop.org>
     * kde3 compiling fixes.
-    
+
 2001-10-13  Ralf Nolden <nolden@kde.org>
     * fixed admin.tar.gz to HEAD with changing search path for KDE from /opt/kde3 to /opt/kde2 and
       the minimum Qt version to 2, minor version 2

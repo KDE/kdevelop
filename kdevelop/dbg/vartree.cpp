@@ -21,6 +21,7 @@
 //#include <kapp.h>     // here for i18n only! yuck!
 #include <kpopupmenu.h>
 #include <klineedit.h>
+#include <klocale.h>
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -29,7 +30,7 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qcursor.h>
-#include <klocale.h>
+
 
 #if defined(DBG_MONITOR)
   #define DBG_DISPLAY(X)          {emit rawData(QString(X));}
@@ -119,7 +120,8 @@ void VarViewer::slotAddWatchVariable()
 
 VarTree::VarTree( QWidget *parent, const char *name ) :
   QListView(parent, name),
-  activeFlag_(0)
+  activeFlag_(0),
+  currentThread_(-1)
 {
   setRootIsDecorated(true);
   setSorting(-1);
@@ -188,8 +190,10 @@ void VarTree::slotAddWatchVariable(const QString& watchVar)
 
 // **************************************************************************
 
-void VarTree::emitSetLocalViewState(bool localsOn, int frameNo)
+void VarTree::emitSetLocalViewState(bool localsOn, int frameNo, int threadNo)
 {
+  // FIXME: Is the following true wrt THREADS
+
   // When they want to _close_ a frame then we need to check the state of
   // all other frames to determine whether we still need the locals.
   if (!localsOn)
@@ -197,7 +201,7 @@ void VarTree::emitSetLocalViewState(bool localsOn, int frameNo)
     QListViewItem* sibling = firstChild();
     while (sibling)
     {
-      FrameRoot* frame = dynamic_cast<FrameRoot*> (sibling);
+      VarFrameRoot* frame = dynamic_cast<VarFrameRoot*> (sibling);
       if (frame && frame->isOpen())
       {
         localsOn = true;
@@ -209,7 +213,7 @@ void VarTree::emitSetLocalViewState(bool localsOn, int frameNo)
   }
 
   emit setLocalViewState(localsOn);
-  emit selectFrame(frameNo);
+  emit selectFrame(frameNo, threadNo);
 }
 
 // **************************************************************************
@@ -224,7 +228,7 @@ QListViewItem* VarTree::findRoot(QListViewItem* item) const
 
 // **************************************************************************
 
-FrameRoot* VarTree::findFrame(int frameNo) const
+VarFrameRoot* VarTree::findFrame(int frameNo, int threadNo) const
 {
   QListViewItem* sibling = firstChild();
 
@@ -232,8 +236,8 @@ FrameRoot* VarTree::findFrame(int frameNo) const
   // check the siblings
   while (sibling)
   {
-    FrameRoot* frame = dynamic_cast<FrameRoot*> (sibling);
-    if (frame && frame->getFrameNo() == frameNo)
+    VarFrameRoot* frame = dynamic_cast<VarFrameRoot*> (sibling);
+    if (frame && frame->matchDetails(frameNo, threadNo))
       return frame;
 
     sibling = sibling->nextSibling();
@@ -291,11 +295,13 @@ void VarTree::trimExcessFrames()
   while (child)
   {
     QListViewItem* nextChild = child->nextSibling();
-    if (FrameRoot* frame = dynamic_cast<FrameRoot*> (child))
+    if (VarFrameRoot* frame = dynamic_cast<VarFrameRoot*> (child))
     {
-      if (frame->getFrameNo() != 0)
+      // remove all frames except the current frame
+      if (!frame->matchDetails(0, currentThread_))
         delete frame;
     }
+
     child = nextChild;
   }
 }
@@ -473,7 +479,7 @@ QString VarItem::varPath() const
   QString vPath("");
   const VarItem* item = this;
 
-  // This stops at the root item (FrameRoot or WatchRoot)
+  // This stops at the root item (VarFrameRoot or WatchRoot)
   while ((item = dynamic_cast<const VarItem*> (item->parent())))
   {
     if (item->getDataType() != typeArray)
@@ -537,8 +543,8 @@ void VarItem::updateValue(char* buf)
   TrimmableItem::updateValue(buf);
 
   // Hack due to my bad QString implementation - this just tidies up the display
-  if ((strncmp(buf, "There is no member named len.", 29) == 0) ||
-      (strncmp(buf, "There is no member or method named len.", 39) == 0))
+  if ((::strncmp(buf, "There is no member named len.", 29) == 0) ||
+      (::strncmp(buf, "There is no member or method named len.", 39) == 0))
   {
     return;
   }
@@ -615,46 +621,26 @@ QCString VarItem::getCache()
 
 void VarItem::checkForRequests()
 {
-  // TODO - hardcoded for now - these should get read from config
-
-  // Signature for a QT1.44 QString
-  if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0)
-  {
-    waitingForData();
-    ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName().latin1()+QCString(".shd.data"));
-  }
-
-  // Signature for a QT1.44 QDir
-  if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0)
-  {
-    waitingForData();
-    ((VarTree*)listView())->emitExpandUserItem(this,
-                                          fullName().latin1()+QCString(".dPath.shd.data"));
-  }
-
   // Signature for a QT2.x and QT3.x  QString
-  // TODO - This handling is not that good - but it works sufficiently well
-  // at the moment to leave it here, and it won't cause bad things to happen.
-  if (strncmp(cache_, "d = 0x", 6) == 0)      // Eeeek - too small
+  if (cache_.find("d = 0x") == 0)      // Eeeek - too small
   {
     waitingForData();
-//    if (GDBParser::getGDBParser()->isQT2Version())
-//      ((VarTree*)listView())->emitExpandUserItem(this,
-//           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-//           fullName().latin1()));
-//    else
-//      ((VarTree*)listView())->emitExpandUserItem(this,
-//           QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
-//           fullName().latin1()));
+    ((VarTree*)listView())->emitExpandUserItem(this,
+           QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+           fullName().latin1()));
+  }
 
-      ((VarTree*)listView())->emitExpandUserItem(this,
+  // Signature for a QT2.x and QT3.x  QString when print statics are "on".
+  if (cache_.find("static null = {static null = <same as static member of an already seen type>, d = 0x") == 0)
+  {
+    waitingForData();
+    ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 
   // Signature for a QT2.0.x QT2.1 QCString
-  if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0)
+  if (cache_.find("<QArray<char>> = {<QGArray> = {shd = ") == 0)
   {
     waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
@@ -662,20 +648,28 @@ void VarItem::checkForRequests()
   }
 
   // Signature for a QT2.0.x QT2.1 QDir
-  if (strncmp(cache_, "dPath = {d = 0x", 15) == 0)
+  // statics are broken
+  if (cache_.find("dPath = {d = 0x") == 0)
   {
     waitingForData();
-//    if (GDBParser::getGDBParser()->isQT2Version())
-//      ((VarTree*)listView())->emitExpandUserItem(this,
-//           QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-//           fullName().latin1()));
-//      else
-//      ((VarTree*)listView())->emitExpandUserItem(this,
-//           QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
-//           fullName().latin1()));
-      ((VarTree*)listView())->emitExpandUserItem(this,
+    ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
+  }
+  // Signature for a QT1.44 QString
+  if (cache_.find("<QArrayT<char>> = {<QGArray> = {shd = ") == 0)
+  {
+    waitingForData();
+    ((VarTree*)listView())->emitExpandUserItem(this,
+                                          fullName().latin1()+QCString(".shd.data"));
+  }
+
+  // Signature for a QT1.44 QDir
+  if (cache_.find("dPath = {<QArrayT<char>> = {<QGArray> = {shd") == 0)
+  {
+    waitingForData();
+    ((VarTree*)listView())->emitExpandUserItem(this,
+                                          fullName().latin1()+QCString(".dPath.shd.data"));
   }
 }
 
@@ -709,10 +703,11 @@ void VarItem::paintCell( QPainter * p, const QColorGroup & cg,
 // **************************************************************************
 // **************************************************************************
 
-FrameRoot::FrameRoot(VarTree* parent, int frameNo) :
+VarFrameRoot::VarFrameRoot(VarTree* parent, int frameNo, int threadNo) :
   TrimmableItem (parent),
   needLocals_(true),
   frameNo_(frameNo),
+  threadNo_(threadNo),
   params_(QCString()),
   locals_(QCString())
 {
@@ -721,19 +716,19 @@ FrameRoot::FrameRoot(VarTree* parent, int frameNo) :
 
 // **************************************************************************
 
-FrameRoot::~FrameRoot()
+VarFrameRoot::~VarFrameRoot()
 {
 }
 
 // **************************************************************************
 
-void FrameRoot::setLocals(char* locals)
+void VarFrameRoot::setLocals(char* locals)
 {
 
   ASSERT(isActive());
 
   // "No symbol table info available" or "No locals."
-  bool noLocals = (locals &&  (strncmp(locals, "No ", 3) == 0));
+  bool noLocals = (locals &&  (::strncmp(locals, "No ", 3) == 0));
   setExpandable(!params_.isEmpty() || !noLocals);
 
   if (noLocals)
@@ -756,7 +751,7 @@ void FrameRoot::setLocals(char* locals)
 
 // **************************************************************************
 
-void FrameRoot::setParams(const QCString& params)
+void VarFrameRoot::setParams(const QCString& params)
 {
   setActive();
   params_ = params;
@@ -767,13 +762,13 @@ void FrameRoot::setParams(const QCString& params)
 
 // Override setOpen so that we can decide what to do when we do change
 // state. This
-void FrameRoot::setOpen(bool open)
+void VarFrameRoot::setOpen(bool open)
 {
   bool localStateChange = (isOpen() != open);
   QListViewItem::setOpen(open);
 
   if (localStateChange)
-    emit ((VarTree*)listView())->emitSetLocalViewState(open, frameNo_);
+    emit ((VarTree*)listView())->emitSetLocalViewState(open, frameNo_, threadNo_);
 
   if (!open)
     return;
@@ -783,6 +778,13 @@ void FrameRoot::setOpen(bool open)
 
   locals_ = QCString();
   params_ = QCString();
+}
+
+// **************************************************************************
+
+bool VarFrameRoot::matchDetails(int frameNo, int threadNo)
+{
+  return frameNo == frameNo_ && threadNo == threadNo_;
 }
 
 // **************************************************************************

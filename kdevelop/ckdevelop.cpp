@@ -1710,8 +1710,8 @@ void CKDevelop::setupInternalDebugger()
   connect(  brkptManager,     SIGNAL(clearAllBreakpoints()),
             dbgController,    SLOT(slotClearAllBreakpoints()));
 
-  connect(  frameStack,       SIGNAL(selectFrame(int)),
-            dbgController,    SLOT(slotSelectFrame(int)));
+  connect(  frameStack,       SIGNAL(selectFrame(int, int, bool)),
+            dbgController,    SLOT(slotSelectFrame(int, int, bool)));
 
   connect(  var_viewer->varTree(),  SIGNAL(expandItem(VarItem*)),
             dbgController,          SLOT(slotExpandItem(VarItem*)));
@@ -2797,12 +2797,17 @@ void CKDevelop::slotStatusMsg(const QString& text)
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
   statProg->reset();
-
-  int actualWidth = m_statusLabel->fontMetrics().width(text);
-  int realLetterCount = text.length();
-  int newLetterCount = (m_statusLabel->width() * realLetterCount) / actualWidth;
-  if (newLetterCount > 3) newLetterCount -= 4;
-  m_statusLabel->setText(text.left(newLetterCount));
+  QString status = text.simplifyWhiteSpace();
+  if (!status.isEmpty())
+  {
+    int actualWidth = m_statusLabel->fontMetrics().width(status);
+    int realLetterCount = status.length();
+    int newLetterCount = (m_statusLabel->width() * realLetterCount) / actualWidth;
+    if (newLetterCount > 3)
+      newLetterCount -= 4;
+    status = status.left(newLetterCount);
+  }
+  m_statusLabel->setText(status);
 }
 
 
