@@ -187,31 +187,68 @@ public slots: // Public slots
    void slot_resizeViaSystemMenu();
 
 protected:
+   /** Reimplemented from its base class.
+     * Resizes the captionbar, relayouts the position of the system buttons,
+     * and calls resize for its embedded client @ref QextMdiChildView.with the proper size */
    virtual void resizeEvent(QResizeEvent *);
+   /** Reimplemented from its base class.
+     * Detects if the mouse is on the edge of window and what resize cursor must be set.
+     * Calls QextMdiChildFrm::resizeWindow if it is in m_resizeMode. */
    virtual void mouseMoveEvent(QMouseEvent *e);
+   /** Reimplemented from its base class.
+     * Colours the caption, raises the childfrm widget and
+     * turns to resize mode if it is on the edge (resize-sensitive area) */
    virtual void mousePressEvent(QMouseEvent *e);
+   /** Reimplemented from its base class.
+     * Sets a normal cursor and leaves the resize mode. */
    virtual void mouseReleaseEvent(QMouseEvent *);
+   /** Reimplemented from its base class.
+     * give its child view the chance to notify a childframe move... that's why it sends
+     * a @ref QextMdiChildMovedEvent to the embedded @ref QextMdiChildView. */
    virtual void moveEvent(QMoveEvent* me);
+   /** Reimplemented from its base class. If not in resize mode, it sets the mouse cursor to normal appearance. */
    virtual void leaveEvent(QEvent *);
+   /** Reimplemented from its base class.
+     * Additionally it catches<UL>
+     * <LI>the client's mousebutton press events and raises and activates the childframe then</LI>
+     * <LI>the client's resize event and resizes its childframe widget (this) as well</LI></UL> */
    virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
-   //   virtual bool focusNextPrevChild( bool next ) { return TRUE; };
+   /** Calculates the new geometry from the new mouse position given as parameters
+     * and calls QextMdiChildFrm::setGeometry */
    void resizeWindow(int resizeCorner, int x, int y);
+   /** Override the cursor appearance depending on the widget corner given as parameter */
    void setResizeCursor(int resizeCorner);
+   /** That means to show a mini window showing the childframe's caption bar, only.
+     * It cannot be resized. */
    virtual void switchToMinimizeLayout();
 
 protected slots:
+   /** Handles a click on the Maximize button */
    void maximizePressed();
+   /** Handles a click on the Restore (Normalize) button */
    void restorePressed();
+   /** Handles a click on the Minimize button. */
    void minimizePressed();
+   /** Handles a click on the Close button. */
    void closePressed();
+   /** Handles a click on the Undock (Detach) button */
    void undockPressed();
+   /** Internally called from the signal focusInEventOccurs.
+     * It raises the MDI childframe to the top of all other MDI child frames and sets the focus on it. */
    void raiseAndActivate();
    /** Shows a system menu for child frame windows. */
    void showSystemMenu();
 
-private:
+protected:
+   /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
+     * Install the event filter for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter) */
    void linkChildren( QDict<FocusPolicy>* pFocPolDict);
+   /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
+     * Remove all event filters for all direct child widgets of this. (See @ref QextMdiChildFrm::eventFilter) */
    QDict<QWidget::FocusPolicy>* unlinkChildren();
+   /** Calculates the corner id for the resize cursor. The return value can be tested for:
+     * QEXTMDI_RESIZE_LEFT, QEXTMDI_RESIZE_RIGHT, QEXTMDI_RESIZE_TOP, QEXTMDI_RESIZE_BOTTOM
+     * or an OR'd variant of them for the corners. */
    int getResizeCorner(int ax,int ay);
 };
 

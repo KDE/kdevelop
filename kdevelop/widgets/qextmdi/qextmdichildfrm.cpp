@@ -66,12 +66,12 @@
  #include "kde_undockbutton.xpm"
 #endif
 
-//============ mousePressEvent ============//
-
 QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
   : QLabel( parent, name)
 {
 }
+
+//============ mousePressEvent ============//
 
 void QextMdiWin32IconButton::mousePressEvent( QMouseEvent*)
 {
