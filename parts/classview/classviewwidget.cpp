@@ -894,23 +894,31 @@ void ClassViewWidget::slotNewClass( )
 
 void ClassViewWidget::slotAddMethod( )
 {
+    if ( !selectedItem() ) return;
+
     if( m_part->languageSupport()->features() & KDevLanguageSupport::AddMethod )
         m_part->languageSupport()->addMethod( static_cast<ClassDomBrowserItem*>( selectedItem() )->dom() );
 }
 
 void ClassViewWidget::slotAddAttribute( )
 {
+    if ( !selectedItem() ) return;
+    
     if( m_part->languageSupport()->features() & KDevLanguageSupport::AddAttribute )
         m_part->languageSupport()->addAttribute( static_cast<ClassDomBrowserItem*>( selectedItem() )->dom() );
 }
 
 void ClassViewWidget::slotOpenDeclaration( )
 {
+    if ( !selectedItem() ) return;
+    
     static_cast<ClassViewItem*>( selectedItem() )->openDeclaration();
 }
 
 void ClassViewWidget::slotOpenImplementation( )
 {
+    if ( !selectedItem() ) return;
+    
     static_cast<ClassViewItem*>( selectedItem() )->openImplementation();
 }
 
