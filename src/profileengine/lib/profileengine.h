@@ -25,6 +25,11 @@
 
 #include "profile.h"
 
+/**
+Profile listing operation.
+Used to get a plain list of profiles
+and store it in the QMap<QString, Profile*>.
+*/
 class ProfileListing{
 public:
     void operator() (Profile *profile)
@@ -35,6 +40,12 @@ public:
     QMap<QString, Profile*> profiles;
 };
 
+/**Profile resource listing operation.
+Used to get a list of urls to the profile resources.
+
+Resource urls can be filtered by an @filter parameter
+passed to the constructor. Filter can have values
+as described in @ref QDir::setNameFilter function documentation.*/
 class ProfileListingEx {
 public:
     ProfileListingEx(const QString &filter): m_filter(filter) {}
@@ -50,7 +61,29 @@ public:
 /**
 Profile engine.
 
-Uses KDevelop profiles to form lists of plugin offers.
+- Uses KDevelop profiles to form lists of plugin offers;
+- Provides means of managing profiles;
+- Provides means to access the resources provided by a profile.
+
+KDevelop profiles form a tree with a root profile named "KDevelop".
+For example, such profiles tree can look as:
+@code
+KDevelop
+- IDE
+  - CompiledLanguageIDE
+    - AdaIDE
+    - CandCppIDE
+      - CIDE
+      - CppIDE
+        - KDECppIDE
+    - FortranIDE
+    ...
+  - DatabaseIDE
+  - ScriptingLanguageIDE
+  ..
+- KDevAssistant
+@endcode
+To manage a tree of profiles, use @ref ProfileEngine::walkProfiles methods.
 */
 class ProfileEngine {
 public:
@@ -98,9 +131,43 @@ public:
     void diffProfiles(OfferType offerType, const QString &profile1, const QString &profile2, 
         QStringList &unload, KTrader::OfferList &load);
 
+    /**@return The root profile. Root profile is always named "KDevelop" and it
+    defines an empty list of plugins. Applications built on KDevelop platform
+    will define nested profiles.*/
     Profile *rootProfile() const { return m_rootProfile; }
+    /**Finds a profile with given name.
+    @return The profile found or 0 if it does not exist.*/
     Profile *findProfile(const QString &profileName);
     
+    /**Walks profiles tree and applies operation @p op to each profile found 
+    in the tree below @root (@p root profile itself is not processed).
+    
+    Operation is a class that have operator(Profile *).
+    Example of operation class which is used to build a plain list of profiles:
+    @code
+    class ProfileListing{
+    public:
+        void operator() (Profile *profile)
+        {
+            profiles[profile->name()] = profile;
+        }
+    
+        QMap<QString, Profile*> profiles;
+    };
+    @endcode
+    Use case for such operation - building a list of all profiles:
+    @code
+    ProfileEngine engine;
+    ProfileListing listing;
+    engine.walkProfiles<ProfileListing>(listing, engine.rootProfile());
+    @endcode
+    
+    @note @ref ProfileListing and @ref ProfileListingEx operations are already defined in 
+    profileengine.h header file.
+    
+    @param op An operation to apply.
+    @param root A profile to start walking from. Complete subtree of the @root is traversed.
+    */
     template<class Operation>
     void walkProfiles(Operation &op, Profile *root)
     {
@@ -111,6 +178,63 @@ public:
             walkProfiles<Operation>(op, *it);
         }
     }
+    /**Walks profiles tree and applies operation @p op to each profile 
+    found in the tree below @root (@p root profile itself is not processed)
+    but the operation in this case returns a result of type defined by
+    "Result" template parameter.
+    
+    When iterating the tree, the result of operation applied to the parent profile 
+    is passed as @p result parameter to the recursive call for child profiles.
+    
+    For example, this function can be used to build another hierarcy of profiles
+    or other objects connected to profiles.
+    Example of operation class which is used to build a listview with items
+    where each item represents a profile:
+    @code
+    class ProfileListBuilding {
+    public:
+        ProfileItem * operator() (ProfileItem *parent, Profile *profile)
+        {
+            parent->setOpen(true);
+            return new ProfileItem(parent, profile);
+        }
+    };
+    
+    class ProfileItem: public KListViewItem {
+    public:
+        ProfileItem(KListView *parent, Profile *profile)
+            :KListViewItem(parent), m_profile(profile)
+        {
+            setText(0, profile->genericName());
+            setText(1, profile->description());
+        }
+        
+        ProfileItem(KListViewItem *parent, Profile *profile)
+            : KListViewItem(parent), m_profile(profile)
+        {
+            setText(0, profile->genericName());
+            setText(1, profile->description());
+        }
+        
+        Profile *profile() const { return m_profile; }
+        
+    private:
+        Profile *m_profile;
+    };
+
+    @endcode
+    Use case for such operation - building a listview:
+    @code
+    ProfileEngine engine;
+    ProfileItem *item = new ProfileItem(profilesList, engine.rootProfile());
+    ProfileListBuilding op;
+    engine.walkProfiles<ProfileListBuilding, ProfileItem>(op, item, engine.rootProfile());
+    @endcode
+    
+    @param op An operation to apply.
+    @param result A result of the operation as it would have been applied to the @root.
+    @param root A profile to start walking from. Complete subtree of the @root is traversed.
+    */
     template<class Operation, class Result>
     void walkProfiles(Operation &op, Result *result, Profile *root)
     {
