@@ -318,12 +318,12 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 	}
 	node->addDeclaration( def );
     }
- 
+
     UPDATE_POS( node, start, lex->index() );
-    
+
     // force (0,0) as start position
     node->setStartPosition( 0, 0 );
-    
+
     return m_problems.size() == 0;
 }
 
@@ -331,6 +331,8 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDefinition()" << endl;
 
+    int start = lex->index();
+    
     switch( lex->lookAhead(0) ){
 	
     case ';':  
@@ -340,7 +342,7 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
     case Token_extern: 
 	return parseLinkageSpecification( node );
 	
-    case Token_namespace: 
+    case Token_namespace:
 	return parseNamespace( node );
 	
     case Token_using: 
@@ -384,6 +386,7 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 	        return true;
 	    }
 
+	    lex->setIndex( start );
 	    return parseDeclaration( node );
 	}
 
@@ -2883,6 +2886,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     GroupAST::Node storageSpec;
     parseStorageClassSpecifier( storageSpec );
 
+    kdDebug(9007) << "------------------------> current token is = " << lex->lookAhead(0).toString() << endl;
     GroupAST::Node cv;
     parseCvQualify( cv );
 
@@ -3092,11 +3096,11 @@ bool Parser::parseFunctionBody( StatementListAST::Node& node )
 QString Parser::toString( int start, int end, const QString& sep ) const
 {
     QStringList l;
-    
+
     for( int i=start; i<end; ++i ){
 	l << lex->tokenAt( i ).toString();
     }
-    
+
     return l.join( sep ).stripWhiteSpace();
 }
 
@@ -3108,19 +3112,19 @@ bool Parser::parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node )
 	return true;
     else if( parseTypeSpecifier(node) )
 	return true;
-	
+
     return false;
 }
 
 bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTryBlockStatement()" << endl;
-    
+
     if( lex->lookAhead(0) != Token_try ){
 	return false;
     }
     lex->nextToken();
-    
+
     StatementAST::Node stmt;
     if( !parseCompoundStatement(stmt) ){
 	syntaxError();
@@ -3131,7 +3135,7 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 	reportError( i18n("catch expected") );
 	return false;
     }
-    
+
     while( lex->lookAhead(0) == Token_catch ){
 	lex->nextToken();
 	ADVANCE( '(', "(" );
@@ -3141,14 +3145,14 @@ bool Parser::parseTryBlockStatement( StatementAST::Node& /*node*/ )
 	    return false;
 	}
 	ADVANCE( ')', ")" );
-	
+
 	StatementAST::Node body;
 	if( !parseCompoundStatement(body) ){
 	    syntaxError();
 	    return false;
 	}
     }
-    
+
     return true;
 }
 
