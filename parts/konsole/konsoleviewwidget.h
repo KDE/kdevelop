@@ -11,6 +11,7 @@ class KonsoleWidgetPrivate;
 class KonsoleViewPart;
 namespace KParts {
   class ReadOnlyPart;
+  class Part;
 }
 class QVBoxLayout;
 
