@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui>
+<kpartplugin name="visualboyadvance" library="libvisualboyadvanceplugin" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_execute" />
+  </Menu>
+</MenuBar>
+</kpartplugin>

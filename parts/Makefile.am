@@ -7,6 +7,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  autoproject scriptproject trollproject customproject \
 	  debugger javadebugger distpart sourcebrowser \
 	  konsole astyle tools ctags regexptest cvs doxygen \
-	  simple-editor nedit manager editor-chooser fileselector \
+	  simple-editor nedit manager editor-chooser fileselector visualboyadvance \
 	  $(SCRIPTING_SUBDIR) $(JAVA_SUBDIRS) 
 
