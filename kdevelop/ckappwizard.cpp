@@ -434,7 +434,7 @@ void CKAppWizard::initPages(){
   hnew = new QPushButton( i18n("New"), widget2, "hnew" );
   hnew->setGeometry( 380, 20, 100, 30 );
   
-  hedit = new KEdit( kapp,widget2 );
+  hedit = new KEdit( widget2 );
   QFont f("fixed",10);
   hedit->setFont(f);
   hedit->setGeometry( 20, 70, 460, 350 );
@@ -468,7 +468,7 @@ void CKAppWizard::initPages(){
   cppnew = new QPushButton( i18n("New"), widget3, "cppnew" );
   cppnew->setGeometry( 380, 20, 100, 30 );
 
-  cppedit = new KEdit(kapp,widget3);
+  cppedit = new KEdit(widget3);
   cppedit->setFont(f);
   cppedit->setGeometry( 20, 70, 460, 350 );
   
@@ -521,20 +521,12 @@ void CKAppWizard::initPages(){
 // connection to directoryload
 void CKAppWizard::slotDirDialogClicked() {
   QString projname;
-  KDirDialog *dirdialog = new KDirDialog(dir,this,"Directory");
-  dirdialog->setCaption (i18n("Directory"));
-  dirdialog->show();
+  dir=KFileDialog::getExistingDirectory(dir, this, "Directory");
   projname = nameline->text();
-  if (!modifyDirectory) {
-  	dir = dirdialog->dirPath() + projname.lower();
+  if (!modifyDirectory)
+  	directoryline->setText(dir + projname.lower());
+  else
   	directoryline->setText(dir);
-  }
-  else {
-  	dir = dirdialog->dirPath();
-    directoryline->setText(dir);
-  }
-  dir = dirdialog->dirPath();
-  delete (dirdialog);
 }
 
 // connection of hload
@@ -1923,9 +1915,7 @@ bool CKAppWizard::generatedProject(){
 }
 
 void CKAppWizard::slotLocationButtonClicked() {
-  KDirDialog *dirdialog = new KDirDialog(dir,this,"Directory");
-  dirdialog->setCaption (i18n("Directory"));
-  dirdialog->show();
+  KFileDialog *dirdialog = KFileDialog::getExistingDirectory(dir,this,"Directory");
   dir = dirdialog->dirPath() + "cvsroot";
   vsLocation->setText(dir);
   delete (dirdialog);
