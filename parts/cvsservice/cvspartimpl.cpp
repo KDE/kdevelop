@@ -169,8 +169,8 @@ bool CvsServicePartImpl::isRegisteredInRepository( const QString &projectDirecto
 
     // KURL::directory() is a bit tricky when used on file or _dir_ paths ;-)
     KURL projectURL = KURL::fromPathOrURL( projectDirectory );
-    kdDebug(9000) << "projectURL = " << projectURL << endl;
-    kdDebug(9000) << "url        = " << url << endl;
+    kdDebug(9000) << "projectURL = " << projectURL.url() << endl;
+    kdDebug(9000) << "url        = " << url.url() << endl;
 
     if ( projectURL == url)
     {
