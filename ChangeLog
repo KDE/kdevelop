@@ -1,3 +1,8 @@
+1999-11-01 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* bugfix: similar library names caused trouble in reparse
+	  library flags (e.g. -lm and -lmysqlclient)
+	  Thanks to T. Regner for the hint
+
 1999-10-31  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
         * With kdoc2, use "doc_kde/kdoc-reference" if kdoc_index is not set
 
