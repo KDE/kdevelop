@@ -41,6 +41,7 @@ void QEditorSettings::init()
     if( !m_config )
 	return;
 
+    m_config->setGroup(generalGroup());
     m_wordWrap = m_config->readBoolEntry( "WordWrap", true );
     m_tabStop = m_config->readNumEntry( "TabStop", 8 );
     m_completeWordWithSpace = m_config->readBoolEntry( "CompleteWordWithSpace", false );
