@@ -491,13 +491,13 @@ void CLogFileView::slotRemoveFromRepository()
 
 void CLogFileView::slotUpdate()
 {
-    project->getVersionControl()->update(getFullFilename(currentItem()));
+   emit updateFileFromVCS(getFullFilename(currentItem()));
 }
 
 
 void CLogFileView::slotCommit()
 {
-    project->getVersionControl()->commit(getFullFilename(currentItem()));
+    emit commitFileToVCS(getFullFilename(currentItem()));
 }
 
 

@@ -57,6 +57,7 @@
 #include "cbugreportdlg.h"
 #include "../config.h"
 #include "structdef.h"
+#include "vc/versioncontrol.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -101,51 +102,52 @@ void CKDevelop::slotFileOpen( int id_ ){
 }
 
 void CKDevelop::slotFileClose(){
-  slotStatusMsg(i18n("Closing file..."));
-  QString filename=edit_widget->getName();
-  int message_result;
-
-  if(edit_widget->isModified()){
-
-    // no autosave if the user intends to save a file
-    if (bAutosave)
-      saveTimer->stop();
-
-    message_result = KMsgBox::yesNoCancel(this,i18n("Save?"),
-					  i18n("The document was modified,save?"),KMsgBox::QUESTION);
-    // restart autosaving
-    if (bAutosave)
-      saveTimer->start(saveTimeout);
-
-    if (message_result == 1){ // yes
-
-      if (isUntitled(filename))
-      {
- 	if (!fileSaveAs())
-		message_result=3;    // simulate here cancel because fileSaveAs failed....
-      }
-      else
-      {
-        edit_widget->doSave();
-        if (edit_widget->isModified())
-            message_result=3;		   // simulate cancel because doSave went wrong!
-      }
+    slotStatusMsg(i18n("Closing file..."));
+    QString filename=edit_widget->getName();
+    int message_result;
+    
+    if(edit_widget->isModified()){
+	
+	// no autosave if the user intends to save a file
+	if (bAutosave)
+	    saveTimer->stop();
+	
+	message_result = KMsgBox::yesNoCancel(this,i18n("Save?"),
+					      i18n("The document was modified,save?"),KMsgBox::QUESTION);
+	// restart autosaving
+	if (bAutosave)
+	    saveTimer->start(saveTimeout);
+	
+	if (message_result == 1){ // yes
+	    
+	    if (isUntitled(filename))
+		{
+		    if (!fileSaveAs())
+			message_result=3;    // simulate here cancel because fileSaveAs failed....
+		}
+	    else
+		{
+		    
+		    saveFileFromTheCurrentEditWidget();
+		    if (edit_widget->isModified())
+			message_result=3;		   // simulate cancel because doSave went wrong!
+		}
+	}
+	
+	if (message_result == 3) // cancel
+	    {
+		setInfoModified(filename, edit_widget->isModified());
+		slotStatusMsg(i18n("Ready."));
+		return;
+	    }
     }
-
-    if (message_result == 3) // cancel
-    {
-      setInfoModified(filename, edit_widget->isModified());
-      slotStatusMsg(i18n("Ready."));
-      return;
-    }
-  }
-
-  removeFileFromEditlist(filename);
-  kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-  kdev_caption+= version +
-             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-  setCaption(kdev_caption);
-  slotStatusMsg(i18n("Ready."));
+    
+    removeFileFromEditlist(filename);
+    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+    kdev_caption+= version +
+	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
+    setCaption(kdev_caption);
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileCloseAll(){
@@ -153,22 +155,44 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(i18n("Ready."));
 }
 
+bool CKDevelop::saveFileFromTheCurrentEditWidget(){
+  QString filename=edit_widget->getName();
+  TEditInfo* actual_info;
+  QFileInfo file_info(filename);
+  
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+      if (actual_info->filename == filename ){
+	  break;
+      }
+  }
+  if(actual_info == 0) return false; //oops :-(
+
+  if(file_info.lastModified() != actual_info->last_modified){
+    if(QMessageBox::warning(this,i18n("File modified"),"The file " + filename +" was modified outside\n this editor.Save anyway?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::No) return false;
+  }
+  edit_widget->doSave();
+  QFileInfo file_info2(filename);
+  actual_info->last_modified = file_info2.lastModified();
+  return true;
+}
 void CKDevelop::slotFileSave(){
 
   QString filename=edit_widget->getName();
   QString sShownFilename=QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file ")+sShownFilename);
+  
+ 
 
   if(isUntitled(filename)){
     slotFileSaveAs();
   }
   else{
-    edit_widget->doSave();
-    setInfoModified(filename, edit_widget->isModified());
-    // only refresh if header file changed
-    if(CProject::getType(filename)==CPP_HEADER){
-    slotViewRefresh();
-    }
+      saveFileFromTheCurrentEditWidget(); // save the current file
+      setInfoModified(filename, edit_widget->isModified());
+      // only refresh if header file changed
+      if(CProject::getType(filename)==CPP_HEADER){
+	  slotViewRefresh();
+      }
   }
   slotStatusMsg(i18n("Ready."));
   QString sHelpMsg=i18n("File ");
@@ -176,101 +200,101 @@ void CKDevelop::slotFileSave(){
   if (edit_widget->isModified())
     sHelpMsg+=i18n(" not saved.");
   else
-    sHelpMsg+=i18n(" saved.");
+      sHelpMsg+=i18n(" saved.");
 
   slotStatusHelpMsg(sHelpMsg);
 }
 
 void CKDevelop::slotFileSaveAs(){
-  slotStatusMsg(i18n("Save file as..."));
-
-  fileSaveAs();
-
-  kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-  kdev_caption+= version +
+    slotStatusMsg(i18n("Save file as..."));
+    
+    fileSaveAs();
+    
+    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+    kdev_caption+= version +
              " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-  setCaption(kdev_caption);
-
-  slotStatusMsg(i18n("Ready."));
+    setCaption(kdev_caption);
+    
+    slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileSaveAll(){
-  QStrList handledNames;
-  // ok,its a dirty implementation  :-)
-  if(!bAutosave || !saveTimer->isActive()){
-    slotStatusMsg(i18n("Saving all changed files..."));
-  }
-  else{
-    slotStatusMsg(i18n("Autosaving..."));
-  }
-  TEditInfo* actual_info;
-  bool mod = false;
-  // save current filename to switch back after saving
-  QString visibleFile = edit_widget->getName();
-  // ooops...autosave switches tabs...
-  int visibleTab=s_tab_view->getCurrentTab();
-  // first the 2 current edits
-  view->setUpdatesEnabled(false);
-
-  setInfoModified(header_widget->getName(), header_widget->isModified());
-  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
-
-  statProg->setTotalSteps(edit_infos.count());
-  statProg->show();
-	statProg->setProgress(0);
-	int i=0;
-  for(actual_info=edit_infos.first();actual_info != 0;){
-    //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
-    TEditInfo *next_info=edit_infos.next();
-	// get now the next info... fileSaveAs can delete the actual_info
-    i++;
-    statProg->setProgress(i);
-    if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
-      if(isUntitled(actual_info->filename)){
-      	switchToFile(actual_info->filename);
-        handledNames.append(actual_info->filename);
-        if (fileSaveAs())
-        {
-          // maybe saved with another name... so we have to start again
-          next_info=edit_infos.first();
-          i=0;
-        }
-     //  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
-     //  mod = true;  this is now handled by slotFileSaveAs()
-      }
-      else{
-      	switchToFile(actual_info->filename);
-        handledNames.append(actual_info->filename);
-      	edit_widget->doSave();
-        actual_info->modified=edit_widget->isModified();
-     // 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
-      	if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
-      	  mod = true;
-      }
+    QStrList handledNames;
+    // ok,its a dirty implementation  :-)
+    if(!bAutosave || !saveTimer->isActive()){
+	slotStatusMsg(i18n("Saving all changed files..."));
     }
-    actual_info=next_info;
-  }
-  statProg->hide();
-  statProg->reset();
-  if(mod){
-    slotViewRefresh();
-  }
-  // switch back to visible file
-  if (visibleTab == CPP || visibleTab == HEADER)
-  {
-    // Does the visible file still exist??
-    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename != visibleFile;
-       actual_info=edit_infos.next());
-
-    if (actual_info)
-       switchToFile(visibleFile);
-
-    view->repaint();
-  }
-  view->setUpdatesEnabled(true);
-  // switch back to visible tab
-  s_tab_view->setCurrentTab(visibleTab);
-  slotStatusMsg(i18n("Ready."));
+    else{
+	slotStatusMsg(i18n("Autosaving..."));
+    }
+    TEditInfo* actual_info;
+    bool mod = false;
+    // save current filename to switch back after saving
+    QString visibleFile = edit_widget->getName();
+    // ooops...autosave switches tabs...
+    int visibleTab=s_tab_view->getCurrentTab();
+    // first the 2 current edits
+    view->setUpdatesEnabled(false);
+    
+    setInfoModified(header_widget->getName(), header_widget->isModified());
+    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+    
+    statProg->setTotalSteps(edit_infos.count());
+    statProg->show();
+    statProg->setProgress(0);
+    int i=0;
+    for(actual_info=edit_infos.first();actual_info != 0;){
+	//KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+	TEditInfo *next_info=edit_infos.next();
+	// get now the next info... fileSaveAs can delete the actual_info
+	i++;
+	statProg->setProgress(i);
+	if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
+	    if(isUntitled(actual_info->filename)){
+		switchToFile(actual_info->filename);
+		handledNames.append(actual_info->filename);
+		if (fileSaveAs())
+		    {
+			// maybe saved with another name... so we have to start again
+			next_info=edit_infos.first();
+			i=0;
+		    }
+		//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
+		//  mod = true;  this is now handled by slotFileSaveAs()
+	    }
+	    else{
+		switchToFile(actual_info->filename,false,false);
+		handledNames.append(actual_info->filename);
+		saveFileFromTheCurrentEditWidget();
+		actual_info->modified=edit_widget->isModified();
+		// 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
+		if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
+		    mod = true;
+	    }
+	}
+	actual_info=next_info;
+    }
+    statProg->hide();
+    statProg->reset();
+    if(mod){
+	slotViewRefresh();
+    }
+    // switch back to visible file
+    if (visibleTab == CPP || visibleTab == HEADER)
+	{
+	    // Does the visible file still exist??
+	    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename != visibleFile;
+		actual_info=edit_infos.next());
+	    
+	    if (actual_info)
+		switchToFile(visibleFile,false,false); // no force reload and no box if modified outside
+	    
+	    view->repaint();
+	}
+    view->setUpdatesEnabled(true);
+    // switch back to visible tab
+    s_tab_view->setCurrentTab(visibleTab);
+    slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -2284,6 +2308,53 @@ void CKDevelop::slotRealFileTreeSelected(QString file){
   switchToFile(file);
 }
 
+void CKDevelop::slotUpdateFileFromVCS(QString file){
+    switchToFile(file,false,false); // force not reload and no messagebox if modified on disc, because slotFileSave() will do it
+    slotFileSave();
+    prj->getVersionControl()->update(file);
+    switchToFile(file,true,false);
+}
+void CKDevelop::slotCommitFileToVCS(QString file){
+    switchToFile(file,false,false);
+    slotFileSave();
+    prj->getVersionControl()->commit(file);
+    switchToFile(file,true,false);
+}
+
+void CKDevelop::slotUpdateDirFromVCS(QString dir){
+    slotFileSaveAll();
+
+    prj->getVersionControl()->update(dir);
+    TEditInfo* actual_info;
+    
+    QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
+
+    for ( ; it.current(); ++it ) {
+	actual_info = it.current();
+	QFileInfo file_info(actual_info->filename);
+	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
+	}
+    }
+}
+
+void CKDevelop::slotCommitDirToVCS(QString dir){
+    slotFileSaveAll();
+    prj->getVersionControl()->commit(dir);
+
+    TEditInfo* actual_info;
+    
+    QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
+
+    for ( ; it.current(); ++it ) {
+	actual_info = it.current();
+	QFileInfo file_info(actual_info->filename);
+	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
+	}
+    }
+    
+}
 void CKDevelop::slotDocTreeSelected(QString url_file){
   if(url_file == "API-Documentation"){
     slotHelpAPI();

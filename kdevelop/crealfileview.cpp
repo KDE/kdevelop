@@ -351,13 +351,27 @@ void CRealFileView::slotRemoveFromRepository()
 
 void CRealFileView::slotUpdate()
 {
-    project->getVersionControl()->update(getFullFilename(currentItem()));
+    QString file_dir_name = getFullFilename(currentItem());
+    QFileInfo file_info(file_dir_name);
+    if (file_info.isFile()){ 
+	emit updateFileFromVCS(file_dir_name);
+    }
+    if(file_info.isDir()){
+      emit updateDirFromVCS(file_dir_name);
+    }
 }
 
 
 void CRealFileView::slotCommit()
 {
-    project->getVersionControl()->commit(getFullFilename(currentItem()));
+    QString file_dir_name = getFullFilename(currentItem());
+    QFileInfo file_info(file_dir_name);
+    if (file_info.isFile()){ 
+	emit commitFileToVCS(file_dir_name);
+    }
+    if(file_info.isDir()){
+      emit commitDirToVCS(file_dir_name);
+    }
 }
  
 

@@ -21,6 +21,7 @@
 
 #include <qlist.h>
 #include <qstring.h>
+#include <qdatetime.h>
 
 /** (struct) contains the internal representation of a textfile
   *@author Sandy Meier
@@ -33,6 +34,7 @@ struct TEditInfo {
   bool modified; // modified ?
   int cursor_line;
   int cursor_col;
+  QDateTime last_modified;
 };
 
 struct TBugReportInfo {

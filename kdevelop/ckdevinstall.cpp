@@ -115,9 +115,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
   main_frame = new QFrame( this, "Frame_2" );
 	main_frame->setGeometry( 10, 10, 500, 290 );
 	{
-		QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(128) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
-		QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-		QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+		QColorGroup normal( QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(128) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ) );
+		QColorGroup disabled( QColor((unsigned int) QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ) );
+		QColorGroup active( QColor( (unsigned int)(unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ) );
 		QPalette palette( normal, disabled, active );
 		main_frame->setPalette( palette );
 	}
@@ -128,9 +128,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	welcome_label = new QLabel( this, "Label_2" );
 	welcome_label->setGeometry( 40, 30, 440, 40 );
 	{
-		QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(8388608) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ) );
-		QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-		QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+		QColorGroup normal( QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(8388608) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(16777215) ) );
+		QColorGroup disabled( QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ) );
+		QColorGroup active( QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ) );
 		QPalette palette( normal, disabled, active );
 		welcome_label->setPalette( palette );
 	}
@@ -148,9 +148,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	qt_label = new QLabel( this, "Label_3" );
 	qt_label->setGeometry( 40, 100, 220, 30 );
 	{
-		QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(128) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ) );
-		QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
-		QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+		QColorGroup normal( QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(128) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)(unsigned int)(unsigned int)QRgb(16777215) ) );
+		QColorGroup disabled( QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(12632256) ) );
+		QColorGroup active( QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(12632256) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(10789024) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ) );
 		QPalette palette( normal, disabled, active );
 		qt_label->setPalette( palette );
 	}
@@ -225,7 +225,7 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	hint_label = new QLabel( this, "Label_5" );
 	hint_label->setGeometry( 40, 100, 440, 170 );
 	{
-	  QColorGroup normal( QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
+	  QColorGroup normal( QColor( (unsigned int)QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	  QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(8421504) ), QColor( QRgb(12632256) ) );
 	  QColorGroup active( QColor( QRgb(0) ), QColor( QRgb(12632256) ), QColor( QRgb(16777215) ), QColor( QRgb(8421504) ), QColor( QRgb(10789024) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ) );
 	  QPalette palette( normal, disabled, active );

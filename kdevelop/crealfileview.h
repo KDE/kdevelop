@@ -72,6 +72,12 @@ signals:
    * project directory. */
   void showFileProperties(QString filename);
 
+  void commitFileToVCS(QString file);
+  void updateFileFromVCS(QString file);
+
+  void commitDirToVCS(QString dir);
+  void updateDirFromVCS(QString dir);
+
 protected slots:
   /** emits signal "fileSelected" when it gets the selectionChanged-signal from itself */
   void slotSelectionChanged(QListViewItem* selection);

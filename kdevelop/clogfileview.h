@@ -90,11 +90,13 @@ protected:
  signals:
     void selectedNewClass();
     void selectedNewFile();
-    void showFileProperties(QString);
-    void selectedFileRemove(QString);
+    void showFileProperties(QString file);
+    void selectedFileRemove(QString file);
     void selectedGroupProp();
     void logFileTreeSelected(QString);
     void menuItemHighlighted(int);
+    void commitFileToVCS(QString file);
+    void updateFileFromVCS(QString file);
 
 protected:
   KPopupMenu *popup;

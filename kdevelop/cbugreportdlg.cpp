@@ -28,6 +28,7 @@
 #include <qdatetime.h>
 #include <iostream.h>
 #include <kmsgbox.h>
+#include <qmessagebox.h>
 
 CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email) : QTabDialog(parent,name,true) {
 
@@ -166,10 +167,11 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   class_combo->setPalettePropagation( QWidget::AllChildren );
   class_combo->setSizeLimit( 10 );
   class_combo->setAutoResize( FALSE );
-  class_combo->insertItem( i18n("software bug") );
-  class_combo->insertItem( i18n("documentation bug") );
-  class_combo->insertItem( i18n("change-request") );
-  class_combo->insertItem( i18n("how do I ...") );
+  // please do not add i18n() to the following 4 lines
+  class_combo->insertItem("software bug" );
+  class_combo->insertItem( "documentation bug" );
+  class_combo->insertItem( "change-request" );
+  class_combo->insertItem( "how do I ..." );
   
   priority_low = new QRadioButton( w, "priority_low" );
   priority_low->setGeometry( 30, 280, 150, 30 );
@@ -255,19 +257,20 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   location_combo->setPalettePropagation( QWidget::AllChildren );
   location_combo->setSizeLimit( 10 );
   location_combo->setAutoResize( FALSE );
-  location_combo->insertItem( i18n("I don´t know") );
-  location_combo->insertItem( i18n("class tree") );
-  location_combo->insertItem( i18n("logical file tree") );
-  location_combo->insertItem( i18n("documentation tree") );
-  location_combo->insertItem( i18n("editor") );
-  location_combo->insertItem( i18n("dialog editor") );
-  location_combo->insertItem( i18n("documentation browser") );
-  location_combo->insertItem( i18n("app-wizard") );
-  location_combo->insertItem( i18n("build process") );
-  location_combo->insertItem( i18n("output window") );
-  location_combo->insertItem( i18n("configuration") );
-  location_combo->insertItem( i18n("project management") );
-  location_combo->insertItem( i18n("installation process") );
+  // please do not add i18n() to the following 13 lines
+  location_combo->insertItem("I don´t know" );
+  location_combo->insertItem("class tree" );
+  location_combo->insertItem( "logical file tree" );
+  location_combo->insertItem( "documentation tree" );
+  location_combo->insertItem( "editor" );
+  location_combo->insertItem( "dialog editor" );
+  location_combo->insertItem( "documentation browser" );
+  location_combo->insertItem( "app-wizard" );
+  location_combo->insertItem( "build process" );
+  location_combo->insertItem( "output window" );
+  location_combo->insertItem( "configuration" );
+  location_combo->insertItem( "project management" );
+  location_combo->insertItem( "installation process" );
   
   QLabel* qtarch_location_label;
   qtarch_location_label = new QLabel( w, "location_label" );
@@ -562,6 +565,9 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
  
   // save bugreport-email
   BugEmail=bug_email;
+
+  QMessageBox::information(0,"Bugreport Dialog","Please remember writing your bugreport in english,\nso every developer is able to understand it. Thanks!",QMessageBox::Ok);
+
 
   // cerr << endl << "init dialog";
 //   cerr << endl << author;

@@ -1,3 +1,10 @@
+1999-08-08 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* implemented correct filehandling when updating/commiting whole directories with the RFV
+
+1999-08-07 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* KDevelop recognize now, if a file was modified outside the editor, yeah :-)
+	* implemented correct filehandling when updating/commiting files,CVS update -> save,update,reloading and so on
+	
 1999-08-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Removed KCombo from kdlgedit
 

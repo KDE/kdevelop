@@ -223,7 +223,7 @@ bool CKDevelop::fileSaveAs(){
                     QString(i18n("\nThe file\n\n"))+name+
 		i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
     }
-
+    
   } while (message_result == 2); // repeat it on 'no'
 
 
@@ -429,7 +429,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
-void CKDevelop::switchToFile(QString filename, bool bForceReload){
+void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
   lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
 
@@ -515,11 +515,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   }
   
   edit_widget->setFocus();
-  if (!bForceReload && filename == edit_widget->getName()){
-    //    cerr << endl <<endl << "Filename:" << filename 
-    // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
-    return;
-  }
+  
   
   // search the current file which would be changed
   
@@ -532,6 +528,27 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   if(actual_info == 0){
 //    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
   }
+
+
+  // handle file if it was modified on disk by another editor/cvs
+  QFileInfo file_info(edit_widget->fileName());
+
+  if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
+      if(QMessageBox::warning(this,i18n("File modified"),"The file " + filename +" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
+	  bForceReload = true;
+	  actual_info->last_modified = file_info.lastModified();
+      }
+  }
+  if (!bShowModifiedBox){
+     actual_info->last_modified = file_info.lastModified(); 
+  }
+  
+  if (!bForceReload && filename == edit_widget->getName()){
+      //    cerr << endl <<endl << "Filename:" << filename 
+      // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
+      return;
+  }
+
     // rescue the old file
   actual_info->text = edit_widget->text();
   actual_info->modified = edit_widget->isModified();
@@ -580,6 +597,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   info->modified = false;
   info->cursor_line = 0;
   info->cursor_col = 0;
+  info->last_modified = fileinfo.lastModified();
 
   // update the widget
 //  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"switchToFile: %s",filename.data());
@@ -591,7 +609,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
   edit_infos.append(info); // add to the list
   kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
   kdev_caption+= version +
-             " - ["+ QFileInfo(filename).fileName()+"]";
+      " - ["+ QFileInfo(filename).fileName()+"]";
   setCaption(kdev_caption);
 }
 

@@ -131,6 +131,7 @@ public:
    *  @return true if it succeeded
    */
   bool fileSaveAs();
+  bool saveFileFromTheCurrentEditWidget();
 
   void refreshTrees();
   void refreshTrees(TFileInfo *info);
@@ -165,8 +166,9 @@ public:
   /** Switch the view to a certain file.
    * @param filename the absolute filename
    * @param bForceReload if true then enforce updating widget text from file
+   * @param bShowModifiedBox if true no messagebox is shown, if the file was modified outside the editor
    */
-  void switchToFile(QString filename, bool bForceReload=false); // filename = abs
+  void switchToFile(QString filename, bool bForceReload=false,bool bShowModifiedBox=true); // filename = abs
 
   /** Switch to a certain line in a certain file.
    *  @param filename Absolute filename of the file to switch to.
@@ -494,6 +496,13 @@ public:
   /** add a file to the project */
   void slotAddFileToProject(QString abs_filename);
   void delFileFromProject(QString rel_filename);
+
+  /////////some slots for VCS interaction
+  
+  void slotUpdateFileFromVCS(QString file);
+  void slotCommitFileToVCS(QString file);
+  void slotUpdateDirFromVCS(QString dir);
+  void slotCommitDirToVCS(QString dir);
 
   //////////////// -- the methods for the statusbar items
   /** change the status message to text */

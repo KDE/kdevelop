@@ -63,9 +63,9 @@ KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name,
 		did_know_label->setFont( font );
 	}
 	{
-		QColorGroup normal( QColor( QRgb(16777215) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(0) ) );
-		QColorGroup disabled( QColor( QRgb(8421504) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(8421504) ), QColor( QRgb(0) ) );
-		QColorGroup active( QColor( QRgb(16777215) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(0) ), QColor( QRgb(16777215) ), QColor( QRgb(0) ) );
+		QColorGroup normal( QColor((unsigned int) QRgb(16777215) ), QColor( (unsigned int)QRgb(0) ), QColor((unsigned int) QRgb(0) ), QColor((unsigned int) QRgb(0) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(0) ) );
+		QColorGroup disabled( QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(0) ), QColor((unsigned int) QRgb(0) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(8421504) ), QColor( (unsigned int)QRgb(0) ) );
+		QColorGroup active( QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(0) ), QColor( (unsigned int)(unsigned int)QRgb(0) ), QColor( (unsigned int)QRgb(16777215) ), QColor( (unsigned int)QRgb(0) ) );
 		QPalette palette( normal, disabled, active );
 		did_know_label->setPalette( palette );
 	}
