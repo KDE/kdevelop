@@ -1,3 +1,13 @@
+2003-06-12 Alexander Dymo <cloudtemple@mksat.net>
+    * Trollproject:
+      - Existing files could be added to a project with a relative path or
+        they could be symlinked instead of just copying
+      - Implemented removing files from IMAGES and IDLS groups
+      - Set run environment variables and program arguments when launching
+        the executable (thanks to Mario Scalas for the patch)
+      - Correct "Link convenience library inside project" functionality (thanks to
+        Mario Scalas for the patch)
+
 2003-06-11 Hamish Rodda <rodda@kde.org>
     * Implemented "Debug in KDevelop" hook into drkonqi (the KDE crash
       handler). Press the button and kdevelop attaches to the process
@@ -6,12 +16,12 @@
       kdebase/drkonqi to work (runtime dependency).
 
 2003-06-07 Mario Scalas <mario.scalas@libero.it>
-	* Stepped back from using Pimpl in part design since it does only complicate code without any of its 
-	  advantages in this case 
-	* Added an option for adding the message for the commit operation to the master ChangeLog 
-	  (located in <projectDirectory>/ChangeLog): await for comments for further changes. 
-	* CommitDlg now uses QTextEdit instead of (deprecated) QMultiLineEdit 
-	* This log was written using the CvsPart! :) 
+	* Stepped back from using Pimpl in part design since it does only complicate code without any of its
+	  advantages in this case
+	* Added an option for adding the message for the commit operation to the master ChangeLog
+	  (located in <projectDirectory>/ChangeLog): await for comments for further changes.
+	* CommitDlg now uses QTextEdit instead of (deprecated) QMultiLineEdit
+	* This log was written using the CvsPart! :)
 
 2003-05-27 F@lk Brettschneider <falkbr@kdevelop.org>
     * compiles and runs on KDE-3.0 again
@@ -24,7 +34,7 @@
 
 2003-05-22 Mario Scalas <mario.scalas@libero.it>
     * Added tooltips to the watch variable list view so no widget resize is needed
-    * Added a opy to clipboard feature for watched variables so their data is available
+    * Added a copy to clipboard feature for watched variables so their data is available
       for other uses.
 
 2003-05-21 Roberto Raggi <roberto@kdevelop.org>
