@@ -1,8 +1,21 @@
 /***************************************************************************
-                         DockWidget part of KDEStudio
+                dockmanager.cpp  -  Impl. DockWidget,DockManager
                              -------------------
-    copyright            : (C) 1999 by Judin Max
+    begin                : Now 21 21:08:00 1999
+    copyright            : (C) 2000 by Judin Max (novaprint@mtu-net.ru)
     email                : novaprint@mtu-net.ru
+
+		improved/changed by	 : Falk Brettschneider	(Jan 30 17:52 MET 2000)
+													 email: gigafalk@yahoo.com
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
  ***************************************************************************/
 
 #define DOCK_CONFIG_VERSION "0.0.2"
@@ -24,7 +37,7 @@
 #include "dockmovemanager.h"
 #include "stabctl.h"
 
-#include "close.xpm"
+#include "dockback.xpm"
 #include "notclose.xpm"
 
 SDockButton::SDockButton( QWidget *parent, const char * name )
@@ -78,6 +91,10 @@ void SDockButton::leaveEvent( QEvent * )
 /*************************************************************************/
 
 DockWidget::DockWidget( DockManager* dockManager, const char* name, const QPixmap &pixmap ) : QWidget( 0L, name )
+  ,m_bDraggable(true)
+	,m_oldBrotherDockWidget(0)
+  ,m_curDockPos(DockNone)
+  ,m_oldDockPos(DockNone)
 {
   Parent = (QWidget*)dockManager->parent();
 
@@ -91,16 +108,10 @@ DockWidget::DockWidget( DockManager* dockManager, const char* name, const QPixma
   installEventFilter( manager );
   manager->childDock->append( this );
 
-  closeButton = new SDockButton( this, "DockWidgetCloseButton");
-  closeButton->setFocusPolicy( NoFocus );
-  closeButton->setPixmap(close_xpm);
-  connect( closeButton, SIGNAL(clicked()), SLOT(slotCloseButtonClick()));
-
-  stayButton = new SDockButton( this, "DockWidgetStayButton");
-  stayButton->setFocusPolicy( NoFocus );
-  stayButton->setToggleButton( true );
-  stayButton->setPixmap(not_close_xpm);
-
+  dockbackButton = new SDockButton( this, "DockWidgetDockBackButton");
+  dockbackButton ->setFocusPolicy( NoFocus );
+  dockbackButton->setPixmap(dockback_xpm);
+  connect( dockbackButton, SIGNAL(clicked()), SLOT(slotDockBackButtonClick()));
 
   QPoint p = QPoint(0,0);
   widget = 0L;
@@ -126,17 +137,16 @@ DockWidget::~DockWidget()
 void DockWidget::recreateToDesktop( QPoint p )
 {
   reparent(0, 0, p, false);
-  XSetTransientForHint( qt_xdisplay(), winId(), Parent->topLevelWidget()->winId());
+//F.B.  XSetTransientForHint( qt_xdisplay(), winId(), Parent->topLevelWidget()->winId());
   QApplication::syncX();
-  KWM::setDecoration(winId(), KWM::tinyDecoration);
+//F.B.  KWM::setDecoration(winId(), KWM::tinyDecoration);
   setMouseTracking( true );
   dockCaptionHeight = 15;
   buttonY = 2;
-  closeButton->setGeometry( 0, 2 , 11, 11 );
-  closeButton->show();
+  dockbackButton->setGeometry( 0, 2 , 11, 11 );
+  dockbackButton->show();
 
-  stayButton->setGeometry( 0, 2 , 11, 11 );
-  stayButton->show();
+  m_curDockPos = DockNone;
 }
 
 void DockWidget::recreateTo( QWidget* s )
@@ -147,19 +157,12 @@ void DockWidget::recreateTo( QWidget* s )
   buttonY = 0;
   if ( s->inherits("KTMainWindow") || isGroup ){
     dockCaptionHeight = 0;
-    closeButton->setGeometry( 0, 0 , 9, 9 );
-    closeButton->hide();
-
-    stayButton->setGeometry( 0, 0 , 9, 9 );
-    stayButton->hide();
   } else {
     dockCaptionHeight = 10;
-    closeButton->setGeometry( 0, 0 , 9, 9 );
-    closeButton->show();
 
-    stayButton->setGeometry( 0, 0 , 9, 9 );
-    stayButton->show();
   }
+  dockbackButton->setGeometry( 0, 0 , 9, 9 );
+  dockbackButton->hide();
 }
 
 void DockWidget::show()
@@ -172,6 +175,8 @@ void DockWidget::show()
   }
   if ( parentWidget() != 0L || ((DockMainWindow*)manager->parent())->isVisible()  )
     QWidget::show();
+  if (m_curDockPos == DockNone)
+ 		QWidget::show();
 }
 
 bool DockWidget::event( QEvent *event )
@@ -190,8 +195,7 @@ bool DockWidget::event( QEvent *event )
       if ( widget == ((QChildEvent*)event)->child() ) widget = 0L;
       break;
     case QEvent::Resize:
-      closeButton->move( width() - closeButton->width() - 1, buttonY );
-      stayButton ->move( closeButton->x() - stayButton->width() - 1, buttonY );
+      dockbackButton->move( width() - dockbackButton->width() - 1, buttonY );
       if ( widget != 0L ){
         widget->setGeometry( crect() );
       }
@@ -201,9 +205,12 @@ bool DockWidget::event( QEvent *event )
     case QEvent::Paint:
       paintCaption();
       break;
-    case QEvent::Show:
+/*    case QEvent::Show:
       if ( widget != 0L ) widget->show();
-      break;
+      break;*/
+		case QEvent::Close:
+			emit iMBeingClosed();
+			break;
     default:
       break;
   }
@@ -212,79 +219,82 @@ bool DockWidget::event( QEvent *event )
 
 QRect DockWidget::crect()
 {
-  return QRect(0, dockCaptionHeight, width(), height()-dockCaptionHeight);
+  if( m_bDraggable)
+	  return QRect(0, dockCaptionHeight, width(), height()-dockCaptionHeight);
+  else
+    return rect();
 }
 
 void DockWidget::paintCaption()
 {
+  setCaption( name());
+
+  if ( !m_bDraggable) return;
   if ( dockCaptionHeight == 0 ) return;
   QPainter p(this);
-  if ( parent() == 0L ){
-    QPainter paint;
-    paint.begin( drawBuffer );
-    drawBuffer->fill( QColor(0,0,128) );
+  QPainter paint;
+  paint.begin( drawBuffer );
+  paint.fillRect( drawBuffer->rect(), QBrush(colorGroup().brush(QColorGroup::Background)) );
 
-    paint.setPen( black );
-    paint.drawLine( 0, 0, width()-1, 0 );
-    paint.drawLine( 0 , dockCaptionHeight-1, 0, 0 );
+	int delta = 0;
+	if( (m_curDockPos == DockNone) && m_oldBrotherDockWidget)
+	  delta = 12;
 
-    paint.setPen( white );
-    paint.drawLine( 0, dockCaptionHeight-1, width()-1, dockCaptionHeight-1 );
-    paint.drawLine( width()-1 , 0, width()-1, dockCaptionHeight-1 );
+  paint.setPen( white );
+  paint.drawLine( 1, 3, 1, 2 );
+  paint.drawLine( 1, 2, width()-delta, 2 );
 
-    paint.setFont( *(manager->titleFont) );
-    paint.drawText( 3, 0, width() - closeButton->width()-7, dockCaptionHeight, AlignLeft|AlignVCenter, name() );
+  paint.setPen( colorGroup().mid() );
+  paint.drawLine( 1, 4, width()-delta, 4 );
+  paint.drawLine( width()-delta, 4, width()-delta, 3 );
 
-    paint.fillRect( width() - 28, 0, 28, height(), QBrush(colorGroup().brush(QColorGroup::Background)) );
+  paint.setPen( white );
+  paint.drawLine( 1, 6, 1, 5 );
+  paint.drawLine( 1, 5, width()-delta, 5 );
 
-    bitBlt( this,0,0,drawBuffer,0,0,width(),dockCaptionHeight );
-    paint.end();
-  } else {
-    QPainter paint;
-    paint.begin( drawBuffer );
-    paint.fillRect( drawBuffer->rect(), QBrush(colorGroup().brush(QColorGroup::Background)) );
+  paint.setPen( colorGroup().mid() );
+  paint.drawLine( 1, 7, width()-delta, 7 );
+  paint.drawLine( width()-delta, 7, width()-delta, 6 );
+	
+//	paint.setPen(black);
+//	paint.setFont(*(manager->titleFont));
+//	paint.drawText(0,0,width(), dockCaptionHeight, AlignLeft, name());
 
-    int delta = 24;
-
-    paint.setPen( white );
-    paint.drawLine( 1, 3, 1, 2 );
-    paint.drawLine( 1, 2, width()-delta, 2 );
-
-    paint.setPen( colorGroup().mid() );
-    paint.drawLine( 1, 4, width()-delta, 4 );
-    paint.drawLine( width()-delta, 4, width()-delta, 3 );
-
-    paint.setPen( white );
-    paint.drawLine( 1, 6, 1, 5 );
-    paint.drawLine( 1, 5, width()-delta, 5 );
-
-    paint.setPen( colorGroup().mid() );
-    paint.drawLine( 1, 7, width()-delta, 7 );
-    paint.drawLine( width()-delta, 7, width()-delta, 6 );
-
-    bitBlt( this,0,0,drawBuffer,0,0,width(),dockCaptionHeight );
-    paint.end();
-  }
+  bitBlt( this,0,0,drawBuffer,0,0,width(),dockCaptionHeight );
+  paint.end();
 }
 
 void DockWidget::manualDock( DockWidget* target, DockPosition dockPos, QPoint pos,  int spliPos )
 {
+	// at first, go toplevel
   unDock();
-  if ( target != 0L ){
 
+	if ( (target != 0L) && (dockPos == DockNone) ) {
+		qDebug("logical error in DockWidget::manualDock. 'DockNone' to a given DockWidget is nonsense!");
+		return;
+	}		
+
+  if ( target != 0L ) {
+		// yes there's a target to dock to
     QWidget* parentDock = target->parentWidget();
+
     if ( parentDock != 0L )
-      if ( parentDock->isA("STabCtl") ){
+			// the target is not toplevel
+      if ( parentDock->isA("STabCtl") ) {
+				// docking to a tab widget
         recreateTo( parentDock );
         ((STabCtl*)parentDock)->insertPage( this, name() );
         ((STabCtl*)parentDock)->setPixmap( this, *pix );
         setDockTabName( (STabCtl*)parentDock );
 
+				m_curDockPos = DockCenter;
         emit manager->change();
         return;
       }
 
+		// create a new dockwidget that will contain the target and this
     DockWidget* newDock = new DockWidget( manager, "tempName", QPixmap("") );
+		newDock->m_curDockPos = target->m_curDockPos;
 
     if ( dockPos == DockCenter ){
       newDock->isTabGroup = true;
@@ -295,16 +305,30 @@ void DockWidget::manualDock( DockWidget* target, DockPosition dockPos, QPoint po
     }
 
     if ( parentDock == 0L ){
+			// dock to a toplevel dockwidget means newDock is toplevel now
       newDock->move( target->frameGeometry().topLeft() );
       newDock->resize( target->geometry().size() );
       if ( target->isVisibleToTLW() ) newDock->show();
     } else {
+			// insert newDock in the parent dockwidget
       newDock->recreateTo( parentDock );
+			if( isVisible())
+				parentDock->show();
     }
 
+		// redirect the dockback button to the new dockwidget
+		if( target->m_oldBrotherDockWidget != 0L) {
+			newDock->m_oldBrotherDockWidget = target->m_oldBrotherDockWidget;
+  		QObject::connect( m_oldBrotherDockWidget, SIGNAL(iMBeingClosed()),
+										    newDock, SLOT(slotOldBrotherIsLost()) );
+			target->slotOldBrotherIsLost();
+		}
+		newDock->m_oldDockPos = target->m_oldDockPos;
 
     if ( dockPos == DockCenter )
     {
+			// if to dock to the center of the target dockwidget,
+			// dock center to newDock
       STabCtl* tab = new STabCtl( newDock, "_dock_tab");
       connect( tab, SIGNAL(tabShowPopup(int,QPoint)), manager, SLOT(slotTabShowPopup(int,QPoint)));
       target->recreateTo( tab );
@@ -318,15 +342,43 @@ void DockWidget::manualDock( DockWidget* target, DockPosition dockPos, QPoint po
 
       setDockTabName( tab );
       tab->show();
-    } else {
+
+			m_curDockPos = DockCenter;
+			target->m_oldDockPos = target->m_curDockPos;
+			target->m_curDockPos = DockCenter;
+    }
+		else {
+			// if to dock not to the center of the target dockwidget,
+			// dock to newDock
       DockSplitter* panner = 0L;
-      if ( dockPos == DockTop  || dockPos == DockBottom ) panner = new DockSplitter( newDock, "DockPaner", DockSplitter::Horizontal, KNewPanner::Percent, spliPos );
-      if ( dockPos == DockLeft || dockPos == DockRight  ) panner = new DockSplitter( newDock, "DockPaner", DockSplitter::Vertical , KNewPanner::Percent, spliPos );
+      if ( dockPos == DockTop  || dockPos == DockBottom )
+		 		panner = new DockSplitter( newDock, "DockPaner", DockSplitter::Horizontal, KNewPanner::Percent, spliPos );
+      if ( dockPos == DockLeft || dockPos == DockRight  )
+				panner = new DockSplitter( newDock, "DockPaner", DockSplitter::Vertical , KNewPanner::Percent, spliPos );
       panner->setFocusPolicy( NoFocus );
       target->recreateTo( panner );
       recreateTo( panner );
-      if ( dockPos == DockRight || dockPos == DockBottom ) panner->activate( target, this );
-      if ( dockPos == DockTop   || dockPos == DockLeft   ) panner->activate( this, target );
+			target->m_oldDockPos = target->m_curDockPos;
+      if ( dockPos == DockRight) {
+				panner->activate( target, this );
+				m_curDockPos = DockRight;
+        target->m_curDockPos = DockLeft;
+      }
+			else if( dockPos == DockBottom) {
+				panner->activate( target, this );
+				m_curDockPos = DockBottom;
+				target->m_curDockPos = DockTop;
+			}
+			else if( dockPos == DockTop) {
+				panner->activate( this, target );
+				m_curDockPos = DockTop;
+				target->m_curDockPos = DockBottom;
+			}
+			else if( dockPos == DockLeft) {
+				panner->activate( this, target );
+				m_curDockPos = DockLeft;
+				target->m_curDockPos = DockRight;
+			}
       target->show();
       show();
       panner->show();
@@ -349,9 +401,11 @@ void DockWidget::manualDock( DockWidget* target, DockPosition dockPos, QPoint po
     emit target->docking( this, dockPos );
     emit manager->replaceDock( target, newDock );
   } else {
+		// if there's no target to dock to
       move( pos );
       show();
   }
+
   // for set DockWidget::widget
   qApp->processEvents();
   emit manager->change();
@@ -362,8 +416,10 @@ void DockWidget::unDock()
   QWidget* parentW = parentWidget();
   if ( parentW == 0L )  return; // Trivial move around desktop
 
-  manager->undockProcess = true;
+  m_oldDockPos = m_curDockPos; //F.B.
 
+  manager->undockProcess = true;
+	
   bool isV = parentW->isVisibleToTLW();
   if ( parentW->isA("STabCtl") ){
     ((STabCtl*)parentW)->removePage( this );
@@ -412,6 +468,9 @@ void DockWidget::unDock()
         lastTab->show();
       }
       emit manager->replaceDock( parentOfTab, lastTab );
+			lastTab->m_curDockPos = parentOfTab->m_curDockPos;
+			if( parentOfTab->m_oldBrotherDockWidget)
+				emit parentOfTab->iMBeingClosed();
       delete parentOfTab;
 
     } else {
@@ -440,6 +499,10 @@ void DockWidget::unDock()
   DockWidget* secondWidget = (DockWidget*)parentSplitterOfDockWidget->getAnother( this );
   DockWidget* group        = (DockWidget*)parentSplitterOfDockWidget->parentWidget();
 
+  m_oldBrotherDockWidget = secondWidget; //F.B.
+	QObject::connect( m_oldBrotherDockWidget, SIGNAL(iMBeingClosed()),
+										this, SLOT(slotOldBrotherIsLost()) );
+
   if ( group->parentWidget() == 0L ){
     secondWidget->recreateToDesktop( QPoint(0,0) );
     secondWidget->setGeometry( group->frameGeometry().x(),
@@ -456,17 +519,26 @@ void DockWidget::unDock()
       secondWidget->recreateTo( obj );
       DockSplitter* parentOfGroup = (DockSplitter*)obj;
       parentOfGroup->deactivate();
-
-      if ( parentOfGroup->getFirst() == group )
-        parentOfGroup->activate( secondWidget );
-      else
+      if ( parentOfGroup->getFirst() == group ) {
+				parentOfGroup->activate( secondWidget);
+        if ( ((DockWidget*)parentOfGroup->parent())->splitterOrientation == (int)KNewPanner::Vertical )
+          emit ((DockWidget*)parentOfGroup->getAnother(group))->docking( group, DockLeft );
+        else
+          emit ((DockWidget*)parentOfGroup->getAnother(group))->docking( group, DockTop );
+			} else {
         parentOfGroup->activate( 0L, secondWidget );
-
+        if ( ((DockWidget*)parentOfGroup->parent())->splitterOrientation == (int)KNewPanner::Vertical )
+          emit ((DockWidget*)parentOfGroup->getAnother(group))->docking( group, DockRight );
+        else
+          emit ((DockWidget*)parentOfGroup->getAnother(group))->docking( group, DockBottom );
+			}
+			parentOfGroup->show();
     }
   }
-  delete parentSplitterOfDockWidget;
+	secondWidget->m_curDockPos = group->m_curDockPos;
+	secondWidget->m_oldDockPos = group->m_oldDockPos;
   emit manager->replaceDock( group, secondWidget );
-  delete group;
+  delete parentSplitterOfDockWidget;
 
   if ( isV ) secondWidget->show();
 
@@ -483,11 +555,33 @@ void DockWidget::setKTMainWindow( KTMainWindow* mw )
   QApplication::syncX();
 }
 
-void DockWidget::slotCloseButtonClick()
+void DockWidget::slotDockBackButtonClick()
 {
-  if ( stayButton->isOn() ) return;
-  unDock();
-  if ( parent() == 0L ) hide();
+  if( m_oldBrotherDockWidget) {
+		// search all children if it tries to dock back to a child
+		bool found = false;
+		QObjectList* cl = queryList("DockWidget");
+   	QObjectListIt it( *cl );
+	  QObject * obj;
+   	while ( (obj=it.current()) != 0 ) {
+      ++it;
+      QWidget* widg = (QWidget*)obj;
+      if( widg == m_oldBrotherDockWidget)
+				found = true;
+   	}
+   	delete cl;
+
+		if( !found) {
+			// can dock back to the old brother dockwidget
+			manualDock( m_oldBrotherDockWidget, m_oldDockPos);
+			m_oldBrotherDockWidget = 0L;
+			return;
+		}
+	}
+
+	// else dockback to the dockmainwindow (default behaviour)
+  ((DockMainWindow*)manager->parent())->dockIn(this, m_oldDockPos);
+  m_oldBrotherDockWidget = 0L;
 }
 
 void DockWidget::setDockTabName( STabCtl* tab )
@@ -503,6 +597,15 @@ void DockWidget::setDockTabName( STabCtl* tab )
   if ( tab->parentWidget()->parent() != 0L )
     if ( tab->parentWidget()->parent()->isA("DockSplitter") ) ( (DockSplitter*)(tab->parentWidget()->parent()) )->updateName();
 }
+
+void DockWidget::slotOldBrotherIsLost()
+{
+	QObject::disconnect( m_oldBrotherDockWidget, SIGNAL(iMBeingClosed()),
+										   this, SLOT(slotOldBrotherIsLost()) );
+	m_oldBrotherDockWidget = 0;
+	repaint();
+}
+
 /**************************************************************************************/
 
 DockManager::DockManager( DockMainWindow* mainWindow, const char* name )
@@ -634,7 +737,7 @@ DockWidget* DockManager::findDockWidgetAt( const QPoint& pos )
   if ( childDockWidgetList->find(w) != -1 ) return 0L;
 
   DockWidget* www = (DockWidget*)w;
-  if ( www->sDocking == (int)DockNone ) return 0L;
+  if ( www->sDocking == DockNone ) return 0L;
 
   DockPosition curPos = DockNone;
   QPoint cpos  = www->mapFromGlobal( pos );
@@ -657,7 +760,7 @@ DockWidget* DockManager::findDockWidgetAt( const QPoint& pos )
         } else
             curPos = DockCenter;
 
-  if ( !(www->sDocking & (int)curPos) ) return 0L;
+  if ( !(www->sDocking & curPos) ) return 0L;
   if ( !(currentDragWidget->eDocking & (int)curPos) ) return 0L;
 
   return www;
@@ -706,7 +809,6 @@ void DockManager::findChildDockWidget( const QWidget* p, WidgetList*& list )
 
 void DockManager::startDrag( DockWidget* w )
 {
-  if ( w->stayButton->isOn() ) return;
   currentMoveWidget = 0L;
 	currentDragWidget = w;
   childDockWidgetList = new WidgetList();
@@ -798,7 +900,6 @@ debug("BEGIN Write Config");
     debug("  -Try to save %s", nList.current());
 		obj = getDockWidgetFromName( nList.current() );
     QString cname = obj->name();
-    c->writeEntry( cname+":stayButton", obj->stayButton->isOn() );
 /*************************************************************************************************/
     if ( obj->isGroup ){
       if ( findList.find( obj->firstName ) != -1 && findList.find( obj->lastName ) != -1 ){
@@ -967,7 +1068,6 @@ void DockManager::readConfig( const char* confName )
       } else obj->hide();
     }
     obj = getDockWidgetFromName( oname );
-    obj->stayButton->setOn( c->readBoolEntry( oname+":stayButton", false ) );
 
     nameList.next();
 	}
@@ -1081,7 +1181,7 @@ void DockManager::slotMenuActivated( int id )
   QWidget * obj = data->dock;
   if ( obj->isA("DockWidget") ){
     if ( data->hide ){
-      ((DockWidget*)data->dock)->slotCloseButtonClick();
+//F.B.      ((DockWidget*)data->dock)->slotCloseButtonClick();
     } else {
       if ( parent() == 0L )
         makeDockVisible((DockWidget*)data->dock);
@@ -1110,8 +1210,6 @@ void DockManager::makeDockVisible( DockWidget* dock )
     if ( dock->parentWidget()->isVisibleToTLW() ){
       ((STabCtl*)dock->parent())->setVisiblePage( dock );
     } else {
-      dock->stayButton->setOn( false );
-      dock->slotCloseButtonClick();
       dock->show();
     }
   } else {

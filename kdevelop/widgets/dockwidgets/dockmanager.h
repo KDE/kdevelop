@@ -1,8 +1,21 @@
 /***************************************************************************
-                         DockWidget part of KDEStudio
+                dockmanager.h  -  Def. DockWidget,DockManager
                              -------------------
-    copyright            : (C) 1999 by Judin Max
+    begin                : Now 21 21:08:00 1999
+    copyright            : (C) 2000 by Judin Max (novaprint@mtu-net.ru)
     email                : novaprint@mtu-net.ru
+
+		improved/changed by	 : Falk Brettschneider	(Jan 30 17:52 MET 2000)
+													 email: gigafalk@yahoo.com
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
  ***************************************************************************/
 
 #ifndef DOCKMANAGER_H
@@ -66,8 +79,13 @@ public:
   void setEnableDocking( int pos ){ eDocking = pos;}
   int enableDocking(){ return eDocking; }
 
+	void setDraggable( bool bDraggable) { m_bDraggable = bDraggable; }
+	bool draggable() { return m_bDraggable; }
+
   void setDockSite( int pos ){ sDocking = pos;}
   int dockSite(){ return sDocking; }
+
+	DockPosition currentDockPos() { return m_curDockPos; }
 
   void setKTMainWindow( KTMainWindow* );
 
@@ -80,29 +98,34 @@ protected:
 signals:
   //emit for dock when another DockWidget docking in this DockWidget
   void docking( DockWidget*, DockPosition );
+	void iMBeingClosed();
 
 public slots:
   void unDock();
 
 private slots:
-  void slotCloseButtonClick();
+  void slotDockBackButtonClick();
+	void slotOldBrotherIsLost();
+
+public: // was also private (F.B.)
+  void recreateToDesktop( QPoint );
+  void recreateTo( QWidget* );
 
 private:
   void setDockTabName( STabCtl* );
-  void recreateToDesktop( QPoint );
-  void recreateTo( QWidget* );
   QRect crect();
 
-  QWidget* widget;
-  SDockButton* closeButton;
-  SDockButton* stayButton;
   DockManager* manager;
+  QWidget* widget;
+  SDockButton* dockbackButton;
+//F.B.  SDockButton* stayButton;
+//  DockManager* manager;
   QWidget* Parent;
   QPixmap* drawBuffer;
   QPixmap* pix;
 
-  int eDocking;
-  int sDocking;
+  int eDocking;	// where can this be docked
+  int sDocking; // where can other DockWidgets dock in this
   int dockCaptionHeight;
   int buttonY;
 
@@ -112,6 +135,11 @@ private:
   int splitterOrientation;
   bool isGroup;
   bool isTabGroup;
+
+  bool m_bDraggable;
+	DockWidget* m_oldBrotherDockWidget;
+  DockPosition m_curDockPos;
+  DockPosition m_oldDockPos;
 };
 
 struct menuDockData

@@ -1,8 +1,21 @@
 /***************************************************************************
-                         DockWidget part of KDEStudio
+                dockmainwindow.cpp  -  Impl. DockMainWindow
                              -------------------
-    copyright            : (C) 1999 by Judin Max
+    begin                : Now 21 21:08:00 1999
+    copyright            : (C) 2000 by Judin Max (novaprint@mtu-net.ru)
     email                : novaprint@mtu-net.ru
+
+		improved/changed by	 : Falk Brettschneider	(Jan 30 17:52 MET 2000)
+													 email: gigafalk@yahoo.com
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
  ***************************************************************************/
 
 #include "dockmainwindow.h"
@@ -37,6 +50,8 @@ DockMainWindow::DockMainWindow( const char *name )
   mainDockWidget = new DockWidget( dockManager, "MainWindowDockWidget", QPixmap("") );
   mainDockWidget->recreateTo( this );
   setView( mainDockWidget );
+	mainDockWidget->setDraggable( false);											//F.B.
+	mainDockWidget->setDockSite(DockLeft|DockRight|DockTop|DockBottom);	//F.B.
   
   toolbar = new KToolBar( this );
   toolbar->insertButton( QPixmap(dock_close_top), 1, true, "Close top dock" );
