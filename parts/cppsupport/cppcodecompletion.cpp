@@ -868,6 +868,7 @@ QStringList CppCodeCompletion::getGlobalSignatureList( const QString& functionNa
 {
     QStringList list = m_pSupport->classStore()->globalScope()->getSortedMethodSignatureList( functionName );
     list += m_repository->getSignatureList( QStringList(), functionName, true );
+    list += m_repository->getSignatureList( QStringList() << functionName, functionName, true );
     return list;
 }
 
