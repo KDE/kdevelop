@@ -79,21 +79,49 @@ working with large projects as they enhance working object-orientated on C++ pro
 <H3><A NAME="ss10.2">10.2 The Classtools</A>
 </H3>
 
+<P>The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes. As the
+classviewer displays all objects by their occurence in the code, you sometimes want to get more information about classes without
+having to look inside the code. Therefore, the classtool dialogs are specified on displaying specific class attributes.
+<P>The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
+To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
+you specific trees for your class. These are:
 <P>
-<P>
-<H4>The Classtool Dialog</H4>
+<DL>
+<DT><B> Parents:</B><DD><P>The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
+class behaves in one or the other way, e.g. for dialogs your parent class could be <EM>QWidget</EM> or <EM>QDialog</EM>.
+<DT><B>Children:</B><DD><P>Displays the children classes that inherit the current class.
+<DT><B>Clients:</B><DD><P>Classes that make use of the selected class by an attribute in their class declaration
+<DT><B>Suppliers:</B><DD><P>The suppliers that give attributes to the selected class.
+<DT><B>Attributes:</B><DD><P>The attributes of the class by their name
+<DT><B>Methods:</B><DD><P>The Methods of the selected class
+<DT><B>Virtual Methods:</B><DD><P>The virtual methods that a class provides
+</DL>
 
-<P>
-<H4>Parents</H4>
-
-<P>
-<H4>Children</H4>
-
+Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
+attribute value.
 <P>
 <H3><A NAME="ss10.3">10.3 Managing Classes</A>
 </H3>
 
+<P>The Classbrowser additionally allows adding methods and attributes directly by dialogs. This means you don't have to type the
+classdeclaration and the implementation header yourself. After adding a method, you only have to set the formal parameters to the
+implementation header and, if the method requrires an attribute, to the declaration.
+<P><B>&raquo; How to add a method to a class</B>
 <P>
+<OL>
+<LI>select the class you want to add a method</LI>
+<LI>press the right mouse button; the popup menu appears</LI>
+<LI>select "Add member function".</LI>
+<LI>the "Add member function" dialog appears.</LI>
+<LI>insert the type, declaration and documentation for the method</LI>
+<LI>specify the access and the modifiers for the method</LI>
+<LI>press OK to exit the dialog</LI>
+</OL>
+<P>For adding a variable, this is the same action, just with selecting "Add member variable" in the popup menu.
+<P>The difference between the actions of these dialogs is that the adding of a variable will add the variable to the classdeclaration,
+the adding of a method will add the method's declaration and the method's implementation header to the sources. As the classviewer
+directly updates himself, you have a direct access to the new method implementation, so you only have to fill out the code for the
+actual purpose of the method.
 <P>
 <P ALIGN="RIGHT">
 

@@ -1327,7 +1327,7 @@ project by selecting it in the RFV. After saving your changes, call "Make User-M
 formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
 is used to create a personal search-index for your documentation automatically. The index is generally build during the
 installation process, but can also be build with the <ref id="General Configuration" name="KDevelop Setup"> dialog. For a description of
-the provided search functions see <ref id="Using the Search Index" name="Using the Search Index">
+the provided search functions see <ref id="Using the Search Index" name="Using the Search Index">.
 
 <sect2>Provided Documentation
 <p>
@@ -1841,9 +1841,38 @@ characters.
 <p>
 <itemize>
 <item><bf/Numbering & Border:/
+<itemize>
+<item><bf/numbering lines:/ adds line numbers to the document for printing
+<item><bf/borders:/ adds a border to the pages for printing
+<item><bf/numbering pages:/ numbers pages for printing
+<item><bf/align files:/ appends files for page numbering
+<item><bf/lines per page:/ the maximum value for lines per page
+</itemize>
 <item><bf/Format and TAB:/
+<itemize>
+<item><bf/set TAB size:/ sets the TAB size for interpreting TABs
+<item><bf/font for header:/ sets the font used for the header text
+<item><bf/font for body:/ sets the font for the body text (file contents)
+</itemize>
 <item><bf/Textprinting:/
+<itemize>
+<item><bf/cut lines:/ cuts the lines if too large. If unchecked, lines are broken
+<item><bf/replace non-printing character by space:/ replaces characters that the printing charset doesn't support by space characters
+</itemize>
 <item><bf/Other Options:/
+<itemize>
+<item><bf/table of contents:/ adds a table of contents page that contains information about printed files, page numbers etc.
+<item><bf/Highlight bars:/
+<itemize>
+<item><bf/highlight bars:/ highlights rows for printing
+<item><bf/cycle fo change:/ sets the number of rows to change highlight style
+</itemize>
+<item><bf/Wrapped line:/
+<itemize>
+<item><bf/mark wrapped lines:/ lines that are broken get marked for printing
+<item><bf/value for wrapped line:/ the preset value for the new line the line is broken into.
+</itemize>
+</itemize>
 </itemize>
 
 <sect4>Underlay
@@ -2463,36 +2492,318 @@ working with large projects as they enhance working object-orientated on C++ pro
 
 <sect1>The Classtools
 <p>
+The classtools are dialogs that makes it even more easier for the developer to get more information about his project's classes. As the
+classviewer displays all objects by their occurence in the code, you sometimes want to get more information about classes without
+having to look inside the code. Therefore, the classtool dialogs are specified on displaying specific class attributes.
 
-<sect2>The Classtool Dialog
-<p>
-<sect2>Parents
-<p>
-<sect2>Children
-<p>
+The classtool dialog is invoked by the popup menu over a class in the classviewer. Select "Classtool", and the dialog will appear.
+To get informed about a class, select the class in the combo box on top. Then the buttons in the toolbar provide functions that give
+you specific trees for your class. These are:
+
+<descrip>
+<tag/ Parents:/
+The parents of the selected class, which means the class it iherits. This is useful for multiple iheritance as well as to see why a
+class behaves in one or the other way, e.g. for dialogs your parent class could be <em/QWidget/ or <em/QDialog/.
+<tag/Children:/
+Displays the children classes that inherit the current class.
+<tag/Clients:/
+Classes that make use of the selected class by an attribute in their class declaration
+<tag/Suppliers:/
+The suppliers that give attributes to the selected class.
+<tag/Attributes:/ The attributes of the class by their name
+<tag/Methods:/ The Methods of the selected class
+<tag/Virtual Methods:/ The virtual methods that a class provides
+</descrip>
+Further, the selection of the attribute public, protected, private or all shows Attributes, Methods and Virtual Methods by their
+attribute value.
+
 <sect1>Managing Classes
 <p>
+The Classbrowser additionally allows adding methods and attributes directly by dialogs. This means you don't have to type the
+classdeclaration and the implementation header yourself. After adding a method, you only have to set the formal parameters to the
+implementation header and, if the method requrires an attribute, to the declaration.
+
+<bf>&raquo How to add a method to a class</bf>
+
+<enum>
+<item>select the class you want to add a method
+<item>press the right mouse button; the popup menu appears
+<item>select "Add member function".
+<item>the "Add member function" dialog appears.
+<item>insert the type, declaration and documentation for the method
+<item>specify the access and the modifiers for the method
+<item>press OK to exit the dialog
+</enum>
+
+For adding a variable, this is the same action, just with selecting "Add member variable" in the popup menu.
+
+The difference between the actions of these dialogs is that the adding of a variable will add the variable to the classdeclaration,
+the adding of a method will add the method's declaration and the method's implementation header to the sources. As the classviewer
+directly updates himself, you have a direct access to the new method implementation, so you only have to fill out the code for the
+actual purpose of the method.
 
 <sect>The Dialogeditor<label id="The Dialogeditor">
 <p>
+The KDevelop integrated Dialogeditor allows the easy construction of widgets and dialogs your application uses all by graphical means.
+You see the direct appearance of your dialog as it will be presented to the user. Using the dialogeditor is usually the first step you
+would take after creating a new project with the KAppWizard to create your main view, the user interaction dialogs and, after finishing
+the graphical work, the code generation. This way, your project will contain all the usually considered "difficult" parts that normally
+would take a long time to implement. Then, the "rest" of your work is implementing the functionality in the generated code. This
+chapter deals with how to use the dialogeditor to create your project widgets as well as what to do in case you see your widgets need
+corrections or additions during the further development process.
+
+You can switch to the Dialogeditor either by selecting "Dialogeditor" from the "Tools"-menu or by the according toolbar icon.
+To switch back to the Project Editor, select "KDevelop" from the dialogeditor's "Tools"-menu or by the icon in the toolbar.
+
+What else does the dialogeditor's interface offer you ?  Mainly, that its appearance is almost the same as the project editor in term
+of the main view separation as well as the menu- and toolbars. This allows you to make yourself accustomed with the dialogeditor very
+quickly and, as he completely interacts with the project management, stay in the dialogeditor if you want to control your
+build-process. Actions that require to switch back to KDevelop will do that automatically for you, like accessing the documentation
+browser. Just select the menu commands, and KDevelop reacts to your will.
+
 <sect1>Creating a New Dialog
 <p>
-<sect1>Adding Widgets
+After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
+the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
+provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
+information about widget design, see <em/The KDevelop Programming Handbook/.
+
+To create a new dialog, select "New" from the "File"-menu. Then you have to do certain selections and insert information:
+
+<sect2>Dialog Class
 <p>
-<sect1>Setting Properties
+The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
+Therefore, you have the following options:
+<enum>
+<item><bf/QWidget:/ the base class for all user interaction widgets provided by Qt. Used for main views and top-level widgets.
+<item><bf/QFrame:/ inherits QWidget and is used by numerous widgets as a base class. This is useful for widgets that already want to
+have a QFrame functionality in addition to QWidget methods.
+<item><bf/Custom:/ inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
+provided by your project or the libraries.
+<item><bf/QDialog:/ the base class for dialogs that you would inherit for user interaction like setting properties or changing values.
+<item><bf/QTabDialog:/ inherits QDialog and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
+widgets that you create.
+</enum>
+
+<sect2>Custom Properties
 <p>
+For the inheritance of a custom class as selected in the dialog class field, you have to specify the classname, which goes to "Custom
+Class". The dialogeditor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
+filename of the custom class has to be set.
+
+<sect2>Files
+<p>
+In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
+for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
+When inserting the Classname, the filenames are given by the dialogeditor, but you can as well change the filenames.
+
+Now, what about the files ? When you are ready with constructing the widget visually, you will have to generate the files that contain
+the implementation for your widget. As this will be a class, the dialog will exist by the header file containing the classdeclaration,
+a C++ file containing the method implementation for your widget's methods and slots. The Data file is the file that will contain a
+function that is called by the constructor of your widget, the <em/initDialog()/ method. The file itself shouldn't be changed as it
+will contain the generated code from the dialogeditor to create the widget on the screen. If you ever have to chage values, you should
+do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
+overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialogeditor writes;
+these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
+changees will get lost by the next code-creation.
+
+<sect2>Location
+<p>
+For generating the widget's sources, the dialogeditor needs to know the location where these will go. The default value for the output
+directory is the current project subdirectory containing the sources already present.
+
+<sect1>The Dialogeditor View
+<p>
+<sect2>The Mainview
+<p>
+The dialogeditor's view is logically seperated by:
+<itemize>
+<item>The Widgets Tabulator, containing the "Widgets", "Dialogs" and "Items" tabs. These are described in <ref id="Adding Widgets"
+name="Adding Widgets">.
+<item>The Widget-Editor, representing the editing view for creating your dialog. See <ref id="The Widget Editor" name="The Widget
+Editor">
+<item>The Properties window, containing a list of properties and their values, dependend on the currently selected widget in the widget
+editor. See <ref id="Setting Properties" name="Setting Properties"> for information how to specialize the widget's behavoir and look.
+</itemize>
+
+<sect2>Menubar, Toolbar and Statusbar differences to KDevelop
+<p>
+In Dialogeditor mode, KDevelop changes the menubar, toolbar and statusbar slighly to provide the functionality you need for creating
+widgets. These are:
+
+<sect3>Menubar
+<p>
+<bf/"File"-menu:/ replaces "New" with "New Dialog". "Open" allows to open a dialog definition file.
+
+<bf/"View"-menu:/ replaces "Tree-View" with "Widgets-View", en/disableing the Widgets-View tabulators; adds "Properties-View" to
+en/disable the Properties-View and "Grid Size" to let you specify the grid size in pixels for horizontal and vertical values.
+
+<bf/"Build"-menu:/ replaces "Compile File" with "Generate Sources". This lets you actually generate the sources for your dialog.
+
+<sect3>Toolbar
+<p>
+The toolbar contains a new icon for "New Dialog" as well as a replacement for "Compile File" by "Generate Sources".
+
+<sect3>Statusbar
+<p>
+The statusbar is providing you information about the currently selected widget, especially displaying the values for X
+and Y size in the coordinate system. For Statusbar help, you are provided the same functionality than in Project-editing mode.
+
+While changing widget size, the statusbar shows the current values for width and height of the selecte widget.
+
+<sect1>Adding Widgets<label id="Adding Widgets">
+<p>
+After specifying the dialogs or widgets class and filenames, you are ready to start creating the widget and filling it with contents.
+Adding low-level widgets to your dialog is a very easy task. Just select the widget you want to add from the "Wigets" tabulator on the
+left; if it is not visible, select "Widgets-View" from the "View"-menu.
+
+<sect2>The Widgets Tabulator
+<p>
+The widgets tab represents the available widgets you can place on the dialog. If you want information about a certain widget, press the
+right mouse button over a widget icon and select "Quick-Help" from the popup-menu. Mind that the dialogeditor automatically determines,
+if your project type is Qt-only or KDE. This prevents you from using KDE-widgets in a Qt application.
+
+Currently provided widgets are:
+
+<bf/QT-Widgets:/
+<itemize>
+<item>QWidget - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
+hirarchy within your dialog.
+<item>QLabel - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the purpose
+of the lineedit is or which varialbe e.g. a combo box allows to set.
+<item>QPushButton - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.
+<item>QCheckBox - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.
+<item>QLCDNumber - displays numbers in LCD style. Often used for clocks.
+<item>QRadioButton - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
+of them depend on each other, e.g. you have three radiobuttons, but ony want the user to choose one of three offered options.
+<item>More to come...
+</itemize>
+
+<bf/KDE-Widgets:/
+<itemize>
+<item>More to come...
+</itemize>
+
+After you selected a widget item, it is placed with default sizes and values on the editing window and marked selected by a frame and
+darkened corners. To resize a widget, move your mouse over one of the dark spots and your cursor will change to display which resizing
+directions are possible. Then press the mousebutton and move the mouse while hoding it. When you're finished with resizing the widget,
+release the mouse. While resizing, the statusbar displays the current position of the item by X and Y values and the current size by
+W(Width) and H(Height) values.
+
+<sect2>The Dialogs Tabulator
+<p>
+The dialogs tabulator is intended to let you open your project's dialogs by a mouseclick. As the dialog's structure is saved in a
+*.kdevdlg file within the directory that contains the generated files, only those dialog definition files are shown. Also mind that you
+don't delete these definition files.
+
+On selecting a dialog, it will be shown as by the state it was saved in the last editing step in the Widget-Editor view.
+
+<sect2>The Items Tabulator
+<p>
+The Items tabulator lets you have an overview over the currently present widget items of the dialog hirarchically. This means, that, as
+your background represents the parent of all widgets within the dialog, it is shown on top of the tree. The children of the main dialog
+are then listed in the next tree-level.
+
+On selecting an item, it gets marked in the edior view, as well as the properties are shown in the properties window.
+Using the items view is sometimes important if your widgets behavoir depends on the parent-child relationship. For more information
+see <em/The KDevelop Programming Handbook/.
+
+<sect1>The Widget Editor<label id="The Widget Editor">
+<p>
+The Widget Editor is the main view that is placed in the middle and where you are constructing your widget. After adding items, those
+can be selected and resized, as well as moved to the place you need them. Over all items, popup menus provide a quick access to
+functions like cut, copy and insert.
+
+<sect1>Setting Properties<label id="Setting Properties">
+<p>
+The properties window on the right is the place where you set the default behavoir for the widget and its items. It displays the
+pre-set values for each selected item right away; changing values will result in direct changes on the Widget Editor view, e.g. naming
+labels or buttons.
+
+To separate certain property values by their effect, the properties window contains four folders; selecting a folder will pop up all
+values for the properties group. All possible values are described below. Mind that the properties are dependend on the widget, e.g. a
+label and button will have a property for their on-screen name, while lineedits will have properties for methods like <em/setText()/.
+
+For a complete list of the available values per item, you should see the classreference of the widget which explains the used methods
+and all possible values. Note that most values are implemented in QWidget and are used for all widgets that inherit QWidget. Also mind
+that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
+the widget's constructors.
+
 <sect2>Appearance
 <p>
+<itemize>
+<item>BgColor: Background color of the widget
+<item>BgMode: Background mode of the widget
+<item>BgPalColor: Color pallette for the background
+<item>BgPixmap: filename for a background pixmap
+<item>Cursor: Cusor over the widget
+<item>Font: Font for the widget
+<item>Margin: sets the margin for a label
+<item>MaskBitmap: filename for a masking bitmap.
+<item>Pixmap: sets the pixmap filename to use
+</itemize>
+
 <sect2>C++ Code
 <p>
+<itemize>
+<item>AcceptsDrops: if set to true, the widget item will accept drops by drag'n drop mechanisms
+<item>Buddy:
+<item>Connections: connects the item's signals to slots
+<item>FocusProxy: the item that gives its focus to this widget.
+<item>HasFocus: sets if the item has the focus by default. Mind that only one item per dialog can have this value as true
+<item>ResizeToParent: resizes the widget to it's parent size (not visible in editing mode)
+<item>VarName: Variable name of the item. Chage this to names that describe the item's purpose.
+</itemize>
 <sect2>General
 <p>
+<itemize>
+<item>CursorPosition: sets the default cursor position in lineedits.
+<item>IsEnabled: sets if the widget will accept user events
+<item>IsHidden: sets the item to be visible(false) or hidden(true)
+<item>MaxLength: sets the maximum string length in lineedits
+<item>Name: sets the name of the widget. Mind that the name is different from the VarName in C++ Code.
+<item>Text: the text on labels, buttons and boxes, also pre-set text for lineedits.
+<item>isAutoDefault
+<item>isAutoRepeat
+<item>isAutoResize
+<item>isChecked
+<item>isDefault
+<item>isMenuButton
+<item>isToggleButton
+<item>isToggledOn
+<item>hasFrame
+<item>isTextSelected
+<item>NumDigits: sets the number of digits displayed in QLCDNumber
+<item>Value: pre-set value for QLCDNumber
+</itemize>
+
 <sect2>Geometry
 <p>
+<itemize>
+<item>Height: height of the item
+<item>IsFixedSize
+<item>MaxHeight: maximum value for Height
+<item>MaxWidth: maximum value for Width
+<item>MinHeight: minimum value for Height
+<item>MinWidth: minimum value for Width
+<item>SizeIncX: pixel steps for resize actions for X position
+<item>SizeIncY: pixel steps for resize actions for Y position
+<item>Width: width of the item
+<item>X: position horizontal, counted from the left corner
+<item>Y: position vertical, counted up to down
+</itemize>
+
 <sect1>Generating Files
 <p>
-<sect1>Implementing Functionality
-<p>
+After creating a widget, you have to generate the sourcecode to make it available in your project. This can be done either with the
+"Generate Sources" from the "Build"-menu or by the according icon in the dialogeditor toolbar. Your Makefiles will be updated
+automatically to include the new widget in the compiling process; therefore, after calling "Generate Sources", you can build your
+project again within the dialogeditor. The output window pops up below the Widget-Editor window as in Project Editor mode.
+
+Now that your project contains a new widget, your work as a programmer is to implement functionality to the used slots and eventually
+add other methods you may need.
+
+For more information about implementation of the widgets functions, see <em/The KDevelop Programming Handbook/.
 
 <sect>General Configuration<label id="General Configuration">
 <p>

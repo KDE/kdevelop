@@ -1,5 +1,10 @@
-1999-05-02  Sandy Meier  <smeier@rz.uni-potsdam.de>
-	* added "build->Make distribution" menuentry
+1999-05-03  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* finished work on the KDevelop User Manual, now completely covering
+	KDevelop - NOTE: the manual will be reviewed by Michael Farr and
+	updated for correctness of contents and spelling within the next week.
+ 
+1999-05-02  Sandy Meier  <smeier@rz.uni-potsdam.de> 	
+	* added "build->Make distribution" menuentry 	
 	* Qt-base-application "configure.in" doesn't check for KDE anymore
 
 1999-05-01  Sandy Meier  <smeier@rz.uni-potsdam.de>

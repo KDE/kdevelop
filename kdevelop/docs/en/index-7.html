@@ -231,11 +231,11 @@ will be automatically broken into the next line.
 <P>For changing the editor's general appearance, you can define a set of colors that the editor uses by selecting "Editor Colors"
 from the "Options"-menu. You can configure colors for:
 <UL>
-<LI> background:              the editor's background</LI>
-<LI> text background:           the background of displayed text</LI>
-<LI> selected:                the color of selected text to display the selection</LI>
-<LI> found:                   the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".</LI>
-<LI> selected + found:        the color of text selected to search for and found</LI>
+<LI><B>background:      </B>        the editor's background</LI>
+<LI><B>text background:  </B>           the background of displayed text</LI>
+<LI><B>selected:         </B>       the color of selected text to display the selection</LI>
+<LI><B>found:            </B>       the color of text found by a search via the menu "View"-"Search", "Repeat search" and "Replace".</LI>
+<LI><B>selected + found: </B>       the color of text selected to search for and found</LI>
 </UL>
 <P>
 <H4>Syntax Highlighting</H4>
@@ -473,10 +473,45 @@ characters.</LI>
 
 <P>
 <UL>
-<LI><B>Numbering &amp; Border:</B></LI>
-<LI><B>Format and TAB:</B></LI>
-<LI><B>Textprinting:</B></LI>
-<LI><B>Other Options:</B></LI>
+<LI><B>Numbering &amp; Border:</B>
+<UL>
+<LI><B>numbering lines:</B> adds line numbers to the document for printing</LI>
+<LI><B>borders:</B> adds a border to the pages for printing</LI>
+<LI><B>numbering pages:</B> numbers pages for printing</LI>
+<LI><B>align files:</B> appends files for page numbering</LI>
+<LI><B>lines per page:</B> the maximum value for lines per page</LI>
+</UL>
+</LI>
+<LI><B>Format and TAB:</B>
+<UL>
+<LI><B>set TAB size:</B> sets the TAB size for interpreting TABs</LI>
+<LI><B>font for header:</B> sets the font used for the header text</LI>
+<LI><B>font for body:</B> sets the font for the body text (file contents)</LI>
+</UL>
+</LI>
+<LI><B>Textprinting:</B>
+<UL>
+<LI><B>cut lines:</B> cuts the lines if too large. If unchecked, lines are broken</LI>
+<LI><B>replace non-printing character by space:</B> replaces characters that the printing charset doesn't support by space characters</LI>
+</UL>
+</LI>
+<LI><B>Other Options:</B>
+<UL>
+<LI><B>table of contents:</B> adds a table of contents page that contains information about printed files, page numbers etc.</LI>
+<LI><B>Highlight bars:</B>
+<UL>
+<LI><B>highlight bars:</B> highlights rows for printing</LI>
+<LI><B>cycle fo change:</B> sets the number of rows to change highlight style</LI>
+</UL>
+</LI>
+<LI><B>Wrapped line:</B>
+<UL>
+<LI><B>mark wrapped lines:</B> lines that are broken get marked for printing</LI>
+<LI><B>value for wrapped line:</B> the preset value for the new line the line is broken into.</LI>
+</UL>
+</LI>
+</UL>
+</LI>
 </UL>
 <P>
 <H4>Underlay</H4>
