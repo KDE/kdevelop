@@ -2995,7 +2995,6 @@ void KWriteDoc::comment(KWriteView *view, VConfig &c) {
 void KWriteDoc::unComment(KWriteView *view, VConfig &c) {
   PointStruc cursor;
   TextLine *textLine;
-  bool started;
 
   c.flags |= cfPersistent;
   cursor = c.cursor;
@@ -3006,9 +3005,10 @@ void KWriteDoc::unComment(KWriteView *view, VConfig &c) {
     if ((textLine->getChar(0) != '/') || (textLine->getChar(1) != '/')) return;
     recordStart(cursor);
     recordReplace(c.cursor,2,"",0);
+    recordEnd(view,c);
   } else {
     //unindent selection
-    started = false;
+    bool started = false;
     for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
       textLine = contents.at(c.cursor.y);
       if ((textLine->isSelected() || textLine->numSelected())
@@ -3022,8 +3022,8 @@ void KWriteDoc::unComment(KWriteView *view, VConfig &c) {
       }
     }
     c.cursor.y--;
+    if(started) recordEnd(view,c);
   }
-  recordEnd(view,c);
 }
 
 void KWriteDoc::indent(KWriteView *view, VConfig &c) {
@@ -3052,7 +3052,6 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
   PointStruc cursor;
   TextLine *textLine;
   int l;
-  bool started;
 
   c.flags |= cfPersistent;
   memset(s,' ',16);
@@ -3065,14 +3064,10 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
     recordStart(cursor);
     l = (textLine->getChar(0) == '\t') ? tabChars - 1 : 0;
     recordReplace(c.cursor,1,s,l);
+    recordEnd(view,c);
   } else {
     //unindent selection
-/*    for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
-      textLine = contents.at(c.cursor.y);
-      if ((textLine->isSelected() || textLine->numSelected())
-        && textLine->firstChar() == 0) return;
-    }*/
-    started = false;
+    bool started = false;
     for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
       textLine = contents.at(c.cursor.y);
       if ((textLine->isSelected() || textLine->numSelected())
@@ -3086,6 +3081,6 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
       }
     }
     c.cursor.y--;
+    if(started) recordEnd(view,c);
   }
-  recordEnd(view,c);
 }
