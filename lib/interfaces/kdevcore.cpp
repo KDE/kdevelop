@@ -85,7 +85,7 @@ EditorContext::EditorContext( const KURL &url, int line, int col,
 
 EditorContext::~EditorContext()
 {
-    kdDebug() << "EditorContext::~EditorContext()" << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
@@ -182,7 +182,7 @@ FileContext::FileContext( const QString &fileName, bool isDirectory )
 
 FileContext::~FileContext()
 {
-    kdDebug() << "FileContext::~FileContext()" << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
@@ -261,7 +261,7 @@ DocumentationContext &DocumentationContext::operator=( const DocumentationContex
 
 DocumentationContext::~DocumentationContext()
 {
-    kdDebug() << "DocumentationContext::~DocumentationContext()" << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
@@ -310,7 +310,7 @@ CodeModelItemContext::CodeModelItemContext( const CodeModelItem* item )
 
 CodeModelItemContext::~CodeModelItemContext()
 {
-    kdDebug() << "CodeModelItemContext::~CodeModelItemContext()" << endl;
+    kdDebug(9000) << k_funcinfo << endl;
     delete d;
     d = 0;
 }
@@ -352,7 +352,7 @@ ProjectModelItemContext::ProjectModelItemContext( const ProjectModelItem* item )
 
 ProjectModelItemContext::~ProjectModelItemContext()
 {
-    kdDebug() << "ProjectModelItemContext::~ProjectModelItemContext()" << endl;
+    kdDebug() << k_funcinfo << endl;
     delete d;
     d = 0;
 }

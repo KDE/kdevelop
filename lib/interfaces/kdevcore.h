@@ -61,11 +61,11 @@ class Context
 {
 public:
     /**
-    * Pre-defined context. More may be added so it is possible to add custom
-    * contexts.
-    * <strong>We reserve enum values until 1000 (yeah, it is one thousand )
-    * for kdevelop official context types.</strong>
-    */
+     * Pre-defined context. More may be added so it is possible to add custom
+     * contexts.
+     * <strong>We reserve enum values until 1000 (yeah, it is one thousand )
+     * for kdevelop official context types.</strong>
+     */
     enum 
     { 
 	EditorContext, 
@@ -76,25 +76,25 @@ public:
     };
 
     /**
-    * Implements this in the context so we can provide rtti
-    */
+     * Implements this in the context so we can provide rtti
+     */
     virtual int type() const = 0;
 
     /**
-    * Returns the type of this Context, so clients can discriminate
-    * between different file contexts.
-    */
+     * Returns the type of this Context, so clients can discriminate
+     * between different file contexts.
+     */
     bool hasType( int type ) const;
 
 protected:
     /**
-    * Constructor
-    */
+     * Constructor
+     */
     Context();
 
     /**
-    * Destructor
-    */
+     * Destructor
+     */
     virtual ~Context();
 };
 
@@ -105,47 +105,47 @@ class EditorContext : public Context
 {
 public:
     /**
-    * Builds a context for an editor part.
-    * @param url
-    * @param line the line number where the cursor is
-    * @param col the column number where the cursor is
-    * @param linestr the content of the line where the cursor is
-    * @param wordstr
-    */
+     * Builds a context for an editor part.
+     * @param url
+     * @param line the line number where the cursor is
+     * @param col the column number where the cursor is
+     * @param linestr the content of the line where the cursor is
+     * @param wordstr
+     */
     EditorContext( const KURL &url, int line, int col,
         const QString &linestr, const QString &wordstr );
     /**
-    * Destructor
-    */
+     * Destructor
+     */
     virtual ~EditorContext();
 
     virtual int type() const;
 
     /**
-    * Returns the url for the file which this context was invoked for.
-    */
+     * Returns the url for the file which this context was invoked for.
+     */
     const KURL &url() const;
 
     /**
-    * Returns the line number for the cursor position.
-    */
+     * Returns the line number for the cursor position.
+     */
     int line() const;
 
     /**
-    * Returns the column number for the cursor position.
-    */
+     * Returns the column number for the cursor position.
+     */
     int col() const;
 
     /**
-    * Returns a QString with the content of the line which this context was
-    * invoked for.
-    */
+     * Returns a QString with the content of the line which this context was
+     * invoked for.
+     */
     QString currentLine() const;
 
     /**
-    * Returns a QString containing the word near to the cursor when this
-    * context object was created.
-    */
+     * Returns a QString containing the word near to the cursor when this
+     * context object was created.
+     */
     QString currentWord() const;
 
 private:
@@ -163,33 +163,38 @@ private:
 class DocumentationContext : public Context
 {
 public:
+
     /**
-    * Builds context.
-    * @param url
-    * @param selection selected text
-    */
+     * Builds a DocumentationContext.
+     * @param url the URL that the context will be for
+     * @param selection selected text
+     */
     DocumentationContext( const QString &url, const QString &selection );
+
     /**
-    * Copy constructor
-    */
+     * Copy constructor
+     */
     DocumentationContext( const DocumentationContext &);
     DocumentationContext &operator=( const DocumentationContext &);
 
     /**
-    * Destructor
-    */
+     * Destructor
+     */
     virtual ~DocumentationContext();
 
+    /**
+     * Get the type of context
+     */
     virtual int type() const;
 
     /**
-    * Returns the url of the document this context was invoked for.
-    */
+     * Returns the url of the document this context was invoked for.
+     */
     QString url() const;
 
     /**
-    * Returns the selected text in the document.
-    */
+     * Returns the selected text in the document.
+     */
     QString selection() const;
 
 private:
@@ -210,42 +215,42 @@ class FileContext : public Context
 {
 public:
     /**
-    * <b>Compatibility mode</b> Build context using a single filename
-    * @param fileName absolute pathname of the file to be used for this file
-    *        context
-    * @param isDirectory
-    */
+     * <b>Compatibility mode</b> Build context using a single filename
+     * @param fileName absolute pathname of the file to be used for this file
+     *        context
+     * @param isDirectory
+     */
     FileContext( const QString &fileName, bool isDirectory );
     /**
-    * Builds the file context using a @see KURL::List
-    * @param someURLs
-    */
+     * Builds the file context using a @see KURL::List
+     * @param someURLs
+     */
     FileContext( const KURL::List &someURLs );
     /**
-    * Destructor
-    */
+     * Destructor
+     */
     virtual ~FileContext();
 
     virtual int type() const;
 
     /**
-    * <b>Compatibility mode</b>
-    * Returns the absolute name of the selected pathname (file or directory).
-    * If the context has been built using the standard costructor than this
-    * method will refer to the first path of the embedded KURL list.
-    */
+     * <b>Compatibility mode</b>
+     * Returns the absolute name of the selected pathname (file or directory).
+     * If the context has been built using the standard costructor than this
+     * method will refer to the first path of the embedded KURL list.
+     */
     QString fileName() const;
     /**
-    * <b>Compatibility mode</b>
-    * Returns true if currently stored file is a directory
-    * If the context has been built using the standard costructor than this
-    * method will refer to the first path of the embedded KURL list.
-    */
+     * <b>Compatibility mode</b>
+     * Returns true if currently stored file is a directory
+     * If the context has been built using the standard costructor than this
+     * method will refer to the first path of the embedded KURL list.
+     */
     bool isDirectory() const;
 
-    /*
-    * Returns a reference to the bunch of URLs
-    */
+    /**
+     * Returns a reference to the bunch of URLs
+     */
     const KURL::List &urls() const;
 
 private:
@@ -263,21 +268,21 @@ class CodeModelItemContext : public Context
 {
 public:
     /**
-    * Builds the context.
-    * @param item
-    */
+     * Builds the context.
+     * @param item
+     */
     CodeModelItemContext( const CodeModelItem* item );
 
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     virtual ~CodeModelItemContext();
 
     virtual int type() const;
 
     /**
-    * Returs the code model item for the selected item.
-    */
+     * Returns the code model item for the selected item.
+     */
     const CodeModelItem* item() const;
 
 private:
@@ -295,21 +300,21 @@ class ProjectModelItemContext : public Context
 {
 public:
     /**
-    * Builds the context.
-    * @param item
-    */
+     * Builds the context.
+     * @param item the item to build the context from
+     */
     ProjectModelItemContext( const ProjectModelItem* item );
 
     /**
-    * Destructor.
-    */
+     * Destructor.
+     */
     virtual ~ProjectModelItemContext();
 
     virtual int type() const;
 
     /**
-    * Returs the code model item for the selected item.
-    */
+     * Returns the code model item for the selected item.
+     */
     const ProjectModelItem* item() const;
 
 private:
@@ -321,11 +326,11 @@ private:
 };
 
 /**
-* A KDevCore class defines an object which is used to realized the cooperation
-* between the various plug-in which compose KDevelop: it defines virtual
-* function, signals that can be captured for menu customization, GUI utility
-* functions for adding new KActions, ...
-*/
+ * A KDevCore class defines an object which is used to realized the cooperation
+ * between the various plug-in which compose KDevelop: it defines virtual
+ * function, signals that can be captured for menu customization, GUI utility
+ * functions for adding new KActions, ...
+ */
 class KDevCore : public QObject
 {
     Q_OBJECT
@@ -338,20 +343,20 @@ public:
     enum Embedding { Replace, SplitHorizontal, SplitVertical };
 
     /**
-    * Constructor
-    * @param parent
-    * @param name
-    */
+     * The standard QObject-derived class constructor
+     * @param parent the QObject that's the parent of this class
+     * @param name the name of the class
+     */
     KDevCore( QObject *parent=0, const char *name=0 );
 
     /**
-    * Destructor
-    */
+     * Destructor
+     */
     virtual ~KDevCore();
 
     /**
-    * @param action
-    */
+     * @param action the action to insert
+     */
     virtual void insertNewAction( KAction* action ) = 0;
 
     /**
@@ -365,7 +370,8 @@ public:
     virtual void fillContextMenu(QPopupMenu *popup, const Context *context) = 0;
 
     /**
-       close the current project and opens the new one
+     * close the current project and open the new one
+     * \param projectFileName the file name of the project to open
      */
     virtual void openProject( const QString& projectFileName ) = 0;
 
@@ -380,7 +386,7 @@ public:
      * Returns a list of all available licenses.
      */
     virtual QDict< KDevLicense > licenses() = 0;
-    
+
 signals:
 
     /**
@@ -388,10 +394,12 @@ signals:
      * the main window has been shown.
      */
     void coreInitialized();
+
     /**
      * A project has been opened
      */
     void projectOpened();
+
     /**
      * The project is about to be closed.
      */
@@ -404,9 +412,11 @@ signals:
 
     /**
      * The user has clicked the stop button.
-     * @param which is 0 if all actions should be cancelled.
+     * If all actions should be cancelled, pass 0 to @p which
+     * @param which The KDevPlugin object to stop. 
      */
     void stopButtonClicked( KDevPlugin *which );
+
     /**
      * A context menu has been requested somewhere. Components
      * may hook some entries into it. More information on the
@@ -415,12 +425,14 @@ signals:
      *
      */
     void contextMenu( QPopupMenu *popupMenu, const Context *context );
+
     /**
      * Expects that a configuration page for use in the
      * KDevelop settings dialog is created by the component.
      * @param dlg the dialog which the configuration widget should be added to
      */
     void configWidget( KDialogBase *dlg );
+
     /**
      * Expects that a configuration page for use in the
      * Project settings dialog is created by the component.

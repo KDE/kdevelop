@@ -24,9 +24,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-/**
- * The interface to a app frontend
- */
+
 
 #ifndef _KDEVAPPFRONTEND_H_
 #define _KDEVAPPFRONTEND_H_
@@ -34,7 +32,16 @@
 #include <qstringlist.h>
 #include "kdevplugin.h"
 
-
+/**
+ * \short The interface to a app frontend.
+ *
+ * This interface is responsible for handling the running of an application in KDevelop.
+ * Currently, this interface defines ways to do the following:
+ * \li Check if the application is running
+ * \li Execute the application
+ * \li Stop the currently running application
+ * \li Control the output view as seen in the 'Application' tool dock
+ */
 class KDevAppFrontend : public KDevPlugin
 {
     Q_OBJECT
