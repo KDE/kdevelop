@@ -120,6 +120,11 @@ private:
   int readTypes(const QDomDocument & dom, QPtrList<FileType> &m_filetypes, bool enable);
 
   /**
+   * Add a file type
+   */
+  void addFileType(const QString & filename);
+
+  /**
    * The number (index to m_availableWidgets) of the widget currently in use
    */
   int m_selectedWidget;

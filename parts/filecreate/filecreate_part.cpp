@@ -180,28 +180,40 @@ void FileCreatePart::slotProjectOpened() {
     // default by scanning the templates directory if no template info
     // found in project file
     QDir templDir( project()->projectDirectory() + "/templates/" );
+    if (templDir.exists()) {
     templDir.setFilter( QDir::Files );
     const QFileInfoList * list = templDir.entryInfoList();
-    if( list ){
-      QFileInfoListIterator it( *list );
-      QFileInfo *fi;
-      while ( (fi = it.current()) != 0 ) {
-        FileType * filetype = getType(fi->fileName());
-        if (!filetype) {
-          filetype = new FileType;
-          filetype->setName( fi->fileName() + " files" );
-          filetype->setExt( fi->fileName() );
-          filetype->setCreateMethod("template");
-          m_filetypes.append(filetype);
+      if( list ){
+        QFileInfoListIterator it( *list );
+        QFileInfo *fi;
+        while ( (fi = it.current()) != 0 ) {
+          addFileType(fi->fileName());
+          ++it;
         }
-        filetype->setEnabled(true);
-        ++it;
       }
+    }
+    else { // it was probably an imported project
+      // KLUDGE: we need a better way to determine file types
+      // the current method looks a bit too restrictive
+      addFileType( "cpp" );
+      addFileType( "h" );
     }
   }
 
   // refresh view
   refresh();
+}
+
+void FileCreatePart::addFileType(const QString & filename) {
+  FileType * filetype = getType(filename);
+  if (!filetype) {
+    filetype = new FileType;
+    filetype->setName( filename + " files" );
+    filetype->setExt( filename );
+    filetype->setCreateMethod("template");
+    m_filetypes.append(filetype);
+  }
+  filetype->setEnabled(true);
 }
 
 void FileCreatePart::slotProjectClosed() {
