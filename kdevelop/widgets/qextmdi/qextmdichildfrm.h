@@ -170,6 +170,8 @@ public slots: // Public slots
 signals: // Signals
   /** is automatically emitted when slot_clickedInWindowMenu is called */
   void clickedInWindowMenu(int);
+  /** forces a mouse release event call */
+  void releaseMouse();
 };
 
 

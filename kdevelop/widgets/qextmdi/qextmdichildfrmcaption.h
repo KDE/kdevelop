@@ -45,12 +45,6 @@ public:
 	QextMdiChildFrmCaption(QextMdiChildFrm *parent);
 	~QextMdiChildFrmCaption();
 public:
-	QString m_szCaption;
-	bool m_bActive;
-	bool m_bCanMove;
-	QextMdiChildFrm *m_pParent;
-	QPoint m_relativeMousePos;
-public:
 	void setActive(bool bActive);
 	void setCaption(const QString& text);
 	int heightHint();
@@ -60,6 +54,20 @@ protected:
 	virtual void mouseDoubleClickEvent(QMouseEvent *);
 	virtual void mouseReleaseEvent(QMouseEvent *);
 	virtual void mouseMoveEvent(QMouseEvent *e);
+protected slots:
+	void slot_releaseMouse();
+
+// attributes
+public:
+	QString m_szCaption;
+	bool m_bActive;
+	bool m_bCanMove;
+	QextMdiChildFrm *m_pParent;
+
+protected: // Protected attributes
+	QPoint m_relativeMousePosInCaption;
+   /** it's for window dragging, stores the last mouse position, it's used to get the mouse move distance */
+   QPoint m_oldGlobalMousePos;
 };
 
 #endif //_QEXTMDICAPTION_H_

@@ -319,14 +319,17 @@ void QextMdiChildFrm::moveWindow( QPoint diff, QPoint relativeMousePos)
    int newMousePosX = newPosX + relativeMousePos.x();
    int newMousePosY = newPosY + relativeMousePos.y();
 
-   if( (newMousePosX < 0) || (newMousePosX > m_pManager->width()) )  return;
-   if( (newMousePosY < 0) || (newMousePosY > m_pManager->height()) ) return;
+   if( (newMousePosX < 0) || (newMousePosX > m_pManager->width())
+    || (newMousePosY < 0) || (newMousePosY > m_pManager->height()) ) {
+      emit releaseMouse();
+      return;
+   }
 
-	if(m_state==Maximized){
-		m_state=Normal;
-		m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
-	}
-	setGeometry( newPosX, newPosY, width(), height());
+   if(m_state==Maximized){
+      m_state=Normal;
+      m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
+   }
+   setGeometry( newPosX, newPosY, width(), height());
 }
 
 //================= getResizeCorner =============//

@@ -50,6 +50,7 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
 	m_pParent      = parent;
 	setBackgroundMode(NoBackground);
 	setFocusPolicy(NoFocus);
+	QObject::connect( parent, SIGNAL(releaseMouse()), this, SLOT(slot_releaseMouse()) );
 }
 
 //============== ~QextMdiChildFrmCaption =============//
@@ -63,8 +64,9 @@ QextMdiChildFrmCaption::~QextMdiChildFrmCaption()
 void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
    grabMouse();
-   m_relativeMousePos = e->pos() - pos() + QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
+   m_relativeMousePosInCaption = e->pos()- pos() + QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
 	//F.B. QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
+	m_oldGlobalMousePos = e->globalPos();
 	m_bCanMove=true;
 }
 
@@ -80,10 +82,12 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *)
 //============== mouseMoveEvent =============//
 void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 {
-	if(m_bCanMove){
-		QPoint diff = (e->pos() - m_relativeMousePos);
-		if(e->state() & LeftButton)m_pParent->moveWindow( diff, m_relativeMousePos);
-	}
+   if(m_bCanMove){
+      QPoint newGlobalMousePos = e->globalPos();
+      QPoint diff = newGlobalMousePos - m_oldGlobalMousePos;
+      if(e->state() & LeftButton)m_pParent->moveWindow( diff, m_relativeMousePosInCaption);
+      m_oldGlobalMousePos = newGlobalMousePos;
+   }
 }
 
 //=============== setActive ===============//
@@ -145,3 +149,12 @@ void QextMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
 {
 	m_pParent->maximizePressed();
 }
+
+//============= slot_releaseMouse ===========//
+
+void QextMdiChildFrmCaption::slot_releaseMouse()
+{
+	QMouseEvent* pME = 0;	// pME is not used
+	mouseReleaseEvent( pME);
+}
+
