@@ -62,6 +62,11 @@ class CAddExistingFileDlg;
 #include "resource.h"
 #include "cprintdlg.h"
 
+#include "./kdlgedit/kdlgedit.h"
+#include "./kdlgedit/kdlgeditwidget.h"
+#include "./kdlgedit/kdlgpropwidget.h"
+#include "./kdlgedit/kdlgwidgets.h"
+#include "./kdlgedit/kdlgdialogs.h"
 
 
 /** the mainclass in kdevelop
@@ -85,6 +90,11 @@ public:
   void refreshTrees();
 	void setKeyAccel();
 
+	void initKDlg();
+	void initKDlgMenuBar();
+	void initKDlgToolBar();
+	void initKDlgStatusBar();
+	
   void enableCommand(int id_);
   void disableCommand(int id_);
 	
@@ -100,7 +110,7 @@ public:
   void switchToFile(QString filename); // filename = abs
   void switchToWorkspace(int id);
   int getTabLocation(QString filename);
-  
+
   /** set the correct toolbar and menubar,if a process is running
     * @param enable if true than enable,otherwise disable
     */
@@ -298,6 +308,14 @@ public:
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 
+
+////////////////////////
+// KDlgEdit-View-Menu entries -- managed by kdevelop
+///////////////////////
+  void slotKDlgViewPropView();
+  void slotKDlgViewToolbar();
+  void slotKDlgViewStatusbar();
+
 ////////////////////////
 // All slots which are used if the user clicks or selects something in the view
 ///////////////////////
@@ -381,14 +399,17 @@ public:
   QString searchToolGetURL(QString str);
   void refreshClassCombos();
   void  saveCurrentWorkspaceIntoProject();
-  
+
+  void switchToKDevelop();
+  void switchToKDlgEdit();
+
 protected:
   virtual void closeEvent(QCloseEvent* e);
   //  void mousePressEvent(QMouseEvent* event);
 
 private:
-  //the menus
-  QPopupMenu* file_menu;
+  //the menus for kdevelop main
+  QPopupMenu* file_menu;				
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
   QPopupMenu* project_menu;
@@ -399,10 +420,27 @@ private:
   QPopupMenu* menu_buffers;
   QPopupMenu* help_menu;
   QWhatsThis* whats_this;
-  
+
+  // the menus for the dialogeditor- specific. other menus inserted as the standard above
+	QPopupMenu* kdlg_file_menu;
+  QPopupMenu* kdlg_edit_menu;
+  QPopupMenu* kdlg_view_menu;
+  QPopupMenu* kdlg_build_menu;
+  QPopupMenu* kdlg_tools_menu;
+  QPopupMenu* kdlg_help_menu;
+	
+  KMenuBar* kdev_menubar;
+  KMenuBar* kdlg_menubar;
+
+  KStatusBar* kdev_statusbar;
+  KStatusBar* kdlg_statusbar;
+
   KNewPanner* view;
   KNewPanner* top_panner;
-  
+	KNewPanner* kdlg_top_panner;  // devides the top_panner for edit and properties widget of the dialogeditor
+
+	KDlgEdit* kdlgedit;          // main class for the dialogeditor- handles menu/toolbar etc. events specified for the dialogeditor
+	
   bool beep; // set this to true, if you want a beep after a process,slotProcessExited()
   
 
@@ -427,6 +465,12 @@ private:
   CTabCtl* t_tab_view; // the tabbar for the trees
   CTabCtl* o_tab_view; // the tabbar for the output_widgets 
 
+  CTabCtl* kdlg_tabctl;  // the tabbar for the kdlg view
+  KDlgEditWidget* kdlg_edit_widget; // the editing view of kdlg
+  KDlgPropWidget* kdlg_prop_widget; // the properties window of kdlg
+  KDlgWidgets* kdlg_widgets_view;  // the first tab of kdlg_tabctl
+  KDlgDialogs* kdlg_dialogs_view;  // the second tab of kldg_tabctl
+
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources
   CEditWidget* cpp_widget;    //  the editwidget for cpp files
@@ -444,6 +488,7 @@ private:
 
   int tree_view_pos;
   int output_view_pos;
+  int kdlg_prop_view_pos;
   int workspace;
 
   QString version;
@@ -483,6 +528,14 @@ private:
 };
 
 #endif
+
+
+
+
+
+
+
+
 
 
 

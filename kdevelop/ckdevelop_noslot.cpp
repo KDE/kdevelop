@@ -163,6 +163,113 @@ void CKDevelop::switchToFile(QString filename){
 
 }
 
+void CKDevelop::switchToKDevelop(){
+  this->setUpdatesEnabled(false);
+
+  //////// change the mainview ////////
+  kdlg_tabctl->hide();
+  kdlg_top_panner->hide();
+  s_tab_view->show();
+  t_tab_view->show();
+
+  top_panner->hide();
+  top_panner->deactivate();
+  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
+  top_panner->show();
+  //////// change the bars ///////////
+  kdlg_menubar->hide();
+  kdev_menubar->show();
+  setMenu(kdev_menubar);
+
+  kdlg_statusbar->hide();
+  kdev_statusbar->show();
+  setStatusBar(kdev_statusbar);
+
+  toolBar(ID_KDLG_TOOLBAR)->hide();
+  toolBar()->show();
+  toolBar(ID_BROWSER_TOOLBAR)->show();
+
+  ///////// reset bar status ////////////
+  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
+    kdev_statusbar->show();
+  else
+    kdev_statusbar->hide();
+
+  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
+    enableToolBar(KToolBar::Show);
+  else
+    enableToolBar(KToolBar::Hide);
+
+  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
+    enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
+  else
+    enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
+
+  ///////// reset the views status ///////////////
+  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+    showTreeView();
+  else
+    showTreeView(false);
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
+    showOutputView();
+  else
+    showOutputView(false);
+
+  this->setUpdatesEnabled(true);
+  this->repaint();
+
+}
+void CKDevelop::switchToKDlgEdit(){
+  this->setUpdatesEnabled(false);
+  //////// change the mainview ////////
+  s_tab_view->hide();
+  t_tab_view->hide();
+  kdlg_tabctl->show();
+  kdlg_top_panner->show();
+  top_panner->hide();
+  top_panner->deactivate();
+  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
+  top_panner->show();
+  //////// change the bars ///////////
+  kdev_menubar->hide();
+  kdlg_menubar->show();
+  setMenu(kdlg_menubar);
+
+  kdev_statusbar->hide();
+  kdlg_statusbar->show();
+  setStatusBar(kdlg_statusbar);
+
+  toolBar()->hide();
+  toolBar(ID_BROWSER_TOOLBAR)->hide();
+  toolBar(ID_KDLG_TOOLBAR)->show();
+
+  ///////// reset bar status ////////////
+  if(kdlg_view_menu->isItemChecked(ID_VIEW_STATUSBAR))
+    kdlg_statusbar->show();
+  else
+    kdlg_statusbar->hide();
+
+  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR))
+    enableToolBar(KToolBar::Show, ID_KDLG_TOOLBAR);
+  else
+    enableToolBar(KToolBar::Hide, ID_KDLG_TOOLBAR);
+
+
+  ///////// reset the views status ///////////////
+  if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+    showTreeView();
+  else
+    showTreeView(false);
+
+  if(kdlg_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
+    showOutputView();
+  else
+    showOutputView(false);
+
+  this->setUpdatesEnabled(true);
+  this->repaint();
+}
+
 void CKDevelop::setToolMenuProcess(bool enable){
 
   if (enable){
@@ -234,5 +341,49 @@ void CKDevelop::switchToWorkspace(int id){
   }
   else{showTreeView(false);}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

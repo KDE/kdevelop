@@ -16,7 +16,7 @@ AM_CONFIG_HEADER(config.h)
 dnl inits some variables needed by automake's Makefiles.
 dnl add here the package name and it's version number. It will
 dnl be defined in config.h and in the Makefiles
-AM_INIT_AUTOMAKE(kdevelop, 0.3.1)
+AM_INIT_AUTOMAKE(kdevelop,)
 
 dnl sets the prefix to $KDEDIR or /usr/local/kde (if no $KDEDIR
 dnl set) for the case, that there is no --prefix
@@ -57,8 +57,9 @@ dnl examples are specific headers, libraries, etc.
 dnl everything to compile and run a KDE program is already checked
 
 dnl add here all your Makefiles. This are created by configure
-AC_OUTPUT(Makefile \
+AC_OUTPUT(Makefile
 	kdevelop/kwrite/Makefile \
+	kdevelop/kdlgedit/Makefile \
 	kdevelop/templates/Makefile \
 	kdevelop/tools/Makefile \
 	kdevelop/docs/Makefile \

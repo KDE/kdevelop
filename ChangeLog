@@ -1,3 +1,11 @@
+1999-03-18  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * added frame classes for kdlgedit and static library construction
+  * added construction of kdlgedit view and *bars including the base widgets of the kdlgedit library
+  * added tool menu entry KDialogEdit and KDevelop in the KDlgEdit menu to switch back and forth
+  * added switching from KDevelop to KDlgEdit and back including view and bars status
+  * added turn on/off of the properties widget of the KDlgEdit, Outputview and Widgetswindow
+  * build-menu inserted in the KDlgEdit interface as well
+
 1999-03-15  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added indent/unindent to the editwidgets
 	* en/disalbed cut/copy/paste for rb-menu of the editwidgets

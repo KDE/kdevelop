@@ -128,10 +128,10 @@
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
-
-#define ID_TOOLS_KICONEDIT          15010
-#define ID_TOOLS_KDBG               15020
-#define ID_TOOLS_KTRANSLATOR        15030
+#define ID_TOOLS_KDLGEDIT           15010
+#define ID_TOOLS_KICONEDIT          15020
+#define ID_TOOLS_KDBG               15030
+#define ID_TOOLS_KTRANSLATOR        15040
                                      
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries 
@@ -150,9 +150,6 @@
 #define ID_OPTIONS_PRINT_ENSCRIPT      16038
 
 #define ID_OPTIONS_KDEVELOP            16040
-
-
-
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
@@ -177,6 +174,36 @@
 
 #define ID_HELP_WHATS_THIS     			18040
 
+///////////////////////////////////////////////////////////////////
+// KDlg-File-menu-entries
+#define ID_KDLG_FILE_NEW            20010
+#define ID_KDLG_FILE_OPEN           20020
+#define ID_KDLG_FILE_CLOSE          20030
+#define ID_KDLG_FILE_SAVE           20040
+///////////////////////////////////////////////////////////////////
+// KDlg-Edit-menu-entries
+#define ID_KDLG_EDIT_UNDO           20110
+#define ID_KDLG_EDIT_REDO           20120
+
+#define ID_KDLG_EDIT_CUT            20130
+#define ID_KDLG_EDIT_COPY           20140
+#define ID_KDLG_EDIT_PASTE          20150
+
+#define ID_KDLG_EDIT_PROPERTIES     20160
+
+///////////////////////////////////////////////////////////////////
+// KDlg-View-menu-entries
+#define ID_KDLG_VIEW_PROPVIEW       20220
+
+#define ID_KDLG_VIEW_TOOLBAR        20230
+#define ID_KDLG_VIEW_STATUSBAR      20240
+
+#define ID_KDLG_VIEW_REFRESH        20250
+
+///////////////////////////////////////////////////////////////////
+// KDlg-Tools-menu-entries
+#define ID_KDLG_TOOLS_KDEVELOP      20310
+
 
 ///////////////////////////////////////////////////////////////////
 // tab-ID's for the s_tab_view
@@ -199,7 +226,10 @@
 #define STDINSTDOUT 1
 #define STDERR 2
 
+///////////////////////////////////////////////////////////////////
+// Toolbar ID's
 #define ID_BROWSER_TOOLBAR 1
+#define ID_KDLG_TOOLBAR 2
 
 
 ///////////////////////////////////////////////////////////////////
@@ -212,6 +242,12 @@
 #define ID_STATUS_EMPTY_2           1005
 #define ID_STATUS_PROGRESS          1006
 #define IDS_DEFAULT                 i18n("Ready.")
+
+///////////////////////////////////////////////////////////////////
+// ID's for the statusbar
+#define ID_KDLG_STATUS_WIDGET       2001
+#define ID_KDLG_STATUS_XY           2002
+#define ID_KDLG_STATUS_WH           2003
 
 ///////////////////////////////////////////////////////////////////
 // KEY-VALUES
@@ -321,6 +357,10 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
+
+
+
 
 
 

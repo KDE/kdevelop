@@ -371,12 +371,14 @@ void CKDevelop::slotViewGotoLine(){
 void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
+    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     tree_view_pos=top_panner->separatorPos();
     top_panner->setSeparatorPos(0);
   }
   else{
     top_panner->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
+    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
   }
   QRect rMainGeom= top_panner->geometry();
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -412,12 +414,14 @@ void CKDevelop::showTreeView(bool show){
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
     view->setSeparatorPos(100);
   }
   else{
     view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
   }
   QRect rMainGeom= view->geometry();
   view->resize(rMainGeom.width()+1,rMainGeom.height());
@@ -476,6 +480,7 @@ void CKDevelop::slotViewTStatusbar(){
   
   bViewStatusbar=!bViewStatusbar;
   view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
+  kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
   enableStatusBar();
   
 }
@@ -1148,6 +1153,36 @@ KDevelop contains sourcecode from KWrite 0.98
 
 }
 
+void CKDevelop::slotKDlgViewPropView(){
+  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
+    kdlg_prop_view_pos=kdlg_top_panner->separatorPos();
+    kdlg_top_panner->setSeparatorPos(100);
+  }
+  else{
+    kdlg_top_panner->setSeparatorPos(kdlg_prop_view_pos);
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
+  }
+  QRect rMainGeom= kdlg_top_panner->geometry();
+  kdlg_top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
+  kdlg_top_panner->resize(rMainGeom.width(),rMainGeom.height());
+
+}
+void CKDevelop::slotKDlgViewToolbar(){
+  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR)){
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,false);
+    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
+  }
+  else{
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
+    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
+  }
+}
+
+void CKDevelop::slotKDlgViewStatusbar(){
+
+}
+
 
 /////////////////////////////////////////////////////////////////////
 // Other slots and functions needed
@@ -1171,16 +1206,22 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
 
 void CKDevelop::enableCommand(int id_)
 {
+//  kdev_menubar->setItemEnabled(id_,true);
+//  kdlg_menubar->setItemEnabled(id_,true);
   menuBar()->setItemEnabled(id_,true);
   toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,true);
 }
 
 void CKDevelop::disableCommand(int id_)
 {
+//  kdev_menubar->setItemEnabled(id_,false);
+//  kdlg_menubar->setItemEnabled(id_,false);
   menuBar()->setItemEnabled(id_,false);
   toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
+  toolBar(ID_KDLG_TOOLBAR)->setItemEnabled(id_,false);
 }
 
 void CKDevelop::slotNewStatus()
@@ -1963,6 +2004,20 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -36,7 +36,16 @@ CKDevelop::CKDevelop(){
 
   init();
   initConnections();
-  initProject(); 
+  initKDlg();    // create the KDialogEditor
+
+  config->setGroup("General Options");
+  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
+  if(switchKDevelop)
+    switchToKDevelop();
+  else
+    switchToKDlgEdit();
+
+  initProject();
 	cerr << "initProject\n";
   config->setGroup("Files");
   filename = config->readEntry("browser_file","");
@@ -55,6 +64,8 @@ CKDevelop::CKDevelop(){
   bool showOutput=config->readBoolEntry("show_output_view",false);
   if(showOutput)
   	slotViewTOutputView();
+
+  	
 }
 
 
@@ -216,9 +227,11 @@ void CKDevelop::init(){
   s_tab_view->addTab(browser_widget,i18n("Documentation-Browser"));
   s_tab_view->addTab(swallow_widget,i18n("Tools"));
 
+
+
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
   view->activate(top_panner,o_tab_view); 
-  
+
   output_view_pos=view->separatorPos();
   tree_view_pos=top_panner->separatorPos();
 
@@ -366,7 +379,8 @@ void CKDevelop::initKeyAccel(){
   accel->readSettings();
 }
 void CKDevelop::initMenu(){
-
+//  KDEVELOP MENUBAR //
+  kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
 
@@ -395,7 +409,7 @@ void CKDevelop::initMenu(){
   file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()),0 ,ID_FILE_QUIT);
 
-  menuBar()->insertItem(i18n("&File"), file_menu);
+  kdev_menubar->insertItem(i18n("&File"), file_menu);
   disableCommand(ID_FILE_NEW);
   disableCommand(ID_FILE_PRINT);
 
@@ -436,7 +450,7 @@ void CKDevelop::initMenu(){
   edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
   edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
   
-  menuBar()->insertItem(i18n("&Edit"), edit_menu);
+  kdev_menubar->insertItem(i18n("&Edit"), edit_menu);
 
   disableCommand(ID_EDIT_UNDO);
   disableCommand(ID_EDIT_REDO);
@@ -479,7 +493,7 @@ void CKDevelop::initMenu(){
   view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
 
-  menuBar()->insertItem(i18n("&View"), view_menu);
+  kdev_menubar->insertItem(i18n("&View"), view_menu);
   
   
   // the bookmarks menu
@@ -487,7 +501,7 @@ void CKDevelop::initMenu(){
   //   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
   //   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
   //   p->insertSeparator();
-  //   menuBar()->insertItem(i18n("&Bookmarks"),p);
+  //   kdev_menubar->insertItem(i18n("&Bookmarks"),p);
   
   
   ///////////////////////////////////////////////////////////////////
@@ -528,7 +542,7 @@ void CKDevelop::initMenu(){
   //  project_menu->insertItem(i18n("Workspaces"),workspaces_submenu,ID_PROJECT_WORKSPACES);
   //  connect(workspaces_submenu, SIGNAL(activated(int)), SLOT(slotProjectWorkspaces(int)));
 
-  menuBar()->insertItem(i18n("&Project"), project_menu);
+  kdev_menubar->insertItem(i18n("&Project"), project_menu);
 
   disableCommand(ID_PROJECT_ADD_FILE_NEW);
   disableCommand(ID_PROJECT_CLOSE);
@@ -577,7 +591,7 @@ void CKDevelop::initMenu(){
   build_menu->insertItem(i18n("Make &User-Manual"), this, 
 			 SLOT(slotBuildManual()),0,ID_BUILD_MAKE_USER_MANUAL);
   
-  menuBar()->insertItem(i18n("&Build"), build_menu);
+  kdev_menubar->insertItem(i18n("&Build"), build_menu);
 
   disableCommand(ID_BUILD_RUN);
   disableCommand(ID_BUILD_DEBUG);
@@ -598,10 +612,11 @@ void CKDevelop::initMenu(){
 // Tools-menu entries
 
   tools_menu = new QPopupMenu;
+  tools_menu->insertItem(i18n("KDialogEdit"),this,SLOT(switchToKDlgEdit()),0,ID_TOOLS_KDLGEDIT);
   tools_menu->insertItem(i18n("&KDbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
   tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
   tools_menu->insertItem(i18n("KTranslator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
-  menuBar()->insertItem(i18n("&Tools"), tools_menu);
+  kdev_menubar->insertItem(i18n("&Tools"), tools_menu);
 
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries
@@ -630,14 +645,14 @@ void CKDevelop::initMenu(){
   options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
 
-  menuBar()->insertItem(i18n("&Options"), options_menu);
+  kdev_menubar->insertItem(i18n("&Options"), options_menu);
   
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
   
   menu_buffers = new QPopupMenu;
-  menuBar()->insertItem(i18n("&Window"), menu_buffers);
-  menuBar()->insertSeparator();
+  kdev_menubar->insertItem(i18n("&Window"), menu_buffers);
+  kdev_menubar->insertSeparator();
   
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
@@ -671,7 +686,7 @@ void CKDevelop::initMenu(){
   //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);
-  menuBar()->insertItem(i18n("&Help"), help_menu);
+  kdev_menubar->insertItem(i18n("&Help"), help_menu);
 
   disableCommand(ID_HELP_BACK);
   disableCommand(ID_HELP_FORWARD);
@@ -803,28 +818,31 @@ void CKDevelop::initToolbar(){
 }
 
 void CKDevelop::initStatusBar(){
+  kdev_statusbar= new KStatusBar(this,"KDevelop_statusbar");
 
-  statProg = new KProgress(0,100,0,KProgress::Horizontal,statusBar(),"Progressbar");
+  statProg = new KProgress(0,100,0,KProgress::Horizontal,kdev_statusbar,"Progressbar");
   statProg->setBarColor("blue");
   statProg->setBarStyle(KProgress::Solid);  // Solid or Blocked
   statProg->setTextEnabled(false);
   statProg->setBackgroundMode(PaletteBackground);
   statProg->setLineWidth( 1 );                // hehe, this *is* tricky...
 
-  statusBar()->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
-  statusBar()->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
-  statusBar()->changeItem("", ID_STATUS_EMPTY);
-  statusBar()->changeItem("", ID_STATUS_LN_CLM);
+  kdev_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
+  kdev_statusbar->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
+  kdev_statusbar->changeItem("", ID_STATUS_EMPTY);
+  kdev_statusbar->changeItem("", ID_STATUS_LN_CLM);
 
-  statusBar()->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
-//  statusBar()->insertItem(i18n(" CAPS "), ID_STATUS_CAPS);
-  statusBar()->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
-  statusBar()->changeItem("", ID_STATUS_EMPTY_2);
+  kdev_statusbar->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
+//  kdev_statusbar->insertItem(i18n(" CAPS "), ID_STATUS_CAPS);
+  kdev_statusbar->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
+  kdev_statusbar->changeItem("", ID_STATUS_EMPTY_2);
 
-//  statusBar()->insertWidget(statProg,150, ID_STATUS_PROGRESS);
-  statusBar()->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
-  statusBar()->setInsertOrder(KStatusBar::RightToLeft);
-  statusBar()->setAlignment(ID_STATUS_INS_OVR, AlignCenter);
+//  kdev_statusbar->insertWidget(statProg,150, ID_STATUS_PROGRESS);
+  kdev_statusbar->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
+  kdev_statusbar->setInsertOrder(KStatusBar::RightToLeft);
+  kdev_statusbar->setAlignment(ID_STATUS_INS_OVR, AlignCenter);
+
+  setStatusBar(kdev_statusbar);
   enableStatusBar();
   if(!bViewStatusbar)
   enableStatusBar();
@@ -948,7 +966,6 @@ void CKDevelop::setKeyAccel(){
   accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
 
-
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
   accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
   accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
@@ -962,6 +979,32 @@ void CKDevelop::setKeyAccel(){
   accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
