@@ -21,10 +21,10 @@ class DbgController;
 class DbgButton;
 class DbgToolbar;
 
-#include <kwm.h>       // Needed for "Window" (Xlib/qt inclusion order is tricky)
 #include <qframe.h>
 #include <qlabel.h>
 
+#include <X11/Xlib.h>  // Needed for "Window" (Xlib/qt inclusion order is tricky)
 /**
   *@author John Birch
   */
