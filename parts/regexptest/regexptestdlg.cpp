@@ -85,9 +85,11 @@ void RegexpTestDialog::somethingChanged()
             case REG_BADPAT:
                 regcompMessage = i18n("Invalid use of pattern operators");
                 break;
+#ifdef REG_ESIZE
             case REG_ESIZE:
                 regcompMessage = i18n("Huh? Regular expression too large");
                 break;
+#endif
             default:
                 regcompMessage = i18n("Unknown error");
                 break;
