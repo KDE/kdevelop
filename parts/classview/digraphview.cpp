@@ -43,7 +43,7 @@ struct DigraphEdge
 
 
 DigraphView::DigraphView(QWidget *parent, const char *name)
-    : QScrollView(parent, name, WRepaintNoErase|WNorthWestGravity|WResizeNoErase)
+    : QScrollView(parent, name, WRepaintNoErase|WStaticContents|WResizeNoErase)
 {
     viewport()->setBackgroundMode(PaletteBase);
     
@@ -99,7 +99,7 @@ void DigraphView::addRenderedNode(const QString &name,
 
 
 void DigraphView::addRenderedEdge(const QString &/*name1*/, const QString &/*name2*/,
-                                  QArray<double> coords)
+                                  QMemArray<double> coords)
 {
     if (coords.count() < 4)
         return;
@@ -208,7 +208,7 @@ void DigraphView::parseDotResults(const QStringList &list)
         } else if (tokens[0] == "edge") {
             if (tokens.count() < 8)
                 continue;
-            QArray<double> coords(tokens.count()-6);
+            QMemArray<double> coords(tokens.count()-6);
             for (uint i=0; i != tokens.count()-6; ++i)
                 coords[i] = tokens[i+4].toDouble();
             addRenderedEdge(tokens[1], tokens[2], coords);

@@ -50,7 +50,7 @@ private:
     void addRenderedNode(const QString &name,
                          double x, double y, double w, double h);
     void addRenderedEdge(const QString &name1, const QString &name2,
-                         QArray<double> coords);
+                         QMemArray<double> coords);
     static QStringList splitLine(QString str);
     void parseDotResults(const QStringList &list);
     

@@ -136,7 +136,7 @@ bool DocSearchDialog::performSearch()
     // to block the user interface, but still get repaint
     // events. Hack taken from NetAccess...
     kapp->setOverrideCursor(waitCursor);
-    QWidget blocker(0, 0, WType_Modal);
+    QWidget blocker(0, 0, WType_Dialog | WShowModal);
     qt_enter_modal(&blocker);
     kapp->enter_loop();
     qt_leave_modal(&blocker);

@@ -92,7 +92,7 @@ private:
     QString currentCommand;
     KProcess *childproc;
     ProcessLineMaker* procLineMaker;
-    QStack<QString> dirstack;
+    QPtrStack<QString> dirstack;
     QValueVector<MakeItem*> m_items;
     QIntDict<MakeItem> m_paragraphToItem;
     long m_paragraphs;
