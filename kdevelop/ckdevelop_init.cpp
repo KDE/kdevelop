@@ -170,7 +170,7 @@ void CKDevelop::initView(){
   
   mdi_main_frame = new MdiFrame( this, "mdi_frame");
   // maybe we should make this configurable :-)
-  mdi_main_frame-> m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
+  mdi_main_frame->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
   
   
 #warning FIXME should we swallow tools in KDevelop 2??
@@ -655,7 +655,7 @@ void CKDevelop::initMenuBar(){
   
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
-  kdev_menubar->insertItem(i18n("&Window"), mdi_main_frame->m_pMdi->m_pWindowMenu);
+  kdev_menubar->insertItem(i18n("&Window"), mdi_main_frame->windowMenu());
   kdev_menubar->insertSeparator();
 
   ///////////////////////////////////////////////////////////////////
