@@ -12,6 +12,7 @@
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qpalette.h>
+#include <qcheckbox.h>
 
 #include "replaceitem.h"
 
@@ -68,6 +69,7 @@ void ReplaceItem::setChecked( bool checked )
     }
 }
 
+#if KDE_VERSION > 305
 // code mostly lifted from QCheckListItem::paintCell()
 void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
 {
@@ -132,11 +134,14 @@ void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, i
 
     QListViewItem::paintCell( p, mcg, column, width - r, align );
 }
+#endif
 
 void ReplaceItem::activate( int, QPoint const & localPos )
 {
     QListView * lv = listView();
-    int boxsize = lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv);
+    QCheckBox cb(0);
+    int boxsize = cb.sizeHint().width();
+//that's KDE-3.1 only    int boxsize = lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv);
     int rightside = lv->itemMargin() + boxsize + ( isFile() ? 0 : lv->treeStepSize() );
 
     // _lineclicked indicates if the click was on the line or in the checkbox

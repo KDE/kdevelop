@@ -102,7 +102,9 @@ public:
     static bool s_listview_done;
 
 private:
+#if KDE_VERSION > 305
     void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align );
+#endif    
     void setChecked( bool checked );
 
     QString _file;
