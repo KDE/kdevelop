@@ -127,7 +127,7 @@ CManpageTextDlg::CManpageTextDlg(QWidget *parent, const char *name ) :
     hl = new QHBoxLayout( 15 );
     vl->addLayout( hl );
 
-    QPushButton *btn = new QPushButton( i18n( "&Ok" ), this );
+    QPushButton *btn = new QPushButton( i18n( "&OK" ), this );
     btn->setFixedSize( btn->sizeHint() );
     btn->setDefault( true );
     connect( btn, SIGNAL( clicked() ), this, SLOT( accept() ) );

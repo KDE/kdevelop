@@ -1400,7 +1400,7 @@ bool CClassPropertiesDlgImpl::fillSignalCombo(ParsedClass* aClass, bool bClear)
                i18n("There was unsuccess to get signal members for the classes listed below:"),
                faileParse,
                i18n("Warning"),
-               QString(i18n("&Ok"))
+               QString(i18n("&OK"))
         );
     }
     mList = aClass -> getSortedSignalList();

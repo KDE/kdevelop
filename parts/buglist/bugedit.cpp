@@ -376,7 +376,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "distribution, QT version, compilers, etc."));
 
     // Need a cancel button too.
-    setOkButton (i18n("Ok"));
+    setOkButton (i18n("OK"));
     setCancelButton (i18n("Cancel"));
 	
     // Get those main buttons hooked up.
