@@ -1,3 +1,6 @@
+2003-05-24 Roberto Raggi <roberto@kdevelop.org>
+    * Added full-screen mode
+
 2003-05-22 Mario Scalas <mario.scalas@libero.it>
     * Added tooltips to the watch variable list view so no widget resize is needed
     * Added a opy to clipboard feature for watched variables so their data is available
