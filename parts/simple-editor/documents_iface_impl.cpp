@@ -17,7 +17,7 @@ DocumentsIfaceImpl::DocumentsIfaceImpl(Editor *editor)
 }
 
 
-QList<Document> DocumentsIfaceImpl::documents()
+QList<Document> DocumentsIfaceImpl::documents() const
 {
   QList<Document> retval;
   

@@ -23,7 +23,7 @@ public:
 
   DocumentsEditorIface(Editor *parent);
 
-  virtual QList<Document> documents() = 0;
+  virtual QList<Document> documents() const = 0;
 
   virtual bool saveAllDocuments();
 

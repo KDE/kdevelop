@@ -20,7 +20,7 @@ public:
 
   DocumentsIfaceImpl(KEditor::Editor *editor);
 
-  QList<Document> documents();
+  QList<Document> documents() const;
 
 
 };

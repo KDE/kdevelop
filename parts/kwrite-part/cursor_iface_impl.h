@@ -19,8 +19,8 @@ public:
   virtual void getCursorPosition(int &line, int &col);
   virtual bool setCursorPosition(int line, int col);
   
-  virtual int numberOfLines();
-  virtual int lengthOfLine(int line);
+  virtual int numberOfLines() const;
+  virtual int lengthOfLine(int line) const;
   
 
 private:

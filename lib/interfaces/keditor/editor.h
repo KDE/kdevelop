@@ -46,7 +46,7 @@ public:
    * \return Pointer to the interface, or 0 if the document
    * does not provide that interface.
    */ 
-  DocumentInterface *getInterface(QString ifname);
+  DocumentInterface *getInterface(const QString &ifname);
 
   /**
    * \brief Load file.
@@ -60,7 +60,7 @@ public:
    *
    * \return true, if file was loaded, false if not
    */
-  virtual bool load(QString filename) = 0;
+  virtual bool load(const QString &filename) = 0;
 
   /**
    * \brief Save file as.
@@ -74,7 +74,7 @@ public:
    *
    * \return true, if the file was saved, false if not
    */
-  virtual bool save(QString filename) = 0;
+  virtual bool save(const QString &filename) = 0;
 
 
   /** 
@@ -93,7 +93,7 @@ protected:
    * Change the name of the document. This is the name
    * that will be used in the \a save method.
    */
-  virtual void rename(QString filename);
+  virtual void rename(const QString &filename);
   
 public:
 
@@ -125,14 +125,14 @@ signals:
    *
    * \param name The new name of the doument.
    */
-  void fileNameChanged(QString name);
+  void fileNameChanged(const QString &name);
 
 
 protected:  
   
   Document(Editor *parent);
 
-  Editor *parent() { return _parent; };
+  Editor *parent() const { return _parent; };
 
 
 protected slots:
@@ -236,7 +236,7 @@ public:
    * always test if a given interface is provided.
    *
    */
-  EditorInterface *getInterface(QString ifname);
+  EditorInterface *getInterface(const QString &ifname);
 
   virtual Document *getDocument(const QString &filename=QString::null) = 0;
   virtual Document *currentDocument() = 0;

@@ -50,7 +50,7 @@ DocumentImpl::~DocumentImpl()
 }
 
 
-bool DocumentImpl::load(QString filename)
+bool DocumentImpl::load(const QString &filename)
 {
   QFile f(filename);
   if (!f.open(IO_ReadOnly))
@@ -67,7 +67,7 @@ bool DocumentImpl::load(QString filename)
 }
 
 
-bool DocumentImpl::save(QString filename)
+bool DocumentImpl::save(const QString &filename)
 {
   QFile f(filename);
   if (!f.open(IO_WriteOnly))

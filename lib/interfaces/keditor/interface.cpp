@@ -14,13 +14,13 @@ EditorInterface::EditorInterface(Editor *parent)
 
 
 
-KActionCollection *EditorInterface::actionCollection()
+KActionCollection *EditorInterface::actionCollection() const
 {
   return _editor->actionCollection();
 }
 
 
-Editor *EditorInterface::editor()
+Editor *EditorInterface::editor() const
 {
   return _editor;
 }

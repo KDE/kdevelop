@@ -16,8 +16,8 @@ public:
 
   DocumentImpl(KEditor::Editor *parent);
 
-  virtual bool load(QString filename);
-  virtual bool save(QString filename);
+  virtual bool load(const QString &filename);
+  virtual bool save(const QString &filename);
 
 
 private:

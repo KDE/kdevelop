@@ -22,13 +22,13 @@ bool CursorIfaceImpl::setCursorPosition(int line, int col)
 }
 
 
-int CursorIfaceImpl::numberOfLines()
+int CursorIfaceImpl::numberOfLines() const
 {
   return m_edit->numLines();
 }
 
 
-int CursorIfaceImpl::lengthOfLine(int line)
+int CursorIfaceImpl::lengthOfLine(int line) const
 {
   return m_edit->textLine(line).length();
 }

@@ -23,9 +23,9 @@ public:
 
   EditorInterface(Editor *parent);
 
-  KActionCollection *actionCollection();
+  KActionCollection *actionCollection() const;
 
-  Editor *editor();
+  Editor *editor() const;
   
 
 private:
@@ -43,7 +43,7 @@ public:
 
   DocumentInterface(Document *parent, Editor *editor);
 
-  Document *document() { return _document; };
+  Document *document() const { return _document; };
 
 
 private:

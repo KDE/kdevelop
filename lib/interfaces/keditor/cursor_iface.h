@@ -22,8 +22,8 @@ public:
   virtual bool setCursorPosition(int line, int row) = 0;
   virtual void getCursorPosition(int &line, int &col) = 0;
 
-  virtual int numberOfLines() = 0;
-  virtual int lengthOfLine(int line) = 0;
+  virtual int numberOfLines() const = 0;
+  virtual int lengthOfLine(int line) const = 0;
 
 
 signals:

@@ -26,7 +26,7 @@ Document::Document(Editor *parent)
 }
 
 
-DocumentInterface *Document::getInterface(QString ifname)
+DocumentInterface *Document::getInterface(const QString &ifname)
 {
   if (!children())
 	return 0;
@@ -55,7 +55,7 @@ bool Document::save()
 }
 
 
-void Document::rename(QString filename)
+void Document::rename(const QString &filename)
 {
   _fileName = filename;
   emit fileNameChanged(filename);
@@ -129,7 +129,7 @@ void Editor::documentCountChanged()
 }
 
 
-EditorInterface *Editor::getInterface(QString ifname)
+EditorInterface *Editor::getInterface(const QString &ifname)
 {
   if (!children())
 	return 0;
