@@ -62,7 +62,7 @@ void AStylePart::beautifySource()
   QTextStream os(&output, IO_WriteOnly);
 
   while (formatter.hasMoreLines())
-	os << formatter.nextLine().c_str() << endl;
+	os << QString::fromUtf8(formatter.nextLine().c_str()) << endl;
 
   // workaround for kate clearing undo history on setText()
   iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
