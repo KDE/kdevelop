@@ -34,7 +34,7 @@ namespace FileCreate {
   {
     setIcon( SmallIcon("filenew2") );
     setCaption(i18n("File Create"));
-    setResizeMode( LastColumn );
+    setResizeMode( AllColumns );
     setAllColumnsShowFocus(true);
     setRootIsDecorated(true);
 
