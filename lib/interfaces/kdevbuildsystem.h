@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +46,9 @@ public:
     {
 	Group,
 	Target,
-	File
+	File,
+	
+	Custom=1000
     };
 
 public:
@@ -92,11 +95,13 @@ public:
     void insertGroup( BuildGroupItem* group );
     void removeGroup( BuildGroupItem* group );
     BuildGroupItem* takeGroup( BuildGroupItem* group );
+    BuildGroupItem* groupByname( const QString& groupName );
     QValueList<BuildGroupItem*> groups() { return m_subGroups; }
 
     void insertTarget( BuildTargetItem* target );
     void removeTarget( BuildTargetItem* target );
     BuildTargetItem* takeTarget( BuildTargetItem* target );
+    BuildTargetItem* targetByName( const QString& targetName );
     QValueList<BuildTargetItem*> targets() { return m_targets; }
 
 private:
@@ -121,6 +126,7 @@ public:
     void insertFile( BuildFileItem* file );
     void removeFile( BuildFileItem* file );
     BuildFileItem* takeFile( BuildFileItem* file );
+    BuildFileItem* fileByName( const QString& fileName );
     QValueList<BuildFileItem*> files() { return m_files; }
 
 private:

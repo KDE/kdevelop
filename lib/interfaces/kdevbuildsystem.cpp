@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -232,6 +233,42 @@ void BuildItemConfigWidget::accept( )
 ProjectConfigTab::ProjectConfigTab( QWidget * parent, const char * name )
     :QWidget(parent, name)
 {
+}
+
+BuildFileItem * BuildTargetItem::fileByName( const QString & fileName )
+{
+    for( QValueList<BuildFileItem*>::Iterator it=m_files.begin(); it!=m_files.end(); ++it )
+    {
+	BuildFileItem* file = *it;
+	if( file->name() == fileName )
+	    return file;
+    }
+    
+    return 0;
+}
+
+BuildTargetItem * BuildGroupItem::targetByName( const QString & targetName )
+{
+    for( QValueList<BuildTargetItem*>::Iterator it=m_targets.begin(); it!=m_targets.end(); ++it )
+    {
+	BuildTargetItem* target = *it;
+	if( target->name() == targetName )
+	    return target;
+    }
+    
+    return 0;
+}
+
+BuildGroupItem * BuildGroupItem::groupByname( const QString & groupName )
+{
+    for( QValueList<BuildGroupItem*>::Iterator it=m_subGroups.begin(); it!=m_subGroups.end(); ++it )
+    {
+	BuildGroupItem* group = *it;
+	if( group->name() == groupName )
+	    return group;
+    }
+    
+    return 0;
 }
 
 #include "kdevbuildsystem.moc"
