@@ -155,7 +155,7 @@ void KDiffTextEdit::searchExtParts()
   init = true;
 
   // search all parts that can handle text/x-diff
-  KTrader::OfferList offers = KTrader::self()->query("text/x-diff", "('KParts/ReadOnlyPart' in ServiceTypes) and ('text/x-diff' in ServiceTypes)");
+  KTrader::OfferList offers = KTrader::self()->query("text/x-diff", "('KParts/ReadOnlyPart' in ServiceTypes) and ('text/x-diff' in ServiceTypes) and (DesktopEntryName != 'katepart')");
   KTrader::OfferList::const_iterator it;
   for ( it = offers.begin(); it != offers.end(); ++it ) {
     KService::Ptr ptr = (*it);
