@@ -18,11 +18,9 @@ dummy.cpp:
 
 METASOURCES = AUTO
 
-appsdir = $(kde_appsdir)/Editors
-apps_DATA = kidewrite.desktop
+servicedir = $(kde_servicesdir)
+service_DATA = kidewrite.desktop
 
 rcdir = $(kde_datadir)/kwrite
 rc_DATA = kidewrite_browser.rc kidewriteui.rc
-
-EXTRA_DIST = $(apps_DATA)
 
