@@ -69,7 +69,7 @@ void TagCreator::parseTranslationUnit( TranslationUnitAST* ast )
 void TagCreator::parseNamespace( NamespaceAST* ast )
 {
     QString nsName;
-    if( !ast->namespaceName() ){
+    if( !ast->namespaceName() || ast->namespaceName()->text().isEmpty() ){
         // anonymous namespace
     } else {
 	nsName = ast->namespaceName()->text();
