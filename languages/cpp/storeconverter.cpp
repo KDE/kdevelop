@@ -43,18 +43,22 @@ void StoreConverter::PCSClassToCodeModel(const QString &className, const QString
             Tag& tag = *it;
             kdDebug() << "TAG: " << tag.name() << " in file " << tag.fileName() << endl;
             FileDom file;
+            bool addFile = false;
             if (m_model->hasFile(tag.name()))
                 file = m_model->fileByName(tag.name());
             else
             {
                 file = m_model->create<FileModel>();
                 file->setName(tag.fileName());
-                m_model->addFile(file);
+                addFile = true;
             }
             if (!file->hasClass(tag.name()))
                 parseClass(tag, file);
+            if (addFile) m_model->addFile(file);
         }
-    }       
+    }
+/*    kdDebug() << "m_model class count: " << m_model->globalNamespace()->classList().count() << endl;
+    kdDebug() << "m_model file count: " << m_model->fileList().count() << endl;*/
 }
 
 void StoreConverter::parseClass(Tag &classTag, FileDom file)
@@ -68,11 +72,11 @@ void StoreConverter::parseClass(Tag &classTag, FileDom file)
     QValueList<Tag> symbolTags = m_part->codeCompletion()->repository()->
         getTagsInScope(scope, false);
     
-    kdDebug() << "got tags: " << endl;
+//     kdDebug() << "got tags: " << endl;
     for (QValueList<Tag>::iterator sit = symbolTags.begin(); sit != symbolTags.end(); ++sit )
     {
         Tag &symbol = *sit;
-        kdDebug() << symbol.name() << endl;
+//         kdDebug() << symbol.name() << endl;
         
         switch (symbol.kind()) 
         {
@@ -88,12 +92,56 @@ void StoreConverter::parseClass(Tag &classTag, FileDom file)
     for (QValueList<Tag>::iterator bit = baseClassTags.begin();
         bit != baseClassTags.end(); ++bit)
         klass->addBaseClass((*bit).name());
+
+    file->addClass(klass);
 }
 
 void StoreConverter::parseFunctionDeclaration(Tag &fun, ClassDom klass)
 {
+    FunctionDom function = m_model->create<FunctionModel>();
+    function->setName(fun.name());
+    function->setFileName(fun.fileName());
+    function->setScope(fun.scope());
+    
+    CppFunction<Tag> cppFun(fun);
+    function->setAccess(cppFun.access());
+    function->setSignal(cppFun.isSignal());
+    function->setSlot(cppFun.isSlot());
+    function->setVirtual(cppFun.isVirtual());
+    function->setStatic(cppFun.isStatic());
+    function->setInline(cppFun.isInline());
+    function->setConstant(cppFun.isConst());
+    function->setAbstract(cppFun.isPure());
+    function->setResultType(cppFun.type());
+    
+    parseArguments(function, cppFun);
+    
+    klass->addFunction(function);
 }
 
 void StoreConverter::parseVariable(Tag &var, ClassDom klass)
 {
+    VariableDom variable = m_model->create<VariableModel>();
+    variable->setName(var.name());
+    variable->setFileName(var.fileName());
+    
+    CppVariable<Tag> cppVar(var);
+    variable->setAccess(cppVar.access());
+    variable->setStatic(cppVar.isStatic());
+    variable->setType(cppVar.type());
+    
+    klass->addVariable(variable);
+}
+
+void StoreConverter::parseArguments(FunctionDom function, CppFunction<Tag> &cppFun)
+{
+    QStringList args = cppFun.arguments();
+    for (QStringList::const_iterator it = args.constBegin(); it != args.constEnd(); ++it)
+    {
+        ArgumentDom arg = m_model->create<ArgumentModel>();
+        arg->setType(*it);
+        arg->setName(cppFun.argumentNames()[args.findIndex(*it)]);
+        
+        function->addArgument(arg);
+    }
 }

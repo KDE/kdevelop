@@ -17,6 +17,8 @@
 #include <catalog.h>
 #include <codemodel.h>
 
+#include "cpp_tags.h"
+
 class CppSupportPart;
 
 class StoreConverter{
@@ -32,6 +34,8 @@ protected:
     void parseFunctionDeclaration(Tag &fun, ClassDom klass);
     /**Parses variable from PCS and adds it into a class dom.*/
     void parseVariable(Tag &var, ClassDom klass);
+    /**Parses function arguments from @p cppFun and adds them into a function dom.*/
+    void parseArguments(FunctionDom function, CppFunction<Tag> &cppFun);
 
 private:
     CppSupportPart *m_part;

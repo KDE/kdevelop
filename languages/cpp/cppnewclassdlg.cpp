@@ -968,7 +968,7 @@ void CppNewClassDialog::parsePCSClass(QString clName, QString inheritance)
     converter.PCSClassToCodeModel(clName, clNamespace);
     
     ClassList myClasses = myModel->globalNamespace()->classByName(clName);
-    kdDebug() << "    tag class count: " << myClasses.count() << endl;
+//     kdDebug() << "    tag class count: " << myClasses.count() << endl;
 
     for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
     {
@@ -1380,7 +1380,7 @@ void CppNewClassDialog::ClassGenerator::common_text()
         if (!namespaceEnd.isEmpty())
             namespaceEnd += "\n\n";
         namespaceBeg += "namespace " + (*it) + " {";
-        namespaceEnd += "};";
+        namespaceEnd += "}";
     }
   }
 
