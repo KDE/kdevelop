@@ -649,6 +649,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
         }
         textChanged(); // calls licenseChanged() && update Next button state
     } else {
+	m_customOptions=0;
         m_pCurrentAppInfo=0;
         icon_label->clear();
         desc_textview->clear();
