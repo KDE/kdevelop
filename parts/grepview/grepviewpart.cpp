@@ -61,7 +61,7 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
 
     KAction *action;
 
-    action = new KAction(i18n("&Find in Files..."), "grep", CTRL+ALT+Key_F,
+    action = new KAction(i18n("Find in Fi&les..."), "grep", CTRL+ALT+Key_F,
                          this, SLOT(slotGrep()),
                          actionCollection(), "edit_grep");
     action->setToolTip( i18n("Search for expressions over several files") );
