@@ -30,7 +30,8 @@ public:
     typedef QMap<QString, QVariant> Environment;
     
 public:
-    KDevAutomakeImporter(QObject *parent = 0, const char *name = 0, const QStringList &args = QStringList());
+    KDevAutomakeImporter(QObject *parent = 0, const char *name = 0, 
+            const QStringList &args = QStringList());
     virtual ~KDevAutomakeImporter();
     
 //
@@ -38,7 +39,8 @@ public:
 //
     virtual KDevProject *project() const;
     
-    virtual ProjectItemDom import(ProjectFolderDom dom, const QString &fileName);
+    virtual ProjectFolderList parse(ProjectFolderDom item);    
+    virtual ProjectItemDom import(ProjectModel *model, const QString &fileName);
     virtual QString findMakefile(ProjectFolderDom dom) const;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const;
   
@@ -62,12 +64,11 @@ private:
     QStringList findMakefiles(ProjectFolderDom dom);
     AutomakeTargetDom findNoinstHeaders(ProjectFolderDom item);
     
-    void parse(ProjectFolderDom item);    
     void parseKDEDOCS(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parseKDEICON(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parsePrimary(ProjectItemDom item, const QString &lhs, const QString &rhs);
     void parsePrefix(ProjectItemDom item, const QString &lhs, const QString &rhs);
-    void parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs);
+    ProjectFolderList parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs);
     
 private:
     KDevProject *m_project;

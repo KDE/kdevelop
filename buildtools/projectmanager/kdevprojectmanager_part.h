@@ -95,7 +95,7 @@ protected:
     
 private:
     ProjectModel *m_projectModel;
-    ProjectWorkspaceDom m_workspace;
+    ProjectFolderDom m_workspace;
     QGuardedPtr<KDevProjectManagerWidget> m_widget;
     QMap<QString, KDevProjectImporter*> m_importers;
     QMap<QString, KDevProjectBuilder*> m_builders;

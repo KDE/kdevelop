@@ -16,37 +16,35 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-#ifndef KDEVPROJECTIMPORTER_H
-#define KDEVPROJECTIMPORTER_H
+#ifndef IMPORTPROJECTJOB_H
+#define IMPORTPROJECTJOB_H
 
-#include "kdevprojectmodel.h"
+#include <kio/job.h>
+#include <kdevprojectmodel.h>
 
-#include <qobject.h>
-#include <qmap.h>
+class KDevProjectImporter;
 
-class KDevProjectEditor;
-class KDevProject;
-
-/**
-@author Roberto Raggi
-*/
-class KDevProjectImporter: public QObject
+class ImportProjectJob: public KIO::Job
 {
     Q_OBJECT
+protected:
+    ImportProjectJob(ProjectFolderDom folder, KDevProjectImporter *importer);
+    virtual ~ImportProjectJob();
+
+    
 public:
-    KDevProjectImporter(QObject *parent = 0, const char *name = 0);
-    virtual ~KDevProjectImporter();
+    static ImportProjectJob *importProjectJob(ProjectFolderDom folder, KDevProjectImporter *importer);
+    void start();
     
-    virtual KDevProject *project() const = 0;
-   
-    virtual KDevProjectEditor *editor() const
-    { return 0; }
+protected:
+    void startNextJob(ProjectFolderDom folder);
+    void slotResult(KIO::Job *job);
+    void processList();
     
-    virtual ProjectFolderList parse(ProjectFolderDom folder) = 0;
-    
-    virtual ProjectItemDom import(ProjectModel *model, const QString &fileName) = 0;
-    virtual QString findMakefile(ProjectFolderDom dom) const = 0;
-    virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
+private:
+    ProjectFolderDom m_folder;
+    KDevProjectImporter *m_importer;
+    ProjectFolderList m_workingList;
 };
 
-#endif
+#endif // IMPORTPROJECTJOB_H

@@ -17,7 +17,8 @@ libkdevprojectmanager_la_LIBADD = \
 
 libkdevprojectmanager_la_SOURCES = \
     kdevprojectmanager_part.cpp \
-    kdevprojectmanager_widget.cpp
+    kdevprojectmanager_widget.cpp \
+    importprojectjob.cpp
     
 METASOURCES = AUTO
 

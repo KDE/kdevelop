@@ -328,20 +328,11 @@ QStringList KDevAutomakeImporter::findMakefiles(ProjectFolderDom dom)
     return files;
 }
 
-ProjectItemDom KDevAutomakeImporter::import(ProjectFolderDom dom, const QString &fileName)
+ProjectItemDom KDevAutomakeImporter::import(ProjectModel *model, const QString &fileName)
 {
-    AutomakeFolderDom root = dom->projectModel()->create<AutomakeFolderModel>();
+    AutomakeFolderDom root = model->create<AutomakeFolderModel>();
     root->setName(fileName);
-    
-    Q_ASSERT(root->toFolder());
-    
-    if (ProjectFolderDom folder = root->toFolder()) {
-        parse(folder);
-        dom->addFolder(folder);
-        return folder->toItem();
-    }
-    
-    return ProjectItemDom();
+    return root->toItem();
 }
 
 // ---------- Automake parser
@@ -394,9 +385,11 @@ static void removeDir( const QString& dirName )
 
 }
 
-void KDevAutomakeImporter::parse(ProjectFolderDom item)
+ProjectFolderList KDevAutomakeImporter::parse(ProjectFolderDom item)
 {
     Q_ASSERT(item);
+    
+    ProjectFolderList subproject_list;
     
     headers.clear();
         
@@ -418,14 +411,15 @@ void KDevAutomakeImporter::parse(ProjectFolderDom item)
         else if ( lhs.right( 3 ) == "dir" )
             parsePrefix( item->toItem(), lhs, rhs );
         else if ( lhs == "SUBDIRS" )
-            parseSUBDIRS( item->toItem(), lhs, rhs );
+            subproject_list += parseSUBDIRS( item->toItem(), lhs, rhs );
     }
 
     /// @todo only if in a c++ project
     AutomakeTargetDom noinst_HEADERS_item = findNoinstHeaders(item);
 
     QDir dir(item->name());
-    QStringList headersList = QStringList::split( QRegExp("[ \t]"), item->attribute("noinst_HEADERS").toString());
+    QStringList headersList = QStringList::split( QRegExp("[ \t]"),
+        item->attribute("noinst_HEADERS").toString());
 
     headersList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
     headersList.sort();
@@ -442,6 +436,8 @@ void KDevAutomakeImporter::parse(ProjectFolderDom item)
             noinst_HEADERS_item->addFile(fitem->toFile());
         }
     }
+    
+    return subproject_list;
 }
 
 void KDevAutomakeImporter::parseKDEDOCS(ProjectItemDom item, const QString &lhs, const QString &rhs)
@@ -656,7 +652,7 @@ void KDevAutomakeImporter::parsePrefix(ProjectItemDom item, const QString &lhs, 
     folder->prefixes.insert( name, dir );
 }
 
-void KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs)
+ProjectFolderList KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const QString &lhs, const QString &rhs)
 {
     Q_UNUSED(lhs);
     
@@ -718,6 +714,8 @@ void KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const QString &lhs,
     QStringList l = QStringList::split( QRegExp( "[ \t]" ), subdirs );
     l.sort();
     QStringList::Iterator it;
+    
+    ProjectFolderList subproject_list;
     for ( it = l.begin(); it != l.end(); ++it )
     {
         if ( *it == "." )
@@ -726,9 +724,10 @@ void KDevAutomakeImporter::parseSUBDIRS(ProjectItemDom item, const QString &lhs,
         AutomakeFolderDom newitem = item->projectModel()->create<AutomakeFolderModel>();
         newitem->setName(item->name() + "/" + *it);
         item->toFolder()->addFolder(newitem->toFolder());
-                
-        parse(newitem->toFolder());
+        subproject_list.append(newitem->toFolder());                
     }
+    
+    return subproject_list;
 }
 
 AutomakeTargetDom KDevAutomakeImporter::findNoinstHeaders(ProjectFolderDom item)

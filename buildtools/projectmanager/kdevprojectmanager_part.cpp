@@ -21,6 +21,7 @@
 #include "kdevprojectimporter.h"
 #include "kdevprojectbuilder.h"
 #include "kdevprojecteditor.h"
+#include "importprojectjob.h"
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
@@ -56,10 +57,6 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     QWhatsThis::add(m_widget, i18n("Project Manager"));
 
     mainWindow()->embedSelectViewRight(m_widget, tr("Project Manager"), tr("Project Manager"));
-
-    m_workspace = m_projectModel->create<ProjectWorkspaceModel>();
-    m_workspace->setName("Workspace (kdevelop)");
-    m_projectModel->addItem(m_workspace->toItem());    
     
     { // load the importers
         KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
@@ -118,12 +115,15 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 {
     QStringList oldFileList = allFiles();
     
-    if (KDevProjectImporter *importer = defaultImporter()) {    
-        ProjectItemDom projectDom = importer->import(m_workspace->toFolder(), projectDirectory());
-        if (ProjectFolderDom folder = projectDom->toFolder()) {
-            m_workspace->addFolder(folder);
-        }
-    }
+    if (m_workspace)
+        m_projectModel->removeItem(m_workspace->toItem());
+        
+    if (m_workspace = defaultImporter()->import(projectModel(), projectDirectory())->toFolder())
+        m_projectModel->addItem(m_workspace->toItem());
+    
+    ImportProjectJob *job = ImportProjectJob::importProjectJob(m_workspace, defaultImporter());
+    connect(job, SIGNAL(result(KIO::Job*)), this, SIGNAL(refresh()));
+    job->start();
         
     QStringList newFileList = allFiles();
 
@@ -131,6 +131,7 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
     
     if ((hasChanges && policy == Refresh) || policy == ForceRefresh)
         emit refresh();
+
 }
 
 void KDevProjectManagerPart::closeProject()
@@ -186,7 +187,9 @@ QString KDevProjectManagerPart::buildDirectory() const
 
 QStringList KDevProjectManagerPart::allFiles() const
 {
-    if (!(isDirty() || m_cachedFileList.isEmpty()))
+    if (!m_workspace)
+        return QStringList();
+    else if (!(isDirty() || m_cachedFileList.isEmpty()))
         return m_cachedFileList;
     
     return const_cast<KDevProjectManagerPart*>(this)->allFiles();
@@ -194,6 +197,9 @@ QStringList KDevProjectManagerPart::allFiles() const
 
 QStringList KDevProjectManagerPart::allFiles()
 {
+    if (!m_workspace)
+        return QStringList();
+        
     ProjectItemDom dom = m_workspace->toItem();
     m_cachedFileList = fileList(dom);
     
