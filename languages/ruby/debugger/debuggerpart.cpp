@@ -363,6 +363,10 @@ void RubyDebuggerPart::setupController()
     // variableTree -> framestackWidget
     connect( variableTree,          SIGNAL(selectFrame(int, int)),
              framestackWidget,      SLOT(slotSelectFrame(int, int)));
+    
+	// framestackWidget -> variableTree
+    connect( framestackWidget,      SIGNAL(frameActive(int, int, const QString&)),
+             variableTree,          SLOT(slotFrameActive(int, int, const QString&)));
 	
     // variableTree -> controller
     connect( variableTree,          SIGNAL(expandItem(VarItem*, const QCString&)),
@@ -375,8 +379,8 @@ void RubyDebuggerPart::setupController()
              controller,            SLOT(slotRemoveWatchExpression(int)));  
     
     // framestackWidget -> controller
-    connect( framestackWidget,      SIGNAL(selectFrame(int,int,bool)),
-             controller,            SLOT(slotSelectFrame(int,int,bool)));
+    connect( framestackWidget,      SIGNAL(selectFrame(int,int,const QString&)),
+             controller,            SLOT(slotSelectFrame(int,int,const QString&)));
 
     // rdbBreakpointWidget -> controller
     connect( rdbBreakpointWidget,   SIGNAL(clearAllBreakpoints()),

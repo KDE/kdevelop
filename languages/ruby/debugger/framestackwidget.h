@@ -40,9 +40,8 @@ public:
     virtual ~ThreadStackItem();
 
 	virtual int rtti() const { return RTTI_THREAD_STACK_ITEM; }
-    
+	
 	void setOpen(bool open);
-
     int threadNo() { return threadNo_; }
 
 private:
@@ -60,8 +59,6 @@ public:
     virtual ~FrameStackItem();
 
 	virtual int rtti() const { return RTTI_FRAME_STACK_ITEM; }
-    
-	void setOpen(bool open);
 
     int frameNo() { return frameNo_; }
     int threadNo() { return threadNo_; }
@@ -104,7 +101,8 @@ public slots:
     void slotSelectionChanged(QListViewItem *thisItem);
 
 signals:
-    void selectFrame(int frameNo, int threadNo, bool needFrames);
+    void selectFrame(int frameNo, int threadNo, const QString& frameName);
+    void frameActive(int frameNo, int threadNo, const QString& frameName);
 
 private:
     ThreadStackItem *viewedThread_;

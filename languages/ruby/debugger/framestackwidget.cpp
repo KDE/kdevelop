@@ -98,9 +98,10 @@ void FramestackWidget::slotSelectFrame(int frameNo, int threadNo)
 	
 	if (frame != 0) {
 		setSelected(frame, true);
+    	emit selectFrame(frameNo, threadNo, frame->frameName());
+	} else {
+    	emit selectFrame(frameNo, threadNo, QString());
 	}
-	
-    emit selectFrame(frameNo, threadNo, frame == 0);
 }
 
 /***************************************************************************/
@@ -109,7 +110,6 @@ void FramestackWidget::parseRDBThreadList(char *str)
 {
 	// on receipt of a thread list we must always clear the list.
     clear();
-	viewedThread_ = 0;
 	
 	QRegExp thread_re("(\\+)?\\s*(\\d+)\\s*(#<[^>]+>\\s*[^:]+:\\d+)");
 	int pos = thread_re.search(str);
@@ -135,24 +135,24 @@ void FramestackWidget::parseRDBThreadList(char *str)
 
 void FramestackWidget::parseRDBBacktraceList(char *str)
 {
-	QString frameName("T%1#%2 %3");
-	
-	QRegExp frame_re("#(\\d+) ([^:]+):(\\d+)(:in `([^\\n]+)')?");
-	int pos = frame_re.search(str);
+	QRegExp	frame_re("#(\\d+) ([^:]+):(\\d+)(:in `([^\\n]+)')?");
+	int	pos = frame_re.search(str);
 	
     while (pos != -1) {
-		QString method(frame_re.cap(5));
+		QString	method(frame_re.cap(5));
 		if (method == "") {
 			method = "toplevel";
 		} else {
 			method.append("(...)");
 		}
 		
-		new FrameStackItem(	viewedThread_, 
-							frame_re.cap(1).toInt(),
-							QString(frame_re.cap(0)),
-							frameName.arg(viewedThread_->threadNo()).arg(frame_re.cap(1)).arg(method) );
+		int frameNo = frame_re.cap(1).toInt();
+		QString frameName = QString("T%1#%2 %3").arg(viewedThread_->threadNo()).arg(frame_re.cap(1)).arg(method);
+		new FrameStackItem(viewedThread_, frameNo, QString(frame_re.cap(0)), frameName);
 		
+		// Tell the Variable Tree that this frame is active
+		emit frameActive(frameNo, viewedThread_->threadNo(), frameName);
+				
 		pos += frame_re.matchedLength();
 		pos = frame_re.search(str, pos);
     }
@@ -224,16 +224,6 @@ FrameStackItem::~FrameStackItem()
 
 
 // **************************************************************************
-
-void FrameStackItem::setOpen(bool open)
-{
-    if (open)
-        ((FramestackWidget*)listView())->slotSelectFrame(1, threadNo());
-
-    QListViewItem::setOpen(open);
-}
-
-// **************************************************************************
 // **************************************************************************
 // **************************************************************************
 
@@ -250,7 +240,6 @@ ThreadStackItem::ThreadStackItem(FramestackWidget *parent, int threadNo, const Q
 ThreadStackItem::~ThreadStackItem()
 {
 }
-
 
 // **************************************************************************
 

@@ -45,9 +45,9 @@ class DbgController;
 class Breakpoint;
 
 enum { 
-	VAR_NAME_COLUMN = 0, 
-	VALUE_COLUMN = 1, 
-	VAR_TYPE_COLUMN = 2
+	VAR_NAME_COLUMN	= 0, 
+	VALUE_COLUMN	= 1, 
+	VAR_TYPE_COLUMN	= 2
 };
 
 enum DataType { 
@@ -115,11 +115,22 @@ public:
 
     // Remove items that are not active
     void prune();
-    void pruneInactiveFrames();
+	
+	// Look for a frame where 'needsVariables()' is true. 
+	// If found, send commands to the debugger to fetch
+	// the variable values.
+	// Return true if a fetch has been scheduled, otherwise
+	// false.
+    bool schedule();
+	
+	// Tell the controller whether or not to fetch the
+	// values of the global variables
     void setFetchGlobals(bool fetch);
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item
 	virtual void maybeTip(const QPoint &);
+	
+	virtual void setSelected(QListViewItem * item, bool selected);
 
 signals:
     void toggleWatchpoint(const QString &varName);
@@ -131,6 +142,8 @@ signals:
 
 public slots:
     void slotAddWatchExpression(const QString& watchVar);
+    void slotFrameActive(int frameNo, int threadNo, const QString& frameName);
+    void slotPressed(QListViewItem * item);	
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
@@ -138,6 +151,7 @@ private slots:
 private:
     int activationId_;
     int currentThread_;
+	VarFrameRoot * selectedFrame_;
 	
 	WatchRoot *		watchRoot_;
 	GlobalRoot *	globalRoot_;
@@ -270,18 +284,18 @@ public:
 
 	virtual void setActivationId() { 
 		LazyFetchItem::setActivationId(); 
-		needLocals_ = true;
+		needsVariables_ = true;
 	} 
 	
-    bool needLocals() const { 
-		return isOpen() && !isWaitingForData() && needLocals_; 
+    bool needsVariables() const { 
+		return isOpen() && !isWaitingForData() && needsVariables_; 
 	}
 	
 	int frameNo() { return frameNo_; }
 	int threadNo() { return threadNo_; }
 
 private:
-    bool    needLocals_;
+    bool    needsVariables_;
     int     frameNo_;
     int     threadNo_;
     QCString cache_;

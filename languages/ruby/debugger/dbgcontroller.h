@@ -45,20 +45,20 @@ class VarItem;
 // sigh - namespace's don't work on some of the older compilers
 enum DBGStateFlags
 {
-  s_dbgNotStarted     = 1,
-  s_appNotStarted     = 2,
-  s_appBusy           = 4,
-  s_waitForWrite      = 8,
-  s_programExited     = 16,
-  s_silent            = 32,
-//  s_viewLocals        = 64,
-  s_viewBT            = 128,
-  s_viewBP            = 256,
-  s_attached          = 512,
-  s_viewGlobals       = 1024,
-  s_waitTimer         = 2048,
-  s_shuttingDown      = 4096,
-  s_viewThreads       = 8192
+  s_dbgNotStarted     = 1 << 0,
+  s_appNotStarted     = 1 << 1,
+  s_appBusy           = 1 << 2,
+  s_waitForWrite      = 1 << 3,
+  s_programExited     = 1 << 4,
+  s_silent            = 1 << 5,
+  s_fetchLocals       = 1 << 6,
+  s_viewBT            = 1 << 7,
+  s_viewBP            = 1 << 8,
+  s_attached          = 1 << 9,
+  s_fetchGlobals      = 1 << 10,
+  s_waitTimer         = 1 << 11,
+  s_shuttingDown      = 1 << 12,
+  s_viewThreads       = 1 << 13
 };
 
 				
@@ -125,7 +125,8 @@ public slots:
 
     virtual void slotExpandItem(VarItem *parent,
                                     const QCString &userRequest)            = 0;
-    virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
+    virtual void slotSelectFrame(int frame, int thread, 
+	                                const QString& frameName)               = 0;
     virtual void slotFetchGlobals(bool fetch)                               = 0;
 
 protected slots:

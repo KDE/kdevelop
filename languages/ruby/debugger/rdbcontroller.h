@@ -116,7 +116,7 @@ public slots:
 
     void slotExpandItem(VarItem *parent, const QCString &userRequest);
     void slotRubyInspect(const QString &inspectText);
-    void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
+    void slotSelectFrame(int frameNo, int threadNo, const QString& frameName);
     void slotFetchGlobals(bool fetch);
     void slotAddWatchExpression(const QString& expr, bool execute);
 	void slotRemoveWatchExpression(int displayId);
@@ -176,7 +176,6 @@ private:
     // Some state variables
     int               state_;
     bool              programHasExited_;
-    bool              backtraceDueToProgramStop_;
 
     // Configuration values
     QDomDocument &dom;

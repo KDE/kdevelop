@@ -108,7 +108,6 @@ RDBController::RDBController(VariableTree *varTree, FramestackWidget *frameStack
         tty_(0),
         state_(s_dbgNotStarted|s_appNotStarted|s_silent),
         programHasExited_(false),
-        backtraceDueToProgramStop_(false),
         dom(projectDom),
         config_forceBPSet_(true),
         config_dbgTerminal_(false)
@@ -301,12 +300,12 @@ void RDBController::actOnProgramPause(const QString &msg)
         // and we must reset the active flag
         currentFrame_ = 1;
         varTree_->nextActivationId();
-        backtraceDueToProgramStop_ = true;
+		setStateOn(s_fetchLocals);
         
 		queueCmd(new RDBCommand("where", NOTRUNCMD, INFOCMD), true);
         queueCmd(new RDBCommand("thread list", NOTRUNCMD, INFOCMD), true);
 		
-		if (stateIsOn(s_viewGlobals)) {
+		if (stateIsOn(s_fetchGlobals)) {
 			queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
 		}
 		        
@@ -394,17 +393,6 @@ void RDBController::parseProgramLocation(char *buf)
 void RDBController::parseBacktraceList(char *buf)
 {
     frameStack_->parseRDBBacktraceList(buf);
-    if (backtraceDueToProgramStop_)
-    {
-        varTree_->pruneInactiveFrames();
-        VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
-    	if (frame == 0) {
-        	frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
-    	}
-		
-		frame->setFrameName(frameStack_->findFrame(currentFrame_, viewedThread_)->frameName());
-        backtraceDueToProgramStop_ = false;
-    }
 }
 
 // **************************************************************************
@@ -965,40 +953,31 @@ void RDBController::slotClearAllBreakpoints()
 
 // **************************************************************************
 
-void RDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
+void RDBController::slotSelectFrame(int frameNo, int threadNo, const QString& frameName)
 {
-	Q_ASSERT(backtraceDueToProgramStop_ || currentCmd_ == 0);
-    
 	if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown)) {
 		kdDebug(9012) << "RDBController::slotSelectFrame wrong state" << endl;
         return;
 	}
 
-    // Get rdb to switch the frame stack on a thread change.
-    if (threadNo != -1) {
-        // We don't switch threads if we on this thread. The -1 check is
-        // because the first time after a stop we're actually on this thread
-        // but the thread number had been reset to -1.
-        if (viewedThread_ != -1) {
-            if (viewedThread_ != threadNo) {
-				// Note that 'thread switch nnn' is a run command
-                queueCmd(new RDBCommand(QCString().sprintf("thread switch %d",
+	if (viewedThread_ != threadNo) {
+		// Note that 'thread switch nnn' is a run command
+		queueCmd(new RDBCommand(QCString().sprintf("thread switch %d",
                                 threadNo), RUNCMD, INFOCMD));
-				executeCmd();
-				return;
-			}
-        }
-    }
-	
-    if (needFrames)
-        queueCmd(new RDBCommand("where", NOTRUNCMD, INFOCMD));
+		executeCmd();
+		return;
+	}
 		
 	if (frameNo > currentFrame_) {
     	queueCmd(new RDBCommand(QCString().sprintf("up %d", frameNo - currentFrame_), NOTRUNCMD, INFOCMD));
-        queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
+		if (!stateIsOn(s_fetchLocals)) {
+        	queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
+		}
 	} else if (frameNo < currentFrame_) {
     	queueCmd(new RDBCommand(QCString().sprintf("down %d", currentFrame_ - frameNo), NOTRUNCMD, INFOCMD));
-        queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
+		if (!stateIsOn(s_fetchLocals)) {
+        	queueCmd(new RDBCommand("display", NOTRUNCMD, INFOCMD));
+		}
 	}
 
     // Hold on to  this thread/frame so that we know where to put the local
@@ -1006,17 +985,16 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
     viewedThread_ = threadNo;
     currentFrame_ = frameNo;
 
-    // Find or add the frame details. hold onto whether it existed because
-    // we're about to create one if it didn't.
     VarFrameRoot *frame = varTree_->findFrame(frameNo, viewedThread_);
     if (frame == 0) {
         frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
     }
-	
-	frame->setFrameName(frameStack_->findFrame(currentFrame_, viewedThread_)->frameName());
+		
+	frame->setFrameName(frameName);
+	varTree_->setSelected(frame, true);
 	
 	// Have we already got these details?
-	if (frame->needLocals()) {
+	if (frame->needsVariables()) {
 		// Ask for the locals
 //      queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
 		queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
@@ -1025,10 +1003,7 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
 		frame->startWaitingForData();
     }
 	
-	// The user must have initiated this action by clicking on something in
-	// the GUI, so there won't be any current commands
-	if (! backtraceDueToProgramStop_) {
-		Q_ASSERT(currentCmd_ == 0);
+	if (currentCmd_ == 0) {
 		executeCmd();
 	}
 	
@@ -1101,11 +1076,11 @@ void RDBController::slotRemoveWatchExpression(int displayId)
 void RDBController::slotFetchGlobals(bool fetch)
 {
     if (fetch) {
-        setStateOn(s_viewGlobals);
+        setStateOn(s_fetchGlobals);
 		queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
 		executeCmd();
     } else {
-        setStateOff(s_viewGlobals);
+        setStateOff(s_fetchGlobals);
 	}
 
     kdDebug(9012) << (fetch ? "<Globals ON>": "<Globals OFF>") << endl;
@@ -1218,6 +1193,12 @@ void RDBController::slotReadFromSocket(int socket)
 	rdbOutputLen_ = 0;
 	
 	executeCmd();
+	
+	if (currentCmd_ == 0 && stateIsOn(s_fetchLocals)) {
+		if (!varTree_->schedule()) {
+			setStateOff(s_fetchLocals);
+		}
+	}
 }
 
 // **************************************************************************

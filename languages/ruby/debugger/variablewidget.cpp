@@ -138,6 +138,9 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
+    
+	connect( this, SIGNAL(pressed(QListViewItem*)),
+             this, SLOT(slotPressed(QListViewItem*)) );
 
 	watchRoot_ = new WatchRoot(this);
 }
@@ -203,6 +206,73 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     }
 }
 
+/***************************************************************************/
+
+void VariableTree::setSelected(QListViewItem * item, bool selected)
+{
+	// Save the last selected VarFrameRoot for slotPressed() to restore
+	if (item->rtti() == RTTI_VAR_FRAME_ROOT && selected) {
+		selectedFrame_ = (VarFrameRoot *) item;
+	}
+	
+	QListView::setSelected(item, selected);
+}
+
+/***************************************************************************/
+
+// Makes sure that only VarFrameRoot items can be selected
+void VariableTree::slotPressed(QListViewItem * item)
+{
+	if (item == 0) {
+		return;
+	}
+	
+	while (item->rtti() == RTTI_VAR_ITEM) {
+		item = item->parent();
+	}
+	
+	if (	item->rtti() == RTTI_GLOBAL_ROOT
+			|| item->rtti() == RTTI_WATCH_ROOT
+			|| item->rtti() == RTTI_WATCH_VAR_ITEM )
+	{
+		setSelected(selectedFrame_, true);
+		return;
+	}
+	
+	if (item->rtti() == RTTI_VAR_FRAME_ROOT) {
+		VarFrameRoot * frame = (VarFrameRoot*) item;
+        emit selectFrame(frame->frameNo(), frame->threadNo());
+	}
+	
+	return;
+}
+
+// **************************************************************************
+
+void VariableTree::prune()
+{
+	QListViewItem *child = firstChild();
+
+    while (child != 0) {
+        QListViewItem *nextChild = child->nextSibling();
+
+        // Only prune var frames, not the watch or global root
+        if (child->rtti() == RTTI_VAR_FRAME_ROOT) {
+			if (((VarFrameRoot*) child)->isActive()) {
+				if (child->isOpen()) {
+					((VarFrameRoot*) child)->prune();
+				}
+			} else {
+				delete child;
+			}
+		}
+		
+        child = nextChild;
+    }
+}
+
+// **************************************************************************
+
 // The debugger has moved onto the next program pause, so invalidate 
 // everything in the Variable Tree
 void VariableTree::nextActivationId() 
@@ -211,13 +281,66 @@ void VariableTree::nextActivationId()
 	globalRoot()->setActivationId();
 	watchRoot()->setActivationId();
 	// ..but that's only the Watch and Global roots
-	//
-	// VarFrameRoot frames in the Variable Tree are set active by the
-	// Frame Stack widget when it parses the backtrace from the 'where' 
-	// command after the pause
-	//
-	// After that, any frames which aren't marked as active must have gone
-	// out of scope, and can be pruned.
+}
+    
+// **************************************************************************
+
+// VarFrameRoot frames in the Variable Tree from the previous program pause, 
+// are set active here. Notified by the Frame Stack widget when it parses the 
+// backtrace from the 'where' command after a pause.
+//
+// After that, any frames which aren't marked as active must have gone
+// out of scope and will end up pruned.
+void VariableTree::slotFrameActive(int frameNo, int threadNo, const QString& frameName)
+{
+	VarFrameRoot * frame = findFrame(frameNo, threadNo);
+	if (frameNo == 1) {
+		// If the current frame 1 doesn't exist, create it
+		if (frame == 0) {
+			frame = new VarFrameRoot(this, frameNo, threadNo);
+		}
+		
+		frame->setFrameName(frameName);
+	}
+	
+	if (frame != 0 && frame->text(VAR_NAME_COLUMN) == frameName) {
+		frame->setActivationId();
+	}
+}
+
+// **************************************************************************
+
+bool VariableTree::schedule()
+{
+    QListViewItem *	child = firstChild();
+	VarFrameRoot * frame = 0;
+
+    while (child != 0) {
+        if (child->rtti() == RTTI_VAR_FRAME_ROOT) {
+			frame = (VarFrameRoot *) child;
+			Q_ASSERT( !frame->isWaitingForData() );
+			
+			if (frame->needsVariables()) {
+				// Tell the controller to retrieve the variable values
+				emit selectFrame(frame->frameNo(), frame->threadNo());
+				return true;
+			}
+		}
+		
+        child = child->nextSibling();
+    }
+	
+	frame = findFrame(1, currentThread_);
+	Q_ASSERT( frame != 0 );
+	Q_ASSERT( !frame->needsVariables() );
+	
+	// All over, nothing left to fetch. 
+	// Return to frame 1, and prune the inactive items
+	// from the variable tree..
+	emit selectFrame(1, currentThread_);
+	prune();
+	
+	return false;
 }
 
 // **************************************************************************
@@ -287,54 +410,6 @@ void VariableTree::resetWatchVars()
 	}
 }
 
-
-
-// **************************************************************************
-
-void VariableTree::prune()
-{
-	QListViewItem *child = firstChild();
-
-    while (child != 0) {
-        QListViewItem *nextChild = child->nextSibling();
-
-        // Only prune var frames, not the watch or global root
-        if (child->rtti() == RTTI_VAR_FRAME_ROOT) {
-			if (((VarFrameRoot*) child)->isActive()) {
-				((VarFrameRoot*) child)->prune();
-			} else {
-				delete child;
-			}
-		}
-		
-        child = nextChild;
-    }
-}
-
-// **************************************************************************
-
-void VariableTree::pruneInactiveFrames()
-{
-	viewport()->setUpdatesEnabled(false);
-    QListViewItem *child = firstChild();
-
-    while (child != 0) {
-        QListViewItem *nextChild = child->nextSibling();
-        if (	child->rtti() == RTTI_VAR_FRAME_ROOT
-				&& (	((VarFrameRoot*) child)->frameNo() != 1 
-						|| ((VarFrameRoot*) child)->threadNo() != currentThread_ ) ) 
-		{
-			delete child;
-		}
-		
-        child = nextChild;
-    }
-	
-    viewport()->setUpdatesEnabled(true);
-    repaint();
-}
-
-
 // **************************************************************************
 
 void VariableTree::maybeTip(const QPoint &p)
@@ -392,6 +467,7 @@ void LazyFetchItem::paintCell(QPainter *p, const QColorGroup &cg,
         f.setBold(true);
         p->setFont(f);
     }
+	
     QListViewItem::paintCell( p, cg, column, width, align );
 }
 
@@ -445,22 +521,31 @@ VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataTyp
       highlight_(false)
 {
     setText(VAR_NAME_COLUMN, varName);
+	setSelectable(false);
 	
 	// Order the VarItems so that globals are first, then
-	// class variables, instance variables and finally local
-	// variables
+	// constants, class variables, instance variables and 
+	// finally local variables
 	QRegExp arrayelement_re("\\[(\\d+)\\]");
 	key_ = varName;
+	
 	if (arrayelement_re.search(varName) != -1) {
 		key_.sprintf("%.6d", arrayelement_re.cap(1).toInt());
 	} else if (key_.startsWith("$")) {
+		// Global variable
 		key_.prepend("1001");
-	} else if (key_.startsWith("@@")) {
+	} else if (QRegExp("^[A-Z]").search(varName) != -1) {
+		// Constant
 		key_.prepend("1002");
-	} else if (key_.startsWith("@")) {
+	} else if (key_.startsWith("@@")) {
+		// Class variable
 		key_.prepend("1003");
-	} else {
+	} else if (key_.startsWith("@")) {
+		// Instance variable
 		key_.prepend("1004");
+	} else {
+		// Local variable or parameter
+		key_.prepend("1005");
 	}
 
 //    kdDebug(9012) << " ### VarItem::VarItem *CONSTR* " << varName << endl;	
@@ -679,7 +764,7 @@ QString VarItem::tipText() const
 
 VarFrameRoot::VarFrameRoot(VariableTree *parent, int frameNo, int threadNo)
     : LazyFetchItem(parent),
-      needLocals_(true),
+      needsVariables_(true),
       frameNo_(frameNo),
       threadNo_(threadNo),
       cache_("")
@@ -704,10 +789,9 @@ void VarFrameRoot::addLocals(char *variables)
 
 void VarFrameRoot::setLocals()
 {
-    setExpandable(!cache_.isEmpty());
     RDBParser::parseVariables(this, cache_.data());
 	cache_ = "";
-    needLocals_ = false;
+    needsVariables_ = false;
 	stopWaitingForData();
 	prune();
 	
@@ -722,7 +806,7 @@ void VarFrameRoot::setOpen(bool open)
 {
 	bool localsViewChanged = (isOpen() != open);
     QListViewItem::setOpen(open);
-
+	
     if (localsViewChanged) {
 		((VariableTree*)listView())->selectFrame(frameNo_, threadNo_);
 	}
@@ -732,13 +816,10 @@ void VarFrameRoot::setOpen(bool open)
 
 void VarFrameRoot::setFrameName(const QString &frameName)
 {
-	setActivationId();
-	
 	if (frameName != text(VAR_NAME_COLUMN)) {
 		prune();
 	}
-	 
-	cache_ = "";
+	
 	setText(VAR_NAME_COLUMN, frameName); 
 	setText(VALUE_COLUMN, "");
 	
@@ -757,6 +838,7 @@ GlobalRoot::GlobalRoot(VariableTree *parent)
     setText(0, i18n("Global"));
     setExpandable(true);
     setOpen(false);
+	setSelectable(false);
 }
 
 // **************************************************************************
@@ -830,6 +912,7 @@ WatchRoot::WatchRoot(VariableTree *parent)
 {
     setText(VAR_NAME_COLUMN, i18n("Watch"));
     setOpen(true);
+	setSelectable(false);
 }
 
 // **************************************************************************
