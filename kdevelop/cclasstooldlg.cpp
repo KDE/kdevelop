@@ -25,6 +25,7 @@
 #include <qtooltip.h>
 #include <qlistbox.h>
 #include <qheader.h>
+#include <qregexp.h>
 #include <iostream.h>
 #include "classparser/ProgrammingByContract.h"
 
@@ -470,13 +471,7 @@ void CClassToolDlg::changeCaption()
       break;
   }
 
-  // ** Martin
-  // gettext doesnt recognize whitespaces correctly?!
-  
-  caption += " ";
-  caption += i18n("of class");
-  caption += " ";
-
+  caption += QString(" ") + i18n(" of class ") + " ";
   if( currentClass != NULL )
     caption += currentClass->name;
 
@@ -671,7 +666,9 @@ void CClassToolDlg::slotExportComboChoice(int idx)
 
 void CClassToolDlg::slotClassComboChoice(int idx)
 {
-  setClass( classCombo.currentText() );
+  QString className=classCombo.currentText();
+  // className.replace(QRegExp("::"), ".");
+  setClass( className );
 
   // Update the view if the choice affected the data.
   switch( currentOperation )
