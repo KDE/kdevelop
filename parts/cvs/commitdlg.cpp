@@ -72,7 +72,7 @@ bool CommitDialog::mustAddToChangeLog() const
 
 void CommitDialog::accept()
 {
-	if (logMessage().isEmpty()) {
+	if (textEdit->text().isNull() || textEdit->text().isEmpty()) {
         int s = KMessageBox::warningContinueCancel( this,
 			i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
 			i18n("CVS Commit Warning"),
