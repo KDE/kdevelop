@@ -1,3 +1,7 @@
+2002-02-09  jbb <jbb@kdevelop.org>
+    * bugfix: When using gdb 5.1+ QString's wern't dispalyed correctly
+    * Removed hardwired (3) from manpages so user can select appropriate page.
+    
 2002-02-02  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: taskbar flickering on session loading
     * bugfix: .kdevses in TabPage mode saves views as 'attached', not as 'detached' any more

@@ -342,7 +342,7 @@ void CDocBrowser::slotSearchText(){
 void CDocBrowser::slotManpage()
 {
   kdDebug() << "CDocBrowser::slotManpage" << endl;
-  QString text = "man:/"+selectedText()+"(3)";
+  QString text = "man:/"+selectedText();    // +"(3)";
   emit signalManpage(text);
 }
 
