@@ -1,3 +1,8 @@
+2003-07-28 Mario Scalas <mario.scalas@libero.it>
+    * PartExplorer is now shown in the embedded SelectView because the dialog-based interface was hardly useful!
+    * Results list will now use tooltips to show available services' properties.
+    * Several bugfixes in GUI code 
+
 2003-07-28 Amilcar Lucas <a.lucas@tu-bs.de>
     * Full support for Doxygen 1.3.3
 
