@@ -173,7 +173,15 @@ public:
    *  @return true if a new subdir was added.
    */
   bool addFileToProject(QString complete_filename, ProjectFileType type, bool refreshTrees=true);
-  void addRecentProject(const char* file);
+
+  // Mewthods for manipulating the recent project menu
+  void addRecentProject(const QString& file);
+//  void refreshRecentProjectMenu();
+  void shuffleProjectToTop(int id);
+  QString getProjectAsString(int id);
+  void setupRecentProjectMenu();
+  void saveRecentProjectMenu();
+
   void switchToWorkspace(int id);
 
   /** Switch the view to a certain file.
@@ -840,7 +848,7 @@ private:
   KConfig* config;
   int act_outbuffer_len;
 
-  QStrList recent_projects;
+//  QStringList recent_projects;
   // for the browser
   QStrList history_list;
   QStrList history_title_list;
@@ -960,7 +968,6 @@ private:
   bool lastShutdownOK;
   KStatusBar* m_statusBar;
   KStartupLogo* start_logo;
-
 };
 
 class SaveAllDialog : public KDialog

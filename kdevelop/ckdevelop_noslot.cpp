@@ -48,21 +48,58 @@
 #include <config.h>
 #endif
 
-
-void CKDevelop::addRecentProject(const char* file)
+void CKDevelop::setupRecentProjectMenu()
 {
-  if(recent_projects.find(file) == -1){
-    if( recent_projects.count() < 5)
-      recent_projects.insert(0,file);
-    else{
-      recent_projects.remove(4);
-      recent_projects.insert(0,file);
+	QStringList list=config->readListEntry("Recent Projects");
+  for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+    addRecentProject((*it));
+}
+
+void CKDevelop::saveRecentProjectMenu()
+{
+	QStringList list;
+  for (uint index=0; index < recent_projects_menu->count(); index++)
+  {
+    int id = recent_projects_menu->idAt(index);
+    QString menuFile = recent_projects_menu->text(id);
+    list.append(menuFile);
+  }
+	config->writeEntry("Recent Projects", list);
+}
+
+void CKDevelop::shuffleProjectToTop(int id)
+{
+  QString file = recent_projects_menu->text(id);
+  if (!file.isEmpty())
+  {
+    recent_projects_menu->removeItem(id);
+    recent_projects_menu->insertItem(file, (int) -1, (int)0);
+  }
+}
+
+QString CKDevelop::getProjectAsString(int id)
+{
+  return recent_projects_menu->text(id);
+}
+
+void CKDevelop::addRecentProject(const QString& file)
+{
+  for (uint index=0; index < recent_projects_menu->count(); index++)
+  {
+    int id = recent_projects_menu->idAt(index);
+    QString menuFile = recent_projects_menu->text(id);
+    if (menuFile == file)
+    {
+      shuffleProjectToTop(id);
+      return;
     }
-    recent_projects_menu->clear();
-    for ( int i =0 ; i < recent_projects.count(); i++){
-      recent_projects_menu->insertItem(recent_projects.at(i), i);
-    }
-	}
+  }
+
+  if (recent_projects_menu->count() > 7)
+    recent_projects_menu->removeItemAt(7);
+
+  // Add it at the top of the menu
+  recent_projects_menu->insertItem(file, (int)-1, (int)0);
 }
 
 /*---------------------------------------- getInfoFromFilename
@@ -679,7 +716,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     return;
   }
 
-  QString ext = fileInfo.extension();
+  QString ext = fileInfo.extension(false);
 
   // Load QtDesigner if clicked/loaded an User Interface file (.ui)
   if ( ext == "ui") {
@@ -708,6 +745,17 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     }
     KShellProcess process("/bin/sh");
     process << "kiconedit " << filename;
+    process.start(KProcess::DontCare);
+    return;
+  }
+
+  // load kiconedit if clicked/loaded  an icon
+  if( ext == "gz" || ext == "tgz" || ext == "bz" ){
+    if(!CToolClass::searchProgram("ark")){
+      return;
+    }
+    KShellProcess process("/bin/sh");
+    process << "ark " << filename;
     process.start(KProcess::DontCare);
     return;
   }
@@ -1234,8 +1282,8 @@ void CKDevelop::readOptions()
   //  make_with_cmd=config->readEntry("MakeWith","");
 
   config->setGroup("Files");
-	recent_projects.setAutoDelete(TRUE);
-	config->readListEntry("Recent Projects",recent_projects);
+  setupRecentProjectMenu();
+
   //MB
   #ifndef WITH_KDOC2
 	doctool = config->readNumEntry("doc_tool_type");
@@ -1255,17 +1303,12 @@ void CKDevelop::readOptions()
 	#endif
 	//MB end
 	
-	uint i;
-	for ( i =0 ; i < recent_projects.count(); i++){
-    recent_projects_menu->insertItem(recent_projects.at(i),i);
-  }
-
 	doc_bookmarks_list.setAutoDelete(TRUE);
 	doc_bookmarks_title_list.setAutoDelete(TRUE);
 	
 	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
 	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
+	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
   }
 	
@@ -1334,7 +1377,9 @@ void CKDevelop::saveOptions(){
   config->writeEntry("browser_file",history_list.current());
   config->writeEntry("doc_bookmarks", doc_bookmarks_list);
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
-  config->writeEntry("Recent Projects", recent_projects);
+//  config->writeEntry("Recent Projects", recent_projects);
+  saveRecentProjectMenu();
+
   //MB serializes menuoptions
   #ifndef WITH_KDOC2
   config->writeEntry("doc_tool_type",doctool);

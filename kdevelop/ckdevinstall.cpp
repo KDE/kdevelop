@@ -350,36 +350,13 @@ void CKDevInstall::slotAuto() // proceed >>
 {
   hint_label->setText(i18n("        Automatic installation in progress... "));
   int numProgs=100; // number of installed Programs
-  bool make=false;
-  bool gmake=false;
-  bool autoconf=false;
-  bool autoheader=false;
-  bool automake=false;
-  bool perl=false;
-  bool sgml2html=false;
-  bool ksgml2html=false;
-  bool kdoc=false;
-  glimpse=false;
-  glimpseindex=false;
-  htdig=false;
-  htsearch=false;
-  bool a2ps=false;
-  bool enscript=false;
-  bool dbg=false;
-  bool kiconedit=false;
-  bool ktranslator=false;
-	bool kbabel=false;
-	bool gimp=false;
-	bool kpaint=false;
-	bool designer=false;
-	bool linguist=false;
 	
   auto_button->setEnabled(false);
+  bool make(false);
 
   if (!till_doc) // jump to the new entry point if qt-doc first wasn't found
   {
-
-  int highl_style=KMessageBox::questionYesNo(this,i18n("\nNow you can choose the Syntax-Highlighting style\n"
+    int highl_style=KMessageBox::questionYesNo(this,i18n("\nNow you can choose the Syntax-Highlighting style\n"
                                                        "KDevelop will use. The options are to set\n"
                                                        "the highlighting to Emacs style or to the default\n"
                                                        "settings of KWrite (k.a. 'Extended Editor')\n\n"
@@ -387,265 +364,228 @@ void CKDevInstall::slotAuto() // proceed >>
                                                         i18n("Syntax-Highlighting"),
                                                         i18n("Emacs style"),
                                                         i18n("KWrite default"));
-  if(highl_style==KMessageBox::Yes){
-    config->setGroup("Perl Highlight");
-    config->writeEntry("Mimetypes","application/x-perl");
-    config->writeEntry("Wildcards","");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Variable","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Operator","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+    if(highl_style==KMessageBox::Yes)
+    {
+      config->setGroup("Perl Highlight");
+      config->writeEntry("Mimetypes","application/x-perl");
+      config->writeEntry("Wildcards","");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Variable","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Operator","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
 
-    config->setGroup("C++ Highlight");
-    config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Data Type","0,AD466A,AD466A,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Mimetypes","text/x-c++-src;text/x-c++-hdr;text/x-c-hdr");
-    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
-    config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
-    config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Keyword","0,A7AD,A7AD,0,0,1,courier,12,Èñf@");
-    config->writeEntry("String Char","0,8000,8000,0,0,1,courier,12,Èñf@");
+      config->setGroup("C++ Highlight");
+      config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Data Type","0,AD466A,AD466A,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Mimetypes","text/x-c++-src;text/x-c++-hdr;text/x-c-hdr");
+      config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
+      config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
+      config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Keyword","0,A7AD,A7AD,0,0,1,courier,12,Èñf@");
+      config->writeEntry("String Char","0,8000,8000,0,0,1,courier,12,Èñf@");
 
-    config->setGroup("Ada Highlight");
-    config->writeEntry("Base-N","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Mimetypes","text/x-ada-src");
-    config->writeEntry("Wildcards","*.a");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->setGroup("Ada Highlight");
+      config->writeEntry("Base-N","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Mimetypes","text/x-ada-src");
+      config->writeEntry("Wildcards","*.a");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
 
-    config->setGroup("Modula 2 Highlight");
-    config->writeEntry("Mimetypes","text/x-modula-2-src");
-    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Wildcards","*.md;*.mi");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-	
-		config->setGroup("IDL Highlight");
-    config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Data Type","0,AD466A,AD466A,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Mimetypes","text/x-idl-src");
-    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Wildcards","*.idl");
-    config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
-    config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
-    config->writeEntry("Keyword","0,A7AD,A7AD,0,0,1,courier,12,Èñf@");
-    config->writeEntry("String Char","0,8000,8000,0,0,1,courier,12,Èñf@");
-
-
-    config->setGroup("Java Highlight");
-    config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Mimetypes","text/x-java-src");
-    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Wildcards","*.java");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-
-    config->setGroup("Normal Highlight");
-    config->writeEntry("Mimetypes","");
-    config->writeEntry("Wildcards","");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
-
-    config->setGroup("C Highlight");
-    config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,");
-    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Mimetypes","text/x-c-src");
-    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Wildcards","*.c;*.C;*.ec");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,");
-
-    config->setGroup("HTML Highlight");
-    config->writeEntry("Tag Text","0,0,FFFFFF,1,0,1,courier,12,");
-    config->writeEntry("Char","0,8000,FF00,0,0,1,courier,12,");
-    config->writeEntry("Tag","0,800080,FF00FF,1,0,1,courier,12,");
-    config->writeEntry("Mimetypes","text/html");
-    config->writeEntry("Wildcards","*.html;*.htm");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Tag Value","0,808000,FFFF00,0,0,1,courier,12,");
-
-    config->setGroup("Python Highlight");
-    config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Mimetypes","text/x-python-src");
-    config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Wildcards","*.py");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-    config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
-
-    config->setGroup("Bash Highlight");
-    config->writeEntry("Integer","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Mimetypes","text/x-shellscript");
-    config->writeEntry("Substitution","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Wildcards","");
-    config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
-    config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
-
-    config->setGroup("KWrite Options");
-    config->writeEntry("WrapAt","78");
-    config->writeEntry("ConfigFlags","1073");
-    config->writeEntry("UndoSteps","50");
-    config->writeEntry("Highlight","C++");
-    config->writeEntry("SearchFlags","32");
-    config->writeEntry("Color0","255,255,255");
-    config->writeEntry("Color1","0,0,128");
-    config->writeEntry("Color2","0,0,0");
-    config->writeEntry("Color3","0,0,0");
-    config->writeEntry("TabWidth","2");
-    config->writeEntry("Color4","255,255,255");
-  }
-  if(highl_style==KMessageBox::No){
-    config->setGroup("KWrite Options");
-    config->writeEntry("WrapAt","78");
-    config->writeEntry("ConfigFlags","1040");
-    config->writeEntry("UndoSteps","50");
-    config->writeEntry("Highlight","C++");
-    config->writeEntry("SearchFlags","32");
-    config->writeEntry("Color0","255,255,255");
-    config->writeEntry("Color1","0,0,128");
-    config->writeEntry("Color2","0,0,0");
-    config->writeEntry("Color3","0,0,0");
-    config->writeEntry("TabWidth","2");
-    config->writeEntry("Color4","255,255,255");
-
-    config->setGroup("C Highlight");
-    config->writeEntry("Wildcards","*.c;*.C;*.ec");
-    config->setGroup("C++ Highlight");
-    config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
-  }
-  config->sync();
-  QProgressDialog progress( i18n("Checking needed programs..."), i18n("Cancel"), numProgs, this );
-  progress.setMinimumDuration ( 0 );
+      config->setGroup("Modula 2 Highlight");
+      config->writeEntry("Mimetypes","text/x-modula-2-src");
+      config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Wildcards","*.md;*.mi");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+  	
+  		config->setGroup("IDL Highlight");
+      config->writeEntry("Prep. Lib","0,808000,FFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Char","0,CC07,CC07,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Data Type","0,AD466A,AD466A,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Mimetypes","text/x-idl-src");
+      config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Preprocessor","0,800080,800080,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Wildcards","*.idl");
+      config->writeEntry("Comment","0,E0,D7,0,0,1,courier,12,Èñf@");
+      config->writeEntry("String","0,8000,8000,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,Èñf@");
+      config->writeEntry("Keyword","0,A7AD,A7AD,0,0,1,courier,12,Èñf@");
+      config->writeEntry("String Char","0,8000,8000,0,0,1,courier,12,Èñf@");
 
 
-  for (int i=0; i<numProgs; i++) {
-  progress.setProgress( i );
-  if ( progress.wasCancelled() )
-    break;
-    if(CToolClass::searchInstProgram("make")){
+      config->setGroup("Java Highlight");
+      config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Mimetypes","text/x-java-src");
+      config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Wildcards","*.java");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
 
-      make=true;
+      config->setGroup("Normal Highlight");
+      config->writeEntry("Mimetypes","");
+      config->writeEntry("Wildcards","");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+
+      config->setGroup("C Highlight");
+      config->writeEntry("Prep. Lib","0,8080,FFFF,0,0,1,courier,12,");
+      config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Data Type","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Mimetypes","text/x-c-src");
+      config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Preprocessor","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Wildcards","*.c;*.C;*.ec");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,");
+
+      config->setGroup("HTML Highlight");
+      config->writeEntry("Tag Text","0,0,FFFFFF,1,0,1,courier,12,");
+      config->writeEntry("Char","0,8000,FF00,0,0,1,courier,12,");
+      config->writeEntry("Tag","0,800080,FF00FF,1,0,1,courier,12,");
+      config->writeEntry("Mimetypes","text/html");
+      config->writeEntry("Wildcards","*.html;*.htm");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Tag Value","0,808000,FFFF00,0,0,1,courier,12,");
+
+      config->setGroup("Python Highlight");
+      config->writeEntry("Octal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Decimal","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Mimetypes","text/x-python-src");
+      config->writeEntry("Hex","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Wildcards","*.py");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Float","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+      config->writeEntry("String Char","1,0,FFFFFF,0,0,1,courier,12,èñf@");
+
+      config->setGroup("Bash Highlight");
+      config->writeEntry("Integer","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Mimetypes","text/x-shellscript");
+      config->writeEntry("Substitution","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Wildcards","");
+      config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
+      config->writeEntry("Keyword","1,0,FFFFFF,0,0,1,courier,12,");
+
+      config->setGroup("KWrite Options");
+      config->writeEntry("WrapAt","78");
+      config->writeEntry("ConfigFlags","1073");
+      config->writeEntry("UndoSteps","50");
+      config->writeEntry("Highlight","C++");
+      config->writeEntry("SearchFlags","32");
+      config->writeEntry("Color0","255,255,255");
+      config->writeEntry("Color1","0,0,128");
+      config->writeEntry("Color2","0,0,0");
+      config->writeEntry("Color3","0,0,0");
+      config->writeEntry("TabWidth","2");
+      config->writeEntry("Color4","255,255,255");
     }
-  }
-  progress.setProgress( numProgs );
+
+    if(highl_style==KMessageBox::No)
+    {
+      config->setGroup("KWrite Options");
+      config->writeEntry("WrapAt","78");
+      config->writeEntry("ConfigFlags","1040");
+      config->writeEntry("UndoSteps","50");
+      config->writeEntry("Highlight","C++");
+      config->writeEntry("SearchFlags","32");
+      config->writeEntry("Color0","255,255,255");
+      config->writeEntry("Color1","0,0,128");
+      config->writeEntry("Color2","0,0,0");
+      config->writeEntry("Color3","0,0,0");
+      config->writeEntry("TabWidth","2");
+      config->writeEntry("Color4","255,255,255");
+
+      config->setGroup("C Highlight");
+      config->writeEntry("Wildcards","*.c;*.C;*.ec");
+      config->setGroup("C++ Highlight");
+      config->writeEntry("Wildcards","*.cpp;*.cc;*.cxx;*.CPP;*.CC;*.CXX;*.h;*.hxx;*.H;*.HXX;*.ecpp");
+    }
+
+    config->sync();
+    QProgressDialog progress( i18n("Checking needed programs..."), i18n("Cancel"), numProgs, this );
+    progress.setMinimumDuration ( 0 );
+
+
+    for (int i=0; i<numProgs; i++)
+    {
+      progress.setProgress( i );
+      if ( progress.wasCancelled() )
+        break;
+
+      if(CToolClass::searchInstProgram("make"))
+          make=true;
+    }
+
+    progress.setProgress( numProgs );
 
   } // end of till_doc
 
-  if(CToolClass::searchInstProgram("gmake")){
-    gmake=true;
-  }
-  if(CToolClass::searchInstProgram("autoconf")){
-    autoconf=true;
-  }
-  if(CToolClass::searchInstProgram("autoheader")){
-    autoheader=true;
-  }
-  if(CToolClass::searchInstProgram("automake")){
-    automake=true;
-  }
-  if(CToolClass::searchInstProgram("perl")){
-    perl=true;
-  }
-  if(CToolClass::searchInstProgram("sgml2html")){
-    sgml2html=true;
-  }
-  if(CToolClass::searchInstProgram("ksgml2html")){
-    ksgml2html=true;
-  }
-  if(CToolClass::searchInstProgram("kdoc")){
-    kdoc=true;
-  }
-  if(CToolClass::searchInstProgram("glimpse")){
-    glimpse=true;
-  }
-  if(CToolClass::searchInstProgram("glimpseindex")){
-    glimpseindex=true;
-  }
-  if(CToolClass::searchInstProgram("htdig")){
-    htdig=true;
-  }
-  if(CToolClass::searchInstProgram("htsearch")){
-    htsearch=true;
-  }
-  if(CToolClass::searchInstProgram("a2ps")){
-    a2ps=true;
-  }
-  if(CToolClass::searchInstProgram("enscript")){
-    enscript=true;
-  }
-  if(CToolClass::searchInstProgram("kdbg")){
-    dbg=true;
-  }
-  if(CToolClass::searchInstProgram("kiconedit")){
-    kiconedit=true;
-  }
-  if(CToolClass::searchInstProgram("ktranslator")){
-    ktranslator=true;
-  }
-  if(CToolClass::searchInstProgram("kbabel")){
-    kbabel=true;
-  }
-  if(CToolClass::searchInstProgram("gimp")){
-    kpaint=true;
-  }
-  if(CToolClass::searchInstProgram("kpaint")){
-    kpaint=true;
-  }
-  if(CToolClass::searchInstProgram("designer")){
-    designer=true;
-  }
-  if(CToolClass::searchInstProgram("linguist")){
-    linguist=true;
-  }
+  bool gmake        = CToolClass::searchInstProgram("gmake");
+  bool autoconf     = CToolClass::searchInstProgram("autoconf");
+  bool autoheader   = CToolClass::searchInstProgram("autoheader");
+  bool automake     = CToolClass::searchInstProgram("automake");
+  bool perl         = CToolClass::searchInstProgram("perl");
+  bool sgml2html    = CToolClass::searchInstProgram("sgml2html");
+  bool ksgml2html   = CToolClass::searchInstProgram("ksgml2html");
+  bool kdoc         = CToolClass::searchInstProgram("kdoc");
+       glimpse      = CToolClass::searchInstProgram("glimpse");
+       glimpseindex = CToolClass::searchInstProgram("glimpseindex");
+       htdig        = CToolClass::searchInstProgram("htdig");
+       htsearch     = CToolClass::searchInstProgram("htsearch");
+  bool a2ps         = CToolClass::searchInstProgram("a2ps");
+  bool enscript     = CToolClass::searchInstProgram("enscript");
+  bool dbg          = CToolClass::searchInstProgram("kdbg");
+  bool kiconedit    = CToolClass::searchInstProgram("kiconedit");
+  bool ark          = CToolClass::searchInstProgram("ark");
+  bool ktranslator  = CToolClass::searchInstProgram("ktranslator");
+  bool kbabel       = CToolClass::searchInstProgram("kbabel");
+  bool gimp         = CToolClass::searchInstProgram("gimp");
+  bool kpaint       = CToolClass::searchInstProgram("kpaint");
+  bool designer     = CToolClass::searchInstProgram("designer");
+  bool linguist     = CToolClass::searchInstProgram("linguist");
+
 	QStrList tools_exe;
 	QStrList tools_entry;
 	QStrList tools_argument;
@@ -711,6 +651,16 @@ void CKDevInstall::slotAuto() // proceed >>
   else
     kiconedit_str="KIconedit"+not_found+i18n(" -- editing icons will not be possible\n");
 	
+  QString ark_str;
+  if(ark){
+    ark_str="Archiever (ark)"+found+"\n";
+		tools_exe.append("ark");
+		tools_entry.append("&Ark");
+		tools_argument.append(" ");
+	}
+  else
+    ark_str="Archiever (ark)"+not_found+i18n(" -- viewing compressed files will not be possible\n");
+
 	QString kpaint_str;
 	if(gimp){
     kpaint_str="GIMP"+found+"\n";
@@ -726,7 +676,6 @@ void CKDevInstall::slotAuto() // proceed >>
   }
   else
       kpaint_str=i18n("GIMP/KPaint ")+not_found+"\n";
-	
 
 	QString designer_str;
 	if(designer){
@@ -829,7 +778,7 @@ void CKDevInstall::slotAuto() // proceed >>
   {
   KMessageBox::information(this,i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str+htdig_str+htsearch_str
-                  +print_str+dbg_str+kiconedit_str+kpaint_str+ktranslator_str+kbabel_str+linguist_str+designer_str,
+                  +print_str+dbg_str+kiconedit_str+ark_str+kpaint_str+ktranslator_str+kbabel_str+linguist_str+designer_str,
                   i18n("Program test results"));
 
 	config->setGroup("ToolsMenuEntries");

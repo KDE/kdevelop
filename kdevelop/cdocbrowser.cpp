@@ -98,85 +98,58 @@ void CDocBrowser::slotViewInKFM()
   new KRun(currentURL());
 }
 
-void CDocBrowser::showURL(QString url, bool reload)
+void CDocBrowser::showURL(const QString& url, bool reload)
 {
-  // in some cases KHTMLView return "file:/file:/...." (which might be a bug in kdoc?)
-  // Anyway clean up the url from this error
-  if (url.left(12)=="file:/file:/")
-    url=url.mid(6, url.length());
-
-  QString url_wo_ref=url; // without ref
-  QString ref;
-
   complete_url=url;
 
-  int pos = url.findRev('#');
-  int len = url.length();
+  // in some cases KHTMLView return "file:/file:/...." (which might be a bug in kdoc?)
+  // Anyway clean up the url from this error
+  if (complete_url.left(12)=="file:/file:/")
+    complete_url=complete_url.mid(6, complete_url.length());
 
-  ref = (pos!=-1) ? (const char*) url.right(len - pos - 1) : "";
+  QString url_wo_ref=complete_url; // without ref
+
+  int pos = complete_url.findRev('#');
+  int len = complete_url.length();
+
+  QString ref;
+  if (pos!=-1)
+		ref = complete_url.right(len - pos - 1);
+
   m_refTitle = ref;
 
   if (pos!=-1)
-   url_wo_ref = url.left(pos);
+   url_wo_ref = complete_url.left(pos);
 
-  if(url.left(7) == "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1)
+  if(complete_url.left(7) == "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1)
   {
-    new KRun(url);
+    new KRun(complete_url);
     return;
   }
   // workaround for kdoc2 malformed urls in crossreferences to Qt-documentation
-  if(url.contains("file%253A/"))
-    url.replace( QRegExp("file%253A/"), "" );
+  if(complete_url.contains("file%253A/"))
+    complete_url.replace( QRegExp("file%253A/"), "" );
     
-  if(url.contains("file%3A/"))
-    url.replace( QRegExp("file%3A/"), "" );
+  if(complete_url.contains("file%3A/"))
+    complete_url.replace( QRegExp("file%3A/"), "" );
 
-//  setURLCursor( KCursor::waitCursor() );
-  kapp->setOverrideCursor( Qt::waitCursor );
-
+//  bool loaded = true;
   if( (url_wo_ref != old_url) || reload)
   {
-    QString tmpFile;
-    if( KIO::NetAccess::download( url, tmpFile ) )
-    {
-      char buffer[256+1];
-      QFile file(tmpFile) ;
-      if(file.exists())
-      {
-        emit enableStop(ID_HELP_BROWSER_STOP);
-        file.open(IO_ReadOnly);
-        QDataStream dstream ( &file );
-        QString content;
-
-        begin( url);
-#warning FIXME      parse();
-
-        while ( !dstream.eof() )
-        {
-          buffer[256]='\0';
-          dstream.readRawBytes(buffer, 256);
-          write(buffer);
-        }
-
-        end();
-        show();
-        KIO::NetAccess::removeTempFile(tmpFile);
-        file.close();
-      }
-      else
-      {
-        KMessageBox::information(0,"file: \"" + tmpFile + i18n("\" not found!"),i18n("Not found!"));
-        return;
-      }
-    }
+	  kapp->setOverrideCursor( Qt::waitCursor );
+		KURL kurl(complete_url);
+		openURL(kurl);
+  	kapp->restoreOverrideCursor();
   }
 
-  kapp->restoreOverrideCursor();
-  if (pos != -1)
-    gotoAnchor(ref);
-  else
-    if (url_wo_ref == old_url)
-      view()->setContentsPos(0,0);
+//  if (loaded)
+//  {
+//    if (pos != -1)
+//      gotoAnchor(ref);
+//    else
+//      if (url_wo_ref == old_url)
+//        view()->setContentsPos(0,0);
+//  }
 
 //  if (url_wo_ref == old_url)
 //    emit completed();  // simulate documentDone to put it in history...

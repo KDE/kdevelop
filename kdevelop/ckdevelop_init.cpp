@@ -743,10 +743,10 @@ void CKDevelop::initMenuBar(){
   build_menu = new QPopupMenu;
   build_menu->insertItem(BarIcon("compfile"),i18n("Compile &File"),
 			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
-  build_menu->insertItem(BarIcon("make"),i18n("&Make"),this,
+  build_menu->insertItem(BarIcon("make_kdevelop"),i18n("&Make"),this,
 			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
 
-//   build_menu->insertItem(BarIcon("make"),i18n("Make &with"),this,
+//   build_menu->insertItem(BarIcon("make_kdevelop"),i18n("Make &with"),this,
 // 			 SLOT(slotBuildMakeWith()),0,ID_BUILD_MAKE_WITH);
 //   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE_WITH ,"MakeWith" );
 
@@ -986,7 +986,7 @@ void CKDevelop::initToolBar(){
   toolBar()->insertWidget(0,20,sepCompile);
 
   toolBar()->insertButton(BarIcon("compfile"),ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
-  toolBar()->insertButton(BarIcon("make"),ID_BUILD_MAKE, false,i18n("Make"));
+  toolBar()->insertButton(BarIcon("make_kdevelop"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar()->insertButton(BarIcon("rebuild"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(BarIcon("debugger"),ID_DEBUG_START, false, i18n("Debug"));

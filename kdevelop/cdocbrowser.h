@@ -39,7 +39,7 @@ public:
   /** destructor */
   ~CDocBrowser();
   /**show a html in a htmlview,if reload true it reload a file even it is in memory*/
-  void showURL(QString url,bool reload=false);
+  void showURL(const QString& url,bool reload=false);
   void setDocBrowserOptions();
   QString currentURL();
 	QString currentTitle();

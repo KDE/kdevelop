@@ -1571,6 +1571,7 @@ void PythonHighlight::makeContextList() {
 }
 
 PerlHighlight::PerlHighlight(const QString& name) : Highlight(name) {
+  dw = "*.pl";
   dm = "application/x-perl";
 }
 

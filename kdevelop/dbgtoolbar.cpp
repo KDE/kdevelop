@@ -264,6 +264,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   dockWindow_(new KDockWindow(parent))
 {
   setFrameStyle( QFrame::Box | QFrame::Raised );
+  setFocusPolicy(NoFocus);
   setLineWidth(1);
   setMidLineWidth(2);
 
@@ -430,7 +431,7 @@ void DbgToolbar::slotDock()
     return;
 
 //  ASSERT(!docker_);
-//  hide();
+  hide();
 
   docker_->show();
   docked_ = true;
@@ -454,6 +455,7 @@ void DbgToolbar::slotUndock()
   if (!docked_)
     return;
 
+  show();
   docker_->hide();
   docked_ = false;
 }
