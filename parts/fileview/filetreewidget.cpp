@@ -45,19 +45,24 @@ public:
     QString path();
     Type type() const
     { return typ; }
-    void setBold(bool b)
-    { bld = b; }
-    bool isBold() const
-    { return bld; }
+    void setIsProjectFile(bool b)
+    { m_isProjectFile = b; }
+    bool isProjectFile() const
+    { return m_isProjectFile; }
 
     virtual void setOpen(bool o);
     virtual void paintCell(QPainter *p, const QColorGroup &cg,
                            int column, int width, int alignment);
+                           
+    void hideOrShow();
 
 private:
+    FileTreeWidget* listView()
+    { return static_cast<FileTreeWidget*>(QListViewItem::listView()); }
+
     void init();
     Type typ;
-    bool bld;
+    bool m_isProjectFile;
 };
 
 
@@ -77,15 +82,13 @@ FileTreeItem::FileTreeItem(FileTreeItem *parent, Type type, const QString &name)
 
 void FileTreeItem::init()
 {
-    bld = false;
-    
     if (typ == File)
         setPixmap(0, SmallIcon("document"));
     else {
         setExpandable(true);
         setPixmap(0, SmallIcon("folder"));
         kdDebug(9017) << "Watch dir " << path() << endl;
-        static_cast<FileTreeWidget*>(listView())->watchDir(path());
+        listView()->watchDir(path());
     }
 }
 
@@ -114,25 +117,44 @@ void FileTreeItem::setOpen(bool o)
         const QFileInfoList *fileList = dir.entryInfoList();
         if (fileList) {
             QFileInfoListIterator it(*fileList);
+            
+            // TODO: Update when files added or removed.
+            QStringList projectFiles = listView()->m_part->project()->allFiles();
             for (; it.current(); ++it) {
                 QFileInfo *fi = it.current();
-                if (fi->fileName() == "." || fi->fileName() == "..")
+                FileTreeItem* item;
+                if (fi->fileName() == "." || fi->fileName() == ".." )
                     continue;
                 if (fi->isDir())
-                    (void) new FileTreeItem(this, Dir, fi->fileName());
+                    item = new FileTreeItem(this, Dir, fi->fileName());
                 else
-                    (void) new FileTreeItem(this, File, fi->fileName());
+                    item = new FileTreeItem(this, File, fi->fileName());
+                item->setIsProjectFile( projectFiles.contains( item->path() ) );
+                item->hideOrShow();
             }
         }
     }
     QListViewItem::setOpen(o);
 }
 
+void FileTreeItem::hideOrShow()
+{
+    bool projectFile = listView()->m_showNonProjectFiles || isProjectFile();
+    bool matchesHidePattern = listView()->matchesHidePattern( text(0) );
+    
+    setVisible( (type() == Dir || projectFile) && !matchesHidePattern );
+    
+    FileTreeItem* item = static_cast<FileTreeItem*>(firstChild());
+    while( item ) {
+        item->hideOrShow();
+        item = static_cast<FileTreeItem*>(item->nextSibling());
+    }
+}
 
 void FileTreeItem::paintCell(QPainter *p, const QColorGroup &cg,
                              int column, int width, int alignment)
 {
-    if (isBold()) {
+    if ( isProjectFile() && listView()->m_showNonProjectFiles ) {
         QFont font(p->font());
         font.setBold(true);
         p->setFont(font);
@@ -164,9 +186,11 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
 
     QDomDocument &dom = *m_part->projectDom();
     m_showNonProjectFiles = !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles");
-    QString patterns = DomUtil::readEntry(dom, "/kdevfileview/tree/hidepatterns");
-    if (patterns.isEmpty())
-        patterns = "*o,*.lo";
+    
+ // Comment out until config UI is implemented
+    QString patterns; // = DomUtil::readEntry(dom, "/kdevfileview/tree/hidepatterns");
+//    if (patterns.isEmpty())
+        patterns = "*.o,*.lo,CVS";
     m_hidePatterns = QStringList::split(",", patterns);
 }
 
@@ -197,27 +221,19 @@ bool FileTreeWidget::matchesHidePattern(const QString &fileName)
     return false;
 }
 
-
 void FileTreeWidget::hideOrShow()
 {
-    QStringList projectFiles = m_part->project()->allFiles();
+    FileTreeItem* item = static_cast<FileTreeItem*>(firstChild());
+    if( !item )
+      return;
     
-    QListViewItemIterator it(this);
-    for (; it.current(); ++it) {
-        FileTreeItem *ftitem = static_cast<FileTreeItem*>(it.current());
-
-        // Show all directory items
-        if (ftitem->type() == FileTreeItem::Dir)
-            continue;
-
-        bool isProjectFile = projectFiles.contains(ftitem->path());
-        bool b1 = m_showNonProjectFiles || isProjectFile;
-        bool b2 = !matchesHidePattern(it.current()->text(0));
-        ftitem->setVisible(b1 && b2);
-        ftitem->setBold(m_showNonProjectFiles && isProjectFile);
+    // Need to skip the root item.
+    item = static_cast<FileTreeItem*>(item->firstChild());
+    while( item ) {
+        item->hideOrShow();
+        item = static_cast<FileTreeItem*>(item->nextSibling());
     }
 }
-
 
 void FileTreeWidget::openDirectory(const QString &dirName)
 {
@@ -234,9 +250,10 @@ void FileTreeWidget::slotDirectoryDirty(const QString &dirName)
     for (; it.current(); ++it) {
         FileTreeItem *ftitem = static_cast<FileTreeItem*>(it.current());
         if (ftitem->path() == dirName) {
+            bool wasOpen = ftitem->isOpen();
             while (ftitem->firstChild())
                 delete ftitem->firstChild();
-            ftitem->setOpen(true);
+            ftitem->setOpen( wasOpen );
         }
     }
 

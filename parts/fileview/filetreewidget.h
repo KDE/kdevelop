@@ -23,6 +23,8 @@ class FileTreeWidget : public KListView
 {
     Q_OBJECT
 
+    friend class FileTreeItem;
+    
 public:
     FileTreeWidget( FileViewPart *part, QWidget *parent=0, const char *name=0 );
     ~FileTreeWidget();
