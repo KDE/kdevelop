@@ -32,6 +32,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kstddirs.h>
+#include <kmessagebox.h>
 
 static const char *description =
         I18N_NOOP("The KDevelop C/C++ Integrated Development Environment");
@@ -85,6 +87,22 @@ int main(int argc, char* argv[])
   KApplication a;
   a.dcopClient()->attach();
   a.dcopClient()->registerAs("kdevelop");
+
+#ifndef USE_KDE_2_1_1
+  // KDE version check
+  KStandardDirs stddirs;
+  QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3.0.0");
+  QFileInfo libFI( libPath + "/libkdeui.so.3.0.0");
+  QDateTime requiredDate(QDate(2001,5,24), QTime(22,30));
+  if ( libFI.lastModified() < requiredDate) {
+    KMessageBox::sorry(0L,
+                       i18n("KDevelop cannot start :-(\n") +
+                       i18n("because your KDE base library libkdeui.so is too old!\n\n") +
+                       i18n("You need a version newer than %1\n but the detected version is from %2.\n").arg(requiredDate.toString()).arg(libFI.lastModified().toString()),
+                       i18n("KDE version") );
+    ::exit(0);
+  }
+#endif
 
   config = KGlobal::config();
   config->setGroup("General Options");
