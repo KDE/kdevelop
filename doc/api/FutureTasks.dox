@@ -105,7 +105,6 @@ Another tasks:
       the same border as other items
     - Browser tool bar should truncate long menu entries so it doesn't
       take so much space
-    - Tag file creation fails silently if ctags is not installed
     .
 
 */
