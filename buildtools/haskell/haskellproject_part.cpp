@@ -297,7 +297,8 @@ QString HaskellProjectPart::createCmdLine( QString srcFile)
 
 void HaskellProjectPart::slotBuild()
 {
-    partController()->saveAllFiles();
+    if (partController()->saveAllFiles()==false)
+       return; //user cancelled
 
     if (_compilerExec.isEmpty()) {
       	KMessageBox::sorry(0, i18n("Could not find the Haskell Translator.\nCheck if your settings are correct."));

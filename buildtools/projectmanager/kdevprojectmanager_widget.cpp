@@ -511,7 +511,8 @@ void ProjectOverview::buildAll()
 {
     kdDebug(9000) << "ProjectOverview::buildAll()" << endl;
     
-    part()->partController()->saveAllFiles();
+    if (part()->partController()->saveAllFiles()==false)
+       return; //user cancelled
     
     if (KDevProjectBuilder *builder = part()->defaultBuilder()) {
         ProjectItemList item_list = projectModel()->itemList();

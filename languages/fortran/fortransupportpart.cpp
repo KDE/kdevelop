@@ -86,7 +86,8 @@ void FortranSupportPart::slotFtnchek()
         return;
     }
 
-    partController()->saveAllFiles();
+    if (partController()->saveAllFiles()==false)
+       return; //user cancelled
 
     QDomDocument &dom = *projectDom();
 

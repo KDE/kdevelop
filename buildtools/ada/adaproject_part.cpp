@@ -341,7 +341,8 @@ void AdaProjectPart::removeFiles(const QStringList& /*fileList*/)
 
 void AdaProjectPart::slotBuild()
 {
-    partController()->saveAllFiles();
+    if (partController()->saveAllFiles()==false)
+       return; //user cancelled
 
     QString cmdline = m_compilerExec + " " + m_compilerOpts + " ";
 

@@ -702,7 +702,8 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
 
 void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target, bool withKdesu)
 {
-    partController()->saveAllFiles();
+    if (partController()->saveAllFiles()==false)
+       return; //user cancelled
 
     m_buildCommand = constructMakeCommandLine(dir, target);
 

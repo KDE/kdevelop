@@ -67,8 +67,8 @@ public:
 
   bool querySaveFiles();
   
-  void saveAllFiles();
-  void saveFiles( const KURL::List & list);
+  bool saveAllFiles();
+  bool saveFiles( const KURL::List & list);
   bool saveFile( const KURL & url, bool force = false );
   
   void revertAllFiles();

@@ -982,7 +982,9 @@ void TrollProjectWidget::slotExecuteTarget()
 
 void TrollProjectWidget::slotBuildProject()
 {
-  m_part->partController()->saveAllFiles();
+  if (m_part->partController()->saveAllFiles()==false)
+       return; //user cancelled
+
   QString dir = projectDirectory();
 
   if (!m_rootSubproject)

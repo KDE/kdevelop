@@ -250,7 +250,8 @@ bool PHPSupportPart::validateConfig(){
 void PHPSupportPart::executeOnWebserver(){
 
   // Save all files once
-  partController()->saveAllFiles();
+  if (partController()->saveAllFiles()==false)
+       return; //user cancelled
   
   // Figure out the name of the remote file
   QString file;

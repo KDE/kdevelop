@@ -971,19 +971,21 @@ bool PartController::saveFile( const KURL & url, bool force )
 	return true;
 }
 
-void PartController::saveAllFiles()
+bool PartController::saveAllFiles()
 {
-	saveFiles( openURLs() );
+	return saveFiles( openURLs() );
 }
 
-void PartController::saveFiles( KURL::List const & filelist )
+bool PartController::saveFiles( KURL::List const & filelist )
 {
 	KURL::List::ConstIterator it = filelist.begin();
 	while ( it != filelist.end() )
 	{
-		saveFile( *it );
+                if (saveFile( *it )==false)
+                   return false; //user cancelled
 		++it;
 	}
+        return true;
 }
 
 bool PartController::querySaveFiles()

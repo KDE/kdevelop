@@ -345,7 +345,8 @@ void PascalProjectPart::removeFiles(const QStringList& /*fileList*/)
 
 void PascalProjectPart::slotBuild()
 {
-    partController()->saveAllFiles();
+    if (partController()->saveAllFiles()==false)
+       return; //user cancelled
 
     QString cmdline = m_compilerExec + " " + m_compilerOpts + " ";
 

@@ -568,7 +568,8 @@ QString CustomProjectPart::makeEnvironment() const
 
 void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
-    partController()->saveAllFiles();
+    if (partController()->saveAllFiles()==false)
+       return; //user cancelled
 
     QDomDocument &dom = *projectDom();
     bool ant = DomUtil::readEntry(dom, "/kdevcustomproject/build/buildtool") == "ant";

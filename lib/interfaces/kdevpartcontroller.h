@@ -97,12 +97,14 @@ public:
     /**@return The list of open documents*/
     virtual KURL::List openURLs() = 0;
     
-    /**Saves all open files.*/
-    virtual void saveAllFiles() = 0;
+    /**Saves all open files.
+     @return false if it was cancelled by the user, true otherwise */
+    virtual bool saveAllFiles() = 0;
     
     /**Saves a list of files.
-    @param list The list of URLs to save.*/
-    virtual void saveFiles(const KURL::List &list) = 0;
+    @param list The list of URLs to save.
+    @return false if it was cancelled by the user, true otherwise */
+    virtual bool saveFiles(const KURL::List &list) = 0;
     
     /**Reloads all open files.*/
     virtual void revertAllFiles() = 0;
