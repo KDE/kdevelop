@@ -12,7 +12,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>646</width>
+            <width>642</width>
             <height>567</height>
         </rect>
     </property>
@@ -69,7 +69,7 @@
                     <class>QLabel</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>TextLabel1</cstring>
+                        <cstring>titleLabel</cstring>
                     </property>
                     <property stdset="1">
                         <name>sizePolicy</name>
@@ -267,7 +267,7 @@
                                                 <class>QLabel</class>
                                                 <property stdset="1">
                                                     <name>name</name>
-                                                    <cstring>TextLabel6_2</cstring>
+                                                    <cstring>archiveNameLabel</cstring>
                                                 </property>
                                                 <property stdset="1">
                                                     <name>text</name>
@@ -355,7 +355,7 @@
                         <class>QLabel</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>TextLabel5_5</cstring>
+                            <cstring>fileListLabel</cstring>
                         </property>
                         <property stdset="1">
                             <name>text</name>
@@ -453,7 +453,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel2</cstring>
+                                    <cstring>appNameLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -471,7 +471,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel4</cstring>
+                                    <cstring>licenseLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -482,7 +482,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel5</cstring>
+                                    <cstring>summaryLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -493,14 +493,14 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>VendorLineEdit</cstring>
+                                    <cstring>vendorLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="7"  column="0" >
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel5_4</cstring>
+                                    <cstring>authorLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -518,7 +518,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel5_2_2</cstring>
+                                    <cstring>packagerLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -529,7 +529,7 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>PackagerLineEdit</cstring>
+                                    <cstring>packagerLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="7"  column="1" >
@@ -543,7 +543,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel5_2</cstring>
+                                    <cstring>groupLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -554,7 +554,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel5_3</cstring>
+                                    <cstring>vendorLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -572,14 +572,14 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>VersionLineEdit</cstring>
+                                    <cstring>versionLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="9"  column="0" >
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel6</cstring>
+                                    <cstring>projectDescriptionLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -590,14 +590,14 @@
                                 <class>QLineEdit</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>LicenseLineEdit</cstring>
+                                    <cstring>licenseLineEdit</cstring>
                                 </property>
                             </widget>
                             <widget row="2"  column="0" >
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel2_2</cstring>
+                                    <cstring>releaseLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -615,7 +615,7 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel3</cstring>
+                                    <cstring>versionLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
@@ -628,7 +628,7 @@
                         <class>QButtonGroup</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>ButtonGroup1</cstring>
+                            <cstring>advancedOptionsGroupBox</cstring>
                         </property>
                         <property stdset="1">
                             <name>title</name>
@@ -701,11 +701,11 @@
                                 <class>QLabel</class>
                                 <property stdset="1">
                                     <name>name</name>
-                                    <cstring>TextLabel1_2</cstring>
+                                    <cstring>archLabel</cstring>
                                 </property>
                                 <property stdset="1">
                                     <name>text</name>
-                                    <string>Architechture Target&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
+                                    <string>Architecture Target&lt;BR&gt;&lt;b&gt;(Note: You must have a compiler that supports this target)&lt;/b&gt;</string>
                                 </property>
                             </widget>
                             <widget>
@@ -839,7 +839,7 @@
                         <class>QGroupBox</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>GroupBox1</cstring>
+                            <cstring>localOptionsGroupBox</cstring>
                         </property>
                         <property stdset="1">
                             <name>sizePolicy</name>
@@ -987,7 +987,7 @@
                         <class>QGroupBox</class>
                         <property stdset="1">
                             <name>name</name>
-                            <cstring>GroupBox2</cstring>
+                            <cstring>remoteOptionsGroupBox</cstring>
                         </property>
                         <property stdset="1">
                             <name>sizePolicy</name>
@@ -1049,7 +1049,7 @@
                                         <class>QLabel</class>
                                         <property stdset="1">
                                             <name>name</name>
-                                            <cstring>TextLabel1_3</cstring>
+                                            <cstring>fileSubmissionLabel</cstring>
                                         </property>
                                         <property stdset="1">
                                             <name>text</name>
@@ -1237,7 +1237,7 @@
                                         <class>QLabel</class>
                                         <property stdset="1">
                                             <name>name</name>
-                                            <cstring>TextLabel2_3</cstring>
+                                            <cstring>progressLabel</cstring>
                                         </property>
                                         <property stdset="1">
                                             <name>text</name>

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Exec=blubb
+Exec=g77
 Comment=GNU Fortran 77 compiler
 Name=G77Options
 ServiceTypes=KDevelop/CompilerOptions

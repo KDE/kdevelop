@@ -34,11 +34,14 @@ private:
     virtual void cflagsClicked();
     virtual void cxxflagsClicked();
     virtual void f77flagsClicked();
+    virtual void cserviceChanged();
+    virtual void cxxserviceChanged();
+    virtual void f77serviceChanged();
 
     KDevCompilerOptions *createCompilerOptions(const QString &lang);
-    QStringList cservice_names;
-    QStringList cxxservice_names;
-    QStringList f77service_names;
+    QStringList cservice_names, cservice_execs;
+    QStringList cxxservice_names, cxxservice_execs;
+    QStringList f77service_names, f77service_execs;
     
     AutoProjectPart *m_part;
 };

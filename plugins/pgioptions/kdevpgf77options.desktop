@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Exec=blubb
+Exec=pgf77
 Comment=Portland Group Fortran77 compiler
 Name=Pgf77Options
 ServiceTypes=KDevelop/CompilerOptions

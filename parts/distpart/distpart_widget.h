@@ -14,18 +14,18 @@
 #include <qprogressbar.h>
 
 class KDevProject;
-class distpartPart;
+class DistpartPart;
 class KParts::ReadOnlyPart;
 
 
-class distpartWidget : public distpart_ui
+class DistpartDialog : public distpart_ui
 {
   Q_OBJECT
 
 public:
 
-  distpartWidget(distpartPart *part);
-  ~distpartWidget();
+  DistpartDialog(DistpartPart *part);
+  ~DistpartDialog();
 
 signals:
     void okay();

@@ -28,12 +28,15 @@
 class ServiceComboBox
 {
 public:
-    static void insertStringList(QComboBox *combo, const QValueList<KService::Ptr> &list, QStringList *names)
+    static void insertStringList(QComboBox *combo, const QValueList<KService::Ptr> &list,
+                                 QStringList *names, QStringList *execs)
     {
         QValueList<KService::Ptr>::ConstIterator it;
         for (it = list.begin(); it != list.end(); ++it) {
             combo->insertItem((*it)->comment());
             (*names) << (*it)->name();
+            (*execs) << (*it)->exec();
+            kdDebug() << "insertStringList item " << (*it)->name() << "," << (*it)->exec() << endl;
         }
     }
     static QString currentText(QComboBox *combo, QStringList *names)
@@ -71,9 +74,9 @@ CompilerOptionsWidget::CompilerOptionsWidget(AutoProjectPart *part, QWidget *par
     KTrader::OfferList f77offers =
         KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Fortran'");
 
-    ServiceComboBox::insertStringList(cservice_combo, coffers, &cservice_names);
-    ServiceComboBox::insertStringList(cxxservice_combo, cxxoffers, &cxxservice_names);
-    ServiceComboBox::insertStringList(f77service_combo, f77offers, &f77service_names);
+    ServiceComboBox::insertStringList(cservice_combo, coffers, &cservice_names, &cservice_execs);
+    ServiceComboBox::insertStringList(cxxservice_combo, cxxoffers, &cxxservice_names, &cxxservice_execs);
+    ServiceComboBox::insertStringList(f77service_combo, f77offers, &f77service_names, &f77service_execs);
     
     ServiceComboBox::setCurrentText(cservice_combo,
                                     DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompiler"),
@@ -127,6 +130,29 @@ void CompilerOptionsWidget::accept()
 
     if (KMessageBox::questionYesNo(this, i18n("Rerun configure now?")) == KMessageBox::Yes)
         QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
+}
+
+
+void CompilerOptionsWidget::cserviceChanged()
+{
+    QString exec = ServiceComboBox::currentText(cservice_combo, &cservice_execs);
+    cbinary_edit->setText(exec);
+    kdDebug() << "exec: " << exec << endl;
+}
+
+
+void CompilerOptionsWidget::cxxserviceChanged()
+{
+    QString exec = ServiceComboBox::currentText(cxxservice_combo, &cxxservice_execs);
+    cxxbinary_edit->setText(exec);
+}
+
+
+void CompilerOptionsWidget::f77serviceChanged()
+{
+    QString exec = ServiceComboBox::currentText(f77service_combo, &f77service_execs);
+    f77binary_edit->setText(exec);
+    kdDebug() << "exec: " << exec << endl;
 }
 
 

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>550</width>
+            <width>542</width>
             <height>379</height>
         </rect>
     </property>
@@ -329,7 +329,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>C++ Compiler</string>
+                <string>Compiler command (CXX):</string>
             </property>
         </widget>
         <widget row="9"  column="1"  rowspan="1"  colspan="4" >
@@ -347,7 +347,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Compiler command (CXX):</string>
+                <string>C++ Compiler</string>
             </property>
         </widget>
         <spacer row="6"  column="2" >
@@ -519,9 +519,30 @@
         <receiver>compiler_options_widget</receiver>
         <slot>f77flagsClicked()</slot>
     </connection>
+    <connection>
+        <sender>cservice_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>compiler_options_widget</receiver>
+        <slot>cserviceChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cxxservice_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>compiler_options_widget</receiver>
+        <slot>cxxserviceChanged()</slot>
+    </connection>
+    <connection>
+        <sender>f77service_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>compiler_options_widget</receiver>
+        <slot>f77serviceChanged()</slot>
+    </connection>
     <slot access="protected">cflagsClicked()</slot>
+    <slot access="protected">cserviceChanged()</slot>
     <slot access="protected">cxxflagsClicked()</slot>
     <slot access="protected">f77flagsClicked()</slot>
+    <slot access="protected">cxxserviceChanged()</slot>
+    <slot access="protected">f77serviceChanged()</slot>
 </connections>
 <tabstops>
     <tabstop>cservice_combo</tabstop>

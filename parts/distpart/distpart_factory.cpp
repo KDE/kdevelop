@@ -11,35 +11,35 @@ extern "C"
 
   void *init_libkdevdistpart()
     {
-      return new distpartFactory;
+      return new DistpartFactory;
     }
 
 };
 
 
-distpartFactory::distpartFactory(QObject *parent, const char *name)
+DistpartFactory::DistpartFactory(QObject *parent, const char *name)
   : KDevFactory(parent, name)
 {
 }
 
 
-distpartFactory::~distpartFactory()
+DistpartFactory::~DistpartFactory()
 {
   delete s_instance;
   s_instance = 0;
 }
 
 
-KDevPart *distpartFactory::createPartObject(KDevApi *api, QObject *parent,
-											   const QStringList &/*args*/)
+KDevPart *DistpartFactory::createPartObject(KDevApi *api, QObject *parent,
+                                            const QStringList &/*args*/)
 {
-  return new distpartPart(api, parent, "distpart");
+  return new DistpartPart(api, parent, "distpart");
 }
 
 
-KInstance *distpartFactory::s_instance = 0;
+KInstance *DistpartFactory::s_instance = 0;
 
-KInstance *distpartFactory::instance()
+KInstance *DistpartFactory::instance()
 {
   if (!s_instance)
     s_instance = new KInstance("kdevdistpart");

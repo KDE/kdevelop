@@ -1,28 +1,46 @@
+2001-08-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Distpart:
+	  - Fixed all layouts in distpart
+	  - The relevant signal for check boxes is toggled(bool), not released()
+	  - Use QDialog instead of QWidget and create it only on demand
+	  - Okay -> OK
+	  - Referring to generated names like Layout36 is a bad idea
+	* Put default binary name for compilers in their desktop files
+	  This default is used for the CC/CXX/F77 setting when the
+	  compiler has been changed by the user
+
 2001-07-30 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+
 	* interfaces/keditor: moc files are compiled separately, #include's
 	removed from cpp files.
 	* fix: KEditor::Editor don't emit documentActivated when there
 	isn't one.
 	
 2001-07-29 Victor Röder <victor_roeder@gmx.de>
+
 	* KDevArgHint improved, i.e. positioning, ui
 
 2001-07-26 Victor Röder <victor_roeder@gmx.de>
+
 	* KDevArgHint added to KWrite-part (widget that shows the function and its needed arguments)
 		Try it and type in 'test(' at the beginning of an empty line in a C++ project!
 	* showArgHint() added to CodeCompletionDocument
 	* added some code to CppCodeCompletion (cppsupport), but only for testing
 
 2001-07-26 Sandy Meier   <smeier@kdevelop.org>
+
 	* kwrite CodeCompletionbox is now useable, maybe someone who want make it more colorful?
 	* php code completion supports (global methods,$this->xxx and $test = new xxx) now, 
 		more will follow
 
 2001-07-26 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+
 	* debian packaging for kdevelop-3.0 branch
 	* kwrite: add path kwriteeditor_part for locating syntax.xml
 
 2001-07-22 Sandy Meier <smeier@kdevelop.org>
+
 	* implemented initial codeCompletion interface for kwrite
 	* added codeCompletion parsing to the PHP supportpart
 	    (everything is very alpha)

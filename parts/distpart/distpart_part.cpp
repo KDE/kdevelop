@@ -13,24 +13,24 @@
 #include "distpart_part.h"
 
 
-distpartPart::distpartPart(KDevApi *api, QObject *parent, const char *name)
+DistpartPart::DistpartPart(KDevApi *api, QObject *parent, const char *name)
   : KDevPart(api, parent, name)
 {
-  setInstance(distpartFactory::instance());
+  setInstance(DistpartFactory::instance());
  
   setXMLFile("kdevpart_distpart.rc");
 
-  m_action =  new KAction( i18n("Project Distrabution and Publishing"), "package", 1,
+  m_action =  new KAction( i18n("Project Distribution and Publishing"), "package", 0,
                           this, SLOT(show()),
                           actionCollection(), "make_dist" );
 
-  m_action->setStatusText(i18n("Make Source and Binary Distrabuition"));
-  m_action->setWhatsThis(i18n("Distrabution and Publishing:\n\n"
+  m_action->setStatusText(i18n("Make Source and Binary Distribution"));
+  m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"
                  	    "fnork fnork blub.... \n"
                             "bork bork bork....."));
-  m_widget = new distpartWidget(this);
+  //QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
 
-  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
+  m_dialog = 0;
 
   // set up package
   KURL projectURL;  // we need to get this from the base project
@@ -39,17 +39,18 @@ distpartPart::distpartPart(KDevApi *api, QObject *parent, const char *name)
 }
 
 
-distpartPart::~distpartPart()
+DistpartPart::~DistpartPart()
 {
-  delete m_widget;
+  delete m_dialog;
 }
 
 
-void distpartPart::show()
+void DistpartPart::show()
 {
-// configure the widget
+  if (!m_dialog)
+    m_dialog = new DistpartDialog(this);
 
-  m_widget->show();
-//  core()->embedWidget(m_widget, KDevCore::SelectView, i18n("distpart"));
+  m_dialog->show();
 }
+
 #include "distpart_part.moc"

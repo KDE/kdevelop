@@ -5,14 +5,14 @@
 #include <kdevfactory.h>
 
 
-class distpartFactory : public KDevFactory
+class DistpartFactory : public KDevFactory
 {
   Q_OBJECT
 
 public:
 
-  distpartFactory(QObject *parent=0, const char *name=0);
-  ~distpartFactory();
+  DistpartFactory(QObject *parent=0, const char *name=0);
+  ~DistpartFactory();
 
   virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
     

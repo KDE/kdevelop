@@ -13,24 +13,24 @@
 
 #include "packagebase.h"
 
-class distpartWidget;
+class DistpartDialog;
 
 
-class distpartPart : public KDevPart
+class DistpartPart : public KDevPart
 {
   Q_OBJECT
 
 public:
 
-  distpartPart(KDevApi *api, QObject *parent=0, const char *name=0);
-  ~distpartPart();
+  DistpartPart(KDevApi *api, QObject *parent=0, const char *name=0);
+  ~DistpartPart();
 
 public slots:
   void show();
 
 private:
   packageBase *thePackage;
-  QGuardedPtr<distpartWidget> m_widget;
+  QGuardedPtr<DistpartDialog> m_dialog;
   KAction *m_action;
 };
 

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Exec=blubb
+Exec=g++
 Comment=GNU C++ compiler
 Name=GppOptions
 ServiceTypes=KDevelop/CompilerOptions
