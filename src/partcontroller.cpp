@@ -359,10 +359,11 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
 
   EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
 
+#if KDE_VERSION < 310
   // HACK: this is a workaround. The kate-part does not emit "completed" when
   // it save a file yet.
-  // FIXME: remove this line once kate-part emits the right signal
   connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
+#endif
 
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
