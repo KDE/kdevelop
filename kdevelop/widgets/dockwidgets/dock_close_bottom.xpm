@@ -1,0 +1,23 @@
+/* XPM */
+const char*dock_close_bottom[]={
+"16 16 4 1",
+"b c #c0c000",
+"# c #c0c0c0",
+"a c #868686",
+". c #ffffff",
+"...............#",
+".##############a",
+".##############a",
+".##############a",
+".##############a",
+".##############a",
+".##############a",
+".##############a",
+"#aaaaaaaaaaaaaaa",
+"...............#",
+".bbbbbbbbbbbbbba",
+".bbbbbbbbbbbbbba",
+".bbbbbbbbbbbbbba",
+".bbbbbbbbbbbbbba",
+".bbbbbbbbbbbbbba",
+"#aaaaaaaaaaaaaaa"};
