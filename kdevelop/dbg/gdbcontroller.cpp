@@ -25,6 +25,7 @@
 
 #include <kapp.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -484,8 +485,8 @@ enum lineStarts
   START_No_s  = 1931505486,
   START_Core  = 1701998403,
   START_Temp  = 1886217556,
-  START__New  = 1,
-  START__Swi  = 2
+  START__New  = 2003127899,
+  START__Swi  = 1769427803
 };
 
 // Any data that isn't "wrapped", arrives here. Rather than do multiple
@@ -494,8 +495,8 @@ enum lineStarts
 // int. Hence those big numbers you see above.
 void GDBController::parseLine(char* buf)
 {
-  int t=*(int*)(char*)"[New";
-  int t1=*(int*)(char*)"[Swi";
+//  int t=*(int*)(char*)"[New";
+//  kdDebug() << "t = " << t << endl;
 
   ASSERT(*buf != (char)BLOCK_START);
 
