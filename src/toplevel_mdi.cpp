@@ -117,6 +117,8 @@ void TopLevelMDI::slotQuit()
 
 QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
 {
+  Q_ASSERT( view ); // if this assert fails, then some part didn't return a widget. Fix the part ;)
+
   QextMdiChildView* pMDICover = new QextMdiChildView(name);
   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
   view->reparent(pMDICover, QPoint(0,0));
