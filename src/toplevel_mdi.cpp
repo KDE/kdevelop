@@ -4,6 +4,7 @@
 #include <qcheckbox.h>
 
 
+#include <kdeversion.h>
 #include <kapplication.h>
 #include <kstdaction.h>
 #include <kdebug.h>
@@ -44,7 +45,9 @@ TopLevelMDI::TopLevelMDI(QWidget *parent, const char *name)
 
 void TopLevelMDI::init()
 {
+#if (KDE_VERSION > 305)
   setStandardToolBarMenuEnabled( true );
+#endif
   setXMLFile("gideonui.rc");
 
   createFramework();

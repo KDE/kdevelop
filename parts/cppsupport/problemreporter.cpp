@@ -23,11 +23,16 @@
 #include "configproblemreporter.h"
 #include "backgroundparser.h"
 
+#include <kdeversion.h>
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
+
+#if (KDE_VERSION > 304)
 #include <ktexteditor/markinterfaceextension.h>
+#endif
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstatusbar.h>
@@ -249,13 +254,14 @@ void ProblemReporter::configWidget( KDialogBase* dlg )
 
 void ProblemReporter::slotPartAdded( KParts::Part* part )
 {
+#if (KDE_VERSION > 304)
 	KTextEditor::MarkInterfaceExtension* iface = dynamic_cast<KTextEditor::MarkInterfaceExtension*>( part );
 	
 	if( !iface )
 		return;
 		
 	iface->setPixmap( KTextEditor::MarkInterface::markType10, SmallIcon("stop") );
-
+#endif
 }
 
 void ProblemReporter::slotPartRemoved( KParts::Part* part )

@@ -3,7 +3,7 @@
 #include <qvbox.h>
 #include <qcheckbox.h>
 
-
+#include <kdeversion.h>
 #include <kapplication.h>
 #include <kstdaction.h>
 #include <kdebug.h>
@@ -14,7 +14,11 @@
 #include <kstatusbar.h>
 #include <kdialogbase.h>
 #include <kkeydialog.h>
+
+#if (KDE_VERSION > 305)
 #include <knotifydialog.h>
+#endif
+
 #include <kedittoolbar.h>
 
 
@@ -53,7 +57,9 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
 
 void TopLevelSDI::init()
 {
+#if (KDE_VERSION > 305)
   setStandardToolBarMenuEnabled( true );
+#endif
   setXMLFile("gideonui.rc");
 
   createFramework();
@@ -160,11 +166,13 @@ void TopLevelSDI::createActions()
       actionCollection(), "settings_configure_toolbars" );
   action->setStatusText(i18n("Lets you configure toolbars"));
 
+#if (KDE_VERSION > 305)
   action = KStdAction::configureNotifications(
       this, SLOT(slotConfigureNotifications()),
       actionCollection(), "settings_configure_notifications" );
   action->setStatusText(i18n("Lets you configure system notifications"));
-    
+#endif  
+  
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
   action->setStatusText( i18n("Lets you customize KDevelop") );
@@ -325,7 +333,9 @@ void TopLevelSDI::slotShowMenuBar()
 
 void TopLevelSDI::slotConfigureNotifications()
 {
+#if (KDE_VERSION > 305)
   KNotifyDialog::configure(this, "Notification Configuration Dialog");
+#endif
 }
 
 void TopLevelSDI::slotSettings()
