@@ -1,4 +1,4 @@
-//
+// -*-c++-*-
 //
 // C++ Implementation: $MODULE
 //
