@@ -19,6 +19,7 @@
 #include <kparts/part.h>
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
