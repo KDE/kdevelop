@@ -253,8 +253,10 @@ GotoLineDialog::GotoLineDialog(int line, int max, QWidget *parent, const char *n
 
   QVBoxLayout *mainLayout = new QVBoxLayout(this, 10);
 
-  e1 = new KIntNumInput(QString::null, 1, INT_MAX, 1, line,
-                        QString::null, 10, false, this);
+//  e1 = new KIntNumInput(QString::null, 1, INT_MAX, 1, line,
+//                        QString::null, 10, false, this);  
+  e1 = new KIntNumInput( line,this,10);
+  e1->setRange(1,INT_MAX,1,false);
   e1->setFixedHeight( e1->sizeHint().height() );
 
   label = new QLabel(e1,i18n("&Goto Line:"),this);
@@ -395,14 +397,26 @@ EditConfigTab::EditConfigTab(QWidget *parent, KWrite *kWrite,
   leLayout = new QVBoxLayout(2);
   mainLayout->addLayout(leLayout);
 
-  e1 = new KIntNumInput(QString::null, 20, 200, 1, kWrite->wordWrapAt(),
-                        QString::null, 10, false, this);
+//  e1 = new KIntNumInput(QString::null, 20, 200, 1, kWrite->wordWrapAt(),
+//                        QString::null, 10, false, this);
+  e1 = new KIntNumInput( kWrite->wordWrapAt(),this,10);
+  e1->setRange(20,200,1,false);
+  e1->setFixedHeight( e1->sizeHint().height() );
+  
+  
   label1 = new QLabel(e1, i18n("Wrap Words At:"), this);
-  e2 = new KIntNumInput(QString::null, 1, 16, 1, kWrite->tabWidth(),
-                        QString::null, 10, false, this);
+//  e2 = new KIntNumInput(QString::null, 1, 16, 1, kWrite->tabWidth(),
+//                        QString::null, 10, false, this);
+  e2 = new KIntNumInput( kWrite->tabWidth(),this,10);
+  e2->setRange(1,16,1,false);
+  
   label2 = new QLabel(e2, i18n("Tab Width:"), this);
-  e3 = new KIntNumInput(QString::null, 5, 30000, 1, kWrite->undoSteps(),
-                        QString::null, 10, false, this);
+
+//  e3 = new KIntNumInput(QString::null, 5, 30000, 1, kWrite->undoSteps(),
+//                        QString::null, 10, false, this);
+  e3 = new KIntNumInput( kWrite->undoSteps(),this,10);
+  e3->setRange(5,30000,1,false);
+    
   label3 = new QLabel(e3, i18n("Undo steps:"), this);
 
   leLayout->addWidget(label1, 0, AlignLeft);
