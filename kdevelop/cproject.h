@@ -31,7 +31,7 @@
   */
 struct TMakefileAmInfo {
   QString rel_name;
-  /** normal,prog_main*/
+  /** normal,prog_main,static_library*/
   QString type;
   QStrList sub_dirs;
 };
@@ -131,12 +131,12 @@ public:
   void getFilters(QString group,QStrList& filters);
   void setFilters(QString group,QStrList& filters);
   void writeFileInfo(TFileInfo info);
-  void writeMakefileAmInfo(TMakefileAmInfo info);
+  //  void writeMakefileAmInfo(TMakefileAmInfo info);
   /** return true if a new subdir was added to the project*/
-  bool addFileToProject(QString rel_name);
+  bool addFileToProject(QString rel_name,TFileInfo info);
   void removeFileFromProject(QString rel_name);
   void setKDevelopWriteArea(QString makefile);
-  void addMakefileAmToProject(QString rel_name);
+  void addMakefileAmToProject(QString rel_name,TMakefileAmInfo info);
 
   QString getKDevPrjVersion();
   QString getProjectType();
@@ -157,11 +157,14 @@ public:
   TFileInfo getFileInfo(QString filename);
   TMakefileAmInfo getMakefileAmInfo(QString rel_name);
   
-  /* return the sources(.cpp,.c,.C,.cxx) for the main-makefile*/
+  /* return the sources(.cpp,.c,.C,.cxx) */
   QStrList& getSources();
-  /** return the headers(.h.) for the main-makefile*/
+  /** return the headers(.h.) */
   QStrList& getHeaders();
+
   
+  
+  void getSources(QString rel_name_makefileam,QStrList& sources);
   /* usefull information methods*/
   /** check if a subdir is in the project (registered)*/
   bool isDirInProject(QString rel_name);
@@ -183,6 +186,7 @@ public:
 
 protected:
 
+  void getAllStaticLibraries(QStrList& libs);
   QString getDir(QString rel_name);
   QString getName(QString rel_name);
   void setSourcesHeaders();

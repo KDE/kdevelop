@@ -84,16 +84,10 @@ void CClassView::CVReadAllFiles(){
     for(filename = headers.first();filename != 0;filename = headers.next()){
       stream_info = new TStreamedFile;
 
-      file.setName(prj_info->getProjectDir() + prj_info->getSubDir() + filename);
-
+      file.setName(filename);
       stream_info->filename = filename;
       if (file.exists()){
 	file.open(IO_ReadOnly);
-	//      cerr << "LESE DATEI" << endl;
-// 	while(!in_stream.eof()){
-//  	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
-//  	}
-	// the above one was really slow
 	stream_info->stream.resize(file.size()+1);
 	file.readBlock(stream_info->stream.data(),file.size());
 	file.close();

@@ -273,12 +273,12 @@ TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
   
 }
 
-void CProject::writeMakefileAmInfo(TMakefileAmInfo info){
-  QString rel_name = info.rel_name;
-  config->setGroup(rel_name);
-  config->writeEntry("type",info.type);
-  config->writeEntry("sub_dirs",info.sub_dirs);
-}
+// void CProject::writeMakefileAmInfo(TMakefileAmInfo info){
+//   QString rel_name = info.rel_name;
+//   config->setGroup(rel_name);
+//   config->writeEntry("type",info.type);
+//   config->writeEntry("sub_dirs",info.sub_dirs);
+// }
 
 
 
@@ -293,8 +293,8 @@ void CProject::getFilters(QString group,QStrList& filters){
   config->setGroup("LFV Groups");
   config->readListEntry(group,filters);
 }
-bool CProject::addFileToProject(QString rel_name){
-
+bool CProject::addFileToProject(QString rel_name,TFileInfo info){
+  
   QStrList list_files;
   QString makefile_name;
   QStrList sub_dirs;
@@ -322,6 +322,7 @@ bool CProject::addFileToProject(QString rel_name){
   // find the makefiles to check
   int slash2_pos;
   check_makefile_list.append(makefile_name);
+  QString makefile_name_org = makefile_name.copy();
 
   //  cerr << endl << "*check:*" << makefile_name;
   
@@ -339,17 +340,38 @@ bool CProject::addFileToProject(QString rel_name){
   config->setGroup("General");
   config->readListEntry("makefiles",makefile_list);
 
+  TMakefileAmInfo makefileaminfo;
+  
   for(makefile_name=check_makefile_list.first();makefile_name!=0;makefile_name=check_makefile_list.next()){ 
     // check if current makefile exists and all makefile above,if not add it
     if(makefile_list.find(makefile_name) == -1){
-      addMakefileAmToProject(makefile_name);
+      makefileaminfo.rel_name = makefile_name;
+      if(makefile_name_org == makefile_name){ // the first makefileam
+	if(info.type == "SOURCE") makefileaminfo.type = "static_library"; // cool 
+	else makefileaminfo.type = "normal";
+	addMakefileAmToProject(makefile_name,makefileaminfo);
+      }
+      else{
+	makefileaminfo.type = "normal";
+	addMakefileAmToProject(makefile_name,makefileaminfo);
+      }
     }
   }
   //++++++++++++++++add Makefile to the project if needed (end)
-  
-  // and at last: modify the subdir entry in every Makefile.am if needed
+
 
   makefile_name = check_makefile_list.first(); // get the complete makefilename
+
+
+  // change the makefile type if needed
+  if(info.type == "SOURCE"){ // a static library is needed?
+    config->setGroup(makefile_name);
+    if(config->readEntry("type") != "prog_main"){
+      config->writeEntry("type","static_library");
+    }
+  }
+  // and at last: modify the subdir entry in every Makefile.am if needed
+
 
   QString subdir;
   bool new_subdir=false;
@@ -391,6 +413,16 @@ bool CProject::addFileToProject(QString rel_name){
   }
   setSourcesHeaders();
   //  createMakefilesAm(); // do some magic generation
+
+  // write the fileinfo
+  config->setGroup(info.rel_name);
+  config->writeEntry("type",info.type);
+  config->writeEntry("dist",info.dist);
+  config->writeEntry("install",info.install);
+  // save the $ because kconfig removes one
+  info.install_location.replace("[\\$]","$$");
+  config->writeEntry("install_location",info.install_location);
+
   return new_subdir;
 }
 void CProject::removeFileFromProject(QString rel_name){
@@ -431,8 +463,6 @@ void CProject::updateMakefilesAm(){
 }
 void CProject::updateMakefileAm(QString makefile){
   setKDevelopWriteArea(makefile);
-  config->setGroup(makefile);
-
   QString abs_filename = getProjectDir() + makefile;
   QFile file(abs_filename);
   QStrList list;
@@ -443,7 +473,14 @@ void CProject::updateMakefileAm(QString makefile){
   QString dist_str;
   QTextStream stream(&file);
   bool found=false;
+
+  QString libname;
+  QStrList static_libs;
+  getAllStaticLibraries(static_libs);
   
+  QString sources;
+  QStrList source_files;
+  config->setGroup(makefile);
   config->readListEntry("files",files);
   config->readListEntry("sub_dirs",subdirs);
   if(file.open(IO_ReadOnly)){ // read the makefileam
@@ -452,26 +489,52 @@ void CProject::updateMakefileAm(QString makefile){
     }
   }
   file.close();
+
   if(file.open(IO_WriteOnly)){
-    for(str = list.first();str != 0;str = list.next()){
+    for(str = list.first();str != 0;str = list.next()){ // every line
       if(str == "####### kdevelop will overwrite this part!!! (begin)##########"){
  	stream << str << "\n";
 	
-	if (config->readEntry("type") == "prog_main"){
-	  QString sources;
-	  for(str= getSources().first();str !=0;str = getSources().next()){
+	if (config->readEntry("type") == "prog_main"){ // the main makefile
+	  getSources(makefile,source_files);
+	  for(str= source_files.first();str !=0;str = source_files.next()){
 	    sources =  str + " " + sources ;
 	  }
 	  stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
 	  stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
 	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
-	  stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
+	  if(static_libs.isEmpty()){
+	    stream << getBinPROGRAM()  <<  "_LDADD   = " << getLDADD();
+	  }
+	  else{ // we must link some libs
+	    stream << getBinPROGRAM()  <<  "_LDADD   = ";
+	    for(libname = static_libs.first();libname != 0;libname = static_libs.next()){
+	      stream << libname.replace(QRegExp("^"+getSubDir()),"./") << " "; // remove the subdirname
+	    }
+	    stream << getLDADD();
+	  }
+	  
 	  if(getProjectType() != "normal_cpp") {
 	    stream << " $(LIBSOCKET)" << "\n";
 	  }
 	  else{
 	    stream << "\n";
 	  }
+	}
+	//***************************generate needed things for static_library*********
+	config->setGroup(makefile);
+	if(config->readEntry("type") == "static_library"){
+	  getSources(makefile,source_files);
+	  for(str= source_files.first();str !=0;str = source_files.next()){
+	    sources =  str + " " + sources ;
+	  }
+	  QDir dir(getDir(makefile));
+	  if (getProjectType() != "normal_cpp"){
+	    stream << "\nINCLUDES = $(all_includes)\n\n";
+	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
+	  }
+	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
+	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
 	}
 
 	//************SUBDIRS***************
@@ -569,26 +632,49 @@ QString CProject::getName(QString rel_name){
   int len = rel_name.length() - pos - 1;
   return rel_name.right(len);
 }
+void CProject::getSources(QString rel_name_makefileam,QStrList& sources){
+  sources.clear();
+  QStrList files;
+  QString file;
+  TFileInfo info;
+  config->setGroup(rel_name_makefileam);
+  config->readListEntry("files",files);
+  
+  for(file = files.first();file != 0;file = files.next()){
+    if(file.right(4) == ".cpp" || file.right(3) == ".cc" || file.right(2) == ".C"
+       || file.right(2) == ".c" || file.right(4) == ".cxx" ){   
+      info = getFileInfo(file);
+      if(info.type == "SOURCE"){
+	sources.append(getName(file));
+      }
+    }
+  }
+}
 void CProject::setSourcesHeaders(){
   // clear the lists
   header_files.clear();
   cpp_files.clear();
   
   QStrList files;
-  QString str,filename;
+  QString file;
+  TFileInfo info;
 
-  config->setGroup(getSubDir() + "Makefile.am");
+  getAllFiles(files);
 
-  config->readListEntry("files",files);
-  for(str = files.first();str != 0;str = files.next()){
-    filename = getName(str);
-    if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
-       || filename.right(2) == ".c" || filename.right(4) == ".cxx" ){    // added .cxx    990204 rnolden
-      cpp_files.append(filename);
+  for(file = files.first();file != 0;file = files.next()){
+    if(file.right(4) == ".cpp" || file.right(3) == ".cc" || file.right(2) == ".C"
+       || file.right(2) == ".c" || file.right(4) == ".cxx" ){    // added .cxx    990204 rnolden
+      info = getFileInfo(file);
+      if(info.type == "SOURCE"){
+	cpp_files.append(getProjectDir()+file);
+      }
     }
-    if(filename.right(2) == ".h" || filename.right(3) == ".hh" || filename.right(2) == ".H"
-       || filename.right(2) == ".H" ){       // added .hxx    990204 rnolden
-      header_files.append(filename);
+    if(file.right(2) == ".h" || file.right(3) == ".hh" || file.right(2) == ".H"
+       || file.right(2) == ".hxx" ){       // added .hxx    990204 rnolden
+      info = getFileInfo(file);
+      if(info.type == "HEADER"){
+	header_files.append(getProjectDir()+file);
+      }
     }
   }
 }
@@ -647,8 +733,12 @@ void CProject::removeLFVGroup(QString name){
   config->deleteEntry(name,false);
   config->writeEntry("groups",groups);
 }
-void CProject::addMakefileAmToProject(QString rel_name){
+void CProject::addMakefileAmToProject(QString rel_name,TMakefileAmInfo info){
   
+  config->setGroup(rel_name);
+  config->writeEntry("type",info.type);
+  config->writeEntry("sub_dirs",info.sub_dirs);
+
   QStrList makefile_list;
   config->setGroup("General");
   config->readListEntry("makefiles",makefile_list); 
@@ -785,4 +875,24 @@ TWorkspace CProject::getWorkspace(int id){
   ws.show_treeview = config->readBoolEntry("show_treeview",true);
   ws.show_output_view =config->readBoolEntry("show_outputview",true);
   return ws;
+}
+
+void CProject::getAllStaticLibraries(QStrList& libs){
+  QDir dir;
+  QStrList makefiles;
+  QString makefile;
+
+  libs.clear();
+  config->setGroup("General");
+  
+  config->readListEntry("makefiles",makefiles);
+  
+  for(makefile=makefiles.first();makefile != 0;makefile=makefiles.next()){
+    config->setGroup(makefile);
+    if(config->readEntry("type") == "static_library"){
+      
+      dir.setPath(getDir(makefile));
+      libs.append(getDir(makefile) + "lib" + dir.dirName() + ".a");
+    }
+  }
 }

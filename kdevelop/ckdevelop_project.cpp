@@ -473,14 +473,15 @@ bool CKDevelop::addFileToProject(QString complete_filename,QString type,bool ref
   bool new_subdir = false;
   QString rel_name = complete_filename;
   rel_name.replace(QRegExp(prj->getProjectDir()),"");
-  new_subdir = prj->addFileToProject(rel_name);
+  
   TFileInfo info;
   info.rel_name = rel_name;
   info.type = type;
   info.dist = true;
   info.install=false;
   info.install_location = "";
-  prj->writeFileInfo(info);
+  new_subdir = prj->addFileToProject(rel_name,info);
+  
   prj->writeProject();
   prj->updateMakefilesAm();
   if(refresh){
@@ -557,21 +558,19 @@ void CKDevelop::slotProjectNewClass(){
 
     QFileInfo header_info(header_file);
     QFileInfo source_info(source_file);
-    prj->addFileToProject(prj->getSubDir() + source_info.fileName());
     TFileInfo file_info;
     file_info.rel_name = prj->getSubDir() + source_info.fileName();
     file_info.type = "SOURCE";
     file_info.dist = true;
     file_info.install = false;
-    prj->writeFileInfo(file_info);
+    prj->addFileToProject(prj->getSubDir() + source_info.fileName(),file_info);
     
-    prj->addFileToProject(prj->getSubDir() + header_info.fileName());
     file_info.rel_name = prj->getSubDir() + header_info.fileName();
     file_info.type = "HEADER";
     file_info.dist = true;
     file_info.install = false;
-    prj->writeFileInfo(file_info);
-    
+    prj->addFileToProject(prj->getSubDir() + header_info.fileName(),file_info);
+   
     prj->updateMakefilesAm();
     slotViewRefresh();
   }

@@ -296,7 +296,7 @@ void CKAppWizard::initPages(){
   QToolTip::add(hnew,i18n("you can clear the headertemplate here"));
   connect(hnew,SIGNAL(clicked()),SLOT(slotNewHeaderButtonClicked()));
   hedit = new KEdit(kapp,widget3);
-  QFont f("courier",10);
+  QFont f("fixed",10);
   hedit->setFont(f);
   hedit->setGeometry(20,60,340,230);
   QToolTip::add(hedit,i18n("you can edit your headertemplate here"));
@@ -872,8 +872,7 @@ void CKAppWizard::slotProcessExited() {
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
   makeAmInfo.sub_dirs = sub_dir_list;
-  project->writeMakefileAmInfo (makeAmInfo);
-  project->addMakefileAmToProject (makeAmInfo.rel_name);
+  project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
@@ -884,8 +883,7 @@ void CKAppWizard::slotProcessExited() {
     //    sub_dir_list.append("docs");
   }
   makeAmInfo.sub_dirs = sub_dir_list;
-  project->writeMakefileAmInfo (makeAmInfo);
-  project->addMakefileAmToProject (makeAmInfo.rel_name);
+  project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
   makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
@@ -894,8 +892,7 @@ void CKAppWizard::slotProcessExited() {
   sub_dir_list.clear();
   //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
-  project->writeMakefileAmInfo (makeAmInfo);
-  project->addMakefileAmToProject (makeAmInfo.rel_name);
+  project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
@@ -903,8 +900,7 @@ void CKAppWizard::slotProcessExited() {
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
-  project->writeMakefileAmInfo (makeAmInfo);
-  project->addMakefileAmToProject (makeAmInfo.rel_name);
+  project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
   if (!(ta->isChecked() || qta->isChecked())) {
     makeAmInfo.rel_name = "po/Makefile.am";
@@ -913,254 +909,244 @@ void CKAppWizard::slotProcessExited() {
     KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
     sub_dir_list.clear();
     makeAmInfo.sub_dirs = sub_dir_list;
-    project->writeMakefileAmInfo (makeAmInfo);
-    project->addMakefileAmToProject (makeAmInfo.rel_name);
+    project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
   TFileInfo fileInfo;
-  if (gnufiles->isChecked()) {
-  project->addFileToProject ("AUTHORS");
   fileInfo.rel_name = "AUTHORS";
   fileInfo.type = "DATA";
   fileInfo.dist = true;
   fileInfo.install = false;
   fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-
-  project->addFileToProject ("COPYING");
-  fileInfo.rel_name = "COPYING";
-  fileInfo.type = "DATA";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject ("ChangeLog");
-  fileInfo.rel_name = "ChangeLog";
-  fileInfo.type = "DATA";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-
-  project->addFileToProject ("INSTALL");
-  fileInfo.rel_name = "INSTALL";
-  fileInfo.type = "DATA";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject ("README");
-  fileInfo.rel_name = "README";
-  fileInfo.type = "DATA";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-
-  project->addFileToProject ("TODO");
-  fileInfo.rel_name = "TODO";
-  fileInfo.type = "DATA";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
+  if (gnufiles->isChecked()) {
+    project->addFileToProject ("AUTHORS",fileInfo);
+    
+    fileInfo.rel_name = "COPYING";
+    fileInfo.type = "DATA";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject ("COPYING",fileInfo);
+    
+    fileInfo.rel_name = "ChangeLog";
+    fileInfo.type = "DATA";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject ("ChangeLog",fileInfo);
+    
+    fileInfo.rel_name = "INSTALL";
+    fileInfo.type = "DATA";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject ("INSTALL",fileInfo);
+    
+    fileInfo.rel_name = "README";
+    fileInfo.type = "DATA";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject ("README",fileInfo);
+    
+    fileInfo.rel_name = "TODO";
+    fileInfo.type = "DATA";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject ("TODO",fileInfo);
+    
   }
 
   if (lsmfile->isChecked()) {
-    project->addFileToProject (namelow + ".lsm");
     fileInfo.rel_name = namelow + ".lsm";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
     fileInfo.install = false;
     fileInfo.install_location = "";
-    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + ".lsm",fileInfo);
   }
-
-  project->addFileToProject (namelow + "/main.cpp");
   fileInfo.rel_name = namelow + "/main.cpp";
   fileInfo.type = "SOURCE";
   fileInfo.dist = true;
   fileInfo.install = false;
   fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
+  project->addFileToProject (namelow + "/main.cpp",fileInfo);
+  
   if (!(ta->isChecked())) {
-  project->addFileToProject (namelow + "/" + namelow + ".cpp");
-  fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
-  fileInfo.type = "SOURCE";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + ".h");
-  fileInfo.rel_name = namelow + "/" + namelow + ".h";
-  fileInfo.type = "HEADER";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
+    
+    fileInfo.rel_name = namelow + "/" + namelow + ".cpp";
+    fileInfo.type = "SOURCE";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/" + namelow + ".cpp",fileInfo);
+    
+    fileInfo.rel_name = namelow + "/" + namelow + ".h";
+    fileInfo.type = "HEADER";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/" + namelow + ".h",fileInfo);
   }
-
+  
   if (kna->isChecked() || qta->isChecked()) {
-  project->addFileToProject (namelow + "/" + namelow + "doc.cpp");
-  fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
-  fileInfo.type = "SOURCE";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "doc.h");
-  fileInfo.rel_name = namelow + "/" + namelow + "doc.h";
-  fileInfo.type = "HEADER";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "view.cpp");
-  fileInfo.rel_name = namelow + "/" + namelow + "view.cpp";
-  fileInfo.type = "SOURCE";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "view.h");
-  fileInfo.rel_name = namelow + "/" + namelow + "view.h";
-  fileInfo.type = "HEADER";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/resource.h");
-  fileInfo.rel_name = namelow + "/resource.h";
-  fileInfo.type = "HEADER";
-  fileInfo.dist = true;
-  fileInfo.install = false;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
+    fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
+    fileInfo.type = "SOURCE";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/" + namelow + "doc.cpp",fileInfo);
+    
+    fileInfo.rel_name = namelow + "/" + namelow + "doc.h";
+    fileInfo.type = "HEADER";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/" + namelow + "doc.h",fileInfo);
+   
+    fileInfo.rel_name = namelow + "/" + namelow + "view.cpp";
+    fileInfo.type = "SOURCE";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/" + namelow + "view.cpp",fileInfo);
+    
+    fileInfo.rel_name = namelow + "/" + namelow + "view.h";
+    fileInfo.type = "HEADER";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/" + namelow + "view.h",fileInfo);
+   
+    fileInfo.rel_name = namelow + "/resource.h";
+    fileInfo.type = "HEADER";
+    fileInfo.dist = true;
+    fileInfo.install = false;
+    fileInfo.install_location = "";
+    project->addFileToProject (namelow + "/resource.h",fileInfo);
+    
   }
-
+  
   if (datalink->isChecked()) {
-    project->addFileToProject (namelow + "/" + namelow + ".kdelnk");
     fileInfo.rel_name = namelow + "/" + namelow + ".kdelnk";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
-    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/" + namelow + ".kdelnk",fileInfo);
   }
   
   if (progicon->isChecked()) {
-    project->addFileToProject (namelow + "/" + namelow + ".xpm");
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
     fileInfo.install = true;
     fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
-    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/" + namelow + ".xpm",fileInfo);
   }
 
   if (miniicon->isChecked()) {
-    project->addFileToProject (namelow + "/mini-" + namelow + ".xpm");
     fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
     fileInfo.install = true;
     QString icon = namelow + ".xpm";
     fileInfo.install_location = "$(kde_minidir)/" + icon;
-    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/mini-" + namelow + ".xpm",fileInfo);
   }
   
   if (userdoc->isChecked()) {
-    project->addFileToProject (namelow + "/docs/en/index-1.html");
     fileInfo.rel_name = namelow + "/docs/en/index-1.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) {
-    fileInfo.install = true;
-  if (qta->isChecked()) {
-    fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
-  }
-  else 
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
-   }
-    project->writeFileInfo (fileInfo);
+    if (!(ta->isChecked())) {
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
+    }
+    project->addFileToProject (namelow + "/docs/en/index-1.html",fileInfo);
 
-    project->addFileToProject (namelow + "/docs/en/index-2.html");
     fileInfo.rel_name = namelow + "/docs/en/index-2.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) {
-    fileInfo.install = true;
-    if (qta->isChecked()) {
-      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
+    if (!(ta->isChecked())) {
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
     }
-    else 
-      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-2.html";
-   }
-    project->writeFileInfo (fileInfo);
-    project->addFileToProject (namelow + "/docs/en/index-3.html");
+    project->addFileToProject (namelow + "/docs/en/index-2.html",fileInfo);
+    
     fileInfo.rel_name = namelow + "/docs/en/index-3.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) {
-    fileInfo.install = true;
-    if (qta->isChecked()) {
-      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
+    if (!(ta->isChecked())) {
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
     }
-    else 
-    fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-3.html";
-   }
-    project->writeFileInfo (fileInfo);
-    project->addFileToProject (namelow + "/docs/en/index-4.html");
+    project->addFileToProject (namelow + "/docs/en/index-3.html",fileInfo);
+    
     fileInfo.rel_name = namelow + "/docs/en/index-4.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) {
-    fileInfo.install = true;
-    if (qta->isChecked()) {
-      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
+    if (!(ta->isChecked())) {
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
     }
-    else 
-      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-4.html";
-   }
-    project->writeFileInfo (fileInfo);
-    project->addFileToProject (namelow + "/docs/en/index-5.html");
+    project->addFileToProject (namelow + "/docs/en/index-4.html",fileInfo);
+    
     fileInfo.rel_name = namelow + "/docs/en/index-5.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) { 
-   fileInfo.install = true;
-    if (qta->isChecked()) {
-      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
+    if (!(ta->isChecked())) { 
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
     }
-    else 
-      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-5.html";
-   }
-    project->writeFileInfo (fileInfo);
-    project->addFileToProject (namelow + "/docs/en/index-6.html");
+    project->addFileToProject (namelow + "/docs/en/index-5.html",fileInfo);
+  
     fileInfo.rel_name = namelow + "/docs/en/index-6.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) {
-    fileInfo.install = true;
-    if (qta->isChecked()) {
-      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
+    if (!(ta->isChecked())) {
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
     }
-    else 
-      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-6.html";
-   }
-    project->writeFileInfo (fileInfo);
-    project->addFileToProject (namelow + "/docs/en/index.html");
+    project->addFileToProject (namelow + "/docs/en/index-6.html",fileInfo);
+    
     fileInfo.rel_name = namelow + "/docs/en/index.html";
     fileInfo.type = "DATA";
     fileInfo.dist = true;
-   if (!(ta->isChecked())) {
-    fileInfo.install = true;
-    if (qta->isChecked()) {
-      fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
+    if (!(ta->isChecked())) {
+      fileInfo.install = true;
+      if (qta->isChecked()) {
+	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
+      }
+      else 
+	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
     }
-    else 
-      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index.html";
-   }
-    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index.html",fileInfo);
+    
   }
   
   
