@@ -23,6 +23,7 @@
 #include <kstandarddirs.h>
 #include <kstringhandler.h>
 #include <kaction.h>
+#include <configwidgetproxy.h>
 
 #include "kdevcore.h"
 #include "misc.h"
@@ -37,6 +38,8 @@
 #include "doctreeglobalconfigwidget.h"
 #include "doctreeprojectconfigwidget.h"
 
+#define GLOBALDOC_OPTIONS 1
+#define PROJECTDOC_OPTIONS 2
 
 DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin("DocTree", "doctree", parent, name ? name : "DocTreeViewPart")
@@ -47,12 +50,15 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(configWidget(KDialogBase*)),
-             this, SLOT(configWidget(KDialogBase*)) );
-    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
-             this, SLOT(projectConfigWidget(KDialogBase*)) );
+//    connect( core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)) );
+//    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+ 
+    _configProxy = new ConfigWidgetProxy( core() );
+    _configProxy->createGlobalConfigPage( i18n("Documentation Tree"), GLOBALDOC_OPTIONS );
+    _configProxy->createProjectConfigPage( i18n("Project Documentation"), PROJECTDOC_OPTIONS );
+    connect( _configProxy, SIGNAL(insertConfigWidget(const QObject*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const QObject*, QWidget*, unsigned int )) );
     
     m_widget = new DocTreeViewWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
@@ -103,7 +109,7 @@ void DocTreeViewPart::projectClosed()
 {
     m_widget->projectChanged(0);
 }
-
+/*
 void DocTreeViewPart::configWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
@@ -126,7 +132,7 @@ void DocTreeViewPart::projectConfigWidget(KDialogBase *dlg) {
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
     //kdDebug(9002) << "**** ProjectConfigWidget ****" << endl;
 }
-
+*/
 
 void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
@@ -208,6 +214,27 @@ void DocTreeViewPart::slotContextFulltextSearch()
         QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
         partController()->showDocument(KURL("file://" + indexdir + "/results.html"), m_popupstr );
     }
+}
+
+void DocTreeViewPart::insertConfigWidget( const QObject * dlg, QWidget * page, unsigned int pagenumber )
+{
+	switch ( pagenumber )
+	{
+		case GLOBALDOC_OPTIONS:
+		{
+			DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget( this, m_widget, page, "doc tree config widget");
+			connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
+		
+		break;
+		}
+		case PROJECTDOC_OPTIONS:
+		{
+			DocTreeProjectConfigWidget *w1 = new DocTreeProjectConfigWidget(m_widget, page, project(), "doc tree project config");
+			connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
+		
+		break;
+		}
+	}
 }
 
 #include "doctreeviewpart.moc"

@@ -21,6 +21,7 @@ class DocTreeViewWidget;
 //class DocIndexDialog;
 class Context;
 class QPopupMenu;
+class ConfigWidgetProxy;
 
 
 class DocTreeViewPart : public KDevPlugin
@@ -32,8 +33,8 @@ public:
     ~DocTreeViewPart();
 
 private slots:
-    void projectConfigWidget(KDialogBase *dlg);
-    void configWidget(KDialogBase *dlg);
+//    void projectConfigWidget(KDialogBase *dlg);
+//    void configWidget(KDialogBase *dlg);
     void projectOpened();
     void projectClosed();
     void contextMenu(QPopupMenu *popup, const Context *context);
@@ -44,6 +45,9 @@ private slots:
     void slotContextGotoManpage();
 //  void slotContextLookupIndex();
     void slotContextFulltextSearch();
+    void insertConfigWidget( const QObject * dlg, QWidget * page, unsigned int pagenumber );
+
+
     
 private:
     QGuardedPtr<DocTreeViewWidget> m_widget;
@@ -51,6 +55,7 @@ private:
     QString m_popupstr;
 
     friend class DocTreeViewWidget;
+    ConfigWidgetProxy * _configProxy;
 };
 
 #endif
