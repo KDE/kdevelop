@@ -46,6 +46,9 @@ public:
                            int column, int width, int alignment);
     void hideOrShow();
 
+protected:
+    virtual void enforceSortOrder() const;
+    
 private:
     FileTreeWidget* listView()
     { return static_cast<FileTreeWidget*>(QListViewItem::listView()); }
@@ -72,6 +75,57 @@ void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
         p->setFont(font);
     }
     QListViewItem::paintCell(p, cg, column, width, alignment);
+}
+
+void MyFileTreeViewItem::enforceSortOrder() const
+{
+    // the pending flag is to avoid infinite looping
+    // (can happen when methods used in this indirectly call this again (like firstChild()))
+    static bool pending = false;
+    if (pending) return;
+    pending = true;
+
+    // call the base class stuff,
+    // unfortunately it doesn't divide the "folder" and "file" entries. The code below this will do that.
+    KFileTreeViewItem::enforceSortOrder();
+
+    // nobody's here, there's nothing to do
+    if (!firstChild()) { pending = false; return; }
+    
+    // iterate to the first item that is a file, store the last "folder" entry in lastDir
+    KFileTreeViewItem* current = dynamic_cast<KFileTreeViewItem*>(firstChild());
+    KFileTreeViewItem* lastDir = 0L;
+    while (current && current->isDir()) {
+        lastDir = current;
+        QListViewItem* lvi = current->nextSibling();
+        if (lvi) {
+            current = dynamic_cast<KFileTreeViewItem*>(lvi);
+        }
+        else { current = 0L; }
+    }
+
+    // go on iterating, now move all next "folder" entries above the files
+    while (current) {
+        QListViewItem* lvi = current->nextSibling();
+        KFileTreeViewItem* nextCandidate = 0L;
+        if (lvi) {
+            nextCandidate = dynamic_cast<KFileTreeViewItem*>(lvi);
+        }
+        if (current->isDir()) {
+            if (lastDir) {
+                current->moveItem(lastDir);
+            }
+            else { // a trick in case the first original entry is a file 'cause there aint no moveBefore()
+                QListViewItem* f = firstChild();
+                current->moveItem(f);
+                f->moveItem(current);
+            }
+            lastDir = current;
+        }
+        current = nextCandidate;
+    }
+
+    pending = false;
 }
 
 class MyFileTreeBranch : public KFileTreeBranch
