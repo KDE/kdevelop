@@ -12,9 +12,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdeversion.h>
-#include <kmenubar.h>
 #include <kstatusbar.h>
-#include <kkeydialog.h>
 #include <kaccel.h>
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
@@ -22,8 +20,6 @@
 #include <kurl.h>
 #include <kurldrag.h>
 #include <kurlrequesterdlg.h>
-
-#include <kedittoolbar.h>
 
 #include <kstdaccel.h>
 #include <kaction.h>
@@ -46,10 +42,11 @@
     // and a status bar
     statusBar()->show();
 
-    // apply the saved mainwindow settings, if any, and ask the mainwindow
-    // to automatically save settings if changed: window size, toolbar
-    // position, icon size, etc.
-    setAutoSaveSettings();
+    // Apply the create the main window and ask the mainwindow to
+		// automatically save settings if changed: window size, toolbar
+    // position, icon size, etc.  Also to add actions for the statusbar
+		// toolbar, and keybindings if necessary.
+    setupGUI();
 
     // allow the view to change the statusbar and caption
     connect(m_view, SIGNAL(signalChangeStatusbar(const QString&)),
@@ -98,11 +95,6 @@ void %{APPNAME}::setupActions()
     KStdAction::print(this, SLOT(filePrint()), actionCollection());
     KStdAction::quit(kapp, SLOT(quit()), actionCollection());
 
-    m_toolbarAction = KStdAction::showToolbar(this, SLOT(optionsShowToolbar()), actionCollection());
-    m_statusbarAction = KStdAction::showStatusbar(this, SLOT(optionsShowStatusbar()), actionCollection());
-
-    KStdAction::keyBindings(this, SLOT(optionsConfigureKeys()), actionCollection());
-    KStdAction::configureToolbars(this, SLOT(optionsConfigureToolbars()), actionCollection());
     KStdAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 
     // this doesn't do anything useful.  it's just here to illustrate
@@ -110,7 +102,6 @@ void %{APPNAME}::setupActions()
     KAction *custom = new KAction(i18n("Cus&tom Menuitem"), 0,
                                   this, SLOT(optionsPreferences()),
                                   actionCollection(), "custom_action");
-    createGUI();
 }
 
 void %{APPNAME}::saveProperties(KConfig *config)
@@ -230,62 +221,6 @@ void %{APPNAME}::filePrint()
         // and send the result to the printer
         p.end();
     }
-}
-
-void %{APPNAME}::optionsShowToolbar()
-{
-    // this is all very cut and paste code for showing/hiding the
-    // toolbar
-    if (m_toolbarAction->isChecked())
-        toolBar()->show();
-    else
-        toolBar()->hide();
-}
-
-void %{APPNAME}::optionsShowStatusbar()
-{
-    // this is all very cut and paste code for showing/hiding the
-    // statusbar
-    if (m_statusbarAction->isChecked())
-        statusBar()->show();
-    else
-        statusBar()->hide();
-}
-
-void %{APPNAME}::optionsConfigureKeys()
-{
-    KKeyDialog::configure(actionCollection());
-}
-
-void %{APPNAME}::optionsConfigureToolbars()
-{
-    // use the standard toolbar editor
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
-    saveMainWindowSettings(KGlobal::config(), autoSaveGroup());
-# else
-    saveMainWindowSettings(KGlobal::config());
-# endif
-#else
-    saveMainWindowSettings(KGlobal::config());
-#endif
-}
-
-void %{APPNAME}::newToolbarConfig()
-{
-    // this slot is called when user clicks "Ok" or "Apply" in the toolbar editor.
-    // recreate our GUI, and re-apply the settings (e.g. "text under icons", etc.)
-    createGUI();
-
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
-    applyMainWindowSettings(KGlobal::config(), autoSaveGroup());
-# else
-    applyMainWindowSettings(KGlobal::config());
-# endif
-#else
-    applyMainWindowSettings(KGlobal::config());
-#endif
 }
 
 void %{APPNAME}::optionsPreferences()

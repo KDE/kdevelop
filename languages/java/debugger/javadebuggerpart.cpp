@@ -139,7 +139,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
     action = new KAction(i18n("&Start"), "1rightarrow", 0,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
-    action->setStatusText( i18n("Runs the program in the debugger") );
+    action->setToolTip( i18n("Runs the program in the debugger") );
     action->setWhatsThis( i18n("Start in debugger\n\n"
                                "Starts the debugger with the project's main "
                                "executable. You may set some breakpoints "
@@ -151,19 +151,19 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
     action->setEnabled(false);
-    action->setStatusText( i18n("Kills the executable and exits the debugger") );
+    action->setToolTip( i18n("Kills the executable and exits the debugger") );
 
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
     action->setEnabled(false);
-    action->setStatusText( i18n("Interrupts the application") );
+    action->setToolTip( i18n("Interrupts the application") );
 
     action = new KAction(i18n("&Continue"), "dbgrun", 0,
                          this, SLOT(slotContinue()),
                          actionCollection(), "debug_cont");
     action->setEnabled(false);
-    action->setStatusText( i18n("Continues the application execution") );
+    action->setToolTip( i18n("Continues the application execution") );
     action->setWhatsThis( i18n("Continue application execution\n\n"
                                "Continues the execution of your application in the "
                                "debugger. This only takes effect when the application "
@@ -174,7 +174,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
     action->setEnabled(false);
-    action->setStatusText( i18n("Steps over the next line") );
+    action->setToolTip( i18n("Steps over the next line") );
     action->setWhatsThis( i18n("Step over\n\n"
                                "Executes one line of source in the current source file. "
                                "If the source line is a call to a function the whole "
@@ -185,7 +185,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
     action->setEnabled(false);
-    action->setStatusText( i18n("Steps into the next statement") );
+    action->setToolTip( i18n("Steps into the next statement") );
     action->setWhatsThis( i18n("Step into\n\n"
                                "Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
@@ -195,13 +195,13 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
     action->setEnabled(false);
-    action->setStatusText( i18n("Steps into the next assembly instruction") );
+    action->setToolTip( i18n("Steps into the next assembly instruction") );
 
     action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
     action->setEnabled(false);
-    action->setStatusText( i18n("Steps out of the current function") );
+    action->setToolTip( i18n("Steps out of the current function") );
     action->setWhatsThis( i18n("Step out of\n\n"
                                "Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
@@ -213,7 +213,7 @@ JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStr
                          this, SLOT(slotMemoryView()),
                          actionCollection(), "debug_memview");
     action->setEnabled(false);
-    action->setStatusText( i18n("Various views into the application") );
+    action->setToolTip( i18n("Various views into the application") );
 
     connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );

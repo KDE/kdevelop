@@ -13,7 +13,6 @@
 #include "%{APPNAMELC}view.h"
 
 class KPrinter;
-class KToggleAction;
 class KURL;
 
 /**
@@ -71,12 +70,7 @@ private slots:
     void fileSave();
     void fileSaveAs();
     void filePrint();
-    void optionsShowToolbar();
-    void optionsShowStatusbar();
-    void optionsConfigureKeys();
-    void optionsConfigureToolbars();
     void optionsPreferences();
-    void newToolbarConfig();
 
     void changeStatusbar(const QString& text);
     void changeCaption(const QString& text);
@@ -89,8 +83,7 @@ private:
     %{APPNAME}View *m_view;
 
     KPrinter   *m_printer;
-    KToggleAction *m_toolbarAction;
-    KToggleAction *m_statusbarAction;
 };
 
 #endif // _%{APPNAMEUC}_H_
+

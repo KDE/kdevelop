@@ -618,7 +618,7 @@ bool DebuggerPart::startDebugger()
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Continue") );
 //    ac->action("debug_run")->setIcon( "dbgrun" );
-    ac->action("debug_run")->setStatusText( i18n("Continues the application execution") );
+    ac->action("debug_run")->setToolTip( i18n("Continues the application execution") );
     ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
                                            "Continues the execution of your application in the "
                                            "debugger. This only takes effect when the application "
@@ -675,7 +675,7 @@ void DebuggerPart::slotStopDebugger()
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Start") );
 //    ac->action("debug_run")->setIcon( "1rightarrow" );
-    ac->action("debug_run")->setStatusText( i18n("Runs the program in the debugger") );
+    ac->action("debug_run")->setToolTip( i18n("Runs the program in the debugger") );
     ac->action("debug_run")->setWhatsThis( i18n("Start in debugger\n\n"
                                            "Starts the debugger with the project's main "
                                            "executable. You may set some breakpoints "
@@ -716,7 +716,7 @@ void DebuggerPart::slotRun()
     {
         KActionCollection *ac = actionCollection();
         ac->action("debug_run")->setText( i18n("&Continue") );
-        ac->action("debug_run")->setStatusText( i18n("Continues the application execution") );
+        ac->action("debug_run")->setToolTip( i18n("Continues the application execution") );
         ac->action("debug_run")->setWhatsThis( i18n("Continue application execution\n\n"
             "Continues the execution of your application in the "
             "debugger. This only takes effect when the application "
@@ -892,7 +892,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         KActionCollection *ac = actionCollection();
         ac->action("debug_run")->setText( i18n("Restart") );
 //        ac->action("debug_run")->setIcon( "1rightarrow" );
-        ac->action("debug_run")->setStatusText( i18n("Restart the program in the debugger") );
+        ac->action("debug_run")->setToolTip( i18n("Restart the program in the debugger") );
         ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
                                            "Restarts the program in the debugger") );
 //        slotStop();

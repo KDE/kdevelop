@@ -65,27 +65,27 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_exec" );
-    action->setStatusText( i18n("Runs the Perl program") );
+    action->setToolTip( i18n("Runs the Perl program") );
 
     action = new KAction( i18n("Execute String..."), "exec", 0,
                           this, SLOT(slotExecuteString()),
                           actionCollection(), "build_execstring" );
-    action->setStatusText( i18n("Executes a string as Perl code") );
+    action->setToolTip( i18n("Executes a string as Perl code") );
 
     action = new KAction( i18n("Start Perl Interpreter"), "exec", 0,
                           this, SLOT(slotStartInterpreter()),
                           actionCollection(), "build_runinterpreter" );
-    action->setStatusText( i18n("Starts the Perl interpreter without a program") );
+    action->setToolTip( i18n("Starts the Perl interpreter without a program") );
 
     action = new KAction( i18n("Find Perl Function Documentation..."), 0,
                           this, SLOT(slotPerldocFunction()),
                           actionCollection(), "help_perldocfunction" );
-    action->setStatusText( i18n("Show the documentation page of a Perl function") );
+    action->setToolTip( i18n("Show the documentation page of a Perl function") );
 
     action = new KAction( i18n("Find Perl FAQ Entry..."), 0,
                           this, SLOT(slotPerldocFAQ()),
                           actionCollection(), "help_perldocfaq" );
-    action->setStatusText( i18n("Show the FAQ entry for a keyword") );
+    action->setToolTip( i18n("Show the FAQ entry for a keyword") );
 
     //perl parser for codemodel
     m_parser = new  perlparser(core(),codeModel(),interpreter());
