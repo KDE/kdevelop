@@ -1,0 +1,3064 @@
+# KTranslator Generated File
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-02-16 16:38+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jacek Wojdel <wojdel@kbs.twi.tudelft.nl>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-2\n"
+
+
+msgid "Close Project ?"
+msgstr "Zamkn±æ projekt ?"
+
+msgid "Creating a new frame application..."
+msgstr "Tworzenie nowyego szkieletu aplikacji..."
+
+msgid "Creating new file..."
+msgstr "Tworzenie nowego pliku..."
+
+msgid "Opening file..."
+msgstr "Otwieranie pliku..."
+
+msgid "Opening project..."
+msgstr "Otwieranie projektu..."
+
+msgid "Saving file "
+msgstr "Zapisywanie pliku..."
+
+msgid "Saving all changed files..."
+msgstr "Zapisywanie wszystkich zmienionych plików..."
+
+msgid "Save file as..."
+msgstr "Zapisz plik jako..."
+
+msgid "Closing file..."
+msgstr "Zamykanie pliku..."
+
+msgid "Save?"
+msgstr "Zapisaæ?"
+
+msgid "The document was modified,save?"
+msgstr "Dokument zosta³ zmieniony, zapisaæ?"
+
+msgid "Closing all files..."
+msgstr "Zamykanie wszystkich plików..."
+
+msgid "Exiting..."
+msgstr "Wychodzê..."
+
+msgid "Cutting..."
+msgstr "Wycinanie..."
+
+msgid "Copying..."
+msgstr "Kopiowanie..."
+
+msgid "Pasting selection..."
+msgstr "Wklejanie zaznaczonego..."
+
+msgid "Selecting all..."
+msgstr "Zaznaczanie wszystkiego..."
+
+msgid "Inserting file contents..."
+msgstr "Wstawianie zawarto¶ci pliku..."
+
+msgid "Searching..."
+msgstr "Wyszukiwanie..."
+
+msgid "Repeating last search..."
+msgstr "Powtarzanie ostatniego wyszukiwania..."
+
+msgid "Replacing..."
+msgstr "Zamienianie..."
+
+msgid "Switching to selected line..."
+msgstr "Przechodzê do zaznaczonej linii..."
+
+msgid "Setting up the Editor..."
+msgstr "Ustawianie opcji Edytora..."
+
+msgid "Setting up the Editor's colors..."
+msgstr "Ustawianie kolorów Edytora..."
+
+msgid "Setting up syntax highlighting colors..."
+msgstr "Ustawianie kolorów pod¶wietlania sk³adni..."
+
+msgid "Setting up Documentation paths..."
+msgstr "Ustawianie ¶cie¿ek do Dokumentacji..."
+
+msgid "Configuring Documentation Browser..."
+msgstr "Konfigurowanie Przegl±darki Dokumentacji..."
+
+msgid "Switching to last page..."
+msgstr "Przechodzê do ostatniej strony..."
+
+msgid "Switching to next page..."
+msgstr "Przechodzê do nastêpnej strony..."
+
+msgid "Creating Search Database..."
+msgstr "Tworzenie Bazy Wyszukiwañ..."
+
+msgid "Searching selected text in documentation..."
+msgstr "Wyszukiwanie zaznaczonego tekstu w dokumentacji..."
+
+msgid "Switching to project API Documentation..."
+msgstr "Przechodzê do dokumentacji API projektu..."
+
+msgid "Switching to project Manual..."
+msgstr "Przechodzê do Instrukcji do projektu..."
+
+msgid "Updating KDE-Libs documentation..."
+msgstr "Uaktualnianie dokumentacji do bibliotek KDE..."
+
+msgid "Generating Documentation..."
+msgstr "Generowanie Dokumentacji..."
+
+msgid "Running "
+msgstr "Uruchamianie "
+
+msgid "Running  "
+msgstr "Uruchamianie "
+
+msgid "Running make..."
+msgstr "Uruchamianie 'make'..."
+
+msgid "Running make clean-command "
+msgstr "Uruchamianie make 'clean-command' "
+
+msgid "Running make clean and rebuilding all..."
+msgstr "Uruchamianie 'make clean' i przebudowywanie wszystkiego..."
+
+msgid "Running make distclean..."
+msgstr "Uruchamianie 'make distclean'..."
+
+msgid "Running autoconf suite..."
+msgstr "Uruchamianie pakietu autoconf..."
+
+msgid "Running ./configure..."
+msgstr "Uruchamianie ./configure..."
+
+msgid "Killing current process..."
+msgstr "Przerywanie aktualnego procesu..."
+
+msgid "Creating project API-Documentation..."
+msgstr "Tworzenie Dokumentacji API projektu..."
+
+msgid "Creating project Manual..."
+msgstr "Tworzenie Instrukcji do projektu..."
+
+msgid "About..."
+msgstr "Informacje o..."
+
+msgid "\tKDevelop Version "
+msgstr "\tKDevelop w wersji "
+
+msgid "Line: %d Col: %d"
+msgstr "Linia: %d Kol: %d"
+
+msgid "Creates a new file"
+msgstr "Tworzy nowy plik"
+
+msgid "Opens an existing file"
+msgstr "Otwiera istniej±cy plik"
+
+msgid "Save the actual document"
+msgstr "Zapisz bie¿±cy dokument"
+
+msgid "Save the document as..."
+msgstr "Zapisz dokument jako..."
+
+msgid "Save all changed files"
+msgstr "Zapisz wszystkie zmienione pliki"
+
+msgid "Closes the actual file"
+msgstr "Zamyka bie¿±cy plik"
+
+msgid "Prints the current document"
+msgstr "Drukuje bie¿±cy dokument"
+
+msgid "Exits the program"
+msgstr "Wychodzi z programu"
+
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "Wycina zaznaczony fragment i umieszcza go w schowki"
+
+msgid "Copys the selected section to the clipboard"
+msgstr "Kopiuje zaznaczony fragment do schowka"
+
+msgid "Pastes the clipboard contents to actual position"
+msgstr "Wkleja zawarto¶æ schowka w aktualne miejsce"
+
+msgid "Selects the whole document contents"
+msgstr "Zaznacza zawarto¶æ ca³ego dokumentu"
+
+msgid "Inserts a file at the current position"
+msgstr "Wstawia plik w aktualne miejsce"
+
+msgid "Searchs the file for an expression"
+msgstr "Wyszukuje wyra¿enie w pliku"
+
+msgid "Repeats the last search"
+msgstr "Powtarza ostatnie wyszukiwanie"
+
+msgid "Searchs and replace expression"
+msgstr "Wyszukuje i wymienia wyra¿enie"
+
+msgid "Goes to Line Number..."
+msgstr "Przechodzi do lini o numerze..."
+
+msgid "Enables / disables the treeview"
+msgstr "W³±cza / wy³±cza widok drzewa"
+
+msgid "Enables / disables the outputview"
+msgstr "W³±cza / wy³±cza widok wyników"
+
+msgid "Enables / disables the standard toolbar"
+msgstr "W³±cza / wy³±cza standardowy pasek narzêdzi"
+
+msgid "Enables / disables the browser toolbar"
+msgstr "W³±cza / wy³±cza pasek przegl±darki"
+
+msgid "Enables / disables the statusbar"
+msgstr "W³±cza / wy³±cza pasek stanu"
+
+msgid "Refreshes current view"
+msgstr "Od¶wie¿a aktualny widok"
+
+msgid "Generates a new project with KAppWizard"
+msgstr "Generuje nowy projekt przy pomocy KAppWizarda"
+
+msgid "Creates a new project"
+msgstr "Tworzy nowy projekt"
+
+msgid "Opens an existing project"
+msgstr "Otwiera istniej±cy projekt"
+
+msgid "Closes the current project"
+msgstr "Zamyka aktualny projekt"
+
+msgid "Adds a file to the current project"
+msgstr "Dodaje plik do aktualnego projektu"
+
+msgid "Adds a new file to the project"
+msgstr "Dodaje nowy plik do aktualnego projektu"
+
+msgid "Adds an existing file to the project"
+msgstr "Dodaje istniej±cy plik do projektu"
+
+msgid "Removes file from the project"
+msgstr "Usuwa plik z projektu"
+
+msgid "Creates a new Class frame structure and files"
+msgstr "Tworzy szkielet nowej klasy i pliki do niej"
+
+msgid "Shows the current file properties"
+msgstr "Pokazuje w³a¶ciwo¶ci aktualnego pliku"
+
+msgid "Sets project and compiler options"
+msgstr "Ustawia opcje projektu i kompilatora"
+
+msgid "Compiles the current sourcefile"
+msgstr "Kompiluje aktualny plik ¿ród³owy"
+
+msgid "Invokes make-command and runs the program"
+msgstr "Wywo³uje komendê make i uruchamia program"
+
+msgid "Invokes make and KDbg debugging the binary"
+msgstr "Wywo³uje make i KDbg do debugowania kodu wynikowego"
+
+msgid "Invokes make-command"
+msgstr "Wywo³uje komendê make"
+
+msgid "Rebuilds the program"
+msgstr "Przebudowuje program"
+
+msgid "Invokes make clean and rebuild all"
+msgstr "Wywo³uje 'make clean' i przebudowuje wszystko"
+
+msgid "Invokes make distclean and deletes all compiled files"
+msgstr "Wywo³uje 'make distclean' i kasuje wszystki skompilowane pliki"
+
+msgid "Invokes automake and co."
+msgstr "Wywo³uje automake i inne"
+
+msgid "Invokes ./configure"
+msgstr "Wywo³uje ./configure"
+
+msgid "Stops make immediately"
+msgstr "Zatrzymuje make natychmiast"
+
+msgid "Creates the Project's API with KDoc"
+msgstr "Tworzy API projektu przy pomocy KDoc"
+
+msgid "Creates the Project's User Manual with the sgml-file"
+msgstr "Tworzy Instrukcjê do projektu na podstawie pliku sgml"
+
+msgid "Starts KDbg in the tools window"
+msgstr "Uruchamia KDbg w oknie narzêdzi"
+
+msgid "Starts KTranslator in the tools window"
+msgstr "Uruchamia KTranslator w oknie narzêdzi"
+
+msgid "Starts KIconedit in the tools window"
+msgstr "Uruchamia KIconedit w oknie narzêdzi"
+
+msgid "Sets the Editor's behavoir"
+msgstr "Ustawia sposób pracy Edytora"
+
+msgid "Sets the Editor's colors"
+msgstr "Ustawia kolory Edytora"
+
+msgid "Sets the highlighting colors"
+msgstr "Ustawia kolory pod¶wietlania"
+
+msgid "Set up the KDevelop environment"
+msgstr "Ustawia ¶rodowisko KDevelop"
+
+msgid "Configures the Browser options"
+msgstr "Konfiguruje opcje przegl±darki"
+
+msgid "Update your KDE-Libs Documentation"
+msgstr "Uaktualnia dokumentacjê do bibliotek KDE"
+
+msgid "Create a search database of the current Documentation"
+msgstr "Tworzy bazê wyszukiwañ dla aktualnej Dokumentacji"
+
+msgid "Switchs to last browser page"
+msgstr "Przechodzi do ostatniej strony w przegl±darce"
+
+msgid "Switchs to next browser page"
+msgstr "Przechodzi do nastêpnej strony w przegl±darce"
+
+msgid "Searchs the selected text in the documentation"
+msgstr "Wyszukuje zaznaczony tekst w dokumentacji"
+
+msgid "Switchs to the QT-Documentation"
+msgstr "Przechodzi do dokumentacji QT"
+
+msgid "Switchs to the KDE-Core-Documentation"
+msgstr "Przechodzi do dokumentacji KDE-Core"
+
+msgid "Switchs to the KDE-GUI-Documentation"
+msgstr "Przechodzi do dokumentacji KDE-GUI"
+
+msgid "Switchs to the KDE-File-Documentation"
+msgstr "Przechodzi do dokumentacji KDE-File"
+
+msgid "Switchs to the KDE-Html-Documentation"
+msgstr "Przechodzi do dokumentacji KDE-Html"
+
+msgid "Switchs to the project's API-Documentation"
+msgstr "Przechodzi do dokumentacji API projektu"
+
+msgid "Switchs to the project's User-Manual"
+msgstr "Przechodzi do Instrukcji U¿ytkownika do projektu"
+
+msgid "Switch to KDevelop's User Manual"
+msgstr "Przechodzi do Instrukcji U¿ytkownika do KDevelop"
+
+msgid "Enter the KDevelop Homepage"
+msgstr "Wchodzi na stronê domow± KDevelop"
+
+msgid "Programmer's Hall of Fame..."
+msgstr "Lista Zas³u¿onych Programistów"
+
+msgid "The filename must end with .cpp,.c,.cc or .C !"
+msgstr "Nazwa pliku musi koñczyæ siê na .cpp,.c,.cc lub .C !"
+
+msgid "The filename must end with .h !"
+msgstr "Nazwa pliku musi koñczyæ siê na .h !"
+
+msgid "The filename must end with .lsm !"
+msgstr "Nazwa pliku musi koñczyæ siê na .lsm !"
+
+msgid "The filename must end with .kdelnk !"
+msgstr "Nazwa pliku musi koñczyæ siê na .kdelnk !"
+
+msgid "The filename must end with .sgml !"
+msgstr "Nazwa pliku musi koñczyæ siê na .sgml !"
+
+msgid "You must enter a filename!"
+msgstr "Musisz wpisaæ nazwê pliku !"
+
+msgid "You must choose a location,that is in your project-dir!"
+msgstr "Musisz wybraæ lokacjê, która jest w katalogu twojego projektu !"
+
+msgid "&New"
+msgstr "&Nowy"
+
+msgid "Save &As..."
+msgstr "Zapisz &jako..."
+
+msgid "Save All"
+msgstr "Zapisz wszystkie"
+
+msgid "U&ndo"
+msgstr "&Cofnij"
+
+msgid "R&edo"
+msgstr "&Powtórz"
+
+msgid "&Insert File..."
+msgstr "Wstaw &plik..."
+
+msgid "&Search..."
+msgstr "&Szukaj..."
+
+msgid "&Repeat Search..."
+msgstr "Szukaj z&nowu..."
+
+msgid "&Replace..."
+msgstr "&Zamieñ..."
+
+msgid "Select &All"
+msgstr "Z&aznacz wszystko"
+
+msgid "Deselect All"
+msgstr "Odznacz wszystko"
+
+msgid "Invert Selection"
+msgstr "Odwróæ zaznaczenie"
+
+msgid "&Goto Line..."
+msgstr "Id¼ do &linii..."
+
+msgid "&Tree-View"
+msgstr "Widok &drzewa"
+
+msgid "&Output-View"
+msgstr "Widok &wyników"
+
+msgid "&Toolbar"
+msgstr "Pasek &narzêdzi"
+
+msgid "&Browser-Toolbar"
+msgstr "Pasek &przegl±darki"
+
+msgid "Status&bar"
+msgstr "Pasek &stanu"
+
+msgid "&Refresh"
+msgstr "&Od¶wie¿"
+
+msgid "&New File..."
+msgstr "&Nowy plik..."
+
+msgid "&Existing File(s)..."
+msgstr "&Istniej±cy(e) plik(i)..."
+
+msgid "KAppWizard..."
+msgstr "KAppWizard..."
+
+msgid "New"
+msgstr "Nowy"
+
+msgid "C&lose"
+msgstr "&Zamknij"
+
+msgid "Compile File "
+msgstr "Kompiluj plik"
+
+msgid "&New Class..."
+msgstr "&Nowa klasa..."
+
+msgid "&Add File(s) to Project"
+msgstr "&Dodaj plik(i) do projektu"
+
+msgid "&File Properties..."
+msgstr "&W³a¶ciwo¶ci pliku..."
+
+msgid "&Options..."
+msgstr "Op&cje..."
+
+msgid "&Project"
+msgstr "P&rojekt"
+
+msgid "&Run"
+msgstr "&Uruchom"
+
+msgid "&Debug..."
+msgstr "&Debuguj..."
+
+msgid "&Make"
+msgstr "&Buduj"
+
+msgid "&Rebuild all"
+msgstr "&Przebuduj wszystko"
+
+msgid "&Clean/Rebuild all"
+msgstr "&Wyczy¶æ/Przebuduj wszystko"
+
+msgid "&DistClean"
+msgstr "&Czy¶æ do dystrybucji"
+
+msgid "&Autoconf"
+msgstr "&Autoconf"
+
+msgid "C&onfigure"
+msgstr "K&onfiguruj"
+
+msgid "&Stop Build"
+msgstr "&Zatrzumaj budowanie"
+
+msgid "Make &API-Doc"
+msgstr "Buduj dokumentacjê API"
+
+msgid "Make &User-Manual"
+msgstr "Buduj &Instrukcjê"
+
+msgid "&Build"
+msgstr "&Buduj"
+
+msgid "&KDbg"
+msgstr "K&Dbg"
+
+msgid "&KIconedit"
+msgstr "K&Iconedit"
+
+msgid "KTranslator"
+msgstr "K&Translator"
+
+msgid "&Tools"
+msgstr "&Narzêdzia"
+
+msgid "&Editor..."
+msgstr "&Edytor..."
+
+msgid "Editor-&Colors..."
+msgstr "&Kolory edytora.."
+
+msgid "&Syntax Highlighting..."
+msgstr "Pod¶wietlanie &sk³adni"
+
+msgid "&Documentation Path..."
+msgstr "¦cie¿ki dokumentacji..."
+
+msgid "Documentation-&Browser..."
+msgstr "Przegl±darka &dokumentacji..."
+
+msgid "Update &KDE-Documentation..."
+msgstr "Uaktualnij Dokumentacjê &KDE..."
+
+msgid "Create &Searchdatabase..."
+msgstr "Utwórz Bazê &Wyszukiwañ..."
+
+msgid "&Window"
+msgstr "&Okno"
+
+msgid "Back"
+msgstr "W ty³"
+
+msgid "Forward"
+msgstr "Do przodu"
+
+msgid "&Next >>"
+msgstr "&Nastêpny >>"
+
+msgid "<< &Back"
+msgstr "<< &Back"
+
+msgid "&Search Marked Text"
+msgstr "&Szukaj zaznaczonego tekstu"
+
+msgid "&Qt-Library"
+msgstr "Biblioteka &QT"
+
+msgid "KDE-&Core-Library"
+msgstr "Biblioteka KDE-&Core"
+
+msgid "KDE-&GUI-Library"
+msgstr "Biblioteka KDE-&GUI"
+
+msgid "KDE-&KFile-Library"
+msgstr "Biblioteka KDE-&KFile"
+
+msgid "KDE-&HTML-Library"
+msgstr "Biblioteka KDE-&HTML"
+
+msgid "Project &API-Doc"
+msgstr "Dokumentacja &API projektu"
+
+msgid "Project &User-Manual"
+msgstr "Instr&ukcja do projektu"
+
+msgid "&Documentation"
+msgstr "&Dokumentacja"
+
+msgid "Contents"
+msgstr "Spis tre¶ci"
+
+msgid "About KDevelop..."
+msgstr "O KDevelop..."
+
+msgid "Open File"
+msgstr "Otwórz plik"
+
+msgid "Save File"
+msgstr "Zapisz plik"
+
+msgid "Refresh"
+msgstr "Od¶wierz"
+
+msgid "Run"
+msgstr "Uruchom"
+
+msgid "Search Text in Documenation"
+msgstr "Wyszukaj tekst w Dokumentacji"
+
+msgid "Line: 00000 Col: 000"
+msgstr "Linia: 00000 Kolumna: 000"
+
+msgid "Welcome to KDevelop!"
+msgstr "Witamy w KDevelop!"
+
+msgid "Attention"
+msgstr "Uwaga"
+
+msgid "Closing project..."
+msgstr "Zamykam projekt..."
+
+msgid "Save changed project files ?"
+msgstr "Zapisaæ zmienione pliki projektu ?"
+
+msgid ""
+"The project\n"
+"\n"
+msgstr ""
+"Projekt\n"
+"\n"
+
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n\n"
+msgstr ""
+"\n"
+"\n"
+"zawiera zmienione pliki. Zapisaæ zmieniony plik\n\n"
+
+msgid "Save all"
+msgstr "Zapisz wszystko"
+
+msgid "Declaration"
+msgstr "Deklaracja"
+
+msgid "New Class..."
+msgstr "Nowa Klasa..."
+
+msgid "Remove Class "
+msgstr "Usuñ klasê"
+
+msgid "Delete Class..."
+msgstr "Skasuj klasê..."
+
+msgid "New Method"
+msgstr "Nowa Metoda..."
+
+msgid "New Variable"
+msgstr "Nowa Zmienna..."
+
+msgid "Definition"
+msgstr "Definicja"
+
+msgid "New File..."
+msgstr "Nowy plik..."
+
+msgid "Options..."
+msgstr "Opcje..."
+
+msgid "look up: "
+msgstr "wyszukaj:"
+
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by switching to menuentry<i>Documentation -> \n"
+" Update KDE-Documentation</i>.Please use the Update dialog whenever you "
+"update \n"
+"your KDE Libs."
+msgstr ""
+"Podaj ¶cie¿ki do dokumentacji bibliotek QT i KDE\n"
+"dla Przegl±darki Dokumentacji.\n"
+"QT zwykle zawiera pe³n± dokumentacjê podczas gdy\n"
+"dla KDE mo¿esz ³atwo utworzyæ dokumentacjê wywo³uj±c\n"
+"z menu <i>Dokumentacja -> Uaktualnij dokumentacjê KDE</i>.\n"
+"Staraj siê uaktualniaæ dokumentacjê za ka¿dym razem gdy\n"
+"uaktualniasz biblioteki KDE"
+
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"Podaj tu ¶cie¿kê do dokumentacji QT.\n"
+"Aby ³atwiej odnale¼æ w³a¶ciw± ¶cie¿kê\n"
+"u¿yj przycisku po prawej stronie by zmieniaæ\n"
+"katalogi.\n"
+"\n"
+"Zwykle dikumentacja do QT znajduje siê w\n"
+"<i><blue>$QTDIR/html</i>"
+
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"switch to menuentry <blue><i>Documentation ->\n"
+"Update KDE-Documentation</i><black> to create it."
+msgstr ""
+"Podaj tu ¶cie¿kê do dokumentacji KDE.\n"
+"Aby ³atwiej odnale¼æ w³a¶ciw± ¶cie¿kê\n"
+"u¿yj przycisku po prawej stronie by zmieniaæ\n"
+"katalogi.\n"
+"\n"
+"Je¶li nie masz zainstalowanej dokumentacji do\n"
+"bibliotek KDE, to u¿yj pozycji menu <blue><i>Dokumentacja ->\n"
+"Uaktualnij dokumentacjê KDE</i><black> aby j± utworzyæ."
+
+msgid "Doc-Location"
+msgstr "Lokacja dokumentacji"
+
+msgid "Project Options"
+msgstr "Opcje projektu"
+
+msgid ""
+"This dialog is for editing\n"
+"your project options."
+msgstr ""
+"Ten dialog s³u¿y do edycji\n"
+"opcji projektu."
+
+msgid "&Last"
+msgstr "Os&tatni"
+
+msgid "&Next"
+msgstr "&Nastêpna"
+
+msgid "Projectname:"
+msgstr "Nazwa projektu:"
+
+msgid "Set the project's name here."
+msgstr "Tu podaj nazwê projektu."
+
+msgid "Version:"
+msgstr "Wersja:"
+
+msgid ""
+"Set your project's version\n"
+"number here."
+msgstr ""
+"Tu podaj numer wersji projektu."
+
+msgid "Author:"
+msgstr "Autor:"
+
+msgid "Insert your name here"
+msgstr "Tu wstaw swoje imiê"
+
+msgid "Email:"
+msgstr "E-mail:"
+
+msgid "Insert your email-address here"
+msgstr "Tu wstaw swój adres e-mail"
+
+msgid "Handbook:"
+msgstr "Podrêcznik:"
+
+msgid ""
+"Insert your Handbook-sgml-file name.\n"
+"Usually this is index.sgml"
+msgstr ""
+"Tu wstaw nazwê pliku SGML z zawieraj±cego\n"
+"podrêcznik. Zwykle jest to index.sgml"
+
+msgid "Short Information:"
+msgstr "Krótki opis:"
+
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not</n>\n"
+"for README etc."
+msgstr ""
+"Podaj tu jekie¶ przydatne informacje na temat\n"
+"tego projektu. Tekst ten zostanie wykorzystany\n"
+"tylko do opisu pliku projektu, a <b>nie</b> do\n"
+"README itp."
+
+msgid "General"
+msgstr "Ogólne"
+
+msgid "Set your Compiler options here"
+msgstr "Tu podaj opcje kopilatora"
+
+msgid "Target"
+msgstr "Cel"
+
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"Tu podaj opcje dotycz±ce celu\n"
+"kompilacji takie jak typ komputera\n"
+"i poziom optymalizacji w GCC (0-3)"
+
+msgid "Target Machine"
+msgstr "Komputer:"
+
+msgid "your machine"
+msgstr "twój komputer"
+
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages."
+msgstr ""
+"Podaj typ komputera dla twojego programu.\n"
+"Typy komputera inne ni¿ twój przydaj± siê\n"
+"zwykle jedynie do dystrybucji prekompilowanych\n"
+"pakietów."
+
+msgid "only syntax check"
+msgstr "tylko sprawdzanie sk³adni"
+
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+"Ta opcja ustawia kompilatorowi\n"
+"<i>-fsyntax-only</i>, co umo¿liwia\n"
+"sprawdziæ kod pod k±tem poprawno¶ci\n"
+"sk³adniowej, ale nie robi nic ponadto."
+
+msgid "optimize"
+msgstr "optymalizuj"
+
+msgid "Optimization-level"
+msgstr "Poziom optymalizacji"
+
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+msgstr ""
+"Ustaw tu opcjê -O dla GCC.\n"
+"Wy³±czenie optymalizacji to -O0.\n"
+"Im wy¿szy poziom optymalizacji tym\n"
+"d³u¿ej zajmie kompilacja lecz te¿\n"
+"tym szybciej bêdzie dzia³a³ program."
+
+msgid "Debugging"
+msgstr "Debugowanie"
+
+msgid "Set your debugging options here."
+msgstr "Tu ustaw opcje debugowania."
+
+msgid "generate debugging information"
+msgstr "generuj informacje dla debugera"
+
+msgid ""
+"Checking this turns on the -g flag\n"
+"to GCC to generate debugging information."
+msgstr ""
+"Zaznaczenie tego w³±cza opcjê -g w wyniku\n"
+"czego GCC generuje informacjê do debugowania."
+
+msgid "Debug-level"
+msgstr "Poziom debugowania"
+
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+"Tu podaj poziom debugowania.\n"
+"Mo¿esz wybraæ w zakresie 1-3, co\n"
+"ustawia opcje -g1 do -g3."
+
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+"Generuje dodatkowy kod do zapisu informacji\n"
+"o wydajno¶ci dla programu analizuj±cego\n"
+"<i>gprof</i>."
+
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+"Zachowaj zwyk³e chwilowe pliki po¶rednie\n"
+"aktualnym katalogu. To oznacza, ¿e kompilacja\n"
+"pliku <i>foo.c</i> spowoduje powstanie plików\n"
+"<i>foo.o, foo.i</i> and <i>foo.s</i>"
+
+msgid "additional options:"
+msgstr "dodatkowe opcje:"
+
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+"Wstaw tu dodatkowe opcje GCC, które\n"
+"bêd± wykorzystane przy uruchamianiu GCC\n"
+"dziêki ustawieniu zmiennej CXXFLAGS."
+
+msgid "Compiler Options"
+msgstr "Opcje kompilatora"
+
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+msgstr ""
+"Tu ustaw ostrze¿enia kompilatora, zaznaczaj±c\n"
+"te opcje -W, których chcesz u¿ywaæ."
+
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+msgstr ""
+"Kompiluj z -Wall. Ta opcja do³±cza\n"
+"kilka ró¿nych ostrze¿eñ, które zaleca\n"
+"siê u¿ywaæ."
+
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+msgstr ""
+"Kompiluj z -W. Ta opcja ustawia\n"
+"bardzo szczególne opcje nie zawarte w\n"
+"-Wall. Je¶li chcesz co¶ wiêcej na ten\n"
+"temat wiedzieæ, przeczytaj GCC-Info."
+
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+"Ostrzegaj pzry niektórych konstrukcjach,\n"
+"które maj± inne znaczenie w tradycyjnym\n"
+"i w ANSI C."
+
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+"Ostrzegaj je¶li niezdefiniowany identyfikator\n"
+"jest sprawdzany w dyrektywie #if."
+
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+"Ostrzegaj gdy zmienna lokalna\n"
+"zas³ania inn± zmienn± lokaln±."
+
+msgid ""
+"Warn whenever two distinct\n"
+"identifiers match in the first LEN\n"
+"characters. This may help you prepare\n"
+"a program that will compile with\n"
+"certain obsolete, brain-damaged\n"
+"compilers."
+msgstr ""
+"Ostrzegaj zawsze gdy dwa ró¿ne\n"
+"identyfikatory pokrywaj± siê w pierwszych LEN\n"
+"znakach. Ta opcja pomaga przygotowaæ twój\n"
+"program do kompilacji z niektórymi 'przyg³upimi'\n"
+"kompilatorami."
+
+msgid ""
+"Warn whenever an object\n"
+"of larger than LEN bytes \n"
+"is defined."
+msgstr ""
+"Ostrzegaj gdy obiekt d³u¿szy\n"
+"ni¿ LEN bajtów jest zdefiniowany."
+
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+"Ostrzegaj gdzy cokolwiek zale¿y\n"
+"od <i>size of</i> dla typu funkcyjnego\n"
+"lub typu <i>void</i>. GNU C przypisuje tym\n"
+"typom rozmiar 1 dla u³atwienia przeliczeñ ze\n"
+"wska¼nikami <i>void *</i> lub wska¼nikami do\n"
+"funkcji."
+
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+"Ostrzegaj gdy wywo³anie funkcji jest\n"
+"rzutowane na niepasuj±cy typ. Na\n"
+"przyk³ad gdy <i>int malloc()</i> jest\n"
+"rzutowane na <i>cololwiek *</i>."
+
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+"Ostrzegaj gdy wska¼nik jest rzutowany\n"
+"tak, ¿e tracony jest kwalifikator typu.\n"
+"Na przyk³ad gdy <i>const char *</i> jest\n"
+"rzutowany na zwyk³y <i>char *</i>."
+
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+"Ostrzegaj gdy wska¼nik jest rzutowany w taki\n"
+"sposób, ¿e wymagane wyrównanie po³o¿enia typu\n"
+"docelowego jest wy¿sze ni¿ typu ¼ród³owego. Na\n"
+"przyk³ad gdy <i>char *</i> jest rzutowany na\n"
+"<i>int *</i> na komputerze, w którym typ <i>int</i>\n"
+"jest dostêpny jedynie w dwu- lub cztero-bajtowych\n"
+"odstêpach."
+
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+"Nadaj sta³ym tekstowym typ <i>const char[D£UGO¦Æ]</i>\n"
+"dziêki czemu kopiowanie adresu tych sta³ych na niesta³y\n"
+"wska¼nik <i>char *</i> wygeneruje ostrze¿enie. Te ostrze¿enia\n"
+"pomagaj± wykryæ podczas kompilacji punkty w których omy³kowo\n"
+"nadpisujesz sta³e tekstowe. Aby jednak z tego korzystaæ musisz\n"
+"bardzo ostro¿nie u¿ywaæ <i>const</i> w deklaracjach. W przeciwnym\n"
+"wypadku opcja ta jedynie utrudnia ¿ycie. W³a¶nie dlatego nie\n"
+"jest ona w³±czona do <i>-Wall</i>."
+
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+"Ostrzegaj gdy deklaracja powoduje inn± konwersjê typów ni¿ by\n"
+"siê to sta³o w przypadku braku deklaracji. Dotyczy to konwersji\n"
+"miêdzy warto¶ciami sta³o- a zmienno-przecinkowymi oraz konwersji\n"
+"zmieniaj±cych rozmiar lub znak argumentów sta³oprzecinkowych za\n"
+"wyj±tkiem standardowych rozszerzeñ. Równie¿ ostrzega gdy ujemny\n"
+"ca³kowity parametr jest przenoszony na typ bezznakowy."
+
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+"Ostrzegaj przy porównaniu miêdzy warto¶ciami ze znakiem i bez,\n"
+"które mog³oby daæ nieprawd³owy rezultat gdy warto¶æ ze znakiem\n"
+"jest konwertowana do bezznakowej."
+
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+"Ostrzegaj przy definicji lub wywo³aniu funkcji, które zwracaj±\n"
+"struktury lub unie. (W przypadku jêzyków, które pozwalaj±\n"
+"zwracaæ tablice, one równie¿ wywo³aj± ostrze¿enie.)"
+
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+"Ostrzegaj gdy funkcja jest zadeklarowana lub zdefiniowana bez\n"
+"podania typów argumentów. (Definicja w starym stylu jest\n"
+"dopuszczana w przypadku gdy zostanie poprzedzona deklaracj±,\n"
+"która specyfikuje typy argumentów.)"
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+"Ostrzegaj gdy globalna funkcja jest zdefiniowana bez\n"
+"uprzedniego zadeklarowania. To ostrze¿enie jest generowane\n"
+"nawet gdy sama definicja podaje prototyp funkcji. Chodzi\n"
+"tu o to, by wykryæ funkcje, które nie zosta³y uprzednio\n"
+"zadeklarowane w plikach nag³ówkowych."
+
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+"Ostrzegaj gdy globalna funkcja jest zdefiniowana bez\n"
+"uprzedniego zadeklarowania. To ostrze¿enie jest generowane\n"
+"nawet gdy sama definicja podaje prototyp funkcji. Chodzi\n"
+"tu o to, by wykryæ funkcje, które nie zosta³y uprzednio\n"
+"zadeklarowane w plikach nag³ówkowych."
+
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+"Ostrzegaj gdy cokolwiek jest zadeklarowane wiêcej ni¿ jeden raz\n"
+"w tym samym zakresie kodu nawet je¶li wielokrotne deklaracje s±\n"
+"poprawne i nic nie zmieniaj±."
+
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+"Ostrzegaj gdy deklaracja <i>extern</i>\n"
+"nastêpuje wewn±trz funkcji."
+
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+"Ostrzegaj, gdy funkcja nie mo¿e byæ rozwiniêta w kodzie,\n"
+"a by³a zadeklarowana jako <i>inline</i>, lub gdy by³a\n"
+"podana opcja <i>-finline-functions</i>."
+
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr ""
+"Ostrzegaj, gdy stary styl rzytowania (jak w C)\n"
+"jest u¿ywany w programie."
+
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+msgstr ""
+"Ostrzegaj gdy znaleziony zostanie potencjalny b³±d w\n"
+"definicji funkcji wirtualnej w klasie potomnej (tylko C++).\n"
+"W klasach potomnych definicje funkcji wirtualnych musz± siê\n"
+"zgadzaæ co do typu z funkcjami z klasy bazowej. Przy\n"
+"w³±czeniu tej opcji kompilator bêdzie ostrzega³ gdy typ\n"
+"funkcji wirtualnej nie znajduje odpowiednika w klasie bazowej."
+
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+"Ostrzegaj gdy sposób zestawiania w g++ nie\n"
+"zgadza siê z tym z cfront."
+
+msgid "Compiler Warnings"
+msgstr "Ostrze¿enia kompilatora"
+
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+"Ustaw opcje Linkera i wybierz biblioteki\n"
+"do do³±czenia do twojego projektu."
+
+msgid "library flags"
+msgstr "flagi bibliotek"
+
+msgid "Set your library flags here."
+msgstr "Ustaw tutaj swoje flagi bibliotek"
+
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+"Je¶li chcesz u¿ywaæ debugera, powiniene¶ zachowaæ\n"
+"t± informacjê w plikach obiektów. Nie ma sensu\n"
+"generowanie informacji dla debugera przy u¿yciu\n"
+"kompilatora, a potem usuwanie jej w tej opcji."
+
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+"Ta opcja, w systemach które umo¿liwiaj± dynamiczne\n"
+"linkowanie, blokuje ³±czenie do bibliotek dzielonych.\n"
+"W przypadku innych systemów nie ma ona znaczenia."
+
+msgid "additional flags:"
+msgstr "dodatkowe flagi:"
+
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+"Tu wstaw pozosta³e opcje linkera, które\n"
+"zostan± przekazane poprzez zmienn±\n"
+"¶rodowiskow± LDFLAGS."
+
+msgid "libraries"
+msgstr "biblioteki"
+
+msgid "Choose your libraries here."
+msgstr "Tu wybierz swoje biblioteki."
+
+msgid "X11 basics\n"
+msgstr "X11 - podstawowe\n"
+
+msgid "X11 extensions\n"
+msgstr "X11 - rozszerzenia\n"
+
+msgid "Qt"
+msgstr "QT"
+
+msgid "KDE basics"
+msgstr "KDE - podstawowe"
+
+msgid "KDE user interface"
+msgstr "KDE - interfejs"
+
+msgid "KDE HTML widget"
+msgstr "KDE - kontrolka HTML"
+
+msgid "KDE kfm functionality"
+msgstr "KDE - funkcje kfm"
+
+msgid "KDE file handling"
+msgstr "KDE - obs³uga plików"
+
+msgid "KDE Spell checking"
+msgstr "KDE - kontrola pisowni"
+
+msgid "KDE addressbook"
+msgstr "KDE - ksi±¿ka adresowa"
+
+msgid "additional libraries:"
+msgstr "inne biblioteki:"
+
+msgid "Add additional libraries here."
+msgstr "Tu podaj dodatkowe biblioteki."
+
+msgid "Linker Options"
+msgstr "Opcje linkera"
+
+msgid "exit the CKAppWizard"
+msgstr "wyjd¼ z CKAppWizard"
+
+msgid "Create"
+msgstr "Utwórz"
+
+msgid "creating the project"
+msgstr "tworzenie projektu"
+
+msgid "set all changes back"
+msgstr "cofnij wszystkie zmiany"
+
+msgid "KWizard"
+msgstr "KWizard"
+
+msgid "Application"
+msgstr "Aplikacja"
+
+msgid "KDE-Application"
+msgstr "Aplikacja KDE"
+
+msgid ""
+"Select this to create a complete framework for\n"
+"your new application. It will contain three main\n"
+"classes: one for the mainwindow, one for the\n"
+"main view and one for the application's documents\n"
+"The main window offers a menubar, toolbar and\n"
+"a statusbar including statusbar help and status\n"
+"signaling."
+msgstr ""
+"Wybierz to by utworzyæ pe³ny szkielet dla twojej\n"
+"nowej aplikacji. Bêdzie on zawiera³ trzy podstawowe\n"
+"klasy: jedn± dla okna g³ównego, jedn± dla g³ównego\n"
+"widoku i jedn± dla dokumentów aplikacji. Okno\n"
+"g³ówne zawiera listwê menu, pasek narzêdzi i pasek\n"
+"stanu wraz z pomoc± na pasku i sygnalizacj± stanu."
+
+msgid "KDE-Mini-Application"
+msgstr "Mini aplikacja KDE"
+
+msgid ""
+"Select this to create a mini-Application.\n"
+"This will only contain the main widget\n"
+"class which inherits QWidget until now."
+msgstr ""
+"Wybierz to by utworzyæ szkielet mini aplikacji.\n"
+"Ta zawiera jedynie klasê g³ównej kontrolki,\n"
+"która jak na razie jest potomkiem QWidget."
+
+msgid "C/C++-Application"
+msgstr "Aplikacja C/C++"
+
+msgid "Select this to create a C/C++-Terminal-Application."
+msgstr "Wybierz to by utworzyæ aplikacjê C/C++"
+"dzia³aj±c± w oknie terminala."
+
+msgid "Names"
+msgstr "Nazwy"
+
+msgid "Projectdirectory:"
+msgstr "Katalog projektu:"
+
+msgid "Versionsnumber:"
+msgstr "Numer wersji:"
+
+msgid ""
+"Enter the Project's name here. This is\n"
+"also the directory name under which your Project\n"
+"will be created."
+msgstr ""
+"Tu wpisz nazê projektu. Tak bêdzie siê te¿\n"
+"nazywa³ podkatalog w którym zostanie utworzony\n"
+"projekt."
+
+msgid ""
+"Enter the toplevel-directory the project\n"
+"will be stored. This <b>must</b> be an\n"
+"<b>existing directory !!"
+msgstr ""
+"Tu podaj katalog g³ówny projektu.\n"
+"Ten katalog <b>musi istnieæ !!</b>"
+
+msgid ""
+"Enter the Version number here.\n"
+"The number will be used in the about-dialog\n"
+"and in the main widget's topbar."
+msgstr ""
+"Tu podaj numer wersji.\n"
+"Ten numer bêdzie u¿yty w dialogu 'Informacje o...'\n"
+"i w listwie g³ównej kontrolki aplikacji."
+
+msgid ""
+"Enter your name here for the about dialog.\n"
+"You may also consider using the Team-name."
+msgstr ""
+"Tu podaj swoje imiê. Bêdzie ono wykorzystane w dialogu\n"
+"'Informacje o...'."
+
+msgid ""
+"Enter your email adress here, so users\n"
+"can send you bug reports easiely ;-))"
+msgstr ""
+"Tu podaj swój adres e-mail, tak aby u¿ytkownicy\n"
+"mogli ci przysy³aæ informacje o b³êdach ;-))"
+
+msgid "Projectfiles & Desktopgoodies"
+msgstr "Pliki projektu i dodatki"
+
+msgid "API-Documentation"
+msgstr "Dokumentacja API"
+
+msgid ""
+"Check this if you wish to have your API\n"
+"Documentation generated automatically"
+msgstr ""
+"Zaznacz to je¶li chcia³by¶ ¿eby dokumentacja\n"
+"do twojego API zosta³a automatycznie wygenerowana."
+
+msgid "User-Dokumentation"
+msgstr "Dokumentacja dla u¿ytkownika"
+
+msgid ""
+"Check this if you wish a general User\n"
+"Documentation to be generated automatically."
+msgstr ""
+"Zaznacz to je¶li chcia³by¶ mieæ automatycznie\n"
+"wygenerowan± dokumentacjê dla u¿ytkownika."
+
+msgid "lsm-File - Linux Software Map"
+msgstr "plik lsm - do Linux Software Map"
+
+msgid "Check this to create a lsm-File"
+msgstr "Zaznacz to, by wygenerowaæ plik lsm"
+
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "Standardowe pliki GNU (INSTALL,README,COPYING...)"
+
+msgid ""
+"Check this if you wish to have\n"
+"the GNU-Standard files created like\n"
+"INSTALL and README"
+msgstr ""
+"Zaznacz to je¶li chcesz automatycznie\n"
+"wygenerowaæ pliki takie jak INSTALL i\n"
+"README."
+
+msgid "Program-Icon"
+msgstr "Ikona programu"
+
+msgid ""
+"Check this to create a sample icon for\n"
+"your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+"Zaznacz to je¶li chcesz by zosta³a wygenerowana\n"
+"przyk³adowa ikona dla twojego programu. Mo¿esz\n"
+"j± potem zmieniæ zapomoc± KIconEdit."
+
+msgid "Mini-Icon"
+msgstr "Ma³a ikona"
+
+msgid ""
+"Check this to create a sample mini-icon\n"
+"for your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+"Zaznacz to je¶li chcesz by zosta³a wygenerowana\n"
+"przyk³adowa ma³a ikona dla twojego programu. Mo¿esz\n"
+"j± potem zmieniæ zapomoc± KIconEdit."
+
+msgid ".kdelnk-File"
+msgstr "plik .kdelnk"
+
+msgid ""
+"Check this if you wish to have\n"
+"a .kdelnk for you application in the\n"
+"K-Menu.  The default is the Applications-\n"
+"submenu. You can change this to other menus\n"
+"by changing the file properties afterwards."
+msgstr ""
+"zaznacz to je¶li chcesz mieæ .kdelnk dla\n"
+"twojej aplikacji w K-menu. Domy¶lnie\n"
+"wybierane jest manu Aplikacje. Mo¿esz to\n"
+"pó¼niej zmieniæ poprzez zmianê w³a¶ciwo¶ci\n"
+"pliku."
+
+msgid ""
+"Select this if you wish another\n"
+"already created icon to be used."
+msgstr ""
+"Wybierz to je¶li chcesz wykorzystaæ\n"
+"inn±; ju¿ istniej±c± ikonê."
+
+msgid ""
+"Select this if you wish another\n"
+"already created mini-icon to be used."
+msgstr ""
+"Wybierz to je¶li chcesz wykorzystaæ\n"
+"inn±; ju¿ istniej±c± ma³± ikonê."
+
+msgid "Headertemplate for .h-files"
+msgstr "Szablon dla plików .h"
+
+msgid "headertemplate for .h-files"
+msgstr "szablon dla plików .h"
+
+msgid ""
+"Check this if you want a standard\n"
+"headertemplate for your headerfiles"
+msgstr ""
+"Zaznacz to je¶li chcesz standardowy szablon\n"
+"nag³ówka dla twoich plików nag³ówkowych."
+
+msgid "Load..."
+msgstr "Wczytaj..."
+
+msgid "you can load another headertemplate here"
+msgstr "tu mo¿esz wczytaæ inny szablon nag³ówka"
+
+msgid "you can clear the headertemplate here"
+msgstr "tu mo¿esz wyczy¶ciæ szablon nag³ówka"
+
+msgid "you can edit your headertemplate here"
+msgstr "tu mo¿esz edytowaæ twój szablon nag³ówka"
+
+msgid "Headertemplate for .cpp-files"
+msgstr "Szablon dla plików .cpp"
+
+msgid "headertemplate for .cpp-files"
+msgstr "szablon dla plików .cpp"
+
+msgid ""
+"Check this if you want a standard\n"
+"cpp-Template for your cpp-files."
+msgstr ""
+"Zaznacz to je¶li chcesz standardowy szablon\n"
+"dla plików cpp."
+
+msgid "you can load another cpptemplate here"
+msgstr "tu mo¿esz wczytaæ inny szablon dla plików cpp"
+
+msgid "you can clear the cpptemplate here"
+msgstr "tu mo¿esz wyczy¶ciæ szablon dla plików cpp"
+
+msgid "you can edit your cpptemplate here"
+msgstr "tu mo¿esz edytowaæ szablon dla plików cpp"
+
+msgid "Processes"
+msgstr "Procesy"
+
+msgid "you can see the normal outputs here"
+msgstr "tu mo¿esz obejrzeæ zwyk³e komunikaty"
+
+msgid "you can see all warnings and errormessages here"
+msgstr "tu mo¿esz obejrzeæ komunikaty b³êdów"
+
+msgid "Exit"
+msgstr "Wyj¶cie"
+
+msgid "Remove File"
+msgstr "Usuñ plik"
+
+msgid "Delete File..."
+msgstr "Skasuj plik..."
+
+msgid "Properties..."
+msgstr "W³a¶ciwo¶ci..."
+
+msgid "New LFV-Group..."
+msgstr "Nowa grupa LFV"
+
+msgid "Remove Group"
+msgstr "Usuñ grupê"
+
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+"Czy na pewno chcesz skasowaæ zaznaczony plik?\n"
+"     Nie bêdzie mo¿liwo¶ci do odzyskaæ!"
+
+msgid "Small"
+msgstr "Ma³y"
+
+msgid "Medium"
+msgstr "¦redni"
+
+msgid "Large"
+msgstr "Du¿y"
+
+msgid "Standard Font"
+msgstr "Zwyk³a czcionka"
+
+msgid "Fixed Font"
+msgstr "Czcionka fixed"
+
+msgid "Background Color:"
+msgstr "Kolor t³a:"
+
+msgid "Normal Text Color:"
+msgstr "Kolor zwyk³ego tekstu:"
+
+msgid "URL Link Color:"
+msgstr "Kolor linku URL:"
+
+msgid "Followed Link Color:"
+msgstr "Kolor odwiedzonego linku:"
+
+msgid "Underline links"
+msgstr "Podkre¶laj linki"
+
+msgid "Documentation Browser Options"
+msgstr "Opcje przegl±darki dokumentacji"
+
+msgid "Colors"
+msgstr "Kolory"
+
+msgid "Add Entry..."
+msgstr "Dodaj pozycjê..."
+
+msgid "Remove Entry"
+msgstr "Usuñ pozycjê"
+
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+"Ta opcja do³±cza aktualny plik do\n"
+"koñcowej dystrybucji."
+
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+"Ta opcja zaznacza, ¿e aktualny plik ma zostaæ\n"
+"docelowo zainstalowany podczas wykonywania\n"
+"<i>make install</i>. Je¶li j± zaznaczysz, musisz\n"
+"podaæ te¿ katalog gdzie plik zostanie\n"
+"zainstalowany. Przyk³adowo mog± to byæ:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Inne dopuszczalne warto¶ci mo¿na znale¼æ w Makefile"
+
+msgid ""
+"select the source files to be added\n"
+"to the project here."
+msgstr ""
+"tu wybierz pliki ¼ród³owe do dodania\n"
+"do projektu."
+
+msgid ""
+"select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+"tu wybierz katalog do którego zostan±\n"
+"skopiowane nowe pliki ¼ród³owe."
+
+msgid "You must choose a destination,that is in your project-dir!"
+msgstr "Musisz wybraæ katalog, który jest podkatalogiem projektu!"
+
+msgid "You must choose a valid dir as a destination!"
+msgstr "Musisz podaæ poprawny katalog jako punkt docelowy!"
+
+msgid "KDE Library Documentation Update..."
+msgstr "Uaktualnienie dokumentacji bibliotek KDE..."
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+"Wybranie tego spowoduje skasowanie aktualnej dokumentacji\n"
+"i wymienienie jej na nowo wygenerowan±."
+
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+msgstr ""
+"Wybranie tego spowoduje skasowanie aktualnej dokumentacji\n"
+"i umo¿liwia ci wybranie za pomoc± poni¿szej kontrolki\n"
+"¶cie¿ki do zainstalowania nowej wersji dokumentacji."
+
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+"W ten sposób pozostawiasz aktualn± dokumentacjê bez zmian i\n"
+"mo¿esz wybraæ now± ¶cie¿kê dla nowej dokumentacji.\n"
+"UWAGA: Nie podawaj tu tego samego miejsca do instalacji nowej\n"
+"dokumentacji co dla starej, spowodowa³oby to niez³e zamieszanie\n"
+"podczas instalacji."
+
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+"Tu podaj ¶cie¿kê do aktualnych ¼róde³\n"
+"bibliotek KDE. To znaczy do miejsca, gdzie\n"
+"rozpakowa³e¶ kdelibs."
+
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+"Tu podaj ¶cie¿kê gdzie chcesz by zosta³a\n"
+"wygenerowana nowa dokumentacja.\n"
+"Uwaga: informacja na temat tej ¶cie¿ki zostanie\n"
+"automatycznie przeniesiona do Ustawieñ, nie\n"
+"musisz wiêc uaktualniaæ jej rêcznie."
+
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+"buduje indeks ¶rednich rozmiarów (20-30% rozmiaru\n"
+"wszystkich plików), daj±c jeszcze szybsze wyszukiwanie"
+
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+"buduje ma³y indeks zamiast minimalnego (czyli 7-9%\n"
+"rozmiaru wszystkich plików), daj±c szybsze wyszukiwanie."
+
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr "minimalny indeks (2-3% rozmiaru wszystkich plików)"
+
+msgid "Filetype"
+msgstr "Typ pliku"
+
+msgid "Classname"
+msgstr "Nazwa klasy"
+
+msgid "Baseclass"
+msgstr "Klasa bazowa"
+
+msgid "Documentation"
+msgstr "Dokumentacja"
+
+msgid "Additional Options"
+msgstr "Dodatkowe opcje"
+
+msgid "&Goto Line:"
+msgstr "&Id¼ do linii"
+
+msgid "&Text To Find:"
+msgstr "Poszukiwany &ci±g znaków:"
+
+msgid "&Case Sensitive"
+msgstr "&Rozró¿niaj wielkie/ma³e litery"
+
+msgid "&Whole Words Only"
+msgstr "Tylko &ca³e s³owa"
+
+msgid "&From Cursor"
+msgstr "&Od kursora"
+
+msgid "Find &Backwards"
+msgstr "&Szukaj do ty³u"
+
+msgid "&Selected Text"
+msgstr "Z&aznaczony tekst"
+
+msgid "Search string not found!"
+msgstr "Poszukiwanego ci±gu znaków nie znaleziono!"
+
+msgid "&Replace With:"
+msgstr "&Zamieñ na:"
+
+msgid "&Prompt On Replace"
+msgstr "&Pytaj przy zamianie"
+
+msgid "use header/cpp-templates"
+msgstr "u¿ywaj szablonów .h/.cpp"
+
+msgid "generate a QWidget-Childclass"
+msgstr "utwórz potomka klasy QWidget"
+
+msgid "Inheritence"
+msgstr "Dziedziczenie"
+
+msgid "public"
+msgstr "public"
+
+msgid "protected"
+msgstr "protected"
+
+msgid "private"
+msgstr "private"
+
+msgid "Class Generator"
+msgstr "Generator klas"
+
+msgid "add to Project"
+msgstr "dodaj do Projektu"
+
+msgid "Location:"
+msgstr "Lokacja:"
+
+msgid "use Template"
+msgstr "u¿yj Szablonu"
+
+msgid "Filename:"
+msgstr "Nazwa pliku:"
+
+msgid "Manuals"
+msgstr "Instrukcje"
+
+msgid "Add existing files to project..."
+msgstr "Dodaj istniej±ce pliki do projektu..."
+
+msgid "Sourcefile(s):"
+msgstr "¬ród³a:"
+
+msgid "Destinationdir:"
+msgstr "Katalog docelowy:"
+
+msgid "File Properties"
+msgstr "W³a¶ciwo¶ci pliku"
+
+msgid "include in distribution"
+msgstr "do³±cz do dystrybucji"
+
+msgid "install"
+msgstr "instaluj"
+
+msgid "Install-location:"
+msgstr "Lokacja instalacji"
+
+msgid "only syntax check"
+msgstr "tylko sprawdzanie sk³adni"
+
+msgid "generate debugging information"
+msgstr "generuj informacje dla debugera"
+
+msgid "debug-level"
+msgstr "poziom debugowania"
+
+msgid "generate extra information for gprof"
+msgstr "dodatkowa informacja dla gprof"
+
+msgid "store temporary intermediate files"
+msgstr "zachowuj chwilowe pliki po¶rednie"
+
+msgid "Optimization-level"
+msgstr "Poziom optymalizacji"
+
+msgid "make all Warnings into errors"
+msgstr "zamieñ wszystkie ostrze¿enia na b³êdy"
+
+msgid "remove all symbol table and relocation information from the executable"
+msgstr "Usuñ wszystkie tablice symboli i informacje o relokacjach z pliku  wykonywalnego"
+
+msgid "prevent using shared libraries"
+msgstr "zablokuj u¿ywanie bibliotek dzielonych"
+
+msgid "Header/Resource Files"
+msgstr "Nag³ówki/Pliki zasobów"
+
+msgid "C/C++ Files"
+msgstr "Pliki C/C++"
+
+msgid "Documentation-Browser"
+msgstr "Przegl±darka dokumentacji"
+
+msgid "Tools"
+msgstr "Narzêdzia"
+
+msgid "Method:"
+msgstr "Metoda:"
+
+msgid "Project:"
+msgstr "Projekt:"
+
+msgid "Class:"
+msgstr "Klasa:"
+
+msgid "Background:"
+msgstr "T³o:"
+
+msgid "Text Background:"
+msgstr "Podk³ad tekstu"
+
+msgid "Selected:"
+msgstr "Zaznaczony:"
+
+msgid "Found:"
+msgstr "Znalezione:"
+
+msgid "Selected + Found:"
+msgstr "Wybrane + znalezione:"
+
+msgid "Qt-Library Doc:"
+msgstr "Dokumentacja QT:"
+
+msgid "KDE Library Doc:"
+msgstr "Dokumentacja bibliotek KDE:"
+
+msgid "&Keys..."
+msgstr "&Klawisze..."
+
+msgid "Editor &Colors..."
+msgstr "&Kolory edytora..."
+
+msgid "Documentation &Browser..."
+msgstr "Przegl±darka &Dokumentacji..."
+
+msgid "Make-&Command.."
+msgstr "Pole&cenie Make"
+
+msgid "Editor &Defaults..."
+msgstr "&Domy¶lne ustawienia edytora..."
+
+msgid "Classes"
+msgstr "Klasa"
+
+msgid "Methods"
+msgstr "Metody"
+
+msgid "Default Item Styles"
+msgstr "Domy¶lne style"
+
+msgid "Default Font"
+msgstr "Domy¶lna czcionka"
+
+msgid "Config Select"
+msgstr "Rodzaj pod¶wietlania"
+
+msgid "Highlight Auto Select"
+msgstr "Rozpoznawaj"
+
+msgid "File Extensions:"
+msgstr "Rozszerzenia pliku:"
+
+msgid "Mime Types:"
+msgstr "Typy MIME:"
+
+msgid "Item Font"
+msgstr "Czcionka elementu"
+
+msgid "Item Style"
+msgstr "Styl elementu"
+
+msgid "Highlight:"
+msgstr "Pod¶wietlenie:"
+
+msgid "Item:"
+msgstr "Dotyczy:"
+
+msgid "&Standards"
+msgstr "&Standardy"
+
+msgid "Compile File"
+msgstr "Kompiluj plik"
+
+msgid "Small"
+msgstr "Ma³y"
+
+msgid "Medium"
+msgstr "¦redni"
+
+msgid "Large"
+msgstr "Du¿y"
+
+msgid "Always use my colors"
+msgstr "Zawsze u¿ywaj tych kolorów"
+
+msgid "KDE Library Doc:"
+msgstr "Dokumentacja bibliotek KDE:"
+
+msgid "Edit Options"
+msgstr "Edytuj opcje"
+
+msgid "Auto &Indent"
+msgstr "Automatyczne &wciêcie"
+
+msgid "&Backspace Indent"
+msgstr "&Backspace cofa wciêcie"
+
+msgid "&Word Wrap"
+msgstr "&Zawijanie s³ów"
+
+msgid "Replace &Tabs"
+msgstr "Zamieñ &tabulacje"
+
+msgid "Remove Trailing &Spaces"
+msgstr "Usuñ &spacje za tekstem"
+
+msgid "Wrap &Cursor"
+msgstr "Zawijaj &kursor"
+
+msgid "&Auto Brackets"
+msgstr "&Automatyczne nawiasy"
+
+msgid "Select Options"
+msgstr "Wybierz opcje"
+
+msgid "&Persistent Selections"
+msgstr "&Spójne zaznaczenia"
+
+msgid "&Multiple Selections"
+msgstr "&Wielokrotne zaznaczenia"
+
+msgid "&Vertical Selections"
+msgstr "&Pionowe zaznaczenia"
+
+msgid "&Delete On Input"
+msgstr "Skasuj przy nowym tek¶cie"
+
+msgid "&Toggle Old"
+msgstr "&Odznacz stary tekst"
+
+msgid "Wrap Words At:"
+msgstr "Zawijaj s³owa przy:"
+
+msgid "Tab Width:"
+msgstr "Szeroko¶æ tabulacji:"
+
+msgid "Undo steps:"
+msgstr "Poziomów do wycofania:"
+
+msgid "Program"
+msgstr "Program"
+
+msgid "files..."
+msgstr "pliki..."
+
+msgid "printing..."
+msgstr "drukowanie..."
+
+msgid "Printer"
+msgstr "Drukarka"
+
+msgid "Outputlocation"
+msgstr "Lokacja wyniku"
+
+msgid "print to file"
+msgstr "drukuj do pliku"
+
+msgid "printername"
+msgstr "nazwa drukarki"
+
+msgid "Paper format"
+msgstr "Format papieru"
+
+msgid "Copy"
+msgstr "Kopiuj"
+
+msgid "Outputmedia"
+msgstr "Rozmiar papieru"
+
+msgid "Outputformat"
+msgstr "Format wyj¶cia"
+
+msgid "Default printsettings"
+msgstr "Domy¶lne ustawienia"
+
+msgid "Outprinting"
+msgstr "Drukowanie"
+
+msgid "Page printing"
+msgstr "Druk na stronach"
+
+msgid "Pages"
+msgstr "Strony"
+
+msgid "Pretty-print"
+msgstr "£adny wydruk"
+
+msgid "pretty-print"
+msgstr "³adny druk"
+
+msgid "color"
+msgstr "kolor"
+
+msgid "Pretty-print mode"
+msgstr "Tryb ³adnego druku"
+
+msgid "File selection"
+msgstr "Wybór plików"
+
+msgid "current"
+msgstr "aktualny"
+
+msgid "all in buffer"
+msgstr "wszystkie w buforze"
+
+msgid "all in project"
+msgstr "wszystkie w projekcie"
+
+msgid "changed files"
+msgstr "zmienione pliki"
+
+msgid "self choosen files"
+msgstr "rêcznie wybrane"
+
+msgid "file"
+msgstr "plik"
+
+msgid "Changed files"
+msgstr "Zmienione pliki"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "since"
+msgstr "od"
+
+msgid "between"
+msgstr "pomiêdzy"
+
+msgid "and"
+msgstr "i"
+
+msgid "Time"
+msgstr "Czas"
+
+msgid "add"
+msgstr "dodaj"
+
+msgid "delete"
+msgstr "kasuj"
+
+msgid "clean"
+msgstr "czy¶æ"
+
+msgid "Self choosen files"
+msgstr "Rêcznie wybrane pliki"
+
+msgid "Header"
+msgstr "Nag³ówek"
+
+msgid "Date & Time"
+msgstr "Data i czas"
+
+msgid "Layout"
+msgstr "Wygl±d"
+
+msgid "Underlay"
+msgstr "Podk³ad"
+
+msgid "header"
+msgstr "nag³ówek"
+
+msgid "Header settings"
+msgstr "Ustwienia nag³ówka"
+
+msgid "Fancy header"
+msgstr "Specjalny nag³ówek"
+
+msgid "Headertext"
+msgstr "Tekst nag³ówka"
+
+msgid "headertext"
+msgstr "tekst nag³ówka"
+
+msgid "text"
+msgstr "tekst"
+
+msgid "position"
+msgstr "pozycja"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "login"
+msgstr "login"
+
+msgid "position"
+msgstr "pozycja"
+
+msgid "Filename"
+msgstr "Nazwa pliku"
+
+msgid "filename"
+msgstr "nazwa pliku"
+
+msgid "size of filename"
+msgstr "rozmiar nazwy"
+
+msgid "Hostname"
+msgstr "Nazwa hosta"
+
+msgid "hostname"
+msgstr "nazwa hosta"
+
+msgid "size of hostname"
+msgstr "rozmiar nazwy"
+
+msgid "Defaults"
+msgstr "Domy¶lnie"
+
+msgid "Preview"
+msgstr "Podgl±d"
+
+msgid "Current date"
+msgstr "Aktualna data"
+
+msgid "current date"
+msgstr "aktualna data"
+
+msgid "Manual"
+msgstr "Rêczne"
+
+msgid "Tutorial"
+msgstr "Tutorial"
+
+msgid "Others"
+msgstr "Inne"
+
+msgid "User-Manual"
+msgstr "Instrukcja u¿ytkownika"
+
+msgid "API-Documentation"
+msgstr "Dokumentacja API"
+
+msgid "current"
+msgstr "aktualny"
+
+msgid "all in buffer"
+msgstr "wszystkie w buforze"
+
+msgid "all in project"
+msgstr "wszystkie w projekcie"
+
+msgid "changed files"
+msgstr "zmienione pliki"
+
+msgid "self choosen files"
+msgstr "rêcznie wybrane"
+
+msgid "all"
+msgstr "wszystkie"
+
+msgid "odd"
+msgstr "nieparzyste"
+
+msgid "even"
+msgstr "parzyste"
+
+msgid "settings"
+msgstr "Ustawienia"
+
+msgid "a2ps default"
+msgstr "domy¶lne a2ps"
+
+msgid "Modification date"
+msgstr "Data modyfikacji"
+
+msgid "Modification time"
+msgstr "Czas modyfikacji"
+
+msgid "modification time"
+msgstr "czas modyfikacji"
+
+msgid "modification date"
+msgstr "data modyfikacji"
+
+msgid "left"
+msgstr "lewa strona"
+
+msgid "right"
+msgstr "prawa strona"
+
+msgid "center"
+msgstr "¶rodek"
+
+msgid "Ready."
+msgstr "Gotowe."
+
+msgid "Compiling "
+msgstr "Kompilowanie "
+
+msgid "Delete old Documentation and install to recent Documentation path"
+msgstr "Skasuj star± dokumentacjê i zainstaluj w tym samym miejscu"
+
+msgid "Delete old Documentation and install to new Documentation path"
+msgstr "Skasuj star± dokumentacjê i zainstaluj w nowym miejscu"
+
+msgid "Leave old Documention untouched and install to new Documention path"
+msgstr "Pozostaw star± dokumentacjê nietkniêt± i zainstaluj w nowym miejscu"
+
+msgid "new KDE Libs sources path:"
+msgstr "¶cie¿ka do nowych bibliotek KDE:"
+
+msgid "Choose installation mode:"
+msgstr "Wybierz tryb instalacji:"
+
+msgid "new KDE Libs Documentation path:"
+msgstr "¶cie¿ka do nowej dokumentacji bibliotek KDE:"
+
+msgid "You must enter a classname!"
+msgstr "Musisz podaæ nazwê klasy!"
+
+msgid "You must enter a name for the header-file!"
+msgstr "Musisz podaæ nazwê pliku nag³ówkowego!"
+
+msgid "You must enter a name for the implementation-file!"
+msgstr "Musisz podaæ nazwê pliku implementacji klasy!"
+
+msgid "You must enter a name for the baseclass!"
+msgstr "Musisz podaæ nazwê klasy bazowej!"
+
+msgid "You must enter a filename!"
+msgstr "Musisz wpisaæ nazwê pliku !"
+
+msgid "Others"
+msgstr "Inne"
+
+msgid "Properties..."
+msgstr "W³a¶ciwo¶ci..."
+
+msgid "Current Project"
+msgstr "Aktualny projekt"
+
+msgid "Others:"
+msgstr "Inne:"
+
+msgid "Filename:"
+msgstr "Nazwa pliku:"
+
+msgid "File:"
+msgstr "Plik:"
+
+msgid "Name:"
+msgstr "Nazwa:"
+
+msgid "Qt-Library"
+msgstr "Biblioteka Qt"
+
+msgid "KDE-Core-Library"
+msgstr "Biblioteka KDE-Core"
+
+msgid "KDE-UI-Library"
+msgstr "Biblioteka KDE-UI"
+
+msgid "KDE-KFile-Library"
+msgstr "Biblioteka KDE-KFile"
+
+msgid "KDE-HTMLW-Library"
+msgstr "Biblioteka KDE-HTMLW"
+
+msgid "KDE-KFM-Library"
+msgstr "Biblioteka KDE-KFM"
+
+msgid "KDE-KAB-Library"
+msgstr "Biblioteka KDE-KAB"
+
+msgid "KDE-KSpell-Library"
+msgstr "Biblioteka KDE-KSpell"
+
+msgid "Qt/KDE Libraries"
+msgstr "Biblioteki Qt/KDE"
+
+msgid "C/C++ File (*.cpp,*.c,*.cc,*.C)"
+msgstr "Plik C/C++ (*.cpp,*.c,*.cc,*.C)"
+
+msgid "Empty Textfile"
+msgstr "Pusty pli tekstowy"
+
+msgid "lsm File - Linux Software Map"
+msgstr "Plik lsm - Linux Software Map"
+
+msgid "kdelnk-File - for the KDE-Menu"
+msgstr "Plik kdelnk - do KDE-Menu"
+
+msgid "Not found!"
+msgstr "Nie znaleziono!"
+
+msgid "\" not found in documentation!"
+msgstr "\" nie znaleziony w dokumentacji!"
+
+msgid "Index Size"
+msgstr "Rozmiar indeksu"
+
+msgid "Index Options"
+msgstr "Opcje indeksowania"
+
+msgid "tiny size"
+msgstr "minimalny"
+
+msgid "small size"
+msgstr "ma³y"
+
+msgid "medium size"
+msgstr "¶redni"
+
+msgid "additional directories to index"
+msgstr "dodatkowe katalogi do indeksowania"
+
+msgid "remove"
+msgstr "usuñ"
+
+msgid "index the KDE documentation"
+msgstr "indeksuj dokumentacê KDE"
+
+msgid "index the QT documentation"
+msgstr "indeksuj dokumentacjê QT"
+
+msgid "Configure &Keys..."
+msgstr "&Konfiguruj Klawisze"
+
+msgid "Make-&Command..."
+msgstr "Pole&cenie Make..."
+
+msgid "&Autosave"
+msgstr "&Automatyczny zapis"
+
+msgid "Files..."
+msgstr "Pliki..."
+
+msgid "one side of paper"
+msgstr "jedna strona papieru"
+
+msgid "two side of paper"
+msgstr "dwie strony papieru"
+
+msgid "Current time"
+msgstr "Aktualny czas"
+
+msgid "current time"
+msgstr "aktualny czas"
+
+msgid "portrait"
+msgstr "portret"
+
+msgid "landscape"
+msgstr "widok"
+
+msgid "&Line..."
+msgstr "&Linia..."
+
+msgid "messages"
+msgstr "komunikaty"
+
+msgid "stdin/stdout"
+msgstr "stdin/stdout"
+
+msgid "stderr"
+msgstr "stderr"
+
+msgid "User-Documentation"
+msgstr "Dokumentacja u¿ytkownika"
+
+msgid "Application Wizard..."
+msgstr "Kreator aplikacji..."
+
+msgid "default"
+msgstr "domy¶lne"
+
+msgid "font"
+msgstr "czcionka"
+
+msgid "underlay"
+msgstr "podk³ad"
+
+msgid "underlaytext"
+msgstr "tekst podk³adu"
+
+msgid "Underlaytext"
+msgstr "Tekst podk³adu"
+
+msgid "Underlayposition"
+msgstr "Pozycja podk³adu"
+
+msgid "Underlayfont"
+msgstr "Czcionka podk³adu"
+
+msgid "Underlaygray"
+msgstr "Szaro¶æ podk³adu"
+
+msgid "underlaygray (x(1/10)"
+msgstr "szaro¶æ podk³adu (x(1/10)"
+
+msgid "Underlaystyle"
+msgstr "Styl podk³adu"
+
+msgid "underlaystyle"
+msgstr "styl podk³adu"
+
+msgid "angle"
+msgstr "k±t"
+
+msgid "Underlayangle"
+msgstr "K±t podk³adu"
+
+msgid "Numbering & Border"
+msgstr "Numeracja i ramka"
+
+msgid "numbering lines"
+msgstr "numeracja linii"
+
+msgid "borders"
+msgstr "ramki"
+
+msgid "numbering pages"
+msgstr "numeracja stron"
+
+msgid "characters per line"
+msgstr "znaków na liniê"
+
+msgid "Lines per page"
+msgstr "Linii na stronie"
+
+msgid "Textprinting"
+msgstr "Drukowanie tekstu"
+
+msgid "cut lines"
+msgstr "tnij linie"
+
+msgid "interpret TAB, BS and FF"
+msgstr "interpretuj TAB, BS i FF"
+
+msgid "replace non-printing character by space"
+msgstr "zast±p niedrukowalne znaki spacj±"
+
+msgid "print non ascii character as ISO Latin 1"
+msgstr "drukuj znaki spoza ascii jako ISO Latin 1"
+
+msgid "files single"
+msgstr "pliki osobno"
+
+msgid "files together"
+msgstr "pliki razem"
+
+msgid "Other options"
+msgstr "Inne opcje"
+
+msgid "table of contents"
+msgstr "spis tre¶ci"
+
+msgid "Highlight bars"
+msgstr "Pod¶wietl listwy"
+
+msgid "highlight bars"
+msgstr "pod¶wietlanie listw"
+
+msgid "cycle of change"
+msgstr "cykl zmian"
+
+msgid "Wrapped line"
+msgstr "Zawijana linia"
+
+msgid "marked wrapped lines"
+msgstr "zaznaczone zawiniête linie"
+
+msgid "bold font"
+msgstr "pogrubiony font"
+
+msgid "Font and TAB"
+msgstr "Font i TABulacja"
+
+msgid "set TAB size"
+msgstr "ustaw rozmiar tabulacji"
+
+msgid "font for a2ps"
+msgstr "czcionka dla a2ps"
+
+msgid "font for header"
+msgstr "czcionka dla nag³ówka"
+
+msgid "font for body"
+msgstr "czcionka dla tekstu"
+
+msgid "value for wrapped line"
+msgstr "warto¶æ zawiniêtej linii"
+
+msgid "Make"
+msgstr "Zbuduj"
+
+msgid "Repeat Search"
+msgstr "Powtórz wyszukiwanie"
+
+msgid "Search Marked Text"
+msgstr "Wyszukaj zaznaczony tekst"
+
+msgid "Toogle Output-View"
+msgstr "Prze³±cz widok wyników"
+
+msgid "Toogle Statusbar"
+msgstr "Prze³±cz pasek stanu"
+
+msgid "Toogle Tree-View"
+msgstr "Prze³±cz widok drzewa"
+
+msgid "Workspaces"
+msgstr "Ustawienia robocze"
+
+msgid "Workspace 1"
+msgstr "Ustawienia 1"
+
+msgid "Workspace 2"
+msgstr "Ustawienia 2"
+
+msgid "Workspace 3"
+msgstr "Ustawienia 3"
+
+msgid "files single"
+msgstr "pliki osobno"
+
+msgid "files together"
+msgstr "pliki razem"
+
+msgid "short"
+msgstr "krótki"
+
+msgid "full"
+msgstr "pe³ny"
+
+msgid "date &  time"
+msgstr "data i czas"
+
+msgid "use fontsize"
+msgstr "u¿ywaj czcionkê"
+
+msgid "fontsize"
+msgstr "rozmiar"
+
+msgid "uses lines per page"
+msgstr "u¿ywa linii na stronie"
+
+msgid "Numbering"
+msgstr "Numeracja"
+
+msgid "Configure &Printer..."
+msgstr "Konfiguruj &drukarkê..."
+
+msgid "&KDevelop Setup..."
+msgstr "U&stawienia KDevelop..."
+
+msgid "Search for Help on..."
+msgstr "Wyszukaj pomocy na temat..."
+
+msgid "Search for:"
+msgstr "Szukaj:"
+
+msgid "C/C++-Reference"
+msgstr "Podrêcznik C/C++"
+
+msgid "Select Make-Command:"
+msgstr "Wybierz polecenie Make:"
+
+msgid "Autosave"
+msgstr "Automatyczny zapis"
+
+msgid "enable Autosave"
+msgstr "w³±cz automatyczny zapis"
+
+msgid "Select Autosave time-intervall:"
+msgstr "Podaj odstêp miêdzy zapisami:"
+
+msgid "Autoswitch"
+msgstr "Auto-prze³±cznik"
+
+msgid "enable Autoswitch"
+msgstr "w³±cz Auto-prze³±cznik"
+
+msgid "Qt-library:"
+msgstr "Biblioteka Qt:"
+
+msgid "KDE-libraries:"
+msgstr "Biblioteki KDE:"
+
+msgid "Create KDE-Documentation :"
+msgstr "Utwórz dokumentacjê KDE:"
+
+msgid "Create Search Database :"
+msgstr "Utwórz bazê wyszukiwañ:"
+
+msgid "Update..."
+msgstr "Uaktualnij..."
+
+msgid "Create..."
+msgstr "Utwórz..."
+
+msgid "Make-Command"
+msgstr "Polecenie Make"
+
+msgid "End of document reached."
+msgstr "Natrafiono na koniec dokumentu."
+
+msgid "Continue from the beginning?"
+msgstr "Zacz±æ od pocz±tku?"
+
+msgid "Program not found!"
+msgstr "Nie znaleziono programu!"
+
+msgid "KDevelop needs \""
+msgstr "KDevelop potrzebuje \""
+
+msgid "\" to work properly.\n\tPlease install it!"
+msgstr "\", by poprawnie dzia³aæ.\n\tZainstaluj to!"
+
+msgid "one page per side"
+msgstr "jedna strona na kartkê"
+
+msgid "two pages per side"
+msgstr "dwie strony na kartkê"
+
+msgid "Printing"
+msgstr "Drukowanie"
+
+msgid "file single"
+msgstr "pliki osobno"
+
+msgid "file together"
+msgstr "pliki razem"
+
+msgid "lines per page"
+msgstr "linii na stronê"
+
+msgid "C/C++ Reference"
+msgstr "Podrêcznik C/C++"
+
+msgid "align files"
+msgstr "u³ó¿ pliki"
+
+msgid ""
+"Open project\n\n"
+"Shows the open project dialog "
+"to select a project to be opened"
+msgstr ""
+"Otwórz projekt\n\n"
+"Pokazuje dialog 'Otwórz projekt' i umo¿liwia wybranie projektu do otwarcia"
+
+msgid ""
+"Open file\n\n"
+"Shows the open file dialog to "
+"select a file to be opened."
+msgstr ""
+"Otwórz plik\n\n"
+"Pokazuje dialog 'Otwórz plik' i umo¿liwia wybranie pliku do otwarcia"
+
+msgid ""
+"Save file\n\n"
+"Saves the file opened in the actual "
+"editing view"
+msgstr ""
+"Zapisz plik\n\n"
+"Zapisuje plik otwarty w aktualnym widoku edycji"
+
+msgid ""
+"Undo\n\n"
+"Reverts the last editing step."
+msgstr ""
+"Cofnij\n\n"
+"Cofa ostatni krok edycji."
+
+msgid ""
+"Redo\n\n"
+"If an editing step was undone, redo "
+"lets you do this step again."
+msgstr ""
+"Przywróæ\n\n"
+"Je¶li krok edycji zosta³ cofniêty, ponawia jego wykonanie."
+
+msgid ""
+"Cut\n\n"
+"Cuts out the selected text and copies "
+"it to the system clipboard."
+msgstr ""
+"Wytnij\n\n"
+"Wycina zaznaczony fragment i umieszcza go w schowku"
+
+msgid ""
+"Copy\n\n"
+"Copies the selected text into the "
+"system clipboard."
+msgstr ""
+"Kopiuj\n\n"
+"Kopiuje zaznaczony fragment do schowka"
+
+msgid ""
+"Paste\n\n"
+"Inserts the contents of the "
+"system clipboard at the current "
+"cursor position. "
+msgstr ""
+"Wklej\n\n"
+"Wkleja zawarto¶æ schowka w aktualne miejsce"
+""
+
+msgid ""
+"Compile file\n\n"
+"Only compile the file opened in "
+"the C/C++ Files- window. The output "
+"is shown in the output window. If "
+"errors occur, clicking on the error line "
+"causes the file window to show you the "
+"line the error occured."
+msgstr ""
+"Kompiluj plik\n\n"
+"Kompiluje tylko plik otwarty w oknie plików C/C++\n"
+"Wyniki ukazuj± siê w oknie wyników. Je¶li zda¿±\n"
+"siê b³êdy kompilacji, klikniêcie na na liniê z\n"
+"komunikatem b³êdu spowoduje ukazanie linii \n"
+"zawieraj±cej ten b³±d w edytorze."
+
+msgid ""
+"Make\n\n"
+"Invokes the make-command set in the "
+"options-menu for the current project "
+"after saving all files. "
+"This will compile all changed sources "
+"since the last compilation was invoked.\n"
+"The output window opens to show compiler "
+"messages. If errors occur, clicking on the "
+"error line will open the file where the "
+"error was found and sets the cursor to the "
+"error line."
+msgstr ""
+"Buduj\n\n"
+"Po zapisaniu wszystkich plików, uruchamia\n"
+"polecenie make - ustawione w menu opcji\n"
+"dla aktualnego projektu.\n"
+"To spowoduje kompilacjê wszystkich\n"
+"zmienionych od czasu ostatniej kompilacji\n"
+"¿róde³. Okno wyników bêdzie zawieraæ\n"
+"wszystkie komunikaty. Je¶li wyst±pi± b³êdy\n"
+"kompilacji, klikniêcie na nie spowoduje\n"
+"otworzenie odpowiedniego pliku ¼ród³owego."
+
+msgid ""
+"Rebuild all\n\n"
+"After saving all files, rebuild all "
+"invokes the make-command set with the "
+"clean-option to remove all object files. "
+"Then, configure creates new Makefiles and "
+"the make-command will rebuild the project."
+msgstr ""
+"Przebuduj wszystkie\n\n"
+"Po zapisaniu wszystkich plików wywo³uje\n"
+"polecenie make z opcj± clean, co powoduje\n"
+"usuniêcie wszystkich plików po¶rednich.\n"
+"Potem configure generuje nowy plik Makefile'\n"
+"a w koñcu make przebudowuje caly projekt."
+
+msgid ""
+"Run\n\n"
+"After saving all files,the make-command is "
+"called to build the project. Then the binary "
+"is executed out of the project directory.\n"
+"Be aware that this function is only valid for "
+"programs and that references to e.g. pixmaps "
+"or html help files that are supposed to be "
+"installed will cause some strange behavoir "
+"like testing the helpmenu will open an error "
+"message that the index.html file is not found."
+msgstr ""
+"Uruchom\n\n"
+"Po zapisani wszystkich plików uruchamia\n"
+"polecenie make, by zbudowaæ projekt. Potem\n"
+"uruchamia program wynikowy. Nale¿y pamiêtaæ,\n"
+"¿e ta funkcja nie instaluje programu, wiêc\n"
+"niektóre nielokalne funkcje mog± nie dzia³aæ\n"
+"poprawnie (np. menu help, niektóre pixmapy itp.)"
+
+msgid ""
+"Stop\n\n"
+"If activated, the stop-command will interrupt "
+"the active process. This affects make-commands "
+"as well as documentation generation."
+msgstr ""
+"Stop\n\n"
+"To polecenie zatrzymuje aktualnie dzia³aj±cy\n"
+"proces. Mo¿e to byæ zarówno polecenie make\n"
+"jak i np. generowanie dokumentacji."
+
+msgid ""
+"Classes\n\n"
+"Choosing a class will switch to the header "
+"file where the class is declarated."
+msgstr ""
+"Klasy\n\n"
+"Wybranie klasy spowoduje przej¶cie do nag³ówka,\n"
+"w którym klasa jest zadeklarowana."
+
+msgid ""
+"Methods\n\n"
+"Allows selecting a method of the current "
+"selected class. This will switch to the "
+"implementation of the chosen class."
+msgstr ""
+"Metody\n\n"
+"Pozwala na wybranie metody aktualnie wybranej klasy.\n"
+"Umo¿liwia prze³±czenie siê do implementacji wyranej\n"
+"metody."
+
+msgid ""
+"Documentation-Back\n\n"
+"This opens the previous browser page in the "
+"browser window. "
+msgstr "Dokumentacja-wstecz\n\n"
+"Otwiera poprzedni± stronê dokumentacji."
+
+msgid ""
+"Documentation-Forward\n\n"
+"This opens the next opened browser page after "
+"Documentation-Back was chosen."
+msgstr ""
+"Dokumentacja-do przodu\n\n"
+"Otwiera nastêpn± stronê w dokumentacji (tylko\n"
+"po utrzednim wykonaniu wstecz)."
+
+msgid ""
+"Search Marked Text\n\n"
+"Uses the searchdatabase to look for the selected "
+"text string and opens a summary page of found "
+"references for the selection in the browser window. "
+"There, you can select a documentation page of your "
+"choice and open it by following the link."
+msgstr ""
+"Wyszukaj zaznaczony tekst\n\n"
+"U¿ywa bazy wyszukiwañ by znale¼æ zaznaczony tekst i otwiera\n"
+"stronê z podsumowaniem znalezionych odwo³añ. Tam mo¿esz\n"
+"wybraæ interesuj±c± ciê stronê dokumentacji i otworzyæ j± w\n"
+"przegl±darce dokumentacji."
+
+msgid ""
+"Class Viewer\n\n"
+"The class viewer shows all classes, methods and variables "
+"of the current project files and allows switching to declarations "
+"and implementations. The right button popup-menu allows more specialized "
+"functionality."
+msgstr ""
+"Widok klas (CV)\n\n"
+"Widok klas pokazuje klasy, metody i zmienne z plików\n"
+"aktualnego projektu umo¿liwiaj±c porusznie siê pomiêdzy\n"
+"deklaracjami a implementacj±. Prawy przycisk myszki\n"
+"wywo³uje menu z dodatkowymi funkcjami."
+
+msgid ""
+"Logical File Viewer\n\n"
+"The logical file viewer separates your project files into "
+"logical groups to allow easier access e.g.to header and "
+"implementation files.The right button popup-menu allows more specialized "
+"functionality."
+msgstr ""
+"Logiczny widok plików (LFV)\n\n"
+"Logiczny widok plików dzieli pliki twojego projektu\n"
+"na poszczególne grupy by u³atwiæ dostêp np. do\n"
+"plików z deklaracjami i z implementacjami funkcji.\n"
+"Prawy przycisk myszki wywo³uje dodatkowe menu."
+
+msgid ""
+"Real File Viewer\n\n"
+"The real file viewer shows the project directory in "
+"it's real structure and gives access to all files."
+msgstr ""
+"Rzeczywisty widok plików (RFV)\n\n"
+"Rzeczywisty widok plików  pokazuje jak w rzeczywisto¶ci\n"
+"rozmieszczone s± pliki w katalogu twojego projektu."
+
+msgid ""
+"Documentation Tree\n\n"
+"The documentation tree gives access to library "
+"documentation and the KDevelop manuals. Can be "
+"configured individually by right-button menu."
+msgstr ""
+"Drzewo dokumentacji (DOC)\n\n"
+"Drzewo dokumentacji umo¿liwia dostêp do dokumentacji\n"
+"bibliotek i podrêcznika KDevelop. Widok tem mo¿na\n"
+"konfigurowaæ spod prawego przycisku myszki."
+
+msgid ""
+"Header/Resource Files\n\n"
+"This window shows header and all other project files "
+"except for source files. The statusbar shows the "
+"status of the insert/overwrite key as well as the "
+"cursor position by line and column."
+msgstr ""
+"Nag³ówki/Pliki zasobów\n\n"
+"To okno pokazuje pliki nag³ówkowe i wszystkie pliki\n"
+"projektu poza plikami ¼ród³owymi. Na pasku stanu widaæ\n"
+"status wstawiania/nadpisywania jak te¿ pozycjê kursora."
+
+msgid ""
+"C/C++ Files\n\n"
+"This window shows only source files. The statusbar shows "
+"the status of the insert/overwrite key as well as the "
+"cursor position by line and column."
+msgstr ""
+"Pliki C/C++\n\n"
+"To okno pokazuje tylko pliki ¼ród³owe.\n"
+"Na pasku stanu widaæ status wstawiania/nadpisywania\n"
+"jak te¿ pozycjê kursora."
+
+msgid ""
+"Documentation Browser\n\n"
+"The documentation browser window shows the online-"
+"documentation provided with kdevelop as well as "
+"library class documentation created. Use the documentation "
+"tree to switch between various parts of the documentation."
+msgstr ""
+"Przegl±darka dokumentacji\n\n"
+"Okno przegl±darki dokumentacji pokazuje dokumentacjê\n"
+"dostarczan± z KDE jak te¿ dokumentacjê aktualnie tworzonych\n"
+"klas. U¿ywaj drzewa dokumentacji by prze³±czaæ siê pomiêdzy\n"
+"ró¿nymi czê¶ciami dokumentacji."
+
+msgid ""
+"Messages\n\n"
+"The messages window shows the output of the compiler and "
+"used utilities like kdoc reference documentation. "
+"For compiler error messages, click on the error message. "
+"This will automatically open the source file and set the "
+"cursor to the line that caused the compiler error/warning. "
+msgstr ""
+"Komunikaty\n\n"
+"Okno komunikatów pokazuje wyniki dzia³ania kompilatora\n"
+"oraz innych programów jak np. kdoc.\n"
+"Je¶li znajd± siê tu komunikaty b³êdów kompilacji, likniêcie\n"
+"na nie przenosi kursor w edytorze do odpowiedniej linii w\n"
+"pliku ¼ród³owym lub nag³ówkowym."
+
+msgid ""
+"StdErr\n\n"
+"The Standard Error window displays messages of running applications "
+"using the cerr function to debug."
+msgstr ""
+"StdErr\n\n"
+"Okno standardowedo strumienia b³êdów wy¶wietla\n"
+"komunikaty b³êdów pochodz±ce od ró¿nych\n"
+"uruchamianych aplikacji."
+
+msgid "&Execute  "
+msgstr "&Uruchom"
+
+msgid "Next Tip"
+msgstr "Nastêpna"
+
+
+msgid "Rebuild"
+msgstr "Przebuduj"
+
+msgid "Compile file"
+msgstr "Kompiluj plik"
+
+msgid "What's this...?"
+msgstr "Co to jest...?"
+
+msgid "Debug program"
+msgstr "Debuguj program"
+
+msgid "show Tip of the day on next start"
+msgstr "poka¿ podpowiedzi przy nastêpnym uruchomieniu"
+
+msgid "&Repeat Search"
+msgstr "Szukaj z&nowu"

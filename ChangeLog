@@ -1,3 +1,6 @@
+1999-03-28 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* commited the pt.po,es.po,pl.po and an updated ru translation
+
 1999-03-28 Pascal Krahmer <pascal@beast.de>
         * fixed segfault bug
         * items now can be selected

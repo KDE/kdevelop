@@ -1,0 +1,3037 @@
+# KDEVELOP PT.PO FILE
+# Copyright (C) 1999 
+# FIRST AUTHOR <dnloreto@esoterica.pt>, 1999.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: KDevelop 0.3.1\n"
+"POT-Creation-Date: 1999-02-16 16:38+0100\n"
+"PO-Revision-Date: 1999-03-21 01:21+GMT\n"
+"Last-Translator: Duarte Loreto <dnloreto@esoterica.pt>\n"
+"Language-Team: pt <xx@xx.xx>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: ckdevelop.cpp:44
+msgid "Creating new file..."
+msgstr "A criar novo ficheiro..."
+
+#: ckdevelop.cpp:51
+msgid "Opening file..."
+msgstr "A abrir ficheiro..."
+
+#: ckdevelop.cpp:72
+msgid "Saving file "
+msgstr "A gravar ficheiro "
+
+#: ckdevelop.cpp:88
+msgid "Saving all changed files..."
+msgstr "A gravar todos os ficheiros modificados"
+
+#: ckdevelop.cpp:139
+msgid "Save file as..."
+msgstr "Gravar ficheiro como..."
+
+#: ckdevelop.cpp:183
+msgid "Closing file..."
+msgstr "A fechar ficheiro..."
+
+#: ckdevelop.cpp:188
+msgid "Save?"
+msgstr "Gravar?"
+
+#: ckdevelop.cpp:189
+msgid "The document was modified,save?"
+msgstr "O documento foi modificado,gravar?"
+
+#: ckdevelop.cpp:241
+msgid "Closing all files..."
+msgstr "A fechar todos os ficheiros..."
+
+#: ckdevelop.cpp:298
+msgid "Exiting..."
+msgstr "A sair..."
+
+#: ckdevelop.cpp:308
+msgid "Cutting..."
+msgstr "A cortar..."
+
+#: ckdevelop.cpp:313
+msgid "Copying..."
+msgstr "A copiar..."
+
+#: ckdevelop.cpp:318
+msgid "Pasting selection..."
+msgstr "A colar selecçao..."
+
+#: ckdevelop.cpp:323
+msgid "Selecting all..."
+msgstr "A seleccionar tudo..."
+
+#: ckdevelop.cpp:334
+msgid "Inserting file contents..."
+msgstr "A inserir conteúdo do ficheiro..."
+
+#: ckdevelop.cpp:339
+msgid "Searching..."
+msgstr "A procurar..."
+
+#: ckdevelop.cpp:344
+msgid "Repeating last search..."
+msgstr "A repetir a última procura..."
+
+#: ckdevelop.cpp:349
+msgid "Replacing..."
+msgstr "A substituir..."
+
+#: ckdevelop.cpp:354
+msgid "Switching to selected line..."
+msgstr "A ir para a linha seleccionada..."
+
+#: ckdevelop.cpp:446
+msgid "Setting up the Editor..."
+msgstr "A configurar o Editor..."
+
+#: ckdevelop.cpp:456
+msgid "Setting up the Editor's colors..."
+msgstr "A configurar as cores do Editor..."
+
+#: ckdevelop.cpp:470
+msgid "Setting up syntax highlighting default colors..."
+msgstr "A configurar as cores, por defeito, de realce da sintaxe..."
+
+#: ckdevelop.cpp:479
+msgid "Setting up syntax highlighting colors..."
+msgstr "A configurar as cores de realce da sintaxe..."
+
+#: ckdevelop.cpp:489
+msgid "Setting up Documentation paths..."
+msgstr "A configurar os caminhos da Documentaçao..."
+
+#: ckdevelop.cpp:496
+msgid "Configuring Documentation Browser..."
+msgstr "A configurar Browser da Documentaçao..."
+
+#: ckdevelop.cpp:540
+msgid "Switching to last page..."
+msgstr "A ir para a última página..."
+
+#: ckdevelop.cpp:558
+msgid "Switching to next page..."
+msgstr "A ir para a página seguinte..."
+
+#: ckdevelop.cpp:657
+msgid "Creating Search Database..."
+msgstr "A criar Base de Dados de Busca..."
+
+#: ckdevelop.cpp:675
+msgid "Searching selected text in documentation..."
+msgstr "A procurar texto seleccionado na documentaçao..."
+
+#: ckdevelop.cpp:717
+msgid "Switching to project API Documentation..."
+msgstr "A ir para a Documentaçao da API do projecto..."
+
+#: ckdevelop.cpp:724
+msgid "Switching to project Manual..."
+msgstr "A ir para o Manual do projecto..."
+
+#: ckdevelop.cpp:736
+msgid "Updating KDE-Libs documentation..."
+msgstr "A actualizar a documentaçao das KDE-Libs..."
+
+#: ckdevelop.cpp:740
+msgid "Generating Documentation..."
+msgstr "A gerar a Documentaçao..."
+
+#: ckdevelop.cpp:753
+msgid "Compiling "
+msgstr "A compilar "
+
+#: ckdevelop.cpp:768
+msgid "Running "
+msgstr "A executar "
+
+#: ckdevelop.cpp:781
+msgid "Running  "
+msgstr "A executar "
+
+#: ckdevelop.cpp:799
+msgid "Running make..."
+msgstr "A executar make..."
+
+#: ckdevelop.cpp:820
+msgid "Running make clean-command "
+msgstr "A executar o comando make clean "
+
+#: ckdevelop.cpp:838
+msgid "Running make clean and rebuilding all..."
+msgstr "A executar make clean e reconstruindo tudo..."
+
+#: ckdevelop.cpp:854
+msgid "Running make distclean..."
+msgstr "A executar make distclean..."
+
+#: ckdevelop.cpp:869
+msgid "Running autoconf suite..."
+msgstr "A executar autoconf..."
+
+#: ckdevelop.cpp:880
+msgid "Running ./configure..."
+msgstr "A executar ./configure..."
+
+#: ckdevelop.cpp:892
+msgid "Killing current process..."
+msgstr "A matar o processo actual..."
+
+#: ckdevelop.cpp:906
+msgid "Creating project API-Documentation..."
+msgstr "A criar a Documentaçao-API do projecto..."
+
+#: ckdevelop.cpp:925
+msgid "Creating project Manual..."
+msgstr "A criar Manual do projecto..."
+
+#: ckdevelop.cpp:1312
+msgid "About..."
+msgstr "Sobre..."
+
+#: ckdevelop.cpp:1312
+msgid "\tKDevelop Version "
+msgstr "\tKDevelop Versao "
+
+#: ckdevelop.cpp:1369
+#, c-format
+msgid "Line: %d Col: %d"
+msgstr "Linha: %d Col: %d"
+
+#: ckdevelop.cpp:1460
+msgid "Creates a new file"
+msgstr "Cria novo ficheiro"
+
+#: ckdevelop.cpp:1461
+msgid "Opens an existing file"
+msgstr "Abre um ficheiro existente"
+
+#: ckdevelop.cpp:1463
+msgid "Save the actual document"
+msgstr "Grava o documento actual"
+
+#: ckdevelop.cpp:1464
+msgid "Save the document as..."
+msgstr "Grava o documento como..."
+
+#: ckdevelop.cpp:1465
+msgid "Save all changed files"
+msgstr "Grava todos os ficheiros modificados"
+
+#: ckdevelop.cpp:1466
+msgid "Closes the actual file"
+msgstr "Fecha o documento actual"
+
+#: ckdevelop.cpp:1468
+msgid "Prints the current document"
+msgstr "Imprime o documento actual"
+
+#: ckdevelop.cpp:1472
+msgid "Exits the program"
+msgstr "Sai do programa"
+
+#: ckdevelop.cpp:1475
+msgid "Cuts the selected section and puts it to the clipboard"
+msgstr "Corta a secçao seleccionada e coloca-a no !!!!!clipboard!!!!"
+
+#: ckdevelop.cpp:1476
+msgid "Copys the selected section to the clipboard"
+msgstr "Copia a secçao seleccionada para o !!!!!clipboard!!!!!"
+
+#: ckdevelop.cpp:1477
+msgid "Pastes the clipboard contents to actual position"
+msgstr "Cola o conteúdo do !!!!clipboard!!!! na posiçao actual"
+
+#: ckdevelop.cpp:1478
+msgid "Selects the whole document contents"
+msgstr "Selecciona o conteúdo de todo o documento"
+
+#: ckdevelop.cpp:1479
+msgid "Inserts a file at the current position"
+msgstr "Insere um ficheiro na posiçao actual"
+
+#: ckdevelop.cpp:1480
+msgid "Searchs the file for an expression"
+msgstr "Procura no ficheiro uma expressao"
+
+#: ckdevelop.cpp:1481
+msgid "Repeats the last search"
+msgstr "Repete a última busca"
+
+#: ckdevelop.cpp:1482
+msgid "Searchs and replace expression"
+msgstr "Procura e substitui expressao"
+
+#: ckdevelop.cpp:1485
+msgid "Goes to Line Number..."
+msgstr "Vai para a Linha Número..."
+
+#: ckdevelop.cpp:1487
+msgid "Enables / disables the treeview"
+msgstr "Activa / desactiva a vista em árvore"
+
+#: ckdevelop.cpp:1488
+msgid "Enables / disables the outputview"
+msgstr "Activa / desactiva a vista do output"
+
+#: ckdevelop.cpp:1490
+msgid "Enables / disables the standard toolbar"
+msgstr "Activa / desactiva a barra de ferramentas standard"
+
+#: ckdevelop.cpp:1491
+msgid "Enables / disables the browser toolbar"
+msgstr "Activa / desactiva a barra de ferramentas browser"
+
+#: ckdevelop.cpp:1492
+msgid "Enables / disables the statusbar"
+msgstr "Activa / desactiva a barra de estados"
+
+#: ckdevelop.cpp:1494
+msgid "Refreshes current view"
+msgstr "Refresca a vista actual"
+
+#: ckdevelop.cpp:1497
+msgid "Generates a new project with KAppWizard"
+msgstr "Gera um novo projecto usando o KAppWizard"
+
+#: ckdevelop.cpp:1498
+msgid "Creates a new project"
+msgstr "Cria um novo projecto"
+
+#: ckdevelop.cpp:1499
+msgid "Opens an existing project"
+msgstr "Abre um projecto existente"
+
+#: ckdevelop.cpp:1500
+msgid "Closes the current project"
+msgstr "Fecha o projecto actual"
+
+#: ckdevelop.cpp:1501
+msgid "Adds a file to the current project"
+msgstr "Adiciona um ficheiro ao projecto actual"
+
+#: ckdevelop.cpp:1502
+msgid "Adds a new file to the project"
+msgstr "Adiciona um ficheiro novo ao projecto"
+
+#: ckdevelop.cpp:1503
+msgid "Adds an existing file to the project"
+msgstr "Adiciona um ficheiro existente ao projecto"
+
+#: ckdevelop.cpp:1504
+msgid "Removes file from the project"
+msgstr "Remove um ficheiro do projecto"
+
+#: ckdevelop.cpp:1506
+msgid "Creates a new Class frame structure and files"
+msgstr "Cria uma nova estrutura base de Classe e ficheiros"
+
+#: ckdevelop.cpp:1508
+msgid "Shows the current file properties"
+msgstr "Mostra as propriedades do ficheiro actual"
+
+#: ckdevelop.cpp:1509
+msgid "Sets project and compiler options"
+msgstr "Define opçoes do projecto e compilador"
+
+#: ckdevelop.cpp:1512
+msgid "Compiles the current sourcefile"
+msgstr "Compila o ficheiro de código actual"
+
+#: ckdevelop.cpp:1513
+msgid "Invokes make-command and runs the program"
+msgstr "Invoca o comando make e executa o programa"
+
+#: ckdevelop.cpp:1514
+msgid "Invokes make and KDbg debugging the binary"
+msgstr "Invoca make e KDbg fazendo debbuging do binário"
+
+#: ckdevelop.cpp:1515
+msgid "Invokes make-command"
+msgstr "Invoca o comando make"
+
+#: ckdevelop.cpp:1516
+msgid "Rebuilds the program"
+msgstr "Reconstroi o programa"
+
+#: ckdevelop.cpp:1517
+msgid "Invokes make clean and rebuild all"
+msgstr "Invoca make clean e rebuild all"
+
+#: ckdevelop.cpp:1518
+msgid "Invokes make distclean and deletes all compiled files"
+msgstr "Invoca make distclean e apaga todos os ficheiros compilados"
+
+#: ckdevelop.cpp:1519
+msgid "Invokes automake and co."
+msgstr "Invoca automake e co."
+
+#: ckdevelop.cpp:1520
+msgid "Invokes ./configure"
+msgstr "Invoca ./configure"
+
+#: ckdevelop.cpp:1521
+msgid "Stops make immediately"
+msgstr "Para make imediatamente"
+
+#: ckdevelop.cpp:1522
+msgid "Creates the Project's API with KDoc"
+msgstr "Cria a API do Projecto usando o KDoc"
+
+#: ckdevelop.cpp:1523
+msgid "Creates the Project's User Manual with the sgml-file"
+msgstr "Cria o Manual do Utilizador do Projecto usando o ficheiro sgml"
+
+#: ckdevelop.cpp:1525
+msgid "Starts KDbg in the tools window"
+msgstr "Inicia KDbg na janela de ferramentas"
+
+#: ckdevelop.cpp:1526
+msgid "Starts KTranslator in the tools window"
+msgstr "Inicia KTranslator na janela de ferramentas"
+
+#: ckdevelop.cpp:1527
+msgid "Starts KIconedit in the tools window"
+msgstr "Inicia KIconedit na janela de ferramentas"
+
+#: ckdevelop.cpp:1529
+msgid "Sets the Editor's behavoir"
+msgstr "Configura comportamento do Editor"
+
+#: ckdevelop.cpp:1530
+msgid "Sets the Editor's colors"
+msgstr "Configura as cores do Editor"
+
+#: ckdevelop.cpp:1531
+msgid "Sets the highlighting default colors"
+msgstr "Configura as cores de realce de defeito"
+
+#: ckdevelop.cpp:1532
+msgid "Sets the highlighting colors"
+msgstr "Configura as cores de realce"
+
+#: ckdevelop.cpp:1533
+msgid "Sets the keyboard accelerators"
+msgstr "Configura os aceleradores de teclado"
+
+#: ckdevelop.cpp:1534
+msgid "Set up the KDevelop environment"
+msgstr "Configura o ambiente do KDevelop"
+
+#: ckdevelop.cpp:1535
+msgid "Configures the Browser options"
+msgstr "Configura as opçoes do Browser"
+
+#: ckdevelop.cpp:1536
+msgid "Update your KDE-Libs Documentation"
+msgstr "Actualiza a Documentaçao das suas KDE-Libs"
+
+#: ckdevelop.cpp:1537
+msgid "Create a search database of the current Documentation"
+msgstr "Cria uma base de dados de busca da Documentaçao actual"
+
+#: ckdevelop.cpp:1539
+msgid "Switchs to last browser page"
+msgstr "Vai para a última página do browser"
+
+#: ckdevelop.cpp:1540
+msgid "Switchs to next browser page"
+msgstr "Vai para a página seguinte do browser"
+
+#: ckdevelop.cpp:1541
+msgid "Searchs the selected text in the documentation"
+msgstr "Procura o texto seleccionado na documentaçao"
+
+#: ckdevelop.cpp:1542
+msgid "Switchs to the QT-Documentation"
+msgstr "Vai para a Documentaçao da QT"
+
+#: ckdevelop.cpp:1543
+msgid "Switchs to the KDE-Core-Documentation"
+msgstr "Vai para a Documentaçao do KDE-Core"
+
+#: ckdevelop.cpp:1544
+msgid "Switchs to the KDE-GUI-Documentation"
+msgstr "Vai para a Documentaçao do KDE-GUI"
+
+#: ckdevelop.cpp:1545
+msgid "Switchs to the KDE-File-Documentation"
+msgstr "Vai para a documentaçao do KDE-File"
+
+#: ckdevelop.cpp:1546
+msgid "Switchs to the KDE-Html-Documentation"
+msgstr "Vai para a Documentaçao do KDE-Html"
+
+#: ckdevelop.cpp:1547
+msgid "Switchs to the project's API-Documentation"
+msgstr "Vai para a Documentaçao da API do projecto"
+
+#: ckdevelop.cpp:1548
+msgid "Switchs to the project's User-Manual"
+msgstr "Vai para o Manual do Utilizador do projecto"
+
+#: ckdevelop.cpp:1550
+msgid "Switch to KDevelop's User Manual"
+msgstr "Vai para o Manual do Utilizador do KDevelop"
+
+#: ckdevelop.cpp:1551
+msgid "Enter the KDevelop Homepage"
+msgstr "Vai para a Página Principal do KDevelop"
+
+#: ckdevelop.cpp:1552
+msgid "Programmer's Hall of Fame..."
+msgstr "Hall of Fame dos programadores..."
+
+#: cclassview.cpp:62 clogfileview.cpp:35 clogfileview.cpp:52
+#: cnewfiledlg.cpp:30
+msgid "New File..."
+msgstr "Novo Ficheiro..."
+
+#: cnewfiledlg.cpp:41 cprjoptionsdlg.cpp:36
+msgid "Project Options"
+msgstr "Opçoes do Projecto"
+
+#: cnewfiledlg.cpp:58
+msgid "use Template"
+msgstr "usar !!!!!!!!!!!!!Template!!!!!!!!!!!!!!!!"
+
+#: cnewfiledlg.cpp:70
+msgid "add to Project"
+msgstr "Adicionar ao Projecto"
+
+#: cnewfiledlg.cpp:124
+msgid "Filename:"
+msgstr "Nome do Ficheiro:"
+
+#: cnewfiledlg.cpp:161
+msgid "Location:"
+msgstr "Localizaçao:"
+
+#: cnewfiledlg.cpp:197 cprjoptionsdlg.cpp:125
+msgid "General"
+msgstr "Geral"
+
+#: cnewfiledlg.cpp:198
+msgid "Manuals"
+msgstr "Manuais"
+
+#: cnewfiledlg.cpp:199
+msgid "Linux/KDE"
+msgstr "Linux/KDE"
+
+#: caddexistingfiledlg.cpp:194 caddexistingfiledlg.cpp:200
+#: cnewclassdlg.cpp:138 cnewclassdlg.cpp:143 cnewclassdlg.cpp:148
+#: cnewclassdlg.cpp:154 cnewfiledlg.cpp:228 cnewfiledlg.cpp:233
+#: cnewfiledlg.cpp:237 cnewfiledlg.cpp:241 cnewfiledlg.cpp:245
+#: cnewfiledlg.cpp:249 cnewfiledlg.cpp:253
+msgid "Error..."
+msgstr "Erro..."
+
+#: cnewfiledlg.cpp:228
+msgid "The filename must end with .cpp,.c,.cc or .C !"
+msgstr "O nome do ficheiro tem de terminar com .cpp,.c,.cc ou .C !"
+
+#: cnewfiledlg.cpp:233
+msgid "The filename must end with .h !"
+msgstr "O nome do ficheiro tem de terminar com .h !"
+
+#: cnewfiledlg.cpp:237
+msgid "The filename must end with .lsm !"
+msgstr "O nome do ficheiro tem de terminar com .lsm !"
+
+#: cnewfiledlg.cpp:241
+msgid "The filename must end with .kdelnk !"
+msgstr "O nome do ficheiro tem de terminar com .kdelnk !"
+
+#: cnewfiledlg.cpp:245
+msgid "The filename must end with .sgml !"
+msgstr "O nome do ficheiro tem de terminar com .sgml !"
+
+#: cnewfiledlg.cpp:249
+msgid "You must enter a filename!"
+msgstr "Tem de introduzir um nome de ficheiro!"
+
+#: cnewfiledlg.cpp:253
+msgid "You must choose a location,that is in your project-dir!"
+msgstr "Tem de escolher uma localizaçao,que esteja na directoria do seu projecto!"
+
+#: ckdevelop_init.cpp:266
+msgid "Header/Resource Files"
+msgstr "Ficheiros Header/Resource"
+
+#: ckdevelop_init.cpp:267
+msgid "C/C++ Files"
+msgstr "Ficheiros C/C++"
+
+#: ckdevelop_init.cpp:268
+msgid "Documentation-Browser"
+msgstr "Browser de Documentaçao"
+
+#: ckdevelop_init.cpp:269
+msgid "Tools"
+msgstr "Ferramentas"
+
+#: ckdevelop_init.cpp:316
+msgid "Repeat Search"
+msgstr "Repetir Busca"
+
+#: ckdevelop_init.cpp:320
+msgid "Goto Line"
+msgstr "Ir para a Linha"
+
+#: ckdevelop_init.cpp:323
+msgid "Toogle Tree-View"
+msgstr "Alternar Vista de árvore"
+
+#: ckdevelop_init.cpp:326
+msgid "Toogle Output-View"
+msgstr "Alternar vista de Output"
+
+#: ckdevelop_init.cpp:329
+msgid "Toogle Statusbar"
+msgstr "Alternar Barra de Estados"
+
+#: ckdevelop_init.cpp:333 ckdevelop_init.cpp:510
+msgid "Compile File"
+msgstr "Compilar Ficheiro"
+
+#: ckdevelop_init.cpp:336 ckdevelop_init.cpp:721
+msgid "Make"
+msgstr "Make"
+
+#: ckdevelop_init.cpp:339 ckdevelop_init.cpp:725
+msgid "Run"
+msgstr "Executar"
+
+#: ckdevelop_init.cpp:343
+msgid "Search Marked Text"
+msgstr "Procurar Texto Marcado"
+
+#: ckdevelop_init.cpp:356
+msgid "&New"
+msgstr "&Novo"
+
+#: ckdevelop_init.cpp:365
+msgid "Save &As..."
+msgstr "Gravar &Como..."
+
+#: ckdevelop_init.cpp:367
+msgid "Save All"
+msgstr "Gravar Todos"
+
+#: ckdevelop_init.cpp:383
+msgid "U&ndo"
+msgstr "A&nular"
+
+#: ckdevelop_init.cpp:384
+msgid "R&edo"
+msgstr "R&efazer"
+
+#: ckdevelop_init.cpp:393
+msgid "&Insert File..."
+msgstr "&Inserir Ficheiro..."
+
+#: ckdevelop_init.cpp:395
+msgid "&Search..."
+msgstr "&Procurar..."
+
+#: ckdevelop_init.cpp:396
+msgid "&Repeat Search..."
+msgstr "&Repetir Procura..."
+
+#: ckdevelop_init.cpp:401
+msgid "&Replace..."
+msgstr "&Substituir..."
+
+#: ckdevelop_init.cpp:403
+msgid "Select &All"
+msgstr "Seleccionar &Tudo"
+
+#: ckdevelop_init.cpp:404
+msgid "Deselect All"
+msgstr "Desseleccionar Tudo"
+
+#: ckdevelop_init.cpp:405
+msgid "Invert Selection"
+msgstr "Inverter Selecçao"
+
+#: ckdevelop_init.cpp:420
+msgid "&Goto Line..."
+msgstr "&Ir para a Linha..."
+
+#: ckdevelop_init.cpp:425
+msgid "&Tree-View"
+msgstr "&Vista de árvore"
+
+#: ckdevelop_init.cpp:430
+msgid "&Output-View"
+msgstr "Vista de &Output"
+
+#: ckdevelop_init.cpp:436
+msgid "&Toolbar"
+msgstr "Barra de &Ferramentas"
+
+#: ckdevelop_init.cpp:440
+msgid "&Browser-Toolbar"
+msgstr "Barra de &Browser"
+
+#: ckdevelop_init.cpp:444
+msgid "Status&bar"
+msgstr "Barra de &Estados"
+
+#: ckdevelop_init.cpp:451
+msgid "&Refresh"
+msgstr "&Refrescar"
+
+#: ckdevelop_init.cpp:470
+msgid "&New File..."
+msgstr "&Novo Ficheiro..."
+
+#: ckdevelop_init.cpp:471
+msgid "&Existing File(s)..."
+msgstr "&Ficheiro(s) Existentes..."
+
+#: ckdevelop_init.cpp:476
+msgid "KAppWizard..."
+msgstr "KAppWizard..."
+
+#: ckappwizard.cpp:281 ckappwizard.cpp:312 ckdevelop_init.cpp:477
+msgid "New"
+msgstr "Novo"
+
+#: ckdevelop_init.cpp:479
+msgid "C&lose"
+msgstr "&Fechar"
+
+#: ckdevelop_init.cpp:482
+msgid "&New Class..."
+msgstr "&Nova Classe..."
+
+#: ckdevelop_init.cpp:484
+msgid "&Add File(s) to Project"
+msgstr "&Addicionar Ficheiro(s) ao Projecto"
+
+#: ckdevelop_init.cpp:490
+msgid "&File Properties..."
+msgstr "Propriedades do &Ficheiro..."
+
+#: ckdevelop_init.cpp:492
+msgid "&Options..."
+msgstr "&Opçoes..."
+
+#: ckdevelop_init.cpp:494
+msgid "&Project"
+msgstr "&Projecto"
+
+#: ckdevelop_init.cpp:514 ckdevelop_init.cpp:599
+msgid "&Make"
+msgstr "&Make"
+
+#: ckdevelop_init.cpp:518
+msgid "&Rebuild all"
+msgstr "&Rebuild tudo"
+
+#: ckdevelop_init.cpp:521
+msgid "&Clean/Rebuild all"
+msgstr "&Clean/Rebuild tudo"
+
+#: ckdevelop_init.cpp:524
+msgid "&Stop Build"
+msgstr "&Parar Build"
+
+#: ckdevelop_init.cpp:527
+msgid "&Run"
+msgstr "&Executar"
+
+#: ckdevelop_init.cpp:530
+msgid "&Debug..."
+msgstr "&Debug..."
+
+#: ckdevelop_init.cpp:532
+msgid "&DistClean"
+msgstr "&DistClean"
+
+#: ckdevelop_init.cpp:533
+msgid "&Autoconf"
+msgstr "&Autoconf"
+
+#: ckdevelop_init.cpp:534
+msgid "C&onfigure"
+msgstr "C&onfigurar"
+
+#: ckdevelop_init.cpp:536
+msgid "Make &API-Doc"
+msgstr "Fazer Doc. &API"
+
+#: ckdevelop_init.cpp:538
+msgid "Make &User-Manual"
+msgstr "Fazer Manual &Utilizador"
+
+#: ckdevelop_init.cpp:541
+msgid "&Build"
+msgstr "&Build"
+
+#: ckdevelop_init.cpp:561
+msgid "&KDbg"
+msgstr "&KDbg"
+
+#: ckdevelop_init.cpp:562
+msgid "&KIconedit"
+msgstr "&Kiconedit"
+
+#: ckdevelop_init.cpp:563
+msgid "KTranslator"
+msgstr "KTranslator"
+
+#: ckdevelop_init.cpp:564
+msgid "&Tools"
+msgstr "&Ferramentas"
+
+#: ckdevelop_init.cpp:571
+msgid "&Editor..."
+msgstr "&Editor..."
+
+#: ckdevelop_init.cpp:573
+msgid "Editor &Colors..."
+msgstr "&Cores do Editor..."
+
+#: ckdevelop_init.cpp:575
+msgid "Editor &Defaults..."
+msgstr "&Definiçoes do Editor..."
+
+#: ckdevelop_init.cpp:578
+msgid "&Syntax Highlighting..."
+msgstr "Salientaçao da &Sintaxe..."
+
+#: ckdevelop_init.cpp:582
+msgid "&Keys..."
+msgstr "&Teclas..."
+
+#: ckdevelop_init.cpp:586
+msgid "Documentation &Browser..."
+msgstr "&Browser da Documentaçao..."
+
+#: ckdevelop_init.cpp:588
+msgid "&Documentation Path..."
+msgstr "Caminho da &Documentaçao..."
+
+#: ckdevelop_init.cpp:591
+msgid "Update &KDE-Documentation..."
+msgstr "Actualizar Documentaçao do &KDE..."
+
+#: ckdevelop_init.cpp:593
+msgid "Create &Searchdatabase..."
+msgstr "Criar &Base de Dados de Procura..."
+
+#: ckdevelop_init.cpp:600
+msgid "&Gmake"
+msgstr "&Gmake"
+
+#: ckdevelop_init.cpp:601
+msgid "&Dmake"
+msgstr "&Dmake"
+
+#: ckdevelop_init.cpp:620
+msgid "&Window"
+msgstr "&Janela"
+
+#: ckdevelop_init.cpp:628 ckdevelop_init.cpp:757
+msgid "Forward"
+msgstr "Avançar"
+
+#: ckdevelop_init.cpp:630
+msgid "&Search Marked Text"
+msgstr "&Procurar Texto Marcado"
+
+#: ckdevelop_init.cpp:634
+msgid "&Qt-Library"
+msgstr "Livraria &QT"
+
+#: ckdevelop_init.cpp:635
+msgid "KDE-&Core-Library"
+msgstr "Livrarias KDE-&Core"
+
+#: ckdevelop_init.cpp:637
+msgid "KDE-&GUI-Library"
+msgstr "Livraria KDE-&GUI"
+
+#: ckdevelop_init.cpp:639
+msgid "KDE-&KFile-Library"
+msgstr "Livraria KDE-&KFile"
+
+#: ckdevelop_init.cpp:641
+msgid "KDE-&HTML-Library"
+msgstr "Livraria KDE-&HTML"
+
+#: ckdevelop_init.cpp:644
+msgid "Project &API-Doc"
+msgstr "Documentaçao &API do Projecto"
+
+#: ckdevelop_init.cpp:647
+msgid "Project &User-Manual"
+msgstr "Manual &Utilizador do Projecto"
+
+#: ckdevelop_init.cpp:650
+msgid "&Documentation"
+msgstr "&Documentaçao"
+
+#: ckdevelop_init.cpp:665
+msgid "About KDevelop..."
+msgstr "Sobre KDevelop..."
+
+#: ckdevelop_init.cpp:690
+msgid "Open Project"
+msgstr "Abrir Projecto"
+
+#: ckdevelop_init.cpp:693
+msgid "Open File"
+msgstr "Abrir Ficheiro"
+
+#: ckdevelop_init.cpp:695
+msgid "Save File"
+msgstr "Gravar Ficheiro"
+
+#: ckdevelop_init.cpp:719
+msgid "Compile file"
+msgstr "Compilar ficheiro"
+
+#: ckdevelop_init.cpp:723
+msgid "Rebuild"
+msgstr "Rebuild"
+
+#: ckdevelop_init.cpp:732
+msgid "What's this...?"
+msgstr "Que é isto...?"
+
+#: ckdevelop_init.cpp:748
+msgid "choice the class"
+msgstr "Escolha a classe"
+
+#: ckdevelop_init.cpp:752
+msgid "choice the methods"
+msgstr "Escolha os métodos"
+
+#: ckdevelop_init.cpp:760
+msgid "Search Text in Documenation"
+msgstr "Procura Texto na Documentaçao"
+
+#: ckdevelop_init.cpp:772
+msgid "xxxxxxxxxxxxxxxxxxxx"
+msgstr "xxxxxxxxxxxxxxxxxxxx"
+
+#: ckdevelop_init.cpp:773
+msgid "Line: 00000 Col: 000"
+msgstr "Linha: 00000 Col: 000"
+
+#: ckdevelop_init.cpp:776
+msgid " INS "
+msgstr " INS "
+
+#: ckdevelop_init.cpp:777
+msgid "Welcome to KDevelop!"
+msgstr "Bem Vindo ao KDevelop!"
+
+#: ckdevelop_init.cpp:799
+msgid "Untitled.h"
+msgstr "Sem_título.h"
+
+#: ckdevelop_init.cpp:804
+msgid "Untitled.cpp"
+msgstr "Sem_título.cpp"
+
+#: ckdevelop_noslot.cpp:55
+msgid "Attention"
+msgstr "Atençao"
+
+#: ckdevelop_project.cpp:46
+msgid "Closing project..."
+msgstr "A Fechar o projecto..."
+
+#: ckdevelop_project.cpp:56 ckdevelop_project.cpp:98 ckdevelop_project.cpp:146
+msgid "Save changed project files ?"
+msgstr "Gravar os ficheiros modificados do projecto ?"
+
+#: ckdevelop_project.cpp:56 ckdevelop_project.cpp:98 ckdevelop_project.cpp:146
+msgid ""
+"The project\n"
+"\n"
+msgstr ""
+"O Projecto\n"
+"\n"
+#: ckdevelop_project.cpp:57 ckdevelop_project.cpp:99 ckdevelop_project.cpp:147
+msgid ""
+"\n"
+"\n"
+"contains changed files. Save modified file\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"contém ficheiros modificados. Gravar ficheiros modificados\n"
+"\n"
+
+#: ckdevelop_project.cpp:58 ckdevelop_project.cpp:100
+#: ckdevelop_project.cpp:148
+msgid "Save all"
+msgstr "Gravar todos"
+
+#: ckdevelop_project.cpp:321 ckdevelop_project.cpp:373
+msgid ""
+"You have added a new subdir to the project.\n"
+"We must now regenerate all Makefiles."
+msgstr ""
+"Voce adicionou uma nova subdirectoria ao projecto.\n"
+"Temos de regenerar todas as Makefiles."
+
+#: ckdevelop_project.cpp:323 ckdevelop_project.cpp:375
+msgid "Running automake/autoconf and configure..."
+msgstr "A executar automake/autoconf e a configurar..."
+
+#: ckdevelop_project.cpp:505
+msgid "Opening project..."
+msgstr "A abrir projecto..."
+
+#: ckdevelop_project.cpp:545
+msgid "Creating a new frame application..."
+msgstr "A criar uma estrutura de aplicaçao nova..."
+
+#: cclassview.cpp:40
+msgid "Class:"
+msgstr "Classe:"
+
+#: cclassview.cpp:41 cclassview.cpp:54
+msgid "Declaration"
+msgstr "Declaraçao"
+
+#: cclassview.cpp:43 cclassview.cpp:63 clogfileview.cpp:53
+msgid "New Class..."
+msgstr "Nova Classe..."
+
+#: cclassview.cpp:48 cclassview.cpp:57
+msgid "New Method"
+msgstr "Novo Método"
+
+#: cclassview.cpp:49 cclassview.cpp:58
+msgid "New Variable"
+msgstr "Nova Variável"
+
+#: cclassview.cpp:53
+msgid "Method:"
+msgstr "Método:"
+
+#: cclassview.cpp:55
+msgid "Definition"
+msgstr "Definiçao"
+
+#: cclassview.cpp:61
+msgid "Project:"
+msgstr "Projecto:"
+
+#: cclassview.cpp:65
+msgid "Options..."
+msgstr "Opçoes..."
+
+#: ceditwidget.cpp:123
+msgid "look up: "
+msgstr "Procurar: "
+
+#: ckdevsetupdlg.cpp:30
+msgid "KDevelop Setup"
+msgstr "Configuraçao KDevelop"
+
+#: ckdevsetupdlg.cpp:37 ckdevsetupdlg.cpp:123 ckdevsetupdlg.cpp:138
+#: ckdevsetupdlg.cpp:147
+msgid "Doc_Location"
+msgstr "Doc_Location"
+
+#: ckdevsetupdlg.cpp:40
+msgid ""
+"Enter the path to your QT and KDE-Libs\n"
+"Documentation for the Documentation Browser.\n"
+"QT usually comes with complete Documentation\n"
+"whereas for KDE you can create the Documentation\n"
+"easiely by switching to menuentry<i>Documentation -> \n"
+" Update KDE-Documentation</i>.Please use the Update dialog whenever you "
+"update \n"
+"your KDE Libs."
+msgstr ""
+"Introduza um caminho para a documentaçao da QT\n"
+"e KDE-Libs para o Browser de Documentaçao.\n"
+"QT normalmente cem com a Documentaçao completa\n"
+"e para o KDE voce pode crear a Documentaçao\n"
+"facilmente alterando a entrada de menu<i>Documentaçao -> \n"
+" Actualizar Documentaçao KDE</i>.Por favor use o diálogo Actualizar sempre "
+"que \n"
+"actualizar as suas Livrarias KDE."
+
+#: ckdevsetupdlg.cpp:63
+msgid "Qt-Library Doc:"
+msgstr "Doc. Livraria QT:"
+
+#: ckdevsetupdlg.cpp:69
+msgid ""
+"Enter the path to your QT-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"Usually the QT-Documentation is\n"
+"located in <i><blue>$QTDIR/html</i>"
+msgstr ""
+"Introduza o caminho para a Documentaçao QT\n"
+"aqui. Para aceder mais facilmente ao caminho\n"
+"pressione o botao à direita para alterar\n"
+"directórios.\n"
+"\n"
+"Normalmente a Documentaçao QT está\n"
+"localizada em <i><blue>$QTDIR/html</i>"
+
+#: ckdevsetupdlg.cpp:91
+msgid "KDE Library Doc:"
+msgstr "Doc. da Livraria KDE:"
+
+#: ckdevsetupdlg.cpp:96
+msgid ""
+"Enter the path to your KDE-Documentation\n"
+"here. To access the path easier please\n"
+"press the pushbutton on the right to change\n"
+"directories.\n"
+"\n"
+"If you have no kdelibs Documentation installed,\n"
+"switch to menuentry <blue><i>Documentation ->\n"
+"Update KDE-Documentation</i><black> to create it."
+msgstr ""
+"Introduza o caminho para a Documentaçao KDE\n"
+"aqui. Para aceder mais facilmente ao caminho\n"
+"pressione o botao à direita para alterar\n"
+"directórios.\n"
+"\n"
+"Se nao tiver instalada a Documentaçao das KDE-Libs,\n"
+"vá ao menu <blue><i>Documentaçao ->\n"
+"Actualizar Documentaçao KDE</i><black> para criá-la."
+
+#: ckdevsetupdlg.cpp:105
+msgid "Doc-Location"
+msgstr "Localizaçao das Docs."
+
+#: cprjoptionsdlg.cpp:40
+msgid ""
+"This dialog is for editing\n"
+"your project options."
+msgstr ""
+"Esta caixa de diálogo é para\n"
+"editar as opçoes do projecto."
+
+#: ckappwizard.cpp:126 cprjoptionsdlg.cpp:45
+msgid "Projectname:"
+msgstr "Nome do Projecto:"
+
+#: cprjoptionsdlg.cpp:51
+msgid "Set the project's name here."
+msgstr "Defina o nome do projecto aqui."
+
+#: cprjoptionsdlg.cpp:57
+msgid "Version:"
+msgstr "Versao:"
+
+#: cprjoptionsdlg.cpp:63
+msgid ""
+"Set your project's version\n"
+"number here."
+msgstr ""
+"Defina o número da versao do\n"
+"projecto aqui."
+
+#: ckappwizard.cpp:134 cprjoptionsdlg.cpp:70
+msgid "Author:"
+msgstr "Autor:"
+
+#: cprjoptionsdlg.cpp:76
+msgid "Insert your name here"
+msgstr "Insira o seu nome aqui"
+
+#: ckappwizard.cpp:136 cprjoptionsdlg.cpp:83
+msgid "Email:"
+msgstr "E-mail:"
+
+#: cprjoptionsdlg.cpp:89
+msgid "Insert your email-address here"
+msgstr "Insira o seu endereço e-mail aqui"
+
+#: cprjoptionsdlg.cpp:96
+msgid "Handbook:"
+msgstr "Manual:"
+
+#: cprjoptionsdlg.cpp:102
+msgid ""
+"Insert your Handbook-sgml-file name.\n"
+"Usually this is index.sgml"
+msgstr ""
+"Insira o nome do ficheiro sgml do Manual.\n"
+"Normalmente é index.sgml"
+
+#: cprjoptionsdlg.cpp:109
+msgid "Short Information:"
+msgstr "Breve Informaçao:"
+
+#: cprjoptionsdlg.cpp:119
+msgid ""
+"Insert some useful information about\n"
+"your project here. This is only for the\n"
+"information in the project file-<b>not</n>\n"
+"for README etc."
+msgstr ""
+"Insira alguma informaçao útil sobre\n"
+"o seu projecto aqui. Isto é apenas para\n"
+"informaçao no ficheiro do projecto-<b>nao</n>\n"
+"para o LEIAME etc."
+
+#: cprjoptionsdlg.cpp:130
+msgid "Set your Compiler options here"
+msgstr "Defina as opçoes do compilador aqui"
+
+#: cprjoptionsdlg.cpp:135
+msgid "Target"
+msgstr "Alvo"
+
+#: cprjoptionsdlg.cpp:136
+msgid ""
+"Set your target options here\n"
+"by specifying your machine type\n"
+"and GCC optimization level (0-3)"
+msgstr ""
+"Defina as suas opçoes alvo aqui\n"
+"especificando o seu tipo de máquina\n"
+"e nivel de optimizaç~ao do GCC (0-3)"
+
+#: cprjoptionsdlg.cpp:143
+msgid "Target Machine"
+msgstr "Máquina Alvo"
+
+#: cprjoptionsdlg.cpp:147
+msgid "your machine"
+msgstr "sua máquina"
+
+#: cprjoptionsdlg.cpp:148
+msgid "i386v"
+msgstr "i386v"
+
+#: cprjoptionsdlg.cpp:157
+msgid ""
+"Specify the machine type for your program.\n"
+"Other machine types than your machine is\n"
+"usually only needed for precompiled\n"
+"distribution packages."
+msgstr ""
+"Especifique o tipo de máquina para o seu programa.\n"
+"Outro tipo de máquinas diferentes da sua\n"
+"normalmente apenas sao necessárias para pacotes\n"
+"de distribuiçao pré-compilados."
+
+#: cprjoptionsdlg.cpp:164
+msgid "only syntax check"
+msgstr "apenas verificaçao sintaxe"
+
+#: cprjoptionsdlg.cpp:166
+msgid ""
+"This option sets the compiler\n"
+"to <i>-fsyntax-only</i>\n"
+"which lets you check your code for\n"
+"syntax-errors but doesn't do anything\n"
+"else beyond that."
+msgstr ""
+"Esta opçao define o compilador\n"
+"para <i>-fsyntax-only</i>\n"
+"o que lhe permite procurar no código\n"
+"erros de sintaxe mas nao faz mais\n"
+"nada para além disso."
+
+#: cprjoptionsdlg.cpp:174
+msgid "optimize"
+msgstr "optimiza"
+
+#: cprjoptionsdlg.cpp:187
+msgid "Optimization-level"
+msgstr "Nível de Optimizaçao"
+
+#: cprjoptionsdlg.cpp:190
+msgid ""
+"Set the -O option for the GCC\n"
+"here. Turning off optimization\n"
+"equals -O0. The higher the level\n"
+"the more time you need to compile\n"
+"but increases program speed."
+msgstr ""
+"Define a opçao -O para o GCC\n"
+"aqui. Desligar a optimizaçao\n"
+"equivale a -O0. Quanto mais alto o nível\n"
+"mais tempo demora a compilaçao\n"
+"mas aumenta a velocidade do programa."
+
+#: cprjoptionsdlg.cpp:199
+msgid "Debugging"
+msgstr "Debugging"
+
+#: cprjoptionsdlg.cpp:200
+msgid "Set your debugging options here."
+msgstr "Defina as opçoes para debug aqui."
+
+#: cprjoptionsdlg.cpp:204
+msgid "generate debugging information"
+msgstr "Gerar informaçao de debug"
+
+#: cprjoptionsdlg.cpp:210
+msgid ""
+"Checking this turns on the -g flag\n"
+"to GCC to generate debugging information."
+msgstr ""
+"Accionando esta opçao liga o parametro\n"
+"-g do GCC para gerar informaçao de debug."
+
+#: cprjoptionsdlg.cpp:223
+msgid "Debug-level"
+msgstr "Nível de Debug"
+
+#: cprjoptionsdlg.cpp:225
+msgid ""
+"Set the debugging level here.\n"
+"You can choose from level 1-3 which\n"
+"sets option -g1 to -g3 debugging\n"
+"level."
+msgstr ""
+"Define o nível de Debug aqui.\n"
+"Pode escolher entre níveis 1 a 3 que\n"
+"definem parametros de nivel de debug\n"
+"de -g1 a -g3."
+
+#: cprjoptionsdlg.cpp:233
+msgid "generate extra information for gprof"
+msgstr "gera informaçao extra para o gprof"
+
+#: cprjoptionsdlg.cpp:239
+msgid ""
+"Generate extra code to write profile\n"
+"information for the analysis program\n"
+"<i>gprof</i>."
+msgstr ""
+"Gera código extra para escrever informaçao\n"
+"de perfil para o programa de análise\n"
+"<i>gprof</i>."
+
+#: cprjoptionsdlg.cpp:245
+msgid "store temporary intermediate files"
+msgstr "guarda ficheiros intermédios temporários"
+
+#: cprjoptionsdlg.cpp:251
+msgid ""
+"Store the usually temporary intermediate\n"
+"files in the current directory. This means\n"
+"compiling a file <i>foo.c</i> will produce\n"
+"the files <i>foo.o, foo.i</i> and<i>foo.s"
+msgstr ""
+"Guarda os habituais ficheiros tempoários\n"
+"intermédios no directório actual. Isto significa\n"
+"que compilar o ficheiro <i>foo.c</i> produzirá\n"
+"os ficheiros <i>foo.o, foo.i</i> e<i>foo.s"
+
+#: cprjoptionsdlg.cpp:259
+msgid "additional options:"
+msgstr "opçoes adicionais:"
+
+#: cprjoptionsdlg.cpp:265
+msgid ""
+"Insert other GCC-options here\n"
+"to invoke GCC with by setting the\n"
+"CXXFLAGS-environment variable."
+msgstr ""
+"Insira outras opçoes do GCC aqui\n"
+"para invocar o GCC configurando a\n"
+"variável CXXFLAGS-environment."
+
+#: cprjoptionsdlg.cpp:269
+msgid "Compiler Options"
+msgstr "Opçoes do Compilador"
+
+#: cprjoptionsdlg.cpp:275
+msgid ""
+"Set the Compiler warnings here by checking\n"
+"the -W options you want to use."
+msgstr ""
+"Defina os avisos do compilador aqui seleccionando\n"
+"as opçoes -W que deseja utilizar."
+
+#: cprjoptionsdlg.cpp:286
+msgid ""
+"Compile with -Wall. This option\n"
+"includes several different warning\n"
+"parameters which are recommended to\n"
+"turn on."
+msgstr ""
+"Compilar com -Wall. Esta opçao\n"
+"inclui vários parametros de aviso\n"
+"diferentes que é recomendado\n"
+"activar."
+
+#: cprjoptionsdlg.cpp:299
+msgid ""
+"Compile with -W. This option\n"
+"sets options not included in -Wall\n"
+"which are very specific. Please read\n"
+"GCC-Info for more information."
+msgstr ""
+"Compilar com -W. Esta opçao\n"
+"define opçoes nao incluidas no -Wall\n"
+"que sao muito específicas. Leia\n"
+"GCC-Info para mais informaçoes."
+
+#: cprjoptionsdlg.cpp:312
+msgid ""
+"Warn about certain constructs\n"
+"that behave differently in traditional\n"
+"and ANSI C."
+msgstr ""
+"Avisar sobre alguns <i>constructs</i>\n"
+"Que se comportam de modo diferente em\n"
+"C tradicional e ANSI C."
+
+#: cprjoptionsdlg.cpp:325
+msgid ""
+"Warn if an undefined identifier is\n"
+"evaluated in an `#if' directive"
+msgstr ""
+"Avisa se um <i>identifier</i> nao definido é\n"
+"avaliado numa directiva `#if'"
+
+#: cprjoptionsdlg.cpp:336
+msgid ""
+"Warn whenever a local variable\n"
+"shadows another local variable."
+msgstr ""
+"Avisa sempre que uma variável local\n"
+"ensombra outra variável local."
+
+#: cprjoptionsdlg.cpp:347
+msgid ""
+"Warn whenever two distinct\n"
+"identifiers match in the first LEN\n"
+"characters. This may help you prepare\n"
+"a program that will compile with\n"
+"certain obsolete, brain-damaged\n"
+"compilers."
+msgstr ""
+"Avisa sempre que dois <i>identifiers</i>\n"
+"distintos coincidirem nos primeiros LEN\n"
+"caracteres. Isto poderá ajudá-lo a\n"
+"preparar um programa que compilará com\n"
+"alguns compiladores obsoletos e com\n"
+"danos cerebrais."
+
+#: cprjoptionsdlg.cpp:362
+msgid ""
+"Warn whenever an object\n"
+"of larger than LEN bytes \n"
+"is defined."
+msgstr ""
+"Avisa sempre que um objecto\n"
+"maior que LEN bytes \n"
+"é definido."
+
+#: cprjoptionsdlg.cpp:375
+msgid ""
+"Warn about anything that\n"
+"depends on the <i>size of</i> a\n"
+"function type or of <i>void</i>.\n"
+"GNU C assigns these types a size of 1,\n"
+"for convenience in calculations with\n"
+"<i>void *</i> pointers and pointers\n"
+"to functions."
+msgstr ""
+"Avisa sobre tudo o que\n"
+"dependa do <i>size of</i> de um\n"
+"tipo de funçao ou do <i>void</i>.\n"
+"O GNU C atribui a estes tipos o tamanho\n"
+"de 1, para conveniencia nos cálculos\n"
+"com ponteiros <i>void *</i> e ponteiros\n"
+"para funçoes."
+
+#: cprjoptionsdlg.cpp:392
+msgid ""
+"Warn whenever a function call is\n"
+"cast to a non-matching type. For\n"
+"example, warn if <i>int malloc()</i>\n"
+"is cast to <i>anything *."
+msgstr ""
+"Avisa sempre que a chamada de uma\n"
+"funçao é feita para um tipo diferente.\n"
+"Por exemplo, avisa se <i>int malloc()</i>\n"
+"é feito para <i>anything *."
+
+#: cprjoptionsdlg.cpp:406
+msgid ""
+"Warn whenever a pointer is cast\n"
+"so as to remove a type qualifier\n"
+"from the target type. For example,\n"
+"warn if a <i>const char *</i> is\n"
+"cast to an ordinary <i>char *."
+msgstr ""
+"Avisa sempre que um ponteiro é feito\n"
+"por forma a remover o qualificador de tipo\n"
+"do tipo alvo. Por exemplo, avisa se\n"
+"um <i>const char *</i> é feito\n"
+"sobre um vulgar <i>char *."
+
+#: cprjoptionsdlg.cpp:421
+msgid ""
+"Warn whenever a pointer is cast such\n"
+"that the required alignment of the target\n"
+"is increased. For example, warn if a\n"
+"<i>char *</i> is cast to an <i>int *</i> on\n"
+"machines where integers can only be accessed\n"
+"at two- or four-byte boundaries."
+msgstr ""
+"Avisa sempre que um ponteiro é feito de\n"
+"modo a aumentar o alinhamento requerido\n"
+"do alvo. Por exemplo, avisa se um\n"
+"<i>char *</i> é feito sobre um <i>int *</i>\n"
+"em máquinas em que inteiros apenas podem ser\n"
+"acedidos em limites de dois ou quatro bytes."
+
+#: cprjoptionsdlg.cpp:438
+msgid ""
+"Give string constants the type <i>const char[LENGTH]</i>\n"
+"so that copying the address of one into a non-<i>const\n"
+"char *</i> pointer will get a warning. These warnings\n"
+"will help you find at compile time code that can try to\n"
+"write into a string constant, but only if you have been\n"
+"very careful about using <i>const</i> in declarations\n"
+"and prototypes. Otherwise, it will just be a nuisance;\n"
+"this is why we did not make <i>-Wall</i> request these\n"
+"warnings."
+msgstr ""
+"Dá a constantes <i>string</i> o tipo <i>const char[LENGHT]</i>\n"
+"por forma a que copiando o endereço de uma para um ponteiro\n"
+"nao-<i>const char*</i> gerará um aviso. Estes avisos\n"
+"ajuda-lo-ao a encontrar, na compilaçao, código que poderá\n"
+"tentar escrever numa constante <i>string</i>, mas apenas se\n"
+"tiver sido muito cuidadoso em usar <i>const</i> nas declaraçoes\n"
+"e protótipos. Caso contrário, apenas será uma <i>nuisance</i>;\n"
+"por isto nao fizemos o <i>-Wall</i> pedir estes avisos."
+
+#: cprjoptionsdlg.cpp:458
+msgid ""
+"Warn if a prototype causes a type conversion that is different\n"
+"from what would happen to the same argument in the absence\n"
+"of a prototype. This includes conversions of fixed point to\n"
+"floating and vice versa, and conversions changing the width\n"
+"or signedness of a fixed point argument except when the same\n"
+"as the default promotion.  Also warn if a negative integer\n"
+"constant expression is implicitly converted to an unsigned\n"
+"type."
+msgstr ""
+"Avisar se um protótipo provoca uma conversao de tipo que é\n"
+"diferente da que ocorreria ao mesmo argumento caso nao existisse\n"
+"um protótipo. Isto inclui conversoes de decimal fixo para\n"
+"vírgula flutuante e vice-versa, e conversoes alterarem a dimensao\n"
+"ou a <i>signedness</i> de um argumento de décimal fixo, excepto\n"
+"quando é o mesmo que a promoçao defeito. Avisa também se uma\n"
+"constante inteira negativa é implicitamente convertida num\n"
+"tipo <i>unsigned</i>."
+
+#: cprjoptionsdlg.cpp:477
+msgid ""
+"Warn when a comparison between signed and unsigned values\n"
+"could produce an incorrect result when the signed value\n"
+"is converted to unsigned."
+msgstr ""
+"Avisa quando a comparaçao entre valores <i>signed</i> e <i>unsigned</i>\n"
+"poderia produzir resultados incorrectos quando o valor <i>signed</i>\n"
+"for convertido para <i>unsigned</i>."
+
+#: cprjoptionsdlg.cpp:491
+msgid ""
+"Warn if any functions that return structures or unions are\n"
+"defined or called. (In languages where you can return an\n"
+"array, this also elicits a warning.)"
+msgstr ""
+"Avisa se uma funçao que devolve estuturas ou unioes é\n"
+"definida ou chamada. (em linguagens em que também se pode\n"
+"devolver uma matriz, isto também gera um aviso.)"
+
+#: cprjoptionsdlg.cpp:505
+msgid ""
+"Warn if a function is declared or defined without specifying\n"
+"the argument types. (An old-style function definition is\n"
+"permitted without a warning if preceded by a declaration\n"
+"which specifies the argument types.)"
+msgstr ""
+"Avisa se uma funçao é declarada ou definida sem especificar\n"
+"os tipos de argumentos. (uma definiçao de estilo antigo é\n"
+"permitida sem aviso se precedida por uma declaraçao que\n"
+"especifique os tipos de arhumentos.)"
+
+#: cprjoptionsdlg.cpp:520
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"prototype declaration. This warning is issued even if\n"
+"the definition itself provides a prototype. The aim\n"
+"is to detect global functions that fail to be declared\n"
+"in header files."
+msgstr ""
+"Avisa se uma funçao global é definida sem declaraçao\n"
+"prévia de um protótipo. Este aviso é feito mesmo se\n"
+"a própria definiçao proporciona um protótipo. O objectivo\n"
+"é detectar funçoes globais que falham a sua declaraçao\n"
+"em ficheiros <i>header</i>."
+
+#: cprjoptionsdlg.cpp:536
+msgid ""
+"Warn if a global function is defined without a previous\n"
+"declaration. Do so even if the definition itself pro-\n"
+"vides a prototype. Use this option to detect global\n"
+"functions that are not declared in header files."
+msgstr ""
+"Avisa se uma funçao global é definida sem declaraçao\n"
+"prévia. Avisa mesmo que a própria definiçao indica um\n"
+"protótipo. Use esta opçao para detctar funçoes globais\n"
+"que nao sao declaradas em ficheiros <i>header</i>."
+
+#: cprjoptionsdlg.cpp:551
+msgid ""
+"Warn if anything is declared more than once in the same scope\n"
+"even in cases where multiple declaration is valid and\n"
+"changes nothing."
+msgstr ""
+"Avisa se algo for declarado mais que uma vez no mesmo ambito\n"
+"mesmo em casos em que declaraçoes multiplas sao válidas\n"
+"e nao alteram nada."
+
+#: cprjoptionsdlg.cpp:565
+msgid ""
+"Warn if an <i>extern</i> declaration is\n"
+"encountered within a function."
+msgstr ""
+"Avisa se uma declaraçao externa é encontrada\n"
+"dentro de uma funçao."
+
+#: cprjoptionsdlg.cpp:578
+msgid ""
+"Warn if a function can not be inlined, and either\n"
+"it was declared as inline, or else the\n"
+"<i>-finline-functions</i> option was given."
+msgstr ""
+"Avisa se uma funçao nao pode ser <i>inlined</i>, e se\n"
+"foi declarada como <i>inline</i> ou a opçao\n"
+"<i>-finline-functions</i> foi usada."
+
+#: cprjoptionsdlg.cpp:592
+msgid ""
+"Warn if an old-style (C-style) cast is used\n"
+"within a program"
+msgstr ""
+"Avisa se um <i>cast</i> antigo (estilo C) foi\n"
+"utilizado num programa"
+
+#: cprjoptionsdlg.cpp:605
+msgid ""
+"Warn when a derived class function declaration may be an\n"
+"error in defining a virtual function (C++ only). In\n"
+"a derived class, the definitions of virtual functions\n"
+"must match the type signature of a virtual function\n"
+"declared in the base class. With this option, the\n"
+"compiler warns when you define a function with the same\n"
+"as a virtual function, but with a type signature that\n"
+"does not match any declarations from the base class."
+msgstr ""
+"Avisa quando a declaraçao de uma funçao derivada de uma classe\n"
+"pode ser um erro na definiçao de uma funçao virtual (apenas C++).\n"
+"Numa classe derivada, a definiçao de funçoes virtuais tem de\n"
+"ser igual ao tipo de assinatura de uma funçao virtual\n"
+"declarada na classe base. Com esta opçao, o compilador\n"
+"avisa quando voce define uma funçao com o mesmo que uma\n"
+"funçao virtual, mas com um tipo de assinatura que nao\n"
+"coincide com nenhuma declaraçao na classe base."
+
+#: cprjoptionsdlg.cpp:624
+msgid ""
+"Warn when g++'s synthesis behavoir does\n"
+"not match that of cfront."
+msgstr ""
+"Avisa quando o comportamento de síntese do\n"
+"g++ nao coincide com o do cfront."
+
+#: cprjoptionsdlg.cpp:630
+msgid "make all Warnings into errors"
+msgstr "torna todos os Avisos em erros"
+
+#: cprjoptionsdlg.cpp:637
+msgid "Make all warnings into errors."
+msgstr "Torna todos os avisos em erros."
+
+#: cprjoptionsdlg.cpp:639
+msgid "Compiler Warnings"
+msgstr "Avisos do Compilador"
+
+#: cprjoptionsdlg.cpp:645
+msgid ""
+"Set the Linker options and choose the\n"
+"libraries to add to your project."
+msgstr ""
+"Define as opçoes do <i>Linker</i> e escolhe as\n"
+"livrarias a serem adicionadas ao seu projecto."
+
+#: cprjoptionsdlg.cpp:654
+msgid "library flags"
+msgstr "<i>flags</i> das livrarias"
+
+#: cprjoptionsdlg.cpp:655
+msgid "Set your library flags here."
+msgstr "Defina as <i>flags</i> das suas sivrarias aqui."
+
+#: cprjoptionsdlg.cpp:668
+msgid ""
+"If you want to use a debugger, you\n"
+"should keep those informations in the object files.\n"
+"It's useless to let the compiler generate debug\n"
+"informations and to remove it with this option."
+msgstr ""
+"Se deseja utilizar um debugger, deverá\n"
+"manter essa informaçao nos ficheiros <i>object</i>.\n"
+"É desnecessário deixar o compilador gerar informaçao\n"
+"de debug e remove-la com esta opçao."
+
+#: cprjoptionsdlg.cpp:684
+msgid ""
+"On systems that support dynamic linking,\n"
+"this prevents linking with the shared libraries.\n"
+"On other systems, this option has no effect."
+msgstr ""
+"Em sistemas que suportem <i>linking</i> dinamico,\n"
+"isto evita <i>linking</i> com livrarias partilhadas.\n"
+"Nos restantes sistemas, esta opçao nao tem efeito."
+
+#: cprjoptionsdlg.cpp:691
+msgid "additional flags:"
+msgstr "<i>flags</i> adicionais:"
+
+#: cprjoptionsdlg.cpp:698
+msgid ""
+"Insert other linker options here\n"
+"to invoke the linker with by setting the\n"
+"LDFLAGS-environment variable."
+msgstr ""
+"Insira outras opçoes do <i>linker</i> aqui\n"
+"para invocar o <i>linker</i> definindo a\n"
+"variável LDFLAGS-environment."
+
+#: cprjoptionsdlg.cpp:705
+msgid "libraries"
+msgstr "livrarias"
+
+#: cprjoptionsdlg.cpp:706
+msgid "Choose your libraries here."
+msgstr "Escolha as suas livrarias aqui."
+
+#: cprjoptionsdlg.cpp:719
+msgid "X11 basics\n"
+msgstr "X11 base\n"
+
+#: cprjoptionsdlg.cpp:732
+msgid "X11 extensions\n"
+msgstr "Extensoes X11\n"
+
+#: cprjoptionsdlg.cpp:745
+msgid "Qt"
+msgstr "Qt"
+
+#: cprjoptionsdlg.cpp:758
+msgid "KDE basics"
+msgstr "KDE base"
+
+#: cprjoptionsdlg.cpp:771
+msgid "KDE user interface"
+msgstr "KDE interface do utilizador"
+
+#: cprjoptionsdlg.cpp:784
+msgid "KDE HTML widget"
+msgstr "KDE HTML widget"
+
+#: cprjoptionsdlg.cpp:797
+msgid "KDE kfm functionality"
+msgstr "Funcionalidade kfm do KDE"
+
+#: cprjoptionsdlg.cpp:810
+msgid "KDE file handling"
+msgstr "Gestao de ficheiros do KDE"
+
+#: cprjoptionsdlg.cpp:823
+msgid "KDE Spell checking"
+msgstr "Correcçao ortográfica do KDE"
+
+#: cprjoptionsdlg.cpp:836
+msgid "KDE addressbook"
+msgstr "Livro de endereços do KDE"
+
+#: cprjoptionsdlg.cpp:841
+msgid "additional libraries:"
+msgstr "livrarias adicionais:"
+
+#: cprjoptionsdlg.cpp:848
+msgid "Add additional libraries here."
+msgstr "Adicione outras livrarias aqui."
+
+#: cprjoptionsdlg.cpp:850
+msgid "Linker Options"
+msgstr "Opçoes do Linker"
+
+#: ckappwizard.cpp:41
+msgid "exit the CKAppWizard"
+msgstr "sair do CKAppWizard"
+
+#: ckappwizard.cpp:43
+msgid "Create"
+msgstr "Criar"
+
+#: ckappwizard.cpp:46
+msgid "creating the project"
+msgstr "a criar o projecto"
+
+#: ckappwizard.cpp:51
+msgid "set all changes back"
+msgstr "repoe todas as modificaçoes"
+
+#: ckappwizard.cpp:62
+msgid "KWizard"
+msgstr "KWizard"
+
+#: ckappwizard.cpp:80
+msgid "Application"
+msgstr "Aplicaçao"
+
+#: ckappwizard.cpp:82
+msgid "KDE-Application"
+msgstr "Aplicaçao-KDE"
+
+#: ckappwizard.cpp:86
+msgid ""
+"Select this to create a complete framework for\n"
+"your new application. It will contain three main\n"
+"classes: one for the mainwindow, one for the\n"
+"main view and one for the application's documents\n"
+"The main window offers a menubar, toolbar and\n"
+"a statusbar including statusbar help and status\n"
+"signaling."
+msgstr ""
+"Seleccione para criar uma estrutura completa para\n"
+"a sua nova aplicaçao. Conterá tres classes principais:\n"
+"uma para a janela principal, uma para a vista principal\n"
+"e uma para a documentaçao da aplicaçao.\n"
+"A janela principal oferece uma barra de menu, uma barra\n"
+"de ferramentas e uma barra de estados incluido ajuda e\n"
+"sinalizaçao de estados."
+
+#: ckappwizard.cpp:95
+msgid "KDE-Mini-Application"
+msgstr "Mini-Aplicaçao-KDE"
+
+#: ckappwizard.cpp:99
+msgid ""
+"Select this to create a mini-Application.\n"
+"This will only contain the main widget\n"
+"class which inherits QWidget until now."
+msgstr ""
+"Seleccione para criar uma mini-aplicaçao.\n"
+"Apenas conterá a classe principal de <i>widget</i>\n"
+"que herda QWidget (por enquanto)."
+
+#: ckappwizard.cpp:105
+msgid "C/C++-Application"
+msgstr "Aplicaçao C/C++"
+
+#: ckappwizard.cpp:109
+msgid "Select this to create a C/C++-Terminal-Application."
+msgstr "Selecione para criar uma aplicaçao de terminal C/C++"
+
+#: ckappwizard.cpp:122
+msgid "Names"
+msgstr "Nomes"
+
+#: ckappwizard.cpp:128
+msgid "Projectdirectory:"
+msgstr "Directório do Projecto:"
+
+#: ckappwizard.cpp:130
+msgid "Versionsnumber:"
+msgstr "Número da Versao:"
+
+#: ckappwizard.cpp:160
+msgid ""
+"Enter the Project's name here. This is\n"
+"also the directory name under which your Project\n"
+"will be created."
+msgstr ""
+"Introduza o nome do projecto aqui. Isto será\n"
+"também o nome do directório sob o qual o seu\n"
+"Projecto será criado."
+
+#: ckappwizard.cpp:166
+msgid ""
+"Enter the toplevel-directory the project\n"
+"will be stored. This <b>must</b> be an\n"
+"<b>existing directory !!"
+msgstr ""
+"Introduza o directório de alto-nível onde o\n"
+"projecto será armazenado. <b>Tem</b> de se um\n"
+"<b>directório existente !!"
+
+#: ckappwizard.cpp:171
+msgid ""
+"Enter the Version number here.\n"
+"The number will be used in the about-dialog\n"
+"and in the main widget's topbar."
+msgstr ""
+"Introduza o numero da versao aqui.\n"
+"O número será utilizado na caixa \"Acerca de\"\n"
+"e na barra principal do <i>widget</i>."
+
+#: ckappwizard.cpp:176
+msgid ""
+"Enter your name here for the about dialog.\n"
+"You may also consider using the Team-name."
+msgstr ""
+"Introduza o seu nome aqui para a caixa \"Acerca de\".\n"
+"Também pode considerar utilizar o nome da equipa."
+
+#: ckappwizard.cpp:180
+msgid ""
+"Enter your email adress here, so users\n"
+"can send you bug reports easiely ;-))"
+msgstr ""
+"Introduza o seu endereço e-mail aqui, para\n"
+"que utilizadores lhe possam reportar bugs facilmente ;-))"
+
+#: ckappwizard.cpp:189
+msgid "Projectfiles & Desktopgoodies"
+msgstr "Ficheiros do Projecto & <i>goodies</i> do Ambiente de Trabalho"
+
+#: ckappwizard.cpp:193
+msgid "API-Documentation"
+msgstr "Documentaçao API"
+
+#: ckappwizard.cpp:196
+msgid ""
+"Check this if you wish to have your API\n"
+"Documentation generated automatically"
+msgstr ""
+"Seleccione se deseja que a Documentaçao\n"
+"da sua API seja gerada automaticamente"
+
+#: ckappwizard.cpp:199
+msgid "User-Dokumentation"
+msgstr "Documentaçao para o Utilizador"
+
+#: ckappwizard.cpp:202
+msgid ""
+"Check this if you wish a general User\n"
+"Documentation to be generated automatically."
+msgstr ""
+"Seleccione se deseja que a Documentaçao geral\n"
+"de utilizaçao seja gerada automaticamente."
+
+#: ckappwizard.cpp:205
+msgid "lsm-File - Linux Software Map"
+msgstr "Ficheiro .lsm - Linux Software Map"
+
+#: ckappwizard.cpp:208
+msgid "Check this to create a lsm-File"
+msgstr "Seleccione para criar um ficheiro .lsm"
+
+#: ckappwizard.cpp:210
+msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
+msgstr "Ficheiros standard GNU (INSTALL,README,COPYING...)"
+
+#: ckappwizard.cpp:213
+msgid ""
+"Check this if you wish to have\n"
+"the GNU-Standard files created like\n"
+"INSTALL and README"
+msgstr ""
+"Seleccione se deseja que sejam\n"
+"criados os ficheiros GNU Standard como\n"
+"o INSTALL e o README"
+
+#: ckappwizard.cpp:219
+msgid "Program-Icon"
+msgstr "Icon do Programa"
+
+#: ckappwizard.cpp:223
+msgid ""
+"Check this to create a sample icon for\n"
+"your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+"Seleccione para criar um icon base para\n"
+"o seu programa. Sugerimos que o faça e modifique\n"
+"a sua aparencia utilizando o KIconEdit."
+
+#: ckappwizard.cpp:227
+msgid "Mini-Icon"
+msgstr "Mini-Icon"
+
+#: ckappwizard.cpp:231
+msgid ""
+"Check this to create a sample mini-icon\n"
+"for your program. We suggest to do so and just\n"
+"change it's view by using KIconEdit."
+msgstr ""
+"Seleccione para criar um mini-icon base\n"
+"para o seu programa. Sugerimos que o faça e modifique\n"
+"a sua aparencia utilizando o KIconEdit."
+
+#: ckappwizard.cpp:235
+msgid ".kdelnk-File"
+msgstr "Ficheiro .kdelnk"
+
+#: ckappwizard.cpp:238
+msgid ""
+"Check this if you wish to have\n"
+"a .kdelnk for you application in the\n"
+"K-Menu.  The default is the Applications-\n"
+"submenu. You can change this to other menus\n"
+"by changing the file properties afterwards."
+msgstr ""
+"Seleccione se deseja possuir\n"
+"um .kdelnk para a sua aplicaçao no\n"
+"menu do K. O defeito é o submenu das\n"
+"Aplicaçoes. Pode alterar para outros menus\n"
+"modificando as propriedades do ficheiro posteriormente."
+
+#: ckappwizard.cpp:248
+msgid ""
+"Select this if you wish another\n"
+"already created icon to be used."
+msgstr ""
+"Seleccione se deseja que seja\n"
+"utilizado um icon já criado."
+
+#: ckappwizard.cpp:255
+msgid ""
+"Select this if you wish another\n"
+"already created mini-icon to be used."
+msgstr ""
+"Seleccione se deseja que seja\n"
+"utiliado um mini-icon já criado."
+
+#: ckappwizard.cpp:266
+msgid "Headertemplate for .h-files"
+msgstr "<i>Headertemplate</i> para ficheiros .h"
+
+#: ckappwizard.cpp:270
+msgid "headertemplate for .h-files"
+msgstr "<i>headertemplate</i> para ficheiros .h"
+
+#: ckappwizard.cpp:274
+msgid ""
+"Check this if you want a standard\n"
+"headertemplate for your headerfiles"
+msgstr ""
+"Seleccione se deseja um <i>headertemplate</i>\n"
+"standard para os seus ficheiros <i>hearder</i>"
+
+#: ckappwizard.cpp:277 ckappwizard.cpp:308
+msgid "Load..."
+msgstr "Ler..."
+
+#: ckappwizard.cpp:279
+msgid "you can load another headertemplate here"
+msgstr "pode ler outro <i>headertemplate</i> aqui"
+
+#: ckappwizard.cpp:283
+msgid "you can clear the headertemplate here"
+msgstr "pode limpar o <i>headertemplate</i> aqui"
+
+#: ckappwizard.cpp:289
+msgid "you can edit your headertemplate here"
+msgstr "pode esitar o seu <i>headertemplate</i> aqui"
+
+#: ckappwizard.cpp:297
+msgid "Headertemplate for .cpp-files"
+msgstr "<i>Headertemplate</i> para ficheiros .cpp"
+
+#: ckappwizard.cpp:301
+msgid "headertemplate for .cpp-files"
+msgstr "<i>headertemplate</i> para ficheiros .cpp"
+
+#: ckappwizard.cpp:305
+msgid ""
+"Check this if you want a standard\n"
+"cpp-Template for your cpp-files."
+msgstr ""
+"Seleccione se deseja um <i>cpp-Template</i>\n"
+"standard para os seus ficheiros .cpp."
+
+#: ckappwizard.cpp:310
+msgid "you can load another cpptemplate here"
+msgstr "pode ler outro <i>cpptemplate</i> aqui"
+
+#: ckappwizard.cpp:314
+msgid "you can clear the cpptemplate here"
+msgstr "pode limpar o <i>cpptemplate</i> aqui"
+
+#: ckappwizard.cpp:319
+msgid "you can edit your cpptemplate here"
+msgstr "pode editar o seu <i>cpptemplate</i> aqui"
+
+#: ckappwizard.cpp:327
+msgid "Processes"
+msgstr "Processos"
+
+#: ckappwizard.cpp:336
+msgid "you can see the normal outputs here"
+msgstr "pode ver os <i>outputs</i> normais aqui"
+
+#: ckappwizard.cpp:341
+msgid "you can see all warnings and errormessages here"
+msgstr "pode ver todos os avisos e mensagens de erro aqui"
+
+#: ckappwizard.cpp:350
+msgid "Directory"
+msgstr "Directório"
+
+#: ckappwizard.cpp:360 cnewclassdlg.cpp:88
+msgid "Header"
+msgstr "<i>Header</i>"
+
+#: ckappwizard.cpp:390
+msgid "Exit"
+msgstr "Sair"
+
+#: clogfileview.cpp:36
+msgid "Remove File"
+msgstr "Remover Ficheiro"
+
+#: clogfileview.cpp:37
+msgid "Delete File..."
+msgstr "Apagar Ficheiro..."
+
+#: cdoctree.cpp:37 cdoctree.cpp:186 clogfileview.cpp:39 clogfileview.cpp:47
+msgid "Properties..."
+msgstr "Propriedades..."
+
+#: clogfileview.cpp:43 clogfileview.cpp:54
+msgid "New LFV-Group..."
+msgstr "Novo Grupo LFV..."
+
+#: clogfileview.cpp:45
+msgid "Remove Group"
+msgstr "Remover Grupo"
+
+#: clogfileview.cpp:193
+msgid "Group Properties..."
+msgstr "Propriedades do Grupo..."
+
+#: clogfileview.cpp:215
+msgid "New Group ..."
+msgstr "Novo Grupo..."
+
+#: clogfileview.cpp:232
+msgid ""
+"Do you really want to delete the selected file?\n"
+"        There is no way to restore it!"
+msgstr ""
+"Quer mesmo apagar o ficheiro seleccionado?\n"
+"				 Nao é possível recuperá-lo!!!"
+
+#: cdocbrowser.cpp:203
+msgid "Small"
+msgstr "Pequeno"
+
+#: cdocbrowser.cpp:207
+msgid "Medium"
+msgstr "Médio"
+
+#: cdocbrowser.cpp:211
+msgid "Large"
+msgstr "Grande"
+
+#: cdocbrowser.cpp:215
+msgid "Standard Font"
+msgstr "Fonte Standard"
+
+#: cdocbrowser.cpp:232
+msgid "Fixed Font"
+msgstr "Fonte Fixa"
+
+#: cdocbrowser.cpp:371
+msgid "Background Color:"
+msgstr "Cor de Fundo:"
+
+#: cdocbrowser.cpp:379
+msgid "Normal Text Color:"
+msgstr "Cor de Texto Normal:"
+
+#: cdocbrowser.cpp:387
+msgid "URL Link Color:"
+msgstr "Cor de URL Link:"
+
+#: cdocbrowser.cpp:395
+msgid "Followed Link Color:"
+msgstr "Cor de Link Seguido:"
+
+#: cdocbrowser.cpp:403
+msgid "Underline links"
+msgstr "Sublinhar Links"
+
+#: cdocbrowser.cpp:411
+msgid "Always use my colors"
+msgstr "Usar sempre as minhas cores"
+
+#: cdocbrowser.cpp:499
+msgid "Documentation Browser Options"
+msgstr "Opçoes do Browser de Documentaçao"
+
+#: cdocbrowser.cpp:512 cdocbrowser.cpp:513
+msgid "Colors"
+msgstr "Cores"
+
+#: cdoctree.cpp:29 cdoctree.cpp:33
+msgid "Others:"
+msgstr "Outros:"
+
+#: cdoctree.cpp:30 cdoctree.cpp:34 cdoctree.cpp:144
+msgid "Add Entry..."
+msgstr "Adicionar Entrada..."
+
+#: cdoctree.cpp:35
+msgid "Remove Entry"
+msgstr "Remover Entrada"
+
+#: cnewclassdlg.cpp:30
+msgid "Class Generator"
+msgstr "Gerador de Classes"
+
+#: cnewclassdlg.cpp:34
+msgid "Additional Options"
+msgstr "Opçoes Adicionais"
+
+#: cnewclassdlg.cpp:38
+msgid "Documentation"
+msgstr "Documentaçao"
+
+#: cnewclassdlg.cpp:42
+msgid "Inheritence"
+msgstr "<i>Inheritence</i>"
+
+#: cnewclassdlg.cpp:46
+msgid "Baseclass"
+msgstr "Classe Base"
+
+#: cnewclassdlg.cpp:56
+msgid "Classname"
+msgstr "Nome da Classe"
+
+#: cnewclassdlg.cpp:72
+msgid "public"
+msgstr "publica"
+
+#: cnewclassdlg.cpp:77
+msgid "protected"
+msgstr "protegida"
+
+#: cnewclassdlg.cpp:81
+msgid "private"
+msgstr "privada"
+
+#: cnewclassdlg.cpp:92
+msgid "Impl."
+msgstr "Impl."
+
+#: cnewclassdlg.cpp:96
+msgid "use header/cpp-templates"
+msgstr "usar <i>header/cpp-templates</i>"
+
+#: cnewclassdlg.cpp:101
+msgid "generate a QWidget-Childclass"
+msgstr "gera uma classe-filha-QWidget"
+
+#: cnewclassdlg.cpp:138
+msgid "You must enter a classname!"
+msgstr "Tem de introduzir um nome de classe!"
+
+#: cnewclassdlg.cpp:143
+msgid "You must enter a name for the header-file!"
+msgstr "Tem de introduzir um nome para o ficheiro <i>header</i>!"
+
+#: cnewclassdlg.cpp:148
+msgid "You must enter a name for the implementation-file!"
+msgstr "Tem de introduzir um nome para o ficheiro de implementaçao!"
+
+#: cnewclassdlg.cpp:154
+msgid "You must enter a name for the baseclass!"
+msgstr "Tem de introduxir um nome para a classe base!"
+
+#: cfilepropdlg.cpp:28
+msgid "File Properties"
+msgstr "Propriedades do Ficheiro"
+
+#: cfilepropdlg.cpp:41
+msgid "Distribution"
+msgstr "Distribuiçao"
+
+#: cfilepropdlg.cpp:53
+msgid "Filetype"
+msgstr "Tipo de Ficheiro"
+
+#: cfilepropdlg.cpp:65
+msgid "Installation"
+msgstr "Instalaçao"
+
+#: cfilepropdlg.cpp:121
+msgid "Install-location:"
+msgstr "Local de Instalaçao:"
+
+#: cfilepropdlg.cpp:133
+msgid "Size:"
+msgstr "Tamanho:"
+
+#: cdoctreepropdlg.cpp:58 cfilepropdlg.cpp:145
+msgid "Name:"
+msgstr "Nome:"
+
+#: cfilepropdlg.cpp:157
+msgid "include in distribution"
+msgstr "incluir na distribuiçao"
+
+#: cfilepropdlg.cpp:169
+msgid "install"
+msgstr "instalar"
+
+#: cfilepropdlg.cpp:233
+msgid ""
+"This option sets if the actual file\n"
+"will be included in the final distri-\n"
+"bution."
+msgstr ""
+"Esta opçao define se o ficheiro actual\n"
+"será incluido na distribuiçao final."
+
+#: cfilepropdlg.cpp:240
+msgid ""
+"This option sets if the actual file\n"
+"will be installed to the platform during\n"
+"the installation process of make install\n"
+"If the install button is checked, you have\n"
+"to set the installation path and filename\n"
+"Possible values are e.g.:\n"
+"$(kde_icondir)/filename\n"
+"$(kde_appsdir)/filename\n"
+"Other values can be found in the Makefile"
+msgstr ""
+"Esta opçao define se o ficheiro actual\n"
+"será instalado na plataforma durante\n"
+"o processo de instalaçao do `make install'.\n"
+"Se o botao de instalaçao está seleccionado, voce\n"
+"terá de definir o caminho e nome de ficheiro da instalaçao\n"
+"Valores possíveis sao, por exemplo:\n"
+"$(kde_icondir)/nome_ficheiro\n"
+"$(kde_appsdir)/nome_ficheiro\n"
+"Outros valores podem ser encontrados no `Makefile'"
+
+#: caddexistingfiledlg.cpp:34
+msgid "Add existing files to project..."
+msgstr "Adicionar ficheiros existentes ao projecto..."
+
+#: caddexistingfiledlg.cpp:57
+msgid "Sourcefile(s):"
+msgstr "Ficheiro(s) de Código:"
+
+#: caddexistingfiledlg.cpp:84
+msgid "Destinationdir:"
+msgstr "Directório de Destino:"
+
+#: caddexistingfiledlg.cpp:117
+msgid ""
+"select the source files to be added\n"
+"to the project here."
+msgstr ""
+"seleccione os ficheiros de código a serem\n"
+"adicionados ao projecto aqui."
+
+#: caddexistingfiledlg.cpp:122
+msgid ""
+"select the directory where the new\n"
+"source files will be copied to here."
+msgstr ""
+"seleccione o directório para onde os novos\n"
+"ficheiros de código serao copiados aqui."
+
+#: caddexistingfiledlg.cpp:195
+msgid "You must choose a destination,that is in your project-dir!"
+msgstr "Tem de escolher um destino,que esteja no seu directório de projecto!"
+
+#: caddexistingfiledlg.cpp:201
+msgid "You must choose a valid dir as a destination!"
+msgstr "Tem de escolher um directório válido como destino!"
+
+#: cgrouppropertiesdlg.cpp:62
+msgid "Groupname:"
+msgstr "Nome do Grupo:"
+
+#: cgrouppropertiesdlg.cpp:75
+msgid "Filters:"
+msgstr "Filtros:"
+
+#: cupdatekdedocdlg.cpp:33
+msgid "KDE Library Documentation Update..."
+msgstr "Actualizar Documentaçao da Livraria KDE..."
+
+#: cupdatekdedocdlg.cpp:43
+msgid "Choose installation mode:"
+msgstr "Escolha modo de instalaçao:"
+
+#: cupdatekdedocdlg.cpp:67
+msgid "new KDE Libs sources path:"
+msgstr "novo caminho do código fonte das KDE Libs:"
+
+#: cupdatekdedocdlg.cpp:93
+msgid "new KDE Libs Documentation path:"
+msgstr "novo caminho da Documentaçao das KDE Libs:"
+
+#: cupdatekdedocdlg.cpp:161
+msgid ""
+"Checking this will delete the current documentation\n"
+"and replacing it with the new generated documentation\n"
+"in the same path."
+msgstr ""
+"Seleccionar isto irá apagar a documentaçao existente\n"
+"e substituí-la pela nova documentaçao gerada no mesmo\n"
+"caminho."
+
+#: cupdatekdedocdlg.cpp:174
+msgid "Delete old Documentation and install to new Documentation path"
+msgstr "Apagar Documentaçao antiga e instalar para novo caminho de Documentaçao"
+
+#: cupdatekdedocdlg.cpp:178
+msgid ""
+"Checking this will delete the current documentation\n"
+"and lets you choose a path in the input field below\n"
+"where the new generated documentation will beinstalled."
+msgstr ""
+"Seleccionar isto irá apagar a documentaçao existente\n"
+"e permite-lhe escolher um caminho no campo de entrada abaixo\n"
+"para onde a nova documentaçao gerada será instalada."
+
+#: cupdatekdedocdlg.cpp:191
+msgid "Leave old Documention untouched and install to new Documention path"
+msgstr "Deixar Documentaçao antiga e instalar para novo caminho de Documentaçao"
+
+#: cupdatekdedocdlg.cpp:195
+msgid ""
+"This doesn't delete your current documentation and leaves it\n"
+"is now and you can select a new path for the new kdelibs\n"
+"documentation. CAUTION: Don't insert the same path where\n"
+"your recent documentation is installed- this may mess up\n"
+"the documentation by mixing old and new files!"
+msgstr ""
+"Isto nao apaga a sua documentaçao existente e deixa-lhe\n"
+"seleccionar um caminho novo para a nova documentaçao das\n"
+"KDE Libs. CUIDADO: Nao insira o mesmo caminho onde a sua\n"
+"documentaçao recente está instalada - Isto baralhará a\n"
+"documentaçao misturando ficheiros antigos com novos!"
+
+#: cupdatekdedocdlg.cpp:208
+msgid ""
+"Insert the path to the current\n"
+"KDE-Libs sourcecodes here. This is\n"
+"where you have unpacked e.g. a kdelibs\n"
+"snapshot a la /snapshot/kdelibs."
+msgstr ""
+"Insira o caminho para o código fonte\n"
+"actual das KDE-Libs aqui. Isto é\n"
+"onde descomprimiu, por exemplo, uma\n"
+"<i>snapshot</i> das kdelibs\n"
+"a la /snapshot/kdelibs."
+
+#: cupdatekdedocdlg.cpp:215
+msgid ""
+"Insert the path where you want to have\n"
+"the new generated documentation installed\n"
+"Note: the path information in Setup will\n"
+"be updated automatically, you don't have\n"
+"to change them to the new doc path."
+msgstr ""
+"Insira o novo caminho onde deseja que a\n"
+"nova documentaçao gerada seja instalada\n"
+"Nota: a informaçao do caminho na Configuraçao\n"
+"será actualizada automaticamente, nao terá de\n"
+"mudá-la para o novo caminho de documentaçao."
+
+#: ccreatedocdatabasedlg.cpp:43
+msgid "Index Options"
+msgstr "Opçoes de Indexaçao"
+
+#: ccreatedocdatabasedlg.cpp:56
+msgid "additional directories to index"
+msgstr "directorias adicionais para indexar"
+
+#: ccreatedocdatabasedlg.cpp:69
+msgid "Index Size"
+msgstr "Dimensao da Indexaçao"
+
+#: ccreatedocdatabasedlg.cpp:80
+msgid "index the KDE documentation"
+msgstr "indexar a documentaçao KDE"
+
+#: ccreatedocdatabasedlg.cpp:93
+msgid "index the QT documentation"
+msgstr "indexar a documentacao QT"
+
+#: ccreatedocdatabasedlg.cpp:106
+msgid "tiny size"
+msgstr "tamanho minúsculo"
+
+#: ccreatedocdatabasedlg.cpp:119
+msgid "small size"
+msgstr "tamanho pequeno"
+
+#: ccreatedocdatabasedlg.cpp:131
+msgid "medium size"
+msgstr "tamanho médio"
+
+#: ccreatedocdatabasedlg.cpp:191 cfileprintdlg.cpp:145
+msgid "add"
+msgstr "adicionar"
+
+#: ccreatedocdatabasedlg.cpp:203
+msgid "remove"
+msgstr "remover"
+
+#: ccreatedocdatabasedlg.cpp:248
+#, c-format
+msgid ""
+"builds a medium-size index (20-30% of the size\n"
+"of all files), allowing faster search."
+msgstr ""
+"constoi um index de tamanho médio (20-30% do tamanho\n"
+"de todos os ficheiros), permitindo buscas mais rápidas."
+
+#: ccreatedocdatabasedlg.cpp:251
+msgid ""
+"Build a small index rather than tiny (meaning 7-9%\n"
+"of the sizes of all files - your mileage may vary)\n"
+"allowing faster search."
+msgstr ""
+"Constroi um index pequeno em vez de minúsculo (significa\n"
+"7-9% do tamanho de todos os ficheiros - sua experiencia\n"
+"pode variar) permitindo buscas mais rápidas."
+
+#: ccreatedocdatabasedlg.cpp:255
+#, c-format
+msgid "a tiny index (2-3% of the total size of all files)"
+msgstr "um index minúsculo (2-3% do tamanho de todos os ficheiros)"
+
+#: ccreatedocdatabasedlg.cpp:267 ccreatedocdatabasedlg.cpp:272
+msgid "No Database created!"
+msgstr "Base de Dados nao criada!"
+
+#: ccreatedocdatabasedlg.cpp:267
+msgid "The KDE-Documentation-Path isn't set correctly."
+msgstr "O caminho da Documentaçao KDE nao foi configurado correctamente."
+
+#: ccreatedocdatabasedlg.cpp:272
+msgid "The Qt-Documentation-Path isn't set correctly."
+msgstr "O caminho da Documentaçao QT nao foi configurado correctamente."
+
+#: cdoctreepropdlg.cpp:70
+msgid "File:"
+msgstr "Ficheiro:"
+
+#: cprintdlg.cpp:55
+msgid "Outputmedia"
+msgstr "Média de <i>Output</i>"
+
+#: cprintdlg.cpp:68
+msgid "Outprinting"
+msgstr "Impressao"
+
+#: cprintdlg.cpp:80
+msgid "Pretty-print"
+msgstr "Impressao Qualidade"
+
+#: cprintdlg.cpp:92
+msgid "Pretty-print mode"
+msgstr "Modo impressao qualidade"
+
+#: cprintdlg.cpp:104
+msgid "Pages"
+msgstr "Páginas"
+
+#: cprintdlg.cpp:117
+msgid "Page printing"
+msgstr "Impressao de Página"
+
+#: cprintdlg.cpp:143
+msgid "Printer"
+msgstr "Impressora"
+
+#: cprintdlg.cpp:156
+msgid "Outputlocation"
+msgstr "Localizaçao do <i>Output</i>"
+
+#: cprintdlg.cpp:169
+msgid "Default printsettings"
+msgstr "Configuraçao defeito da impressora"
+
+#: cprintdlg.cpp:182
+msgid "Outputformat"
+msgstr "Formato do <i>Output</i>"
+
+#: cprintdlg.cpp:195
+msgid "Program"
+msgstr "Programa"
+
+#: cprintdlg.cpp:207
+msgid "Paper format"
+msgstr "Formato do Papel"
+
+#: cprintdlg.cpp:218
+msgid "printing..."
+msgstr "a imprimir..."
+
+#: cprintdlg.cpp:272
+msgid "printername"
+msgstr "nome da impressora"
+
+#: cprintdlg.cpp:353
+msgid "pretty-print"
+msgstr "impressao de qualidade"
+
+#: cprintdlg.cpp:366
+msgid "color"
+msgstr "cor"
+
+#: cprintdlg.cpp:420
+msgid "files..."
+msgstr "ficheiros..."
+
+#: cprintdlg.cpp:489
+msgid "print to file"
+msgstr "imprimir para ficheiro"
+
+#: cprintdlg.cpp:620
+msgid "Preview"
+msgstr "Ver antes"
+
+#: cfileprintdlg.cpp:47
+msgid "Self choosen files"
+msgstr "Ficheiros escolhidos"
+
+#: cfileprintdlg.cpp:59
+msgid "Changed files"
+msgstr "Ficheiros alterados"
+
+#: cfileprintdlg.cpp:71
+msgid "Time"
+msgstr "Tempo"
+
+#: cfileprintdlg.cpp:83
+msgid "Date"
+msgstr "Data"
+
+#: cfileprintdlg.cpp:96
+msgid "File selection"
+msgstr "Selecçao de Ficheiros"
+
+#: cfileprintdlg.cpp:119
+msgid "clean"
+msgstr "limpar"
+
+#: cfileprintdlg.cpp:132
+msgid "delete"
+msgstr "apagar"
+
+#: cfileprintdlg.cpp:158 cfileprintdlg.cpp:329
+msgid "between"
+msgstr "entre"
+
+#: cfileprintdlg.cpp:170 cfileprintdlg.cpp:304
+msgid "since"
+msgstr "desde"
+
+#: cfileprintdlg.cpp:208
+msgid "file"
+msgstr "ficheiro"
+
+#: cfileprintdlg.cpp:219
+msgid "current"
+msgstr "corrente"
+
+#: cfileprintdlg.cpp:231
+msgid "all in buffer"
+msgstr "todos na memória"
+
+#: cfileprintdlg.cpp:243
+msgid "all in project"
+msgstr "todos no projecto"
+
+#: cfileprintdlg.cpp:255
+msgid "self choosen files"
+msgstr "ficheiros seleccionados"
+
+#: cfileprintdlg.cpp:267
+msgid "changed files"
+msgstr "ficheiros modificados"
+
+#: cfileprintdlg.cpp:292 cfileprintdlg.cpp:380
+msgid "and"
+msgstr "e"
+
+#: cconfigprintdlg.cpp:234
+msgid "Header settings"
+msgstr "configuraçao do cabeçalho"
+
+#: cconfigprintdlg.cpp:246
+msgid "Fancy header"
+msgstr "Cabeçalho ornamentado"
+
+#: cconfigprintdlg.cpp:258
+msgid "Login"
+msgstr "Login"
+
+#: cconfigprintdlg.cpp:270
+msgid "Headertext"
+msgstr "Texto de cabeçalho"
+
+#: cconfigprintdlg.cpp:281
+msgid "header"
+msgstr "cabeçalho"
+
+#: cconfigprintdlg.cpp:312
+msgid "headertext"
+msgstr "texto de cabeçalho"
+
+#: cconfigprintdlg.cpp:329
+msgid "login"
+msgstr "login"
+
+#: cconfigprintdlg.cpp:358 cconfigprintdlg.cpp:382 cconfigprintdlg.cpp:459
+#: cconfigprintdlg.cpp:537 cconfigprintdlg.cpp:1567
+msgid "position"
+msgstr "posiçao"
+
+#: cconfigprintdlg.cpp:370
+msgid "text"
+msgstr "texto"
+
+#: cconfigprintdlg.cpp:408
+msgid "fancy header"
+msgstr "cabeçalho ornamentado"
+
+#: cconfigprintdlg.cpp:421
+msgid "Filename"
+msgstr "Nome do ficheiro"
+
+#: cconfigprintdlg.cpp:432
+msgid "filename"
+msgstr "nome do ficheiro"
+
+#: cconfigprintdlg.cpp:447
+msgid "size of filename"
+msgstr "tamanho do nome do ficheiro"
+
+#: cconfigprintdlg.cpp:499
+msgid "Hostname"
+msgstr "Nome da máquina"
+
+#: cconfigprintdlg.cpp:510
+msgid "hostname"
+msgstr "nome da máquina"
+
+#: cconfigprintdlg.cpp:525
+msgid "size of hostname "
+msgstr "tamanho do nome da máquina"
+
+#: cconfigprintdlg.cpp:590
+msgid "Current time"
+msgstr "Tempo actual"
+
+#: cconfigprintdlg.cpp:602
+msgid "Modification time"
+msgstr "Altura da modificaçao"
+
+#: cconfigprintdlg.cpp:614 cconfigprintdlg.cpp:638 cconfigprintdlg.cpp:674
+#: cconfigprintdlg.cpp:710
+msgid "Format"
+msgstr "Formatar"
+
+#: cconfigprintdlg.cpp:626 cconfigprintdlg.cpp:650 cconfigprintdlg.cpp:686
+#: cconfigprintdlg.cpp:722
+msgid "Position"
+msgstr "Posiçao"
+
+#: cconfigprintdlg.cpp:662
+msgid "Modification date"
+msgstr "Data da Modificaçao"
+
+#: cconfigprintdlg.cpp:698
+msgid "Current date"
+msgstr "Data actual"
+
+#: cconfigprintdlg.cpp:734 cconfigprintdlg.cpp:746
+msgid "AM/PM"
+msgstr "AM/PM"
+
+#: cconfigprintdlg.cpp:757
+msgid "current date"
+msgstr "data actual"
+
+#: cconfigprintdlg.cpp:775
+msgid "modification date"
+msgstr "data demodificaçao"
+
+#: cconfigprintdlg.cpp:790
+msgid "current time"
+msgstr "Tempo actual"
+
+#: cconfigprintdlg.cpp:808
+msgid "modification time"
+msgstr "Altura da Modificaçao"
+
+#: cconfigprintdlg.cpp:971
+msgid "Font and TAB"
+msgstr "Fonte e <i>TAB</i>"
+
+#: cconfigprintdlg.cpp:984
+msgid "Textprinting"
+msgstr "Impressao de texto"
+
+#: cconfigprintdlg.cpp:996
+msgid "Other options"
+msgstr "Outras opçoes"
+
+#: cconfigprintdlg.cpp:1008
+msgid "Highlight bars"
+msgstr "Saliente barras"
+
+#: cconfigprintdlg.cpp:1019
+msgid "cycle of change"
+msgstr "ciclo das alteraçoes"
+
+#: cconfigprintdlg.cpp:1032
+msgid "Wrapped line"
+msgstr "Translinear linha"
+
+#: cconfigprintdlg.cpp:1045
+msgid "Numbering & border"
+msgstr "Numeraçao & Margem"
+
+#: cconfigprintdlg.cpp:1056
+msgid "borders"
+msgstr "margens"
+
+#: cconfigprintdlg.cpp:1068
+msgid "table of contents"
+msgstr "Tabela de conteúdo"
+
+#: cconfigprintdlg.cpp:1080
+msgid "marked wrapped lines"
+msgstr "linhas translineadas marcadas"
+
+#: cconfigprintdlg.cpp:1094
+msgid "lines per page"
+msgstr "linhas por página"
+
+#: cconfigprintdlg.cpp:1106
+msgid "numbering pages"
+msgstr "numerar páginas"
+
+#: cconfigprintdlg.cpp:1119
+msgid "characters per line"
+msgstr "caracteres por linha"
+
+#: cconfigprintdlg.cpp:1131
+msgid "numbering lines"
+msgstr "numerar linhas"
+
+#: cconfigprintdlg.cpp:1209
+msgid "value for wrapped line"
+msgstr "valor da linha translineada"
+
+#: cconfigprintdlg.cpp:1234
+msgid "highlight bars"
+msgstr "salientar barras"
+
+#: cconfigprintdlg.cpp:1247
+msgid "interpret TAB, BS and FF"
+msgstr "interpretar <i>TAB, BS</i> e<i>FF</i>"
+
+#: cconfigprintdlg.cpp:1259
+msgid "cut lines"
+msgstr "cortar linhas"
+
+#: cconfigprintdlg.cpp:1274
+msgid "replace non-printing character by space"
+msgstr "substituir caracteres nao imprimíveis por espaços"
+
+#: cconfigprintdlg.cpp:1286
+msgid "print non ascii character as ISO Latin 1"
+msgstr "imprimir caracteres nao ASCII como ISO Latin 1"
+
+#: cconfigprintdlg.cpp:1298
+msgid "bold font"
+msgstr "fonte negrito"
+
+#: cconfigprintdlg.cpp:1311
+msgid "set TAB size"
+msgstr "Definir tamanho do <i>TAB</i>"
+
+#: cconfigprintdlg.cpp:1323
+msgid "font for a2ps"
+msgstr "fonte para a2ps"
+
+#: cconfigprintdlg.cpp:1335
+msgid "font for header"
+msgstr "fonte para o cabeçalho"
+
+#: cconfigprintdlg.cpp:1347
+msgid "font for body"
+msgstr "fonte para o corpo"
+
+#: cconfigprintdlg.cpp:1435
+msgid "Underlaytext"
+msgstr "Texto em fundo"
+
+#: cconfigprintdlg.cpp:1447
+msgid "Underlaystyle"
+msgstr "Estilo em fundo"
+
+#: cconfigprintdlg.cpp:1459
+msgid "Underlayangle"
+msgstr "Angulo de fundo"
+
+#: cconfigprintdlg.cpp:1471
+msgid "Underlaygray"
+msgstr "Fundo em Marca de Agua"
+
+#: cconfigprintdlg.cpp:1483
+msgid "Underlayfont"
+msgstr "Fonte de fundo"
+
+#: cconfigprintdlg.cpp:1495
+msgid "Underlayposition"
+msgstr "Posiçao de fundo"
+
+#: cconfigprintdlg.cpp:1507
+msgid "Y-Position"
+msgstr "Posiçao Y"
+
+#: cconfigprintdlg.cpp:1519
+msgid "X-Position"
+msgstr "Posiçao X"
+
+#: cconfigprintdlg.cpp:1530
+msgid "underlay"
+msgstr "fundo"
+
+#: cconfigprintdlg.cpp:1543
+msgid "underlaystyle"
+msgstr "Estilo de fundo"
+
+#: cconfigprintdlg.cpp:1555
+msgid "angle"
+msgstr "angulo"
+
+#: cconfigprintdlg.cpp:1579
+msgid "font"
+msgstr "fonte"
+
+#: cconfigprintdlg.cpp:1671 cconfigprintdlg.cpp:1697
+msgid "default"
+msgstr "defeito"
+
+#: cconfigprintdlg.cpp:1710
+msgid "underlaytext"
+msgstr "texto de fundo"
+
+#: ckdevelop_whatsthis.cpp:22
+msgid ""
+"Open project\n"
+"\n"
+"Shows the open project dialog to select a project to be opened"
+msgstr ""
+"Abrir projecto\n"
+"\n"
+"Mostra a caixa de diálogo para seleccionar o projecto a ser aberto"
+
+#: ckdevelop_whatsthis.cpp:26
+msgid ""
+"Open file\n"
+"\n"
+"Shows the open file dialog to select a file to be opened."
+msgstr ""
+"Abrir ficheiro\n"
+"\n"
+"Mostra a caixa de diálogo para seleccionar o ficheiro a ser aberto."
+
+#: ckdevelop_whatsthis.cpp:30
+msgid ""
+"Save file\n"
+"\n"
+"Saves the file opened in the actual editing view"
+msgstr ""
+"Gravar ficheiro\n"
+"\n"
+"Grava o ficheiro aberto na vista de ediçao actual"
+
+#: ckdevelop_whatsthis.cpp:34
+msgid ""
+"Undo\n"
+"\n"
+"Reverts the last editing step."
+msgstr ""
+"Desfazer\n"
+"\n"
+"Reverte o último passo de ediçao."
+
+#: ckdevelop_whatsthis.cpp:36
+msgid ""
+"Redo\n"
+"\n"
+"If an editing step was undone, redo lets you do this step again."
+msgstr ""
+"Refazer\n"
+"\n"
+"Se um passo de ediçao foi desfeito, refaz o passo novamente."
+
+#: ckdevelop_whatsthis.cpp:40
+msgid ""
+"Class viewer\n"
+"\n"
+"The class viewer shows the project(s), classes,classmembers and variables "
+"found by scanning theheader files in the source tree.Clicking on the class "
+"name results in opening the header file,setting the cursor to the class "
+"declaration line.Clicking on the member function results in opening the "
+"source file and sets the cursor to the member implementation. Selecting a "
+"member variable switches to the variable declaration in the header file.\n"
+"You can enable/diable the treeview window by selecting Tree-View in the "
+"View-menu or use the key accelerator."
+msgstr ""
+"Visualizador de Classe\n"
+"\n"
+"O visualizador de classe mostra o(s) projecto(s), classes, membros de classe"
+" e variáveis que se encontram procurando os ficheiros <i>header</i> na "
+"árvore de código. Clicar no nome da classe resulta na abertura do ficheiro "
+"<i>header</i>, colocando o cursor na linha de declaraçao da classe. Clicar "
+"na funçao membro resulta na abertura do ficheiro fonte e coloca o cursor no "
+"membro de implementaçao. Seleccionar uma variável membro vai para a declara- "
+"çao no ficheiro <i>header</i>. Pode activar/desactivar a janela de vista de "
+"árvore seleccionando Vista de Arvore no menu Ver ou usando a tecla acelara- "
+"dora."
