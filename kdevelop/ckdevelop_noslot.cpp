@@ -730,16 +730,14 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
 
   // Load Qt linguist if the filename is a ts file
   if( filename.right(3) == ".po") {
-    if(!CToolClass::searchProgram("kbabel")){
+    if(CToolClass::searchInstProgram("kbabel")){
+   		KProcess linguist_process;
+   		linguist_process << "kbabel" << filename;
+   		if(!linguist_process.start(KProcess::DontCare)) {
+       	debug("KBabel didn't start!");
+   		}
       return;
-    }
-
-		KProcess linguist_process;
-		linguist_process << "kbabel" << filename;
-		if(!linguist_process.start(KProcess::DontCare)) {
-    	debug("KBabel didn't start!");
-		}
-    return;
+   	}
   }
 
   //load ktranslator if clicked/loaded an po file
