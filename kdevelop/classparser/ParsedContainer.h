@@ -1,3 +1,20 @@
+/***************************************************************************
+                          ParsedContainer.h  -  description
+                             -------------------
+    begin                : Mon Mar 15 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef _CPARSEDCONTAINER_H_INCLUDED
 #define _CPARSEDCONTAINER_H_INCLUDED
 
@@ -12,8 +29,12 @@
 class CParsedStruct;
 
 /** Represents a parsed object that can store other objects.
- *  The objects can be variables, functions or structures. */
-class CParsedContainer
+ *  The objects can be variables, functions or structures. 
+ *  Since this is a special case of a parsed item, the container
+ *  inherits CParsedItem.
+ * @author Jonas Nordin
+ */
+class CParsedContainer : public CParsedItem
 {
 public: // Constructor and destructor
 
@@ -142,6 +163,24 @@ public: // Public methods
 
   /** Clear the internal state. */
   void clear();
+
+public: // Implementation of virtual methods
+
+  /** Output this object to stdout */
+  virtual void out() {}
+
+  /** Return a string made for persistant storage. 
+   * @param str String to store the result in.
+   * @return Pointer to str.
+   */
+  virtual const char *asPersistantString( QString &str ) { return str;}
+
+  /** Initialize the object from a persistant string. 
+   * @param str String to initialize from.
+   * @param startPos Position(0-based) at which to start.
+   */
+  virtual int fromPersistantString( const char *str, int startPos ) { return startPos; }
+
 };
 
 #include "ParsedStruct.h"

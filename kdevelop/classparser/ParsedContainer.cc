@@ -60,6 +60,7 @@ void CParsedContainer::addStruct( CParsedStruct *aStruct )
   assert( aStruct != NULL );
   assert( !aStruct->name.isEmpty() );
 
+  aStruct->setDeclaredInClass( name );
   structs.insert( aStruct->name, aStruct );  
 }
 
@@ -78,6 +79,7 @@ void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
   assert( anAttribute != NULL );
   assert( !anAttribute->name.isEmpty() );
 
+  anAttribute->setDeclaredInClass( name );
   attributes.insert( anAttribute->name, anAttribute );
 }
 
@@ -98,6 +100,7 @@ void CParsedContainer::addMethod( CParsedMethod *aMethod )
 
   QString str;
 
+  aMethod->setDeclaredInClass( name );
   methods.append( aMethod );
 
   aMethod->asString( str );
