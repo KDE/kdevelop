@@ -52,8 +52,11 @@ To update to a newer doxygen version:
    To do the merge you should use:
        $ kompare doxygen-location/addon/doxywizard/config.cpp  kdevelop-location/parts/doxygen/config.cpp
        $ kompare doxygen-location/addon/doxywizard/config.h    kdevelop-location/parts/doxygen/config.h
-   Be careful because doxygen uses the deprecated QList class while kedevelop
+   Be careful because doxygen uses the deprecated QList class while KDevelop
    uses the new QPtrList so you should not merge certain lines of code!!!
+   Be careful because doxygen uses the deprecated QRegExp::match() method while
+   KDevelop uses the new QRegExp::search() and QRegExp::matchedLength() mehtods
+   instead so you should not merge certain lines of code!!!
 
 2. Replace _ALL_ references to the deprecated QList class with the new QPtrList
    class in config.h and config.cpp
