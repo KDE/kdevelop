@@ -268,6 +268,10 @@ GroupItem::GroupType GroupItem::groupTypeForExtension(const QString &ext)
         return Forms;
     else if (ext == "idl")
         return IDLs;
+    else if (ext == "l" || ext == "ll" || ext == "lxx" || ext == "l++" )
+        return Lexsources;
+    else if (ext == "y" || ext == "yy" || ext == "yxx" || ext == "y++" )
+        return Yaccsources;
     else if (ext == "ts")
         return Translations;
     else
@@ -2017,6 +2021,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     break;
                 case GroupItem::Translations:
                     fcext = "ts";
+                    break;
+                case GroupItem::Lexsources:
+                    fcext = "l";
+                    break;
+                case GroupItem::Yaccsources:
+                    fcext = "y";
                     break;
                 default:
                     fcext = QString::null;
