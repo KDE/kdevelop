@@ -2,7 +2,6 @@
 #include <qlistbox.h>
 #include <qlineedit.h>
 #include <qtextview.h>
-#include <iostream.h>
 #include <klocale.h>
 #include <qlabel.h>
 #include <qmultilineedit.h>
