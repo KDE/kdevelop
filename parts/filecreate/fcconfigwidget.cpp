@@ -50,6 +50,10 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
         loadProjectConfig(fc_view);
         loadProjectTemplates(fctemplates_view);
     }
+
+    m_globalfiletypes.setAutoDelete(true);
+    m_projectfiletypes.setAutoDelete(true);
+    m_projectfiletemplates.setAutoDelete(true);
 }
 
 FCConfigWidget::~FCConfigWidget()

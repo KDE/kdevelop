@@ -23,10 +23,6 @@ namespace FileCreate{
 class FileType;
 }
 
-/**
- *
- * KDevelop Authors
- **/
 class FCConfigWidget : public FCConfigWidgetBase
 {
 Q_OBJECT
