@@ -801,7 +801,7 @@ bool DocTreeViewWidget::initKDocKDELibs()
 /**************************************/
 
 DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
-    : QVBox(0, "doc tree widget"), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
+    : QVBox(0, "doc tree widget"), folder_qt( 0L ), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
 	KActionCollection* actions = new KActionCollection(this);
@@ -913,6 +913,10 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
             }
         }
     }
+	else
+	{
+		folder_qt = 0L;
+	}
        
 	docConfigAction = new KAction(i18n("Customize..."), "configure", 0,
 		this, SLOT(slotConfigure()), actions, "documentation options");
@@ -1138,6 +1142,8 @@ void DocTreeViewWidget::refresh()
     folder_project->refresh();
     if( folder_kdelibs )    
         folder_kdelibs->refresh();
+    if( folder_qt )    
+        folder_qt->refresh();
 }
 
 
@@ -1157,7 +1163,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         docView->takeItem(it1.current());
     
     docView->takeItem(folder_doxygen);
-    docView->takeItem(folder_qt);
+    if(folder_qt) docView->takeItem(folder_qt);
     if(folder_kdelibs) docView->takeItem(folder_kdelibs);
 //    docView->takeItem(folder_kdevelop);
 
@@ -1193,7 +1199,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         if (!ignoretocs.contains("kde"))
             docView->insertItem(folder_kdelibs);
 
-    docView->insertItem(folder_qt);
+    if(folder_qt) docView->insertItem(folder_qt);
 
     docView->triggerUpdate();
 }
