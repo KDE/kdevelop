@@ -4,7 +4,7 @@
 <TITLE>The KDevelop Programming Handbook: Internationalization</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+<META NAME="description" CONTENT="#">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -24,28 +24,58 @@
 <H3><A NAME="ss11.1">11.1 What is i18n ?</A>
 </H3>
 
+<P>i18n is an internationalization standard that is used to offer internationalized versions of an application or project. The difficulty 
+with writing applications is that they only support the language they originally are composed with; visually this can be seen on 
+labels, menuentries and the like. Goal of the internationalization is to provide applications and library functions in the language of 
+the user; therefore enabling users that are not capable of the original language to make use of the provided functionality.
 <P>
-<H3><A NAME="ss11.2">11.2 Translation Team Contacts</A>
+<P>
+<H3><A NAME="ss11.2">11.2 How KDE supports Internationalization</A>
 </H3>
 
+<P>KDE, as one of the most modern desktop environments, has set one of it's numerous goals to provide applications for users in their 
+native language, and simplifies the work for developers to provide their application in any of the supported language.
+<P>Technically, this is realized by the KDE File System Standard which contains localization support for languages in terms of 
+documentation and by providing application internationalization through the use of the KDE-core library class <CODE>KLocale</CODE>. This class 
+does all the translation, dependend on the prefered language set in the KDE Control Center. 
+<P>The developer on the other hand only has to know two things to make his application able to use this feature:
 <P>
-<H3><A NAME="ss11.3">11.3 How KDE supports Internationalization</A>
+<OL>
+<LI>include <CODE>kapp.h</CODE> into your sourcecode wherever a visible text appears in your application, e.g. in source files that contain 
+QLabels.</LI>
+<LI>wherever you set the visual string, embrace it with the <CODE>i18n()</CODE> macro provided by <CODE>kapp.h</CODE>.</LI>
+</OL>
+<P>That is almost all you have to watch for while coding. Mind that you should not internationalize any configuration strings that are 
+used by <CODE>KConfig</CODE>, because this is not necessary on one hand and doesn't work for reading in values on the other; besides messes too 
+much in the translation files.
+<P>
+<H3><A NAME="ss11.3">11.3 Translation Team Contacts</A>
 </H3>
 
+<P>The KDE Team also provides numerous contacts to developers that are contributing to the KDE project as translators. Those are organized 
+in language teams and coordinate the translation work.
+<P>For a full list and information who to ask for translating your application, see 
+<A HREF="http://www.kde.org">http://www.kde.org</A>.
 <P>
-<H3><A NAME="ss11.4">11.4 Enableing Internationalization Support</A>
+<H3><A NAME="ss11.4">11.4 Adding a Language to your Project</A>
 </H3>
 
+<P>Before your application can support internationalization, you have to run "Make Messages and merge" from the "Project" menu. This will 
+scan all of your sourcefiles for the <CODE>i18n()</CODE> macro and extracts the strings into a &lt;yourapp&gt;.pot file, which is then placed 
+into the <CODE>po</CODE> subdirectory of your project.
+<P>Then select the desired language by choosing "Add new translation file" from the "Project" menu. After pressing "OK", the translation 
+file will be build and added to the project in form of &lt;language_prefix&gt;.po, placed in the po directory.
+<P>When translation files have to be updated, run "Make Messages and merge" form the "Project" menu to extract the i18n() macros again 
+into the pot file. In this context, merging means that the new strings that are added will be added to all currently integrated po 
+files. Translators then only have to look for the strings currently not translated.
 <P>
-<H3><A NAME="ss11.5">11.5 Adding a Language to your Project</A>
+<H3><A NAME="ss11.5">11.5 Translating po files</A>
 </H3>
 
-<P>
-<H3><A NAME="ss11.6">11.6 Translations with KTranslator</A>
-</H3>
-
-<P>
-<P>
+<P>To translate the po files, the KDE SDK offers a tool that is called <CODE>KTranslator</CODE>. In case it is installed, selecting a po file will 
+open the file with KTranslator in the Tools-window where the message strings can be translated using the existing translation files 
+installed at the translator's KDE locale directory. If KTranslator is not installed, the po file is opened in the Resource window where 
+it can be edited manually as a text file.
 <P>
 <P ALIGN="RIGHT">
 

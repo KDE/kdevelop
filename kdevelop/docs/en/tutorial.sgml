@@ -1354,21 +1354,118 @@ handling; then we will connect certain functions to the toolbar and menubar and 
 
 <sect>Configuring Menubars and Toolbars<label id="Configuring Menubars and Toolbars">
 <p>
+Menubars and toolbars are one of the most important parts of an application to provide methods to work with a document structure. As a
+general rule, you should make all functions availabele by the menubar. Those methods that should not be available at a current stage of
+the application process should be disabled.
+
+Further, an appliation can only contain one menubar, but several toolbars. Toolbars on the other hand should contain only the most
+recently used commands by pixmap icons or provide quick access methods like combos to select values.
+
 <sect1>How does it work ?
 <p>
+Each entry, may it be a menuentry or a toolbar item, has a resource ID which is an integer value. As these values can't be used twice,
+those are set by macros, where the numeric values are replaced by a descriptive ID name that can be used in your sources then.
+
+All resource ID's are collected in the file <tt/resource.h/, where you can keep an overview over the used values. Anyway, the compiler
+will inform you if you've used a value twice for constructing entries. Also, the resource file should contain all menu accelerators by
+IDK macro replacements. An example:
+
+<code>
+(resource.h)
+
+#define ID_VIEW_TOOLBAR             12010
+
+
+(kscribble.cpp)
+
+// menu entry Toolbar in the "view" menubar menu
+view_menu->insertItem(i18n("&amp;Toolbar"), ID_VIEW_TOOLBAR);
+
+</code>
+
+This inserts the entry Toolbar to the View popup menu of the menubar in the kscribble application. The resource ID's name is held to
+contain the menu name and the action's name visible. The ampersand is set in front of the letter that functions as a keyboard
+accelerator and the entry itself is embraced by the i18n() internationalization macro.
+
+On activating the menu item, the commandCallback() switch is called with the ID number. There, you have to add an according comparator
+value with the method you want to execute on activating the menuentry:
+
+<code>
+    case ID_VIEW_TOOLBAR:
+    	slotViewToolBar();
+    	break;
+</code>
+
 <sect1>Adding a new menu
 <p>
+A new menubar is added to an application by the following:
+
+<enum>
+<item>add a pointer to the new menu in the App-class header
+<item>call the constructor of <tt/QPopupMenu/ to the pointer in <tt/initMenuBar()/ at the location where your menubar should appear
+later.
+<item>insert the according menuitems into the popup menu and set their resource ID's in the resource file
+<item>add connects for <tt/commandCallback()/ and <tt/statusCallback()/ to the menu at the end of <tt/initMenuBar()/
+<item>add the methods you want to call by the menuentries in the header and implementation file.
+<item>add the switch statements for the entries to the <tt/commandCallback()/ and <tt/statusCallback()/ methods
+</enum>
+
+
 <sect1>Integrating Toolbar buttons
 <p>
+Toolbar buttons can be added like menuentries with the difference that the used method is <tt/insertButton()/ and takes a button
+pixmap and tooltip text instead of a menu text.
+
+The icons you want to use can be loaded by <tt/KIconLoader/, where <tt/KApplication/ offers the macros <tt/ICON()/ and <tt/Icon()/ to
+access the icon loader and load the icon. These macros take the filename of the pixmap as their parameter to load the icon from the KDE
+file system in a certain order (see <tt/KIconLoader/ for the search order).
+
+The KDE libraries also offer a set of toolbar buttons that can be used for standard actions. In cases where they don't meet your needs,
+you will have to paint your own pixmaps. KDevelop supports this by selecting "New" from the "File" menu, then select Pixmap as the file
+type. Usually you will place your toolbar pixmaps in a project subdirectory "toolbar" and install them into your application specific
+toolbar directory.
+
 <sect1>Configuring Statusbars
 <p>
+The KDevelop projects already make use of the statusbar by providing statusbar messages for menuentries and toolbar buttons. When
+adding a menuentry, also add your statusmessage in the method <tt/statusCallback()/.
+
+<tt/statusCallback()/ uses the method <tt/slotStatusHelpMsg()/ to display a statusbar message for two seconds. When executing a
+command, you should use the method <tt/slotStatusMsg()/ at the beginning with the string describing what your application does; before
+a return or method end, you should reset the statusbar message with a "Ready." string calling the same method.
+
+
 <sect1>Keyboard Accelerator Configuration
 <p>
+A very professional thing you should always add to your application are keyboard accelerators. Those are mainly used by experienced
+users that want to work fast with their applications and are willing to learn shortcuts. For this, the KDE libraries provide the class
+<tt/KAccel/, which provides the keyboard accelerator keys and access to global configured standard keyboard accelerators.
+
+By default, frame applications generated by KDevelop only use standard keyboard accelerators such as F1 for acessing online-help,
+Ctrl+N for New File etc. You should look for the keyboard accelerators already set in <tt/KAccel/ first before adding a new
+accelerator.
+
+If your application contains a lot of accelerators, you should make them configurable by an Options-menu; either it could be combined
+with other application configuration in a <tt/QTabDialog/ or stand alone. The KDE libarary already provides a <tt/KKeyChooser/ for use
+in tab dialogs, whereas <tt/KKeyDialog/ provides a ready-to use key-configuration dialog.
+
+See the following classes for more information:
+
+<tt/KAccel/(kdecore), <tt/KKeyChooser/, <tt/KKeyDialog/ (kdeui)
 
 <sect>The Dialogeditor: Where your Dialogs are Build
 <p>
 <sect1>What the Dialogeditor provides
 <p>
+The Build-In dialogeditor of KDevelop is designed to help you construct widgets and dialogs that fit your application's purpose and 
+reduces the time rapidely to extend the GUI of your applcation. The only limitation for now is that the dialogeditor does not support 
+geometry management that is provided by Qt; therefore the dialogs are static in their size and this may lead to certain circumstances 
+where e.g. the label width is not long enough to support the full length of a translation.
+
+On the other hand, the current state of the editor in conjunction with KDevelop's project management offers the fastes way to create 
+full-featured applications for the K Desktop Environment.
+
+
 <sect1>Qt and KDE Widgets
 <p>
 Currently provided widgets are:
@@ -1705,11 +1802,11 @@ Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
 <itemize>
 <item><bf/General:/
   <itemize>
-  <item><bf/MaxValue:/
-  <item><bf/MinValue:/
+  <item><bf/MaxValue:/  the maximum value the user can choose
+  <item><bf/MinValue:/  the minimum value the user can choose
   <item><bf/Prefix:/
   <item><bf/Suffix:/
-  <item><bf/Value:/
+  <item><bf/Value:/     the pre-set value when the widget is shown
   <item><bf/isWrapping:/
   </itemize>
 </itemize>
@@ -1727,7 +1824,6 @@ Inherited by <ref id="QListBox" name="QListBox"> and <ref id="QMultiLineEdit" na
 Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
 
 <itemize>
-
 <item><bf/General:/
   <itemize>
   <item><bf/isAutoBottomScrollBar: (setAutoBottomScrollBar)/
@@ -1738,14 +1834,11 @@ Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and 
   <item><bf/isDragSelect: (setDragSelect)/
   <item><bf/isSmoothScrolling: (setSmoothScrolling)/
   </itemize>
-
 <item><bf/Geometry:/
-
-<itemize>
-<item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
-current font.
-</itemize>
-
+  <itemize>
+  <item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
+  current font.
+  </itemize>
 </itemize>
 <p>
 
@@ -1754,24 +1847,18 @@ current font.
 Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
 
 <itemize>
-
 <item><bf/General:/
-
-<itemize>
-<item><bf/Text: (setText) / (public slot) sets the text of the widget.
-<item><bf/isAutoUpdate: (setAutoUpdate)/ used to avoid flicker during large changes; the view is not updated if disabled.
-<item><bf/isOverWriteMode: (setOverwriteMode) /(public slot) sets overwrite enabled or disabled.
-<item><bf/isReadOnly: (setReadOnly)/ (public slot) sets the widget text to read only; disables text input.
-<item><bf/isTextSelected: (selectAll)/(public slot) marks the whole text selected
-</itemize>
-
+  <itemize>
+  <item><bf/Text: (setText) / (public slot) sets the text of the widget.
+  <item><bf/isAutoUpdate: (setAutoUpdate)/ used to avoid flicker during large changes; the view is not updated if disabled.
+  <item><bf/isOverWriteMode: (setOverwriteMode) /(public slot) sets overwrite enabled or disabled.
+  <item><bf/isReadOnly: (setReadOnly)/ (public slot) sets the widget text to read only; disables text input.
+  <item><bf/isTextSelected: (selectAll)/(public slot) marks the whole text selected
+  </itemize>
 <item><bf/Geometry:/
-
-<itemize>
-<item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
-current font.
-</itemize>
-
+  <itemize>
+  <item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the current font.
+  </itemize>
 </itemize>
 <p>
 
@@ -1781,9 +1868,7 @@ current font.
 Inherits <ref id="QWidget" name="QWidget">
 
 <itemize>
-
 <item><bf/General:/
-
 <itemize>
 <item><bf/CursorPosition: (setCursorPosition)/ sets the default cursor position.
 <item><bf/MaxLength: (setMaxLength) / sets the maximum string length
@@ -1791,7 +1876,6 @@ Inherits <ref id="QWidget" name="QWidget">
 <item><bf/hasFrame: (setFrame) / draws the lineedit witin a two-pixel frame if enabled.
 <item><bf/isTextSelected: (selectAll) / (public slot) sets the text to be selected.
 </itemize>
-
 </itemize>
 <p>
 
@@ -1800,9 +1884,7 @@ Inherits <ref id="QWidget" name="QWidget">
 Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
 
 <itemize>
-
 <item><bf/General:/
-
 <itemize>
 <item><bf/MaxValue:/ sets the maximum slider value; used in constructor (optional)
 <item><bf/MinValue:/ sets the minimum slider value; used in constructor (optional)
@@ -1811,7 +1893,6 @@ Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
 <item><bf/isTracking: (setTracking)/ if enabled, the scrollbar emits <tt/valueChanged()/ whenever the bar is dragged; otherwise only on
 mouse release.
 </itemize>
-
 </itemize>
 <p>
 
@@ -1820,9 +1901,7 @@ mouse release.
 Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
 
 <itemize>
-
 <item><bf/General:/
-
 <itemize>
 <item><bf/MaxValue:/ sets the maximum slider value; used in constructor (optional)
 <item><bf/MinValue:/ sets the minimum slider value; used in constructor (optional)
@@ -1881,7 +1960,7 @@ Inherits <ref id="QPushButton" name="QPushButton">
 <itemize>
 <item>General
 	<itemize>
-	<item>DisplayedColor (setColor()) the displayed color on the button
+	<item><bf/DisplayedColor (setColor())/ the displayed color on the button
 	</itemize>
 </itemize>
 
@@ -1893,13 +1972,12 @@ Inherits <ref id="QPushButton" name="QPushButton">
 
 Inherits: <ref id="QComboBox" name="QComboBox">
 
-
 <itemize>
 <item>General
 	<itemize>
-	<item>Entries
-	<item>Text
-	<item>isAutoResize
+	<item><bf/Entries/ the string list of entries displayed in the combo box
+	<item><bf/Text/ the text displayed in the combo box currently
+	<item><bf/isAutoResize/ resizes the combo box to the current item
 	</itemize>
 </itemize>
 
@@ -1909,7 +1987,7 @@ Inherits: <ref id="QComboBox" name="QComboBox">
 <itemize>
 <item>Appearance
 	<itemize>
-	<item>FontSize
+	<item><bf/FontSize/ the font size for the date picker
 	</itemize>
 </itemize>
 	
@@ -1921,10 +1999,11 @@ Inherits: <ref id="QComboBox" name="QComboBox">
 
 <sect2>KSeparator<label id="KSeparator">
 <p>
+
 <itemize>
 <item>General
 	<itemize>
-	<item>Orientation
+	<item><bf/Orientation/ sets the orientation of the separator to horizontal or vertical; default is horizontal
 	</itemize>
 </itemize>
 
@@ -1937,18 +2016,18 @@ Inherits: <ref id="QComboBox" name="QComboBox">
 <itemize>
 <item>Appearance
 	<itemize>
-	<item>TreeListBgColor
-	<item>TreeListPalette
-	<item>isBottomScrollbar
-	<item>isScrollBar
-	<item>isShowItemText
-	<item>isSmoothScrolling
-	<item>isTreeDrawing
+	<item><bf/TreeListBgColor/
+	<item><bf/TreeListPalette/
+	<item><bf/isBottomScrollbar/
+	<item><bf/isScrollBar/
+	<item><bf/isShowItemText/
+	<item><bf/isSmoothScrolling/
+	<item><bf/isTreeDrawing/
 	</itemize>
 <item>General
 	<itemize>
-	<item>Entries
-	<item>isAutoUpdate
+	<item><bf/Entries/
+	<item><bf/isAutoUpdate/
 	</itemize>
 </itemize>
 
@@ -1956,6 +2035,7 @@ Inherits: <ref id="QComboBox" name="QComboBox">
 
 <sect2>KRestrictedLine<label id="KRestrictedLine">
 <p>
+
 <sect2>KLed<label id="KLed">
 <p>
 
@@ -1964,17 +2044,127 @@ Inherits <ref id="QWidget" name="QWidget">
 <itemize>
 <item>Appearance
 	<itemize>
-	<item>LedColor: (setColor()) sets the displayed LED color
+	<item><bf/LedColor: (setColor())/ sets the displayed LED color
 	</itemize>
 </itemize>
 	
 	
 <sect1>Constructing a new Dialog
 <p>
-<sect1>Setting Widget Properties
+Constructing a new dialog is very easy if you already have experience with graphical construction applications. KDevelop offers to 
+create a widget visually and displays the look as it will be shown to the user directly. Further, you can have a preview of your widget 
+by selecting "Preview" from the "View" menu.
+
+To begin constructing a dialog or any other widget, switch to the Dialogeditor and select "New Dialog" from the "File" menu. Then enter 
+all needed information to the "New Dialog" dialog. Those are:
+
+<enum>
+<item>The Dialog inheritance. This is necessary because any widget is at least derived from <tt/QWidget/. Besides the widget types 
+provided by Qt, you can inherit e.g. form an abstract base class you constructed yourself within your project. In this case, select 
+"custom" and enter the header file path to the line edit below. 
+<item>The Dialog name. This sets the class name of the generated dialog. Select a classname that is descriptive for what the dialog 
+does; in cases of inheritance from <tt/QDialog/, you may enter a name that ends with <tt/Dlg/ to remember yourself it's a dialog. 
+Naming convention should match that of KDE and Qt: Use uppercase letters for your classname. For e.g. a grid-size selection dialog, you 
+would enter <tt/GridSizeDlg/.
+<item>The generated filenames. Those are preset when entering the dialog name, but can be changed afterwards. If you want to use other 
+filenames, the naming convention should also match that of KDE and Qt: the filenames are all lowercase and contain the classname to 
+remember what class is kept where. The data file that has to be set will later contain the generated code that will build up your 
+dialog. You should not edit this file manually afterwards; use the implementation file for any additions towards dialog construction 
+code and method implementations.
+</enum>
+
+The dialog will then show itself as a widget with a grid. As the dialgoeditor uses the grid to snap any child widgets to the geometry, 
+you can change the grid size with the "Grid Size" entry in the "View" menu, if the preset values don't match your needs.
+
+Then select the "Widgets" tabulator on the left pane and press the button for the widget item you want to add to the main widget. It 
+directly appears on the main widget's left upper corner and gets selected by a resizable frame. Then move or resize the widget with the 
+mouse. The cursor will change to indicate which action can be done at the current position.
+
+After having finished the construction, select "Generate Files" from the "Build" menu or hit the according toolbar button. The files 
+will then be generated at the preset location and included into your project sources. A rebuild or make will compile all generated 
+files within your project and you can add the according constructor call to the application to invoke the dialog or widget. For KDE 
+projects, all widget properties that will be visible later, e.g. label texts, are set with the <tt/i18n()/ macro of <tt/kapp.h/ to 
+support internationalization. Therefore you should do a "Make Messages and merge" when finished with construction and implementation.
+ 
+When creating a dialog or widget, you should watch the following guidelines: 
+<itemize>
+<item>Always try to be consistant! This is probably the most important rule when constructing GUI elements. Mind that the user will 
+only accept an application that is easy to understand no matter how complex it's purpose may be.
+<item>Add help whereever you can by tooltips, What's this..? help or Quickhelp. This allows getting direct information about the 
+purpose of the GUI elements.
+<item>watch the <bf/keyboard focus/ !  The generator does not take care of that- this has to be watched when constructing any widget; 
+otherwise you have to reorder your initialization code by hand which is a very unthankful job. The keyboard focus on any widget means 
+the oder on which items get the keyboard input focus when the user presses the tab and shift+tab button. It would be very annoying if 
+the focus changes everywhere but not to the next widget visible below or to the right of the current widget. Therefore start 
+constructing your widget top down from left to right to ensure the consistancy of the focus.
+</itemize>
+  
+<sect1>Setting Widget Properties 
 <p>
+Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window automatically updates to the properties
+of the current widget. As all widgets are derived from <tt/QWidget/, you can set the <tt/QWidget/ properties plus an amount of properties that are specific to the
+selected widget. Properties can be:
+
+<itemize>
+<item>Integer values, such as the geometry of a widget or the font size
+<item>Boolean values to enable/disable certain parameters of the widget. Set with combos containing true and false
+<item>enumerable values of a widget, e.g. the palette. Set with combos containing all possible values
+<item>Color values for e.g. the displayed color. Set with the KDE Color Dialog
+<item>Font values for e.g. labels. Be careful to set Font values other than the default because this may prevent KDE from updating the font. Set with the KDE Font Dialog
+<item>File names for e.g. background pixmaps. Do not use gif images here as these may get unsupported by further Qt versions > 1.42
+</itemize>
+
 <sect1>Integrating the Dialog
 <p>
+Whenever you created a widget, you probably want to add it to the project to execute the action it is designed for. As a widget can be 
+constructed for several purposes, we will watch for two cases: a <tt/QWidget/ inherited widget and a <tt/QDialog/ one.
+
+<sect2><tt/QWidget/ inherited 
+<p>
+Let's say you created a widget that will be part of the main view. If it fills the whole view area, you have to add an instance pointer 
+to the header declaration of your <tt/KTMainWindow/ instance replacing the currently set view widget. Then change the code in the 
+<tt/initView/ method to set this widget the main view. Additionally, you could remove the View class of the generated project, but mind 
+that the document instance and the App instance depends on the view class. In this case, it is technically a much better way to create 
+a mini-KDE application and construct your <tt/KTMainWindow/ instance yourself.
+
+More often the widget is intended to be a part of the view area, which means it is combined with other widgets. This can be done by 
+using one of the following classes that provide a devider to separate two widgets:
+
+<enum>
+<item><tt/QSplitter/
+<item><tt/KPanner/
+<item><tt/KNewPanner/
+</enum>
+
+If the main view shall contain more than two widgets, you have to use another instance of the devider as one of the two managed widgets 
+by the first one. Then add the according widgets to each panner and set the first panner the view area.
+
+<sect2><tt/QDialog/ inherited
+<p>
+If your widget inherits <tt/QDialog/, it is probably intended to change one or more values; often this is used to set the application 
+preferences. To invoke the dialog, you have to add a slot to the <tt/App/ class by adding the method declaration and the implementation 
+body. Then add the constructor call to the method as well as a call to <tt/show()/ or <tt/exec()/ the dialog. Finally, you should take 
+care for processing the results of the dialog; this can either be done by the dialog who changes values of the parent widget itself or 
+by retriving the values from the dialog (which would make your dialog a lot more reusable in other projects). Mind that you should call 
+<tt/delete/ if you called the dialog instance with <tt/new/ to avoid memory leaks.
+
+Finally, you have to connect a menuentry (with according statusbar help) to the new slot invoking the dialog; optionally a keyboard 
+accelerator and a toolbar icon. For this, add a resource ID to the file <tt/resource.h/ with a define. Then add an according menuentry 
+to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The menuentry consists of:
+
+<itemize>
+<item>an optional icon pixmap. Call this with the <tt/Icon("iconname.xpm")/ macro of <tt/KApplication/ to use the provided 
+<tt/KIconLoader/ instance.
+<item>the menuentry name. Add this with the <tt/i18n("&amp;entryname")/ macro of <tt/KApplication/ to allow internationalization. The
+ampersand should be in front of the letter that will be displayed underlined to access the entry directly by keyboard acceleration.
+<item>the member instance to call. Normally this would be the <tt/this/ pointer.
+<item>the member slot to call. Use <tt/SLOT(yourmethod()/ to call the slot on the signal <tt/activated()/. 
+<item>the accelerator key. This should be set to zero as this is done by an enty in <tt/initKeyAccel()/ where you have to introduce an 
+accelerator key together with the slot to call. Then call <tt/changeMenuAccel()/ to change the menuitem's accelerator. This will make 
+it configurable by a keychooser dialog later. For standard actions, use the enumerable values given by <tt/KAccel/.
+<item>the menu ID as set in <tt/resource.h/
+</itemize>
+
 
 <sect>Printing Support
 <p>
@@ -2125,48 +2315,338 @@ whats_this->add(class_tree, i18n("Class Viewer\n\n"
 
 <sect>Extending the Documentation with SGML
 <p>
+Due to the fact that projects often lack a complete set of user documentation, all KDevelop projects contain a pre-build handbook that 
+can be easily adapted; therefore fulfilling another goal of KDE: providing enough online-help to support users that are not familiar 
+with an application. This chapter therefore introduces you on how to extend the provided documentation template and what you have to do 
+to make it available to the user. 
+ 
 <sect1>Why SGML ?
 <p>
-<sect1>What the Documentation already contains
+SGML is a text formatting system that allows to create output in various formats; therefore technical documentation has to be written 
+only once and then transfered to the desired output. The most used output is probably HTML to provide online help through web-browsers 
+in a time where internet standards are available even on single-desktop systems. KDE makes use of HTML documentation by it's KDEHelp 
+application where all KDE applications are listed and give access to their user manuals. To provide a unique look to KDE documentation, 
+the KDE-Software Development Kit (SDK) contains a tool called <tt/ksgml2html/ which itself uses the sgmltools' sgml2html program to 
+extend the HTML output with the KDE logo.
+
+But besides this, sgmltools allow output in plain text, GNU info, LyX, DVI, Postscript and RTF; therefore the SGML documentation can be 
+easily used to provide a printed version of the online handbook.   
+  
+This document is a user's guide to the SGML-Tools formatting system, a SGML-based system 
+which allows you to produce a variety of output formats. You can create plain text output (ASCII and ISO-8859-1), DVI, PostScript, 
+HTML, GNU info, LyX, and RTF output from a single document source file. This guide describes SGML-Tools version 1.0. 
+
+<sect1>What the Documentation already contains 
 <p>
+When creating a KDevelop project, the subdirectory docs/en already contains the index.sgml documentation file and the already produced 
+output HTML files. Those are already included into the project as well as their installation destination is preset to the KDE HTML 
+directory. The documentation is already adapted to your project name, version number and the programmer's information. Further, the 
+output covers the index.html file containing the table of contents (which is opened by KDE Help when the user requests help); an 
+installation introduction and a copyright information. 
+
+Therefore, when extending the documentation, you only have to concentrate on the information you want to add. Mind that for KDE 
+projects you have to run "Make Doc-Handbook" from the "Project" menu again after the project is created. The index.sgml file is again 
+processed by <tt/ksgml2html/ and the logo is added. Then open the RFV and add the <tt/logo.gif/ file to the project and set the file 
+properties correctly to install the logo file into the same location the HTML files will go.
+  
 <sect1>Adding new Pages
 <p>
-<sect1>How to call Help in Dialogs
-<p>
+Adding another page to the documentation is very easy by adding another &lt;sect&gt;, followed by the name of the chapter to the 
+index.sgml file at the location where your chapter will appear. For that, search the &lt;sect&gt; that is the chapter before and add 
+your section after that into the sgml file. Whenever you want to rebuild your documentation output to control for errors, select "Make 
+Doc-Handbook" from the "Project" menu which will invoke either sgml2html or ksgml2html depending on the project type. If errors occur, 
+you are able to locate the error by clicking on the error message or selecting "next error" from the "View" menu.
 
+For each &lt;sect&gt; you added, another HTML output file will be generated; therefore all chapters after the inserted will change 
+their chapters. This is important if you call your HTML documentation pages from within your application- mind that you have to whatch 
+the page you call for help.
+  
+<sect1>How to call Help in Dialogs 
+<p>
+Calling help in dialogs is often done by adding a Help-button; then you add a slot that is called when the button gets pressed. Within 
+the slot implementation, call 
+
+ 
+<tscreen><verb>
+kapp->invokeHTMLHelp( QString aFilename, QString aTopic ); 
+</verb></tscreen>
+
+where <tt/aFilename/ is the the filename to be called within your HTML documentation directory of the application; e.g index-3.html.
+<tt/aTopic/ then is the topic that is to be called. The hash prefix is automatically added; just enter the chapter you want to have on 
+this page, actually this would be a subsection's name.
+ 
 <sect>Class Documentation with KDoc
 <p>
+Another important part of the documentation is including a descriptive help for your class interfaces. This will allow you and other 
+programmers to use your classes by reading the HTML class documentation that can be created with <tt/KDoc/. KDevelop supports the use 
+of <tt/KDoc/ completely by creating the KDE-library documentation, also your application frameworks are already documented. To work 
+yourself into the provided code, it would be a good start to read the included documentation online. The following describes what to do 
+to get the API documentation, where KDevelop helps you add it and what kind of special tags <tt/KDoc/ provides additionally.
+    
 <sect1>How to use KDevelop's Documentation features
 <p>
+To create the API documentation after you generated a project, select "Make API-Doc" from the "Project" menu. This will process all 
+header files and create the HTML output. Then you can access the documentation by selecting "API-Documentation" from the Help-menu or 
+the according book symbol in the Documentation tree, folder "Current Project".
+
+The documentation is already crossreferenced to the KDE and Qt online-class documentation, so you can follow the inheritance easily 
+with the inheritance overview. This may help you getting started with the KDE and Qt documentation as well.
+  
+ 
 <sect1>Adding Class and Member Documentation
 <p>
+As KDevelop provides all means to add code automatically, it also offers direct documentation. Whenever you're using the Class 
+Generator by choosing "Project"->"New Class", add a descriptive help message to the documentation field. This will add the 
+documentation to the class header. 
+
+When adding class member functions and attributes with the classtools, add the member documentation to the according documentation 
+fields as well.
+
+You may think that documentation is a part of the development process that isn't very necessary. But remember that the more your 
+project grows and the more people take part on the development process, class documentation is the best help to save time. If 
+developers have to guess by method names what exactly the method does, it is even more likely that the meaning is misunderstood and the 
+method apparently doesn't do the job a developer guessed it would do. Therefore keep track of your documentation and rebuild it as 
+often as possible. 
+
+Besides this, the documentation files are NOT included into the project, nor do they have any internationalization support. Therefore 
+all API documentation should be held in english to allow international development groups to work with your sources.
+
+Whenever you may want to add documentation by hand into the header file, just add the documentation <bf/above/ the method or class in a 
+C-comment style with the difference that the first line has to begin with a slash and a double asterisk.
+
+Example:
+  
+<tscreen><verb>
+  /** enables menuentries/toolbar items
+  	*/
+  void enableCommand(int id_);
+</verb></tscreen>
+
+      
 <sect1>Special Tags
 <p>
+<bf/NOTE:/ The following documentation of this chapter is taken from the KDoc documentation provided with KDoc by 
+Sirtaj S. Kang (taj@.kde.org), author of KDoc; Copyright (c) 1997
+
+The documentation is a mixture of:
+
+<itemize>
+<item>Normal text. Paragraphs must be separated by atleast one blank line. 
+
+<item>text of the form 
+<code>
+&lt;pre&gt;
+.....code fragments....
+&lt;/pre&gt;
+</code>
+<item>Various tags of the form:
+<tscreen><verb>
+@tagname [tag parameters]
+</verb></tscreen>
+</itemize>
+
+
+The valid tags for each type of source code entity are:
+
+<itemize>
+<item>Classes
+<tscreen><verb>
+	@short [one sentence of text] 
+			A short description of the class 
+	@author [one sentence of text] 
+			Class author 
+	@version [once sentence of text] 
+			Class version (I normally set this to the RCS/CVS tag "Id") 
+	@see [one or more references to classes or methods] 	
+			References to other related documentation.
+</verb></tscreen>
+
+<item>Methods
+
+<tscreen><verb>
+@see 
+		as above 
+@return [one sentence] 
+		A sentence describing the return value 
+@param [param name identifier] [param description] 
+		Describe a parameter. The param description can span multiple 
+		lines and will be terminated by a blank line, the end of the 
+		comment, or another param entry. For this reason, param entries 
+		should normally be the last part of the doc comment. 
+</verb></tscreen>
+
+<item>Constants, Enums, Properties
+<tscreen><verb>
+@see 
+		as above
+</verb></tscreen>
+<item>ALSO <tt/@ref/
+
+As a departure from the javadoc format, the metatag "@ref" has the same format as @see, but can appear anywhere in the documentation (all other tags must appear on a line by themselves).
+</itemize>
 
 <sect>Internationalization
 <p>
 <sect1>What is i18n ?
 <p>
-<sect1>Translation Team Contacts
-<p>
+i18n is an internationalization standard that is used to offer internationalized versions of an application or project. The difficulty 
+with writing applications is that they only support the language they originally are composed with; visually this can be seen on 
+labels, menuentries and the like. Goal of the internationalization is to provide applications and library functions in the language of 
+the user; therefore enabling users that are not capable of the original language to make use of the provided functionality.
+   
+
 <sect1>How KDE supports Internationalization
 <p>
-<sect1>Enableing Internationalization Support
+KDE, as one of the most modern desktop environments, has set one of it's numerous goals to provide applications for users in their 
+native language, and simplifies the work for developers to provide their application in any of the supported language.
+
+Technically, this is realized by the KDE File System Standard which contains localization support for languages in terms of 
+documentation and by providing application internationalization through the use of the KDE-core library class <tt/KLocale/. This class 
+does all the translation, dependend on the prefered language set in the KDE Control Center. 
+
+The developer on the other hand only has to know two things to make his application able to use this feature:
+
+<enum>
+<item>include <tt/kapp.h/ into your sourcecode wherever a visible text appears in your application, e.g. in source files that contain 
+QLabels.
+<item>wherever you set the visual string, embrace it with the <tt/i18n()/ macro provided by <tt/kapp.h/.
+</enum>
+
+That is almost all you have to watch for while coding. Mind that you should not internationalize any configuration strings that are 
+used by <tt/KConfig/, because this is not necessary on one hand and doesn't work for reading in values on the other; besides messes too 
+much in the translation files.
+     
+<sect1>Translation Team Contacts
 <p>
+The KDE Team also provides numerous contacts to developers that are contributing to the KDE project as translators. Those are organized 
+in language teams and coordinate the translation work.
+
+For a full list and information who to ask for translating your application, see <htmlurl url="http://www.kde.org" 
+name="http://www.kde.org">.
+  
 <sect1>Adding a Language to your Project
 <p>
-<sect1>Translations with KTranslator
+Before your application can support internationalization, you have to run "Make Messages and merge" from the "Project" menu. This will 
+scan all of your sourcefiles for the <tt/i18n()/ macro and extracts the strings into a &lt;yourapp&gt;.pot file, which is then placed 
+into the <tt/po/ subdirectory of your project.
+
+Then select the desired language by choosing "Add new translation file" from the "Project" menu. After pressing "OK", the translation 
+file will be build and added to the project in form of &lt;language_prefix&gt;.po, placed in the po directory.
+
+When translation files have to be updated, run "Make Messages and merge" form the "Project" menu to extract the i18n() macros again 
+into the pot file. In this context, merging means that the new strings that are added will be added to all currently integrated po 
+files. Translators then only have to look for the strings currently not translated.
+
+<sect1>Translating po files
 <p>
-
-
+To translate the po files, the KDE SDK offers a tool that is called <tt/KTranslator/. In case it is installed, selecting a po file will 
+open the file with KTranslator in the Tools-window where the message strings can be translated using the existing translation files 
+installed at the translator's KDE locale directory. If KTranslator is not installed, the po file is opened in the Resource window where 
+it can be edited manually as a text file.
+    
 <sect>Finding Errors
 <p>
 <sect1>Debugging Macros provided by Qt
 <p>
+The Debugging Macros provided by the Qt library can be read on the debug.html page of your Qt Online Reference
+Documentation, acessable on the link "Debugging Techniques" at the Qt Documentation index page.
+
+The most recently used macros are
+
+<itemize>
+<item>ASSERT(b)
+<item>CHECK_PTR(p)
+</itemize>
+
+Thereby, b is a boolean expression. Gives out a debugging warning if b is false; p is a pointer which is checked and gives out a 
+warning, if p is null.
+
+Details can be found in the Qt Online Reference. 
+
 <sect1>KDE Macros
 <p>
+<bf/NOTE:/ This chapter is a copy of Kalle Dalheimer's <htmlurl url="mailto:kalle@kde.org" name="kalle@kde.org"> explanation document 
+about the KDEBUG macros included with the KDE libs package as kdebug.html
+ 
+Last modified: Sat Sep 13 11:56:01 CEST 1997
 
-<sect>Copyright<label id="Copyright">
+
+<bf/What is KDebug/
+
+KDebug is a system of macros and functions that makes using diagnostic messages in your code more efficient. You can give a message 
+one out of four severity level and an area. You can choose at runtime where diagnostic messages should go and which of them should be 
+printed at all. How to use KDebug in your code
+
+<bf/The macro KDEBUG/
+
+Using KDebug is very simple. All you have to do is to #include &lt;kdebug.h&gt; at the beginning of every source file in which you want
+to use diagnostic messages and output the messages by calling the macro KDEBUG. This macro expects three parameters. The first is the
+severity level. Use one of the following constants: 
+
+<itemize>
+<item>KDEBUG_INFO 
+<item>KDEBUG_WARN 
+<item>KDEBUG_ERROR 
+<item>KDEBUG_FATAL 
+</itemize>
+
+The second parameter is the area. An area is a part of KDE that you define yourself. You can then at runtime choose from which areas 
+diagnostic messages should be printed. Please see the file kdelibs/kdecore/kdebugareas.txt for a list of already allocated area ranges. 
+Choose an area within the range allocated for your application. If your application is not yet in here and you have CVS access, you can 
+allocate a range for your application here, otherwise just mail me. It is probably a good idea to define symbolic constants for the 
+areas you want to use, but this is completely up to you. The third parameter, finally, is the text you want to output. KDebug 
+automatically prepends the logical application name if you output to a file, to stderr or to syslog. A newline is always appended, you 
+need not (and should not) use one yourself. If you need parameters, you can use one of the macros KDEBUG1, ..., KDEBUG9. These allow 
+for one to nine additional arguments. The syntax is exactly the same as with printf, i.e. you have to include format specifiers in your 
+message which get replaced by the additional parameters. An example: 
+
+<tscreen><code>
+KDEBUG3( KDEBUG_INFO, kmail_composer, "Message no. %d to %s has %d bytes",
+          message_no, aMessage.to(), aMessage.length() ); 
+</code></tscreen>
+          
+
+<bf/KASSERT/
+
+There are also the macros KASSERT, KASSERT1, ..., KASSERT9 which work just like their KDEBUG-counterparts, except that they have an 
+additional bool as their first parameter. Only if this evaluates to false will the message be output. Note: You should not use neither 
+KDEBUG nor KASSERT before the KApplication object is constructed. Note 2: KDebug provides no means for internationalization because it 
+is meant strictly for developers only. If you want to inform the user about an erroneous condition (like "this file is not writable"), 
+use KMsgBox. 
+
+<bf/Compiler switches/
+
+You do not need any special compiler switches in order to use KDebug. But when you ship your 
+product (this mainly applies to people who create distributions like .rpm or .deb packages), you should compile with the switch 
+-DNDEBUG. This will simply remove all the debugging code from your application and make it smaller and faster (e.g. it uses 256K less 
+non-shareable memory). 
+
+
+<bf/How to manage diagnostic messages at runtime/
+  
+You can press Ctrl-Shift-F12 in every KApplication at any time, and the "Debug Settings"-Dialog will appear. Here you can define 
+separately for every severity level what should be done with the diagnostic messages of that level. The following settings are 
+available: 
+
+<itemize>
+<item>Output: In this Combobox, you can choose where the messages should be output. The choices are: "File", "Message Box", "Shell" 
+(meaning stderr) and "syslog". Please do not direct fatal messages to syslog unless you are the system administrator yourself. The 
+default is "Message Box". 
+<item>File: This is only meaningful when you have chosen "File" as the output and provides the name of that file (which is interpreted 
+relatively to the current directory). The default is kdebug.dbg. 
+
+<item>Area: The areas which should only be output. Every message that is not mentioned here will simply not be output (unless this 
+field remains empty which is the default and means that all messages should be output). Your can enter several areas separated by 
+commas here, and you can also use area ranges with the syntax start-end. Thus a valid entry could be: 117,214-289,356-359,221. Please 
+do not use whitespace.
+</itemize>
+
+Apart from this, you can also tick the checkbox "Abort on fatal errors". In this case, if a diagnostic message with the severity level 
+"KDEBUG_FATAL" is output, the application aborts with a SIGABRT after outputting the message. When you close the dialog with OK, your 
+entries apply immediately and saved in your application's configuration file. Please note that these settings are specific for one 
+singular application! When you press cancel, your entries are discarded and the old ones are restored. 
+
+<sect>Copyright<label id="Copyright"> 
 <p>
 <tscreen><verb>
 

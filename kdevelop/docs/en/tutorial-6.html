@@ -4,7 +4,7 @@
 <TITLE>The KDevelop Programming Handbook: The Dialogeditor: Where your Dialogs are Build</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+<META NAME="description" CONTENT="#">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -24,6 +24,13 @@
 <H3><A NAME="ss6.1">6.1 What the Dialogeditor provides</A>
 </H3>
 
+<P>The Build-In dialogeditor of KDevelop is designed to help you construct widgets and dialogs that fit your application's purpose and 
+reduces the time rapidely to extend the GUI of your applcation. The only limitation for now is that the dialogeditor does not support 
+geometry management that is provided by Qt; therefore the dialogs are static in their size and this may lead to certain circumstances 
+where e.g. the label width is not long enough to support the full length of a translation.
+<P>On the other hand, the current state of the editor in conjunction with KDevelop's project management offers the fastes way to create 
+full-featured applications for the K Desktop Environment.
+<P>
 <P>
 <H3><A NAME="ss6.2">6.2 Qt and KDE Widgets</A>
 </H3>
@@ -413,11 +420,11 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <UL>
 <LI><B>General:</B>
 <UL>
-<LI><B>MaxValue:</B></LI>
-<LI><B>MinValue:</B></LI>
+<LI><B>MaxValue:</B>  the maximum value the user can choose</LI>
+<LI><B>MinValue:</B>  the minimum value the user can choose</LI>
 <LI><B>Prefix:</B></LI>
 <LI><B>Suffix:</B></LI>
-<LI><B>Value:</B></LI>
+<LI><B>Value:</B>     the pre-set value when the widget is shown</LI>
 <LI><B>isWrapping:</B></LI>
 </UL>
 </LI>
@@ -450,15 +457,12 @@ display the progress, you have to call setProgress(int) to advance the progress 
 <LI><B>isDragSelect: (setDragSelect)</B></LI>
 <LI><B>isSmoothScrolling: (setSmoothScrolling)</B></LI>
 </UL>
-
 </LI>
 <LI><B>Geometry:</B>
-
 <UL>
 <LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the
 current font.</LI>
 </UL>
-
 </LI>
 </UL>
 <P>
@@ -471,7 +475,6 @@ current font.</LI>
 <A HREF="#QTableView">QTableView</A><P>
 <UL>
 <LI><B>General:</B>
-
 <UL>
 <LI><B>Text: (setText) </B> (public slot) sets the text of the widget.</LI>
 <LI><B>isAutoUpdate: (setAutoUpdate)</B> used to avoid flicker during large changes; the view is not updated if disabled.</LI>
@@ -479,15 +482,11 @@ current font.</LI>
 <LI><B>isReadOnly: (setReadOnly)</B> (public slot) sets the widget text to read only; disables text input.</LI>
 <LI><B>isTextSelected: (selectAll)</B>(public slot) marks the whole text selected</LI>
 </UL>
-
 </LI>
 <LI><B>Geometry:</B>
-
 <UL>
-<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the
-current font.</LI>
+<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the current font.</LI>
 </UL>
-
 </LI>
 </UL>
 <P>
@@ -499,7 +498,6 @@ current font.</LI>
 <A HREF="#QWidget">QWidget</A><P>
 <UL>
 <LI><B>General:</B>
-
 <UL>
 <LI><B>CursorPosition: (setCursorPosition)</B> sets the default cursor position.</LI>
 <LI><B>MaxLength: (setMaxLength) </B> sets the maximum string length</LI>
@@ -507,7 +505,6 @@ current font.</LI>
 <LI><B>hasFrame: (setFrame) </B> draws the lineedit witin a two-pixel frame if enabled.</LI>
 <LI><B>isTextSelected: (selectAll) </B> (public slot) sets the text to be selected.</LI>
 </UL>
-
 </LI>
 </UL>
 <P>
@@ -519,7 +516,6 @@ current font.</LI>
 <P>
 <UL>
 <LI><B>General:</B>
-
 <UL>
 <LI><B>MaxValue:</B> sets the maximum slider value; used in constructor (optional)</LI>
 <LI><B>MinValue:</B> sets the minimum slider value; used in constructor (optional)</LI>
@@ -528,7 +524,6 @@ current font.</LI>
 <LI><B>isTracking: (setTracking)</B> if enabled, the scrollbar emits <CODE>valueChanged()</CODE> whenever the bar is dragged; otherwise only on
 mouse release.</LI>
 </UL>
-
 </LI>
 </UL>
 <P>
@@ -540,7 +535,6 @@ mouse release.</LI>
 <P>
 <UL>
 <LI><B>General:</B>
-
 <UL>
 <LI><B>MaxValue:</B> sets the maximum slider value; used in constructor (optional)</LI>
 <LI><B>MinValue:</B> sets the minimum slider value; used in constructor (optional)</LI>
@@ -627,7 +621,7 @@ mouse release.</LI>
 <UL>
 <LI>General
 <UL>
-<LI>DisplayedColor (setColor()) the displayed color on the button</LI>
+<LI><B>DisplayedColor (setColor())</B> the displayed color on the button</LI>
 </UL>
 </LI>
 </UL>
@@ -641,13 +635,12 @@ mouse release.</LI>
 <P>
 <P>Inherits: 
 <A HREF="#QComboBox">QComboBox</A><P>
-<P>
 <UL>
 <LI>General
 <UL>
-<LI>Entries</LI>
-<LI>Text</LI>
-<LI>isAutoResize</LI>
+<LI><B>Entries</B> the string list of entries displayed in the combo box</LI>
+<LI><B>Text</B> the text displayed in the combo box currently</LI>
+<LI><B>isAutoResize</B> resizes the combo box to the current item</LI>
 </UL>
 </LI>
 </UL>
@@ -659,7 +652,7 @@ mouse release.</LI>
 <UL>
 <LI>Appearance
 <UL>
-<LI>FontSize</LI>
+<LI><B>FontSize</B> the font size for the date picker</LI>
 </UL>
 </LI>
 </UL>
@@ -675,10 +668,11 @@ mouse release.</LI>
 <H4><A NAME="KSeparator"></A> KSeparator</H4>
 
 <P>
+<P>
 <UL>
 <LI>General
 <UL>
-<LI>Orientation</LI>
+<LI><B>Orientation</B> sets the orientation of the separator to horizontal or vertical; default is horizontal</LI>
 </UL>
 </LI>
 </UL>
@@ -694,19 +688,19 @@ mouse release.</LI>
 <UL>
 <LI>Appearance
 <UL>
-<LI>TreeListBgColor</LI>
-<LI>TreeListPalette</LI>
-<LI>isBottomScrollbar</LI>
-<LI>isScrollBar</LI>
-<LI>isShowItemText</LI>
-<LI>isSmoothScrolling</LI>
-<LI>isTreeDrawing</LI>
+<LI><B>TreeListBgColor</B></LI>
+<LI><B>TreeListPalette</B></LI>
+<LI><B>isBottomScrollbar</B></LI>
+<LI><B>isScrollBar</B></LI>
+<LI><B>isShowItemText</B></LI>
+<LI><B>isSmoothScrolling</B></LI>
+<LI><B>isTreeDrawing</B></LI>
 </UL>
 </LI>
 <LI>General
 <UL>
-<LI>Entries</LI>
-<LI>isAutoUpdate</LI>
+<LI><B>Entries</B></LI>
+<LI><B>isAutoUpdate</B></LI>
 </UL>
 </LI>
 </UL>
@@ -716,6 +710,7 @@ mouse release.</LI>
 <H4><A NAME="KRestrictedLine"></A> KRestrictedLine</H4>
 
 <P>
+<P>
 <H4><A NAME="KLed"></A> KLed</H4>
 
 <P>
@@ -724,7 +719,7 @@ mouse release.</LI>
 <UL>
 <LI>Appearance
 <UL>
-<LI>LedColor: (setColor()) sets the displayed LED color</LI>
+<LI><B>LedColor: (setColor())</B> sets the displayed LED color</LI>
 </UL>
 </LI>
 </UL>
@@ -733,14 +728,113 @@ mouse release.</LI>
 <H3><A NAME="ss6.5">6.5 Constructing a new Dialog</A>
 </H3>
 
+<P>Constructing a new dialog is very easy if you already have experience with graphical construction applications. KDevelop offers to 
+create a widget visually and displays the look as it will be shown to the user directly. Further, you can have a preview of your widget 
+by selecting "Preview" from the "View" menu.
+<P>To begin constructing a dialog or any other widget, switch to the Dialogeditor and select "New Dialog" from the "File" menu. Then enter 
+all needed information to the "New Dialog" dialog. Those are:
 <P>
-<H3><A NAME="ss6.6">6.6 Setting Widget Properties</A>
+<OL>
+<LI>The Dialog inheritance. This is necessary because any widget is at least derived from <CODE>QWidget</CODE>. Besides the widget types 
+provided by Qt, you can inherit e.g. form an abstract base class you constructed yourself within your project. In this case, select 
+"custom" and enter the header file path to the line edit below. </LI>
+<LI>The Dialog name. This sets the class name of the generated dialog. Select a classname that is descriptive for what the dialog 
+does; in cases of inheritance from <CODE>QDialog</CODE>, you may enter a name that ends with <CODE>Dlg</CODE> to remember yourself it's a dialog. 
+Naming convention should match that of KDE and Qt: Use uppercase letters for your classname. For e.g. a grid-size selection dialog, you 
+would enter <CODE>GridSizeDlg</CODE>.</LI>
+<LI>The generated filenames. Those are preset when entering the dialog name, but can be changed afterwards. If you want to use other 
+filenames, the naming convention should also match that of KDE and Qt: the filenames are all lowercase and contain the classname to 
+remember what class is kept where. The data file that has to be set will later contain the generated code that will build up your 
+dialog. You should not edit this file manually afterwards; use the implementation file for any additions towards dialog construction 
+code and method implementations.</LI>
+</OL>
+<P>The dialog will then show itself as a widget with a grid. As the dialgoeditor uses the grid to snap any child widgets to the geometry, 
+you can change the grid size with the "Grid Size" entry in the "View" menu, if the preset values don't match your needs.
+<P>Then select the "Widgets" tabulator on the left pane and press the button for the widget item you want to add to the main widget. It 
+directly appears on the main widget's left upper corner and gets selected by a resizable frame. Then move or resize the widget with the 
+mouse. The cursor will change to indicate which action can be done at the current position.
+<P>After having finished the construction, select "Generate Files" from the "Build" menu or hit the according toolbar button. The files 
+will then be generated at the preset location and included into your project sources. A rebuild or make will compile all generated 
+files within your project and you can add the according constructor call to the application to invoke the dialog or widget. For KDE 
+projects, all widget properties that will be visible later, e.g. label texts, are set with the <CODE>i18n()</CODE> macro of <CODE>kapp.h</CODE> to 
+support internationalization. Therefore you should do a "Make Messages and merge" when finished with construction and implementation.
+<P>When creating a dialog or widget, you should watch the following guidelines: 
+<UL>
+<LI>Always try to be consistant! This is probably the most important rule when constructing GUI elements. Mind that the user will 
+only accept an application that is easy to understand no matter how complex it's purpose may be.</LI>
+<LI>Add help whereever you can by tooltips, What's this..? help or Quickhelp. This allows getting direct information about the 
+purpose of the GUI elements.</LI>
+<LI>watch the <B>keyboard focus</B> !  The generator does not take care of that- this has to be watched when constructing any widget; 
+otherwise you have to reorder your initialization code by hand which is a very unthankful job. The keyboard focus on any widget means 
+the oder on which items get the keyboard input focus when the user presses the tab and shift+tab button. It would be very annoying if 
+the focus changes everywhere but not to the next widget visible below or to the right of the current widget. Therefore start 
+constructing your widget top down from left to right to ensure the consistancy of the focus.</LI>
+</UL>
+<P>
+<H3><A NAME="ss6.6">6.6 Setting Widget Properties </A>
 </H3>
 
+<P>Widget properties can be set easily with the properties window entries. When a widget gets selected, the properties window automatically updates to the properties
+of the current widget. As all widgets are derived from <CODE>QWidget</CODE>, you can set the <CODE>QWidget</CODE> properties plus an amount of properties that are specific to the
+selected widget. Properties can be:
+<P>
+<UL>
+<LI>Integer values, such as the geometry of a widget or the font size</LI>
+<LI>Boolean values to enable/disable certain parameters of the widget. Set with combos containing true and false</LI>
+<LI>enumerable values of a widget, e.g. the palette. Set with combos containing all possible values</LI>
+<LI>Color values for e.g. the displayed color. Set with the KDE Color Dialog</LI>
+<LI>Font values for e.g. labels. Be careful to set Font values other than the default because this may prevent KDE from updating the font. Set with the KDE Font Dialog</LI>
+<LI>File names for e.g. background pixmaps. Do not use gif images here as these may get unsupported by further Qt versions > 1.42</LI>
+</UL>
 <P>
 <H3><A NAME="ss6.7">6.7 Integrating the Dialog</A>
 </H3>
 
+<P>Whenever you created a widget, you probably want to add it to the project to execute the action it is designed for. As a widget can be 
+constructed for several purposes, we will watch for two cases: a <CODE>QWidget</CODE> inherited widget and a <CODE>QDialog</CODE> one.
+<P>
+<H4><CODE>QWidget</CODE> inherited </H4>
+
+<P>Let's say you created a widget that will be part of the main view. If it fills the whole view area, you have to add an instance pointer 
+to the header declaration of your <CODE>KTMainWindow</CODE> instance replacing the currently set view widget. Then change the code in the 
+<CODE>initView</CODE> method to set this widget the main view. Additionally, you could remove the View class of the generated project, but mind 
+that the document instance and the App instance depends on the view class. In this case, it is technically a much better way to create 
+a mini-KDE application and construct your <CODE>KTMainWindow</CODE> instance yourself.
+<P>More often the widget is intended to be a part of the view area, which means it is combined with other widgets. This can be done by 
+using one of the following classes that provide a devider to separate two widgets:
+<P>
+<OL>
+<LI><CODE>QSplitter</CODE></LI>
+<LI><CODE>KPanner</CODE></LI>
+<LI><CODE>KNewPanner</CODE></LI>
+</OL>
+<P>If the main view shall contain more than two widgets, you have to use another instance of the devider as one of the two managed widgets 
+by the first one. Then add the according widgets to each panner and set the first panner the view area.
+<P>
+<H4><CODE>QDialog</CODE> inherited</H4>
+
+<P>If your widget inherits <CODE>QDialog</CODE>, it is probably intended to change one or more values; often this is used to set the application 
+preferences. To invoke the dialog, you have to add a slot to the <CODE>App</CODE> class by adding the method declaration and the implementation 
+body. Then add the constructor call to the method as well as a call to <CODE>show()</CODE> or <CODE>exec()</CODE> the dialog. Finally, you should take 
+care for processing the results of the dialog; this can either be done by the dialog who changes values of the parent widget itself or 
+by retriving the values from the dialog (which would make your dialog a lot more reusable in other projects). Mind that you should call 
+<CODE>delete</CODE> if you called the dialog instance with <CODE>new</CODE> to avoid memory leaks.
+<P>Finally, you have to connect a menuentry (with according statusbar help) to the new slot invoking the dialog; optionally a keyboard 
+accelerator and a toolbar icon. For this, add a resource ID to the file <CODE>resource.h</CODE> with a define. Then add an according menuentry 
+to one of the popup menus already present in the menubar or create a new popup to add your menuentry. The menuentry consists of:
+<P>
+<UL>
+<LI>an optional icon pixmap. Call this with the <CODE>Icon("iconname.xpm")</CODE> macro of <CODE>KApplication</CODE> to use the provided 
+<CODE>KIconLoader</CODE> instance.</LI>
+<LI>the menuentry name. Add this with the <CODE>i18n("&amp;entryname")</CODE> macro of <CODE>KApplication</CODE> to allow internationalization. The
+ampersand should be in front of the letter that will be displayed underlined to access the entry directly by keyboard acceleration.</LI>
+<LI>the member instance to call. Normally this would be the <CODE>this</CODE> pointer.</LI>
+<LI>the member slot to call. Use <CODE>SLOT(yourmethod()</CODE> to call the slot on the signal <CODE>activated()</CODE>. </LI>
+<LI>the accelerator key. This should be set to zero as this is done by an enty in <CODE>initKeyAccel()</CODE> where you have to introduce an 
+accelerator key together with the slot to call. Then call <CODE>changeMenuAccel()</CODE> to change the menuitem's accelerator. This will make 
+it configurable by a keychooser dialog later. For standard actions, use the enumerable values given by <CODE>KAccel</CODE>.</LI>
+<LI>the menu ID as set in <CODE>resource.h</CODE></LI>
+</UL>
 <P>
 <P>
 <P ALIGN="RIGHT">
