@@ -20,7 +20,7 @@ public:
 
   static KService::List pluginServices( const QString &scope = QString::null );
 
-  static KDevPart *loadPlugin(KService *service, const char *className, QObject *parent);
+  static KDevPart *loadPlugin(const KService::Ptr &service, const char *className, QObject *parent);
 
 
 protected:
@@ -34,6 +34,8 @@ private:
   void loadDefaultParts();
 
   void integratePart(KXMLGUIClient *part);
+
+  static QStringList argumentsFromService( const KService::Ptr &service );
 
   static PluginController *s_instance;
 

@@ -101,12 +101,9 @@ void PluginController::loadGlobalPlugins()
 
       integratePart(part);
     } else {
-        QStringList args;
-        QVariant prop = ( *it )->property( "X-KDevelop-Args" );
-        if ( prop.isValid() )
-            args = QStringList::split( " ", prop.toString() );
+        QStringList args = argumentsFromService( *it );
 
-	KDevPlugin *plugin = KParts::ComponentFactory
+        KDevPlugin *plugin = KParts::ComponentFactory
 	    ::createInstanceFromService<KDevPlugin>( *it, API::getInstance(), 0,
                                                      args );
         if ( plugin )
@@ -116,12 +113,9 @@ void PluginController::loadGlobalPlugins()
 }
 
 
-KDevPart *PluginController::loadPlugin(KService *service, const char *className, QObject *parent)
+KDevPart *PluginController::loadPlugin(const KService::Ptr &service, const char *className, QObject *parent)
 {
-  QStringList args;
-  QVariant prop = service->property("X-KDevelop-Args");
-  if (prop.isValid())
-    args = QStringList::split(" ", prop.toString());
+  QStringList args = argumentsFromService( service );;
 
   kdDebug(9000) << "Loading service " << service->name() << endl;
   KLibFactory *factory = KLibLoader::self()->factory(QFile::encodeName(service->library()));
@@ -164,4 +158,13 @@ KService::List PluginController::pluginServices( const QString &scope )
 void PluginController::integratePart(KXMLGUIClient *part)
 {
   TopLevel::getInstance()->main()->guiFactory()->addClient(part);
+}
+
+QStringList PluginController::argumentsFromService( const KService::Ptr &service )
+{
+    QStringList args;
+    QVariant prop = service->property( "X-KDevelop-Args" );
+    if ( prop.isValid() )
+        args = QStringList::split( " ", prop.toString() );
+    return args;
 }
