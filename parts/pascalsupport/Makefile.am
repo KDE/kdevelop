@@ -14,5 +14,5 @@ service_DATA = kdevpascalsupport.desktop
 rcdir = $(kde_datadir)/kdevpascalsupport
 rc_DATA = kdevpascalsupport.rc
 
-templatedir = ${kde_datadir}/kdevabbrev/templates
-template_DATA = pascaltemplates
+#templatedir = ${kde_datadir}/kdevabbrev/templates
+#template_DATA = pascaltemplates
