@@ -467,6 +467,8 @@ CppSupportPart::projectClosed( )
             kdDebug( 9007 ) << "EE: can't write file '" << pcsFile << "'" << endl;
     }
 
+    m_backgroundParser->removeAllFiles();
+
     delete m_pParser;
     delete m_pCCParser;
     delete m_pCompletion;
