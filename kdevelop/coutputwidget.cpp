@@ -103,7 +103,7 @@ void COutputWidget::insertAtEnd(const QString& s)
 CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   QMultiLineEdit(parent, name),
   m_buf(),
-  m_dirChange("[^\n]*: ([^\n]+) (`|»)(.*)('|«)([^\n]*)\n"),
+  m_dirChange("[^\n]*: ([^\n]+) (`|»)(.*)('|«)([^\n]*)(\n|)"),
   m_errorGcc("^([^: \t]+):([0-9]+)[:,].*")
 {
   it = m_errorMap.begin();
