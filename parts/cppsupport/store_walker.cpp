@@ -28,7 +28,6 @@ StoreWalker::~StoreWalker()
 
 void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
 {
-    kdDebug(9007) << "-----------------------> m_fileName = " << m_fileName << endl;
     m_currentScope.clear();    
     m_currentScopeContainer = m_store->globalScope();
     m_currentClass = 0;
