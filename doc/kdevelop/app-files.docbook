@@ -65,14 +65,24 @@ There are quite a lot of default configuration subdirectories in <filename class
 <itemizedlist>
   <listitem id="app-files-default-apps-stdalone"><itemizedlist>
     <title>Stand-alone Applications</title>
-    <listitem><para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE.</para></listitem>
+    <listitem>
+      <para><filename class="directory">kdevelop/</filename> &mdash; contains files to configure the &kdevelop; IDE:</para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">licenses/</filename> &mdash; contains various licenses texts.</para></listitem>
+        <listitem><para><filename class="directory">pics/</filename> &mdash; contains the picture files used for the &kdevelop;, KDevelop Assistant, and KDevelop Designer splash screens.</para></listitem>
+        <listitem><para><filename class="directory">profiles/</filename> &mdash; contains default plugin profile settings. (Currently there is only a <filename>tiny</filename> profile provided which defines a minimum set of active &kdevelop; plugins.)</para></listitem>
+        <listitem><para><filename>eventsrc</filename> &mdash; holds a lot of <quote>Process successful</quote> localization strings.</para></listitem>
+        <listitem><para><filename>kdevelopui.rc</filename> &mdash; provides the basic menu and tool bar entries &kdevelop; uses.</para></listitem>
+        <listitem><para><filename>kdevhtml_partui.rc</filename> &mdash; provides a <guimenuitem>Print...</guimenuitem> entry in the <guimenu>File</guimenu> menu, a <guimenuitem>Copy</guimenuitem> entry in the <guimenu>Edit</guimenu> menu, and <guilabel>Back</guilabel> and <guilabel>Forward</guilabel> arrows in the <guilabel>Browser Toolbar</guilabel> in case a HTML file is browsed from the <guilabel>Documentation</guilabel> plugin.</para></listitem>
+      </itemizedlist>
+    </listitem>
     <listitem><para><filename class="directory">kdevassistant/</filename> &mdash; provides the menu and tool bars of the stand-alone &kdevelop; Assistant documentation browser.</para></listitem>
     <listitem><para><filename class="directory">kdevdesigner/</filename> and <filename class="directory">kdevdesignerpart/</filename> &mdash; provide menu bar and tool bars of the stand-alone &kdevelop; user interface designer.</para></listitem>
   </itemizedlist></listitem>
 
   <listitem><itemizedlist id="app-files-default-apps-task">
     <title>Task Specific Parts</title>
-    <listitem>
+    <listitem id="app-files-default-abbrev">
       <para><filename class="directory">kdevabbrev/</filename> &mdash; contains files used by the <guilabel>Abbreviation Expansion</guilabel> plugin:</para>
       <itemizedlist>
         <listitem><para><filename class="directory">sources/</filename> &mdash; contains keyword definition files used by the <guilabel>Expand Text</guilabel> command.</para></listitem>
@@ -80,7 +90,7 @@ There are quite a lot of default configuration subdirectories in <filename class
         <listitem><para><filename>kdevabbrev.rc</filename> &mdash; provides the <guimenuitem>Expand Text</guimenuitem> and <guimenuitem>Expand Abbreviation</guimenuitem> entries in the <guimenu>Edit</guimenu> menu.</para></listitem>
       </itemizedlist>
     </listitem>
-    <listitem>
+    <listitem id="app-files-default-appwizard">
       <para><filename class="directory">kdevappwizard/</filename> &mdash; contains files used by the &appwizard; part:</para>
       <itemizedlist>
         <listitem><para><filename class="directory">importfiles/</filename> &mdash; contains <filename>.kdevelop</filename> project files which control the initialization of a new project.</para></listitem>
@@ -92,6 +102,7 @@ There are quite a lot of default configuration subdirectories in <filename class
       </itemizedlist>
     </listitem>
     <listitem><para><filename class="directory">kdevastyle/</filename> &mdash; provides the <guimenuitem>Reformat Source</guimenuitem> entry in the <guimenu>Edit</guimenu> menu.</para></listitem>
+    <listitem><para><filename class="directory">kdevautoproject/</filename> &mdash; provides most of the entries in the <guimenu>Build</guimenu> menu and the <guilabel>Build Toolbar (KDeveleop)</guilabel> toolbar.</para></listitem>
     <listitem>
       <para><filename class="directory">kdevclassview/</filename> &mdash; contains files used by the <guilabel>Class View</guilabel> project plugin:</para>
       <itemizedlist>
@@ -105,7 +116,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem><para><filename class="directory">kdevdebugger/</filename> &mdash; provides the <guimenu>Debug</guimenu> menu entries for the <guilabel>Debugger Frontend</guilabel> project plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevdiff/</filename> &mdash; provides the <guimenuitem>Difference Viewer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu.</para></listitem>
     <listitem><para><filename class="directory">kdevdistpart/</filename> &mdash; provides the <guimenuitem>Distribution &amp; Publishing</guimenuitem> entry in the <guimenu>Project</guimenu> menu for the <guilabel>Final Packaging Support</guilabel> project plugin.</para></listitem>
-    <listitem>
+    <listitem id="app-files-default-kdevdoc">
       <para><filename class="directory">kdevdocumentation/</filename> &mdash; contains files used by the <guilabel>Documentation</guilabel> plugin:</para>
       <itemizedlist>
         <listitem><para><filename class="directory">en/</filename> and <filename class="directory">pics/</filename> &mdash; contain files used by the <application>htdig</application> search tool.</para></listitem>
@@ -114,7 +125,7 @@ There are quite a lot of default configuration subdirectories in <filename class
       </itemizedlist>
     </listitem>
     <listitem><para><filename class="directory">kdevdoxygen/</filename> &mdash; provides the menu entries for the <guilabel>Doxygen Support</guilabel> project plugin.</para></listitem>
-    <listitem>
+    <listitem id="app-files-default-filecreate">
       <para><filename class="directory">kdevfilecreate/</filename> &mdash; contains files used by the <guilabel>New File Wizard:</guilabel>
       <itemizedlist>
         <listitem><para><filename class="directory">file-templates/</filename> &mdash; provides the initial text contents to be put into the new source file of a given type.</para></listitem>
@@ -132,8 +143,8 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem><para><filename class="directory">kdevquickopen/</filename> &mdash; provides the <guimenuitem>Quick Open File..</guimenuitem> entry in the <guimenu>File</guimenu> menu and the <guimenuitem>Quick Open Class...</guimenuitem> and <guimenuitem>Quick Open Method</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Quick Open</guilabel> project plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevregexptest/</filename> &mdash; provides the <guimenuitem>Debug Regular Expression...</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Regular Expression Tester</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevreplace/</filename> &mdash; provides the <guimenuitem>Find-Select-Replace...</guimenuitem> entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Replace Part</guilabel> plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevtipofday/</filename> &mdash; provides the <guimenuitem>Tip of the Day</guimenuitem> entry in the <guimenu>Help</guimenu> menu as well as a HTML-File containing the available tips.</para></listitem>
-    <listitem><para><filename class="directory">kdevtools/</filename> &mdash; controls the various menu entries ceated by <guimenu>Tools Menu</guimenu> and <guilabel>External Tools Menu</guilabel> settings provided by the <guilabel>Tools Menu Addition</guilabel> plugin.</para></listitem>
+    <listitem id="app-files-default-tips"><para><filename class="directory">kdevtipofday/</filename> &mdash; provides the <guimenuitem>Tip of the Day</guimenuitem> entry in the <guimenu>Help</guimenu> menu as well as a HTML-File containing the available tips.</para></listitem>
+    <listitem><para><filename class="directory">kdevtools/</filename> &mdash; controls various menu entries ceated by <guimenu>Tools Menu</guimenu> and <guilabel>External Tools Menu</guilabel> settings provided by the <guilabel>Tools Menu Addition</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevvalgrind/</filename> &mdash; provides the <guimenuitem>Valgrind Memory Leak Check</guimenuitem> and <guimenuitem>Profile with KCachegrind</guimenuitem> entries in the <guimenu>Debug</guimenu> menu used by the <guilabel>Valgrind Frontend</guilabel> plugin.</para></listitem>
   </itemizedlist></listitem>
 
@@ -153,7 +164,7 @@ There are quite a lot of default configuration subdirectories in <filename class
     <title>Language Specific Parts</title>
     <listitem><para><filename class="directory">kdevadasupport/</filename> &mdash; provides entries in the <guimenu>Tools</guimenu> menu and according tool bar icons needed to develop Ada applications.</para></listitem>
     <listitem><para><filename class="directory">kdevbashsupport/</filename> &mdash; provides entries in the <guimenu>Build</guimenu> menu and according tool bar icons needed to develop Bash scripts.</para></listitem>
-    <listitem>
+    <listitem id="app-files-default-apps-lang-cpp">
       <para><filename class="directory">kdevcppsupport/</filename> &mdash; contains files used by the &appwizard; to build C++ applications:</para>
       <itemizedlist>
         <listitem><para><filename class="directory">newclass/</filename> &mdash; contains header and source templates from which the &appwizard; builds the according source files.</para></listitem>
@@ -187,20 +198,148 @@ There are quite a lot of default configuration subdirectories in <filename class
 <title>User Oriented Configuration</title>
 
 <para>
-All information about user defined settings is kept in the <link linkend="app-files-user-apps"><filename class="directory">$KDEHOME/share/apps/</filename></link> and <link linkend="app-files-user-config"><filename class="directory">$KDEHOME/share/config/</filename></link> directories. This includes any changes made to the <link linkend="app-files-default">&kdevelop; default settings</link>.
+All information about user defined settings is kept in two subdirectories of <filename class="directory">$KDEHOMR</filename>, namely:
+<simplelist>
+  <member><link linkend="app-files-user-apps">Application Specific Configuration</link> in the <filename class="directory">$KDEHOME/share/apps/</filename> directory, and</member>
+  <member><link linkend="app-files-user-config">Resource Configuration File</link> in the <filename class="directory">$KDEHOME/share/config/</filename> directory.</member>
+</simplelist>
 </para>
 
 <sect2 id="app-files-user-apps">
 <title>Application Specific Configuration</title>
 
 <para>
-(... to be written ...)
+Any user changes to the <link linkend="app-files-default">&kdevelop; Default Configuration</link> settings as well as user specific settings which are not kept in any of the <link linkend="app-files-user-config">Resource Configuration Files</link> are found in <filename>kdev...</filename> subdirectories of the <filename class="directory">$KDEHOME/share/apps/</filename> directory.
 </para>
+<para>
+Most of these configuration files are however used by various &kdevelop; plugins in order to provide some specific menu and/or toolbar entries. Thus they are of interest only in case something went really wrong with the user interface.
+</para>
+<note><para>
+In case the contents of these directories mirror those of the Default Configuration settings, &kdevelop; will have copied them from <filename class="directory">$KDEDIR/apps/</filename> into the <filename class="directory">$KDEHOME/apps/</filename> directory on its initial start. Any subsequent changes will be made to these copies only. The Default Configuration settings remain unchanged in any case.
+</para></note>
+
+<itemizedlist>
+  <listitem>
+    <para><filename class="directory">kdevabbrev/</filename> &mdash;  contains files used by the <guilabel>Abbreviation Expansion</guilabel> plugin:</para>
+    <itemizedlist>
+      <listitem><para><filename class="directory">sources/</filename> &mdash; currently empty; &kdevelop; uses the <link linkend="app-files-default-abbrev">default keyword definition</link> files for <guilabel>Expand Text</guilabel> commands.</para></listitem>
+      <listitem><para><filename class="directory">templates/</filename> &mdash; contains the user modified template definition files used by the <guilabel>Expand Abbreviation</guilabel> command.</para></listitem>
+      <listitem><para><filename>kdevabbrev.rc</filename> &mdash; provides the <guimenuitem>Expand Text</guimenuitem> and <guimenuitem>Expand Abbreviation</guimenuitem> entries in the <guimenu>Edit</guimenu> menu.</para></listitem>
+    </itemizedlist>    
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevappwizard/</filename> &mdash; only provides the <guimenuitem>New Project...</guimenuitem> and <guimenuitem>Import Existing Project...</guimenuitem> entries in the <guimenu>Projects</guimenu> menu. The &appwizard; will use the <link linkend="app-files-default-appwizard">default configuration settings</link> for its actual works.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevastyle/</filename> &mdash; provides the actual <guimenuitem>Reformat Source</guimenuitem> entry in the <guimenu>Edit</guimenu> menu.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevautoproject/</filename> &mdash; provides the actual entries in the <guimenu>Build</guimenu> menu and the <guilabel>Build Toolbar (KDevelop)</guilabel> toolbar.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevclassview/</filename> &mdash; provides the <guimenuitem>Class Inheritance Diagram</guimenuitem> entry in the <guimenu>Project</guimenu> menu and the class browser combo box in the <guilabel>Browser Toolbar</guilabel> by the <guilabel>Class View</guilabel> project plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevcloser/</filename> &mdash; provides the <guimenuitem>Close Selected Windows...</guimenuitem> entry in the <guimenu>Windows</guimenu> menu.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevcppsupport/</filename> &mdash; holds the acual configuration used by the &appwizard; to build C++ applications. The &appwizard; however uses its main bulk of configuration information directly from the <link linkend="app-files-default-apps-lang-cpp">default configuration directory</link>. See there for more detail.</para>
+    <itemizedlist>
+      <listitem>
+        <para><filename class="directory">newclass/</filename> &mdash; contains the actual header and source templates from which the &appwizard; builds the according source files.</para>
+      </listitem>
+      <listitem>
+        <para><filename class="directory">pcs/</filename> &mdash; contains database files &kdevelop; uses build the actual Persistent Code Store (<filename>.pcs</filename>) file of a &kde; C++ project.</para>
+      </listitem>
+      <listitem>
+        <para><filename>kdevcppsupport.rc</filename> &mdash; provides the <guimenuitem>Complete Text</guimenuitem> and <guimenuitem>Make Member</guimenuitem> entries fo the <guimenu>Edit</guimenu> menu, the <guimenuitem>Switch Header/Implementation</guimenuitem> entry for the <guimenu>View</guimenu> menu, and the <guimenuitem>New Class</guimenuitem> entry for the <guimenu>Project</guimenu> menu as well as a <guiicon>New Class</guiicon> icon for the <guilabel>Browser Toolbar</guilabel>.</para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevctags/</filename> &mdash; provides the <guimenuitem>CTags</guimenuitem> entry in the <guimenu>Tools</guimenu> menu for the <guilabel>CTags Frontend</guilabel> project plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevdebugger/</filename> &mdash; provides the <guimenu>Debug</guimenu> menu entries for the <guilabel>Debugger Frontend</guilabel> project plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevdiff/</filename> &mdash; provides the <guimenuitem>Difference Viewer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevdocumentation/</filename> &mdash; contains the actual files used by the <guilabel>Documentation</guilabel> plugin in addition to the <link linkend="app-files-default-kdevdoc"> default configuration files</link>. See there for more detail.</para>
+    <para>The directories in <filename class="directory">kdevdocumentation/</filename> mainly hold actual bookkeeping information. The actually set up documentation files are kept in <link linkend="app-files-user-config-doc"> <quote><filename>doc...pluginrc</filename></quote> files</link> in the <filename class="directory">$KDEHOME/share/config/</filename> directory.</para>
+    <itemizedlist>
+      <listitem>
+        <para><filename class="directory">bookmarks/</filename> &mdash; maintains the entries in the <guilabel>Bookmarks</guilabel> tab of the &kdevelop; <guilabel>Documentation</guilabel> plugin.</para>
+      </listitem>
+      <listitem>
+        <para><filename class="directory">index/</filename> &mdash; holds various cache files &kdevelop; uses to speed up indexed documentation searches in the <guilabel>Index</guilabel> tab of the <guilabel>Documentation</guilabel> plugin.</para>
+      </listitem>
+      <listitem>
+        <para><filename class="directory">search/</filename> &mdash; contains files used by the <application>htdig</application> search tool which serves search calls from the <guilabel>Search</guilabel> tab of the <guilabel>Documentation</guilabel> plugin.</para>
+      </listitem>
+      <listitem>
+        <para><filename>kdevpart_documentation.rc</filename> &mdash; provides the search related entries in the <guimenu>Help</guimenu> menu.</para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevdoxygen/</filename> &mdash; provides the menu entries for the <guilabel>Doxygen Support</guilabel> project plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevelop/</filename> &mdash; contains some actual settings &kdevelop; uses for its basic setup:</para>
+    <itemizedlist>
+      <listitem><para><filename class="directory">profiles/</filename> &mdash; provides actual plugin profile setting. (Initially there is only a <filename>FullIDE</filename> profile which defines a full set of initially active &kdevelop; plugins.)</para></listitem>
+      <listitem><para><filename>kdevelopui.rc</filename> &mdash; provides the basic menu and tool bar entries &kdevelop; uses.</para></listitem>
+    </itemizedlist>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevfilecreate/</filename> &mdash; contains files used by the <guilabel>New File Wizard:</guilabel></para>
+      <itemizedlist>
+        <listitem><para><filename class="directory">file-templates/</filename> &mdash; provides the actually used text contents to be put into the new source file of a given type. More file templates are found in the <link linkend="app-files-default-filecreate">default configuration files</link> directory.</para></listitem>
+        <listitem><para><filename>kdevpart_filecreate.rc</filename> &mdash; provides the <guimenuitem>New</guimenuitem> entry in the <guimenu>File</guimenu> menu.</para></listitem>
+        <listitem><para><filename>template-info.xml</filename> &mdash; contains descriptions of the available file types to be displayed in the <guilabel>New File</guilabel> tool view.</para></listitem>
+      </itemizedlist>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevfilter/</filename> &mdash; provides the <guimenuitem>Execute Command...</guimenuitem> and <guimenuitem>Filter Selection Through Command...</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Shell Filtering and Insertion</guilabel> plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevfullscreen/</filename> &mdash; provides the <guimenuitem>Full Screen Mode</guimenuitem> entry in the <guimenu>View</guimenu> menu and the according tool bar icon.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevgrepview/</filename> &mdash; provides the <guimenuitem>Find in Files...</guimenuitem>entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Grep Frontend</guilabel> plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevoutputviews/</filename> &mdash; provides the <guimenuitem>Next Error</guimenuitem> and <guimenuitem>Previous Error</guimenuitem> entries in the <guimenu>View</guimenu> menu.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevpartexplorer/</filename> &mdash; provides the <guimenuitem>Part Explorer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Part Explorer Tool</guilabel> plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevquickopen/</filename> &mdash; provides the <guimenuitem>Quick Open File..</guimenuitem> entry in the <guimenu>File</guimenu> menu and the <guimenuitem>Quick Open Class...</guimenuitem> and <guimenuitem>Quick Open Method</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Quick Open</guilabel> project plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevregexptest/</filename> &mdash; provides the <guimenuitem>Debug Regular Expression...</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Regular Expression Tester</guilabel> plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevreplace/</filename> &mdash; provides the <guimenuitem>Find-Select-Replace...</guimenuitem> entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Replace Part</guilabel> plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevtipofday/</filename> &mdash;provides the <guimenuitem>Tip of the Day</guimenuitem> entry in the <guimenu>Help</guimenu> menu. The HTML-File containing the available tips is provided as a <link linkend="app-files-default-tips">default configuration file</link> only.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevtools/</filename> &mdash; controls various menu entries ceated by <guimenu>Tools Menu</guimenu> and <guilabel>External Tools Menu</guilabel> settings provided by the <guilabel>Tools Menu Addition</guilabel> plugin.</para>
+  </listitem>
+  <listitem>
+    <para><filename class="directory">kdevvalgrind/</filename> &mdash; provides the <guimenuitem>Valgrind Memory Leak Check</guimenuitem> and <guimenuitem>Profile with KCachegrind</guimenuitem> entries in the <guimenu>Debug</guimenu> menu used by the <guilabel>Valgrind Frontend</guilabel> plugin.</para>
+  </listitem>
+</itemizedlist>
 
 </sect2> <!-- app-files-user-apps -->
 
 <sect2 id="app-files-user-config">
-<title>Resource Cofiguration Files</title>
+<title>Resource Configuration Files</title>
 
 <para>
 There are two groups of &kdevelop; configuration files in the <filename class="directory">$KDEHOME/share/config/</filename> directory, distiguished by their surrounding character sequences:
@@ -253,7 +392,6 @@ There are two groups of &kdevelop; configuration files in the <filename class="d
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-
 <sect1 id="app-files-project">
 <title>Project Dependent Configuration</title>
 
@@ -271,7 +409,7 @@ Both are &XML; coded files. They can be viewed and (cautiously) altered using an
 <formalpara>
 <title>Persistant Code Store Files</title>
 
-<para>There is a third project dependend configuration file, the <filename>&lt;project-name&gt;.kdevelop.pcs</filename> Persistant Code Store. This is a binary coded file holding a parser cache for the most part in order to speed up the loading sequence of the project. Additionally, this Persistant Code Store keeps information use by the <guilabel>Code Completion</guilabel> facility of &kdevelop;.
+<para>There is a third project dependend configuration file, the <filename>&lt;project-name&gt;.kdevelop.pcs</filename> Persistant Code Store. This is a binary coded file holding an internal parser cache for the most part in order to speed up the loading sequence of the project. Additionally, this Persistant Code Store keeps information use by the <guilabel>Code Completion</guilabel> facility of &kdevelop;.
 </para>
 </formalpara>
 
