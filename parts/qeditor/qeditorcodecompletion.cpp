@@ -202,7 +202,7 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
             QTimer::singleShot(0,this,SLOT(showComment()));
             return false;
         }
-        if( ke->key() == Key_Enter || ke->key() == Key_Return ) {
+        if( ke->key() == Key_Enter || ke->key() == Key_Return || ke->key() == Key_Space || ke->key() == Key_Tab ) {
             CompletionItem* item = static_cast<CompletionItem*>(
                 m_completionListBox->item(m_completionListBox->currentItem()));
 
@@ -236,7 +236,13 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
 
         // redirect the event to the editor
         QApplication::sendEvent( m_view->editor(), e );
-        if( m_colCursor + m_offset > m_view->cursorColumnReal() ) {
+	
+        QString currentLine = m_view->currentTextLine();
+        int len = m_view->cursorColumnReal() - m_colCursor;
+        QString currentComplText = currentLine.mid( m_colCursor, len );
+	
+        if( m_colCursor + m_offset > m_view->cursorColumnReal() ||
+	    (m_completionListBox->count() == 1 && m_completionListBox->currentText() == currentComplText) ) {
             // the cursor is too far left
             kdDebug(9032) << "Aborting Codecompletion after sendEvent" << endl;
             kdDebug(9032) << m_view->cursorColumnReal() << endl;

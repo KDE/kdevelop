@@ -9,8 +9,8 @@
 
 void GotoLineDialog::init()
 {
-	m_editor = 0;
-        spinLineNumber->setMinValue( 1 );
+    m_editor = 0;
+    spinLineNumber->setMinValue( 1 );
 }
 
 void GotoLineDialog::destroy()
@@ -19,11 +19,19 @@ void GotoLineDialog::destroy()
 
 void GotoLineDialog::setEditor( QEditor* editor )
 {
-	m_editor = editor;
+    m_editor = editor;
+    
+    if( !m_editor )
+	return;
+    
+    int line, col;
+    m_editor->getCursorPosition( &line, &col );
+    spinLineNumber->setValue( line+1 );
+    spinLineNumber->selectAll();
 }
 
 void GotoLineDialog::accept()
 {
-	m_editor->doGotoLine( spinLineNumber->value()-1 );
-        QDialog::accept();
+    m_editor->doGotoLine( spinLineNumber->value()-1 );
+    QDialog::accept();
 }
