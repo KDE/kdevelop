@@ -133,6 +133,7 @@ EXCLUDE                = parts/appwizard/adahello/ \
                          parts/appwizard/xulhello/ \
                          parts/appwizard/kappjava/ \
                          parts/appwizard/kdevlang \
+                         parts/appwizard/generichello \
                          parts/cppsupport/subclassing_template \
                          parts/pascalsupport/ \
                          parts/javasupport \
