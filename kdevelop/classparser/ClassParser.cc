@@ -99,6 +99,8 @@ CParsedStruct *CClassParser::parseStruct()
   if( lexem == ID )
   {
     aStruct->setName( getText() );
+    aStruct->setDefinedOnLine( getLineno() );
+    aStruct->setDefinedInFile( currentFile );
 
     // Skip the '{'
     getNextLexem();
@@ -412,6 +414,7 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod)
   aMethod->setDeclaredOnLine( getLineno() );
   aMethod->setDefinedInFile( currentFile );
   aMethod->setDeclaredInFile( currentFile );
+  aMethod->setExport( declaredScope );
   aMethod->setIsStatic( isStatic );
 
   getNextLexem();
