@@ -11,6 +11,7 @@
 
 #include <qtooltip.h>
 #include <qheader.h>
+#include <qstringlist.h>
 #include <klocale.h>
 
 #include "flagboxes.h"
