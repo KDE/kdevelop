@@ -766,7 +766,7 @@ void CKDevelop::slotBuildRun(){
 }
 void CKDevelop::slotBuildDebug(){
 
-  if(!CToolClass::searchProgram("kdgb")){
+  if(!CToolClass::searchProgram("kdbg")){
     return;
   }
   if(!prj->getBinPROGRAM()){
@@ -785,7 +785,7 @@ void CKDevelop::slotBuildDebug(){
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
-  swallow_widget->setExeString("kdbg "+prj->getBinPROGRAM());
+  swallow_widget->setExeString("kdbg "+ prj->getProjectDir() + prj->getSubDir() +"/" +  prj->getBinPROGRAM());
   swallow_widget->sWExecute();
   swallow_widget->init();
   
