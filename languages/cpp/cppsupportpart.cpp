@@ -2000,6 +2000,7 @@ KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::Designer
 	KDevDesignerIntegration * des = 0;
 	switch ( type )
 	{
+	case KInterfaceDesigner::Glade:
 	case KInterfaceDesigner::QtDesigner:
 		des = m_designers[ type ];
 		if ( des == 0 )

@@ -25,7 +25,7 @@ StoreConverter::StoreConverter(CppSupportPart *part, CodeModel *model)
 {
 }
 
-void StoreConverter::PCSClassToCodeModel(const QString &className, const QStringList &classScope)
+void StoreConverter::PCSClassToCodeModel(const QString &className, const QStringList &/*classScope*/)
 {
 	QValueList<Catalog*> catalogs = m_part->codeRepository()->registeredCatalogs();
 	for (QValueList<Catalog*>::iterator it = catalogs.begin();
