@@ -1283,15 +1283,11 @@ void GDBController::slotStart(const QString& shell, const QString &application)
     DomUtil::PairList::ConstIterator it;
     for (it = envvars.begin(); it != envvars.end(); ++it)
     {
-        environstr = (*it).first;
+        environstr = "set environment ";
+        environstr += (*it).first;
         environstr += "=";
-#if (KDE_VERSION > 305)
-        environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
-        queueCmd(new GDBCommand(QCString("set environment ") + environstr.latin1(),
-                    NOTRUNCMD, NOTINFOCMD));
+        environstr += (*it).second;
+        queueCmd(new GDBCommand(environstr.latin1(), NOTRUNCMD, NOTINFOCMD));
     }
 
     // Organise any breakpoints.
