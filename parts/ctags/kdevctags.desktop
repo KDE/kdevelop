@@ -4,6 +4,6 @@ Type=Service
 Exec=blubb
 Comment=CTags Frontend
 Name=KDevCTags
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevctags
 X-KDevelop-Scope=Project

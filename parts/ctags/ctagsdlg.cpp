@@ -29,7 +29,7 @@
 #include <kprocess.h>
 #include <kregexp.h>
 
-#include "kdevpart.h"
+#include "kdevplugin.h"
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "kdevproject.h"
@@ -359,7 +359,7 @@ private:
 };
 
 
-CTagsDialog::CTagsDialog(KDevPart *part)
+CTagsDialog::CTagsDialog(KDevPlugin *part)
     : QDialog(0, "ctags dialog", false)
 {
     setCaption("Search in Tags");

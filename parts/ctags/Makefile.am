@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevctags.la
 libkdevctags_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevctags_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevctags_la_SOURCES = ctagsfactory.cpp \
-			  ctagspart.cpp \
+libkdevctags_la_SOURCES = ctagspart.cpp \
 			  ctagsdlg.cpp
 
 METASOURCES = AUTO

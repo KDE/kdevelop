@@ -21,7 +21,7 @@ class QListBox;
 class QListBoxItem;
 class QListView;
 class CTagsTagInfo;
-class KDevPart;
+class KDevPlugin;
 typedef QValueList<CTagsTagInfo> CTagsTagInfoList;
 typedef QValueList<CTagsTagInfo>::Iterator CTagsTagInfoListIterator;
 
@@ -31,7 +31,7 @@ class CTagsDialog : public QDialog
     Q_OBJECT
     
 public:
-    CTagsDialog( KDevPart *part );
+    CTagsDialog( KDevPlugin *part );
     ~CTagsDialog();
 
 private slots:
@@ -50,7 +50,7 @@ private:
     QListView *kinds_listview;
     QListBox *results_listbox;
     
-    KDevPart *m_part;
+    KDevPlugin *m_part;
     QDict<CTagsTagInfoList> *m_tags;
 };
 

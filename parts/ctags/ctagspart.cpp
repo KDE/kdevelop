@@ -10,15 +10,17 @@
  ***************************************************************************/
 
 #include <klocale.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "ctagsdlg.h"
-#include "ctagsfactory.h"
 #include "ctagspart.h"
 
+typedef KGenericFactory<CTagsPart> CTagsFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( "kdevctags" ) );
 
-CTagsPart::CTagsPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
+    : KDevPlugin(parent, name)
 {
     setInstance(CTagsFactory::instance());
     setXMLFile("kdevctags.rc");

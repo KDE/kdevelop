@@ -14,17 +14,17 @@
 
 #include <qguardedptr.h>
 #include <kdialogbase.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 class CTagsDialog;
 
 
-class CTagsPart : public KDevPart
+class CTagsPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    CTagsPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    CTagsPart( QObject *parent, const char *name, const QStringList & );
     ~CTagsPart();
 
 private slots:
