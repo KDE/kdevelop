@@ -46,6 +46,7 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
   - captions missing for toolbar buttons
 
 * doctreeview:
+  - implement "Make User Manual"
   - use kdoc to update Qt/KDE docs
 
 Solve the regression bugs. These are the ones marked with "HI" priority
