@@ -178,12 +178,12 @@ private:
   QListViewItem *kde2mdiitem;
   QListViewItem *qtentry;
   QListViewItem *ccppentry;
-  //QListViewItem *gtkentry;
+  QListViewItem *gnomeentry;
   QListViewItem *othersentry;
   QListViewItem *citem;
   QListViewItem *cppitem;
   QListViewItem *customprojitem;
-  //QListViewItem *gtknormalitem;
+  QListViewItem *gnomenormalitem;
   // QListViewItem *gtkminiitem;
   QListViewItem *qtnormalitem;
   QListViewItem *qt2normalitem;
