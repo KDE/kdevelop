@@ -52,7 +52,6 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
         this, SIGNAL(displayError(QString)),
         m_widget, SLOT(slotDisplayError(QString))
     );
-
 }
 
 PartExplorerPlugin::~PartExplorerPlugin()
@@ -63,16 +62,6 @@ PartExplorerPlugin::~PartExplorerPlugin()
 void PartExplorerPlugin::slotShowWidget()
 {
     m_widget->show();
-}
-
-void PartExplorerPlugin::slotSearchServices( QString serviceType, QString costraints)
-{
-    kdDebug(9000) << ">> slot slotSearchServices(QString, QString): " << endl
-        << "  ** serviceType = " << serviceType << ", costraints = " << costraints
-        << endl;
-
-    KTrader::OfferList foundServices = KTrader::self()->query( serviceType, costraints );
-    m_widget->fillWidget( foundServices );
 }
 
 #include "partexplorer_plugin.moc"

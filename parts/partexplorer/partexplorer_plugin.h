@@ -50,10 +50,6 @@ signals:
 
 public slots:
     /**
-    * Query KDE for registered services matching the query costraints.
-    */
-    void slotSearchServices( QString, QString );
-    /**
     * Show PartEplorer form.
     */
     void slotShowWidget();

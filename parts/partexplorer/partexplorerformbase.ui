@@ -114,39 +114,6 @@
                         </widget>
                     </vbox>
                 </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>buttonSearch</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Search</string>
-                    </property>
-                </widget>
-                <spacer row="1" column="1">
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Fixed</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>80</height>
-                        </size>
-                    </property>
-                </spacer>
             </grid>
         </widget>
         <widget class="QLabel">
@@ -208,7 +175,6 @@
 <tabstops>
     <tabstop>lineEditType</tabstop>
     <tabstop>lineEditCostraints</tabstop>
-    <tabstop>buttonSearch</tabstop>
     <tabstop>listViewResults</tabstop>
 </tabstops>
 <includes>

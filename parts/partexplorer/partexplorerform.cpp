@@ -43,12 +43,14 @@ public:
 
 PartExplorerForm::PartExplorerForm( QWidget *parent )
     : KDialogBase( parent, "partexplorerform", true, i18n("PartExplorer, a services lister"),
-        Ok, Ok, true )
+        User1 | Close, User1, true )
 {
     m_base = new PartExplorerFormBase( this, "partexplorerformbase" );
     this->setMainWidget( m_base );
 
-    connect( m_base->buttonSearch, SIGNAL(clicked()), this, SLOT(slotSearchRequested())	);
+	setButtonText( User1, i18n("&Start query") );
+
+	connect( this, SIGNAL(user1Clicked()), this, SLOT(slotSearchRequested()) );
     connect( m_base->lineEditType, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
     connect( m_base->lineEditCostraints, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 }
@@ -59,20 +61,22 @@ PartExplorerForm::~PartExplorerForm()
 
 void PartExplorerForm::slotSearchRequested()
 {
-    QString queryType = m_base->lineEditType->text(),
-        queryCostraints = m_base->lineEditCostraints->text();
+    QString serviceType = m_base->lineEditType->text(),
+        costraints = m_base->lineEditCostraints->text();
 
     kdDebug(9000) << ">> slot PartExplorerForm::slotSearchRequested(): " << endl
-        << "  ** queryType = " << queryType << ", queryCostraints = " << queryCostraints
+        << "  ** serviceType = " << serviceType << ", costraints = " << costraints
         << endl;
 
-    if (queryType.isNull() || queryType.isEmpty())
+    if (serviceType.isNull() || serviceType.isEmpty())
     {
         slotDisplayError( "You must fill at least the type field!!" );
         return;
     }
 
-    emit searchQuery( queryType, queryCostraints );
+	// Query for requested services
+    KTrader::OfferList foundServices = KTrader::self()->query( serviceType, costraints );
+	fillWidget( foundServices );
 }
 
 void PartExplorerForm::slotDisplayError( QString errorMessage )

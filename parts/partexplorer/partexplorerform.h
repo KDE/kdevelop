@@ -39,9 +39,6 @@ public:
     */
     void fillWidget( const KTrader::OfferList &services );
 
-signals:
-    void searchQuery( QString, QString );
-
 public slots:
     void slotDisplayError( QString );
 
