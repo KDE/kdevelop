@@ -444,6 +444,11 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     QString name = fName;
     QString dir = directory( parag );
 
+    if ( fName.startsWith( "/" ) )
+    {
+        // absolute path given
+        name = fName;
+    } else
     if ( ( fName.contains( "/" ) ) && ( !dir.isEmpty() ) )
     {
         name = dir + fName;
