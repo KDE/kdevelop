@@ -1,5 +1,5 @@
 2005-01-09 Jens Dagerbo <jens.dagerbo@swipnet.se>
- * Finished the new CTags frontend. (Just a few minor issues remain.)
+ * Finished the new CTags frontend.
 
 2005-01-08 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Made it possible to finally remove Code Completion databases via the GUI
