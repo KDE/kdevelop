@@ -1,3 +1,10 @@
+kdevelop (1:1.4-20010219-1) unstable; urgency=low
+ 
+  * New upstream release
+  * Updating for potato/woody/sid
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 19 Feb 2001 02:06:00 -0700
+
 kdevelop (1:1.4-20010127-1) unstable; urgency=low
 
   * New upstream release
