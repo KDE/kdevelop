@@ -308,10 +308,22 @@ void MainWindowIDEAl::raiseView(QWidget *view) {
 }
 
 
-void MainWindowIDEAl::lowerView(QWidget *view) {
+void MainWindowIDEAl::lowerView(QWidget *view)
+{
+    bool hasFocus = false;
+    QWidget *w = qApp->focusWidget();
+    while (w) {
+	if (w == view) {
+	    hasFocus = true;
+	    break;
+	}
+	w = w->parentWidget();
+    }
     m_leftBar->lowerWidget(view);
     m_rightBar->lowerWidget(view);
     m_bottomBar->lowerWidget(view);
+    if (hasFocus)
+	raiseEditor();
 }
 
 
