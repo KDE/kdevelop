@@ -12,6 +12,7 @@ Description[et]=WinHelp-failide kuvamise IO-moodul
 Description[fr]=Un module d'entrée / sortie pour l'affichage des fichiers WinHelp
 Description[it]=Un kioslave per mostrare i file WinHelp
 Description[nl]=Een kioslave voor het weergeven van WinHelp-bestanden
+Description[pl]=kioslave do pokazywania plików WinHelp
 Description[pt]=A 'kioslave' para mostrar ficheiros WinHelp
 Description[pt_BR]=Um kioslave para exibir arquivos WinHelp
 Description[ru]=Обработчик ввода-вывода для файлов WinHelp

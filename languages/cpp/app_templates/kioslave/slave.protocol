@@ -13,6 +13,7 @@ Description[et]=%{APPNAMELC} IO-moodul
 Description[fr]=Un module d'entrée / sortie pour %{APPNAMELC}
 Description[it]=Un kioslave per %{APPNAMELC}
 Description[nl]=Kioslave voor %{APPNAMELC}
+Description[pl]=kioslave dla %{APPNAMELC}
 Description[pt]=Um 'kioslave' para %{APPNAMELC}
 Description[pt_BR]=Um kioslave para %{APPNAMELC}
 Description[ru]=Обработчик ввода-вывода для %{APPNAMELC}

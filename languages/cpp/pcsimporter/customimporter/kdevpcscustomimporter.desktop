@@ -2,6 +2,7 @@
 Type=Service
 Name=KDevPCSCustomImporter
 Name[da]=KDevelop brugerdefineret PCS-importør
+Name[pl]=KDevWłasnyImportPCS
 Name[sv]=KDevelop egen import av PCS
 Name[xx]=xxKDevPCSCustomImporterxx
 Comment=KDevelop Custom Directory PCS Importer
