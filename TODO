@@ -45,20 +45,14 @@ gideon >= kdevelop 2.x UI-wise and functionality-wise!
 * doctreeview:
   - use kdoc to update Qt/KDE docs
 
-* editing:
-  - RMB on qeditor doesn't have the 'Switch to declaration/definition'
-    functionality
-
-* build/configuration:
-  - cross-compiling feature missing
-  - make "MIN_VERSION" configurable on new project creation
-
 * interoperability:
   - import/export 2.1-projects<-->Gideon-projects
-  - version control: integration with Cervisia?
 
 * classview:
   - delete method/class menu items
+
+Solve the regression bugs. These are the ones maked with priority
+"HI" in the bug database (bugs.kde.org)
 
 3. Missing UIs (other than 2)
 -----------------------------
@@ -87,6 +81,7 @@ Other Issues
 * mid-term:
 
   - use mimetype to determine code files, not extension
+  - version control: integration with Cervisia?
 
 * long-term:
 
