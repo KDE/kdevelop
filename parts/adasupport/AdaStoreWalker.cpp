@@ -16,7 +16,7 @@ void AdaStoreWalker::compilation_unit(RefAdaAST _t) {
 	RefAdaAST compilation_unit_AST_in = _t;
 	
 	try {      // for error handling
-#line 87 "expandedada.store.g"
+#line 95 "expandedada.store.g"
 		init();
 #line 22 "AdaStoreWalker.cpp"
 		context_items_opt(_t);
@@ -143,7 +143,7 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			RefAdaAST tmp4_AST_in = _t;
 			match(static_cast<antlr::RefAST>(_t),PRIVATE);
 			_t = _t->getNextSibling();
-#line 103 "expandedada.store.g"
+#line 111 "expandedada.store.g"
 			m_currentAccess = PIE_PROTECTED;
 #line 149 "AdaStoreWalker.cpp"
 			break;
@@ -205,15 +205,11 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			gpi = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 			def_id(_t);
 			_t = _retTree;
-#line 107 "expandedada.store.g"
+#line 115 "expandedada.store.g"
 			
-					       QString scopeName (qtext (gpi));
-					       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
-					       psc->setDeclaredOnLine( gpi->getLine() );
-					       psc->setDeclaredInFile( m_fileName );
-					       // psc->setDeclarationEndsOnLine (endLine);
+					       defineScope( gpi );
 					
-#line 217 "AdaStoreWalker.cpp"
+#line 213 "AdaStoreWalker.cpp"
 			generic_inst(_t);
 			_t = _retTree;
 			_t = __t22;
@@ -229,27 +225,26 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			ps = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 			def_id(_t);
 			_t = _retTree;
-#line 117 "expandedada.store.g"
+#line 121 "expandedada.store.g"
 			
-					       QString scopeName (qtext (ps));
-					       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
-					       psc->setDeclaredOnLine( ps->getLine() );
-					       psc->setDeclaredInFile( m_fileName );
+					       ParsedScopeContainer* psc = defineScope( ps );
 					       m_currentContainer = psc;
 					       m_scopeStack.append( psc );
 					
-#line 242 "AdaStoreWalker.cpp"
+#line 235 "AdaStoreWalker.cpp"
 			pkg_spec_part(_t);
 			_t = _retTree;
-#line 126 "expandedada.store.g"
+#line 127 "expandedada.store.g"
 			
 					       m_scopeStack.removeLast();
-					       if (m_scopeStack.count() == 0)
+					       if (m_scopeStack.count() == 0) {
+						 kdDebug() << "adastore: m_scopeStack is empty!" << endl;
 					         m_scopeStack.append( m_store->globalScope() );
+					       }
 					       m_currentContainer = m_scopeStack.last();
 					       // m_currentContainer->setDeclarationEndsOnLine (endLine);
 					
-#line 253 "AdaStoreWalker.cpp"
+#line 248 "AdaStoreWalker.cpp"
 			_t = __t23;
 			_t = _t->getNextSibling();
 			break;
@@ -263,17 +258,11 @@ void AdaStoreWalker::library_item(RefAdaAST _t) {
 			prd = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 			def_id(_t);
 			_t = _retTree;
-#line 135 "expandedada.store.g"
+#line 138 "expandedada.store.g"
 			
-					       QString scopeName (qtext (prd));
-					       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
-					       /*
-					       psc->setDeclaredOnLine (startLine);
-					       psc->setDeclaredInFile (m_fileName);
-					       psc->setDeclarationEndsOnLine (endLine);
-					        */
+					       defineScope( prd );
 					
-#line 277 "AdaStoreWalker.cpp"
+#line 266 "AdaStoreWalker.cpp"
 			renames(_t);
 			_t = _retTree;
 			_t = __t24;
@@ -530,9 +519,9 @@ void AdaStoreWalker::use_clause(RefAdaAST _t) {
 					c = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 					compound_name(_t);
 					_t = _retTree;
-#line 98 "expandedada.store.g"
+#line 106 "expandedada.store.g"
 					m_imports.back ().push_back (qtext (c));
-#line 536 "AdaStoreWalker.cpp"
+#line 525 "AdaStoreWalker.cpp"
 				}
 				else {
 					if ( _cnt15>=1 ) { goto _loop15; } else {throw antlr::NoViableAltException(static_cast<antlr::RefAST>(_t));}
@@ -660,7 +649,7 @@ void AdaStoreWalker::def_id(RefAdaAST _t,
 		cn = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 		compound_name(_t);
 		_t = _retTree;
-#line 164 "expandedada.store.g"
+#line 161 "expandedada.store.g"
 		
 			    if (is_subprogram) {
 			      ParsedMethod *method = new ParsedMethod;
@@ -679,7 +668,7 @@ void AdaStoreWalker::def_id(RefAdaAST _t,
 			      // TBC: what about other declarations?
 			    }
 			
-#line 683 "AdaStoreWalker.cpp"
+#line 672 "AdaStoreWalker.cpp"
 	}
 	catch (antlr::RecognitionException& ex) {
 		reportError(ex);
@@ -753,14 +742,14 @@ void AdaStoreWalker::pkg_spec_part(RefAdaAST _t) {
 		switch ( _t->getType()) {
 		case BASIC_DECLARATIVE_ITEMS_OPT:
 		{
-#line 283 "expandedada.store.g"
+#line 296 "expandedada.store.g"
 			m_currentAccess = PIE_PROTECTED;
-#line 759 "AdaStoreWalker.cpp"
+#line 748 "AdaStoreWalker.cpp"
 			basic_declarative_items_opt(_t);
 			_t = _retTree;
-#line 285 "expandedada.store.g"
+#line 298 "expandedada.store.g"
 			m_currentAccess = PIE_PUBLIC;
-#line 764 "AdaStoreWalker.cpp"
+#line 753 "AdaStoreWalker.cpp"
 			break;
 		}
 		case 3:
@@ -861,7 +850,7 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 			gpd = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 			def_id(_t);
 			_t = _retTree;
-#line 527 "expandedada.store.g"
+#line 540 "expandedada.store.g"
 			
 					       QString scopeName (qtext (gpd));
 					       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
@@ -870,10 +859,10 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 					       m_currentContainer = psc;
 					       m_scopeStack.append( psc );
 					
-#line 874 "AdaStoreWalker.cpp"
+#line 863 "AdaStoreWalker.cpp"
 			pkg_spec_part(_t);
 			_t = _retTree;
-#line 536 "expandedada.store.g"
+#line 549 "expandedada.store.g"
 			
 					       m_scopeStack.removeLast();
 					       if (m_scopeStack.count() == 0)
@@ -881,7 +870,7 @@ void AdaStoreWalker::generic_decl(RefAdaAST _t) {
 					       m_currentContainer = m_scopeStack.last();
 					       // m_currentContainer->setDeclarationEndsOnLine (endLine);
 					
-#line 885 "AdaStoreWalker.cpp"
+#line 874 "AdaStoreWalker.cpp"
 			_t = __t250;
 			_t = _t->getNextSibling();
 			break;
@@ -1181,7 +1170,7 @@ void AdaStoreWalker::def_designator(RefAdaAST _t) {
 			cn = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 			compound_name(_t);
 			_t = _retTree;
-#line 257 "expandedada.store.g"
+#line 254 "expandedada.store.g"
 			
 				    ParsedMethod *method = new ParsedMethod;
 				    method->setName (qtext (cn));
@@ -1196,7 +1185,7 @@ void AdaStoreWalker::def_designator(RefAdaAST _t) {
 				        m_currentContainer->addMethod (method);
 				    }
 				
-#line 1200 "AdaStoreWalker.cpp"
+#line 1189 "AdaStoreWalker.cpp"
 			break;
 		}
 		case OPERATOR_SYMBOL:
@@ -2497,6 +2486,7 @@ void AdaStoreWalker::extension_opt(RefAdaAST _t) {
 
 void AdaStoreWalker::spec_decl_part(RefAdaAST _t) {
 	RefAdaAST spec_decl_part_AST_in = _t;
+	RefAdaAST ps = static_cast<RefAdaAST>(antlr::nullAST);
 	
 	try {      // for error handling
 		if (_t == static_cast<RefAdaAST>(antlr::nullAST) )
@@ -2522,10 +2512,29 @@ void AdaStoreWalker::spec_decl_part(RefAdaAST _t) {
 			RefAdaAST tmp95_AST_in = _t;
 			match(static_cast<antlr::RefAST>(_t),PACKAGE_SPECIFICATION);
 			_t = _t->getFirstChild();
+			ps = (_t == ASTNULL) ? static_cast<RefAdaAST>(antlr::nullAST) : _t;
 			def_id(_t);
 			_t = _retTree;
+#line 276 "expandedada.store.g"
+			
+				       ParsedScopeContainer* psc = defineScope( ps );
+				       m_currentContainer = psc;
+				       m_scopeStack.append( psc );
+				
+#line 2525 "AdaStoreWalker.cpp"
 			pkg_spec_part(_t);
 			_t = _retTree;
+#line 282 "expandedada.store.g"
+			
+				       m_scopeStack.removeLast();
+				       if (m_scopeStack.count() == 0) {
+					 kdDebug() << "adastore: m_scopeStack is empty!" << endl;
+				         m_scopeStack.append( m_store->globalScope() );
+				       }
+				       m_currentContainer = m_scopeStack.last();
+				       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+				
+#line 2538 "AdaStoreWalker.cpp"
 			_t = __t86;
 			_t = _t->getNextSibling();
 			break;

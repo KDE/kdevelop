@@ -85,10 +85,18 @@ public:
 	ns = new ParsedScopeContainer( false );
 	ns->setName( name );
 	scope->addScope( ns );
-	m_store->addScope( ns );
+	if ( scope == m_store->globalScope() )
+	    m_store->addScope( ns );
 	return ns;
     }
-
+    ParsedScopeContainer * defineScope( RefAdaAST namenode ) {
+       QString scopeName( qtext( namenode ) );
+       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
+       psc->setDeclaredOnLine( namenode->getLine() );
+       psc->setDeclaredInFile( m_fileName );
+       // psc->setDeclarationEndsOnLine (endLine);
+       return psc;
+    }
 }
 
 /*
@@ -141,41 +149,30 @@ library_item :
 		| #(PACKAGE_BODY pb:def_id pkg_body_part)
 		| #(GENERIC_PACKAGE_INSTANTIATION gpi:def_id
 		     {
-		       QString scopeName (qtext (gpi));
-		       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
-		       psc->setDeclaredOnLine( #gpi->getLine() );
-		       psc->setDeclaredInFile( m_fileName );
-		       // psc->setDeclarationEndsOnLine (endLine);
+		       defineScope( #gpi );
 		     }
 		     generic_inst
 		   )
 		| #(PACKAGE_SPECIFICATION ps:def_id
 		     {
-		       QString scopeName (qtext (ps));
-		       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
-		       psc->setDeclaredOnLine( #ps->getLine() );
-		       psc->setDeclaredInFile( m_fileName );
+		       ParsedScopeContainer* psc = defineScope( #ps );
 		       m_currentContainer = psc;
 		       m_scopeStack.append( psc );
 		     }
 		    pkg_spec_part
 		     {
 		       m_scopeStack.removeLast();
-		       if (m_scopeStack.count() == 0)
+		       if (m_scopeStack.count() == 0) {
+			 kdDebug() << "adastore: m_scopeStack is empty!" << endl;
 		         m_scopeStack.append( m_store->globalScope() );
+		       }
 		       m_currentContainer = m_scopeStack.last();
 		       // m_currentContainer->setDeclarationEndsOnLine (endLine);
 		     }
 		   )
 		| #(PACKAGE_RENAMING_DECLARATION prd:def_id
 		     {
-		       QString scopeName (qtext (prd));
-		       //ParsedScopeContainer* psc = insertScopeContainer (m_currentContainer, scopeName);
-		       /*
-		       psc->setDeclaredOnLine (startLine);
-		       psc->setDeclaredInFile (m_fileName);
-		       psc->setDeclarationEndsOnLine (endLine);
-		        */
+		       defineScope( #prd );
 		     }
 		     renames
 		   )
@@ -338,7 +335,23 @@ function_tail : formal_part_opt subtype_mark
 
 spec_decl_part
 	: #(GENERIC_PACKAGE_INSTANTIATION def_id generic_inst)
-	| #(PACKAGE_SPECIFICATION def_id pkg_spec_part)
+	| #(PACKAGE_SPECIFICATION ps:def_id
+	     {
+	       ParsedScopeContainer* psc = defineScope( #ps );
+	       m_currentContainer = psc;
+	       m_scopeStack.append( psc );
+	     }
+	    pkg_spec_part
+	     {
+	       m_scopeStack.removeLast();
+	       if (m_scopeStack.count() == 0) {
+		 kdDebug() << "adastore: m_scopeStack is empty!" << endl;
+	         m_scopeStack.append( m_store->globalScope() );
+	       }
+	       m_currentContainer = m_scopeStack.last();
+	       // m_currentContainer->setDeclarationEndsOnLine (endLine);
+	     }
+	   )
 	| #(PACKAGE_RENAMING_DECLARATION def_id renames)
 	;
 

@@ -83,10 +83,18 @@ public:
 	ns = new ParsedScopeContainer( false );
 	ns->setName( name );
 	scope->addScope( ns );
-	m_store->addScope( ns );
+	if ( scope == m_store->globalScope() )
+	    m_store->addScope( ns );
 	return ns;
     }
-
+    ParsedScopeContainer * defineScope( RefAdaAST namenode ) {
+       QString scopeName( qtext( namenode ) );
+       ParsedScopeContainer* psc = insertScopeContainer( m_currentContainer, scopeName );
+       psc->setDeclaredOnLine( namenode->getLine() );
+       psc->setDeclaredInFile( m_fileName );
+       // psc->setDeclarationEndsOnLine (endLine);
+       return psc;
+    }
 #line 34 "AdaStoreWalker.hpp"
 public:
 	AdaStoreWalker();
