@@ -2,7 +2,6 @@
                     noslot.cpp - some no slot functions in CKDevelop
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     

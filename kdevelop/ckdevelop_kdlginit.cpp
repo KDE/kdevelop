@@ -29,7 +29,7 @@
 
 
 void CKDevelop::initKDlg(){
-  kdlg_caption="KDevelop Dialogeditor: Widget_1.kdevdlg";
+  kdlg_caption="KDevelop Dialogeditor:";
 
   kdlg_tabctl= new CTabCtl(top_panner);
   kdlg_tabctl->setFocusPolicy(QWidget::ClickFocus);
@@ -442,7 +442,7 @@ void CKDevelop::initKDlgStatusBar(){
   kdlg_statusbar->changeItem("", ID_KDLG_STATUS_WH);
   kdlg_statusbar->changeItem("", ID_KDLG_STATUS_XY);
 
-  kdlg_statusbar->insertItem(i18n("Widget_1"), ID_KDLG_STATUS_WIDGET);
+  kdlg_statusbar->insertItem(i18n("        "), ID_KDLG_STATUS_WIDGET);
 
   kdlg_statusbar->insertItem(i18n("Welcome to KDevelop!"), ID_STATUS_MSG);
   kdlg_statusbar->setInsertOrder(KStatusBar::RightToLeft);

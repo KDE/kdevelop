@@ -114,7 +114,7 @@ void CKAppWizard::initPages(){
   
   // create another widget for a picture
   widget1b = new QWidget( widget0, "widget1b" );
-  widget1b->setGeometry( 280, 170, 190, 140 );
+  widget1b->setGeometry( 255, 180, 190, 140 );
   widget1b->setMinimumSize( 0, 0 );
   widget1b->setMaximumSize( 32767, 32767 );
   widget1b->setFocusPolicy( QWidget::NoFocus );

@@ -63,7 +63,7 @@ void KDlgDialogs::refresh(CProject* prj){
 }
 /** Initialize popupmenus. */
 void KDlgDialogs::initPopups(){
-  dialog_pop.setTitle("Dialog");
+  dialog_pop.setTitle(i18n("Dialogs"));
   dialog_pop.insertItem(i18n("New Dialog..."),this,SLOT(slotNewDialog()));
 }
   /** Get the current popupmenu. */
@@ -73,7 +73,7 @@ KPopupMenu* KDlgDialogs::getCurrentPopup(){
   switch( treeH->itemType() )
     {
     case THPROJECT:
-      // popup = &project_pop;
+       popup = &dialog_pop;
       break;
     case THFOLDER:
       //      popup = &group_pop;

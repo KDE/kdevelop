@@ -521,11 +521,12 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,QString author=""
 	fix_mledit->setOverwriteMode( FALSE );
 
 	addTab(w3,i18n("Problem description"));
-
-  // **************set the button*********************
-  setOkButton(i18n("Send E-Mail"));
+	
+	// **************set the button*********************
+	setOkButton(0);
+  setDefaultButton(i18n("Send E-Mail"));
   setCancelButton(i18n("Cancel"));
-  connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
+  connect( this, SIGNAL(defaultButtonPressed()), SLOT(ok()) );
 
   // generate bug-id
   QString s;
@@ -574,12 +575,17 @@ CBugReportDlg::~CBugReportDlg(){
 
 void CBugReportDlg::ok() {
 
-  //  cerr << endl << "slot ok()";
+  if (description_mledit->text() == ""  ||  subject_edit->text() == "") {
+    KMsgBox::message(this,i18n("Information"),i18n("Please fill in at least the subject and bug description!"));
+    return;
+  }
+  //  cerr << endl << "slot ok()"
   if (generateEmail()) {
     if(sendEmail()){
       KMsgBox::message(this,i18n("Bug Report"),i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
     }
   }
+  accept();
 }
 
 bool CBugReportDlg::generateEmail() {

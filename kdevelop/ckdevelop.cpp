@@ -379,10 +379,10 @@ void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotEditInvertSelection(){
-  edit_widget->invertSelection();
+    edit_widget->invertSelection();
 }
 void CKDevelop::slotEditDeselectAll(){
-  edit_widget->deselectAll();
+    edit_widget->deselectAll();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1069,10 +1069,15 @@ void CKDevelop::slotHelpSearchText(QString text){
     KMsgBox::message(this,i18n("Error..."),i18n("You must select a text for searching the documentation!"));
     return;
   }
-  cerr << ":" << text << ":" << endl;
+  //  cerr << ":" << text << ":" << endl;
   slotStatusMsg(i18n("Searching selected text in documentation..."));
   doc_search_text = text.copy(); // save the text
-
+  if(!QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
+    if(KMsgBox::yesNo(this,i18n("Error..."),i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?")) == 1){
+      slotOptionsCreateSearchDatabase();
+    }
+    return;
+  }
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
   search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
@@ -1615,16 +1620,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     }
     if (next_job == "run"  || next_job == "run_with_args" && process.exitStatus() == 0){ 
       // rest from the buildRun
+      appl_process.clearArguments();
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
       stdin_stdout_widget->clear();
       stderr_widget->clear();
       QString args = prj->getExecuteArgs();
-      QString program;
-      if(args.isEmpty()){
-	program = prj->getBinPROGRAM().lower();
-      }
-      else{
-	program = prj->getBinPROGRAM().lower() + " "+args;
+      QString program = prj->getBinPROGRAM().lower();
+      
+      
+      if(next_job == "run_with_args"){
+	if(!args.isEmpty()){
+	  program = prj->getBinPROGRAM().lower() + " "+args;
+	}
       }
 
       // Warning: not every user has the current directory in his path !
@@ -1653,10 +1660,11 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
 	}
 	appl_process << exec_str;
-	cout << exec_str;
+	cerr << endl << "EXEC:" << exec_str;
       }
       else{
 	appl_process << "./" + program;
+	cerr << endl << "EXEC:" << "./" +program;
 	o_tab_view->setCurrentTab(STDERR);
       }
       setToolMenuProcess(false);
@@ -1769,15 +1777,35 @@ void CKDevelop::slotRealFileTreeSelected(QString file){
 }
 
 void CKDevelop::slotDocTreeSelected(QString url_file){
-    if(url_file == "API-Documentation"){
-	slotHelpAPI();
-	return;
+  if(url_file == "API-Documentation"){
+    slotHelpAPI();
+    return;
+  }
+  if(url_file == "User-Manual"){
+    slotHelpManual();
+    return;
+  }
+  QString text = doc_tree->selectedText();
+  
+  if(!QFile::exists(url_file)){
+    if( text == i18n("Qt-Library")){
+      if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?",KMsgBox::INFORMATION) == 1) {
+	slotOptionsKDevelop();
+      }
+      return;
     }
-    if(url_file == "User-Manual"){
-	slotHelpManual();
-	return;
+    if(text ==  i18n("KDE-Core-Library") || text == i18n("KDE-UI-Library") ||
+       text == i18n("KDE-KFile-Library") || text == i18n("KDE-KHTMLW-Library") ||
+       text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
+       text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
+      if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?",KMsgBox::INFORMATION) == 1) {
+	slotOptionsUpdateKDEDocumentation();
+      }
+      return;
     }
-    slotURLSelected(browser_widget,url_file,1,"test");
+  }
+  slotURLSelected(browser_widget,"file:"+ url_file,1,"test");
+  
 }
 
 void CKDevelop::slotTCurrentTab(int item){

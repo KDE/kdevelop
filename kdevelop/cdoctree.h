@@ -41,6 +41,7 @@ public:
 
   /** starts the refresh */
   void refresh(CProject* prj);
+  QString selectedText(){return m_text;}
 
 protected: // Implementations of virtual methods.
 
@@ -66,5 +67,6 @@ private: // Popupmenus
 private: // Private attributes
   KConfig* config_kdevelop;
   CProject* project;
+  QString m_text;
 };
 #endif

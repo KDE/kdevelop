@@ -2,7 +2,6 @@
               ceditwidget.h  -  an abstraction layer for an editwidget   
                              -------------------                                         
 
-    version              :                                   
     begin                : 23 Aug 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -47,6 +46,8 @@ public:
   void gotoLine();
   void indent();
   void unIndent();
+  void invertSelection();
+  void deselectAll();
 
 public slots:
 	void spellcheck();

@@ -65,12 +65,12 @@ void KDlgEdit::slotFileNew(){
       info.data_file = getRelativeName(location + dlg.getDataName());
       info.is_toplevel_dialog = true;
 
-      dialog_file = prj->getProjectDir() + info.rel_name;
+      QString l_dialog_file = prj->getProjectDir() + info.rel_name;
 
       if(prj->addDialogFileToProject(info.rel_name,info)){
 	((CKDevelop*)parent())->newSubDir();
       }
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
+      ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
       
       // registrate the source files
       ((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getHeaderName());
@@ -81,8 +81,8 @@ void KDlgEdit::slotFileNew(){
       // header
       generateInitialHeaderFile(info,dlg.getBaseClassHeader());
       generateInitialSourceFile(info);
+      slotOpenDialog(l_dialog_file);
       slotBuildGenerate();
-      slotOpenDialog(dialog_file);
       ((CKDevelop*)parent())->refreshTrees();
     }
   }

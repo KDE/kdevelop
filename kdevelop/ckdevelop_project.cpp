@@ -871,6 +871,7 @@ bool CKDevelop::readProjectFile(QString file){
 
   if(prj->isKDEProject() || prj->isQtProject()){
     enableCommand(ID_TOOLS_KDLGEDIT);
+    kdlg_tabctl->setTabEnabled("dialogs_view",true);
   }  
 
   if (prj->isKDEProject()){

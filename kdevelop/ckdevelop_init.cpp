@@ -702,9 +702,9 @@ void CKDevelop::initMenu(){
 	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
 	bookmarks_menu->insertSeparator();
   QPopupMenu* header_bookmarks = new QPopupMenu();
-	header_widget->installBMPopup(header_bookmarks);
+  header_widget->installBMPopup(header_bookmarks);
   QPopupMenu* cpp_bookmarks = new QPopupMenu();
-	cpp_widget->installBMPopup(cpp_bookmarks);
+  cpp_widget->installBMPopup(cpp_bookmarks);
 	
 	bookmarks_menu->insertItem(i18n("Header Window"),header_bookmarks,31000);
 	bookmarks_menu->insertItem(i18n("C/C++ Window"),cpp_bookmarks,31010);

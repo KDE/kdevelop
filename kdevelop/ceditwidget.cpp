@@ -1,8 +1,7 @@
 /***************************************************************************
-               ceditwidget.cpp  -  a abstraction layer for a editwidget   
+               ceditwidget.cpp  -  a abstraction layer for an editwidget   
                              -------------------                                         
 
-    version              :                                   
     begin                : 23 Aug 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -119,6 +118,14 @@ void CEditWidget::indent(){
 void CEditWidget::unIndent(){
   KWrite::unIndent();
 }
+void CEditWidget::invertSelection(){
+  KWrite::invertSelection();
+}
+void CEditWidget::deselectAll(){
+  KWrite::deselectAll();
+}
+
+
 void CEditWidget::spellcheck(){
    kspell= new KSpell (this, "KDevelop: Spellcheck", this,
 		   SLOT (spellcheck2 (KSpell *)));	

@@ -2,7 +2,6 @@
                      cnewfiledlg.cpp - the new file dialog
                              -------------------                                         
 
-    version              :                                   
     begin                : 17 Aug 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
