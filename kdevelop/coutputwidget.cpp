@@ -28,8 +28,6 @@ COutputWidget::COutputWidget(QWidget* parent, const char* name) :
 //  KEdit(parent,name)
   QMultiLineEdit(parent, name)
 {
-	setWordWrap(WidgetWidth);
-	setWrapPolicy(Anywhere);
 }
 
 void COutputWidget::insertAtEnd(const QString& s)
@@ -80,7 +78,9 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
   m_errorGcc("([^: \t]+):([0-9]+)[:,].*")
 {
   it = m_errorMap.begin();
-//  setReadOnly(true);
+  setReadOnly(true);        // -JROC uncommented again
+  setWordWrap(WidgetWidth); // -JROC
+  setWrapPolicy(Anywhere); // -JROC
 }
 
 // ---------------------------------------------------------------------------
