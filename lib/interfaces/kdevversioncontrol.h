@@ -19,6 +19,8 @@
 
 #include "kdevplugin.h"
 
+class KDevVCSFileInfoProvider;
+
 /**
 * This is the abstract base class which encapsulates everything
 * necessary for communicating with version control systems.
@@ -56,7 +58,20 @@ public:
     */
     virtual void fetchFromRepository();
     /**
-    * Returns the unique identifier for this plugin (so it can be used for retrieving
+    * @return the file info provider for this version control (0 if none is available)
+    */
+    virtual KDevVCSFileInfoProvider *fileInfoProvider() const;
+
+    /**
+    * Checks if the directory is valid for this version control (for example
+    * CVS may check for the presence of "<dirPath>/CVS/" subdir and something else)
+    * @param dirPath absolute path of the directory
+    * @return true if the directory is valid for this version control
+    *     <b>warning</b>: this returns false by default
+    */
+    virtual bool isValidDirectory( const QString &dirPath ) const;
+    /**
+    * @return the unique identifier for this plugin (so it can be used for retrieving
     * it from collections).
     */
     QString uid() const;

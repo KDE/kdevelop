@@ -69,4 +69,18 @@ void KDevVersionControl::fetchFromRepository()
     return;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+bool KDevVersionControl::isValidDirectory( const QString &/*dirPath*/ ) const
+{
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+KDevVCSFileInfoProvider *KDevVersionControl::fileInfoProvider() const
+{
+    return 0;
+}
+
 #include "kdevversioncontrol.moc"
