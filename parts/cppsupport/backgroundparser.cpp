@@ -176,7 +176,7 @@ public:
 	    ++it;
 	}
     }
-    
+
 private:
     mutable QMutex m_mutex;
     QValueList< QPair<QString, bool> > m_fileList;
@@ -211,6 +211,10 @@ void BackgroundParser::addFile( const QString& fileName, bool readFromDisk )
         m_fileList->push_back( fn, readFromDisk );
 	added = true;
     }
+
+    kdDebug(9007) << "=======================================================" << endl;
+    kdDebug(9007) << "= the current file list contains: " << m_fileList->count()  << " files" << endl;
+    kdDebug(9007) << "=======================================================" << endl;
 
     if( added )
         m_canParse.wakeAll();
@@ -253,7 +257,7 @@ void BackgroundParser::removeFile( const QString& fileName )
 Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk )
 {
     static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( readFromDisk );
-    
+
     m_driver->remove( fileName );
     m_driver->parseFile( fileName );
     m_driver->removeAllMacrosInFile( fileName );  // romove all macros defined by this
@@ -264,25 +268,25 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk )
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
     unit->problems = m_driver->problems( fileName );
-    
+
     static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( false );
-    
+
     if( m_unitDict.find(fileName) != m_unitDict.end() ){
 	Unit* u = m_unitDict[ fileName ];
 	m_unitDict.remove( fileName );
 	delete( u );
 	u = 0;
     }
-    
+
     m_unitDict.insert( fileName, unit );
-    
+
     KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName, unit->problems) );
-    
+
     m_currentFile = QString::null;
-    
+
     if( m_fileList->isEmpty() )
 	m_isEmpty.wakeAll();
-    
+
     return unit;
 }
 
@@ -294,12 +298,15 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
 
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
+    if( m_currentFile == fileName ){
+         kdDebug(9007) << "============================> SHIT!!!!!!!!!!!" << endl;
+    }
     Unit* u = 0;
     if( (u = findUnit(fileName)) == 0 ){
 	m_fileList->remove( fileName );
 	u = parseFile( fileName, false );
     }
-    
+
     return u->translationUnit;
 }
 
@@ -310,7 +317,7 @@ QValueList<Problem> BackgroundParser::problems( const QString& fileName )
 	m_fileList->remove( fileName );
 	u = parseFile( fileName, false );
     }
-    
+
     return u ? u->problems : QValueList<Problem>();
 }
 
@@ -352,12 +359,14 @@ void BackgroundParser::run()
         QString fileName = entry.first;
 	bool readFromDisk = entry.second;
 	m_currentFile = fileName;
-	m_fileList->pop_front();
 
 	(void) parseFile( fileName, readFromDisk );
+	m_fileList->pop_front();
         m_mutex.unlock();
+
+	m_currentFile = QString::null;
     }
-    
+
     kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
 
     QThread::exit();

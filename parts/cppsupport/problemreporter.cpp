@@ -83,6 +83,8 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
       m_document( 0 ),
       m_markIface( 0 )
 {
+    m_canParseFile = true;
+
     addColumn( i18n("Level") );
     addColumn( i18n("File") );
     addColumn( i18n("Line") );
@@ -98,6 +100,8 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
              this, SLOT(slotPartAdded(KParts::Part*)) );
     connect( part->partController(), SIGNAL(partRemoved(KParts::Part*)),
              this, SLOT(slotPartRemoved(KParts::Part*)) );
+
+    connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
 
     connect( m_timer, SIGNAL(timeout()), this, SLOT(reparse()) );
 
@@ -150,8 +154,10 @@ void ProblemReporter::slotActivePartChanged( KParts::Part* part )
 
 void ProblemReporter::slotTextChanged()
 {
-    if( m_active )
-        m_timer->changeInterval( m_delay );
+    if( !m_active )
+        return;
+
+    m_timer->changeInterval( m_delay );
 }
 
 void ProblemReporter::removeAllProblems( const QString& filename )
@@ -177,14 +183,16 @@ void ProblemReporter::removeAllProblems( const QString& filename )
 
 void ProblemReporter::reparse()
 {
+    m_timer->stop();
+
     if( !m_cppSupport->isValid() )
 	return;
 
-    m_timer->stop();
-
-    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
-    m_cppSupport->backgroundParser()->addFile( m_fileName );
-    kdDebug(9007) << "---> file added" << endl;
+    if( m_canParseFile ){
+        m_cppSupport->backgroundParser()->addFile( m_fileName );
+        m_canParseFile = false;
+        kdDebug(9007) << "---> file added" << endl;
+    }
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -281,6 +289,13 @@ int ProblemReporter::levelToMarkType( int level ) const
         return -1;
     default:
         return -1;
+    }
+}
+
+void ProblemReporter::slotFileParsed( const QString& fileName )
+{
+    if( m_active && fileName == m_fileName ){
+        m_canParseFile = true;
     }
 }
 

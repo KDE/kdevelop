@@ -56,6 +56,7 @@ private slots:
     void slotActivePartChanged( KParts::Part* );
     void slotTextChanged();
     void slotSelected( QListViewItem* );
+    void slotFileParsed( const QString& fileName );
 
 private:
     QString levelToString( int level ) const;
@@ -69,6 +70,7 @@ private:
     QString m_fileName;
     int m_active;
     int m_delay;
+    int m_canParseFile;
 };
 
 #endif
