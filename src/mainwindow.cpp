@@ -358,10 +358,10 @@ void MainWindow::createActions()
 
   connect(manager(), SIGNAL(change()),this, SLOT(updateActionState()));
 
-  action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
+  action = new KAction( i18n("&Next Window"), ALT+Key_Right, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
   action->setStatusText( i18n("Switches to the next window") );
 
-  action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
+  action = new KAction( i18n("&Previous Window"), ALT+Key_Left, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
   action->setStatusText( i18n("Switches to the previous window") );
 
 
