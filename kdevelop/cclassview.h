@@ -145,8 +145,11 @@ protected: // Protected signals and slots
     void slotMethodDelete();
     void slotAttributeNew();
     void slotAttributeDelete();
-    //void slotViewDeclaration();
-    //void slotViewDefinition();
+    void slotFolderNew();
+    void slotClassBaseClasses();
+    void slotClassDerivedClasses();
+    void slotViewDefinition();
+    void slotViewDeclaration();
 
   signals:
     void selectedFileNew();
