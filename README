@@ -1,4 +1,4 @@
-KDevelop 1.2
+KDevelop 1.3
 
 -------------------------------------
 
@@ -63,11 +63,16 @@ xdevel.rpm (or similar)
 qtdevel.rpm (or similar)
 qtcompat.rpm (SuSE)
 qtext.rpm (SuSE)
+kde-devel.rpm (Mandrake/Redhat)
+kde-libs-devel.rpm (Mandrake/Redhat)
 
 Please set the KDEDIR to the correct KDE path (SuSE /opt/kde, RedHat 6.x /usr/, Slackware /opt/kde)
-On Red Hat 6.1 please set the QTDIR variable to the Qt 1.44 dir, NOT to QT 2.0
+On Red Hat 6.x please set the QTDIR variable to the Qt 1.44 dir, NOT to QT 2.0
+
+If you want to use KDE1 and KDE2 applications at the same time please look at
+http://www.kde.org/kde1-and-kde2.html
 
 Have fun!
 							 
 The KDevelop-Team 
-<kdevelop-team@barney.cs.uni-potsdam.de>
+<kdevelop-team@kdevelop.org>
