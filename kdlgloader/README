@@ -11,20 +11,20 @@ KDLGLOADER README
 ---------------
 
 The KDialogLoader is a shared library allowing programs loading dialogs designed by
-KDevelop dialog editor at runtime. There is a header file available, provideing a
+KDevelop dialog editor at runtime. There is a header file available, providing a
 wrapper class for dynamically loading the library and use it to load the dialogs
 (kdlgloader.h). By the way, of course the lib must be installed together with your
-application on the users system as long as it is not included in the kdelibs
+application on the user's system as long as it is not included in the kdelibs
 package.
 
 2. Advantages and disadvantages
 -------------------------------
 
-There are many advantages for using the dialog loader. The most important one is,
-that it will be possible to change the dialogs layout without having to recompile
+There are many advantages for using the dialog loader. The most important one is
+that it will be possible to change the dialog´s layout without having to recompile
 the application. In future versions it will also be possible to provide dialog
-defination files for every language so translators can redesign the dialog.
-Another advantage is that you will not longer have to deal with hundrets of lines
+definition files for every language so translators can redesign the dialog.
+Another advantage is that you will not longer have to deal with hundreds of lines
 for dialog designs because the dialog loader does all initialization for you (see
 below).
 A disadvantage may be that the time needed for loading will be a little bit longer.
