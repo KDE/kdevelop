@@ -25,6 +25,7 @@ class QDomDocument;
 class KDevPartController;
 class KDevTopLevel;
 class KDevDebugger;
+class KDevDiffFrontend;
 
 
 class KDevApiPrivate;
@@ -62,6 +63,8 @@ public:
     KDevVersionControl *versionControl();
     void setVersionControl(KDevVersionControl *versionControl);
 
+    KDevDiffFrontend *diffFrontend();
+    void setDiffFrontend(KDevDiffFrontend *diffFrontend);
 
 private:
     

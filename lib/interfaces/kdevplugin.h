@@ -27,6 +27,7 @@ class KDevApi;
 class KDevPartController;
 class KDevTopLevel;
 class KDevDebugger;
+class KDevDiffFrontend;
 
 
 // 2002-02-08 added ccClassStore( ) - daniel
@@ -74,6 +75,10 @@ public:
      * Gives a reference to the make frontend component
      */
     KDevMakeFrontend *makeFrontend();
+    /**
+     * Gives a reference to the diff frontend component
+     */
+    KDevDiffFrontend *diffFrontend();
     /**
      * Gives a reference to the application frontend component
      */

@@ -63,6 +63,11 @@ KDevMakeFrontend *KDevPlugin::makeFrontend()
     return m_api->makeFrontend();
 }
 
+KDevDiffFrontend *KDevPlugin::diffFrontend()
+{
+    return m_api->diffFrontend();
+}
+
 KDevAppFrontend *KDevPlugin::appFrontend()
 {
     return m_api->appFrontend();

@@ -7,7 +7,8 @@ public:
 
   KDevApiPrivate() 
     : m_projectDom(0), m_project(0), m_makeFrontend(0),
-      m_appFrontend(0), m_languageSupport(0), m_versionControl(0)
+      m_appFrontend(0), m_languageSupport(0), m_versionControl(0),
+      m_diffFrontend(0)
   {}
 
   QDomDocument *m_projectDom;
@@ -16,6 +17,7 @@ public:
   KDevAppFrontend *m_appFrontend;
   KDevLanguageSupport *m_languageSupport;
   KDevVersionControl *m_versionControl;
+  KDevDiffFrontend *m_diffFrontend;
 
 };
 
@@ -91,6 +93,15 @@ void KDevApi::setVersionControl(KDevVersionControl *versionControl)
   d->m_versionControl = versionControl;
 }
 
+KDevDiffFrontend *KDevApi::diffFrontend()
+{
+  return d->m_diffFrontend;
+}
+
+void KDevApi::setDiffFrontend(KDevDiffFrontend *diffFrontend)
+{
+  d->m_diffFrontend = diffFrontend;
+}
 
 QDomDocument *KDevApi::projectDom() 
 {

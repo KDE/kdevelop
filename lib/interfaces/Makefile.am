@@ -5,7 +5,7 @@ noinst_LTLIBRARIES = libkdevinterfaces.la
 libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 			       kdevlanguagesupport.cpp kdevversioncontrol.cpp \
 			       kdevmakefrontend.cpp kdevappfrontend.cpp kdevcompileroptions.cpp \
-			       kdevpartcontroller.cpp kdevapi.cpp\
+			       kdevpartcontroller.cpp kdevapi.cpp kdevdifffrontend.cpp \
 			       KDevMakeFrontendIface.skel KDevMakeFrontendIface.cpp \
 			       KDevAppFrontendIface.skel KDevAppFrontendIface.cpp \
 			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp \
@@ -14,7 +14,7 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 
 kdevelopincludedir = $(includedir)/kdevelop
 kdevelopinclude_HEADERS = kdevcore.h kdevproject.h \
-			  kdevlanguagesupport.h kdevversioncontrol.h \
+			  kdevlanguagesupport.h kdevversioncontrol.h kdevdifffrontend.h \
 			  kdevmakefrontend.h kdevappfrontend.h kdevcompileroptions.h \
 			  KDevMakeFrontendIface.h KDevAppFrontendIface.h KDevCoreIface.h \
 			  kdevplugin.h kdevdebugger.h
@@ -25,6 +25,6 @@ servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = kdevelopcompileroptions.desktop \
 		   kdevelopmakefrontend.desktop kdevelopappfrontend.desktop \
 		   kdevelopproject.desktop kdeveloplanguagesupport.desktop \
-		   kdevelopplugin.desktop
+		   kdevelopplugin.desktop kdevelopdifffrontend.desktop
 
 METASOURCES = AUTO
