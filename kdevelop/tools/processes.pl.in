@@ -38,7 +38,7 @@ $nameBig = $processes{NAME};
 $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
-$template_dir= $processes{TEMPLATESDIR} if ($processes{TEMPLATESDIR});
+#$template_dir= $processes{TEMPLATESDIR} if ($processes{TEMPLATESDIR});
 if ($processes{KDEICONDIR})
 {
   $kde_icondir= $processes{KDEICONDIR};
@@ -323,31 +323,26 @@ sub condCopyUserDocFiles {
 
 sub condCopyKdelnkFile {
 
+  # desktop file is in the kickerapp tar ball, so don't do it here
+  return    if ($processes{APPLICATION} =~ /kickerapp/);
+
   #if .kdelnk-file was chosen in kAppWizard
   if ($processes{KDELNK} eq "yes") {
 
     #copying, rename and replace in the kdelnk-file
     chdir ($templatedir);
 
-    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/) {
+    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/)
+    {
       copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
       chdir ($underDirectory);
       replaceValuesInFile(\%changings, "$nameLittle.desktop");
     }
     else
     {
-      if ($processes{APPLICATION} eq "kickerapp") {
-
-        move ("$underDirectory/skel.desktop","$underDirectory/$nameLittle.desktop");
-        chdir ($underDirectory);
-        replaceValuesInFile(\%changings, "$nameLittle.desktop");
-      }
-      else
-      {
-        copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
-        chdir ($underDirectory);
-        replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
-      }
+      copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
+      chdir ($underDirectory);
+      replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
     }
   }
 }
@@ -582,7 +577,12 @@ sub changeMiniApp {
 
   rename ("skel.cpp", $nameLittle.".cpp");
   rename ("skel.h",   $nameLittle.".h");
-
+  if ($processes{APPLICATION} =~ /kickerapp/)
+  {
+    rename ("skel.desktop", $nameLittle.".desktop");
+    replaceValuesInFile(\%changings, "$nameLittle.desktop");
+  } 
+ 
   replaceValuesInFile(\%changings, "Makefile.am");
   replaceValuesInFile(\%changings, "$nameLittle.cpp");
   replaceValuesInFile(\%changings, "$nameLittle.h");
