@@ -328,7 +328,7 @@
 <tocsect2 name="Index" url="api/genindex.html"/>
 <tocsect2 name="About this document ..." url="api/about.html"/>
 </tocsect1>
-<tocsect1 name="Library" url="lib.html">
+<tocsect1 name="Library" url="lib/lib.html">
 <tocsect2 name="Front Matter" url="lib/front.html"/>
 <tocsect2 name="Contents" url="lib/contents.html"/>
 <tocsect2 name="1. Introduction" url="lib/intro.html"/>
