@@ -185,7 +185,6 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
             data->setMark( data->mark() | 0x01 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
         }
-        emit marksChanged();
     } else if ( res == toggleBreakPoint && m_changeBreakpointsAllowed ) {
         mark.type = 0x02;
         if ( data->mark() & 0x02 ) {
@@ -196,15 +195,14 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
             data->setMark( data->mark() | 0x02 );
             emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
         }
-        emit marksChanged();
     } else if ( res == lmbClickChangesBPs ) {
         m_clickChangesBPs = !m.isItemChecked(lmbClickChangesBPs);
     } else if ( res == lmbClickChangesBookmarks ) {
         m_clickChangesBPs = m.isItemChecked(lmbClickChangesBookmarks);
     }
 
+    emit marksChanged();
     doRepaint();
-    // emit markersChanged();
 }
 
 void MarkerWidget::mousePressEvent( QMouseEvent * e )
@@ -249,6 +247,7 @@ void MarkerWidget::mousePressEvent( QMouseEvent * e )
     }
   }
 
+  emit marksChanged();
   doRepaint();
 }
 
