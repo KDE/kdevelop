@@ -68,7 +68,6 @@ public:
 
 protected:
     Unit* findUnit( const QString& fileName );
-    Unit* findOrCreateUnit( const QString& fileName, bool forceCreate=false );
     Unit* parseFile( const QString& fileName );
 
 private:

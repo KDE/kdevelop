@@ -103,7 +103,7 @@ void showMemUsage()
 #endif
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"), 
+    : KDevLanguageSupport("CppSupport", "cpp", parent, name ? name : "KDevCppSupport"),
       m_activeSelection( 0 ), m_activeEditor( 0 ),
       m_activeViewCursor( 0 ), m_projectClosed( true ), m_valid( false )
 {
@@ -248,10 +248,13 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 
 	m_backgroundParser->unlock();
     } else if( ev->type() == int(Event_FileParsed) ){
-	FileParsedEvent* event = (FileParsedEvent*) ev;
-	QString fileName( event->fileName().unicode(), event->fileName().length() );
-	emit fileParsed( fileName );
-	// mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
+
+	if( m_valid ){
+	    FileParsedEvent* event = (FileParsedEvent*) ev;
+	    QString fileName( event->fileName().unicode(), event->fileName().length() );
+	    emit fileParsed( fileName );
+	    // mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
+	}
 
 	m_eventConsumed.wakeAll();
     }
@@ -939,7 +942,7 @@ void CppSupportPart::slotMakeMember()
                 m_backgroundParser->isEmpty().wait();
 
 	}
-	
+
 	m_backgroundParser->lock();
 	translationUnit = m_backgroundParser->translationUnit( m_activeFileName );
 	int atLine, atColumn;
@@ -1038,7 +1041,7 @@ KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
 void CppSupportPart::setupCatalog( )
 {
     kdDebug(9007) << "CppSupportPart::setupCatalog()" << endl;
-    
+
     KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
     QStringList pcsList = dirs->findAllResources( "pcs", "*.db", false, true );
     QStringList::Iterator it = pcsList.begin();
@@ -1059,23 +1062,23 @@ KMimeType::List CppSupportPart::mimeTypes( )
 {
     KMimeType::List list;
     KMimeType::Ptr mime;
-    
+
     mime = KMimeType::mimeType( "text/x-csrc" );
     if( mime )
 	list << mime;
-    
+
     mime = KMimeType::mimeType( "text/x-chdr" );
     if( mime )
 	list << mime;
-    
+
     mime = KMimeType::mimeType( "text/x-c++src" );
     if( mime )
 	list << mime;
-    
+
     mime = KMimeType::mimeType( "text/x-c++hdr" );
     if( mime )
 	list << mime;
-    
+
     return list;
 }
 

@@ -276,13 +276,12 @@ void BackgroundParser::removeFile( const QString& fileName )
 {
     QMutexLocker locker( &m_mutex );
 
-    Unit* unit = findUnit( fileName );
-    m_unitDict.remove( fileName );
-    if( unit ){
+    if( Unit* unit = findUnit(fileName) ){
+        m_driver->remove( fileName );
+        m_unitDict.remove( fileName );
         delete( unit );
 	unit = 0;
     }
-    m_driver->remove( fileName );
 
     if( m_fileList.isEmpty() )
         m_isEmpty.wakeAll();
@@ -293,31 +292,12 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
     m_driver->remove( fileName );
     m_driver->parseFile( fileName );
 
-    m_driver->parseFile( fileName );
     TranslationUnitAST::Node translationUnit = m_driver->takeTranslationUnit( fileName );
 
     Unit* unit = new Unit;
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
     unit->problems = m_driver->problems( fileName );
-
-    return unit;
-}
-
-Unit* BackgroundParser::findOrCreateUnit( const QString& fileName, bool force )
-{
-    QMap<QString, Unit*>::Iterator it = m_unitDict.find( fileName );
-    Unit* unit = it != m_unitDict.end() ? *it : 0;
-
-    if( unit && force ){
-        m_unitDict.remove( fileName );
-	delete( unit );
-	unit = 0;
-    }
-
-    if( !unit && 0 != (unit = parseFile(fileName)) ){
-	m_unitDict.insert( fileName, unit );
-    }
 
     return unit;
 }
@@ -370,8 +350,9 @@ void BackgroundParser::run()
 
 	    if( m_unitDict.find(fileName) != m_unitDict.end() ){
 	        Unit* u = m_unitDict[ fileName ];
-		delete( u );
 		m_unitDict.remove( fileName );
+		delete( u );
+		u = 0;
 	    }
 
 	    m_unitDict.insert( fileName, unit );
