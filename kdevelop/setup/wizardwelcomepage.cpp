@@ -30,7 +30,7 @@ WizardWelcomePage::WizardWelcomePage(QWidget* parent, const char* name, const QS
    m_vbox = new QVBox(this);
 
    QLabel * label = new QLabel("", m_vbox);
-   label = new QLabel(i18n("Welcome to the KDevelop Setup !"), m_vbox);
+   label = new QLabel(i18n("Welcome to the KDevelop Setup!"), m_vbox);
    label->setAlignment(AlignHCenter);
    label->setFont( QFont("Helvetica", 18, QFont::Bold));
    label->setFixedSize(label->sizeHint());
