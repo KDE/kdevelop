@@ -13,4 +13,4 @@ EXTRA_DIST = breakpoint.cpp breakpoint.h breakpointdialog.cpp breakpointdialog.h
 
 ####### kdevelop will overwrite this part!!! (end)############
 
-KDE_CXXFLAGS=-DQT_CLEAN_NAMESPACE -DQT_NO_COMPAT -DQT_NO_ASCII_CAST -DGDB_MONITOR
+KDE_CXXFLAGS=-DQT_CLEAN_NAMESPACE -DQT_NO_COMPAT -DQT_NO_ASCII_CAST

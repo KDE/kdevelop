@@ -1,0 +1,1135 @@
+<!DOCTYPE UI><UI>
+<class>wzConnectDlg</class>
+<author>Serge Lussier</author>
+<widget>
+    <class>QWizard</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>wzConnectDlg</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>366</width>
+            <height>423</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Signals -&gt; Slot connection</string>
+    </property>
+    <property stdset="1">
+        <name>backgroundOrigin</name>
+        <enum>ParentOrigin</enum>
+    </property>
+    <property stdset="1">
+        <name>palette</name>
+        <palette>
+            <active>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>162</red>
+                    <green>162</green>
+                    <blue>162</blue>
+                </color>
+                <color>
+                    <red>243</red>
+                    <green>243</green>
+                    <blue>243</blue>
+                </color>
+                <color>
+                    <red>202</red>
+                    <green>202</green>
+                    <blue>202</blue>
+                </color>
+                <color>
+                    <red>81</red>
+                    <green>81</green>
+                    <blue>81</blue>
+                </color>
+                <color>
+                    <red>108</red>
+                    <green>108</green>
+                    <blue>108</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>192</red>
+                    <green>192</green>
+                    <blue>192</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </active>
+            <disabled>
+                <color>
+                    <red>128</red>
+                    <green>128</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>162</red>
+                    <green>162</green>
+                    <blue>162</blue>
+                </color>
+                <color>
+                    <red>243</red>
+                    <green>243</green>
+                    <blue>243</blue>
+                </color>
+                <color>
+                    <red>186</red>
+                    <green>186</green>
+                    <blue>186</blue>
+                </color>
+                <color>
+                    <red>81</red>
+                    <green>81</green>
+                    <blue>81</blue>
+                </color>
+                <color>
+                    <red>108</red>
+                    <green>108</green>
+                    <blue>108</blue>
+                </color>
+                <color>
+                    <red>128</red>
+                    <green>128</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>128</red>
+                    <green>128</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>192</red>
+                    <green>192</green>
+                    <blue>192</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </disabled>
+            <inactive>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>162</red>
+                    <green>162</green>
+                    <blue>162</blue>
+                </color>
+                <color>
+                    <red>243</red>
+                    <green>243</green>
+                    <blue>243</blue>
+                </color>
+                <color>
+                    <red>186</red>
+                    <green>186</green>
+                    <blue>186</blue>
+                </color>
+                <color>
+                    <red>81</red>
+                    <green>81</green>
+                    <blue>81</blue>
+                </color>
+                <color>
+                    <red>108</red>
+                    <green>108</green>
+                    <blue>108</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>192</red>
+                    <green>192</green>
+                    <blue>192</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </inactive>
+        </palette>
+    </property>
+    <widget>
+        <class>QWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>wzpSignal</cstring>
+        </property>
+        <attribute>
+            <name>title</name>
+            <string>Signals</string>
+        </attribute>
+        <vbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>11</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <spacer>
+                <property>
+                    <name>name</name>
+                    <cstring>Spacer2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>orientation</name>
+                    <enum>Vertical</enum>
+                </property>
+                <property stdset="1">
+                    <name>sizeType</name>
+                    <enum>Expanding</enum>
+                </property>
+                <property>
+                    <name>sizeHint</name>
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget>
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>GroupBox1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string>Source class (where to implement connection):</string>
+                </property>
+                <property stdset="1">
+                    <name>frameShadow</name>
+                    <enum>Sunken</enum>
+                </property>
+                <vbox>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>11</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget>
+                        <class>QComboBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>cbSourceCVList</cstring>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>Line</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>Line1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>Instantiated classe's variables members</string>
+                        </property>
+                        <vbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QComboBox</class>
+                                <item>
+                                    <property>
+                                        <name>text</name>
+                                        <string></string>
+                                    </property>
+                                </item>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>cbCVMemberList</cstring>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>Line</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Line1_2</cstring>
+                                </property>
+                                <property stdset="1">
+                                    <name>orientation</name>
+                                    <enum>Horizontal</enum>
+                                </property>
+                            </widget>
+                            <widget>
+                                <class>QLayoutWidget</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>Layout4</cstring>
+                                </property>
+                                <hbox>
+                                    <property stdset="1">
+                                        <name>margin</name>
+                                        <number>0</number>
+                                    </property>
+                                    <property stdset="1">
+                                        <name>spacing</name>
+                                        <number>6</number>
+                                    </property>
+                                    <widget>
+                                        <class>QLabel</class>
+                                        <property stdset="1">
+                                            <name>name</name>
+                                            <cstring>TextLabel1</cstring>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>text</name>
+                                            <string>Signals from member :</string>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>frameShape</name>
+                                            <enum>NoFrame</enum>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>frameShadow</name>
+                                            <enum>Plain</enum>
+                                        </property>
+                                    </widget>
+                                    <widget>
+                                        <class>QLabel</class>
+                                        <property stdset="1">
+                                            <name>name</name>
+                                            <cstring>TextLabel2</cstring>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>text</name>
+                                            <string>cc_class_type* this</string>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>frameShape</name>
+                                            <enum>Panel</enum>
+                                        </property>
+                                        <property stdset="1">
+                                            <name>frameShadow</name>
+                                            <enum>Sunken</enum>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget>
+                                <class>QComboBox</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>cbCVMemberSignalList</cstring>
+                                </property>
+                            </widget>
+                        </vbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <spacer>
+                <property>
+                    <name>name</name>
+                    <cstring>Spacer2_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>orientation</name>
+                    <enum>Vertical</enum>
+                </property>
+                <property stdset="1">
+                    <name>sizeType</name>
+                    <enum>Expanding</enum>
+                </property>
+                <property>
+                    <name>sizeHint</name>
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+        </vbox>
+    </widget>
+    <widget>
+        <class>QWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>wzpSlots</cstring>
+        </property>
+        <attribute>
+            <name>title</name>
+            <string>Slots:</string>
+        </attribute>
+        <vbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>11</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>lbWorkClass</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Current Class...</string>
+                </property>
+                <property stdset="1">
+                    <name>frameShape</name>
+                    <enum>Panel</enum>
+                </property>
+                <property stdset="1">
+                    <name>frameShadow</name>
+                    <enum>Sunken</enum>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel5</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Slots list:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QComboBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>cbSlotList</cstring>
+                </property>
+                <property stdset="1">
+                    <name>autoResize</name>
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QCheckBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>chNewSlot</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>New Slot:</string>
+                </property>
+                <property stdset="1">
+                    <name>backgroundOrigin</name>
+                    <enum>ParentOrigin</enum>
+                </property>
+                <property stdset="1">
+                    <name>autoResize</name>
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>cbNewSlotEdit</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string></string>
+                </property>
+                <property stdset="1">
+                    <name>enabled</name>
+                    <bool>false</bool>
+                </property>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel4</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>100</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>slot declaration:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout6</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>14</x>
+                            <y>145</y>
+                            <width>290</width>
+                            <height>30</height>
+                        </rect>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <spacer>
+                            <property>
+                                <name>name</name>
+                                <cstring>Spacer3</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>sizeType</name>
+                                <enum>Expanding</enum>
+                            </property>
+                            <property>
+                                <name>sizeHint</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget>
+                            <class>QPushButton</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>btnDoCreateSlot</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>&amp;Do create slot</string>
+                            </property>
+                            <property stdset="1">
+                                <name>autoResize</name>
+                                <bool>true</bool>
+                            </property>
+                            <property stdset="1">
+                                <name>autoDefault</name>
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property>
+                                <name>name</name>
+                                <cstring>Spacer4</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>sizeType</name>
+                                <enum>Expanding</enum>
+                            </property>
+                            <property>
+                                <name>sizeHint</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>LineEdit1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>45</y>
+                            <width>291</width>
+                            <height>26</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>slot_(const QString&amp;)</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QButtonGroup</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>ButtonGroup1</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>85</y>
+                            <width>295</width>
+                            <height>51</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>title</name>
+                        <string>Access attribute:</string>
+                    </property>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbSlotPublic</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>10</x>
+                                <y>20</y>
+                                <width>86</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Public</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbSlotProtected</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>100</x>
+                                <y>20</y>
+                                <width>87</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Protected</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbSlotPrivate</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>197</x>
+                                <y>20</y>
+                                <width>86</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Private</string>
+                        </property>
+                    </widget>
+                </widget>
+            </widget>
+        </vbox>
+    </widget>
+    <widget>
+        <class>QWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>wzpImplementation</cstring>
+        </property>
+        <attribute>
+            <name>title</name>
+            <string>Implementation:</string>
+        </attribute>
+        <vbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>11</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>lbWorkClass_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Current Class...</string>
+                </property>
+                <property stdset="1">
+                    <name>frameShape</name>
+                    <enum>Panel</enum>
+                </property>
+                <property stdset="1">
+                    <name>frameShadow</name>
+                    <enum>Sunken</enum>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel5_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Methods member list:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QComboBox</class>
+                <item>
+                    <property>
+                        <name>text</name>
+                        <string></string>
+                    </property>
+                </item>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>cbMethodtList</cstring>
+                </property>
+            </widget>
+            <widget>
+                <class>QCheckBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>chNewMethod</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>New Method:</string>
+                </property>
+                <property stdset="1">
+                    <name>backgroundOrigin</name>
+                    <enum>ParentOrigin</enum>
+                </property>
+                <property stdset="1">
+                    <name>autoResize</name>
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QGroupBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>GroupBox13_2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>title</name>
+                    <string></string>
+                </property>
+                <property stdset="1">
+                    <name>enabled</name>
+                    <bool>false</bool>
+                </property>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout6_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>14</x>
+                            <y>145</y>
+                            <width>290</width>
+                            <height>30</height>
+                        </rect>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <spacer>
+                            <property>
+                                <name>name</name>
+                                <cstring>Spacer3_2</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>sizeType</name>
+                                <enum>Expanding</enum>
+                            </property>
+                            <property>
+                                <name>sizeHint</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget>
+                            <class>QPushButton</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>btnDoCreateMethod</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>&amp;Do create method</string>
+                            </property>
+                            <property stdset="1">
+                                <name>autoResize</name>
+                                <bool>true</bool>
+                            </property>
+                            <property stdset="1">
+                                <name>autoDefault</name>
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property>
+                                <name>name</name>
+                                <cstring>Spacer4_2</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>sizeType</name>
+                                <enum>Expanding</enum>
+                            </property>
+                            <property>
+                                <name>sizeHint</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel4_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>130</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Methods member list:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>LineEdit1_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>45</y>
+                            <width>291</width>
+                            <height>26</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>void setCallback()</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QButtonGroup</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>ButtonGroup1_2</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>85</y>
+                            <width>295</width>
+                            <height>51</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>title</name>
+                        <string>Access attribute:</string>
+                    </property>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbMethodPublic</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>12</x>
+                                <y>20</y>
+                                <width>86</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Public</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbMethodProtected</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>104</x>
+                                <y>20</y>
+                                <width>87</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Protected</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbMethodPrivate</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>197</x>
+                                <y>20</y>
+                                <width>86</width>
+                                <height>19</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Private</string>
+                        </property>
+                    </widget>
+                </widget>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>cbSourceCVList</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotSourceClassSelected(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>cbCVMemberList</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotMemberSelected(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>cbCVMemberSignalList</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotSignalSelected(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>cbSlotList</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotSlotSelected(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>chNewSlot</sender>
+        <signal>clicked()</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotNewSlotChanged()</slot>
+    </connection>
+    <connection>
+        <sender>btnDoCreateSlot</sender>
+        <signal>clicked()</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotDoCreateSlot()</slot>
+    </connection>
+    <connection>
+        <sender>cbMethodtList</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotMethodSelected(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>chNewMethod</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotMethodChanged()</slot>
+    </connection>
+    <connection>
+        <sender>btnDoCreateMethod</sender>
+        <signal>clicked()</signal>
+        <receiver>wzConnectDlg</receiver>
+        <slot>slotDoCreateMethod()</slot>
+    </connection>
+    <slot access="public">slotDoCreateMethod()</slot>
+    <slot access="protected">slotDoCreateSlot()</slot>
+    <slot access="protected">slotMemberSelected(const QString&amp;)</slot>
+    <slot access="protected">slotMethodChanged()</slot>
+    <slot access="protected">slotMethodSelected(const QString&amp;)</slot>
+    <slot access="protected">slotNewSlotChanged()</slot>
+    <slot access="protected">slotSignalSelected(const QString&amp;)</slot>
+    <slot access="protected">slotSlotSelected(const QString&amp;)</slot>
+    <slot access="protected">slotSourceClassSelected(const QString&amp;)</slot>
+</connections>
+</UI>
