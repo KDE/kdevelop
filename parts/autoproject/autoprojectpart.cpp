@@ -110,7 +110,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotInstall()),
                           actionCollection(), "build_install" );
 
-    action = new KAction( i18n("Install with kdesu"), 0,
+    action = new KAction( i18n("Install (as root user)"), 0,
                           this, SLOT(slotInstallWithKdesu()),
                           actionCollection(), "build_install_kdesu" );
 

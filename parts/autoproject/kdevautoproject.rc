@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevAutoProject" version="1">
+<kpartgui name="KDevAutoProject" version="2">
 <MenuBar>
   <Menu name="project" >
     <Action name="project_addtranslation" />
