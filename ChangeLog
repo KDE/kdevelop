@@ -1,16 +1,17 @@
+2002-04-04  Richard Dale <duke@tipitina.demon.co.uk>
+
+	* Added more complete Objective-C support
+	* Added tokenizer.cpp to DISTCLEANFILES in parts/cppsupport/Makefile.am
+
 2002-03-26  Roberto Raggi  <raggi@cli.di.unipi.it>
     * improved part embedding
-
 2002-03-26  F@lk Brettschneider <falk@kdevelop.org>
     * merged diff between kdevsession.cpp 1.1.2.16.2.8 and 1.1.2.16.2.9 to this branch
       (was bugfix: corrupted .kdevses file shouldn't confuse KDevelop any more)
-
 2002-03-26  Roberto Raggi  <raggi@cli.di.unipi.it>
     * added gideon sdk and implemented part loader
-
 2002-03-25  Roland Krause  <roland@cougar>
     * added parts/classwizzard and parts/cppsupport from gideon
-
 2002-03-25  Roberto Raggi  <raggi@cli.di.unipi.it>
     * added sourceinfo/pcs
 	
