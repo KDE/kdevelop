@@ -177,7 +177,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 
 	qt_button = new QPushButton( this, "PushButton_4" );
 	qt_button->setGeometry( 440, 100, 40, 30 );
-	qt_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	qt_button->setPixmap(pix);
 	qt_button->setAutoRepeat( FALSE );
 	qt_button->setAutoResize( FALSE );
 	connect( qt_button, SIGNAL(clicked()), SLOT(slotQTpressed()) );
@@ -790,6 +792,7 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
 
 
 

@@ -20,7 +20,7 @@
 </P>
 <H3><A NAME="Development with KDevelop"></A> <A NAME="s4">4. Development with KDevelop</A></H3>
 
-<P>In this chapter you will get a general overview how you can use KDevelop and the internal Dialogeditor to create own applications.
+<P>In this chapter you will get a general overview how you can use KDevelop and the internal Dialog Editor to create own applications.
 Thereby, all tools are described by their use during the development process. If you are a beginner in C++/GUI design and
 programming, you should read <EM>"The KDevelop Programming Handbook"</EM>, which describes some basics for program design and shows a
 more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way applications are
@@ -55,7 +55,7 @@ your specific ones. After implementing the functionality to methods that are eit
 containing code for standard user actions, you should extend the User Manual by simply editing the provided sgml index file
 towards describing your applications capabilities. The last step would be to generate translation files and to distribute your
 project to translators doing the rest to enhance internationalization.
-<P>But even for non-GUI application designers the IDE offers an easy way to create new projects; the editor and classbrowser in
+<P>But even for non-GUI application designers the IDE offers an easy way to create new projects; the editor and Class Browser in
 conjunction with KDevelop's powerful project management will reduce the time for development to the minimum that is required for
 implementation of functionality.
 <P>
@@ -67,21 +67,21 @@ environment for object-orientated application development under Unix-Systems. Ge
 environment and the dialogeditor; besides that all needed programs that can be helpful for designing applications are embedded in
 one or the other way.
 <P>
-<H4>Programming Environment and Dialogeditor</H4>
+<H4>Programming Environment and Dialog Editor</H4>
 
 <P>
 <P>
 <H4>The Programming Environment</H4>
 
 <P>The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
-many other tools by simplifying their use. It's build-in Editor and Helpbrowser as well as the Classbrowser reduce the amount of
+many other tools by simplifying their use. It's build-in Editor and Helpbrowser as well as the Class Browser reduce the amount of
 work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
 on it's own and will probably result in shorter release cycles and better development improvements. From here, you're managing
 your project throughout all its details, keep the overview over your classes and don't have to use additional consoles for your
 work, as well as the integration of all user interfaces results in the fact that you only have to work with one window under X and
 don't have to watch for several ones spread all over your desktop.
 <P>
-<H4>The Dialogeditor</H4>
+<H4>The Dialog Editor</H4>
 
 <P>KDevelop's build-in dialogeditor offers a simple way of designing user interfaces with the Qt and KDE libraries. It's
 simple way to do almost everything with the mouse allows a rapid construction of dialogs and main views for applications and their
@@ -89,7 +89,7 @@ direct transformation into C++ code, which is directly added to the project. As 
 KDevelop's user interface, you have the same commands available than working in Programming mode. This allows e.g. construction of a
 dialog, generation of the code output and it's direct testing within the program by the availability of the make-commands and you still
 can control the compiler output without having to switch back to the programming view. For a detailed description, see 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>
+<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>
 .
 <P>
 <H4>KAppWizard and the Classtools</H4>
@@ -123,7 +123,7 @@ specifying the complete set of options the program generator offers, your applic
 <P>The term "Classtools" describes a variety of functions that are available for the developer to work on a project not only by
 an object-orientated language but using the sources in an object-orientated way. Working with classes instead of having to
 watch for files offers a very flexible way to extend a project and lets the user concentrate on the objects the project contains.
-The tools that KDevelop offers are a Classgenerator and a Classbrowser, where each one provides a lot of automated
+The tools that KDevelop offers are a Classgenerator and a Class Browser, where each one provides a lot of automated
 functionality.
 <P>
 <H4>Creating a new class with the Classgenerator</H4>
@@ -135,18 +135,18 @@ Classgenerator lets you do this by only specifying the new class by its name, in
 information such as class documentation by it's purpose for the project. Additionally, you can also change the filenames that are
 preset by the generator and if the class would be Qt-signal/slot enabled by default.
 <P>The rest of the work is done automatically- you don't have to take care for Makefile.am, files and the class itself. A new "make"
-invocation is enough to include the new class in the compilation process. As the Classbrowser updates itself after the addition of
+invocation is enough to include the new class in the compilation process. As the Class Browser updates itself after the addition of
 a class, the declaration and implementation is available at once and you can start working on the extension of the class. The
 Classgenerator is invoked by the Project-menu, entry "New Class".
 <P>
-<H4>The Classbrowser</H4>
+<H4>The Class Browser</H4>
 
-<P>The Classbrowser displays all types of objects and fuctions of your project in a tree left of the editing windows. A classparser
+<P>The Class Browser displays all types of objects and fuctions of your project in a tree left of the editing windows. A classparser
 scans all files for methods and classes and makes them available by graphical symbols. Over those, context-menus offer a
 specialized functionality to work with the sources by focusing on the classes and functions.
 <P>Selecting a class will result in opening the file that contains the declaration; on methods and functions this will
 show you the implementation. For a full description, see 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A><P>
+<A HREF="index-10.html#The Class Browser">The Class Browser</A><P>
 <H3><A NAME="ss4.3">4.3 The Development Process</A>
 </H3>
 
@@ -173,7 +173,7 @@ present by choosing "Execute" from the Build-menu.
 <P>
 <H4>Developing an Application</H4>
 
-<P>This section describes the development phase of applications with KDevelop and the Dialogeditor- and all work can be done within
+<P>This section describes the development phase of applications with KDevelop and the Dialog Editor- and all work can be done within
 the IDE.
 <P>The development steps are generally to edit the source files, the compilation of the project sources followed by the linker
 process binding all object files to the final binary. Then errors have to be located which either prevented a compilation or
@@ -193,7 +193,7 @@ program generally has a menubar, toolbars and a statusbar as well as a main view
 editor. KAppWizard generated applications already contain a complex functionality on graphical interfaces- the frame structure
 takes care of standard elements such as bars and buttons. When developing your application, you have to extend the given structure
 to give the program the user interaction capability you want to provide. One part of the work is the design of dialogs e.g. for
-changing values like the brush width in a paint application. This can be done easily with the Dialogeditor inside KDevelop. Now,
+changing values like the brush width in a paint application. This can be done easily with the Dialog Editor inside KDevelop. Now,
 how do you create those good-looking dialogs ? As the Qt library is a GUI toolkit, it provides a base set of so-called "widgets"
 like labels displaying plain text, lineedits for text input and buttons for navigation and selection commands. Besides these
 "low-level" parts of user interfaces, standard dialogs are provided and are ready to use such as printing dialogs. The
@@ -206,17 +206,17 @@ the predefined dialogs provided with Qt. For your own dialogs, those low-level w
 consists by a collection of different widgets combined together building the interface and is technically programmed by C++ code
 in a class that is derived from QWidget or a more specialized dialog class that inherits QWidget. The program using the widget
 therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are used.
-<P>The Dialogeditor of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
-to combine dialogs with pure C++ code together- this is the hard way to create interfaces. Switch to the Dialogeditor by
+<P>The Dialog Editor of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
+to combine dialogs with pure C++ code together- this is the hard way to create interfaces. Switch to the Dialog Editor by
 choosing the according entry in the "Tools"-menu (or by the toolbar button). You will see that KDevelop's face has changed but for
 e.g. the menubar and the toolbar are very similar. This makes it very easy to switch back and forth between the two working modes
 and you will feel comfortable in both after some time. There you can construct your views and dialogs as you like and set all
 available preferences for the items the view will contain. When you're finished, select "Generate Sources" from the Build-menu;
-the Dialogeditor and the project management will take care of the rest. You can test if everything went OK by selecting Make or
+the Dialog Editor and the project management will take care of the rest. You can test if everything went OK by selecting Make or
 Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
 matter of implementation that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
 about creating dialogs, see 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, examples and guidelines can also be found in
+<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, examples and guidelines can also be found in
 <EM>The KDevelop Programming Handbook</EM>.
 <P>
 <H4>Binding New Elements</H4>
@@ -265,7 +265,7 @@ application development.
 <H4>Sourcecode Management</H4>
 
 <P>The KDevelop IDE provides a lot of methods to the programmer to achieve his goals within the shortest time.  As described above,
-the KAppWizard and the Dialogeditor shorten the time you would usually need to get to the same result manually. But this
+the KAppWizard and the Dialog Editor shorten the time you would usually need to get to the same result manually. But this
 didn't cover the work a programmer has to do usually: working on the implementation of his application to provide a proper
 execution by the end-user. Now, why is KDevelop the IDE you would want to use as a coding environment, including it's use to
 create even non-GUI applications ?
@@ -279,14 +279,14 @@ author's name as well as e.g. license terms for the code. Additionally, this req
 functions, class declarations and implementations are in the project. Therefore, KDevelop contains the Classtools- a variety of
 actions, that allow fast work and moving the developer's focus from files to objects- classes, structures and methods. The
 classgenerator lets you create a new class including inheritance, attributes and documentation easily . For object-oriented work,
-the classbrowser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
+the Class Browser brings you to the location of your objects; it doesn't matter any more where the code is actually. The
 Browser scans all sources automatically and rebuilds itself after additions to keep up with your work and enables you to access
 the new code directly. By context-menus, the browser offers even more fuctionality, like bringing you to the implementation or to
 the declaration of member functions. Then, the addition of members are done graphically by dialogs- no search for the file and the
 place you would have to add your entries. Finally, you can get an even more specialized view of your project's classes by the
 Classtool dialog, providing you trees that show the usage, contents and inheritance of classes and their objects. For more
 detailed information, see 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>.
+<A HREF="index-10.html#The Class Browser">The Class Browser</A>.
 <P>
 <H4>Building and Executing your Application</H4>
 
@@ -344,7 +344,7 @@ the Qt and KDE libraries,</LI>
 <A HREF="index-8.html#Projects">Projects</A>, describing all availiable
 functions within KDevelop, </LI>
 <LI>this handbook, section 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, adressing the use of the
+<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, adressing the use of the
 dialogeditor to create your own widgets, </LI>
 <LI>The <EM>Online-Reference Documentation</EM> to the Qt library, which covers examples of
 using the Qt GUI-toolkit as well as a class reference and screenshots for the most important ready-to-use widgets included,</LI>

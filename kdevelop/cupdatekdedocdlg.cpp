@@ -108,7 +108,9 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     source_button->setBackgroundMode( QWidget::PaletteBackground );
     source_button->setFontPropagation( QWidget::NoChildren );
     source_button->setPalettePropagation( QWidget::NoChildren );
-    source_button->setText( "..." );
+		QPixmap pix;
+  	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+    source_button->setPixmap(pix);
     source_button->setAutoRepeat( FALSE );
     source_button->setAutoResize( FALSE );
     
@@ -120,36 +122,12 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     doc_button->setBackgroundMode( QWidget::PaletteBackground );
     doc_button->setFontPropagation( QWidget::NoChildren );
     doc_button->setPalettePropagation( QWidget::NoChildren );
-    doc_button->setText( "..." );
+    doc_button->setPixmap(pix);
     doc_button->setAutoRepeat( FALSE );
     doc_button->setAutoResize( FALSE );
     doc_button->setEnabled(false);
     
-    ok_button = new QPushButton( this, "ok_button" );
-    ok_button->setGeometry( 140, 320, 100, 30 );
-    ok_button->setMinimumSize( 0, 0 );
-    ok_button->setMaximumSize( 32767, 32767 );
-    ok_button->setFocusPolicy( QWidget::TabFocus );
-    ok_button->setBackgroundMode( QWidget::PaletteBackground );
-    ok_button->setFontPropagation( QWidget::NoChildren );
-    ok_button->setPalettePropagation( QWidget::NoChildren );
-    ok_button->setText( "OK" );
-    ok_button->setAutoRepeat( FALSE );
-    ok_button->setAutoResize( FALSE );
-    
-  
-    cancel_button = new QPushButton( this, "cancel_button" );
-    cancel_button->setGeometry( 270, 320, 100, 30 );
-    cancel_button->setMinimumSize( 0, 0 );
-    cancel_button->setMaximumSize( 32767, 32767 );
-    cancel_button->setFocusPolicy( QWidget::TabFocus );
-    cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-    cancel_button->setFontPropagation( QWidget::NoChildren );
-    cancel_button->setPalettePropagation( QWidget::NoChildren );
-    cancel_button->setText(i18n("Cancel"));
-    cancel_button->setAutoRepeat( FALSE );
-    cancel_button->setAutoResize( FALSE );
-    
+
     del_recent_radio_button = new QRadioButton( this, "del_recent_radio_button" );
     del_recent_radio_button->setGeometry( 40, 110, 430, 30 );
     del_recent_radio_button->setMinimumSize( 0, 0 );
@@ -216,13 +194,37 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
 		       						"snapshot a la /snapshot/kdelibs."))));
     
     KQuickHelp::add(doc_label,
-		    KQuickHelp::add(doc_edit,
-  KQuickHelp::add(doc_button, i18n("Insert the path where you want to have\n"
+		KQuickHelp::add(doc_edit,
+	  KQuickHelp::add(doc_button, i18n("Insert the path where you want to have\n"
 				   "the new generated documentation installed\n"
 				   "Note: the path information in Setup will\n"
                			   "be updated automatically, you don't have\n"
 				   "to change them to the new doc path."))));
 
+    ok_button = new QPushButton( this, "ok_button" );
+    ok_button->setGeometry( 140, 320, 100, 30 );
+    ok_button->setMinimumSize( 0, 0 );
+    ok_button->setMaximumSize( 32767, 32767 );
+    ok_button->setFocusPolicy( QWidget::TabFocus );
+    ok_button->setBackgroundMode( QWidget::PaletteBackground );
+    ok_button->setFontPropagation( QWidget::NoChildren );
+    ok_button->setPalettePropagation( QWidget::NoChildren );
+    ok_button->setText( "OK" );
+    ok_button->setAutoRepeat( FALSE );
+    ok_button->setAutoResize( FALSE );
+    ok_button->setDefault( true );
+
+    cancel_button = new QPushButton( this, "cancel_button" );
+    cancel_button->setGeometry( 270, 320, 100, 30 );
+    cancel_button->setMinimumSize( 0, 0 );
+    cancel_button->setMaximumSize( 32767, 32767 );
+    cancel_button->setFocusPolicy( QWidget::TabFocus );
+    cancel_button->setBackgroundMode( QWidget::PaletteBackground );
+    cancel_button->setFontPropagation( QWidget::NoChildren );
+    cancel_button->setPalettePropagation( QWidget::NoChildren );
+    cancel_button->setText(i18n("Cancel"));
+    cancel_button->setAutoRepeat( FALSE );
+    cancel_button->setAutoResize( FALSE );
 
 
 
@@ -465,6 +467,7 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   }
 
 }
+
 
 
 

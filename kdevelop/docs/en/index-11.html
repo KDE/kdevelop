@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: The Dialogeditor</TITLE>
+<TITLE>The User Manual to KDevelop: The Dialog Editor</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,74 +18,26 @@
 <A HREF="index-10.html">Previous</A>
 <A HREF="index.html#toc11">Table of Contents</A>
 </P>
-<H3><A NAME="The Dialogeditor"></A> <A NAME="s11">11. The Dialogeditor</A></H3>
+<H3><A NAME="The Dialog Editor"></A> <A NAME="s11">11. The Dialog Editor</A></H3>
 
-<P>The KDevelop integrated Dialogeditor allows the easy construction of widgets and dialogs your application uses all by graphical means.
+<P>The KDevelop integrated Dialog Editor allows the easy construction of widgets and dialogs your application uses all by graphical means.
 You see the direct appearance of your dialog as it will be presented to the user. Using the dialogeditor is usually the first step you
 would take after creating a new project with the KAppWizard to create your main view, the user interaction dialogs and, after finishing
 the graphical work, the code generation. This way, your project will contain all the usually considered "difficult" parts that normally
 would take a long time to implement. Then, the "rest" of your work is implementing the functionality in the generated code. This
 chapter deals with how to use the dialogeditor to create your project widgets as well as what to do in case you see your widgets need
 corrections or additions during the further development process.
-<P>You can switch to the Dialogeditor either by selecting "Dialogeditor" from the "Tools"-menu or by the according toolbar icon.
+<P>You can switch to the Dialog Editor either by selecting "Dialog Editor" from the "Tools"-menu or by the according toolbar icon.
 To switch back to the Project Editor, select "KDevelop" from the dialogeditor's "Tools"-menu or by the icon in the toolbar.
 <P>What else does the dialogeditor's interface offer you ?  Mainly, that its appearance is almost the same as the project editor in term
 of the main view separation as well as the menu- and toolbars. This allows you to make yourself accustomed with the dialogeditor very
 quickly and, as he completely interacts with the project management, stay in the dialogeditor if you want to control your
 build-process. Actions that require to switch back to KDevelop will do that automatically for you, like accessing the documentation
 browser. Just select the menu commands, and KDevelop reacts to your will.
+<P>The following chapters give you an overview of the dialogeditor interface, how to create a new dialog initially and how set up the
+properties of the child widgets that your dialog contains.
 <P>
-<H3><A NAME="ss11.1">11.1 Creating a New Dialog</A>
-</H3>
-
-<P>After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
-the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
-provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
-information about widget design, see <EM>The KDevelop Programming Handbook</EM>.
-<P>To create a new dialog, select "New" from the "File"-menu. Then you have to do certain selections and insert information:
-<P>
-<H4>Dialog Class</H4>
-
-<P>The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
-Therefore, you have the following options:
-<OL>
-<LI><B>QWidget:</B> the base class for all user interaction widgets provided by Qt. Used for main views and top-level widgets.</LI>
-<LI><B>QFrame:</B> inherits QWidget and is used by numerous widgets as a base class. This is useful for widgets that already want to
-have a QFrame functionality in addition to QWidget methods.</LI>
-<LI><B>Custom:</B> inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
-provided by your project or the libraries.</LI>
-<LI><B>QDialog:</B> the base class for dialogs that you would inherit for user interaction like setting properties or changing values.</LI>
-<LI><B>QTabDialog:</B> inherits QDialog and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
-widgets that you create.</LI>
-</OL>
-<P>
-<H4>Custom Properties</H4>
-
-<P>For the inheritance of a custom class as selected in the dialog class field, you have to specify the classname, which goes to "Custom
-Class". The dialogeditor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
-filename of the custom class has to be set.
-<P>
-<H4>Files</H4>
-
-<P>In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
-for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
-When inserting the Classname, the filenames are given by the dialogeditor, but you can as well change the filenames.
-<P>Now, what about the files ? When you are ready with constructing the widget visually, you will have to generate the files that contain
-the implementation for your widget. As this will be a class, the dialog will exist by the header file containing the classdeclaration,
-a C++ file containing the method implementation for your widget's methods and slots. The Data file is the file that will contain a
-function that is called by the constructor of your widget, the <EM>initDialog()</EM> method. The file itself shouldn't be changed as it
-will contain the generated code from the dialogeditor to create the widget on the screen. If you ever have to chage values, you should
-do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
-overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialogeditor writes;
-these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
-changees will get lost by the next code-creation.
-<P>
-<H4>Location</H4>
-
-<P>For generating the widget's sources, the dialogeditor needs to know the location where these will go. The default value for the output
-directory is the current project subdirectory containing the sources already present.
-<P>
-<H3><A NAME="ss11.2">11.2 The Dialogeditor View</A>
+<H3><A NAME="ss11.1">11.1 The Dialog Editor View</A>
 </H3>
 
 <P>
@@ -124,6 +76,61 @@ en/disable the Properties-View and "Grid Size" to let you specify the grid size 
 and Y size in the coordinate system. For Statusbar help, you are provided the same functionality than in Project-editing mode.
 <P>While changing widget size, the statusbar shows the current values for width and height of the selecte widget.
 <P>
+<H3><A NAME="ss11.2">11.2 Creating a New Dialog</A>
+</H3>
+
+<P>After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
+the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
+provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
+information about widget design, see <EM>The KDevelop Programming Handbook</EM>.
+<P>To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The "New Dialog"
+menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
+destination.
+<P>
+<H4>Dialog Class</H4>
+
+<P>The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
+Therefore, you have the following options:
+<OL>
+<LI><B>QWidget:</B> the base class for all user interaction widgets provided by Qt. Used for main views and top-level widgets.</LI>
+<LI><B>QFrame:</B> inherits QWidget and is used by numerous widgets as a base class. This is useful for widgets that already want to
+have a QFrame functionality in addition to QWidget methods.</LI>
+<LI><B>Custom:</B> inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
+provided by your project or the libraries.</LI>
+<LI><B>QDialog:</B> the base class for dialogs that you would inherit for user interaction like setting properties or changing values.</LI>
+<LI><B>QTabDialog:</B> inherits QDialog and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
+widgets that you create.</LI>
+</OL>
+<P><B>Custom Properties</B>
+<P>For the inheritance of a custom class as selected in the dialog class field, you have to specify the classname, which goes to "Custom
+Class". The dialogeditor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
+filename of the custom class has to be set.
+<P>
+<H4>Files</H4>
+
+<P>In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
+for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
+When inserting the Classname, the filenames are given by the dialogeditor, but you can as well change the filenames.
+<P>Now, what about the files ? When you are ready with constructing the widget visually, you will have to generate the files that contain
+the implementation for your widget. As this will be a class, the dialog will exist by the header file containing the classdeclaration,
+a C++ file containing the method implementation for your widget's methods and slots. The Data file is the file that will contain a
+function that is called by the constructor of your widget, the <EM>initDialog()</EM> method. The file itself shouldn't be changed as it
+will contain the generated code from the dialogeditor to create the widget on the screen. If you ever have to chage values, you should
+do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
+overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialogeditor writes;
+these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
+changees will get lost by the next code-creation.
+<P>
+<H4>Location</H4>
+
+<P>For generating the widget's sources, the dialogeditor needs to know the location where these will go. The default value for the output
+directory is the current project subdirectory containing the sources already present.
+<P>After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
+your own widget. Mind that the dialogeditor currently only supports static widgets without geometry management. If you're about to use
+geometry management for your widgets, you should make yourself accustomed with the classes that Qt provides for this, create a new
+class with the classgenerator and write your widget by hand. For more information, see <EM>The KDevelop Programming Handbook</EM>.
+<P>
+<P>
 <H3><A NAME="Adding Widgets"></A> <A NAME="ss11.3">11.3 Adding Widgets</A>
 </H3>
 
@@ -139,15 +146,26 @@ if your project type is Qt-only or KDE. This prevents you from using KDE-widgets
 <P>Currently provided widgets are:
 <P><B>QT-Widgets:</B>
 <UL>
-<LI>QWidget - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
+<LI><B>QWidget</B> - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
 hirarchy within your dialog.</LI>
-<LI>QLabel - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the purpose
-of the lineedit is or which varialbe e.g. a combo box allows to set.</LI>
-<LI>QPushButton - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.</LI>
-<LI>QCheckBox - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.</LI>
-<LI>QLCDNumber - displays numbers in LCD style. Often used for clocks.</LI>
-<LI>QRadioButton - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
+<LI><B>QLabel</B> - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the
+purpose of the lineedit is or which varialbe e.g. a combo box allows to set.</LI>
+<LI><B>QPushButton</B> - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.</LI>
+<LI><B>QCheckBox</B> - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.</LI>
+<LI><B>QLCDNumber</B> - displays numbers in LCD style. Often used for clocks.</LI>
+<LI><B>QRadioButton</B> - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
 of them depend on each other, e.g. you have three radiobuttons, but ony want the user to choose one of three offered options.</LI>
+<LI><B>QComboBox</B> - a combo box lets the user set a value by selecting it from a drop-down menu or by inserting the value, if the
+box is write enabled.</LI>
+<LI><B>QListBox</B> - provides a single-column list of items that can be scrolled.</LI>
+<LI><B>QMultiLineEdit</B> - offers a multi-line editor.</LI>
+<LI><B>QProgressBar</B> - displays the progress of an action that takes a longer time to be finished.</LI>
+<LI><B>QSpinBox</B> - allows choosing numeric values by up- and down buttons or insertion if write enabled.</LI>
+<LI><B>QSlider</B> - sets a value in a program-defined range by a slider.</LI>
+<LI><B>QScrollBar</B> - indicates the range of a value and sets the current value by a slider as well as up- and down buttons; often
+used for widgets whose contents is larger than the acutally visible view area. By using the scrollbar, the visible area can be changed
+to another part of the widgets' contents.</LI>
+<LI><B>QGroupBox</B> - provides a groupbox frame with title to indicate that child widgets within the box belong together.</LI>
 <LI>More to come...</LI>
 </UL>
 <P><B>KDE-Widgets:</B>
@@ -197,75 +215,476 @@ and all possible values. Note that most values are implemented in QWidget and ar
 that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
 the widget's constructors.
 <P>
-<H4>Appearance</H4>
+<H3><A NAME="ss11.6">11.6 Properties of Qt supported Widgets</A>
+</H3>
 
+<P>The following chapter gives a complete overview over the currently supported widgets of the Qt toolkit. To achieve a better
+understanding of the properties, these are separated to their inheritance. As all of them inherit <CODE>QWidget</CODE>, this class is described
+first. All QWidget properties are available for all other widgets as well, so these are not listed for them again. For widget groups
+that inherit an abstract subclass of QWidget as their baseclass, the baseclasses' properties are listed first (though this class does
+not provide a widget in the dialogeditor itself). Then the widget properities for the available widget of the group contains the
+properties that are specific to it. For a better understanding the inheritance tree of the available widgets is listed below:
 <P>
 <UL>
-<LI>BgColor: Background color of the widget</LI>
-<LI>BgMode: Background mode of the widget</LI>
-<LI>BgPalColor: Color pallette for the background</LI>
-<LI>BgPixmap: filename for a background pixmap</LI>
-<LI>Cursor: Cusor over the widget</LI>
-<LI>Font: Font for the widget</LI>
-<LI>Margin: sets the margin for a label</LI>
-<LI>MaskBitmap: filename for a masking bitmap.</LI>
-<LI>Pixmap: sets the pixmap filename to use</LI>
+<LI>
+<A HREF="#QWidget">QWidget</A>
+<UL>
+<LI>
+<A HREF="#QButton">QButton</A> (abstract)
+<UL>
+<LI>
+<A HREF="#QCheckBox">QCheckBox</A></LI>
+<LI>
+<A HREF="#QPushButton">QPushButton</A></LI>
+<LI>
+<A HREF="#QRadioButton">QRadioButton</A></LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QComboBox">QComboBox</A></LI>
+<LI>
+<A HREF="#QFrame">QFrame</A> (abstract for now)
+<UL>
+<LI>
+<A HREF="#QGroupBox">QGroupBox</A></LI>
+<LI>
+<A HREF="#QLCDNumber">QLCDNumber</A></LI>
+<LI>
+<A HREF="#QLabel">QLabel</A></LI>
+<LI>
+<A HREF="#QProgressBar">QProgressBar</A></LI>
+<LI>
+<A HREF="#QSpinBox">QSpinBox</A></LI>
+<LI>
+<A HREF="#QTableView">QTableView</A> (abstract)
+<UL>
+<LI>
+<A HREF="#QListBox">QListBox</A></LI>
+<LI>
+<A HREF="#QMultiLineEdit">QMultiLineEdit</A></LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<A HREF="#QLineEdit">QLineEdit</A></LI>
+<LI>
+<A HREF="#QScrollBar">QScrollBar</A></LI>
+<LI>
+<A HREF="#QSlider">QSlider</A></LI>
+</UL>
+</LI>
 </UL>
 <P>
-<H4>C++ Code</H4>
+<H4><A NAME="QWidget"></A> QWidget Properties </H4>
 
+<P>QWidget is the base class for almost all widgets in Qt and KDE. Therefore widgets that inherit QWidget will allow to use the same
+settings in most cases.
 <P>
 <UL>
-<LI>AcceptsDrops: if set to true, the widget item will accept drops by drag'n drop mechanisms</LI>
-<LI>Buddy:</LI>
-<LI>Connections: connects the item's signals to slots</LI>
-<LI>FocusProxy: the item that gives its focus to this widget.</LI>
-<LI>HasFocus: sets if the item has the focus by default. Mind that only one item per dialog can have this value as true</LI>
-<LI>ResizeToParent: resizes the widget to it's parent size (not visible in editing mode)</LI>
-<LI>VarName: Variable name of the item. Chage this to names that describe the item's purpose.</LI>
-</UL>
-<H4>General</H4>
+<LI><B>Appearance:</B>
 
+<UL>
+<LI><B>BgColor:</B> Background color of the widget</LI>
+<LI><B>BgMode:</B> Background mode of the widget</LI>
+<LI><B>BgPalColor:</B> Color pallette for the background</LI>
+<LI><B>BgPixmap:</B> filename for a background pixmap</LI>
+<LI><B>Cursor:</B> Cusor over the widget</LI>
+<LI><B>Font:</B> Font for the widget</LI>
+<LI><B>MaskBitmap:</B> filename for a masking bitmap.</LI>
+</UL>
+
+</LI>
+<LI><B>C++ Code:</B>
+
+<UL>
+<LI><B>AcceptsDrops:</B> if set to true, the widget item will accept drops by drag'n drop mechanisms</LI>
+<LI><B>Connections:</B> connects the item's signals to slots</LI>
+<LI><B>FocusProxy:</B> the item that gives its focus to this widget.</LI>
+<LI><B>HasFocus:</B> sets if the item has the focus by default. Mind that only one item per dialog can have this value as true</LI>
+<LI><B>ResizeToParent:</B> resizes the widget to it's parent size (not visible in editing mode)</LI>
+<LI><B>VarName:</B> Variable name of the item. Chage this to names that describe the item's purpose.</LI>
+</UL>
+
+</LI>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>IsEnabled:</B> sets if the widget will accept user events</LI>
+<LI><B>IsHidden:</B> sets the item to be visible(false) or hidden(true)</LI>
+<LI><B>Name:</B> sets the name of the widget. Mind that the name is different from the VarName in C++ Code.</LI>
+</UL>
+
+</LI>
+<LI><B>Geometry:</B>
+
+<UL>
+<LI><B>Height:</B> height of the item</LI>
+<LI><B>IsFixedSize:</B></LI>
+<LI><B>MaxHeight:</B> maximum value for Height</LI>
+<LI><B>MaxWidth:</B> maximum value for Width</LI>
+<LI><B>MinHeight:</B> minimum value for Height</LI>
+<LI><B>MinWidth:</B> minimum value for Width</LI>
+<LI><B>SizeIncX:</B> pixel steps for resize actions for X position</LI>
+<LI><B>SizeIncY:</B> pixel steps for resize actions for Y position</LI>
+<LI><B>Width:</B> width of the item</LI>
+<LI><B>X:</B> position horizontal, counted from the left corner</LI>
+<LI><B>Y:</B> position vertical, counted up to down</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QButton"></A> QButton inherited widgets </H4>
+
+<P><CODE>QButton</CODE> is an abstract widget class that provides properties common to buttons.
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A><P>Inherited by 
+<A HREF="#QCheckBox">QCheckBox</A>, 
+<A HREF="#QPushButton">QPushButton</A> and 
+<A HREF="#QRadioButton">QRadioButton</A> inherit <CODE>QButton</CODE>.
+<P>
 <P>
 <UL>
-<LI>CursorPosition: sets the default cursor position in lineedits.</LI>
-<LI>IsEnabled: sets if the widget will accept user events</LI>
-<LI>IsHidden: sets the item to be visible(false) or hidden(true)</LI>
-<LI>MaxLength: sets the maximum string length in lineedits</LI>
-<LI>Name: sets the name of the widget. Mind that the name is different from the VarName in C++ Code.</LI>
-<LI>Text: the text on labels, buttons and boxes, also pre-set text for lineedits.</LI>
-<LI>isAutoDefault</LI>
-<LI>isAutoRepeat</LI>
-<LI>isAutoResize</LI>
-<LI>isChecked</LI>
-<LI>isDefault</LI>
-<LI>isMenuButton</LI>
-<LI>isToggleButton</LI>
-<LI>isToggledOn</LI>
-<LI>hasFrame</LI>
-<LI>isTextSelected</LI>
-<LI>NumDigits: sets the number of digits displayed in QLCDNumber</LI>
-<LI>Value: pre-set value for QLCDNumber</LI>
+<LI><B>Appearance:</B>
+
+<UL>
+<LI><B>setPixmap:</B> sets the pixmap filename to use</LI>
+</UL>
+
+</LI>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>setText:</B> the text on labels, buttons and boxes, also pre-set text for lineedits.</LI>
+<LI><B>setAutoRepeat:</B> if enabled, the clicked() signal is emitted at regular intervals while the button is down. No effect on
+toogle buttons.</LI>
+<LI><B>setAutoResize:</B> Enables auto-resizing if TRUE. When auto-resize is enabled, the button will resizes itself
+whenever the contents changes.</LI>
+</UL>
+
+</LI>
 </UL>
 <P>
-<H4>Geometry</H4>
+<P>
+<H4><A NAME="QCheckBox"></A> QCheckBox Properities </H4>
 
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QButton">QButton</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>isChecked: (setChecked)</B> defines is the checkbox is set checked on construction</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QPushButton"></A> QPushButton Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QButton">QButton</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>isAutoDefault: (setAutoDefault)</B> the auto-default button becomes the default push button if it receives the keyboard input focus.</LI>
+<LI><B>isDefault: (setDefault)</B> there can be only one default button and it is only allowed to use in a dialog (see <CODE>QDialog</CODE>). The
+default button emits <CODE>clicked()</CODE> if the user presses the Enter key.</LI>
+<LI><B>isMenuButton: (setIsMenuButton)</B> tells the button to draw
+a menu indication triangle if enabled. The menu has to be inserted separately.</LI>
+<LI><B>isToggleButton::(setToggleButton)</B> makes a push button a toggle button, so the button has a similar state as check
+boxes.</LI>
+<LI><B>isToggledOn: (setOn)</B> (public slot) switches a toggle button on.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QRadioButton"></A> QRadioButton Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QButton">QButton</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>isChecked: (setChecked)</B> defines is the radiobutton is set checked on construction</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QComboBox"></A> QComboBox Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A><P>( no additional properties for now)
+<P>
+<P>
+<P>
+<H4><A NAME="QFrame"></A> QFrame inherited widgets </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A><P>For now only used as an abstract class.
+<UL>
+<LI><B>Appearance:</B>
+
+<UL>
+<LI>Margin (setMargin): sets the margin, which is the distance from the innermost pixel of the frame and the outermost pixel of the
+contents.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QGroupBox"></A> QGroupBox Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>Title: (setTitle)</B> sets the groupbox title that is displayed in the box frame.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QLCDNumber"></A> QLCDNumber Properties  </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>NumDigits:(setNumDigits)</B> sets the number of digits displayed in QLCDNumber</LI>
+<LI><B>Value: (display)</B> (public slot) sets the initial value for QLCDNumber</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="QLabel"></A> QLabel Properties  </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>Appearance:</B>
+
+<UL>
+<LI>Margin (setMargin): sets the margin, which is for QLabel the distance from the frame to the first letter of the label text,
+depending on the alignment of the label.</LI>
+</UL>
+
+</LI>
+<LI><B>C++ Code: </B>
+
+<UL>
+<LI><B>Buddy: (setBuddy)</B> sets the buddy widget of the label.</LI>
+</UL>
+
+</LI>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>Text: (setText)</B> sets the label text.</LI>
+<LI><B>isAutoResize: (setAutoResize)</B> if TRUE, the label will resize itself if the contents changes. The top left corner is not
+moved.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="QProgressBar"></A> QProgressBar Properties  </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>TotalSteps: (setTotalSteps)</B> (public slot) sets the total steps of the progressbar. During the iteration of your action to
+display the progress, you have to call setProgress(int) to advance the progress step displayed to (int).</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QSpinBox"></A> QSpinBox Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and 
+<A HREF="#QFrame">QFrame</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>MaxValue:</B></LI>
+<LI><B>MinValue:</B></LI>
+<LI><B>Prefix:</B></LI>
+<LI><B>Suffix:</B></LI>
+<LI><B>Value:</B></LI>
+<LI><B>isWrapping:</B></LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QTableView"></A> QTableView inherited widgets </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A> and 
+<A HREF="#QTableView">QTableView</A><P>Inherited by 
+<A HREF="#QListBox">QListBox</A> and 
+<A HREF="#QMultiLineEdit">QMultiLineEdit</A><P>
+<P>
+<H4><A NAME="QListBox"></A> QListBox Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A> and 
+<A HREF="#QTableView">QTableView</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>isAutoBottomScrollBar: (setAutoBottomScrollBar)</B></LI>
+<LI><B>isAutoScroll: (setAutoScroll)</B></LI>
+<LI><B>isAutoScrollBar: (setAutoScrollBar)</B></LI>
+<LI><B>isAutoUpdate: (setAutoUpdate)</B></LI>
+<LI><B>isBottomScrollBar: (setBottomScrollBar)</B></LI>
+<LI><B>isDragSelect: (setDragSelect)</B></LI>
+<LI><B>isSmoothScrolling: (setSmoothScrolling)</B></LI>
+</UL>
+
+</LI>
+<LI><B>Geometry:</B>
+
+<UL>
+<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the
+current font.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QMultiLineEdit"></A> QMultiLineEdit Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A>, 
+<A HREF="#QFrame">QFrame</A> and 
+<A HREF="#QTableView">QTableView</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>Text: (setText) </B> (public slot) sets the text of the widget.</LI>
+<LI><B>isAutoUpdate: (setAutoUpdate)</B> used to avoid flicker during large changes; the view is not updated if disabled.</LI>
+<LI><B>isOverWriteMode: (setOverwriteMode) </B>(public slot) sets overwrite enabled or disabled.</LI>
+<LI><B>isReadOnly: (setReadOnly)</B> (public slot) sets the widget text to read only; disables text input.</LI>
+<LI><B>isTextSelected: (selectAll)</B>(public slot) marks the whole text selected</LI>
+</UL>
+
+</LI>
+<LI><B>Geometry:</B>
+
+<UL>
+<LI><B>setFixedVisibleLines:</B> sets a fixed height for the widget so that the given number of textlines are displayed using the
+current font.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H4><A NAME="QLineEdit"></A> QLineEdit Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A><P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>CursorPosition: (setCursorPosition)</B> sets the default cursor position.</LI>
+<LI><B>MaxLength: (setMaxLength) </B> sets the maximum string length</LI>
+<LI><B>Text: (setText) </B> (public slot) sets the contents displayed on construction</LI>
+<LI><B>hasFrame: (setFrame) </B> draws the lineedit witin a two-pixel frame if enabled.</LI>
+<LI><B>isTextSelected: (selectAll) </B> (public slot) sets the text to be selected.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<H4><A NAME="QScrollBar"></A> QScrollBar Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and <CODE>QRangeControl</CODE>.
 <P>
 <UL>
-<LI>Height: height of the item</LI>
-<LI>IsFixedSize</LI>
-<LI>MaxHeight: maximum value for Height</LI>
-<LI>MaxWidth: maximum value for Width</LI>
-<LI>MinHeight: minimum value for Height</LI>
-<LI>MinWidth: minimum value for Width</LI>
-<LI>SizeIncX: pixel steps for resize actions for X position</LI>
-<LI>SizeIncY: pixel steps for resize actions for Y position</LI>
-<LI>Width: width of the item</LI>
-<LI>X: position horizontal, counted from the left corner</LI>
-<LI>Y: position vertical, counted up to down</LI>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>MaxValue:</B> sets the maximum slider value; used in constructor (optional)</LI>
+<LI><B>MinValue:</B> sets the minimum slider value; used in constructor (optional)</LI>
+<LI><B>Orientation: (setOrientation)</B> sets the orientation of the scrollbar to horizontal or vertical.</LI>
+<LI><B>Value: </B> sets the initial value of the scrollbar in the constructor (optional)</LI>
+<LI><B>isTracking: (setTracking)</B> if enabled, the scrollbar emits <CODE>valueChanged()</CODE> whenever the bar is dragged; otherwise only on
+mouse release.</LI>
+</UL>
+
+</LI>
 </UL>
 <P>
-<H3><A NAME="ss11.6">11.6 Generating Files</A>
+<P>
+<H4><A NAME="QSlider"></A> QSlider Properties </H4>
+
+<P>Inherits 
+<A HREF="#QWidget">QWidget</A> and <CODE>QRangeControl</CODE>.
+<P>
+<UL>
+<LI><B>General:</B>
+
+<UL>
+<LI><B>MaxValue:</B> sets the maximum slider value; used in constructor (optional)</LI>
+<LI><B>MinValue:</B> sets the minimum slider value; used in constructor (optional)</LI>
+<LI><B>Orientation: (setOrientation)</B> sets the orientation of the slider to horizontal or vertical.</LI>
+<LI><B>Value: (setValue)</B> (public slot) uses <CODE>QRangeControl::setValue()</CODE> to set the value.</LI>
+<LI><B>isTracking:(setTracking)</B> if enabled, the slider emits <CODE>valueChanged()</CODE> whenever the slider is dragged; otherwise only on
+mouse release.</LI>
+</UL>
+
+</LI>
+</UL>
+<P>
+<P>
+<P>
+<H3><A NAME="ss11.7">11.7 Generating Files</A>
 </H3>
 
 <P>After creating a widget, you have to generate the sourcecode to make it available in your project. This can be done either with the

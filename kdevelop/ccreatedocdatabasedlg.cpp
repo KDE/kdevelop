@@ -133,29 +133,6 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	medium_radio_button->setAutoRepeat( FALSE );
 	medium_radio_button->setAutoResize( FALSE );
 
-	ok_button = new QPushButton( this, "PushButton_1" );
-	ok_button->setGeometry( 100, 390, 100, 30 );
-	ok_button->setMinimumSize( 0, 0 );
-	ok_button->setMaximumSize( 32767, 32767 );
-	ok_button->setFocusPolicy( QWidget::TabFocus );
-	ok_button->setBackgroundMode( QWidget::PaletteBackground );
-	ok_button->setFontPropagation( QWidget::NoChildren );
-	ok_button->setPalettePropagation( QWidget::NoChildren );
-	ok_button->setText( "OK" );
-	ok_button->setAutoRepeat( FALSE );
-	ok_button->setAutoResize( FALSE );
-
-	cancel_button = new QPushButton( this, "PushButton_2" );
-	cancel_button->setGeometry( 280, 390, 100, 30 );
-	cancel_button->setMinimumSize( 0, 0 );
-	cancel_button->setMaximumSize( 32767, 32767 );
-	cancel_button->setFocusPolicy( QWidget::TabFocus );
-	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-	cancel_button->setFontPropagation( QWidget::NoChildren );
-	cancel_button->setPalettePropagation( QWidget::NoChildren );
-	cancel_button->setText( i18n("Cancel") );
-	cancel_button->setAutoRepeat( FALSE );
-	cancel_button->setAutoResize( FALSE );
 
 	dir_button = new QPushButton( this, "PushButton_3" );
 	dir_button->setGeometry( 340, 190, 30, 30 );
@@ -165,7 +142,9 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_button->setBackgroundMode( QWidget::PaletteBackground );
 	dir_button->setFontPropagation( QWidget::NoChildren );
 	dir_button->setPalettePropagation( QWidget::NoChildren );
-	dir_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	dir_button->setPixmap(pix);
 	dir_button->setAutoRepeat( FALSE );
 	dir_button->setAutoResize( FALSE );
 
@@ -228,6 +207,31 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	qtarch_ButtonGroup_1->insert( tiny_radio_button );
 	qtarch_ButtonGroup_1->insert( small_radio_button );
 	qtarch_ButtonGroup_1->insert( medium_radio_button );
+	
+	ok_button = new QPushButton( this, "PushButton_1" );
+	ok_button->setGeometry( 100, 390, 100, 30 );
+	ok_button->setMinimumSize( 0, 0 );
+	ok_button->setMaximumSize( 32767, 32767 );
+	ok_button->setFocusPolicy( QWidget::TabFocus );
+	ok_button->setBackgroundMode( QWidget::PaletteBackground );
+	ok_button->setFontPropagation( QWidget::NoChildren );
+	ok_button->setPalettePropagation( QWidget::NoChildren );
+	ok_button->setText( "OK" );
+	ok_button->setAutoRepeat( FALSE );
+	ok_button->setAutoResize( FALSE );
+	ok_button->setDefault(true);
+	
+	cancel_button = new QPushButton( this, "PushButton_2" );
+	cancel_button->setGeometry( 280, 390, 100, 30 );
+	cancel_button->setMinimumSize( 0, 0 );
+	cancel_button->setMaximumSize( 32767, 32767 );
+	cancel_button->setFocusPolicy( QWidget::TabFocus );
+	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
+	cancel_button->setFontPropagation( QWidget::NoChildren );
+	cancel_button->setPalettePropagation( QWidget::NoChildren );
+	cancel_button->setText( i18n("Cancel") );
+	cancel_button->setAutoRepeat( FALSE );
+	cancel_button->setAutoResize( FALSE );
 
 	resize( 490,430 );
 	setMinimumSize( 0, 0 );
@@ -330,3 +334,6 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked(){
     dir_edit->setText(name);
   }
 }
+
+
+

@@ -20,96 +20,92 @@ Previous<A HREF="index.html#toc1">Table of Contents</A>
 <H3><A NAME="s1">1. Introduction</A></H3>
 
 <P>As everything on earth has it's fashions, today's computer world seems to tend more to the use of free software even for
-commercial purpose. The most popular software project among thousands is Linux, and it's existence is a proof for the quality that
-non-cost products can achieve. But inspite of the quality, end users still suffer under the cryptic use of almost any Unix-like
-systems; even the most enthusiastic users seem to only accept such an Operating System besides their commercial products. A major
-attempt to make free software even more competitive and to get commercial producers to port their applications to e.g. Linux, is
-in the first place to make usability as easy as possible and thereby increase the productivity of the system. The KDE project
-tries to close this gap and besides the programs provided with it, the libraries offer a perfect way to extend the variety of
-available GUI-based software. But especially as free software is often made in the author's free time, the question for authors is
-how much they like their development environment. KDevelop wants to take another major step- making the programmer's life easier
-and save time; on the other hand the products created with KDevelop can reach a higher level of reliability and functionality in
-the same development period. To fulfill this goal, the KDevelop Integrated Development Environment is capable of many
-features that developers need as well as it wraps functionality of third party projects and makes them an invisible, in-cryptic
-part of the development process. From within the user interface, you're managing:
+commercial purpose. The most popular free software project is Linux. It is now generally agreed that Linux, (as well as other projects
+such as the Apache web server, the Perl language and GNU suite of tools), proves that free software can be of as high a quality as
+commercial software. But despite the quality, end users must still suffer under the cryptic commands of any Unix Systems.For Linux to
+thrive, it needs applications, both free and commercial, and ease of use.
+<P>The KDE project tries to close this gap by providing an easy to use desktop and the companion libraries to extend the variety of
+available GUI-based software. But especially as free software is often made in the author's free time, the question for many
+programmers is how much they like the current code development environment. KDevelop wants to take another major step: making the
+programmer's life easier and more efficient: products created with KDevelop can reach a higher level of reliability and functionality
+in the same development period.
+<P>To fulfill this goal, the KDevelop Integrated Development Environment provides many features that developers need as well as it
+wraps the functionality of third party projects such as <CODE>make</CODE> and the GNU C++ compilers and makes them an invisible, integrated
+part of the development process. KDevelop manages:
+<P>
 <UL>
-<LI> all development tools needed for C++ programming like compiler, linker, automake and autoconf,</LI>
-<LI> the KAppWizard, who generates complete applications for various purposes that are ready-to-run,</LI>
-<LI> the Classgenerator, creating new classes and integrating them into the current project,</LI>
-<LI> file properties for sources, headers, documentation etc. to be included in the project and their installation destination
-for the end-user,</LI>
-<LI> the creation of User-Handbooks written with SGML and automatic generation of HTML-output with the KDE-look'n feel,</LI>
-<LI> automatic HTML-based API-documentation for your project's classes with cross-references to the used libraries,</LI>
-<LI> internationalization support for your application, allowing translators to easily add their target language to your
-project,</LI>
-<LI> WYSIWYG (What you see is what you get) -creation of user interfaces with the build-in dialog editor and their automatic
-transfer to clean C++ code,</LI>
-<LI> debugging your application by integrating KDbg,</LI>
-<LI> the editing of project-specific pixmaps with KIconedit,</LI>
-<LI> any other program you need for development by adding it to the "Tools"-menu according to your individual needs.</LI>
+<LI> All development tools needed for C++ programming like compiler, linker, automake and
+autoconf,</LI>
+<LI> KAppWizard, which generates complete, ready-to-go sample applications,</LI>
+<LI> Classgenerator, for creating new classes and integrating them into the current project,</LI>
+<LI> Rile management for sources, headers, documentation etc. to be included in the project,</LI>
+<LI> The creation of User-Handbooks written with SGML and the automatic generation of HTML-output with the KDE look and feel,</LI>
+<LI> Automatic HTML-based API-documentation for your project's classes with cross-references to the used libraries,</LI>
+<LI> Internationalization support for your application, allowing translators to easily add their target language to a project,</LI>
+<LI> WYSIWYG (What you see is what you get) -creation of user interfaces with a built-in dialog editor,</LI>
+<LI> Debugging your application by integrating KDbg,</LI>
+<LI> Editing of project-specific pixmaps with KIconedit,</LI>
+<LI> The inclusion of any other program you need for development by adding it to the "Tools"-menu according to your individual needs.</LI>
 </UL>
-
-KDevelop makes it a joy to work with all programs in one place and helps saving time by automating standard development processes
+<P>KDevelop makes it a joy to work with all programs in one place and saves time by automating standard development processes
 as well as giving you direct and transparent access to all information you need. The integrated browsing mechanisms are designed
-to support all type of requests that developers have in conjuction with their project. The class viewer brings you anywhere in the
-project code by a mouse click without needing to search for files or lines as does the error finder reduces code correction to a
-click and your creativity to detect the error cause; file trees give direct access to the project files and the integrated
-help system offers the best availability to online-documentations anywhere within the IDE.
+to support documentation requests that developers have in conjunction with their project.
+<P>The class viewer and error finder bring you anywhere in the project code with a mouse click without needing to search for files; File
+trees give direct access to the project files and the integrated help system offers superb access to online-documentation from anywhere
+within the IDE.
+<P>
 <H3><A NAME="ss1.1">1.1 Changes</A>
 </H3>
 
-<P>This version of the KDevelop IDE is yet another huge step towards providing an easy to understand environment that fulfills it's
-promise towards usability and functionality. Since the last release, we sat down how to extend the design and decided about the
-technical realization. Then, the main work was done in three different areas: the class viewer, the dialog editor and the
-"look-n'-feel" in general, including new editing functions and the creation of KDE-applications. In order to do that, we were
-proud to welcome the newest two team members, Jonas Nordin, who designed a full-featured class parser and -viewer, and Pascal
-Krahmer, who joined the team to implement an up-to-date dialog editor running inside KDevelop and interacting with the project
-management. Other work was done in various parts of the IDE, such as a new <CODE>grep</CODE>-dialog allowing expression search through all
-project files or even the whole system KDevelop runs on; extended configuration utilities; this reviewed and extended
-documentation as well as a new project generator.
+<P>Since the last release, the main work was done in three different areas: the class viewer, the dialog editor and the
+"look-n'-feel" in general, including new editing functions and the creation of KDE-applications. In order to accomplish all this,
+we are proud to welcome the newest two team members, Jonas Nordin, who designed a full-featured class parser and -viewer, and Pascal
+Krahmer, who joined the team to implement an integrated dialog editor. Other work was done in various parts of the IDE, such as a new
+<CODE>grep</CODE>-dialog allowing expression search through all project files or even the whole system; extended configuration
+utilities; reviewed and extended documentation as well as a new project generator.
+<P>
 <H3><A NAME="ss1.2">1.2 About this Handbook</A>
 </H3>
 
-<P>This user manual to the KDevelop IDE gives the user a complete overview of the provided functionality and describes the basic
-development process in short, which can be seen as an introduction into C++ application design with KDevelop in general. For more
-information about specific programming issues, we advise to read the KDevelop Programming Handbook included with your
-distribution of KDevelop, covering themes like understanding generated application frameworks and how to create full-featured KDE
-applications by example projects. The design of this handbook is therefore separated into the following parts:
+<P>This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
+information about specific programming issues, we suggest reading the KDevelop Programming Handbook included with KDevelop, which
+covers themes such as understanding generated application frameworks and how to create full-featured KDE applications using
+example projects.
+<P>The design of this handbook is therefore separated into the following parts:
 <UL>
 <LI>Chapter 
-<A HREF="index-2.html#Installation">Installation</A>, covers the system requirements, installation and setting up of the
-KDevelop IDE.</LI>
+<A HREF="index-2.html#Installation">Installation</A>, covers the system requirements, installation and setting up of the KDevelop
+IDE. </LI>
 <LI>Chapter 
 <A HREF="index-3.html#Programs">Programs</A>, tells you how programs are created with standard GNU development tools and
-how they are build.</LI>
+how they are built.</LI>
 <LI>Chapter 
-<A HREF="index-4.html#Development with KDevelop">Development with KDevelop</A>, takes you on a short trip describing the
+<A HREF="index-4.html#Development with KDevelop">Development with KDevelop</A>, takes you on a short tour describing the
 main functionality of the environment.</LI>
 <LI>Chapter 
 <A HREF="index-5.html#Overview">Overview</A>, explains the menus and dialogs as well as keyboard shortcuts.</LI>
 <LI>Chapter 
-<A HREF="index-6.html#The Helpsystem">The Helpsystem</A>, shows how to use the build-in documentation browser and
+<A HREF="index-6.html#The Help System">The Help System</A>, shows how to use the built-in documentation browser and
 additional help functions.</LI>
 <LI>Chapter  
-<A HREF="index-7.html#Working with the Editor">Working with the Editor</A>, tells you the features of file management and
-editing functionality of KDevelop.</LI>
+<A HREF="index-7.html#Working with the Editor">Working with the Editor</A>, explains the features of file management and
+editing.</LI>
 <LI>Chapter 
 <A HREF="index-8.html#Projects">Projects</A>, describes the creation and maintaining of software projects.</LI>
 <LI>Chapter 
 <A HREF="index-9.html#Build Settings">Build Settings</A>, contains a reference on how to set compiler and liker flags as well as project options.</LI>
 <LI>Chapter 
-<A HREF="index-10.html#The Classbrowser">The Classbrowser</A>, tells you how to make use of KDevelop's powerful classbrowser.</LI>
+<A HREF="index-10.html#The Class Browser">The Class Browser</A>, tells you how to make use of KDevelop's powerful Class Browser.</LI>
 <LI>Chapter 
-<A HREF="index-11.html#The Dialogeditor">The Dialogeditor</A>, features the integrated visual GUI constructor and how it
+<A HREF="index-11.html#The Dialog Editor">The Dialog Editor</A>, features the integrated visual GUI constructor and how it
 generates C++ output.</LI>
 <LI>Chapter 
 <A HREF="index-12.html#General Configuration">General Configuration</A> shows how you can set overall preferences for using KDevelop.</LI>
 <LI>Chapter 
-<A HREF="index-13.html#Questions and Answers">Questions and Answers</A>, covers questions that regard to the usage of
-KDevelop under different Unices and problem solutions in general.</LI>
+<A HREF="index-13.html#Questions and Answers">Questions and Answers</A>, covers questions that regard to the usage of KDevelop
+under different flavors of Unix systems and problem solutions in general.</LI>
 </UL>
-
-For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
+<P>For programming beginners and new users of this product we recommend to read yourself into this manual before starting to actually
 work with the IDE as it covers the usage in depth. The understanding of how things are done the quickest way will save you a lot
 of time searching for functions and features as it will enable you to make use of first-class development tools even more simple.
 <P>

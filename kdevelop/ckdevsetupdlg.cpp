@@ -259,7 +259,9 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QPushButton* qt_button;
   qt_button = new QPushButton( w, "qt_button" );
   qt_button->setGeometry( 370, 40, 30, 30 );
-  qt_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	qt_button->setPixmap(pix);
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
   
   QLabel* qt_label;
@@ -287,7 +289,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   QPushButton* kde_button;
   kde_button = new QPushButton( w, "kde_button" );
   kde_button->setGeometry( 370, 90, 30, 30 );
-  kde_button->setText( "..." );
+	kde_button->setPixmap(pix);
   connect(kde_button,SIGNAL(clicked()),SLOT(slotKDEClicked()));
   
   QLabel* kde_label;

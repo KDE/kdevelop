@@ -2568,56 +2568,8 @@ quickly and, as he completely interacts with the project management, stay in the
 build-process. Actions that require to switch back to KDevelop will do that automatically for you, like accessing the documentation
 browser. Just select the menu commands, and KDevelop reacts to your will.
 
-<sect1>Creating a New Dialog
-<p>
-After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
-the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
-provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
-information about widget design, see <em/The KDevelop Programming Handbook/.
-
-To create a new dialog, select "New" from the "File"-menu. Then you have to do certain selections and insert information:
-
-<sect2>Dialog Class
-<p>
-The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
-Therefore, you have the following options:
-<enum>
-<item><bf/QWidget:/ the base class for all user interaction widgets provided by Qt. Used for main views and top-level widgets.
-<item><bf/QFrame:/ inherits QWidget and is used by numerous widgets as a base class. This is useful for widgets that already want to
-have a QFrame functionality in addition to QWidget methods.
-<item><bf/Custom:/ inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
-provided by your project or the libraries.
-<item><bf/QDialog:/ the base class for dialogs that you would inherit for user interaction like setting properties or changing values.
-<item><bf/QTabDialog:/ inherits QDialog and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
-widgets that you create.
-</enum>
-
-<sect2>Custom Properties
-<p>
-For the inheritance of a custom class as selected in the dialog class field, you have to specify the classname, which goes to "Custom
-Class". The dialogeditor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
-filename of the custom class has to be set.
-
-<sect2>Files
-<p>
-In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
-for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
-When inserting the Classname, the filenames are given by the dialogeditor, but you can as well change the filenames.
-
-Now, what about the files ? When you are ready with constructing the widget visually, you will have to generate the files that contain
-the implementation for your widget. As this will be a class, the dialog will exist by the header file containing the classdeclaration,
-a C++ file containing the method implementation for your widget's methods and slots. The Data file is the file that will contain a
-function that is called by the constructor of your widget, the <em/initDialog()/ method. The file itself shouldn't be changed as it
-will contain the generated code from the dialogeditor to create the widget on the screen. If you ever have to chage values, you should
-do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
-overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialogeditor writes;
-these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
-changees will get lost by the next code-creation.
-
-<sect2>Location
-<p>
-For generating the widget's sources, the dialogeditor needs to know the location where these will go. The default value for the output
-directory is the current project subdirectory containing the sources already present.
+The following chapters give you an overview of the dialogeditor interface, how to create a new dialog initially and how set up the
+properties of the child widgets that your dialog contains.
 
 <sect1>The Dialog Editor View
 <p>
@@ -2658,6 +2610,65 @@ and Y size in the coordinate system. For Statusbar help, you are provided the sa
 
 While changing widget size, the statusbar shows the current values for width and height of the selecte widget.
 
+<sect1>Creating a New Dialog
+<p>
+After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
+the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
+provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
+information about widget design, see <em/The KDevelop Programming Handbook/.
+
+To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The "New Dialog"
+menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
+destination.
+
+<sect2>Dialog Class
+<p>
+The dialog class you can select, is the class that is inherited by your new widget, which is technically represented by a class itself.
+Therefore, you have the following options:
+<enum>
+<item><bf/QWidget:/ the base class for all user interaction widgets provided by Qt. Used for main views and top-level widgets.
+<item><bf/QFrame:/ inherits QWidget and is used by numerous widgets as a base class. This is useful for widgets that already want to
+have a QFrame functionality in addition to QWidget methods.
+<item><bf/Custom:/ inherits a custom class that has to be set in the "Custom Properties". This could be an already designed class
+provided by your project or the libraries.
+<item><bf/QDialog:/ the base class for dialogs that you would inherit for user interaction like setting properties or changing values.
+<item><bf/QTabDialog:/ inherits QDialog and provides a dialog with predefined buttons and a set of tabs, which you will provide by the
+widgets that you create.
+</enum>
+
+<bf/Custom Properties/
+
+For the inheritance of a custom class as selected in the dialog class field, you have to specify the classname, which goes to "Custom
+Class". The dialogeditor uses this for the code-generation; therefore, you also have to insert the "Custom Header", where the header
+filename of the custom class has to be set.
+
+<sect2>Files
+<p>
+In the "Files" section, you have to enter the widget's specific information. This is the classname (which would be e.g. KColorSelectDlg
+for a dialog that allows selecting the color of a pen), the header, C++ and Data filenames.
+When inserting the Classname, the filenames are given by the dialogeditor, but you can as well change the filenames.
+
+Now, what about the files ? When you are ready with constructing the widget visually, you will have to generate the files that contain
+the implementation for your widget. As this will be a class, the dialog will exist by the header file containing the classdeclaration,
+a C++ file containing the method implementation for your widget's methods and slots. The Data file is the file that will contain a
+function that is called by the constructor of your widget, the <em/initDialog()/ method. The file itself shouldn't be changed as it
+will contain the generated code from the dialogeditor to create the widget on the screen. If you ever have to chage values, you should
+do this by the constructor or be sure that you won't change the dialog during the development process, as the Data file wil be
+overwritten each time the code is generated for your widget. The header and C++ file contain sections, where the dialogeditor writes;
+these are marked by comments. After file generation, you can change any values and settings outside these sections; otherwise your
+changees will get lost by the next code-creation.
+
+<sect2>Location
+<p>
+For generating the widget's sources, the dialogeditor needs to know the location where these will go. The default value for the output
+directory is the current project subdirectory containing the sources already present.
+
+After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
+your own widget. Mind that the dialogeditor currently only supports static widgets without geometry management. If you're about to use
+geometry management for your widgets, you should make yourself accustomed with the classes that Qt provides for this, create a new
+class with the classgenerator and write your widget by hand. For more information, see <em/The KDevelop Programming Handbook/.
+
+
 <sect1>Adding Widgets<label id="Adding Widgets">
 <p>
 After specifying the dialogs or widgets class and filenames, you are ready to start creating the widget and filling it with contents.
@@ -2674,15 +2685,26 @@ Currently provided widgets are:
 
 <bf/QT-Widgets:/
 <itemize>
-<item>QWidget - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
+<item><bf/QWidget/ - a widget that can be specified by yourself and can contain other widgets as well. This allows creating a widget
 hirarchy within your dialog.
-<item>QLabel - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the purpose
-of the lineedit is or which varialbe e.g. a combo box allows to set.
-<item>QPushButton - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.
-<item>QCheckBox - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.
-<item>QLCDNumber - displays numbers in LCD style. Often used for clocks.
-<item>QRadioButton - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
+<item><bf/QLabel/ - a label that represents text information on the widget. Use QLabel e.g. in front of lineedits to signal what the
+purpose of the lineedit is or which varialbe e.g. a combo box allows to set.
+<item><bf/QPushButton/ - a button that allows to e.g. call another dialog like QFileDialog for selecting a filename.
+<item><bf/QCheckBox/ - a checkbox for e.g. enableing/disableing options. QCheckBox is widely used for configuration dialogs.
+<item><bf/QLCDNumber/ - displays numbers in LCD style. Often used for clocks.
+<item><bf/QRadioButton/ - like QCheckBox often used to let the user set any options. QRadioButton specializes the options setting when more
 of them depend on each other, e.g. you have three radiobuttons, but ony want the user to choose one of three offered options.
+<item><bf/QComboBox/ - a combo box lets the user set a value by selecting it from a drop-down menu or by inserting the value, if the
+box is write enabled.
+<item><bf/QListBox/ - provides a single-column list of items that can be scrolled.
+<item><bf/QMultiLineEdit/ - offers a multi-line editor.
+<item><bf/QProgressBar/ - displays the progress of an action that takes a longer time to be finished.
+<item><bf/QSpinBox/ - allows choosing numeric values by up- and down buttons or insertion if write enabled.
+<item><bf/QSlider/ - sets a value in a program-defined range by a slider.
+<item><bf/QScrollBar/ - indicates the range of a value and sets the current value by a slider as well as up- and down buttons; often
+used for widgets whose contents is larger than the acutally visible view area. By using the scrollbar, the visible area can be changed
+to another part of the widgets' contents.
+<item><bf/QGroupBox/ - provides a groupbox frame with title to indicate that child widgets within the box belong together.
 <item>More to come...
 </itemize>
 
@@ -2736,69 +2758,429 @@ and all possible values. Note that most values are implemented in QWidget and ar
 that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
 the widget's constructors.
 
-<sect2>Appearance
+<sect1>Properties of Qt supported Widgets
 <p>
+The following chapter gives a complete overview over the currently supported widgets of the Qt toolkit. To achieve a better
+understanding of the properties, these are separated to their inheritance. As all of them inherit <tt/QWidget/, this class is described
+first. All QWidget properties are available for all other widgets as well, so these are not listed for them again. For widget groups
+that inherit an abstract subclass of QWidget as their baseclass, the baseclasses' properties are listed first (though this class does
+not provide a widget in the dialogeditor itself). Then the widget properities for the available widget of the group contains the
+properties that are specific to it. For a better understanding the inheritance tree of the available widgets is listed below:
+
 <itemize>
-<item>BgColor: Background color of the widget
-<item>BgMode: Background mode of the widget
-<item>BgPalColor: Color pallette for the background
-<item>BgPixmap: filename for a background pixmap
-<item>Cursor: Cusor over the widget
-<item>Font: Font for the widget
-<item>Margin: sets the margin for a label
-<item>MaskBitmap: filename for a masking bitmap.
-<item>Pixmap: sets the pixmap filename to use
+<item><ref id="QWidget" name="QWidget">
+	<itemize>
+		<item><ref id="QButton" name="QButton"> (abstract)
+			<itemize>
+			<item><ref id="QCheckBox" name="QCheckBox">
+			<item><ref id="QPushButton" name="QPushButton">
+			<item><ref id="QRadioButton" name="QRadioButton">
+			</itemize>
+		<item><ref id="QComboBox" name="QComboBox">
+		<item><ref id="QFrame" name="QFrame"> (abstract for now)
+			<itemize>
+			<item><ref id="QGroupBox" name="QGroupBox">
+			<item><ref id="QLCDNumber" name="QLCDNumber">
+			<item><ref id="QLabel" name="QLabel">
+			<item><ref id="QProgressBar" name="QProgressBar">
+			<item><ref id="QSpinBox" name="QSpinBox">
+			<item><ref id="QTableView" name="QTableView"> (abstract)
+				<itemize>
+				<item><ref id="QListBox" name="QListBox">
+				<item><ref id="QMultiLineEdit" name="QMultiLineEdit">
+				</itemize>
+			</itemize>
+		<item><ref id="QLineEdit" name="QLineEdit">
+		<item><ref id="QScrollBar" name="QScrollBar">
+		<item><ref id="QSlider" name="QSlider">
+	</itemize>
 </itemize>
 
-<sect2>C++ Code
+<sect2>QWidget Properties <label id="QWidget">
 <p>
+QWidget is the base class for almost all widgets in Qt and KDE. Therefore widgets that inherit QWidget will allow to use the same
+settings in most cases.
+
 <itemize>
-<item>AcceptsDrops: if set to true, the widget item will accept drops by drag'n drop mechanisms
-<item>Buddy:
-<item>Connections: connects the item's signals to slots
-<item>FocusProxy: the item that gives its focus to this widget.
-<item>HasFocus: sets if the item has the focus by default. Mind that only one item per dialog can have this value as true
-<item>ResizeToParent: resizes the widget to it's parent size (not visible in editing mode)
-<item>VarName: Variable name of the item. Chage this to names that describe the item's purpose.
-</itemize>
-<sect2>General
-<p>
+
+<item><bf/Appearance:/
+
 <itemize>
-<item>CursorPosition: sets the default cursor position in lineedits.
-<item>IsEnabled: sets if the widget will accept user events
-<item>IsHidden: sets the item to be visible(false) or hidden(true)
-<item>MaxLength: sets the maximum string length in lineedits
-<item>Name: sets the name of the widget. Mind that the name is different from the VarName in C++ Code.
-<item>Text: the text on labels, buttons and boxes, also pre-set text for lineedits.
-<item>isAutoDefault
-<item>isAutoRepeat
-<item>isAutoResize
-<item>isChecked
-<item>isDefault
-<item>isMenuButton
-<item>isToggleButton
-<item>isToggledOn
-<item>hasFrame
-<item>isTextSelected
-<item>NumDigits: sets the number of digits displayed in QLCDNumber
-<item>Value: pre-set value for QLCDNumber
+<item><bf/BgColor:/ Background color of the widget
+<item><bf/BgMode:/ Background mode of the widget
+<item><bf/BgPalColor:/ Color pallette for the background
+<item><bf/BgPixmap:/ filename for a background pixmap
+<item><bf/Cursor:/ Cusor over the widget
+<item><bf/Font:/ Font for the widget
+<item><bf/MaskBitmap:/ filename for a masking bitmap.
 </itemize>
 
-<sect2>Geometry
-<p>
+<item><bf/C++ Code:/
+
 <itemize>
-<item>Height: height of the item
-<item>IsFixedSize
-<item>MaxHeight: maximum value for Height
-<item>MaxWidth: maximum value for Width
-<item>MinHeight: minimum value for Height
-<item>MinWidth: minimum value for Width
-<item>SizeIncX: pixel steps for resize actions for X position
-<item>SizeIncY: pixel steps for resize actions for Y position
-<item>Width: width of the item
-<item>X: position horizontal, counted from the left corner
-<item>Y: position vertical, counted up to down
+
+<item><bf/AcceptsDrops:/ if set to true, the widget item will accept drops by drag'n drop mechanisms
+<item><bf/Connections:/ connects the item's signals to slots
+<item><bf/FocusProxy:/ the item that gives its focus to this widget.
+<item><bf/HasFocus:/ sets if the item has the focus by default. Mind that only one item per dialog can have this value as true
+<item><bf/ResizeToParent:/ resizes the widget to it's parent size (not visible in editing mode)
+<item><bf/VarName:/ Variable name of the item. Chage this to names that describe the item's purpose.
 </itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/IsEnabled:/ sets if the widget will accept user events
+<item><bf/IsHidden:/ sets the item to be visible(false) or hidden(true)
+<item><bf/Name:/ sets the name of the widget. Mind that the name is different from the VarName in C++ Code.
+</itemize>
+
+<item><bf/Geometry:/
+
+<itemize>
+<item><bf/Height:/ height of the item
+<item><bf/IsFixedSize:/
+<item><bf/MaxHeight:/ maximum value for Height
+<item><bf/MaxWidth:/ maximum value for Width
+<item><bf/MinHeight:/ minimum value for Height
+<item><bf/MinWidth:/ minimum value for Width
+<item><bf/SizeIncX:/ pixel steps for resize actions for X position
+<item><bf/SizeIncY:/ pixel steps for resize actions for Y position
+<item><bf/Width:/ width of the item
+<item><bf/X:/ position horizontal, counted from the left corner
+<item><bf/Y:/ position vertical, counted up to down
+</itemize>
+
+</itemize>
+
+
+<sect2>QButton inherited widgets <label id="QButton">
+<p>
+<tt/QButton/ is an abstract widget class that provides properties common to buttons.
+
+Inherits <ref id="QWidget" name="QWidget">
+
+Inherited by <ref id="QCheckBox" name="QCheckBox">, <ref id="QPushButton" name="QPushButton"> and <ref id="QRadioButton"
+name="QRadioButton"> inherit <tt/QButton/.
+
+
+<itemize>
+<item><bf/Appearance:/
+
+<itemize>
+<item><bf/setPixmap:/ sets the pixmap filename to use
+</itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/setText:/ the text on labels, buttons and boxes, also pre-set text for lineedits.
+<item><bf/setAutoRepeat:/ if enabled, the clicked() signal is emitted at regular intervals while the button is down. No effect on
+toogle buttons.
+<item><bf/setAutoResize:/ Enables auto-resizing if TRUE. When auto-resize is enabled, the button will resizes itself
+whenever the contents changes.
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QCheckBox Properities <label id="QCheckBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/isChecked: (setChecked)/ defines is the checkbox is set checked on construction
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QPushButton Properties <label id="QPushButton">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/isAutoDefault: (setAutoDefault)/ the auto-default button becomes the default push button if it receives the keyboard input focus.
+<item><bf/isDefault: (setDefault)/ there can be only one default button and it is only allowed to use in a dialog (see <tt/QDialog/). The
+default button emits <tt/clicked()/ if the user presses the Enter key.
+<item><bf/isMenuButton: (setIsMenuButton)/ tells the button to draw
+a menu indication triangle if enabled. The menu has to be inserted separately.
+<item><bf/isToggleButton::(setToggleButton)/ makes a push button a toggle button, so the button has a similar state as check
+boxes.
+<item><bf/isToggledOn: (setOn)/ (public slot) switches a toggle button on.
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QRadioButton Properties <label id="QRadioButton">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QButton" name="QButton">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/isChecked: (setChecked)/ defines is the radiobutton is set checked on construction
+</itemize>
+
+</itemize>
+<p>
+
+<sect2>QComboBox Properties <label id="QComboBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget">
+
+( no additional properties for now)
+<p>
+
+
+<sect2>QFrame inherited widgets <label id="QFrame">
+<p>
+Inherits <ref id="QWidget" name="QWidget">
+
+For now only used as an abstract class.
+<itemize>
+
+<item><bf/Appearance:/
+
+<itemize>
+<item>Margin (setMargin): sets the margin, which is the distance from the innermost pixel of the frame and the outermost pixel of the
+contents.
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QGroupBox Properties <label id="QGroupBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/Title: (setTitle)/ sets the groupbox title that is displayed in the box frame.
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QLCDNumber Properties  <label id="QLCDNumber">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/NumDigits:(setNumDigits)/ sets the number of digits displayed in QLCDNumber
+<item><bf/Value: (display)/ (public slot) sets the initial value for QLCDNumber
+</itemize>
+
+</itemize>
+<p>
+
+
+<sect3>QLabel Properties  <label id="QLabel">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+
+<item><bf/Appearance:/
+
+<itemize>
+<item>Margin (setMargin): sets the margin, which is for QLabel the distance from the frame to the first letter of the label text,
+depending on the alignment of the label.
+</itemize>
+
+<item><bf/C++ Code: /
+
+<itemize>
+<item><bf/Buddy: (setBuddy)/ sets the buddy widget of the label.
+</itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/Text: (setText)/ sets the label text.
+<item><bf/isAutoResize: (setAutoResize)/ if TRUE, the label will resize itself if the contents changes. The top left corner is not
+moved.
+</itemize>
+
+</itemize>
+<p>
+
+
+<sect3>QProgressBar Properties  <label id="QProgressBar">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/TotalSteps: (setTotalSteps)/ (public slot) sets the total steps of the progressbar. During the iteration of your action to
+display the progress, you have to call setProgress(int) to advance the progress step displayed to (int).
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QSpinBox Properties <label id="QSpinBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <ref id="QFrame" name="QFrame">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/MaxValue:/
+<item><bf/MinValue:/
+<item><bf/Prefix:/
+<item><bf/Suffix:/
+<item><bf/Value:/
+<item><bf/isWrapping:/
+</itemize>
+
+</itemize>
+<p>
+
+<sect3>QTableView inherited widgets <label id="QTableView">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+
+Inherited by <ref id="QListBox" name="QListBox"> and <ref id="QMultiLineEdit" name="QMultiLineEdit">
+<p>
+
+<sect4>QListBox Properties <label id="QListBox">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/isAutoBottomScrollBar: (setAutoBottomScrollBar)/
+<item><bf/isAutoScroll: (setAutoScroll)/
+<item><bf/isAutoScrollBar: (setAutoScrollBar)/
+<item><bf/isAutoUpdate: (setAutoUpdate)/
+<item><bf/isBottomScrollBar: (setBottomScrollBar)/
+<item><bf/isDragSelect: (setDragSelect)/
+<item><bf/isSmoothScrolling: (setSmoothScrolling)/
+</itemize>
+
+<item><bf/Geometry:/
+
+<itemize>
+<item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
+current font.
+</itemize>
+
+</itemize>
+<p>
+
+<sect4>QMultiLineEdit Properties <label id="QMultiLineEdit">
+<p>
+Inherits <ref id="QWidget" name="QWidget">, <ref id="QFrame" name="QFrame"> and <ref id="QTableView" name="QTableView">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/Text: (setText) / (public slot) sets the text of the widget.
+<item><bf/isAutoUpdate: (setAutoUpdate)/ used to avoid flicker during large changes; the view is not updated if disabled.
+<item><bf/isOverWriteMode: (setOverwriteMode) /(public slot) sets overwrite enabled or disabled.
+<item><bf/isReadOnly: (setReadOnly)/ (public slot) sets the widget text to read only; disables text input.
+<item><bf/isTextSelected: (selectAll)/(public slot) marks the whole text selected
+</itemize>
+
+<item><bf/Geometry:/
+
+<itemize>
+<item><bf/setFixedVisibleLines:/ sets a fixed height for the widget so that the given number of textlines are displayed using the
+current font.
+</itemize>
+
+</itemize>
+<p>
+
+
+<sect2>QLineEdit Properties <label id="QLineEdit">
+<p>
+Inherits <ref id="QWidget" name="QWidget">
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/CursorPosition: (setCursorPosition)/ sets the default cursor position.
+<item><bf/MaxLength: (setMaxLength) / sets the maximum string length
+<item><bf/Text: (setText) / (public slot) sets the contents displayed on construction
+<item><bf/hasFrame: (setFrame) / draws the lineedit witin a two-pixel frame if enabled.
+<item><bf/isTextSelected: (selectAll) / (public slot) sets the text to be selected.
+</itemize>
+
+</itemize>
+<p>
+
+<sect2>QScrollBar Properties <label id="QScrollBar">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/MaxValue:/ sets the maximum slider value; used in constructor (optional)
+<item><bf/MinValue:/ sets the minimum slider value; used in constructor (optional)
+<item><bf/Orientation: (setOrientation)/ sets the orientation of the scrollbar to horizontal or vertical.
+<item><bf/Value: / sets the initial value of the scrollbar in the constructor (optional)
+<item><bf/isTracking: (setTracking)/ if enabled, the scrollbar emits <tt/valueChanged()/ whenever the bar is dragged; otherwise only on
+mouse release.
+</itemize>
+
+</itemize>
+<p>
+
+<sect2>QSlider Properties <label id="QSlider">
+<p>
+Inherits <ref id="QWidget" name="QWidget"> and <tt/QRangeControl/.
+
+<itemize>
+
+<item><bf/General:/
+
+<itemize>
+<item><bf/MaxValue:/ sets the maximum slider value; used in constructor (optional)
+<item><bf/MinValue:/ sets the minimum slider value; used in constructor (optional)
+<item><bf/Orientation: (setOrientation)/ sets the orientation of the slider to horizontal or vertical.
+<item><bf/Value: (setValue)/ (public slot) uses <tt/QRangeControl::setValue()/ to set the value.
+<item><bf/isTracking:(setTracking)/ if enabled, the slider emits <tt/valueChanged()/ whenever the slider is dragged; otherwise only on
+mouse release.
+</itemize>
+
+</itemize>
+<p>
+
 
 <sect1>Generating Files
 <p>
@@ -2915,11 +3297,39 @@ will be faster and more successful, so we suggest choosing a "medium" size. For 
 
 <sect>Questions and Answers<label id="Questions and Answers">
 <p>
+This section adresses questions by users that were answered by the KDevelop Team or by their supporters on the KDevelop
+mailinglist during experiences with the current versions of KDevelop as well as bug reporting in general.
+
+<sect1>Bug Reporting <label id="Bug Reporting">
+<p>
+Another improvement of KDevelop is the integrated bug-reporting system via email. If you experience a bug, you have the option to send
+the KDevelop development team a bug report either by your email-client or by the bug-report dialog. All bug-reports are collected on
+the KDevelop website and can be reviewed on <htmlurl url="http://fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html"
+name="fara3.cs.uni-potsdam.de/~smeier/kdevelop/bugarchive/maillist.html">. You can also receive all bug-reports via subscription to the
+bug-report mailinglist by sending an empty email to <htmlurl  url="mailto:kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"
+name="kdevelop-bug-report-request@fara3.cs.uni-potsdam.de"> with "subscribe <em/your_email_adress/" as the body contents.
+
+To send bug reports, please use this email adress by your mail program. If you want to use KDevelop for direct bug-reporting, choose
+"Bug Report" from the "Help" menu. You are presented the report dialog that lets you enter all necessary information about the bug you
+found. After pressing "OK", the dialog's contents is sent to the mailinglist automatically.
+
+<sect1>Where to get Information
+<p>
 <bf>Q:</bf> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
 
-<bf>A:</bf>  In any case send all requests that are regarding KDevelop to the KDevelop mailinglist which adress can be found on the
-KDevelop homepage. All questions should go there and will be adressed there as well.  If you stick to that, you will get the most
-help by the developers and all users having the same problems, as well as helping to keep the FAQ up to date.
+<bf>A:</bf>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailinglist at <htmlurl
+url="mailto:kdevelop@fara3.cs.uni-potsdam.de" name = "kdevelop@fara3.cs.uni-potsdam.de">. Send a mail with an empty header and
+"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be adressed there as well.
+If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
+the FAQ up to date.
+
+The KDevelop Homepage at <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
+name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> also contains a mailing-list archive that allows you to browse the
+mails already send by the subscribers, so you should look there first as most problems should have been adressed already by the team or
+other users.
+
+<sect1>Library and System Problems
+<p>
 
 <bf>Q:</bf> Wrong JPEG library version: library is 61, caller expects 62
 
@@ -3008,6 +3418,8 @@ make: *** [all-recursive-am] Error 2
 <bf>A:</bf> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
 them or get an updated rpm of the kdelibs from <htmlurl url="ftp://ftp.suse.com" name="ftp://ftp.suse.com">
 
+<sect1>Usage Questions
+<p>
 <bf>Q:</bf> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
 
 <bf>A:</bf>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
@@ -3141,6 +3553,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
 
 
 

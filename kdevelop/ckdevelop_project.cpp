@@ -650,9 +650,10 @@ void CKDevelop::slotProjectAPI(){
     shell_process.clearArguments();
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << "-n"+prj->getProjectName();
+    shell_process << prj->getProjectName();
     shell_process << "*.h";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+//    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else if(!QFileInfo(qt_ref_file).exists()){
     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
@@ -661,10 +662,11 @@ void CKDevelop::slotProjectAPI(){
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
-    shell_process << "-n"+prj->getProjectName();
+    shell_process << prj->getProjectName();
     shell_process << "*.h";
     shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+//    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else{
     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
@@ -673,10 +675,11 @@ void CKDevelop::slotProjectAPI(){
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
-    shell_process << "-n"+prj->getProjectName();
+    shell_process << prj->getProjectName();
     shell_process << "*.h";
     shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+//    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
 }
 

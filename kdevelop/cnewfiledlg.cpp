@@ -27,55 +27,46 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
   
   prj = p_prj;
   setCaption(i18n("New File..."));    
+	// the tabview
+	tab = new KTabCtl(this);
+  tab->setGeometry( 20, 20, 230, 160);
+  tab->setBorder(false);
 
-button_group = new QButtonGroup( this, "button_group" );
-	button_group->setGeometry( 20, 200, 430, 140 );
-	button_group->setMinimumSize( 10, 10 );
-	button_group->setMaximumSize( 32767, 32767 );
-	button_group->setFocusPolicy( QWidget::NoFocus );
-	button_group->setBackgroundMode( QWidget::PaletteBackground );
-	button_group->setFontPropagation( QWidget::NoChildren );
-	button_group->setPalettePropagation( QWidget::NoChildren );
-	button_group->setFrameStyle( 49 );
-	button_group->setTitle( i18n("Project Options" ));
-	button_group->setAlignment( 1 );
+  list_linux = new QListBox( tab, "list_linux" );
+  list_linux->insertItem(i18n("lsm File - Linux Software Map"));
+  list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
+  list_linux->insertItem(i18n("Icon (*.xpm)"));
+  list_linux->setMultiSelection( FALSE );
+  list_linux->setCurrentItem(0);
 
-	check_use_template = new QCheckBox( this, "check_use_template" );
-	check_use_template->setGeometry( 270, 120, 180, 30 );
-	check_use_template->setMinimumSize( 10, 10 );
-	check_use_template->setMaximumSize( 32767, 32767 );
-	check_use_template->setFocusPolicy( QWidget::TabFocus );
-	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
-	check_use_template->setFontPropagation( QWidget::NoChildren );
-	check_use_template->setPalettePropagation( QWidget::NoChildren );
-	check_use_template->setText(i18n("use Template") );
-	check_use_template->setAutoRepeat( FALSE );
-	check_use_template->setAutoResize( FALSE );
+  list_manuals = new QListBox( tab, "list_manuals" );
+  list_manuals->insertItem("english (.sgml)");
+  list_manuals->setMultiSelection( FALSE );
+  list_manuals->setCurrentItem(0);
 
-	check_add_project = new QCheckBox( this, "check_add_project" );
-	check_add_project->setGeometry( 30, 220, 210, 30 );
-	check_add_project->setMinimumSize( 10, 10 );
-	check_add_project->setMaximumSize( 32767, 32767 );
-	check_add_project->setFocusPolicy( QWidget::TabFocus );
-	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
-	check_add_project->setFontPropagation( QWidget::NoChildren );
-	check_add_project->setPalettePropagation( QWidget::NoChildren );
-	check_add_project->setText(i18n("add to Project") );
-	check_add_project->setAutoRepeat( FALSE );
-	check_add_project->setAutoResize( FALSE );
+  list_cpp = new QListBox( tab, "list_cpp" );
+  list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
+  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
+  list_cpp->insertItem(i18n("Empty Textfile"));
+  list_cpp->setMultiSelection( FALSE );
+  list_cpp->setCurrentItem(0);
 
-ok = new QPushButton( this, "ok" );
-	ok->setGeometry( 110, 360, 100, 30 );
-	ok->setMinimumSize( 10, 10 );
-	ok->setMaximumSize( 32767, 32767 );
-	ok->setFocusPolicy( QWidget::TabFocus );
-	ok->setBackgroundMode( QWidget::PaletteBackground );
-	ok->setFontPropagation( QWidget::NoChildren );
-	ok->setPalettePropagation( QWidget::NoChildren );
-	ok->setText( "OK" );
-	ok->setAutoRepeat( FALSE );
-	ok->setAutoResize( FALSE );
+  tab->addTab(list_cpp,i18n("General"));
+  tab->addTab(list_manuals,i18n("Manuals"));
+  tab->addTab(list_linux,i18n("Linux/KDE"));
 
+	label_filename = new QLabel( this, "label_filename" );
+	label_filename->setGeometry( 270, 30, 170, 30 );
+	label_filename->setMinimumSize( 10, 10 );
+	label_filename->setMaximumSize( 32767, 32767 );
+	label_filename->setFocusPolicy( QWidget::NoFocus );
+	label_filename->setBackgroundMode( QWidget::PaletteBackground );
+	label_filename->setFontPropagation( QWidget::NoChildren );
+	label_filename->setPalettePropagation( QWidget::NoChildren );
+	label_filename->setText( i18n("Filename:") );
+	label_filename->setAlignment( 289 );
+	label_filename->setMargin( -1 );
+	
 	edit = new QLineEdit( this, "edit" );
 	edit->setGeometry( 270, 70, 180, 30 );
 	edit->setMinimumSize( 10, 10 );
@@ -89,35 +80,54 @@ ok = new QPushButton( this, "ok" );
 	edit->setEchoMode( QLineEdit::Normal );
 	edit->setFrame( TRUE );
 
-	cancel = new QPushButton( this, "cancel" );
-	cancel->setGeometry( 270, 360, 100, 30 );
-	cancel->setMinimumSize( 10, 10 );
-	cancel->setMaximumSize( 32767, 32767 );
-	cancel->setFocusPolicy( QWidget::TabFocus );
-	cancel->setBackgroundMode( QWidget::PaletteBackground );
-	cancel->setFontPropagation( QWidget::NoChildren );
-	cancel->setPalettePropagation( QWidget::NoChildren );
-	cancel->setText(i18n("Cancel") );
-	cancel->setAutoRepeat( FALSE );
-	cancel->setAutoResize( FALSE );
+	check_use_template = new QCheckBox( this, "check_use_template" );
+	check_use_template->setGeometry( 270, 120, 180, 30 );
+	check_use_template->setMinimumSize( 10, 10 );
+	check_use_template->setMaximumSize( 32767, 32767 );
+	check_use_template->setFocusPolicy( QWidget::TabFocus );
+	check_use_template->setBackgroundMode( QWidget::PaletteBackground );
+	check_use_template->setFontPropagation( QWidget::NoChildren );
+	check_use_template->setPalettePropagation( QWidget::NoChildren );
+	check_use_template->setText(i18n("use Template") );
+	check_use_template->setAutoRepeat( FALSE );
+	check_use_template->setAutoResize( FALSE );
+	
+	button_group = new QButtonGroup( this, "button_group" );
+	button_group->setGeometry( 20, 200, 430, 140 );
+	button_group->setMinimumSize( 10, 10 );
+	button_group->setMaximumSize( 32767, 32767 );
+	button_group->setFocusPolicy( QWidget::NoFocus );
+	button_group->setBackgroundMode( QWidget::PaletteBackground );
+	button_group->setFontPropagation( QWidget::NoChildren );
+	button_group->setPalettePropagation( QWidget::NoChildren );
+	button_group->setFrameStyle( 49 );
+	button_group->setTitle( i18n("Project Options" ));
+	button_group->setAlignment( 1 );
 
+	check_add_project = new QCheckBox( this, "check_add_project" );
+	check_add_project->setGeometry( 30, 220, 210, 30 );
+	check_add_project->setMinimumSize( 10, 10 );
+	check_add_project->setMaximumSize( 32767, 32767 );
+	check_add_project->setFocusPolicy( QWidget::TabFocus );
+	check_add_project->setBackgroundMode( QWidget::PaletteBackground );
+	check_add_project->setFontPropagation( QWidget::NoChildren );
+	check_add_project->setPalettePropagation( QWidget::NoChildren );
+	check_add_project->setText(i18n("add to Project") );
+	check_add_project->setAutoRepeat( FALSE );
+	check_add_project->setAutoResize( FALSE );
 
-
-
-
-
-	label_filename = new QLabel( this, "label_filename" );
-	label_filename->setGeometry( 270, 30, 170, 30 );
-	label_filename->setMinimumSize( 10, 10 );
-	label_filename->setMaximumSize( 32767, 32767 );
-	label_filename->setFocusPolicy( QWidget::NoFocus );
-	label_filename->setBackgroundMode( QWidget::PaletteBackground );
-	label_filename->setFontPropagation( QWidget::NoChildren );
-	label_filename->setPalettePropagation( QWidget::NoChildren );
-	label_filename->setText( i18n("Filename:") );
-	label_filename->setAlignment( 289 );
-	label_filename->setMargin( -1 );
-
+	location_label = new QLabel( this, "location_label" );
+	location_label->setGeometry( 30, 250, 160, 30 );
+	location_label->setMinimumSize( 0, 0 );
+	location_label->setMaximumSize( 32767, 32767 );
+	location_label->setFocusPolicy( QWidget::NoFocus );
+	location_label->setBackgroundMode( QWidget::PaletteBackground );
+	location_label->setFontPropagation( QWidget::NoChildren );
+	location_label->setPalettePropagation( QWidget::NoChildren );
+	location_label->setText(i18n("Location:") );
+	location_label->setAlignment( 289 );
+	location_label->setMargin( -1 );
+	
 	prj_loc_edit = new QLineEdit( this, "prj_loc_edit" );
 	prj_loc_edit->setGeometry( 30, 290, 360, 30 );
 	prj_loc_edit->setMinimumSize( 0, 0 );
@@ -139,66 +149,44 @@ ok = new QPushButton( this, "ok" );
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
 	loc_button->setFontPropagation( QWidget::NoChildren );
 	loc_button->setPalettePropagation( QWidget::NoChildren );
-	loc_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	loc_button->setPixmap(pix);
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
-
-	location_label = new QLabel( this, "location_label" );
-	location_label->setGeometry( 30, 250, 160, 30 );
-	location_label->setMinimumSize( 0, 0 );
-	location_label->setMaximumSize( 32767, 32767 );
-	location_label->setFocusPolicy( QWidget::NoFocus );
-	location_label->setBackgroundMode( QWidget::PaletteBackground );
-	location_label->setFontPropagation( QWidget::NoChildren );
-	location_label->setPalettePropagation( QWidget::NoChildren );
-	location_label->setText(i18n("Location:") );
-	location_label->setAlignment( 289 );
-	location_label->setMargin( -1 );
 
 	button_group->insert( check_add_project );
 	button_group->insert( loc_button );
 
+	ok = new QPushButton( this, "ok" );
+	ok->setGeometry( 110, 360, 100, 30 );
+	ok->setMinimumSize( 10, 10 );
+	ok->setMaximumSize( 32767, 32767 );
+	ok->setFocusPolicy( QWidget::TabFocus );
+	ok->setBackgroundMode( QWidget::PaletteBackground );
+	ok->setFontPropagation( QWidget::NoChildren );
+	ok->setPalettePropagation( QWidget::NoChildren );
+	ok->setText(i18n("OK"));
+	ok->setAutoRepeat( FALSE );
+	ok->setAutoResize( FALSE );
+	ok->setDefault( TRUE );
+	
+	cancel = new QPushButton( this, "cancel" );
+	cancel->setGeometry( 270, 360, 100, 30 );
+	cancel->setMinimumSize( 10, 10 );
+	cancel->setMaximumSize( 32767, 32767 );
+	cancel->setFocusPolicy( QWidget::TabFocus );
+	cancel->setBackgroundMode( QWidget::PaletteBackground );
+	cancel->setFontPropagation( QWidget::NoChildren );
+	cancel->setPalettePropagation( QWidget::NoChildren );
+	cancel->setText(i18n("Cancel") );
+	cancel->setAutoRepeat( FALSE );
+	cancel->setAutoResize( FALSE );
 
-
-  
-  
-  
-	// the tabview
-	tab = new KTabCtl(this);
-  tab->setGeometry( 20, 20, 230, 160);
-  tab->setBorder(false);
-  
-  
-  list_linux = new QListBox( tab, "list_linux" );
-  list_linux->insertItem(i18n("lsm File - Linux Software Map"));
-  list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
-  list_linux->insertItem(i18n("Icon (*.xpm)"));
-  list_linux->setMultiSelection( FALSE );
-  list_linux->setCurrentItem(0);
-  
-  list_manuals = new QListBox( tab, "list_manuals" );
-  list_manuals->insertItem("english (.sgml)");
-  list_manuals->setMultiSelection( FALSE );
-  list_manuals->setCurrentItem(0);
-  
-  list_cpp = new QListBox( tab, "list_cpp" );
-  list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
-  list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
-  list_cpp->insertItem(i18n("Empty Textfile"));
-  list_cpp->setMultiSelection( FALSE );
-  list_cpp->setCurrentItem(0);
-  
-  tab->addTab(list_cpp,i18n("General"));
-  tab->addTab(list_manuals,i18n("Manuals"));
-  tab->addTab(list_linux,i18n("Linux/KDE"));
-  
-  resize( 470,410 );
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
-  
-  
-  edit->setFocus();
-  
+  resize( 470,410 );
+
   connect(tab,SIGNAL(tabSelected(int)),SLOT(slotTabSelected(int)));
   connect(ok,SIGNAL(clicked()),SLOT(slotOKClicked()));
   connect(cancel,SIGNAL(clicked()),SLOT(reject()));
@@ -434,3 +422,5 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
+
+

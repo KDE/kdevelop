@@ -103,14 +103,16 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_button->setBackgroundMode( QWidget::PaletteBackground );
   file_button->setFontPropagation( QWidget::NoChildren );
   file_button->setPalettePropagation( QWidget::NoChildren );
-  file_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+  file_button->setPixmap(pix);
   file_button->setAutoRepeat( FALSE );
   file_button->setAutoResize( FALSE );
   
-  resize( 410,170 );
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
-  
+  resize( 410,170 );
+
   connect(file_button,SIGNAL(clicked()),SLOT(slotFileButtonClicked()));
   connect(ok_button,SIGNAL(clicked()),SLOT(accept()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
@@ -119,8 +121,10 @@ CDocTreePropDlg::~CDocTreePropDlg(){
 }
 
 void CDocTreePropDlg::slotFileButtonClicked(){
-  QString str=  KFileDialog::getOpenFileName(0,"*.html",this,"test");
+  QString str=  KFileDialog::getOpenFileName(0,"*.html *.htm",this,"test");
   if(!str.isEmpty()){
     file_edit->setText(str);
   }
 }
+
+

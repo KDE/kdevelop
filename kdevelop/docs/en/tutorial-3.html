@@ -286,7 +286,6 @@ text-editing view.
 <PRE>
 KScribbleApp::KScribbleApp()
 {
-  windowList.append(this);
   config=kapp->getConfig();
         
 
@@ -294,8 +293,8 @@ KScribbleApp::KScribbleApp()
   // call inits to invoke all other construction parts
   initMenuBar();
   initToolBar();
-  initKeyAccel();
   initStatusBar();
+  initKeyAccel();
   initDocument();
   initView();
 
@@ -314,9 +313,7 @@ KScribbleApp::KScribbleApp()
 </PRE>
 <HR>
 </CODE></BLOCKQUOTE>
-<P>You see that first, the current instance is appended to a list of KScribbleApps called <CODE>windowList</CODE>. This is used to count the
-number of copies that are currently opened of our application windows and which is needed for closing all of them at once when the user
-leaves the application. Then we see that our instance of <CODE>KConfig</CODE> now points to the applications configuration, so we can operate
+<P>We see that our instance of <CODE>KConfig</CODE> now points to the applications configuration, so we can operate
 with the configuration file entries later.
 <P>Then, all parts of the application that are needed are created by their according member functions that are specific to our main
 window:
@@ -421,7 +418,8 @@ each entry. Whenever the user moves his mouse or keyboard focus to an entry, the
 <P>After we finished with the menubar, we can continue with the toolbar in the following section. Mind that an instance of a
 <CODE>KTMainWindow</CODE> can only have one menubar visible at a time; therefore if you want to construct several menubars, you have to create
 them seperately with instances of <CODE>KMenuBar</CODE> and set one of them by the according methods of <CODE>KTMainWindow</CODE> as the current
-menubar.
+menubar. See the class documentation of <CODE>KMenuBar</CODE> for more detailed information about how to extend the features, also see 
+<A HREF="tutorial-5.html#Configuring Menubars and Toolbars">Configuring Menubars and Toolbars</A>.
 <P>
 <H4>The Toolbar</H4>
 
@@ -434,19 +432,120 @@ toolBar()->insertButton(Icon("filenew.xpm"), ID_FILE_NEW, true, i18n("New File")
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>This adds a left-aligned button with the icon "filenew.xpm" with the according ID to the toolbar. The third parameter decides if the
-button should be enabled or not; by default we set this to <CODE>true</CODE>, because our <CODE>disableCommand()</CODE> menthods at the end of the
+button should be enabled or not; by default we set this to <CODE>true</CODE>, because our <CODE>disableCommand()</CODE> methods at the end of the
 constructor do this for us automatically for both menu and toolbar entries. Finally, the last parameter is uses as a so-called
 "QuickTip"- when the user moves the mouse pointer over the button so that it gets highlighted, a small window appears that contains a
 short help message, whose contents can be set here.
 <P>Finally, all toolbar buttons are connected to our <CODE>commandCallback()</CODE> method again by their signal <CODE>clicked()</CODE>. On the signal
 <CODE>pressed()</CODE>, we let the user receive the according help message in the statusbar.
+<P><B>Additional Information:</B>
+<P>As toolbars are created using the class <CODE>KToolBar</CODE>, you should have a look at the according documentation. With <CODE>KTooBar</CODE>, a lot
+of things needed in a toolbar can be realized such as delayed popups if your button wants to pop up a menu when the button keeps being
+pressed or even widgets like combos. Also, by default, the toolbar fills the complete width of the window, which makes it look nice for
+using a single bar. When using more than one, you should also think about setting the bar size to end at the most right button, so
+other bars can be displayed in the same row below the menubar. We will discuss certain techniques about designing and extending
+toolbars in section 
+<A HREF="tutorial-5.html#Configuring Menubars and Toolbars">Configuring Menubars and Toolbars</A>.
 <P>
 <H4>The Statusbar</H4>
 
 <P>The statusbar is, as well as the other bars, already provided by the <CODE>KTMainWindow</CODE> instance, so we just have to insert our items as
 we want to. By default, the framework contains only one entry that displays statusbar help. For a lot of applications this may not
 last; then you would add the entries you need for displaying e.g. coordinates and the like.
+<P>Also, an application can only have one statusbar at a time like a menubar. If you want to construct several ones, you should create
+them seperately and set the current bar by the according method of <CODE>KTMainWindow</CODE>.  The statusbar also offers to insert widgets,
+which can be used to produce nich habbits for displaying progressbars like KDevelop does. Refer to the class documentation of
+<CODE>KStatusBar</CODE>.
 <P>
+<H4>Keyboard Accelerators</H4>
+
+<P>With reaching the method <CODE>initKeyAccel()</CODE>, we already constructed the standard items of an application main window- the menubar,
+toolbar and statusbar. Indeed, we didn't set any keyboard accelerators by which advanced users that only want to work with the keyboard
+have a quick access to certain commands that are used most often during work with our program. To do this, we could have inserted the
+accelerator keys by the insertion of the menuitems for example, but KDE offers a good solution to construct and maintain keyboard
+accelerators. A lot of users want to have them configurable on one hand and on the other standard accelerators should be the same over
+all applications. Therefore, the KDE controll center offers configuring standard keyboard accelerators globally by using the
+<CODE>KAccel</CODE> class. Additonally, the KDE libaries contain a widget that lets users configure application specific keyboard shortcuts
+easily. As the application framework only uses menuitems that have standard actions such as "New" or "Exit", these are set by the
+method <CODE>initKeyAccel()</CODE>. Standard actions just have to be connected, for your application specific keyboard values, you have to
+insert them first by specifying the keyboard accelerator name and then connect them. As our accelerators are all present in the
+menubar, we have to change the accelerators for the popup entries. Finally we call <CODE>readSettings()</CODE>, which reads the current
+settings from the root window of KDE containing the configuration of standard accelerators, then the settings for accelerators
+specified in the application's config file. When we're going further into our example project, we will also talk about how to configure
+our application specific accelerators by a configuration dialog, see 
+<A HREF="tutorial-5.html#Configuring Menubars and Toolbars">Configuring Menubars and Toolbars</A> for that part of the development process.
+<P>
+<H4>The Document-View Model</H4>
+
+<P>The next two member function calls, <CODE>initDocument()</CODE> and <CODE>initView()</CODE>, are finally building the part that the application
+windows are supposed to provide to the user: an interface to work with data that the application is supposed to manipulate; and that is
+also the reason why the application framework contains three classes, an <CODE>*App</CODE>, <CODE>*View</CODE> and <CODE>*Doc</CODE> class. To understand, why
+this structure is helpful, we'll look a bit aside the actual code and introduce some theory, then we'll switch to the program again to
+see how the KDevelop frameworks support such a model.
+<P>Basically, all what has been explained about the framework is that we need an application instance that contains a main window. This
+window is responsible to provide the basic interface for the user- it contains the menubar, toolbars and statusbar and the event
+controlling for user interaction. Also, it contains an area, that is described as a "view". Now, the purpose of a view is generally, to
+display the data that the user can manipulate, e.g. a part of a text file. Although the textfile is probably larger than the view is
+able to display on the screen, it offers the user to go to the part that he wants to see (therefore it is a view), and there the user
+can as well change the data of the file contents. To give the programmer a better way to separate parts of the application by code, the
+Document-View Model has been invented. Although not a standard, it provides a structure how an application should work:
+<P>
+<UL>
+<LI> The application contains a controller object,</LI>
+<LI> a View object that displays the data the user works with</LI>
+<LI> and a Document object that actually contains the data to manipulate.</LI>
+</UL>
+<P>Back to the example of working with a textfile- there, this model would work the way that the Document would read the file contents and
+provides methods to change the data as well as to save the file again. The view then processes the events that the user produces by the
+keyboard and the mouse and uses the document object's methods to manipulate the document data.
+<P>Finally, the controller object is responsible for user interaction by providing the document and the view objects as well as the
+interfaces to send commands like opening and saving. Additonally, certain methods of the view object can be provided by commands that
+can be accessed via keyboard accelerators or the mouse on menubars and toolbars.
+<P>This Document-View model has some advantages- it separates the program's code more object-oriented and by this offers more flexibility
+in general, e.g. the same document object could be displayed by two views at the same time; either by a new view in a new window or by
+tiling the current one that then contains two view object that build the acutal window view region.
+<P>Now, if you're coming from MS-Windows systems you may have some experience with that- the MFC already provide a document model that is
+ready to use. For KDE and Qt applications, things are a bit different. Qt is a powerful toolkit as it provides the most needed classes,
+widgets etc. But there wasn't any intention to take care of the document-view model, and as KDE is inheriting Qt, there weren't any
+tendencies to introduce such a model either. This somehow has its reason in the fact that usually X-applications don't work with an MDI
+(Multiple Document Interface).  Each main window is responsible for it's data and that reduces the need of a document model to the fact
+that methods to work on documents are always implied into widgets. The only exception from this currently is the <EM>KOffice</EM> project
+that is intended to provide a complete office suite of applications like a word processor, a spreadsheet etc. Technically, this is
+realized by two changes two the normal usage of Qt and KDE:
+<P>
+<UL>
+<LI>KOffice uses KOM and the free MICO implementation of CORBA for object communication,</LI>
+<LI>the KOffice applications use a document-view model to allow all applications to work with any KOffice data objects</LI>
+</UL>
+<P>But as currently KDevelop aims on the use of the current libraries of KDE 1.1.x and Qt 1.4x, we can't use this model by default- this
+will come in further releases for KDE 2, which will (hopefully) contain two new major changes in relation to the current situation:
+<P>
+<OL>
+<LI>an MDI interface for KTMainWindow that allows child windows within the mainwindow,</LI>
+<LI>the KOM libraries that provide a document model</LI>
+</OL>
+<P>Therefore, the current way for application developers can be to either implement all needed document methods within their view or to
+try to reproduce a document model by themselves. KDevelop therefore contains such a reproduction by providing the needed classes and
+the basic methods that are generally used for a Document-View model with the application frameworks for Qt and KDE.
+<P>Back to the code, you now can imagine the purpose of the two methods we mentioned at the beginning of this section: the
+<CODE>initDocument()</CODE> and <CODE>initView()</CODE> functions. The <CODE>initDocument()</CODE> constructs the document object that represents the
+application window data and initializes the basic attributes like setting the modification bit that indicates if the data currently
+used has been changed by the user. Then, the <CODE>initView()</CODE> method constructs the <CODE>*View</CODE> widget, connects it to the document and
+calls the <CODE>setView()</CODE> method of <CODE>KTMainWindow</CODE> to tell the <CODE>*App</CODE> window to use the <CODE>*View</CODE> widget as it's center view.
+<P>For the developer, it is important to know that during the development process he has to:
+<P>
+<UL>
+<LI>reimplement the virtual methods for mouse and keyboard events provided by <CODE>QWidget</CODE> in the <CODE>*View</CODE> object to provide the
+means to manipulate data,</LI>
+<LI>reimplement the <CODE>paintEvent()</CODE> of <CODE>QWidget</CODE> in the <CODE>*View</CODE> object to repaint() the view after changes,</LI>
+<LI>complete the implementation for printing the document via the printing method of the <CODE>*View</CODE> object,</LI>
+<LI>add the serialization for the <CODE>*Doc</CODE> object to provide file loading and saving,</LI>
+<LI>add the document data structure implementation to the <CODE>*Doc</CODE> object that is representing the document data logically in the
+memory.</LI>
+<LI>add any methods that have to be accessible by the user via accelerator keys and menus/toolbars.</LI>
+</UL>
+<P>During the development of our sample application <EM>KScribble</EM>, we'll go further into this development process and complete the
+application framework according to our program's special needs.
 <P>
 <P>
 <H3><A NAME="ss3.4">3.4 Additional Contents of KDevelop Projects</A>

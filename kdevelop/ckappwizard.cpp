@@ -196,7 +196,9 @@ void CKAppWizard::initPages(){
   directoryload->setBackgroundMode( QWidget::PaletteBackground );
   directoryload->setFontPropagation( QWidget::NoChildren );
   directoryload->setPalettePropagation( QWidget::NoChildren );
-  directoryload->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+  directoryload->setPixmap(pix);
   directoryload->setAutoRepeat( FALSE );
   directoryload->setAutoResize( FALSE );
   
@@ -1853,3 +1855,4 @@ QString CKAppWizard::getProjectFile() {
 bool CKAppWizard::generatedProject(){
   return gen_prj;
 }
+

@@ -79,7 +79,9 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	executable_button = new QPushButton( this, "executable_button" );
 	executable_button->setGeometry( 410, 240, 30, 30 );
 	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
-	executable_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	executable_button->setPixmap(pix);
 	executable_button->setAutoRepeat( FALSE );
 	executable_button->setAutoResize( FALSE );
 
@@ -280,6 +282,8 @@ void CToolsConfigDlg::swap(int item1,int item2){
   tools_argument.remove(item2);
   tools_argument.insert(item2,str1);
 }
+
+
 
 
 

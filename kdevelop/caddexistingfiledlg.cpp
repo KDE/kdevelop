@@ -91,7 +91,9 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_button->setBackgroundMode( QWidget::PaletteBackground );
   source_button->setFontPropagation( QWidget::NoChildren );
   source_button->setPalettePropagation( QWidget::NoChildren );
-  source_button->setText( "..." );
+	QPixmap pix;
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+  source_button->setPixmap(pix);
   source_button->setAutoRepeat( FALSE );
   source_button->setAutoResize( FALSE );
   
@@ -104,7 +106,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_button->setBackgroundMode( QWidget::PaletteBackground );
   destination_button->setFontPropagation( QWidget::NoChildren );
   destination_button->setPalettePropagation( QWidget::NoChildren );
-  destination_button->setText( "..." );
+  destination_button->setPixmap(pix);
   destination_button->setAutoRepeat( FALSE );
   destination_button->setAutoResize( FALSE );
   
@@ -202,6 +204,7 @@ void CAddExistingFileDlg::OK(){
   
   accept();
 }
+
 
 
 
