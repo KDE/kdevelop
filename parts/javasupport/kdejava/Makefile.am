@@ -1,5 +1,3 @@
-SUBDIRS =
-
 lib_LTLIBRARIES = libkdevjavapluginapi.la
 
 INCLUDES = -I.. -I$(top_srcdir)/src -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(jni_includes) $(all_includes)
@@ -65,7 +63,7 @@ EXTRA_DIST = ClassStore.h \
 			       ParsedParent.h \
 			       ParsedScopeContainer.h \
 			       ParsedStruct.h \
-			       PersistantClassStore.h
+			       PersistantClassStore.h \
 			       CursorDocumentIface.h \
 			       DocumentInterface.h \
 			       EditDocumentIface.h \
@@ -78,14 +76,6 @@ EXTRA_DIST = ClassStore.h \
 SOMAJOR = 1
 SOMINOR = 0
 SOSUBMINOR = 0
-
-# here you should add all header files, which contains the functionality
-# of your shared lib (published for the users)
-kdevjavapluginapi_HEADERS =
-kdevjavapluginapidir = $(includedir)/kdevjavapluginapi
-
-# here you should add all header files, which shouldn´t be installed
-noinst_HEADERS =
 
 libkdevjavapluginapi_la_LDFLAGS = $(all_libraries)  $(KDE_PLUGIN) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) 
 libkdevjavapluginapi_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/keditor/libkeditorinterface.la -lqtjava -lkdejava 
