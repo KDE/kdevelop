@@ -179,7 +179,7 @@ void RubySupportPart::parse(const QString &fileName)
   QRegExp memberre("'([A-Za-z0-9_ &*]+\\s)?([A-Za-z0-9_]+)\\([^)]*\\)',?");
   QRegExp begin_commentre("^*=begin");
   QRegExp end_commentre("^*=end");
-  QRegExp variablere("(@@?[A-Za-z0-9_]+)\\s*=\\s*((?:([A-Za-z0-9_:.]+)\\.new)|[\\[\\\"'%:/\\?]|%r|<<|true|false|^\\?|0[0-7]+|[-+]?0b[01]+|[-+]?0x[1-9a-fA-F]+|[-+]?[0-9_\\.e]+|nil)?");
+  QRegExp variablere("(@@?[A-Za-z0-9_]+)\\s*=\\s*((?:([A-Za-z0-9_:.]+)\\.new)|[\\[\"'%:/\\?\\{]|%r|<<|true|false|^\\?|0[0-7]+|[-+]?0b[01]+|[-+]?0x[1-9a-fA-F]+|[-+]?[0-9_\\.e]+|nil)?");
  
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
@@ -195,10 +195,15 @@ void RubySupportPart::parse(const QString &fileName)
     rawline = stream.readLine();
     line = rawline.stripWhiteSpace().local8Bit();
     if (classre.search(line) != -1) {
-      lastClass = codeModel()->create<ClassModel>();
-      lastClass->setName(classre.cap(2));
-      lastClass->setFileName( fileName );
-      lastClass->setStartPosition( lineNo, 0 );
+      if (m_file->hasClass(classre.cap(2))) {
+        lastClass = m_file->classByName( classre.cap(2) )[ 0 ];
+	  } else {
+        lastClass = codeModel()->create<ClassModel>();
+        lastClass->setName(classre.cap(2));
+        lastClass->setFileName( fileName );
+        lastClass->setStartPosition( lineNo, 0 );
+        m_file->addClass( lastClass );
+	  }
 
       QString parent = classre.cap(4);
       if (!parent.isEmpty())
@@ -206,20 +211,7 @@ void RubySupportPart::parse(const QString &fileName)
         kdDebug() << "Add parent " << parent << endl;
         lastClass->addBaseClass( parent );
       }
-
-      if (m_file->hasClass(lastClass->name())) {
-        ClassDom old = m_file->classByName( lastClass->name() )[ 0 ];
-        old->setFileName( lastClass->fileName() );
-
-        int line, col;
-        lastClass->getStartPosition( &line, &col );
-        old->setStartPosition( line, col );
-
-        lastClass = old;
-      } else {
-          kdDebug() << "Add class " << lastClass->name() << endl;
-          m_file->addClass( lastClass );
-      }
+	  
 	  lastAccess = CodeModelItem::Public;
     } else if (methodre.search(line) != -1) {
       FunctionDom methodDecl;
@@ -414,7 +406,7 @@ void RubySupportPart::parse(const QString &fileName)
 	 
 	 if (QRegExp("^(/|%r)").search(variablere.cap(2)) != -1) {
        attr->setType( "Regexp" );
-	 } else if (QRegExp("^[\\\"'%<]").search(variablere.cap(2)) != -1) {
+	 } else if (QRegExp("^[\"'%<]").search(variablere.cap(2)) != -1) {
        attr->setType( "String" );
 	 } else if (QRegExp("^\\[").search(variablere.cap(2)) != -1) {
        attr->setType( "Array" );
@@ -425,14 +417,14 @@ void RubySupportPart::parse(const QString &fileName)
 	 } else if (QRegExp("\\.\\.").search(variablere.cap(2)) != -1) {
        attr->setType( "Range" );
 	 } else if (variablere.cap(2) == "true" || variablere.cap(2) == "false") {
-       attr->setType( variablere.cap(2) );
+       attr->setType( "Boolean" );
 	 } else if (  QRegExp("[0-9_]+").exactMatch(variablere.cap(2))
 	              || QRegExp("^[-+]?(0x|0|0b|\\?)").search(variablere.cap(2)) != -1 ) 
 	 {
        attr->setType( "Integer" );
 	 } else if (QRegExp("[0-9._]+(e[-+0-9]+)?").exactMatch(variablere.cap(2))) {
        attr->setType( "Float" );
-	 } else if (variablere.cap(2) != "nil") {
+	 } else if (variablere.cap(2) != "nil" && variablere.cap(3) != "") {
        attr->setType( variablere.cap(3) );
 	 }
    } else if (begin_commentre.search(line) != -1) {
@@ -522,6 +514,8 @@ KDevDesignerIntegration *RubySupportPart::designer(KInterfaceDesigner::DesignerT
                 m_designers[type] = des;
             }
             break;
+        case KInterfaceDesigner::Glade:
+		    break;
     }
     return des;
 }

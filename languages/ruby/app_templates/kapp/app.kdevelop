@@ -83,6 +83,7 @@
 		<run>
 			<interpreter>ruby</interpreter>
 			<terminal>false</terminal>
+			<charactercoding>3</charactercoding>
 		</run>
 	</kdevrubysupport>
 </kdevelop>

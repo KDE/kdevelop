@@ -74,6 +74,13 @@
    <type ext="rb"/>
   </useglobaltypes>
  </kdevfilecreate>
+ <kdevrubysupport>
+   <run>
+     <interpreter>ruby</interpreter>
+     <terminal>false</terminal>
+     <charactercoding>3</charactercoding>
+   </run>
+ </kdevrubysupport>
   <kdevdocumentation>
     <projectdoc>
       <docsystem>Doxygen Documentation Collection</docsystem>

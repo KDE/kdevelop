@@ -5,6 +5,7 @@ Category=Ruby/Qt
 Comment=This generates a simple QtRuby Hello World application
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
+Icon=qtruby.png
 Archive=qtruby.tar.gz
 
 [FILE1]

@@ -1,3 +1,11 @@
+2004-10-30  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Fixed ruby class and instance variable type matching bugs
+ * Added error message if the ruby code to run can't be located by the top level C++ stub
+ * The default character coding for KDE ruby projects is UTF-8
+ * If a class is declared several times in a file, the line number of the first instance
+   is used in the class browser, and not the last one.
+
 2004-10-29  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Added the 'qmakeapp' project template translated to QtRuby

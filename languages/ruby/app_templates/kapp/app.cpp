@@ -9,6 +9,9 @@ int main(int argc, char **argv) {
     KInstance * instance = new KInstance("%{APPNAMELC}");
     QString appdir = ::locate("data", "%{APPNAMELC}/main.rb", instance);
     delete instance;
+    if (appdir.isNull()) {
+        qFatal("Error: Can't find \"%{APPNAMELC}/main.rb\"\n");
+    }
     QFileInfo program(appdir);
      
     char ** rubyargs = (char **) calloc(argc+4, sizeof(char *));
