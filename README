@@ -1,6 +1,6 @@
 README for
 
-KDevelop 1.0 Beta 2 
+KDevelop 1.0 Beta 3 
 
 -------------------------------------
 
@@ -27,7 +27,7 @@ perl 5.004
 autoconf 2.12
 automake 1.4
 Qt 1.44 NOT Qt 2.0
-KDE 1.1 or KDE 1.(1).2
+KDE 1.1 or KDE 1.1.2
 flex
 
 optional:
