@@ -1,7 +1,7 @@
 2000-04-06 Walter Tasin  <tasin@kdevelop.de>
-	* some bugfixes for symlink usage inside projects
-          (KDevelop didn't recognized well, if a file, which
-	   has a symlink in it, was changed)
+	* some bugfixes for symlink usage inside project base path
+          (KDevelop didn't recognized well, if a full filename,
+	   which has a symlink in it, was changed)
 	* adding pragma directive for Makefile.am
 	  to switch off Makefile.am patching
 	* LFV/RFV update on creation of API/User documentation
