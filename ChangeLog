@@ -1,5 +1,7 @@
 1999-08-04 Jonas Nordin   <jonas.nordin@cenacle.se>
 	* Started to make the classparser respect namespaces.
+	* added menu for signals.
+	* added deletion of signals and slots.
 
 1999-08-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* For cvs operations on directories, do not change into
