@@ -1,3 +1,8 @@
+2000-11-20 jbb <jbb@kdevelop.org>
+      * Disable binary tab and make file setting except for custom projects
+        For other projects allowing these to be set can cause nasty
+        side affects.
+
 2000-11-20 Walter Tasin  <tasin@kdevelop.de>
 	* changing c and c++ template for using libtool
 	  to support shared libs creation

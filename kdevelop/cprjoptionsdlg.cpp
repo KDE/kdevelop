@@ -1333,7 +1333,13 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     setTabEnabled("Warnings",false);
     setTabEnabled("Linker",false);
   }
- 
+  else
+  {
+    setTabEnabled("bin",false);
+    m_makestartpoint_line->setEnabled(false);
+    m_makestartpoint_dir->setEnabled(false);
+  }
+
 }
 
 void CPrjOptionsDlg::slotOptimize_level_changed(int v) {
