@@ -36,12 +36,13 @@ bei einer weiteren Betätigung wieder zurück zur Definition. Das verzögerte Popup
 bietet zusätzliche Funktionen, die ebenfalls in den Kontextmenüs der Klassenansicht zur Verfügung stehen:
 <P>
 <UL>
-<LI>Goto Declaration: wechselt zur Deklaration der Methode</LI>
-<LI>Goto Definition: wechselt zur Definition der Methode</LI>
-<LI>Goto Class Declaration: wechselt zur Klassendeklaration</LI>
+<LI>Gehe zur Deklaration: wechselt zur Deklaration der Methode</LI>
+<LI>Gehe zur Definition: wechselt zur Definition der Methode</LI>
+<LI>Gehe zur  Klassen Deklaration: wechselt zur Klassendeklaration</LI>
 <LI>Neue Klasse: öffnet das Dialogfeld "Neue Klasse"</LI>
-<LI>Add Method: fügt der aktuellen Klasse eine Methode hinzu</LI>
-<LI>Add Attribute: fügt der aktuellen Klasse ein Attribut hinzu</LI>
+<LI>Methode hinzufügen: fügt der aktuellen Klasse eine Methode hinzu</LI>
+<LI>Variable hinzufügen: fügt der aktuellen Klasse eine Variable hinzu</LI>
+<LI>Zeige graphische Klassenansicht: Öffnet den graphischen Vererbungsbaum</LI>
 </UL>
 <P>
 <H4>Verfügbare Objekte</H4>
@@ -115,13 +116,12 @@ sowohl <CODE>QWidget</CODE> als auch <CODE>QDialog</CODE> beerben.
 <DT><B>Children:</B><DD><P>Zeigt alle Klassen an, die die aktuelle Klasse beerben.
 <DT><B>Clients:</B><DD><P>Klassen, die die ausgewählte Klasse durch Attribute in ihrer Klassendeklaration verwenden
 Classes that make use of the selected class by an attribute in their class declaration
-tag/Suppliers:/ Klassen, die durch Attribute der Klasse verwendet werden
-<DT><B>Attributes:</B><DD><P>Namen der Attribute der ausgewählten Klasse
-<DT><B>Methods:</B><DD><P>Methoden der ausgewählten Klasse
-<DT><B>Virtual Methods:</B><DD><P>Virtuelle Methoden der Klasse
+<DT><B>Suppliers:</B><DD><P>Klassen, die durch Attribute der Klasse verwendet werden
+<DT><B>Attribute:</B><DD><P>Namen der Attribute der ausgewählten Klasse
+<DT><B>Methoden:</B><DD><P>Methoden der ausgewählten Klasse
 </DL>
 
-Weiterhin erlaubt das Klassenwerzeug die sortierte Anzeige nach Modifizeirer-Attribut public, protected und private.
+Weiterhin erlaubt das Klassenwerzeug die sortierte Anzeige nach Modifizierer-Attribut alle, public, protected und private.
 <P>
 <H3><A NAME="ss10.3">10.3 Handhabung von Klassen</A>
 </H3>
@@ -142,8 +142,8 @@ lediglich die Formalparameter dem Implementationskopf hinzufügen (falls diese ni
 </OL>
 <P>Um eine Variable hinzuzufügen führen Sie die gleichen Schritte aus, wählen dabei jedoch "Variable hinzufügen" im Popup-Menü.
 <P>Der Unterschied zwischen diesen Dialogen ist, das beim Hinzufügen einer Variable nur die Variable in der Klassendeklaration erklärt,
-das Hinzufügen einer Methode wird die Methdendeklaration und der Implementationskopf dem Quellcode hinzufügen. Da die Klassenansicht
-sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, sodaß Sie nur die Methode anspringen
+das Hinzufügen einer Methode wird die Methodendeklaration und der Implementationskopf dem Quellcode hinzufügen. Da die Klassenansicht
+sich selbst aktualisiert, haben Sie direkten Zugang zu der Implementation der neuen Methode, so daß Sie nur die Methode anspringen
 müssen, um den auszuführenden Code einzugeben.
 <P>
 <P ALIGN="RIGHT">

@@ -82,14 +82,14 @@ Binärdatei wird und daher nicht installiert wird.
 <LI>Um eine dynamische Bibliothek zu erstellen, können Sie ein weiteres Projekt-Unterverzeichnis anlegen. Die Quellcodes, die sich in
 diesem Unterverzeichnis befinden, werden dem Projekt hinzugefügt und sind daher in der Klassen-Ansicht as Hauptklassen verfügbar. Um
 eine dynamische Bibliothek zu erzeugen, bietet Ihnen das 
-<A HREF="programming-15.html">KDevelop Programming Handbook</A> im
+<A HREF="programming/index-19.html">KDevelop Programming Handbook</A> im
 Anhang eine Schablone zur Erstellung der entsprechenden Makefile.am an. Wenn das Makefile des neuen Unterverzeichnisses dem
 configure.in Skript hinzugefügt wurde, müssen Sie nur noch "Autoconf und automake" und "Configure" ausführen, um die Makefiles zu
 erzeugen. Die Erstellung selbst ist jedoch nur möglich, indem das Erstellungsprogramm aus dem Unterverzeichnis aufgerufen wird, da
 KDevelop die Erstellung aus dem ursprünglichen Projekt-Unterverzeichnis aufruft. Eine weitere Möglichkeit, eine dynamische Bibliothek
 zu erstellen wäre, die Makefile.am des ursprünglichen Unterverzeichnisses an die Schablone des Programmierhandbuches anzupassen, indem
 Sie die Regeln zur Projekt-Modifikation beachten, die im Abschnitt 
-<A HREF="#Project Hacking">Project Hacking</A> beschrieben
+<A HREF="#Projekt Hacking">Projekt Hacking</A> beschrieben
 werden.</LI>
 <LI>Um eine dynamische Bibliothek zu installieren, müssen Sie den KDE-Datei-System Standard beachten, wie er im 
 <A HREF="programming-13.html">The KDevelop Programming Handbook</A> beschrieben ist.</LI>
@@ -107,8 +107,8 @@ is invoked from the main project subdirectory).
 subdirectories in conjunction with the project files to the directory containing all sources later. Then you could load each
 target independently by its project file; this also allows executing and debugging the target.
 <P>Multiple binaries or libraries within the main project subdirectory are possible with following the rules explained in section 
-<A HREF="#Project Hacking">Project Hacking</A> and the following guidelines for editing the main project's subdirectory Makefile.am (all
-modifications outside the KDevelop write area):
+<A HREF="#Projekt Hacking">Projekt Hacking</A> and the following guidelines for editing the main project's subdirectory 
+Makefile.am (all modifications outside the KDevelop write area):
 <P>
 <UL>
 <LI>add your target to the bin_PROGRAMS if it is an executable</LI>
@@ -179,16 +179,16 @@ sources and adding classes, pixmaps, pictures and whatelse you project needs. No
 default project after its generation by menus and dialogs according to your needs. The next section therefore describes how you
 can add existing files and classes as well as creating new files. This is needed for building your project, but this won't help
 you for the installation process by the end-user. Therefore, section 
-<A HREF="#Setting Project File Options">Setting Project File Options</A> describes how to set File Properties especially for additional files that you want make to install, like documentation or
+<A HREF="#Setzen der Projekt Optionen">Setzen der Projekt Optionen</A> describes how to set File Properties especially for additional files that you want make to install, like documentation or
 pixmaps.
 Another part in project maintaining is adding translations for applications that support internationalization, which is described
 in 
-<A HREF="#Adding Translations">Adding Translations</A>.
+<A HREF="#Übersetzung hinzufügen">Übersetzung hinzufügen</A>.
 <P>
-<A HREF="#Extending the Project Documentation">Extending the Project Documentation</A> covers questions on how to create a good set
+<A HREF="#Erweitern der Projekt Dokumentation">Erweitern der Projekt Dokumentation</A> covers questions on how to create a good set
 of documentation for online help enabling the end-user to help himself in case of troubles as well as how to use your product.
 <P>Finally, 
-<A HREF="#Project Hacking">Project Hacking</A> describes how you can eventually work around the KDevelop project
+<A HREF="#Projekt Hacking">Projekt Hacking</A> describes how you can eventually work around the KDevelop project
 management in special cases.
 <P>
 <H4><A NAME="Hinzufügen und Entfernen von Dateien und Klassen"></A> Hinzufügen und Entfernen von Dateien und Klassen</H4>
@@ -209,7 +209,7 @@ will be added to the project and the destination directory. Mind that the files 
 added to the project. You should call "Make" after adding sources; then your added files will be included in the build-process. In
 case you want to add e.g. pixmaps that have to be installed by the end-user, you should update the File Properties for the added
 file and specify the installation path (see 
-<A HREF="#Setting Project File Options">Setting Project File Options</A><P>To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
+<A HREF="#Setzen der Projekt Optionen">Setzen der Projekt Optionen</A><P>To add a file to the project that is already in the project directory, go to the RFV, where all project-included files are
 dispayed by their project status by a red ! over the file icon. Select the file you want to add to the project (which has a normal
 file icon) and press the right mouse button to get the popup-menu. Then select "Add".
 <P>Files can also be removed from your project. This could be needed in cases where you don't want to use pre-generated files that
@@ -217,7 +217,7 @@ are already given by the KAppWizard. To remove a file, you have additionally the
 or delete it completely. To remove a file from the project, select the file in the LFV or the RFV, press the right mouse button
 and select "remove". To delete a file, select "delete physically".
 <P>
-<H4><A NAME="Setting Project File Options"></A> Setting Project File Options</H4>
+<H4><A NAME="Setzen der Projekt Optionen"></A> Setzen der Projekt Optionen</H4>
 
 <P>The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
 files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
@@ -227,7 +227,7 @@ project is build and installed by end users, so you have to set up those locatio
 look in your Makefile.am where the location macros are specified.
 <P>
 <P>
-<H4><A NAME="Adding Translations"></A> Adding Translations</H4>
+<H4><A NAME="Übersetzung hinzufügen"></A> Übersetzung hinzufügen</H4>
 
 <P>As KDE allows configuring your desktop and the behavoir of your applications, you also have the option to choose the language
 that your application uses, in regards of the use of online-documentation as well as the application's look. For documentation files,
@@ -269,7 +269,7 @@ could write to and who will help you with this. Also read
 <A HREF="index-11.html#Der Dialogeditor">Der Dialogeditor</A> and 
 <A HREF="programming-11.html">The KDevelop Programming Handbook</A> where questions about internationalization are covered again.
 <P>
-<H4><A NAME="Extending the Project Documentation"></A> Extending the Project Documentation</H4>
+<H4><A NAME="Erweitern der Projekt Dokumentation"></A> Erweitern der Projekt Dokumentation</H4>
 
 <P>All projects created with KDevelop contain a pre-configured documentation, which already contains standard chapters for
 installation, project name and version as well as the author name and email-address. As KDevelop uses SGML-templates, it's very
@@ -297,7 +297,7 @@ filename and enter STRG+V to insert the clipboard contents (which was the instal
 way to specify the installation path. For more options about specifying installation destinations, see 
 <A HREF="programming-14.html">The KDevelop Programming Handbook</A>.
 <P>
-<H4><A NAME="Project Hacking"></A> Project Hacking</H4>
+<H4><A NAME="Projekt Hacking"></A> Projekt Hacking</H4>
 
 <P>When working with a project, you should never edit the project file by hand. This will prevent KDevelop from loading your project
 correctly under certain circumstances, as well as changes will not result in updating the Makefiles. To change any settings for
