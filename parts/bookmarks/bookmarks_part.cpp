@@ -11,6 +11,7 @@
 
 #include <qwhatsthis.h>
 #include <qvbox.h>
+#include <qtimer.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -44,6 +45,8 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	_widget->setCaption(i18n("Bookmarks"));
 	_widget->setIcon(SmallIcon("bookmark"));
+	
+	_marksChangeTimer = new QTimer( this );
 
 	QWhatsThis::add(_widget, i18n("<b>Bookmarks</b><p>"
 			"The bookmark viewer shows all the source bookmarks in the project."));
@@ -63,6 +66,8 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 		this, SLOT( removeAllBookmarksForURL( const KURL & ) ) );
 	connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
 		this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
+		
+	connect( _marksChangeTimer, SIGNAL( timeout() ), this, SLOT( marksChanged() ) );
 
 	_config = new BookmarksConfig;
 	_config->readConfig();
@@ -75,6 +80,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 BookmarksPart::~BookmarksPart()
 {
 	delete _widget;
+	delete _config;
 }
 
 void BookmarksPart::partAdded( KParts::Part * part )
@@ -93,9 +99,7 @@ void BookmarksPart::partAdded( KParts::Part * part )
 			
 			// connect to this editor
 			KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( ro_part );
-//			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksChanged() ) );
-			connect( doc, SIGNAL( markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction ) ), 
-				this, SLOT( markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction ) ) );
+			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksEvent() ) );
 
 			// workaround for a katepart oddity where it drops all bookmarks on 'reload'
 			connect( doc, SIGNAL( completed() ), this, SLOT( reload() ) );
@@ -110,16 +114,27 @@ void BookmarksPart::reload()
 	QObject * senderobj = const_cast<QObject*>( sender() );
 	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj ) )
 	{
-		setBookmarksForURL( ro_part );
+		if ( partIsSane( ro_part ) )
+		{
+			setBookmarksForURL( ro_part );
+		}
 	}
 }
 
-
-void BookmarksPart::markChanged( KTextEditor::Mark mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction )
+void BookmarksPart::marksEvent()
 {
-	if ( mark.type == KTextEditor::MarkInterface::markType01 ) // bookmark type
+	kdDebug(0) << "BookmarksPart::marksEvent()" << endl;
+	
+	if ( ! _settingMarks )
 	{
-		marksChanged();
+		QObject * senderobj = const_cast<QObject*>( sender() );
+		KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj );
+		
+		if ( partIsSane( ro_part ) && !_dirtyParts.contains( ro_part ) )
+		{
+			_dirtyParts.push_back( ro_part );
+			_marksChangeTimer->start( 100, true );
+		}
 	}
 }
 
@@ -127,17 +142,14 @@ void BookmarksPart::marksChanged()
 {
 	kdDebug(0) << "BookmarksPart::marksChanged()" << endl;
 
-	QObject * senderobj = const_cast<QObject*>( sender() );
-	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj );
-	KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface*>( senderobj );
-
-	// don't react if we're in the middle of setting marks
-	if ( ! _settingMarks )
+	QValueListIterator<KParts::ReadOnlyPart*> it = _dirtyParts.begin();
+	while ( it != _dirtyParts.end() )
 	{
-		if ( ro_part && mi )
+		KParts::ReadOnlyPart * ro_part = *it;
+		KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface*>( ro_part );
+	
+		if ( ro_part && mi && partIsSane( ro_part ) )
 		{
-			kdDebug(0) << "found a MarkInterface" << endl;
-
 			if ( EditorData * data = storeBookmarksForURL( ro_part ) )
 			{
 				updateContextStringForURL( ro_part );
@@ -148,11 +160,9 @@ void BookmarksPart::marksChanged()
 				_widget->removeURL( ro_part->url() );
 			}
 		}
+		++it;
 	}
-	else
-	{
-		kdDebug(0) << "currently setting marks, bailing out" << endl;
-	}
+	_dirtyParts.clear();	
 }
 
 void BookmarksPart::projectConfigWidget( KDialogBase *dlg )
@@ -303,6 +313,8 @@ void BookmarksPart::updateContextStringForURL( KParts::ReadOnlyPart * ro_part )
  		int startline = context > line ? 0 : line - context;
  		int endline = ( line + context > ed->numLines() ) ? ed->numLines() : line + context;
 
+		(*it).second.clear();
+		
 		for ( int i = line - context; i<= line + context; i++)
 		{
 			if ( i >= startline && i <= endline )
@@ -395,6 +407,8 @@ bool BookmarksPart::clearBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 
 EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 {
+	kdDebug(0) << "BookmarksPart::storeBookmarksForURL()" << endl;
+	
 	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>( ro_part ) )
 	{
 		EditorData * data = new EditorData;
@@ -482,6 +496,23 @@ KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
 		++it;
 	}
 	return 0;
+}
+
+bool BookmarksPart::partIsSane( KParts::ReadOnlyPart * ro_part )
+{
+	kdDebug(0) << "BookmarksPart::partIsSane()" << endl;
+	
+	bool isSane = true;
+	
+	isSane = isSane && partController()->parts()->contains( ro_part);
+	isSane = isSane && !ro_part->url().path().isEmpty();
+	
+	if ( ! isSane )
+	{
+		kdDebug(0) << " ** Non-sane part encountered! ** " << endl;
+	}
+	
+	return isSane;
 }
 
 #include "bookmarks_part.moc"

@@ -21,10 +21,10 @@
 
 #include <kparts/part.h>
 #include <kurl.h>
-#include <ktexteditor/markinterfaceextension.h>
 
 #include <kdevplugin.h>
 
+class QTimer;
 class KDialogBase;
 class BookmarksConfig;
 
@@ -59,9 +59,11 @@ private slots:
 	// connected to partcontroller
 	void partAdded( KParts::Part * part );
 
-	// connected to KTextEditor::MarkInterface(Extension)
+	// connected to KTextEditor::MarkInterface
+	void marksEvent();
+
+	// connected to _marksChangeTimer	
 	void marksChanged();
-	void markChanged( KTextEditor::Mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction );
 	
 	// connected to KParts::ReadOnlyPart
 	void reload();
@@ -86,12 +88,16 @@ private:
 	void updateContextStringForAll();
 
 	KParts::ReadOnlyPart * partForURL( KURL const & url );
+	bool partIsSane( KParts::ReadOnlyPart * );
 
 	QGuardedPtr<BookmarksWidget> _widget;
 	QDict<EditorData> _editorMap;
 	bool _settingMarks;	//	are we currently in the process of setting bookmarks?
 	
 	BookmarksConfig * _config;
+	
+	QTimer * _marksChangeTimer;
+	QValueList<KParts::ReadOnlyPart*> _dirtyParts;
 };
 
 
