@@ -3306,7 +3306,7 @@ void KWriteDoc::updateBMPopup(QPopupMenu* popup)
 			i18n("Line").data(), 
 			line + 1);
 	  }
-          popup->insertItem(SmallIconSet("filenew"),buf,z);
+          popup->insertItem(SmallIconSet("edit"),buf,z);
         }
     }
 }
