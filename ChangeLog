@@ -1,3 +1,9 @@
+2000-03-13 Walter Tasin  <tasin@kdevelop.de>
+	* fixing problem with double checking C/C++ compilers
+	  inside the GUI-source templates
+	  (many thanks to S. Kulow)
+	* simplifying KDE_USE_QT() call for QT 2.0.2 apps
+	
 2000-03-13 Ralf Nolden <rnolden@kdevelop.de>
         * fixed small documentation errors
 
