@@ -28,6 +28,10 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <kpopmenu.h>
+#include <qlabel.h>
+#include <qlcdnumber.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 
 class KDlgEditWidget;
 
@@ -171,8 +175,58 @@ class KDlgItem_PushButton : public KDlgItem_Base
   #define classname KDlgItem_PushButton
   #define widgettype QPushButton
   #define classdesc "QPushButton"
+  #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
+
+
+class KDlgItem_Label : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_Label
+  #define widgettype QLabel
+  #define classdesc "QLabel"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+
+
+class KDlgItem_LCDNumber : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_LCDNumber
+  #define widgettype QLCDNumber
+  #define classdesc "QLCDNumber"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+
+
+class KDlgItem_RadioButton : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_RadioButton
+  #define widgettype QRadioButton
+  #define classdesc "QRadioButton"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+
+
+class KDlgItem_CheckBox : public KDlgItem_Base
+{
+  Q_OBJECT
+
+  #define classname KDlgItem_CheckBox
+  #define widgettype QCheckBox
+  #define classdesc "QCheckBox"
+  #undef MyWidgetAdd
+  #include "item_class.cpp.inc"
+};
+
 
 
 #endif

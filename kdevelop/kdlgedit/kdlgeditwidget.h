@@ -151,11 +151,12 @@ class KDlgEditWidget : public QWidget  {
     bool readGrp_Ignore( QTextStream *t );
     bool readGrp_Information( QTextStream *t );
     bool readGrp_SessionManagement( QTextStream *t );
-    bool readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, QTextStream *t, QString ctype );
-    bool readGroup( KDlgEditWidget *edwid, QTextStream *t );
+    bool readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString ctype );
+    bool readGroup( QTextStream *t );
 
 
     virtual void resizeEvent ( QResizeEvent * );
+
 
     KQuickHelpWindow *qhw;
     KDlgItemDatabase *dbase;

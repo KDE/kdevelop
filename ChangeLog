@@ -1,3 +1,7 @@
+1999-04-16 Pascal Krahmer <pascal@beast.de>
+        * added copy/paste functionality
+        * added items : QLabel, QLCDNumber, QRadioButton, QCheckButton
+
 1999-04-15  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* C++ Terminal Application are now started with xterm/konsole and a shell.
 	* added "KDevelop Homepage" to the helpmenu

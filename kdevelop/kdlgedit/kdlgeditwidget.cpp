@@ -218,12 +218,90 @@ void KDlgEditWidget::slot_deleteSelected()
 
 void KDlgEditWidget::slot_copySelected()
 {
-  qhw->popup("Sorry, feature not yet implemented.\n\n<i>Pascal Krahmer</i>", QCursor::pos().x(),QCursor::pos().y());
+  if (!selected_widget)
+    return;
+
+  QFile f("/tmp/kdevdlgedt_copyitem.tmp");
+  if ( f.open(IO_WriteOnly) )
+    {
+      QTextStream t( &f );
+
+      saveWidget((KDlgItem_Widget*)selected_widget, &t);
+      f.close();
+    }
+  else
+    {
+      printf("kdlgedit ERROR : Could not open temporary file for copying action !\n");
+    }
 }
 
 void KDlgEditWidget::slot_pasteSelected()
 {
-  qhw->popup("Sorry, feature not yet implemented.\n\n<i>Pascal Krahmer</i>", QCursor::pos().x(),QCursor::pos().y());
+  KDlgItem_Widget *parent_widget = main_widget;
+
+  if (selectedWidget())
+    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
+      {
+        int res = 0;
+        res = QMessageBox::information( this, i18n("Add item"),
+                     i18n("Into which widget do you want to insert this item ?\n\n"
+                     "You either may add it to the main widget or to the selected\n"
+                     "widget respectively to the selected items' parent widget."),
+                     i18n("&Main"), i18n("&Selected"), i18n("&Cancel"),0,2 );
+
+        if (res == 1)
+          {
+            if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
+                parent_widget = (KDlgItem_Widget*)selectedWidget();
+            else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+                parent_widget = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
+          }
+        else if (res == 2)
+          return;
+      }
+
+  dlgfilelinecnt = 0;
+  QFile f("/tmp/kdevdlgedt_copyitem.tmp");
+  if ( f.open(IO_ReadOnly) )
+    {
+      QTextStream t( &f );
+
+      while (!t.eof())
+        {
+          QString s;
+          do s = dlgReadLine(&t); while (s.isEmpty());
+
+          if (!readGrp_Item( parent_widget, &t, s.right(s.length()-s.find(' ')-1) ))
+            {
+              f.close();
+              return;
+            }
+
+          KDlgItem_Base *it = parent_widget->getChildDb()->getFirst();
+          KDlgItem_Base *lst = it;
+          while (it)
+            {
+              lst = it;
+              it = parent_widget->getChildDb()->getNext();
+            }
+          if (lst)
+            {
+              lst->getProps()->setProp_Value("X","10");
+              lst->getProps()->setProp_Value("Y","10");
+              lst->getItem()->move(10,10);
+            }
+        }
+
+      f.close();
+    }
+  else
+    {
+      return;
+    }
+
+  getCKDevel()->kdlg_get_items_view()->refreshList();
+
+  setWidgetAdded(true);
   setModified(true);
 }
 
@@ -298,7 +376,7 @@ bool KDlgEditWidget::readGrp_SessionManagement( QTextStream *t )
   return readGrp_Ignore( t );
 }
 
-bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, QTextStream *t, QString ctype )
+bool KDlgEditWidget::readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString ctype )
 {
   int svdlc = dlgfilelinecnt;
 
@@ -309,12 +387,12 @@ bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, Q
 
   if (par)
     {
-      thatsme = edwid->addItem(par, ctype);
+      thatsme = addItem(par, ctype);
     }
   else
     {
-      edwid->deselectWidget();
-      thatsme = edwid->mainWidget();
+      deselectWidget();
+      thatsme = mainWidget();
       thatsme->deleteMyself();
     }
 
@@ -330,7 +408,7 @@ bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, Q
       int res = 0;
       QString errmsg = QString().sprintf(i18n("Error reading dialog file (line %d) :\n   Could not insert item (%s). Seems like I don't know it :-("), svdlc, (const char*)ctype);
       printf("  kdlgedit ERROR : %s\n", (const char*)errmsg);
-      res = QMessageBox::warning( edwid, "Error", errmsg, i18n("&Ignore"), i18n("&Cancel"),0,1 );
+      res = QMessageBox::warning( this, "Error", errmsg, i18n("&Ignore"), i18n("&Cancel"),0,1 );
       if (res == 1)
         {
           dlgfilelinecnt = -100;
@@ -352,7 +430,7 @@ bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, Q
           {
             if ((ctype.upper() == "QWIDGET") || (ctype.upper() == "QFRAME"))
               {
-                if (!readGrp_Item( edwid, thatsme, t, s.right(s.length()-s.find(' ')-1) ))
+                if (!readGrp_Item( thatsme, t, s.right(s.length()-s.find(' ')-1) ))
                   return false;
               }
             else
@@ -379,7 +457,7 @@ bool KDlgEditWidget::readGrp_Item(KDlgEditWidget *edwid, KDlgItem_Widget* par, Q
 }
 
 
-bool KDlgEditWidget::readGroup( KDlgEditWidget *edwid, QTextStream *t )
+bool KDlgEditWidget::readGroup( QTextStream *t )
 {
   QString s;
   s = dlgReadLine(t);
@@ -415,7 +493,7 @@ bool KDlgEditWidget::readGroup( KDlgEditWidget *edwid, QTextStream *t )
     }
   else if (type == "ITEM")
     {
-      if (!readGrp_Item( edwid, 0, t, name ))
+      if (!readGrp_Item( 0, t, name ))
         return false;
     }
 
@@ -435,7 +513,7 @@ bool KDlgEditWidget::openFromFile( QString fname )
 
       while (!t.eof())
         {
-          if (!readGroup( this, &t ))
+          if (!readGroup( &t ))
             {
               int res = 0;
               if (dlgfilelinecnt >=0)
@@ -685,6 +763,10 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
   macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
   macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
   macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
+  macro_CreateIfRightOne("QLabel", KDlgItem_Label )
+  macro_CreateIfRightOne("QLCDNumber", KDlgItem_LCDNumber )
+  macro_CreateIfRightOne("QCheckBox", KDlgItem_CheckBox )
+  macro_CreateIfRightOne("QRadioButton", KDlgItem_RadioButton )
 
   #undef macro_CreateIfRightOne
 
@@ -736,7 +818,6 @@ void KDlgEditWidget::typeCount::addType(QString type)
       {
         types[i] = type.stripWhiteSpace();
         counts[i] = 1;
-        printf("Added : %s\n",(const char*)types[i]);
       }
 }
 
@@ -747,7 +828,6 @@ void KDlgEditWidget::typeCount::increase(QString type)
     if (type.stripWhiteSpace().upper() == types[i].upper())
       {
         counts[i]++;
-        printf("Inc : %s\n",(const char*)types[i]);
         return;
       }
 
@@ -761,7 +841,6 @@ void KDlgEditWidget::typeCount::decrease(QString type)
     if (type.upper().stripWhiteSpace() == types[i].upper())
       {
         counts[i]--;
-        printf("Dec : %s\n",(const char*)types[i]);
         return;
       }
 
@@ -772,3 +851,6 @@ QString KDlgEditWidget::typeCount::countString(QString type)
 {
   return type + QString("_") + QString().setNum(returnCount(type));
 }
+
+
+
