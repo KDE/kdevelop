@@ -13,6 +13,7 @@
 #define CODEINFORMATIONREPOSITORY_H
 
 #include "catalog.h"
+#include "cppcodecompletion.h"
 #include <qmap.h>
 
 #include <ktexteditor/codecompletioninterface.h>
@@ -28,14 +29,15 @@ public:
     virtual void addCatalog( const QString& id, Catalog* catalog );
     virtual void removeCatalog( const QString& id );
 
-    static QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags );
-    static KTextEditor::CompletionEntry toEntry( Tag& tag );
+    static QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags,
+    				CppCodeCompletion::CompletionMode mode=CppCodeCompletion::NormalCompletion  );
+    static KTextEditor::CompletionEntry toEntry( Tag& tag, CppCodeCompletion::CompletionMode mode=CppCodeCompletion::NormalCompletion );
     QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute=false );
-    
+
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
     QValueList<Tag> getTagsInScope( const QStringList& scope, bool isInstance );
     QValueList<Tag> getTagsInScope( const QString& name, const QStringList& scope );
-    
+
     QValueList<Tag> getTagsInFile( const QString& fileName );
     QValueList<Tag> getBaseClassList( const QString& className );
     QValueList<Tag> getClassOrNamespaceList( const QStringList& scope );

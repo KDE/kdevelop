@@ -1405,7 +1405,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	    tags = m_repository->query( args );
 	    computeCompletionEntryList( entryList, tags, isInstance );
 	}
-	
+
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Base_class )
 	    << Catalog::QueryArgument( "name", type.join("::") );
@@ -1442,7 +1442,7 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	        continue;
 	}
 
-	entryList << CodeInformationRepository::toEntry( tag );
+	entryList << CodeInformationRepository::toEntry( tag, m_completionMode );
     }
 }
 
@@ -1539,7 +1539,9 @@ void CppCodeCompletion::computeCompletionEntryList( QValueList< KTextEditor::Com
 	    ArgumentDom arg = *argIt;
 	    ++argIt;
 
-	    text += arg->type() + " " + arg->name();
+	    text += arg->type();
+	    if( m_completionMode == NormalCompletion )
+	        text += QString(" ") + arg->name();
 
 	    if( argIt != args.end() )
 		text += ", ";
@@ -1689,19 +1691,23 @@ void CppCodeCompletion::computeSignatureList( QStringList & signatureList, const
 	    continue;
 
         QString signature;
-        signature += tag.name() + "(";
+	signature += info.type() + " " + tag.name() + "(";
+        signature = signature.stripWhiteSpace();
+
         QStringList arguments = info.arguments();
         QStringList argumentNames = info.argumentNames();
 
         for( uint i=0; i<arguments.size(); ++i ){
             signature += arguments[ i ];
-            QString argName = argumentNames[ i ];
-            if( !argName.isEmpty() )
-                signature += QString::fromLatin1( " " ) + argName;
+	    if( m_completionMode == NormalCompletion ){
+                QString argName = argumentNames[ i ];
+                if( !argName.isEmpty() )
+                    signature += QString::fromLatin1( " " ) + argName;
 
-            if( i != (arguments.size()-1) ){
-                signature += ", ";
-            }
+                if( i != (arguments.size()-1) ){
+                    signature += ", ";
+                }
+	    }
         }
         signature += ")";
 

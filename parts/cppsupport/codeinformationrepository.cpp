@@ -192,7 +192,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
     return tags;
 }
 
-KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
+KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag, CppCodeCompletion::CompletionMode completionMode )
 {
     KTextEditor::CompletionEntry entry;
 
@@ -204,7 +204,7 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
 	    entry.prefix = "typedef";
 	    entry.text = tag.name();
 	break;
-	
+
 	case Tag::Kind_Class:
 	    entry.prefix = "class";
 	    entry.text = tag.name();
@@ -228,9 +228,11 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
 	    QString signature;
 	    for( uint i=0; i<arguments.size(); ++i ){
 		signature += arguments[ i ];
-		QString argName = argumentNames[ i ];
-		if( !argName.isEmpty() )
-		    signature += QString::fromLatin1( " " ) + argName;
+		if( completionMode == CppCodeCompletion::NormalCompletion ){
+		    QString argName = argumentNames[ i ];
+		    if( !argName.isEmpty() )
+		        signature += QString::fromLatin1( " " ) + argName;
+		}
 
 		if( i != (arguments.size()-1) ){
 		    signature += ", ";
@@ -244,6 +246,11 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
 
 	    if( tagInfo.isConst() )
 		entry.postfix += " const";
+
+	    if( completionMode != CppCodeCompletion::NormalCompletion ){
+	        entry.text += entry.postfix;
+		entry.postfix = QString::null;
+	    }
 
 	    QString comment = tag.attribute("description").toString();
 	    if (!comment.isNull())
@@ -266,7 +273,7 @@ KTextEditor::CompletionEntry CodeInformationRepository::toEntry( Tag & tag )
     return entry;
 }
 
-QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const QValueList<Tag> & tags )
+QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryList( const QValueList<Tag> & tags, CppCodeCompletion::CompletionMode completionMode )
 {
     QValueList<KTextEditor :: CompletionEntry> entryList;
     QMap<QString, bool> ns;
@@ -276,7 +283,7 @@ QValueList<KTextEditor :: CompletionEntry> CodeInformationRepository::toEntryLis
 	Tag tag = *it;
 	++it;
 
-	KTextEditor::CompletionEntry entry = toEntry( tag );
+	KTextEditor::CompletionEntry entry = toEntry( tag, completionMode );
 	if( !entry.text.isEmpty() )
 	    entryList << entry;
     }

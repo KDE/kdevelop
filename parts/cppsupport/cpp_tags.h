@@ -207,7 +207,7 @@ public:
 
     bool isSlot() const
     {
-        return bool( m_info.data.isSignal );
+        return bool( m_info.data.isSlot );
     }
 
     void setSlot( bool isSlot )
