@@ -73,6 +73,7 @@ enum NodeType
     NodeType_ParameterDeclarationList,
     NodeType_ParameterDeclarationClause,
     NodeType_Group,
+    NodeType_AccessDeclaration,
 
     NodeType_Custom = 2000
 };
@@ -130,11 +131,11 @@ public:
 public:
     GroupAST();
 
-    QPtrList<AST> nodes() { return m_nodes; }
+    QPtrList<AST> nodeList() { return m_nodeList; }
     void addNode( AST::Node& node );
 
 private:
-    QPtrList<AST> m_nodes;
+    QPtrList<AST> m_nodeList;
 
 private:
     GroupAST( const GroupAST& source );
@@ -152,10 +153,10 @@ public:
     TemplateArgumentListAST();
 
     void addArgument( AST::Node& arg );
-    QPtrList<AST> arguments() { return m_arguments; }
+    QPtrList<AST> argumentList() { return m_argumentList; }
 
 private:
-    QPtrList<AST> m_arguments;
+    QPtrList<AST> m_argumentList;
 
 private:
     TemplateArgumentListAST( const TemplateArgumentListAST& source );
@@ -197,10 +198,10 @@ public:
 
     void addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName );
     QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
-                    
+
 private:
     QPtrList<ClassOrNamespaceNameAST> m_classOrNamespaceNameList;
-    
+
 private:
     NestedNameSpecifierAST( const NestedNameSpecifierAST& source );
     void operator = ( const NestedNameSpecifierAST& source );
@@ -248,12 +249,32 @@ private:
     void operator = ( const DeclarationAST& source );
 };
 
+class AccessDeclarationAST: public DeclarationAST
+{
+public:
+    typedef std::auto_ptr<AccessDeclarationAST> Node;
+    enum { Type = NodeType_AccessDeclaration };
+
+public:
+    AccessDeclarationAST();
+
+    QPtrList<AST> accessList() { return m_accessList; }
+    void addAccess( AST::Node& access );
+
+private:
+    QPtrList<AST> m_accessList;
+
+private:
+    AccessDeclarationAST( const AccessDeclarationAST& source );
+    void operator = ( const AccessDeclarationAST& source );
+};
+
 class TypeSpecifierAST: public AST
 {
 public:
     typedef std::auto_ptr<TypeSpecifierAST> Node;
     enum { Type = NodeType_TypeSpecifier };
-    
+
     virtual NameAST* name() { return m_name.get(); }
     virtual void setName( NameAST::Node& name );
 
@@ -262,7 +283,7 @@ public:
 
 private:
     NameAST::Node m_name;
-    
+
 private:
     TypeSpecifierAST( const TypeSpecifierAST& source );
     void operator = ( const TypeSpecifierAST& source );
@@ -306,11 +327,11 @@ public:
     BaseClauseAST();
 
     void addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier );
-    QPtrList<BaseSpecifierAST> baseSpecifiers() { return m_baseSpecifiers; }
-    
+    QPtrList<BaseSpecifierAST> baseSpecifierList() { return m_baseSpecifierList; }
+
 private:
-    QPtrList<BaseSpecifierAST> m_baseSpecifiers;
-    
+    QPtrList<BaseSpecifierAST> m_baseSpecifierList;
+
 private:
     BaseClauseAST( const BaseClauseAST& source );
     void operator = ( const BaseClauseAST& source );
@@ -331,13 +352,13 @@ public:
     BaseClauseAST* baseClause() { return m_baseClause.get(); }
     void setBaseClause( BaseClauseAST::Node& baseClause );
 
-    QPtrList<DeclarationAST> declarations() { return m_declarations; }
+    QPtrList<DeclarationAST> declarationList() { return m_declarationList; }
     void addDeclaration( DeclarationAST::Node& declaration );
 
 private:
     AST::Node m_classKey;
     BaseClauseAST::Node m_baseClause;
-    QPtrList<DeclarationAST> m_declarations;
+    QPtrList<DeclarationAST> m_declarationList;
 
 private:
     ClassSpecifierAST( const ClassSpecifierAST& source );
@@ -378,10 +399,10 @@ public:
     EnumSpecifierAST();
 
     void addEnumerator( EnumeratorAST::Node& enumerator );
-    QPtrList<EnumeratorAST> enumerators() { return m_enumerators; }
+    QPtrList<EnumeratorAST> enumeratorList() { return m_enumeratorList; }
 
 private:
-    QPtrList<EnumeratorAST> m_enumerators;
+    QPtrList<EnumeratorAST> m_enumeratorList;
 
 private:
     EnumSpecifierAST( const EnumSpecifierAST& source );
@@ -419,10 +440,10 @@ public:
     LinkageBodyAST();
 
     void addDeclaration( DeclarationAST::Node& ast );
-    QPtrList<DeclarationAST> declarations() { return m_declarations; }
+    QPtrList<DeclarationAST> declarationList() { return m_declarationList; }
 
 private:
-    QPtrList<DeclarationAST> m_declarations;
+    QPtrList<DeclarationAST> m_declarationList;
 
 private:
     LinkageBodyAST( const LinkageBodyAST& source );
@@ -634,11 +655,11 @@ public:
 public:
     ParameterDeclarationListAST();
 
-    QPtrList<ParameterDeclarationAST> parameters() { return m_parameters; }
+    QPtrList<ParameterDeclarationAST> parameterList() { return m_parameterList; }
     void addParameter( ParameterDeclarationAST::Node& parameter );
 
 private:
-    QPtrList<ParameterDeclarationAST> m_parameters;
+    QPtrList<ParameterDeclarationAST> m_parameterList;
 
 private:
     ParameterDeclarationListAST( const ParameterDeclarationListAST& source );
@@ -1052,14 +1073,14 @@ public:
     TranslationUnitAST();
 
     void addDeclaration( DeclarationAST::Node& ast );
-    QPtrList<DeclarationAST> declarations() { return m_declarations; }
+    QPtrList<DeclarationAST> declarationList() { return m_declarationList; }
 
 private:
-    QPtrList<DeclarationAST> m_declarations;
-   
+    QPtrList<DeclarationAST> m_declarationList;
+
 private:
     TranslationUnitAST( const TranslationUnitAST& source );
     void operator = ( const TranslationUnitAST& source );
 };
 
-#endif 
+#endif

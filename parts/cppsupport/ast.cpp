@@ -96,6 +96,8 @@ QString nodeTypeToString( NodeType type )
 	return "ParameterDeclarationClause";
     case NodeType_Group:
 	return "Group";
+    case NodeType_AccessDeclaration:
+	return "AccessDeclaration";
     case NodeType_Custom:
 	return "Custom";
     }
@@ -200,7 +202,7 @@ DeclarationAST::DeclarationAST()
 // ------------------------------------------------------------------------
 LinkageBodyAST::LinkageBodyAST()
 {
-    m_declarations.setAutoDelete( true );
+    m_declarationList.setAutoDelete( true );
 }
 
 void LinkageBodyAST::addDeclaration( DeclarationAST::Node& ast )
@@ -209,7 +211,7 @@ void LinkageBodyAST::addDeclaration( DeclarationAST::Node& ast )
         return;
 
     ast->setParent( this );
-    m_declarations.append( ast.release() );
+    m_declarationList.append( ast.release() );
 }
 
 // ------------------------------------------------------------------------
@@ -239,7 +241,7 @@ void LinkageSpecificationAST::setDeclaration( DeclarationAST::Node& decl )
 TranslationUnitAST::TranslationUnitAST()
 {
     kdDebug(9007) << "++ TranslationUnitAST::TranslationUnitAST()" << endl;
-    m_declarations.setAutoDelete( true );
+    m_declarationList.setAutoDelete( true );
 }
 
 void TranslationUnitAST::addDeclaration( DeclarationAST::Node& ast )
@@ -248,7 +250,7 @@ void TranslationUnitAST::addDeclaration( DeclarationAST::Node& ast )
         return;
 
     ast->setParent( this );
-    m_declarations.append( ast.release() );
+    m_declarationList.append( ast.release() );
 }
 
 // ------------------------------------------------------------------------
@@ -339,7 +341,7 @@ void TypedefAST::setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclara
 // ------------------------------------------------------------------------
 TemplateArgumentListAST::TemplateArgumentListAST()
 {
-    m_arguments.setAutoDelete( true );
+    m_argumentList.setAutoDelete( true );
 }
 
 void TemplateArgumentListAST::addArgument( AST::Node& arg )
@@ -348,7 +350,7 @@ void TemplateArgumentListAST::addArgument( AST::Node& arg )
         return;
 
     arg->setParent( this );
-    m_arguments.append( arg.release() );
+    m_argumentList.append( arg.release() );
 }
 
 
@@ -416,7 +418,7 @@ TypeSpecifierAST::TypeSpecifierAST()
 // ------------------------------------------------------------------------
 ClassSpecifierAST::ClassSpecifierAST()
 {
-    m_declarations.setAutoDelete( true );
+    m_declarationList.setAutoDelete( true );
 }
 
 void ClassSpecifierAST::setClassKey( AST::Node& classKey )
@@ -431,7 +433,7 @@ void ClassSpecifierAST::addDeclaration( DeclarationAST::Node& declaration )
         return;
 
     declaration->setParent( this );
-    m_declarations.append( declaration.release() );
+    m_declarationList.append( declaration.release() );
 }
 
 void ClassSpecifierAST::setBaseClause( BaseClauseAST::Node& baseClause )
@@ -443,7 +445,7 @@ void ClassSpecifierAST::setBaseClause( BaseClauseAST::Node& baseClause )
 // ------------------------------------------------------------------------
 EnumSpecifierAST::EnumSpecifierAST()
 {
-    m_enumerators.setAutoDelete( true );
+    m_enumeratorList.setAutoDelete( true );
 }
 
 void EnumSpecifierAST::addEnumerator( EnumeratorAST::Node& enumerator )
@@ -452,7 +454,7 @@ void EnumSpecifierAST::addEnumerator( EnumeratorAST::Node& enumerator )
         return;
 
     enumerator->setParent( this );
-    m_enumerators.append( enumerator.release() );
+    m_enumeratorList.append( enumerator.release() );
 }
 
 
@@ -492,7 +494,7 @@ void EnumeratorAST::setExpr( AST::Node& expr )
 // ------------------------------------------------------------------------
 BaseClauseAST::BaseClauseAST()
 {
-    m_baseSpecifiers.setAutoDelete( true );
+    m_baseSpecifierList.setAutoDelete( true );
 }
 
 void BaseClauseAST::addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier )
@@ -501,7 +503,7 @@ void BaseClauseAST::addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier )
         return;
 
     baseSpecifier->setParent( this );
-    m_baseSpecifiers.append( baseSpecifier.release() );
+    m_baseSpecifierList.append( baseSpecifier.release() );
 }
 
 // ------------------------------------------------------------------------
@@ -853,7 +855,7 @@ void ParameterDeclarationAST::setExpression( AST::Node& expression )
 // --------------------------------------------------------------------------
 ParameterDeclarationListAST::ParameterDeclarationListAST()
 {
-    m_parameters.setAutoDelete( true );
+    m_parameterList.setAutoDelete( true );
 }
 
 void ParameterDeclarationListAST::addParameter( ParameterDeclarationAST::Node& parameter )
@@ -862,7 +864,7 @@ void ParameterDeclarationListAST::addParameter( ParameterDeclarationAST::Node& p
         return;
 
     parameter->setParent( this );
-    m_parameters.append( parameter.release() );
+    m_parameterList.append( parameter.release() );
 }
 
 
@@ -886,7 +888,7 @@ void ParameterDeclarationClauseAST::setEllipsis( AST::Node& ellipsis )
 // --------------------------------------------------------------------------
 GroupAST::GroupAST()
 {
-    m_nodes.setAutoDelete( true );
+    m_nodeList.setAutoDelete( true );
 }
 
 void GroupAST::addNode( AST::Node& node )
@@ -895,6 +897,21 @@ void GroupAST::addNode( AST::Node& node )
         return;
 
     node->setParent( this );
-    m_nodes.append( node.release() );
+    m_nodeList.append( node.release() );
+}
+
+// --------------------------------------------------------------------------
+AccessDeclarationAST::AccessDeclarationAST()
+{
+    m_accessList.setAutoDelete( true );
+}
+
+void AccessDeclarationAST::addAccess( AST::Node& access )
+{
+    if( !access.get() )
+        return;
+
+    access->setParent( this );
+    m_accessList.append( access.release() );
 }
 

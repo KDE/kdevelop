@@ -1615,12 +1615,12 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 
     while( lex->lookAhead(0) == Token_identifier && lex->lookAhead(1) == Token_identifier )
     	lex->nextToken();
-	
+
     NameAST::Node name;
     parseName( name );
-    
+
     BaseClauseAST::Node bases;
-    if( lex->lookAhead(0) == ':' ){      
+    if( lex->lookAhead(0) == ':' ){
 	if( !parseBaseClause(bases) ){
 	    skipUntil( '{' );
 	}
@@ -1706,10 +1706,18 @@ bool Parser::parseMemberSpecification( DeclarationAST::Node& node )
     } else if( parseTemplateDeclaration(node) ){
 	return true;
     } else if( parseAccessSpecifier(access) ){
+        AccessDeclarationAST::Node ast = CreateNode<AccessDeclarationAST>();
+	ast->addAccess( access );
+
+        int startSlot = lex->index();
 	if( lex->lookAhead(0) == Token_slots ){
 	    lex->nextToken();
+	    AST::Node sl = CreateNode<AST>();
+	    UPDATE_POS( sl, startSlot, lex->index() );
+	    ast->addAccess( sl );
 	}
 	ADVANCE( ':', ":" );
+	node = ast;
 	return true;
     }
 
@@ -2778,7 +2786,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaration()" << endl;
 
     int start = lex->index();
-    
+
     GroupAST::Node funSpec;
     parseFunctionSpecifier( funSpec );
 
