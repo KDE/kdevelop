@@ -77,6 +77,8 @@ SubprojectOptionsDialog::SubprojectOptionsDialog(AutoProjectPart *part, AutoProj
             clitem->moveItem(lastItem);
         lastItem = clitem;
     }
+
+    setIcon ( SmallIcon ( "configure" ) );
         
     readConfig();
 }

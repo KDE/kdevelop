@@ -14,13 +14,15 @@
 
 #include <qdialog.h>
 
+#include "removefiledlgbase.h"
+
 class QCheckBox;
 class AutoProjectWidget;
 class SubprojectItem;
 class TargetItem;
 
 
-class RemoveFileDialog : public QDialog
+class RemoveFileDialog : public RemoveFileDlgBase
 {
     Q_OBJECT
 
@@ -34,8 +36,8 @@ protected:
     virtual void accept();
 
 private:
-    QCheckBox *removefromtargets_box;
-    QCheckBox *removefromdisk_box;
+    QCheckBox *removeFromTargetsCheckBox;
+    //QCheckBox *removefromdisk_box;
     
     AutoProjectWidget *m_widget;
     SubprojectItem *subProject;

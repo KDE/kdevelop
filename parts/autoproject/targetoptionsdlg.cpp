@@ -52,6 +52,8 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     for (it = l.begin(); it != l.end(); ++it)
         QCheckListItem *clitem = new QCheckListItem(insidelib_listview, *it, QCheckListItem::CheckBox);
 
+    setIcon ( SmallIcon ( "configure" ) );
+
     readConfig();
 }
 

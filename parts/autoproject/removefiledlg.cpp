@@ -12,12 +12,15 @@
 #include "removefiledlg.h"
 
 #include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <qfile.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
+#include <ksqueezedtextlabel.h>
 
 #include "misc.h"
 #include "autoprojectwidget.h"
@@ -36,9 +39,9 @@ static bool fileListContains(const QList<FileItem> &list, const QString &name)
 RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *spitem,
                                    TargetItem *item, const QString &filename,
                                    QWidget *parent, const char *name)
-    : QDialog(parent, name, true)
+    : RemoveFileDlgBase(parent, name, true)
 {
-    setCaption(i18n("Remove File From Target"));
+    removeFromTargetsCheckBox = 0;
 
     QStringList targets;
     
@@ -47,33 +50,25 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *sp
         if (fileListContains((*it)->sources, filename))
             targets.append((*it)->name);
 
-    removefromtargets_box = 0;
-    if (targets.count() > 1) {
-        QString joinedtargets = "     " + targets.join("\n     ");
-        removefromtargets_box = new QCheckBox(i18n("The file %1 is still used by the following targets:\n%2\n"
-                                                   "Remove it from all of them?").arg(filename).arg(joinedtargets), this);
+    if (targets.count() > 1)
+    {
+        removeFromTargetsCheckBox = new QCheckBox( fileGroupBox, "removeFromTargetsCheckBox" );
+        removeFromTargetsCheckBox->setMinimumSize( QSize( 0, 45 ) );
+        fileLayout->addWidget( removeFromTargetsCheckBox );
+
+        QString joinedtargets = "    *" + targets.join("\n    *");
+        removeFromTargetsCheckBox->setText ( i18n ( "The file %1 is still used by the following targets:\n%2\n"
+                                                   "Remove it from all of them?").arg(filename).arg(joinedtargets) );
     }
 
-    removefromdisk_box = new QCheckBox(i18n("Remove From disk"), this);
-        
-    QFrame *frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+    removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b>?" ).arg ( filename ) );
+    directoryLabel->setText ( spitem->path );
+    targetLabel->setText ( item->name );
 
-    KButtonBox *buttonbox = new KButtonBox(this);
-    buttonbox->addStretch();
-    QPushButton *ok_button = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel_button = buttonbox->addButton(i18n("Cancel"));
-    ok_button->setDefault(true);
-    connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
-    connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
-    buttonbox->layout();
+    connect ( removeButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
+    connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );
 
-    QVBoxLayout *layout = new QVBoxLayout(this, 2*KDialog::marginHint(), KDialog::spacingHint());
-    if (removefromtargets_box)
-        layout->addWidget(removefromtargets_box);
-    layout->addWidget(removefromdisk_box);
-    layout->addWidget(frame, 0);
-    layout->addWidget(buttonbox, 0);
+    setIcon ( SmallIcon ( "editdelete.png" ) );
 
     m_widget = widget;
     subProject = spitem;
@@ -90,7 +85,7 @@ void RemoveFileDialog::accept()
 {
     QMap<QCString,QCString> replaceMap;
     
-    if (removefromtargets_box && removefromtargets_box->isChecked()) {
+    if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
         QListIterator<TargetItem> it(subProject->targets);
         for (; it.current(); ++it) {
             if ((*it) != target && fileListContains((*it)->sources, fileName)) {
@@ -133,7 +128,7 @@ void RemoveFileDialog::accept()
     
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
     
-    if (removefromdisk_box->isChecked())
+    if (removeCheckBox->isChecked())
         QFile::remove(subProject->path + "/" + fileName);
         
     m_widget->emitRemovedFile(fileName);
