@@ -54,7 +54,7 @@ private:
     void parseBacktraceList   (char *buf);
     void parseThreadList      (char* buf);
     void parseBreakpointSet   (char *buf);
-    void parseLocals          (char *buf);
+    void parseLocals          (char type, char *buf);
     void parseRequestedData   (char *buf);
     void parseLine            (char *buf);
     void parseFrameSelected   (char *buf);

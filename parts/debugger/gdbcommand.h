@@ -27,6 +27,8 @@ enum GDBCmd
   BLOCK_START     = '\32',
   SRC_POSITION    = '\32',    // Hmmm, same value may not work for all compilers
 
+  ARGS            = 'A',
+  
   BPLIST          = 'B',
   SET_BREAKPT     = 'b',
 

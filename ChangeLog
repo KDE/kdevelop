@@ -1,3 +1,7 @@
+2003-02-26 jbb <jbb@kdevelop.org>
+    * parts/debugger
+    - Fix display of function parameters.
+
 2003-02-25 F@lk Brettschneider <falkbr@kdevelop.org>
 	* make-outputview: scrolling during compiling possible without immediate auto-scrolling to the bottom
     

@@ -382,7 +382,10 @@ void GDBController::actOnProgramPause(const QString &msg)
             queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD), true);
         queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
         if (stateIsOn(s_viewLocals))
+        {
+            queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
             queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+        }
 
         varTree_->findWatch()->requestWatchVars();
         varTree_->findWatch()->setActive();
@@ -765,7 +768,7 @@ void GDBController::parseBacktraceList(char *buf)
     varFrame->setFrameName(frameName);
 
     // Add the frame params to the variable list
-    varFrame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
+// varFrame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
 
     if (currentFrame_ == 0 && viewedThread_ != -1)
         varTree_->trimExcessFrames();
@@ -857,7 +860,7 @@ void GDBController::parseFrameSelected(char *buf)
 // This is called when a completely new set of local data arrives. This data
 // is always attached to (and completely updates) the current frame
 // _All_ inactive items in the tree are trimmed here.
-void GDBController::parseLocals(char *buf)
+void GDBController::parseLocals(char type, char *buf)
 {
     varTree_->viewport()->setUpdatesEnabled(false);
 
@@ -873,7 +876,10 @@ void GDBController::parseLocals(char *buf)
 
     // Frame data consists of the parameters of the calling function
     // and the local data.
-    frame->setLocals(buf);
+    if (type == (char) ARGS)
+        frame->setParams(buf);
+    else
+        frame->setLocals(buf);
 
     // This is tricky - trim the whole tree when we're on the top most
     // frame so that they always see only "frame 0" on a program stop.
@@ -946,8 +952,11 @@ char *GDBController::parseCmdBlock(char *buf)
         case SRC_POSITION:
             parseProgramLocation      (buf);
             break;
+        case ARGS:
+            parseLocals               (cmdType, buf);
+            break;
         case LOCALS:
-            parseLocals               (buf);
+            parseLocals               (cmdType, buf);
             break;
         case DATAREQUEST:
             parseRequestedData        (buf);
@@ -1202,6 +1211,8 @@ void GDBController::slotStart(const QString& shell, const QString &application)
     else
         queueCmd(new GDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
 
+    queueCmd(new GDBCommand("handle SIG32 pass nostop noprint", NOTRUNCMD, NOTINFOCMD));
+
     // Print some nicer names in disassembly output. Although for an assembler
     // person this may actually be wrong and the mangled name could be better.
     if (config_asmDemangle_)
@@ -1294,7 +1305,10 @@ void GDBController::slotCoreFile(const QString &coreFile)
         queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
     if (stateIsOn(s_viewLocals))
+    {
+        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
         queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+    }
 }
 
 // **************************************************************************
@@ -1308,7 +1322,10 @@ void GDBController::slotAttachTo(int pid)
         queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
     if (stateIsOn(s_viewLocals))
+    {
+        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
         queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+    }
 }
 
 // **************************************************************************
@@ -1571,8 +1588,9 @@ void GDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
         if (frame->needLocals())
         {
             // Add the frame params to the variable list
-            frame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
+//          frame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
             // and ask for the locals
+            queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
             queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
         }
     }

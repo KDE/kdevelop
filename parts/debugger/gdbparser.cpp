@@ -306,10 +306,16 @@ DataType GDBParser::determineType(char *buf) const
         case '&':
             return typeReference;
         default:
+            switch (*(buf-8)) {
+                case '*':
+                    return typePointer;
+                case '&':
+                    return typeReference;
+            }
             return typeUnknown;
         }
     }
-    
+
     buf = skipTokenValue(buf);
     if ((strncmp(buf, " = ", 3) == 0) || (*buf == '='))
         return typeName;
