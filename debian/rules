@@ -7,6 +7,19 @@ export DH_COMPAT=3
 
 include debian/debiandirs
 
+configkdevelop= --prefix=/usr \
+ --enable-debug --enable-docbase \
+ --disable-rpath --with-qt-includes=/usr/include/qt \
+ --libdir=$(kde_libdir) --includedir=$(kde_includedir) --mandir=$(mandir) \
+ --with-kdelibsdoc-dir=/usr/share/doc/kdelibs3-doc/html \
+ --enable-gideon-qt2 --enable-docbase \
+ --enable-javasupport \
+ --with-phpdocdir=/usr/share/doc/php4 \
+ --with-glibdocdir=/usr/share/doc/glib-reference/html \
+ --with-gdkdocdir=/usr/share/doc/gtk-reference/gdk/html \
+ --with-gtkdocdir=/usr/share/doc/gtk-reference/gtk/html \
+ --with-gnomedocdir=/usr/share/doc/gnome-dev-doc/html
+
 debdir=$(shell pwd)/debian
 instdir=$(debdir)/tmp
 
@@ -33,10 +46,6 @@ debian-clean:
 	dh_clean
 
 clean: debian-clean
-	-rm -f debian/debiandirs 
-	if test -d CVS; then \
-	make -f admin/Makefile.common cvs-clean ;\
-	fi
 	-make distclean
 
 install: build
@@ -46,7 +55,7 @@ install: build
 	dh_installdirs
 	install -d debian/tmp/etc/kde2
 	$(MAKE) prefix=/usr DESTDIR=$(debdir)/tmp install
-	rm -rf $(instdir)/usr/share/doc/kde/HTML/en/kdevdoctreeview/stl
+#	rm -rf $(instdir)/usr/share/doc/kde/HTML/en/kdevdoctreeview/stl
 
 deb-common:
 	dh_movefiles
@@ -56,16 +65,16 @@ deb-common:
 	dh_installchangelogs
 	dh_link
 
-binary-indep:
+binary-indep: deb-common
 	dh_compress -X.database -i
 
-binary-arch: 
+binary-arch: deb-common
 	dh_strip -a
 	dh_compress -X.database -a
 
 # Below here is fairly generic really
 
-binary:	install binary-common binary-arch binary-indep
+binary:	install binary-arch binary-indep
 	dh_fixperms
 	dh_makeshlibs
 	dh_installdeb
