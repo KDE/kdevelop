@@ -25,12 +25,16 @@
 
 /** Java 1.3 Recognizer
  *
+ * \verbatim
  * Run 'java Main [-showtree] directory-full-of-java-files'
+ * \endverbatim
  *
  * [The -showtree option pops up a Swing frame that shows
  *  the AST constructed from the parser.]
  *
+ * \verbatim
  * Run 'java Main <directory full of java files>'
+ * \endverbatim
  *
  * Contributing authors:
  *		John Mitchell		johnm@non.net

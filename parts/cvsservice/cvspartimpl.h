@@ -89,6 +89,7 @@ public:
     /**
     * Add the specified files (as KURL) to repository.
     * @param urlList
+    * @param binary is the file binary or plain text
     */
     virtual void add( const KURL::List& urlList, bool binary = false );
     /**

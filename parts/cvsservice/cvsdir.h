@@ -43,26 +43,26 @@ public:
     QStringList registeredEntryList() const;
     /**
     * @param fileName is the file name (with no path info, just the file name!)
-    * @param refreshCache update internal cache re-parsing <dirPath>/CVS/Entries
+    * @param refreshCache update internal cache re-parsing "<dirPath>/CVS/Entries"
     * @return an empty CVSEntry if the file is not present
     */
     CVSEntry fileState( const QString &fileName, bool refreshCache = false ) const;
     /**
-    * Check if the specified @p fileName is in <CVSDIR>/.cvsignore and, if not,
+    * Check if the specified @p fileName is in "<CVSDIR>/.cvsignore" and, if not,
     * append it.
     */
     void ignoreFile( const QString &fileName );
     /**
-    * Check if the specified @p fileName is in <CVSDIR>/.cvsignore and, if yes,
+    * Check if the specified @p fileName is in "<CVSDIR>/.cvsignore" and, if yes,
     * remove it.
     */
     void doNotIgnoreFile( const QString &fileName );
     /**
-    * @return the content of <CVSDIR>/CVS/Repository
+    * @return the content of "<CVSDIR>/CVS/Repository"
     */
     QString repository() const;
     /**
-    * @return the content of <CVSDIR>/CVS/Root
+    * @return the content of "<CVSDIR>/CVS/Root"
     */
     QString root() const;
     /**

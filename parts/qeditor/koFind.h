@@ -37,13 +37,12 @@ class QGridLayout;
  *
  * @author S.R.Haque <srhaque@iee.org>
  *
- * @sect Detail
  *
  * This widget inherits from @ref KDialogBase and implements
  * the following additional functionalities:  a find string
  * object and an area for a user-defined widget to extend the dialog.
  *
- * @sect Example
+ * Example
  *
  * To use the basic find dialog:
  *
@@ -224,13 +223,12 @@ private:
  *
  * @author S.R.Haque <srhaque@iee.org>
  *
- * @sect Detail
  *
  * This class includes prompt handling etc. Also provides some
  * static functions which can be used to create custom behaviour
  * instead of using the class directly.
  *
- * @sect Example
+ * Example
  *
  * To use the class to implement a complete find feature:
  *
