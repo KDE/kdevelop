@@ -67,7 +67,7 @@ public:
 	QMap<QString, QString> variables;
 	/** list of targets */
 	QPtrList<TargetItem> targets;
-	
+
 	QString relativePath();
 
 private:

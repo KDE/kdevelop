@@ -293,13 +293,23 @@ void ChooseTargetDialog::accept ()
 		{
             //FIXME: a quick hack to prevent adding header files to _SOURCES
             //and display them in noinst_HEADERS
-            if (AutoProjectPrivate::isHeader(fileName))
+            if (AutoProjectPrivate::isHeader(fileName) &&
+                ( m_choosenTarget->primary == "PROGRAMS" || m_choosenTarget->primary == "LIBRARIES" ||  m_choosenTarget->primary == "LTLIBRARIES" ) )
             {
                 kdDebug ( 9020 ) << "Ignoring header file and adding it to noinst_HEADERS: " << fileName << endl;
                 TargetItem* noinst_HEADERS_item = m_widget->getSubprojectView()->findNoinstHeaders(m_choosenSubproject);
                 FileItem *fitem = m_widget->createFileItem( fileName, m_choosenSubproject );
                 noinst_HEADERS_item->sources.append( fitem );
                 noinst_HEADERS_item->insertItem( fitem );
+                noinst_HEADERS_item->setOpen(true);
+
+                QString varname = "noinst_HEADERS";
+                m_choosenSubproject->variables[ varname ] += ( " " + fileName );
+
+                QMap<QString, QString> replaceMap;
+                replaceMap.insert( varname, m_choosenSubproject->variables[ varname ] );
+
+                AutoProjectTool::modifyMakefileam( m_choosenSubproject->path + "/Makefile.am", replaceMap );
             }
             else
             {

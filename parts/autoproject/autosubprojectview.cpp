@@ -711,11 +711,11 @@ void AutoSubprojectView::parse( SubprojectItem *item )
 	TargetItem* noinst_HEADERS_item = findNoinstHeaders(item);
 
 	QDir dir( item->path );
-	QStringList headersList = QStringList::split( "[ \t]", item->variables[ "noinst_HEADERS" ] );
+	QStringList headersList = QStringList::split( QRegExp("[ \t]"), item->variables[ "noinst_HEADERS" ] );
+
 	headersList += dir.entryList( "*.h;*.H;*.hh;*.hxx;*.hpp;*.tcc", QDir::Files );
 	headersList.sort();
-
-	item->variables[ "noinst_HEADERS" ] = headersList.join( " " );
+    headersList = QStringList::split(QRegExp("[ \t]"), headersList.join( " " ));
 
 	QStringList::Iterator fileIt = headersList.begin();
 	while( fileIt != headersList.end() ){
