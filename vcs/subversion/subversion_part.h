@@ -74,7 +74,7 @@ private:
 		*actionAddToIgnoreList,
 		*actionRemoveFromIgnoreList;
 
-		subversionProjectWidget *m_projWidget;
+		QGuardedPtr<subversionProjectWidget> m_projWidget;
 		KURL base;
 
 public:

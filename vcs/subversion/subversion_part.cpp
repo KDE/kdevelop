@@ -89,8 +89,10 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 }
 
 subversionPart::~subversionPart() {
-	if ( m_projWidget )
-		delete m_projWidget;
+	if ( m_projWidget ){
+		delete (subversionProjectWidget*) m_projWidget;
+		m_projWidget = 0;
+	}
 	delete m_impl;
 }
 
