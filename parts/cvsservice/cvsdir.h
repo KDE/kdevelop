@@ -42,12 +42,23 @@ public:
     * @return an empty CVSEntry if the file is not present
     */
     CVSEntry fileState( const QString &fileName, bool refreshCache = false ) const;
+    /**
+    * Check if the specified @p fileName is in <CVSDIR>/.cvsignore and, if not,
+    * append it.
+    */
+    void ignoreFile( const QString &fileName );
+    /**
+    * Check if the specified @p fileName is in <CVSDIR>/.cvsignore and, if yes,
+    * remove it.
+    */
+    void doNotIgnoreFile( const QString &fileName );
 
-private:
     QString entriesFileName() const;
     QString rootFileName() const;
     QString repoFileName() const;
+    QString cvsIgnoreFileName() const;
 
+private:
     void refreshEntriesCache() const;
     inline QByteArray cacheFile( const QString &fileName ) const;
 

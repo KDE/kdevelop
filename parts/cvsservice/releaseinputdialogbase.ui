@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>551</width>
-            <height>133</height>
+            <width>542</width>
+            <height>234</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Insert Interesting Release</string>
+        <string>Update/revert to another release/branch/date</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -34,44 +34,116 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="title">
+                <string>Revision</string>
+            </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignLeft</set>
             </property>
-            <property name="title">
-                <string>Release is</string>
-            </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>tagRadio</cstring>
+                        <cstring>headRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>by tag/branch name</string>
+                        <string>most recent from HEAD</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>dateRadio</cstring>
+                        <cstring>layout3</cstring>
                     </property>
-                    <property name="text">
-                        <string>by date</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>revisionRadio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>an arbitrary revision/tag/branch</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>revisionEdit</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Type your release name here (leave empty for HEAD)</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Fill the field with the release or branch name (i.e. &lt;i&gt;make_it_cool, kdevelop_alpha5, ...&lt;/i&gt;)</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-            </hbox>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>dateRadio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>an arbitrary date</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>dateEdit</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>FIll the field with a date (i.e. &lt;i&gt;20030204&lt;/i&gt;)</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QLineEdit">
+        <widget class="QGroupBox">
             <property name="name">
-                <cstring>releaseLineEdit</cstring>
+                <cstring>groupBox1</cstring>
             </property>
-            <property name="toolTip" stdset="0">
-                <string>Type your release name here (leave empty for HEAD)</string>
+            <property name="title">
+                <string>Additional options</string>
             </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>revertCheck</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>471</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Enforce even if the file has been locally modified (Revert)</string>
+                </property>
+            </widget>
         </widget>
         <widget class="Line">
             <property name="name">
@@ -159,6 +231,18 @@
         <signal>clicked()</signal>
         <receiver>ReleaseInputDialogBase</receiver>
         <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>dateRadio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>dateEdit</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>revisionRadio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>revisionEdit</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <layoutdefaults spacing="6" margin="11"/>

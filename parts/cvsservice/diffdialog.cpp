@@ -10,6 +10,7 @@
  ***************************************************************************/
 
 #include <qlineedit.h>
+#include <qradiobutton.h>
 
 #include "diffdialog.h"
 
@@ -30,14 +31,34 @@ DiffDialog::~DiffDialog()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+DiffDialog::DiffType DiffDialog::requestedDiff() const
+{
+    if (diffArbitraryRevRadio->isChecked())
+        return diffArbitrary;
+    else if (diffLocalOtherRadio->isChecked())
+        return diffLocalOther;
+    else
+        return diffLocalHEAD;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 QString DiffDialog::revA() const
 {
-    return this->revaEdit->text();
+    if (requestedDiff() == diffArbitrary)
+        return revaEdit->text();
+    else  if (requestedDiff() == diffLocalOther)
+        return revOtherEdit->text();
+    else
+        return QString::null;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 QString DiffDialog::revB() const
 {
-    return this->revbEdit->text();
+    if (requestedDiff())
+        return this->revbEdit->text();
+    else
+        return QString::null;
 }

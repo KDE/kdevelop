@@ -70,6 +70,13 @@ QString CVSDir::repoFileName() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
+QString CVSDir::cvsIgnoreFileName() const
+{
+    return  absPath() + QDir::separator()  + ".cvsignore";
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 QByteArray CVSDir::cacheFile( const QString &fileName ) const
 {
     QFile f( fileName );
@@ -130,4 +137,75 @@ CVSEntry CVSDir::fileState( const QString &fileName, bool refreshCache ) const
     }
     else
         return CVSEntry();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CVSDir::ignoreFile( const QString &fileName )
+{
+    if (!isValid())
+        return;
+
+    QFile f( cvsIgnoreFileName() );
+    if (!f.open( IO_ReadOnly))
+        return;
+
+    QByteArray cachedFile = f.readAll();
+    QTextStream t( cachedFile, IO_ReadOnly | IO_WriteOnly );
+
+    QString readFileName;
+    bool found = false;
+
+    while (!t.eof() && !found)
+    {
+        readFileName = t.readLine();
+        found = (fileName == readFileName);
+    }
+
+    if (!found)
+    {
+        f.close();
+        f.open( IO_WriteOnly );
+
+        t << fileName << "\n";
+
+        f.writeBlock( cachedFile );
+        f.close();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CVSDir::doNotIgnoreFile( const QString &fileName )
+{
+    if (!isValid())
+        return;
+
+    // 1. Read all .ignore file in memory
+    QFile f( cvsIgnoreFileName() );
+    if (!f.open( IO_ReadOnly ))
+        return; // No .cvsignore file? Nothing to do then!
+
+    QByteArray cachedFile = f.readAll();
+    QTextIStream is( cachedFile );
+
+    QByteArray cachedOutputFile;
+    QTextOStream os( cachedOutputFile );
+
+    bool removed = false;
+    while (!is.eof())
+    {
+        QString readLine = is.readLine();
+        if (readLine != fileName)
+            os << readLine << "\n"; // QTextStream::readLine() eats the "\n" ...
+        else
+            removed = true;
+    }
+
+    if (removed)
+    {
+        f.close();
+        f.open( IO_WriteOnly );
+        f.writeBlock( cachedOutputFile );
+    }
 }

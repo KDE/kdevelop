@@ -94,12 +94,6 @@ public:
     */
     virtual void remove( const KURL::List& urlList ) = 0;
     /**
-    * Revert the specified files (as KURL) with the most recent version
-    * present in repository.
-    * @param urlList
-    */
-    virtual void revert( const KURL::List& urlList ) = 0;
-    /**
     * Produce a log of changes about the specified files.
     * @param urlList
     */
@@ -121,8 +115,12 @@ public:
     */
     virtual void unTag( const KURL::List& urlList ) = 0;
     /**
+    * Remove tag from the specified files (as KURL) in repository.
+    * @param urlList
+    */
+    virtual void removeStickyFlag( const KURL::List& urlList ) = 0;
+    /**
     * Add the specified files (as KURL) to the .cvsignore file.
-    * DSDSDS
     * @param urlList
     */
     virtual void addToIgnoreList( const KURL::List& urlList ) = 0;
@@ -139,9 +137,9 @@ public:
     *        repositories)
     * @param message an initial creation message for the project
     * @param module the module into repository where to put this source tree
-    * @param vendor
-    * @param release
-    * @param mustInitRoot
+    * @param vendor  vendor string
+    * @param release release tag
+    * @param mustInitRoot if true will attempt to initialize $CVSROOT if not already prepared
     */
     virtual void createNewProject( const QString &dirName,
         const QString &cvsRsh, const QString &location,

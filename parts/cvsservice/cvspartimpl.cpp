@@ -118,12 +118,6 @@ bool CvsPartImpl::isRegisteredInRepository( const QString &projectDirectory, con
 {
     kdDebug(9000) << "===> CvsPartImpl::isRegisteredInRepository() here! " << endl;
 
-    if ( url.path() == projectDirectory )
-    {
-        kdDebug(9000) << "===> Operation requested for projectDir(): true. " << endl;
-        return true;
-    }
-
     CVSDir cvsdir( url.directory() );
     if (!cvsdir.isValid())
     {
@@ -177,30 +171,8 @@ void CvsPartImpl::addToIgnoreList( const QString &projectDirectory, const KURL &
         return;
     }
 
-    QString dirName = url.directory();
-    QString ignoreFilePath = dirName + "/.cvsignore";
-    QString relPathName = url.fileName();
-
-    kdDebug(9000) << "Adding file to ignore " << relPathName << " to " << ignoreFilePath << endl;
-
-    QFile f( ignoreFilePath );
-    if (f.open( IO_ReadOnly | IO_WriteOnly))
-    {
-        QTextStream t( &f );
-        QString fileName;
-        bool found = false;
-        while (!t.eof() && !found)
-        {
-            fileName = t.readLine();
-            kdDebug(9000) << "** Examining line: " << fileName << endl;
-            found = fileName == relPathName;
-        }
-        if (!found) {
-            t << relPathName << "\n";
-            kdDebug(9000) << "** File is not present. So it can be added to " << ignoreFilePath << endl;
-        }
-    }
-    f.close();
+    CVSDir cvsdir( url.directory() );
+    cvsdir.ignoreFile( url.fileName() );
 }
 
 void CvsPartImpl::addToIgnoreList( const QString &projectDirectory, const KURL::List &urls )
@@ -219,46 +191,8 @@ void CvsPartImpl::removeFromIgnoreList( const QString &/*projectDirectory*/, con
 
     QStringList ignoreLines;
 
-    QString dirName = url.directory();
-    QString ignoreFilePath = dirName + "/.cvsignore";
-    QString relPathName = url.fileName();
-
-    // 1. Read all .ignore file in memory
-    QFile f( ignoreFilePath );
-    if (!f.open( IO_ReadOnly ))
-        return; // No .cvsignore file? Nothing to do then!
-
-    {
-        QTextStream t( &f );
-        while (!t.eof()) {
-            QString line = t.readLine();
-            kdDebug(9000) << "** Readin line: " << line << endl;
-            ignoreLines << line;
-        }
-    }
-    f.close();
-
-    // 2. Look up for filename
-    if (ignoreLines.remove( relPathName ) == 0) // Ok, file is not in list, so nothing to do!
-    {
-        kdDebug(9000) << "** File is not present in " << ignoreFilePath << "! So no point in removing it ..." << endl;
-        return;
-    }
-    // 3. If present, remove it and write the lines in memory back to file!
-    if (!f.open( IO_WriteOnly )) // Who nows
-    {
-        kdDebug(9000) << "Argh!! Could not open " << ignoreFilePath << " for appending the filename!!!" << endl;
-        return; //
-    }
-
-    {
-        QTextStream t( &f );
-        for (size_t i=0; i<ignoreLines.count(); ++i)
-        {
-            t << ignoreLines[i] << "\n";
-        }
-    }
-    f.close();
+    CVSDir cvsdir( url.directory() );
+    cvsdir.doNotIgnoreFile( url.fileName() );
 }
 
 void CvsPartImpl::removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls )

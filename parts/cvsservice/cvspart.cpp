@@ -11,6 +11,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qdir.h>
+#include <qpopupmenu.h>
+
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -25,12 +28,14 @@
 #include <kprocess.h>
 #include <kiconloader.h>
 
+#include <dcopref.h>
+#include <repository_stub.h>
+#include <cvsservice_stub.h>
+#include <cvsjob_stub.h>
+
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
 #include <kgenericfactory.h>
-
-#include <qdir.h>
-#include <qpopupmenu.h>
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
@@ -41,25 +46,17 @@
 #include "kdevproject.h"
 #include "urlutil.h"
 
-#include "logform.h"
 #include "cvsform.h"
 #include "commitdlg.h"
 #include "checkoutdialog.h"
 #include "tagdialog.h"
-
-//#include "changelog.h"
-//#include "cvsutils.h"
-#include "cvspart.h"
 #include "cvsprocesswidget.h"
 #include "cvsoptions.h"
 #include "cvsoptionswidget.h"
-
 #include "cvsserviceimpl.h"
+#include "cvsdir.h"
 
-#include <dcopref.h>
-#include <repository_stub.h>
-#include <cvsservice_stub.h>
-#include <cvsjob_stub.h>
+#include "cvspart.h"
 
 QStringList prependToStringList( const QString &s, const QStringList &paths )
 {
@@ -94,7 +91,7 @@ CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
         name ? name : "CvsService" ),
     actionCommit( 0 ), actionDiff( 0 ), actionLog( 0 ), actionAdd( 0 ),
     actionAddBinary( 0 ), actionRemove( 0 ), actionUpdate( 0 ),
-    actionRevert( 0 ),
+    actionRemoveSticky( 0 ),
     actionAddToIgnoreList( 0 ), actionRemoveFromIgnoreList( 0 ),
     actionTag( 0 ), actionUnTag( 0 ),
     actionLogin( 0), actionLogout( 0 ),
@@ -147,58 +144,51 @@ void CvsPart::init()
 
 void CvsPart::setupActions()
 {
-/*
-    KAction * action = new KAction( i18n("CVS Repository"), 0,
-        this, SLOT(slotCheckOut()), actionCollection(), "cvsservice_checkout" );
-    action->setStatusText( i18n("Check-out from an existing CVS repository") );
-*/
-    actionCommit = new KAction( i18n("&Commit"), 0, this,
+    actionCommit = new KAction( i18n("&Commit to repository"), 0, this,
         SLOT(slotActionCommit()), actionCollection(), "cvsservice_commit" );
 
-    actionDiff = new KAction( i18n("&Difference Between Revisions"), 0, this, SLOT(slotActionDiff()),
+    actionDiff = new KAction( i18n("&Difference between revisions"), 0, this, SLOT(slotActionDiff()),
         actionCollection(), "cvsservice_diff" );
 
     actionLog = new KAction( i18n("Generate &log"), 0, this, SLOT(slotActionLog()),
         actionCollection(), "cvsservice_log" );
 
-    actionAdd = new KAction( i18n("&Add to Repository"), 0, this, SLOT(slotActionAdd()),
+    actionAdd = new KAction( i18n("&Add to repository"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvsservice_add" );
 
-    actionAddBinary = new KAction( i18n("Add to Repository as &Binary"), 0, this,
+    actionAddBinary = new KAction( i18n("Add to repository as &binary"), 0, this,
         SLOT(slotActionAddBinary()), actionCollection(), "cvsservice_add_bin" );
 
-    actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
+    actionRemove = new KAction( i18n("&Remove from repository"), 0, this,
         SLOT(slotActionRemove()), actionCollection(), "cvsservice_remove" );
 
-    actionUpdate = new KAction( i18n("&Update Local Copy to Most Recent Release"), 0, this,
+    actionUpdate = new KAction( i18n("&Update/revert to another release"), 0, this,
         SLOT(slotActionUpdate()), actionCollection(), "cvsservice_update" );
 
-    actionRevert = new KAction( i18n("R&evert to Previous Release"), 0,
-        this, SLOT(slotActionRevert()), actionCollection(),
-        "cvsservice_revert" );
+    actionRemoveSticky = new KAction( i18n("R&emove sticky flag"), 0,
+        this, SLOT(slotActionRemoveSticky()), actionCollection(),
+        "cvsservice_removesticky" );
 
-    actionTag = new KAction( i18n("&Tag/Branch These File(s)"), 0,
+    actionTag = new KAction( i18n("&Tag/branch"), 0,
         this, SLOT(slotActionTag()), actionCollection(),
         "cvsservice_tag" );
 
-    actionUnTag = new KAction( i18n("Re&move Tag From These File(s)"), 0,
+    actionUnTag = new KAction( i18n("Re&move tag/branch"), 0,
         this, SLOT(slotActionUnTag()), actionCollection(),
         "cvsservice_untag" );
 
-    actionAddToIgnoreList = new KAction(
-        i18n("&Ignore This File(s) in CVS Operations"), 0,
+    actionAddToIgnoreList = new KAction( i18n("&Ignore in CVS operations"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(),
         "cvsservice_ignore" );
 
-    actionRemoveFromIgnoreList = new KAction(
-        i18n("Do &Not Ignore This File in CVS Operations"), 0,
+    actionRemoveFromIgnoreList = new KAction( i18n("Do &not ignore in CVS operations"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(),
         "cvsservice_donot_ignore" );
 
-    actionLogin = new KAction( i18n("&Login Into Server"), 0, this,
+    actionLogin = new KAction( i18n("&Login into server"), 0, this,
         SLOT(slotActionLogin()), actionCollection(), "cvsservice_login" );
 
-    actionLogout = new KAction( i18n("L&ogout From Server"), 0, this,
+    actionLogout = new KAction( i18n("L&ogout from server"), 0, this,
         SLOT(slotActionLogout()), actionCollection(), "cvsservice_logout" );
 }
 
@@ -269,6 +259,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
             return;
 
         KPopupMenu *subMenu = new KPopupMenu( popup );
+        popup->insertSeparator();
 
         subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
         // CvsService let to do log and diff operations only on one file (or directory) at time
@@ -283,8 +274,9 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
         subMenu->insertSeparator();
         subMenu->insertItem( actionTag->text(), this, SLOT(slotTag()) );
+        subMenu->insertItem( actionUnTag->text(), this, SLOT(slotUnTag()) );
         subMenu->insertItem( actionUpdate->text(), this, SLOT(slotUpdate()) );
-        subMenu->insertItem( actionRevert->text(), this, SLOT(slotRevert()) );
+        subMenu->insertItem( actionRemoveSticky->text(), this, SLOT(slotRemoveSticky()) );
 
         subMenu->insertSeparator();
         subMenu->insertItem( actionAddToIgnoreList->text(), this, SLOT(slotAddToIgnoreList()) );
@@ -394,12 +386,12 @@ void CvsPart::slotActionRemove()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotActionRevert()
+void CvsPart::slotActionRemoveSticky()
 {
     KURL currDocument;
     if (urlFocusedDocument( currDocument ))
     {
-        m_impl->revert( currDocument );
+        m_impl->removeStickyFlag( currDocument );
     }
 }
 
@@ -506,9 +498,9 @@ void CvsPart::slotRemove()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::slotRevert()
+void CvsPart::slotRemoveSticky()
 {
-    m_impl->revert( m_urls );
+    m_impl->removeStickyFlag( m_urls );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -613,6 +605,14 @@ void CvsPart::slotProjectOpened()
 {
     kdDebug(9000) << "CvsPart::slotProjectOpened() here!" << endl;
 
+    // Avoid bothering the user if this project has no support for CVS
+    CVSDir cvsdir( project()->projectDirectory() );
+    if (cvsdir.isValid())
+    {
+        kdDebug(9000) << "Project has no CVS Support: too bad!! :-(" << endl;
+        return;
+    }
+
     CvsOptions *options = CvsOptions::instance();
 
     // If createNewProject() has set this var then we have to get it.
@@ -633,6 +633,14 @@ void CvsPart::slotProjectOpened()
 void CvsPart::slotProjectClosed()
 {
     kdDebug(9000) << "CvsPart::slotProjectClosed() here!" << endl;
+
+    // Avoid bothering the user if this project has no support for CVS
+    CVSDir cvsdir( project()->projectDirectory() );
+    if (cvsdir.isValid())
+    {
+        kdDebug(9000) << "Project has no CVS Support: too bad!! :-(" << endl;
+        return;
+    }
 
     CvsOptions *options = CvsOptions::instance();
     options->save( project() );

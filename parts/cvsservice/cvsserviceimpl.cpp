@@ -37,7 +37,7 @@
 #include "tagdialog.h"
 #include "diffdialog.h"
 #include "releaseinputdialog.h"
-#include "logform.h"
+#include "cvslogdialog.h"
 
 #include "changelog.h"
 #include "cvsoptions.h"
@@ -169,16 +169,19 @@ void CvsServiceImpl::update( const KURL::List& urlList )
         return;
 
     CvsOptions *options = CvsOptions::instance();
-    ReleaseInputDialog dlg( i18n("Update to release: leave empty for HEAD"),
-        mainWindow()->main()->centralWidget(), false );
+    ReleaseInputDialog dlg( mainWindow()->main()->centralWidget() );
     if (dlg.exec() == QDialog::Rejected)
         return;
+
+    QString additionalOptions = dlg.release();
+    if (dlg.isRevert())
+        additionalOptions = additionalOptions + " " + options->revertOptions();
 
     DCOPRef cvsJob = m_cvsService->update( m_fileList,
         options->recursiveWhenUpdate(),
         options->createDirsWhenUpdate(),
         options->pruneEmptyDirsWhenUpdate(),
-        dlg.release() ); // Or QString::null for HEAD
+        additionalOptions ); 
 
     processWidget()->startJob( cvsJob );
     connect( processWidget(), SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
@@ -222,7 +225,7 @@ void CvsServiceImpl::remove( const KURL::List& urlList )
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
+/*
 void CvsServiceImpl::revert( const KURL::List& urlList )
 {
     kdDebug(9000) << "CvsServiceImpl::revert() here" << endl;
@@ -247,6 +250,30 @@ void CvsServiceImpl::revert( const KURL::List& urlList )
 
     doneOperation();
 }
+*/
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServiceImpl::removeStickyFlag( const KURL::List& urlList )
+{
+    kdDebug(9000) << "CvsServiceImpl::revert() here" << endl;
+
+    if (!prepareOperation( urlList, opUpdate ))
+        return;
+
+    CvsOptions *options = CvsOptions::instance();
+
+    DCOPRef cvsJob = m_cvsService->update( m_fileList,
+        options->recursiveWhenUpdate(),
+        options->createDirsWhenUpdate(),
+        options->pruneEmptyDirsWhenUpdate(),
+        "-A" );
+
+    processWidget()->startJob( cvsJob );
+    connect( processWidget(), SIGNAL(jobFinished(bool,int)),
+        this, SLOT(slotJobFinished(bool,int)) );
+
+    doneOperation();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -257,10 +284,10 @@ void CvsServiceImpl::log( const KURL::List& urlList )
     if (!prepareOperation( urlList, opLog ))
         return;
 
-    LogForm* f = new LogForm( m_cvsService );
+    CVSLogDialog* f = new CVSLogDialog( m_cvsService );
     f->show();
     // Form will do all the work
-    f->start( projectDirectory(), m_fileList[0] );
+    f->startLog( projectDirectory(), m_fileList[0] );
 
     doneOperation();
 }

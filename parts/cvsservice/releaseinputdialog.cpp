@@ -11,6 +11,7 @@
 
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 #include <qradiobutton.h>
 
 #include "releaseinputdialog.h"
@@ -19,12 +20,9 @@
 // class ReleaseInputDialog
 ///////////////////////////////////////////////////////////////////////////////
 
-ReleaseInputDialog::ReleaseInputDialog( const QString &releaseMsg, QWidget* parent,
-    bool enforceNotNullInput )
-    : ReleaseInputDialogBase( parent, "releaseinputdialog", true, 0 ),
-    m_enforceNullInput( enforceNotNullInput )
+ReleaseInputDialog::ReleaseInputDialog( QWidget* parent)
+    : ReleaseInputDialogBase( parent, "releaseinputdialog", true, 0 )
 {
-    this->setCaption( releaseMsg );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,46 +33,34 @@ ReleaseInputDialog::~ReleaseInputDialog()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+bool ReleaseInputDialog::isRevert() const
+{
+    return revertCheck->isChecked();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 QString ReleaseInputDialog::release() const
 {
-    // Can be a date or a tag/branch name
-    QString releaseInfo = this->releaseLineEdit->text();
-    // Avoid adding "-opt" to a null input
-    if (releaseInfo.isEmpty())
-        return QString::null;
-
-    if (isDate())
-        return  " -D " + releaseInfo; // Look at the leading white space!!
+    if (type() == byRevision)
+        return " -r " + revisionEdit->text();
+    else if (type() == byDate)
+        return " -D " + dateEdit->text();
     else
-        return  " -r " + releaseInfo;
-
+        return QString::null;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool ReleaseInputDialog::isTag() const
+ReleaseInputDialog::ReleaseType ReleaseInputDialog::type() const
 {
-    return this->tagRadio->isChecked();
+    if (revisionRadio->isChecked())
+        return byRevision;
+    else if (dateRadio->isChecked())
+        return byDate;
+    else
+        return byHead;
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool ReleaseInputDialog::isDate() const
-{
-    return this->dateRadio->isChecked();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void ReleaseInputDialog::accept()
-{
-    if (m_enforceNullInput && this->releaseLineEdit->text().isEmpty())
-        return;
-
-    QDialog::accept();
-}
-
-
 
 #include "releaseinputdialog.moc"
 

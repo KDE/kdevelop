@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevCvsServicePart" version="1">
+<kpartgui name="KDevCvsServicePart" version="2">
 <MenuBar>
     <Menu name="tools">
         <Menu name="version_control">
@@ -17,7 +17,7 @@
                 <Action name="cvsservice_tag" />
                 <Action name="cvsservice_untag" />
                 <Action name="cvsservice_update" />
-                <Action name="cvsservice_revert" />
+                <Action name="cvsservice_removesticky" />
                 <Separator />
                 <Action name="cvsservice_ignore" />
                 <Action name="cvsservice_donot_ignore" />
@@ -28,6 +28,5 @@
         </Menu>
     </Menu>
 </MenuBar>
-
 </kpartgui>
 

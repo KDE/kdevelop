@@ -64,8 +64,8 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
-    QWidget *parent, const char *name, WFlags f )
-    : KDialogBase( parent, "checkoutdialog", true, i18n("CVS Checkout"),
+    QWidget *parent, const char *name, WFlags )
+    : KDialogBase( parent, name? name : "checkoutdialog", true, i18n("CVS Checkout"),
         Ok | Cancel, Ok, true ),
     m_service( cvsService ), m_job( 0 )
 {
@@ -219,7 +219,7 @@ void CheckoutDialog::slotSelectWorkDirList()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CheckoutDialog::slotModuleSelected( QListViewItem *item )
+void CheckoutDialog::slotModuleSelected( QListViewItem * )
 {
     ModuleListViewItem *aModuleItem = static_cast<ModuleListViewItem*>(
         m_base->modulesListView->selectedItem()

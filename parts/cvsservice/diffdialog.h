@@ -28,6 +28,11 @@ public:
 
     QString revA() const;
     QString revB() const;
+
+private:
+    enum  DiffType { diffLocalHEAD, diffLocalOther, diffArbitrary };
+
+    DiffType requestedDiff() const;
 };
 
 #endif // __DIFFDIALOG_H

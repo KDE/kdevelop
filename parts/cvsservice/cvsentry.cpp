@@ -67,10 +67,14 @@ void CVSEntry::parse( const QString &aLine, CVSEntry &entry )
     {
         entry.m_type = fileEntry; // Is a file
     }
-    else // Must be a directory then
+    else if (aLine.startsWith( directoryMarker )) // Must be a directory then
     {
         entry.m_type = directoryEntry; // Is a directory
         entry.m_fields.pop_front(); // Remove first
+    }
+    else // What the hell is this? >:-)
+    {
+        entry.m_type = invalidEntry;
     }
 }
 

@@ -87,7 +87,7 @@ private slots:
     void slotActionAdd();
     void slotActionAddBinary();
     void slotActionRemove();
-    void slotActionRevert();
+    void slotActionRemoveSticky();
     void slotActionLog();
     void slotActionDiff();
     void slotActionTag();
@@ -101,7 +101,7 @@ private slots:
     void slotAdd();
     void slotAddBinary();
     void slotRemove();
-    void slotRevert();
+    void slotRemoveSticky();
     void slotLog();
     void slotDiff();
     void slotTag();
@@ -145,7 +145,7 @@ private:
         *actionAddBinary,
         *actionRemove,
         *actionUpdate,
-        *actionRevert,
+        *actionRemoveSticky,
         *actionAddToIgnoreList,
         *actionRemoveFromIgnoreList,
         *actionTag,

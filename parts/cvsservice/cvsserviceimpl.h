@@ -41,11 +41,11 @@ public:
     virtual void update( const KURL::List& urlList );
     virtual void add( const KURL::List& urlList, bool binary = false );
     virtual void remove( const KURL::List& urlList );
-    virtual void revert( const KURL::List& urlList );
     virtual void log( const KURL::List& urlList );
     virtual void diff( const KURL::List& urlList );
     virtual void tag( const KURL::List& urlList );
     virtual void unTag( const KURL::List& urlList );
+    virtual void removeStickyFlag( const KURL::List& urlList );
     virtual void addToIgnoreList( const KURL::List& urlList );
     virtual void removeFromIgnoreList( const KURL::List& urlList );
     virtual void createNewProject( const QString &dirName,

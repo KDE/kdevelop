@@ -121,10 +121,6 @@ bool CvsProcessWidget::startJob( const DCOPRef &aJob )
     // create a DCOP stub for the non-concurrent cvs job
     if (m_job)
     {
-        disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
-        disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
-        disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
-
         delete m_job;
         m_job = 0;
     }
@@ -180,6 +176,14 @@ void CvsProcessWidget::slotJobExited( bool normalExit, int exitStatus )
     g_dcopExitCounter++;
     kdDebug() << "MYDCOPDEBUG: dcopExitCounter == " << g_dcopExitCounter << endl;
 #endif
+    if (m_job)
+    {
+        disconnectDCOPSignal( m_job->app(), m_job->obj(), "jobExited(bool, int)", "slotJobExited(bool, int)" );
+        disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStdout(QString)", "slotReceivedOutput(QString)" );
+        disconnectDCOPSignal( m_job->app(), m_job->obj(), "receivedStderr(QString)", "slotReceivedErrors(QString)" );
+        delete m_job;
+        m_job = 0;
+    }
     QString exitMsg = i18n("Job finished with exitCode == %1");
     showInfo( exitMsg.arg( exitStatus) );
 

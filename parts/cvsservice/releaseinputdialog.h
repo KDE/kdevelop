@@ -27,10 +27,8 @@ public:
     * C-tor
     * @param releaseMsg the custom message to display when prompting the user
     * @param parent
-    * @param enforceNotNullInput the dialog will accept only not null input
     */
-    ReleaseInputDialog( const QString &releaseMsg, QWidget* parent = 0,
-        bool enforceNotNullInput = true );
+    ReleaseInputDialog( QWidget* parent = 0 );
     /**
     * Destructor
     */
@@ -42,17 +40,16 @@ public:
     */
     QString release() const;
 
-protected slots:
     /**
-    * Redefined so we can accept only valid (not null) input by the user
+    * @return true if the user has checked "rever": enforce operation then even
+    * if the files have been locally modified.
     */
-    virtual void accept();
+    bool isRevert() const;
 
 private:
-    bool isTag() const;
-    bool isDate() const;
+    enum ReleaseType { byHead, byDate, byRevision };
 
-    bool m_enforceNullInput;
+    ReleaseType type() const;
 };
 
 #endif
