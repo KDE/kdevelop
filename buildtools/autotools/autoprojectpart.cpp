@@ -222,7 +222,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     _configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, info()->icon() );
     _configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, info()->icon() );
     _configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, info()->icon() );
-    connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+    connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
              this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
@@ -614,6 +614,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
 
     QString preCommand;
     QFileInfo fi1();
+    kdDebug(9020) << k_funcinfo << "Looking for Makefile in " << dir << endl;
     if ( !QFile::exists(dir + "/GNUmakefile") && !QFile::exists(dir + "/makefile")
             && ! QFile::exists(dir + "/Makefile") )
     {
@@ -1101,7 +1102,7 @@ void AutoProjectPart::slotNotExecuteTargetAfterBuildFailed(const QString& comman
 if ( constructMakeCommandLine(m_executeTargetAfterBuild.first.path(), m_executeTargetAfterBuild.second->name) == command )
 {
 	disconnect( makeFrontend(), SIGNAL(commandFinished(const QString&)), this, SLOT(slotExecuteTargetAfterBuild()) );
-	disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed()) );	
+	disconnect( makeFrontend(), SIGNAL(commandFailed(const QString&)), this, SLOT(slotNotExecuteTargetAfterBuildFailed()) );
 }
 
 }

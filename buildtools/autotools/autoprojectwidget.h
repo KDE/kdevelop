@@ -17,12 +17,12 @@
 #ifndef _AUTOPROJECTWIDGET_H_
 #define _AUTOPROJECTWIDGET_H_
 
-#include <qlayout.h>
 #include <qdict.h>
 #include <qlistview.h>
 #include <qmap.h>
 #include <qvbox.h>
 #include <qhbox.h>
+#include <qlayout.h>
 #include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -40,6 +40,7 @@ class KAction;
 class QDomElement;
 class QToolButton;
 class QStringList;
+class QFocusEvent;
 class KListViewItem;
 class QListViewItem;
 class MakefileHandler;
@@ -224,5 +225,5 @@ private:
 	MakefileHandler *m_makefileHandler;
 };
 
-#endif 
+#endif
 // kate: indent-mode csands; tab-width 4;
